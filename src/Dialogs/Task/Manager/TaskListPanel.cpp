@@ -27,9 +27,13 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
-#include "Widget/XMLWidget.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
 #include "Task/TaskStore.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
@@ -51,8 +55,7 @@ static unsigned task_list_serial;
 #endif
 
 class TaskListPanel gcc_final
-  : public XMLWidget, private ActionListener,
-    private ListControl::Handler {
+  : public ListWidget, private ActionListener {
   enum Buttons {
     LOAD = 100,
     RENAME,
@@ -73,15 +76,34 @@ class TaskListPanel gcc_final
    */
   bool more;
 
-  ListControl *wTasks;
   WndButton *more_button;
+  TextWidget &summary;
+  TwoWidgets *two_widgets;
+  ButtonPanelWidget *buttons;
 
 public:
   TaskListPanel(TaskManagerDialog &_dialog,
-                OrderedTask **_active_task, bool *_task_modified)
+                OrderedTask **_active_task, bool *_task_modified,
+                TextWidget &_summary)
     :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
-     more(false) {}
+     more(false),
+     summary(_summary)  {}
+
+  void SetTwoWidgets(TwoWidgets &_two_widgets) {
+    two_widgets = &_two_widgets;
+  }
+
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons) {
+    buttons.Add(_("Load"), *this, LOAD);
+    buttons.Add(_("Rename"), *this, RENAME);
+    buttons.Add(_("Delete"), *this, DELETE);
+    more_button = buttons.Add(_("More"), *this, MORE);
+  }
 
   void RefreshView();
 
@@ -131,7 +153,7 @@ private:
 OrderedTask *
 TaskListPanel::get_cursor_task()
 {
-  const unsigned cursor_index = wTasks->GetCursorIndex();
+  const unsigned cursor_index = GetList().GetCursorIndex();
   if (cursor_index >= task_store->Size())
     return NULL;
 
@@ -152,7 +174,7 @@ TaskListPanel::get_cursor_task()
 const TCHAR *
 TaskListPanel::get_cursor_name()
 {
-  const unsigned cursor_index = wTasks->GetCursorIndex();
+  const unsigned cursor_index = GetList().GetCursorIndex();
   if (cursor_index >= task_store->Size())
     return _T("");
 
@@ -196,24 +218,23 @@ TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 TaskListPanel::RefreshView()
 {
-  wTasks->SetLength(task_store->Size());
+  GetList().SetLength(task_store->Size());
 
   dialog.InvalidateTaskView();
-
-  WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
-  assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_cursor_task();
   dialog.ShowTaskView(ordered_task);
 
   if (ordered_task == NULL) {
-    wSummary->SetCaption(_T(""));
-    return;
+    summary.SetText(_T(""));
+  } else {
+    TCHAR text[300];
+    OrderedTaskSummary(ordered_task, text, false);
+    summary.SetText(text);
   }
 
-  TCHAR text[300];
-  OrderedTaskSummary(ordered_task, text, false);
-  wSummary->SetCaption(text);
+  if (GetList().IsVisible() && two_widgets != nullptr)
+    two_widgets->UpdateLayout();
 }
 
 void
@@ -245,7 +266,7 @@ TaskListPanel::LoadTask()
 void
 TaskListPanel::DeleteTask()
 {
-  const unsigned cursor_index = wTasks->GetCursorIndex();
+  const unsigned cursor_index = GetList().GetCursorIndex();
   if (cursor_index >= task_store->Size())
     return;
 
@@ -295,7 +316,7 @@ ClearSuffix(TCHAR *p, const TCHAR *suffix)
 void
 TaskListPanel::RenameTask()
 {
-  const unsigned cursor_index = wTasks->GetCursorIndex();
+  const unsigned cursor_index = GetList().GetCursorIndex();
   if (cursor_index >= task_store->Size())
     return;
 
@@ -337,44 +358,26 @@ TaskListPanel::OnMoreClicked()
   RefreshView();
 }
 
-static void
-SetActionListener(SubForm &form, const TCHAR *name,
-                  ActionListener *listener, int id)
-{
-  ((WndButton *)form.FindByName(name))->SetListener(listener, id);
-}
-
 void
 TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(nullptr, parent, rc,
-             _T("IDR_XML_TASKLIST"));
+  CreateList(parent, dialog.GetLook(),
+             rc, Layout::GetMinimumControlHeight());
 
-  SetActionListener(form, _T("cmdLoad"), this, LOAD);
-  SetActionListener(form, _T("cmdRename"), this, RENAME);
-  SetActionListener(form, _T("cmdDelete"), this, DELETE);
-  SetActionListener(form, _T("more"), this, MORE);
+  CreateButtons(buttons->GetButtonPanel());
 
   task_store = new TaskStore();
 
   /* mark the new TaskStore as "dirty" until the data directory really
      gets scanned */
   serial = task_list_serial - 1;
-
-  // Save important control pointers
-  wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
-  assert(wTasks != NULL);
-  wTasks->SetHandler(this);
-
-  more_button = (WndButton *)form.FindByName(_T("more"));
-  assert(more_button != NULL);
 }
 
 void
 TaskListPanel::Unprepare()
 {
   delete task_store;
-  XMLWidget::Unprepare();
+  DeleteWindow();
 }
 
 void
@@ -388,9 +391,9 @@ TaskListPanel::Show(const PixelRect &rc)
 
   dialog.ShowTaskView(get_cursor_task());
 
-  wTasks->SetCursorIndex(0); // so Save & Declare are always available
+  GetList().SetCursorIndex(0); // so Save & Declare are always available
   RefreshView();
-  XMLWidget::Show(rc);
+  ListWidget::Show(rc);
 }
 
 void
@@ -398,14 +401,24 @@ TaskListPanel::Hide()
 {
   dialog.ResetTaskView();
 
-  XMLWidget::Hide();
+  ListWidget::Hide();
 }
 
 Widget *
 CreateTaskListPanel(TaskManagerDialog &dialog,
                     OrderedTask **active_task, bool *task_modified)
 {
-  return new TaskListPanel(dialog, active_task, task_modified);
+  TextWidget *summary = new TextWidget();
+  TaskListPanel *widget = new TaskListPanel(dialog, active_task, task_modified,
+                                            *summary);
+  TwoWidgets *tw = new TwoWidgets(widget, summary);
+  widget->SetTwoWidgets(*tw);
+
+  ButtonPanelWidget *buttons =
+    new ButtonPanelWidget(*tw, ButtonPanelWidget::Alignment::BOTTOM);
+  widget->SetButtonPanel(*buttons);
+
+  return buttons;
 }
 
 void
