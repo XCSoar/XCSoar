@@ -24,7 +24,6 @@ Copyright_License {
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
@@ -47,7 +46,21 @@ Copyright_License {
 
 static unsigned task_list_serial;
 
-class TaskListPanel : public XMLWidget, private ListControl::Handler {
+/* this macro exists in the WIN32 API */
+#ifdef DELETE
+#undef DELETE
+#endif
+
+class TaskListPanel gcc_final
+  : public XMLWidget, private ActionListener,
+    private ListControl::Handler {
+  enum Buttons {
+    LOAD = 100,
+    RENAME,
+    DELETE,
+    MORE,
+  };
+
   TaskManagerDialog &dialog;
 
   OrderedTask **active_task;
@@ -93,6 +106,9 @@ protected:
   const TCHAR *get_cursor_name();
 
 private:
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) gcc_override;
+
   /* virtual methods from class ListControl::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override;
@@ -109,10 +125,6 @@ private:
     LoadTask();
   }
 };
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskListPanel *instance;
 
 /**
  * used for browsing saved tasks
@@ -148,6 +160,28 @@ TaskListPanel::get_cursor_name()
     return _T("");
 
   return task_store->GetName(cursor_index);
+}
+
+void
+TaskListPanel::OnAction(int id)
+{
+  switch (id) {
+  case LOAD:
+    LoadTask();
+    break;
+
+  case RENAME:
+    RenameTask();
+    break;
+
+  case DELETE:
+    DeleteTask();
+    break;
+
+  case MORE:
+    OnMoreClicked();
+    break;
+  }
 }
 
 void
@@ -333,48 +367,23 @@ TaskListPanel::OnMoreClicked()
   RefreshView();
 }
 
-class WndButton;
-
 static void
-OnMoreClicked()
+SetActionListener(SubForm &form, const TCHAR *name,
+                  ActionListener *listener, int id)
 {
-  instance->OnMoreClicked();
+  ((WndButton *)form.FindByName(name))->SetListener(listener, id);
 }
-
-static void
-OnLoadClicked()
-{
-  instance->LoadTask();
-}
-
-static void
-OnDeleteClicked()
-{
-  instance->DeleteTask();
-}
-
-static void
-OnRenameClicked()
-{
-  instance->RenameTask();
-}
-
-static constexpr CallBackTableEntry task_list_callbacks[] = {
-  DeclareCallBackEntry(OnMoreClicked),
-  DeclareCallBackEntry(OnLoadClicked),
-  DeclareCallBackEntry(OnDeleteClicked),
-  DeclareCallBackEntry(OnRenameClicked),
-
-  DeclareCallBackEntry(NULL)
-};
 
 void
 TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(task_list_callbacks, parent, rc,
+  LoadWindow(nullptr, parent, rc,
              _T("IDR_XML_TASKLIST"));
 
-  instance = this;
+  SetActionListener(form, _T("cmdLoad"), this, LOAD);
+  SetActionListener(form, _T("cmdRename"), this, RENAME);
+  SetActionListener(form, _T("cmdDelete"), this, DELETE);
+  SetActionListener(form, _T("more"), this, MORE);
 
   task_store = new TaskStore();
 

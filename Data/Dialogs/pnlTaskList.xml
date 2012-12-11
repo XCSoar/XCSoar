@@ -5,8 +5,8 @@
    
   <Label Name="frmSummary1" Y="-90" Height="50"/>
 
-  <Button Name="cmdLoad" Caption="Load" X="0" Y="-37" Width="55" Height="35" OnClick="OnLoadClicked"/>
-  <Button Name="cmdRename" Caption="Rename" X="55" Y="-37" Width="65" Height="35" OnClick="OnRenameClicked"/>
-  <Button Name="cmdDelete" Caption="Delete" X="120" Y="-37" Width="60" Height="35" OnClick="OnDeleteClicked"/>
-  <Button Name="more" Caption="More" X="180" Y="-37" Width="60" Height="35" OnClick="OnMoreClicked"/>
+  <Button Name="cmdLoad" Caption="Load" X="0" Y="-37" Width="55" Height="35"/>
+  <Button Name="cmdRename" Caption="Rename" X="55" Y="-37" Width="65" Height="35"/>
+  <Button Name="cmdDelete" Caption="Delete" X="120" Y="-37" Width="60" Height="35"/>
+  <Button Name="more" Caption="More" X="180" Y="-37" Width="60" Height="35"/>
 </Panel>
