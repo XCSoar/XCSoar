@@ -52,17 +52,17 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-enum Buttons {
-  EDIT = 100,
-  DOWN,
-  UP,
-  MUTATE,
-  CLEAR_ALL,
-};
-
 class TaskEditPanel
   : public XMLWidget, public ActionListener,
     private ListControl::Handler {
+  enum Buttons {
+    EDIT = 100,
+    DOWN,
+    UP,
+    MUTATE,
+    CLEAR_ALL,
+  };
+
   TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
