@@ -10,6 +10,8 @@ Version 6.4.5 - not yet released
   - fix crash in terrain renderer with broken map file (#2478)
 * data files
   - added "LAK-12" polar
+* task
+  - consider configured height margin when checking start condition
 
 Version 6.4.4 - 2012/11/15
 * devices
