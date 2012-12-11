@@ -34,7 +34,6 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
-#include "Audio/VarioGlue.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
@@ -606,11 +605,6 @@ MainWindow::OnUser(unsigned id)
       InfoBoxManager::SetDirty();
       InfoBoxManager::ProcessTimer();
     }
-
-    if (CommonInterface::Basic().brutto_vario_available)
-      AudioVarioGlue::SetValue(CommonInterface::Basic().brutto_vario);
-    else
-      AudioVarioGlue::NoValue();
 
     return true;
 

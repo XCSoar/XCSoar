@@ -25,6 +25,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "NMEA/MoreData.hpp"
+#include "Audio/VarioGlue.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
   :WorkerThread(150, 50, 20),
@@ -58,6 +59,11 @@ MergeThread::Tick()
 {
   bool gps_updated, calculated_updated;
 
+#ifdef HAVE_PCM_PLAYER
+  bool vario_available;
+  fixed vario;
+#endif
+
   {
     ScopeLock protect(device_blackboard.mutex);
 
@@ -74,6 +80,11 @@ MergeThread::Tick()
     calculated_updated = (bool)last_any.alive != (bool)basic.alive ||
       (bool)last_any.location_available != (bool)basic.location_available;
 
+#ifdef HAVE_PCM_PLAYER
+    vario_available = basic.brutto_vario_available;
+    vario = vario_available ? basic.brutto_vario : fixed(0);
+#endif
+
     /* update last_any in every iteration */
     last_any = basic;
 
@@ -83,6 +94,13 @@ MergeThread::Tick()
         basic.location_available != last_fix.location_available)
       last_fix = basic;
   }
+
+#ifdef HAVE_PCM_PLAYER
+  if (vario_available)
+    AudioVarioGlue::SetValue(vario);
+  else
+    AudioVarioGlue::NoValue();
+#endif
 
   if (gps_updated)
     TriggerGPSUpdate();

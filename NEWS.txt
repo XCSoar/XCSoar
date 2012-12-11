@@ -30,6 +30,7 @@ Version 6.5 - not yet released
   - support keyboard input on desktop computer
   - improved angle input (e.g. wind direction, sector radials)
   - faster map initialisation during startup
+  - reduce audio vario latency
 * infoboxes
   - added thermal assistant infobox
 * track friends via internet connection (SkyLines live tracking)
