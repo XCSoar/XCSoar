@@ -56,30 +56,39 @@ MergeThread::Process()
 void
 MergeThread::Tick()
 {
-  ScopeLock protect(device_blackboard.mutex);
+  bool gps_updated, calculated_updated;
 
-  Process();
+  {
+    ScopeLock protect(device_blackboard.mutex);
 
-  const MoreData &basic = device_blackboard.Basic();
-  if (last_any.location_available != basic.location_available)
-    // trigger update if gps has become available or dropped out
-    TriggerGPSUpdate();
+    Process();
 
-  if ((bool)last_any.alive != (bool)basic.alive ||
-      (bool)last_any.location_available != (bool)basic.location_available)
+    const MoreData &basic = device_blackboard.Basic();
+
+    /* trigger update if gps has become available or dropped out */
+    gps_updated = last_any.location_available != basic.location_available;
+
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers
        the redraw, so we have to do it */
+    calculated_updated = (bool)last_any.alive != (bool)basic.alive ||
+      (bool)last_any.location_available != (bool)basic.location_available;
+
+    /* update last_any in every iteration */
+    last_any = basic;
+
+    /* update last_fix only when a new GPS fix was received */
+    if ((basic.time_available &&
+         (!last_fix.time_available || basic.time != last_fix.time)) ||
+        basic.location_available != last_fix.location_available)
+      last_fix = basic;
+  }
+
+  if (gps_updated)
+    TriggerGPSUpdate();
+
+  if (calculated_updated)
     TriggerCalculatedUpdate();
 
   TriggerVarioUpdate();
-
-  /* update last_any in every iteration */
-  last_any = basic;
-
-  /* update last_fix only when a new GPS fix was received */
-  if ((basic.time_available &&
-       (!last_fix.time_available || basic.time != last_fix.time)) ||
-      basic.location_available != last_fix.location_available)
-    last_fix = basic;
 }
