@@ -31,7 +31,6 @@ class TaskMiscPanel;
 class WndOwnerDrawFrame;
 class TabbedControl;
 class OrderedTask;
-class TaskListPanel;
 
 class TaskActionsPanel : public XMLWidget {
   TaskManagerDialog &dialog;
@@ -40,21 +39,11 @@ class TaskActionsPanel : public XMLWidget {
   OrderedTask **active_task;
   bool *task_modified;
 
-  TaskListPanel *list_panel;
-
 public:
   TaskActionsPanel(TaskManagerDialog &_dialog, TaskMiscPanel &_parent,
                    OrderedTask **_active_task, bool *_task_modified)
     :dialog(_dialog), parent(_parent),
-     active_task(_active_task), task_modified(_task_modified),
-     list_panel(NULL) {}
-
-  void SetListPanel(TaskListPanel *_list_panel) {
-    assert(list_panel == NULL);
-    assert(_list_panel != NULL);
-
-    list_panel = _list_panel;
-  }
+     active_task(_active_task), task_modified(_task_modified) {}
 
   void SaveTask();
 

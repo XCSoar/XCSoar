@@ -53,8 +53,7 @@ TaskActionsPanel::SaveTask()
     if (!OrderedTaskSave(**active_task))
       return;
 
-    if (list_panel != NULL)
-      list_panel->DirtyList();
+    DirtyTaskListPanel();
   } else {
     ShowMessageBox(getTaskValidationErrors(
         (*active_task)->GetFactory().GetValidationErrors()), _("Task not saved"),

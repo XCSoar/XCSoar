@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TaskListPanel.hpp"
-#include "TaskMiscPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
 #include "Dialogs/CallBackTable.hpp"
@@ -31,6 +30,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
+#include "Widget/XMLWidget.hpp"
 #include "Task/TaskStore.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
@@ -44,6 +44,71 @@ Copyright_License {
 
 #include <assert.h>
 #include <windef.h>
+
+static unsigned task_list_serial;
+
+class TaskListPanel : public XMLWidget, private ListControl::Handler {
+  TaskManagerDialog &dialog;
+
+  OrderedTask **active_task;
+  bool *task_modified;
+
+  TaskStore *task_store;
+  unsigned serial;
+
+  /**
+   * Showing all task files?  (including *.igc, *.cup)
+   */
+  bool more;
+
+  ListControl *wTasks;
+  WndButton *more_button;
+
+public:
+  TaskListPanel(TaskManagerDialog &_dialog,
+                OrderedTask **_active_task, bool *_task_modified)
+    :dialog(_dialog),
+     active_task(_active_task), task_modified(_task_modified),
+     more(false) {}
+
+  void RefreshView();
+  void DirtyList();
+
+  void SaveTask();
+  void LoadTask();
+  void DeleteTask();
+  void RenameTask();
+
+  void OnMoreClicked();
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
+  virtual void Show(const PixelRect &rc);
+  virtual void Hide();
+
+protected:
+  OrderedTask *get_cursor_task();
+
+  gcc_pure
+  const TCHAR *get_cursor_name();
+
+private:
+  /* virtual methods from class ListControl::Handler */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual void OnCursorMoved(unsigned index) gcc_override {
+    RefreshView();
+  }
+
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+      return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override {
+    LoadTask();
+  }
+};
 
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
@@ -312,7 +377,10 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   instance = this;
 
   task_store = new TaskStore();
-  lazy_loaded = false;
+
+  /* mark the new TaskStore as "dirty" until the data directory really
+     gets scanned */
+  serial = task_list_serial - 1;
 
   // Save important control pointers
   wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
@@ -333,8 +401,8 @@ TaskListPanel::Unprepare()
 void
 TaskListPanel::Show(const PixelRect &rc)
 {
-  if (!lazy_loaded) {
-    lazy_loaded = true;
+  if (serial != task_list_serial) {
+    serial = task_list_serial;
     // Scan XCSoarData for available tasks
     task_store->Scan(more);
   }
@@ -352,4 +420,17 @@ TaskListPanel::Hide()
   dialog.ResetTaskView();
 
   XMLWidget::Hide();
+}
+
+Widget *
+CreateTaskListPanel(TaskManagerDialog &dialog,
+                    OrderedTask **active_task, bool *task_modified)
+{
+  return new TaskListPanel(dialog, active_task, task_modified);
+}
+
+void
+DirtyTaskListPanel()
+{
+  ++task_list_serial;
 }

@@ -24,79 +24,20 @@ Copyright_License {
 #ifndef XCSOAR_TASK_LIST_PANEL_HPP
 #define XCSOAR_TASK_LIST_PANEL_HPP
 
-#include "Widget/XMLWidget.hpp"
-#include "Form/List.hpp"
-
+class Widget;
 class TaskManagerDialog;
-class WndButton;
-class WndOwnerDrawFrame;
-class TabbedControl;
-class Canvas;
 class OrderedTask;
-class TaskStore;
 
-class TaskListPanel : public XMLWidget, private ListControl::Handler {
-  TaskManagerDialog &dialog;
+Widget *
+CreateTaskListPanel(TaskManagerDialog &dialog,
+                    OrderedTask **active_task, bool *task_modified);
 
-  OrderedTask **active_task;
-  bool *task_modified;
-
-  TaskStore *task_store;
-
-  bool lazy_loaded; // if store has been loaded first time tab displayed
-
-  /**
-   * Showing all task files?  (including *.igc, *.cup)
-   */
-  bool more;
-
-  ListControl *wTasks;
-  WndButton *more_button;
-
-public:
-  TaskListPanel(TaskManagerDialog &_dialog,
-                OrderedTask **_active_task, bool *_task_modified)
-    :dialog(_dialog),
-     active_task(_active_task), task_modified(_task_modified),
-     more(false) {}
-
-  void RefreshView();
-  void DirtyList();
-
-  void SaveTask();
-  void LoadTask();
-  void DeleteTask();
-  void RenameTask();
-
-  void OnMoreClicked();
-
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-
-protected:
-  OrderedTask *get_cursor_task();
-
-  gcc_pure
-  const TCHAR *get_cursor_name();
-
-private:
-  /* virtual methods from class ListControl::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
-
-  virtual void OnCursorMoved(unsigned index) gcc_override {
-    RefreshView();
-  }
-
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
-      return true;
-  }
-
-  virtual void OnActivateItem(unsigned index) gcc_override {
-    LoadTask();
-  }
-};
+/**
+ * Mark the previously scanned list of tasks as "dirty".  Before the
+ * list will be shown next time, a new list will be collected.  Call
+ * this function after a task file has been created or deleted.
+ */
+void
+DirtyTaskListPanel();
 
 #endif
