@@ -24,6 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/Derived.hpp"
+#include "Volatile.hpp"
 
 #include <stdio.h>
 
@@ -68,16 +69,11 @@ void
 VegaDevice::VarioWriteSettings(const DerivedInfo &calculated,
                                OperationEnvironment &env) const
 {
-    char mcbuf[100];
-
-    sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
-            iround(mc * 10),
-            iround(calculated.V_stf*10),
-            calculated.circling,
-            iround(calculated.terrain_altitude),
-            uround(qnh.GetHectoPascal() * 10));
-
-    PortWriteNMEA(port, mcbuf, env);
+  Vega::VolatileData volatile_data;
+  volatile_data.mc = uround(mc * 10);
+  volatile_data.qnh = uround(qnh.GetHectoPascal() * 10);
+  volatile_data.CopyFrom(calculated);
+  volatile_data.SendTo(port, env);
 }
 
 bool
