@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Checklist">
-  <Edit Name="frmDetails" Height="-35" ReadOnly="1" MultiLine="1" />
+  <TextEdit Name="frmDetails" Height="-35" ReadOnly="1" MultiLine="1" />
 
   <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNextClicked" />
 

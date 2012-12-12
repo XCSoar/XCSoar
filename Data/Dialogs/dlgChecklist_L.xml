@@ -5,7 +5,7 @@
 
   <Button Name="cmdClose" Caption="Close" X="0" Y="-35" Width="60" Height="35" OnClick="OnCloseClicked" />
 
-  <Edit Name="frmDetails" X="60" Y="0" ReadOnly="1" MultiLine="1" />
+  <TextEdit Name="frmDetails" X="60" Y="0" ReadOnly="1" MultiLine="1" />
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-105" Width="60" Height="35" OnClick="OnPrevClicked" />
 </Form>

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/Edit.hpp"
+#include "Screen/EditWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "LocalPath.hpp"
@@ -45,7 +45,7 @@ Copyright_License {
 
 static int page = 0;
 static WndForm *wf = NULL;
-static WndProperty *wDetails = NULL;
+static EditWindow *wDetails = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
@@ -218,7 +218,7 @@ dlgChecklistShowModal()
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wDetails = (WndProperty*)wf->FindByName(_T("frmDetails"));
+  wDetails = (EditWindow *)wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);
 
   page = 0;
