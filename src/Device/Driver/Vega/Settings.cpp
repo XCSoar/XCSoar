@@ -24,7 +24,6 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/Derived.hpp"
-#include "Volatile.hpp"
 
 #include <stdio.h>
 
@@ -65,28 +64,17 @@ VegaDevice::GetSetting(const char *name) const
   return std::make_pair(true, *i);
 }
 
-void
-VegaDevice::VarioWriteSettings(const DerivedInfo &calculated,
-                               OperationEnvironment &env) const
-{
-  Vega::VolatileData volatile_data;
-  volatile_data.mc = uround(mc * 10);
-  volatile_data.qnh = uround(qnh.GetHectoPascal() * 10);
-  volatile_data.CopyFrom(calculated);
-  volatile_data.SendTo(port, env);
-}
-
 bool
 VegaDevice::PutMacCready(fixed _mc, OperationEnvironment &env)
 {
-  mc = _mc;
+  volatile_data.mc = uround(_mc * 10);
   return true;
 }
 
 bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres, OperationEnvironment &env)
 {
-  qnh = pres;
+  volatile_data.qnh = uround(pres.GetHectoPascal() * 10);
 
   return true;
 }
