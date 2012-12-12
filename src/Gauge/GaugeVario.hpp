@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
 
-#include "Screen/BufferWindow.hpp"
+#include "Screen/AntiFlickerWindow.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
 #include "Blackboard/FullBlackboard.hpp"
@@ -34,7 +34,7 @@ struct UnitsLook;
 class ContainerWindow;
 class UnitSymbol;
 
-class GaugeVario : public BufferWindow
+class GaugeVario : public AntiFlickerWindow
 {
   enum {
     NARROWS = 3,

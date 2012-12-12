@@ -24,12 +24,12 @@
 #ifndef THERMAL_ASSISTENT_WINDOW_HPP
 #define THERMAL_ASSISTENT_WINDOW_HPP
 
-#include "Screen/BufferWindow.hpp"
+#include "Screen/AntiFlickerWindow.hpp"
 #include "ThermalAssistantRenderer.hpp"
 
 struct ThermalAssistantLook;
 
-class ThermalAssistantWindow : public BufferWindow
+class ThermalAssistantWindow : public AntiFlickerWindow
 {
   ThermalAssistantRenderer renderer;
 

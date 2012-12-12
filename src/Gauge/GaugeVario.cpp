@@ -725,7 +725,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
 void
 GaugeVario::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  BufferWindow::OnResize(width, height);
+  AntiFlickerWindow::OnResize(width, height);
 
   /* trigger reinitialisation */
   xoffset = width;
