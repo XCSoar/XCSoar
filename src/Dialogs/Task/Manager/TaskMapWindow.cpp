@@ -34,7 +34,7 @@ Copyright_License {
 #endif
 
 void
-TaskMapWindow::OnPaint(Canvas &canvas)
+TaskMapWindow::OnPaintBuffer(Canvas &canvas)
 {
   if (task == nullptr) {
     canvas.ClearWhite();

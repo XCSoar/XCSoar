@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MAP_WINDOW_HPP
 #define XCSOAR_TASK_MAP_WINDOW_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "Screen/BufferWindow.hpp"
 
 struct MapLook;
 class ActionListener;
@@ -33,7 +33,7 @@ class OrderedTask;
 /**
  * A window that shows the task.
  */
-class TaskMapWindow : public PaintWindow {
+class TaskMapWindow : public BufferWindow {
   const MapLook &look;
 
   ActionListener &listener;
@@ -52,8 +52,10 @@ public:
   }
 
   /* virtual methods from class Window */
-  virtual void OnPaint(Canvas &canvas) gcc_override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+
+  /* virtual methods from class BufferWindow */
+  virtual void OnPaintBuffer(Canvas &canvas) gcc_override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */
