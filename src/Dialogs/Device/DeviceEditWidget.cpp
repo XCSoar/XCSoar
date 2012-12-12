@@ -68,7 +68,7 @@ static constexpr struct {
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
   { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
 #ifndef NDEBUG
-  { DeviceConfig::PortType::NUNCHUCK, N_("IOIO Nunchuck") },
+  { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
   { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
 #endif
 #endif
@@ -613,7 +613,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   FillI2CAddr(*i2c_addr_df);
   i2c_addr_df->Set(config.i2c_addr);
   Add(_("I2C Addr"), _("The i2c address that matches your configuration."
-                        "This field is not used when your selection in the I2C Bus field is not an i2c address. "
+                        "This field is not used when your selection in the I2C Bus field is not an i2c bus number. "
                         "In case you do not understand the previous sentence you may assume that this field is not used."),
                         i2c_addr_df);
 
