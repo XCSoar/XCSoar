@@ -25,17 +25,12 @@ Copyright_License {
 #define XCSOAR_SCREEN_BUFFER_WINDOW_HXX
 
 #include "Screen/PaintWindow.hpp"
-
-#ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
-#endif
 
 /**
  * A #PaintWindow with buffered painting, to avoid flickering.
  */
 class BufferWindow : public PaintWindow {
-#ifndef ENABLE_OPENGL
-private:
   BufferCanvas buffer;
 
   /**
@@ -49,7 +44,6 @@ public:
     dirty = true;
     PaintWindow::Invalidate();
   }
-#endif
 
 protected:
   /**
@@ -57,22 +51,16 @@ protected:
    * buffer which allows incremental drawing in each frame.
    */
   static bool IsPersistent() {
-#ifdef ENABLE_OPENGL
-    /* on OpenGL, there is no per-window buffer, each frame needs to
-       be redrawn from scratch */
-    return false;
-#else
     return true;
-#endif
   }
 
 protected:
 #ifndef ENABLE_OPENGL
   virtual void OnCreate();
   virtual void OnDestroy();
+#endif
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
-#endif
 
   virtual void OnPaint(Canvas &canvas);
 

@@ -24,6 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_DOUBLE_BUFFER_WINDOW_HXX
 #define XCSOAR_SCREEN_DOUBLE_BUFFER_WINDOW_HXX
 
+#ifdef ENABLE_OPENGL
+
+#include "BufferWindow.hpp"
+
+class DoubleBufferWindow : public BufferWindow {
+  /* there's no DrawThread on OpenGL, so this is just a normal
+     BufferWindow */
+};
+
+#else
+
 #include "Screen/PaintWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Thread/Mutex.hpp"
@@ -34,30 +45,6 @@ Copyright_License {
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
-#ifdef ENABLE_OPENGL
-  /* on OpenGL, there is no DrawThread, and we use only one buffer to
-     cache the painted window, to reduce CPU/GPU usage for new
-     frames */
-  BufferCanvas buffer;
-
-  /**
-   * Is the buffer dirty, i.e. does it need a full repaint with
-   * OnPaintBuffer()?
-   */
-  bool dirty;
-
-public:
-  void Invalidate() {
-    dirty = true;
-    PaintWindow::Invalidate();
-  }
-
-protected:
-  virtual void OnCreate() gcc_override;
-  virtual void OnDestroy() gcc_override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
-
-#else
   BufferCanvas buffers[2];
 
   /**
@@ -104,19 +91,16 @@ protected:
 protected:
   virtual void OnCreate() gcc_override;
   virtual void OnDestroy() gcc_override;
-#endif
-
-protected:
   virtual void OnPaint(Canvas &canvas) gcc_override;
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
-#ifndef ENABLE_OPENGL
 public:
   void Repaint() {
     OnPaintBuffer(GetPaintCanvas());
     Flip();
   }
-#endif
 };
+
+#endif
 
 #endif

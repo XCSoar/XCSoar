@@ -23,32 +23,7 @@ Copyright_License {
 
 #include "Screen/DoubleBufferWindow.hpp"
 
-#ifdef ENABLE_OPENGL
-
-void
-DoubleBufferWindow::OnCreate()
-{
-  PaintWindow::OnCreate();
-
-  dirty = true;
-}
-
-void
-DoubleBufferWindow::OnDestroy()
-{
-  buffer.Destroy();
-  PaintWindow::OnDestroy();
-}
-
-void
-DoubleBufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
-{
-  PaintWindow::OnResize(width, height);
-  buffer.Destroy();
-  Invalidate();
-}
-
-#else /* !OpenGL */
+#ifndef ENABLE_OPENGL
 
 #include "Screen/WindowCanvas.hpp"
 
@@ -87,27 +62,11 @@ DoubleBufferWindow::Flip()
   buffers[current].Grow(GetWidth(), GetHeight());
 }
 
-#endif
-
 void
 DoubleBufferWindow::OnPaint(Canvas &canvas)
 {
-#ifdef ENABLE_OPENGL
-  if (!buffer.IsDefined()) {
-    buffer.Create(canvas.GetWidth(), canvas.GetHeight());
-    dirty = true;
-  }
-
-  if (dirty) {
-    dirty = false;
-    buffer.Begin(canvas);
-    OnPaintBuffer(buffer);
-    buffer.Commit(canvas);
-  } else
-    buffer.CopyTo(canvas);
-
-#else
   ScopeLock protect(mutex);
   canvas.Copy(GetVisibleCanvas());
-#endif
 }
+
+#endif

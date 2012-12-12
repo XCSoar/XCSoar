@@ -24,8 +24,10 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 
 #ifndef ENABLE_OPENGL
-
 #include "Screen/WindowCanvas.hpp"
+#endif
+
+#ifndef ENABLE_OPENGL
 
 void
 BufferWindow::OnCreate()
@@ -46,23 +48,40 @@ BufferWindow::OnDestroy()
   buffer.Destroy();
 }
 
+#endif
+
 void
 BufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
+#ifdef ENABLE_OPENGL
+  buffer.Destroy();
+#else
   buffer.Resize(width, height);
-  PaintWindow::OnResize(width, height);
   Invalidate();
-}
-
 #endif
+
+  PaintWindow::OnResize(width, height);
+}
 
 void
 BufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
-  /* paint directly on OpenGL */
-  OnPaintBuffer(canvas);
+  if (!buffer.IsDefined()) {
+    buffer.Create(canvas.GetWidth(), canvas.GetHeight());
+    dirty = true;
+  }
+
+  if (dirty) {
+    dirty = false;
+    buffer.Begin(canvas);
+    OnPaintBuffer(buffer);
+    buffer.Commit(canvas);
+  } else
+    buffer.CopyTo(canvas);
+
 #else
+
   if (dirty) {
     dirty = false;
     OnPaintBuffer(buffer);
