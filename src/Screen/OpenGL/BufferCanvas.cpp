@@ -41,10 +41,8 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
 }
 
 void
-BufferCanvas::Create(const Canvas &canvas,
-                     UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Create(UPixelScalar _width, UPixelScalar _height)
 {
-  assert(canvas.IsDefined());
   assert(!active);
 
   const PixelSize new_size(_width, _height);

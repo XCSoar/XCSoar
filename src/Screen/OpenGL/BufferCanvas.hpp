@@ -60,7 +60,14 @@ public:
     return texture != NULL;
   }
 
-  void Create(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
+  void Create(UPixelScalar _width, UPixelScalar _height);
+
+  void Create(const Canvas &canvas,
+              UPixelScalar _width, UPixelScalar _height) {
+    assert(canvas.IsDefined());
+
+    Create(_width, _height);
+  }
 
   void Create(const Canvas &canvas) {
     Create(canvas, canvas.GetWidth(), canvas.GetHeight());
