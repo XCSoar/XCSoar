@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.4.5 - not yet released
+* calculations
+  - fix rounding error in convex boundary calculation (#2477)
 * devices
   - Vega: fix MacCready setting feedback loop (#1218, #2490)
 * user interface

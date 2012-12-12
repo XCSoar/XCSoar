@@ -59,8 +59,11 @@ public:
    * Constructor.  Note that this class should be used temporarily only
    *
    * @param sps Input vector of points (may be unordered)
+   *
+   * @param sign_tolerance the tolerance for the direction sign; -1
+   * for automatic tolerance
    */
-  GrahamScan(SearchPointVector& sps, const fixed sign_tolerance = fixed(1.0e-8));
+  GrahamScan(SearchPointVector& sps, const fixed sign_tolerance = fixed(-1));
 
   /**
    * Perform convex hull transformation
