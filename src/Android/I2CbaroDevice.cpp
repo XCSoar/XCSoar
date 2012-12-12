@@ -74,7 +74,7 @@ I2CbaroDevice::I2CbaroDevice(unsigned _index,
                                *this)),
    press_use(use),
    pitot_offset(offset),
-   kalman_filter(fixed(10), fixed(0.3))
+   kalman_filter(fixed(5), fixed(0.3))
 {
 }
 
@@ -141,15 +141,14 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
         if (static_p != fixed(0))
         {
           fixed dyn = pressure.GetHectoPascal() - static_p - pitot_offset;
-          if (dyn < fixed(0.31)) dyn = fixed(0.0);      // suppress speeds below ~25 km/h
+          if (dyn < fixed(0.31)) dyn = fixed(0);      // suppress speeds below ~25 km/h
           basic.ProvideDynamicPressure(AtmosphericPressure::HectoPascal(dyn));
         }
         break;
 
       case DeviceConfig::PressureUse::PITOT_ZERO:
         pitot_offset = kalman_filter.GetXAbs() - static_p;
-        if (pitot_offset == fixed(0.0)) pitot_offset = fixed(0.01);
-        basic.ProvidePitotOffset(pitot_offset);
+        basic.ProvideSensorCalibration(fixed (1), pitot_offset);
         break;
     }
   }

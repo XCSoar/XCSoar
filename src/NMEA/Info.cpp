@@ -129,7 +129,7 @@ NMEAInfo::Reset()
   static_pressure_available.Clear();
   dyn_pressure_available.Clear();
   pitot_pressure_available.Clear();
-  pitot_offset_available.Clear();
+  sensor_calibration_available.Clear();
 
   baro_altitude_available.Clear();
   baro_altitude = fixed(0);
@@ -209,7 +209,7 @@ NMEAInfo::Expire()
   static_pressure_available.Expire(clock, fixed(30));
   dyn_pressure_available.Expire(clock, fixed(30));
   pitot_pressure_available.Expire(clock, fixed(30));
-  pitot_offset_available.Expire(clock, fixed(3600));
+  sensor_calibration_available.Expire(clock, fixed(3600));
   baro_altitude_available.Expire(clock, fixed(30));
   pressure_altitude_available.Expire(clock, fixed(30));
   noncomp_vario_available.Expire(clock, fixed(5));
@@ -276,8 +276,10 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (pitot_pressure_available.Complement(add.pitot_pressure_available))
     pitot_pressure = add.pitot_pressure;
 
-  if (pitot_offset_available.Complement(add.pitot_offset_available))
-    pitot_offset = add.pitot_offset;
+  if (sensor_calibration_available.Complement(add.sensor_calibration_available)) {
+     sensor_calibration_factor = add.sensor_calibration_factor;
+     sensor_calibration_offset = add.sensor_calibration_offset;
+  }
 
   if (baro_altitude_available.Complement(add.baro_altitude_available))
     baro_altitude = add.baro_altitude;

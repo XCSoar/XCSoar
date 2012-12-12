@@ -156,9 +156,10 @@ struct DeviceConfig {
   PressureUse press_use;
 
   /**
-   * Offset in hPa of the pitot pressure sensor relative to the static pressure sensor.
+   * sensor calibration data
    */
-  fixed pitot_offset;
+  fixed sensor_offset;
+  fixed sensor_factor;
 
   /**
    * Name of the driver.
@@ -339,6 +340,15 @@ struct DeviceConfig {
 
   bool UsesI2C() const {
     return UsesI2C(port_type);
+  }
+
+  static bool UsesCalibration(PortType port_type) {
+    return port_type == PortType::I2CPRESSURESENSOR ||
+           port_type == PortType::DROIDSOAR_V2;
+  }
+
+  bool UsesCalibration() const {
+    return UsesCalibration(port_type);
   }
 
   void Clear() {

@@ -336,8 +336,11 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("PressureUse"));
   GetEnum(buffer, config.press_use);
 
-  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PitotOffset"));
-  Get(buffer, config.pitot_offset);
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorOffset"));
+  Get(buffer, config.sensor_offset);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorFactor"));
+  Get(buffer, config.sensor_factor);
 }
 
 static const TCHAR *
@@ -417,16 +420,17 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("PressureUse"));
   SetEnum(buffer, config.press_use);
 
-  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PitotOffset"));
-  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 ||
-      config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR) {
-    // Has a new offset been determined ?
-    if (XCSoarInterface::Basic().pitot_offset_available) {
-      Set(buffer, XCSoarInterface::Basic().pitot_offset);
-    } else {
-      Set(buffer, config.pitot_offset);
-    }
-  } else {
-    Set(buffer, fixed(0.0));	// invalid value
-  }
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorOffset"));
+  fixed offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : fixed(0);
+  // Has new calibration data been delivered ?
+  if (XCSoarInterface::Basic().sensor_calibration_available)
+    offset = XCSoarInterface::Basic().sensor_calibration_offset;
+  Set(buffer, offset);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorFactor"));
+  fixed factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : fixed(0);
+  // Has new calibration data been delivered ?
+  if (XCSoarInterface::Basic().sensor_calibration_available)
+    factor = XCSoarInterface::Basic().sensor_calibration_factor;
+  Set(buffer, factor);
 }

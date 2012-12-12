@@ -778,7 +778,7 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
   }
 
   if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 &&
-      config.pitot_offset == fixed(0.0))
+      config.sensor_factor == fixed(0.0))
     changed = true;
 
 #ifndef NDEBUG

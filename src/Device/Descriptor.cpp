@@ -268,12 +268,13 @@ DeviceDescriptor::OpenDroidSoarV2()
     i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(), 
                                   ioio_helper->GetHolder(),
                                   DeviceConfig::PressureUse::STATIC_ONLY,
-                                  config.pitot_offset, 2 + (0x77 << 8) + (27 << 16), 0 , 5, 0);
+                                  config.sensor_offset, 2 + (0x77 << 8) + (27 << 16), 0 , 5, 0);
 
     i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                                   ioio_helper->GetHolder(),
-                                  (config.pitot_offset == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO : DeviceConfig::PressureUse::PITOT,
-                                  config.pitot_offset, 1 + (0x77 << 8) + (46 << 16), 0 , 5, 0);
+                                  // needs calibration ?
+                                  (config.sensor_factor == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO : DeviceConfig::PressureUse::PITOT,
+                                  config.sensor_offset, 1 + (0x77 << 8) + (46 << 16), 0 , 5, 0);
     return true;
   }
 #endif
@@ -294,7 +295,7 @@ DeviceDescriptor::OpenI2Cbaro()
     if (i2cbaro[i] == NULL) {
       i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
                                   ioio_helper->GetHolder(),
-                                  config.press_use, config.pitot_offset, config.i2c_bus, config.i2c_addr,
+                                  config.press_use, config.sensor_offset, config.i2c_bus, config.i2c_addr,
                                   config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
                                   0); // called flags, actually reserved for future use.
       return true;

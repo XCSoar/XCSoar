@@ -240,11 +240,15 @@ struct NMEAInfo {
   Validity dyn_pressure_available;
 
   /**
-   * Pitot pressure offset relative to static_pressure [hPa].
-   * Used only for calibration of the pitot pressure.
+   * Generic sensor calibration data for lineair sensors.
+   * Used by some sensors e.g.:
+   *   1) pitot pressure offset relative to static_pressure [hPa].
+   *   2) outside air temperature sensor
+   *   3) battery voltage measurement
    */
-  fixed pitot_offset;
-  Validity pitot_offset_available;
+  fixed sensor_calibration_offset;
+  fixed sensor_calibration_factor; // 0 is not a valid factor.
+  Validity sensor_calibration_available;
 
   /**
    * Is a barometric altitude available?
@@ -552,6 +556,7 @@ struct NMEAInfo {
   /**
    * Used to compute indicated airspeed
    * when static pressure is known.
+   * Value already includes calibration data.
    */
   void ProvidePitotPressure(AtmosphericPressure value) {
     pitot_pressure = value;
@@ -560,13 +565,16 @@ struct NMEAInfo {
 
   /**
    * Used only as a config value that should be saved.
-   * Provide the offset between the pitot- and the static pressure sensor in hPa (zero).
-   * The pressure passed to ProvidePitotPressure() should already include the
-   *pitot pressure offset. See ProvidePitotOffset()
+   *
+   * Currently used for:
+   *       battery voltage measurement (multiplier)
+   *       offset between the pitot- and the static pressure sensor in hPa (zero).
+   *       temperature sensor
    */
-  void ProvidePitotOffset(fixed value) {
-    pitot_offset = value;
-    pitot_offset_available.Update(clock);
+  void ProvideSensorCalibration(fixed value, fixed offset) {
+    sensor_calibration_factor = value;
+    sensor_calibration_offset = offset;
+    sensor_calibration_available.Update(clock);
   }
 
   /**
