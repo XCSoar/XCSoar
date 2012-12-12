@@ -82,7 +82,7 @@ private:
    * Returns the Canvas which is currently used for rendering.  This
    * method may only be called within the drawing thread.
    */
-  Canvas &get_canvas() {
+  Canvas &GetPaintCanvas() {
     return buffers[current];
   }
 
@@ -90,14 +90,14 @@ private:
    * Marks the hidden Canvas as "done" and schedules it for painting
    * to the Window.
    */
-  void flip();
+  void Flip();
 
 protected:
   /**
    * Returns the Canvas which is currently visible.  A call to this
    * method must be protected with the Mutex.
    */
-  const Canvas &get_visible_canvas() const {
+  const Canvas &GetVisibleCanvas() const {
     return buffers[current ^ 1];
   }
 
@@ -112,9 +112,9 @@ protected:
 
 #ifndef ENABLE_OPENGL
 public:
-  void repaint() {
-    OnPaintBuffer(get_canvas());
-    flip();
+  void Repaint() {
+    OnPaintBuffer(GetPaintCanvas());
+    Flip();
   }
 #endif
 };

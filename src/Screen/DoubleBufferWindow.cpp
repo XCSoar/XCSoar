@@ -72,7 +72,7 @@ DoubleBufferWindow::OnDestroy()
 }
 
 void
-DoubleBufferWindow::flip()
+DoubleBufferWindow::Flip()
 {
   /* enable the drawing buffer */
   mutex.Lock();
@@ -108,6 +108,6 @@ DoubleBufferWindow::OnPaint(Canvas &canvas)
 
 #else
   ScopeLock protect(mutex);
-  canvas.Copy(get_visible_canvas());
+  canvas.Copy(GetVisibleCanvas());
 #endif
 }

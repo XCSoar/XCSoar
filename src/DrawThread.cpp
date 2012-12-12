@@ -72,7 +72,7 @@ DrawThread::Run()
       map.ExchangeBlackboard();
 
       // Draw the moving map
-      map.repaint();
+      map.Repaint();
 
       if (trigger.Test()) {
         // interrupt re-calculation of bounds if there was a 

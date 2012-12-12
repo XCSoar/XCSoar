@@ -79,9 +79,9 @@ class DrawThread {
 public:
 #ifndef ENABLE_OPENGL
   static void Draw(MapWindow &map) {
-    map.repaint();
+    map.Repaint();
     map.UpdateAll();
-    map.repaint();
+    map.Repaint();
   }
 #else
   static void UpdateAll(MapWindow &map) {
