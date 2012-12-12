@@ -110,15 +110,13 @@ protected:
   virtual void OnPaint(Canvas &canvas) gcc_override;
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
+#ifndef ENABLE_OPENGL
 public:
   void repaint() {
-#ifndef ENABLE_OPENGL
     OnPaintBuffer(get_canvas());
     flip();
-#else
-    Invalidate();
-#endif
   }
+#endif
 };
 
 #endif
