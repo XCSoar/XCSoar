@@ -54,14 +54,15 @@ Copyright_License {
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
 
 static bool
-PDSWC(NMEAInputLine &line, NMEAInfo &info)
+PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
 
   unsigned value;
-  if (line.ReadChecked(value))
-    info.settings.ProvideMacCready(fixed(value) / 10, info.clock);
+  if (line.ReadChecked(value) &&
+      info.settings.ProvideMacCready(fixed(value) / 10, info.clock))
+    volatile_data.mc = value;
 
   long switchinputs = line.ReadHex(0L);
   long switchoutputs = line.ReadHex(0L);
@@ -282,7 +283,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
     detected = true;
 
   if (strcmp(type, "$PDSWC") == 0)
-    return PDSWC(line, info);
+    return PDSWC(line, info, volatile_data);
   else if (strcmp(type, "$PDAAV") == 0)
     return PDAAV(line, info);
   else if (strcmp(type, "$PDVSC") == 0)
