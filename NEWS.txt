@@ -8,6 +8,7 @@ Version 6.4.5 - not yet released
 * user interface
   - faster gesture drawing
   - fix crash in InfoBox page setup (#2122)
+  - allow scrolling the check list on Altair (#1289)
 * map
   - fix crash in terrain renderer with broken map file (#2478)
 * data files

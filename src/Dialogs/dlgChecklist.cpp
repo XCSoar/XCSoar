@@ -100,6 +100,14 @@ static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
+  case VK_UP:
+    wDetails->ScrollVertically(-3);
+    return true;
+
+  case VK_DOWN:
+    wDetails->ScrollVertically(3);
+    return true;
+
   case VK_LEFT:
 #ifdef GNAV
   case '6':
