@@ -73,7 +73,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   const UPixelScalar width = rc.right - rc.left;
   const UPixelScalar height = rc.bottom - rc.top;
 
-  if (!is_persistent() || !layout_initialised) {
+  if (!IsPersistent() || !layout_initialised) {
     UPixelScalar value_height = 4 + look.value_font->GetCapitalHeight()
       + look.text_font->GetCapitalHeight();
 
@@ -142,18 +142,18 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   // clear items first
 
   if (Settings().show_average_needle) {
-    if (!is_persistent() || ival_av != ival_last)
+    if (!IsPersistent() || ival_av != ival_last)
       RenderNeedle(canvas, ival_last, true, true);
 
     ival_last = ival_av;
   }
 
-  if (!is_persistent() || (sval != sval_last) || (ival != vval_last))
+  if (!IsPersistent() || (sval != sval_last) || (ival != vval_last))
     RenderVarioLine(canvas, vval_last, sval_last, true);
 
   sval_last = sval;
 
-  if (!is_persistent() || ival != vval_last)
+  if (!IsPersistent() || ival != vval_last)
     RenderNeedle(canvas, vval_last, false, true);
 
   vval_last = ival;
@@ -229,7 +229,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
 
   if (Basic().switch_state.flight_mode == SwitchInfo::FlightMode::CIRCLING)
     canvas.ScaleCopy(x, y, look.climb_bitmap, 12, 0, 12, 12);
-  else if (is_persistent())
+  else if (IsPersistent())
     canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           look.background_color);
 }
@@ -366,13 +366,13 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
   canvas.SetBackgroundTransparent();
 
-  if (!is_persistent() || (dirty && _tcscmp(diLabel->last_text, Label) != 0)) {
+  if (!IsPersistent() || (dirty && _tcscmp(diLabel->last_text, Label) != 0)) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
     tsize = canvas.CalcTextSize(Label);
     diLabel->text_position.x = diLabel->rc.right - tsize.cx;
 
-    if (is_persistent()) {
+    if (IsPersistent()) {
       canvas.SetBackgroundColor(look.background_color);
       canvas.DrawOpaqueText(diLabel->text_position.x, diLabel->text_position.y,
                             diLabel->rc, Label);
@@ -384,7 +384,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     }
   }
 
-  if (!is_persistent() || (dirty && value_info->last_value != Value)) {
+  if (!IsPersistent() || (dirty && value_info->last_value != Value)) {
     TCHAR buffer[18];
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
@@ -393,7 +393,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     tsize = canvas.CalcTextSize(buffer);
     value_info->text_position.x = value_info->rc.right - tsize.cx;
 
-    if (is_persistent()) {
+    if (IsPersistent()) {
       canvas.DrawOpaqueText(value_info->text_position.x,
                             value_info->text_position.y,
                             value_info->rc, buffer);
@@ -406,7 +406,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     }
   }
 
-  if (!is_persistent() ||
+  if (!IsPersistent() ||
       value_info->last_unit != Units::current.vertical_speed_unit) {
     value_info->last_unit = Units::current.vertical_speed_unit;
     const UnitSymbol *unit_symbol = units_look.GetSymbol(value_info->last_unit);
@@ -450,10 +450,10 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   } else
     vdiff = fixed(0);
 
-  if (!is_persistent() || lastVdiff != vdiff || dirty) {
+  if (!IsPersistent() || lastVdiff != vdiff || dirty) {
     lastVdiff = vdiff;
 
-    if (is_persistent()) {
+    if (IsPersistent()) {
       // bottom (too slow)
       canvas.DrawFilledRectangle(x, ybottom + YOFFSET,
                                  x + arrow_x_size * 2 + 1,
@@ -595,26 +595,26 @@ GaugeVario::RenderBallast(Canvas &canvas)
 
   unsigned ballast = uround(GetGlidePolar().GetBugs() * 100);
 
-  if (!is_persistent() || ballast != last_ballast) {
+  if (!IsPersistent() || ballast != last_ballast) {
     // ballast hase been changed
 
     canvas.Select(*look.text_font);
 
-    if (is_persistent())
+    if (IsPersistent())
       canvas.SetBackgroundColor(look.background_color);
     else
       canvas.SetBackgroundTransparent();
 
-    if (is_persistent() || last_ballast == 0 || ballast == 0) {
+    if (IsPersistent() || last_ballast == 0 || ballast == 0) {
       // new ballast is 0, hide label
       if (ballast > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
-        if (is_persistent())
+        if (IsPersistent())
           canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
         else
           canvas.DrawText(orgLabel.x, orgLabel.y, TextBal);
-      } else if (is_persistent())
+      } else if (IsPersistent())
         canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
 
@@ -624,14 +624,14 @@ GaugeVario::RenderBallast(Canvas &canvas)
       _stprintf(buffer, _T("%u%%"), ballast);
       canvas.SetTextColor(look.text_color);
 
-      if (is_persistent())
+      if (IsPersistent())
         canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
       else
         canvas.DrawText(orgValue.x, orgValue.y, buffer);
-    } else if (is_persistent())
+    } else if (IsPersistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
-    if (is_persistent())
+    if (IsPersistent())
       last_ballast = ballast;
   }
 }
@@ -686,23 +686,23 @@ GaugeVario::RenderBugs(Canvas &canvas)
   }
 
   int bugs = iround((fixed(1) - GetComputerSettings().polar.bugs) * 100);
-  if (is_persistent() || bugs != last_bugs) {
+  if (IsPersistent() || bugs != last_bugs) {
 
     canvas.Select(*look.text_font);
 
-    if (is_persistent())
+    if (IsPersistent())
       canvas.SetBackgroundColor(look.background_color);
     else
       canvas.SetBackgroundTransparent();
 
-    if (is_persistent() || last_bugs < 1 || bugs < 1) {
+    if (IsPersistent() || last_bugs < 1 || bugs < 1) {
       if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
-        if (is_persistent())
+        if (IsPersistent())
           canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
         else
           canvas.DrawText(orgLabel.x, orgLabel.y, TextBug);
-      } else if (is_persistent())
+      } else if (IsPersistent())
         canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
 
@@ -710,14 +710,14 @@ GaugeVario::RenderBugs(Canvas &canvas)
       TCHAR buffer[18];
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
-      if (is_persistent())
+      if (IsPersistent())
         canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
       else 
         canvas.DrawText(orgValue.x, orgValue.y, buffer);
-    } else if (is_persistent())
+    } else if (IsPersistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
-    if (is_persistent())
+    if (IsPersistent())
       last_bugs = bugs;
   }
 }
