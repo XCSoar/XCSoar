@@ -68,13 +68,12 @@ bool
 VegaDevice::PutMacCready(fixed _mc, OperationEnvironment &env)
 {
   volatile_data.mc = uround(_mc * 10);
-  return true;
+  return volatile_data.SendTo(port, env);
 }
 
 bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres, OperationEnvironment &env)
 {
   volatile_data.qnh = uround(pres.GetHectoPascal() * 10);
-
-  return true;
+  return volatile_data.SendTo(port, env);
 }
