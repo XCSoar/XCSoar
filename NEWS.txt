@@ -4,7 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.4.5 - not yet released
 * devices
-  - Vega: fix MacCready setting feedback loop (#2490)
+  - Vega: fix MacCready setting feedback loop (#1218, #2490)
 * user interface
   - faster gesture drawing
   - fix crash in InfoBox page setup (#2122)
