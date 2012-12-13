@@ -146,14 +146,18 @@ struct DeviceConfig {
    * What is the purpose of this pressure sensor.
    */
   enum class PressureUse : unsigned {
-        NONE = 0,
-	STATIC_WITH_VARIO, /* ProvidePressureAltitude() and ProvideNoncompVario() */
-	STATIC_ONLY,    /* ProvidePressureAltitude() */
-	TEK_PRESSURE,	/* ProvideNettoVario() */
-	PITOT,          /* ProvideIndicatedAirspeedWithAltitude() */
-	PITOT_ZERO,     /* Determine and then save the offset between static and pitot sensor */
-  };
-  PressureUse press_use;
+    NONE = 0,
+    /** ProvidePressureAltitude() and ProvideNoncompVario() */
+    STATIC_WITH_VARIO,
+    /** ProvidePressureAltitude() */
+    STATIC_ONLY,
+    /** ProvideNettoVario() */
+    TEK_PRESSURE,
+    /** ProvideIndicatedAirspeedWithAltitude() */
+    PITOT,
+    /** Determine and then save the offset between static and pitot sensor */
+    PITOT_ZERO,
+  } press_use;
 
   /**
    * sensor calibration data
