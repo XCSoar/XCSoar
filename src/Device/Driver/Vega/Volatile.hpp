@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -18,28 +19,46 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "FlatGeoPoint.hpp"
-#include "Math/FastMath.h"
+#ifndef XCSOAR_VEGA_VOLATILE_HPP
+#define XCSOAR_VEGA_VOLATILE_HPP
 
-unsigned
-FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return ihypot(delta.longitude, delta.latitude);
+struct DerivedInfo;
+class Port;
+class OperationEnvironment;
+
+namespace Vega {
+  struct VolatileData {
+    /**
+     * MacCready setting [cm/s].
+     */
+    unsigned mc;
+
+    /**
+     * QNH [0.1 hPa].
+     */
+    unsigned qnh;
+
+    /**
+     * Terrain altitude [m].
+     */
+    int terrain_altitude;
+
+    /**
+     * Speed to fly [cm/s].
+     */
+    unsigned stf;
+
+    bool circling;
+
+    constexpr VolatileData()
+      :mc(0), qnh(10133), terrain_altitude(0), stf(0), circling(false) {}
+
+    void CopyFrom(const DerivedInfo &calculated);
+
+    bool SendTo(Port &port, OperationEnvironment &env) const;
+  };
 }
 
-unsigned
-FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return ShiftedIntegerHypot(delta.longitude, delta.latitude, bits);
-}
-
-unsigned
-FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return delta.DotProduct(delta);
-}
+#endif

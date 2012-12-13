@@ -54,20 +54,21 @@ Copyright_License {
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
 
 static bool
-PDSWC(NMEAInputLine &line, NMEAInfo &info)
+PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
 
-  fixed value;
-  if (line.ReadChecked(value))
-    info.settings.ProvideMacCready(value / 10, info.clock);
+  unsigned value;
+  if (line.ReadChecked(value) &&
+      info.settings.ProvideMacCready(fixed(value) / 10, info.clock))
+    volatile_data.mc = value;
 
   long switchinputs = line.ReadHex(0L);
   long switchoutputs = line.ReadHex(0L);
 
   if (line.ReadChecked(value)) {
-    info.voltage = value / 10;
+    info.voltage = fixed(value) / 10;
     info.voltage_available.Update(info.clock);
   }
 
@@ -191,20 +192,22 @@ VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 static bool
 PDVDV(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  int value;
 
   if (line.ReadChecked(value))
-    info.ProvideTotalEnergyVario(value / 10);
+    info.ProvideTotalEnergyVario(fixed(value) / 10);
 
   bool ias_available = line.ReadChecked(value);
-  fixed tas_ratio = line.Read(fixed(1024)) / 1024;
-  if (ias_available)
-    info.ProvideBothAirspeeds(value / 10, value / 10 * tas_ratio);
+  int tas_ratio = line.Read(1024);
+  if (ias_available) {
+    const fixed ias = fixed(value) / 10;
+    info.ProvideBothAirspeeds(ias, ias * tas_ratio / 1024);
+  }
 
   //hasVega = true;
 
   if (line.ReadChecked(value))
-    info.ProvidePressureAltitude(value);
+    info.ProvidePressureAltitude(fixed(value));
 
   return true;
 }
@@ -214,11 +217,10 @@ PDVDV(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed AccelX = line.Read(fixed(0));
-  fixed AccelZ = line.Read(fixed(0));
+  const int accel_x = line.Read(0), accel_z = line.Read(0);
 
-  fixed mag = SmallHypot(AccelX, AccelZ);
-  info.acceleration.ProvideGLoad(fixed(mag) / 100, true);
+  fixed mag = SmallHypot(fixed(accel_x), fixed(accel_z));
+  info.acceleration.ProvideGLoad(mag / 100, true);
 
   /*
   double flap = line.Read(0.0);
@@ -228,9 +230,9 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   info.stall_ratio = line.Read(fixed(0));
   info.stall_ratio_available.Update(info.clock);
 
-  fixed value;
+  int value;
   if (line.ReadChecked(value))
-    info.ProvideNettoVario(value / 10);
+    info.ProvideNettoVario(fixed(value) / 10);
 
   //hasVega = true;
 
@@ -240,10 +242,10 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDVVT(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed value;
+  int value;
   info.temperature_available = line.ReadChecked(value);
   if (info.temperature_available)
-    info.temperature = value / 10;
+    info.temperature = fixed(value) / 10;
 
   info.humidity_available = line.ReadChecked(info.humidity);
 
@@ -281,7 +283,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
     detected = true;
 
   if (strcmp(type, "$PDSWC") == 0)
-    return PDSWC(line, info);
+    return PDSWC(line, info, volatile_data);
   else if (strcmp(type, "$PDAAV") == 0)
     return PDAAV(line, info);
   else if (strcmp(type, "$PDVSC") == 0)

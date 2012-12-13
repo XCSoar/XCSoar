@@ -125,20 +125,16 @@ gcc_const
 static inline unsigned
 ihypot(int x, int y)
 {
-  const long lx = x, ly = y;
-  return isqrt4(lx * lx + ly * ly);
+  return isqrt4(x * x + y * y);
 }
 
+/**
+ * Calculates the hypotenuse, and shifts the result by the number of
+ * bits to the left.  Unlike ihypot(), this is mostly safe against
+ * integer overflow without the overhead for 64 bit math.
+ */
 gcc_const
-static inline unsigned long
-lhypot(long x, long y)
-{
-#if defined(__i386__) || defined(__x86_64__)
-  /* x86 FPUs are extremely fast */
-  return (unsigned long)hypot((double)x, (double)y);
-#else
-  return isqrt4(x * x + y * y);
-#endif
-}
+unsigned
+ShiftedIntegerHypot(int x, int y, unsigned bits);
 
 #endif

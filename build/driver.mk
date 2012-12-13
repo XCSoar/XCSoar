@@ -74,6 +74,7 @@ VEGA_SOURCES = \
 	$(DRIVER_SRC_DIR)/Vega/Misc.cpp \
 	$(DRIVER_SRC_DIR)/Vega/Parser.cpp \
 	$(DRIVER_SRC_DIR)/Vega/Settings.cpp \
+	$(DRIVER_SRC_DIR)/Vega/Volatile.cpp \
 	$(DRIVER_SRC_DIR)/Vega/Register.cpp
 
 DRIVER_SOURCES = \

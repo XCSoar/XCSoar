@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -18,28 +19,28 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "FlatGeoPoint.hpp"
-#include "Math/FastMath.h"
+#include "Volatile.hpp"
+#include "NMEA/Derived.hpp"
+#include "Device/Internal.hpp"
+#include "Operation/Operation.hpp"
 
-unsigned
-FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
+#include <stdio.h>
+
+void
+Vega::VolatileData::CopyFrom(const DerivedInfo &calculated)
 {
-  const FlatGeoPoint delta = *this - sp;
-  return ihypot(delta.longitude, delta.latitude);
+  stf = uround(calculated.V_stf * 10);
+  terrain_altitude = iround(calculated.terrain_altitude);
+  circling = calculated.circling;
 }
 
-unsigned
-FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
+bool
+Vega::VolatileData::SendTo(Port &port, OperationEnvironment &env) const
 {
-  const FlatGeoPoint delta = *this - sp;
-  return ShiftedIntegerHypot(delta.longitude, delta.latitude, bits);
-}
-
-unsigned
-FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const
-{
-  const FlatGeoPoint delta = *this - sp;
-  return delta.DotProduct(delta);
+  char buffer[100];
+  sprintf(buffer, "PDVMC,%u,%u,%u,%d,%u",
+          mc, stf, circling, terrain_altitude, qnh);
+  return PortWriteNMEA(port, buffer, env);
 }

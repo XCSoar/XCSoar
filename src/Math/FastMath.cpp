@@ -25,6 +25,9 @@ Copyright_License {
 #include "Math/Constants.h"
 
 #include "MathTables.h"
+
+#include <algorithm>
+
 #include <assert.h>
 
 int
@@ -232,7 +235,7 @@ void i_normalise(int &x,
   const unsigned m_max = std::max(abs(x), abs(y));
   if (!m_max)
     return;
-  const int mag = lhypot(x, y);
+  const int mag = ihypot(x, y);
   x= (x<<NORMALISE_BITS)/mag;
   y= (y<<NORMALISE_BITS)/mag;
 }
@@ -267,4 +270,26 @@ void mag_rmag(fixed x,
     dist *= d_shift;
   }
 #endif
+}
+
+static inline unsigned
+SquareUnsigned(unsigned x)
+{
+  return x * x;
+}
+
+unsigned
+ShiftedIntegerHypot(int _x, int _y, unsigned bits)
+{
+  const unsigned x = abs(_x), y = abs(_y);
+  const unsigned a = std::min(x, y), b = std::max(x, y);
+  if (a == 0)
+    /* guard against division by zero */
+    return b;
+
+  /* this is the classic hypotenuse formula, with the smaller
+     parameter moved out of the square root call; this avoids squaring
+     the raw parameters, and therefore reduces the risk of overflowing
+     32 bit integers */
+  return a * isqrt4((1u << (bits << 1u)) + SquareUnsigned((b << bits) / a));
 }

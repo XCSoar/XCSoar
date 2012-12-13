@@ -45,8 +45,14 @@ Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
   // is on a straight line.
   //
 
-  return (((p0.longitude - p1.longitude) * (p2.latitude - p1.latitude)) -
-          ((p2.longitude - p1.longitude) * (p0.latitude - p1.latitude))).Sign(tolerance);
+  const Angle a = (p0.longitude - p1.longitude) * (p2.latitude - p1.latitude);
+  const Angle b = (p2.longitude - p1.longitude) * (p0.latitude - p1.latitude);
+
+  if (negative(tolerance))
+    /* auto-tolerance - this has been verified by experiment */
+    tolerance = std::max(fabs(a.Native()), fabs(b.Native())) / 10;
+
+  return (a - b).Sign(tolerance);
 }
 
 GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):

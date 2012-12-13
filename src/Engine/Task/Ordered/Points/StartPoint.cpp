@@ -148,9 +148,9 @@ StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const
 {
   const bool now_in_height =
-    constraints.CheckHeight(ref_now, margins, GetBaseElevation());
+    constraints.CheckHeight(ref_now, margins, GetBaseElevation(), true);
   const bool last_in_height =
-    constraints.CheckHeight(ref_last, margins, GetBaseElevation());
+    constraints.CheckHeight(ref_last, margins, GetBaseElevation(), true);
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks

@@ -36,13 +36,20 @@ Version 6.5 - not yet released
 * track friends via internet connection (SkyLines live tracking)
 
 Version 6.4.5 - not yet released
+* calculations
+  - fix rounding error in convex boundary calculation (#2477)
+* devices
+  - Vega: fix MacCready setting feedback loop (#1218, #2490)
 * user interface
   - faster gesture drawing
   - fix crash in InfoBox page setup (#2122)
+  - allow scrolling the check list on Altair (#1289)
 * map
   - fix crash in terrain renderer with broken map file (#2478)
 * data files
   - added "LAK-12" polar
+* task
+  - consider configured height margin when checking start condition
 
 Version 6.4.4 - 2012/11/15
 * devices

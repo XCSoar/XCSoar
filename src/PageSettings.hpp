@@ -39,7 +39,7 @@ struct PageSettings {
 
     InfoBoxConfig() = default;
 
-    InfoBoxConfig(bool _auto_switch, unsigned _panel)
+    constexpr InfoBoxConfig(bool _auto_switch, unsigned _panel)
       : auto_switch(_auto_switch), panel(_panel) {}
 
     void SetDefaults() {
@@ -70,8 +70,8 @@ struct PageSettings {
 
     PageLayout() = default;
 
-    PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config) :
-      top_layout(_top_layout), infobox_config(_infobox_config) {}
+    constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
+      :top_layout(_top_layout), infobox_config(_infobox_config) {}
 
     void SetDefaults() {
       top_layout = tlEmpty;

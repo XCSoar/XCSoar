@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Device/Driver.hpp"
 #include "Device/SettingsMap.hpp"
-#include "Atmosphere/Pressure.hpp"
 #include "Thread/Mutex.hpp"
+#include "Volatile.hpp"
 
 class NMEAInputLine;
 
@@ -35,26 +35,15 @@ class VegaDevice : public AbstractDevice {
 private:
   Port &port;
 
-  /**
-   * The most recent MacCready setting, written by PutMacCready(),
-   * read by VarioWriteSettings().
-   */
-  fixed mc;
-
-  /**
-   * The most recent QNH value, written by SetQNH(), read by
-   * VarioWriteSettings().
-   */
-  AtmosphericPressure qnh;
-
   bool detected;
+
+  Vega::VolatileData volatile_data;
 
   DeviceSettingsMap<int> settings;
 
 public:
   VegaDevice(Port &_port)
     :port(_port),
-     mc(fixed(0)), qnh(AtmosphericPressure::Standard()),
      detected(false) {}
 
   /**
@@ -83,9 +72,6 @@ public:
   std::pair<bool, int> GetSetting(const char *name) const;
 
 protected:
-  void VarioWriteSettings(const DerivedInfo &calculated,
-                          OperationEnvironment &env) const;
-
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);
 
 public:

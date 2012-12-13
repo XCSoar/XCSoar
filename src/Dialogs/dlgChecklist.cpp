@@ -94,6 +94,14 @@ static bool
 FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
+  case KEY_UP:
+    wDetails->ScrollVertically(-3);
+    return true;
+
+  case KEY_DOWN:
+    wDetails->ScrollVertically(3);
+    return true;
+
   case KEY_LEFT:
 #ifdef GNAV
   case '6':

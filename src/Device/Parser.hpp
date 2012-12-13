@@ -60,7 +60,7 @@ public:
   }
 
   void DisableGeoid() {
-    use_geoid = true;
+    use_geoid = false;
   }
 
   /**

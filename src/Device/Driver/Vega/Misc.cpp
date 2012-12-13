@@ -39,9 +39,11 @@ VegaDevice::LinkTimeout()
 void
 VegaDevice::OnSysTicker(const DerivedInfo &calculated)
 {
+  volatile_data.CopyFrom(calculated);
+
   if (detected) {
     NullOperationEnvironment env;
-    VarioWriteSettings(calculated, env);
+    volatile_data.SendTo(port, env);
   }
 
 #ifdef UAV_APPLICATION
