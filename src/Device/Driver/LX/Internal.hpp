@@ -67,6 +67,11 @@ class LXDevice: public AbstractDevice
   bool is_nano;
 
   /**
+   * Was a LXNavigation LX1600/1606 vario detected?
+   */
+  bool is_lx16xx;
+
+  /**
    * Was a V7 with a Nano on the GPS port detected?
    */
   bool is_forwarded_nano;
@@ -90,7 +95,7 @@ public:
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
      busy(false),
      is_colibri(baud_rate == 4800),
-     is_v7(false), is_nano(false), is_forwarded_nano(false),
+     is_v7(false), is_nano(false), is_lx16xx(false), is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
 
   /**
@@ -105,6 +110,13 @@ public:
    */
   bool IsNano() const {
     return is_nano || is_forwarded_nano;
+  }
+
+  /**
+   * Was a LXNavigation LX1600/1606 vario detected?
+   */
+  bool IsLX16xx() const {
+    return is_lx16xx;
   }
 
   /**

@@ -338,6 +338,8 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
     const bool saw_v7 = device_info.product.equals("V7");
     const bool saw_nano = device_info.product.equals("NANO");
+    const bool saw_lx16xx = device_info.product.equals("1606") ||
+                             device_info.product.equals("1600");
 
     if (mode == Mode::PASS_THROUGH) {
       /* in pass-through mode, we should never clear the V7 flag,
@@ -345,13 +347,15 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
          currently */
       is_v7 |= saw_v7;
       is_nano |= saw_nano;
+      is_lx16xx |= saw_lx16xx;
       is_forwarded_nano = saw_nano;
     } else {
       is_v7 = saw_v7;
       is_nano = saw_nano;
+      is_lx16xx = saw_lx16xx;
     }
 
-    if (saw_v7 || saw_nano)
+    if (saw_v7 || saw_nano || saw_lx16xx)
       is_colibri = false;
 
     return true;
