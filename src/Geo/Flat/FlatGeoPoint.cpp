@@ -34,7 +34,7 @@ unsigned
 FlatGeoPoint::ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const
 {
   const FlatGeoPoint delta = *this - sp;
-  return ihypot(delta.longitude << bits, delta.latitude << bits);
+  return ShiftedIntegerHypot(delta.longitude, delta.latitude, bits);
 }
 
 unsigned

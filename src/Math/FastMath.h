@@ -207,4 +207,13 @@ ihypot(int x, int y)
   return isqrt4(x * x + y * y);
 }
 
+/**
+ * Calculates the hypotenuse, and shifts the result by the number of
+ * bits to the left.  Unlike ihypot(), this is mostly safe against
+ * integer overflow without the overhead for 64 bit math.
+ */
+gcc_const
+unsigned
+ShiftedIntegerHypot(int x, int y, unsigned bits);
+
 #endif
