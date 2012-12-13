@@ -30,8 +30,8 @@ static void
 Print(const TaskStats &stats)
 {
   printf("distance nominal = %f km\n", double(stats.distance_nominal / 1000));
-  printf("distance max = %f km\n", double(stats.distance_min / 1000));
-  printf("distance min = %f km\n", double(stats.distance_max / 1000));
+  printf("distance min = %f km\n", double(stats.distance_min / 1000));
+  printf("distance max = %f km\n", double(stats.distance_max / 1000));
 }
 
 static void
