@@ -208,16 +208,4 @@ ihypot(int x, int y)
   return isqrt4(lx * lx + ly * ly);
 }
 
-gcc_const
-static inline unsigned long
-lhypot(long x, long y)
-{
-#if defined(__i386__) || defined(__x86_64__)
-  /* x86 FPUs are extremely fast */
-  return (unsigned long)hypot((double)x, (double)y);
-#else
-  return isqrt4(x * x + y * y);
-#endif
-}
-
 #endif
