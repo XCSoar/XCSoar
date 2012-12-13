@@ -204,8 +204,7 @@ gcc_const
 static inline unsigned
 ihypot(int x, int y)
 {
-  const long lx = x, ly = y;
-  return isqrt4(lx * lx + ly * ly);
+  return isqrt4(x * x + y * y);
 }
 
 #endif
