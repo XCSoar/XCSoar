@@ -216,7 +216,7 @@ private:
    * the 'cheat' option allows non-achieved task points to be considered achieved
    * by assuming the aircraft appeared at the reference location.
    *
-   * @return Vector of boundary points representing a closed polygon
+   * @return a list of boundary points
    */
   gcc_pure
   const SearchPointVector &GetSearchPoints() const;
