@@ -35,7 +35,7 @@ LXDevice::LinkTimeout()
 
   ScopeLock protect(mutex);
 
-  is_v7 = is_nano = is_forwarded_nano = false;
+  ResetDeviceDetection();
 
   v7_settings.Lock();
   v7_settings.clear();

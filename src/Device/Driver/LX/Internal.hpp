@@ -119,6 +119,10 @@ public:
     return is_lx16xx;
   }
 
+  void ResetDeviceDetection() {
+    is_v7 = is_nano = is_lx16xx = is_forwarded_nano = false;
+  }
+
   /**
    * Write a setting to a LXNAV V7.
    *
