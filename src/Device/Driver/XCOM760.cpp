@@ -35,7 +35,7 @@ public:
   XCOM760Device(Port &_port):port(_port) {}
 
 public:
-  virtual bool PutVolume(int volume, OperationEnvironment &env);
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
   virtual bool PutActiveFrequency(RadioFrequency frequency,
                                   OperationEnvironment &env);
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
@@ -43,10 +43,10 @@ public:
 };
 
 bool
-XCOM760Device::PutVolume(int Volume, OperationEnvironment &env)
+XCOM760Device::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   char szTmp[32];
-  sprintf(szTmp, "$RVOL=%d\r\n", Volume);
+  sprintf(szTmp, "$RVOL=%u\r\n", volume);
   port.Write(szTmp);
   return true;
 }

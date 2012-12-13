@@ -82,7 +82,7 @@ AllDevicesPutBallast(fixed fraction, fixed overload,
 }
 
 void
-AllDevicesPutVolume(int volume, OperationEnvironment &env)
+AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 {
   if (is_simulator())
     return;

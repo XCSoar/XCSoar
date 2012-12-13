@@ -52,7 +52,7 @@ AllDevicesPutBallast(fixed fraction, fixed overload,
                      OperationEnvironment &env);
 
 void
-AllDevicesPutVolume(int volume, OperationEnvironment &env);
+AllDevicesPutVolume(unsigned volume, OperationEnvironment &env);
 
 void
 AllDevicesPutActiveFrequency(RadioFrequency frequency,

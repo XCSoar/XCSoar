@@ -392,7 +392,7 @@ public:
   bool PutBugs(fixed bugs, OperationEnvironment &env);
   bool PutBallast(fixed fraction, fixed overload,
                   OperationEnvironment &env);
-  bool PutVolume(int volume, OperationEnvironment &env);
+  bool PutVolume(unsigned volume, OperationEnvironment &env);
   bool PutActiveFrequency(RadioFrequency frequency,
                           OperationEnvironment &env);
   bool PutStandbyFrequency(RadioFrequency frequency,

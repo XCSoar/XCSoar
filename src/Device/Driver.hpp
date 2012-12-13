@@ -162,7 +162,7 @@ public:
    * @param volume the new volume (0 - 100%)
    * @return true on success
    */
-  virtual bool PutVolume(int volume, OperationEnvironment &env) = 0;
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) = 0;
 
   /**
    * Set a new radio frequency.
@@ -256,7 +256,7 @@ public:
                           OperationEnvironment &env);
   virtual bool PutQNH(const AtmosphericPressure &pres,
                       OperationEnvironment &env);
-  virtual bool PutVolume(int volume, OperationEnvironment &env);
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
   virtual bool PutActiveFrequency(RadioFrequency frequency,
                                   OperationEnvironment &env);
   virtual bool PutStandbyFrequency(RadioFrequency frequency,

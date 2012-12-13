@@ -69,7 +69,7 @@ AbstractDevice::PutQNH(const AtmosphericPressure &pres,
 }
 
 bool
-AbstractDevice::PutVolume(int volume, OperationEnvironment &env)
+AbstractDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   return true;
 }

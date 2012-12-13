@@ -711,7 +711,7 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
 }
 
 bool
-DeviceDescriptor::PutVolume(int volume, OperationEnvironment &env)
+DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   if (device == NULL || !config.sync_to_device)
     return true;
