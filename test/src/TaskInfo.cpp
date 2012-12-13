@@ -43,20 +43,28 @@ Print(const OrderedTask &task)
 int
 main(int argc, char **argv)
 {
-  Args args(argc, argv, "FILE.tsk");
-  tstring path = args.ExpectNextT();
-  args.ExpectEnd();
+  Args args(argc, argv, "FILE.tsk ...");
+  if (args.IsEmpty())
+    args.UsageError();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
-  OrderedTask *task = LoadTask(path.c_str(), task_behaviour);
-  if (task == NULL)
-    return EXIT_FAILURE;
+  int result = EXIT_SUCCESS;
 
-  Print(*task);
+  do {
+    tstring path = args.ExpectNextT();
+    OrderedTask *task = LoadTask(path.c_str(), task_behaviour);
+    if (task != NULL) {
+      Print(*task);
+      delete task;
+    } else {
+      _ftprintf(stderr, _T("Failed to load %s\n"), path.c_str());
+      result = EXIT_FAILURE;
+    }
 
-  delete task;
-  return EXIT_SUCCESS;
+  } while (!args.IsEmpty());
+
+  return result;
 }
 
