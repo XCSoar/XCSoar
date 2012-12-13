@@ -70,12 +70,15 @@ namespace LX1600 {
   static bool
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    /* This line initiates the Color Vario to send out LXWP2 and LXWP3
-       LXWP0 once started, is repeated every second.  This is a copy
-       of the initiation done in LK8000, realized by LX Navigation
-       developers We have no documentation and so we do not know what
-       this exactly means. */
-    return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4", env);
+    /*
+     * This line sets the requested NMEA sentences on the device.
+     * LXWP0: every second
+     * LXWP1-3: once and then after each change
+     *
+     * We have no official documentation.
+     * This behavior was tested on an LX1606.
+     */
+    return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,2,LXWP2,2,LXWP3,2", env);
   }
 }
 
