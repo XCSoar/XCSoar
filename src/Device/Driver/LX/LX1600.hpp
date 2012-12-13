@@ -38,7 +38,7 @@ namespace LX1600 {
    * either 4800 baud or the current vario baud rate.  Since both works
    * equally well, we don't bother to switch.
    */
-  static bool
+  static inline bool
   ModeColibri(Port &port, OperationEnvironment &env)
   {
     return PortWriteNMEA(port, "PFLX0,COLIBRI", env);
@@ -50,7 +50,7 @@ namespace LX1600 {
    * sent at 4800 baud.  After this command has been sent, we switch
    * back to the "real" baud rate.
    */
-  static bool
+  static inline bool
   ModeLX1600(Port &port, OperationEnvironment &env)
   {
     unsigned old_baud_rate = port.GetBaudrate();
@@ -67,7 +67,7 @@ namespace LX1600 {
     return success;
   }
 
-  static bool
+  static inline bool
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
     /*
