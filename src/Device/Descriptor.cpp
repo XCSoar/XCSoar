@@ -523,7 +523,7 @@ DeviceDescriptor::IsManageable() const
 
     if (_tcscmp(driver->name, _T("LX")) == 0 && device != NULL) {
       const LXDevice &lx = *(const LXDevice *)device;
-      return lx.IsV7() || lx.IsNano();
+      return lx.IsV7() || lx.IsNano() || lx.IsLX16xx();
     }
   }
 

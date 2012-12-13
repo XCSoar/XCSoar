@@ -157,6 +157,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/LX/V7ConfigWidget.cpp \
 	$(SRC)/Dialogs/Device/LX/ManageNanoDialog.cpp \
 	$(SRC)/Dialogs/Device/LX/NanoConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/LX/ManageLX16xxDialog.cpp \
 	$(SRC)/Dialogs/Device/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Device/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Device/Vega/VegaDemoDialog.cpp \

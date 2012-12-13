@@ -28,6 +28,7 @@ Copyright_License {
 #include "ManageFlarmDialog.hpp"
 #include "LX/ManageV7Dialog.hpp"
 #include "LX/ManageNanoDialog.hpp"
+#include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
@@ -462,6 +463,8 @@ DeviceListWidget::ManageCurrent()
       ManageV7Dialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
       ManageNanoDialog(lx_device, info);
+    else if (lx_device.IsLX16xx())
+      ManageLX16xxDialog(lx_device, info);
   } else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
 
