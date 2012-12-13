@@ -80,6 +80,17 @@ namespace LX1600 {
      */
     return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,2,LXWP2,2,LXWP3,2", env);
   }
+
+  static inline bool
+  SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
+  {
+    if (volume > 99)
+      volume = 99;
+
+    char buffer[100];
+    sprintf(buffer, "PFLX2,,,,,,,%u", volume);
+    return PortWriteNMEA(port, buffer, env);
+  }
 }
 
 #endif

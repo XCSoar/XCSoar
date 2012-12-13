@@ -212,6 +212,8 @@ public:
   virtual bool PutQNH(const AtmosphericPressure &pres,
                       OperationEnvironment &env);
 
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
+
   virtual bool EnablePassThrough(OperationEnvironment &env);
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,

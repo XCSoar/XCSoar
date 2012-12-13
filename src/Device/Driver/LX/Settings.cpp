@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "LX1600.hpp"
 
 #include <cstdio>
 
@@ -206,4 +207,13 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   else
     sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
   return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+LXDevice::PutVolume(unsigned volume, OperationEnvironment &env)
+{
+  if (!IsLX16xx() || !EnableNMEA(env))
+    return false;
+
+  return LX1600::SetVolume(port, env, volume);
 }
