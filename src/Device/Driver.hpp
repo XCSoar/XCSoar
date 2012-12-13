@@ -159,7 +159,7 @@ public:
   /**
    * Set the radio volume.
    *
-   * @param volume the new volume (XXX define this)
+   * @param volume the new volume (0 - 100%)
    * @return true on success
    */
   virtual bool PutVolume(int volume, OperationEnvironment &env) = 0;
