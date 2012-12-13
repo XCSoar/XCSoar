@@ -66,6 +66,14 @@ struct FlatGeoPoint {
   unsigned Distance(const FlatGeoPoint &sp) const;
 
   /**
+   * Like Distance(), but shift the distance left by the specified
+   * number of bits.  This method can be used to avoid integer
+   * truncation errors.  Use only when you know what you're doing!
+   */
+  gcc_pure
+  unsigned ShiftedDistance(const FlatGeoPoint &sp, unsigned bits) const;
+
+  /**
    * Find squared distance from one point to another
    *
    * @param sp That point
