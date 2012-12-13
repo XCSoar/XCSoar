@@ -122,7 +122,7 @@ protected:
    */
   gcc_pure
   unsigned CalcDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
-    return GetPoint(s1).FlatDistanceTo(GetPoint(s2));
+    return CalcDistance(s1, GetPoint(s2));
   }
 
 private:
