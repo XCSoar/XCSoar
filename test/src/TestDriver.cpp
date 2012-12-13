@@ -36,6 +36,7 @@
 #include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
+#include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/IMI.hpp"
 #include "Device/Driver/PosiGraph.hpp"
@@ -794,6 +795,34 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(equals(nmea_info.settings.ballast_overload, 1.1));
     ok1(nmea_info.settings.bugs_available);
     ok1(equals(nmea_info.settings.bugs, 0.95));
+
+    LXDevice &lx_device = *(LXDevice *)device;
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,V7,12345,1.0,1.0,12345*6f", nmea_info));
+    ok1(lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,NANO,12345,1.0,1.0,12345*00", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(lx_device.IsNano());
+    ok1(!lx_device.IsLX16xx());
+
+    lx_device.ResetDeviceDetection();
+    ok1(device->ParseNMEA("$LXWP1,1606,4294967295,1.90,1.00,4294967295*06", nmea_info));
+    ok1(!lx_device.IsV7());
+    ok1(!lx_device.IsNano());
+    ok1(lx_device.IsLX16xx());
+
+    ok1(nmea_info.device.product == "1606");
+    ok1(nmea_info.device.serial == "4294967295");
+    ok1(nmea_info.device.software_version == "1.90");
+    ok1(nmea_info.device.hardware_version == "1.00");
   }
 
   delete device;
@@ -810,6 +839,9 @@ TestLXV7()
   basic.Reset();
   basic.clock = fixed(1);
 
+  LXDevice &lx_device = *(LXDevice *)device;
+  lx_device.ResetDeviceDetection();
+
   ok1(device->ParseNMEA("$PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*64", basic));
   ok1(basic.netto_vario_available);
   ok1(equals(basic.netto_vario, -0.25));
@@ -817,6 +849,9 @@ TestLXV7()
   ok1(equals(basic.indicated_airspeed, 90.2));
   ok1(basic.pressure_altitude_available);
   ok1(equals(basic.pressure_altitude, 244.3));
+
+  ok1(lx_device.IsV7());
+  lx_device.ResetDeviceDetection();
 
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
@@ -826,6 +861,8 @@ TestLXV7()
   ok1(!basic.switch_state.speed_command);
   ok1(basic.voltage_available);
   ok1(equals(basic.voltage, 12.3));
+
+  ok1(lx_device.IsV7());
 
   delete device;
 }
@@ -1111,7 +1148,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(568);
+  plan_tests(589);
 
   TestGeneric();
   TestTasman();
