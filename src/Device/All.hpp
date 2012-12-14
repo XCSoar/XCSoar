@@ -31,6 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEAInfo;
+struct MoreData;
 struct DerivedInfo;
 class OperationEnvironment;
 class AtmosphericPressure;
@@ -64,5 +65,8 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
 
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
+
+void
+AllDevicesNotifySensorUpdate(const MoreData &basic);
 
 #endif

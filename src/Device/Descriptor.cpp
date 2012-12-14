@@ -956,6 +956,18 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
   }
 }
 
+void
+DeviceDescriptor::OnSensorUpdate(const MoreData &basic)
+{
+  /* must hold the mutex because this method may run in any thread,
+     just in case the main thread deletes the Device while this method
+     still runs */
+  const ScopeLock protect(mutex);
+
+  if (device != nullptr)
+    device->OnSensorUpdate(basic);
+}
+
 bool
 DeviceDescriptor::ParseLine(const char *line)
 {

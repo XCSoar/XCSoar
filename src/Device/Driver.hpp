@@ -34,6 +34,7 @@ Copyright_License {
 #include <stdint.h>
 
 struct NMEAInfo;
+struct MoreData;
 struct DerivedInfo;
 struct DeviceConfig;
 struct Waypoint;
@@ -237,6 +238,28 @@ public:
    */
   virtual bool DataReceived(const void *data, size_t length,
                             struct NMEAInfo &info) = 0;
+
+  /**
+   * This method is invoked by #MergeThread after each merge,
+   * i.e. each time any device updates its #NMEAInfo object.  If there
+   * are many devices or if there is a device with a high output rate,
+   * this method may be called very often.  If no device is connected,
+   * it may not be called at all.
+   *
+   * It is meant to be implemented by drivers that forward data
+   * quickly to the device, for example an analog vario needle.
+   *
+   * Note that this method will be invoked on sensor changes on any
+   * device, including this one.
+   *
+   * Caution!  This method will be called with the DeviceBlackboard
+   * mutex locked.  Therefore it must not block and must be very
+   * careful with obtaining more mutexes, as this may block the whole
+   * XCSoar process.
+   *
+   * @param basic the merged sensor data
+   */
+  virtual void OnSensorUpdate(const MoreData &basic) = 0;
 };
 
 /**
@@ -284,6 +307,8 @@ public:
                             struct NMEAInfo &info) {
     return false;
   }
+
+  virtual void OnSensorUpdate(const MoreData &basic) gcc_override {}
 };
 
 /**

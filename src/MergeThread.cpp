@@ -26,6 +26,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Device/All.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
   :WorkerThread(150, 50, 20),
@@ -70,6 +71,9 @@ MergeThread::Tick()
     Process();
 
     const MoreData &basic = device_blackboard.Basic();
+
+    /* call Driver::OnSensorUpdate() on all devices */
+    AllDevicesNotifySensorUpdate(basic);
 
     /* trigger update if gps has become available or dropped out */
     gps_updated = last_any.location_available != basic.location_available;

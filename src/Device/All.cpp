@@ -123,3 +123,13 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutQNH(pres, env);
 }
+
+void
+AllDevicesNotifySensorUpdate(const MoreData &basic)
+{
+  if (is_simulator())
+    return;
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    device_list[i]->OnSensorUpdate(basic);
+}

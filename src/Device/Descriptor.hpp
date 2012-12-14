@@ -42,6 +42,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEAInfo;
+struct MoreData;
 struct DerivedInfo;
 struct Declaration;
 struct Waypoint;
@@ -437,6 +438,11 @@ public:
                       OperationEnvironment &env);
 
   void OnSysTicker(const DerivedInfo &calculated);
+
+  /**
+   * Wrapper for Driver::OnSensorUpdate().
+   */
+  void OnSensorUpdate(const MoreData &basic);
 
 private:
   bool ParseLine(const char *line);
