@@ -102,18 +102,6 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static bool
-cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
-{
-  return true;
-}
-
-static bool
-cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
-{
-  return true;
-}
-
 bool
 CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
@@ -126,12 +114,6 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (StringIsEqual(type, "$LXWP0"))
     return cLXWP0(line, info);
-
-  if (StringIsEqual(type, "$LXWP1"))
-    return cLXWP1(line, info);
-
-  if (StringIsEqual(type, "$LXWP2"))
-    return cLXWP2(line, info);
 
   return false;
 }
