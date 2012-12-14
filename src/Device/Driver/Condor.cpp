@@ -73,22 +73,18 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
   11 windspeed (kph)
   */
 
-  fixed value;
 
   line.Skip();
 
   fixed airspeed;
   bool tas_available = line.ReadChecked(airspeed);
 
-  fixed alt = line.Read(fixed(0));
+  fixed value;
+  if (line.ReadChecked(value))
+    info.ProvideBaroAltitudeTrue(value);
 
   if (tas_available)
-    info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                                               Unit::KILOMETER_PER_HOUR),
-                                              alt);
-
-  // ToDo check if QNH correction is needed!
-  info.ProvideBaroAltitudeTrue(alt);
+    info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
   if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
