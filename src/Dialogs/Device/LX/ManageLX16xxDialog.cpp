@@ -31,11 +31,8 @@ Copyright_License {
 #include "NMEA/DeviceInfo.hpp"
 
 class ManageLX16xxWidget : public RowFormWidget {
-#if __has_feature(attribute_unused_on_fields)
   /* This attribute is will be used in the next commits. */
-  gcc_unused
-#endif
-  LXDevice &device;
+  gcc_unused_field LXDevice &device;
   const DeviceInfo info;
 
 public:

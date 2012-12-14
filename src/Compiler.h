@@ -142,4 +142,11 @@ Copyright_License {
   #define __has_feature(x) 0
 #endif
 
+#if __has_feature(attribute_unused_on_fields)
+#define gcc_unused_field gcc_unused
+#else
+#define gcc_unused_field
+#endif
+
+
 #endif
