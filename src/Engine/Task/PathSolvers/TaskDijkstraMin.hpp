@@ -30,7 +30,7 @@
  */
 class TaskDijkstraMin : public TaskDijkstra {
 public:
-  TaskDijkstraMin(OrderedTask& _task)
+  TaskDijkstraMin(const OrderedTask &_task)
     :TaskDijkstra(_task, true) {}
 
   /**

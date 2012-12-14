@@ -50,7 +50,7 @@ class OrderedTask;
 class TaskDijkstra : protected NavDijkstra
 {
 protected:
-  OrderedTask &task;
+  const OrderedTask &task;
   unsigned active_stage;
 
 private:
@@ -65,7 +65,7 @@ public:
    * @param _task The task to find max/min distances for
    * @param is_min Whether this will be used to minimise or maximise distances
    */
-  TaskDijkstra(OrderedTask& _task, const bool is_min);
+  TaskDijkstra(const OrderedTask &_task, const bool is_min);
 
   /**
    * Returns the solution point for the specified task point.  Call

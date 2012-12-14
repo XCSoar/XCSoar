@@ -24,7 +24,7 @@
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Geo/SearchPointVector.hpp"
 
-TaskDijkstra::TaskDijkstra(OrderedTask &_task, bool _is_min)
+TaskDijkstra::TaskDijkstra(const OrderedTask &_task, bool _is_min)
   :NavDijkstra(0),
    task(_task),
    is_min(_is_min)
