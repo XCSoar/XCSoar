@@ -29,6 +29,7 @@
 #include <assert.h>
 
 class OrderedTask;
+class SearchPointVector;
 
 /**
  * Class used to scan an OrderedTask for maximum/minimum distance
@@ -50,11 +51,10 @@ class OrderedTask;
 class TaskDijkstra : protected NavDijkstra
 {
 protected:
-  const OrderedTask &task;
   unsigned active_stage;
 
 private:
-  unsigned sp_sizes[MAX_STAGES];
+  const SearchPointVector *boundaries[MAX_STAGES];
 
   const bool is_min;
 
@@ -62,10 +62,9 @@ public:
   /**
    * Constructor
    *
-   * @param _task The task to find max/min distances for
    * @param is_min Whether this will be used to minimise or maximise distances
    */
-  TaskDijkstra(const OrderedTask &_task, const bool is_min);
+  TaskDijkstra(const bool is_min);
 
   /**
    * Returns the solution point for the specified task point.  Call
@@ -85,8 +84,10 @@ protected:
 
   /**
    * Update internal details required from the task
+   *
+   * @param _task The task to find max/min distances for
    */
-  bool RefreshTask();
+  bool RefreshTask(const OrderedTask &task);
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
             unsigned value) {
@@ -130,11 +131,7 @@ protected:
 
 private:
   gcc_pure
-  unsigned GetStageSize(const unsigned stage) const {
-    assert(stage < num_stages);
-
-    return sp_sizes[stage];
-  }
+  unsigned GetStageSize(const unsigned stage) const;
 
 protected:
   /* methods from NavDijkstra */

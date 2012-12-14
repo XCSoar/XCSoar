@@ -23,9 +23,9 @@
 #include "TaskDijkstraMax.hpp"
 
 bool
-TaskDijkstraMax::DistanceMax()
+TaskDijkstraMax::DistanceMax(const OrderedTask &task)
 {
-  if (!RefreshTask())
+  if (!RefreshTask(task))
     return false;
 
   dijkstra.Reserve(256);

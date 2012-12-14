@@ -23,9 +23,10 @@
 #include "TaskDijkstraMin.hpp"
 
 bool
-TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
+TaskDijkstraMin::DistanceMin(const OrderedTask &task,
+                             const SearchPoint &currentLocation)
 {
-  if (!RefreshTask())
+  if (!RefreshTask(task))
     return false;
 
   dijkstra.Reserve(256);

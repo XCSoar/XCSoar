@@ -30,8 +30,8 @@
  */
 class TaskDijkstraMin : public TaskDijkstra {
 public:
-  TaskDijkstraMin(const OrderedTask &_task)
-    :TaskDijkstra(_task, true) {}
+  TaskDijkstraMin()
+    :TaskDijkstra(true) {}
 
   /**
    * Search task points for targets within OZs to produce the
@@ -46,7 +46,7 @@ public:
    * @param location Location of aircraft
    * @return True if succeeded
    */
-  bool DistanceMin(const SearchPoint& location);
+  bool DistanceMin(const OrderedTask &task, const SearchPoint &location);
 };
 
 #endif

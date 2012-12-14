@@ -30,8 +30,8 @@
  */
 class TaskDijkstraMax : public TaskDijkstra {
 public:
-  TaskDijkstraMax(const OrderedTask &_task)
-    :TaskDijkstra(_task, false) {}
+  TaskDijkstraMax()
+    :TaskDijkstra(false) {}
 
   /**
    * Search task points for targets within OZs to produce the
@@ -41,7 +41,7 @@ public:
    *
    * @return True if succeeded
    */
-  bool DistanceMax();
+  bool DistanceMax(const OrderedTask &task);
 };
 
 #endif
