@@ -761,19 +761,34 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   nmea_info.Reset();
   nmea_info.clock = fixed(1);
 
-  /* pressure altitude disabled */
+  /* empty sentence */
+  ok1(device->ParseNMEA("$LXWP0,N,,,,,,,,,,,*6d", nmea_info));
+  ok1(!nmea_info.pressure_altitude_available);
+  ok1(!nmea_info.baro_altitude_available);
+  ok1(!nmea_info.airspeed_available);
+  ok1(!nmea_info.total_energy_vario_available);
+  ok1(!nmea_info.external_wind_available);
+
+  /* altitude and wind */
   ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
+
+  if (condor) {
+    ok1(!nmea_info.pressure_altitude_available);
+    ok1(nmea_info.baro_altitude_available);
+    ok1(equals(nmea_info.baro_altitude, 1266.5));
+  } else {
+    ok1(nmea_info.pressure_altitude_available);
+    ok1(!nmea_info.baro_altitude_available);
+    ok1(equals(nmea_info.pressure_altitude, 1266.5));
+  }
+
   ok1(!nmea_info.airspeed_available);
   ok1(!nmea_info.total_energy_vario_available);
 
-  /* pressure altitude enabled */
-  ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
-  ok1((bool)nmea_info.pressure_altitude_available == !condor);
-  ok1((bool)nmea_info.baro_altitude_available == condor);
-  ok1(equals(condor ? nmea_info.baro_altitude : nmea_info.pressure_altitude,
-             1266.5));
-  ok1(!nmea_info.airspeed_available);
-  ok1(!nmea_info.total_energy_vario_available);
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.norm, 23.1 / 3.6));
+  ok1(equals(nmea_info.external_wind.bearing, condor ? 68 : 248));
+
 
   /* airspeed and vario available */
   ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
@@ -1148,7 +1163,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(589);
+  plan_tests(601);
 
   TestGeneric();
   TestTasman();
