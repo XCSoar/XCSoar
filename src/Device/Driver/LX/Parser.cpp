@@ -61,8 +61,6 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
   11 windspeed (kph)
   */
 
-  fixed value;
-
   line.Skip();
 
   fixed airspeed;
@@ -71,11 +69,11 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
     /* implausible */
     return false;
 
-  fixed alt = fixed(0);
-  if (line.ReadChecked(alt))
+  fixed value;
+  if (line.ReadChecked(value))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */
-    info.ProvidePressureAltitude(alt);
+    info.ProvidePressureAltitude(value);
 
   if (tas_available)
     /*
