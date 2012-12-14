@@ -52,6 +52,8 @@ Copyright_License {
 #include "Device/Driver/LevilAHRS_G.hpp"
 #include "Util/Macros.hpp"
 
+#include <assert.h>
+
 /** NULL terminated array of available device drivers. */
 static const struct DeviceRegister *const driver_list[] = {
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
