@@ -285,7 +285,7 @@ ShiftedIntegerHypot(int _x, int _y, unsigned bits)
   const unsigned a = std::min(x, y), b = std::max(x, y);
   if (a == 0)
     /* guard against division by zero */
-    return b;
+    return b << bits;
 
   /* this is the classic hypotenuse formula, with the smaller
      parameter moved out of the square root call; this avoids squaring
