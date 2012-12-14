@@ -175,6 +175,19 @@ CheckTakeOffSpeed(fixed takeoff_speed, const NMEAInfo &basic)
   return speed >= takeoff_speed;
 }
 
+/**
+ * After take-off has been detected, we check if the ground speed goes
+ * below a certain threshold that indicates the aircraft has ceased
+ * flying.  To avoid false positives while wave/ridge soaring, this
+ * threshold is half of the given take-off speed.
+ */
+gcc_pure
+static bool
+CheckLandingSpeed(fixed takeoff_speed, const NMEAInfo &basic)
+{
+  return !CheckTakeOffSpeed(Half(takeoff_speed), basic);
+}
+
 gcc_pure
 static bool
 CheckAltitudeAGL(const DerivedInfo &calculated)
@@ -236,7 +249,8 @@ FlyingComputer::Compute(fixed takeoff_speed,
       CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, dt, basic.location);
   else if (!flying.flying ||
-           !any_altitude.first || !CheckClimbing(dt, any_altitude.second))
+           (CheckLandingSpeed(takeoff_speed, basic) &&
+            (!any_altitude.first || !CheckClimbing(dt, any_altitude.second))))
     Stationary(flying, basic.time, dt, basic.location);
 
   if (any_altitude.first) {
