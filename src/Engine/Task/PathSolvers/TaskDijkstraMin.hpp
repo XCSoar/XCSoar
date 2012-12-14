@@ -30,7 +30,8 @@
  */
 class TaskDijkstraMin : public TaskDijkstra {
 public:
-  TaskDijkstraMin(OrderedTask& _task);
+  TaskDijkstraMin(OrderedTask& _task)
+    :TaskDijkstra(_task, true) {}
 
   /**
    * Search task points for targets within OZs to produce the

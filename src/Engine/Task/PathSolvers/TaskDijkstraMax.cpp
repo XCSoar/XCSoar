@@ -22,11 +22,6 @@
 
 #include "TaskDijkstraMax.hpp"
 
-TaskDijkstraMax::TaskDijkstraMax(OrderedTask& _task)
-  :TaskDijkstra(_task, false)
-{
-}
-
 bool
 TaskDijkstraMax::DistanceMax()
 {

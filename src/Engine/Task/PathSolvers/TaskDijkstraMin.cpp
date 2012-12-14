@@ -22,11 +22,6 @@
 
 #include "TaskDijkstraMin.hpp"
 
-TaskDijkstraMin::TaskDijkstraMin(OrderedTask& _task)
-  :TaskDijkstra(_task, true)
-{
-}
-
 bool
 TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
 {

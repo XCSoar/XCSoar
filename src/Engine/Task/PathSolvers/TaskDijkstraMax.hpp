@@ -30,7 +30,8 @@
  */
 class TaskDijkstraMax : public TaskDijkstra {
 public:
-  TaskDijkstraMax(OrderedTask& _task);
+  TaskDijkstraMax(OrderedTask& _task)
+    :TaskDijkstra(_task, false) {}
 
   /**
    * Search task points for targets within OZs to produce the
