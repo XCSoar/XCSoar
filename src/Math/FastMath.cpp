@@ -285,11 +285,22 @@ ShiftedIntegerHypot(int _x, int _y, unsigned bits)
   const unsigned a = std::min(x, y), b = std::max(x, y);
   if (a == 0)
     /* guard against division by zero */
-    return b;
+    return b << bits;
+
+  /* avoid integer overflow in (b/a)^2 by moving part of the bit shift
+     out of the square; this can happen if one parameter is very small
+     (e.g. 1) and the other is very large */
+  const unsigned q = b / a;
+  unsigned remaining_bits = 0;
+  while (bits > 0 && q > unsigned(0x8000 >> bits)) {
+    --bits;
+    ++remaining_bits;
+  }
 
   /* this is the classic hypotenuse formula, with the smaller
      parameter moved out of the square root call; this avoids squaring
      the raw parameters, and therefore reduces the risk of overflowing
      32 bit integers */
-  return a * isqrt4((1u << (bits << 1u)) + SquareUnsigned((b << bits) / a));
+  return (a * isqrt4((1u << (bits << 1u)) + SquareUnsigned((b << bits) / a)))
+    << remaining_bits;
 }
