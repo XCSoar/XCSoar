@@ -769,6 +769,10 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(!nmea_info.total_energy_vario_available);
   ok1(!nmea_info.external_wind_available);
 
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
   /* altitude and wind */
   ok1(device->ParseNMEA("$LXWP0,N,,1266.5,,,,,,,,248,23.1*55", nmea_info));
 
@@ -790,6 +794,9 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(equals(nmea_info.external_wind.bearing, condor ? 68 : 248));
 
 
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
   /* airspeed and vario available */
   ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
                         nmea_info));
@@ -801,6 +808,25 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(equals(nmea_info.true_airspeed, 222.3/3.6));
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 1.71));
+
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.norm, 10.1 / 3.6));
+  ok1(equals(nmea_info.external_wind.bearing, condor ? 354 : 174));
+
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  /* airspeed without altitude */
+  ok1(device->ParseNMEA("$LXWP0,Y,222.3,,,,,,,,,,*55",
+                        nmea_info));
+  ok1(!nmea_info.pressure_altitude_available);
+  ok1(!nmea_info.baro_altitude_available);
+  // TODO: indicated airspeed shouldn't be available without altitude
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed, 222.3/3.6));
+  ok1(equals(nmea_info.indicated_airspeed, 222.3/3.6));
+
 
   if (!condor) {
     ok1(device->ParseNMEA("$LXWP2,1.7,1.1,5,,,,*3e", nmea_info));
@@ -1168,7 +1194,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(605);
+  plan_tests(623);
 
   TestGeneric();
   TestTasman();
