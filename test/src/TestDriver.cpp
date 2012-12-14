@@ -810,6 +810,11 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(equals(nmea_info.settings.ballast_overload, 1.1));
     ok1(nmea_info.settings.bugs_available);
     ok1(equals(nmea_info.settings.bugs, 0.95));
+    ok1(!nmea_info.settings.volume_available);
+
+    ok1(device->ParseNMEA("$LXWP2,,,,,,,76*0c", nmea_info));
+    ok1(nmea_info.settings.volume_available);
+    ok1(nmea_info.settings.volume == 76);
 
     LXDevice &lx_device = *(LXDevice *)device;
     ok1(!lx_device.IsV7());
@@ -1163,7 +1168,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(601);
+  plan_tests(605);
 
   TestGeneric();
   TestTasman();

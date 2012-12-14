@@ -146,6 +146,12 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(value))
     info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
 
+  line.Skip(3);
+
+  unsigned volume;
+  if (line.ReadChecked(volume))
+    info.settings.ProvideVolume(volume, info.clock);
+
   return true;
 }
 
