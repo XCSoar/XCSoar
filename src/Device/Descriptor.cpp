@@ -233,7 +233,13 @@ DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
-  device = driver->CreateOnPort(config, *port);
+  Device *new_device = driver->CreateOnPort(config, *port);
+
+  {
+    const ScopeLock protect(mutex);
+    device = new_device;
+  }
+
   EnableNMEA(env);
   return true;
 }
@@ -434,8 +440,18 @@ DeviceDescriptor::Close()
 
 #endif
 
-  delete device;
-  device = NULL;
+  /* safely delete the Device object */
+  Device *old_device = device;
+
+  {
+    const ScopeLock protect(mutex);
+    device = nullptr;
+    /* after leaving this scope, no other thread may use the old
+       object; to avoid locking the mutex for too long, the "delete"
+       is called after the scope */
+  }
+
+  delete old_device;
 
   Port *old_port = port;
   port = NULL;

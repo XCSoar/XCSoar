@@ -34,6 +34,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"
 #include "Event/Notify.hpp"
+#include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
 
 #include <assert.h>
@@ -58,6 +59,13 @@ class OperationEnvironment;
 class OpenDeviceJob;
 
 class DeviceDescriptor : private Notify, private PortLineSplitter {
+  /**
+   * This mutex protects modifications of the attribute "device".  If
+   * you use the attribute "device" from a thread other than the main
+   * thread, you must hold this mutex.
+   */
+  Mutex mutex;
+
   /** the index of this device in the global list */
   const unsigned index;
 
@@ -105,6 +113,12 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
 
   /**
    * An instance of the driver.
+   *
+   * Modifications (from the main thread) must be protected by the
+   * attribute "mutex".  Read access and any use of this object
+   * outside of the main thread must also be protected, unless the
+   * device was borrowed with the method Borrow().  The latter,
+   * however, is only possible from the main thread.
    */
   Device *device;
 
