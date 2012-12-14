@@ -65,6 +65,11 @@ struct ExternalSettings {
   /** the QNH setting [hPa] */
   AtmosphericPressure qnh;
 
+  Validity volume_available;
+
+  /** the volume of the device [0-100%] */
+  unsigned volume;
+
   void Clear();
   void Expire(fixed time);
   void Complement(const ExternalSettings &add);
@@ -146,6 +151,16 @@ struct ExternalSettings {
   }
 
   /**
+   * Compare the volume setting with the specified value.
+   *
+   * @return true if the current setting is the same (within 3% difference),
+   * false if the value is different or if there is no value
+   */
+  bool CompareVolume(unsigned value) const {
+    return volume_available && abs(volume - value) < 3;
+  }
+
+  /**
    * Sets a new MacCready value, but updates the time stamp only if
    * the value has changed.
    *
@@ -157,6 +172,7 @@ struct ExternalSettings {
   bool ProvideWingLoading(fixed value, fixed time);
   bool ProvideBugs(fixed value, fixed time);
   bool ProvideQNH(AtmosphericPressure value, fixed time);
+  bool ProvideVolume(unsigned value, fixed time);
 };
 
 #endif

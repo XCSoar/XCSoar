@@ -32,6 +32,7 @@ ExternalSettings::Clear()
   wing_loading_available.Clear();
   bugs_available.Clear();
   qnh_available.Clear();
+  volume_available.Clear();
 }
 
 void
@@ -73,6 +74,11 @@ ExternalSettings::Complement(const ExternalSettings &add)
     qnh = add.qnh;
     qnh_available = add.qnh_available;
   }
+
+  if (add.volume_available.Modified(volume_available)) {
+    volume = add.volume;
+    volume_available = add.volume_available;
+  }
 }
 
 void
@@ -103,6 +109,10 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
 
   if (qnh_available && other.CompareQNH(qnh) && !last.CompareQNH(qnh))
     qnh_available.Clear();
+
+  if (volume_available && other.CompareVolume(volume) &&
+      !last.CompareVolume(volume))
+    volume_available.Clear();
 }
 
 bool
@@ -193,5 +203,20 @@ ExternalSettings::ProvideQNH(AtmosphericPressure value, fixed time)
 
   qnh = value;
   qnh_available.Update(time);
+  return true;
+}
+
+bool
+ExternalSettings::ProvideVolume(unsigned value, fixed time)
+{
+  if (value > 100)
+    /* failed sanity check */
+    return false;
+
+  if (CompareVolume(value))
+    return false;
+
+  volume = value;
+  volume_available.Update(time);
   return true;
 }
