@@ -266,15 +266,21 @@ DeviceDescriptor::OpenDroidSoarV2()
 
   if (i2cbaro[0] == NULL) {
     i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(), 
-                                  ioio_helper->GetHolder(),
-                                  DeviceConfig::PressureUse::STATIC_ONLY,
-                                  config.sensor_offset, 2 + (0x77 << 8) + (27 << 16), 0 , 5, 0);
+                       ioio_helper->GetHolder(),
+                       DeviceConfig::PressureUse::STATIC_WITH_VARIO,
+                       config.sensor_offset,
+                       2 + (0x77 << 8) + (27 << 16), 0,	// bus, address
+                       5,                               // update freq.
+                       0);                              // flags
 
     i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
-                                  ioio_helper->GetHolder(),
-                                  // needs calibration ?
-                                  (config.sensor_factor == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO : DeviceConfig::PressureUse::PITOT,
-                                  config.sensor_offset, 1 + (0x77 << 8) + (46 << 16), 0 , 5, 0);
+                       ioio_helper->GetHolder(),
+                       // needs calibration ?
+                       (config.sensor_factor == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO :
+                                                            DeviceConfig::PressureUse::PITOT,
+                       config.sensor_offset, 1 + (0x77 << 8) + (46 << 16), 0 ,
+                       5,
+                       0);
     return true;
   }
 #endif
@@ -294,10 +300,15 @@ DeviceDescriptor::OpenI2Cbaro()
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
     if (i2cbaro[i] == NULL) {
       i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
-                                  ioio_helper->GetHolder(),
-                                  config.press_use, config.sensor_offset, config.i2c_bus, config.i2c_addr,
-                                  config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
-                                  0); // called flags, actually reserved for future use.
+                       ioio_helper->GetHolder(),
+                       // needs calibration ?
+                       (config.sensor_factor == fixed(0) && config.press_use == DeviceConfig::PressureUse::PITOT) ?
+                                          DeviceConfig::PressureUse::PITOT_ZERO :
+                                          config.press_use,
+                       config.sensor_offset,
+                       config.i2c_bus, config.i2c_addr,
+                       config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
+                       0); // called flags, actually reserved for future use.
       return true;
     }
   }
