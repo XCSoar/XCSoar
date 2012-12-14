@@ -145,10 +145,8 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
   const fixed distance_ahead = vector1.distance + vector2.distance;
 
   ok1(equals(stats.distance_nominal, distance_nominal));
-  ok1(between(stats.distance_min,
-              distance_nominal - fixed(30), distance_nominal));
-  ok1(between(stats.distance_max,
-              distance_nominal, distance_nominal + fixed(30)));
+  ok1(equals(stats.distance_min, distance_nominal));
+  ok1(equals(stats.distance_max, distance_nominal));
 
   ok1(!total.vector_remaining.IsValid());
   ok1(solution_remaining.IsOk());
@@ -209,10 +207,8 @@ TestFlightToFinish(fixed aircraft_altitude)
   ok1(!stats.task_finished);
   ok1(stats.flight_mode_final_glide == !negative(stats.total.solution_remaining.altitude_difference));
   ok1(equals(stats.distance_nominal, vector.distance));
-  ok1(between(stats.distance_min,
-              vector.distance - fixed(20), vector.distance));
-  ok1(between(stats.distance_max,
-              vector.distance, vector.distance + fixed(20)));
+  ok1(equals(stats.distance_min, vector.distance));
+  ok1(equals(stats.distance_max, vector.distance));
 
   CheckLeg(tp2, aircraft, stats);
 
@@ -250,10 +246,8 @@ TestSimpleTask()
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, tp1_to_tp2.distance));
-  ok1(between(stats.distance_min,
-              tp1_to_tp2.distance - fixed(20), tp1_to_tp2.distance));
-  ok1(between(stats.distance_max,
-              tp1_to_tp2.distance, tp1_to_tp2.distance + fixed(20)));
+  ok1(equals(stats.distance_min, tp1_to_tp2.distance));
+  ok1(equals(stats.distance_max, tp1_to_tp2.distance));
 
   CheckLeg(tp1, aircraft, stats);
   CheckTotal(aircraft, stats, tp1, tp1, tp2);
@@ -291,10 +285,8 @@ TestHighFinish()
   ok1(!stats.task_finished);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, vector.distance));
-  ok1(between(stats.distance_min,
-              vector.distance - fixed(20), vector.distance));
-  ok1(between(stats.distance_max,
-              vector.distance, vector.distance + fixed(20)));
+  ok1(equals(stats.distance_min, vector.distance));
+  ok1(equals(stats.distance_max, vector.distance));
 
   CheckLeg(tp2, aircraft, stats);
 
