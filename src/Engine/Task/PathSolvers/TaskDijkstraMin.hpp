@@ -28,9 +28,7 @@
 /**
  * Specialisation of TaskDijkstra for minimum distance search
  */
-class TaskDijkstraMin: 
-  public TaskDijkstra
-{
+class TaskDijkstraMin : public TaskDijkstra {
 public:
   TaskDijkstraMin(OrderedTask& _task);
 

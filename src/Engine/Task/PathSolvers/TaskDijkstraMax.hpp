@@ -28,9 +28,7 @@
 /**
  * Specialisation of TaskDijkstra for maximum distance search
  */
-class TaskDijkstraMax: 
-  public TaskDijkstra
-{
+class TaskDijkstraMax : public TaskDijkstra {
 public:
   TaskDijkstraMax(OrderedTask& _task);
 
