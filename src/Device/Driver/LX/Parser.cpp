@@ -78,9 +78,11 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
     info.ProvidePressureAltitude(alt);
 
   if (tas_available)
-    info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                                          Unit::KILOMETER_PER_HOUR),
-                                         alt);
+    /*
+     * Call ProvideTrueAirspeed() after ProvidePressureAltitude() to use
+     * the provided altitude (if available)
+     */
+    info.ProvideTrueAirspeed(Units::ToSysUnit(airspeed, Unit::KILOMETER_PER_HOUR));
 
   if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
