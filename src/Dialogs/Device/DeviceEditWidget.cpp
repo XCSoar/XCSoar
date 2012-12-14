@@ -32,6 +32,8 @@
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Interface.hpp"
 
 #ifdef _WIN32_WCE
 #include "Device/Windows/Enumerator.hpp"
@@ -777,8 +779,7 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
     changed |= SaveValue(IgnoreCheckSum, config.ignore_checksum);
   }
 
-  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 &&
-      config.sensor_factor == fixed(0.0))
+  if (XCSoarInterface::Basic().sensor_calibration_available)
     changed = true;
 
 #ifndef NDEBUG
