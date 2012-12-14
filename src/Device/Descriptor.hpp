@@ -34,6 +34,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"
 #include "Event/Notify.hpp"
+#include "Thread/Debug.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -326,6 +327,8 @@ public:
    * May only be called from the main thread.
    */
   bool IsOccupied() const {
+    assert(InMainThread());
+
     return IsBorrowed() || async.IsBusy();
   }
 
@@ -337,6 +340,8 @@ public:
    * @see Borrow()
    */
   bool CanBorrow() const {
+    assert(InMainThread());
+
     return device != NULL && GetState() == PortState::READY && !IsOccupied();
   }
 

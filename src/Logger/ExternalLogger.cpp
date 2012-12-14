@@ -262,8 +262,6 @@ ShowFlightList(const RecordedFlightList &flight_list)
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
-  assert(device.IsBorrowed());
-
   MessageOperationEnvironment env;
 
   // Download the list of flights that the logger contains

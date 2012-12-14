@@ -174,6 +174,8 @@ DeviceDescriptor::ShouldReopenDriverOnTimeout() const
 void
 DeviceDescriptor::CancelAsync()
 {
+  assert(InMainThread());
+
   if (!async.IsBusy())
     return;
 
@@ -385,6 +387,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 void
 DeviceDescriptor::Open(OperationEnvironment &env)
 {
+  assert(InMainThread());
   assert(port == NULL);
   assert(device == NULL);
   assert(!ticker);
@@ -408,6 +411,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
 void
 DeviceDescriptor::Close()
 {
+  assert(InMainThread());
   assert(!IsBorrowed());
 
   CancelAsync();
@@ -451,6 +455,7 @@ DeviceDescriptor::Close()
 void
 DeviceDescriptor::Reopen(OperationEnvironment &env)
 {
+  assert(InMainThread());
   assert(!IsBorrowed());
 
   Close();
@@ -460,6 +465,8 @@ DeviceDescriptor::Reopen(OperationEnvironment &env)
 void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (/* don't reopen a device that is occupied */
       IsOccupied() ||
       !config.IsAvailable() ||
@@ -544,6 +551,8 @@ DeviceDescriptor::IsManageable() const
 bool
 DeviceDescriptor::Borrow()
 {
+  assert(InMainThread());
+
   if (!CanBorrow())
     return false;
 
@@ -554,6 +563,7 @@ DeviceDescriptor::Borrow()
 void
 DeviceDescriptor::Return()
 {
+  assert(InMainThread());
   assert(IsBorrowed());
 
   borrowed = false;
@@ -651,6 +661,8 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line, OperationEnvironment &env)
 bool
 DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || settings_sent.CompareMacCready(value) ||
       !config.sync_to_device)
     return true;
@@ -674,6 +686,8 @@ DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 bool
 DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || settings_sent.CompareBugs(value) ||
       !config.sync_to_device)
     return true;
@@ -698,6 +712,8 @@ bool
 DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
                              OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || !config.sync_to_device ||
       (settings_sent.CompareBallastFraction(fraction) &&
        settings_sent.CompareBallastOverload(overload)))
@@ -724,6 +740,8 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
 bool
 DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || !config.sync_to_device)
     return true;
 
@@ -739,6 +757,8 @@ bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || !config.sync_to_device)
     return true;
 
@@ -754,6 +774,8 @@ bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || !config.sync_to_device)
     return true;
 
@@ -769,6 +791,8 @@ bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
                          OperationEnvironment &env)
 {
+  assert(InMainThread());
+
   if (device == NULL || settings_sent.CompareQNH(value) ||
       !config.sync_to_device)
     return true;
@@ -854,7 +878,7 @@ bool
 DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
-  assert(IsBorrowed());
+  assert(borrowed);
   assert(port != NULL);
   assert(driver != NULL);
   assert(device != NULL);
@@ -871,7 +895,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                                  const TCHAR *path,
                                  OperationEnvironment &env)
 {
-  assert(IsBorrowed());
+  assert(borrowed);
   assert(port != NULL);
   assert(driver != NULL);
   assert(device != NULL);
@@ -889,6 +913,8 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 void
 DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 {
+  assert(InMainThread());
+
   if (port != NULL && port->GetState() == PortState::FAILED && !IsOccupied())
     Close();
 
@@ -934,6 +960,7 @@ DeviceDescriptor::OnNotification()
 {
   /* notification from AsyncJobRunner, the Job was finished */
 
+  assert(InMainThread());
   assert(open_job != NULL);
 
   async.Wait();
