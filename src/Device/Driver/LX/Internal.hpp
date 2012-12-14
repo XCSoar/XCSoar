@@ -200,32 +200,32 @@ protected:
   bool EnableCommandMode(OperationEnvironment &env);
 
 public:
-  virtual void LinkTimeout();
-  virtual bool EnableNMEA(OperationEnvironment &env);
+  virtual void LinkTimeout() gcc_override;
+  virtual bool EnableNMEA(OperationEnvironment &env) gcc_override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 
   virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env);
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+                          OperationEnvironment &env) gcc_override;
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) gcc_override;
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) gcc_override;
   virtual bool PutQNH(const AtmosphericPressure &pres,
-                      OperationEnvironment &env);
+                      OperationEnvironment &env) gcc_override;
 
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) gcc_override;
 
-  virtual bool EnablePassThrough(OperationEnvironment &env);
+  virtual bool EnablePassThrough(OperationEnvironment &env) gcc_override;
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env);
+                       OperationEnvironment &env) gcc_override;
 
-  virtual void OnSysTicker(const DerivedInfo &calculated);
+  virtual void OnSysTicker(const DerivedInfo &calculated) gcc_override;
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env);
+                              OperationEnvironment &env) gcc_override;
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path,
-                              OperationEnvironment &env);
+                              OperationEnvironment &env) gcc_override;
 };
 
 #endif

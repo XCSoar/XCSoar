@@ -39,8 +39,8 @@ class FlymasterF1Device : public AbstractDevice {
 public:
   FlymasterF1Device(Port &_port):port(_port) {}
 
-  virtual bool EnableNMEA(OperationEnvironment &env);
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool EnableNMEA(OperationEnvironment &env) gcc_override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 };
 
 bool

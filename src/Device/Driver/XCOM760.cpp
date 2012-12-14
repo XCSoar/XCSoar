@@ -35,11 +35,11 @@ public:
   XCOM760Device(Port &_port):port(_port) {}
 
 public:
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) gcc_override;
   virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  OperationEnvironment &env);
+                                  OperationEnvironment &env) gcc_override;
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   OperationEnvironment &env);
+                                   OperationEnvironment &env) gcc_override;
 };
 
 bool

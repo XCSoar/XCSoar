@@ -75,12 +75,12 @@ protected:
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);
 
 public:
-  virtual void LinkTimeout();
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+  virtual void LinkTimeout() gcc_override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) gcc_override;
   virtual bool PutQNH(const AtmosphericPressure& pres,
-                      OperationEnvironment &env);
-  virtual void OnSysTicker(const DerivedInfo &calculated);
+                      OperationEnvironment &env) gcc_override;
+  virtual void OnSysTicker(const DerivedInfo &calculated) gcc_override;
 };
 
 #endif

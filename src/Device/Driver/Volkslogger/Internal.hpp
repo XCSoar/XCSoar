@@ -33,9 +33,9 @@ private:
 public:
   VolksloggerDevice(Port &_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env);
+                       OperationEnvironment &env) gcc_override;
 };
 
 #endif

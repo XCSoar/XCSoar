@@ -34,7 +34,7 @@ Copyright_License {
 
 class LeonardoDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 };
 
 static bool

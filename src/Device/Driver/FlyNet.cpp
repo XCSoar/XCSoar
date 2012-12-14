@@ -29,7 +29,7 @@ Copyright_License {
 
 class FlyNetDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 
   bool ParseBAT(const char *content, NMEAInfo &info);
   bool ParsePRS(const char *content, NMEAInfo &info);
