@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_ALTAIRPRO_HPP
 #define XCSOAR_DEVICE_DRIVER_ALTAIRPRO_HPP
 
-extern const struct DeviceRegister atrDevice;
+extern const struct DeviceRegister altair_pro_driver;
 
 #endif

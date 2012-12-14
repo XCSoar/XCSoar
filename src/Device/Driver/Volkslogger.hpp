@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_HPP
 #define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_HPP
 
-extern const struct DeviceRegister vlDevice;
+extern const struct DeviceRegister volkslogger_driver;
 
 #endif

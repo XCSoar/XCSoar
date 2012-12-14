@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/NmeaOut.hpp"
 #include "Device/Driver.hpp"
 
-const struct DeviceRegister nmoDevice = {
+const struct DeviceRegister nmea_out_driver = {
   _T("NmeaOut"),
   _T("NMEA output"),
   DeviceRegister::NMEA_OUT|DeviceRegister::NO_TIMEOUT,

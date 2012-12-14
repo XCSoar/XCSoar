@@ -367,7 +367,7 @@ EWMicroRecorderCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new EWMicroRecorderDevice(com_port);
 }
 
-const struct DeviceRegister ewMicroRecorderDevice = {
+const struct DeviceRegister ew_microrecorder_driver = {
   _T("EW MicroRecorder"),
   _T("EW microRecorder"),
   DeviceRegister::DECLARE,

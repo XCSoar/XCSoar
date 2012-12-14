@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_GENERIC_HPP
 #define XCSOAR_DEVICE_DRIVER_GENERIC_HPP
 
-extern const struct DeviceRegister genDevice;
+extern const struct DeviceRegister generic_driver;
 
 #endif

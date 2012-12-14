@@ -30,7 +30,7 @@ FlarmCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new FlarmDevice(com_port);
 }
 
-const struct DeviceRegister flarm_device = {
+const struct DeviceRegister flarm_driver = {
   _T("FLARM"), _T("FLARM"),
   DeviceRegister::DECLARE | DeviceRegister::LOGGER | DeviceRegister::MANAGE,
   FlarmCreateOnPort,

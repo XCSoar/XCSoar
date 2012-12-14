@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_EWMICRORECORDER_HPP
 #define XCSOAR_DEVICE_DRIVER_EWMICRORECORDER_HPP
 
-extern const struct DeviceRegister ewMicroRecorderDevice;
+extern const struct DeviceRegister ew_microrecorder_driver;
 
 #endif

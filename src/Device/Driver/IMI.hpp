@@ -7,6 +7,6 @@
 #ifndef DEVIMI_H
 #define DEVIMI_H
 
-extern const struct DeviceRegister imi_device_driver;
+extern const struct DeviceRegister imi_driver;
 
 #endif /* DEVIMI_H */

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_BORGELTB50_HPP
 #define XCSOAR_DEVICE_DRIVER_BORGELTB50_HPP
 
-extern const struct DeviceRegister b50Device;
+extern const struct DeviceRegister b50_driver;
 
 #endif
 

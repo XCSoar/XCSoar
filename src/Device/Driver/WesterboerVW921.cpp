@@ -361,7 +361,7 @@ WesterboerVW921CreateOnPort(const DeviceConfig &config, Port &com_port)
   return new WesterboerVW921Device();
 }
 
-const struct DeviceRegister westerboer_vw921_device_driver = {
+const struct DeviceRegister westerboer_vw921_driver = {
   _T("VW921"),
   _T("Westerboer VW921/VW922"),
   DeviceRegister::RAW_GPS_DATA | DeviceRegister::RECEIVE_SETTINGS,

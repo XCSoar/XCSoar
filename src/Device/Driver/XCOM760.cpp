@@ -80,7 +80,7 @@ XCOM760CreateOnPort(const DeviceConfig &config, Port &com_port)
   return new XCOM760Device(com_port);
 }
 
-const struct DeviceRegister xcom760Device = {
+const struct DeviceRegister xcom760_driver = {
   _T("XCOM760"),
   _T("XCOM760"),
   DeviceRegister::NO_TIMEOUT | DeviceRegister::SEND_SETTINGS,

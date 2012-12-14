@@ -230,7 +230,7 @@ static void
 TestAltairRU()
 {
   NullPort null;
-  Device *device = atrDevice.CreateOnPort(dummy_config, null);
+  Device *device = altair_pro_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -260,7 +260,7 @@ static void
 TestGTAltimeter()
 {
   NullPort null;
-  Device *device = gt_altimeter_device_driver.CreateOnPort(dummy_config, null);
+  Device *device = gt_altimeter_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -298,7 +298,7 @@ static void
 TestBorgeltB50()
 {
   NullPort null;
-  Device *device = b50Device.CreateOnPort(dummy_config, null);
+  Device *device = b50_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -328,7 +328,7 @@ static void
 TestCAI302()
 {
   NullPort null;
-  Device *device = cai302Device.CreateOnPort(dummy_config, null);
+  Device *device = cai302_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -418,7 +418,7 @@ static void
 TestFlymasterF1()
 {
   NullPort null;
-  Device *device = flymasterf1Device.CreateOnPort(dummy_config, null);
+  Device *device = flymaster_f1_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -502,7 +502,7 @@ static void
 TestFlytec()
 {
   NullPort null;
-  Device *device = flytec_device_driver.CreateOnPort(dummy_config, null);
+  Device *device = flytec_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -641,7 +641,7 @@ static void
 TestLeonardo()
 {
   NullPort null;
-  Device *device = leonardo_device_driver.CreateOnPort(dummy_config, null);
+  Device *device = leonardo_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -878,7 +878,7 @@ static void
 TestLXV7()
 {
   NullPort null;
-  Device *device = lxDevice.CreateOnPort(dummy_config, null);
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo basic;
@@ -917,7 +917,7 @@ static void
 TestILEC()
 {
   NullPort null;
-  Device *device = ilec_device_driver.CreateOnPort(dummy_config, null);
+  Device *device = ilec_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -948,7 +948,7 @@ static void
 TestVega()
 {
   NullPort null;
-  Device *device = vgaDevice.CreateOnPort(dummy_config, null);
+  Device *device = vega_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -993,7 +993,7 @@ static void
 TestWesterboer()
 {
   NullPort null;
-  Device *device = westerboer_device_driver.CreateOnPort(dummy_config, null);
+  Device *device = westerboer_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -1031,7 +1031,7 @@ static void
 TestZander()
 {
   NullPort null;
-  Device *device = zanderDevice.CreateOnPort(dummy_config, null);
+  Device *device = zander_driver.CreateOnPort(dummy_config, null);
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
@@ -1208,8 +1208,8 @@ int main(int argc, char **argv)
   TestFlytec();
   TestLeonardo();
   TestLevilAHRS();
-  TestLX(lxDevice);
-  TestLX(condorDevice, true);
+  TestLX(lx_driver);
+  TestLX(condor_driver, true);
   TestLXV7();
   TestILEC();
   TestVega();
@@ -1219,22 +1219,22 @@ int main(int argc, char **argv)
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */
-  //TestDeclare(atrDevice);
-  TestDeclare(cai302Device);
-  TestDeclare(ewDevice);
-  TestDeclare(ewMicroRecorderDevice);
-  TestDeclare(pgDevice);
-  TestDeclare(lxDevice);
-  TestDeclare(imi_device_driver);
-  TestDeclare(flarm_device);
-  //TestDeclare(vgaDevice);
+  //TestDeclare(altair_pro_driver);
+  TestDeclare(cai302_driver);
+  TestDeclare(ew_driver);
+  TestDeclare(ew_microrecorder_driver);
+  TestDeclare(posigraph_driver);
+  TestDeclare(lx_driver);
+  TestDeclare(imi_driver);
+  TestDeclare(flarm_driver);
+  //TestDeclare(vega_driver);
 
   /* XXX Volkslogger doesn't do well with this test case */
-  //TestDeclare(vlDevice);
+  //TestDeclare(volkslogger_driver);
 
-  TestFlightList(cai302Device);
-  TestFlightList(lxDevice);
-  TestFlightList(imi_device_driver);
+  TestFlightList(cai302_driver);
+  TestFlightList(lx_driver);
+  TestFlightList(imi_driver);
 
   return exit_status();
 }

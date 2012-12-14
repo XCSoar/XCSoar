@@ -29,6 +29,6 @@ Copyright_License {
  *
  * @see http://www.nadler.com/sn10/SN10_PDA_Support.html
  */
-extern const struct DeviceRegister ilec_device_driver;
+extern const struct DeviceRegister ilec_driver;
 
 #endif

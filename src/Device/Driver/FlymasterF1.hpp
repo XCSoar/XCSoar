@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_FLYMASTERF1_HPP
 #define XCSOAR_DEVICE_DRIVER_FLYMASTERF1_HPP
 
-extern const struct DeviceRegister flymasterf1Device;
+extern const struct DeviceRegister flymaster_f1_driver;
 
 #endif
 

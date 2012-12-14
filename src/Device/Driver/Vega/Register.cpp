@@ -30,7 +30,7 @@ VegaCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new VegaDevice(com_port);
 }
 
-const struct DeviceRegister vgaDevice = {
+const struct DeviceRegister vega_driver = {
   _T("Vega"),
   _T("Vega"),
   DeviceRegister::MANAGE |

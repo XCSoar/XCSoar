@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_GT_ALTIMETER_HPP
 #define XCSOAR_DEVICE_DRIVER_GT_ALTIMETER_HPP
 
-extern const struct DeviceRegister gt_altimeter_device_driver;
+extern const struct DeviceRegister gt_altimeter_driver;
 
 #endif
 

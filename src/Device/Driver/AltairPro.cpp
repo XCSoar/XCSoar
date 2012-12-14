@@ -355,7 +355,7 @@ AltairProCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new AltairProDevice(com_port);
 }
 
-const struct DeviceRegister atrDevice = {
+const struct DeviceRegister altair_pro_driver = {
   _T("Altair RU"),
   _T("Altair Recording Unit"),
   DeviceRegister::DECLARE,

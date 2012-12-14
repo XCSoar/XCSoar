@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_CAIGPSNAV_HPP
 #define XCSOAR_DEVICE_DRIVER_CAIGPSNAV_HPP
 
-extern const struct DeviceRegister caiGpsNavDevice;
+extern const struct DeviceRegister gps_nav_driver;
 
 #endif
 

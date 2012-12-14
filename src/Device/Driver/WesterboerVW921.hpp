@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_WESTERBOER_VW921_HPP
 #define XCSOAR_DEVICE_DRIVER_WESTERBOER_VW921_HPP
 
-extern const struct DeviceRegister westerboer_vw921_device_driver;
+extern const struct DeviceRegister westerboer_vw921_driver;
 
 #endif

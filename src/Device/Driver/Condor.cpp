@@ -120,7 +120,7 @@ CondorCreateOnPort(const DeviceConfig &config, gcc_unused Port &com_port)
   return new CondorDevice();
 }
 
-const struct DeviceRegister condorDevice = {
+const struct DeviceRegister condor_driver = {
   _T("Condor"),
   _T("Condor Soaring Simulator"),
   0,

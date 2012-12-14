@@ -28,6 +28,6 @@ Copyright_License {
  * A driver for Leonardo PRO BT.  It provides vario, airspeed,
  * temperature, wind (plus GPS in standard NMEA records).
  */
-extern const struct DeviceRegister leonardo_device_driver;
+extern const struct DeviceRegister leonardo_driver;
 
 #endif

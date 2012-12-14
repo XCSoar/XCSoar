@@ -82,7 +82,7 @@ PGCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new PGDevice(com_port, config.baud_rate, config.bulk_baud_rate);
 }
 
-const struct DeviceRegister pgDevice = {
+const struct DeviceRegister posigraph_driver = {
   _T("PosiGraph Logger"),
   _T("PosiGraph Logger"),
   DeviceRegister::DECLARE | DeviceRegister::BULK_BAUD_RATE,

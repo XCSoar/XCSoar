@@ -30,7 +30,7 @@ FlytecCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new FlytecDevice(com_port);
 }
 
-const struct DeviceRegister flytec_device_driver = {
+const struct DeviceRegister flytec_driver = {
   _T("Flytec"), _T("Flytec 5030 / Brauniger"),
   0 /* DeviceRegister::LOGGER deactivated until current firmware supports this */,
   FlytecCreateOnPort,

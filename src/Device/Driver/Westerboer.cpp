@@ -191,7 +191,7 @@ WesterboerCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new WesterboerDevice(com_port);
 }
 
-const struct DeviceRegister westerboer_device_driver = {
+const struct DeviceRegister westerboer_driver = {
   _T("Westerboer VW1150"),
   _T("Westerboer VW1150"),
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,

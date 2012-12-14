@@ -95,7 +95,7 @@ GTAltimeterDeviceCreateOnPort(gcc_unused const DeviceConfig &config,
   return new GTAltimeterDevice();
 }
 
-const struct DeviceRegister gt_altimeter_device_driver = {
+const struct DeviceRegister gt_altimeter_driver = {
   _T("GTAltimeter"),
   _T("GT Altimeter (GliderTools)"),
   0,

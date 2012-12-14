@@ -162,7 +162,7 @@ ZanderCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new ZanderDevice();
 }
 
-const struct DeviceRegister zanderDevice = {
+const struct DeviceRegister zander_driver = {
   _T("Zander"),
   _T("Zander / SDI"),
   DeviceRegister::RECEIVE_SETTINGS,

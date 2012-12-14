@@ -47,18 +47,18 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 }
 
 static void
-LoadPilotInfo(LX::Pilot &lxDevice_Pilot, const Declaration &declaration)
+LoadPilotInfo(LX::Pilot &lx_driver_Pilot, const Declaration &declaration)
 {
-  memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
-  copy_space_padded(lxDevice_Pilot.PilotName, declaration.pilot_name,
-                    sizeof(lxDevice_Pilot.PilotName));
-  copy_space_padded(lxDevice_Pilot.GliderType, declaration.aircraft_type,
-                    sizeof(lxDevice_Pilot.GliderType));
-  copy_space_padded(lxDevice_Pilot.GliderID, declaration.aircraft_registration,
-                    sizeof(lxDevice_Pilot.GliderID));
-  copy_space_padded(lxDevice_Pilot.CompetitionID, declaration.competition_id,
-                    sizeof(lxDevice_Pilot.CompetitionID));
-  memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
+  memset((void*)lx_driver_Pilot.unknown1, 0, sizeof(lx_driver_Pilot.unknown1));
+  copy_space_padded(lx_driver_Pilot.PilotName, declaration.pilot_name,
+                    sizeof(lx_driver_Pilot.PilotName));
+  copy_space_padded(lx_driver_Pilot.GliderType, declaration.aircraft_type,
+                    sizeof(lx_driver_Pilot.GliderType));
+  copy_space_padded(lx_driver_Pilot.GliderID, declaration.aircraft_registration,
+                    sizeof(lx_driver_Pilot.GliderID));
+  copy_space_padded(lx_driver_Pilot.CompetitionID, declaration.competition_id,
+                    sizeof(lx_driver_Pilot.CompetitionID));
+  memset((void*)lx_driver_Pilot.unknown2, 0, sizeof(lx_driver_Pilot.unknown2));
 }
 
 gcc_const
@@ -73,7 +73,7 @@ AngleToLX(Angle value)
  * @param decl  The declaration
  */
 static bool
-LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
+LoadTask(LX::Declaration &lx_driver_Declaration, const Declaration &declaration)
 {
   if (declaration.Size() > 10)
     return false;
@@ -81,8 +81,8 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
   if (declaration.Size() < 2)
       return false;
 
-  memset((void*)lxDevice_Declaration.unknown1, 0,
-          sizeof(lxDevice_Declaration.unknown1));
+  memset((void*)lx_driver_Declaration.unknown1, 0,
+          sizeof(lx_driver_Declaration.unknown1));
 
   BrokenDate DeclDate;
   DeclDate.day = 1;
@@ -91,54 +91,54 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
 
   if (DeclDate.day > 0 && DeclDate.day < 32
       && DeclDate.month > 0 && DeclDate.month < 13) {
-    lxDevice_Declaration.dayinput = (unsigned char)DeclDate.day;
-    lxDevice_Declaration.monthinput = (unsigned char)DeclDate.month;
+    lx_driver_Declaration.dayinput = (unsigned char)DeclDate.day;
+    lx_driver_Declaration.monthinput = (unsigned char)DeclDate.month;
     int iCentury = DeclDate.year / 100; // Todo: if no gps fix, use system time
     iCentury *= 100;
-    lxDevice_Declaration.yearinput = (unsigned char)(DeclDate.year - iCentury);
+    lx_driver_Declaration.yearinput = (unsigned char)(DeclDate.year - iCentury);
   }
   else {
-    lxDevice_Declaration.dayinput = (unsigned char)1;
-    lxDevice_Declaration.monthinput = (unsigned char)1;
-    lxDevice_Declaration.yearinput = (unsigned char)10;
+    lx_driver_Declaration.dayinput = (unsigned char)1;
+    lx_driver_Declaration.monthinput = (unsigned char)1;
+    lx_driver_Declaration.yearinput = (unsigned char)10;
   }
-  lxDevice_Declaration.dayuser = lxDevice_Declaration.dayinput;
-  lxDevice_Declaration.monthuser = lxDevice_Declaration.monthinput;
-  lxDevice_Declaration.yearuser = lxDevice_Declaration.yearinput;
-  lxDevice_Declaration.taskid = 0;
-  lxDevice_Declaration.numtps = declaration.Size();
+  lx_driver_Declaration.dayuser = lx_driver_Declaration.dayinput;
+  lx_driver_Declaration.monthuser = lx_driver_Declaration.monthinput;
+  lx_driver_Declaration.yearuser = lx_driver_Declaration.yearinput;
+  lx_driver_Declaration.taskid = 0;
+  lx_driver_Declaration.numtps = declaration.Size();
 
   for (unsigned i = 0; i < LX::NUMTPS; i++) {
     if (i == 0) { // takeoff
-      lxDevice_Declaration.tptypes[i] = 3;
-      lxDevice_Declaration.Latitudes[i] = 0;
-      lxDevice_Declaration.Longitudes[i] = 0;
-      copy_space_padded(lxDevice_Declaration.WaypointNames[i], _T("TAKEOFF"),
-        sizeof(lxDevice_Declaration.WaypointNames[i]));
+      lx_driver_Declaration.tptypes[i] = 3;
+      lx_driver_Declaration.Latitudes[i] = 0;
+      lx_driver_Declaration.Longitudes[i] = 0;
+      copy_space_padded(lx_driver_Declaration.WaypointNames[i], _T("TAKEOFF"),
+        sizeof(lx_driver_Declaration.WaypointNames[i]));
 
 
     } else if (i <= declaration.Size()) {
-      lxDevice_Declaration.tptypes[i] = 1;
-      lxDevice_Declaration.Longitudes[i] =
+      lx_driver_Declaration.tptypes[i] = 1;
+      lx_driver_Declaration.Longitudes[i] =
         AngleToLX(declaration.GetLocation(i - 1).longitude);
-      lxDevice_Declaration.Latitudes[i] =
+      lx_driver_Declaration.Latitudes[i] =
         AngleToLX(declaration.GetLocation(i - 1).latitude);
-      copy_space_padded(lxDevice_Declaration.WaypointNames[i],
+      copy_space_padded(lx_driver_Declaration.WaypointNames[i],
                         declaration.GetName(i - 1),
-                        sizeof(lxDevice_Declaration.WaypointNames[i]));
+                        sizeof(lx_driver_Declaration.WaypointNames[i]));
 
     } else if (i == declaration.Size() + 1) { // landing
-      lxDevice_Declaration.tptypes[i] = 2;
-      lxDevice_Declaration.Longitudes[i] = 0;
-      lxDevice_Declaration.Latitudes[i] = 0;
-      copy_space_padded(lxDevice_Declaration.WaypointNames[i], _T("LANDING"),
-          sizeof(lxDevice_Declaration.WaypointNames[i]));
+      lx_driver_Declaration.tptypes[i] = 2;
+      lx_driver_Declaration.Longitudes[i] = 0;
+      lx_driver_Declaration.Latitudes[i] = 0;
+      copy_space_padded(lx_driver_Declaration.WaypointNames[i], _T("LANDING"),
+          sizeof(lx_driver_Declaration.WaypointNames[i]));
 
     } else { // unused
-      lxDevice_Declaration.tptypes[i] = 0;
-      lxDevice_Declaration.Longitudes[i] = 0;
-      lxDevice_Declaration.Latitudes[i] = 0;
-      memset((void*)lxDevice_Declaration.WaypointNames[i], 0, 9);
+      lx_driver_Declaration.tptypes[i] = 0;
+      lx_driver_Declaration.Longitudes[i] = 0;
+      lx_driver_Declaration.Latitudes[i] = 0;
+      memset((void*)lx_driver_Declaration.WaypointNames[i], 0, 9);
     }
   }
 
@@ -146,11 +146,11 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
 }
 
 static void
-LoadContestClass(LX::ContestClass &lxDevice_ContestClass,
+LoadContestClass(LX::ContestClass &lx_driver_ContestClass,
                  gcc_unused const Declaration &declaration)
 {
-  copy_space_padded(lxDevice_ContestClass.contest_class, _T(""),
-                    sizeof(lxDevice_ContestClass.contest_class));
+  copy_space_padded(lx_driver_ContestClass.contest_class, _T(""),
+                    sizeof(lx_driver_ContestClass.contest_class));
 }
 
 static bool
@@ -171,8 +171,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::Pilot pilot;
   LoadPilotInfo(pilot, declaration);
 
-  LX::Declaration lxDevice_Declaration;
-  if (!LoadTask(lxDevice_Declaration, declaration))
+  LX::Declaration lx_driver_Declaration;
+  if (!LoadTask(lx_driver_Declaration, declaration))
     return false;
 
   LX::ContestClass contest_class;
@@ -192,7 +192,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   if (env.IsCancelled())
     return false;
 
-  writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration), env);
+  writer.Write(&lx_driver_Declaration, sizeof(lx_driver_Declaration), env);
   writer.Flush();
   if (!LX::ExpectACK(port, env))
     return false;

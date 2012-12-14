@@ -173,7 +173,7 @@ B50CreateOnPort(const DeviceConfig &config, Port &com_port)
   return new B50Device(com_port);
 }
 
-const struct DeviceRegister b50Device = {
+const struct DeviceRegister b50_driver = {
   _T("Borgelt B50"),
   _T("Borgelt B50/B800"),
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,

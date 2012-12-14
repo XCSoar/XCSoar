@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_VEGA_HPP
 #define XCSOAR_DEVICE_DRIVER_VEGA_HPP
 
-extern const struct DeviceRegister vgaDevice;
+extern const struct DeviceRegister vega_driver;
 
 #endif

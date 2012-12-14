@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_EW_HPP
 #define XCSOAR_DEVICE_DRIVER_EW_HPP
 
-extern const struct DeviceRegister ewDevice;
+extern const struct DeviceRegister ew_driver;
 
 #endif

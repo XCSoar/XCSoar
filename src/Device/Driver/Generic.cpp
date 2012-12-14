@@ -33,7 +33,7 @@ GenericCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new GenericDevice();
 }
 
-const struct DeviceRegister genDevice = {
+const struct DeviceRegister generic_driver = {
   _T("Generic"),
   _T("Generic"),
   0,

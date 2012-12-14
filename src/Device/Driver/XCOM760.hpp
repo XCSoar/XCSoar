@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_XCOM760_HPP
 #define XCSOAR_DEVICE_DRIVER_XCOM760_HPP
 
-extern const struct DeviceRegister xcom760Device;
+extern const struct DeviceRegister xcom760_driver;
 
 #endif
 

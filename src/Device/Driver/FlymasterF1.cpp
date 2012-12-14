@@ -111,7 +111,7 @@ FlymasterF1CreateOnPort(const DeviceConfig &config, Port &port)
   return new FlymasterF1Device(port);
 }
 
-const struct DeviceRegister flymasterf1Device = {
+const struct DeviceRegister flymaster_f1_driver = {
   _T("FlymasterF1"),
   _T("Flymaster F1"),
   0,

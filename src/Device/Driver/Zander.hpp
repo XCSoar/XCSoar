@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_ZANDER_HPP
 #define XCSOAR_DEVICE_DRIVER_ZANDER_HPP
 
-extern const struct DeviceRegister zanderDevice;
+extern const struct DeviceRegister zander_driver;
 
 #endif
 

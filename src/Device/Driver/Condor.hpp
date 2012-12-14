@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_CONDOR_HPP
 #define XCSOAR_DEVICE_DRIVER_CONDOR_HPP
 
-extern const struct DeviceRegister condorDevice;
+extern const struct DeviceRegister condor_driver;
 
 #endif
 

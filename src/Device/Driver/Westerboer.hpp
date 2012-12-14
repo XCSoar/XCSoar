@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_WESTERBOER_HPP
 #define XCSOAR_DEVICE_DRIVER_WESTERBOER_HPP
 
-extern const struct DeviceRegister westerboer_device_driver;
+extern const struct DeviceRegister westerboer_driver;
 
 #endif

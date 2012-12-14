@@ -30,7 +30,7 @@ IMICreateOnPort(const DeviceConfig &config, Port &com_port)
   return new IMIDevice(com_port);
 }
 
-const struct DeviceRegister imi_device_driver = {
+const struct DeviceRegister imi_driver = {
   _T("IMI ERIXX"),
   _T("IMI ERIXX"),
   DeviceRegister::DECLARE | DeviceRegister::LOGGER,

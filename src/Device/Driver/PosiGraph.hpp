@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_POSIGRAPH_HPP
 #define XCSOAR_DEVICE_DRIVER_POSIGRAPH_HPP
 
-extern const struct DeviceRegister pgDevice;
+extern const struct DeviceRegister posigraph_driver;
 
 #endif
 

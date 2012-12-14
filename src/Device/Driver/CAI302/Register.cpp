@@ -30,7 +30,7 @@ CAI302CreateOnPort(const DeviceConfig &config, Port &port)
   return new CAI302Device(config, port);
 }
 
-const struct DeviceRegister cai302Device = {
+const struct DeviceRegister cai302_driver = {
   _T("CAI 302"),
   _T("Cambridge CAI302"),
   DeviceRegister::BULK_BAUD_RATE |

@@ -109,7 +109,7 @@ ILECCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new ILECDevice();
 }
 
-const struct DeviceRegister ilec_device_driver = {
+const struct DeviceRegister ilec_driver = {
   _T("ILEC SN10"),
   _T("ILEC SN10"),
   0,

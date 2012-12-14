@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_CAI302_HPP
 #define XCSOAR_DEVICE_DRIVER_CAI302_HPP
 
-extern const struct DeviceRegister cai302Device;
+extern const struct DeviceRegister cai302_driver;
 
 #endif

@@ -298,7 +298,7 @@ EWCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new EWDevice(com_port);
 }
 
-const struct DeviceRegister ewDevice = {
+const struct DeviceRegister ew_driver = {
   _T("EW Logger"),
   _T("EW Logger"),
   DeviceRegister::DECLARE,

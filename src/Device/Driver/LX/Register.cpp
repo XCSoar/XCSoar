@@ -35,7 +35,7 @@ LXCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new LXDevice(com_port, baud_rate, bulk_baud_rate);
 }
 
-const struct DeviceRegister lxDevice = {
+const struct DeviceRegister lx_driver = {
   _T("LX"),
   _T("LX / Colibri"),
   DeviceRegister::DECLARE | DeviceRegister::LOGGER |

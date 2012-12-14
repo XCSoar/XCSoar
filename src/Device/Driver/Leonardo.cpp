@@ -225,7 +225,7 @@ LeonardoCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new LeonardoDevice();
 }
 
-const struct DeviceRegister leonardo_device_driver = {
+const struct DeviceRegister leonardo_driver = {
   _T("Leonardo"),
   _T("Digifly Leonardo"),
   0,

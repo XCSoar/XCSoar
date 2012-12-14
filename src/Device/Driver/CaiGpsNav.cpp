@@ -69,7 +69,7 @@ CaiGpsNavCreateOnPort(const DeviceConfig &config, Port &com_port)
   return new CaiGpsNavDevice(com_port);
 }
 
-const struct DeviceRegister caiGpsNavDevice = {
+const struct DeviceRegister gps_nav_driver = {
   _T("CAI GPS-NAV"),
   _T("Cambridge CAI GPS-NAV"),
   0,

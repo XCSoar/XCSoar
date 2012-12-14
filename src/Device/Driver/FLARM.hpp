@@ -24,6 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_FLARM_HPP
 #define XCSOAR_DEVICE_DRIVER_FLARM_HPP
 
-extern const struct DeviceRegister flarm_device;
+extern const struct DeviceRegister flarm_driver;
 
 #endif
