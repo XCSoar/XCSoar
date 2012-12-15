@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/device.hpp"
 #include "Thread/Mutex.hpp"
-#include "../Simulator.hpp"
 
 #include <assert.h>
 
@@ -53,9 +52,6 @@ AllDevicesAutoReopen(OperationEnvironment &env)
 void
 AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutMacCready(mac_cready, env);
 }
@@ -63,9 +59,6 @@ AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 void
 AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutBugs(bugs, env);
 }
@@ -74,9 +67,6 @@ void
 AllDevicesPutBallast(fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutBallast(fraction, overload, env);
 }
@@ -84,9 +74,6 @@ AllDevicesPutBallast(fixed fraction, fixed overload,
 void
 AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutVolume(volume, env);
 }
@@ -95,9 +82,6 @@ void
 AllDevicesPutActiveFrequency(RadioFrequency frequency,
                              OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutActiveFrequency(frequency, env);
 }
@@ -106,9 +90,6 @@ void
 AllDevicesPutStandbyFrequency(RadioFrequency frequency,
                               OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutStandbyFrequency(frequency, env);
 }
@@ -117,9 +98,6 @@ void
 AllDevicesPutQNH(const AtmosphericPressure &pres,
                  OperationEnvironment &env)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->PutQNH(pres, env);
 }
@@ -127,9 +105,6 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
 void
 AllDevicesNotifySensorUpdate(const MoreData &basic)
 {
-  if (is_simulator())
-    return;
-
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->OnSensorUpdate(basic);
 }
