@@ -441,6 +441,120 @@ applies to them.  We have a template class called \texttt{Guard} to
 enforce proper read/write locking.  Example: the task.
 
 
+\section{Accessing Sensor Data}
+
+Much of XCSoar deals with obtaining sensor data and visualising it.
+
+Suppose you want to write a dialog that needs the current GPS
+location, where do you get it?  The short and simple answer is: from
+\verb|CommonInterface::Basic()| (the \texttt{InterfaceBlackboard}).
+Example:
+
+\begin{verbatim}
+#include "Interface.hpp"
+
+...
+  const auto &basic = CommonInterface::Basic();
+  if (basic.location_available)
+    current_location = basic.location;
+\end{verbatim}
+
+This is true for the main thread (aka the ``user interface thread'').
+Other threads must not use the \texttt{Interface.hpp} library, because
+the \verb|InterfaceBlackboard| is not protected in any way.  It
+contains copies of various data structures just for the main thread.
+
+This is how sensor data moves inside XCSoar:
+
+\begin{tikzpicture}
+  \node(merge)[thread,align=center]{
+    MergeThread\\
+    BasicComputer\\
+    DeviceBlackboard
+  };
+
+  \path(merge.north)+(-2,2) node(device1)[thread]{Device 1};
+  \draw[->] (device1.south) -- (merge.north)
+  node[midway, below, sloped, font=\tiny]{NMEAInfo};
+
+  \path(merge.north)+(2,2) node(device2)[thread]{Device 2};
+  \draw[->] (device2.south) -- (merge.north)
+  node[midway, below, sloped, font=\tiny]{NMEAInfo};
+
+  \path(merge.south)+(0,-2) node(calc)[thread,align=center]{
+    CalcThread\\
+    GlideComputer\\
+    GlideComputerBlackboard
+  };
+  \draw[->] (merge.south) -- (calc.north)
+  node[midway, below, sloped, font=\tiny]{MoreData};
+
+  \path(calc.south)+(0,-2) node(ui)[thread,align=center]{
+    UI thread\\
+    InterfaceBlackboard\\
+    BlackboardListener
+  };
+  \draw[->] (calc.south) -- (ui.north)
+  node[midway, below, sloped, font=\tiny]{DerivedInfo};
+
+  \path(ui.east)+(3.5,0) node(draw)[thread,align=center]{
+    DrawThread\\
+    MapWindow\\
+    MapWindowBlackboard
+  };
+  \draw[->] (ui.east) -- (draw.west)
+  node[midway, below, sloped, font=\tiny]{DerivedInfo};
+\end{tikzpicture}
+
+The device driver parses input received from its device into its own
+\texttt{NMEAInfo} instance inside \texttt{DeviceBlackboard}
+(i.e. \verb|per_device_data|).  Then it wakes up the
+\texttt{MergeThread} to merge the new data into the central
+\texttt{NMEAInfo} instance.  The \texttt{MergeThread} hosts the
+\texttt{BasicComputer} which attempts to calculate missing data (for
+example, derives vario from GPS altitude).
+
+The \texttt{CalculationThread} wakes up and receives the
+\texttt{MoreData} object from \texttt{DeviceBlackboard}.  Here,
+expensive calculations are performed (\texttt{GlideComputer}: task
+engine, airspace warnings, ...), resulting in a \texttt{DerivedInfo}
+object.  The \texttt{CalculationThread} runs no more than twice per
+second.
+
+Finally, the UI thread wakes up and receives \texttt{MoreData} and
+\texttt{DerivedInfo} via \texttt{DeviceBlackboard}.  This updates
+InfoBoxes and other UI elements.  On Windows, the map is drawn in a
+separate thread, so there's another layer.
+
+Let's get back to the question: where do I get sensor data?  That
+depends on who you are:
+
+\begin{itemize}
+
+\item you are the user interface: (InfoBoxes, dialogs, any Window
+  callback): \texttt{InterfaceBlackboard} (see above).  To get
+  notified on changes, register a \texttt{BlackboardListener} (and
+  don't forget to unregister it).
+
+\item you are the MapWindow: depends!  If you're being called from
+  \texttt{OnPaintBuffer} (i.e. inside the \texttt{DrawThread}), you
+  must use the \texttt{MapWindowBlackboard}, all others must use the
+  \texttt{InterfaceBlackboard}.
+
+\item you are a ``computer'' library: you will get the values as a
+  parameter.  Don't try to use the \texttt{GlideComputerBlackboard}
+  directly.
+
+\item you are a device driver: implement the method
+  \texttt{OnSensorUpdate} or \texttt{OnCalculatedUpdate} if you need
+  to know values from other devices or calculation results.
+
+\item everybody else may use the \texttt{DeviceBlackboard}, but be
+  sure to lock it while using its data.
+
+\end{itemize}
+
+
 \chapter{The build system}
 
 A big plain \texttt{Makefile} is used to control the XCSoar build.
