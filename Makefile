@@ -765,6 +765,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/BatteryTimer.cpp \
 	$(SRC)/ProcessTimer.cpp \
 	$(SRC)/MainWindow.cpp \
+	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
