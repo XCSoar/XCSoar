@@ -698,7 +698,7 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
 void
 FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
-  canvas.ClearWhite();
+  canvas.Clear(look.background_color);
   Paint(canvas);
 }
 

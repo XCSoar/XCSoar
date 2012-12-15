@@ -33,7 +33,7 @@ Version 6.5 - not yet released
   - reduce audio vario latency
 * infoboxes
   - added thermal assistant infobox
-  - inverse colors for wind arrow infobox (#2337)
+  - inverse colors for wind arrow infobox and flarm gauge (#2337)
 * track friends via internet connection (SkyLines live tracking)
 
 Version 6.4.5 - 2012/12/14

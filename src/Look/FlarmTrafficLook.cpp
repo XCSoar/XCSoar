@@ -27,15 +27,15 @@
 #include "Screen/Layout.hpp"
 
 void
-FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
+FlarmTrafficLook::Initialise(const TrafficLook &other, bool small, bool inverse)
 {
   passive_color = Color(0x99, 0x99, 0x99);
   warning_color = other.warning_color;
   alarm_color = other.alarm_color;
-  default_color = COLOR_BLACK;
+  default_color = inverse ? COLOR_WHITE : COLOR_BLACK;
   selection_color = COLOR_BLUE;
-  background_color = COLOR_WHITE;
-  radar_color = COLOR_LIGHT_GRAY;
+  background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
+  radar_color = inverse ? COLOR_DARK_GRAY : COLOR_LIGHT_GRAY;
   Color team_color_green = Color(0x74, 0xFF, 0);
   Color team_color_blue = Color(0, 0x90, 0xFF);
   Color team_color_yellow = Color(0xFF, 0xE8, 0);
@@ -66,7 +66,7 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   plane_pen.Set(width, radar_color);
   radar_pen.Set(1, radar_color);
 
-  unit_fraction_pen.Set(1, COLOR_BLACK);
+  unit_fraction_pen.Set(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   no_traffic_font.Load(GetStandardFontFace(), Layout::FastScale(24));
   label_font.Load(GetStandardFontFace(), Layout::FastScale(14));

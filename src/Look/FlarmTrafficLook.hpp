@@ -68,7 +68,7 @@ struct FlarmTrafficLook {
   Font label_font, side_info_font, no_traffic_font;
   Font info_values_font, info_units_font, info_labels_font, call_sign_font;
 
-  void Initialise(const TrafficLook &other, bool small);
+  void Initialise(const TrafficLook &other, bool small, bool inverse = false);
 };
 
 #endif
