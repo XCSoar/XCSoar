@@ -102,6 +102,6 @@ AbstractDevice::Declare(const Declaration &declaration, const Waypoint *home,
 }
 
 void
-AbstractDevice::OnSysTicker(const DerivedInfo &calculated)
+AbstractDevice::OnSysTicker()
 {
 }

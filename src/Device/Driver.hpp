@@ -227,7 +227,7 @@ public:
    *
    * @param calculated the current set of calculation results
    */
-  virtual void OnSysTicker(const DerivedInfo &calculated) = 0;
+  virtual void OnSysTicker() = 0;
 
   /**
    * Called when data is received and the device is configured to
@@ -260,6 +260,14 @@ public:
    * @param basic the merged sensor data
    */
   virtual void OnSensorUpdate(const MoreData &basic) = 0;
+
+  /**
+   * This method is invoked by the main thread after each
+   * CalculationThread run.  It is meant for drivers which want to
+   * send calculation results to the device.
+   */
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) = 0;
 };
 
 /**
@@ -301,7 +309,7 @@ public:
     return false;
   }
 
-  virtual void OnSysTicker(const DerivedInfo &calculated);
+  virtual void OnSysTicker() gcc_override;
 
   virtual bool DataReceived(const void *data, size_t length,
                             struct NMEAInfo &info) {
@@ -309,6 +317,9 @@ public:
   }
 
   virtual void OnSensorUpdate(const MoreData &basic) gcc_override {}
+
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) gcc_override {}
 };
 
 /**

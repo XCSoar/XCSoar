@@ -437,12 +437,18 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                       OperationEnvironment &env);
 
-  void OnSysTicker(const DerivedInfo &calculated);
+  void OnSysTicker();
 
   /**
    * Wrapper for Driver::OnSensorUpdate().
    */
   void OnSensorUpdate(const MoreData &basic);
+
+  /**
+   * Wrapper for Driver::OnCalculatedUpdate().
+   */
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated);
 
 private:
   bool ParseLine(const char *line);

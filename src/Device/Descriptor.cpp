@@ -927,7 +927,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 }
 
 void
-DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
+DeviceDescriptor::OnSysTicker()
 {
   assert(InMainThread());
 
@@ -952,7 +952,7 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     ticker = !ticker;
     if (ticker)
       // write settings to vario every second
-      device->OnSysTicker(calculated);
+      device->OnSysTicker();
   }
 }
 
@@ -966,6 +966,16 @@ DeviceDescriptor::OnSensorUpdate(const MoreData &basic)
 
   if (device != nullptr)
     device->OnSensorUpdate(basic);
+}
+
+void
+DeviceDescriptor::OnCalculatedUpdate(const MoreData &basic,
+                                     const DerivedInfo &calculated)
+{
+  assert(InMainThread());
+
+  if (device != nullptr)
+    device->OnCalculatedUpdate(basic, calculated);
 }
 
 bool

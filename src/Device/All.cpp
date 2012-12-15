@@ -26,13 +26,13 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 
 void
-devTick(const DerivedInfo &calculated)
+devTick()
 {
   int i;
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceDescriptor &device = *device_list[i];
-    device.OnSysTicker(calculated);
+    device.OnSysTicker();
   }
 }
 
@@ -103,4 +103,12 @@ AllDevicesNotifySensorUpdate(const MoreData &basic)
 {
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i]->OnSensorUpdate(basic);
+}
+
+void
+AllDevicesNotifyCalculatedUpdate(const MoreData &basic,
+                                 const DerivedInfo &calculated)
+{
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    device_list[i]->OnCalculatedUpdate(basic, calculated);
 }

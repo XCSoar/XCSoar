@@ -80,7 +80,8 @@ public:
   virtual bool PutMacCready(fixed mc, OperationEnvironment &env) gcc_override;
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       OperationEnvironment &env) gcc_override;
-  virtual void OnSysTicker(const DerivedInfo &calculated) gcc_override;
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) gcc_override;
 };
 
 #endif

@@ -33,7 +33,7 @@ class AtmosphericPressure;
 class RadioFrequency;
 
 void
-devTick(const DerivedInfo &calculated);
+devTick();
 
 void
 AllDevicesAutoReopen(OperationEnvironment &env);
@@ -64,5 +64,9 @@ AllDevicesPutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
 void
 AllDevicesNotifySensorUpdate(const MoreData &basic);
+
+void
+AllDevicesNotifyCalculatedUpdate(const MoreData &basic,
+                                 const DerivedInfo &calculated);
 
 #endif

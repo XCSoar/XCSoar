@@ -219,7 +219,7 @@ public:
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env) gcc_override;
 
-  virtual void OnSysTicker(const DerivedInfo &calculated) gcc_override;
+  virtual void OnSysTicker() gcc_override;
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env) gcc_override;

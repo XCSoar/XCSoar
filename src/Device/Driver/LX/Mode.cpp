@@ -91,7 +91,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
 }
 
 void
-LXDevice::OnSysTicker(const DerivedInfo &calculated)
+LXDevice::OnSysTicker()
 {
   ScopeLock protect(mutex);
   if (mode == Mode::COMMAND && !busy) {

@@ -37,7 +37,8 @@ VegaDevice::LinkTimeout()
 }
 
 void
-VegaDevice::OnSysTicker(const DerivedInfo &calculated)
+VegaDevice::OnCalculatedUpdate(const MoreData &basic,
+                               const DerivedInfo &calculated)
 {
   volatile_data.CopyFrom(calculated);
 

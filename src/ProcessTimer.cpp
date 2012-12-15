@@ -329,7 +329,7 @@ ProcessTimer()
 
   if (!is_simulator()) {
     // now check GPS status
-    devTick(CommonInterface::Calculated());
+    devTick();
 
     // also service replay logger
     if (replay && replay->Update()) {
