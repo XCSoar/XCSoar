@@ -324,6 +324,9 @@ public:
     return mode == _mode;
   }
 
+  gcc_pure
+  bool IsMat() const;
+
   /**
    * Retrieves glide polar used by task system
    *

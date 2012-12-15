@@ -404,6 +404,12 @@ TaskManager::SetTaskAdvance()
   return ordered_task->SetTaskAdvance();
 }
 
+bool
+TaskManager::IsMat() const
+{
+  return ordered_task->GetFactoryType() == TaskFactoryType::MAT;
+}
+
 const AlternateList &
 TaskManager::GetAlternates() const
 {
