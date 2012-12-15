@@ -25,10 +25,11 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-WindArrowLook::Initialise(const Font &_font)
+WindArrowLook::Initialise(const Font &_font, bool inverse)
 {
-  arrow_pen.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
-  tail_pen.Set(Pen::DASH, 1, COLOR_BLACK);
+  arrow_pen.Set(Layout::Scale(1), inverse ? LightColor(COLOR_GRAY) : DarkColor(COLOR_GRAY));
+  tail_pen.Set(Pen::DASH, 1, inverse ? COLOR_WHITE : COLOR_BLACK);
   arrow_brush.Set(COLOR_GRAY);
+
   font = &_font;
 }

@@ -36,7 +36,7 @@ struct WindArrowLook
 
   const Font *font;
 
-  void Initialise(const Font &font);
+  void Initialise(const Font &font, bool inverse = false);
 };
 
 #endif

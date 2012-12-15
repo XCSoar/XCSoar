@@ -61,6 +61,7 @@ struct Look {
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
   InfoBoxLook info_box;
+  WindArrowLook wind_arrow_info_box;
   FinalGlideBarLook final_glide_bar;
   IconLook icon;
   ThermalAssistantLook thermal_assistant_gauge;

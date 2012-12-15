@@ -36,7 +36,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "UIGlobals.hpp"
-#include "Look/MapLook.hpp"
+#include "Look/Look.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -231,6 +231,6 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 
-  WindArrowRenderer renderer(UIGlobals::GetMapLook().wind);
+  WindArrowRenderer renderer(UIGlobals::GetLook().wind_arrow_info_box);
   renderer.DrawArrow(canvas, pt, angle, length, style, offset);
 }
