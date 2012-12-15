@@ -25,16 +25,12 @@ Copyright_License {
 #define XCSOAR_DEVICE_ALL_HPP
 
 #include "Math/fixed.hpp"
-#include "Compiler.h"
-#include "RadioFrequency.hpp"
 
-#include <tchar.h>
-
-struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 class OperationEnvironment;
 class AtmosphericPressure;
+class RadioFrequency;
 
 void
 devTick(const DerivedInfo &calculated);
