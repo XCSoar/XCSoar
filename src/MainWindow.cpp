@@ -51,6 +51,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
 #include "DrawThread.hpp"
+#include "Device/All.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
@@ -613,6 +614,9 @@ MainWindow::OnUser(unsigned id)
 
     ActionInterface::UpdateDisplayMode();
     ActionInterface::SendUIState();
+
+    AllDevicesNotifyCalculatedUpdate(CommonInterface::Basic(),
+                                     CommonInterface::Calculated());
 
     return true;
 
