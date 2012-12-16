@@ -232,9 +232,11 @@ InfoBoxContentWindArrow::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
     size -= padding;
 
   auto angle = info.wind.bearing - info.heading;
-  auto length = std::min(size, (UPixelScalar)std::max(10, iround(info.wind.norm * 4)));
 
-  auto offset = -length / 2;
+  PixelScalar length =
+      std::min(size, (UPixelScalar)std::max(10, iround(info.wind.norm * 4)));
+
+  PixelScalar offset = -length / 2;
 
   auto style = CommonInterface::GetMapSettings().wind_arrow_style;
 

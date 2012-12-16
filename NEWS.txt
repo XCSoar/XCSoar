@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.4.6 - not yet released
+* infoboxes
+  - fixes broken wind arrow display in some situations (#2295)
 
 Version 6.4.5 - 2012/12/14
 * calculations
