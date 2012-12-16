@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.4.6 - not yet released
+
 Version 6.4.5 - 2012/12/14
 * calculations
   - fix rounding error in convex boundary calculation (#2477)
