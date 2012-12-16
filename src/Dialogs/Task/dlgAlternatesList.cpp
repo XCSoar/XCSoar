@@ -22,9 +22,12 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/ListPicker.hpp"
+#include "Widget/ListWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
+#include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
@@ -33,15 +36,43 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
 
-class AlternatesListDialog : public ListItemRenderer {
+class AlternatesListWidget : public ListWidget, private ActionListener {
+  enum Buttons {
+    SETTINGS,
+    GOTO,
+  };
+
+  const DialogLook &dialog_look;
+
+  WndButton *details_button, *cancel_button, *goto_button;
+
 public:
   AbortTask::AlternateVector alternates;
+
+public:
+  void CreateButtons(WidgetDialog &dialog);
+
+public:
+  AlternatesListWidget(const DialogLook &_dialog_look)
+    :dialog_look(_dialog_look) {}
+
+  unsigned GetCursorIndex() const {
+    return GetList().GetCursorIndex();
+  }
 
   void Update() {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
     alternates = lease->GetAlternates();
   }
 
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare() {
+    DeleteWindow();
+  }
+
+  /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned index) gcc_override {
     assert(index < alternates.size());
@@ -56,7 +87,55 @@ public:
                                UIGlobals::GetMapLook().waypoint,
                                CommonInterface::GetMapSettings().waypoint);
   }
+
+  virtual void OnActivateItem(unsigned index);
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id);
 };
+
+void
+AlternatesListWidget::CreateButtons(WidgetDialog &dialog)
+{
+  goto_button = dialog.AddButton(_("Goto"), *this, GOTO);
+  details_button = dialog.AddButton(_("Details"), mrOK);
+  cancel_button = dialog.AddButton(_("Close"), mrCancel);
+}
+
+void
+AlternatesListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  UPixelScalar item_height = dialog_look.list.font->GetHeight()
+    + Layout::Scale(6) + dialog_look.small_font->GetHeight();
+  assert(item_height > 0);
+
+  CreateList(parent, dialog_look, rc, item_height);
+
+  GetList().SetLength(alternates.size());
+}
+
+void
+AlternatesListWidget::OnActivateItem(unsigned index)
+{
+  details_button->OnClicked();
+}
+
+void
+AlternatesListWidget::OnAction(int id)
+{
+  switch (id) {
+  case GOTO:
+    unsigned index = GetCursorIndex();
+
+    auto const &item = alternates[index];
+    auto const &waypoint = item.waypoint;
+
+    protected_task_manager->DoGoto(waypoint);
+    cancel_button->OnClicked();
+
+    break;
+  }
+}
 
 void
 dlgAlternatesListShowModal(SingleWindow &parent)
@@ -64,16 +143,22 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
-  AlternatesListDialog dialog;
-  dialog.Update();
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  int i = ListPicker(parent, _("Alternates"), dialog.alternates.size(), 0,
-                     WaypointListRenderer::GetHeight(look),
-                     dialog, true);
+  AlternatesListWidget widget(dialog_look);
+  widget.Update();
 
-  if (i < 0 || (unsigned)i >= dialog.alternates.size())
+  WidgetDialog dialog(dialog_look);
+  dialog.CreateFull(parent, _("Alternates"), &widget);
+  widget.CreateButtons(dialog);
+
+  int i = dialog.ShowModal() == mrOK
+    ? (int)widget.GetCursorIndex()
+    : -1;
+  dialog.StealWidget();
+
+  if (i < 0 || (unsigned)i >= widget.alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(parent, dialog.alternates[i].waypoint);
+  dlgWaypointDetailsShowModal(parent, widget.alternates[i].waypoint);
 }
