@@ -649,8 +649,18 @@ ParseClassTNP(const TCHAR *buffer)
 static AirspaceClass
 ParseTypeTNP(const TCHAR *buffer)
 {
+  // Handle e.g. "TYPE=CLASS C" properly
+  const TCHAR *type = StringAfterPrefixCI(buffer, _T("CLASS "));
+  if (type) {
+    AirspaceClass _class = ParseClassTNP(type);
+    if (_class != OTHER)
+      return _class;
+  } else {
+    type = buffer;
+  }
+
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_type_strings); i++)
-    if (StringIsEqualIgnoreCase(buffer, airspace_tnp_type_strings[i].string))
+    if (StringIsEqualIgnoreCase(type, airspace_tnp_type_strings[i].string))
       return airspace_tnp_type_strings[i].type;
 
   return OTHER;
