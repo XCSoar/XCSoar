@@ -94,8 +94,7 @@ public:
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::Create(_T("RunWindArrowRenderer"),
-                         size, style);
+    SingleWindow::Create(_T("RunWindArrowRenderer"), size, style);
 
     const PixelRect rc = GetClientRect();
 
@@ -138,7 +137,8 @@ protected:
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    wind.Resize(width, height);
+    if (wind.IsDefined())
+      wind.Resize(width, height);
   }
 };
 

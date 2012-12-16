@@ -121,7 +121,8 @@ protected:
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    horizon.Resize(width, height);
+    if (horizon.IsDefined())
+      horizon.Resize(width, height);
   }
 };
 
