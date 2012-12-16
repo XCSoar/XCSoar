@@ -225,11 +225,15 @@ InfoBoxContentWindArrow::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
     PixelScalar((rc.top + rc.bottom) / 2),
   };
 
-  UPixelScalar padding = Layout::FastScale(5);
+  UPixelScalar padding = Layout::FastScale(10);
   UPixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top);
 
   if (size > padding)
     size -= padding;
+
+  // Normalize the size because the Layout::Scale is applied
+  // by the DrawArrow() function again
+  size = size * 100 / Layout::Scale(100);
 
   auto angle = info.wind.bearing - info.heading;
 
