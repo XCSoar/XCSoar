@@ -1166,9 +1166,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   },
 
   {
-    N_("Start open/close countdown at arrival"),
-    N_("Start open arr"),
-    N_("Shows the time left until the start point opens or closes, compared to the calculated arrival time."),
+    N_("Start open/close countdown at reaching"),
+    N_("Start reach"),
+    N_("Shows the time left until the start point opens or closes, compared to the calculated time to reach it."),
     UpdateInfoBoxStartOpenArrival,
     START_OPEN_TIME,
     START_OPEN_TIME,
