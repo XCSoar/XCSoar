@@ -48,6 +48,8 @@ static constexpr StaticEnumChoice orientation_list[] = {
     N_("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.") },
   { (unsigned)DisplayOrientation::TARGET_UP, N_("Target up"),
     N_("The moving map display will be rotated so the navigation target is oriented up.") },
+  { (unsigned)DisplayOrientation::WIND_UP, N_("Wind up"),
+    N_("The moving map display will be rotated so the wind is always oriented up to down. (can be useful for wave flying)") },
   { 0 }
 };
 
@@ -80,8 +82,11 @@ private:
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
+  auto orientation = (DisplayOrientation)GetValueInteger(OrientationCruise);
+
   SetRowVisible(MAP_SHIFT_BIAS,
-                (DisplayOrientation)GetValueInteger(OrientationCruise) == DisplayOrientation::NORTH_UP);
+                orientation == DisplayOrientation::NORTH_UP ||
+                orientation == DisplayOrientation::WIND_UP);
 }
 
 void

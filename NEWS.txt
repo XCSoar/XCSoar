@@ -7,6 +7,7 @@ Version 6.5 - not yet released
   - lower zoom levels possible while circling (#1120)
   - draw FAI triangle areas (#1563)
   - optimise the terrain renderer
+  - added "Wind Up" display orientation
 * calculations
   - don't detect landing while climbing in a wave (#1330, #2289, #2406)
   - basic support for the contest "DMSt" (#2208)

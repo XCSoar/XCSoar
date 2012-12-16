@@ -50,6 +50,7 @@ enum class DisplayOrientation : uint8_t {
   NORTH_UP,
   TARGET_UP,
   HEADING_UP,
+  WIND_UP,
 };
 
 enum class MapShiftBias : uint8_t {

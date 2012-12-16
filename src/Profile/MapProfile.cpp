@@ -35,6 +35,7 @@ IsValidMapOrientation(unsigned value)
   case (unsigned)DisplayOrientation::NORTH_UP:
   case (unsigned)DisplayOrientation::TARGET_UP:
   case (unsigned)DisplayOrientation::HEADING_UP:
+  case (unsigned)DisplayOrientation::WIND_UP:
     return true;
   }
 

@@ -191,6 +191,10 @@ GlueMapWindow::UpdateScreenAngle()
   else if (orientation == DisplayOrientation::NORTH_UP ||
            !basic.track_available)
     visible_projection.SetScreenAngle(Angle::Zero());
+  else if (orientation == DisplayOrientation::WIND_UP &&
+           calculated.wind_available &&
+           calculated.wind.norm >= fixed(0.5))
+    visible_projection.SetScreenAngle(calculated.wind.bearing);
   else
     // normal, glider forward
     visible_projection.SetScreenAngle(basic.track);
@@ -267,7 +271,8 @@ GlueMapWindow::UpdateProjection()
 
   if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
-  else if (settings_map.cruise_orientation == DisplayOrientation::NORTH_UP) {
+  else if (settings_map.cruise_orientation == DisplayOrientation::NORTH_UP ||
+           settings_map.cruise_orientation == DisplayOrientation::WIND_UP) {
     RasterPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MapShiftBias::NONE) {
@@ -278,14 +283,18 @@ GlueMapWindow::UpdateProjection()
             basic.ground_speed_available &&
              /* 8 m/s ~ 30 km/h */
             basic.ground_speed > fixed_int_constant(8)) {
-          const auto sc = basic.track.Reciprocal().SinCos();
+          auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
+
+          const auto sc = angle.SinCos();
           x = sc.first;
           y = sc.second;
         }
       } else if (settings_map.map_shift_bias == MapShiftBias::TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.IsDefined()) {
-          const auto sc =calculated.task_stats.current_leg.solution_remaining
-            .vector.bearing.Reciprocal().SinCos();
+          auto angle = calculated.task_stats.current_leg.solution_remaining
+              .vector.bearing.Reciprocal() - visible_projection.GetScreenAngle();
+
+          const auto sc = angle.SinCos();
           x = sc.first;
           y = sc.second;
         }
