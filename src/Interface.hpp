@@ -305,10 +305,6 @@ namespace ActionInterface {
 namespace XCSoarInterface {
   using namespace ActionInterface;
 
-  void AfterStartup();
-  void Shutdown();
-  bool Startup();
-
   /**
    * Receive GPS data (#MoreData) from the DeviceBlackboard.
    */

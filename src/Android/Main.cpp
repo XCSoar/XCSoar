@@ -46,6 +46,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
+#include "Startup.hpp"
 #include "Interface.hpp"
 #include "Java/Global.hpp"
 #include "Java/File.hpp"
@@ -154,7 +155,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   ScreenInitialized();
   AllowLanguage();
-  return XCSoarInterface::Startup();
+  return Startup();
 }
 
 gcc_visibility_default

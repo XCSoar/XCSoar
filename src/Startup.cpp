@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Startup.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Profile/Profile.hpp"
@@ -135,12 +136,12 @@ LoadProfile()
   return true;
 }
 
-void
-XCSoarInterface::AfterStartup()
+static void
+AfterStartup()
 {
   StartupLogFreeRamAndStorage();
 
-  status_messages.Startup(true);
+  CommonInterface::status_messages.Startup(true);
 
   if (is_simulator()) {
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
@@ -148,8 +149,10 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  OrderedTask *defaultTask = protected_task_manager->TaskCreateDefault(
-      &way_points, GetComputerSettings().task.task_type_default);
+  const TaskFactoryType task_type_default =
+    CommonInterface::GetComputerSettings().task.task_type_default;
+  OrderedTask *defaultTask =
+    protected_task_manager->TaskCreateDefault(&way_points, task_type_default);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
@@ -162,12 +165,12 @@ XCSoarInterface::AfterStartup()
 
   task_manager->Resume();
 
-  main_window->Fullscreen();
+  CommonInterface::main_window->Fullscreen();
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
 
-  status_messages.Startup(false);
+  CommonInterface::status_messages.Startup(false);
 }
 
 /**
@@ -177,7 +180,7 @@ XCSoarInterface::AfterStartup()
  * @return True if bootup successful, False otherwise
  */
 bool
-XCSoarInterface::Startup()
+Startup()
 {
   VerboseOperationEnvironment operation;
 
@@ -201,7 +204,8 @@ XCSoarInterface::Startup()
   if (CommandLine::resizable)
     style.Resizable();
 
-  main_window = new MainWindow(status_messages);
+  MainWindow *const main_window = CommonInterface::main_window =
+    new MainWindow(CommonInterface::status_messages);
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
@@ -249,10 +253,14 @@ XCSoarInterface::Startup()
 
   SetXMLDialogLook(main_window->GetLook().dialog);
 
-  SetSystemSettings().SetDefaults();
-  SetComputerSettings().SetDefaults();
-  SetUISettings().SetDefaults();
-  SetUIState().Clear();
+  CommonInterface::SetSystemSettings().SetDefaults();
+  CommonInterface::SetComputerSettings().SetDefaults();
+  CommonInterface::SetUISettings().SetDefaults();
+  CommonInterface::SetUIState().Clear();
+
+  const auto &computer_settings = CommonInterface::GetComputerSettings();
+  const auto &ui_settings = CommonInterface::GetUISettings();
+  auto &live_blackboard = CommonInterface::GetLiveBlackboard();
 
   if (!LoadProfile())
     return false;
@@ -272,7 +280,7 @@ XCSoarInterface::Startup()
 
   ReadLanguageFile();
 
-  status_messages.LoadFile();
+  CommonInterface::status_messages.LoadFile();
   InputEvents::readFile();
 
   // Initialize DeviceBlackboard
@@ -300,13 +308,12 @@ XCSoarInterface::Startup()
 #endif
 
   // Initialize main blackboard data
-  task_manager = new TaskManager(GetComputerSettings().task, way_points);
+  task_manager = new TaskManager(computer_settings.task, way_points);
   task_manager->SetTaskEvents(task_events);
   task_manager->Reset();
 
   protected_task_manager =
-    new ProtectedTaskManager(*task_manager,
-                             XCSoarInterface::GetComputerSettings().task);
+    new ProtectedTaskManager(*task_manager, computer_settings.task);
 
   // Read the terrain file
   operation.SetText(_("Loading Terrain File..."));
@@ -318,7 +325,7 @@ XCSoarInterface::Startup()
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
                                      task_events);
-  glide_computer->ReadComputerSettings(GetComputerSettings());
+  glide_computer->ReadComputerSettings(computer_settings);
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(logger);
   glide_computer->Initialise();
@@ -328,12 +335,13 @@ XCSoarInterface::Startup()
   // Load the EGM96 geoid data
   EGM96::Load();
 
-  GlidePolar &gp = SetComputerSettings().polar.glide_polar_task;
+  GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(fixed(0));
-  gp.SetMC(GetComputerSettings().task.safety_mc);
-  gp.SetBugs(GetComputerSettings().polar.degradation_factor);
-  PlaneGlue::FromProfile(SetComputerSettings().plane);
-  PlaneGlue::Synchronize(GetComputerSettings().plane, SetComputerSettings(), gp);
+  gp.SetMC(computer_settings.task.safety_mc);
+  gp.SetBugs(computer_settings.polar.degradation_factor);
+  PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane);
+  PlaneGlue::Synchronize(computer_settings.plane,
+                         CommonInterface::SetComputerSettings(), gp);
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
@@ -348,20 +356,20 @@ XCSoarInterface::Startup()
 
   // Set the home waypoint
   WaypointGlue::SetHome(way_points, terrain,
-                        SetComputerSettings().poi,
-                        SetComputerSettings().team_code,
+                        CommonInterface::SetComputerSettings().poi,
+                        CommonInterface::SetComputerSettings().team_code,
                         device_blackboard, false);
 
   // ReSynchronise the blackboards here since SetHome touches them
   device_blackboard->Merge();
-  ReadBlackboardBasic(device_blackboard->Basic());
+  CommonInterface::ReadBlackboardBasic(device_blackboard->Basic());
 
   // Scan for weather forecast
   LogFormat("RASP load");
-  RASP.ScanAll(Basic().location, operation);
+  RASP.ScanAll(CommonInterface::Basic().location, operation);
 
   // Reads the airspace files
-  ReadAirspace(airspace_database, terrain, GetComputerSettings().pressure,
+  ReadAirspace(airspace_database, terrain, computer_settings.pressure,
                operation);
 
   {
@@ -370,7 +378,7 @@ XCSoarInterface::Startup()
                       device_blackboard->Calculated());
     ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
-    lease->SetConfig(CommonInterface::GetComputerSettings().airspace.warnings);
+    lease->SetConfig(computer_settings.airspace.warnings);
   }
 
 #ifdef HAVE_NOAA
@@ -379,7 +387,7 @@ XCSoarInterface::Startup()
 #endif
 
   AudioVarioGlue::Initialise();
-  AudioVarioGlue::Configure(GetUISettings().sound.vario);
+  AudioVarioGlue::Configure(ui_settings.sound.vario);
 
   // Start the device thread(s)
   operation.SetText(_("Starting devices"));
@@ -387,7 +395,7 @@ XCSoarInterface::Startup()
 
 /*
   -- Reset polar in case devices need the data
-  GlidePolar::UpdatePolar(true, GetComputerSettings());
+  GlidePolar::UpdatePolar(true, computer_settings);
 
   This should be done inside devStartup if it is really required
 */
@@ -413,8 +421,8 @@ XCSoarInterface::Startup()
 #endif
 
     /* show map at home waypoint until GPS fix becomes available */
-    if (GetComputerSettings().poi.home_location_available)
-      map_window->SetLocation(GetComputerSettings().poi.home_location);
+    if (computer_settings.poi.home_location_available)
+      map_window->SetLocation(computer_settings.poi.home_location);
   }
 
   // Finally ready to go.. all structures must be present before this.
@@ -435,15 +443,15 @@ XCSoarInterface::Startup()
   ReadAssetNumber();
 
   glide_computer_events.Reset();
-  GetLiveBlackboard().AddListener(glide_computer_events);
+  live_blackboard.AddListener(glide_computer_events);
 
-  if (CommonInterface::GetComputerSettings().logger.enable_flight_logger) {
-    flight_logger = new GlueFlightLogger(GetLiveBlackboard());
+  if (computer_settings.logger.enable_flight_logger) {
+    flight_logger = new GlueFlightLogger(live_blackboard);
     LocalPath(path, _T("flights.log"));
     flight_logger->SetPath(path);
   }
 
-  if (CommonInterface::GetComputerSettings().logger.enable_nmea_logger)
+  if (computer_settings.logger.enable_nmea_logger)
     NMEALogger::enabled = true;
 
   LogFormat("ProgramStarted");
@@ -451,7 +459,7 @@ XCSoarInterface::Startup()
   // Give focus to the map
   main_window->SetDefaultFocus();
 
-  Pages::Initialise(GetUISettings().pages);
+  Pages::Initialise(ui_settings.pages);
 
   // Start calculation thread
   merge_thread->Start();
@@ -459,7 +467,7 @@ XCSoarInterface::Startup()
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();
-  tracking->SetSettings(GetComputerSettings().tracking);
+  tracking->SetSettings(computer_settings.tracking);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   if (map_window != nullptr)
@@ -480,10 +488,13 @@ XCSoarInterface::Startup()
 }
 
 void
-XCSoarInterface::Shutdown()
+Shutdown()
 {
   VerboseOperationEnvironment operation;
   gcc_unused ScopeBusyIndicator busy;
+
+  MainWindow *const main_window = CommonInterface::main_window;
+  auto &live_blackboard = CommonInterface::GetLiveBlackboard();
 
   // Show progress dialog
   operation.SetText(_("Shutdown, please wait..."));
@@ -505,12 +516,12 @@ XCSoarInterface::Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  logger->GUIStopLogger(Basic(), true);
+  logger->GUIStopLogger(CommonInterface::Basic(), true);
 
   delete flight_logger;
   flight_logger = NULL;
 
-  GetLiveBlackboard().RemoveListener(glide_computer_events);
+  live_blackboard.RemoveListener(glide_computer_events);
 
   FlarmFriends::Save();
 

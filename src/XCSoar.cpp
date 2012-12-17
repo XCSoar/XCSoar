@@ -26,6 +26,7 @@ Copyright_License {
  * @file XCSoar.cpp
  */
 
+#include "Startup.hpp"
 #include "resource.h"
 #include "LocalPath.hpp"
 #include "Version.hpp"
@@ -130,7 +131,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
-  if (XCSoarInterface::Startup())
+  if (Startup())
     ret = CommonInterface::main_window->RunEventLoop();
 
   delete CommonInterface::main_window;

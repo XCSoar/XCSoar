@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MainWindow.hpp"
+#include "Startup.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "resource.h"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -646,7 +647,7 @@ bool MainWindow::OnClose() {
     return SingleWindow::OnClose();
 
   if (UIActions::CheckShutdown()) {
-    XCSoarInterface::Shutdown();
+    Shutdown();
   }
   return true;
 }
