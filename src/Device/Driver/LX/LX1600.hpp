@@ -140,6 +140,10 @@ namespace LX1600 {
     return PortWriteNMEA(port, buffer, env);
   }
 
+  /**
+   * Set the audio volume setting of the LX16xx vario
+   * @param volume 0 - 100 %
+   */
   static inline bool
   SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
   {
