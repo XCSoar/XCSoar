@@ -27,15 +27,18 @@ Copyright_License {
 #include "Device/All.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
-static void
+static bool
 BallastProcessTimer()
 {
+  bool modified = false;
+
   static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
-
-  if (settings.ballast_fraction_available.Modified(last_fraction))
+  if (settings.ballast_fraction_available.Modified(last_fraction)) {
     ActionInterface::SetBallast(settings.ballast_fraction, false);
+    modified = true;
+  }
 
   last_fraction = settings.ballast_fraction_available;
 
@@ -45,26 +48,37 @@ BallastProcessTimer()
     fixed fraction = ((settings.ballast_overload - fixed(1)) *
                       plane.dry_mass) / plane.max_ballast;
     ActionInterface::SetBallast(fraction, false);
+    modified = true;
   }
 
   last_overload = settings.ballast_overload_available;
+
+  return modified;
 }
 
-static void
+static bool
 BugsProcessTimer()
 {
+  bool modified = false;
+
   static Validity last;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
 
-  if (settings.bugs_available.Modified(last))
+  if (settings.bugs_available.Modified(last)) {
     ActionInterface::SetBugs(settings.bugs, false);
+    modified = true;
+  }
 
   last = settings.bugs_available;
+
+  return modified;
 }
 
-static void
+static bool
 QNHProcessTimer()
 {
+  bool modified = false;
+
   ComputerSettings &settings_computer =
     CommonInterface::SetComputerSettings();
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -73,6 +87,7 @@ QNHProcessTimer()
   if (basic.settings.qnh_available.Modified(settings_computer.pressure_available)) {
     settings_computer.pressure = basic.settings.qnh;
     settings_computer.pressure_available = basic.settings.qnh_available;
+    modified = true;
   }
 
   if (calculated.pressure_available.Modified(settings_computer.pressure_available)) {
@@ -81,37 +96,51 @@ QNHProcessTimer()
 
     MessageOperationEnvironment env;
     AllDevicesPutQNH(settings_computer.pressure, env);
+
+    modified = true;
   }
+
+  return modified;
 }
 
-static void
+static bool
 MacCreadyProcessTimer()
 {
+  bool modified = false;
+
   static ExternalSettings last_external_settings;
   static Validity last_auto_mac_cready;
 
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-  if (last_auto_mac_cready.Modified(calculated.auto_mac_cready_available))
+  if (last_auto_mac_cready.Modified(calculated.auto_mac_cready_available)) {
     /* time warp, reset */
     last_auto_mac_cready.Clear();
+    modified = true;
+  }
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
     ActionInterface::SetMacCready(basic.settings.mac_cready, false);
+    modified = true;
   } else if (calculated.auto_mac_cready_available.Modified(last_auto_mac_cready)) {
     last_auto_mac_cready = calculated.auto_mac_cready_available;
     ActionInterface::SetMacCready(calculated.auto_mac_cready);
+    modified = true;
   }
 
   last_external_settings = basic.settings;
+
+  return modified;
 }
 
-void
+bool
 ApplyExternalSettings()
 {
-  BallastProcessTimer();
-  BugsProcessTimer();
-  QNHProcessTimer();
-  MacCreadyProcessTimer();
+  bool modified = false;
+  modified |= BallastProcessTimer();
+  modified |= BugsProcessTimer();
+  modified |= QNHProcessTimer();
+  modified |= MacCreadyProcessTimer();
+  return modified;
 }

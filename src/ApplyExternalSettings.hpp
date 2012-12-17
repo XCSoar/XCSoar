@@ -26,8 +26,10 @@ Copyright_License {
 
 /**
  * Apply and propagate settings received from external devices.
+ *
+ * @return true if a setting was changed
  */
-void
+bool
 ApplyExternalSettings();
 
 #endif
