@@ -38,7 +38,7 @@ Update(const TCHAR *name, bool value)
 }
 
 static void
-UpdateValues(const SwitchInfo &switches)
+UpdateValues(const SwitchState &switches)
 {
   Update(_T("prpFlapLanding"), switches.flap_landing);
   Update(_T("prpAirbrakeExtended"), switches.airbrake_locked);
@@ -53,7 +53,7 @@ UpdateValues(const SwitchInfo &switches)
   Update(_T("prpUserSwitchMiddle"), switches.user_switch_middle);
   Update(_T("prpUserSwitchDown"), switches.user_switch_down);
   Update(_T("prpVarioCircling"),
-         switches.flight_mode == SwitchInfo::FlightMode::CIRCLING);
+         switches.flight_mode == SwitchState::FlightMode::CIRCLING);
 }
 
 void

@@ -220,10 +220,10 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
 
   uint8_t flight_status2 = *(data + 6);
   if ((flight_status2 & (1 << 7)) == 0) {
-    info.switch_state.flight_mode = SwitchInfo::FlightMode::CRUISE;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
     info.switch_state.speed_command = true;
   } else {
-    info.switch_state.flight_mode = SwitchInfo::FlightMode::CIRCLING;
+    info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
     info.switch_state.speed_command = false;
   }
 

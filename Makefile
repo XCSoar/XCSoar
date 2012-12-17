@@ -404,6 +404,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \

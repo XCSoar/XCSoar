@@ -4,6 +4,7 @@ HARNESS_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \

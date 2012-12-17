@@ -25,23 +25,6 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 void
-SwitchInfo::Reset()
-{
-  airbrake_locked = false;
-  flap_positive = false;
-  flap_neutral = false;
-  flap_negative = false;
-  gear_extended = false;
-  acknowledge = false;
-  repeat = false;
-  speed_command = false;
-  user_switch_up = false;
-  user_switch_middle = false;
-  user_switch_down = false;
-  flight_mode = SwitchInfo::FlightMode::UNKNOWN;
-}
-
-void
 GPSState::Reset()
 {
   fix_quality = FixQuality::NO_FIX;

@@ -28,6 +28,7 @@ Copyright_License {
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Attitude.hpp"
+#include "SwitchState.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -36,36 +37,6 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 
 #include <type_traits>
-
-/**
- * State of external switch devices (esp Vega)
- */
-struct SwitchInfo
-{
-  enum class FlightMode: uint8_t {
-    UNKNOWN,
-    CIRCLING,
-    CRUISE,
-  };
-
-  FlightMode flight_mode;
-
-  bool airbrake_locked;
-  bool flap_positive;
-  bool flap_neutral;
-  bool flap_negative;
-  bool gear_extended;
-  bool acknowledge;
-  bool repeat;
-  bool speed_command;
-  bool user_switch_up;
-  bool user_switch_middle;
-  bool user_switch_down;
-  bool flap_landing;
-  // bool stall;
-
-  void Reset();
-};
 
 enum class FixQuality: uint8_t {
   NO_FIX,
@@ -414,7 +385,7 @@ struct NMEAInfo {
   bool switch_state_available;
 
   /** Switch state of the user inputs */
-  SwitchInfo switch_state;
+  SwitchState switch_state;
 
   fixed stall_ratio;
   Validity stall_ratio_available;

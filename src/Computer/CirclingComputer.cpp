@@ -111,17 +111,17 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   bool force_circling = false;
   if (settings.external_trigger_cruise_enabled && !basic.gps.replay) {
     switch (basic.switch_state.flight_mode) {
-    case SwitchInfo::FlightMode::UNKNOWN:
+    case SwitchState::FlightMode::UNKNOWN:
       force_circling = false;
       force_cruise = false;
       break;
 
-    case SwitchInfo::FlightMode::CIRCLING:
+    case SwitchState::FlightMode::CIRCLING:
       force_circling = true;
       force_cruise = false;
       break;
 
-    case SwitchInfo::FlightMode::CRUISE:
+    case SwitchState::FlightMode::CRUISE:
       force_circling = false;
       force_cruise = true;
       break;

@@ -290,6 +290,7 @@ TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
@@ -571,6 +572,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/FLARM/List.cpp \
@@ -737,6 +739,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
@@ -1150,6 +1153,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
@@ -1534,6 +1538,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/ClimbInfo.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/CirclingInfo.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -2005,6 +2010,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/Task/Serialiser.cpp \

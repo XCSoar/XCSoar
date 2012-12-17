@@ -102,8 +102,8 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   */
   info.switch_state.flight_mode =
     (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
-    ? SwitchInfo::FlightMode::CIRCLING
-    : SwitchInfo::FlightMode::CRUISE;
+    ? SwitchState::FlightMode::CIRCLING
+    : SwitchState::FlightMode::CRUISE;
   info.switch_state.flap_landing =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
