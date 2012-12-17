@@ -300,16 +300,12 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
   }
 
   int mode;
+  info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;
   if (line.ReadChecked(mode)) {
-    if (mode == 0) {
+    if (mode == 0)
       info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
-      info.switch_state.speed_command = false;
-      info.switch_state_available = true;
-    } else if (mode == 1) {
+    else if (mode == 1)
       info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
-      info.switch_state.speed_command = true;
-      info.switch_state_available = true;
-    }
   }
 
   fixed voltage;

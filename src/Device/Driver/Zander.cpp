@@ -115,16 +115,13 @@ PZAN5(NMEAInputLine &line, NMEAInfo &info)
   char state[3];
   line.Read(state, 3);
 
-  if (strcmp(state, "SF") == 0) {
+  if (strcmp(state, "SF") == 0)
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
-    info.switch_state.speed_command = true;
-  } else if (strcmp(state, "VA") == 0) {
+  else if (strcmp(state, "VA") == 0)
     info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
-    info.switch_state.speed_command = false;
-  } else
-    return false;
+  else
+    info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;
 
-  info.switch_state_available = true;
   return true;
 }
 

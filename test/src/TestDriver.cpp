@@ -902,9 +902,7 @@ TestLXV7()
   ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
   ok1(basic.temperature_available);
   ok1(equals(basic.temperature, 296.25));
-  ok1(basic.switch_state_available);
   ok1(basic.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
-  ok1(!basic.switch_state.speed_command);
   ok1(basic.voltage_available);
   ok1(equals(basic.voltage, 12.3));
 
@@ -966,7 +964,6 @@ TestVega()
   ok1(device->ParseNMEA("$PDSWC,0,1002000,100,115*54", nmea_info));
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 0));
-  ok1(nmea_info.switch_state_available);
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 11.5));
 
@@ -1105,22 +1102,18 @@ TestZander()
 
   nmea_info.Reset();
   nmea_info.clock = fixed(1);
-  ok1(!device->ParseNMEA("$PZAN5,,MUEHL,123.4,KM,T,234*24", nmea_info));
-  ok1(!nmea_info.switch_state_available);
+  ok1(device->ParseNMEA("$PZAN5,,MUEHL,123.4,KM,T,234*24", nmea_info));
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::UNKNOWN);
 
   nmea_info.Reset();
   nmea_info.clock = fixed(1);
   ok1(device->ParseNMEA("$PZAN5,SF,MUEHL,123.4,KM,T,234*31", nmea_info));
-  ok1(nmea_info.switch_state_available);
   ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
-  ok1(nmea_info.switch_state.speed_command);
 
   nmea_info.Reset();
   nmea_info.clock = fixed(1);
   ok1(device->ParseNMEA("$PZAN5,VA,MUEHL,123.4,KM,T,234*33", nmea_info));
-  ok1(nmea_info.switch_state_available);
   ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CIRCLING);
-  ok1(!nmea_info.switch_state.speed_command);
 
   delete device;
 }
@@ -1194,7 +1187,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(623);
+  plan_tests(616);
 
   TestGeneric();
   TestTasman();

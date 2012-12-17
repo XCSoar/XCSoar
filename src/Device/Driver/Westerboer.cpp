@@ -113,16 +113,12 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(i))
     info.settings.ProvideMacCready(fixed(i) / 10, info.clock);
 
+  info.switch_state.flight_mode = SwitchState::FlightMode::UNKNOWN;
   if (line.ReadChecked(i)) {
-    if (i == 0) {
+    if (i == 0)
       info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
-      info.switch_state.speed_command = false;
-      info.switch_state_available = true;
-    } else if (i == 1) {
+    else if (i == 1)
       info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
-      info.switch_state.speed_command = true;
-      info.switch_state_available = true;
-    }
   }
 
   line.Skip(3);
