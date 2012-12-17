@@ -34,6 +34,8 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "Units/System.hpp"
+#include "Atmosphere/Pressure.hpp"
 
 #include <stdio.h>
 
@@ -137,6 +139,60 @@ SetBugs(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetAltitudeOffset(Port &port, OperationEnvironment &env)
+{
+  while (true) {
+    fixed altitude_offset;
+
+    fprintf(stdout, "Please enter the altitude offset setting (m):\n");
+    fprintf(stdout, "> ");
+
+    if (!ReadFixed(altitude_offset)) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
+            (double)altitude_offset);
+
+    if (LX1600::SetAltitudeOffset(port, env, Units::ToUserUnit(altitude_offset, Unit::FEET)))
+      fprintf(stdout, "Altitude offset set to \"%.1f m\"\n",
+              (double)altitude_offset);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
+SetQNH(Port &port, OperationEnvironment &env)
+{
+  while (true) {
+    fixed qnh;
+
+    fprintf(stdout, "Please enter the QNH setting (hPa):\n");
+    fprintf(stdout, "> ");
+
+    if (!ReadFixed(qnh)) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
+            (double)qnh);
+
+    if (LX1600::SetQNH(port, env, AtmosphericPressure::HectoPascal(qnh)))
+      fprintf(stdout, "QNH set to \"%.1f hPa\"\n",
+              (double)qnh);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -147,6 +203,8 @@ WriteMenu()
                   "1:  Set the MC\n"
                   "2:  Set Ballast\n"
                   "3:  Set Bugs\n"
+                  "4:  Set Altitude Offset\n"
+                  "5:  Set QNH\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -179,6 +237,12 @@ RunUI(Port &port, OperationEnvironment &env)
       break;
     case '3':
       SetBugs(port, env);
+      break;
+    case '4':
+      SetAltitudeOffset(port, env);
+      break;
+    case '5':
+      SetQNH(port, env);
       break;
     case 'q':
     case 'Q':
