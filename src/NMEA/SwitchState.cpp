@@ -26,10 +26,10 @@ Copyright_License {
 void
 SwitchState::Reset()
 {
+  flight_mode = FlightMode::UNKNOWN;
+  flap_position = FlapPosition::UNKNOWN;
+
   airbrake_locked = false;
-  flap_positive = false;
-  flap_neutral = false;
-  flap_negative = false;
   gear_extended = false;
   acknowledge = false;
   repeat = false;
@@ -37,5 +37,4 @@ SwitchState::Reset()
   user_switch_up = false;
   user_switch_middle = false;
   user_switch_down = false;
-  flight_mode = FlightMode::UNKNOWN;
 }

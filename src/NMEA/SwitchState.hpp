@@ -37,12 +37,18 @@ struct SwitchState
     CRUISE,
   };
 
+  enum class FlapPosition : uint8_t {
+    UNKNOWN,
+    POSITIVE,
+    NEUTRAL,
+    NEGATIVE,
+    LANDING,
+  };
+
   FlightMode flight_mode;
+  FlapPosition flap_position;
 
   bool airbrake_locked;
-  bool flap_positive;
-  bool flap_neutral;
-  bool flap_negative;
   bool gear_extended;
   bool acknowledge;
   bool repeat;

@@ -85,10 +85,18 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   auto &switches = info.switch_state;
   info.switch_state_available = true;
 
+  if (switchoutputs & OUTPUT_MASK_FLAP_LANDING)
+    switches.flap_position = SwitchState::FlapPosition::LANDING;
+  else if (switchinputs & INPUT_MASK_FLAP_ZERO)
+    switches.flap_position = SwitchState::FlapPosition::NEUTRAL;
+  else if (switchinputs & INPUT_MASK_FLAP_NEGATIVE)
+    switches.flap_position = SwitchState::FlapPosition::NEGATIVE;
+  else if (switchinputs & INPUT_MASK_FLAP_POSITIVE)
+    switches.flap_position = SwitchState::FlapPosition::POSITIVE;
+  else
+    switches.flap_position = SwitchState::FlapPosition::UNKNOWN;
+
   switches.airbrake_locked = switchinputs & INPUT_MASK_AIRBRAKE_LOCKED;
-  switches.flap_positive = switchinputs & INPUT_MASK_FLAP_POSITIVE;
-  switches.flap_neutral = switchinputs & INPUT_MASK_FLAP_ZERO;
-  switches.flap_negative = switchinputs & INPUT_MASK_FLAP_NEGATIVE;
   switches.gear_extended = switchinputs & INPUT_MASK_GEAR_EXTENDED;
   switches.acknowledge = switchinputs & INPUT_MASK_ACK;
   switches.repeat = switchinputs & INPUT_MASK_REP;
@@ -100,7 +108,6 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   switches.flight_mode = switchoutputs & OUTPUT_MASK_CIRCLING
     ? SwitchState::FlightMode::CIRCLING
     : SwitchState::FlightMode::CRUISE;
-  switches.flap_landing = switchoutputs & OUTPUT_MASK_FLAP_LANDING;
 
   long up_switchinputs;
   long down_switchinputs;

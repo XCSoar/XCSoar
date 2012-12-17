@@ -29,13 +29,21 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
+#include "Form/DataField/Enum.hpp"
+
+static constexpr StaticEnumChoice flap_position_list[] = {
+  { (unsigned)SwitchState::FlapPosition::UNKNOWN, N_("Unknown") },
+  { (unsigned)SwitchState::FlapPosition::POSITIVE, N_("Positive") },
+  { (unsigned)SwitchState::FlapPosition::NEUTRAL, N_("Neutral") },
+  { (unsigned)SwitchState::FlapPosition::NEGATIVE, N_("Negative") },
+  { (unsigned)SwitchState::FlapPosition::LANDING, N_("Landing") },
+  { 0 }
+};
 
 class SwitchesLeft : public RowFormWidget {
   enum Controls {
     AIRBRAKE_LOCKED,
-    FLAP_POSITIVE,
-    FLAP_NEUTRAL,
-    FLAP_NEGATIVE,
+    FLAP_POSITION,
     GEAR_DOWN,
     ACKNOWLEDGE,
     REPEAT,
@@ -47,9 +55,7 @@ public:
 
   void Create() {
     AddBoolean(_("Airbrake locked"), nullptr, false);
-    AddBoolean(_("Flap positive"), nullptr, false);
-    AddBoolean(_("Flap neutral"), nullptr, false);
-    AddBoolean(_("Flap negative"), nullptr, false);
+    AddEnum(_("Flaps"), nullptr, flap_position_list, 0);
     AddBoolean(_("Gear down"), nullptr, false);
     AddBoolean(_("Acknowledge"), nullptr, false);
     AddBoolean(_("Repeat"), nullptr, false);
@@ -58,9 +64,7 @@ public:
 
   void Update(const SwitchState &switches) {
     LoadValue(AIRBRAKE_LOCKED, switches.airbrake_locked);
-    LoadValue(FLAP_POSITIVE, switches.flap_positive);
-    LoadValue(FLAP_NEUTRAL, switches.flap_neutral);
-    LoadValue(FLAP_NEGATIVE, switches.flap_negative);
+    LoadValueEnum(FLAP_POSITION, (unsigned)switches.flap_position);
     LoadValue(GEAR_DOWN, switches.gear_extended);
     LoadValue(ACKNOWLEDGE, switches.acknowledge);
     LoadValue(SPEED_COMMAND, switches.speed_command);
@@ -73,7 +77,6 @@ class SwitchesRight : public RowFormWidget {
     USER_MIDDLE,
     USER_DOWN,
     FLIGHT_MODE,
-    FLAP_LANDING,
   };
 
 public:
@@ -84,7 +87,6 @@ public:
     AddBoolean(_("User middle"), nullptr, false);
     AddBoolean(_("User down"), nullptr, false);
     AddBoolean(_("Vario circling"), nullptr, false);
-    AddBoolean(_("Flap landing"), nullptr, false);
   }
 
   void Update(const SwitchState &switches) {
@@ -93,7 +95,6 @@ public:
     LoadValue(USER_DOWN, switches.user_switch_down);
     LoadValue(FLIGHT_MODE,
               switches.flight_mode == SwitchState::FlightMode::CIRCLING);
-    LoadValue(FLAP_LANDING, switches.flap_landing);
   }
 };
 
