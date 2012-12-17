@@ -764,6 +764,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Protection.cpp \
 	$(SRC)/BatteryTimer.cpp \
 	$(SRC)/ProcessTimer.cpp \
+	$(SRC)/ApplyExternalSettings.cpp \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \
