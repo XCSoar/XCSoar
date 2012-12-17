@@ -150,6 +150,8 @@ namespace LX1600 {
   static inline bool
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
   {
+    assert(qnh.IsPlausible());
+
     fixed altitude_offset = Units::ToUserUnit(
         qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()),
         Unit::FEET);
