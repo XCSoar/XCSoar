@@ -53,6 +53,21 @@ Copyright_License {
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
 
+static constexpr unsigned INPUT_MASK_FLAP_POSITIVE = 1 << INPUT_BIT_FLAP_POS;
+static constexpr unsigned INPUT_MASK_FLAP_ZERO = 1 << INPUT_BIT_FLAP_ZERO;
+static constexpr unsigned INPUT_MASK_FLAP_NEGATIVE = 1 << INPUT_BIT_FLAP_NEG;
+static constexpr unsigned INPUT_MASK_SC = 1 << INPUT_BIT_SC;
+static constexpr unsigned INPUT_MASK_GEAR_EXTENDED = 1 << INPUT_BIT_GEAR_EXTENDED;
+static constexpr unsigned INPUT_MASK_AIRBRAKE_NOT_LOCKED = 1 << INPUT_BIT_AIRBRAKELOCKED;
+static constexpr unsigned INPUT_MASK_ACK = 1 << INPUT_BIT_ACK;
+static constexpr unsigned INPUT_MASK_REP = 1 << INPUT_BIT_REP;
+static constexpr unsigned INPUT_MASK_AIRBRAKE_LOCKED = 1 << INPUT_BIT_AIRBRAKELOCKED;
+static constexpr unsigned INPUT_MASK_USER_SWITCH_UP = 1 << INPUT_BIT_USERSWUP;
+static constexpr unsigned INPUT_MASK_USER_SWITCH_MIDDLE = 1 << INPUT_BIT_USERSWMIDDLE;
+static constexpr unsigned INPUT_MASK_USER_SWITCH_DOWN = 1 << INPUT_BIT_USERSWDOWN;
+static constexpr unsigned OUTPUT_MASK_CIRCLING = 1 << OUTPUT_BIT_CIRCLING;
+static constexpr unsigned OUTPUT_MASK_FLAP_LANDING = 1 << OUTPUT_BIT_FLAP_LANDING;
+
 static bool
 PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 {
@@ -70,25 +85,22 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   auto &switches = info.switch_state;
   info.switch_state_available = true;
 
-  switches.airbrake_locked = (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
-  switches.flap_positive = (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
-  switches.flap_neutral = (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
-  switches.flap_negative = (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
-  switches.gear_extended = (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
-  switches.acknowledge = (switchinputs & (1<<INPUT_BIT_ACK))>0;
-  switches.repeat = (switchinputs & (1<<INPUT_BIT_REP))>0;
-  switches.speed_command = (switchinputs & (1<<INPUT_BIT_SC))>0;
-  switches.user_switch_up = (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
-  switches.user_switch_middle = (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
-  switches.user_switch_down = (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
-  /*
-  switches.Stall =
-    (switchinputs & (1<<INPUT_BIT_STALL))>0;
-  */
-  switches.flight_mode = (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
+  switches.airbrake_locked = switchinputs & INPUT_MASK_AIRBRAKE_LOCKED;
+  switches.flap_positive = switchinputs & INPUT_MASK_FLAP_POSITIVE;
+  switches.flap_neutral = switchinputs & INPUT_MASK_FLAP_ZERO;
+  switches.flap_negative = switchinputs & INPUT_MASK_FLAP_NEGATIVE;
+  switches.gear_extended = switchinputs & INPUT_MASK_GEAR_EXTENDED;
+  switches.acknowledge = switchinputs & INPUT_MASK_ACK;
+  switches.repeat = switchinputs & INPUT_MASK_REP;
+  switches.speed_command = switchinputs & INPUT_MASK_SC;
+  switches.user_switch_up = switchinputs & INPUT_MASK_USER_SWITCH_UP;
+  switches.user_switch_middle = switchinputs & INPUT_MASK_USER_SWITCH_MIDDLE;
+  switches.user_switch_down = switchinputs & INPUT_MASK_USER_SWITCH_DOWN;
+  // switches.stall = switchinputs & INPUT_MASK_STALL;
+  switches.flight_mode = switchoutputs & OUTPUT_MASK_CIRCLING
     ? SwitchState::FlightMode::CIRCLING
     : SwitchState::FlightMode::CRUISE;
-  switches.flap_landing = (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
+  switches.flap_landing = switchoutputs & OUTPUT_MASK_FLAP_LANDING;
 
   long up_switchinputs;
   long down_switchinputs;
