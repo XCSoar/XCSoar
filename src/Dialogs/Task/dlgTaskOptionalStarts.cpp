@@ -197,7 +197,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
   if (index_optional_starts < task.GetOptionalStartPointCount()) {
     const GeoPoint &location = task.TaskSize() > 0
       ? task.GetPoint(0).GetLocation()
-      : XCSoarInterface::Basic().location;
+      : CommonInterface::Basic().location;
     const Waypoint* way_point =
       ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
     if (!way_point)
@@ -210,7 +210,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
 
     const GeoPoint &location = task.TaskSize() > 0
       ? task.GetPoint(0).GetLocation()
-      : XCSoarInterface::Basic().location;
+      : CommonInterface::Basic().location;
     const Waypoint* way_point =
       ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
     if (!way_point)

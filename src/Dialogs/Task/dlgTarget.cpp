@@ -118,7 +118,7 @@ MoveTarget(gcc_unused double adjust_angle)
   }
 
   // JMW illegal
-  bearing = AngleLimit360(XCSoarInterface::main_window.map.GetDisplayAngle()
+  bearing = AngleLimit360(CommonInterface::main_window.map.GetDisplayAngle()
                           + adjust_angle);
 
   FindLatitudeLongitude (tp.AATTargetLocation,
@@ -127,15 +127,15 @@ MoveTarget(gcc_unused double adjust_angle)
 
   if (task.InAATTurnSector(target_location,
                            target_point)) {
-    if (XCSoarInterface::Calculated().IsInSector
+    if (CommonInterface::Calculated().IsInSector
         && (target_point == task.getActiveIndex())) {
       // set range/radial for inside sector
       double course_bearing, target_bearing;
       DistanceBearing(task.getTargetLocation(target_point-1),
-                      XCSoarInterface::Basic().Location,
+                      CommonInterface::Basic().Location,
                       NULL, &course_bearing);
 
-      DistanceBearing(XCSoarInterface::Basic().Location,
+      DistanceBearing(CommonInterface::Basic().Location,
                       target_location,
                       &distance, &target_bearing);
       bearing = AngleLimit180(target_bearing-course_bearing);
@@ -145,7 +145,7 @@ MoveTarget(gcc_unused double adjust_angle)
         Radial = bearing;
         tp.AATTargetOffsetRadial = Radial;
         Range =
-          task.FindInsideAATSectorRange(XCSoarInterface::Basic().Location,
+          task.FindInsideAATSectorRange(CommonInterface::Basic().Location,
                                         target_point,
                                         target_bearing,
                                         distance);

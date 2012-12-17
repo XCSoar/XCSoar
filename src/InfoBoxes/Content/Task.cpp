@@ -158,7 +158,7 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
   // use proper non-terminal next task stats
 
   const NMEAInfo &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
   if (!task_stats.task_valid || !vector_remaining.IsValid()) {
     data.SetInvalid();
@@ -239,7 +239,7 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
 
   SetValueFromAltDiff(data, task_stats, next_solution);
@@ -248,7 +248,7 @@ UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 void
 UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   SetValueFromAltDiff(data, task_stats,
                       task_stats.current_leg.solution_mc0);
@@ -259,7 +259,7 @@ UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
@@ -275,7 +275,7 @@ UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
   // pilots want this to be assuming terminal flight to this wp
 
   const MoreData &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GlideResult next_solution = task_stats.current_leg.solution_remaining;
   if (!basic.NavAltitudeAvailable() ||
       !task_stats.task_valid || !next_solution.IsAchievable()) {
@@ -293,12 +293,12 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
 
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
     data.SetInvalid();
     return;
   }
 
-  fixed gradient = XCSoarInterface::Calculated().task_stats.current_leg.gradient;
+  fixed gradient = CommonInterface::Calculated().task_stats.current_leg.gradient;
 
   if (!positive(gradient)) {
     data.SetValue(_T("+++"));
@@ -314,7 +314,7 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
 void
 UpdateInfoBoxFinalDistance(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
       !task_stats.current_leg.vector_remaining.IsValid() ||
@@ -323,7 +323,7 @@ UpdateInfoBoxFinalDistance(InfoBoxData &data)
     return;
   }
 
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   // Set Value
   data.SetValueFromDistance(common_stats.task_finished
@@ -334,7 +334,7 @@ UpdateInfoBoxFinalDistance(InfoBoxData &data)
 void
 UpdateInfoBoxFinalETE(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
     data.SetInvalid();
@@ -355,7 +355,7 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
 void
 UpdateInfoBoxFinalETA(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
@@ -375,7 +375,7 @@ UpdateInfoBoxFinalETA(InfoBoxData &data)
 void
 UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   SetValueFromAltDiff(data, task_stats, task_stats.total.solution_remaining);
 }
@@ -383,7 +383,7 @@ UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 void
 UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
       !task_stats.total.solution_remaining.IsOk()) {
     data.SetInvalid();
@@ -396,7 +396,7 @@ UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 void
 UpdateInfoBoxTaskSpeed(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
     data.SetInvalid();
     return;
@@ -413,7 +413,7 @@ UpdateInfoBoxTaskSpeed(InfoBoxData &data)
 void
 UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
       !task_stats.total.remaining_effective.IsDefined()) {
     data.SetInvalid();
@@ -431,7 +431,7 @@ UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
 void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
     data.SetInvalid();
     return;
@@ -448,7 +448,7 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 void
 UpdateInfoBoxFinalGRTE(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     data.SetInvalid();
     return;
@@ -469,7 +469,7 @@ UpdateInfoBoxFinalGRTE(InfoBoxData &data)
 void
 UpdateInfoBoxFinalGR(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
     data.SetInvalid();
     return;
@@ -491,7 +491,7 @@ void
 UpdateInfoBoxHomeDistance(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.vector_home.IsValid()) {
     data.SetInvalid();
@@ -511,14 +511,14 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
 void
 InfoBoxContentOLC::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::GetComputerSettings().contest.enable ||
+  if (!CommonInterface::GetComputerSettings().contest.enable ||
       !protected_task_manager) {
     data.SetInvalid();
     return;
   }
 
   const ContestResult& result_olc = 
-    XCSoarInterface::Calculated().contest_stats.GetResult();
+    CommonInterface::Calculated().contest_stats.GetResult();
 
   if (result_olc.score < fixed(1)) {
     data.SetInvalid();
@@ -553,8 +553,8 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 void
 UpdateInfoBoxTaskAATime(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable()) {
@@ -577,8 +577,8 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable()) {
@@ -609,8 +609,8 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid ||
@@ -626,8 +626,8 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
@@ -642,8 +642,8 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 {
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
@@ -658,8 +658,8 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 {
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
@@ -678,8 +678,8 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 {
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
@@ -698,8 +698,8 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 {
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
@@ -718,8 +718,8 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 {
-  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
-  const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const fixed maxheight = fixed(protected_task_manager->
                                 GetOrderedTaskBehaviour().start_constraints.max_height);
 
@@ -730,7 +730,7 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
     return;
   }
 
-  const int dd = (int)(XCSoarInterface::Basic().time -
+  const int dd = (int)(CommonInterface::Basic().time -
       common_stats.TimeUnderStartMaxHeight);
 
   TCHAR value[32];

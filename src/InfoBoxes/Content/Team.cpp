@@ -34,7 +34,7 @@ InfoBoxContentTeamCode::Update(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
-  const TeamInfo &teamcode_info = XCSoarInterface::Calculated();
+  const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (!settings.team_code_reference_waypoint) {
     data.SetInvalid();
@@ -42,7 +42,7 @@ InfoBoxContentTeamCode::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(XCSoarInterface::Calculated().own_teammate_code.GetCode());
+  data.SetValue(CommonInterface::Calculated().own_teammate_code.GetCode());
 
   // Set Comment
   if (teamcode_info.flarm_teammate_code_available) {
@@ -61,7 +61,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
-  const TrafficList &flarm = XCSoarInterface::Basic().flarm.traffic;
+  const TrafficList &flarm = CommonInterface::Basic().flarm.traffic;
   const FlarmTraffic *traffic =
     settings.team_flarm_id.IsDefined()
     ? flarm.FindTraffic(settings.team_flarm_id)
@@ -98,7 +98,7 @@ UpdateInfoBoxTeamBearing(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
-  const TrafficList &flarm = XCSoarInterface::Basic().flarm.traffic;
+  const TrafficList &flarm = CommonInterface::Basic().flarm.traffic;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (teamcode_info.teammate_available) {
@@ -127,7 +127,7 @@ UpdateInfoBoxTeamBearingDiff(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const TrafficList &flarm = basic.flarm.traffic;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 

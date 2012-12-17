@@ -59,11 +59,11 @@ UpdateInfoBoxVarioNetto(InfoBoxData &data)
 void
 UpdateInfoBoxThermal30s(InfoBoxData &data)
 {
-  SetVSpeed(data, XCSoarInterface::Calculated().average);
+  SetVSpeed(data, CommonInterface::Calculated().average);
 
   // Set Color (red/black)
   data.SetValueColor(Double(CommonInterface::Calculated().average) <
-      XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
+      CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
@@ -111,13 +111,13 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data)
 void
 UpdateInfoBoxThermalAllAvg(InfoBoxData &data)
 {
-  if (!positive(XCSoarInterface::Calculated().time_climb)) {
+  if (!positive(CommonInterface::Calculated().time_climb)) {
     data.SetInvalid();
     return;
   }
 
-  SetVSpeed(data, XCSoarInterface::Calculated().total_height_gain /
-            XCSoarInterface::Calculated().time_climb);
+  SetVSpeed(data, CommonInterface::Calculated().total_height_gain /
+            CommonInterface::Calculated().time_climb);
 }
 
 void
@@ -133,7 +133,7 @@ UpdateInfoBoxThermalAvg(InfoBoxData &data)
 
   // Set Color (red/black)
   data.SetValueColor(thermal.lift_rate * fixed(1.5) <
-      XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
+      CommonInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 
 void
@@ -153,27 +153,27 @@ UpdateInfoBoxThermalRatio(InfoBoxData &data)
 {
   // Set Value
 
-  if (negative(XCSoarInterface::Calculated().circling_percentage))
+  if (negative(CommonInterface::Calculated().circling_percentage))
     data.SetInvalid();
   else
     data.SetValue(_T("%2.0f%%"),
-                  XCSoarInterface::Calculated().circling_percentage);
+                  CommonInterface::Calculated().circling_percentage);
 }
 
 void
 UpdateInfoBoxVarioDistance(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Calculated().task_stats.task_valid) {
+  if (!CommonInterface::Calculated().task_stats.task_valid) {
     data.SetInvalid();
     return;
   }
 
   SetVSpeed(data,
-            XCSoarInterface::Calculated().task_stats.total.vario.get_value());
+            CommonInterface::Calculated().task_stats.total.vario.get_value());
 
   // Set Color (red/black)
   data.SetValueColor(negative(
-      XCSoarInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
+      CommonInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
 }
 
 
@@ -195,15 +195,15 @@ InfoBoxContentThermalAssistant::InfoBoxContentThermalAssistant()
 void
 InfoBoxContentThermalAssistant::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Calculated().circling) {
+  if (!CommonInterface::Calculated().circling) {
     data.SetInvalid();
     return;
   }
 
   data.SetCustom();
 
-  renderer.Update(XCSoarInterface::Basic().attitude,
-                  XCSoarInterface::Calculated());
+  renderer.Update(CommonInterface::Basic().attitude,
+                  CommonInterface::Calculated());
 }
 
 void

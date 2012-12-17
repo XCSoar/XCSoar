@@ -52,7 +52,7 @@ public:
 void
 GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
 
   RowFormWidget::Prepare(parent, rc);
@@ -119,7 +119,7 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveValueEnum(AutoMcMode, ProfileKeys::AutoMcMode, settings_computer.task.auto_mc_mode);

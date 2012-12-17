@@ -63,7 +63,7 @@ void
 TimeConfigPanel::SetLocalTime(int utc_offset)
 {
   TCHAR temp[20];
-  int time(XCSoarInterface::Basic().time);
+  int time(CommonInterface::Basic().time);
   FormatSignedTimeHHMM(temp, TimeLocal(time, utc_offset));
 
   WndProperty &wp = GetControl(LocalTime);
@@ -84,7 +84,8 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
 
   int utc_offset = settings_computer.utc_offset;
   AddTime(_("UTC offset"),
@@ -110,7 +111,7 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
   int ival = GetValueInteger(UTCOffset);
   if (settings_computer.utc_offset != ival) {

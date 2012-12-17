@@ -68,7 +68,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Thermal band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
-             XCSoarInterface::GetMapSettings().show_thermal_profile);
+             CommonInterface::GetMapSettings().show_thermal_profile);
 
   AddBoolean(_("Final glide bar MC0"),
              _("If set to ON the final glide bar will show a second arrow indicating the required height "
@@ -94,7 +94,7 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
                        ui_settings.enable_thermal_assistant_gauge);
 
   changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
-                       XCSoarInterface::SetMapSettings().show_thermal_profile);
+                       CommonInterface::SetMapSettings().show_thermal_profile);
 
   changed |= SaveValue(EnableFinalGlideBarMC0, ProfileKeys::EnableFinalGlideBarMC0,
                        ui_settings.map.final_glide_bar_mc0_enabled);

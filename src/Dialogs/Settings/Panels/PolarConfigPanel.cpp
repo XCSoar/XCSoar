@@ -347,7 +347,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   assert(buttonExport != NULL);
   buttonExport->SetOnClickNotify(OnExport);
 
-  const ComputerSettings &settings = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   DockWindow &dock = *(DockWindow *)form.FindByName(_T("shape"));
   PolarShapeEditWidget *shape_editor =
@@ -367,7 +367,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
 
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
 
   LoadFormProperty(form, _T("prpHandicap"),
                    settings_computer.plane.handicap);
@@ -383,7 +383,7 @@ PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
   changed |= SavePolarShape(form, settings_computer.plane.polar_shape);
 

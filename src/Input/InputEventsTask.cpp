@@ -46,7 +46,7 @@ Copyright_License {
 static void
 trigger_redraw()
 {
-  if (!XCSoarInterface::Basic().location_available)
+  if (!CommonInterface::Basic().location_available)
     ForceCalculation();
   TriggerMapUpdate();
 }

@@ -59,7 +59,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
 
   data.FormatTitle(_T("Altn %d"), index + 1);
 
-  if (alternate == NULL || !XCSoarInterface::Basic().track_available) {
+  if (alternate == NULL || !CommonInterface::Basic().track_available) {
     data.SetInvalid();
     return;
   }
@@ -68,7 +68,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
 
   // Set Value
   Angle Value = alternate->solution.vector.bearing -
-    XCSoarInterface::Basic().track;
+    CommonInterface::Basic().track;
 
   data.SetValueFromBearingDifference(Value);
 

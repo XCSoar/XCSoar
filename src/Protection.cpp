@@ -100,7 +100,7 @@ CreateCalculationThread()
   assert(glide_computer != NULL);
 
   /* copy settings to DeviceBlackboard */
-  device_blackboard->ReadComputerSettings(XCSoarInterface::GetComputerSettings());
+  device_blackboard->ReadComputerSettings(CommonInterface::GetComputerSettings());
 
   /* create and run MergeThread, because GlideComputer's first
      iteration depends on MergeThread's results */

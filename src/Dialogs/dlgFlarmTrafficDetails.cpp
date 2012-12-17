@@ -160,7 +160,7 @@ Update()
 
     // Fill the plane type field
     const FlarmTraffic* target =
-        XCSoarInterface::Basic().flarm.traffic.FindTraffic(target_id);
+      CommonInterface::Basic().flarm.traffic.FindTraffic(target_id);
 
     const TCHAR* actype;
     if (target == NULL ||

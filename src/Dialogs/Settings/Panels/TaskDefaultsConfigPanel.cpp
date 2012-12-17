@@ -106,7 +106,7 @@ void
 TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WndProperty *wp;
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask temptask(task_behaviour);
   temptask.SetFactory(TaskFactoryType::RACING);
@@ -222,7 +222,7 @@ TaskDefaultsConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveValueEnum(StartType, ProfileKeys::StartType, task_behaviour.sector_defaults.start_type);

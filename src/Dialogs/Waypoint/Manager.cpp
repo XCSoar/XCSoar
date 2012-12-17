@@ -51,10 +51,10 @@ OnWaypointNewClicked()
     return;
   }
 
-  Waypoint edit_waypoint = way_points.Create(XCSoarInterface::Basic().location);
-  edit_waypoint.elevation = XCSoarInterface::Calculated().terrain_valid
-    ? XCSoarInterface::Calculated().terrain_altitude
-    : XCSoarInterface::Basic().nav_altitude;
+  Waypoint edit_waypoint = way_points.Create(CommonInterface::Basic().location);
+  edit_waypoint.elevation = CommonInterface::Calculated().terrain_valid
+    ? CommonInterface::Calculated().terrain_altitude
+    : CommonInterface::Basic().nav_altitude;
 
   if (dlgWaypointEditShowModal(edit_waypoint) &&
       edit_waypoint.name.size()) {
@@ -74,8 +74,9 @@ OnWaypointEditClicked()
     return;
   }
 
-  const Waypoint *way_point = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                                                XCSoarInterface::Basic().location);
+  const Waypoint *way_point =
+    ShowWaypointListDialog(UIGlobals::GetMainWindow(),
+                           CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
     if (dlgWaypointEditShowModal(wp_copy)) {
@@ -115,7 +116,7 @@ OnWaypointDeleteClicked()
 
 #ifdef OLD_TASK
   int res;
-  res = ShowWaypointListDialog(XCSoarInterface::Basic().location);
+  res = ShowWaypointListDialog(CommonInterface::Basic().location);
   if (res != -1){
     if(ShowMessageBox(way_points.get(res).name,
                    _("Delete Waypoint?"),

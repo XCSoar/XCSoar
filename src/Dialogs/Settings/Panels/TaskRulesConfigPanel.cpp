@@ -58,7 +58,7 @@ public:
 void
 TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   const ContestSettings &contest_settings = settings_computer.contest;
 
@@ -165,7 +165,7 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
   ContestSettings &contest_settings = settings_computer.contest;

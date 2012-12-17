@@ -67,7 +67,7 @@ WindEditPanel::OnModified(DataField &df)
 void
 WindEditPanel::OnWindSpeed(DataFieldFloat &Sender)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
     settings.use_external_wind;
@@ -81,7 +81,7 @@ WindEditPanel::OnWindSpeed(DataFieldFloat &Sender)
 void
 WindEditPanel::OnWindDirection(AngleDataField &df)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
     settings.use_external_wind;

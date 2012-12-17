@@ -210,7 +210,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   const NMEAInfo &basic = CommonInterface::Basic();
   PaintTaskPoint(canvas, rc, *ordered_task, tp,
                  basic.location_available, basic.location,
-                 XCSoarInterface::GetMapSettings(),
+                 CommonInterface::GetMapSettings(),
                  look.task, look.airspace,
                  terrain, &airspace_database);
 }

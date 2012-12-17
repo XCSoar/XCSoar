@@ -87,8 +87,9 @@ Update(const MoreData &basic, const DerivedInfo &calculated)
 static void
 OnSetWaypointClicked()
 {
-  const Waypoint* wp = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                                         XCSoarInterface::Basic().location);
+  const Waypoint* wp =
+    ShowWaypointListDialog(UIGlobals::GetMainWindow(),
+                           CommonInterface::Basic().location);
   if (wp != NULL) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
     Profile::Set(ProfileKeys::TeamcodeRefWaypoint, wp->id);

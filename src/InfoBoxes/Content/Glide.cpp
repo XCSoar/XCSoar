@@ -33,7 +33,7 @@ Copyright_License {
 void
 UpdateInfoBoxGRInstant(InfoBoxData &data)
 {
-  const fixed gr = XCSoarInterface::Calculated().gr;
+  const fixed gr = CommonInterface::Calculated().gr;
 
   if (!::GradientValid(gr)) {
     data.SetInvalid();
@@ -47,7 +47,7 @@ UpdateInfoBoxGRInstant(InfoBoxData &data)
 void
 UpdateInfoBoxGRCruise(InfoBoxData &data)
 {
-  const fixed cruise_gr = XCSoarInterface::Calculated().cruise_gr;
+  const fixed cruise_gr = CommonInterface::Calculated().cruise_gr;
 
   if (!::GradientValid(cruise_gr)) {
     data.SetInvalid();
@@ -61,7 +61,7 @@ UpdateInfoBoxGRCruise(InfoBoxData &data)
 void
 UpdateInfoBoxGRAvg(InfoBoxData &data)
 {
-  const fixed average_gr = XCSoarInterface::Calculated().average_gr;
+  const fixed average_gr = CommonInterface::Calculated().average_gr;
 
   if (average_gr == fixed(0)) {
     data.SetInvalid();
@@ -80,11 +80,11 @@ UpdateInfoBoxGRAvg(InfoBoxData &data)
 void
 UpdateInfoBoxLDVario(InfoBoxData &data)
 {
-  const fixed ld_vario = XCSoarInterface::Calculated().ld_vario;
+  const fixed ld_vario = CommonInterface::Calculated().ld_vario;
 
   if (!::GradientValid(ld_vario) ||
-      !XCSoarInterface::Basic().total_energy_vario_available ||
-      !XCSoarInterface::Basic().airspeed_available) {
+      !CommonInterface::Basic().total_energy_vario_available ||
+      !CommonInterface::Basic().airspeed_available) {
     data.SetInvalid();
     return;
   }

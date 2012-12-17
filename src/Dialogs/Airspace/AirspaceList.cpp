@@ -389,7 +389,7 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
 {
   airspace_warnings = _airspace_warnings;
   airspaces = &_airspaces;
-  location = XCSoarInterface::Basic().location;
+  location = CommonInterface::Basic().location;
 
   PrepareAirspaceSelectDialog();
 

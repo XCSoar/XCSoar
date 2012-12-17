@@ -423,14 +423,14 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorOffset"));
   fixed offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : fixed(0);
   // Has new calibration data been delivered ?
-  if (XCSoarInterface::Basic().sensor_calibration_available)
-    offset = XCSoarInterface::Basic().sensor_calibration_offset;
+  if (CommonInterface::Basic().sensor_calibration_available)
+    offset = CommonInterface::Basic().sensor_calibration_offset;
   Set(buffer, offset);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SensorFactor"));
   fixed factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : fixed(0);
   // Has new calibration data been delivered ?
-  if (XCSoarInterface::Basic().sensor_calibration_available)
-    factor = XCSoarInterface::Basic().sensor_calibration_factor;
+  if (CommonInterface::Basic().sensor_calibration_available)
+    factor = CommonInterface::Basic().sensor_calibration_factor;
   Set(buffer, factor);
 }

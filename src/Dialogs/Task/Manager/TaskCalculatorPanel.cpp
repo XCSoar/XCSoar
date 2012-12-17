@@ -60,7 +60,7 @@ static TaskCalculatorPanel *instance;
 void
 TaskCalculatorPanel::GetCruiseEfficiency()
 {
-  cruise_efficiency = XCSoarInterface::Calculated().task_stats.cruise_efficiency;
+  cruise_efficiency = CommonInterface::Calculated().task_stats.cruise_efficiency;
 }
 
 void
@@ -236,7 +236,7 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
     CommonInterface::GetComputerSettings().polar.glide_polar_task;
 
   cruise_efficiency = polar.GetCruiseEfficiency();
-  emc = XCSoarInterface::Calculated().task_stats.effective_mc;
+  emc = CommonInterface::Calculated().task_stats.effective_mc;
 
   Refresh();
 

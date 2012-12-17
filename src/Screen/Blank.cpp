@@ -38,7 +38,7 @@ unsigned DisplayTimeOut = 0;
 static void
 BlankDisplay(bool doblank)
 {
-  if (!XCSoarInterface::GetUISettings().display.enable_auto_blank)
+  if (!CommonInterface::GetUISettings().display.enable_auto_blank)
     return;
 
   UIState &ui_state = CommonInterface::SetUIState();

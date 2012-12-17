@@ -102,7 +102,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 static void
 trigger_redraw()
 {
-  if (!XCSoarInterface::Basic().location_available)
+  if (!CommonInterface::Basic().location_available)
     ForceCalculation();
   TriggerMapUpdate();
 }

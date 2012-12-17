@@ -308,7 +308,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                           _T("none")};
 
   WaypointRendererSettings::LabelSelection &wls =
-    XCSoarInterface::SetMapSettings().waypoint.label_selection;
+    CommonInterface::SetMapSettings().waypoint.label_selection;
   if (StringIsEqual(misc, _T("toggle")))
     wls = WaypointRendererSettings::LabelSelection(((unsigned)wls + 1) %  n);
   else if (StringIsEqual(misc, _T("show"))) {

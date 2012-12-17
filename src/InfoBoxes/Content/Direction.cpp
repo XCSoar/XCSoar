@@ -35,11 +35,11 @@ Copyright_License {
 void
 InfoBoxContentTrack::Update(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().track_available) {
+  if (!CommonInterface::Basic().track_available) {
     data.SetInvalid();
     return;
   }
-  data.SetValue(XCSoarInterface::Basic().track);
+  data.SetValue(CommonInterface::Basic().track);
 }
 
 bool
@@ -47,7 +47,7 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
-  if (!XCSoarInterface::Basic().gps.simulator)
+  if (!CommonInterface::Basic().gps.simulator)
     return false;
 
   const Angle a5 = Angle::Degrees(5);
@@ -55,13 +55,13 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkUp:
   case ibkRight:
     device_blackboard->SetTrack(
-        XCSoarInterface::Basic().track + a5);
+        CommonInterface::Basic().track + a5);
     return true;
 
   case ibkDown:
   case ibkLeft:
     device_blackboard->SetTrack(
-        XCSoarInterface::Basic().track - a5);
+        CommonInterface::Basic().track - a5);
     return true;
 
   case ibkEnter:

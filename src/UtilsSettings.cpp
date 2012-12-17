@@ -139,7 +139,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (WaypointFileChanged && protected_task_manager != NULL) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    OrderedTask *task = lease->Clone(XCSoarInterface::GetComputerSettings().task);
+    OrderedTask *task = lease->Clone(CommonInterface::GetComputerSettings().task);
     if (task) {
       // this must be done in thread lock because it potentially changes the
       // waypoints database

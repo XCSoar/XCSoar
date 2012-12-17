@@ -59,7 +59,7 @@ private:
 void
 WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
     settings.use_external_wind;
@@ -91,7 +91,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind when displayed in circling mode."),
-             XCSoarInterface::GetMapSettings().trail.wind_drift_enabled, this);
+             CommonInterface::GetMapSettings().trail.wind_drift_enabled, this);
 }
 
 
@@ -115,7 +115,7 @@ WindSetupPanel::OnAutoWind(DataFieldEnum &Sender)
 void
 WindSetupPanel::OnTrailDrift(DataFieldBoolean &Sender)
 {
-  XCSoarInterface::SetMapSettings().trail.wind_drift_enabled = Sender.GetAsBoolean();
+  CommonInterface::SetMapSettings().trail.wind_drift_enabled = Sender.GetAsBoolean();
 }
 
 Widget *

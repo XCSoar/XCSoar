@@ -92,7 +92,7 @@ RouteConfigPanel::OnModified(DataField &df)
 void
 RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
   RowFormWidget::Prepare(parent, rc);
@@ -176,7 +176,7 @@ bool
 RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
   changed |= SaveValueEnum(RoutePlannerMode, ProfileKeys::RoutePlannerMode,

@@ -51,7 +51,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
-  if (!XCSoarInterface::Basic().gps.simulator)
+  if (!CommonInterface::Basic().gps.simulator)
     return false;
 
   fixed fixed_step = (fixed)Units::ToSysSpeed(fixed(10));
@@ -60,20 +60,20 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkUp:
     device_blackboard->SetSpeed(
-        XCSoarInterface::Basic().ground_speed + fixed_step);
+        CommonInterface::Basic().ground_speed + fixed_step);
     return true;
 
   case ibkDown:
     device_blackboard->SetSpeed(
-        max(fixed(0), XCSoarInterface::Basic().ground_speed - fixed_step));
+        max(fixed(0), CommonInterface::Basic().ground_speed - fixed_step));
     return true;
 
   case ibkLeft:
-    device_blackboard->SetTrack(XCSoarInterface::Basic().track - a5);
+    device_blackboard->SetTrack(CommonInterface::Basic().track - a5);
     return true;
 
   case ibkRight:
-    device_blackboard->SetTrack(XCSoarInterface::Basic().track + a5);
+    device_blackboard->SetTrack(CommonInterface::Basic().track + a5);
     return true;
 
   case ibkEnter:
@@ -122,7 +122,7 @@ UpdateInfoBoxSpeedDolphin(InfoBoxData &data)
   data.SetValueFromSpeed(calculated.V_stf, false);
 
   // Set Comment
-  if (XCSoarInterface::GetComputerSettings().features.block_stf_enabled)
+  if (CommonInterface::GetComputerSettings().features.block_stf_enabled)
     data.SetComment(_("BLOCK"));
   else
     data.SetComment(_("DOLPHIN"));

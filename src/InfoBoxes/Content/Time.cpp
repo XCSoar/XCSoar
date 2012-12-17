@@ -39,7 +39,7 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data)
   }
 
   // Set Value
-  int dd = DetectCurrentTime(XCSoarInterface::Basic());
+  int dd = DetectCurrentTime(CommonInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
@@ -58,7 +58,7 @@ UpdateInfoBoxTimeUTC(InfoBoxData &data)
   }
 
   // Set Value
-  const BrokenDateTime t = XCSoarInterface::Basic().date_time_utc;
+  const BrokenDateTime t = CommonInterface::Basic().date_time_utc;
   data.UnsafeFormatValue(_T("%02d:%02d"), t.hour, t.minute);
 
   // Set Comment
@@ -76,7 +76,7 @@ UpdateInfoBoxTimeFlight(InfoBoxData &data)
   // Set Value
   TCHAR value[32], comment[32];
   FormatTimeTwoLines(value, comment,
-                         (int)XCSoarInterface::Calculated().flight.flight_time);
+                         (int)CommonInterface::Calculated().flight.flight_time);
 
   data.SetValue(value);
   data.SetComment(comment);

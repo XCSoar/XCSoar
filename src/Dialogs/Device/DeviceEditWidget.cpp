@@ -779,7 +779,7 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
     changed |= SaveValue(IgnoreCheckSum, config.ignore_checksum);
   }
 
-  if (XCSoarInterface::Basic().sensor_calibration_available)
+  if (CommonInterface::Basic().sensor_calibration_available)
     changed = true;
 
 #ifndef NDEBUG

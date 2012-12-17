@@ -101,7 +101,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 LoggerConfigPanel::Save(bool &changed, bool &require_restart)
 {
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
 
   changed |= SaveValue(LoggerTimeStepCruise, ProfileKeys::LoggerTimeStepCruise,

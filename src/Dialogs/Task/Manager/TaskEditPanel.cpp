@@ -468,7 +468,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       ShowWaypointListDialog(dialog.GetMainWindow(),
                              ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
-                             : XCSoarInterface::Basic().location,
+                             : CommonInterface::Basic().location,
                         ordered_task, ItemIndex);
     if (!way_point)
       return;

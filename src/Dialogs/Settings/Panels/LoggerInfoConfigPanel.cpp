@@ -70,7 +70,7 @@ LoggerInfoConfigPanel::Save(bool &changed, bool &require_restart)
 {
   bool plane_settings_changed = false;
 
-  ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
   Plane &plane = settings_computer.plane;
 

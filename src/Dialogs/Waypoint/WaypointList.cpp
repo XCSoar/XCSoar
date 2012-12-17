@@ -356,7 +356,8 @@ OnCloseClicked()
 static void
 OnGPSUpdate(const MoreData &basic)
 {
-  if (dialog_state.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
+  if (dialog_state.direction_index == 1 &&
+      !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {

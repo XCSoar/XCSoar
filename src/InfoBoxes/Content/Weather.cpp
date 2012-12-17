@@ -44,7 +44,7 @@ Copyright_License {
 void
 UpdateInfoBoxHumidity(InfoBoxData &data)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.humidity_available) {
     data.SetInvalid();
     return;
@@ -57,7 +57,7 @@ UpdateInfoBoxHumidity(InfoBoxData &data)
 void
 UpdateInfoBoxTemperature(InfoBoxData &data)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.temperature_available) {
     data.SetInvalid();
     return;
@@ -175,7 +175,7 @@ UpdateInfoBoxHeadWind(InfoBoxData &data)
 void
 UpdateInfoBoxHeadWindSimplified(InfoBoxData &data)
 {
-  const NMEAInfo &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.ground_speed_available || !basic.airspeed_available) {
     data.SetInvalid();
     return;

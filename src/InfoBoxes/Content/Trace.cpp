@@ -143,8 +143,8 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
                        look.chart, look.cross_section,
                        look.info_box.inverse,
                        glide_computer->GetFlightStats(),
-                       XCSoarInterface::Basic(),
-                       XCSoarInterface::Calculated(), protected_task_manager);
+                       CommonInterface::Basic(),
+                       CommonInterface::Calculated(), protected_task_manager);
 }
 
 bool
@@ -178,7 +178,7 @@ InfoBoxContentThermalBand::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
                                 CommonInterface::Calculated(),
                                 CommonInterface::GetComputerSettings(),
                                 canvas, rc,
-                                XCSoarInterface::GetComputerSettings().task);
+                                CommonInterface::GetComputerSettings().task);
 }
 
 void

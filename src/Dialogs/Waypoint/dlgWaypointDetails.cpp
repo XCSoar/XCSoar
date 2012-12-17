@@ -194,7 +194,7 @@ goto_and_clear_task(const Waypoint &wp)
 
   protected_task_manager->DoGoto(wp);
   TaskEvents task_events;
-  const OrderedTask blank(XCSoarInterface::GetComputerSettings().task);
+  const OrderedTask blank(CommonInterface::GetComputerSettings().task);
   protected_task_manager->task_commit(blank);
 
   return SUCCESS;

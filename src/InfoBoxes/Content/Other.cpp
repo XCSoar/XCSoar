@@ -43,13 +43,13 @@ Copyright_License {
 void
 UpdateInfoBoxGLoad(InfoBoxData &data)
 {
-  if (!XCSoarInterface::Basic().acceleration.available) {
+  if (!CommonInterface::Basic().acceleration.available) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValue(_T("%2.2f"), XCSoarInterface::Basic().acceleration.g_load);
+  data.SetValue(_T("%2.2f"), CommonInterface::Basic().acceleration.g_load);
 }
 
 void
@@ -62,12 +62,12 @@ UpdateInfoBoxBattery(InfoBoxData &data)
       data.SetComment(_("AC Off"));
       break;
     case Power::External::ON:
-      if (!XCSoarInterface::Basic().voltage_available)
+      if (!CommonInterface::Basic().voltage_available)
         data.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
         data.SetValue(_T("%2.1fV"),
-                          XCSoarInterface::Basic().voltage);
+                          CommonInterface::Basic().voltage);
       }
       break;
     case Power::External::UNKNOWN:
@@ -106,11 +106,11 @@ UpdateInfoBoxBattery(InfoBoxData &data)
 
 #endif
 
-  if (XCSoarInterface::Basic().voltage_available) {
-    data.SetValue(_T("%2.1fV"), XCSoarInterface::Basic().voltage);
+  if (CommonInterface::Basic().voltage_available) {
+    data.SetValue(_T("%2.1fV"), CommonInterface::Basic().voltage);
     return;
-  } else if (XCSoarInterface::Basic().battery_level_available) {
-    data.SetValue(_T("%.0f%%"), XCSoarInterface::Basic().battery_level);
+  } else if (CommonInterface::Basic().battery_level_available) {
+    data.SetValue(_T("%.0f%%"), CommonInterface::Basic().battery_level);
     return;
   }
 

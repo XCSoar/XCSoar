@@ -147,8 +147,8 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
 
   Angle sun_azimuth(Angle::Degrees(-45));
   if (renderer.GetSettings().slope_shading == SlopeShading::SUN &&
-      XCSoarInterface::Calculated().sun_data_available)
-    sun_azimuth = XCSoarInterface::Calculated().sun_azimuth;
+      CommonInterface::Calculated().sun_data_available)
+    sun_azimuth = CommonInterface::Calculated().sun_azimuth;
 
   renderer.Generate(projection, sun_azimuth);
 

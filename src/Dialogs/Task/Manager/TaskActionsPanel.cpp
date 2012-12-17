@@ -81,7 +81,7 @@ TaskActionsPanel::OnNewTaskClicked()
       (ShowMessageBox(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     (*active_task)->Clear();
-    (*active_task)->SetFactory(XCSoarInterface::GetComputerSettings().task.task_type_default);
+    (*active_task)->SetFactory(CommonInterface::GetComputerSettings().task.task_type_default);
     *task_modified = true;
     dialog.SwitchToPropertiesPanel();
   }
