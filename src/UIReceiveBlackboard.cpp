@@ -24,6 +24,7 @@ Copyright_License {
 #include "UIReceiveBlackboard.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
+#include "ApplyExternalSettings.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Device/All.hpp"
 
@@ -32,13 +33,15 @@ UIReceiveSensorData()
 {
   XCSoarInterface::ReceiveGPS();
 
+  bool modified = ApplyExternalSettings();
+
   /*
    * Update the infoboxes if no location is available
    *
    * (if the location is available the CalculationThread will send the
    * Command::CALCULATED_UPDATE message which will update them)
    */
-  if (!CommonInterface::Basic().location_available) {
+  if (modified || !CommonInterface::Basic().location_available) {
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
   }

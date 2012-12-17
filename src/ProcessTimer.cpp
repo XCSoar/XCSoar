@@ -44,7 +44,6 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "ApplyExternalSettings.hpp"
 
 #ifdef _WIN32_WCE
 static void
@@ -184,7 +183,6 @@ ManualWindProcessTimer()
 static void
 SettingsProcessTimer()
 {
-  ApplyExternalSettings();
   BallastDumpProcessTimer();
   ManualWindProcessTimer();
 }
