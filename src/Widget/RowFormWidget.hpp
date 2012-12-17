@@ -235,6 +235,13 @@ public:
                    const TCHAR *display_format,
                    UnitGroup unit_group, fixed value);
 
+  /**
+   * Add a read-only control displaying a boolean value.  Use
+   * LoadValue() to update the displayed value.
+   */
+  void AddReadOnly(const TCHAR *label, const TCHAR *help,
+                   bool value);
+
   WndProperty *Add(const TCHAR *label, const TCHAR *help,
                    DataField *df);
 
