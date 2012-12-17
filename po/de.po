@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-11-22 18:19+0000\n"
-"Last-Translator: Fabian Berstecher <Unknown>\n"
+"PO-Revision-Date: 2012-12-16 23:47+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-26 13:20+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Generator: Launchpad (build 16372)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1176,6 +1176,9 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"Die benötigte Gleitzahl über Grund um die Aufgabe zu beenden, gegeben durch "
+"die verbleibende Distanz geteilt durch die benötigte Höhe um mit "
+"Sicherheitshöhe anzukommen."
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1495,12 +1498,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Nächster Wegpunkt - benötigte Gleitzahl"
 
 #: src/InfoBoxes/Content/Factory.cpp:534
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "WP GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:535
 #, no-c-format
@@ -1509,6 +1512,9 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"Die benötigte Gleitzahl über Grund um den nächsten Wegpunkt zu erreichen, "
+"gegeben durch die Distanz zum nächsten Wegpunkt geteilt durch die benötigte "
+"Höhe um mit Sicherheitshöhe anzukommen."
 
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
@@ -2613,21 +2619,23 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"Ein umlaufender Thermik-Assistent zeigt die Verteilung des Steigens über den "
+"Kreis."
 
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "Abflug geöffnet/geschlossen Countdown"
 
 #: src/InfoBoxes/Content/Factory.cpp:1161
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Nur Start"
+msgstr "Abflug geöffnet"
 
 #: src/InfoBoxes/Content/Factory.cpp:1162
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "Zeigt die Zeit bis zum Öffnen/Schließen des Abflugs."
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
@@ -2736,18 +2744,16 @@ msgid "Time Below"
 msgstr "Zeit unter"
 
 #: src/InfoBoxes/Content/Task.cpp:851 src/InfoBoxes/Content/Task.cpp:896
-#, fuzzy
 msgid "Closed"
-msgstr "Schließen"
+msgstr "Geschlossen"
 
 #: src/InfoBoxes/Content/Task.cpp:860 src/InfoBoxes/Content/Task.cpp:905
 msgid "Open"
-msgstr ""
+msgstr "Freigegeben"
 
 #: src/InfoBoxes/Content/Task.cpp:865 src/InfoBoxes/Content/Task.cpp:910
-#, fuzzy
 msgid "Waiting"
-msgstr "Vario Stummschaltung"
+msgstr "Warte"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:79 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/WindSettingsPanel.cpp:51 Data/Dialogs/dlgVegaDemo.xml:14
@@ -3720,9 +3726,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Drucksensor"
+msgstr "IOIO i2c Drucksensor"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3761,15 +3767,15 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "I2C Bus"
-msgstr ""
+msgstr "I2C Bus"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Wähle die Beschreibung oder Busnummer passend zu deiner Konfiguration."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C Adresse"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3780,9 +3786,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "Drucksensor"
+msgstr "Druck Verwendung"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
@@ -3790,6 +3795,8 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
+"Wähle die Verwendung des Drucksensor. Der Sensor misst ein bel. Druck. "
+"Hiermit kann das System den Druck richtig einsetzen."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
@@ -5174,6 +5181,8 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"Wählt die performancemäßig beste Option für Deine Hardware aus. Tatsächlich "
+"bevorzugt es 'Rahmen', außer bei PPC 2000 Systemen."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:71
 #, no-c-format
@@ -5183,7 +5192,7 @@ msgstr "Ganz ausfüllen"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "Färbt das ganze Areal des Luftraums transparent."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
@@ -5630,15 +5639,15 @@ msgstr "Englisch"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
 msgid "Status message"
-msgstr "Status Meldung"
+msgstr "Nachricht"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:172
 msgid ""
 "The status file can be used to define sounds to be played when certain "
 "events occur, and how long various status messages will appear on screen."
 msgstr ""
-"Die Meldungendatei legt fest welche Klänge auf welche Ereignisse hin "
-"abgespielt werden und wie lange die verschiedenen Meldungen angezeigt werden."
+"Die Statusdatei legt fest welche Klänge auf welche Ereignisse hin abgespielt "
+"werden und wie lange die verschiedenen Meldungen angezeigt werden."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid "Menu timeout"
@@ -5870,7 +5879,7 @@ msgstr "Oben Links"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr ""
+msgstr "Nachrichten-Anzeige in der Ecke links oben."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:138
 #, no-c-format
@@ -6568,6 +6577,8 @@ msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
+"Im Steigen werden die Linien grün und dicker, während im Sinken die Linien "
+"braun und dünn werden. Null wird als graue Linie angezeigt."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
 #, no-c-format
@@ -6580,6 +6591,8 @@ msgstr "Vario #1 (mit Punkten)"
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
 msgstr ""
+"Das gleiche Farbschema wie vorher, aber mit gepunkteten Linien solange man "
+"sinkt."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -6592,6 +6605,8 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
+"Die Steigen-Farbe für dieses Schema ist Orange bis Rot, Sinken wird mit "
+"Hellblau bis Dunkelblau angezeigt. Null wird als gelbe Linie angezeigt."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
@@ -6601,7 +6616,7 @@ msgstr "Vario #2 (mit Punkten)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr ""
+msgstr "Das Farbschema entspricht der Höhe."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -6813,7 +6828,7 @@ msgstr "Referenz ist die Höhe über dem Meeresspiegel ."
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr ""
+msgstr "Bezogen auf die Höhe über dem Aufgabenpunkt."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
@@ -6823,7 +6838,7 @@ msgstr "Abflughöhe bezogen auf"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
 msgid "Reference used for start max height rule."
-msgstr ""
+msgstr "Bezug für die Regel über die max. Abflughöhe."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:223
@@ -6847,7 +6862,7 @@ msgstr "Zielhöhenref."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Reference used for finish min height rule."
-msgstr ""
+msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #, no-c-format
@@ -7579,14 +7594,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Minimale AAT Aufgabenzeit in Minuten."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Start open time"
-msgstr "Startzeit"
+msgstr "Abflugöffnungszeit"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
-#, fuzzy
 msgid "Start close time"
-msgstr "Startzeit"
+msgstr "Abflugschluss"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -7915,9 +7928,8 @@ msgid "Not Found"
 msgstr "Nicht gefunden"
 
 #: src/Dialogs/TimeEntry.cpp:83
-#, fuzzy
 msgid "Now"
-msgstr "Nein"
+msgstr "Sofort"
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7977,23 +7989,27 @@ msgstr "Die Ton-Frequenz bei der größten Steigrate."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "Tonausblendung min. Steigen"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Unter diesem Steig-Schwellwert spielt das Vario töne, falls die  "
+"Tonausblendung aktiviert ist."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "Tonausblendung max. Steigen"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:117
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Über diesem Steig-Schwellwert spielt das Vario töne, falls die  "
+"Tonausblendung aktiviert ist."
 
 #: src/Dialogs/Weather/NOAAList.cpp:109 Data/Dialogs/dlgNOAADetails.xml:6
 #: Data/Dialogs/dlgNOAADetails_L.xml:6
@@ -8037,13 +8053,12 @@ msgid "Hot-air balloon"
 msgstr "Heißluftballon"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-#, fuzzy
 msgid "Track friends"
-msgstr "Verfolgung"
+msgstr "Kurs-Freunde"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Lade die Position deiner Freunde live vom  SkyLines Server."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
 msgid "Tracking Interval"
@@ -9082,15 +9097,38 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#, fuzzy
-#~ msgid "Start open arr"
-#~ msgstr "Logger starten"
+#~ msgid "Start open/close countdown at arrival"
+#~ msgstr "Abflug öffnet/schließt Countdown mit Erreichen"
 
-#~ msgid "Map labels on"
-#~ msgstr "Beschriftung ein"
+#~ msgid "Start open arr"
+#~ msgstr "Abflug mit Erreichen"
+
+#~ msgid ""
+#~ "Shows the time left until the start point opens or closes, compared to "
+#~ "the calculated arrival time."
+#~ msgstr ""
+#~ "Zeigt die verbleibende Zeit bis der Abflug öffnet oder schließt, "
+#~ "verglichen mit der berechneten Zeit dort hinzufliegen."
+
+#~ msgid "IOIO Nunchuck"
+#~ msgstr "IOIO Nunchuck"
+
+#~ msgid ""
+#~ "The i2c address that matches your configuration.This field is not used "
+#~ "when your selection in the I2C Bus field is not an i2c address. In case "
+#~ "you do not understand the previous sentence you may assume that this "
+#~ "field is not used."
+#~ msgstr ""
+#~ "Die i2c Adresse, die zu deiner Konfiguration passt. Das Feld wird nicht "
+#~ "genutzt, wenn deine Wahl im I2C Bus-Feld keine i2c Adresse ist. Wenn dir "
+#~ "diese Dinge nicht geläufig sind gehe davon aus, dass dieses Feld nicht "
+#~ "genutzt wird."
 
 #~ msgid "v"
 #~ msgstr "v"
+
+#~ msgid "Map labels on"
+#~ msgstr "Beschriftung ein"
 
 #~ msgid "Flight replay"
 #~ msgstr "Flug wiedergeben"
