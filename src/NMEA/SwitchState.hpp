@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SWITCH_STATE_HPP
 #define XCSOAR_SWITCH_STATE_HPP
 
+#include "VegaSwitchState.hpp"
+
 #include <stdint.h>
 
 /**
@@ -63,13 +65,11 @@ struct SwitchState
   UserSwitch user_switch;
   AirbrakeState airbrake_state;
 
-  bool gear_extended;
-  bool acknowledge;
-  bool repeat;
-  bool speed_command;
-  // bool stall;
+  VegaSwitchState vega;
 
   void Reset();
+
+  void Complement(const SwitchState &add);
 };
 
 #endif

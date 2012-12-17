@@ -382,8 +382,6 @@ struct NMEAInfo {
   /** Battery supply information in percent (0.0 - 100.0; if available) */
   fixed battery_level;
 
-  bool switch_state_available;
-
   /** Switch state of the user inputs */
   SwitchState switch_state;
 

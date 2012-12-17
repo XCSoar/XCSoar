@@ -142,7 +142,6 @@ NMEAInfo::Reset()
   voltage_available.Clear();
   battery_level_available.Clear();
 
-  switch_state_available = false;
   switch_state.Reset();
 
   stall_ratio_available.Clear();
@@ -300,8 +299,7 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (battery_level_available.Complement(add.battery_level_available))
     battery_level = add.battery_level;
 
-  if (!switch_state_available && add.switch_state_available)
-    switch_state = add.switch_state;
+  switch_state.Complement(add.switch_state);
 
   if (!stall_ratio_available && add.stall_ratio_available)
     stall_ratio = add.stall_ratio;

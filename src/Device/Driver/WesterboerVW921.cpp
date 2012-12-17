@@ -225,8 +225,6 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
     info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
   }
 
-  info.switch_state_available = true;
-
   // 7      Byte  GPS status (Bitmask)
   // Bit 3: GPS-Status-Flag ("A"-valid position/"V"- NAV receiver warning)
   // 8      Byte  GPS status 2 (Bitmask)

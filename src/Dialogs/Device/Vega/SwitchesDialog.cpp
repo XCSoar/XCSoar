@@ -80,9 +80,9 @@ public:
   void Update(const SwitchState &switches) {
     LoadValueEnum(AIRBRAKE_STATE, switches.airbrake_state);
     LoadValueEnum(FLAP_POSITION, (unsigned)switches.flap_position);
-    LoadValue(GEAR_DOWN, switches.gear_extended);
-    LoadValue(ACKNOWLEDGE, switches.acknowledge);
-    LoadValue(SPEED_COMMAND, switches.speed_command);
+    LoadValue(GEAR_DOWN, switches.vega.GetGearExtended());
+    LoadValue(ACKNOWLEDGE, switches.vega.GetAcknowledge());
+    LoadValue(SPEED_COMMAND, switches.vega.GetSpeedCommand());
   }
 };
 

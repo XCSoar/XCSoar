@@ -37,37 +37,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-#define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
-#define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
-#define INPUT_BIT_FLAP_NEG                  2 // 1 flap neg
-#define INPUT_BIT_SC                        3 // 1 circling
-#define INPUT_BIT_GEAR_EXTENDED             5 // 1 gear extended
-#define INPUT_BIT_AIRBRAKENOTLOCKED         6 // 1 airbrake extended
-#define INPUT_BIT_ACK                       8 // 1 ack pressed
-#define INPUT_BIT_REP                       9 // 1 rep pressed
-//#define INPUT_BIT_STALL                     20  // 1 if detected
-#define INPUT_BIT_AIRBRAKELOCKED            21 // 1 airbrake locked
-#define INPUT_BIT_USERSWUP                  23 // 1 if up
-#define INPUT_BIT_USERSWMIDDLE              24 // 1 if middle
-#define INPUT_BIT_USERSWDOWN                25
-#define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
-#define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
-
-static constexpr unsigned INPUT_MASK_FLAP_POSITIVE = 1 << INPUT_BIT_FLAP_POS;
-static constexpr unsigned INPUT_MASK_FLAP_ZERO = 1 << INPUT_BIT_FLAP_ZERO;
-static constexpr unsigned INPUT_MASK_FLAP_NEGATIVE = 1 << INPUT_BIT_FLAP_NEG;
-static constexpr unsigned INPUT_MASK_SC = 1 << INPUT_BIT_SC;
-static constexpr unsigned INPUT_MASK_GEAR_EXTENDED = 1 << INPUT_BIT_GEAR_EXTENDED;
-static constexpr unsigned INPUT_MASK_AIRBRAKE_NOT_LOCKED = 1 << INPUT_BIT_AIRBRAKELOCKED;
-static constexpr unsigned INPUT_MASK_ACK = 1 << INPUT_BIT_ACK;
-static constexpr unsigned INPUT_MASK_REP = 1 << INPUT_BIT_REP;
-static constexpr unsigned INPUT_MASK_AIRBRAKE_LOCKED = 1 << INPUT_BIT_AIRBRAKELOCKED;
-static constexpr unsigned INPUT_MASK_USER_SWITCH_UP = 1 << INPUT_BIT_USERSWUP;
-static constexpr unsigned INPUT_MASK_USER_SWITCH_MIDDLE = 1 << INPUT_BIT_USERSWMIDDLE;
-static constexpr unsigned INPUT_MASK_USER_SWITCH_DOWN = 1 << INPUT_BIT_USERSWDOWN;
-static constexpr unsigned OUTPUT_MASK_CIRCLING = 1 << OUTPUT_BIT_CIRCLING;
-static constexpr unsigned OUTPUT_MASK_FLAP_LANDING = 1 << OUTPUT_BIT_FLAP_LANDING;
-
 static bool
 PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 {
@@ -79,45 +48,39 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
       info.settings.ProvideMacCready(fixed(value) / 10, info.clock))
     volatile_data.mc = value;
 
-  const unsigned switchinputs = line.ReadHex(0);
-  const unsigned switchoutputs = line.ReadHex(0);
-
   auto &switches = info.switch_state;
-  info.switch_state_available = true;
+  auto &vs = switches.vega;
+  vs.inputs = line.ReadHex(0);
+  vs.outputs = line.ReadHex(0);
 
-  if (switchoutputs & OUTPUT_MASK_FLAP_LANDING)
+  if (vs.GetFlapLanding())
     switches.flap_position = SwitchState::FlapPosition::LANDING;
-  else if (switchinputs & INPUT_MASK_FLAP_ZERO)
+  else if (vs.GetFlapZero())
     switches.flap_position = SwitchState::FlapPosition::NEUTRAL;
-  else if (switchinputs & INPUT_MASK_FLAP_NEGATIVE)
+  else if (vs.GetFlapNegative())
     switches.flap_position = SwitchState::FlapPosition::NEGATIVE;
-  else if (switchinputs & INPUT_MASK_FLAP_POSITIVE)
+  else if (vs.GetFlapPositive())
     switches.flap_position = SwitchState::FlapPosition::POSITIVE;
   else
     switches.flap_position = SwitchState::FlapPosition::UNKNOWN;
 
-  if (switchinputs & INPUT_MASK_USER_SWITCH_MIDDLE)
+  if (vs.GetUserSwitchMiddle())
     switches.user_switch = SwitchState::UserSwitch::MIDDLE;
-  else if (switchinputs & INPUT_MASK_USER_SWITCH_UP)
+  else if (vs.GetUserSwitchUp())
     switches.user_switch = SwitchState::UserSwitch::UP;
-  else if (switchinputs & INPUT_MASK_USER_SWITCH_DOWN)
+  else if (vs.GetUserSwitchDown())
     switches.user_switch = SwitchState::UserSwitch::DOWN;
   else
     switches.user_switch = SwitchState::UserSwitch::UNKNOWN;
 
-  if (switchinputs & INPUT_MASK_AIRBRAKE_LOCKED)
+  if (vs.GetAirbrakeLocked())
     switches.airbrake_state = SwitchState::AirbrakeState::LOCKED;
-  else if (switchinputs & INPUT_MASK_AIRBRAKE_NOT_LOCKED)
+  else if (vs.GetAirbrakeNotLocked())
     switches.airbrake_state = SwitchState::AirbrakeState::NOT_LOCKED;
   else
     switches.airbrake_state = SwitchState::AirbrakeState::UNKNOWN;
 
-  switches.gear_extended = switchinputs & INPUT_MASK_GEAR_EXTENDED;
-  switches.acknowledge = switchinputs & INPUT_MASK_ACK;
-  switches.repeat = switchinputs & INPUT_MASK_REP;
-  switches.speed_command = switchinputs & INPUT_MASK_SC;
-  // switches.stall = switchinputs & INPUT_MASK_STALL;
-  switches.flight_mode = switchoutputs & OUTPUT_MASK_CIRCLING
+  switches.flight_mode = vs.GetCircling()
     ? SwitchState::FlightMode::CIRCLING
     : SwitchState::FlightMode::CRUISE;
 
@@ -129,10 +92,10 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   // detect changes to ON: on now (x) and not on before (!lastx)
   // detect changes to OFF: off now (!x) and on before (lastx)
 
-  down_switchinputs = (switchinputs & (~last_switchinputs));
-  up_switchinputs = ((~switchinputs) & (last_switchinputs));
-  down_switchoutputs = (switchoutputs & (~last_switchoutputs));
-  up_switchoutputs = ((~switchoutputs) & (last_switchoutputs));
+  down_switchinputs = (vs.inputs & (~last_switchinputs));
+  up_switchinputs = ((~vs.inputs) & (last_switchinputs));
+  down_switchoutputs = (vs.outputs & (~last_switchoutputs));
+  up_switchoutputs = ((~vs.outputs) & (last_switchoutputs));
 
   int i;
   long thebit;
@@ -152,8 +115,8 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
     }
   }
 
-  last_switchinputs = switchinputs;
-  last_switchoutputs = switchoutputs;
+  last_switchinputs = vs.inputs;
+  last_switchoutputs = vs.outputs;
 
   if (line.ReadChecked(value)) {
     info.voltage = fixed(value) / 10;
