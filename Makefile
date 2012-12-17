@@ -768,6 +768,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/BatteryTimer.cpp \
 	$(SRC)/ProcessTimer.cpp \
 	$(SRC)/ApplyExternalSettings.cpp \
+	$(SRC)/ApplyVegaSwitches.cpp \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \

@@ -24,6 +24,7 @@ Copyright_License {
 #include "UIReceiveBlackboard.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
+#include "ApplyVegaSwitches.hpp"
 #include "ApplyExternalSettings.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Device/All.hpp"
@@ -32,6 +33,8 @@ void
 UIReceiveSensorData()
 {
   XCSoarInterface::ReceiveGPS();
+
+  ApplyVegaSwitches();
 
   bool modified = ApplyExternalSettings();
 

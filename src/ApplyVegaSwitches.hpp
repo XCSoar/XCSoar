@@ -21,10 +21,14 @@ Copyright_License {
 }
 */
 
-#include "Input/InputQueue.hpp"
+#ifndef XCSOAR_APPLY_VEGA_SWITCHES_HPP
+#define XCSOAR_APPLY_VEGA_SWITCHES_HPP
 
-bool
-InputEvents::processNmea(unsigned key)
-{
-  return true;
-}
+/**
+ * Check if the Vega switches have changed, and invoke the according
+ * NMEA events.
+ */
+void
+ApplyVegaSwitches();
+
+#endif

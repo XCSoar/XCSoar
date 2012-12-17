@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Message.hpp"
-#include "Input/InputQueue.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Compiler.h"
@@ -40,9 +39,6 @@ Copyright_License {
 static bool
 PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 {
-  static long last_switchinputs;
-  static long last_switchoutputs;
-
   unsigned value;
   if (line.ReadChecked(value) &&
       info.settings.ProvideMacCready(fixed(value) / 10, info.clock))
@@ -83,40 +79,6 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   switches.flight_mode = vs.GetCircling()
     ? SwitchState::FlightMode::CIRCLING
     : SwitchState::FlightMode::CRUISE;
-
-  long up_switchinputs;
-  long down_switchinputs;
-  long up_switchoutputs;
-  long down_switchoutputs;
-
-  // detect changes to ON: on now (x) and not on before (!lastx)
-  // detect changes to OFF: off now (!x) and on before (lastx)
-
-  down_switchinputs = (vs.inputs & (~last_switchinputs));
-  up_switchinputs = ((~vs.inputs) & (last_switchinputs));
-  down_switchoutputs = (vs.outputs & (~last_switchoutputs));
-  up_switchoutputs = ((~vs.outputs) & (last_switchoutputs));
-
-  int i;
-  long thebit;
-  for (i=0; i<32; i++) {
-    thebit = 1<<i;
-    if ((down_switchinputs & thebit) == thebit) {
-      InputEvents::processNmea(i);
-    }
-    if ((down_switchoutputs & thebit) == thebit) {
-      InputEvents::processNmea(i+32);
-    }
-    if ((up_switchinputs & thebit) == thebit) {
-      InputEvents::processNmea(i+64);
-    }
-    if ((up_switchoutputs & thebit) == thebit) {
-      InputEvents::processNmea(i+96);
-    }
-  }
-
-  last_switchinputs = vs.inputs;
-  last_switchoutputs = vs.outputs;
 
   if (line.ReadChecked(value)) {
     info.voltage = fixed(value) / 10;

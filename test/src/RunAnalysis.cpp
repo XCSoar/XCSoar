@@ -107,12 +107,6 @@ void Logger::LogStartEvent(const NMEAInfo &gps_info) {}
 void Logger::LogFinishEvent(const NMEAInfo &gps_info) {}
 void Logger::LogPoint(const NMEAInfo &gps_info) {}
 
-bool
-InputEvents::processNmea(unsigned key)
-{
-  return true;
-}
-
 /* done with fake symbols. */
 
 static RasterTerrain *terrain;
