@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-12-09 16:47+0000\n"
+"PO-Revision-Date: 2012-12-16 09:28+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-10 10:24+0000\n"
-"X-Generator: Launchpad (build 16341)\n"
+"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Generator: Launchpad (build 16372)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3729,7 +3729,7 @@ msgstr "Sélectionnez un fichier"
 
 #: src/Dialogs/FileManager.cpp:684
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "Le téléchargement de l'index du répertoire a échoué"
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
@@ -3738,11 +3738,11 @@ msgstr "Gestionnaire de fichiers"
 
 #: src/Dialogs/FileManager.cpp:714
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Le gestionnaire de fichiers n'est pas disponible sur cet appareil."
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "Le gestionnaire de fichier nécessite Android 2.3."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
@@ -3750,9 +3750,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Capteur de pression"
+msgstr ""
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3810,9 +3810,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "Capteur de pression"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
@@ -9105,8 +9104,8 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Map labels on"
-#~ msgstr "Etiquettes sur carte ON"
-
 #~ msgid "v"
 #~ msgstr "v"
+
+#~ msgid "Map labels on"
+#~ msgstr "Etiquettes sur carte ON"
