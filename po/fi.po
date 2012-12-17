@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-12-17 01:52+0000\n"
-"Last-Translator: Juha Huvilinna <juha@siipi.fi>\n"
+"PO-Revision-Date: 2012-12-17 19:54+0000\n"
+"Last-Translator: Juha H <juha@siipi.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Launchpad-Export-Date: 2012-12-17 21:00+0000\n"
 "X-Generator: Launchpad (build 16372)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -252,7 +252,7 @@ msgstr ""
 
 #: src/Airspace/AirspaceParser.cpp:256
 msgid "Line skipped."
-msgstr ""
+msgstr "Rivi ohitettu"
 
 #: src/Airspace/AirspaceParser.cpp:257
 #: src/Dialogs/Airspace/dlgAirspace.cpp:177
@@ -262,11 +262,11 @@ msgstr ""
 #: Data/Dialogs/dlgVoice.xml:34 Data/Input/default.xci:534
 #, no-c-format
 msgid "Airspace"
-msgstr ""
+msgstr "Ilmatila"
 
 #: src/Airspace/AirspaceParser.cpp:895
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Tuntematon ilmatilatyyppi"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:52
 msgid "Expect early task arrival"
@@ -288,17 +288,17 @@ msgstr ""
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:56
 msgid "Significant wind change"
-msgstr ""
+msgstr "Merkittävä muutos tuulessa"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Ei virhettä"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Tiedot"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
@@ -317,7 +317,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:60
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
@@ -327,22 +327,22 @@ msgstr ""
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Virta"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS-yhteys"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS-asetukset"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "RF-yhteys"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
@@ -352,22 +352,22 @@ msgstr ""
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Flash-muisti"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Paineanturi"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:77
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Estetietokanta"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Lentotallennin"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -377,72 +377,74 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Muu"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
-msgstr ""
+msgstr "Käynnistä loggeri"
 
 #: src/Logger/Logger.cpp:119
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Loggeri pois käytöstä, tallennustila lopussa!"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
-msgstr ""
+msgstr "Loggeri-virhe"
 
 #: src/Logger/Logger.cpp:148 src/Dialogs/Device/ManageCAI302Dialog.cpp:73
 msgid "Stop Logger"
-msgstr ""
+msgstr "Pysäytä loggeri"
 
 #: src/Logger/ExternalLogger.cpp:89
 msgid "Declare task?"
-msgstr ""
+msgstr "Ilmoita tehtävä?"
 
 #: src/Logger/ExternalLogger.cpp:98 src/Logger/ExternalLogger.cpp:130
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:108
 msgid "Declare task"
-msgstr ""
+msgstr "Ilmoita tehtävä"
 
 #: src/Logger/ExternalLogger.cpp:104
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Virhe,\n"
+"Tehtävää ei ole ilmoitettu!"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "Task declared!"
-msgstr ""
+msgstr "Tehtävä ilmoitettu!"
 
 #: src/Logger/ExternalLogger.cpp:129
 msgid "No logger connected"
-msgstr ""
+msgstr "Loggeria ei yhdistetty"
 
 #: src/Logger/ExternalLogger.cpp:271
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Lentolistan lataaminen epäonnistui."
 
 #: src/Logger/ExternalLogger.cpp:272 src/Logger/ExternalLogger.cpp:280
 #: src/Logger/ExternalLogger.cpp:297 src/Logger/ExternalLogger.cpp:324
 msgid "Download flight"
-msgstr ""
+msgstr "Lataa lento"
 
 #: src/Logger/ExternalLogger.cpp:279
 msgid "Logger is empty."
-msgstr ""
+msgstr "Loggeri on tyhjä."
 
 #: src/Logger/ExternalLogger.cpp:296
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Lennon lataaminen epäonnistui."
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Haluatko ladata toisen lennon?"
 
 #: src/Waypoint/WaypointGlue.cpp:111
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:35
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Ladataan reittipisteitä..."
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:192
 msgid "Not Circling"
@@ -450,7 +452,7 @@ msgstr ""
 
 #: src/Gauge/FlarmTrafficWindow.cpp:225
 msgid "No Traffic"
-msgstr ""
+msgstr "Ei liikennettä"
 
 #: src/Gauge/BigTrafficWidget.cpp:291 src/Gauge/BigTrafficWidget.cpp:292
 #: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
@@ -462,7 +464,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Variometri"
 
 #: src/Gauge/BigTrafficWidget.cpp:367 src/Renderer/MapItemListRenderer.cpp:120
 #: src/Renderer/MapItemListRenderer.cpp:124
@@ -479,7 +481,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18 Data/Dialogs/dlgTarget.xml:20
 #: Data/Dialogs/dlgTarget_L.xml:13
 msgid "Distance"
-msgstr ""
+msgstr "Etäisyys"
 
 #: src/Gauge/BigTrafficWidget.cpp:410 src/Gauge/BigTrafficWidget.cpp:413
 msgid "Rel. Alt."
@@ -516,25 +518,25 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:17 Data/Dialogs/dlgVario.xml:6
 #: Data/Dialogs/dlgVario_L.xml:6
 msgid "Close"
-msgstr ""
+msgstr "Sulje"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:152
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Ladataan lentopaikkojen tietoja..."
 
 #: src/Menu/ExpandMacros.cpp:127 src/Menu/ExpandMacros.cpp:137
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:233
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Seuraava käännepiste"
 
 #: src/Menu/ExpandMacros.cpp:132 src/Menu/ExpandMacros.cpp:142
 #: src/Menu/ExpandMacros.cpp:215 src/Menu/ExpandMacros.cpp:261
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Edellinen käännepiste"
 
 #: src/Menu/ExpandMacros.cpp:154 src/Menu/ExpandMacros.cpp:174
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Kaukaisin laskupaikka"
 
 #: src/Menu/ExpandMacros.cpp:155 src/Menu/ExpandMacros.cpp:175
 msgid "Next Landpoint"
@@ -643,40 +645,40 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:43
 #, no-c-format
 msgid "Track up"
-msgstr ""
+msgstr "Reitti ylös"
 
 #: src/Menu/ExpandMacros.cpp:348
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Pohjoinen ylös"
 
 #: src/Menu/ExpandMacros.cpp:453 src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
-msgstr ""
+msgstr "Pysäytä"
 
 #: src/Menu/ExpandMacros.cpp:454 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
-msgstr ""
+msgstr "Käynnistä"
 
 #: src/Menu/ExpandMacros.cpp:460
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Long"
-msgstr ""
+msgstr "Pitkä"
 
 #: src/Menu/ExpandMacros.cpp:464
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Short"
-msgstr ""
+msgstr "Lyhyt"
 
 #: src/Menu/ExpandMacros.cpp:468
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
 msgid "Full"
-msgstr ""
+msgstr "Täysi"
 
 #: src/Menu/ExpandMacros.cpp:472 src/Menu/ExpandMacros.cpp:479
 #: src/Menu/ExpandMacros.cpp:536 src/Menu/ExpandMacros.cpp:542
@@ -695,7 +697,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
 #, no-c-format
 msgid "Off"
-msgstr ""
+msgstr "Pois"
 
 #: src/Menu/ExpandMacros.cpp:479 src/Menu/ExpandMacros.cpp:536
 #: src/Menu/ExpandMacros.cpp:542 src/Menu/ExpandMacros.cpp:545
@@ -708,7 +710,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
 #, no-c-format
 msgid "On"
-msgstr ""
+msgstr "Päällä"
 
 #: src/Menu/ExpandMacros.cpp:491 src/Menu/ExpandMacros.cpp:517
 msgid "Topography On"
@@ -730,7 +732,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Kaikki"
 
 #: src/Menu/ExpandMacros.cpp:555 src/Input/InputEventsSettings.cpp:302
 #, no-c-format
@@ -750,7 +752,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:149
 #, no-c-format
 msgid "Height GPS"
-msgstr ""
+msgstr "GPS-korkeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:150
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -769,7 +771,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Korkeus AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
@@ -788,7 +790,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Keskinosto, viimeiset 30 s"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -801,13 +803,15 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Noston keskimääräinen voimakkuus viimeisen 30 sekunnin ajalta. Perustuu GPS-"
+"tietoihin tai variometriin, mikäli data on saatavilla."
 
 #: src/InfoBoxes/Content/Factory.cpp:180 src/InfoBoxes/Content/Factory.cpp:181
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
 #: Data/Dialogs/dlgTeamCode.xml:15 Data/Dialogs/dlgTeamCode_L.xml:15
 #, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "Suunta"
 
 #: src/InfoBoxes/Content/Factory.cpp:182
 #, no-c-format
@@ -819,7 +823,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
 msgid "GR instantaneous"
-msgstr ""
+msgstr "Liitoluku (GR), tämänhetkinen"
 
 #: src/InfoBoxes/Content/Factory.cpp:191
 #, no-c-format
@@ -857,7 +861,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Maanopeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -917,7 +921,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:242
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Edellisessä termiikissä käytetty aika kaarrossa."
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
@@ -940,7 +944,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Etäisyys seuraavaan"
 
 #: src/InfoBoxes/Content/Factory.cpp:261 src/InfoBoxes/Content/Task.cpp:154
 #, no-c-format
@@ -991,7 +995,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Seuraava reittipiste (WP)"
 
 #: src/InfoBoxes/Content/Factory.cpp:291
 #, no-c-format
@@ -1143,7 +1147,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Reitti"
 
 #: src/InfoBoxes/Content/Factory.cpp:382
 #, no-c-format
@@ -1163,7 +1167,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "Tuulen nopeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:401
 #, no-c-format
@@ -1184,7 +1188,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Tuulen suunta"
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -1277,7 +1281,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Mitattu ilmanopeus (IAS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:473
 #, no-c-format
@@ -1292,7 +1296,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "Painekorkeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:483
 #, no-c-format
@@ -1344,17 +1348,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "Flight Duration"
-msgstr ""
+msgstr "Lennon kesto"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
 msgid "Flt Duration"
-msgstr ""
+msgstr "Lennon kesto"
 
 #: src/InfoBoxes/Content/Factory.cpp:515
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "Lennon kesto havaitusta lentoonlähdöstä."
 
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
@@ -1394,12 +1398,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "Paikallinen aika"
 
 #: src/InfoBoxes/Content/Factory.cpp:544
 #, no-c-format
 msgid "Time loc"
-msgstr ""
+msgstr "Kello"
 
 #: src/InfoBoxes/Content/Factory.cpp:545
 #, no-c-format
@@ -1409,7 +1413,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:553 src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "Kello UTC"
 
 #: src/InfoBoxes/Content/Factory.cpp:555
 #, no-c-format
@@ -1551,41 +1555,41 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:633
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Ulkolämpötila"
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "Ulkolämpö"
 
 #: src/InfoBoxes/Content/Factory.cpp:635
 #, no-c-format
 msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
 "intelligent variometer."
-msgstr ""
+msgstr "Ulkoilman lämpötila saadaan sitä tukevalta variometriltä."
 
 #: src/InfoBoxes/Content/Factory.cpp:643
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "Suhteellinen kosteus"
 
 #: src/InfoBoxes/Content/Factory.cpp:644
 #, no-c-format
 msgid "Rel Hum"
-msgstr ""
+msgstr "Suht. kost."
 
 #: src/InfoBoxes/Content/Factory.cpp:645
 #, no-c-format
 msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
-msgstr ""
+msgstr "Suhteellinen kosteus saadaan sitä tukevalta variometriltä."
 
 #: src/InfoBoxes/Content/Factory.cpp:653 src/Input/InputEventsSettings.cpp:294
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Lämpötilaennuste"
 
 #: src/InfoBoxes/Content/Factory.cpp:654
 #, no-c-format
@@ -1650,7 +1654,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:693
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr ""
+msgstr "Tosi-ilmanopeus (TAS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:694
 #, no-c-format
@@ -1829,17 +1833,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:804
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "Akun varaustila"
 
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
 msgid "Battery voltage"
-msgstr ""
+msgstr "Akun jännite"
 
 #: src/InfoBoxes/Content/Factory.cpp:808
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Akku"
 
 #: src/InfoBoxes/Content/Factory.cpp:809
 #, no-c-format
@@ -2015,7 +2019,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:938
 #, no-c-format
 msgid "Flight level"
-msgstr ""
+msgstr "Lentopinta"
 
 #: src/InfoBoxes/Content/Factory.cpp:939
 #, no-c-format
@@ -2110,12 +2114,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:999
 #, no-c-format
 msgid "Task progress"
-msgstr ""
+msgstr "Tehtävän eteneminen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
 msgid "Progress"
-msgstr ""
+msgstr "Eteneminen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2182,7 +2186,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
 msgid "Horizon"
-msgstr ""
+msgstr "Horisontti"
 
 #: src/InfoBoxes/Content/Factory.cpp:1041
 #, no-c-format
@@ -2244,12 +2248,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1079
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "Vastatuulikomponentti"
 
 #: src/InfoBoxes/Content/Factory.cpp:1080
 #, no-c-format
 msgid "Head Wind"
-msgstr ""
+msgstr "Vastatuuli"
 
 #: src/InfoBoxes/Content/Factory.cpp:1081
 #, no-c-format
@@ -2360,26 +2364,26 @@ msgstr ""
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Tuuli"
 
 #: src/InfoBoxes/Content/Factory.cpp:1150
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, no-c-format
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Termiikkiavustin"
 
 #: src/InfoBoxes/Content/Factory.cpp:1151
 #: src/Renderer/MapItemListRenderer.cpp:383
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termiikki"
 
 #: src/InfoBoxes/Content/Factory.cpp:1152
 #, no-c-format
 msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
-msgstr ""
+msgstr "Termiikkiavustin osoittaa noston voimakkuuden kaarron alueella."
 
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
@@ -2437,7 +2441,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "Asetukset"
 
 #: src/InfoBoxes/Content/Altitude.cpp:77
 #: src/InfoBoxes/Content/Altitude.cpp:182
@@ -2461,7 +2465,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:7
 #, no-c-format
 msgid "Edit"
-msgstr ""
+msgstr "Muokkaa"
 
 #: src/InfoBoxes/Content/MacCready.cpp:77
 msgid "MC AUTO"
@@ -2496,7 +2500,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:82
 msgid "Next"
-msgstr ""
+msgstr "Seuraava"
 
 #: src/InfoBoxes/Content/Task.cpp:741
 msgid "Time Below"
@@ -2534,7 +2538,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:221
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:348
 msgid "InfoBox"
-msgstr ""
+msgstr "Inforuutu"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:296
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:225
@@ -2582,7 +2586,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
 #: src/Dialogs/WindSettingsPanel.cpp:84
 msgid "Speed"
-msgstr ""
+msgstr "Nopeus"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:100 src/Dialogs/WindSettingsPanel.cpp:84
 msgid "Manual adjustment of wind speed."
@@ -2595,7 +2599,7 @@ msgstr ""
 #: Data/Dialogs/AirspaceList_L.xml:12 Data/Dialogs/WaypointList.xml:12
 #: Data/Dialogs/WaypointList_L.xml:8
 msgid "Direction"
-msgstr ""
+msgstr "Suunta"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105 src/Dialogs/WindSettingsPanel.cpp:96
 msgid "Manual adjustment of wind direction."
@@ -2629,7 +2633,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #, no-c-format
 msgid "Both"
-msgstr ""
+msgstr "Molemmat"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:92 src/Dialogs/WindSettingsPanel.cpp:70
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:154
@@ -2657,7 +2661,7 @@ msgstr ""
 
 #: src/Input/InputEventsActions.cpp:282
 msgid "No active waypoint!"
-msgstr ""
+msgstr "Ei aktiivista reittipistettä!"
 
 #: src/Input/InputEventsActions.cpp:372
 msgid "NMEA log on"
@@ -2814,7 +2818,7 @@ msgstr ""
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:232
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
-msgstr ""
+msgstr "Kilpailutunnus"
 
 #: src/Input/InputEventsTraffic.cpp:100
 msgid "Show details:"
@@ -2938,15 +2942,15 @@ msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:149
 msgid "GPS not connected"
-msgstr ""
+msgstr "GPS ei kytketty"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:152
 msgid "GPS waiting for fix"
-msgstr ""
+msgstr "Odotetaan GPS-sijaintia"
 
 #: src/Topography/TopographyGlue.cpp:71
 msgid "Loading Topography File..."
-msgstr ""
+msgstr "Ladataan pinnanmuotoja..."
 
 #: src/Terrain/RasterWeather.cpp:48
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
@@ -2955,12 +2959,12 @@ msgstr ""
 #: Data/Input/default.xci:520 Data/Input/default.xci:1143
 #, no-c-format
 msgid "Terrain"
-msgstr ""
+msgstr "Maasto"
 
 #: src/Terrain/RasterWeather.cpp:49
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
-msgstr ""
+msgstr "Näytä maasto kartalla, säädataa ei esitetä."
 
 #: src/Terrain/RasterWeather.cpp:53
 #, no-c-format
@@ -3104,7 +3108,7 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:154
 #: src/Renderer/FlightStatisticsRenderer.cpp:183
 msgid "Score"
-msgstr ""
+msgstr "Pistemäärä"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:130
 #: src/Renderer/FlightStatisticsRenderer.cpp:154
@@ -3122,7 +3126,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:127 Data/Dialogs/dlgWeather.xml:8
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Aika"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:250
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
@@ -3173,7 +3177,7 @@ msgstr ""
 
 #: src/Renderer/GlidePolarRenderer.cpp:125 src/Dialogs/dlgAnalysis.cpp:321
 msgid "Mass"
-msgstr ""
+msgstr "Massa"
 
 #: src/Renderer/GlidePolarRenderer.cpp:134
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:298
@@ -3182,45 +3186,45 @@ msgstr ""
 
 #: src/Renderer/CuRenderer.cpp:124
 msgid "Thermal height"
-msgstr ""
+msgstr "Termiikin korkeus"
 
 #: src/Renderer/CuRenderer.cpp:127
 msgid "Cloud base"
-msgstr ""
+msgstr "Pilvipohja"
 
 #: src/UIActions.cpp:48
 msgid "Quit program?"
-msgstr ""
+msgstr "Poistu ohjelmasta?"
 
 #: src/Units/UnitsStore.cpp:37
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Eurooppalainen"
 
 #: src/Units/UnitsStore.cpp:47
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Englantilainen"
 
 #: src/Units/UnitsStore.cpp:57
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Amerikkalainen"
 
 #: src/Units/UnitsStore.cpp:67
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Austraalialainen"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:122 src/Startup.cpp:319
 msgid "Loading Terrain File..."
-msgstr ""
+msgstr "Ladataan maastotiedostoa..."
 
 #: src/Profile/DeviceConfig.cpp:151 src/Dialogs/Device/DeviceEditWidget.cpp:70
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Bluetooth-palvelin"
 
 #: src/Profile/DeviceConfig.cpp:168 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
@@ -3230,7 +3234,7 @@ msgstr ""
 #: src/Profile/DeviceConfig.cpp:171 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "Sisäänrakennettu GPS ja anturit"
 
 #: src/Polar/PolarGlue.cpp:106
 msgid ""
@@ -3240,12 +3244,12 @@ msgstr ""
 
 #: src/Polar/PolarGlue.cpp:107
 msgid "Warning"
-msgstr ""
+msgstr "Varoitus"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "Akku lähes tyhjä"
 
 #: src/Startup.cpp:268
 msgid "Initialising"
@@ -3269,26 +3273,26 @@ msgstr ""
 #. Show progress dialog
 #: src/Startup.cpp:500 src/Startup.cpp:536 src/Startup.cpp:580
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Sammutetaan, odota..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:518
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Sammutetaan, tallennetaan lokeja..."
 
 #. Save settings to profile
 #: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Sammutetaan, tallennetaan profiilia..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Sammutetaan, tallennetaan tehtävää..."
 
 #: src/Device/Descriptor.cpp:371
 msgid "Unable to open port"
-msgstr ""
+msgstr "Porttia ei voitu avata"
 
 #: src/Device/Descriptor.cpp:860 src/Device/Descriptor.cpp:866
 msgid "Sending declaration"
@@ -3296,11 +3300,11 @@ msgstr ""
 
 #: src/Device/Descriptor.cpp:903
 msgid "Reading flight list"
-msgstr ""
+msgstr "Luetaan lentolistaa"
 
 #: src/Device/Descriptor.cpp:923
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Ladataan lento-lokia"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. create buttons
@@ -3321,15 +3325,15 @@ msgstr ""
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:62
 msgid "Yes"
-msgstr ""
+msgstr "Kyllä"
 
 #: src/Dialogs/Message.cpp:131
 msgid "No"
-msgstr ""
+msgstr "Ei"
 
 #: src/Dialogs/Message.cpp:138
 msgid "Retry"
-msgstr ""
+msgstr "Yritä uudelleen"
 
 #: src/Dialogs/Message.cpp:145 src/Dialogs/ListPicker.cpp:191
 #: src/Dialogs/JobDialog.cpp:110 src/Dialogs/WidgetDialog.cpp:202
@@ -3344,29 +3348,29 @@ msgstr ""
 #: Data/Dialogs/dlgPlanePolar.xml:23 Data/Dialogs/dlgPlanePolar_L.xml:23
 #: Data/Input/default.xci:948
 msgid "Cancel"
-msgstr ""
+msgstr "Peruuta"
 
 #: src/Dialogs/Message.cpp:154
 msgid "Ignore"
-msgstr ""
+msgstr "Ohita"
 
 #: src/Dialogs/ListPicker.cpp:186 src/Dialogs/HelpDialog.cpp:38
 msgid "Help"
-msgstr ""
+msgstr "Ohje"
 
 #: src/Dialogs/ListPicker.cpp:189 Data/Dialogs/WaypointList.xml:18
 #: Data/Dialogs/WaypointList_L.xml:16
 msgid "Select"
-msgstr ""
+msgstr "Valitse"
 
 #: src/Dialogs/FileManager.cpp:405 src/Dialogs/Weather/NOAAList.cpp:185
 #: src/Dialogs/Weather/NOAAList.cpp:197 src/Dialogs/Weather/NOAADetails.cpp:79
 msgid "Download"
-msgstr ""
+msgstr "Lataa"
 
 #: src/Dialogs/FileManager.cpp:406 src/Dialogs/Weather/NOAAList.cpp:108
 msgid "Add"
-msgstr ""
+msgstr "LIsää"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
@@ -3374,7 +3378,7 @@ msgstr ""
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
 msgid "Downloading"
-msgstr ""
+msgstr "Ladataan"
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
 #: src/Dialogs/Device/DeviceListDialog.cpp:332
@@ -3396,11 +3400,11 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:283
 #: src/Dialogs/Weather/NOAADetails.cpp:130
 msgid "Error"
-msgstr ""
+msgstr "Virhe"
 
 #: src/Dialogs/FileManager.cpp:545
 msgid "Select a file"
-msgstr ""
+msgstr "Valitse tiedosto"
 
 #: src/Dialogs/FileManager.cpp:684
 msgid "Failed to download the repository index."
@@ -3409,15 +3413,15 @@ msgstr ""
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
 msgid "File Manager"
-msgstr ""
+msgstr "Tiedostoselain"
 
 #: src/Dialogs/FileManager.cpp:714
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Tiedostoselain ei ole käytettävissä tässä laitteessa."
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "Tiedostoselain vaatii Andoid 2.3. tai uudemman."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
@@ -3427,7 +3431,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr ""
+msgstr "IOIO i2c paineanturi"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3435,16 +3439,16 @@ msgstr ""
 #: src/Dialogs/Device/DeviceEditWidget.cpp:604
 #, no-c-format
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP-portti"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:81
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "UDP-portti"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
-msgstr ""
+msgstr "Portti"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:589
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
@@ -3464,7 +3468,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "I2C Bus"
-msgstr ""
+msgstr "I2C-väylä"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "Select the description or bus number that matches your configuration."
@@ -3472,7 +3476,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C-osoite"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3495,7 +3499,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
-msgstr ""
+msgstr "Ohjain"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid "Sync. from device"
@@ -3539,7 +3543,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:356
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
-msgstr ""
+msgstr "Yhdistä uudelleen"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:236
 msgid "Flight download"
@@ -3577,7 +3581,7 @@ msgstr ""
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 msgid "Connected"
-msgstr ""
+msgstr "Yhdistetty"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:308
 msgid "Baro"
@@ -3585,7 +3589,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:313 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
-msgstr ""
+msgstr "Ilmanopeus"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 msgid "Not connected"
@@ -3607,14 +3611,14 @@ msgstr ""
 #: Data/Input/default.xci:1214
 #, no-c-format
 msgid "Devices"
-msgstr ""
+msgstr "Laitteet"
 
 #: src/Dialogs/Device/PortMonitor.cpp:141
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:223 src/Dialogs/TimeEntry.cpp:89
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
 msgid "Clear"
-msgstr ""
+msgstr "Tyhjennä"
 
 #: src/Dialogs/Device/PortMonitor.cpp:143
 #: src/Dialogs/Device/PortMonitor.cpp:169
@@ -3630,7 +3634,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:123
 #, no-c-format
 msgid "Units"
-msgstr ""
+msgstr "Yksiköt"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:71
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:100
@@ -3639,26 +3643,26 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #, no-c-format
 msgid "Waypoints"
-msgstr ""
+msgstr "Reittipisteet"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 msgid "Delete all flights"
-msgstr ""
+msgstr "Poista kaikki lennot"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:75
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
 msgid "Reboot"
-msgstr ""
+msgstr "Käynnistä uudelleen"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:135
 msgid "Do you really want to delete all flights from the device?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa kaikki lennot tästä laitteesta?"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
 msgid "Temperature"
-msgstr ""
+msgstr "Lämpötila"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
@@ -3668,7 +3672,7 @@ msgstr ""
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
-msgstr ""
+msgstr "Tiedoston lataus epäonnistui."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:42
 msgid "Too many waypoints."
@@ -3676,11 +3680,11 @@ msgstr ""
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Uploading Waypoints"
-msgstr ""
+msgstr "Lähetetään reittipisteitä"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:52
 msgid "Failed to erase waypoints."
-msgstr ""
+msgstr "Reittipisteiden poisto epäonnistui."
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:58
 msgid "Failed to switch baud rate."
@@ -3765,80 +3769,80 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:122
 #, no-c-format
 msgid "Unkown"
-msgstr ""
+msgstr "Tuntematon"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:115
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Purjekone"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
 msgid "Tow plane"
-msgstr ""
+msgstr "Hinauskone"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Helikopteri"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
 msgid "Parachute"
-msgstr ""
+msgstr "Hyppääjä"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:127
 #, no-c-format
 msgid "Drop plane"
-msgstr ""
+msgstr "Hyppykone"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
 #, no-c-format
 msgid "Hang glider"
-msgstr ""
+msgstr "Riippuliidin"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:116
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Varjoliidin"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:117
 #, no-c-format
 msgid "Powered aircraft"
-msgstr ""
+msgstr "Moottorikone"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:132
 #, no-c-format
 msgid "Jet aircraft"
-msgstr ""
+msgstr "Jetti"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:134
 #, no-c-format
 msgid "Flying saucer"
-msgstr ""
+msgstr "Lentävä lautanen"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:135
 #, no-c-format
 msgid "Balloon"
-msgstr ""
+msgstr "Kuumailmapallo"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
 #, no-c-format
 msgid "Airship"
-msgstr ""
+msgstr "Ilmalaiva"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:138
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr ""
+msgstr "Miehittämätön ilma-alus"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:140
 #, no-c-format
 msgid "Static object"
-msgstr ""
+msgstr "Kiinteä kohde"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
@@ -3848,16 +3852,16 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:12 Data/Dialogs/dlgTaskPoint_L.xml:16
 #: Data/Dialogs/dlgWaypointEdit.xml:66 Data/Dialogs/dlgWaypointEdit_L.xml:66
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:145
 msgid "Logger interval"
-msgstr ""
+msgstr "Tallennusväli"
 
 #: src/Dialogs/MapItemListDialog.cpp:151 src/Dialogs/dlgAnalysis.cpp:290
 #: src/Dialogs/dlgAnalysis.cpp:326 src/Dialogs/dlgAnalysis.cpp:335
 msgid "Settings"
-msgstr ""
+msgstr "Asetukset"
 
 #: src/Dialogs/MapItemListDialog.cpp:152
 #: src/Dialogs/Task/dlgAlternatesList.cpp:100
@@ -3930,7 +3934,7 @@ msgstr ""
 
 #: src/Dialogs/ColorListDialog.cpp:74
 msgid "Select Color"
-msgstr ""
+msgstr "Valitse väri"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:104
 #: src/Dialogs/Airspace/dlgAirspace.cpp:125
@@ -3992,11 +3996,11 @@ msgstr ""
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:79
 msgid "Change Border Color"
-msgstr ""
+msgstr "Vaihda reunaviivan väriä"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:80
 msgid "Change Fill Color"
-msgstr ""
+msgstr "Vaihda täyttöväriä"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:87
 msgid "Change Fill Brush"
@@ -4004,7 +4008,7 @@ msgstr ""
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:96
 msgid "Border Width"
-msgstr ""
+msgstr "Reunaviivan leveys"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:97
 msgid ""
@@ -4096,7 +4100,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:105
 #, no-c-format
 msgid "Glide Computer"
-msgstr ""
+msgstr "Liukulaskin"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: Data/Dialogs/dlgConfigFonts.xml:31 Data/Dialogs/dlgConfigFonts_L.xml:31
@@ -4132,7 +4136,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:107
 #, no-c-format
 msgid "Route"
-msgstr ""
+msgstr "Reitti"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
@@ -4157,22 +4161,22 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Language, Input"
-msgstr ""
+msgstr "Kieli ja syöte"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
 msgid "Screen Layout"
-msgstr ""
+msgstr "Näytön asettelu"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
 #, no-c-format
 msgid "InfoBox Pages"
-msgstr ""
+msgstr "Inforuutu-sivut"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "InfoBox Modes"
-msgstr ""
+msgstr "Inforuutu-tilat"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:73
@@ -4183,19 +4187,19 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:5
 #, no-c-format
 msgid "Polar"
-msgstr ""
+msgstr "Polaari"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
 #: Data/Input/default.xci:624 Data/Input/default.xci:1199
 #, no-c-format
 msgid "Logger"
-msgstr ""
+msgstr "Loggeri"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:122
 #, no-c-format
 msgid "Logger Info"
-msgstr ""
+msgstr "Loggerin tiedot"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:129
 #, no-c-format
@@ -4232,19 +4236,19 @@ msgstr ""
 #: Data/Dialogs/WaypointList.xml:2 Data/Dialogs/WaypointList_L.xml:2
 #: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
 msgid "Name"
-msgstr ""
+msgstr "Nimi"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:364
 msgid "Content"
-msgstr ""
+msgstr "Sisältö"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:403
 msgid "Copy"
-msgstr ""
+msgstr "Kopioi"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:409
 msgid "Paste"
-msgstr ""
+msgstr "Liitä"
 
 #: src/Dialogs/Settings/FontEdit.cpp:126
 msgid ""
@@ -4254,15 +4258,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:128
 msgid "Font not found."
-msgstr ""
+msgstr "Kirjasinta ei löydy."
 
 #: src/Dialogs/Settings/FontEdit.cpp:138
 msgid "Font face"
-msgstr ""
+msgstr "Kirjasintyyli"
 
 #: src/Dialogs/Settings/FontEdit.cpp:149
 msgid "Height"
-msgstr ""
+msgstr "Korkeus"
 
 #: src/Dialogs/Settings/FontEdit.cpp:158
 msgid "My Sample"
@@ -4270,11 +4274,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:183
 msgid "Edit Font"
-msgstr ""
+msgstr "Muokkaa kirjasinta"
 
 #: src/Dialogs/Settings/FontEdit.cpp:191
 msgid "Reset"
-msgstr ""
+msgstr "Palauta"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:106
 msgid "No further information"
@@ -4288,7 +4292,7 @@ msgstr ""
 #: Data/Dialogs/dlgAnalysis.xml:3 Data/Dialogs/dlgAnalysis_L.xml:3
 #: Data/Input/default.xci:818 Data/Input/default.xci:1261
 msgid "Analysis"
-msgstr ""
+msgstr "Analysointi"
 
 #: src/Dialogs/dlgAnalysis.cpp:286
 msgid "Barograph"
@@ -4333,16 +4337,16 @@ msgstr ""
 #: src/Dialogs/dlgAnalysis.cpp:370
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
 msgid "Warnings"
-msgstr ""
+msgstr "Varoitukset"
 
 #: src/Dialogs/dlgChecklist.cpp:68 Data/Dialogs/dlgChecklist.xml:3
 #: Data/Dialogs/dlgChecklist_L.xml:3
 msgid "Checklist"
-msgstr ""
+msgstr "Tarkastuslista"
 
 #: src/Dialogs/dlgChecklist.cpp:150
 msgid "No checklist loaded"
-msgstr ""
+msgstr "Tarkastuslistaa ei ole ladattu"
 
 #: src/Dialogs/dlgChecklist.cpp:150
 msgid "Create xcsoar-checklist.txt\n"
@@ -4352,7 +4356,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:6
 msgid "New"
-msgstr ""
+msgstr "Uusi"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:167
 #: src/Dialogs/Plane/PlaneListDialog.cpp:363
@@ -4360,7 +4364,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9
 msgid "Delete"
-msgstr ""
+msgstr "Poista"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:168
 #: src/Dialogs/Plane/PlaneListDialog.cpp:250
@@ -4371,7 +4375,7 @@ msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 msgid "Active"
-msgstr ""
+msgstr "Aktiivinen"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
 #, c-format
@@ -4386,7 +4390,7 @@ msgstr ""
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Ole hyvä ja syötä koneen rekisteritunnus!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:287
 #: src/Dialogs/Plane/PlaneListDialog.cpp:330
@@ -4397,7 +4401,7 @@ msgstr ""
 #: src/Dialogs/Plane/PlaneListDialog.cpp:290
 #: src/Dialogs/Plane/PlaneListDialog.cpp:333
 msgid "Overwrite"
-msgstr ""
+msgstr "Korvaa"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:361
 #, c-format
@@ -4459,11 +4463,11 @@ msgstr ""
 
 #: src/Dialogs/dlgInfoBoxAccess.cpp:105 src/Dialogs/dlgInfoBoxAccess.cpp:118
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "Vaihda Inforuutua"
 
 #: src/Dialogs/ReplayDialog.cpp:53
 msgid "Could not open IGC file!"
-msgstr ""
+msgstr "IGC-tiedostoa ei voitu avata!"
 
 #: src/Dialogs/ReplayDialog.cpp:54 Data/Dialogs/dlgLoggerReplay.xml:3
 #: Data/Input/default.xci:632
@@ -4473,31 +4477,31 @@ msgstr ""
 #: src/Dialogs/dlgStatus.cpp:50 src/Dialogs/dlgStatus.cpp:61
 #: Data/Input/default.xci:836 Data/Input/default.xci:1269
 msgid "Status"
-msgstr ""
+msgstr "Tila"
 
 #: src/Dialogs/dlgStatus.cpp:125
 msgid "Flight"
-msgstr ""
+msgstr "Lento"
 
 #: src/Dialogs/dlgStatus.cpp:128
 msgid "System"
-msgstr ""
+msgstr "Järjestelmä"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
 msgid "Rules"
-msgstr ""
+msgstr "Säännöt"
 
 #: src/Dialogs/dlgStatus.cpp:137
 msgid "Times"
-msgstr ""
+msgstr "Ajat"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 #: Data/Dialogs/dlgTaskPoint.xml:5 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:91
 msgid "Max. height gain"
@@ -4505,14 +4509,14 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:92
 msgid "Near"
-msgstr ""
+msgstr "Lähellä"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:44
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
 #, no-c-format
 msgid "Disconnected"
-msgstr ""
+msgstr "Yhteys katkaistu"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:46
 #, no-c-format
@@ -4539,7 +4543,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:113
 msgid "Variometer"
-msgstr ""
+msgstr "Variometri"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
 msgid "Supply voltage"
@@ -4608,15 +4612,15 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:107
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:97
 msgid "Local time"
-msgstr ""
+msgstr "Paikallinen aika"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:108
 msgid "UTC time"
-msgstr ""
+msgstr "UTC-aika"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 msgid "UTC date"
-msgstr ""
+msgstr "UTC-päiväys"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 msgid "Flight time"
@@ -4633,7 +4637,7 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:130
 msgid "Sunset"
-msgstr ""
+msgstr "Auringonlasku"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -4647,15 +4651,15 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:26
 msgid "Radio frequency"
-msgstr ""
+msgstr "Radiotaajuus"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:111
 msgid "Runway"
-msgstr ""
+msgstr "Kiitotie"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:142
 msgid "Bearing and Distance"
-msgstr ""
+msgstr "Suunta ja etäisyys"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:154
 msgid "Alt. diff. MC 0"
@@ -4829,7 +4833,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:51
 #, no-c-format
 msgid "Default"
-msgstr ""
+msgstr "Oletus"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:69
 #, no-c-format
@@ -4941,11 +4945,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
 msgid "Airspace transparency"
-msgstr ""
+msgstr "Ilmatilan läpinäkyvyys"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
+msgstr "Jos valittu, ilmatila väritetään läpikuultavasti."
 
 #: src/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp:41
 #, no-c-format
@@ -4954,7 +4958,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp:69
 msgid "Device model"
-msgstr ""
+msgstr "Laitteen malli"
 
 #: src/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp:70
 msgid ""
@@ -5076,7 +5080,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:61
 #, no-c-format
 msgid "Final glide"
-msgstr ""
+msgstr "Loppuliuku"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
@@ -5186,7 +5190,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:76
 msgid "Fonts"
-msgstr ""
+msgstr "Kirjasimet"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:122
 msgid "Auto. blank"
@@ -5210,7 +5214,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:136
 msgid "Language"
-msgstr ""
+msgstr "Kieli"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:137
 msgid ""
@@ -5221,11 +5225,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:142
 msgid "Automatic"
-msgstr ""
+msgstr "Automaattinen"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:143
 msgid "English"
-msgstr ""
+msgstr "Englanti"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:171
 msgid "Status message"
@@ -5250,7 +5254,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:185
 #, no-c-format
 msgid "Keyboard"
-msgstr ""
+msgstr "Näppäimistö"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:187
 #, no-c-format
@@ -5282,112 +5286,112 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:53
 #, no-c-format
 msgid "Portrait"
-msgstr ""
+msgstr "Pysty"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:55
 #, no-c-format
 msgid "Landscape"
-msgstr ""
+msgstr "Vaaka"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:57
 #, no-c-format
 msgid "Reverse Portrait"
-msgstr ""
+msgstr "Käänteinen pysty"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:59
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr ""
+msgstr "Käänteinen vaaka"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:65
 #, no-c-format
 msgid "8 Top + Bottom (Portrait)"
-msgstr ""
+msgstr "8 ylhäällä + alhaalla (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:67
 #, no-c-format
 msgid "8 Bottom (Portrait)"
-msgstr ""
+msgstr "8 alhaalla (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:69
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
-msgstr ""
+msgstr "8 alhaalla + vario (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "8 Top (Portrait)"
-msgstr ""
+msgstr "8 ylhäällä (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:73
 #, no-c-format
 msgid "8 Left + Right (Landscape)"
-msgstr ""
+msgstr "8 vasemmalla + oikealla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:75
 #, no-c-format
 msgid "8 Left (Landscape)"
-msgstr ""
+msgstr "8 vasemmalla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:77
 #, no-c-format
 msgid "8 Right (Landscape)"
-msgstr ""
+msgstr "8 oikealla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:79
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 oikealla + vario (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
 #, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 vasemmalla + oikealla + vario (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "5 Right (Square)"
-msgstr ""
+msgstr "5 oikealla (neliö)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
 msgid "12 Right (Landscape)"
-msgstr ""
+msgstr "12 oikealla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:87
 #, no-c-format
 msgid "12 Bottom (Portrait)"
-msgstr ""
+msgstr "12 alhaalla (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:89
 #, no-c-format
 msgid "12 Top (Portrait)"
-msgstr ""
+msgstr "12 ylhäällä (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:91
 #, no-c-format
 msgid "24 Right (Landscape)"
-msgstr ""
+msgstr "24 oikealla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
 #, no-c-format
 msgid "4 Top (Portrait)"
-msgstr ""
+msgstr "4 ylhäällä (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
 msgid "4 Bottom (Portrait)"
-msgstr ""
+msgstr "4 alhaalla (pysty)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:97
 #, no-c-format
 msgid "4 Left (Landscape)"
-msgstr ""
+msgstr "4 vasemmalla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:99
 #, no-c-format
 msgid "4 Right (Landscape)"
-msgstr ""
+msgstr "4 oikealla (vaaka)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
 #, no-c-format
@@ -5397,37 +5401,37 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
 #, no-c-format
 msgid "Top Left"
-msgstr ""
+msgstr "Ylävasen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:109
 #, no-c-format
 msgid "Top Right"
-msgstr ""
+msgstr "Yläoikea"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:111
 #, no-c-format
 msgid "Bottom Left"
-msgstr ""
+msgstr "Alavasen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:113
 #, no-c-format
 msgid "Bottom Right"
-msgstr ""
+msgstr "Alaoikea"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:115
 #, no-c-format
 msgid "Centre Top"
-msgstr ""
+msgstr "Ylhäällä keskellä"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:117
 #, no-c-format
 msgid "Centre Bottom"
-msgstr ""
+msgstr "Alhaalla keskellä"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Text"
-msgstr ""
+msgstr "Teksti"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -5631,15 +5635,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:59
 msgid "Pilot name"
-msgstr ""
+msgstr "Lentäjän nimi"
 
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:61
 msgid "Aircraft type"
-msgstr ""
+msgstr "Ilma-aluksen tyyppi"
 
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:62
 msgid "Aircraft reg."
-msgstr ""
+msgstr "Ilma-aluksen rekisteri"
 
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:65
 msgid "Logger ID"
@@ -5711,7 +5715,7 @@ msgstr ""
 #: Data/Input/default.xci:430 Data/Input/default.xci:1086
 #, no-c-format
 msgid "Target"
-msgstr ""
+msgstr "Kohde"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #, no-c-format
@@ -5772,7 +5776,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:82
 msgid "Page"
-msgstr ""
+msgstr "Sivu"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:84
 msgid "Determines the information displayed on different screen pages."
@@ -5835,7 +5839,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
 #, no-c-format
 msgid "Straight"
-msgstr ""
+msgstr "Suora"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
@@ -5995,7 +5999,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:87
 msgid "Map database"
-msgstr ""
+msgstr "Karttatietokanta"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:88
 msgid ""
@@ -6033,7 +6037,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
 msgid "Airspaces"
-msgstr ""
+msgstr "Ilmatilat"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:109
 msgid "The file name of the primary airspace file."
@@ -6041,7 +6045,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:112
 msgid "More airspaces"
-msgstr ""
+msgstr "Lisäilmatilat"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:112
 msgid "The file name of the secondary airspace file."
@@ -6138,7 +6142,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Detailed"
-msgstr ""
+msgstr "Yksityiskohtainen"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
@@ -6148,7 +6152,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
 msgid "HangGlider"
-msgstr ""
+msgstr "Riippuliidin"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
@@ -6158,7 +6162,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "ParaGlider"
-msgstr ""
+msgstr "Varjoliidin"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -6208,7 +6212,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:148
 msgid "Trail length"
-msgstr ""
+msgstr "Jäljen pituus"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:149
 msgid ""
@@ -6217,7 +6221,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
 msgid "Trail type"
-msgstr ""
+msgstr "Jäljen tyyppi"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:161
 msgid "Sets the type of the snail trail display."
@@ -6522,11 +6526,11 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
 #, no-c-format
 msgid "Grey"
-msgstr ""
+msgstr "Harmaa"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 msgid "Terrain colors"
-msgstr ""
+msgstr "Maaston värit"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
 msgid "Defines the color ramp used in terrain rendering."
@@ -6535,7 +6539,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
 #, no-c-format
 msgid "Sun"
-msgstr ""
+msgstr "Aurinko"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
 msgid "Slope shading"
@@ -6578,7 +6582,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
 msgid "My individual set of units."
@@ -6589,7 +6593,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:198
 #, no-c-format
 msgid "knots"
-msgstr ""
+msgstr "solmua"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:145
 msgid "Aircraft/Wind speed"
@@ -6617,20 +6621,20 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
 #, no-c-format
 msgid "foot"
-msgstr ""
+msgstr "jalkaa"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:178
 #, no-c-format
 msgid "meter"
-msgstr ""
+msgstr "metrit"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
 msgid "Units used for altitude and heights."
-msgstr ""
+msgstr "Korkeudessa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
 msgid "Units used for temperature."
-msgstr ""
+msgstr "Lämpötilassa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
 msgid "Task speed"
@@ -6638,11 +6642,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
 msgid "Units used for task speeds."
-msgstr ""
+msgstr "Nopeudessa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
 msgid "Units used for pressures."
-msgstr ""
+msgstr "Paineessa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
 msgid "Lat./Lon."
@@ -6650,7 +6654,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
 msgid "Units used for latitude and longitude."
-msgstr ""
+msgstr "Koordinaatistossa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
 msgid "UTC offset"
@@ -6665,7 +6669,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:100
 msgid "Use GPS time"
-msgstr ""
+msgstr "Käytä GPS-aikaa"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:101
 msgid ""
@@ -6678,47 +6682,47 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "Full name"
-msgstr ""
+msgstr "Koko nimi"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr ""
+msgstr "Reittipisteen koko nimi näytetään."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:91
 #, no-c-format
 msgid "First word of name"
-msgstr ""
+msgstr "Nimen ensimmäinen sana"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:92
 #, no-c-format
 msgid "The first word of the waypoint name is displayed."
-msgstr ""
+msgstr "Reittipisteen nimestä näytetään ensimmäinen sana."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:94
 #, no-c-format
 msgid "First 3 letters"
-msgstr ""
+msgstr "Ensimmäiset 3 kirjainta"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:95
 #, no-c-format
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Reittipisteen nimestä näytetään kolme ensimmäistä kirjainta."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:97
 #, no-c-format
 msgid "First 5 letters"
-msgstr ""
+msgstr "Ensimmäiset 5 kirjainta"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Reittipisteen nimestä näytetään viisi ensimmäistä kirjainta."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "Reittipisteen nimeä ei näytetä."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:103
 msgid "Label format"
@@ -6736,7 +6740,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
 msgid "Straight glide"
-msgstr ""
+msgstr "Suora liito"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
@@ -7053,12 +7057,12 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:103
 msgid "Rename"
-msgstr ""
+msgstr "Nimeä uudelleen"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:355
 msgid "More"
-msgstr ""
+msgstr "Lisää"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:247
 msgid "Load the selected task?"
@@ -7091,7 +7095,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:355
 msgid "Less"
-msgstr ""
+msgstr "Vähemmän"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:162
 msgid "Calculator excludes unsaved task changes!"
@@ -7197,7 +7201,7 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:64
 msgid "Goal"
-msgstr ""
+msgstr "Maali"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:71
 msgid "Out and return"
@@ -7239,11 +7243,11 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:186
 msgid "Sector"
-msgstr ""
+msgstr "Sektori"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:198
 msgid "Cylinder"
-msgstr ""
+msgstr "Sylinteri"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:204
 msgid "DAeC Keyhole"
@@ -7332,7 +7336,7 @@ msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:83
 msgid "Now"
-msgstr ""
+msgstr "Nyt"
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7411,11 +7415,11 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:109 Data/Dialogs/dlgNOAADetails.xml:6
 #: Data/Dialogs/dlgNOAADetails_L.xml:6
 msgid "Update"
-msgstr ""
+msgstr "Päivitä"
 
 #: src/Dialogs/Weather/NOAAList.cpp:165
 msgid "Airport ICAO code"
-msgstr ""
+msgstr "Lentokentän ICAO-tunnus"
 
 #: src/Dialogs/Weather/NOAAList.cpp:169
 msgid "Please enter the FOUR letter code of the desired station."
@@ -7435,7 +7439,7 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:270 src/Dialogs/Weather/NOAADetails.cpp:62
 #: Data/Dialogs/dlgNOAADetails.xml:3 Data/Dialogs/dlgNOAADetails_L.xml:3
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR ja TAF"
 
 #: src/Dialogs/Weather/NOAAList.cpp:282
 #: src/Dialogs/Weather/NOAADetails.cpp:129
@@ -7445,7 +7449,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:118
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "Kuumailmapallo"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
 msgid "Track friends"
@@ -7469,15 +7473,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:156
 msgid "Server"
-msgstr ""
+msgstr "Palvelin"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:160
 msgid "Username"
-msgstr ""
+msgstr "Käyttäjänimi"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:161
 msgid "Password"
-msgstr ""
+msgstr "Salasana"
 
 #: src/Renderer/NOAAListRenderer.cpp:70
 msgid "No METAR available"
@@ -7485,11 +7489,11 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
-msgstr ""
+msgstr "Kastepiste"
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "Näkyvyys"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
@@ -7502,7 +7506,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:844
 msgid "Weather"
-msgstr ""
+msgstr "Sää"
 
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
@@ -7558,7 +7562,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgBrightness.xml:3
 msgid "Screen Brightness"
-msgstr ""
+msgstr "Näytön kirkkaus"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:26
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:26
@@ -7581,11 +7585,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:3
 msgid "Edit text"
-msgstr ""
+msgstr "Muokkaa tekstiä"
 
 #: Data/Dialogs/AirspaceList.xml:3 Data/Dialogs/AirspaceList_L.xml:3
 msgid "Select Airspace"
-msgstr ""
+msgstr "Valitse ilmatila"
 
 #: Data/Dialogs/pnlTaskManagerClose.xml:6
 msgid "Revert Changes"
@@ -7601,7 +7605,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid "Brightness"
-msgstr ""
+msgstr "Kirkkaus"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:21
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:21
@@ -7637,7 +7641,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWeather.xml:3
 msgid "Weather Forecast"
-msgstr ""
+msgstr "Sääennuste"
 
 #: Data/Dialogs/dlgVoice.xml:22
 msgid "Enable voice read-back of MacReady setting after it is adjusted."
@@ -7658,7 +7662,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
 msgid "Pilot"
-msgstr ""
+msgstr "Lentäjä"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Export"
@@ -7703,11 +7707,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:3 Data/Dialogs/dlgConfigFonts_L.xml:3
 msgid "Font Configuration"
-msgstr ""
+msgstr "Kirjasinasetukset"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 #: Data/Dialogs/dlgVario.xml:3 Data/Dialogs/dlgVario_L.xml:3
 msgid "Vario Configuration"
@@ -7716,7 +7720,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:25
 msgid "Airport"
-msgstr ""
+msgstr "Lentokenttä"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
@@ -7744,13 +7748,13 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 msgid "Friends"
-msgstr ""
+msgstr "Ystävät"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:8
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8 Data/Dialogs/dlgVario.xml:9
 #: Data/Dialogs/dlgVario_L.xml:8 Data/Dialogs/pnlTaskActions.xml:7
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
@@ -7758,7 +7762,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:38
 msgid "Optimized"
-msgstr ""
+msgstr "Optimoitu"
 
 #: Data/Dialogs/dlgConfiguration.xml:8 Data/Dialogs/dlgConfiguration_L.xml:4
 msgid "Expert"
@@ -7776,7 +7780,7 @@ msgstr ""
 #: Data/Dialogs/dlgSimulatorPrompt.xml:4
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:4
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Mitä haluat tehdä?"
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
 msgid "Topography labels, important"
@@ -7784,11 +7788,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
-msgstr ""
+msgstr "Kuittaa"
 
 #: Data/Dialogs/dlgSwitches.xml:31
 msgid "Repeat"
-msgstr ""
+msgstr "Toista"
 
 #: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:552
 #: Data/Input/default.xci:559
@@ -7855,21 +7859,21 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:10
 msgid "Own code"
-msgstr ""
+msgstr "Oma koodi"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:16 Data/Dialogs/dlgPlaneDetails_L.xml:22
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:31
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:31
 msgid "Handicap"
-msgstr ""
+msgstr "Tasoitus"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:8 Data/Dialogs/dlgPlaneDetails_L.xml:10
 msgid "Comp. ID"
-msgstr ""
+msgstr "Kilpailutunnus"
 
 #: Data/Dialogs/dlgStartup.xml:6 Data/Dialogs/dlgStartup_L.xml:6
 msgid "Profile"
-msgstr ""
+msgstr "Profiili"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid ""
@@ -8082,11 +8086,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:3
 msgid "Airspace Warnings"
-msgstr ""
+msgstr "Ilmatilavaroitukset"
 
 #: Data/Dialogs/dlgStartup.xml:4 Data/Dialogs/dlgStartup_L.xml:4
 msgid "Continue"
-msgstr ""
+msgstr "Jatka"
 
 #: Data/Dialogs/dlgTarget.xml:20 Data/Dialogs/dlgTarget_L.xml:13
 msgid ""
@@ -8106,7 +8110,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskActions.xml:6
 msgid "Browse"
-msgstr ""
+msgstr "Selaa"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:38
 msgid "Lat."
@@ -8114,7 +8118,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskActions.xml:4
 msgid "New Task"
-msgstr ""
+msgstr "Uusi tehtävä"
 
 #: Data/Dialogs/dlgTarget.xml:4 Data/Dialogs/dlgTarget_L.xml:6
 msgid "This sets the task point for review."
@@ -8154,7 +8158,7 @@ msgstr ""
 #: Data/Input/default.xci:544 Data/Input/default.xci:593
 #: Data/Input/default.xci:642 Data/Input/default.xci:934
 msgid "Config"
-msgstr ""
+msgstr "Asetukset"
 
 #: Data/Input/default.xci:505 Data/Input/default.xci:1128
 msgid "Labels"
@@ -8189,7 +8193,7 @@ msgstr ""
 
 #: Data/Input/default.xci:513 Data/Input/default.xci:1136
 msgid "Trail"
-msgstr ""
+msgstr "Jälki"
 
 #: Data/Input/default.xci:713
 msgid ""
@@ -8237,7 +8241,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1013
 msgid "Map"
-msgstr ""
+msgstr "Kartta"
 
 #: Data/Input/default.xci:132
 msgid ""
@@ -8247,7 +8251,7 @@ msgstr ""
 
 #: Data/Input/default.xci:868 Data/Input/default.xci:1277
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "Termiikkiavustin"
 
 #: Data/Input/default.xci:65
 msgid "Above final glide"
@@ -8258,22 +8262,28 @@ msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
+"Lähin\n"
+"Ilmatila"
 
 #: Data/Input/default.xci:575 Data/Input/default.xci:1167
 msgid ""
 "Flight\n"
 "Setup"
 msgstr ""
+"Lennon\n"
+"asetukset"
 
 #: Data/Input/default.xci:608 Data/Input/default.xci:1183
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
+"Järjestelmän\n"
+"asetukset"
 
 #: Data/Input/default.xci:699
 msgid "Setup Audio"
-msgstr ""
+msgstr "Ääniasetukset"
 
 #: Data/Input/default.xci:786 Data/Input/default.xci:1229
 msgid "FLARM Radar"
@@ -8300,7 +8310,7 @@ msgstr ""
 
 #: Data/Input/default.xci:54
 msgid "Takeoff"
-msgstr ""
+msgstr "Lentoonlähtö"
 
 #: Data/Input/default.xci:75
 msgid "Final glide through terrain"
@@ -8387,7 +8397,7 @@ msgstr ""
 
 #: Data/Input/default.xci:754
 msgid "Store"
-msgstr ""
+msgstr "Talleta"
 
 #: Data/Input/default.xci:852
 msgid ""
