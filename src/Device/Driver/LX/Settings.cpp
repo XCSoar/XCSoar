@@ -24,8 +24,8 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
-#include "Atmosphere/Pressure.hpp"
 #include "LX1600.hpp"
+#include "V7.hpp"
 
 #include <cstdio>
 
@@ -144,18 +144,10 @@ LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
   if (!EnableNMEA(env))
     return false;
 
-  // This is a copy of the routine done in LK8000 for LX MiniMap, realized
-  // by Lx developers.
-
-  char tmp[100];
-  sprintf(tmp, "PFLX2,,%.2f,,,,", (double)overload);
-  PortWriteNMEA(port, tmp, env);
-
-  // LXNAV V7 variant:
-  sprintf(tmp, "PLXV0,BAL,W,%.2f", (double)overload);
-  PortWriteNMEA(port, tmp, env);
-
-  return true;
+  if (IsV7())
+    return V7::SetBallast(port, env, overload);
+  else
+    return LX1600::SetBallast(port, env, overload);
 }
 
 bool
@@ -164,17 +156,12 @@ LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  // This is a copy of the routine done in LK8000 for LX MiniMap, realized
-  // by Lx developers.
-
-  char tmp[100];
   int transformed_bugs_value = 100 - (int)(bugs*100);
 
   if (IsV7())
-    sprintf(tmp, "PLXV0,BUGS,W,%d", transformed_bugs_value);
+    return V7::SetBugs(port, env, transformed_bugs_value);
   else
-    sprintf(tmp, "PFLX2,,,%d,,,", transformed_bugs_value);
-  return PortWriteNMEA(port, tmp, env);
+    return LX1600::SetBugs(port, env, transformed_bugs_value);
 }
 
 bool
@@ -183,13 +170,10 @@ LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  char tmp[32];
-
   if (IsV7())
-    sprintf(tmp, "PLXV0,MC,W,%.1f", (double)mac_cready);
+    return V7::SetMacCready(port, env, mac_cready);
   else
-    sprintf(tmp, "PFLX2,%1.1f,,,,,,", (double)mac_cready);
-  return PortWriteNMEA(port, tmp, env);
+    return LX1600::SetMacCready(port, env, mac_cready);
 }
 
 bool
@@ -198,15 +182,10 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  double altitude_offset =
-    (double)pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()) / 0.3048;
-
-  char buffer[100];
   if (IsV7())
-    sprintf(buffer, "PLXV0,QNH,W,%.2f", altitude_offset);
+    return V7::SetQNH(port, env, pres);
   else
-    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
-  return PortWriteNMEA(port, buffer, env);
+    return LX1600::SetQNH(port, env, pres);
 }
 
 bool

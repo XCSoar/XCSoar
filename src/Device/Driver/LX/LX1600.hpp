@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
+#include "Atmosphere/Pressure.hpp"
+#include "Units/System.hpp"
 
 /**
  * Code specific to LX Navigation varios (e.g. LX1600).
@@ -79,6 +81,63 @@ namespace LX1600 {
      * This behavior was tested on an LX1606.
      */
     return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,2,LXWP2,2,LXWP3,2", env);
+  }
+
+  /**
+   * Set the MC setting of the LX16xx vario
+   * @param mc in m/s
+   */
+  static inline bool
+  SetMacCready(Port &port, OperationEnvironment &env, fixed mc)
+  {
+    char buffer[32];
+    sprintf(buffer, "PFLX2,%1.1f,,,,,,", (double)mc);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the ballast setting of the LX16xx vario
+   * @param overload 1.0 - 1.5 (100 - 140%)
+   */
+  static inline bool
+  SetBallast(Port &port, OperationEnvironment &env, fixed overload)
+  {
+    // This is a copy of the routine done in LK8000 for LX MiniMap, realized
+    // by Lx developers.
+
+    char buffer[100];
+    sprintf(buffer, "PFLX2,,%.2f,,,,", (double)overload);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the bugs setting of the LX16xx vario
+   * @param bugs 0 - 30 %
+   */
+  static inline bool
+  SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
+  {
+    // This is a copy of the routine done in LK8000 for LX MiniMap, realized
+    // by Lx developers.
+
+    char buffer[100];
+    sprintf(buffer, "PFLX2,,,%u,,,", bugs);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the QNH setting of the LX16xx vario
+   */
+  static inline bool
+  SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
+  {
+    fixed altitude_offset = Units::ToUserUnit(
+        qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()),
+        Unit::FEET);
+
+    char buffer[100];
+    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset);
+    return PortWriteNMEA(port, buffer, env);
   }
 
   static inline bool
