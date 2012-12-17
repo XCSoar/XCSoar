@@ -167,10 +167,10 @@ public:
     mutate_button = new WndButton(parent, look, _("Make Finish"),
                                   layout.down, style,
                                   *listener, MUTATE);
-    down_button = new WndSymbolButton(parent, look, _("v"),
+    down_button = new WndSymbolButton(parent, look, _T("v"),
                                       layout.down, style,
                                       *listener, DOWN);
-    up_button = new WndSymbolButton(parent, look, _("^"),
+    up_button = new WndSymbolButton(parent, look, _T("^"),
                                     layout.down, style,
                                     *listener, UP);
     clear_all_button = new WndButton(parent, look, _("Clear All"),
