@@ -137,15 +137,24 @@ namespace LX1600 {
    * Set the QNH setting of the LX16xx vario
    */
   static inline bool
+  SetAltitudeOffset(Port &port, OperationEnvironment &env, fixed altitude_offset)
+  {
+    char buffer[100];
+    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the QNH setting of the LX16xx vario
+   */
+  static inline bool
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
   {
     fixed altitude_offset = Units::ToUserUnit(
         qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()),
         Unit::FEET);
 
-    char buffer[100];
-    sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset);
-    return PortWriteNMEA(port, buffer, env);
+    return SetAltitudeOffset(port, env, altitude_offset);
   }
 
   /**
