@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-12-04 02:35+0000\n"
-"Last-Translator: Bruno Bonamin <bruno@bonamin.org>\n"
+"PO-Revision-Date: 2012-12-16 01:36+0000\n"
+"Last-Translator: Luis Araujo <luisaraujor@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
-"X-Generator: Launchpad (build 16341)\n"
+"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Generator: Launchpad (build 16372)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -34,7 +34,7 @@ msgstr "Tarea"
 
 #: src/Task/TypeStrings.cpp:37
 msgid "Racing"
-msgstr ""
+msgstr "Carrera"
 
 #: src/Task/TypeStrings.cpp:39
 msgid "FAI badges/records"
@@ -42,7 +42,7 @@ msgstr ""
 
 #: src/Task/TypeStrings.cpp:41 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 msgid "FAI triangle"
-msgstr ""
+msgstr "Triangulo FAI"
 
 #: src/Task/TypeStrings.cpp:43
 msgid "FAI out and return"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: src/Task/TypeStrings.cpp:45
 msgid "FAI goal"
-msgstr ""
+msgstr "Gol FAI"
 
 #: src/Task/TypeStrings.cpp:47
 msgid "AAT"
@@ -58,7 +58,7 @@ msgstr ""
 
 #: src/Task/TypeStrings.cpp:49
 msgid "Mixed"
-msgstr ""
+msgstr "Mixto"
 
 #: src/Task/TypeStrings.cpp:51
 msgid "Touring"
@@ -200,7 +200,7 @@ msgstr ""
 
 #: src/Task/TypeStrings.cpp:146 src/Dialogs/Task/dlgTaskHelpers.cpp:181
 msgid "FAI quadrant"
-msgstr ""
+msgstr "cuadrante FAI"
 
 #: src/Task/TypeStrings.cpp:148
 msgid "Keyhole sector (DAeC)"
@@ -2083,7 +2083,7 @@ msgstr "Carga CPU"
 #: src/InfoBoxes/Content/Factory.cpp:909
 #, no-c-format
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/InfoBoxes/Content/Factory.cpp:910
 #, no-c-format
@@ -2399,6 +2399,8 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
+"Altura Barometrica obtenida del sensor de presion incluido en el dispositivo "
+"o la altura GPS si la altura barometrica no esta disponible."
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -2465,19 +2467,19 @@ msgstr "flecha del Viento"
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Viento"
 
 #: src/InfoBoxes/Content/Factory.cpp:1150
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, no-c-format
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Asistente de Ternica"
 
 #: src/InfoBoxes/Content/Factory.cpp:1151
 #: src/Renderer/MapItemListRenderer.cpp:383
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:1152
 #, no-c-format
@@ -2524,14 +2526,14 @@ msgstr ""
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 #, no-c-format
 msgid "Simulator"
-msgstr ""
+msgstr "Simulador"
 
 #: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:43
 #: Data/Input/default.xci:778 Data/Input/default.xci:828
 #: Data/Input/default.xci:878 Data/Input/default.xci:941
 #, no-c-format
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: src/InfoBoxes/Content/Altitude.cpp:59
 #: src/InfoBoxes/Content/MacCready.cpp:58
@@ -2542,7 +2544,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "Configuración"
 
 #: src/InfoBoxes/Content/Altitude.cpp:77
 #: src/InfoBoxes/Content/Altitude.cpp:182
@@ -2570,11 +2572,11 @@ msgstr "Editar"
 
 #: src/InfoBoxes/Content/MacCready.cpp:77
 msgid "MC AUTO"
-msgstr ""
+msgstr "MC Auto"
 
 #: src/InfoBoxes/Content/MacCready.cpp:77
 msgid "MC MANUAL"
-msgstr ""
+msgstr "MC Manual"
 
 #: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
@@ -2663,7 +2665,7 @@ msgstr ""
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:75
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:309
 msgid "QNH"
-msgstr ""
+msgstr "QNH"
 
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:76
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:310
@@ -2691,7 +2693,7 @@ msgstr "Velocidad"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:100 src/Dialogs/WindSettingsPanel.cpp:84
 msgid "Manual adjustment of wind speed."
-msgstr ""
+msgstr "Ajuste manual de la velocidad del viento"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105
 #: src/Renderer/MapItemListRenderer.cpp:121
@@ -2704,12 +2706,12 @@ msgstr "Dirección"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105 src/Dialogs/WindSettingsPanel.cpp:96
 msgid "Manual adjustment of wind direction."
-msgstr ""
+msgstr "Ajuste manual de la direccion del viento"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:71
 #, no-c-format
 msgid "External"
-msgstr ""
+msgstr "Externo"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:74 src/InfoBoxes/Panel/WindSetup.cpp:87
 msgid "Auto. wind"
@@ -2750,7 +2752,7 @@ msgstr ""
 
 #: src/Input/InputEventsActions.cpp:173
 msgid "Screen Mode Full"
-msgstr ""
+msgstr "Modo Pantalla Completa"
 
 #: src/Input/InputEventsActions.cpp:175
 msgid "Auxiliary InfoBoxes"
@@ -2842,7 +2844,7 @@ msgstr ""
 
 #: src/Input/InputEventsTask.cpp:228
 msgid "Task aborted"
-msgstr ""
+msgstr "Manga Abortada"
 
 #: src/Input/InputEventsTask.cpp:231
 msgid "Go to target"
@@ -2867,7 +2869,7 @@ msgstr "Siguiente punto de giro"
 
 #: src/Input/InputEventsTask.cpp:335
 msgid "Task finished"
-msgstr ""
+msgstr "Manga Finalizada"
 
 #: src/Input/InputEventsTask.cpp:337
 msgid "In sector, arm advance when ready"
@@ -2875,11 +2877,11 @@ msgstr "En el Sector, armar Inicio cuando listo"
 
 #: src/Input/InputEventsSettings.cpp:52
 msgid "Vario sounds on"
-msgstr ""
+msgstr "Sonido Vario Encendido"
 
 #: src/Input/InputEventsSettings.cpp:54
 msgid "Vario sounds off"
-msgstr ""
+msgstr "Sonido Vario Apagado"
 
 #: src/Input/InputEventsSettings.cpp:82
 msgid "Snail trail off"
@@ -2913,7 +2915,7 @@ msgstr ""
 
 #: src/Input/InputEventsSettings.cpp:437
 msgid "Topography/Terrain"
-msgstr ""
+msgstr "Topografia/Terreno"
 
 #: src/Input/InputEventsTraffic.cpp:91
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:232
@@ -2923,7 +2925,7 @@ msgstr ""
 
 #: src/Input/InputEventsTraffic.cpp:100
 msgid "Show details:"
-msgstr ""
+msgstr "Mostrar detalles:"
 
 #: src/Input/InputEventsTraffic.cpp:105
 msgid "Unknown competition number"
@@ -2931,7 +2933,7 @@ msgstr ""
 
 #: src/Input/InputEventsTraffic.cpp:106
 msgid "Not found"
-msgstr ""
+msgstr "No encontrado"
 
 #: src/PageSettings.cpp:37
 msgid "Info Hide"
@@ -2939,7 +2941,7 @@ msgstr ""
 
 #: src/PageSettings.cpp:39
 msgid "Map (Full screen)"
-msgstr ""
+msgstr "Mapa (Pantalla Completa)"
 
 #: src/PageSettings.cpp:43
 msgid "Map and InfoBoxes"
@@ -2987,7 +2989,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:276
 msgid "Your Position"
-msgstr ""
+msgstr "Tu Posicion"
 
 #: src/Renderer/MapItemListRenderer.cpp:334
 msgid "Marker"
@@ -3039,11 +3041,11 @@ msgstr ""
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:107
 msgid "Elevation: "
-msgstr ""
+msgstr "Elevacion: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:149
 msgid "GPS not connected"
-msgstr ""
+msgstr "GPS no conectado"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:152
 msgid "GPS waiting for fix"
@@ -3051,7 +3053,7 @@ msgstr ""
 
 #: src/Topography/TopographyGlue.cpp:71
 msgid "Loading Topography File..."
-msgstr ""
+msgstr "Cargando Archivo de Topografia..."
 
 #: src/Terrain/RasterWeather.cpp:48
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
@@ -3215,7 +3217,7 @@ msgstr "Puntuación"
 #: src/Renderer/FlightStatisticsRenderer.cpp:154
 #: src/Renderer/FlightStatisticsRenderer.cpp:183
 msgid "pts"
-msgstr ""
+msgstr "puntos"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. Important: all pages after Units in this list must not have data fields that are
@@ -3295,27 +3297,27 @@ msgstr "Techo de Nubes"
 
 #: src/UIActions.cpp:48
 msgid "Quit program?"
-msgstr ""
+msgstr "¿Salir del Programa?"
 
 #: src/Units/UnitsStore.cpp:37
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europeo"
 
 #: src/Units/UnitsStore.cpp:47
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Británico"
 
 #: src/Units/UnitsStore.cpp:57
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Americano"
 
 #: src/Units/UnitsStore.cpp:67
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australiano"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:122 src/Startup.cpp:319
@@ -3325,7 +3327,7 @@ msgstr "Cargando archivo de Terreno..."
 #: src/Profile/DeviceConfig.cpp:151 src/Dialogs/Device/DeviceEditWidget.cpp:70
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Servidor Bluetooth"
 
 #: src/Profile/DeviceConfig.cpp:168 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
@@ -3335,7 +3337,7 @@ msgstr ""
 #: src/Profile/DeviceConfig.cpp:171 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr ""
+msgstr "GPS Integrado & Sensores"
 
 #: src/Polar/PolarGlue.cpp:106
 msgid ""
@@ -3350,7 +3352,7 @@ msgstr "Advertencia"
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "Batería baja"
 
 #: src/Startup.cpp:268
 msgid "Initialising"
@@ -3369,7 +3371,7 @@ msgstr ""
 #.
 #: src/Startup.cpp:403
 msgid "Initialising display"
-msgstr ""
+msgstr "Inicializando Pantalla"
 
 #. Show progress dialog
 #: src/Startup.cpp:500 src/Startup.cpp:536 src/Startup.cpp:580
@@ -3389,23 +3391,23 @@ msgstr ""
 #. Save the task for the next time
 #: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Cerrando, guardando la Manga..."
 
 #: src/Device/Descriptor.cpp:371
 msgid "Unable to open port"
-msgstr ""
+msgstr "No es posible abrir el puerto"
 
 #: src/Device/Descriptor.cpp:860 src/Device/Descriptor.cpp:866
 msgid "Sending declaration"
-msgstr ""
+msgstr "Enviando declaracion"
 
 #: src/Device/Descriptor.cpp:903
 msgid "Reading flight list"
-msgstr ""
+msgstr "Leyendo la lista de vuelos"
 
 #: src/Device/Descriptor.cpp:923
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Descargando traza del vuelo"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. create buttons
@@ -3420,7 +3422,7 @@ msgstr ""
 #: Data/Dialogs/dlgPlaneDetails.xml:42 Data/Dialogs/dlgPlaneDetails_L.xml:58
 #: Data/Dialogs/dlgPlanePolar.xml:22 Data/Dialogs/dlgPlanePolar_L.xml:22
 msgid "OK"
-msgstr ""
+msgstr "Aceptar"
 
 #: src/Dialogs/Message.cpp:127
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:59
@@ -3430,7 +3432,7 @@ msgstr "Si"
 
 #: src/Dialogs/Message.cpp:131
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: src/Dialogs/Message.cpp:138
 msgid "Retry"
@@ -3467,19 +3469,19 @@ msgstr "Seleccionar"
 #: src/Dialogs/FileManager.cpp:405 src/Dialogs/Weather/NOAAList.cpp:185
 #: src/Dialogs/Weather/NOAAList.cpp:197 src/Dialogs/Weather/NOAADetails.cpp:79
 msgid "Download"
-msgstr ""
+msgstr "Descargar"
 
 #: src/Dialogs/FileManager.cpp:406 src/Dialogs/Weather/NOAAList.cpp:108
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: src/Dialogs/FileManager.cpp:439
 msgid "Queued"
-msgstr ""
+msgstr "Encolado"
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
 msgid "Downloading"
-msgstr ""
+msgstr "Descargando"
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
 #: src/Dialogs/Device/DeviceListDialog.cpp:332
@@ -3501,11 +3503,11 @@ msgstr ""
 #: src/Dialogs/Weather/NOAAList.cpp:283
 #: src/Dialogs/Weather/NOAADetails.cpp:130
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: src/Dialogs/FileManager.cpp:545
 msgid "Select a file"
-msgstr ""
+msgstr "Seleccione un archivo"
 
 #: src/Dialogs/FileManager.cpp:684
 msgid "Failed to download the repository index."
@@ -3514,15 +3516,15 @@ msgstr ""
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
 msgid "File Manager"
-msgstr ""
+msgstr "Administrador de archivos"
 
 #: src/Dialogs/FileManager.cpp:714
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "Administrador de Archivos no disponible en este dispositivo"
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "El Administrdor de Archivos requiere Android 2.3"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
@@ -3530,9 +3532,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Sensor barométrico"
+msgstr ""
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3540,12 +3542,12 @@ msgstr "Sensor barométrico"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:604
 #, no-c-format
 msgid "TCP Port"
-msgstr ""
+msgstr "Puerto TCP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:81
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "Puerto UDP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Port"
@@ -3555,7 +3557,7 @@ msgstr "Puerto"
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
-msgstr ""
+msgstr "Tasa de baudios"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:596
 msgid "Bulk baud rate"
@@ -3588,9 +3590,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "Sensor barométrico"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
@@ -3601,7 +3602,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
-msgstr ""
+msgstr "Controlador"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid "Sync. from device"
@@ -3645,7 +3646,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:356
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
-msgstr ""
+msgstr "Reconectar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:236
 msgid "Flight download"
@@ -3658,11 +3659,11 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:185
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:199
 msgid "Manage"
-msgstr ""
+msgstr "Administrar"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:239
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:285
 #: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
@@ -3695,7 +3696,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 msgid "Not connected"
-msgstr ""
+msgstr "No conectado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:356
 #: src/Dialogs/Device/DeviceListDialog.cpp:378
@@ -3706,7 +3707,7 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:398
 msgid "Edit device"
-msgstr ""
+msgstr "Editar dispositivo"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:528
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119 Data/Input/default.xci:657
@@ -3725,7 +3726,7 @@ msgstr "Cancelar"
 #: src/Dialogs/Device/PortMonitor.cpp:143
 #: src/Dialogs/Device/PortMonitor.cpp:169
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: src/Dialogs/Device/PortMonitor.cpp:187
 msgid "Port monitor"
@@ -3745,16 +3746,16 @@ msgstr "Unidades"
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:92
 #, no-c-format
 msgid "Waypoints"
-msgstr ""
+msgstr "Balizas"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 msgid "Delete all flights"
-msgstr ""
+msgstr "Borrar todos los vuelos"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:75
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:82
 msgid "Reboot"
-msgstr ""
+msgstr "Reiniciar"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:135
 msgid "Do you really want to delete all flights from the device?"
@@ -3764,17 +3765,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Presión"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
-msgstr ""
+msgstr "Falla al cargar archivo"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:42
 msgid "Too many waypoints."
@@ -3782,11 +3783,11 @@ msgstr ""
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:46
 msgid "Uploading Waypoints"
-msgstr ""
+msgstr "Cargando Balizas"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:52
 msgid "Failed to erase waypoints."
-msgstr ""
+msgstr "Fallo al borrar balizas"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:58
 msgid "Failed to switch baud rate."
@@ -3801,20 +3802,20 @@ msgstr ""
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:75
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:64
 msgid "Hardware version"
-msgstr ""
+msgstr "Versión del Hardware"
 
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:71
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:86
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:81
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:69
 msgid "Firmware version"
-msgstr ""
+msgstr "Versión de Firmware"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:68
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:63
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:54
 msgid "Product"
-msgstr ""
+msgstr "Producto"
 
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:74
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:69
@@ -3860,7 +3861,7 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:118
 msgid "Threshold"
-msgstr ""
+msgstr "Umbral"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:119
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
@@ -3871,7 +3872,7 @@ msgstr "Rango"
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:122
 #, no-c-format
 msgid "Unkown"
-msgstr ""
+msgstr "Desconocido"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:115
@@ -3887,7 +3888,7 @@ msgstr ""
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:125
 #, no-c-format
 msgid "Helicopter"
-msgstr ""
+msgstr "Helicóptero"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:126
 #, no-c-format
@@ -8535,8 +8536,8 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "Map labels on"
-#~ msgstr "Etiquetas de Mapa ON"
-
 #~ msgid "v"
 #~ msgstr "v"
+
+#~ msgid "Map labels on"
+#~ msgstr "Etiquetas de Mapa ON"
