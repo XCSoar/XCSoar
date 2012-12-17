@@ -73,6 +73,76 @@ SetMC(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetBallast(Port &port, OperationEnvironment &env)
+{
+  while (true) {
+    fixed ballast;
+
+    fprintf(stdout, "Please enter the Ballast setting (1.0 - 1.5):\n");
+    fprintf(stdout, "> ");
+
+    char buffer[64];
+    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(buffer);
+
+    char *end_ptr;
+    ballast = fixed(strtod(buffer, &end_ptr));
+    if (end_ptr == buffer) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
+
+    if (LX1600::SetBallast(port, env, ballast))
+      fprintf(stdout, "Ballast set to \"%.1f\"\n", (double)ballast);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
+SetBugs(Port &port, OperationEnvironment &env)
+{
+  while (true) {
+    unsigned bugs;
+
+    fprintf(stdout, "Please enter the Bugs setting (0 - 30%%):\n");
+    fprintf(stdout, "> ");
+
+    char buffer[64];
+    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(buffer);
+
+    char *end_ptr;
+    bugs = strtoul(buffer, &end_ptr, 10);
+    if (end_ptr == buffer) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting Bugs to \"%u\" ...\n", bugs);
+
+    if (LX1600::SetBugs(port, env, bugs))
+      fprintf(stdout, "Bugs set to \"%u\"\n", bugs);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -81,6 +151,8 @@ WriteMenu()
                   "Press any of the following commands:\n\n"
                   "h:  Display this menu\n"
                   "1:  Set the MC\n"
+                  "2:  Set Ballast\n"
+                  "3:  Set Bugs\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -107,6 +179,12 @@ RunUI(Port &port, OperationEnvironment &env)
       break;
     case '1':
       SetMC(port, env);
+      break;
+    case '2':
+      SetBallast(port, env);
+      break;
+    case '3':
+      SetBugs(port, env);
       break;
     case 'q':
     case 'Q':
