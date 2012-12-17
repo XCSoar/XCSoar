@@ -25,6 +25,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "../TaskDialogs.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Form/Draw.hpp"

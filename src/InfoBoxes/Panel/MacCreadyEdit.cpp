@@ -25,7 +25,7 @@ Copyright_License {
 #include "Widget/OffsetButtonsWidget.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
-#include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "UIGlobals.hpp"
 
 static void

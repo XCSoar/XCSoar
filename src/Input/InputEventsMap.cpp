@@ -25,6 +25,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Pages.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"

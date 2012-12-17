@@ -38,6 +38,7 @@ Copyright_License {
 #include "Polar/PolarGlue.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"

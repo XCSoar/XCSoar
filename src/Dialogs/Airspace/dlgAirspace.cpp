@@ -41,6 +41,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>

@@ -649,6 +649,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
+	$(SRC)/ActionInterface.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \

@@ -24,6 +24,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"

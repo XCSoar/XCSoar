@@ -26,6 +26,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "MapSettings.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceVisibility.hpp"

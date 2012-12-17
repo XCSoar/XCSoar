@@ -77,6 +77,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Audio/Sound.hpp"
 #include "UIActions.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Logger/Logger.hpp"

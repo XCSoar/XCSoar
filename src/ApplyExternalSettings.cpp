@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ApplyExternalSettings.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Device/All.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 

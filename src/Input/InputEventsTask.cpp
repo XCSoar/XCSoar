@@ -28,6 +28,7 @@ Copyright_License {
 #include "Message.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Protection.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"

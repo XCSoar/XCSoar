@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProcessTimer.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Protection.hpp"
 #include "Input/InputQueue.hpp"
 #include "Input/InputEvents.hpp"
