@@ -29,6 +29,8 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Units/System.hpp"
 
+#include <assert.h>
+
 /**
  * Code specific to LX Navigation varios (e.g. LX1600).
  */
@@ -90,6 +92,8 @@ namespace LX1600 {
   static inline bool
   SetMacCready(Port &port, OperationEnvironment &env, fixed mc)
   {
+    assert(mc >= fixed(0.0) && mc <= fixed(5.0));
+
     char buffer[32];
     sprintf(buffer, "PFLX2,%1.1f,,,,,,", (double)mc);
     return PortWriteNMEA(port, buffer, env);
@@ -102,6 +106,8 @@ namespace LX1600 {
   static inline bool
   SetBallast(Port &port, OperationEnvironment &env, fixed overload)
   {
+    assert(overload >= fixed(1.0) && overload <= fixed(1.5));
+
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
 
@@ -117,6 +123,8 @@ namespace LX1600 {
   static inline bool
   SetBugs(Port &port, OperationEnvironment &env, unsigned bugs)
   {
+    assert(bugs <= 30);
+
     // This is a copy of the routine done in LK8000 for LX MiniMap, realized
     // by Lx developers.
 
@@ -147,6 +155,8 @@ namespace LX1600 {
   static inline bool
   SetVolume(Port &port, OperationEnvironment &env, unsigned volume)
   {
+    assert(volume <= 100);
+
     if (volume > 99)
       volume = 99;
 
