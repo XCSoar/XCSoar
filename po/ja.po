@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-11-06 09:08+0000\n"
-"Last-Translator: Masahiro Mori <Unknown>\n"
+"PO-Revision-Date: 2012-12-16 20:24+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-15 11:32+0000\n"
-"X-Generator: Launchpad (build 16272)\n"
+"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Generator: Launchpad (build 16372)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1158,6 +1158,9 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"タスクを終了するのに必要な滑空比\r\n"
+"残りの距離を滑空してゴールするのに必要な高度で割った値\r\n"
+"安全到達高度を考慮している"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1478,12 +1481,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Next　滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:534
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "WP　滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:535
 #, no-c-format
@@ -1492,6 +1495,9 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"次のウエイポイントまで到達するのに必要な滑空比\r\n"
+"残りの距離を滑空して到達するのに必要な高度で割った値\r\n"
+"安全到達高度を考慮している"
 
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
@@ -2598,21 +2604,23 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"サーマルアシストは旋回円のそれぞれの場所の\r\n"
+"上昇風の強さを表示する"
 
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "スタートゲート　開/閉　カウント"
 
 #: src/InfoBoxes/Content/Factory.cpp:1161
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "スタート"
+msgstr "スタートゲート　開"
 
 #: src/InfoBoxes/Content/Factory.cpp:1162
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "スタートゲート　が開くか、閉まるまでの時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
@@ -2721,18 +2729,16 @@ msgid "Time Below"
 msgstr "時間　下"
 
 #: src/InfoBoxes/Content/Task.cpp:851 src/InfoBoxes/Content/Task.cpp:896
-#, fuzzy
 msgid "Closed"
-msgstr "閉じる"
+msgstr "閉まる"
 
 #: src/InfoBoxes/Content/Task.cpp:860 src/InfoBoxes/Content/Task.cpp:905
 msgid "Open"
-msgstr ""
+msgstr "開く"
 
 #: src/InfoBoxes/Content/Task.cpp:865 src/InfoBoxes/Content/Task.cpp:910
-#, fuzzy
 msgid "Waiting"
-msgstr "バリオ　消音"
+msgstr "待機中"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:79 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/WindSettingsPanel.cpp:51 Data/Dialogs/dlgVegaDemo.xml:14
@@ -3101,7 +3107,7 @@ msgstr "地形"
 
 #: src/Renderer/MapItemListRenderer.cpp:246
 msgid "Unreachable through terrain."
-msgstr ""
+msgstr "地形越しに到達不能"
 
 #: src/Renderer/MapItemListRenderer.cpp:251
 msgid "Arrival altitude incl. safety height"
@@ -3666,7 +3672,7 @@ msgstr "ファイルを選択してください"
 
 #: src/Dialogs/FileManager.cpp:684
 msgid "Failed to download the repository index."
-msgstr ""
+msgstr "インデックスの読み込み失敗"
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
@@ -3675,11 +3681,11 @@ msgstr "ファイルマネージャー"
 
 #: src/Dialogs/FileManager.cpp:714
 msgid "The file manager is not available on this device."
-msgstr ""
+msgstr "このファイルマネージャーはこの装置では使用できません"
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "ファイルマネージャーはアンドロイド２．３以降が必要"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
@@ -3687,9 +3693,9 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "圧力計"
+msgstr "IOIO接続 i２c 圧力センサー"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3728,15 +3734,15 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "I2C Bus"
-msgstr ""
+msgstr "i2c バス"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "設定に適合するポートを選択してください"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C アドレス"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3747,16 +3753,15 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "圧力計"
+msgstr "圧力用途"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
-msgstr ""
+msgstr "圧力センサーの目的を設定してください"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
@@ -4190,7 +4195,7 @@ msgstr "このスイッチは風　表示アルゴリズムをON OFF するこ�
 
 #: src/Dialogs/WindSettingsPanel.cpp:64
 msgid "Prefer external wind"
-msgstr ""
+msgstr "外部風信号"
 
 #: src/Dialogs/WindSettingsPanel.cpp:65
 msgid ""
@@ -5124,6 +5129,8 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"一番見やすい設定を選択する。PPC２０００システム以外の場合\r\n"
+"全面塗りつぶしが良い"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:71
 #, no-c-format
@@ -5133,7 +5140,7 @@ msgstr "すべて塗りつぶす"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "その空域すべてを透明な指定色で塗りつぶす"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
@@ -5144,7 +5151,7 @@ msgstr "半透明の点線で囲む"
 #, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
-msgstr ""
+msgstr "半透明の太い線で空域の境界を囲む"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:146
 msgid "Colours"
@@ -5817,7 +5824,7 @@ msgstr "左上"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
 #, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr ""
+msgstr "ステータスメッセージを　ボックスの左上に表示する"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:138
 #, no-c-format
@@ -6488,6 +6495,7 @@ msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
+"上昇帯では緑色太線、沈下帯では茶色の細い線、ゼロの場合には灰色の線で表示する"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
 #, no-c-format
@@ -6499,7 +6507,7 @@ msgstr "バリオ＃１（.)"
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
-msgstr ""
+msgstr "前の設定と同じ色を使用する、沈下帯を点線で表示する"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -6512,6 +6520,8 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
+"上昇帯はオレンジから赤色、沈下帯を明るい青から暗い青、ゼロ帯を黄色の線で表示"
+"する"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
@@ -6521,7 +6531,7 @@ msgstr "バリオ＃2（.)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr ""
+msgstr "表示色は高度によって変化する"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -6571,7 +6581,7 @@ msgstr "パラグライダー　簡易表示　白と黒の線画"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
 #, no-c-format
 msgid "No wind arrow is drawn."
-msgstr ""
+msgstr "風向矢印を表示しない"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
 #, no-c-format
@@ -6661,11 +6671,11 @@ msgstr "地図上に風向矢印を表示する方法の選択"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
 msgid "FAI triangle areas"
-msgstr ""
+msgstr "FAI三角コース"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
 msgid "Show FAI triangle areas on the map."
-msgstr ""
+msgstr "FAI三角コースを地図上に表示する"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:201
@@ -6720,13 +6730,13 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr ""
+msgstr "高度は標準界面からの高度を意味する"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
 #, no-c-format
 msgid "Reference is the height above the task point."
-msgstr ""
+msgstr "高度はタスク上の地点からの地上高を意味する"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
@@ -6736,7 +6746,7 @@ msgstr "スタート高度設定"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
 msgid "Reference used for start max height rule."
-msgstr ""
+msgstr "最高出発高度ルールの値"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:223
@@ -6760,7 +6770,7 @@ msgstr "フィニッシュ高度"
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
 msgid "Reference used for finish min height rule."
-msgstr ""
+msgstr "最低フィニッシュ高度の値"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #, no-c-format
@@ -7472,14 +7482,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "最小AATタスク時間　分"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Start open time"
-msgstr "スタート時刻"
+msgstr "出発ゲートが開く時間"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
-#, fuzzy
 msgid "Start close time"
-msgstr "スタート時刻"
+msgstr "出発ゲートが閉まるく時間"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -7806,9 +7814,8 @@ msgid "Not Found"
 msgstr "見つかりません"
 
 #: src/Dialogs/TimeEntry.cpp:83
-#, fuzzy
 msgid "Now"
-msgstr "いいえ"
+msgstr "今"
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7866,23 +7873,23 @@ msgstr "最大上昇の場合の音質"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "最低制限空域"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
-msgstr ""
+msgstr "制限空域を設定している場合　その高度以下では　バリオ計器が警告音をだす"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "最高上昇制限空域"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:117
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
-msgstr ""
+msgstr "制限空域を設定している場合　その高度以上では　バリオ計器が警告音をだす"
 
 #: src/Dialogs/Weather/NOAAList.cpp:109 Data/Dialogs/dlgNOAADetails.xml:6
 #: Data/Dialogs/dlgNOAADetails_L.xml:6
@@ -7924,13 +7931,12 @@ msgid "Hot-air balloon"
 msgstr "熱気球"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-#, fuzzy
 msgid "Track friends"
-msgstr "航跡"
+msgstr "友人の航跡"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "スカイラインサーバーから、友人の航跡をダウンロードする"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
 msgid "Tracking Interval"
@@ -8757,7 +8763,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1013
 msgid "Map"
-msgstr ""
+msgstr "地図"
 
 #: Data/Input/default.xci:132
 msgid ""
@@ -8951,15 +8957,37 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#, fuzzy
-#~ msgid "Start open arr"
-#~ msgstr "ロガー開始"
+#~ msgid "Start open/close countdown at arrival"
+#~ msgstr "スタートゲート　が開くか、閉まるまでの残り時間"
 
-#~ msgid "Map labels on"
-#~ msgstr "マップ　ラベル　ON"
+#~ msgid "Start open arr"
+#~ msgstr "スタート　開　到着"
+
+#~ msgid ""
+#~ "Shows the time left until the start point opens or closes, compared to "
+#~ "the calculated arrival time."
+#~ msgstr ""
+#~ "スタートゲート　が開くか、閉まるまでの時間\r\n"
+#~ "到着見込み時間との比較値"
+
+#~ msgid "IOIO Nunchuck"
+#~ msgstr "IOIO　設定"
+
+#~ msgid ""
+#~ "The i2c address that matches your configuration.This field is not used "
+#~ "when your selection in the I2C Bus field is not an i2c address. In case "
+#~ "you do not understand the previous sentence you may assume that this "
+#~ "field is not used."
+#~ msgstr ""
+#~ "i2c アドレスの設定、I2Cバスのアドレスがi2cで無い場合\r\n"
+#~ "使用しない場合または、どう設定したらよいかわからない場合は\r\n"
+#~ "不使用に設定する。"
 
 #~ msgid "v"
 #~ msgstr "速度"
+
+#~ msgid "Map labels on"
+#~ msgstr "マップ　ラベル　ON"
 
 #~ msgid "Flight replay"
 #~ msgstr "フライトを再生"
