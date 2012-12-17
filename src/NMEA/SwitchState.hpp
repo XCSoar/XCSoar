@@ -61,7 +61,6 @@ struct SwitchState
   bool acknowledge;
   bool repeat;
   bool speed_command;
-  bool flap_landing;
   // bool stall;
 
   void Reset();
