@@ -36,7 +36,7 @@ namespace V7 {
   /**
    * Enable direct link with GPS port.
    */
-  static bool
+  static inline bool
   ModeDirect(Port &port, OperationEnvironment &env)
   {
     return PortWriteNMEA(port, "PLXV0,CONNECTION,W,DIRECT", env);
@@ -45,7 +45,7 @@ namespace V7 {
   /**
    * Enable communication with V7.
    */
-  static bool
+  static inline bool
   ModeVSeven(Port &port, OperationEnvironment &env)
   {
     return PortWriteNMEA(port, "PLXV0,CONNECTION,W,VSEVEN", env);
@@ -62,7 +62,7 @@ namespace V7 {
    * - LXWP3 disabled (we don't parse it)
    * - LXWP5 disabled (we don't parse it)
    */
-  static bool
+  static inline bool
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
     return PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,30,0,0", env);
