@@ -181,7 +181,9 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/Settings/FontEdit.cpp \
-	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
+	$(SRC)/Dialogs/Traffic/FlarmTrafficList.cpp \
+	$(SRC)/Dialogs/Traffic/FlarmTrafficDetails.cpp \
+	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
@@ -191,7 +193,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Plane/PolarShapeEditWidget.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
-	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/ReplayDialog.cpp \
@@ -261,7 +262,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/dlgAlternatesList.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
-	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \

@@ -21,7 +21,7 @@
 }
 */
 
-#include "Dialogs/Traffic.hpp"
+#include "TrafficDialogs.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"

@@ -29,7 +29,7 @@ Copyright_License {
 #include "FLARM/Glue.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/Traffic.hpp"
+#include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Language/Language.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"

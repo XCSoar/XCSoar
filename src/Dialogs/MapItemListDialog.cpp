@@ -28,7 +28,7 @@ Copyright_License {
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/Traffic.hpp"
+#include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"

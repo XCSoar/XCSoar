@@ -29,7 +29,7 @@
  * home airport (if found in FLARMnet and local waypoint database)
  */
 
-#include "Dialogs/Traffic.hpp"
+#include "TrafficDialogs.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
