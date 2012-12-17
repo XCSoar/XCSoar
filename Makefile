@@ -595,6 +595,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/DeviceBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/UIReceiveBlackboard.cpp \
 	$(SRC)/UIGlobals.cpp \
 	$(SRC)/UIState.cpp \
 	$(SRC)/UISettings.cpp \

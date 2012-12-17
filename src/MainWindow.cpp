@@ -53,7 +53,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
 #include "DrawThread.hpp"
-#include "Device/All.hpp"
+#include "UIReceiveBlackboard.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
@@ -596,30 +596,11 @@ MainWindow::OnUser(unsigned id)
     return true;
 
   case Command::GPS_UPDATE:
-    XCSoarInterface::ReceiveGPS();
-
-    /*
-     * Update the infoboxes if no location is available
-     *
-     * (if the location is available the CalculationThread will send the
-     * Command::CALCULATED_UPDATE message which will update them)
-     */
-    if (!CommonInterface::Basic().location_available) {
-      InfoBoxManager::SetDirty();
-      InfoBoxManager::ProcessTimer();
-    }
-
+    UIReceiveSensorData();
     return true;
 
   case Command::CALCULATED_UPDATE:
-    XCSoarInterface::ReceiveCalculated();
-
-    ActionInterface::UpdateDisplayMode();
-    ActionInterface::SendUIState();
-
-    AllDevicesNotifyCalculatedUpdate(CommonInterface::Basic(),
-                                     CommonInterface::Calculated());
-
+    UIReceiveCalculatedData();
     return true;
 
   case Command::ACTIVATE_MAP:
