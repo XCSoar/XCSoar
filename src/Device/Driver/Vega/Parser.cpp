@@ -105,7 +105,13 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   else
     switches.user_switch = SwitchState::UserSwitch::UNKNOWN;
 
-  switches.airbrake_locked = switchinputs & INPUT_MASK_AIRBRAKE_LOCKED;
+  if (switchinputs & INPUT_MASK_AIRBRAKE_LOCKED)
+    switches.airbrake_state = SwitchState::AirbrakeState::LOCKED;
+  else if (switchinputs & INPUT_MASK_AIRBRAKE_NOT_LOCKED)
+    switches.airbrake_state = SwitchState::AirbrakeState::NOT_LOCKED;
+  else
+    switches.airbrake_state = SwitchState::AirbrakeState::UNKNOWN;
+
   switches.gear_extended = switchinputs & INPUT_MASK_GEAR_EXTENDED;
   switches.acknowledge = switchinputs & INPUT_MASK_ACK;
   switches.repeat = switchinputs & INPUT_MASK_REP;

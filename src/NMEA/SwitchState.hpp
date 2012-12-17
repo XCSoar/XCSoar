@@ -52,11 +52,17 @@ struct SwitchState
     DOWN,
   };
 
+  enum class AirbrakeState : uint8_t {
+    UNKNOWN,
+    LOCKED,
+    NOT_LOCKED,
+  };
+
   FlightMode flight_mode;
   FlapPosition flap_position;
   UserSwitch user_switch;
+  AirbrakeState airbrake_state;
 
-  bool airbrake_locked;
   bool gear_extended;
   bool acknowledge;
   bool repeat;

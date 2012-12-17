@@ -48,9 +48,16 @@ static constexpr StaticEnumChoice user_switch_list[] = {
   { 0 }
 };
 
+static constexpr StaticEnumChoice airbrake_state_list[] = {
+  { (unsigned)SwitchState::AirbrakeState::UNKNOWN, N_("Unknown") },
+  { (unsigned)SwitchState::AirbrakeState::LOCKED, N_("Locked") },
+  { (unsigned)SwitchState::AirbrakeState::NOT_LOCKED, N_("Not locked") },
+  { 0 }
+};
+
 class SwitchesLeft : public RowFormWidget {
   enum Controls {
-    AIRBRAKE_LOCKED,
+    AIRBRAKE_STATE,
     FLAP_POSITION,
     GEAR_DOWN,
     ACKNOWLEDGE,
@@ -62,7 +69,7 @@ public:
   SwitchesLeft(const DialogLook &look):RowFormWidget(look) {}
 
   void Create() {
-    AddBoolean(_("Airbrake locked"), nullptr, false);
+    AddEnum(_("Airbrake locked"), nullptr, airbrake_state_list, false);
     AddEnum(_("Flaps"), nullptr, flap_position_list, 0);
     AddBoolean(_("Gear down"), nullptr, false);
     AddBoolean(_("Acknowledge"), nullptr, false);
@@ -71,7 +78,7 @@ public:
   }
 
   void Update(const SwitchState &switches) {
-    LoadValue(AIRBRAKE_LOCKED, switches.airbrake_locked);
+    LoadValueEnum(AIRBRAKE_STATE, switches.airbrake_state);
     LoadValueEnum(FLAP_POSITION, (unsigned)switches.flap_position);
     LoadValue(GEAR_DOWN, switches.gear_extended);
     LoadValue(ACKNOWLEDGE, switches.acknowledge);

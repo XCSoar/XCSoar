@@ -29,8 +29,7 @@ SwitchState::Reset()
   flight_mode = FlightMode::UNKNOWN;
   flap_position = FlapPosition::UNKNOWN;
   user_switch = UserSwitch::UNKNOWN;
-
-  airbrake_locked = false;
+  airbrake_state = AirbrakeState::UNKNOWN;
   gear_extended = false;
   acknowledge = false;
   repeat = false;
