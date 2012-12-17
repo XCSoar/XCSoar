@@ -64,8 +64,8 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
       info.settings.ProvideMacCready(fixed(value) / 10, info.clock))
     volatile_data.mc = value;
 
-  long switchinputs = line.ReadHex(0L);
-  long switchoutputs = line.ReadHex(0L);
+  const unsigned switchinputs = line.ReadHex(0);
+  const unsigned switchoutputs = line.ReadHex(0);
 
   auto &switches = info.switch_state;
   info.switch_state_available = true;

@@ -68,7 +68,7 @@ public:
   bool ReadCompare(const char *value);
 
   long Read(long default_value);
-  long ReadHex(long default_value);
+  unsigned ReadHex(unsigned default_value);
 
   int Read(int default_value) {
     return (int)Read((long)default_value);
@@ -97,7 +97,7 @@ public:
    * number should be written into
    * @return True if number was read successfully, False otherwise
    */
-  bool ReadHexChecked(long &value_r);
+  bool ReadHexChecked(unsigned &value_r);
 
   /**
    * Read a #fixed only if the unit string which follows matches.

@@ -38,7 +38,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PCPROBE,T,Q0,Q1,Q2,Q3,ax,ay,az,temp,rh,batt,delta_press,abs_press,C,
 
-  long _q[4];
+  unsigned _q[4];
   bool q_available = line.ReadHexChecked(_q[0]);
   if (!line.ReadHexChecked(_q[1]))
     q_available = false;
@@ -74,7 +74,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
     }
   }
 
-  long _a[3];
+  unsigned _a[3];
   bool a_available = line.ReadHexChecked(_a[0]);
   if (!line.ReadHexChecked(_a[1]))
     a_available = false;
@@ -90,19 +90,19 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
     info.acceleration.ProvideGLoad(sqrt(sqr(a[0]) + sqr(a[1]) + sqr(a[2])), true);
   }
 
-  long temperature;
+  unsigned temperature;
   if (line.ReadHexChecked(temperature)) {
     info.temperature_available = true;
     info.temperature = fixed((int16_t)temperature) / 10;
   }
 
-  long humidity;
+  unsigned humidity;
   if (line.ReadHexChecked(humidity)) {
     info.humidity_available = true;
     info.humidity = fixed((int16_t)humidity) / 10;
   }
 
-  long battery_level;
+  unsigned battery_level;
   if (line.ReadHexChecked(battery_level)) {
     info.battery_level_available.Update(info.clock);
     info.battery_level = fixed((int16_t)battery_level);

@@ -91,11 +91,11 @@ CSVLine::Read(long default_value)
   return default_value;
 }
 
-long
-CSVLine::ReadHex(long default_value)
+unsigned
+CSVLine::ReadHex(unsigned default_value)
 {
   char *endptr;
-  long value = strtol(data, &endptr, 16);
+  unsigned long value = strtoul(data, &endptr, 16);
   assert(endptr >= data && endptr <= end);
   if (endptr == data)
     /* nothing was parsed */
@@ -203,10 +203,10 @@ CSVLine::ReadChecked(long &value_r)
 }
 
 bool
-CSVLine::ReadHexChecked(long &value_r)
+CSVLine::ReadHexChecked(unsigned &value_r)
 {
   char *endptr;
-  long value = strtol(data, &endptr, 16);
+  unsigned long value = strtoul(data, &endptr, 16);
   assert(endptr >= data && endptr <= end);
 
   bool success = endptr > data;
