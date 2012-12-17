@@ -67,45 +67,28 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   long switchinputs = line.ReadHex(0L);
   long switchoutputs = line.ReadHex(0L);
 
-  if (line.ReadChecked(value)) {
-    info.voltage = fixed(value) / 10;
-    info.voltage_available.Update(info.clock);
-  }
-
+  auto &switches = info.switch_state;
   info.switch_state_available = true;
 
-  info.switch_state.airbrake_locked =
-    (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
-  info.switch_state.flap_positive =
-    (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
-  info.switch_state.flap_neutral =
-    (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
-  info.switch_state.flap_negative =
-    (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
-  info.switch_state.gear_extended =
-    (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
-  info.switch_state.acknowledge =
-    (switchinputs & (1<<INPUT_BIT_ACK))>0;
-  info.switch_state.repeat =
-    (switchinputs & (1<<INPUT_BIT_REP))>0;
-  info.switch_state.speed_command =
-    (switchinputs & (1<<INPUT_BIT_SC))>0;
-  info.switch_state.user_switch_up =
-    (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
-  info.switch_state.user_switch_middle =
-    (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
-  info.switch_state.user_switch_down =
-    (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
+  switches.airbrake_locked = (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
+  switches.flap_positive = (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
+  switches.flap_neutral = (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
+  switches.flap_negative = (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
+  switches.gear_extended = (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
+  switches.acknowledge = (switchinputs & (1<<INPUT_BIT_ACK))>0;
+  switches.repeat = (switchinputs & (1<<INPUT_BIT_REP))>0;
+  switches.speed_command = (switchinputs & (1<<INPUT_BIT_SC))>0;
+  switches.user_switch_up = (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
+  switches.user_switch_middle = (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
+  switches.user_switch_down = (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
   /*
-  info.switch_state.Stall =
+  switches.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
   */
-  info.switch_state.flight_mode =
-    (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
+  switches.flight_mode = (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
     ? SwitchState::FlightMode::CIRCLING
     : SwitchState::FlightMode::CRUISE;
-  info.switch_state.flap_landing =
-    (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
+  switches.flap_landing = (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
   long up_switchinputs;
   long down_switchinputs;
@@ -140,6 +123,11 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
 
   last_switchinputs = switchinputs;
   last_switchoutputs = switchoutputs;
+
+  if (line.ReadChecked(value)) {
+    info.voltage = fixed(value) / 10;
+    info.voltage_available.Update(info.clock);
+  }
 
   return true;
 }
