@@ -22,56 +22,125 @@ Copyright_License {
 */
 
 #include "SwitchesDialog.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
 #include "Interface.hpp"
 #include "Blackboard/ScopeGPSListener.hpp"
+#include "Language/Language.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
 
-static WndForm *wf = NULL;
+class SwitchesLeft : public RowFormWidget {
+  enum Controls {
+    AIRBRAKE_LOCKED,
+    FLAP_POSITIVE,
+    FLAP_NEUTRAL,
+    FLAP_NEGATIVE,
+    GEAR_DOWN,
+    ACKNOWLEDGE,
+    REPEAT,
+    SPEED_COMMAND,
+  };
 
-static void
-Update(const TCHAR *name, bool value)
-{
-  LoadFormProperty(*wf, name, value);
-}
+public:
+  SwitchesLeft(const DialogLook &look):RowFormWidget(look) {}
 
-static void
-UpdateValues(const SwitchState &switches)
-{
-  Update(_T("prpFlapLanding"), switches.flap_landing);
-  Update(_T("prpAirbrakeExtended"), switches.airbrake_locked);
-  Update(_T("prpFlapPositive"), switches.flap_positive);
-  Update(_T("prpFlapNeutral"), switches.flap_neutral);
-  Update(_T("prpFlapNegative"), switches.flap_negative);
-  Update(_T("prpGearExtended"), switches.gear_extended);
-  Update(_T("prpAcknowledge"), switches.acknowledge);
-  Update(_T("prpRepeat"), switches.repeat);
-  Update(_T("prpSpeedCommand"), switches.speed_command);
-  Update(_T("prpUserSwitchUp"), switches.user_switch_up);
-  Update(_T("prpUserSwitchMiddle"), switches.user_switch_middle);
-  Update(_T("prpUserSwitchDown"), switches.user_switch_down);
-  Update(_T("prpVarioCircling"),
-         switches.flight_mode == SwitchState::FlightMode::CIRCLING);
-}
+  void Create() {
+    AddBoolean(_("Airbrake locked"), nullptr, false);
+    AddBoolean(_("Flap positive"), nullptr, false);
+    AddBoolean(_("Flap neutral"), nullptr, false);
+    AddBoolean(_("Flap negative"), nullptr, false);
+    AddBoolean(_("Gear down"), nullptr, false);
+    AddBoolean(_("Acknowledge"), nullptr, false);
+    AddBoolean(_("Repeat"), nullptr, false);
+    AddBoolean(_("Speed command"), nullptr, false);
+  }
+
+  void Update(const SwitchState &switches) {
+    LoadValue(AIRBRAKE_LOCKED, switches.airbrake_locked);
+    LoadValue(FLAP_POSITIVE, switches.flap_positive);
+    LoadValue(FLAP_NEUTRAL, switches.flap_neutral);
+    LoadValue(FLAP_NEGATIVE, switches.flap_negative);
+    LoadValue(GEAR_DOWN, switches.gear_extended);
+    LoadValue(ACKNOWLEDGE, switches.acknowledge);
+    LoadValue(SPEED_COMMAND, switches.speed_command);
+  }
+};
+
+class SwitchesRight : public RowFormWidget {
+  enum Controls {
+    USER_UP,
+    USER_MIDDLE,
+    USER_DOWN,
+    FLIGHT_MODE,
+    FLAP_LANDING,
+  };
+
+public:
+  SwitchesRight(const DialogLook &look):RowFormWidget(look) {}
+
+  void Create() {
+    AddBoolean(_("User up"), nullptr, false);
+    AddBoolean(_("User middle"), nullptr, false);
+    AddBoolean(_("User down"), nullptr, false);
+    AddBoolean(_("Vario circling"), nullptr, false);
+    AddBoolean(_("Flap landing"), nullptr, false);
+  }
+
+  void Update(const SwitchState &switches) {
+    LoadValue(USER_UP, switches.user_switch_up);
+    LoadValue(USER_MIDDLE, switches.user_switch_middle);
+    LoadValue(USER_DOWN, switches.user_switch_down);
+    LoadValue(FLIGHT_MODE,
+              switches.flight_mode == SwitchState::FlightMode::CIRCLING);
+    LoadValue(FLAP_LANDING, switches.flap_landing);
+  }
+};
+
+class SwitchesDialog : public TwoWidgets, private NullBlackboardListener {
+public:
+  SwitchesDialog(const DialogLook &look)
+    :TwoWidgets(new SwitchesLeft(look), new SwitchesRight(look), false) {}
+
+  void Update(const SwitchState &switches) {
+    ((SwitchesLeft &)GetFirst()).Update(switches);
+    ((SwitchesRight &)GetSecond()).Update(switches);
+  }
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    ((SwitchesLeft &)GetFirst()).Create();
+    ((SwitchesRight &)GetSecond()).Create();
+
+    TwoWidgets::Prepare(parent, rc);
+  }
+
+  virtual void Show(const PixelRect &rc) gcc_override {
+    Update(CommonInterface::Basic().switch_state);
+    TwoWidgets::Show(rc);
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+  }
+
+  virtual void Hide() gcc_override {
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+    TwoWidgets::Hide();
+  }
+
+private:
+  /* virtual methods from BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic) gcc_override {
+    Update(basic.switch_state);
+  }
+};
 
 void
 dlgSwitchesShowModal()
 {
-  wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-		              _T("IDR_XML_SWITCHES"));
-  if (wf == NULL)
-    return;
-
-  UpdateValues(CommonInterface::Basic().switch_state);
-
-  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(),
-                           [](const MoreData &basic){
-                             UpdateValues(basic.switch_state);
-                           });
-
-  wf->ShowModal();
-
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Switches"),
+                    new SwitchesDialog(look));
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
 }
