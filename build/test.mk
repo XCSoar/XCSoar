@@ -691,6 +691,7 @@ DEBUG_PROGRAM_NAMES = \
 	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
+	RunLX1600Utils \
 	TaskInfo DumpTaskFile \
 	DumpFlarmNet \
 	RunRepositoryParser \
@@ -1261,6 +1262,22 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
 RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO MATH UTIL
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
+
+RUN_LX1600_UTILS_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/RunLX1600Utils.cpp
+RUN_LX1600_UTILS_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO MATH UTIL
+$(eval $(call link-program,RunLX1600Utils,RUN_LX1600_UTILS))
 
 RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
