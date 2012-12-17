@@ -1,3 +1,23 @@
+# Finnish translation for xcsoar
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the xcsoar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xcsoar\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-17 10:12+0100\n"
+"PO-Revision-Date: 2012-12-17 01:52+0000\n"
+"Last-Translator: Juha Huvilinna <juha@siipi.fi>\n"
+"Language-Team: Finnish <fi@li.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
+"X-Generator: Launchpad (build 16372)\n"
+
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:556
@@ -10,7 +30,7 @@
 #: Data/Input/default.xci:1032 Data/Input/default.xci:1070
 #, no-c-format
 msgid "Task"
-msgstr ""
+msgstr "Tehtävä"
 
 #: src/Task/TypeStrings.cpp:37
 msgid "Racing"
@@ -22,7 +42,7 @@ msgstr ""
 
 #: src/Task/TypeStrings.cpp:41 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI kolmio"
 
 #: src/Task/TypeStrings.cpp:43
 msgid "FAI out and return"
@@ -518,15 +538,15 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:155 src/Menu/ExpandMacros.cpp:175
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Seuraava laskupaikka"
 
 #: src/Menu/ExpandMacros.cpp:164 src/Menu/ExpandMacros.cpp:184
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Lähin laskupaikka"
 
 #: src/Menu/ExpandMacros.cpp:165 src/Menu/ExpandMacros.cpp:185
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Edellinen laskupaikka"
 
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:232
 msgid "Finish Turnpoint"
@@ -595,12 +615,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:325 src/Menu/ExpandMacros.cpp:329
 #: src/Dialogs/Device/PortMonitor.cpp:166
 msgid "Resume"
-msgstr ""
+msgstr "Jatka"
 
 #: src/Menu/ExpandMacros.cpp:325 src/Menu/ExpandMacros.cpp:329
 #: src/Dialogs/Message.cpp:150
 msgid "Abort"
-msgstr ""
+msgstr "Keskeytys"
 
 #: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:539
 #: src/Menu/ExpandMacros.cpp:566 src/Menu/ExpandMacros.cpp:626
@@ -8316,6 +8336,8 @@ msgid ""
 "Zoom\n"
 "Out"
 msgstr ""
+"Zoom\n"
+"-"
 
 #: Data/Input/default.xci:768
 msgid ""
@@ -8341,10 +8363,12 @@ msgid ""
 "Zoom\n"
 "In"
 msgstr ""
+"Zoom\n"
+"+"
 
 #: Data/Input/default.xci:974
 msgid "Return"
-msgstr ""
+msgstr "Takaisin"
 
 #: Data/Input/default.xci:1020
 msgid "AVG/ALT"
@@ -8354,7 +8378,7 @@ msgstr ""
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr ""
+msgstr "Ilmatila"
 
 #: Data/Input/default.xci:355 Data/Input/default.xci:404
 #: Data/Input/default.xci:920
@@ -8373,7 +8397,7 @@ msgstr ""
 
 #: Data/Input/default.xci:59
 msgid "Landing"
-msgstr ""
+msgstr "Laskeutuminen"
 
 #: Data/Input/default.xci:794 Data/Input/default.xci:1237
 msgid ""
