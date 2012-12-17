@@ -38,7 +38,7 @@ ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
     return;
 
   error.severity = (FlarmError::Severity)
-    line.ReadHex((long)FlarmError::Severity::NO_ERROR);
+    line.Read((int)FlarmError::Severity::NO_ERROR);
   error.code = (FlarmError::Code)line.ReadHex(0);
 
   error.available.Update(clock);
