@@ -37,6 +37,30 @@ Copyright_License {
 
 #include <stdio.h>
 
+static bool
+ReadFixed(fixed &value)
+{
+  char buffer[64];
+  if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0)
+    return false;
+
+  char *end_ptr;
+  value = fixed(strtod(buffer, &end_ptr));
+  return end_ptr != buffer;
+}
+
+static bool
+ReadUnsigned(unsigned &value)
+{
+  char buffer[64];
+  if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0)
+    return false;
+
+  char *end_ptr;
+  value = strtoul(buffer, &end_ptr, 10);
+  return end_ptr != buffer;
+}
+
 static void
 SetMC(Port &port, OperationEnvironment &env)
 {
@@ -46,17 +70,7 @@ SetMC(Port &port, OperationEnvironment &env)
     fprintf(stdout, "Please enter the MC setting (0.0 - 5.0):\n");
     fprintf(stdout, "> ");
 
-    char buffer[64];
-    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
-      fprintf(stdout, "Invalid input\n");
-      continue;
-    }
-
-    TrimRight(buffer);
-
-    char *end_ptr;
-    mc = fixed(strtod(buffer, &end_ptr));
-    if (end_ptr == buffer) {
+    if (!ReadFixed(mc)) {
       fprintf(stdout, "Invalid input\n");
       continue;
     }
@@ -81,17 +95,7 @@ SetBallast(Port &port, OperationEnvironment &env)
     fprintf(stdout, "Please enter the Ballast setting (1.0 - 1.5):\n");
     fprintf(stdout, "> ");
 
-    char buffer[64];
-    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
-      fprintf(stdout, "Invalid input\n");
-      continue;
-    }
-
-    TrimRight(buffer);
-
-    char *end_ptr;
-    ballast = fixed(strtod(buffer, &end_ptr));
-    if (end_ptr == buffer) {
+    if (!ReadFixed(ballast)) {
       fprintf(stdout, "Invalid input\n");
       continue;
     }
@@ -116,17 +120,7 @@ SetBugs(Port &port, OperationEnvironment &env)
     fprintf(stdout, "Please enter the Bugs setting (0 - 30%%):\n");
     fprintf(stdout, "> ");
 
-    char buffer[64];
-    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
-      fprintf(stdout, "Invalid input\n");
-      continue;
-    }
-
-    TrimRight(buffer);
-
-    char *end_ptr;
-    bugs = strtoul(buffer, &end_ptr, 10);
-    if (end_ptr == buffer) {
+    if (!ReadUnsigned(bugs)) {
       fprintf(stdout, "Invalid input\n");
       continue;
     }
