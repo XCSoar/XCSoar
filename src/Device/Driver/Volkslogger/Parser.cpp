@@ -40,14 +40,16 @@ vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
   line.Skip();
 
   // four characers, hex, barometric altitude
-  long altitude = line.ReadHex(0L);
+  long altitude;
 
-  if (altitude > 60000)
-    /* Assuming that altitude has wrapped around.  60 000 m occurs at
-       QNH ~2000 hPa */
-    altitude -= 65535;
+  if (line.ReadHexChecked(altitude)) {
+    if (altitude > 60000)
+      /* Assuming that altitude has wrapped around.  60 000 m occurs
+         at QNH ~2000 hPa */
+      altitude -= 65535;
 
-  info.ProvidePressureAltitude(fixed(altitude));
+    info.ProvidePressureAltitude(fixed(altitude));
+  }
 
   // ExtractParameter(String,ctemp,3);
   // four characters, hex, constant.  Value 1371 (dec)
