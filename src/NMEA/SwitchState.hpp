@@ -45,17 +45,22 @@ struct SwitchState
     LANDING,
   };
 
+  enum class UserSwitch : uint8_t {
+    UNKNOWN,
+    UP,
+    MIDDLE,
+    DOWN,
+  };
+
   FlightMode flight_mode;
   FlapPosition flap_position;
+  UserSwitch user_switch;
 
   bool airbrake_locked;
   bool gear_extended;
   bool acknowledge;
   bool repeat;
   bool speed_command;
-  bool user_switch_up;
-  bool user_switch_middle;
-  bool user_switch_down;
   bool flap_landing;
   // bool stall;
 

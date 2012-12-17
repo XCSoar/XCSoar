@@ -96,14 +96,20 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info, Vega::VolatileData &volatile_data)
   else
     switches.flap_position = SwitchState::FlapPosition::UNKNOWN;
 
+  if (switchinputs & INPUT_MASK_USER_SWITCH_MIDDLE)
+    switches.user_switch = SwitchState::UserSwitch::MIDDLE;
+  else if (switchinputs & INPUT_MASK_USER_SWITCH_UP)
+    switches.user_switch = SwitchState::UserSwitch::UP;
+  else if (switchinputs & INPUT_MASK_USER_SWITCH_DOWN)
+    switches.user_switch = SwitchState::UserSwitch::DOWN;
+  else
+    switches.user_switch = SwitchState::UserSwitch::UNKNOWN;
+
   switches.airbrake_locked = switchinputs & INPUT_MASK_AIRBRAKE_LOCKED;
   switches.gear_extended = switchinputs & INPUT_MASK_GEAR_EXTENDED;
   switches.acknowledge = switchinputs & INPUT_MASK_ACK;
   switches.repeat = switchinputs & INPUT_MASK_REP;
   switches.speed_command = switchinputs & INPUT_MASK_SC;
-  switches.user_switch_up = switchinputs & INPUT_MASK_USER_SWITCH_UP;
-  switches.user_switch_middle = switchinputs & INPUT_MASK_USER_SWITCH_MIDDLE;
-  switches.user_switch_down = switchinputs & INPUT_MASK_USER_SWITCH_DOWN;
   // switches.stall = switchinputs & INPUT_MASK_STALL;
   switches.flight_mode = switchoutputs & OUTPUT_MASK_CIRCLING
     ? SwitchState::FlightMode::CIRCLING

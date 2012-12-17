@@ -28,13 +28,11 @@ SwitchState::Reset()
 {
   flight_mode = FlightMode::UNKNOWN;
   flap_position = FlapPosition::UNKNOWN;
+  user_switch = UserSwitch::UNKNOWN;
 
   airbrake_locked = false;
   gear_extended = false;
   acknowledge = false;
   repeat = false;
   speed_command = false;
-  user_switch_up = false;
-  user_switch_middle = false;
-  user_switch_down = false;
 }

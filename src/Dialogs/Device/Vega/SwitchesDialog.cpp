@@ -40,6 +40,14 @@ static constexpr StaticEnumChoice flap_position_list[] = {
   { 0 }
 };
 
+static constexpr StaticEnumChoice user_switch_list[] = {
+  { (unsigned)SwitchState::UserSwitch::UNKNOWN, N_("Unknown") },
+  { (unsigned)SwitchState::UserSwitch::UP, N_("Up") },
+  { (unsigned)SwitchState::UserSwitch::MIDDLE, N_("Middle") },
+  { (unsigned)SwitchState::UserSwitch::DOWN, N_("Down") },
+  { 0 }
+};
+
 class SwitchesLeft : public RowFormWidget {
   enum Controls {
     AIRBRAKE_LOCKED,
@@ -73,9 +81,7 @@ public:
 
 class SwitchesRight : public RowFormWidget {
   enum Controls {
-    USER_UP,
-    USER_MIDDLE,
-    USER_DOWN,
+    USER_SWITCH,
     FLIGHT_MODE,
   };
 
@@ -83,16 +89,12 @@ public:
   SwitchesRight(const DialogLook &look):RowFormWidget(look) {}
 
   void Create() {
-    AddBoolean(_("User up"), nullptr, false);
-    AddBoolean(_("User middle"), nullptr, false);
-    AddBoolean(_("User down"), nullptr, false);
+    AddEnum(_("Switch"), nullptr, user_switch_list, false);
     AddBoolean(_("Vario circling"), nullptr, false);
   }
 
   void Update(const SwitchState &switches) {
-    LoadValue(USER_UP, switches.user_switch_up);
-    LoadValue(USER_MIDDLE, switches.user_switch_middle);
-    LoadValue(USER_DOWN, switches.user_switch_down);
+    LoadValueEnum(USER_SWITCH, switches.user_switch);
     LoadValue(FLIGHT_MODE,
               switches.flight_mode == SwitchState::FlightMode::CIRCLING);
   }
