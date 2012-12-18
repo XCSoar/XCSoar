@@ -113,8 +113,8 @@ Copyright_License {
 
 static Markers *marks;
 static TaskManager *task_manager;
-static GlideComputerEvents glide_computer_events;
-static GlideComputerTaskEvents task_events;
+static GlideComputerEvents *glide_computer_events;
+static GlideComputerTaskEvents *task_events;
 
 static bool
 LoadProfile()
@@ -308,8 +308,9 @@ Startup()
 #endif
 
   // Initialize main blackboard data
+  task_events = new GlideComputerTaskEvents();
   task_manager = new TaskManager(computer_settings.task, way_points);
-  task_manager->SetTaskEvents(task_events);
+  task_manager->SetTaskEvents(*task_events);
   task_manager->Reset();
 
   protected_task_manager =
@@ -324,7 +325,7 @@ Startup()
 
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
-                                     task_events);
+                                     *task_events);
   glide_computer->ReadComputerSettings(computer_settings);
   glide_computer->SetTerrain(terrain);
   glide_computer->SetLogger(logger);
@@ -442,8 +443,9 @@ Startup()
   // Find unique ID of this PDA
   ReadAssetNumber();
 
-  glide_computer_events.Reset();
-  live_blackboard.AddListener(glide_computer_events);
+  glide_computer_events = new GlideComputerEvents();
+  glide_computer_events->Reset();
+  live_blackboard.AddListener(*glide_computer_events);
 
   if (computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
@@ -521,7 +523,8 @@ Shutdown()
   delete flight_logger;
   flight_logger = NULL;
 
-  live_blackboard.RemoveListener(glide_computer_events);
+  live_blackboard.RemoveListener(*glide_computer_events);
+  delete glide_computer_events;
 
   FlarmFriends::Save();
 
@@ -630,6 +633,7 @@ Shutdown()
   EGM96::Close();
 
   delete glide_computer;
+  delete task_events;
   delete logger;
 
   // Clear airspace database
