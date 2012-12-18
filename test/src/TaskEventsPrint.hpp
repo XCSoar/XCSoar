@@ -46,8 +46,6 @@ public:
 
   void ActiveAdvanced(const TaskWaypoint &tp, const int i);
 
-  void ActiveChanged(const TaskWaypoint &tp);
-  
   void ConstructionError(const char* error);
 
   void RequestArm(const TaskWaypoint &tp);

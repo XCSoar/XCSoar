@@ -61,16 +61,6 @@ public:
    * @param i The task sequence number after auto-advance
    */
   virtual void ActiveAdvanced(const TaskWaypoint &tp, const int i) {}
-
-  /**
-   * Called when a taskpoint was altered internally.
-   * This can happen when an AbortTask determines a better task
-   * point is available, or (not yet impelemented) the glider
-   * enters a different start point for multiple start points.
-   *
-   * @param tp The new active taskpoint
-   */
-  virtual void ActiveChanged(const TaskWaypoint &tp) {}
   
   /**
    * Called when a task is invalid due to improper construction

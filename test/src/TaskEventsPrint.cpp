@@ -47,13 +47,6 @@ TaskEventsPrint::ExitTransition(const TaskWaypoint &tp)
 }
 
 void
-TaskEventsPrint::ActiveChanged(const TaskWaypoint &tp)
-{
-  if (verbose)
-    printf("#- active changed to wp %d\n", tp.GetWaypoint().id);
-}
-
-void
 TaskEventsPrint::ConstructionError(const char* error)
 {
   if (verbose) {
