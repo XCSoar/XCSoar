@@ -64,13 +64,6 @@ TaskEventsPrint::ConstructionError(const char* error)
 }
 
 void
-TaskEventsPrint::StartSpeedWarning()
-{
-  if (verbose)
-    printf("#- warning speed excessive\n");
-}
-
-void
 TaskEventsPrint::RequestArm(const TaskWaypoint &tp)
 {
   if (verbose)

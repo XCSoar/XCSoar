@@ -74,9 +74,10 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                              TaskEvents *task_events,
                              const TaskProjection &projection)
 {
-  if (task_events != NULL && IsInSector(state) &&
-      !constraints.CheckSpeed(state, margins))
-    task_events->StartSpeedWarning();
+  /* TODO:
+  if (IsInSector(state) && !constraints.CheckSpeed(state, margins))
+    TO_BE_IMPLEMENTED;
+  */
 
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
 }

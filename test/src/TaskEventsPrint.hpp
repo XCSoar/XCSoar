@@ -47,8 +47,6 @@ public:
   void ActiveAdvanced(const TaskWaypoint &tp, const int i);
 
   void ActiveChanged(const TaskWaypoint &tp);
-
-  void StartSpeedWarning();
   
   void ConstructionError(const char* error);
 

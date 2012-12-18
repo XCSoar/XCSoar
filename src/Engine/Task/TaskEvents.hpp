@@ -71,13 +71,6 @@ public:
    * @param tp The new active taskpoint
    */
   virtual void ActiveChanged(const TaskWaypoint &tp) {}
-
-  /**
-   * Called when aircraft speed is higher than set limit
-   * according to task rules
-   *
-   */
-  virtual void StartSpeedWarning() {}
   
   /**
    * Called when a task is invalid due to improper construction
