@@ -14,8 +14,6 @@ public:
 
   void EnterTransition(const TaskWaypoint& tp);
 
-  void AlternateTransition();
-
   void ActiveAdvanced(const TaskWaypoint &tp, const int i);
 
   void RequestArm(const TaskWaypoint &tp);

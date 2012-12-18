@@ -22,44 +22,25 @@ Copyright_License {
 
 */
 
-#include "GlideComputerInterface.hpp"
-#include "GlideComputer.hpp"
-#include "Input/InputQueue.hpp"
+#ifndef XCSOAR_TASK_EVENT_OBSERVER_HPP
+#define XCSOAR_TASK_EVENT_OBSERVER_HPP
 
-void
-GlideComputerTaskEvents::SetComputer(GlideComputer &_computer)
-{
-  computer = &_computer;
-}
+#include "Compiler.h"
 
-void
-GlideComputerTaskEvents::EnterTransition(const TaskWaypoint &tp)
-{
-  computer->OnTransitionEnter();
-}
+class TaskManager;
 
-void
-GlideComputerTaskEvents::RequestArm(const TaskWaypoint &tp)
-{
-  InputEvents::processGlideComputer(GCE_ARM_READY);
-}
+/**
+ * This class scans a #TaskManager periodically for changes and
+ * generates glide computer events (GCE).
+ */
+class TaskEventObserver gcc_final {
+  unsigned best_alternate_id;
 
-void
-GlideComputerTaskEvents::ActiveAdvanced(const TaskWaypoint &tp, const int i)
-{
-  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
-}
+public:
+  constexpr TaskEventObserver()
+    :best_alternate_id(-1) {}
 
-void
-GlideComputerTaskEvents::TaskStart()
-{
-  InputEvents::processGlideComputer(GCE_TASK_START);
-  computer->OnStartTask();
-}
+  void Check(const TaskManager &task_manager);
+};
 
-void
-GlideComputerTaskEvents::TaskFinish()
-{
-  InputEvents::processGlideComputer(GCE_TASK_FINISH);
-  computer->OnFinishTask();
-}
+#endif

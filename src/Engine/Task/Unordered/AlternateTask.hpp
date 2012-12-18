@@ -50,7 +50,6 @@ public:
 private:
   AlternateVector alternates;
   GeoPoint destination;
-  unsigned best_alternate_id;
 
 public:
   /** 
@@ -80,9 +79,6 @@ public:
   const AlternateVector &GetAlternates() const {
     return alternates;
   }
-
-protected:
-  void CheckAlternateChanged();
 
 private:
   /**

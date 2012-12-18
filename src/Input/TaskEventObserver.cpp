@@ -22,44 +22,25 @@ Copyright_License {
 
 */
 
-#include "GlideComputerInterface.hpp"
-#include "GlideComputer.hpp"
-#include "Input/InputQueue.hpp"
+#include "TaskEventObserver.hpp"
+#include "Engine/Task/TaskManager.hpp"
+#include "InputQueue.hpp"
 
-void
-GlideComputerTaskEvents::SetComputer(GlideComputer &_computer)
+static unsigned
+GetBestAlternateID(const TaskManager &tm)
 {
-  computer = &_computer;
+  const auto &alternates = tm.GetAlternates();
+  return alternates.empty()
+    ? unsigned(-1)
+    : alternates.front().waypoint.id;
 }
 
 void
-GlideComputerTaskEvents::EnterTransition(const TaskWaypoint &tp)
+TaskEventObserver::Check(const TaskManager &tm)
 {
-  computer->OnTransitionEnter();
-}
-
-void
-GlideComputerTaskEvents::RequestArm(const TaskWaypoint &tp)
-{
-  InputEvents::processGlideComputer(GCE_ARM_READY);
-}
-
-void
-GlideComputerTaskEvents::ActiveAdvanced(const TaskWaypoint &tp, const int i)
-{
-  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
-}
-
-void
-GlideComputerTaskEvents::TaskStart()
-{
-  InputEvents::processGlideComputer(GCE_TASK_START);
-  computer->OnStartTask();
-}
-
-void
-GlideComputerTaskEvents::TaskFinish()
-{
-  InputEvents::processGlideComputer(GCE_TASK_FINISH);
-  computer->OnFinishTask();
+  const unsigned new_best_alternate_id = GetBestAlternateID(tm);
+  if (new_best_alternate_id != best_alternate_id) {
+    best_alternate_id = new_best_alternate_id;
+    InputEvents::processGlideComputer(GCE_ALTERNATE_CHANGED);
+  }
 }

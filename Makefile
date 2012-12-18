@@ -517,6 +517,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputLookup.cpp \
 	$(SRC)/Input/InputKeys.cpp \
 	$(SRC)/Input/InputParser.cpp \
+	$(SRC)/Input/TaskEventObserver.cpp \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/Pages.cpp \
 	$(SRC)/StatusMessage.cpp \

@@ -28,6 +28,11 @@ Copyright_License {
 #include "ApplyExternalSettings.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Device/All.hpp"
+#include "Input/TaskEventObserver.hpp"
+#include "Task/ProtectedTaskManager.hpp"
+#include "Components.hpp"
+
+static TaskEventObserver task_event_observer;
 
 void
 UIReceiveSensorData()
@@ -60,4 +65,9 @@ UIReceiveCalculatedData()
 
   AllDevicesNotifyCalculatedUpdate(CommonInterface::Basic(),
                                    CommonInterface::Calculated());
+
+  {
+    const ProtectedTaskManager::Lease lease(*protected_task_manager);
+    task_event_observer.Check(lease);
+  }
 }

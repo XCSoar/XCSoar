@@ -33,13 +33,6 @@ TaskEventsPrint::EnterTransition(const TaskWaypoint& tp)
 }
 
 void
-TaskEventsPrint::AlternateTransition()
-{
-  if (verbose)
-    printf("#- alternate changed\n");
-}
-
-void
 TaskEventsPrint::ExitTransition(const TaskWaypoint &tp)
 {
   if (verbose)

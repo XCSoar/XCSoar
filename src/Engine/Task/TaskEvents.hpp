@@ -49,11 +49,6 @@ public:
   virtual void ExitTransition(const TaskWaypoint &tp) {}
 
   /**
-   * Called when the aircraft alternate changes
-   */
-  virtual void AlternateTransition() {}
-
-  /**
    * Called when auto-advance has changed the active
    * task point in an ordered task
    *

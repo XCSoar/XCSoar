@@ -42,8 +42,6 @@ public:
 
   void ExitTransition(const TaskWaypoint &tp);
 
-  void AlternateTransition();
-
   void ActiveAdvanced(const TaskWaypoint &tp, const int i);
 
   void ConstructionError(const char* error);
