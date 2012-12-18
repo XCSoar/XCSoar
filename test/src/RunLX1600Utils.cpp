@@ -70,18 +70,35 @@ PrintInputRequest(const char *setting)
   fprintf(stdout, "> ");
 }
 
+static bool
+ReadFixed(const char *setting, fixed &value)
+{
+  PrintInputRequest(setting);
+  if (ReadFixed(value))
+    return true;
+
+  fprintf(stdout, "Invalid input\n");
+  return false;
+}
+
+static bool
+ReadUnsigned(const char *setting, unsigned &value)
+{
+  PrintInputRequest(setting);
+  if (ReadUnsigned(value))
+    return true;
+
+  fprintf(stdout, "Invalid input\n");
+  return false;
+}
+
 static void
 SetMC(Port &port, OperationEnvironment &env)
 {
   while (true) {
     fixed mc;
-
-    PrintInputRequest("the MC setting (0.0 - 5.0)");
-
-    if (!ReadFixed(mc)) {
-      fprintf(stdout, "Invalid input\n");
+    if (!ReadFixed("the MC setting (0.0 - 5.0)", mc))
       continue;
-    }
 
     fprintf(stdout, "Setting MC to \"%.1f\" ...\n", (double)mc);
 
@@ -99,13 +116,8 @@ SetBallast(Port &port, OperationEnvironment &env)
 {
   while (true) {
     fixed ballast;
-
-    PrintInputRequest("the Ballast setting (1.0 - 1.5)");
-
-    if (!ReadFixed(ballast)) {
-      fprintf(stdout, "Invalid input\n");
+    if (!ReadFixed("the Ballast setting (1.0 - 1.5)", ballast))
       continue;
-    }
 
     fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
 
@@ -123,13 +135,8 @@ SetBugs(Port &port, OperationEnvironment &env)
 {
   while (true) {
     unsigned bugs;
-
-    PrintInputRequest("the Bugs setting (0 - 30%)");
-
-    if (!ReadUnsigned(bugs)) {
-      fprintf(stdout, "Invalid input\n");
+    if (!ReadUnsigned("the Bugs setting (0 - 30%)", bugs))
       continue;
-    }
 
     fprintf(stdout, "Setting Bugs to \"%u\" ...\n", bugs);
 
@@ -147,13 +154,8 @@ SetAltitudeOffset(Port &port, OperationEnvironment &env)
 {
   while (true) {
     fixed altitude_offset;
-
-    PrintInputRequest("the altitude offset setting (m)");
-
-    if (!ReadFixed(altitude_offset)) {
-      fprintf(stdout, "Invalid input\n");
+    if (!ReadFixed("the altitude offset setting (m)", altitude_offset))
       continue;
-    }
 
     fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
             (double)altitude_offset);
@@ -173,13 +175,8 @@ SetQNH(Port &port, OperationEnvironment &env)
 {
   while (true) {
     fixed qnh;
-
-    PrintInputRequest("the QNH setting (hPa)");
-
-    if (!ReadFixed(qnh)) {
-      fprintf(stdout, "Invalid input\n");
+    if (!ReadFixed("the QNH setting (hPa)", qnh))
       continue;
-    }
 
     fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
             (double)qnh);
