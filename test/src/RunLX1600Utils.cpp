@@ -95,100 +95,80 @@ ReadUnsigned(const char *setting, unsigned &value)
 static void
 SetMC(Port &port, OperationEnvironment &env)
 {
-  while (true) {
-    fixed mc;
-    if (!ReadFixed("the MC setting (0.0 - 5.0)", mc))
-      continue;
-
-    fprintf(stdout, "Setting MC to \"%.1f\" ...\n", (double)mc);
-
-    if (LX1600::SetMacCready(port, env, mc))
-      fprintf(stdout, "MC set to \"%.1f\"\n", (double)mc);
-    else
-      fprintf(stdout, "Operation failed!\n");
-
+  fixed mc;
+  if (!ReadFixed("the MC setting (0.0 - 5.0)", mc))
     return;
-  }
+
+  fprintf(stdout, "Setting MC to \"%.1f\" ...\n", (double)mc);
+
+  if (LX1600::SetMacCready(port, env, mc))
+    fprintf(stdout, "MC set to \"%.1f\"\n", (double)mc);
+  else
+    fprintf(stdout, "Operation failed!\n");
 }
 
 static void
 SetBallast(Port &port, OperationEnvironment &env)
 {
-  while (true) {
-    fixed ballast;
-    if (!ReadFixed("the Ballast setting (1.0 - 1.5)", ballast))
-      continue;
-
-    fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
-
-    if (LX1600::SetBallast(port, env, ballast))
-      fprintf(stdout, "Ballast set to \"%.1f\"\n", (double)ballast);
-    else
-      fprintf(stdout, "Operation failed!\n");
-
+  fixed ballast;
+  if (!ReadFixed("the Ballast setting (1.0 - 1.5)", ballast))
     return;
-  }
+
+  fprintf(stdout, "Setting Ballast to \"%.1f\" ...\n", (double)ballast);
+
+  if (LX1600::SetBallast(port, env, ballast))
+    fprintf(stdout, "Ballast set to \"%.1f\"\n", (double)ballast);
+  else
+    fprintf(stdout, "Operation failed!\n");
 }
 
 static void
 SetBugs(Port &port, OperationEnvironment &env)
 {
-  while (true) {
-    unsigned bugs;
-    if (!ReadUnsigned("the Bugs setting (0 - 30%)", bugs))
-      continue;
-
-    fprintf(stdout, "Setting Bugs to \"%u\" ...\n", bugs);
-
-    if (LX1600::SetBugs(port, env, bugs))
-      fprintf(stdout, "Bugs set to \"%u\"\n", bugs);
-    else
-      fprintf(stdout, "Operation failed!\n");
-
+  unsigned bugs;
+  if (!ReadUnsigned("the Bugs setting (0 - 30%)", bugs))
     return;
-  }
+
+  fprintf(stdout, "Setting Bugs to \"%u\" ...\n", bugs);
+
+  if (LX1600::SetBugs(port, env, bugs))
+    fprintf(stdout, "Bugs set to \"%u\"\n", bugs);
+  else
+    fprintf(stdout, "Operation failed!\n");
 }
 
 static void
 SetAltitudeOffset(Port &port, OperationEnvironment &env)
 {
-  while (true) {
-    fixed altitude_offset;
-    if (!ReadFixed("the altitude offset setting (m)", altitude_offset))
-      continue;
-
-    fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
-            (double)altitude_offset);
-
-    if (LX1600::SetAltitudeOffset(port, env, Units::ToUserUnit(altitude_offset, Unit::FEET)))
-      fprintf(stdout, "Altitude offset set to \"%.1f m\"\n",
-              (double)altitude_offset);
-    else
-      fprintf(stdout, "Operation failed!\n");
-
+  fixed altitude_offset;
+  if (!ReadFixed("the altitude offset setting (m)", altitude_offset))
     return;
-  }
+
+  fprintf(stdout, "Setting altitude offset to \"%.1f m\" ...\n",
+          (double)altitude_offset);
+
+  if (LX1600::SetAltitudeOffset(port, env, Units::ToUserUnit(altitude_offset, Unit::FEET)))
+    fprintf(stdout, "Altitude offset set to \"%.1f m\"\n",
+            (double)altitude_offset);
+  else
+    fprintf(stdout, "Operation failed!\n");
 }
 
 static void
 SetQNH(Port &port, OperationEnvironment &env)
 {
-  while (true) {
-    fixed qnh;
-    if (!ReadFixed("the QNH setting (hPa)", qnh))
-      continue;
-
-    fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
-            (double)qnh);
-
-    if (LX1600::SetQNH(port, env, AtmosphericPressure::HectoPascal(qnh)))
-      fprintf(stdout, "QNH set to \"%.1f hPa\"\n",
-              (double)qnh);
-    else
-      fprintf(stdout, "Operation failed!\n");
-
+  fixed qnh;
+  if (!ReadFixed("the QNH setting (hPa)", qnh))
     return;
-  }
+
+  fprintf(stdout, "Setting QNH to \"%.1f hPa\" ...\n",
+          (double)qnh);
+
+  if (LX1600::SetQNH(port, env, AtmosphericPressure::HectoPascal(qnh)))
+    fprintf(stdout, "QNH set to \"%.1f hPa\"\n",
+            (double)qnh);
+  else
+    fprintf(stdout, "Operation failed!\n");
 }
 
 static void
