@@ -24,14 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_POSIX_MUTEX_HXX
 #define XCSOAR_THREAD_POSIX_MUTEX_HXX
 
-#include "Util/NonCopyable.hpp"
-
 #include <pthread.h>
 
 /**
  * Low-level wrapper for a pthread_mutex_t.
  */
-class PosixMutex : private NonCopyable {
+class PosixMutex {
   pthread_mutex_t mutex;
 
   friend class Cond;
@@ -40,13 +38,10 @@ public:
   /**
    * Create a "fast" mutex.
    */
-  PosixMutex() {
-    pthread_mutex_init(&mutex, NULL);
-  }
+  constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
 
-  ~PosixMutex() {
-    pthread_mutex_destroy(&mutex);
-  }
+  PosixMutex(const PosixMutex &other) = delete;
+  PosixMutex &operator=(const PosixMutex &other) = delete;
 
   void Lock() {
     pthread_mutex_lock(&mutex);

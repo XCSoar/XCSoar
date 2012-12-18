@@ -51,7 +51,7 @@ extern ThreadLocalInteger thread_locks_held;
  * This class wraps an OS specific mutex.  It is an object which one
  * thread can wait for, and another thread can wake it up.
  */
-class Mutex : private NonCopyable {
+class Mutex {
   FastMutex mutex;
 
 #ifndef NDEBUG
@@ -71,6 +71,9 @@ public:
   /**
    * Initializes the Mutex
    */
+#if defined(HAVE_POSIX) && defined(NDEBUG)
+  constexpr
+#endif
   Mutex()
 #ifndef NDEBUG
     :locked(false)
@@ -78,12 +81,14 @@ public:
   {
   }
 
+#ifndef NDEBUG
   /**
    * Deletes the Mutex
    */
   ~Mutex() {
     assert(!locked);
   }
+#endif
 
 public:
 #ifndef NDEBUG
@@ -222,7 +227,7 @@ public:
   }
 #else
 public:
-  TemporaryUnlock(Mutex &_mutex) {}
+  constexpr TemporaryUnlock(Mutex &_mutex) {}
 #endif
 };
 

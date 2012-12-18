@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_COND_HPP
 #define XCSOAR_THREAD_COND_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
 
 #include <pthread.h>
@@ -33,17 +32,14 @@ Copyright_License {
 /**
  * This class wraps a POSIX pthread_cond_t.
  */
-class Cond : private NonCopyable {
+class Cond {
   pthread_cond_t cond;
 
 public:
-  Cond() {
-    pthread_cond_init(&cond, NULL);
-  }
+  constexpr Cond():cond(PTHREAD_COND_INITIALIZER) {}
 
-  ~Cond() {
-    pthread_cond_destroy(&cond);
-  }
+  Cond(const Cond &other) = delete;
+  Cond &operator=(const Cond &other) = delete;
 
 public:
   /**
