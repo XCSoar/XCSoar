@@ -29,12 +29,12 @@ Copyright_License {
 /**
  * Checks whether aircraft in start sector is within height/speed rules
  */
-class ConditionMonitorStartRules: public ConditionMonitor
-{
+class ConditionMonitorStartRules gcc_final : public ConditionMonitor {
   bool withinMargin;
 
 public:
-  ConditionMonitorStartRules():ConditionMonitor(60, 1), withinMargin(false) {}
+  constexpr ConditionMonitorStartRules()
+    :ConditionMonitor(60, 1), withinMargin(false) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,

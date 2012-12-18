@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorLandableReachable: public ConditionMonitor
-{
+class ConditionMonitorLandableReachable gcc_final : public ConditionMonitor {
   bool last_reachable;
   bool now_reachable;
 
 public:
-  ConditionMonitorLandableReachable()
-    :ConditionMonitor(60 * 5, 1), last_reachable(false) {}
+  constexpr ConditionMonitorLandableReachable()
+    :ConditionMonitor(60 * 5, 1),
+    last_reachable(false), now_reachable(false) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,

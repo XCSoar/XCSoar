@@ -26,10 +26,9 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorSunset: public ConditionMonitor
-{
+class ConditionMonitorSunset gcc_final : public ConditionMonitor {
 public:
-  ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
+  constexpr ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,

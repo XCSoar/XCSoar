@@ -43,8 +43,11 @@ protected:
   fixed Interval_Check;
 
 public:
-  ConditionMonitor(unsigned _interval_notification,
-                   unsigned _interval_check);
+  constexpr ConditionMonitor(unsigned _interval_notification,
+                             unsigned _interval_check)
+    :LastTime_Notification(-1), LastTime_Check(-1),
+     Interval_Notification(_interval_notification),
+     Interval_Check(_interval_check) {}
 
   void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
               const ComputerSettings &settings);

@@ -26,12 +26,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-ConditionMonitor::ConditionMonitor(unsigned _interval_notification,
-                                   unsigned _interval_check)
-  :LastTime_Notification(-1), LastTime_Check(-1),
-   Interval_Notification(_interval_notification),
-   Interval_Check(_interval_check) {}
-
 void
 ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
                          const ComputerSettings &settings)

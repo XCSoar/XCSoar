@@ -28,13 +28,12 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
-class ConditionMonitorWind: public ConditionMonitor
-{
+class ConditionMonitorWind gcc_final : public ConditionMonitor {
   SpeedVector wind;
   SpeedVector last_wind;
 
 public:
-  ConditionMonitorWind()
+  constexpr ConditionMonitorWind()
     :ConditionMonitor(60 * 5, 10),
      wind(SpeedVector::Zero()), last_wind(SpeedVector::Zero()) {}
 

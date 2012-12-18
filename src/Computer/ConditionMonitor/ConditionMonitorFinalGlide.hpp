@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorFinalGlide: public ConditionMonitor
-{
+class ConditionMonitorFinalGlide gcc_final : public ConditionMonitor {
   fixed tad;
   fixed last_tad;
 
 public:
-  ConditionMonitorFinalGlide():ConditionMonitor(60 * 5, 1), tad(fixed(0)) {}
+  constexpr ConditionMonitorFinalGlide()
+    :ConditionMonitor(60 * 5, 1), tad(0), last_tad(0) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
