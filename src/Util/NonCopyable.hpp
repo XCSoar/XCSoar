@@ -28,7 +28,7 @@
 class NonCopyable
 {
 protected:
-  NonCopyable () {}
+  constexpr NonCopyable () {}
   /** Protected non-virtual destructor */
   ~NonCopyable () {}
 
