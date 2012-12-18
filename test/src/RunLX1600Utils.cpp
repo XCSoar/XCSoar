@@ -36,6 +36,7 @@ Copyright_License {
 #include "IO/Async/GlobalIOThread.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "IO/DataHandler.hpp"
 
 #include <stdio.h>
 
@@ -253,6 +254,11 @@ RunUI(Port &port, OperationEnvironment &env)
   }
 }
 
+class NullDataHandler : public DataHandler {
+public:
+  virtual void DataReceived(const void *data, size_t length) {}
+};
+
 int
 main(int argc, char **argv)
 {
@@ -262,7 +268,8 @@ main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  std::unique_ptr<Port> port(OpenPort(config, *(DataHandler *)NULL));
+  NullDataHandler handler;
+  std::unique_ptr<Port> port(OpenPort(config, handler));
   if (!port) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
