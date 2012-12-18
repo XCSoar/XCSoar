@@ -172,6 +172,21 @@ SetQNH(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetVolume(Port &port, OperationEnvironment &env)
+{
+  unsigned volume;
+  if (!ReadUnsigned("the Volume setting (0 - 100%)", volume))
+    return;
+
+  fprintf(stdout, "Setting Volume to \"%u %%\" ...\n", volume);
+
+  if (LX1600::SetVolume(port, env, volume))
+    fprintf(stdout, "Volume set to \"%u %%\"\n", volume);
+  else
+    fprintf(stdout, "Operation failed!\n");
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -184,6 +199,7 @@ WriteMenu()
                   "3:  Set Bugs\n"
                   "4:  Set Altitude Offset\n"
                   "5:  Set QNH\n"
+                  "6:  Set Volume\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -222,6 +238,9 @@ RunUI(Port &port, OperationEnvironment &env)
       break;
     case '5':
       SetQNH(port, env);
+      break;
+    case '6':
+      SetVolume(port, env);
       break;
     case 'q':
     case 'Q':
