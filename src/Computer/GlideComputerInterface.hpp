@@ -2,12 +2,11 @@
 #define GLIDE_COMPUTER_INTERFACE_HPP
 
 #include "Task/TaskEvents.hpp"
+#include "Compiler.h"
 
 class GlideComputer;
 
-class GlideComputerTaskEvents:
-  public TaskEvents
-{
+class GlideComputerTaskEvents gcc_final : public TaskEvents {
   GlideComputer* computer;
 
 public:

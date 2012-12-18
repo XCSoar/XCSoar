@@ -40,12 +40,6 @@ DeviceListInitialise()
   }
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, DeviceDescriptor really doesn't need a virtual destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
 void
 DeviceListDeinitialise()
 {
@@ -54,7 +48,3 @@ DeviceListDeinitialise()
     delete dispatchers[i];
   }
 }
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif

@@ -28,7 +28,7 @@
 /**
  * Specialisation of TaskDijkstra for minimum distance search
  */
-class TaskDijkstraMin : public TaskDijkstra {
+class TaskDijkstraMin gcc_final : public TaskDijkstra {
 public:
   TaskDijkstraMin()
     :TaskDijkstra(true) {}

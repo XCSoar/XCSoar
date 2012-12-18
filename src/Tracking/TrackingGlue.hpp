@@ -41,9 +41,10 @@ Copyright_License {
 struct MoreData;
 struct DerivedInfo;
 
-class TrackingGlue : protected StandbyThread
+class TrackingGlue gcc_final
+  : protected StandbyThread
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-                   , private SkyLinesTracking::Handler
+  , private SkyLinesTracking::Handler
 #endif
 {
   struct LiveTrack24State

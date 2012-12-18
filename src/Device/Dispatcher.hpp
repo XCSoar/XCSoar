@@ -25,11 +25,12 @@ Copyright_License {
 #define XCSOAR_DEVICE_DISPATCHER_HPP
 
 #include "Port/LineHandler.hpp"
+#include "Compiler.h"
 
 /**
  * A #DataHandler that dispatches incoming data to all NMEA outputs.
  */
-class DeviceDispatcher : public PortLineHandler {
+class DeviceDispatcher gcc_final : public PortLineHandler {
   /**
    * The device index that should be excluded.  It is this
    * dispatcher's own index.

@@ -35,11 +35,6 @@ InitialiseIOThread()
   io_thread->Start();
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, IOThread really doesn't need a virtual destructor */
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
 void
 DeinitialiseIOThread()
 {

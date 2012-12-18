@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Blackboard/BlackboardListener.hpp"
 #include "NMEA/Validity.hpp"
+#include "Compiler.h"
 
 /**
  * This class listens for #LiveBlackboard changes and emits glide
@@ -33,7 +34,7 @@ Copyright_License {
  *
  * @see InputEvents::processGlideComputer()
  */
-class GlideComputerEvents : public NullBlackboardListener {
+class GlideComputerEvents gcc_final : public NullBlackboardListener {
   bool enable_team, last_teammate_in_sector;
 
   bool last_flying;

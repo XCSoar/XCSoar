@@ -69,19 +69,8 @@ OrderedTask::~OrderedTask()
 
   delete active_factory;
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-  /* no, TaskDijkstra{Min,Max} really don't need a virtual
-     destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
   delete dijkstra_min;
   delete dijkstra_max;
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif
 }
 
 const TaskFactoryConstraints &

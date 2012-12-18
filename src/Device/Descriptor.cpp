@@ -80,7 +80,7 @@ struct ScopeReturnDevice {
   }
 };
 
-class OpenDeviceJob : public Job {
+class OpenDeviceJob gcc_final : public Job {
   DeviceDescriptor &device;
 
 public:
@@ -165,12 +165,6 @@ DeviceDescriptor::ShouldReopenDriverOnTimeout() const
   return driver == NULL || driver->HasTimeout();
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, OpenDeviceJob really doesn't need a virtual destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
 void
 DeviceDescriptor::CancelAsync()
 {
@@ -187,10 +181,6 @@ DeviceDescriptor::CancelAsync()
   delete open_job;
   open_job = NULL;
 }
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif
 
 bool
 DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
@@ -987,12 +977,6 @@ DeviceDescriptor::ParseLine(const char *line)
   return ParseNMEA(line, basic);
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, OpenDeviceJob really doesn't need a virtual destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
 void
 DeviceDescriptor::OnNotification()
 {
@@ -1006,10 +990,6 @@ DeviceDescriptor::OnNotification()
   delete open_job;
   open_job = NULL;
 }
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif
 
 void
 DeviceDescriptor::DataReceived(const void *data, size_t length)

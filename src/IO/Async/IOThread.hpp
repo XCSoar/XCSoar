@@ -38,7 +38,7 @@ class FileEventHandler;
 /**
  * A thread that is used for asynchronous (non-blocking) I/O.
  */
-class IOThread : protected Thread {
+class IOThread gcc_final : protected Thread {
   struct File {
     File *next_ready;
 

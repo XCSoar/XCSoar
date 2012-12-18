@@ -67,11 +67,6 @@ AudioVarioGlue::Initialise()
   synthesiser = new VarioSynthesiser();
 }
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, VarioSynthesiser really doesn't need a virtual destructor */
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
 void
 AudioVarioGlue::Deinitialise()
 {

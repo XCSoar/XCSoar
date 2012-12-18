@@ -59,7 +59,7 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 
-class DeviceDescriptor : private Notify, private PortLineSplitter {
+class DeviceDescriptor gcc_final : private Notify, private PortLineSplitter {
   /**
    * This mutex protects modifications of the attribute "device".  If
    * you use the attribute "device" from a thread other than the main

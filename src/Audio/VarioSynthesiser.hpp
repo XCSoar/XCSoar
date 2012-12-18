@@ -32,7 +32,7 @@ Copyright_License {
 /**
  * This class generates vario sound.
  */
-class VarioSynthesiser : public ToneSynthesiser {
+class VarioSynthesiser gcc_final : public ToneSynthesiser {
   /**
    * This mutex protects all atttributes below.  It is locked
    * automatically by all public methods.

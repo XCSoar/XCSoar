@@ -115,8 +115,8 @@ Net::DownloadManager::Cancel(const TCHAR *relative_path)
 
 #include <windef.h> /* for MAX_PATH */
 
-class DownloadManagerThread : protected StandbyThread,
-                              private QuietOperationEnvironment {
+class DownloadManagerThread gcc_final
+  : protected StandbyThread, private QuietOperationEnvironment {
   struct Item {
     std::string uri;
     tstring path_relative;
@@ -305,12 +305,6 @@ Net::DownloadManager::BeginDeinitialise()
 
   thread->StopAsync();
 }
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, DownloadManagerThread really doesn't need a virtual
-   destructor */
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
 
 void
 Net::DownloadManager::Deinitialise()

@@ -35,7 +35,7 @@ class GlideComputer;
  * that should not be done directly in the device thread.
  * Data transfer is handled by a blackboard system.
  */
-class CalculationThread : public WorkerThread {
+class CalculationThread gcc_final : public WorkerThread {
   /**
    * This mutex protects #settings_computer and
    * #screen_distance_meters.

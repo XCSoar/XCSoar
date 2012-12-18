@@ -11,7 +11,7 @@ CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
 
 # disable some warnings, we're not ready for them yet
-CXXFLAGS += -Wno-unused-parameter -Wno-non-virtual-dtor
+CXXFLAGS += -Wno-unused-parameter
 CXXFLAGS += -Wno-missing-field-initializers 
 CXXFLAGS += -Wcast-align
 
