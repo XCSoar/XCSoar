@@ -211,7 +211,7 @@ struct NMEAInfo {
   Validity dyn_pressure_available;
 
   /**
-   * Generic sensor calibration data for lineair sensors.
+   * Generic sensor calibration data for linear sensors.
    * Used by some sensors e.g.:
    *   1) pitot pressure offset relative to static_pressure [hPa].
    *   2) outside air temperature sensor
