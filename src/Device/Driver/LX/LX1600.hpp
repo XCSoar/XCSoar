@@ -134,7 +134,8 @@ namespace LX1600 {
   }
 
   /**
-   * Set the QNH setting of the LX16xx vario
+   * Set the altitude offset of the LX16xx vario
+   * @param altitude_offset offset necessary to set QNE in ft (default=0)
    */
   static inline bool
   SetAltitudeOffset(Port &port, OperationEnvironment &env, fixed altitude_offset)
