@@ -334,9 +334,5 @@ AbstractTask::CalcEffectiveMC(const AircraftState &state_now,
 void
 AbstractTask::UpdateFlightMode()
 {
-  if (!stats.calc_flight_mode(task_behaviour))
-    return;
-
-  if (task_events != NULL)
-    task_events->FlightModeTransition(stats.flight_mode_final_glide);
+  stats.calc_flight_mode(task_behaviour);
 }

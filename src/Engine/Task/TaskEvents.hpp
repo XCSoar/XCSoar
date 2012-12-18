@@ -87,11 +87,6 @@ public:
    * Called when orderd task has finished
    */
   virtual void TaskFinish() {}
-
-  /**
-   * Called when flight mode changes
-   */
-  virtual void FlightModeTransition(const bool is_final) {}
 };
 
 #endif

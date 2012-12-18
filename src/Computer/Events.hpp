@@ -39,6 +39,7 @@ class GlideComputerEvents gcc_final : public NullBlackboardListener {
 
   bool last_flying;
   bool last_circling;
+  bool last_final_glide;
 
   unsigned last_traffic;
   Validity last_new_traffic;

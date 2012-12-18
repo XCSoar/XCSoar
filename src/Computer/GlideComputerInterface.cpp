@@ -69,12 +69,3 @@ GlideComputerTaskEvents::TaskFinish()
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
   computer->OnFinishTask();
 }
-
-void
-GlideComputerTaskEvents::FlightModeTransition(const bool is_final)
-{
-  if (is_final)
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
-  else
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-}

@@ -32,6 +32,7 @@ GlideComputerEvents::Reset()
 {
   last_flying = false;
   last_circling = false;
+  last_final_glide = false;
   last_traffic = 0;
   last_new_traffic.Clear();
   last_teammate_in_sector = false;
@@ -95,6 +96,17 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
       // Reset "event" when distance is greater than 300m again
       last_teammate_in_sector = false;
     }
+  }
+
+  /* check for final glide */
+
+  const bool final_glide = calculated.task_stats.flight_mode_final_glide;
+  if (final_glide != last_final_glide) {
+    last_final_glide = final_glide;
+
+    InputEvents::processGlideComputer(final_glide
+                                      ? GCE_FLIGHTMODE_FINALGLIDE
+                                      : GCE_FLIGHTMODE_CRUISE);
   }
 }
 

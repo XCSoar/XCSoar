@@ -23,8 +23,6 @@ public:
   void TaskStart();
 
   void TaskFinish();
-
-  void FlightModeTransition(const bool is_final);
 };
 
 #endif

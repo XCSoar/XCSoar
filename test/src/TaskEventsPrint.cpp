@@ -83,14 +83,3 @@ TaskEventsPrint::ActiveAdvanced(const TaskWaypoint &tp, const int i)
   if (verbose)
     printf("#- advance to sector %d\n", i);
 }
-
-void
-TaskEventsPrint::FlightModeTransition(const bool is_final)
-{
-  if (verbose) {
-    if (is_final)
-      printf("#- flight mode final glide \n");
-    else
-      printf("#- flight mode cruise \n");
-  }
-}
