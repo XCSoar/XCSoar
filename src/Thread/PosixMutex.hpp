@@ -44,17 +44,6 @@ public:
     pthread_mutex_init(&mutex, NULL);
   }
 
-  /**
-   * Create a mutex of the specified kind.
-   */
-  PosixMutex(int kind) {
-    pthread_mutexattr_t recursive;
-    pthread_mutexattr_init(&recursive);
-    pthread_mutexattr_settype(&recursive, kind);
-    pthread_mutex_init(&mutex, &recursive);
-    pthread_mutexattr_destroy(&recursive);
-  }
-
   ~PosixMutex() {
     pthread_mutex_destroy(&mutex);
   }
