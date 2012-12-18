@@ -27,13 +27,14 @@
  */
 class NonCopyable
 {
-  protected:
-    NonCopyable () {}
-    /** Protected non-virtual destructor */
-    ~NonCopyable () {}
-  private: 
-    NonCopyable (const NonCopyable &);
-    NonCopyable & operator = (const NonCopyable &);
+protected:
+  NonCopyable () {}
+  /** Protected non-virtual destructor */
+  ~NonCopyable () {}
+
+private:
+  NonCopyable(const NonCopyable &);
+  NonCopyable &operator=(const NonCopyable &);
 };
 
 #endif
