@@ -27,7 +27,6 @@
 #include "TaskWaypoint.hpp"
 #include "Compiler.h"
 
-class TaskEvents;
 class TaskProjection;
 class OZBoundary;
 struct GeoPoint;
@@ -112,7 +111,6 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                TaskEvents *task_events,
                                 const TaskProjection &projection);
 
   /**
@@ -124,7 +122,6 @@ public:
    * @return True if internal state changed
    */
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               TaskEvents *task_events,
                                const TaskProjection &projection) {
     return false;
   }

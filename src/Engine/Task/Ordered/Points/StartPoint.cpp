@@ -71,7 +71,6 @@ StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 
 bool
 StartPoint::UpdateSampleNear(const AircraftState& state,
-                             TaskEvents *task_events,
                              const TaskProjection &projection)
 {
   /* TODO:
@@ -79,7 +78,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
     TO_BE_IMPLEMENTED;
   */
 
-  return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
+  return OrderedTaskPoint::UpdateSampleNear(state, projection);
 }
 
 void

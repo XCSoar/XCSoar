@@ -38,11 +38,9 @@ AATPoint::GetLocationRemaining() const
 
 bool 
 AATPoint::UpdateSampleNear(const AircraftState& state,
-                           TaskEvents *task_events,
                            const TaskProjection &projection)
 {
-  bool retval = OrderedTaskPoint::UpdateSampleNear(state, task_events,
-                                                   projection);
+  bool retval = OrderedTaskPoint::UpdateSampleNear(state, projection);
   retval |= CheckTarget(state, false);
 
   return retval;
@@ -50,12 +48,11 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
 
 bool 
 AATPoint::UpdateSampleFar(const AircraftState& state,
-                          TaskEvents *task_events,
                           const TaskProjection &projection)
 {
   // the orderedtaskpoint::update_sample_far does nothing for now
   // but we are calling this in case that changes.
-  return OrderedTaskPoint::UpdateSampleFar(state, task_events, projection) ||
+  return OrderedTaskPoint::UpdateSampleFar(state, projection) ||
     CheckTarget(state, true);
 }
 

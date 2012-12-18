@@ -196,10 +196,8 @@ public:
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                TaskEvents *task_events,
                                 const TaskProjection &projection) gcc_override;
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               TaskEvents *task_events,
                                const TaskProjection &projection) gcc_override;
 
   /* virtual methods from class ObservationZoneClient */

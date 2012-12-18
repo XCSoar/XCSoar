@@ -447,8 +447,9 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
   if (is_start) 
     UpdateStartTransition(state, point);
   
-  return nearby ? point.UpdateSampleNear(state, task_events, task_projection) :
-                  point.UpdateSampleFar(state, task_events, task_projection);
+  return nearby
+    ? point.UpdateSampleNear(state, task_projection)
+    : point.UpdateSampleFar(state, task_projection);
 }
 
 // ADDITIONAL FUNCTIONS
