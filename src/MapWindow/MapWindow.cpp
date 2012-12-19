@@ -55,6 +55,9 @@ MapWindow::MapWindow(const MapLook &_look,
 #ifdef HAVE_NOAA
    noaa_store(NULL),
 #endif
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+   skylines_data(nullptr),
+#endif
    compass_visible(true)
 #ifndef ENABLE_OPENGL
    , ui_generation(1), buffer_generation(0),
