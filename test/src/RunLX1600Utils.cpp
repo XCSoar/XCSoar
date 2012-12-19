@@ -188,6 +188,22 @@ SetVolume(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetPolar(Port &port, OperationEnvironment &env)
+{
+  fixed a, b, c;
+  if (!ReadFixed("polar coefficient a", a) ||
+      !ReadFixed("polar coefficient b", b) ||
+      !ReadFixed("polar coefficient c", c))
+    return;
+
+  if (LX1600::SetPolar(port, env, a, b, c))
+    fprintf(stdout, "Polar coefficients set to \"%.2f, %.2f, %.2f\"\n",
+            (double)a, (double)b, (double)c);
+  else
+    fprintf(stdout, "Operation failed!\n");
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -201,6 +217,7 @@ WriteMenu()
                   "4:  Set Altitude Offset\n"
                   "5:  Set QNH\n"
                   "6:  Set Volume\n"
+                  "p:  Set polar coefficients\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -242,6 +259,10 @@ RunUI(Port &port, OperationEnvironment &env)
       break;
     case '6':
       SetVolume(port, env);
+      break;
+    case 'p':
+    case 'P':
+      SetPolar(port, env);
       break;
     case 'q':
     case 'Q':
