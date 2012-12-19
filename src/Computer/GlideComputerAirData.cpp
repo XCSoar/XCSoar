@@ -117,7 +117,10 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   average_vario.Compute(basic, calculated.circling, last_circling,
                         calculated);
   AverageClimbRate(basic, calculated);
-  CurrentThermal(basic, calculated, calculated.current_thermal);
+
+  if (calculated.circling)
+    CurrentThermal(basic, calculated, calculated.current_thermal);
+
   lift_database_computer.Compute(calculated.lift_database,
                                  calculated.trace_history.CirclingAverage,
                                  basic, calculated);
