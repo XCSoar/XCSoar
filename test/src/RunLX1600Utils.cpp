@@ -204,6 +204,23 @@ SetPolar(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetFilters(Port &port, OperationEnvironment &env)
+{
+  fixed vario_filter, te_filter;
+  unsigned te_level;
+  if (!ReadFixed("Vario filter (sec, default = 1)", vario_filter) ||
+      !ReadFixed("TE filter (0.1 - 2.0, default = 1.5", te_filter) ||
+      !ReadUnsigned("TE level (50 - 150 %, default = 0 = off)", te_level))
+    return;
+
+  if (LX1600::SetFilters(port, env, vario_filter, te_filter, te_level))
+    fprintf(stdout, "Filters set to \"%.1f, %.1f, %u\"\n",
+            (double)vario_filter, (double)te_filter, te_level);
+  else
+    fprintf(stdout, "Operation failed!\n");
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -218,6 +235,7 @@ WriteMenu()
                   "5:  Set QNH\n"
                   "6:  Set Volume\n"
                   "p:  Set polar coefficients\n"
+                  "f:  Set filter settings\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -263,6 +281,10 @@ RunUI(Port &port, OperationEnvironment &env)
     case 'p':
     case 'P':
       SetPolar(port, env);
+      break;
+    case 'f':
+    case 'F':
+      SetFilters(port, env);
       break;
     case 'q':
     case 'Q':

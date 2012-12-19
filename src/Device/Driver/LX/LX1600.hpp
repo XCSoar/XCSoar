@@ -206,6 +206,28 @@ namespace LX1600 {
     sprintf(buffer, "PFLX2,,,,,,,%u", volume);
     return PortWriteNMEA(port, buffer, env);
   }
+
+  /**
+   * Set the filter settings of the LX16xx vario
+   *
+   * @param vario_filter filtering of vario in seconds (float) default=1
+   * @param te_filter filtering of TE compensation in seconds (float)
+   * (from 0.1 to 2.0 default=1.5)
+   * @param te_level level of TE compensation in %
+   * (from 50 to 150 default=0) 0 -> TECOMP = OFF
+   */
+  static inline bool
+  SetFilters(Port &port, OperationEnvironment &env,
+             fixed vario_filter, fixed te_filter, unsigned te_level)
+  {
+    assert(te_filter >= fixed(0.1) && te_filter <= fixed(2.0));
+    assert((te_level >= 50 && te_level <= 150) || te_level == 0);
+
+    char buffer[100];
+    sprintf(buffer, "PFLX3,,,%.1f,%.1f,%u",
+            (double)vario_filter, (double)te_filter, te_level);
+    return PortWriteNMEA(port, buffer, env);
+  }
 }
 
 #endif
