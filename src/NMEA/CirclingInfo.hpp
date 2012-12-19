@@ -73,6 +73,8 @@ struct CirclingInfo
   GeoPoint cruise_start_location;
   /** StartAltitude of the current/last cruise */
   fixed cruise_start_altitude;
+  /** StartAltitude of the current/last cruise (total energy) */
+  fixed cruise_start_altitude_te;
   /** StartTime of the current/last cruise */
   fixed cruise_start_time;
 

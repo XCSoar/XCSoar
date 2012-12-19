@@ -194,6 +194,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
         circling_info.turn_mode = CirclingMode::CRUISE;
         circling_info.cruise_start_location = turn_start_location;
         circling_info.cruise_start_altitude = turn_start_altitude;
+        circling_info.cruise_start_altitude_te =
+          turn_start_altitude + turn_start_energy_height;
         circling_info.cruise_start_time = turn_start_time;
       }
     } else {

@@ -361,8 +361,9 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   if (duration < THERMAL_TIME_MIN)
     return;
 
-  fixed gain = calculated.cruise_start_altitude
-    + basic.energy_height - calculated.climb_start_altitude_te;
+  fixed gain =
+    calculated.cruise_start_altitude_te - calculated.climb_start_altitude_te;
+
   if (!positive(gain))
     return;
 
