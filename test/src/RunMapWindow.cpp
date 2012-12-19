@@ -151,7 +151,9 @@ protected:
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    map.Resize(width, height);
+
+    if (map.IsDefined())
+      map.Resize(width, height);
 
 #ifndef ENABLE_OPENGL
   if (initialised)
