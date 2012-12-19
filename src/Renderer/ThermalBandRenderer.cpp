@@ -72,7 +72,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   fixed hstart = fixed(0);
 
   draw_start_height = ordered_props
-    && calculated.common_stats.ordered_valid
+    && calculated.ordered_task_stats.task_valid
     && ordered_props->start_constraints.max_height != 0
     && calculated.terrain_valid;
   if (draw_start_height) {

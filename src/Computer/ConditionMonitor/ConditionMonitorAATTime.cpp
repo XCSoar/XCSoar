@@ -33,16 +33,15 @@ ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
                                         const ComputerSettings &settings)
 {
   if (!calculated.flight.flying ||
-      !calculated.task_stats.task_valid ||
       calculated.common_stats.task_type != TaskType::ORDERED ||
-      !calculated.common_stats.ordered_valid ||
+      !calculated.ordered_task_stats.task_valid ||
       !calculated.common_stats.ordered_has_targets ||
-      !calculated.common_stats.task_started ||
+      !calculated.ordered_task_stats.task_started ||
       !calculated.common_stats.active_has_next ||
-      calculated.common_stats.task_finished)
+      calculated.ordered_task_stats.task_finished)
     return false;
 
-  return calculated.common_stats.task_time_remaining <
+  return calculated.ordered_task_stats.total.time_remaining <
     calculated.common_stats.aat_time_remaining;
 }
 

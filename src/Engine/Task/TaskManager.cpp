@@ -130,9 +130,6 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
   if (task_ordered.TaskSize() > 1) {
     const TaskStats &task_stats = task_ordered.GetStats();
 
-    common_stats.task_started = task_stats.task_started;
-    common_stats.task_finished = task_stats.task_finished;
-
     common_stats.ordered_has_targets = task_ordered.HasTargets();
 
     common_stats.aat_time_remaining =
@@ -156,9 +153,6 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       common_stats.aat_speed_max = fixed(-1);
       common_stats.aat_speed_min = fixed(-1);
     }
-
-    common_stats.task_time_remaining = task_stats.total.time_remaining;
-    common_stats.task_time_elapsed = task_stats.total.time_elapsed;
 
     const StartConstraints &start_constraints =
       task_ordered.GetOrderedTaskBehaviour().start_constraints;
@@ -203,10 +197,8 @@ TaskManager::UpdateCommonStatsTask()
 {
   common_stats.task_type = mode;
 
-  common_stats.ordered_valid = task_ordered.CheckTask();
-
-  common_stats.ordered_has_optional_starts = common_stats.ordered_valid &&
-    task_ordered.HasOptionalStarts();
+  common_stats.ordered_has_optional_starts =
+    task_ordered.GetStats().task_valid && task_ordered.HasOptionalStarts();
 
   if (active_task && active_task->GetStats().task_valid) {
     common_stats.active_has_next = active_task->IsValidTaskPoint(1);

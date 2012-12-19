@@ -282,9 +282,9 @@ RefreshCalculator()
     LoadRangeAndRadial();
 
   // update outputs
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const fixed aat_time_estimated =
-    common_stats.task_time_remaining + common_stats.task_time_elapsed;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const fixed aat_time_estimated = task_stats.GetEstimatedTotalTime();
 
   ShowOptionalFormControl(*wf, _T("prpAATEst"), !nodisplay);
   ShowFormControl(*wf, _T("prpAATDelta"), !nodisplay);
@@ -295,7 +295,7 @@ RefreshCalculator()
                      (aat_time_estimated - aat_time) / 60);
   }
 
-  const ElementStat &total = CommonInterface::Calculated().task_stats.total;
+  const ElementStat &total = task_stats.total;
   if (total.remaining_effective.IsDefined())
     LoadFormProperty(*wf, _T("prpSpeedRemaining"), UnitGroup::TASK_SPEED,
                      total.remaining_effective.GetSpeed());

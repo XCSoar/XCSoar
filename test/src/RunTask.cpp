@@ -75,11 +75,10 @@ Run(DebugReplay &replay, TaskManager &task_manager)
     last_calculated = calculated;
   }
 
-  const CommonStats &common_stats = task_manager.GetCommonStats();
-  printf("task_started=%d task_finished=%d\n",
-         common_stats.task_started, common_stats.task_finished);
+  const TaskStats &task_stats = task_manager.GetOrderedTask().GetStats();
 
-  const TaskStats &task_stats = task_manager.GetStats();
+  printf("task_started=%d task_finished=%d\n",
+         task_stats.task_started, task_stats.task_finished);
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed);
   printf("task speed %1.1f kph\n",

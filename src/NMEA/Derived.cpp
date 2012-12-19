@@ -72,6 +72,7 @@ DerivedInfo::Reset()
   head_wind_available.Clear();
   sun_data_available.Clear();
   task_stats.reset();
+  ordered_task_stats.reset();
   common_stats.Reset();
   contest_stats.Reset();
 

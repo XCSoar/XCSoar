@@ -61,20 +61,24 @@ static TaskCalculatorPanel *instance;
 void
 TaskCalculatorPanel::GetCruiseEfficiency()
 {
-  cruise_efficiency = CommonInterface::Calculated().task_stats.cruise_efficiency;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+
+  cruise_efficiency = task_stats.cruise_efficiency;
 }
 
 void
 TaskCalculatorPanel::Refresh()
 {
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (target_button != NULL)
     target_button->SetVisible(common_stats.ordered_has_targets);
 
-  LoadValue(AAT_ESTIMATED, (common_stats.task_time_remaining
-                            + common_stats.task_time_elapsed) / 60);
+  const fixed aat_estimated = task_stats.GetEstimatedTotalTime();
+  LoadValue(AAT_ESTIMATED, aat_estimated / 60);
 
   SetRowVisible(AAT_TIME, common_stats.ordered_has_targets);
   if (common_stats.ordered_has_targets)
@@ -237,7 +241,7 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
     CommonInterface::GetComputerSettings().polar.glide_polar_task;
 
   cruise_efficiency = polar.GetCruiseEfficiency();
-  emc = CommonInterface::Calculated().task_stats.effective_mc;
+  emc = CommonInterface::Calculated().ordered_task_stats.effective_mc;
 
   Refresh();
 

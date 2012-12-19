@@ -52,18 +52,18 @@ RulesStatusPanel::Refresh()
   TCHAR Temp[80];
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const CommonStats &common_stats = calculated.common_stats;
+  const TaskStats &task_stats = calculated.ordered_task_stats;
 
   /// @todo proper task validity check
-  SetText(ValidStart, calculated.common_stats.task_started
+  SetText(ValidStart, task_stats.task_started
           ? _("Yes") : _T("No"));
 
-  SetText(ValidFinish, calculated.common_stats.task_finished
+  SetText(ValidFinish, task_stats.task_finished
           ? _("Yes") : _T("No"));
 
   AircraftState start_state = protected_task_manager->GetStartState();
 
-  if (common_stats.task_started) {
+  if (task_stats.task_started) {
     FormatSignedTimeHHMM(Temp, (int)TimeLocal((int)start_state.time));
     SetText(StartTime, Temp);
 

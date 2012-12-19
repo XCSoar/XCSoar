@@ -314,7 +314,8 @@ UpdateInfoBoxNextGR(InfoBoxData &data)
 void
 UpdateInfoBoxFinalDistance(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
 
   if (!task_stats.task_valid ||
       !task_stats.current_leg.vector_remaining.IsValid() ||
@@ -323,10 +324,8 @@ UpdateInfoBoxFinalDistance(InfoBoxData &data)
     return;
   }
 
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-
   // Set Value
-  data.SetValueFromDistance(common_stats.task_finished
+  data.SetValueFromDistance(task_stats.task_finished
                             ? task_stats.current_leg.vector_remaining.distance
                             : task_stats.total.remaining.GetDistance());
 }
@@ -553,8 +552,9 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 void
 UpdateInfoBoxTaskAATime(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable()) {
@@ -577,8 +577,9 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !task_stats.total.IsAchievable()) {
@@ -609,8 +610,9 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid ||
@@ -626,8 +628,9 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
@@ -642,8 +645,9 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 {
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid) {
@@ -658,8 +662,9 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 {
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
@@ -678,8 +683,9 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 {
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
@@ -698,8 +704,9 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 void
 UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 {
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   if (!common_stats.ordered_has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
@@ -718,8 +725,9 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 void
 UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 {
-  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
   const fixed maxheight = fixed(protected_task_manager->
                                 GetOrderedTaskBehaviour().start_constraints.max_height);
 
@@ -830,13 +838,15 @@ void
 UpdateInfoBoxStartOpen(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const RoughTimeSpan &open = common_stats.start_open_time_span;
 
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
 
-  if (!basic.time_available || !common_stats.ordered_valid ||
+  if (!basic.time_available || !task_stats.task_valid ||
       common_stats.ordered_summary.active != 0 ||
       !open.IsDefined()) {
     data.SetInvalid();
@@ -870,7 +880,8 @@ void
 UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const auto &calculated = CommonInterface::Calculated();
+  const TaskStats &task_stats = calculated.ordered_task_stats;
   const GlideResult &current_remaining =
     task_stats.current_leg.solution_remaining;
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
@@ -879,8 +890,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
   /* reset color that may have been set by a previous call */
   data.SetValueColor(0);
 
-  if (!basic.time_available || !common_stats.ordered_valid ||
-      common_stats.task_type != TaskType::ORDERED ||
+  if (!basic.time_available || !task_stats.task_valid ||
       common_stats.ordered_summary.active != 0 ||
       !open.IsDefined() ||
       !current_remaining.IsOk()) {

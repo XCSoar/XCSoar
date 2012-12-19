@@ -91,6 +91,7 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
   }
 
   calculated.task_stats = _task->GetStats();
+  calculated.ordered_task_stats = _task->GetOrderedTask().GetStats();
   calculated.common_stats = _task->GetCommonStats();
   calculated.glide_polar_safety = _task->GetSafetyPolar();
 }

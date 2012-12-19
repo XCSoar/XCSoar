@@ -46,12 +46,8 @@ public:
 
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
-  /** Whether the task is started (aliases ordered task) */
-  bool task_started;
   /** time UTC ship descended through max task start height */
   fixed TimeUnderStartMaxHeight;
-  /** Whether the task is finished (aliases ordered task) */
-  bool task_finished;
   /** Time (s) until assigned minimum time is achieved */
   fixed aat_time_remaining;
   /**
@@ -63,18 +59,12 @@ public:
   fixed aat_speed_max;
   /** Average speed over min task at minimum assigned time (m/s) */
   fixed aat_speed_min;
-  /** Time (s) remaining for ordered task */
-  fixed task_time_remaining;
-  /** Time (s) elapsed for ordered task */
-  fixed task_time_elapsed;
   /** Vector to home waypoint */
   GeoVector vector_home;
 
   /** The current task type/mode */
   TaskType task_type;
 
-  /** Whether ordered task is valid */
-  bool ordered_valid;
   /** Whether ordered task has AAT areas */
   bool ordered_has_targets;
   /** Whether ordered task has optional starts */

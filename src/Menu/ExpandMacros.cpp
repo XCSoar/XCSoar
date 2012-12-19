@@ -93,6 +93,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                  const ComputerSettings &settings_computer)
 {
   const TaskStats &task_stats = calculated.task_stats;
+  const TaskStats &ordered_task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
   bool invalid = false;
@@ -106,7 +107,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckTask)"))) {
-    if (!calculated.task_stats.task_valid)
+    if (!task_stats.task_valid)
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
@@ -311,7 +312,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckAutoMc)"))) {
-    if (!calculated.task_stats.task_valid
+    if (!task_stats.task_valid
         && settings_computer.task.IsAutoMCFinalGlideEnabled())
       invalid = true;
 
@@ -320,7 +321,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
     if (common_stats.task_type == TaskType::GOTO) {
-      CondReplaceInString(common_stats.ordered_valid,
+      CondReplaceInString(ordered_task_stats.task_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
     } else 

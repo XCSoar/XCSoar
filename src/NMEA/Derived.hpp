@@ -177,6 +177,10 @@ struct DerivedInfo:
 
   /** Copy of task statistics data for active task */
   TaskStats task_stats;
+
+  /** Copy of task statistics data for ordered task */
+  TaskStats ordered_task_stats;
+
   /** Copy of common task statistics data */
   CommonStats common_stats;
   /** Copy of contest statistics data */

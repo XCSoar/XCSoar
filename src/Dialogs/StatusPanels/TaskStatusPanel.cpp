@@ -47,7 +47,7 @@ TaskStatusPanel::Refresh()
     return;
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.task_stats;
+  const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
   TCHAR Temp[80];
@@ -58,8 +58,7 @@ TaskStatusPanel::Refresh()
     SetText(TaskTime, Temp);
   }
 
-  int ete_time(task_stats.total.time_elapsed +
-               task_stats.total.time_remaining);
+  int ete_time(task_stats.GetEstimatedTotalTime());
   FormatSignedTimeHHMM(Temp, ete_time);
   SetText(ETETime, Temp);
 

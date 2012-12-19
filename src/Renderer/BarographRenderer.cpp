@@ -85,11 +85,13 @@ DrawLegs(ChartRenderer &chart,
          const DerivedInfo& calculated,
          const bool task_relative)
 {
-  if (!calculated.common_stats.task_started)
+  const TaskStats &task_stats = calculated.ordered_task_stats;
+
+  if (!task_stats.task_started)
     return;
 
   const fixed start_time = task_relative
-    ? basic.time - calculated.common_stats.task_time_elapsed
+    ? basic.time - task_stats.total.time_elapsed
     : calculated.flight.takeoff_time;
 
   const OrderedTask &task = task_manager.GetOrderedTask();

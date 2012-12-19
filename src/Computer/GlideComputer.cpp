@@ -282,7 +282,7 @@ GlideComputer::OnLanding()
   // JMWX  restore data calculated at finish so
   // user can review flight as at finish line
 
-  if (Calculated().common_stats.task_finished)
+  if (Calculated().ordered_task_stats.task_finished)
     RestoreFinish();
 }
 

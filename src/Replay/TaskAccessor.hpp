@@ -48,12 +48,12 @@ public:
 
   gcc_pure
   bool IsFinished() const {
-    return task_manager.GetCommonStats().task_finished;
+    return task_manager.GetOrderedTask().GetStats().task_finished;
   }
 
   gcc_pure
   bool IsStarted() const {
-    return task_manager.GetCommonStats().task_started;
+    return task_manager.GetOrderedTask().GetStats().task_started;
   }
 
   gcc_pure
