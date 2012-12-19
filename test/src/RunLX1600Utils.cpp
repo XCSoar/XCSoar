@@ -221,6 +221,29 @@ SetFilters(Port &port, OperationEnvironment &env)
 }
 
 static void
+SetSCSettings(Port &port, OperationEnvironment &env)
+{
+  unsigned mode, control_mode;
+  fixed deadband, threshold_speed;
+
+  if (!ReadUnsigned("the SC Mode (EXTERNAL = 0, default = ON_CIRCLING = 1, AUTO_IAS = 2)", mode) ||
+      !ReadFixed("the SC deadband (0 - 10.0 m/s, default=1)", deadband) ||
+      !ReadUnsigned("the SC switch mode (NORMAL = 0, default = INVERTED = 1, TASTER = 2)", control_mode))
+    return;
+
+  if (mode != 2u)
+    threshold_speed = fixed(0);
+  else if (!ReadFixed("the SC threshold speed (50 - 150 km/h, default=110)", threshold_speed))
+    return;
+
+  if (LX1600::SetSCSettings(port, env, (LX1600::SCMode)mode, deadband,
+                            (LX1600::SCControlMode)control_mode, threshold_speed))
+    fprintf(stdout, "SC settings changed!\n");
+  else
+    fprintf(stdout, "Operation failed!\n");
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -236,6 +259,7 @@ WriteMenu()
                   "6:  Set Volume\n"
                   "p:  Set polar coefficients\n"
                   "f:  Set filter settings\n"
+                  "s:  Set speed control settings\n"
                   "q:  Quit this application\n"
                   "------------------------------------\n");
 }
@@ -285,6 +309,10 @@ RunUI(Port &port, OperationEnvironment &env)
     case 'f':
     case 'F':
       SetFilters(port, env);
+      break;
+    case 's':
+    case 'S':
+      SetSCSettings(port, env);
       break;
     case 'q':
     case 'Q':

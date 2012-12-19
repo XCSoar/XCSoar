@@ -31,11 +31,24 @@ Copyright_License {
 #include "Units/System.hpp"
 
 #include <assert.h>
+#include <stdint.h>
 
 /**
  * Code specific to LX Navigation varios (e.g. LX1600).
  */
 namespace LX1600 {
+  enum class SCMode : uint8_t {
+    EXTERNAL = 0,
+    ON_CIRCLING = 1,
+    AUTO_IAS = 2,
+  };
+
+  enum class SCControlMode : uint8_t {
+    NORMAL = 0,
+    INVERTED = 1,
+    TASTER = 2,
+  };
+
   /**
    * Enable pass-through mode on the LX1600.  This command was provided
    * by Crtomir Rojnik (LX Navigation) in an email without further
@@ -226,6 +239,39 @@ namespace LX1600 {
     char buffer[100];
     sprintf(buffer, "PFLX3,,,%.1f,%.1f,%u",
             (double)vario_filter, (double)te_filter, te_level);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the filter settings of the LX16xx vario
+   *
+   * @param mode methods for automatic SC switch index (default=ON_CIRCLING)
+   * @param deadband area of silence in SC mode (float)
+   * (from 0 to 10.0 m/s, 1.0 = silence between +1m/s and -1m/s, default=1)
+   * @param control_mode external switch/taster function (default=INVERTED)
+   * @param threshold_speed speed of automatic switch from vario to sc mode
+   * (if SCMODE == 2) (from 50 to 150 km/h, default=110)
+   */
+  static inline bool
+  SetSCSettings(Port &port, OperationEnvironment &env,
+                SCMode mode, fixed deadband, SCControlMode control_mode,
+                fixed threshold_speed = fixed(0))
+  {
+    assert((unsigned)mode <= (unsigned)SCMode::AUTO_IAS);
+    assert(deadband >= fixed(0) && deadband <= fixed(10));
+    assert((unsigned)control_mode <= (unsigned)SCControlMode::TASTER);
+    assert(mode != SCMode::AUTO_IAS ||
+           (threshold_speed >= fixed(50) && threshold_speed <= fixed(150)));
+
+    char buffer[100];
+    if (mode == SCMode::AUTO_IAS)
+      sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u,%.0f",
+              (unsigned)mode, (double)deadband, (unsigned)control_mode,
+              (double)threshold_speed);
+    else
+      sprintf(buffer, "PFLX3,,%u,,,,,,%.1f,%u",
+              (unsigned)mode, (double)deadband, (unsigned)control_mode);
+
     return PortWriteNMEA(port, buffer, env);
   }
 }
