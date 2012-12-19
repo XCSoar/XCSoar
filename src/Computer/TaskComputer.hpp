@@ -32,7 +32,7 @@ Copyright_License {
 struct NMEAInfo;
 class ProtectedTaskManager;
 
-class GlideComputerTask
+class TaskComputer
 {
   ProtectedTaskManager &task;
 
@@ -48,8 +48,8 @@ class GlideComputerTask
   bool last_flying;
 
 public:
-  GlideComputerTask(ProtectedTaskManager &_task,
-                    const Airspaces &airspace_database);
+  TaskComputer(ProtectedTaskManager &_task,
+               const Airspaces &airspace_database);
 
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return route.GetProtectedRoutePlanner();

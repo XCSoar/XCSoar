@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "GlideComputerTask.hpp"
+#include "TaskComputer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -37,8 +37,8 @@ using std::max;
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
-GlideComputerTask::GlideComputerTask(ProtectedTaskManager &_task,
-                                     const Airspaces &airspace_database)
+TaskComputer::TaskComputer(ProtectedTaskManager &_task,
+                           const Airspaces &airspace_database)
   :task(_task),
    route(airspace_database),
    contest(trace.GetFull(), trace.GetSprint())
@@ -47,7 +47,7 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &_task,
 }
 
 void
-GlideComputerTask::ResetFlight(const bool full)
+TaskComputer::ResetFlight(const bool full)
 {
   task.Reset();
   route.ResetFlight();
@@ -59,11 +59,11 @@ GlideComputerTask::ResetFlight(const bool full)
 }
 
 void
-GlideComputerTask::ProcessBasicTask(const MoreData &basic,
-                                    const MoreData &last_basic,
-                                    DerivedInfo &calculated,
-                                    const ComputerSettings &settings_computer,
-                                    bool force)
+TaskComputer::ProcessBasicTask(const MoreData &basic,
+                               const MoreData &last_basic,
+                               DerivedInfo &calculated,
+                               const ComputerSettings &settings_computer,
+                               bool force)
 {
   trace.Update(settings_computer, basic, calculated);
 
@@ -96,9 +96,9 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
 }
 
 void
-GlideComputerTask::ProcessMoreTask(const MoreData &basic,
-                                   DerivedInfo &calculated,
-                                   const ComputerSettings &settings_computer)
+TaskComputer::ProcessMoreTask(const MoreData &basic,
+                              DerivedInfo &calculated,
+                              const ComputerSettings &settings_computer)
 {
   const GlidePolar &glide_polar = settings_computer.polar.glide_polar_task;
   const GlidePolar &safety_polar = calculated.glide_polar_safety;
@@ -140,9 +140,9 @@ Predicted(const ContestSettings &settings,
 }
 
 void
-GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
-                               const ComputerSettings &settings_computer,
-                               bool exhaustive)
+TaskComputer::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
+                          const ComputerSettings &settings_computer,
+                          bool exhaustive)
 {
   contest.SetPredicted(Predicted(settings_computer.contest, basic,
                                  calculated.task_stats.current_leg));
@@ -160,8 +160,8 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 }
 
 void 
-GlideComputerTask::ProcessAutoTask(const NMEAInfo &basic,
-                                   const DerivedInfo &calculated)
+TaskComputer::ProcessAutoTask(const NMEAInfo &basic,
+                              const DerivedInfo &calculated)
 {
   if (!calculated.flight.flying) {
     /* not flying (yet) */
@@ -185,6 +185,7 @@ GlideComputerTask::ProcessAutoTask(const NMEAInfo &basic,
 }
 
 void 
-GlideComputerTask::SetTerrain(const RasterTerrain* _terrain) {
+TaskComputer::SetTerrain(const RasterTerrain* _terrain)
+{
   route.set_terrain(_terrain);
 }

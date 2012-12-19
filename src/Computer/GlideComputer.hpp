@@ -29,7 +29,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
-#include "GlideComputerTask.hpp"
+#include "TaskComputer.hpp"
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
@@ -47,7 +47,7 @@ class RasterTerrain;
 class GlideComputer : public GlideComputerBlackboard
 {
   GlideComputerAirData air_data_computer;
-  GlideComputerTask task_computer;
+  TaskComputer task_computer;
   GlideComputerStats stats_computer;
   LogComputer log_computer;
   CuComputer cu_computer;
