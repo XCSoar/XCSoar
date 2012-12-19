@@ -102,8 +102,8 @@ CalculateTaskManagerLayout(PixelRect rc)
   layout.task_view.left = 0;
   layout.task_view.top = 0;
 
-  layout.vertical = rc.right > rc.left;
-  if (rc.right > rc.left) {
+  layout.vertical = rc.right > rc.bottom;
+  if (rc.right > rc.bottom) {
     layout.task_view = { 0, 0, Layout::Scale(80), Layout::Scale(52) };
     layout.target_button = { Layout::Scale(5), Layout::Scale(18),
                              Layout::Scale(58), Layout::Scale(51) };
