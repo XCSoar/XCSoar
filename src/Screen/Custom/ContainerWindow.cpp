@@ -151,10 +151,8 @@ bool
 ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL) {
-    child->OnMouseMove(x - child->GetLeft(), y - child->GetTop(), keys);
-    return true;
-  }
+  if (child != NULL)
+    return child->OnMouseMove(x - child->GetLeft(), y - child->GetTop(), keys);
 
   return PaintWindow::OnMouseMove(x, y, keys);
 }
@@ -163,10 +161,8 @@ bool
 ContainerWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL) {
-    child->OnMouseDown(x - child->GetLeft(), y - child->GetTop());
-    return true;
-  }
+  if (child != NULL)
+    return child->OnMouseDown(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseDown(x, y);
 }
@@ -175,10 +171,8 @@ bool
 ContainerWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL) {
-    child->OnMouseUp(x - child->GetLeft(), y - child->GetTop());
-    return true;
-  }
+  if (child != NULL)
+    return child->OnMouseUp(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseUp(x, y);
 }
@@ -187,10 +181,8 @@ bool
 ContainerWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL) {
-    child->OnMouseDouble(x - child->GetLeft(), y - child->GetTop());
-    return true;
-  }
+  if (child != NULL)
+    return child->OnMouseDouble(x - child->GetLeft(), y - child->GetTop());
 
   return PaintWindow::OnMouseDouble(x, y);
 }
@@ -199,10 +191,9 @@ bool
 ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   Window *child = EventChildAt(x, y);
-  if (child != NULL) {
-    child->OnMouseWheel(x - child->GetLeft(), y - child->GetTop(), delta);
-    return true;
-  }
+  if (child != NULL)
+    return child->OnMouseWheel(x - child->GetLeft(), y - child->GetTop(),
+                               delta);
 
   return PaintWindow::OnMouseWheel(x, y, delta);
 }
@@ -212,10 +203,8 @@ ContainerWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 bool
 ContainerWindow::OnMultiTouchDown()
 {
-  if (!capture && capture_child != NULL) {
-    capture_child->OnMultiTouchDown();
-    return true;
-  }
+  if (!capture && capture_child != NULL)
+    return capture_child->OnMultiTouchDown();
 
   return PaintWindow::OnMultiTouchDown();
 }
@@ -223,10 +212,8 @@ ContainerWindow::OnMultiTouchDown()
 bool
 ContainerWindow::OnMultiTouchUp()
 {
-  if (!capture && capture_child != NULL) {
-    capture_child->OnMultiTouchUp();
-    return true;
-  }
+  if (!capture && capture_child != NULL)
+    return capture_child->OnMultiTouchUp();
 
   return PaintWindow::OnMultiTouchUp();
 }
