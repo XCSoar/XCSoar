@@ -41,7 +41,7 @@ CylinderZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Radius"), _("Radius of the OZ cylinder."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed(0.1), fixed(100), fixed(1), true,
+           fixed(0.1), fixed(200), fixed(1), true,
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
   SetRowEnabled(RADIUS, radius_editable);

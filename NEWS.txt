@@ -14,6 +14,7 @@ Version 6.5 - not yet released
 * tasks
   - add task start countdown (#136, #1080)
   - optimise racing tasks for minimum distance
+  - allow observation zone sizes up to 200km (#2401)
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)
