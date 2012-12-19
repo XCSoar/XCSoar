@@ -208,9 +208,9 @@ SetFilters(Port &port, OperationEnvironment &env)
 {
   fixed vario_filter, te_filter;
   unsigned te_level;
-  if (!ReadFixed("Vario filter (sec, default = 1)", vario_filter) ||
-      !ReadFixed("TE filter (0.1 - 2.0, default = 1.5", te_filter) ||
-      !ReadUnsigned("TE level (50 - 150 %, default = 0 = off)", te_level))
+  if (!ReadFixed("the Vario filter (sec, default = 1)", vario_filter) ||
+      !ReadFixed("the TE filter (0.1 - 2.0, default = 1.5)", te_filter) ||
+      !ReadUnsigned("the TE level (50 - 150 %, default = 0 = off)", te_level))
     return;
 
   if (LX1600::SetFilters(port, env, vario_filter, te_filter, te_level))
