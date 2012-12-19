@@ -156,8 +156,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   draw_sw.Mark("RenderMisc1");
   // Render weather/terrain max/min values
-  if (!background.DrawSpotHeights(canvas, label_block))
-    DrawTaskOffTrackIndicator(canvas);
+  DrawTaskOffTrackIndicator(canvas);
 
   // Render the snail trail
   if (basic.location_available)

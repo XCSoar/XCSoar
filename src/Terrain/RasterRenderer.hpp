@@ -71,10 +71,6 @@ public:
   RasterRenderer();
   ~RasterRenderer();
 
-  unsigned GetQuantisation() const {
-    return quantisation_pixels;
-  }
-
   const HeightMatrix &GetHeightMatrix() const {
     return height_matrix;
   }

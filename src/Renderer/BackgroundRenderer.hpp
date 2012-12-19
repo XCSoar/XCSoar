@@ -57,8 +57,6 @@ public:
             const WindowProjection& proj,
             const TerrainRendererSettings &terrain_settings);
 
-  bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
-
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated);
@@ -68,8 +66,6 @@ public:
 
 private:
   void SetShadingAngle(const WindowProjection& proj, Angle angle);
-  static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
-                             const TCHAR *Buffer, RasterPoint pt);
 };
 
 #endif

@@ -178,45 +178,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
 }
 
 void
-TerrainRenderer::ScanSpotHeights()
-{
-  spot_max_pt.x = -1;
-  spot_max_pt.y = -1;
-  spot_min_pt.x = -1;
-  spot_min_pt.y = -1;
-  spot_max_val = -1;
-  spot_min_val = 32767;
-
-  const HeightMatrix &height_matrix = raster_renderer.GetHeightMatrix();
-  const short *h_buf = height_matrix.GetData();
-  const unsigned quantisation_pixels = raster_renderer.GetQuantisation();
-
-  for (unsigned y = 0; y < height_matrix.GetHeight(); ++y) {
-    for (unsigned x = 0; x < height_matrix.GetWidth(); ++x) {
-      short val = *h_buf++;
-      if (RasterBuffer::IsSpecial(val))
-        continue;
-
-      if (val > spot_max_val) {
-        spot_max_val = val;
-        spot_max_pt.x = x;
-        spot_max_pt.y = y;
-      }
-      if (val < spot_min_val) {
-        spot_min_val = val;
-        spot_min_pt.x = x;
-        spot_min_pt.y = y;
-      }
-    }
-  }
-
-  spot_max_pt.x *= quantisation_pixels;
-  spot_max_pt.y *= quantisation_pixels;
-  spot_min_pt.x *= quantisation_pixels;
-  spot_min_pt.y *= quantisation_pixels;
-}
-
-void
 TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
 {
   raster_renderer.GetImage().StretchTo(raster_renderer.GetWidth(),

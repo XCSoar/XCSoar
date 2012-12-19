@@ -57,18 +57,10 @@ protected:
   RasterRenderer raster_renderer;
 
 public:
-  RasterPoint spot_max_pt;
-  RasterPoint spot_min_pt;
-  short spot_max_val;
-  short spot_min_val;
-
-public:
   TerrainRenderer(const RasterTerrain *_terrain);
   virtual ~TerrainRenderer() {}
 
 protected:
-  void ScanSpotHeights();
-
   void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
 
 public:
