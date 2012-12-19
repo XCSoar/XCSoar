@@ -51,6 +51,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const MapSettings &settings)
 {
   if (settings.display_ground_track == DisplayGroundTrack::OFF ||
+      !basic.track_available || !basic.attitude.heading_available ||
       calculated.circling)
     return;
 
