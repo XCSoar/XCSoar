@@ -97,11 +97,12 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
 
   // set resolution
 
-  fixed map_pixel_size = map.pixel_distance(Gmid, 1);
-  fixed q = map_pixel_size / pixel_size;
   if (pixel_size < fixed(3000)) {
     /* round down to reduce slope shading artefacts (caused by
        RasterBuffer interpolation) */
+
+    fixed map_pixel_size = map.pixel_distance(Gmid, 1);
+    fixed q = map_pixel_size / pixel_size;
     quantisation_effective = std::max(1, (int)q);
 
     if (quantisation_effective > 25)
