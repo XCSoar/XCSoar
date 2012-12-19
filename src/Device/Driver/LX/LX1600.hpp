@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
 #include "Atmosphere/Pressure.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Units/System.hpp"
 
 #include <assert.h>
@@ -158,6 +159,35 @@ namespace LX1600 {
         Unit::FEET);
 
     return SetAltitudeOffset(port, env, altitude_offset);
+  }
+
+  /**
+   * Set the polar coefficients of the LX16xx vario
+   *
+   * These are the polar coefficients in LX format
+   * (i.e. for v=(km/h*100) and w=(m/s))
+   */
+  static inline bool
+  SetPolar(Port &port, OperationEnvironment &env, fixed a, fixed b, fixed c)
+  {
+    char buffer[100];
+    sprintf(buffer, "PFLX2,,,,%.2f,%.2f,%.2f,", (double)a, (double)b, (double)c);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the polar coefficients of the LX16xx vario
+   * @param polar Polar coefficients in XCSoar format (SI, m/s)
+   */
+  static inline bool
+  SetPolar(Port &port, OperationEnvironment &env, const PolarCoefficients &polar)
+  {
+    // Convert from m/s to (km/h)/100
+    fixed polar_a = polar.a * 10000 / sqr(fixed(3.6));
+    fixed polar_b = polar.b * 100 / fixed(3.6);
+    fixed polar_c = polar.c;
+
+    return SetPolar(port, env, polar_a, polar_b, polar_c);
   }
 
   /**
