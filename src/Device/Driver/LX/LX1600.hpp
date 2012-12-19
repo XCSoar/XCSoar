@@ -155,7 +155,7 @@ namespace LX1600 {
     assert(qnh.IsPlausible());
 
     fixed altitude_offset = Units::ToUserUnit(
-        qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()),
+        -AtmosphericPressure::StaticPressureToPressureAltitude(qnh),
         Unit::FEET);
 
     return SetAltitudeOffset(port, env, altitude_offset);
