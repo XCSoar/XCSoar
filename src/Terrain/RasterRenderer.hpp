@@ -88,6 +88,14 @@ public:
     bounds.SetInvalid();
   }
 
+  /**
+   * Calculate a new #quantisation_pixels value.
+   *
+   * @return true if the new #quantisation_pixels value is smaller
+   * than the previous one (redraw needed)
+   */
+  bool UpdateQuantisation();
+
   const GeoBounds &GetBounds() const {
     return bounds;
   }

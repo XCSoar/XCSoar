@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
+#include "Event/Idle.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -79,6 +80,38 @@ RasterRenderer::~RasterRenderer()
 {
   delete image;
 }
+
+#ifdef ENABLE_OPENGL
+
+gcc_pure
+static unsigned
+GetQuantisation()
+{
+  if (IsUserIdle(2000))
+    /* full terrain resolution when the user is idle */
+    return 1;
+  else if (IsUserIdle(1000))
+    /* reduced terrain resolution when the user has interacted with
+       XCSoar recently */
+    return 2;
+  else
+    /* the user is actively operating XCSoar: reduce UI latency */
+    return Layout::FastScale(2);
+}
+
+bool
+RasterRenderer::UpdateQuantisation()
+{
+  unsigned new_q = GetQuantisation();
+  if (new_q == quantisation_pixels)
+    return false;
+
+  bool result = new_q < quantisation_pixels;
+  quantisation_pixels = new_q;
+  return result;
+}
+
+#endif
 
 void
 RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection)

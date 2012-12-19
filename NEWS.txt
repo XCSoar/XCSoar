@@ -8,6 +8,7 @@ Version 6.5 - not yet released
   - draw FAI triangle areas (#1563)
   - optimise the terrain renderer
   - added "Wind Up" display orientation
+  - high-resolution terrain renderer (Android/Linux only)
 * calculations
   - don't detect landing while climbing in a wave (#1330, #2289, #2406)
   - basic support for the contest "DMSt" (#2208)

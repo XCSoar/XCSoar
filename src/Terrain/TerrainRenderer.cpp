@@ -229,9 +229,11 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain->GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth))
+      sunazimuth.CompareRoughly(last_sun_azimuth) &&
+      !raster_renderer.UpdateQuantisation())
     /* no change since previous frame */
     return;
+
 #else
   if (compare_projection.CompareAndUpdate(map_projection) &&
       terrain_serial == terrain->GetSerial() &&
