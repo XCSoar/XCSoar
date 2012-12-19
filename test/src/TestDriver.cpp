@@ -914,6 +914,11 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(nmea_info.device.serial == "4294967295");
     ok1(nmea_info.device.software_version == "1.90");
     ok1(nmea_info.device.hardware_version == "1.00");
+
+
+    ok1(device->ParseNMEA("$LXWP3,47.76,0,2.0,5.0,15,30,2.5,1.0,0,100,0.1,,0*08", nmea_info));
+    ok1(nmea_info.settings.qnh_available);
+    ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1015));
   }
 
   delete device;
@@ -1232,7 +1237,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(648);
+  plan_tests(651);
 
   TestGeneric();
   TestTasman();

@@ -162,7 +162,7 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 }
 
 static bool
-LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
+LXWP3(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
    * $LXWP3,
@@ -175,6 +175,16 @@ LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
    * glider name
    * time offset
    */
+
+  fixed value;
+
+  // Altitude offset -> QNH
+  if (line.ReadChecked(value)) {
+    value = Units::ToSysUnit(-value, Unit::FEET);
+    auto qnh = AtmosphericPressure::PressureAltitudeToStaticPressure(value);
+    info.settings.ProvideQNH(qnh, info.clock);
+  }
+
   return true;
 }
 
