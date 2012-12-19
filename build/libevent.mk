@@ -1,4 +1,5 @@
 EVENT_SOURCES = \
+	$(SRC)/Event/Idle.cpp \
 	$(SRC)/Event/DelayedNotify.cpp \
 	$(SRC)/Event/Notify.cpp
 

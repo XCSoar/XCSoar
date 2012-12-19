@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/Blank.hpp"
 #include "Screen/GDI/PaintCanvas.hpp"
+#include "Event/Idle.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -164,7 +164,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_LBUTTONDOWN:
     if (OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;
@@ -172,7 +172,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_LBUTTONUP:
     if (OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;
@@ -187,7 +187,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
 
     if (OnMouseDouble(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
 
@@ -198,7 +198,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     if (OnMouseWheel(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
                        GET_WHEEL_DELTA_WPARAM(wParam))) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;
@@ -207,7 +207,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_KEYDOWN:
     if (OnKeyDown(wParam)) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;
@@ -215,7 +215,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_KEYUP:
     if (OnKeyUp(wParam)) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;
@@ -230,7 +230,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
   case WM_COMMAND:
     if (OnCommand(LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */
-      ResetDisplayTimeOut();
+      ResetUserIdle();
       return 0;
     }
     break;

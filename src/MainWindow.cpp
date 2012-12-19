@@ -54,6 +54,7 @@ Copyright_License {
 #include "UIState.hpp"
 #include "DrawThread.hpp"
 #include "UIReceiveBlackboard.hpp"
+#include "Event/Idle.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
@@ -590,7 +591,7 @@ MainWindow::OnUser(unsigned id)
       return true;
 
     /* un-blank the display, play a sound and show the dialog */
-    ResetDisplayTimeOut();
+    ResetUserIdle();
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
     dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
     return true;

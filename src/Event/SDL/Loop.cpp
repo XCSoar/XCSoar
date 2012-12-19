@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Loop.hpp"
 #include "Event.hpp"
+#include "Event/Idle.hpp"
 #include "Thread/Debug.hpp"
 #include "Screen/TopWindow.hpp"
 
@@ -59,6 +60,9 @@ EventLoop::Dispatch(const Event &_event)
   } else if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;
     callback(event.user.data2);
-  } else if (top_window != nullptr)
-    top_window->OnEvent(event);
+  } else if (top_window != nullptr) {
+    if (top_window->OnEvent(event) &&
+        _event.IsUserInput())
+      ResetUserIdle();
+  }
 }

@@ -44,6 +44,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
+#include "Event/Idle.hpp"
 
 #ifdef _WIN32_WCE
 static void
@@ -65,7 +66,7 @@ MessageProcessTimer()
   // don't display messages if airspace warning dialog is active
   if (CommonInterface::main_window->popup.Render())
     // turn screen on if blanked and receive a new message
-    ResetDisplayTimeOut();
+    ResetUserIdle();
 }
 
 /**

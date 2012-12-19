@@ -28,11 +28,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "Time/PeriodClock.hpp"
-
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "OS/Clock.hpp"
-#endif
+#include "Event/Idle.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
@@ -186,12 +182,9 @@ GlueMapWindow::Idle()
     return true;
   }
 
-#ifdef ANDROID
-  const unsigned start_ms = MonotonicClockMS();
-  if (start_ms - last_user_input_ms < 2500)
+  if (!IsUserIdle(2500))
     /* don't hold back the UI thread while the user is interacting */
     return true;
-#endif
 
   PeriodClock clock;
   clock.Update();
@@ -222,9 +215,7 @@ GlueMapWindow::Idle()
 #ifndef ENABLE_OPENGL
            !draw_thread->IsTriggered() &&
 #endif
-#ifdef ANDROID
-           last_user_input_ms < start_ms &&
-#endif
+           IsUserIdle(2500) &&
            still_dirty);
 
   return still_dirty;

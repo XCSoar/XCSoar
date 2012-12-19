@@ -38,14 +38,6 @@ extern NativeView *native_view;
 
 extern EventQueue *event_queue;
 
-/**
- * The time stamp when the last user input was received.  This is used
- * to cancel expensive operations to improve UI latency.
- *
- * @see MonotonicClockMS(), GlueMapWindow::Idle()
- */
-extern volatile unsigned last_user_input_ms;
-
 extern Vibrator *vibrator;
 extern bool os_haptic_feedback_enabled;
 

@@ -29,11 +29,7 @@ Copyright_License {
 #include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
 #include "UIState.hpp"
-
-/** timeout of display/battery mode in quarter seconds */
-static constexpr unsigned DISPLAYTIMEOUTMAX = 60 * 4;
-
-unsigned DisplayTimeOut = 0;
+#include "Event/Idle.hpp"
 
 static void
 BlankDisplay(bool doblank)
@@ -55,8 +51,6 @@ BlankDisplay(bool doblank)
       // Power off the display
       Display::Blank(true);
       ui_state.screen_blanked = true;
-    } else {
-      ResetDisplayTimeOut();
     }
   } else {
     // was blanked
@@ -73,18 +67,12 @@ CheckDisplayTimeOut(bool sticky)
   SystemIdleTimerReset();
 #endif
 
-  if (!sticky) {
-    if (DisplayTimeOut < DISPLAYTIMEOUTMAX)
-      DisplayTimeOut++;
-  } else {
+  if (sticky) {
     // JMW don't let display timeout while a dialog is active
-    ResetDisplayTimeOut();
     return;
   }
-  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX)
-    BlankDisplay(true);
-  else
-    BlankDisplay(false);
+
+  BlankDisplay(IsUserIdle(60000));
 }
 
 #endif /* HAVE_BLANK */

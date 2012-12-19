@@ -21,20 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BLANK_HPP
-#define XCSOAR_SCREEN_BLANK_HPP
-
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#define HAVE_BLANK
-
-void CheckDisplayTimeOut(bool sticky);
-
-#else /* !HAVE_BLANK */
+#ifndef XCSOAR_EVENT_IDLE_HPP
+#define XCSOAR_EVENT_IDLE_HPP
 
 #include "Compiler.h"
 
-static inline void CheckDisplayTimeOut(gcc_unused bool sticky) {}
+/**
+ * Check whether the user is currently inactive.
+ *
+ * When the user is currently interacting with XCSoar, we should
+ * attempt to reduce UI latency, for example by reducing rendering
+ * details.
+ *
+ * @return true if the user has been idle for at the specified number
+ * of milliseconds or more
+ */
+gcc_pure
+bool
+IsUserIdle(unsigned duration_ms);
 
-#endif /* !HAVE_BLANK */
+/**
+ * Acts as if the user had just interacted with XCSoar.
+ */
+void
+ResetUserIdle();
 
 #endif

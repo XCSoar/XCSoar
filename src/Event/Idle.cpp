@@ -21,20 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_BLANK_HPP
-#define XCSOAR_SCREEN_BLANK_HPP
+#include "Idle.hpp"
+#include "Time/PeriodClock.hpp"
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#define HAVE_BLANK
+static PeriodClock user_idle_clock;
 
-void CheckDisplayTimeOut(bool sticky);
+bool
+IsUserIdle(unsigned duration_ms)
+{
+  return user_idle_clock.Check(duration_ms);
+}
 
-#else /* !HAVE_BLANK */
-
-#include "Compiler.h"
-
-static inline void CheckDisplayTimeOut(gcc_unused bool sticky) {}
-
-#endif /* !HAVE_BLANK */
-
-#endif
+/**
+ * Acts as if the user had just interacted with XCSoar.
+ */
+void
+ResetUserIdle()
+{
+  user_idle_clock.Update();
+}
