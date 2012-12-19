@@ -842,6 +842,51 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
     ok1(nmea_info.settings.volume_available);
     ok1(nmea_info.settings.volume == 76);
 
+
+    nmea_info.Reset();
+    nmea_info.clock = fixed(1);
+
+    // Test LX160 (sw 3.04) variant (different bugs notation)
+    ok1(device->ParseNMEA("$LXWP2,1.1,1.00,1.00,2.14,-3.87,2.38*3E", nmea_info));
+    ok1(nmea_info.settings.mac_cready_available);
+    ok1(equals(nmea_info.settings.mac_cready, 1.1));
+    ok1(nmea_info.settings.ballast_overload_available);
+    ok1(equals(nmea_info.settings.ballast_overload, 1.0));
+    ok1(nmea_info.settings.bugs_available);
+    ok1(equals(nmea_info.settings.bugs, 1.0));
+    ok1(!nmea_info.settings.volume_available);
+
+    ok1(device->ParseNMEA("$LXWP2,1.1,1.50,1.10,1.83,-3.87,2.91*34", nmea_info));
+    ok1(nmea_info.settings.mac_cready_available);
+    ok1(equals(nmea_info.settings.mac_cready, 1.1));
+    ok1(nmea_info.settings.ballast_overload_available);
+    ok1(equals(nmea_info.settings.ballast_overload, 1.5));
+    ok1(nmea_info.settings.bugs_available);
+    ok1(equals(nmea_info.settings.bugs, 0.9));
+    ok1(!nmea_info.settings.volume_available);
+
+    ok1(device->ParseNMEA("$LXWP2,0.0,1.20,1.05,2.00,-3.87,2.61*30", nmea_info));
+    ok1(nmea_info.settings.mac_cready_available);
+    ok1(equals(nmea_info.settings.mac_cready, 0.0));
+    ok1(nmea_info.settings.ballast_overload_available);
+    ok1(equals(nmea_info.settings.ballast_overload, 1.2));
+    ok1(nmea_info.settings.bugs_available);
+    ok1(equals(nmea_info.settings.bugs, 0.95));
+    ok1(!nmea_info.settings.volume_available);
+
+    ok1(device->ParseNMEA("$LXWP2,1.5,1.00,2.5,2.14,-3.87,2.38*0C", nmea_info));
+    ok1(nmea_info.settings.mac_cready_available);
+    ok1(equals(nmea_info.settings.mac_cready, 1.5));
+    ok1(nmea_info.settings.ballast_overload_available);
+    ok1(equals(nmea_info.settings.ballast_overload, 1.0));
+    ok1(nmea_info.settings.bugs_available);
+    ok1(equals(nmea_info.settings.bugs, 0.975));
+    ok1(!nmea_info.settings.volume_available);
+
+
+    nmea_info.Reset();
+    nmea_info.clock = fixed(1);
+
     LXDevice &lx_device = *(LXDevice *)device;
     ok1(!lx_device.IsV7());
     ok1(!lx_device.IsNano());
@@ -1187,7 +1232,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(616);
+  plan_tests(648);
 
   TestGeneric();
   TestTasman();

@@ -143,8 +143,14 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
     info.settings.ProvideBallastOverload(value, info.clock);
 
   // Bugs
-  if (line.ReadChecked(value))
-    info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
+  if (line.ReadChecked(value)) {
+    if (value <= fixed(1.5) && value >= fixed(1.0))
+      // LX160 (sw 3.04) reports bugs as 1.00, 1.05 or 1.10 (#2167)
+      info.settings.ProvideBugs(fixed(2) - value, info.clock);
+    else
+      // All other known LX devices report bugs as 0, 5, 10, 15, ...
+      info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
+  }
 
   line.Skip(3);
 
