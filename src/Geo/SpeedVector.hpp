@@ -33,7 +33,7 @@ Copyright_License {
  */
 struct SpeedVector {
   /**
-   * The direction of the vector in degrees true (0..360).
+   * The direction of the vector.
    */
   Angle bearing;
 
@@ -50,7 +50,7 @@ struct SpeedVector {
   /** 
    * Constructor given bearing and magnitude
    * 
-   * @param _bearing Bearing of vector (degrees true)
+   * @param _bearing the direction of vector
    * @param _norm Magnitude of vector (m/s)
    * @return Initialised object
    */
