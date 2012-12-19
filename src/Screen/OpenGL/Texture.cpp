@@ -196,11 +196,9 @@ LoadSurfaceIntoTexture(const SDL_Surface *surface)
 #endif
 
 GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
-  :width(_width), height(_height)
-#ifndef HAVE_OES_DRAW_TEXTURE
-  , allocated_width(ValidateTextureSize(_width)),
+  :width(_width), height(_height),
+   allocated_width(ValidateTextureSize(_width)),
    allocated_height(ValidateTextureSize(_height))
-#endif
 {
   /* enable linear filtering for the terrain texture */
   Initialise(true);
@@ -212,11 +210,9 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
 
 GLTexture::GLTexture(GLint internal_format, GLsizei _width, GLsizei _height,
                      GLenum format, GLenum type, const GLvoid *data)
-  :width(_width), height(_height)
-#ifndef HAVE_OES_DRAW_TEXTURE
-  , allocated_width(ValidateTextureSize(_width)),
+  :width(_width), height(_height),
+   allocated_width(ValidateTextureSize(_width)),
    allocated_height(ValidateTextureSize(_height))
-#endif
 {
   Initialise();
   LoadTextureAutoAlign(internal_format, _width, _height, format, type, data);
@@ -234,10 +230,8 @@ GLTexture::ResizeDiscard(PixelSize new_size)
   if (validated_size == old_size)
     return;
 
-#ifndef HAVE_OES_DRAW_TEXTURE
   allocated_width = validated_size.cx;
   allocated_height = validated_size.cy;
-#endif
 
   Bind();
 
@@ -255,10 +249,8 @@ GLTexture::Load(SDL_Surface *src)
   width = src->w;
   height = src->h;
 
-#ifndef HAVE_OES_DRAW_TEXTURE
   allocated_width = ValidateTextureSize(width);
   allocated_height = ValidateTextureSize(src->h);
-#endif
 
   if (!LoadSurfaceIntoTexture(src)) {
     /* try again after conversion */

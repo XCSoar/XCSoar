@@ -48,13 +48,11 @@ protected:
   GLuint id;
   UPixelScalar width, height;
 
-#ifndef HAVE_OES_DRAW_TEXTURE
   /**
    * The real dimensions of the texture.  This may differ when
    * ARB_texture_non_power_of_two is not available.
    */
   GLsizei allocated_width, allocated_height;
-#endif
 
 public:
 #ifdef ANDROID
@@ -118,11 +116,7 @@ public:
    */
   gcc_pure
   PixelSize GetAllocatedSize() const {
-#ifdef HAVE_OES_DRAW_TEXTURE
-    return GetSize();
-#else
     return { allocated_width, allocated_height };
-#endif
   }
 
   /**
