@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GLIDECOMPUTER_TASK_HPP
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
-#include "GlideComputerRoute.hpp"
+#include "RouteComputer.hpp"
 #include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
@@ -36,7 +36,7 @@ class TaskComputer
 {
   ProtectedTaskManager &task;
 
-  GlideComputerRoute route;
+  RouteComputer route;
 
   TraceComputer trace;
 

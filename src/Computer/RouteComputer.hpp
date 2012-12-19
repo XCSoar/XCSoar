@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
-#define XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
+#ifndef XCSOAR_ROUTE_COMPUTER_HPP
+#define XCSOAR_ROUTE_COMPUTER_HPP
 
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Engine/Task/TaskType.hpp"
@@ -38,7 +38,7 @@ class RoutePlannerGlue;
 class RasterTerrain;
 class GlidePolar;
 
-class GlideComputerRoute {
+class RouteComputer {
   RoutePlannerGlue route_planner;
   ProtectedRoutePlanner protected_route_planner;
 
@@ -51,7 +51,7 @@ class GlideComputerRoute {
   unsigned last_active_tp;
 
 public:
-  GlideComputerRoute(const Airspaces &airspace_database);
+  RouteComputer(const Airspaces &airspace_database);
 
   /**
    * Returns a reference to the unprotected route planner object,

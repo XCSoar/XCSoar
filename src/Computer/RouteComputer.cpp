@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "GlideComputerRoute.hpp"
+#include "RouteComputer.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Task/RoutePlannerGlue.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <algorithm>
 
-GlideComputerRoute::GlideComputerRoute(const Airspaces &airspace_database)
+RouteComputer::RouteComputer(const Airspaces &airspace_database)
   :route_planner(airspace_database),
    protected_route_planner(route_planner, airspace_database),
    route_clock(fixed(5)),
@@ -43,7 +43,7 @@ GlideComputerRoute::GlideComputerRoute(const Airspaces &airspace_database)
 {}
 
 void
-GlideComputerRoute::ResetFlight()
+RouteComputer::ResetFlight()
 {
   route_clock.Reset();
   reach_clock.Reset();
@@ -54,12 +54,11 @@ GlideComputerRoute::ResetFlight()
 }
 
 void
-GlideComputerRoute::ProcessRoute(const MoreData &basic,
-                                 DerivedInfo &calculated,
-                                 const GlideSettings &settings,
-                                 const RoutePlannerConfig &config,
-                                 const GlidePolar &glide_polar,
-                                 const GlidePolar &safety_polar)
+RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
+                            const GlideSettings &settings,
+                            const RoutePlannerConfig &config,
+                            const GlidePolar &glide_polar,
+                            const GlidePolar &safety_polar)
 {
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return;
@@ -72,9 +71,9 @@ GlideComputerRoute::ProcessRoute(const MoreData &basic,
 }
 
 inline void
-GlideComputerRoute::TerrainWarning(const MoreData &basic,
-                                   DerivedInfo &calculated,
-                                   const RoutePlannerConfig &config)
+RouteComputer::TerrainWarning(const MoreData &basic,
+                              DerivedInfo &calculated,
+                              const RoutePlannerConfig &config)
 {
   const AircraftState as = ToAircraftState(basic, calculated);
 
@@ -132,8 +131,8 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
 }
 
 inline void
-GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
-                          const RoutePlannerConfig &config)
+RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
+                     const RoutePlannerConfig &config)
 {
   if (!calculated.terrain_valid) {
     /* without valid terrain information, we cannot calculate
@@ -161,7 +160,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
 }
 
 void
-GlideComputerRoute::set_terrain(const RasterTerrain* _terrain) {
+RouteComputer::set_terrain(const RasterTerrain* _terrain) {
   terrain = _terrain;
   protected_route_planner.SetTerrain(terrain);
 }
