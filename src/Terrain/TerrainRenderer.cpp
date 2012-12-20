@@ -235,11 +235,13 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     return;
 
 #else
-  if (compare_projection.CompareAndUpdate(map_projection) &&
+  if (compare_projection.Compare(map_projection) &&
       terrain_serial == terrain->GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth))
     /* no change since previous frame */
     return;
+
+  compare_projection = CompareProjection(map_projection);
 #endif
 
   terrain_serial = terrain->GetSerial();
