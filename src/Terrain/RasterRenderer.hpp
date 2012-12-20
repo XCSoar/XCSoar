@@ -45,6 +45,14 @@ class RasterRenderer : private NonCopyable {
   /** screen dimensions in coarse pixels */
   unsigned quantisation_pixels;
 
+#ifdef ENABLE_OPENGL
+  /**
+   * The value of #quantisation_pixels that was used in the last
+   * ScanMap() call.
+   */
+  unsigned last_quantisation_pixels;
+#endif
+
   /**
    * Step size used for slope calculations.  Slope shading is disabled
    * when this attribute is 0.

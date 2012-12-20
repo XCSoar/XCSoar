@@ -65,6 +65,7 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 RasterRenderer::RasterRenderer()
   :quantisation_pixels(2),
 #ifdef ENABLE_OPENGL
+   last_quantisation_pixels(-1),
    bounds(GeoBounds::Invalid()),
 #endif
    image(NULL)
@@ -102,13 +103,8 @@ GetQuantisation()
 bool
 RasterRenderer::UpdateQuantisation()
 {
-  unsigned new_q = GetQuantisation();
-  if (new_q == quantisation_pixels)
-    return false;
-
-  bool result = new_q < quantisation_pixels;
-  quantisation_pixels = new_q;
-  return result;
+  quantisation_pixels = GetQuantisation();
+  return quantisation_pixels < last_quantisation_pixels;
 }
 
 #endif
@@ -152,6 +148,8 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
                      projection.GetScreenWidth() / quantisation_pixels,
                      projection.GetScreenHeight() / quantisation_pixels,
                      true);
+
+  last_quantisation_pixels = quantisation_pixels;
 #else
   height_matrix.Fill(map, projection, quantisation_pixels, true);
 #endif
