@@ -41,16 +41,17 @@ Copyright_License {
 
 enum ControlIndex {
 #ifdef USE_GDI
-  Face,
+  FACE,
 #endif
-  Height,
-  Weight,
-  Italic,
-  Preview,
+  HEIGHT,
+  WEIGHT,
+  ITALIC,
+  PREVIEW,
 };
 
 class FontEditWidget
-  : public RowFormWidget, public ActionListener, DataFieldListener{
+  : public RowFormWidget, public ActionListener, DataFieldListener
+{
   LOGFONT data, default_data;
 
   Font font;
@@ -84,15 +85,15 @@ FontEditWidget::Load()
 {
 #ifdef USE_GDI
   {
-    DataFieldEnum &df = (DataFieldEnum &)GetDataField(Face);
+    DataFieldEnum &df = (DataFieldEnum &)GetDataField(FACE);
     df.SetStringAutoAdd(data.lfFaceName);
-    GetControl(Face).RefreshDisplay();
+    GetControl(FACE).RefreshDisplay();
   }
 #endif
 
-  LoadValue(Height, (int)data.lfHeight);
-  LoadValue(Weight, data.lfWeight > 500);
-  LoadValue(Italic, !!data.lfItalic);
+  LoadValue(HEIGHT, (int)data.lfHeight);
+  LoadValue(WEIGHT, data.lfWeight > 500);
+  LoadValue(ITALIC, !!data.lfItalic);
 
   UpdatePreview();
 }
@@ -101,12 +102,12 @@ void
 FontEditWidget::SaveValues()
 {
 #ifdef USE_GDI
-  CopyString(data.lfFaceName, GetDataField(Face).GetAsString(), LF_FACESIZE);
+  CopyString(data.lfFaceName, GetDataField(FACE).GetAsString(), LF_FACESIZE);
 #endif
 
-  data.lfHeight = GetValueInteger(Height);
-  data.lfWeight = GetValueBoolean(Weight) ? 700 : 500;
-  data.lfItalic = GetValueBoolean(Italic);
+  data.lfHeight = GetValueInteger(HEIGHT);
+  data.lfWeight = GetValueBoolean(WEIGHT) ? 700 : 500;
+  data.lfItalic = GetValueBoolean(ITALIC);
 }
 
 void
@@ -120,7 +121,7 @@ FontEditWidget::UpdatePreview()
   TextCache::Flush();
 #endif
 
-  WndFrame &preview = (WndFrame &)GetGeneric(Preview);
+  WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
   if (font.IsDefined()) {
     preview.SetFont(font);
     preview.SetCaption(_("Sample Text\n123"));
@@ -146,9 +147,7 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   /* we cannot obtain a list of fonts on SDL/OpenGL currently */
 #endif
 
-  AddInteger(_("Height"), NULL, _T("%d"), _T("%d"),
-             1, 200, 1, 0, this);
-
+  AddInteger(_("Height"), NULL, _T("%d"), _T("%d"), 1, 200, 1, 0, this);
   AddBoolean(_T("Bold"), NULL, false, this);
   AddBoolean(_T("Italic"), NULL, false, this);
 
@@ -175,15 +174,13 @@ FontEditWidget::OnAction(int id)
 }
 
 bool
-dlgFontEditShowModal(const TCHAR * FontDescription,
-                     LOGFONT &log_font,
-                     LOGFONT autoLogFont)
+dlgFontEditShowModal(const TCHAR *type, LOGFONT &data, LOGFONT default_data)
 {
   StaticString<128> title;
-  title.Format(_T("%s: %s"), _("Edit Font"), FontDescription);
+  title.Format(_T("%s: %s"), _("Edit Font"), type);
 
   FontEditWidget *widget =
-    new FontEditWidget(log_font, autoLogFont);
+    new FontEditWidget(data, default_data);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateAuto(UIGlobals::GetMainWindow(), title, widget);
@@ -195,6 +192,6 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
     return false;
 
   widget->SaveValues();
-  log_font = widget->GetData();
+  data = widget->GetData();
   return true;
 }
