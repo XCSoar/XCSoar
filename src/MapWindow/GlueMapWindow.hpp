@@ -27,6 +27,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Time/PeriodClock.hpp"
 #include "TrackingGestureManager.hpp"
+#include "KineticManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Screen/Timer.hpp"
@@ -82,6 +83,11 @@ class GlueMapWindow : public MapWindow {
   RasterPoint drag_start;
   TrackingGestureManager gestures;
   bool ignore_single_click;
+
+#ifdef ENABLE_OPENGL
+  KineticManager kinetic_x, kinetic_y;
+  WindowTimer kinetic_timer;
+#endif
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
   bool arm_mapitem_list;

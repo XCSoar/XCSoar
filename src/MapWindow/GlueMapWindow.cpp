@@ -36,6 +36,11 @@ GlueMapWindow::GlueMapWindow(const Look &look)
    idle_robin(-1),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
+#ifdef ENABLE_OPENGL
+   kinetic_x(700),
+   kinetic_y(700),
+   kinetic_timer(*this),
+#endif
    arm_mapitem_list(false),
    last_display_mode(DisplayMode::NONE),
    thermal_band_renderer(look.thermal_band, look.chart),

@@ -77,6 +77,11 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
                                       + drag_start_geopoint
                                       - drag_projection.ScreenToGeo(x, y));
     QuickRedraw();
+
+#ifdef ENABLE_OPENGL
+    kinetic_x.MouseMove(x);
+    kinetic_y.MouseMove(y);
+#endif
     return true;
 
   case DRAG_GESTURE:
@@ -99,6 +104,10 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   map_item_timer.Cancel();
 
+#ifdef ENABLE_OPENGL
+  kinetic_timer.Cancel();
+#endif
+
   // Ignore single click event if double click detected
   if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
@@ -119,6 +128,12 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   case FOLLOW_PAN:
     drag_mode = DRAG_PAN;
     drag_projection = visible_projection;
+
+#ifdef ENABLE_OPENGL
+    kinetic_x.MouseDown(x);
+    kinetic_y.MouseDown(y);
+#endif
+
     break;
   }
 
@@ -174,6 +189,12 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
        redraws */
     scale_buffer = 2;
 #endif
+
+#ifdef ENABLE_OPENGL
+    kinetic_x.MouseUp(x);
+    kinetic_y.MouseUp(y);
+    kinetic_timer.Schedule(30);
+#endif
     break;
 
   case DRAG_SIMULATOR:
@@ -224,6 +245,10 @@ GlueMapWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   map_item_timer.Cancel();
 
+#ifdef ENABLE_OPENGL
+  kinetic_timer.Cancel();
+#endif
+
   if (drag_mode != DRAG_NONE)
     return true;
 
@@ -268,6 +293,10 @@ GlueMapWindow::OnKeyDown(unsigned key_code)
 {
   map_item_timer.Cancel();
 
+#ifdef ENABLE_OPENGL
+  kinetic_timer.Cancel();
+#endif
+
   if (InputEvents::processKey(key_code)) {
     return true; // don't go to default handler
   }
@@ -292,6 +321,10 @@ GlueMapWindow::OnCancelMode()
     ReleaseCapture();
     drag_mode = DRAG_NONE;
   }
+
+#ifdef ENABLE_OPENGL
+  kinetic_timer.Cancel();
+#endif
 
   map_item_timer.Cancel();
 }
@@ -338,6 +371,22 @@ GlueMapWindow::OnTimer(WindowTimer &timer)
     map_item_timer.Cancel();
     ShowMapItems(drag_start_geopoint, false);
     return true;
+#ifdef ENABLE_OPENGL
+  } else if (timer == kinetic_timer) {
+    if (kinetic_x.IsSteady() && kinetic_y.IsSteady()) {
+      kinetic_timer.Cancel();
+    } else {
+      auto location = drag_projection.ScreenToGeo(kinetic_x.GetPosition(),
+                                                  kinetic_y.GetPosition());
+      location = drag_projection.GetGeoLocation() +
+          drag_start_geopoint - location;
+
+      visible_projection.SetGeoLocation(location);
+      QuickRedraw();
+    }
+
+    return true;
+#endif
   } else
     return MapWindow::OnTimer(timer);
 }
