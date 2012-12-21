@@ -65,7 +65,7 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
 
     // Low-pass filter
     fixed filtered_pressure;
-    static const fixed alpha(0.05);
+    static constexpr fixed alpha(0.05);
     if (!info.static_pressure_available)
       filtered_pressure = pressure;
     else
