@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-12-16 23:47+0000\n"
+"PO-Revision-Date: 2012-12-19 20:53+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
-"X-Generator: Launchpad (build 16372)\n"
+"X-Launchpad-Export-Date: 2012-12-21 12:40+0000\n"
+"X-Generator: Launchpad (build 16378)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2640,12 +2640,12 @@ msgstr "Zeigt die Zeit bis zum Öffnen/Schließen des Abflugs."
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "Abflug geöffnet/geschlossen Countdown mit Erreichen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Abflug Radial"
+msgstr "Abflug mit Erreichen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1171
 #, no-c-format
@@ -2653,6 +2653,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Zeigt die verbleibende Zeit bis der Abflug öffnet oder schließt, verglichen "
+"mit der berechneten Zeit dort hinzufliegen."
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294
@@ -3723,7 +3725,7 @@ msgstr "Der Dateimanager erfordert Android 2.3."
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO Schalter und Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
 #, no-c-format
@@ -3784,6 +3786,10 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"Die i2c Adresse, die zu deiner Konfiguration passt. Das Feld wird nicht "
+"genutzt, wenn deine Wahl im I2C Bus-Feld keine i2c Busnummer ist. Wenn dir "
+"diese Dinge nicht geläufig sind gehe davon aus, dass dieses Feld nicht "
+"genutzt wird."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid "Pressure use"
@@ -4813,16 +4819,12 @@ msgid "Status"
 msgstr "Status"
 
 #: src/Dialogs/dlgStatus.cpp:125
-#, fuzzy
 msgid "Flight"
-msgstr "Flugzeit"
+msgstr "Flug"
 
 #: src/Dialogs/dlgStatus.cpp:128
-#, fuzzy
 msgid "System"
-msgstr ""
-"System\n"
-"Einstellung"
+msgstr "System"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
@@ -4831,9 +4833,8 @@ msgid "Rules"
 msgstr "Regeln"
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Zeit"
+msgstr "Zeiten"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
@@ -6123,17 +6124,18 @@ msgstr ""
 "ausgerichtet ist."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Wind V"
+msgstr "Wind oben"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Die Kartenanzeige wird gedreht, so dass der Kurs nach oben ausgerichtet ist."
+"Die Kartenanzeige wird nach dem Wind ausgerichtet, so dass die Wind-Richtung "
+"von oben nach unten ist (eine Option für den Wellenflug)."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
