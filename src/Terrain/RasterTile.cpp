@@ -22,18 +22,8 @@ Copyright_License {
 */
 
 #include "Terrain/RasterTile.hpp"
-#include "Terrain/RasterLocation.hpp"
-#include "jasper/jas_image.h"
-#include "IO/ZipLineReader.hpp"
-#include "Operation/Operation.hpp"
 
-#include <stdlib.h>
 #include <algorithm>
-#include <limits.h>
-
-using std::min;
-using std::max;
-
 
 bool
 RasterTile::SaveCache(FILE *file) const
