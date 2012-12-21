@@ -238,30 +238,20 @@ $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TROUTE_SOURCES = \
 	$(SRC)/XML/Node.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_troute.cpp
-TEST_TROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
+TEST_TROUTE_DEPENDS = TERRAIN IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
 	$(SRC)/XML/Node.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_reach.cpp
-TEST_REACH_DEPENDS = JASPER IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
+TEST_REACH_DEPENDS = TERRAIN IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
@@ -269,11 +259,6 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/XML/Node.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -282,7 +267,7 @@ TEST_ROUTE_SOURCES = \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_route.cpp
-TEST_ROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
+TEST_ROUTE_DEPENDS = TERRAIN IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
@@ -1014,29 +999,19 @@ LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
 LOAD_TERRAIN_SOURCES = \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
-LOAD_TERRAIN_DEPENDS = GEO MATH IO OS JASPER ZZIP UTIL
+LOAD_TERRAIN_DEPENDS = TERRAIN GEO MATH IO OS ZZIP UTIL
 $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_CPPFLAGS = $(SCREEN_CPPFLAGS)
-RUN_HEIGHT_MATRIX_DEPENDS = GEO MATH IO OS JASPER ZZIP UTIL
+RUN_HEIGHT_MATRIX_DEPENDS = TERRAIN GEO MATH IO OS ZZIP UTIL
 $(eval $(call link-program,RunHeightMatrix,RUN_HEIGHT_MATRIX))
 
 RUN_INPUT_PARSER_SOURCES = \
@@ -2090,13 +2065,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -2199,7 +2167,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_LDADD = \
 	$(RESOURCE_BINARY)
-RUN_ANALYSIS_DEPENDS = DRIVER PROFILE FORM WIDGET SCREEN EVENT IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
+RUN_ANALYSIS_DEPENDS = TERRAIN DRIVER PROFILE FORM WIDGET SCREEN EVENT IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \

@@ -109,6 +109,7 @@ include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
+include $(topdir)/build/libterrain.mk
 include $(topdir)/build/harness.mk
 
 include $(topdir)/build/setup.mk
@@ -618,18 +619,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/RasterWeather.cpp \
-	$(SRC)/Terrain/HeightMatrix.cpp \
-	$(SRC)/Terrain/RasterRenderer.cpp \
-	$(SRC)/Terrain/TerrainRenderer.cpp \
-	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
-	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	\
@@ -879,11 +868,12 @@ XCSOAR_LDADD = \
 	$(RESOURCE_BINARY)
 
 XCSOAR_DEPENDS = GETTEXT PROFILE \
+	TERRAIN \
 	WIDGET FORM DATA_FIELD \
 	AUDIO SCREEN EVENT \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
-	SHAPELIB JASPER ZZIP \
+	SHAPELIB ZZIP \
 	LIBNET TIME OS THREAD \
 	UTIL GEO MATH
 
