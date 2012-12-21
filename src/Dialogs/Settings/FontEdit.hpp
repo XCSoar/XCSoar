@@ -29,6 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 bool
-dlgFontEditShowModal(const TCHAR *type, LOGFONT &data, LOGFONT default_data);
+dlgFontEditShowModal(const TCHAR *type, LOGFONT &data,
+                     const LOGFONT &default_data);
 
 #endif

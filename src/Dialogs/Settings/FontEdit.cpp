@@ -52,7 +52,8 @@ enum ControlIndex {
 class FontEditWidget
   : public RowFormWidget, public ActionListener, DataFieldListener
 {
-  LOGFONT data, default_data;
+  LOGFONT data;
+  const LOGFONT &default_data;
 
   Font font;
 
@@ -174,7 +175,8 @@ FontEditWidget::OnAction(int id)
 }
 
 bool
-dlgFontEditShowModal(const TCHAR *type, LOGFONT &data, LOGFONT default_data)
+dlgFontEditShowModal(const TCHAR *type, LOGFONT &data,
+                     const LOGFONT &default_data)
 {
   StaticString<128> title;
   title.Format(_T("%s: %s"), _("Edit Font"), type);
