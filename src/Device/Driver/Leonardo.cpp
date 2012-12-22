@@ -116,7 +116,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 
   // 1 = air pressure [Pa]
   if (line.Skip() == 0)
-    /* short "$C" sentence ends after airspeed */
+    /* short "$D" sentence ends after vario */
     return true;
 
   // 2 = netto vario [dm/s]
