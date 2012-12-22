@@ -76,12 +76,13 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(value))
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
+  if (line.Rest().empty())
+    /* short "$C" sentence ends after airspeed */
+    return true;
+
   // 3 = netto vario [dm/s]
   if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
-  else
-    /* short "$C" sentence ends after airspeed */
-    return true;
 
   // 4 = temperature [deg C]
   fixed oat;

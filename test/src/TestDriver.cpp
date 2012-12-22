@@ -667,6 +667,19 @@ TestLeonardo()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
+  ok1(device->ParseNMEA("$c,+2025,-2,+18*5C", nmea_info));
+  ok1(nmea_info.baro_altitude_available);
+  ok1(equals(nmea_info.baro_altitude, 2025));
+  ok1(nmea_info.total_energy_vario_available);
+  ok1(equals(nmea_info.total_energy_vario, -0.2));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.true_airspeed,
+             Units::ToSysUnit(fixed(18), Unit::KILOMETER_PER_HOUR)));
+  ok1(!nmea_info.netto_vario_available);
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
   ok1(device->ParseNMEA("$D,+7,100554,+25,18,+31,,0,-356,+25,+11,115,96*6A",
                         nmea_info));
   ok1(nmea_info.total_energy_vario_available);
@@ -1075,7 +1088,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(552);
+  plan_tests(560);
 
   TestGeneric();
   TestTasman();
