@@ -267,7 +267,10 @@ struct NMEAInfo {
    */
   Validity time_available;
 
-  fixed time; /**< global time (seconds UTC) */
+  /**
+   * Global time (seconds after UTC midnight)
+   */
+  fixed time;
 
   /** GPS date and time (UTC) */
   BrokenDateTime date_time_utc;
