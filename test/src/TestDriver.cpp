@@ -706,6 +706,10 @@ TestLeonardo()
   ok1(equals(nmea_info.total_energy_vario, 2.5));
   ok1(nmea_info.netto_vario_available);
   ok1(equals(nmea_info.netto_vario, -1.4));
+  ok1(nmea_info.airspeed_available);
+  ok1(nmea_info.airspeed_real);
+  ok1(equals(nmea_info.indicated_airspeed,
+             Units::ToSysUnit(fixed(45), Unit::KILOMETER_PER_HOUR)));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 65));
   ok1(equals(nmea_info.external_wind.norm, 7.777777));
@@ -1250,7 +1254,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(659);
+  plan_tests(662);
 
   TestGeneric();
   TestTasman();

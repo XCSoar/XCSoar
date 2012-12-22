@@ -23,6 +23,7 @@ Version 6.5 - not yet released
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)
   - Android/IOIO: support MS5611 pressure sensor
   - added driver for Levil AHRS device
+  - Leonardo: read indicated airspeed from PDGFTL1 sentence
 * logger
   - auto-flush IGC logger after every fix
 * user interface

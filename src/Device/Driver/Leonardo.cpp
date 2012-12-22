@@ -178,8 +178,11 @@ PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideNettoVario(value / 10);
 
   //  Indicated Air Speed  45       km/h         45 km/h
+  if (line.ReadChecked(value))
+    info.ProvideIndicatedAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
+
   //  Ground Efficiency  134      ratio        13,4 : 1
-  line.Skip(2);
+  line.Skip();
 
   //  Wind Speed  28       km/h         28 km/h
   //  Wind Direction  65       degree       65 degree
