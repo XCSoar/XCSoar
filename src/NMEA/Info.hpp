@@ -624,6 +624,20 @@ struct NMEAInfo {
   }
 
   /**
+   * Set the indicated airspeed [m/s] and derive the true airspeed
+   * from it, using the current altitude.
+   */
+  void ProvideIndicatedAirspeed(fixed ias) {
+    auto any_altitude = GetAnyAltitude();
+
+    if (any_altitude.first)
+      ProvideIndicatedAirspeedWithAltitude(ias, any_altitude.second);
+    else
+      /* no altitude; dirty fallback */
+      ProvideBothAirspeeds(ias, ias);
+  }
+
+  /**
    * Set the gross, non-compensated, plain-old vertical speed vario value [m/s].
    */
   void ProvideNoncompVario(fixed value) {
