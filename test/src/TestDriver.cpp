@@ -651,7 +651,7 @@ TestLeonardo()
   ok1(nmea_info.baro_altitude_available);
   ok1(equals(nmea_info.baro_altitude, 2025));
   ok1(nmea_info.total_energy_vario_available);
-  ok1(equals(nmea_info.total_energy_vario, -0.7));
+  ok1(equals(nmea_info.total_energy_vario, -0.07));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 5));
   ok1(nmea_info.netto_vario_available);
@@ -671,7 +671,7 @@ TestLeonardo()
   ok1(nmea_info.baro_altitude_available);
   ok1(equals(nmea_info.baro_altitude, 2025));
   ok1(nmea_info.total_energy_vario_available);
-  ok1(equals(nmea_info.total_energy_vario, -0.2));
+  ok1(equals(nmea_info.total_energy_vario, -0.02));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed,
              Units::ToSysUnit(fixed(18), Unit::KILOMETER_PER_HOUR)));

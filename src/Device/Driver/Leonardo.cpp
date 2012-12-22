@@ -67,9 +67,9 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value);
 
-  // 1 = vario [dm/s]
+  // 1 = vario [cm/s]
   if (line.ReadChecked(value))
-    info.ProvideTotalEnergyVario(value / 10);
+    info.ProvideTotalEnergyVario(value / 100);
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */

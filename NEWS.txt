@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.4.6 - not yet released
+* devices
+  - Leonardo: fixed vario parser for the $c sentence
 * infoboxes
   - fixes broken wind arrow display in some situations (#2295)
 * data files
