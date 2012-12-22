@@ -686,6 +686,8 @@ TestLeonardo()
                         nmea_info));
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 0.7));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1005.54));
   ok1(nmea_info.netto_vario_available);
   ok1(equals(nmea_info.netto_vario, 2.5));
   ok1(nmea_info.airspeed_available);
@@ -1254,7 +1256,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(662);
+  plan_tests(664);
 
   TestGeneric();
   TestTasman();

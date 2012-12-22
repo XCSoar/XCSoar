@@ -115,10 +115,13 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 10);
 
-  // 1 = air pressure [Pa]
-  if (line.Skip() == 0)
+  if (line.Rest().empty())
     /* short "$D" sentence ends after vario */
     return true;
+
+  // 1 = air pressure [Pa]
+  if (line.ReadChecked(value))
+    info.ProvideStaticPressure(AtmosphericPressure::Pascal(value));
 
   // 2 = netto vario [dm/s]
   if (line.ReadChecked(value))
