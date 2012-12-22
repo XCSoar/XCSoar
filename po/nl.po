@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-17 10:12+0100\n"
-"PO-Revision-Date: 2012-12-03 07:21+0000\n"
+"PO-Revision-Date: 2012-12-21 21:13+0000\n"
 "Last-Translator: Fuchur <Unknown>\n"
 "Language-Team: Ikhiwa.com <opensource@ikhiwa.com>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
-"X-Generator: Launchpad (build 16341)\n"
+"X-Launchpad-Export-Date: 2012-12-22 10:41+0000\n"
+"X-Generator: Launchpad (build 16378)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2657,23 +2657,23 @@ msgid "Shows the time left until the start point opens or closes."
 msgstr "Laat de resterende tijd zien totdat de start OPEN/DICHT gaat."
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr "Start OPEN/DICHT aftellen bij aankomst"
+msgstr "Start open/dicht klok t.o.v. aankomst"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Start straal"
+msgstr "Start aankomst"
 
 #: src/InfoBoxes/Content/Factory.cpp:1171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
-"Laat de tijd zien die nog te gaan is tot het openen/sluiten van het "
-"startpunt, vergeleken met de berekende aankomsttijd."
+"Laat de tijd om het startpunt te bereiken zien ten opzichte van de tijd die "
+"deze open of dicht gaat."
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294
@@ -3749,12 +3749,12 @@ msgstr "Android 2.3 is benodigd voor de bestanden manager."
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO schakelaars en sticks"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Druk sensor"
+msgstr "IOIO i2c druk sensor"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3793,15 +3793,17 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "I2C Bus"
-msgstr ""
+msgstr "I2C Bus"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "Select the description or bus number that matches your configuration."
 msgstr ""
+"Selecteer de omschrijving of het bus nummer welke met de configuratie "
+"overeenkomt"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C Adr"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3810,11 +3812,13 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"Het i2c adres welke met de configuratie overeenkomt. Dit veld wordt niet "
+"gebruikt wanneer de selectie in de i2c Bus geen i2c bus nummer is. (Wanneer "
+"de voorgaande zin chinees is kan het veld worden leeg gelaten ;-)"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "Druk sensor"
+msgstr "Druk gebruik"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
@@ -3822,6 +3826,9 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
+"Selecteer het doel van de druk sensor. Deze sensor meet een bepaalde druk. "
+"Hier wordt verteld welke druk dit precies is en waar deze voor moet worden "
+"gebruikt."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
@@ -4840,16 +4847,12 @@ msgid "Status"
 msgstr "Status"
 
 #: src/Dialogs/dlgStatus.cpp:125
-#, fuzzy
 msgid "Flight"
-msgstr "Vluchtduur"
+msgstr "Vlucht"
 
 #: src/Dialogs/dlgStatus.cpp:128
-#, fuzzy
 msgid "System"
-msgstr ""
-"Syteem\n"
-"Instelling"
+msgstr "Systeem"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
@@ -4858,9 +4861,8 @@ msgid "Rules"
 msgstr "Regels"
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Tijd"
+msgstr "Aantal keer"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
@@ -6150,17 +6152,18 @@ msgstr ""
 "De kaart zal zo geroteerd wordendat het navigatie doel boven georiënteerd is."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Wind V"
+msgstr "Wind boven"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"De kaart zal zo geroteerd worden dat het gevlogen pad boven georiënteerd is."
+"De kaart wordt zo geroteerd dat de altijd van boven naar beneden loopt op de "
+"kaart. (Kan nuttig zijn bij golf vliegen)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
