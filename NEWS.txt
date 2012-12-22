@@ -42,8 +42,12 @@ Version 6.5 - not yet released
 * track friends via internet connection (SkyLines live tracking)
 
 Version 6.4.6 - not yet released
+* devices
+  - Leonardo: fixed vario parser for the $c sentence
 * infoboxes
   - fixes broken wind arrow display in some situations (#2295)
+* data files
+  - fixed arc airspace approximation threshold handling (#2360)
 
 Version 6.4.5 - 2012/12/14
 * calculations

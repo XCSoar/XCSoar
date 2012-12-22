@@ -67,21 +67,22 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value);
 
-  // 1 = vario [dm/s]
+  // 1 = vario [cm/s]
   if (line.ReadChecked(value))
-    info.ProvideTotalEnergyVario(value / 10);
+    info.ProvideTotalEnergyVario(value / 100);
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
   if (line.ReadChecked(value))
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
+  if (line.Rest().empty())
+    /* short "$C" sentence ends after airspeed */
+    return true;
+
   // 3 = netto vario [dm/s]
   if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
-  else
-    /* short "$C" sentence ends after airspeed */
-    return true;
 
   // 4 = temperature [deg C]
   fixed oat;
@@ -116,7 +117,7 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 
   // 1 = air pressure [Pa]
   if (line.Skip() == 0)
-    /* short "$C" sentence ends after airspeed */
+    /* short "$D" sentence ends after vario */
     return true;
 
   // 2 = netto vario [dm/s]

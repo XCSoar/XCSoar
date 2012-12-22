@@ -213,12 +213,20 @@ struct TempAirspaceType
     // Determine end bearing
     Angle end_bearing = center.Bearing(end);
 
+    if (rotation > 0) {
+      while (end_bearing < start_bearing)
+        end_bearing += Angle::FullCircle();
+    } else if (rotation < 0) {
+      while (end_bearing > start_bearing)
+        end_bearing -= Angle::FullCircle();
+    }
+
     // Add first polygon point
     points.push_back(start);
 
     // Add intermediate polygon points
     while ((end_bearing - start_bearing).AbsoluteDegrees() > threshold) {
-      start_bearing = (start_bearing + step).AsBearing();
+      start_bearing += step;
       points.push_back(FindLatitudeLongitude(center, start_bearing, radius));
     }
 
@@ -234,12 +242,20 @@ struct TempAirspaceType
     const Angle step = Angle::Degrees(rotation * _step);
     const fixed threshold = _step * fixed(1.5);
 
+    if (rotation > 0) {
+      while (end < start)
+        end += Angle::FullCircle();
+    } else if (rotation < 0) {
+      while (end > start)
+        end -= Angle::FullCircle();
+    }
+
     // Add first polygon point
     points.push_back(FindLatitudeLongitude(center, start, radius));
 
     // Add intermediate polygon points
     while ((end - start).AbsoluteDegrees() > threshold) {
-      start = (start + step).AsBearing();
+      start += step;
       points.push_back(FindLatitudeLongitude(center, start, radius));
     }
 
@@ -649,8 +665,18 @@ ParseClassTNP(const TCHAR *buffer)
 static AirspaceClass
 ParseTypeTNP(const TCHAR *buffer)
 {
+  // Handle e.g. "TYPE=CLASS C" properly
+  const TCHAR *type = StringAfterPrefixCI(buffer, _T("CLASS "));
+  if (type) {
+    AirspaceClass _class = ParseClassTNP(type);
+    if (_class != OTHER)
+      return _class;
+  } else {
+    type = buffer;
+  }
+
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_type_strings); i++)
-    if (StringIsEqualIgnoreCase(buffer, airspace_tnp_type_strings[i].string))
+    if (StringIsEqualIgnoreCase(type, airspace_tnp_type_strings[i].string))
       return airspace_tnp_type_strings[i].type;
 
   return OTHER;
