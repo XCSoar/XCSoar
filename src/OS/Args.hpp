@@ -53,13 +53,13 @@ class Args {
 public:
   Args(int argc, char **argv, const char *_usage)
     :name(argv[0]), usage(_usage) {
-    assert(name != NULL);
-    assert(usage != NULL);
+    assert(name != nullptr);
+    assert(usage != nullptr);
 
     std::copy(argv + 1, argv + argc, std::back_inserter(args));
 
 #ifdef WIN32
-    cmdline = NULL;
+    cmdline = nullptr;
 #endif
   }
 
@@ -88,7 +88,7 @@ public:
     char *d = cmdline;                 // current position in destination buffer
     char *option = cmdline;
 
-    name = NULL;
+    name = nullptr;
     bool in_qoute = false;
     do {
       if (*s == '"')
@@ -106,7 +106,7 @@ public:
           // first quoted blank or non blank character of new option
 #ifndef _WIN32_WCE
           // program name is not included in command line on CE
-          if (name == NULL)
+          if (name == nullptr)
             name = option;
           else
 #endif
@@ -116,7 +116,7 @@ public:
       }
     } while (*s++);
 
-    if (name == NULL)
+    if (name == nullptr)
       name = "";
   }
 
@@ -156,7 +156,7 @@ public:
   }
 
   const char *PeekNext() const {
-    return IsEmpty() ? NULL : args.front();
+    return IsEmpty() ? nullptr : args.front();
   }
 
   const char *ExpectNext() {
@@ -168,7 +168,7 @@ public:
 
   int ExpectNextInt() {
     const char *p = ExpectNext();
-    assert(p != NULL);
+    assert(p != nullptr);
 
     char *endptr;
     int result = ParseInt(p, &endptr);
@@ -180,7 +180,7 @@ public:
 
   double ExpectNextDouble() {
     const char *p = ExpectNext();
-    assert(p != NULL);
+    assert(p != nullptr);
 
     char *endptr;
     double result = ParseDouble(p, &endptr);
@@ -192,7 +192,7 @@ public:
 
   tstring ExpectNextT() {
     const char *p = ExpectNext();
-    assert(p != NULL);
+    assert(p != nullptr);
 
 #ifdef _UNICODE
     PathName convert(p);
