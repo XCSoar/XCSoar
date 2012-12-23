@@ -38,6 +38,7 @@ static bool
 ParseData(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PCPROBE,T,Q0,Q1,Q2,Q3,ax,ay,az,temp,rh,batt,delta_press,abs_press,C,
+  // see http://www.compassitaly.com/CMS/index.php/en/download/c-probe/231-c-probeusermanual/download
 
   long _q[4];
   bool q_available = line.ReadHexChecked(_q[0]);
