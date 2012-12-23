@@ -34,9 +34,6 @@ Copyright_License {
 #include <algorithm>
 #include <limits.h>
 
-using std::min;
-using std::max;
-
 short*
 RasterTileCache::GetImageBuffer(unsigned index)
 {
@@ -204,10 +201,10 @@ void
 RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                                  double _lat_min, double _lat_max)
 {
-  bounds.west = Angle::Degrees(fixed(min(_lon_min, _lon_max)));
-  bounds.east = Angle::Degrees(fixed(max(_lon_min, _lon_max)));
-  bounds.north = Angle::Degrees(fixed(max(_lat_min, _lat_max)));
-  bounds.south = Angle::Degrees(fixed(min(_lat_min, _lat_max)));
+  bounds.west = Angle::Degrees(std::min(_lon_min, _lon_max));
+  bounds.east = Angle::Degrees(std::max(_lon_min, _lon_max));
+  bounds.north = Angle::Degrees(std::max(_lat_min, _lat_max));
+  bounds.south = Angle::Degrees(std::min(_lat_min, _lat_max));
   bounds_initialised = true;
 }
 
