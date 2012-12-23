@@ -481,7 +481,7 @@ glide reach is drawn as a line resp.\ a shade on the map area.
   thermal profile (climb band) overlay on the map.
 \item[Final glide bar MC0*]  If set to ON the final glide bar will show a second arrow 
   indicating the required height to reach the final waypoint at MC zero.
-
+\end{description}
 In all FLARM environment, the colour of the target indicates the threat level.
 
 
@@ -490,6 +490,7 @@ In all FLARM environment, the colour of the target indicates the threat level.
 
 This page bundles all details to the vario-gauge and is entirely classified as expert setup.
 
+\begin{description}
 \item[Speed arrows*]  \label{conf:variogauge} Whether to show speed command 
   arrows on the vario gauge.
   When shown, in cruise mode, arrows point up to command slow down; arrows point down 
@@ -503,6 +504,22 @@ This page bundles all details to the vario-gauge and is entirely classified as e
 \item[Averager needle*]  If true, the vario gauge will display a hollow averager
   needle. During cruise, this needle displays the average net value. During circling, 
   this needle displays the average gross value.
+\end{description}
+
+%%%%%%%%%%
+\section{Gauges / Audio Vario}\label{sec:audiovario-gauge}
+
+This page bundles all details to the audio vario-gauge. \label{conf:audiovariogauge}
+
+\begin{description}
+\item[Audio Vario]  Enable/Disable the audio variometer.
+\item[Volume]  Set the volume of the variometer sounds.
+\item[Enable Deadband]  Enable/Disable the mute for audio output when the current lift is in a certain range around zero.
+\item[Min. Frequency*]  The tone frequency that is played at maximum sink rate.
+\item[Zero Frequency*]  The tone frequency that is played at zero climb rate.
+\item[Max. Frequency*]  The tone frequency that is played at maximum climb rate.
+\item[Deadband min. lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is below this threshold.
+\item[Deadband max. lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is above this threshold.
 \end{description}
 
 
