@@ -1577,18 +1577,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	$(SRC)/Math/Screen.cpp \
-	$(SRC)/Terrain/RasterBuffer.cpp \
-	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Terrain/RasterTile.cpp \
-	$(SRC)/Terrain/RasterTileCache.cpp \
-	$(SRC)/Terrain/RasterMap.cpp \
-	$(SRC)/Terrain/RasterTerrain.cpp \
-	$(SRC)/Terrain/RasterWeather.cpp \
-	$(SRC)/Terrain/HeightMatrix.cpp \
-	$(SRC)/Terrain/RasterRenderer.cpp \
-	$(SRC)/Terrain/TerrainRenderer.cpp \
-	$(SRC)/Terrain/TerrainSettings.cpp \
-	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Look/Fonts.cpp \
@@ -1685,7 +1673,7 @@ RUN_MAP_WINDOW_SOURCES += \
 endif
 
 RUN_MAP_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN EVENT SHAPELIB IO OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
+RUN_MAP_WINDOW_DEPENDS = PROFILE TERRAIN SCREEN EVENT SHAPELIB IO OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_DIALOG_SOURCES = \
