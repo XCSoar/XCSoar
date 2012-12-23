@@ -487,7 +487,8 @@ public:
    * @param y y-coordinate
    * @return Counter-clockwise angle between the x-axis and the given coordinate
    */
-  static Angle FromXY(const fixed& x, const fixed& y) {
+  gcc_const
+  static Angle FromXY(const fixed x, const fixed y) {
     return Angle::Radians(atan2(y,x));
   }
 
