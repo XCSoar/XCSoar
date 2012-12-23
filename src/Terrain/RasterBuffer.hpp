@@ -75,7 +75,7 @@ public:
     :data(_width, _height) {}
 
   bool IsDefined() const {
-    return data.Defined();
+    return data.IsDefined();
   }
 
   unsigned GetWidth() const {

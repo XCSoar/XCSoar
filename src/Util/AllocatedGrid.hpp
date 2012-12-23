@@ -52,7 +52,7 @@ public:
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
 
-  bool Defined() const {
+  bool IsDefined() const {
     return array.size() > 0;
   }
 
