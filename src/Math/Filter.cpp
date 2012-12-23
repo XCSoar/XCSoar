@@ -63,7 +63,7 @@ Filter::Design(const fixed cutoff_wavelength, const bool bessel)
   fixed K2 = g * sqr(omega0);
 
   a[0] = K2 / (fixed(1) + K1 + K2);
-  a[1] = a[0] + a[0];
+  a[1] = Double(a[0]);
   a[2] = a[0];
   b[0] = a[1] * (fixed(1) / K2 - fixed(1));
   b[1] = fixed(1) - (a[0] + a[1] + a[2] + b[0]);
