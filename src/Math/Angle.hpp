@@ -120,7 +120,7 @@ public:
 #ifdef FIXED_MATH
   gcc_const
   static Angle Degrees(const fixed _value) {
-    return Angle(_value * fixed_deg_to_rad);
+    return Angle(_value * fixed(DEG_TO_RAD));
   }
 #endif
 
@@ -131,7 +131,7 @@ public:
 
   gcc_pure
   fixed Degrees() const {
-    return value * fixed_rad_to_deg;
+    return value * fixed(RAD_TO_DEG);
   }
 
   constexpr
@@ -167,7 +167,7 @@ public:
 #ifdef FIXED_MATH
   gcc_const
   static Angle Radians(const fixed _value) {
-    return Angle(_value * fixed_rad_to_deg);
+    return Angle(_value * fixed(RAD_TO_DEG));
   }
 #endif
 
@@ -178,7 +178,7 @@ public:
 
   gcc_pure
   fixed Radians() const {
-    return value * fixed_deg_to_rad;
+    return value * fixed(DEG_TO_RAD);
   }
 
   gcc_pure
