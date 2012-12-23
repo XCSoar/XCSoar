@@ -44,6 +44,31 @@ GeoBounds::Extend(const GeoPoint pt)
   }
 }
 
+static bool
+IntersectWith(Angle &a, Angle &b, const Angle other_a, const Angle other_b)
+{
+  bool result = false;
+
+  if (other_a.Between(a, b)) {
+    a = other_a;
+    result = true;
+  }
+
+  if (other_b.Between(a, b)) {
+    b = other_b;
+    result = true;
+  }
+
+  return result;
+}
+
+bool
+GeoBounds::IntersectWith(const GeoBounds &other)
+{
+  return ::IntersectWith(west, east, other.west, other.east) &&
+    ::IntersectWith(south, north, other.south, other.north);
+}
+
 GeoPoint
 GeoBounds::GetCenter() const
 {

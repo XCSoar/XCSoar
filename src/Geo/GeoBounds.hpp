@@ -123,6 +123,14 @@ public:
       Overlaps(south, north, other.south, other.north);
   }
 
+  /**
+   * Set this object to the intersection of this and the other object.
+   *
+   * @return false if the two objects do not overlap; in this case,
+   * the object is left in an undefined state
+   */
+  bool IntersectWith(const GeoBounds &other);
+
   gcc_pure
   GeoPoint GetCenter() const;
 

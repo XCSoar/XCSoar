@@ -25,9 +25,16 @@
 
 #include <stdio.h>
 
+static GeoBounds
+MakeGeoBounds(int west, int north, int east, int south)
+{
+  return GeoBounds(GeoPoint(Angle::Degrees(west), Angle::Degrees(north)),
+                   GeoPoint(Angle::Degrees(east), Angle::Degrees(south)));
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(24);
+  plan_tests(38);
 
   GeoPoint g(Angle::Degrees(2), Angle::Degrees(4));
 
@@ -73,6 +80,26 @@ int main(int argc, char **argv)
   ok1(equals(b.west, 2));
   ok1(equals(b.north, 6));
   ok1(equals(b.south, 4));
+
+  GeoBounds c = MakeGeoBounds(2, 6, 8, 4);
+  ok1(c.Overlaps(b));
+  ok1(c.IntersectWith(b));
+  ok1(equals(c.west, 2));
+  ok1(equals(c.north, 6));
+  ok1(equals(c.east, 8));
+  ok1(equals(c.south, 4));
+
+  GeoBounds d = MakeGeoBounds(2, 6, 7, 5);
+  ok1(c.Overlaps(d));
+  ok1(c.IntersectWith(d));
+  ok1(equals(c.west, 2));
+  ok1(equals(c.north, 6));
+  ok1(equals(c.east, 7));
+  ok1(equals(c.south, 5));
+
+  d = MakeGeoBounds(8, 6, 1, 5);
+  ok1(!c.Overlaps(d));
+  ok1(!c.IntersectWith(d));
 
   return exit_status();
 }
