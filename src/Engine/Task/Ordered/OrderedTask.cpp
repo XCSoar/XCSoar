@@ -1329,14 +1329,10 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
 
-  FlatGeoPoint ll = task_projection.ProjectInteger(GeoPoint(bounds.west,
-                                                            bounds.south));
-  FlatGeoPoint lr = task_projection.ProjectInteger(GeoPoint(bounds.east,
-                                                            bounds.south));
-  FlatGeoPoint ul = task_projection.ProjectInteger(GeoPoint(bounds.west,
-                                                            bounds.north));
-  FlatGeoPoint ur = task_projection.ProjectInteger(GeoPoint(bounds.east,
-                                                            bounds.north));
+  FlatGeoPoint ll = task_projection.ProjectInteger(bounds.GetSouthWest());
+  FlatGeoPoint lr = task_projection.ProjectInteger(bounds.GetSouthEast());
+  FlatGeoPoint ul = task_projection.ProjectInteger(bounds.GetNorthWest());
+  FlatGeoPoint ur = task_projection.ProjectInteger(bounds.GetNorthEast());
   FlatGeoPoint fmin(min(ll.longitude, ul.longitude),
                     min(ll.latitude, lr.latitude));
   FlatGeoPoint fmax(max(lr.longitude, ur.longitude),

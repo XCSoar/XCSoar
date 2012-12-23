@@ -168,8 +168,8 @@ TaskProjection::Project(const GeoBounds& bb) const
 {
   assert(initialised);
 
-  FlatBoundingBox fb(ProjectInteger(GeoPoint(bb.west, bb.south)),
-                     ProjectInteger(GeoPoint(bb.east, bb.north)));
+  FlatBoundingBox fb(ProjectInteger(bb.GetSouthWest()),
+                     ProjectInteger(bb.GetNorthEast()));
   fb.ExpandByOne(); // prevent rounding
   return fb;
 }

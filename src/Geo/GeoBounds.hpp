@@ -66,6 +66,22 @@ struct GeoBounds {
     north = Angle::FullCircle();
   }
 
+  constexpr GeoPoint GetNorthWest() const {
+    return GeoPoint(west, north);
+  }
+
+  constexpr GeoPoint GetNorthEast() const {
+    return GeoPoint(east, north);
+  }
+
+  constexpr GeoPoint GetSouthWest() const {
+    return GeoPoint(west, south);
+  }
+
+  constexpr GeoPoint GetSouthEast() const {
+    return GeoPoint(east, south);
+  }
+
   /**
    * Check if this object is "valid".  Returns false when it was
    * constructed by Invalid().  This is not an extensive plausibility

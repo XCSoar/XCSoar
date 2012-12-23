@@ -285,10 +285,10 @@ TerrainRenderer::Draw(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   const GeoBounds &bounds = raster_renderer.GetBounds();
   const RasterPoint vertices[] = {
-    map_projection.GeoToScreen(GeoPoint(bounds.west, bounds.north)),
-    map_projection.GeoToScreen(GeoPoint(bounds.east, bounds.north)),
-    map_projection.GeoToScreen(GeoPoint(bounds.west, bounds.south)),
-    map_projection.GeoToScreen(GeoPoint(bounds.east, bounds.south)),
+    map_projection.GeoToScreen(bounds.GetNorthWest()),
+    map_projection.GeoToScreen(bounds.GetNorthEast()),
+    map_projection.GeoToScreen(bounds.GetSouthWest()),
+    map_projection.GeoToScreen(bounds.GetSouthEast()),
   };
 
   glVertexPointer(2, GL_VALUE, 0, vertices);
