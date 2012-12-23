@@ -325,6 +325,15 @@ public:
   unsigned GetFineHeight() const {
     return height << SUBPIXEL_BITS;
   }
+
+private:
+  unsigned GetFineTileWidth() const {
+    return tile_width << SUBPIXEL_BITS;
+  }
+
+  unsigned GetFineTileHeight() const {
+    return tile_height << SUBPIXEL_BITS;
+  }
 };
 
 #endif

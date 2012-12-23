@@ -317,13 +317,14 @@ RasterTileCache::ScanLine(const RasterLocation _start,
                           const RasterLocation _end,
                           short *buffer, unsigned size, bool interpolate) const
 {
-  assert(_start.x < width << 8);
-  assert(_start.y < height << 8);
-  assert(_end.x < width << 8);
-  assert(_end.y < height << 8);
+  assert(_start.x < GetFineWidth());
+  assert(_start.y < GetFineHeight());
+  assert(_end.x < GetFineWidth());
+  assert(_end.y < GetFineHeight());
   assert(size >= 2);
 
-  const GridRay ray(tile_width << 8, tile_height << 8, _start, _end, size);
+  const GridRay ray(GetFineTileWidth(), GetFineTileHeight(),
+                    _start, _end, size);
   assert(ray.size == size);
   assert(ray.start.index == 0);
   assert(ray.end.index == size);
