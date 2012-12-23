@@ -49,14 +49,18 @@ public:
     return raster_tile_cache.GetInitialised();
   }
 
+  const GeoBounds &GetBounds() const {
+    return raster_tile_cache.GetBounds();
+  }
+
   gcc_pure
   bool IsInside(const GeoPoint &pt) const {
-    return raster_tile_cache.GetBounds().IsInside(pt);
+    return GetBounds().IsInside(pt);
   }
 
   gcc_pure
   GeoPoint GetMapCenter() const {
-    return raster_tile_cache.GetBounds().GetCenter();
+    return GetBounds().GetCenter();
   }
 
   void SetViewCenter(const GeoPoint &location, fixed radius);

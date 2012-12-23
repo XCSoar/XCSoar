@@ -66,7 +66,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
     }
   }
 
-  projection.Set(raster_tile_cache.GetBounds(),
+  projection.Set(GetBounds(),
                  raster_tile_cache.GetFineWidth(),
                  raster_tile_cache.GetFineHeight());
 }
@@ -87,7 +87,7 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
   if (!raster_tile_cache.GetInitialised())
     return;
 
-  const GeoBounds &bounds = raster_tile_cache.GetBounds();
+  const GeoBounds &bounds = GetBounds();
 
   int x = AngleToPixel(location.longitude, bounds.west, bounds.east,
                        raster_tile_cache.GetWidth());
@@ -131,7 +131,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   /* clip the line to the map bounds */
 
   GeoPoint clipped_start = start, clipped_end = end;
-  const GeoClip clip(raster_tile_cache.GetBounds());
+  const GeoClip clip(GetBounds());
   if (!clip.ClipLine(clipped_start, clipped_end)) {
     std::fill(buffer, buffer + size, invalid);
     return;
