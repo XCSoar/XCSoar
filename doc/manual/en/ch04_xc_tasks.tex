@@ -256,6 +256,57 @@ related to the active task, as described in detail below.  In addition, there
 are buttons for \button{Calculator}, \button{Turn Points}, \button{Manage}, 
 and \button{Rules}, as well as a button to \button{Close} the task manager.
 
+\subsection*{Task calculator dialog}\label{sec:task-calc-dial}
+The task calculator dialogue allows the pilot to see the effect of
+various changes to the task on final performance.
+
+This may be accessed several ways: \gesture{Right - Down}
+\begin{itemize}
+\item From the menu 
+\begin{quote}
+\bmenu{Nav}\blink\bmenu{Task calc}
+\end{quote}
+\item From the analysis dialogue, menu \bmenu{Info}\blink\bmenu{Analysis} and select
+ the button \button{Task Calc}
+\end{itemize}
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{en/figures/dialog-taskcalculator.png}
+\end{center}
+
+\begin{description}
+%\item[Assigned task time]  This field displays the assigned task time.
+\item[Estimated task time]  This field displays the estimated total time 
+  on task to complete the task at the provided MacCready setting.
+\item[Task distance]  This field displays the task distance remaining.
+\item[Set MacCready]  Allows the user to adjust the MacCready value and 
+  see the effect it has on the estimated task time.
+\item[AAT range]  Allows the user to adjust the targets within the remaining 
+  AAT areas, to see the effect it has on estimated task time and task distance.
+\item[Speed remaining]  This field displays the estimated speed for the
+  remainder of the task at the provided MacCready setting.
+\item[Achieved MacCready]  This field displays the achieved MacCready value.
+\item[Achieved speed]  This field displays the achieved speed % at the achieved MacCready setting???
+\item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
+than 100 indicates better than MacCready performance is achieved through flying
+in streets. Less than 100 is appropriate if you fly considerably off-track. This 
+value estimates your cruise efficiency according to the current flight history 
+with the set MC value. Calculation begins after task is started.
+\end{description}
+See Section~\ref{sec:task-speed-estim} for more details on task speed
+and achieved MacCready calculations.
+
+On closing the dialogue the entered MacCready value is used as the MacCready 
+setting. If the \button{Cancel} button is pressed, the MacCready setting is 
+unaffected.
+
+The \button{Target} button, for AAT tasks, adjusts the range
+(increases or decreases) so that the estimated task time exceeds the
+assigned task time by less than five minutes.  The range is adjusted
+target-wise. In typical use, all targets are set to ``auto" that means the pilot 
+does not have to manually adjust the range to find the course for arrival at 
+the assigned task time, thereby reducing pilot workload.
+
 \subsection*{Turn Points}
 The \button{Turn Points} button displays an ordered list of the points in the 
 current active task.  If there are no waypoints in the active task, there 
@@ -290,7 +341,7 @@ different value for this rule.  Task types are discussed in more detail below.
 Also, tapping on the \button{Rules} button again after it is highlighted allows 
 toggling between a "thumbnail" view of the task map and a larger view of the task.
 
-\subsection*{Task types}
+\section{Task types}
 XC Soar currently defines three different task types: Racing, AAT, and FAI badges/records.
 
 A brief description of the task types is included below, but this manual does 
@@ -298,13 +349,16 @@ not intend to rephrase FAI rules or contest task types.  The reader is encourage
 to become thoroughly familiar with each task type by referring to contest rules 
 or FAI rules, which are available at \url{http://www.fai.org}. 
 
-\begin{itemize}
-\item Racing (also known as an "assigned task").  The racing task involves flight 
+
+\subsection*{Racing}
+(also known as an "assigned task").  The racing task involves flight 
 around each specified turnpoint in the specified order.  Selecting the racing task 
 type allows the pilot to enter the following parameters (note: if the option 
 "FAI start/finish rules" is set to "On" then none of the options are available: 
 \todonum[inline]{Why is this?}
   \begin{itemize}
+  \item Start open time: This is the time when the start zone opens.
+  \item Start close time: This is the time when the start zone closes.
   \item Start max. speed: This is the maximum speed allowed in the start observation 
     zone.  This should be set to 0 if there is no limit.
   \item Start max. height: This is the maximum height above the start height 
@@ -321,22 +375,30 @@ type allows the pilot to enter the following parameters (note: if the option
     or max. start speed.  Finish height reference is set to AGL and finish height 
     is 1000m below the start height \todonum[inline]{Is this description correct?}
   \end{itemize}
-\item AAT (also known as "Turn Area Task,"or TAT).  This is a task through assigned 
+\subsection*{AAT}
+(also known as "Turn Area Task,"or TAT).  This is a task through assigned 
 areas (restricted to cylinder or sector observation zones).  A minimum task time 
 applies.  Rules options for this task type include:
   \begin{itemize}
   \item AAT minimum time:  This is the required minimum time for the task.  Refer 
     to contest rules or consult an expert for penalties associated with finishing 
     prior to the minimum time.  The time in this option is given in minutes.
+  \item Start open time: Same meaning as in the racing task type, above
+  \item Start close time: Same meaning as in the racing task type, above
   \item Start maximum speed: Same meaning as in the racing task type, above
   \item Start maximum height: Same meaning as in the racing task type, above
   \item Start height reference: Same meaning as in the racing task type, above
   \item Finish minimum height: Same meaning as in the racing task type, above
   \item Finish height reference: Same meaning as in the racing task type, above
-   \item FAI start/finish rules: Same meaning as in the racing task type, above
+  \item FAI start/finish rules: Same meaning as in the racing task type, above
  \end{itemize}
-\item FAI badges/records.  This task type allows only FAI start, finish, and turn point types.
-\end{itemize}
+\subsection*{FAI badges/records}
+Rules options for this task type include:
+  \begin{itemize}
+  \item Start open time: Same meaning as in the racing task type, above
+  \item Start close time: Same meaning as in the racing task type, above
+  \item FAI start/finish rules: Same meaning as in the racing task type, above
+  \end{itemize}
 
 Once the appropriate task type has been selected and start and finish rules have 
 been defined as described above, it is necessary to define the properties of each 
@@ -349,7 +411,82 @@ brings up the waypoint definition pressing the \button{Change type} button  will
 bring up a menu of the various task point types available.  Definitions of each 
 point type are shown below the list.
 
+\section{Task rules}\label{sec:task-rules}
+
+A variety of task rules may be used when specifying tasks, including
+the common FAI triangles and Assigned Area Tasks (AAT).  Many aspects
+of the rules can also be customised.
+
+Starting and finishing lines are centered on their associated waypoint
+and aligned perpendicular to the next and previous waypoints
+respectively.
+
+Sector turn-points are 90 degree segments aligned to the bisection of
+the previous and next waypoints, as commonly used in FAI tasks.
+There is also support for British BGA, and German DAeC sectors.
+
+The conditions to meet for a valid start depending on the type of start:
+\begin{description}
+\item[Start Cylinder] When the glider leaves the cylinder area.
+\item[Start Line] When the glider crosses the start line.
+\end{description}
+
+The conditions to meet for a valid intermediate waypoints depending on their
+ type:
+\begin{description}
+\item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
+by a segment and radial distance from the waypoint.  The segment is
+defined by a 90 degree arc centered about the bisector of inbound and
+outbound legs, with a distance of 20 km.
+\item[Keyhole Sector (DAeC 0.5/10 sector)] When the glider has entered the
+observation zone, defined by a segment and radial distance from the waypoint.  The segment is
+defined by a 90 degree arc centered about the bisector of inbound and
+outbound legs, with a distance of 10 km.  The observation zone also includes
+a cylinder of 500 m.
+\item[Turnpoint Cylinder]  When the glider has entered the observation zone
+defined by a radial distance from the waypoint.
+\item[BGA Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 90 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 20 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[BGA Enhanced Option Fixed Course Sector]  When the glider has entered the
+observation zone defined by a segment and radial distance from the
+waypoint. The segment is defined by a 180 degree arc centered about the
+bisector of inbound and outbound legs, with a distance of 10 km.
+The observation zone also includes a cylinder of 500 m (British rules).
+\item[Area Zylinder (AAT)]  and
+\item[Area Sector (AAT)]  When the glider has entered the observation zone
+defined by the radial distance from the waypoint, and segment for sector areas.
+\end{description}
+
+Task completion depends on the finish type:
+\begin{description}
+\item[Finish Cylinder] When the glider enters the cylinder area.
+\item[Finish Line] When the glider crosses the finish line.
+\end{description}
+
+Automatic advancement is triggered whenever a condition is met. To start an AAT,
+mixed task, or Racing task the start has to be armed before. 
+
+
+\tip Competition rules may be defined in a profile file for
+distribution to a group of pilots or task-setters, so all competitors
+are playing by the same rules!
+
+Additional task rules for valid starts and finishes may also be
+specified.  Starts may have a defined maximum altitude above ground,
+and a maximum speed.  Finishes may have a minimum altitude above
+ground.  These parameters are defined in the page ``Default Task Rules'' in
+the configuration \config{taskrules} settings.
+
+For non-AAT tasks, an option is available to set the minimum finish
+altitude according to the FAI rule, whereby the minimum finish
+altitude is above 1000 meters below the start altitude.
+
+
 %Need to add a section describing how to start the task%
+
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
 At all times one waypoint in the task is designated as the active
@@ -436,78 +573,6 @@ aircraft is in sector:
  or entered the finish cylinder.  This occurs in both advance modes. 
 \end{itemize}
 
-\section{Task rules}\label{sec:task-rules}
-
-A variety of task rules may be used when specifying tasks, including
-the common FAI triangles and Assigned Area Tasks (AAT).  Many aspects
-of the rules can also be customised.
-
-Starting and finishing lines are centered on their associated waypoint
-and aligned perpendicular to the next and previous waypoints
-respectively.
-
-Sector turn-points are 90 degree segments aligned to the bisection of
-the previous and next waypoints, as commonly used in FAI tasks.
-There is also support for British BGA, and German DAeC sectors.
-
-The conditions to meet for a valid start depending on the type of start:
-\begin{description}
-\item[Start Cylinder] When the glider leaves the cylinder area.
-\item[Start Line] When the glider crosses the start line.
-\end{description}
-
-The conditions to meet for a valid intermediate waypoints depending on their
- type:
-\begin{description}
-\item[FAI Sector] When the glider has entered the observation zone (OZ), defined 
-by a segment and radial distance from the waypoint.  The segment is
-defined by a 90 degree arc centered about the bisector of inbound and
-outbound legs, with a distance of 20 km.
-\item[Keyhole Sector (DAeC 0.5/10 sector)] When the glider has entered the
-observation zone, defined by a segment and radial distance from the waypoint.  The segment is
-defined by a 90 degree arc centered about the bisector of inbound and
-outbound legs, with a distance of 10 km.  The observation zone also includes
-a cylinder of 500 m.
-\item[Turnpoint Cylinder]  When the glider has entered the observation zone
-defined by a radial distance from the waypoint.
-\item[BGA Fixed Course Sector]  When the glider has entered the
-observation zone defined by a segment and radial distance from the
-waypoint. The segment is defined by a 90 degree arc centered about the
-bisector of inbound and outbound legs, with a distance of 20 km.
-The observation zone also includes a cylinder of 500 m (British rules).
-\item[BGA Enhanced Option Fixed Course Sector]  When the glider has entered the
-observation zone defined by a segment and radial distance from the
-waypoint. The segment is defined by a 180 degree arc centered about the
-bisector of inbound and outbound legs, with a distance of 10 km.
-The observation zone also includes a cylinder of 500 m (British rules).
-\item[Area Zylinder (AAT)]  and
-\item[Area Sector (AAT)]  When the glider has entered the observation zone
-defined by the radial distance from the waypoint, and segment for sector areas.
-\end{description}
-
-Task completion depends on the finish type:
-\begin{description}
-\item[Finish Cylinder] When the glider enters the cylinder area.
-\item[Finish Line] When the glider crosses the finish line.
-\end{description}
-
-Automatic advancement is triggered whenever a condition is met. To start an AAT,
-mixed task, or Racing task the start has to be armed before. 
-
-
-\tip Competition rules may be defined in a profile file for
-distribution to a group of pilots or task-setters, so all competitors
-are playing by the same rules!
-
-Additional task rules for valid starts and finishes may also be
-specified.  Starts may have a defined maximum altitude above ground,
-and a maximum speed.  Finishes may have a minimum altitude above
-ground.  These parameters are defined in the page ``Default Task Rules'' in
-the configuration \config{taskrules} settings.
-
-For non-AAT tasks, an option is available to set the minimum finish
-altitude according to the FAI rule, whereby the minimum finish
-altitude is above 1000 meters below the start altitude.
 
 \section{Alternate starts}\label{sec:alternate-starts}
 
@@ -565,55 +630,64 @@ will potentially brought back in a next release.
 %  waypoint by selecting the previous waypoint.  Continuing to select
 %  the previous waypoint will cycle through all alternate start points.
 
-\section{Task calculator dialog}\label{sec:task-calc-dial}
-The task calculator dialogue allows the pilot to see the effect of
-various changes to the task on final performance.
+\section{Abort/resume the task and Alternates}
 
-This may be accessed several ways: \gesture{Right - Down}
+If atmospheric conditions change for the worse, you may make the
+judgement that it will be impossible to complete the task.  In this
+situation, XCSoar can be instructed to `abort' the task, and it will
+then help you reach a safe landing site.
+
+\subsection*{Task Abort}\label{sec:taskabort}
+The task is aborted by any of those actions:
 \begin{itemize}
-\item From the menu 
-\begin{quote}
-\bmenu{Nav}\blink\bmenu{Task calc}
-\end{quote}
-\item From the analysis dialogue, menu \bmenu{Info}\blink\bmenu{Analysis} and select
- the button \button{Task Calc}
+\item Pressing \bmenu{Nav 2}\blink\bmenu{Task Abort}
+\item Choosing an alternate from the list under  \gesture{Down - Left}
+ \bmenu{Nav 1}\blink\bmenu{Alternates}
+\item Or selecting a waypoint from the map and start a `Goto task'.
 \end{itemize}
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
-\end{center}
+Once aborted, whatever cross-country task was being flown is
+discarded.  The task waypoint list is then filled with nearby landing
+points. The landing points are ordered simply by their reachability.
 
-\begin{description}
-\item[Assigned task time]  This field displays the assigned task time.
-\item[Estimated task time]  This field displays the estimated total time 
-  on task to complete the task at the provided MacCready setting.
-\item[Task distance]  This field displays the task distance remaining.
-\item[Set MacCready]  Allows the user to adjust the MacCready value and 
-  see the effect it has on the estimated task time.
-\item[Set range]  Allows the user to adjust the targets within the remaining 
-  AAT areas, to see the effect it has on estimated task time and task distance.
-\item[Set speed remaining]  This field displays the estimated speed for the
-  remainder of the task at the provided MacCready setting.
-\item[Achieved MacCready]  This field displays the achieved MacCready value.
-\item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
-than 100 indicates better than MacCready performance is achieved through flying
-in streets. Less than 100 is appropriate if you fly considerably off-track. This 
-value estimates your cruise efficiency according to the current flight history 
-with the set MC value. Calculation begins after task is started.
-\end{description}
-See Section~\ref{sec:task-speed-estim} for more details on task speed
-and achieved MacCready calculations.
+The configuration option `reach polar' determines whether
+waypoint arrival heights in abort mode uses the MacCready value prior
+to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
+Default is to use the safety MacCready value.  When switching to
+abort mode, the MacCready setting is set to the safety value 
+if it is lower than the current setting.
 
-On closing the dialogue the entered MacCready value is used as the MacCready 
-setting. If the \button{Cancel} button is pressed, the MacCready setting is 
-unaffected.
+Always the nearest 10 landable points are shown, even if none 
+of them is reachable.
 
-The \button{Target} button, for AAT tasks, adjusts the range
-(increases or decreases) so that the estimated task time exceeds the
-assigned task time by less than five minutes.  The range is adjusted
-target-wise. In typical use, all targets are set to ``auto" that means the pilot 
-does not have to manually adjust the range to find the course for arrival at 
-the assigned task time, thereby reducing pilot workload.
+The active waypoint, and in fact the list of nearby landable points in
+the task, is changed dynamically when in abort mode, so that at any
+time the pilot is presented with several landing options and any of
+these may be selected as the active waypoint.
+\sketch{figures/abort-low.png}
+
+If conditions improve, the task can be resumed (by selecting the same
+menu button that aborted the task).  The active waypoint, prior to
+aborting the task, is then restored along with all the other task
+details.
+
+\subsection*{Alternates} \label{sec:alternates}
+Alternates are maintained throughout the flight. In contrast to the abort mode 
+options is the idea to have continously an eye on possible alternates. Six landing 
+options are maintained. They are filtered by the configured `alternates mode' 
+criteria (Simple, Task, or Home). \config{alternatesmode} 
+One of those criterias should fit to your personal preference. 
+
+Besides the list including the distance, arrival height and frequency, there 
+is an InfoBox available for the first two items on the list. A good candidate 
+for an extra page with InfoBoxes besides the default.
+\sketch{figures/alternates_list.png}
+
+Although the items on the alternate list obey different rules they interact 
+in the same way 
+with the current task. Choosing a target from the alternates list aborts the task; 
+once the conditions get better the resuming of the task is doable by the already 
+mentioned button.
 
 
 \section{Task status}\label{sec:task-status}
@@ -823,66 +897,6 @@ path is shown as a thick red line.
 The score and computed optimal distance is approximate.
 
 When the aircraft has landed, the displayed result gets not updated anymore.
-
-
-\section{Abort/resume the task and Alternates}
-
-If atmospheric conditions change for the worse, you may make the
-judgement that it will be impossible to complete the task.  In this
-situation, XCSoar can be instructed to `abort' the task, and it will
-then help you reach a safe landing site.
-
-\subsection*{Task Abort}\label{sec:taskabort}
-The task is aborted by any of those actions:
-\begin{itemize}
-\item Pressing \bmenu{Nav 2}\blink\bmenu{Task Abort}
-\item Choosing an alternate from the list under  \gesture{Down - Left}
- \bmenu{Nav 1}\blink\bmenu{Alternates}
-\item Or selecting a waypoint from the map and start a `Goto task'.
-\end{itemize}
-
-Once aborted, whatever cross-country task was being flown is
-discarded.  The task waypoint list is then filled with nearby landing
-points. The landing points are ordered simply by their reachability.
-
-The configuration option `reach polar' determines whether
-waypoint arrival heights in abort mode uses the MacCready value prior
-to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
-Default is to use the safety MacCready value.  When switching to
-abort mode, the MacCready setting is set to the safety value 
-if it is lower than the current setting.
-
-Always the nearest 10 landable points are shown, even if none 
-of them is reachable.
-
-The active waypoint, and in fact the list of nearby landable points in
-the task, is changed dynamically when in abort mode, so that at any
-time the pilot is presented with several landing options and any of
-these may be selected as the active waypoint.
-\sketch{figures/abort-low.png}
-
-If conditions improve, the task can be resumed (by selecting the same
-menu button that aborted the task).  The active waypoint, prior to
-aborting the task, is then restored along with all the other task
-details.
-
-\subsection*{Alternates} \label{sec:alternates}
-Alternates are maintained throughout the flight. In contrast to the abort mode 
-options is the idea to have continously an eye on possible alternates. Six landing 
-options are maintained. They are filtered by the configured `alternates mode' 
-criteria (Simple, Task, or Home). \config{alternatesmode} 
-One of those criterias should fit to your personal preference. 
-
-Besides the list including the distance, arrival height and frequency, there 
-is an InfoBox available for the first two items on the list. A good candidate 
-for an extra page with InfoBoxes besides the default.
-\sketch{figures/alternates_list.png}
-
-Although the items on the alternate list obey different rules they interact 
-in the same way 
-with the current task. Choosing a target from the alternates list aborts the task; 
-once the conditions get better the resuming of the task is doable by the already 
-mentioned button.
 
 
 \section{Logger}\label{sec:logger}
