@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 #include <stdint.h>
 
@@ -93,7 +94,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
   long temperature;
   if (line.ReadHexChecked(temperature)) {
     info.temperature_available = true;
-    info.temperature = fixed((int16_t)temperature) / 10;
+    info.temperature = CelsiusToKelvin(fixed((int16_t)temperature) / 10);
   }
 
   long humidity;
