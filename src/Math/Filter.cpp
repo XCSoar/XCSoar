@@ -21,7 +21,8 @@
 */
 
 #include "Filter.hpp"
-#include <math.h>
+#include "Math/Angle.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -57,7 +58,7 @@ Filter::Design(const fixed cutoff_wavelength, const bool bessel)
     return false;
   }
 
-  fixed omega0 = tan(fixed_pi * f_star);
+  fixed omega0 = (Angle::HalfCircle() * f_star).tan();
   fixed K1 = p * omega0;
   fixed K2 = g * sqr(omega0);
 
