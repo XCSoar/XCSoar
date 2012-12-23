@@ -30,9 +30,9 @@ int main(int argc, char **argv)
   unsigned max_points = 1000;
 
   Args args(argc, argv,
-            "[--max-points=1000] DRIVER FILE\n"
+            "[options] DRIVER FILE\n"
             "Options:\n"
-            "  --max-points             Maximum number of trace points in output (default = 1000)");
+            "  --max-points=1000        Maximum number of trace points in output (default = 1000)");
 
   const char *arg;
   while ((arg = args.PeekNext()) != nullptr && *arg == '-') {
