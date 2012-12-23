@@ -28,6 +28,7 @@
 #include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
+#include "Device/Driver/Eye.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/FlyNet.hpp"
@@ -412,6 +413,62 @@ TestCProbe()
   ok1(equals(nmea_info.battery_level, 100.0));
 
   delete device;
+}
+
+static void
+TestEye()
+{
+  NullPort null;
+  std::unique_ptr<Device> device(eye_driver.CreateOnPort(dummy_config, null));
+  ok1(device);
+
+  NMEAInfo nmea_info;
+
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  ok1(device->ParseNMEA("$PEYA,1015.5,1020.5,3499,1012.3,265,12,176,+05.4,+15.2,095,1650,+05.1,+3.9*3a",
+                        nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 1015.5));
+  ok1(nmea_info.pitot_pressure_available);
+  ok1(equals(nmea_info.pitot_pressure.GetHectoPascal(), 1020.5));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 3499));
+  ok1(nmea_info.settings.qnh_available);
+  ok1(equals(nmea_info.settings.qnh.GetHectoPascal(), 1012.3));
+  ok1(nmea_info.external_wind_available);
+  ok1(equals(nmea_info.external_wind.bearing, 265));
+  ok1(equals(nmea_info.external_wind.norm,
+             Units::ToSysUnit(fixed(12), Unit::KILOMETER_PER_HOUR)));
+  ok1(nmea_info.airspeed_available);
+  ok1(nmea_info.airspeed_real);
+  ok1(equals(nmea_info.true_airspeed,
+             Units::ToSysUnit(fixed(176), Unit::KILOMETER_PER_HOUR)));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, 5.4));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature,
+             Units::ToSysUnit(fixed(15.2), Unit::DEGREES_CELCIUS)));
+  ok1(nmea_info.humidity_available);
+  ok1(equals(nmea_info.humidity, 95));
+
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  ok1(device->ParseNMEA("$PEYI,+110,+020,+135,+130,+140,+0.12,+1.03,+9.81,+12,248,246,+02.3,*16",
+                        nmea_info));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, 110));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, 20));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 248));
+  ok1(nmea_info.acceleration.available);
+  ok1(nmea_info.acceleration.real);
+  ok1(equals(nmea_info.acceleration.g_load, 9.864654074));
 }
 
 static void
@@ -1256,7 +1313,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(664);
+  plan_tests(696);
 
   TestGeneric();
   TestTasman();
@@ -1266,6 +1323,7 @@ int main(int argc, char **argv)
   TestBorgeltB50();
   TestCAI302();
   TestCProbe();
+  TestEye();
   TestFlymasterF1();
   TestFlytec();
   TestLeonardo();
