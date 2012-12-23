@@ -74,7 +74,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   config.mode = RoutePlannerConfig::Mode::BOTH;
 
   unsigned i=0;
-  for (fixed ang=fixed(0); ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed(0.5)) {
+  for (fixed ang = fixed(0); ang < fixed_two_pi; ang += fixed(M_PI / 8)) {
     GeoPoint dest = GeoVector(fixed(40000.0), Angle::Radians(ang)).EndPoint(origin);
 
     short hdest = map.GetHeight(dest)+100;
