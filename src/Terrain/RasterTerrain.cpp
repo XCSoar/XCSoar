@@ -46,7 +46,7 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
     return NULL;
 
   RasterTerrain *rt = new RasterTerrain(szFile, world_file, cache, operation);
-  if (!rt->map.isMapLoaded()) {
+  if (!rt->map.IsDefined()) {
     delete rt;
     return NULL;
   }

@@ -389,7 +389,7 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
 bool
 RoutePlanner::CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const
 {
-  if (!terrain || !terrain->isMapLoaded())
+  if (!terrain || !terrain->IsDefined())
     return true;
 
   count_terrain++;

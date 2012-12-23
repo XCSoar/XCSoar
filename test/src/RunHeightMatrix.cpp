@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
   NullOperationEnvironment operation;
   RasterMap map(jp2_path, j2w_path, NULL, operation);
-  if (!map.isMapLoaded()) {
+  if (!map.IsDefined()) {
     fprintf(stderr, "failed to load map\n");
     return EXIT_FAILURE;
   }

@@ -218,7 +218,7 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
                           const RasterMap* map, const TaskProjection& proj,
                           GeoPoint& intx) const
 {
-  if (!map || !map->isMapLoaded())
+  if (map == nullptr || !map->IsDefined())
     return false;
 
   RouteLink e(RoutePoint(proj.ProjectInteger(destination),
@@ -247,7 +247,7 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
                              const RasterMap* map,
                              const TaskProjection& proj) const
 {
-  const bool valid = map && map->isMapLoaded();
+  const bool valid = map && map->IsDefined();
   const RoughAltitude altitude = origin.altitude - GetSafetyHeight();
   const AGeoPoint m_origin((GeoPoint)origin, altitude);
   const GeoPoint dest = MSLIntercept(index, m_origin, proj);

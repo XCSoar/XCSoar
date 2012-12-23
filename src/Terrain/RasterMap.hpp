@@ -45,12 +45,12 @@ public:
             OperationEnvironment &operation);
   ~RasterMap();
 
-  bool isMapLoaded() const {
+  bool IsDefined() const {
     return raster_tile_cache.GetInitialised();
   }
 
   gcc_pure
-  bool inside(const GeoPoint &pt) const {
+  bool IsInside(const GeoPoint &pt) const {
     return raster_tile_cache.GetBounds().IsInside(pt);
   }
 

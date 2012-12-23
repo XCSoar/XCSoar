@@ -76,7 +76,7 @@ RasterMap::~RasterMap() {
 }
 
 static unsigned
-angle_to_pixel(Angle value, Angle start, Angle end, unsigned width)
+AngleToPixel(Angle value, Angle start, Angle end, unsigned width)
 {
   return unsigned((value - start).Native() * width / (end - start).Native());
 }
@@ -89,11 +89,11 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 
   const GeoBounds &bounds = raster_tile_cache.GetBounds();
 
-  int x = angle_to_pixel(location.longitude, bounds.west, bounds.east,
-                         raster_tile_cache.GetWidth());
+  int x = AngleToPixel(location.longitude, bounds.west, bounds.east,
+                       raster_tile_cache.GetWidth());
 
-  int y = angle_to_pixel(location.latitude, bounds.north, bounds.south,
-                         raster_tile_cache.GetHeight());
+  int y = AngleToPixel(location.latitude, bounds.north, bounds.south,
+                       raster_tile_cache.GetHeight());
 
   raster_tile_cache.UpdateTiles(path, x, y,
                                 projection.DistancePixels(radius) / 256);
