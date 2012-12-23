@@ -202,7 +202,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     if (available) {
       basic.indicated_airspeed = sqrt(fixed(163.2653061) * dyn);
       basic.true_airspeed = basic.indicated_airspeed *
-                            AtmosphericPressure::AirDensityRatio(any_altitude.second);
+                            AirDensityRatio(any_altitude.second);
 
       basic.airspeed_available.Update(basic.clock);
       basic.airspeed_real = true; // Anyway not less real then any other method.
@@ -233,7 +233,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   basic.indicated_airspeed = TrueAirspeedEstimated;
   if (any_altitude.first)
-    basic.indicated_airspeed /= AtmosphericPressure::AirDensityRatio(any_altitude.second);
+    basic.indicated_airspeed /= AirDensityRatio(any_altitude.second);
 
   basic.airspeed_available.Update(basic.clock);
   basic.airspeed_real = false;

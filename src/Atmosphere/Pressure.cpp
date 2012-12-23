@@ -23,14 +23,10 @@ Copyright_License {
 
 #include "Pressure.hpp"
 
-#define isa_sea_level_density fixed(1.225)
 #define k1 fixed(0.190263)
 #define inv_k1 fixed(1.0 / 0.190263)
 #define k2 fixed(8.417286e-5)
 #define inv_k2 fixed(1.0 / 8.417286e-5)
-#define k4 fixed(44330.8)
-#define k6 fixed(1.0 / 42266.5)
-#define k7 fixed(1.0 / 0.234969)
 
 AtmosphericPressure
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
@@ -75,16 +71,3 @@ AtmosphericPressure::FindQNHFromPressure(const AtmosphericPressure pressure,
 {
   return pressure.QNHAltitudeToStaticPressure(-alt_known);
 }
-
-fixed
-AtmosphericPressure::AirDensity(const fixed altitude)
-{
-  return fixed(pow((k4 - altitude) * k6, k7));
-}
-
-fixed
-AtmosphericPressure::AirDensityRatio(const fixed altitude)
-{
-  return sqrt(isa_sea_level_density / AirDensity(altitude));
-}
-

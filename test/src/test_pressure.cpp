@@ -22,6 +22,7 @@
 
 
 #include "test_debug.hpp"
+#include "Atmosphere/AirDensity.hpp"
 #include "Atmosphere/Pressure.hpp"
 
 static bool
@@ -100,7 +101,7 @@ test_isa_pressure(const fixed alt, const fixed prat)
 static bool
 test_isa_density(const fixed alt, const fixed prat)
 {
-  fixed p0 = AtmosphericPressure::AirDensity(alt);
+  fixed p0 = AirDensity(alt);
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }

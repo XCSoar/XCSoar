@@ -31,6 +31,7 @@ Copyright_License {
 #include "SwitchState.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Atmosphere/AirDensity.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "DeviceInfo.hpp"
 #include "FLARM/Data.hpp"
@@ -594,8 +595,7 @@ struct NMEAInfo {
    */
   void ProvideTrueAirspeedWithAltitude(fixed tas, fixed altitude) {
     true_airspeed = tas;
-    indicated_airspeed = true_airspeed /
-      AtmosphericPressure::AirDensityRatio(altitude);
+    indicated_airspeed = true_airspeed / AirDensityRatio(altitude);
     airspeed_available.Update(clock);
     airspeed_real = true;
   }
@@ -606,8 +606,7 @@ struct NMEAInfo {
    */
   void ProvideIndicatedAirspeedWithAltitude(fixed ias, fixed altitude) {
     indicated_airspeed = ias;
-    true_airspeed = indicated_airspeed *
-      AtmosphericPressure::AirDensityRatio(altitude);
+    true_airspeed = indicated_airspeed * AirDensityRatio(altitude);
     airspeed_available.Update(clock);
     airspeed_real = true;
   }
