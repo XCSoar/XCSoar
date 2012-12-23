@@ -40,6 +40,13 @@ class RasterProjection {
   fixed x_scale, y_scale;
 
 public:
+  /**
+   * Initialise the projection.
+   *
+   * @param bounds the geographic bounds of the map file
+   * @param width the sub-pixel ("fine)" width of the map file
+   * @param height the sub-pixel ("fine)" height of the map file
+   */
   void Set(const GeoBounds &bounds, unsigned width, unsigned height);
 
   gcc_pure
