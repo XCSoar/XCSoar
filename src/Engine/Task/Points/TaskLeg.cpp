@@ -141,9 +141,9 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.HasEntered()) {
-      max(fixed(0),
-          GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
-          - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
+      return max(fixed(0),
+                 GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
+                 - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
     } else {
       return 
         max(fixed(0),
