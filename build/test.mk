@@ -102,6 +102,7 @@ TEST_NAMES = \
 	TestByteOrder \
 	TestByteOrder2 \
 	TestStrings \
+	TestCRC \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
 	TestHexColorFormatter \
@@ -111,6 +112,12 @@ TEST_NAMES = \
 	TestLXNToIGC
 
 TESTS = $(call name-to-bin,$(TEST_NAMES))
+
+TEST_CRC_SOURCES = \
+	$(SRC)/Util/CRC.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCRC.cpp
+$(eval $(call link-program,TestCRC,TEST_CRC))
 
 TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
