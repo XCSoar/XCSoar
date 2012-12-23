@@ -151,9 +151,9 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
   fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12) + time_zone;
   Angle t = Angle::Degrees(15) * T;
 
-  return Angle::Radians(-atan2(dec.cos() * t.sin(),
-                               Location.latitude.cos() * dec.sin() -
-                               Location.latitude.sin() * dec.cos() * t.cos()));
+  return -Angle::FromXY(Location.latitude.cos() * dec.sin() -
+                        Location.latitude.sin() * dec.cos() * t.cos(),
+                        dec.cos() * t.sin());
 }
 
 SunEphemeris::Result
@@ -176,7 +176,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   Angle obliquity = Angle::Degrees(fixed(23.439) - fixed(.0000004) * days_to_j2000);
 
   // Find the RA and DEC of the Sun
-  Angle alpha = Angle::Radians(atan2(obliquity.cos() * lambda.sin(), lambda.cos()));
+  Angle alpha = Angle::FromXY(lambda.cos(), obliquity.cos() * lambda.sin());
   Angle delta = Angle::asin(obliquity.sin() * lambda.sin());
 
   // Find the Equation of Time in minutes

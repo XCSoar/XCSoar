@@ -98,8 +98,7 @@ UpdateChanging(const MoreData &basic)
 
   // Fill vertical direction field
   if (target_ok) {
-    Angle dir = Angle::Radians((fixed)atan2(target->relative_altitude,
-                                            target->distance)).AsDelta();
+    Angle dir = Angle::FromXY(target->distance, target->relative_altitude);
     FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
   } else
     _tcscpy(tmp, _T("--"));

@@ -45,7 +45,7 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   FlatPoint op = ap;
   op.Subtract(p);
   op.Rotate(-theta);
-  theta_initial = Angle::Radians(atan2(op.y * a, op.x * b)).AsDelta();
+  theta_initial = Angle::FromXY(op.x * b, op.y * a).AsDelta();
 }
 
 fixed

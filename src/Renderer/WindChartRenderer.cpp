@@ -108,7 +108,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     if (negative(mag))
       continue;
 
-    Angle angle = Angle::Radians(atan2(-wind.x, wind.y));
+    Angle angle = Angle::FromXY(wind.y, -wind.x);
 
     RasterPoint point = chart.ToScreen((chart.GetXMin() + chart.GetXMax()) / 2, h);
 

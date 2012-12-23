@@ -60,17 +60,18 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       info.attitude.pitch_angle_available = true;
       info.attitude.pitch_angle = Angle::asin(sin_pitch);
 
-      fixed heading = fixed_pi + atan2(Double(q[1] * q[2] + q[3] * q[0]),
-                                       sqr(q[3]) - sqr(q[0]) - sqr(q[1]) + sqr(q[2]));
+      Angle heading = Angle::HalfCircle() +
+        Angle::FromXY(sqr(q[3]) - sqr(q[0]) - sqr(q[1]) + sqr(q[2]),
+                      Double(q[1] * q[2] + q[3] * q[0]));
 
       info.attitude.heading_available.Update(info.clock);
-      info.attitude.heading = Angle::Radians(heading);
+      info.attitude.heading = heading;
 
-      fixed roll = atan2(Double(q[0] * q[1] + q[3] * q[2]),
-                         sqr(q[3]) + sqr(q[0]) - sqr(q[1]) - sqr(q[2]));
+      Angle roll = Angle::FromXY(sqr(q[3]) + sqr(q[0]) - sqr(q[1]) - sqr(q[2]),
+                                 Double(q[0] * q[1] + q[3] * q[2]));
 
       info.attitude.bank_angle_available = true;
-      info.attitude.bank_angle = Angle::Radians(roll);
+      info.attitude.bank_angle = roll;
     }
   }
 

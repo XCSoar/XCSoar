@@ -70,7 +70,7 @@ int main(int argc, char **argv)
       if (result.wind.y == fixed(0) && result.wind.x == fixed(0))
         bearing = Angle::Zero();
       else
-        bearing = Angle::Radians(atan2(result.wind.y, result.wind.x)).AsBearing();
+        bearing = Angle::FromXY(result.wind.x, result.wind.y).AsBearing();
 
       TCHAR time_buffer[32];
       FormatTime(time_buffer, replay->Basic().time);

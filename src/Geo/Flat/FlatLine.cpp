@@ -84,7 +84,7 @@ FlatLine::add(const FlatPoint&p)
 Angle
 FlatLine::angle() const
 {
-  return Angle::Radians(atan2(dy(), dx()));
+  return Angle::FromXY(dx(), dy());
 }
 
 void

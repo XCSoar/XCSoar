@@ -151,7 +151,7 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
     x0 += calculated.wind.bearing.fastsine() * calculated.wind.norm;
     y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
 
-    attitude.heading = Angle::Radians(atan2(x0, y0)).AsBearing();
+    attitude.heading = Angle::FromXY(y0, x0).AsBearing();
   } else {
     attitude.heading = basic.track;
   }
@@ -394,8 +394,8 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
   if (basic.total_energy_vario_available) {
     // estimate pitch angle (assuming balanced turn)
-    basic.attitude.pitch_angle = Angle::Radians(atan2(basic.gps_vario - basic.total_energy_vario,
-                                                      basic.true_airspeed));
+    basic.attitude.pitch_angle = Angle::FromXY(basic.true_airspeed,
+                                               basic.gps_vario - basic.total_energy_vario);
     basic.attitude.pitch_angle_available = true;
   }
 

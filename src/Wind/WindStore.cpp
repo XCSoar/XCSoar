@@ -88,7 +88,7 @@ WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
   if (wind.y == fixed(0) && wind.x == fixed(0))
     bearing = Angle::Zero();
   else
-    bearing = Angle::Radians(atan2(wind.y, wind.x));
+    bearing = Angle::FromXY(wind.x, wind.y);
 
   if (mag < fixed(30)) { // limit to reasonable values
     derived.estimated_wind = SpeedVector(bearing.AsBearing(), mag);
