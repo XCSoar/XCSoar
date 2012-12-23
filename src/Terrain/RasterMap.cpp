@@ -66,7 +66,7 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
     }
   }
 
-  projection.set(raster_tile_cache.GetBounds(),
+  projection.Set(raster_tile_cache.GetBounds(),
                  raster_tile_cache.GetWidth() * 256,
                  raster_tile_cache.GetHeight() * 256);
 }
@@ -96,20 +96,20 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
                          raster_tile_cache.GetHeight());
 
   raster_tile_cache.UpdateTiles(path, x, y,
-                                projection.distance_pixels(radius) / 256);
+                                projection.DistancePixels(radius) / 256);
 }
 
 short
 RasterMap::GetHeight(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.project(location) >> 8;
+  RasterLocation pt = projection.ProjectFine(location) >> 8;
   return raster_tile_cache.GetHeight(pt.x, pt.y);
 }
 
 short
 RasterMap::GetInterpolatedHeight(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.project(location);
+  RasterLocation pt = projection.ProjectFine(location);
   return raster_tile_cache.GetInterpolatedHeight(pt.x, pt.y);
 }
 
@@ -170,13 +170,13 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   const unsigned max_y =
     raster_tile_cache.GetHeight() << RasterTileCache::SUBPIXEL_BITS;
 
-  RasterLocation raster_start = projection.project(clipped_start);
+  RasterLocation raster_start = projection.ProjectFine(clipped_start);
   if (raster_start.x >= max_x)
     raster_start.x = max_x - 1;
   if (raster_start.y >= max_y)
     raster_start.y = max_y - 1;
 
-  RasterLocation raster_end = projection.project(clipped_end);
+  RasterLocation raster_end = projection.ProjectFine(clipped_end);
   if (raster_end.x >= max_x)
     raster_end.x = max_x - 1;
   if (raster_end.y >= max_y)
@@ -195,8 +195,8 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
                              const short h_safety,
                              GeoPoint& intx, short &h) const
 {
-  const RasterLocation c_origin = projection.project_coarse(origin);
-  const RasterLocation c_destination = projection.project_coarse(destination);
+  const RasterLocation c_origin = projection.ProjectCoarse(origin);
+  const RasterLocation c_destination = projection.ProjectCoarse(destination);
   const int c_diff = c_origin.ManhattanDistance(c_destination);
   const bool can_climb = (h_destination< h_virt);
 
@@ -219,7 +219,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
     bool changed = c_int != c_destination ||
       (h > h_destination && c_int == c_destination);
     if (changed) {
-      intx = projection.unproject_coarse(c_int);
+      intx = projection.UnprojectCoarse(c_int);
       assert(h>= h_origin);
     }
     return changed;
@@ -234,8 +234,8 @@ RasterMap::Intersection(const GeoPoint& origin,
                         const short h_glide,
                         const GeoPoint& destination) const
 {
-  const RasterLocation c_origin = projection.project_coarse(origin);
-  const RasterLocation c_destination = projection.project_coarse(destination);
+  const RasterLocation c_origin = projection.ProjectCoarse(origin);
+  const RasterLocation c_destination = projection.ProjectCoarse(destination);
   const int c_diff = c_origin.ManhattanDistance(c_destination);
   if (c_diff==0) {
     return destination; // no distance
@@ -251,5 +251,5 @@ RasterMap::Intersection(const GeoPoint& origin,
                               // of destination
     return destination;
 
-  return projection.unproject_coarse(c_int);
+  return projection.UnprojectCoarse(c_int);
 }

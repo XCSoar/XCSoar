@@ -47,7 +47,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
 
   GeoPoint origin(map.GetMapCenter());
 
-  fixed pd = map.pixel_distance(origin, 1);
+  fixed pd = map.PixelDistance(origin, 1);
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;

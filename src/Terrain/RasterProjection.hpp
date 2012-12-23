@@ -40,25 +40,25 @@ class RasterProjection {
   fixed x_scale, y_scale;
 
 public:
-  void set(const GeoBounds &bounds, unsigned width, unsigned height);
+  void Set(const GeoBounds &bounds, unsigned width, unsigned height);
 
   gcc_pure
-  Angle width_to_angle(fixed pixels) const {
+  Angle WidthToAngle(fixed pixels) const {
     return Angle::Native(fixed(pixels) / x_scale);
   }
 
   gcc_pure
-  Angle height_to_angle(fixed pixels) const {
+  Angle HeightToAngle(fixed pixels) const {
     return Angle::Native(fixed(pixels) / y_scale);
   }
 
   gcc_pure
-  unsigned angle_to_height(Angle angle) const {
+  unsigned AngleToHeight(Angle angle) const {
     return (unsigned)(angle.Native() * y_scale);
   }
 
   gcc_pure RasterLocation
-  project(const GeoPoint &location) const {
+  ProjectFine(const GeoPoint &location) const {
     const unsigned x = ((int)(location.longitude.Native() * x_scale)) - left;
     const unsigned y = top - ((int)(location.latitude.Native() * y_scale));
 
@@ -67,14 +67,14 @@ public:
 
   gcc_pure
   GeoPoint
-  unproject(const RasterLocation &coords) const {
+  UnprojectFine(const RasterLocation &coords) const {
     const fixed x = fixed((int)coords.x + left) / x_scale;
     const fixed y = fixed(top - (int)coords.y) / y_scale;
     return GeoPoint(Angle::Native(x),Angle::Native(y));
   }
 
   gcc_pure RasterLocation
-  project_coarse(const GeoPoint &location) const {
+  ProjectCoarse(const GeoPoint &location) const {
     const int x = ((int)(location.longitude.Native() * x_scale)) - left;
     const int y = top - ((int)(location.latitude.Native() * y_scale));
 
@@ -83,7 +83,7 @@ public:
 
   gcc_pure
   GeoPoint
-  unproject_coarse(const RasterLocation &coords) const {
+  UnprojectCoarse(const RasterLocation &coords) const {
     const fixed x = fixed(((int)coords.x << 8) + left) / x_scale;
     const fixed y = fixed(top - ((int)coords.y << 8)) / y_scale;
     return GeoPoint(Angle::Native(x),Angle::Native(y));
@@ -95,7 +95,7 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure fixed
-  pixel_distance(const GeoPoint &location, unsigned pixels) const;
+  PixelDistance(const GeoPoint &location, unsigned pixels) const;
 
   /**
    * Converts a distance (in meters) to a pixel distance.
@@ -103,7 +103,7 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure unsigned
-  distance_pixels(fixed distance) const;
+  DistancePixels(fixed distance) const;
 };
 
 #endif

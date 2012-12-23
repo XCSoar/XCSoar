@@ -26,7 +26,7 @@ Copyright_License {
 #include "Geo/Constants.hpp"
 
 void
-RasterProjection::set(const GeoBounds &bounds,
+RasterProjection::Set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
   x_scale = fixed(width) /
@@ -39,7 +39,8 @@ RasterProjection::set(const GeoBounds &bounds,
 }
 
 fixed
-RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) const
+RasterProjection::PixelDistance(const GeoPoint &location,
+                                unsigned pixels) const
 {
   enum {
     /**
@@ -50,11 +51,11 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
     FACTOR = 256,
   };
 
-  Angle distance = width_to_angle(fixed_sqrt_two * FACTOR * pixels);
+  Angle distance = WidthToAngle(fixed_sqrt_two * FACTOR * pixels);
   GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
   fixed x = location.Distance(p);
 
-  distance = height_to_angle(fixed_sqrt_two * FACTOR * pixels);
+  distance = HeightToAngle(fixed_sqrt_two * FACTOR * pixels);
   p = GeoPoint(location.longitude, location.latitude + distance);
   fixed y = location.Distance(p);
 
@@ -62,8 +63,8 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
 }
 
 unsigned
-RasterProjection::distance_pixels(fixed distance) const
+RasterProjection::DistancePixels(fixed distance) const
 {
   Angle angle = Angle::Radians(distance / REARTH);
-  return angle_to_height(angle);
+  return AngleToHeight(angle);
 }
