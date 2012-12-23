@@ -25,6 +25,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "ComputerSettings.hpp"
+#include "Atmosphere/AirDensity.hpp"
 
 #define fixed_inv_g fixed(1.0/9.81)
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
