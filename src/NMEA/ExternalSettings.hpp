@@ -157,7 +157,7 @@ struct ExternalSettings {
    * false if the value is different or if there is no value
    */
   bool CompareVolume(unsigned value) const {
-    return volume_available && abs(volume - value) < 3;
+    return volume_available && abs(int(volume) - int(value)) < 3;
   }
 
   /**
