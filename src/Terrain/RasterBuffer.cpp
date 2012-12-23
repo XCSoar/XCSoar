@@ -118,9 +118,9 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
                                  short *gcc_restrict buffer, unsigned size,
                                  bool interpolate) const
 {
-  assert(ax < GetWidth() << 8);
-  assert(bx < GetWidth() << 8);
-  assert(y < GetHeight() << 8);
+  assert(ax < GetFineWidth());
+  assert(bx < GetFineWidth());
+  assert(y < GetFineHeight());
   assert(buffer != NULL);
   assert(size > 0);
 
@@ -179,10 +179,10 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                        short *gcc_restrict buffer,
                        unsigned size, bool interpolate) const
 {
-  assert(ax < GetWidth() << 8);
-  assert(ay < GetHeight() << 8);
-  assert(bx < GetWidth() << 8);
-  assert(by < GetHeight() << 8);
+  assert(ax < GetFineWidth());
+  assert(ay < GetFineHeight());
+  assert(bx < GetFineWidth());
+  assert(by < GetFineHeight());
   assert(buffer != NULL);
   assert(size > 0);
 
@@ -232,17 +232,17 @@ RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
                               short *buffer, unsigned size,
                               bool interpolate) const
 {
-  if (ax >= GetWidth() << 8)
-    ax = (GetWidth() << 8) - 1;
+  if (ax >= GetFineWidth())
+    ax = GetFineWidth() - 1;
 
-  if (ay >= GetHeight() << 8)
-    ay = (GetHeight() << 8) - 1;
+  if (ay >= GetFineHeight())
+    ay = GetFineHeight() - 1;
 
-  if (bx >= GetWidth() << 8)
-    bx = (GetWidth() << 8) - 1;
+  if (bx >= GetFineWidth())
+    bx = GetFineWidth() - 1;
 
-  if (by >= GetHeight() << 8)
-    by = (GetHeight() << 8) - 1;
+  if (by >= GetFineHeight())
+    by = GetFineHeight() - 1;
 
   ScanLine(ax, ay, bx, by, buffer, size, interpolate);
 }

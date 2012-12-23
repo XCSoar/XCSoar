@@ -86,6 +86,14 @@ public:
     return data.GetHeight();
   }
 
+  unsigned GetFineWidth() const {
+    return GetWidth() << 8;
+  }
+
+  unsigned GetFineHeight() const {
+    return GetHeight() << 8;
+  }
+
   short *GetData() {
     return data.begin();
   }
