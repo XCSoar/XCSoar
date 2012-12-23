@@ -53,14 +53,19 @@ public:
   }
 
   gcc_pure
+  unsigned AngleToWidth(Angle angle) const {
+    return (unsigned)(angle.Native() * x_scale);
+  }
+
+  gcc_pure
   unsigned AngleToHeight(Angle angle) const {
     return (unsigned)(angle.Native() * y_scale);
   }
 
   gcc_pure RasterLocation
   ProjectFine(const GeoPoint &location) const {
-    const unsigned x = ((int)(location.longitude.Native() * x_scale)) - left;
-    const unsigned y = top - ((int)(location.latitude.Native() * y_scale));
+    const unsigned x = AngleToWidth(location.longitude) - left;
+    const unsigned y = top - AngleToHeight(location.latitude);
 
     return RasterLocation(x, y);
   }
@@ -68,25 +73,20 @@ public:
   gcc_pure
   GeoPoint
   UnprojectFine(const RasterLocation &coords) const {
-    const fixed x = fixed((int)coords.x + left) / x_scale;
-    const fixed y = fixed(top - (int)coords.y) / y_scale;
-    return GeoPoint(Angle::Native(x),Angle::Native(y));
+    const Angle x = WidthToAngle(fixed((int)coords.x + left));
+    const Angle y = HeightToAngle(fixed(top - (int)coords.y));
+    return GeoPoint(x, y);
   }
 
   gcc_pure RasterLocation
   ProjectCoarse(const GeoPoint &location) const {
-    const int x = ((int)(location.longitude.Native() * x_scale)) - left;
-    const int y = top - ((int)(location.latitude.Native() * y_scale));
-
-    return RasterLocation(x >> 8, y >> 8);
+    return ProjectFine(location) >> 8;
   }
 
   gcc_pure
   GeoPoint
   UnprojectCoarse(const RasterLocation &coords) const {
-    const fixed x = fixed(((int)coords.x << 8) + left) / x_scale;
-    const fixed y = fixed(top - ((int)coords.y << 8)) / y_scale;
-    return GeoPoint(Angle::Native(x),Angle::Native(y));
+    return UnprojectFine(coords << 8);
   }
 
   /**
