@@ -38,6 +38,9 @@ def fixed_value(f):
     else:
         return long(f['m_nVal']) / (1. * (1 << 28))
 
+def angle_value(a):
+    return fixed_value(a['value']) * 57.2957795131
+
 class FixedPrinter:
     def __init__(self, value):
         self.value = value
@@ -50,7 +53,7 @@ class AnglePrinter:
         self.value = value
 
     def to_string(self):
-        return str(fixed_value(self.value['value']) * 57.2957795131)
+        return str(angle_value(self.value))
 
 class GeoPointPrinter:
     def __init__(self, value):
