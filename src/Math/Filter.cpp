@@ -33,20 +33,21 @@ Filter::Filter(const fixed cutoff_wavelength, const bool bessel)
 bool
 Filter::Design(const fixed cutoff_wavelength, const bool bessel)
 {
-  static const fixed sample_freq = fixed(1);
-  static const fixed n = fixed(1);
-  fixed c, g, p;
+  static const unsigned sample_freq = 1;
+  static const unsigned n = 1;
+  fixed c;
+  unsigned g, p;
 
   if (bessel) {
     // Bessel
     c = pow((sqrt(pow(fixed(2), fixed(1) / n) - fixed(0.75)) - fixed(0.5)),
             -fixed(0.5)) / sqrt(fixed(3));
-    g = p = fixed(3);
+    g = p = 3;
   } else {
     // Critically damped
     c = pow((pow(fixed(2), fixed(1) / (2 * n)) - fixed(1)), -fixed(0.5));
-    g = fixed(1);
-    p = fixed(2);
+    g = 1;
+    p = 2;
   }
 
   fixed f_star = c / (sample_freq * cutoff_wavelength);
