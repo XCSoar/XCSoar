@@ -5,6 +5,7 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/Intersection.cpp \
+	$(SRC)/Terrain/ScanLine.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/RasterWeather.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \

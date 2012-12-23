@@ -226,7 +226,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 
 #define ACCURATE_TERRAIN_INTERSECTION
 
-short
+inline short
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
 {
   assert(px < width);
