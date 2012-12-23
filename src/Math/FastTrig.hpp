@@ -42,9 +42,9 @@ extern const short ISINETABLE[4096];
 extern const short ICOSTABLE[4096];
 
 #ifdef RADIANS
-#define INT_ANGLE_MULT fixed_constant(4096.0 / M_2PI, 0x28be60db93LL)
+#define INT_ANGLE_MULT fixed(4096.0 / M_2PI)
 #else
-#define INT_ANGLE_MULT fixed_constant(4096.0 / 360, 0xb60b60b6LL)
+#define INT_ANGLE_MULT fixed(4096.0 / 360)
 #endif
 
 gcc_const

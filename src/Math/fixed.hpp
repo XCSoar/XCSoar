@@ -15,24 +15,18 @@
 
 #include <assert.h>
 
-#ifdef FIXED_MATH
-#define fixed_constant(d, f) fixed(fixed::internal(), (f))
-#else
-#define fixed_constant(d, f) (d)
-#endif
+#define fixed_third fixed(1./3.)
+#define fixed_two_thirds fixed(2./3.)
 
-#define fixed_third fixed_constant(1./3., (1 << fixed::resolution_shift) / 3)
-#define fixed_two_thirds fixed_constant(2./3., (2 << (fixed::resolution_shift)) / 3)
+#define fixed_deg_to_rad fixed(DEG_TO_RAD)
+#define fixed_rad_to_deg fixed(RAD_TO_DEG)
+#define fixed_pi fixed(M_PI)
+#define fixed_two_pi fixed(M_2PI)
+#define fixed_half_pi fixed(M_HALFPI)
+#define fixed_quarter_pi fixed(M_HALFPI / 2)
 
-#define fixed_deg_to_rad fixed_constant(0.0174532925199432958, 0x477d1bLL)
-#define fixed_rad_to_deg fixed_constant(57.2957795131, 0x394bb834cLL)
-#define fixed_pi fixed_constant(M_PI, 0x3243f6a8LL)
-#define fixed_two_pi fixed_constant(M_2PI, 0x6487ed51LL)
-#define fixed_half_pi fixed_constant(M_HALFPI, 0x1921fb54LL)
-#define fixed_quarter_pi fixed_constant(M_HALFPI/2, 0xc90fdaaLL)
-
-#define fixed_sqrt_two fixed_constant(1.4142135623730951, 0x16a09e66LL)
-#define fixed_sqrt_half fixed_constant(0.70710678118654757, 0xb504f33LL)
+#define fixed_sqrt_two fixed(1.4142135623730951)
+#define fixed_sqrt_half fixed(0.70710678118654757)
 
 #ifndef FIXED_MATH
 #include <math.h>
