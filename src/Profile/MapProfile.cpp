@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "MapSettings.hpp"
+#include "Util/Clamp.hpp"
 
 static bool
 IsValidMapOrientation(unsigned value)
@@ -110,12 +111,10 @@ Profile::Load(MapSettings &settings)
 
   fixed tmp;
   if (Profile::Get(ProfileKeys::ClimbMapScale, tmp))
-    settings.circling_scale =
-      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
+    settings.circling_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
 
   if (Profile::Get(ProfileKeys::CruiseMapScale, tmp))
-    settings.cruise_scale =
-      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
+    settings.cruise_scale = Clamp(tmp / 10000, fixed(0.0003), fixed(10));
 
   GetEnum(ProfileKeys::MapShiftBias, settings.map_shift_bias);
   Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);

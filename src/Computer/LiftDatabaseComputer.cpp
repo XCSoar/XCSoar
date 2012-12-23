@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/LiftDatabase.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/CirclingInfo.hpp"
+#include "Util/Clamp.hpp"
 
 void
 LiftDatabaseComputer::Clear(LiftDatabase &lift_database,
@@ -68,7 +69,7 @@ heading_to_index(Angle &heading)
   unsigned index = (unsigned)
       ((heading + afive).AsBearing().Degrees() / 10);
 
-  return std::max(0u, std::min(35u, index));
+  return Clamp(index, 0u, 35u);
 }
 
 void

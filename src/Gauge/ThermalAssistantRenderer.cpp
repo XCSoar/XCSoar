@@ -23,6 +23,7 @@
 
 #include "ThermalAssistantRenderer.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "Screen/Canvas.hpp"
@@ -103,7 +104,7 @@ fixed
 ThermalAssistantRenderer::NormalizeLift(fixed lift, fixed max_lift)
 {
   lift = (lift + max_lift) / Double(max_lift);
-  return std::min(fixed(1), std::max(fixed(0), lift));
+  return Clamp(lift, fixed(0), fixed(1));
 }
 
 void

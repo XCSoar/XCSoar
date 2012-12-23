@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "VarioSynthesiser.hpp"
 #include "Math/FastMath.h"
-#include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -31,12 +31,6 @@ Copyright_License {
  * The minimum and maximum vario range for the constants below [cm/s].
  */
 static constexpr int min_vario = -500, max_vario = 500;
-
-static int
-Clamp(int value, int min, int max)
-{
-  return std::max(std::min(value, max), min);
-}
 
 unsigned
 VarioSynthesiser::VarioToFrequency(int ivario)
