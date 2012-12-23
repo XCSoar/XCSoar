@@ -33,14 +33,14 @@ Copyright_License {
  */
 class AtmosphericPressure 
 {
-  /** Pressure at sea level, hPa */
-  fixed qnh;
+  /** Pressure in hPa */
+  fixed value;
 
   /**
-   * @param qnh the QNH in hPa
+   * @param value the pressure in hPa
    */
   explicit constexpr
-  AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
+  AtmosphericPressure(fixed _value):value(_value) {}
 
 public:
   /**
@@ -83,7 +83,7 @@ public:
    */
   constexpr
   bool IsPlausible() const {
-    return qnh > fixed(100) && qnh < fixed(1200);
+    return value > fixed(100) && value < fixed(1200);
   }
 
   fixed GetPascal() const {
@@ -96,7 +96,7 @@ public:
    * @return QNH value (hPa)
    */
   fixed GetHectoPascal() const {
-    return qnh;
+    return value;
   }
 
   /**
