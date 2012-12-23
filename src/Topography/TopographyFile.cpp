@@ -42,7 +42,8 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
    pen_width(_pen_width),
    color(thecolor), scale_threshold(_threshold),
    label_threshold(_label_threshold),
-   important_label_threshold(_important_label_threshold)
+   important_label_threshold(_important_label_threshold),
+   cache_bounds(GeoBounds::Invalid())
 {
   if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
     return;
@@ -57,9 +58,6 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
 
   if (dir != NULL)
     ++dir->refcount;
-
-  cache_bounds.west = cache_bounds.east =
-    cache_bounds.south = cache_bounds.north = Angle::Zero();
 
   ++serial;
 }
@@ -113,7 +111,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
 
   const GeoBounds screenRect =
     map_projection.GetScreenBounds();
-  if (cache_bounds.IsInside(screenRect))
+  if (cache_bounds.IsValid() && cache_bounds.IsInside(screenRect))
     /* the cache is still fresh */
     return false;
 
