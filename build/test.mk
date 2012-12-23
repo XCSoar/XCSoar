@@ -1166,6 +1166,10 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1181,7 +1185,7 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
-RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO OS THREAD WAYPOINT GEO MATH UTIL
+RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO OS THREAD WAYPOINT GEO TIME MATH UTIL
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
 
 RUN_ENABLE_NMEA_SOURCES = \
@@ -1196,6 +1200,10 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
@@ -1210,7 +1218,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunEnableNMEA.cpp
-RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT MATH UTIL ASYNC IO OS THREAD
+RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT TIME MATH UTIL ASYNC IO OS THREAD
 $(eval $(call link-program,RunEnableNMEA,RUN_ENABLE_NMEA))
 
 RUN_VEGA_SETTINGS_SOURCES = \
@@ -1276,6 +1284,10 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1290,7 +1302,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
-RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO MATH UTIL
+RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
@@ -1304,6 +1316,10 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1318,7 +1334,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
-RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO MATH UTIL
+RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC IO OS THREAD GEO TIME MATH UTIL
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 
 CAI302_TOOL_SOURCES = \
@@ -1330,6 +1346,10 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/SwitchState.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
@@ -1339,7 +1359,7 @@ CAI302_TOOL_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/CAI302Tool.cpp
-CAI302_TOOL_DEPENDS = CAI302 PORT ASYNC OS THREAD IO MATH UTIL
+CAI302_TOOL_DEPENDS = CAI302 PORT ASYNC OS THREAD IO TIME MATH UTIL
 $(eval $(call link-program,CAI302Tool,CAI302_TOOL))
 
 TEST_LXN_TO_IGC_SOURCES = \
@@ -1675,6 +1695,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NMEA/Info.hpp"
 #include "OS/Clock.hpp"
+#include "Atmosphere/AirDensity.hpp"
 
 void
 GPSState::Reset()
@@ -84,6 +85,48 @@ NMEAInfo::ProvideTime(fixed _time)
   t /= 60;
 
   date_time_utc.hour = t % 24;
+}
+
+void
+NMEAInfo::ProvideTrueAirspeedWithAltitude(fixed tas, fixed altitude)
+{
+  true_airspeed = tas;
+  indicated_airspeed = true_airspeed / AirDensityRatio(altitude);
+  airspeed_available.Update(clock);
+  airspeed_real = true;
+}
+
+void
+NMEAInfo::ProvideIndicatedAirspeedWithAltitude(fixed ias, fixed altitude)
+{
+  indicated_airspeed = ias;
+  true_airspeed = indicated_airspeed * AirDensityRatio(altitude);
+  airspeed_available.Update(clock);
+  airspeed_real = true;
+}
+
+void
+NMEAInfo::ProvideTrueAirspeed(fixed tas)
+{
+  auto any_altitude = GetAnyAltitude();
+
+  if (any_altitude.first)
+    ProvideTrueAirspeedWithAltitude(tas, any_altitude.second);
+  else
+    /* no altitude; dirty fallback */
+    ProvideBothAirspeeds(tas, tas);
+}
+
+void
+NMEAInfo::ProvideIndicatedAirspeed(fixed ias)
+{
+  auto any_altitude = GetAnyAltitude();
+
+  if (any_altitude.first)
+    ProvideIndicatedAirspeedWithAltitude(ias, any_altitude.second);
+  else
+    /* no altitude; dirty fallback */
+    ProvideBothAirspeeds(ias, ias);
 }
 
 void
