@@ -343,18 +343,16 @@ public:
   gcc_pure
   Angle Fraction(const Angle end, const fixed fraction) const;
 
-  gcc_pure
-  Angle
+  constexpr Angle
   operator*(const Angle x) const
   {
-    return Angle(value * x.value);
+    return Angle(fast_mult(value, 6, x.value, 6));
   }
 
-  gcc_pure
-  Angle
+  constexpr Angle
   operator*(const fixed x) const
   {
-    return Angle(value * x);
+    return Angle(fast_mult(value, x, 8));
   }
 
   constexpr
