@@ -317,6 +317,14 @@ public:
 
   unsigned int GetWidth() const { return width; }
   unsigned int GetHeight() const { return height; }
+
+  unsigned GetFineWidth() const {
+    return width << SUBPIXEL_BITS;
+  }
+
+  unsigned GetFineHeight() const {
+    return height << SUBPIXEL_BITS;
+  }
 };
 
 #endif

@@ -39,8 +39,8 @@ RasterProjection::Set(const GeoBounds &bounds,
 }
 
 fixed
-RasterProjection::PixelDistance(const GeoPoint &location,
-                                unsigned pixels) const
+RasterProjection::FinePixelDistance(const GeoPoint &location,
+                                    unsigned pixels) const
 {
   enum {
     /**
@@ -63,7 +63,7 @@ RasterProjection::PixelDistance(const GeoPoint &location,
 }
 
 unsigned
-RasterProjection::DistancePixels(fixed distance) const
+RasterProjection::DistancePixelsFine(fixed distance) const
 {
   Angle angle = Angle::Radians(distance / REARTH);
   return AngleToHeight(angle);

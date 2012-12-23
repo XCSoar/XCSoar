@@ -75,13 +75,13 @@ public:
   }
 
   /**
-   * @see RasterProjection::pixel_distance()
+   * @see RasterProjection::CoarsePixelDistance()
    */
   gcc_pure fixed
   PixelDistance(const GeoPoint &location, unsigned pixels) const {
     /* factor 256 because the caller should pass a physical pixel
        number, not interpolated */
-    return projection.PixelDistance(location, 256 * pixels);
+    return projection.CoarsePixelDistance(location, pixels);
   }
 
   /**

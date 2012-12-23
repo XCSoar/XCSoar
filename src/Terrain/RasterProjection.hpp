@@ -95,7 +95,12 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure fixed
-  PixelDistance(const GeoPoint &location, unsigned pixels) const;
+  FinePixelDistance(const GeoPoint &location, unsigned pixels) const;
+
+  gcc_pure
+  fixed CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
+    return FinePixelDistance(location, pixels << 8);
+  }
 
   /**
    * Converts a distance (in meters) to a pixel distance.
@@ -103,7 +108,11 @@ public:
    * @param pixels the pixel distance between two pixels
    */
   gcc_pure unsigned
-  DistancePixels(fixed distance) const;
+  DistancePixelsFine(fixed distance) const;
+
+  gcc_pure unsigned DistancePixelsCoarse(fixed distance) const {
+    return DistancePixelsFine(distance) >> 8;
+  }
 };
 
 #endif

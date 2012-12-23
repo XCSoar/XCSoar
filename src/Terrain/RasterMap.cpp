@@ -67,8 +67,8 @@ RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
   }
 
   projection.Set(raster_tile_cache.GetBounds(),
-                 raster_tile_cache.GetWidth() * 256,
-                 raster_tile_cache.GetHeight() * 256);
+                 raster_tile_cache.GetFineWidth(),
+                 raster_tile_cache.GetFineHeight());
 }
 
 RasterMap::~RasterMap() {
@@ -96,13 +96,13 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
                        raster_tile_cache.GetHeight());
 
   raster_tile_cache.UpdateTiles(path, x, y,
-                                projection.DistancePixels(radius) / 256);
+                                projection.DistancePixelsCoarse(radius));
 }
 
 short
 RasterMap::GetHeight(const GeoPoint &location) const
 {
-  RasterLocation pt = projection.ProjectFine(location) >> 8;
+  RasterLocation pt = projection.ProjectCoarse(location);
   return raster_tile_cache.GetHeight(pt.x, pt.y);
 }
 
@@ -165,10 +165,8 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   /* now scan the middle part which is within the map */
 
-  const unsigned max_x =
-    raster_tile_cache.GetWidth() << RasterTileCache::SUBPIXEL_BITS;
-  const unsigned max_y =
-    raster_tile_cache.GetHeight() << RasterTileCache::SUBPIXEL_BITS;
+  const unsigned max_x = raster_tile_cache.GetFineWidth();
+  const unsigned max_y = raster_tile_cache.GetFineHeight();
 
   RasterLocation raster_start = projection.ProjectFine(clipped_start);
   if (raster_start.x >= max_x)
