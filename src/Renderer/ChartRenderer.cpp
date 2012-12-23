@@ -74,16 +74,16 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
     y.max = lsdata.y_max;
     y.unscaled = false;
   } else {
-    y.min = min(y.min, lsdata.y_min);
-    y.max = max(y.max, lsdata.y_max);
+    y.min = std::min(y.min, lsdata.y_min);
+    y.max = std::max(y.max, lsdata.y_max);
   }
 
   if (lsdata.sum_n > 1) {
     fixed y0, y1;
     y0 = lsdata.x_min * lsdata.m + lsdata.b;
     y1 = lsdata.x_max * lsdata.m + lsdata.b;
-    y.min = min(y.min, min(y0, y1));
-    y.max = max(y.max, max(y0, y1));
+    y.min = std::min({y.min, y0, y1});
+    y.max = std::max({y.max, y0, y1});
   }
 
   if (fabs(y.max - y.min) > fixed(50)) {
@@ -106,8 +106,8 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
     x.max = lsdata.x_max;
     x.unscaled = false;
   } else {
-    x.min = min(x.min, lsdata.x_min);
-    x.max = max(x.max, lsdata.x_max);
+    x.min = std::min(x.min, lsdata.x_min);
+    x.max = std::max(x.max, lsdata.x_max);
   }
 
   x.scale = (x.max - x.min);
@@ -123,8 +123,8 @@ ChartRenderer::ScaleYFromValue(const fixed value)
     y.max = value;
     y.unscaled = false;
   } else {
-    y.min = min(value, y.min);
-    y.max = max(value, y.max);
+    y.min = std::min(value, y.min);
+    y.max = std::max(value, y.max);
   }
 
   y.scale = (y.max - y.min);
@@ -140,8 +140,8 @@ ChartRenderer::ScaleXFromValue(const fixed value)
     x.max = value;
     x.unscaled = false;
   } else {
-    x.min = min(value, x.min);
-    x.max = max(value, x.max);
+    x.min = std::min(value, x.min);
+    x.max = std::max(value, x.max);
   }
 
   x.scale = (x.max - x.min);
@@ -206,7 +206,7 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  PixelScalar x = max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
+  PixelScalar x = std::max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
   PixelScalar y = rc.top;
 
   canvas.DrawText(x, y, text);

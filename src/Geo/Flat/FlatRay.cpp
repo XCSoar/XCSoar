@@ -21,8 +21,9 @@
  */
 
 #include "FlatRay.hpp"
-
 #include "Math/FastMath.h"
+
+#include <stdlib.h>
 
 #define sgn(x) (x >= 0 ? 1 : -1)
 

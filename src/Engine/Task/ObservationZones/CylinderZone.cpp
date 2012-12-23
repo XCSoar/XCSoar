@@ -24,6 +24,8 @@
 #include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
+#include <stdlib.h>
+
 fixed
 CylinderZone::ScoreAdjustment() const
 {
@@ -67,7 +69,7 @@ CylinderZone::GetRandomPointInSector(const fixed mag) const
 
   do {
     Angle dir = Angle::Degrees(fixed(rand() % 360));
-    fixed dmag = max(min(radius, fixed(100.0)), radius * mag);
+    fixed dmag = std::max(std::min(radius, fixed(100.0)), radius * mag);
     fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
     location = vec.EndPoint(GetReference());

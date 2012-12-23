@@ -26,6 +26,7 @@ Copyright_License {
 #include "Units/System.hpp"
 
 #include <cstdio>
+#include <stdlib.h>
 
 bool
 ParsePolarShape(PolarShape &shape, const TCHAR *s)

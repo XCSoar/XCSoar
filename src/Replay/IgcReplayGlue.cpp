@@ -31,7 +31,7 @@ IgcReplayGlue::UpdateTime(fixed time_scale)
   if (!clock.Check(760))
     return false;
 
-  t_simulation += time_scale * max(clock.Elapsed(), 0) / 1000;
+  t_simulation += time_scale * std::max(clock.Elapsed(), 0) / 1000;
   clock.Update();
 
   return true;

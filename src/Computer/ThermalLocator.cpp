@@ -57,7 +57,7 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
   points[n_index].location = location;
   points[n_index].t_0 = t;
-  points[n_index].w = max(w, fixed(-0.1));
+  points[n_index].w = std::max(w, fixed(-0.1));
   // lift_weight and recency_weight are set by Drift()
 
   n_index = (n_index + 1) % TLOCATOR_NMAX;

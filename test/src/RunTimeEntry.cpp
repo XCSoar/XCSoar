@@ -28,6 +28,8 @@ Copyright_License {
 #include "Dialogs/TimeEntry.hpp"
 #include "Time/RoughTime.hpp"
 
+#include <stdio.h>
+
 static void
 Main()
 {

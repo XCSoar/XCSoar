@@ -58,7 +58,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   // Draw arrow symbols instead of < and >
   if (ch == '<' || ch == '>') {
-    int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+    int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     RasterPoint Arrow[3];
     Arrow[0].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
@@ -73,7 +73,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   // Draw arrow symbols instead of v and ^
   else if (ch == '^' || ch == 'v') {
-    int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+    int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     RasterPoint Arrow[3];
     Arrow[0].x = (rc.left + rc.right) / 2 +
@@ -92,7 +92,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   // Draw symbols instead of + and -
   else if (ch == '+' || ch == '-') {
-    int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+    int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     canvas.Rectangle((rc.left + rc.right) / 2 - size,
                      (rc.top + rc.bottom) / 2 - size / 3,

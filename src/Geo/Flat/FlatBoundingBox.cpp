@@ -33,10 +33,10 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
   if (Overlaps(f))
     return 0;
 
-  int dx = max(0, min(f.bb_ll.longitude - bb_ur.longitude,
-                      bb_ll.longitude - f.bb_ur.longitude));
-  int dy = max(0, min(f.bb_ll.latitude - bb_ur.latitude,
-                      bb_ll.latitude - f.bb_ur.latitude));
+  int dx = std::max(0, std::min(f.bb_ll.longitude - bb_ur.longitude,
+                                bb_ll.longitude - f.bb_ur.longitude));
+  int dy = std::max(0, std::min(f.bb_ll.latitude - bb_ur.latitude,
+                                bb_ll.latitude - f.bb_ur.latitude));
 
   return ihypot(dx, dy);
 }
@@ -61,8 +61,8 @@ FlatBoundingBox::Intersects(const FlatRay& ray) const
     if (t1 > t2)
       std::swap(t1, t2);
 
-    tmin = max(tmin, t1);
-    tmax = min(tmax, t2);
+    tmin = std::max(tmin, t1);
+    tmax = std::min(tmax, t2);
     // exit with no collision as soon as slab intersection becomes empty
     if (tmin > tmax)
       return false;
@@ -83,8 +83,8 @@ FlatBoundingBox::Intersects(const FlatRay& ray) const
     if (t1 > t2)
       std::swap(t1, t2);
 
-    tmin = max(tmin, t1);
-    tmax = min(tmax, t2);
+    tmin = std::max(tmin, t1);
+    tmax = std::min(tmax, t2);
     // exit with no collision as soon as slab intersection becomes empty
     if (tmin > tmax)
       return false;

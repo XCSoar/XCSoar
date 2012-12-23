@@ -255,10 +255,11 @@ CirclingComputer::MaxHeightGain(const MoreData &basic,
 
   if (positive(min_altitude)) {
     fixed height_gain = basic.nav_altitude - min_altitude;
-    circling_info.max_height_gain = max(height_gain, circling_info.max_height_gain);
+    circling_info.max_height_gain =
+      std::max(height_gain, circling_info.max_height_gain);
   } else {
     min_altitude = basic.nav_altitude;
   }
 
-  min_altitude = min(basic.nav_altitude, min_altitude);
+  min_altitude = std::min(basic.nav_altitude, min_altitude);
 }

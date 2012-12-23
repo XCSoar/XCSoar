@@ -62,12 +62,12 @@ FinishPoint::GetElevation() const
   const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 
   if (constraints.fai_finish) {
-    return max(nominal_elevation, fai_finish_height);
+    return std::max(nominal_elevation, fai_finish_height);
   } else {
-    return max(nominal_elevation,
-               fixed(constraints.min_height) +
-               (constraints.min_height_ref == AltitudeReference::AGL
-                ? GetBaseElevation() : fixed(0)));
+    return std::max(nominal_elevation,
+                    fixed(constraints.min_height) +
+                    (constraints.min_height_ref == AltitudeReference::AGL
+                     ? GetBaseElevation() : fixed(0)));
   }
 }
 
@@ -89,7 +89,7 @@ FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 void
 FinishPoint::set_fai_finish_height(const fixed height)
 {
-  fai_finish_height = max(fixed(0), height);
+  fai_finish_height = std::max(fixed(0), height);
 }
 
 bool

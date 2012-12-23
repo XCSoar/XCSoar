@@ -109,7 +109,7 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
   const FlatLine l_pf2(pe, f2);
   const Angle ang = l_f1p.angle();
 
-  const fixed d = l_pf2.d() + max(a, b); // max line length
+  const fixed d = l_pf2.d() + std::max(a, b); // max line length
 
   const auto sc = ang.SinCos();
   fixed san = sc.first, can = sc.second;

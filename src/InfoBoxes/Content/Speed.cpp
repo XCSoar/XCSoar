@@ -64,8 +64,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
     return true;
 
   case ibkDown:
-    device_blackboard->SetSpeed(
-        max(fixed(0), CommonInterface::Basic().ground_speed - fixed_step));
+    device_blackboard->SetSpeed(std::max(fixed(0), CommonInterface::Basic().ground_speed - fixed_step));
     return true;
 
   case ibkLeft:

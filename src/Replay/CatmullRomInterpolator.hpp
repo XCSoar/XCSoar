@@ -160,7 +160,7 @@ public:
   {
     assert(Ready());
 
-    return max(fixed(0), max(p[0].time, max(p[1].time, max(p[2].time, p[3].time))));
+    return std::max({fixed(0), p[0].time, p[1].time, p[2].time, p[3].time});
   }
 
   bool

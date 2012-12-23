@@ -52,7 +52,7 @@ TaskBestMc::TaskBestMc(TaskPoint* tp,
 fixed
 TaskBestMc::f(const fixed mc)
 {
-  tm.set_mc(max(fixed_tiny, mc));
+  tm.set_mc(std::max(fixed_tiny, mc));
   res = tm.glide_solution(aircraft);
 
   return res.altitude_difference;

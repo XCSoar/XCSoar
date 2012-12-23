@@ -138,9 +138,9 @@ fixed
 GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
   const fixed w0 = SinkRate(V);
-  const fixed vl = VbestLD / max(Half(VbestLD), V);
-  return max(fixed(0),
-             w0 + (V / Double(bestLD)) * (sqr(n) - fixed(1)) * sqr(vl));
+  const fixed vl = VbestLD / std::max(Half(VbestLD), V);
+  return std::max(fixed(0),
+                  w0 + (V / Double(bestLD)) * (sqr(n) - fixed(1)) * sqr(vl));
 }
 
 #if 0
@@ -242,7 +242,7 @@ GlidePolar::UpdateSMin()
 #else
   assert(polar.IsValid());
 
-  Vmin = min(Vmax, -polar.b / Double(polar.a));
+  Vmin = std::min(Vmax, -polar.b / Double(polar.a));
   Smin = SinkRate(Vmin);
 #endif
 
@@ -290,7 +290,7 @@ public:
   GlidePolarSpeedToFly(const GlidePolar &_polar, const fixed net_sink_rate,
                        const fixed head_wind, const fixed vmin,
                        const fixed vmax) :
-    ZeroFinder(max(fixed(1), vmin - head_wind), vmax - head_wind,
+    ZeroFinder(std::max(fixed(1), vmin - head_wind), vmax - head_wind,
                fixed(TOLERANCE_POLAR_DOLPHIN)),
     polar(_polar),
     m_net_sink_rate(net_sink_rate),
@@ -346,7 +346,7 @@ GlidePolar::SpeedToFly(const AircraftState &state,
     V_stf = gp_stf.solve(Vmax);
   }
 
-  return max(Vmin, V_stf*g_scaling);
+  return std::max(Vmin, V_stf * g_scaling);
 }
 
 fixed
@@ -435,7 +435,7 @@ GlidePolar::GetLDOverGround(Angle track, SpeedVector wind) const
               sqr(wind_ld) - sqr(bestLD));
 
   if (q.Check())
-    return max(fixed(0), q.SolutionMax());
+    return std::max(fixed(0), q.SolutionMax());
 
   return fixed(0);
 }

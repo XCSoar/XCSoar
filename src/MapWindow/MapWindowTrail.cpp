@@ -28,7 +28,7 @@ Copyright_License {
 void
 MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
-  unsigned min_time = max(0, (int)Basic().time - 600);
+  unsigned min_time = std::max(0, (int)Basic().time - 600);
   DrawTrail(canvas, aircraft_pos, min_time);
 }
 

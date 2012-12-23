@@ -92,8 +92,8 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   PixelSize tsize = canvas.CalcTextSize(data.title);
 
   PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
-  PixelScalar x = max(PixelScalar(1),
-                      PixelScalar(title_rect.left + halftextwidth));
+  PixelScalar x = std::max(PixelScalar(1),
+                           PixelScalar(title_rect.left + halftextwidth));
   PixelScalar y = title_rect.top;
 
   canvas.TextAutoClipped(x, y, data.title);
@@ -147,8 +147,9 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       value_size = canvas.CalcTextSize(data.value);
     }
 
-    PixelScalar x = max(PixelScalar(0),
-                        PixelScalar((value_rect.left + value_rect.right - value_size.cx - unit_width) / 2));
+    PixelScalar x = std::max(PixelScalar(0),
+                             PixelScalar((value_rect.left + value_rect.right
+                                          - value_size.cx - unit_width) / 2));
 
     PixelScalar y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
@@ -189,9 +190,10 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     unit_size.cy = 0;
   }
 
-  PixelScalar x = max(PixelScalar(1),
-                      PixelScalar((value_rect.left + value_rect.right - value_size.cx
-                                   - Layout::FastScale(unit_size.cx)) / 2));
+  PixelScalar x = std::max(PixelScalar(1),
+                           PixelScalar((value_rect.left + value_rect.right
+                                        - value_size.cx
+                                        - Layout::FastScale(unit_size.cx)) / 2));
 
   PixelScalar y = value_rect.top + 1 - ascent_height +
     (value_rect.bottom - value_rect.top + capital_height) / 2;
@@ -224,9 +226,9 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 
   PixelSize tsize = canvas.CalcTextSize(data.comment);
 
-  PixelScalar x = max(PixelScalar(1),
-                      PixelScalar((comment_rect.left + comment_rect.right
-                                   - tsize.cx) / 2));
+  PixelScalar x = std::max(PixelScalar(1),
+                           PixelScalar((comment_rect.left + comment_rect.right
+                                        - tsize.cx) / 2));
   PixelScalar y = comment_rect.top;
 
   canvas.TextAutoClipped(x, y, data.comment);

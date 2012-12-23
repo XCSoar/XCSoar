@@ -117,7 +117,8 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
     return;
 
   fixed distance_max =
-    min(vec.distance, render_projection.GetScreenDistanceMeters() * fixed(0.7));
+    std::min(vec.distance,
+             render_projection.GetScreenDistanceMeters() * fixed(0.7));
 
   // too short to bother
   if (distance_max < fixed(5000))

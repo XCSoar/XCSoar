@@ -133,31 +133,29 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg totally included
-    return 
-      max(fixed(0),
-          GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
-          - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
+    return std::max(fixed(0),
+                    GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
+                    - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.HasEntered()) {
-      return max(fixed(0),
-                 GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
-                 - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
+      return std::max(fixed(0),
+                      GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
+                      - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
     } else {
-      return 
-        max(fixed(0),
-            ref.ProjectedDistance(GetOrigin()->GetLocationScored(),
-                                  destination.GetLocationScored())
-                 -GetOrigin()->ScoreAdjustment());
+      return std::max(fixed(0),
+                      ref.ProjectedDistance(GetOrigin()->GetLocationScored(),
+                                            destination.GetLocationScored())
+                      -GetOrigin()->ScoreAdjustment());
     }
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
     if (GetOrigin()->HasEntered()) {
-      return max(fixed(0),
-                 memo_travelled.calc(GetOrigin()->GetLocationScored(),
-                                     ref).distance
+      return std::max(fixed(0),
+                      memo_travelled.calc(GetOrigin()->GetLocationScored(),
+                                          ref).distance
                       -GetOrigin()->ScoreAdjustment());
     }
   default:

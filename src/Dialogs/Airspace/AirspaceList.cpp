@@ -166,7 +166,7 @@ UpdateList()
   if (!StringIsEmpty(name_filter))
     airspace_sorter->FilterByNamePrefix(airspace_list, name_filter);
 
-  airspace_list_control->SetLength(max((size_t)1, airspace_list.size()));
+  airspace_list_control->SetLength(std::max((size_t)1, airspace_list.size()));
   airspace_list_control->Invalidate();
 }
 

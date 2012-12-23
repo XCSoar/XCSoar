@@ -219,8 +219,9 @@ InputEvents::sub_SetZoom(fixed value)
   fixed scale_2min_distance = vmin * fixed_int_constant(12);
   const fixed scale_100m = fixed_int_constant(10);
   const fixed scale_1600km = fixed_int_constant(1600*100);
-  fixed minreasonable = (displayMode == DisplayMode::CIRCLING) ?
-                        scale_100m : max(scale_100m, scale_2min_distance);
+  fixed minreasonable = displayMode == DisplayMode::CIRCLING
+    ? scale_100m
+    : std::max(scale_100m, scale_2min_distance);
 
   value = Clamp(value, minreasonable, scale_1600km);
   map_window->SetMapScale(value);

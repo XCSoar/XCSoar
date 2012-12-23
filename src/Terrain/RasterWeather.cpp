@@ -164,7 +164,7 @@ RasterWeather::isWeatherAvailable(unsigned t) const
 {
   Poco::ScopedRWLock protect(lock, false);
   assert(t < MAX_WEATHER_TIMES);
-  return weather_available[min((unsigned)MAX_WEATHER_TIMES, t)];
+  return weather_available[std::min((unsigned)MAX_WEATHER_TIMES, t)];
 }
 
 void
@@ -256,12 +256,12 @@ RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
   if (_weather_time == 0) {
     // "Now" time, so find time in half hours
     unsigned half_hours = (day_time_local / 1800) % 48;
-    _weather_time = max(_weather_time, half_hours);
+    _weather_time = std::max(_weather_time, half_hours);
     now = true;
   }
 
   // limit values, for safety
-  _weather_time = min(MAX_WEATHER_TIMES - 1, _weather_time);
+  _weather_time = std::min(MAX_WEATHER_TIMES - 1, _weather_time);
   if (_weather_time != last_weather_time)
     reload = true;
 

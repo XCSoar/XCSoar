@@ -39,9 +39,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-using std::max;
-
 bool
 GlueMapWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {

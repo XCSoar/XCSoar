@@ -24,6 +24,8 @@ Copyright_License {
 #include "Database.hpp"
 #include "Geo/GeoPoint.hpp"
 
+#include <stdlib.h>
+
 GeoPoint
 Volkslogger::Waypoint::GetLocation() const
 {

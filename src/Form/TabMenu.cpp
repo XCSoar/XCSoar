@@ -286,7 +286,7 @@ TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
     const PageItem& item = pages_in[i];
     if (item.main_menu_index == main_menu_index) {
       CreateSubMenuItem(item);
-      firstPageIndex = min(i, firstPageIndex);
+      firstPageIndex = std::min(i, firstPageIndex);
       subMenuIndex++;
     }
   }

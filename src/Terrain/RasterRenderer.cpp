@@ -49,13 +49,13 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
   char x;
   if (illum < 0) {
     // shadow to blue
-    x = min(63, -illum);
+    x = std::min(63, -illum);
     r = MIX(0,r,x);
     g = MIX(0,g,x);
     b = MIX(64,b,x);
   } else if (illum > 0) {
     // highlight to yellow
-    x = min(32, illum / 2);
+    x = std::min(32, illum / 2);
     r = MIX(255,r,x);
     g = MIX(255,g,x);
     b = MIX(16,b,x);
@@ -196,7 +196,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
         if (h < 0)
           h = 0;
 
-        h = min(254, h >> height_scale);
+        h = std::min(254, h >> height_scale);
         *p++ = oColorBuf[h];
       } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
@@ -246,7 +246,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   border.right = height_matrix.GetWidth() - quantisation_effective;
   border.bottom = height_matrix.GetHeight() - quantisation_effective;
 
-  const unsigned height_slope_factor = max(1, (int)pixel_size);
+  const unsigned height_slope_factor = std::max(1, (int)pixel_size);
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
@@ -283,7 +283,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         if (h < 0)
           h = 0;
 
-        h = min(254, h >> height_scale);
+        h = std::min(254, h >> height_scale);
 
         // no need to calculate slope if undefined height or sea level
 

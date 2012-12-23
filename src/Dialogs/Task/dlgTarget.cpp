@@ -113,9 +113,9 @@ MoveTarget(gcc_unused double adjust_angle)
 
   distance = 500;
   if (tp.AATType == AAT_SECTOR) {
-    distance = max(tp.AATSectorRadius/20.0,distance);
+    distance = std::max(tp.AATSectorRadius/20.0,distance);
   } else {
-    distance = max(tp.AATCircleRadius/20.0,distance);
+    distance = std::max(tp.AATCircleRadius/20.0,distance);
   }
 
   // JMW illegal
@@ -548,11 +548,11 @@ InitTargetPoints()
   if (task_size <= target_point)
     target_point = initial_active_task_point;
   else
-    target_point = max(target_point, initial_active_task_point);
+    target_point = std::max(target_point, initial_active_task_point);
 
   target_point = Clamp(int(target_point), 0, (int)task_size - 1);
 
-  dfe.Set(max(0, (int)target_point - (int)initial_active_task_point));
+  dfe.Set(std::max(0, (int)target_point - (int)initial_active_task_point));
 
   if (task_size > target_point) {
     SetTarget();

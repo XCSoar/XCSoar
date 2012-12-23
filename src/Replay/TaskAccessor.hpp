@@ -90,7 +90,8 @@ public:
   gcc_pure
   fixed GetTargetHeight() const {
     if (task_manager.GetActiveTaskPoint())
-      return max(floor_alt, task_manager.GetActiveTaskPoint()->GetElevation());
+      return std::max(floor_alt,
+                      task_manager.GetActiveTaskPoint()->GetElevation());
     else
       return floor_alt;
   }

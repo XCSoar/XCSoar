@@ -48,7 +48,7 @@ AirspaceAircraftPerformance::SolutionGeneral(const fixed &distance,
       return fixed_big;
 
     const fixed t_descent = h_descent / mod_descent_rate;
-    return max(t_cruise, t_descent);
+    return std::max(t_cruise, t_descent);
 
   }
 
@@ -232,11 +232,13 @@ AirspaceAircraftPerformance::SolutionExists(const fixed &distance_max,
                                              const fixed &h_max) const
 {
   if (positive(altitude - h_max) &&
-      !positive(max(GetCruiseDescent(), GetDescentRate()) + vertical_tolerance))
+      !positive(std::max(GetCruiseDescent(), GetDescentRate())
+                + vertical_tolerance))
     return false;
 
   if (positive(h_min-altitude) &&
-      !positive(max(GetClimbRate(), -GetCruiseDescent()) + vertical_tolerance))
+      !positive(std::max(GetClimbRate(), -GetCruiseDescent())
+                + vertical_tolerance))
     return false;
 
   if (positive(distance_max) && !positive(GetCruiseSpeed()))

@@ -51,8 +51,8 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
     // fractional distance
     if (offset > 0) {
       if (offset * 2 < mag12) {
-        proj = max(0, min(proj, mag12));
-        proj = max(offset, min(mag12 - offset, proj + offset));
+        proj = std::max(0, std::min(proj, mag12));
+        proj = std::max(offset, std::min(mag12 - offset, proj + offset));
       } else {
         proj = mag12 / 2;
       }

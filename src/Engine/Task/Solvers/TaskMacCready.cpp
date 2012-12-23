@@ -33,7 +33,7 @@ TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
   :points(_tps.begin(), _tps.end()),
    active_index(_active_index),
    start_index(0),
-   end_index(max((int)_tps.size(), 1) - 1),
+   end_index(std::max((int)_tps.size(), 1) - 1),
    settings(_settings),
    glide_polar(gp) {}
 
@@ -52,7 +52,7 @@ TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
   :points(_tps.begin(), _tps.end()),
    active_index(0),
    start_index(0),
-   end_index(max((int)_tps.size(), 1) - 1),
+   end_index(std::max((int)_tps.size(), 1) - 1),
    settings(_settings),
    glide_polar(gp) {}
 
@@ -105,7 +105,7 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
       acc_gr = gr;
     else
       acc_gr.altitude_difference =
-          min(acc_gr.altitude_difference, gr.altitude_difference);
+        std::min(acc_gr.altitude_difference, gr.altitude_difference);
   }
 
   return acc_gr;

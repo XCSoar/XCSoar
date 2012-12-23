@@ -165,7 +165,7 @@ Canvas::DrawClippedText(PixelScalar x, PixelScalar y, UPixelScalar width,
   const PixelSize size = CalcTextSize(text);
 
   PixelRect rc;
-  ::SetRect(&rc, x, y, x + min(width, (UPixelScalar)size.cx), y + size.cy);
+  ::SetRect(&rc, x, y, x + std::min(width, (UPixelScalar)size.cx), y + size.cy);
   DrawClippedText(x, y, rc, text);
 }
 

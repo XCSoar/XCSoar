@@ -25,6 +25,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 
 static const char *
 EndOfLine(const char *line)

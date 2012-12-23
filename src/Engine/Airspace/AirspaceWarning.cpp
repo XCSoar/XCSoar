@@ -71,7 +71,7 @@ AirspaceWarning::WarningLive(const unsigned ack_time, const unsigned dt)
       && (state < state_last) 
       && (state_last == WARNING_INSIDE))
     // if inside was acknowledged, consider warning to be acknowledged
-    acktime_warning = max(acktime_warning, acktime_inside);
+    acktime_warning = std::max(acktime_warning, acktime_inside);
 
   if (acktime_warning > dt)
     acktime_warning-= dt;

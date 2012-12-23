@@ -400,8 +400,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
   }
 
   if (!basic.acceleration.available)
-    basic.acceleration.ProvideGLoad(
-        fixed(1) / max(fixed_small, fabs(cos(angle))), false);
+    basic.acceleration.ProvideGLoad(fixed(1) / std::max(fixed_small, fabs(cos(angle))), false);
 }
 
 void

@@ -58,10 +58,10 @@ TaskProjection::Scan(const GeoPoint &ref)
   if (!ref.IsValid())
     return;
 
-  location_min.longitude = min(ref.longitude, location_min.longitude);
-  location_max.longitude = max(ref.longitude, location_max.longitude);
-  location_min.latitude = min(ref.latitude, location_min.latitude);
-  location_max.latitude = max(ref.latitude, location_max.latitude);
+  location_min.longitude = std::min(ref.longitude, location_min.longitude);
+  location_max.longitude = std::max(ref.longitude, location_max.longitude);
+  location_min.latitude = std::min(ref.latitude, location_min.latitude);
+  location_max.latitude = std::max(ref.latitude, location_max.latitude);
 }
 
 bool
@@ -148,8 +148,8 @@ TaskProjection::ApproxRadius() const
 {
   assert(initialised);
 
-  return max(location_mid.Distance(location_max),
-             location_mid.Distance(location_min));
+  return std::max(location_mid.Distance(location_max),
+                  location_mid.Distance(location_min));
 }
 
 GeoBounds

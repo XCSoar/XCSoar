@@ -190,7 +190,7 @@ FlarmTrafficControl::CalcAutoZoom()
     if (warning_mode && !it->HasAlarm())
       continue;
 
-    zoom_dist = max(it->distance, zoom_dist);
+    zoom_dist = std::max(it->distance, zoom_dist);
   }
 
   fixed zoom_dist2 = zoom_dist;
@@ -310,7 +310,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  const int max_height = max(unit_height, value_height);
+  const int max_height = std::max(unit_height, value_height);
   const int y = rc.top + look.info_units_font.GetHeight() + max_height;
 
   // Paint value
@@ -347,7 +347,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  const unsigned max_height = max(unit_height, value_height);
+  const unsigned max_height = std::max(unit_height, value_height);
 
   // Paint value
   canvas.DrawText(rc.left, rc.bottom - value_height, buffer);
@@ -390,7 +390,7 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  const unsigned max_height = max(unit_height, value_height);
+  const unsigned max_height = std::max(unit_height, value_height);
 
   // Paint value
   canvas.DrawText(rc.right - unit_width - space_width - value_width,

@@ -195,7 +195,7 @@ AATPoint::GetTargetRangeRadial(fixed oldrange) const
 
   const fixed d = floc.Distance(GetTargetLocation());
   const fixed radius = floc.Distance(GetLocationMin());
-  const fixed rangeraw = min(fixed(1), d / radius);
+  const fixed rangeraw = std::min(fixed(1), d / radius);
 
   Angle radial = radialraw.AsDelta();
   fixed range = rangeraw;

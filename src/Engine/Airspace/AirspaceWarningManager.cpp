@@ -76,8 +76,9 @@ void
 AirspaceWarningManager::SetPredictionTimeFilter(fixed time)
 {
   prediction_time_filter = time;
-  cruise_filter.Design(max(fixed(10),prediction_time_filter*CRUISE_FILTER_FACT));
-  circling_filter.Design(max(fixed(10),prediction_time_filter));
+  cruise_filter.Design(std::max(fixed(10),
+                                prediction_time_filter * CRUISE_FILTER_FACT));
+  circling_filter.Design(std::max(fixed(10), prediction_time_filter));
 }
 
 AirspaceWarning& 
@@ -271,7 +272,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // it can be the minimum of the user set warning time, or the time of the 
   // task segment
 
-  const fixed max_time_limit = min(fixed(config.warning_time), max_time);
+  const fixed max_time_limit = std::min(fixed(config.warning_time), max_time);
 
   // the ceiling is the max height for predicted intrusions, given
   // that you may be climbing.  the ceiling is nominally set at 1000m
@@ -281,7 +282,8 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.altitude + fixed(max((unsigned)1000, config.altitude_warning_margin));
+  const fixed ceiling = state.altitude
+    + fixed(std::max((unsigned)1000, config.altitude_warning_margin));
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 

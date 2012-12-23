@@ -27,6 +27,8 @@ Copyright_License {
 #include "Main.hpp"
 #include "Dialogs/NumberEntry.hpp"
 
+#include <stdio.h>
+
 static void
 Main()
 {

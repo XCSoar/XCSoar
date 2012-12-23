@@ -82,7 +82,8 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
                  ChartLook::STYLE_REDTHICK);
 
   chart.DrawLabel(_T("MC"),
-                  max(fixed(0.5), fixed(fs.thermal_average.sum_n) - fixed(1)),
+                  std::max(fixed(0.5),
+                           fixed(fs.thermal_average.sum_n) - fixed(1)),
                   MACCREADY);
 
   chart.DrawTrendN(fs.thermal_average, ChartLook::STYLE_BLUETHIN);

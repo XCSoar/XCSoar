@@ -28,6 +28,8 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Atmosphere/Pressure.hpp"
 
+#include <stdlib.h>
+
 /**
  * Settings received from an external device.
  */

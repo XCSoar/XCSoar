@@ -217,7 +217,7 @@ dlgTextEntryHighscoreType(TCHAR *text, size_t width,
   if (width == 0)
     width = MAX_TEXTENTRY;
 
-  max_width = min(MAX_TEXTENTRY, width);
+  max_width = std::min(MAX_TEXTENTRY, width);
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_TEXTENTRY"));

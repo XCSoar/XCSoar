@@ -57,7 +57,7 @@ RasterProjection::FinePixelDistance(const GeoPoint &location,
   p = GeoPoint(location.longitude, location.latitude + distance);
   fixed y = location.Distance(p);
 
-  return max(x, y) / FACTOR;
+  return std::max(x, y) / FACTOR;
 }
 
 unsigned

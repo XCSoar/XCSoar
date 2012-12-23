@@ -129,9 +129,9 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
   UPixelScalar textheightoffset = 0;
 
   if (textwidth > (rc.right - rc.left)) // assume 2 lines
-    textheightoffset = max(0, (int)(buttonheight - textheight * 2) / 2);
+    textheightoffset = std::max(0, (int)(buttonheight - textheight * 2) / 2);
   else
-    textheightoffset = max(0, (int)(buttonheight - textheight) / 2);
+    textheightoffset = std::max(0, (int)(buttonheight - textheight) / 2);
 
   rcTextFinal.top += textheightoffset;
 

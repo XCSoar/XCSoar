@@ -48,8 +48,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   RasterPoint center;
   center.y = (rc.top + rc.bottom) / 2;
   center.x = (rc.left + rc.right) / 2;
-  const int radius = min(rc.right - rc.left, rc.bottom - rc.top) / 2 -
-                     Layout::Scale(1);
+  const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2
+    - Layout::Scale(1);
 
 #define fixed_div fixed(1.0 / 50.0)
 

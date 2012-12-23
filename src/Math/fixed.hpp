@@ -8,12 +8,12 @@
 // Extensions and bug/compilation fixes by John Wharington 2009
 
 #include "Compiler.h"
-
-#include <algorithm>
 #include "Constants.h"
+
+#include <utility>
+#include <complex>
+
 #include <assert.h>
-using std::max;
-using std::min;
 
 #ifdef FIXED_MATH
 #define fixed_constant(d, f) fixed(fixed::internal(), (f))

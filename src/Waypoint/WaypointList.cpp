@@ -24,6 +24,8 @@ Copyright_License {
 #include "WaypointList.hpp"
 #include "Waypoint/Waypoint.hpp"
 
+#include <algorithm>
+
 void
 WaypointListItem::ResetVector()
 {

@@ -120,7 +120,7 @@ ScrollBar::ToOrigin(unsigned size, unsigned view_size,
     return 0;
 
   unsigned origin = y * max_origin / GetScrollHeight();
-  return min(origin, max_origin);
+  return std::min(origin, max_origin);
 }
 
 void

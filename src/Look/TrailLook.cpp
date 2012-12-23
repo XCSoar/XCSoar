@@ -89,9 +89,9 @@ TrailLook::Initialise(const TrailSettings &settings)
         !settings.scaling_enabled)
       iwidth = minwidth;
     else
-      iwidth = max(minwidth,
-                   UPixelScalar((i - NUMSNAILCOLORS / 2) *
-                                Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
+      iwidth = std::max(minwidth,
+                        UPixelScalar((i - NUMSNAILCOLORS / 2) *
+                                     Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
 
     trail_widths[i] = iwidth;
     trail_brushes[i].Set(color);

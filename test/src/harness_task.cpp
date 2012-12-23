@@ -883,8 +883,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   const TaskFactoryConstraints &constraints =
     task_manager.GetOrderedTask().GetFactoryConstraints();
   const unsigned num_points_total =
-    max(constraints.min_points,
-        _num_points % constraints.max_points) + 1;
+    std::max(constraints.min_points,
+             _num_points % constraints.max_points) + 1;
   const unsigned num_int_points = num_points_total - 2;
 
   test_note("# adding start\n");

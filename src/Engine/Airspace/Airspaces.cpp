@@ -382,7 +382,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
   bool changed = false;
   const AirspaceVector contents_master = master.ScanRange(location, range, condition);
   AirspaceVector contents_self;
-  contents_self.reserve(max(airspace_tree.size(), contents_master.size()));
+  contents_self.reserve(std::max(airspace_tree.size(), contents_master.size()));
 
   task_projection = master.task_projection; // ensure these are up to date
 

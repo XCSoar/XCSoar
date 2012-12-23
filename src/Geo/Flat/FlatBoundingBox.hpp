@@ -136,7 +136,7 @@ public:
      * @return Distance on axis
      */
     distance_type operator()(const int a, const int b, const size_t dim) const {
-      return BBDist(dim, max((dim < 2) ? (b - a) : (a - b), 0));
+      return BBDist(dim, std::max((dim < 2) ? (b - a) : (a - b), 0));
     }
   };
 

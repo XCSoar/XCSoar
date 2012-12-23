@@ -312,8 +312,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   bool last_started = TaskStarted();
   const bool last_finished = TaskFinished();
 
-  const int t_min = max(0, (int)active_task_point - 1);
-  const int t_max = min(n_task - 1, (int)active_task_point);
+  const int t_min = std::max(0, (int)active_task_point - 1);
+  const int t_max = std::min(n_task - 1, (int)active_task_point);
   bool full_update = false;
 
   for (int i = t_min; i <= t_max; i++) {
@@ -887,7 +887,8 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
-    const fixed t_rem = max(fixed(0), t_target - stats.total.time_elapsed);
+    const fixed t_rem = std::max(fixed(0),
+                                 t_target - stats.total.time_elapsed);
 
     TaskMinTarget bmt(task_points, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,
@@ -1333,10 +1334,10 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
   FlatGeoPoint lr = task_projection.ProjectInteger(bounds.GetSouthEast());
   FlatGeoPoint ul = task_projection.ProjectInteger(bounds.GetNorthWest());
   FlatGeoPoint ur = task_projection.ProjectInteger(bounds.GetNorthEast());
-  FlatGeoPoint fmin(min(ll.longitude, ul.longitude),
-                    min(ll.latitude, lr.latitude));
-  FlatGeoPoint fmax(max(lr.longitude, ur.longitude),
-                    max(ul.latitude, ur.latitude));
+  FlatGeoPoint fmin(std::min(ll.longitude, ul.longitude),
+                    std::min(ll.latitude, lr.latitude));
+  FlatGeoPoint fmax(std::max(lr.longitude, ur.longitude),
+                    std::max(ul.latitude, ur.latitude));
   // note +/- 1 to ensure rounding keeps bb valid 
   fmin.longitude -= 1; fmin.latitude -= 1;
   fmax.longitude += 1; fmax.latitude += 1;
