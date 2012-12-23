@@ -60,6 +60,9 @@ class GeoPointPrinter:
         self.value = value
 
     def to_string(self):
+        if angle_value(self.value['latitude']) >= 180:
+            return 'GeoPoint::INVALID'
+
         longitude = AnglePrinter(self.value['longitude']).to_string()
         latitude = AnglePrinter(self.value['latitude']).to_string()
         return 'GeoPoint(%s %s)' % (longitude, latitude)
