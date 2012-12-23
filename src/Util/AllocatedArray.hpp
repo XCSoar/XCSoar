@@ -98,14 +98,14 @@ public:
   /**
    * Returns true if no memory was allocated so far.
    */
-  bool empty() const {
+  constexpr bool empty() const {
     return the_size == 0;
   }
 
   /**
    * Returns the number of allocated elements.
    */
-  size_type size() const {
+  constexpr size_type size() const {
     return the_size;
   }
 
@@ -131,7 +131,7 @@ public:
     return data;
   }
 
-  const_iterator begin() const {
+  constexpr const_iterator begin() const {
     return data;
   }
 
@@ -139,7 +139,7 @@ public:
     return data + the_size;
   }
 
-  const_iterator end() const {
+  constexpr const_iterator end() const {
     return data + the_size;
   }
 

@@ -52,19 +52,19 @@ public:
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
 
-  bool IsDefined() const {
+  constexpr bool IsDefined() const {
     return array.size() > 0;
   }
 
-  unsigned GetWidth() const {
+  constexpr unsigned GetWidth() const {
     return width;
   }
 
-  unsigned GetHeight() const {
+  constexpr unsigned GetHeight() const {
     return height;
   }
 
-  unsigned GetSize() const {
+  constexpr unsigned GetSize() const {
     return width * height;
   }
 
@@ -98,16 +98,16 @@ public:
     return array.begin();
   }
 
-  const_iterator begin() const {
+  constexpr const_iterator begin() const {
     return array.begin();
   }
 
   iterator end() {
-    return begin() + width * height;
+    return begin() + GetSize();
   }
 
-  const_iterator end() const {
-    return begin() + width * height;
+  constexpr const_iterator end() const {
+    return begin() + GetSize();
   }
 
   iterator GetPointerAt(unsigned x, unsigned y) {
