@@ -22,25 +22,9 @@ Copyright_License {
 */
 
 #include "CRC16.hpp"
+#include "Util/CRC.hpp"
 
 #include <assert.h>
-
-/*
- * Source: FLARM_BINCOMM.pdf
- */
-gcc_const
-static uint16_t
-crc_update(uint16_t crc, uint8_t data)
-{
-  crc = crc ^ ((uint16_t)data << 8);
-  for (unsigned i = 0; i < 8; ++i) {
-    if (crc & 0x8000)
-      crc = (crc << 1) ^ 0x1021;
-    else
-      crc <<= 1;
-  }
-  return crc;
-}
 
 uint16_t
 FLARM::CalculateCRC(const FrameHeader &header,
@@ -50,16 +34,12 @@ FLARM::CalculateCRC(const FrameHeader &header,
 
   uint16_t crc = 0x00;
 
-  const uint8_t *_header = (const uint8_t *)&header;
-  for (unsigned i = 0; i < 6; ++i, ++_header)
-    crc = crc_update(crc, *_header);
+  crc = UpdateCRC16CCITT((const uint8_t *)&header, 6, crc);
 
   if (length == 0 || data == NULL)
     return crc;
 
-  const uint8_t *_data = (const uint8_t *)data;
-  for (unsigned i = 0; i < length; ++i, ++_data)
-    crc = crc_update(crc, *_data);
+  crc = UpdateCRC16CCITT((const uint8_t *)data, length, crc);
 
   return crc;
 }
