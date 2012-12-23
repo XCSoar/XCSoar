@@ -197,7 +197,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
 {
   const RasterLocation c_origin = projection.project_coarse(origin);
   const RasterLocation c_destination = projection.project_coarse(destination);
-  const int c_diff = c_origin.manhattan_distance(c_destination);
+  const int c_diff = c_origin.ManhattanDistance(c_destination);
   const bool can_climb = (h_destination< h_virt);
 
   intx = destination; h = h_destination; // fallback, pass
@@ -236,7 +236,7 @@ RasterMap::Intersection(const GeoPoint& origin,
 {
   const RasterLocation c_origin = projection.project_coarse(origin);
   const RasterLocation c_destination = projection.project_coarse(destination);
-  const int c_diff = c_origin.manhattan_distance(c_destination);
+  const int c_diff = c_origin.ManhattanDistance(c_destination);
   if (c_diff==0) {
     return destination; // no distance
   }

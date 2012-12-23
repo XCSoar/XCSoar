@@ -54,7 +54,7 @@ struct RasterLocation {
   }
 
   gcc_pure
-  unsigned manhattan_distance(const RasterLocation &other) const {
+  unsigned ManhattanDistance(const RasterLocation &other) const {
     return std::abs((int)x - (int)other.x) +
       std::abs((int)y - (int)other.y);
   }
