@@ -191,7 +191,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
     const fixed sintheta = (state.wind.bearing - bearing).sin();
     if (fabs(sintheta) > fixed(0.0001))
       bearing +=
-        Angle::Radians(asin(sintheta * state.wind.norm / state.true_airspeed));
+        Angle::asin(sintheta * state.wind.norm / state.true_airspeed);
   }
 
   Angle diff = (bearing - heading).AsDelta();

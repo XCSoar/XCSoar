@@ -479,6 +479,16 @@ public:
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
 #endif
 
+  gcc_const
+  static Angle asin(fixed x) {
+    return Radians(::asin(x));
+  }
+
+  gcc_const
+  static Angle acos(fixed x) {
+    return Radians(::acos(x));
+  }
+
   /**
    * Returns the angle based on the input of both a x- and y-coordinate.
    * This is the mathematical angle where zero means along x axis and

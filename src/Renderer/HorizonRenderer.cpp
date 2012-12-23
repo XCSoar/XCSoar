@@ -60,8 +60,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                         attitude.pitch_angle.Degrees() : fixed(0);
 
   fixed phi = Clamp(bank_degrees, fixed(-89), fixed(89));
-  Angle alpha = Angle::Radians(acos(Clamp(pitch_degrees * fixed_div,
-                                          fixed(-1), fixed(1))));
+  Angle alpha = Angle::acos(Clamp(pitch_degrees * fixed_div,
+                                  fixed(-1), fixed(1)));
   Angle sphi = Angle::HalfCircle() - Angle::Degrees(phi);
   Angle alpha1 = sphi - alpha;
   Angle alpha2 = sphi + alpha;

@@ -100,9 +100,7 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
     dfo.Flip();
 
   fixed fo = (declin + dfo).tan() * lat.tan();
-  fo = asin(fo) + fixed_half_pi;
-
-  return Angle::Radians(fo);
+  return Angle::asin(fo) + Angle::QuarterCircle();
 }
 
 Angle
@@ -115,9 +113,7 @@ SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
     df1.Flip();
 
   fixed fi = (declin + df1).tan() * lat.tan();
-  fi = asin(fi) + fixed_half_pi;
-
-  return Angle::Radians(fi);
+  return Angle::asin(fi) + Angle::QuarterCircle();
 }
 
 Angle
@@ -181,7 +177,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   // Find the RA and DEC of the Sun
   Angle alpha = Angle::Radians(atan2(obliquity.cos() * lambda.sin(), lambda.cos()));
-  Angle delta = Angle::Radians(asin(obliquity.sin() * lambda.sin()));
+  Angle delta = Angle::asin(obliquity.sin() * lambda.sin());
 
   // Find the Equation of Time in minutes
   // Correction suggested by David Smith
@@ -241,7 +237,7 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
   Angle obliquity = Angle::Degrees(fixed(23.439) - fixed(.0000004) * days_to_j2000);
 
   // Find the DEC of the Sun
-  Angle delta = Angle::Radians(asin(obliquity.sin() * lambda.sin()));
+  Angle delta = Angle::asin(obliquity.sin() * lambda.sin());
 
   return CalculateAzimuth(location, date_time, time_zone, delta);
 }

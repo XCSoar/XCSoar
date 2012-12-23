@@ -57,10 +57,8 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
 
     fixed sin_pitch = -2 * (q[0] * q[2] - q[3] * q[1]);
     if (sin_pitch <= fixed(1) && sin_pitch >= fixed(-1)) {
-      fixed pitch = asin(sin_pitch);
-
       info.attitude.pitch_angle_available = true;
-      info.attitude.pitch_angle = Angle::Radians(pitch);
+      info.attitude.pitch_angle = Angle::asin(sin_pitch);
 
       fixed heading = fixed_pi + atan2(Double(q[1] * q[2] + q[3] * q[0]),
                                        sqr(q[3]) - sqr(q[0]) - sqr(q[1]) + sqr(q[2]));

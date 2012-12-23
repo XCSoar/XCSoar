@@ -37,7 +37,7 @@ CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c)
 {
     const fixed cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
       / Double(dist_c * dist_b);
-    return Angle::Radians(acos(cos_alpha));
+    return Angle::acos(cos_alpha);
 }
 
 gcc_const
