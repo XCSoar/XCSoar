@@ -12,7 +12,7 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp
 
-TERRAIN_CPPFLAGS_INTERNAL = $(JASPER_CPPFLAGS)
+TERRAIN_CPPFLAGS_INTERNAL = $(JASPER_CPPFLAGS) $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,libterrain,TERRAIN))
 
