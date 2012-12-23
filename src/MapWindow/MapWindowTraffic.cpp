@@ -59,7 +59,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // if zoomed in too far out, dont draw traffic since it will be too close to
   // the glider and so will be meaningless (serves only to clutter, cant help
   // the pilot)
-  if (projection.GetMapScale() > fixed_int_constant(7300))
+  if (projection.GetMapScale() > fixed(7300))
     return;
 
   canvas.Select(Fonts::map);

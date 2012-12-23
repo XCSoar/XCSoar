@@ -72,10 +72,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                settings.airspace, basic,
                                calculated);
 
-  if (marks && visible_projection.GetMapScale() <= fixed_int_constant(30000))
+  if (marks && visible_projection.GetMapScale() <= fixed(30000))
     builder.AddMarkers(*marks);
 
-  if (visible_projection.GetMapScale() <= fixed_int_constant(4000))
+  if (visible_projection.GetMapScale() <= fixed(4000))
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
   if (waypoints)

@@ -81,7 +81,7 @@ void
 MapWindow::RenderMarkers(Canvas &canvas)
 {
   if (marks != NULL &&
-      render_projection.GetMapScale() <= fixed_int_constant(30000))
+      render_projection.GetMapScale() <= fixed(30000))
     marks->Draw(canvas, render_projection, look.marker);
 }
 

@@ -56,8 +56,7 @@ static constexpr unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const
 {
-  return (GetMapScale() <= (way_point.IsLandable() ? fixed_int_constant(20000) :
-                                                      fixed_int_constant(10000)));
+  return (GetMapScale() <= (way_point.IsLandable() ? fixed(20000) : fixed(10000)));
 }
 
 fixed

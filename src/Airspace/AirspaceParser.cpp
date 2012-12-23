@@ -186,11 +186,11 @@ struct TempAirspaceType
   static int
   ArcStepWidth(fixed radius)
   {
-    if (radius > fixed_int_constant(50000))
+    if (radius > fixed(50000))
       return 1;
-    if (radius > fixed_int_constant(25000))
+    if (radius > fixed(25000))
       return 2;
-    if (radius > fixed_int_constant(10000))
+    if (radius > fixed(10000))
       return 3;
 
     return 5;

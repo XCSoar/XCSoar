@@ -25,8 +25,8 @@
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-constexpr fixed MIN_PHASE_TIME = fixed_int_constant(30);
-constexpr fixed FP_TOLERANCE = fixed_constant(0.001, 0x41893LL);
+constexpr fixed MIN_PHASE_TIME = fixed(30);
+constexpr fixed FP_TOLERANCE = fixed(0.001);
 
 /**
  * Update circling directon for given phase with given new direction

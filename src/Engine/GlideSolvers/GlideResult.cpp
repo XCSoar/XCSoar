@@ -136,7 +136,7 @@ GlideResult::GlideAngleGround() const
   if (positive(vector.distance))
     return pure_glide_height / vector.distance;
 
-  return fixed_int_constant(1000);
+  return fixed(1000);
 }
 
 fixed
@@ -145,7 +145,7 @@ GlideResult::DestinationAngleGround() const
   if (positive(vector.distance))
     return (altitude_difference + pure_glide_height) / vector.distance;
 
-  return fixed_int_constant(1000);
+  return fixed(1000);
 }
 
 bool 

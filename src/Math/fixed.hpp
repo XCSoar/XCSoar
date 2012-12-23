@@ -21,8 +21,6 @@
 #define fixed_constant(d, f) (d)
 #endif
 
-#define fixed_int_constant(i) fixed_constant((double)(i), ((fixed::value_t)(i)) << fixed::resolution_shift)
-
 #define fixed_third fixed_constant(1./3., (1 << fixed::resolution_shift) / 3)
 #define fixed_two_thirds fixed_constant(2./3., (2 << (fixed::resolution_shift)) / 3)
 

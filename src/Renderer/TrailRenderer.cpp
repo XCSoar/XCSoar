@@ -128,7 +128,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   GetMinMax(value_min, value_max, settings.type, trace);
 
   bool scaled_trail = settings.scaling_enabled &&
-                      projection.GetMapScale() <= fixed_int_constant(6000);
+                      projection.GetMapScale() <= fixed(6000);
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed(4));
 

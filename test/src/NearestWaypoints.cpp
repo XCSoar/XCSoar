@@ -134,7 +134,7 @@ PrintWaypoint(const Waypoint *waypoint)
 int main(int argc, char **argv)
 {
   WaypointType type = WaypointType::ALL;
-  fixed range = fixed_int_constant(100000);
+  fixed range = fixed(100000);
 
   Args args(argc, argv,
             "PATH\n\nPATH is expected to be any compatible waypoint file.\n"

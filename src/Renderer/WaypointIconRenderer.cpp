@@ -139,8 +139,8 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 
   // SW rendering of landables
   fixed scale = fixed(Layout::SmallScale(settings.landable_rendering_scale)) /
-                fixed_int_constant(150);
-  fixed radius = fixed_int_constant(10) * scale;
+                fixed(150);
+  fixed radius = fixed(10) * scale;
 
   canvas.SelectBlackPen();
 
@@ -192,8 +192,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
     len += Double(scale);
     Angle runwayDrawingAngle = runway.GetDirection() - screen_rotation;
     canvas.Select(look.white_brush);
-    DrawLandableRunway(canvas, point, runwayDrawingAngle, len,
-                       fixed_int_constant(5) * scale);
+    DrawLandableRunway(canvas, point, runwayDrawingAngle, len, fixed(5) * scale);
   }
 }
 

@@ -37,8 +37,8 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   const fixed x = sc.first, y = sc.second;
 
   RasterPoint end;
-  end.x = pos.x + iround(x * fixed_int_constant(400));
-  end.y = pos.y - iround(y * fixed_int_constant(400));
+  end.x = pos.x + iround(x * fixed(400));
+  end.y = pos.y - iround(y * fixed(400));
 
   canvas.Select(look.track_line_pen);
   canvas.DrawLine(pos, end);

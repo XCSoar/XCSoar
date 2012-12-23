@@ -128,7 +128,7 @@ public:
   bool operator()(const AirspaceSelectInfo &info) {
     Angle bearing = info.GetVector(location, projection).bearing;
     fixed direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
-    return direction_error > fixed_int_constant(18);
+    return direction_error > fixed(18);
   }
 };
 

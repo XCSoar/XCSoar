@@ -26,7 +26,7 @@
 
 #include <assert.h>
 
-#define fixed_big fixed_int_constant(1000000)
+#define fixed_big fixed(1000000)
 
 fixed 
 AirspaceAircraftPerformance::SolutionGeneral(const fixed &distance,

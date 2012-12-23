@@ -67,7 +67,7 @@ AircraftStateFilter::Update(const AircraftState &state)
 
   GeoVector vec(last_state.location, state.location);
 
-  const fixed MACH_1 = fixed_int_constant(343);
+  const fixed MACH_1 = fixed(343);
   if (vec.distance > fixed(1000) || vec.distance / dt > MACH_1) {
     Reset(state);
     return;

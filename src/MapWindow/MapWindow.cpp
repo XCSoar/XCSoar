@@ -78,7 +78,7 @@ MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
   DoubleBufferWindow::Create(parent, rc, style);
 
   // initialize other systems
-  visible_projection.SetMapScale(fixed_int_constant(5000));
+  visible_projection.SetMapScale(fixed(5000));
   visible_projection.SetScreenOrigin((rc.left + rc.right) / 2,
                                      (rc.bottom + rc.top) / 2);
   visible_projection.UpdateScreenBounds();

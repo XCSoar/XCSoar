@@ -283,7 +283,7 @@ GlueMapWindow::UpdateProjection()
         if (basic.track_available &&
             basic.ground_speed_available &&
              /* 8 m/s ~ 30 km/h */
-            basic.ground_speed > fixed_int_constant(8)) {
+            basic.ground_speed > fixed(8)) {
           auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
 
           const auto sc = angle.SinCos();
