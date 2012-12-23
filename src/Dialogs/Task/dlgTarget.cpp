@@ -44,6 +44,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 #include "Interface.hpp"
+#include "Util/Clamp.hpp"
 
 #include <stdio.h>
 
@@ -549,7 +550,7 @@ InitTargetPoints()
   else
     target_point = max(target_point, initial_active_task_point);
 
-  target_point = max(0, min((int)target_point, (int)task_size - 1));
+  target_point = Clamp(int(target_point), 0, (int)task_size - 1);
 
   dfe.Set(max(0, (int)target_point - (int)initial_active_task_point));
 

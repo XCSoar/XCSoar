@@ -25,6 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
+#include "Util/Clamp.hpp"
 
 void
 OffsetHistory::Reset()
@@ -234,8 +235,8 @@ GlueMapWindow::UpdateMapScale()
     distance /= fixed(auto_zoom_factor) / 100;
 
     // Clip map auto zoom range to reasonable values
-    distance = max(fixed_int_constant(525),
-                   min(settings.max_auto_zoom_distance / 10, distance));
+    distance = Clamp(distance, fixed(525),
+                     settings.max_auto_zoom_distance / 10);
 
     visible_projection.SetFreeMapScale(distance);
   }

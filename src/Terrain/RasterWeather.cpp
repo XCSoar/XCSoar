@@ -28,6 +28,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/Clamp.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
@@ -396,7 +397,7 @@ RasterWeather::ValueToText(TCHAR* Buffer, short val) const
               Units::GetAltitudeName());
     return;
   case 5: // blcloudpct
-    _stprintf(Buffer, _T("%d%%"), (int)max(0, min(100, (int)val)));
+    _stprintf(Buffer, _T("%d%%"), Clamp(int(val), 0, 100));
     return;
   case 6: // sfctemp
     _stprintf(Buffer, _T("%d")_T(DEG), val / 2 - 20);

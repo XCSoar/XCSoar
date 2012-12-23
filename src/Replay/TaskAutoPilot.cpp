@@ -24,6 +24,7 @@
 #include "TaskAccessor.hpp"
 #include "Task/Stats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Util/Clamp.hpp"
 
 void
 AutopilotParameters::SetIdeal()
@@ -196,7 +197,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
   Angle diff = (bearing - heading).AsDelta();
   fixed d = diff.Degrees();
   fixed max_turn = parms.turn_speed * timestep;
-  heading += Angle::Degrees(max(-max_turn, min(max_turn, d)));
+  heading += Angle::Degrees(Clamp(d, -max_turn, max_turn));
   if (positive(parms.bearing_noise))
     heading += GetHeadingDeviation() * timestep;
 

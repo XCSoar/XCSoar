@@ -27,6 +27,7 @@
 #include "Math/ZeroFinder.hpp"
 #include "Math/Quadratic.hpp"
 #include "Util/Tolerances.hpp"
+#include "Util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
 
 #include <assert.h>
@@ -193,7 +194,7 @@ GlidePolar::UpdateBestLD()
   assert(polar.IsValid());
   assert(!negative(mc));
 
-  VbestLD = max(Vmin, min(Vmax, sqrt((polar.c+mc)/polar.a)));
+  VbestLD = Clamp(sqrt((polar.c + mc) / polar.a), Vmin, Vmax);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif
@@ -387,7 +388,7 @@ GlidePolar::GetRiskMC(fixed height_fraction, const fixed riskGamma) const
 #define fixed_low_limit fixed(0.1)
 #define fixed_up_limit fixed(0.9)
 
-  height_fraction = max(fixed(0), min(fixed(1), height_fraction));
+  height_fraction = Clamp(height_fraction, fixed(0), fixed(1));
 
   if (riskGamma < fixed_low_limit)
     return mc;

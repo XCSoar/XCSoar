@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -77,7 +78,7 @@ fixed
 MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 {
   int i = FindMapScale(scale) + Step;
-  i = max(0, min((int)ScaleListCount - 1, i));
+  i = Clamp(i, 0, (int)ScaleListCount - 1);
   return CalculateMapScale(i);
 }
 

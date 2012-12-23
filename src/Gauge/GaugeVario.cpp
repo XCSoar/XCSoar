@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/FastPixelRotation.hpp"
 #include "LogFile.hpp"
 #include "Units/Units.hpp"
+#include "Util/Clamp.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -166,7 +167,8 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   RenderNeedle(canvas, ival, false, false);
 
   if (Settings().show_gross) {
-    fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), Units::ToUserVSpeed(vval)));
+    fixed vvaldisplay = Clamp(Units::ToUserVSpeed(vval),
+                              fixed(-99.9), fixed(99.9));
 
     RenderValue(canvas, middle_position.x, middle_position.y,
                 &value_middle, &label_middle,
@@ -257,7 +259,7 @@ GaugeVario::ValueToNeedlePos(fixed Value)
     needle_initialised = true;
   }
   i = iround(Value * degrees_per_unit);
-  i = min((int)gmax, max(-gmax, i));
+  i = Clamp(i, -int(gmax), int(gmax));
   return i;
 }
 
@@ -445,7 +447,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   if ((Calculated().flight.flying)
       && (!Basic().gps.simulator || !Calculated().circling)) {
     vdiff = Calculated().V_stf - Basic().indicated_airspeed;
-    vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
+    vdiff = Clamp(vdiff, -DeltaVlimit, DeltaVlimit); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else
     vdiff = fixed(0);

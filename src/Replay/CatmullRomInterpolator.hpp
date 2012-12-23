@@ -24,6 +24,7 @@
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Util/Clamp.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -178,7 +179,7 @@ private:
     const fixed fraction = (time - p[1].time) / (p[2].time - p[1].time);
 
     if (limit_range)
-      return max(fixed(0), min(fixed(1), fraction));
+      return Clamp(fraction, fixed(0), fixed(1));
     else
       return fraction;
   }

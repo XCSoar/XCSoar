@@ -26,6 +26,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
+#include "Util/Clamp.hpp"
 
 #include <math.h>
 
@@ -56,7 +57,8 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
         proj = mag12 / 2;
       }
     }
-    const fixed f = min(fixed(1), max(fixed(0), fixed(proj) / mag12));
+
+    const fixed f = Clamp(fixed(proj) / mag12, fixed(0), fixed(1));
     // location of 'closest' point
     p4->x = iround(v12x * f) + p1.x;
     p4->y = iround(v12y * f) + p1.y;

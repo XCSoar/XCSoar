@@ -41,6 +41,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 #include "Look/GestureLook.hpp"
 #include "Input/InputEvents.hpp"
 
@@ -398,7 +399,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
 {
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    fixed s = max(fixed(0), min(fixed(1), Basic().stall_ratio));
+    fixed s = Clamp(Basic().stall_ratio, fixed(0), fixed(1));
     PixelScalar m((rc.bottom - rc.top) * s * s);
 
     canvas.SelectBlackPen();

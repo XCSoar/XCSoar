@@ -21,6 +21,7 @@
  */
 
 #include "Gradient.hpp"
+#include "Util/Clamp.hpp"
 
 #include <algorithm>
 #include <math.h>
@@ -29,7 +30,7 @@ fixed
 AngleToGradient(const fixed d)
 {
   if (fabs(d)) {
-    return min(fixed(999), max(fixed(-999), fixed(1) / d));
+    return Clamp(fixed(1) / d, fixed(-999), fixed(999));
   } else {
     return fixed(999);
   }

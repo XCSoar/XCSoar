@@ -35,6 +35,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Pan.hpp"
+#include "Util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -212,8 +213,8 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
       if (((new_bearing - old_bearing).AsDelta().AbsoluteDegrees() < fixed(30)) ||
           (CommonInterface::Basic().ground_speed < min_speed))
-        device_blackboard->SetSpeed(
-            min(fixed(100.0), max(min_speed, fixed(distance / (Layout::FastScale(3))))));
+        device_blackboard->SetSpeed(Clamp(fixed(distance) / Layout::FastScale(3),
+                                          min_speed, fixed(100)));
 
       device_blackboard->SetTrack(new_bearing);
       // change bearing without changing speed if direction change > 30

@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Util/Clamp.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -97,8 +98,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   // of max performance
 
   if (line.ReadChecked(value))
-    info.settings.ProvideBugs(fixed(1) - max(fixed(0),
-                                              min(fixed(30), value)) / 100,
+    info.settings.ProvideBugs(fixed(1) - Clamp(value, fixed(0), fixed(30)) / 100,
                               info.clock);
 
   fixed ballast_overload;

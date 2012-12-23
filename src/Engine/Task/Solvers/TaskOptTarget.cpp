@@ -24,6 +24,7 @@
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Util/Tolerances.hpp"
+#include "Util/Clamp.hpp"
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
@@ -85,7 +86,7 @@ TaskOptTarget::search(const fixed tp)
 void
 TaskOptTarget::SetTarget(const fixed p)
 {
-  const GeoPoint loc = iso.Parametric(min(xmax, max(xmin, p)));
+  const GeoPoint loc = iso.Parametric(Clamp(p, xmin, xmax));
   tp_current.SetTarget(loc);
   tp_start->ScanDistanceRemaining(aircraft.location);
 }

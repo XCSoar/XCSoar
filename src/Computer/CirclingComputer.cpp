@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
+#include "Util/Clamp.hpp"
 
 static constexpr fixed MIN_TURN_RATE(4);
 static constexpr fixed CRUISE_CLIMB_SWITCH(15);
@@ -80,7 +81,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
-  fixed turn_rate = max(fixed(-50), min(fixed(50), circling_info.turn_rate));
+  fixed turn_rate = Clamp(circling_info.turn_rate, fixed(-50), fixed(50));
 
   // Make the turn rate more smooth using the LowPassFilter
   turn_rate = LowPassFilter(circling_info.turn_rate_smoothed,

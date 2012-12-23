@@ -35,6 +35,7 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Asset.hpp"
 #include "Pan.hpp"
+#include "Util/Clamp.hpp"
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
@@ -221,7 +222,7 @@ InputEvents::sub_SetZoom(fixed value)
   fixed minreasonable = (displayMode == DisplayMode::CIRCLING) ?
                         scale_100m : max(scale_100m, scale_2min_distance);
 
-  value = max(minreasonable, min(scale_1600km, value));
+  value = Clamp(value, minreasonable, scale_1600km);
   map_window->SetMapScale(value);
   map_window->QuickRedraw();
 }

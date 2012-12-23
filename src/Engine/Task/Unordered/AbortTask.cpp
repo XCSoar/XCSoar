@@ -29,6 +29,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
+#include "Util/Clamp.hpp"
 
 /** min search range in m */
 static constexpr fixed min_search_range = fixed(50000);
@@ -104,8 +105,8 @@ AbortTask::GetAbortRange(const AircraftState &state,
                          const GlidePolar &glide_polar) const
 {
   // always scan at least min range or approx glide range
-  return min(max_search_range,
-             max(min_search_range, state.altitude * glide_polar.GetBestLD()));
+  return Clamp(state.altitude * glide_polar.GetBestLD(),
+               min_search_range, max_search_range);
 }
 
 bool
