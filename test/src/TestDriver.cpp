@@ -412,6 +412,8 @@ TestCProbe()
   ok1(equals(nmea_info.humidity, 21.4));
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 100.0));
+  ok1(nmea_info.dyn_pressure_available);
+  ok1(equals(nmea_info.dyn_pressure.GetPascal(), 2.8));
 
   delete device;
 }
@@ -1314,7 +1316,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(696);
+  plan_tests(698);
 
   TestGeneric();
   TestTasman();

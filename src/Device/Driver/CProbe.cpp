@@ -110,6 +110,12 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
     info.battery_level = fixed((int16_t)battery_level);
   }
 
+  unsigned _delta_pressure;
+  if (line.ReadHexChecked(_delta_pressure)) {
+    fixed delta_pressure = fixed((int16_t)_delta_pressure) / 10;
+    info.ProvideDynamicPressure(AtmosphericPressure::Pascal(delta_pressure));
+  }
+
   return true;
 }
 
