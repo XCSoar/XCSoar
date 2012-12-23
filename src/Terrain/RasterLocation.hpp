@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 #define XCSOAR_TERRAIN_RASTER_LOCATION_HPP
 
+#include "Compiler.h"
+
 #include <cstdlib>
 
 /**
@@ -33,24 +35,25 @@ struct RasterLocation {
   unsigned x, y;
 
   RasterLocation() = default;
-  RasterLocation(unsigned _x, unsigned _y):x(_x), y(_y) {}
+  constexpr RasterLocation(unsigned _x, unsigned _y):x(_x), y(_y) {}
 
-  bool operator==(const RasterLocation &other) const {
+  constexpr bool operator==(const RasterLocation &other) const {
     return x == other.x && y == other.y;
   }
 
-  bool operator!=(const RasterLocation &other) const {
+  constexpr bool operator!=(const RasterLocation &other) const {
     return !(*this == other);
   }
 
-  RasterLocation operator>>(unsigned bits) const {
+  constexpr RasterLocation operator>>(unsigned bits) const {
     return RasterLocation(x >> bits, y >> bits);
   }
 
-  RasterLocation operator<<(unsigned bits) const {
+  constexpr RasterLocation operator<<(unsigned bits) const {
     return RasterLocation(x << bits, y << bits);
   }
 
+  gcc_pure
   unsigned manhattan_distance(const RasterLocation &other) const {
     return std::abs((int)x - (int)other.x) +
       std::abs((int)y - (int)other.y);
