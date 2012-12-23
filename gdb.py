@@ -55,6 +55,15 @@ class AnglePrinter:
     def to_string(self):
         return str(angle_value(self.value))
 
+class AngleRangePrinter:
+    def __init__(self, value):
+        self.value = value
+
+    def to_string(self):
+        start = AnglePrinter(self.value['start']).to_string()
+        end = AnglePrinter(self.value['end']).to_string()
+        return 'AngleRange(%s..%s)' % (start, end)
+
 class GeoPointPrinter:
     def __init__(self, value):
         self.value = value
@@ -72,13 +81,13 @@ class GeoBoundsPrinter:
         self.value = value
 
     def to_string(self):
-        if angle_value(self.value['north']) >= 180:
+        if angle_value(self.value['latitude']['end']) >= 180:
             return 'GeoBounds::INVALID'
 
-        west = AnglePrinter(self.value['west']).to_string()
-        east = AnglePrinter(self.value['east']).to_string()
-        south = AnglePrinter(self.value['south']).to_string()
-        north = AnglePrinter(self.value['north']).to_string()
+        west = AnglePrinter(self.value['longitude']['start']).to_string()
+        east = AnglePrinter(self.value['longitude']['end']).to_string()
+        south = AnglePrinter(self.value['latitude']['start']).to_string()
+        north = AnglePrinter(self.value['latitude']['end']).to_string()
         return 'GeoBounds([%s .. %s] [%s .. %s])' % (west, east, south, north)
 
 class GeoVectorPrinter:
@@ -203,6 +212,8 @@ def lookup_function(value):
         return FixedPrinter(value)
     elif typename == 'Angle':
         return AnglePrinter(value)
+    elif typename == 'AngleRange':
+        return AngleRangePrinter(value)
     elif typename == 'GeoPoint':
         return GeoPointPrinter(value)
     elif typename == 'GeoBounds':

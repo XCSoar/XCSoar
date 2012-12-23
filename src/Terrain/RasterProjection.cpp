@@ -30,10 +30,10 @@ RasterProjection::Set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
   x_scale = fixed(width) / bounds.GetWidth().Native();
-  left = int(bounds.west.Native() * x_scale);
+  left = int(bounds.GetWest().Native() * x_scale);
 
   y_scale = fixed(height) / bounds.GetHeight().Native();
-  top = int(bounds.north.Native() * y_scale);
+  top = int(bounds.GetNorth().Native() * y_scale);
 }
 
 fixed

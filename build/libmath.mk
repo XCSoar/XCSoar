@@ -4,6 +4,7 @@ MATH_SRC_DIR = $(SRC)/Math
 
 MATH_SOURCES = \
 	$(MATH_SRC_DIR)/Angle.cpp \
+	$(MATH_SRC_DIR)/ARange.cpp \
 	$(MATH_SRC_DIR)/FastMath.cpp \
 	$(MATH_SRC_DIR)/FastTrig.cpp \
 	$(MATH_SRC_DIR)/FastRotation.cpp \

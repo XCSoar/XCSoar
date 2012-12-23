@@ -31,7 +31,7 @@ Copyright_License {
 class RasterMap;
 
 #ifdef ENABLE_OPENGL
-struct GeoBounds;
+class GeoBounds;
 #else
 class WindowProjection;
 #endif

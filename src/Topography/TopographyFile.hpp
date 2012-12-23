@@ -38,7 +38,6 @@ Copyright_License {
 struct GeoPoint;
 class Canvas;
 class WindowProjection;
-struct GeoBounds;
 class LabelBlock;
 struct MapSettings;
 class XShape;

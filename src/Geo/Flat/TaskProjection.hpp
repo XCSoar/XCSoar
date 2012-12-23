@@ -29,7 +29,7 @@
 struct FlatPoint;
 struct FlatGeoPoint;
 class FlatBoundingBox;
-struct GeoBounds;
+class GeoBounds;
 
 /**
  * Class for performing Lambert Conformal Conic projections from

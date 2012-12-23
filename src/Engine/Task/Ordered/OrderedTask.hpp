@@ -44,7 +44,7 @@ struct Waypoint;
 class Waypoints;
 class AATPoint;
 class FlatBoundingBox;
-struct GeoBounds;
+class GeoBounds;
 struct TaskSummary;
 struct TaskFactoryConstraints;
 

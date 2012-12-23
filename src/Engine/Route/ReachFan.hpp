@@ -29,7 +29,7 @@
 
 class RoutePolars;
 class RasterMap;
-struct GeoBounds;
+class GeoBounds;
 struct ReachResult;
 
 class ReachFan

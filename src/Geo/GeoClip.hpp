@@ -39,7 +39,7 @@ class GeoClip : protected GeoBounds {
 public:
   GeoClip() = default;
   GeoClip(const GeoBounds &other)
-    :GeoBounds(other), width((east - west).AsBearing()) {}
+    :GeoBounds(other), width(GetWidth()) {}
 
 protected:
   /**
@@ -49,7 +49,7 @@ protected:
    */
   gcc_pure
   Angle ImportLongitude(Angle l) const {
-    return (l - west).AsDelta();
+    return (l - GetWest()).AsDelta();
   }
 
   gcc_pure
@@ -59,7 +59,7 @@ protected:
 
   gcc_pure
   GeoPoint ExportPoint(GeoPoint pt) const {
-    return GeoPoint(pt.longitude + west, pt.latitude);
+    return GeoPoint(pt.longitude + GetWest(), pt.latitude);
   }
 
   /**

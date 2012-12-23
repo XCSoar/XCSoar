@@ -117,9 +117,9 @@ protected:
   struct CacheHeader {
     enum {
 #ifdef FIXED_MATH
-      VERSION = 0x8,
+      VERSION = 0xa,
 #else
-      VERSION = 0x9,
+      VERSION = 0xb,
 #endif
     };
 

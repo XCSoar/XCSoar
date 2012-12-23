@@ -100,10 +100,11 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
-  bounds.west = Angle::Degrees(fixed(shape.bounds.minx));
-  bounds.south = Angle::Degrees(fixed(shape.bounds.miny));
-  bounds.east = Angle::Degrees(fixed(shape.bounds.maxx));
-  bounds.north = Angle::Degrees(fixed(shape.bounds.maxy));
+  bounds = GeoBounds(GeoPoint(Angle::Degrees(fixed(shape.bounds.minx)),
+                              Angle::Degrees(fixed(shape.bounds.maxy))),
+                     GeoPoint(Angle::Degrees(fixed(shape.bounds.maxx)),
+                              Angle::Degrees(fixed(shape.bounds.miny))));
+
 #ifdef ENABLE_OPENGL
   center = bounds.GetCenter();
 #endif

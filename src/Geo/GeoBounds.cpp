@@ -30,43 +30,18 @@ GeoBounds::Extend(const GeoPoint pt)
     return;
 
   if (IsValid()) {
-    if (pt.longitude < west)
-      west = pt.longitude;
-    if (pt.latitude > north)
-      north = pt.latitude;
-    if (pt.longitude > east)
-      east = pt.longitude;
-    if (pt.latitude < south)
-      south = pt.latitude;
+    longitude.Extend(pt.longitude);
+    latitude.Extend(pt.latitude);
   } else {
-    west = east = pt.longitude;
-    north = south = pt.latitude;
+    *this = GeoBounds(pt);
   }
-}
-
-static bool
-IntersectWith(Angle &a, Angle &b, const Angle other_a, const Angle other_b)
-{
-  bool result = false;
-
-  if (other_a.Between(a, b)) {
-    a = other_a;
-    result = true;
-  }
-
-  if (other_b.Between(a, b)) {
-    b = other_b;
-    result = true;
-  }
-
-  return result;
 }
 
 bool
 GeoBounds::IntersectWith(const GeoBounds &other)
 {
-  return ::IntersectWith(west, east, other.west, other.east) &&
-    ::IntersectWith(south, north, other.south, other.north);
+  return longitude.IntersectWith(other.longitude) &&
+    latitude.IntersectWith(other.latitude);
 }
 
 GeoPoint
@@ -75,8 +50,7 @@ GeoBounds::GetCenter() const
   if (!IsValid())
     return GeoPoint::Invalid();
 
-  return GeoPoint(west.Fraction(east, fixed(0.5)),
-                  south.Fraction(north, fixed(0.5)));
+  return GeoPoint(longitude.GetMiddle(), latitude.GetMiddle());
 }
 
 GeoBounds
@@ -86,15 +60,15 @@ GeoBounds::Scale(fixed factor) const
     return Invalid();
 
   Angle diff_lat_half =
-    (north - south).AsBearing() / fixed(2) * (factor - fixed(1));
+    GetHeight() / 2 * (factor - fixed(1));
   Angle diff_lon_half =
-    (east - west).AsBearing() / fixed(2) * (factor - fixed(1));
+    GetWidth() / 2 * (factor - fixed(1));
 
   GeoBounds br = *this;
-  br.east += diff_lon_half;
-  br.west -= diff_lon_half;
-  br.north += diff_lat_half;
-  br.south -= diff_lat_half;
+  br.longitude.end += diff_lon_half;
+  br.longitude.start -= diff_lon_half;
+  br.latitude.end += diff_lat_half;
+  br.latitude.start -= diff_lat_half;
 
   return br;
 }

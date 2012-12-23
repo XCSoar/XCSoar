@@ -89,10 +89,10 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 
   const GeoBounds &bounds = GetBounds();
 
-  int x = AngleToPixel(location.longitude, bounds.west, bounds.east,
+  int x = AngleToPixel(location.longitude, bounds.GetWest(), bounds.GetEast(),
                        raster_tile_cache.GetWidth());
 
-  int y = AngleToPixel(location.latitude, bounds.north, bounds.south,
+  int y = AngleToPixel(location.latitude, bounds.GetNorth(), bounds.GetSouth(),
                        raster_tile_cache.GetHeight());
 
   raster_tile_cache.UpdateTiles(path, x, y,

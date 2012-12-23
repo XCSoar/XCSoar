@@ -199,10 +199,15 @@ void
 RasterTileCache::SetLatLonBounds(double _lon_min, double _lon_max,
                                  double _lat_min, double _lat_max)
 {
-  bounds.west = Angle::Degrees(std::min(_lon_min, _lon_max));
-  bounds.east = Angle::Degrees(std::max(_lon_min, _lon_max));
-  bounds.north = Angle::Degrees(std::max(_lat_min, _lat_max));
-  bounds.south = Angle::Degrees(std::min(_lat_min, _lat_max));
+  const Angle lon_min(Angle::Degrees(_lon_min));
+  const Angle lon_max(Angle::Degrees(_lon_max));
+  const Angle lat_min(Angle::Degrees(_lat_min));
+  const Angle lat_max(Angle::Degrees(_lat_max));
+
+  bounds = GeoBounds(GeoPoint(std::min(lon_min, lon_max),
+                              std::max(lat_min, lat_max)),
+                     GeoPoint(std::max(lon_min, lon_max),
+                              std::min(lat_min, lat_max)));
   bounds_initialised = true;
 }
 

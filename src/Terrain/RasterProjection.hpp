@@ -29,7 +29,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-struct GeoBounds;
+class GeoBounds;
 
 /**
  * This class manages the projection from GeoPoint to RasterMap

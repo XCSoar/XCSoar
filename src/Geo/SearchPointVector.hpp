@@ -29,7 +29,7 @@
 
 class FlatRay;
 class FlatBoundingBox;
-struct GeoBounds;
+class GeoBounds;
 
 class SearchPointVector: public std::vector<SearchPoint> {
 public:

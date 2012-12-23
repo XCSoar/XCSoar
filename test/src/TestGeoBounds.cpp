@@ -40,10 +40,10 @@ int main(int argc, char **argv)
 
   GeoBounds b(g);
 
-  ok1(equals(b.east, 2));
-  ok1(equals(b.west, 2));
-  ok1(equals(b.north, 4));
-  ok1(equals(b.south, 4));
+  ok1(equals(b.GetEast(), 2));
+  ok1(equals(b.GetWest(), 2));
+  ok1(equals(b.GetNorth(), 4));
+  ok1(equals(b.GetSouth(), 4));
 
   ok1(b.IsEmpty());
 
@@ -51,10 +51,10 @@ int main(int argc, char **argv)
   g.longitude = Angle::Degrees(8);
   b.Extend(g);
 
-  ok1(equals(b.east, 8));
-  ok1(equals(b.west, 2));
-  ok1(equals(b.north, 6));
-  ok1(equals(b.south, 4));
+  ok1(equals(b.GetEast(), 8));
+  ok1(equals(b.GetWest(), 2));
+  ok1(equals(b.GetNorth(), 6));
+  ok1(equals(b.GetSouth(), 4));
 
   ok1(!b.IsEmpty());
 
@@ -69,33 +69,33 @@ int main(int argc, char **argv)
 
   b = b.Scale(fixed(2));
 
-  ok1(equals(b.east, 11));
-  ok1(equals(b.west, -1));
-  ok1(equals(b.north, 7));
-  ok1(equals(b.south, 3));
+  ok1(equals(b.GetEast(), 11));
+  ok1(equals(b.GetWest(), -1));
+  ok1(equals(b.GetNorth(), 7));
+  ok1(equals(b.GetSouth(), 3));
 
   b = b.Scale(fixed(0.5));
 
-  ok1(equals(b.east, 8));
-  ok1(equals(b.west, 2));
-  ok1(equals(b.north, 6));
-  ok1(equals(b.south, 4));
+  ok1(equals(b.GetEast(), 8));
+  ok1(equals(b.GetWest(), 2));
+  ok1(equals(b.GetNorth(), 6));
+  ok1(equals(b.GetSouth(), 4));
 
   GeoBounds c = MakeGeoBounds(2, 6, 8, 4);
   ok1(c.Overlaps(b));
   ok1(c.IntersectWith(b));
-  ok1(equals(c.west, 2));
-  ok1(equals(c.north, 6));
-  ok1(equals(c.east, 8));
-  ok1(equals(c.south, 4));
+  ok1(equals(c.GetWest(), 2));
+  ok1(equals(c.GetNorth(), 6));
+  ok1(equals(c.GetEast(), 8));
+  ok1(equals(c.GetSouth(), 4));
 
   GeoBounds d = MakeGeoBounds(2, 6, 7, 5);
   ok1(c.Overlaps(d));
   ok1(c.IntersectWith(d));
-  ok1(equals(c.west, 2));
-  ok1(equals(c.north, 6));
-  ok1(equals(c.east, 7));
-  ok1(equals(c.south, 5));
+  ok1(equals(c.GetWest(), 2));
+  ok1(equals(c.GetNorth(), 6));
+  ok1(equals(c.GetEast(), 7));
+  ok1(equals(c.GetSouth(), 5));
 
   d = MakeGeoBounds(8, 6, 1, 5);
   ok1(!c.Overlaps(d));
