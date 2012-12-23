@@ -406,7 +406,8 @@ TestCProbe()
   ok1(nmea_info.acceleration.real);
   ok1(equals(nmea_info.acceleration.g_load, 1.0030817514));
   ok1(nmea_info.temperature_available);
-  ok1(equals(nmea_info.temperature, 11.7));
+  ok1(equals(nmea_info.temperature,
+             Units::ToSysUnit(fixed(11.7), Unit::DEGREES_CELCIUS)));
   ok1(nmea_info.humidity_available);
   ok1(equals(nmea_info.humidity, 21.4));
   ok1(nmea_info.battery_level_available);

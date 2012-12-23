@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Atmosphere/Temperature.hpp"
 
 #include <stdint.h>
 
@@ -37,6 +38,7 @@ static bool
 ParseData(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PCPROBE,T,Q0,Q1,Q2,Q3,ax,ay,az,temp,rh,batt,delta_press,abs_press,C,
+  // see http://www.compassitaly.com/CMS/index.php/en/download/c-probe/231-c-probeusermanual/download
 
   unsigned _q[4];
   bool q_available = line.ReadHexChecked(_q[0]);
@@ -93,7 +95,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
   unsigned temperature;
   if (line.ReadHexChecked(temperature)) {
     info.temperature_available = true;
-    info.temperature = fixed((int16_t)temperature) / 10;
+    info.temperature = CelsiusToKelvin(fixed((int16_t)temperature) / 10);
   }
 
   unsigned humidity;

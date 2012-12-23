@@ -45,6 +45,7 @@ Version 6.5 - not yet released
 Version 6.4.6 - not yet released
 * devices
   - Leonardo: fixed vario parser for the $c sentence
+  - C-Probe: fixed temperature offset bug
 * infoboxes
   - fixes broken wind arrow display in some situations (#2295)
 * data files
