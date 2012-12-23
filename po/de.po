@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-23 13:29+0100\n"
+"POT-Creation-Date: 2012-12-23 13:32+0100\n"
 "PO-Revision-Date: 2012-12-19 20:53+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -2659,6 +2659,11 @@ msgid ""
 msgstr ""
 "Zeigt die verbleibende Zeit bis der Abflug öffnet oder schließt, verglichen "
 "mit der berechneten Zeit dort hinzufliegen."
+
+#: src/InfoBoxes/Content/Alternate.cpp:61
+#, fuzzy, c-format
+msgid "Altn %d"
+msgstr "Altn 1"
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294

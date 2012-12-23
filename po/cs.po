@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-23 13:29+0100\n"
+"POT-Creation-Date: 2012-12-23 13:32+0100\n"
 "PO-Revision-Date: 2012-09-21 14:50+0000\n"
 "Last-Translator: Jiri Tichy <jiti@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -2488,6 +2488,11 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+
+#: src/InfoBoxes/Content/Alternate.cpp:61
+#, fuzzy, c-format
+msgid "Altn %d"
+msgstr "Altn 1"
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294

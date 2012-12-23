@@ -29,6 +29,7 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "Dialogs/Dialogs.h"
 #include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -57,7 +58,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     }
   }
 
-  data.FormatTitle(_T("Altn %d"), index + 1);
+  data.FormatTitle(_("Altn %d"), index + 1);
 
   if (alternate == NULL || !CommonInterface::Basic().track_available) {
     data.SetInvalid();

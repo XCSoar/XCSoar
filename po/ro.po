@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-23 13:29+0100\n"
+"POT-Creation-Date: 2012-12-23 13:32+0100\n"
 "PO-Revision-Date: 2012-03-05 21:42+0000\n"
 "Last-Translator: tudor abrudan <tyt2002ro@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -2495,6 +2495,11 @@ msgstr "Logger pornire"
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
+msgstr ""
+
+#: src/InfoBoxes/Content/Alternate.cpp:61
+#, c-format
+msgid "Altn %d"
 msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
