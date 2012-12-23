@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/HorizonLook.hpp"
 #include "NMEA/Attitude.hpp"
+#include "Util/Clamp.hpp"
 
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
@@ -60,11 +61,11 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                         attitude.pitch_angle.Degrees() : fixed(0);
 
   fixed phi = max(-fixed_89, min(fixed_89, bank_degrees));
-  fixed alpha = fixed_rad_to_deg * acos(max(fixed(-1),min(fixed(1),
-                  pitch_degrees * fixed_div)));
-  fixed sphi = fixed(180) - phi;
-  Angle alpha1 = Angle::Degrees(sphi - alpha);
-  Angle alpha2 = Angle::Degrees(sphi + alpha);
+  Angle alpha = Angle::Radians(acos(Clamp(pitch_degrees * fixed_div,
+                                          fixed(-1), fixed(1))));
+  Angle sphi = Angle::HalfCircle() - Angle::Degrees(phi);
+  Angle alpha1 = sphi - alpha;
+  Angle alpha2 = sphi + alpha;
 
   // draw sky part
   canvas.Select(look.sky_pen);
