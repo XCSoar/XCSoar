@@ -105,6 +105,25 @@ struct GeoBounds {
     return (north - south).AsBearing();
   }
 
+  /**
+   * Returns the geographic width of the object (west to east) at its
+   * center in metres.
+   */
+  gcc_pure
+  fixed GetGeoWidth() const {
+    const Angle latitude = south.Fraction(north, fixed(0.5));
+    return GeoPoint(west, latitude).Distance(GeoPoint(east, latitude));
+  }
+
+  /**
+   * Returns the geographic height of the object (south to north) in
+   * metres.
+   */
+  gcc_pure
+  fixed GetGeoHeight() const {
+    return GetNorthWest().Distance(GetSouthWest());
+  }
+
   void Extend(const GeoPoint pt);
 
   bool IsInside(Angle longitude, Angle latitude) const {

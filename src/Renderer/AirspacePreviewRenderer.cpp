@@ -45,10 +45,8 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.GetCenter();
 
-  fixed geo_heigth = GeoPoint(center.longitude, bounds.north).Distance(
-                     GeoPoint(center.longitude, bounds.south));
-  fixed geo_width = GeoPoint(bounds.west, center.latitude).Distance(
-                    GeoPoint(bounds.east, center.latitude));
+  fixed geo_heigth = bounds.GetGeoHeight();
+  fixed geo_width = bounds.GetGeoWidth();
 
   fixed geo_size = std::max(geo_heigth, geo_width);
 
