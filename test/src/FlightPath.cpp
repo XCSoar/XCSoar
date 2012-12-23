@@ -32,11 +32,11 @@ int main(int argc, char **argv)
   Args args(argc, argv, "[--max-points=1000] DRIVER FILE");
 
   const char *arg;
-  while ((arg = args.PeekNext()) != NULL && *arg == '-') {
+  while ((arg = args.PeekNext()) != nullptr && *arg == '-') {
     args.Skip();
 
     const char *value;
-    if ((value = StringAfterPrefix(arg, "--max-points=")) != NULL) {
+    if ((value = StringAfterPrefix(arg, "--max-points=")) != nullptr) {
       unsigned _max_points = strtol(value, NULL, 10);
       if (_max_points > 0)
         max_points = _max_points;
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   }
 
   DebugReplay *replay = CreateDebugReplay(args);
-  if (replay == NULL)
+  if (replay == nullptr)
     return EXIT_FAILURE;
 
   args.ExpectEnd();
