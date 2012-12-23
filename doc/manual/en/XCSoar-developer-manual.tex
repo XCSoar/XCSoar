@@ -577,6 +577,39 @@ Search directories (\texttt{-L}) are technically linker ``flags'', but
 they are allowed in \texttt{LDLIBS}, too.
 
 
+\chapter{Developing}
+
+\section{Debugging XCSoar}
+
+The XCSoar source repository contains a module for the GNU debugger
+(\texttt{gdb}).  It contains pretty-printers for various XCSoar types,
+including \texttt{Angle}, \texttt{GeoPoint} and others.  These are
+helpful when you print values in the debugger.  To use it, start the
+debugging session and load the module:
+
+\begin{verbatim}
+$ gdb -ex "source gdb.py" output/UNIX/xcsoar
+(gdb) run
+\end{verbatim}
+
+The module will automatically convert fixed-point to floating point,
+radian angles to degrees and more.  You can now do fancy stuff like:
+
+\begin{verbatim}
+(gdb) p basic.location
+$1 = GeoPoint(7.93911242887 51.1470221074)
+(gdb) p basic.date_time_utc
+$2 = DateTime(2012/12/23 21:41:57)
+(gdb) p basic.track
+$3 = 55.2254197961
+(gdb) p basic.external_wind
+$4 = GeoVector::ZERO
+(gdb) p current_leg.vector_remaining
+$5 = GeoVector(267.899420345 107957.109724)
+\end{verbatim}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{User interface guidelines}
 
