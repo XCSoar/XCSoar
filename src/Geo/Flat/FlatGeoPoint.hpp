@@ -128,8 +128,7 @@ struct FlatGeoPoint {
    *
    * @return Cross product
    */
-  gcc_pure
-  int CrossProduct(const FlatGeoPoint &other) const {
+  constexpr int CrossProduct(FlatGeoPoint other) const {
     return longitude * other.latitude - latitude * other.longitude;
   }
 
@@ -140,8 +139,7 @@ struct FlatGeoPoint {
    *
    * @return Dot product
    */
-  gcc_pure
-  int DotProduct(const FlatGeoPoint &other) const {
+  constexpr int DotProduct(FlatGeoPoint other) const {
     return longitude * other.longitude + latitude * other.latitude;
   }
 
