@@ -27,7 +27,7 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-  int start = -1;
+  int start = -1, end = -1;
   unsigned max_points = 1000;
 
   Args args(argc, argv,
@@ -35,6 +35,8 @@ int main(int argc, char **argv)
             "Options:\n"
             "  --start=5000             Begin flight path at 5000 sec after UTC midnight,\n"
             "                           if not defined takeoff time is used\n"
+            "  --end=15000              End flight path at 15000 sec after UTC midnight,\n"
+            "                           if not defined the last timestamp in the file is used\n"
             "  --max-points=1000        Maximum number of trace points in output (default = 1000)");
 
   const char *arg;
@@ -53,9 +55,21 @@ int main(int argc, char **argv)
         fputs("The start parameter could not be parsed correctly.\n", stderr);
         args.UsageError();
       }
+    } else if ((value = StringAfterPrefix(arg, "--end=")) != nullptr) {
+      char *endptr;
+      end = strtol(value, &endptr, 10);
+      if (endptr == value || *endptr != '\0' || end < 0) {
+        fputs("The end parameter could not be parsed correctly.\n", stderr);
+        args.UsageError();
+      }
     } else {
       args.UsageError();
     }
+  }
+
+  if (start >= 0 && end >= 0 && start >= end) {
+    fputs("The start parameter has to be smaller than the end parameter.\n", stderr);
+    args.UsageError();
   }
 
   DebugReplay *replay = CreateDebugReplay(args);
@@ -78,6 +92,9 @@ int main(int argc, char **argv)
 
     if (start >= 0 && (int)basic.time < start)
       continue;
+
+    if (end >= 0 && (int)basic.time > end)
+      break;
 
     trace.push_back(TracePoint(basic));
 
