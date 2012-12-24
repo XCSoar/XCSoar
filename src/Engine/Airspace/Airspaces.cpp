@@ -141,37 +141,6 @@ Airspaces::FindNearest(const GeoPoint &location,
 }
 
 const Airspaces::AirspaceVector
-Airspaces::ScanNearest(const GeoPoint &location,
-                       const AirspacePredicate &condition) const
-{
-  if (empty())
-    // nothing to do
-    return AirspaceVector();
-
-  Airspace bb_target(location, task_projection);
-
-  std::pair<AirspaceTree::const_iterator, AirspaceTree::distance_type>
-    found = airspace_tree.find_nearest(bb_target);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
-  AirspaceVector res;
-  if (found.first != airspace_tree.end()) {
-    // also should do scan_range with range = 0 since there
-    // could be more than one with zero dist
-    if (found.second.is_zero())
-      return ScanRange(location, fixed(0), condition);
-
-    if (condition(*found.first->GetAirspace()))
-      res.push_back(*found.first);
-  }
-
-  return res;
-}
-
-const Airspaces::AirspaceVector
 Airspaces::ScanRange(const GeoPoint &location, fixed range,
                      const AirspacePredicate &condition) const
 {

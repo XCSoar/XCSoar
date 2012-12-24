@@ -214,19 +214,6 @@ public:
                                        AirspacePredicate::always_true) const;
 
   /** 
-   * Search for airspaces nearest to the aircraft.
-   * 
-   * @param location location of aircraft, from which to search
-   * @param condition condition to be applied to matches
-   * 
-   * @return single nearest airspace if external, or all airspaces enclosing the aircraft
-   */
-  gcc_pure
-  const AirspaceVector ScanNearest(const GeoPoint &location,
-                                   const AirspacePredicate &condition =
-                                         AirspacePredicate::always_true) const;
-
-  /** 
    * Find airspaces the aircraft is inside (taking altitude into account)
    * 
    * @param state state of aircraft for which to search

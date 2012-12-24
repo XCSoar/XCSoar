@@ -284,10 +284,13 @@ void scan_airspaces(const AircraftState state,
 {
   const fixed range(20000.0);
 
-  const std::vector<Airspace> vn = airspaces.ScanNearest(state.location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
-  std::for_each(vn.begin(), vn.end(), CallVisitor<AirspaceVisitor>(pvn));
+  const Airspace *nearest = airspaces.FindNearest(state.location);
+  if (nearest != nullptr) {
+    AirspaceVisitor &v = pvn;
+    v.Visit(*nearest);
+  }
 
   {
     AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
