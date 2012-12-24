@@ -269,8 +269,7 @@ GlidePolar::IsGlidePossible(const GlideState &task) const
  *
  * This finds the speed that maximises the glide angle over the ground
  */
-class GlidePolarSpeedToFly: public ZeroFinder
-{
+class GlidePolarSpeedToFly gcc_final : public ZeroFinder {
   const GlidePolar &polar;
   const fixed m_net_sink_rate;
   const fixed m_head_wind;
