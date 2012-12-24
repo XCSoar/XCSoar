@@ -24,11 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_GEO_CONSTANTS_HPP
 #define XCSOAR_GEO_CONSTANTS_HPP
 
-#include "Math/fixed.hpp"
-
 static constexpr unsigned REARTH = 6371000;
-
-static constexpr fixed fixed_earth_r(REARTH);
-static constexpr fixed fixed_inv_earth_r(1.0 / REARTH);
 
 #endif

@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
-#include "Geo/Constants.hpp"
+#include "Geo/Math.hpp"
 #endif
 
 #include <algorithm>
@@ -280,9 +280,8 @@ XShape::geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const
 
   ShapePoint pt;
   pt.x = (ShapeScalar)fast_mult(point.latitude.fastcosine(),
-                                fast_mult(d.longitude.Radians(),
-                                          fixed_earth_r, 12), 16);
-  pt.y = (ShapeScalar)-fast_mult(d.latitude.Radians(), fixed_earth_r, 12);
+                                AngleToEarthDistance(d.longitude), 16);
+  pt.y = (ShapeScalar)-AngleToEarthDistance(d.latitude);
   return pt;
 }
 

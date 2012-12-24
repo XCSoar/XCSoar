@@ -77,7 +77,7 @@ Projection::SetScale(const fixed _scale)
   scale = _scale;
 
   // Calculate earth radius in pixels
-  draw_scale = fixed_earth_r * scale;
+  draw_scale = REARTH * scale;
   // Save inverted value for faster calculations
   inv_draw_scale = fixed(1) / draw_scale;
 }

@@ -33,9 +33,32 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
+#include "Constants.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
+
+/**
+ * Convert a distance on earth's surface [m] to the according Angle,
+ * assuming the earth is a sphere.
+ */
+constexpr
+static inline Angle
+EarthDistanceToAngle(fixed distance)
+{
+  return Angle::Radians(distance / REARTH);
+}
+
+/**
+ * Convert an angle to the according distance on earth's surface [m],
+ * assuming the earth is a sphere.
+ */
+constexpr
+static inline fixed
+AngleToEarthDistance(Angle angle)
+{
+  return angle.Radians() * REARTH;
+}
 
 /**
  * Finds cross track error in meters and closest point P4 between P3

@@ -32,8 +32,6 @@ Copyright_License {
 unsigned count_distbearing = 0;
 #endif
 
-#define fixed_double_earth_r fixed(REARTH * 2)
-
 static inline Angle
 EarthASin(const fixed a)
 {
@@ -113,8 +111,8 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
     return loc2;
 
   return IntermediatePoint(loc1, loc2,
-                           Angle::Radians(dthis * fixed_inv_earth_r),
-                           Angle::Radians(dtotal * fixed_inv_earth_r));
+                           EarthDistanceToAngle(dthis),
+                           EarthDistanceToAngle(dtotal));
 }
 
 GeoPoint
@@ -178,7 +176,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
   if (distance != NULL) {
     Angle distance_angle;
     DistanceBearingS(loc1, loc2, &distance_angle, bearing);
-    *distance = distance_angle.Radians() * fixed_earth_r;
+    *distance = AngleToEarthDistance(distance_angle);
   } else
     DistanceBearingS(loc1, loc2, NULL, bearing);
 }
@@ -216,7 +214,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
   count_distbearing++;
 #endif
 
-  return cross_track_distance.Radians() * fixed_earth_r;
+  return AngleToEarthDistance(cross_track_distance);
 }
 
 fixed
@@ -255,7 +253,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   count_distbearing++;
 #endif
 
-  return along_track_distance.Radians() * fixed_earth_r;
+  return AngleToEarthDistance(along_track_distance);
 }
 
 
@@ -279,7 +277,7 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   count_distbearing++;
 #endif
 
-  return fixed_double_earth_r * 
+  return (2 * REARTH) *
     (EarthDistance(a12) + EarthDistance(a23)).Radians();
 }
 
@@ -292,9 +290,10 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
     return loc;
 
   GeoPoint loc_out;
-  distance /= REARTH;
 
-  const auto scd = sin_cos(distance);
+  const Angle distance_angle = EarthDistanceToAngle(distance);
+
+  const auto scd = distance_angle.SinCos();
   const fixed sin_distance = scd.first, cos_distance = scd.second;
 
   const auto scb = bearing.SinCos();
