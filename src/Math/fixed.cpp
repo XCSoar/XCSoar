@@ -263,27 +263,26 @@ fixed fixed::log() const
 
 namespace
 {
-  const long arctantab[32] = {
+  static constexpr long arctantab[32] = {
     297197971, 210828714, 124459457, 65760959, 33381290, 16755422, 8385879,
     4193963, 2097109, 1048571, 524287, 262144, 131072, 65536, 32768, 16384,
     8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0, 0,
   };
 
+  static constexpr long cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
 
-  long scale_cordic_result(long a)
+  constexpr long scale_cordic_result(long a)
   {
-    long const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
     return (long)((((fixed::value_t)a)*cordic_scale_factor)>>31);
   }
 
-  fixed::value_t scale_cordic_result_accurate(long a)
+  constexpr fixed::value_t scale_cordic_result_accurate(long a)
   {
-    fixed::value_t const cordic_scale_factor=0x22C2DD1C; /* 0.271572 * 2^31*/
     return (fixed::value_t)((((fixed::value_t)a)*cordic_scale_factor)>>
                             (31-fixed::accurate_cordic_shift));
   }
 
-  long right_shift(long val,int shift)
+  constexpr long right_shift(long val, int shift)
   {
     return (shift<0)?(val<<-shift):(val>>shift);
   }
