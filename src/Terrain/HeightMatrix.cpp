@@ -65,7 +65,7 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
 {
   SetSize(width, height);
 
-  const Angle delta_y = bounds.GetHeight().AsBearing() / height;
+  const Angle delta_y = bounds.GetHeight() / height;
   Angle latitude = bounds.GetNorth();
   for (short *p = data.begin(), *const end = p + width * height;
        p != end; p += width, latitude -= delta_y) {
