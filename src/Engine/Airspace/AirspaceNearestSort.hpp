@@ -38,8 +38,6 @@ protected:
 private:
   Queue m_q;
 
-  bool m_reverse;
-
 public:
 /** 
  * Constructor
@@ -52,8 +50,7 @@ public:
   AirspaceNearestSort(const GeoPoint _location,
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
     m_location(_location),
-    m_condition(condition),
-    m_reverse(false) {};
+    m_condition(condition) {}
 
 /** 
  * Find nearest
@@ -96,15 +93,6 @@ public:
  * @return Positive value indicating rank (low best), negative indicates invalid
  */
   virtual fixed metric(const AirspaceInterceptSolution& ais) const;
-
-/** 
- * Set reversal of sorting order
- * 
- * @param set New value 
- */
-  void set_reverse(bool set) {
-    m_reverse = set;
-  }
 
 private:
 

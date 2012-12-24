@@ -19,7 +19,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
         solve_intercept(*as, airspaces.GetProjection());
       const fixed value = metric(ais);
       if (!negative(value)) {
-        m_q.push(std::make_pair(m_reverse? -value:value,
+        m_q.push(std::make_pair(value,
                                 std::make_pair(ais, airspace)));
       }
     }
