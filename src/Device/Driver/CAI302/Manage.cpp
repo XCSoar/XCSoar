@@ -27,6 +27,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Util/Macros.hpp"
 #include "Util/CharUtil.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,

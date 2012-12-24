@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
-#include "Device/Declaration.hpp"
-#include "RadioFrequency.hpp"
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Util/StaticArray.hpp"
+#include "Math/fixed.hpp"
 
 #include <tchar.h>
 #include <stdint.h>
@@ -37,9 +36,11 @@ struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 struct DeviceConfig;
+struct Declaration;
 struct Waypoint;
 class Port;
 class AtmosphericPressure;
+class RadioFrequency;
 class OperationEnvironment;
 
 struct RecordedFlightInfo {

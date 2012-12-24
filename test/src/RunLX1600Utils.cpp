@@ -38,6 +38,8 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "IO/DataHandler.hpp"
 
+#include <memory>
+
 #include <stdio.h>
 
 static bool

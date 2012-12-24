@@ -49,6 +49,7 @@
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "Device/Declaration.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "NMEA/Info.hpp"

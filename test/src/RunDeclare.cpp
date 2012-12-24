@@ -33,6 +33,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
+#include "Device/Declaration.hpp"
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 

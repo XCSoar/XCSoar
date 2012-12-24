@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"

@@ -25,6 +25,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Declaration.hpp"
 #include "Time/TimeoutClock.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"

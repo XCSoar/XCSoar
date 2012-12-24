@@ -24,6 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/ByteOrder.hpp"
 

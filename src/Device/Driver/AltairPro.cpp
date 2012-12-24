@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Port/Port.hpp"
+#include "Device/Declaration.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
