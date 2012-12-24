@@ -263,7 +263,8 @@ protected:
     /** the actual value */
     T value;
 
-    explicit Leaf(const T &_value):value(_value) {}
+    template<typename U>
+    explicit Leaf(U &&_value):value(std::forward<U>(_value)) {}
 
     Point GetPosition() const {
       return QuadTree<T,Accessor,Alloc>::GetPosition(value);
@@ -990,12 +991,13 @@ public:
    * @return a reference to the new value in the QuadTree; it remains
    * valid until the value is removed
    */
-  const T &AddQuick(const T &value) {
+  template<typename U>
+  const T &AddQuick(U &&value) {
     assert(IsFlat());
     assert(bounds.IsEmpty());
 
     Leaf *leaf = leaf_allocator.allocate(1);
-    leaf_allocator.construct(leaf, Leaf(value));
+    leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
 
     root.AddHere(leaf);
 
@@ -1009,13 +1011,14 @@ public:
    * @return a reference to the new value in the QuadTree; it remains
    * valid until the value is removed
    */
-  const T &AddScan(const T &value) {
+  template<typename U>
+  const T &AddScan(U &&value) {
     assert(IsFlat());
 
     Leaf *leaf = leaf_allocator.allocate(1);
-    leaf_allocator.construct(leaf, Leaf(value));
+    leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
 
-    bounds.Scan(GetPosition(value));
+    bounds.Scan(GetPosition(leaf->value));
     root.AddHere(leaf);
 
     return leaf->value;
@@ -1027,11 +1030,12 @@ public:
    * @return a reference to the new value in the QuadTree; it
    * remains valid until the value is removed
    */
-  const T &AddDeep(const T &value) {
+  template<typename U>
+  const T &AddDeep(U &&value) {
     assert(IsWithinBounds(value));
 
     Leaf *leaf = leaf_allocator.allocate(1);
-    leaf_allocator.construct(leaf, Leaf(value));
+    leaf_allocator.construct(leaf, Leaf(std::forward<U>(value)));
 
     Rectangle bounds = this->bounds;
     root.Add(bounds, leaf, bucket_allocator);
@@ -1045,21 +1049,22 @@ public:
    * @return a reference to the new value in the QuadTree; it remains
    * valid until the value is removed
    */
-  const T &Add(const T &value) {
+  template<typename U>
+  const T &Add(U &&value) {
     if (bounds.IsEmpty())
       /* quick-add mode: add all values to the root bucket, optimise
          later */
-      return AddQuick(value);
+      return AddQuick(std::forward<U>(value));
     else if (IsWithinBounds(value))
       /* it's within the current bounds, we can insert it properly
          now */
-      return AddDeep(value);
+      return AddDeep(std::forward<U>(value));
     else {
       /* outside of the current bounds: we need to rescan the
          bounds, prepare for that now */
       Flatten();
       ClearBounds();
-      return AddQuick(value);
+      return AddQuick(std::forward<U>(value));
     }
   }
 
@@ -1222,8 +1227,9 @@ public:
     Clear();
   }
 
-  void insert(const T &value) {
-    Add(value);
+  template<typename U>
+  void insert(U &&value) {
+    Add(std::forward<U>(value));
   }
 
   void erase(const_iterator it) {
@@ -1253,7 +1259,8 @@ public:
    * Replace the value, and reposition the item in the tree (if its
    * position has been modified).
    */
-  void Replace(const_iterator it, const T &value) {
+  template<typename U>
+  void Replace(const_iterator it, U &&value) {
     assert(it.bucket != nullptr);
     assert(it.bucket->GetRoot() == &root);
     assert(it.leaf != nullptr);
@@ -1261,14 +1268,14 @@ public:
     Leaf *leaf = DeconstifyLeaf(it.leaf);
     if (bounds.IsEmpty()) {
       /* bounds are not known yet, we can replace the value quickly */
-      leaf->value = value;
+      leaf->value = std::forward<U>(value);
       return;
     }
 
     const Point old_position = GetPosition(leaf->value);
     const Point new_position = GetPosition(value);
 
-    leaf->value = value;
+    leaf->value = std::forward<U>(value);
 
     if (new_position != old_position) {
       /* the position has changed, we have to reposition the Leaf
