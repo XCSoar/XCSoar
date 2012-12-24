@@ -83,10 +83,8 @@ public:
    * @return Initialised object
    */
   AirspaceAircraftInterceptVertical(const AirspaceAircraftPerformance &aap,
-                                    const fixed &distance,
-                                    const fixed &alt,
-                                    const fixed &h_min,
-                                    const fixed &h_max)
+                                    fixed distance, fixed alt,
+                                    fixed h_min, fixed h_max)
     :ZeroFinder(h_min, h_max, fixed(1)),
      m_perf(aap), m_distance(distance), m_alt(alt),
      m_h_min(h_min) {}
@@ -114,9 +112,9 @@ public:
 
 private:
   const AirspaceAircraftPerformance &m_perf;
-  const fixed &m_distance;
-  const fixed &m_alt;
-  const fixed &m_h_min;
+  const fixed m_distance;
+  const fixed m_alt;
+  const fixed m_h_min;
 };
 
 fixed 
@@ -162,9 +160,8 @@ public:
    * @return Initialised object
    */
   AirspaceAircraftInterceptHorizontal(const AirspaceAircraftPerformance &aap,
-                                      const fixed &distance_min,
-                                      const fixed &distance_max,
-                                      const fixed &dh)
+                                      fixed distance_min, fixed distance_max,
+                                      fixed dh)
     :ZeroFinder(distance_min, distance_max, fixed(1)),
      m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
@@ -191,8 +188,8 @@ public:
 
 private:
   const AirspaceAircraftPerformance &m_perf;
-  const fixed &m_d_min;
-  const fixed &m_dh;
+  const fixed m_d_min;
+  const fixed m_dh;
 };
 
 fixed 
