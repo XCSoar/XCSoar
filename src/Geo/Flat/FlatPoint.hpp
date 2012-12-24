@@ -37,6 +37,11 @@ struct FlatPoint
   fixed y;
 
   /**
+   * Non-initialising default constructor.
+   */
+  FlatPoint() = default;
+
+  /**
    * Constructor given known location
    *
    * @param _x X position
@@ -46,14 +51,6 @@ struct FlatPoint
    */
   constexpr
   FlatPoint(const fixed _x, const fixed _y): x(_x), y(_y) {}
-
-  /**
-   * Constructor at origin
-   *
-   * @return Initialised object
-   */
-  constexpr
-  FlatPoint(): x(fixed(0)), y(fixed(0)) {}
 
   /**
    * Calculate cross product of two points
