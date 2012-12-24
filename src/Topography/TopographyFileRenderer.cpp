@@ -351,7 +351,8 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 
   canvas.Select(file.IsLabelImportant(map_scale) ?
                 Fonts::map_label_important : Fonts::map_label);
-  canvas.SetTextColor(Color(0x20, 0x20, 0x20));
+  canvas.SetTextColor(file.IsLabelImportant(map_scale) ?
+                COLOR_BLACK : COLOR_DARK_GRAY);
   canvas.SetBackgroundTransparent();
 
   // get drawing info

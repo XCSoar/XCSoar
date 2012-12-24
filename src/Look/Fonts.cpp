@@ -98,7 +98,7 @@ LoadAltairLogFonts()
   InitialiseLogfont(&log_cdi, _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&log_map_label, _T("RasterGothicTwelveCond"), 13);
   InitialiseLogfont(&log_map_label_important,
-                    _T("RasterGothicTwelveCond"), 13, true);
+                    _T("RasterGothicTwelveCond"), 13);
   InitialiseLogfont(&log_map, _T("RasterGothicFourteenCond"), 15);
   InitialiseLogfont(&log_map_bold, _T("RasterGothicFourteenCond"), 15, true);
   InitialiseLogfont(&log_infobox_small, _T("RasterGothicEighteenCond"), 19, true);
@@ -159,7 +159,7 @@ InitialiseLogFonts()
 
   // new font for map labels big/medium cities
   InitialiseLogfont(&log_map_label_important, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.39), true, true);
+                    UPixelScalar(FontHeight * 0.39), false, true);
 
   // new font for map labels
   InitialiseLogfont(&log_map, GetStandardFontFace(),
