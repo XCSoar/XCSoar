@@ -24,8 +24,6 @@ Copyright_License {
 #include "MapItemListBuilder.hpp"
 
 #include "Util/StaticArray.hpp"
-#include "Engine/Airspace/AirspacePolygon.hpp"
-#include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicateInside.hpp"
@@ -134,12 +132,7 @@ class AirspaceListBuilderVisitor gcc_final : public AirspaceVisitor
 public:
   AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
-  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
-    if (!list.full())
-      list.append(new AirspaceMapItem(airspace));
-  }
-
-  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
     if (!list.full())
       list.append(new AirspaceMapItem(airspace));
   }

@@ -226,11 +226,7 @@ public:
     }
   }
 
-  virtual void Visit(const AirspaceCircle& as) gcc_override {
-    Intersection(as);
-  }
-
-  virtual void Visit(const AirspacePolygon& as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     Intersection(as);
   }
 

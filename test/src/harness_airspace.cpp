@@ -126,26 +126,13 @@ public:
     }
   }
 
-  void visit_general(const AbstractAirspace &as) {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     if (do_report) {
+      *fout << as;
       *fout << "# Name: " << as.GetName()
             << "Base: " << as.GetBase()
             << " Top: " << as.GetTop()
             << "\n";
-    }
-  }
-
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    if (do_report) {
-      *fout << as;
-      visit_general(as);
-    }
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
-    if (do_report) {
-      *fout << as;
-      visit_general(as);
     }
   }
 };
@@ -202,14 +189,7 @@ public:
     }
   }
 
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    if (do_report) {
-      *yout << as;
-      intersection(as);
-    }
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     if (do_report) {
       *yout << as;
       intersection(as);
@@ -259,11 +239,7 @@ public:
     }
   }
 
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    closest(as);
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     closest(as);
   }
 };

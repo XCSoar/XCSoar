@@ -29,8 +29,6 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
-#include "Engine/Airspace/AirspaceCircle.hpp"
-#include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Util/Macros.hpp"
 
@@ -171,11 +169,7 @@ protected:
     }
   }
 
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    Check(as);
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     Check(as);
   }
 

@@ -156,8 +156,8 @@ public:
     glStencilMask(0xff);
   }
 
-public:
-  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
+private:
+  void VisitCircle(const AirspaceCircle &airspace) {
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
@@ -190,7 +190,7 @@ public:
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
-  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
+  void VisitPolygon(const AirspacePolygon &airspace) {
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
@@ -226,6 +226,19 @@ public:
     // draw outline
     if (SetupOutline(airspace))
       DrawPrepared();
+  }
+
+protected:
+  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE:
+      VisitCircle((const AirspaceCircle &)airspace);
+      break;
+
+    case AbstractAirspace::Shape::POLYGON:
+      VisitPolygon((const AirspacePolygon &)airspace);
+      break;
+    }
   }
 
 private:
@@ -306,8 +319,8 @@ public:
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
 
-public:
-  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
+private:
+  void VisitCircle(const AirspaceCircle &airspace) {
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
@@ -322,7 +335,7 @@ public:
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
-  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
+  void VisitPolygon(const AirspacePolygon &airspace) {
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
@@ -338,6 +351,19 @@ public:
     // draw outline
     if (SetupOutline(airspace))
       DrawPrepared();
+  }
+
+protected:
+  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE:
+      VisitCircle((const AirspaceCircle &)airspace);
+      break;
+
+    case AbstractAirspace::Shape::POLYGON:
+      VisitPolygon((const AirspacePolygon &)airspace);
+      break;
+    }
   }
 
 private:
@@ -399,7 +425,8 @@ public:
     }
   }
 
-  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
+private:
+  void VisitCircle(const AirspaceCircle &airspace) {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -416,7 +443,7 @@ public:
     DrawCircle(center, radius);
   }
 
-  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
+  void VisitPolygon(const AirspacePolygon &airspace) {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -430,6 +457,20 @@ public:
     DrawSearchPointVector(airspace.GetPoints());
   }
 
+protected:
+  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE:
+      VisitCircle((const AirspaceCircle &)airspace);
+      break;
+
+    case AbstractAirspace::Shape::POLYGON:
+      VisitPolygon((const AirspacePolygon &)airspace);
+      break;
+    }
+  }
+
+public:
   void DrawIntercepts() {
     BufferRenderFinish();
   }
@@ -512,14 +553,26 @@ protected:
   }
 
 public:
-  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
+  void VisitCircle(const AirspaceCircle &airspace) {
     if (SetupCanvas(airspace))
       DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
-  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
+  void VisitPolygon(const AirspacePolygon &airspace) {
     if (SetupCanvas(airspace))
       DrawPolygon(airspace.GetPoints());
+  }
+
+  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+    switch (airspace.GetShape()) {
+    case AbstractAirspace::Shape::CIRCLE:
+      VisitCircle((const AirspaceCircle &)airspace);
+      break;
+
+    case AbstractAirspace::Shape::POLYGON:
+      VisitPolygon((const AirspacePolygon &)airspace);
+      break;
+    }
   }
 };
 

@@ -165,19 +165,7 @@ public:
     }
   }
 
-  /**
-   * Visitor function for intersectingAirspaceCircle objects
-   * @param as Intersecting AirspaceCircle instance
-   */
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    Render(as);
-  }
-
-  /**
-   * Visitor function for intersecting AirspacePolygon objects
-   * @param as Intersecting AirspacePolygon instance
-   */
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     Render(as);
   }
 };

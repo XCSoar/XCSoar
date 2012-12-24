@@ -60,15 +60,7 @@ public:
     {
     }
 
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    visit_abstract(as);
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
-    visit_abstract(as);
-  }
-
-  void visit_abstract(const AbstractAirspace &as) {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     assert(!intersections.empty());
 
     GeoPoint point = intersections[0].first;
@@ -107,15 +99,7 @@ public:
   }
 
 protected:
-  virtual void Visit(const AirspaceCircle &as) gcc_override {
-    visit_abstract(as);
-  }
-
-  virtual void Visit(const AirspacePolygon &as) gcc_override {
-    visit_abstract(as);
-  }
-
-  void visit_abstract(const AbstractAirspace &as) {
+  virtual void Visit(const AbstractAirspace &as) gcc_override {
     m_found = &as;
   }
 };
