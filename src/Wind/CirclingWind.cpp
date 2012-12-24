@@ -237,8 +237,9 @@ CirclingWind::CalcWind()
   fixed rthis = fixed(0);
 
   for (unsigned i = 0; i < samples.size(); i++) {
-    const auto sc = ::sin_cos(((i + jmax) % samples.size()) * fixed_two_pi
-                              / samples.size());
+    const Angle angle =
+      Angle::FullCircle() * ((i + jmax) % samples.size()) / samples.size();
+    const auto sc = angle.SinCos();
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
