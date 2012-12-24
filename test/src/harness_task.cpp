@@ -31,6 +31,7 @@
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include "harness_waypoints.hpp"
 #include <string.h>

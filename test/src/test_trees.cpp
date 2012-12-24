@@ -27,6 +27,7 @@
 #define n_test 500
 
 #include "Waypoint/WaypointVisitor.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 class WaypointVisitorPrint: public WaypointVisitor {
 public:

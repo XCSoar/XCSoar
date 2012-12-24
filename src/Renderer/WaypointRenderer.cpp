@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"

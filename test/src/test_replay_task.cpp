@@ -10,6 +10,7 @@
 #include "Task/Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "NMEA/Info.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include <fstream>
 

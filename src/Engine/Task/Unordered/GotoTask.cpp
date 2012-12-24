@@ -24,6 +24,7 @@
 #include "UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
+#include "Waypoint/Waypoints.hpp"
 
 GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)

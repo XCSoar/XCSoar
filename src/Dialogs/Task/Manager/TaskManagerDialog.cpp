@@ -41,6 +41,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskStore.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"

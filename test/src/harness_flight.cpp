@@ -28,6 +28,7 @@
 #include "Replay/TaskAutoPilot.hpp"
 #include "Replay/AircraftSim.hpp"
 #include "Replay/TaskAccessor.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #include <fstream>
 

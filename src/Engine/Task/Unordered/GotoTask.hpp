@@ -24,8 +24,10 @@
 #define GOTOTASK_H
 
 #include "UnorderedTask.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "Compiler.h"
+
+struct Waypoint;
+class Waypoints;
 
 /**
  * Class providing ability to go to a single task point
