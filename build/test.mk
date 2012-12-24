@@ -21,7 +21,6 @@ TESTSLOW = \
 	test_highterrain \
 	test_randomtask \
 	test_flight \
-	test_olc \
 	test_aat \
 	test_replay_olc
 
