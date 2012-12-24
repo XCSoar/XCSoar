@@ -42,8 +42,8 @@ public:
    * @param _val Value of distance
    */
   BBDist(const size_t _dim, const int _val)
+    :val{-1, -1}
   {
-    set_vals(-1);
     val[_dim % 2] = _val;
     calc_d();
   }
@@ -53,20 +53,16 @@ public:
    *
    * @param _val Set distance (typically 0)
    */
-  explicit BBDist(const double _val) {
-    set_vals(-1);
-    d = (int)_val;
-  }
+  explicit constexpr BBDist(const double _val)
+    :val{-1, -1}, d(_val) {}
 
   /**
    * Constructor for set distance
    *
    * @param _val Set distance (typically 0)
    */
-  explicit BBDist(const int _val) {
-    set_vals(-1);
-    d = _val;
-  }
+  explicit constexpr BBDist(const int _val)
+    :val{-1, -1}, d(_val) {}
 
   /**
    * Add distance measure
@@ -94,11 +90,11 @@ public:
     return BBDist((int)isqrt4(d));
   }
 
-  bool operator<=(const BBDist &other) const {
+  constexpr bool operator<=(const BBDist &other) const {
     return d <= other.d;
   }
 
-  bool is_zero() const {
+  constexpr bool is_zero() const {
     return d == 0;
   }
 
@@ -115,11 +111,6 @@ private:
         d += val[i] * val[i];
       }
     }
-  }
-
-  void set_vals(const int _val) {
-    val[0] = _val;
-    val[1] = _val;
   }
 };
 
