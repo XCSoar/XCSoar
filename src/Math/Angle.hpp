@@ -118,9 +118,9 @@ public:
   }
 
 #ifdef FIXED_MATH
-  gcc_const
+  constexpr
   static Angle Degrees(const fixed _value) {
-    return Angle(_value * fixed(DEG_TO_RAD));
+    return Angle(fast_mult(fixed(DEG_TO_RAD), _value, 4));
   }
 #endif
 
@@ -129,9 +129,9 @@ public:
     return Angle(_value);
   }
 
-  gcc_pure
+  constexpr
   fixed Degrees() const {
-    return value * fixed(RAD_TO_DEG);
+    return fast_mult(value, fixed(RAD_TO_DEG), 4);
   }
 
   constexpr
@@ -139,9 +139,9 @@ public:
     return value;
   }
 
-  gcc_pure
+  constexpr
   fixed Hours() const {
-    return value * fixed(24 / M_2PI);
+    return fast_mult(value, fixed(24 / M_2PI), 4);
   }
 #else
   constexpr
@@ -165,9 +165,9 @@ public:
   }
 
 #ifdef FIXED_MATH
-  gcc_const
+  constexpr
   static Angle Radians(const fixed _value) {
-    return Angle(_value * fixed(RAD_TO_DEG));
+    return Angle(fast_mult(_value, fixed(RAD_TO_DEG), 4));
   }
 #endif
 
@@ -176,9 +176,9 @@ public:
     return value;
   }
 
-  gcc_pure
+  constexpr
   fixed Radians() const {
-    return value * fixed(DEG_TO_RAD);
+    return fast_mult(fixed(DEG_TO_RAD), value, 4);
   }
 
   gcc_pure
@@ -187,11 +187,7 @@ public:
   }
 #endif
 
-#ifdef FIXED_MATH
-  gcc_const
-#else
   constexpr
-#endif
   static Angle DMS(unsigned d, unsigned m, unsigned s) {
     return Angle::Degrees(fixed(d) + fixed(m) / 60 + fixed(s) / 3600);
   }
