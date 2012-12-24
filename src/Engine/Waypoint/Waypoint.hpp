@@ -74,12 +74,11 @@ struct Waypoint {
     /** If waypoint is watched, i.e. displayed with arrival height in map */
     bool watched:1;
 
-    /**
-     * Set default flags (all off except turnpoint)
-     *
-     * @param turnpoint Whether the waypoint is a turnpoint
-     */
-    void SetDefaults();
+    Flags() = default;
+
+    static constexpr Flags Defaults() {
+      return { false, false, false, false, false };
+    }
   };
 
   /** Unique id */
@@ -133,7 +132,11 @@ struct Waypoint {
    *
    * @return Uninitialised object
    */
-  Waypoint();
+  Waypoint()
+    :runway(Runway::Null()), radio_frequency(RadioFrequency::Null()),
+     type(Type::NORMAL), flags(Flags::Defaults()), file_num(-1)
+  {
+  }
 
   /**
    * Constructor for real waypoints
@@ -141,12 +144,6 @@ struct Waypoint {
    * @return Uninitialised object
    */
   Waypoint(const GeoPoint &_location);
-
-  /**
-   * Initializes type, file_num, flags, runway and
-   * radio_frequency with default/invalid values
-   */
-  void SetDefaults();
 
   /** 
    * Determine if waypoint is marked as able to be landed at
