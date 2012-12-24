@@ -24,6 +24,7 @@
 
 #include "Util/SliceAllocator.hpp"
 #include "Airspace.hpp"
+#include "Geo/Flat/BoundingBoxDistance.hpp"
 
 #include <kdtree++/kdtree.hpp>
 
@@ -33,6 +34,59 @@
  * facade protected class where locking is required.
  */
 class AirspacesInterface {
+  /** Function object used by kd-tree to index coordinates */
+  struct kd_get_bounds
+  {
+    /** Used by kd-tree */
+    typedef int result_type;
+
+    /**
+     * Retrieve coordinate value given coordinate index and object
+     *
+     * @param d Object being stored in kd-tree
+     * @param k Index of coordinate
+     *
+     * @return Coordinate value
+     */
+    int operator() ( const FlatBoundingBox &d, const unsigned k) const {
+      switch(k) {
+      case 0:
+        return d.GetLowerLeft().longitude;
+      case 1:
+        return d.GetLowerLeft().latitude;
+      case 2:
+        return d.GetUpperRight().longitude;
+      case 3:
+        return d.GetUpperRight().latitude;
+      };
+      return 0;
+    };
+  };
+
+  /**
+   * Distance metric function object used by kd-tree.  This specialisation
+   * allows for overlap; distance is zero with overlap, otherwise the minimum
+   * distance between two regions.
+   */
+  struct kd_distance
+  {
+    /** Distance operator for overlap functionality */
+    typedef BBDist distance_type;
+
+    /**
+     * \todo document this!
+     *
+     * @param a
+     * @param b
+     * @param dim
+     *
+     * @return Distance on axis
+     */
+    distance_type operator()(const int a, const int b, const size_t dim) const {
+      return BBDist(dim, std::max((dim < 2) ? (b - a) : (a - b), 0));
+    }
+  };
+
 public:
   typedef std::vector<Airspace> AirspaceVector; /**< Vector of airspaces (used internally) */
 
@@ -41,9 +95,8 @@ public:
    */
   typedef KDTree::KDTree<4, 
                          Airspace, 
-                         FlatBoundingBox::kd_get_bounds,
-                         FlatBoundingBox::kd_distance,
-                         std::less<FlatBoundingBox::kd_get_bounds::result_type>,
+                         kd_get_bounds, kd_distance,
+                         std::less<kd_get_bounds::result_type>,
                          SliceAllocator<KDTree::_Node<Airspace>, 256>
                          > AirspaceTree;
 };
