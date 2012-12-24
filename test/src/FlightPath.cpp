@@ -27,11 +27,14 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
+  int start = -1;
   unsigned max_points = 1000;
 
   Args args(argc, argv,
             "[options] DRIVER FILE\n"
             "Options:\n"
+            "  --start=5000             Begin flight path at 5000 sec after UTC midnight,\n"
+            "                           if not defined takeoff time is used\n"
             "  --max-points=1000        Maximum number of trace points in output (default = 1000)");
 
   const char *arg;
@@ -43,6 +46,13 @@ int main(int argc, char **argv)
       unsigned _max_points = strtol(value, NULL, 10);
       if (_max_points > 0)
         max_points = _max_points;
+    } else if ((value = StringAfterPrefix(arg, "--start=")) != nullptr) {
+      char *endptr;
+      start = strtol(value, &endptr, 10);
+      if (endptr == value || *endptr != '\0' || start < 0) {
+        fputs("The start parameter could not be parsed correctly.\n", stderr);
+        args.UsageError();
+      }
     } else {
       args.UsageError();
     }
@@ -66,9 +76,12 @@ int main(int argc, char **argv)
         !basic.NavAltitudeAvailable())
       continue;
 
+    if (start >= 0 && (int)basic.time < start)
+      continue;
+
     trace.push_back(TracePoint(basic));
 
-    if (calculated.flight.flying && !takeoff) {
+    if (start < 0 && calculated.flight.flying && !takeoff) {
       takeoff = true;
       trace.EraseEarlierThan(calculated.flight.takeoff_time);
     }
