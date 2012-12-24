@@ -35,6 +35,7 @@ class OZRenderer;
 class TaskPoint;
 class OrderedTaskPoint;
 class AATPoint;
+class TaskProjection;
 struct TaskLook;
 
 class TaskPointRenderer

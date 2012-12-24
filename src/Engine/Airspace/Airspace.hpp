@@ -29,11 +29,13 @@
 #include <iostream>
 #endif
 
+struct GeoPoint;
 struct AircraftState;
 class AtmosphericPressure;
 class AbstractAirspace;
 class AirspaceActivity;
 class AirspaceIntersectionVector;
+class TaskProjection;
 
 /**
  * Single object container for actual airspaces, to be stored in Airspaces object
@@ -74,12 +76,7 @@ public:
    * @return dummy airspace envelope
    */
   Airspace(const GeoPoint&loc, const TaskProjection& task_projection,
-           const fixed range=fixed(0))
-    :FlatBoundingBox(task_projection.ProjectInteger(loc),
-                     task_projection.ProjectRangeInteger(loc, range)),
-     airspace(NULL)
-  {
-  }
+           const fixed range=fixed(0));
 
   /** 
    * Constructor for virtual airspaces for use in bounding-box
@@ -92,12 +89,7 @@ public:
    * @return dummy airspace envelope
    */
   Airspace(const GeoPoint &ll, const GeoPoint &ur,
-           const TaskProjection& task_projection)
-    :FlatBoundingBox(task_projection.ProjectInteger(ll),
-                     task_projection.ProjectInteger(ur)),
-     airspace(NULL)
-  {
-  }
+           const TaskProjection &task_projection);
 
   /** 
    * Checks whether an aircraft is inside the airspace. 

@@ -26,7 +26,7 @@
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/Predicate/AirspacePredicateHeightRange.hpp"
-#include "Math/FastMath.h"
+#include "Geo/Flat/FlatRay.hpp"
 
 // Airspace query helpers
 

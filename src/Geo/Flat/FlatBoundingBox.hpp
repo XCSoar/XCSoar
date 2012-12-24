@@ -23,10 +23,10 @@
 #define FLATBOUNDINGBOX_HPP
 
 #include "FlatGeoPoint.hpp"
-#include "FlatRay.hpp"
-#include "TaskProjection.hpp"
 #include "BoundingBoxDistance.hpp"
 #include "Compiler.h"
+
+class FlatRay;
 
 /**
  * Structure defining 2-d integer projected coordinates defining

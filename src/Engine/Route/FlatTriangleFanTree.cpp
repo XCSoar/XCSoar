@@ -24,6 +24,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
 #include "Util/GlobalSliceAllocator.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 
 #define REACH_BUFFER 1
 #define REACH_SWEEP (ROUTEPOLAR_Q1-REACH_BUFFER)

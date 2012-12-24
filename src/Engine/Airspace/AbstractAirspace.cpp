@@ -26,6 +26,8 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceInterceptSolution.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatRay.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "AirspaceIntersectionVector.hpp"
 

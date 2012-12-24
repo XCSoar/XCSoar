@@ -25,6 +25,8 @@
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Geo/Flat/FlatRay.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;

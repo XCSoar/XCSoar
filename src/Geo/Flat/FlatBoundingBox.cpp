@@ -21,7 +21,7 @@
  */
 
 #include "FlatBoundingBox.hpp"
-
+#include "FlatRay.hpp"
 #include "Math/fixed.hpp"
 #include "Math/FastMath.h"
 

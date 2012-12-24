@@ -30,6 +30,7 @@
 #include <list>
 
 class TaskProjection;
+struct GeoPoint;
 struct RouteLink;
 struct AFlatGeoPoint;
 struct ReachFanParms;
