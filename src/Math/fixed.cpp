@@ -348,12 +348,23 @@ namespace
   }
 }
 
+/**
+ * Normalize the value to the range 0 to #internal_two_pi.
+ */
+gcc_const
+static inline fixed::value_t
+NormalizeInternalAngle(fixed::value_t a)
+{
+  a %= internal_two_pi;
+  if (a < 0)
+    a += internal_two_pi;
+  return a;
+}
+
 fixed
 fixed::accurate_half_sin() const
 {
-  value_t x= (m_nVal>>1) % internal_two_pi;
-  if( x < 0 )
-    x += internal_two_pi;
+  value_t x = NormalizeInternalAngle(m_nVal >> 1);
 
   bool negate_sin=false;
   
@@ -375,9 +386,7 @@ fixed::accurate_half_sin() const
 std::pair<fixed, fixed>
 fixed::sin_cos(fixed theta)
 {
-    value_t x=theta.m_nVal%internal_two_pi;
-    if( x < 0 )
-        x += internal_two_pi;
+  value_t x = NormalizeInternalAngle(theta.m_nVal);
 
     bool negate_cos=false;
     bool negate_sin=false;
