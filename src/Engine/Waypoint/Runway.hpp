@@ -34,11 +34,22 @@ class Runway {
   /** Main runway length in m (0 for unknown) */
   uint16_t length;
 
+  constexpr Runway(int _direction, unsigned _length)
+    :direction(_direction), length(_length) {}
+
 public:
   /**
    * No initialisation.
    */
   Runway() = default;
+
+  /**
+   * Construct an empty instance.  Its IsDefined() method will return
+   * false.
+   */
+  static constexpr Runway Null() {
+    return { -1, 0 };
+  }
 
   bool IsDirectionDefined() const {
     return direction >= 0;
