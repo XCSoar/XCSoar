@@ -8,7 +8,6 @@
 
 #include <queue>
 
-class AirspaceVisitor;
 class Airspaces;
 
 /**
@@ -62,18 +61,6 @@ public:
  */
   const AbstractAirspace* find_nearest(const Airspaces &airspaces,
                                        const fixed range);
-
-/** 
- * 
- * Visit all nearest in ascending order
- * 
- * @param airspaces Airspaces to search
- * @param visitor Visitor to apply to matches, in sorted order
- * @param range Maximum range of search
- */
-  void visit_sorted(const Airspaces &airspaces,
-                    AirspaceVisitor &visitor,
-                    const fixed range);
 
 /** 
  * Compute complete or partial solution as required to this sort strategy

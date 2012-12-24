@@ -1,6 +1,5 @@
 #include "AirspaceNearestSort.hpp"
 #include "Airspaces.hpp"
-#include "AirspaceVisitor.hpp"
 #include "AbstractAirspace.hpp"
 
 void 
@@ -59,18 +58,4 @@ AirspaceNearestSort::find_nearest(const Airspaces &airspaces,
   } else {
     return NULL;
   }
-}
-
-
-void
-AirspaceNearestSort::visit_sorted(const Airspaces &airspaces,
-                                  AirspaceVisitor &visitor,
-                                  const fixed range) 
-{
-  populate_queue(airspaces, range);
-
-  while (!m_q.empty()) {
-    visitor.Visit(*m_q.top().second.second.GetAirspace());
-    m_q.pop();
-  } 
 }
