@@ -136,7 +136,8 @@ struct FlatPoint
    *
    * @return Dot product
    */
-  fixed DotProduct(const FlatPoint &other) const {
+  gcc_const
+  fixed DotProduct(FlatPoint other) const {
     return x*other.x+y*other.y;
   }
 
@@ -147,14 +148,10 @@ struct FlatPoint
    *
    * @return Scaled point
    */
-  gcc_pure
-  FlatPoint
-  operator*(fixed p) const
+  gcc_const
+  FlatPoint operator*(fixed p) const
   {
-    FlatPoint res = *this;
-    res.x *= p;
-    res.y *= p;
-    return res;
+    return { x * p, y * p };
   }
 
   /**
@@ -164,14 +161,9 @@ struct FlatPoint
    *
    * @return Added value
    */
-  gcc_pure
-  FlatPoint
-  operator+ (const FlatPoint &p2) const
+  constexpr FlatPoint operator+(FlatPoint other) const
   {
-    FlatPoint res = *this;
-    res.x += p2.x;
-    res.y += p2.y;
-    return res;
+    return { x + other.x, y + other.y };
   }
 
   /**
@@ -196,14 +188,9 @@ struct FlatPoint
    *
    * @return Subtracted value
    */
-  gcc_pure
-  FlatPoint
-  operator- (const FlatPoint &p2) const
+  constexpr FlatPoint operator-(const FlatPoint other) const
   {
-    FlatPoint res = *this;
-    res.x -= p2.x;
-    res.y -= p2.y;
-    return res;
+    return { x - other.x, y - other.y };
   }
 
   constexpr
