@@ -19,7 +19,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
       const fixed value = metric(ais);
       if (!negative(value)) {
         m_q.push(std::make_pair(value,
-                                std::make_pair(ais, airspace)));
+                                std::make_pair(ais, as)));
       }
     }
   }
@@ -54,7 +54,7 @@ AirspaceNearestSort::find_nearest(const Airspaces &airspaces,
   populate_queue(airspaces, range);
 
   if (!m_q.empty()) {
-    return m_q.top().second.second.GetAirspace();
+    return m_q.top().second.second;
   } else {
     return NULL;
   }

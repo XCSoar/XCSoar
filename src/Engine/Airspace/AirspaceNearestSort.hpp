@@ -3,12 +3,12 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Predicate/AirspacePredicate.hpp"
-#include "Airspace.hpp"
 #include "AirspaceInterceptSolution.hpp"
 
 #include <queue>
 
 class Airspaces;
+class TaskProjection;
 
 /**
  *  Class to sort nearest airspaces by distance to closest point.
@@ -16,7 +16,7 @@ class Airspaces;
  */
 class AirspaceNearestSort
 {
-  typedef std::pair<AirspaceInterceptSolution, Airspace> AirspaceSolutionItem;
+  typedef std::pair<AirspaceInterceptSolution, const AbstractAirspace *> AirspaceSolutionItem;
   typedef std::pair<fixed, AirspaceSolutionItem> Item;
 
   /**
