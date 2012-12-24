@@ -43,11 +43,21 @@ class RadioFrequency {
    */
   uint16_t value;
 
+  constexpr RadioFrequency(unsigned _value):value(_value) {}
+
 public:
   /**
    * Uninitialized.
    */
   RadioFrequency() = default;
+
+  /**
+   * Construct an empty instance.  Its IsDefined() method will return
+   * false.
+   */
+  static constexpr RadioFrequency Null() {
+    return { 0 };
+  }
 
   bool IsDefined() const {
     return value != 0;
