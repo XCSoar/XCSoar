@@ -2003,27 +2003,12 @@ RUN_JOB_DIALOG_DEPENDS = THREAD FORM SCREEN EVENT OS MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Engine/Trace/Point.cpp \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
-	$(SRC)/Engine/Navigation/Aircraft.cpp \
-	$(SRC)/NMEA/Info.cpp \
-	$(SRC)/NMEA/MoreData.cpp \
-	$(SRC)/NMEA/Attitude.cpp \
-	$(SRC)/NMEA/Acceleration.cpp \
-	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/NMEA/Derived.cpp \
-	$(SRC)/NMEA/VarioInfo.cpp \
-	$(SRC)/NMEA/ClimbInfo.cpp \
-	$(SRC)/NMEA/CirclingInfo.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
-	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/NMEA/ClimbHistory.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/NMEA/SwitchState.cpp \
-	$(SRC)/FLARM/List.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
@@ -2050,8 +2035,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
-	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/System.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
@@ -2119,8 +2102,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/ThermalBandComputer.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
-	$(SRC)/Computer/BasicComputer.cpp \
-	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/WindComputer.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
@@ -2167,18 +2148,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
-	$(SRC)/Device/Port/Port.cpp \
-	$(SRC)/Device/Port/NullPort.cpp \
-	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Device/Parser.cpp \
-	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/Atmosphere/AirDensity.cpp \
-	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -2186,9 +2155,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeGeoid.cpp \
-	$(TEST_SRC_DIR)/DebugReplay.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_LDADD = \
