@@ -127,20 +127,19 @@ public:
 /**
  * Class to display airspace details dialog
  */
-class AirspaceListBuilderVisitor:
-  public AirspaceVisitor
+class AirspaceListBuilderVisitor gcc_final : public AirspaceVisitor
 {
   MapItemList &list;
 
 public:
   AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
-  void Visit(const AirspacePolygon &airspace) {
+  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
     if (!list.full())
       list.append(new AirspaceMapItem(airspace));
   }
 
-  void Visit(const AirspaceCircle &airspace) {
+  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
     if (!list.full())
       list.append(new AirspaceMapItem(airspace));
   }

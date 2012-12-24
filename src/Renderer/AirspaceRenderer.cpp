@@ -131,7 +131,8 @@ public:
 
 #ifdef ENABLE_OPENGL
 
-class AirspaceVisitorRenderer : public AirspaceVisitor, protected MapCanvas
+class AirspaceVisitorRenderer gcc_final
+  : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
@@ -156,7 +157,7 @@ public:
   }
 
 public:
-  void Visit(const AirspaceCircle &airspace) {
+  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
@@ -189,7 +190,7 @@ public:
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
-  void Visit(const AirspacePolygon &airspace) {
+  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
@@ -286,7 +287,8 @@ private:
   }
 };
 
-class AirspaceFillRenderer : public AirspaceVisitor, protected MapCanvas
+class AirspaceFillRenderer gcc_final
+  : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
@@ -305,7 +307,7 @@ public:
   }
 
 public:
-  void Visit(const AirspaceCircle &airspace) {
+  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
@@ -320,7 +322,7 @@ public:
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
-  void Visit(const AirspacePolygon &airspace) {
+  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
@@ -371,9 +373,8 @@ private:
  * The old way of doing it was possibly faster but required a lot
  * of code overhead.
  */
-class AirspaceVisitorMap: 
-  public AirspaceVisitor,
-  public MapDrawHelper
+class AirspaceVisitorMap gcc_final
+  : public AirspaceVisitor, public MapDrawHelper
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warnings;
@@ -398,7 +399,7 @@ public:
     }
   }
 
-  void Visit(const AirspaceCircle &airspace) {
+  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -415,7 +416,7 @@ public:
     DrawCircle(center, radius);
   }
 
-  void Visit(const AirspacePolygon &airspace) {
+  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -476,9 +477,8 @@ private:
   }
 };
 
-class AirspaceOutlineRenderer
-  :public AirspaceVisitor,
-   protected MapCanvas
+class AirspaceOutlineRenderer gcc_final
+  : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
   const AirspaceRendererSettings &settings;
@@ -512,12 +512,12 @@ protected:
   }
 
 public:
-  void Visit(const AirspaceCircle &airspace) {
+  virtual void Visit(const AirspaceCircle &airspace) gcc_override {
     if (SetupCanvas(airspace))
       DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
-  void Visit(const AirspacePolygon &airspace) {
+  virtual void Visit(const AirspacePolygon &airspace) gcc_override {
     if (SetupCanvas(airspace))
       DrawPolygon(airspace.GetPoints());
   }

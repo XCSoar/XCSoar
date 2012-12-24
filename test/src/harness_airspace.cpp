@@ -107,8 +107,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
 }
 
 
-class AirspaceVisitorPrint: 
-  public AirspaceVisitor {
+class AirspaceVisitorPrint gcc_final : public AirspaceVisitor {
   std::ofstream *fout;
   const bool do_report;
 
@@ -127,7 +126,7 @@ public:
     }
   }
 
-  virtual void visit_general(const AbstractAirspace& as) {
+  void visit_general(const AbstractAirspace &as) {
     if (do_report) {
       *fout << "# Name: " << as.GetName()
             << "Base: " << as.GetBase()
@@ -135,13 +134,15 @@ public:
             << "\n";
     }
   }
-  virtual void Visit(const AirspaceCircle& as) {
+
+  virtual void Visit(const AirspaceCircle &as) gcc_override {
     if (do_report) {
       *fout << as;
       visit_general(as);
     }
   }
-  virtual void Visit(const AirspacePolygon& as) {
+
+  virtual void Visit(const AirspacePolygon &as) gcc_override {
     if (do_report) {
       *fout << as;
       visit_general(as);
@@ -150,7 +151,8 @@ public:
 };
 
 
-class AirspaceIntersectionVisitorPrint : public AirspaceIntersectionVisitor {
+class AirspaceIntersectionVisitorPrint gcc_final
+  : public AirspaceIntersectionVisitor {
   std::ofstream *fout;
   std::ofstream *yout;
   std::ofstream *iout;
@@ -184,7 +186,7 @@ public:
     }
   }
 
-  virtual void intersection(const AbstractAirspace& as) {
+  void intersection(const AbstractAirspace &as) {
     *fout << "# intersection point\n";
     for (auto it = intersections.begin(); it != intersections.end(); ++it) {
       const GeoPoint start = (it->first);
@@ -199,13 +201,15 @@ public:
       *iout << solution.location.longitude << " " << solution.location.latitude << " " << "\n\n";
     }
   }
-  virtual void Visit(const AirspaceCircle& as) {
+
+  virtual void Visit(const AirspaceCircle &as) gcc_override {
     if (do_report) {
       *yout << as;
       intersection(as);
     }
   }
-  virtual void Visit(const AirspacePolygon& as) {
+
+  virtual void Visit(const AirspacePolygon &as) gcc_override {
     if (do_report) {
       *yout << as;
       intersection(as);
@@ -214,7 +218,7 @@ public:
 };
 
 
-class AirspaceVisitorClosest: public AirspaceVisitor {
+class AirspaceVisitorClosest gcc_final : public AirspaceVisitor {
   std::ofstream *fout;
   const TaskProjection &projection;
   const AircraftState& state;
@@ -237,7 +241,8 @@ public:
     if (fout)
       delete fout;
   }
-  virtual void closest(const AbstractAirspace& as) {
+
+  void closest(const AbstractAirspace &as) {
     GeoPoint c = as.ClosestPoint(state.location, projection);
     if (fout) {
       *fout << "# closest point\n";
@@ -253,10 +258,12 @@ public:
       }
     }
   }
-  virtual void Visit(const AirspaceCircle& as) {
+
+  virtual void Visit(const AirspaceCircle &as) gcc_override {
     closest(as);
   }
-  virtual void Visit(const AirspacePolygon& as) {
+
+  virtual void Visit(const AirspacePolygon &as) gcc_override {
     closest(as);
   }
 };
