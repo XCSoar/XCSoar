@@ -236,9 +236,9 @@ CirclingWind::CalcWind()
   fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
   fixed rthis = fixed(0);
 
-  for (unsigned i = 0; i < samples.size(); i++) {
-    const Angle angle =
-      Angle::FullCircle() * ((i + jmax) % samples.size()) / samples.size();
+  const Angle step = Angle::FullCircle() / samples.size();
+  Angle angle = step * jmax;
+  for (unsigned i = 0; i < samples.size(); i++, angle += step) {
     const auto sc = angle.SinCos();
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
