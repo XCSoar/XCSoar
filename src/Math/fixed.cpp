@@ -387,76 +387,69 @@ fixed::sin_cos(fixed theta)
 {
   value_t x = NormalizeInternalAngle(theta.m_nVal);
 
-    bool negate_cos=false;
-    bool negate_sin=false;
+  bool negate_cos=false;
+  bool negate_sin=false;
 
-    if( x > internal_pi )
-    {
-        x =internal_two_pi-x;
-        negate_sin=true;
-    }
-    if(x>internal_half_pi)
-    {
-        x=internal_pi-x;
-        negate_cos=true;
-    }
-    long x_cos=1<<resolution_shift,x_sin=0;
+  if (x > internal_pi) {
+    x = internal_two_pi - x;
+    negate_sin = true;
+  }
 
-    perform_cordic_rotation(x_cos,x_sin,(long)x);
+  if (x > internal_half_pi) {
+    x = internal_pi - x;
+    negate_cos = true;
+  }
 
-    return std::make_pair(fixed(internal(), negate_sin ? -x_sin : x_sin),
-                          fixed(internal(), negate_cos ? -x_cos : x_cos));
+  long x_cos = 1 << resolution_shift, x_sin=0;
+  perform_cordic_rotation(x_cos, x_sin, (int_least32_t)x);
+
+  return std::make_pair(fixed(internal(), negate_sin ? -x_sin : x_sin),
+                        fixed(internal(), negate_cos ? -x_cos : x_cos));
 }
 
 fixed fixed::atan() const
 {
-    fixed r,theta;
-    to_polar(fixed(1), *this, &r, &theta);
-    return theta;
+  fixed r,theta;
+  to_polar(fixed(1), *this, &r, &theta);
+  return theta;
 }
 
 fixed fixed::atan2(const fixed y, const fixed x)
 {
-    fixed r,theta;
-    to_polar(x,y, &r, &theta);
-    return theta;
+  fixed r,theta;
+  to_polar(x,y, &r, &theta);
+  return theta;
 }
 
 void fixed::to_polar(const fixed x, const fixed y, fixed *r, fixed *theta)
 {
-    bool const negative_x=x.m_nVal<0;
-    bool const negative_y=y.m_nVal<0;
-    
-    uvalue_t a=negative_x?-x.m_nVal:x.m_nVal;
-    uvalue_t b=negative_y?-y.m_nVal:y.m_nVal;
+  bool const negative_x = x.m_nVal < 0;
+  bool const negative_y = y.m_nVal < 0;
 
-    unsigned right_shift=0;
-    unsigned const max_value=1U<<resolution_shift;
+  uvalue_t a = negative_x ? -x.m_nVal : x.m_nVal;
+  uvalue_t b = negative_y ? -y.m_nVal : y.m_nVal;
 
-    while((a>=max_value) || (b>=max_value))
-    {
-        ++right_shift;
-        a>>=1;
-        b>>=1;
-    }
-    long xtemp=(long)a;
-    long ytemp=(long)b;
-    perform_cordic_polarization(xtemp,ytemp);
-    r->m_nVal=(value_t)(xtemp)<<right_shift;
-    theta->m_nVal=ytemp;
+  unsigned right_shift = 0;
+  const unsigned max_value = 1U << resolution_shift;
 
-    if(negative_x && negative_y)
-    {
-        theta->m_nVal-=internal_pi;
-    }
-    else if(negative_x)
-    {
-        theta->m_nVal=internal_pi-theta->m_nVal;
-    }
-    else if(negative_y)
-    {
-        theta->m_nVal=-theta->m_nVal;
-    }
+  while (a >= max_value || b >= max_value) {
+    ++right_shift;
+    a >>= 1;
+    b >>= 1;
+  }
+
+  long xtemp = (long)a;
+  long ytemp = (long)b;
+  perform_cordic_polarization(xtemp,ytemp);
+  r->m_nVal = value_t(xtemp) << right_shift;
+  theta->m_nVal=ytemp;
+
+  if (negative_x && negative_y)
+    theta->m_nVal -= internal_pi;
+  else if (negative_x)
+    theta->m_nVal = internal_pi - theta->m_nVal;
+  else if (negative_y)
+    theta->m_nVal = -theta->m_nVal;
 }
 
 
