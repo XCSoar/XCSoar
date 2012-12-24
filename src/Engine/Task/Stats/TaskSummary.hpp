@@ -55,7 +55,8 @@ struct TaskSummary {
   void append(const TaskSummaryPoint& tsp) {
     pts.push_back(tsp);
   }
-  void update(const fixed &d_remaining, const fixed &d_planned) {
+
+  void update(fixed d_remaining, fixed d_planned) {
     if (!positive(d_planned))
       return;
 

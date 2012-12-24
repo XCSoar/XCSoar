@@ -48,7 +48,7 @@ struct GeoVector {
 
   /** Constructor given supplied distance/bearing */
   constexpr
-  GeoVector(const fixed _distance, const Angle &_bearing)
+  GeoVector(fixed _distance, Angle _bearing)
     :distance(_distance), bearing(_bearing) {}
 
   /**

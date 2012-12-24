@@ -59,7 +59,7 @@ public:
   void AddLocation(const NMEAInfo &basic, const RasterTerrain *terrain);
   void AddArrivalAltitudes(const ProtectedRoutePlanner &route_planner,
                      const RasterTerrain *terrain, fixed safety_height);
-  void AddSelfIfNear(const GeoPoint &self, const Angle &bearing);
+  void AddSelfIfNear(const GeoPoint &self, Angle bearing);
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,
                           const ProtectedAirspaceWarningManager *warning_manager,

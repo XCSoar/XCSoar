@@ -360,7 +360,7 @@ public:
    * @return Initialised object (not yet searched)
    */
   MacCreadyVopt(const GlideState &_task, const MacCready &_mac,
-                const fixed & vmin, const fixed & vmax,
+                fixed vmin, fixed vmax,
                 const bool _allow_partial) :
     ZeroFinder(vmin, vmax, fixed(TOLERANCE_MC_OPT_GLIDE)),
     task(_task),
@@ -390,7 +390,7 @@ public:
    * @return Glide solution (optimum)
    */
   GlideResult
-  Result(const fixed &v_init)
+  Result(const fixed v_init)
   {
     fixed v = find_min(v_init);
     return mac.SolveGlide(task, v, allow_partial);

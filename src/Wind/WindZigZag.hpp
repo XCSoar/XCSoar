@@ -163,7 +163,7 @@ protected:
    * adding it to the list
    */
   gcc_pure
-  bool do_append(const unsigned time, const Angle &ang) const;
+  bool do_append(const unsigned time, Angle ang) const;
 
   /**
    * Set blackout timer

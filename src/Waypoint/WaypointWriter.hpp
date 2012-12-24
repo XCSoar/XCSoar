@@ -48,7 +48,7 @@ public:
 
 private:
   static void WriteWaypoint(TextWriter &writer, const Waypoint &wp);
-  static void WriteAngle(TextWriter &writer, const Angle &angle,
+  static void WriteAngle(TextWriter &writer, Angle angle,
                          bool is_latitude);
   static void WriteAltitude(TextWriter &writer, fixed altitude);
   static void WriteFlags(TextWriter &writer, const Waypoint &wp);

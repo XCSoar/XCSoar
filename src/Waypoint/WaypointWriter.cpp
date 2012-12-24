@@ -70,7 +70,7 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
 }
 
 void
-WaypointWriter::WriteAngle(TextWriter &writer, const Angle &angle,
+WaypointWriter::WriteAngle(TextWriter &writer, const Angle angle,
                            bool is_latitude)
 {
   // Calculate degrees, minutes and seconds

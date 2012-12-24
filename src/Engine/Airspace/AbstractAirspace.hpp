@@ -370,7 +370,7 @@ private:
   gcc_pure
   AirspaceInterceptSolution InterceptVertical(const AircraftState &state,
                                               const AirspaceAircraftPerformance &perf,
-                                              const fixed &distance) const;
+                                              fixed distance) const;
 
   /**
    * Find time/distance to specified horizontal boundary from an observer
@@ -388,8 +388,8 @@ private:
   gcc_pure
   AirspaceInterceptSolution InterceptHorizontal(const AircraftState &state,
                                                 const AirspaceAircraftPerformance &perf,
-                                                const fixed &distance_start,
-                                                const fixed &distance_end,
+                                                fixed distance_start,
+                                                fixed distance_end,
                                                 const bool lower = true) const;
 };
 

@@ -102,7 +102,7 @@ public:
    * @param in_time Time step for extrapolation (s)
    * @return Predicted aircraft state in in_time seconds
    */
-  AircraftState GetPredictedState(const fixed &in_time) const;
+  AircraftState GetPredictedState(fixed in_time) const;
 };
 
 #endif

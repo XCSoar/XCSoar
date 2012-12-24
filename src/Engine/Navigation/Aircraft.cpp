@@ -24,7 +24,7 @@
 #include "Geo/GeoVector.hpp"
 
 AircraftState 
-AircraftState::GetPredictedState(const fixed &in_time) const
+AircraftState::GetPredictedState(fixed in_time) const
 {
   AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);

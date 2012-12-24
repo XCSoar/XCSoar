@@ -475,15 +475,15 @@ public:
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  fixed& operator%=(fixed const& other);
-  fixed& operator*=(fixed const& val);
+  fixed& operator%=(const fixed other);
+  fixed& operator*=(const fixed val);
   fixed& operator/=(fixed const divisor);
-  fixed& operator-=(fixed const& val) {
+  fixed& operator-=(const fixed val) {
     m_nVal -= val.m_nVal;
     return *this;
   }
 
-  fixed& operator+=(fixed const& val) {
+  fixed& operator+=(const fixed val) {
     m_nVal += val.m_nVal;
     return *this;
   }
@@ -639,13 +639,13 @@ public:
   gcc_const
   static std::pair<fixed, fixed> sin_cos(fixed theta);
 
-  static void to_polar(fixed const& x,fixed const& y,fixed* r,fixed*theta);
+  static void to_polar(const fixed x, const fixed y, fixed* r, fixed*theta);
 
   gcc_pure
-  static fixed atan2(fixed const& y,fixed const& x);
+  static fixed atan2(const fixed y, const fixed x);
 
   gcc_pure
-  static fixed sigmoid(fixed const& x);
+  static fixed sigmoid(const fixed x);
 
   gcc_pure
   fixed sin() const {
@@ -738,7 +738,7 @@ inline fixed operator*(char a, const fixed b)
 }
 
 gcc_pure
-inline fixed operator*(fixed const& a,fixed const& b)
+inline fixed operator*(const fixed a, const fixed b)
 {
   fixed temp(a);
   return temp*=b;
@@ -767,7 +767,7 @@ inline fixed fast_mult(fixed a, fixed b, int b_bits)
 }
 
 gcc_pure
-inline fixed operator/(fixed const& a,fixed const& b)
+inline fixed operator/(const fixed a, const fixed b)
 {
   fixed temp(a);
   return temp/=b;
@@ -779,29 +779,29 @@ static inline fixed pow(fixed x, fixed y)
   return fixed(pow((double)x, (double)y));
 }
 
-inline fixed sin(fixed const& x)
+inline fixed sin(const fixed x)
 {
   return x.sin();
 }
-inline fixed cos(fixed const& x)
+inline fixed cos(const fixed x)
 {
   return x.cos();
 }
-inline fixed tan(fixed const& x)
+inline fixed tan(const fixed x)
 {
   return x.tan();
 }
-inline fixed atan(fixed const& x)
+inline fixed atan(const fixed x)
 {
     return x.atan();
 }
-inline fixed accurate_half_sin(fixed const& x)
+inline fixed accurate_half_sin(const fixed x)
 {
   return x.accurate_half_sin();
 }
 
 gcc_pure
-inline fixed atan2(fixed const& y, fixed const& x)
+inline fixed atan2(const fixed y, const fixed x)
 {
   return fixed::atan2(y,x);
 }
@@ -817,19 +817,19 @@ static inline fixed acos(fixed x)
 }
 
 gcc_pure
-inline fixed sqr(fixed const& x)
+inline fixed sqr(const fixed x)
 {
   return x.sqr();
 }
 
 gcc_pure
-inline fixed sqrt(fixed const& x)
+inline fixed sqrt(const fixed x)
 {
   return x.sqrt();
 }
 
 gcc_pure
-inline fixed fast_sqrt(fixed const& x)
+inline fixed fast_sqrt(const fixed x)
 {
   assert(!x.negative());
   if (!x.positive())
@@ -838,19 +838,19 @@ inline fixed fast_sqrt(fixed const& x)
 }
 
 gcc_pure
-inline fixed rsqrt(fixed const& x)
+inline fixed rsqrt(const fixed x)
 {
   return x.rsqrt();
 }
 
 gcc_pure
-inline fixed exp(fixed const& x)
+inline fixed exp(const fixed x)
 {
   return x.exp();
 }
 
 gcc_pure
-inline fixed log(fixed const& x)
+inline fixed log(const fixed x)
 {
   return x.log();
 }
@@ -880,7 +880,7 @@ inline fixed fabs(fixed const x)
   return x.abs();
 }
 
-inline fixed modf(fixed const& x,fixed*integral_part)
+inline fixed modf(const fixed x, fixed *integral_part)
 {
   return x.modf(integral_part);
 }
@@ -922,7 +922,7 @@ sin_cos(const fixed theta)
 }
 
 gcc_pure
-inline fixed sigmoid(fixed const& x)
+inline fixed sigmoid(const fixed x)
 {
   return ::fixed::sigmoid(x);
 }
@@ -947,7 +947,7 @@ inline fixed sigmoid(fixed const& x)
 
 #define fixed_max fixed(fixed::internal(), 0x7fffffffffffffffLL)
 
-inline fixed fixed::sigmoid(const fixed&x) {
+inline fixed fixed::sigmoid(const fixed x) {
   return fixed(2) / (fixed(1) + (-x).exp()) - fixed(1);
 }
 

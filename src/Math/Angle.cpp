@@ -41,7 +41,7 @@ Angle::ToDMS(unsigned &dd, unsigned &mm, unsigned &ss, bool &is_positive) const
 }
 
 int
-Angle::Sign(const fixed& tolerance) const
+Angle::Sign(const fixed tolerance) const
 {
   if ((value > tolerance))
     return 1;

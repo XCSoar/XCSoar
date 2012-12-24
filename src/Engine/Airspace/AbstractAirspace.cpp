@@ -58,7 +58,7 @@ AbstractAirspace::SetFlightLevel(const AtmosphericPressure &press)
 AirspaceInterceptSolution 
 AbstractAirspace::InterceptVertical(const AircraftState &state,
                                     const AirspaceAircraftPerformance &perf,
-                                    const fixed &distance) const
+                                    fixed distance) const
 {
   AirspaceInterceptSolution solution;
   solution.distance = distance;
@@ -72,10 +72,10 @@ AbstractAirspace::InterceptVertical(const AircraftState &state,
 
 AirspaceInterceptSolution 
 AbstractAirspace::InterceptHorizontal(const AircraftState &state,
-                                       const AirspaceAircraftPerformance &perf,
-                                       const fixed &distance_start,
-                                       const fixed &distance_end,
-                                       const bool lower) const
+                                      const AirspaceAircraftPerformance &perf,
+                                      fixed distance_start,
+                                      fixed distance_end,
+                                      const bool lower) const
 {
   if (lower && altitude_base.IsTerrain())
     // impossible to be lower than terrain

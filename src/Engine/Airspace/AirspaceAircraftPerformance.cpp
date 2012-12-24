@@ -29,8 +29,7 @@
 #define fixed_big fixed(1000000)
 
 fixed 
-AirspaceAircraftPerformance::SolutionGeneral(const fixed &distance,
-                                              const fixed &dh) const
+AirspaceAircraftPerformance::SolutionGeneral(fixed distance, fixed dh) const
 {
   const fixed t_cruise =
       positive(distance) ? distance / GetCruiseSpeed() : fixed(0);
@@ -118,11 +117,9 @@ private:
 };
 
 fixed 
-AirspaceAircraftPerformance::SolutionVertical(const fixed &distance,
-                                               const fixed &altitude,
-                                               const fixed &base,
-                                               const fixed &top,
-                                               fixed &intercept_alt) const
+AirspaceAircraftPerformance::SolutionVertical(fixed distance, fixed altitude,
+                                              fixed base, fixed top,
+                                              fixed &intercept_alt) const
 {
   if (!SolutionExists(distance, altitude, base, top))
     return fixed(-1);
@@ -193,11 +190,10 @@ private:
 };
 
 fixed 
-AirspaceAircraftPerformance::SolutionHorizontal(const fixed &distance_min,
-                                                 const fixed &distance_max,
-                                                 const fixed &altitude,
-                                                 const fixed &h,
-                                                 fixed &intercept_distance) const
+AirspaceAircraftPerformance::SolutionHorizontal(fixed distance_min,
+                                                fixed distance_max,
+                                                fixed altitude, fixed h,
+                                                fixed &intercept_distance) const
 {
   if (!SolutionExists(distance_max, altitude, h, h))
     return fixed(-1);
@@ -223,10 +219,9 @@ TODO: write a sorter/visitor so that we can visit airspaces in increasing
  */
 
 bool 
-AirspaceAircraftPerformance::SolutionExists(const fixed &distance_max,
-                                             const fixed &altitude,
-                                             const fixed &h_min,
-                                             const fixed &h_max) const
+AirspaceAircraftPerformance::SolutionExists(fixed distance_max,
+                                            fixed altitude,
+                                            fixed h_min, fixed h_max) const
 {
   if (positive(altitude - h_max) &&
       !positive(std::max(GetCruiseDescent(), GetDescentRate())

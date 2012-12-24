@@ -273,7 +273,7 @@ WindZigZag::back_in_time(const unsigned time) const
 }
 
 bool
-WindZigZag::do_append(const unsigned time, const Angle &ang) const
+WindZigZag::do_append(const unsigned time, const Angle ang) const
 {
   // never add if during maneuvering blackout
   if (time < time_blackout + BLACKOUT_TIME)

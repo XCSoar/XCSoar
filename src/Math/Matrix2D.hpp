@@ -56,7 +56,7 @@ public:
     m[2][0] = other.m[2][0];  m[2][1] = other.m[2][1];
   }
 
-  void Scale(const fixed &factor) {
+  void Scale(const fixed factor) {
 #ifdef FIXED_MATH
     Scalex(factor.as_glfixed_scale());
 #else

@@ -108,7 +108,7 @@ public:
    * @return Time to intercept (s) or -1 if failed
    */
   gcc_pure
-  virtual fixed SolutionGeneral(const fixed &distance, const fixed &dh) const;
+  fixed SolutionGeneral(fixed distance, fixed dh) const;
 
   /**
    * Find time to intercept a target with a height band, set distance
@@ -121,8 +121,8 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed SolutionVertical(const fixed &distance, const fixed &altitude,
-                         const fixed &base, const fixed &top,
+  fixed SolutionVertical(fixed distance, fixed altitude,
+                         fixed base, fixed top,
                          fixed &intercept_alt) const;
 
   /**
@@ -136,15 +136,14 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed SolutionHorizontal(const fixed &distance_min, const fixed &distance_max,
-                           const fixed &altitude, const fixed &h,
+  fixed SolutionHorizontal(fixed distance_min, fixed distance_max,
+                           fixed altitude, fixed h,
                            fixed &intercept_distance) const;
 
 private:
   gcc_pure
-  virtual bool SolutionExists(const fixed &distance_min,
-                              const fixed &distance_max,
-                              const fixed &h_min, const fixed &h_max) const;
+  virtual bool SolutionExists(fixed distance_min, fixed distance_max,
+                              fixed h_min, fixed h_max) const;
 };
 
 

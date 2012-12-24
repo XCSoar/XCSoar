@@ -218,7 +218,7 @@ MapItemListBuilder::AddArrivalAltitudes(
 }
 
 void
-MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing)
+MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, Angle bearing)
 {
   if (!list.full() && location.Distance(self) < range)
     list.append(new SelfMapItem(self, bearing));

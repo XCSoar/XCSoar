@@ -70,7 +70,7 @@ class RoutePolar
 
     RoutePolarPoint() = default;
 
-    RoutePolarPoint(const fixed &_slowness, const fixed &_gradient)
+    RoutePolarPoint(fixed _slowness, fixed _gradient)
       :slowness(_slowness), gradient(_gradient), valid(true)
     {
       if (positive(gradient))

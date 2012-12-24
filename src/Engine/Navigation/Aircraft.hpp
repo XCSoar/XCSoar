@@ -151,7 +151,7 @@ struct AircraftState:
    * @return Predicted aircraft state in in_time seconds
    */
   gcc_pure
-  AircraftState GetPredictedState(const fixed& in_time) const;
+  AircraftState GetPredictedState(fixed in_time) const;
 
   void Reset();
 };

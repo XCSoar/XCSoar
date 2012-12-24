@@ -86,7 +86,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
 
 static void
 DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
-                   const Angle &angle, fixed radius, fixed width)
+                   const Angle angle, fixed radius, fixed width)
 {
   if (radius <= fixed(0))
     return;

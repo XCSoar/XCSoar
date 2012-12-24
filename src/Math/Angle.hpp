@@ -38,7 +38,7 @@ class Angle
   fixed value;
 
   constexpr
-  explicit Angle(const fixed &_value): value(_value) {};
+  explicit Angle(const fixed _value):value(_value) {};
 
 public:
   /**
@@ -285,7 +285,7 @@ public:
   int Sign() const;
 
   gcc_pure
-  int Sign(const fixed &tolerance) const;
+  int Sign(const fixed tolerance) const;
 
   gcc_pure
   std::pair<fixed, fixed> SinCos() const {
@@ -419,14 +419,14 @@ public:
   }
 
   const Angle&
-  operator+=(const Angle& x)
+  operator+=(Angle x)
   {
     value += x.value;
     return *this;
   }
 
   const Angle&
-  operator-=(const Angle& x)
+  operator-=(Angle x)
   {
     value -= x.value;
     return *this;
@@ -476,7 +476,7 @@ public:
   bool Between(const Angle start, const Angle end) const;
 
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, const Angle& a);
+  friend std::ostream& operator<< (std::ostream& o, Angle a);
 #endif
 
   gcc_const

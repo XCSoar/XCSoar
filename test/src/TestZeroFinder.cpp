@@ -28,7 +28,7 @@ class ZeroFinderTest: public ZeroFinder
   unsigned func;
 
 public:
-  ZeroFinderTest(const fixed &x_min, const fixed &x_max, unsigned _func = 0) :
+  ZeroFinderTest(fixed x_min, fixed x_max, unsigned _func = 0) :
     ZeroFinder(x_min, x_max, fixed(0.0001)), func(_func) {}
 
   fixed f(const fixed x);

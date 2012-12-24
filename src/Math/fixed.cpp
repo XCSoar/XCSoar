@@ -12,13 +12,13 @@ static fixed::value_t const internal_two_pi=0x6487ed51;
 static fixed::value_t const internal_half_pi=0x1921fb54;
 static fixed::value_t const internal_quarter_pi=0xc90fdaa;
 
-fixed& fixed::operator%=(fixed const& other)
+fixed& fixed::operator%=(const fixed other)
 {
   m_nVal = m_nVal%other.m_nVal;
   return *this;
 }
 
-fixed& fixed::operator*=(fixed const& val)
+fixed& fixed::operator*=(const fixed val)
 {
   bool const val_negative=val.m_nVal<0;
   bool const this_negative=m_nVal<0;
@@ -407,14 +407,14 @@ fixed fixed::atan() const
     return theta;
 }
 
-fixed fixed::atan2(fixed const& y, fixed const& x)
+fixed fixed::atan2(const fixed y, const fixed x)
 {
     fixed r,theta;
     to_polar(x,y, &r, &theta);
     return theta;
 }
 
-void fixed::to_polar(fixed const& x,fixed const& y,fixed* r,fixed* theta)
+void fixed::to_polar(const fixed x, const fixed y, fixed *r, fixed *theta)
 {
     bool const negative_x=x.m_nVal<0;
     bool const negative_y=y.m_nVal<0;

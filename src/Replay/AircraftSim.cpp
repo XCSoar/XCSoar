@@ -26,7 +26,7 @@
 void
 AircraftSim::Start(const GeoPoint& location_start,
                    const GeoPoint& location_last,
-                   const fixed& altitude)
+                   fixed altitude)
 {
   state.Reset();
   state.location = location_start;

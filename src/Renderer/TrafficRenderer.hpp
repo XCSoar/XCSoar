@@ -36,7 +36,7 @@ namespace TrafficRenderer
 {
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
-     const FlarmTraffic &traffic, const Angle &angle,
+     const FlarmTraffic &traffic, Angle angle,
      const FlarmFriends::Color color, const RasterPoint pt);
 }
 

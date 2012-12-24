@@ -25,7 +25,7 @@
 #include <fstream>
 
 #ifdef FIXED_MATH
-std::ostream& operator<<(std::ostream& os,fixed const& value)
+std::ostream& operator<<(std::ostream& os, fixed value)
 {
   return os<<value.as_double();
 }
@@ -106,7 +106,7 @@ PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 
 #include "Math/Angle.hpp"
 
-std::ostream& operator<< (std::ostream& o, const Angle& a)
+std::ostream& operator<< (std::ostream& o, Angle a)
 {
   o << a.Degrees();
   return o;

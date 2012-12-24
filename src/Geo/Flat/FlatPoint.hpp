@@ -149,7 +149,7 @@ struct FlatPoint
    */
   gcc_pure
   FlatPoint
-  operator* (const fixed &p) const
+  operator*(fixed p) const
   {
     FlatPoint res = *this;
     res.x *= p;

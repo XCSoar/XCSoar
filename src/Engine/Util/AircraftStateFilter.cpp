@@ -107,7 +107,7 @@ AircraftStateFilter::Design(const fixed cutoff_wavelength)
 }
 
 AircraftState
-AircraftStateFilter::GetPredictedState(const fixed &in_time) const
+AircraftStateFilter::GetPredictedState(const fixed in_time) const
 {
   AircraftState state_next = last_state;
   state_next.ground_speed = GetSpeed();

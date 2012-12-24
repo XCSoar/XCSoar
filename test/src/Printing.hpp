@@ -51,7 +51,7 @@ struct AirspaceAltitude;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"
-std::ostream& operator<<(std::ostream& os,fixed const& value);
+std::ostream& operator<<(std::ostream& os, fixed value);
 #endif
 
 std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
