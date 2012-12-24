@@ -316,18 +316,6 @@ Airspaces::SetActivity(const AirspaceActivity mask)
   }
 }
 
-Airspaces::AirspaceTree::const_iterator
-Airspaces::begin() const
-{
-  return airspace_tree.begin();
-}
-
-Airspaces::AirspaceTree::const_iterator
-Airspaces::end() const
-{
-  return airspace_tree.end();
-}
-
 Airspaces::Airspaces(const Airspaces& master, bool _owns_children):
   qnh(master.qnh),
   activity_mask(master.activity_mask),

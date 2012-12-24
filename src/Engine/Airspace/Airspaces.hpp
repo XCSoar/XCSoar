@@ -232,7 +232,9 @@ public:
    * @return First airspace in store
    */
   gcc_pure
-  AirspaceTree::const_iterator begin() const;
+  AirspaceTree::const_iterator begin() const {
+    return airspace_tree.begin();
+  }
 
   /**
    * Access end airspace in store, for use in iterators as end point.
@@ -240,7 +242,9 @@ public:
    * @return End airspace in store
    */
   gcc_pure
-  AirspaceTree::const_iterator end() const;
+  AirspaceTree::const_iterator end() const {
+    return airspace_tree.end();
+  }
 
   const TaskProjection &GetProjection() const {
     return task_projection;
