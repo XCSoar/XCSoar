@@ -1485,7 +1485,6 @@ $(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
 
 ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/JSON/Writer.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
