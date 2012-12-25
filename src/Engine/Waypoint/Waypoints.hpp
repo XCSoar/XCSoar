@@ -201,6 +201,7 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if not)
    */
+  gcc_pure
   const Waypoint *FindHome();
 
   /**
@@ -218,6 +219,7 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if not)
    */
+  gcc_pure
   const Waypoint* LookupId(const unsigned id) const;
 
   /**
@@ -228,6 +230,7 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if none found)
    */
+  gcc_pure
   const Waypoint* LookupLocation(const GeoPoint &loc,
                                  const fixed range = fixed(0)) const;
 
@@ -238,8 +241,10 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if not)
    */
+  gcc_pure
   const Waypoint* LookupName(const TCHAR *name) const;
 
+  gcc_pure
   const Waypoint* LookupName(const tstring &name) const {
     return LookupName(name.c_str());
   }
@@ -276,6 +281,7 @@ public:
    * Returns a set of possible characters following the specified
    * prefix.
    */
+  gcc_pure
   TCHAR *SuggestNamePrefix(const TCHAR *prefix,
                            TCHAR *dest, size_t max_length) const {
     return name_tree.suggest(prefix, dest, max_length);
@@ -290,6 +296,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
+  gcc_pure
   const Waypoint *GetNearest(const GeoPoint &loc, fixed range) const;
 
   /**
@@ -302,6 +309,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
+  gcc_pure
   const Waypoint *GetNearestLandable(const GeoPoint &loc, fixed range) const;
 
   /**
@@ -315,6 +323,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
+  gcc_pure
   const Waypoint *GetNearestIf(const GeoPoint &loc, fixed range,
                                std::function<bool(const Waypoint &)> predicate) const;
 
