@@ -30,8 +30,6 @@
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
-#include <functional>
-
 class WaypointVisitor;
 
 /**
@@ -325,7 +323,7 @@ public:
    */
   gcc_pure
   const Waypoint *GetNearestIf(const GeoPoint &loc, fixed range,
-                               std::function<bool(const Waypoint &)> predicate) const;
+                               bool (*predicate)(const Waypoint &)) const;
 
   /**
    * Access first waypoint in store, for use in iterators.

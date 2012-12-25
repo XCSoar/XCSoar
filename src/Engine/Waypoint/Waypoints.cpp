@@ -188,7 +188,7 @@ Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
 
 const Waypoint*
 Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
-                        std::function<bool(const Waypoint &)> predicate) const
+                        bool (*predicate)(const Waypoint &)) const
 {
   if (IsEmpty())
     return NULL;

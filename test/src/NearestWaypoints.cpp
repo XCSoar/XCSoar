@@ -102,7 +102,7 @@ static const Waypoint *
 GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
                    fixed range, WaypointType type)
 {
-  std::function<bool(const Waypoint &)> predicate;
+  bool (*predicate)(const Waypoint &);
   switch (type) {
   case WaypointType::AIRPORT:
     predicate = IsAirport;
