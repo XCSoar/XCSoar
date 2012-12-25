@@ -93,7 +93,7 @@ include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
 include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk
-include $(topdir)/build/io.mk
+include $(topdir)/build/libio.mk
 include $(topdir)/build/libasync.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/libwaypoint.mk
