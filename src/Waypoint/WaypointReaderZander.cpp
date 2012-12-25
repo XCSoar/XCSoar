@@ -198,6 +198,6 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
     if (len < 36 || !ParseFlagsFromDescription(line + 35, new_waypoint))
       new_waypoint.flags.turn_point = true;
 
-  way_points.Append(new_waypoint);
+  way_points.Append(std::move(new_waypoint));
   return true;
 }

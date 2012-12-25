@@ -272,6 +272,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iDescription < n_params)
     new_waypoint.comment = params[iDescription];
 
-  waypoints.Append(new_waypoint);
+  waypoints.Append(std::move(new_waypoint));
   return true;
 }

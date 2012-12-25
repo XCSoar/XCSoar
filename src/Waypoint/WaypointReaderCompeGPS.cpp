@@ -232,7 +232,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Parse waypoint name
   waypoint.comment.assign(line);
 
-  waypoints.Append(waypoint);
+  waypoints.Append(std::move(waypoint));
   return true;
 }
 

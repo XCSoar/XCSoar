@@ -256,6 +256,6 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   // Waypoint Flags (e.g. AT)
   ParseFlags(params[4], new_waypoint);
 
-  waypoints.Append(new_waypoint);
+  waypoints.Append(std::move(new_waypoint));
   return true;
 }

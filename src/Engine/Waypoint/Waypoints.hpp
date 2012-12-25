@@ -107,7 +107,7 @@ public:
    *
    * @param wp Waypoint to add to internal store
    */
-  const Waypoint &Append(const Waypoint &wp);
+  const Waypoint &Append(Waypoint &&wp);
 
   /**
    * Erase waypoint from the internal store.  Requires optimise() to

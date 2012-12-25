@@ -120,7 +120,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
   // Description (Characters 35-44)
   ParseString(params[11], new_waypoint.comment);
 
-  way_points.Append(new_waypoint);
+  way_points.Append(std::move(new_waypoint));
   return true;
 }
 

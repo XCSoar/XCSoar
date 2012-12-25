@@ -201,7 +201,7 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   if (len > (is_utm ? 38 : 47))
     ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
 
-  way_points.Append(new_waypoint);
+  way_points.Append(std::move(new_waypoint));
   return true;
 }
 

@@ -61,7 +61,7 @@ OnWaypointNewClicked()
     WaypointsNeedSave = true;
 
     ScopeSuspendAllThreads suspend;
-    way_points.Append(edit_waypoint);
+    way_points.Append(std::move(edit_waypoint));
     way_points.Optimise();
   }
 }

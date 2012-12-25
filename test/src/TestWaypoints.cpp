@@ -91,7 +91,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
     buffer.AppendFormat(_T(" #%d"), i + 1);
     waypoint.name = buffer;
 
-    waypoints.Append(waypoint);
+    waypoints.Append(std::move(waypoint));
   }
 
   waypoints.Optimise();
@@ -260,7 +260,7 @@ TestCopy(Waypoints& waypoints)
   unsigned size_old = waypoints.size();
   Waypoint wp_copy = *wp;
   wp_copy.id = waypoints.size() + 1;
-  waypoints.Append(wp_copy);
+  waypoints.Append(std::move(wp_copy));
   waypoints.Optimise();
   unsigned size_new = waypoints.size();
   return (size_new == size_old + 1);

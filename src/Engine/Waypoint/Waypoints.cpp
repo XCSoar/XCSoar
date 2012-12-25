@@ -128,10 +128,8 @@ Waypoints::Optimise()
 }
 
 const Waypoint &
-Waypoints::Append(const Waypoint &_wp)
+Waypoints::Append(Waypoint &&wp)
 {
-  Waypoint wp(_wp);
-
   if (waypoint_tree.HaveBounds()) {
     wp.Project(task_projection);
     if (!waypoint_tree.IsWithinBounds(wp)) {
@@ -147,7 +145,7 @@ Waypoints::Append(const Waypoint &_wp)
   task_projection.Scan(wp.location);
   wp.id = next_id++;
 
-  const Waypoint &new_wp = waypoint_tree.Add(wp);
+  const Waypoint &new_wp = waypoint_tree.Add(std::move(wp));
   name_tree.Add(new_wp);
 
   ++serial;
@@ -363,7 +361,7 @@ Waypoints::CheckExistsOrAppend(const Waypoint &waypoint)
     return *found;
   }
 
-  return Append(waypoint);
+  return Append(Waypoint(waypoint));
 }
 
 Waypoint 
@@ -393,7 +391,7 @@ Waypoints::AddTakeoffPoint(const GeoPoint& location,
   if (!nearest_landable) {
     // now add new and update database
     Waypoint new_waypoint = GenerateTakeoffPoint(location, terrain_alt);
-    Append(new_waypoint);
+    Append(std::move(new_waypoint));
   }
 
   Optimise();
