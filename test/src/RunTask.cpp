@@ -50,7 +50,7 @@ Run(DebugReplay &replay, TaskManager &task_manager)
 
   while (replay.Next()) {
     const MoreData &basic = replay.Basic();
-    DerivedInfo &calculated = replay.SetCalculated();
+    const DerivedInfo &calculated = replay.Calculated();
 
     if (!basic.HasTimeAdvancedSince(last_basic) ||
         !basic.location_available)
