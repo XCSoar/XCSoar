@@ -372,7 +372,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
-	$(SRC)/Computer/GlideComputerStats.cpp \
+	$(SRC)/Computer/StatsComputer.cpp \
 	$(SRC)/Computer/RouteComputer.cpp \
 	$(SRC)/Computer/TaskComputer.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \

@@ -2116,7 +2116,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/TaskComputer.cpp \
 	$(SRC)/Computer/RouteComputer.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
-	$(SRC)/Computer/GlideComputerStats.cpp \
+	$(SRC)/Computer/StatsComputer.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/LogComputer.cpp \
 	$(SRC)/Computer/CuComputer.cpp \

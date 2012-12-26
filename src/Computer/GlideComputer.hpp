@@ -28,7 +28,7 @@ Copyright_License {
 #include "Audio/VegaVoice.hpp"
 #include "Time/PeriodClock.hpp"
 #include "GlideComputerAirData.hpp"
-#include "GlideComputerStats.hpp"
+#include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
 #include "LogComputer.hpp"
 #include "WarningComputer.hpp"
@@ -48,7 +48,7 @@ class GlideComputer : public GlideComputerBlackboard
 {
   GlideComputerAirData air_data_computer;
   TaskComputer task_computer;
-  GlideComputerStats stats_computer;
+  StatsComputer stats_computer;
   LogComputer log_computer;
   CuComputer cu_computer;
   WarningComputer warning_computer;

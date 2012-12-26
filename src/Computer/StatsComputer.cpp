@@ -22,15 +22,15 @@ Copyright_License {
 
 */
 
-#include "GlideComputerStats.hpp"
+#include "StatsComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-GlideComputerStats::GlideComputerStats()
+StatsComputer::StatsComputer()
   :stats_clock(fixed(60)) {}
 
 void
-GlideComputerStats::ResetFlight(const bool full)
+StatsComputer::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
   last_climb_start_time = fixed(-1);
@@ -42,7 +42,7 @@ GlideComputerStats::ResetFlight(const bool full)
 }
 
 void
-GlideComputerStats::StartTask(const NMEAInfo &basic)
+StatsComputer::StartTask(const NMEAInfo &basic)
 {
   flightstats.StartTask();
 }
@@ -52,7 +52,7 @@ GlideComputerStats::StartTask(const NMEAInfo &basic)
  * @return True if valid fix (fix distance <= 200m), False otherwise
  */
 bool
-GlideComputerStats::DoLogging(const MoreData &basic,
+StatsComputer::DoLogging(const MoreData &basic,
                               const DerivedInfo &calculated)
 {
   /// @todo consider putting this sanity check inside Parser
@@ -82,14 +82,14 @@ GlideComputerStats::DoLogging(const MoreData &basic,
 }
 
 void
-GlideComputerStats::OnClimbBase(const DerivedInfo &calculated, fixed StartAlt)
+StatsComputer::OnClimbBase(const DerivedInfo &calculated, fixed StartAlt)
 {
   flightstats.AddClimbBase(calculated.climb_start_time -
                            calculated.flight.takeoff_time, StartAlt);
 }
 
 void
-GlideComputerStats::OnClimbCeiling(const DerivedInfo &calculated)
+StatsComputer::OnClimbCeiling(const DerivedInfo &calculated)
 {
   flightstats.AddClimbCeiling(calculated.cruise_start_time -
                               calculated.flight.takeoff_time,
@@ -101,7 +101,7 @@ GlideComputerStats::OnClimbCeiling(const DerivedInfo &calculated)
  * calculation of all related statistics
  */
 void
-GlideComputerStats::OnDepartedThermal(const DerivedInfo &calculated)
+StatsComputer::OnDepartedThermal(const DerivedInfo &calculated)
 {
   assert(calculated.last_thermal.IsDefined());
 
@@ -109,7 +109,7 @@ GlideComputerStats::OnDepartedThermal(const DerivedInfo &calculated)
 }
 
 void
-GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated)
+StatsComputer::ProcessClimbEvents(const DerivedInfo &calculated)
 {
   switch (calculated.turn_mode) {
   case CirclingMode::CLIMB:

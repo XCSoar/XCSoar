@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLIDECOMPUTER_STATS_HPP
-#define XCSOAR_GLIDECOMPUTER_STATS_HPP
+#ifndef XCSOAR_STATS_COMPUTER_HPP
+#define XCSOAR_STATS_COMPUTER_HPP
 
 #include "Geo/GeoPoint.hpp"
 #include "FlightStatistics.hpp"
@@ -32,7 +32,7 @@ struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 
-class GlideComputerStats {
+class StatsComputer {
   GeoPoint last_location;
 
   fixed last_climb_start_time, last_cruise_start_time;
@@ -42,7 +42,7 @@ class GlideComputerStats {
   GPSClock stats_clock;
 
 public:
-  GlideComputerStats();
+  StatsComputer();
 
   /** Returns the FlightStatistics object */
   FlightStatistics &GetFlightStats() { return flightstats; }
