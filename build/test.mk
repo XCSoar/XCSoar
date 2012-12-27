@@ -460,6 +460,7 @@ TEST_FILE_UTIL_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
+TEST_FILE_UTIL_DEPENDS = UTIL
 $(eval $(call link-program,TestFileUtil,TEST_FILE_UTIL))
 
 TEST_GEO_POINT_SOURCES = \
