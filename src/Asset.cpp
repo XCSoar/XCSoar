@@ -35,6 +35,7 @@ Copyright_License {
 #endif
 
 #include <windef.h> /* for MAX_PATH */
+#include <string.h>
 
 // Registration Data
 TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");

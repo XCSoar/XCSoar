@@ -31,8 +31,6 @@ Copyright_License {
 #include <iterator>
 #endif
 
-#include <string.h>
-
 typedef char TCHAR;
 #define _stprintf sprintf
 #define _vstprintf vsprintf

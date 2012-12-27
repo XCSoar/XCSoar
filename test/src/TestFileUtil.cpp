@@ -23,6 +23,8 @@
 #include "OS/FileUtil.hpp"
 #include "TestUtil.hpp"
 
+#include <string.h>
+
 class TestingFileVisitor: public File::Visitor
 {
 private:

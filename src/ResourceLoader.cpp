@@ -43,6 +43,8 @@ ResourceLoader::Init(HINSTANCE hInstance)
 
 #include "resource_data.h"
 
+#include <string.h>
+
 #endif /* !WIN32 */
 
 ResourceLoader::Data

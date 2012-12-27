@@ -26,6 +26,7 @@ Copyright_License {
 #include "LogFile.hpp"
 
 #include <tchar.h>
+#include <string.h>
 
 #ifndef HAVE_POSIX
 #include <windows.h>

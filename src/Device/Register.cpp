@@ -53,6 +53,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 #include <assert.h>
+#include <string.h>
 
 /** NULL terminated array of available device drivers. */
 static const struct DeviceRegister *const driver_list[] = {

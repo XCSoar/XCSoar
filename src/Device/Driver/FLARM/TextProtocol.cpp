@@ -27,6 +27,7 @@ Copyright_License {
 #include "Time/TimeoutClock.hpp"
 
 #include <assert.h>
+#include <string.h>
 
 bool
 FlarmDevice::TextMode(OperationEnvironment &env)

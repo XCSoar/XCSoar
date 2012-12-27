@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <string.h>
+
 DataFieldEnum::Entry::~Entry()
 {
   free(string);

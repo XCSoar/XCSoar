@@ -25,6 +25,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 #include <stdio.h>
+#include <string.h>
 
 void
 FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,

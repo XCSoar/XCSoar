@@ -27,6 +27,7 @@ Copyright_License {
 #include "Geo/CoordinateFormat.hpp"
 
 #include <tchar.h>
+#include <stddef.h>
 
 class Angle;
 struct GeoPoint;

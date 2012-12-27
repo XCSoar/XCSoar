@@ -24,6 +24,8 @@ Copyright_License {
 #include "ConvertLineReader.hpp"
 #include "Util/UTF8.hpp"
 
+#include <string.h>
+
 #ifdef _UNICODE
 #include <windows.h>
 #endif

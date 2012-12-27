@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "WaypointLabelList.hpp"
 
+#include <string.h>
+
 #include <algorithm>
 
 static constexpr PixelScalar WPCIRCLESIZE = 2;

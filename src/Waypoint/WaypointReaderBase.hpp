@@ -26,6 +26,7 @@ Copyright_License {
 #define WAYPOINTFILE_HPP
 
 #include <tchar.h>
+#include <stddef.h>
 
 struct Waypoint;
 class Waypoints;

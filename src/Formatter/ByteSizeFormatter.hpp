@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_BYTE_SIZE_FORMATTER_HPP
 
 #include <tchar.h>
+#include <stddef.h>
 
 void FormatByteSize(TCHAR *buffer, size_t size,
                     unsigned long bytes, bool simple = false);

@@ -31,6 +31,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <string.h>
 
 K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate, DataHandler &_handler)
   :Port(_handler), port(_port), baud_rate(0)

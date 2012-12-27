@@ -26,6 +26,8 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 
+#include <string.h>
+
 bool
 FlarmDevice::ParsePFLAC(NMEAInputLine &line)
 {

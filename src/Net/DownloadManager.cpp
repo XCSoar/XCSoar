@@ -113,6 +113,7 @@ Net::DownloadManager::Cancel(const TCHAR *relative_path)
 #include <list>
 #include <algorithm>
 
+#include <string.h>
 #include <windef.h> /* for MAX_PATH */
 
 class DownloadManagerThread gcc_final

@@ -33,6 +33,7 @@ Copyright_License {
 #include "TestUtil.hpp"
 
 #include <tchar.h>
+#include <string.h>
 
 struct AirspaceClassTestCouple
 {
