@@ -34,8 +34,6 @@ Copyright_License {
 #include <string.h>
 #include <stdarg.h>
 
-#include <ctype.h>
-
 typedef char TCHAR;
 #define _stprintf sprintf
 #define _vstprintf vsprintf
@@ -68,7 +66,5 @@ typedef char TCHAR;
 #define _totupper toupper
 #define _tcstol strtol
 #define _tcstod strtod
-
-#define _istpunct ispunct
 
 #endif
