@@ -59,8 +59,8 @@ protected:
 public:
   void open_dbb();
   void close_db(int kennung);
-  void add_ds(int kennung,void *quelle);
-  void add_fdf(int feldkennung,int feldlaenge, void *quelle);
+  void add_ds(int kennung, const void *quelle);
+  void add_fdf(int feldkennung, int feldlaenge, const void *quelle);
   int16 fdf_findfield(uint8_t id) const;
 };
 

@@ -76,8 +76,9 @@ void DBB::open_dbb() {
   }
 }
 
-
-void DBB::add_ds(int kennung,void *quelle) {
+void
+DBB::add_ds(int kennung, const void *quelle)
+{
   HEADER *h = &header[kennung];
   // append record if there is space for it
   if ((dbcursor + h->dslaenge) < DBBEnd) {
@@ -94,8 +95,9 @@ void DBB::add_ds(int kennung,void *quelle) {
   }
 }
 
-
-void DBB::add_fdf(int feldkennung,int feldlaenge, void *quelle) {
+void
+DBB::add_fdf(int feldkennung,int feldlaenge, const void *quelle)
+{
   if ((fdfcursor+feldlaenge+2) < FrmEnd) {
     fdf[fdfcursor] = feldlaenge + 2;
     fdf[fdfcursor+1] = feldkennung;
