@@ -193,21 +193,11 @@ void
 IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
 {
   char c_record[500];
-  char id_string[MAX_PATH];
-  int i;
-
-  TCHAR tmpstring[MAX_PATH];
-  _tcscpy(tmpstring, id);
-  _tcsupr(tmpstring);
-  for (i = 0; i < (int)_tcslen(tmpstring); i++)
-    id_string[i] = (char)tmpstring[i];
-
-  id_string[i] = '\0';
 
   char *p = c_record;
   *p++ = 'C';
   p = FormatIGCLocation(p, location);
-  strcpy(p, id_string);
+  CopyASCIIUppper(p, id);
 
   WriteLine(c_record);
 }

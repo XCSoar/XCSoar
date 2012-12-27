@@ -255,6 +255,21 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end);
 #endif
 
 /**
+ * Like CopyUpper(), but convert all letters to upper-case.
+ */
+gcc_nonnull_all
+void
+CopyASCIIUppper(char *dest, const char *src);
+
+#ifdef _UNICODE
+
+gcc_nonnull_all
+void
+CopyASCIIUppper(char *dest, const TCHAR *src);
+
+#endif
+
+/**
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character.  If the string has no
  * non-whitespace characters, then a pointer to the NULL terminator is

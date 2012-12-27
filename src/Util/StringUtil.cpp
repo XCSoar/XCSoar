@@ -205,6 +205,39 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end)
 
 #endif
 
+void
+CopyASCIIUppper(char *dest, const char *src)
+{
+  do {
+    char ch = *src;
+    if (IsASCII(ch)) {
+      if (IsLowerAlphaASCII(ch))
+        ch -= 'a' - 'A';
+
+      *dest++ = ch;
+    }
+  } while (*src++ != '\0');
+}
+
+#ifdef _UNICODE
+
+void
+CopyASCIIUppper(char *dest, const TCHAR *src)
+{
+  do {
+    TCHAR t = *src;
+    if (IsASCII(t)) {
+      char ch = (char)t;
+      if (IsLowerAlphaASCII(ch))
+        ch -= 'a' - 'A';
+
+      *dest++ = ch;
+    }
+  } while (*src++ != '\0');
+}
+
+#endif
+
 const char *
 TrimLeft(const char *p)
 {
