@@ -43,28 +43,6 @@ char *utoa(unsigned value, char *digits, int base)
 
 #ifndef HAVE_MSVCRT
 
-char *ltoa(long value, char *digits, int base)
-{
-  char *d;
-  unsigned u;
-
-  d = digits;
-  if(base == 0)  base = 10;
-
-  if(digits == NULL || base < 2 || base > 36)  return NULL;
-
-  if (value < 0)
-    {
-      *d++ = '-';
-      u = -value;
-    }
-  else
-      u = value;
-
-  utoa(u, d, base);
-  return digits;
-}
-
 char *strupr(char *str)
 {
   char *string = str;
