@@ -17,9 +17,6 @@
 
 #include "utils.h"
 
-#include <ctype.h>
-#include <stdio.h>
-
 char *utoa(unsigned value, char *digits, int base)
 {
     const char *s = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -40,19 +37,3 @@ char *utoa(unsigned value, char *digits, int base)
     }
     return digits;
 }
-
-#ifndef HAVE_MSVCRT
-
-char *strupr(char *str)
-{
-  char *string = str;
-
-  if (str)
-    {
-      for ( ; *str; ++str)
-          *str = toupper(*str);
-    }
-
-  return string;
-}
-#endif

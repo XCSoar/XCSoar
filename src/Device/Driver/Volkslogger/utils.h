@@ -16,15 +16,3 @@
 ***********************************************************************/
 
 char *utoa(unsigned value, char *digits, int base);
-
-#ifdef HAVE_MSVCRT
-
-#include <stdlib.h>
-
-#else
-
-char *strupr(char *str);
-
-#endif
-
-
