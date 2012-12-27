@@ -24,6 +24,7 @@
 #include "Util.hpp"
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <memory.h>
 #include <string.h>
@@ -513,16 +514,16 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
 
 
 void VLAPI_DATA::DECLARATION::put(DBB *dbb) {
-  strupr(flightinfo.pilot);
-
-  char name[65];
-  char name2[17];
-  strncpy(name,flightinfo.pilot,sizeof(name));
+  const char *src = flightinfo.pilot;
   int i;
   for(i=0; i<4; i++) {
-    strncpy(name2,name+16*i,16);
-    name2[16] = 0;
-    dbb->add_fdf(i+1,17,name2);
+    char *dest = (char *)dbb->AddFDF(i + 1, 17);
+    if (dest == nullptr)
+      break;
+
+    for (unsigned i = 0; i < 16; ++i)
+      *dest++ = ToUpperASCII(*src++);
+    *dest = '\0';
   }
 
   dbb->AddFDFStringUpper(FLDGTY, flightinfo.glidertype);
