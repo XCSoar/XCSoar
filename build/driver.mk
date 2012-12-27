@@ -11,11 +11,8 @@ VOLKSLOGGER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Volkslogger/grecord.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapi2.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapihlp.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/vlutils.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlconv.cpp
-
-ifeq ($(HAVE_MSVCRT),n)
-VOLKSLOGGER_SOURCES += $(DRIVER_SRC_DIR)/Volkslogger/vlutils.cpp
-endif
 
 CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Protocol.cpp \

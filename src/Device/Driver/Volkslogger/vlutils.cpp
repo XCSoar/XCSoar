@@ -41,6 +41,8 @@ char *utoa(unsigned value, char *digits, int base)
     return digits;
 }
 
+#ifndef HAVE_MSVCRT
+
 char *ltoa(long value, char *digits, int base)
 {
   char *d;
@@ -63,7 +65,6 @@ char *ltoa(long value, char *digits, int base)
   return digits;
 }
 
-#ifndef HAVE_MSVCRT
 char *strupr(char *str)
 {
   char *string = str;
