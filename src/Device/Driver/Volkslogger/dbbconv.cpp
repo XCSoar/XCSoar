@@ -81,7 +81,7 @@ DBB::add_ds(int kennung, const void *quelle)
 {
   HEADER *h = &header[kennung];
   // append record if there is space for it
-  if ((dbcursor + h->dslaenge) < DBBEnd) {
+  if ((dbcursor + h->dslaenge) < sizeof(block)) {
     // and only if the database is still open
     if (h->dslast == 0xffff) {
       // save the position of the first record
@@ -98,7 +98,7 @@ DBB::add_ds(int kennung, const void *quelle)
 void
 DBB::add_fdf(int feldkennung, size_t feldlaenge, const void *quelle)
 {
-  if ((fdfcursor+feldlaenge+2) < FrmEnd) {
+  if ((fdfcursor+feldlaenge+2) < sizeof(fdf)) {
     fdf[fdfcursor] = feldlaenge + 2;
     fdf[fdfcursor+1] = feldkennung;
     memcpy(&fdf[fdfcursor+2],quelle, feldlaenge);
