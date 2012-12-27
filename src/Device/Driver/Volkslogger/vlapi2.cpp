@@ -518,7 +518,7 @@ VLAPI_DATA::DECLARATION::put(DBB *dbb) const
   const char *src = flightinfo.pilot;
   int i;
   for(i=0; i<4; i++) {
-    char *dest = (char *)dbb->AddFDF(i + 1, 17);
+    char *dest = (char *)dbb->AddFDF(FLDPLT + i, 17);
     if (dest == nullptr)
       break;
 
