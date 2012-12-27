@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-23 13:32+0100\n"
-"PO-Revision-Date: 2012-12-16 09:28+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2012-12-27 15:07+0000\n"
+"Last-Translator: Christophe Bougault <suspente@free.fr>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
-"X-Generator: Launchpad (build 16372)\n"
+"X-Launchpad-Export-Date: 2012-12-27 18:24+0000\n"
+"X-Generator: Launchpad (build 16378)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2652,27 +2652,27 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "Start démarrer/arrêter le compte à rebour"
 
 #: src/InfoBoxes/Content/Factory.cpp:1161
 #, no-c-format
 msgid "Start open"
-msgstr ""
+msgstr "Start ouvert"
 
 #: src/InfoBoxes/Content/Factory.cpp:1162
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé"
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "Start: démarrer/arrêter le compte à rebour"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Radiale N°1"
+msgstr "Start atteint"
 
 #: src/InfoBoxes/Content/Factory.cpp:1171
 #, no-c-format
@@ -2680,11 +2680,13 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé, "
+"comparé au temps estimé pour l'atteindre"
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Altn %d"
-msgstr "Dgmt 1"
+msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294
@@ -3893,19 +3895,19 @@ msgid "Set new audio scheme?  Old values will be lost."
 msgstr "Définir un nouveau son ? Les précedents seront effacés."
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
-msgstr "Volets positifs"
+msgstr "Positif"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Neutral"
-msgstr "Volets en lisse"
+msgstr "Neutre"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
-msgstr "Volets négatifs"
+msgstr "Négatif"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:59
 #, no-c-format
@@ -3923,9 +3925,9 @@ msgid "Middle"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Télécharger"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -3933,9 +3935,9 @@ msgid "Locked"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Transparent"
+msgstr "Non verrouillé"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -3962,9 +3964,8 @@ msgid "Speed command"
 msgstr "Commande de vitesse"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "Commutateurs"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -4747,16 +4748,12 @@ msgid "Status"
 msgstr "Etats"
 
 #: src/Dialogs/dlgStatus.cpp:125
-#, fuzzy
 msgid "Flight"
-msgstr "Temps de vol"
+msgstr "Vol"
 
 #: src/Dialogs/dlgStatus.cpp:128
-#, fuzzy
 msgid "System"
-msgstr ""
-"Options\n"
-"Système"
+msgstr "Système"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
@@ -4765,9 +4762,8 @@ msgid "Rules"
 msgstr "Règles"
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Heure"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
@@ -6052,18 +6048,16 @@ msgid ""
 msgstr "La carte sera orientée de façon à ce que l'objectif soit en haut."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "V Vent"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"L'affichage de la carte mobile sera orienté de façon à ce que la route du "
-"planeur soit vers le haut."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
@@ -6594,7 +6588,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
 #, no-c-format
 msgid "No wind arrow is drawn."
-msgstr ""
+msgstr "La flèche de vent n'est pas dessinée"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
 #, no-c-format
@@ -6688,11 +6682,11 @@ msgstr "Détermine la façon dont la flèche du vent est affiché sur la carte."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
 msgid "FAI triangle areas"
-msgstr ""
+msgstr "Secteurs de triangle FAI"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
 msgid "Show FAI triangle areas on the map."
-msgstr ""
+msgstr "Montrer les secteur de triangle FAI sur la carte"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:201
@@ -6749,7 +6743,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr ""
+msgstr "La référence est l'altitude  celle du niveau moyen de la mer"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
@@ -7530,11 +7524,11 @@ msgstr "Temps minimum de l'épreuve AAT en minutes."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
 msgid "Start open time"
-msgstr ""
+msgstr "Heure d'ouverture du start"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
 msgid "Start close time"
-msgstr ""
+msgstr "Heure de fermeture du start"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -7853,7 +7847,7 @@ msgstr "Dégagmts"
 
 #: src/Dialogs/TimeEntry.cpp:83
 msgid "Now"
-msgstr ""
+msgstr "Maintenant"
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7972,11 +7966,11 @@ msgstr "Ballon"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
 msgid "Track friends"
-msgstr ""
+msgstr "Suivre des amis"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Télécharger la position de vos amis en live sur le serveur Skylines"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
 msgid "Tracking Interval"
@@ -9137,6 +9131,15 @@ msgstr ""
 
 #~ msgid "Flap landing"
 #~ msgstr "Volets landing"
+
+#~ msgid "Flap positive"
+#~ msgstr "Volets positifs"
+
+#~ msgid "Flap negative"
+#~ msgstr "Volets négatifs"
+
+#~ msgid "Flap neutral"
+#~ msgstr "Volets en lisse"
 
 #~ msgid "v"
 #~ msgstr "v"
