@@ -24,6 +24,8 @@ Copyright_License {
 #include "Util.hpp"
 #include "Util/CharUtil.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 #include <string.h>
 
@@ -52,6 +54,18 @@ CopyUpper(char *dest, const char *src, const char *end)
   while (src < end)
     *dest++ = ToUpperASCII(*src++);
   return dest;
+}
+
+void
+CopyTerminatedUpper(char *dest, const char *src, size_t size)
+{
+  assert(dest != NULL);
+  assert(src != NULL);
+  assert(size > 0);
+
+  const char *end = std::find(src, src + size, '\0');
+  dest = CopyUpper(dest, src, end);
+  *dest = '\0';
 }
 
 void

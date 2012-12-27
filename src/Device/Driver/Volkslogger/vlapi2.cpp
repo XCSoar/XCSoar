@@ -290,9 +290,7 @@ VLAPI::read_igcfile(const char *filename, int index, int secmode)
 void VLAPI_DATA::WPT::get(const void *p) {
   const Volkslogger::Waypoint *src = (const Volkslogger::Waypoint *)p;
 
-  memcpy(name, src->name, sizeof(src->name));
-  name[sizeof(src->name)] = 0;
-  strupr(name);
+  CopyTerminatedUpper(name, src->name, sizeof(src->name));
 
   typ = (WPTTYP)(src->type_and_longitude_sign & 0x7f);
 
@@ -365,9 +363,7 @@ void VLAPI_DATA::DCLWPT::put(void *p) const {
 void VLAPI_DATA::ROUTE::get(const void *p) {
   const Volkslogger::Route *src = (const Volkslogger::Route *)p;
 
-  memcpy(name, src->name, sizeof(src->name));
-  name[sizeof(src->name)] = 0;
-  strupr(name);
+  CopyTerminatedUpper(name, src->name, sizeof(src->name));
 
   for(int i=0; i<10; i++)
     wpt[i].get(&src->waypoints[i]);
@@ -389,9 +385,7 @@ VLAPI_DATA::PILOT::get(const void *p)
 {
   const Volkslogger::Pilot *src = (const Volkslogger::Pilot *)p;
 
-  memcpy(name, src->name, sizeof(src->name));
-  name[sizeof(src->name)] = 0;
-  strupr(name);
+  CopyTerminatedUpper(name, src->name, sizeof(src->name));
 }
 
 void
