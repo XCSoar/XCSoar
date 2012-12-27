@@ -240,14 +240,8 @@ dlgTextEntryHighscoreType(TCHAR *text, size_t width,
   wf->SetKeyDownFunction(FormKeyDown);
 
   if (wf->ShowModal() == mrOK) {
+    TrimRight(edittext);
     CopyString(text, edittext, max_width);
-
-    // strip trailing spaces
-    int len = _tcslen(text) - 1;
-    while ((len > 0) && (text[len] == _T(' '))) {
-      text[len] = 0;
-      len--;
-    }
   }
 
   delete wf;
