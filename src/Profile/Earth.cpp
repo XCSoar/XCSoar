@@ -24,7 +24,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Geo/GeoPoint.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 bool
 Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)

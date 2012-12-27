@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <functional>
 
+#include <tchar.h>
+
 typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 
 bool

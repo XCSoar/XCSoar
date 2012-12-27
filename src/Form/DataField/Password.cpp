@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Password.hpp"
 
+#include <algorithm>
+
 const TCHAR *
 PasswordDataField::GetAsDisplayString() const
 {

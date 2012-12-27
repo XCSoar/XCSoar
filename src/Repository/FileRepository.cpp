@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "FileRepository.hpp"
 
+#include <algorithm>
+
 struct AvailableFileNameComparator {
   const char *name;
 

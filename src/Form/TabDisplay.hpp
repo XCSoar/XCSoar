@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Util/StaticString.hpp"
 
+#include <tchar.h>
+
 struct DialogLook;
 class Bitmap;
 class ContainerWindow;

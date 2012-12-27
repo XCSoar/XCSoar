@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <algorithm>
 #include <stdio.h>
+#include <tchar.h>
 
 using namespace InfoBoxFactory;
 

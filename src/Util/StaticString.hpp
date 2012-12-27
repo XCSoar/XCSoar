@@ -32,11 +32,12 @@
 
 #include "Util/StringUtil.hpp"
 
-#include <algorithm>
-
 #include <assert.h>
 #include <stddef.h>
+
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 /**
  * A string with a maximum size known at compile time.
@@ -302,6 +303,32 @@ public:
 
 /**
  * A string with a maximum size known at compile time.
+ * This is the char-based sister of the StaticString class.
+ */
+template<size_t max>
+class NarrowString: public StaticStringBase<char, max>
+{
+public:
+  NarrowString() = default;
+  explicit NarrowString(const char *value):StaticStringBase<char, max>(value) {}
+
+  NarrowString<max> &operator =(const char *new_value) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator =(new_value);
+  }
+
+  NarrowString<max> &operator +=(const char *new_value) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(new_value);
+  }
+
+  NarrowString<max> &operator +=(char ch) {
+    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(ch);
+  }
+};
+
+#ifdef _UNICODE
+
+/**
+ * A string with a maximum size known at compile time.
  * This is the TCHAR-based sister of the NarrowString class.
  */
 template<size_t max>
@@ -324,28 +351,8 @@ public:
   }
 };
 
-/**
- * A string with a maximum size known at compile time.
- * This is the char-based sister of the StaticString class.
- */
-template<size_t max>
-class NarrowString: public StaticStringBase<char, max>
-{
-public:
-  NarrowString() = default;
-  explicit NarrowString(const char *value):StaticStringBase<char, max>(value) {}
-
-  NarrowString<max> &operator =(const char *new_value) {
-    return (NarrowString<max> &)StaticStringBase<char, max>::operator =(new_value);
-  }
-
-  NarrowString<max> &operator +=(const char *new_value) {
-    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(new_value);
-  }
-
-  NarrowString<max> &operator +=(char ch) {
-    return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(ch);
-  }
-};
+#else
+#define StaticString NarrowString
+#endif
 
 #endif

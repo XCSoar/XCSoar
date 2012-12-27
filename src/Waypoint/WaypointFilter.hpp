@@ -29,6 +29,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 #include <stdint.h>
+#include <tchar.h>
 
 struct Waypoint;
 struct GeoPoint;

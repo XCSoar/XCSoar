@@ -28,6 +28,8 @@ Copyright_License {
 #include "Units/Unit.hpp"
 #include "Math/fixed.hpp"
 
+#include <tchar.h>
+
 class Angle;
 
 struct InfoBoxData {

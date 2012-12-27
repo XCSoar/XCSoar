@@ -25,6 +25,8 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
+#include <tchar.h>
+
 void
 LiveTrack24Settings::SetDefaults()
 {

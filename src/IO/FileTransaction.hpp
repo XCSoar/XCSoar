@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <windef.h> /* for MAX_PATH */
+#include <tchar.h>
 
 /**
  * Write to a temporary file, and then replace the old file

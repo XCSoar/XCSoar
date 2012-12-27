@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Util/StaticString.hpp"
 
+#include <tchar.h>
+
 struct DialogLook;
 
 class WndFrame : public PaintWindow {
