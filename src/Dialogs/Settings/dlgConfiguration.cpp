@@ -116,7 +116,6 @@ static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Pages"), 5, CreatePagesConfigPanel },
   {N_("InfoBox Sets"), 5, CreateInfoBoxesConfigPanel },
   {N_("Logger"), 6, CreateLoggerConfigPanel },
-  {N_("Logger Info"), 6, CreateLoggerInfoConfigPanel },
   {N_("Units"), 6, CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
