@@ -22,6 +22,7 @@
 #include "Database.hpp"
 
 #include <stdint.h>
+#include <stddef.h>
 
 class DBB {
 public:
@@ -31,12 +32,12 @@ public:
     FrmBeg  = 0x3000,
     FrmEnd  = 0x4000
   };
-  int dbcursor;
-  int fdfcursor;
+  size_t dbcursor;
+  size_t fdfcursor;
   struct HEADER {
-    int dsanzahl;
-    int dslaenge, keylaenge;
-    unsigned short int dsfirst, dslast;
+    unsigned dsanzahl;
+    unsigned dslaenge, keylaenge;
+    unsigned dsfirst, dslast;
   };
   HEADER header[8];
 public:
@@ -60,7 +61,7 @@ public:
   void open_dbb();
   void close_db(int kennung);
   void add_ds(int kennung, const void *quelle);
-  void add_fdf(int feldkennung, int feldlaenge, const void *quelle);
+  void add_fdf(int feldkennung, size_t feldlaenge, const void *quelle);
   int16 fdf_findfield(uint8_t id) const;
 };
 

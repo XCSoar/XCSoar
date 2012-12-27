@@ -96,7 +96,7 @@ DBB::add_ds(int kennung, const void *quelle)
 }
 
 void
-DBB::add_fdf(int feldkennung,int feldlaenge, const void *quelle)
+DBB::add_fdf(int feldkennung, size_t feldlaenge, const void *quelle)
 {
   if ((fdfcursor+feldlaenge+2) < FrmEnd) {
     fdf[fdfcursor] = feldlaenge + 2;
