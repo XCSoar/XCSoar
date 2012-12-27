@@ -42,6 +42,21 @@ LargeTextWindow::GetVisibleRows() const
   return GetHeight() / GetFont().GetHeight();
 }
 
+unsigned
+LargeTextWindow::GetRowCount() const
+{
+  AssertNoneLocked();
+
+  const TCHAR *str = value.c_str();
+  unsigned row_count = 1;
+  while ((str = _tcschr(str, _T('\n'))) != NULL) {
+    str++;
+    row_count++;
+  }
+
+  return row_count;
+}
+
 void
 LargeTextWindow::ScrollVertically(int delta_lines)
 {

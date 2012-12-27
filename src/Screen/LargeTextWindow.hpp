@@ -85,23 +85,17 @@ public:
   unsigned GetVisibleRows() const;
 #endif
 
+#ifndef USE_GDI
+  gcc_pure
+  unsigned GetRowCount() const;
+#else
   gcc_pure
   unsigned GetRowCount() const {
     AssertNoneLocked();
 
-#ifndef USE_GDI
-    const TCHAR *str = value.c_str();
-    int row_count = 1;
-
-    while ((str = _tcschr(str, _T('\n'))) != NULL) {
-      str++;
-      row_count++;
-    }
-    return row_count;
-#else /* USE_GDI */
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
-#endif /* USE_GDI */
   }
+#endif
 
   void SetText(const TCHAR *text);
 
