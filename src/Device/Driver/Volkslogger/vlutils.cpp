@@ -26,8 +26,8 @@ char *utoa(unsigned value, char *digits, int base)
 
     if (base == 0)
         base = 10;
-    if (digits == NULL || base < 2 || base > 36)
-        return NULL;
+    if (digits == nullptr || base < 2 || base > 36)
+        return nullptr;
     if (value < (unsigned) base) {
         digits[0] = s[value];
         digits[1] = '\0';
