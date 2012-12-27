@@ -61,7 +61,17 @@ public:
   void open_dbb();
   void close_db(int kennung);
   void add_ds(int kennung, const void *quelle);
+
+  /**
+   * Add a FDF entry.
+   *
+   * @return a writeable pointer of the specified size or nullptr if
+   * the buffer is full
+   */
+  void *AddFDF(uint8_t id, size_t size);
+
   void add_fdf(int feldkennung, size_t feldlaenge, const void *quelle);
+
   int16 fdf_findfield(uint8_t id) const;
 };
 

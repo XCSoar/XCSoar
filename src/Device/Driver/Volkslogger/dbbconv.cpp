@@ -20,9 +20,8 @@
 #include "dbbconv.h"
 #include "OS/ByteOrder.hpp"
 
-#include <memory.h>
 #include <string.h>
-
+#include <assert.h>
 
 DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
   memset(this,0xff,sizeof *this);
@@ -95,15 +94,28 @@ DBB::add_ds(int kennung, const void *quelle)
   }
 }
 
+void *
+DBB::AddFDF(uint8_t id, size_t size)
+{
+  assert(size + 2 <= 0xff);
+
+  if (fdfcursor + size + 2 > sizeof(fdf))
+    return nullptr;
+
+  fdf[fdfcursor++] = size + 2;
+  fdf[fdfcursor++] = id;
+
+  void *result = &fdf[fdfcursor];
+  fdfcursor += size;
+  return result;
+}
+
 void
 DBB::add_fdf(int feldkennung, size_t feldlaenge, const void *quelle)
 {
-  if ((fdfcursor+feldlaenge+2) < sizeof(fdf)) {
-    fdf[fdfcursor] = feldlaenge + 2;
-    fdf[fdfcursor+1] = feldkennung;
-    memcpy(&fdf[fdfcursor+2],quelle, feldlaenge);
-    fdfcursor += (feldlaenge + 2);
-  }
+  void *dest = AddFDF(feldkennung, feldlaenge);
+  if (dest != nullptr)
+    memcpy(dest, quelle, feldlaenge);
 }
 
 // find an actual record of specified type(id) in the declaration memory
