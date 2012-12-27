@@ -16,7 +16,7 @@
 ***********************************************************************/
 
 #include "grecord.h"
-#include "vlapihlp.h"
+#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -161,7 +161,7 @@ Filtern einer Zeile:
 static char *
 filterline(char *st)
 {
-  strtrim(st);
+  TrimRight(st);
   if (!(
       (st[0]=='A')
    || (st[0]=='B')

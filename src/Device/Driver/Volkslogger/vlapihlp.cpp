@@ -17,6 +17,7 @@
 
 #include "vlapihlp.h"
 #include "utils.h"
+#include "Util/StringUtil.hpp"
 
 #include <string.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@
 /*
 Filtern einer Zeile:
   - Umwandeln von nicht-IGC-Zeichen in Leerzeichen
-  - Entfernen von Leer- und Sonderzeichen am Ende (strtrim)
+  - Entfernen von Leer- und Sonderzeichen am Ende (TrimRight)
 */
 char *igc_filter(char *st) {
  static const char* alphabet = " \"#%&\'()+-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_\140abcdefghijklmnopqrstuvwxyz{|}";
@@ -41,25 +42,9 @@ char *igc_filter(char *st) {
 	found = 1;
     if (!found) st[i] = ' ';
   }
-  strtrim(st);
+  TrimRight(st);
   return st;
 }
-
-/*
-Steuer- und Leerzeichen am Ende des strings *st enfernen
-*/
-char *strtrim(char *st) {
- int i;
- int l;
-  l = strlen(st);
-  for(i=l; i>=0; i--) {
-    if (st[i] < 33)        // Steuerzeichen am Ende entfernen
-      st[i] = 0;
-    else break;
-  }
-  return st;
-}
-
 
 // Aus einer 2byte-Binärzahl einen base-36 Seriennummernstring machen
 char *wordtoserno(word Binaer) {
