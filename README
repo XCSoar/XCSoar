@@ -69,7 +69,7 @@ On Debian, you may install these using the following command:
 For Android, you need:
 
 - Android SDK (http://developer.android.com/sdk/)
-- Android NDK r8c (http://developer.android.com/sdk/ndk/)
+- Android NDK r8d (http://developer.android.com/sdk/ndk/)
 - Ogg Vorbis (http://www.vorbis.com/)
 
 For Mac OS X, you need:
