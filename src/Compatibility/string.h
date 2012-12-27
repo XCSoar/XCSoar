@@ -41,10 +41,6 @@ _strupr(char *p)
   return p;
 }
 
-#if !defined(_istalnum)
-  #define _istalnum isalnum
-#endif
-
 #define _strdup strdup
 
 #endif /* !HAVE_MSVCRT */

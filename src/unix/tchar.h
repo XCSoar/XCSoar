@@ -69,7 +69,6 @@ typedef char TCHAR;
 #define _tcstol strtol
 #define _tcstod strtod
 
-#define _istalnum isalnum
 #define _istpunct ispunct
 
 #endif
