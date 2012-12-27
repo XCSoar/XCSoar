@@ -122,7 +122,7 @@ class VLAPI_DATA {
     } task;
   protected:
     void get(DBB *dbb);
-    void put(DBB *dbb);
+    void put(DBB *dbb) const;
   };
 
   struct VLINFO {

@@ -512,8 +512,9 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
   }
 }
 
-
-void VLAPI_DATA::DECLARATION::put(DBB *dbb) {
+void
+VLAPI_DATA::DECLARATION::put(DBB *dbb) const
+{
   const char *src = flightinfo.pilot;
   int i;
   for(i=0; i<4; i++) {
