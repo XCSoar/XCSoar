@@ -514,10 +514,6 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
 
 void VLAPI_DATA::DECLARATION::put(DBB *dbb) {
   strupr(flightinfo.pilot);
-  strupr(flightinfo.glidertype);
-  strupr(flightinfo.gliderid);
-  strupr(flightinfo.competitionclass);
-  strupr(flightinfo.competitionid);
 
   char name[65];
   char name2[17];
@@ -529,12 +525,10 @@ void VLAPI_DATA::DECLARATION::put(DBB *dbb) {
     dbb->add_fdf(i+1,17,name2);
   }
 
-  dbb->add_fdf(FLDGTY, strlen(flightinfo.glidertype)+1, flightinfo.glidertype);
-  dbb->add_fdf(FLDGID, strlen(flightinfo.gliderid)+1, flightinfo.gliderid);
-  dbb->add_fdf(FLDCCL, strlen(flightinfo.competitionclass)+1,
-               flightinfo.competitionclass);
-  dbb->add_fdf(FLDCID, strlen(flightinfo.competitionid)+1,
-               flightinfo.competitionid);
+  dbb->AddFDFStringUpper(FLDGTY, flightinfo.glidertype);
+  dbb->AddFDFStringUpper(FLDGID, flightinfo.gliderid);
+  dbb->AddFDFStringUpper(FLDCCL, flightinfo.competitionclass);
+  dbb->AddFDFStringUpper(FLDCID, flightinfo.competitionid);
 
   uint8_t fdfwpt[16]; // temporary space for data conversions
   flightinfo.homepoint.put(fdfwpt);

@@ -19,6 +19,7 @@
 
 #include "dbbconv.h"
 #include "OS/ByteOrder.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <string.h>
 #include <assert.h>
@@ -116,6 +117,18 @@ DBB::add_fdf(int feldkennung, size_t feldlaenge, const void *quelle)
   void *dest = AddFDF(feldkennung, feldlaenge);
   if (dest != nullptr)
     memcpy(dest, quelle, feldlaenge);
+}
+
+void
+DBB::AddFDFStringUpper(uint8_t id, const char *src)
+{
+  char *dest = (char *)AddFDF(id, strlen(src) + 1);
+  if (dest == nullptr)
+    return;
+
+  do {
+    *dest++ = ToUpperASCII(*src++);
+  } while (*src != '\0');
 }
 
 // find an actual record of specified type(id) in the declaration memory

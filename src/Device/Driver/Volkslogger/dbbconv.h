@@ -72,6 +72,12 @@ public:
 
   void add_fdf(int feldkennung, size_t feldlaenge, const void *quelle);
 
+  /**
+   * Add a FDF entry with the specified string value (convert to upper
+   * case).
+   */
+  void AddFDFStringUpper(uint8_t id, const char *value);
+
   int16 fdf_findfield(uint8_t id) const;
 };
 
