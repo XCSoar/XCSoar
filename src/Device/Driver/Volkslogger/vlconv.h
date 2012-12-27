@@ -90,7 +90,6 @@ struct DIRENTRY {
   long recordingtime; // length of trace in seconds
   int	 takeoff;				// set to one if VL has detected a takeoff
 											//  (v>10kt) inside this trace
-  char filename[15];  // filename as required by IGC
   char pilot[65];					// flight-info, can be enhanced by all
 	char competitionid[4];	// headerfields, but these here might be
 	char gliderid[8];				// enough

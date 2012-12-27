@@ -1010,46 +1010,6 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   return pl;
 }
 
-// Members of class DIRENTRY
-static char *
-gen_filename(DIRENTRY *de, int flightnum)
-{
-  static char tempfn[15];
-  char temps[17];
-  int dd, mm, yy;
-
-  yy = de->firsttime.tm_year % 10;
-  mm = de->firsttime.tm_mon % 12 + 1;
-  dd = de->firsttime.tm_mday % 32;
-
-  itoa(yy, temps, 10);
-  strcpy(tempfn, temps);
-
-  itoa(mm, temps, 36);
-  strcat(tempfn, temps);
-
-  itoa(dd, temps, 36);
-  strcat(tempfn, temps);
-
-  strcat(tempfn, MFR_ID2); // Manufacturer code
-
-  strcat(tempfn, wordtoserno(de->serno));
-
-  if (flightnum < 36) // Flightnumber between 0 and 35
-    itoa(flightnum, temps, 36); // otherwise "_"
-  else
-    strcpy(temps, "_");
-
-  strcat(tempfn, temps);
-  strcat(tempfn, ".igc");
-  strupr(tempfn);
-
-  // The filename should also be saved
-  strcpy(de->filename, tempfn);
-
-  return tempfn;
-}
-
 // Members of class DIR
 int
 conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
@@ -1086,7 +1046,6 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
       pilot3[0] = 0;
       pilot4[0] = 0;
       de.takeoff = 0;
-      de.filename[0] = 0;
       bfv = p[0] & ~rectyp_msk;
       if (bfv > max_bfv)
         return -1;
@@ -1206,7 +1165,6 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
         strcat(de.pilot, pilot2);
         strcat(de.pilot, pilot3);
         strcat(de.pilot, pilot4);
-        gen_filename(&de, flight_of_day);
 
         flights[number_of_flights] = de;
       }
