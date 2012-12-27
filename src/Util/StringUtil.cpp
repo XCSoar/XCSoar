@@ -26,7 +26,6 @@ Copyright_License {
 #include "Compatibility/string.h"
 
 #include <string.h>
-#include <ctype.h>
 #include <algorithm>
 
 bool
@@ -333,8 +332,8 @@ NormalizeSearchString(char *gcc_restrict dest,
   char *retval = dest;
 
   for (; !StringIsEmpty(src); ++src)
-    if (static_cast<unsigned>(*src) < 128 && isalnum(*src))
-      *dest++ = toupper(*src);
+    if (IsAlphaNumericASCII(*src))
+      *dest++ = ToUpperASCII(*src);
 
   *dest = '\0';
 
@@ -349,8 +348,8 @@ NormalizeSearchString(TCHAR *gcc_restrict dest,
   TCHAR *retval = dest;
 
   for (; !StringIsEmpty(src); ++src)
-    if (static_cast<unsigned>(*src) < 128 && _istalnum(*src))
-      *dest++ = _totupper(*src);
+    if (IsAlphaNumericASCII(*src))
+      *dest++ = ToUpperASCII(*src);
 
   *dest = _T('\0');
 
