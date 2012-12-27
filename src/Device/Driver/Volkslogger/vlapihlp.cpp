@@ -47,14 +47,16 @@ char *igc_filter(char *st) {
 }
 
 // Aus einer 2byte-Binärzahl einen base-36 Seriennummernstring machen
-char *wordtoserno(word Binaer) {
+char *
+wordtoserno(unsigned Binaer)
+{
  char SerNStr[4];
  static char Seriennummer[4];
  int i,l;
   // limitation
   if (Binaer > 46655L)
     Binaer = 46655L;
-  ltoa(Binaer,SerNStr,36);
+  utoa(Binaer,SerNStr,36);
   sprintf(Seriennummer,"%3s",SerNStr);
   strupr(Seriennummer);
   // generate leading zeroes

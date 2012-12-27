@@ -25,7 +25,7 @@
 
 
 char *igc_filter(char *);
-char *wordtoserno(word);
+char *wordtoserno(unsigned);
 long pressure2altitude(word);
 
 
