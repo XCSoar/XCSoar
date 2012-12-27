@@ -53,16 +53,12 @@ typedef char TCHAR;
 #define _tcsrchr strrchr
 #define _tcspbrk strpbrk
 #define _tcscat strcat
-#define _tcsncat strncat
 #define _T(x) x
 #define _tfopen fopen
 #define _TEOF EOF
-#define _fgetts fgets
 #define _putts puts
 #define _stscanf sscanf
 
-#define _tcstok strtok
-#define _totupper toupper
 #define _tcstol strtol
 #define _tcstod strtod
 
