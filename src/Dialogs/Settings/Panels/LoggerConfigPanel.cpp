@@ -32,11 +32,13 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 
 enum ControlIndex {
+  PilotName,
   LoggerTimeStepCruise,
   LoggerTimeStepCircling,
   DisableAutoLogger,
   EnableNMEALogger,
   EnableFlightLogger,
+  LoggerID,
 };
 
 class LoggerConfigPanel final : public RowFormWidget {
@@ -63,6 +65,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const LoggerSettings &logger = settings_computer.logger;
 
   RowFormWidget::Prepare(parent, rc);
+  AddText(_("Pilot name"), NULL, logger.pilot_name);
 
   AddTime(_("Time step cruise"),
           _("This is the time interval between logged points when not circling."),
@@ -89,6 +92,9 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Log book"), _("Logs each start and landing."),
              logger.enable_flight_logger);
   SetExpertRow(EnableFlightLogger);
+
+  AddText(_("Logger ID"), NULL, logger.logger_id);
+  SetExpertRow(LoggerID);
 }
 
 bool
@@ -96,6 +102,9 @@ LoggerConfigPanel::Save(bool &changed)
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
+
+  changed |= SaveValue(PilotName, ProfileKeys::PilotName,
+                       logger.pilot_name.buffer(), logger.pilot_name.MAX_SIZE);
 
   changed |= SaveValue(LoggerTimeStepCruise, ProfileKeys::LoggerTimeStepCruise,
                        logger.time_step_cruise);
@@ -122,6 +131,9 @@ LoggerConfigPanel::Save(bool &changed)
        setting */
     require_restart = true;
   }
+
+  changed |= SaveValue(LoggerID, ProfileKeys::LoggerID,
+                       logger.logger_id.buffer(), logger.logger_id.MAX_SIZE);
 
   return true;
 }

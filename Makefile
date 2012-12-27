@@ -230,7 +230,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LayoutConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LoggerConfigPanel.cpp \
-	$(SRC)/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
