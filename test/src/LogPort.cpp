@@ -38,8 +38,8 @@ Copyright_License {
 class MyHandler : public DataHandler {
 public:
   virtual void DataReceived(const void *data, size_t length) {
-    TCHAR prefix[16];
-    _stprintf(prefix, _T("%12u "), MonotonicClockMS());
+    char prefix[16];
+    sprintf(prefix, "%12u ", MonotonicClockMS());
     HexDump(prefix, data, length);
   }
 };

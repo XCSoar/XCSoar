@@ -28,7 +28,6 @@ Copyright_License {
 #include "LogFile.hpp"
 
 #include <stdint.h>
-#include <stdio.h>
 
 static inline bool
 IsPrintable(uint8_t ch)
@@ -37,42 +36,42 @@ IsPrintable(uint8_t ch)
 }
 
 static inline void
-HexDumpLine(const TCHAR *prefix, unsigned offset,
+HexDumpLine(const char *prefix, unsigned offset,
             const uint8_t *data, size_t length)
 {
-  StaticString<128> line;
+  NarrowString<128> line;
   line.clear();
 
   for (size_t i = 0; i < length; ++i) {
     if ((i & 0x7) == 0)
-      line += _T(" ");
+      line += " ";
 
-    line.AppendFormat(_T(" %02x"), data[i]);
+    line.AppendFormat(" %02x", data[i]);
   }
 
   for (size_t i = length; i < 0x10; ++i) {
     if ((i & 0x7) == 0)
-      line += _T(" ");
+      line += " ";
 
-    line += _T("   ");
+    line += "   ";
   }
 
-  line += _T(" ");
+  line += " ";
   for (size_t i = 0; i < length; ++i) {
     if ((i & 0x7) == 0)
-      line += _T(" ");
+      line += " ";
 
-    TCHAR byte[2];
-    byte[0] = IsPrintable(data[i]) ? (TCHAR)data[i] : '.';
-    byte[1] = _T('\0');
+    char byte[2];
+    byte[0] = IsPrintable(data[i]) ? (char)data[i] : '.';
+    byte[1] = '\0';
     line += byte;
   }
 
-  LogStartUp(_T("%s%04x%s"), prefix, offset, line.c_str());
+  LogFormat("%s%04x%s", prefix, offset, line.c_str());
 }
 
 static inline void
-HexDump(const TCHAR *prefix, const void *_data, size_t length)
+HexDump(const char *prefix, const void *_data, size_t length)
 {
   const uint8_t *data = (const uint8_t *)_data;
   unsigned offset = 0;
@@ -90,7 +89,7 @@ HexDump(const TCHAR *prefix, const void *_data, size_t length)
 static inline void
 HexDump(const void *data, size_t length)
 {
-  HexDump(_T(""), data, length);
+  HexDump("", data, length);
 }
 
 #endif

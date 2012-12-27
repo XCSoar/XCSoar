@@ -46,7 +46,7 @@ DumpPort::Write(const void *data, size_t length)
   LogFormat("Write(%u)", (unsigned)length);
   size_t nbytes = port->Write(data, length);
   LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
-  HexDump(_T("W "), data, nbytes);
+  HexDump("W ", data, nbytes);
   return nbytes;
 }
 
@@ -98,7 +98,7 @@ DumpPort::Read(void *buffer, size_t size)
   int nbytes = port->Read(buffer, size);
   LogFormat("Read(%u)=%d", (unsigned)size, nbytes);
   if (nbytes > 0)
-    HexDump(_T("R "), buffer, nbytes);
+    HexDump("R ", buffer, nbytes);
   return nbytes;
 }
 
