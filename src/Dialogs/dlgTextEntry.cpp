@@ -111,24 +111,29 @@ UpdateCursor()
     wGrid->Invalidate();
 }
 
+/**
+ * Find a letter in the list and returns its index.  Returns 0
+ * (i.e. the index of the space character) if the given letter is
+ * unknown.
+ */
+gcc_const
+static unsigned
+FindEntryLetter(TCHAR ch)
+{
+  for (unsigned i = 0; i < (int)MAXENTRYLETTERS; ++i)
+    if (EntryLetters[i] == ch)
+      return i;
+
+  return 0;
+}
+
 static void
 MoveCursor()
 {
   if (cursor >= _tcslen(edittext))
     edittext[cursor + 1] = 0;
 
-  for (lettercursor = 0; lettercursor < (int)MAXENTRYLETTERS; lettercursor++) {
-    if (edittext[cursor] == EntryLetters[lettercursor])
-      break;
-  }
-
-  if (lettercursor == MAXENTRYLETTERS) {
-    lettercursor = 0;
-    edittext[cursor] = EntryLetters[lettercursor];
-  }
-
-  if (edittext[cursor] == 0)
-    lettercursor = 0;
+  lettercursor = FindEntryLetter(edittext[cursor]);
 
   UpdateCursor();
 }
