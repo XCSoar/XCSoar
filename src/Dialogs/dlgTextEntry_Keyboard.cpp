@@ -238,7 +238,6 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
   ClearText();
 
   if (!StringIsEmpty(text)) {
-    _tcsupr(text);
     CopyString(edittext, text, width);
     cursor = _tcslen(text);
   }
