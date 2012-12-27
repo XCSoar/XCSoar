@@ -47,11 +47,10 @@ char *igc_filter(char *st) {
 }
 
 // Aus einer 2byte-Binärzahl einen base-36 Seriennummernstring machen
-char *
-wordtoserno(unsigned Binaer)
+void
+wordtoserno(char *Seriennummer, unsigned Binaer)
 {
  char SerNStr[4];
- static char Seriennummer[4];
  int i,l;
   // limitation
   if (Binaer > 46655L)
@@ -65,7 +64,6 @@ wordtoserno(unsigned Binaer)
     if (Seriennummer[i] == ' ')
       Seriennummer[i] = '0';
   };
-  return Seriennummer;
 }
 
 

@@ -797,7 +797,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
         *serno = (256L * p2[1] + p2[2]);
 
         // sonstiges einlesen
-        strcpy(igcheader.A, wordtoserno(*serno));
+        wordtoserno(igcheader.A, *serno);
 
         sprintf(igcheader.DTM, "%03u", p2[3]);
         sprintf(igcheader.RHW, "%0X.%0X", p2[4] >> 4, (p2[4] & 0xf));
