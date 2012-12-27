@@ -52,7 +52,8 @@ static size_t max_width;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
-static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
+static constexpr TCHAR EntryLetters[] =
+  _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
 #define MAXENTRYLETTERS (ARRAY_SIZE(EntryLetters) - 1)
 
