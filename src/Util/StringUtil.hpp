@@ -71,13 +71,31 @@ StringStartsWith(const char *haystack, const char *needle)
   return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
 
+gcc_pure
+bool
+StringEndsWith(const char *haystack, const char *needle);
+
+gcc_pure
+bool
+StringEndsWithIgnoreCase(const char *haystack, const char *needle);
+
 #ifdef _UNICODE
+
 gcc_pure
 static inline bool
 StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
 {
   return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
+
+gcc_pure
+bool
+StringEndsWith(const TCHAR *haystack, const TCHAR *needle);
+
+gcc_pure
+bool
+StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle);
+
 #endif
 
 gcc_pure

@@ -29,6 +29,52 @@ Copyright_License {
 #include <ctype.h>
 #include <algorithm>
 
+bool
+StringEndsWith(const char *haystack, const char *needle)
+{
+  const size_t haystack_length = StringLength(haystack);
+  const size_t needle_length = StringLength(needle);
+
+  return haystack_length >= needle_length &&
+    StringIsEqual(haystack + haystack_length - needle_length, needle);
+}
+
+bool
+StringEndsWithIgnoreCase(const char *haystack, const char *needle)
+{
+  const size_t haystack_length = StringLength(haystack);
+  const size_t needle_length = StringLength(needle);
+
+  return haystack_length >= needle_length &&
+    StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
+                            needle);
+}
+
+#ifdef _UNICODE
+
+bool
+StringEndsWith(const TCHAR *haystack, const TCHAR *needle)
+{
+  const size_t haystack_length = StringLength(haystack);
+  const size_t needle_length = StringLength(needle);
+
+  return haystack_length >= needle_length &&
+    StringIsEqual(haystack + haystack_length - needle_length, needle);
+}
+
+bool
+StringEndsWithIgnoreCase(const TCHAR *haystack, const TCHAR *needle)
+{
+  const size_t haystack_length = StringLength(haystack);
+  const size_t needle_length = StringLength(needle);
+
+  return haystack_length >= needle_length &&
+    StringIsEqualIgnoreCase(haystack + haystack_length - needle_length,
+                            needle);
+}
+
+#endif
+
 const char *
 StringAfterPrefix(const char *string, const char *prefix)
 {
