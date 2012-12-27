@@ -72,15 +72,4 @@ typedef char TCHAR;
 #define _istalnum isalnum
 #define _istpunct ispunct
 
-#define _tcsupr CharUpper
-
-static inline TCHAR *
-CharUpper(TCHAR *s)
-{
-  TCHAR *p;
-  for (p = s; *p != 0; ++p)
-    *p = (TCHAR)toupper(*p);
-  return s;
-}
-
 #endif
