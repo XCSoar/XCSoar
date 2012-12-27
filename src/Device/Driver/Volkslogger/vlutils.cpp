@@ -22,7 +22,7 @@
 
 char *utoa(unsigned value, char *digits, int base)
 {
-    const char *s = "0123456789abcdefghijklmnopqrstuvwxyz";
+    const char *s = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     if (base == 0)
         base = 10;

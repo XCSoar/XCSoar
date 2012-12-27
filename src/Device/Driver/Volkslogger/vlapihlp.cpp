@@ -57,7 +57,6 @@ wordtoserno(char *Seriennummer, unsigned Binaer)
     Binaer = 46655L;
   utoa(Binaer,SerNStr,36);
   sprintf(Seriennummer,"%3s",SerNStr);
-  strupr(Seriennummer);
   // generate leading zeroes
   l = strlen(Seriennummer);
   for (i=0; i<l; i++) {
