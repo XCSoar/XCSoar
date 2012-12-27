@@ -23,8 +23,6 @@
 
 char *utoa(unsigned value, char *digits, int base);
 
-char *itoa(int value, char *digits, int base);
-
 char *ltoa(long value, char *digits, int base);
 
 #ifndef __CYGWIN__

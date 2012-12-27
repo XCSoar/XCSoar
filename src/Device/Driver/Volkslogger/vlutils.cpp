@@ -41,27 +41,6 @@ char *utoa(unsigned value, char *digits, int base)
     return digits;
 }
 
-char *itoa(int value, char *digits, int base)
-{
-  unsigned u;
-
-  char *d = digits;
-  if(base == 0)  base = 10;
-
-  if(digits == NULL || base < 2 || base > 36)  return NULL;
-  if(value < 0)
-    {
-      *d++ = '-';
-      u = -value;
-    }
-  else
-      u = value;
-
-  utoa(u, d, base);
-  return digits;
-}
-
-
 char *ltoa(long value, char *digits, int base)
 {
   char *d;
