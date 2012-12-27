@@ -273,7 +273,7 @@ TaskListPanel::DeleteTask()
   const TCHAR *path = task_store->GetPath(cursor_index);
   if (StringEndsWithIgnoreCase(path, _T(".cup"))) {
     ShowMessageBox(_("Can't delete .CUP files"), _("Delete Error"),
-        MB_ICONEXCLAMATION);
+                   MB_OK | MB_ICONEXCLAMATION);
     return;
   }
 
