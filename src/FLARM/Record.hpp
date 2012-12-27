@@ -31,15 +31,20 @@ Copyright_License {
 
 class FlarmId;
 
+constexpr
+static inline size_t
+LatinBufferSize(size_t size)
+{
 #ifdef _UNICODE
 /* with wide characters, the exact size of the FLARMNet database field
    (plus one for the terminator) is just right, ... */
-#define LatinBufferSize(s) (s)
+  return size;
 #else
 /* ..., but when we convert Latin-1 to UTF-8, we need a little bit
    more buffer */
-#define LatinBufferSize(s) ((s) * 3 / 2 + 1)
+  return size * 3 / 2 + 1;
 #endif
+}
 
 /**
  * FlarmNet.org file entry
