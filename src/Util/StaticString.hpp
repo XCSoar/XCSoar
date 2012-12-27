@@ -45,17 +45,21 @@ template<typename T, size_t max>
 class StaticStringBase
 {
 public:
+  typedef T value_type;
+  typedef T *pointer;
+  typedef const T *const_pointer;
+  typedef const_pointer const_iterator;
   typedef size_t size_type;
 
   static constexpr size_type MAX_SIZE = max;
-  static constexpr T SENTINEL = '\0';
+  static constexpr value_type SENTINEL = '\0';
 
 protected:
-  T data[max];
+  value_type data[max];
 
 public:
   StaticStringBase() = default;
-  explicit StaticStringBase(const T *value) {
+  explicit StaticStringBase(const_pointer value) {
     set(value);
   }
 
@@ -88,7 +92,7 @@ public:
   }
 
   void SetASCII(const char *src, const char *src_end) {
-    T *end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
+    pointer end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
     *end = SENTINEL;
   }
 
@@ -98,7 +102,7 @@ public:
 
 #ifdef _UNICODE
   void SetASCII(const TCHAR *src, const TCHAR *src_end) {
-    T *end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
+    pointer end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
     *end = SENTINEL;
   }
 
@@ -114,33 +118,33 @@ public:
     CopyASCII(data, data);
   }
 
-  bool equals(const T *other) const {
+  bool equals(const_pointer other) const {
     assert(other != nullptr);
 
     return StringIsEqual(data, other);
   }
 
   gcc_pure
-  bool StartsWith(const T *prefix) const {
+  bool StartsWith(const_pointer prefix) const {
     return StringStartsWith(data, prefix);
   }
 
   gcc_pure
-  bool Contains(const T *needle) const {
+  bool Contains(const_pointer needle) const {
     return StringFind(data, needle) != nullptr;
   }
 
   /**
    * Returns a writable buffer.
    */
-  T *buffer() {
+  pointer buffer() {
     return data;
   }
 
   /**
    * Returns one character.  No bounds checking.
    */
-  T operator[](size_type i) const {
+  value_type operator[](size_type i) const {
     assert(i <= length());
 
     return data[i];
@@ -149,51 +153,51 @@ public:
   /**
    * Returns one writable character.  No bounds checking.
    */
-  T &operator[](size_type i) {
+  value_type &operator[](size_type i) {
     assert(i <= length());
 
     return data[i];
   }
 
-  const T *begin() const {
+  const_iterator begin() const {
     return data;
   }
 
-  const T *end() const {
+  const_iterator end() const {
     return data + length();
   }
 
-  T last() const {
+  value_type last() const {
     assert(length() > 0);
 
     return data[length() - 1];
   }
 
-  const T *get() const {
+  const_pointer get() const {
     return data;
   }
 
-  void set(const T *new_value) {
+  void set(const_pointer new_value) {
     assert(new_value != nullptr);
 
     CopyString(data, new_value, MAX_SIZE);
   }
 
-  void set(const T *new_value, size_type length) {
+  void set(const_pointer new_value, size_type length) {
     assert(new_value != nullptr);
 
     size_type max_length = (MAX_SIZE < length + 1) ? MAX_SIZE : length + 1;
     CopyString(data, new_value, max_length);
   }
 
-  void append(const T *new_value) {
+  void append(const_pointer new_value) {
     assert(new_value != nullptr);
 
     size_type len = length();
     CopyString(data + len, new_value, MAX_SIZE - len);
   }
 
-  void append(const T *new_value, size_type _length) {
+  void append(const_pointer new_value, size_type _length) {
     assert(new_value != nullptr);
 
     size_type len = length();
@@ -202,7 +206,7 @@ public:
     CopyString(data + len, new_value, max_length);
   }
 
-  bool Append(T ch) {
+  bool Append(value_type ch) {
     size_t l = length();
     if (l >= MAX_SIZE - 1)
       return false;
@@ -220,33 +224,33 @@ public:
     CopyASCII(data + length(), p);
   }
 
-  const T *c_str() const {
+  const_pointer c_str() const {
     return get();
   }
 
-  operator const T *() const {
+  operator const_pointer() const {
     return get();
   }
 
-  bool operator ==(const T *value) const {
+  bool operator ==(const_pointer value) const {
     return equals(value);
   }
 
-  bool operator !=(const T *value) const {
+  bool operator !=(const_pointer value) const {
     return !equals(value);
   }
 
-  StaticStringBase<T, max> &operator =(const T *new_value) {
+  StaticStringBase<T, max> &operator =(const_pointer new_value) {
     set(new_value);
     return *this;
   }
 
-  StaticStringBase<T, max> &operator +=(const T *new_value) {
+  StaticStringBase<T, max> &operator +=(const_pointer new_value) {
     append(new_value);
     return *this;
   }
 
-  StaticStringBase<T, max> &operator +=(T ch) {
+  StaticStringBase<T, max> &operator +=(value_type ch) {
     Append(ch);
     return *this;
   }
@@ -254,14 +258,14 @@ public:
   /**
    * Don't use - not thread safe.
    */
-  T *first_token(const T *delim) {
+  pointer first_token(const_pointer delim) {
     return StringToken(data, delim);
   }
 
   /**
    * Don't use - not thread safe.
    */
-  T *next_token(const T *delim) {
+  pointer next_token(const_pointer delim) {
     return StringToken(nullptr, delim);
   }
 
@@ -270,7 +274,7 @@ public:
    * truncated if it is too long for the buffer.
    */
   template<typename... Args>
-  void Format(const T *fmt, Args&&... args) {
+  void Format(const_pointer fmt, Args&&... args) {
     StringFormat(data, MAX_SIZE, fmt, args...);
   }
 
@@ -279,7 +283,7 @@ public:
    * if it would become too long for the buffer.
    */
   template<typename... Args>
-  void AppendFormat(const T *fmt, Args&&... args) {
+  void AppendFormat(const_pointer fmt, Args&&... args) {
     size_t l = length();
     StringFormat(data + l, MAX_SIZE - l, fmt, args...);
   }
