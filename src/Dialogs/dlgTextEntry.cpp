@@ -41,8 +41,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
 
