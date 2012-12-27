@@ -236,11 +236,7 @@ dlgTextEntryHighscoreType(TCHAR *text, size_t width,
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
   cursor = 0;
-  edittext[0] = 0;
-  edittext[1] = 0;
-  if (!StringIsEmpty(text)) {
-    CopyString(edittext, text, max_width);
-  }
+  CopyString(edittext, text, max_width);
   MoveCursor();
 
   wf->SetKeyDownFunction(FormKeyDown);
