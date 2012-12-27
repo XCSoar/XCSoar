@@ -38,7 +38,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
-#include "Panels/PolarConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"
 #include "Panels/TimeConfigPanel.hpp"
 #include "Panels/LoggerConfigPanel.hpp"
@@ -118,7 +117,6 @@ static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Pages"), 5, CreatePagesConfigPanel },
   {N_("InfoBox Sets"), 5, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, CreateDevicesConfigPanel },
-  {N_("Polar"), 6, CreatePolarConfigPanel },
   {N_("Logger"), 6, CreateLoggerConfigPanel },
   {N_("Logger Info"), 6, CreateLoggerInfoConfigPanel },
   {N_("Units"), 6, CreateUnitsConfigPanel },

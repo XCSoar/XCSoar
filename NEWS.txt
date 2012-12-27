@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7 - not yet released
 * user interface
   - added AutoZoom gesture (up-down)
+  - obsolete configuration page "polar" removed
 * map
   - terrain countour lines (#2451)
 * waypoint editor

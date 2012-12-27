@@ -281,10 +281,6 @@ XMLDIALOG(IDR_XML_WAYPOINTSELECT, "WaypointList")
 XMLDIALOG(IDR_XML_WAYPOINTSELECT_L, "WaypointList_L")
 XMLDIALOG(IDR_XML_WEATHER, "dlgWeather")
 
-// configuration menu
-XMLDIALOG(IDR_XML_POLARCONFIGPANEL, "Configuration/PolarConfigPanel")
-XMLDIALOG(IDR_XML_POLARCONFIGPANEL_L, "Configuration/PolarConfigPanel_L")
-
 // new task editor
 XMLDIALOG(IDR_XML_TASKACTIONS, "pnlTaskActions")
 XMLDIALOG(IDR_XML_TASKMANAGER, "dlgTaskManager")
