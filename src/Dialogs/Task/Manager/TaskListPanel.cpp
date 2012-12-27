@@ -270,17 +270,14 @@ TaskListPanel::DeleteTask()
   if (cursor_index >= task_store->Size())
     return;
 
-  const TCHAR *fname = task_store->GetName(cursor_index);
-  tstring upperstring = fname;
-  std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
-      ::toupper);
-
-  if (upperstring.find(_T(".CUP")) != tstring::npos) {
+  const TCHAR *path = task_store->GetPath(cursor_index);
+  if (StringEndsWithIgnoreCase(path, _T(".cup"))) {
     ShowMessageBox(_("Can't delete .CUP files"), _("Delete Error"),
         MB_ICONEXCLAMATION);
     return;
   }
 
+  const TCHAR *fname = task_store->GetName(cursor_index);
 
   tstring text = _("Delete the selected task?");
   text += _T("\n(");
@@ -291,7 +288,7 @@ TaskListPanel::DeleteTask()
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  File::Delete(task_store->GetPath(cursor_index));
+  File::Delete(path);
 
   task_store->Scan(more);
   RefreshView();
