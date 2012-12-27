@@ -24,26 +24,25 @@
 #include <stdint.h>
 
 class DBB {
-//private:
 public:
-	enum {
-		DBBBeg  = 0x0000,
-		DBBEnd  = 0x3000,
-		FrmBeg  = 0x3000,
-		FrmEnd  = 0x4000
-	};
- int dbcursor;
- int fdfcursor;
- struct HEADER {
-	 int dsanzahl;
-	 int dslaenge, keylaenge;
-	 unsigned short int dsfirst, dslast;
- };
- HEADER header[8];
+  enum {
+    DBBBeg  = 0x0000,
+    DBBEnd  = 0x3000,
+    FrmBeg  = 0x3000,
+    FrmEnd  = 0x4000
+  };
+  int dbcursor;
+  int fdfcursor;
+  struct HEADER {
+    int dsanzahl;
+    int dslaenge, keylaenge;
+    unsigned short int dsfirst, dslast;
+  };
+  HEADER header[8];
 public:
- uint8_t block[DBBEnd-DBBBeg];
- uint8_t fdf[FrmEnd-FrmBeg];
-	DBB();
+  uint8_t block[DBBEnd-DBBBeg];
+  uint8_t fdf[FrmEnd-FrmBeg];
+  DBB();
 
 protected:
   Volkslogger::TableHeader *GetHeader(unsigned i) {
@@ -58,10 +57,10 @@ protected:
   }
 
 public:
-	void open_dbb();
-	void close_db(int kennung);
-	void add_ds(int kennung,void *quelle);
-	void add_fdf(int feldkennung,int feldlaenge, void *quelle);
+  void open_dbb();
+  void close_db(int kennung);
+  void add_ds(int kennung,void *quelle);
+  void add_fdf(int feldkennung,int feldlaenge, void *quelle);
   int16 fdf_findfield(uint8_t id) const;
 };
 
