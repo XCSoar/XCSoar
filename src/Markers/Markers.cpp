@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Markers.hpp"
-#include "Compatibility/string.h"
 #include "LocalPath.hpp"
 #include "resource.h"
 #include "IO/TextWriter.hpp"

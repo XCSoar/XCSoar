@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Compatibility/string.h"
 #include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

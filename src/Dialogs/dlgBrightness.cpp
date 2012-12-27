@@ -33,7 +33,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "Compatibility/string.h"
 #include "Time/PeriodClock.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"

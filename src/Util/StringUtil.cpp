@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "StringUtil.hpp"
 #include "CharUtil.hpp"
-#include "Compatibility/string.h"
 
 #include <string.h>
 #include <algorithm>

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/NumberParser.hpp"
-#include "Compatibility/string.h"
 
 #include <tchar.h>
 #include <cctype>

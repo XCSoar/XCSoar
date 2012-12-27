@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaypointFilter.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
-#include "Compatibility/string.h"
 
 bool
 WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,

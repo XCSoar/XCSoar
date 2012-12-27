@@ -25,7 +25,6 @@ Copyright_License {
 #include "IGCString.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
-#include "Compatibility/string.h"
 
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */

@@ -30,7 +30,6 @@ Copyright_License {
 #include "Gauge/BigTrafficWidget.hpp"
 #include "ComputerSettings.hpp"
 #include "Components.hpp"
-#include "Compatibility/string.h"
 #include "MapSettings.hpp"
 #include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"

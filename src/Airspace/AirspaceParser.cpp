@@ -36,7 +36,6 @@ Copyright_License {
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Compatibility/string.h"
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Util/StaticString.hpp"
 
