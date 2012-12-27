@@ -151,12 +151,12 @@ LoadChecklist()
     return;
   }
 
-  TCHAR Details[MAXDETAILS];
+  StaticString<MAXDETAILS> Details;
   TCHAR Name[100];
   bool inDetails = false;
   int i;
 
-  Details[0] = 0;
+  Details.clear();
   Name[0] = 0;
 
   TCHAR *TempString;
@@ -165,7 +165,7 @@ LoadChecklist()
     if (TempString[0] == '[') {
       if (inDetails) {
         addChecklist(Name, Details);
-        Details[0] = 0;
+        Details.clear();
         Name[0] = 0;
       }
 
@@ -181,9 +181,8 @@ LoadChecklist()
       inDetails = true;
     } else {
       // append text to details string
-      _tcsncat(Details, TempString, MAXDETAILS - 2);
-      _tcscat(Details, _T("\n"));
-      // TODO code: check the string is not too long
+      Details.append(TempString);
+      Details.Append(_T('\n'));
     }
   }
 
