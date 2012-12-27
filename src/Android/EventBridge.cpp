@@ -46,7 +46,7 @@ TranslateKeyCode(unsigned key_code)
 
   if (key_code >= KEYCODE_A && key_code <= KEYCODE_Z)
     /* return upper-case character, because InputEvents::findKey()
-       calls _totupper() */
+       calls ToUpperASCII() */
     return 'A' + (key_code - KEYCODE_A);
 
   return key_code;

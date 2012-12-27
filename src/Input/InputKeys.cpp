@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "InputKeys.hpp"
 #include "Screen/Key.h"
+#include "Util/CharUtil.hpp"
 
 #include <string.h>
-#include <ctype.h>
 
 struct string_to_key {
   const TCHAR *name;
@@ -69,7 +69,7 @@ ParseKeyCode(const TCHAR *data)
       return p->key;
 
   if (_tcslen(data) == 1)
-    return _totupper(data[0]);
+    return ToUpperASCII(data[0]);
 
   else
     return 0;
