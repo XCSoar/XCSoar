@@ -43,5 +43,5 @@ ContestToString(Contest contest)
   unsigned i = (unsigned)contest;
   return i < ARRAY_SIZE(contest_to_string)
     ? contest_to_string[i]
-    : NULL;
+    : nullptr;
 }

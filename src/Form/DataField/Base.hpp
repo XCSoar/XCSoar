@@ -77,21 +77,21 @@ protected:
             DataFieldListener *listener);
 
   DataField(Type type, bool supports_combolist,
-            DataAccessCallback data_access_callback = NULL);
+            DataAccessCallback data_access_callback = nullptr);
 
 public:
   virtual ~DataField() {}
 
   void SetListener(DataFieldListener *_listener) {
-    assert(data_access_callback == NULL);
-    assert(listener == NULL);
-    assert(_listener != NULL);
+    assert(data_access_callback == nullptr);
+    assert(listener == nullptr);
+    assert(_listener != nullptr);
 
     listener = _listener;
   }
 
   void SetDataAccessCallback(DataAccessCallback _data_access_callback) {
-    assert(listener == NULL);
+    assert(listener == nullptr);
 
     data_access_callback = _data_access_callback;
   }
@@ -129,7 +129,7 @@ public:
 
   gcc_malloc
   virtual ComboList *CreateComboList() const {
-    return NULL;
+    return nullptr;
   }
 
   virtual void

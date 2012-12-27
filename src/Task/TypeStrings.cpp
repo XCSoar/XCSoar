@@ -52,7 +52,7 @@ OrderedTaskFactoryName(TaskFactoryType type)
   }
 
   assert(false);
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR*
@@ -81,7 +81,7 @@ OrderedTaskFactoryDescription(TaskFactoryType type)
   }
 
   assert(false);
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR*
@@ -127,7 +127,7 @@ OrderedTaskPointDescription(TaskPointFactoryType type)
   }
 
   assert(false);
-  return NULL;
+  return nullptr;
 }
 
 const TCHAR*
@@ -167,5 +167,5 @@ OrderedTaskPointName(TaskPointFactoryType type)
   }
 
   assert(false);
-  return NULL;
+  return nullptr;
 }
