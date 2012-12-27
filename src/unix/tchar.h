@@ -32,7 +32,6 @@ Copyright_License {
 #endif
 
 #include <string.h>
-#include <stdarg.h>
 
 typedef char TCHAR;
 #define _stprintf sprintf
