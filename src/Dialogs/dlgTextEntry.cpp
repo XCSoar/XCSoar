@@ -34,6 +34,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Asset.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/CharUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"
@@ -133,7 +134,7 @@ MoveCursor()
   if (cursor >= _tcslen(edittext))
     edittext[cursor + 1] = 0;
 
-  lettercursor = FindEntryLetter(edittext[cursor]);
+  lettercursor = FindEntryLetter(ToUpperASCII(edittext[cursor]));
 
   UpdateCursor();
 }
@@ -238,7 +239,6 @@ dlgTextEntryHighscoreType(TCHAR *text, size_t width,
   edittext[0] = 0;
   edittext[1] = 0;
   if (!StringIsEmpty(text)) {
-    _tcsupr(text);
     CopyString(edittext, text, max_width);
   }
   MoveCursor();
