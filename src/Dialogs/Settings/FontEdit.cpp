@@ -125,7 +125,7 @@ FontEditWidget::UpdatePreview()
   WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
   if (font.IsDefined()) {
     preview.SetFont(font);
-    preview.SetCaption(_("Sample Text\n123"));
+    preview.SetCaption(_T("Sample Text\n123"));
   } else {
     preview.SetCaption(_("Font not found."));
   }
@@ -155,7 +155,7 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   PixelRect preview_rc { 0, 0, Layout::Scale(250), Layout::Scale(100) };
   WndFrame *preview = new WndFrame(*(ContainerWindow *)GetWindow(),
                                    UIGlobals::GetDialogLook(), preview_rc);
-  preview->SetText(_("My Sample"));
+  preview->SetText(_T("My Sample"));
   Add(preview);
 
   Load();
