@@ -160,7 +160,6 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   PixelRect preview_rc { 0, 0, Layout::Scale(250), Layout::Scale(100) };
   WndFrame *preview = new WndFrame(*(ContainerWindow *)GetWindow(),
                                    UIGlobals::GetDialogLook(), preview_rc);
-  preview->SetText(_T("My Sample"));
   Add(preview);
 
   Load();
