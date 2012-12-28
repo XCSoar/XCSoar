@@ -54,6 +54,28 @@ EarthDistance(const fixed a)
 #endif
 }
 
+/**
+ * Multiply two very small values (less than 4).  This is an optimised
+ * fast path for fixed-point.
+ */
+constexpr
+static inline fixed
+SmallMult(fixed a, fixed b)
+{
+  return fast_mult(a, b, 0);
+}
+
+/**
+ * Multiply three very small values (less than 2).  This is an
+ * optimised fast path for fixed-point.
+ */
+constexpr
+static inline fixed
+SmallMult(fixed a, fixed b, fixed c)
+{
+  return SmallMult(SmallMult(a, b), c);
+}
+
 gcc_pure
 static GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
@@ -83,14 +105,14 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto sc4 = loc2.longitude.SinCos();
   const fixed sin_loc2_lon = sc4.first, cos_loc2_lon = sc4.second;
 
-  const fixed a_cos_loc1_lat = A * cos_loc1_lat;
-  const fixed b_cos_loc2_lat = B * cos_loc2_lat;
+  const fixed a_cos_loc1_lat = SmallMult(A, cos_loc1_lat);
+  const fixed b_cos_loc2_lat = SmallMult(B, cos_loc2_lat);
 
-  const fixed x = a_cos_loc1_lat * cos_loc1_lon +
-                  b_cos_loc2_lat * cos_loc2_lon;
-  const fixed y = a_cos_loc1_lat * sin_loc1_lon +
-                  b_cos_loc2_lat * sin_loc2_lon;
-  const fixed z = A * sin_loc1_lat + B * sin_loc2_lat;
+  const fixed x = SmallMult(a_cos_loc1_lat, cos_loc1_lon)
+    + SmallMult(b_cos_loc2_lat, cos_loc2_lon);
+  const fixed y = SmallMult(a_cos_loc1_lat, sin_loc1_lon)
+    + SmallMult(b_cos_loc2_lat, sin_loc2_lon);
+  const fixed z = SmallMult(A, sin_loc1_lat) + SmallMult(B, sin_loc2_lat);
 
   GeoPoint loc3;
   loc3.latitude = Angle::FromXY(TinyHypot(x, y), z);
@@ -147,7 +169,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
   if (distance) {
     const fixed s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
     const fixed s2 = dlon.accurate_half_sin();
-    const fixed a = sqr(s1) + cos_lat1 * cos_lat2 * sqr(s2);
+    const fixed a = sqr(s1) + SmallMult(cos_lat1, cos_lat2) * sqr(s2);
 
     Angle distance2 = EarthDistance(a);
     assert(!negative(distance2.Native()));
@@ -159,8 +181,9 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
     const auto sc = dlon.SinCos();
     const fixed sin_dlon = sc.first, cos_dlon = sc.second;
 
-    const fixed y = sin_dlon * cos_lat2;
-    const fixed x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
+    const fixed y = SmallMult(sin_dlon, cos_lat2);
+    const fixed x = SmallMult(cos_lat1, sin_lat2)
+      - SmallMult(sin_lat1, cos_lat2, cos_dlon);
 
     *bearing = (x == fixed(0) && y == fixed(0))
       ? Angle::Zero()
@@ -201,7 +224,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
 
   // cross track distance
   const Angle cross_track_distance =
-    EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
+    EarthASin(SmallMult(sindist_AD, (crs_AD - crs_AB).sin()));
 
   if (loc4) {
     const auto sc = cross_track_distance.SinCos();
@@ -243,7 +266,7 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
 
   const fixed sindist_AD = dist_AD.sin();
   const Angle cross_track_distance =
-      EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
+    EarthASin(SmallMult(sindist_AD, (crs_AD - crs_AB).sin()));
 
   const auto sc = cross_track_distance.SinCos();
   const fixed sinXTD = sc.first, cosXTD = sc.second;
@@ -273,8 +296,10 @@ DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   const fixed s32 = (loc3.latitude - loc2.latitude).accurate_half_sin();
   const fixed sl32 = (loc3.longitude - loc2.longitude).accurate_half_sin();
 
-  const fixed a12 = sqr(s21) + cos_loc1_lat * cos_loc2_lat * sqr(sl21);
-  const fixed a23 = sqr(s32) + cos_loc2_lat * cos_loc3_lat * sqr(sl32);
+  const fixed a12 = sqr(s21)
+    + SmallMult(cos_loc1_lat, cos_loc2_lat) * sqr(sl21);
+  const fixed a23 = sqr(s32)
+    + SmallMult(cos_loc2_lat, cos_loc3_lat) * sqr(sl32);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -305,12 +330,14 @@ FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
   const auto scl = loc.latitude.SinCos();
   const fixed sin_latitude = scl.first, cos_latitude = scl.second;
 
-  loc_out.latitude = EarthASin(sin_latitude * cos_distance
-                               + cos_latitude * sin_distance * cos_bearing);
+  loc_out.latitude = EarthASin(SmallMult(sin_latitude, cos_distance)
+                               + SmallMult(cos_latitude, sin_distance,
+                                           cos_bearing));
 
   loc_out.longitude = loc.longitude +
-    Angle::FromXY(cos_distance - sin_latitude * loc_out.latitude.sin(),
-                  sin_bearing * sin_distance * cos_latitude);
+    Angle::FromXY(cos_distance - SmallMult(sin_latitude,
+                                           loc_out.latitude.sin()),
+                  SmallMult(sin_bearing, sin_distance, cos_latitude));
 
   loc_out.Normalize(); // ensure longitude is within -180:180
 
