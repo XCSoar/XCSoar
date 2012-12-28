@@ -115,8 +115,6 @@ FontEditWidget::SaveValues()
 void
 FontEditWidget::UpdatePreview()
 {
-  SaveValues();
-
   /* revert to default font first, to avoid freeing the Font while it
      is still being referenced */
   WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
@@ -168,6 +166,7 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 FontEditWidget::OnModified(DataField &df)
 {
+  SaveValues();
   UpdatePreview();
 }
 
