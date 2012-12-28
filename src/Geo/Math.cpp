@@ -83,10 +83,13 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
   const auto sc4 = loc2.longitude.SinCos();
   const fixed sin_loc2_lon = sc4.first, cos_loc2_lon = sc4.second;
 
-  const fixed x = A * cos_loc1_lat * cos_loc1_lon +
-                  B * cos_loc2_lat * cos_loc2_lon;
-  const fixed y = A * cos_loc1_lat * sin_loc1_lon +
-                  B * cos_loc2_lat * sin_loc2_lon;
+  const fixed a_cos_loc1_lat = A * cos_loc1_lat;
+  const fixed b_cos_loc2_lat = B * cos_loc2_lat;
+
+  const fixed x = a_cos_loc1_lat * cos_loc1_lon +
+                  b_cos_loc2_lat * cos_loc2_lon;
+  const fixed y = a_cos_loc1_lat * sin_loc1_lon +
+                  b_cos_loc2_lat * sin_loc2_lon;
   const fixed z = A * sin_loc1_lat + B * sin_loc2_lat;
 
   GeoPoint loc3;
