@@ -80,7 +80,7 @@ class LargeTextWindow : public Window {
 
 public:
   void Create(ContainerWindow &parent, PixelRect rc,
-              const LargeTextWindowStyle style);
+              const LargeTextWindowStyle style=LargeTextWindowStyle());
 
 #ifndef USE_GDI
   gcc_pure
