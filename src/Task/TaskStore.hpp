@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <vector>
 
+#include <tchar.h>
+
 struct TaskBehaviour;
 class OrderedTask;
 
@@ -46,7 +48,8 @@ public:
     OrderedTask* task;
     bool valid;
 
-    Item(const TCHAR *the_filename, const TCHAR *_task_name,
+    Item(tstring::const_pointer the_filename,
+         tstring::const_pointer _task_name,
          unsigned _task_index = 0)
       :task_name(_task_name),
        filename(the_filename),
@@ -57,12 +60,12 @@ public:
     ~Item();
 
     gcc_pure
-    const TCHAR *GetName() const {
+    tstring::const_pointer GetName() const {
       return task_name.c_str();
     }
 
     gcc_pure
-    const TCHAR *GetPath() const {
+    tstring::const_pointer GetPath() const {
       return filename.c_str();
     }
 
@@ -112,7 +115,7 @@ public:
    * @return Filename of the task defined by the given index
    */
   gcc_pure
-  const TCHAR *GetName(unsigned index) const;
+  tstring::const_pointer GetName(unsigned index) const;
 
   /**
    * Return the pathname of the task defined by the given index
@@ -121,7 +124,7 @@ public:
    * @return pathname of the task defined by the given index
    */
   gcc_pure
-  const TCHAR *GetPath(unsigned index) const;
+  tstring::const_pointer GetPath(unsigned index) const;
 
   /**
    * Return the task defined by the given index

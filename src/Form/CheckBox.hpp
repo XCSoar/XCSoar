@@ -57,13 +57,13 @@ public:
    * when the button is clicked
    */
   CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
-                  const TCHAR *caption,
+                  tstring::const_pointer caption,
                   const PixelRect &rc,
                   const CheckBoxStyle style,
                   ClickNotifyCallback click_notify_callback = NULL);
 
   CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
-                  const TCHAR *caption,
+                  tstring::const_pointer caption,
                   const PixelRect &rc,
                   const CheckBoxStyle style,
                   ActionListener *listener, int id);

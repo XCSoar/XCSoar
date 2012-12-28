@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 
+#include <string.h>
+
 void
 LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
                         const LargeTextWindowStyle style)

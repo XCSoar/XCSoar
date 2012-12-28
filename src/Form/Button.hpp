@@ -67,12 +67,12 @@ public:
    * when the button is clicked
    */
   WndButton(ContainerWindow &parent, const DialogLook &look,
-            const TCHAR *caption, const PixelRect &rc,
+            tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ClickNotifyCallback click_callback = NULL);
 
   WndButton(ContainerWindow &parent, const DialogLook &look,
-            const TCHAR *caption, const PixelRect &rc,
+            tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ActionListener &listener, int id);
 
@@ -107,7 +107,7 @@ public:
    * (derived from WindowControl)
    * @param Value The new Caption/Text of the Control
    */
-  void SetCaption(const TCHAR *caption) {
+  void SetCaption(tstring::const_pointer caption) {
     SetText(caption);
   }
 

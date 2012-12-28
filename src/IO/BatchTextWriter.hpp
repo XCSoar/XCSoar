@@ -39,7 +39,7 @@ class BatchTextWriter {
   BatchBuffer<std::string,256> buffer;
 
 public:
-  BatchTextWriter(const TCHAR *_path, bool _append=false)
+  BatchTextWriter(tstring::const_pointer _path, bool _append=false)
     :path(_path), append(_append) {}
   ~BatchTextWriter() {
     Flush();

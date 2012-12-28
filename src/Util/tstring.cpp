@@ -1,5 +1,7 @@
 #include "tstring.hpp"
 
+#include <tchar.h>
+
 #define WHITESPACE _T(" \r\t")
 
 tstring &

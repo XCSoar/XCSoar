@@ -61,11 +61,12 @@ class CheckBox : public PaintWindow {
 public:
   CheckBox():checked(false), dragging(false), pressed(false) {}
 
-  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
+              unsigned id,
               const PixelRect &rc,
               const CheckBoxStyle style=CheckBoxStyle());
 
-  void Create(ContainerWindow &parent, const TCHAR *text,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
               const PixelRect &rc,
               const CheckBoxStyle style=CheckBoxStyle()) {
     Create(parent, text, 0, rc, style);
@@ -105,13 +106,14 @@ protected:
  */
 class CheckBox : public BaseButtonWindow {
 public:
-  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
+              unsigned id,
               const PixelRect &rc,
               const CheckBoxStyle style=CheckBoxStyle()) {
     BaseButtonWindow::Create(parent, text, id, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const TCHAR *text,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
               const PixelRect &rc,
               const CheckBoxStyle style=CheckBoxStyle()) {
     BaseButtonWindow::Create(parent, text, rc, style);

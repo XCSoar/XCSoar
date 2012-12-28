@@ -78,11 +78,12 @@ public:
   ButtonWindow():dragging(false), down(false) {}
 
 public:
-  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
+              unsigned id,
               const PixelRect &rc,
               const ButtonWindowStyle style=ButtonWindowStyle());
 
-  void Create(ContainerWindow &parent, const TCHAR *text,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
               const PixelRect &rc,
               const ButtonWindowStyle style=ButtonWindowStyle()) {
     Create(parent, text, 0, rc, style);
@@ -96,7 +97,7 @@ public:
     id = _id;
   }
 
-  void SetText(const TCHAR *_text) {
+  void SetText(tstring::const_pointer _text) {
     AssertNoneLocked();
     AssertThread();
 
@@ -155,11 +156,12 @@ public:
   };
 
 public:
-  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
+              unsigned id,
               const PixelRect &rc,
               const WindowStyle style);
 
-  void Create(ContainerWindow &parent, const TCHAR *text,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
               const PixelRect &rc,
               const WindowStyle style) {
     Create(parent, text, COMMAND_BOUNCE_ID, rc, style);
@@ -191,13 +193,14 @@ protected:
  */
 class ButtonWindow : public BaseButtonWindow {
 public:
-  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
+              unsigned id,
               const PixelRect &rc,
               const ButtonWindowStyle style=ButtonWindowStyle()) {
     BaseButtonWindow::Create(parent, text, id, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const TCHAR *text,
+  void Create(ContainerWindow &parent, tstring::const_pointer text,
               const PixelRect &rc,
               const ButtonWindowStyle style=ButtonWindowStyle()) {
     BaseButtonWindow::Create(parent, text, rc, style);
@@ -210,7 +213,7 @@ public:
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
 
-  void SetText(const TCHAR *text);
+  void SetText(tstring::const_pointer text);
 
   const tstring GetText() const;
 

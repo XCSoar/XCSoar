@@ -26,6 +26,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
+#include <string.h>
+
 Font normal_font, small_font, bold_font, monospace_font;
 
 static const TCHAR *

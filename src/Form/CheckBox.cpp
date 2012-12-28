@@ -28,7 +28,7 @@ Copyright_License {
 
 CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
                                  const DialogLook &look,
-                                 const TCHAR *caption,
+                                 tstring::const_pointer caption,
                                  const PixelRect &rc,
                                  const CheckBoxStyle style,
                                  ClickNotifyCallback _click_notify_callback)
@@ -40,7 +40,7 @@ CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
 
 CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
                                  const DialogLook &look,
-                                 const TCHAR *caption,
+                                 tstring::const_pointer caption,
                                  const PixelRect &rc,
                                  const CheckBoxStyle style,
                                  ActionListener *_listener, int _id)

@@ -26,6 +26,8 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
+#include <string.h>
+
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::infobox;
 Font Fonts::infobox_small;

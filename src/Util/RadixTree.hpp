@@ -37,6 +37,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <tchar.h>
 
 #ifdef PRINT_RADIX_TREE
 #include <ostream>

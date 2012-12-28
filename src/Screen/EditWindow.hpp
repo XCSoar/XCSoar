@@ -32,6 +32,7 @@ Copyright_License {
 #endif
 
 #include <winuser.h>
+#include <tchar.h>
 
 class EditWindowStyle : public WindowStyle {
 #ifndef USE_GDI

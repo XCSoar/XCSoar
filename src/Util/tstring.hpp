@@ -3,9 +3,8 @@
 
 #include <string>
 
-#include <tchar.h>
-
 #ifdef _UNICODE
+#include <tchar.h>
 typedef std::wstring tstring;
 #else
 typedef std::string tstring;

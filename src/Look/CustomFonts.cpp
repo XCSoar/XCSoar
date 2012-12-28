@@ -26,6 +26,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/FontConfig.hpp"
 
+#include <string.h>
+
 static void
 LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
 {

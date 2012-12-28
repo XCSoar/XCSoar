@@ -34,6 +34,8 @@
 #include <iostream>
 #endif
 
+#include <tchar.h>
+
 struct AircraftState;
 struct AltitudeState;
 struct GeoVector;

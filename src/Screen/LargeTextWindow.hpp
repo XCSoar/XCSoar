@@ -32,6 +32,8 @@ Copyright_License {
 #include <winuser.h>
 #endif
 
+#include <tchar.h>
+
 class LargeTextWindowStyle : public WindowStyle {
 public:
   LargeTextWindowStyle() {

@@ -26,7 +26,7 @@ Copyright_License {
 
 
 Window *
-SubForm::FindByName(const TCHAR *name)
+SubForm::FindByName(tstring::const_pointer name)
 {
   auto i = name_to_window.find(name);
   if (i == name_to_window.end())

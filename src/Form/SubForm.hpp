@@ -78,7 +78,7 @@ public:
   /**
    * Adds a #Window to the name-to-window map.
    */
-  void AddNamed(const TCHAR *name, Window *window) {
+  void AddNamed(tstring::const_pointer name, Window *window) {
     name_to_window[name] = window;
   }
 
@@ -88,7 +88,7 @@ public:
    * @param name the name of the #Window that is searched
    * @return the Window, or NULL if not found
    */
-  Window *FindByName(const TCHAR *name);
+  Window *FindByName(tstring::const_pointer name);
 
   /**
    * Finds the ancestor window with the specified name.
@@ -96,7 +96,7 @@ public:
    * @param name the name of the #Window that is searched
    * @return the Window, or NULL if not found
    */
-  const Window *FindByName(const TCHAR *name) const {
+  const Window *FindByName(tstring::const_pointer name) const {
     return const_cast<SubForm *>(this)->FindByName(name);
   }
 

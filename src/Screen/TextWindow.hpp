@@ -31,6 +31,8 @@ Copyright_License {
 #include <algorithm>
 #endif
 
+#include <tchar.h>
+
 class TextWindowStyle : public WindowStyle {
 public:
   TextWindowStyle() = default;

@@ -27,6 +27,8 @@ Copyright_License {
 #include "WindowWidget.hpp"
 #include "Form/SubForm.hpp"
 
+#include <tchar.h>
+
 struct CallBackTableEntry;
 
 /**

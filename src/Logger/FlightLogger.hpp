@@ -58,7 +58,7 @@ public:
   /**
    * Call this before Tick().
    */
-  void SetPath(const TCHAR *_path) {
+  void SetPath(tstring::const_pointer _path) {
     path = _path;
   }
 

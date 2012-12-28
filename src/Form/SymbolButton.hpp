@@ -46,14 +46,14 @@ public:
    * when the button is clicked
    */
   WndSymbolButton(ContainerWindow &Parent, const DialogLook &look,
-                  const TCHAR *Caption,
+                  tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
                style, Function) {}
 
   WndSymbolButton(ContainerWindow &Parent, const DialogLook &look,
-                  const TCHAR *Caption,
+                  tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ActionListener &listener, int id)
     :WndButton(Parent, look, Caption, rc,

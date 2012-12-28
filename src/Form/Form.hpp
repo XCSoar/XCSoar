@@ -32,6 +32,8 @@ Copyright_License {
 
 #include <functional>
 
+#include <tchar.h>
+
 struct DialogLook;
 class SingleWindow;
 class PeriodClock;
