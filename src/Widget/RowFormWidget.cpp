@@ -61,6 +61,9 @@ RowFormWidget::Row::GetMinimumHeight() const
   case Type::DUMMY:
     return 0;
 
+  case Type::WIDGET:
+    return widget->GetMinimumSize().cy;
+
   case Type::GENERIC:
     break;
 
@@ -84,6 +87,9 @@ RowFormWidget::Row::GetMaximumHeight() const
   switch (type) {
   case Type::DUMMY:
     return 0;
+
+  case Type::WIDGET:
+    return widget->GetMaximumSize().cy;
 
   case Type::GENERIC:
     break;
@@ -941,27 +947,6 @@ RowFormWidget::UpdateLayout()
     if (i.type == Row::Type::DUMMY)
       continue;
 
-    Window &window = i.GetWindow();
-
-    if (!i.available) {
-      window.Hide();
-      continue;
-    }
-
-    if (i.expert) {
-      if (!expert) {
-        window.Hide();
-        continue;
-      }
-
-      if (i.visible)
-        window.Show();
-    }
-
-    if (caption_width > 0 && i.type == Row::Type::EDIT &&
-        i.GetControl().HasCaption())
-      i.GetControl().SetCaptionWidth(caption_width);
-
     /* determine this row's height */
     UPixelScalar height = i.GetMinimumHeight();
     if (excess_height > 0 && i.IsElastic()) {
@@ -983,6 +968,55 @@ RowFormWidget::UpdateLayout()
 
       --n_elastic;
     }
+
+    if (i.type == Row::Type::WIDGET) {
+      Widget &widget = i.GetWidget();
+
+      if (!i.available || (i.expert && !expert)) {
+        widget.Hide();
+        continue;
+      }
+
+      /* TODO: visible check - hard to implement without remembering
+         the control position, because Widget::Show() wants a
+         PixelRect parameter */
+
+      NextControlRect(current_rect, height);
+
+      if (!i.initialised) {
+        i.initialised = true;
+        widget.Initialise(*(ContainerWindow *)GetWindow(), current_rect);
+      }
+
+      if (!i.prepared) {
+        i.prepared = true;
+        widget.Prepare(*(ContainerWindow *)GetWindow(), current_rect);
+      }
+
+      widget.Show(current_rect);
+      continue;
+    }
+
+    Window &window = i.GetWindow();
+
+    if (!i.available) {
+      window.Hide();
+      continue;
+    }
+
+    if (i.expert) {
+      if (!expert) {
+        window.Hide();
+        continue;
+      }
+
+      if (i.visible)
+        window.Show();
+    }
+
+    if (caption_width > 0 && i.type == Row::Type::EDIT &&
+        i.GetControl().HasCaption())
+      i.GetControl().SetCaptionWidth(caption_width);
 
     /* finally move and resize */
     NextControlRect(current_rect, height);

@@ -56,6 +56,11 @@ class RowFormWidget : public WindowWidget {
       DUMMY,
 
       /**
+       * A #Widget.
+       */
+      WIDGET,
+
+      /**
        * A generic #Window.
        */
       GENERIC,
@@ -86,6 +91,11 @@ class RowFormWidget : public WindowWidget {
     Type type;
 
     /**
+     * Only used for #type==WIDGET.
+     */
+    bool initialised, prepared;
+
+    /**
      * Shall this row be available?  If not, it is hidden and no
      * screen space is reserved for it.
      */
@@ -102,28 +112,64 @@ class RowFormWidget : public WindowWidget {
      */
     bool expert;
 
+    Widget *widget;
+
     Window *window;
 
     Row() = default;
 
     Row(Type _type)
       :type(_type), available(true), visible(false), expert(false),
-       window(NULL) {
+       widget(nullptr), window(nullptr) {
       assert(_type == Type::DUMMY);
     }
 
     Row(Type _type, Window *_window)
       :type(_type), available(true), visible(true), expert(false),
-       window(_window) {
+       widget(nullptr), window(_window) {
       assert(_type != Type::DUMMY);
       assert(_window != NULL);
     }
 
+    Row(Widget *_widget)
+      :type(Type::WIDGET),
+       initialised(false), prepared(false),
+       available(true), visible(true), expert(false),
+       widget(_widget), window(nullptr) {
+      assert(_widget != NULL);
+    }
+
     /**
-     * Delete the #Window object.
+     * Delete the #Widget or #Window object.
      */
     void Delete() {
+      if (type == Type::WIDGET) {
+        assert(widget != nullptr);
+        assert(window == nullptr);
+
+        if (prepared)
+          widget->Unprepare();
+        delete widget;
+        return;
+      }
+
       delete window;
+    }
+
+    gcc_pure
+    Widget &GetWidget() {
+      assert(widget != nullptr);
+      assert(window == nullptr);
+
+      return *widget;
+    }
+
+    gcc_pure
+    const Widget &GetWidget() const {
+      assert(widget != nullptr);
+      assert(window == nullptr);
+
+      return *widget;
     }
 
     gcc_pure
@@ -196,6 +242,13 @@ public:
    */
   void AddDummy() {
     rows.push_back(Row::Type::DUMMY);
+  }
+
+  /**
+   * Add a #Widget row.  The object will be deleted automatically.
+   */
+  void Add(Widget *widget) {
+    rows.push_back(widget);
   }
 
   void Add(Window *window) {
@@ -385,6 +438,11 @@ public:
   void AddMultiLine(const TCHAR *text=nullptr);
 
   void AddButton(const TCHAR *label, ActionListener &listener, int id);
+
+  gcc_pure
+  Widget &GetRowWidget(unsigned i) {
+    return rows[i].GetWidget();
+  }
 
   gcc_pure
   Window &GetRow(unsigned i) {
