@@ -38,6 +38,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
   text.clear();
 
   Create(parent, rc, style);
+  SetFont(*look.text_font);
 }
 
 void
@@ -84,8 +85,6 @@ WndFrame::OnPaint(Canvas &canvas)
 
   canvas.SetTextColor(caption_color);
   canvas.SetBackgroundTransparent();
-
-  canvas.Select(*look.text_font);
 
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();
