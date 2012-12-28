@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WindConfigPanel.hpp"
-#include "Dialogs/WindSettingsPanel.hpp"
+#include "../WindSettingsPanel.hpp"
 
 Widget *
 CreateWindConfigPanel()

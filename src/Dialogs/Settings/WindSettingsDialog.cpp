@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/WindSettingsPanel.hpp"
+#include "WindSettingsPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 

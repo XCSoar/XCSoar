@@ -168,7 +168,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
-	$(SRC)/Dialogs/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/ColorListDialog.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspace.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspacePatterns.cpp \
@@ -177,6 +176,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/Settings/WindSettingsPanel.cpp \
+	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
@@ -267,7 +268,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
-	$(SRC)/Dialogs/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
