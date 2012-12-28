@@ -24,11 +24,11 @@ Copyright_License {
 #include "FontEdit.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Look/DialogLook.hpp"
-#include "Form/Frame.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
+#include "Screen/LargeTextWindow.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"
@@ -117,7 +117,7 @@ FontEditWidget::UpdatePreview()
 {
   /* revert to default font first, to avoid freeing the Font while it
      is still being referenced */
-  WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
+  LargeTextWindow &preview = (LargeTextWindow &)GetGeneric(PREVIEW);
   preview.SetFont(*GetLook().text_font);
 
   font.Load(data);
@@ -128,9 +128,9 @@ FontEditWidget::UpdatePreview()
 
   if (font.IsDefined()) {
     preview.SetFont(font);
-    preview.SetCaption(_T("Sample Text\n123"));
+    preview.SetText(_T("Sample Text\n123"));
   } else {
-    preview.SetCaption(_("Font not found."));
+    preview.SetText(_("Font not found."));
   }
 }
 
@@ -156,8 +156,10 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_T("Italic"), NULL, false, this);
 
   PixelRect preview_rc { 0, 0, Layout::Scale(250), Layout::Scale(100) };
-  WndFrame *preview = new WndFrame(*(ContainerWindow *)GetWindow(),
-                                   UIGlobals::GetDialogLook(), preview_rc);
+  LargeTextWindowStyle preview_style;
+  preview_style.Border();
+  LargeTextWindow *preview = new LargeTextWindow();
+  preview->Create(*(ContainerWindow *)GetWindow(), preview_rc, preview_style);
   Add(preview);
 
   Load();
