@@ -269,16 +269,16 @@ namespace
     8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0, 0,
   };
 
-  static constexpr int cordic_scale_factor = 0x22C2DD1C; /* 0.271572 * 2^31*/
+  static constexpr fixed::value_t cordic_scale_factor = 0x22C2DD1C; /* 0.271572 * 2^31*/
 
-  constexpr int_least32_t scale_cordic_result(int_least32_t a)
+  constexpr int_least32_t scale_cordic_result(fixed::value_t a)
   {
-    return (int_least32_t)((fixed::value_t(a) * cordic_scale_factor) >> 31);
+    return (int_least32_t)((a * cordic_scale_factor) >> 31);
   }
 
-  constexpr fixed::value_t scale_cordic_result_accurate(int_least32_t a)
+  constexpr fixed::value_t scale_cordic_result_accurate(fixed::value_t a)
   {
-    return (fixed::value_t)((fixed::value_t(a) * cordic_scale_factor)
+    return (fixed::value_t)((a * cordic_scale_factor)
                             >> (31 - fixed::accurate_cordic_shift));
   }
 
