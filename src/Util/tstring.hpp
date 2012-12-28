@@ -11,8 +11,6 @@ typedef std::wstring tstring;
 typedef std::string tstring;
 #endif
 
-tstring trim(const tstring& the_string);
-
 tstring &
 trim_inplace(tstring &s);
 
