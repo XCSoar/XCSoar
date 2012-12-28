@@ -100,7 +100,7 @@ FontEditWidget::Load()
   UpdatePreview();
 }
 
-void
+inline void
 FontEditWidget::SaveValues()
 {
 #ifdef USE_GDI
@@ -196,7 +196,6 @@ dlgFontEditShowModal(const TCHAR *type, LOGFONT &data,
   if (dialog.ShowModal() != mrOK)
     return false;
 
-  widget->SaveValues();
   data = widget->GetData();
   return true;
 }
