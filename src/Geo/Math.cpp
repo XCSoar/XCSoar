@@ -48,7 +48,7 @@ EarthDistance(const fixed a)
   // acos(1-x) = 2*asin(sqrt(x/2))
   // acos(1-2*x) = 2*asin(sqrt(x))
   //    = 2*atan2(sqrt(x), sqrt(fixed(1)-x));
-  return EarthASin(sqrt(a) / (1 << fixed::accurate_cordic_shift)) * 2;
+  return EarthASin(sqrt(a) >> fixed::accurate_cordic_shift) * 2;
 #else
   return Angle::acos(fixed(1) - Double(a));
 #endif
