@@ -22,10 +22,11 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/WidgetDialog.hpp"
 #include "FontEdit.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
@@ -36,8 +37,10 @@ Copyright_License {
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
+#include "Screen/TextWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -49,15 +52,6 @@ Copyright_License {
 
 #include <assert.h>
 
-static Font TempInfoWindowFont;
-static Font TempTitleWindowFont;
-static Font TempMapWindowFont;
-static Font TempTitleSmallWindowFont;
-static Font TempMapWindowBoldFont;
-static Font TempCDIWindowFont;
-static Font TempMapLabelFont;
-static Font TempMapLabelImportantFont;
-
 extern LOGFONT log_infobox;
 extern LOGFONT log_title;
 extern LOGFONT log_map;
@@ -68,237 +62,220 @@ extern LOGFONT log_map_label;
 extern LOGFONT log_map_label_important;
 
 static bool changed = false;
-static bool FontRegistryChanged = false;
-static WndForm *wf = NULL;
 
-static void
-ResetFont(Font &font, bool custom, const TCHAR *profile_key,
-          const LOGFONT &default_log_font)
-{
-  LOGFONT log_font;
-  if (!custom || !Profile::GetFont(profile_key, &log_font))
-    log_font = default_log_font;
+class FontPreviewAndButton : public NullWidget, private ActionListener {
+  const TCHAR *const profile_key;
+  const TCHAR *const text;
 
-  font.Load(log_font);
-}
+  const LOGFONT defaults;
 
-static void
-ResetFonts(bool bUseCustom)
-{
-  ResetFont(TempInfoWindowFont, bUseCustom,
-            ProfileKeys::FontInfoWindowFont, log_infobox);
-  ResetFont(TempTitleWindowFont, bUseCustom,
-            ProfileKeys::FontTitleWindowFont, log_title);
-  ResetFont(TempMapWindowFont, bUseCustom,
-            ProfileKeys::FontMapWindowFont, log_map);
-  ResetFont(TempTitleSmallWindowFont, bUseCustom,
-            ProfileKeys::FontTitleSmallWindowFont, log_infobox_small);
-  ResetFont(TempMapWindowBoldFont, bUseCustom,
-            ProfileKeys::FontMapWindowBoldFont, log_map_bold);
-  ResetFont(TempCDIWindowFont, bUseCustom,
-            ProfileKeys::FontCDIWindowFont, log_cdi);
-  ResetFont(TempMapLabelFont, bUseCustom,
-            ProfileKeys::FontMapLabelFont, log_map_label);
-  ResetFont(TempMapLabelImportantFont, bUseCustom,
-            ProfileKeys::FontMapLabelImportantFont, log_map_label_important);
-}
+  bool enabled;
+  PixelRect position;
 
-static void
-ShowFontEditButtons(bool bVisible)
-{
-  ShowFormControl(*wf, _T("cmdInfoWindowFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdTitleWindowFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdMapWindowFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdTitleSmallWindowFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdMapWindowBoldFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdCDIWindowFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdMapLabelFont"), bVisible);
-  ShowFormControl(*wf, _T("cmdMapLabelImportantFont"), bVisible);
-}
+  Font font;
 
-static void
-RefreshPreview(const TCHAR *name, Font &font)
-{
-  WndFrame *sample = (WndFrame *)wf->FindByName(name);
-  assert(sample != nullptr);
+  TextWindow preview;
+  WndButton *button;
 
-  sample->SetFont(font);
-}
+public:
+  FontPreviewAndButton(const TCHAR *_key, const TCHAR *_text,
+                       const LOGFONT _defaults,
+                       bool _enabled)
+    :profile_key(_key), text(_text), defaults(_defaults),
+     enabled(_enabled) {}
 
-static void
-RefreshFonts()
-{
-  WndProperty * wp;
+  void SetEnabled(bool _enabled) {
+    if (_enabled == enabled)
+      return;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
-  if (wp) {
-    bool bUseCustomFonts =
-        ((DataFieldBoolean*)(wp->GetDataField()))->GetAsBoolean();
-    ResetFonts(bUseCustomFonts);
-    ShowFontEditButtons(bUseCustomFonts);
+    enabled = _enabled;
+    UpdateLayout();
   }
 
+private:
+  void UpdateLayout() {
+    if (enabled) {
+      unsigned button_width = Layout::Scale(50);
+      if (unsigned(position.right - position.left) < button_width * 2)
+        button_width = unsigned(position.right - position.left) / 2;
+
+      PixelRect rc = position;
+      rc.right -= button_width;
+      preview.Move(rc);
+
+      rc.left = rc.right;
+      rc.right = position.right;
+      button->MoveAndShow(rc);
+    } else {
+      button->FastHide();
+      preview.Move(position);
+    }
+  }
+
+  void UpdateFont() {
+    preview.SetFont(*UIGlobals::GetDialogLook().text_font);
+    font.Destroy();
+
+    LOGFONT custom;
+    if (!enabled || !Profile::GetFont(profile_key, &custom))
+      custom = defaults;
+
+    if (font.Load(custom)) {
 #ifdef ENABLE_OPENGL
-  TextCache::Flush();
+      TextCache::Flush();
 #endif
-
-  // now set SampleTexts on the Fonts frame
-  RefreshPreview(_T("prpInfoWindowFont"), TempInfoWindowFont);
-  RefreshPreview(_T("prpTitleWindowFont"), TempTitleWindowFont);
-  RefreshPreview(_T("prpMapWindowFont"), TempMapWindowFont);
-  RefreshPreview(_T("prpTitleSmallWindowFont"), TempTitleSmallWindowFont);
-  RefreshPreview(_T("prpMapWindowBoldFont"), TempMapWindowBoldFont);
-  RefreshPreview(_T("prpCDIWindowFont"), TempCDIWindowFont);
-  RefreshPreview(_T("prpMapLabelFont"), TempMapLabelFont);
-  RefreshPreview(_T("prpMapLabelImportantFont"), TempMapLabelImportantFont);
-}
-
-static void
-OnUseCustomFontData(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    RefreshFonts();
-
-    break;
-
-  case DataField::daSpecial:
-    return;
+      preview.SetFont(font);
+    }
   }
-}
 
-static void
-GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
-{
-  const WndFrame *wp = (WndFrame *)wf->FindByName(prpName);
-  if (wp)
-    CopyString(Description, wp->GetCaption(), iMaxLen);
-}
+public:
+  /* virtual methods from Widget */
 
-static void
-EditFont(const TCHAR *prp_name, const TCHAR *profile_key,
-         const LOGFONT &log_font)
-{
-  // updates registry for font info and updates LogFont values
-#define MAX_EDITFONT_DESC_LEN 100
-  TCHAR FontDesc[MAX_EDITFONT_DESC_LEN];
-
-  LOGFONT custom_log_font;
-  if (!Profile::GetFont(profile_key, &custom_log_font))
-    custom_log_font = log_font;
-
-  GetFontDescription(FontDesc, prp_name, MAX_EDITFONT_DESC_LEN);
-  if (dlgFontEditShowModal(FontDesc, custom_log_font, log_font)) {
-    Profile::SetFont(profile_key, custom_log_font);
-    FontRegistryChanged = true;
-    RefreshFonts();
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return { unsigned(Layout::Scale(150)), Layout::GetMinimumControlHeight() };
   }
-}
 
-static void
-OnEditInfoWindowFontClicked()
-{
-  EditFont(_T("prpInfoWindowFont"), ProfileKeys::FontInfoWindowFont, log_infobox);
-}
+  virtual PixelSize GetMaximumSize() const gcc_override {
+    return { unsigned(Layout::Scale(250)), Layout::GetMaximumControlHeight() };
+  }
 
-static void
-OnEditTitleWindowFontClicked()
-{
-  EditFont(_T("prpTitleWindowFont"), ProfileKeys::FontTitleWindowFont, log_title);
-}
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    ButtonWindowStyle button_style;
+    button_style.Hide();
+    button_style.TabStop();
+    button = new WndButton(parent, UIGlobals::GetDialogLook(),
+                           _("Edit"), rc, button_style, *this, 0);
 
-static void
-OnEditMapWindowFontClicked()
-{
-  EditFont(_T("prpMapWindowFont"), ProfileKeys::FontMapWindowFont, log_map);
-}
+    TextWindowStyle preview_style;
+    preview_style.Hide();
+    preview.Create(parent, text, rc, preview_style);
 
-static void
-OnEditTitleSmallWindowFontClicked()
-{
-  EditFont(_T("prpTitleSmallWindowFont"), ProfileKeys::FontTitleSmallWindowFont,
-           log_infobox_small);
-}
+    position = rc;
 
-static void
-OnEditMapWindowBoldFontClicked()
-{
-  EditFont(_T("prpMapWindowBoldFont"), ProfileKeys::FontMapWindowBoldFont,
-           log_map_bold);
-}
+    UpdateLayout();
+  }
 
-static void
-OnEditCDIWindowFontClicked()
-{
-  EditFont(_T("prpCDIWindowFont"), ProfileKeys::FontCDIWindowFont, log_cdi);
-}
+  virtual void Unprepare() gcc_override {
+    preview.Destroy();
+    delete button;
+    font.Destroy();
+  }
 
-static void
-OnEditMapLabelFontClicked()
-{
-  EditFont(_T("prpMapLabelFont"), ProfileKeys::FontMapLabelFont, log_map_label);
-}
+  virtual void Show(const PixelRect &rc) gcc_override {
+    position = rc;
+    UpdateLayout();
+    UpdateFont();
 
-static void
-OnEditMapLabelImportantFontClicked()
-{
-  EditFont(_T("prpMapLabelImportantFont"), ProfileKeys::FontMapLabelImportantFont,
-           log_map_label_important);
-}
+    preview.Show();
+    if (enabled)
+      button->Show();
+  }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnUseCustomFontData),
-  DeclareCallBackEntry(OnEditInfoWindowFontClicked),
-  DeclareCallBackEntry(OnEditTitleWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapWindowFontClicked),
-  DeclareCallBackEntry(OnEditTitleSmallWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapWindowBoldFontClicked),
-  DeclareCallBackEntry(OnEditCDIWindowFontClicked),
-  DeclareCallBackEntry(OnEditMapLabelFontClicked),
-  DeclareCallBackEntry(OnEditMapLabelImportantFontClicked),
-  DeclareCallBackEntry(NULL)
+  virtual void Hide() gcc_override {
+    preview.Hide();
+    if (enabled)
+      button->Hide();
+  }
+
+  virtual void Move(const PixelRect &rc) gcc_override {
+    position = rc;
+    UpdateLayout();
+  }
+
+  virtual bool SetFocus() gcc_override {
+    button->SetFocus();
+    return true;
+  }
+
+private:
+  /* virtual methods from ActionListener */
+
+  virtual void OnAction(int id) gcc_override {
+    LOGFONT custom;
+    if (!Profile::GetFont(profile_key, &custom))
+      custom = defaults;
+
+    if (dlgFontEditShowModal(text, custom, defaults)) {
+      Profile::SetFont(profile_key, custom);
+      changed = true;
+      UpdateFont();
+    }
+  }
+};
+
+static const struct {
+  const TCHAR *registry_key;
+  const TCHAR *text;
+  const LOGFONT &defaults;
+} customisable_fonts[] = {
+  { ProfileKeys::FontTitleWindowFont, N_("InfoBox titles"), log_title },
+  { ProfileKeys::FontInfoWindowFont, N_("InfoBox values, normal"),
+    log_infobox },
+  { ProfileKeys::FontTitleSmallWindowFont, N_("InfoBox values, small"),
+    log_infobox_small },
+  { ProfileKeys::FontMapWindowFont, N_("Waypoint labels"), log_map },
+  { ProfileKeys::FontMapLabelFont, N_("Topography labels, normal"),
+    log_map_label },
+  { ProfileKeys::FontMapLabelImportantFont,
+    N_("Topography labels, important"),
+    log_map_label_important},
+  { ProfileKeys::FontMapWindowBoldFont, N_("Dialog text"), log_map_bold },
+  { ProfileKeys::FontCDIWindowFont, N_("Gauges"), log_cdi },
+  { nullptr, nullptr, *(const LOGFONT *)nullptr }
+};
+
+class CustomFontsWidget : public RowFormWidget, private DataFieldListener {
+public:
+  CustomFontsWidget(const DialogLook &look):RowFormWidget(look) {}
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    const UISettings &ui_settings = CommonInterface::GetUISettings();
+    const bool custom_fonts = ui_settings.custom_fonts;
+
+    AddBoolean(_("Customize fonts"), nullptr, custom_fonts, this);
+
+    for (auto i = customisable_fonts; i->registry_key != nullptr; ++i)
+      Add(new FontPreviewAndButton(i->registry_key, i->text, i->defaults,
+                                   custom_fonts));
+  }
+
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df) gcc_override {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    const bool value = dfb.GetAsBoolean();
+
+    UISettings &ui_settings = CommonInterface::SetUISettings();
+    ui_settings.custom_fonts = value;
+    Profile::Set(ProfileKeys::UseCustomFonts, value);
+
+    for (unsigned i = 0; customisable_fonts[i].registry_key != nullptr; ++i) {
+      FontPreviewAndButton &widget =
+        (FontPreviewAndButton &)GetRowWidget(i + 1);
+      widget.SetEnabled(value);
+    }
+
+    changed = true;
+  }
 };
 
 void dlgConfigFontsShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ?
-                  _T("IDR_XML_CONFIG_FONTS_L") : _T("IDR_XML_CONFIG_FONTS"));
-
-  if (wf == NULL)
-    return;
-
-  UISettings &ui_settings = CommonInterface::SetUISettings();
-
-  LoadFormProperty(*wf, _T("prpUseCustomFonts"), ui_settings.custom_fonts);
-
-  ShowFontEditButtons(ui_settings.custom_fonts);
-  RefreshFonts();
-
-  FontRegistryChanged = false;
   changed = false;
 
-  wf->ShowModal();
-
-  changed |= SaveFormProperty(*wf, _T("prpUseCustomFonts"),
-                              ProfileKeys::UseCustomFonts,
-                              ui_settings.custom_fonts);
-
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Font Configuration"),
+                    new CustomFontsWidget(look));
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
 
   if (changed) {
     Profile::Save();
-
     ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
-                _T(""), MB_OK);
+                   _T(""), MB_OK);
   }
-
-  TempInfoWindowFont.Destroy();
-  TempTitleWindowFont.Destroy();
-  TempMapWindowFont.Destroy();
-  TempTitleSmallWindowFont.Destroy();
-  TempMapWindowBoldFont.Destroy();
-  TempCDIWindowFont.Destroy();
-  TempMapLabelFont.Destroy();
-  TempMapLabelImportantFont.Destroy();
 }
