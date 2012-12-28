@@ -244,10 +244,9 @@ TaskListPanel::LoadTask()
   if (orig == NULL)
     return;
 
-  tstring text = _("Load the selected task?");
-  text += _T("\n(");
-  text += get_cursor_name();
-  text += _T(")");
+  StaticString<1024> text;
+  text.Format(_T("%s?\n(%s)"), _("Load the selected task?"),
+              get_cursor_name());
 
   if (ShowMessageBox(text.c_str(), _("Task Browser"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -279,11 +278,8 @@ TaskListPanel::DeleteTask()
 
   const TCHAR *fname = task_store->GetName(cursor_index);
 
-  tstring text = _("Delete the selected task?");
-  text += _T("\n(");
-  text += fname;
-  text += _T(")");
-
+  StaticString<1024> text;
+  text.Format(_T("%s?\n(%s)"), _("Delete the selected task?"), fname);
   if (ShowMessageBox(text.c_str(), _("Task Browser"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
