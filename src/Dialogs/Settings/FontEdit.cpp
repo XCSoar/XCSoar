@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FontEdit.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Frame.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
@@ -116,13 +117,17 @@ FontEditWidget::UpdatePreview()
 {
   SaveValues();
 
+  /* revert to default font first, to avoid freeing the Font while it
+     is still being referenced */
+  WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
+  preview.SetFont(*GetLook().text_font);
+
   font.Load(data);
 
 #ifdef ENABLE_OPENGL
   TextCache::Flush();
 #endif
 
-  WndFrame &preview = (WndFrame &)GetGeneric(PREVIEW);
   if (font.IsDefined()) {
     preview.SetFont(font);
     preview.SetCaption(_T("Sample Text\n123"));
