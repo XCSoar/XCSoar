@@ -45,13 +45,13 @@ class Waypoints: private NonCopyable
    * QuadTree.
    */
   struct WaypointAccessor {
+    constexpr
     int GetX(const Waypoint &wp) const {
-      assert(wp.flat_location_initialised);
       return wp.flat_location.longitude;
     }
 
+    constexpr
     int GetY(const Waypoint &wp) const {
-      assert(wp.flat_location_initialised);
       return wp.flat_location.latitude;
     }
   };

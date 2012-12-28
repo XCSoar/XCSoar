@@ -60,6 +60,7 @@ template<typename T, typename Accessor,
          typename Alloc = std::allocator<T> >
 class QuadTree : private NonCopyable {
   struct AlwaysTrue {
+    constexpr
     bool operator()(const T &value) const {
       return true;
     }
@@ -77,6 +78,7 @@ public:
   /**
    * Returns the maximum value for the numeric type #distance_type.
    */
+  constexpr
   static inline distance_type max_distance(){
     return std::numeric_limits<distance_type>::max();
   }
@@ -87,7 +89,7 @@ public:
   /**
    * Calculate the square of this number.
    */
-  gcc_const
+  constexpr
   static distance_type Square(distance_type x) {
     return x * x;
   }
@@ -97,7 +99,7 @@ public:
    * Without this overload, the square of a negative number cannot be
    * calculated.
    */
-  gcc_const
+  constexpr
   static distance_type Square(position_type x) {
     return x * x;
   }
@@ -108,20 +110,23 @@ public:
   struct Point {
     position_type x, y;
 
+    constexpr
     Point(position_type _x, position_type _y):x(_x), y(_y) {}
 
     /**
      * Calculate the square distance to another point.
      */
-    gcc_pure
+    constexpr
     distance_type SquareDistanceTo(const Point &other) const {
       return Square(other.x - x) + Square(other.y - y);
     }
 
+    constexpr
     bool operator==(const Point &other) const {
       return x == other.x && y == other.y;
     }
 
+    constexpr
     bool operator!=(const Point &other) const {
       return !(*this == other);
     }
@@ -136,12 +141,14 @@ public:
     /**
      * Non-initialising contructor.
      */
-    Rectangle() {}
+    Rectangle() = default;
 
+    constexpr
     Rectangle(position_type _left, position_type _top,
               position_type _right, position_type _bottom)
       :left(_left), top(_top), right(_right), bottom(_bottom) {}
 
+    constexpr
     bool IsEmpty() const {
       return left == right || top == bottom;
     }
@@ -157,15 +164,17 @@ public:
     /**
      * Is this rectangle big enough so it can be splitted?
      */
+    constexpr
     bool CanSplit() const {
       return left + 2 <= right && top + 2 <= bottom;
     }
 
-    gcc_pure
+    constexpr
     Point GetMiddle() const {
       return Point((left + right) / 2, (top + bottom) / 2);
     }
 
+    constexpr
     bool IsInside(const Point &point) const {
       return point.x >= left && point.x <= right &&
         point.y >= top && point.y <= bottom;
@@ -197,24 +206,34 @@ public:
         bottom = point.y;
     }
 
-    /**
-     * Calculate the minimum square distance of this rectangle to the
-     * specified point.  Returns 0 when the point is inside.
-     */
-    distance_type SquareDistanceTo(const Point &other) const {
-      distance_type dx = other.x < left
+    constexpr
+    distance_type HorizontalDistanceTo(const Point &other) const {
+      return other.x < left
         ? left - other.x
         : (other.x > right
            ? other.x - right
            : 0);
-      distance_type dy = other.y < top
+    }
+
+    constexpr
+    distance_type VerticalDistanceTo(const Point &other) const {
+      return other.y < top
         ? top - other.y
         : (other.y > bottom
            ? other.y - bottom
            : 0);
-      return Square(dx) + Square(dy);
     }
 
+    /**
+     * Calculate the minimum square distance of this rectangle to the
+     * specified point.  Returns 0 when the point is inside.
+     */
+    constexpr
+    distance_type SquareDistanceTo(const Point &other) const {
+      return Square(HorizontalDistanceTo(other)) + Square(VerticalDistanceTo(other));
+    }
+
+    constexpr
     bool IsWithinSquareRange(const Point &other, distance_type square_range) const {
       return SquareDistanceTo(other) <= square_range;
     }
@@ -246,10 +265,10 @@ public:
   /**
    * Function wrapper for the Accessor.
    */
+  constexpr
   static Point GetPosition(const T &value) {
-    Accessor accessor;
-    return Point(accessor.GetX(value),
-                 accessor.GetY(value));
+    return Point(Accessor().GetX(value),
+                 Accessor().GetY(value));
   }
 
 protected:
@@ -266,16 +285,17 @@ protected:
     template<typename U>
     explicit Leaf(U &&_value):value(std::forward<U>(_value)) {}
 
+    constexpr
     Point GetPosition() const {
       return QuadTree<T,Accessor,Alloc>::GetPosition(value);
     }
 
-    gcc_pure
+    constexpr
     distance_type SquareDistanceTo(const Point &other) const {
       return GetPosition().SquareDistanceTo(other);
     }
 
-    gcc_pure
+    constexpr
     bool InSquareRange(const Point &ref, distance_type square_range) const {
       return GetPosition().SquareDistanceTo(ref) <= square_range;
     }
@@ -295,10 +315,12 @@ protected:
       assert(size == 0);
     }
 
+    constexpr
     bool IsEmpty() const {
       return head == nullptr;
     }
 
+    constexpr
     unsigned GetSize() const {
       return size;
     }
@@ -415,6 +437,7 @@ protected:
     }
 
     template<class P>
+    gcc_pure
     std::pair<const Leaf *, distance_type>
     FindNearestIf(const Point location, distance_type square_range,
                   const P &predicate) const {
@@ -471,10 +494,12 @@ protected:
       assert(IsEmpty());
     }
 
+    constexpr
     bool IsEmpty() const {
       return children == nullptr && leaves.IsEmpty();
     }
 
+    constexpr
     bool IsSplitted() const {
       return children != nullptr;
     }
@@ -634,6 +659,7 @@ protected:
     /**
      * Find the first Bucket in the tree that has at least one Leaf.
      */
+    gcc_pure
     const Bucket *FindFirstLeafBucket() const {
       if (!leaves.IsEmpty())
         return this;
@@ -650,6 +676,7 @@ protected:
       return nullptr;
     }
 
+    gcc_pure
     const Bucket *FindNextLeafBucket() const {
       assert(children == nullptr);
 
@@ -669,16 +696,19 @@ protected:
       return nullptr;
     }
 
+    gcc_pure
     Bucket *FindFirstLeafBucket() {
       const Bucket *cthis = this;
       return const_cast<Bucket *>(cthis->FindFirstLeafBucket());
     }
 
+    gcc_pure
     Bucket *FindNextLeafBucket() {
       const Bucket *cthis = this;
       return const_cast<Bucket *>(cthis->FindNextLeafBucket());
     }
 
+    gcc_pure
     const_iterator FindPointer(Rectangle &bounds, const T *value) const {
       assert(value != nullptr);
       assert(bounds.IsEmpty() || bounds.IsInside(GetPosition(*value)));
@@ -694,6 +724,7 @@ protected:
     }
 
     template<class P>
+    gcc_pure
     std::pair<const_iterator, distance_type>
     FindNearestIf(const Rectangle &bounds,
                   const Point location, distance_type square_range,
@@ -739,10 +770,12 @@ protected:
         buckets[i].parent = parent;
     }
 
+    gcc_const
     Bucket &Get(bool right, bool bottom) {
       return buckets[(bottom << 1) | right];
     }
 
+    gcc_pure
     const Bucket *GetNext(const Bucket *bucket) {
       assert(bucket != nullptr);
       assert(bucket->parent != nullptr);
@@ -753,7 +786,7 @@ protected:
       return ++i < N ? &buckets[i] : nullptr;
     }
 
-    gcc_pure
+    constexpr
     unsigned GetSize() const {
       return buckets[0].GetSize() + buckets[1].GetSize() +
         buckets[2].GetSize() + buckets[3].GetSize();
@@ -771,22 +804,22 @@ protected:
         buckets[i].EraseIf(predicate, leaf_allocator);
     }
 
-    gcc_const
+    constexpr
     static Rectangle GetTopLeft(const Rectangle r, const Point middle) {
       return Rectangle(r.left, r.top, middle.x, middle.y);
     }
 
-    gcc_const
+    constexpr
     static Rectangle GetTopRight(const Rectangle r, const Point middle) {
       return Rectangle(middle.x, r.top, r.right, middle.y);
     }
 
-    gcc_const
+    constexpr
     static Rectangle GetBottomLeft(const Rectangle r, const Point middle) {
       return Rectangle(r.left, middle.y, middle.x, r.bottom);
     }
 
-    gcc_const
+    constexpr
     static Rectangle GetBottomRight(const Rectangle r, const Point middle) {
       return Rectangle(middle.x, middle.y, r.right, r.bottom);
     }
@@ -801,6 +834,7 @@ protected:
     }
 
     template<class P>
+    gcc_pure
     std::pair<const_iterator, distance_type>
     FindNearestIf(const Rectangle &bounds,
                   const Point location, distance_type square_range,
@@ -869,6 +903,7 @@ protected:
   /**
    * Safely deconstify a bucket pointer.  This is a hack.
    */
+  gcc_const
   Bucket *DeconstifyBucket(const Bucket *bucket) {
     assert(bucket != nullptr);
     assert(bucket->GetRoot() == &root);
@@ -879,6 +914,7 @@ protected:
   /**
    * Safely deconstify a leaf pointer.  This is a hack.
    */
+  gcc_const
   Leaf *DeconstifyLeaf(const Leaf *leaf) {
     assert(leaf != nullptr);
 
@@ -903,6 +939,7 @@ public:
     Clear();
   }
 
+  constexpr
   bool HaveBounds() const {
     return !bounds.IsEmpty();
   }
@@ -934,10 +971,12 @@ public:
    * Is the specified value within the current bounds?  If yes, then
    * it may be added without a rescan.
    */
+  constexpr
   bool IsWithinBounds(const T &value) const {
     return bounds.IsInside(GetPosition(value));
   }
 
+  constexpr
   bool IsWithinKnownBounds(const T &value) const {
     return bounds.IsEmpty() || bounds.IsInside(GetPosition(value));
   }
@@ -955,6 +994,7 @@ public:
     return !bounds.IsEmpty();
   }
 
+  constexpr
   bool IsFlat() const {
     return !root.IsSplitted();
   }
@@ -1071,6 +1111,7 @@ public:
   /**
    * Does this QuadTree contain at least one value?
    */
+  constexpr
   bool IsEmpty() const {
     return root.IsEmpty();
   }
@@ -1081,9 +1122,11 @@ public:
     Bucket *bucket;
     Leaf *leaf;
 
+    constexpr
     iterator()
       :bucket(nullptr), leaf(nullptr) {}
 
+    constexpr
     iterator(Bucket *_bucket)
       :bucket(_bucket), leaf(bucket->leaves.head) {}
 
@@ -1094,10 +1137,12 @@ public:
     typedef T *pointer;
     typedef T &reference;
 
+    constexpr
     bool operator==(const iterator &other) const {
       return bucket == other.bucket && leaf == other.leaf;
     }
 
+    constexpr
     bool operator!=(const iterator &other) const {
       return !(*this == other);
     }
@@ -1129,6 +1174,7 @@ public:
     }
   };
 
+  gcc_pure
   iterator begin() {
     Bucket *bucket = root.FindFirstLeafBucket();
     return bucket != nullptr
@@ -1136,6 +1182,7 @@ public:
       : iterator();
   }
 
+  gcc_pure
   iterator end() {
     return iterator();
   }
@@ -1146,12 +1193,15 @@ public:
     const Bucket *bucket;
     const Leaf *leaf;
 
+    constexpr
     const_iterator()
       :bucket(nullptr), leaf(nullptr) {}
 
+    constexpr
     const_iterator(const Bucket *_bucket)
       :bucket(_bucket), leaf(bucket->leaves.head) {}
 
+    constexpr
     const_iterator(const Bucket *_bucket, const Leaf *_leaf)
       :bucket(_bucket), leaf(_leaf) {}
 
@@ -1162,13 +1212,16 @@ public:
     typedef const T *pointer;
     typedef const T &reference;
 
+    constexpr
     const_iterator(const iterator &other)
       :bucket(other.bucket), leaf(other.leaf) {}
 
+    constexpr
     bool operator==(const const_iterator &other) const {
       return bucket == other.bucket && leaf == other.leaf;
     }
 
+    constexpr
     bool operator!=(const const_iterator &other) const {
       return !(*this == other);
     }
@@ -1200,6 +1253,7 @@ public:
     }
   };
 
+  gcc_pure
   const_iterator begin() const {
     const Bucket *bucket = root.FindFirstLeafBucket();
     return bucket != nullptr
@@ -1207,10 +1261,12 @@ public:
       : const_iterator();
   }
 
+  gcc_pure
   const_iterator end() const {
     return const_iterator();
   }
 
+  gcc_pure
   const_iterator FindPointer(const T *value) const {
     assert(value != nullptr);
     assert(IsWithinKnownBounds(*value));
@@ -1219,6 +1275,7 @@ public:
     return root.FindPointer(bounds, value);
   }
 
+  gcc_pure
   unsigned size() const {
     return root.GetSize();
   }
