@@ -71,6 +71,7 @@ For Android, you need:
 - Android SDK level 16 (http://developer.android.com/sdk/)
 - Android NDK r8d (http://developer.android.com/sdk/ndk/)
 - Ogg Vorbis (http://www.vorbis.com/)
+- Apache Ant (http://ant.apache.org/)
 
 For Mac OS X, you need:
 - GCC 4.6.2 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
