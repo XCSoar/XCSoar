@@ -6,6 +6,11 @@ $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_E
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) >$@
 
+ifeq ($(WINHOST),y)
+# Deactivate printf format warnings for builds with WINHOST=y
+$(HOST_OUTPUT_DIR)/tools/GenerateSineTables.o: CXXFLAGS += -Wno-format
+endif
+
 $(call SRC_TO_OBJ,$(SRC)/Math/FastMath.cpp): $(OUT)/include/MathTables.h
 $(call SRC_TO_OBJ,$(SRC)/Math/FastTrig.cpp): $(OUT)/include/MathTables.h
 
