@@ -28,6 +28,7 @@ Copyright_License {
 #include "Edit.hpp"
 #include "DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/Enum.hpp"
 #include "Units/Group.hpp"
 
 #include <assert.h>
@@ -542,30 +543,12 @@ public:
 
   template<typename T>
   bool SaveValueEnum(unsigned i, T &value) const {
-#if GCC_VERSION >= 40700
-    /* this micro-optimisation triggers a cast-align warning on older
-       gcc versions */
-    if (sizeof(T) == sizeof(int))
-      return SaveValue(i, (int &)value);
-#endif
-
-    int value2 = (int)value;
-    if (!SaveValue(i, value2))
-      return false;
-
-    value = (T)value2;
-    return true;
+    return SaveValue(i, EnumCast<T>()(value));
   }
 
   template<typename T>
   bool SaveValueEnum(unsigned i, const TCHAR *registry_key, T &value) const {
-
-    int value2 = (int)value;
-    if (!SaveValue(i, registry_key, value2))
-      return false;
-
-    value = (T)value2;
-    return true;
+    return SaveValue(i, registry_key, EnumCast<T>()(value));
   }
 
   bool SaveValueFileReader(unsigned i, const TCHAR *registry_key);
