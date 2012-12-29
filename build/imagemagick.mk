@@ -1,8 +1,4 @@
-ifeq ($(WINHOST),y)
-  IM_PREFIX := im-
-else
-  IM_PREFIX :=
-endif
+IM_PREFIX :=
 
 # extract alpha channel
 %_alpha.png: %.png
