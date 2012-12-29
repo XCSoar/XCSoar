@@ -45,7 +45,7 @@ public:
    *
    */
   bool Update(const fixed x0) {
-    StaticArray<fixed, max> &x = this->x;
+    auto &x = this->x;
 
     assert(i < x.capacity());
 
