@@ -601,6 +601,17 @@ RowFormWidget::SaveValue(unsigned i, int &value) const
 }
 
 bool
+RowFormWidget::SaveValue(unsigned i, uint8_t &value) const
+{
+  int new_value = GetValueInteger(i);
+  if (new_value == value || new_value < 0)
+    return false;
+
+  value = (uint8_t)new_value;
+  return true;
+}
+
+bool
 RowFormWidget::SaveValue(unsigned i, uint16_t &value) const
 {
   int new_value = GetValueInteger(i);
@@ -660,6 +671,17 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 bool
 RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
                          int &value) const
+{
+  if (!SaveValue(i, value))
+    return false;
+
+  Profile::Set(registry_key, value);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+                         uint8_t &value) const
 {
   if (!SaveValue(i, value))
     return false;

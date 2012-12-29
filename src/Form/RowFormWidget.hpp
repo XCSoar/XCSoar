@@ -511,6 +511,7 @@ public:
 
   bool SaveValue(unsigned i, bool &value, bool negated = false) const;
   bool SaveValue(unsigned i, int &value) const;
+  bool SaveValue(unsigned i, uint8_t &value) const;
   bool SaveValue(unsigned i, uint16_t &value) const;
   bool SaveValue(unsigned i, fixed &value) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
@@ -522,6 +523,7 @@ public:
 
   bool SaveValue(unsigned i, const TCHAR *registry_key, bool &value, bool negated = false) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, int &value) const;
+  bool SaveValue(unsigned i, const TCHAR *registry_key, uint8_t &value) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, uint16_t &value) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, fixed &value) const;
 
