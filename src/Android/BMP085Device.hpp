@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class BMP085Device : private BMP085Listener {
+class BMP085Device gcc_final : private BMP085Listener {
   unsigned index;
   Java::Object obj;
 

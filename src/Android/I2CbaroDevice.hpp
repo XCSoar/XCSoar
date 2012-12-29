@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class I2CbaroDevice : private I2CbaroListener {
+class I2CbaroDevice gcc_final : private I2CbaroListener {
   unsigned index;
   Java::Object obj;
   DeviceConfig::PressureUse press_use;

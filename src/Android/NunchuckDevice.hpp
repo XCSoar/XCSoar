@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class NunchuckDevice : private NunchuckListener {
+class NunchuckDevice gcc_final : private NunchuckListener {
   unsigned index;
   Java::Object obj;
 
