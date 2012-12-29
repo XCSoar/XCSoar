@@ -187,10 +187,12 @@ UTM::ToGeoPoint() const
   double tan2 = _tan * _tan;
   double tan4 = tan2 * tan2;
 
-  double n = r / sqrt(1 - e * sin2);
+  double _e_sin2_sqrt = sqrt(1 - e * sin2);
+  double _e_sin2_sqrt3 = _e_sin2_sqrt * _e_sin2_sqrt * _e_sin2_sqrt;
+  double n = r / _e_sin2_sqrt;
   double c = e * _cos * _cos;
   double c2 = c * c;
-  double _r = r * (1 - e) / pow(1 - e * sin2, 1.5);
+  double _r = r * (1 - e) / _e_sin2_sqrt3;
 
   double d = x / (n * k0);
   double d2 = d * d;
