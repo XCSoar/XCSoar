@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Geo/UTM.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Util/Macros.hpp"
 
 static constexpr double k0 = 0.9996;
 
@@ -36,52 +37,9 @@ static constexpr double r = 6378137;
 char
 UTM::CalculateZoneLetter(const Angle latitude)
 {
-  fixed degrees = latitude.Degrees();
-
-  if (degrees >= fixed(84))
-    return '\0';
-  if (degrees >= fixed(72))
-    return 'X';
-  if (degrees >= fixed(64))
-    return 'W';
-  if (degrees >= fixed(56))
-    return 'V';
-  if (degrees >= fixed(48))
-    return 'U';
-  if (degrees >= fixed(40))
-    return 'T';
-  if (degrees >= fixed(32))
-    return 'S';
-  if (degrees >= fixed(24))
-    return 'R';
-  if (degrees >= fixed(16))
-    return 'Q';
-  if (degrees >= fixed(8))
-    return 'P';
-  if (degrees >= fixed(0))
-    return 'N';
-  if (degrees >= fixed(-8))
-    return 'M';
-  if (degrees >= fixed(-16))
-    return 'L';
-  if (degrees >= fixed(-24))
-    return 'K';
-  if (degrees >= fixed(-32))
-    return 'J';
-  if (degrees >= fixed(-40))
-    return 'H';
-  if (degrees >= fixed(-48))
-    return 'G';
-  if (degrees >= fixed(-56))
-    return 'F';
-  if (degrees >= fixed(-64))
-    return 'E';
-  if (degrees >= fixed(-72))
-    return 'D';
-  if (degrees >= fixed(-80))
-    return 'C';
-
-  return '\0';
+  static constexpr char letters[] = "CDEFGHJKLMNPQRSTUVWXX";
+  unsigned index = (unsigned)((latitude.Degrees() + fixed(80)) / 8);
+  return (index < ARRAY_SIZE(letters)) ? letters[index] : '\0';
 }
 
 unsigned char
