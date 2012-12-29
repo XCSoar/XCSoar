@@ -169,7 +169,8 @@ UTM::ToGeoPoint() const
 
   double m  = y / k0;
   double mu = m / (r * (1 - e / 4 - 3 * e2 / 64 - 5 * e3 / 256));
-  double _e = (1 - sqrt(1 - e)) / (1 + sqrt(1 - e));
+  double _e_sqrt = sqrt(1 - e);
+  double _e = (1 - _e_sqrt) / (1 + _e_sqrt);
   double _e2 = _e * _e;
   double _e3 = _e * _e2;
   double _e4 = _e * _e3;
