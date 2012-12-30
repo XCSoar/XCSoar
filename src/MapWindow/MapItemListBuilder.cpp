@@ -54,14 +54,12 @@ Copyright_License {
 
 class AirspaceWarningList
 {
-  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
+  StaticArray<const AbstractAirspace *,64> list;
 
 public:
   void Add(const AirspaceWarning& as) {
-    if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE)
-      ids_inside.checked_append(&as.GetAirspace());
-    else if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR)
-      ids_warning.checked_append(&as.GetAirspace());
+    if (as.GetWarningState() > AirspaceWarning::WARNING_CLEAR)
+      list.checked_append(&as.GetAirspace());
   }
 
   void Fill(const AirspaceWarningManager &awm) {
@@ -74,12 +72,8 @@ public:
     Fill(lease);
   }
 
-  bool ContainsWarning(const AbstractAirspace& as) const {
-    return ids_warning.contains(&as);
-  }
-
-  bool ContainsInside(const AbstractAirspace& as) const {
-    return ids_inside.contains(&as);
+  bool Contains(const AbstractAirspace& as) const {
+    return list.contains(&as);
   }
 };
 
@@ -92,8 +86,7 @@ public:
     :warnings(_warnings) {}
 
   bool operator()(const AbstractAirspace& airspace) const {
-    return warnings.ContainsInside(airspace) ||
-           warnings.ContainsWarning(airspace);
+    return warnings.Contains(airspace);
   }
 };
 
