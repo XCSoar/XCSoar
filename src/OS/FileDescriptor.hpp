@@ -62,9 +62,7 @@ public:
   }
 
   FileDescriptor &operator=(FileDescriptor &&other) {
-    Close();
-    fd = other.fd;
-    other.fd = -1;
+    std::swap(fd, other.fd);
     return *this;
   }
 
