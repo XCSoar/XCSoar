@@ -21,35 +21,27 @@ Copyright_License {
 }
 */
 
-#include "Markers.hpp"
-#include "LocalPath.hpp"
-#include "IO/TextWriter.hpp"
-#include "IO/DataFile.hpp"
+#include "MarkerRenderer.hpp"
+#include "Projection/WindowProjection.hpp"
+#include "Look/MarkerLook.hpp"
+#include "Markers/ProtectedMarkers.hpp"
+#include "Markers/Markers.hpp"
 
-void
-Markers::Reset()
+static void
+RenderMarkers(Canvas &canvas, const WindowProjection &projection,
+              const MarkerLook &look, const Markers &markers)
 {
-  marker_store.clear();
+  for (const Marker &m : markers) {
+    RasterPoint pt;
+    if (projection.GeoToScreenIfVisible(m.location, pt))
+      look.icon.Draw(canvas, pt);
+  }
 }
 
 void
-Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
+RenderMarkers(Canvas &canvas, const WindowProjection &projection,
+              const MarkerLook &look, const ProtectedMarkers &markers)
 {
-  assert(time.Plausible());
-
-  Marker marker = { loc, time };
-  marker_store.push_back(marker);
-
-  char message[160];
-  sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
-          time.day, time.month, time.year,
-          time.hour, time.minute, time.second,
-          (double)(loc.longitude.Degrees()), 
-          (double)(loc.latitude.Degrees()));
-
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
-  if (writer != NULL) {
-    writer->WriteLine(message);
-    delete writer;
-  }
+  const ProtectedMarkers::Lease lease(markers);
+  RenderMarkers(canvas, projection, look, lease);
 }

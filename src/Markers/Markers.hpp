@@ -28,10 +28,6 @@ Copyright_License {
 
 #include <vector>
 
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
 class Markers
 {
 public:
@@ -42,8 +38,6 @@ private:
 
 public:
   void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
   void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
 
   const_iterator begin() const {

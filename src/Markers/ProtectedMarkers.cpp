@@ -37,11 +37,3 @@ ProtectedMarkers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
   ExclusiveLease lease(*this);
   lease->MarkLocation(loc, time);
 }
-
-void
-ProtectedMarkers::Draw(Canvas &canvas, const WindowProjection &projection,
-                       const MarkerLook &look) const
-{
-  Lease lease(*this);
-  lease->Draw(canvas, projection, look);
-}

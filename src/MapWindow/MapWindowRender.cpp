@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units/Units.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/MarkerRenderer.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -82,7 +83,7 @@ MapWindow::RenderMarkers(Canvas &canvas)
 {
   if (marks != NULL &&
       render_projection.GetMapScale() <= fixed(30000))
-    marks->Draw(canvas, render_projection, look.marker);
+    ::RenderMarkers(canvas, render_projection, look.marker, *marks);
 }
 
 void

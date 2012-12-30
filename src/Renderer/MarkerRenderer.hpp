@@ -21,35 +21,16 @@ Copyright_License {
 }
 */
 
-#include "Markers.hpp"
-#include "LocalPath.hpp"
-#include "IO/TextWriter.hpp"
-#include "IO/DataFile.hpp"
+#ifndef XCSOAR_MARKER_RENDERER_HPP
+#define XCSOAR_MARKER_RENDERER_HPP
+
+class Canvas;
+class WindowProjection;
+struct MarkerLook;
+class ProtectedMarkers;
 
 void
-Markers::Reset()
-{
-  marker_store.clear();
-}
+RenderMarkers(Canvas &canvas, const WindowProjection &projection,
+              const MarkerLook &look, const ProtectedMarkers &markers);
 
-void
-Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
-{
-  assert(time.Plausible());
-
-  Marker marker = { loc, time };
-  marker_store.push_back(marker);
-
-  char message[160];
-  sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
-          time.day, time.month, time.year,
-          time.hour, time.minute, time.second,
-          (double)(loc.longitude.Degrees()), 
-          (double)(loc.latitude.Degrees()));
-
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
-  if (writer != NULL) {
-    writer->WriteLine(message);
-    delete writer;
-  }
-}
+#endif

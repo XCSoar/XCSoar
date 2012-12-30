@@ -27,9 +27,6 @@ Copyright_License {
 #include "Thread/Guard.hpp"
 
 class Markers;
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
 struct GeoPoint;
 struct BrokenDateTime;
 
@@ -40,8 +37,6 @@ public:
     Guard<Markers>(markers) {}
 
   void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
   void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
 };
 
