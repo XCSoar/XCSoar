@@ -318,7 +318,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Markers::Marker &marker = item.marker;
+  const Marker &marker = item.marker;
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);

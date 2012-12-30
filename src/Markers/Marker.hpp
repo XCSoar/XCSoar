@@ -21,37 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#ifndef XCSOAR_MARKER_HPP
+#define XCSOAR_MARKER_HPP
 
-#include "Marker.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Time/BrokenDateTime.hpp"
 
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Markers
-{
-public:
-  typedef std::vector<Marker>::const_iterator const_iterator;
-
-private:
-  std::vector<Marker> marker_store;
-
-public:
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
-
-  const_iterator begin() const {
-    return marker_store.begin();
-  }
-  const_iterator end() const {
-    return marker_store.end();
-  }
+struct Marker {
+  GeoPoint location;
+  BrokenDateTime time;
 };
 
 #endif

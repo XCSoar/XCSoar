@@ -28,7 +28,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
-#include "Markers/Markers.hpp"
+#include "Markers/Marker.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Friends.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -143,9 +143,9 @@ struct WaypointMapItem: public MapItem
 struct MarkerMapItem: public MapItem
 {
   unsigned id;
-  Markers::Marker marker;
+  Marker marker;
 
-  MarkerMapItem(unsigned _id, const Markers::Marker &_marker)
+  MarkerMapItem(unsigned _id, const Marker &_marker)
     :MapItem(MARKER), id(_id), marker(_marker) {}
 };
 
