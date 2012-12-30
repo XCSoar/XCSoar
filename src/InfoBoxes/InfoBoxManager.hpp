@@ -44,8 +44,6 @@ namespace InfoBoxManager
   void Event_Select(int i);
   void Event_Change(int i);
 
-  bool Click(InfoBoxWindow &ib);
-
   void ProcessTimer();
   void SetDirty();
 
@@ -54,15 +52,6 @@ namespace InfoBoxManager
   void Destroy();
   void Show();
   void Hide();
-
-  gcc_pure
-  const TCHAR* GetTitle(unsigned box);
-
-  gcc_pure
-  bool IsEmpty(unsigned panel);
-
-  gcc_pure
-  bool HasFocus();
 
   /**
    * Opens a dialog to select the InfoBox contents for

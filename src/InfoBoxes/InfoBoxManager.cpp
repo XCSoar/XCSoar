@@ -124,24 +124,6 @@ InfoBoxManager::Event_Select(int i)
     infoboxes[0]->FocusParent();
 }
 
-const TCHAR*
-InfoBoxManager::GetTitle(unsigned box)
-{
-  if (infoboxes[box] != NULL)
-    return infoboxes[box]->GetTitle();
-  else
-    return NULL;
-}
-
-bool
-InfoBoxManager::IsEmpty(unsigned panelIdx)
-{
-  const InfoBoxSettings &infoBoxManagerConfig =
-    CommonInterface::GetUISettings().info_boxes;
-
-  return infoBoxManagerConfig.panels[panelIdx].IsEmpty();
-}
-
 void
 InfoBoxManager::Event_Change(int i)
 {
@@ -205,12 +187,6 @@ InfoBoxManager::DisplayInfoBox()
   }
 
   first = false;
-}
-
-bool
-InfoBoxManager::HasFocus()
-{
-  return GetFocused() >= 0;
 }
 
 void
