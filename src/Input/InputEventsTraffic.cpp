@@ -96,8 +96,7 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
   unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
 
   if (count > 0) {
-    FlarmId id = dlgFlarmDetailsListShowModal(*CommonInterface::main_window,
-                                              _("Show details:"), ids, count);
+    FlarmId id = dlgFlarmDetailsListShowModal(_("Show details:"), ids, count);
 
     if (id.IsDefined())
       dlgFlarmTrafficDetailsShowModal(id);

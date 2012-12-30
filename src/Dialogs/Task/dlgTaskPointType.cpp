@@ -172,7 +172,7 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
 
   FunctionListItemRenderer item_renderer(OnPointPaintListItem);
 
-  int result = ListPicker(UIGlobals::GetMainWindow(), _("Task Point Type"),
+  int result = ListPicker(_("Task Point Type"),
                           point_types.size(), initial_index,
                           Layout::Scale(18),
                           item_renderer, false,

@@ -25,7 +25,6 @@ Copyright_License {
 #include "ComboPicker.hpp"
 #include "Form/DataField/FileReader.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "UIGlobals.hpp"
 
 bool
 FilePicker(const TCHAR *caption, const TCHAR *filter, TCHAR *buffer)
@@ -43,8 +42,7 @@ FilePicker(const TCHAR *caption, const TCHAR *filter, TCHAR *buffer)
     return false;
   }
 
-  int i = ComboPicker(UIGlobals::GetMainWindow(), caption,
-                      *combo_list, NULL);
+  int i = ComboPicker(caption, *combo_list, NULL);
   if (i < 0) {
     delete combo_list;
     return false;

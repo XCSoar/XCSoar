@@ -307,8 +307,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   StaticString<20> caption;
   caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
   info_box_combo_list = &list;
-  int result = ComboPicker(UIGlobals::GetMainWindow(), caption, list,
-                           OnInfoBoxHelp, true);
+  int result = ComboPicker(caption, list, OnInfoBoxHelp, true);
   if (result < 0)
     return;
 

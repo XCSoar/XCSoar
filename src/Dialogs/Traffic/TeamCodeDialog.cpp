@@ -146,8 +146,7 @@ OnFlarmLockClicked()
 
   if (count > 0) {
     const FlarmId id =
-      dlgFlarmDetailsListShowModal(UIGlobals::GetMainWindow(),
-                                   _("Set new teammate:"), ids, count);
+      dlgFlarmDetailsListShowModal(_("Set new teammate:"), ids, count);
 
     if (id.IsDefined()) {
       settings.team_flarm_id = id;

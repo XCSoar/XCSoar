@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/List.hpp"
-#include "UIGlobals.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Util/Macros.hpp"
 
@@ -72,7 +71,7 @@ ShowColorListDialog(Color &color)
 
   FunctionListItemRenderer item_renderer(OnPaintListItem);
 
-  int index = ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
+  int index = ListPicker(_("Select Color"),
                          ARRAY_SIZE(AirspaceLook::preset_colors), default_index,
                          Layout::FastScale(18), item_renderer);
 

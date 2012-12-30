@@ -66,7 +66,7 @@ OnItemHelp(unsigned i)
 }
 
 int
-ComboPicker(SingleWindow &parent, const TCHAR *caption,
+ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
             ListHelpCallback_t help_callback,
             bool enable_item_help)
@@ -85,7 +85,7 @@ ComboPicker(SingleWindow &parent, const TCHAR *caption,
   const UPixelScalar padding = (row_height - font_height) / 2;
 
   ComboPickerSupport support(combo_list, padding);
-  return ListPicker(parent, caption,
+  return ListPicker(caption,
                     combo_list.size(),
                     combo_list.ComboPopupItemSavedIndex,
                     row_height,
@@ -107,14 +107,14 @@ OnHelpClicked(unsigned i)
 }
 
 static int
-ComboPicker(SingleWindow &parent, const WndProperty &control,
+ComboPicker(const WndProperty &control,
             const ComboList &combo_list, bool EnableItemHelp)
 {
-  return ComboPicker(parent, control.GetCaption(), combo_list, OnHelpClicked, EnableItemHelp);
+  return ComboPicker(control.GetCaption(), combo_list, OnHelpClicked, EnableItemHelp);
 }
 
 int
-dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
+dlgComboPicker(WndProperty *theProperty)
 {
   static bool bInComboPicker = false;
   bool bInitialPage = true;
@@ -147,7 +147,7 @@ dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
       ComboPopupDataField->CopyString(sSavedInitialValue, false);
     }
 
-    int idx = ComboPicker(parent, *theProperty, *ComboListPopup, ComboPopupDataField->GetItemHelpEnabled());
+    int idx = ComboPicker(*theProperty, *ComboListPopup, ComboPopupDataField->GetItemHelpEnabled());
 
     bOpenCombo = false; //tell  combo to exit loop after close
 

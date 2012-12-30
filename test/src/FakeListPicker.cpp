@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 
 int
-dlgComboPicker(SingleWindow &parent, WndProperty *theProperty)
+dlgComboPicker(WndProperty *theProperty)
 {
   return -1;
 }

@@ -253,7 +253,7 @@ ShowFlightList(const RecordedFlightList &flight_list)
   }
 
   // Show list of the flights
-  int i = ComboPicker(UIGlobals::GetMainWindow(), _T("Choose a flight"),
+  int i = ComboPicker(_T("Choose a flight"),
                       combo, NULL, false);
 
   return (i < 0) ? NULL : &flight_list[i];

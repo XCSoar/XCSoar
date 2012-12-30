@@ -41,7 +41,6 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
 #include "Units/Units.hpp"
-#include "UIGlobals.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Language/Language.hpp"
 
@@ -154,8 +153,7 @@ ListClicked()
   list.Sort();
 
   // let the user select
-  int result = ComboPicker(UIGlobals::GetMainWindow(),
-                           _("Load Polar"), list, NULL);
+  int result = ComboPicker(_("Load Polar"), list, NULL);
   if (result < 0)
     return;
 
@@ -208,8 +206,7 @@ ImportClicked()
   list.Sort();
 
   // let the user select
-  int result = ComboPicker(UIGlobals::GetMainWindow(),
-                           _("Load Polar From File"), list, NULL);
+  int result = ComboPicker(_("Load Polar From File"), list, NULL);
   if (result < 0)
     return;
 

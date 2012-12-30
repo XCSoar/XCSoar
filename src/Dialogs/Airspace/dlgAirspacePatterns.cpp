@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Features.hpp"
 #include "Form/List.hpp"
-#include "UIGlobals.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Util/Macros.hpp"
 
@@ -63,7 +62,7 @@ dlgAirspacePatternsShowModal(const AirspaceLook &look)
 {
   AirspacePatternsDialog dialog(look);
 
-  return ListPicker(UIGlobals::GetMainWindow(), _("Select Pattern"),
+  return ListPicker(_("Select Pattern"),
                     ARRAY_SIZE(AirspaceLook::brushes), 0, Layout::FastScale(18),
                     dialog);
 }

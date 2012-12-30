@@ -152,7 +152,7 @@ private:
 };
 
 int
-ListPicker(SingleWindow &parent, const TCHAR *caption,
+ListPicker(const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update,
@@ -180,7 +180,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     list_widget->EnableItemHelp(_itemhelp_callback, text_widget, two_widgets);
   }
 
-  dialog.CreateFull(parent, caption, widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), caption, widget);
 
   if (_help_callback != nullptr)
     dialog.AddButton(_("Help"), *list_widget, HELP);

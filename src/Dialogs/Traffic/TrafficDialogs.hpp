@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class SingleWindow;
 class FlarmId;
 
 void
@@ -36,7 +35,7 @@ void
 dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
 FlarmId
-dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
+dlgFlarmDetailsListShowModal(const TCHAR *title,
                              FlarmId array[], unsigned count);
 
 #endif

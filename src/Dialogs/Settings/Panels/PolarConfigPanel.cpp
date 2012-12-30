@@ -24,7 +24,6 @@ Copyright_License {
 #include "PolarConfigPanel.hpp"
 #include "Dialogs/Plane/PolarShapeEditWidget.hpp"
 #include "ConfigPanel.hpp"
-#include "UIGlobals.hpp"
 #include "Widget/XMLWidget.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -156,7 +155,7 @@ PolarConfigPanel::LoadInternal()
 
   /* let the user select */
 
-  int result = ComboPicker(UIGlobals::GetMainWindow(), _("Load Polar"), list, NULL);
+  int result = ComboPicker(_("Load Polar"), list, NULL);
   if (result >= 0) {
     const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
 
@@ -214,8 +213,7 @@ PolarConfigPanel::LoadFromFile()
   list.Sort();
 
   // Show selection dialog
-  int result = ComboPicker(UIGlobals::GetMainWindow(),
-                           _("Load Polar From File"), list, NULL);
+  int result = ComboPicker(_("Load Polar From File"), list, NULL);
   if (result >= 0) {
     const TCHAR* path = list[result].StringValue;
     PolarInfo polar;

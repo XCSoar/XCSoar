@@ -30,12 +30,12 @@ class ComboList;
 class WndProperty;
 
 int
-ComboPicker(SingleWindow &parent, const TCHAR *caption,
+ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
             ListHelpCallback_t help_callback,
             bool enable_item_help = false);
 
 int
-dlgComboPicker(SingleWindow &parent, WndProperty *theProperty);
+dlgComboPicker(WndProperty *theProperty);
 
 #endif

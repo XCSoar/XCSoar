@@ -112,7 +112,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 }
 
 FlarmId
-dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
+dlgFlarmDetailsListShowModal(const TCHAR *title,
                              FlarmId _array[], unsigned count)
 {
   assert(count > 0);
@@ -120,7 +120,7 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
   array = _array;
   UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
   FunctionListItemRenderer item_renderer(PaintListItem);
-  unsigned index = ListPicker(parent, title, count, 0, line_height,
+  unsigned index = ListPicker(title, count, 0, line_height,
                               item_renderer, true);
   return index < count
     ? array[index]

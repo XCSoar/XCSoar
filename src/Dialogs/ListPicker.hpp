@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class SingleWindow;
 class ListItemRenderer;
 
 typedef void (*ListHelpCallback_t)(unsigned item);
@@ -36,7 +35,6 @@ typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
 
 /**
  * Shows a list dialog and lets the user pick an item.
- * @param parent
  * @param caption
  * @param num_items
  * @param initial_value
@@ -48,7 +46,7 @@ typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
  * @return the list index, or -1 if the user cancelled the dialog
  */
 int
-ListPicker(SingleWindow &parent, const TCHAR *caption,
+ListPicker(const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update = false,

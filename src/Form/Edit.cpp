@@ -178,13 +178,9 @@ WndProperty::BeginEditing()
        it exists */
     return OnHelp();
   } else if (mDataField != NULL && mDataField->supports_combolist) {
-    SingleWindow *root = (SingleWindow *)GetRootOwner();
-
     /* if this asserton fails, then there no valid root window could
        be found - maybe it didn't register its wndproc? */
-    assert(root != NULL);
-
-    dlgComboPicker(*root, this);
+    dlgComboPicker(this);
     return true;
   } else if (mDataField != NULL &&
              mDataField->GetType() == DataField::Type::ROUGH_TIME) {
