@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-12-23 13:32+0100\n"
-"PO-Revision-Date: 2012-12-16 20:24+0000\n"
+"PO-Revision-Date: 2012-12-30 09:48+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-17 08:52+0000\n"
-"X-Generator: Launchpad (build 16372)\n"
+"X-Launchpad-Export-Date: 2012-12-30 20:52+0000\n"
+"X-Generator: Launchpad (build 16378)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2629,12 +2629,12 @@ msgstr "スタートゲート　が開くか、閉まるまでの時間"
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "ゲート開または閉迄の残り時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "スタート半径"
+msgstr "スタート地点　到着"
 
 #: src/InfoBoxes/Content/Factory.cpp:1171
 #, no-c-format
@@ -2642,11 +2642,13 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"ゲート　オープン、またはクロース迄の残り時間\r\n"
+"到着見込み時間"
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Altn %d"
-msgstr "代替地　１"
+msgstr "高度　%d"
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:294
@@ -3514,7 +3516,7 @@ msgstr "ファイルマネージャーはアンドロイド２．３以降が必
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO切替、設定"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
 #, no-c-format
@@ -3575,6 +3577,9 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"i2cアドレスの設定、ここではI２Cバスの選択が、i2cに割り当てられたバス番号でな"
+"い場合使用できません\r\n"
+"信号が読めない場合使用しない設定にする"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid "Pressure use"
@@ -3843,19 +3848,19 @@ msgid "Set new audio scheme?  Old values will be lost."
 msgstr "新しいサウンド設定を読み込みますか？　以前の設定は消去されます"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
-msgstr "フラップ　＋"
+msgstr "ポジティブ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Neutral"
-msgstr "フラップ　ニュートラル"
+msgstr "ニュートラル"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
-msgstr "ネガティブ　フラップ"
+msgstr "ネガティブ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:59
 #, no-c-format
@@ -3865,27 +3870,27 @@ msgstr "着陸"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "上"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
 msgid "Middle"
-msgstr ""
+msgstr "中央揃え"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "ダウンロード"
+msgstr "下"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "ロック状態"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "塗りつぶし無し"
+msgstr "アンロック状態"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -3893,7 +3898,7 @@ msgstr "エアブレーキ　ロック"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
 msgid "Flaps"
-msgstr ""
+msgstr "フラップ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
@@ -3912,9 +3917,8 @@ msgid "Speed command"
 msgstr "スピードコマンド"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "切り替える"
+msgstr "スイッチ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -4690,16 +4694,12 @@ msgid "Status"
 msgstr "状況"
 
 #: src/Dialogs/dlgStatus.cpp:125
-#, fuzzy
 msgid "Flight"
-msgstr "飛行時間"
+msgstr "フライト"
 
 #: src/Dialogs/dlgStatus.cpp:128
-#, fuzzy
 msgid "System"
-msgstr ""
-"セットアップ\n"
-"システム"
+msgstr "システム"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
@@ -4708,7 +4708,6 @@ msgid "Rules"
 msgstr "ルール"
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
 msgstr "時間"
 
@@ -5987,16 +5986,18 @@ msgid ""
 msgstr "地図は目的地が上になるよう表示"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "風速"
+msgstr "風上が上"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
-msgstr "地図は航跡が上になるよう表示"
+msgstr ""
+"マップは風上が常に上となるように回転します。(ウェーブフライトの際に便利で"
+"す。)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
