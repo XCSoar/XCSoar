@@ -76,14 +76,6 @@ public:
   void FilterByClass(AirspaceSelectInfoVector& vec, const AirspaceClass t) const;
 
   /**
-   * Remove airspaces not matching supplied initial character
-   *
-   * @param vec List of airspaces to filter (read-write)
-   * @param c Character to match
-   */
-  void FilterByName(AirspaceSelectInfoVector& vec, const unsigned char c) const;
-
-  /**
    * Remove airspaces not matching the specifid name prefix
    *
    * @param v List of airspaces to filter (read-write)

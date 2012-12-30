@@ -66,17 +66,6 @@ AirspaceSorter::FilterByClass(AirspaceSelectInfoVector& vec,
 }
 
 void
-AirspaceSorter::FilterByName(AirspaceSelectInfoVector& vec,
-                             const unsigned char match_char) const
-{
-  auto filter = [match_char] (const AirspaceSelectInfo &info) {
-    return (((info.four_chars & 0xff000000) >> 24) != match_char);
-  };
-
-  vec.erase(std::remove_if(vec.begin(), vec.end(), filter), vec.end());
-}
-
-void
 AirspaceSorter::FilterByNamePrefix(AirspaceSelectInfoVector &v,
                                    const TCHAR *prefix) const
 {
