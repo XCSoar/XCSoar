@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Units/Units.hpp"
 #include "LocalTime.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -38,35 +37,10 @@ Copyright_License {
 
 #include <stdio.h>
 
-static void
-OnWeatherHelp(WindowControl * Sender)
-{
-  WndProperty *wp = (WndProperty*)Sender;
-  int type = wp->GetDataField()->GetAsInteger();
-  TCHAR caption[256];
-  _tcscpy(caption, _("Weather parameters"));
-  const TCHAR *label = RASP.ItemLabel(type);
-  if (label != NULL) {
-    _tcscat(caption, _T(": "));
-    _tcscat(caption, label);
-  }
-
-  const TCHAR *help = RASP.ItemHelp(type);
-  if (help == NULL)
-    help = _("No help available on this item");
-
-  dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, help);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnWeatherHelp),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgWeatherShowModal()
 {
-  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
                            _T("IDR_XML_WEATHER"));
   if (wf == NULL)
     return;
@@ -95,12 +69,13 @@ dlgWeatherShowModal()
   DataFieldEnum* dfe;
   if (wp) {
     dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->EnableItemHelp(true);
     dfe->addEnumText(_("Terrain"));
 
     for (int i = 1; i <= 15; i++) {
       const TCHAR *label = RASP.ItemLabel(i);
       if (label != NULL)
-        dfe->addEnumText(label, i);
+        dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
     }
     dfe->Set(RASP.GetParameter());
     wp->RefreshDisplay();
