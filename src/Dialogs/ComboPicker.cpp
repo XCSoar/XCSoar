@@ -110,7 +110,9 @@ static int
 ComboPicker(const WndProperty &control,
             const ComboList &combo_list, bool EnableItemHelp)
 {
-  return ComboPicker(control.GetCaption(), combo_list, OnHelpClicked, EnableItemHelp);
+  return ComboPicker(control.GetCaption(), combo_list,
+                     control.HasHelp() ? OnHelpClicked : nullptr,
+                     EnableItemHelp);
 }
 
 int
