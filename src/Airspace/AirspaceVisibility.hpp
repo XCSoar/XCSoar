@@ -2,7 +2,6 @@
 #define AIRSPACE_VISIBILITY_HPP
 
 #include "Airspace/Predicate/AirspacePredicate.hpp"
-#include "Math/fixed.hpp"
 
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
