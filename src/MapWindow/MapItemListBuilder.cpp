@@ -254,12 +254,13 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
 {
   ProtectedMarkers::Lease lease(marks);
   unsigned i = 0;
-  for (auto it = lease->begin(), it_end = lease->end(); it != it_end; ++it) {
+
+  for (const auto &m : (const Markers &)lease) {
     if (list.full())
       break;
 
-    if (location.Distance(it->location) < range)
-      list.append(new MarkerMapItem(i, *it));
+    if (location.Distance(m.location) < range)
+      list.append(new MarkerMapItem(i, m));
 
     i++;
   }
@@ -285,13 +286,13 @@ void
 MapItemListBuilder::AddTraffic(const TrafficList &flarm,
                                const TeamCodeSettings &teamcode)
 {
-  for (auto it = flarm.list.begin(), end = flarm.list.end(); it != end; ++it) {
+  for (const auto &t : flarm.list) {
     if (list.full())
       break;
 
-    if (location.Distance(it->location) < range) {
-      auto color = FlarmFriends::GetFriendColor(it->id, teamcode);
-      list.append(new TrafficMapItem(*it, color));
+    if (location.Distance(t.location) < range) {
+      auto color = FlarmFriends::GetFriendColor(t.id, teamcode);
+      list.append(new TrafficMapItem(t, color));
     }
   }
 }
@@ -301,20 +302,19 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
                                 const MoreData &basic,
                                 const DerivedInfo &calculated)
 {
-  for (auto it = thermals.sources.begin(), end = thermals.sources.end();
-       it != end; ++it) {
+  for (const auto &t : thermals.sources) {
     if (list.full())
       break;
 
     // find height difference
-    if (basic.nav_altitude < it->ground_height)
+    if (basic.nav_altitude < t.ground_height)
       continue;
 
-    GeoPoint loc = calculated.wind_available ?
-      it->CalculateAdjustedLocation(basic.nav_altitude, calculated.wind) :
-      it->location;
+    GeoPoint loc = calculated.wind_available
+      ? t.CalculateAdjustedLocation(basic.nav_altitude, calculated.wind)
+      : t.location;
 
     if (location.Distance(loc) < range)
-      list.append(new ThermalMapItem(*it));
+      list.append(new ThermalMapItem(t));
   }
 }
