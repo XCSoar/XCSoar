@@ -49,7 +49,6 @@ static const char *const all_font_paths[] = {
   "/usr/share/fonts/freefont-ttf/FreeSans.ttf",
   "/usr/share/fonts/truetype/unifont/unifont.ttf",
   "/usr/share/fonts/unifont/unifont.ttf",
-  "/usr/share/fonts/local/tahoma.ttf",
   "/usr/share/fonts/corefonts/tahoma.ttf",
 #endif
   NULL
