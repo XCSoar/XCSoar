@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/CaiGpsNav.hpp"
 #include "Device/Driver/EW.hpp"
+#include "Device/Driver/Eye.hpp"
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver/Vega.hpp"
@@ -85,6 +86,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &gt_altimeter_driver,
   &c_probe_driver,
   &levil_driver,
+  &eye_driver,
   NULL
 };
 
