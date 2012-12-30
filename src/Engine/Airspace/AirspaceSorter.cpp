@@ -46,8 +46,8 @@ AirspaceSorter::GetList() const
 }
 
 void
-AirspaceSorter::FilterByClass(AirspaceSelectInfoVector& vec,
-                             const AirspaceClass match_class) const
+AirspaceSorter::FilterByClass(AirspaceSelectInfoVector &vec,
+                              const AirspaceClass match_class)
 {
   auto filter = [match_class] (const AirspaceSelectInfo &info) {
     return info.GetAirspace().GetType() != match_class;
@@ -58,7 +58,7 @@ AirspaceSorter::FilterByClass(AirspaceSelectInfoVector& vec,
 
 void
 AirspaceSorter::FilterByNamePrefix(AirspaceSelectInfoVector &v,
-                                   const TCHAR *prefix) const
+                                   const TCHAR *prefix)
 {
   auto filter = [prefix] (const AirspaceSelectInfo &info) {
     return !info.GetAirspace().MatchNamePrefix(prefix);
@@ -104,7 +104,7 @@ AirspaceSorter::SortByDistance(AirspaceSelectInfoVector& vec) const
 }
 
 void
-AirspaceSorter::SortByName(AirspaceSelectInfoVector& vec) const
+AirspaceSorter::SortByName(AirspaceSelectInfoVector& vec)
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {

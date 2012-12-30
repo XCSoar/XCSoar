@@ -76,7 +76,7 @@ public:
    * @param vec List of airspaces to filter (read-write)
    * @param t Class of airspace to match
    */
-  void FilterByClass(AirspaceSelectInfoVector& vec, const AirspaceClass t) const;
+  static void FilterByClass(AirspaceSelectInfoVector& vec, AirspaceClass t);
 
   /**
    * Remove airspaces not matching the specifid name prefix
@@ -84,8 +84,8 @@ public:
    * @param v List of airspaces to filter (read-write)
    * @param prefix the name prefix
    */
-  void FilterByNamePrefix(AirspaceSelectInfoVector &v,
-                          const TCHAR *prefix) const;
+  static void FilterByNamePrefix(AirspaceSelectInfoVector &v,
+                                 const TCHAR *prefix);
 
   /**
    * Remove airspaces bearing greater than 18 degrees from supplied direction
@@ -115,7 +115,7 @@ public:
    *
    * @param vec List of airspaces to sort (read-write)
    */
-  void SortByName(AirspaceSelectInfoVector& vec) const;
+  static void SortByName(AirspaceSelectInfoVector &vec);
 };
 
 #endif
