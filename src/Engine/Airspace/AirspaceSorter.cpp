@@ -3,6 +3,7 @@
 #include "AbstractAirspace.hpp"
 #include "Geo/GeoVector.hpp"
 
+#include <string.h>
 #include <algorithm>
 
 AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace)
@@ -191,7 +192,7 @@ static bool
 AirspaceNameCompare(const AirspaceSelectInfo& elem1,
                     const AirspaceSelectInfo& elem2)
 {
-  return (elem1.four_chars < elem2.four_chars);
+  return _tcscmp(elem1.airspace->GetName(), elem2.airspace->GetName()) < 0;
 }
 
 void
