@@ -40,6 +40,7 @@ Version 6.5 - not yet released
   - improved angle input (e.g. wind direction, sector radials)
   - faster map initialisation during startup
   - reduce audio vario latency
+  - better bold fonts on Linux
 * infoboxes
   - added thermal assistant infobox
   - inverse colors for wind arrow infobox and flarm gauge (#2337)

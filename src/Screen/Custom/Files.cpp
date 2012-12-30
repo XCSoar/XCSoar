@@ -53,6 +53,26 @@ static const char *const all_font_paths[] = {
   NULL
 };
 
+static const char *const all_bold_font_paths[] = {
+#ifdef __APPLE__
+  "/Library/Fonts/Tahoma Bold.ttf",
+  "/Library/Fonts/Georgia Bold.ttf",
+  "/Library/Fonts/Arial Narrow Bold.ttf",
+  "/Library/Fonts/Microsoft/Arial Bold.ttf",
+#elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/truetype/ttf-droid/DroidSans-Bold.ttf",
+  "/usr/share/fonts/droid/DroidSans-Bold.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans-Bold.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf",
+  "/usr/share/fonts/corefonts/arialbd.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSansBold.ttf",
+#endif
+  nullptr
+};
+
 static const char *const all_monospace_font_paths[] = {
 #ifdef __APPLE__
   "/Library/Fonts/Courier New.ttf",
@@ -81,6 +101,12 @@ const char *
 FindDefaultFont()
 {
   return FindFile(all_font_paths);
+}
+
+const char *
+FindDefaultBoldFont()
+{
+  return FindFile(all_bold_font_paths);
 }
 
 const char *

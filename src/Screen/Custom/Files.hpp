@@ -32,6 +32,10 @@ FindDefaultFont();
 
 gcc_const
 const char *
+FindDefaultBoldFont();
+
+gcc_const
+const char *
 FindDefaultMonospaceFont();
 
 #endif

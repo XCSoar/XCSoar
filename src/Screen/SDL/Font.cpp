@@ -28,12 +28,14 @@ Copyright_License {
 #include <assert.h>
 
 static const char *font_path;
+static const char *bold_font_path;
 static const char *monospace_font_path;
 
 void
 Font::Initialise()
 {
   font_path = FindDefaultFont();
+  bold_font_path = FindDefaultBoldFont();
 
   monospace_font_path = FindDefaultMonospaceFont();
   if (monospace_font_path == NULL)
@@ -79,16 +81,26 @@ Font::Load(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
-  const char *path = (log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH
-    ? monospace_font_path
-    : font_path;
+  bool bold = log_font.lfWeight >= 700;
+
+  const char *path;
+  if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
+      monospace_font_path != nullptr) {
+    path = monospace_font_path;
+  } else if (bold && bold_font_path != nullptr) {
+    /* a bold variant of the font exists: clear the "bold" flag, so
+       SDL_TTF does not apply it again */
+    path = bold_font_path;
+    bold = false;
+  } else {
+    path = font_path;
+  }
 
   if (path == NULL)
     return false;
 
   return LoadFile(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-                  log_font.lfWeight >= 700,
-                  log_font.lfItalic);
+                  bold, log_font.lfItalic);
 }
 
 void
