@@ -583,8 +583,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/TargetMapWindow.cpp \
 	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
 	$(SRC)/MapWindow/TargetMapWindowDrag.cpp \
-	$(SRC)/GestureManager.cpp \
-	$(SRC)/TrackingGestureManager.cpp \
+	$(SRC)/UIUtil/GestureManager.cpp \
+	$(SRC)/UIUtil/TrackingGestureManager.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \

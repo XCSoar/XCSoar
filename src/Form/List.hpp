@@ -30,7 +30,7 @@ Copyright_License {
 
 #ifndef _WIN32_WCE
 #include "Screen/Timer.hpp"
-#include "KineticManager.hpp"
+#include "UIUtil/KineticManager.hpp"
 #endif
 
 struct DialogLook;

@@ -37,7 +37,7 @@
 #include "Look/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
-#include "GestureManager.hpp"
+#include "UIUtil/GestureManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Input/InputEvents.hpp"

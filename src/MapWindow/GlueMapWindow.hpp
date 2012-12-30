@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Time/PeriodClock.hpp"
-#include "TrackingGestureManager.hpp"
-#include "KineticManager.hpp"
+#include "UIUtil/TrackingGestureManager.hpp"
+#include "UIUtil/KineticManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Screen/Timer.hpp"

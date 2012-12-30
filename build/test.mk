@@ -1752,7 +1752,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/KineticManager.cpp \
+	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1767,7 +1767,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/KineticManager.cpp \
+	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1791,7 +1791,7 @@ $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 RUN_NUMBER_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/KineticManager.cpp \
+	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -2012,7 +2012,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/GestureManager.cpp \
+	$(SRC)/UIUtil/GestureManager.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \

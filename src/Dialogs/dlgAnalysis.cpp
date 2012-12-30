@@ -49,7 +49,7 @@ Copyright_License {
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/WindChartRenderer.hpp"
 #include "Renderer/CuRenderer.hpp"
-#include "GestureManager.hpp"
+#include "UIUtil/GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
