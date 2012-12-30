@@ -18,8 +18,6 @@ struct AirspaceSelectInfo
 {
   /** Pointer to actual airspace (unprotected!) */
   const AbstractAirspace *airspace;
-  /** Fast access of first four characters of name */
-  unsigned int four_chars;
 
 private:
   /** From observer to waypoint */

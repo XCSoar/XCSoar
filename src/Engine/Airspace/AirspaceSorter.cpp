@@ -7,14 +7,7 @@
 #include <algorithm>
 
 AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace)
-  :airspace(&_airspace), vec(GeoVector::Invalid())
-{
-  const TCHAR *name = airspace->GetName();
-  four_chars = ((name[0] & 0xff) << 24) +
-               ((name[1] & 0xff) << 16) +
-               ((name[2] & 0xff) << 8) +
-               ((name[3] & 0xff));
-}
+  :airspace(&_airspace), vec(GeoVector::Invalid()) {}
 
 void
 AirspaceSelectInfo::ResetVector()
