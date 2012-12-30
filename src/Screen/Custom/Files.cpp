@@ -37,17 +37,18 @@ static const char *const all_font_paths[] = {
   "c:\\windows\\fonts\\arial.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
   "/usr/share/fonts/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/droid/DroidSans.ttf",
+  "/usr/share/fonts/truetype/DroidSans.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
   "/usr/share/fonts/corefonts/arial.ttf",
   "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
   "/usr/share/fonts/freefont-ttf/FreeSans.ttf",
   "/usr/share/fonts/truetype/unifont/unifont.ttf",
   "/usr/share/fonts/unifont/unifont.ttf",
-  "/usr/share/fonts/local/tahoma.ttf",
   "/usr/share/fonts/corefonts/tahoma.ttf",
 #endif
   NULL
@@ -61,10 +62,12 @@ static const char *const all_bold_font_paths[] = {
   "/Library/Fonts/Microsoft/Arial Bold.ttf",
 #elif defined(HAVE_POSIX)
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/droid/DroidSans-Bold.ttf",
+  "/usr/share/fonts/truetype/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf",
   "/usr/share/fonts/corefonts/arialbd.ttf",
   "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
@@ -78,7 +81,9 @@ static const char *const all_monospace_font_paths[] = {
   "/Library/Fonts/Courier New.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
+  "/usr/share/fonts/truetype/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/couri.ttf",
   "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
