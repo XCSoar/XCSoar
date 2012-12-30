@@ -560,11 +560,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     // Determine whether the control is multiline or readonly
     bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
-    // Load the event callback properties
-    WindowControl::HelpCallback help_callback =
-      (WindowControl::HelpCallback)
-      GetCallBack(lookup_table, node, _T("OnHelp"));
-
     // Create the Property Control
     if (!read_only)
       style.TabStop();
@@ -573,9 +568,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
                                         caption_width, style);
     property->SetReadOnly(read_only);
-
-    // Set the help function event callback
-    property->SetOnHelpCallback(help_callback);
 
     // Load the help text
     property->SetHelpText(StringToStringDflt(node.GetAttribute(_T("Help")),
