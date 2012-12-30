@@ -42,25 +42,6 @@ public:
      state(_state) {}
 
   virtual bool operator()(const AbstractAirspace &airspace) const gcc_override;
-
-  /**
-   * Determine if airspace is visible based on observers' altitude
-   *
-   * @param airspace Airspace to test
-   *
-   * @return True if visible
-   */
-  bool IsAltitudeVisible(const AbstractAirspace &airspace) const;
-
-  /**
-   * Determine if airspace is visible based on type
-   *
-   * @param airspace Airspace to test
-   *
-   * @return True if visible
-   */
-  bool IsTypeVisible(const AbstractAirspace &airspace) const;
 };
-
 
 #endif
