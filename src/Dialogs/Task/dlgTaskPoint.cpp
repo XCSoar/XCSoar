@@ -332,16 +332,6 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   dock = (DockWindow *)wf->FindByName(_T("properties"));
   assert(dock != nullptr);
 
-  const DialogLook &look = UIGlobals::GetDialogLook();
-
-  WndFrame* wType = (WndFrame*) wf->FindByName(_T("lblType"));
-  assert (wType);
-  wType->SetFont(*look.caption.font);
-
-  WndFrame* wLocation = (WndFrame*) wf->FindByName(_T("lblLocation"));
-  assert (wLocation);
-  wLocation->SetFont(*look.caption.font);
-
   do {
     RefreshView();
     next_previous=0;
