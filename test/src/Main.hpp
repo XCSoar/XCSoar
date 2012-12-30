@@ -156,7 +156,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #elif defined(ENABLE_DIALOG_LOOK)
   dialog_look = new DialogLook();
   dialog_look->Initialise(bold_font, normal_font, small_font,
-                          bold_font, bold_font);
+                          bold_font, bold_font, bold_font);
 #endif
 
 #ifdef ENABLE_XML_DIALOG

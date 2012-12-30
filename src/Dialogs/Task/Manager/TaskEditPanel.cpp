@@ -365,7 +365,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   TCHAR buffer[120];
 
-  const Font &name_font = *dialog.GetLook().list.font;
+  const Font &name_font = *dialog.GetLook().list.font_bold;
   const Font &small_font = *dialog.GetLook().small_font;
 
   // Draw "Add turnpoint" label
@@ -575,7 +575,7 @@ void
 TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  UPixelScalar line_height = look.list.font->GetHeight()
+  UPixelScalar line_height = look.list.font_bold->GetHeight()
     + Layout::Scale(6) + look.small_font->GetHeight();
   CreateList(parent, look, rc, line_height);
 

@@ -83,7 +83,7 @@ struct DialogLook {
       Color background_color, text_color;
     } pressed;
 
-    const Font *font;
+    const Font *font, *font_bold;
 
     gcc_pure
     Color GetTextColor(bool is_selected, bool is_focused,
@@ -115,7 +115,7 @@ struct DialogLook {
   void Initialise(const Font &caption_font,
                   const Font &text_font, const Font &small_font,
                   const Font &button_font,
-                  const Font &list_font);
+                  const Font &list_font, const Font &list_font_bold);
 
   void SetBackgroundColor(Color color);
 };

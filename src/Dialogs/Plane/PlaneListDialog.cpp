@@ -130,7 +130,7 @@ gcc_pure
 static UPixelScalar
 GetRowHeight(const DialogLook &look)
 {
-  return look.list.font->GetHeight() + Layout::Scale(6)
+  return look.list.font_bold->GetHeight() + Layout::Scale(6)
     + look.small_font->GetHeight();
 }
 
@@ -188,7 +188,7 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(i < list.size());
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const Font &name_font = *look.list.font;
+  const Font &name_font = *look.list.font_bold;
   const Font &details_font = *look.small_font;
 
   canvas.SetTextColor(COLOR_BLACK);

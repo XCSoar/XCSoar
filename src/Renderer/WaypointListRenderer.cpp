@@ -103,7 +103,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   // Y-Coordinate of the second row
@@ -154,7 +154,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   Buffer buffer;

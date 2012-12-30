@@ -106,7 +106,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const LocationMapItem &item,
                           const DialogLook &dialog_look)
 {
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   PixelScalar left = rc.left + Layout::FastScale(2);
@@ -189,7 +189,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -267,7 +267,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -325,7 +325,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.icon.Draw(canvas, pt);
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -373,7 +373,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   look.thermal_source_icon.Draw(canvas, pt);
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
@@ -415,7 +415,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
 
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
   TCHAR buffer[256];
@@ -461,7 +461,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
       traffic_list->FindTraffic(item.id);
 
   // Now render the text information
-  const Font &name_font = *dialog_look.list.font;
+  const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 

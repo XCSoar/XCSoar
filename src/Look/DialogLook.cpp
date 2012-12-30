@@ -33,7 +33,8 @@ DialogLook::Initialise(const Font &caption_font,
                        const Font &_text_font,
                        const Font &_small_font,
                        const Font &button_font,
-                       const Font &list_font)
+                       const Font &list_font,
+                       const Font &list_font_bold)
 {
   caption.text_color = COLOR_BLACK;
   caption.font = &caption_font;
@@ -65,6 +66,7 @@ DialogLook::Initialise(const Font &caption_font,
   list.pressed.background_color = COLOR_YELLOW;
   list.pressed.text_color = COLOR_BLACK;
   list.font = &list_font;
+  list.font_bold = &list_font_bold;
 }
 
 void

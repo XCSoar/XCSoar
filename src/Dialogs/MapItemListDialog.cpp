@@ -157,7 +157,7 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 void
 MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  UPixelScalar item_height = dialog_look.list.font->GetHeight()
+  UPixelScalar item_height = dialog_look.list.font_bold->GetHeight()
     + Layout::Scale(6) + dialog_look.small_font->GetHeight();
   assert(item_height > 0);
 
