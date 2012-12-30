@@ -23,8 +23,6 @@ class AirspaceSelectInfo
   mutable GeoVector vec;
 
 public:
-  AirspaceSelectInfo() = default;
-
   AirspaceSelectInfo(const AbstractAirspace &_airspace)
     :airspace(&_airspace), vec(GeoVector::Invalid()) {}
 
