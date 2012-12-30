@@ -234,7 +234,6 @@ MainWindow::InitialiseConfigured()
   map->SetMapSettings(CommonInterface::GetMapSettings());
   map->SetUIState(CommonInterface::GetUIState());
   map->Create(*this, map_rect);
-  map->SetFont(Fonts::map);
 
   popup.Create(rc);
 }
