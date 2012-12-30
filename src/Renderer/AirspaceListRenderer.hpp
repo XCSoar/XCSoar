@@ -38,10 +38,23 @@ namespace AirspaceListRenderer
   gcc_pure
   UPixelScalar GetHeight(const DialogLook &dialog_look);
 
+  /**
+   * Draws an airspace list item.
+   *
+   * Comment is e.g. "Class C"
+   */
   void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
             const DialogLook &dialog_look, const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
 
+  /**
+   * Draws an airspace list item.
+   *
+   * Comment is e.g. "Class C - 20.0 km - 56 deg"
+   *
+   * @param vector The distance and direction that should be
+   * added to the comment
+   */
   void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
             const GeoVector &vector, const DialogLook &dialog_look,
             const AirspaceLook &look,
