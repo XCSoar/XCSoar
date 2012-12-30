@@ -14,7 +14,6 @@ MATH_SOURCES = \
 	$(MATH_SRC_DIR)/Filter.cpp \
 	$(MATH_SRC_DIR)/ZeroFinder.cpp \
 	$(MATH_SRC_DIR)/KalmanFilter1d.cpp \
-	$(MATH_SRC_DIR)/SelfTimingKalmanFilter1d.cpp \
-	$(MATH_SRC_DIR)/LowPassFilter.cpp
+	$(MATH_SRC_DIR)/SelfTimingKalmanFilter1d.cpp
 
 $(eval $(call link-library,math,MATH))

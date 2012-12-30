@@ -36,7 +36,10 @@ Copyright_License {
  * @return Output value (y)
  */
 gcc_const
-fixed
-LowPassFilter(fixed y_last, fixed x_in, fixed fact);
+static inline fixed
+LowPassFilter(fixed y_last, fixed x_in, fixed fact)
+{
+  return (fixed(1) - fact) * y_last + (fact) * x_in;
+}
 
 #endif
