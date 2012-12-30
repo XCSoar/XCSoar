@@ -154,7 +154,7 @@ private:
 int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
-           UPixelScalar item_height,
+           unsigned item_height,
            ListItemRenderer &item_renderer, bool update,
            ListHelpCallback_t _help_callback,
            ItemHelpCallback_t _itemhelp_callback)
