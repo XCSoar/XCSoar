@@ -28,8 +28,6 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Features.hpp"
-#include "Engine/Airspace/AirspaceClass.hpp"
-#include "Sizes.h"
 
 struct TaskLook {
   Pen oz_current_pen;
