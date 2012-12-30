@@ -25,7 +25,9 @@ private:
 
 public:
   AirspaceSelectInfo() = default;
-  AirspaceSelectInfo(const AbstractAirspace &airspace);
+
+  AirspaceSelectInfo(const AbstractAirspace &_airspace)
+    :airspace(&_airspace), vec(GeoVector::Invalid()) {}
 
   void ResetVector();
 

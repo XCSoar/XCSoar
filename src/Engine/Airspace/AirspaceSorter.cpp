@@ -6,9 +6,6 @@
 #include <string.h>
 #include <algorithm>
 
-AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace)
-  :airspace(&_airspace), vec(GeoVector::Invalid()) {}
-
 void
 AirspaceSelectInfo::ResetVector()
 {
