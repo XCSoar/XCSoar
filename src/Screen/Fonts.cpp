@@ -177,7 +177,7 @@ InitialiseLogFonts()
 
 #ifndef GNAV
   InitialiseLogfont(&log_infobox_units, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.56), true);
+                    (int)(FontHeight * 0.56));
 #endif
 
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
