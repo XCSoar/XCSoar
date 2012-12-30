@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Interface.hpp"
-#include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -65,7 +64,6 @@ InfoBoxesConfigPanel::OnAction(int id)
   if (changed) {
     Profile::Save(data, i);
     Profile::Save();
-    LogDebug(_T("InfoBox configuration: Changes saved"));
     ((WndButton &)GetRow(i)).SetCaption(gettext(data.name));
   }
 }
