@@ -7,6 +7,25 @@ struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
 struct AltitudeState;
 
+/**
+ * Checks the airspace visibility settings that use the airspace type.
+ */
+gcc_pure
+bool
+IsAirspaceTypeVisible(const AbstractAirspace &airspace,
+                      const AirspaceRendererSettings &renderer_settings);
+
+/**
+ * Checks the airspace visibility settings that use the aircraft
+ * altitude.
+ */
+gcc_pure
+bool
+IsAirspaceAltitudeVisible(const AbstractAirspace &airspace,
+                          const AltitudeState &state,
+                          const AirspaceComputerSettings &computer_settings,
+                          const AirspaceRendererSettings &renderer_settings);
+
 class AirspaceVisiblePredicate: public AirspacePredicate
 {
 protected:
