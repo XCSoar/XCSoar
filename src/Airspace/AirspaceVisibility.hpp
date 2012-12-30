@@ -22,9 +22,7 @@ public:
      renderer_settings(_renderer_settings),
      state(_state) {}
 
-  virtual bool operator()(const AbstractAirspace &airspace) const {
-    return IsTypeVisible(airspace) && IsAltitudeVisible(airspace);
-  }
+  virtual bool operator()(const AbstractAirspace &airspace) const gcc_override;
 
   /**
    * Determine if airspace is visible based on observers' altitude

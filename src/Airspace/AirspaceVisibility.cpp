@@ -60,3 +60,9 @@ AirspaceVisiblePredicate::IsAltitudeVisible(const AbstractAirspace& airspace) co
   }
   return true;
 }
+
+bool
+AirspaceVisiblePredicate::operator()(const AbstractAirspace &airspace) const
+{
+  return IsTypeVisible(airspace) && IsAltitudeVisible(airspace);
+}
