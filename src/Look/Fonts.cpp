@@ -143,8 +143,7 @@ InitialiseLogFonts()
   log_infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
-  InitialiseLogfont(&log_title, GetStandardFontFace(),
-                    FontHeight / 3, true);
+  InitialiseLogfont(&log_title, GetStandardFontFace(), FontHeight / 3);
 
   // new font for CDI Scale
   InitialiseLogfont(&log_cdi, GetStandardFontFace(),
