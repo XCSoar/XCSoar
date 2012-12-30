@@ -28,8 +28,18 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "UIGlobals.hpp"
 
-static void
-MacCreadyOffsetCallback(fixed offset)
+class MacCreadyOffsetButtons gcc_final : public OffsetButtonsWidget {
+public:
+  template<typename... Args>
+  MacCreadyOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
+
+protected:
+  /* virtual methods from OffsetButtonsWidget */
+  virtual void OnOffset(fixed offset) gcc_override;
+};
+
+void
+MacCreadyOffsetButtons::OnOffset(fixed offset)
 {
   ActionInterface::OffsetManualMacCready(offset);
 }
@@ -38,8 +48,7 @@ Widget *
 LoadMacCreadyEditPanel(unsigned id)
 {
   const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-  return new OffsetButtonsWidget(UIGlobals::GetDialogLook(),
-                                 GetUserVerticalSpeedFormat(false, true),
-                                 step, 5 * step,
-                                 MacCreadyOffsetCallback);
+  return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook(),
+                                    GetUserVerticalSpeedFormat(false, true),
+                                    step, 5 * step);
 }

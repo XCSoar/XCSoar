@@ -118,5 +118,5 @@ OffsetButtonsWidget::OnAction(int id)
 {
   assert(unsigned(id) < ARRAY_SIZE(offsets));
 
-  callback(offsets[id]);
+  OnOffset(offsets[id]);
 }

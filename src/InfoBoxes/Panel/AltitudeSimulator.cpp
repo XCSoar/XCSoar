@@ -30,8 +30,18 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
 
-static void
-ChangeAltitude(const fixed step)
+class AltitudeSimulatorOffsetButtons gcc_final : public OffsetButtonsWidget {
+public:
+  template<typename... Args>
+  AltitudeSimulatorOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
+
+protected:
+  /* virtual methods from OffsetButtonsWidget */
+  virtual void OnOffset(fixed offset) gcc_override;
+};
+
+void
+AltitudeSimulatorOffsetButtons::OnOffset(const fixed step)
 {
   if (!is_simulator())
     return;
@@ -49,7 +59,7 @@ LoadAltitudeSimulatorPanel(unsigned id)
   if (!basic.gps.simulator)
     return nullptr;
 
-  return new OffsetButtonsWidget(UIGlobals::GetDialogLook(),
-                                 _T("%+.0f"), fixed(10), fixed(100),
-                                 ChangeAltitude);
+  return new AltitudeSimulatorOffsetButtons(UIGlobals::GetDialogLook(),
+                                            _T("%+.0f"),
+                                            fixed(10), fixed(100));
 }

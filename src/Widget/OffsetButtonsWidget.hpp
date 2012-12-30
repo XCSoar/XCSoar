@@ -28,8 +28,6 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Math/fixed.hpp"
 
-#include <functional>
-
 #include <tchar.h>
 
 struct DialogLook;
@@ -40,21 +38,16 @@ class WndButton;
  * Show four buttons to increment/decrement a value.
  */
 class OffsetButtonsWidget : public NullWidget, private ActionListener {
-  typedef std::function<void(fixed offset)> Callback;
-
   const DialogLook &look;
   const TCHAR *const format;
   const fixed offsets[4];
-  const Callback callback;
   WndButton *buttons[4];
 
 public:
   OffsetButtonsWidget(const DialogLook &_look, const TCHAR *_format,
-                      fixed small_offset, fixed large_offset,
-                      Callback _callback)
+                      fixed small_offset, fixed large_offset)
     :look(_look), format(_format),
-     offsets{-large_offset, -small_offset, small_offset, large_offset},
-     callback(_callback) {}
+     offsets{-large_offset, -small_offset, small_offset, large_offset} {}
 
 public:
   /* virtual methods from Widget */
@@ -67,6 +60,9 @@ public:
   virtual void Hide();
   virtual void Move(const PixelRect &rc);
   virtual bool SetFocus();
+
+protected:
+  virtual void OnOffset(fixed offset) = 0;
 
 private:
   /* virtual methods from ActionListener */
