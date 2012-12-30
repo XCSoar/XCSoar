@@ -62,15 +62,16 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
 
+  // Y-Coordinate of the second row
+  PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
   canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
                          airspace.GetName());
 
   canvas.Select(small_font);
-  canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                         rc, comment);
+  canvas.DrawClippedText(left, top2, rc, comment);
 
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
@@ -84,8 +85,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   altitude_width = canvas.CalcTextWidth(buffer);
 
-  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4), top2,
                          rc, buffer);
 
   const RasterPoint pt(rc.left + line_height / 2,
