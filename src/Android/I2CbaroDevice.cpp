@@ -29,7 +29,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Math/LowPassFilter.hpp"
 
 static Java::TrivialClass i2cbaro_class;
 static jmethodID i2cbaro_ctor, close_method;
