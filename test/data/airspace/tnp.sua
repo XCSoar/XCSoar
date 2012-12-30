@@ -135,6 +135,13 @@ BASE=1000 ft
 TOPS=2000 ft
 CIRCLE RADIUS=5 CENTRE=N010530 E0000530
 
+# Airspace to test airspace class MATZ
+TYPE=MATZ
+TITLE=Class-MATZ-Test
+BASE=1000 ft
+TOPS=2000 ft
+CIRCLE RADIUS=5 CENTRE=N010530 E0000530
+
 # Airspace to test airspace heights
 TYPE=C
 TITLE=Height-Test-1

@@ -109,6 +109,7 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { _T("CYR"), RESTRICT },
   { _T("CYD"), DANGER },
   { _T("CYA"), CLASSF },
+  { _T("MATZ"), MATZ },
 };
 
 // this can now be called multiple times to load several airspaces.

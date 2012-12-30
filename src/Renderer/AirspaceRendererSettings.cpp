@@ -72,6 +72,7 @@ AirspaceRendererSettings::SetDefaults()
 
   classes[OTHER].SetColors(COLOR_CYAN);
   classes[DANGER].SetColors(DarkColor(COLOR_MAGENTA));
+  classes[MATZ].SetColors(DarkColor(COLOR_MAGENTA));
   classes[CLASSC].SetColors(DarkColor(COLOR_MAGENTA));
   classes[CLASSD].SetColors(COLOR_BLUE);
   classes[CTR].SetColors(DarkColor(COLOR_MAGENTA));

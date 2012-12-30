@@ -191,9 +191,10 @@ TestTNP()
     { _T("Class-TMZ-Test"), TMZ },
     { _T("Class-G-Test"), CLASSG },
     { _T("Class-CLASS-C-Test"), CLASSC },
+    { _T("Class-MATZ-Test"), MATZ },
   };
 
-  ok1(airspaces.size() == 23);
+  ok1(airspaces.size() == 24);
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->GetAirspace();
@@ -275,7 +276,7 @@ TestTNP()
 
 int main(int argc, char **argv)
 {
-  plan_tests(102);
+  plan_tests(103);
 
   TestOpenAir();
   TestTNP();
