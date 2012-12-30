@@ -79,7 +79,7 @@ public:
 
 class AirspaceAtPointPredicate: public AirspacePredicate
 {
-  AirspaceVisiblePredicate visible_predicate;
+  const AirspaceVisibility visible_predicate;
   const AirspaceWarningList &warnings;
   const GeoPoint location;
 
