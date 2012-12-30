@@ -187,17 +187,10 @@ TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &center)
   TestRangeVisitor(waypoints, center, fixed(1000000), 151);
 }
 
-class OriginalIDAbove
-{
-  unsigned threshold;
-
-public:
-  OriginalIDAbove(unsigned _threshold):threshold(_threshold) {}
-
-  bool operator()(const Waypoint &waypoint) {
-    return waypoint.original_id > threshold;
-  }
-};
+static bool
+OriginalIDAbove5(const Waypoint &waypoint) {
+  return waypoint.original_id > 5;
+}
 
 static void
 TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
@@ -234,9 +227,9 @@ TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
   ok1((waypoint = waypoints.GetNearestLandable(further, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 3);
 
-  ok1((waypoint = waypoints.GetNearestIf(center, fixed(1), OriginalIDAbove(5))) == NULL);
+  ok1((waypoint = waypoints.GetNearestIf(center, fixed(1), OriginalIDAbove5)) == NULL);
 
-  ok1((waypoint = waypoints.GetNearestIf(center, fixed(10000), OriginalIDAbove(5))) != NULL);
+  ok1((waypoint = waypoints.GetNearestIf(center, fixed(10000), OriginalIDAbove5)) != NULL);
   ok1(waypoint->original_id == 6);
 }
 
