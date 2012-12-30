@@ -48,7 +48,6 @@ private:
 
 public:
   Markers();
-  ~Markers();
 
   void Reset();
   void Draw(Canvas &canvas, const WindowProjection &projection,

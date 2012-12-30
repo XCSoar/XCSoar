@@ -40,11 +40,6 @@ Markers::Reset()
   marker_store.clear();
 }
 
-Markers::~Markers()
-{
-  marker_store.clear();
-}
-
 void
 Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 {
