@@ -2,7 +2,9 @@
 #define AIRSPACE_SORTER_HPP
 
 #include "Geo/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -10,7 +12,6 @@
 
 class AbstractAirspace;
 class Airspaces;
-struct GeoPoint;
 class TaskProjection;
 
 /** Structure to hold Airspace sorting information */
@@ -39,83 +40,67 @@ public:
 
 typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
 
-/**
- * Utility class to manage sorting of waypoints (e.g. for dlgWaypointSelect)
- * Note that distance queries do not yet make use of the kdtree, but this system
- * keeps a local master list so won't need to lock the waypoints for long.
- */
-class AirspaceSorter
-{
-  AirspaceSelectInfoVector m_airspaces_all;
+struct AirspaceFilterData {
+  /**
+   * Show only airspaces of this class.  The special value
+   * #AirspaceClass::AIRSPACECLASSCOUNT disables this filter.
+   */
+  AirspaceClass cls;
 
+  /**
+   * Show only airspaces with a name beginning with this string.
+   */
+  const TCHAR *name_prefix;
+
+  /**
+   * Show only airspaces with a direction deviating less than 18
+   * degrees from the aircraft.  A negative value disables this
+   * filter.
+   */
+  Angle direction;
+
+  /**
+   * Show only airspaces less than this number of meters from the
+   * aircraft.  A negative value disables this filter.
+   */
+  fixed distance;
+
+  void Clear() {
+    cls = AirspaceClass::AIRSPACECLASSCOUNT;
+    name_prefix = nullptr;
+    direction = Angle::Native(fixed(-1));
+    distance = fixed(-1);
+  }
+
+  gcc_pure
+  bool Match(const GeoPoint &location,
+             const TaskProjection &projection,
+             const AbstractAirspace &as) const;
+};
+
+class AirspaceFilterPredicate : public AirspacePredicate {
+  GeoPoint location;
   const TaskProjection &projection;
-  const GeoPoint &location;
+  const AirspaceFilterData &filter;
 
 public:
-  /**
-   * Constructor.  Sorts master list of waypoints by name
-   *
-   * @param _airspaces Airspaces store
-   * @param Location Location of aircraft at time of query
-   * @param distance_factor Units factor to apply to distance calculations
-   */
-  AirspaceSorter(const Airspaces &_airspaces,
-                 const GeoPoint &Location);
+  AirspaceFilterPredicate(const GeoPoint &_location,
+                          const TaskProjection &_projection,
+                          const AirspaceFilterData &_filter)
+    :location(_location), projection(_projection), filter(_filter) {}
 
-  /**
-   * Return master list
-   *
-   * @return Master list
-   */
-  gcc_pure
-  const AirspaceSelectInfoVector& GetList() const;
-
-  /**
-   * Remove airspaces not of specified class
-   *
-   * @param vec List of airspaces to filter (read-write)
-   * @param t Class of airspace to match
-   */
-  static void FilterByClass(AirspaceSelectInfoVector& vec, AirspaceClass t);
-
-  /**
-   * Remove airspaces not matching the specifid name prefix
-   *
-   * @param v List of airspaces to filter (read-write)
-   * @param prefix the name prefix
-   */
-  static void FilterByNamePrefix(AirspaceSelectInfoVector &v,
-                                 const TCHAR *prefix);
-
-  /**
-   * Remove airspaces bearing greater than 18 degrees from supplied direction
-   *
-   * @param vec List of airspaces to filter (read-write)
-   * @param direction Bearing (degrees) of desired direction
-   */
-  void FilterByDirection(AirspaceSelectInfoVector& vec, const Angle direction) const;
-
-  /**
-   * Remove airspaces further than desired direction
-   *
-   * @param vec List of airspaces to filter (read-write)
-   * @param distance Distance (user units) of limit
-   */
-  void FilterByDistance(AirspaceSelectInfoVector& vec, const fixed distance) const;
-
-  /**
-   * Sort airspaces by distance
-   *
-   * @param vec List of airspaces to sort (read-write)
-   */
-  void SortByDistance(AirspaceSelectInfoVector& vec) const;
-
-  /**
-   * Sort airspaces alphabetically
-   *
-   * @param vec List of airspaces to sort (read-write)
-   */
-  static void SortByName(AirspaceSelectInfoVector &vec);
+  virtual bool operator()(const AbstractAirspace &as) const gcc_override;
 };
+
+/**
+ * Returns a filtered list of airspaces, sorted by name or distance.
+ *
+ * @param airspaces the airspace database
+ * @param location location of aircraft at time of query
+ */
+gcc_pure
+AirspaceSelectInfoVector
+FilterAirspaces(const Airspaces &airspaces, const GeoPoint &location,
+                const AirspaceFilterData &filter);
 
 #endif

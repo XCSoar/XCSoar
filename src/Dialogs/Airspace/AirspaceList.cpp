@@ -110,8 +110,6 @@ static constexpr StaticEnumChoice type_filter_list[] = {
 
 static AirspaceSelectInfoVector airspace_list;
 
-static AirspaceSorter* airspace_sorter;
-
 struct AirspaceListDialogState
 {
   fixed distance;
@@ -140,33 +138,28 @@ AirspaceListDialog::OnActivateItem(unsigned i)
 static void
 UpdateList()
 {
-  airspace_list = airspace_sorter->GetList();
+  AirspaceFilterData data;
+  data.Clear();
 
   if (dialog_state.type != WILDCARD)
-    airspace_sorter->FilterByClass(airspace_list,
-                                   (AirspaceClass)dialog_state.type);
-  
-  bool sort_distance = false;
-  if (positive(dialog_state.distance)) {
-    sort_distance = true;
-    airspace_sorter->FilterByDistance(airspace_list, dialog_state.distance);
-  } 
-
-  if (dialog_state.direction != WILDCARD) {
-    sort_distance = true;
-    Angle a = dialog_state.direction == 0
-      ? CommonInterface::Basic().attitude.heading
-      : Angle::Degrees(dialog_state.direction);
-    airspace_sorter->FilterByDirection(airspace_list, a);
-  }
-
-  if (sort_distance)
-    airspace_sorter->SortByDistance(airspace_list);
-
+    data.cls = (AirspaceClass)dialog_state.type;
 
   const TCHAR *name_filter = name_control->GetDataField()->GetAsString();
   if (!StringIsEmpty(name_filter))
-    airspace_sorter->FilterByNamePrefix(airspace_list, name_filter);
+    data.name_prefix = name_filter;
+
+  if (dialog_state.direction != WILDCARD) {
+    data.direction = dialog_state.direction == 0
+      ? CommonInterface::Basic().attitude.heading
+      : Angle::Degrees(dialog_state.direction);
+  }
+
+  if (positive(dialog_state.distance))
+    data.distance = dialog_state.distance;
+
+  airspace_list = FilterAirspaces(*airspaces,
+                                  CommonInterface::Basic().location,
+                                  data);
 
   airspace_list_control->SetLength(std::max((size_t)1, airspace_list.size()));
   airspace_list_control->Invalidate();
@@ -404,9 +397,6 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   distance_control->GetDataField()->SetListener(&listener);
   direction_control->GetDataField()->SetListener(&listener);
   type_control->GetDataField()->SetListener(&listener);
-
-  AirspaceSorter _airspace_sorter(*airspaces, location);
-  airspace_sorter = &_airspace_sorter;
 
   UpdateList();
 
