@@ -175,8 +175,10 @@ InitialiseLogFonts()
   InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
 
-  InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
+#ifndef GNAV
+  InitialiseLogfont(&log_infobox_units, Fonts::GetStandardFontFace(),
                     (int)(FontHeight * 0.56), true);
+#endif
 
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
                     UPixelScalar(FontHeight * 0.39), false, false, false);
