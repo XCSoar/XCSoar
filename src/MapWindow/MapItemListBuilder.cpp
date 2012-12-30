@@ -26,7 +26,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
-#include "Engine/Airspace/Predicate/AirspacePredicateInside.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
@@ -81,7 +81,7 @@ class AirspaceAtPointPredicate: public AirspacePredicate
 {
   AirspaceVisiblePredicate visible_predicate;
   const AirspaceWarningList &warnings;
-  AirspacePredicateInside inside_predicate;
+  const GeoPoint location;
 
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
@@ -91,14 +91,14 @@ public:
                            const GeoPoint _location)
     :visible_predicate(_computer_settings, _renderer_settings, _state),
      warnings(_warnings),
-     inside_predicate(_location) {}
+     location(_location) {}
 
   bool operator()(const AbstractAirspace& airspace) const {
     // Airspace should be visible or have a warning/inside status
     // and airspace needs to be at specified location
 
     return (visible_predicate(airspace) || warnings.Contains(airspace)) &&
-           inside_predicate(airspace);
+      airspace.Inside(location);
   }
 };
 
