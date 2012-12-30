@@ -47,8 +47,6 @@ private:
   std::vector<Marker> marker_store;
 
 public:
-  Markers();
-
   void Reset();
   void Draw(Canvas &canvas, const WindowProjection &projection,
             const MarkerLook &look) const;

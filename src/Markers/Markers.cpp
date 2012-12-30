@@ -29,11 +29,6 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Look/MarkerLook.hpp"
 
-Markers::Markers()
-{
-  Reset();
-}
-
 void
 Markers::Reset()
 {
