@@ -126,7 +126,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 
   GeoPoint start = Basic().location;
   
-  canvas.Select(Fonts::title);
+  canvas.Select(Fonts::map_bold);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   

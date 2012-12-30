@@ -310,7 +310,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!buffer.empty()) {
     int y = rc.bottom - height;
 
-    canvas.Select(Fonts::title);
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
