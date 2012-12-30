@@ -307,6 +307,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
