@@ -50,7 +50,7 @@ AirspaceSorter::FilterByClass(AirspaceSelectInfoVector& vec,
                              const AirspaceClass match_class) const
 {
   auto filter = [match_class] (const AirspaceSelectInfo &info) {
-    return info.airspace->GetType() != match_class;
+    return info.GetAirspace().GetType() != match_class;
   };
 
   vec.erase(std::remove_if(vec.begin(), vec.end(), filter),vec.end());
@@ -61,7 +61,7 @@ AirspaceSorter::FilterByNamePrefix(AirspaceSelectInfoVector &v,
                                    const TCHAR *prefix) const
 {
   auto filter = [prefix] (const AirspaceSelectInfo &info) {
-    return !info.airspace->MatchNamePrefix(prefix);
+    return !info.GetAirspace().MatchNamePrefix(prefix);
   };
 
   v.erase(std::remove_if(v.begin(), v.end(), filter), v.end());
@@ -108,7 +108,8 @@ AirspaceSorter::SortByName(AirspaceSelectInfoVector& vec) const
 {
   auto compare = [&] (const AirspaceSelectInfo &elem1,
                       const AirspaceSelectInfo &elem2) {
-    return _tcscmp(elem1.airspace->GetName(), elem2.airspace->GetName()) < 0;
+    return _tcscmp(elem1.GetAirspace().GetName(),
+                   elem2.GetAirspace().GetName()) < 0;
   };
 
   std::sort(vec.begin(), vec.end(), compare);

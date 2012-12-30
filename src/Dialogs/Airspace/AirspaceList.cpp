@@ -134,7 +134,7 @@ AirspaceListDialog::OnActivateItem(unsigned i)
 
   assert(i < airspace_list.size());
 
-  dlgAirspaceDetails(*airspace_list[i].airspace, airspace_warnings);
+  dlgAirspaceDetails(airspace_list[i].GetAirspace(), airspace_warnings);
 }
 
 static void
@@ -232,7 +232,7 @@ AirspaceListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   assert(i < airspace_list.size());
 
-  const AbstractAirspace &airspace = *airspace_list[i].airspace;
+  const AbstractAirspace &airspace = airspace_list[i].GetAirspace();
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,

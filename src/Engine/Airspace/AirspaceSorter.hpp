@@ -14,12 +14,11 @@ struct GeoPoint;
 class TaskProjection;
 
 /** Structure to hold Airspace sorting information */
-struct AirspaceSelectInfo
+class AirspaceSelectInfo
 {
   /** Pointer to actual airspace (unprotected!) */
   const AbstractAirspace *airspace;
 
-private:
   /** From observer to waypoint */
   mutable GeoVector vec;
 
@@ -28,6 +27,10 @@ public:
 
   AirspaceSelectInfo(const AbstractAirspace &_airspace)
     :airspace(&_airspace), vec(GeoVector::Invalid()) {}
+
+  const AbstractAirspace &GetAirspace() const {
+    return *airspace;
+  }
 
   void ResetVector();
 
