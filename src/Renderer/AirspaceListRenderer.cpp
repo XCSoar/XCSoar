@@ -65,14 +65,17 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
+  // Draw airspace name
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
   canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
                          airspace.GetName());
 
+  // Draw comment line
   canvas.Select(small_font);
   canvas.DrawClippedText(left, top2, rc, comment);
 
+  // Draw upper airspace altitude limit
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
   PixelScalar altitude_width =
@@ -82,6 +85,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          small_font.GetHeight() + Layout::FastScale(2), rc,
                          buffer);
 
+  // Draw lower airspace altitude limit
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   altitude_width = canvas.CalcTextWidth(buffer);
 
