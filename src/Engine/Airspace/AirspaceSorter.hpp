@@ -28,6 +28,8 @@ public:
   AirspaceSelectInfo(const AbstractAirspace &airspace);
 
   void ResetVector();
+
+  gcc_pure
   const GeoVector &GetVector(const GeoPoint &location,
                              const TaskProjection &projection) const;
 };
