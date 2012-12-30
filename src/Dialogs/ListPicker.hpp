@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_LIST_PICKER_HPP
 #define XCSOAR_DIALOGS_LIST_PICKER_HPP
 
-#include "Form/List.hpp"
-
 #include <tchar.h>
 
 class SingleWindow;

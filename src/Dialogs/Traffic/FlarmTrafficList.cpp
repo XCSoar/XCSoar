@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/List.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"

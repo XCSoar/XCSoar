@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/ListPicker.hpp"
+#include "Form/List.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/ComboList.hpp"

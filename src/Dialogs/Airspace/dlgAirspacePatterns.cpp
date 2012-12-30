@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Features.hpp"
+#include "Form/List.hpp"
 #include "UIGlobals.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Util/Macros.hpp"
