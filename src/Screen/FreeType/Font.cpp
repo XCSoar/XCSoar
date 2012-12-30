@@ -34,6 +34,7 @@ Copyright_License {
 #include <assert.h>
 
 static const char *font_path;
+static const char *bold_font_path;
 static const char *monospace_font_path;
 
 gcc_const
@@ -54,6 +55,7 @@ void
 Font::Initialise()
 {
   font_path = FindDefaultFont();
+  bold_font_path = FindDefaultBoldFont();
 
   monospace_font_path = FindDefaultMonospaceFont();
   if (monospace_font_path == NULL)
