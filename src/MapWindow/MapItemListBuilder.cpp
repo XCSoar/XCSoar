@@ -63,8 +63,8 @@ public:
   }
 
   void Fill(const AirspaceWarningManager &awm) {
-    for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
-      Add(*i);
+    for (const AirspaceWarning &as : awm)
+      Add(as);
   }
 
   void Fill(const ProtectedAirspaceWarningManager &awm) {
