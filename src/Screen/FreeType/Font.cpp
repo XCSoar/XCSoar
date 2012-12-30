@@ -56,10 +56,7 @@ Font::Initialise()
 {
   font_path = FindDefaultFont();
   bold_font_path = FindDefaultBoldFont();
-
   monospace_font_path = FindDefaultMonospaceFont();
-  if (monospace_font_path == NULL)
-    monospace_font_path = font_path;
 }
 
 gcc_pure
