@@ -23,14 +23,6 @@ Copyright_License {
 
 #include "Math/LowPassFilter.hpp"
 
-/**
- * Implements a low-pass filter
- * @see http://en.wikipedia.org/wiki/Low-pass_filter
- * @param y_last Last output value (y-1)
- * @param x_in Input value (x)
- * @param fact Smoothing factor (alpha)
- * @return Output value (y)
- */
 fixed
 LowPassFilter(fixed y_last, fixed x_in, fixed fact)
 {
