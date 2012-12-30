@@ -54,7 +54,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update = false,
-           ListHelpCallback_t help_callback = NULL,
-           ItemHelpCallback_t itemhelp_callback = NULL);
+           ListHelpCallback_t help_callback = nullptr,
+           ItemHelpCallback_t itemhelp_callback = nullptr);
 
 #endif
