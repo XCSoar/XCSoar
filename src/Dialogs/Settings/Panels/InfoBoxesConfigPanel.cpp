@@ -27,7 +27,6 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
