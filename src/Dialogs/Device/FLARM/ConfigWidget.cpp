@@ -116,7 +116,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Baud rate"), NULL, baud_list, baud);
   AddBoolean(_("Stealth mode"), NULL, priv == 1);
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
-  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 100, range);
+  AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 250, range);
 
   static constexpr StaticEnumChoice acft_list[] = {
     { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unkown") },
