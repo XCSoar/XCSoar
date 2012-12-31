@@ -6,6 +6,7 @@ Version 6.4.6 - not yet released
 * devices
   - Leonardo: fixed vario parser for the $c sentence
   - C-Probe: fixed temperature offset bug
+  - GTAltimeter: fixed vario parser
 * user interface
   - sort airspaces properly in the airspace list dialog (#2528)
 * infoboxes

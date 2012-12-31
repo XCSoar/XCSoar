@@ -49,7 +49,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   int vario;
   if (line.ReadChecked(vario) && vario != 9999)
-    info.ProvideNettoVario(fixed(vario) / 100);
+    info.ProvideNoncompVario(fixed(vario) / 100);
 
   int temperature;
   if (line.ReadChecked(temperature) && temperature != 99) {

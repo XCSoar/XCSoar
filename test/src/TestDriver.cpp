@@ -269,8 +269,8 @@ TestGTAltimeter()
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetHectoPascal(), 995.45));
   ok1(!nmea_info.pressure_altitude_available);
-  ok1(nmea_info.netto_vario_available);
-  ok1(equals(nmea_info.netto_vario, 0.01));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, 0.01));
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature, 26));
   ok1(!nmea_info.battery_level_available);
@@ -284,8 +284,8 @@ TestGTAltimeter()
   ok1(!nmea_info.static_pressure_available);
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 149));
-  ok1(nmea_info.netto_vario_available);
-  ok1(equals(nmea_info.netto_vario, -1.23));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, -1.23));
   ok1(!nmea_info.temperature_available);
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 76));
