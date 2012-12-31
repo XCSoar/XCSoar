@@ -40,10 +40,10 @@ Copyright_License {
 using std::min;
 using std::max;
 
-#define DeltaVstep fixed(4)
-#define DeltaVlimit fixed(16)
-#define TextBug _T("Bug")
-#define TextBal _T("Bal")
+#define DELTA_V_STEP fixed(4)
+#define DELTA_V_LIMIT fixed(16)
+#define TEXT_BUG _T("Bug")
+#define TEXT_BALLAST _T("Bal")
 
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
@@ -316,13 +316,13 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 // TODO code: Optimise vario rendering, this is slow
 void
 GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
-                        DrawInfo *value_info,
-                        DrawInfo *diLabel, fixed Value, const TCHAR *Label)
+                        DrawInfo *value_info, DrawInfo *label_info,
+                        fixed value, const TCHAR *label)
 {
   PixelSize tsize;
 
 #ifndef FIXED_MATH
-  Value = (double)iround(Value * 10) / 10; // prevent the -0.0 case
+  value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 #endif
 
   if (!value_info->initialised) {
@@ -346,51 +346,51 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     value_info->initialised = true;
   }
 
-  if (!diLabel->initialised) {
+  if (!label_info->initialised) {
 
-    diLabel->rc.right = x;
-    diLabel->rc.top = y + Layout::Scale(1);
+    label_info->rc.right = x;
+    label_info->rc.top = y + Layout::Scale(1);
 
-    diLabel->rc.left = diLabel->rc.right;
+    label_info->rc.left = label_info->rc.right;
     // update back rect with max label size
-    diLabel->rc.bottom = diLabel->rc.top
+    label_info->rc.bottom = label_info->rc.top
       + look.text_font->GetCapitalHeight();
 
-    diLabel->text_position.x = diLabel->rc.left;
-    diLabel->text_position.y = diLabel->rc.top
+    label_info->text_position.x = label_info->rc.left;
+    label_info->text_position.y = label_info->rc.top
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    diLabel->last_value = fixed(-9999);
-    diLabel->last_text[0] = '\0';
-    diLabel->initialised = true;
+    label_info->last_value = fixed(-9999);
+    label_info->last_text[0] = '\0';
+    label_info->initialised = true;
   }
 
   canvas.SetBackgroundTransparent();
 
-  if (!IsPersistent() || (dirty && _tcscmp(diLabel->last_text, Label) != 0)) {
+  if (!IsPersistent() || (dirty && _tcscmp(label_info->last_text, label) != 0)) {
     canvas.SetTextColor(look.dimmed_text_color);
     canvas.Select(*look.text_font);
-    tsize = canvas.CalcTextSize(Label);
-    diLabel->text_position.x = diLabel->rc.right - tsize.cx;
+    tsize = canvas.CalcTextSize(label);
+    label_info->text_position.x = label_info->rc.right - tsize.cx;
 
     if (IsPersistent()) {
       canvas.SetBackgroundColor(look.background_color);
-      canvas.DrawOpaqueText(diLabel->text_position.x, diLabel->text_position.y,
-                            diLabel->rc, Label);
-      diLabel->rc.left = diLabel->text_position.x;
-      _tcscpy(diLabel->last_text, Label);
+      canvas.DrawOpaqueText(label_info->text_position.x, label_info->text_position.y,
+                            label_info->rc, label);
+      label_info->rc.left = label_info->text_position.x;
+      _tcscpy(label_info->last_text, label);
     } else {
-      canvas.DrawText(diLabel->text_position.x, diLabel->text_position.y,
-                      Label);
+      canvas.DrawText(label_info->text_position.x, label_info->text_position.y,
+                      label);
     }
   }
 
-  if (!IsPersistent() || (dirty && value_info->last_value != Value)) {
+  if (!IsPersistent() || (dirty && value_info->last_value != value)) {
     TCHAR buffer[18];
     canvas.SetBackgroundColor(look.background_color);
     canvas.SetTextColor(look.text_color);
-    _stprintf(buffer, _T("%.1f"), (double)Value);
+    _stprintf(buffer, _T("%.1f"), (double)value);
     canvas.Select(*look.value_font);
     tsize = canvas.CalcTextSize(buffer);
     value_info->text_position.x = value_info->rc.right - tsize.cx;
@@ -401,7 +401,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
                             value_info->rc, buffer);
 
       value_info->rc.left = value_info->text_position.x;
-      value_info->last_value = Value;
+      value_info->last_value = value;
     } else {
       canvas.DrawText(value_info->text_position.x, value_info->text_position.y,
                       buffer);
@@ -426,8 +426,8 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
       !Basic().total_energy_vario_available)
     return;
 
-  static fixed lastVdiff;
-  fixed vdiff;
+  static fixed last_v_diff;
+  fixed v_diff;
 
   const UPixelScalar arrow_y_size = Layout::Scale(3);
   const UPixelScalar arrow_x_size = Layout::Scale(7);
@@ -446,14 +446,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.flying)
       && (!Basic().gps.simulator || !Calculated().circling)) {
-    vdiff = Calculated().V_stf - Basic().indicated_airspeed;
-    vdiff = Clamp(vdiff, -DeltaVlimit, DeltaVlimit); // limit it
-    vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
+    v_diff = Calculated().V_stf - Basic().indicated_airspeed;
+    v_diff = Clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
+    v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
   } else
-    vdiff = fixed(0);
+    v_diff = fixed(0);
 
-  if (!IsPersistent() || lastVdiff != vdiff || dirty) {
-    lastVdiff = vdiff;
+  if (!IsPersistent() || last_v_diff != v_diff || dirty) {
+    last_v_diff = v_diff;
 
     if (IsPersistent()) {
       // bottom (too slow)
@@ -476,7 +476,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
     canvas.SelectNullPen();
 
     if (look.colors) {
-      if (positive(vdiff)) {
+      if (positive(v_diff)) {
         // too slow
         canvas.Select(look.sink_brush);
       } else {
@@ -489,13 +489,13 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
         canvas.SelectBlackBrush();
     }
 
-    if (positive(vdiff)) {
+    if (positive(v_diff)) {
       // too slow
       y = ybottom;
       y += YOFFSET;
 
-      while (positive(vdiff)) {
-        if (vdiff > DeltaVstep) {
+      while (positive(v_diff)) {
+        if (v_diff > DELTA_V_STEP) {
           canvas.Rectangle(x, y,
                            x + arrow_x_size * 2 + 1, y + arrow_y_size - 1);
         } else {
@@ -508,16 +508,16 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
           arrow[2].y = y;
           canvas.DrawTriangleFan(arrow, 3);
         }
-        vdiff -= DeltaVstep;
+        v_diff -= DELTA_V_STEP;
         y += arrow_y_size;
       }
-    } else if (negative(vdiff)) {
+    } else if (negative(v_diff)) {
       // too fast
       y = ytop;
       y -= YOFFSET;
 
-      while (negative(vdiff)) {
-        if (vdiff < -DeltaVstep) {
+      while (negative(v_diff)) {
+        if (v_diff < -DELTA_V_STEP) {
           canvas.Rectangle(x, y + 1,
                            x + arrow_x_size * 2 + 1, y - arrow_y_size + 2);
         } else {
@@ -530,7 +530,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
           arrow[2].y = y;
           canvas.DrawTriangleFan(arrow, 3);
         }
-        vdiff += DeltaVstep;
+        v_diff += DELTA_V_STEP;
         y -= arrow_y_size;
       }
     }
@@ -541,10 +541,10 @@ void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
   static unsigned last_ballast = -1;
-  static PixelRect recLabelBk = {-1,-1,-1,-1};
-  static PixelRect recValueBk = {-1,-1,-1,-1};
-  static RasterPoint orgLabel = {-1,-1};
-  static RasterPoint orgValue = {-1,-1};
+  static PixelRect label_rect = {-1,-1,-1,-1};
+  static PixelRect value_rect = {-1,-1,-1,-1};
+  static RasterPoint label_pos = {-1,-1};
+  static RasterPoint value_pos = {-1,-1};
 
   if (!ballast_initialised) { // ontime init, origin and background rect
     const PixelRect rc = GetClientRect();
@@ -552,44 +552,44 @@ GaugeVario::RenderBallast(Canvas &canvas)
     PixelSize tSize;
 
     // position of ballast label
-    orgLabel.x = 1;
-    orgLabel.y = rc.top + 2
+    label_pos.x = 1;
+    label_pos.y = rc.top + 2
       + look.text_font->GetCapitalHeight() * 2
       - look.text_font->GetAscentHeight();
 
     // position of ballast value
-    orgValue.x = 1;
-    orgValue.y = rc.top + 1
+    value_pos.x = 1;
+    value_pos.y = rc.top + 1
       + look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
     // set upper left corner
-    recLabelBk.left = orgLabel.x;
-    recLabelBk.top = orgLabel.y
+    label_rect.left = label_pos.x;
+    label_rect.top = label_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
     // set upper left corner
-    recValueBk.left = orgValue.x;
-    recValueBk.top = orgValue.y
+    value_rect.left = value_pos.x;
+    value_rect.top = value_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
     // get max label size
     canvas.Select(*look.text_font);
-    tSize = canvas.CalcTextSize(TextBal);
+    tSize = canvas.CalcTextSize(TEXT_BALLAST);
 
     // update back rect with max label size
-    recLabelBk.right = recLabelBk.left + tSize.cx;
-    recLabelBk.bottom = recLabelBk.top +
+    label_rect.right = label_rect.left + tSize.cx;
+    label_rect.bottom = label_rect.top +
       look.text_font->GetCapitalHeight();
 
     // get max value size
     tSize = canvas.CalcTextSize(_T("100%"));
 
-    recValueBk.right = recValueBk.left + tSize.cx;
+    value_rect.right = value_rect.left + tSize.cx;
     // update back rect with max label size
-    recValueBk.bottom = recValueBk.top +
+    value_rect.bottom = value_rect.top +
       look.text_font->GetCapitalHeight();
 
     ballast_initialised = true;
@@ -613,11 +613,11 @@ GaugeVario::RenderBallast(Canvas &canvas)
         canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
         if (IsPersistent())
-          canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
+          canvas.DrawOpaqueText(label_pos.x, label_pos.y, label_rect, TEXT_BALLAST);
         else
-          canvas.DrawText(orgLabel.x, orgLabel.y, TextBal);
+          canvas.DrawText(label_pos.x, label_pos.y, TEXT_BALLAST);
       } else if (IsPersistent())
-        canvas.DrawFilledRectangle(recLabelBk, look.background_color);
+        canvas.DrawFilledRectangle(label_rect, look.background_color);
     }
 
     // new ballast 0, hide value
@@ -627,11 +627,11 @@ GaugeVario::RenderBallast(Canvas &canvas)
       canvas.SetTextColor(look.text_color);
 
       if (IsPersistent())
-        canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
+        canvas.DrawOpaqueText(value_pos.x, value_pos.y, value_rect, buffer);
       else
-        canvas.DrawText(orgValue.x, orgValue.y, buffer);
+        canvas.DrawText(value_pos.x, value_pos.y, buffer);
     } else if (IsPersistent())
-      canvas.DrawFilledRectangle(recValueBk, look.background_color);
+      canvas.DrawFilledRectangle(value_rect, look.background_color);
 
     if (IsPersistent())
       last_ballast = ballast;
@@ -642,46 +642,46 @@ void
 GaugeVario::RenderBugs(Canvas &canvas)
 {
   static int last_bugs = -1;
-  static PixelRect recLabelBk = {-1,-1,-1,-1};
-  static PixelRect recValueBk = {-1,-1,-1,-1};
-  static RasterPoint orgLabel = {-1,-1};
-  static RasterPoint orgValue = {-1,-1};
+  static PixelRect label_rect = {-1,-1,-1,-1};
+  static PixelRect value_rect = {-1,-1,-1,-1};
+  static RasterPoint label_pos = {-1,-1};
+  static RasterPoint value_pos = {-1,-1};
 
   if (!bugs_initialised) {
     const PixelRect rc = GetClientRect();
     PixelSize tSize;
 
-    orgLabel.x = 1;
-    orgLabel.y = rc.bottom - 2
+    label_pos.x = 1;
+    label_pos.y = rc.bottom - 2
       - look.text_font->GetCapitalHeight()
       - look.text_font->GetAscentHeight();
 
-    orgValue.x = 1;
-    orgValue.y = rc.bottom - 1
+    value_pos.x = 1;
+    value_pos.y = rc.bottom - 1
       - look.text_font->GetAscentHeight();
 
-    recLabelBk.left = orgLabel.x;
-    recLabelBk.top = orgLabel.y
+    label_rect.left = label_pos.x;
+    label_rect.top = label_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
-    recValueBk.left = orgValue.x;
-    recValueBk.top = orgValue.y
+    value_rect.left = value_pos.x;
+    value_rect.top = value_pos.y
       + look.text_font->GetAscentHeight()
       - look.text_font->GetCapitalHeight();
 
     canvas.Select(*look.text_font);
-    tSize = canvas.CalcTextSize(TextBug);
+    tSize = canvas.CalcTextSize(TEXT_BUG);
 
-    recLabelBk.right = recLabelBk.left + tSize.cx;
-    recLabelBk.bottom = recLabelBk.top
+    label_rect.right = label_rect.left + tSize.cx;
+    label_rect.bottom = label_rect.top
       + look.text_font->GetCapitalHeight()
       + look.text_font->GetHeight()
       - look.text_font->GetAscentHeight();
 
     tSize = canvas.CalcTextSize(_T("100%"));
 
-    recValueBk.right = recValueBk.left + tSize.cx;
-    recValueBk.bottom = recValueBk.top +
+    value_rect.right = value_rect.left + tSize.cx;
+    value_rect.bottom = value_rect.top +
       look.text_font->GetCapitalHeight();
 
     bugs_initialised = true;
@@ -701,11 +701,11 @@ GaugeVario::RenderBugs(Canvas &canvas)
       if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         if (IsPersistent())
-          canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
+          canvas.DrawOpaqueText(label_pos.x, label_pos.y, label_rect, TEXT_BUG);
         else
-          canvas.DrawText(orgLabel.x, orgLabel.y, TextBug);
+          canvas.DrawText(label_pos.x, label_pos.y, TEXT_BUG);
       } else if (IsPersistent())
-        canvas.DrawFilledRectangle(recLabelBk, look.background_color);
+        canvas.DrawFilledRectangle(label_rect, look.background_color);
     }
 
     if (bugs > 0) {
@@ -713,11 +713,11 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (IsPersistent())
-        canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
+        canvas.DrawOpaqueText(value_pos.x, value_pos.y, value_rect, buffer);
       else 
-        canvas.DrawText(orgValue.x, orgValue.y, buffer);
+        canvas.DrawText(value_pos.x, value_pos.y, buffer);
     } else if (IsPersistent())
-      canvas.DrawFilledRectangle(recValueBk, look.background_color);
+      canvas.DrawFilledRectangle(value_rect, look.background_color);
 
     if (IsPersistent())
       last_bugs = bugs;
