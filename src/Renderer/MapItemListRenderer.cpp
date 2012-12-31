@@ -243,7 +243,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   } else if (elevation_available &&
              (int)item.reach.direct >= (int)item.elevation &&
              item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
-    buffer.UnsafeFormat(_T("%s "), _("Unreachable through terrain."));
+    buffer.UnsafeFormat(_T("%s "), _("Unreachable due to terrain."));
   } else {
     buffer.clear();
   }
