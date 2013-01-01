@@ -289,13 +289,10 @@ final class I2Cbaro extends Thread {
     h_twi.writeRead(i2c_addr, false,
                   request, request.length, dummy, 0);
 
-    /*
-     * Considering the overhead the waitForValue causes it seems pretty useless:
-     *  mean conversion time 17 ms, max 25.5 ms.
-     * if (eocPin != 0)
-     *   h_eoc.waitForValue(true);
-     * else */
-      sleep(26);
+     if (h_eoc != null)
+       h_eoc.waitForValue(true);
+     else
+       sleep(26);
 
     h_twi.writeRead(i2c_addr, false,
                   request085Value, request085Value.length,
