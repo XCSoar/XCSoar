@@ -36,7 +36,7 @@
 class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
-  fixed safety_height_terrain;
+  fixed safety_height;
 
 public:    
   /**

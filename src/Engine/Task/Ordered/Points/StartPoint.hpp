@@ -40,7 +40,7 @@
  * - enabled/disabled for multiple start points
  */
 class StartPoint gcc_final : public OrderedTaskPoint {
-  fixed safety_height_terrain;
+  fixed safety_height;
 
   TaskStartMargins margins;
 

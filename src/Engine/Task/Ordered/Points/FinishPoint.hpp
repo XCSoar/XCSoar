@@ -39,7 +39,7 @@ struct FinishConstraints;
  */
 class FinishPoint gcc_final : public OrderedTaskPoint
 {
-  fixed safety_height_arrival;
+  fixed safety_height;
 
   /**
    * A copy of OrderedTaskBehaviour::finish_constraints, managed by
