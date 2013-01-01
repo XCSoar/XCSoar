@@ -123,11 +123,13 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       SunEphemeris::CalcSunTimes(waypoint.location, basic.date_time_utc,
                                  fixed(GetUTCOffset()) / 3600);
 
+    const unsigned sunrisehours = (int)sun.time_of_sunrise;
+    const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
     const unsigned sunset_hour = (int)sun.time_of_sunset;
     const unsigned sunset_minute = (int)((sun.time_of_sunset - fixed(sunset_hour)) * 60);
 
-    buffer.UnsafeFormat(_T("%02u:%02u"), sunset_hour, sunset_minute);
-    AddReadOnly(_("Sunset"), NULL, buffer);
+    buffer.UnsafeFormat(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunset_hour, sunset_minute);
+    AddReadOnly(_("Daylight time"), NULL, buffer);
   }
 
   if (basic.location_available) {

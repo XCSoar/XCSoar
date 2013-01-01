@@ -35,7 +35,7 @@ enum Controls {
   FlightTime,
   TakeoffTime,
   LandingTime,
-  Sunset,
+  Daylight,
 };
 
 void
@@ -50,13 +50,15 @@ TimesStatusPanel::Refresh()
     SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
         basic.location, basic.date_time_utc, fixed(GetUTCOffset()) / 3600);
 
-    int sunsethours = (int)sun.time_of_sunset;
-    int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
+    const unsigned sunrisehours = (int)sun.time_of_sunrise;
+    const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
+    const unsigned sunsethours = (int)sun.time_of_sunset;
+    const unsigned sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
 
-    temp.Format(_T("%02d:%02d"), sunsethours, sunsetmins);
-    SetText(Sunset, temp);
+    temp.Format(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunsethours, sunsetmins);
+    SetText(Daylight, temp);
   } else {
-    SetText(Sunset, _T(""));
+    SetText(Daylight, _T(""));
   }
 
   if (basic.time_available) {
@@ -110,5 +112,5 @@ TimesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_("Flight time"));
   AddReadOnly(_("Takeoff time"));
   AddReadOnly(_("Landing time"));
-  AddReadOnly(_("Sunset"));
+  AddReadOnly(_("Daylight time"));
 }
