@@ -51,7 +51,7 @@ KalmanFilter1d::Reset(const fixed x_abs_value, const fixed x_vel_value)
 {
   x_abs_ = x_abs_value;
   x_vel_ = x_vel_value;
-  p_abs_abs_ = fixed(1.e10);
+  p_abs_abs_ = fixed(1.e6);
   p_abs_vel_ = fixed(0);
   p_vel_vel_ = var_x_accel_;
 }
