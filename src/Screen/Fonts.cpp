@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::infobox;
 Font Fonts::infobox_small;
@@ -223,6 +227,10 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
   if (!IsAltair())
     SizeLogFont(lf, control_width, _T("12345m"));
   infobox_small.Set(lf);
+
+#ifdef ENABLE_OPENGL
+  TextCache::Flush();
+#endif
 }
 
 void
