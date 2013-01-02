@@ -67,12 +67,10 @@ TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                  look.axis_pen);
 }
 
-static int sgn(const fixed x) {
-  if (positive(x))
-    return 1;
-  if (negative(x))
-    return -1;
-  return 0;
+static int
+sgn(const fixed x)
+{
+  return positive(x) ? 1 : (negative(x) ? -1 : 0);
 }
 
 void 
