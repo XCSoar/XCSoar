@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Protection.hpp"
+#include "UtilsSettings.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"

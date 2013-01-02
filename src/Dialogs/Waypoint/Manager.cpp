@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
+#include "UtilsSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"

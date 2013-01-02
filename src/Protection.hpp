@@ -68,16 +68,6 @@ TriggerAirspaceWarning();
 
 void CreateCalculationThread();
 
-// changed only in config or by user interface
-// used in settings dialog
-extern bool DevicePortChanged;
-extern bool AirspaceFileChanged;
-extern bool WaypointFileChanged;
-extern bool AirfieldFileChanged;
-extern bool InputFileChanged;
-extern bool MapFileChanged;
-extern bool LanguageChanged;
-
 extern bool global_running;
 
 /**

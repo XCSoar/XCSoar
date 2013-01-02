@@ -33,7 +33,7 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Asset.hpp"
-#include "Protection.hpp"
+#include "UtilsSettings.hpp"
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Canvas.hpp"

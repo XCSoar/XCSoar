@@ -34,7 +34,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
-#include "Protection.hpp"
+#include "UtilsSettings.hpp"
 #include "ConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"

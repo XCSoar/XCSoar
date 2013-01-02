@@ -24,6 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_UTILS_SETTINGS_HPP
 #define XCSOAR_UTILS_SETTINGS_HPP
 
+// changed only in config or by user interface
+// used in settings dialog
+extern bool DevicePortChanged;
+extern bool AirspaceFileChanged;
+extern bool WaypointFileChanged;
+extern bool AirfieldFileChanged;
+extern bool InputFileChanged;
+extern bool MapFileChanged;
+extern bool LanguageChanged;
+
 void
 SystemConfiguration();
 

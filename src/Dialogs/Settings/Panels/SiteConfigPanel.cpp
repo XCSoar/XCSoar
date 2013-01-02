@@ -27,7 +27,7 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Form/Button.hpp"
 #include "LocalPath.hpp"
-#include "Protection.hpp"
+#include "UtilsSettings.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
