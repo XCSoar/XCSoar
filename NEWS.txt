@@ -50,10 +50,12 @@ Version 6.4.6 - not yet released
 * devices
   - Leonardo: fixed vario parser for the $c sentence
   - C-Probe: fixed temperature offset bug
+  - GTAltimeter: fixed vario parser
 * user interface
   - sort airspaces properly in the airspace list dialog (#2528)
 * infoboxes
   - fixes broken wind arrow display in some situations (#2295)
+  - fix font scaling on screen rotation change (Android/Linux OpenGL)
 * data files
   - fixed arc airspace approximation threshold handling (#2360)
 
