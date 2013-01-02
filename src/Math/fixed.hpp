@@ -1079,4 +1079,16 @@ uround(const fixed x)
   return (unsigned)(x + fixed(0.5));
 }
 
+/**
+ * The sign function.
+ *
+ * Returns 1 for positive values, -1 for negative values and 0 for zero.
+ */
+constexpr
+static inline int
+sgn(const fixed x)
+{
+  return positive(x) ? 1 : (negative(x) ? -1 : 0);
+}
+
 #endif

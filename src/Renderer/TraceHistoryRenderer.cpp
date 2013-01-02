@@ -67,13 +67,6 @@ TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                  look.axis_pen);
 }
 
-constexpr
-static int
-sgn(const fixed x)
-{
-  return positive(x) ? 1 : (negative(x) ? -1 : 0);
-}
-
 void 
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
