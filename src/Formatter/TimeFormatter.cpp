@@ -105,8 +105,8 @@ FormatTimeTwoLines(TCHAR *buffer1, TCHAR *buffer2, int _time)
     _stprintf(buffer2, _T("%02u"), time.second);
 
   } else { // mm:ss
-    _stprintf(buffer1, _T("%02u:%02u"), time.minute, time.second);
-      buffer2[0] = '\0';
+    _stprintf(buffer1, _T("%02u'%02u"), time.minute, time.second);
+    buffer2[0] = '\0';
   }
 }
 

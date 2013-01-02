@@ -148,27 +148,27 @@ TestTwoLines()
   TCHAR buffer[256], buffer2[256];
 
   FormatTimeTwoLines(buffer, buffer2, 0);
-  ok1(StringIsEqual(buffer, _T("00:00")));
+  ok1(StringIsEqual(buffer, _T("00'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 1);
-  ok1(StringIsEqual(buffer, _T("00:01")));
+  ok1(StringIsEqual(buffer, _T("00'01")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 59);
-  ok1(StringIsEqual(buffer, _T("00:59")));
+  ok1(StringIsEqual(buffer, _T("00'59")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 60);
-  ok1(StringIsEqual(buffer, _T("01:00")));
+  ok1(StringIsEqual(buffer, _T("01'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 60 * 5);
-  ok1(StringIsEqual(buffer, _T("05:00")));
+  ok1(StringIsEqual(buffer, _T("05'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 60 * 59);
-  ok1(StringIsEqual(buffer, _T("59:00")));
+  ok1(StringIsEqual(buffer, _T("59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, 60 * 60);
@@ -184,7 +184,7 @@ TestTwoLines()
   ok1(StringIsEqual(buffer2, _T("28")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 59));
-  ok1(StringIsEqual(buffer, _T("59:00")));
+  ok1(StringIsEqual(buffer, _T("59'00")));
   ok1(StringIsEqual(buffer2, _T("")));
 
   FormatTimeTwoLines(buffer, buffer2, -(60 * 60 * 19 + 60 * 47 + 28));
