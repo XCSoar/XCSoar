@@ -31,6 +31,7 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
 #include "Engine/Contest/ContestTrace.hpp"
+#include "Util/Clamp.hpp"
 
 #include <algorithm>
 
@@ -73,8 +74,8 @@ gcc_const
 static int
 GetSnailColorIndex(fixed cv)
 {
-  return max((short)0, min((short)(TrailLook::NUMSNAILCOLORS - 1),
-                           (short)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS)));
+  return Clamp((short)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
+               (short)0, (short)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
 static std::pair<fixed, fixed>
@@ -155,7 +156,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
       if (settings.type == TrailSettings::Type::ALTITUDE) {
         unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
                        * (TrailLook::NUMSNAILCOLORS - 1));
-        index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
+        index = Clamp(index, 0u, TrailLook::NUMSNAILCOLORS - 1);
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {
