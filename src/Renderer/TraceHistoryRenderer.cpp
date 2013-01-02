@@ -67,6 +67,7 @@ TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                  look.axis_pen);
 }
 
+constexpr
 static int
 sgn(const fixed x)
 {
