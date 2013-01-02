@@ -67,13 +67,15 @@ TrailRenderer::GetBounds(const GeoPoint fallback_location) const
 /**
  * This function returns the corresponding SnailTrail
  * color array index to the input
- * @param cv Input value between -1.0 and 1.0
+ * @param vario Input value between min_vario and max_vario
  * @return SnailTrail color array index
  */
 gcc_const
 static int
-GetSnailColorIndex(fixed cv)
+GetSnailColorIndex(fixed vario, fixed min_vario, fixed max_vario)
 {
+  fixed cv = negative(vario) ? -vario / min_vario : vario / max_vario;
+
   return Clamp((int)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
                0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
@@ -160,11 +162,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {
-        const fixed colour_vario = negative(it->GetVario())
-          ? - it->GetVario() / value_min
-          : it->GetVario() / value_max ;
-
-        unsigned color_index = GetSnailColorIndex(colour_vario);
+        unsigned color_index = GetSnailColorIndex(it->GetVario(),
+                                                  value_min, value_max);
         if (negative(it->GetVario()) &&
             (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
              settings.type == TrailSettings::Type::VARIO_2_DOTS)) {
