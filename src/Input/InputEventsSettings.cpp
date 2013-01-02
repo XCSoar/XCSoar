@@ -257,7 +257,6 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
     WaypointFileChanged = true;
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
-    PolarFileChanged = true;
 
     // assuming all is ok, we can...
     Profile::Use();

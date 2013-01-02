@@ -67,9 +67,6 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
-bool PolarFileChanged = false;
-bool LanguageFileChanged = false;
-bool StatusFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
 
@@ -85,9 +82,6 @@ SettingsEnter()
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
-  PolarFileChanged = false;
-  LanguageFileChanged = false;
-  StatusFileChanged = false;
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
