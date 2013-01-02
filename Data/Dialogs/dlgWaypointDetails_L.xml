@@ -3,11 +3,11 @@
 <Form Caption="Waypoint Info">
   <Button Name="cmdGoto" Caption="GoTo" Width="70" Height="35" OnClick="OnGotoClicked" />
 
-  <SymbolButton Name="cmdMagnify" Caption="+" X="17" Y="60" Width="35" Height="35" OnClick="OnMagnifyClicked" />
-  <SymbolButton Name="cmdShrink" Caption="-" X="17" Y="97" Width="35" Height="35" OnClick="OnShrinkClicked" />
+  <SymbolButton Name="cmdMagnify" Caption="+" X="17" Y="45" Width="35" Height="35" OnClick="OnMagnifyClicked" />
+  <SymbolButton Name="cmdShrink" Caption="-" X="17" Y="82" Width="35" Height="35" OnClick="OnShrinkClicked" />
 
-  <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-70" Width="35" Height="35" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="-70" Width="35" Height="35" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-70" Width="70" Height="35" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" Y="-105" Width="70" Height="35" OnClick="OnNextClicked" />
 
   <CloseButton Y="-35" Width="70" Height="35"/>
 
