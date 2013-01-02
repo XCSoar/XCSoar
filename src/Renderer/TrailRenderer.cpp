@@ -74,8 +74,8 @@ gcc_const
 static int
 GetSnailColorIndex(fixed cv)
 {
-  return Clamp((short)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
-               (short)0, (short)(TrailLook::NUMSNAILCOLORS - 1));
+  return Clamp((int)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS),
+               0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
 static std::pair<fixed, fixed>
