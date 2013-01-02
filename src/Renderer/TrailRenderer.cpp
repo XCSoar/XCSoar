@@ -77,10 +77,11 @@ GetSnailColorIndex(fixed cv)
                            (short)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS)));
 }
 
-static void
-GetMinMax(fixed &value_min, fixed &value_max, TrailSettings::Type type,
-          const TracePointVector &trace)
+static std::pair<fixed, fixed>
+GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
 {
+  fixed value_min, value_max;
+
   if (type == TrailSettings::Type::ALTITUDE) {
     value_max = fixed(1000);
     value_min = fixed(500);
@@ -98,6 +99,8 @@ GetMinMax(fixed &value_min, fixed &value_max, TrailSettings::Type type,
     value_max = min(fixed(7.5), value_max);
     value_min = max(fixed(-5.0), value_min);
   }
+
+  return std::make_pair(value_min, value_max);
 }
 
 void
@@ -124,8 +127,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     traildrift = basic.location - tp1;
   }
 
-  fixed value_max, value_min;
-  GetMinMax(value_min, value_max, settings.type, trace);
+  auto minmax = GetMinMax(settings.type, trace);
+  fixed value_min = minmax.first;
+  fixed value_max = minmax.second;
 
   bool scaled_trail = settings.scaling_enabled &&
                       projection.GetMapScale() <= fixed(6000);
