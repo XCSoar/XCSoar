@@ -62,13 +62,14 @@ namespace KDTree
         return _M_node_allocator.deallocate(__P, 1);
       }
 
+      template<typename U>
       void
-      _M_construct_node(_Node_* __p, _Tp const __V = _Tp(),
+      _M_construct_node(_Node_* __p, U &&__V,
                         _Base_ptr const __PARENT = NULL,
                         _Base_ptr const __LEFT = NULL,
                         _Base_ptr const __RIGHT = NULL)
       {
-        new (__p) _Node_(__V, __PARENT, __LEFT, __RIGHT);
+        new (__p) _Node_(std::forward<U>(__V), __PARENT, __LEFT, __RIGHT);
       }
 
       void

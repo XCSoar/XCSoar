@@ -309,25 +309,27 @@ namespace KDTree
       const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
       const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
+      template<typename U>
       iterator
-      insert(iterator /* ignored */, const_reference __V)
+      insert(iterator /* ignored */, U &&__V)
       {
-         return this->insert(__V);
+          return this->insert(std::forward<U>(__V));
       }
 
+      template<typename U>
       iterator
-      insert(const_reference __V)
+      insert(U &&__V)
       {
         if (!_M_get_root())
           {
-            _Link_type __n = _M_new_node(__V, &_M_header);
+            _Link_type __n = _M_new_node(std::forward<U>(__V), &_M_header);
             ++_M_count;
             _M_set_root(__n);
             _M_set_leftmost(__n);
             _M_set_rightmost(__n);
             return iterator(__n);
           }
-        return _M_insert(_M_get_root(), __V, 0);
+        return _M_insert(_M_get_root(), std::forward<U>(__V), 0);
       }
 
       template <class _InputIterator>
@@ -1165,15 +1167,17 @@ namespace KDTree
       }
 
 
+      template<typename U>
       _Link_type
-      _M_new_node(const_reference __V, //  = value_type(),
+      _M_new_node(U &&__V,
                   _Base_ptr const __PARENT = NULL,
                   _Base_ptr const __LEFT = NULL,
                   _Base_ptr const __RIGHT = NULL)
       {
          typename _Base::NoLeakAlloc noleak(this);
          _Link_type new_node = noleak.get();
-         _Base::_M_construct_node(new_node, __V, __PARENT, __LEFT, __RIGHT);
+         _Base::_M_construct_node(new_node, std::forward<U>(__V),
+                                  __PARENT, __LEFT, __RIGHT);
          noleak.disconnect();
          return new_node;
       }

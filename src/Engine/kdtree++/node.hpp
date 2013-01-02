@@ -73,11 +73,13 @@ namespace KDTree
 
       _Val _M_value;
 
-      _Node(_Val const& __VALUE = _Val(),
+      template<typename U>
+      _Node(U &&__VALUE,
             _Base_ptr const __PARENT = NULL,
             _Base_ptr const __LEFT = NULL,
             _Base_ptr const __RIGHT = NULL)
-        : _Node_base(__PARENT, __LEFT, __RIGHT), _M_value(__VALUE) {}
+        : _Node_base(__PARENT, __LEFT, __RIGHT),
+          _M_value(std::forward<U>(__VALUE)) {}
 
 #ifdef KDTREE_DEFINE_OSTREAM_OPERATORS
 
