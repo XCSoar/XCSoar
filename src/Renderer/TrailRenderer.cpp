@@ -71,7 +71,7 @@ TrailRenderer::GetBounds(const GeoPoint fallback_location) const
  * @return SnailTrail color array index
  */
 gcc_const
-static int
+static unsigned
 GetSnailColorIndex(fixed vario, fixed min_vario, fixed max_vario)
 {
   fixed cv = negative(vario) ? -vario / min_vario : vario / max_vario;
