@@ -86,7 +86,7 @@ int main(int argc, char **argv)
       fixed vario = sin(elapsed / 3) * cos(elapsed / 10) *
                     cos(elapsed / 20 + fixed(2)) * fixed(3);
 
-      fixed pressure_vario = vario * fixed(12.5);
+      fixed pressure_vario = -vario * fixed(12.5);
       fixed delta_pressure = pressure_vario * 48 / 1000;
       pressure += delta_pressure;
 
