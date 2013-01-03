@@ -188,6 +188,8 @@ public:
  * @author JMW
  */
 class ScopeLock : private NonCopyable {
+  Mutex &scope_mutex;
+
 public:
   ScopeLock(Mutex& the_mutex):scope_mutex(the_mutex) {
     scope_mutex.Lock();
@@ -195,8 +197,6 @@ public:
   ~ScopeLock() {
     scope_mutex.Unlock();
   }
-private:
-  Mutex &scope_mutex;
 };
 
 /**
