@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_THREAD_HPP
 #define XCSOAR_THREAD_THREAD_HPP
 
-#include "Util/NonCopyable.hpp"
-
 #ifndef NDEBUG
 #include "Util/ListHead.hpp"
 #endif
@@ -41,7 +39,7 @@ Copyright_License {
 /**
  * This class provides an OS independent view on a thread.
  */
-class Thread : private NonCopyable {
+class Thread {
 #ifndef NDEBUG
   ListHead siblings;
 #endif
@@ -82,6 +80,9 @@ public:
     assert(!IsDefined());
   }
 #endif
+
+  Thread(const Thread &other) = delete;
+  Thread &operator=(const Thread &other) = delete;
 
   bool IsDefined() const {
 #ifdef HAVE_POSIX

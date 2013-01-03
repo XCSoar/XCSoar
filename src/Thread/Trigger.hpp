@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_TRIGGER_HXX
 #define XCSOAR_THREAD_TRIGGER_HXX
 
-#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #ifdef HAVE_POSIX
@@ -39,7 +38,7 @@ Copyright_License {
  * This class wraps an OS specific trigger.  It is an object which one
  * thread can wait for, and another thread can wake it up.
  */
-class Trigger : private NonCopyable {
+class Trigger {
 #ifdef HAVE_POSIX
   /** this mutex protects the value */
   mutable pthread_mutex_t mutex;
@@ -78,6 +77,9 @@ public:
     ::CloseHandle(handle);
 #endif
   }
+
+  Trigger(const Trigger &other) = delete;
+  Trigger &operator=(const Trigger &other) = delete;
 
 public:
   /**

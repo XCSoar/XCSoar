@@ -24,14 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_CRITICAL_SECTION_HXX
 #define XCSOAR_THREAD_CRITICAL_SECTION_HXX
 
-#include "Util/NonCopyable.hpp"
-
 #include <windows.h>
 
 /**
  * Low-level wrapper for a CRITICAL_SECTION.
  */
-class CriticalSection : private NonCopyable {
+class CriticalSection {
   CRITICAL_SECTION critical_section;
 
 public:
@@ -42,6 +40,9 @@ public:
   ~CriticalSection() {
     ::DeleteCriticalSection(&critical_section);
   }
+
+  CriticalSection(const CriticalSection &other) = delete;
+  CriticalSection &operator=(const CriticalSection &other) = delete;
 
   void Lock() {
     ::EnterCriticalSection(&critical_section);
