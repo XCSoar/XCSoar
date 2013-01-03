@@ -156,9 +156,10 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
     if (last_valid) {
       if (settings.type == TrailSettings::Type::ALTITUDE) {
-        unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
-                       * (TrailLook::NUMSNAILCOLORS - 1));
-        index = Clamp(index, 0u, TrailLook::NUMSNAILCOLORS - 1);
+        fixed relative_altitude =
+          (it->GetAltitude() - value_min) / (value_max - value_min);
+        int _max = TrailLook::NUMSNAILCOLORS - 1;
+        unsigned index = Clamp((int)(relative_altitude * _max), 0, _max);
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {

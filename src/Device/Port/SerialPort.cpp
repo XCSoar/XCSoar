@@ -52,10 +52,16 @@ SerialPort::~SerialPort()
   if (hPort != INVALID_HANDLE_VALUE) {
     StoppableThread::BeginStop();
 
+    /* Some CE widcomm drivers has a bug that locks/hangs
+       ReadFile if the handle is closed.
+       Wait for the thread to finish before closing the handle. */
+    bool finished = is_widcomm && Thread::Join(2000);
+      
     if (CloseHandle(hPort) && !IsEmbedded())
       Sleep(2000); // needed for windows bug
 
-    Thread::Join();
+    if (!finished)
+      Thread::Join();
   }
 
   BufferedPort::EndClose();
