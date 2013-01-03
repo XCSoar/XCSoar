@@ -80,6 +80,15 @@ GetSnailColorIndex(fixed vario, fixed min_vario, fixed max_vario)
                0, (int)(TrailLook::NUMSNAILCOLORS - 1));
 }
 
+gcc_const
+static unsigned
+GetAltitudeColorIndex(fixed alt, fixed min_alt, fixed max_alt)
+{
+  fixed relative_altitude = (alt - min_alt) / (max_alt - min_alt);
+  int _max = TrailLook::NUMSNAILCOLORS - 1;
+  return Clamp((int)(relative_altitude * _max), 0, _max);
+}
+
 static std::pair<fixed, fixed>
 GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
 {
@@ -156,10 +165,8 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
     if (last_valid) {
       if (settings.type == TrailSettings::Type::ALTITUDE) {
-        fixed relative_altitude =
-          (it->GetAltitude() - value_min) / (value_max - value_min);
-        int _max = TrailLook::NUMSNAILCOLORS - 1;
-        unsigned index = Clamp((int)(relative_altitude * _max), 0, _max);
+        unsigned index = GetAltitudeColorIndex(it->GetAltitude(),
+                                               value_min, value_max);
         canvas.Select(look.trail_pens[index]);
         canvas.DrawLinePiece(last_point, pt);
       } else {
