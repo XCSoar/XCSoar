@@ -300,22 +300,16 @@ public:
                        OperationEnvironment &env) gcc_override;
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) gcc_override {
-    return false;
-  }
+                              OperationEnvironment &env) gcc_override;
 
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path,
-                              OperationEnvironment &env) gcc_override {
-    return false;
-  }
+                              OperationEnvironment &env) gcc_override;
 
   virtual void OnSysTicker() gcc_override;
 
   virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) gcc_override {
-    return false;
-  }
+                            struct NMEAInfo &info) gcc_override;
 
   virtual void OnSensorUpdate(const MoreData &basic) gcc_override {}
 

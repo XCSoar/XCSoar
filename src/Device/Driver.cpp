@@ -106,3 +106,23 @@ void
 AbstractDevice::OnSysTicker()
 {
 }
+
+bool
+AbstractDevice::ReadFlightList(RecordedFlightList &flight_list,
+                               OperationEnvironment &env)
+{
+  return false;
+}
+
+bool
+AbstractDevice::DownloadFlight(const RecordedFlightInfo &flight,
+                               const TCHAR *path, OperationEnvironment &env)
+{
+  return false;
+}
+
+bool
+AbstractDevice::DataReceived(const void *data, size_t length, NMEAInfo &info)
+{
+  return false;
+}
