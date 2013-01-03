@@ -24,10 +24,13 @@ Copyright_License {
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
+#include "Math/WindowFilter.hpp"
 
 #include <stdlib.h>
 
 class FlyNetDevice : public AbstractDevice {
+  WindowFilter<40> vario_filter;
+
 public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 
@@ -58,21 +61,34 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
 {
   // e.g. _PRS 00017CBA
 
+  // The frequency at which the device sends _PRS sentences
+  static constexpr fixed frequency = fixed(1 / 0.048);
+
   char *endptr;
   long value = strtol(content, &endptr, 16);
   if (endptr != content) {
-    fixed pressure = fixed(value);
+    auto pressure = AtmosphericPressure::Pascal(fixed(value));
 
-    // Low-pass filter
-    fixed filtered_pressure;
-    static constexpr fixed alpha(0.05);
-    if (!info.static_pressure_available)
-      filtered_pressure = pressure;
-    else
-      filtered_pressure = alpha * pressure +
-          (fixed(1) - alpha) * info.static_pressure.GetPascal();
+    if (info.static_pressure_available) {
+      // Calculate non-compensated vario value
 
-    info.ProvideStaticPressure(AtmosphericPressure::Pascal(filtered_pressure));
+      auto last_pressure = info.static_pressure;
+
+      fixed alt = AtmosphericPressure::StaticPressureToPressureAltitude(pressure);
+      fixed last_alt = AtmosphericPressure::StaticPressureToPressureAltitude(last_pressure);
+
+      fixed vario = (alt - last_alt) * frequency;
+      vario_filter.Update(vario);
+
+      fixed vario_filtered = vario_filter.Average();
+
+      info.ProvideNoncompVario(vario_filtered);
+    } else {
+      // Reset filter when the first new pressure sentence is received
+      vario_filter.Reset();
+    }
+
+    info.ProvideStaticPressure(pressure);
   }
 
   return true;
