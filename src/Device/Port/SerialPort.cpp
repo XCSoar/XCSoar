@@ -46,16 +46,31 @@ SerialPort::SerialPort(DataHandler &_handler)
 
 SerialPort::~SerialPort()
 {
+  bool finished;
   BufferedPort::BeginClose();
 
   // Close the communication port.
   if (hPort != INVALID_HANDLE_VALUE) {
     StoppableThread::BeginStop();
 
-    if (CloseHandle(hPort) && !IsEmbedded())
-      Sleep(2000); // needed for windows bug
+    if (is_widcomm) {
+      // Some CE widcomm drivers has a bug that locks/hangs
+      // ReadFile if the handle is closed.
+      // Wait for the thread to finish before closing the handle.
+      finished = Thread::Join(2000);
+      
+      if (CloseHandle(hPort) && !IsEmbedded())
+        Sleep(2000); // needed for windows bug
+          
+      if (!finished) 
+        Thread::Join();
+    }
+    else {
+      if (CloseHandle(hPort) && !IsEmbedded())
+        Sleep(2000); // needed for windows bug
 
-    Thread::Join();
+      Thread::Join();
+    }
   }
 
   BufferedPort::EndClose();
