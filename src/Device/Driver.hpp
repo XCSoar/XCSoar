@@ -277,43 +277,43 @@ public:
  */
 class AbstractDevice : public Device {
 public:
-  virtual void LinkTimeout();
-  virtual bool EnableNMEA(OperationEnvironment &env);
+  virtual void LinkTimeout() gcc_override;
+  virtual bool EnableNMEA(OperationEnvironment &env) gcc_override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
 
-  virtual bool PutMacCready(fixed MacCready, OperationEnvironment &env);
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutMacCready(fixed MacCready, OperationEnvironment &env) gcc_override;
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) gcc_override;
   virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env);
+                          OperationEnvironment &env) gcc_override;
   virtual bool PutQNH(const AtmosphericPressure &pres,
-                      OperationEnvironment &env);
-  virtual bool PutVolume(unsigned volume, OperationEnvironment &env);
+                      OperationEnvironment &env) gcc_override;
+  virtual bool PutVolume(unsigned volume, OperationEnvironment &env) gcc_override;
   virtual bool PutActiveFrequency(RadioFrequency frequency,
-                                  OperationEnvironment &env);
+                                  OperationEnvironment &env) gcc_override;
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
-                                   OperationEnvironment &env);
+                                   OperationEnvironment &env) gcc_override;
 
-  virtual bool EnablePassThrough(OperationEnvironment &env);
+  virtual bool EnablePassThrough(OperationEnvironment &env) gcc_override;
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env);
+                       OperationEnvironment &env) gcc_override;
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) {
+                              OperationEnvironment &env) gcc_override {
     return false;
   }
 
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path,
-                              OperationEnvironment &env) {
+                              OperationEnvironment &env) gcc_override {
     return false;
   }
 
   virtual void OnSysTicker() gcc_override;
 
   virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) {
+                            struct NMEAInfo &info) gcc_override {
     return false;
   }
 
