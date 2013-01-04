@@ -345,10 +345,10 @@ public:
     return Angle(fast_mult(value, 6, x.value, 6));
   }
 
-  constexpr Angle
+  gcc_pure Angle
   operator*(const fixed x) const
   {
-    return Angle(fast_mult(value, x, 8));
+    return Angle(value * x);
   }
 
   constexpr
