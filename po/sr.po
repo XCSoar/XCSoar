@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-23 13:32+0100\n"
+"POT-Creation-Date: 2013-01-04 21:02+0100\n"
 "PO-Revision-Date: 2011-12-20 19:56+0100\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: none\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:557
+#: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:556
 #: src/Input/InputEventsSettings.cpp:303 src/Dialogs/dlgAnalysis.cpp:348
 #: src/Dialogs/dlgStatus.cpp:131
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:159
@@ -453,7 +453,7 @@ msgstr ""
 msgid "Loading Waypoints..."
 msgstr ""
 
-#: src/Gauge/ThermalAssistantRenderer.cpp:192
+#: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
 msgstr ""
 
@@ -502,7 +502,7 @@ msgstr ""
 msgid "Details"
 msgstr "Detalji"
 
-#: src/Gauge/BigTrafficWidget.cpp:877 src/Dialogs/XML.cpp:617
+#: src/Gauge/BigTrafficWidget.cpp:877 src/Dialogs/XML.cpp:609
 #: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:529
 #: src/Dialogs/Device/PortMonitor.cpp:198
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:160
@@ -514,11 +514,12 @@ msgstr "Detalji"
 #: src/Dialogs/MapItemListDialog.cpp:154
 #: src/Dialogs/Airspace/dlgAirspace.cpp:179
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:273
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:397
 #: src/Dialogs/Plane/PlaneListDialog.cpp:412 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:122 src/Dialogs/dlgStatus.cpp:94
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:190
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:194
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:191
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:195
 #: src/Dialogs/Task/dlgTaskOptionalStarts.cpp:63
 #: src/Dialogs/Task/dlgAlternatesList.cpp:102
 #: src/Dialogs/Weather/NOAAList.cpp:271
@@ -532,123 +533,124 @@ msgstr "Zatvori"
 msgid "Loading Airfield Details File..."
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:128 src/Menu/ExpandMacros.cpp:138
-#: src/Menu/ExpandMacros.cpp:204 src/Menu/ExpandMacros.cpp:234
+#: src/Menu/ExpandMacros.cpp:127 src/Menu/ExpandMacros.cpp:137
+#: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:233
 msgid "Next Turnpoint"
 msgstr "Sled. okretna tačka"
 
-#: src/Menu/ExpandMacros.cpp:133 src/Menu/ExpandMacros.cpp:143
-#: src/Menu/ExpandMacros.cpp:216 src/Menu/ExpandMacros.cpp:262
+#: src/Menu/ExpandMacros.cpp:132 src/Menu/ExpandMacros.cpp:142
+#: src/Menu/ExpandMacros.cpp:215 src/Menu/ExpandMacros.cpp:261
 #, fuzzy
 msgid "Previous Turnpoint"
 msgstr "Sled. okretna tačka"
 
-#: src/Menu/ExpandMacros.cpp:155 src/Menu/ExpandMacros.cpp:175
+#: src/Menu/ExpandMacros.cpp:154 src/Menu/ExpandMacros.cpp:174
 msgid "Furthest Landpoint"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:156 src/Menu/ExpandMacros.cpp:176
+#: src/Menu/ExpandMacros.cpp:155 src/Menu/ExpandMacros.cpp:175
 #, fuzzy
 msgid "Next Landpoint"
 msgstr "Sled. okretna tačka"
 
-#: src/Menu/ExpandMacros.cpp:165 src/Menu/ExpandMacros.cpp:185
+#: src/Menu/ExpandMacros.cpp:164 src/Menu/ExpandMacros.cpp:184
 #, fuzzy
 msgid "Closest Landpoint"
 msgstr "Izabrani 'Waypoint'"
 
-#: src/Menu/ExpandMacros.cpp:166 src/Menu/ExpandMacros.cpp:186
+#: src/Menu/ExpandMacros.cpp:165 src/Menu/ExpandMacros.cpp:185
 msgid "Previous Landpoint"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:233
+#: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:232
 #, fuzzy
 msgid "Finish Turnpoint"
 msgstr "Krajni radial"
 
-#: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:255
+#: src/Menu/ExpandMacros.cpp:208 src/Menu/ExpandMacros.cpp:254
 #, fuzzy
 msgid "Next Startpoint"
 msgstr "Sled. okretna tačka"
 
-#: src/Menu/ExpandMacros.cpp:215 src/Menu/ExpandMacros.cpp:261
+#: src/Menu/ExpandMacros.cpp:214 src/Menu/ExpandMacros.cpp:260
 #, fuzzy
 msgid "Start Turnpoint"
 msgstr "Start tačka"
 
-#: src/Menu/ExpandMacros.cpp:239
+#: src/Menu/ExpandMacros.cpp:238
 #, fuzzy
 msgid "Arm start"
 msgstr "Validan start"
 
-#: src/Menu/ExpandMacros.cpp:242
+#: src/Menu/ExpandMacros.cpp:241
 msgid "Arm turn"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:270
+#: src/Menu/ExpandMacros.cpp:269
 #, fuzzy
 msgid "Disarm start"
 msgstr "Validan start"
 
-#: src/Menu/ExpandMacros.cpp:273
+#: src/Menu/ExpandMacros.cpp:272
 msgid "Disarm turn"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:283
+#: src/Menu/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:288
+#: src/Menu/ExpandMacros.cpp:287
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:293
+#: src/Menu/ExpandMacros.cpp:292
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:298
+#: src/Menu/ExpandMacros.cpp:297
 msgid ""
 "Arm\n"
 "Start"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:303
+#: src/Menu/ExpandMacros.cpp:302
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:308
+#: src/Menu/ExpandMacros.cpp:307
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:326 src/Menu/ExpandMacros.cpp:330
+#: src/Menu/ExpandMacros.cpp:325 src/Menu/ExpandMacros.cpp:329
 #: src/Dialogs/Device/PortMonitor.cpp:166
 msgid "Resume"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:326 src/Menu/ExpandMacros.cpp:330
+#: src/Menu/ExpandMacros.cpp:325 src/Menu/ExpandMacros.cpp:329
 #: src/Dialogs/Message.cpp:150
 msgid "Abort"
 msgstr "Prekinuti"
 
-#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:540
-#: src/Menu/ExpandMacros.cpp:567 src/Menu/ExpandMacros.cpp:627
-#: src/InfoBoxes/Panel/WindSetup.cpp:80 src/Dialogs/WindSettingsPanel.cpp:49
+#: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:539
+#: src/Menu/ExpandMacros.cpp:566 src/Menu/ExpandMacros.cpp:626
+#: src/InfoBoxes/Panel/WindSetup.cpp:80
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:49
 #, no-c-format
 msgid "Manual"
 msgstr "Uputstvo"
 
-#: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:540
-#: src/Menu/ExpandMacros.cpp:567 src/Menu/ExpandMacros.cpp:627
+#: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:539
+#: src/Menu/ExpandMacros.cpp:566 src/Menu/ExpandMacros.cpp:626
 #: src/PageSettings.cpp:54 src/PageSettings.cpp:57
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
@@ -657,50 +659,50 @@ msgstr "Uputstvo"
 msgid "Auto"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:349
+#: src/Menu/ExpandMacros.cpp:348
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:43
 #, no-c-format
 msgid "Track up"
 msgstr "Zapis gore-Pravac kret.napred."
 
-#: src/Menu/ExpandMacros.cpp:349
+#: src/Menu/ExpandMacros.cpp:348
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
 msgid "North up"
 msgstr "Sever gore-Sever je gore napred."
 
-#: src/Menu/ExpandMacros.cpp:454 src/Dialogs/Settings/dlgBasicSettings.cpp:145
+#: src/Menu/ExpandMacros.cpp:453 src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:455 Data/Dialogs/dlgLoggerReplay.xml:10
+#: src/Menu/ExpandMacros.cpp:454 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:461
+#: src/Menu/ExpandMacros.cpp:460
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Long"
 msgstr "Dugačko"
 
-#: src/Menu/ExpandMacros.cpp:465
+#: src/Menu/ExpandMacros.cpp:464
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Short"
 msgstr "Kratko"
 
-#: src/Menu/ExpandMacros.cpp:469
+#: src/Menu/ExpandMacros.cpp:468
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
 msgid "Full"
 msgstr "Puno"
 
-#: src/Menu/ExpandMacros.cpp:473 src/Menu/ExpandMacros.cpp:480
-#: src/Menu/ExpandMacros.cpp:537 src/Menu/ExpandMacros.cpp:543
-#: src/Menu/ExpandMacros.cpp:546 src/Menu/ExpandMacros.cpp:549
-#: src/Menu/ExpandMacros.cpp:552 src/Menu/ExpandMacros.cpp:570
-#: src/Menu/ExpandMacros.cpp:623 src/Input/InputEventsSettings.cpp:432
+#: src/Menu/ExpandMacros.cpp:472 src/Menu/ExpandMacros.cpp:479
+#: src/Menu/ExpandMacros.cpp:536 src/Menu/ExpandMacros.cpp:542
+#: src/Menu/ExpandMacros.cpp:545 src/Menu/ExpandMacros.cpp:548
+#: src/Menu/ExpandMacros.cpp:551 src/Menu/ExpandMacros.cpp:569
+#: src/Menu/ExpandMacros.cpp:622 src/Input/InputEventsSettings.cpp:432
 #: src/Input/InputEventsSettings.cpp:435 src/Dialogs/XML.cpp:488
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:203
@@ -715,10 +717,10 @@ msgstr "Puno"
 msgid "Off"
 msgstr "Isk."
 
-#: src/Menu/ExpandMacros.cpp:480 src/Menu/ExpandMacros.cpp:537
-#: src/Menu/ExpandMacros.cpp:543 src/Menu/ExpandMacros.cpp:546
-#: src/Menu/ExpandMacros.cpp:549 src/Menu/ExpandMacros.cpp:552
-#: src/Menu/ExpandMacros.cpp:570 src/Menu/ExpandMacros.cpp:623
+#: src/Menu/ExpandMacros.cpp:479 src/Menu/ExpandMacros.cpp:536
+#: src/Menu/ExpandMacros.cpp:542 src/Menu/ExpandMacros.cpp:545
+#: src/Menu/ExpandMacros.cpp:548 src/Menu/ExpandMacros.cpp:551
+#: src/Menu/ExpandMacros.cpp:569 src/Menu/ExpandMacros.cpp:622
 #: src/Input/InputEventsSettings.cpp:430 src/Input/InputEventsSettings.cpp:435
 #: src/Dialogs/XML.cpp:488 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:204
@@ -728,37 +730,37 @@ msgstr "Isk."
 msgid "On"
 msgstr "UKLJ."
 
-#: src/Menu/ExpandMacros.cpp:492 src/Menu/ExpandMacros.cpp:518
+#: src/Menu/ExpandMacros.cpp:491 src/Menu/ExpandMacros.cpp:517
 msgid "Topography On"
 msgstr ""
 
-#: src/Menu/ExpandMacros.cpp:496 src/Menu/ExpandMacros.cpp:522
+#: src/Menu/ExpandMacros.cpp:495 src/Menu/ExpandMacros.cpp:521
 #, fuzzy
 msgid "Terrain On"
 msgstr "Teren"
 
-#: src/Menu/ExpandMacros.cpp:500 src/Menu/ExpandMacros.cpp:526
+#: src/Menu/ExpandMacros.cpp:499 src/Menu/ExpandMacros.cpp:525
 #, fuzzy
 msgid "Terrain + Topography"
 msgstr "Boje terena"
 
-#: src/Menu/ExpandMacros.cpp:504 src/Menu/ExpandMacros.cpp:530
+#: src/Menu/ExpandMacros.cpp:503 src/Menu/ExpandMacros.cpp:529
 #, fuzzy
 msgid "Terrain Off"
 msgstr "Teren"
 
-#: src/Menu/ExpandMacros.cpp:555 src/Input/InputEventsSettings.cpp:301
+#: src/Menu/ExpandMacros.cpp:554 src/Input/InputEventsSettings.cpp:301
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, fuzzy, no-c-format
 msgid "All"
 msgstr "Sve uklj."
 
-#: src/Menu/ExpandMacros.cpp:556 src/Input/InputEventsSettings.cpp:302
+#: src/Menu/ExpandMacros.cpp:555 src/Input/InputEventsSettings.cpp:302
 #, fuzzy, no-c-format
 msgid "Task & Landables"
 msgstr "Pravilo zadatka"
 
-#: src/Menu/ExpandMacros.cpp:558 src/Input/InputEventsSettings.cpp:304
+#: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:304
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:101
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
@@ -2440,7 +2442,7 @@ msgid "Altn %d"
 msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
-#: src/MapWindow/GlueMapWindowOverlays.cpp:294
+#: src/MapWindow/GlueMapWindowOverlays.cpp:295
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:6
 #, no-c-format
@@ -2474,15 +2476,8 @@ msgstr ""
 #: src/InfoBoxes/Content/MacCready.cpp:57
 #: src/InfoBoxes/Content/Weather.cpp:111
 #: src/Dialogs/Device/DeviceListDialog.cpp:237
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:148
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
-#: Data/Dialogs/dlgConfigFonts.xml:11 Data/Dialogs/dlgConfigFonts.xml:14
-#: Data/Dialogs/dlgConfigFonts.xml:17 Data/Dialogs/dlgConfigFonts.xml:20
-#: Data/Dialogs/dlgConfigFonts.xml:23 Data/Dialogs/dlgConfigFonts.xml:26
-#: Data/Dialogs/dlgConfigFonts.xml:29 Data/Dialogs/dlgConfigFonts.xml:32
-#: Data/Dialogs/dlgConfigFonts_L.xml:11 Data/Dialogs/dlgConfigFonts_L.xml:14
-#: Data/Dialogs/dlgConfigFonts_L.xml:17 Data/Dialogs/dlgConfigFonts_L.xml:20
-#: Data/Dialogs/dlgConfigFonts_L.xml:23 Data/Dialogs/dlgConfigFonts_L.xml:26
-#: Data/Dialogs/dlgConfigFonts_L.xml:29 Data/Dialogs/dlgConfigFonts_L.xml:32
 #: Data/Dialogs/dlgConfigWaypoints.xml:7
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:7
 #, no-c-format
@@ -2514,11 +2509,11 @@ msgstr ""
 msgid "Disabled"
 msgstr ""
 
-#: src/InfoBoxes/Content/Speed.cpp:126
+#: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
 msgstr ""
 
-#: src/InfoBoxes/Content/Speed.cpp:128
+#: src/InfoBoxes/Content/Speed.cpp:127
 msgid "DOLPHIN"
 msgstr ""
 
@@ -2544,31 +2539,31 @@ msgstr ""
 msgid "Waiting"
 msgstr "Podešavanja vetra"
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:79 src/InfoBoxes/Panel/WindSetup.cpp:81
-#: src/Dialogs/WindSettingsPanel.cpp:51 Data/Dialogs/dlgVegaDemo.xml:14
+#: src/InfoBoxes/InfoBoxSettings.cpp:80 src/InfoBoxes/Panel/WindSetup.cpp:81
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:51
+#: Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
 msgstr "Kruženje"
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:80
+#: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "Cruise"
 msgstr "Krstarenje"
 
-#: src/InfoBoxes/InfoBoxSettings.cpp:81
+#: src/InfoBoxes/InfoBoxSettings.cpp:82
 #, fuzzy, no-c-format
 msgid "FinalGlide"
 msgstr "Finalno klizanje"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:291 src/InfoBoxes/InfoBoxManager.cpp:332
+#: src/InfoBoxes/InfoBoxManager.cpp:267 src/InfoBoxes/InfoBoxManager.cpp:308
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:221
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:348
 msgid "InfoBox"
 msgstr ""
 
-#: src/InfoBoxes/InfoBoxManager.cpp:296
+#: src/InfoBoxes/InfoBoxManager.cpp:272
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:225
-#: src/Dialogs/dlgWeather.cpp:56
 #, no-c-format
 msgid "No help available on this item"
 msgstr ""
@@ -2610,24 +2605,26 @@ msgstr ""
 #: src/Renderer/FlightStatisticsRenderer.cpp:156
 #: src/Renderer/FlightStatisticsRenderer.cpp:185
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
-#: src/Dialogs/WindSettingsPanel.cpp:84
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Speed"
 msgstr "Brzina"
 
-#: src/InfoBoxes/Panel/WindEdit.cpp:100 src/Dialogs/WindSettingsPanel.cpp:84
+#: src/InfoBoxes/Panel/WindEdit.cpp:100
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:84
 msgid "Manual adjustment of wind speed."
 msgstr ""
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105
 #: src/Renderer/MapItemListRenderer.cpp:121
 #: src/Renderer/MapItemListRenderer.cpp:124
-#: src/Dialogs/WindSettingsPanel.cpp:96 Data/Dialogs/AirspaceList.xml:18
-#: Data/Dialogs/AirspaceList_L.xml:12 Data/Dialogs/WaypointList.xml:12
-#: Data/Dialogs/WaypointList_L.xml:8
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:96
+#: Data/Dialogs/AirspaceList.xml:18 Data/Dialogs/AirspaceList_L.xml:12
+#: Data/Dialogs/WaypointList.xml:12 Data/Dialogs/WaypointList_L.xml:8
 msgid "Direction"
 msgstr "Smer"
 
-#: src/InfoBoxes/Panel/WindEdit.cpp:105 src/Dialogs/WindSettingsPanel.cpp:96
+#: src/InfoBoxes/Panel/WindEdit.cpp:105
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:96
 msgid "Manual adjustment of wind direction."
 msgstr ""
 
@@ -2650,24 +2647,28 @@ msgid ""
 "circling."
 msgstr ""
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:82 src/Dialogs/WindSettingsPanel.cpp:53
+#: src/InfoBoxes/Panel/WindSetup.cpp:82
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:53
 #, no-c-format
 msgid "ZigZag"
 msgstr ""
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:83 src/Dialogs/WindSettingsPanel.cpp:55
+#: src/InfoBoxes/Panel/WindSetup.cpp:83
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #, no-c-format
 msgid "Both"
 msgstr "Obadvoje"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:92 src/Dialogs/WindSettingsPanel.cpp:70
+#: src/InfoBoxes/Panel/WindSetup.cpp:92
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:70
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:154
 msgid "Trail drift"
 msgstr "Pravac staze"
 
-#: src/InfoBoxes/Panel/WindSetup.cpp:93 src/Dialogs/WindSettingsPanel.cpp:71
+#: src/InfoBoxes/Panel/WindSetup.cpp:93
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:71
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:155
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
@@ -2706,21 +2707,21 @@ msgstr "Dnevnik UKLJUČEN"
 msgid "Logger off"
 msgstr "Dnevnik ISKLJUČEN"
 
-#: src/Input/InputEventsMap.cpp:70
+#: src/Input/InputEventsMap.cpp:71
 #, fuzzy
 msgid "Auto. zoom on"
 msgstr "Auto. Povecanje UKLJUČENO"
 
-#: src/Input/InputEventsMap.cpp:72 src/Input/InputEventsMap.cpp:214
+#: src/Input/InputEventsMap.cpp:73 src/Input/InputEventsMap.cpp:215
 #, fuzzy
 msgid "Auto. zoom off"
 msgstr "Auto. Povecanje UKLJUČENO"
 
-#: src/Input/InputEventsMap.cpp:97
+#: src/Input/InputEventsMap.cpp:98
 msgid "Circling zoom on"
 msgstr "Uvećanje kruženja UKLJ."
 
-#: src/Input/InputEventsMap.cpp:99
+#: src/Input/InputEventsMap.cpp:100
 msgid "Circling zoom off"
 msgstr "Uvećanje kruženja ISK."
 
@@ -2732,119 +2733,119 @@ msgstr "Prik. vazd.pros.ISK."
 msgid "Show airspace on"
 msgstr "Prik. vazd.pros.UKLJ."
 
-#: src/Input/InputEventsTask.cpp:78
+#: src/Input/InputEventsTask.cpp:79
 msgid "Advance manually"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:81
+#: src/Input/InputEventsTask.cpp:82
 msgid "Advance automatically"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:84
+#: src/Input/InputEventsTask.cpp:85
 #, fuzzy
 msgid "Ready to start"
 msgstr "Validan start"
 
-#: src/Input/InputEventsTask.cpp:87
+#: src/Input/InputEventsTask.cpp:88
 #, fuzzy
 msgid "Hold start"
 msgstr "Validan start"
 
-#: src/Input/InputEventsTask.cpp:90
+#: src/Input/InputEventsTask.cpp:91
 msgid "Ready to turn"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:93
+#: src/Input/InputEventsTask.cpp:94
 msgid "Hold turn"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:160
+#: src/Input/InputEventsTask.cpp:161
 #, fuzzy
 msgid "Auto. MacCready on"
 msgstr "Auto MacCready UKLJUČEN"
 
-#: src/Input/InputEventsTask.cpp:162
+#: src/Input/InputEventsTask.cpp:163
 #, fuzzy
 msgid "Auto. MacCready off"
 msgstr "Auto MacCready UKLJUČEN"
 
-#: src/Input/InputEventsTask.cpp:167
+#: src/Input/InputEventsTask.cpp:168
 msgid "MacCready "
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:228
+#: src/Input/InputEventsTask.cpp:229
 #, fuzzy
 msgid "Task aborted"
 msgstr "Početak zadatka"
 
-#: src/Input/InputEventsTask.cpp:231
+#: src/Input/InputEventsTask.cpp:232
 msgid "Go to target"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:234
+#: src/Input/InputEventsTask.cpp:235
 msgid "Ordered task"
 msgstr ""
 
-#: src/Input/InputEventsTask.cpp:237
+#: src/Input/InputEventsTask.cpp:238
 #: src/Renderer/FlightStatisticsRenderer.cpp:239
 msgid "No task"
 msgstr "Nema zadatka"
 
-#: src/Input/InputEventsTask.cpp:331
+#: src/Input/InputEventsTask.cpp:332
 msgid "Task start"
 msgstr "Početak zadatka"
 
-#: src/Input/InputEventsTask.cpp:333
+#: src/Input/InputEventsTask.cpp:334
 msgid "Next turnpoint"
 msgstr "Sled. okretna tačka"
 
-#: src/Input/InputEventsTask.cpp:335
+#: src/Input/InputEventsTask.cpp:336
 #, fuzzy
 msgid "Task finished"
 msgstr "Zadatak Završen"
 
-#: src/Input/InputEventsTask.cpp:337
+#: src/Input/InputEventsTask.cpp:338
 msgid "In sector, arm advance when ready"
 msgstr "U sektoru, Napredni ARM kada je spreman"
 
-#: src/Input/InputEventsSettings.cpp:52
+#: src/Input/InputEventsSettings.cpp:53
 msgid "Vario sounds on"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:54
+#: src/Input/InputEventsSettings.cpp:55
 msgid "Vario sounds off"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:82
+#: src/Input/InputEventsSettings.cpp:83
 #, fuzzy
 msgid "Snail trail off"
 msgstr "LenjaStaza ISK."
 
-#: src/Input/InputEventsSettings.cpp:86
+#: src/Input/InputEventsSettings.cpp:87
 msgid "Long snail trail"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:90
+#: src/Input/InputEventsSettings.cpp:91
 #, fuzzy
 msgid "Short snail trail"
 msgstr "Kratko ime fajla"
 
-#: src/Input/InputEventsSettings.cpp:94
+#: src/Input/InputEventsSettings.cpp:95
 msgid "Full snail trail"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:196
+#: src/Input/InputEventsSettings.cpp:197
 msgid "Bugs performance"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:239
+#: src/Input/InputEventsSettings.cpp:240
 #, no-c-format
 msgid "Ballast %"
 msgstr ""
 
-#: src/Input/InputEventsSettings.cpp:317 Data/Dialogs/dlgConfigFonts.xml:19
-#: Data/Dialogs/dlgConfigFonts_L.xml:19
-#, fuzzy
+#: src/Input/InputEventsSettings.cpp:317
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:217
+#, fuzzy, no-c-format
 msgid "Waypoint labels"
 msgstr "Tačka"
 
@@ -2853,21 +2854,21 @@ msgid "Topography/Terrain"
 msgstr ""
 
 #: src/Input/InputEventsTraffic.cpp:91
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:232
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:231
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
 msgstr ""
 
-#: src/Input/InputEventsTraffic.cpp:100
+#: src/Input/InputEventsTraffic.cpp:99
 #, fuzzy
 msgid "Show details:"
 msgstr "Tačka"
 
-#: src/Input/InputEventsTraffic.cpp:105
+#: src/Input/InputEventsTraffic.cpp:104
 msgid "Unknown competition number"
 msgstr ""
 
-#: src/Input/InputEventsTraffic.cpp:106
+#: src/Input/InputEventsTraffic.cpp:105
 msgid "Not found"
 msgstr ""
 
@@ -2919,7 +2920,7 @@ msgstr "Teren"
 
 #: src/Renderer/MapItemListRenderer.cpp:246
 #, fuzzy
-msgid "Unreachable through terrain."
+msgid "Unreachable due to terrain."
 msgstr "Krajnje klizanje kroz terena"
 
 #: src/Renderer/MapItemListRenderer.cpp:251
@@ -2980,16 +2981,16 @@ msgstr ""
 msgid "Map elements at this location"
 msgstr ""
 
-#: src/MapWindow/GlueMapWindowOverlays.cpp:107
+#: src/MapWindow/GlueMapWindowOverlays.cpp:108
 #, fuzzy
 msgid "Elevation: "
 msgstr "Visina"
 
-#: src/MapWindow/GlueMapWindowOverlays.cpp:149
+#: src/MapWindow/GlueMapWindowOverlays.cpp:150
 msgid "GPS not connected"
 msgstr ""
 
-#: src/MapWindow/GlueMapWindowOverlays.cpp:152
+#: src/MapWindow/GlueMapWindowOverlays.cpp:153
 msgid "GPS waiting for fix"
 msgstr ""
 
@@ -3113,7 +3114,7 @@ msgid "Australian"
 msgstr ""
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:122 src/Startup.cpp:320
+#: src/UtilsSettings.cpp:117 src/Startup.cpp:320
 msgid "Loading Terrain File..."
 msgstr "Učitavanje fajla terena..."
 
@@ -3210,12 +3211,13 @@ msgstr ""
 #: src/Dialogs/WidgetDialog.cpp:218
 #: src/Dialogs/MapItemListSettingsDialog.cpp:36
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:37
+#: src/Dialogs/Settings/WindSettingsDialog.cpp:36
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:365
-#: src/Dialogs/Settings/FontEdit.cpp:189 src/Dialogs/NumberEntry.cpp:65
-#: src/Dialogs/NumberEntry.cpp:111 src/Dialogs/dlgTextEntry_Keyboard.cpp:214
-#: src/Dialogs/TimeEntry.cpp:76 src/Dialogs/WindSettingsDialog.cpp:36
-#: Data/Dialogs/dlgPlaneDetails.xml:42 Data/Dialogs/dlgPlaneDetails_L.xml:58
-#: Data/Dialogs/dlgPlanePolar.xml:22 Data/Dialogs/dlgPlanePolar_L.xml:22
+#: src/Dialogs/Settings/FontEdit.cpp:194 src/Dialogs/NumberEntry.cpp:65
+#: src/Dialogs/NumberEntry.cpp:111 src/Dialogs/dlgTextEntry_Keyboard.cpp:213
+#: src/Dialogs/TimeEntry.cpp:76 Data/Dialogs/dlgPlaneDetails.xml:42
+#: Data/Dialogs/dlgPlaneDetails_L.xml:58 Data/Dialogs/dlgPlanePolar.xml:22
+#: Data/Dialogs/dlgPlanePolar_L.xml:22
 msgid "OK"
 msgstr ""
 
@@ -3238,13 +3240,13 @@ msgstr "Ponovo"
 #: src/Dialogs/WidgetDialog.cpp:219 src/Dialogs/FileManager.cpp:407
 #: src/Dialogs/MapItemListSettingsDialog.cpp:37
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
-#: src/Dialogs/Settings/FontEdit.cpp:191 src/Dialogs/NumberEntry.cpp:66
-#: src/Dialogs/NumberEntry.cpp:112 src/Dialogs/dlgTextEntry_Keyboard.cpp:218
-#: src/Dialogs/TimeEntry.cpp:77 src/Dialogs/WindSettingsDialog.cpp:37
-#: Data/Dialogs/WaypointList.xml:19 Data/Dialogs/WaypointList_L.xml:17
-#: Data/Dialogs/dlgPlaneDetails.xml:43 Data/Dialogs/dlgPlaneDetails_L.xml:59
-#: Data/Dialogs/dlgPlanePolar.xml:23 Data/Dialogs/dlgPlanePolar_L.xml:23
-#: Data/Input/default.xci:948
+#: src/Dialogs/Settings/WindSettingsDialog.cpp:37
+#: src/Dialogs/Settings/FontEdit.cpp:196 src/Dialogs/NumberEntry.cpp:66
+#: src/Dialogs/NumberEntry.cpp:112 src/Dialogs/dlgTextEntry_Keyboard.cpp:217
+#: src/Dialogs/TimeEntry.cpp:77 Data/Dialogs/WaypointList.xml:19
+#: Data/Dialogs/WaypointList_L.xml:17 Data/Dialogs/dlgPlaneDetails.xml:43
+#: Data/Dialogs/dlgPlaneDetails_L.xml:59 Data/Dialogs/dlgPlanePolar.xml:23
+#: Data/Dialogs/dlgPlanePolar_L.xml:23 Data/Input/default.xci:948
 msgid "Cancel"
 msgstr "Prekid"
 
@@ -3294,8 +3296,9 @@ msgstr "Ponovljeni let"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:156
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:166
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:233
-#: src/Dialogs/Waypoint/Manager.cpp:50 src/Dialogs/Waypoint/Manager.cpp:73
-#: src/Dialogs/Waypoint/Manager.cpp:96 src/Dialogs/Waypoint/Manager.cpp:113
+#: src/Dialogs/Waypoint/Manager.cpp:51 src/Dialogs/Waypoint/Manager.cpp:74
+#: src/Dialogs/Waypoint/Manager.cpp:97 src/Dialogs/Waypoint/Manager.cpp:114
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:274
 #: src/Dialogs/Weather/NOAAList.cpp:170 src/Dialogs/Weather/NOAAList.cpp:176
 #: src/Dialogs/Weather/NOAAList.cpp:283
 #: src/Dialogs/Weather/NOAADetails.cpp:130
@@ -3457,8 +3460,8 @@ msgstr "Ponovljeni let"
 #: src/Dialogs/Device/DeviceListDialog.cpp:378
 #: src/Dialogs/Device/DeviceListDialog.cpp:435
 #: src/Dialogs/Device/PortMonitor.cpp:150
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:185
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:199
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:186
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:200
 msgid "Manage"
 msgstr ""
 
@@ -3467,7 +3470,7 @@ msgid "Monitor"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:285
-#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:184
 #, c-format
 msgid "%s on %s"
 msgstr ""
@@ -3522,7 +3525,7 @@ msgid "Devices"
 msgstr "Aparati"
 
 #: src/Dialogs/Device/PortMonitor.cpp:141
-#: src/Dialogs/dlgTextEntry_Keyboard.cpp:223 src/Dialogs/TimeEntry.cpp:89
+#: src/Dialogs/dlgTextEntry_Keyboard.cpp:222 src/Dialogs/TimeEntry.cpp:89
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
 msgid "Clear"
@@ -3890,48 +3893,6 @@ msgid ""
 "at the location."
 msgstr ""
 
-#: src/Dialogs/WindSettingsPanel.cpp:50
-#, no-c-format
-msgid ""
-"When the algorithm is switched off, the pilot is responsible for setting the "
-"wind estimate."
-msgstr ""
-
-#: src/Dialogs/WindSettingsPanel.cpp:52
-#, no-c-format
-msgid "Requires only a GPS source."
-msgstr ""
-
-#: src/Dialogs/WindSettingsPanel.cpp:54
-#, no-c-format
-msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
-
-#: src/Dialogs/WindSettingsPanel.cpp:56
-#, no-c-format
-msgid "Use ZigZag and circling."
-msgstr ""
-
-#: src/Dialogs/WindSettingsPanel.cpp:60
-#, fuzzy
-msgid "Auto wind"
-msgstr "Auto vetar"
-
-#: src/Dialogs/WindSettingsPanel.cpp:61
-msgid "This allows switching on or off the automatic wind algorithm."
-msgstr ""
-
-#: src/Dialogs/WindSettingsPanel.cpp:64
-#, fuzzy
-msgid "Prefer external wind"
-msgstr "Sletanje"
-
-#: src/Dialogs/WindSettingsPanel.cpp:65
-msgid ""
-"If enabled, then the wind vector received from external devices overrides "
-"XCSoar's internal wind calculation."
-msgstr ""
-
 #: src/Dialogs/ColorListDialog.cpp:74
 #, fuzzy
 msgid "Select Color"
@@ -3982,12 +3943,12 @@ msgstr "Uključi"
 msgid "Ack Day"
 msgstr "ACK Dan"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:227
+#: src/Dialogs/Airspace/AirspaceList.cpp:222
 #: src/Dialogs/Waypoint/WaypointList.cpp:314
 msgid "No Match!"
 msgstr "Ne slaze se!"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:250
+#: src/Dialogs/Airspace/AirspaceList.cpp:245
 #, fuzzy
 msgid "Heading"
 msgstr "Sletanje"
@@ -4046,6 +4007,52 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:333
 msgid "No Warnings"
 msgstr "Nema upozorenja"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:50
+#, no-c-format
+msgid ""
+"When the algorithm is switched off, the pilot is responsible for setting the "
+"wind estimate."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:52
+#, no-c-format
+msgid "Requires only a GPS source."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:54
+#, no-c-format
+msgid "Requires GPS and an intelligent vario with airspeed output."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:56
+#, no-c-format
+msgid "Use ZigZag and circling."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:60
+#, fuzzy
+msgid "Auto wind"
+msgstr "Auto vetar"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:61
+msgid "This allows switching on or off the automatic wind algorithm."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:64
+#, fuzzy
+msgid "Prefer external wind"
+msgstr "Sletanje"
+
+#: src/Dialogs/Settings/WindSettingsPanel.cpp:65
+msgid ""
+"If enabled, then the wind vector received from external devices overrides "
+"XCSoar's internal wind calculation."
+msgstr ""
+
+#: src/Dialogs/Settings/WindSettingsDialog.cpp:34
+msgid "Wind Settings"
+msgstr "Podešavanja vetra"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:364
@@ -4107,7 +4114,7 @@ msgid "Glide Computer"
 msgstr "Računar klizanja"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
-#: Data/Dialogs/dlgConfigFonts.xml:31 Data/Dialogs/dlgConfigFonts_L.xml:31
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:224
 #, no-c-format
 msgid "Gauges"
 msgstr "Manometar"
@@ -4134,7 +4141,7 @@ msgstr "Dogadjaji"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:102
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
-#: src/Dialogs/dlgWeather.cpp:98 src/Terrain/RasterWeather.cpp:48
+#: src/Dialogs/dlgWeather.cpp:73 src/Terrain/RasterWeather.cpp:49
 #: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:520
 #: Data/Input/default.xci:1143
 #, no-c-format
@@ -4192,8 +4199,8 @@ msgid "InfoBox Modes"
 msgstr "InfoBox nalepiti"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
-#: src/Dialogs/Plane/PlanePolarDialog.cpp:73
-#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:105
+#: src/Dialogs/Plane/PlanePolarDialog.cpp:72
+#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:104
 #: Data/Dialogs/dlgPlaneDetails.xml:21 Data/Dialogs/dlgPlaneDetails_L.xml:29
 #: Data/Dialogs/dlgPlanePolar.xml:5 Data/Dialogs/dlgPlanePolar_L.xml:5
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:5
@@ -4225,9 +4232,48 @@ msgid "Experimental Features"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:298
-#: src/Dialogs/Settings/dlgConfigFonts.cpp:292
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:278
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:212
+#, fuzzy, no-c-format
+msgid "InfoBox titles"
+msgstr "InfoBox nazivi"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:213
+#, fuzzy, no-c-format
+msgid "InfoBox values, normal"
+msgstr "InfoBox mala vrednost"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:215
+#, fuzzy, no-c-format
+msgid "InfoBox values, small"
+msgstr "InfoBox mala vrednost"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:218
+#, fuzzy, no-c-format
+msgid "Topography labels, normal"
+msgstr "Nalepnica topologije"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:221
+#, fuzzy, no-c-format
+msgid "Topography labels, important"
+msgstr "Nalepnica topologije"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:223
+#, fuzzy, no-c-format
+msgid "Dialog text"
+msgstr "Okvir razgovora"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:238
+msgid "Customize fonts"
+msgstr "Izborni Font-ovi"
+
+#: src/Dialogs/Settings/dlgConfigFonts.cpp:271
+#, fuzzy
+msgid "Font Configuration"
+msgstr "Konfiguracija"
 
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:111
 msgid "Overwrite?"
@@ -4264,66 +4310,56 @@ msgstr "Kopiraj"
 msgid "Paste"
 msgstr "Nalepi"
 
-#: src/Dialogs/Settings/FontEdit.cpp:128
-msgid ""
-"Sample Text\n"
-"123"
-msgstr ""
-
-#: src/Dialogs/Settings/FontEdit.cpp:130
+#: src/Dialogs/Settings/FontEdit.cpp:133
 msgid "Font not found."
 msgstr ""
 
-#: src/Dialogs/Settings/FontEdit.cpp:140
+#: src/Dialogs/Settings/FontEdit.cpp:143
 #, fuzzy
 msgid "Font face"
 msgstr "Interfejs"
 
-#: src/Dialogs/Settings/FontEdit.cpp:151
+#: src/Dialogs/Settings/FontEdit.cpp:154
 msgid "Height"
 msgstr "Visina"
 
-#: src/Dialogs/Settings/FontEdit.cpp:158
-msgid "My Sample"
-msgstr ""
-
-#: src/Dialogs/Settings/FontEdit.cpp:182
+#: src/Dialogs/Settings/FontEdit.cpp:187
 msgid "Edit Font"
 msgstr "Uredi Font-ove"
 
-#: src/Dialogs/Settings/FontEdit.cpp:190
+#: src/Dialogs/Settings/FontEdit.cpp:195
 msgid "Reset"
 msgstr "Vraćanje"
 
-#: src/Dialogs/Traffic/FlarmTrafficList.cpp:106
+#: src/Dialogs/Traffic/FlarmTrafficList.cpp:107
 msgid "No further information"
 msgstr ""
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:128
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:127
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
 msgid "FLARM Traffic Details"
 msgstr ""
 
 #. Ask for confirmation
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:198
 msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr ""
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:200
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
 #, fuzzy
 msgid "New Teammate"
 msgstr "Nema zadatka"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:150
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:149
 msgid "Set new teammate:"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:158
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:157
 msgid "Unknown Competition Number"
 msgstr ""
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:159
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:158
 msgid "Not Found"
 msgstr ""
 
@@ -4468,21 +4504,23 @@ msgstr ""
 msgid "Plane Details"
 msgstr "Detalji"
 
-#: src/Dialogs/Plane/PlanePolarDialog.cpp:65 Data/Dialogs/dlgPlanePolar.xml:3
+#: src/Dialogs/Plane/PlanePolarDialog.cpp:64 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
 #, fuzzy
 msgid "Plane Polar"
 msgstr "Polarni klizač"
 
 #. let the user select
-#: src/Dialogs/Plane/PlanePolarDialog.cpp:158
-#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:159
+#: src/Dialogs/Plane/PlanePolarDialog.cpp:156
+#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:158
 #, fuzzy
 msgid "Load Polar"
 msgstr "Polarni klizač"
 
-#: src/Dialogs/Plane/PlanePolarDialog.cpp:212
-#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:218
+#. let the user select
+#. Show selection dialog
+#: src/Dialogs/Plane/PlanePolarDialog.cpp:209
+#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:216
 #, fuzzy
 msgid "Load Polar From File"
 msgstr "Polar-e fajl"
@@ -4525,8 +4563,8 @@ msgid "System"
 msgstr "Sistem"
 
 #: src/Dialogs/dlgStatus.cpp:134
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:188
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:202
 #, fuzzy
 msgid "Rules"
 msgstr "Pravilo zadatka"
@@ -4652,36 +4690,37 @@ msgstr "Krajna min. visina"
 msgid "Valid finish"
 msgstr "Validan kraj"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:107
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:97
 msgid "Local time"
 msgstr "Lokalno vreme"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:108
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 #, fuzzy
 msgid "UTC time"
 msgstr "AAT min. vreme"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
 msgid "UTC date"
 msgstr ""
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
 msgstr "Vreme letenja"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:111
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
 msgid "Takeoff time"
 msgstr "Vreme poletanja"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:114
 msgid "Landing time"
 msgstr "Vreme sletanja"
 
-#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:130
-msgid "Sunset"
-msgstr "Zalazak Sunca"
+#: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
+#, fuzzy
+msgid "Daylight time"
+msgstr "Vreme letenja"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -4701,20 +4740,20 @@ msgstr ""
 msgid "Runway"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:142
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:144
 #, fuzzy
 msgid "Bearing and Distance"
 msgstr "Preostala udaljenost"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:154
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:156
 msgid "Alt. diff. MC 0"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:158
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:160
 msgid "Alt. diff. MC safety"
 msgstr ""
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:163
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:165
 msgid "Alt. diff. MC current"
 msgstr ""
 
@@ -4809,21 +4848,21 @@ msgstr ""
 msgid "Waypoint"
 msgstr "Tačka"
 
-#: src/Dialogs/Waypoint/Manager.cpp:50 src/Dialogs/Waypoint/Manager.cpp:73
-#: src/Dialogs/Waypoint/Manager.cpp:96 src/Dialogs/Waypoint/Manager.cpp:113
+#: src/Dialogs/Waypoint/Manager.cpp:51 src/Dialogs/Waypoint/Manager.cpp:74
+#: src/Dialogs/Waypoint/Manager.cpp:97 src/Dialogs/Waypoint/Manager.cpp:114
 #, fuzzy
 msgid "Waypoints not editable"
 msgstr "Ažuriranje tačaka"
 
-#: src/Dialogs/Waypoint/Manager.cpp:122
+#: src/Dialogs/Waypoint/Manager.cpp:123
 msgid "Delete Waypoint?"
 msgstr "Brisanje 'Waypoint'?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:156
+#: src/Dialogs/Waypoint/Manager.cpp:157
 msgid "Save changes to waypoint file?"
 msgstr "Snimi promene u fajl 'waypoint'?"
 
-#: src/Dialogs/Waypoint/Manager.cpp:156
+#: src/Dialogs/Waypoint/Manager.cpp:157
 msgid "Waypoints edited"
 msgstr ""
 
@@ -5236,12 +5275,12 @@ msgid ""
 "arrival height for legs with head wind."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:89
+#: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 #, fuzzy
 msgid "Use final glide mode"
 msgstr "Iznad Finalnog klizanja"
 
-#: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:90
+#: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
@@ -5782,7 +5821,7 @@ msgid "Use a recent average of the ground track as basis."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:143
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:144
 #: Data/Dialogs/dlgTarget.xml:3 Data/Dialogs/dlgTarget_L.xml:3
 #: Data/Dialogs/dlgTaskManager.xml:5 Data/Dialogs/dlgTaskManager_L.xml:5
 #: Data/Input/default.xci:430 Data/Input/default.xci:1086
@@ -5858,7 +5897,7 @@ msgstr ""
 msgid "Determines the information displayed on different screen pages."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:254
+#: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 #, fuzzy
 msgid "Polar name"
 msgstr "Polar-e fajl"
@@ -7070,29 +7109,29 @@ msgstr ""
 msgid "Inner radius of the OZ sector."
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:124
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:225
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:317
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:125
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:226
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:318
 #: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:179
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:180
 #, fuzzy
 msgid "Calculator"
 msgstr "Računanje zadatka"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:182
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:196
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:183
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:197
 #, fuzzy
 msgid "Turn Points"
 msgstr "Start tačka"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:314
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:315
 msgid "Validation Errors"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:316
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:317
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
@@ -7191,42 +7230,37 @@ msgid "Rename"
 msgstr "Promeniti"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:355
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:247
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:252
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:290
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:251
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:283
 msgid "Task Browser"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:279
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:274
 msgid "Can't delete .CUP files"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:279
-#, fuzzy
-msgid "Delete Error"
-msgstr "Briši"
-
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:285
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:282
 msgid "Delete the selected task?"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:327
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:320
 msgid "Can't rename .CUP files"
 msgstr ""
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:327
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:320
 #, fuzzy
 msgid "Rename Error"
 msgstr "Promeniti"
 
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:355
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
 msgstr ""
 
@@ -7460,18 +7494,10 @@ msgstr "Sled. okretna tačka"
 msgid "Alternates"
 msgstr ""
 
-#: src/Dialogs/TimeEntry.cpp:83
+#: src/Dialogs/TimeEntry.cpp:83 src/Dialogs/dlgWeather.cpp:54
 #, fuzzy
 msgid "Now"
 msgstr "Ne"
-
-#: src/Dialogs/dlgWeather.cpp:47
-msgid "Weather parameters"
-msgstr "Vodeni parametri"
-
-#: src/Dialogs/WindSettingsDialog.cpp:34
-msgid "Wind Settings"
-msgstr "Podešavanja vetra"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -7579,6 +7605,12 @@ msgstr ""
 msgid "Hot-air balloon"
 msgstr ""
 
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
+#, fuzzy
+msgid "Tracking Interval"
+msgstr "Pravac"
+
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
 #, fuzzy
 msgid "Track friends"
@@ -7587,11 +7619,6 @@ msgstr "Pravac"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
 msgstr ""
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
-#, fuzzy
-msgid "Tracking Interval"
-msgstr "Pravac"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
 msgid "Vehicle Type"
@@ -7655,17 +7682,17 @@ msgstr ""
 msgid "No TAF available!"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:49
+#: src/Terrain/RasterWeather.cpp:50
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:53
+#: src/Terrain/RasterWeather.cpp:54
 #, no-c-format
 msgid "W*"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:54
+#: src/Terrain/RasterWeather.cpp:55
 #, no-c-format
 msgid ""
 "Average dry thermal updraft strength near mid-BL height.  Subtract glider "
@@ -7675,12 +7702,12 @@ msgid ""
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:58
+#: src/Terrain/RasterWeather.cpp:59
 #, no-c-format
 msgid "BL Wind spd"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:59
+#: src/Terrain/RasterWeather.cpp:60
 #, no-c-format
 msgid ""
 "The speed and direction of the vector-averaged wind in the BL.  This "
@@ -7688,12 +7715,12 @@ msgid ""
 "through the BL."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:63
+#: src/Terrain/RasterWeather.cpp:64
 #, no-c-format
 msgid "H bl"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:64
+#: src/Terrain/RasterWeather.cpp:65
 #, no-c-format
 msgid ""
 "Height of the top of the mixing layer, which for thermal convection is the "
@@ -7706,12 +7733,12 @@ msgid ""
 "parameter is not useful for glider flying. "
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:68
+#: src/Terrain/RasterWeather.cpp:69
 #, no-c-format
 msgid "dwcrit"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:69
+#: src/Terrain/RasterWeather.cpp:70
 #, no-c-format
 msgid ""
 "This parameter estimates the height above ground at which the average dry "
@@ -7724,12 +7751,12 @@ msgid ""
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:73
+#: src/Terrain/RasterWeather.cpp:74
 #, no-c-format
 msgid "bl cloud"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:74
+#: src/Terrain/RasterWeather.cpp:75
 #, no-c-format
 msgid ""
 "This parameter provides an additional means of evaluating the formation of "
@@ -7740,12 +7767,12 @@ msgid ""
 "expected to be below the BL Top height."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:78
+#: src/Terrain/RasterWeather.cpp:79
 #, no-c-format
 msgid "Sfc temp"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:79
+#: src/Terrain/RasterWeather.cpp:80
 #, no-c-format
 msgid ""
 "The temperature at a height of 2m above ground level.  This can be compared "
@@ -7754,12 +7781,12 @@ msgid ""
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:83
+#: src/Terrain/RasterWeather.cpp:84
 #, no-c-format
 msgid "hwcrit"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:84
+#: src/Terrain/RasterWeather.cpp:85
 #, no-c-format
 msgid ""
 "This parameter estimates the height at which the average dry updraft "
@@ -7772,12 +7799,12 @@ msgid ""
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:88
+#: src/Terrain/RasterWeather.cpp:89
 #, no-c-format
 msgid "wblmaxmin"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:89
+#: src/Terrain/RasterWeather.cpp:90
 #, no-c-format
 msgid ""
 "Maximum grid-area-averaged extensive upward or downward motion within the BL "
@@ -7787,14 +7814,14 @@ msgid ""
 "inversions which limit thermalling heights."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:93
+#: src/Terrain/RasterWeather.cpp:94
 #, no-c-format
 msgid "blcwbase"
 msgstr ""
 
 #. not holding the lock here, because this method is only called
 #. during startup, when the other threads aren't running yet
-#: src/Terrain/RasterWeather.cpp:223
+#: src/Terrain/RasterWeather.cpp:224
 msgid "Scanning weather forecast"
 msgstr ""
 
@@ -7868,11 +7895,6 @@ msgstr "Izbor vazd.prostora"
 msgid "Revert Changes"
 msgstr ""
 
-#: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
-msgid "Topography labels, normal"
-msgstr "Nalepnica topologije"
-
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 #, fuzzy
 msgid "Set Code"
@@ -7891,6 +7913,10 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails_L.xml:3
 msgid "Waypoint Info"
 msgstr "Informacije tačke"
+
+#: Data/Dialogs/dlgTarget_L.xml:23
+msgid "Estimated time en-route to the next AAT target."
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:30
 #, fuzzy
@@ -7972,11 +7998,6 @@ msgstr ""
 msgid "ETE"
 msgstr ""
 
-#: Data/Dialogs/dlgConfigFonts.xml:3 Data/Dialogs/dlgConfigFonts_L.xml:3
-#, fuzzy
-msgid "Font Configuration"
-msgstr "Konfiguracija"
-
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
 msgstr "Fajl"
@@ -8051,11 +8072,6 @@ msgstr ""
 msgid "What do you want to do?"
 msgstr ""
 
-#: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
-msgid "Topography labels, important"
-msgstr "Nalepnica topologije"
-
 #: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:552
 #: Data/Input/default.xci:559
 msgid "MacCready"
@@ -8074,20 +8090,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Enable voice read-back of the average climb rate when circling."
-msgstr ""
-
-#: Data/Dialogs/dlgConfigFonts.xml:10 Data/Dialogs/dlgConfigFonts_L.xml:10
-#, fuzzy
-msgid "InfoBox titles"
-msgstr "InfoBox nazivi"
-
-#: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
-msgid "InfoBox values, small"
-msgstr "InfoBox mala vrednost"
-
-#: Data/Dialogs/dlgTarget_L.xml:23
-msgid "AAT Est Remaining Help"
 msgstr ""
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:5
@@ -8166,11 +8168,6 @@ msgstr "Objaviti"
 msgid "Demo"
 msgstr ""
 
-#: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
-msgid "Dialog text"
-msgstr "Okvir razgovora"
-
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
 msgstr "ACK Prostor"
@@ -8206,10 +8203,6 @@ msgstr "Novi 'Waypoint'"
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:5
 msgid "Set WP"
 msgstr ""
-
-#: Data/Dialogs/dlgConfigFonts.xml:6 Data/Dialogs/dlgConfigFonts_L.xml:6
-msgid "Customize fonts"
-msgstr "Izborni Font-ovi"
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Waypts."
@@ -8292,11 +8285,6 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
-
-#: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
-msgid "InfoBox values, normal"
-msgstr "InfoBox mala vrednost"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:10
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:1078
@@ -8644,6 +8632,16 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#~ msgid "Sunset"
+#~ msgstr "Zalazak Sunca"
+
+#, fuzzy
+#~ msgid "Delete Error"
+#~ msgstr "Briši"
+
+#~ msgid "Weather parameters"
+#~ msgstr "Vodeni parametri"
 
 #, fuzzy
 #~ msgid "Start open arr"
