@@ -28,16 +28,6 @@
 
 #include <assert.h>
 
-gcc_const
-static Angle
-IndexToAngle(unsigned i)
-{
-  assert(i < ROUTEPOLAR_POINTS);
-
-  return Angle::QuarterCircle()
-    - Angle::FullCircle() * (fixed(i) / ROUTEPOLAR_POINTS);
-}
-
 GlideResult
 RoutePolar::SolveTask(const GlideSettings &settings,
                       const GlidePolar& glide_polar,
@@ -56,8 +46,10 @@ RoutePolar::Initialise(const GlideSettings &settings, const GlidePolar& polar,
                        const SpeedVector& wind,
                        const bool is_glide)
 {
-  for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i) {
-    const Angle ang = IndexToAngle(i);
+  static constexpr Angle ang_step = Angle::FullCircle() / ROUTEPOLAR_POINTS;
+
+  Angle ang = Angle::QuarterCircle();
+  for (unsigned i = 0; i < ROUTEPOLAR_POINTS; ++i, ang -= ang_step) {
     GlideResult res = SolveTask(settings, polar, wind, ang, is_glide);
     if (res.IsOk()) {
       RoutePolarPoint point(res.time_elapsed, res.height_glide);
