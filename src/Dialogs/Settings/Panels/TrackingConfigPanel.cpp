@@ -128,7 +128,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
-  AddTime(_T("Tracking Interval"), NULL, 5, 1200, 5,
+  AddTime(_("Tracking Interval"), NULL, 5, 1200, 5,
           settings.skylines.interval);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

@@ -51,7 +51,7 @@ dlgWeatherShowModal()
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("Now"));
+    dfe->addEnumText(_("Now"));
     for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
       if (RASP.isWeatherAvailable(i)) {
         TCHAR timetext[10];
