@@ -21,7 +21,7 @@
   </Edit>
 
   <Edit Name="prpAATEst" Caption="ETE" X="-120" Y="-123" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="600" step="10"
-    Help="AAT Est Remaining Help">
+    Help="Estimated time en-route to the next AAT target.">
     <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
