@@ -41,8 +41,8 @@ SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figure
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
 SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
 
-TEX_INCLUDES_DE =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/de/*.sty)
-FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
+TEX_INCLUDES_BLITZ_DE =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/de/Blitz/*.sty)
+FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/Bilder/*.png
  
 TEX_INCLUDES_FR =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/fr/*.sty)
 #FIGURES_FR = $(DOC)/manual/fr/images/*.png
@@ -56,7 +56,7 @@ manual: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
-	$(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf
+	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf
 
 # Generate a redistributable ZIP file that allows manual editors
 # without the full XCSoar development chain to compile the XCSoar
@@ -86,8 +86,8 @@ ifeq ($(DEBUG),n)
 endif
 	$(TEX_RUN) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf: $(DOC)/manual/de/XCSoar-Handbuch.tex $(DOC)/manual/de/Blitzeinstieg.tex $(TEX_INCLUDES_DE) \
-	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/Blitzeinstieg.tex \
+$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
