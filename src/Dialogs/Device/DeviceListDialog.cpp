@@ -200,7 +200,8 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   const UPixelScalar margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
-  CreateList(parent, look, rc, 3 * margin + 2 * font_height).SetLength(NUMDEV);
+  CreateList(parent, look, rc, 3 * margin + font_height +
+             look.small_font->GetHeight()).SetLength(NUMDEV);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     items[i].Clear();
@@ -287,6 +288,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     text.append(port_name);
   }
 
+  canvas.Select(*look.list.font);
   canvas.DrawText(rc.left + margin, rc.top + margin, text);
 
   /* show a list of features that are available in the second row */
@@ -334,6 +336,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     status = _("Not connected");
   }
 
+  canvas.Select(*look.small_font);
   canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
                   status);
 }
