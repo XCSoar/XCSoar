@@ -134,51 +134,51 @@ InitialiseLogFonts()
   }
 
 #ifndef USE_GDI
-  UPixelScalar FontHeight = Layout::SmallScale(IsAndroid() ? 30 : 24);
+  UPixelScalar font_height = Layout::SmallScale(IsAndroid() ? 30 : 24);
 #else
-  UPixelScalar FontHeight = Layout::SmallScale(35);
+  UPixelScalar font_height = Layout::SmallScale(35);
 #endif
 
   // oversize first so can then scale down
   InitialiseLogfont(&log_infobox, GetStandardFontFace(),
-                    (int)(FontHeight * 1.4), true, false, true);
+                    (int)(font_height * 1.4), true, false, true);
 
 #ifdef WIN32
   log_infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
-  InitialiseLogfont(&log_title, GetStandardFontFace(), FontHeight / 3);
+  InitialiseLogfont(&log_title, GetStandardFontFace(), font_height / 3);
 
   // new font for CDI Scale
   InitialiseLogfont(&log_cdi, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.6), false, false, false);
+                    UPixelScalar(font_height * 0.6), false, false, false);
 
   // new font for map labels
   InitialiseLogfont(&log_map_label, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.39), false, true);
+                    UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels big/medium cities
   InitialiseLogfont(&log_map_label_important, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.39), false, true);
+                    UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels
   InitialiseLogfont(&log_map, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.507));
+                    UPixelScalar(font_height * 0.507));
 
   // Font for map bold text
   InitialiseLogfont(&log_map_bold, GetStandardFontFace(),
-                    UPixelScalar(FontHeight * 0.507), true);
+                    UPixelScalar(font_height * 0.507), true);
 
   InitialiseLogfont(&log_infobox_small, GetStandardFontFace(),
                     Layout::Scale(20));
 
 #ifndef GNAV
   InitialiseLogfont(&log_infobox_units, GetStandardFontFace(),
-                    (int)(FontHeight * 0.56));
+                    (int)(font_height * 0.56));
 #endif
 
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
-                    UPixelScalar(FontHeight * 0.39), false, false, false);
+                    UPixelScalar(font_height * 0.39), false, false, false);
 }
 
 bool
