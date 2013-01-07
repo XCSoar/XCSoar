@@ -259,7 +259,7 @@ namespace LX1600 {
   }
 
   /**
-   * Set the filter settings of the LX16xx vario
+   * Set the speed command settings of the LX16xx vario
    *
    * @param mode methods for automatic SC switch index (default=ON_CIRCLING)
    * @param deadband area of silence in SC mode (float)
