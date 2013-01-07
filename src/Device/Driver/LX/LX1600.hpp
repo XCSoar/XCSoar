@@ -91,10 +91,10 @@ namespace LX1600 {
     /*
      * This line sets the requested NMEA sentences on the device.
      * LXWP0: every second
-     * LXWP1+3: once every 60 seconds
+     * LXWP1+3+5: once every 60 seconds
      * LXWP2: once every 10 seconds
      */
-    return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,60,LXWP2,10,LXWP3,60", env);
+    return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP1,60,LXWP2,10,LXWP3,60,LXWP5,60", env);
   }
 
   /**
