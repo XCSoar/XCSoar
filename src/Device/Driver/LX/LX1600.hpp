@@ -290,6 +290,21 @@ namespace LX1600 {
 
     return PortWriteNMEA(port, buffer, env);
   }
+
+  /**
+   * Set the time offset of the LX16xx vario
+   * @param offset time offset in hours
+   */
+  static inline bool
+  SetTimeOffset(Port &port, OperationEnvironment &env, int offset)
+  {
+    assert(offset >= -14 && offset <= 14);
+
+    char buffer[100];
+    sprintf(buffer, "PFLX3,,,,,,,,,,,,,%d", offset);
+
+    return PortWriteNMEA(port, buffer, env);
+  }
 }
 
 #endif
