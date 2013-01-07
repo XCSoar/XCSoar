@@ -292,6 +292,19 @@ namespace LX1600 {
   }
 
   /**
+   * Set the Smart VARIO filtering
+   * @param filter filter setting in m/s^2
+   */
+  static inline bool
+  SetSmartDiffFilter(Port &port, OperationEnvironment &env, fixed filter)
+  {
+    char buffer[100];
+    sprintf(buffer, "PFLX3,,,,,,,,,,,%.1f", (double)filter);
+
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
    * Set the time offset of the LX16xx vario
    * @param offset time offset in hours
    */
