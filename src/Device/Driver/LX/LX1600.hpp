@@ -292,6 +292,26 @@ namespace LX1600 {
   }
 
   /**
+   * Set the vario settings of the LX16xx vario
+   *
+   * @param avg_time averaging time in seconds for integrator
+   * (between 5s and 30s, default=25)
+   * @param range range of the vario display (2.5, 5.0 or 10.0, default=5.0)
+   */
+  static inline bool
+  SetVarioSettings(Port &port, OperationEnvironment &env,
+                   unsigned avg_time, fixed range)
+  {
+    assert(avg_time >= 5 && avg_time <= 30);
+    assert(range >= fixed(2.5) && range <= fixed(10));
+
+    char buffer[100];
+    sprintf(buffer, "PFLX3,,,,,,%u,%.1f", avg_time, (double)range);
+
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
    * Set the Smart VARIO filtering
    * @param filter filter setting in m/s^2
    */
