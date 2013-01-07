@@ -48,11 +48,11 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
            this);
 
   AddAngle(_("Start radial"), _("Start radial of the OZ area"),
-           GetObject().GetStartRadial(), 10, false,
+           GetObject().GetStartRadial(), 10, true,
            this);
 
   AddAngle(_("Finish radial"), _("Finish radial of the OZ area"),
-           GetObject().GetEndRadial(), 10, false,
+           GetObject().GetEndRadial(), 10, true,
            this);
 
   if (GetObject().shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
