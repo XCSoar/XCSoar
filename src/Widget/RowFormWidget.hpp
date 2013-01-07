@@ -371,7 +371,7 @@ public:
   }
 
   WndProperty *AddAngle(const TCHAR *label, const TCHAR *help,
-                        Angle value, unsigned step,
+                        Angle value, unsigned step, bool fine,
                         DataFieldListener *listener=nullptr);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,

@@ -38,21 +38,24 @@ class AngleDataField : public DataField {
   unsigned value;
   unsigned step;
 
+  /** set to true to allow adjustment of values with step/10 precision */
+  bool fine;
+
 public:
-  AngleDataField(unsigned _value, unsigned _step,
+  AngleDataField(unsigned _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
     :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step) {}
+     value(Import(_value)), step(_step), fine(_fine) {}
 
-  AngleDataField(int _value, unsigned _step,
+  AngleDataField(int _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
     :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step) {}
+     value(Import(_value)), step(_step), fine(_fine) {}
 
-  AngleDataField(Angle _value, unsigned _step,
+  AngleDataField(Angle _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
     :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step) {}
+     value(Import(_value)), step(_step), fine(_fine) {}
 
   constexpr
   static unsigned Import(unsigned value) {

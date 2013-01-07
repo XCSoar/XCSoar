@@ -94,7 +94,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
 
     wp = AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
-                  manual_wind.bearing, 5u);
+                  manual_wind.bearing, 5u, false);
     wp->SetEnabled(!external_wind);
   }
 }

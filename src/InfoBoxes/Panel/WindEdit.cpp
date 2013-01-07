@@ -104,7 +104,7 @@ WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
            CommonInterface::Calculated().GetWindOrZero().bearing, 5u,
-           this);
+           false, this);
 }
 
 Widget *

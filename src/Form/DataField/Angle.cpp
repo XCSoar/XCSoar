@@ -140,8 +140,16 @@ AngleDataField::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
 
+  const unsigned fine_step = std::max(1u, step / 10u);
+  const unsigned fine_start_value = (value >= step) ? value - step : 0;
+  const unsigned fine_stop_value = value + step;
+
   bool found_current = false;
-  for (unsigned i = 0; i < MAX; i += step) {
+  bool in_fine_step = false;
+  unsigned current_step = step;
+  unsigned i = 0;
+
+  while (i < MAX) {
     if (!found_current && value <= i) {
       combo_list->ComboPopupItemSavedIndex = combo_list->size();
 
@@ -153,6 +161,26 @@ AngleDataField::CreateComboList() const
     }
 
     AppendComboValue(*combo_list, i);
+
+    if (fine) {
+      if (i + current_step > fine_stop_value) {
+        if (in_fine_step) {
+          in_fine_step = false;
+          current_step = step;
+          i = ((i + step) / step) * step;
+        } else
+          i += current_step;
+      } else if (i + current_step > fine_start_value) {
+        if (!in_fine_step) {
+          in_fine_step = true;
+          current_step = fine_step;
+          i = fine_start_value + fine_step;
+        } else
+          i += current_step;
+      } else
+        i += current_step;
+    } else
+      i += current_step;
   }
 
   if (!found_current) {

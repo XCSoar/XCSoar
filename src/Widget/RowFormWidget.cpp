@@ -339,11 +339,11 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddAngle(const TCHAR *label, const TCHAR *help,
-                        Angle value, unsigned step,
+                        Angle value, unsigned step, bool fine,
                         DataFieldListener *listener)
 {
   WndProperty *edit = Add(label, help);
-  AngleDataField *df = new AngleDataField(value, step, listener);
+  AngleDataField *df = new AngleDataField(value, step, fine, listener);
   edit->SetDataField(df);
   return edit;
 }
