@@ -85,6 +85,24 @@ namespace LX1600 {
     return success;
   }
 
+  /**
+   * Store the current settings into the EEPROM of the device.
+   */
+  static inline bool
+  SaveToEEPROM(Port &port, OperationEnvironment &env)
+  {
+    return PortWriteNMEA(port, "PFLX0,EEPROM", env);
+  }
+
+  /**
+   * Initialize all settings to default, writes to EEPROM and resets unit.
+   */
+  static inline bool
+  FactoryReset(Port &port, OperationEnvironment &env)
+  {
+    return PortWriteNMEA(port, "PFLX0,INITEEPROM", env);
+  }
+
   static inline bool
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
