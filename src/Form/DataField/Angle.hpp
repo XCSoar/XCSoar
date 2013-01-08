@@ -67,7 +67,7 @@ public:
 
   gcc_const
   static unsigned Import(Angle value) {
-    return uround(value.AsBearing().Degrees());
+    return uround(value.AsBearing().Degrees()) % 360u;
   }
 
   Angle GetValue() const {
