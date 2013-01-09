@@ -64,13 +64,13 @@ DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
 
 ifeq ($(TESTING),y)
-ICON_PNG = $(DATA)/graphics/xcsoarswiftsplash_red_160.png
+ICON_SVG = $(topdir)/Data/graphics/xcsoarswiftsplash_red.svg
 else
-ICON_PNG = $(DATA)/graphics/xcsoarswiftsplash_160.png
+ICON_SVG = $(topdir)/Data/graphics/xcsoarswiftsplash.svg
 endif
 
-$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_PNG) | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)rsvg-convert --width=48 $< -o $@
 
 OGGENC = oggenc --quiet --quality 1
 
