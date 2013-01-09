@@ -64,12 +64,13 @@ DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
 
 ifeq ($(TESTING),y)
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+ICON_PNG = $(DATA)/graphics/xcsoarswiftsplash_red_160.png
 else
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+ICON_PNG = $(DATA)/graphics/xcsoarswiftsplash_160.png
 endif
+
+$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_PNG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 
 OGGENC = oggenc --quiet --quality 1
 
