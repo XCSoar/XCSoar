@@ -100,6 +100,10 @@ struct PixelRect : public tagRECT {
     return { right - left, bottom - top };
   }
 
+  constexpr RasterPoint GetCenter() const {
+    return { (left + right) / 2, (top + bottom) / 2 };
+  }
+
   bool IsInside(RasterPoint pt) const {
     return ::PtInRect(this, pt);
   }

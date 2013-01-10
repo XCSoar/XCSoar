@@ -136,6 +136,10 @@ struct PixelRect {
     return { right - left, bottom - top };
   }
 
+  constexpr RasterPoint GetCenter() const {
+    return { (left + right) / 2, (top + bottom) / 2 };
+  }
+
   constexpr RasterPoint GetTopLeft() const {
     return { left, top };
   }
