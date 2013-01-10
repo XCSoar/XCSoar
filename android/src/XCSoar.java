@@ -157,9 +157,15 @@ public class XCSoar extends Activity {
     nativeView.setFocusable(true);
     nativeView.requestFocus();
 
+    // Obtain an instance of the Android PowerManager class
     PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+    // Create a WakeLock instance to keep the screen from timing out
+    // Note: FULL_WAKE_LOCK is deprecated in favor of FLAG_KEEP_SCREEN_ON
     wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|
                               PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
+
+    // Activate the WakeLock
     wakeLock.acquire();
   }
 
@@ -204,6 +210,7 @@ public class XCSoar extends Activity {
       nativeView = null;
     }
 
+    // Release the WakeLock instance to re-enable screen timeouts
     if (wakeLock != null) {
       wakeLock.release();
       wakeLock = null;
