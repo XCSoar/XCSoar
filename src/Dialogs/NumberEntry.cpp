@@ -64,6 +64,7 @@ NumberEntryDialog(const TCHAR *caption,
 
   buttons.Add(_("OK"), dialog, mrOK);
   buttons.Add(_("Cancel"), dialog, mrCancel);
+  entry.Move(buttons.UpdateLayout());
 
   /* run it */
 
