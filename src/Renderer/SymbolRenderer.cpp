@@ -30,17 +30,14 @@ void
 SymbolRenderer::DrawSign(Canvas &canvas, PixelRect rc, bool plus)
 {
   PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
+  RasterPoint center = rc.GetCenter();
 
   // Draw horizontal bar
-  canvas.Rectangle((rc.left + rc.right) / 2 - size,
-                   (rc.top + rc.bottom) / 2 - size / 3,
-                   (rc.left + rc.right) / 2 + size,
-                   (rc.top + rc.bottom) / 2 + size / 3);
+  canvas.Rectangle(center.x - size, center.y - size / 3,
+                   center.x + size, center.y + size / 3);
 
   if (plus)
     // Draw vertical bar
-    canvas.Rectangle((rc.left + rc.right) / 2 - size / 3,
-                     (rc.top + rc.bottom) / 2 - size,
-                     (rc.left + rc.right) / 2 + size / 3,
-                     (rc.top + rc.bottom) / 2 + size);
+    canvas.Rectangle(center.x - size / 3, center.y - size,
+                     center.x + size / 3, center.y + size);
 }
