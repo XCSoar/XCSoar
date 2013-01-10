@@ -36,9 +36,9 @@ Copyright_License {
 #include <SDL_endian.h>
 #include <SDL_image.h>
 
-  #ifdef WIN32
-    #include <windows.h>
-  #endif
+#ifdef WIN32
+  #include <windows.h>
+#endif
 
 #include <assert.h>
 
