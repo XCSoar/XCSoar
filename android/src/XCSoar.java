@@ -159,8 +159,7 @@ public class XCSoar extends Activity {
 
     PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
     wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK|
-                              PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                              "XCSoar");
+                              PowerManager.ACQUIRE_CAUSES_WAKEUP, TAG);
     wakeLock.acquire();
   }
 
