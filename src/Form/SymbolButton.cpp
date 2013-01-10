@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
+#include "Renderer/SymbolRenderer.hpp"
 #include "resource.h"
 
 void
@@ -91,20 +92,8 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   }
 
   // Draw symbols instead of + and -
-  else if (ch == '+' || ch == '-') {
-    int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
-
-    canvas.Rectangle((rc.left + rc.right) / 2 - size,
-                     (rc.top + rc.bottom) / 2 - size / 3,
-                     (rc.left + rc.right) / 2 + size,
-                     (rc.top + rc.bottom) / 2 + size / 3);
-
-    if (ch == '+')
-      canvas.Rectangle((rc.left + rc.right) / 2 - size / 3,
-                       (rc.top + rc.bottom) / 2 - size,
-                       (rc.left + rc.right) / 2 + size / 3,
-                       (rc.top + rc.bottom) / 2 + size);
-  }
+  else if (ch == '+' || ch == '-')
+    SymbolRenderer::DrawSign(canvas, rc, ch == '+');
 
   // Draw Fly bitmap
   else if (caption == _T("Fly")) {
