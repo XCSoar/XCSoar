@@ -33,29 +33,29 @@ SymbolRenderer::DrawArrow(Canvas &canvas, PixelRect rc, Direction direction)
          direction == LEFT || direction == RIGHT);
 
   PixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 5;
-  RasterPoint Arrow[3];
+  RasterPoint arrow[3];
 
   if (direction == LEFT || direction == RIGHT) {
-    Arrow[0].x = (rc.left + rc.right) / 2 + (direction == LEFT ? size : -size);
-    Arrow[0].y = (rc.top + rc.bottom) / 2 + size;
-    Arrow[1].x = (rc.left + rc.right) / 2 + (direction == LEFT ? -size : size);
-    Arrow[1].y = (rc.top + rc.bottom) / 2;
-    Arrow[2].x = (rc.left + rc.right) / 2 + (direction == LEFT ? size : -size);
-    Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
+    arrow[0].x = (rc.left + rc.right) / 2 + (direction == LEFT ? size : -size);
+    arrow[0].y = (rc.top + rc.bottom) / 2 + size;
+    arrow[1].x = (rc.left + rc.right) / 2 + (direction == LEFT ? -size : size);
+    arrow[1].y = (rc.top + rc.bottom) / 2;
+    arrow[2].x = (rc.left + rc.right) / 2 + (direction == LEFT ? size : -size);
+    arrow[2].y = (rc.top + rc.bottom) / 2 - size;
   } else if (direction == UP || direction == DOWN) {
-    Arrow[0].x = (rc.left + rc.right) / 2 +
+    arrow[0].x = (rc.left + rc.right) / 2 +
                  size;
-    Arrow[0].y = (rc.top + rc.bottom) / 2 +
+    arrow[0].y = (rc.top + rc.bottom) / 2 +
                  (direction == UP ? size : -size);
-    Arrow[1].x = (rc.left + rc.right) / 2;
-    Arrow[1].y = (rc.top + rc.bottom) / 2 +
+    arrow[1].x = (rc.left + rc.right) / 2;
+    arrow[1].y = (rc.top + rc.bottom) / 2 +
                  (direction == UP ? -size : size);
-    Arrow[2].x = (rc.left + rc.right) / 2 - size;
-    Arrow[2].y = (rc.top + rc.bottom) / 2 +
+    arrow[2].x = (rc.left + rc.right) / 2 - size;
+    arrow[2].y = (rc.top + rc.bottom) / 2 +
                  (direction == UP ? size : -size);
   }
 
-  canvas.DrawTriangleFan(Arrow, 3);
+  canvas.DrawTriangleFan(arrow, 3);
 }
 
 void
