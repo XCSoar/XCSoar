@@ -41,12 +41,12 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
                    const WindowStyle style,
                    unsigned _length)
 {
+  assert(_length > 0);
+  assert(_length <= MAX_LENGTH);
+
   length = _length;
   cursor = length - 1;
   valid = true;
-
-  assert(length > 0);
-  assert(length <= MAX_LENGTH);
 
   const UPixelScalar margin = 1;
   padding = Layout::Scale(2);
