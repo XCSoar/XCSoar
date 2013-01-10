@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "DigitEntry.hpp"
 #include "ActionListener.hpp"
-#include "Look/DialogLook.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
@@ -580,9 +579,6 @@ DigitEntry::OnPaint(Canvas &canvas)
   PixelRect plus_rc(0, top - control_height, 0, top);
   PixelRect minus_rc(0, bottom, 0, bottom + control_height);
 
-  canvas.SelectNullPen();
-  canvas.Select(look.button.standard.foreground_brush);
-
   for (unsigned i = 0; i < length; ++i) {
     const Column &c = columns[i];
     if (!c.IsEditable())
@@ -590,6 +586,12 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     plus_rc.left = minus_rc.left = c.left;
     plus_rc.right = minus_rc.right = c.right;
+
+    button_renderer.DrawButton(canvas, plus_rc, false, false);
+    button_renderer.DrawButton(canvas, minus_rc, false, false);
+
+    canvas.SelectNullPen();
+    canvas.Select(look.button.standard.foreground_brush);
 
     SymbolRenderer::DrawSign(canvas, plus_rc, true);
     SymbolRenderer::DrawSign(canvas, minus_rc, false);

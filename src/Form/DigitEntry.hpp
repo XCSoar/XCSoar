@@ -25,13 +25,14 @@ Copyright_License {
 #define XCSOAR_FORM_DIGIT_ENTRY_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Look/DialogLook.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Math/fixed.hpp"
 
 #include <assert.h>
 #include <stdint.h>
 
 class RoughTime;
-struct DialogLook;
 class ContainerWindow;
 class ActionListener;
 
@@ -96,6 +97,8 @@ class DigitEntry : public PaintWindow {
 
   const DialogLook &look;
 
+  ButtonRenderer button_renderer;
+
   ActionListener *action_listener;
   int action_id;
 
@@ -119,7 +122,7 @@ class DigitEntry : public PaintWindow {
 
 public:
   DigitEntry(const DialogLook &_look)
-    :look(_look), action_listener(nullptr) {}
+    :look(_look), button_renderer(look.button), action_listener(nullptr) {}
 
   virtual ~DigitEntry();
 
