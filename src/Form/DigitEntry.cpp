@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
+#include "Renderer/SymbolRenderer.hpp"
 
 #include <stdio.h>
 
@@ -574,20 +575,23 @@ DigitEntry::OnPaint(Canvas &canvas)
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(look.text_color);
 
-  const int plus_y = (Layout::GetMaximumControlHeight() - text_height) / 2;
-  const int minus_y = bottom + plus_y;
-  const unsigned plus_width = canvas.CalcTextWidth(_T("+"));
-  const unsigned minus_width = canvas.CalcTextWidth(_T("-"));
+  unsigned control_height = Layout::GetMaximumControlHeight();
+
+  PixelRect plus_rc(0, top - control_height, 0, top);
+  PixelRect minus_rc(0, bottom, 0, bottom + control_height);
+
+  canvas.SelectNullPen();
+  canvas.Select(look.button.standard.foreground_brush);
 
   for (unsigned i = 0; i < length; ++i) {
     const Column &c = columns[i];
     if (!c.IsEditable())
       continue;
 
-    int plus_x = (c.left + c.right - plus_width) / 2;
-    canvas.DrawText(plus_x, plus_y, _T("+"));
+    plus_rc.left = minus_rc.left = c.left;
+    plus_rc.right = minus_rc.right = c.right;
 
-    int minus_x = (c.left + c.right - minus_width) / 2;
-    canvas.DrawText(minus_x, minus_y, _T("-"));
+    SymbolRenderer::DrawSign(canvas, plus_rc, true);
+    SymbolRenderer::DrawSign(canvas, minus_rc, false);
   }
 }
