@@ -378,10 +378,7 @@ int
 DigitEntry::GetIntegerValue() const
 {
   int value = GetPositiveInteger();
-  if (IsNegative())
-    value = -value;
-
-  return value;
+  return IsNegative() ? -value : value;
 }
 
 unsigned
