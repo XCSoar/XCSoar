@@ -94,6 +94,21 @@ DigitEntry::CreateSigned(ContainerWindow &parent, const PixelRect &rc,
 }
 
 void
+DigitEntry::CreateUnsigned(ContainerWindow &parent, const PixelRect &rc,
+                           const WindowStyle style,
+                           unsigned ndigits, unsigned precision)
+{
+  Create(parent, rc, style, ndigits + (precision > 0));
+
+  if (precision > 0) {
+    columns[ndigits - precision].type = Column::Type::DECIMAL_POINT;
+
+    if (ndigits > precision)
+      cursor -= precision + 1;
+  }
+}
+
+void
 DigitEntry::CreateTime(ContainerWindow &parent, const PixelRect &rc,
                        const WindowStyle style)
 {

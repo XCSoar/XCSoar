@@ -136,6 +136,10 @@ public:
                     const WindowStyle style,
                     unsigned ndigits, unsigned precision);
 
+  void CreateUnsigned(ContainerWindow &parent, const PixelRect &rc,
+                      const WindowStyle style,
+                      unsigned ndigits, unsigned precision);
+
   void CreateTime(ContainerWindow &parent, const PixelRect &rc,
                   const WindowStyle style);
 

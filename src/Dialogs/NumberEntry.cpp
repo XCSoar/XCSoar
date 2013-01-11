@@ -104,7 +104,7 @@ NumberEntryDialog(const TCHAR *caption,
   control_style.TabStop();
 
   DigitEntry entry(look);
-  entry.CreateSigned(client_area, rc, control_style, length, 0);
+  entry.CreateUnsigned(client_area, rc, control_style, length, 0);
   entry.SetValue(value);
 
   /* create buttons */
