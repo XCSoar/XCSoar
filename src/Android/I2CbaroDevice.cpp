@@ -128,8 +128,8 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
         break;
 
       case DeviceConfig::PressureUse::STATIC_WITH_VARIO:
-        static_p = kalman_filter.GetXAbs();
-        basic.ProvideNoncompVario(ComputeNoncompVario(static_p, kalman_filter.GetXVel()));
+        static_p = pressure.GetHectoPascal();
+        basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(), kalman_filter.GetXVel()));
         basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(static_p));
         break;
 
