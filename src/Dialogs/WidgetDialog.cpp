@@ -102,15 +102,21 @@ WidgetDialog::AutoSize()
   const PixelSize parent_size = parent_rc.GetSize();
 
   widget.Prepare();
+
+  // Calculate the minimum size of the dialog
   PixelSize min_size = widget.Get()->GetMinimumSize();
   min_size.cy += GetTitleHeight();
+
+  // Calculate the maximum size of the dialog
   PixelSize max_size = widget.Get()->GetMaximumSize();
   max_size.cy += GetTitleHeight();
 
+  // Calculate sizes with one button row at the bottom
   const PixelScalar min_height_with_buttons =
     min_size.cy + Layout::GetMaximumControlHeight();
   const PixelScalar max_height_with_buttons =
     max_size.cy + Layout::GetMaximumControlHeight();
+
   if (/* need full dialog height even for minimum widget height? */
       min_height_with_buttons >= parent_size.cy ||
       /* try to avoid putting buttons left on portrait screens; try to
