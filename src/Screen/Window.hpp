@@ -425,6 +425,14 @@ public:
     Move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   }
 
+  void MoveToCenter() {
+    const PixelSize window_size = GetSize();
+    const PixelSize parent_size = GetParentClientRect().GetSize();
+    PixelScalar dialog_x = (parent_size.cx - window_size.cx) / 2;
+    PixelScalar dialog_y = (parent_size.cy - window_size.cy) / 2;
+    Move(dialog_x, dialog_y);
+  }
+
   /**
    * Like move(), but does not trigger a synchronous redraw.  The
    * caller is responsible for redrawing.
