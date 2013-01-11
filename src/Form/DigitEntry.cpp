@@ -396,9 +396,7 @@ fixed
 DigitEntry::GetFixedValue() const
 {
   fixed value = fixed(GetPositiveInteger()) + GetPositiveFractional();
-  if (IsNegative())
-    value = -value;
-  return value;
+  return IsNegative() ? -value : value;
 }
 
 bool
