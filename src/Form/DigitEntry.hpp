@@ -181,15 +181,27 @@ protected:
     return columns[0].IsSign() && columns[0].IsNegative();
   }
 
+  /**
+   * Find the first column with that contains a decimal point.
+   */
   gcc_pure
   int FindDecimalPoint() const;
 
+  /**
+   * Find the next column to the left (including i) that is numerical.
+   */
   gcc_pure
   int FindNumberLeft(int i) const;
 
+  /**
+   * Find the next column to the left (including i) that is editable.
+   */
   gcc_pure
   int FindEditableLeft(int i) const;
 
+  /**
+   * Find the next column to the right (including i) that is editable.
+   */
   gcc_pure
   int FindEditableRight(unsigned i) const;
 
