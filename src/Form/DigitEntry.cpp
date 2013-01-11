@@ -128,8 +128,7 @@ DigitEntry::FindEditableRight(unsigned i) const
 void
 DigitEntry::SetCursor(unsigned _cursor)
 {
-  assert(length > 0);
-  assert(cursor < length);
+  assert(_cursor < length);
 
   if (_cursor == cursor)
     return;
