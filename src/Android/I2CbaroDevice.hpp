@@ -56,7 +56,7 @@ public:
 
 private:
   /* virtual methods from class I2CbaroListener */
-  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure);
+  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure) gcc_override;
   virtual void onI2CbaroError() gcc_override;
 };
 

@@ -52,7 +52,8 @@ public:
 
 private:
   /* virtual methods from class NunchuckListener */
-  virtual void onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int acc_z, int switches);
+  virtual void onNunchuckValues(int joy_x, int joy_y,
+                                int acc_x, int acc_y, int acc_z, int switches) gcc_override;
   virtual void onNunchuckError() gcc_override;
 };
 
