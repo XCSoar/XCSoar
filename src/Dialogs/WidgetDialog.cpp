@@ -135,7 +135,7 @@ WidgetDialog::AutoSize()
     if (remaining_size.cx > max_size.cx)
       rc.right -= remaining_size.cx - max_size.cx;
 
-    Move(rc);
+    Resize(rc.GetSize());
     widget.Move(buttons.LeftLayout());
     return;
   }
@@ -152,7 +152,7 @@ WidgetDialog::AutoSize()
   if (remaining_size.cy > max_size.cy)
     rc.bottom -= remaining_size.cy - max_size.cy;
 
-  Move(rc);
+  Resize(rc.GetSize());
   widget.Move(buttons.BottomLayout());
 }
 
