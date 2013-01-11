@@ -196,12 +196,7 @@ DigitEntry::SetValue(int value)
 
   const int dp = FindDecimalPoint();
 
-  int i;
-  if (dp >= 0)
-    i = dp;
-  else
-    i = length;
-
+  int i = (dp >= 0) ? dp : length;
   while (true) {
     i = FindNumberLeft(i - 1);
     if (i < 0)
