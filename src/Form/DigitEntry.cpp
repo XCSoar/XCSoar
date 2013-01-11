@@ -192,7 +192,7 @@ DigitEntry::SetValue(int value)
   if (columns[0].IsSign()) {
     columns[0].SetNegative(value < 0);
   } else if (value < 0)
-    value = 0;
+    uvalue = 0u;
 
   const int dp = FindDecimalPoint();
 
