@@ -196,7 +196,7 @@ DigitEntry::SetValue(int value)
 
   const int dp = FindDecimalPoint();
 
-  int i = length - 1;
+  int i;
   if (dp >= 0)
     i = dp;
   else
