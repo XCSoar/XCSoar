@@ -667,7 +667,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunTask \
 	ViewImage \
 	RunCanvas RunMapWindow \
-	RunDialog RunListControl RunTextEntry RunNumberEntry RunTimeEntry \
+	RunDialog RunListControl \
+	RunTextEntry RunNumberEntry RunTimeEntry RunAngleEntry \
 	RunTerminal \
 	RunRenderOZ \
 	RunChartRenderer \
@@ -1831,6 +1832,27 @@ RUN_TIME_ENTRY_SOURCES = \
 RUN_TIME_ENTRY_LDADD = $(RESOURCE_BINARY)
 RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTimeEntry,RUN_TIME_ENTRY))
+
+RUN_ANGLE_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/NumberEntry.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeListPicker.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/RunAngleEntry.cpp
+RUN_ANGLE_ENTRY_LDADD = $(RESOURCE_BINARY)
+RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
+$(eval $(call link-program,RunAngleEntry,RUN_ANGLE_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
