@@ -137,6 +137,8 @@ WidgetDialog::AutoSize()
 
     Resize(rc.GetSize());
     widget.Move(buttons.LeftLayout());
+
+    MoveToCenter();
     return;
   }
 
@@ -154,6 +156,8 @@ WidgetDialog::AutoSize()
 
   Resize(rc.GetSize());
   widget.Move(buttons.BottomLayout());
+
+  MoveToCenter();
 }
 
 int
