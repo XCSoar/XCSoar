@@ -49,6 +49,7 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
+#include "Android/Product.hpp"
 #endif
 
 #ifdef IOIOLIB
@@ -240,6 +241,10 @@ DeviceDescriptor::OpenInternalSensors()
 #ifdef ANDROID
   if (is_simulator())
     return true;
+
+  if (IsNookSimpleTouch())
+    /* avoid a crash on startup b/c nook has no internal sensors */
+    return false;
 
   internal_sensors =
       InternalSensors::create(Java::GetEnv(), context, GetIndex());
