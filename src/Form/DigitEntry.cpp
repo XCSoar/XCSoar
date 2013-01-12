@@ -620,7 +620,7 @@ DigitEntry::OnPaint(Canvas &canvas)
     canvas.SelectNullPen();
     canvas.Select(look.button.standard.foreground_brush);
 
-    SymbolRenderer::DrawSign(canvas, plus_rc, true);
-    SymbolRenderer::DrawSign(canvas, minus_rc, false);
+    SymbolRenderer::DrawArrow(canvas, plus_rc, SymbolRenderer::UP);
+    SymbolRenderer::DrawArrow(canvas, minus_rc, SymbolRenderer::DOWN);
   }
 }
