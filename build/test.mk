@@ -1791,7 +1791,7 @@ $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 RUN_NUMBER_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/UIUtil/KineticManager.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
