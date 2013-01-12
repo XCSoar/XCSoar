@@ -79,6 +79,7 @@ WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
 void
 WidgetDialog::CreatePreliminary(SingleWindow &parent, const TCHAR *caption)
 {
+  auto_size = true;
   WndForm::Create(parent, parent.GetClientRect(), caption, GetDialogStyle());
 }
 
