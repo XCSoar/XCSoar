@@ -30,7 +30,7 @@ CompareRegistryValue(const RegistryKey &registry,
                      const TCHAR *name, const TCHAR *value)
 {
   TCHAR real_value[64];
-  return registry.get_value(name, real_value, 64) &&
+  return registry.GetValue(name, real_value, 64) &&
     StringIsEqualIgnoreCase(value, real_value);
 }
 
@@ -65,7 +65,7 @@ GetDeviceFriendlyName(const TCHAR *key, TCHAR *buffer, size_t max_size)
 {
   RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
   return !registry.error() &&
-    registry.get_value(_T("FriendlyName"), buffer, max_size);
+    registry.GetValue(_T("FriendlyName"), buffer, max_size);
 }
 
 PortEnumerator::PortEnumerator()
@@ -87,15 +87,15 @@ PortEnumerator::Next()
 
   /* enumerate regular serial ports first */
 
-  while (drivers_active.enum_key(i++, key_name, 64)) {
+  while (drivers_active.EnumKey(i++, key_name, 64)) {
     RegistryKey device(drivers_active, key_name, true);
     if (device.error())
       continue;
 
     TCHAR device_key[64];
-    if (device.get_value(_T("Key"), device_key, 64) &&
+    if (device.GetValue(_T("Key"), device_key, 64) &&
         IsSerialPort(device_key) &&
-        device.get_value(_T("Name"), name.buffer(), name.MAX_SIZE)) {
+        device.GetValue(_T("Name"), name.buffer(), name.MAX_SIZE)) {
       display_name = name;
       const size_t length = display_name.length();
       TCHAR *const tail = display_name.buffer() + length;
@@ -115,12 +115,12 @@ PortEnumerator::Next()
   /* virtual Bluetooth serial ports will not be found by the above;
      the following is necessary to enumerate those */
 
-  while (bluetooth_ports.enum_key(j++, key_name, 64)) {
+  while (bluetooth_ports.EnumKey(j++, key_name, 64)) {
     RegistryKey port(bluetooth_ports, key_name, true);
     if (port.error())
       continue;
 
-    if (!port.get_value(_T("Port"), name.buffer(), name.MAX_SIZE - 1))
+    if (!port.GetValue(_T("Port"), name.buffer(), name.MAX_SIZE - 1))
       continue;
 
     /* the trailing colon is missing in this part of the registry */
@@ -144,7 +144,7 @@ PortEnumerator::Next()
       TCHAR *const tail = display_name.buffer() + length;
       const size_t remaining = display_name.MAX_SIZE - length - 3;
 
-      if (device.get_value(_T("name"), tail + 2, remaining)) {
+      if (device.GetValue(_T("name"), tail + 2, remaining)) {
         /* build a string in the form: "COM1: (Friendly Name)" */
         tail[0] = _T(' ');
         tail[1] = _T('(');

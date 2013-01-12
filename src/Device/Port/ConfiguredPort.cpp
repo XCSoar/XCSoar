@@ -72,7 +72,7 @@ detect_gps(TCHAR *path, size_t path_max_size)
 
   RegistryKey key(HKEY_LOCAL_MACHINE, gps_idm_key, true);
   return !key.error() &&
-    key.get_value(gps_idm_value, path, path_max_size);
+    key.GetValue(gps_idm_value, path, path_max_size);
 #else
   return false;
 #endif

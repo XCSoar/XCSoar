@@ -83,11 +83,11 @@ SetHP31XBacklight()
 
   RegistryKey key(HKEY_CURRENT_USER, _T("ControlPanel\\Backlight"), false);
   return !key.error() &&
-    key.set_value(_T("BackLightCurrentACLevel"), max_level) &&
-    key.set_value(_T("BackLightCurrentBatteryLevel"), max_level) &&
-    key.set_value(_T("TotalLevels"), max_level) &&
-    key.set_value(_T("UseExt"), use_ext) &&
-    key.delete_value(_T("ACTimeout")) &&
+    key.SetValue(_T("BackLightCurrentACLevel"), max_level) &&
+    key.SetValue(_T("BackLightCurrentBatteryLevel"), max_level) &&
+    key.SetValue(_T("TotalLevels"), max_level) &&
+    key.SetValue(_T("UseExt"), use_ext) &&
+    key.DeleteValue(_T("ACTimeout")) &&
     TriggerGlobalEvent(_T("BacklightChangeEvent"));
 }
 
