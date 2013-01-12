@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
+#include "Math/Angle.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 
 #include <stdio.h>
@@ -106,6 +107,16 @@ DigitEntry::CreateUnsigned(ContainerWindow &parent, const PixelRect &rc,
     if (ndigits > precision)
       cursor -= precision + 1;
   }
+}
+
+void
+DigitEntry::CreateAngle(ContainerWindow &parent, const PixelRect &rc,
+                        const WindowStyle style)
+{
+  Create(parent, rc, style, 4);
+
+  columns[3].type = Column::Type::DEGREES;
+  cursor = 2;
 }
 
 void
@@ -251,6 +262,12 @@ DigitEntry::SetValue(RoughTime value)
   Invalidate();
 }
 
+void
+DigitEntry::SetValue(Angle value)
+{
+  SetValue(value.Degrees());
+}
+
 unsigned
 DigitEntry::GetPositiveInteger() const
 {
@@ -389,6 +406,12 @@ DigitEntry::GetFixedValue() const
 {
   fixed value = fixed(GetPositiveInteger()) + GetPositiveFractional();
   return IsNegative() ? -value : value;
+}
+
+Angle
+DigitEntry::GetAngleValue() const
+{
+  return Angle::Degrees(GetFixedValue());
 }
 
 bool

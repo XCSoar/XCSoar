@@ -33,6 +33,7 @@ Copyright_License {
 #include <stdint.h>
 
 class RoughTime;
+class Angle;
 class ContainerWindow;
 class ActionListener;
 
@@ -143,6 +144,9 @@ public:
   void CreateTime(ContainerWindow &parent, const PixelRect &rc,
                   const WindowStyle style);
 
+  void CreateAngle(ContainerWindow &parent, const PixelRect &rc,
+                   const WindowStyle style);
+
   gcc_pure
   PixelSize GetRecommendedSize() const {
     return PixelSize(columns[length - 1].right, bottom + top);
@@ -165,6 +169,7 @@ public:
   void SetValue(unsigned value);
   void SetValue(fixed value);
   void SetValue(RoughTime value);
+  void SetValue(Angle value);
 
   gcc_pure
   int GetIntegerValue() const;
@@ -177,6 +182,9 @@ public:
 
   gcc_pure
   RoughTime GetTimeValue() const;
+
+  gcc_pure
+  Angle GetAngleValue() const;
 
 protected:
   gcc_pure
