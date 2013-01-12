@@ -152,8 +152,8 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #endif
 
   AddInteger(_("Height"), NULL, _T("%d"), _T("%d"), 1, 200, 1, 0, this);
-  AddBoolean(_T("Bold"), NULL, false, this);
-  AddBoolean(_T("Italic"), NULL, false, this);
+  AddBoolean(_("Bold"), NULL, false, this);
+  AddBoolean(_("Italic"), NULL, false, this);
 
   PixelRect preview_rc { 0, 0, Layout::Scale(250), Layout::Scale(100) };
   LargeTextWindowStyle preview_style;
