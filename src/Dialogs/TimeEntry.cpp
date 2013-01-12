@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/WindowWidget.hpp"
+#include "Widget/FixedWindowWidget.hpp"
 #include "Form/Form.hpp"
 #include "Form/DigitEntry.hpp"
 #include "Form/LambdaActionListener.hpp"
@@ -35,16 +35,6 @@ Copyright_License {
 
 enum {
   CLEAR = 100,
-};
-
-class FixedWindowWidget : public WindowWidget {
-public:
-  FixedWindowWidget() = default;
-  FixedWindowWidget(Window *window):WindowWidget(window) {}
-
-  virtual PixelSize GetMinimumSize() const gcc_override {
-    return GetWindow()->GetSize();
-  }
 };
 
 bool
