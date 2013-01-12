@@ -26,6 +26,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+class Angle;
+
 bool
 NumberEntryDialog(const TCHAR *caption,
                   int &value, unsigned length);
@@ -33,5 +35,7 @@ NumberEntryDialog(const TCHAR *caption,
 bool
 NumberEntryDialog(const TCHAR *caption,
                   unsigned &value, unsigned length);
+
+bool AngleEntryDialog(const TCHAR *caption, Angle &value);
 
 #endif

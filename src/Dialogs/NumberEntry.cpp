@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/DigitEntry.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
+#include "Math/Angle.hpp"
 #include "UIGlobals.hpp"
 
 bool
@@ -115,5 +116,47 @@ NumberEntryDialog(const TCHAR *caption,
     return false;
 
   value = entry.GetUnsignedValue();
+  return true;
+}
+
+bool
+AngleEntryDialog(const TCHAR *caption, Angle &value)
+{
+  /* create the dialog */
+
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(look);
+  dialog.CreatePreliminary(UIGlobals::GetMainWindow(), caption);
+
+  ContainerWindow &client_area = dialog.GetClientAreaWindow();
+
+  /* create the input control */
+
+  WindowStyle control_style;
+  control_style.Hide();
+  control_style.TabStop();
+
+  DigitEntry entry(look);
+  entry.CreateAngle(client_area, client_area.GetClientRect(), control_style);
+  entry.Resize(entry.GetRecommendedSize());
+  entry.SetValue(value);
+
+  /* create buttons */
+
+  dialog.AddButton(_("OK"), dialog, mrOK);
+  dialog.AddButton(_("Cancel"), dialog, mrCancel);
+
+  /* run it */
+
+  FixedWindowWidget widget(&entry);
+  dialog.FinishPreliminary(&widget);
+
+  bool result = dialog.ShowModal() == mrOK;
+  dialog.StealWidget();
+  if (!result)
+    return false;
+
+  value = entry.GetAngleValue();
   return true;
 }
