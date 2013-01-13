@@ -103,8 +103,6 @@ class DigitEntry : public PaintWindow {
   ActionListener *action_listener;
   int action_id;
 
-  UPixelScalar padding;
-
   /**
    * Total number of columns.
    */
