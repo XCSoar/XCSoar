@@ -71,19 +71,19 @@ InitialiseFonts()
   const TCHAR *face = _T("Tahoma");
 
 #ifndef USE_GDI
-  UPixelScalar FontHeight = Layout::SmallScale(IsAndroid() ? 30 : 24);
+  UPixelScalar font_height = Layout::SmallScale(IsAndroid() ? 30 : 24);
 #else
-  UPixelScalar FontHeight = Layout::SmallScale(35);
+  UPixelScalar font_height = Layout::SmallScale(35);
 #endif
 
   LOGFONT lf;
-  InitialiseLogfont(&lf, face, FontHeight / 2);
+  InitialiseLogfont(&lf, face, font_height / 2);
   normal_font.Load(lf);
 
-  InitialiseLogfont(&lf, face, FontHeight / 2 - Layout::Scale(2));
+  InitialiseLogfont(&lf, face, font_height / 2 - Layout::Scale(2));
   small_font.Load(lf);
 
-  InitialiseLogfont(&lf, face, FontHeight / 2, true);
+  InitialiseLogfont(&lf, face, font_height / 2, true);
   bold_font.Load(lf);
 
   InitialiseLogfont(&lf, GetStandardMonospaceFontFace(),
