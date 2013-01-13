@@ -141,10 +141,11 @@ DigitEntry::CalculateLayout()
   top = Layout::GetMaximumControlHeight();
   bottom = top + digit_size.cy;
 
+  unsigned last_right = 0;
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
-    digit.left = i * digit_width;
-    digit.right = digit.left + digit_width;
+    digit.left = last_right;
+    last_right = digit.right = digit.left + digit_width;
   }
 }
 
