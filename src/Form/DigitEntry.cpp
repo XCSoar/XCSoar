@@ -130,10 +130,7 @@ DigitEntry::CalculateLayout()
   const UPixelScalar padding = Layout::GetTextPadding();
 
   PixelSize digit_size = look.text_font->TextSize(_T("8"));
-  digit_size.cx += 2 * padding;
   digit_size.cy += 2 * padding;
-  if (digit_size.cx < Layout::Scale(20))
-    digit_size.cx = Layout::Scale(20);
   if (digit_size.cy < Layout::Scale(28))
     digit_size.cy = Layout::Scale(28);
 
@@ -143,8 +140,14 @@ DigitEntry::CalculateLayout()
   unsigned last_right = 0;
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
+
+    PixelScalar value_width = digit.GetWidth() * digit_size.cx;
+    value_width += 2 * padding;
+    if (value_width < Layout::Scale(20))
+      value_width = Layout::Scale(20);
+
     digit.left = last_right;
-    last_right = digit.right = digit.left + digit_size.cx;
+    last_right = digit.right = digit.left + value_width;
   }
 }
 

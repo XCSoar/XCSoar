@@ -94,6 +94,14 @@ class DigitEntry : public PaintWindow {
 
       value = is_negative;
     }
+
+    /**
+     * Returns the number characters that this column can have.
+     * Used for calculating the pixel-based width of the column.
+     */
+    constexpr unsigned GetWidth() const {
+      return type == Type::UNIT ? 4 : type == Type::HOUR ? 2 : 1;
+    }
   };
 
   const DialogLook &look;
