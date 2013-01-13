@@ -157,9 +157,9 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (!Profile::GetPath(ProfileKeys::LanguageFile, value))
       value[0] = _T('\0');
 
-    if (_tcscmp(value, _T("none")) == 0)
+    if (StringIsEqual(value, _T("none")))
       df.Set(1);
-    else if (!StringIsEmpty(value) && _tcscmp(value, _T("auto")) != 0) {
+    else if (!StringIsEmpty(value) && !StringIsEqual(value, _T("auto"))) {
       const TCHAR *base = BaseName(value);
       if (base != NULL)
         df.Set(base);
