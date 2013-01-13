@@ -59,27 +59,13 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
   cursor = length - 1;
   valid = true;
 
-  const UPixelScalar padding = Layout::GetTextPadding();
-
-  PixelSize digit_size = look.text_font->TextSize(_T("8"));
-  digit_size.cx += 2 * padding;
-  digit_size.cy += 2 * padding;
-  if (digit_size.cx < Layout::Scale(20))
-    digit_size.cx = Layout::Scale(20);
-  if (digit_size.cy < Layout::Scale(28))
-    digit_size.cy = Layout::Scale(28);
-
-  const unsigned digit_width = digit_size.cx;
-  top = Layout::GetMaximumControlHeight();
-  bottom = top + digit_size.cy;
-
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
     digit.type = Column::Type::DIGIT;
     digit.value = 0;
-    digit.left = i * digit_width;
-    digit.right = digit.left + digit_width;
   }
+
+  CalculateLayout();
 
   PaintWindow::Create(parent, rc, style);
 }
@@ -136,6 +122,30 @@ DigitEntry::CreateTime(ContainerWindow &parent, const PixelRect &rc,
   columns[1].type = Column::Type::COLON;
   columns[2].type = Column::Type::DIGIT6;
   cursor = 0;
+}
+
+void
+DigitEntry::CalculateLayout()
+{
+  const UPixelScalar padding = Layout::GetTextPadding();
+
+  PixelSize digit_size = look.text_font->TextSize(_T("8"));
+  digit_size.cx += 2 * padding;
+  digit_size.cy += 2 * padding;
+  if (digit_size.cx < Layout::Scale(20))
+    digit_size.cx = Layout::Scale(20);
+  if (digit_size.cy < Layout::Scale(28))
+    digit_size.cy = Layout::Scale(28);
+
+  const unsigned digit_width = digit_size.cx;
+  top = Layout::GetMaximumControlHeight();
+  bottom = top + digit_size.cy;
+
+  for (unsigned i = 0; i < length; ++i) {
+    Column &digit = columns[i];
+    digit.left = i * digit_width;
+    digit.right = digit.left + digit_width;
+  }
 }
 
 int

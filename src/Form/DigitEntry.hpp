@@ -143,6 +143,8 @@ public:
   void CreateAngle(ContainerWindow &parent, const PixelRect &rc,
                    const WindowStyle style);
 
+  void CalculateLayout();
+
   gcc_pure
   PixelSize GetRecommendedSize() const {
     return PixelSize(columns[length - 1].right, bottom + top);
