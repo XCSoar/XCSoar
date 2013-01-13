@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_DIGIT_ENTRY_HPP
 
 #include "Screen/PaintWindow.hpp"
-#include "Look/DialogLook.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 #include "Math/fixed.hpp"
 
@@ -36,6 +35,7 @@ class RoughTime;
 class Angle;
 class ContainerWindow;
 class ActionListener;
+struct DialogLook;
 
 /**
  * A control that allows entering numbers or other data types digit by
@@ -120,9 +120,7 @@ class DigitEntry : public PaintWindow {
   unsigned cursor;
 
 public:
-  DigitEntry(const DialogLook &_look)
-    :look(_look), button_renderer(look.button), action_listener(nullptr) {}
-
+  DigitEntry(const DialogLook &_look);
   virtual ~DigitEntry();
 
 protected:

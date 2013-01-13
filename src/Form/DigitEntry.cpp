@@ -28,12 +28,20 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
+#include "Look/DialogLook.hpp"
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
 #include "Math/Angle.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 
 #include <stdio.h>
+
+DigitEntry::DigitEntry(const DialogLook &_look)
+  :look(_look),
+   button_renderer(look.button),
+   action_listener(nullptr)
+{
+}
 
 DigitEntry::~DigitEntry()
 {
