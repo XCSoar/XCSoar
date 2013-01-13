@@ -122,6 +122,8 @@ DigitEntry::CreateTime(ContainerWindow &parent, const PixelRect &rc,
   columns[1].type = Column::Type::COLON;
   columns[2].type = Column::Type::DIGIT6;
   cursor = 0;
+
+  CalculateLayout();
 }
 
 void
