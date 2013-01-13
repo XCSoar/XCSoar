@@ -155,7 +155,7 @@ FindLanguage(const TCHAR *resource)
 
   // Search for supported languages matching the MO file name
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
-    if (_tcscmp(language_table[i].resource, resource) == 0)
+    if (StringIsEqual(language_table[i].resource, resource))
       // .. and return the language code
       return language_table[i].language;
 
@@ -367,10 +367,10 @@ ReadLanguageFile()
   const TCHAR *value = Profile::GetPath(ProfileKeys::LanguageFile, buffer)
     ? buffer : _T("");
 
-  if (_tcscmp(value, _T("none")) == 0)
+  if (StringIsEqual(value, _T("none")))
     return;
 
-  if (StringIsEmpty(value) || _tcscmp(value, _T("auto")) == 0) {
+  if (StringIsEmpty(value) || StringIsEqual(value, _T("auto"))) {
     AutoDetectLanguage();
     return;
   }
