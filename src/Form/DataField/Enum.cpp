@@ -245,17 +245,13 @@ DataFieldEnum::Dec()
   }
 }
 
-static bool
-DataFieldEnumCompare(const DataFieldEnum::Entry &a,
-                     const DataFieldEnum::Entry &b)
-{
-  return _tcscmp(a.GetDisplayString(), b.GetDisplayString()) < 0;
-}
-
 void
 DataFieldEnum::Sort(int startindex)
 {
-  std::sort(entries.begin() + startindex, entries.end(), DataFieldEnumCompare);
+  std::sort(entries.begin() + startindex, entries.end(),
+            [](const DataFieldEnum::Entry &a, const DataFieldEnum::Entry &b) {
+              return _tcscmp(a.GetDisplayString(), b.GetDisplayString()) < 0;
+            });
 }
 
 ComboList *
