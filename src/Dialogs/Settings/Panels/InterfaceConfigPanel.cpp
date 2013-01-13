@@ -144,8 +144,11 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_BUILTIN_LANGUAGES
     for (const BuiltinLanguage *l = language_table;
-         l->resource != NULL; ++l)
-      df.addEnumText(l->resource);
+         l->resource != NULL; ++l) {
+      StaticString<100> display_string;
+      display_string.Format(_T("%s (%s)"), l->name, l->resource);
+      df.addEnumText(l->resource, display_string);
+    }
 #endif
 
     LanguageFileVisitor lfv(df);

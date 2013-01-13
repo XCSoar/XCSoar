@@ -46,6 +46,7 @@ CloseLanguageFile();
 struct BuiltinLanguage {
   unsigned language;
   const TCHAR *resource;
+  const TCHAR *name;
 };
 
 extern const BuiltinLanguage language_table[];
