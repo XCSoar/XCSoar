@@ -137,7 +137,6 @@ DigitEntry::CalculateLayout()
   if (digit_size.cy < Layout::Scale(28))
     digit_size.cy = Layout::Scale(28);
 
-  const unsigned digit_width = digit_size.cx;
   top = Layout::GetMaximumControlHeight();
   bottom = top + digit_size.cy;
 
@@ -145,7 +144,7 @@ DigitEntry::CalculateLayout()
   for (unsigned i = 0; i < length; ++i) {
     Column &digit = columns[i];
     digit.left = last_right;
-    last_right = digit.right = digit.left + digit_width;
+    last_right = digit.right = digit.left + digit_size.cx;
   }
 }
 
