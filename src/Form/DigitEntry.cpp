@@ -51,7 +51,7 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
   cursor = length - 1;
   valid = true;
 
-  const UPixelScalar padding = Layout::Scale(2);
+  const UPixelScalar padding = Layout::GetTextPadding();
 
   PixelSize digit_size = look.text_font->TextSize(_T("8"));
   digit_size.cx += 2 * padding;
