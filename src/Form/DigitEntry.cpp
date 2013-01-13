@@ -51,7 +51,6 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
   cursor = length - 1;
   valid = true;
 
-  const UPixelScalar margin = 1;
   padding = Layout::Scale(2);
 
   PixelSize digit_size = look.text_font->TextSize(_T("8"));
@@ -62,7 +61,7 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
   if (digit_size.cy < Layout::Scale(28))
     digit_size.cy = Layout::Scale(28);
 
-  const unsigned digit_width = digit_size.cx + margin;
+  const unsigned digit_width = digit_size.cx;
   top = Layout::GetMaximumControlHeight();
   bottom = top + digit_size.cy;
 
@@ -71,7 +70,7 @@ DigitEntry::Create(ContainerWindow &parent, const PixelRect &rc,
     digit.type = Column::Type::DIGIT;
     digit.value = 0;
     digit.left = i * digit_width;
-    digit.right = digit.left + digit_width - margin;
+    digit.right = digit.left + digit_width;
   }
 
   PaintWindow::Create(parent, rc, style);
