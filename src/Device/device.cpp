@@ -145,7 +145,7 @@ HaveCondorDevice()
 void
 VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 {
-  for (int i = 0; i < NUMDEV; i++)
+  for (unsigned i = 0; i < NUMDEV; i++)
     if (device_list[i]->IsVega())
       device_list[i]->WriteNMEA(text, env);
 }
@@ -153,7 +153,7 @@ VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 DeviceDescriptor *
 devVarioFindVega()
 {
-  for (int i = 0; i < NUMDEV; i++)
+  for (unsigned i = 0; i < NUMDEV; i++)
     if (device_list[i]->IsVega())
       return device_list[i];
 
@@ -163,12 +163,10 @@ devVarioFindVega()
 void
 devShutdown()
 {
-  int i;
-
   // Stop COM devices
   LogFormat("Stop COM devices");
 
-  for (i = 0; i < NUMDEV; i++) {
+  for (unsigned i = 0; i < NUMDEV; i++) {
     device_list[i]->Close();
   }
 }
