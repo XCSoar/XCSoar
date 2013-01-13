@@ -49,7 +49,8 @@ class DigitEntry : public PaintWindow {
     enum class Type : uint8_t {
       DIGIT,
       DIGIT6,
-      HOUR,
+      HOUR, // i.e. DIGIT24
+      DIGIT36,
       SIGN,
       DECIMAL_POINT,
       COLON,
@@ -76,13 +77,15 @@ class DigitEntry : public PaintWindow {
 
     constexpr bool IsNumber() const {
       return type == Type::DIGIT ||
-        type == Type::DIGIT6 || type == Type::HOUR;
+        type == Type::DIGIT6 ||
+        type == Type::DIGIT36 ||
+        type == Type::HOUR;
     }
 
     constexpr unsigned GetMaxNumber() const {
-      return type == Type::DIGIT
-        ? 9
-        : (type == Type::HOUR ? 23 : 5);
+      return type == Type::DIGIT6 ? 5 :
+             type == Type::HOUR ? 23 :
+             type == Type::DIGIT36 ? 35 : 9;
     }
 
     constexpr bool IsEditable() const {
@@ -100,7 +103,8 @@ class DigitEntry : public PaintWindow {
      * Used for calculating the pixel-based width of the column.
      */
     constexpr unsigned GetWidth() const {
-      return type == Type::UNIT ? 4 : type == Type::HOUR ? 2 : 1;
+      return type == Type::UNIT ? 4 :
+             type == Type::HOUR || type == Type::DIGIT36 ? 2 : 1;
     }
   };
 

@@ -106,10 +106,13 @@ void
 DigitEntry::CreateAngle(ContainerWindow &parent, const PixelRect &rc,
                         const WindowStyle style)
 {
-  Create(parent, rc, style, 4);
+  Create(parent, rc, style, 3);
 
-  columns[3].type = Column::Type::DEGREES;
-  cursor = 2;
+  columns[0].type = Column::Type::DIGIT36;
+  columns[2].type = Column::Type::DEGREES;
+  cursor = 0;
+
+  CalculateLayout();
 }
 
 void
@@ -290,7 +293,17 @@ DigitEntry::SetValue(RoughTime value)
 void
 DigitEntry::SetValue(Angle value)
 {
-  SetValue(value.Degrees());
+  assert(length == 3);
+  assert(columns[0].type == Column::Type::DIGIT36);
+  assert(columns[1].type == Column::Type::DIGIT);
+  assert(columns[2].type == Column::Type::DEGREES);
+
+  int degrees = iround(value.Degrees());
+
+  columns[0].value = degrees / 10;
+  columns[1].value = degrees % 10;
+
+  Invalidate();
 }
 
 unsigned
@@ -304,6 +317,9 @@ DigitEntry::GetPositiveInteger() const
     if (c.type == Column::Type::DIGIT) {
       assert(c.value < 10);
       value = (value * 10) + c.value;
+    } else if (c.type == Column::Type::DIGIT36) {
+      assert(c.value < 36);
+      value = (value * 100) + c.value;
     } else if (c.type == Column::Type::DECIMAL_POINT)
       break;
   }
@@ -582,6 +598,11 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     case Column::Type::HOUR:
       assert(c.value < 24);
+      _stprintf(buffer, _T("%02u"), c.value);
+      break;
+
+    case Column::Type::DIGIT36:
+      assert(c.value < 36);
       _stprintf(buffer, _T("%02u"), c.value);
       break;
 
