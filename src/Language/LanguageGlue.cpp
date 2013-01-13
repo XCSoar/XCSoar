@@ -98,7 +98,7 @@ enum {
 };
 #endif
 
-const struct builtin_language language_table[] = {
+const BuiltinLanguage language_table[] = {
   { LANG_CZECH, _T("cs.mo") },
   { LANG_DANISH, _T("da.mo") },
   { LANG_GERMAN, _T("de.mo") },
@@ -134,7 +134,7 @@ const struct builtin_language language_table[] = {
 
 gcc_pure
 static const TCHAR *
-find_language(WORD language)
+FindLanguage(WORD language)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
@@ -149,7 +149,7 @@ find_language(WORD language)
 
 gcc_pure
 static unsigned
-find_language(const TCHAR *resource)
+FindLanguage(const TCHAR *resource)
 {
   assert(resource != NULL);
 
@@ -163,7 +163,7 @@ find_language(const TCHAR *resource)
 }
 
 static const TCHAR *
-detect_language()
+DetectLanguage()
 {
 #ifdef ANDROID
 
@@ -248,7 +248,7 @@ detect_language()
 
   // Try to convert the primary language part of the language identifier
   // to a MO file name in the language table
-  return find_language(PRIMARYLANGID(lang_id));
+  return FindLanguage(PRIMARYLANGID(lang_id));
 
 #endif /* !ANDROID */
 }
@@ -256,7 +256,7 @@ detect_language()
 static bool
 ReadResourceLanguageFile(const TCHAR *resource)
 {
-  if (!find_language(resource))
+  if (!FindLanguage(resource))
     /* refuse to load resources which are not in the language table */
     return false;
 
@@ -288,7 +288,7 @@ ReadResourceLanguageFile(const TCHAR *resource)
 #else /* !HAVE_BUILTIN_LANGUAGES */
 
 static inline const TCHAR *
-detect_language()
+DetectLanguage()
 {
   return NULL;
 }
@@ -316,7 +316,7 @@ AutoDetectLanguage()
 #else /* !HAVE_NATIVE_GETTEXT */
 
   // Try to detect the language by calling the OS's corresponding functions
-  const TCHAR *resource = detect_language();
+  const TCHAR *resource = DetectLanguage();
   if (resource != NULL)
     // If a language was detected -> try to load the MO file
     ReadResourceLanguageFile(resource);

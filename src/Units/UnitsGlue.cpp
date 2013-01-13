@@ -80,7 +80,7 @@ const struct language_unit_map language_table[] = {
 
 #ifndef HAVE_POSIX
 static unsigned
-find_language(LANGID lang)
+FindLanguage(LANGID lang)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].region_code != NULL; ++i)
@@ -91,7 +91,7 @@ find_language(LANGID lang)
 }
 #elif defined(ANDROID)
 static unsigned
-find_language(const TCHAR* lang)
+FindLanguage(const TCHAR* lang)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].region_code != NULL; ++i)
@@ -132,7 +132,7 @@ AutoDetect()
   if (lang_id == 0)
     return 0;
 
-  return find_language(lang_id);
+  return FindLanguage(lang_id);
 
 #elif defined(ANDROID)
   JNIEnv *env = Java::GetEnv();
@@ -169,7 +169,7 @@ AutoDetect()
     return 0;
   }
 
-  unsigned id = find_language(language2);
+  unsigned id = FindLanguage(language2);
 
   // Clean up the memory
   env->ReleaseStringUTFChars(language, language2);

@@ -143,7 +143,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     df.addEnumText(_("English"));
 
 #ifdef HAVE_BUILTIN_LANGUAGES
-    for (const struct builtin_language *l = language_table;
+    for (const BuiltinLanguage *l = language_table;
          l->resource != NULL; ++l)
       df.addEnumText(l->resource);
 #endif

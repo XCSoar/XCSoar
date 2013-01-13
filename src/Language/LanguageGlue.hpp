@@ -43,12 +43,12 @@ CloseLanguageFile();
 
 #include <tchar.h>
 
-struct builtin_language {
+struct BuiltinLanguage {
   unsigned language;
   const TCHAR *resource;
 };
 
-extern const struct builtin_language language_table[];
+extern const BuiltinLanguage language_table[];
 
 #endif
 
