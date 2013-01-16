@@ -131,7 +131,7 @@ SystemWindowSize()
   #ifdef WIN32
   return { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 #elif defined(ANDROID)
-  return { native_view->GetWidth(), native_view->GetHeight() };
+  return native_view->GetSize();
 #elif defined(USE_VIDEOCORE)
   uint32_t width, height;
   return graphics_get_display_size(0, &width, &height) >= 0
