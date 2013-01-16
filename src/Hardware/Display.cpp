@@ -233,7 +233,7 @@ Display::Rotate(DisplaySettings::Orientation orientation)
   if (native_view == NULL)
     return false;
 
-  NativeView::screen_orientation android_orientation;
+  NativeView::ScreenOrientation android_orientation;
   switch (orientation) {
   case DisplaySettings::Orientation::PORTRAIT:
     android_orientation = NativeView::SCREEN_ORIENTATION_PORTRAIT;

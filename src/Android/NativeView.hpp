@@ -48,7 +48,7 @@ public:
   /**
    * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
    */
-  enum screen_orientation {
+  enum ScreenOrientation {
     // API level 1
     SCREEN_ORIENTATION_UNSPECIFIED = -1,
     SCREEN_ORIENTATION_LANDSCAPE = 0,
@@ -88,8 +88,8 @@ public:
                                         "(Ljava/lang/String;)V");
   }
 
-  unsigned get_width() const { return width; }
-  unsigned get_height() const { return height; }
+  unsigned GetWidth() const { return width; }
+  unsigned GetHeight() const { return height; }
 
   unsigned GetXDPI() const {
     return xdpi;
@@ -120,7 +120,7 @@ public:
     env->CallVoidMethod(obj, deinit_surface_method);
   }
 
-  bool setRequestedOrientation(screen_orientation so) {
+  bool setRequestedOrientation(ScreenOrientation so) {
     return env->CallBooleanMethod(obj, setRequestedOrientationID, (jint)so);
   }
 
