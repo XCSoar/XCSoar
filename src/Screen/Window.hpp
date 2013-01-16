@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_WINDOW_HPP
 #define XCSOAR_SCREEN_WINDOW_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
 #include "Thread/Debug.hpp"
@@ -185,7 +184,7 @@ public:
  * which optionally interacts with the user.  To draw custom graphics
  * into a Window, derive your class from #PaintWindow.
  */
-class Window : private NonCopyable {
+class Window {
   friend class ContainerWindow;
 
 protected:
@@ -230,6 +229,9 @@ public:
            double_clicks(false), custom_painting(false) {}
 #endif
   virtual ~Window();
+
+  Window(const Window &other) = delete;
+  Window &operator=(const Window &other) = delete;
 
   /**
    * Activates the OnPaint() method.  It is disabled by default

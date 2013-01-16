@@ -28,7 +28,6 @@ Copyright_License {
 #error Please include OpenGL/Canvas.hpp
 #endif
 
-#include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
@@ -56,7 +55,7 @@ class Bitmap;
  * Base drawable canvas class
  * 
  */
-class Canvas : private NonCopyable {
+class Canvas {
   friend class WindowCanvas;
   friend class SubCanvas;
 
@@ -81,6 +80,9 @@ public:
   explicit Canvas(SDL_Surface *_surface)
     :surface(_surface), offset(0, 0), size(_surface->w, _surface->h),
      font(NULL), background_mode(OPAQUE) {}
+
+  Canvas(const Canvas &other) = delete;
+  Canvas &operator=(const Canvas &other) = delete;
 
   void Create(SDL_Surface *_surface) {
     Destroy();

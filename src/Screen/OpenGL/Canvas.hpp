@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 #define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
@@ -48,7 +47,7 @@ class GLTexture;
  * Base drawable canvas class
  * 
  */
-class Canvas : private NonCopyable {
+class Canvas {
   friend class SubCanvas;
   friend class BufferCanvas;
 
@@ -76,6 +75,9 @@ public:
   Canvas(PixelSize _size)
     :offset(0, 0), size(_size),
      font(NULL), background_mode(OPAQUE) {}
+
+  Canvas(const Canvas &other) = delete;
+  Canvas &operator=(const Canvas &other) = delete;
 
   void Create(PixelSize _size) {
     size = _size;

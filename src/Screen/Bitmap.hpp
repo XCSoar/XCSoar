@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_BITMAP_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Util/tstring.hpp"
@@ -51,9 +50,9 @@ struct SDL_Surface;
 /**
  * An image loaded from storage.
  */
-class Bitmap : private NonCopyable
+class Bitmap
 #ifdef ENABLE_OPENGL
-             , private GLSurfaceListener
+             : private GLSurfaceListener
 #endif
 {
 public:
@@ -105,6 +104,9 @@ public:
   ~Bitmap() {
     Reset();
   }
+
+  Bitmap(const Bitmap &other) = delete;
+  Bitmap &operator=(const Bitmap &other) = delete;
 
 public:
   bool IsDefined() const {

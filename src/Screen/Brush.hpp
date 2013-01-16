@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BRUSH_HPP
 #define XCSOAR_SCREEN_BRUSH_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
 #include "Compiler.h"
@@ -37,9 +36,6 @@ class Bitmap;
  * A Brush is used for drawing filled circles, rectangles and so on
  */
 class Brush
-#ifdef USE_GDI
-  : private NonCopyable
-#endif
 {
 protected:
 #ifndef USE_GDI
@@ -67,7 +63,10 @@ public:
 
   /** Destructor */
   ~Brush() { Reset(); }
-  #endif
+
+  Brush(const Brush &other) = delete;
+  Brush &operator=(const Brush &other) = delete;
+#endif
 
 public:
   /**

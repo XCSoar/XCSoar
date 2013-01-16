@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #include "Screen/Point.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
 #ifdef USE_FREETYPE
@@ -47,7 +46,7 @@ class TextUtil;
 /**
  * A font loaded from storage.  It is used by #Canvas to draw text.
  */
-class Font : private NonCopyable {
+class Font {
 protected:
 #ifdef USE_FREETYPE
   FT_Face face;
@@ -80,6 +79,9 @@ public:
 #endif
 
   ~Font() { Destroy(); }
+
+  Font(const Font &other) = delete;
+  Font &operator=(const Font &other) = delete;
 
   /**
    * Perform global font initialisation.

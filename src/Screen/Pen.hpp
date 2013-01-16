@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PEN_HPP
 #define XCSOAR_SCREEN_PEN_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
 
@@ -32,9 +31,6 @@ Copyright_License {
  * A pen draws lines and borders.
  */
 class Pen
-#ifdef USE_GDI
-  : private NonCopyable
-#endif
 {
 public:
 #ifndef USE_GDI
@@ -105,6 +101,9 @@ public:
 
   /** Destructor */
   ~Pen() { Reset(); }
+
+  Pen(const Pen &other) = delete;
+  Pen &operator=(const Pen &other) = delete;
 #endif /* USE_GDI */
 
 public:

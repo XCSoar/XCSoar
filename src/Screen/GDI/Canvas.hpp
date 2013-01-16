@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_CANVAS_HPP
 #define XCSOAR_SCREEN_GDI_CANVAS_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Color.hpp"
@@ -42,7 +41,7 @@ Copyright_License {
  * Base drawable canvas class
  * 
  */
-class Canvas : private NonCopyable {
+class Canvas {
 protected:
   HDC dc, compatible_dc;
   UPixelScalar width, height;
@@ -57,6 +56,9 @@ public:
   ~Canvas() {
     Destroy();
   }
+
+  Canvas(const Canvas &other) = delete;
+  Canvas &operator=(const Canvas &other) = delete;
 
 protected:
   void Destroy() {
