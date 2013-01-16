@@ -170,10 +170,8 @@ ReadUUID()
 #endif
 }
 
-/**
- * Finds the unique ID of this PDA
- */
-void ReadAssetNumber()
+void
+ReadAssetNumber()
 {
   if (ReadCompaqID()) {
     LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);

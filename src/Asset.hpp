@@ -31,6 +31,9 @@ Copyright_License {
 // asset/registration data
 extern TCHAR asset_number[];
 
+/**
+ * Finds the unique ID of this PDA
+ */
 void ReadAssetNumber();
 
 // model info
