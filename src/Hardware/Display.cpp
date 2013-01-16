@@ -236,27 +236,27 @@ Display::Rotate(DisplaySettings::Orientation orientation)
   NativeView::ScreenOrientation android_orientation;
   switch (orientation) {
   case DisplaySettings::Orientation::PORTRAIT:
-    android_orientation = NativeView::SCREEN_ORIENTATION_PORTRAIT;
+    android_orientation = NativeView::ScreenOrientation::PORTRAIT;
     break;
 
   case DisplaySettings::Orientation::LANDSCAPE:
-    android_orientation = NativeView::SCREEN_ORIENTATION_LANDSCAPE;
+    android_orientation = NativeView::ScreenOrientation::LANDSCAPE;
     break;
 
   case DisplaySettings::Orientation::REVERSE_PORTRAIT:
     android_orientation = IsGalaxyTab22() ?
-                          NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT :
-                          NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+                          NativeView::ScreenOrientation::REVERSE_PORTRAIT_GT :
+                          NativeView::ScreenOrientation::REVERSE_PORTRAIT;
     break;
 
   case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
     android_orientation = IsGalaxyTab22() ?
-                          NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT :
-                          NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+                          NativeView::ScreenOrientation::REVERSE_LANDSCAPE_GT :
+                          NativeView::ScreenOrientation::REVERSE_LANDSCAPE;
     break;
 
   default:
-    android_orientation = NativeView::SCREEN_ORIENTATION_SENSOR;
+    android_orientation = NativeView::ScreenOrientation::SENSOR;
   };
 
   return native_view->setRequestedOrientation(android_orientation);
@@ -278,7 +278,7 @@ Display::RotateRestore()
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
 #elif defined(ANDROID)
-  return native_view->setRequestedOrientation(NativeView::SCREEN_ORIENTATION_SENSOR);
+  return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
 #else
   return false;
 #endif

@@ -49,22 +49,22 @@ public:
   /**
    * @see http://developer.android.com/reference/android/R.attr.html#screenOrientation
    */
-  enum ScreenOrientation {
+  enum class ScreenOrientation {
     // API level 1
-    SCREEN_ORIENTATION_UNSPECIFIED = -1,
-    SCREEN_ORIENTATION_LANDSCAPE = 0,
-    SCREEN_ORIENTATION_PORTRAIT = 1,
-    SCREEN_ORIENTATION_USER = 2,
-    SCREEN_ORIENTATION_BEHIND = 3,
-    SCREEN_ORIENTATION_SENSOR = 4,
-    SCREEN_ORIENTATION_NOSENSOR = 5,
+    UNSPECIFIED = -1,
+    LANDSCAPE = 0,
+    PORTRAIT = 1,
+    USER = 2,
+    BEHIND = 3,
+    SENSOR = 4,
+    NOSENSOR = 5,
     // API level 9
     // see http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-    SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8,
-    SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9,
+    REVERSE_LANDSCAPE = 8,
+    REVERSE_PORTRAIT = 9,
     // HACK for Galaxy Tab (FROYO = 2.2 = API level 8)
-    SCREEN_ORIENTATION_REVERSE_LANDSCAPE_GT = 7,
-    SCREEN_ORIENTATION_REVERSE_PORTRAIT_GT = 8,
+    REVERSE_LANDSCAPE_GT = 7,
+    REVERSE_PORTRAIT_GT = 8,
   };
 
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
