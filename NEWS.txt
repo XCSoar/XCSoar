@@ -17,6 +17,8 @@ Version 6.5 - not yet released
   - add task start countdown (#136, #1080)
   - optimise racing tasks for minimum distance
   - allow observation zone sizes up to 200km (#2401)
+  - always use "arrival safety height" when calculating arrival heights
+    for intermediate task turnpoints
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
   - LX: read bugs setting from the LX160 vario (#2167)

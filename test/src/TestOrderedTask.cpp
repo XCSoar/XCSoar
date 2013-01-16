@@ -70,13 +70,7 @@ static const Waypoint wp5 = MakeWaypoint(0.3, 46, 50);
 static fixed
 GetSafetyHeight(const TaskPoint &tp)
 {
-  switch (tp.GetType()) {
-  case TaskPointType::FINISH:
-    return task_behaviour.safety_height_arrival;
-
-  default:
-    return task_behaviour.route_planner.safety_height_terrain;
-  }
+  return task_behaviour.safety_height_arrival;
 }
 
 static void
@@ -126,8 +120,9 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
            const TaskWaypoint &finish)
 {
   const fixed min_arrival_alt1 = tp1.GetWaypoint().elevation +
-    task_behaviour.route_planner.safety_height_terrain;
-  const fixed min_arrival_alt2 = finish.GetWaypoint().elevation + task_behaviour.safety_height_arrival;
+    task_behaviour.safety_height_arrival;
+  const fixed min_arrival_alt2 = finish.GetWaypoint().elevation +
+    task_behaviour.safety_height_arrival;
   const GeoVector vector0 =
     start.GetWaypoint().location.DistanceBearing(tp1.GetWaypoint().location);
   const GeoVector vector1 =

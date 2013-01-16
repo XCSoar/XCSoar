@@ -29,12 +29,12 @@ IntermediateTaskPoint::IntermediateTaskPoint(TaskPointType _type,
                                              const TaskBehaviour &tb,
                                              const bool b_scored)
   :OrderedTaskPoint(_type, _oz, wp, b_scored),
-   safety_height(tb.route_planner.safety_height_terrain) {}
+   safety_height(tb.safety_height_arrival) {}
 
 void
 IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 {
-  safety_height = tb.route_planner.safety_height_terrain;
+  safety_height = tb.safety_height_arrival;
 }
 
 fixed

@@ -34,7 +34,7 @@ StartPoint::StartPoint(ObservationZonePoint *_oz,
                        const TaskBehaviour &tb,
                        const StartConstraints &_constraints)
   :OrderedTaskPoint(TaskPointType::START, _oz, wp, false),
-   safety_height(tb.route_planner.safety_height_terrain),
+   safety_height(tb.safety_height_arrival),
    margins(tb.start_margins),
    constraints(_constraints)
 {
@@ -43,7 +43,7 @@ StartPoint::StartPoint(ObservationZonePoint *_oz,
 void
 StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 {
-  safety_height = tb.route_planner.safety_height_terrain;
+  safety_height = tb.safety_height_arrival;
   margins = tb.start_margins;
 }
 
