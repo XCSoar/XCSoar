@@ -31,7 +31,6 @@
 #define XCSOAR_JAVA_GLOBAL_REF_HPP
 
 #include "Java/Global.hpp"
-#include "Util/NonCopyable.hpp"
 
 #include <assert.h>
 #include <jni.h>
@@ -41,7 +40,7 @@ namespace Java {
    * Hold a local reference on a JNI object.
    */
   template<typename T>
-  class LocalRef : private NonCopyable {
+  class LocalRef {
     JNIEnv *const env;
     const T value;
 
@@ -58,6 +57,9 @@ namespace Java {
       env->DeleteLocalRef(value);
     }
 
+    LocalRef(const LocalRef &other) = delete;
+    LocalRef &operator=(const LocalRef &other) = delete;
+
     T Get() const {
       return value;
     }
@@ -71,7 +73,7 @@ namespace Java {
    * Hold a global reference on a JNI object.
    */
   template<typename T>
-  class GlobalRef : private NonCopyable {
+  class GlobalRef {
     T value;
 
   public:
@@ -91,6 +93,9 @@ namespace Java {
     ~GlobalRef() {
       GetEnv()->DeleteGlobalRef(value);
     }
+
+    GlobalRef(const GlobalRef &other) = delete;
+    GlobalRef &operator=(const GlobalRef &other) = delete;
 
     /**
      * Sets the object, ignoring the previous value.  This is only
@@ -119,10 +124,15 @@ namespace Java {
    * that are implicitly initialised with zeroes.
    */
   template<typename T>
-  class TrivialRef : private NonCopyable {
+  class TrivialRef {
     T value;
 
   public:
+    constexpr TrivialRef() {};
+
+    TrivialRef(const TrivialRef &other) = delete;
+    TrivialRef &operator=(const TrivialRef &other) = delete;
+
     bool IsDefined() const {
       return value != NULL;
     }
