@@ -1,7 +1,7 @@
 MANUAL_OUTPUT_DIR = $(OUT)/manual
 TEX_INCLUDES = $(wildcard $(DOC)/manual/*.tex) $(wildcard $(DOC)/manual/*.sty)
 TEX_FILES_EN = $(wildcard $(DOC)/manual/en/*.tex)
-TEX_INCLUDES_EN = $(TEX_INCLUDES) $(wildcard $(DOC)/manual/en/*.sty)
+TEX_INCLUDES_EN = $(wildcard $(DOC)/manual/en/*.sty)
 FIGURES_EN = $(DOC)/manual/en/figures/*.png $(DOC)/manual/en/figures/*.pdf
 
 SVG_ICON_LIST = \
@@ -41,14 +41,15 @@ SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figure
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
 SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
 
-TEX_INCLUDES_BLITZ_DE =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/de/Blitz/*.sty)
-FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/Bilder/*.png
+TEX_INCLUDES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/*.sty)
+FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/Bilder/*.png $(DOC)/manual/de/Blitz/Bilder/*.jpg
  
-TEX_INCLUDES_DE =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/de/*.sty)
-FIGURES_DE = $(DOC)/manual/de/figures/*.png
+TEX_INCLUDES_DE = $(wildcard $(DOC)/manual/de/*.sty)
+FIGURES_DE = $(DOC)/manual/de/figures/*.png  $(DOC)/manual/de/figures/*.pdf
  
-TEX_INCLUDES_FR =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/fr/*.sty)
-#FIGURES_FR = $(DOC)/manual/fr/images/*.png
+TEX_FILES_FR = $(wildcard $(DOC)/manual/fr/*.tex)
+TEX_INCLUDES_FR = $(wildcard $(DOC)/manual/fr/*.sty)
+FIGURES_FR = $(DOC)/manual/fr/figures/*.png
 
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
@@ -58,8 +59,10 @@ TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 manual: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
-	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
+
 
 Handbuch: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual_D.pdf
@@ -70,7 +73,7 @@ Handbuch: \
 manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
-	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
@@ -80,11 +83,11 @@ endif
 
 # Generate a HTML version of the manual with latex2html
 $(MANUAL_OUTPUT_DIR)/html/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
-	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/html/dirstamp
 	$(TEX_VARS) latex2html -dir $(@D) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES_EN) \
+$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
@@ -101,14 +104,23 @@ endif
 	$(TEX_RUN) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual_D.pdf: $(DOC)/manual/de/XCSoar-manual_D.tex \
-	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(TEX_INCLUDES) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 endif
 	$(TEX_RUN) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-main.tex $(TEX_INCLUDES_FR) \
+$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-main.tex $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
+	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+ifeq ($(DEBUG),n)
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+endif
+	$(TEX_RUN) $<
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex \
+	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
 	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
@@ -127,12 +139,29 @@ $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: T=$(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
-	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS)
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) \
+	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(FIGURES_FR)
 	rm -rf $(T)
-	mkdir $(T) $(T)/figures
+	mkdir -p $(T)/figures $(T)/en/figures
 	echo $(GIT_COMMIT_ID) >$(T)/git.txt
-	cp VERSION.txt $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/
-	cp $(FIGURES_EN) $(SVG_FIGURES) $(T)/figures
-	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/
+	cp VERSION.txt $(TEX_INCLUDES) $(T)/.
+	cp $(SVG_FIGURES) $(T)/figures/.
+	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/.
+	# Incl. the English original 
+	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
+	cp $(FIGURES_EN) $(T)/en/figures/.
+	# Incl. the French translation
+	mkdir -p $(T)/fr/figures
+	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
+	cp $(FIGURES_FR) $(T)/fr/figures/.
+	# Incl. the German translation
+	mkdir -p $(T)/de/figures $(T)/de/Blitz/Bilder
+	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
+	cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
+	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/Bilder/.
+	# Create an example bash to generate the manuals
+	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\nmkdir -p output" > $(T)/generate_manuals.sh
+	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
+	chmod +x $(T)/generate_manuals.sh
 	cd $(@D) && zip -r XCSoar-manual-dev.zip XCSoar-manual-dev
