@@ -1,0 +1,113 @@
+\documentclass[frenchle,a4paper,12pt,twoside]{refrep}
+\title{Manuel de l'utilisateur}
+
+
+% Set the page title
+\newcommand{\mycontent}[0]{
+\begin{tabular}{l}
+\hspace*{-4cm} \em XCSoar: Manuel de l'utilisateur \vspace*{2pt}
+\end{tabular}}
+
+\input{xcsoar.sty}
+\input{title-xcsoar.sty}
+\usepackage[utf8]{inputenc}
+\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
+\usepackage{xkeyval}
+\usepackage[frenchle]{babel}
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
+
+%cela est toujours le cas quand le Goto automatique existe ???
+%\tip It is also possible to save a `default' task and have this task loaded
+%automatically upon start-up of XCSoar.  One application of this is to
+%set up a default task with one waypoint being the home --- this means
+%that XCSoar is then programmed for final glide back to home, which is
+%useful for casual cross-country touring.
+
+
+\warning 
+CE MANUEL EST EN COURS DE TRADUCTION! 
+IL N'EST PAS VRAIMENT UTILE ET TRÈS ÉCOLOGIQUE DE L'IMPRIMER VU QU'IL VA ENCORE BEAUCOUP ÉVOLUER ET QU'IL RESTE PAS MAL DE TEXTE EN ANGLAIS.
+IL PEUT AUSSI CONTENIR DES ERREURS!!!
+POUR SIGNALER CE GENRE DE CHOSES... VOUS POUVEZ CONTACTER Daniel: osteocool@yahoo.fr
+
+MERCI
+%%%%%%%%%%%%%%%%%%%%%%
+\begingroup
+\setlength{\parskip}{0.1\baselineskip}
+\tableofcontents
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Préface}
+
+\section*{Avertissements et précautions d'utilisation}
+
+\warning IL EST DE LA RESPONSABILITÉ DE L'UTILISATEUR D'UTILISER CE LOGICIEL AVEC LA PLUS GRANDE PRUDENCE. CE LOGICIEL EST DESTINE A ETRE UTILISE UNIQUEMENT COMME UNE AIDE A LA NAVIGATION ET NE DOIT PAS ÊTRE UTILISÉ DANS LES CAS EXIGEANT UNE MESURE PRECISE DU CAP,DE LA DISTANCE, DE LA POSITION OU DE LA TOPOGRAPHIE. CE LOGICIEL NE DOIT PAS ÊTRE UTILISÉ COMME AIDE POUR DÉTERMINER L’ALTITUDE EN NAVIGATION AERIENNE. CE LOGICIEL NE DOIT PAS ÊTRE UTILISÉ COMME UN SYSTEME ANTI\-COLLISION.
+
+\section*{Mentions légales}
+
+\subsection*{Contrat de licence logicielle}
+
+Ce logiciel est distribué conformément à la licence GNU « General Public License » Version~3. Voir l'annexe (~\ref{cha:gnu-general-public}) pour le texte complet de l’accord de licence et des provisions de garantie.
+
+\subsection*{Limitation de responsabilité}
+
+En aucun cas, XCSoar, ses dirigeants, actionnaires, cadres, employés, sociétés affiliées, sous-traitants, filiales, ne peuvent être tenues responsables des dommages accessoires, indirects ou dommages-intérêts punitifs de toute nature, suite à l'utilisation du produit.
+
+\subsection*{Avertissement}
+
+Ce produit, et tous les fichiers joints, données ou documents, sont distribués «tels quels» et sans garantie d'aucune sorte, expresse ou implicite. Ce produit est utilisé entièrement sous la responsabilité de l'utilisateur. Bien qu'un grand soin ait été pris pour identifier les éventuelles erreurs pendant
+le développement, il n’est en aucun cas revendiqué comme exempt de tout défaut . Aucune garantie n’est fournie quant à son exactitude, sa fiabilité ou son adéquation à un besoin particulier. Les développeurs  et les contributeurs du projet XCSoar ne peuvent en aucun cas être tenu responsables des erreurs pouvant s’y trouver ou des dommages fortuits ou consécutifs, de toute perte de données ou de tout dommages corporels pouvant survenir dans le cadre de la livraison, de la mise en service ou de l'utilisation de ce programme.
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch01_introduction.tex}
+\input{installation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch02_user_interface.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch03_navigation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch04_xc_tasks.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch05_glide_computer.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch06_atmosphere_and_instruments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch07_airspace_and_flarm.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch08_avionics_and_airframe.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch09_quickstart.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch10_infobox_reference.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch11_configuration.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch12_data_files.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch13_history.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+
+\chapter{GNU General Public License}\label{cha:gnu-general-public}
+\input{gpl.tex}
+
+\end{document}

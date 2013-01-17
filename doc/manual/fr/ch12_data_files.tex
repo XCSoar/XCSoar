@@ -1,0 +1,307 @@
+\chapter{Fichiers de données}\label{cha:data-files}
+
+Il y a 2 catégories de fichiers:
+\begin{description}
+\item[Données liées au vol]  Ces fichiers contiennent les données relatives à l'aéronef, les espaces aériens, les cartes, les points de virage, etc... Ce sont les fichiers qui sont le plus à même à être modifiés ou crées par l'utilisateur normal.
+\item[Données liées au programme]  Ces fichiers permettent de gérer l'aspect de l'interface utilisateur et des boutons de saisie.
+\end{description}
+Ce chapitre présente les fichiers de données liées au vol. Pour plus de détails concernant les fichiers de données liées au  programme,voir :
+\begin{itemize}
+\item {\em XCSoarAdvanced Configuration Guide}
+\item {\href{http://xcsoar.wikia.com/wiki/Advanced:Input}{http://xcsoar.wikia.com/wiki/Advanced:Input}}
+\end{itemize}
+
+
+\section{Gestion des fichiers}
+
+Les noms des fichiers doivent avoir une extension (suffixe) comme spécifié plus bas. Il faut prendre l'habitude de donner des noms explicites sur le contenu et le type de fichier, afin d'éviter les risques de confusion lors de la modification de la configuration du logiciel.
+
+En ce qui concerne les plus vieux Pocket PC, il est souhaitable de positionner les fichiers de données sur une mémoire non volatile (ROM, NVRAM,...), car les cartes SD et autres supports mobiles avec les PDA, peut donner lieu à des problèmes de performances. Pour des petits fichiers ou des fichiers lus seulement au lancement de l'application (points de virage, espaces aériens, polaires, fichiers de configuration), ceci n'est pas très important. Par contre les fichiers de relief/topographie sont accédés en permanence quand le logiciel fonctionne. Ils faut donc les placer sur les mémoires les plus rapides. Pour les terminaux Androïd et pour les derniers Windows Mobile ceci n'est plus un problème. Les vitesses d'accès des dernières cartes mémoire permettent de ne plus poser de problème de performance. 
+
+De nombreux PDA ont un système de ficher non volatile; ce qui a été dit ci-dessus s'applique de la même façon en ce qui concerne leur utilisation et leurs performances.
+
+All data files should be copied into the directory: 
+Toutes les données doivent être copiées sous le répertoire :
+\begin{verbatim}
+My Documents/XCSoarData
+\end{verbatim}
+
+Sur les PDA les données peuvent aussi être stockées sur le système de fichier du système d'exploitation, sur une carte flash ou carte SD sous le répertoire
+\verb|XCSoarData|.
+
+For example:
+\begin{verbatim}
+SD Card/XCSoarData
+IPAQ File Store/XCSoarData
+\end{verbatim}
+
+Si vous n'êtes pas certain du positionnement du répertoire, lancez XCSoar que vous venez d'installer et il crée le répertoire \verb|XCSoarData| à la bonne place.
+
+\section{Les cartes}\label{sec:map}
+
+Le fichier "carte" (suffixe \verb|.xcm|) comporte le relief, la topographie et en option, des points de virage, aérodromes et espaces aériens.
+
+Le relief est une carte raster, basé sur la modélisation numérique d'un tableau d'altitudes en metres dont la grille est composée de longitudes et latitudes. Le format interne du fichier est GeoJPEG2000.
+
+Par contre la topographie est un fichier vectoriel. Les routes, autoroutes, lignes de chemin de fer, grandes et petites villes, villages, rivières, lacs, ... sont représentés. Le format du ce "fichier de formes" est ESRI shapefile. Il est généré à partir de  {\href{http://www.openstreetmap.org/}{openstreetmap}}
+
+Les fichiers de cartes peuvent être téléchargés à partir du site XCSoar :
+
+\url{http://www.xcsoar.org/download/maps/}
+
+Pour créer votre propre carte ayant les paramètres qui vous conviennent, ainsi que le contour désiré, vous pouvez utiliser le générateur de cartes :
+
+\url{http://mapgen.xcsoar.org/}
+
+Lorsque les points de virage ou les espaces aériens sont inclus dans la carte (fichier \verb|.xcm|) XCSoar les prend par défaut. Si un fichier séparé de points de virage est défini, alors seuls les points de virages de celui-ci seront pris en compte.
+
+\section{Points de virage}
+
+Les différents formats de fichiers de points de virage supportés sont :
+
+\begin{itemize}
+\item WinPilot/Cambridge (\verb|.dat|)
+\item SeeYou (\verb|.cup|)
+\item Zander (\verb|.wpz|)
+\item OziExplorer (\verb|.wpt|)
+\item GPSDump/FS, GEO et UTM (\verb|.wpt|)
+\end{itemize}
+
+Des fichiers sont disponibles sur le serveur d'échange international\footnote{Des sites miroirs existent, utilisez google + ``worldwide soaring turnpoint exchange'' si le serveur principal est indisponible} dans la section points de virage : 
+
+{\href{http://soaringweb.org/TP/}{http://soaringweb.org/TP}}
+
+Plusieurs logiciels payants et gratuits existent permettant de convertir les fichiers de points de virage d'un format à un autre. 
+
+Si l'altitude du point de virage est nulle, dans le fichier de points de virage, alors XCSoar estime son altitude à partir du fichier de relief si celui-ci est défini.
+
+
+\section{Espace aérien}
+
+Les formats de fichiers d'espace aérien supportés par XCSoar sont :
+\begin{itemize}
+\item Les fichiers d'extension \verb|.txt| qui utilisent un sous ensemble du format OpenAir.
+\item Les fichiers d'extension \verb|.sua| qui utilisent le format Tim Newport-Pearce.
+\end{itemize}
+
+Les fichiers sont disponibles à partir de la section Airspace du site soaringweb :
+
+{\href{http://soaringweb.org/Airspace/}{http://soaringweb.org/Airspace}}
+
+Ce qui suit est la liste de types d'espace aériens supportés : Classe A à G, Interdite, Zone Dangereuse, Restreinte, Zone de concours, CTR, Planeurs interdits, Onde, Transpondeur obligatoire et Autre. Tous les autres espaces sont représentés comme "Autre".
+
+En plus du standard OpenAir, la commande AR permet de définir la fréquence radio.
+
+\section{Détails des aérodromes/waypoints}\label{sec:Airfield-details}
+
+Les fichiers de détails des aérodromes/points de virage sont de simples fichiers textes (extension \verb|.txt|) comportant une entrée pour chaque aérodrome, écrit entre crochets et en majuscules, suivi du texte affiché dans la fenêtre d'information des aérodromes/points de virage. Le texte doit être constitué de lignes assez courtes car la fenêtre d'information ne gère pas les retours à la ligne.
+
+Sur les plateformes autres que les PC, le texte peut aussi faire référence à des images ou à d'autres fichiers relatifs aux points de virage. Pour faire apparaitre une image directement dans XCSoar utilisez \verb|image=| suivit par le nom du fichier. Pour ouvrir un fichier dans une autre application utilisez \verb|file=| suivit du type de fichier correspondant (ex: \verb|BARCELONNETTE.jpg|). Il ne faut pas laisser d'espace de par et d'autre du signe = ou devant un mot clé (\verb|image=xxx|, 
+ \verb|file=zzz|, \verb|file=.png|,...). Le type de fichier supportés dépend du système d'exploitation et des applications installées. Androïd supporte les fichiers JPEG et d'autres formats, les autres plateformes principalement le format BMP.
+
+Le nom des aérodromes utilisés dans le fichier de détails doit correspondre exactement au nom utilisé dans le fichier de points de virage, la seule différence possible étant la casse.
+
+Le site web d'XCSoar propose des fichiers de détails d'aérodromes de divers pays ainsi que des outils permettant de convertir dans ce format différentes sources de données complémentaires "en route".
+
+L'utilisateur est libre d'éditer ces fichiers et d'y ajouter ses propres annotations concernant un aérodrome/point de virage qui n'existent pas dans les sources de données complémentaires.
+
+Voici un exemple crée pour l'aérodrome de Barcelonnette :
+\begin{verbatim}
+[BARCELONNETTE]
+image=BARCELONNETTE.jpg
+LFMR : BARCELONNETTE SAINT-PONS
+RADIO: 123.500
+ALTITUDE: 3714 FT - (1132 M)
+OUVERT A LA CAP
+BRISE DE VALLEE
+ATTERRISAGE FACE A L'OUEST 
+PISTE EN DUR: TRAIN SORTI !!!
+RECHARGE OXYGENE POSSIBLE
+CARBURANT / FUEL : 100LL
+QFU 272° PRÉFÉRENTIEL CAUSE RELIEF.
+ROULAGE INTERDIT HORS PISTE ET RWY.
+TWY RÉSERVÉ AUX PLANEURS, PRUDENCE RECOMMANDÉE
+LORSQUE LE VENT EST ÉTABLI AU 270° POUR 20 KT,
+FORTS RABATTANTS EN COURTE FINALE.
+
+[SAINT CREPIN]
+image=SAINT_CREPIN.jpg
+LFNC : MONT DAUPHIN SAINT CREPIN
+CONDITIONS GÉNÉRALES D’UTILISATION DE L’AD
+AD RESERVÉ AUX ACFT MUNIS DE RADIO.
+L’UTILISATION SIMULTANÉE PISTE REVÊTUE AVIONS ET PISTE NON
+REVÊTUE PLANEURS EST INTERDITE.
+PROCÉDURES ET CONSIGNES PARTICULIÈRES
+PRUDENCE RECOMMANDÉE POUR LE ROULAGE HORS PISTES.
+ACTIVITÉS DIVERSES
+ACTIVITÉ INTENSE DE VOL À VOILE DU 01 MARS AU 30 SEPTEMBRE.
+..........................
+
+\end{verbatim}
+
+\section{Polaire} \label{sec:glide-polar}
+
+De nombreuses polaires sont prédéfinies dans XCSoar. Si le modèle de votre planeur n'y est pas, vous pouvez créer votre propre fichier de polaire au format de polaire WinPilot (extension \verb|.plr|).
+
+Les sites web WinPilot et XCSoar proposent des fichiers de polaires. Des fichiers pour d'autres types de planeurs peuvent être crées à la demande, à l'équipe de XCSoar.
+
+Le format de ce fichier est simple. Les commentaires sont les lignes commençant par \verb|*|. Les données sont des chiffres séparés par des virgules, sur une seule ligne :
+\begin{itemize}
+\item Masse à vide en kg: masse à vide du planeur plus le poids 'standard' du pilote.
+\item Masse de ballast maximum (kg).
+\item Vitesse en km/h du premier point de mesure, (en général le point de chute minimum).
+\item Taux de chute en m/s du premier point de mesure.
+\item Vitesse en km/h du second point de mesure, (en général le point de finesse maximum)
+\item Taux de chute en m/s du second point de mesure.
+\item Vitesse en km/h du troisième point de mesure, (en général le point de vitesse maximum de manœuvre).
+\item Taux de chute en m/s du troisième point de mesure.
+\end{itemize}
+Ce qui suit est une extension du format du fichier de polaire et est optionnel.
+\begin{itemize}
+\item Surface de l'aile en m$^2$ pour calcul de la charge alaire( 0 si inconnue).
+\item Vitesse maximum de manœuvre en Km/h pour permettre de limiter les indications de vitesse données par le calculateur.
+\end{itemize}
+
+Voici un exemple de fichier pour le LS3 :
+\begin{verbatim}
+*LS-3	WinPilot POLAR file: MassDryGross[kg], 
+*  MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], 
+*  Speed2, Sink2, Speed3, Sink3  	
+373,	121,	74.1,	-0.65,	102.0,	-0.67,	167.0,	-1.85
+\end{verbatim}
+
+\tip Ne soyez pas trop optimiste si vous définissez vous même votre polaire. Il est très facile de définir une finesse un peut trop élevée et de se retrouver en arrivée, un peu trop bas!
+\section{Profiles}
+
+Les fichiers "profiles" (extension \verb|.prf|) peuvent être utilisés pour stocker les configurations de XCSoar. Ce format est un défini dans un  fichier texte contenant des paires\\ \verb|<label>=<value>|. Certaine valeurs sont des chaines de caractères entre guillemets, par exemple :
+\begin{verbatim}
+PilotName="Baron Richtoffen"
+\end{verbatim}
+Toutes les autres valeurs sont numériques y compris les les variables booléennes (vrai$=1$, faux$=0$). 
+\begin{verbatim}
+StartDistance=1000
+\end{verbatim}
+
+Toutes les valeurs représentant des dimensions physiques sont exprimées dans le système ISO (metre, metre/seconde, seconde,...).
+
+Quand un profile est sauvegardé, il contient tout les paramètres de configuration. Les fichiers de profile peuvent être édités à l'aide d'un simple éditeur de texte pour créer un sous-ensemble de paramètres pouvant être donnés à d'autres pilotes.
+
+Quand un fichier de profile est chargé, seuls les paramètres de ce fichier sont chargés et surchargent les paramètres internes de XCSoar : tous les autres paramètres sont inchangés.
+
+Le fichier de paramètres par défaut est crée automatiquement quand des paramètres sont modifiés ou à la sortie du programme : le nom du fichier est \verb|xcsoar-registry.prf|.
+
+La façon la plus simple de créer un nouveau profile est de copier le fichier par défaut et de lui donner un nom logique. Au redémarrage du programme, il est alors possible de sélectionner l'un des fichiers profile existants.
+
+
+\section{Checklist}
+Le fichier de checklist (\verb|xcsoar-checklist.txt|) utilise un format similaire au fichier de détails des points de virage. Chaque page de la checklist est précédée par le nom de la checklist entre crochets. Jusqu'à 20 listes peuvent être définies.
+
+Un exemple (extrait):
+\begin{verbatim}
+[Pré vol]
+Commandes libres, dans le bon sens.
+Harnais verrouillé, pas d'objets libres
+aéro-freins verrouillés
+débattement et position volets
+Trim et ballast
+Instruments
+Verrière fermée verrouillée
+[Démontage]
+Retirer les scotchs des ailes et profondeur.
+Coller les aéro-freins.
+...
+\end{verbatim}
+
+\section{Épreuves}
+
+Les fichiers d'épreuve (extension \verb|.tsk|) sont stockés dans un fichier XML dans un format propre à XCSoar. Cependant les fichiers d'épreuves définies dans SeeYou  (extension \verb|.cup|) peuvent aussi être chargés dans XCSoar.
+
+
+\section{Fichiers de vol} \label{sec:logfiles}
+
+Le logiciel d'enregistrement génère des fichiers au format IGC  (extension \verb|.igc|) en accord avec la spécification des noms de fichiers longs de la FAI, voir le document  {\href{http://www.fai.org/component/phocadownload/category/855-technicalspecifications?download=5745:igc-flight-recorder-specification-edition-2-with-al1-2011-5-31}{Technical Specification for IGC-Approved GNSS Flight Recorders}}.
+ 
+Les enregistrements sont stockés dans le sous répertoire 'logs'  du répertoire XCSoarData. Ces fichiers peuvent être importés dans d'autres programmes pour être analysés après le vol.
+
+
+\section{Identification du FLARM}\label{sec:flarm-ident-file}
+
+
+The FLARM identification file \verb|xcsoar-flarm.txt| defines a table
+of aircraft registrations or pilot names against the ICAO IDs that are
+optionally broadcast by FLARM equipped aircraft.  These names are
+displayed on the map next to FLARM traffic symbols, for matching ICAO
+IDs.
+
+The format of this file is a list of entries, one for each aircraft,
+of the form {\em icao id=name}, where {\em icao id} is the six-digit
+hex value of the ICAO aircraft ID, and {\em name} is free text
+(limited to 20 characters), describing the aircraft and/or pilot name.
+Short names are preferred in order to reduce clutter on the map
+display.
+
+Example:
+\begin{verbatim}
+DD8F12=WUS
+DA8B06=Chuck Yeager
+\end{verbatim}
+
+Currently this file is limited to a maximum of 200 entries.
+
+Additionally the FlarmNet file \verb|data.fln| is supported. It contains all 
+the FLARM identifications distributed by the FlarmNet community. The file can 
+be downloaded from the web site:
+
+\url{http://www.flarmnet.org}
+
+The file must reside in the XCSoarData directory.
+
+
+%%%%%%%%%%%%%% advanced stuff below..
+\section{Input events}
+
+The input event file (extension \verb|.xci|) is a plain text file
+designed to control the input and events in your glide computer.
+
+You do not require access to the source code or understanding of
+programming to write your own input event files but you do require
+some advanced understanding of XCSoar and of gliding.
+
+Some reasons why you might like to use xci:
+\begin{itemize}
+\item Modify the layout of button labels
+\item Support a new set or layout of buttons (organiser hardware buttons)
+\item Support an external device such as a bluetooth keyboard or gamepad
+\item Customise any button/key event
+\item Do multiple events from one key or glide computer triggered process
+\end{itemize}
+For more information on editing or writing or your own input event
+file, see the {\em XCSoar Advanced Configuration Manual}.
+
+\section{Status}\label{sec:status-file}
+
+Status files are text of the form {\em label=value}, arranged in
+blocks of text where each block corresponds to an individual status
+message.  These are delimited by double spaces.  Each block can
+contain the following fields:
+\begin{description}
+\item[key]  This is the text of the status message.
+\item[sound] Location of a WAV audio file to play when the status
+  message appears.  This is optional.
+\item[delay] Duration in milliseconds the status message is
+  to be displayed.  This is optional.
+\item[hide] A boolean (yes/no) that dictates whether the message
+ is to be hidden (that is, not displayed). 
+\end{description} 
+
+Example:
+\begin{verbatim}
+key=Simulation\r\nNothing is real!
+sound=\My Documents\XCSoarData\Start_Real.wav
+delay=1500
+
+key=Task started
+delay=1500
+hide=yes
+\end{verbatim}
+% 

@@ -1,0 +1,116 @@
+\chapter{Introduction}\label{cha:introduction}
+Ce document est le manuel d'utilistion de XCSoar, logiciel de navigation aérienne, open-source développé à l'origine pour les Poket PC. Le lecteur est sensé avoir de bonnes connaissances des fondamentaux de la théorie  du vol à voile et un minimum de pratique du vol sur la campagne.
+
+Les mises à jour périodiques du logiciel peuvent rendre ce manuel périmé concernant certains points. Il est souhaitable de lire les notes de mise à jour du logiciel pour en connaitre les évolutions. Les mises à jour du logiciel et de la documentation sont disponibles sur 
+\begin{quote}
+\xcsoarwebsite{/download}
+\end{quote}
+
+\section{Organisation du manuel}
+
+\todonum[inline]{Write about the manual crossref hinting icons and the yellow
+colour. The Quickstart will be readable also without those links available} 
+Ce manuel est structuré par grandes fonctionnalités du point de vue du pilote. La suite de ce chapitre parle du téléchargement, de l'installation et du lancement du logiciel sur les différentes plateformes matérielles supportées. Le chapitre ~\ref{cha:interface} décrit les concepts de l'interface utilisateur et donne une vue générale de l'affichage.
+
+Le chapitre~\ref{cha:navigation} décrit en détail l'utilisation de la carte mobile et l'aide que peut apporter le logiciel de navigation. Le chapitre~\ref{cha:tasks} décrit comment les circuits sont définis et utilisés en vol. Il présente aussi les outils d'analyse permettant aux pilotes d'améliorer leurs performances. Le chapitre~\ref{cha:glide}  est consacré au calculateur de vol d'XCSoar et présente en détail les fonctionnalités qu'il offre. Il est important pour les pilotes de comprendre comment le calculateur effectue ses différents calculs.
+
+Le chapitre~\ref{cha:atmosph} parle de l'interfaçage du calculateur avec des varios et autres instruments de mesure et comment ces données sont utilisées pour représenter différents modèles concernant entre autre le vent et la convection. Le chapitre~\ref{cha:airspace} parle de la gestion des espaces aériens et des alarmes dédiées ainsi que des alarmes du FLARM. Le chapitre~\ref{cha:avionics-airframe} présente l'intégration du calculateur avec le reste des systèmes utilisés dans l'environnement de vol ( terminaux permettant de communiquer avec le calculateur, switches divers) et des diagnostiques possibles.
+
+La suite du document est constituée principalement de chapitres de référence. Le chapitre~\ref{cha:infobox} liste les différentes informations qui peuvent être affichées dans les "InfoBox" sur les côtés de la carte mobile. La configuration du logiciel est décrite dans le chapitre ~\ref{cha:configuration}. Le format des fichiers utilisés ainsi que la manière de les obtenir ou les créer et les éditer est décrit dans le chapitre~\ref{cha:data-files}.
+
+Enfin, un bref historique et une explication du processus de développement de XCSoar sont présentés dans le chapitre ~\ref{cha:history-development}.
+
+\section{Remarques}
+
+\subsection*{Terminologie}
+Un certain nombre de termes sont utilisés pour la description de matériel embarqués tels que Pocket PC, comprenant 'organiser', Portable Digital Assistant (PDA), et Personal Navigation Assistant (PNA). XCSoar est aussi disponible sur plateforme Altair(calculateur Triadis) qui est concrètement un instrument de navigation et plusieurs autres plateformes. Dans ce document ces termes sont utilisés indifféremment comme référence à un matériel supporté par XCSoar.
+
+\subsection*{Copies d'écran}
+Tout au long de ce manuel des copies d'écran de XCSoar sont présentées. Elles proviennent de différentes plateformes matériel et pas forcément de la même version d'XCSoar. Entre plateforme il peut y avoir des différences de résolution d'écran, de présentation générale, de police de caractères ce qui induit des différences entre la documentation et la visualisation sur l'appareil. La plupart des copies d'écran de ce manuel sont faites avec un affichage d'XCSoar en format paysage.
+
+\section{Platformes}
+\begin{description}
+\item[Windows PC]
+XCSoar fonctionne sur un PC sous Windows (XP, Vista, 7 versions 32 et 64 bits). Cette version est principalement utile pour la prise en main, l'entrainement à l'utilisation d'XCSoar, rejouer des fichiers IGC enregistrés ou utiliser XCSoar en mode simulation sur un PC non connecté à un GPS.
+\item[Windows Mobile PDA/PNA]
+XCSoar supporte les appareils utilisant Microsoft Pocket PC 2000 jusqu'à Windows Mobile 6. Windows Mobile 7 n'est pas supporté car Microsoft a décidé de ne pas maintenir les applications natives à partir de cette version.  
+\item[Unix/Linux PC]
+XCSoar peut tourner sous Unix en utilisant l'émulateur Wine. Une version native Unix existe à partir de la version 6.0 mais est toujours considérée comme expérimentale.     
+\item[Périphériques Androïd] supporté à partir d'Androïd 1.6 et versions ultérieures.
+\item[Altair] Le calculateur de vol Altair, de triadis engineering GmbH, dans lequel XCSoar est pré-installé. la version Altair PRO comporte un GS interne. 
+\end{description}
+
+
+
+\section{Support technique}
+
+\subsection*{Dépannage}
+XCSoar est développé par une petite équipe. Bien que nous soyons heureux de vous aider dans l'utilisation de notre logiciel, nous ne pouvons donner de cours sur l'utilisation des techniques modernes d'information!
+Si vous avez des questions concernant XCSoar, consultez la FAQ en premier lieu. Si vous ne trouvez pas de réponse satisfaisante, envoyez un mail à la liste:
+\begin{quote}
+\href{mailto:xcsoar-user@lists.sourceforge.net}{xcsoar-user@lists.sourceforge.net}
+\end{quote}
+
+Les nouvelles questions seront ajoutées à la FAQ du site de XCSoar. 
+
+Vous pouvez aussi vous inscrire à la liste de mails de XCSoar afin d'être averti des derniers développements du logiciel. Pour plus d'information voir sur notre site:
+\begin{quote}
+\xcsoarwebsite{/discover/mailinglist.html}
+\end{quote}
+
+Le fichier de "log" du démarrage du logiciel est \verb|xcsoar-startup.log|. Il peut être envoyé aux développeurs d'XCSoar pour les aider à déterminer les causes de problèmes au lancement du logiciel.
+
+Pour les utilisateurs d'Altair le fichier de log est transféré vers le répertoire `FromAltair' à l'aide d'AltairSync si un support de stockage USB est connecté et qu'Altair est déjà sous tension.
+
+\subsection*{Mises à jour}
+Il est souhaitable de visiter le site web de XCSoar pour vérifier si il n'y a pas de mise à jour disponible. La procédure d'installation décrite au chapitre~\ref{cha:installation} suivant peut être répétée pour la mise à jour du logiciel. Les fichiers de configurations et les données personnelles (cartes, points de virage,...) sont préservées lors des mises à jour et ré-installations.
+
+Il est bien entendu recommandé de mettre à jour les données de navigation (cartes, espaces aériens) pouvant être modifiées par les autorités. Le fichier d'espace aérien mis à disposition sur le site de la FFVV est mis à jour environ une fois par mois au cours de la saison.
+
+\subsection*{Mises à jour de XCSoar sur Altair}
+La lise à jour du logiciel sur Altair implique de télécharger le dernier fichier {\tt XCSoarAltair-YYY-CRCXX.exe} et de le copier sur une clé USB ou une carte SD. Ensuite utiliser l'utilitaire AltairSync sur le terminal Altair pour terminer l'installation. Pour plus de détails, se référer au {\em Manuel d'utilisateur Altair}.
+
+Les autres types de données ou programmes peuvent être installés sur Altair de la même façon.
+
+\subsection*{Vos retours}
+Comme tout programme élaboré, XCSoar peut comporter des bugs. Si vous en trouvez un, veuillez le remonter à l'équipe de développement en utilisant notre portail dédié à:
+\begin{quote}
+\xcsoarwebsite{/trac}
+\end{quote}
+ou en nous contactant par mail à:
+
+\begin{quote}
+\href{mailto:xcsoar-devel@lists.sourceforge.net}{xcsoar-devel@lists.sourceforge.net}
+\end{quote}
+
+\section{Entrainement}
+Pour votre sécurité et celle des autres, les pilotes utilisant XCSoar doivent s'entrainer à l'utilisation du logiciel, au sol , afin de s'habituer à l'interface utilisateur et au différentes fonctionnalités qu'il offre, AVANT de l'utiliser en vol.
+
+\subsection*{XCSoar sur un PC}
+La version PC permet de se familiariser avec le logiciel, son interface utilisateur et ses fonctionnalités tout en étant confortablement installé à la maison, une bière à la main.... Tous les fichiers et les configurations de cette version sont identiques aux versions embarquées. Il est donc très facile de tester différentes configurations sur le PC avant de les mettre en pratique en vol.
+
+La version PC peut être connectée à des instruments et fonctionner comme un calculateur en l'air. Exemples d'utilisation:
+
+\begin{itemize}
+\item Connecter un FLARM au PC pour utiliser XCSoar comme station au sol, pour afficher le traffic des planeurs équipées de FLARM.
+\item Connecter un variomètre "intelligent"  comme le Vega pour tester le paramétrage du vario.
+\end{itemize}
+
+\subsection*{XCSoar avec un simulateur de vol}
+Une bonne manière d'apprendre à se servir du logiciel est de connecter un Pocket PC à un PC sur lequel tourne un simulateur de vol qui peut envoyer des messages NMEA vers un port série. Condor et X-Plane le permettent par exemple.
+
+Le gros avantage de s'entrainer ainsi est que XCSoar peut être utilisé en mode FLY. Ainsi, il se comporte exactement comme si vous voliez et vous pouvez avoir un très bon aperçu du fonctionnement de XCSoar quand vous utilisez le simulateur de vol. 
+
+\section{XCSoar et la sécurité}
+L'utilisation d'un calculateur tel que XCSoar en vol entraine certains risques: l'attention du pilote peut être diminuée de manière très significative, comme le temps passé à regarder en dehors du cockpit pour assurer la sécurité.
+
+La philosophie guidant la conception et le développement de XCSoar est de réduire cette distraction en minimisant les interactions de l'utilisateur et en présentant les informations de façon claire et lisible d'un coup d'œil.
+
+Les pilotes qui utilisent ce logiciel sont responsables de l'utilisation de XCSoar en sécurité. 
+Pour bien utiliser XCSoar vous devez:
+\begin{itemize}
+\item Devenir familier avec l'interface graphique et avec vous entrainer au sol.
+\item En vol, prendre l'habitude de regarder dehors autour de vous avant d'interagir avec le logiciel.
+\item Configurer le logiciel pour profiter des fonctionnalités automatisées pour minimiser les interactions avec le logiciel. Si vous vous apercevez que vous faites mécaniquement des actions fréquentes, demandez-vous (ou à un autre utilisateur de XCSoar) si le logiciel ne peut pas être configuré pour le faire à votre place.
+\end{itemize}
+              
