@@ -15,6 +15,8 @@ Version 6.4.6 - not yet released
   - fix font scaling on screen rotation change (Android/Linux OpenGL)
 * data files
   - fixed arc airspace approximation threshold handling (#2360)
+* configuration
+  - save waypoint label display configuration changed from menu (#2548)
 
 Version 6.4.5 - 2012/12/14
 * calculations
