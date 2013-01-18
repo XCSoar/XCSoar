@@ -70,7 +70,6 @@ Profile::Load(TrafficSettings &settings)
 void
 Profile::Load(DialogSettings &settings)
 {
-  GetEnum(ProfileKeys::AppTextInputStyle, settings.text_input_style);
   GetEnum(ProfileKeys::AppDialogTabStyle, settings.tab_style);
   Get(ProfileKeys::UserLevel, settings.expert);
 }

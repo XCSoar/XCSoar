@@ -52,7 +52,6 @@ enum ControlIndex {
 #endif
   StatusFile,
   MenuTimeout,
-  TextInput,
   HapticFeedback
 };
 
@@ -183,24 +182,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           1, 60, 1, settings.menu_timeout / 2);
   SetExpertRow(MenuTimeout);
 
-  static constexpr StaticEnumChoice text_input_list[] = {
-    { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
-    { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
-    { (unsigned)DialogSettings::TextInputStyle::HighScore,
-      N_("HighScore Style") },
-    { 0 }
-  };
-
-  AddEnum(_("Text input style"),
-          _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
-          text_input_list, (unsigned)settings.dialog.text_input_style);
-  SetExpertRow(TextInput);
-
-  /* on-screen keyboard doesn't work without a pointing device
-     (mouse or touch screen), hide the option on Altair */
-  SetRowVisible(TextInput, HasPointer());
-
-#ifdef HAVE_VIBRATOR
+  #ifdef HAVE_VIBRATOR
   static constexpr StaticEnumChoice haptic_feedback_list[] = {
     { (unsigned)UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
     { (unsigned)UISettings::HapticFeedback::OFF, N_("Off") },
@@ -281,9 +263,6 @@ InterfaceConfigPanel::Save(bool &_changed)
     Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);
     changed = true;
   }
-
-  if (HasPointer())
-    changed |= SaveValueEnum(TextInput, ProfileKeys::AppTextInputStyle, settings.dialog.text_input_style);
 
 #ifdef HAVE_VIBRATOR
   changed |= SaveValueEnum(HapticFeedback, ProfileKeys::HapticFeedback, settings.haptic_feedback);
