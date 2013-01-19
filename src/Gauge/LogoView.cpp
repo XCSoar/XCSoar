@@ -27,7 +27,7 @@ Copyright_License {
 #include "Version.hpp"
 
 LogoView::LogoView()
-  :logo(IDB_SWIFT), big_logo(IDB_SWIFT_HD),
+  :logo(IDB_LOGO), big_logo(IDB_LOGO_HD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
 #ifndef USE_GDI

@@ -24,7 +24,7 @@
 #define IDB_AIRSPACE0                   240
 #define IDB_AIRSPACE1                   241
 #define IDB_AIRSPACE2                   242
-#define IDB_SWIFT_HD                    251
+#define IDB_LOGO_HD                    251
 #define IDB_GPSSTATUS1                  256
 #define IDB_GPSSTATUS1_HD              5256
 #define IDB_GPSSTATUS2                  257
@@ -76,7 +76,7 @@
 #define IDB_TEAMMATE_POS_HD            5322
 #define IDB_LAUNCHER1                   330
 #define IDB_LAUNCHER2                   331
-#define IDB_SWIFT                       332
+#define IDB_LOGO                       332
 #define IDD_PROGRESS_LANDSCAPE2         333
 #define IDB_AIRPORT_UNREACHABLE2        334
 #define IDB_AIRPORT_UNREACHABLE2_HD    5334
