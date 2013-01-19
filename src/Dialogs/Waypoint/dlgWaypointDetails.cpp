@@ -428,17 +428,12 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(shrink_button != NULL);
 
   if (!allow_navigation) {
-    WndButton* button = (WndButton *)form->FindByName(_T("cmdPrev"));
-    assert(button != NULL);
-    button->Hide();
-
-    button = (WndButton *)form->FindByName(_T("cmdNext"));
-    assert(button != NULL);
-    button->Hide();
-
-    button = (WndButton *)form->FindByName(_T("cmdGoto"));
-    assert(button != NULL);
-    button->Hide();
+    for (const TCHAR *button_name :
+         { _T("cmdPrev"), _T("cmdNext"), _T("cmdGoto") }) {
+      Window *button = form->FindByName(button_name);
+      assert(button != NULL);
+      button->Hide();
+    }
   }
 
   for (auto it = waypoint->files_embed.begin(),
