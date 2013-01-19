@@ -67,6 +67,8 @@ Copyright_License {
 class WndOwnerDrawFrame;
 
 static int page = 0;
+static int last_page = 0;
+
 static WndForm *form = NULL;
 static Window *details_panel = NULL;
 static DockWindow *info_widget = NULL;
@@ -92,8 +94,8 @@ static void
 NextPage(int step)
 {
   assert(waypoint);
+  assert(last_page > 0);
 
-  int last_page = 2 + images.size();
   do {
     page += step;
     if (page < 0)
@@ -451,6 +453,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     if (!images.append().LoadFile(path))
       images.shrink(images.size() - 1);
   }
+
+  last_page = 2 + images.size();
 
   page = 0;
   UpdatePage();
