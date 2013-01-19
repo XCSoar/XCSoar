@@ -87,7 +87,18 @@ UpdatePage()
   info_widget->SetVisible(page == 0);
   details_panel->SetVisible(page == 1);
   commands_widget->SetVisible(page == 2);
-  image_window->SetVisible(page >= 3);
+
+  bool image_page = page >= 3;
+  image_window->SetVisible(image_page);
+  magnify_button->SetVisible(image_page);
+  shrink_button->SetVisible(image_page);
+}
+
+static void
+UpdateZoomControls()
+{
+  magnify_button->SetEnabled(zoom < 5);
+  shrink_button->SetEnabled(zoom > 0);
 }
 
 static void
@@ -111,11 +122,10 @@ NextPage(int step)
 
   UpdatePage();
 
-  zoom = 0;
-  magnify_button->SetVisible(page >= 3);
-  magnify_button->SetEnabled(true);
-  shrink_button->SetVisible(page >= 3);
-  shrink_button->SetEnabled(false);
+  if (page >= 3) {
+    zoom = 0;
+    UpdateZoomControls();
+  }
 }
 
 static void
@@ -125,8 +135,7 @@ OnMagnifyClicked()
     return;
   zoom++;
 
-  magnify_button->SetEnabled(zoom < 5);
-  shrink_button->SetEnabled(zoom > 0);
+  UpdateZoomControls();
   image_window->Invalidate();
 }
 
@@ -137,8 +146,7 @@ OnShrinkClicked()
     return;
   zoom--;
 
-  magnify_button->SetEnabled(zoom < 5);
-  shrink_button->SetEnabled(zoom > 0);
+  UpdateZoomControls();
   image_window->Invalidate();
 }
 
