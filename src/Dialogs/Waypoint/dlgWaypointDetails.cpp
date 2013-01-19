@@ -355,25 +355,23 @@ UpdateCaption()
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
-  if (waypoint->file_num > 0) {
-    const TCHAR *key = NULL;
-    switch (waypoint->file_num) {
-    case 1:
-      key = ProfileKeys::WaypointFile;
-      break;
-    case 2:
-      key = ProfileKeys::AdditionalWaypointFile;
-      break;
-    case 3:
-      key = ProfileKeys::WatchedWaypointFile;
-      break;
-    }
+  const TCHAR *key = NULL;
+  switch (waypoint->file_num) {
+  case 1:
+    key = ProfileKeys::WaypointFile;
+    break;
+  case 2:
+    key = ProfileKeys::AdditionalWaypointFile;
+    break;
+  case 3:
+    key = ProfileKeys::WatchedWaypointFile;
+    break;
+  }
 
-    if (key != NULL) {
-      const TCHAR *filename = Profile::GetPathBase(key);
-      if (filename != NULL)
-        buffer.AppendFormat(_T(" (%s)"), filename);
-    }
+  if (key != NULL) {
+    const TCHAR *filename = Profile::GetPathBase(key);
+    if (filename != NULL)
+      buffer.AppendFormat(_T(" (%s)"), filename);
   }
 
   form->SetCaption(buffer);
