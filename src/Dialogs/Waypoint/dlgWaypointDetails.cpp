@@ -80,6 +80,15 @@ static StaticArray<Bitmap, 5> images;
 static int zoom = 0;
 
 static void
+UpdatePage()
+{
+  info_widget->SetVisible(page == 0);
+  details_panel->SetVisible(page == 1);
+  commands_widget->SetVisible(page == 2);
+  image_window->SetVisible(page >= 3);
+}
+
+static void
 NextPage(int step)
 {
   assert(waypoint);
@@ -98,10 +107,8 @@ NextPage(int step)
 #endif
            waypoint->details.empty());
 
-  info_widget->SetVisible(page == 0);
-  details_panel->SetVisible(page == 1);
-  commands_widget->SetVisible(page == 2);
-  image_window->SetVisible(page >= 3);
+  UpdatePage();
+
   zoom = 0;
   magnify_button->SetVisible(page >= 3);
   magnify_button->SetEnabled(true);
@@ -446,8 +453,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   }
 
   page = 0;
-
-  NextPage(0); // JMW just to turn proper pages on/off
+  UpdatePage();
 
   form->ShowModal();
 
