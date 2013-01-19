@@ -47,6 +47,7 @@ Version 6.5 - not yet released
 * track friends via internet connection (SkyLines live tracking)
 * Documentation
   - started a French translation of the manual
+  - included an almost complete German translation of the manual
 
 Version 6.4.6 - not yet released
 * devices

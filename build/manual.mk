@@ -44,8 +44,9 @@ SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/gra
 TEX_INCLUDES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/*.sty)
 FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/Bilder/*.png $(DOC)/manual/de/Blitz/Bilder/*.jpg
  
+TEX_FILES_DE = $(wildcard $(DOC)/manual/de/*.tex)
 TEX_INCLUDES_DE = $(wildcard $(DOC)/manual/de/*.sty)
-FIGURES_DE = $(DOC)/manual/de/figures/*.png  $(DOC)/manual/de/figures/*.pdf
+FIGURES_DE = $(DOC)/manual/de/figures/*.png
  
 TEX_FILES_FR = $(wildcard $(DOC)/manual/fr/*.tex)
 TEX_INCLUDES_FR = $(wildcard $(DOC)/manual/fr/*.sty)
@@ -60,12 +61,12 @@ manual: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
 
-
 Handbuch: \
-	$(MANUAL_OUTPUT_DIR)/XCSoar-manual_D.pdf
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
 
 # Generate a redistributable ZIP file that allows manual editors
 # without the full XCSoar development chain to compile the XCSoar
@@ -103,8 +104,9 @@ ifeq ($(DEBUG),n)
 endif
 	$(TEX_RUN) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-manual_D.pdf: $(DOC)/manual/de/XCSoar-manual_D.tex \
-	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(TEX_INCLUDES) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex \
+	$(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(TEX_INCLUDES) \
+	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
@@ -155,11 +157,13 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	mkdir -p $(T)/fr/figures
 	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
 	cp $(FIGURES_FR) $(T)/fr/figures/.
-	# Incl. the German translation
+	# Incl. both German translation
 	mkdir -p $(T)/de/figures $(T)/de/Blitz/Bilder
 	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
 	cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
 	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/Bilder/.
+	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
+	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
 	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\nmkdir -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
