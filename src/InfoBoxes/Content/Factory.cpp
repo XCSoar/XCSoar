@@ -146,9 +146,9 @@ struct MetaData {
 static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_HeightGPS
   {
-    N_("Height GPS"),
-    N_("H GPS"),
-    N_("This is the height above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
+    N_("Altitude GPS"),
+    N_("Alt GPS"),
+    N_("This is the altitude above mean sea level reported by the GPS. Touch-screen/PC only: In simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
     e_HeightAGL, // H AGL
     e_FlightLevel, // Flight Level
@@ -156,8 +156,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_HeightAGL
   {
-    N_("Height AGL"),
-    N_("H AGL"),
+    N_("Altitude AGL"),
+    N_("Alt AGL"),
     N_("This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
     UpdateInfoBoxAltitudeAGL,
     altitude_infobox_panels,
