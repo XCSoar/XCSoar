@@ -350,14 +350,14 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-UpdateCaption(const TCHAR *waypoint_name, int8_t file_num)
+UpdateCaption()
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint_name);
+  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
-  if (file_num > 0) {
+  if (waypoint->file_num > 0) {
     const TCHAR *key = NULL;
-    switch (file_num) {
+    switch (waypoint->file_num) {
     case 1:
       key = ProfileKeys::WaypointFile;
       break;
@@ -392,7 +392,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   LastUsedWaypoints::Add(_waypoint);
 
-  UpdateCaption(waypoint->name.c_str(), waypoint->file_num);
+  UpdateCaption();
 
   form->SetKeyDownFunction(FormKeyDown);
 
