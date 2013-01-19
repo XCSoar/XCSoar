@@ -163,15 +163,15 @@ BITMAP_ICON(IDB_MARGINAL_HD, "winpilot_marginal_160")
 BITMAP_ICON(IDB_SMALL, "map_small")
 BITMAP_ICON(IDB_SMALL_HD, "map_small_160")
 #ifdef TESTING
-BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_red_160")
-BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_red_80")
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "logo_red_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "logo_red_80")
 #else
 #ifdef NO_HORIZON
-BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_no_horizon_160")
-BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_no_horizon_80")
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "logo_no_horizon_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "logo_no_horizon_80")
 #else
-BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_160")
-BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_80")
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "logo_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "logo_80")
 #endif
 #endif
 BITMAP_ICON(IDB_TARGET, "map_target")
