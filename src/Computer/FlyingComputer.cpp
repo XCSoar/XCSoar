@@ -116,9 +116,9 @@ FlyingComputer::Check(FlyingState &state, fixed time)
   }
 
   // If we are not certainly flying we are probably on the ground
-  // To make sure that we are, wait for 10sec to make sure there
+  // To make sure that we are, wait for 2 minutes to make sure there
   // is no more movement
-  state.on_ground = !state.flying && stationary_clock >= fixed(10);
+  state.on_ground = !state.flying && stationary_clock >= fixed(120);
 }
 
 void
