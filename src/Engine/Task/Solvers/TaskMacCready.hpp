@@ -26,6 +26,7 @@
 #include "Util/StaticArray.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 #include <vector>
 #include <array>
@@ -101,7 +102,13 @@ public:
    */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _active_index,
-                const GlideSettings &settings, const GlidePolar &gp);
+                const GlideSettings &_settings, const GlidePolar &gp)
+    :points(_tps.begin(), _tps.end()),
+     active_index(_active_index),
+     start_index(0),
+     end_index(std::max((int)_tps.size(), 1) - 1),
+     settings(_settings),
+     glide_polar(gp) {}
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -110,7 +117,13 @@ public:
    * @param gp Glide polar to copy for calculations
    */
   TaskMacCready(TaskPoint* tp,
-                const GlideSettings &settings, const GlidePolar &gp);
+                const GlideSettings &_settings, const GlidePolar &gp)
+    :points(1, tp),
+     active_index(0),
+     start_index(0),
+     end_index(0),
+     settings(_settings),
+     glide_polar(gp) {}
 
   /**
    * Calculate glide solution

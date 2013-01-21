@@ -24,22 +24,6 @@
 #include "TaskSolution.hpp"
 #include "Task/Points/TaskPoint.hpp"
 
-TaskMacCreadyRemaining::TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
-                                               const unsigned _active_index,
-                                               const GlideSettings &settings,
-                                               const GlidePolar &_gp)
-  :TaskMacCready(_tps, _active_index, settings, _gp)
-{
-  start_index = active_index;
-}
-
-TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
-                                               const GlideSettings &settings,
-                                               const GlidePolar &_gp):
-  TaskMacCready(tp, settings, _gp)
-{
-}
-
 GlideResult
 TaskMacCreadyRemaining::tp_solution(const unsigned i,
                                     const AircraftState &aircraft,

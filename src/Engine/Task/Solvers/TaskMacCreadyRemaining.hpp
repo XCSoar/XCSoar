@@ -38,7 +38,10 @@ public:
    */
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
-                         const GlideSettings &settings, const GlidePolar &_gp);
+                         const GlideSettings &settings, const GlidePolar &_gp)
+    :TaskMacCready(_tps, _activeTaskPoint, settings, _gp) {
+    start_index = active_index;
+  }
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -47,7 +50,8 @@ public:
    * @param gp Glide polar to copy for calculations
    */
   TaskMacCreadyRemaining(TaskPoint* tp,
-                         const GlideSettings &settings, const GlidePolar &gp);
+                         const GlideSettings &settings, const GlidePolar &gp)
+    :TaskMacCready(tp, settings, gp) {}
 
   /**
    * Set ranges of all remaining task points

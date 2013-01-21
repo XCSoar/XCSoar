@@ -22,29 +22,8 @@
 
 #include "TaskMacCready.hpp"
 #include "TaskSolution.hpp"
-#include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 #include <algorithm>
-
-TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
-                             const unsigned _active_index,
-                             const GlideSettings &_settings,
-                             const GlidePolar &gp)
-  :points(_tps.begin(), _tps.end()),
-   active_index(_active_index),
-   start_index(0),
-   end_index(std::max((int)_tps.size(), 1) - 1),
-   settings(_settings),
-   glide_polar(gp) {}
-
-TaskMacCready::TaskMacCready(TaskPoint* tp, const GlideSettings &_settings,
-                             const GlidePolar &gp)
-  :points(1, tp),
-   active_index(0),
-   start_index(0),
-   end_index(0),
-   settings(_settings),
-   glide_polar(gp) {}
 
 GlideResult
 TaskMacCready::glide_solution(const AircraftState &aircraft)

@@ -39,7 +39,10 @@ public:
    */
   TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
-                         const GlideSettings &settings, const GlidePolar &_gp);
+                         const GlideSettings &settings, const GlidePolar &_gp)
+    :TaskMacCready(_tps, _activeTaskPoint, settings, _gp) {
+    end_index = active_index;
+  }
 
 private:
   /* virtual methods from class TaskMacCready */

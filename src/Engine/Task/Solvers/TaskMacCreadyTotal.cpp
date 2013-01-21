@@ -24,14 +24,6 @@
 #include "TaskSolution.hpp"
 #include "Task/Points/TaskPoint.hpp"
 
-TaskMacCreadyTotal::TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tps,
-                                       const unsigned _activeTaskPoint,
-                                       const GlideSettings &settings,
-                                       const GlidePolar &_gp)
-  :TaskMacCready(_tps, _activeTaskPoint, settings, _gp)
-{
-}
-
 GlideResult
 TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AircraftState &aircraft,
