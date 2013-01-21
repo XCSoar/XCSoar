@@ -28,27 +28,25 @@
 /**
  *  Abstract class to solve for travelled time.
  */
-class TaskSolveTravelled: 
-  public ZeroFinder
-{
+class TaskSolveTravelled : public ZeroFinder {
   const AircraftState &aircraft;
   fixed inv_dt;
   fixed dt;
 
-protected:
+ protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
 
-public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param gp Glide polar to copy for calculations
- * @param xmin Min value of search parameter
- * @param xmax Max value of search parameter
- */
+ public:
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param gp Glide polar to copy for calculations
+   * @param xmin Min value of search parameter
+   * @param xmax Max value of search parameter
+   */
   TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
                      const unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
@@ -57,20 +55,20 @@ public:
                      const fixed xmax);
   virtual ~TaskSolveTravelled() {};
 
-/**
- * Calls travelled calculator 
- *
- * @return Time error
- */
+  /**
+   * Calls travelled calculator
+   *
+   * @return Time error
+   */
   fixed time_error();
 
-/** 
- * Search for parameter value.
- * 
- * @param ce Default parameter value
- * 
- * @return Value producing same travelled time
- */
+  /**
+   * Search for parameter value.
+   *
+   * @param ce Default parameter value
+   *
+   * @return Value producing same travelled time
+   */
   virtual fixed search(const fixed ce);
 };
 

@@ -24,16 +24,16 @@
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Util/Tolerances.hpp"
 
-TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
+TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
                                        const unsigned activeTaskPoint,
                                        const AircraftState &_aircraft,
                                        const GlideSettings &settings,
                                        const GlidePolar &gp,
-                                       const fixed _xmin, 
-                                       const fixed _xmax):
-  ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_CRUISE_EFFICIENCY)),
-  aircraft(_aircraft),
-  tm(tps, activeTaskPoint, settings, gp)
+                                       const fixed _xmin,
+                                       const fixed _xmax)
+  :ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_CRUISE_EFFICIENCY)),
+   aircraft(_aircraft),
+   tm(tps, activeTaskPoint, settings, gp)
 {
   dt = aircraft.time-tps[0]->GetEnteredState().time;
   if (positive(dt)) {
@@ -45,8 +45,8 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
 
 #define SOLVE_ZERO
 
-fixed 
-TaskSolveTravelled::time_error() 
+fixed
+TaskSolveTravelled::time_error()
 {
   GlideResult res = tm.glide_solution(aircraft);
   if (!res.IsOk())
@@ -65,8 +65,8 @@ TaskSolveTravelled::time_error()
   return d*inv_dt;
 }
 
-fixed 
-TaskSolveTravelled::search(const fixed ce) 
+fixed
+TaskSolveTravelled::search(const fixed ce)
 {
 #ifdef SOLVE_ZERO
   return find_zero(ce);

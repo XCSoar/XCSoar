@@ -29,38 +29,37 @@
  *  Class to solve for virtual sink rate such that pure glide at
  *  block MacCready speeds with this sink rate would result in
  *  a solution perfectly on final glide.
- *  
+ *
  * \todo
  * - f() fails if Mc too low for wind, need to account for failed solution
  *
  */
-class TaskGlideRequired gcc_final : public ZeroFinder
-{
+class TaskGlideRequired gcc_final : public ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
 
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param gp Glide polar to copy for calculations
- */
-  TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param gp Glide polar to copy for calculations
+   */
+  TaskGlideRequired(const std::vector<OrderedTaskPoint *> &tps,
                     const unsigned activeTaskPoint,
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
 
-/** 
- * Constructor for single task points (non-ordered ones)
- * 
- * @param tp Task point comprising the task
- * @param _aircraft Current aircraft state
- * @param gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for single task points (non-ordered ones)
+   *
+   * @param tp Task point comprising the task
+   * @param _aircraft Current aircraft state
+   * @param gp Glide polar to copy for calculations
+   */
   TaskGlideRequired(TaskPoint* tp,
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
@@ -69,13 +68,13 @@ public:
 
   virtual fixed f(const fixed mc);
 
-/** 
- * Search for sink rate to produce final glide solution
- * 
- * @param s Default sink rate value (m/s)
- * 
- * @return Solution sink rate (m/s, down positive)
- */
+  /**
+   * Search for sink rate to produce final glide solution
+   *
+   * @param s Default sink rate value (m/s)
+   *
+   * @return Solution sink rate (m/s, down positive)
+   */
   virtual fixed search(const fixed s);
 };
 
