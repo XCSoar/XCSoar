@@ -364,7 +364,7 @@ public:
 
   constexpr fixed ceil() const {
     return fixed(fixed::internal(),
-                 ((m_nVal - 1) | ~(resolution - 1)) + 1);
+                 ((m_nVal - 1) | (resolution - 1)) + 1);
   }
 
   gcc_pure
