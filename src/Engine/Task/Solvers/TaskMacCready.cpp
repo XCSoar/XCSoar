@@ -22,6 +22,8 @@
 
 #include "TaskMacCready.hpp"
 #include "TaskSolution.hpp"
+#include "Task/Points/TaskPoint.hpp"
+#include "Navigation/Aircraft.hpp"
 
 #include <algorithm>
 

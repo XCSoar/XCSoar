@@ -26,9 +26,7 @@
 #include "Util/StaticArray.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
-#include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
-#include <vector>
 #include <array>
 
 struct AircraftState;
@@ -100,7 +98,8 @@ public:
    * @param _active_index Current active task point in sequence
    * @param gp Glide polar to copy for calculations
    */
-  TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
+  template<class V>
+  TaskMacCready(const V &_tps,
                 const unsigned _active_index,
                 const GlideSettings &_settings, const GlidePolar &gp)
     :points(_tps.begin(), _tps.end()),

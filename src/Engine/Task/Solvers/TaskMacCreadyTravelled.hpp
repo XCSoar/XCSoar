@@ -37,7 +37,8 @@ public:
    * @param _activeTaskPoint Current active task point in sequence
    * @param _gp Glide polar to copy for calculations
    */
-  TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
+  template<class V>
+  TaskMacCreadyTravelled(const V &_tps,
                          const unsigned _activeTaskPoint,
                          const GlideSettings &settings, const GlidePolar &_gp)
     :TaskMacCready(_tps, _activeTaskPoint, settings, _gp) {

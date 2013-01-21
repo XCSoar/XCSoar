@@ -21,8 +21,9 @@
  */
 
 #include "TaskBestMc.hpp"
-#include <math.h>
+#include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Util/Tolerances.hpp"
+
 #include <algorithm>
 
 // @todo only engage this class if above final glide at mc=0
