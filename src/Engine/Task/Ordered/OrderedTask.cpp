@@ -762,7 +762,8 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyRemaining tm(task_points, active_task_point,
+  TaskMacCreadyRemaining tm(task_points.cbegin(), task_points.cend(),
+                            active_task_point,
                             task_behaviour.glide, polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
@@ -774,7 +775,8 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyTravelled tm(task_points, active_task_point,
+  TaskMacCreadyTravelled tm(task_points.cbegin(), task_points.cend(),
+                            active_task_point,
                             task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();
@@ -790,7 +792,8 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg)
 {
-  TaskMacCreadyTotal tm(task_points, active_task_point,
+  TaskMacCreadyTotal tm(task_points.cbegin(), task_points.cend(),
+                        active_task_point,
                         task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();

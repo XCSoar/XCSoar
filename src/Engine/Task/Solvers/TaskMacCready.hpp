@@ -98,14 +98,14 @@ public:
    * @param _active_index Current active task point in sequence
    * @param gp Glide polar to copy for calculations
    */
-  template<class V>
-  TaskMacCready(const V &_tps,
+  template<class I>
+  TaskMacCready(const I tps_begin, const I tps_end,
                 const unsigned _active_index,
                 const GlideSettings &_settings, const GlidePolar &gp)
-    :points(_tps.begin(), _tps.end()),
+    :points(tps_begin, tps_end),
      active_index(_active_index),
      start_index(0),
-     end_index(std::max((int)_tps.size(), 1) - 1),
+     end_index(std::max((int)points.size(), 1) - 1),
      settings(_settings),
      glide_polar(gp) {}
 

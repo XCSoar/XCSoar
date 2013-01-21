@@ -30,7 +30,7 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint *> &tps,
                                      const GlideSettings &settings,
                                      const GlidePolar &_gp)
   :ZeroFinder(-fixed(10), fixed(10), fixed(TOLERANCE_GLIDE_REQUIRED)),
-   tm(tps, activeTaskPoint, settings, _gp),
+   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft)
 {
   // Vopt at mc=0

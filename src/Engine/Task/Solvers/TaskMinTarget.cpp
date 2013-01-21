@@ -32,7 +32,7 @@ TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const fixed _t_remaining,
                              StartPoint *_ts)
   :ZeroFinder(fixed(0), fixed(1), fixed(TOLERANCE_MIN_TARGET)),
-   tm(tps, activeTaskPoint, settings, _gp),
+   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
    aircraft(_aircraft),
    t_remaining(_t_remaining),
    tp_start(_ts),

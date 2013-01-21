@@ -32,15 +32,14 @@ public:
   /**
    * Constructor for ordered task points
    *
-   * @param _tps Vector of ordered task points comprising the task
    * @param _activeTaskPoint Current active task point in sequence
    * @param _gp Glide polar to copy for calculations
    */
-  template<class V>
-  TaskMacCreadyRemaining(const V &_tps,
+  template<class I>
+  TaskMacCreadyRemaining(const I tps_begin, const I tps_end,
                          const unsigned _activeTaskPoint,
                          const GlideSettings &settings, const GlidePolar &_gp)
-    :TaskMacCready(_tps, _activeTaskPoint, settings, _gp) {
+    :TaskMacCready(tps_begin, tps_end, _activeTaskPoint, settings, _gp) {
     start_index = active_index;
   }
 
