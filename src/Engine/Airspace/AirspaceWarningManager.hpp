@@ -177,7 +177,7 @@ public:
    *
    * @return Number of items in warning list
    */
-  size_t size() const {
+  AirspaceWarningList::size_type size() const {
     return warnings.size();
   }
 
