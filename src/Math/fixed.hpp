@@ -11,7 +11,6 @@
 #include "Constants.h"
 
 #include <utility>
-#include <complex>
 
 #include <assert.h>
 
@@ -108,7 +107,6 @@ inline fixed accurate_half_sin(fixed a) {
 #define FIXED_INT(x) x.as_int()
 
 #include <type_traits>
-#include <complex>
 #include <climits>
 
 #ifdef HAVE_BOOST
@@ -926,24 +924,6 @@ inline fixed sigmoid(const fixed x)
 {
   return ::fixed::sigmoid(x);
 }
-
- namespace std
- {
-   template<>
-   inline ::fixed arg(const std::complex< ::fixed>& val)
-   {
-     ::fixed r,theta;
-     ::fixed::to_polar(val.real(),val.imag(),&r,&theta);
-     return theta;
-   }
-
-   template<>
-   inline complex< ::fixed> polar(::fixed const& rho,::fixed const& theta)
-   {
-     const auto sc = ::fixed::sin_cos(theta);
-     return complex< ::fixed>(rho * sc.second, rho * sc.first);
-   }
- }
 
 #define fixed_max fixed(fixed::internal(), 0x7fffffffffffffffLL)
 
