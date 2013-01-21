@@ -76,7 +76,7 @@ protected:
   /**
    * TaskPoint sequence index of first taskpoint included in scan.
    */
-  int start_index;
+  static constexpr int start_index = 0;
 
   /**
    * TaskPoint sequence index of last taskpoint included in scan.
@@ -104,7 +104,6 @@ public:
                 const GlideSettings &_settings, const GlidePolar &gp)
     :points(tps_begin, tps_end),
      active_index(_active_index),
-     start_index(0),
      end_index(std::max((int)points.size(), 1) - 1),
      settings(_settings),
      glide_polar(gp) {}
@@ -119,7 +118,6 @@ public:
                 const GlideSettings &_settings, const GlidePolar &gp)
     :points(1, tp),
      active_index(0),
-     start_index(0),
      end_index(0),
      settings(_settings),
      glide_polar(gp) {}
