@@ -881,7 +881,7 @@ OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
 }
 
 
-fixed
+inline fixed
 OrderedTask::CalcMinTarget(const AircraftState &aircraft,
                            const GlidePolar &glide_polar,
                            const fixed t_target)

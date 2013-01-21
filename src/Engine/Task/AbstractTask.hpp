@@ -249,24 +249,6 @@ protected:
                                fixed &val) const;
 
   /**
-   * Optimise target ranges (for adjustable tasks) to produce an estimated
-   * time remaining with the current glide polar, equal to a target value.
-   *
-   * For non-ordered tasks, this doesn't do anything and returns 0.0
-   *
-   * @param state_now Aircraft state
-   * @param t_target Desired time for remainder of task (s)
-   *
-   * @return Target range parameter (0-1)
-   */
-  gcc_pure
-  virtual fixed CalcMinTarget(const AircraftState &state_now, 
-                              const GlidePolar &glide_polar,
-                              const fixed t_target) {
-    return fixed(0);
-  };
-
-  /**
    * Calculate angle from aircraft to destination of current leg
    * (height above taskpoint divided by distance to go).
    *

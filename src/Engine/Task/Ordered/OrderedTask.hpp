@@ -442,6 +442,19 @@ private:
   fixed ScanDistanceMax();
 
   /**
+   * Optimise target ranges (for adjustable tasks) to produce an estimated
+   * time remaining with the current glide polar, equal to a target value.
+   *
+   * @param state_now Aircraft state
+   * @param t_target Desired time for remainder of task (s)
+   *
+   * @return Target range parameter (0-1)
+   */
+  fixed CalcMinTarget(const AircraftState &state_now,
+                      const GlidePolar &glide_polar,
+                      const fixed t_target);
+
+  /**
    * Sets previous/next taskpoint pointers for task point at specified
    * index in sequence.
    *
@@ -649,9 +662,6 @@ protected:
   virtual bool CalcEffectiveMC(const AircraftState &state_now,
                                const GlidePolar &glide_polar,
                                fixed &value) const gcc_override;
-  virtual fixed CalcMinTarget(const AircraftState &state_now,
-                              const GlidePolar &glide_polar,
-                              const fixed t_target) gcc_override;
   virtual fixed CalcGradient(const AircraftState &state_now) const gcc_override;
   virtual fixed ScanTotalStartTime(const AircraftState &state_now) gcc_override;
   virtual fixed ScanLegStartTime(const AircraftState &state_now) gcc_override;
