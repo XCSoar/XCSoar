@@ -39,8 +39,8 @@ public:
   TaskMacCreadyRemaining(const I tps_begin, const I tps_end,
                          const unsigned _activeTaskPoint,
                          const GlideSettings &settings, const GlidePolar &_gp)
-    :TaskMacCready(tps_begin, tps_end, _activeTaskPoint, settings, _gp) {
-    start_index = active_index;
+    :TaskMacCready(std::next(tps_begin, _activeTaskPoint), tps_end, 0,
+                   settings, _gp) {
   }
 
   /**
