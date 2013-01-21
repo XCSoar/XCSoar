@@ -127,8 +127,9 @@ public:
    *
    * @return Glide result for entire task with virtual sink rate
    */
+  gcc_pure
   GlideResult glide_sink(const AircraftState &aircraft,
-                         const fixed S);
+                         const fixed S) const;
 
   /**
    * Adjust MacCready value of internal glide polar
@@ -172,6 +173,7 @@ private:
    *
    * @return Min height (m) of entire task
    */
+  gcc_pure
   virtual fixed get_min_height(const AircraftState &state) const = 0;
 
   /**
@@ -197,8 +199,9 @@ private:
    *
    * @param state Actual aircraft state
    *
- * @return Aircraft state at start of task
- */
+   * @return Aircraft state at start of task
+   */
+  gcc_pure
   virtual const AircraftState &
   get_aircraft_start(const AircraftState &state) const = 0;
 };

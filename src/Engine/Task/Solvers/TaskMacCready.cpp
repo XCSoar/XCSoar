@@ -64,7 +64,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
 }
 
 GlideResult
-TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
+TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S) const
 {
   AircraftState aircraft_predict = aircraft;
   GlideResult acc_gr;
