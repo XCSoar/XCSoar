@@ -52,7 +52,7 @@ public:
    * 
    * @return Initialised object
    */
-  Deserialiser(DataNode &_node, const Waypoints *_waypoints=NULL)
+  Deserialiser(DataNode &_node, const Waypoints *_waypoints=nullptr)
     :node(_node), waypoints(_waypoints) {}
 
   /** 
@@ -73,7 +73,7 @@ protected:
   /** 
    * Deserialise a Waypoint; client responsible for deletion
    * 
-   * @return Newly constructed Waypoint or NULL on failure
+   * @return Newly constructed Waypoint or nullptr on failure
    */
   Waypoint* DeserialiseWaypoint();
 
@@ -90,7 +90,7 @@ protected:
    * @param wp Waypoint base of point
    * @param is_turnpoint Whether the point is a turnpoint
    *
-   * @return Newly constructed ObservationZonePoint or NULL on failure
+   * @return Newly constructed ObservationZonePoint or nullptr on failure
    */
   ObservationZonePoint* DeserialiseOZ(const Waypoint &wp, bool is_turnpoint);
 

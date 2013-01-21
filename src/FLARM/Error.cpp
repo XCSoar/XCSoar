@@ -58,13 +58,13 @@ static constexpr struct {
   { FlarmError::Code::TRANSPONDER_RECEIVER,
     N_("Transponder receiver") },
   { FlarmError::Code::OTHER, N_("Other") },
-  { FlarmError::Code::OTHER, NULL }
+  { FlarmError::Code::OTHER, nullptr }
 };
 
 const TCHAR *
 FlarmError::ToString(Code code)
 {
-  for (auto i = error_strings; i->string != NULL; ++i)
+  for (auto i = error_strings; i->string != nullptr; ++i)
     if (i->code == code)
       return i->string;
 

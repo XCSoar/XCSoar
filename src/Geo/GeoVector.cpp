@@ -51,5 +51,5 @@ fixed
 GeoVector::MinimumDistance(const GeoPoint &source,
                             const GeoPoint &ref) const
 {
-  return ::CrossTrackError(source, EndPoint(source), ref, NULL);
+  return ::CrossTrackError(source, EndPoint(source), ref, nullptr);
 }

@@ -45,7 +45,7 @@ void
 Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
-  if (type == NULL)
+  if (type == nullptr)
     return;
 
   std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
@@ -61,7 +61,7 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
 
   AbstractTaskFactory &fact = data.GetFactory();
 
-  ObservationZonePoint* oz = NULL;
+  ObservationZonePoint* oz = nullptr;
   std::unique_ptr<OrderedTaskPoint> pt;
 
   if (oz_node) {
@@ -73,25 +73,33 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
   }
 
   if (StringIsEqual(type, _T("Start"))) {
-    pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
+    pt.reset(oz != nullptr
+             ? fact.CreateStart(oz, *wp)
+             : fact.CreateStart(*wp));
 
   } else if (StringIsEqual(type, _T("OptionalStart"))) {
-    pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
+    pt.reset(oz != nullptr
+             ? fact.CreateStart(oz, *wp)
+             : fact.CreateStart(*wp));
     fact.AppendOptionalStart(*pt);
 
     // don't let generic code below add it
     pt.reset();
 
   } else if (StringIsEqual(type, _T("Turn"))) {
-    pt.reset((oz != NULL) ? fact.CreateASTPoint(oz, *wp)
-                          : fact.CreateIntermediate(*wp));
+    pt.reset(oz != nullptr
+             ? fact.CreateASTPoint(oz, *wp)
+             : fact.CreateIntermediate(*wp));
 
   } else if (StringIsEqual(type, _T("Area"))) {
-    pt.reset((oz != NULL) ? fact.CreateAATPoint(oz, *wp)
-                          : fact.CreateIntermediate(*wp));
+    pt.reset(oz != nullptr
+             ? fact.CreateAATPoint(oz, *wp)
+             : fact.CreateIntermediate(*wp));
 
   } else if (StringIsEqual(type, _T("Finish"))) {
-    pt.reset((oz != NULL) ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
+    pt.reset(oz != nullptr
+             ? fact.CreateFinish(oz, *wp)
+             : fact.CreateFinish(*wp));
   } 
 
   if (pt)
@@ -102,8 +110,8 @@ ObservationZonePoint*
 Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
-  if (type == NULL)
-    return NULL;
+  if (type == nullptr)
+    return nullptr;
 
   if (StringIsEqual(type, _T("Line"))) {
     LineSectorZone *ls = new LineSectorZone(wp.location);
@@ -154,7 +162,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
     return new BGAEnhancedOptionZone(wp.location);
 
   assert(1);
-  return NULL;
+  return nullptr;
 }
 
 void 
@@ -169,23 +177,23 @@ Deserialiser::DeserialiseWaypoint()
 {
   std::unique_ptr<DataNode> loc_node(node.GetChildNamed(_T("Location")));
   if (!loc_node)
-    return NULL;
+    return nullptr;
 
   GeoPoint loc;
   Deserialiser lser(*loc_node, waypoints);
   lser.Deserialise(loc);
 
   const TCHAR *name = node.GetAttribute(_T("name"));
-  if (name == NULL)
+  if (name == nullptr)
     // Turnpoints need names
-    return NULL;
+    return nullptr;
 
-  if (waypoints != NULL) {
+  if (waypoints != nullptr) {
     // Try to find waypoint by name
     const Waypoint *from_database = waypoints->LookupName(name);
 
     // If waypoint by name found and closer than 10m to the original
-    if (from_database != NULL &&
+    if (from_database != nullptr &&
         from_database->location.Distance(loc) <= fixed(10))
       // Use this waypoint for the task
       return new Waypoint(*from_database);
@@ -194,7 +202,7 @@ Deserialiser::DeserialiseWaypoint()
     from_database = waypoints->GetNearest(loc, fixed(10));
 
     // If closest waypoint found and closer than 10m to the original
-    if (from_database != NULL &&
+    if (from_database != nullptr &&
         from_database->location.Distance(loc) <= fixed(10))
       // Use this waypoint for the task
       return new Waypoint(*from_database);
@@ -207,7 +215,7 @@ Deserialiser::DeserialiseWaypoint()
   node.GetAttribute(_T("id"), wp->id);
 
   const TCHAR *comment = node.GetAttribute(_T("comment"));
-  if (comment != NULL)
+  if (comment != nullptr)
     wp->comment.assign(comment);
 
   node.GetAttribute(_T("altitude"), wp->elevation);
@@ -257,7 +265,7 @@ AltitudeReference
 Deserialiser::GetHeightRef(const TCHAR *nodename) const
 {
   const TCHAR *type = node.GetAttribute(nodename);
-  if (type != NULL && StringIsEqual(type, _T("MSL")))
+  if (type != nullptr && StringIsEqual(type, _T("MSL")))
     return AltitudeReference::MSL;
 
   return AltitudeReference::AGL;
@@ -267,7 +275,7 @@ TaskFactoryType
 Deserialiser::GetTaskFactoryType() const
 {
   const TCHAR *type = node.GetAttribute(_T("type"));
-  if (type == NULL)
+  if (type == nullptr)
     return TaskFactoryType::FAI_GENERAL;
 
   if (StringIsEqual(type, _T("FAIGeneral")))

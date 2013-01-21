@@ -49,8 +49,8 @@ public:
   LogComputer();
 
   void SetLogger(Logger *_logger) {
-    assert(logger == NULL);
-    assert(_logger != NULL);
+    assert(logger == nullptr);
+    assert(_logger != nullptr);
 
     logger = _logger;
   }

@@ -199,12 +199,12 @@ void
 DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
                 fixed *distance, Angle *bearing)
 {
-  if (distance != NULL) {
+  if (distance != nullptr) {
     Angle distance_angle;
     DistanceBearingS(loc1, loc2, &distance_angle, bearing);
     *distance = AngleToEarthDistance(distance_angle);
   } else
-    DistanceBearingS(loc1, loc2, NULL, bearing);
+    DistanceBearingS(loc1, loc2, nullptr, bearing);
 }
 
 fixed
@@ -352,7 +352,7 @@ fixed
 Distance(const GeoPoint &loc1, const GeoPoint &loc2)
 {
   fixed distance;
-  DistanceBearing(loc1, loc2, &distance, NULL);
+  DistanceBearing(loc1, loc2, &distance, nullptr);
   return distance;
 }
 
@@ -360,6 +360,6 @@ Angle
 Bearing(const GeoPoint &loc1, const GeoPoint &loc2)
 {
   Angle bearing;
-  DistanceBearing(loc1, loc2, NULL, &bearing);
+  DistanceBearing(loc1, loc2, nullptr, &bearing);
   return bearing;
 }

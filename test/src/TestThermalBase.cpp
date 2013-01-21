@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   GeoPoint ground_location(Angle::Zero(), Angle::Zero());
   fixed ground_alt;
 
-  EstimateThermalBase(NULL, location, altitude, average, wind,
+  EstimateThermalBase(nullptr, location, altitude, average, wind,
                       ground_location, ground_alt);
 
   ok1(equals(ground_location.longitude.Degrees(), 7.114186));

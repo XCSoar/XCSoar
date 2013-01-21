@@ -29,7 +29,7 @@ Copyright_License {
 //SI to Local Units
 
 const UnitDescriptor Units::unit_descriptors[] = {
-  { NULL, fixed(1), fixed(0) },
+  { nullptr, fixed(1), fixed(0) },
   { _T("km"), fixed(0.001), fixed(0) },
   { _T("NM"), fixed(0.000539956803), fixed(0) },
   { _T("mi"), fixed(0.000621371192), fixed(0) },
@@ -58,7 +58,7 @@ Units::GetUnitName(Unit unit)
 {
   const unsigned i = (unsigned)unit;
   assert(i < ARRAY_SIZE(unit_descriptors));
-  assert(unit_descriptors[i].name != NULL);
+  assert(unit_descriptors[i].name != nullptr);
 
   return unit_descriptors[i].name;
 }
