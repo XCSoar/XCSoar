@@ -30,6 +30,8 @@
 #include "Util/Clamp.hpp"
 #include "Navigation/Aircraft.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :

@@ -29,6 +29,8 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Util/DebugFlag.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 class WindowProjection:

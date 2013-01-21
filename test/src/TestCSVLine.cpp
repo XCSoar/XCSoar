@@ -24,6 +24,7 @@
 #include "TestUtil.hpp"
 
 #include <cstring>
+#include <string>
 
 static void
 Test1()

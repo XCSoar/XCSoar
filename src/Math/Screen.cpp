@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Util/Clamp.hpp"
 
-#include <math.h>
+#include <algorithm>
 
 // note these use static vars! not thread-safe
 

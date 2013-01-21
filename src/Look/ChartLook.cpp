@@ -26,6 +26,8 @@ Copyright_License {
 #include "StandardFonts.hpp"
 #include "Screen/Layout.hpp"
 
+#include <algorithm>
+
 void
 ChartLook::Initialise()
 {

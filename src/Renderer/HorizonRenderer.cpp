@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/Attitude.hpp"
 #include "Util/Clamp.hpp"
 
+#include <algorithm>
+
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const HorizonLook &look,

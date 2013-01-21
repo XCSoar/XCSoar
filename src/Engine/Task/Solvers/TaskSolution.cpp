@@ -27,6 +27,8 @@
 #include "Navigation/Aircraft.hpp"
 #include "Task/Points/TaskPoint.hpp"
 
+#include <algorithm>
+
 GlideResult 
 TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,

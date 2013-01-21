@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 #include <assert.h>
+#include <stdint.h>
 
 class RoughTime;
 struct DialogLook;

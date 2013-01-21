@@ -25,6 +25,8 @@ Copyright_License {
 #include "Geo/Constants.hpp"
 #include "Math/Angle.hpp"
 
+#include <algorithm>
+
 Projection::Projection() :
   geo_location(Angle::Zero(), Angle::Zero()),
   screen_rotation(Angle::Zero())

@@ -32,6 +32,8 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Time/RoughTime.hpp"
 
+#include <stdio.h>
+
 DigitEntry::~DigitEntry()
 {
 }

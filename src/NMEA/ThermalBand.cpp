@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "ThermalBand.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 void

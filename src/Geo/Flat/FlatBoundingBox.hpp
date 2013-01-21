@@ -25,6 +25,8 @@
 #include "FlatGeoPoint.hpp"
 #include "Compiler.h"
 
+#include <algorithm>
+
 class FlatRay;
 
 /**

@@ -26,6 +26,8 @@
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 
+#include <algorithm>
+
 static Color
 GetVario1Color(short ramp_h) {
   static constexpr ColorRamp snail_colors_vario[] = {

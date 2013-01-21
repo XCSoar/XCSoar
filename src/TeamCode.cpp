@@ -27,7 +27,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <math.h>
+#include <algorithm>
+
 #include <string.h>
 
 #define TEAMCODE_COMBINATIONS 1296

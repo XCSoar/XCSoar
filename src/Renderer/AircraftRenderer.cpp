@@ -33,6 +33,8 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #endif
 
+#include <algorithm>
+
 class RotatedPolygonRenderer {
 #ifdef ENABLE_OPENGL
   const RasterPoint *points;

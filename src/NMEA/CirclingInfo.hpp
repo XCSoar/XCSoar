@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <type_traits>
 
+#include <stdint.h>
+
 /** Enumeration for cruise/circling mode detection */
 enum class CirclingMode: uint8_t {
   /** Established cruise mode */

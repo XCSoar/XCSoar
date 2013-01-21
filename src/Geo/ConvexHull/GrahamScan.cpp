@@ -173,7 +173,7 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
     output.push_back(i);
 
     while (output.size() >= 3) {
-      size_t end = output.size() - 1;
+      const auto end = output.size() - 1;
 
       if (factor * Direction(output[end - 2]->GetLocation(),
                              output[end]->GetLocation(),

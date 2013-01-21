@@ -28,6 +28,8 @@
 
 #include <type_traits>
 
+#include <stdint.h>
+
 struct GlideState;
 struct AircraftState;
 

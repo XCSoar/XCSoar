@@ -26,6 +26,8 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Util/Macros.hpp"
 
+#include <stddef.h>
+
 //SI to Local Units
 
 const UnitDescriptor Units::unit_descriptors[] = {

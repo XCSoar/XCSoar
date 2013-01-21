@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "AirspaceWarning.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 AirspaceWarning::AirspaceWarning(const AbstractAirspace &_airspace):

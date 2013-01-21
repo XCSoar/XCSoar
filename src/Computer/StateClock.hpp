@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 
 /**

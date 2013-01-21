@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Util/Macros.hpp"
 
+#include <algorithm>
+
 #include <tchar.h>
 #include <cstdio>
 

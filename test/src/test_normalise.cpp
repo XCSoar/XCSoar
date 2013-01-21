@@ -23,6 +23,7 @@
 #include "TestUtil.hpp"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 static 
 void test_normalise_err(const int x, const int y) 

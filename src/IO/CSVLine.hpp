@@ -27,6 +27,8 @@ Copyright_License {
 #include "Util/Range.hpp"
 #include "Math/fixed.hpp"
 
+#include <stddef.h>
+
 /**
  * A helper class which can dissect a NMEA input line.
  */

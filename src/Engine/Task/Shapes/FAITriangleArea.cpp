@@ -27,6 +27,8 @@ Copyright_License {
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
 
+#include <algorithm>
+
 using namespace FAITriangleRules;
 
 static constexpr unsigned STEPS = FAI_TRIANGLE_SECTOR_MAX / 3 / 8;

@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "Wind/WindEKF.hpp"
 
-#include <math.h>
+#include <stdint.h>
 
 void
 WindEKF::StatePrediction(float gps_vel[2], float dT)

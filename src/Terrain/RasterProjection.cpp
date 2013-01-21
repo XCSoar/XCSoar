@@ -25,6 +25,8 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Constants.hpp"
 
+#include <algorithm>
+
 void
 RasterProjection::Set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
