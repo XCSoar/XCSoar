@@ -70,7 +70,9 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
   GlideResult acc_gr;
 
   for (unsigned i = 0, size = points.size(); i < size; ++i) {
-    const GlideResult gr = tp_sink(i, aircraft_predict, S);
+    const GlideResult gr =
+      TaskSolution::GlideSolutionSink(*points[i], aircraft_predict,
+                                      settings, glide_polar, S);
 
     aircraft_predict.altitude -= gr.height_glide;
     if (i == 0)
@@ -81,13 +83,4 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
   }
 
   return acc_gr;
-}
-
-GlideResult
-TaskMacCready::tp_sink(const unsigned i,
-                       const AircraftState &aircraft,
-                       const fixed S) const
-{
-  return TaskSolution::GlideSolutionSink(*points[i], aircraft,
-                                         settings, glide_polar, S);
 }

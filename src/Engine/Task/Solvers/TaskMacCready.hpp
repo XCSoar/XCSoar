@@ -160,22 +160,6 @@ public:
     return leg_solutions[active_index];
   }
 
-protected:
-
-  /**
-   * Calculate glide solution for specified index, given
-   * aircraft state and virtual sink rate.
-   *
-   * @param index Index of task point
-   * @param state Aircraft state at origin
-   * @param S Sink rate (m/s, positive down)
-   *
-   * @return Glide result for segment
-   */
-  GlideResult tp_sink(const unsigned index,
-                      const AircraftState &state,
-                      const fixed S) const;
-
 private:
 
   /**
