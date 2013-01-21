@@ -81,7 +81,7 @@ protected:
   /**
    * TaskPoint sequence index of last taskpoint included in scan.
    */
-  int end_index;
+  const int end_index;
 
   const GlideSettings &settings;
 
