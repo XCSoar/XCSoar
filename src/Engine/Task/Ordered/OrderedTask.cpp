@@ -466,15 +466,14 @@ OrderedTask::UpdateIdle(const AircraftState &state,
     CalcMinTarget(state, glide_polar,
                   GetOrderedTaskBehaviour().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
 
-    if (task_behaviour.optimise_targets_bearing) {
-      if (task_points[active_task_point]->GetType() == TaskPointType::AAT) {
-        AATPoint *ap = (AATPoint *)task_points[active_task_point];
-        // very nasty hack
-        TaskOptTarget tot(task_points, active_task_point, state,
-                          task_behaviour.glide, glide_polar,
-                          *ap, task_projection, taskpoint_start);
-        tot.search(fixed(0.5));
-      }
+    if (task_behaviour.optimise_targets_bearing &&
+        task_points[active_task_point]->GetType() == TaskPointType::AAT) {
+      AATPoint *ap = (AATPoint *)task_points[active_task_point];
+      // very nasty hack
+      TaskOptTarget tot(task_points, active_task_point, state,
+                        task_behaviour.glide, glide_polar,
+                        *ap, task_projection, taskpoint_start);
+      tot.search(fixed(0.5));
     }
     retval = true;
   }
