@@ -1,0 +1,189 @@
+\chapter{Avionik und Zusatzgeräte}\label{cha:avionics-airframe}
+
+In diesem Kapitel werden  die Möglichkeiten beschrieben,  diverse Geräte, wie z.B.\ ein GPS oder ein Vario anzuschließen und gibt Informationen, wie zusätzliche Sensoren adaptiert werden können.
+\warning  Da es sich bei \textsf{XCSoar} um Software handelt, kann hier nicht erwartet werden, wie solcherart Geräte hardwaremäßig, also mit Kabeln etc.\ anzuschließen sind. Bauanleitungen finden sich hier nicht.
+
+Auf die Integration von FLARM wird im Kapitel~\ref{cha:airspace}  eingegangen, Variometer werden in Kap.~\ref{cha:atmosph}.   behandelt.
+
+\section{Batteriezustand}
+
+Die meisten \textsf{PDA} sind so ausgelegt und designt, ab und zu angeschaltet zu werden, und verfügen demgemäß nicht über einen guten Akku mit länger Laufzeit, wenn man hier die Dauer eines guten Überlandfluges gegenüberstellt. Aus diesem Grunde wird sehr empfohlen, \textsf{PDA} und andere Geräte mittels eines separaten Akkus zu versorgen. Diese Spannungsversorgung sollte grundsätzlich von qualifiziertem Personal erfolgen, weiterhin abgesichert und mit einem Schalter zur  Trennung vom Stromkreis versehen sein.
+
+Der größte Verbraucher eines \textsf{PDA} ist die LCD-Hintergrundbeleuchtung, welche in den meisten Fällen notwendig ist, daß diese Geräte nicht über ein im Sonnenlicht gut erkennbares Display verfügen. Zwar gibt es Geräte mit transflektivem Display, welche bei Sonnenschein sogar brillianter werden (z.B.\ die A600-Serie von Asus), doch diese stellen die Ausnahme dar und sind selten auf dem Markt zu bekommen.  In den allermeisten Fällen wird daher die Beleuchtung auf "voll an" stehen. Im Gegensatz dazu, kann bei einem EFIS-System, wie z.B.\ dem \textsf{Altair} die Beleuchtung auf kleinster Stufe stehen.
+
+
+Wenn \textsf{PDA}s mit dem internen Akku betrieben wird, kann  \textsf{XCSoar} einen niedrigen Batteriezustand detektieren und so abschalten, um den aktuellen Zustand zu speichern. Weiterhin kann es z.B. nach einer gewissen Zeit an Untätigkeit einen leeren Bildschirm  darstellen, um Energie zu sparen.   Um wieder in den normalen Anzeigemodus zu gelangen, wird einfach einer der Hardwareknöpfe bedient. Wenn vom System eine Statusmeldung hierzu vorgesehen wurde, wird diese dementsprechend aktiviert/inaktiviert.
+
+Ein andere Möglichkeit, Strom zu sparen ist es, manche Features abzuschalten, so nimmt z.B. die ständige Neuberechnung und -zeichnen des Terrains während des Fluges als Hintergrundprozeß  signifikante Rechenleistung der CPU in Anspruch.
+
+Beim \textsf{Altair}/Vega system wird die externe Versorgungsspannung im Status-Display des System-Dialogfensters zu sehen.
+ Hierzu auch Abschnitt~\ref{sec:system-status-dialog}).
+
+Für andere Plattformen, ist eine \infobox{Batterie} InfoBox vorgesehen, welche über den Zustand informiert.
+(vorhandene Kapazität, interner/externer Batteriebetrieb, Ladezustand: ein/aus)
+
+\subsection*{GPS Status}\index{GPS!Status}
+
+\textsf{XCSoar} benötigt 3D-GPS fixe für die Berechnung von Navigationsaufgaben.
+Das bedeutet, daß mindestens 4 Satelliten erkannt werden müssen.
+
+Der Status des GPS wird am unteren Rand des Displays dargestellt:
+
+\begin{tabular}{c c}%{c c}
+\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_acquiring.pdf} & \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_disconnected.pdf}\\
+(a) & (b)
+\end{tabular}
+
+\begin{description}
+\item[Warte auf gültigen GPS-fix (a)]  Das GPS wird vom Programm richtig erkannt. Zur Funktion wird aber ein besserer Empfang benötigt.Es kann sein, daß ein 2D Fix vorhanden ist, welcher aber nicht für alle Berechnungen ausreichend ist.
+Solange kein 3D-fix erkannt wird, erscheint ein kleines Flugzeug als Symbol.
+
+\item[GPS nicht verbunden (b)]  Es kann keine Verbindung zum GPS hergestellt werden.
+ (GPS ausgeschaltet, Kabelbruch , RTD/TXD vertauscht, falsche baud-Rate, falscher COM-Port)
+\end{description}
+
+Falls ein GPS für mehr als eine Minute keine gültigen Daten sendet, wird \textsf{XCSoar} die Datenverbindung 
+automatisch erneut etablieren und wiederum auf gültige Daten warten, dies wird solange fortgesetzt, 
+bis gültige Daten zur Verarbeitung vorhanden sind. 
+
+
+Diese Methode hat sich als die zuverlässigste bewährt, wenn Kommunikationsfehler auftreten.
+
+\textsf{XCSoar} kann bis zu zwei GPS-Quellen verwalten um Redundanz zu bieten\index{GPS!Redundnaz}
+Diese GPS Quellen werden auf der NMEA-Anschluß-Seite konfiguriert und als GERÄT A bzw.\ GERÄT B 
+\menulabel{\bmenut{Konfig.}{2/3}\blink\,\bmenut{System}{Einstellung}\\[5pt]\mbutton{Einstellung}\blink\,\button{\footnotesize NMEA-Anschluß}} 
+bezeichnet.  Gerät  A ist das primäre Gerät und Gerät B ist das sekundäre Gerät.
+
+%Einstellungen hierzu über das folgende Menü:
+%\begin{quote}
+%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{System}{Einstellung}\blink
+%\seite{15}
+%\end{quote}
+
+Falls während des Betriebes das primäre GPS ausfällt, wird auf das sekundäre GPS zurückgegriffen. Wenn beide Geräte gültige Fixe erzeugen, wird grundsätzlich das primäre Gerät benutzt und das sekundäre ignoriert.  Aus diesem Grunde ist es dringend vorzuziehen, das beste am zuverlässigste Gerät als primäres Gerät (Gerät A) zu definieren.
+
+\subsection*{GPS Höhe}
+
+Manch ältere GPS  (und auch manche neue(!)) geben die Höhe nicht relativ zum MSL aus, sondern beziehen sich auf den WGS84-Ellipsoid.  \textsf{XCSoar} detektiert dies und muß anhand einer internen Tabelle jede Koordinate umrechnen.
+Dies ist nicht notwendig, wenn FLARM oder \textsf{Altair} benutzt werden, welche die Höhe korrekt bzgl. MSL ausgeben.
+%%%%%%%%%%%%%%
+\section{Schalter als digitale Eingänge}\index{Digitale Eingänge}\index{Schalter}
+
+\textsf{XCSoar} unterstützt Sensoren und Schalter, welche an einem Hauptrechner angeschlossen sind, um z.B. Alarme auszugeben. Die Zustände dieser Schalter bzw. Eingänge können auf folgende Arten von \textsf{XCSoar} verarbeitet werden:
+
+\begin{description}
+     \item[Serielle Schnittstelle]  Einige "intelligente" Varios, wie das \\textsf{triadis Vega} können etliche  Eingänge verwalten und senden diese über das NMEA Protokoll zu weiterverarbeitender Soft- oder Hardware wie z.B. an \textsf{XCSoar} oder aber an das EFIS System \textsf{Altair}.
+     \item[1-Draht-Gerät]  \textsf{triadis \textsf{Altair}} und das Vega Variometer unterstützen den 1-Draht Bus und können so digitale und analoge(!) Signale verarbeiten
+     \item[Bluetooth Gerät]  Sehr viele Pocket \textsf{PC}s unterstützen Bluetooth, sodaß bspw.\ ein Game-Pad mit mehreren  Hardwareknöpfen unterstützt werden kann. Dies eignet sich aber wohl eher als Interface für die Bedienung von \textsf{XCSoar} anstelle für den Eingang von Flugzeugmeldungen wie Fahrwerks, Klappen oder Stall-Warnungen.
+
+        \textsl{Die Zuverlässigkeit der Taster/Eingänge sollte hier immer im Vordergrund stehen}.
+        Dennoch -für Bastelfans-es ist nicht ausgeschlossen, hierüber digitale Eingänge zu realisieren.
+\end{description}
+
+In einer an eigene Bedürfnisse angepaßten Datei z.B.\ \texttt{Flugzeug-Meldungen.txt} wird eine Tabelle erstellt, in der die jeweiligen Eingänge gelistet und beschrieben werden. Ein Standardsatz von Ereignissen innerhalb dieser Datei  kann z.B. folgendes enthalten:
+\begin{itemize}
+\item Landeklappen
+\item Wölbklappenposition (positive/Landestellung, neutral, negativ/Vorflug)
+\item Fahrwerk
+\end{itemize}
+
+\halt Dieser Datensatz kann in kommenden Versionen auch durch Motor- bzw- Spritwarnungen erweitert werden.
+Speziell bei Verwendung des Vega können komplexe Meldungen erstellt, welche logische Eingänge verknüpfen und geschlossen ausgeben: "Landeklappen ausgefahren und Fahrwerk verriegelt"  Hierzu sollte die VEGA Documentation im Detail herangezogen werden.
+
+\section{Schalter Dialog}
+
+Wenn das VEGA Variometer angeschlossen ist, dann gibt es ein zusätzliches Menü für die am VEGA angeschlossenen Schalter und Eingänge. Ohne VEGA ist dieser MenüButton grau, also nicht verfügbar:
+\begin{quote}
+\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Vario}\blink\smenut{Flugzeug}{Switches}
+\end{quote}
+
+Dieser Dialog wird in Echtzeit aktualisiert, so daß der Pilot direkt zur Kontrolle nachverfolgen kann, wie seine Meldung verarbeitet wird. sinnvoll z.B. bei einem Klappencheck vor dem Start.
+
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
+\end{center}
+
+\section{Slave Modus, Doppelsitzermodus,  Durchschleifen von Daten}\index{Slave mode}\index{Dosi-Mode}
+
+Einer der im NMEA-Anschluß-Menü befindlichen Treiber ("NMEA-Output") bietet den sog.\   "Slave-Modus", welcher verwendet wird,  um z.B. zwei Geräte  (\textsf{Altair} oder \textsf{PDA})  im Master-Slave-Modus miteinander zu verbinden. \halt
+
+Erreichbar ist dies unter
+\begin{quote}
+\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{15}
+\end{quote}
+Untermenü "Treiber"
+
+Im als Master definierten Gerät muß dazu der Treiber des zweiten Gerätes (Gerät B) als NMEA OUT gesetzt werden.
+Hierdurch werden alle ein- und ausgehenden Datensätze  durchgeschleift und an das als Slave definierte Gerät weitergereicht.
+Im Slave-Gerät muß dann als Gerät A z.B.\ \textsf{Altair} als Treiber angewählt werden.
+
+Als Beispiel seien zwei \textsf{Altair} miteinander verbunden:
+\begin{center}
+\begin{tabbing}
+Anschluß\quad\=  COM1  hspace{10em}   \=  Anschluß\quad\=  COM1\kill
+\textbf{Master-Gerät:} \>                        \> \textbf{Slave-Gerät:}\\[0.5em]
+\textsf{Gerät A}            \>                        \> \textsf{Gerät A}\\
+Anschluß\quad\>  COM1 \>                           Anschluß\quad\>  COM1\\
+Baudrate\> 19200          \>                           Baudrate\> 19200\\
+Treiber\> \textsf{Altair}\>                           Treiber\> \textsf{Altair}\\[0.75em]
+%
+\textsf{Gerät B}\>                                    \>  \textsf{Gerät B}\\
+Anschluß\>  COM2         \>                              Anschluß\>  COM1\\
+Baudrate\> 19200         \>                              Baudrate\> 19200\\
+Treiber\> NMEA OUT    \>                              Treiber\> \textsl{beliebig}\\[0.75em]
+\end{tabbing}
+\end{center}
+
+
+Auf diese Art und weise werden beide Geräte mit den identischen Daten versorgt, so, als ob sie direkt vom Flarm, VEGA, o.ä. kämen. \todonum{Slave-Modus und Konfiguration richtig erklärt?}Auf gleiche Weise können zwei \textsf{PDA} mit identischen Daten versorgt werden, wenn nur eine Datenquelle zur Verfügung steht.
+
+Zur Verkabelung bitte die entsprechenden Handbücher der Geräte konsultieren.
+
+
+\section{Systemstatus Dialog}\label{sec:system-status-dialog}\index{Status!System}\index{Status!angeschlossene Geräte}
+
+Der Systemstatus-Dialog (auch Kap.~\ref{sec:dialog-windows}) wird hauptsächlich zum Systemcheck benutzt und hier vor allem, ob die Verbindung zu den angeschlossenen Geräten voll etabliert und OK ist:
+
+\begin{quote}
+\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}
+\end{quote}
+anschließend den Punkt "System" anwählen.
+
+Alle dynamischen Werte wie z.B. Batteriespannung, GPS-Empfang, Anzahl der Satelliten des angeschlossenen GPS etc. werden kontinuierlich aktualisiert
+
+
+\section{Mehrere Verbindungen zu externen Geräten}
+
+Es können bis zu zwei externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden (einige \textsf{PDA} haben zwei serielle Schnittstellen, Verbindungen per Bluetooth können prinzipiell mehrere unabhängige Verbindung etablieren)
+
+Wenn  beide der Geräte GPS-Signale zur Verfügung stellen können, dann wird das primäre, erste Gerät von \textsf{XCSoar} ausgewählt und das zweite bleibt ignoriert. Sowie die erste GPS -Quelle aus irgendeinem Grunde versagt, wird automatisch auf die zweite Quelle umgeschaltet - solange, bis die erste Quelle wieder gültige GPS-Daten übermittelt. (fallback)
+
+Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindigkeit etc:
+\textsf{XCSoar} bevorzugt grundsätzlich das primäre Gerät, und greift auf das sekundäre Gerät zurück, sowie das Primäre versagt.
+
+Beispielkonfiguration:
+
+Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei  FLARM.Diese Kombination bietet von beiden Geräten das Beste:
+\halt
+Vom CAI 302 kommt true airspeed und das Variosignal, vom Flarm kommen die  Luftverkehrswarnungen.
+\todonum{Entweder alle Daten vom CAI, und nur im Fallback aufs Flarm? Nun doch Parallel? }
+
+
+\section{Verwaltung der angeschlossenen Geräte, NMEA-Anschluß etc.\ }\index{NMEA!Info}
+
+Das NMEA-Ansichtsfenster ist wie folgt zu erreichen:
+\begin{quote}
+\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{NMEA-}{Anschluß}\blink
+\end{quote}
+
+Hier können angeschlossene Geräte und  deren Ausgänge  betrachtet werden.
+
+Der Button \bmenu{Wiederverbinden} dient dazu, das gerät mit \textsf{XCSoar} neu wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ Fehlersuche\dots
+
+Der Button \bmenu{Flug donwload} ist nur verfügbar, wenn ein IGC-Logger an \textsf{XCSoar} angeschlossen ist.  \label{sec:supported-varios}
+Wenn anklickt wird, erscheint eine Liste aufgezeichnter Flüge, welche entsprechend geladen werden kann.  Die Datei  wird geladen und in das \texttt{logs}-Unterverzeichnis des  \texttt{XCSorData } - Verzeichnis kopiert.
+
+Mit \bmenu{Aktualisieren} werden alle Geräte der Liste aktualisiert, d.h. neu initialisiert. Sinnvoll, wenn z.B. in der Zwischenzeit ein weiteres Gerät angeschlossen wurde, oder ein Fehler dessen Verbindung gelöst wurde. Das entsprechende Gerät sollte anschließend in der Liste erscheinen.
+
+
+Der Button \bmenu{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt. (Z.B. löschen des Flugspeichers beim CAI 302. (Speziell hier kann es Verzögerungen kommen, da teilweise ein Firmware Bug des CAI 302 auftritt)

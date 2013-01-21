@@ -1,0 +1,100 @@
+\documentclass[german,a4paper,10pt]{refrep}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
+\usepackage[T1]{fontenc}
+\usepackage[right]{eurosym}%EuroSymbol 
+\usepackage{color}
+\usepackage{times}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{todonotes}%		Gestattet Kommentare für Sachen, welche noch zu erldigen sind  .
+\usepackage{paralist}%		etwas geringere Abstände in der item und enumerate...}
+\usepackage{url}
+\usepackage{hyperref}
+\makeindex
+\makeatletter
+\title{Benutzerhandbuch}%	Titel der ersten Seite 
+\newcommand{\mycontent}[0]{%
+\begin{tabular}{l}\hspace*{-4cm}{\em XCSoar-Handbuch  } \vspace*{2pt}\end{tabular}}% Kopfzeile
+%
+\input{xcsoar.sty}
+\input{title-xcsoar.sty}
+%
+\newcommand\xc{\textsf{XCSoar }}%  ein paar Abkürzungen gegen die nervige Handarbeit ..  
+\newcommand\fl{\textsf{Flarm }}
+\newcommand\al{\textsf{Altair }}
+\newcommand\trdvvs{Vega}
+\begin{document}
+\sloppy% ja ich weiß, soll man nicht mehr machen .. dennoch ..
+\shorthandoff{"}%
+\maketitle
+\begingroup\setlength{\parskip}{0.1\baselineskip}\tableofcontents\endgroup
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Vorwort}
+\section*{Warnungen und Vorsichtshinweise}
+%
+\warning
+\textsc{Es liegt in der ausschließlichen Verantwortung des Benutzers, diese Software vernünftig
+und umsichtig einzusetzen. Diese Software ist gedacht als Unterstützung zur Navigation
+und darf \emph{auf keinen Fall} als Ersatz für professionelle, dedizierte Navigationsgeräte benutzt
+werden. \emph{Auf gar keinen Fall} darf diese Software zur Bestimmung von Distanzen, Koordinaten
+oder aber Richtungen benutzt werden. Diese Software darf \emph{nicht} als Antigeländekollisions- Software benutzt werden.
+Diese Software darf \emph{auch nicht} als ein Antikollisionssystem benutzt werden.}
+%
+\section*{Offizielle Hinweise}
+\subsection*{Software Lizenz Einverständnis}
+%
+Diese Software wird gemäß der GNU General Public License Version~2 veröffentlicht. Der ausführliche,
+komplette Text des Einverständnisses hierzu und Anmerkungen zur Garantie befindet sich
+unter~\ref{cha:gnu-general-public}.
+%
+\subsection*{Beschränkte Haftung}
+In keinem Fall übernimmt XCSoar oder dessen Vorsitzende, Teilhaber, Programmierer, Angestellte  oder aber sonstige Mitwirkende  oder aber  Tochterunternehmungen irgendeine Haftung für den Gebrauch oder aber Mißbrauch und auch zufälliges Fehlverhalten dieses Programmes, egal zu welchem Zweck es eingesetzt wird.
+%
+\subsection*{Erklärung}
+Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so,wie es ist" und gewährt keinerlei Garantie auf irgendeine Art und Weise -  weder erwähnt noch unerwähnt. Dies Programm wird komplett und \emph{ausschließlich auf ureigenes Risiko des Benutzers} installiert, ausgeführt und benutzt. Obwohl mit größtmöglicher Sorgfalt und Achtung während der Entwicklung dieses Produktes gearbeitet wurde, kann nicht ausgeschlossen werden, daß das Programm 100\% fehlerfrei ist. Auf gar keinen Fall können daher Ansprüche bzgl. Korrektheit, Fehlerfreiheit, Zuverlässigkeit für irgendeinen Teil dieser Software gestellt werden. Das XCSoar Projekt-Team und die Verteiler sind in keiner Weise verantwortlich für Fehler in diesem Programm oder für Fehlverhalten, Datenverlust oder aber körperliche Verletzungen die aus der Verteilung, Benutzung, Installation oder Anwendung dieser Software herrühren könnten.
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch01_introduction.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{installation.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch02_user_interface.tex}%                           fertig ...
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch03_navigation.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch04_xc_tasks.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch05_glide_computer.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch06_atmosphere_and_instruments.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch07_airspace_and_flarm.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch08_avionics_and_airframe.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch09_quickstart.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch10_infobox_reference.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch11_configuration.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch12_data_files.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch13_history.tex}             
+%%%%%%%%%%%%%%%%%%%%%%
+\printindex
+%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter{GNU General Public License}\label{cha:gnu-general-public}
+\input{gpl.tex}
+%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
+%\todonum[inline]{alternates list}
+%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

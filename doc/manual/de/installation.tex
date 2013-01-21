@@ -1,0 +1,355 @@
+\chapter{Installation}\label{cha:installation}
+
+Um {\textsf  XCSoar} zum Laufen zu bringen benötigst Du folgendes:
+
+
+\begin{itemize}
+\item ein Gerät, auf dem {\textsf  XCSoar} läuft.
+\item {\textsf  XCSoar} an sich
+\item einen GPS Empfänger
+\item ein Wegpunkt-File
+\item ein Luftraum-File
+\item ein Karten-File (Kartendatenbank bzw. Gelände)
+\end{itemize}
+
+\section{Kompatibilität}
+
+\subsection*{Geräte auf denen  {\textsf  XCSoar} läuft}
+
+{\textsf  XCSoar} läuft derzeit auf folgenden Plattformen:
+
+\begin{itemize}
+\item Handys und Tablets mit Android 1.6 oder neuer\\
+  Beispiel: Dell Streak, Samsung Galaxy S II, HTC Desire HD, Samsung Tablet 10.1N
+  Motorola Xoom
+\item PDAs mit Pocket PC 2000, 2002, 2003 \\
+  Beispiel: Asus A600, Compaq iPaq 3800, 38xx, iPaq 3900, 39xx
+\item PDAs mit Windows Mobile \\
+  Beispiel: iPaq hx4700, Dell Axim x51v
+\item PNAs mit  Windows CE 3.0 oder neuer \\
+  Beispiel: HP314, Mio400
+\item Triadis Altair
+\item LX MiniMap
+\item Windows 2000 oder neuer
+\item Linux
+\item Mac OS X
+\end{itemize}
+
+\subsection*{GPS, Logger, Varios}
+
+{\textsf  XCSoar}  ist kompatibel zu allen Geräten, welche GPS-Daten im NMEA-Format ausgeben.
+
+Die meisten modernen Android Geräte haben einen eingebauten GPS-Empfänger, der diese Daten zur Verwendung 
+ausgibt. Mitunter jedoch ist es ratsam, diese Daten aus einem anderen Gerät zu verwenden, wenn man z..B.\ Luftverkehrsdaten aus einem 
+\fl benutzen und anzeigen möchte oder aber noch weitere Features -wie nachfolgend aufgelistet- nutzen möchte:
+
+
+
+\begin{itemize}
+\item Geschwindigkeitssensor (TAS) erlaubt schnelle und eine exakte Ermittlung des Winds ohne Kurbeln zu müssen
+\item ein extern angeschlossenes Vario wird die Zentrierhilfe unterstützen und erheblich beschleunigen
+\item Aufgaben können deklariert und ausgetauscht werden (laden und speichern z.B. in IGC Logger ),   Flüge können ausgelesen werden 
+\item manche Varios erlauben eine Synchronisation z.B.\ des MC-Wertes und anderen Werte mit {\textsf  XCSoar} 
+\end{itemize}
+
+\subsection*{Unterstützte externe Geräte und deren Funktionen}\label{sec:supported-varios}
+
+\newcommand{\y}[0]{{ $\surd$ }}
+%{0.8\textwidth}
+\noindent\makebox[\textwidth]{%
+\begin{tabular}{l|ccc|cc|cc|c}
+       \multicolumn{1}{r}{\bf Unterstütze:} & \multicolumn{3}{c|}{\bf -Funktionen} & \multicolumn{5}{c}{\bf -Daten} \\
+NMEA Gerät & 
+  \begin{sideways} Deklaration\end{sideways} & 
+  \begin{sideways} Fernbedienung\end{sideways} & 
+  \begin{sideways} Download\end{sideways} &
+  \begin{sideways} TAS \end{sideways} & 
+  \begin{sideways} Vario\end{sideways} & 
+  \begin{sideways} Baro. Höhe\end{sideways} & 
+  \begin{sideways} Wind\end{sideways} &
+  \begin{sideways} G-Sensor\end{sideways} \\
+\hline
+
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+Borgelt B50          &    & \y &    & \y & \y & \y &    &    \\
+CAI 302              & \y & \y & \y & \y & \y & \y & \y & \y \\
+CAI GPS Nav          &    &    &    &    &    &    &    &    \\
+Condor               &    &    &    & \y & \y & \y & \y &    \\
+\hline
+Digifly Leonardo     &    &    &    & \y & \y & \y & \y &    \\
+EW Logger            & \y &    &    &    &    & \y &    &    \\
+EW microRecorder     & \y &    &    &    &    & \y &    &    \\
+FLARM                & \y &   & \y  &    &    &    &    &    \\
+\hline
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+Flymaster F1         &    &    &    &    & \y & \y &    &    \\
+Flytec 5030          &    &    &    & \y & \y &    &    &    \\
+GTAltimeter          &    &    &    &    &(\y)& \y &    &    \\
+ILEC SN10            &    &    &    &    & \y & \y & \y &    \\
+\hline
+IMI ERIXX            & \y &    & \y &    &    &    &    &    \\
+LX20, Colibri        & \y &    & \y &    &    & \y &    &    \\
+LX Vario \footnotemark
+                     & \y & \y &    & \y & \y & \y & \y & \y \\
+
+LXNAV Nano           & \y &    &    &    &    &    &    &    \\
+\hline
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+LXNAV V7             &    & \y &    & \y & \y &    &    &    \\
+PosiGraph            & \y &    &    &    &    & \y &    &    \\
+Triadis Altair (pro) & \y &    &    &    &    & \y &    &    \\
+Triadis Vega         &    & \y &    & \y & \y & \y &    & \y \\
+\hline
+Volkslogger          & \y &    &    &    &    & \y &    &    \\
+Westerboer VW1150    &    & \y &    & \y & \y & \y &    &    \\
+Westerboer VW921, 922
+                     &    & \y &    & \y & \y & \y &    &    \\
+Zander / SDI         &    & \y &    & \y & \y & \y & \y &    \\
+\end{tabular}}
+\footnotetext{LX Navigation biete mehrere ''intelligente'' Varios an, wie z.B.\ 
+  LX1600, LX5000, LX7000. All diese bieten den gleichen NMEA-Ausgang
+  Die angebotenen Funktionen in Verbindung mit {\textsf  XCSoar} hängen jedoch zum Großteil auch von der 
+Firmware des benutzten  Gerätes ab.}
+
+
+
+Während die meisten CE-basierten Geräte über eine serielle Schnittstelle verfügen, 
+ist diese Art der Schnittstelle bei den meisten, modernen Android-Geräten nicht mehr vorhanden. 
+Diese können entweder Bluetooth oder aber das Android IOIO-Board verwenden. 
+
+
+Um Bluetooth zu benutzen, verbinde das Gerät mit einem Bluetooth $\leftrightarrow$ Seriell-Adapter, wie z.B.\ 
+ dem K6-Bt oder dem Glidertools VFBT-1.
+
+
+\section{Software Installation der Software}\index{Installation}
+
+Die Software ist auf der {\textsf  XCSoar}-Homepage frei herunterzuladen. 
+In diesem Kapitel wird behandelt, {\sl wie} die Software heruntergeladen und installiert wird.
+
+\subsection*{Betriebssystem Android}\index{Installation!unter Android}
+
+Suche nach {\textsf  XCSoar} in Googles Android-Marktplatz (PlayGround), oder installiere das \verb|apk|-
+File manuell.  Kopiere diese Datei auf eine SD-Karte in das Verzeichnis \verb|XCSoarData|.
+
+\subsection*{Auf einem PDA (Windows Mobile, PocketPC)}\index{Installation!unter Pocket PC, Windows Mobile}
+
+Wähle eines dieser Files:
+
+\begin{description}
+\item[\texttt{PPC2000}] Pocket PC 2000/2002, Windows CE 3.0
+\item[\texttt{PPC2003}] Pocket PC 2003, Windows CE 4.0
+\item[\texttt{WM5}] Windows Mobile 5 oder neuer
+\item[\texttt{WM5X}]Windows Mobile 5 oder neuer mit XScale CPU oder besser(z.B. hx4700)
+\end{description}
+
+\sketch{figures/XCS_Today.png}
+Lade das File \verb|XCSoar.exe| herunter und kopiere es auf eine SD Karte.  
+Starte das File z.B.\ über den Explorer. 
+
+Ein andere Methode ist, {\textsf  XCSoar} auf PDA über das CAB-File zu installieren.  Lade dies File herunter auf Deine SD-Karte, 
+anschließend  doppelklicke darauf und {\textsf  XCSoar} wird auf Deinem PDA installiert werden. 
+
+Nach der Installation werden das {\textsf  XCSoar}-Symbol sowie die beiden Schriftzüge ''FLY'' und ''SIM'' aufgelistet
+dem ''Heute''-Schirm sichtbar sein. (s.\ Bild) 
+
+
+\subsection*{Auf einem PNA (Windows CE)}\index{Installation!unter Windows CE}
+
+Lade das File \verb|XCSoar.exe| (Ziel wie oben ''WM5'') auf eine SD Karte herunter. 
+Führe es z.B.\ mit dem Explorer aus.
+
+\subsection*{Auf einem Windows PC}\index{Installation!unter Windows}
+  
+Lade das entsprechende File \verb|XCSoar.exe| (Ziel ''PC'') auf Deinen Rechner (Platte) herunter und führe es aus.
+
+
+\subsection*{Unter Unix/Linux}\index{Installation!unter Linux}
+
+Das herunterzuladende File ist \verb|xcsoar_XXX.deb|, wobei \verb|XXX| die Version und Plattform darstellt.  
+z.B.\ \verb|xcsoar_6.0.4_i386.deb|. Dies ist ein Debian Paket und für 32bit Betriebssysteme mit Intel-Prozessoren gedacht.
+Es kann installiert werden mit:
+\begin{center}
+\verb|sudo dpkg -i xcsoar_XXX.deb|.
+\end{center}
+Um zu sehen, wo die ausführbaren Dateien und die anderen Dateien installiert wurden, führe \verb|dpkg-query -L xcsoar| 
+aus. 
+
+Alle weiteren Dateien (Karten, Lufträume etc.\ müssen in \verb|~/.xcsoar/XCSoarData/| kopiert werden.
+Wenn das Verzeichnis \verb|~/.xcsoar| nicht existiert, wird es beim ersten Aufruf von {\textsf  XCSoar} angelegt.
+
+
+\section{Daten Files}\label{InstallationDatenfiles}\index{Installation!Datenfiles}
+
+Um alle Funktionen von {\textsf  XCSoar} nutzen zu können, werden weitere Daten und Files benötigt.
+Hierzu zählen Lufträume, Geländedaten, Topologiedaten eine Polare, Wegpunkte und so weiter. 
+
+
+Die Nutzung dieser Daten und Files wird in Kap.~\ref{cha:data-files} ausführlich beschrieben. 
+
+Alle Files sollten unbedingt in das Verzeichnis \texttt{XCSoarData} kopiert bzw. \ gespeichert werden. 
+Dies Verzeichnis muß  in einem bekannten Verzeichnis befindlich sein, damit {\textsf  XCSoar} bekannt ist, wo es nach entsprechenden 
+Daten-File suchen muß: 
+
+ 
+\begin{description}
+\item[Windows PC]
+\texttt{XCSoarData} befindet sich im Persönlichen Verzeichnis (''\texttt{Eigene Dateien}'')
+\item[Windows Mobile PDA/PNA]
+- Wenn ein Verzeichnis \texttt{XCSoarData} im gleichen Verzeichnis wie {\textsf  XCSoar} existiert, dann wird dies benutzt.  
+
+
+- \texttt{XCSoarData} befindet sich auf der SD-Karte.  Wenn keine SD-Karte vorhanden ist, dann schaut {\textsf  XCSoar} in \texttt{Eigene Dateien} nach diesen Files
+
+\item[Unix/Linux]
+Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeichnis des Users. 
+\item[Android Geräte]
+\texttt{XCSoarData} befindet sich auf der SD-Karte.
+\item[Altair]
+Wenn {\textsf  XCSoar} sich auf einem USB-gerät (Stick) befindet, dann wir dies benutzt, andernfalls wird der interne Speicher benutzt. 
+\end{description}
+
+
+{\textsf  XCSoar} wird während der Laufzeit einige zusätzliche Files, wie z.B.\ eine Datei mit sämtlichen Konfigurationsdetails erzeugen.
+Diese werden ebenfalls im \texttt{XCSoarData} Verzeichnis (Windows PC und Windows Mobile Geräte), oder aber im \texttt{.xcsoar} 
+Verzeichnis(Unix/LinuxPC) abgelegt. 
+
+Beim ersten Start wird {\textsf  XCSoar}  folgende Files erzeugen und anlegen: 
+\texttt{Default.tsk} (Standard Aufgabe),  \texttt{xcsoar-registry.prf} (Konfigurationseinstellungen), \texttt{xcsoar-startup.log} 
+(Ein Log-Schrieb des Startprozesses von {\textsf  XCSoar}\dots), 
+
+
+
+Weiterhin werden drei Verzeichnisse angelegt: \texttt{cache}, \texttt{config} und \texttt{logs}.  
+
+Während des Laufes von {\textsf  XCSoar} können (und werden) weitere Files angelegt wie z.B.\  Aufgaben-Files (\texttt{*.tsk}) 
+und Flugaufzeichnungen (evtl.\ (\texttt{*.igc})
+
+
+\section{Betrieb von {\textsf  XCSoar}}
+%\subsection*{Fly and simulator modes}
+
+{\textsf  XCSoar} wird kann in zwei Modi ausgeführt werden:
+\begin{description}
+\item[FLY] Dies ist der ''echte'' Flugmodus. Alle Ein - und Ausgänge betr.\ Signalaustausch sind aktiv
+\item[SIM] Dies ist der Simulator-Modus. Keine Kommunikation mit externen Geräten per serieller Schnittstelle möglich. 
+\end{description}
+
+\subsection*{\al - Version}
+Wenn der \al angeschaltet wird, fährt {\textsf  XCSoar} automatisch hoch (es ist quasi das das ''Betriebssystem'' des \al) 
+Der PWR/ESC Knopf hat mehrer Funktionen:
+\begin{description}
+\item[Anschalten]  Drücken und halten für mehr als eine Sekunde: Die LED beginnt zu leuchten und {\textsf  XCSoar} wird starten, nachdem der \al gebootet hat.
+\item[Ausschalten]  Drücken und Halten für mehr als drei Sekunden: Schaltet den Altair und somit {\textsf  XCSoar} aus.
+\item[Escape] Kurzes Drücken des Knopfes wirkt wie die ESC-Taste eines PC: Wird benutzt als Abbruch-Funktion oder aber zum 
+              Ausschalten von von Dialogen benutzt.
+\end{description}
+
+\achtung Die \al-Version von {\textsf  XCSoar} hat keine Simulator-Funktion
+
+\subsection*{{\textsf  XCSoar}-PC Version}
+Ein Doppelklick im entsprechenden Verzeichnis {\textsf  XCSoar} öffnet das Programm. 
+{\textsf  XCSoar} kann auch mit Kommandozeilenoptionen oder über ein Batch-File mit Parametern geöffnet werden, 
+die hier angegeben werden: 
+
+\begin{description}
+\item[-portrait] Anzeige ist 480 Pixels breit, 640 Pixels hoch
+\item[-square] Die Anzeige ist 480 Pixel breit, 480 Pixel hoch
+\item[-landscape] die Anzeige ist 640 Pixel breit, 480 Pixel hoch. Dies ist die Standardeinstellung.
+Wenn Du nichts anderes angibst, wird diese Einstellung auf dem PC automatisch gewählt.
+\item[-small] Dies stellt den Bildschirm in halber Größe dar. sinnvoll z.B.\ wenn {\textsf  XCSoar} in Verbindung mit dem Segelflugsimulator 
+{\sc Condor} für das Trainig (oder gegen Langeweile) im Winter gestartet wird.
+\end{description}
+
+Um die Bildschirmdarstellung zu ändern ist es sinnvoll, sich in Windows eine Verknüpfung herzustellen. 
+In den ''Eigenschaften'' sollte dann unter ''Ziel'' der Programm zusammen mit den Kommandozeilenparametern 
+angegeben werden. (z.B.\ \texttt{xcsoar.exe -landscape}
+
+
+\subsection*{{\textsf  XCSoar} Unix/Linux PC-Version}
+Starte \verb|xcsoar| von der Kommandozeile oder aber erzeuge einen Link auf dem Desktop. 
+
+Der Ort, an dem sich die ausführbare Datei befindet,  kann mit \verb|which xcsoar| herausgefunden werden.
+Nicht alle Optionen wie bei der PC- Version sind hierbei nun möglich.
+ 
+\subsection*{Nachladen von Daten-Files}
+Das erste Mal, wenn {\textsf  XCSoar} gestartet wird, werden {\sl noch nicht} automatisch die Files nachgeladen, welche im 
+angegebenen \verb|XCSoarData| abgespeichert wurden. Die kann erst geschehen, wenn {\textsf  XCSoar} das Konfigurationsfeile erstellt hat - also nach dem ersten Start.
+
+
+Um {\textsf  XCSoar} kenntlich zu machen, wo sich die entsprechenden Files befinden, mache einen kurzen Doppelklick irgendwo auf die nackte Bildschirmfläche 
+\sketch{figures/config-basic.png} nach dem Start irgendwo in der nähe des stilistisch abgebildeten Segelflugzeuges in der Mitte, klicke zweimal auf die Schaltfläche ''Konfig'' 
+und wähle dann 
+\begin{center}
+\bmenut{Konfig.}{1/3}~\blink~\bmenut{Konfig.}{2/3}~\blink~\bmenut{System}{Einstellung} 
+\end{center}
+\achtung {\sl Im folgenden werden die Anzahl der Klicks auf die Menüs wie oben beschrieben nur noch mit {\bf einem} Kästchen dargestellt, d.h.\bmenut{Konfig.}{3/3} steht dann für {\bf 3-maliges Klicken} auf den Konfig.-Knopf
+und damit für die dritte Seite des Konfigurations-Menüs}
+
+Auf dieser allerersten Konfigurationseite kannst Du nun unter dem Punkt ''Standortdatei''  die Kartendatenbank, ein Luftraum- sowie ein Wegpunkt-File angeben.
+Damit ist {\textsf  XCSoar} bis auf weitere sofort einsetzbar.
+viele (wirklich viele\dots) andere Details können anschließend unter \bmenut{System}{Einstellung} an Deine Vorlieben und Bedürfnisse angepaßt werden. 
+Die Konfiguration  ist aujsführlich beschrieben in Kap.\ref{cha:configuration} und unbedingt lesenswert. 
+
+Nachdem diese Files hier einmal eingestellt wurden, werde sie bei jedem Start (es sei denn, Änderungen und/oder Neuinstallationen werden vorganommen)
+automatisch wieder geladen.
+
+\subsection*{Start-Up und Benutzer Profile}\index{Benutzerprofile}
+Beim Start von {\textsf  XCSoar} wird automatisch nach einem Benutzerprofil gesucht. Wenn mehrere vorhanden sind, wird in einem Fenster ganz unten am rande nachgefragt, welcghes file benutzt werden soll.
+Aus diesem Grunde macht (wirklich) es Sinn, den einzelnen Benutzerprofilen eindringliche, wiedererkennbare Namen zu geben, 
+um diese schnell und eindeutig unterscheiden zu können. 
+
+Wenn kein Profil explizit ausgewählt und geladen wird, wird automatisch das Profile des letzten Startes benutzt. 
+
+Profile können sehr sinnvoll sein z.B. für  
+
+\begin{itemize}
+\item verschiedene Piloten
+\item eines für Wettbewerbe, eines für Lustflug
+\item Fliegen an unterschiedlichen Plätzen (zu Hause, Fliegerlager, Namibia\dots )
+\end{itemize}
+
+
+\subsection*{Simulator Modus (SIM)}
+Der Simulatormodus ist entwickelt worden, um mit {\textsf  XCSoar} firm zu werden und bereits vor dem ersten Einsatz im Flugzeug 
+Erfahrung mit der Bedienung sammeln zu können. Das unterscheidet {\textsf  XCSoar} von manch anderem fest eingebautem, erheblich teurerem 
+ Gerät. 
+
+Im Simulatormodus wird das auf dem Schirm sichtbare Flugzeug ganz einfach gesteuert:
+Auf dem TouchScreen (oder mit der Maus), einfach mit dem Finger auf das Segelflugzeugsymbol tippen und in die Richtung 
+streifen, wo es hingehen soll. Je länger man zieht/streift, desto schneller wird sich das Flugzeug bewegen. 
+
+In der PC-Version und bei Geräten mit mehreren Knöpfen kann die Geschwidingkeit, Höhe und Richtung mit bestimmten Tasten geändert werdden: 
+
+\achtung {\sl Diese Art der Bedienung ist naturgemäß nicht für TouchScreen-Geräte verfügbar!}
+
+
+Die Höhe des Flugzeuges kann geändert werden mit einem Druck auf die GPS-Höhe in der \infobox{H GPS}-InfoBox, hier Hoch- und Runter-Tasten benutzen. 
+
+Die Geschwindigkeit des Flugzeuges kann angepasst werden über die Übergrundgeschwindigkeit in der \infobox{V Gnd}-Infobox), hier die Hoch- oder Runter-Taste drücken (oder gedrückt lassen)
+
+Der Kurs des Flugzeuges kann über Kurs-\infobox{Track}-InfoBox, angepasst werden, Hoch- oder Runter -Taste drücken oder halten. 
+
+Wenn entweder\index{Simulator!Steuerung} \infobox{H GPS} oder\infobox{V ü Gnd}) ausgewählt ist, 
+kann die Richtung des Flugzeuges auch über die Links- und Rechts-Tasten gesteuert werden.
+
+Alle andere Funktionen, Knöpfe(Buttons) und Menüs arbeiten genau gleich wie im ''FLY'' Modus. 
+
+
+\subsection*{Start Seite - Ladevorgang}\index{Geduld}
+Während des Ladevorganges zeigt {\textsf  XCSoar} einen Ladebalken am unteren Rande des Fensters, 
+welche die aktuell geladenen Files und Optionen darstellt. Kann als ''Ladevorgangsbalken'' angesehen werden;  auf PDA $>$ 10Jahre mit dataillierter Kartendatenbank mitunter 
+relativ langsam (Geduld-bis zu 90sec können vergehen!!), auf aktuellen Geräten (PC, Android) vergehen meist keine 2 Sekunden (nur beim ersten mal..) 
+
+Diese Seite zeigt auch die Version der Software.
+
+\subsection*{Schließen des Programmes}
+Bei PDA und PC-Version, kann {\textsf  XCSoar} vom Menü aus beendet werden. Hierzu Doppelklick auf die Kartenfläche und anschließend 
+\begin{quote}
+\bmenu{Beenden}
+\end{quote}
+
+Beim PC kann auch das ''normale'' Windows-Kreuz genutzt werden.
+Der \al wird heruntergefahren und damit {\textsf  XCSoar} geschlossen durch Drücken auf den PWR-Knopf für mehr als zwei Sekunden.
+
+
