@@ -23,11 +23,17 @@
 #define TASKMACCREADYREMAINING_HPP
 
 #include "TaskMacCready.hpp"
+#include "Geo/GeoPoint.hpp"
 
 /**
  * Specialisation of TaskMacCready for task remaining
  */
 class TaskMacCreadyRemaining gcc_final : public TaskMacCready {
+  /**
+   * Storage used by target_save() and target_restore().
+   */
+  std::array<GeoPoint, MAX_SIZE> saved_targets;
+
 public:
   /**
    * Constructor for ordered task points

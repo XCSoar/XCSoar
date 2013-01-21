@@ -23,6 +23,7 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "TaskSolution.hpp"
 #include "Task/Points/TaskPoint.hpp"
+#include "Task/Ordered/Points/AATPoint.hpp"
 
 GlideResult
 TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
@@ -72,13 +73,23 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 void 
 TaskMacCreadyRemaining::target_save()
 {
+  auto saved = saved_targets.begin();
   for (TaskPoint *point : points)
-    point->SaveTarget();
+    *saved++ = point->HasTarget()
+      ? ((AATPoint *)point)->GetTarget()
+      : GeoPoint::Invalid();
 }
 
 void 
 TaskMacCreadyRemaining::target_restore()
 {
-  for (TaskPoint *point : points)
-    point->RestoreTarget();
+  auto saved = saved_targets.cbegin();
+  for (TaskPoint *point : points) {
+    if (saved->IsValid()) {
+      assert(point->HasTarget());
+      ((AATPoint *)point)->SetTarget(*saved, true);
+    }
+
+    ++saved;
+  }
 }

@@ -161,15 +161,6 @@ public:
   }
 
   /**
-   * Save local copy of target in case optimisation fails
-   */
-  virtual void SaveTarget() {}
-  /**
-   * Restore target from local copy
-   */
-  virtual void RestoreTarget() {}
-
-  /**
    * Check whether aircraft has entered the observation zone.
    *
    * @return True if observation zone has been entered

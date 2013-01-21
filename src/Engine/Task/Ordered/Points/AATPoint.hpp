@@ -56,8 +56,6 @@ class AATPoint gcc_final : public IntermediateTaskPoint
 {
   /** Location of target within OZ */
   GeoPoint target_location;
-  /** Saved location of target within OZ */
-  GeoPoint target_save;
   /** Whether target can float */
   bool target_locked;
 
@@ -77,7 +75,6 @@ public:
            const TaskBehaviour &tb)
     :IntermediateTaskPoint(TaskPointType::AAT, _oz, wp, tb, true),
      target_location(wp.location),
-     target_save(wp.location),
      target_locked(false)
   {
   }
@@ -89,6 +86,10 @@ public:
    */
   void LockTarget(bool do_lock) {
     target_locked = do_lock;
+  }
+
+  const GeoPoint &GetTarget() const {
+    return target_location;
   }
 
   /**
@@ -184,14 +185,6 @@ public:
 
   virtual bool IsTargetLocked() const gcc_override {
     return target_locked;
-  }
-
-  virtual void SaveTarget() gcc_override {
-    target_save = target_location;
-  }
-
-  virtual void RestoreTarget() gcc_override {
-    target_location = target_save;
   }
 
   /* virtual methods from class SampledTaskPoint */

@@ -55,9 +55,9 @@ class OrderedTaskPoint;
  */
 class TaskMacCready : private NonCopyable
 {
+protected:
   static constexpr unsigned MAX_SIZE = 16;
 
-protected:
    /**
     * The TaskPoints in the task.
     */
