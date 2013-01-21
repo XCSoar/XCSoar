@@ -130,7 +130,9 @@ bool
 ContestDijkstra::UpdateTraceTail()
 {
   assert(continuous);
-  assert(incremental == finished);
+  /* the following assertion was disabled because this method doesn't
+     get the "force" parameter */
+  //assert(incremental == finished || force);
   assert(modify_serial == trace_master.GetModifySerial());
 
   if (!trace_master.SyncPoints(trace))
