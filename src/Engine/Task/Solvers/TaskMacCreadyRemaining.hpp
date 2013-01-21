@@ -74,15 +74,16 @@ public:
   void target_restore();
 
 private:
-
-  virtual GlideResult tp_solution(const unsigned i,
-                                  const AircraftState &aircraft,
-                                  fixed minH) const;
-  virtual fixed get_min_height(const AircraftState &aircraft) const {
+  /* virtual methods from class TaskMacCready */
+  virtual fixed get_min_height(const AircraftState &aircraft) const gcc_override {
     return fixed(0);
   }
 
-  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const;
+  virtual GlideResult tp_solution(const unsigned i,
+                                  const AircraftState &aircraft,
+                                  fixed minH) const gcc_override;
+
+  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const gcc_override;
 };
 
 #endif
