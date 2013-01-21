@@ -24,25 +24,25 @@
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Util/Tolerances.hpp"
 
-
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
                              const AircraftState &_aircraft,
-                             const GlideSettings &settings, const GlidePolar &_gp,
+                             const GlideSettings &settings,
+                             const GlidePolar &_gp,
                              const fixed _t_remaining,
-                             StartPoint *_ts):
-  ZeroFinder(fixed(0.0), fixed(1.0), fixed(TOLERANCE_MIN_TARGET)),
-  tm(tps, activeTaskPoint, settings, _gp),
-  aircraft(_aircraft),
-  t_remaining(_t_remaining),
-  tp_start(_ts),
-  force_current(false)
+                             StartPoint *_ts)
+  :ZeroFinder(fixed(0), fixed(1), fixed(TOLERANCE_MIN_TARGET)),
+   tm(tps, activeTaskPoint, settings, _gp),
+   aircraft(_aircraft),
+   t_remaining(_t_remaining),
+   tp_start(_ts),
+   force_current(false)
 {
 
 }
 
-fixed 
-TaskMinTarget::f(const fixed p) 
+fixed
+TaskMinTarget::f(const fixed p)
 {
   // set task targets
   set_range(p);
@@ -52,20 +52,19 @@ TaskMinTarget::f(const fixed p)
 }
 
 
-bool 
-TaskMinTarget::valid(const fixed tp) 
+bool
+TaskMinTarget::valid(const fixed tp)
 {
   //  const fixed ff = f(tp);
   return res.IsOk(); // && (ff>= -tolerance*fixed(2));
 }
 
-fixed 
-TaskMinTarget::search(const fixed tp) 
+fixed
+TaskMinTarget::search(const fixed tp)
 {
-  if (!tm.has_targets()) {
+  if (!tm.has_targets())
     // don't bother if nothing to adjust
     return tp;
-  }
 
   force_current = false;
   /// @todo if search fails, force current
@@ -78,7 +77,7 @@ TaskMinTarget::search(const fixed tp)
   }
 }
 
-void 
+void
 TaskMinTarget::set_range(const fixed p)
 {
   tm.set_range(p, force_current);

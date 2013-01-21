@@ -38,8 +38,7 @@ class StartPoint;
  * - Allow for other schemes or weightings in how much to adjust each
  *   target.
  */
-class TaskMinTarget gcc_final : private ZeroFinder
-{
+class TaskMinTarget gcc_final : private ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
@@ -48,16 +47,16 @@ class TaskMinTarget gcc_final : private ZeroFinder
   bool force_current;
 
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param _gp Glide polar to copy for calculations
- * @param _t_remaining Desired time remaining (s) of task
- * @param _ts StartPoint of task (to initiate scans)
- */
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param _gp Glide polar to copy for calculations
+   * @param _t_remaining Desired time remaining (s) of task
+   * @param _ts StartPoint of task (to initiate scans)
+   */
   TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
                 const AircraftState &_aircraft,
@@ -69,26 +68,26 @@ public:
 private:
   virtual fixed f(const fixed p);
 
-/** 
- * Test validity of a solution given search parameter
- * 
- * @param p Search parameter (target range parameter [0,1])
- * 
- * @return True if solution is valid
- */
+  /**
+   * Test validity of a solution given search parameter
+   *
+   * @param p Search parameter (target range parameter [0,1])
+   *
+   * @return True if solution is valid
+   */
   bool valid(const fixed p);
 
 public:
-/** 
- * Search for target range to produce remaining time equal to
- * value specified in constructor.
- *
- * Running this adjusts the target values for AAT task points. 
- * 
- * @param p Default range (0-1)
- * 
- * @return Range value for solution
- */
+  /**
+   * Search for target range to produce remaining time equal to
+   * value specified in constructor.
+   *
+   * Running this adjusts the target values for AAT task points.
+   *
+   * @param p Default range (0-1)
+   *
+   * @return Range value for solution
+   */
   fixed search(const fixed p);
 
 private:
