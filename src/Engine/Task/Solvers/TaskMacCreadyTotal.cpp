@@ -25,11 +25,11 @@
 #include "Task/Points/TaskPoint.hpp"
 
 GlideResult
-TaskMacCreadyTotal::tp_solution(const unsigned i,
-                                const AircraftState &aircraft,
-                                fixed minH) const
+TaskMacCreadyTotal::SolvePoint(const TaskPoint &tp,
+                               const AircraftState &aircraft,
+                               fixed minH) const
 {
-  return TaskSolution::GlideSolutionPlanned(*points[i], aircraft,
+  return TaskSolution::GlideSolutionPlanned(tp, aircraft,
                                             settings, glide_polar, minH);
 }
 

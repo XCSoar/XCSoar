@@ -26,11 +26,11 @@
 #include "Navigation/Aircraft.hpp"
 
 GlideResult
-TaskMacCreadyTravelled::tp_solution(const unsigned i,
-                                    const AircraftState &aircraft,
-                                    fixed minH) const
+TaskMacCreadyTravelled::SolvePoint(const TaskPoint &tp,
+                                   const AircraftState &aircraft,
+                                   fixed minH) const
 {
-  return TaskSolution::GlideSolutionTravelled(*points[i], aircraft,
+  return TaskSolution::GlideSolutionTravelled(tp, aircraft,
                                               settings, glide_polar, minH);
 }
 

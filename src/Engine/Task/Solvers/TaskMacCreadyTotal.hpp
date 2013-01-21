@@ -69,9 +69,9 @@ private:
     return fixed(0);
   }
 
-  virtual GlideResult tp_solution(const unsigned i,
-                                  const AircraftState &aircraft,
-                                  fixed minH) const gcc_override;
+  virtual GlideResult SolvePoint(const TaskPoint &tp,
+                                 const AircraftState &aircraft,
+                                 fixed minH) const gcc_override;
 
   virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const gcc_override;
 };

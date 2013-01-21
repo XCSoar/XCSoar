@@ -39,7 +39,8 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
                                          points[i]->GetElevation());
 
     // perform estimate, ensuring that alt is above previous taskpoint
-    GlideResult gr = tp_solution(i, aircraft_predict, tp_min_height);
+    const GlideResult gr = SolvePoint(*points[i], aircraft_predict,
+                                      tp_min_height);
     leg_solutions[i] = gr;
 
     // update state

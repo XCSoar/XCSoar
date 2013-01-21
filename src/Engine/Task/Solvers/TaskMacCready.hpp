@@ -203,20 +203,20 @@ private:
   virtual fixed get_min_height(const AircraftState &state) const = 0;
 
   /**
-   * Pure virtual method to calculate glide solution for specified index, given
+   * Pure virtual method to calculate glide solution for specified point, given
    * aircraft state and height constraint.
    * This is used to provide alternate methods for different perspectives
    * on the task, e.g. planned/remaining/travelled
    *
-   * @param index Index of task point
    * @param state Aircraft state at origin
    * @param minH Minimum height at destination
    *
    * @return Glide result for segment
    */
-  virtual GlideResult tp_solution(const unsigned index,
-                                  const AircraftState &state,
-                                  fixed minH) const = 0;
+  gcc_pure
+  virtual GlideResult SolvePoint(const TaskPoint &tp,
+                                 const AircraftState &state,
+                                 fixed minH) const = 0;
 
   /**
    * Pure virtual method to obtain aircraft state at start of task.
