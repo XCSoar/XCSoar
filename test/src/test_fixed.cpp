@@ -28,6 +28,32 @@
 #include <stdio.h>
 
 static constexpr struct {
+  double input;
+  int floor, ceil;
+} floor_ceil_tests[] = {
+  { 0, 0, 0 },
+
+  { 1.00001, 1, 2 },
+  { 1.4, 1, 2 },
+  { 1.5, 1, 2 },
+  { 1.99999, 1, 2 },
+
+  { -1.00001, -2, -1 },
+  { -1.4, -2, -1 },
+  { -1.5, -2, -1 },
+  { -1.99999, -2, -1 },
+};
+
+static void
+TestFloorCeil()
+{
+  for (const auto &i : floor_ceil_tests) {
+    ok1(floor(fixed(i.input)) == fixed(i.floor));
+    ok1(ceil(fixed(i.input)) == fixed(i.ceil));
+  }
+}
+
+static constexpr struct {
   double in;
   unsigned out;
 } uround_test_values[] = {
@@ -147,6 +173,7 @@ TestTinyHypot()
 
 int main(int argc, char** argv) {
   plan_tests(43 + ARRAY_SIZE(Hypot_test_values)
+             + ARRAY_SIZE(floor_ceil_tests) * 2
              + ARRAY_SIZE(uround_test_values)
              + 2 * ARRAY_SIZE(iround_test_values)
              + ARRAY_SIZE(tiny_hypot_test_values));
@@ -204,6 +231,7 @@ int main(int argc, char** argv) {
     }
   }
 
+  TestFloorCeil();
   TestRound();
   test_hypot();
   TestTinyHypot();
