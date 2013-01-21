@@ -10,6 +10,8 @@ Version 6.4.6 - not yet released
   - SerialPort: fixed lockup/hang problem when closing for some CE devices (#2515)
 * user interface
   - sort airspaces properly in the airspace list dialog (#2528)
+* map
+  - allow PPC2000/2002 devices to use "padding" airspace rendering style again
 * infoboxes
   - fixes broken wind arrow display in some situations (#2295)
   - fix font scaling on screen rotation change (Android/Linux OpenGL)
