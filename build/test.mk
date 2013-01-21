@@ -2018,6 +2018,15 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
+	$(SRC)/Task/TaskFileIGC.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \

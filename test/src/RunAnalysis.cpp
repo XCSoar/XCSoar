@@ -76,13 +76,6 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "LocalTime.hpp"
 
-OrderedTask *
-TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
-                  const Waypoints *waypoints, unsigned index)
-{
-  return NULL;
-}
-
 void dlgBasicSettingsShowModal() {}
 void ShowWindSettingsDialog() {}
 
@@ -178,6 +171,15 @@ Main()
                                               blackboard.GetComputerSettings().task);
 
   LoadFiles(airspace_database);
+
+  const TaskFactoryType task_type_default =
+    blackboard.GetComputerSettings().task.task_type_default;
+  OrderedTask *task =
+    protected_task_manager.TaskCreateDefault(&way_points, task_type_default);
+  if (task != nullptr) {
+    protected_task_manager.TaskCommit(*task);
+    delete task;
+  }
 
   GlideComputer glide_computer(way_points, airspace_database,
                                protected_task_manager,
