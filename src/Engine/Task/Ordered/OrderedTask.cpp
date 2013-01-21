@@ -775,8 +775,7 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
-  TaskMacCreadyTravelled tm(task_points.cbegin(), task_points.cend(),
-                            active_task_point,
+  TaskMacCreadyTravelled tm(task_points.cbegin(), active_task_point,
                             task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution();

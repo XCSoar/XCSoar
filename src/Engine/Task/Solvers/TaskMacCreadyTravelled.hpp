@@ -37,11 +37,11 @@ public:
    * @param _gp Glide polar to copy for calculations
    */
   template<class I>
-  TaskMacCreadyTravelled(const I tps_begin, const I tps_end,
+  TaskMacCreadyTravelled(const I tps_begin,
                          const unsigned _activeTaskPoint,
                          const GlideSettings &settings, const GlidePolar &_gp)
-    :TaskMacCready(tps_begin, tps_end, _activeTaskPoint, settings, _gp) {
-    end_index = active_index;
+    :TaskMacCready(tps_begin, std::next(tps_begin, _activeTaskPoint + 1),
+                   _activeTaskPoint, settings, _gp) {
   }
 
 private:
