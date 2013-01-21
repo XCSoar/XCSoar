@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-04 21:02+0100\n"
-"PO-Revision-Date: 2012-12-22 08:03+0000\n"
+"PO-Revision-Date: 2013-01-21 20:42+0000\n"
 "Last-Translator: Juha H <juha@siipi.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-22 10:40+0000\n"
-"X-Generator: Launchpad (build 16378)\n"
+"X-Launchpad-Export-Date: 2013-01-21 20:44+0000\n"
+"X-Generator: Launchpad (build 16430)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -451,7 +451,7 @@ msgstr "Ladataan reittipisteitä..."
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
-msgstr ""
+msgstr "Ei kaarrossa"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:225
 msgid "No Traffic"
@@ -743,7 +743,7 @@ msgstr "Kaikki"
 #: src/Menu/ExpandMacros.cpp:555 src/Input/InputEventsSettings.cpp:302
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Tehtävä & laskupaikat"
 
 #: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:304
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
@@ -753,7 +753,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Ei mitään"
 
 #: src/InfoBoxes/Content/Factory.cpp:149
 #, no-c-format
@@ -773,6 +773,9 @@ msgid ""
 "only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Tämä on GPS-korkeus keskimääräisestä merenpinnasta. Touch-screen/PC only: In "
+"simulation mode, this value is adjustable with the up/down arrow keys and "
+"the right/left arrow keys also cause the glider to turn."
 
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
@@ -825,6 +828,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Todellinen suunta seuraavaan reittipisteeseen. For AAT tasks, this is the "
+"true bearing to the target within the AAT sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
@@ -885,7 +890,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:220
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Edellinen nosto keskiarvo"
 
 #: src/InfoBoxes/Content/Factory.cpp:221
 #, no-c-format
@@ -898,11 +903,13 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Edellisessä nostossa saavutettu/menetetty korkeus jaettuna siinä käytetyllä "
+"ajalla."
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "Edellinen nosto netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:231
 #, no-c-format
@@ -912,12 +919,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:232
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Edellisessä nostossa saatvutettu/menetetty korkeus."
 
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "Edellinen nosto aika"
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -963,6 +970,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Etäisyys valittuun reittipisteeseen. For AAT tasks, this is the distance to "
+"the target within the AAT sector."
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -1069,7 +1078,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Jäljellä oleva matka"
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
@@ -1079,7 +1088,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Tehtävän jäljellä oleva matka reittipisteiden kautta."
 
 #: src/InfoBoxes/Content/Factory.cpp:340 src/InfoBoxes/Content/Factory.cpp:817
 #, no-c-format
@@ -1120,7 +1129,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Termiikki keskinosto"
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
@@ -1132,12 +1141,12 @@ msgstr ""
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
-msgstr ""
+msgstr "Nykyisessä nostossa saavutettu/menetetty korkeus jaettuna kestolla."
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Termiikki tuotto"
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
@@ -1147,7 +1156,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:372
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Nykyisessä nostossa saavutettu/menetetty korkeus."
 
 #: src/InfoBoxes/Content/Factory.cpp:380 src/InfoBoxes/Content/Factory.cpp:381
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
@@ -1314,7 +1323,7 @@ msgstr ""
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
-msgstr ""
+msgstr "Tämä painekorkeus saadaan laitteelta jossa on paineanturi."
 
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
@@ -1337,7 +1346,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Prosentuaalisesti nostossa"
 
 #: src/InfoBoxes/Content/Factory.cpp:504
 #, no-c-format
@@ -1350,6 +1359,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"Nostossa vietetty aika prosentuaalisesti. Tämä tieto nollataan tehtävän "
+"aloituksessa."
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -1369,7 +1380,7 @@ msgstr "Lennon kesto havaitusta lentoonlähdöstä."
 #: src/InfoBoxes/Content/Factory.cpp:523
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "G-voima"
 
 #: src/InfoBoxes/Content/Factory.cpp:524
 #, no-c-format
@@ -1381,7 +1392,7 @@ msgstr ""
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
-msgstr ""
+msgstr "Yhteensopivan variometrin ilmoittama G-rasitus."
 
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
@@ -1404,7 +1415,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
 msgid "Time local"
-msgstr "Paikallinen aika"
+msgstr "Kello paikallinen"
 
 #: src/InfoBoxes/Content/Factory.cpp:544
 #, no-c-format
@@ -1414,7 +1425,7 @@ msgstr "Kello"
 #: src/InfoBoxes/Content/Factory.cpp:545
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr ""
+msgstr "GPS:ltä saatu paikallinen aika"
 
 #: src/InfoBoxes/Content/Factory.cpp:553 src/InfoBoxes/Content/Factory.cpp:554
 #, no-c-format
@@ -1424,7 +1435,7 @@ msgstr "Kello UTC"
 #: src/InfoBoxes/Content/Factory.cpp:555
 #, no-c-format
 msgid "GPS time expressed in UTC."
-msgstr ""
+msgstr "GPS:ltä saatu UTC-aika"
 
 #: src/InfoBoxes/Content/Factory.cpp:563
 #, no-c-format
@@ -1757,17 +1768,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
 msgid "Distance home"
-msgstr ""
+msgstr "Etäisyys kotiin"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Home Dist"
-msgstr ""
+msgstr "Matka kotiin"
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr ""
+msgstr "Etäisyys kotipisteeseen (mikäli määritetty)."
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
@@ -1807,7 +1818,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
 msgid "Thermal average over all"
-msgstr ""
+msgstr "Termiikki kokonaiskeskinosto"
 
 #: src/InfoBoxes/Content/Factory.cpp:784
 #, no-c-format
@@ -1993,7 +2004,7 @@ msgstr "Prosessori"
 #: src/InfoBoxes/Content/Factory.cpp:910
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
-msgstr ""
+msgstr "XCSoarin käyttämä prosessoriteho keskiarvona viiden sekunnin ajalta."
 
 #: src/InfoBoxes/Content/Factory.cpp:918
 #, no-c-format
@@ -2038,16 +2049,18 @@ msgid ""
 "Pressure Altitude given as Flight Level. Only available if barometric "
 "altitude available and correct QNH set."
 msgstr ""
+"Painekorkeus ilmoitettuna lentopintana. Käytettävissä vain mikäli painetieto "
+"on saatavilla ja oikea QNH asetettu."
 
 #: src/InfoBoxes/Content/Factory.cpp:949 src/InfoBoxes/Content/Factory.cpp:950
 #, no-c-format
 msgid "Barogram"
-msgstr ""
+msgstr "Barometri"
 
 #: src/InfoBoxes/Content/Factory.cpp:951
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr ""
+msgstr "Piirtää korkeuskäyrää lennon aikana"
 
 #: src/InfoBoxes/Content/Factory.cpp:959
 #, no-c-format
@@ -2086,7 +2099,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:979
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr ""
+msgstr "Termiikki noususeuranta"
 
 #: src/InfoBoxes/Content/Factory.cpp:980
 #, no-c-format
@@ -2133,6 +2146,8 @@ msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
 "points."
 msgstr ""
+"Kellon kaltainen näyttö tehtävän jäljellä olevasta matkasta, näyttää "
+"tehtävältä saavutetut pisteet."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
 #, no-c-format
@@ -2187,7 +2202,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1039
 #, no-c-format
 msgid "Attitude indicator"
-msgstr ""
+msgstr "Keinohorisontti"
 
 #: src/InfoBoxes/Content/Factory.cpp:1040
 #, no-c-format
@@ -2200,6 +2215,8 @@ msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
 "supplemented with acceleration and variometer data if available."
 msgstr ""
+"Keinohorisontti lasketan lentoradasta ja täydennetään kiihtyvyys- ja "
+"variometidatalla mikäli saatavilla."
 
 #: src/InfoBoxes/Content/Factory.cpp:1049
 #, no-c-format
@@ -2292,7 +2309,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1099
 #, no-c-format
 msgid "Altitude (Auto)"
-msgstr ""
+msgstr "Korkeus (Auto)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1100
 #, no-c-format
@@ -2306,6 +2323,8 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
+"Tämä on painekorkeus mikäli tieto on saatavilla, muuten näytetään GPS-"
+"korkeus."
 
 #: src/InfoBoxes/Content/Factory.cpp:1110
 #, no-c-format
@@ -2327,7 +2346,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1120
 #, no-c-format
 msgid "Head wind component (simplified)"
-msgstr ""
+msgstr "Vastatuulikomponentti (yksinkertaistettu)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1121
 #, no-c-format
@@ -2396,7 +2415,7 @@ msgstr "Termiikkiavustin osoittaa noston voimakkuuden kaarron alueella."
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "Aika lähdön avaukseen/sulkuun"
 
 #: src/InfoBoxes/Content/Factory.cpp:1161
 #, no-c-format
@@ -2406,12 +2425,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1162
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "Näyttää jäljellä olevan ajan lähdön avaukseen tai sulkemiseen"
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "Aika lähdön avaukseen/sulkuun kun siellä"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
 #, no-c-format
@@ -2424,6 +2443,8 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"Näyttää jäljellä olevan ajan lähdön avaukseen tai sulkemiseen verrattuna "
+"aikaan joka sinne kestää."
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
 #, c-format
@@ -2847,7 +2868,7 @@ msgstr ""
 
 #: src/PageSettings.cpp:37
 msgid "Info Hide"
-msgstr ""
+msgstr "Info piilota"
 
 #: src/PageSettings.cpp:39
 msgid "Map (Full screen)"
@@ -2903,7 +2924,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:334
 msgid "Marker"
-msgstr ""
+msgstr "Merkki"
 
 #: src/Renderer/MapItemListRenderer.cpp:341
 #, c-format
@@ -2947,7 +2968,7 @@ msgstr ""
 #: src/MapWindow/GlueMapWindowItems.cpp:98
 #: src/Dialogs/MapItemListDialog.cpp:239
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Kartan elementit tässä pisteessä"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:108
 msgid "Elevation: "
@@ -3043,7 +3064,7 @@ msgstr "Massa"
 #: src/Renderer/GlidePolarRenderer.cpp:134
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:298
 msgid "Wing loading"
-msgstr ""
+msgstr "Siipikuorma"
 
 #: src/Renderer/CuRenderer.cpp:124
 msgid "Thermal height"
@@ -3419,7 +3440,7 @@ msgstr ""
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:186
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:200
 msgid "Manage"
-msgstr ""
+msgstr "Hallitse"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:239
 msgid "Monitor"
@@ -3646,9 +3667,9 @@ msgid "Middle"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Lataa"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -3685,9 +3706,8 @@ msgid "Speed command"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "Vaihda Inforuutua"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -3709,7 +3729,7 @@ msgstr ""
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:88
 #: Data/Dialogs/dlgTeamCode.xml:12 Data/Dialogs/dlgTeamCode_L.xml:12
 msgid "Range"
-msgstr ""
+msgstr "Etäisyys"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:122
 #, no-c-format
@@ -3896,7 +3916,7 @@ msgstr ""
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
-msgstr ""
+msgstr "Ilmatilan piirron asetukset"
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:79
@@ -3999,7 +4019,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:291
 msgid "Ballast"
-msgstr ""
+msgstr "Ballasti"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:292
 msgid ""
@@ -4011,7 +4031,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:300
 msgid "Bugs"
-msgstr ""
+msgstr "Ötökät"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:301
 #, no-c-format
@@ -4104,7 +4124,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "Variom. äänet"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
@@ -4393,7 +4413,7 @@ msgstr "Aktiivinen"
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
 #, c-format
 msgid "Loading of plane profile \"%s\" failed!"
-msgstr ""
+msgstr "Profiilin \"%s\" lataaminen epäonnistui!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:251
 #, c-format
@@ -4428,7 +4448,7 @@ msgstr "Haluatko ladata profiilin \"%s\"?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:411
 msgid "Planes"
-msgstr ""
+msgstr "Koneet"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:44
 #: Data/Dialogs/dlgPlaneDetails.xml:3 Data/Dialogs/dlgPlaneDetails_L.xml:3
@@ -4438,7 +4458,7 @@ msgstr "Koneen tiedot"
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:64 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
 msgid "Plane Polar"
-msgstr ""
+msgstr "Koneen polaari"
 
 #. let the user select
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:156
@@ -4539,7 +4559,7 @@ msgstr ""
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:112
 msgid "Satellites in view"
-msgstr ""
+msgstr "Satelliitteja näkyvillä"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:113
 msgid "Variometer"
@@ -4557,57 +4577,57 @@ msgstr ""
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:100
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:199
 msgid "Estimated task time"
-msgstr ""
+msgstr "Arvioitu tehtävän kesto"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:101
 msgid "Remaining time"
-msgstr ""
+msgstr "Jäljellä oleva aika"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:200
 msgid "Task distance"
-msgstr ""
+msgstr "Tehtävän pituus"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:103
 msgid "Remaining distance"
-msgstr ""
+msgstr "Matkaa jäljellä"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:104
 msgid "Speed estimated"
-msgstr ""
+msgstr "Arvioitu nopeus"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:105
 msgid "Speed average"
-msgstr ""
+msgstr "Keskinopeus"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:103
 msgid "Valid start"
-msgstr ""
+msgstr "Hyväksytty startti"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:104
 msgid "Start time"
-msgstr ""
+msgstr "Aloitusaika"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:105
 msgid "Start alt."
-msgstr ""
+msgstr "Aloituskorkeus"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:106
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:116
 msgid "Start point"
-msgstr ""
+msgstr "Aloituspiste"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:107
 msgid "Start speed"
-msgstr ""
+msgstr "Aloitusnopeus"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:108
 msgid "Finish min. alt."
-msgstr ""
+msgstr "Min. lopetuskorkeus"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:109
 msgid "Valid finish"
-msgstr ""
+msgstr "Hyväksytty lopetus"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:97
@@ -4624,21 +4644,20 @@ msgstr "UTC-päiväys"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:112
 msgid "Flight time"
-msgstr ""
+msgstr "Lentoaika"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:113
 msgid "Takeoff time"
-msgstr ""
+msgstr "Lähtöaika"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:114
 msgid "Landing time"
-msgstr ""
+msgstr "Laskuaika"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
-#, fuzzy
 msgid "Daylight time"
-msgstr "Varoitusaika"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -4807,7 +4826,7 @@ msgstr "Kaikki ilmatilat näytetään."
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid "Clip"
-msgstr ""
+msgstr "Leikkaa"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
@@ -4885,13 +4904,14 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
 msgid "Clip altitude"
-msgstr ""
+msgstr "Leikkauskorkeus"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
 msgstr ""
+"Leikkaustilassa tämä on korkeus jonka alapuoleiset ilmatilat näytetään."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
 msgid "Margin"
@@ -4969,7 +4989,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
 msgid "FLARM radar"
-msgstr ""
+msgstr "FLARM-tutka"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
 msgid ""
@@ -5053,7 +5073,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:78
 msgid "Show ballast"
-msgstr ""
+msgstr "Näytä ballasti"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:78
 msgid "Whether to show the ballast percentage."
@@ -5110,7 +5130,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Autom. MC-tila"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -5130,23 +5150,28 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:83
 msgid "Nav. by baro altitude"
-msgstr ""
+msgstr "Nav. painekorkeudella"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:84
 msgid ""
 "When enabled and if connected to a barometric altimeter, barometric altitude "
 "is used for all navigation functions. Otherwise GPS altitude is used."
 msgstr ""
+"Kun päällä ja kytketty ilmanpainetiedon välittävään variometriin, niin "
+"paineeseen perustuvaa korkeustietoa käytetään kaikkiin toimintoihin. Muuten "
+"käytetään GPS-korkeutta."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:89
 msgid "Flap forces cruise"
-msgstr ""
+msgstr "Laipat asettaa liukuun"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
+"Kun Vega -variometri on kytketty ja tämä asetus on päällä, määrittää "
+"positiivinen laippa-asetus laiteen termiikki- ja liukutilan välillä."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:96
 #, no-c-format
@@ -5171,7 +5196,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:111
 msgid "Predict wind drift"
-msgstr ""
+msgstr "Ennusta tuulen sortama"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid ""
@@ -5244,7 +5269,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:177
 msgid "Menu timeout"
-msgstr ""
+msgstr "Menun esitysaika"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:178
 msgid ""
@@ -5264,7 +5289,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:191
 msgid "Text input style"
-msgstr ""
+msgstr "Tekstinsyöttötapa"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:192
 msgid ""
@@ -5274,15 +5299,15 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:202
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "Järjestelmän oletus"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:208
 msgid "Haptic feedback"
-msgstr ""
+msgstr "Haptinen palaute"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:209
 msgid "Determines if haptic feedback like vibration is used."
-msgstr ""
+msgstr "Määrittää onko haptinen palaute (esim. värinä) käytössä."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:53
 #, no-c-format
@@ -5512,15 +5537,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 msgid "Display orientation"
-msgstr ""
+msgstr "Näytön suunta"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:169
 msgid "Rotate the display on devices that support it."
-msgstr ""
+msgstr "Kääntää näyttöä laitteissa joissa se on mahdollista."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:174
 msgid "InfoBox geometry"
-msgstr ""
+msgstr "Inforuutujen asettelu"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:175
 msgid ""
@@ -5530,11 +5555,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "FLARM display"
-msgstr ""
+msgstr "FLARM-näyttö"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Choose a location for the FLARM display."
-msgstr ""
+msgstr "Valitse FLARM-näytön sijainti."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:183
 msgid "Tab dialog style"
@@ -5577,7 +5602,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:54
 #, no-c-format
 msgid "Start only"
-msgstr ""
+msgstr "Vain käynnistys"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "Time step cruise"
@@ -5615,6 +5640,8 @@ msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
+"Käynnistää ja lopettaa lentojen automaattisen tallennuksen lentoonlähdössä "
+"ja laskussa. Poista käytöstä riippuliidossa."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:90
 msgid "NMEA logger"
@@ -5628,11 +5655,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
 msgid "Log book"
-msgstr ""
+msgstr "Lokikirja"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
 msgid "Logs each start and landing."
-msgstr ""
+msgstr "Kirjaa jokaisen lähdön ja laskun."
 
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:59
 msgid "Pilot name"
@@ -5769,7 +5796,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:138
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "Max. auto zoom etäisyys"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:139
 msgid "The upper limit for auto zoom distance."
@@ -6418,7 +6445,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:198
 #, no-c-format
 msgid "Radius"
-msgstr ""
+msgstr "Säde"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:117
 msgid "Default start type for new tasks you create."
@@ -6577,7 +6604,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
 msgid "Preset"
-msgstr ""
+msgstr "Asettelu"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
 msgid "Load a set of units."
@@ -6600,18 +6627,20 @@ msgstr "solmua"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:145
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "Koneen/tuulen nopeus"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
 msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
 msgstr ""
+"Ilma-aluksen ja tuulen nopeuksissa käytettävä yksikkö. Tehtävän nopeudelle "
+"voidaan asettaa eri yksikkö."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:159
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
-msgstr ""
+msgstr "Etäisyyden yksikkö, esim. matka reittipisteeseen."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
 msgid "Lift"
@@ -6619,7 +6648,7 @@ msgstr "Nousu"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
 msgid "Units used for vertical speeds (variometer)."
-msgstr ""
+msgstr "Pystynopeuden yksikkö (variometri)"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
 #, no-c-format
@@ -6661,7 +6690,7 @@ msgstr "Koordinaatistossa käytettävät yksiköt."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
 msgid "UTC offset"
-msgstr ""
+msgstr "UTC-siirto"
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:92
 msgid ""
@@ -6729,7 +6758,7 @@ msgstr "Reittipisteen nimeä ei näytetä."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:103
 msgid "Label format"
-msgstr ""
+msgstr "Merkinnän muoto"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:103
 msgid "Determines how labels are displayed with each waypoint"
@@ -6840,7 +6869,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:161
 #, no-c-format
 msgid "Purple circle"
-msgstr ""
+msgstr "Violetti ympyrä"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -6850,11 +6879,14 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Lentokentät ja maastolaskupaikat esitetään violetteina ympyröinä. Mikäli "
+"paikka on liitomatkan päässä violetin taustalla on vihreä ympyrä, jos paikka "
+"on vuoren takana, niin tausta on punainen."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:166
 #, no-c-format
 msgid "B/W"
-msgstr ""
+msgstr "Mustavalko"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:167
 #, no-c-format
@@ -6863,11 +6895,14 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"Lentokentät ja maastolaskupaikat esitetään valkoisena tai harmaana. Mikäli "
+"paikka on liitomatkan päässä väri vahdetaan vihreäksi, jos taas edessä on "
+"vuori väri on punainen."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:171
 #, no-c-format
 msgid "Traffic lights"
-msgstr ""
+msgstr "Liikennevalot"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
@@ -6876,10 +6911,12 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"Lentokentät ja maastolaskupaikat esitetään liikenevalojen värein. Vihreä on "
+"liitomatkan päässä, oranssi vuoren takana ja punainen ei ole tavoitettavissa."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:176
 msgid "Landable symbols"
-msgstr ""
+msgstr "Laskupaikkojen merkki"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:177
 msgid ""
@@ -6887,6 +6924,10 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
+"Kolme eri tyyliä on valittavana; violetti ympyä (WinPilot tyylinen), "
+"mustavalkoinen tai oranssi. Piirto on erilainen lentokentällä ja "
+"maastolaskupaikalla. Kaikissa tyyleissä liitomatkan päässä olevat paikat "
+"korostetaan vihreällä."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:182
 msgid "Detailed landables"
@@ -6966,12 +7007,12 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:180
 msgid "Calculator"
-msgstr ""
+msgstr "Laskin"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:183
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:197
 msgid "Turn Points"
-msgstr ""
+msgstr "K.pisteet"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:315
 msgid "Validation Errors"
@@ -7001,11 +7042,11 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:176
 msgid "Clear All"
-msgstr ""
+msgstr "Tyhjennä kaikki"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:322
 msgid "Clear all points?"
-msgstr ""
+msgstr "Tyhjennä kaikki pisteet?"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:322
 msgid "Task edit"
@@ -7013,7 +7054,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:375
 msgid "Add Turnpoint"
-msgstr ""
+msgstr "Lisää käännepiste"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:195
 msgid "Minimum AAT task time in minutes."
@@ -7163,7 +7204,7 @@ msgstr ""
 #: Data/Dialogs/dlgNOAADetails_L.xml:7 Data/Dialogs/dlgTaskPoint.xml:7
 #: Data/Dialogs/dlgTaskPoint_L.xml:11
 msgid "Remove"
-msgstr ""
+msgstr "Poista"
 
 #: src/Dialogs/Task/dlgTaskOptionalStarts.cpp:151
 msgid "(Add Alternate Start)"
@@ -7226,7 +7267,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:121
 #, c-format
 msgid "Task is empty (%s)"
-msgstr ""
+msgstr "Tehtävä on tyhjä (%s)"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:131
 msgid "max."
@@ -7327,11 +7368,11 @@ msgstr "Nyt"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
-msgstr ""
+msgstr "Variom. ääni"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:72
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Jäljittelee sähköisen variometrin ääntä."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:75
 msgid "Volume"
@@ -7339,13 +7380,13 @@ msgstr "Äänenvoimakkuus"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:78
 msgid "Enable Deadband"
-msgstr ""
+msgstr "Nollakohta"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:79
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr ""
+msgstr "Vaimenna ääni mikäli nosto on lähellä nollaa"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "Min. Frequency"
@@ -7353,7 +7394,7 @@ msgstr "Min. taajuus"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "Toistettava äänentaajuus maksimi vajoamassa."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "Zero Frequency"
@@ -7361,7 +7402,7 @@ msgstr "Nollataajuus"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "Toistettava äänentaajuus nollanostossa."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "Max. Frequency"
@@ -7369,7 +7410,7 @@ msgstr "Max. taajuus"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "Toistettava äänentaajuus maksimi nostossa."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
@@ -7445,7 +7486,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
 msgid "Vehicle Type"
-msgstr ""
+msgstr "Alusluokka"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
 msgid "Type of vehicle used."
@@ -7677,7 +7718,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid "Rate"
-msgstr ""
+msgstr "Nopeus"
 
 #: Data/Dialogs/dlgBrightness.xml:3
 msgid "Screen Brightness"
@@ -7716,7 +7757,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:4 Data/Dialogs/dlgTeamCode_L.xml:4
 msgid "Set Code"
-msgstr ""
+msgstr "Aseta koodi"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid "Brightness"
@@ -7725,7 +7766,7 @@ msgstr "Kirkkaus"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:21
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:21
 msgid "Wing area"
-msgstr ""
+msgstr "Siipiala"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:3
 #: Data/Dialogs/dlgWaypointDetails_L.xml:3
@@ -7842,7 +7883,7 @@ msgstr ""
 
 #: Data/Dialogs/WaypointList.xml:1 Data/Dialogs/WaypointList_L.xml:1
 msgid "Select Waypoint"
-msgstr ""
+msgstr "Valitse reittipiste"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:37 Data/Dialogs/dlgPlaneDetails_L.xml:51
 msgid "Max. Cruise Speed"
@@ -7975,7 +8016,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskActions.xml:5
 msgid "Declare"
-msgstr ""
+msgstr "Ilmoita"
 
 #: Data/Dialogs/dlgVario.xml:8 Data/Dialogs/dlgVario_L.xml:7
 msgid "Demo"
@@ -7987,7 +8028,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:4 Data/Dialogs/dlgPlaneDetails_L.xml:5
 msgid "Registration"
-msgstr ""
+msgstr "Rekisteri"
 
 #: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
 msgid "Radial"
@@ -8021,7 +8062,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:25 Data/Dialogs/dlgPlaneDetails_L.xml:32
 msgid "Wing Area"
-msgstr ""
+msgstr "Siipiala"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
@@ -8121,7 +8162,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:41
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:41
 msgid "The time in seconds to dump full ballast."
-msgstr ""
+msgstr "Täyden ballastin tyhjenemisaika sekunneissa."
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
@@ -8129,7 +8170,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:11 Data/Dialogs/dlgTeamCode_L.xml:11
 msgid "Mate code"
-msgstr ""
+msgstr "Kaverin koodi"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:3
 msgid "Airspace Warnings"
@@ -8189,6 +8230,8 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
+"Reittipiste-\n"
+"lista"
 
 #: Data/Input/default.xci:544 Data/Input/default.xci:593
 #: Data/Input/default.xci:642 Data/Input/default.xci:934
@@ -8197,7 +8240,7 @@ msgstr "Asetukset"
 
 #: Data/Input/default.xci:505 Data/Input/default.xci:1128
 msgid "Labels"
-msgstr ""
+msgstr "Merkinnät"
 
 #: Data/Input/default.xci:70
 msgid "Below final glide"
@@ -8249,10 +8292,12 @@ msgid ""
 "What's\n"
 "here?"
 msgstr ""
+"Mitä\n"
+"täällä on?"
 
 #: Data/Input/default.xci:419 Data/Input/default.xci:1110
 msgid "Dropped marker"
-msgstr ""
+msgstr "Merkki lisätty"
 
 #: Data/Input/default.xci:438 Data/Input/default.xci:1094
 msgid ""
@@ -8366,6 +8411,8 @@ msgid ""
 "Mark\n"
 "Drop"
 msgstr ""
+"Lisää\n"
+"merkki"
 
 #: Data/Input/default.xci:753
 msgid "Stored to EEPROM"
@@ -8377,7 +8424,7 @@ msgstr ""
 
 #: Data/Input/default.xci:887
 msgid "Credits"
-msgstr ""
+msgstr "Tietoja"
 
 #: Data/Input/default.xci:146 Data/Input/default.xci:464
 #: Data/Input/default.xci:992
@@ -8405,6 +8452,8 @@ msgid ""
 "FLARM\n"
 "Details"
 msgstr ""
+"FLARM-\n"
+"tiedot"
 
 #: Data/Input/default.xci:139 Data/Input/default.xci:457
 #: Data/Input/default.xci:985
