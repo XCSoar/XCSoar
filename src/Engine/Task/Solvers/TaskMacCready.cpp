@@ -34,7 +34,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
   GlideResult acc_gr;
   AircraftState aircraft_predict = get_aircraft_start(aircraft);
 
-  for (int i = start_index; i <= end_index; ++i) {
+  for (unsigned i = 0, size = points.size(); i < size; ++i) {
     const fixed tp_min_height = std::max(aircraft_min_height,
                                          points[i]->GetElevation());
 
@@ -44,7 +44,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
     leg_solutions[i] = gr;
 
     // update state
-    if (i == start_index)
+    if (i == 0)
       acc_gr = gr;
     else
       acc_gr.Add(gr);
@@ -69,11 +69,11 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
   AircraftState aircraft_predict = aircraft;
   GlideResult acc_gr;
 
-  for (int i = start_index; i <= end_index; ++i) {
+  for (unsigned i = 0, size = points.size(); i < size; ++i) {
     const GlideResult gr = tp_sink(i, aircraft_predict, S);
 
     aircraft_predict.altitude -= gr.height_glide;
-    if (i == start_index)
+    if (i == 0)
       acc_gr = gr;
     else
       acc_gr.altitude_difference =

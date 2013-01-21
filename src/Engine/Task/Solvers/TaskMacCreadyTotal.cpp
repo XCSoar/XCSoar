@@ -49,7 +49,7 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
 
   fixed t_total = fixed(0);
   fixed d_total = fixed(0);
-  for (int i = end_index; i >= start_index; i--) {
+  for (int i = points.size() - 1; i >= 0; i--) {
     const GlideResult &result = leg_solutions[i];
 
     if (result.IsOk() && positive(result.time_elapsed)) {
