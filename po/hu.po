@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-04 21:02+0100\n"
-"PO-Revision-Date: 2012-08-08 07:43+0000\n"
-"Last-Translator: Petrovits István <ipetrovits@gmail.com>\n"
+"PO-Revision-Date: 2013-01-19 16:53+0000\n"
+"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-13 06:41+0000\n"
-"X-Generator: Launchpad (build 15791)\n"
+"X-Launchpad-Export-Date: 2013-01-21 20:44+0000\n"
+"X-Generator: Launchpad (build 16430)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -56,7 +56,7 @@ msgstr "FAI céltáv"
 
 #: src/Task/TypeStrings.cpp:47
 msgid "AAT"
-msgstr "Hozzárendelt területes (HT) feladat"
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:49
 msgid "Mixed"
@@ -108,7 +108,7 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
-"Versenyfeladat, fordulópontok és hozzárendelt területek (HT) keverékével, "
+"Versenyfeladat, fordulópontok és előre meghatározott légterek keverékével, "
 "minimális idő előírásával."
 
 #: src/Task/TypeStrings.cpp:80
@@ -471,7 +471,7 @@ msgstr "Hiba a repülés letöltésekor."
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr "Szeretne egy masik repulest letolteni?"
+msgstr "Szeretne egy másik repülést letölteni?"
 
 #: src/Waypoint/WaypointGlue.cpp:111
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:35
@@ -1026,8 +1026,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"A következő fordulópont távolsága. Hozzárendelt területes (HT) feladat "
-"esetén a szektor célpontjának távolsága."
+"A következő fordulópont távolsága. Légtérfeladat (AAT) esetén a szektor "
+"célpontjának távolsága."
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -1046,8 +1046,7 @@ msgid ""
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
 "A következő fordulópontba érkezés magassága a biztonsági magassághoz képest. "
-"Hozzárendelt területes (HT) feladat esetén a szektorban kijelölt célhoz "
-"számítva."
+"Légtérfeladat (AAT) esetén a szektorban kijelölt célhoz számítva."
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
@@ -1065,8 +1064,8 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
-"A következő fordulópont eléréséhez hiányzó magasság. Hozzárendelt területes "
-"(HT) feladat esetén a szektorban kijelölt célhoz számítva."
+"A következő fordulópont eléréséhez hiányzó magasság. Légtérfeladat (AAT) "
+"esetén a szektorban kijelölt célhoz számítva."
 
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
@@ -1174,6 +1173,8 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"A feladat befejezéséhez szükséges siklószám.A biztonsági magasságban "
+"érkezéshez szükséges magasság és a távolság hányadosa."
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1308,9 +1309,7 @@ msgstr "HT idő"
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
-"Hátralevő idő hozzárendelt területes (HT) feladatban. Vörösre vált ha az idő "
-"lejárt."
+msgstr "Hátralevő idő légtérfeladatban (AAT). Vörösre vált ha az idő lejárt."
 
 #: src/InfoBoxes/Content/Factory.cpp:432
 #, no-c-format
@@ -1325,9 +1324,7 @@ msgstr "HT táv max"
 #: src/InfoBoxes/Content/Factory.cpp:434
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
-"Maximális lehetséges távolság a hozzárendelt területes (HT) feladat "
-"hátralevő részére."
+msgstr "Maximális lehetséges távolság a légtérfeladat (AAT) hátralevő részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:442
 #, no-c-format
@@ -1342,9 +1339,7 @@ msgstr "HT táv min"
 #: src/InfoBoxes/Content/Factory.cpp:444
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
-"Minimális lehetséges távolság hozzárendelt területes (HT) feladat hátralevő "
-"részére."
+msgstr "Minimális lehetséges távolság a légtérfeladat (AAT) hátralevő részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:452
 #, no-c-format
@@ -1362,8 +1357,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Hozzárendelt területes (HT) feladaton elérhető átlagsebesség, ha a maximális "
-"lehetséges hátralevő távolságot a minimális HT idő alatt repüljük."
+"Légtérfeladaton (AAT) elérhető átlagsebesség, ha a maximális lehetséges "
+"hátralevő távolságot a minimális AAT idő alatt repüljük."
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
@@ -1381,8 +1376,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"A hozzárendelt területes (HT) feladat elérhető átlagsebessége, ha a lehető "
-"legrövidebb távon repülünk a minimális HT idő alatt."
+"A légtérfeladat (AAT) elérhető átlagsebessége, ha a lehető legrövidebb távon "
+"repülünk a minimális AAT idő alatt."
 
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
@@ -1491,14 +1486,14 @@ msgstr ""
 "irányú manővereknél negatív."
 
 #: src/InfoBoxes/Content/Factory.cpp:533
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "Következő"
+msgstr "Sklsz köv"
 
 #: src/InfoBoxes/Content/Factory.cpp:534
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP GR"
-msgstr "FP Sklsz kmp"
+msgstr "Sklsz fp"
 
 #: src/InfoBoxes/Content/Factory.cpp:535
 #, no-c-format
@@ -1507,6 +1502,8 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"A következő fordulópont eléréséhez szükséges siklószám. A biztonsági "
+"magasságban érkezéshez szükséges magasság és a távolság hányadosa."
 
 #: src/InfoBoxes/Content/Factory.cpp:543
 #, no-c-format
@@ -1683,12 +1680,12 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"A gép nyomvonalának és a következő fordulópont, vagy hozzárendelt területes "
-"(HT) feladat esetén a következő szektor célpontjának iránya közötti "
-"különbség. A GPS navigáció a terepre vetített nyomvonalon alapul, és ennek "
-"az iránya eltérhet a gép irányától ha fúj a szél. A kettős nyilak mutatják, "
-"merre kell fordulni, hogy a nyomvonal a következő fordulópont irányába "
-"tartson. Ez az irány számításba veszi a Föld görbületét."
+"A gép nyomvonalának és a következő fordulópont, vagy légtérfeladat (AAT) "
+"esetén a következő szektor célpontjának iránya közötti különbség. A GPS "
+"navigáció a terepre vetített nyomvonalon alapul, és ennek az iránya eltérhet "
+"a gép irányától ha fúj a szél. A kettős nyilak mutatják, merre kell "
+"fordulni, hogy a nyomvonal a következő fordulópont irányába tartson. Ez az "
+"irány számításba veszi a Föld görbületét."
 
 #: src/InfoBoxes/Content/Factory.cpp:633
 #, no-c-format
@@ -1765,8 +1762,8 @@ msgstr "HT táv cél"
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr ""
-"Hozzárendelt területes (HT) feladaton a feladat hátralevő részének a célok "
-"megkerülésével számított távolsága ."
+"Légtérfeladaton (AAT) a feladat hátralevő részének a célok megkerülésével "
+"számított távolsága ."
 
 #: src/InfoBoxes/Content/Factory.cpp:673
 #, no-c-format
@@ -1784,8 +1781,8 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
-"Hozzárendelt területes (HT) feladaton elérhető átlagsebesség a célok körül, "
-"a minimum időnek megfelelően."
+"Légtérfeladaton (AAT) elérhető átlagsebesség a célok körül, a minimum időnek "
+"megfelelően."
 
 #: src/InfoBoxes/Content/Factory.cpp:683 src/InfoBoxes/Content/Factory.cpp:684
 #, no-c-format
@@ -1960,10 +1957,9 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
-"Az eltelt idő és a hozzárendelt területes (HT) feladat minimum tartamának "
-"különbsége. Vörös ha negatív (túl korai érkezés), kék ha a szektorban "
-"vagyunk és fordulhatunk, mert a becsült érkezés öt perccel meghaladja a HT "
-"időtartamot."
+"Az eltelt idő és a légtérfeladat (AAT) minimum tartamának különbsége. Vörös "
+"ha negatív (túl korai érkezés), kék ha a szektorban vagyunk és fordulhatunk, "
+"mert a becsült érkezés öt perccel meghaladja az AAT időtartamot."
 
 #: src/InfoBoxes/Content/Factory.cpp:783
 #, no-c-format
@@ -2192,8 +2188,7 @@ msgid ""
 "tasks, the target within the AAT sector is used."
 msgstr ""
 "A következő fordulópont elérésének abszolút magassága végsiklás során. "
-"Hozzárendelt területes (HT) feladatok során a szektorban kijelölt célonon "
-"alapul."
+"Légtérfeladatok (AAT) során a szektorban kijelölt célon alapul."
 
 #: src/InfoBoxes/Content/Factory.cpp:928 src/InfoBoxes/Content/Factory.cpp:929
 #, no-c-format
@@ -2456,8 +2451,8 @@ msgid ""
 "used."
 msgstr ""
 "Érkezési magasság a következő fordulópontra MC0 beállítással a biztonságos "
-"érkezési magassághoz képest. Hozzárendelt területes (HT) feladatok esetén a "
-"szektorban kijelölt célon alapul."
+"érkezési magassághoz képest. Légtérfeladatok (AAT) esetén a szektorban "
+"kijelölt célon alapul."
 
 #: src/InfoBoxes/Content/Factory.cpp:1079
 #, no-c-format
@@ -2614,31 +2609,32 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"Kör alakú termiksegéd amely az emelés eloszlását mutatja a kör területén."
 
 #: src/InfoBoxes/Content/Factory.cpp:1160
 #, no-c-format
 msgid "Start open/close countdown"
-msgstr ""
+msgstr "Hátralevő idő a start nyitásáig/zárásáig."
 
 #: src/InfoBoxes/Content/Factory.cpp:1161
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Csak kezdés"
+msgstr "Start megnyitása"
 
 #: src/InfoBoxes/Content/Factory.cpp:1162
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
-msgstr ""
+msgstr "A start megnyitásáig vagy zárásáig hátralevő időt mutatja."
 
 #: src/InfoBoxes/Content/Factory.cpp:1169
 #, no-c-format
 msgid "Start open/close countdown at reaching"
-msgstr ""
+msgstr "Időtartalék a start nyitásáig/zárásáig"
 
 #: src/InfoBoxes/Content/Factory.cpp:1170
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Start mag."
+msgstr "Start tartalék"
 
 #: src/InfoBoxes/Content/Factory.cpp:1171
 #, no-c-format
@@ -2646,11 +2642,13 @@ msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
 "calculated time to reach it."
 msgstr ""
+"A szükséges menetidőt figyelembe véve mutatja a startba érkezéskor a "
+"nyitásig vagy zárásig hátralevő időt."
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Altn %d"
-msgstr "Ktr1"
+msgstr "Másik %d"
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:295
@@ -2735,18 +2733,16 @@ msgid "Time Below"
 msgstr "Idő alacsonyabban"
 
 #: src/InfoBoxes/Content/Task.cpp:861 src/InfoBoxes/Content/Task.cpp:906
-#, fuzzy
 msgid "Closed"
-msgstr "Bezár"
+msgstr "Zárva"
 
 #: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
 msgid "Open"
-msgstr ""
+msgstr "Nyitva"
 
 #: src/InfoBoxes/Content/Task.cpp:875 src/InfoBoxes/Content/Task.cpp:920
-#, fuzzy
 msgid "Waiting"
-msgstr "Varió némítás"
+msgstr "Várakozik"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:80 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:51
@@ -3123,9 +3119,8 @@ msgid "around terrain"
 msgstr "terep körül"
 
 #: src/Renderer/MapItemListRenderer.cpp:246
-#, fuzzy
 msgid "Unreachable due to terrain."
-msgstr "Végsiklás terepen át"
+msgstr "Terep miatt elérhetetlen."
 
 #: src/Renderer/MapItemListRenderer.cpp:251
 msgid "Arrival altitude incl. safety height"
@@ -3506,9 +3501,8 @@ msgid "Select a file"
 msgstr "Válasszon egy fájlt"
 
 #: src/Dialogs/FileManager.cpp:684
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "Hiba a repülési lista letöltésekor"
+msgstr "A tartalomjegyzék letöltése sikertelen."
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
@@ -3516,23 +3510,22 @@ msgid "File Manager"
 msgstr "Fájlkezelő"
 
 #: src/Dialogs/FileManager.cpp:714
-#, fuzzy
 msgid "The file manager is not available on this device."
-msgstr "Ez a funkció még nem elérhető a platformodon."
+msgstr "Ezen az eszközön nincs fájlkezelő."
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
-msgstr ""
+msgstr "A fájlkezelőhöz Android 2.3 szükséges."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
-msgstr ""
+msgstr "IOIO kapcsolók és Nunchuk"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Nyomásérzékelő"
+msgstr "IOIO i2c nyomásszenzor"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3571,15 +3564,15 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "I2C Bus"
-msgstr ""
+msgstr "I2C busz"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:610
 msgid "Select the description or bus number that matches your configuration."
-msgstr ""
+msgstr "Válassza a konfigurációjának megfelelő leírást vagy busz sorszámot."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid "I2C Addr"
-msgstr ""
+msgstr "I2C cím"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
@@ -3588,11 +3581,13 @@ msgid ""
 "not understand the previous sentence you may assume that this field is not "
 "used."
 msgstr ""
+"A konfigurációjának megfelelő i2c cím. Ez a mező nem használatos, ha az I2C "
+"busz mezőben nem számot választott. Ha ezt az előző mondatot nem érti, akkor "
+"feltételezhetően a mező nem használatos."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
-#, fuzzy
 msgid "Pressure use"
-msgstr "Nyomásérzékelő"
+msgstr "Nyomásmérés célja"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:626
 msgid ""
@@ -3600,6 +3595,9 @@ msgid ""
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr ""
+"Válassza ki ennek a nyomásszenzornak a felhasználását. Ez a szenzor valami "
+"nyomást mér. Itt megmondhatja a rendszernek, hogy milyen nyomás ez és mire "
+"szeretné használni."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:641
 msgid "Driver"
@@ -3863,19 +3861,19 @@ msgid "Set new audio scheme?  Old values will be lost."
 msgstr "Rögzítsem az új hangsémát? A régi elvész."
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
-msgstr "Pozitív ívelőlap"
+msgstr "Pozitív"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Neutral"
-msgstr "Semleges ívelőlap"
+msgstr "Semleges"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
-msgstr "Negatív ívelőlap"
+msgstr "Negatív"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:59
 #, no-c-format
@@ -3885,17 +3883,17 @@ msgstr "Leszállás"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Fent"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
 msgid "Middle"
-msgstr ""
+msgstr "Középen"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Letöltés"
+msgstr "Lent"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -3903,18 +3901,17 @@ msgid "Locked"
 msgstr "Zárva"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Nincs kitöltve"
+msgstr "Nincs rögzítve"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
 msgstr "Féklap rögzítve"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
-#, fuzzy
 msgid "Flaps"
-msgstr "Ívelőlap"
+msgstr "Fékszárny"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
@@ -3933,9 +3930,8 @@ msgid "Speed command"
 msgstr "Sebesség parancs"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "Kapcsolók"
+msgstr "Kapcsoló"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -4233,9 +4229,8 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "Az automatikus szélalgoritmust lehet ki/be kapcsolni."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "Prefer external wind"
-msgstr "Külső széladat"
+msgstr "Külső széladat előnyben"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid ""
@@ -4818,7 +4813,7 @@ msgstr "Tápfeszültség"
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:99
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:198
 msgid "Assigned task time"
-msgstr "Hozzárendelt feladat idő"
+msgstr "Légtérfeladat idő"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:100
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:199
@@ -4902,9 +4897,8 @@ msgstr "Leszállás"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
-#, fuzzy
 msgid "Daylight time"
-msgstr "Repült idő"
+msgstr "Nappal"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -5109,6 +5103,7 @@ msgid ""
 "This selects the best performing option for your hardware. In fact it "
 "favours 'fill padding' except for PPC 2000 system."
 msgstr ""
+"Kiválasztja a készüléke teljesítményének megfelelő legjobb lehetőséget."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:71
 #, no-c-format
@@ -5118,7 +5113,7 @@ msgstr "Teljes kitöltés"
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:72
 #, no-c-format
 msgid "Transparently fills the airspace colour over the whole area."
-msgstr ""
+msgstr "Átlátszóan színezi ki a légtér teljes területét."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:73
 #, no-c-format
@@ -5126,12 +5121,10 @@ msgid "Fill padding"
 msgstr "Szélek kitöltése"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
-msgstr ""
-"A légtér kerülete fekete színnel kerüljön kirajzolásra, nem a légtér saját "
-"színével."
+msgstr "Folytonos körvonalat és félig átlátszó szegélyt rajzol a légtér köré."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:146
 msgid "Colours"
@@ -5261,10 +5254,10 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"Ez engedélyezi a FLARM radarkijelzőt. Nyílhegy formában kerül kijelzésre az "
-"útirány eltérése a gép haladási irányától és egy fel vagy lefele mutató "
-"háromszög utal a cél relatív magasságára a géphez képest. A cél színe minden "
-"üzemmódban a fenyegetettség szintjére utal."
+"Ez engedélyezi a FLARM radarkijelzőt. Nyílhegy formában kerül kijelzésre a "
+"forgalom haladási iránya a sajátunkhoz képest és egy fel vagy lefele mutató "
+"háromszög utal a cél relatív magasságára a sajátunkhoz képest. A nyíl színe "
+"minden üzemmódban a fenyegetés szintjére utal."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 msgid "Auto close FLARM"
@@ -5801,9 +5794,9 @@ msgid "Topleft"
 msgstr "Balrafent"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:133
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "Státusz doboz bal felső sarokban"
+msgstr "Az állapotjelző üzeneteket a bal felső sarokban jeleníti meg."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:138
 #, no-c-format
@@ -6040,16 +6033,18 @@ msgid ""
 msgstr "A térkép forgatása mindig a navigációs cél irányát követi."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Szél seb"
+msgstr "Szélirány"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
-msgstr "A térkép forgatása mindig a repülési irányt követi."
+msgstr ""
+"A térkép tájolását mindig a szélhez igazítja, hogy az fentről lefele fújjon. "
+"(hullámrepüléshez hasznos)"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
@@ -6487,6 +6482,8 @@ msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
+"Az emelőterekben a vonalak zöldek és vastagabbak, a merülésben barnák és "
+"vékonyak. A nulla emelést szürke vonal jelzi."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
 #, no-c-format
@@ -6498,7 +6495,7 @@ msgstr "Varió 1 (pöttyökkel)"
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
-msgstr ""
+msgstr "Az előzővel megegyező színséma de merülésben pontvonallal."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -6511,6 +6508,8 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
+"Ebben a színsémában az emelés narancstól vörösig, a merülés világostól "
+"sötétkékig terjedő színű. A nulla emelést sárga vonal jelzi."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
@@ -6520,7 +6519,7 @@ msgstr "Varió 2 (pöttyökkel)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr ""
+msgstr "A színséma a magasságnak megfelelő."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -6570,7 +6569,7 @@ msgstr "Egyszerű, vonalas, fehér siklóernyő grafika, fekete körvonallal."
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
 #, no-c-format
 msgid "No wind arrow is drawn."
-msgstr ""
+msgstr "Szélnyíl nem látszik"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
 #, no-c-format
@@ -6662,14 +6661,12 @@ msgid "Determines the way the wind arrow is drawn on the map."
 msgstr "Meghatározza a szél megjelenítésének módját a térképen."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
-#, fuzzy
 msgid "FAI triangle areas"
-msgstr "FAI háromszög"
+msgstr "FAI háromszögek"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
-#, fuzzy
 msgid "Show FAI triangle areas on the map."
-msgstr "Érvénytelen alakú a FAI háromszög.\n"
+msgstr "FAI háromszögek megjelenítése a térképen"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:201
@@ -6721,19 +6718,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:96
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:215
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr ""
-"MSL referenciamagasság a feladatkezdés maximális magasságának szabályához "
-"(tengerszint feletti)."
+msgstr "A referencia a tengerszint feletti magasság."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference is the height above the task point."
-msgstr ""
-"AGL referenciamagasság a feladatkezdés maximális magasságának szabályához "
-"(kezdőpont feletti)."
+msgstr "A referencia a feladatpont feletti magasság."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
@@ -6742,11 +6735,8 @@ msgstr "Start mag. bázisa"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
-#, fuzzy
 msgid "Reference used for start max height rule."
-msgstr ""
-"MSL referenciamagasság a feladatkezdés maximális magasságának szabályához "
-"(tengerszint feletti)."
+msgstr "A maximális startmagassághoz használt referencia."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:223
@@ -6769,11 +6759,8 @@ msgstr "Befejező magasság referencia"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
-#, fuzzy
 msgid "Reference used for finish min height rule."
-msgstr ""
-"MSL referenciamagasság a feladatbefejezés minimális magasságának szabályához "
-"(tengerszint feletti)."
+msgstr "A minimális befutó magassághoz használt referencia."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #, no-c-format
@@ -6899,7 +6886,7 @@ msgstr "HT min idő"
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:207
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "Alap HT minimum idő, új hozzárendelt területes (HT) feladatokhoz."
+msgstr "Alap AAT minimum idő új légtérfeladatokhoz."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:210
 msgid "Optimisation margin"
@@ -6910,9 +6897,9 @@ msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
-"Biztonsági időtartalék a hozzárendelt területes (HT) feladatok "
-"optimizálásához. Az optimumszámítás a legrövidebb időnek ezzel a tartalékkal "
-"megnövelt értékéhez igazítja a feladat végrehajtását."
+"Biztonsági időtartalék a légtérfeladatok (AAT) optimizálásához. Az "
+"optimumszámítás a legrövidebb időnek ezzel a tartalékkal megnövelt értékéhez "
+"igazítja a feladat végrehajtását."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:174
 msgid "Terrain display"
@@ -7500,14 +7487,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "HT feladat minimális ideje percben."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Start open time"
-msgstr "Start ideje"
+msgstr "Start megnyitás időpontja"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
-#, fuzzy
 msgid "Start close time"
-msgstr "Start ideje"
+msgstr "Start zárás időpontja"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -7612,10 +7597,9 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
-"A hozzárendelt területes (HT) feladatokban ez az érték megmutatja, hogy a "
-"lehetséges minimum és maximum távhoz képest milyen távot jelölt ki a "
-"célpontokkal. -100% a minimum, 0% a névleges, +100% a maximum HT távot "
-"jelenti."
+"A légtérfeladatokban (AAT) ez az érték megmutatja, hogy a lehetséges minimum "
+"és maximum távhoz képest milyen távot jelölt ki a célpontokkal. -100% a "
+"minimum, 0% a névleges, +100% a maximum AAT távot jelenti."
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:219
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
@@ -7819,9 +7803,8 @@ msgid "Alternates"
 msgstr "Kitérők"
 
 #: src/Dialogs/TimeEntry.cpp:83 src/Dialogs/dlgWeather.cpp:54
-#, fuzzy
 msgid "Now"
-msgstr "Nem"
+msgstr "Most"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -7873,23 +7856,27 @@ msgstr "A legnagyobb emelés során hallható hang frekvenciája"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "Holtsáv min. emelés"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Ezen tűrés alatti emeléseknél kezd a varió hangjelzést adni, ha a 'Holtsáv' "
+"be van kapcsolva."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "Holtsáv max. emelés"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:117
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Ezen tűrés feletti emeléseknél kezd a varió hangjelzést adni, ha a 'Holtsáv' "
+"be van kapcsolva."
 
 #: src/Dialogs/Weather/NOAAList.cpp:109 Data/Dialogs/dlgNOAADetails.xml:6
 #: Data/Dialogs/dlgNOAADetails_L.xml:6
@@ -7936,13 +7923,12 @@ msgid "Tracking Interval"
 msgstr "Nyomkövetési ütem"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-#, fuzzy
 msgid "Track friends"
-msgstr "Nyomkövetés"
+msgstr "Barátok követése"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Barátok helyzetének letöltése élőben a SkyLines szerverről."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
 msgid "Vehicle Type"
@@ -8283,7 +8269,7 @@ msgstr "Fordulópont részletek"
 
 #: Data/Dialogs/dlgTarget_L.xml:23
 msgid "Estimated time en-route to the next AAT target."
-msgstr ""
+msgstr "Becsült menetidő a következő HT célpontig."
 
 #: Data/Dialogs/dlgVoice.xml:30
 msgid "In sector"
@@ -8318,9 +8304,9 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
-"Hozzárendelt területes (HT) feladat esetén ezzel lehet beállítani a "
-"célpontokat a szektoron belül. Pozitív számok óra szerint, negatívak "
-"ellentétesen forgatják a vonalat."
+"Légtérfeladat (AAT) esetén ezzel lehet beállítani a célpontokat a szektoron "
+"belül. Pozitív számok óra szerint, negatívak ellentétesen forgatják a "
+"vonalat."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
@@ -8597,10 +8583,10 @@ msgid ""
 "sector and can turn now with estimated arrival time greater than AAT time "
 "plus 5 minutes."
 msgstr ""
-"HT delta idő - hozzárendelt területes (HT) feladatokon a HT minimumidő és a "
-"becsült időigény különbsége. Vörösre vált, ha negatív (várhatóan túl korai "
-"érkezés), kékre ha a szektorban vagyunk és az azonnali fordulással a becsült "
-"érkezési idő HT idő plusz öt perc."
+"AAT delta idő - légtérfeladatokon az AAT minimumidő és a becsült időigény "
+"különbsége. Vörösre vált, ha negatív (várhatóan túl korai érkezés), kékre ha "
+"a szektorban vagyunk és az azonnali fordulással a becsült érkezési idő AAT "
+"idő plusz öt perc."
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:10
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:10
@@ -8631,7 +8617,7 @@ msgstr "Referencia tömeg"
 
 #: Data/Dialogs/dlgTeamCode.xml:7 Data/Dialogs/dlgTeamCode_L.xml:6
 msgid "Flarm Lock"
-msgstr "Flarm kapocs"
+msgstr "Flarm kontaktus"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task altitude difference"
@@ -8722,9 +8708,9 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
-"Hozzárendelt területes (HT) feladaton ezzel lehet állítani a szektoron belül "
-"a célpontot. A nagyobb értékek nagyobb távolságra, a kisebbek közelebb "
-"viszik a célpontot, kisebb távot eredményezve a feladatra."
+"Légtérfeladaton (AAT) ezzel lehet állítani a szektoron belül a célpontot. A "
+"nagyobb értékek nagyobb távolságra, a kisebbek közelebb viszik a célpontot, "
+"kisebb távot eredményezve a feladatra."
 
 #: Data/Dialogs/dlgVoice.xml:14
 msgid "Waypoint distance"
@@ -8873,7 +8859,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1013
 msgid "Map"
-msgstr ""
+msgstr "Térkép"
 
 #: Data/Input/default.xci:132
 msgid ""
@@ -9059,6 +9045,15 @@ msgstr ""
 "METAR\n"
 "TAF"
 
+#~ msgid "Weather parameters"
+#~ msgstr "Időjárási paraméterek"
+
+#~ msgid "Sunset"
+#~ msgstr "Napnyugta"
+
+#~ msgid "Delete Error"
+#~ msgstr "Törlési hiba"
+
 #~ msgid ""
 #~ "Sample Text\n"
 #~ "123"
@@ -9068,15 +9063,6 @@ msgstr ""
 
 #~ msgid "My Sample"
 #~ msgstr "Saját Mintám"
-
-#~ msgid "Sunset"
-#~ msgstr "Napnyugta"
-
-#~ msgid "Delete Error"
-#~ msgstr "Törlési hiba"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Időjárási paraméterek"
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "HT Becs.Marad"
