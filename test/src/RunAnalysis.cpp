@@ -47,7 +47,6 @@ Copyright_License {
 #include "Airspace/AirspaceGlue.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Computer/BasicComputer.hpp"
@@ -165,7 +164,6 @@ Main()
   task_manager.SetTaskEvents(task_events);
 
   Airspaces airspace_database;
-  AirspaceWarningManager airspace_warning(airspace_database);
 
   ProtectedTaskManager protected_task_manager(task_manager,
                                               blackboard.GetComputerSettings().task);
