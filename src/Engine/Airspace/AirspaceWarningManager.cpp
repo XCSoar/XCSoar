@@ -357,6 +357,9 @@ bool
 AirspaceWarningManager::UpdateGlide(const AircraftState &state,
                                     const GlidePolar &glide_polar)
 {
+  if (!glide_polar.IsValid())
+    return false;
+
   const GeoPoint location_predicted = 
     state.GetPredictedState(prediction_time_glide).location;
 
@@ -371,6 +374,9 @@ bool
 AirspaceWarningManager::UpdateInside(const AircraftState& state,
                                      const GlidePolar &glide_polar)
 {
+  if (!glide_polar.IsValid())
+    return false;
+
   bool found = false;
 
   AirspacePredicateAircraftInside condition(state);
