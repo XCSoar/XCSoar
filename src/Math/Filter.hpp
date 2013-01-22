@@ -40,6 +40,12 @@ class Filter
 
 public:
   /**
+   * Non-initialising default constructor.  To initialise this
+   * instance, call Design().
+   */
+  Filter() = default;
+
+  /**
    * Constructor, designs low-pass FIR filter
    *
    * @param cutoff_wavelength 3dB cutoff wavelength (in cycles) of filter design

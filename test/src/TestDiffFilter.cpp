@@ -30,7 +30,7 @@ main(int argc, char **argv)
 {
   plan_tests(192 + 232 + 40);
 
-  DiffFilter df;
+  DiffFilter df(fixed(0));
 
   // Test steady-state response scaling
   for (long dY = 1; dY <= 10000000; dY *= 10) {

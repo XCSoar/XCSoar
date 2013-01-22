@@ -35,11 +35,17 @@ class DiffFilter
 
 public:
   /**
+   * Non-initialising default constructor.  To initialise this
+   * instance, call Reset().
+   */
+  DiffFilter() = default;
+
+  /**
    * Constructor.  Initialises as if fed x_default continuously.
    *
    * @param x_default Default value of input
    */
-  DiffFilter(const fixed x_default = fixed(0))
+  DiffFilter(const fixed x_default)
   {
     Reset(x_default);
   }

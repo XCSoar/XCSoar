@@ -40,12 +40,18 @@ class AircraftStateFilter {
   fixed v_x, v_y, v_alt;
 
 public:
+  /**
+   * Non-initialising default constructor.  To initialise this
+   * instance, call Design() and Reset().
+   */
+  AircraftStateFilter() = default;
+
   /** 
    * Constructor
    * 
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
-  AircraftStateFilter(const fixed cutoff_wavelength = fixed(10));
+  AircraftStateFilter(const fixed cutoff_wavelength);
 
   /**
    * Reset filters to initial state
