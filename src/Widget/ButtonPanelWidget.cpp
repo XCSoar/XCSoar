@@ -31,6 +31,7 @@ Copyright_License {
 ButtonPanelWidget::~ButtonPanelWidget()
 {
   delete buttons;
+  delete widget;
 }
 
 PixelRect
@@ -59,7 +60,7 @@ ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
 PixelSize
 ButtonPanelWidget::GetMinimumSize() const
 {
-  PixelSize size = widget.GetMinimumSize();
+  PixelSize size = widget->GetMinimumSize();
   if (size.cy > 0)
     size.cy += Layout::GetMinimumControlHeight();
   return size;
@@ -68,7 +69,7 @@ ButtonPanelWidget::GetMinimumSize() const
 PixelSize
 ButtonPanelWidget::GetMaximumSize() const
 {
-  PixelSize size = widget.GetMaximumSize();
+  PixelSize size = widget->GetMaximumSize();
   if (size.cy > 0)
     size.cy += Layout::GetMaximumControlHeight();
   return size;
@@ -84,7 +85,7 @@ ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 
   /* initialise with full dimensions for now, buttons will be added
      later */
-  widget.Initialise(parent, rc);
+  widget->Initialise(parent, rc);
 }
 
 void
@@ -94,7 +95,7 @@ ButtonPanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   /* initialise with full dimensions for now, buttons may be added
      during this call, and the final layout will be set by Show() */
-  widget.Prepare(parent, rc);
+  widget->Prepare(parent, rc);
 }
 
 void
@@ -106,13 +107,13 @@ ButtonPanelWidget::Unprepare()
 bool
 ButtonPanelWidget::Save(bool &changed, bool &require_restart)
 {
-  return widget.Save(changed, require_restart);
+  return widget->Save(changed, require_restart);
 }
 
 bool
 ButtonPanelWidget::Click()
 {
-  return widget.Click();
+  return widget->Click();
 }
 
 void
@@ -120,7 +121,7 @@ ButtonPanelWidget::ReClick()
 {
   assert(buttons != nullptr);
 
-  widget.ReClick();
+  widget->ReClick();
 }
 
 void
@@ -128,31 +129,31 @@ ButtonPanelWidget::Show(const PixelRect &rc)
 {
   assert(buttons != nullptr);
 
-  widget.Show(UpdateLayout(rc));
+  widget->Show(UpdateLayout(rc));
   buttons->ShowAll();
 }
 
 bool
 ButtonPanelWidget::Leave()
 {
-  return widget.Leave();
+  return widget->Leave();
 }
 
 void
 ButtonPanelWidget::Hide()
 {
   buttons->HideAll();
-  widget.Hide();
+  widget->Hide();
 }
 
 void
 ButtonPanelWidget::Move(const PixelRect &rc)
 {
-  widget.Move(UpdateLayout(rc));
+  widget->Move(UpdateLayout(rc));
 }
 
 bool
 ButtonPanelWidget::SetFocus()
 {
-  return widget.SetFocus();
+  return widget->SetFocus();
 }

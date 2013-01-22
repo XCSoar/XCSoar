@@ -408,7 +408,7 @@ CreateTaskListPanel(TaskManagerDialog &dialog,
   widget->SetTwoWidgets(*tw);
 
   ButtonPanelWidget *buttons =
-    new ButtonPanelWidget(*tw, ButtonPanelWidget::Alignment::BOTTOM);
+    new ButtonPanelWidget(tw, ButtonPanelWidget::Alignment::BOTTOM);
   widget->SetButtonPanel(*buttons);
 
   return buttons;

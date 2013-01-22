@@ -40,12 +40,12 @@ public:
   };
 
 private:
-  Widget &widget;
+  Widget *widget;
   ButtonPanel *buttons;
   Alignment alignment;
 
 public:
-  ButtonPanelWidget(Widget &_widget, Alignment _alignment=Alignment::AUTO)
+  ButtonPanelWidget(Widget *_widget, Alignment _alignment=Alignment::AUTO)
     :widget(_widget), buttons(nullptr), alignment(_alignment) {}
   virtual ~ButtonPanelWidget();
 
