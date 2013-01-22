@@ -77,7 +77,7 @@ struct PixelRect : public tagRECT {
   constexpr PixelRect(RasterPoint origin, PixelSize size)
     :tagRECT({origin.x, origin.y, origin.x + size.cx, origin.y + size.cy}) {}
 
-  constexpr PixelRect(PixelSize size)
+  explicit constexpr PixelRect(PixelSize size)
     :tagRECT({0, 0, size.cx, size.cy}) {}
 
   void SetEmpty() {
