@@ -211,11 +211,6 @@ public:
   }
 
   constexpr explicit
-  operator bool() const {
-    return m_nVal != 0;
-  }
-
-  constexpr explicit
   inline operator double() const {
     return as_double();
   }
@@ -623,10 +618,6 @@ public:
   fixed &operator<<=(int bits) {
     m_nVal <<= bits;
     return *this;
-  }
-
-  constexpr bool operator!() const {
-    return m_nVal==0;
   }
 
   fixed modf(fixed* integral_part) const;

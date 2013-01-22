@@ -315,7 +315,7 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const
 
   // Get the distance to the next turnpoint
   const fixed d = tp->GetVectorRemaining(aircraft.location).distance;
-  if (!d)
+  if (!positive(d))
     return fixed(0);
 
   // Calculate the geometric gradient (height divided by distance)

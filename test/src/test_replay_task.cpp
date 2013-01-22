@@ -172,7 +172,7 @@ test_replay()
            (double)task_manager.GetStats().total.travelled.GetDistance()/1000.0);
     printf("# scored distance %4.1f (km)\n", 
            (double)task_manager.GetStats().distance_scored/1000.0);
-    if (task_manager.GetStats().total.time_elapsed) {
+    if (positive(task_manager.GetStats().total.time_elapsed)) {
       printf("# scored speed %3.1f (kph)\n", 
              (double)task_manager.GetStats().distance_scored/(double)task_manager.GetStats().total.time_elapsed*3.6);
     }

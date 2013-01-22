@@ -914,7 +914,7 @@ OrderedTask::CalcGradient(const AircraftState &state) const
     // Sum up the leg distances
     distance += tp->GetVectorRemaining(state.location).distance;
 
-  if (!distance)
+  if (!positive(distance))
     return fixed(0);
 
   // Calculate gradient to the last turnpoint of the remaining task
