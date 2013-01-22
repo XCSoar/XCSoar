@@ -35,6 +35,8 @@ struct RasterPoint : public tagPOINT {
   constexpr RasterPoint(PixelScalar _x, PixelScalar _y)
     :tagPOINT({_x, _y}) {}
 
+  explicit constexpr RasterPoint(const POINT &other):tagPOINT(other) {}
+
   constexpr RasterPoint operator+(RasterPoint other) const {
     return { x + other.x, y + other.y };
   }
@@ -55,6 +57,8 @@ struct PixelSize : public tagSIZE {
 
   constexpr PixelSize(unsigned _width, unsigned _height)
     :tagSIZE({PixelScalar(_width), PixelScalar(_height)}) {}
+
+  explicit constexpr PixelSize(const SIZE &other):tagSIZE(other) {}
 
   bool operator==(const PixelSize &other) const {
     return cx == other.cx && cy == other.cy;
@@ -79,6 +83,8 @@ struct PixelRect : public tagRECT {
 
   explicit constexpr PixelRect(PixelSize size)
     :tagRECT({0, 0, size.cx, size.cy}) {}
+
+  explicit constexpr PixelRect(const RECT &other):tagRECT(other) {}
 
   void SetEmpty() {
     ::SetRectEmpty(this);
