@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
 {
 #ifdef USE_X11
@@ -58,13 +58,13 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
 
   VC_RECT_T dst_rect;
   dst_rect.x = dst_rect.y = 0;
-  dst_rect.width = width;
-  dst_rect.height = height;
+  dst_rect.width = new_size.cx;
+  dst_rect.height = new_size.cy;
 
   VC_RECT_T src_rect = dst_rect;
   src_rect.x = src_rect.y = 0;
-  src_rect.width = width << 16;
-  src_rect.height = height << 16;
+  src_rect.width = new_size.cx << 16;
+  src_rect.height = new_size.cy << 16;
 
   vc_element = vc_dispmanx_element_add(vc_update, vc_display,
                                        0, &dst_rect, 0, &src_rect,
@@ -74,8 +74,8 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
   vc_dispmanx_update_submit_sync(vc_update);
 
   vc_window.element = vc_element;
-  vc_window.width = width;
-  vc_window.height = height;
+  vc_window.width = new_size.cx;
+  vc_window.height = new_size.cy;
 
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   const EGLNativeWindowType native_window = &vc_window;
@@ -125,8 +125,8 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
   eglMakeCurrent(display, surface, surface, context);
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(width, height);
-  Canvas::Create({width, height});
+  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  Canvas::Create(new_size);
 }
 
 TopCanvas::~TopCanvas()
