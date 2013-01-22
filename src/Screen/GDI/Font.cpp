@@ -91,7 +91,7 @@ Font::CalculateHeights()
   if (IsAltair()) {
     // JMW: don't know why we need this in GNAV, but we do.
 
-    BufferCanvas buffer(canvas, tm.tmAveCharWidth, tm.tmHeight);
+    BufferCanvas buffer(canvas, {tm.tmAveCharWidth, tm.tmHeight});
     const HWColor white = buffer.map(COLOR_WHITE);
 
     buffer.SetBackgroundOpaque();

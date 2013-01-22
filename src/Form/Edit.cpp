@@ -240,9 +240,9 @@ WndProperty::UpdateLayout()
 }
 
 void
-WndProperty::OnResize(UPixelScalar width, UPixelScalar height)
+WndProperty::OnResize(PixelSize new_size)
 {
-  WindowControl::OnResize(width, height);
+  WindowControl::OnResize(new_size);
   UpdateLayout();
 }
 

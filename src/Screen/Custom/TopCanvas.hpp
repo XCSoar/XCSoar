@@ -52,7 +52,7 @@ public:
   ~TopCanvas();
 #endif
 
-  void Create(UPixelScalar width, UPixelScalar height,
+  void Create(PixelSize new_size,
               bool full_screen, bool resizable);
 
 #ifdef ENABLE_OPENGL
@@ -62,7 +62,7 @@ public:
   void Resume();
 #endif
 
-  void OnResize(UPixelScalar width, UPixelScalar height);
+  void OnResize(PixelSize new_size);
 
 #if defined(ANDROID) || defined(USE_EGL)
   void Fullscreen() {}

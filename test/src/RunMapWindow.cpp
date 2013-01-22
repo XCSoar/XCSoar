@@ -149,11 +149,11 @@ protected:
     return TopWindow::OnCommand(id, code);
   }
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
-    SingleWindow::OnResize(width, height);
+  virtual void OnResize(PixelSize new_size) override {
+    SingleWindow::OnResize(new_size);
 
     if (map.IsDefined())
-      map.Resize(width, height);
+      map.Resize(new_size);
 
 #ifndef ENABLE_OPENGL
   if (initialised)

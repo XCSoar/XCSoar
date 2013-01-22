@@ -43,8 +43,10 @@ namespace Layout
 }
 
 void
-Layout::Initialize(unsigned width, unsigned height)
+Layout::Initialize(PixelSize new_size)
 {
+  const unsigned width = new_size.cx, height = new_size.cy;
+
   landscape = width > height;
   square = width == height;
 

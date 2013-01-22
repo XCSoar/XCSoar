@@ -142,7 +142,7 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
     return;
 
   MapWindowProjection projection = map->VisibleProjection();
-  projection.SetScreenSize(canvas.GetWidth(), canvas.GetHeight());
+  projection.SetScreenSize(canvas.GetSize());
   projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
 
   Angle sun_azimuth(Angle::Degrees(-45));

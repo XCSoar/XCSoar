@@ -725,13 +725,13 @@ GaugeVario::RenderBugs(Canvas &canvas)
 }
 
 void
-GaugeVario::OnResize(UPixelScalar width, UPixelScalar height)
+GaugeVario::OnResize(PixelSize new_size)
 {
-  AntiFlickerWindow::OnResize(width, height);
+  AntiFlickerWindow::OnResize(new_size);
 
   /* trigger reinitialisation */
-  xoffset = width;
-  yoffset = height / 2;
+  xoffset = new_size.cx;
+  yoffset = new_size.cy / 2;
   layout_initialised = false;
   needle_initialised = false;
   ballast_initialised = false;

@@ -181,9 +181,9 @@ WndForm::OnCreate()
 }
 
 void
-WndForm::OnResize(UPixelScalar width, UPixelScalar height)
+WndForm::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
   UpdateLayout();
   client_area.Move(client_rect);
 }

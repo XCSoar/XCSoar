@@ -340,7 +340,7 @@ private:
 protected:
   /* virtual methods from class Window */
   virtual void OnDestroy() override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
   virtual void OnSetFocus() override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual bool OnUser(unsigned id) override;

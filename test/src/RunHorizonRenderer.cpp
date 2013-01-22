@@ -119,10 +119,10 @@ protected:
     return SingleWindow::OnTimer(_timer);
   }
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
-    SingleWindow::OnResize(width, height);
+  virtual void OnResize(PixelSize new_size) override {
+    SingleWindow::OnResize(new_size);
     if (horizon.IsDefined())
-      horizon.Resize(width, height);
+      horizon.Resize(new_size);
   }
 };
 

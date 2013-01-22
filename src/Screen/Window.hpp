@@ -485,7 +485,7 @@ public:
     size = { width, height };
 
     Invalidate();
-    OnResize(width, height);
+    OnResize(size);
 #else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
@@ -959,7 +959,7 @@ public:
    */
   virtual void OnCreate();
   virtual void OnDestroy();
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(PixelSize new_size);
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);

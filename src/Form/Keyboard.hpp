@@ -69,7 +69,7 @@ public:
 protected:
   virtual void OnPaint(Canvas &canvas) override;
   virtual bool OnCommand(unsigned id, unsigned code) override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
 
 private:
   gcc_pure

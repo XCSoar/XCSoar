@@ -91,7 +91,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
       if (window == NULL)
         break;
 
-      Canvas canvas((HDC)wParam, 1, 1);
+      Canvas canvas((HDC)wParam, {1, 1});
       const Brush *brush = OnChildColor(*window, canvas);
       if (brush == NULL)
         break;
@@ -109,8 +109,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
       if (window == NULL)
         break;
 
-      Canvas canvas(di->hDC, di->rcItem.right - di->rcItem.left,
-                    di->rcItem.bottom - di->rcItem.top);
+      Canvas canvas(di->hDC, PixelRect(di->rcItem).GetSize());
       window->OnPaint(canvas);
       return TRUE;
     }

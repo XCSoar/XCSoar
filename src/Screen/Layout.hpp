@@ -62,10 +62,9 @@ namespace Layout
    * Initializes the screen layout information provided by this
    * namespace.
    *
-   * @param width the width of the screen in pixels
-   * @param height the width of the screen in pixels
+   * @param screen_size the size of the screen in pixels
    */
-  void Initialize(unsigned width, unsigned height);
+  void Initialize(PixelSize screen_size);
 
   /**
    * Is scaling supported by this platform?

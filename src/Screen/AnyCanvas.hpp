@@ -36,7 +36,7 @@ class AnyCanvas : public Canvas {};
 
 class AnyCanvas : public VirtualCanvas {
 public:
-  AnyCanvas():VirtualCanvas(1, 1) {}
+  AnyCanvas():VirtualCanvas({1, 1}) {}
 };
 
 #endif

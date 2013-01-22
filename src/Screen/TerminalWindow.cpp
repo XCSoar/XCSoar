@@ -103,12 +103,12 @@ TerminalWindow::OnCreate()
 }
 
 void
-TerminalWindow::OnResize(UPixelScalar width, UPixelScalar height)
+TerminalWindow::OnResize(PixelSize new_size)
 {
-  PaintWindow::OnResize(width, height);
+  PaintWindow::OnResize(new_size);
 
-  data.GrowPreserveFill(std::max(1u, unsigned(width / cell_size.cx)),
-                        std::max(1u, unsigned(height / cell_size.cy)),
+  data.GrowPreserveFill(std::max(1u, unsigned(new_size.cx / cell_size.cx)),
+                        std::max(1u, unsigned(new_size.cy / cell_size.cy)),
                         ' ');
   if (cursor_x >= data.GetWidth())
     cursor_x = data.GetWidth() - 1;

@@ -60,27 +60,26 @@ public:
     return texture != NULL;
   }
 
-  void Create(UPixelScalar _width, UPixelScalar _height);
+  void Create(PixelSize new_size);
 
-  void Create(const Canvas &canvas,
-              UPixelScalar _width, UPixelScalar _height) {
+  void Create(const Canvas &canvas, PixelSize new_size) {
     assert(canvas.IsDefined());
 
-    Create(_width, _height);
+    Create(new_size);
   }
 
   void Create(const Canvas &canvas) {
-    Create(canvas, canvas.GetWidth(), canvas.GetHeight());
+    Create(canvas, canvas.GetSize());
   }
 
   void Destroy();
 
-  void Resize(UPixelScalar _width, UPixelScalar _height);
+  void Resize(PixelSize new_size);
 
   /**
    * Similar to Resize(), but never shrinks the buffer.
    */
-  void Grow(UPixelScalar _width, UPixelScalar _height);
+  void Grow(PixelSize new_size);
 
   /**
    * Begin painting to the buffer and to the specified #Canvas.

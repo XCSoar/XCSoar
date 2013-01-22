@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef USE_GDI
 
 WindowCanvas::WindowCanvas(PaintWindow &window)
-  :Canvas(::GetDC(window), window.GetWidth(), window.GetHeight()),
+  :Canvas(::GetDC(window), window.GetSize()),
    wnd(window) {}
 
 #endif /* USE_GDI */

@@ -127,7 +127,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef ENABLE_SCREEN
   ScreenGlobalInit screen_init;
-  Layout::Initialize(640, 480);
+  Layout::Initialize({640, 480});
   InitialiseFonts();
 #endif
 

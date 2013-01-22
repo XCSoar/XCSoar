@@ -102,9 +102,9 @@ TabbedControl::UpdateLayout()
 }
 
 void
-TabbedControl::OnResize(UPixelScalar width, UPixelScalar height)
+TabbedControl::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 
   UpdateLayout();
 }

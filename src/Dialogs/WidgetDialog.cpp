@@ -188,9 +188,9 @@ WidgetDialog::OnDestroy()
 }
 
 void
-WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
+WidgetDialog::OnResize(PixelSize new_size)
 {
-  WndForm::OnResize(width, height);
+  WndForm::OnResize(new_size);
 
   if (auto_size)
     return;

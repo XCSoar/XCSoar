@@ -152,10 +152,10 @@ public:
 protected:
   virtual void OnPaint(Canvas &canvas) override;
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
-    PaintWindow::OnResize(width, height);
-    projection.SetScale(fixed(width) / 21000);
-    projection.SetScreenOrigin(width / 2, height / 2);
+  virtual void OnResize(PixelSize new_size) override {
+    PaintWindow::OnResize(new_size);
+    projection.SetScale(fixed(new_size.cx) / 21000);
+    projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
   }
 };
 

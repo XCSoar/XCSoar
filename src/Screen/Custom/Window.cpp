@@ -53,7 +53,7 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
     parent->AddChild(*this);
 
   OnCreate();
-  OnResize(size.cx, size.cy);
+  OnResize(size);
 }
 
 void

@@ -84,9 +84,9 @@ LargeTextWindow::ScrollVertically(int delta_lines)
 }
 
 void
-LargeTextWindow::OnResize(UPixelScalar width, UPixelScalar height)
+LargeTextWindow::OnResize(PixelSize new_size)
 {
-  Window::OnResize(width, height);
+  Window::OnResize(new_size);
 
   if (!value.empty()) {
     /* revalidate the scroll position */

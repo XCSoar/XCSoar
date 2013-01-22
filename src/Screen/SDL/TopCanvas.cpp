@@ -71,15 +71,15 @@ MakeSDLFlags(bool full_screen, bool resizable)
 }
 
 void
-TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
 {
   const Uint32 flags = MakeSDLFlags(full_screen, resizable);
 
-  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
+  SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
   if (s == NULL) {
     fprintf(stderr, "SDL_SetVideoMode(%u, %u, 0, %#x) has failed: %s\n",
-            width, height, (unsigned)flags,
+            new_size.cx, new_size.cy, (unsigned)flags,
             ::SDL_GetError());
     return;
   }
@@ -92,17 +92,17 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
     ::SDL_GL_SwapBuffers();
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(width, height);
-  Canvas::Create({width, height});
+  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  Canvas::Create(new_size);
 #else
   Canvas::Create(s);
 #endif
 }
 
 void
-TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
+TopCanvas::OnResize(PixelSize new_size)
 {
-  if (width == GetWidth() && height == GetHeight())
+  if (new_size == size)
     return;
 
 #ifdef ENABLE_OPENGL
@@ -115,13 +115,13 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 
   const Uint32 flags = old->flags;
 
-  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
+  SDL_Surface *s = ::SDL_SetVideoMode(new_size.cx, new_size.cy, 0, flags);
   if (s == NULL)
     return;
 
 #ifdef ENABLE_OPENGL
-  OpenGL::SetupViewport(width, height);
-  Canvas::Create({width, height});
+  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  Canvas::Create(new_size);
 #endif
 }
 

@@ -312,19 +312,19 @@ TargetMapWindow::SetTarget(unsigned index)
 }
 
 void
-TargetMapWindow::OnResize(UPixelScalar width, UPixelScalar height)
+TargetMapWindow::OnResize(PixelSize new_size)
 {
-  BufferWindow::OnResize(width, height);
+  BufferWindow::OnResize(new_size);
 
 #ifndef ENABLE_OPENGL
-  buffer_canvas.Grow(width, height);
+  buffer_canvas.Grow(new_size);
 
   if (!IsAncientHardware())
-    stencil_canvas.Grow(width, height);
+    stencil_canvas.Grow(new_size);
 #endif
 
-  projection.SetScreenSize(width, height);
-  projection.SetScreenOrigin(width / 2, height / 2);
+  projection.SetScreenSize(new_size);
+  projection.SetScreenOrigin(new_size.cx / 2, new_size.cy / 2);
   projection.UpdateScreenBounds();
 }
 

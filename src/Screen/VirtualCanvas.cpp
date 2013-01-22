@@ -27,27 +27,25 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
-VirtualCanvas::VirtualCanvas(UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::VirtualCanvas(PixelSize new_size)
 {
-  Create(_width, _height);
+  Create(new_size);
 }
 
-VirtualCanvas::VirtualCanvas(const Canvas &canvas,
-                             UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
 {
-  Create(_width, _height);
+  Create(new_size);
 }
 
 #else /* !ENABLE_SDL */
 
-VirtualCanvas::VirtualCanvas(UPixelScalar _width, UPixelScalar _height)
-  :Canvas(::CreateCompatibleDC(NULL), _width, _height)
+VirtualCanvas::VirtualCanvas(PixelSize new_size)
+  :Canvas(::CreateCompatibleDC(NULL), new_size)
 {
 }
 
-VirtualCanvas::VirtualCanvas(const Canvas &canvas,
-                             UPixelScalar _width, UPixelScalar _height)
-  :Canvas(::CreateCompatibleDC(canvas), _width, _height)
+VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
+  :Canvas(::CreateCompatibleDC(canvas), new_size)
 {
   assert(canvas.IsDefined());
 }
@@ -64,13 +62,13 @@ VirtualCanvas::~VirtualCanvas()
 #endif /* !OPENGL */
 
 void
-VirtualCanvas::Create(UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::Create(PixelSize new_size)
 {
-  assert((PixelScalar)_width >= 0);
-  assert((PixelScalar)_height >= 0);
+  assert((PixelScalar)new_size.cx >= 0);
+  assert((PixelScalar)new_size.cy >= 0);
 
 #ifdef ENABLE_OPENGL
-  Canvas::Create(_width, _height);
+  Canvas::Create(new_size);
 #else /* !OPENGL */
 
   Destroy();
@@ -81,36 +79,35 @@ VirtualCanvas::Create(UPixelScalar _width, UPixelScalar _height)
   const SDL_PixelFormat *format = video->format;
 
   SDL_Surface *surface;
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, _width, _height,
+  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
                                    format->BitsPerPixel,
                                    format->Rmask, format->Gmask,
                                    format->Bmask, format->Amask);
   if (surface != NULL)
     Canvas::Create(surface);
 #else /* !ENABLE_SDL */
-  Canvas::Create(CreateCompatibleDC(NULL), _width, _height);
+  Canvas::Create(CreateCompatibleDC(NULL), new_size);
 #endif /* !ENABLE_SDL */
 #endif /* !OPENGL */
 }
 
 void
-VirtualCanvas::Create(const Canvas &canvas,
-                      UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
 {
   assert(canvas.IsDefined());
 
 #ifdef ENABLE_SDL
-  Create(_width, _height);
+  Create(new_size);
 #else /* !ENABLE_SDL */
   Destroy();
-  Canvas::Create(CreateCompatibleDC(canvas), _width, _height);
+  Canvas::Create(CreateCompatibleDC(canvas), new_size);
 #endif /* !ENABLE_SDL */
 }
 
 void
 VirtualCanvas::Create(const Canvas &canvas)
 {
-  Create(canvas, canvas.GetWidth(), canvas.GetHeight());
+  Create(canvas, canvas.GetSize());
 }
 
 #ifndef ENABLE_SDL

@@ -53,7 +53,7 @@ private:
 
 protected:
   virtual void OnCreate() override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
   virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
 };

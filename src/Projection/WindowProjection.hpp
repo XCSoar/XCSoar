@@ -74,19 +74,17 @@ public:
   gcc_pure
   bool ScreenVisible(const RasterPoint &P) const;
 
-  void SetScreenSize(unsigned width, unsigned height) {
-#ifndef NDEBUG
-    assert(width > 0);
-    assert(height > 0);
-#endif
+  void SetScreenSize(PixelSize new_size) {
+    assert(new_size.cx > 0);
+    assert(new_size.cy > 0);
 
-    screen_width = width;
-    screen_height = height;
+    screen_width = new_size.cx;
+    screen_height = new_size.cy;
     screen_size_initialised = true;
   }
 
   void SetMapRect(const PixelRect &rc) {
-    SetScreenSize(rc.right - rc.left, rc.bottom - rc.top);
+    SetScreenSize(rc.GetSize());
   }
 
   gcc_pure

@@ -178,10 +178,10 @@ KeyboardControl::OnCommand(unsigned id, unsigned code)
 }
 
 void
-KeyboardControl::OnResize(UPixelScalar width, UPixelScalar height)
+KeyboardControl::OnResize(PixelSize new_size)
 {
-  button_width = GetWidth() / 10;
-  button_height = GetHeight() / 5;
+  button_width = new_size.cx / 10;
+  button_height = new_size.cy / 5;
 
   ResizeButtons();
   MoveButtons();

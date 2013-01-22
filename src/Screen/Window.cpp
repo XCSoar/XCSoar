@@ -168,7 +168,7 @@ Window::OnDestroy()
 }
 
 void
-Window::OnResize(UPixelScalar width, UPixelScalar height)
+Window::OnResize(PixelSize new_size)
 {
 }
 

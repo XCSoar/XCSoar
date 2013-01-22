@@ -142,10 +142,10 @@ public:
   }
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
-    SingleWindow::OnResize(width, height);
-    key_code_dumper.Move(0, 0, width, (height + 1) / 2);
-    close_button.Move(0, (height + 1) / 2, width, height / 2);
+  virtual void OnResize(PixelSize new_size) override {
+    SingleWindow::OnResize(new_size);
+    key_code_dumper.Move(0, 0, new_size.cx, (new_size.cy + 1) / 2);
+    close_button.Move(0, (new_size.cy + 1) / 2, new_size.cx, new_size.cy / 2);
   }
 
   virtual bool OnCommand(unsigned id, unsigned code) override {

@@ -46,7 +46,7 @@ void
 VerboseOperationEnvironment::UpdateLayout()
 {
   ProgressGlue::Close();
-  ProgressGlue::Create(NULL);
+  ProgressGlue::Create(nullptr);
 }
 
 void

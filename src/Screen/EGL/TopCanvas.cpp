@@ -138,13 +138,13 @@ TopCanvas::~TopCanvas()
 }
 
 void
-TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
+TopCanvas::OnResize(PixelSize new_size)
 {
-  if (width == GetWidth() && height == GetHeight())
+  if (new_size == size)
     return;
 
-  OpenGL::SetupViewport(width, height);
-  Canvas::Create({width, height});
+  OpenGL::SetupViewport(new_size.cx, new_size.cy);
+  Canvas::Create(new_size);
 }
 
 void

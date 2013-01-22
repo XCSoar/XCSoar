@@ -51,16 +51,16 @@ BufferWindow::OnDestroy()
 #endif
 
 void
-BufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
+BufferWindow::OnResize(PixelSize new_size)
 {
 #ifdef ENABLE_OPENGL
   buffer.Destroy();
 #else
-  buffer.Resize(width, height);
+  buffer.Resize(new_size);
   Invalidate();
 #endif
 
-  PaintWindow::OnResize(width, height);
+  PaintWindow::OnResize(new_size);
 }
 
 void
@@ -68,7 +68,7 @@ BufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (!buffer.IsDefined()) {
-    buffer.Create(canvas.GetWidth(), canvas.GetHeight());
+    buffer.Create(canvas.GetSize());
     dirty = true;
   }
 

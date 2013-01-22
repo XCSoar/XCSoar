@@ -68,7 +68,7 @@ Main()
   if (portrait)
     std::swap(screen_size.cx, screen_size.cy);
 
-  Layout::Initialize(screen_size.cx, screen_size.cy);
+  Layout::Initialize(screen_size);
   SingleWindow main_window;
   main_window.Create(_T("RunDialog"), screen_size);
   main_window.Show();

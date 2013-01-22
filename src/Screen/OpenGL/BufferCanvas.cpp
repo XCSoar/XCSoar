@@ -41,14 +41,12 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
 }
 
 void
-BufferCanvas::Create(UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Create(PixelSize new_size)
 {
   assert(!active);
 
-  const PixelSize new_size(_width, _height);
-
   Destroy();
-  texture = new GLTexture(_width, _height);
+  texture = new GLTexture(new_size.cx, new_size.cy);
 
   if (OpenGL::frame_buffer_object) {
     frame_buffer = new GLFrameBuffer();
@@ -88,11 +86,10 @@ BufferCanvas::Destroy()
 }
 
 void
-BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Resize(PixelSize new_size)
 {
   assert(IsDefined());
 
-  const PixelSize new_size(_width, _height);
   if (new_size == GetSize())
     return;
 
@@ -118,7 +115,7 @@ BufferCanvas::Begin(Canvas &other)
   assert(IsDefined());
   assert(!active);
 
-  Resize(other.GetWidth(), other.GetHeight());
+  Resize(other.GetSize());
 
   if (frame_buffer != NULL) {
     /* activate the frame buffer */

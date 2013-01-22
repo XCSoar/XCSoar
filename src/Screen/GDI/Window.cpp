@@ -153,7 +153,7 @@ Window::OnMessage(HWND _hWnd, UINT message,
     return 0;
 
   case WM_SIZE:
-    OnResize(LOWORD(lParam), HIWORD(lParam));
+    OnResize({LOWORD(lParam), HIWORD(lParam)});
     return 0;
 
   case WM_MOUSEMOVE:

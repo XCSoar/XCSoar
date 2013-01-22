@@ -65,14 +65,17 @@ FlarmTrafficWindow::WarningMode() const
 }
 
 void
-FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
+FlarmTrafficWindow::OnResize(PixelSize new_size)
 {
-  PaintWindow::OnResize(width, height);
+  PaintWindow::OnResize(new_size);
+
+  const unsigned half_width = new_size.cx / 2;
+  const unsigned half_height = new_size.cy / 2;
 
   // Calculate Radar size
-  radius = std::min(width / 2 - h_padding, height / 2 - v_padding);
-  radar_mid.x = width / 2;
-  radar_mid.y = height / 2;
+  radius = std::min(half_width - h_padding, half_height - v_padding);
+  radar_mid.x = half_width;
+  radar_mid.y = half_height;
 }
 
 void

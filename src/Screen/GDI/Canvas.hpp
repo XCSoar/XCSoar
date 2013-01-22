@@ -44,12 +44,12 @@ Copyright_License {
 class Canvas {
 protected:
   HDC dc, compatible_dc;
-  UPixelScalar width, height;
+  PixelSize size;
 
 public:
   Canvas():dc(NULL), compatible_dc(NULL) {}
-  Canvas(HDC _dc, UPixelScalar _width, UPixelScalar _height)
-    :dc(_dc), compatible_dc(NULL), width(_width), height(_height) {
+  Canvas(HDC _dc, PixelSize new_size)
+    :dc(_dc), compatible_dc(NULL), size(new_size) {
     assert(dc != NULL);
   }
 
@@ -68,17 +68,16 @@ protected:
     }
   }
 
-  void Create(HDC _dc, UPixelScalar _width, UPixelScalar _height) {
+  void Create(HDC _dc, PixelSize new_size) {
     assert(_dc != NULL);
-    assert(_width > 0);
-    assert(_height > 0);
+    assert(new_size.cx > 0);
+    assert(new_size.cy > 0);
 
     Destroy();
 
     dc = _dc;
     compatible_dc = NULL;
-    width = _width;
-    height = _height;
+    size = new_size;
   }
 
   HDC GetCompatibleDC() {
@@ -100,26 +99,29 @@ public:
     return dc;
   }
 
+  const PixelSize &GetSize() const {
+    return size;
+  }
+
   UPixelScalar GetWidth() const {
     assert(IsDefined());
 
-    return width;
+    return size.cx;
   }
 
   UPixelScalar GetHeight() const {
     assert(IsDefined());
 
-    return height;
+    return size.cy;
   }
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
+    return PixelRect{RasterPoint{0, 0}, size};
   }
 
-  void Resize(UPixelScalar _width, UPixelScalar _height) {
-    width = _width;
-    height = _height;
+  void Resize(PixelSize new_size) {
+    size = new_size;
   }
 
   gcc_pure
@@ -279,25 +281,25 @@ public:
   }
 
   void Clear() {
-    Rectangle(0, 0, width, height);
+    Rectangle(0, 0, GetWidth(), GetHeight());
   }
 
   void Clear(const HWColor color) {
-    DrawFilledRectangle(0, 0, width, height, color);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, width, height, color);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, width, height, brush);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
   }
 
   void ClearWhite() {
     assert(IsDefined());
 
-    ::BitBlt(dc, 0, 0, width, height, NULL, 0, 0, WHITENESS);
+    ::BitBlt(dc, 0, 0, GetWidth(), GetHeight(), NULL, 0, 0, WHITENESS);
   }
 
   void DrawRoundRectangle(PixelScalar left, PixelScalar top,
@@ -529,7 +531,8 @@ public:
   void Stretch(const Bitmap &src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height) {
-    Stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
+    Stretch(0, 0, GetWidth(), GetHeight(),
+            src, src_x, src_y, src_width, src_height);
   }
 
   void Stretch(PixelScalar dest_x, PixelScalar dest_y,

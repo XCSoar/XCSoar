@@ -201,7 +201,7 @@ public:
 
   /** from class Window */
   virtual void OnCreate() override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
   virtual void OnDestroy() override;
 
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;

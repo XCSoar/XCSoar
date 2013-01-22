@@ -51,7 +51,7 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
   fixed geo_size = std::max(geo_heigth, geo_width);
 
   WindowProjection projection;
-  projection.SetScreenSize(radius * 2, radius * 2);
+  projection.SetScreenSize({radius * 2, radius * 2});
   projection.SetScreenOrigin(pt.x, pt.y);
   projection.SetGeoLocation(center);
   projection.SetScale(fixed(radius * 2) / geo_size);

@@ -290,7 +290,7 @@ InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
   Paint(canvas);
 #else
   const PixelSize size = GetSize();
-  BufferCanvas buffer(dest, size.cx, size.cy);
+  BufferCanvas buffer(dest, size);
 
   Paint(buffer);
   dest.Stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
@@ -373,9 +373,9 @@ InfoBoxWindow::OnDestroy()
 }
 
 void
-InfoBoxWindow::OnResize(UPixelScalar width, UPixelScalar height)
+InfoBoxWindow::OnResize(PixelSize new_size)
 {
-  PaintWindow::OnResize(width, height);
+  PaintWindow::OnResize(new_size);
 
   PixelRect rc = GetClientRect();
 

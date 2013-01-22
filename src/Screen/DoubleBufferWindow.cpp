@@ -59,7 +59,7 @@ DoubleBufferWindow::Flip()
 
   /* grow the current buffer, just in case the window has been
      resized */
-  buffers[current].Grow(GetWidth(), GetHeight());
+  buffers[current].Grow(GetSize());
 }
 
 void

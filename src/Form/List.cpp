@@ -93,13 +93,13 @@ ListControl::show_or_hide_scroll_bar()
 }
 
 void
-ListControl::OnResize(UPixelScalar width, UPixelScalar height)
+ListControl::OnResize(PixelSize new_size)
 {
-  PaintWindow::OnResize(width, height);
+  PaintWindow::OnResize(new_size);
 
-  items_visible = height / item_height;
+  items_visible = new_size.cy / item_height;
 
-  if (height >= length * item_height) {
+  if (unsigned(new_size.cy) >= length * item_height) {
     /* after the resize, there is enough room for all list items -
        scroll back to the top */
     origin = pixel_pan = 0;

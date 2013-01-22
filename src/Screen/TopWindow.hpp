@@ -326,7 +326,7 @@ protected:
 #endif
 
 #ifndef USE_GDI
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
 #endif
 
 #ifdef ANDROID

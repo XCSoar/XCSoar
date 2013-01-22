@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_PROGRESS_GLUE_HPP
 #define XCSOAR_PROGRESS_GLUE_HPP
 
-#include "Screen/Point.hpp"
-
 #include <tchar.h>
+
+struct PixelRect;
 
 namespace ProgressGlue {
   /**
@@ -35,7 +35,7 @@ namespace ProgressGlue {
    */
   void Create(const TCHAR *text);
 
-  void Resize(UPixelScalar width, UPixelScalar height);
+  void Move(const PixelRect &rc);
 
   /**
    * Closes the ProgressWindow

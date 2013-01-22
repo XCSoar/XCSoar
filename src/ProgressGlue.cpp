@@ -51,12 +51,12 @@ ProgressGlue::Create(const TCHAR *text)
 }
 
 void
-ProgressGlue::Resize(UPixelScalar width, UPixelScalar height)
+ProgressGlue::Move(const PixelRect &rc)
 {
   if (global_progress_window == NULL)
     return;
 
-  global_progress_window->Move(0, 0, width, height);
+  global_progress_window->Move(rc);
   throttle_clock.Reset();
 }
 

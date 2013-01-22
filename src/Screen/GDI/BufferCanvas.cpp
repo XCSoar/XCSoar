@@ -25,11 +25,10 @@ Copyright_License {
 
 #include <assert.h>
 
-BufferCanvas::BufferCanvas(const Canvas &canvas,
-                           UPixelScalar _width, UPixelScalar _height)
-  :VirtualCanvas(canvas, _width, _height)
+BufferCanvas::BufferCanvas(const Canvas &canvas, PixelSize new_size)
+  :VirtualCanvas(canvas, new_size)
 {
-  bitmap = ::CreateCompatibleBitmap(canvas, width, height);
+  bitmap = ::CreateCompatibleBitmap(canvas, new_size.cx, new_size.cy);
   ::SelectObject(dc, bitmap);
 }
 
@@ -39,21 +38,20 @@ BufferCanvas::~BufferCanvas()
 }
 
 void
-BufferCanvas::Create(const Canvas &canvas,
-                     UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Create(const Canvas &canvas, PixelSize new_size)
 {
   assert(canvas.IsDefined());
 
   Destroy();
-  VirtualCanvas::Create(canvas, _width, _height);
-  bitmap = ::CreateCompatibleBitmap(canvas, width, height);
+  VirtualCanvas::Create(canvas, new_size);
+  bitmap = ::CreateCompatibleBitmap(canvas, new_size.cx, new_size.cy);
   ::SelectObject(dc, bitmap);
 }
 
 void
 BufferCanvas::Create(const Canvas &canvas)
 {
-  Create(canvas, canvas.GetWidth(), canvas.GetHeight());
+  Create(canvas, canvas.GetSize());
 }
 
 void
@@ -65,15 +63,15 @@ BufferCanvas::Destroy()
 }
 
 void
-BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Resize(PixelSize new_size)
 {
   assert(dc != NULL);
 
-  if (_width == width && _height == height)
+  if (new_size == size)
     return;
 
   ::DeleteObject(bitmap);
-  Canvas::Resize(_width, _height);
-  bitmap = ::CreateCompatibleBitmap(dc, width, height);
+  Canvas::Resize(new_size);
+  bitmap = ::CreateCompatibleBitmap(dc, new_size.cx, new_size.cy);
   ::SelectObject(dc, bitmap);
 }

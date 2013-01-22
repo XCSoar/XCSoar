@@ -109,7 +109,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
   virtual void OnPaint(Canvas &canvas) override;
   virtual bool OnKeyCheck(unsigned key_code) const override;
   virtual bool OnKeyDown(unsigned key_code) override;

@@ -45,7 +45,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   font.Load(_T("Droid Sans"), 12);
   text_height = font.GetHeight();
 #else
-  VirtualCanvas canvas(1, 1);
+  VirtualCanvas canvas({1, 1});
   text_height = canvas.GetFontHeight();
 #endif
 
@@ -126,23 +126,24 @@ ProgressWindow::Step()
 }
 
 void
-ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
+ProgressWindow::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 
   // Make progress bar height proportional to window height
-  UPixelScalar progress_height = height / 20;
+  UPixelScalar progress_height = new_size.cy / 20;
   UPixelScalar progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
   if (message.IsDefined())
-    message.Move(0, height - progress_border_height - text_height - (height/48),
-                 width, text_height);
+    message.Move(0,
+                 new_size.cy - progress_border_height - text_height - (new_size.cy / 48),
+                 new_size.cx, text_height);
 
   if (progress_bar.IsDefined())
     progress_bar.Move(progress_horizontal_border,
-                      height - progress_border_height + progress_horizontal_border,
-                      width - progress_height,
+                      new_size.cy - progress_border_height + progress_horizontal_border,
+                      new_size.cx - progress_height,
                       progress_height);
 
   Invalidate();

@@ -62,9 +62,9 @@ DockWindow::MoveWidget()
 }
 
 void
-DockWindow::OnResize(UPixelScalar width, UPixelScalar height)
+DockWindow::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 
   if (widget != NULL)
     widget->Move(GetClientRect());

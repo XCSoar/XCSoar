@@ -144,10 +144,10 @@ TopWindow::PostQuit()
 }
 
 void
-TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
+TopWindow::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 
-  screen->OnResize(width, height);
+  screen->OnResize(new_size);
 }
 

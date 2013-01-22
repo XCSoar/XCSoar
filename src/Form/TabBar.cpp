@@ -183,9 +183,9 @@ TabBarControl::OnDestroy()
 }
 
 void
-TabBarControl::OnResize(UPixelScalar width, UPixelScalar height)
+TabBarControl::OnResize(PixelSize new_size)
 {
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 
   if (tab_display != nullptr) {
     const PixelRect tab_rc = tab_display->GetPosition();

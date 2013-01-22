@@ -34,17 +34,16 @@ Copyright_License {
 class VirtualCanvas : public Canvas {
 public:
   VirtualCanvas() = default;
-  VirtualCanvas(UPixelScalar _width, UPixelScalar _height);
-  VirtualCanvas(const Canvas &canvas,
-                UPixelScalar _width, UPixelScalar _height);
+  VirtualCanvas(PixelSize new_size);
+  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
 
 #ifndef ENABLE_OPENGL
   ~VirtualCanvas();
 #endif
 
-  void Create(UPixelScalar _width, UPixelScalar _height);
+  void Create(PixelSize new_size);
 
-  void Create(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
+  void Create(const Canvas &canvas, PixelSize new_size);
   void Create(const Canvas &canvas);
 
 #ifndef ENABLE_SDL
@@ -52,12 +51,12 @@ public:
 #endif
 
 #ifdef ENABLE_SDL
-  void Resize(UPixelScalar _width, UPixelScalar _height) {
-    if (_width != GetWidth() || _height != GetHeight())
-      Create(*this, _width, _height);
+  void Resize(PixelSize new_size) {
+    if (new_size != size)
+      Create(*this, new_size);
   }
 
-  void Grow(UPixelScalar _width, UPixelScalar _height);
+  void Grow(PixelSize new_size);
 #endif
 };
 

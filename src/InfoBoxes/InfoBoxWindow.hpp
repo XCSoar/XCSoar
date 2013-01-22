@@ -159,7 +159,7 @@ public:
 
 protected:
   virtual void OnDestroy() override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnResize(PixelSize new_size) override;
   virtual void OnSetFocus() override;
   virtual void OnKillFocus() override;
   virtual void OnCancelMode() override;

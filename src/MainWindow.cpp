@@ -158,9 +158,7 @@ NoFontsAvailable()
 void
 MainWindow::Initialise()
 {
-  PixelRect rc = GetClientRect();
-
-  Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
+  Layout::Initialize(GetSize());
 
   LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
@@ -484,11 +482,11 @@ MainWindow::FullRedraw()
 // Windows event handlers
 
 void
-MainWindow::OnResize(UPixelScalar width, UPixelScalar height)
+MainWindow::OnResize(PixelSize new_size)
 {
-  SingleWindow::OnResize(width, height);
+  SingleWindow::OnResize(new_size);
 
-  Layout::Initialize(width, height);
+  Layout::Initialize(new_size);
 
   ReinitialiseLayout();
 
@@ -499,9 +497,9 @@ MainWindow::OnResize(UPixelScalar width, UPixelScalar height)
     map->BringToBottom();
   }
 
-  ButtonLabel::OnResize(GetClientRect());
-
-  ProgressGlue::Resize(width, height);
+  const PixelRect rc = GetClientRect();
+  ButtonLabel::OnResize(rc);
+  ProgressGlue::Move(rc);
 }
 
 bool

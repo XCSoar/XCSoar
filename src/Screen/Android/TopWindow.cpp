@@ -102,14 +102,14 @@ TopWindow::RefreshSize()
 }
 
 void
-TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
+TopWindow::OnResize(PixelSize new_size)
 {
   if (native_view != NULL) {
-    native_view->SetSize(width, height);
-    screen->OnResize(width, height);
+    native_view->SetSize(new_size.cx, new_size.cy);
+    screen->OnResize(new_size);
   }
 
-  ContainerWindow::OnResize(width, height);
+  ContainerWindow::OnResize(new_size);
 }
 
 void

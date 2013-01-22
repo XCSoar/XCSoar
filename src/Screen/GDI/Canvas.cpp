@@ -202,7 +202,7 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 void
 Canvas::Copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
 {
-  Copy(0, 0, width, height, src, src_x, src_y);
+  Copy(0, 0, GetWidth(), GetHeight(), src, src_x, src_y);
 }
 
 void
@@ -285,7 +285,7 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
   const PixelSize size = src.GetSize();
 
-  BufferCanvas inverted(*this, size.cx, size.cy);
+  BufferCanvas inverted(*this, size);
   ::BitBlt(inverted, 0, 0, size.cx, size.cy,
            virtual_dc, 0, 0, NOTSRCCOPY);
   ::SelectObject(virtual_dc, old);
@@ -341,7 +341,8 @@ Canvas::Stretch(const Canvas &src,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
-  Stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
+  Stretch(0, 0, GetWidth(), GetHeight(),
+          src, src_x, src_y, src_width, src_height);
 }
 
 void

@@ -34,22 +34,22 @@ Copyright_License {
 #include "Weather/Features.hpp"
 
 void
-MapWindow::OnResize(UPixelScalar width, UPixelScalar height)
+MapWindow::OnResize(PixelSize new_size)
 {
-  DoubleBufferWindow::OnResize(width, height);
+  DoubleBufferWindow::OnResize(new_size);
 
 #ifndef ENABLE_OPENGL
   ++ui_generation;
 
   // We only grow() the buffer here because resizing it everytime has
   // a huge negative effect on the heap fragmentation
-  buffer_canvas.Grow(width, height);
+  buffer_canvas.Grow(new_size);
 
   if (!IsAncientHardware())
-    stencil_canvas.Grow(width, height);
+    stencil_canvas.Grow(new_size);
 #endif
 
-  visible_projection.SetScreenSize(width, height);
+  visible_projection.SetScreenSize(new_size);
   visible_projection.UpdateScreenBounds();
 }
 
