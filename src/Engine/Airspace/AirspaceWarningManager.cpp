@@ -30,14 +30,8 @@
 
 #define CRUISE_FILTER_FACT fixed(0.5)
 
-AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
-                                               fixed prediction_time_glide,
-                                               fixed prediction_time_filter)
+AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces)
   :airspaces(_airspaces),
-   prediction_time_glide(prediction_time_glide),
-   prediction_time_filter(prediction_time_filter),
-   cruise_filter(prediction_time_filter * CRUISE_FILTER_FACT),
-   circling_filter(prediction_time_filter),
    perf_cruise(cruise_filter),
    perf_circling(circling_filter)
 {

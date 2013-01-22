@@ -72,15 +72,10 @@ public:
    * Default constructor
    * 
    * @param airspaces Store of airspaces
-   * @param task_manager Task manager holding task
-   * @param prediction_time_glide Time (s) of glide predictor (default 15 s)
-   * @param prediction_time_filter Time (s) of state filter predictor (default 60 s)
    *
    * @return Initialised object
    */
-  AirspaceWarningManager(const Airspaces &_airspaces,
-                         const fixed _prediction_time_glide = fixed(15.0),
-                         const fixed _prediction_time_filter = fixed(60.0));
+  AirspaceWarningManager(const Airspaces &_airspaces);
 
   gcc_pure
   const TaskProjection &GetProjection() const;
