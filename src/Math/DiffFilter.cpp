@@ -24,22 +24,17 @@
 void
 DiffFilter::Reset(const fixed x0, const fixed y0)
 {
-  for (unsigned i = 0; i < 7; i++) {
+  for (unsigned i = 0; i < x.size(); i++)
     x[i] = x0 - y0 * i;
-  }
 }
 
 fixed
 DiffFilter::Update(const fixed x0)
 {
-  x[6] = x[5];
-  x[5] = x[4];
-  x[4] = x[3];
-  x[3] = x[2];
-  x[2] = x[1];
-  x[1] = x[0];
-  x[0] = x0;
+  std::copy_backward(x.cbegin(), std::prev(x.cend()), x.end());
+  x.front() = x0;
+
   /// @note not sure why need to divide by pi/2 here
-  return ((x[6] - x[0]) / 16 + x[2] - x[4]) / fixed_half_pi;
+  return ((x.back() - x.front()) / 16 + x[2] - x[4]) / fixed_half_pi;
 }
 

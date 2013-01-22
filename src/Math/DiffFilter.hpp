@@ -25,13 +25,15 @@
 
 #include "Math/fixed.hpp"
 
+#include <array>
+
 /**
  * Differentiating low-pass IIR filter
  * @see http://www.dsprelated.com/showarticle/35.php
  */
 class DiffFilter 
 {
-  fixed x[7];
+  std::array<fixed, 7> x;
 
 public:
   /**
