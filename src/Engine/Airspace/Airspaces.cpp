@@ -21,6 +21,7 @@
 */
 
 #include "Airspaces.hpp"
+#include "AbstractAirspace.hpp"
 #include "AirspaceVisitor.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "Atmosphere/Pressure.hpp"

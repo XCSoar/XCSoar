@@ -22,6 +22,7 @@
 
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceInterceptSolution.hpp"
+#include "AbstractAirspace.hpp"
 
 AirspaceInterceptSolution 
 AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,

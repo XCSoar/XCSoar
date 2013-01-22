@@ -24,10 +24,10 @@
 #define AIRSPACE_INTERSECTION_VISITOR_HPP
 
 #include "AirspaceVisitor.hpp"
-#include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
 struct AircraftState;
+struct AirspaceInterceptSolution;
 class AirspaceAircraftPerformance;
 
 /**
