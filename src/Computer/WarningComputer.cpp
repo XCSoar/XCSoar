@@ -71,6 +71,8 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   const AircraftState as = ToAircraftState(basic, calculated);
   ProtectedAirspaceWarningManager::ExclusiveLease lease(protected_manager);
 
+  lease->SetConfig(settings_computer.airspace.warnings);
+
   if (!initialised) {
     initialised = true;
     lease->Reset(as);

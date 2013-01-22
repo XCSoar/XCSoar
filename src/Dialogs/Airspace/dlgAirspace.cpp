@@ -39,7 +39,6 @@ Copyright_License {
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Components.hpp"
-#include "Computer/GlideComputer.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
@@ -183,11 +182,6 @@ dlgAirspaceShowModal(bool color_mode)
 
   // now retrieve back the properties...
   if (widget.IsModified()) {
-    if (!color_mode && glide_computer != NULL) {
-      ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
-      awm->SetConfig(CommonInterface::SetComputerSettings().airspace.warnings);
-    }
-
     Profile::Save();
   }
 

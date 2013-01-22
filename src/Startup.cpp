@@ -379,7 +379,6 @@ Startup()
                       device_blackboard->Calculated());
     ProtectedAirspaceWarningManager::ExclusiveLease lease(glide_computer->GetAirspaceWarnings());
     lease->Reset(aircraft_state);
-    lease->SetConfig(computer_settings.airspace.warnings);
   }
 
 #ifdef HAVE_NOAA
