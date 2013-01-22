@@ -19,21 +19,21 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AirspaceWarningManager.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Airspaces.hpp"
 #include "AirspaceCircle.hpp"
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
+#include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
 #include "Predicate/AirspacePredicateAircraftInside.hpp"
 
 #define CRUISE_FILTER_FACT fixed(0.5)
 
 AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces)
-  :airspaces(_airspaces),
-   perf_cruise(cruise_filter),
-   perf_circling(circling_filter)
+  :airspaces(_airspaces)
 {
   /* force filter initialisation in the first SetConfig() call */
   config.warning_time = -1;
@@ -314,8 +314,8 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
     /* glide solver failed, cannot continue */
     return false;
 
-  AirspaceAircraftPerformanceTask perf_task(glide_polar,
-                                            current_leg.solution_remaining);
+  const AirspaceAircraftPerformance perf_task(glide_polar,
+                                              current_leg.solution_remaining);
   GeoPoint location_tp = current_leg.location_remaining;
   const fixed time_remaining = solution.time_elapsed;
 
@@ -344,11 +344,11 @@ AirspaceWarningManager::UpdateFilter(const AircraftState& state, const bool circ
 
   if (circling) 
     return UpdatePredicted(state, location_predicted,
-                            perf_circling,
+                           AirspaceAircraftPerformance(circling_filter),
                             AirspaceWarning::WARNING_FILTER, prediction_time_filter);
   else
     return UpdatePredicted(state, location_predicted,
-                            perf_cruise,
+                           AirspaceAircraftPerformance(cruise_filter),
                             AirspaceWarning::WARNING_FILTER, prediction_time_filter);
 }
 
@@ -363,7 +363,7 @@ AirspaceWarningManager::UpdateGlide(const AircraftState &state,
   const GeoPoint location_predicted = 
     state.GetPredictedState(prediction_time_glide).location;
 
-  const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
+  const AirspaceAircraftPerformance perf_glide(glide_polar);
   return UpdatePredicted(state, location_predicted,
                           perf_glide,
                           AirspaceWarning::WARNING_GLIDE, prediction_time_glide);
@@ -395,7 +395,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
     if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
-      const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
+      const AirspaceAircraftPerformance perf_glide(glide_polar);
       AirspaceInterceptSolution solution;
       airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
 

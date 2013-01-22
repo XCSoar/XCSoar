@@ -25,6 +25,7 @@
 #include "test_debug.hpp"
 #include "harness_airspace.hpp"
 #include "Route/AirspaceRoute.hpp"
+#include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
@@ -79,7 +80,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     AircraftState state;
     GlidePolar glide_polar(fixed(0.1));
-    AirspaceAircraftPerformanceGlide perf(glide_polar);
+    const AirspaceAircraftPerformance perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
     fixed range = fixed(10000) + vec.distance / 2;

@@ -25,7 +25,7 @@
 #include "Util/NonCopyable.hpp"
 #include "AirspaceWarning.hpp"
 #include "AirspaceWarningConfig.hpp"
-#include "AirspaceAircraftPerformance.hpp"
+#include "Util/AircraftStateFilter.hpp"
 #include "Compiler.h"
 
 #include <list>
@@ -34,6 +34,7 @@ class TaskStats;
 class GlidePolar;
 class Airspaces;
 class TaskProjection;
+class AirspaceAircraftPerformance;
 
 /**
  * Class to detect and track airspace warnings
@@ -58,8 +59,6 @@ class AirspaceWarningManager:
 
   AircraftStateFilter cruise_filter;
   AircraftStateFilter circling_filter;
-  AirspaceAircraftPerformanceStateFilter perf_cruise;  
-  AirspaceAircraftPerformanceStateFilter perf_circling;  
 
   typedef std::list<AirspaceWarning> AirspaceWarningList;
 

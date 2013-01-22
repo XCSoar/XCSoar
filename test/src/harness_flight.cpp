@@ -29,6 +29,7 @@
 #include "Replay/AircraftSim.hpp"
 #include "Replay/TaskAccessor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
 
 #include <fstream>
 
@@ -119,7 +120,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   static const fixed fixed_10(10);
 
-  AirspaceAircraftPerformanceGlide perf(task_manager.GetGlidePolar());
+  const AirspaceAircraftPerformance perf(task_manager.GetGlidePolar());
 
   if (aircraft_filter)
     aircraft_filter->Reset(aircraft.GetState());

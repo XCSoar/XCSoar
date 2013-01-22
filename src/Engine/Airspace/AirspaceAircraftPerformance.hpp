@@ -25,38 +25,115 @@
 
 #include "Math/fixed.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "GlideSolvers/GlideResult.hpp"
 #include "Util/AircraftStateFilter.hpp"
 #include "Compiler.h"
+
+#include <assert.h>
 
 /**
  *  Class used for simplified/idealised performace
  *  of aircraft speed as a function of glide slope.
  */
-class AirspaceAircraftPerformance
-{
-protected:
+class AirspaceAircraftPerformance {
   /** Tolerance in vertical max speeds (m/s) */
   fixed vertical_tolerance;
 
+  /**
+   * Nominal cruise speed [m/s]
+   */
+  fixed cruise_speed;
+
+  /**
+   * Nominal descent speed (m/s, positive down)
+   */
+  fixed cruise_descent;
+
+  /**
+   * Max descent speed (m/s, positive down)
+   */
+  fixed descent_rate;
+
+  /**
+   * Max climb rate (m/s, positive up)
+   */
+  fixed climb_rate;
+
+  /**
+   * Maximum speed achievable by this model [m/s].
+   */
+  fixed max_speed;
+
 public:
+  struct Simple {};
 
   /**
-   * Default constructor.
-   * Note that search mechanism will fail if descent_rate and climb_rate are zero
-   * without tolerance being positive.
-   *
-   * @param tolerance Tolerance of vertical speeds (m/s)
+   * Simplified aircraft performance model used for testing of
+   * airspace warning system with minimal dependencies.
    */
-  AirspaceAircraftPerformance(const fixed _tolerance = fixed(0))
-    :vertical_tolerance(_tolerance) {};
+  constexpr AirspaceAircraftPerformance(Simple)
+    :vertical_tolerance(0),
+     cruise_speed(30), cruise_descent(2),
+     descent_rate(2),
+     climb_rate(10),
+     max_speed(30) {}
 
   /**
-   * Set tolerance of vertical speeds
-   *
-   * @param val New value of tolerance, positive (m/s)
+   * Specialisation based on simplified theoretical MC cross-country
+   * speeds.  Assumes cruise at best LD (ignoring wind) for current MC
+   * setting, climb rate at MC setting, with direct descent possible
+   * at sink rate of cruise.
    */
-  void SetVerticalTolerance(const fixed val) {
-    vertical_tolerance = val;
+  explicit AirspaceAircraftPerformance(const GlidePolar &polar)
+    :vertical_tolerance(0),
+     cruise_speed(polar.GetVBestLD()), cruise_descent(polar.GetSBestLD()),
+     descent_rate(polar.GetSMax()),
+     climb_rate(polar.GetMC()),
+     max_speed(polar.GetVMax()) {
+    assert(polar.IsValid());
+  }
+
+  /**
+   * Specialisation of AirspaceAircraftPerformance based on low pass
+   * filtered aircraft state --- effectively producing potential
+   * solutions at average speed in the averaged direction at the
+   * averaged climb rate.
+   */
+  explicit AirspaceAircraftPerformance(const AircraftStateFilter &filter)
+    :vertical_tolerance(0.01),
+     cruise_speed(filter.GetSpeed()), cruise_descent(-filter.GetClimbRate()),
+     descent_rate(-filter.GetClimbRate()),
+     climb_rate(filter.GetClimbRate()),
+     max_speed(filter.GetSpeed()) {}
+
+  /**
+   * Specialisation of AirspaceAircraftPerformance for tasks where
+   * part of the path is in cruise, part in final glide.  This is
+   * intended to be used temporarily only.
+   *
+   * This simplifies the path by assuming flight is constant altitude
+   * or descent to the task point elevation.
+   */
+  AirspaceAircraftPerformance(const GlidePolar &polar,
+                              const GlideResult &solution)
+    :vertical_tolerance(0.001),
+     cruise_speed(positive(solution.time_elapsed)
+                  ? solution.vector.distance / solution.time_elapsed
+                  : fixed(1)),
+     cruise_descent(positive(solution.time_elapsed)
+                    ? (positive(solution.height_climb)
+                       ? -solution.height_climb
+                       : solution.height_glide) / solution.time_elapsed
+                    : fixed(0)),
+     descent_rate(polar.GetSBestLD()),
+     climb_rate(positive(solution.time_elapsed) &&
+                positive(solution.height_climb)
+                ? polar.GetMC()
+                : fixed(0)),
+     max_speed(cruise_speed) {
+    assert(polar.IsValid());
+    assert(solution.IsOk());
+    assert(solution.IsAchievable());
   }
 
   /**
@@ -64,40 +141,45 @@ public:
    *
    * @return Nominal cruise speed (m/s)
    */
-  gcc_pure
-  virtual fixed GetCruiseSpeed() const = 0;
+  fixed GetCruiseSpeed() const {
+    return cruise_speed;
+  }
 
   /**
    * Return nominal descent rate
    *
    * @return Nominal descent speed (m/s, positive down)
    */
-  gcc_pure
-  virtual fixed GetCruiseDescent() const = 0;
+  fixed GetCruiseDescent() const {
+    return cruise_descent;
+  }
 
   /**
    * Return descent rate limit (above nominal descent rate)
    *
    * @return Max descent speed (m/s, positive down)
    */
-  gcc_pure
-  virtual fixed GetDescentRate() const = 0;
+  fixed GetDescentRate() const {
+    return descent_rate;
+  }
 
   /**
    * Return climb rate limit (above nominal descent rate)
    *
    * @return Max climb rate (m/s, positive up)
    */
-  gcc_pure
-  virtual fixed GetClimbRate() const = 0;
+  fixed GetClimbRate() const {
+    return climb_rate;
+  }
 
   /**
    * Return maximum speed achievable by this model
    *
    * @return Speed (m/s)
    */
-  gcc_pure
-  virtual fixed GetMaxSpeed() const = 0;
+  fixed GetMaxSpeed() const {
+    return max_speed;
+  }
 
   /**
    * Find minimum intercept time to a point
@@ -145,174 +227,5 @@ private:
   virtual bool SolutionExists(fixed distance_min, fixed distance_max,
                               fixed h_min, fixed h_max) const;
 };
-
-
-/** 
- * Simplified aircraft performance model used for testing of
- * airspace warning system with minimal dependencies.
- */
-class AirspaceAircraftPerformanceSimple:
-  public AirspaceAircraftPerformance 
-{
-  fixed v_ld;
-  fixed s_ld;
-  fixed climb_rate;
-
-protected:
-  /**
-   * Constructor.  Initialises current to experimental values.
-   * Intended to be specialised for a real aircraft performance model.
-   */
-  AirspaceAircraftPerformanceSimple()
-    :v_ld(30.0), s_ld(2.0), climb_rate(10.0) {}
-
-public:
-  virtual fixed GetCruiseSpeed() const {
-    return v_ld;
-  }
-
-  virtual fixed GetCruiseDescent() const {
-    return s_ld;
-  }
-
-  virtual fixed GetClimbRate() const {
-    return climb_rate;
-  }
-
-  virtual fixed GetDescentRate() const {
-    return s_ld;
-  }
-
-  virtual fixed GetMaxSpeed() const {
-    return v_ld;
-  }
-};
-
-/**
- * Specialisation of AirspaceAircraftPerformance
- * based on simplified theoretical MC cross-country speeds.
- * Assumes cruise at best LD (ignoring wind) for current MC setting,
- * climb rate at MC setting, with direct descent possible at sink rate
- * of cruise.
- */
-class AirspaceAircraftPerformanceGlide: 
-  public AirspaceAircraftPerformance
-{
-protected:
-  /** Glide polar used for speed model */
-  const GlidePolar &m_glide_polar;
-
-public:
-  /**
-   * Constructor.
-   *
-   * @param polar Polar to take data from
-   *
-   * @return Initialised object
-   */
-  AirspaceAircraftPerformanceGlide(const GlidePolar &polar)
-    :m_glide_polar(polar) {}
-
-  virtual fixed GetCruiseSpeed() const {
-    return m_glide_polar.GetVBestLD();
-  }
-
-  virtual fixed GetCruiseDescent() const {
-    return m_glide_polar.GetSBestLD();
-  }
-
-  virtual fixed GetClimbRate() const {
-    return m_glide_polar.GetMC();
-  }
-
-  virtual fixed GetDescentRate() const {
-    return m_glide_polar.GetSMax();
-  }
-
-  virtual fixed GetMaxSpeed() const {
-    return m_glide_polar.GetVMax();
-  }
-};
-
-
-/**
- * Specialisation of AirspaceAircraftPerformance based on
- * low pass filtered aircraft state --- effectively producing
- * potential solutions at average speed in the averaged direction
- * at the averaged climb rate.
- */
-class AirspaceAircraftPerformanceStateFilter: 
-  public AirspaceAircraftPerformance
-{
-  const AircraftStateFilter &m_state_filter;
-
-public:
-  /**
-   * Constructor.
-   *
-   * @param filter Filter to retrieve state information from
-   *
-   * @return Initialised object
-   */
-  AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter)
-    :AirspaceAircraftPerformance(fixed(0.01)),
-     m_state_filter(filter) {}
-
-  virtual fixed GetCruiseSpeed() const {
-    return m_state_filter.GetSpeed();
-  }
-
-  virtual fixed GetCruiseDescent() const {
-    return -m_state_filter.GetClimbRate();
-  }
-
-  virtual fixed GetClimbRate() const {
-    return m_state_filter.GetClimbRate();
-  }
-
-  virtual fixed GetDescentRate() const {
-    return -m_state_filter.GetClimbRate();
-  }
-
-  virtual fixed GetMaxSpeed() const {
-    return m_state_filter.GetSpeed();
-  }
-};
-
-/**
- * Specialisation of AirspaceAircraftPerformance
- * for tasks where part of the path is in cruise, part in
- * final glide.  This is intended to be used temporarily only.
- *
- * This simplifies the path by assuming flight is constant altitude
- * or descent to the task point elevation.
- */
-class AirspaceAircraftPerformanceTask: 
-  public AirspaceAircraftPerformance
-{
-  fixed m_v;
-  fixed m_cruise_descent;
-  fixed m_max_descent;
-  fixed m_climb_rate;
-
-public:
-  /**
-   * Constructor.
-   *
-   * @param polar Polar
-   * @param task Task to retrieve plan from
-   *
-   * @return Initialised object
-   */
-  AirspaceAircraftPerformanceTask(const GlidePolar& polar,
-                                  const GlideResult &solution);
-
-  fixed GetCruiseSpeed() const;
-  fixed GetCruiseDescent() const;
-  fixed GetClimbRate() const;
-  fixed GetDescentRate() const;
-  fixed GetMaxSpeed() const;
-};
-
 
 #endif
