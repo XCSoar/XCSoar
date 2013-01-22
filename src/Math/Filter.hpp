@@ -52,7 +52,9 @@ public:
    * @param bessel If true, generates Bessel filter, otherwise
    * critically damped filter
    */
-  Filter(const fixed cutoff_wavelength, const bool bessel = true);
+  Filter(const fixed cutoff_wavelength, const bool bessel = true) {
+    Design(cutoff_wavelength, bessel);
+  }
 
   /**
    * Designs low-pass FIR filter

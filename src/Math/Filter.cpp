@@ -26,11 +26,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-Filter::Filter(const fixed cutoff_wavelength, const bool bessel)
-{
-  Design(cutoff_wavelength, bessel);
-}
-
 bool
 Filter::Design(const fixed cutoff_wavelength, const bool bessel)
 {
