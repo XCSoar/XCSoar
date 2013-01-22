@@ -210,5 +210,6 @@ void
 InfoBoxContentThermalAssistant::OnCustomPaint(Canvas &canvas,
                                               const PixelRect &rc)
 {
-  renderer.Paint(canvas, rc);
+  renderer.UpdateLayout(rc);
+  renderer.Paint(canvas);
 }

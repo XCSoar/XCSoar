@@ -198,12 +198,16 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 }
 
 void
-ThermalAssistantRenderer::Paint(Canvas &canvas, PixelRect rc)
+ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 {
   radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - padding;
   mid.x = (rc.left + rc.right) / 2;
   mid.y = (rc.top + rc.bottom) / 2;
+}
 
+void
+ThermalAssistantRenderer::Paint(Canvas &canvas)
+{
   fixed max_lift = ceil(CalculateMaxLift());
 
   PaintRadarBackground(canvas, max_lift);

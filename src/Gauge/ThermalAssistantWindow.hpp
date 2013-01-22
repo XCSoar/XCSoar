@@ -49,7 +49,8 @@ public:
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
 protected:
-  virtual void OnPaintBuffer(Canvas &canvas);
+  virtual void OnResize(PixelSize new_size) override;
+  virtual void OnPaintBuffer(Canvas &canvas) override;
 };
 
 #endif

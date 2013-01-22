@@ -80,7 +80,8 @@ public:
 
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
-  void Paint(Canvas &canvas, PixelRect rc);
+  void UpdateLayout(const PixelRect &rc);
+  void Paint(Canvas &canvas);
 
   const ThermalAssistantLook &GetLook() {
     return look;

@@ -47,6 +47,14 @@ ThermalAssistantWindow::Update(const AttitudeState &attitude,
 }
 
 void
+ThermalAssistantWindow::OnResize(PixelSize new_size)
+{
+  AntiFlickerWindow::OnResize(new_size);
+
+  renderer.UpdateLayout(GetClientRect());
+}
+
+void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
@@ -62,5 +70,5 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 #endif
     canvas.Clear(renderer.GetLook().background_color);
 
-  renderer.Paint(canvas, GetClientRect());
+  renderer.Paint(canvas);
 }
