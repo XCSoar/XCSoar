@@ -46,7 +46,7 @@ public:
   IgcReplay(NLineReader *reader);
   virtual ~IgcReplay();
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) gcc_override;
+  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
 
 protected:
   virtual bool UpdateTime(fixed time_scale);

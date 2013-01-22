@@ -65,9 +65,9 @@ protected:
                     OperationEnvironment &env);
 
 public:
-  virtual void LinkTimeout() gcc_override;
+  virtual void LinkTimeout() override;
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) gcc_override;
+                       OperationEnvironment &env) override;
 };
 
 static void

@@ -46,9 +46,9 @@ public:
     return allowed_characters;
   }
 
-  virtual const TCHAR *GetAsDisplayString() const gcc_override;
-  virtual void Inc() gcc_override;
-  virtual void Dec() gcc_override;
+  virtual const TCHAR *GetAsDisplayString() const override;
+  virtual void Inc() override;
+  virtual void Dec() override;
 
 protected:
   gcc_pure

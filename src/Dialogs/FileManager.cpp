@@ -284,11 +284,11 @@ public:
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /* virtual methods from class Timer */
-  virtual void OnTimer() gcc_override;
+  virtual void OnTimer() override;
 
   /* virtual methods from class Net::DownloadListener */
   virtual void OnDownloadAdded(const TCHAR *path_relative,
-                               int64_t size, int64_t position) gcc_override;
+                               int64_t size, int64_t position) override;
   virtual void OnDownloadComplete(const TCHAR *path_relative, bool success);
 
   /* virtual methods from class Notify */

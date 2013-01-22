@@ -107,7 +107,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
 }
 
 
-class AirspaceVisitorPrint gcc_final : public AirspaceVisitor {
+class AirspaceVisitorPrint final : public AirspaceVisitor {
   std::ofstream *fout;
   const bool do_report;
 
@@ -126,7 +126,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     if (do_report) {
       *fout << as;
       *fout << "# Name: " << as.GetName()
@@ -138,7 +138,7 @@ public:
 };
 
 
-class AirspaceIntersectionVisitorPrint gcc_final
+class AirspaceIntersectionVisitorPrint final
   : public AirspaceIntersectionVisitor {
   std::ofstream *fout;
   std::ofstream *yout;
@@ -189,7 +189,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     if (do_report) {
       *yout << as;
       intersection(as);
@@ -198,7 +198,7 @@ public:
 };
 
 
-class AirspaceVisitorClosest gcc_final : public AirspaceVisitor {
+class AirspaceVisitorClosest final : public AirspaceVisitor {
   std::ofstream *fout;
   const TaskProjection &projection;
   const AircraftState& state;
@@ -239,7 +239,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     closest(as);
   }
 };

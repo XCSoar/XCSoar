@@ -28,14 +28,14 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "UIGlobals.hpp"
 
-class MacCreadyOffsetButtons gcc_final : public OffsetButtonsWidget {
+class MacCreadyOffsetButtons final : public OffsetButtonsWidget {
 public:
   template<typename... Args>
   MacCreadyOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(fixed offset) gcc_override;
+  virtual void OnOffset(fixed offset) override;
 };
 
 void

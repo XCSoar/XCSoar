@@ -80,7 +80,7 @@ struct ScopeReturnDevice {
   }
 };
 
-class OpenDeviceJob gcc_final : public Job {
+class OpenDeviceJob final : public Job {
   DeviceDescriptor &device;
 
 public:

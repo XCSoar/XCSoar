@@ -39,7 +39,7 @@
  * - gate start time?
  * - enabled/disabled for multiple start points
  */
-class StartPoint gcc_final : public OrderedTaskPoint {
+class StartPoint final : public OrderedTaskPoint {
   fixed safety_height;
 
   TaskStartMargins margins;
@@ -80,26 +80,26 @@ public:
                        const TaskProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual fixed GetElevation() const gcc_override;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  virtual fixed GetElevation() const override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual bool IsInSector(const AircraftState &ref) const gcc_override;
+  virtual bool IsInSector(const AircraftState &ref) const override;
   virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const gcc_override;
+                                   const AircraftState &ref_last) const override;
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection) gcc_override;
+                                const TaskProjection &projection) override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) gcc_override;
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) override;
   virtual void SetNeighbours(OrderedTaskPoint *prev,
-                             OrderedTaskPoint *next) gcc_override;
+                             OrderedTaskPoint *next) override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool ScoreLastExit() const gcc_override {
+  virtual bool ScoreLastExit() const override {
     return true;
   }
 };

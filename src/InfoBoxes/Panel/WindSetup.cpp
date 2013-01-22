@@ -45,11 +45,11 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()), id(_id) {}
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
+                       const PixelRect &rc) override;
 
 protected:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) gcc_override;
+  virtual void OnModified(DataField &df) override;
 
 private:
   void OnAutoWind(DataFieldEnum &Sender);

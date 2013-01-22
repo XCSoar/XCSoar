@@ -59,7 +59,7 @@ public:
   }
 
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) gcc_override;
+                                  const DerivedInfo &calculated) override;
 };
 
 #endif

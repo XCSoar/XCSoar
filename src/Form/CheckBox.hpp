@@ -89,12 +89,12 @@ public:
     click_notify_callback = _click_notify_callback;
   }
 
-  virtual bool OnClicked() gcc_override;
+  virtual bool OnClicked() override;
 
 #ifdef _WIN32_WCE
 protected:
-  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual bool OnKeyCheck(unsigned key_code) const override;
+  virtual bool OnKeyDown(unsigned key_code) override;
 #endif
 };
 

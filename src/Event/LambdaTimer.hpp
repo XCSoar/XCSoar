@@ -43,7 +43,7 @@ public:
   using Timer::Cancel;
 
 protected:
-  virtual void OnTimer() gcc_override {
+  virtual void OnTimer() override {
     C::operator()();
   }
 };

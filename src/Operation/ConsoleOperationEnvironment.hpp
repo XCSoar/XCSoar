@@ -31,9 +31,9 @@ class ConsoleOperationEnvironment : public QuietOperationEnvironment {
 
 public:
   /* virtual methods from class OperationEnvironment */
-  virtual void SetText(const TCHAR *text) gcc_override;
-  virtual void SetProgressRange(unsigned range) gcc_override;
-  virtual void SetProgressPosition(unsigned position) gcc_override;
+  virtual void SetText(const TCHAR *text) override;
+  virtual void SetProgressRange(unsigned range) override;
+  virtual void SetProgressPosition(unsigned position) override;
 };
 
 #endif

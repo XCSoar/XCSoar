@@ -83,7 +83,7 @@ public:
   void Revert();
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */

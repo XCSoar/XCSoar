@@ -59,7 +59,7 @@ struct TaskFactoryConstraints;
  * - have a method to check if a potential taskpoint is distinct from its neighbours?
  * - multiple start points
  */
-class OrderedTask gcc_final : public AbstractTask
+class OrderedTask final : public AbstractTask
 {
 public:
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
@@ -625,59 +625,59 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
 
-  virtual unsigned TaskSize() const gcc_override {
+  virtual unsigned TaskSize() const override {
     return task_points.size();
   }
 
-  virtual void SetActiveTaskPoint(unsigned desired) gcc_override;
-  virtual TaskWaypoint *GetActiveTaskPoint() const gcc_override;
-  virtual bool IsValidTaskPoint(const int index_offset=0) const gcc_override;
+  virtual void SetActiveTaskPoint(unsigned desired) override;
+  virtual TaskWaypoint *GetActiveTaskPoint() const override;
+  virtual bool IsValidTaskPoint(const int index_offset=0) const override;
   virtual bool UpdateIdle(const AircraftState& state_now,
-                          const GlidePolar &glide_polar) gcc_override;
+                          const GlidePolar &glide_polar) override;
 
   /* virtual methods from class AbstractTask */
-  virtual void Reset() gcc_override;
-  virtual bool TaskFinished() const gcc_override;
-  virtual bool TaskStarted(bool soft=false) const gcc_override;
-  virtual bool CheckTask() const gcc_override;
-  virtual fixed GetFinishHeight() const gcc_override;
+  virtual void Reset() override;
+  virtual bool TaskFinished() const override;
+  virtual bool TaskStarted(bool soft=false) const override;
+  virtual bool CheckTask() const override;
+  virtual fixed GetFinishHeight() const override;
 
 protected:
   /* virtual methods from class AbstractTask */
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            const bool full_update) gcc_override;
+                            const bool full_update) override;
   virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) gcc_override;
+                                const AircraftState &state_last) override;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
-                          fixed& best) const gcc_override;
+                          fixed& best) const override;
   virtual fixed CalcRequiredGlide(const AircraftState &state_now,
-                                  const GlidePolar &glide_polar) const gcc_override;
+                                  const GlidePolar &glide_polar) const override;
   virtual bool CalcCruiseEfficiency(const AircraftState &state_now,
                                     const GlidePolar &glide_polar,
-                                    fixed &value) const gcc_override;
+                                    fixed &value) const override;
   virtual bool CalcEffectiveMC(const AircraftState &state_now,
                                const GlidePolar &glide_polar,
-                               fixed &value) const gcc_override;
-  virtual fixed CalcGradient(const AircraftState &state_now) const gcc_override;
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) gcc_override;
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) gcc_override;
-  virtual fixed ScanDistanceNominal() gcc_override;
-  virtual fixed ScanDistancePlanned() gcc_override;
-  virtual fixed ScanDistanceRemaining(const GeoPoint &ref) gcc_override;
-  virtual fixed ScanDistanceScored(const GeoPoint &ref) gcc_override;
-  virtual fixed ScanDistanceTravelled(const GeoPoint &ref) gcc_override;
+                               fixed &value) const override;
+  virtual fixed CalcGradient(const AircraftState &state_now) const override;
+  virtual fixed ScanTotalStartTime(const AircraftState &state_now) override;
+  virtual fixed ScanLegStartTime(const AircraftState &state_now) override;
+  virtual fixed ScanDistanceNominal() override;
+  virtual fixed ScanDistancePlanned() override;
+  virtual fixed ScanDistanceRemaining(const GeoPoint &ref) override;
+  virtual fixed ScanDistanceScored(const GeoPoint &ref) override;
+  virtual fixed ScanDistanceTravelled(const GeoPoint &ref) override;
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  fixed *dmin, fixed *dmax) gcc_override;
+                                  fixed *dmin, fixed *dmax) override;
   virtual void GlideSolutionRemaining(const AircraftState &state_now,
                                       const GlidePolar &polar,
-                                      GlideResult &total, GlideResult &leg) gcc_override;
+                                      GlideResult &total, GlideResult &leg) override;
   virtual void GlideSolutionTravelled(const AircraftState &state_now,
                                       const GlidePolar &glide_polar,
-                                      GlideResult &total, GlideResult &leg) gcc_override;
+                                      GlideResult &total, GlideResult &leg) override;
   virtual void GlideSolutionPlanned(const AircraftState &state_now,
                                     const GlidePolar &glide_polar,
                                     GlideResult &total,
@@ -685,11 +685,11 @@ protected:
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg) gcc_override;
+                                    const GlideResult &solution_remaining_leg) override;
 protected:
-  virtual bool IsScored() const gcc_override;
+  virtual bool IsScored() const override;
 public:
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const override;
 };
 
 #endif //ORDEREDTASK_H

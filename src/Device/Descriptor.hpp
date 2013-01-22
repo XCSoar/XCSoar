@@ -59,7 +59,7 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 
-class DeviceDescriptor gcc_final : private Notify, private PortLineSplitter {
+class DeviceDescriptor final : private Notify, private PortLineSplitter {
   /**
    * This mutex protects modifications of the attribute "device".  If
    * you use the attribute "device" from a thread other than the main
@@ -454,13 +454,13 @@ private:
   bool ParseLine(const char *line);
 
   /* virtual methods from class Notify */
-  virtual void OnNotification() gcc_override;
+  virtual void OnNotification() override;
 
   /* virtual methods from DataHandler  */
-  virtual void DataReceived(const void *data, size_t length) gcc_override;
+  virtual void DataReceived(const void *data, size_t length) override;
 
   /* virtual methods from PortLineHandler */
-  virtual void LineReceived(const char *line) gcc_override;
+  virtual void LineReceived(const char *line) override;
 };
 
 #endif

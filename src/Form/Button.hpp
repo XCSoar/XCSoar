@@ -116,15 +116,15 @@ public:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool OnClicked() gcc_override;
+  virtual bool OnClicked() override;
 
 protected:
 #ifdef USE_GDI
-  virtual void OnSetFocus() gcc_override;
-  virtual void OnKillFocus() gcc_override;
+  virtual void OnSetFocus() override;
+  virtual void OnKillFocus() override;
 #endif
 
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

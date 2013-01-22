@@ -133,19 +133,19 @@ private:
   const PixelRect &GetButtonSize(unsigned i) const;
 
 protected:
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 
-  virtual void OnKillFocus() gcc_override;
-  virtual void OnSetFocus() gcc_override;
-  virtual void OnCancelMode() gcc_override;
+  virtual void OnKillFocus() override;
+  virtual void OnSetFocus() override;
+  virtual void OnCancelMode() override;
 
-  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual bool OnKeyCheck(unsigned key_code) const override;
+  virtual bool OnKeyDown(unsigned key_code) override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) gcc_override;
+                           unsigned keys) override;
 
   void EndDrag();
 };

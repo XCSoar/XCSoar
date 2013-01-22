@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorFinalGlide gcc_final : public ConditionMonitor {
+class ConditionMonitorFinalGlide final : public ConditionMonitor {
   fixed tad;
   fixed last_tad;
 
@@ -37,7 +37,7 @@ public:
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast();
 };

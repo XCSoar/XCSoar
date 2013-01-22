@@ -38,7 +38,7 @@ class FileEventHandler;
 /**
  * A thread that is used for asynchronous (non-blocking) I/O.
  */
-class IOThread gcc_final : protected Thread {
+class IOThread final : protected Thread {
   struct File {
     File *next_ready;
 
@@ -160,7 +160,7 @@ protected:
   void HandleReady(File *ready);
 
   /* virtual methods from Thread */
-  virtual void Run() gcc_override;
+  virtual void Run() override;
 };
 
 #endif

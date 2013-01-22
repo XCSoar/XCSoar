@@ -35,7 +35,7 @@ class DeviceBlackboard;
  * The MergeThread collects new data from the DeviceBlackboard, merges
  * it and runs a number of cheap calculations.
  */
-class MergeThread gcc_final : public WorkerThread {
+class MergeThread final : public WorkerThread {
   DeviceBlackboard &device_blackboard;
 
   /**

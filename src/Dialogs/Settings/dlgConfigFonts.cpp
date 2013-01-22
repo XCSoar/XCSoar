@@ -131,16 +131,16 @@ private:
 public:
   /* virtual methods from Widget */
 
-  virtual PixelSize GetMinimumSize() const gcc_override {
+  virtual PixelSize GetMinimumSize() const override {
     return { unsigned(Layout::Scale(150)), Layout::GetMinimumControlHeight() };
   }
 
-  virtual PixelSize GetMaximumSize() const gcc_override {
+  virtual PixelSize GetMaximumSize() const override {
     return { unsigned(Layout::Scale(250)), Layout::GetMaximumControlHeight() };
   }
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override {
+                       const PixelRect &rc) override {
     ButtonWindowStyle button_style;
     button_style.Hide();
     button_style.TabStop();
@@ -156,13 +156,13 @@ public:
     UpdateLayout();
   }
 
-  virtual void Unprepare() gcc_override {
+  virtual void Unprepare() override {
     preview.Destroy();
     delete button;
     font.Destroy();
   }
 
-  virtual void Show(const PixelRect &rc) gcc_override {
+  virtual void Show(const PixelRect &rc) override {
     position = rc;
     UpdateLayout();
     UpdateFont();
@@ -172,18 +172,18 @@ public:
       button->Show();
   }
 
-  virtual void Hide() gcc_override {
+  virtual void Hide() override {
     preview.Hide();
     if (enabled)
       button->Hide();
   }
 
-  virtual void Move(const PixelRect &rc) gcc_override {
+  virtual void Move(const PixelRect &rc) override {
     position = rc;
     UpdateLayout();
   }
 
-  virtual bool SetFocus() gcc_override {
+  virtual bool SetFocus() override {
     button->SetFocus();
     return true;
   }
@@ -191,7 +191,7 @@ public:
 private:
   /* virtual methods from ActionListener */
 
-  virtual void OnAction(int id) gcc_override {
+  virtual void OnAction(int id) override {
     LOGFONT custom;
     if (!Profile::GetFont(profile_key, &custom))
       custom = defaults;
@@ -231,7 +231,7 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override {
+                       const PixelRect &rc) override {
     const UISettings &ui_settings = CommonInterface::GetUISettings();
     const bool custom_fonts = ui_settings.custom_fonts;
 
@@ -244,7 +244,7 @@ public:
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) gcc_override {
+  virtual void OnModified(DataField &df) override {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     const bool value = dfb.GetAsBoolean();
 

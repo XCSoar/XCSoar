@@ -54,7 +54,7 @@ AirspaceFilterData::Match(const GeoPoint &location,
   return true;
 }
 
-class AirspaceFilterVisitor gcc_final : public AirspaceVisitor {
+class AirspaceFilterVisitor final : public AirspaceVisitor {
   GeoPoint location;
   const TaskProjection &projection;
   const AirspaceFilterData &filter;

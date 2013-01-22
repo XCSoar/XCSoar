@@ -27,14 +27,14 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 
 /** Checks whether arrival time will be less than AAT time */
-class ConditionMonitorAATTime gcc_final : public ConditionMonitor {
+class ConditionMonitorAATTime final : public ConditionMonitor {
 public:
   constexpr ConditionMonitorAATTime():ConditionMonitor(60 * 15, 10) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

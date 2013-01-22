@@ -39,7 +39,7 @@ class DemoReplayGlue
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager);
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) gcc_override;
+  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
 
 protected:
   bool UpdateTime();

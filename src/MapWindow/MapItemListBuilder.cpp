@@ -105,14 +105,14 @@ public:
 /**
  * Class to display airspace details dialog
  */
-class AirspaceListBuilderVisitor gcc_final : public AirspaceVisitor
+class AirspaceListBuilderVisitor final : public AirspaceVisitor
 {
   MapItemList &list;
 
 public:
   AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
-  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) override {
     if (!list.full())
       list.append(new AirspaceMapItem(airspace));
   }

@@ -55,9 +55,9 @@ protected:
 
 public:
   /* virtual methods from class AbstractContest */
-  virtual void Reset() gcc_override;
-  virtual SolverResult Solve(bool exhaustive) gcc_override;
-  virtual void CopySolution(ContestTraceVector &vec) const gcc_override;
+  virtual void Reset() override;
+  virtual SolverResult Solve(bool exhaustive) override;
+  virtual void CopySolution(ContestTraceVector &vec) const override;
 };
 
 #endif

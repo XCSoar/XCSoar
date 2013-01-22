@@ -250,7 +250,7 @@ protected:
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned idx) gcc_override {
+  virtual void OnCursorMoved(unsigned idx) override {
     assert(idx < NUM_OZ_TYPES);
 
     oz.set_shape((ObservationZonePoint::Shape)idx);

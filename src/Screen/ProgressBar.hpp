@@ -54,7 +54,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 #endif
 };
 

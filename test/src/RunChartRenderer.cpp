@@ -174,7 +174,7 @@ protected:
   }
 
   /* virtual methods from ListCursorHandler */
-  virtual void OnCursorMoved(unsigned idx) gcc_override {
+  virtual void OnCursorMoved(unsigned idx) override {
     assert(idx < ARRAY_SIZE(chart_names));
 
     chart.SetChart(idx);

@@ -28,7 +28,7 @@
 /**
  * Specialisation of TaskDijkstra for maximum distance search
  */
-class TaskDijkstraMax gcc_final : public TaskDijkstra {
+class TaskDijkstraMax final : public TaskDijkstra {
 public:
   TaskDijkstraMax()
     :TaskDijkstra(false) {}

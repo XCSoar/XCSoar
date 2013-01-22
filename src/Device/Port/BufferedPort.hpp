@@ -78,15 +78,15 @@ protected:
 
 public:
   /* virtual methods from class Port */
-  virtual void Flush() gcc_override;
-  virtual int Read(void *Buffer, size_t Size) gcc_override;
-  virtual WaitResult WaitRead(unsigned timeout_ms) gcc_override;
-  virtual bool StopRxThread() gcc_override;
-  virtual bool StartRxThread() gcc_override;
+  virtual void Flush() override;
+  virtual int Read(void *Buffer, size_t Size) override;
+  virtual WaitResult WaitRead(unsigned timeout_ms) override;
+  virtual bool StopRxThread() override;
+  virtual bool StartRxThread() override;
 
 protected:
   /* virtual methods from class DataHandler */
-  virtual void DataReceived(const void *data, size_t length) gcc_override;
+  virtual void DataReceived(const void *data, size_t length) override;
 };
 
 #endif

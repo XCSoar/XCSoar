@@ -70,16 +70,16 @@ public:
   WaitResult WaitWrite(unsigned timeout_ms);
 
   /* virtual methods from class Port */
-  virtual PortState GetState() const gcc_override;
-  virtual bool Drain() gcc_override;
-  virtual void Flush() gcc_override;
-  virtual bool SetBaudrate(unsigned baud_rate) gcc_override;
-  virtual unsigned GetBaudrate() const gcc_override;
-  virtual size_t Write(const void *data, size_t length) gcc_override;
+  virtual PortState GetState() const override;
+  virtual bool Drain() override;
+  virtual void Flush() override;
+  virtual bool SetBaudrate(unsigned baud_rate) override;
+  virtual unsigned GetBaudrate() const override;
+  virtual size_t Write(const void *data, size_t length) override;
 
 protected:
   /* virtual methods from class FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) gcc_override;
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

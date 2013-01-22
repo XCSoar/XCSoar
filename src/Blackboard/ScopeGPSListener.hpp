@@ -57,7 +57,7 @@ public:
     blackboard.RemoveListener(*this);
   }
 
-  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

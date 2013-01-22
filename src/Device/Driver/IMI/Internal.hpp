@@ -37,12 +37,12 @@ public:
   IMIDevice(Port &_port):port(_port) {}
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) gcc_override;
+                              OperationEnvironment &env) override;
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path, OperationEnvironment &env) gcc_override;
+                              const TCHAR *path, OperationEnvironment &env) override;
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) gcc_override;
+                       OperationEnvironment &env) override;
 private:
   bool Connect(OperationEnvironment &env);
   void Disconnect(OperationEnvironment &env);

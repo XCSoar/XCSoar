@@ -110,8 +110,8 @@ public:
   bool FilterEvent(const Event &event, Window *allowed) const;
 
 protected:
-  virtual bool OnClose() gcc_override;
-  virtual void OnDestroy() gcc_override;
+  virtual bool OnClose() override;
+  virtual void OnDestroy() override;
 };
 
 #endif

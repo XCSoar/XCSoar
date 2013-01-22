@@ -62,7 +62,7 @@ public:
                      task_look, aircraft_look) {}
 
 protected:
-  virtual void OnTaskModified() gcc_override;
+  virtual void OnTaskModified() override;
 };
 
 static WndForm *wf = NULL;

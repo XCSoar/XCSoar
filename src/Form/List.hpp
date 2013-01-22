@@ -51,7 +51,7 @@ public:
   LambdaListItemRenderer(C &&c):C(std::move(c)) {}
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override {
+                           unsigned idx) override {
     C::operator()(canvas, rc, idx);
   }
 };
@@ -74,7 +74,7 @@ public:
     :function(_function) {}
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override {
+                           unsigned idx) override {
     function(canvas, rc, idx);
   }
 };
@@ -329,28 +329,28 @@ protected:
   void DrawScrollBar(Canvas &canvas);
 
 #ifndef _WIN32_WCE
-  virtual bool OnTimer(WindowTimer &timer) gcc_override;
-  virtual void OnDestroy() gcc_override;
+  virtual bool OnTimer(WindowTimer &timer) override;
+  virtual void OnDestroy() override;
 #endif
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
 
-  virtual void OnSetFocus() gcc_override;
-  virtual void OnKillFocus() gcc_override;
+  virtual void OnSetFocus() override;
+  virtual void OnKillFocus() override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) gcc_override;
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) gcc_override;
+                           unsigned keys) override;
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
 
   virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) override;
 
-  virtual void OnCancelMode() gcc_override;
+  virtual void OnCancelMode() override;
 
-  virtual void OnPaint(Canvas &canvas) gcc_override;
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
+  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) override;
 };
 
 #endif

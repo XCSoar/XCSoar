@@ -65,12 +65,12 @@ public:
   void Step();
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnPaint(Canvas &canvas) override;
 
 #ifdef USE_GDI
   virtual const Brush *OnChildColor(Window &window,
-                                    Canvas &canvas) gcc_override;
+                                    Canvas &canvas) override;
 #endif
 };
 

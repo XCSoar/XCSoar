@@ -51,11 +51,11 @@ public:
 
 public:
   /* virtual methods from Widget */
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc);
   virtual void Hide();
   virtual void Move(const PixelRect &rc);
@@ -66,7 +66,7 @@ protected:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 };
 
 #endif

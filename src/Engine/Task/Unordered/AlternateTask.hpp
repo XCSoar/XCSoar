@@ -31,7 +31,7 @@
  *
  * @todo: take user preferences of landing points into account.
  */
-class AlternateTask gcc_final : public AbortTask
+class AlternateTask final : public AbortTask
 {
 public:
   struct Divert : public Alternate {
@@ -89,13 +89,13 @@ private:
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual void Reset() gcc_override;
+  virtual void Reset() override;
 
 protected:
   /* virtual methods from class AbortTask */
-  virtual void Clear() gcc_override;
+  virtual void Clear() override;
   virtual void ClientUpdate(const AircraftState &state_now,
-                            bool reachable) gcc_override;
+                            bool reachable) override;
 };
 
 #endif //ALTERNATETASK_HPP

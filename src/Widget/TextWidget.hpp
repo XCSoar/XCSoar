@@ -36,12 +36,12 @@ public:
   void SetText(const TCHAR *text);
 
   /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
 };
 
 #endif

@@ -220,37 +220,37 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  gcc_override{
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  override{
     return vector_remaining;
   }
-  virtual GeoVector GetVectorPlanned() const gcc_override {
+  virtual GeoVector GetVectorPlanned() const override {
     return vector_planned;
   }
-  virtual GeoVector GetVectorTravelled() const gcc_override {
+  virtual GeoVector GetVectorTravelled() const override {
     return vector_travelled;
   }
-  virtual GeoVector GetNextLegVector() const gcc_override;
+  virtual GeoVector GetNextLegVector() const override;
 
   /* virtual methods from class SampledTaskPoint */
-  virtual void UpdateOZ(const TaskProjection &projection) gcc_override;
+  virtual void UpdateOZ(const TaskProjection &projection) override;
 
 private:
   /* virtual methods from class SampledTaskPoint */
-  virtual bool SearchNominalIfUnsampled() const gcc_override;
-  virtual bool SearchBoundaryPoints() const gcc_override;
+  virtual bool SearchNominalIfUnsampled() const override;
+  virtual bool SearchBoundaryPoints() const override;
 
 public:
   /* virtual methods from class SampledTaskPoint */
-  virtual bool IsInSector(const AircraftState &ref) const gcc_override;
-  virtual OZBoundary GetBoundary() const gcc_override;
+  virtual bool IsInSector(const AircraftState &ref) const override;
+  virtual OZBoundary GetBoundary() const override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const gcc_override;
+                                    const AircraftState &ref_last) const override;
 
   virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const  gcc_override{
+                                   const AircraftState &ref_last) const  override{
     return CheckEnterTransition(ref_last, ref_now);
   }
 };

@@ -29,8 +29,8 @@ Copyright_License {
 class InfoBoxContentTeamCode : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
+  virtual void Update(InfoBoxData &data) override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
 void

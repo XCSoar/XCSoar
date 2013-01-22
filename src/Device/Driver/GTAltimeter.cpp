@@ -29,7 +29,7 @@ Copyright_License {
 
 class GTAltimeterDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 };
 
 static bool

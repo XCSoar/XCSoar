@@ -39,11 +39,11 @@ public:
   void Refresh();
 
   virtual void Initialise(ContainerWindow &parent,
-                          const PixelRect &rc) gcc_override;
-  virtual void Show(const PixelRect &rc) gcc_override;
-  virtual void Hide() gcc_override;
+                          const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
-  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 void

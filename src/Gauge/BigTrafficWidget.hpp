@@ -81,21 +81,21 @@ public:
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
-  virtual void Show(const PixelRect &rc) gcc_override;
-  virtual void Hide() gcc_override;
-  virtual void Move(const PixelRect &rc) gcc_override;
-  virtual bool SetFocus() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
+  virtual bool SetFocus() override;
 
 private:
 #ifndef GNAV
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 #endif
 
   /* virtual methods from class BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

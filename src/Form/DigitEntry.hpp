@@ -219,12 +219,12 @@ protected:
   int FindColumnAt(unsigned x) const;
 
 protected:
-  virtual void OnSetFocus() gcc_override;
-  virtual void OnKillFocus() gcc_override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnSetFocus() override;
+  virtual void OnKillFocus() override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnKeyCheck(unsigned key_code) const override;
+  virtual bool OnKeyDown(unsigned key_code) override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

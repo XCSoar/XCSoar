@@ -35,7 +35,7 @@ class GRECORD {
  public:
   GRECORD(FILE *ausgabedatei);
   void update(uint8_t b);
-  void final (void);
+  void finish(void);
 
 };
 

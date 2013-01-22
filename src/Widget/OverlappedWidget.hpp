@@ -42,7 +42,7 @@ public:
   void Raise();
 
 #ifdef USE_GDI
-  virtual void Hide() gcc_override;
+  virtual void Hide() override;
 #endif
 };
 

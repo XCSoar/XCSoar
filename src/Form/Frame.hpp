@@ -69,7 +69,7 @@ public:
 
 protected:
   /** from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

@@ -36,7 +36,7 @@ public:
   IgcReplayGlue(NLineReader *_reader):IgcReplay(_reader) {}
 
 protected:
-  virtual bool UpdateTime(fixed time_scale) gcc_override;
+  virtual bool UpdateTime(fixed time_scale) override;
 };
 
 #endif

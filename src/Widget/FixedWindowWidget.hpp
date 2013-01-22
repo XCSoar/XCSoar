@@ -32,7 +32,7 @@ public:
   FixedWindowWidget() = default;
   FixedWindowWidget(Window *window):WindowWidget(window) {}
 
-  virtual PixelSize GetMinimumSize() const gcc_override {
+  virtual PixelSize GetMinimumSize() const override {
     return GetWindow()->GetSize();
   }
 };

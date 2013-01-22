@@ -72,7 +72,7 @@ struct WarningItem
 class AirspaceWarningListHandler : public ListControl::Handler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
+                           unsigned idx) override;
 
   virtual void OnCursorMoved(unsigned index);
 
@@ -80,7 +80,7 @@ public:
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) gcc_override;
+  virtual void OnActivateItem(unsigned index) override;
 };
 
 typedef TrivialArray<WarningItem, 64u> WarningList;

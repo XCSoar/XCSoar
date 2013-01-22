@@ -96,18 +96,18 @@ public:
   void ModifyValue(Angle _value);
 
   /* virtual methods from class DataField */
-  virtual int GetAsInteger() const gcc_override;
-  virtual const TCHAR *GetAsString() const gcc_override;
-  virtual const TCHAR *GetAsDisplayString() const gcc_override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
 
-  virtual void SetAsInteger(int value) gcc_override;
-  virtual void SetAsString(const TCHAR *value) gcc_override;
+  virtual void SetAsInteger(int value) override;
+  virtual void SetAsString(const TCHAR *value) override;
 
-  virtual void Inc() gcc_override;
-  virtual void Dec() gcc_override;
+  virtual void Inc() override;
+  virtual void Dec() override;
 
-  virtual ComboList *CreateComboList() const gcc_override;
-  virtual void SetFromCombo(int i, TCHAR *s) gcc_override;
+  virtual ComboList *CreateComboList() const override;
+  virtual void SetFromCombo(int i, TCHAR *s) override;
 };
 
 #endif

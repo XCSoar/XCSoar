@@ -53,13 +53,13 @@ protected:
   }
 
 public:
-  virtual void OnAck(unsigned id) gcc_override {
+  virtual void OnAck(unsigned id) override {
     printf("received ack %u\n", id);
     Done();
   }
 
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
-                         const GeoPoint &location, int altitude) gcc_override {
+                         const GeoPoint &location, int altitude) override {
     BrokenTime time = BrokenTime::FromSecondOfDay(time_of_day_ms / 1000);
 
     printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d\n",

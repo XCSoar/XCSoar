@@ -28,7 +28,7 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
-class ConditionMonitorWind gcc_final : public ConditionMonitor {
+class ConditionMonitorWind final : public ConditionMonitor {
   SpeedVector wind;
   SpeedVector last_wind;
 
@@ -40,7 +40,7 @@ public:
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast();
 };

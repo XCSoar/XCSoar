@@ -447,12 +447,13 @@ private:
    * Backtrack solution from A* internal structure to construct a
    * Route.
    *
-   * @param final Final point from search to backtrack
+   * @param final_point Final point from search to backtrack
    * @param this_route Route to copy into
    *
    * @return Destination score (s)
    */
-  unsigned FindSolution(const RoutePoint &final, Route& this_route) const;
+  unsigned FindSolution(const RoutePoint &final_point,
+                        Route& this_route) const;
 };
 
 #endif

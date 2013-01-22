@@ -49,8 +49,8 @@ protected:
                           const PixelRect &rc, UPixelScalar row_height);
 
 public:
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
 };
 
 #endif

@@ -127,12 +127,10 @@ Copyright_License {
 
 #if defined(__cplusplus)
 
-#if GCC_VERSION >= 40700 || defined(__clang__)
-#define gcc_override override
-#define gcc_final final
-#else
-#define gcc_override
-#define gcc_final
+/* support for C++11 "override" was added in gcc 4.7 */
+#if !defined(__clang__) && GCC_VERSION < 40700
+#define override
+#define final
 #endif
 
 #endif

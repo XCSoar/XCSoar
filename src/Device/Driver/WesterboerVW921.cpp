@@ -41,7 +41,7 @@ class WesterboerVW921Device : public AbstractDevice
 
 public:
   virtual bool DataReceived(const void *data, size_t length,
-                            struct NMEAInfo &info) gcc_override;
+                            struct NMEAInfo &info) override;
 
   void SentenceReceived(unsigned sentence_number,
                         const void *data, size_t length, struct NMEAInfo &info);

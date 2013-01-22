@@ -106,16 +106,16 @@ public:
 
 public:
   /* virtual methods from class OperationEnvironment */
-  virtual bool IsCancelled() const gcc_override;
-  virtual void Sleep(unsigned ms) gcc_override;
-  virtual void SetErrorMessage(const TCHAR *error) gcc_override;
-  virtual void SetText(const TCHAR *text) gcc_override;
-  virtual void SetProgressRange(unsigned range) gcc_override;
-  virtual void SetProgressPosition(unsigned position) gcc_override;
+  virtual bool IsCancelled() const override;
+  virtual void Sleep(unsigned ms) override;
+  virtual void SetErrorMessage(const TCHAR *error) override;
+  virtual void SetText(const TCHAR *text) override;
+  virtual void SetProgressRange(unsigned range) override;
+  virtual void SetProgressPosition(unsigned position) override;
 
 protected:
   /* virtual methods from class Notify */
-  virtual void OnNotification() gcc_override;
+  virtual void OnNotification() override;
 };
 
 #endif

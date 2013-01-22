@@ -46,8 +46,8 @@ protected:
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
+                       const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 #endif

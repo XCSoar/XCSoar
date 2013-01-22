@@ -34,7 +34,7 @@ public:
 
 protected:
   /* virtual methods from class ContestDijkstra */
-  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const gcc_override;
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const override;
 };
 
 #endif

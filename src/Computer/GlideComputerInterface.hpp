@@ -6,7 +6,7 @@
 
 class GlideComputer;
 
-class GlideComputerTaskEvents gcc_final : public TaskEvents {
+class GlideComputerTaskEvents final : public TaskEvents {
   GlideComputer* computer;
 
 public:

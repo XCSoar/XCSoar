@@ -53,7 +53,7 @@ public:
                            const AltitudeState& _state)
     :AirspaceVisibility(_computer_settings, _renderer_settings, _state) {}
 
-  virtual bool operator()(const AbstractAirspace &airspace) const gcc_override;
+  virtual bool operator()(const AbstractAirspace &airspace) const override;
 };
 
 #endif

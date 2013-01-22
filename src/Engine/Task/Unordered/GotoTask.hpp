@@ -32,7 +32,7 @@ class Waypoints;
 /**
  * Class providing ability to go to a single task point
  */
-class GotoTask gcc_final : public UnorderedTask
+class GotoTask final : public UnorderedTask
 {
   TaskWaypoint* tp;
   const Waypoints &waypoints;
@@ -73,20 +73,20 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual unsigned TaskSize() const gcc_override;
-  virtual TaskWaypoint *GetActiveTaskPoint() const gcc_override;
-  virtual void SetActiveTaskPoint(unsigned index) gcc_override;
-  virtual bool IsValidTaskPoint(const int index_offset) const gcc_override;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  virtual unsigned TaskSize() const override;
+  virtual TaskWaypoint *GetActiveTaskPoint() const override;
+  virtual void SetActiveTaskPoint(unsigned index) override;
+  virtual bool IsValidTaskPoint(const int index_offset) const override;
 
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            const bool full_update) gcc_override;
+                            const bool full_update) override;
   virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) gcc_override;
+                                const AircraftState &state_last) override;
 public:
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const gcc_override;
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const override;
 };
 
 #endif //GOTOTASK_H

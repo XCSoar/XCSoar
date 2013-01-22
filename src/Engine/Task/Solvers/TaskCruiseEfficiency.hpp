@@ -31,7 +31,7 @@
  *
  *  This is calculated for the part of the task that has been travelled
  */
-class TaskCruiseEfficiency gcc_final : public TaskSolveTravelled
+class TaskCruiseEfficiency final : public TaskSolveTravelled
 {
 public:
 /** 

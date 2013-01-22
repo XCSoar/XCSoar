@@ -42,7 +42,7 @@ public:
 
 protected:
   /* virtual methods from class Thread */
-  virtual void Run() gcc_override;
+  virtual void Run() override;
 };
 
 #endif

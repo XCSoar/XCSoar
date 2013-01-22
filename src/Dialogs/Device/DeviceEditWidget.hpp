@@ -64,12 +64,12 @@ public:
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
+                       const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) gcc_override;
+  virtual void OnModified(DataField &df) override;
 };
 
 #endif

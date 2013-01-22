@@ -188,11 +188,12 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
 }
 
 unsigned
-RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
+RoutePlanner::FindSolution(const RoutePoint &final_point,
+                           Route &this_route) const
 {
   // we are iterating from goal (aircraft) backwards to start (target)
 
-  RoutePoint p(final);
+  RoutePoint p(final_point);
   RoutePoint p_last(p);
   bool finished = false;
 
@@ -234,7 +235,7 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
     // @todo: assert check_clearance
   } while (!finished);
 
-  return planner.GetNodeValue(final).h;
+  return planner.GetNodeValue(final_point).h;
 }
 
 bool

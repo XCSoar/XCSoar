@@ -74,7 +74,7 @@ public:
 
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned index) gcc_override {
+                           unsigned index) override {
     assert(index < alternates.size());
 
     const ComputerSettings &settings = CommonInterface::GetComputerSettings();

@@ -41,7 +41,7 @@ Copyright_License {
 struct MoreData;
 struct DerivedInfo;
 
-class TrackingGlue gcc_final
+class TrackingGlue final
   : protected StandbyThread
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   , private SkyLinesTracking::Handler
@@ -101,7 +101,7 @@ protected:
 private:
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
-                         const GeoPoint &location, int altitude) gcc_override;
+                         const GeoPoint &location, int altitude) override;
 
 public:
   const SkyLinesTracking::Data &GetSkyLinesData() const {

@@ -54,7 +54,7 @@ static unsigned task_list_serial;
 #undef DELETE
 #endif
 
-class TaskListPanel gcc_final
+class TaskListPanel final
   : public ListWidget, private ActionListener {
   enum Buttons {
     LOAD = 100,
@@ -126,21 +126,21 @@ protected:
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 
   /* virtual methods from class ListControl::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
+                           unsigned idx) override;
 
-  virtual void OnCursorMoved(unsigned index) gcc_override {
+  virtual void OnCursorMoved(unsigned index) override {
     RefreshView();
   }
 
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
+  virtual bool CanActivateItem(unsigned index) const override {
       return true;
   }
 
-  virtual void OnActivateItem(unsigned index) gcc_override {
+  virtual void OnActivateItem(unsigned index) override {
     LoadTask();
   }
 };

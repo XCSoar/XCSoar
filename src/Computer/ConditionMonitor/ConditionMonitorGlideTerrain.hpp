@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorGlideTerrain gcc_final : public ConditionMonitor {
+class ConditionMonitorGlideTerrain final : public ConditionMonitor {
 public:
   constexpr ConditionMonitorGlideTerrain():ConditionMonitor(60 * 5, 1) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

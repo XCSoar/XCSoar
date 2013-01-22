@@ -41,42 +41,42 @@ public:
     :Port(_handler), running(true), baud_rate(DEFAULT_BAUD_RATE) {}
 
   /* virtual methods from class Port */
-  virtual PortState GetState() const gcc_override {
+  virtual PortState GetState() const override {
     return inject_port_fault > 0
       ? PortState::READY
       : PortState::FAILED;
   }
 
-  virtual size_t Write(const void *data, size_t length) gcc_override {
+  virtual size_t Write(const void *data, size_t length) override {
     return length;
   }
 
-  virtual bool Drain() gcc_override {
+  virtual bool Drain() override {
     return true;
   }
 
-  virtual void Flush() gcc_override {}
+  virtual void Flush() override {}
 
-  virtual unsigned GetBaudrate() const gcc_override {
+  virtual unsigned GetBaudrate() const override {
     return baud_rate;
   }
 
-  virtual bool SetBaudrate(unsigned _baud_rate) gcc_override {
+  virtual bool SetBaudrate(unsigned _baud_rate) override {
     baud_rate = _baud_rate;
     return true;
   }
 
-  virtual bool StopRxThread() gcc_override {
+  virtual bool StopRxThread() override {
     running = false;
     return true;
   }
 
-  virtual bool StartRxThread() gcc_override {
+  virtual bool StartRxThread() override {
     running = true;
     return true;
   }
 
-  virtual int Read(void *Buffer, size_t Size) gcc_override {
+  virtual int Read(void *Buffer, size_t Size) override {
     if (inject_port_fault == 0)
       return -1;
 
@@ -86,7 +86,7 @@ public:
     return Size;
   }
 
-  virtual WaitResult WaitRead(unsigned timeout_ms) gcc_override {
+  virtual WaitResult WaitRead(unsigned timeout_ms) override {
     return inject_port_fault > 0
       ? WaitResult::READY
       : WaitResult::FAILED;

@@ -30,7 +30,7 @@ Copyright_License {
 /**
  * A #DataHandler that dispatches incoming data to all NMEA outputs.
  */
-class DeviceDispatcher gcc_final : public PortLineHandler {
+class DeviceDispatcher final : public PortLineHandler {
   /**
    * The device index that should be excluded.  It is this
    * dispatcher's own index.

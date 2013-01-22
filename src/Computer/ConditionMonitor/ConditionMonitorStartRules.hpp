@@ -29,7 +29,7 @@ Copyright_License {
 /**
  * Checks whether aircraft in start sector is within height/speed rules
  */
-class ConditionMonitorStartRules gcc_final : public ConditionMonitor {
+class ConditionMonitorStartRules final : public ConditionMonitor {
   bool withinMargin;
 
 public:
@@ -39,7 +39,7 @@ public:
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

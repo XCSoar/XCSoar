@@ -31,7 +31,7 @@ extern const InfoBoxPanel altitude_infobox_panels[];
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
-  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
+  virtual const InfoBoxPanel *GetDialogContent() override;
 };
 
 void
@@ -40,8 +40,8 @@ UpdateInfoBoxAltitudeNav(InfoBoxData &data);
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
+  virtual void Update(InfoBoxData &data) override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
 void

@@ -33,7 +33,7 @@
 /**
  * Find airspace and location of nearest intercept
  */
-class AIV gcc_final : public AirspaceIntersectionVisitor
+class AIV final : public AirspaceIntersectionVisitor
 {
 public:
   typedef std::pair<const AbstractAirspace*, RoutePoint> AIVResult;
@@ -60,7 +60,7 @@ public:
     {
     }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     assert(!intersections.empty());
 
     GeoPoint point = intersections[0].first;
@@ -87,7 +87,7 @@ public:
 };
 
 
-class AirspaceInsideOtherVisitor gcc_final : public AirspaceVisitor {
+class AirspaceInsideOtherVisitor final : public AirspaceVisitor {
   const AbstractAirspace* m_found;
 
 public:
@@ -99,7 +99,7 @@ public:
   }
 
 protected:
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     m_found = &as;
   }
 };

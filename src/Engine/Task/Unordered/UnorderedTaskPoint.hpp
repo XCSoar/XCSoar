@@ -47,15 +47,15 @@ public:
                      const TaskBehaviour &tb);
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const gcc_override;
-  virtual GeoVector GetVectorPlanned() const gcc_override;
-  virtual GeoVector GetVectorTravelled() const gcc_override;
-  virtual bool HasEntered() const gcc_override {
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
+  virtual GeoVector GetVectorPlanned() const override;
+  virtual GeoVector GetVectorTravelled() const override;
+  virtual bool HasEntered() const override {
     return false;
   }
-  virtual const AircraftState &GetEnteredState() const gcc_override;
-  virtual fixed GetElevation() const gcc_override;
+  virtual const AircraftState &GetEnteredState() const override;
+  virtual fixed GetElevation() const override;
 };
 
 #endif

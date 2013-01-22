@@ -33,13 +33,13 @@ class CrossSectionWidget : public WindowWidget,
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
 
 private:
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) gcc_override;
+                                  const DerivedInfo &calculated) override;
 };
 
 #endif

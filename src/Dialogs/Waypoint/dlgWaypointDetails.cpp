@@ -305,13 +305,13 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *sender, Canvas &canvas)
 class WaypointExternalFileListHandler : public ListControl::Handler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
+                           unsigned idx) override;
 
   virtual bool CanActivateItem(unsigned index) const {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) gcc_override;
+  virtual void OnActivateItem(unsigned index) override;
 };
 
 void

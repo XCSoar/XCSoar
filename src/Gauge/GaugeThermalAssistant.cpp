@@ -60,12 +60,12 @@ private:
   }
 
 protected:
-  virtual void OnCancelMode() gcc_override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual void OnCancelMode() override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
-                           unsigned keys) gcc_override;
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+                           unsigned keys) override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 void

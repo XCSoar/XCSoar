@@ -49,7 +49,7 @@ public:
 
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) gcc_override {
+                           unsigned i) override {
     canvas.DrawClippedText(rc.left + padding,
                            rc.top + padding, rc,
                            combo_list[i].StringValueFormatted);

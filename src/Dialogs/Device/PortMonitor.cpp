@@ -118,7 +118,7 @@ public:
   void Reconnect();
   void TogglePause();
 
-  virtual void OnAction(int id) gcc_override {
+  virtual void OnAction(int id) override {
     switch (id) {
     case CLEAR:
       Clear();

@@ -119,27 +119,27 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override {
+                       const PixelRect &rc) override {
     ((SwitchesLeft &)GetFirst()).Create();
     ((SwitchesRight &)GetSecond()).Create();
 
     TwoWidgets::Prepare(parent, rc);
   }
 
-  virtual void Show(const PixelRect &rc) gcc_override {
+  virtual void Show(const PixelRect &rc) override {
     Update(CommonInterface::Basic().switch_state);
     TwoWidgets::Show(rc);
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
 
-  virtual void Hide() gcc_override {
+  virtual void Hide() override {
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
     TwoWidgets::Hide();
   }
 
 private:
   /* virtual methods from BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic) gcc_override {
+  virtual void OnGPSUpdate(const MoreData &basic) override {
     Update(basic.switch_state);
   }
 };

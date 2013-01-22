@@ -33,7 +33,7 @@ Copyright_License {
 class MessageOperationEnvironment : public QuietOperationEnvironment {
 public:
   /* virtual methods from class OperationEnvironment */
-  virtual void SetErrorMessage(const TCHAR *text) gcc_override;
+  virtual void SetErrorMessage(const TCHAR *text) override;
 };
 
 #endif

@@ -178,27 +178,27 @@ public:
 
 protected:
   /* virtual methods from class MapWindow */
-  virtual void Render(Canvas &canvas, const PixelRect &rc) gcc_override;
-  virtual void DrawThermalEstimate(Canvas &canvas) const gcc_override;
+  virtual void Render(Canvas &canvas, const PixelRect &rc) override;
+  virtual void DrawThermalEstimate(Canvas &canvas) const override;
   virtual void RenderTrail(Canvas &canvas,
-                           const RasterPoint aircraft_pos) gcc_override;
+                           const RasterPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) gcc_override;
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
 
 #ifdef HAVE_MULTI_TOUCH
-  virtual bool OnMultiTouchDown() gcc_override;
+  virtual bool OnMultiTouchDown() override;
 #endif
 
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
-  virtual void OnCancelMode() gcc_override;
-  virtual void OnPaint(Canvas &canvas) gcc_override;
-  virtual void OnPaintBuffer(Canvas& canvas) gcc_override;
-  virtual bool OnTimer(WindowTimer &timer) gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) override;
+  virtual void OnCancelMode() override;
+  virtual void OnPaint(Canvas &canvas) override;
+  virtual void OnPaintBuffer(Canvas& canvas) override;
+  virtual bool OnTimer(WindowTimer &timer) override;
 
   /**
    * This event handler gets called when a gesture has

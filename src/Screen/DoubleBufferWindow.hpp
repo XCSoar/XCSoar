@@ -89,9 +89,9 @@ protected:
   }
 
 protected:
-  virtual void OnCreate() gcc_override;
-  virtual void OnDestroy() gcc_override;
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnCreate() override;
+  virtual void OnDestroy() override;
+  virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
 public:

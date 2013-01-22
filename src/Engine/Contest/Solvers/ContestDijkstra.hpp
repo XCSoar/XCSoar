@@ -235,17 +235,17 @@ protected:
 
 public:
   /* public virtual methods from AbstractContest */
-  virtual SolverResult Solve(bool exhaustive) gcc_override;
-  virtual void Reset() gcc_override;
+  virtual SolverResult Solve(bool exhaustive) override;
+  virtual void Reset() override;
 
 protected:
   /* protected virtual methods from AbstractContest */
-  virtual ContestResult CalculateResult() const gcc_override;
-  virtual void CopySolution(ContestTraceVector &vec) const gcc_override;
+  virtual ContestResult CalculateResult() const override;
+  virtual void CopySolution(ContestTraceVector &vec) const override;
 
 protected:
   /* virtual methods from NavDijkstra */
-  virtual void AddEdges(ScanTaskPoint curNode) gcc_override;
+  virtual void AddEdges(ScanTaskPoint curNode) override;
 };
 
 #endif

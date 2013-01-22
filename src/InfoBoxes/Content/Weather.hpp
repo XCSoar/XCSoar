@@ -35,8 +35,8 @@ UpdateInfoBoxTemperature(InfoBoxData &data);
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
+  virtual void Update(InfoBoxData &data) override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
 extern const InfoBoxPanel wind_infobox_panels[];
@@ -56,9 +56,9 @@ UpdateInfoBoxHeadWindSimplified(InfoBoxData &data);
 class InfoBoxContentWindArrow: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
-  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
+  virtual void Update(InfoBoxData &data) override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
+  virtual const InfoBoxPanel *GetDialogContent() override;
 };
 
 #endif

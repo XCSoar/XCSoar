@@ -52,10 +52,10 @@ public:
   }
 
   /* virtual methods from class Window */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
 
   /* virtual methods from class BufferWindow */
-  virtual void OnPaintBuffer(Canvas &canvas) gcc_override;
+  virtual void OnPaintBuffer(Canvas &canvas) override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */

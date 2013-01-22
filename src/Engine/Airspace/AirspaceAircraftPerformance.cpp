@@ -68,7 +68,7 @@ AirspaceAircraftPerformance::SolutionGeneral(fixed distance, fixed dh) const
  * Utility class to scan for height difference that produces
  * minimum arrival time intercept with a vertical line
  */
-class AirspaceAircraftInterceptVertical gcc_final : public ZeroFinder {
+class AirspaceAircraftInterceptVertical final : public ZeroFinder {
 public:
   /**
    * Constructor
@@ -142,7 +142,7 @@ AirspaceAircraftPerformance::SolutionVertical(fixed distance, fixed altitude,
  * Utility class to scan for distance that produces
  * minimum arrival time intercept with a horizontal line
  */
-class AirspaceAircraftInterceptHorizontal gcc_final : public ZeroFinder {
+class AirspaceAircraftInterceptHorizontal final : public ZeroFinder {
 public:
   /**
    * Constructor

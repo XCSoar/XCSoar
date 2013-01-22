@@ -56,11 +56,11 @@ protected:
    * Clears and deletes the windows created by LoadWindow
    * during Prepare() associated with the WindowWidget
    */
-  virtual void Unprepare() gcc_override {
+  virtual void Unprepare() override {
     form.Clear();
   }
 
-  virtual bool SetFocus() gcc_override;
+  virtual bool SetFocus() override;
 };
 
 #endif

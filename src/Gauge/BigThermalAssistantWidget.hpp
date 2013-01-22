@@ -43,18 +43,18 @@ public:
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
-  virtual void Show(const PixelRect &rc) gcc_override;
-  virtual void Hide() gcc_override;
-  virtual bool SetFocus() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual bool SetFocus() override;
 
 private:
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) gcc_override;
+                                  const DerivedInfo &calculated) override;
 };
 
 #endif

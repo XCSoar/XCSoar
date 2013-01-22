@@ -63,7 +63,7 @@ public:
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 class TerrainDisplayConfigPanel : public RowFormWidget, DataFieldListener {

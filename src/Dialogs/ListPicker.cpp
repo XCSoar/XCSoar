@@ -87,25 +87,25 @@ public:
   /* virtual methods from class Widget */
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override {
+                       const PixelRect &rc) override {
     ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
                                    row_height);
     list.SetLength(num_items);
     list.SetCursorIndex(initial_value);
   }
 
-  virtual void Unprepare() gcc_override {
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
-  virtual void Show(const PixelRect &rc) gcc_override {
+  virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
 
     visible = true;
     Schedule(0);
   }
 
-  virtual void Hide() gcc_override {
+  virtual void Hide() override {
     visible = false;
     Cancel();
     ListWidget::Hide();
@@ -114,25 +114,25 @@ public:
   /* virtual methods from class ListControl::Handler */
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override {
+                           unsigned idx) override {
     item_renderer.OnPaintItem(canvas, rc, idx);
   }
 
-  virtual void OnCursorMoved(unsigned index) gcc_override {
+  virtual void OnCursorMoved(unsigned index) override {
     UpdateHelp(index);
   }
 
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
+  virtual bool CanActivateItem(unsigned index) const override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) gcc_override {
+  virtual void OnActivateItem(unsigned index) override {
     action_listener.OnAction(mrOK);
   }
 
   /* virtual methods from class ActionListener */
 
-  virtual void OnAction(int id) gcc_override {
+  virtual void OnAction(int id) override {
     help_callback(GetList().GetCursorIndex());
   }
 
@@ -145,7 +145,7 @@ private:
    * initialised yet in Show(), and recursively calling into Widget
    * methods is dangerous anyway.
    */
-  virtual void OnTimer() gcc_override {
+  virtual void OnTimer() override {
     UpdateHelp(GetList().GetCursorIndex());
     Timer::Cancel();
   }

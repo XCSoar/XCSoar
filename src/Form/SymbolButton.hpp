@@ -60,7 +60,7 @@ public:
                style, listener, id) {}
 
 protected:
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

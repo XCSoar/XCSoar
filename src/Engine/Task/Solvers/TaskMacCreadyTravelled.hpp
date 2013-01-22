@@ -27,7 +27,7 @@
 /**
  * Specialisation of TaskMacCready for task travelled
  */
-class TaskMacCreadyTravelled gcc_final : public TaskMacCready
+class TaskMacCreadyTravelled final : public TaskMacCready
 {
 public:
   /**
@@ -46,13 +46,13 @@ public:
 
 private:
   /* virtual methods from class TaskMacCready */
-  virtual fixed get_min_height(const AircraftState &aircraft) const gcc_override;
+  virtual fixed get_min_height(const AircraftState &aircraft) const override;
 
   virtual GlideResult SolvePoint(const TaskPoint &tp,
                                  const AircraftState &aircraft,
-                                 fixed minH) const gcc_override;
+                                 fixed minH) const override;
 
-  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const gcc_override;
+  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const override;
 };
 
 #endif

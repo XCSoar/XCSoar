@@ -78,7 +78,7 @@ public:
   typedef std::vector <Alternate> AlternateVector;
 
 protected:
-  struct AlternateTaskPoint gcc_final : public UnorderedTaskPoint
+  struct AlternateTaskPoint final : public UnorderedTaskPoint
   {
     GlideResult solution;
 
@@ -226,25 +226,25 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const override;
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual unsigned TaskSize() const gcc_override;
-  virtual void SetActiveTaskPoint(unsigned index) gcc_override;
-  virtual TaskWaypoint *GetActiveTaskPoint() const gcc_override;
-  virtual bool IsValidTaskPoint(int index_offset) const gcc_override;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  virtual unsigned TaskSize() const override;
+  virtual void SetActiveTaskPoint(unsigned index) override;
+  virtual TaskWaypoint *GetActiveTaskPoint() const override;
+  virtual bool IsValidTaskPoint(int index_offset) const override;
 
   /* virtual methods from class AbstractTask */
-  virtual void Reset() gcc_override;
+  virtual void Reset() override;
 
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            bool full_update) gcc_override;
+                            bool full_update) override;
   virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) gcc_override;
+                                const AircraftState &state_last) override;
 };
 
 #endif

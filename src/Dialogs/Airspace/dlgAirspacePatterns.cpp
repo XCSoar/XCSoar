@@ -44,7 +44,7 @@ public:
     :look(_look) {}
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned i) gcc_override {
+                           unsigned i) override {
     assert(i < ARRAY_SIZE(AirspaceLook::brushes));
 
     canvas.SetBackgroundTransparent();

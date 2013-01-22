@@ -34,7 +34,7 @@
  * to enter the observation zone)
  * but does not yet have an observation zone.
  */
-class ASTPoint gcc_final : public IntermediateTaskPoint
+class ASTPoint final : public IntermediateTaskPoint
 {
 public:
   /**

@@ -53,10 +53,10 @@ public:
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void ReClick() gcc_override;
-  virtual void Show(const PixelRect &rc) gcc_override;
-  virtual void Hide() gcc_override;
+                       const PixelRect &rc) override;
+  virtual void ReClick() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 };
 
 #endif

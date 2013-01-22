@@ -69,7 +69,7 @@ protected:
 
 private:
   /* virtual methods from class Timer */
-  virtual void OnTimer() gcc_override;
+  virtual void OnTimer() override;
 };
 
 #endif

@@ -52,7 +52,7 @@ protected:
 
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
-  virtual void OnPaint(Canvas &canvas) gcc_override {
+  virtual void OnPaint(Canvas &canvas) override {
     OnPaintBuffer(canvas);
   }
 };

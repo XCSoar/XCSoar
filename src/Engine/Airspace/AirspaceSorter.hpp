@@ -89,7 +89,7 @@ public:
                           const AirspaceFilterData &_filter)
     :location(_location), projection(_projection), filter(_filter) {}
 
-  virtual bool operator()(const AbstractAirspace &as) const gcc_override;
+  virtual bool operator()(const AbstractAirspace &as) const override;
 };
 
 /**

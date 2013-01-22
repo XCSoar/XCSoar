@@ -59,11 +59,11 @@ public:
                          const InfoBoxPanel *_panels)
     :update(_update), panels(_panels) {}
 
-  virtual void Update(InfoBoxData &data) gcc_override {
+  virtual void Update(InfoBoxData &data) override {
     update(data);
   }
 
-  virtual const InfoBoxPanel *GetDialogContent() gcc_override {
+  virtual const InfoBoxPanel *GetDialogContent() override {
     return panels;
   }
 };

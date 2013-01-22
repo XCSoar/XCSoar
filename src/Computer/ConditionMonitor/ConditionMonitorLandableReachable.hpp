@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorLandableReachable gcc_final : public ConditionMonitor {
+class ConditionMonitorLandableReachable final : public ConditionMonitor {
   bool last_reachable;
   bool now_reachable;
 
@@ -38,7 +38,7 @@ public:
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast();
 };

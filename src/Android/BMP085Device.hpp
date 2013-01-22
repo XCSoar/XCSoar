@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class BMP085Device gcc_final : private BMP085Listener {
+class BMP085Device final : private BMP085Listener {
   unsigned index;
   Java::Object obj;
 
@@ -54,8 +54,8 @@ public:
 private:
   /* virtual methods from class BMP085Listener */
   virtual void onBMP085Values(fixed temperature,
-                              AtmosphericPressure pressure) gcc_override;
-  virtual void onBMP085Error() gcc_override;
+                              AtmosphericPressure pressure) override;
+  virtual void onBMP085Error() override;
 };
 
 #endif

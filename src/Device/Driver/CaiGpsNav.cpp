@@ -45,7 +45,7 @@ public:
   CaiGpsNavDevice(Port &_port):port(_port) {}
 
 public:
-  virtual bool EnableNMEA(OperationEnvironment &env) gcc_override;
+  virtual bool EnableNMEA(OperationEnvironment &env) override;
 };
 
 bool

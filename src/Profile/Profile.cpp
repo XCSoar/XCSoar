@@ -119,20 +119,20 @@ Profile::SaveFile(const TCHAR *szFile)
 }
 
 void
-Profile::SetFiles(const TCHAR* override)
+Profile::SetFiles(const TCHAR *override_path)
 {
   /* set the "modified" flag, because we are potentially saving to a
      new file now */
   SetModified(true);
 
-  if (!StringIsEmpty(override)) {
-    if (IsBaseName(override)) {
-      LocalPath(startProfileFile, override);
+  if (!StringIsEmpty(override_path)) {
+    if (IsBaseName(override_path)) {
+      LocalPath(startProfileFile, override_path);
 
-      if (_tcschr(override, '.') == NULL)
+      if (_tcschr(override_path, '.') == NULL)
         _tcscat(startProfileFile, _T(".prf"));
     } else
-      CopyString(startProfileFile, override, MAX_PATH);
+      CopyString(startProfileFile, override_path, MAX_PATH);
     return;
   }
 

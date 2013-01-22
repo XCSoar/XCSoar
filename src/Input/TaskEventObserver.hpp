@@ -33,7 +33,7 @@ class TaskManager;
  * This class scans a #TaskManager periodically for changes and
  * generates glide computer events (GCE).
  */
-class TaskEventObserver gcc_final {
+class TaskEventObserver final {
   unsigned best_alternate_id;
 
 public:

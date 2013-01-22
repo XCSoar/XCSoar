@@ -40,7 +40,7 @@
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer
  */
-class AirspaceIntersectionVisitorSlice gcc_final
+class AirspaceIntersectionVisitorSlice final
   : public AirspaceIntersectionVisitor
 {
   /** Canvas to draw on */
@@ -165,7 +165,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     Render(as);
   }
 };

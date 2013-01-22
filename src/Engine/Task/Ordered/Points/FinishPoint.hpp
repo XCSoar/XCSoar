@@ -37,7 +37,7 @@ struct FinishConstraints;
  *
  * Entry requires previous point to have entered to prevent spurious crossing.
  */
-class FinishPoint gcc_final : public OrderedTaskPoint
+class FinishPoint final : public OrderedTaskPoint
 {
   fixed safety_height;
 
@@ -74,26 +74,26 @@ public:
   void set_fai_finish_height(const fixed height);
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual fixed GetElevation() const gcc_override;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
+  virtual fixed GetElevation() const override;
 
   /* virtual methods from class SampledTaskPoint */
-  virtual void Reset() gcc_override;
+  virtual void Reset() override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) gcc_override;
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) override;
   virtual void SetNeighbours(OrderedTaskPoint *prev,
-                             OrderedTaskPoint *next) gcc_override;
+                             OrderedTaskPoint *next) override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual bool IsInSector(const AircraftState &ref) const gcc_override;
+  virtual bool IsInSector(const AircraftState &ref) const override;
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const gcc_override;
+                                    const AircraftState &ref_last) const override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool EntryPrecondition() const gcc_override;
-  virtual bool ScoreFirstEntry() const gcc_override {
+  virtual bool EntryPrecondition() const override;
+  virtual bool ScoreFirstEntry() const override {
     return true;
   }
 

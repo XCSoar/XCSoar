@@ -34,7 +34,7 @@
  * - f() fails if Mc too low for wind, need to account for failed solution
  *
  */
-class TaskGlideRequired gcc_final : public ZeroFinder {
+class TaskGlideRequired final : public ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;

@@ -52,15 +52,15 @@ public:
   }
 
   /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const gcc_override {
+  virtual PixelSize GetMinimumSize() const override {
     return PixelSize{Layout::Scale(80u), Layout::Scale(30u)};
   }
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
+                       const PixelRect &rc) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 };
 
 void

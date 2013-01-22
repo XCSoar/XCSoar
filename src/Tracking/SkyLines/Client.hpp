@@ -87,7 +87,7 @@ namespace SkyLinesTracking {
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from FileEventHandler */
-    virtual bool OnFileEvent(int fd, unsigned mask) gcc_override;
+    virtual bool OnFileEvent(int fd, unsigned mask) override;
 #endif
   };
 }

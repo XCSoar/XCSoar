@@ -135,7 +135,7 @@ private:
 
 protected:
   /* methods from NavDijkstra */
-  virtual void AddEdges(ScanTaskPoint curNode) gcc_final;
+  virtual void AddEdges(ScanTaskPoint curNode) final;
 };
 
 #endif

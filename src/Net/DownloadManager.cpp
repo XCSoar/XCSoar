@@ -116,7 +116,7 @@ Net::DownloadManager::Cancel(const TCHAR *relative_path)
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
 
-class DownloadManagerThread gcc_final
+class DownloadManagerThread final
   : protected StandbyThread, private QuietOperationEnvironment {
   struct Item {
     std::string uri;
@@ -244,12 +244,12 @@ private:
     return StandbyThread::IsStopped();
   }
 
-  virtual void SetProgressRange(unsigned range) gcc_override {
+  virtual void SetProgressRange(unsigned range) override {
     ScopeLock protect(mutex);
     current_size = range;
   }
 
-  virtual void SetProgressPosition(unsigned position) gcc_override {
+  virtual void SetProgressPosition(unsigned position) override {
     ScopeLock protect(mutex);
     current_position = position;
   }

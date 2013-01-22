@@ -44,7 +44,7 @@ class QuickMenu : public ActionListener {
 public:
   unsigned clicked_event;
 
-  virtual void OnAction(int id) gcc_override;
+  virtual void OnAction(int id) override;
 };
 
 static void

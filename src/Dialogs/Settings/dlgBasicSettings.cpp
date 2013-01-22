@@ -106,10 +106,10 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
+                       const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
-  virtual void Show(const PixelRect &rc) gcc_override {
+  virtual void Show(const PixelRect &rc) override {
     RowFormWidget::Show(rc);
     Timer::Schedule(500);
 
@@ -118,7 +118,7 @@ public:
     SetBallast();
   }
 
-  virtual void Hide() gcc_override {
+  virtual void Hide() override {
     Timer::Cancel();
     RowFormWidget::Hide();
   }
@@ -128,11 +128,11 @@ public:
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) gcc_override;
-  virtual void OnSpecial(DataField &df) gcc_override;
+  virtual void OnModified(DataField &df) override;
+  virtual void OnSpecial(DataField &df) override;
 
   /* virtual methods from Timer */
-  virtual void OnTimer() gcc_override;
+  virtual void OnTimer() override;
 };
 
 void

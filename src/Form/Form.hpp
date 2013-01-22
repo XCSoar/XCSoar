@@ -61,10 +61,10 @@ class WndForm : public ContainerWindow, public SubForm,
   protected:
 #ifdef USE_GDI
     virtual const Brush *OnChildColor(Window &window,
-                                      Canvas &canvas) gcc_override;
+                                      Canvas &canvas) override;
 #endif
 
-    virtual void OnPaint(Canvas &canvas) gcc_override;
+    virtual void OnPaint(Canvas &canvas) override;
   };
 
 public:
@@ -111,7 +111,7 @@ protected:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 
   StaticString<256> caption;
 
@@ -176,7 +176,7 @@ public:
   }
 
   /** inherited from ActionListener */
-  virtual void OnAction(int id) gcc_override {
+  virtual void OnAction(int id) override {
     SetModalResult(id);
   }
 
@@ -200,17 +200,17 @@ public:
   void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
-  virtual void OnCreate() gcc_override;
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
-  virtual void OnDestroy() gcc_override;
+  virtual void OnCreate() override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+  virtual void OnDestroy() override;
 
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
-  virtual void OnCancelMode() gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual void OnCancelMode() override;
 
 #ifdef WIN32
-  virtual bool OnCommand(unsigned id, unsigned code) gcc_override;
+  virtual bool OnCommand(unsigned id, unsigned code) override;
 #endif
 
   void SetKeyDownFunction(KeyDownFunction function) {

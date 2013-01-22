@@ -37,7 +37,7 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual ContestResult CalculateResult() const gcc_override;
+  virtual ContestResult CalculateResult() const override;
 };
 
 #endif

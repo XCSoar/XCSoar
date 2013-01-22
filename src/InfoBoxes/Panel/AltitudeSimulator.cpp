@@ -30,14 +30,14 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
 
-class AltitudeSimulatorOffsetButtons gcc_final : public OffsetButtonsWidget {
+class AltitudeSimulatorOffsetButtons final : public OffsetButtonsWidget {
 public:
   template<typename... Args>
   AltitudeSimulatorOffsetButtons(Args&&... args):OffsetButtonsWidget(args...) {}
 
 protected:
   /* virtual methods from OffsetButtonsWidget */
-  virtual void OnOffset(fixed offset) gcc_override;
+  virtual void OnOffset(fixed offset) override;
 };
 
 void

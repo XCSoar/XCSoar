@@ -66,16 +66,16 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual bool UpdateScore() gcc_override;
-  virtual void CopySolution(ContestTraceVector &vec) const gcc_override;
+  virtual bool UpdateScore() override;
+  virtual void CopySolution(ContestTraceVector &vec) const override;
 
   /* virtual methods from NavDijkstra */
-  virtual void AddEdges(ScanTaskPoint curNode) gcc_override;
+  virtual void AddEdges(ScanTaskPoint curNode) override;
 
   /* virtual methods from ContestDijkstra */
-  virtual void StartSearch() gcc_override;
-  virtual void AddStartEdges() gcc_override;
-  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const gcc_override;
+  virtual void StartSearch() override;
+  virtual void AddStartEdges() override;
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const override;
 };
 
 #endif

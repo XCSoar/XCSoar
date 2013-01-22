@@ -59,21 +59,21 @@ private:
   PixelRect UpdateLayout(const PixelRect &rc);
 
 public:
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
   virtual void Initialise(ContainerWindow &parent, const PixelRect &rc)
-    gcc_override;
+    override;
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc)
-    gcc_override;
-  virtual void Unprepare() gcc_override;
-  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
-  virtual bool Click() gcc_override;
-  virtual void ReClick() gcc_override;
-  virtual void Show(const PixelRect &rc) gcc_override;
-  virtual bool Leave() gcc_override;
-  virtual void Hide() gcc_override;
-  virtual void Move(const PixelRect &rc) gcc_override;
-  virtual bool SetFocus() gcc_override;
+    override;
+  virtual void Unprepare() override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Click() override;
+  virtual void ReClick() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual bool Leave() override;
+  virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
+  virtual bool SetFocus() override;
 };
 
 #endif

@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class I2CbaroDevice gcc_final : private I2CbaroListener {
+class I2CbaroDevice final : private I2CbaroListener {
   unsigned index;
   Java::Object obj;
   DeviceConfig::PressureUse press_use;
@@ -56,8 +56,8 @@ public:
 
 private:
   /* virtual methods from class I2CbaroListener */
-  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure) gcc_override;
-  virtual void onI2CbaroError() gcc_override;
+  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure) override;
+  virtual void onI2CbaroError() override;
 };
 
 #endif

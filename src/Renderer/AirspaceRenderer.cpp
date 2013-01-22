@@ -131,7 +131,7 @@ public:
 
 #ifdef ENABLE_OPENGL
 
-class AirspaceVisitorRenderer gcc_final
+class AirspaceVisitorRenderer final
   : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
@@ -229,7 +229,7 @@ private:
   }
 
 protected:
-  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -300,7 +300,7 @@ private:
   }
 };
 
-class AirspaceFillRenderer gcc_final
+class AirspaceFillRenderer final
   : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
@@ -354,7 +354,7 @@ private:
   }
 
 protected:
-  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -399,7 +399,7 @@ private:
  * The old way of doing it was possibly faster but required a lot
  * of code overhead.
  */
-class AirspaceVisitorMap gcc_final
+class AirspaceVisitorMap final
   : public AirspaceVisitor, public MapDrawHelper
 {
   const AirspaceLook &look;
@@ -458,7 +458,7 @@ private:
   }
 
 protected:
-  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -518,7 +518,7 @@ private:
   }
 };
 
-class AirspaceOutlineRenderer gcc_final
+class AirspaceOutlineRenderer final
   : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &look;
@@ -563,7 +563,7 @@ public:
       DrawPolygon(airspace.GetPoints());
   }
 
-  virtual void Visit(const AbstractAirspace &airspace) gcc_override {
+  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);

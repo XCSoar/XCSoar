@@ -45,7 +45,7 @@ public:
   NmeaReplay(NLineReader *reader, const DeviceConfig &config);
   ~NmeaReplay();
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) gcc_override;
+  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
 
 protected:
   bool ParseLine(const char *line, NMEAInfo &data);

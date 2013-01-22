@@ -34,7 +34,7 @@ Copyright_License {
 
 class EyeDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, NMEAInfo &info) gcc_override;
+  virtual bool ParseNMEA(const char *line, NMEAInfo &info) override;
 
   static bool PEYA(NMEAInputLine &line, NMEAInfo &info);
   static bool PEYI(NMEAInputLine &line, NMEAInfo &info);

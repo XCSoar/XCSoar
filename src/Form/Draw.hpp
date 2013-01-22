@@ -58,7 +58,7 @@ protected:
   OnPaintCallback_t mOnPaintCallback;
 
   /** from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

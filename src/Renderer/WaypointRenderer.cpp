@@ -363,7 +363,7 @@ public:
     AddWaypoint(way_point, false);
   }
 
-  virtual void Visit(const TaskPoint &tp) gcc_override {
+  virtual void Visit(const TaskPoint &tp) override {
     switch (tp.GetType()) {
     case TaskPointType::UNORDERED:
       AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypoint(), true);

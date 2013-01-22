@@ -60,23 +60,23 @@ private:
   bool SetBaudRate(unsigned baud_rate, OperationEnvironment &env);
 
 public:
-  virtual void LinkTimeout() gcc_override;
-  virtual bool EnableNMEA(OperationEnvironment &env) gcc_override;
+  virtual void LinkTimeout() override;
+  virtual bool EnableNMEA(OperationEnvironment &env) override;
 
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
-  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) gcc_override;
-  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) gcc_override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env) override;
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) override;
   virtual bool PutBallast(fixed fraction, fixed overload,
-                          OperationEnvironment &env) gcc_override;
+                          OperationEnvironment &env) override;
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
-                       OperationEnvironment &env) gcc_override;
+                       OperationEnvironment &env) override;
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env) gcc_override;
+                              OperationEnvironment &env) override;
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path,
-                              OperationEnvironment &env) gcc_override;
+                              OperationEnvironment &env) override;
 
 public:
   bool EnableBulkMode(OperationEnvironment &env);

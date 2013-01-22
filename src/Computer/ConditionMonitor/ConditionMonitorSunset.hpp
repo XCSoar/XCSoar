@@ -26,14 +26,14 @@ Copyright_License {
 
 #include "ConditionMonitor.hpp"
 
-class ConditionMonitorSunset gcc_final : public ConditionMonitor {
+class ConditionMonitorSunset final : public ConditionMonitor {
 public:
   constexpr ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
                               const DerivedInfo &calculated,
-                              const ComputerSettings &settings) gcc_override;
+                              const ComputerSettings &settings) override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

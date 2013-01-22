@@ -37,7 +37,7 @@ class StartPoint;
  * - Merge with TaskMinTarget?
  * - Refactor, since passing in AATPoint is a hack
  */
-class TaskOptTarget gcc_final : public ZeroFinder
+class TaskOptTarget final : public ZeroFinder
 {
   /** Object to calculate remaining task statistics */
   TaskMacCreadyRemaining tm;

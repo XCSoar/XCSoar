@@ -65,7 +65,7 @@ protected:
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) gcc_override;
+  virtual void OnModified(DataField &df) override;
 };
 
 #endif

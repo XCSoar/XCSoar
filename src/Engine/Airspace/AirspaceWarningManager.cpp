@@ -152,7 +152,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
 /**
  * Class used temporarily to check intersections with warning system
  */
-class AirspaceIntersectionWarningVisitor gcc_final
+class AirspaceIntersectionWarningVisitor final
   : public AirspaceIntersectionVisitor
 {
   const AircraftState state;
@@ -227,7 +227,7 @@ public:
     }
   }
 
-  virtual void Visit(const AbstractAirspace &as) gcc_override {
+  virtual void Visit(const AbstractAirspace &as) override {
     Intersection(as);
   }
 

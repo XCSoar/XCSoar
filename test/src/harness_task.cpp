@@ -120,7 +120,7 @@ public:
 class TaskPointVisitorPrint: public TaskPointConstVisitor
 {
 public:
-  virtual void Visit(const TaskPoint& tp) gcc_override {
+  virtual void Visit(const TaskPoint& tp) override {
     switch (tp.GetType()) {
     case TaskPointType::UNORDERED:
       printf("# got a tp\n");

@@ -70,8 +70,8 @@ class InfoBoxContentThermalAssistant: public InfoBoxContent
 public:
   InfoBoxContentThermalAssistant();
 
-  virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
+  virtual void Update(InfoBoxData &data) override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
 };
 
 #endif

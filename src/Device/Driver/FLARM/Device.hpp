@@ -101,12 +101,12 @@ protected:
   bool ParsePFLAC(NMEAInputLine &line);
 
 public:
-  void LinkTimeout() gcc_override;
-  bool EnableNMEA(OperationEnvironment &env) gcc_override;
-  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) gcc_override;
+  void LinkTimeout() override;
+  bool EnableNMEA(OperationEnvironment &env) override;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
-               OperationEnvironment &env) gcc_override;
+               OperationEnvironment &env) override;
 
   bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
   bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
@@ -298,7 +298,7 @@ public:
    * @return True if received and parsed successfully, otherwise False
    */
   bool ReadFlightList(RecordedFlightList &flight_list,
-                      OperationEnvironment &env) gcc_override;
+                      OperationEnvironment &env) override;
 
   /**
    * Downloads a flight from the Flarm into an IGC file
@@ -307,7 +307,7 @@ public:
    * @return True if received and written successfully, otherwise False
    */
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
-                      OperationEnvironment &env) gcc_override;
+                      OperationEnvironment &env) override;
 };
 
 #endif

@@ -249,7 +249,7 @@ public:
   void Fullscreen();
 
 #ifndef USE_GDI
-  virtual void Invalidate() gcc_override;
+  virtual void Invalidate() override;
 
 protected:
   void Expose();
@@ -317,16 +317,16 @@ protected:
   virtual bool OnClose();
 
 #ifdef USE_VIDEOCORE
-  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas) override;
 #endif
 
 #ifdef USE_GDI
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam) gcc_override;
+                             WPARAM wParam, LPARAM lParam) override;
 #endif
 
 #ifndef USE_GDI
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
 #endif
 
 #ifdef ANDROID

@@ -40,7 +40,7 @@ protected:
   virtual unsigned Read(T *p, unsigned n) = 0;
 
 public:
-  virtual typename Source<T>::Range Read() gcc_override {
+  virtual typename Source<T>::Range Read() override {
     auto r = buffer.Write();
     if (!r.IsEmpty()) {
       unsigned n = Read(r.data, r.length);
@@ -51,12 +51,12 @@ public:
     return typename Source<T>::Range(r.data, r.length);
   }
 
-  virtual void Consume(unsigned n) gcc_override {
+  virtual void Consume(unsigned n) override {
     buffer.Consume(n);
     position += n;
   }
 
-  virtual long Tell() const gcc_override {
+  virtual long Tell() const override {
     return position;
   }
 };

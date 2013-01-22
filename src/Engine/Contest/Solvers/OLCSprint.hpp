@@ -41,14 +41,14 @@ private:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual ContestResult CalculateResult() const gcc_override;
+  virtual ContestResult CalculateResult() const override;
 
   /* virtual methods from NavDijkstra */
-  virtual void AddEdges(ScanTaskPoint origin) gcc_override;
+  virtual void AddEdges(ScanTaskPoint origin) override;
 
   /* virtual methods from ContestDijkstra */
-  virtual void UpdateTrace(bool force) gcc_override;
-  virtual void AddStartEdges() gcc_override;
+  virtual void UpdateTrace(bool force) override;
+  virtual void AddStartEdges() override;
 };
 
 #endif

@@ -52,7 +52,7 @@ struct RangeAndRadial {
  * \todo
  * - Elevation may vary with target shift
  */
-class AATPoint gcc_final : public IntermediateTaskPoint
+class AATPoint final : public IntermediateTaskPoint
 {
   /** Location of target within OZ */
   GeoPoint target_location;
@@ -180,26 +180,26 @@ private:
 public:
 
   /* virtual methods from class TaskPoint */
-  const GeoPoint& GetLocationRemaining() const gcc_override;
-  virtual bool SetRange(const fixed p, bool force_if_current) gcc_override;
+  const GeoPoint& GetLocationRemaining() const override;
+  virtual bool SetRange(const fixed p, bool force_if_current) override;
 
-  virtual bool IsTargetLocked() const gcc_override {
+  virtual bool IsTargetLocked() const override {
     return target_locked;
   }
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection) gcc_override;
+                                const TaskProjection &projection) override;
   virtual bool UpdateSampleFar(const AircraftState &state,
-                               const TaskProjection &projection) gcc_override;
+                               const TaskProjection &projection) override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual fixed ScoreAdjustment() const gcc_override {
+  virtual fixed ScoreAdjustment() const override {
     return fixed(0);
   }
 
 private:
   /* virtual methods from class OrderedTaskPoint */
-  virtual bool Equals(const OrderedTaskPoint &other) const gcc_override;
+  virtual bool Equals(const OrderedTaskPoint &other) const override;
 };
 #endif

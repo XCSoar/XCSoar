@@ -64,26 +64,26 @@ public:
   /* virtual methods from class Widget */
 
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override {
+                       const PixelRect &rc) override {
     ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
                                    Layout::Scale(18u));
     list.SetLength(AIRSPACECLASSCOUNT);
   }
 
-  virtual void Unprepare() gcc_override {
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
   /* virtual methods from class ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
+                           unsigned idx) override;
 
   /* virtual methods from class ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
+  virtual bool CanActivateItem(unsigned index) const override {
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) gcc_override;
+  virtual void OnActivateItem(unsigned index) override;
 };
 
 void

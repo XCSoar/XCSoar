@@ -41,7 +41,7 @@ protected:
 
 public:
   virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
+                       const PixelRect &rc) override;
 };
 
 #endif
