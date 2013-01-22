@@ -66,27 +66,27 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate = fixed(0);
     circling_info.turn_rate_heading = fixed(0);
     circling_info.turn_rate_smoothed = fixed(0);
+    return;
   }
 
-  if (!positive(dt))
-    return;
+  if (positive(dt)) {
+    circling_info.turn_rate =
+      (basic.track - last_track).AsDelta().Degrees() / dt;
+    circling_info.turn_rate_heading =
+      (basic.attitude.heading - last_heading).AsDelta().Degrees() / dt;
 
-  circling_info.turn_rate =
-    (basic.track - last_track).AsDelta().Degrees() / dt;
-  circling_info.turn_rate_heading =
-    (basic.attitude.heading - last_heading).AsDelta().Degrees() / dt;
+    // JMW limit rate to 50 deg per second otherwise a big spike
+    // will cause spurious lock on circling for a long time
+    fixed turn_rate = Clamp(circling_info.turn_rate, fixed(-50), fixed(50));
+
+    // Make the turn rate more smooth using the LowPassFilter
+    turn_rate = LowPassFilter(circling_info.turn_rate_smoothed,
+                              turn_rate, fixed(0.3));
+    circling_info.turn_rate_smoothed = turn_rate;
+  }
 
   last_track = basic.track;
   last_heading = basic.attitude.heading;
-
-  // JMW limit rate to 50 deg per second otherwise a big spike
-  // will cause spurious lock on circling for a long time
-  fixed turn_rate = Clamp(circling_info.turn_rate, fixed(-50), fixed(50));
-
-  // Make the turn rate more smooth using the LowPassFilter
-  turn_rate = LowPassFilter(circling_info.turn_rate_smoothed,
-                            turn_rate, fixed(0.3));
-  circling_info.turn_rate_smoothed = turn_rate;
 }
 
 void
