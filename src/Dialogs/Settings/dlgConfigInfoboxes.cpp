@@ -50,9 +50,12 @@ Copyright_License {
 
 class InfoBoxPreview : public PaintWindow {
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
-  virtual void OnPaint(Canvas &canvas);
+  /* virtual methods from class Window */
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 static const InfoBoxLook *look;

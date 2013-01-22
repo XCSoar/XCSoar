@@ -109,7 +109,7 @@ protected:
    * OnPaint event called by the message loop
    * @param canvas Canvas to draw to
    */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

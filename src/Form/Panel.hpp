@@ -52,7 +52,8 @@ public:
 
 #ifdef HAVE_CLIPPING
 protected:
-  void OnPaint(Canvas &canvas);
+  /* virtual methods from class PaintWindow */
+  void OnPaint(Canvas &canvas) override;
 #endif
 };
 

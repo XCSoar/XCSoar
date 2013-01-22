@@ -47,17 +47,17 @@ public:
   }
 
 protected:
-  virtual void OnCreate() {
+  virtual void OnCreate() override {
     SingleWindow::OnCreate();
     timer.Schedule(10);
   }
 
-  virtual void OnDestroy() {
+  virtual void OnDestroy() override {
     timer.Cancel();
     SingleWindow::OnDestroy();
   }
 
-  virtual bool OnTimer(WindowTimer &_timer) {
+  virtual bool OnTimer(WindowTimer &_timer) override {
     if (_timer == timer) {
       unsigned r = rand();
       char ch;

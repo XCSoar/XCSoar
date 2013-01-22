@@ -40,7 +40,7 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) override {
     if (bitmap.IsDefined())
       canvas.Stretch(bitmap);
     else

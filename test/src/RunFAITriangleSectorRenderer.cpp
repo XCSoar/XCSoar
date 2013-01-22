@@ -34,7 +34,7 @@ Copyright_License {
 class FAITriangleWindow : public PaintWindow
 {
 protected:
-  void OnPaint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) override {
     canvas.ClearWhite();
 
     const GeoPoint a(Angle::Degrees(7.70722),
@@ -94,7 +94,7 @@ public:
   }
 
 protected:
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();
@@ -104,7 +104,7 @@ protected:
     return SingleWindow::OnCommand(id, code);
   }
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
     SingleWindow::OnResize(width, height);
     triangle_window.Resize(width, height);
   }

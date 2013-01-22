@@ -184,7 +184,7 @@ private:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) {
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override {
     if (SingleWindow::OnMouseDown(x, y))
       return true;
 
@@ -193,7 +193,7 @@ protected:
     return true;
   }
 
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();
@@ -215,7 +215,7 @@ protected:
     return SingleWindow::OnCommand(id, code);
   }
 
-  virtual void OnPaint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) override {
 #ifndef ENABLE_OPENGL
     if (!buffered) {
 #endif

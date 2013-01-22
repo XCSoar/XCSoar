@@ -55,15 +55,18 @@ protected:
   }
 
 protected:
+  /* virtual methods from class Window */
 #ifndef ENABLE_OPENGL
-  virtual void OnCreate();
-  virtual void OnDestroy();
+  virtual void OnCreate() override;
+  virtual void OnDestroy() override;
 #endif
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
 
-  virtual void OnPaint(Canvas &canvas);
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 
+  /* our virtual methods */
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 };
 

@@ -344,7 +344,7 @@ protected:
                            unsigned keys) override;
   virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) override;
 
-  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyCheck(unsigned key_code) const override;
   virtual bool OnKeyDown(unsigned key_code) override;
 
   virtual void OnCancelMode() override;

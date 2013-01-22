@@ -136,8 +136,11 @@ protected:
   FlarmFriends::Color GetTeamColor(const FlarmId &id) const;
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaint(Canvas &canvas);
+  /* virtual methods from class Window */
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif

@@ -99,8 +99,9 @@ private:
   void AutoSize();
 
 protected:
-  virtual void OnDestroy();
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  /* virtual methods from class Window */
+  virtual void OnDestroy() override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
 };
 
 /**

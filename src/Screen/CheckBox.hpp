@@ -85,16 +85,19 @@ public:
 protected:
   void SetPressed(bool value);
 
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
-  virtual void OnCancelMode() override;
-  virtual void OnPaint(Canvas &canvas);
-
   virtual bool OnClicked();
+
+  /* virtual methods from class Window */
+  virtual bool OnKeyDown(unsigned key_code) override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual void OnSetFocus() override;
+  virtual void OnKillFocus() override;
+  virtual void OnCancelMode() override;
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #else /* USE_GDI */

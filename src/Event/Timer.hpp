@@ -180,7 +180,8 @@ private:
   static Uint32 Callback(Uint32 interval, void *param);
 #else
 private:
-  virtual bool OnTimer(WindowTimer &timer);
+  /* virtual methods from class Window */
+  virtual bool OnTimer(WindowTimer &timer) override;
 #endif
 };
 

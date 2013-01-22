@@ -150,9 +150,9 @@ public:
   }
 
 protected:
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) override;
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
     PaintWindow::OnResize(width, height);
     projection.SetScale(fixed(width) / 21000);
     projection.SetScreenOrigin(width / 2, height / 2);
@@ -233,7 +233,7 @@ public:
   }
 
 protected:
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();
@@ -245,7 +245,7 @@ protected:
 
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) {
+                           unsigned idx) override {
     canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
   }
 

@@ -65,32 +65,32 @@ protected:
   }
 
 protected:
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) {
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override {
     SetFocus();
     return true;
   }
 
-  virtual bool OnKeyDown(unsigned key_code) {
+  virtual bool OnKeyDown(unsigned key_code) override {
     add_event(key_code, true);
     return true;
   }
 
-  virtual bool OnKeyUp(unsigned key_code) {
+  virtual bool OnKeyUp(unsigned key_code) override {
     add_event(key_code, false);
     return true;
   }
 
-  virtual void OnSetFocus() {
+  virtual void OnSetFocus() override {
     PaintWindow::OnSetFocus();
     Invalidate();
   }
 
-  virtual void OnKillFocus() {
+  virtual void OnKillFocus() override {
     PaintWindow::OnKillFocus();
     Invalidate();
   }
 
-  virtual void OnPaint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) override {
     canvas.SelectWhiteBrush();
     if (HasFocus())
       canvas.SelectBlackPen();
@@ -142,13 +142,13 @@ public:
   }
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
     SingleWindow::OnResize(width, height);
     key_code_dumper.Move(0, 0, width, (height + 1) / 2);
     close_button.Move(0, (height + 1) / 2, width, height / 2);
   }
 
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();

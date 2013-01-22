@@ -139,7 +139,7 @@ public:
   }
 
 protected:
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();
@@ -149,7 +149,7 @@ protected:
     return TopWindow::OnCommand(id, code);
   }
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
     SingleWindow::OnResize(width, height);
 
     if (map.IsDefined())

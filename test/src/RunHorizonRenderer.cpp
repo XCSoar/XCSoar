@@ -47,7 +47,7 @@ public:
   }
 
 protected:
-  void OnPaint(Canvas &canvas) {
+  virtual void OnPaint(Canvas &canvas) override {
     canvas.ClearWhite();
     HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }
@@ -94,7 +94,7 @@ public:
   }
 
 protected:
-  virtual bool OnCommand(unsigned id, unsigned code) {
+  virtual bool OnCommand(unsigned id, unsigned code) override {
     switch (id) {
     case ID_CLOSE:
       Close();
@@ -104,7 +104,7 @@ protected:
     return SingleWindow::OnCommand(id, code);
   }
 
-  virtual bool OnTimer(WindowTimer &_timer) {
+  virtual bool OnTimer(WindowTimer &_timer) override {
     if (_timer == timer) {
       AttitudeState attitude;
       attitude.bank_angle_available = true;
@@ -119,7 +119,7 @@ protected:
     return SingleWindow::OnTimer(_timer);
   }
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override {
     SingleWindow::OnResize(width, height);
     if (horizon.IsDefined())
       horizon.Resize(width, height);

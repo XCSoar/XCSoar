@@ -123,15 +123,18 @@ public:
   virtual bool OnClicked();
 
 protected:
-  bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
+  /* virtual methods from class Window */
+  virtual bool OnKeyCheck(unsigned key_code) const override;
+  virtual bool OnKeyDown(unsigned key_code) override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual void OnSetFocus() override;
+  virtual void OnKillFocus() override;
   virtual void OnCancelMode() override;
-  virtual void OnPaint(Canvas &canvas);
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #else /* USE_GDI */
@@ -218,8 +221,8 @@ public:
   const tstring GetText() const;
 
 protected:
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnKeyCheck(unsigned key_code) const override;
+  virtual bool OnKeyDown(unsigned key_code) override;
 };
 
 #endif /* USE_GDI */

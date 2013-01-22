@@ -121,14 +121,18 @@ protected:
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
-  virtual void OnCreate();
-  virtual void OnPaint(Canvas &canvas);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
-  virtual bool OnKeyDown(unsigned key_code);
   bool OnMouseGesture(const TCHAR* gesture);
+
+  /* virtual methods from class Window */
+  virtual void OnCreate() override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
+  virtual bool OnKeyDown(unsigned key_code) override;
+
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 void

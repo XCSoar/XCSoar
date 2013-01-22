@@ -117,8 +117,11 @@ protected:
   }
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaintBuffer(Canvas &canvas);
+  /* virtual methods from class Window */
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) override;
+
+  /* virtual methods from class AntiFlickerWindow */
+  virtual void OnPaintBuffer(Canvas &canvas) override;
 
 private:
   void RenderZero(Canvas &canvas);
