@@ -34,6 +34,7 @@ DebugReplay::DebugReplay(NLineReader *_reader)
   :reader(_reader), glide_polar(fixed(1))
 {
   raw_basic.Reset();
+  computed_basic.Reset();
   calculated.Reset();
 
   flying_computer.Reset();
