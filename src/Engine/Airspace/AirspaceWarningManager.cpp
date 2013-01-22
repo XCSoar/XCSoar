@@ -41,6 +41,8 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
    perf_cruise(cruise_filter),
    perf_circling(circling_filter)
 {
+  /* force filter initialisation in the first SetConfig() call */
+  config.warning_time = -1;
 }
 
 const TaskProjection &
@@ -52,10 +54,15 @@ AirspaceWarningManager::GetProjection() const
 void
 AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
 {
+  const bool modified_warning_time =
+    _config.warning_time != config.warning_time;
+
   config = _config;
 
-  SetPredictionTimeGlide(fixed(config.warning_time));
-  SetPredictionTimeFilter(fixed(config.warning_time));
+  if (modified_warning_time) {
+    SetPredictionTimeGlide(fixed(config.warning_time));
+    SetPredictionTimeFilter(fixed(config.warning_time));
+  }
 }
 
 void
