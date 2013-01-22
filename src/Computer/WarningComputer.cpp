@@ -38,12 +38,6 @@ WarningComputer::WarningComputer(Airspaces &_airspaces)
 }
 
 void
-WarningComputer::Reset(const MoreData &basic, const DerivedInfo &calculated)
-{
-  initialised = false;
-}
-
-void
 WarningComputer::Update(const ComputerSettings &settings_computer,
                         const MoreData &basic, const MoreData &last_basic,
                         const DerivedInfo &calculated,

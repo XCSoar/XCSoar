@@ -66,7 +66,7 @@ GlideComputer::ResetFlight(const bool full)
   log_computer.Reset();
 
   cu_computer.Reset();
-  warning_computer.Reset(Basic(), Calculated());
+  warning_computer.Reset();
 }
 
 /**

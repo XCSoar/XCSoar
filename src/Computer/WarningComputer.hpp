@@ -58,7 +58,9 @@ public:
     return protected_manager;
   }
 
-  void Reset(const MoreData &basic, const DerivedInfo &calculated);
+  void Reset() {
+    initialised = false;
+  }
 
   void Update(const ComputerSettings &settings_computer,
               const MoreData &basic, const MoreData &last_basic,
