@@ -300,6 +300,9 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
                                    const GlidePolar &glide_polar,
                                    const TaskStats &task_stats)
 {
+  if (!glide_polar.IsValid())
+    return false;
+
   const ElementStat &current_leg = task_stats.current_leg;
 
   if (!task_stats.task_valid || !current_leg.location_remaining.IsValid())

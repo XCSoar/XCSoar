@@ -418,7 +418,8 @@ GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
   const GeoVector next_leg_vector =
       calculated.task_stats.current_leg.next_leg_vector;
 
-  if(!next_leg_vector.IsValid() ||
+  if (!settings.polar.glide_polar_task.IsValid() ||
+      !next_leg_vector.IsValid() ||
       !vector_remaining.IsValid() ||
       !calculated.wind_available) {
     // Assign a negative value to invalidate the result
