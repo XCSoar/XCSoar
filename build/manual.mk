@@ -168,4 +168,6 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\nmkdir -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
 	chmod +x $(T)/generate_manuals.sh
+	# Copy an example bat file to generate the manuals with MikTex on Windows
+	cp $(DOC)/manual/generate_manuals.bat $(T)/.
 	cd $(@D) && zip -r XCSoar-manual-dev.zip XCSoar-manual-dev
