@@ -220,7 +220,7 @@ TaskManager::UpdateCommonStatsTask()
 void
 TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
 {
-  if (!state.location.IsValid())
+  if (!state.location.IsValid() || !glide_polar.IsValid())
     return;
 
   common_stats.current_risk_mc =

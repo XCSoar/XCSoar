@@ -253,6 +253,10 @@ AbortTask::UpdateSample(const AircraftState &state,
 
   active_task_point = 0; // default to best result if can't find user-set one 
 
+  if (!glide_polar.IsValid())
+    /* can't work without a polar */
+    return false;
+
   AlternateVector approx_waypoints; 
   approx_waypoints.reserve(128);
 
