@@ -45,8 +45,6 @@ class OrderedTaskPoint;
  * This class uses mementos to reduce expensive re-calculation of static data.
  */
 class TaskLeg {
-
-protected:
   /** Saved vector for current leg's travelled route */
   GeoVector vector_travelled;
   /** Saved vector for current leg's remaining route */
@@ -54,7 +52,6 @@ protected:
   /** Saved vector for current leg's planned route */
   GeoVector vector_planned;
 
-private:
   DistanceMemento memo_max;
   DistanceMemento memo_min;
   GeoVectorMemento memo_nominal;
@@ -166,6 +163,13 @@ public:
 
   gcc_pure
   GeoVector GetNominalLegVector() const;
+
+  /**
+   * Calculate vector from aircraft to destination
+   */
+  const GeoVector &GetVectorRemaining() const {
+    return vector_remaining;
+  }
 
   /**
    * Calculate vector from aircraft to destination

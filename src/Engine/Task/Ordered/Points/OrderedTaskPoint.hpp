@@ -221,7 +221,7 @@ protected:
 public:
   /* virtual methods from class TaskPoint */
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  override{
-    return vector_remaining;
+    return TaskLeg::GetVectorRemaining();
   }
   virtual GeoVector GetNextLegVector() const override;
 

@@ -213,7 +213,7 @@ GeoVector
 OrderedTaskPoint::GetNextLegVector() const
 {
   if (tp_next)
-    return tp_next->vector_planned;
+    return tp_next->GetVectorPlanned();
 
   return GeoVector::Invalid();
 }
