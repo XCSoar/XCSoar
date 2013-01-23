@@ -97,7 +97,7 @@ public:
    * @return Initialised object
    */
   OrderedTask(const TaskBehaviour &tb);
-  virtual ~OrderedTask();
+  ~OrderedTask();
 
   /**
    * Accessor for factory system for constructing tasks
