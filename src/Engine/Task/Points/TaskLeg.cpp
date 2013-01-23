@@ -27,9 +27,6 @@
 #include <algorithm>
 
 TaskLeg::TaskLeg(OrderedTaskPoint &_destination):
-  vector_travelled(fixed(0)),
-  vector_remaining(fixed(0)),
-  vector_planned(fixed(0)),
   destination(_destination)
 {
 }
