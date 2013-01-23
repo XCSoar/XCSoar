@@ -45,7 +45,7 @@ bool
 TaskMacCreadyRemaining::has_targets() const
 {
   for (const TaskPoint *point : points)
-    if (point->HasTarget() && !point->IsTargetLocked())
+    if (point->HasTarget() && !((const AATPoint *)point)->IsTargetLocked())
       return true;
 
   return false;
@@ -58,14 +58,15 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;
   for (TaskPoint *point : points)
-    modified |= point->SetRange(tp,false);
+    if (point->HasTarget())
+      modified |= ((AATPoint *)point)->SetRange(tp, false);
 
   if (!force_current && !modified) {
     // couldn't modify remaining targets, so force move even if inside
     for (TaskPoint *point : points)
-      if (point->SetRange(tp,true))
-        // quick exit
-        return;
+      if (point->HasTarget() && ((AATPoint *)point)->SetRange(tp, true))
+          // quick exit
+          return;
   }
 }
 

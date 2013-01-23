@@ -142,6 +142,31 @@ public:
   bool IsCloseToTarget(const AircraftState& state,
                        const fixed threshold=fixed(0)) const;
 
+  /**
+   * Set target to parametric value between min and max locations.
+   * Targets are only moved for current or after taskpoints, unless
+   * force_if_current is true.
+   *
+   * @param p Parametric range (0:1) to set target
+   * @param force_if_current If current active, force range move (otherwise ignored)
+   *
+   * @return True if target was moved
+   */
+  bool SetRange(const fixed p, bool force_if_current);
+
+  /**
+   * If this TaskPoint has the capability to adjust the
+   * target/range, this indicates whether it is locked from
+   * being updated by the optimizer
+   * Only valid for TaskPoints where has_target() returns true
+   *
+   * @return True if target is locked
+   *    or False if target is unlocked or tp has no target
+   */
+  bool IsTargetLocked() const {
+    return target_locked;
+  }
+
 private:
   /**
    * Check whether target needs to be moved and if so, to
@@ -181,11 +206,6 @@ public:
 
   /* virtual methods from class TaskPoint */
   const GeoPoint& GetLocationRemaining() const override;
-  virtual bool SetRange(const fixed p, bool force_if_current) override;
-
-  virtual bool IsTargetLocked() const override {
-    return target_locked;
-  }
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
