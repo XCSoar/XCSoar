@@ -70,7 +70,7 @@ OrderedTaskPoint::UpdateOZ(const TaskProjection &projection)
 {
   UpdateGeometry();
 
-  SampledTaskPoint::UpdateOZ(projection);
+  SampledTaskPoint::UpdateOZ(projection, GetBoundary());
 }
 
 bool
@@ -114,12 +114,6 @@ bool
 OrderedTaskPoint::IsInSector(const AircraftState &ref) const
 {
   return ObservationZoneClient::IsInSector(ref.location);
-}
-
-OZBoundary
-OrderedTaskPoint::GetBoundary() const
-{
-  return ObservationZoneClient::GetBoundary();
 }
 
 bool

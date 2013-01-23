@@ -75,12 +75,13 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 // BOUNDARY
 
 void 
-SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
+SampledTaskPoint::UpdateOZ(const TaskProjection &projection,
+                           const OZBoundary &_boundary)
 { 
   search_max = search_min = nominal_points.front();
   boundary_points.clear();
 
-  for (const SearchPoint sp : GetBoundary())
+  for (const SearchPoint sp : _boundary)
     boundary_points.push_back(sp);
 
   UpdateProjection(projection);

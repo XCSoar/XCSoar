@@ -237,7 +237,6 @@ private:
 public:
   /* virtual methods from class SampledTaskPoint */
   virtual bool IsInSector(const AircraftState &ref) const override;
-  virtual OZBoundary GetBoundary() const override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
