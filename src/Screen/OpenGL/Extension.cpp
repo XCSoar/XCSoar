@@ -38,20 +38,17 @@ OpenGL::IsExtensionSupported(const char *extension)
   /* this code is copied from
      http://www.opengl.org/resources/features/OGLextensions/ */
 
-  const GLubyte *extensions = NULL;
-  const GLubyte *start;
-  const GLubyte *where, *terminator;
-
-  extensions = glGetString(GL_EXTENSIONS);
+  const GLubyte *const extensions = glGetString(GL_EXTENSIONS);
   /* It takes a bit of care to be fool-proof about parsing the
      OpenGL extensions string. Don't be fooled by sub-strings,
      etc. */
-  start = extensions;
+  const GLubyte *start = extensions;
   for (;;) {
-    where = (const GLubyte *) strstr((const char *) start, extension);
+    const GLubyte *where = (const GLubyte *) strstr((const char *) start, extension);
     if (!where)
       break;
-    terminator = where + strlen(extension);
+
+    const GLubyte *terminator = where + strlen(extension);
     if (where == start || *(where - 1) == ' ')
       if (*terminator == ' ' || *terminator == '\0')
         return true;
