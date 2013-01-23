@@ -40,14 +40,6 @@ public:
     return GeoVector();
   }
 
-  virtual GeoVector GetVectorPlanned() const {
-    return GeoVector();
-  }
-
-  virtual GeoVector GetVectorTravelled() const {
-    return GeoVector();
-  }
-
   virtual bool HasEntered() const {
     return false;
   }

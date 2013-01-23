@@ -99,22 +99,6 @@ public:
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
 
   /**
-   * Calculate vector from aircraft to destination
-   *
-   * @return Vector for task leg
-   */
-  gcc_pure
-  virtual GeoVector GetVectorPlanned() const = 0;
-
-  /**
-   * Calculate vector travelled along this leg
-   *
-   * @return Vector for task leg
-   */
-  gcc_pure
-  virtual GeoVector GetVectorTravelled() const = 0;
-
-  /**
     * Calculate vector of next leg, if there is one
     *
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg

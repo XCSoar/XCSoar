@@ -26,6 +26,7 @@
 #include "GlideSolvers/GlideState.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Points/TaskPoint.hpp"
+#include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 #include <algorithm>
 
@@ -58,7 +59,7 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
 }
 
 GlideResult 
-TaskSolution::GlideSolutionPlanned(const TaskPoint &taskpoint,
+TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const AircraftState &ac,
                                    const GlideSettings &settings,
                                    const GlidePolar &polar,
@@ -71,7 +72,7 @@ TaskSolution::GlideSolutionPlanned(const TaskPoint &taskpoint,
 }
 
 GlideResult 
-TaskSolution::GlideSolutionTravelled(const TaskPoint &taskpoint,
+TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const AircraftState &ac,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,

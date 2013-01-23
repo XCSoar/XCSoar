@@ -49,8 +49,6 @@ public:
   /* virtual methods from class TaskPoint */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
-  virtual GeoVector GetVectorPlanned() const override;
-  virtual GeoVector GetVectorTravelled() const override;
   virtual bool HasEntered() const override {
     return false;
   }

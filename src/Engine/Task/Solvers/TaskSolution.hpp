@@ -30,6 +30,7 @@ struct GlideResult;
 struct AircraftState;
 class GlidePolar;
 class TaskPoint;
+class OrderedTaskPoint;
 struct GeoPoint;
 struct SpeedVector;
 
@@ -89,7 +90,7 @@ namespace TaskSolution
    * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
    * @return GlideResult of task leg
    */
-  GlideResult GlideSolutionTravelled(const TaskPoint &taskpoint,
+  GlideResult GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
@@ -105,7 +106,7 @@ namespace TaskSolution
    * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
    * @return GlideResult of task leg
    */
-  GlideResult GlideSolutionPlanned(const TaskPoint &taskpoint,
+  GlideResult GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const AircraftState &state,
                                    const GlideSettings &settings,
                                    const GlidePolar &polar,

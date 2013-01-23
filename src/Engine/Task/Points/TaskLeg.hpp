@@ -167,6 +167,20 @@ public:
   gcc_pure
   GeoVector GetNominalLegVector() const;
 
+  /**
+   * Calculate vector from aircraft to destination
+   */
+  const GeoVector &GetVectorPlanned() const {
+    return vector_planned;
+  }
+
+  /**
+   * Calculate vector travelled along this leg
+   */
+  const GeoVector &GetVectorTravelled() const {
+    return vector_travelled;
+  }
+
 private:
   gcc_pure
   GeoVector GetPlannedVector() const;

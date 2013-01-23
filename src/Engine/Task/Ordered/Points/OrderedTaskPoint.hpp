@@ -223,12 +223,6 @@ public:
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  override{
     return vector_remaining;
   }
-  virtual GeoVector GetVectorPlanned() const override {
-    return vector_planned;
-  }
-  virtual GeoVector GetVectorTravelled() const override {
-    return vector_travelled;
-  }
   virtual GeoVector GetNextLegVector() const override;
 
   /* virtual methods from class SampledTaskPoint */

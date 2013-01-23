@@ -30,7 +30,10 @@ TaskMacCreadyTravelled::SolvePoint(const TaskPoint &tp,
                                    const AircraftState &aircraft,
                                    fixed minH) const
 {
-  return TaskSolution::GlideSolutionTravelled(tp, aircraft,
+  assert(tp.GetType() != TaskPointType::UNORDERED);
+  const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
+
+  return TaskSolution::GlideSolutionTravelled(otp, aircraft,
                                               settings, glide_polar, minH);
 }
 
