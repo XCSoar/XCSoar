@@ -29,6 +29,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Enum.hpp"
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
@@ -323,6 +324,10 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
       if (StringIsEqual(misc, actions[i]))
         wls = (WaypointRendererSettings::LabelSelection)i;
   }
+
+  /* save new values to profile */
+  Profile::Set(ProfileKeys::WaypointLabelSelection,
+               EnumCast<WaypointRendererSettings::LabelSelection>()(wls));
 
   ActionInterface::SendMapSettings(true);
 }

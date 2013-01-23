@@ -72,12 +72,22 @@ DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
 
 ifeq ($(TESTING),y)
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/logo_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+ICON_SVG = $(topdir)/Data/graphics/logo_red.svg
 else
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/logo_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+ICON_SVG = $(topdir)/Data/graphics/logo.svg
 endif
+
+$(ANDROID_BUILD)/res/drawable-ldpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-ldpi/dirstamp
+	$(Q)rsvg-convert --width=36 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)rsvg-convert --width=48 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-hdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-hdpi/dirstamp
+	$(Q)rsvg-convert --width=72 $< -o $@
+
+$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png: $(ICON_SVG) | $(ANDROID_BUILD)/res/drawable-xhdpi/dirstamp
+	$(Q)rsvg-convert --width=96 $< -o $@
 
 OGGENC = oggenc --quiet --quality 1
 
@@ -117,7 +127,11 @@ PNG5 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TIT
 $(PNG5): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5)
+PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) \
+	$(ANDROID_BUILD)/res/drawable-ldpi/icon.png \
+	$(ANDROID_BUILD)/res/drawable/icon.png \
+	$(ANDROID_BUILD)/res/drawable-hdpi/icon.png \
+	$(ANDROID_BUILD)/res/drawable-xhdpi/icon.png
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml

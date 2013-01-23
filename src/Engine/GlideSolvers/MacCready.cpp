@@ -382,6 +382,11 @@ public:
   f(const fixed v)
   {
     res = mac.SolveGlide(task, v, allow_partial);
+    if (!res.IsOk())
+      /* the solver failed: return a large value that will be
+         discarded by ZeroFinder */
+      return fixed(1000000);
+
     return res.height_glide / res.vector.distance * fixed(360);
   }
   
