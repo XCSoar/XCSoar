@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.4.6 - not yet released
+Version 6.4.6 - 2013/01/23
 * devices
   - Leonardo: fixed vario parser for the $c sentence
   - C-Probe: fixed temperature offset bug
