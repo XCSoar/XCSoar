@@ -54,7 +54,6 @@ public:
    * @return Partially initialised object
    */
   ScoredTaskPoint(TaskPointType _type, const Waypoint &wp, bool b_scored);
-  virtual ~ScoredTaskPoint() {}
 
   /* virtual methods from class TaskPoint */
   virtual const GeoPoint &GetLocationRemaining() const override;

@@ -66,8 +66,6 @@ public:
    */
   SampledTaskPoint(const GeoPoint &location, const bool is_scored);
 
-  virtual ~SampledTaskPoint() {}
-
   /** Reset the task (as if never flown) */
   virtual void Reset();
 

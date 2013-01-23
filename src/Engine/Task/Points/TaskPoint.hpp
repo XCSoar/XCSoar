@@ -62,11 +62,6 @@ public:
     type(_type), location(_location),
     elevation(_elevation) {}
 
-  /**
-   * Destructor.  Does nothing yet.
-   */
-  virtual ~TaskPoint() {};
-
   TaskPointType GetType() const {
     return type;
   }
