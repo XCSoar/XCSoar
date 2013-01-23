@@ -60,13 +60,9 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
 {
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
-    if (!GetOrigin())
-      return GeoVector(fixed(0));
-
     // this leg totally included
-    return memo_remaining.calc(GetOrigin()->GetLocationRemaining(),
-                               destination.GetLocationRemaining());
-    break;
+    return GetPlannedVector();
+
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     return memo_remaining.calc(ref, destination.GetLocationRemaining());
