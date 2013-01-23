@@ -82,6 +82,7 @@ DRIVER_SOURCES = \
 	$(FLYTEC_SOURCES) \
 	$(VEGA_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
+	$(DRIVER_SRC_DIR)/BlueFlyVario.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
 	$(DRIVER_SRC_DIR)/Condor.cpp \
