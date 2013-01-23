@@ -51,6 +51,7 @@ Copyright_License {
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/LevilAHRS_G.hpp"
+#include "Device/Driver/BlueFlyVario.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -87,6 +88,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &c_probe_driver,
   &levil_driver,
   &eye_driver,
+  &bluefly_driver,
   NULL
 };
 

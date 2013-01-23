@@ -22,6 +22,7 @@
 
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver/AltairPro.hpp"
+#include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/Condor.hpp"
@@ -294,6 +295,42 @@ TestGTAltimeter()
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 76));
   ok1(!nmea_info.voltage_available);
+}
+
+static void
+TestBlueFly()
+{
+  NullPort null;
+  Device *device = bluefly_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  // repeat input to get stable filter output
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CBA", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 97466));
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed(1);
+
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(device->ParseNMEA("PRS 00017CCA", nmea_info));
+  ok1(nmea_info.static_pressure_available);
+  ok1(equals(nmea_info.static_pressure.GetPascal(), 97482));
+
+  delete device;
 }
 
 static void
@@ -1317,13 +1354,14 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(698);
+  plan_tests(715);
 
   TestGeneric();
   TestTasman();
   TestFLARM();
   TestAltairRU();
   TestGTAltimeter();
+  TestBlueFly();
   TestBorgeltB50();
   TestCAI302();
   TestCProbe();
