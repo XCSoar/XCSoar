@@ -116,6 +116,8 @@ int main(int argc, char **argv)
   }
 
   TaskManager task_manager(task_behaviour, way_points);
+  task_manager.SetGlidePolar(GlidePolar(fixed(1)));
+
   if (!task_manager.Commit(*task)) {
     fprintf(stderr, "Failed to commit task\n");
     return EXIT_FAILURE;
