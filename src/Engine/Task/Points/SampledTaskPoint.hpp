@@ -179,14 +179,6 @@ private:
   gcc_pure
   virtual bool SearchNominalIfUnsampled() const = 0;
 
-  /**
-   * Determines whether to return sampled or boundary points for max/min search
-   *
-   * @return Vector of boundary points representing a closed polygon
-   */
-  gcc_pure
-  virtual bool SearchBoundaryPoints() const = 0;
-
   virtual OZBoundary GetBoundary() const = 0;
 
 public:

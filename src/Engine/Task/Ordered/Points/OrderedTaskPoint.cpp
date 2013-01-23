@@ -95,10 +95,13 @@ OrderedTaskPoint::ScanActive(const OrderedTaskPoint &atp)
   return active_state != BEFORE_ACTIVE && active_state != NOTFOUND_ACTIVE;
 }
 
-bool
-OrderedTaskPoint::SearchBoundaryPoints() const
+const SearchPointVector &
+OrderedTaskPoint::GetSearchPoints() const
 {
-  return active_state == AFTER_ACTIVE;
+  if (active_state == AFTER_ACTIVE)
+    return GetBoundaryPoints();
+
+  return SampledTaskPoint::GetSearchPoints();
 }
 
 bool

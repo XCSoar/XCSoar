@@ -204,6 +204,9 @@ public:
   gcc_pure
   bool BoundingBoxOverlaps(const FlatBoundingBox &bb) const;
 
+  gcc_pure
+  const SearchPointVector &GetSearchPoints() const;
+
 protected:
   /**
    * Calculate distance from previous remaining/planned location to a point,
@@ -231,7 +234,6 @@ public:
 private:
   /* virtual methods from class SampledTaskPoint */
   virtual bool SearchNominalIfUnsampled() const override;
-  virtual bool SearchBoundaryPoints() const override;
 
 public:
   /* virtual methods from class SampledTaskPoint */
