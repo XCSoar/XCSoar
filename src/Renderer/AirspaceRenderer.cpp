@@ -388,11 +388,8 @@ public:
   {
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::FillMode::DEFAULT:
-      use_stencil = !IsAncientHardware();
-      break;
-
     case AirspaceRendererSettings::FillMode::PADDING:
-      use_stencil = true;
+      use_stencil = !IsAncientHardware();
       break;
 
     case AirspaceRendererSettings::FillMode::ALL:
