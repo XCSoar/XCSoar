@@ -98,7 +98,7 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   }
   ac.altitude = h;
 
-  GeoVector vect(fixed(400.0));
+  GeoVector vect(fixed(400.0), Angle::Zero());
   GlideState gs(vect, fixed(0), ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
   hfile << (double)h << " " 
@@ -130,7 +130,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   ac.altitude = h;
   ac.netto_vario = S;
 
-  GeoVector vect(fixed(400.0));
+  GeoVector vect(fixed(400.0), Angle::Zero());
   GlideState gs(vect, fixed(0), ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
 
@@ -238,7 +238,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
   }
   ac.altitude = h;
 
-  GeoVector vect(fixed(400.0));
+  GeoVector vect(fixed(400.0), Angle::Zero());
   GlideState gs (vect, fixed(0), ac.altitude, ac.wind);
   GlideResult gr = MacCready::Solve(settings, polar, gs);
 
