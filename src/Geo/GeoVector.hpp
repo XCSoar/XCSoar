@@ -65,6 +65,13 @@ struct GeoVector {
   GeoVector(const GeoPoint &source, const GeoPoint &target);
 
   /**
+   * Create the zero vector: zero distance, undefined bearing.
+   */
+  constexpr static GeoVector Zero() {
+    return GeoVector(fixed(0), Angle::Zero());
+  }
+
+  /**
    * Create an invalid instance.
    */
   gcc_const
