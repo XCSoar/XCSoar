@@ -67,7 +67,7 @@ public:
   SampledTaskPoint(const GeoPoint &location, const bool is_scored);
 
   /** Reset the task (as if never flown) */
-  virtual void Reset();
+  void Reset();
 
   /**
    * Accessor to retrieve location of the sample/boundary polygon

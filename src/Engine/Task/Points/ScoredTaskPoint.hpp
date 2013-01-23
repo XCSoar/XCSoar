@@ -66,8 +66,7 @@ public:
     return state_entered;
   }
 
-  /* virtual methods from class SampledTaskPoint */
-  virtual void Reset() override;
+  virtual void Reset();
 
   /**
    * Test whether aircraft has exited the OZ
