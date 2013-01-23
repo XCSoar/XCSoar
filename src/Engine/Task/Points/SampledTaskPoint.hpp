@@ -53,7 +53,6 @@ class SampledTaskPoint {
   SearchPointVector boundary_points;
   SearchPoint search_max;
   SearchPoint search_min;
-  SearchPoint search_reference;
 
 public:
   /**

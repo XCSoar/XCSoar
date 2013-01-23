@@ -26,10 +26,9 @@
 
 SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
                                    const bool b_scored)
-  :boundary_scored(b_scored),
-   search_reference(location)
+  :boundary_scored(b_scored)
 {
-  nominal_points.push_back(search_reference);
+  nominal_points.push_back(location);
 }
 
 // SAMPLES
@@ -78,8 +77,7 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 void 
 SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 { 
-  search_max = search_reference;
-  search_min = search_reference;
+  search_max = search_min = nominal_points.front();
   boundary_points.clear();
 
   for (const SearchPoint sp : GetBoundary())
@@ -95,7 +93,6 @@ SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
 {
   search_max.Project(projection);
   search_min.Project(projection);
-  search_reference.Project(projection);
   nominal_points.Project(projection);
   sampled_points.Project(projection);
   boundary_points.Project(projection);
