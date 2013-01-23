@@ -72,6 +72,7 @@ public:
    *
    * @return True if adjustable targets
    */
+  gcc_pure
   bool has_targets() const;
 
   /**
