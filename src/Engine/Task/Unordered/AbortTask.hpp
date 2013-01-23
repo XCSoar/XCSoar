@@ -114,7 +114,6 @@ public:
    */
   AbortTask(const TaskBehaviour &tb,
             const Waypoints &wps);
-  virtual ~AbortTask();
 
   const UnorderedTaskPoint &GetAlternate(unsigned i) const {
     assert(i < task_points.size());

@@ -47,11 +47,6 @@ AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
   task_points.reserve(32);
 }
 
-AbortTask::~AbortTask()
-{
-  Clear();
-}
-
 void
 AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 {
