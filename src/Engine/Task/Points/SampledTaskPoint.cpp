@@ -27,8 +27,6 @@
 SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
                                    const bool b_scored)
   :boundary_scored(b_scored),
-   search_max(location),
-   search_min(location),
    search_reference(location)
 {
   nominal_points.push_back(search_reference);

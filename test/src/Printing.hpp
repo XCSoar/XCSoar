@@ -34,6 +34,7 @@ class OrderedTask;
 class AbstractTask;
 class TaskPoint;
 class SampledTaskPoint;
+class ScoredTaskPoint;
 class OrderedTaskPoint;
 class ContestManager;
 class Trace;
@@ -71,7 +72,8 @@ public:
   static void taskpoint_print(std::ostream& f, const TaskPoint& tp, const AircraftState &state);
   static void sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp, 
                                      const AircraftState &state);
-  static void sampledtaskpoint_print_samples(std::ostream& f, const SampledTaskPoint& tp, 
+  static void sampledtaskpoint_print_samples(std::ostream &f,
+                                             const ScoredTaskPoint &tp,
                                              const AircraftState &state);
   static void orderedtaskpoint_print(std::ostream& f, const OrderedTaskPoint& tp, 
                                      const AircraftState &state,

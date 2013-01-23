@@ -178,7 +178,7 @@ PrintHelper::orderedtaskpoint_print(std::ostream& f,
                                     const int item) 
 {
   if (item==0) {
-    sampledtaskpoint_print(f,tp,state);
+    taskpoint_print(f,tp,state);
     orderedtaskpoint_print_boundary(f,tp,state);
     f << "# Entered " << tp.GetEnteredState().time << "\n";
     f << "# Bearing travelled " << tp.GetVectorTravelled().bearing << "\n";
@@ -206,18 +206,9 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
   f << "\n";
 }
 
-
-void 
-PrintHelper::sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp,
-                                    const AircraftState &state) 
-{
-  taskpoint_print(f,tp,state);
-}
-
-
 void 
 PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
-                                            const SampledTaskPoint& tp,
+                                            const ScoredTaskPoint &tp,
                                             const AircraftState &state) 
 {
   const unsigned n= tp.GetSearchPoints().size();
