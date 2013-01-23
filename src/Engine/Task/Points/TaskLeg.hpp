@@ -65,7 +65,8 @@ public:
   /**
    * Constructor.  Takes local copy of taskpoint data used in internal computations
    */
-  TaskLeg(OrderedTaskPoint &_destination);
+  TaskLeg(OrderedTaskPoint &_destination)
+    :destination(_destination) {}
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -159,7 +160,9 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed GetNominalLegDistance() const;
+  fixed GetNominalLegDistance() const {
+    return GetNominalLegVector().distance;
+  }
 
   gcc_pure
   GeoVector GetNominalLegVector() const;

@@ -26,30 +26,25 @@
 #include <assert.h>
 #include <algorithm>
 
-TaskLeg::TaskLeg(OrderedTaskPoint &_destination):
-  destination(_destination)
-{
-}
-
-const OrderedTaskPoint* 
+inline const OrderedTaskPoint *
 TaskLeg::GetOrigin() const
 {
   return destination.GetPrevious();
 }
 
-const OrderedTaskPoint *
+inline const OrderedTaskPoint *
 TaskLeg::GetNext() const
 {
   return destination.GetNext();
 }
 
-OrderedTaskPoint *
+inline OrderedTaskPoint *
 TaskLeg::GetNext()
 {
   return destination.GetNext();
 }
 
-GeoVector 
+inline GeoVector
 TaskLeg::GetPlannedVector() const
 {
   if (!GetOrigin()) {
@@ -60,7 +55,7 @@ TaskLeg::GetPlannedVector() const
   }
 }
 
-GeoVector 
+inline GeoVector
 TaskLeg::GetRemainingVector(const GeoPoint &ref) const
 {
   switch (destination.GetActiveState()) {
@@ -84,7 +79,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
   };
 }
 
-GeoVector
+inline GeoVector
 TaskLeg::GetTravelledVector(const GeoPoint &ref) const
 {
   switch (destination.GetActiveState()) {
@@ -121,7 +116,7 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
   };
 }
 
-fixed 
+inline fixed
 TaskLeg::GetScoredDistance(const GeoPoint &ref) const
 {
   if (!GetOrigin())
@@ -162,12 +157,6 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
   return fixed(0);
 }
 
-fixed 
-TaskLeg::GetNominalLegDistance() const
-{
-  return GetNominalLegVector().distance;
-}
-
 GeoVector
 TaskLeg::GetNominalLegVector() const
 {
@@ -179,7 +168,7 @@ TaskLeg::GetNominalLegVector() const
   }
 }
 
-fixed 
+inline fixed
 TaskLeg::GetMaximumLegDistance() const
 {
   if (GetOrigin())
@@ -188,7 +177,7 @@ TaskLeg::GetMaximumLegDistance() const
   return fixed(0);
 }
 
-fixed 
+inline fixed
 TaskLeg::GetMinimumLegDistance() const
 {
   if (GetOrigin())
