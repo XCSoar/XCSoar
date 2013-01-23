@@ -31,9 +31,7 @@
  * Class for unordered task points (e.g. goto and abort)
  *
  */
-class UnorderedTaskPoint : 
-  public TaskWaypoint
-{
+class UnorderedTaskPoint final : public TaskWaypoint {
   fixed safety_height_arrival;
 
 public:
