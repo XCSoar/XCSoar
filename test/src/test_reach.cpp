@@ -71,8 +71,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * fixed(2) - fixed(1);
-        fixed fy = (fixed)j / (ny - 1) * fixed(2) - fixed(1);
+        fixed fx = (fixed)i / (nx - 1) * 2 - fixed(1);
+        fixed fy = (fixed)j / (ny - 1) * 2 - fixed(1);
         GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
                    origin.latitude + Angle::Degrees(fixed(0.6) * fy));
         short h = map.GetInterpolatedHeight(x);

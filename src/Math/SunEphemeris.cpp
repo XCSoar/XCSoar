@@ -124,7 +124,7 @@ SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
 
   //   Ecliptic longitude of the Sun
   return (Angle::Degrees(1.915) * g.sin() + L +
-          Angle::Degrees(.02) * (g * fixed(2)).sin()).AsBearing();
+          Angle::Degrees(.02) * (g * 2).sin()).AsBearing();
 }
 
 Angle

@@ -136,9 +136,9 @@ GlidePolarTest::TestBugs()
   polar.SetBugs(fixed(0.75));
   ok1(equals(polar.GetBugs(), 0.75));
 
-  ok1(equals(polar.polar.a, polar.ideal_polar.a * fixed(4) / 3));
-  ok1(equals(polar.polar.b, polar.ideal_polar.b * fixed(4) / 3));
-  ok1(equals(polar.polar.c, polar.ideal_polar.c * fixed(4) / 3));
+  ok1(equals(polar.polar.a, polar.ideal_polar.a * 4 / 3));
+  ok1(equals(polar.polar.b, polar.ideal_polar.b * 4 / 3));
+  ok1(equals(polar.polar.c, polar.ideal_polar.c * 4 / 3));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
              0.808));

@@ -33,9 +33,9 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
   // length of sector element
   const fixed c1 = sweep * GetRadius();
   // length of cylinder element
-  const fixed c2 = small_sweep * SmallRadius * fixed(5);
+  const fixed c2 = small_sweep * SmallRadius * 5;
   // length of straight elements
-  const fixed l = (GetRadius() - SmallRadius) * fixed(0.2);
+  const fixed l = (GetRadius() - SmallRadius) / 5;
   // total distance
   const fixed tt = t * (c1 + l + l + c2);
 

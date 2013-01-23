@@ -63,7 +63,7 @@ bool
 TaskBestMc::valid(const fixed mc)
 {
   return res.IsOk() &&
-         res.altitude_difference >= -tolerance * fixed(2) * res.vector.distance;
+    res.altitude_difference >= Double(-tolerance) * res.vector.distance;
 }
 
 fixed

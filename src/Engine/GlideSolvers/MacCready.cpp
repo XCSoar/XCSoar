@@ -387,7 +387,7 @@ public:
          discarded by ZeroFinder */
       return fixed(1000000);
 
-    return res.height_glide / res.vector.distance * fixed(360);
+    return res.height_glide * 1024 / res.vector.distance;
   }
   
   /**
