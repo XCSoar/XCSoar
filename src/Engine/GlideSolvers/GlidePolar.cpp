@@ -331,6 +331,8 @@ fixed
 GlidePolar::SpeedToFly(const AircraftState &state,
     const GlideResult &solution, const bool block_stf) const
 {
+  assert(IsValid());
+
   fixed V_stf;
   const fixed g_scaling (block_stf ? fixed(1) : sqrt(fabs(state.g_load))); 
 
