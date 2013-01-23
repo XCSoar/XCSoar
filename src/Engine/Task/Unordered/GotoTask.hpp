@@ -28,13 +28,14 @@
 
 struct Waypoint;
 class Waypoints;
+class UnorderedTaskPoint;
 
 /**
  * Class providing ability to go to a single task point
  */
 class GotoTask final : public UnorderedTask
 {
-  TaskWaypoint* tp;
+  UnorderedTaskPoint *tp;
   const Waypoints &waypoints;
 
 public:
