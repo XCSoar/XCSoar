@@ -42,10 +42,6 @@ OpenGL::IsExtensionSupported(const char *extension)
   const GLubyte *start;
   const GLubyte *where, *terminator;
 
-  /* Extension names should not have spaces. */
-  where = (const GLubyte *) strchr(extension, ' ');
-  if (where || *extension == '\0')
-    return 0;
   extensions = glGetString(GL_EXTENSIONS);
   /* It takes a bit of care to be fool-proof about parsing the
      OpenGL extensions string. Don't be fooled by sub-strings,
