@@ -209,6 +209,34 @@ public:
   gcc_pure
   const SearchPointVector &GetSearchPoints() const;
 
+  gcc_pure
+  virtual bool IsInSector(const AircraftState &ref) const;
+
+  /**
+   * Check if aircraft is within observation zone if near, and if so,
+   * update the interior sample polygon.
+   *
+   * @param state Aircraft state
+   * @param task_events Callback class for feedback
+   *
+   * @return True if internal state changed
+   */
+  virtual bool UpdateSampleNear(const AircraftState &state,
+                                const TaskProjection &projection);
+
+  /**
+   * Perform updates to samples as required if known to be far from the OZ
+   *
+   * @param state Aircraft state
+   * @param task_events Callback class for feedback
+   *
+   * @return True if internal state changed
+   */
+  virtual bool UpdateSampleFar(const AircraftState &state,
+                               const TaskProjection &projection) {
+    return false;
+  }
+
 protected:
   /**
    * Calculate distance from previous remaining/planned location to a point,
@@ -233,10 +261,6 @@ public:
 private:
   /* virtual methods from class SampledTaskPoint */
   virtual bool SearchNominalIfUnsampled() const override;
-
-public:
-  /* virtual methods from class SampledTaskPoint */
-  virtual bool IsInSector(const AircraftState &ref) const override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */

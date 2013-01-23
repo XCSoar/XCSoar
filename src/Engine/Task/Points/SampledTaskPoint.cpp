@@ -34,13 +34,9 @@ SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
 // SAMPLES
 
 bool 
-SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
-                                     const TaskProjection &projection)
+SampledTaskPoint::AddInsideSample(const AircraftState& state,
+                                  const TaskProjection &projection)
 {
-  if (!IsInSector(state))
-    // return false (no update required)
-    return false;
-
   // if sample is inside sample polygon
   if (sampled_points.IsInside(state.location))
     // return false (no update required)

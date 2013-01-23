@@ -117,6 +117,17 @@ OrderedTaskPoint::IsInSector(const AircraftState &ref) const
 }
 
 bool
+OrderedTaskPoint::UpdateSampleNear(const AircraftState &state,
+                                   const TaskProjection &projection)
+{
+  if (!IsInSector(state))
+    // return false (no update required)
+    return false;
+
+  return AddInsideSample(state, projection);
+}
+
+bool
 OrderedTaskPoint::CheckEnterTransition(const AircraftState &ref_now,
                                        const AircraftState &ref_last) const
 {
