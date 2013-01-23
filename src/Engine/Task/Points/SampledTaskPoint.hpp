@@ -24,12 +24,12 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Geo/SearchPointVector.hpp"
-#include "TaskWaypoint.hpp"
 #include "Compiler.h"
 
 class TaskProjection;
 class OZBoundary;
 struct GeoPoint;
+struct AircraftState;
 
 /**
  * Abstract specialisation of TaskPoint which has an observation zone
@@ -41,7 +41,7 @@ struct GeoPoint;
  * - Currently undefined as to what happens to interior samples if observation 
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
-class SampledTaskPoint : public TaskWaypoint {
+class SampledTaskPoint {
   /**
    * Whether boundaries are used in scoring distance,
    * or just the reference point
@@ -60,14 +60,12 @@ public:
    * Constructor.  Clears boundary and interior samples on instantiation.
    * Must be followed by update_oz() after task geometry is modified.
    *
-   * @param wp Waypoint associated with this task point
+   * @param location the reference location of this task point
    * @param is_scored Whether distance within OZ is scored
    *
    * @return Partially initialised object
    */
-  SampledTaskPoint(TaskPointType type,
-                   const Waypoint &wp,
-                   const bool is_scored);
+  SampledTaskPoint(const GeoPoint &location, const bool is_scored);
 
   virtual ~SampledTaskPoint() {}
 

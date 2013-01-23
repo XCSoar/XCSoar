@@ -24,13 +24,12 @@
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Navigation/Aircraft.hpp"
 
-SampledTaskPoint::SampledTaskPoint(TaskPointType _type, const Waypoint & wp,
+SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
                                    const bool b_scored)
-  :TaskWaypoint(_type, wp),
-   boundary_scored(b_scored),
-   search_max(GetLocation()),
-   search_min(GetLocation()),
-   search_reference(GetLocation())
+  :boundary_scored(b_scored),
+   search_max(location),
+   search_min(location),
+   search_reference(location)
 {
   nominal_points.push_back(search_reference);
 }

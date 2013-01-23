@@ -23,6 +23,7 @@
 #ifndef SCOREDTASKPOINT_HPP
 #define SCOREDTASKPOINT_HPP
 
+#include "TaskWaypoint.hpp"
 #include "SampledTaskPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Compiler.h"
@@ -37,8 +38,7 @@
  * \todo 
  * - better documentation of this class!
  */
-class ScoredTaskPoint:
-  public SampledTaskPoint
+class ScoredTaskPoint : public TaskWaypoint, public SampledTaskPoint
 {
   AircraftState state_entered;
   bool has_exited;
