@@ -54,8 +54,9 @@ OpenGL::IsExtensionSupported(const char *extension)
     terminator = where + strlen(extension);
     if (where == start || *(where - 1) == ' ')
       if (*terminator == ' ' || *terminator == '\0')
-        return 1;
+        return true;
+
     start = terminator;
   }
-  return 0;
+  return false;
 }
