@@ -737,7 +737,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
     return true;
   }
 
-  /* unreachable */
+  gcc_unreachable();
   assert(false);
   return false;
 }

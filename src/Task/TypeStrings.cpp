@@ -51,8 +51,7 @@ OrderedTaskFactoryName(TaskFactoryType type)
     return _("Touring");
   }
 
-  assert(false);
-  return nullptr;
+  gcc_unreachable();
 }
 
 const TCHAR*
@@ -80,8 +79,7 @@ OrderedTaskFactoryDescription(TaskFactoryType type)
     return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
   }
 
-  assert(false);
-  return nullptr;
+  gcc_unreachable();
 }
 
 const TCHAR*
@@ -126,8 +124,7 @@ OrderedTaskPointDescription(TaskPointFactoryType type)
     return _("Enter cylinder to finish.");
   }
 
-  assert(false);
-  return nullptr;
+  gcc_unreachable();
 }
 
 const TCHAR*
@@ -166,6 +163,5 @@ OrderedTaskPointName(TaskPointFactoryType type)
     return _("Finish cylinder");
   }
 
-  assert(false);
-  return nullptr;
+  gcc_unreachable();
 }

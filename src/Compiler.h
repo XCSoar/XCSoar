@@ -146,5 +146,10 @@ Copyright_License {
 #define gcc_unused_field
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+#define gcc_unreachable() __builtin_unreachable()
+#else
+#define gcc_unreachable()
+#endif
 
 #endif

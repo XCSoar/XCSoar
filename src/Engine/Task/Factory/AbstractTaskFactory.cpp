@@ -261,13 +261,12 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   case TaskPointType::UNORDERED:
     /* obviously, when we check the type of an OrderedTaskPoint, we
        should never get type==UNORDERED */
-    assert(false);
+    gcc_unreachable();
     break;
   }
 
   // fail, should never get here
-  assert(1);
-  return TaskPointFactoryType::START_LINE;
+  gcc_unreachable();
 }
 
 OrderedTaskPoint* 
@@ -655,11 +654,10 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
   case TaskPointType::UNORDERED:
     /* obviously, when we check the type of an OrderedTaskPoint, we
        should never get type==UNORDERED */
-    assert(false);
-    break;
+    gcc_unreachable();
   }
 
-  return false;
+  gcc_unreachable();
 }
 
 bool

@@ -217,6 +217,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     return;
   }
 
+  gcc_unreachable();
   assert(false);
 }
 
@@ -284,6 +285,5 @@ TaskValidationError(TaskValidationErrorType type)
     return _("non-FAI turn points");
   }
 
-  assert(false);
-  return NULL;
+  gcc_unreachable();
 }

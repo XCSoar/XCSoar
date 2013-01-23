@@ -127,9 +127,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return false;
   }
 
-  /* unreachable */
-  assert(false);
-  return false;
+  gcc_unreachable();
 }
 
 const TCHAR *
@@ -183,9 +181,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return buffer;
   }
 
-  /* unreachable */
-  assert(false);
-  return _T("Disabled");
+  gcc_unreachable();
 }
 
 static const TCHAR *

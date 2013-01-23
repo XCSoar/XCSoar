@@ -46,7 +46,8 @@ ZeroFinderTest::f(const fixed x)
   if (func == 2)
     return cos(x);
 
-  assert(true);
+  gcc_unreachable();
+  assert(false);
   return fixed(0);
 }
 

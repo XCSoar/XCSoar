@@ -42,8 +42,7 @@ GetName(TaskPointType type, bool mode_optional_start)
 {
   switch (type) {
   case TaskPointType::UNORDERED:
-    assert(false);
-    break;
+    gcc_unreachable();
 
   case TaskPointType::START:
     return mode_optional_start ? _T("OptionalStart") : _T("Start");
@@ -58,7 +57,7 @@ GetName(TaskPointType type, bool mode_optional_start)
     return _T("Finish");
   }
 
-  return nullptr;
+  gcc_unreachable();
 }
 
 gcc_pure

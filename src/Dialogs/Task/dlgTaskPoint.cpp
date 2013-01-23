@@ -170,8 +170,7 @@ RefreshView()
     break;
 
   default:
-    assert(true);
-    break;
+    gcc_unreachable();
   }
 
   wf->SetCaption(type_buffer);

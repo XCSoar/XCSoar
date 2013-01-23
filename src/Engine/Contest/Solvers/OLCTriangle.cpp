@@ -312,7 +312,7 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
     break;
 
   default:
-    assert(false);
+    gcc_unreachable();
   }
 }
 

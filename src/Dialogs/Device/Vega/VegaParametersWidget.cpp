@@ -87,7 +87,7 @@ VegaParametersWidget::AddParameter(const StaticParameter &p)
     break;
 
   default:
-    /* not implemented */
+    gcc_unreachable();
     assert(false);
   }
 }

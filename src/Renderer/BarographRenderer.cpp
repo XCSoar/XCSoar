@@ -73,9 +73,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
     break;
   }
 
-  /* not reachable */
-  assert(false);
-  return false;
+  gcc_unreachable();
 }
 
 static void

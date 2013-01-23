@@ -50,11 +50,7 @@ ButtonPanelWidget::UpdateLayout(const PixelRect &rc)
     return buttons->BottomLayout(rc);
   }
 
-#ifndef __clang__
-  /* only clang is clever enough to see that this is unreachable */
-  assert(false);
-  return PixelRect();
-#endif
+  gcc_unreachable();
 }
 
 PixelSize

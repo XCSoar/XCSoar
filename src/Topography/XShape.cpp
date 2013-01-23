@@ -254,8 +254,7 @@ XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
     // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     return true;
   } else {
-    assert(false);
-    return false;
+    gcc_unreachable();
   }
 }
 

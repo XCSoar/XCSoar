@@ -60,9 +60,7 @@ IsFAITriangleApplicable(TaskFactoryType factory)
     return false;
   }
 
-  /* unreachable */
-  assert(false);
-  return false;
+  gcc_unreachable();
 }
 
 gcc_pure

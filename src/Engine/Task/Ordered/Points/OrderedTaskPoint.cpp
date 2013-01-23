@@ -176,6 +176,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
 
   case TaskPointType::UNORDERED:
     /* an OrderedTaskPoint must never be UNORDERED */
+    gcc_unreachable();
     assert(false);
     break;
   }

@@ -64,6 +64,5 @@ CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
   };
 
   /* not reachable */
-  assert(false);
-  return NULL;
+  gcc_unreachable();
 }

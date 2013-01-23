@@ -62,7 +62,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     return true;
   }
 
-  /* unreachable */
+  gcc_unreachable();
   assert(false);
   return false;
 }

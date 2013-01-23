@@ -374,8 +374,7 @@ Update()
     break;
 
   case AnalysisPage::COUNT:
-    assert(false);
-    break;
+    gcc_unreachable();
   }
 
   switch (page) {

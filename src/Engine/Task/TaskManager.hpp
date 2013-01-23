@@ -381,6 +381,7 @@ public:
       return safety_polar;
     }
 
+    gcc_unreachable();
     assert(false);
     return glide_polar;
   }

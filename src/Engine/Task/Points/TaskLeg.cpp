@@ -72,7 +72,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
     return GeoVector::Zero();
 
   default:
-    /* unreachable */
+    gcc_unreachable();
     assert(false);
     return GeoVector::Invalid();
   };
@@ -113,7 +113,7 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
     return GeoVector::Zero();
 
   default:
-    /* unreachable */
+    gcc_unreachable();
     assert(false);
     return GeoVector::Invalid();
   };

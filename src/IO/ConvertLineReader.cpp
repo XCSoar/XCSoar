@@ -125,8 +125,7 @@ ConvertLineReader::ReadLine()
   }
 
   /* unreachable */
-  assert(false);
-  return NULL;
+  gcc_unreachable();
 #endif
 }
 
