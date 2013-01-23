@@ -193,6 +193,8 @@ public:
    */
   void ScanProjection(TaskProjection &task_projection) const;
 
+  void UpdateOZ(const TaskProjection &projection);
+
   /**
    * Update the bounding box in flat projected coordinates
    */
@@ -227,9 +229,6 @@ public:
     return TaskLeg::GetVectorRemaining();
   }
   virtual GeoVector GetNextLegVector() const override;
-
-  /* virtual methods from class SampledTaskPoint */
-  virtual void UpdateOZ(const TaskProjection &projection) override;
 
 private:
   /* virtual methods from class SampledTaskPoint */

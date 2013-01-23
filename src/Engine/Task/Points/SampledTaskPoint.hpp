@@ -94,7 +94,7 @@ public:
    * Construct boundary polygon from internal representation of observation zone.
    * Also updates projection.
    */
-  virtual void UpdateOZ(const TaskProjection &projection);
+  void UpdateOZ(const TaskProjection &projection);
 
   /**
    * Check if aircraft is within observation zone if near, and if so,
