@@ -86,7 +86,7 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   const fixed straight_distance = state_now.location.Distance(destination);
 
   for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i) {
-    const TaskWaypoint &tp = *i;
+    const TaskWaypoint &tp = i->point;
     const Waypoint &wp = tp.GetWaypoint();
 
     const fixed diversion_distance =

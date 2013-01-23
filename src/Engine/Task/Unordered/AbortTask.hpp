@@ -78,13 +78,13 @@ public:
   typedef std::vector <Alternate> AlternateVector;
 
 protected:
-  struct AlternateTaskPoint final : public UnorderedTaskPoint
-  {
+  struct AlternateTaskPoint {
+    UnorderedTaskPoint point;
     GlideResult solution;
 
     AlternateTaskPoint(const Waypoint &waypoint, const TaskBehaviour &tb,
                        const GlideResult &_solution)
-      :UnorderedTaskPoint(waypoint, tb), solution(_solution) {}
+      :point(waypoint, tb), solution(_solution) {}
   };
 
   typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
@@ -119,7 +119,7 @@ public:
   const UnorderedTaskPoint &GetAlternate(unsigned i) const {
     assert(i < task_points.size());
 
-    return task_points[i];
+    return task_points[i].point;
   }
 
   /**
