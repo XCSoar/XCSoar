@@ -290,7 +290,8 @@ TaskManager::Update(const AircraftState &state,
     if (home)
       destination = &home->location;
   } else if (task_behaviour.abort_task_mode == AbortTaskMode::TASK) {
-    const TaskWaypoint *twp = GetActiveTaskPoint();
+    const OrderedTaskPoint *twp = (const OrderedTaskPoint *)
+      task_ordered.GetActiveTaskPoint();
     if (twp)
       destination = &(twp->GetLocationRemaining());
   }
