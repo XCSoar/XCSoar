@@ -45,7 +45,7 @@ OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
 {
 }
 
-void 
+void
 OrderedTaskPoint::SetNeighbours(OrderedTaskPoint *_previous,
                                 OrderedTaskPoint *_next)
 {
@@ -55,10 +55,6 @@ OrderedTaskPoint::SetNeighbours(OrderedTaskPoint *_previous,
   UpdateGeometry();
 }
 
-/** 
- * Update observation zone geometry (or other internal data) when
- * previous/next turnpoint changes.
- */
 void
 OrderedTaskPoint::UpdateGeometry()
 {
@@ -128,7 +124,7 @@ OrderedTaskPoint::CheckEnterTransition(const AircraftState &ref_now,
     TransitionConstraint(ref_now.location, ref_last.location);
 }
 
-fixed 
+fixed
 OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
 {
   assert(tp_previous);
@@ -138,7 +134,7 @@ OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
                           ref, GetNext()->GetLocationRemaining());
 }
 
-bool 
+bool
 OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 {
   return GetWaypoint() == other.GetWaypoint() &&
@@ -147,10 +143,10 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
     other.GetObservationZone().Equals(GetObservationZone());
 }
 
-OrderedTaskPoint* 
+OrderedTaskPoint *
 OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskBehaviour &ordered_task_behaviour,
-                        const Waypoint* waypoint) const
+                        const Waypoint *waypoint) const
 {
   if (waypoint == NULL)
     waypoint = &GetWaypoint();

@@ -33,18 +33,18 @@
 struct OrderedTaskBehaviour;
 
 /**
- *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
- *  for task points which are organised in an ordered sequence.  This
- *  class manages the concept of an active task point, and therefore
- *  in a task, one OrderedTaskPoint will be marked as active, and the
- *  others marked either before or after active.
+ * Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
+ * for task points which are organised in an ordered sequence.  This
+ * class manages the concept of an active task point, and therefore in
+ * a task, one OrderedTaskPoint will be marked as active, and the
+ * others marked either before or after active.
  *
- *  The OrderedTaskPoint tracks previous and next OrderedTaskPoints. 
+ * The OrderedTaskPoint tracks previous and next OrderedTaskPoints.
  */
-class OrderedTaskPoint : 
-  public TaskLeg,
-  public ScoredTaskPoint,
-  public ObservationZoneClient
+class OrderedTaskPoint
+  :public TaskLeg,
+   public ScoredTaskPoint,
+   public ObservationZoneClient
 {
 public:
   /**
@@ -87,7 +87,7 @@ public:
   virtual ~OrderedTaskPoint() {}
 
   /**
-   * Create a clone of the task point. 
+   * Create a clone of the task point.
    * Caller is responsible for destruction.
    *
    * @param task_behaviour Task behaviour of clone
@@ -99,7 +99,7 @@ public:
                           const OrderedTaskBehaviour &ordered_task_behaviour,
                           const Waypoint* waypoint=NULL) const;
 
-  /** 
+  /**
    * Update observation zone geometry (or other internal data) when
    * previous/next turnpoint changes.
    */
@@ -152,7 +152,7 @@ public:
   OrderedTaskPoint *GetNext() {
     return tp_next;
   }
-  
+
   /**
    * Accessor for activation state of this task point.
    * This is valid only after ScanActive() has been called.
@@ -252,7 +252,7 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  override{
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return TaskLeg::GetVectorRemaining();
   }
   virtual GeoVector GetNextLegVector() const override;
