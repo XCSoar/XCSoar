@@ -24,43 +24,6 @@
 #include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
-GeoPoint
-KeyholeZone::GetBoundaryParametric(fixed t) const
-{
-  const fixed sweep = (GetEndRadial() - GetStartRadial()).AsBearing().Radians();
-  const fixed small_sweep = fixed_two_pi - sweep;
-  const fixed SmallRadius = fixed(500);
-  // length of sector element
-  const fixed c1 = sweep * GetRadius();
-  // length of cylinder element
-  const fixed c2 = small_sweep * SmallRadius * 5;
-  // length of straight elements
-  const fixed l = (GetRadius() - SmallRadius) / 5;
-  // total distance
-  const fixed tt = t * (c1 + l + l + c2);
-
-  Angle a;
-  fixed d;
-  if (tt < l) {
-    // first straight element
-    d = (tt / l) * (GetRadius() - SmallRadius) + SmallRadius;
-    a = GetStartRadial();
-  } else if (tt < l + c1) {
-    // sector element
-    d = GetRadius();
-    a = GetStartRadial() + Angle::Radians((tt - l) / c1 * sweep);
-  } else if (tt < l + l + c1) {
-    // second straight element
-    d = (fixed(1) - (tt - l - c1) / l) * (GetRadius() - SmallRadius) + SmallRadius;
-    a = GetEndRadial();
-  } else {
-    // cylinder element
-    d = SmallRadius;
-    a = GetEndRadial() + Angle::Radians((tt - l - l - c1) / c2 * small_sweep);
-  }
-  return GeoVector(d, a).EndPoint(GetReference());
-}
-
 OZBoundary
 KeyholeZone::GetBoundary() const
 {

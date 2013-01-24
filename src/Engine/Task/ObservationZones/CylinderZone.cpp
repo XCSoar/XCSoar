@@ -32,13 +32,6 @@ CylinderZone::ScoreAdjustment() const
   return radius;
 }
 
-GeoPoint
-CylinderZone::GetBoundaryParametric(fixed t) const
-{
-  return GeoVector(radius, Angle::Radians(t * fixed_two_pi)).
-           EndPoint(GetReference());
-}
-
 OZBoundary
 CylinderZone::GetBoundary() const
 {

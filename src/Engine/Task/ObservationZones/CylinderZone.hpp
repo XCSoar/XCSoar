@@ -93,7 +93,6 @@ public:
     return true;
   }
 
-  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
   virtual OZBoundary GetBoundary() const override;
   virtual fixed ScoreAdjustment() const override;
 

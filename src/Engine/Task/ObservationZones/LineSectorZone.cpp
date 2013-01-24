@@ -23,11 +23,6 @@
 #include "LineSectorZone.hpp"
 #include "Boundary.hpp"
 
-GeoPoint LineSectorZone::GetBoundaryParametric(fixed t) const
-{ 
-  return GetSectorStart().Interpolate(GetSectorEnd(), t);
-}
-
 OZBoundary
 LineSectorZone::GetBoundary() const
 {

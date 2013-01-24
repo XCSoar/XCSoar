@@ -70,16 +70,6 @@ public:
                                     const GeoPoint &last_location) const = 0;
 
   /**
-   * Get point on boundary from parametric representation
-   *
-   * @param t T value [0,1]
-   *
-   * @return Point on boundary
-   */
-  gcc_pure
-  virtual GeoPoint GetBoundaryParametric(fixed t) const = 0;
-
-  /**
    * Return an unordered list of boundary points for evaluation by the
    * class #TaskDijkstra.  It shall contain all corners, all middle
    * points of straight lines and approximations for arcs.

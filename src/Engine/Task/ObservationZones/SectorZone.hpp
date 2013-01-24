@@ -144,7 +144,6 @@ protected:
 public:
   /* virtual methods from class ObservationZone */
   virtual bool IsInSector(const GeoPoint &location) const override;
-  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
   virtual OZBoundary GetBoundary() const override;
   virtual fixed ScoreAdjustment() const override;
 

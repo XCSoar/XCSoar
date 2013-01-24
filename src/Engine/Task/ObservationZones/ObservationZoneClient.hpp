@@ -69,9 +69,6 @@ public:
                             const GeoPoint &last_location) const;
 
   gcc_pure
-  GeoPoint GetBoundaryParametric(fixed t) const;
-
-  gcc_pure
   OZBoundary GetBoundary() const;
 
   virtual fixed ScoreAdjustment() const;

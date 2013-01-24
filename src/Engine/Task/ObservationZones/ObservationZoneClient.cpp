@@ -53,12 +53,6 @@ ObservationZoneClient::ScoreAdjustment() const
   return oz_point->ScoreAdjustment();
 }
 
-GeoPoint
-ObservationZoneClient::GetBoundaryParametric(fixed t) const
-{
-  return oz_point->GetBoundaryParametric(t);
-}
-
 OZBoundary
 ObservationZoneClient::GetBoundary() const
 {

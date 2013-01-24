@@ -82,7 +82,6 @@ public:
       CylinderZone::IsInSector(last_location);
   }
 
-  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
   virtual OZBoundary GetBoundary() const override;
   virtual fixed ScoreAdjustment() const override;
 

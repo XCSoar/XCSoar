@@ -24,29 +24,6 @@
 #include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
-GeoPoint
-SectorZone::GetBoundaryParametric(fixed t) const
-{
-  const Angle sweep = (end_radial - start_radial).AsBearing();
-  const fixed l = GetRadius();
-  const fixed c1 = sweep.Radians() * GetRadius();
-  const fixed tt = t * (c1 + 2 * l);
-  Angle a;
-  fixed d;
-  if (tt < l) {
-    d = (tt / l) * GetRadius();
-    a = start_radial;
-  } else if (tt < l + c1) {
-    d = GetRadius();
-    a = start_radial + Angle::Radians(((tt - l) / c1) * sweep.Radians());
-  } else {
-    d = GetRadius() - (tt - l - c1) / l * GetRadius();
-    a = end_radial;
-  }
-  return GeoVector(d, a).EndPoint(GetReference());
-}
-
-
 OZBoundary
 SectorZone::GetBoundary() const
 {
