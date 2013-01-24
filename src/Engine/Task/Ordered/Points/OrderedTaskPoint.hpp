@@ -25,6 +25,7 @@
 #define ORDEREDTASKPOINT_HPP
 
 #include "Task/Points/TaskLeg.hpp"
+#include "Task/Points/TaskWaypoint.hpp"
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
@@ -43,6 +44,7 @@ struct OrderedTaskBehaviour;
  */
 class OrderedTaskPoint
   :public TaskLeg,
+   public TaskWaypoint,
    public ScoredTaskPoint,
    public ObservationZoneClient
 {
@@ -85,6 +87,9 @@ public:
                    const bool b_scored);
 
   virtual ~OrderedTaskPoint() {}
+
+  /* choose TaskPoint's implementation, not SampledTaskPoint's */
+  using TaskPoint::GetLocation;
 
   /**
    * Create a clone of the task point.
@@ -252,6 +257,9 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
+  virtual const GeoPoint &GetLocationRemaining() const override {
+    return ScoredTaskPoint::GetLocationRemaining();
+  }
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override {
     return TaskLeg::GetVectorRemaining();
   }

@@ -38,7 +38,9 @@ OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    ObservationZonePoint *_oz,
                                    const Waypoint &wp,
                                    const bool b_scored)
-  :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
+  :TaskLeg(*this),
+   TaskWaypoint(_type, wp),
+   ScoredTaskPoint(wp.location, b_scored),
    ObservationZoneClient(_oz),
    tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!

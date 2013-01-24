@@ -21,9 +21,8 @@
  */
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(TaskPointType _type, const Waypoint &wp,
-                                 bool b_scored)
-  :TaskWaypoint(_type, wp), SampledTaskPoint(wp.location, b_scored)
+ScoredTaskPoint::ScoredTaskPoint(const GeoPoint &location, bool b_scored)
+  :SampledTaskPoint(location, b_scored)
 {
   Reset();
 }
@@ -72,12 +71,6 @@ ScoredTaskPoint::GetLocationScored() const
     return GetLocationMin();
 
   return GetLocation();
-}
-
-const GeoPoint &
-ScoredTaskPoint::GetLocationRemaining() const
-{
-  return GetLocationMin();
 }
 
 void 

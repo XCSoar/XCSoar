@@ -76,6 +76,10 @@ public:
   /** Reset the task (as if never flown) */
   void Reset();
 
+  const GeoPoint &GetLocation() const {
+    return nominal_points.front().GetLocation();
+  }
+
   /**
    * Accessor to retrieve location of the sample/boundary polygon
    * node that produces the maximum task distance.

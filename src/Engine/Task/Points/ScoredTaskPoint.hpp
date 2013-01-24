@@ -23,7 +23,6 @@
 #ifndef SCOREDTASKPOINT_HPP
 #define SCOREDTASKPOINT_HPP
 
-#include "TaskWaypoint.hpp"
 #include "SampledTaskPoint.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Compiler.h"
@@ -38,7 +37,7 @@
  * \todo 
  * - better documentation of this class!
  */
-class ScoredTaskPoint : public TaskWaypoint, public SampledTaskPoint
+class ScoredTaskPoint : public SampledTaskPoint
 {
   AircraftState state_entered;
   bool has_exited;
@@ -47,16 +46,15 @@ public:
   /**
    * Constructor.  Clears entry/exit states on instantiation.
    *
-   * @param wp Waypoint associated with the task point
-   * @param tb Task Behaviour defining options (esp safety heights)
    * @param b_scored Whether distance within OZ is scored
    *
    * @return Partially initialised object
    */
-  ScoredTaskPoint(TaskPointType _type, const Waypoint &wp, bool b_scored);
+  ScoredTaskPoint(const GeoPoint &location, bool b_scored);
 
-  /* virtual methods from class TaskPoint */
-  virtual const GeoPoint &GetLocationRemaining() const override;
+  const GeoPoint &GetLocationRemaining() const {
+    return GetLocationMin();
+  }
 
   /**
    * Check whether aircraft has entered the observation zone.
