@@ -22,9 +22,8 @@
 
 #include "StartPoint.hpp"
 #include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 #include "Task/TaskBehaviour.hpp"
-#include "Task/TaskEvents.hpp"
-#include "Math/ZeroFinder.hpp"
 #include "Geo/Math.hpp"
 
 #include <assert.h>
@@ -86,54 +85,30 @@ StartPoint::find_best_start(const AircraftState &state,
                             const OrderedTaskPoint &next,
                             const TaskProjection &projection)
 {
-  class StartPointBestStart: public ZeroFinder {
-    const StartPoint &start;
-    const GeoPoint loc_from;
-    const GeoPoint loc_to;
-    fixed p_offset;
+  /* check which boundary point results in the smallest distance to
+     fly */
 
-  public:
-    StartPointBestStart(const StartPoint& ts,
-                        const GeoPoint &_loc_from,
-                        const GeoPoint &_loc_to):
-      ZeroFinder(-fixed(0.5), fixed(0.5), fixed(0.01)),
-      start(ts),
-      loc_from(_loc_from),
-      loc_to(_loc_to) {};
+  const OZBoundary boundary = next.GetBoundary();
+  assert(!boundary.empty());
 
-    virtual fixed f(const fixed p) {
-      return ::DoubleDistance(loc_from, parametric(p), loc_to);
+  const auto end = boundary.end();
+  auto i = boundary.begin();
+  assert(i != end);
+
+  const GeoPoint &next_location = next.GetLocationRemaining();
+
+  GeoPoint best_location = *i;
+  fixed best_distance = ::DoubleDistance(state.location, *i, next_location);
+
+  for (++i; i != end; ++i) {
+    fixed distance = ::DoubleDistance(state.location, *i, next_location);
+    if (distance < best_distance) {
+      best_location = *i;
+      best_distance = distance;
     }
+  }
 
-    GeoPoint solve() {
-      // find approx solution first, being the offset for the local function
-      // minimiser search
-      p_offset = fixed(0);
-      fixed f_best= f(fixed(0));
-      for (; p_offset < fixed(1); p_offset += fixed(0.25)) {
-        fixed ff = f(fixed(0));
-        if (ff< f_best) {
-          f_best = ff;
-        }
-      }
-      // now detailed search, returning result
-      return parametric(find_min(fixed(0)));
-    }
-  private:
-    GeoPoint parametric(const fixed p) {
-      // ensure parametric input is between 0 and 1
-      fixed pp = p+p_offset;
-      if (negative(pp)) {
-        pp+= fixed(1);
-      }
-      pp = fmod(pp,fixed(1));
-      return start.GetBoundaryParametric(pp);
-    }
-  };
-
-  StartPointBestStart solver(*this, state.location,
-                             next.GetLocationRemaining());
-  SetSearchMin(SearchPoint(solver.solve(), projection));
+  SetSearchMin(SearchPoint(best_location, projection));
 }
 
 bool
