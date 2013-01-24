@@ -72,22 +72,22 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool CanStartThroughTop() const {
+  virtual bool CanStartThroughTop() const override {
     return false;
   }
 
   virtual bool TransitionConstraint(const GeoPoint &location,
-                                    const GeoPoint &last_location) const {
+                                    const GeoPoint &last_location) const override {
     return CylinderZone::IsInSector(location) &&
       CylinderZone::IsInSector(last_location);
   }
 
-  virtual GeoPoint GetBoundaryParametric(fixed t) const;
-  virtual OZBoundary GetBoundary() const;
-  virtual fixed ScoreAdjustment() const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
+  virtual OZBoundary GetBoundary() const override;
+  virtual fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new LineSectorZone(*this, _reference);
   }
 };

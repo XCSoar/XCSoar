@@ -65,13 +65,13 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool IsInSector(const GeoPoint &location) const;
-  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual bool IsInSector(const GeoPoint &location) const override;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
   virtual OZBoundary GetBoundary() const override;
-  virtual fixed ScoreAdjustment() const;
+  virtual fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new KeyholeZone(*this, _reference);
   }
 };

@@ -63,8 +63,8 @@ public:
 
   /* virtual methods from class ObservationZonePoint */
   virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
-                       const GeoPoint *next);
-  virtual bool Equals(const ObservationZonePoint &other) const;
+                       const GeoPoint *next) override;
+  virtual bool Equals(const ObservationZonePoint &other) const override;
 };
 
 #endif

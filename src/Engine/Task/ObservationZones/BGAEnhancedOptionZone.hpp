@@ -53,7 +53,7 @@ public:
   }
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new BGAEnhancedOptionZone(*this, _reference);
   }
 };

@@ -76,7 +76,6 @@ public:
 
   virtual fixed ScoreAdjustment() const;
 
-  /* virtual methods from class ObservationZonePoint */
   void SetLegs(const TaskPoint *previous, const TaskPoint *current,
                const TaskPoint *next);
 

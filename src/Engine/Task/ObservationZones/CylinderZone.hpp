@@ -84,24 +84,24 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool IsInSector(const GeoPoint &location) const {
+  virtual bool IsInSector(const GeoPoint &location) const override {
     return DistanceTo(location) <= radius;
   }
 
   virtual bool TransitionConstraint(const GeoPoint &location,
-                                    const GeoPoint &last_location) const {
+                                    const GeoPoint &last_location) const override {
     return true;
   }
 
-  virtual GeoPoint GetBoundaryParametric(fixed t) const;
-  virtual OZBoundary GetBoundary() const;
-  virtual fixed ScoreAdjustment() const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const override;
+  virtual OZBoundary GetBoundary() const override;
+  virtual fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual bool Equals(const ObservationZonePoint &other) const;
-  virtual GeoPoint GetRandomPointInSector(const fixed mag) const;
+  virtual bool Equals(const ObservationZonePoint &other) const override;
+  virtual GeoPoint GetRandomPointInSector(const fixed mag) const override;
 
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new CylinderZone(*this, _reference);
   }
 };

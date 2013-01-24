@@ -57,10 +57,10 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual OZBoundary GetBoundary() const;
+  virtual OZBoundary GetBoundary() const override;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
     return new FAISectorZone(*this, _reference);
   }
 };
