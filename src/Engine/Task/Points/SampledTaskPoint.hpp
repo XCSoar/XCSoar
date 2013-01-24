@@ -48,6 +48,13 @@ class SampledTaskPoint {
    */
   const bool boundary_scored;
 
+  /**
+   * True when the current task state is past this task point.  This
+   * is used to determine whether the task point was missed.  In that
+   * case, a 'cheat' has to be applied.
+   */
+  bool past;
+
   SearchPointVector nominal_points;
   SearchPointVector sampled_points;
   SearchPointVector boundary_points;
@@ -131,6 +138,10 @@ public:
   }
 
 protected:
+  void SetPast(bool _past) {
+    past = _past;
+  }
+
   /**
    * Clear all sample points and add the current state as a sample.
    * This is used, for exmaple, for StartPoints to only remember the last sample
@@ -152,14 +163,6 @@ private:
    * Must be called if task_projection changes.
    */
   void UpdateProjection(const TaskProjection &projection);
-
-  /**
-   * Determines whether to 'cheat' a missed OZ prior to the current active task point.
-   *
-   * @return Vector of boundary points representing a closed polygon
-   */
-  gcc_pure
-  virtual bool SearchNominalIfUnsampled() const = 0;
 
 public:
   /**

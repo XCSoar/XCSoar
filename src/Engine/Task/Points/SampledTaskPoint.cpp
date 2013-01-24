@@ -26,7 +26,7 @@
 
 SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
                                    const bool b_scored)
-  :boundary_scored(b_scored)
+  :boundary_scored(b_scored), past(false)
 {
   nominal_points.push_back(location);
 }
@@ -107,7 +107,7 @@ SampledTaskPoint::GetSearchPoints() const
   if (HasSampled())
     return sampled_points;
 
-  if (SearchNominalIfUnsampled())
+  if (past)
     // this adds a point in case the waypoint was skipped
     // this is a crude way of handling the situation --- may be best
     // to de-rate the score in some way

@@ -256,10 +256,6 @@ public:
   }
   virtual GeoVector GetNextLegVector() const override;
 
-private:
-  /* virtual methods from class SampledTaskPoint */
-  virtual bool SearchNominalIfUnsampled() const override;
-
 protected:
   /* virtual methods from class ScoredTaskPoint */
   virtual bool CheckEnterTransition(const AircraftState &ref_now,

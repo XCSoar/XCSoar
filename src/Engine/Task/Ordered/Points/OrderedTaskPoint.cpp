@@ -85,6 +85,8 @@ OrderedTaskPoint::ScanActive(const OrderedTaskPoint &atp)
   else
     active_state = BEFORE_ACTIVE;
 
+  SetPast(active_state == BEFORE_ACTIVE);
+
   if (tp_next)
     // propagate to remainder of task
     return GetNext()->ScanActive(atp);
@@ -99,12 +101,6 @@ OrderedTaskPoint::GetSearchPoints() const
     return GetBoundaryPoints();
 
   return SampledTaskPoint::GetSearchPoints();
-}
-
-bool
-OrderedTaskPoint::SearchNominalIfUnsampled() const
-{
-  return active_state == BEFORE_ACTIVE;
 }
 
 bool
