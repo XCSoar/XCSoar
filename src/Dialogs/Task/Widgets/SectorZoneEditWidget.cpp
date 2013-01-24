@@ -55,7 +55,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
            GetObject().GetEndRadial(), 10, true,
            this);
 
-  if (GetObject().shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
+  if (GetObject().GetShape() == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
     const AnnularSectorZone &annulus = (const AnnularSectorZone &)GetObject();
 
     AddFloat(_("Inner radius"), _("Inner radius of the OZ sector."),
@@ -89,7 +89,7 @@ SectorZoneEditWidget::Save(bool &_changed, bool &require_restart)
     changed = true;
   }
 
-  if (GetObject().shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
+  if (GetObject().GetShape() == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
     AnnularSectorZone &annulus = (AnnularSectorZone &)GetObject();
 
     radius = annulus.GetInnerRadius();

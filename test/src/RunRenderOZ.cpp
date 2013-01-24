@@ -93,7 +93,7 @@ public:
   }
 
   void set_shape(ObservationZonePoint::Shape shape) {
-    if (oz != NULL && shape == oz->shape)
+    if (oz != NULL && shape == oz->GetShape())
       return;
 
     delete oz;

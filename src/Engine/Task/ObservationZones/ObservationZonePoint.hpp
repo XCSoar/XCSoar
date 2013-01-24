@@ -36,28 +36,12 @@ class ObservationZonePoint:
   public ObservationZone,
   public NonCopyable
 {
-public:
-  enum Shape {
-    LINE,
-    CYLINDER,
-    SECTOR,
-    FAI_SECTOR,
-    KEYHOLE,
-    BGAFIXEDCOURSE,
-    BGAENHANCEDOPTION,
-    BGA_START,
-    ANNULAR_SECTOR,
-  };
-
-  const Shape shape;
-
-private:
   GeoPoint reference;
 
 protected:
   ObservationZonePoint(const ObservationZonePoint &other,
                        const GeoPoint &_reference)
-    :shape(other.shape), reference(_reference) {}
+    :ObservationZone(other.GetShape()), reference(_reference) {}
 
 public:
   /**
@@ -68,7 +52,7 @@ public:
    * @return Initialised object
    */
   ObservationZonePoint(Shape _shape, const GeoPoint & _location)
-    :shape(_shape), reference(_location) {}
+    :ObservationZone(_shape), reference(_location) {}
 
   /**
    * Update geometry when previous/next legs are modified.

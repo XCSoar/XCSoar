@@ -77,7 +77,7 @@ public:
   }
 
   void Visit(const ObservationZonePoint &oz) {
-    switch (oz.shape) {
+    switch (oz.GetShape()) {
     case ObservationZonePoint::FAI_SECTOR:
       Visit((const FAISectorZone &)oz);
       break;
@@ -409,7 +409,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(1);
   if (wp) {
     tp = fact.CreateStart(TaskPointFactoryType::START_LINE,*wp);
-    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(5000.0));
       tp->UpdateOZ(projection);
@@ -437,7 +437,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -462,7 +462,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(5);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -584,7 +584,7 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -599,7 +599,7 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(40000.0));
       tp->UpdateOZ(projection);

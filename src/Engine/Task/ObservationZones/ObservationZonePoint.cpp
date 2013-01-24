@@ -25,6 +25,7 @@
 bool
 ObservationZonePoint::Equals(const ObservationZonePoint &other) const
 {
-  return shape == other.shape && GetReference().Equals(other.GetReference());
+  return GetShape() == other.GetShape() &&
+    GetReference().Equals(other.GetReference());
 }
 

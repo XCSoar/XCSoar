@@ -34,7 +34,7 @@ static Declaration::TurnPoint::Shape
 get_shape(const OrderedTaskPoint &tp)
 {
   const ObservationZonePoint &oz = tp.GetObservationZone();
-  switch (oz.shape) {
+  switch (oz.GetShape()) {
   case ObservationZonePoint::LINE:
     return Declaration::TurnPoint::LINE;
 

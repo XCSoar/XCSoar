@@ -101,7 +101,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
 
   Prepare(canvas, layer, offset);
 
-  switch (_oz.shape) {
+  switch (_oz.GetShape()) {
   case ObservationZonePoint::LINE:
   case ObservationZonePoint::FAI_SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;

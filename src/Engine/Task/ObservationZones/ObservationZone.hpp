@@ -37,7 +37,30 @@ class OZBoundary;
 class ObservationZone
 {
 public:
+  enum Shape {
+    LINE,
+    CYLINDER,
+    SECTOR,
+    FAI_SECTOR,
+    KEYHOLE,
+    BGAFIXEDCOURSE,
+    BGAENHANCEDOPTION,
+    BGA_START,
+    ANNULAR_SECTOR,
+  };
+
+private:
+  const Shape shape;
+
+protected:
+  ObservationZone(Shape _shape):shape(_shape) {}
+
+public:
   virtual ~ObservationZone() {}
+
+  Shape GetShape() const {
+    return shape;
+  }
 
   /** 
    * Check whether observer is within OZ

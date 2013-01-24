@@ -94,7 +94,7 @@ Serialiser::Serialise(const OrderedTaskPoint &tp)
 void 
 Serialiser::Serialise(const ObservationZonePoint &data)
 {
-  switch (data.shape) {
+  switch (data.GetShape()) {
   case ObservationZonePoint::FAI_SECTOR:
     Visit((const FAISectorZone &)data);
     break;

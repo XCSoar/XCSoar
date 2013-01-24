@@ -84,7 +84,7 @@ static TPOZListener listener;
 static ObservationZoneEditWidget *
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
-  switch (oz.shape) {
+  switch (oz.GetShape()) {
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
     return new SectorZoneEditWidget((SectorZone &)oz);

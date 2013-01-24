@@ -261,7 +261,7 @@ TargetMapWindow::SetTopograpgy(TopographyStore *topography)
 static fixed
 GetRadius(const ObservationZonePoint &oz)
 {
-  switch (oz.shape) {
+  switch (oz.GetShape()) {
   case ObservationZonePoint::LINE:
   case ObservationZonePoint::CYLINDER:
   case ObservationZonePoint::SECTOR:
