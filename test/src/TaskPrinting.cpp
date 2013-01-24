@@ -31,6 +31,7 @@
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Stats/CommonStats.hpp"
+#include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Geo/Math.hpp"
 
@@ -197,12 +198,8 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
                                              const AircraftState &state) 
 {
   f << "#   Boundary points\n";
-  for (double t=0; t<= 1.0; t+= 0.05) {
-    GeoPoint loc = tp.GetBoundaryParametric(fixed(t));
-    f << "     " << loc.longitude << " " << loc.latitude << "\n";
-  }
-  GeoPoint loc = tp.GetBoundaryParametric(fixed(0));
-  f << "     " << loc.longitude << " " << loc.latitude << "\n";
+  for (const auto &i : tp.GetBoundary())
+    f << "     " << i.longitude << " " << i.latitude << "\n";
   f << "\n";
 }
 
