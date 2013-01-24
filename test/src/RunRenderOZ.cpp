@@ -143,7 +143,7 @@ public:
     }
 
     if (oz != NULL)
-      oz->SetLegs(&previous, &location, &next);
+      oz->SetLegs(&previous, &next);
 
     if (IsDefined())
       Invalidate();

@@ -60,7 +60,7 @@ OrderedTaskPoint::SetNeighbours(OrderedTaskPoint *_previous,
 void
 OrderedTaskPoint::UpdateGeometry()
 {
-  SetLegs(tp_previous, this, tp_next);
+  SetLegs(tp_previous, tp_next);
 }
 
 void

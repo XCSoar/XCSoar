@@ -54,11 +54,9 @@ public:
    * Update geometry when previous/next legs are modified.
    *
    * @param previous Previous task point (origin of inbound leg)
-   * @param current Taskpoint this is located at
    * @param next Following task point (destination of outbound leg)
    */
-  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
-                       const GeoPoint *next) {};
+  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *next) {}
 
   /**
    * Test whether an OZ is equivalent to this one

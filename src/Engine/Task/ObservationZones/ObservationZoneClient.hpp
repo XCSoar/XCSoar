@@ -73,8 +73,7 @@ public:
 
   virtual fixed ScoreAdjustment() const;
 
-  void SetLegs(const TaskPoint *previous, const TaskPoint *current,
-               const TaskPoint *next);
+  void SetLegs(const TaskPoint *previous, const TaskPoint *next);
 
   gcc_pure
   GeoPoint GetRandomPointInSector(const fixed mag) const;
