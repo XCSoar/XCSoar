@@ -52,6 +52,8 @@ public:
            const Waypoints &wps);
   ~GotoTask();
 
+  void SetTaskBehaviour(const TaskBehaviour &tb);
+
 /** 
  * Sets go to task point to specified waypoint. 
  * Obeys TaskBehaviour.goto_nonlandable, won't do anything
@@ -74,7 +76,6 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual unsigned TaskSize() const override;
   virtual TaskWaypoint *GetActiveTaskPoint() const override;
   virtual void SetActiveTaskPoint(unsigned index) override;

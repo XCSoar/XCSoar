@@ -93,6 +93,10 @@ public:
   /** Reset the auto Mc calculator */
   void ResetAutoMC();
 
+  void SetTaskBehaviour(const TaskBehaviour &tb) {
+    task_behaviour = tb;
+  }
+
   /** 
    * Retrieves the active task point sequence.
    * 
@@ -433,10 +437,6 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
-    task_behaviour = tb;
-  }
-
   virtual bool Update(const AircraftState &state_now,
                       const AircraftState &state_last,
                       const GlidePolar &glide_polar) override;

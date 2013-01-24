@@ -115,6 +115,8 @@ public:
   AbortTask(const TaskBehaviour &tb,
             const Waypoints &wps);
 
+  void SetTaskBehaviour(const TaskBehaviour &tb);
+
   const UnorderedTaskPoint &GetAlternate(unsigned i) const {
     assert(i < task_points.size());
 
@@ -229,7 +231,6 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual unsigned TaskSize() const override;
   virtual void SetActiveTaskPoint(unsigned index) override;
   virtual TaskWaypoint *GetActiveTaskPoint() const override;

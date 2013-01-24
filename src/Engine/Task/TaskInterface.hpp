@@ -54,8 +54,6 @@ public:
     return type;
   }
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) = 0;
-
   /**
    * Size of task
    *
