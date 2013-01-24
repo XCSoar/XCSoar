@@ -115,6 +115,7 @@ public:
     return GetType() != TaskPointType::FINISH;
   }
 
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
   virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {}
 
   /**

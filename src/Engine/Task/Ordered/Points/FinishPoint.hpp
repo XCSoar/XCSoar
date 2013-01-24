@@ -74,13 +74,13 @@ public:
   void set_fai_finish_height(const fixed height);
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual fixed GetElevation() const override;
 
   /* virtual methods from class SampledTaskPoint */
   virtual void Reset() override;
 
   /* virtual methods from class OrderedTaskPoint */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) override;
   virtual void SetNeighbours(OrderedTaskPoint *prev,
                              OrderedTaskPoint *next) override;

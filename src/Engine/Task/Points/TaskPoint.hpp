@@ -66,8 +66,6 @@ public:
     return type;
   }
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
-
 protected:
   fixed GetBaseElevation() const {
     return elevation;
