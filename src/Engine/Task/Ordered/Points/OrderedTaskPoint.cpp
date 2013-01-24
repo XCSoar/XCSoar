@@ -40,7 +40,7 @@ OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    const bool b_scored)
   :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
    ObservationZoneClient(_oz),
-   active_state(NOTFOUND_ACTIVE), tp_next(NULL), tp_previous(NULL),
+   tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {
 }
@@ -76,9 +76,6 @@ OrderedTaskPoint::UpdateOZ(const TaskProjection &projection)
 bool
 OrderedTaskPoint::ScanActive(const OrderedTaskPoint &atp)
 {
-  // reset
-  active_state = NOTFOUND_ACTIVE;
-
   if (&atp == this)
     active_state = CURRENT_ACTIVE;
   else if (tp_previous &&
@@ -92,7 +89,7 @@ OrderedTaskPoint::ScanActive(const OrderedTaskPoint &atp)
     // propagate to remainder of task
     return GetNext()->ScanActive(atp);
 
-  return active_state != BEFORE_ACTIVE && active_state != NOTFOUND_ACTIVE;
+  return active_state != BEFORE_ACTIVE;
 }
 
 const SearchPointVector &

@@ -52,8 +52,6 @@ public:
    * (with respect to which OrderedTaskPoint is active/selected).
    */
   enum ActiveState {
-    /** Active task point was not found, ERROR! */
-    NOTFOUND_ACTIVE = 0,
     /** This taskpoint is before the active one */
     BEFORE_ACTIVE,
     /** This taskpoint is currently the active one */
