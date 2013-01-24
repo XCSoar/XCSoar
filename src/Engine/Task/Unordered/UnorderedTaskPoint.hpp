@@ -47,10 +47,6 @@ public:
   /* virtual methods from class TaskPoint */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const override;
-  virtual bool HasEntered() const override {
-    return false;
-  }
-  virtual const AircraftState &GetEnteredState() const override;
   virtual fixed GetElevation() const override;
 };
 

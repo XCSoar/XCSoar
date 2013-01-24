@@ -58,11 +58,21 @@ public:
   /* virtual methods from class TaskPoint */
   virtual const GeoPoint &GetLocationRemaining() const override;
 
-  virtual bool HasEntered() const override {
+  /**
+   * Check whether aircraft has entered the observation zone.
+   *
+   * @return True if observation zone has been entered
+   */
+  bool HasEntered() const {
     return positive(state_entered.time);
   }
 
-  const AircraftState &GetEnteredState() const override {
+  /**
+   * Recall aircraft state where it entered the observation zone.
+   *
+   * @return State at entry, or null if never entered
+   */
+  const AircraftState &GetEnteredState() const {
     return state_entered;
   }
 

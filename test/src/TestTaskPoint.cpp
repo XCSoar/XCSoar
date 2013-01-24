@@ -21,14 +21,11 @@
 */
 
 #include "Engine/Task/Points/TaskPoint.hpp"
-#include "Engine/Navigation/Aircraft.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TestUtil.hpp"
 
 class DummyTaskPoint: public TaskPoint
 {
-  AircraftState dummy_state;
-
 public:
   friend class TaskPointTest;
 
@@ -38,14 +35,6 @@ public:
 
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return GeoVector();
-  }
-
-  virtual bool HasEntered() const {
-    return false;
-  }
-
-  virtual const AircraftState& GetEnteredState() const {
-    return dummy_state;
   }
 
   virtual fixed GetElevation() const {

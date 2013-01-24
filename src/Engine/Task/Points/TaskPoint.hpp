@@ -112,22 +112,6 @@ public:
   }
 
   /**
-   * Check whether aircraft has entered the observation zone.
-   *
-   * @return True if observation zone has been entered
-   */
-  gcc_pure
-  virtual bool HasEntered() const = 0;
-
-  /**
-   * Recall aircraft state where it entered the observation zone.
-   *
-   * @return State at entry, or null if never entered
-   */
-  gcc_pure
-  virtual const AircraftState &GetEnteredState() const = 0;
-
-  /**
    * Retrieve elevation of taskpoint, taking into account
    * rules and safety margins.
    *
