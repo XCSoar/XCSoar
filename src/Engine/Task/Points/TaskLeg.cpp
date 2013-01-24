@@ -70,12 +70,11 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
     return GeoVector::Zero();
+  }
 
-  default:
-    gcc_unreachable();
-    assert(false);
-    return GeoVector::Invalid();
-  };
+  gcc_unreachable();
+  assert(false);
+  return GeoVector::Invalid();
 }
 
 inline GeoVector
@@ -111,12 +110,11 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
       return memo_travelled.calc(GetOrigin()->GetLocationTravelled(), ref);
 
     return GeoVector::Zero();
+  }
 
-  default:
-    gcc_unreachable();
-    assert(false);
-    return GeoVector::Invalid();
-  };
+  gcc_unreachable();
+  assert(false);
+  return GeoVector::Invalid();
 }
 
 inline fixed
@@ -153,10 +151,10 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
                                           ref).distance
                       -GetOrigin()->ScoreAdjustment());
     }
-  default:
-    return fixed(0);
-    break;
-  };
+  }
+
+  gcc_unreachable();
+  assert(false);
   return fixed(0);
 }
 
