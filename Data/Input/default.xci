@@ -572,7 +572,7 @@ type=key
 data=9
 event=Setup Basic
 event=Mode default
-label=Flight\nSetup
+label=Flight
 location=8
 
 mode=Config1
@@ -580,7 +580,7 @@ type=key
 data=0
 event=Setup Wind
 event=Mode default
-label=Setup\nWind
+label=Wind
 location=9
 
 # -------------
@@ -598,7 +598,7 @@ type=key
 data=6
 event=Setup System
 event=Mode default
-label=Setup\nSystem
+label=System
 location=5
 
 mode=Config2
@@ -606,7 +606,7 @@ type=key
 data=7
 event=Setup Plane
 event=Mode default
-label=Setup Plane
+label=Plane
 location=6
 
 mode=Config2
@@ -663,7 +663,7 @@ type=key
 data=8
 event=Setup Airspace
 event=Mode default
-label=Settings\nAirspace$(CheckAirspace)
+label=Airspace$(CheckAirspace)
 location=7
 
 mode=Config3
