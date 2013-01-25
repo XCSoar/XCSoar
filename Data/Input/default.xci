@@ -617,7 +617,7 @@ type=key
 data=9
 event=FileManager
 event=Mode default
-label=File Manager
+label=File\nManager
 location=8
 
 mode=Config2
