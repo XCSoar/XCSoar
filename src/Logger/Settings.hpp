@@ -48,9 +48,6 @@ struct LoggerSettings {
   /** Logger interval in circling mode */
   uint16_t time_step_circling;
 
-  /** Use short IGC filenames for the logger files */
-  bool short_name;
-
   enum class AutoLogger: uint8_t {
     ON,
     START_ONLY,

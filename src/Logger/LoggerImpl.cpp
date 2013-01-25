@@ -244,12 +244,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StaticString<64> name;
   for (int i = 1; i < 99; i++) {
-    if (!settings.short_name)
-      FormatIGCFilenameLong(name.buffer(), today,
-                            "XCS", logger_id, i);
-    else
-      FormatIGCFilename(name.buffer(), today,
-                        'X', logger_id, i);
+    FormatIGCFilenameLong(name.buffer(), today, "XCS", logger_id, i);
 
     LocalPath(filename, _T("logs"), name);
     if (!File::Exists(filename))

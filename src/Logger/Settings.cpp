@@ -28,7 +28,6 @@ LoggerSettings::SetDefaults()
 {
   time_step_cruise = 5;
   time_step_circling = 1;
-  short_name = false;
   auto_logger = AutoLogger::ON;
   logger_id.clear();
   pilot_name.clear();
