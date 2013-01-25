@@ -5,7 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7 - not yet released
 * user interface
   - added AutoZoom gesture (up-down)
-  - obsolete configuration pages "polar", "logger info" removed
+  - obsolete configuration pages "devices", "polar", "logger info" removed
   - new page: "horizon" (#1592)
   - default page gesture changed right/left sense according to other xc ui interaction pattern
   - pressing the Escape key in task manager switches to "Close" tab (#2877)

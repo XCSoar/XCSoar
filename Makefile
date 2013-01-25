@@ -220,7 +220,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
-	$(SRC)/Dialogs/Settings/Panels/DevicesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \

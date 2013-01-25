@@ -41,7 +41,6 @@ Copyright_License {
 #include "Panels/UnitsConfigPanel.hpp"
 #include "Panels/TimeConfigPanel.hpp"
 #include "Panels/LoggerConfigPanel.hpp"
-#include "Panels/DevicesConfigPanel.hpp"
 #include "Panels/AirspaceConfigPanel.hpp"
 #include "Panels/SiteConfigPanel.hpp"
 #include "Panels/MapDisplayConfigPanel.hpp"
@@ -115,7 +114,6 @@ static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Screen Layout"), 5, CreateLayoutConfigPanel },
   {N_("Pages"), 5, CreatePagesConfigPanel },
   {N_("InfoBox Sets"), 5, CreateInfoBoxesConfigPanel },
-  {N_("Devices"), 6, CreateDevicesConfigPanel },
   {N_("Logger"), 6, CreateLoggerConfigPanel },
   {N_("Units"), 6, CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
