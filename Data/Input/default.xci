@@ -596,32 +596,33 @@ location=3
 mode=Config2
 type=key
 data=6
-event=Mode Vario1
-label=Vega$(CheckVega)
+event=Setup System
+event=Mode default
+label=Setup\nSystem
 location=5
 
 mode=Config2
 type=key
 data=7
-event=Setup System
+event=Setup Plane
 event=Mode default
-label=Setup\nSystem
+label=Setup Plane
 location=6
 
 mode=Config2
 type=key
 data=8
-event=Setup Airspace
+event=Device list
 event=Mode default
-label=Settings\nAirspace$(CheckAirspace)
+label=Devices
 location=7
 
 mode=Config2
 type=key
 data=9
-event=Logger show
-event=Logger toggle ask
-label=Logger\n$(LoggerActive)$(CheckLogger)
+event=FileManager
+event=Mode default
+label=File Manager
 location=8
 
 mode=Config2
@@ -645,33 +646,32 @@ location=3
 mode=Config3
 type=key
 data=6
-event=Logger nmea
-label=Raw Logger$(CheckLogger)
+event=Logger show
+event=Logger toggle ask
+label=Logger\n$(LoggerActive)$(CheckLogger)
 location=5
 
 mode=Config3
 type=key
 data=7
-event=Device list
-event=Mode default
-label=Devices
+event=Logger nmea
+label=Raw Logger$(CheckLogger)
 location=6
 
 mode=Config3
 type=key
 data=8
-event=Setup Plane
+event=Setup Airspace
 event=Mode default
-label=Setup Plane
+label=Settings\nAirspace$(CheckAirspace)
 location=7
 
 mode=Config3
 type=key
-data=9
-event=FileManager
-event=Mode default
-label=File Manager
-location=8
+data=0
+event=Mode Vario1
+label=Vega$(CheckVega)
+location=9
 
 # -------------
 # mode=Vario1
