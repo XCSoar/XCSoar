@@ -33,7 +33,6 @@ Copyright_License {
 enum ControlIndex {
   LoggerTimeStepCruise,
   LoggerTimeStepCircling,
-  LoggerShortName,
   DisableAutoLogger,
   EnableNMEALogger,
   EnableFlightLogger,
@@ -74,13 +73,6 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           1, 30, 1, logger.time_step_circling);
   SetExpertRow(LoggerTimeStepCircling);
 
-  AddBoolean(_("Short file name"),
-             _("This determines whether the logger uses the short IGC file name or the "
-                 "long IGC file name. Example short name (81HXABC1.IGC), long name "
-                 "(2008-01-18-XXX-ABC-01.IGC)."),
-             logger.short_name);
-  SetExpertRow(LoggerShortName);
-
   AddEnum(_("Auto. logger"),
           _("Enables the automatic starting and stopping of logger on takeoff and landing "
             "respectively. Disable when flying paragliders."),
@@ -109,9 +101,6 @@ LoggerConfigPanel::Save(bool &changed, bool &require_restart)
 
   changed |= SaveValue(LoggerTimeStepCircling, ProfileKeys::LoggerTimeStepCircling,
                        logger.time_step_circling);
-
-  changed |= SaveValue(LoggerShortName, ProfileKeys::LoggerShort,
-                       logger.short_name);
 
   /* GUI label is "Enable Auto Logger" */
   changed |= SaveValueEnum(DisableAutoLogger, ProfileKeys::AutoLogger,

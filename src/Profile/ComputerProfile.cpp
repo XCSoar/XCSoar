@@ -64,7 +64,6 @@ Profile::Load(LoggerSettings &settings)
 {
   Get(ProfileKeys::LoggerTimeStepCruise, settings.time_step_cruise);
   Get(ProfileKeys::LoggerTimeStepCircling, settings.time_step_circling);
-  Get(ProfileKeys::LoggerShort, settings.short_name);
 
   if (!GetEnum(ProfileKeys::AutoLogger, settings.auto_logger)) {
     // Legacy
