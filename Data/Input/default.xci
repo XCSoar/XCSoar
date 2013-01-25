@@ -650,7 +650,7 @@ mode=Config3
 type=key
 data=7
 event=Logger nmea
-label=Raw Logger$(CheckLogger)
+label=NMEA Logger$(CheckLogger)
 location=6
 
 mode=Config3
