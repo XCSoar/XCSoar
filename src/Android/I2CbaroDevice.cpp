@@ -134,7 +134,7 @@ I2CbaroDevice::onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure)
         break;
 
       case DeviceConfig::PressureUse::TEK_PRESSURE:
-        basic.ProvideNettoVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+        basic.ProvideTotalEnergyVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
                                                     kalman_filter.GetXVel()));
         break;
 
