@@ -55,6 +55,10 @@ public:
   RegistryKey(const RegistryKey &) = delete;
   RegistryKey &operator=(const RegistryKey &) = delete;
 
+  RegistryKey(RegistryKey &&other):hKey(other.hKey) {
+    other.hKey = 0;
+  }
+
   RegistryKey &operator=(RegistryKey &&other) {
     if (hKey != 0)
       ::RegCloseKey(hKey);
