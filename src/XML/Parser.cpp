@@ -9,25 +9,6 @@
  * @author      Frank Vanden Berghen
  * based on original implementation by Martyn C Brown
  *
- * NOTE:
- *
- *   If you add "#define APPROXIMATE_PARSING", on the first line of this file
- *   the parser will see the following XML-stream:
- *     <data name="n1">
- *     <data name="n2">
- *     <data name="n3" />
- *   as equivalent to the following XML-stream:
- *     <data name="n1" />
- *     <data name="n2" />
- *     <data name="n3" />
- *   This can be useful for badly-formed XML-streams but prevent the use
- *   of the following XML-stream:
- *     <data name="n1">
- *        <data name="n2">
- *            <data name="n3" />
- *        </data>
- *     </data>
- *
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,8 +46,6 @@ namespace XML {
     Error error;
     const TCHAR *lpEndTag;
     size_t cbEndTag;
-    const TCHAR *lpNewElement;
-    size_t cbNewElement;
     bool nFirst;
   };
 
@@ -570,19 +549,6 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           return false;
         }
 
-        // If we found a new element which is the same as this
-        // element then we need to pass this back to the caller..
-
-#ifdef APPROXIMATE_PARSING
-        if (d->name && CompareTagName(d->name, token.pStr)) {
-          // Indicate to the caller that it needs to create a
-          // new element.
-          pXML->lpNewElement = token.pStr;
-          pXML->cbNewElement = token_length;
-          return true;
-        }
-#endif
-
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
@@ -620,22 +586,6 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
               }
 
               return true;
-            } else if (pXML->cbNewElement) {
-              // If the call indicated a new element is to
-              // be created on THIS element.
-
-              // If the name of this element matches the
-              // name of the element we need to create
-              // then we need to return to the caller
-              // and let it process the element.
-
-              if (CompareTagName(node.GetName(), pXML->lpNewElement))
-                return true;
-
-              // Add the new element and recurse
-              pNew = &node.AddChild(pXML->lpNewElement, pXML->cbNewElement,
-                                    false);
-              pXML->cbNewElement = 0;
             } else {
               // If we didn't have a new element to create
               break;
@@ -896,7 +846,7 @@ XML::ParseString(const TCHAR *xml_string, Results *pResults)
 
   Error error;
   XMLNode xnode = XMLNode::Null();
-  Parser xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, true, };
+  Parser xml = { NULL, 0, eXMLErrorNone, NULL, 0, true, };
 
   xml.lpXML = xml_string;
 
