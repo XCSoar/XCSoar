@@ -58,6 +58,9 @@ protected:
 public:
   virtual ~ObservationZone() {}
 
+  ObservationZone(const ObservationZone &) = delete;
+  ObservationZone &operator=(const ObservationZone &) = delete;
+
   Shape GetShape() const {
     return shape;
   }

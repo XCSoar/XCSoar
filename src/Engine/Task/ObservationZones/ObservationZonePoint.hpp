@@ -25,17 +25,13 @@
 #define OBSERVATIONZONEPOINT_HPP
 
 #include "ObservationZone.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Geo/GeoPoint.hpp"
 
 /**
  * \todo 
  * - add arc type for future use
  */
-class ObservationZonePoint:
-  public ObservationZone,
-  public NonCopyable
-{
+class ObservationZonePoint : public ObservationZone {
   GeoPoint reference;
 
 protected:
