@@ -534,8 +534,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != NULL) {
-          temp_length = FindEndOfText(text, token.pStr - text);
-          node.AddText(text, temp_length);
+          size_t length = FindEndOfText(text, token.pStr - text);
+          node.AddText(text, length);
           text = NULL;
         }
 
@@ -599,8 +599,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 
         // If we have node text then add this to the element
         if (text != NULL) {
-          temp_length = FindEndOfText(text, token.pStr - text);
-          TCHAR *text2 = FromXMLString(text, temp_length);
+          size_t length = FindEndOfText(text, token.pStr - text);
+          TCHAR *text2 = FromXMLString(text, length);
           if (text2 == NULL) {
             pXML->error = eXMLErrorUnexpectedToken;
             return false;
