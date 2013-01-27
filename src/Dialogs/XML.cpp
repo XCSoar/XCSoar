@@ -320,17 +320,8 @@ LoadXMLFromResource(const TCHAR* resource, XML::Results *xml_results)
 static XMLNode *
 LoadXMLFromResource(const TCHAR *resource)
 {
-  XML::Results xml_results;
-
-  // Reset errors
-  xml_results.error = XML::eXMLErrorNone;
-  XML::global_error = false;
-
-  // Load and parse the resource
-  XMLNode *node = LoadXMLFromResource(resource, &xml_results);
-
-  // Show errors if they exist
-  assert(xml_results.error == XML::eXMLErrorNone);
+  XMLNode *node = LoadXMLFromResource(resource, nullptr);
+  assert(node != nullptr);
 
   return node;
 }
@@ -363,8 +354,6 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   // load only one top-level control.
   Window *window = LoadChild(*form, parent, rc, lookup_table, *node, 0, style);
   delete node;
-
-  assert(!XML::global_error);
 
   return window;
 }
@@ -441,9 +430,6 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
                       lookup_table, node);
   delete node;
-
-  // If XML error occurred -> Error messagebox + cancel
-  assert(!XML::global_error);
 
   // Return the created form
   return form;

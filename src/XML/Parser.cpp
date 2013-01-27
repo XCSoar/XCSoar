@@ -37,8 +37,6 @@
 #include <stdio.h>
 
 namespace XML {
-  bool global_error = false;
-
   /** Main structure used for parsing XML. */
   struct Parser {
     const TCHAR *lpXML;
@@ -147,7 +145,6 @@ FromXMLString(const TCHAR *ss, size_t lo)
         unsigned i = ParseUnsigned(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
           free(result);
-          XML::global_error = true;
           return NULL;
         }
 
@@ -160,7 +157,6 @@ FromXMLString(const TCHAR *ss, size_t lo)
         ss = endptr + 1;
       } else {
         free(result);
-        XML::global_error = true;
         return NULL;
       }
     } else {
@@ -980,30 +976,4 @@ XML::ParseFile(const TCHAR *filename, Results *pResults)
 
   // Parse the string and get the main XMLNode
   return ParseString(buffer.c_str(), pResults);
-}
-
-/**
- * Opens the file given by the filepath and returns the main node.
- * (Includes error handling)
- * @param path Filepath to the XML file to parse
- * @param tag (?)
- * @return The main XMLNode
- */
-XMLNode *
-XML::OpenFileHelper(const TCHAR *path)
-{
-  Results pResults;
-  global_error = false;
-
-  // Parse the file and get the main XMLNode
-  XMLNode *xnode = ParseFile(path, &pResults);
-
-  // If error appeared
-  if (pResults.error != eXMLErrorNone) {
-    // Remember Error
-    global_error = true;
-  }
-
-  // Return the parsed node or empty node on error
-  return xnode;
 }

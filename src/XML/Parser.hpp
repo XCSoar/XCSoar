@@ -58,17 +58,8 @@ namespace XML {
     unsigned line, column;
   };
 
-  // If the XML document is corrupted:
-  //   - The "openFileHelper" method will stop execution and display an error message.
-  //   - The 2 other methods will initialize the "pResults" variable with some information that
-  //     can be used to trace the error.
-  // you can have a detailed explanation of the parsing error with this function:
-
-  extern bool global_error;
-
   XMLNode *ParseString(const TCHAR *xml_string, Results *pResults=NULL);
   XMLNode *ParseFile(const TCHAR *path, Results *pResults=NULL);
-  XMLNode *OpenFileHelper(const TCHAR *path);
 
   /**
    * Parse XML errors into a user friendly string.

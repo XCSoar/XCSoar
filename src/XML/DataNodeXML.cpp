@@ -30,7 +30,7 @@
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
 {
-  std::unique_ptr<XMLNode> child(XML::OpenFileHelper(path));
+  std::unique_ptr<XMLNode> child(XML::ParseFile(path));
   if (!child)
     return NULL;
 
