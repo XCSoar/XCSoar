@@ -64,6 +64,13 @@ namespace XML {
 
   struct NextToken {
     const TCHAR *pStr;
+
+    /**
+     * The number of characters that have been read.
+     */
+    size_t length;
+
+    TokenTypeTag type;
   };
 
   /** Enumeration used when parsing attributes. */
@@ -83,7 +90,7 @@ namespace XML {
   };
 
   static XML::NextToken
-  GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType);
+  GetNextToken(Parser *pXML);
 
   static bool
   ParseXMLElement(XMLNode &node, Parser *pXML);
@@ -237,11 +244,9 @@ FindNonWhiteSpace(XML::Parser *pXML)
 
 /**
  * Find the next token in a string.
- *
- * @param token_length_r contains the number of characters that have been read
  */
 static XML::NextToken
-XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
+XML::GetNextToken(Parser *pXML)
 {
   XML::NextToken result;
   const TCHAR *lpXML;
@@ -256,10 +261,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
   ch = FindNonWhiteSpace(pXML);
   if (gcc_unlikely(ch == 0)) {
     // If we failed to obtain a valid character
-    token_length_r = 0;
-    pType = eTokenError;
-    result.pStr = NULL;
-    return result;
+    return { nullptr, 0, eTokenError };
   }
 
   // Cache the current string pointer
@@ -272,7 +274,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
   case _T('\''):
   case _T('\"'):
     // Type of token
-    pType = eTokenQuotedText;
+    result.type = eTokenQuotedText;
     temp_ch = ch;
     n = pXML->nIndex;
 
@@ -309,13 +311,13 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
     // Equals (used with attribute values)
   case _T('='):
     size = 1;
-    pType = eTokenEquals;
+    result.type = eTokenEquals;
     break;
 
     // Close tag
   case _T('>'):
     size = 1;
-    pType = eTokenCloseTag;
+    result.type = eTokenCloseTag;
     break;
 
     // Check for tag start and tag end
@@ -329,7 +331,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
     if (temp_ch == _T('/')) {
       // Set the type and ensure we point at the next character
       GetNextChar(pXML);
-      pType = eTokenTagEnd;
+      result.type = eTokenTagEnd;
       size = 2;
     }
 
@@ -338,13 +340,13 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
 
       // Set the type and ensure we point at the next character
       GetNextChar(pXML);
-      pType = eTokenDeclaration;
+      result.type = eTokenDeclaration;
       size = 2;
     }
 
     // Otherwise we must have a start tag
     else {
-      pType = eTokenTagStart;
+      result.type = eTokenTagStart;
       size = 1;
     }
     break;
@@ -359,7 +361,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
     if (temp_ch == _T('>')) {
       // Set the type and ensure we point at the next character
       GetNextChar(pXML);
-      pType = eTokenShortHandClose;
+      result.type = eTokenShortHandClose;
       size = 2;
       break;
     }
@@ -375,7 +377,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
   // If this is a TEXT node
   if (is_text) {
     // Indicate we are dealing with text
-    pType = eTokenText;
+    result.type = eTokenText;
     size = 1;
     bool nExit = false;
 
@@ -423,7 +425,7 @@ XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
       }
     }
   }
-  token_length_r = size;
+  result.length = size;
 
   return result;
 }
@@ -506,10 +508,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
   // Iterate through the tokens in the document
   while (true) {
     // Obtain the next token
-    size_t token_length;
-    enum TokenTypeTag type;
-    NextToken token = GetNextToken(pXML, token_length, type);
-    if (gcc_unlikely(type == eTokenError))
+    NextToken token = GetNextToken(pXML);
+    if (gcc_unlikely(token.type == eTokenError))
       return false;
 
     // Check the current status
@@ -518,7 +518,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
     case eOutsideTag:
 
       // Check what type of token we obtained
-      switch (type) {
+      switch (token.type) {
         // If we have found text or quoted text
       case eTokenText:
       case eTokenQuotedText:
@@ -532,7 +532,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
       case eTokenTagStart:
       case eTokenDeclaration:
         // Cache whether this new element is a declaration or not
-        is_declaration = type == eTokenDeclaration;
+        is_declaration = token.type == eTokenDeclaration;
 
         // If we have node text then add this to the element
         if (text != NULL) {
@@ -542,11 +542,11 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         }
 
         // Find the name of the tag
-        token = GetNextToken(pXML, token_length, type);
+        token = GetNextToken(pXML);
 
         // Return an error if we couldn't obtain the next token or
         // it wasnt text
-        if (type != eTokenText) {
+        if (token.type != eTokenText) {
           pXML->error = eXMLErrorMissingTagName;
           return false;
         }
@@ -554,7 +554,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &node.AddChild(token.pStr, token_length,
+        pNew = &node.AddChild(token.pStr, token.length,
                               is_declaration);
 
         while (true) {
@@ -614,18 +614,20 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         }
 
         // Find the name of the end tag
-        token = GetNextToken(pXML, temp_length, type);
+        token = GetNextToken(pXML);
 
         // The end tag should be text
-        if (type != eTokenText) {
+        if (token.type != eTokenText) {
           pXML->error = eXMLErrorMissingEndTagName;
           return false;
         }
+
         temp = token.pStr;
+        temp_length = token.length;
 
         // After the end tag we should find a closing tag
-        token = GetNextToken(pXML, token_length, type);
-        if (type != eTokenCloseTag) {
+        token = GetNextToken(pXML);
+        if (token.type != eTokenCloseTag) {
           pXML->error = eXMLErrorMissingEndTagName;
           return false;
         }
@@ -659,14 +661,14 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we are looking for a new attribute
       case eAttribName:
         // Check what the current token type is
-        switch (type) {
+        switch (token.type) {
           // If the current type is text...
           // Eg.  'attribute'
         case eTokenText:
           // Cache the token then indicate that we are next to
           // look for the equals
           temp = token.pStr;
-          temp_length = token_length;
+          temp_length = token.length;
           attrib = eAttribEquals;
           break;
 
@@ -698,7 +700,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we are looking for an equals
       case eAttribEquals:
         // Check what the current token type is
-        switch (type) {
+        switch (token.type) {
           // If the current type is text...
           // Eg.  'Attribute AnotherAttribute'
         case eTokenText:
@@ -707,7 +709,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           temp = token.pStr;
-          temp_length = token_length;
+          temp_length = token.length;
           break;
 
           // If we found a closing tag 'Attribute >' or a short hand
@@ -724,7 +726,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
             node.AddAttribute(temp, temp_length, _T(""), 0);
 
           // If this is the end of the tag then return to the caller
-          if (type == eTokenShortHandClose)
+          if (token.type == eTokenShortHandClose)
             return true;
 
           // We are now outside the tag
@@ -754,7 +756,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         // If we are looking for an attribute value
       case eAttribValue:
         // Check what the current token type is
-        switch (type) {
+        switch (token.type) {
           // If the current type is text or quoted text...
           // Eg.  'Attribute = "Value"' or 'Attribute = Value' or
           // 'Attribute = 'Value''.
@@ -762,18 +764,18 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         case eTokenQuotedText:
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (node.IsDeclaration() && (token.pStr[token_length - 1]) == _T('?')) {
-            token_length--;
+          if (node.IsDeclaration() && (token.pStr[token.length - 1]) == _T('?')) {
+            token.length--;
           }
 
           if (temp_length) {
             // Add the valued attribute to the list
-            if (type == eTokenQuotedText) {
+            if (token.type == eTokenQuotedText) {
               token.pStr++;
-              token_length -= 2;
+              token.length -= 2;
             }
 
-            TCHAR *value = FromXMLString(token.pStr, token_length);
+            TCHAR *value = FromXMLString(token.pStr, token.length);
             node.AddAttribute(temp, temp_length,
                               value, _tcslen(value));
             free(value);
