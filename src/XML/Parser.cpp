@@ -466,15 +466,13 @@ FindEndOfText(const TCHAR *token, size_t length)
 static bool
 XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 {
-  const TCHAR *temp = NULL;
-  size_t temp_length;
   bool is_declaration;
   const TCHAR *text = NULL;
   XMLNode *pNew;
   enum Status status; // inside or outside a tag
   enum Attrib attrib = eAttribName;
 
-  /* the name of the attribute that is currently being parsed */
+  /* the name of the attribute that is currently being */
   tstring attribute_name;
 
   assert(pXML);
@@ -606,12 +604,8 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           return false;
         }
 
-        temp = token.pStr;
-        temp_length = token.length;
-
         // After the end tag we should find a closing tag
-        token = GetNextToken(pXML);
-        if (token.type != eTokenCloseTag) {
+        if (GetNextToken(pXML).type != eTokenCloseTag) {
           pXML->error = eXMLErrorMissingEndTagName;
           return false;
         }
@@ -619,9 +613,9 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
         // caller until we find a match
-        if (!CompareTagName(node.GetName(), temp)) {
-          pXML->lpEndTag = temp;
-          pXML->cbEndTag = temp_length;
+        if (!CompareTagName(node.GetName(), token.pStr)) {
+          pXML->lpEndTag = token.pStr;
+          pXML->cbEndTag = token.length;
         }
 
         // Return to the caller
