@@ -1000,20 +1000,6 @@ XML::OpenFileHelper(const TCHAR *path)
 
   // If error appeared
   if (pResults.error != eXMLErrorNone) {
-
-    // In debug mode -> Log error to stdout
-#ifdef DUMP_XML_ERRORS
-    printf("XML Parsing error inside file '%s'.\n"
-#ifdef _UNICODE
-           "Error: %S\n"
-#else
-           "Error: %s\n"
-#endif
-           "At line %u, column %u.\n", path,
-           GetErrorMessage(pResults.error),
-           pResults.line, pResults.column);
-#endif
-
     // Remember Error
     global_error = true;
   }
