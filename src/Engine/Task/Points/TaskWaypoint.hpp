@@ -47,7 +47,7 @@ public:
    * @return Initialised object
    */
   TaskWaypoint(TaskPointType _type, const Waypoint & wp)
-    :TaskPoint(_type, wp.location, wp.elevation),
+    :TaskPoint(_type, wp.location),
      waypoint(wp) {}
 
   /**
@@ -60,6 +60,14 @@ public:
   gcc_pure
   const Waypoint &GetWaypoint() const {
     return waypoint;
+  }
+
+protected:
+  /**
+   * Altitude (AMSL, m) of task point terrain.
+   */
+  fixed GetBaseElevation() const {
+    return waypoint.elevation;
   }
 };
 

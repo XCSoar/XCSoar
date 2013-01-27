@@ -40,9 +40,6 @@ class TaskPoint
 
   GeoPoint location;
 
-  /** Altitude (AMSL, m) of task point terrain */
-  fixed elevation;
-
 public:
   bool IsIntermediatePoint() const {
     return type == TaskPointType::AST || type == TaskPointType::AAT;
@@ -57,21 +54,13 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(TaskPointType _type, const GeoPoint &_location,
-            const fixed _elevation) :
-    type(_type), location(_location),
-    elevation(_elevation) {}
+  TaskPoint(TaskPointType _type, const GeoPoint &_location)
+    :type(_type), location(_location) {}
 
   TaskPointType GetType() const {
     return type;
   }
 
-protected:
-  fixed GetBaseElevation() const {
-    return elevation;
-  }
-
-public:
   /**
    * Retrieve location to be used for remaining task
    * (for a pure TaskPoint, this is the reference location)
