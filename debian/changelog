@@ -3,7 +3,7 @@ xcsoar (6.5~alpha1) unstable; urgency=low
   * new release
   * move manuals to separate documentation package
 
- --
+ -- Max Kellermann <max@duempel.org>  Sun, 27 Jan 2013 23:08:17 +0100
 
 xcsoar (6.4.6) unstable; urgency=low
 
