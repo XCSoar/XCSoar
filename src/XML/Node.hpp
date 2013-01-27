@@ -55,6 +55,9 @@ protected:
     struct Attribute : private NonCopyable {
       tstring name, value;
 
+      Attribute(tstring &&_name, const TCHAR *_value, size_t value_length)
+        :name(std::move(_name)), value(_value, value_length) {}
+
       Attribute(const TCHAR *_name, const TCHAR *_value)
         :name(_name), value(_value) {}
 
@@ -99,6 +102,11 @@ protected:
 
     bool HasChildren() const {
       return !children.empty() || !text.empty();
+    }
+
+    void AddAttribute(tstring &&name,
+                      const TCHAR *value, size_t value_length) {
+      attributes.emplace_front(std::move(name), value, value_length);
     }
 
     void AddAttribute(const TCHAR *name, const TCHAR *value) {
@@ -251,6 +259,11 @@ public:
   /**
    * Add an attribute to an element.
    */
+  void AddAttribute(tstring &&name,
+                    const TCHAR *value, size_t value_length) {
+    d->AddAttribute(std::move(name), value, value_length);
+  }
+
   void AddAttribute(const TCHAR *name, const TCHAR *value) {
     assert(name != NULL);
     assert(value != NULL);

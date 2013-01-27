@@ -474,6 +474,9 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
   enum Status status; // inside or outside a tag
   enum Attrib attrib = eAttribName;
 
+  /* the name of the attribute that is currently being parsed */
+  tstring attribute_name;
+
   assert(pXML);
 
   // If this is the first call to the function
@@ -648,8 +651,7 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
         case eTokenText:
           // Cache the token then indicate that we are next to
           // look for the equals
-          temp = token.pStr;
-          temp_length = token.length;
+          attribute_name.assign(token.pStr, token.length);
           attrib = eAttribEquals;
           break;
 
@@ -686,25 +688,31 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case eTokenText:
           // Add the unvalued attribute to the list
-          node.AddAttribute(temp, temp_length, _T(""), 0);
+          node.AddAttribute(std::move(attribute_name), _T(""), 0);
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
-          temp = token.pStr;
-          temp_length = token.length;
+          attribute_name.assign(token.pStr, token.length);
           break;
 
           // If we found a closing tag 'Attribute >' or a short hand
           // closing tag 'Attribute />'
         case eTokenShortHandClose:
         case eTokenCloseTag:
+          assert(!attribute_name.empty());
+
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (node.IsDeclaration() && (temp[temp_length - 1]) == _T('?'))
-            temp_length--;
+          if (node.IsDeclaration() && attribute_name.back() == _T('?')) {
+#if GCC_VERSION >= 40700
+            attribute_name.pop_back();
+#else
+            attribute_name.erase(std::prev(attribute_name.end()));
+#endif
+          }
 
-          if (temp_length)
+          if (!attribute_name.empty())
             // Add the unvalued attribute to the list
-            node.AddAttribute(temp, temp_length, _T(""), 0);
+            node.AddAttribute(std::move(attribute_name), _T(""), 0);
 
           // If this is the end of the tag then return to the caller
           if (token.type == eTokenShortHandClose)
@@ -749,15 +757,17 @@ XML::ParseXMLElement(XMLNode &node, Parser *pXML)
             token.length--;
           }
 
-          if (temp_length) {
-            // Add the valued attribute to the list
-            if (token.type == eTokenQuotedText) {
-              token.pStr++;
-              token.length -= 2;
-            }
+          // Add the valued attribute to the list
+          if (token.type == eTokenQuotedText) {
+            token.pStr++;
+            token.length -= 2;
+          }
 
+          assert(!attribute_name.empty());
+
+          {
             TCHAR *value = FromXMLString(token.pStr, token.length);
-            node.AddAttribute(temp, temp_length,
+            node.AddAttribute(std::move(attribute_name),
                               value, _tcslen(value));
             free(value);
           }
