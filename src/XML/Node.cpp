@@ -104,13 +104,15 @@ XMLNode::AddText(const TCHAR *text, size_t length)
 XMLNode&
 XMLNode::operator=(const XMLNode& A)
 {
-  if (this != &A) {
-    if (d != NULL)
-      d->Unref();
-    d = A.d;
-    if (d)
-      d->Ref();
-  }
+  Data *old = d;
+
+  d = A.d;
+  if (d != nullptr)
+    d->Ref();
+
+  if (old != nullptr)
+    old->Unref();
+
   return *this;
 }
 
