@@ -33,6 +33,7 @@
 #include "Util/tstring.hpp"
 #include "Compiler.h"
 
+#include <utility>
 #include <list>
 #include <forward_list>
 
@@ -230,13 +231,7 @@ public:
   XMLNode &operator=(const XMLNode& A);
 
   XMLNode &operator=(XMLNode &&other) {
-    Data *old = d;
-    d = other.d;
-    other.d = NULL;
-
-    if (old != NULL)
-      old->Unref();
-
+    std::swap(d, other.d);
     return *this;
   }
 
