@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_RATIO_HPP
 #define XCSOAR_GLIDE_RATIO_HPP
 
-#include "Util/NonCopyable.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
@@ -32,7 +31,7 @@ static constexpr fixed INVALID_GR = fixed(999);
 
 struct ComputerSettings;
 
-class GlideRatioCalculator : private NonCopyable {
+class GlideRatioCalculator {
   struct Record {
     unsigned distance;
     int altitude;
