@@ -187,10 +187,7 @@ CompareTagName(const TCHAR *cclose, const TCHAR *copen)
     return false;
 
   const TCHAR c = copen[l];
-  if ((c == _T('\n')) ||
-      (c == _T(' ')) ||
-      (c == _T('\t')) ||
-      (c == _T('\r')) ||
+  if (IsWhitespaceOrNull(c) ||
       (c == _T('/')) ||
       (c == _T('<')) ||
       (c == _T('>')) ||
@@ -224,16 +221,8 @@ FindNonWhiteSpace(XML::Parser *pXML)
   // non-white space character
   TCHAR ch;
   while ((ch = GetNextChar(pXML)) != 0) {
-    switch (ch) {
-    // Ignore white space
-    case _T('\n'):
-    case _T(' '):
-    case _T('\t'):
-    case _T('\r'):
-      continue;
-    default:
+    if (!IsWhitespaceOrNull(ch))
       return ch;
-    }
   }
   return 0;
 }
@@ -378,15 +367,11 @@ XML::GetNextToken(Parser *pXML)
     bool nExit = false;
 
     while (!nExit && ((ch = GetNextChar(pXML)) != 0)) {
-      switch (ch) {
+      if (IsWhitespaceOrNull(ch))
         // Break when we find white space
-      case _T('\n'):
-      case _T(' '):
-      case _T('\t'):
-      case _T('\r'):
-        nExit = true;
-      break;
+        break;
 
+      switch (ch) {
       // If we find a slash then this maybe text or a short hand end tag.
       case _T('/'):
 
