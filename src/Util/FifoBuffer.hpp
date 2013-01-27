@@ -30,8 +30,6 @@
 #ifndef XCSOAR_FIFO_BUFFER_HPP
 #define XCSOAR_FIFO_BUFFER_HPP
 
-#include "Util/NonCopyable.hpp"
-
 #include <utility>
 #include <algorithm>
 
@@ -44,7 +42,7 @@
  * buffer as needed.  It is not thread safe.
  */
 template<class T, size_t size>
-class FifoBuffer : private NonCopyable {
+class FifoBuffer {
 public:
   typedef size_t size_type;
 
