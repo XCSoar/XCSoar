@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CONFIG_REGISTRY_HPP
 #define XCSOAR_CONFIG_REGISTRY_HPP
 
+#include <utility>
+
 #include <windows.h>
 #include <tchar.h>
 #include <string.h>
@@ -60,12 +62,7 @@ public:
   }
 
   RegistryKey &operator=(RegistryKey &&other) {
-    if (hKey != 0)
-      ::RegCloseKey(hKey);
-
-    hKey = other.hKey;
-    other.hKey = 0;
-
+    std::swap(hKey, other.hKey);
     return *this;
   }
 
