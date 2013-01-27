@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-04 21:02+0100\n"
-"PO-Revision-Date: 2013-01-21 20:42+0000\n"
+"PO-Revision-Date: 2013-01-23 08:54+0000\n"
 "Last-Translator: Juha H <juha@siipi.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-21 20:44+0000\n"
-"X-Generator: Launchpad (build 16430)\n"
+"X-Launchpad-Export-Date: 2013-01-27 18:56+0000\n"
+"X-Generator: Launchpad (build 16451)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -853,7 +853,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "Liitoluku liu'ussa"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -939,7 +939,7 @@ msgstr "Edellisessä termiikissä käytetty aika kaarrossa."
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "MacCready-asetus"
 
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
@@ -962,7 +962,7 @@ msgstr "Etäisyys seuraavaan"
 #: src/InfoBoxes/Content/Factory.cpp:261 src/InfoBoxes/Content/Task.cpp:154
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "WP etäisyys"
 
 #: src/InfoBoxes/Content/Factory.cpp:262
 #, no-c-format
@@ -976,7 +976,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Seuraavassa korkeuden erotus"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -993,7 +993,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Seuraavaan vaadittu korkeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:281
 #, no-c-format
@@ -1029,7 +1029,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Loppuliuku korkeuden erotus"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
@@ -1046,7 +1046,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Loppuliuku vaadittu korkeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -1397,7 +1397,7 @@ msgstr "Yhteensopivan variometrin ilmoittama G-rasitus."
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Seuraavaan vaadittu liitoluku"
 
 #: src/InfoBoxes/Content/Factory.cpp:534
 #, no-c-format
@@ -1457,7 +1457,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:573
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Seuraavaan aika (ETE)"
 
 #: src/InfoBoxes/Content/Factory.cpp:574
 #, no-c-format
@@ -1532,7 +1532,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:613
 #, no-c-format
 msgid "Next arrival time"
-msgstr ""
+msgstr "Seuraavaan saapumisaika (ETA)"
 
 #: src/InfoBoxes/Content/Factory.cpp:614
 #, no-c-format
@@ -1549,7 +1549,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:623
 #, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "Suunnan erotus"
 
 #: src/InfoBoxes/Content/Factory.cpp:624
 #, no-c-format
@@ -1919,7 +1919,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:857 src/InfoBoxes/Content/Factory.cpp:858
 #, no-c-format
 msgid "QFE GPS"
-msgstr ""
+msgstr "Korkeus QFE GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:859
 #, no-c-format
@@ -1933,7 +1933,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:868
 #, no-c-format
 msgid "GR average"
-msgstr ""
+msgstr "Liitoluvun keskiarvo"
 
 #: src/InfoBoxes/Content/Factory.cpp:869
 #, no-c-format
@@ -2009,7 +2009,7 @@ msgstr "XCSoarin käyttämä prosessoriteho keskiarvona viiden sekunnin ajalta."
 #: src/InfoBoxes/Content/Factory.cpp:918
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr ""
+msgstr "Seuraavassa saapumiskorkeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:919
 #, no-c-format
@@ -2185,7 +2185,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1029
 #, no-c-format
 msgid "Next time to go (ground speed)"
-msgstr ""
+msgstr "Seuraavaan aika maanopeudella (ETE VMG)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1030
 #, no-c-format
@@ -2255,7 +2255,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1069
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "Seuraavassa korkeuden erotus MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:1070
 #, no-c-format
@@ -4193,6 +4193,8 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:278
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+"Muutokset asetuksiin on tallennettu. Käynnistä XCSoar uudelleen ottaaksesi "
+"ne käyttöön."
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:212
 #, no-c-format
@@ -5276,6 +5278,8 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
+"Määrittää kuinka kauan menu-valinnat esitetään ruudulla, jollei käyttäjä tee "
+"mitään."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:185
 #, no-c-format
