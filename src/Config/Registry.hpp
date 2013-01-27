@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_CONFIG_REGISTRY_HPP
 #define XCSOAR_CONFIG_REGISTRY_HPP
 
-#include "Util/NonCopyable.hpp"
-
 #include <windows.h>
 #include <tchar.h>
 #include <string.h>
@@ -33,7 +31,7 @@ Copyright_License {
 /**
  * OO wrapper for a HKEY.
  */
-class RegistryKey : private NonCopyable {
+class RegistryKey {
 protected:
   HKEY hKey;
 
@@ -53,6 +51,9 @@ public:
     if (hKey != 0)
       ::RegCloseKey(hKey);
   }
+
+  RegistryKey(const RegistryKey &) = delete;
+  RegistryKey &operator=(const RegistryKey &) = delete;
 
   RegistryKey &operator=(RegistryKey &&other) {
     if (hKey != 0)
