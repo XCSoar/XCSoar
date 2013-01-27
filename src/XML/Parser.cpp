@@ -172,11 +172,13 @@ FromXMLString(const TCHAR *ss, size_t lo)
   return result;
 }
 
+gcc_pure
 static bool
 CompareTagName(const TCHAR *cclose, const TCHAR *copen)
 {
-  if (!cclose)
-    return false;
+  assert(cclose != nullptr);
+  assert(copen != nullptr);
+
   size_t l = _tcslen(cclose);
   if (!StringIsEqualIgnoreCase(cclose, copen, l))
     return false;
