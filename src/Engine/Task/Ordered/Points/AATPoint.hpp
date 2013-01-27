@@ -207,19 +207,17 @@ public:
   /* virtual methods from class TaskPoint */
   const GeoPoint& GetLocationRemaining() const override;
 
-  /* virtual methods from class SampledTaskPoint */
-  virtual bool UpdateSampleNear(const AircraftState &state,
-                                const TaskProjection &projection) override;
-  virtual bool UpdateSampleFar(const AircraftState &state,
-                               const TaskProjection &projection) override;
-
   /* virtual methods from class ObservationZoneClient */
   virtual fixed ScoreAdjustment() const override {
     return fixed(0);
   }
 
-private:
   /* virtual methods from class OrderedTaskPoint */
   virtual bool Equals(const OrderedTaskPoint &other) const override;
+  virtual bool UpdateSampleNear(const AircraftState &state,
+                                const TaskProjection &projection) override;
+  virtual bool UpdateSampleFar(const AircraftState &state,
+                               const TaskProjection &projection) override;
 };
+
 #endif

@@ -76,19 +76,17 @@ public:
   /* virtual methods from class TaskPoint */
   virtual fixed GetElevation() const override;
 
-  /* virtual methods from class SampledTaskPoint */
+  /* virtual methods from class ScoredTaskPoint */
   virtual void Reset() override;
+  virtual bool CheckEnterTransition(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const override;
 
   /* virtual methods from class OrderedTaskPoint */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
   virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) override;
   virtual void SetNeighbours(OrderedTaskPoint *prev,
                              OrderedTaskPoint *next) override;
-
-  /* virtual methods from class ObservationZoneClient */
   virtual bool IsInSector(const AircraftState &ref) const override;
-  virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
