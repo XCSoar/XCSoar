@@ -46,6 +46,9 @@ public:
 
   ~ObservationZoneClient();
 
+  ObservationZoneClient(const ObservationZoneClient &) = delete;
+  ObservationZoneClient &operator=(const ObservationZoneClient &) = delete;
+
   /**
    * Accessor for OZ (for modifying parameters etc)
    *
