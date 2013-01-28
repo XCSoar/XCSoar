@@ -60,8 +60,8 @@ public:
   }
 
   gcc_pure
-  unsigned AngleToWidth(Angle angle) const {
-    return (unsigned)(angle.Native() * x_scale);
+  int AngleToWidth(Angle angle) const {
+    return (int)(angle.Native() * x_scale);
   }
 
   gcc_pure
