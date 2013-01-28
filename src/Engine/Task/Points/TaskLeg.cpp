@@ -66,7 +66,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     return memo_remaining.calc(ref, destination.GetLocationRemaining());
-    break;
+
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
     return GeoVector::Zero();
@@ -129,7 +129,7 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
     return std::max(fixed(0),
                     GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
                     - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
-    break;
+
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.HasEntered()) {
@@ -142,7 +142,7 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
                                             destination.GetLocationScored())
                       -GetOrigin()->ScoreAdjustment());
     }
-    break;
+
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
     if (GetOrigin()->HasEntered()) {
