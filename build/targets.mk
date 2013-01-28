@@ -463,10 +463,6 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
-ifeq ($(TARGET_IS_DARWIN),y)
-  TARGET_LDFLAGS += -static-libgcc
-endif
-
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
 endif

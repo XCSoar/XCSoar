@@ -6,10 +6,6 @@ ifeq ($(TARGET),ANDROID)
   LIBSTDCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_GCC_VERSION)/libs/$(ANDROID_ABI3)/libgnustl_static.a
 endif
 
-ifeq ($(TARGET_IS_DARWIN),y)
-  LIBSTDCXX_LDADD = $(shell $(CXX) -print-file-name=libstdc++.a)
-endif
-
 ifneq ($(LIBCXX),)
   include $(topdir)/build/libcxx.mk
   LIBSTDCXX_CPPFLAGS = $(LIBCXX_CPPFLAGS)
