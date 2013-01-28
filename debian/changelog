@@ -1,6 +1,7 @@
 xcsoar (6.5~alpha1) unstable; urgency=low
 
   * new release
+  * move manuals to separate documentation package
 
  --
 

@@ -41,7 +41,21 @@ debian/stamp-install: debian/stamp-build
 	touch $@
 
 # Build architecture-independent files here.
-binary-indep:
+binary-indep: build install
+	dh_testdir -i
+	dh_testroot -i
+	dh_installdocs -i
+	dh_installchangelogs -i
+	dh_install -i --sourcedir=debian/tmp
+	dh_link -i
+	dh_strip -i
+	dh_compress -i -X.pdf
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 # Build architecture-dependent files here.
 binary-arch: build install
@@ -52,7 +66,7 @@ binary-arch: build install
 	dh_install -a --sourcedir=debian/tmp
 	dh_link -a
 	dh_strip -a
-	dh_compress -a -X.pdf
+	dh_compress -a
 	dh_fixperms -a
 	dh_installdeb -a
 	dh_shlibdeps -a
