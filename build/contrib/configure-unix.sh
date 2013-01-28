@@ -18,7 +18,7 @@
 # AC_CONFIG_FILES([Makefile])
 # AC_OUTPUT
 
-DEST=`dirname $0`/local-config.mk
+DEST=`dirname $0`/../local-config.mk
 
 # Test if running on a Mac
 if [ "`uname -s`" != "Darwin" -a "`uname -s`" != "Linux" ]; 

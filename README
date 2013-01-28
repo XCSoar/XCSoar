@@ -88,9 +88,10 @@ To compile, run:
  make TARGET=<target>
 
 To compile on a Unix-like system (Linux, Mac), you may run the
-configure script to detect the build toolchain (optional):
+unofficial configure script to detect the build toolchain (optional
+and unsupported, not recommended):
 
- ./configure
+ ./build/contrib/configure
  make
 
 Supported targets:

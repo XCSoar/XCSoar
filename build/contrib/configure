@@ -10,7 +10,7 @@ SYSTEM=`uname -s 2>/dev/null`
 
 case "${SYSTEM}" in
 "Darwin" | "Linux")
-  ${DIR}/build/configure-unix.sh
+  ${DIR}/configure-unix.sh
   ;;
 esac
 
