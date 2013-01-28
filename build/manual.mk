@@ -56,14 +56,16 @@ TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/e
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 
-.PHONY: manual
-manual: \
+MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
+
+.PHONY: manual
+manual: $(MANUAL_PDF)
 
 Handbuch: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
