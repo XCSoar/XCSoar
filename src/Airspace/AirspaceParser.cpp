@@ -26,7 +26,6 @@ Copyright_License {
 #include "Airspace/Airspaces.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
-#include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
@@ -265,13 +264,13 @@ struct TempAirspaceType
 };
 
 static bool
-ShowParseWarning(int line, const TCHAR* str)
+ShowParseWarning(int line, const TCHAR *str, OperationEnvironment &operation)
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: %d\r\n\"%s\"\r\n%s."),
-                _("Parse Error at Line"), line, str, _("Line skipped."));
-  return (ShowMessageBox(buffer, _("Airspace"), MB_OKCANCEL) == IDOK);
-
+  buffer.Format(_T("%s: %d\r\n\"%s\""),
+                _("Parse Error at Line"), line, str);
+  operation.SetErrorMessage(buffer.c_str());
+  return false;
 }
 
 static void
@@ -904,12 +903,12 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
     // Parse the line
     if (filetype == AFT_OPENAIR)
       if (!ParseLine(airspaces, line, temp_area) &&
-          !ShowParseWarning(line_num, line))
+          !ShowParseWarning(line_num, line, operation))
         return false;
 
     if (filetype == AFT_TNP)
       if (!ParseLineTNP(airspaces, line, temp_area, ignore) &&
-          !ShowParseWarning(line_num, line))
+          !ShowParseWarning(line_num, line, operation))
         return false;
 
     // Update the ProgressDialog
