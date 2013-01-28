@@ -151,6 +151,8 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
                                           ref).distance
                       -GetOrigin()->ScoreAdjustment());
     }
+
+    return fixed(0);
   }
 
   gcc_unreachable();
