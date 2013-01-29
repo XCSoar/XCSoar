@@ -71,8 +71,8 @@ static constexpr struct {
   { DeviceConfig::PortType::DROIDSOAR_V2, _T("DroidSoar V2") },
 #ifndef NDEBUG
   { DeviceConfig::PortType::NUNCHUCK, N_("IOIO switches and Nunchuk") },
-  { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
 #endif
+  { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
 #endif
 
   /* label not translated for now, until we have a TCP/UDP port
