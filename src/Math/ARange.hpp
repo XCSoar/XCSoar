@@ -70,7 +70,7 @@ struct AngleRange {
    */
   gcc_pure
   bool Overlaps(const AngleRange &other) const {
-    return IsInside(other.start) || IsInside(other.end);
+    return IsInside(other.start) || other.IsInside(start);
   }
 
   /**
