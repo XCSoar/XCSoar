@@ -57,6 +57,7 @@ Copyright_License {
 #include "Android/BMP085Device.hpp"
 #include "Android/I2CbaroDevice.hpp"
 #include "Android/NunchuckDevice.hpp"
+#include "Android/VoltageDevice.hpp"
 #endif
 
 #include <assert.h>
@@ -103,6 +104,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
 #ifdef IOIOLIB
    droidsoar_v2(nullptr),
    nunchuck(nullptr),
+   voltage(nullptr),
 #endif
 #endif
    ticker(false), borrowed(false)
@@ -153,6 +155,9 @@ DeviceDescriptor::GetState() const
     return PortState::READY;
 
   if (nunchuck != nullptr)
+    return PortState::READY;
+
+  if (voltage != nullptr)
     return PortState::READY;
 #endif
 #endif
@@ -339,6 +344,26 @@ DeviceDescriptor::OpenNunchuck()
 }
 
 bool
+DeviceDescriptor::OpenVoltage()
+{
+#ifdef IOIOLIB
+  if (is_simulator())
+    return true;
+
+  if (ioio_helper == nullptr)
+    return false;
+
+  voltage = new VoltageDevice(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(),
+                                  config.sensor_offset, config.sensor_factor,
+                                  60); // sample_rate per minute
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
 DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
   assert(config.IsAvailable());
@@ -354,6 +379,9 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   if (config.port_type == DeviceConfig::PortType::NUNCHUCK)
     return OpenNunchuck();
+
+  if (config.port_type == DeviceConfig::PortType::IOIOVOLTAGE)
+    return OpenVoltage();
 
   reopen_clock.Update();
 
@@ -431,6 +459,10 @@ DeviceDescriptor::Close()
   }
   delete nunchuck;
   nunchuck = nullptr;
+
+  delete voltage;
+  voltage = nullptr;
+
 #endif
 
 #endif

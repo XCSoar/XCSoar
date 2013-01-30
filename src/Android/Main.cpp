@@ -65,6 +65,8 @@ Copyright_License {
 #include "I2CbaroDevice.hpp"
 #include "NativeNunchuckListener.hpp"
 #include "NunchuckDevice.hpp"
+#include "NativeVoltageListener.hpp"
+#include "VoltageDevice.hpp"
 #endif
 
 #ifndef NDEBUG
@@ -126,6 +128,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   I2CbaroDevice::Initialise(env);
   NativeNunchuckListener::Initialise(env);
   NunchuckDevice::Initialise(env);
+  NativeVoltageListener::Initialise(env);
+  VoltageDevice::Initialise(env);
 #endif
 
   context = new Context(env, _context);
@@ -214,6 +218,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeI2CbaroListener::Deinitialise(env);
   NunchuckDevice::Deinitialise(env);
   NativeNunchuckListener::Deinitialise(env);
+  VoltageDevice::Deinitialise(env);
+  NativeVoltageListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
 #endif
   BluetoothHelper::Deinitialise(env);

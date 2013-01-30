@@ -66,6 +66,7 @@ struct DeviceConfig {
     DROIDSOAR_V2,
     NUNCHUCK,
     I2CPRESSURESENSOR,
+    IOIOVOLTAGE,
 
     /**
      * Attempt to auto-discover the GPS source.

@@ -54,6 +54,7 @@ class InternalSensors;
 class BMP085Device;
 class I2CbaroDevice;
 class NunchuckDevice;
+class VoltageDevice;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -134,6 +135,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   BMP085Device *droidsoar_v2;
   I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck;
+  VoltageDevice *voltage;
 #endif
 #endif
 
@@ -271,6 +273,8 @@ private:
   bool OpenI2Cbaro();
 
   bool OpenNunchuck();
+
+  bool OpenVoltage();
 public:
   /**
    * To be used by OpenDeviceJob, don't call directly.

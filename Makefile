@@ -827,6 +827,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/I2CbaroDevice.cpp \
 	$(SRC)/Android/NativeNunchuckListener.cpp \
 	$(SRC)/Android/NunchuckDevice.cpp \
+	$(SRC)/Android/NativeVoltageListener.cpp \
+	$(SRC)/Android/VoltageDevice.cpp \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 

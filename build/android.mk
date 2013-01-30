@@ -55,6 +55,7 @@ ifneq ($(IOIOLIB_DIR),)
 NATIVE_CLASSES += NativeBMP085Listener
 NATIVE_CLASSES += NativeI2CbaroListener
 NATIVE_CLASSES += NativeNunchuckListener
+NATIVE_CLASSES += NativeVoltageListener
 endif
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
@@ -66,6 +67,7 @@ ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*IOIO*.java),$(ANDRO
 ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*BMP085*.java),$(ANDROID_JAVA_SOURCES))
 ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*I2Cbaro*.java),$(ANDROID_JAVA_SOURCES))
 ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*Nunchuck*.java),$(ANDROID_JAVA_SOURCES))
+ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*Voltage*.java),$(ANDROID_JAVA_SOURCES))
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
@@ -212,6 +214,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeBMP085Listener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeI2CbaroListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeNunchuckListener.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/NativeVoltageListener.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp

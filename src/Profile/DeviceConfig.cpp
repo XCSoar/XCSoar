@@ -39,6 +39,7 @@ static const TCHAR *const port_type_strings[] = {
   _T("droidsoar_v2"),
   _T("nunchuck"),
   _T("i2c_baro"),
+  _T("ioio_voltage"),
   _T("auto"),
   _T("internal"),
   _T("tcp_listener"),
@@ -65,6 +66,7 @@ DeviceConfig::IsAvailable() const
   case PortType::DROIDSOAR_V2:
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
+  case PortType::IOIOVOLTAGE:
     return IsAndroid() && HasIOIOLib();
 
   case PortType::AUTO:
@@ -109,6 +111,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
   case PortType::DROIDSOAR_V2:
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
+  case PortType::IOIOVOLTAGE:
     /* errors on these are detected automatically by the driver */
     return false;
 
@@ -161,6 +164,9 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::I2CPRESSURESENSOR:
     return _T("IOIO i2c pressure sensor");
+
+  case PortType::IOIOVOLTAGE:
+    return _T("IOIO voltage sensor");
 
   case PortType::AUTO:
     return _("GPS Intermediate Driver");
