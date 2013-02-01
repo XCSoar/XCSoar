@@ -8,6 +8,7 @@ Build-Depends: debhelper (>= 5), g++ (>= 4.6),
  libgl-dev,
  libcurl-dev,
  librsvg2-bin, imagemagick (>= 7:6.4), xsltproc,
+ gettext,
  texlive, texlive-latex-extra,
  texlive-lang-english, texlive-lang-german, texlive-lang-french,
  latex-xcolor, pgf

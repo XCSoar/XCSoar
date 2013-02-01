@@ -31,6 +31,7 @@ To compile from source, you need:
 - GNU make
 - GNU compiler collection (gcc), version 4.6.2 or later
   or clang/LLVM 3.1 (with "make CLANG=y")
+- GNU gettext
 - rsvg (http://librsvg.sourceforge.net/)
 - ImageMagick 6.4 (http://www.imagemagick.org/)
 - xsltproc (http://xmlsoft.org/XSLT/xsltproc2.html)
