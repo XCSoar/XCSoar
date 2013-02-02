@@ -240,7 +240,8 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   if (event_queue == NULL)
     return;
 
-  CommonInterface::main_window->AnnounceResize(width, height);
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->AnnounceResize(width, height);
 
   event_queue->Purge(Event::RESIZE);
 
