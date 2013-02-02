@@ -88,71 +88,70 @@ In einer an eigene Bedürfnisse angepaßten Datei z.B.\ \texttt{Flugzeug-Meldung
 \end{itemize}
 
 \halt Dieser Datensatz kann in kommenden Versionen auch durch Motor- bzw- Spritwarnungen erweitert werden.
-Speziell bei Verwendung des Vega können komplexe Meldungen erstellt, welche logische Eingänge verknüpfen und geschlossen ausgeben: "Landeklappen ausgefahren und Fahrwerk verriegelt"  Hierzu sollte die VEGA Documentation im Detail herangezogen werden.
+Speziell bei Verwendung des Vega können komplexe Meldungen erstellt, welche logische Eingänge verknüpfen und geschlossen ausgeben: ''Landeklappen ausgefahren und Fahrwerk verriegelt''  Hierzu sollte die VEGA Documentation im Detail herangezogen werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Schalter Dialog {\textit(nur bei VEGA Vario)}}
 
-\section{Schalter Dialog}
+Wenn das VEGA Variometer angeschlossen ist, dann gibt es ein zusätzliches Menü für die am VEGA \menulabel{\bmenut{Konfig.}{1/2}\blink\bmenus{Vega}}angeschlossenen Schalter und Eingänge. Ohne VEGA ist dieser MenüButton grau, also nicht verfügbar.
+%\begin{quote}
+%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Vega}\blink\smenut{Flugzeug}{Schalter}
+%\end{quote}
+Dieser Dialog wird in Echtzeit aktualisiert, so daß der Pilot direkt zur Kontrolle nachverfolgen kann, wie seine Meldung verarbeitet wird. sinnvoll z.B. bei einem Klappencheck vor dem \menulabel{~~~~~~~~~~~~~~\bmenut{Flugzeug}{Schalter}}Start.
 
-Wenn das VEGA Variometer angeschlossen ist, dann gibt es ein zusätzliches Menü für die am VEGA angeschlossenen Schalter und Eingänge. Ohne VEGA ist dieser MenüButton grau, also nicht verfügbar:
-\begin{quote}
-\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Vario}\blink\smenut{Flugzeug}{Switches}
-\end{quote}
-
-Dieser Dialog wird in Echtzeit aktualisiert, so daß der Pilot direkt zur Kontrolle nachverfolgen kann, wie seine Meldung verarbeitet wird. sinnvoll z.B. bei einem Klappencheck vor dem Start.
 
 \begin{center}
 \includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
 \end{center}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Slave Modus, Doppelsitzermodus,  Durchschleifen von Daten}\index{Slave mode}\index{Dosi-Mode}
 
-Einer der im NMEA-Anschluß-Menü befindlichen Treiber ("NMEA-Output") bietet den sog.\   "Slave-Modus", welcher verwendet wird,  um z.B. zwei Geräte  (\textsf{Altair} oder \textsf{PDA})  im Master-Slave-Modus miteinander zu verbinden. \halt
+Einer der im NMEA-Anschluß-Menü befindlichen Treiber ("NMEA-Output") bietet den sog.\   "Slave-\menulabel{\bmenut{Konfig.}{1/2}\blink\bmenut{System}{Einstellung}}Modus", welcher verwendet wird,  um z.B. zwei Geräte  (\textsf{Altair} oder \textsf{PDA})  im Master-Slave-Modus miteinander zu verbinden. 
 
-Erreichbar ist dies unter
-\begin{quote}
-\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{15}
-\end{quote}
-Untermenü "Treiber"
+%Erreichbar ist dies unter
+%\begin{quote}
+%\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{15}
+%\end{quote}
+%Untermenü "Treiber"
 
-Im als Master definierten Gerät muß dazu der Treiber des zweiten Gerätes (Gerät B) als NMEA OUT gesetzt werden.
+Im als Master definierten Gerät muß dazu der Treiber des zweiten \menulabel{\button{Einstellung}\blink\button{NMEA Anschluß}} Gerätes (Gerät B) als NMEA OUT gesetzt werden.
+
 Hierdurch werden alle ein- und ausgehenden Datensätze  durchgeschleift und an das als Slave definierte Gerät weitergereicht.
+\todonum{wo stellt man was wie ein -''chaos'' alles neu hier :-) Es gibt kein Master und Slave. Was ist udp? Was ist IOIO? Erheblicher Klärungsbedarf ..}
 Im Slave-Gerät muß dann als Gerät A z.B.\ \textsf{Altair} als Treiber angewählt werden.
 
 Als Beispiel seien zwei \textsf{Altair} miteinander verbunden:
 \begin{center}
 \begin{tabbing}
 Anschluß\quad\=  COM1  hspace{10em}   \=  Anschluß\quad\=  COM1\kill
-\textbf{Master-Gerät:} \>                        \> \textbf{Slave-Gerät:}\\[0.5em]
-\textsf{Gerät A}            \>                        \> \textsf{Gerät A}\\
-Anschluß\quad\>  COM1 \>                           Anschluß\quad\>  COM1\\
-Baudrate\> 19200          \>                           Baudrate\> 19200\\
-Treiber\> \textsf{Altair}\>                           Treiber\> \textsf{Altair}\\[0.75em]
+\textbf{Master-Gerät:}   \>     \> \textbf{Slave-Gerät:}\\[0.5em]
+\textsf{Gerät A}         \>     \> \textsf{Gerät A}\\
+Anschluß\quad\>  COM1    \>           Anschluß\quad\>  COM1\\
+Baudrate\> 19200         \>           Baudrate\> 19200\\
+Treiber\> \textsf{Altair}\>           Treiber\> \textsf{Altair}\\[0.75em]
 %
-\textsf{Gerät B}\>                                    \>  \textsf{Gerät B}\\
-Anschluß\>  COM2         \>                              Anschluß\>  COM1\\
-Baudrate\> 19200         \>                              Baudrate\> 19200\\
-Treiber\> NMEA OUT    \>                              Treiber\> \textsl{beliebig}\\[0.75em]
+\textsf{Gerät B}         \>      \>  \textsf{Gerät B}\\
+Anschluß\>  COM2         \>           Anschluß\>  COM1\\
+Baudrate\> 19200         \>           Baudrate\> 19200\\
+Treiber\> NMEA OUT       \>           Treiber\> \textsl{beliebig}\\[0.75em]
 \end{tabbing}
 \end{center}
 
 
-Auf diese Art und weise werden beide Geräte mit den identischen Daten versorgt, so, als ob sie direkt vom Flarm, VEGA, o.ä. kämen. \todonum{Slave-Modus und Konfiguration richtig erklärt?}Auf gleiche Weise können zwei \textsf{PDA} mit identischen Daten versorgt werden, wenn nur eine Datenquelle zur Verfügung steht.
+Auf diese Art und weise werden beide Geräte mit den identischen Daten versorgt, so, als ob sie direkt vom Flarm, VEGA, o.ä. kämen. Auf gleiche Weise können zwei \textsf{PDA} mit identischen Daten versorgt werden, wenn nur eine Datenquelle zur Verfügung steht.
 
 Zur Verkabelung bitte die entsprechenden Handbücher der Geräte konsultieren.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+\section{Systemstatus Dialog}\label{sec:system-status-dialog} \index{Status!System}\index{Status!angeschlossene Geräte}
 
-\section{Systemstatus Dialog}\label{sec:system-status-dialog}\index{Status!System}\index{Status!angeschlossene Geräte}
+Der Systemstatus-Dialog (auch Kap.~\ref{sec:dialog-windows}) wird hauptsächlich zum Systemcheck \menulabel{\bmenut{Info}{2/3}\blink\bmenu2{Status}}benutzt und hier vor allem, ob die Verbindung zu den angeschlossenen Geräten voll etabliert und OK ist
+%\begin{quote}
+%\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}
+%\end{quote}
 
-Der Systemstatus-Dialog (auch Kap.~\ref{sec:dialog-windows}) wird hauptsächlich zum Systemcheck benutzt und hier vor allem, ob die Verbindung zu den angeschlossenen Geräten voll etabliert und OK ist:
-
-\begin{quote}
-\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}
-\end{quote}
-anschließend den Punkt "System" anwählen.
-
-Alle dynamischen Werte wie z.B. Batteriespannung, GPS-Empfang, Anzahl der Satelliten des angeschlossenen GPS etc. werden kontinuierlich aktualisiert
-
-
-\section{Mehrere Verbindungen zu externen Geräten}
+Alle sich permanent verändernden wie z.B.\ Batteriespannung, GPS-Empfang, Anzahl der Satelliten des angeschlossenen GPS etc. werden kontinuierlich aktualisiert
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mehrere Verbindungen zu externen Geräten}\index{Externe Geräte}
 
 Es können bis zu zwei externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden (einige \textsf{PDA} haben zwei serielle Schnittstellen, Verbindungen per Bluetooth können prinzipiell mehrere unabhängige Verbindung etablieren)
 
@@ -163,27 +162,27 @@ Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindi
 
 Beispielkonfiguration:
 
-Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei  FLARM.Diese Kombination bietet von beiden Geräten das Beste:
-\halt
-Vom CAI 302 kommt true airspeed und das Variosignal, vom Flarm kommen die  Luftverkehrswarnungen.
-\todonum{Entweder alle Daten vom CAI, und nur im Fallback aufs Flarm? Nun doch Parallel? }
+Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei \fl . Diese Kombination bietet von beiden Geräten das Beste:
 
-
+Vom CAI 302 kommt die TAS und das Variosignal, vom \fl kommen die  Luftverkehrswarnungen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Verwaltung der angeschlossenen Geräte, NMEA-Anschluß etc.\ }\index{NMEA!Info}
 
 Das NMEA-Ansichtsfenster ist wie folgt zu erreichen:
-\begin{quote}
-\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{NMEA-}{Anschluß}\blink
-\end{quote}
+%\begin{quote}
+%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{NMEA-}{Anschluß}\blink
+%\end{quote}
 
-Hier können angeschlossene Geräte und  deren Ausgänge  betrachtet werden.
+ Hier können angeschlossene Geräte und  deren Ausgänge  betrachtet werden.
 
-Der Button \bmenu{Wiederverbinden} dient dazu, das gerät mit \textsf{XCSoar} neu wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ Fehlersuche\dots
+\menulabel{\bmenut{Konfig}{3/3}\blink}Der Button \button{Wiederverbinden} dient dazu, das Gerät mit \xc neu wiederzuverbinden. \menulabel{\button{NMEA-Anschluss}}Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ bei der Fehlersuche\dots
 
-Der Button \bmenu{Flug donwload} ist nur verfügbar, wenn ein IGC-Logger an \textsf{XCSoar} angeschlossen ist.  \ref{sec:supported-varios}
-Wenn anklickt wird, erscheint eine Liste aufgezeichnter Flüge, welche entsprechend geladen werden kann.  Die Datei  wird geladen und in das \texttt{logs}-Unterverzeichnis des  \texttt{XCSorData } - Verzeichnis kopiert.
+Der Button \button{Flug download} ist ausschließlich verfügbar, wenn ein IGC-Logger ($\Rightarrow$ \ref{sec:supported-varios}) an \xc angeschlossen ist. 
+Wenn dieser angeklickt wird, erscheint eine Liste der aufgezeichneten Flüge, welche entsprechend geladen werden können.  Die Datei wird geladen und in das \texttt{logs}-Unterverzeichnis des  \xc  - Verzeichnis kopiert.
 
-Mit \bmenu{Aktualisieren} werden alle Geräte der Liste aktualisiert, d.h. neu initialisiert. Sinnvoll, wenn z.B. in der Zwischenzeit ein weiteres Gerät angeschlossen wurde, oder ein Fehler dessen Verbindung gelöst wurde. Das entsprechende Gerät sollte anschließend in der Liste erscheinen.
+Mit \button{Bearbeiten} werden die möglichen Einstellungen zum  Anschluß aufgerufen (Anschluß, Treiber, Port etc.\   
+%Mit \button{Aktualisieren} werden alle Geräte der Liste aktualisiert, d.h. neu initialisiert. %Sinnvoll, wenn z.B. in der Zwischenzeit ein weiteres Gerät angeschlossen wurde, oder ein Fehler %dessen Verbindung gelöst wurde. Das entsprechende Gerät sollte anschließend in der Liste erscheinen.
 
+Der Button \button{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt.  Bspw.\  das Löschen des Flugspeichers beim CAI 302. \warning Genau hier kann es Verzögerungen kommen, da teilweise ein Firmware-Fehler  des CAI 302 auftritt.
 
-Der Button \bmenu{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt. (Z.B. löschen des Flugspeichers beim CAI 302. (Speziell hier kann es Verzögerungen kommen, da teilweise ein Firmware Bug des CAI 302 auftritt)
+Mit \button{Überwachen} kann man die aktuelle Ausgabe des NMEA Anschlusses ansehen, ums die Werte zu prüfen. 

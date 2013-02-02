@@ -1,6 +1,6 @@
 \chapter{Navigation}\label{cha:navigation}
 
-In diesem Kapitel wird die "moving map" beschreiben, welche einen elementarer Bestandteil von \textsf{XCSoar} zur Navigation darstellt und heute selbstverständlich ist. Weiterhin werden hier die entsprechenden Elemente und Details beschrieben, welche auf der Karte eingeblendet sind, um die Navigation so schnell und einfach wie möglich zu machen.
+In diesem Kapitel wird die ''moving map'' beschreiben, welche einen elementaren Bestandteil von \textsf{XCSoar} zur Navigation darstellt und heute wohl selbstverständlich ist. Weiterhin werden hier die entsprechenden Elemente und Details beschrieben, welche auf der Karte eingeblendet sind, um die Navigation so schnell und einfach wie möglich zu machen.
 
 \section{Elemente der Kartenanzeige}
 
@@ -8,82 +8,86 @@ In diesem Kapitel wird die "moving map" beschreiben, welche einen elementarer Be
 \includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{figures/fig-map.png}
 \end{maxipage}
 
-Die moving-map zeigt folgende Bestandteile:
+Der Bildschirm der moving-map zeigt folgende Bestandteile:
 
 \begin{enumerate}
-  \item Das Segelflugzeug Symbol
+  \item Das Segelflugzeug-Symbol
   \item Die Wegpunkte
-  \item Die aktive Flugaufgabe (task)
-  \item Den Kurs zum gewählten Wegpunkt (bearing)
-     (\footnote{Die Kurve zum nächsten Wegpunkt kann auch eine {\em Route} sein, wie es im Abschnitt~\ref{sec:route} beschrieben wird.})
+  \item Die aktive Flugaufgabe (den ''task'')
+  \item Den Kurs zum gewählten Wegpunkt (das ''bearing'')
+     (\footnote{Die Kurve zum nächsten Wegpunkt kann auch eine {\em ''route''} sein, wie es im Abschnitt~\ref{sec:route} beschrieben wird.})
     \item Die Lufträume
   \item Die Landkarte und die Topologie (Straßen, Flüsse, Seen)
-  \item Markierungen (selbst erstellte "markers")
-  \item Den bisher zurückgelegten Flugweg ("trail")
+  \item Markierungen (selbst erstellte ''markers'')
+  \item Den bisher zurückgelegten Flugweg (Flugspur, ''trail'')
   \item Den Gleitbereich \footnote{Der Gleitbereich wird auch beschrieben im Abschnitt~\ref{sec:reach}.}
   \item Die aus der aktuellen Höhe erreichbaren Plätze
-  \item Einen Nord-  und einen Windpfeil
+  \item Einen Nord- und einen Windpfeil
 \end{enumerate}
 
 Die Karte ist in einer speziellen Projektion dargestellt, nicht in Längen- und Breitengraden. Sie kann herein- und herausgezoomt werden als auch verschoben werden. Sämtliche Navigationsberechnungen von \textsf{XCSoar} finden unter Berücksichtigung der Erdkrümmung statt.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Segelflugzeugsymbol und Kartenausrichtung}\label{Segelflugzeugsymbol}\index{Segelflugzeugsymbol}\index{Kartenausrichtung}
 
-Das Segelflugzeugsymbol zeigt die Position des Flugzeuges auf der Karte. Die Ausrichtung des Symboles gibt die ungefähre Lage des Segelflugzeuges in Bezug auf die Karte wieder(\emph{heading}).
+Das Segelflugzeugsymbol zeigt die Position des Flugzeuges auf der Karte. Die Ausrichtung des Symboles gibt die ungefähre Lage des Segelflugzeuges in Bezug auf die Karte wieder(\emph{''heading''}). Das Segelflugzeugsymbol erscheint weiß, wenn die Darstellung des Geländes ausgewählt ist, und schwarz, wenn das Gelände ausgeblendet, ist also nur Straßen, Flüsse, Seen etc.\ dargestellt sind.
 
-Die Karte kann in Abhängigkeit des Flugmodus und der gewählten Einstellungen in der Konfiguration auf drei Arten dargestellt werden:
+Die Karte kann in Abhängigkeit des Flugmodus und der gewählten Konfigurationseinstellungen auf drei Arten dargestellt werden:
 
 \begin{description}
-\item[\emph{North-Up}] Hier wird die Karte immer in Nordrichtung (\emph{true north}) dargestellt. Das Segelflugzeugsymbol bewegt sich gemäß seinem Kurs unter Berücksichtigung des Windes.
-\item[\emph{Track-Up}] Bei dieser Darstellung wird das Flugzeug immer nach oben ausgerichtet und die Karte dreht sich  mit. Hierbei wird außerdem der Nordpfeil eingeblendet, der die Richtung nach Nord angibt (\emph{true north})
-\item[\emph{Target-Up}] Hierbei ist immer das Ziel am oberen Rande der Karte ausgerichtet.
+\item[\emph{Kurs nach oben}] Bei dieser Darstellung wird die Karte so gedreht, da\ss{} der Kurs immer nach oben zeigt. Hierbei wird außerdem der Nordpfeil eingeblendet, der die Richtung nach Norden angibt.
+\item[\emph{Flugrichtung oben}] Die angezeigte Karte orientiert sch anhand der Flugrichtung.
+\item[\emph{Norden oben}] Hier wird die Karte immer in Nordrichtung (\emph{true north}) dargestellt. Das Segelflugzeugsymbol bewegt sich gemäß seines Kurses unter Berücksichtigung des Windes.
+\item[\emph{Ziel nach oben}] Hierbei ist immer das Ziel am oberen Rande der Karte ausgerichtet.
 \end{description}
 
-Über die Konfigurationseinstellungen \config{orientation} können die jeweiligen Einstellungen an die Flugsituation (Kurbeln, Final etc.\  ) angepasst werden.
+Über die Konfigurationseinstellungen können die jeweiligen Einstellungen an die Flugsituation (Kurbeln oder Geradeausflug) angepasst werden:
 
-In den Konfigurationseinstellungen kann weiterhin eingestellt werden, ob während des Kurbelns wahlweise das Ziel oben anzuzeigen ist (\emph{Target-Up}). Dies ist evtl.\ sinnvoll, wenn während des Kurbelns kurzzeitig die Orientierung zum Ausleiten verlorengegangen ist. Nach Beendigung des Kurbelns springt die Anzeige dann wieder in \emph{North-Up} den Modus.
+\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenut{System}{Einstellung}}
+Dies ist evtl.\ sinnvoll, wenn während des Kurbelns kurzzeitig die Orientierung zum Ausleiten verlorengegangen ist. 
+\menulabel{\button{Kartenanzeige}\blink\button{Ausrichtung}} 
+Setzt man bspw.\  \textsf{Vorflug Ausrichtung} auf ''Norden oben'' und \textsf{Steigflug Ausrichtung} ''Ziel nach oben''  dann 
+springt nach dem Kurbeln die Anzeige automatisch wieder auf ''Norden oben''.
 
-Wenn die Darstellung \emph{North-Up} oder \emph{Target-Up} gewählt ist, wird das Segelflugzeugsymbol in der Karte zentriert dargestellt. Normalerweise dagegen ist das Symbol ca.\ 20\% vom unteren Rand der Karte positioniert, um einen guten Überblick in Flugrichtung zu gewährleisten. Auch diese Position kann in den Konfigurationseinstellungen geändert werden.
+Wenn die Darstellung \emph{''Norden oben''} oder \emph{''Ziel nach oben''} gewählt ist, wird das Segelflugzeugsymbol in der Karte zentriert dargestellt. Normalerweise dagegen ist das Symbol ca.\ 20\% vom unteren Rand der Karte positioniert, um einen guten Überblick in Flugrichtung zu gewährleisten. Auch diese Position kann in den Konfigurationseinstellungen geändert werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Zoom und Kartenmaßstab}\label{zoom}\label{kartenmasstab}\index{Zoom}\index{Kartenmaßstab}\index{Maßstab}
-Um den Kartenmaßstab zu ändern  (für \textsf{PC}  und  \textsf{Pocket PC} ):
+Der Kartenmaßstab kann wie folgt geändert werden: \\
+\textcolor{blue}{\textsl{PC} und  \textsl{Pocket PC}:}
 \begin{enumerate}
-  \item Tippe auf eine leer Stelle des Displays, um die Karte zu aktivieren (keinen Wegpunkt wählen ! )
-  \item Hiernach die Schaltwippe des \textsf{PDA}s hoch oder runter drücken, um herein- bzw.\ herauszuzoomen.
-  \item Es können ebenfalls Gesten benutzt werden, um den Maßstab zu ändern Gesture.
-      Die  \gesture{Up/Down}
-     "Up'' zoomt herein,  "Down'' zoomt heraus.
-     \item Als letzte Möglichkeit kann über das Menü gezoomt werden:
-\begin{quote}
- \smenus{Anzeige}\blink\smenut{Zoom}{Herein} bzw. \smenus{Anzeige}\blink\smenut{Zoom}{Heraus}
-\end{quote}
+ \item Tippe auf eine leer Stelle des Displays, um die Karte zu aktivieren (keinen Wegpunkt auswählen ! )\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{herein}} 
+        Hiernach die Schaltwippe des \textsf{PDA}s hoch oder runter drücken, um herein- bzw.\ herauszuzoomen. 
+ \item Es können ebenfalls\gesture{Up/Down} Gesten benutzt werden, um den Maßstab zu ändern.
+      Die  Geste {\emph ''Hoch''} zoomt herein,  {\emph ''Runter''} zoomt heraus.
+ \item Als letzte Möglichkeit kann über das Menü gezoomt werden:
 \end{enumerate}
 
-Beim Altair wird der Drehknopf zum ein- und auszoomen verwendet werden.
+\textcolor{blue}{Beim \al} wird der Drehknopf zum ein- und auszoomen verwendet werden.
 
 Der Kartenmaßstab (siehe Bild links) \index{Kartenmaßstab}\index{Maßstab} ist in der linken unteren Ecke eingeblendet, weiterhin als schwarzweiß \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
 gestreifter Balken, um je nach Maßstab die Entfernungen anzugeben(z.B.\ 0,1km, 1,0km, 10km etc.).
 
 Die Zahl gibt hierbei die Gesamtbreite des Bildschirmes an.
 
-Für \textsc{Compaq Aero} Benutzer: Wenn Ihr die \textsl{Compaq Aero Game Keys} aktiviert (im Q-Menü), können auch diese für das Hinein- und Herauszoomen benutzt werden.
+\textcolor{blue}{Für \textsl{Compaq Aero}} Benutzer: Wenn Ihr die \textsl{Compaq Aero Game Keys} aktiviert (im Q-Menü), können auch diese für das Hinein- und Herauszoomen benutzt werden.
 
-Es besteht die Möglichkeit, zwei Zoom Einstellung zu haben: einer, wenn der Segelflieger beim Kurbeln ist, und ein weiterer welcher für den Überlandflug bzw. Endanflugmodus gültig ist.
+Es besteht die Möglichkeit, zwei Zoom Einstellung zu haben: einer, wenn der Segelflieger \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenut{System}{Einstellung}} beim Kurbeln ist, und ein weiterer welcher für den Überlandflug bzw. Endanflugmodus gültig ist.
+Dies ist die ''Steigflug Zoom'' Einstellung, welche unter \config{circlingzoom} eingestellt werden kann.
+Als Standardmaßstab für die ''Steigflug Zoom'' Funktion ist in Abhängigkeit von der Displaygröße ein Kartenmaßstab von 2,5--5km voreingestellt.
 
-Dies ist die "Zoom Kurbeln" Einstellung, welche unter \config{circlingzoom} eingestellt werden kann.
-\halt
-Als Standardmaßstab für die "Zoom Kurbel" Einstellung ist abhängig  von der Displaygröße ein Kartenmaßstab von 2,5 - 5 km voreingestellt.
-Wenn während des Kurbelns hinein oder herausgesucht wird, so beeinflußt dies nicht den vorher im Grabe Ausflug eingestellten zu den Zoom-Maßstab. Sowie das kurbeln beendet wird, wird automatisch auf den vorher eingestellten Maßstab zurückgesetzt.
+Wenn während des Kurbelns hinein oder herausgezoomt wird, \menulabel{\button{Kartenanzeige}\blink\button{Ausrichtung}} so beeinflußt dies nicht den vorher im 
+Geradeausflug eingestellten zu den Zoom-Maßstab. 
 
-Die Auto-Zoom Funktion zoomt automatisch herein, wenn man sich einem Wendepunkt nähert.
-Wenn Auto-Zoom aktiv ist, erscheint und links am Kartenrand ein Text "Auto-Zoom"
-Es kann trotzdem weiterhin hinein und heraus gesucht werden, die Auto-Zoom Funktion wird in diesem Falle automatisch auf manuell zurückgesetzt.
+Sowie das Kurbeln beendet wird, wird automatisch auf \menulabel{~~~~~~~~~~~~\button{Steigflug Zoom}} den vorher eingestellten Maßstab zurückgesetzt.
 
-\marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
+Die Auto-Zoom Funktion zoomt automatisch herein, wenn man sich einem Wendepunkt nähert. Wenn Auto-Zoom aktiv ist, erscheint und links am Kartenrand ein Text ''Auto-Zoom''
+Es kann trotzdem weiterhin hinein und heraus gezoomt werden, \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}} 
+die Auto-Zoom Funktion wird in diesem Falle automatisch auf manuell zurückgesetzt.
 
-Um Auto-Zoom einzuschalten, benutze folgendes Menü:
-\begin{quote}
-\smenus{Anzeige}\blink\smenut{Zoom}{Auto}
-\end{quote}
+
+Auto-Zoom kann auch \"uber das Men\"u eingeschaltet werden. 
+%\begin{quote}
+\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{Auto}}
+%\end{quote}
 
 Nachdem ein Wegpunkt sich geändert hat (automatisch, über die Wegpunkt Auswahl, oder durch manuelles Umschalten auf der Karte) wird Auto-Zoom den Maßstab automatisch so wählen, daß der nächste Wegpunkt sichtbar ist. Während des Kurbelns, wenn ein Bart entdeckt wurde, wird die Karte zentriert bezüglich des Bartes dargestellt, sodaß das Flugzeugsymbol dennoch sichtbar bleibt.
 
@@ -106,7 +110,7 @@ Solange der verschiedene Modus aktiv ist, erscheint der Text "Pan" und links an 
 \sketch{figures/pan.png}
 
 Der Verschiebe-Modus kann ebenfalls über Gesten aufgerufen werden \gesture{P}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Wegpunkte} \label{sec:waypoint-schemes}
 Die Darstellung und Einfärbung von Wegpunkten erfolgt je nach Situation und Art des jeweiligen Punktes. Hauptmerkmal ist die hierbei Landbarkeit eines Wegpunktes.  Es gibt drei Sätze für die Darstellung von landbaren Wegpunkten  (Lila Punkt, Schwarz Weiß und Ampel), die unter
 \begin{quote}
@@ -153,10 +157,9 @@ Ampelfarben &
 Die Wegpunkte können nach mehreren Abkürzungsregeln beschriftet werden \seite{4}), um auf der Karte nicht so viel Platz zu verschwenden. \config{labels} Weiterhin können je nach Sichtbarkeit bzw. Erreichbarkeit die Farben und/oder Formen geändert werden. \config{labelvisibility}. \textsf{XCSoar} berechnet unter Berücksichtigung des Windes permanent, welche Wegpunkte sich innerhalb des Gleitpfades befinden.
 
 Die angenommene Ankunftshöhe {\em oberhalb der Sicherheitshöhe} der erreichbaren  Wegpunkte wird neben dem Wegpunkt  angezeigt. Diese Ankunftshöhe wird berechnet aus der entsprechenden Leistung des Segelflugzeuges und dem MacCready Wert. Hierbei kann gewählt werden, ob die Berechnung mit einem Sicherheits-MacCready Wert, oder aber streng nach der Polare erfolgt \config{reachpolar}.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Aktive Aufgabe}
-
-Die Linie der aktiven Aufgabe wird als eine grüne, gestrichelte Linie auf der Karte dargestellt.
+Die Kurslinie der aktiven Aufgabe wird als eine grüne, gestrichelte Linie auf der Karte dargestellt.
 
 Bei AAT-Aufgaben werden die Sektoren der Aufgabe gelb hinterlegt dargestellt.
 Die Start und Zielpunkte werden als Kreise dargestellt, Linien werden nur gezeichnet, wenn es sich hierbei um Start bzw. Ziellinien handelt.
@@ -171,7 +174,7 @@ Vom Segelflugzeugsymbol wird eine dicke schwarze Linie direkt zum nächsten akti
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-barrel.png} \\
 \end{tabular}
 \end{center}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Gelände und Topologie}
 
 Die folgenden topologischen Details werden auf der Karte dargestellt:
