@@ -43,6 +43,16 @@ class gxx {
   }
 }
 
+class mingw-w64 {
+  package { "gcc-mingw-w64":
+    ensure => present,
+  }
+
+  package { "g++-mingw-w64":
+    ensure => present,
+  }
+}
+
 class make {
   package { "make":
     ensure => present,
@@ -51,6 +61,12 @@ class make {
 
 class ccache {
   package { "ccache":
+    ensure => present,
+  }
+}
+
+class gettext {
+  package { "gettext":
     ensure => present,
   }
 }
@@ -90,7 +106,11 @@ class {'make': }
 class {'gxx': }
 class {'ccache': }
 
+# MinGW Toolchain
+class {'mingw-w64': }
+
 # Resource tools
+class {'gettext': }
 class {'xsltproc': }
 class {'rsvg': }
 class {'imagemagick': }
