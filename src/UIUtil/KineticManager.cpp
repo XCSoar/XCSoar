@@ -65,7 +65,12 @@ void
 KineticManager::MouseUp(int x)
 {
   // Calculate end position of the kinetic movement
-  end = last + (int)((v / 2) * stopping_time);
+  int dt = clock.Elapsed();
+  if (dt > 200) {
+    end = x;
+    steady = true;
+  } else
+    end = last + (int)((v / 2) * stopping_time);
 }
 
 int
