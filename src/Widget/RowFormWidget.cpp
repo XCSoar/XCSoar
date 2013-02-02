@@ -920,7 +920,7 @@ RowFormWidget::UpdateLayout()
   unsigned caption_width = 0;
 
   for (const auto &i : rows) {
-    if (!i.available || (i.expert && !expert))
+    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert))
       continue;
 
     min_height += i.GetMinimumHeight();
@@ -944,7 +944,7 @@ RowFormWidget::UpdateLayout()
 
   /* second row traversal: now move and resize the rows */
   for (auto &i : rows) {
-    if (i.type == Row::Type::DUMMY)
+    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert))
       continue;
 
     /* determine this row's height */
