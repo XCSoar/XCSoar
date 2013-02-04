@@ -33,9 +33,7 @@ Copyright_License {
  * The identification number of a FLARM traffic.
  */
 class FlarmId {
-  enum {
-    UNDEFINED_VALUE = 0,
-  };
+  static constexpr uint32_t UNDEFINED_VALUE = 0;
 
   uint32_t value;
 
