@@ -153,8 +153,7 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 FlarmId
-dlgFlarmDetailsListShowModal(const TCHAR *title,
-                             FlarmId array[], unsigned count)
+PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count)
 {
   assert(count > 0);
 
