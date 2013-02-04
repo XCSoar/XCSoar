@@ -146,7 +146,7 @@ OnFlarmLockClicked()
 
   if (count > 0) {
     const FlarmId id =
-      PickFlarmTraffic(_("Set new teammate:"), ids, count);
+      PickFlarmTraffic(_("Set new teammate"), ids, count);
 
     if (id.IsDefined()) {
       settings.team_flarm_id = id;
