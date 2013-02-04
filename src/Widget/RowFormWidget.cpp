@@ -54,7 +54,7 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-UPixelScalar
+unsigned
 RowFormWidget::Row::GetMinimumHeight() const
 {
   switch (type) {
@@ -81,7 +81,7 @@ RowFormWidget::Row::GetMinimumHeight() const
   return window->GetHeight();
 }
 
-UPixelScalar
+unsigned
 RowFormWidget::Row::GetMaximumHeight() const
 {
   switch (type) {
@@ -876,12 +876,12 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
   return true;
 }
 
-UPixelScalar
+unsigned
 RowFormWidget::GetRecommendedCaptionWidth() const
 {
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
-  UPixelScalar w = 0;
+  unsigned w = 0;
   for (const auto &i : rows) {
     if (!i.IsAvailable(expert))
       continue;

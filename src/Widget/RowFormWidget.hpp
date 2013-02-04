@@ -221,10 +221,10 @@ class RowFormWidget : public WindowWidget {
     }
 
     gcc_pure
-    UPixelScalar GetMinimumHeight() const;
+    unsigned GetMinimumHeight() const;
 
     gcc_pure
-    UPixelScalar GetMaximumHeight() const;
+    unsigned GetMaximumHeight() const;
   };
 
   const DialogLook &look;
@@ -648,9 +648,9 @@ public:
 
 protected:
   gcc_pure
-  UPixelScalar GetRecommendedCaptionWidth() const;
+  unsigned GetRecommendedCaptionWidth() const;
 
-  void NextControlRect(PixelRect &rc, UPixelScalar height) {
+  void NextControlRect(PixelRect &rc, unsigned height) {
     assert(IsDefined());
 
     rc.top = rc.bottom;
@@ -658,7 +658,7 @@ protected:
   }
 
   gcc_pure
-  PixelRect InitialControlRect(UPixelScalar height) {
+  PixelRect InitialControlRect(unsigned height) {
     assert(IsDefined());
 
     PixelRect rc = GetWindow()->GetClientRect();
