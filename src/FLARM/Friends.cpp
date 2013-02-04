@@ -59,13 +59,10 @@ FlarmFriends::LoadColor(const TCHAR *key, Color color)
   if (ids == NULL || StringIsEmpty(ids))
     return;
 
-  FlarmId id;
-  TCHAR *endptr;
-
   const TCHAR *p = ids;
   while (p != NULL && *p) {
-    id = FlarmId::Parse(p, &endptr);
-
+    TCHAR *endptr;
+    FlarmId id = FlarmId::Parse(p, &endptr);
     if (id.IsDefined())
       SetFriendColor(id, color);
 
