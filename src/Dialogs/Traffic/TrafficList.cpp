@@ -123,10 +123,9 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.DrawText(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), tmp);
 
-  canvas.Select(small_font);
-
-  tmp.clear();
   if (record != NULL) {
+    tmp.clear();
+
     if (!record->pilot.empty())
       tmp = record->pilot.c_str();
 
@@ -143,12 +142,14 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
       tmp.append(record->airfield);
     }
-  }
 
-  if (!tmp.empty())
-    canvas.DrawText(rc.left + Layout::FastScale(2),
-                    rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                    tmp);
+    if (!tmp.empty()) {
+      canvas.Select(small_font);
+      canvas.DrawText(rc.left + Layout::FastScale(2),
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                      tmp);
+    }
+  }
 }
 
 FlarmId
