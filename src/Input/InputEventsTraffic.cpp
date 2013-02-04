@@ -85,23 +85,5 @@ void
 InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 {
   LoadFlarmDatabases();
-
-  StaticString<4> callsign;
-  callsign.clear();
-  if (!TextEntryDialog(callsign, _("Competition ID")) ||
-      callsign.empty())
-    return;
-
-  FlarmId ids[30];
-  unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
-
-  if (count > 0) {
-    FlarmId id = PickFlarmTraffic(_("Show details"), ids, count);
-
-    if (id.IsDefined())
-      dlgFlarmTrafficDetailsShowModal(id);
-  } else {
-    ShowMessageBox(_("Unknown competition number"),
-                _("Not found"), MB_OK | MB_ICONINFORMATION);
-  }
+  TrafficListDialog();
 }

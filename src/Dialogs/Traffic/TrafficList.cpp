@@ -24,9 +24,12 @@ Copyright_License {
 #include "TrafficDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/List.hpp"
+#include "Form/DataField/Prefix.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
@@ -35,7 +38,16 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 
-class TrafficListWidget : public ListWidget {
+enum Controls {
+  CALLSIGN,
+};
+
+enum Buttons {
+  DETAILS,
+};
+
+class TrafficListWidget : public ListWidget, public DataFieldListener,
+                          public ActionListener {
   struct Item {
     FlarmId id;
 
@@ -68,18 +80,24 @@ class TrafficListWidget : public ListWidget {
     }
   };
 
-  ActionListener &action_listener;
+  ActionListener *action_listener;
+
+  const RowFormWidget *filter_widget;
 
   std::vector<Item> items;
 
 public:
   TrafficListWidget(ActionListener &_action_listener,
                     const FlarmId *array, size_t count)
-    :action_listener(_action_listener) {
+    :action_listener(&_action_listener), filter_widget(nullptr) {
     items.reserve(count);
 
     for (unsigned i = 0; i < count; ++i)
       items.emplace_back(array[i]);
+  }
+
+  TrafficListWidget(const RowFormWidget &_filter_widget)
+    :action_listener(nullptr), filter_widget(&_filter_widget) {
   }
 
   FlarmId GetCursorId() const {
@@ -87,6 +105,8 @@ public:
       ? FlarmId::Undefined()
       : items[GetList().GetCursorIndex()].id;
   }
+
+  void UpdateList();
 
   /* virtual methods from class Widget */
 
@@ -105,8 +125,52 @@ public:
     return true;
   }
 
-  virtual void OnActivateItem(unsigned index) override {
-    action_listener.OnAction(mrOK);
+  virtual void OnActivateItem(unsigned index) override;
+
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override {
+    UpdateList();
+  }
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+};
+
+class TrafficFilterWidget : public RowFormWidget {
+  DataFieldListener *listener;
+
+public:
+  TrafficFilterWidget(const DialogLook &look)
+    :RowFormWidget(look, true) {}
+
+  void SetListener(DataFieldListener *_listener) {
+    listener = _listener;
+  }
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    PrefixDataField *callsign_df = new PrefixDataField();
+    callsign_df->SetListener(listener);
+    Add(_("Competition ID"), nullptr, callsign_df);
+  }
+};
+
+class TrafficListButtons : public RowFormWidget {
+  ActionListener &dialog;
+  ActionListener *list;
+
+public:
+  TrafficListButtons(const DialogLook &look, ActionListener &_dialog)
+    :RowFormWidget(look), dialog(_dialog) {}
+
+  void SetList(ActionListener *_list) {
+    list = _list;
+  }
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    AddButton(_("Details"), *list, DETAILS);
+    AddButton(_("Cancel"), dialog, mrCancel);
   }
 };
 
@@ -119,13 +183,36 @@ GetRowHeight(const DialogLook &look)
 }
 
 void
+TrafficListWidget::UpdateList()
+{
+  assert(filter_widget != nullptr);
+
+  items.clear();
+
+  const TCHAR *callsign = filter_widget->GetValueString(CALLSIGN);
+  if (!StringIsEmpty(callsign)) {
+    FlarmId ids[30];
+    unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
+
+    for (unsigned i = 0; i < count; ++i)
+      items.emplace_back(ids[i]);
+  }
+
+  GetList().SetLength(items.size());
+}
+
+void
 TrafficListWidget::Prepare(ContainerWindow &parent,
                            const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   ListControl &list = CreateList(parent, look, rc,
                                  GetRowHeight(look));
-  list.SetLength(items.size());
+
+  if (filter_widget != nullptr)
+    UpdateList();
+  else
+    list.SetLength(items.size());
 }
 
 void
@@ -189,6 +276,50 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                       tmp);
     }
   }
+}
+
+void
+TrafficListWidget::OnActivateItem(unsigned index)
+{
+  if (action_listener != nullptr)
+    action_listener->OnAction(mrOK);
+  else
+    dlgFlarmTrafficDetailsShowModal(GetCursorId());
+}
+
+void
+TrafficListWidget::OnAction(int id)
+{
+  switch (Buttons(id)) {
+  case DETAILS:
+    dlgFlarmTrafficDetailsShowModal(GetCursorId());
+    break;
+  }
+}
+
+void
+TrafficListDialog()
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+
+  TrafficFilterWidget *filter_widget = new TrafficFilterWidget(look);
+
+  TrafficListButtons *buttons_widget = new TrafficListButtons(look, dialog);
+
+  TwoWidgets *left_widget =
+    new TwoWidgets(filter_widget, buttons_widget, true);
+
+  TrafficListWidget *const list_widget =
+    new TrafficListWidget(*filter_widget);
+
+  filter_widget->SetListener(list_widget);
+  buttons_widget->SetList(list_widget);
+
+  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
+
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Traffic"), widget);
+  dialog.ShowModal();
 }
 
 FlarmId

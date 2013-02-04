@@ -34,6 +34,9 @@ dlgTeamCodeShowModal();
 void
 dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
+void
+TrafficListDialog();
+
 FlarmId
 PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count);
 
