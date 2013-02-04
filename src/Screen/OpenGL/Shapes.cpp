@@ -78,8 +78,8 @@ OpenGL::DeinitShapes()
     return;
 
   delete circle_buffer;
-  circle_buffer = NULL;
+  circle_buffer = nullptr;
 
   delete small_circle_buffer;
-  small_circle_buffer = NULL;
+  small_circle_buffer = nullptr;
 }

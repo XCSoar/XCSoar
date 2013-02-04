@@ -81,7 +81,7 @@ LoadTextureAutoAlign(GLint internal_format,
                  format, type, pixels);
   else {
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
-                 format, type, NULL);
+                 format, type, nullptr);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
                     format, type, pixels);
   }
@@ -115,7 +115,7 @@ gcc_pure
 static bool
 IsLuminanceFormat(const SDL_PixelFormat *format)
 {
-  return format->palette != NULL && format->BitsPerPixel == 8 &&
+  return format->palette != nullptr && format->BitsPerPixel == 8 &&
     format->Rloss == 8 && format->Gloss == 8 && format->Bloss == 8 &&
     format->Rshift == 0 && format->Gshift == 0 && format->Bshift == 0 &&
     format->Rmask == 0 && format->Gmask == 0 && format->Bmask == 0 &&
@@ -146,14 +146,14 @@ static bool
 LoadSurfaceIntoTexture(const SDL_Surface *surface)
 {
 
-  assert(surface != NULL);
-  assert(surface->format != NULL);
+  assert(surface != nullptr);
+  assert(surface->format != nullptr);
 
   const SDL_PixelFormat *fmt = surface->format;
   if (IsLuminanceFormat(fmt))
     return LoadLuminanceTexture(surface);
 
-  if (fmt->palette != NULL)
+  if (fmt->palette != nullptr)
     /* OpenGL does not support a hardware palette */
     return false;
 
@@ -205,7 +205,7 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
-               0, GL_RGB, GetType(), NULL);
+               0, GL_RGB, GetType(), nullptr);
 }
 
 GLTexture::GLTexture(GLint internal_format, GLsizei _width, GLsizei _height,
@@ -237,7 +237,7 @@ GLTexture::ResizeDiscard(PixelSize new_size)
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                validated_size.cx, validated_size.cy,
-               0, GL_RGB, GetType(), NULL);
+               0, GL_RGB, GetType(), nullptr);
 
 }
 
@@ -255,7 +255,7 @@ GLTexture::Load(SDL_Surface *src)
   if (!LoadSurfaceIntoTexture(src)) {
     /* try again after conversion */
     SDL_PixelFormat format;
-    format.palette = NULL;
+    format.palette = nullptr;
 #ifdef ANDROID
     format.BitsPerPixel = 16;
     format.BytesPerPixel = 2;
@@ -286,7 +286,7 @@ GLTexture::Load(SDL_Surface *src)
     format.alpha = 0xff;
 
     SDL_Surface *surface = ::SDL_ConvertSurface(src, &format, SDL_SWSURFACE);
-    assert(surface != NULL);
+    assert(surface != nullptr);
 
     LoadSurfaceIntoTexture(surface);
     SDL_FreeSurface(surface);
