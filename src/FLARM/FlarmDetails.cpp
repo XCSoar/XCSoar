@@ -184,9 +184,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
   if (record != NULL)
     return record->GetId();
 
-  FlarmId id;
-  id.Clear();
-  return id;
+  return FlarmId::Undefined();
 }
 
 bool
