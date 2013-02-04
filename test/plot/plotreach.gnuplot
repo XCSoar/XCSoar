@@ -15,13 +15,13 @@ set style line 8 lt 2 lc rgb "red" lw 2
 set style line 9 lt 2 lc rgb "#a0a0f0" lw 0.5
 
 plot \
-     "< test/tools/gnuplotitems.pl ftri results/res-reach.txt" using 1:2 with lines ls 1 title "border", \
-     "< test/tools/gnuplotitems.pl ftri results/res-reach.txt" using 1:2 with filledcurve ls 2 title "triangles", \
-     "< test/tools/gnuplotitems.pl fcorner results/res-reach.txt" using 1:2 with points ls 4 title "corner"
+     "< test/tools/gnuplotitems.pl ftri output/results/res-reach.txt" using 1:2 with lines ls 1 title "border", \
+     "< test/tools/gnuplotitems.pl ftri output/results/res-reach.txt" using 1:2 with filledcurve ls 2 title "triangles", \
+     "< test/tools/gnuplotitems.pl fcorner output/results/res-reach.txt" using 1:2 with points ls 4 title "corner"
 pause -1
 
 set zrange [1:]
 set pm3d map
 splot \
-      "results/terrain.txt" using 1:2:4 with pm3d notitle
+      "output/results/terrain.txt" using 1:2:4 with pm3d notitle
 pause -1

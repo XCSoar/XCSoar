@@ -19,19 +19,23 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Printing.hpp"
-#include <fstream>
 
+#include "Printing.hpp"
+#include "OS/FileUtil.hpp"
 #include "Contest/ContestManager.hpp"
 #include "Trace/Trace.hpp"
+
+#include <fstream>
 
 void
 PrintHelper::contestmanager_print(const ContestManager &man,
                                   const Trace &trace_full,
                                   const Trace &trace_sprint)
 {
+  Directory::Create(_T("output/results"));
+
   {
-    std::ofstream fs("results/res-olc-trace.txt");
+    std::ofstream fs("output/results/res-olc-trace.txt");
     TracePointVector v;
     trace_full.GetPoints(v);
 
@@ -42,7 +46,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
   }
 
   {
-    std::ofstream fs("results/res-olc-trace_sprint.txt");
+    std::ofstream fs("output/results/res-olc-trace_sprint.txt");
 
     TracePointVector v;
     trace_sprint.GetPoints(v);
@@ -53,7 +57,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
          << "\n";
   }
 
-  std::ofstream fs("results/res-olc-solution.txt");
+  std::ofstream fs("output/results/res-olc-solution.txt");
 
   if (man.stats.solution[0].empty()) {
     fs << "# no solution\n";

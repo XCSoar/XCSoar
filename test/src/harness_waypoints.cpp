@@ -24,6 +24,7 @@
 #include "harness_waypoints.hpp"
 #include "test_debug.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -88,7 +89,8 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
   waypoints.Optimise();
 
   if (verbose) {
-    std::ofstream fin("results/res-wp-in.txt");
+    Directory::Create(_T("output/results"));
+    std::ofstream fin("output/results/res-wp-in.txt");
     for (unsigned i=1; i<=waypoints.size(); i++) {
       const Waypoint *wp = waypoints.LookupId(i);
       if (wp != NULL)

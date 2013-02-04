@@ -30,6 +30,7 @@
 #include "Replay/TaskAccessor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <fstream>
 
@@ -112,8 +113,9 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   autopilot.SetSpeedFactor(fixed(speed_factor));
 
-  std::ofstream f4("results/res-sample.txt");
-  std::ofstream f5("results/res-sample-filtered.txt");
+  Directory::Create(_T("output/results"));
+  std::ofstream f4("output/results/res-sample.txt");
+  std::ofstream f5("output/results/res-sample-filtered.txt");
 
   bool do_print = verbose;
   bool first = true;

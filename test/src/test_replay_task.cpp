@@ -6,6 +6,7 @@
 #include "Computer/FlyingComputer.hpp"
 #include "NMEA/FlyingState.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Task/Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
@@ -70,7 +71,8 @@ protected:
 static bool
 test_replay()
 {
-  std::ofstream f("results/res-sample.txt");
+  Directory::Create(_T("output/results"));
+  std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(fixed(4.0));
   Waypoints waypoints;

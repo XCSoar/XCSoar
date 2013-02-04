@@ -27,6 +27,8 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "OS/FileUtil.hpp"
+
 #include <stdio.h>
 #include <fstream>
 #include <string>
@@ -51,8 +53,8 @@ static void
 basic_polar(const fixed mc)
 {
   char bname[100];
-  sprintf(bname,"results/res-polar-%02d-best.txt",(int)(mc*10));
-  std::ofstream pfile("results/res-polar.txt");
+  sprintf(bname,"output/results/res-polar-%02d-best.txt",(int)(mc*10));
+  std::ofstream pfile("output/results/res-polar.txt");
   std::ofstream mfile(bname);
 
   GlidePolar polar(mc);
@@ -148,31 +150,31 @@ static bool
 test_stf()
 {
   { // variation with height
-    std::ofstream hfile("results/res-polar-s0.txt");
+    std::ofstream hfile("output/results/res-polar-s0.txt");
     for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_stf(h,fixed(0),fixed(0),fixed(0),hfile);
     }
   }
   { // variation with S, below FG
-    std::ofstream hfile("results/res-polar-s1.txt");
+    std::ofstream hfile("output/results/res-polar-s1.txt");
     for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(0), fixed(0),fixed(0),S, hfile);
     }
   }
   { // variation with S, above FG
-    std::ofstream hfile("results/res-polar-s2.txt");
+    std::ofstream hfile("output/results/res-polar-s2.txt");
     for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(40), fixed(0),fixed(0),S, hfile);
     }
   }
   { // variation with S, below FG, wind
-    std::ofstream hfile("results/res-polar-s3.txt");
+    std::ofstream hfile("output/results/res-polar-s3.txt");
     for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(0), fixed(10.0), fixed(0),S, hfile);
     }
   }
   { // variation with S, above FG, wind
-    std::ofstream hfile("results/res-polar-s4.txt");
+    std::ofstream hfile("output/results/res-polar-s4.txt");
     for (fixed S=fixed(-4.0); S<fixed(4.0); S+= fixed(0.1)) {
       test_glide_stf(fixed(40), fixed(10.0), fixed(0), S, hfile);
     }
@@ -184,7 +186,7 @@ static bool
 test_mc()
 {
   {
-    std::ofstream ofile("results/res-polar-m.txt");
+    std::ofstream ofile("output/results/res-polar-m.txt");
     for (fixed mc=fixed(0); mc<fixed(5.0); mc+= fixed(0.1)) {
       basic_polar(mc);
       polar_mc(ofile, mc);
@@ -192,28 +194,28 @@ test_mc()
   }
 
   {
-    std::ofstream hfile("results/res-polar-h-00.txt");
+    std::ofstream hfile("output/results/res-polar-h-00.txt");
     for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_alt(h, fixed(0), fixed(0), hfile);
     }
   }
 
   {
-    std::ofstream hfile("results/res-polar-h-50.txt");
+    std::ofstream hfile("output/results/res-polar-h-50.txt");
     for (fixed h=fixed(0); h<fixed(40.0); h+= fixed(0.1)) {
       test_glide_alt(h, fixed(5.0), fixed(0), hfile);
     }
   }
 
   {
-    std::ofstream hfile("results/res-polar-w.txt");
+    std::ofstream hfile("output/results/res-polar-w.txt");
     for (fixed w=fixed(-10.0); w<=fixed(10.0); w+= fixed(0.1)) {
       test_glide_alt(fixed(50.0), w, fixed(0), hfile);
     }
   }
 
   {
-    std::ofstream hfile("results/res-polar-a.txt");
+    std::ofstream hfile("output/results/res-polar-a.txt");
     for (fixed a=fixed(0); a<=fixed(360.0); a+= fixed(10)) {
       test_glide_alt(fixed(50.0), fixed(10.0), a, hfile);
     }
@@ -256,7 +258,7 @@ static bool
 test_cb()
 {
   {
-    std::ofstream hfile("results/res-polar-cb.txt");
+    std::ofstream hfile("output/results/res-polar-cb.txt");
     for (fixed a = fixed(0); a <= fixed(360.0); a+= fixed(10)) {
       test_glide_cb(fixed(0), fixed(10.0), a, hfile);
     }
@@ -267,6 +269,8 @@ test_cb()
 int main() {
 
   plan_tests(3);
+
+  Directory::Create(_T("output/results"));
 
   ok(test_mc(),"mc output",0);
   ok(test_stf(),"mc stf",0);

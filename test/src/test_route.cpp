@@ -32,6 +32,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
@@ -44,7 +45,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
   setup_airspaces(airspaces, map.GetMapCenter(), n_airspaces);
 
   {
-    std::ofstream fout("results/terrain.txt");
+    Directory::Create(_T("output/results"));
+    std::ofstream fout("output/results/terrain.txt");
 
     unsigned nx = 100;
     unsigned ny = 100;

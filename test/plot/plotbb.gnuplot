@@ -8,18 +8,18 @@ set style line 4 lt 4 lc rgb "blue" lw 2
 set style line 5 lt 4 lc rgb "grey" lw 2
 
 plot \
-     'results/res-bb-inside.txt' using 1:2 with filledcurve ls 2 title "inside", \
-     'results/res-bb-in.txt' using 1:2 with lines ls 3 title "all", \
-     'results/res-bb-range.txt' using 1:2 with lines ls 4 title "range", \
-     'results/res-bb-intersects.txt' using 1:2 with lines ls 5 title "intersects", \
-     'results/res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
-     'results/res-sample.txt' using 1:2 with lines ls 1 title "sample"
+     'output/results/res-bb-inside.txt' using 1:2 with filledcurve ls 2 title "inside", \
+     'output/results/res-bb-in.txt' using 1:2 with lines ls 3 title "all", \
+     'output/results/res-bb-range.txt' using 1:2 with lines ls 4 title "range", \
+     'output/results/res-bb-intersects.txt' using 1:2 with lines ls 5 title "intersects", \
+     'output/results/res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
+     'output/results/res-sample.txt' using 1:2 with lines ls 1 title "sample"
 pause -1
 
 plot \
-     'results/res-wp-in.txt' using 1:2 with points ls 3 title "all", \
-     'results/res-bb-inside.txt' using 1:2 with filledcurve ls 2 title "inside", \
-     'results/res-wp-range.txt' using 1:2 with points ls 4 title "range", \
-     'results/res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
-     'results/res-sample.txt' using 1:2 with lines ls 1 title "sample"
+     'output/results/res-wp-in.txt' using 1:2 with points ls 3 title "all", \
+     'output/results/res-bb-inside.txt' using 1:2 with filledcurve ls 2 title "inside", \
+     'output/results/res-wp-range.txt' using 1:2 with points ls 4 title "range", \
+     'output/results/res-bb-target.txt' using 1:2 with lines ls 5 title "search", \
+     'output/results/res-sample.txt' using 1:2 with lines ls 1 title "sample"
 pause -1

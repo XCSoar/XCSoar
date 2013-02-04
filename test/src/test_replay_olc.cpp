@@ -6,6 +6,7 @@
 #include "Engine/Contest/ContestManager.hpp"
 #include "ComputerSettings.hpp"
 #include "OS/PathName.hpp"
+#include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
@@ -128,7 +129,8 @@ static bool
 test_replay(const Contest olc_type,
             const ContestResult &official_score)
 {
-  std::ofstream f("results/res-sample.txt");
+  Directory::Create(_T("output/results"));
+  std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(fixed(2));
   AircraftState state_last;

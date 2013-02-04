@@ -19,8 +19,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Printing.hpp"
 #include "Trace/Trace.hpp"
+#include "OS/FileUtil.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 #include <fstream>
 
@@ -30,8 +33,6 @@ std::ostream& operator<<(std::ostream& os, fixed value)
   return os<<value.as_double();
 }
 #endif
-
-#include "Waypoint/Waypoint.hpp"
 
 std::ostream &
 operator<< (std::ostream& f, const Waypoint& wp)
@@ -97,7 +98,8 @@ PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 void
 PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
-  std::ofstream fs("results/res-trace.txt");
+  Directory::Create(_T("output/results"));
+  std::ofstream fs("output/results/res-trace.txt");
 
   for (auto it = trace.begin(); it != trace.end(); ++it)
     PrintTracePoint(*it, fs);

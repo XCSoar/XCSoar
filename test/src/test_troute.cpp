@@ -33,6 +33,7 @@
 #include "Geo/SpeedVector.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Operation/Operation.hpp"
+#include "OS/FileUtil.hpp"
 
 static void
 test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
@@ -53,7 +54,8 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   bool retval= true;
 
   {
-    std::ofstream fout ("results/terrain.txt");
+    Directory::Create(_T("output/results"));
+    std::ofstream fout ("output/results/terrain.txt");
     unsigned nx = 100;
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {

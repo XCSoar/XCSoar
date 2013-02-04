@@ -24,14 +24,16 @@
 #include "Printing.hpp"
 #include "harness_airspace.hpp"
 #include "test_debug.hpp"
-#include <stdlib.h>
-#include <fstream>
-#include <iostream>
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceNearestSort.hpp"
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
+#include "OS/FileUtil.hpp"
+
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
 
 static void
 airspace_random_properties(AbstractAirspace& as)
@@ -62,8 +64,10 @@ bool test_airspace_extra(Airspaces &airspaces) {
 void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigned n) {
   std::ofstream *fin = NULL;
 
-  if (verbose)
-    fin = new std::ofstream("results/res-bb-in.txt");
+  if (verbose) {
+    Directory::Create(_T("output/results"));
+    fin = new std::ofstream("output/results/res-bb-in.txt");
+  }
 
   for (unsigned i=0; i<n; i++) {
     AbstractAirspace* as;
@@ -267,7 +271,8 @@ void scan_airspaces(const AircraftState state,
 {
   const fixed range(20000.0);
 
-  AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
+  Directory::Create(_T("output/results"));
+  AirspaceVisitorPrint pvn("output/results/res-bb-nearest.txt",
                            do_report);
   const Airspace *nearest = airspaces.FindNearest(state.location);
   if (nearest != nullptr) {
@@ -276,28 +281,28 @@ void scan_airspaces(const AircraftState state,
   }
 
   {
-    AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
+    AirspaceVisitorPrint pvisitor("output/results/res-bb-range.txt",
                                   do_report);
     airspaces.VisitWithinRange(state.location, range, pvisitor);
   }
 
   {
-    AirspaceVisitorClosest pvisitor("results/res-bb-closest.txt",
+    AirspaceVisitorClosest pvisitor("output/results/res-bb-closest.txt",
                                     airspaces.GetProjection(), state, perf);
     airspaces.VisitWithinRange(state.location, range, pvisitor);
   }
 
   {
     const std::vector<Airspace> vi = airspaces.FindInside(state);
-    AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
+    AirspaceVisitorPrint pvi("output/results/res-bb-inside.txt",
                              do_report);
     std::for_each(vi.begin(), vi.end(), CallVisitor<AirspaceVisitor>(pvi));
   }
   
   {
-    AirspaceIntersectionVisitorPrint ivisitor("results/res-bb-intersects.txt",
-                                              "results/res-bb-intersected.txt",
-                                              "results/res-bb-intercepts.txt",
+    AirspaceIntersectionVisitorPrint ivisitor("output/results/res-bb-intersects.txt",
+                                              "output/results/res-bb-intersected.txt",
+                                              "output/results/res-bb-intercepts.txt",
                                               do_report,
                                               state, perf);
     airspaces.VisitIntersecting(state.location, target, ivisitor);
@@ -307,7 +312,7 @@ void scan_airspaces(const AircraftState state,
     AirspaceNearestSort ans(state.location);
     const AbstractAirspace* as = ans.find_nearest(airspaces, range);
     if (do_report) {
-      std::ofstream fout("results/res-bb-sortednearest.txt");
+      std::ofstream fout("output/results/res-bb-sortednearest.txt");
       if (as) {
         fout << *as << "\n";
       } else {
@@ -320,7 +325,7 @@ void scan_airspaces(const AircraftState state,
     AirspaceSoonestSort ans(state, perf);
     const AbstractAirspace* as = ans.find_nearest(airspaces);
     if (do_report) {
-      std::ofstream fout("results/res-bb-sortedsoonest.txt");
+      std::ofstream fout("output/results/res-bb-sortedsoonest.txt");
       if (as) {
         fout << *as << "\n";
       } else {
@@ -349,12 +354,12 @@ PrintAirspaceWarnings(const char *path,
 void
 print_warnings(const AirspaceWarningManager &airspace_warnings)
 {
-  PrintAirspaceWarnings("results/res-as-warnings-inside.txt",
+  PrintAirspaceWarnings("output/results/res-as-warnings-inside.txt",
                         airspace_warnings, AirspaceWarning::WARNING_INSIDE);
-  PrintAirspaceWarnings("results/res-as-warnings-glide.txt",
+  PrintAirspaceWarnings("output/results/res-as-warnings-glide.txt",
                         airspace_warnings, AirspaceWarning::WARNING_GLIDE);
-  PrintAirspaceWarnings("results/res-as-warnings-filter.txt",
+  PrintAirspaceWarnings("output/results/res-as-warnings-filter.txt",
                         airspace_warnings, AirspaceWarning::WARNING_FILTER);
-  PrintAirspaceWarnings("results/res-as-warnings-task.txt",
+  PrintAirspaceWarnings("output/results/res-as-warnings-task.txt",
                         airspace_warnings, AirspaceWarning::WARNING_TASK);
 }

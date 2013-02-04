@@ -20,21 +20,21 @@ set ylabel "Y"
 set size ratio -1
 
 plot \
-     "< test/tools/gnuplotitems.pl cleared results/troute.txt" using 1:2 with linespoints ls 5 title "cleared", \
-     "< test/tools/gnuplotitems.pl cand results/troute.txt" using 1:2 with linespoints ls 4 title "candidate", \
-     "< test/tools/gnuplotitems.pl shortcut results/troute.txt" using 1:2 with linespoints ls 8 title "shortcut", \
-     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 1:2 with linespoints ls 1 title "solution", \
-     "results/footprint.txt" using 1:2 with linespoints ls 3 title "footprint"
+     "< test/tools/gnuplotitems.pl cleared output/results/troute.txt" using 1:2 with linespoints ls 5 title "cleared", \
+     "< test/tools/gnuplotitems.pl cand output/results/troute.txt" using 1:2 with linespoints ls 4 title "candidate", \
+     "< test/tools/gnuplotitems.pl shortcut output/results/troute.txt" using 1:2 with linespoints ls 8 title "shortcut", \
+     "< test/tools/gnuplotitems.pl solution output/results/troute.txt" using 1:2 with linespoints ls 1 title "solution", \
+     "output/results/footprint.txt" using 1:2 with linespoints ls 3 title "footprint"
 
 pause -1
 
 set pm3d explicit map
 splot \
-      "results/terrain.txt" using 1:2:3 with pm3d, \
-     "< test/tools/gnuplotitems.pl cleared results/troute.txt" using 1:2:3 with linespoints ls 5 title "cleared", \
-     "< test/tools/gnuplotitems.pl cand results/troute.txt" using 1:2:3 with linespoints ls 4 title "candidate", \
-     "< test/tools/gnuplotitems.pl shortcut results/troute.txt" using 1:2:3 with points ls 2 title "shortcut", \
-     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 1:2:3 with linespoints ls 1 title "solution"
+      "output/results/terrain.txt" using 1:2:3 with pm3d, \
+     "< test/tools/gnuplotitems.pl cleared output/results/troute.txt" using 1:2:3 with linespoints ls 5 title "cleared", \
+     "< test/tools/gnuplotitems.pl cand output/results/troute.txt" using 1:2:3 with linespoints ls 4 title "candidate", \
+     "< test/tools/gnuplotitems.pl shortcut output/results/troute.txt" using 1:2:3 with points ls 2 title "shortcut", \
+     "< test/tools/gnuplotitems.pl solution output/results/troute.txt" using 1:2:3 with linespoints ls 1 title "solution"
 
 pause -1
 
@@ -55,13 +55,13 @@ set hidden3d
 set view 60,72,1,0.5
 
 splot \
-      "results/terrain.txt" using 1:2:3 with lines, \
-     "< test/tools/gnuplotitems.pl shortcut results/troute.txt" using 1:2:3 with points ls 2 title "shortcut", \
-     "< test/tools/gnuplotitems.pl cand results/troute.txt" using 1:2:3 with linespoints ls 4 title "candidate", \
-     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 1:2:($3+300) with linespoints ls 1 title "solution"
+      "output/results/terrain.txt" using 1:2:3 with lines, \
+     "< test/tools/gnuplotitems.pl shortcut output/results/troute.txt" using 1:2:3 with points ls 2 title "shortcut", \
+     "< test/tools/gnuplotitems.pl cand output/results/troute.txt" using 1:2:3 with linespoints ls 4 title "candidate", \
+     "< test/tools/gnuplotitems.pl solution output/results/troute.txt" using 1:2:($3+300) with linespoints ls 1 title "solution"
 pause -1
 
 plot \
-     "< test/tools/gnuplotitems.pl solution results/troute.txt" using 0:3 with linespoints ls 1 title "solution"
+     "< test/tools/gnuplotitems.pl solution output/results/troute.txt" using 0:3 with linespoints ls 1 title "solution"
 pause -1
 
