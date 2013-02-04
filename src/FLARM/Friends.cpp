@@ -66,10 +66,8 @@ FlarmFriends::LoadColor(const TCHAR *key, Color color)
   while (p != NULL && *p) {
     id = FlarmId::Parse(p, &endptr);
 
-    if (id.IsDefined()) {
+    if (id.IsDefined())
       SetFriendColor(id, color);
-      id.Clear();
-    }
 
     p = _tcschr(endptr, _T(','));
     if (p != NULL)
