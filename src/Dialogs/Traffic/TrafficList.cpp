@@ -69,8 +69,6 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *look.list.font_bold;
   const Font &small_font = *look.small_font;
 
-  canvas.SetTextColor(COLOR_BLACK);
-
   TCHAR tmp_id[10];
   id.Format(tmp_id);
 
