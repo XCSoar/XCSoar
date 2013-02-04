@@ -138,12 +138,6 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
     return;
 
   row.available = available;
-  if (!available)
-    row.GetWindow().Hide();
-  else if (row.visible &&
-           (!row.expert || UIGlobals::GetDialogSettings().expert))
-    row.GetWindow().Show();
-
   UpdateLayout();
 }
 
