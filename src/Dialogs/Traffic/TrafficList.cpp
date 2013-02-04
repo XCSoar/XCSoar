@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "TrafficDialogs.hpp"
-#include "Dialogs/ListPicker.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/List.hpp"
@@ -34,7 +35,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 
-class TrafficListRenderer : public ListItemRenderer {
+class TrafficListWidget : public ListWidget {
   struct Item {
     FlarmId id;
 
@@ -67,18 +68,46 @@ class TrafficListRenderer : public ListItemRenderer {
     }
   };
 
+  ActionListener &action_listener;
+
   std::vector<Item> items;
 
 public:
-  TrafficListRenderer(const FlarmId *array, size_t count) {
+  TrafficListWidget(ActionListener &_action_listener,
+                    const FlarmId *array, size_t count)
+    :action_listener(_action_listener) {
     items.reserve(count);
 
     for (unsigned i = 0; i < count; ++i)
       items.emplace_back(array[i]);
   }
 
+  FlarmId GetCursorId() const {
+    return items.empty()
+      ? FlarmId::Undefined()
+      : items[GetList().GetCursorIndex()].id;
+  }
+
+  /* virtual methods from class Widget */
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override {
+    DeleteWindow();
+  }
+
+  /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) override {
+    action_listener.OnAction(mrOK);
+  }
 };
 
 gcc_pure
@@ -90,8 +119,18 @@ GetRowHeight(const DialogLook &look)
 }
 
 void
-TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                 unsigned index)
+TrafficListWidget::Prepare(ContainerWindow &parent,
+                           const PixelRect &rc)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  ListControl &list = CreateList(parent, look, rc,
+                                 GetRowHeight(look));
+  list.SetLength(items.size());
+}
+
+void
+TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                               unsigned index)
 {
   assert(index < items.size());
   Item &item = items[index];
@@ -157,11 +196,18 @@ PickFlarmTraffic(const TCHAR *title, FlarmId array[], unsigned count)
 {
   assert(count > 0);
 
-  UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
-  TrafficListRenderer item_renderer(array, count);
-  unsigned index = ListPicker(title, count, 0, line_height,
-                              item_renderer, true);
-  return index < count
-    ? array[index]
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+
+  TrafficListWidget *const list_widget =
+    new TrafficListWidget(dialog, array, count);
+
+  Widget *widget = list_widget;
+
+  dialog.CreateFull(UIGlobals::GetMainWindow(), title, widget);
+  dialog.AddButton(_("Select"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  return dialog.ShowModal() == mrOK
+    ? list_widget->GetCursorId()
     : FlarmId::Undefined();
 }
