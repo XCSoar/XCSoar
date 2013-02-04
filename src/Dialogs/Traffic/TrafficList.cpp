@@ -82,8 +82,8 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
   else
     tmp.Format(_T("%s"), tmp_id);
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
-                         rc.top + Layout::FastScale(2), rc, tmp);
+  canvas.DrawText(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), tmp);
 
   canvas.Select(small_font);
 
@@ -110,9 +110,9 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (tmp.empty())
     tmp = _("No further information");
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                         rc, tmp);
+  canvas.DrawText(rc.left + Layout::FastScale(2),
+                  rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                  tmp);
 }
 
 FlarmId
