@@ -944,8 +944,14 @@ RowFormWidget::UpdateLayout()
 
   /* second row traversal: now move and resize the rows */
   for (auto &i : rows) {
-    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert))
+    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert)) {
+      if (i.type == Row::Type::WIDGET)
+        i.GetWidget().Hide();
+      else if (i.type != Row::Type::DUMMY)
+        i.GetWindow().Hide();
+
       continue;
+    }
 
     /* determine this row's height */
     UPixelScalar height = i.GetMinimumHeight();
@@ -972,11 +978,6 @@ RowFormWidget::UpdateLayout()
     if (i.type == Row::Type::WIDGET) {
       Widget &widget = i.GetWidget();
 
-      if (!i.available || (i.expert && !expert)) {
-        widget.Hide();
-        continue;
-      }
-
       /* TODO: visible check - hard to implement without remembering
          the control position, because Widget::Show() wants a
          PixelRect parameter */
@@ -999,20 +1000,8 @@ RowFormWidget::UpdateLayout()
 
     Window &window = i.GetWindow();
 
-    if (!i.available) {
-      window.Hide();
-      continue;
-    }
-
-    if (i.expert) {
-      if (!expert) {
-        window.Hide();
-        continue;
-      }
-
-      if (i.visible)
-        window.Show();
-    }
+    if (i.visible)
+      window.Show();
 
     if (caption_width > 0 && i.type == Row::Type::EDIT &&
         i.GetControl().HasCaption())
