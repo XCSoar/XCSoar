@@ -36,5 +36,3 @@ build/local-config.mk
 
 *.pyc
 *.pyo
-
-.vagrant
