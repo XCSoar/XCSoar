@@ -55,7 +55,7 @@ Copyright_License {
 #include <limits.h>
 
 unsigned
-RowFormWidget::Row::GetMinimumHeight() const
+RowFormWidget::Row::GetMinimumHeight(bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -68,6 +68,11 @@ RowFormWidget::Row::GetMinimumHeight() const
     break;
 
   case Type::EDIT:
+    if (vertical && GetControl().HasCaption())
+      return 2 * Layout::GetMinimumControlHeight();
+
+    /* fall through */
+
   case Type::BUTTON:
     return Layout::GetMinimumControlHeight();
 
@@ -82,7 +87,7 @@ RowFormWidget::Row::GetMinimumHeight() const
 }
 
 unsigned
-RowFormWidget::Row::GetMaximumHeight() const
+RowFormWidget::Row::GetMaximumHeight(bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -95,6 +100,9 @@ RowFormWidget::Row::GetMaximumHeight() const
     break;
 
   case Type::EDIT:
+    if (vertical && GetControl().HasCaption())
+      return 2 * Layout::GetMinimumControlHeight();
+
     return GetControl().IsReadOnly()
       /* rows that are not clickable don't need to be extra-large */
       ? Layout::GetMinimumControlHeight()
@@ -113,8 +121,8 @@ RowFormWidget::Row::GetMaximumHeight() const
   return window->GetHeight();
 }
 
-RowFormWidget::RowFormWidget(const DialogLook &_look)
-  :look(_look)
+RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
+  :look(_look), vertical(_vertical)
 {
 }
 
@@ -916,18 +924,18 @@ RowFormWidget::UpdateLayout()
     if (!i.IsAvailable(expert))
       continue;
 
-    min_height += i.GetMinimumHeight();
-    if (i.IsElastic())
+    min_height += i.GetMinimumHeight(vertical);
+    if (i.IsElastic(vertical))
       ++n_elastic;
 
-    if (i.type == Row::Type::EDIT) {
+    if (!vertical && i.type == Row::Type::EDIT) {
       unsigned cw = i.GetControl().GetRecommendedCaptionWidth();
       if (cw > caption_width)
         caption_width = cw;
     }
   }
 
-  if (caption_width * 3 > total_width * 2)
+  if (!vertical && caption_width * 3 > total_width * 2)
     caption_width = total_width * 2 / 3;
 
   /* how much excess height in addition to the minimum height? */
@@ -947,15 +955,15 @@ RowFormWidget::UpdateLayout()
     }
 
     /* determine this row's height */
-    UPixelScalar height = i.GetMinimumHeight();
-    if (excess_height > 0 && i.IsElastic()) {
+    UPixelScalar height = i.GetMinimumHeight(vertical);
+    if (excess_height > 0 && i.IsElastic(vertical)) {
       assert(n_elastic > 0);
 
       /* distribute excess height among all elastic rows */
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i.GetMaximumHeight();
+        const UPixelScalar max_height = i.GetMaximumHeight(vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
@@ -996,9 +1004,13 @@ RowFormWidget::UpdateLayout()
     if (i.visible)
       window.Show();
 
-    if (caption_width > 0 && i.type == Row::Type::EDIT &&
-        i.GetControl().HasCaption())
-      i.GetControl().SetCaptionWidth(caption_width);
+    if (i.type == Row::Type::EDIT &&
+        i.GetControl().HasCaption()) {
+      if (vertical)
+        i.GetControl().SetCaptionWidth(-1);
+      else if (caption_width > 0)
+        i.GetControl().SetCaptionWidth(caption_width);
+    }
 
     /* finally move and resize */
     NextControlRect(current_rect, height);
@@ -1016,10 +1028,14 @@ RowFormWidget::GetMinimumSize() const
 
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
-  PixelSize size(GetRecommendedCaptionWidth() + value_width, 0u);
+  const unsigned edit_width = vertical
+    ? std::max(GetRecommendedCaptionWidth(), value_width)
+    : (GetRecommendedCaptionWidth() + value_width);
+
+  PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
     if (i.IsAvailable(expert))
-      size.cy += i.GetMinimumHeight();
+      size.cy += i.GetMinimumHeight(vertical);
 
   return size;
 }
@@ -1030,9 +1046,13 @@ RowFormWidget::GetMaximumSize() const
   const unsigned value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx * 2;
 
-  PixelSize size(GetRecommendedCaptionWidth() + value_width, 0u);
+  const unsigned edit_width = vertical
+    ? std::max(GetRecommendedCaptionWidth(), value_width)
+    : (GetRecommendedCaptionWidth() + value_width);
+
+  PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
-    size.cy += i.GetMaximumHeight();
+    size.cy += i.GetMaximumHeight(vertical);
 
   return size;
 }
