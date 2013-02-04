@@ -285,9 +285,10 @@ FLARM audio devices are much more suitable in assisting the pilot to be
 aware of traffic.
 
 Note that unless one is circling, the usual zoom level is such that
-FLARM traffic will not be easily distinguished.  When one is circling,
-or if the user has North-Up screen orientation, this makes the map display 
-a poor aid at helping to locate the traffic.
+FLARM traffic will not be easily distinguished. When one is circling,
+the zoom level might be appropriate, but continuous direction change and
+the typical latency of a PDA makes the map display a poor aid at helping
+to locate the traffic.
 
 \subsection*{FLARM map display}
 
@@ -318,7 +319,7 @@ for the small radar view can be configured\config{flarmradar-place}.
 This FLARM display is oriented track-up and a small glider icon
 clearly shows that the display is oriented as such.  The scale of the
 display is linear up to maximum distance of 2000 meters.  On the
-background there are two rings; the first is 1000 meters and the second 
+background there are two rings; the first is a 1000 meters radius and the second 
 is 2000 meters.  Traffic further away than 2000 meters is drawn at the 2000 meter ring.
 \sketch{figures/flarmrose.png}
 
@@ -357,7 +358,7 @@ about the FLARM traffic and depending on the setup it closes by itself, when all
 traffic has been gone.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
 \end{center}
 
 Only a few controls are on the dialogue, from top down:
@@ -384,7 +385,7 @@ previous or next target on the radar, gestures work in the same manner.
 \end{tabular}
 \end{center}
 The three screenshots are taken in a sequence and demonstrate a typical near
-pass of e.g. two FLARM equippped gliders. The extra information is colour-coded
+pass of e.g. two FLARM equipped gliders. The extra information is colour-coded
 in the already mentioned way. In the four corners of the radar screen is
 additional info to the selected target displayed:
 
@@ -431,16 +432,28 @@ button to open the text entry dialogue to allow entry of the mate's code.
 After entering the mate's code, the relative distance and 
 bearing to the mate is calculated and updated in the dialogue.
 
+\subsection*{FLARM Id lookup}
 XCSoar also supports the encrypted team codes from the FlarmNet initiative.
-The \button{Flarm Lock} button accesses the FlarmNet database. A simple but 
-ambiguous lookup for a competition ID delivers a FLARM ID, which allows you 
-to `lock' your FLARM mate from the far. See Section~\ref{sec:flarm-ident-file} 
-where to find the FlarmNet database etc.
+The \button{Flarm Lock} button allows you to accesses the FlarmNet database as well 
+as XCSoar's database for flarm to find a team mate. A simple 
+lookup for a competition ID delivers potentially the desired 
+FLARM identity. Selecting the desired data base entry from the found items allows you 
+to `lock' your buddy from the far. See Section~\ref{sec:flarm-ident-file} 
+where to find the FlarmNet database etc. explained in detail.
 
-Finally XCSoar can manage only one team mate with a defined reference waypoint, 
-but any number of `friends' with a known FLARM ID. In case you get closer to 
-your flying college, just pick a colour on the FLARM dialogue and identify this 
-FLARM response in the future as your buddy.
+\menulabel{\bmenu{Info 2}\blink\bmenut{FLARM}{Details}}
+Just a similar functionality provides the flarm details diologue. It also let 
+you search through the competition ID's in the data base and shows the details on it.  
 
-\todo{flarm detail dialogue}
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarmdetails.png}
+\end{center}
+
+\subsection*{Klick your buddy}
+Even if XCSoar can `lock' only one team mate by reference waypoint, 
+it handles any number of `friends' with a known FLARM Id. Chances are high your buddy is not 
+registered in any database. But in any case you get closer to 
+your flying college, just pick the the details from the FLARM radar screen, choose 
+a colour and identify this FLARM response in the future as your buddy.
+
 
