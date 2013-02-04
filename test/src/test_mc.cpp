@@ -34,10 +34,8 @@
 
 const fixed Vmin(5.0);
 
-std::ofstream ofile("results/res-polar-m.txt");
-
 static void
-polar_mc(const fixed mc)
+polar_mc(std::ofstream &ofile, const fixed mc)
 {
   GlidePolar polar(mc);
   ofile << (double)mc << " " 
@@ -185,9 +183,12 @@ test_stf()
 static bool
 test_mc()
 {
-  for (fixed mc=fixed(0); mc<fixed(5.0); mc+= fixed(0.1)) {
-    basic_polar(mc);
-    polar_mc(mc);
+  {
+    std::ofstream ofile("results/res-polar-m.txt");
+    for (fixed mc=fixed(0); mc<fixed(5.0); mc+= fixed(0.1)) {
+      basic_polar(mc);
+      polar_mc(ofile, mc);
+    }
   }
 
   {
