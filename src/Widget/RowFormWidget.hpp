@@ -140,6 +140,17 @@ class RowFormWidget : public WindowWidget {
     }
 
     /**
+     * Determines whether this row is available.  A row that is not
+     * available is hidden and will not be considered in the layout.
+     *
+     * @param expert_mode true if the user has enabled "expert" mode
+     */
+    bool IsAvailable(bool expert_mode) const {
+      return type != Row::Type::DUMMY && available &&
+        (!expert || expert_mode);
+    }
+
+    /**
      * Delete the #Widget or #Window object.
      */
     void Delete() {

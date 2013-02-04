@@ -151,8 +151,7 @@ RowFormWidget::SetRowVisible(unsigned i, bool visible)
   row.visible = visible;
   if (!visible)
     row.GetWindow().Hide();
-  else if (row.available &&
-           (!row.expert || UIGlobals::GetDialogSettings().expert))
+  else if (row.IsAvailable(UIGlobals::GetDialogSettings().expert))
     row.GetWindow().Show();
 }
 
@@ -884,7 +883,7 @@ RowFormWidget::GetRecommendedCaptionWidth() const
 
   UPixelScalar w = 0;
   for (const auto &i : rows) {
-    if (!i.available || (i.expert && !expert))
+    if (!i.IsAvailable(expert))
       continue;
 
     if (i.type == Row::Type::EDIT) {
@@ -914,7 +913,7 @@ RowFormWidget::UpdateLayout()
   unsigned caption_width = 0;
 
   for (const auto &i : rows) {
-    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert))
+    if (!i.IsAvailable(expert))
       continue;
 
     min_height += i.GetMinimumHeight();
@@ -938,7 +937,7 @@ RowFormWidget::UpdateLayout()
 
   /* second row traversal: now move and resize the rows */
   for (auto &i : rows) {
-    if (i.type == Row::Type::DUMMY || !i.available || (i.expert && !expert)) {
+    if (!i.IsAvailable(expert)) {
       if (i.type == Row::Type::WIDGET)
         i.GetWidget().Hide();
       else if (i.type != Row::Type::DUMMY)
@@ -1019,7 +1018,7 @@ RowFormWidget::GetMinimumSize() const
 
   PixelSize size(GetRecommendedCaptionWidth() + value_width, 0u);
   for (const auto &i : rows)
-    if (i.available && (!i.expert || expert))
+    if (i.IsAvailable(expert))
       size.cy += i.GetMinimumHeight();
 
   return size;
