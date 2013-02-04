@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TrafficDialogs.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -30,13 +29,10 @@ Copyright_License {
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-
-#include <stdio.h>
 
 class TrafficListRenderer : public ListItemRenderer {
   const FlarmId *array;
