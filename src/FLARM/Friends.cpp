@@ -56,19 +56,21 @@ void
 FlarmFriends::LoadColor(const TCHAR *key, Color color)
 {
   const TCHAR *ids = Profile::Get(key);
-  if (ids == NULL || StringIsEmpty(ids))
+  if (ids == nullptr)
     return;
 
   const TCHAR *p = ids;
-  while (p != NULL && *p) {
+  while (true) {
     TCHAR *endptr;
     FlarmId id = FlarmId::Parse(p, &endptr);
     if (id.IsDefined())
       SetFriendColor(id, color);
 
     p = _tcschr(endptr, _T(','));
-    if (p != NULL)
-      p++;
+    if (p == nullptr)
+      break;
+
+    ++p;
   }
 }
 
