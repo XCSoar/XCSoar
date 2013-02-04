@@ -145,12 +145,10 @@ TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
   }
 
-  if (tmp.empty())
-    tmp = _("No further information");
-
-  canvas.DrawText(rc.left + Layout::FastScale(2),
-                  rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                  tmp);
+  if (!tmp.empty())
+    canvas.DrawText(rc.left + Layout::FastScale(2),
+                    rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                    tmp);
 }
 
 FlarmId
