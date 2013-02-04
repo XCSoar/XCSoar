@@ -38,7 +38,16 @@ Copyright_License {
 
 #include <stdio.h>
 
-static const FlarmId *array;
+class TrafficListRenderer : public ListItemRenderer {
+  const FlarmId *array;
+
+public:
+  TrafficListRenderer(const FlarmId *_array)
+    :array(_array) {}
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) override;
+};
 
 gcc_pure
 static UPixelScalar
@@ -48,8 +57,9 @@ GetRowHeight(const DialogLook &look)
     + look.small_font->GetHeight();
 }
 
-static void
-PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
+void
+TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                 unsigned index)
 {
   assert(array[index].IsDefined());
 
@@ -113,13 +123,12 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
 FlarmId
 dlgFlarmDetailsListShowModal(const TCHAR *title,
-                             FlarmId _array[], unsigned count)
+                             FlarmId array[], unsigned count)
 {
   assert(count > 0);
 
-  array = _array;
   UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
-  FunctionListItemRenderer item_renderer(PaintListItem);
+  TrafficListRenderer item_renderer(array);
   unsigned index = ListPicker(title, count, 0, line_height,
                               item_renderer, true);
   return index < count
