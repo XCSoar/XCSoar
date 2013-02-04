@@ -35,11 +35,47 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 class TrafficListRenderer : public ListItemRenderer {
-  const FlarmId *array;
+  struct Item {
+    FlarmId id;
+
+    /**
+     * Were the attributes below already lazy-loaded from the
+     * database?  We can't use nullptr for this, because both will be
+     * nullptr after a failed lookup.
+     */
+    bool loaded;
+
+    const FlarmRecord *record;
+    const TCHAR *callsign;
+
+    explicit Item(FlarmId _id):id(_id), loaded(false) {
+      assert(id.IsDefined());
+    }
+
+    void Load() {
+      assert(id.IsDefined());
+
+      record = FlarmNet::FindRecordById(id);
+      callsign = FlarmDetails::LookupCallsign(id);
+
+      loaded = true;
+    }
+
+    void AutoLoad() {
+      if (!loaded)
+        Load();
+    }
+  };
+
+  std::vector<Item> items;
 
 public:
-  TrafficListRenderer(const FlarmId *_array)
-    :array(_array) {}
+  TrafficListRenderer(const FlarmId *array, size_t count) {
+    items.reserve(count);
+
+    for (unsigned i = 0; i < count; ++i)
+      items.emplace_back(array[i]);
+  }
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
@@ -57,19 +93,21 @@ void
 TrafficListRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                  unsigned index)
 {
-  assert(array[index].IsDefined());
+  assert(index < items.size());
+  Item &item = items[index];
+  assert(item.id.IsDefined());
 
-  const FlarmId id = array[index];
+  item.AutoLoad();
+
+  const FlarmRecord *record = item.record;
+  const TCHAR *callsign = item.callsign;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   const Font &name_font = *look.list.font_bold;
   const Font &small_font = *look.small_font;
 
   TCHAR tmp_id[10];
-  id.Format(tmp_id);
-
-  const FlarmRecord *record = FlarmNet::FindRecordById(id);
-  const TCHAR *callsign = FlarmDetails::LookupCallsign(id);
+  item.id.Format(tmp_id);
 
   canvas.Select(name_font);
 
@@ -122,7 +160,7 @@ dlgFlarmDetailsListShowModal(const TCHAR *title,
   assert(count > 0);
 
   UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
-  TrafficListRenderer item_renderer(array);
+  TrafficListRenderer item_renderer(array, count);
   unsigned index = ListPicker(title, count, 0, line_height,
                               item_renderer, true);
   return index < count
