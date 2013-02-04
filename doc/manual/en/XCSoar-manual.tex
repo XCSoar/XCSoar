@@ -1,23 +1,41 @@
-\documentclass[a4paper,12pt]{refrep}
+\documentclass[a4paper,11pt]{refrep}
+
+% Set the title
 \title{User Manual}
+
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
 
 % Set the page title
 \newcommand{\mycontent}[0]{
 \begin{tabular}{l}
-\hspace*{-4cm} \em XCSoar User Manual \vspace*{2pt}
+\hspace*{-6cm} \em XCSoar User Manual \vspace*{2pt}
 \end{tabular}}
 
+% Define some xc doc styles
 \input{xcsoar.sty}
 \input{title-xcsoar.sty}
+
+
 \begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Front page
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%
+% Todo's
 \listoftodos
  
 %%%%%%%%%%%%%%%%%%%%%%
+% Table of contents
 \begingroup
-\setlength{\parskip}{0.1\baselineskip}
+\fontfamily{ptm}
+\normalsize
+\fontseries{c}\selectfont
+\setlength{\parskip}{0.05\baselineskip}
 \tableofcontents
 \endgroup
 
