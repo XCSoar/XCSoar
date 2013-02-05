@@ -45,6 +45,10 @@ public:
     code.clear();
   }
 
+  bool IsDefined() const {
+    return !code.empty();
+  }
+
   /**
    * Returns the current team code
    * @return Current team code

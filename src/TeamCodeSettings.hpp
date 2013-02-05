@@ -38,12 +38,13 @@ struct TeamCodeSettings {
   int team_code_reference_waypoint;
   /** Whether to enable tracking by FLARM */
   bool team_flarm_tracking;
-  /** Whether the teammate code is valid */
-  bool team_code_valid;
 
   /** CN of the glider to track */
   StaticString<4> team_flarm_callsign;
-  /** auto-detected, see also in Info.h */
+
+  /**
+   * Check TeamCode::IsDefined() before using this attribute.
+   */
   TeamCode team_code;
 
   /** FlarmId of the glider to track */

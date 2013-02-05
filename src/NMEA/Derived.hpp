@@ -92,9 +92,6 @@ struct TeamInfo
   /** Are #teammate_vector and #TeammateLocation available? */
   bool teammate_available;
 
-  /** Is #flarm_teammate_code available? */
-  bool flarm_teammate_code_available;
-
   /** is #flarm_teammate_code current or did we lose him? */
   bool flarm_teammate_code_current;
 
@@ -107,7 +104,10 @@ struct TeamInfo
   /** Position of the chosen team mate */
   GeoPoint teammate_location;
 
-  /** The team code of the FLARM teammate. */
+  /**
+   * The team code of the FLARM teammate.  Check TeamCode::IsDefined()
+   * before using this attribute.
+   */
   TeamCode flarm_teammate_code;
 
   void Clear();

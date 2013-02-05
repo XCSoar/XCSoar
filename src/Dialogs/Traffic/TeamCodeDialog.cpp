@@ -112,12 +112,8 @@ OnCodeClicked()
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
   settings.team_code.Update(newTeammateCode);
-  if (!StringIsEmpty(settings.team_code.GetCode())) {
-    settings.team_code_valid = true;
+  if (settings.team_code.IsDefined())
     settings.team_flarm_tracking = false;
-  }
-  else
-    settings.team_code_valid = false;
 }
 
 static void
@@ -132,7 +128,7 @@ OnFlarmLockClicked()
     return;
 
   settings.team_flarm_callsign = newTeamFlarmCNTarget;
-  settings.team_code_valid = false;
+  settings.team_code.Clear();
 
   if (StringIsEmpty(settings.team_flarm_callsign)) {
     settings.team_flarm_tracking = false;

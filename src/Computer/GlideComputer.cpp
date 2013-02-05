@@ -223,7 +223,6 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
 
   // Calculate TeamCode and save it in Calculated
   teamcode_info.flarm_teammate_code.Update(v.bearing, v.distance);
-  teamcode_info.flarm_teammate_code_available = true;
   teamcode_info.flarm_teammate_code_current = true;
 }
 
@@ -254,15 +253,15 @@ GlideComputer::CalculateTeammateBearingRange()
     ComputeFlarmTeam(basic.location, team_code_ref_location,
                      basic.flarm.traffic, settings.team_flarm_id,
                      teamcode_info);
-  } else if (settings.team_code_valid) {
-    teamcode_info.flarm_teammate_code_available = false;
+  } else if (settings.team_code.IsDefined()) {
+    teamcode_info.flarm_teammate_code.Clear();
 
     ComputeTeamCode(basic.location, team_code_ref_location,
                     settings.team_code,
                     teamcode_info);
   } else {
     teamcode_info.teammate_available = false;
-    teamcode_info.flarm_teammate_code_available = false;
+    teamcode_info.flarm_teammate_code.Clear();
   }
 }
 

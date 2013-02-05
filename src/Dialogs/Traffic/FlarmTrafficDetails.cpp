@@ -216,7 +216,7 @@ OnTeamClicked()
   // Start tracking
   settings.team_flarm_id = target_id;
   settings.team_flarm_tracking = true;
-  settings.team_code_valid = false;
+  settings.team_code.Clear();
 
   // Close the dialog
   wf->SetModalResult(mrOK);

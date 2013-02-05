@@ -42,8 +42,6 @@ TeamInfo::Clear()
 
   own_teammate_code.Clear();
 
-  flarm_teammate_code_available = false;
-
   flarm_teammate_code.Clear();
 }
 

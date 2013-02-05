@@ -114,5 +114,5 @@ void
 GlideComputerEvents::OnComputerSettingsUpdate(const ComputerSettings &settings)
 {
   enable_team = settings.team_code.team_flarm_tracking ||
-    settings.team_code.team_code_valid;
+    settings.team_code.team_code.IsDefined();
 }

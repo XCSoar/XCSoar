@@ -45,10 +45,10 @@ InfoBoxContentTeamCode::Update(InfoBoxData &data)
   data.SetValue(CommonInterface::Calculated().own_teammate_code.GetCode());
 
   // Set Comment
-  if (teamcode_info.flarm_teammate_code_available) {
+  if (teamcode_info.flarm_teammate_code.IsDefined()) {
     data.SetComment(teamcode_info.flarm_teammate_code.GetCode());
     data.SetCommentColor(teamcode_info.flarm_teammate_code_current ? 2 : 1);
-  } else if (settings.team_code_valid) {
+  } else if (settings.team_code.IsDefined()) {
     data.SetComment(settings.team_code.GetCode());
     data.SetCommentColor(0);
   }
