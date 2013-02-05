@@ -41,28 +41,28 @@ static constexpr Angle ANGLE_FACTOR =
 /**
  * Decodes the TeamCode
  * @param code The teamcode (or part of it)
- * @param maxCount Maximum chars to decode
+ * @param length Maximum chars to decode
  * @return The decoded value
  */
 static unsigned
-GetValueFromTeamCode(const TCHAR *code, unsigned maxCount)
+GetValueFromTeamCode(const TCHAR *code, unsigned length)
 {
   unsigned val = 0;
-  unsigned charPos = 0;
+  unsigned position = 0;
 
-  while (code[charPos] != 0 && charPos < maxCount) {
+  while (code[position] != 0 && position < length) {
     unsigned cifferVal = 0;
 
-    if (code[charPos] >= '0' && code[charPos] <= '9') {
-      cifferVal = code[charPos] - '0';
-    } else if (code[charPos] >= 'A' && code[charPos] <= 'Z') {
-      cifferVal = 10 + code[charPos] - 'A';
+    if (code[position] >= '0' && code[position] <= '9') {
+      cifferVal = code[position] - '0';
+    } else if (code[position] >= 'A' && code[position] <= 'Z') {
+      cifferVal = 10 + code[position] - 'A';
     }
 
     val = val * BASE;
     val += cifferVal;
 
-    charPos++;
+    ++position;
   }
 
   return val;
@@ -72,37 +72,37 @@ GetValueFromTeamCode(const TCHAR *code, unsigned maxCount)
  * Encodes a value to teamcode
  * @param value The value to encode
  * @param code The teamcode (pointer)
- * @param minCiffers Number of chars for the teamcode
+ * @param n_digits Number of chars for the teamcode
  */
 static void
-NumberToTeamCode(unsigned value, TCHAR *code, unsigned minCiffers)
+NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
 {
-  unsigned maxCif = 0;
-  int curCif = 0;
+  unsigned max_digits = 0;
+  int current_digit = 0;
 
-  if (minCiffers > 0)	{
-    maxCif = minCiffers - 1;
-    curCif = maxCif;
+  if (n_digits > 0) {
+    max_digits = n_digits - 1;
+    current_digit = max_digits;
   }
 
   unsigned rest = value;
-  while (rest > 0 || curCif >= 0) {
-    unsigned cifVal = (unsigned)pow(BASE, curCif);
-    unsigned partSize = (unsigned)(rest / cifVal);
-    unsigned partVal(partSize * cifVal);
-    unsigned txtPos = maxCif - curCif;
+  while (rest > 0 || current_digit >= 0) {
+    unsigned digit_value = (unsigned)pow(BASE, current_digit);
+    unsigned part_size = (unsigned)(rest / digit_value);
+    unsigned part_value(part_size * digit_value);
+    unsigned position = max_digits - current_digit;
 
-    if (partSize < 10) {
-      rest -= partVal;
-      code[txtPos] = (unsigned char)('0' + partSize);
-      curCif--;
-    } else if (partSize < BASE) {
-      rest -= partVal;
-      code[txtPos] = (unsigned char)('A' + partSize - 10);
-      curCif--;
+    if (part_size < 10) {
+      rest -= part_value;
+      code[position] = (unsigned char)('0' + part_size);
+      --current_digit;
+    } else if (part_size < BASE) {
+      rest -= part_value;
+      code[position] = (unsigned char)('A' + part_size - 10);
+      --current_digit;
     } else {
-      curCif++;
-      maxCif = curCif;
+      ++current_digit;
+      max_digits = current_digit;
     }
   }
 }
@@ -115,27 +115,27 @@ NumberToTeamCode(unsigned value, TCHAR *code, unsigned minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const unsigned bamValue = uround(bearing.AsBearing().Native()
-                                   / ANGLE_FACTOR.Native());
-  NumberToTeamCode(bamValue, code, 2);
+  const unsigned value = uround(bearing.AsBearing().Native()
+                                / ANGLE_FACTOR.Native());
+  NumberToTeamCode(value, code, 2);
 }
 
 Angle
 TeamCode::GetBearing() const
 {
   // Get the first two values from teamcode (1-2)
-  unsigned val = GetValueFromTeamCode(code, 2);
+  unsigned value = GetValueFromTeamCode(code, 2);
 
   // Calculate bearing
-  return (ANGLE_FACTOR * val).AsBearing();
+  return (ANGLE_FACTOR * value).AsBearing();
 }
 
 fixed
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
-  unsigned val = GetValueFromTeamCode(code.begin() + 2, 3);
-  return fixed(val * 100);
+  unsigned value = GetValueFromTeamCode(code.begin() + 2, 3);
+  return fixed(value * 100);
 }
 
 void
