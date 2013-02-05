@@ -68,6 +68,19 @@ GetValueFromTeamCode(const TCHAR *code, unsigned length)
   return val;
 }
 
+gcc_const
+static unsigned
+CountDigits(unsigned value)
+{
+  unsigned n = 1;
+  while (value >= BASE) {
+    value /= BASE;
+    ++n;
+  }
+
+  return n;
+}
+
 /**
  * Encodes a value to teamcode
  * @param value The value to encode
@@ -77,34 +90,19 @@ GetValueFromTeamCode(const TCHAR *code, unsigned length)
 static void
 NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
 {
-  unsigned max_digits = 0;
-  int current_digit = 0;
+  if (n_digits == 0)
+    n_digits = CountDigits(value);
 
-  if (n_digits > 0) {
-    max_digits = n_digits - 1;
-    current_digit = max_digits;
-  }
+  TCHAR *p = code + n_digits - 1;
 
-  unsigned rest = value;
-  while (rest > 0 || current_digit >= 0) {
-    unsigned digit_value = (unsigned)pow(BASE, current_digit);
-    unsigned part_size = (unsigned)(rest / digit_value);
-    unsigned part_value(part_size * digit_value);
-    unsigned position = max_digits - current_digit;
+  do {
+    unsigned digit_value = value % BASE;
+    value /= BASE;
 
-    if (part_size < 10) {
-      rest -= part_value;
-      code[position] = (unsigned char)('0' + part_size);
-      --current_digit;
-    } else if (part_size < BASE) {
-      rest -= part_value;
-      code[position] = (unsigned char)('A' + part_size - 10);
-      --current_digit;
-    } else {
-      ++current_digit;
-      max_digits = current_digit;
-    }
-  }
+    *p = digit_value < 10
+      ? TCHAR('0' + digit_value)
+      : TCHAR('A' + digit_value - 10);
+  } while (--p >= code);
 }
 
 /**
