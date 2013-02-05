@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "FLARM/FlarmNet.hpp"
 #include "FlarmNetReader.hpp"
+#include "FlarmNetRecord.hpp"
+#include "FlarmNetDatabase.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "FLARM/Record.hpp"
-#include "FLARM/Database.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "IO/LineReader.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 
 namespace FlarmNet
 {
-  static FlarmDatabase *database;
+  static FlarmNetDatabase *database;
 }
 
 void
@@ -50,7 +50,7 @@ FlarmNet::LoadFile(NLineReader &reader)
 {
   // Clear database before adding new entries
   if (database == NULL)
-    database = new FlarmDatabase();
+    database = new FlarmNetDatabase();
   else
     database->Clear();
 
@@ -62,14 +62,14 @@ FlarmNet::LoadFile(const TCHAR *path)
 {
   // Clear database before adding new entries
   if (database == NULL)
-    database = new FlarmDatabase();
+    database = new FlarmNetDatabase();
   else
     database->Clear();
 
   return FlarmNetReader::LoadFile(path, *database);
 }
 
-const FlarmRecord *
+const FlarmNetRecord *
 FlarmNet::FindRecordById(FlarmId id)
 {
   if (database == NULL)
@@ -78,7 +78,7 @@ FlarmNet::FindRecordById(FlarmId id)
   return database->FindRecordById(id);
 }
 
-const FlarmRecord *
+const FlarmNetRecord *
 FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 {
   return database != NULL
@@ -88,7 +88,7 @@ FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 
 unsigned
 FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
-                                const FlarmRecord *array[], unsigned size)
+                                const FlarmNetRecord *array[], unsigned size)
 {
   if (database == NULL)
     return 0;

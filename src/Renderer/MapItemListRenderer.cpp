@@ -49,7 +49,7 @@ Copyright_License {
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FlarmDetails.hpp"
-#include "FLARM/Record.hpp"
+#include "FLARM/FlarmNetRecord.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 
@@ -465,7 +465,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  const FlarmRecord *record = FlarmDetails::LookupRecord(item.id);
+  const FlarmNetRecord *record = FlarmDetails::LookupRecord(item.id);
 
   StaticString<256> title_string;
   if (record && !StringIsEmpty(record->pilot))

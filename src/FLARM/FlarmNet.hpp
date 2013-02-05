@@ -24,11 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_HPP
 #define XCSOAR_FLARM_NET_HPP
 
-#include "Record.hpp"
-
 #include <tchar.h>
 
-struct FlarmRecord;
+struct FlarmNetRecord;
 class NLineReader;
 class FlarmId;
 
@@ -54,15 +52,16 @@ namespace FlarmNet
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  const FlarmRecord *FindRecordById(FlarmId id);
+  const FlarmNetRecord *FindRecordById(FlarmId id);
 
   /**
    * Finds a FLARMNetRecord object based on the given Callsign
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const FlarmRecord *FindFirstRecordByCallSign(const TCHAR *cn);
-  unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmRecord *array[],
+  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn);
+  unsigned FindRecordsByCallSign(const TCHAR *cn,
+                                 const FlarmNetRecord *array[],
                                  unsigned size);
   unsigned FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size);
 };

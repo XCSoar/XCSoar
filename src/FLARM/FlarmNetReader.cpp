@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "FlarmNetReader.hpp"
-#include "FLARM/Record.hpp"
-#include "FLARM/Database.hpp"
+#include "FlarmNetRecord.hpp"
+#include "FlarmNetDatabase.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "IO/LineReader.hpp"
@@ -101,7 +101,7 @@ LoadString(const char *bytes, size_t length, StaticString<size> &dest)
  * The caller is responsible for deleting the object again!
  */
 static bool
-LoadRecord(FlarmRecord &record, const char *line)
+LoadRecord(FlarmNetRecord &record, const char *line)
 {
   if (strlen(line) < 172)
     return false;
@@ -123,7 +123,7 @@ LoadRecord(FlarmRecord &record, const char *line)
 }
 
 unsigned
-FlarmNetReader::LoadFile(NLineReader &reader, FlarmDatabase &database)
+FlarmNetReader::LoadFile(NLineReader &reader, FlarmNetDatabase &database)
 {
   /* skip first line */
   const char *line = reader.ReadLine();
@@ -132,7 +132,7 @@ FlarmNetReader::LoadFile(NLineReader &reader, FlarmDatabase &database)
 
   int itemCount = 0;
   while ((line = reader.ReadLine()) != NULL) {
-    FlarmRecord record;
+    FlarmNetRecord record;
     if (LoadRecord(record, line)) {
       database.Insert(record);
       itemCount++;
@@ -143,7 +143,7 @@ FlarmNetReader::LoadFile(NLineReader &reader, FlarmDatabase &database)
 }
 
 unsigned
-FlarmNetReader::LoadFile(const TCHAR *path, FlarmDatabase &database)
+FlarmNetReader::LoadFile(const TCHAR *path, FlarmNetDatabase &database)
 {
   FileLineReaderA file(path);
   if (file.error())

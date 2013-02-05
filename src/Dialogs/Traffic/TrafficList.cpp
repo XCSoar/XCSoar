@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "FLARM/FlarmNet.hpp"
+#include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "Util/StaticString.hpp"
@@ -58,7 +59,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     bool loaded;
 
-    const FlarmRecord *record;
+    const FlarmNetRecord *record;
     const TCHAR *callsign;
 
     explicit Item(FlarmId _id):id(_id), loaded(false) {
@@ -225,7 +226,7 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   item.AutoLoad();
 
-  const FlarmRecord *record = item.record;
+  const FlarmNetRecord *record = item.record;
   const TCHAR *callsign = item.callsign;
 
   const DialogLook &look = UIGlobals::GetDialogLook();

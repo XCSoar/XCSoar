@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_RECORD_HPP
-#define XCSOAR_FLARM_RECORD_HPP
+#ifndef XCSOAR_FLARM_NET_RECORD_HPP
+#define XCSOAR_FLARM_NET_RECORD_HPP
 
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
@@ -49,7 +49,7 @@ LatinBufferSize(size_t size)
 /**
  * FlarmNet.org file entry
  */
-struct FlarmRecord {
+struct FlarmNetRecord {
   /**< FLARM id 6 bytes */
   StaticString<LatinBufferSize(7)> id;
 

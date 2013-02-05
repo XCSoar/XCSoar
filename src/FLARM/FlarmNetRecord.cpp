@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Record.hpp"
+#include "FlarmNetRecord.hpp"
 #include "FlarmId.hpp"
 
 FlarmId
-FlarmRecord::GetId() const
+FlarmNetRecord::GetId() const
 {
   return FlarmId::Parse(this->id, NULL);
 };

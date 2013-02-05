@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Database.hpp"
+#include "FlarmNetDatabase.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <assert.h>
 
 void
-FlarmDatabase::Insert(const FlarmRecord &record)
+FlarmNetDatabase::Insert(const FlarmNetRecord &record)
 {
   FlarmId id = record.GetId();
   if (!id.IsDefined())
@@ -37,13 +37,13 @@ FlarmDatabase::Insert(const FlarmRecord &record)
   map.insert(std::make_pair(id, record));
 }
 
-const FlarmRecord *
-FlarmDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
+const FlarmNetRecord *
+FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 {
   for (const auto &i : map) {
     assert(i.first.IsDefined());
 
-    const FlarmRecord &record = i.second;
+    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
   }
@@ -52,16 +52,16 @@ FlarmDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 }
 
 unsigned
-FlarmDatabase::FindRecordsByCallSign(const TCHAR *cn,
-                                     const FlarmRecord *array[],
-                                     unsigned size) const
+FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn,
+                                        const FlarmNetRecord *array[],
+                                        unsigned size) const
 {
   unsigned count = 0;
 
   for (const auto &i : map) {
     assert(i.first.IsDefined());
 
-    const FlarmRecord &record = i.second;
+    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
   }
@@ -70,15 +70,15 @@ FlarmDatabase::FindRecordsByCallSign(const TCHAR *cn,
 }
 
 unsigned
-FlarmDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
-                                 unsigned size) const
+FlarmNetDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
+                                    unsigned size) const
 {
   unsigned count = 0;
 
   for (const auto &i : map) {
     assert(i.first.IsDefined());
 
-    const FlarmRecord &record = i.second;
+    const FlarmNetRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = i.first;
   }

@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_DATABASE_HPP
-#define XCSOAR_FLARM_DATABASE_HPP
+#ifndef XCSOAR_FLARM_NET_DATABASE_HPP
+#define XCSOAR_FLARM_NET_DATABASE_HPP
 
 #include "FlarmId.hpp"
-#include "Record.hpp"
+#include "FlarmNetRecord.hpp"
 #include "Compiler.h"
 
 #include <map>
@@ -37,8 +37,8 @@ class FlarmId;
 /**
  * An in-memory representation of the FlarmNet.org database.
  */
-class FlarmDatabase {
-  typedef std::map<FlarmId, FlarmRecord> RecordMap;
+class FlarmNetDatabase {
+  typedef std::map<FlarmId, FlarmNetRecord> RecordMap;
   RecordMap map;
 
 public:
@@ -50,7 +50,7 @@ public:
     map.clear();
   }
 
-  void Insert(const FlarmRecord &record);
+  void Insert(const FlarmNetRecord &record);
 
   /**
    * Finds a FLARMNetRecord object based on the given FLARM id
@@ -58,7 +58,7 @@ public:
    * @return FLARMNetRecord object
    */
   gcc_pure
-  const FlarmRecord *FindRecordById(FlarmId id) {
+  const FlarmNetRecord *FindRecordById(FlarmId id) {
     auto i = map.find(id);
     return i != map.end()
       ? &i->second
@@ -71,9 +71,10 @@ public:
    * @return FLARMNetRecord object
    */
   gcc_pure
-  const FlarmRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
+  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
 
-  unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmRecord *array[],
+  unsigned FindRecordsByCallSign(const TCHAR *cn,
+                                 const FlarmNetRecord *array[],
                                  unsigned size) const;
   unsigned FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                              unsigned size) const;

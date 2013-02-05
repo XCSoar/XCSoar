@@ -338,8 +338,8 @@ TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/Record.cpp \
-	$(SRC)/FLARM/Database.cpp \
+	$(SRC)/FLARM/FlarmNetRecord.cpp \
+	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp
 TEST_FLARM_NET_DEPENDS = IO OS MATH UTIL
@@ -2420,8 +2420,8 @@ $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 DUMP_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/Record.cpp \
-	$(SRC)/FLARM/Database.cpp \
+	$(SRC)/FLARM/FlarmNetRecord.cpp \
+	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/DumpFlarmNet.cpp
 DUMP_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))

@@ -346,8 +346,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/List.cpp \
-	$(SRC)/FLARM/Record.cpp \
-	$(SRC)/FLARM/Database.cpp \
+	$(SRC)/FLARM/FlarmNetRecord.cpp \
+	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/Traffic.cpp \

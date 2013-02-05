@@ -38,6 +38,7 @@
 #include "Form/Util.hpp"
 #include "Form/Button.hpp"
 #include "FLARM/FlarmNet.hpp"
+#include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Friends.hpp"
@@ -129,7 +130,7 @@ Update()
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
-  const FlarmRecord *record = FlarmDetails::LookupRecord(target_id);
+  const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
     SetFormValue(*wf, _T("prpPilot"), record->pilot);

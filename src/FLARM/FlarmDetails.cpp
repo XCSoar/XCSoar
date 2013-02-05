@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "FlarmNetRecord.hpp"
 #include "NameDatabase.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
@@ -118,7 +119,7 @@ FlarmDetails::SaveSecondary()
   delete writer;
 }
 
-const FlarmRecord *
+const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
@@ -136,7 +137,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
     return name;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmRecord *record = FlarmNet::FindRecordById(id);
+  const FlarmNetRecord *record = FlarmNet::FindRecordById(id);
   if (record != NULL)
     return record->callsign;
 
@@ -154,7 +155,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return id;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
+  const FlarmNetRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
   if (record != NULL)
     return record->GetId();
 
