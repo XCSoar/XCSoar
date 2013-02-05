@@ -86,7 +86,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     builder.AddWeatherStations(*noaa_store);
 #endif
 
-  builder.AddTraffic(basic.flarm.traffic, computer_settings.team_code);
+  builder.AddTraffic(basic.flarm.traffic);
 
   // Sort the list of map items
   list.Sort();

@@ -45,7 +45,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "FLARM/FriendsGlue.hpp"
+#include "FLARM/Friends.hpp"
 #include "TeamCodeSettings.hpp"
 
 #ifdef HAVE_NOAA
@@ -283,15 +283,14 @@ MapItemListBuilder::AddWeatherStations(NOAAStore &store)
 #endif
 
 void
-MapItemListBuilder::AddTraffic(const TrafficList &flarm,
-                               const TeamCodeSettings &teamcode)
+MapItemListBuilder::AddTraffic(const TrafficList &flarm)
 {
   for (const auto &t : flarm.list) {
     if (list.full())
       break;
 
     if (location.Distance(t.location) < range) {
-      auto color = FlarmFriends::GetFriendColor(t.id, teamcode);
+      auto color = FlarmFriends::GetFriendColor(t.id);
       list.append(new TrafficMapItem(t, color));
     }
   }

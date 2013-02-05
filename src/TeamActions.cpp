@@ -24,6 +24,8 @@ Copyright_License {
 #include "TeamActions.hpp"
 #include "Interface.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/TrafficDatabases.hpp"
+#include "FLARM/Global.hpp"
 
 void
 TeamActions::TrackFlarm(FlarmId id, const TCHAR *callsign)
@@ -44,4 +46,7 @@ TeamActions::TrackFlarm(FlarmId id, const TCHAR *callsign)
     settings.team_flarm_callsign = callsign;
   else
     settings.team_flarm_callsign.clear();
+
+  if (traffic_databases != nullptr)
+    traffic_databases->team_flarm_id = id;
 }

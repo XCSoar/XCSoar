@@ -31,7 +31,7 @@ Copyright_License {
 #include "Look/TrafficLook.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
-#include "FLARM/FriendsGlue.hpp"
+#include "FLARM/Friends.hpp"
 #include "Look/Fonts.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 
@@ -114,8 +114,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
       }
     }
 
-    auto color = FlarmFriends::GetFriendColor(traffic.id,
-                                              GetComputerSettings().team_code);
+    auto color = FlarmFriends::GetFriendColor(traffic.id);
     TrafficRenderer::Draw(canvas, traffic_look, traffic,
                           traffic.track - projection.GetScreenAngle(),
                           color, sc);

@@ -43,7 +43,6 @@ struct ThermalLocatorInfo;
 struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
-struct TeamCodeSettings;
 class NOAAStore;
 
 class MapItemListBuilder
@@ -68,7 +67,7 @@ public:
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddMarkers(const ProtectedMarkers &marks);
-  void AddTraffic(const TrafficList &flarm, const TeamCodeSettings &teamcode);
+  void AddTraffic(const TrafficList &flarm);
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 

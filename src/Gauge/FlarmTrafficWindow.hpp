@@ -133,8 +133,6 @@ protected:
   void PaintRadarBackground(Canvas &canvas) const;
   void PaintNorth(Canvas &canvas) const;
 
-  FlarmColor GetTeamColor(const FlarmId &id) const;
-
 protected:
   /* virtual methods from class Window */
   virtual void OnResize(PixelSize new_size) override;

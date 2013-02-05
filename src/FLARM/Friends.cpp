@@ -31,7 +31,7 @@ FlarmFriends::GetFriendColor(FlarmId id)
 {
   assert(traffic_databases != nullptr);
 
-  return traffic_databases->flarm_colors.Get(id);
+  return traffic_databases->GetColor(id);
 }
 
 void
