@@ -34,10 +34,13 @@ Copyright_License {
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "FLARM/Global.hpp"
+#include "FLARM/TrafficDatabases.hpp"
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Interface.hpp"
 
 enum Controls {
   CALLSIGN,
@@ -197,6 +200,26 @@ TrafficListWidget::UpdateList()
 
     for (unsigned i = 0; i < count; ++i)
       items.emplace_back(ids[i]);
+  } else {
+    /* if no filter was set, show a list of current traffic and known
+       traffic */
+
+    /* add live FLARM traffic */
+    for (const auto &i : CommonInterface::Basic().flarm.traffic.list) {
+      items.emplace_back(i.id);
+    }
+
+    /* add FLARM peers that have a user-defined color */
+    for (const auto &i : traffic_databases->flarm_colors) {
+      items.emplace_back(i.first);
+    }
+
+    /* add FLARM peers that have a user-defined name */
+    for (const auto &i : traffic_databases->flarm_names) {
+      items.emplace_back(i.id);
+    }
+
+    // TODO: avoid duplicates
   }
 
   GetList().SetLength(items.size());
