@@ -335,7 +335,6 @@ TEST_GEO_BOUNDS_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
 
 TEST_FLARM_NET_SOURCES = \
-	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
