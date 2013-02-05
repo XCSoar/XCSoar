@@ -667,6 +667,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Formatter/AngleFormatter.cpp \
 	$(SRC)/FLARM/FlarmDetails.cpp \
+	$(SRC)/FLARM/NameDatabase.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/OS/LogError.cpp \

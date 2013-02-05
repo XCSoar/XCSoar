@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "NameDatabase.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TrivialArray.hpp"
@@ -34,14 +35,7 @@ Copyright_License {
 
 #include <assert.h>
 
-struct FlarmIdNameCouple
-{
-  FlarmId id;
-
-  StaticString<21> name;
-};
-
-static TrivialArray<FlarmIdNameCouple, 200> flarm_names;
+static FlarmNameDatabase *flarm_names;
 
 void
 FlarmDetails::Load()
@@ -67,7 +61,7 @@ FlarmDetails::LoadFLARMnet()
 }
 
 static void
-LoadSecondaryFile(TLineReader &reader)
+LoadSecondaryFile(TLineReader &reader, FlarmNameDatabase &db)
 {
   TCHAR *line;
   while ((line = reader.ReadLine()) != NULL) {
@@ -92,12 +86,12 @@ FlarmDetails::LoadSecondary()
   LogFormat("OpenFLARMDetails");
 
   // if (FLARM Details already there) delete them;
-  if (!flarm_names.empty())
-    flarm_names.clear();
+  delete flarm_names;
+  flarm_names = new FlarmNameDatabase();
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   if (reader != NULL) {
-    LoadSecondaryFile(*reader);
+    LoadSecondaryFile(*reader, *flarm_names);
     delete reader;
   }
 }
@@ -105,47 +99,23 @@ FlarmDetails::LoadSecondary()
 void
 FlarmDetails::SaveSecondary()
 {
+  assert(flarm_names != nullptr);
+
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
   if (writer == NULL)
     return;
 
   TCHAR id[16];
 
-  for (unsigned i = 0; i < flarm_names.size(); i++) {
-    assert(flarm_names[i].id.IsDefined());
+  for (const auto &i : *flarm_names) {
+    assert(i.id.IsDefined());
 
     writer->FormatLine(_T("%s=%s"),
-                       flarm_names[i].id.Format(id),
-                       flarm_names[i].name.c_str());
+                       i.id.Format(id),
+                       i.name.c_str());
   }
 
   delete writer;
-}
-
-int
-FlarmDetails::LookupSecondaryIndex(FlarmId id)
-{
-  for (unsigned i = 0; i < flarm_names.size(); i++) {
-    assert(flarm_names[i].id.IsDefined());
-
-    if (flarm_names[i].id == id)
-      return i;
-  }
-
-  return -1;
-}
-
-int
-FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
-{
-  for (unsigned i = 0; i < flarm_names.size(); i++) {
-    assert(flarm_names[i].id.IsDefined());
-
-    if (flarm_names[i].name.equals(cn))
-      return i;
-  }
-
-  return -1;
 }
 
 const FlarmRecord *
@@ -158,10 +128,12 @@ FlarmDetails::LookupRecord(FlarmId id)
 const TCHAR *
 FlarmDetails::LookupCallsign(FlarmId id)
 {
+  assert(flarm_names != nullptr);
+
   // try to find flarm from userFile
-  int index = LookupSecondaryIndex(id);
-  if (index != -1)
-    return flarm_names[index].name;
+  const TCHAR *name = flarm_names->Get(id);
+  if (name != nullptr)
+    return name;
 
   // try to find flarm from FlarmNet.org File
   const FlarmRecord *record = FlarmNet::FindRecordById(id);
@@ -175,9 +147,11 @@ FlarmId
 FlarmDetails::LookupId(const TCHAR *cn)
 {
   // try to find flarm from userFile
-  int index = LookupSecondaryIndex(cn);
-  if (index != -1)
-    return flarm_names[index].id;
+  assert(flarm_names != nullptr);
+
+  FlarmId id = flarm_names->Get(cn);
+  if (id.IsDefined())
+    return id;
 
   // try to find flarm from FlarmNet.org File
   const FlarmRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
@@ -190,27 +164,13 @@ FlarmDetails::LookupId(const TCHAR *cn)
 bool
 FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 {
+  assert(flarm_names != nullptr);
+
   if (!id.IsDefined())
     /* ignore malformed records */
     return false;
 
-  int index = LookupSecondaryIndex(id);
-  if (index != -1) {
-    // modify existing record
-    flarm_names[index].id = id;
-    flarm_names[index].name = name;
-    return true;
-  }
-
-  if (flarm_names.full())
-    return false;
-
-  // create new record
-  FlarmIdNameCouple &item = flarm_names.append();
-  item.id = id;
-  item.name = name;
-
-  return true;
+  return flarm_names->Set(id, name);
 }
 
 unsigned
@@ -218,20 +178,10 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                 unsigned size)
 {
   assert(cn != NULL);
+  assert(flarm_names != nullptr);
 
   if (StringIsEmpty(cn))
     return 0;
 
-  unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
-
-  for (unsigned i = 0; i < flarm_names.size() && count < size; i++) {
-    if (flarm_names[i].name.equals(cn)) {
-      assert(flarm_names[i].id.IsDefined());
-
-      array[count] = flarm_names[i].id;
-      count++;
-    }
-  }
-
-  return count;
+  return flarm_names->Get(cn, array, size);
 }

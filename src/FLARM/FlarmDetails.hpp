@@ -94,24 +94,6 @@ namespace FlarmDetails
   bool
   AddSecondaryItem(FlarmId id, const TCHAR *name);
 
-  /**
-   * Looks up the FLARM callsign in the FLARM details array
-   * and returns the array id
-   * @param cn Callsign
-   * @return Array id if found, otherwise -1
-   */
-  int
-  LookupSecondaryIndex(const TCHAR *cn);
-
-  /**
-   * Looks up the FLARM id in the FLARM details array
-   * and returns the array id
-   * @param id FLARM id
-   * @return Array id if found, otherwise -1
-   */
-  int
-  LookupSecondaryIndex(FlarmId id);
-
   unsigned
   FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size);
 }
