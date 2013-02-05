@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
   TeamCode tc;
 
-  tc.Update(Angle::Degrees(90.1), fixed(5000));
+  tc.Update(Angle::Degrees(90), fixed(5000));
 
   ok1(StringIsEqual(tc.GetCode(), _T("901E")));
   ok1(iround(tc.GetBearing().Degrees()) == 90);
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   ok1(iround(tc.GetBearing().Degrees()) == 359);
   ok1(equals(tc.GetRange(), fixed(25000)));
 
-  tc.Update(Angle::Degrees(180.2), fixed(800000));
+  tc.Update(Angle::Degrees(180), fixed(800000));
   ok1(StringIsEqual(tc.GetCode(), _T("I0668")));
   ok1(iround(tc.GetBearing().Degrees()) == 180);
   ok1(equals(tc.GetRange(), fixed(800000)));

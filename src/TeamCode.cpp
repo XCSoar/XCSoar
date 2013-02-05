@@ -115,8 +115,8 @@ NumberToTeamCode(unsigned value, TCHAR *code, unsigned minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const unsigned bamValue = unsigned(bearing.AsBearing().Native()
-                                     / ANGLE_FACTOR.Native());
+  const unsigned bamValue = uround(bearing.AsBearing().Native()
+                                   / ANGLE_FACTOR.Native());
   NumberToTeamCode(bamValue, code, 2);
 }
 
@@ -146,7 +146,7 @@ TeamCode::Update(Angle bearing, fixed range)
   // Calculate bearing part of the teamcode
   ConvertBearingToTeamCode(bearing, code.buffer());
   // Calculate distance part of the teamcode
-  NumberToTeamCode(unsigned(range / 100), code.buffer() + 2, 0);
+  NumberToTeamCode(uround(range / 100), code.buffer() + 2, 0);
 }
 
 void
