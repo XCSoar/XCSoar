@@ -30,7 +30,7 @@ Copyright_License {
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Markers/Marker.hpp"
 #include "FLARM/Traffic.hpp"
-#include "FLARM/Friends.hpp"
+#include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Route/ReachResult.hpp"
@@ -162,9 +162,9 @@ struct WeatherStationMapItem: public MapItem
 struct TrafficMapItem: public MapItem
 {
   FlarmId id;
-  FlarmFriends::Color color;
+  FlarmColor color;
 
-  TrafficMapItem(const FlarmTraffic &_traffic, FlarmFriends::Color _color)
+  TrafficMapItem(const FlarmTraffic &_traffic, FlarmColor _color)
     :MapItem(TRAFFIC), id(_traffic.id), color(_color) {}
 };
 

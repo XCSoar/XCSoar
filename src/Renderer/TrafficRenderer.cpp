@@ -31,7 +31,7 @@
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmTraffic &traffic, const Angle angle,
-                      const FlarmFriends::Color color, const RasterPoint pt)
+                      const FlarmColor color, const RasterPoint pt)
 {
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
@@ -73,16 +73,16 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   canvas.DrawPolygon(Arrow, 5);
 
   switch (color) {
-  case FlarmFriends::Color::GREEN:
+  case FlarmColor::GREEN:
     canvas.Select(traffic_look.team_pen_green);
     break;
-  case FlarmFriends::Color::BLUE:
+  case FlarmColor::BLUE:
     canvas.Select(traffic_look.team_pen_blue);
     break;
-  case FlarmFriends::Color::YELLOW:
+  case FlarmColor::YELLOW:
     canvas.Select(traffic_look.team_pen_yellow);
     break;
-  case FlarmFriends::Color::MAGENTA:
+  case FlarmColor::MAGENTA:
     canvas.Select(traffic_look.team_pen_magenta);
     break;
   default:

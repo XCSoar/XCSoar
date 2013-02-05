@@ -238,35 +238,35 @@ OnCallsignClicked()
 static void
 OnFriendBlueClicked()
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::BLUE);
+  FlarmFriends::SetFriendColor(target_id, FlarmColor::BLUE);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendGreenClicked()
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::GREEN);
+  FlarmFriends::SetFriendColor(target_id, FlarmColor::GREEN);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendYellowClicked()
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::YELLOW);
+  FlarmFriends::SetFriendColor(target_id, FlarmColor::YELLOW);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendMagentaClicked()
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::MAGENTA);
+  FlarmFriends::SetFriendColor(target_id, FlarmColor::MAGENTA);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendClearClicked()
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::NONE);
+  FlarmFriends::SetFriendColor(target_id, FlarmColor::NONE);
   wf->SetModalResult(mrOK);
 }
 

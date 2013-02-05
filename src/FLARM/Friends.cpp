@@ -31,29 +31,29 @@ Copyright_License {
 namespace FlarmFriends
 {
   bool loaded = false;
-  std::map<FlarmId, Color> friends;
+  std::map<FlarmId, FlarmColor> friends;
 
-  void LoadColor(const TCHAR *key, Color color);
+  void LoadColor(const TCHAR *key, FlarmColor color);
 }
 
-FlarmFriends::Color
+FlarmColor
 FlarmFriends::GetFriendColor(FlarmId id)
 {
   auto i = friends.find(id);
   if (i != friends.end())
     return i->second;
 
-  return Color::NONE;
+  return FlarmColor::NONE;
 }
 
 void
-FlarmFriends::SetFriendColor(FlarmId id, Color color)
+FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
 {
   friends[id] = color;
 }
 
 void
-FlarmFriends::LoadColor(const TCHAR *key, Color color)
+FlarmFriends::LoadColor(const TCHAR *key, FlarmColor color)
 {
   const TCHAR *ids = Profile::Get(key);
   if (ids == nullptr)
@@ -77,10 +77,10 @@ FlarmFriends::LoadColor(const TCHAR *key, Color color)
 void
 FlarmFriends::Load()
 {
-  LoadColor(_T("FriendsGreen"), Color::GREEN);
-  LoadColor(_T("FriendsBlue"), Color::BLUE);
-  LoadColor(_T("FriendsYellow"), Color::YELLOW);
-  LoadColor(_T("FriendsMagenta"), Color::MAGENTA);
+  LoadColor(_T("FriendsGreen"), FlarmColor::GREEN);
+  LoadColor(_T("FriendsBlue"), FlarmColor::BLUE);
+  LoadColor(_T("FriendsYellow"), FlarmColor::YELLOW);
+  LoadColor(_T("FriendsMagenta"), FlarmColor::MAGENTA);
 
   loaded = true;
 }
@@ -96,9 +96,9 @@ FlarmFriends::Save()
 
   for (const auto &i : friends) {
     assert(i.first.IsDefined());
-    assert((int)i.second < (int)Color::COUNT);
+    assert((int)i.second < (int)FlarmColor::COUNT);
 
-    if (i.second == Color::NONE)
+    if (i.second == FlarmColor::NONE)
       continue;
 
     unsigned color_index = (int)i.second - 1;

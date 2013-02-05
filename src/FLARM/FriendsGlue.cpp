@@ -22,20 +22,21 @@ Copyright_License {
 */
 
 #include "FriendsGlue.hpp"
+#include "Friends.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "TeamCodeSettings.hpp"
 
-FlarmFriends::Color
+FlarmColor
 FlarmFriends::GetFriendColor(FlarmId id, const TeamCodeSettings &settings)
 {
-  Color team_color = GetFriendColor(id);
+  FlarmColor team_color = GetFriendColor(id);
 
   // If no color found but target is teammate
-  if (team_color == Color::NONE &&
+  if (team_color == FlarmColor::NONE &&
       settings.team_flarm_tracking &&
       id == settings.team_flarm_id)
     // .. use green color
-    return Color::GREEN;
+    return FlarmColor::GREEN;
 
   return team_color;
 }

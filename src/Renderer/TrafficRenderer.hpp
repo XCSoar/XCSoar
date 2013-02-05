@@ -24,7 +24,7 @@
 #ifndef XCSOAR_TRAFFIC_RENDERER_HPP
 #define XCSOAR_TRAFFIC_RENDERER_HPP
 
-#include "FLARM/Friends.hpp"
+#include "FLARM/Color.hpp"
 
 struct RasterPoint;
 class Canvas;
@@ -37,7 +37,7 @@ namespace TrafficRenderer
 void
 Draw(Canvas &canvas, const TrafficLook &traffic_look,
      const FlarmTraffic &traffic, Angle angle,
-     const FlarmFriends::Color color, const RasterPoint pt);
+     const FlarmColor color, const RasterPoint pt);
 }
 
 #endif

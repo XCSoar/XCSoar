@@ -26,7 +26,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/List.hpp"
-#include "FLARM/Friends.hpp"
+#include "FLARM/Color.hpp"
 #include "TeamCodeSettings.hpp"
 #include "Math/FastRotation.hpp"
 
@@ -133,7 +133,7 @@ protected:
   void PaintRadarBackground(Canvas &canvas) const;
   void PaintNorth(Canvas &canvas) const;
 
-  FlarmFriends::Color GetTeamColor(const FlarmId &id) const;
+  FlarmColor GetTeamColor(const FlarmId &id) const;
 
 protected:
   /* virtual methods from class Window */

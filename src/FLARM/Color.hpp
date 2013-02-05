@@ -21,20 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_FRIENDS_HPP
-#define XCSOAR_FLARM_FRIENDS_HPP
+#ifndef XCSOAR_FLARM_COLOR_HPP
+#define XCSOAR_FLARM_COLOR_HPP
 
-#include "Color.hpp"
+#include <stdint.h>
 
-class FlarmId;
-
-namespace FlarmFriends
-{
-  FlarmColor GetFriendColor(FlarmId id);
-  void SetFriendColor(FlarmId id, FlarmColor color);
-
-  void Load();
-  void Save();
+enum class FlarmColor : uint8_t {
+  NONE,
+  GREEN,
+  BLUE,
+  YELLOW,
+  MAGENTA,
+  COUNT
 };
 
 #endif

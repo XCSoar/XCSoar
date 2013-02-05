@@ -24,14 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_FRIENDS_GLUE_HPP
 #define XCSOAR_FLARM_FRIENDS_GLUE_HPP
 
-#include "Friends.hpp"
+#include "Color.hpp"
 
 class FlarmId;
 struct TeamCodeSettings;
 
 namespace FlarmFriends
 {
-  Color GetFriendColor(FlarmId id, const TeamCodeSettings &settings);
+  FlarmColor GetFriendColor(FlarmId id, const TeamCodeSettings &settings);
 };
 
 #endif
