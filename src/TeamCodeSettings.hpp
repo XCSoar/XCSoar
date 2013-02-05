@@ -36,8 +36,6 @@ Copyright_License {
 struct TeamCodeSettings {
   /** Reference waypoint id for code origin */
   int team_code_reference_waypoint;
-  /** Whether to enable tracking by FLARM */
-  bool team_flarm_tracking;
 
   /** CN of the glider to track */
   StaticString<4> team_flarm_callsign;
@@ -47,7 +45,10 @@ struct TeamCodeSettings {
    */
   TeamCode team_code;
 
-  /** FlarmId of the glider to track */
+  /**
+   * FlarmId of the glider to track.  Check FlarmId::IsDefined()
+   * before using this attribute.
+   */
   FlarmId team_flarm_id;
 
   void SetDefaults();

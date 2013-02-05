@@ -33,7 +33,7 @@ FlarmFriends::GetFriendColor(FlarmId id, const TeamCodeSettings &settings)
 
   // If no color found but target is teammate
   if (team_color == FlarmColor::NONE &&
-      settings.team_flarm_tracking &&
+      settings.team_flarm_id.IsDefined() &&
       id == settings.team_flarm_id)
     // .. use green color
     return FlarmColor::GREEN;

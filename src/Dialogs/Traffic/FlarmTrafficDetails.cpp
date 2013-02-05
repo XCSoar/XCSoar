@@ -215,7 +215,6 @@ OnTeamClicked()
 
   // Start tracking
   settings.team_flarm_id = target_id;
-  settings.team_flarm_tracking = true;
   settings.team_code.Clear();
 
   // Close the dialog

@@ -113,6 +113,6 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
 void
 GlideComputerEvents::OnComputerSettingsUpdate(const ComputerSettings &settings)
 {
-  enable_team = settings.team_code.team_flarm_tracking ||
+  enable_team = settings.team_code.team_flarm_id.IsDefined() ||
     settings.team_code.team_code.IsDefined();
 }

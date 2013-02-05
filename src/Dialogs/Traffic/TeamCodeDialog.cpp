@@ -79,7 +79,7 @@ Update(const MoreData &basic, const DerivedInfo &calculated)
   SetFormValue(*wf, _T("prpMateCode"), settings.team_code.GetCode());
 
   SetFormValue(*wf, _T("prpFlarmLock"),
-               settings.team_flarm_tracking
+               settings.team_flarm_id.IsDefined()
                ? settings.team_flarm_callsign.c_str()
                : _T(""));
 }
@@ -113,7 +113,7 @@ OnCodeClicked()
     CommonInterface::SetComputerSettings().team_code;
   settings.team_code.Update(newTeammateCode);
   if (settings.team_code.IsDefined())
-    settings.team_flarm_tracking = false;
+    settings.team_flarm_id.Clear();
 }
 
 static void
@@ -131,7 +131,6 @@ OnFlarmLockClicked()
   settings.team_code.Clear();
 
   if (StringIsEmpty(settings.team_flarm_callsign)) {
-    settings.team_flarm_tracking = false;
     settings.team_flarm_id.Clear();
     return;
   }
@@ -146,7 +145,6 @@ OnFlarmLockClicked()
 
     if (id.IsDefined()) {
       settings.team_flarm_id = id;
-      settings.team_flarm_tracking = true;
       return;
     }
   } else {
@@ -154,7 +152,6 @@ OnFlarmLockClicked()
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
   }
 
-  settings.team_flarm_tracking = false;
   settings.team_flarm_id.Clear();
   settings.team_flarm_callsign.clear();
 }

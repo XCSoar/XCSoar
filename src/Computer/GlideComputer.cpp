@@ -249,7 +249,7 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  if (settings.team_flarm_tracking) {
+  if (settings.team_flarm_id.IsDefined()) {
     ComputeFlarmTeam(basic.location, team_code_ref_location,
                      basic.flarm.traffic, settings.team_flarm_id,
                      teamcode_info);
