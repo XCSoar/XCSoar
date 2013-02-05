@@ -284,8 +284,10 @@ TrafficListWidget::OnActivateItem(unsigned index)
 {
   if (action_listener != nullptr)
     action_listener->OnAction(mrOK);
-  else
+  else {
     dlgFlarmTrafficDetailsShowModal(GetCursorId());
+    UpdateList();
+  }
 }
 
 void
@@ -294,6 +296,7 @@ TrafficListWidget::OnAction(int id)
   switch (Buttons(id)) {
   case DETAILS:
     dlgFlarmTrafficDetailsShowModal(GetCursorId());
+    UpdateList();
     break;
   }
 }
