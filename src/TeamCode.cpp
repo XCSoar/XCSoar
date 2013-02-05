@@ -28,10 +28,6 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 
-#include <algorithm>
-
-#include <string.h>
-
 static constexpr unsigned BASE = 36;
 static constexpr unsigned TEAMCODE_COMBINATIONS = BASE * BASE;
 
@@ -93,7 +89,8 @@ NumberToTeamCode(unsigned value, TCHAR *code, unsigned n_digits)
   if (n_digits == 0)
     n_digits = CountDigits(value);
 
-  TCHAR *p = code + n_digits - 1;
+  TCHAR *p = code + n_digits;
+  *p-- = _T('\0');
 
   do {
     unsigned digit_value = value % BASE;
@@ -139,8 +136,6 @@ TeamCode::GetRange() const
 void
 TeamCode::Update(Angle bearing, fixed range)
 {
-  // Clear teamcode
-  std::fill(code.buffer(), code.buffer() + code.MAX_SIZE, _T('\0'));
   // Calculate bearing part of the teamcode
   ConvertBearingToTeamCode(bearing, code.buffer());
   // Calculate distance part of the teamcode
