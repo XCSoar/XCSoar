@@ -26,7 +26,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(9);
+  plan_tests(12);
 
   TeamCode tc;
 
@@ -45,6 +45,11 @@ int main(int argc, char **argv)
   ok1(StringIsEqual(tc.GetCode(), _T("I0668")));
   ok1(iround(tc.GetBearing().Degrees()) == 180);
   ok1(equals(tc.GetRange(), fixed(800000)));
+
+  tc.Update(Angle::Degrees(270), fixed(100));
+  ok1(StringIsEqual(tc.GetCode(), _T("R01")));
+  ok1(iround(tc.GetBearing().Degrees()) == 270);
+  ok1(equals(tc.GetRange(), fixed(100)));
 
   return exit_status();
 }
