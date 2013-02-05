@@ -39,5 +39,8 @@ FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
 {
   assert(traffic_databases != nullptr);
 
-  traffic_databases->flarm_colors.Set(id, color);
+  if (color == FlarmColor::NONE)
+    traffic_databases->flarm_colors.Remove(id);
+  else
+    traffic_databases->flarm_colors.Set(id, color);
 }
