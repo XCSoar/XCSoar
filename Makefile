@@ -355,6 +355,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/FriendsGlue.cpp \
 	$(SRC)/FLARM/FlarmComputer.cpp \
+	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/FLARM/Glue.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \

@@ -21,17 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_FRIENDS_HPP
-#define XCSOAR_FLARM_FRIENDS_HPP
+#ifndef XCSOAR_TRAFFIC_DATABASES_HPP
+#define XCSOAR_TRAFFIC_DATABASES_HPP
 
-#include "Color.hpp"
+#include "ColorDatabase.hpp"
+#include "NameDatabase.hpp"
+#include "FlarmNetDatabase.hpp"
 
-class FlarmId;
+struct TrafficDatabases {
+  FlarmColorDatabase flarm_colors;
 
-namespace FlarmFriends
-{
-  FlarmColor GetFriendColor(FlarmId id);
-  void SetFriendColor(FlarmId id, FlarmColor color);
+  FlarmNameDatabase flarm_names;
+
+  FlarmNetDatabase flarm_net;
 };
 
 #endif

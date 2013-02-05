@@ -1570,6 +1570,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/FriendsGlue.cpp \
 	$(SRC)/FLARM/List.cpp \
+	$(SRC)/FLARM/Global.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \

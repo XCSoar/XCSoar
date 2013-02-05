@@ -31,33 +31,6 @@ struct FlarmNetRecord;
 namespace FlarmDetails
 {
   /**
-   * Loads XCSoar's own FLARM details file and the FLARMnet file
-   */
-  void
-  Load();
-
-  /**
-   * Loads the FLARMnet file
-   */
-  void
-  LoadFLARMnet();
-
-  /**
-   * Opens XCSoars own FLARM details file, parses it and
-   * adds its entries as FlarmLookupItems
-   * @see AddSecondaryItem
-   */
-  void
-  LoadSecondary();
-
-  /**
-   * Saves XCSoars own FLARM details into the
-   * corresponding file (xcsoar-flarm.txt)
-   */
-  void
-  SaveSecondary();
-
-  /**
    * Looks up the FLARM id in the FLARMNet Database
    * and returns the FLARMNet Record
    * @param id FLARM id

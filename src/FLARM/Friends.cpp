@@ -23,48 +23,21 @@ Copyright_License {
 
 #include "FLARM/Friends.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "ColorDatabase.hpp"
-#include "Profile/FlarmProfile.hpp"
-
-namespace FlarmFriends
-{
-  static FlarmColorDatabase *database;
-}
+#include "Global.hpp"
+#include "TrafficDatabases.hpp"
 
 FlarmColor
 FlarmFriends::GetFriendColor(FlarmId id)
 {
-  assert(database != nullptr);
+  assert(traffic_databases != nullptr);
 
-  return database->Get(id);
+  return traffic_databases->flarm_colors.Get(id);
 }
 
 void
 FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
 {
-  assert(database != nullptr);
+  assert(traffic_databases != nullptr);
 
-  database->Set(id, color);
-}
-
-void
-FlarmFriends::Load()
-{
-  assert(database == nullptr);
-
-  database = new FlarmColorDatabase();
-  Profile::Load(*database);
-}
-
-void
-FlarmFriends::Save()
-{
-  if (database != nullptr)
-    Profile::Save(*database);
-}
-
-void
-FlarmFriends::Destroy()
-{
-  delete database;
+  traffic_databases->flarm_colors.Set(id, color);
 }

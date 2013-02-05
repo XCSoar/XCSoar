@@ -42,6 +42,7 @@
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Friends.hpp"
+#include "FLARM/Glue.hpp"
 #include "Screen/Layout.hpp"
 #include "Geo/Math.hpp"
 #include "LocalPath.hpp"
@@ -231,7 +232,7 @@ OnCallsignClicked()
   newName.clear();
   if (TextEntryDialog(newName, _("Competition ID")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
-    FlarmDetails::SaveSecondary();
+    SaveFlarmNames();
 
   Update();
 }

@@ -22,67 +22,23 @@ Copyright_License {
 */
 
 #include "FLARM/FlarmNet.hpp"
-#include "FlarmNetReader.hpp"
-#include "FlarmNetRecord.hpp"
-#include "FlarmNetDatabase.hpp"
-#include "FLARM/FlarmId.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/CharUtil.hpp"
-#include "IO/LineReader.hpp"
-#include "IO/FileLineReader.hpp"
-
-#include <stdio.h>
-#include <stdlib.h>
-
-namespace FlarmNet
-{
-  static FlarmNetDatabase *database;
-}
-
-void
-FlarmNet::Destroy()
-{
-  delete database;
-}
-
-unsigned
-FlarmNet::LoadFile(NLineReader &reader)
-{
-  // Clear database before adding new entries
-  if (database == NULL)
-    database = new FlarmNetDatabase();
-  else
-    database->Clear();
-
-  return FlarmNetReader::LoadFile(reader, *database);
-}
-
-unsigned
-FlarmNet::LoadFile(const TCHAR *path)
-{
-  // Clear database before adding new entries
-  if (database == NULL)
-    database = new FlarmNetDatabase();
-  else
-    database->Clear();
-
-  return FlarmNetReader::LoadFile(path, *database);
-}
+#include "Global.hpp"
+#include "TrafficDatabases.hpp"
 
 const FlarmNetRecord *
 FlarmNet::FindRecordById(FlarmId id)
 {
-  if (database == NULL)
+  if (traffic_databases == nullptr)
     return NULL;
 
-  return database->FindRecordById(id);
+  return traffic_databases->flarm_net.FindRecordById(id);
 }
 
 const FlarmNetRecord *
 FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 {
-  return database != NULL
-    ? database->FindFirstRecordByCallSign(cn)
+  return traffic_databases != nullptr
+    ? traffic_databases->flarm_net.FindFirstRecordByCallSign(cn)
     : NULL;
 }
 
@@ -90,17 +46,17 @@ unsigned
 FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
                                 const FlarmNetRecord *array[], unsigned size)
 {
-  if (database == NULL)
+  if (traffic_databases == nullptr)
     return 0;
 
-  return database->FindRecordsByCallSign(cn, array, size);
+  return traffic_databases->flarm_net.FindRecordsByCallSign(cn, array, size);
 }
 
 unsigned
 FlarmNet::FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size)
 {
-  if (database == NULL)
+  if (traffic_databases == nullptr)
     return 0;
 
-  return database->FindIdsByCallSign(cn, array, size);
+  return traffic_databases->flarm_net.FindIdsByCallSign(cn, array, size);
 }

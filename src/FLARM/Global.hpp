@@ -21,17 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_FRIENDS_HPP
-#define XCSOAR_FLARM_FRIENDS_HPP
+#ifndef XCSOAR_FLARM_GLOBAL_HPP
+#define XCSOAR_FLARM_GLOBAL_HPP
 
-#include "Color.hpp"
+struct TrafficDatabases;
 
-class FlarmId;
-
-namespace FlarmFriends
-{
-  FlarmColor GetFriendColor(FlarmId id);
-  void SetFriendColor(FlarmId id, FlarmColor color);
-};
+extern TrafficDatabases *traffic_databases;
 
 #endif

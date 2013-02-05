@@ -43,9 +43,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Math/FastMath.h"
 #include "UtilsSystem.hpp"
-#include "FLARM/FlarmDetails.hpp"
-#include "FLARM/FlarmNet.hpp"
-#include "FLARM/Friends.hpp"
+#include "FLARM/Glue.hpp"
 #include "MapSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -525,7 +523,7 @@ Shutdown()
   live_blackboard.RemoveListener(*glide_computer_events);
   delete glide_computer_events;
 
-  FlarmFriends::Save();
+  SaveFlarmColors();
 
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));
@@ -639,8 +637,7 @@ Shutdown()
   airspace_database.clear();
 
   // Destroy FlarmNet records
-  FlarmNet::Destroy();
-  FlarmFriends::Destroy();
+  DeinitTrafficGlobals();
 
   delete file_cache;
 

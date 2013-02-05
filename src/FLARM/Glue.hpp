@@ -31,4 +31,13 @@ Copyright_License {
 void
 LoadFlarmDatabases();
 
+void
+SaveFlarmColors();
+
+void
+SaveFlarmNames();
+
+void
+DeinitTrafficGlobals();
+
 #endif

@@ -27,7 +27,6 @@ Copyright_License {
 #include <tchar.h>
 
 struct FlarmNetRecord;
-class NLineReader;
 class FlarmId;
 
 /**
@@ -35,18 +34,6 @@ class FlarmId;
  */
 namespace FlarmNet
 {
-  void Destroy();
-
-  unsigned LoadFile(NLineReader &reader);
-
-  /**
-   * Reads the FlarmNet.org file and fills the map
-   *
-   * @param path the path of the file
-   * @return the number of records read from the file
-   */
-  unsigned LoadFile(const TCHAR *path);
-
   /**
    * Finds a FLARMNetRecord object based on the given FLARM id
    * @param id FLARM id

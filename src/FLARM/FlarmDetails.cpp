@@ -22,74 +22,12 @@ Copyright_License {
 */
 
 #include "FLARM/FlarmDetails.hpp"
+#include "Global.hpp"
+#include "TrafficDatabases.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "FlarmNetRecord.hpp"
-#include "NameDatabase.hpp"
-#include "NameFile.hpp"
-#include "Util/StringUtil.hpp"
-#include "Util/StaticString.hpp"
-#include "Util/TrivialArray.hpp"
-#include "LogFile.hpp"
-#include "LocalPath.hpp"
 #include "FLARM/FlarmNet.hpp"
-#include "IO/DataFile.hpp"
-#include "IO/TextWriter.hpp"
 
 #include <assert.h>
-
-static FlarmNameDatabase *flarm_names;
-
-void
-FlarmDetails::Load()
-{
-  LogFormat("FlarmDetails::Load");
-
-  LoadSecondary();
-  LoadFLARMnet();
-}
-
-void
-FlarmDetails::LoadFLARMnet()
-{
-  NLineReader *reader = OpenDataTextFileA(_T("data.fln"));
-  if (reader == NULL)
-    return;
-
-  unsigned num_records = FlarmNet::LoadFile(*reader);
-  delete reader;
-
-  if (num_records > 0)
-    LogFormat("%u FLARMnet ids found", num_records);
-}
-
-void
-FlarmDetails::LoadSecondary()
-{
-  LogFormat("OpenFLARMDetails");
-
-  // if (FLARM Details already there) delete them;
-  delete flarm_names;
-  flarm_names = new FlarmNameDatabase();
-
-  TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
-  if (reader != NULL) {
-    LoadFlarmNameFile(*reader, *flarm_names);
-    delete reader;
-  }
-}
-
-void
-FlarmDetails::SaveSecondary()
-{
-  assert(flarm_names != nullptr);
-
-  TextWriter *writer = CreateDataTextFile(_T("xcsoar-flarm.txt"));
-  if (writer == NULL)
-    return;
-
-  SaveFlarmNameFile(*writer, *flarm_names);
-  delete writer;
-}
 
 const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
@@ -101,10 +39,11 @@ FlarmDetails::LookupRecord(FlarmId id)
 const TCHAR *
 FlarmDetails::LookupCallsign(FlarmId id)
 {
-  assert(flarm_names != nullptr);
+  if (traffic_databases == nullptr)
+    return nullptr;
 
   // try to find flarm from userFile
-  const TCHAR *name = flarm_names->Get(id);
+  const TCHAR *name = traffic_databases->flarm_names.Get(id);
   if (name != nullptr)
     return name;
 
@@ -120,9 +59,9 @@ FlarmId
 FlarmDetails::LookupId(const TCHAR *cn)
 {
   // try to find flarm from userFile
-  assert(flarm_names != nullptr);
+  assert(traffic_databases != nullptr);
 
-  FlarmId id = flarm_names->Get(cn);
+  FlarmId id = traffic_databases->flarm_names.Get(cn);
   if (id.IsDefined())
     return id;
 
@@ -137,13 +76,13 @@ FlarmDetails::LookupId(const TCHAR *cn)
 bool
 FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 {
-  assert(flarm_names != nullptr);
+  assert(traffic_databases != nullptr);
 
   if (!id.IsDefined())
     /* ignore malformed records */
     return false;
 
-  return flarm_names->Set(id, name);
+  return traffic_databases->flarm_names.Set(id, name);
 }
 
 unsigned
@@ -151,10 +90,10 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                 unsigned size)
 {
   assert(cn != NULL);
-  assert(flarm_names != nullptr);
+  assert(traffic_databases != nullptr);
 
   if (StringIsEmpty(cn))
     return 0;
 
-  return flarm_names->Get(cn, array, size);
+  return traffic_databases->flarm_names.Get(cn, array, size);
 }
