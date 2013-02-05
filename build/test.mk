@@ -1676,6 +1676,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/MapProfile.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/Screen.cpp \
+	$(SRC)/Profile/FlarmProfile.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \

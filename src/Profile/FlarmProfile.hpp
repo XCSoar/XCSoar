@@ -21,50 +21,15 @@ Copyright_License {
 }
 */
 
-#include "FLARM/Friends.hpp"
-#include "FLARM/FlarmId.hpp"
-#include "ColorDatabase.hpp"
-#include "Profile/FlarmProfile.hpp"
+#ifndef XCSOAR_FLARM_PROFILE_HPP
+#define XCSOAR_FLARM_PROFILE_HPP
 
-namespace FlarmFriends
+class FlarmColorDatabase;
+
+namespace Profile
 {
-  static FlarmColorDatabase *database;
-}
+  void Load(FlarmColorDatabase &db);
+  void Save(const FlarmColorDatabase &db);
+};
 
-FlarmColor
-FlarmFriends::GetFriendColor(FlarmId id)
-{
-  assert(database != nullptr);
-
-  return database->Get(id);
-}
-
-void
-FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
-{
-  assert(database != nullptr);
-
-  database->Set(id, color);
-}
-
-void
-FlarmFriends::Load()
-{
-  assert(database == nullptr);
-
-  database = new FlarmColorDatabase();
-  Profile::Load(*database);
-}
-
-void
-FlarmFriends::Save()
-{
-  if (database != nullptr)
-    Profile::Save(*database);
-}
-
-void
-FlarmFriends::Destroy()
-{
-  delete database;
-}
+#endif
