@@ -34,6 +34,7 @@
 #include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Glue.hpp"
 #include "ComputerSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StringUtil.hpp"
@@ -134,6 +135,8 @@ OnFlarmLockClicked()
     settings.team_flarm_id.Clear();
     return;
   }
+
+  LoadFlarmDatabases();
 
   FlarmId ids[30];
   unsigned count =
