@@ -40,6 +40,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Look.hpp"
 #include "Interface.hpp"
 
 enum Controls {
@@ -56,6 +57,12 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     FlarmId id;
 
     /**
+     * The color that was assigned by the user to this FLARM peer.  It
+     * is FlarmColor::COUNT if the color has not yet been determined.
+     */
+    FlarmColor color;
+
+    /**
      * Were the attributes below already lazy-loaded from the
      * database?  We can't use nullptr for this, because both will be
      * nullptr after a failed lookup.
@@ -65,7 +72,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     const FlarmNetRecord *record;
     const TCHAR *callsign;
 
-    explicit Item(FlarmId _id):id(_id), loaded(false) {
+    explicit Item(FlarmId _id)
+      :id(_id), color(FlarmColor::COUNT),
+       loaded(false) {
       assert(id.IsDefined());
     }
 
@@ -79,6 +88,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
 
     void AutoLoad() {
+      if (color == FlarmColor::COUNT)
+        color = traffic_databases->GetColor(id);
+
       if (!loaded)
         Load();
     }
@@ -212,6 +224,7 @@ TrafficListWidget::UpdateList()
     /* add FLARM peers that have a user-defined color */
     for (const auto &i : traffic_databases->flarm_colors) {
       items.emplace_back(i.first);
+      items.back().color = i.second;
     }
 
     /* add FLARM peers that have a user-defined name */
@@ -269,6 +282,37 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     tmp.Format(_T("%s - %s"), callsign, tmp_id);
   else
     tmp.Format(_T("%s"), tmp_id);
+
+  if (item.color != FlarmColor::NONE) {
+    const TrafficLook &traffic_look = UIGlobals::GetLook().traffic;
+
+    switch (item.color) {
+    case FlarmColor::NONE:
+    case FlarmColor::COUNT:
+      gcc_unreachable();
+
+    case FlarmColor::GREEN:
+      canvas.Select(traffic_look.team_pen_green);
+      break;
+    case FlarmColor::BLUE:
+      canvas.Select(traffic_look.team_pen_blue);
+      break;
+    case FlarmColor::YELLOW:
+      canvas.Select(traffic_look.team_pen_yellow);
+      break;
+    case FlarmColor::MAGENTA:
+      canvas.Select(traffic_look.team_pen_magenta);
+      break;
+    }
+
+    canvas.SelectHollowBrush();
+
+    const PixelSize size = canvas.CalcTextSize(tmp);
+    canvas.Rectangle(rc.left + Layout::FastScale(1),
+                     rc.top + Layout::FastScale(1),
+                     rc.left + size.cx + Layout::FastScale(2),
+                     rc.top + size.cy + Layout::FastScale(2));
+  }
 
   canvas.DrawText(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), tmp);
