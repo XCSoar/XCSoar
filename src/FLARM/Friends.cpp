@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FLARM/Friends.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "ColorDatabase.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/tstring.hpp"
 
@@ -30,8 +31,7 @@ Copyright_License {
 
 namespace FlarmFriends
 {
-  bool loaded = false;
-  std::map<FlarmId, FlarmColor> friends;
+  static FlarmColorDatabase *database;
 
   void LoadColor(const TCHAR *key, FlarmColor color);
 }
@@ -39,17 +39,17 @@ namespace FlarmFriends
 FlarmColor
 FlarmFriends::GetFriendColor(FlarmId id)
 {
-  auto i = friends.find(id);
-  if (i != friends.end())
-    return i->second;
+  assert(database != nullptr);
 
-  return FlarmColor::NONE;
+  return database->Get(id);
 }
 
 void
 FlarmFriends::SetFriendColor(FlarmId id, FlarmColor color)
 {
-  friends[id] = color;
+  assert(database != nullptr);
+
+  database->Set(id, color);
 }
 
 void
@@ -77,24 +77,26 @@ FlarmFriends::LoadColor(const TCHAR *key, FlarmColor color)
 void
 FlarmFriends::Load()
 {
+  assert(database == nullptr);
+
+  database = new FlarmColorDatabase();
+
   LoadColor(_T("FriendsGreen"), FlarmColor::GREEN);
   LoadColor(_T("FriendsBlue"), FlarmColor::BLUE);
   LoadColor(_T("FriendsYellow"), FlarmColor::YELLOW);
   LoadColor(_T("FriendsMagenta"), FlarmColor::MAGENTA);
-
-  loaded = true;
 }
 
 void
 FlarmFriends::Save()
 {
-  if (!loaded)
+  if (database == nullptr)
     return;
 
   TCHAR id[16];
   tstring ids[4];
 
-  for (const auto &i : friends) {
+  for (const auto &i : *database) {
     assert(i.first.IsDefined());
     assert((int)i.second < (int)FlarmColor::COUNT);
 
@@ -112,4 +114,10 @@ FlarmFriends::Save()
   Profile::Set(_T("FriendsBlue"), ids[1].c_str());
   Profile::Set(_T("FriendsYellow"), ids[2].c_str());
   Profile::Set(_T("FriendsMagenta"), ids[3].c_str());
+}
+
+void
+FlarmFriends::Destroy()
+{
+  delete database;
 }

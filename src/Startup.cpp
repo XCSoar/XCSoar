@@ -640,6 +640,7 @@ Shutdown()
 
   // Destroy FlarmNet records
   FlarmNet::Destroy();
+  FlarmFriends::Destroy();
 
   delete file_cache;
 

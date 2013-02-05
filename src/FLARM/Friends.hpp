@@ -35,6 +35,7 @@ namespace FlarmFriends
 
   void Load();
   void Save();
+  void Destroy();
 };
 
 #endif
