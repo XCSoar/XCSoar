@@ -26,12 +26,14 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
 #include <string.h>
 
-#define TEAMCODE_COMBINATIONS 1296
+static constexpr unsigned BASE = 36;
+static constexpr unsigned TEAMCODE_COMBINATIONS = BASE * BASE;
 
 static constexpr Angle ANGLE_FACTOR =
   Angle::FullCircle() / TEAMCODE_COMBINATIONS;
@@ -57,7 +59,7 @@ GetValueFromTeamCode(const TCHAR *code, unsigned maxCount)
       cifferVal = 10 + code[charPos] - 'A';
     }
 
-    val = val * 36;
+    val = val * BASE;
     val += cifferVal;
 
     charPos++;
@@ -85,7 +87,7 @@ NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
 
   fixed rest = value;
   while (positive(rest) || curCif >= 0) {
-    unsigned cifVal = (unsigned)pow(36.0, curCif);
+    unsigned cifVal = (unsigned)pow(BASE, curCif);
     unsigned partSize = (unsigned)(rest / cifVal);
     fixed partVal(partSize * cifVal);
     unsigned txtPos = maxCif - curCif;
@@ -94,7 +96,7 @@ NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
       rest -= partVal;
       code[txtPos] = (unsigned char)('0' + partSize);
       curCif--;
-    } else if (partSize < 36) {
+    } else if (partSize < BASE) {
       rest -= partVal;
       code[txtPos] = (unsigned char)('A' + partSize - 10);
       curCif--;
