@@ -25,6 +25,7 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "FlarmNetRecord.hpp"
 #include "NameDatabase.hpp"
+#include "NameFile.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TrivialArray.hpp"
@@ -61,26 +62,6 @@ FlarmDetails::LoadFLARMnet()
     LogFormat("%u FLARMnet ids found", num_records);
 }
 
-static void
-LoadSecondaryFile(TLineReader &reader, FlarmNameDatabase &db)
-{
-  TCHAR *line;
-  while ((line = reader.ReadLine()) != NULL) {
-    TCHAR *endptr;
-    FlarmId id = FlarmId::Parse(line, &endptr);
-    if (!id.IsDefined())
-      /* ignore malformed records */
-      continue;
-
-    if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
-      TCHAR *Name = endptr + 1;
-      TrimRight(Name);
-      if (!FlarmDetails::AddSecondaryItem(id, Name))
-        break; // cant add anymore items !
-    }
-  }
-}
-
 void
 FlarmDetails::LoadSecondary()
 {
@@ -92,7 +73,7 @@ FlarmDetails::LoadSecondary()
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   if (reader != NULL) {
-    LoadSecondaryFile(*reader, *flarm_names);
+    LoadFlarmNameFile(*reader, *flarm_names);
     delete reader;
   }
 }
@@ -106,16 +87,7 @@ FlarmDetails::SaveSecondary()
   if (writer == NULL)
     return;
 
-  TCHAR id[16];
-
-  for (const auto &i : *flarm_names) {
-    assert(i.id.IsDefined());
-
-    writer->FormatLine(_T("%s=%s"),
-                       i.id.Format(id),
-                       i.name.c_str());
-  }
-
+  SaveFlarmNameFile(*writer, *flarm_names);
   delete writer;
 }
 
