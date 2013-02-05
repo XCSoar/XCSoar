@@ -33,6 +33,9 @@ Copyright_License {
 
 #define TEAMCODE_COMBINATIONS 1296
 
+static constexpr Angle ANGLE_FACTOR =
+  Angle::FullCircle() / TEAMCODE_COMBINATIONS;
+
 /**
  * Decodes the TeamCode
  * @param code The teamcode (or part of it)
@@ -113,8 +116,7 @@ NumberToTeamCode(fixed value, TCHAR *code, int minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const fixed bamValue = bearing.AsBearing().Degrees() / 360
-                          * TEAMCODE_COMBINATIONS;
+  const fixed bamValue = bearing.AsBearing().Native() / ANGLE_FACTOR.Native();
   NumberToTeamCode(bamValue, code, 2);
 }
 
@@ -125,7 +127,7 @@ TeamCode::GetBearing() const
   int val = GetValueFromTeamCode(code, 2);
 
   // Calculate bearing
-  return Angle::Degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).AsBearing();
+  return (ANGLE_FACTOR * val).AsBearing();
 }
 
 fixed
