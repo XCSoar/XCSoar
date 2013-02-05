@@ -94,6 +94,7 @@ TEST_NAMES = \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
+	TestTeamCode \
 	TestZeroFinder \
 	TestAirspaceParser \
 	TestMETARParser \
@@ -242,6 +243,13 @@ TEST_TASKWAYPOINT_SOURCES = \
 	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
 TEST_TASKWAYPOINT_DEPENDS = IO OS TASK GEO MATH UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
+
+TEST_TEAM_CODE_SOURCES = \
+	$(SRC)/TeamCode.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTeamCode.cpp
+TEST_TEAM_CODE_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestTeamCode,TEST_TEAM_CODE))
 
 TEST_TROUTE_SOURCES = \
 	$(SRC)/XML/Node.cpp \
