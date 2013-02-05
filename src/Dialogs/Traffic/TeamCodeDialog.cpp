@@ -141,18 +141,17 @@ OnFlarmLockClicked()
   unsigned count =
     FlarmDetails::FindIdsByCallSign(newTeamFlarmCNTarget, ids, 30);
 
-  if (count > 0) {
-    const FlarmId id =
-      PickFlarmTraffic(_("Set new teammate"), ids, count);
-
-    if (id.IsDefined()) {
-      TeamActions::TrackFlarm(id, newTeamFlarmCNTarget);
-      return;
-    }
-  } else {
+  if (count == 0) {
     ShowMessageBox(_("Unknown Competition Number"),
-                _("Not Found"), MB_OK | MB_ICONINFORMATION);
+                   _("Not Found"), MB_OK | MB_ICONINFORMATION);
+    return;
   }
+
+  const FlarmId id = PickFlarmTraffic(_("Set new teammate"), ids, count);
+  if (!id.IsDefined())
+    return;
+
+  TeamActions::TrackFlarm(id, newTeamFlarmCNTarget);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
