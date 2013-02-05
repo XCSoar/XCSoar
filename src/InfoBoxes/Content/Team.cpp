@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Formatter/Units.hpp"
+#include "TeamActions.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -77,14 +78,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
     return false;
 
   if (traffic != NULL) {
-    settings.team_flarm_id = traffic->id;
-
-    if (traffic->HasName()) {
-      // copy the 3 first chars from the name to TeamFlarmCNTarget
-      settings.team_flarm_callsign = traffic->name;
-    } else {
-      settings.team_flarm_callsign.clear();
-    }
+    TeamActions::TrackFlarm(traffic->id, traffic->name);
   } else {
     // no flarm traffic to select!
     settings.team_flarm_id.Clear();
