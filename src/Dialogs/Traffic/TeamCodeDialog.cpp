@@ -128,11 +128,9 @@ OnFlarmLockClicked()
   if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
     return;
 
-  settings.team_flarm_callsign = newTeamFlarmCNTarget;
-  settings.team_code.Clear();
-
-  if (StringIsEmpty(settings.team_flarm_callsign)) {
+  if (StringIsEmpty(newTeamFlarmCNTarget)) {
     settings.team_flarm_id.Clear();
+    settings.team_flarm_callsign.clear();
     return;
   }
 
@@ -140,23 +138,22 @@ OnFlarmLockClicked()
 
   FlarmId ids[30];
   unsigned count =
-    FlarmDetails::FindIdsByCallSign(settings.team_flarm_callsign, ids, 30);
+    FlarmDetails::FindIdsByCallSign(newTeamFlarmCNTarget, ids, 30);
 
   if (count > 0) {
     const FlarmId id =
       PickFlarmTraffic(_("Set new teammate"), ids, count);
 
     if (id.IsDefined()) {
+      settings.team_flarm_callsign = newTeamFlarmCNTarget;
       settings.team_flarm_id = id;
+      settings.team_code.Clear();
       return;
     }
   } else {
     ShowMessageBox(_("Unknown Competition Number"),
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
   }
-
-  settings.team_flarm_id.Clear();
-  settings.team_flarm_callsign.clear();
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
