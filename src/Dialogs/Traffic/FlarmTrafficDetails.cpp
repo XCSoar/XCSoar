@@ -55,6 +55,7 @@
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Blackboard/ScopeGPSListener.hpp"
+#include "TeamActions.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -201,21 +202,7 @@ OnTeamClicked()
                   _("New Teammate"), MB_YESNO) != IDYES)
     return;
 
-  TeamCodeSettings &settings =
-    CommonInterface::SetComputerSettings().team_code;
-
-  // Set the Teammate callsign
-  const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);
-  if (callsign == NULL || StringIsEmpty(callsign)) {
-    settings.team_flarm_callsign.clear();
-  } else {
-    // copy the 3 first chars from the name
-    settings.team_flarm_callsign = callsign;
-  }
-
-  // Start tracking
-  settings.team_flarm_id = target_id;
-  settings.team_code.Clear();
+  TeamActions::TrackFlarm(target_id);
 
   // Close the dialog
   wf->SetModalResult(mrOK);

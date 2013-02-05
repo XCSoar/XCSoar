@@ -46,6 +46,7 @@
 #include "Interface.hpp"
 #include "Blackboard/ScopeCalculatedListener.hpp"
 #include "Language/Language.hpp"
+#include "TeamActions.hpp"
 
 #include <stdio.h>
 
@@ -145,9 +146,7 @@ OnFlarmLockClicked()
       PickFlarmTraffic(_("Set new teammate"), ids, count);
 
     if (id.IsDefined()) {
-      settings.team_flarm_callsign = newTeamFlarmCNTarget;
-      settings.team_flarm_id = id;
-      settings.team_code.Clear();
+      TeamActions::TrackFlarm(id, newTeamFlarmCNTarget);
       return;
     }
   } else {
