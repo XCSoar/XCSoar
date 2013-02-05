@@ -75,7 +75,7 @@ GetValueFromTeamCode(const TCHAR *code, unsigned maxCount)
  * @param minCiffers Number of chars for the teamcode
  */
 static void
-NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
+NumberToTeamCode(unsigned value, TCHAR *code, unsigned minCiffers)
 {
   unsigned maxCif = 0;
   int curCif = 0;
@@ -85,11 +85,11 @@ NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
     curCif = maxCif;
   }
 
-  fixed rest = value;
-  while (positive(rest) || curCif >= 0) {
+  unsigned rest = value;
+  while (rest > 0 || curCif >= 0) {
     unsigned cifVal = (unsigned)pow(BASE, curCif);
     unsigned partSize = (unsigned)(rest / cifVal);
-    fixed partVal(partSize * cifVal);
+    unsigned partVal(partSize * cifVal);
     unsigned txtPos = maxCif - curCif;
 
     if (partSize < 10) {
@@ -104,9 +104,6 @@ NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
       curCif++;
       maxCif = curCif;
     }
-
-    if (rest < fixed(1))
-      rest = fixed(0);
   }
 }
 
@@ -118,7 +115,8 @@ NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const fixed bamValue = bearing.AsBearing().Native() / ANGLE_FACTOR.Native();
+  const unsigned bamValue = unsigned(bearing.AsBearing().Native()
+                                     / ANGLE_FACTOR.Native());
   NumberToTeamCode(bamValue, code, 2);
 }
 
@@ -148,7 +146,7 @@ TeamCode::Update(Angle bearing, fixed range)
   // Calculate bearing part of the teamcode
   ConvertBearingToTeamCode(bearing, code.buffer());
   // Calculate distance part of the teamcode
-  NumberToTeamCode(range / 100, code.buffer() + 2, 0);
+  NumberToTeamCode(unsigned(range / 100), code.buffer() + 2, 0);
 }
 
 void
