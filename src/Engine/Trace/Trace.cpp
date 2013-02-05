@@ -259,6 +259,7 @@ Trace::push_back(const TracePoint &point)
 
     /* not much, try to fix it */
     EraseLaterThan(point.GetTime() - 10);
+    ++modify_serial;
   } else if (point.GetTime() - back().GetTime() < 2)
     // only add one item per two seconds
     return;
