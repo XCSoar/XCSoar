@@ -33,7 +33,7 @@
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
-#include "FLARM/Friends.hpp"
+#include "FLARM/FriendsGlue.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
@@ -438,14 +438,7 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
 
   if (!WarningMode()) {
     // Team color dot
-    FlarmColor team_color = FlarmFriends::GetFriendColor(traffic.id);
-
-    // If no color found but target is teammate
-    if (team_color == FlarmColor::NONE &&
-        settings.team_flarm_tracking &&
-        traffic.id == settings.team_flarm_id)
-      // .. use green color
-      team_color = FlarmColor::GREEN;
+    FlarmColor team_color = FlarmFriends::GetFriendColor(traffic.id, settings);
 
     // If team color found -> draw a colored circle in front of the name
     if (team_color != FlarmColor::NONE) {
