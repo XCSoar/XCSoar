@@ -42,23 +42,23 @@ static constexpr Angle ANGLE_FACTOR =
  * @param maxCount Maximum chars to decode
  * @return The decoded value
  */
-static int
-GetValueFromTeamCode(const TCHAR *code, int maxCount)
+static unsigned
+GetValueFromTeamCode(const TCHAR *code, unsigned maxCount)
 {
-  int val = 0;
-  int charPos = 0;
+  unsigned val = 0;
+  unsigned charPos = 0;
 
   while (code[charPos] != 0 && charPos < maxCount) {
-    int cifferVal = 0;
+    unsigned cifferVal = 0;
 
     if (code[charPos] >= '0' && code[charPos] <= '9') {
-      cifferVal = (int)(code[charPos] - '0');
+      cifferVal = code[charPos] - '0';
     } else if (code[charPos] >= 'A' && code[charPos] <= 'Z') {
-      cifferVal = (int)(code[charPos] + -'A') + 10;
+      cifferVal = 10 + code[charPos] - 'A';
     }
 
     val = val * 36;
-    val += (int)cifferVal;
+    val += cifferVal;
 
     charPos++;
   }
@@ -73,9 +73,9 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
  * @param minCiffers Number of chars for the teamcode
  */
 static void
-NumberToTeamCode(fixed value, TCHAR *code, int minCiffers)
+NumberToTeamCode(fixed value, TCHAR *code, unsigned minCiffers)
 {
-  int maxCif = 0;
+  unsigned maxCif = 0;
   int curCif = 0;
 
   if (minCiffers > 0)	{
@@ -85,10 +85,10 @@ NumberToTeamCode(fixed value, TCHAR *code, int minCiffers)
 
   fixed rest = value;
   while (positive(rest) || curCif >= 0) {
-    int cifVal = (int)pow(36.0, curCif);
-    int partSize = (int)(rest / cifVal);
+    unsigned cifVal = (unsigned)pow(36.0, curCif);
+    unsigned partSize = (unsigned)(rest / cifVal);
     fixed partVal(partSize * cifVal);
-    int txtPos = maxCif - curCif;
+    unsigned txtPos = maxCif - curCif;
 
     if (partSize < 10) {
       rest -= partVal;
@@ -124,7 +124,7 @@ Angle
 TeamCode::GetBearing() const
 {
   // Get the first two values from teamcode (1-2)
-  int val = GetValueFromTeamCode(code, 2);
+  unsigned val = GetValueFromTeamCode(code, 2);
 
   // Calculate bearing
   return (ANGLE_FACTOR * val).AsBearing();
@@ -134,7 +134,7 @@ fixed
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
-  int val = GetValueFromTeamCode(code.begin() + 2, 3);
+  unsigned val = GetValueFromTeamCode(code.begin() + 2, 3);
   return fixed(val * 100);
 }
 
