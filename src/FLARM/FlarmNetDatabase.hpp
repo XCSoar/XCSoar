@@ -58,7 +58,7 @@ public:
    * @return FLARMNetRecord object
    */
   gcc_pure
-  const FlarmNetRecord *FindRecordById(FlarmId id) {
+  const FlarmNetRecord *FindRecordById(FlarmId id) const {
     auto i = map.find(id);
     return i != map.end()
       ? &i->second
