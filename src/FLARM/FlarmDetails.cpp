@@ -76,11 +76,8 @@ FlarmDetails::LookupId(const TCHAR *cn)
 bool
 FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 {
+  assert(id.IsDefined());
   assert(traffic_databases != nullptr);
-
-  if (!id.IsDefined())
-    /* ignore malformed records */
-    return false;
 
   return traffic_databases->flarm_names.Set(id, name);
 }
@@ -90,10 +87,8 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                 unsigned size)
 {
   assert(cn != NULL);
+  assert(!StringIsEmpty(cn));
   assert(traffic_databases != nullptr);
-
-  if (StringIsEmpty(cn))
-    return 0;
 
   return traffic_databases->flarm_names.Get(cn, array, size);
 }
