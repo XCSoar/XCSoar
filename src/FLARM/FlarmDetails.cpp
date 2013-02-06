@@ -25,7 +25,6 @@ Copyright_License {
 #include "Global.hpp"
 #include "TrafficDatabases.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "FLARM/FlarmNet.hpp"
 
 #include <assert.h>
 
@@ -33,7 +32,10 @@ const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
-  return FlarmNet::FindRecordById(id);
+  if (traffic_databases == nullptr)
+    return NULL;
+
+  return traffic_databases->flarm_net.FindRecordById(id);
 }
 
 const TCHAR *

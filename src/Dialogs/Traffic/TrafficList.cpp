@@ -30,7 +30,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmNetRecord.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
@@ -81,8 +80,8 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     void Load() {
       assert(id.IsDefined());
 
-      record = FlarmNet::FindRecordById(id);
-      callsign = FlarmDetails::LookupCallsign(id);
+      record = traffic_databases->flarm_net.FindRecordById(id);
+      callsign = traffic_databases->FindNameById(id);
 
       loaded = true;
     }
