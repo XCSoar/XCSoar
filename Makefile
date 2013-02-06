@@ -670,6 +670,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/FLARM/NameDatabase.cpp \
 	$(SRC)/FLARM/NameFile.cpp \
+	$(SRC)/FLARM/TrafficDatabases.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
 	$(SRC)/OS/LogError.cpp \

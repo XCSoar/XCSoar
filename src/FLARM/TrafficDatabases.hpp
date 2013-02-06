@@ -56,6 +56,22 @@ struct TrafficDatabases {
 
     return color;
   }
+
+  gcc_pure
+  const TCHAR *FindNameById(FlarmId id) const;
+
+  gcc_pure gcc_nonnull_all
+  FlarmId FindIdByName(const TCHAR *name) const;
+
+  /**
+   * Look up all records with the specified name.
+   *
+   * @param max the maximum size of the given buffer
+   * @return the number of items copied to the given buffer
+   */
+  gcc_nonnull_all
+  unsigned FindIdsByName(const TCHAR *name,
+                         FlarmId *buffer, unsigned max) const;
 };
 
 #endif

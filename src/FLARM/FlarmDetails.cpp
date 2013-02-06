@@ -42,35 +42,15 @@ FlarmDetails::LookupCallsign(FlarmId id)
   if (traffic_databases == nullptr)
     return nullptr;
 
-  // try to find flarm from userFile
-  const TCHAR *name = traffic_databases->flarm_names.Get(id);
-  if (name != nullptr)
-    return name;
-
-  // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = FlarmNet::FindRecordById(id);
-  if (record != NULL)
-    return record->callsign;
-
-  return NULL;
+  return traffic_databases->FindNameById(id);
 }
 
 FlarmId
 FlarmDetails::LookupId(const TCHAR *cn)
 {
-  // try to find flarm from userFile
   assert(traffic_databases != nullptr);
 
-  FlarmId id = traffic_databases->flarm_names.Get(cn);
-  if (id.IsDefined())
-    return id;
-
-  // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
-  if (record != NULL)
-    return record->GetId();
-
-  return FlarmId::Undefined();
+  return traffic_databases->FindIdByName(cn);
 }
 
 bool
@@ -90,5 +70,5 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
   assert(!StringIsEmpty(cn));
   assert(traffic_databases != nullptr);
 
-  return traffic_databases->flarm_names.Get(cn, array, size);
+  return traffic_databases->FindIdsByName(cn, array, size);
 }

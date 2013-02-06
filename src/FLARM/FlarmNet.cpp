@@ -33,30 +33,3 @@ FlarmNet::FindRecordById(FlarmId id)
 
   return traffic_databases->flarm_net.FindRecordById(id);
 }
-
-const FlarmNetRecord *
-FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
-{
-  return traffic_databases != nullptr
-    ? traffic_databases->flarm_net.FindFirstRecordByCallSign(cn)
-    : NULL;
-}
-
-unsigned
-FlarmNet::FindRecordsByCallSign(const TCHAR *cn,
-                                const FlarmNetRecord *array[], unsigned size)
-{
-  if (traffic_databases == nullptr)
-    return 0;
-
-  return traffic_databases->flarm_net.FindRecordsByCallSign(cn, array, size);
-}
-
-unsigned
-FlarmNet::FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size)
-{
-  if (traffic_databases == nullptr)
-    return 0;
-
-  return traffic_databases->flarm_net.FindIdsByCallSign(cn, array, size);
-}

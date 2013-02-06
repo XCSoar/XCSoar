@@ -40,17 +40,6 @@ namespace FlarmNet
    * @return FLARMNetRecord object
    */
   const FlarmNetRecord *FindRecordById(FlarmId id);
-
-  /**
-   * Finds a FLARMNetRecord object based on the given Callsign
-   * @param cn Callsign
-   * @return FLARMNetRecord object
-   */
-  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn);
-  unsigned FindRecordsByCallSign(const TCHAR *cn,
-                                 const FlarmNetRecord *array[],
-                                 unsigned size);
-  unsigned FindIdsByCallSign(const TCHAR *cn, FlarmId array[], unsigned size);
 };
 
 #endif
