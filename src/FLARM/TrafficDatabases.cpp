@@ -67,5 +67,9 @@ TrafficDatabases::FindIdsByName(const TCHAR *name,
   assert(!StringIsEmpty(name));
   assert(buffer != nullptr);
 
-  return flarm_names.Get(name, buffer, max);
+  unsigned n = flarm_names.Get(name, buffer, max);
+  if (n < max)
+    n += flarm_net.FindIdsByCallSign(name, buffer + n, max - n);
+
+  return n;
 }
