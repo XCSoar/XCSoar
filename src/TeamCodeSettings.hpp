@@ -52,9 +52,16 @@ struct TeamCodeSettings {
   FlarmId team_flarm_id;
 
   void SetDefaults();
+
+  /**
+   * Track a specific FLARM.
+   *
+   * Don't use this method directory, use TeamActions::TrackFlarm()
+   * instead.
+   */
+  void TrackFlarm(FlarmId id, const TCHAR *callsign);
 };
 
 static_assert(std::is_trivial<TeamCodeSettings>::value, "type is not trivial");
 
 #endif
-

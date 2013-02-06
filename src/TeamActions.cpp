@@ -33,19 +33,10 @@ TeamActions::TrackFlarm(FlarmId id, const TCHAR *callsign)
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
 
-  // Start tracking
-  settings.team_flarm_id = id;
-  settings.team_code.Clear();
-
-  // Set the Teammate callsign
   if (callsign == nullptr)
     callsign = FlarmDetails::LookupCallsign(id);
 
-  if (callsign != nullptr)
-    // copy the 3 first chars from the name
-    settings.team_flarm_callsign = callsign;
-  else
-    settings.team_flarm_callsign.clear();
+  settings.TrackFlarm(id, callsign);
 
   if (traffic_databases != nullptr)
     traffic_databases->team_flarm_id = id;

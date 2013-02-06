@@ -30,3 +30,18 @@ TeamCodeSettings::SetDefaults()
   team_flarm_callsign.clear();
   team_flarm_id.Clear();
 }
+
+void
+TeamCodeSettings::TrackFlarm(FlarmId id, const TCHAR *name)
+{
+  // Start tracking
+  team_flarm_id = id;
+  team_code.Clear();
+
+  // Set the Teammate callsign
+  if (name != nullptr)
+    // copy the 3 first chars from the name
+    team_flarm_callsign = name;
+  else
+    team_flarm_callsign.clear();
+}
