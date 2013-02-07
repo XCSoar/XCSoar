@@ -50,6 +50,8 @@ enum Buttons {
   DETAILS,
 };
 
+class TrafficListButtons;
+
 class TrafficListWidget : public ListWidget, public DataFieldListener,
                           public ActionListener {
   struct Item {
@@ -99,20 +101,25 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
   const RowFormWidget *const filter_widget;
 
+  TrafficListButtons *const buttons;
+
   std::vector<Item> items;
 
 public:
   TrafficListWidget(ActionListener &_action_listener,
                     const FlarmId *array, size_t count)
-    :action_listener(&_action_listener), filter_widget(nullptr) {
+    :action_listener(&_action_listener), filter_widget(nullptr),
+     buttons(nullptr) {
     items.reserve(count);
 
     for (unsigned i = 0; i < count; ++i)
       items.emplace_back(array[i]);
   }
 
-  TrafficListWidget(const RowFormWidget &_filter_widget)
-    :action_listener(nullptr), filter_widget(&_filter_widget) {
+  TrafficListWidget(const RowFormWidget &_filter_widget,
+                    TrafficListButtons &_buttons)
+    :action_listener(nullptr), filter_widget(&_filter_widget),
+     buttons(&_buttons) {
   }
 
   FlarmId GetCursorId() const {
@@ -122,6 +129,7 @@ public:
   }
 
   void UpdateList();
+  void UpdateButtons();
 
   /* virtual methods from class Widget */
 
@@ -136,6 +144,10 @@ public:
                            unsigned idx) override;
 
   /* virtual methods from ListCursorHandler */
+  virtual void OnCursorMoved(unsigned index) override {
+    UpdateButtons();
+  }
+
   virtual bool CanActivateItem(unsigned index) const override {
     return true;
   }
@@ -235,6 +247,20 @@ TrafficListWidget::UpdateList()
   }
 
   GetList().SetLength(items.size());
+
+  UpdateButtons();
+}
+
+void
+TrafficListWidget::UpdateButtons()
+{
+  if (buttons == nullptr)
+    return;
+
+  unsigned cursor = GetList().GetCursorIndex();
+  bool valid_cursor = cursor < items.size();
+
+  buttons->SetRowVisible(DETAILS, valid_cursor);
 }
 
 void
@@ -381,7 +407,7 @@ TrafficListDialog()
     new TwoWidgets(filter_widget, buttons_widget, true);
 
   TrafficListWidget *const list_widget =
-    new TrafficListWidget(*filter_widget);
+    new TrafficListWidget(*filter_widget, *buttons_widget);
 
   filter_widget->SetListener(list_widget);
   buttons_widget->SetList(list_widget);
