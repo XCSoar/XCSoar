@@ -51,7 +51,7 @@ struct TerrainRendererSettings {
   /** Terrain brightness percentage */
   short brightness;
 
-  short ramp;
+  unsigned short ramp;
 
   /**
    * Set all attributes to the default values.

@@ -42,5 +42,9 @@ Profile::LoadTerrainRendererSettings(TerrainRendererSettings &settings)
 
   Get(ProfileKeys::TerrainContrast, settings.contrast);
   Get(ProfileKeys::TerrainBrightness, settings.brightness);
-  Get(ProfileKeys::TerrainRamp, settings.ramp);
+
+  unsigned short ramp;
+  if (Get(ProfileKeys::TerrainRamp, ramp) &&
+      ramp < TerrainRendererSettings::NUM_RAMPS)
+    settings.ramp = ramp;
 }
