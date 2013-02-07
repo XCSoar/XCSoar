@@ -87,7 +87,7 @@ public:
   void SetScreenSize(unsigned width, unsigned height);
 
   RasterPoint GetMousePosition() const {
-    return { mouse_x, mouse_y };
+    return { int(mouse_x), int(mouse_y) };
   }
 
   void Quit() {
