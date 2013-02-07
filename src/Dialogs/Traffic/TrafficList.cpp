@@ -97,13 +97,15 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
   };
 
+  typedef std::vector<Item> ItemList;
+
   ActionListener *const action_listener;
 
   const RowFormWidget *const filter_widget;
 
   TrafficListButtons *const buttons;
 
-  std::vector<Item> items;
+  ItemList items;
 
 public:
   TrafficListWidget(ActionListener &_action_listener,
@@ -126,6 +128,31 @@ public:
     return items.empty()
       ? FlarmId::Undefined()
       : items[GetList().GetCursorIndex()].id;
+  }
+
+  /**
+   * Find an existing item by its FLARM id.  This is a simple linear
+   * search that doesn't scale well with a large list.
+   */
+  gcc_pure
+  ItemList::iterator FindItem(FlarmId id) {
+    assert(id.IsDefined());
+
+    return std::find_if(items.begin(), items.end(),
+                        [id](const Item &item) { return item.id == id; });
+  }
+
+  /**
+   * Add a new item to the list, unless the given FLARM id already
+   * exists.
+   */
+  Item &AddItem(FlarmId id) {
+    auto existing = FindItem(id);
+    if (existing != items.end())
+      return *existing;
+
+    items.emplace_back(id);
+    return items.back();
   }
 
   void UpdateList();
@@ -222,28 +249,26 @@ TrafficListWidget::UpdateList()
     unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
 
     for (unsigned i = 0; i < count; ++i)
-      items.emplace_back(ids[i]);
+      AddItem(ids[i]);
   } else {
     /* if no filter was set, show a list of current traffic and known
        traffic */
 
     /* add live FLARM traffic */
     for (const auto &i : CommonInterface::Basic().flarm.traffic.list) {
-      items.emplace_back(i.id);
+      AddItem(i.id);
     }
 
     /* add FLARM peers that have a user-defined color */
     for (const auto &i : traffic_databases->flarm_colors) {
-      items.emplace_back(i.first);
-      items.back().color = i.second;
+      Item &item = AddItem(i.first);
+      item.color = i.second;
     }
 
     /* add FLARM peers that have a user-defined name */
     for (const auto &i : traffic_databases->flarm_names) {
-      items.emplace_back(i.id);
+      AddItem(i.id);
     }
-
-    // TODO: avoid duplicates
   }
 
   GetList().SetLength(items.size());
