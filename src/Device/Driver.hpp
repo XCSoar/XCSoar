@@ -79,6 +79,11 @@ struct RecordedFlightInfo {
     uint8_t flarm;
 
     /**
+     * Flight number, used by Volkslogger driver
+     */
+    uint8_t volkslogger;
+
+    /**
      * Flight number, used by the Flytec driver.
      */
     unsigned flytec;
