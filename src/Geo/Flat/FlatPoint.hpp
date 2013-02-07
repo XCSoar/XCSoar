@@ -133,7 +133,7 @@ struct FlatPoint
    *
    * @return Dot product
    */
-  gcc_const
+  gcc_pure
   fixed DotProduct(FlatPoint other) const {
     return x*other.x+y*other.y;
   }
@@ -145,7 +145,7 @@ struct FlatPoint
    *
    * @return Scaled point
    */
-  gcc_const
+  gcc_pure
   FlatPoint operator*(fixed p) const
   {
     return { x * p, y * p };

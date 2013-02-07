@@ -71,7 +71,7 @@ CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
-gcc_const
+gcc_pure
 fixed
 ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                   const GeoPoint &loc3);
@@ -86,7 +86,7 @@ DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
  * @param loc2 Location 2
  * @return The distance
  */
-gcc_const
+gcc_pure
 fixed
 Distance(const GeoPoint &loc1, const GeoPoint &loc2);
 
@@ -96,7 +96,7 @@ Distance(const GeoPoint &loc1, const GeoPoint &loc2);
  * @param loc2 Location 2
  * @return The bearing
  */
-gcc_const
+gcc_pure
 Angle
 Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
 
