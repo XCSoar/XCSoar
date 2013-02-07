@@ -95,9 +95,9 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
   };
 
-  ActionListener *action_listener;
+  ActionListener *const action_listener;
 
-  const RowFormWidget *filter_widget;
+  const RowFormWidget *const filter_widget;
 
   std::vector<Item> items;
 
