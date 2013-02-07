@@ -219,10 +219,6 @@ public:
   FastRowRotation GetScreenAngleRotation(int y) const {
     return FastRowRotation(screen_rotation, y);
   }
-
-protected:
-  gcc_const
-  static int GetMapResolutionFactor();
 };
 
 #endif
