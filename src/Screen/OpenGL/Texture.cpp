@@ -81,7 +81,7 @@ LoadTextureAutoAlign(GLint internal_format,
                  format, type, pixels);
   else {
     glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
-                 format, type, NULL);
+                 format, type, nullptr);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
                     format, type, pixels);
   }
@@ -205,7 +205,7 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
-               0, GL_RGB, GetType(), NULL);
+               0, GL_RGB, GetType(), nullptr);
 }
 
 GLTexture::GLTexture(GLint internal_format, GLsizei _width, GLsizei _height,
@@ -237,7 +237,7 @@ GLTexture::ResizeDiscard(PixelSize new_size)
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                validated_size.cx, validated_size.cy,
-               0, GL_RGB, GetType(), NULL);
+               0, GL_RGB, GetType(), nullptr);
 
 }
 
