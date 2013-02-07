@@ -29,6 +29,8 @@ ifeq ($(CLANG)$(DEBUG),nn)
 # This requires -ffast-math, because some vector units don't conform
 # stricly with IEEE/ISO (see above).
 OPTIMIZE += -ftree-vectorize
+
+OPTIMIZE += -funsafe-loop-optimizations
 endif
 
 ifeq ($(LTO),y)
