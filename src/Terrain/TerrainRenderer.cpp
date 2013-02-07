@@ -35,7 +35,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static constexpr ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRamp terrain_colors[9][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0,           0x70, 0xc0, 0xa7},
     {250,         0xca, 0xe7, 0xb9},
@@ -155,6 +155,21 @@ static constexpr ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
     {2000,        220, 220, 220},
     {2250,        220, 220, 220},
     {2500,        220, 220, 220}
+  },
+  { // White
+    {0,           255, 255, 255},
+    {100,         255, 255, 255},
+    {200,         255, 255, 255},
+    {300,         255, 255, 255},
+    {500,         255, 255, 255},
+    {700,         255, 255, 255},
+    {1000,        255, 255, 255},
+    {1250,        255, 255, 255},
+    {1500,        255, 255, 255},
+    {1750,        255, 255, 255},
+    {2000,        255, 255, 255},
+    {2250,        255, 255, 255},
+    {2500,        255, 255, 255}
   }
 };
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
