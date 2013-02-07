@@ -205,7 +205,7 @@ gcc_pure
 static UPixelScalar
 GetRowHeight(const DialogLook &look)
 {
-  return look.list.font_bold->GetHeight() + Layout::Scale(6)
+  return look.list.font_bold->GetHeight() + 3 * Layout::GetTextPadding()
     + look.small_font->GetHeight();
 }
 
@@ -294,6 +294,9 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *look.list.font_bold;
   const Font &small_font = *look.small_font;
 
+  const unsigned text_padding = Layout::GetTextPadding();
+  const unsigned frame_padding = text_padding / 2;
+
   TCHAR tmp_id[10];
   item.id.Format(tmp_id);
 
@@ -307,6 +310,8 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     tmp.Format(_T("%s - %s"), callsign, tmp_id);
   else
     tmp.Format(_T("%s"), tmp_id);
+
+  const int name_x = rc.left + text_padding, name_y = rc.top + text_padding;
 
   if (item.color != FlarmColor::NONE) {
     const TrafficLook &traffic_look = UIGlobals::GetLook().traffic;
@@ -333,14 +338,13 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     canvas.SelectHollowBrush();
 
     const PixelSize size = canvas.CalcTextSize(tmp);
-    canvas.Rectangle(rc.left + Layout::FastScale(1),
-                     rc.top + Layout::FastScale(1),
-                     rc.left + size.cx + Layout::FastScale(2),
-                     rc.top + size.cy + Layout::FastScale(2));
+    canvas.Rectangle(name_x - frame_padding,
+                     name_y - frame_padding,
+                     name_x + size.cx + frame_padding,
+                     name_y + size.cy + frame_padding);
   }
 
-  canvas.DrawText(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), tmp);
+  canvas.DrawText(name_x, name_y, tmp);
 
   if (record != NULL) {
     tmp.clear();
@@ -364,8 +368,8 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     if (!tmp.empty()) {
       canvas.Select(small_font);
-      canvas.DrawText(rc.left + Layout::FastScale(2),
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+      canvas.DrawText(rc.left + text_padding,
+                      rc.bottom - small_font.GetHeight() - text_padding,
                       tmp);
     }
   }
