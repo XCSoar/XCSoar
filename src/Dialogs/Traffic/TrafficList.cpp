@@ -44,6 +44,9 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+#include "Tracking/SkyLines/Data.hpp"
+#include "Tracking/TrackingGlue.hpp"
+#include "Components.hpp"
 
 enum Controls {
   CALLSIGN,
@@ -58,7 +61,18 @@ class TrafficListButtons;
 class TrafficListWidget : public ListWidget, public DataFieldListener,
                           public ActionListener, NullBlackboardListener {
   struct Item {
+    /**
+     * The FLARM traffic id.  If this is "undefined", then this object
+     * does not refer to FLARM traffic.
+     */
     FlarmId id;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    /**
+     * The SkyLines account id.
+     */
+    uint32_t skylines_id;
+#endif
 
     /**
      * The color that was assigned by the user to this FLARM peer.  It
@@ -83,22 +97,52 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     GeoVector vector;
 
     explicit Item(FlarmId _id)
-      :id(_id), color(FlarmColor::COUNT),
+      :id(_id),
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+       skylines_id(0),
+#endif
+       color(FlarmColor::COUNT),
        loaded(false), vector(GeoVector::Invalid()) {
       assert(id.IsDefined());
+      assert(IsFlarm());
     }
 
-    void Load() {
-      assert(id.IsDefined());
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    explicit Item(uint32_t _id)
+      :id(FlarmId::Undefined()), skylines_id(_id),
+       color(FlarmColor::COUNT),
+       loaded(false), vector(GeoVector::Invalid()) {
+      assert(IsSkyLines());
+    }
+#endif
 
-      record = traffic_databases->flarm_net.FindRecordById(id);
-      callsign = traffic_databases->FindNameById(id);
+    /**
+     * Does this object describe a FLARM?
+     */
+    bool IsFlarm() const {
+      return id.IsDefined();
+    }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    /**
+     * Does this object describe data from SkyLines live tracking?
+     */
+    bool IsSkyLines() const {
+      return skylines_id != 0;
+    }
+#endif
+
+    void Load() {
+      if (IsFlarm()) {
+        record = traffic_databases->flarm_net.FindRecordById(id);
+        callsign = traffic_databases->FindNameById(id);
+      }
 
       loaded = true;
     }
 
     void AutoLoad() {
-      if (color == FlarmColor::COUNT)
+      if (IsFlarm() && color == FlarmColor::COUNT)
         color = traffic_databases->GetColor(id);
 
       if (!loaded)
@@ -317,6 +361,24 @@ TrafficListWidget::UpdateList()
     for (const auto &i : traffic_databases->flarm_names) {
       AddItem(i.id);
     }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    /* show SkyLines traffic unless this is a FLARM traffic picker
+       dialog (from dlgTeamCode) */
+    if (action_listener == nullptr) {
+      const auto &data = tracking->GetSkyLinesData();
+      const ScopeLock protect(data.mutex);
+      for (const auto &i : data.traffic) {
+        items.emplace_back(Item(i.first));
+        Item &item = items.back();
+
+        if (i.second.location.IsValid() &&
+            CommonInterface::Basic().location_available)
+          item.vector = GeoVector(CommonInterface::Basic().location,
+                                  i.second.location);
+      }
+    }
+#endif
   }
 
   GetList().SetLength(items.size());
@@ -376,8 +438,9 @@ TrafficListWidget::UpdateButtons()
 
   unsigned cursor = GetList().GetCursorIndex();
   bool valid_cursor = cursor < items.size();
+  bool flarm_cursor = valid_cursor && items[cursor].IsFlarm();
 
-  buttons->SetRowVisible(DETAILS, valid_cursor);
+  buttons->SetRowVisible(DETAILS, flarm_cursor);
 }
 
 void
@@ -400,7 +463,12 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   assert(index < items.size());
   Item &item = items[index];
-  assert(item.id.IsDefined());
+
+  assert(item.IsFlarm()
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+         || item.IsSkyLines()
+#endif
+         );
 
   item.AutoLoad();
 
@@ -420,13 +488,22 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
 
   StaticString<256> tmp;
-  if (record != NULL)
-    tmp.Format(_T("%s - %s - %s"),
-               callsign, record->registration.c_str(), tmp_id);
-  else if (callsign != NULL)
-    tmp.Format(_T("%s - %s"), callsign, tmp_id);
-  else
-    tmp.Format(_T("%s"), tmp_id);
+
+  if (item.IsFlarm()) {
+    if (record != NULL)
+      tmp.Format(_T("%s - %s - %s"),
+                 callsign, record->registration.c_str(), tmp_id);
+    else if (callsign != NULL)
+      tmp.Format(_T("%s - %s"), callsign, tmp_id);
+    else
+      tmp.Format(_T("%s"), tmp_id);
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  } else if (item.IsSkyLines()) {
+    tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
+#endif
+  } else {
+    tmp = _T("?");
+  }
 
   const int name_x = rc.left + text_padding, name_y = rc.top + text_padding;
 
@@ -517,8 +594,11 @@ TrafficListWidget::OpenDetails(unsigned index)
     return;
 
   Item &item = items[index];
-  dlgFlarmTrafficDetailsShowModal(item.id);
-  UpdateList();
+
+  if (item.IsFlarm()) {
+    dlgFlarmTrafficDetailsShowModal(item.id);
+    UpdateList();
+  }
 }
 
 void
