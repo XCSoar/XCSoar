@@ -41,6 +41,9 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Formatter/AngleFormatter.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
 enum Controls {
   CALLSIGN,
@@ -53,7 +56,7 @@ enum Buttons {
 class TrafficListButtons;
 
 class TrafficListWidget : public ListWidget, public DataFieldListener,
-                          public ActionListener {
+                          public ActionListener, NullBlackboardListener {
   struct Item {
     FlarmId id;
 
@@ -73,9 +76,15 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     const FlarmNetRecord *record;
     const TCHAR *callsign;
 
+    /**
+     * The vector from the current aircraft location to this object's
+     * location (if known).  Check GeoVector::IsValid().
+     */
+    GeoVector vector;
+
     explicit Item(FlarmId _id)
       :id(_id), color(FlarmColor::COUNT),
-       loaded(false) {
+       loaded(false), vector(GeoVector::Invalid()) {
       assert(id.IsDefined());
     }
 
@@ -106,6 +115,12 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
   TrafficListButtons *const buttons;
 
   ItemList items;
+
+  /**
+   * The time stamp of the newest #FlarmTraffic object.  This is used
+   * to check whether the list needs to be redrawn.
+   */
+  Validity last_update;
 
 public:
   TrafficListWidget(ActionListener &_action_listener,
@@ -156,6 +171,13 @@ public:
   }
 
   void UpdateList();
+
+  /**
+   * Update volatile data on existing items (e.g. their current
+   * positions).
+   */
+  void UpdateVolatile();
+
   void UpdateButtons();
 
   /* virtual methods from class Widget */
@@ -164,6 +186,20 @@ public:
                        const PixelRect &rc) override;
   virtual void Unprepare() override {
     DeleteWindow();
+  }
+
+  virtual void Show(const PixelRect &rc) override {
+    ListWidget::Show(rc);
+
+    UpdateList();
+
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+  }
+
+  virtual void Hide() override {
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
+    ListWidget::Hide();
   }
 
   /* virtual methods from ListItemRenderer */
@@ -188,6 +224,12 @@ public:
 
   /* virtual methods from ActionListener */
   virtual void OnAction(int id) override;
+
+private:
+  /* virtual methods from BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic) override {
+    UpdateVolatile();
+  }
 };
 
 class TrafficFilterWidget : public RowFormWidget {
@@ -242,6 +284,7 @@ TrafficListWidget::UpdateList()
   assert(filter_widget != nullptr);
 
   items.clear();
+  last_update.Clear();
 
   const TCHAR *callsign = filter_widget->GetValueString(CALLSIGN);
   if (!StringIsEmpty(callsign)) {
@@ -273,7 +316,51 @@ TrafficListWidget::UpdateList()
 
   GetList().SetLength(items.size());
 
+  UpdateVolatile();
   UpdateButtons();
+}
+
+void
+TrafficListWidget::UpdateVolatile()
+{
+  const TrafficList &live_list = CommonInterface::Basic().flarm.traffic;
+
+  bool modified = false;
+
+  /* determine the most recent time stamp in the #TrafficList; this is
+     used to set the new last_update value */
+  Validity max_time;
+  max_time.Clear();
+
+  for (auto &i : items) {
+    const FlarmTraffic *live = live_list.FindTraffic(i.id);
+
+    if (live != nullptr) {
+      if (live->valid.Modified(last_update))
+        /* if this #FlarmTraffic is newer than #last_update, then we
+           need to redraw the list */
+        modified = true;
+
+      if (live->valid.Modified(max_time))
+        /* update max_time (and last_update) for the next
+           UpdateVolatile() call */
+        max_time = live->valid;
+
+      i.vector = GeoVector(live->distance, live->track);
+    } else {
+      if (i.vector.IsValid())
+        /* this item has disappeared from our FLARM: redraw the
+           list */
+        modified = true;
+
+      i.vector.SetInvalid();
+    }
+  }
+
+  last_update = max_time;
+
+  if (modified)
+    GetList().Invalidate();
 }
 
 void
@@ -398,6 +485,24 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                       tmp);
     }
   }
+
+  /* draw bearing and distance on the right */
+  if (item.vector.IsValid()) {
+    FormatUserDistanceSmart(item.vector.distance, tmp.buffer(), true);
+    unsigned width = canvas.CalcTextWidth(tmp.c_str());
+    canvas.DrawText(rc.right - text_padding - width,
+                    name_y +
+                    (name_font.GetHeight() - small_font.GetHeight()) / 2,
+                    tmp.c_str());
+
+    // Draw leg bearing
+    FormatBearing(tmp.buffer(), tmp.MAX_SIZE, item.vector.bearing);
+    width = canvas.CalcTextWidth(tmp.c_str());
+    canvas.DrawText(rc.right - text_padding - width,
+                    rc.bottom - small_font.GetHeight() - text_padding,
+                    tmp.c_str());
+  }
+
 }
 
 void
