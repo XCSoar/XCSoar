@@ -29,6 +29,7 @@ Version 6.5 - not yet released
   - C-Probe: read IAS/TAS from the device
 * data files
   - added MATZ airspace class (#2530)
+  - integrated handicaps from DAEC 2012
 * logger
   - auto-flush IGC logger after every fix
 * user interface
