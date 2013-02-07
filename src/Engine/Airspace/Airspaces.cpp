@@ -371,7 +371,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
   // anything left in the self list are items that were not in the query,
   // so delete them --- including the clearances!
   for (auto v = contents_self.begin(); v != contents_self.end();) {
-    bool found = false;
+    gcc_unused bool found = false;
     for (auto t = airspace_tree.begin(); t != airspace_tree.end(); ) {
       if (t->GetAirspace() == v->GetAirspace()) {
         AirspaceTree::const_iterator new_t = t;
