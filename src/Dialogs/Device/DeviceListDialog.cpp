@@ -374,8 +374,14 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
 
   DeviceDescriptor &device = *device_list[current];
-  if (device.GetState() != PortState::READY)
+  if (!device.IsLogger())
     return;
+
+  if (device.GetState() != PortState::READY) {
+    ShowMessageBox(_("Device is not connected"), _("Manage"),
+                   MB_OK | MB_ICONERROR);
+    return;
+  }
 
   if (!device.Borrow()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
@@ -430,9 +436,14 @@ DeviceListWidget::ManageCurrent()
     return;
 
   DeviceDescriptor &descriptor = *device_list[current];
-  if (descriptor.GetState() != PortState::READY ||
-      !descriptor.IsManageable())
+  if (!descriptor.IsManageable())
     return;
+
+  if (descriptor.GetState() != PortState::READY) {
+    ShowMessageBox(_("Device is not connected"), _("Manage"),
+                   MB_OK | MB_ICONERROR);
+    return;
+  }
 
   if (!descriptor.Borrow()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
