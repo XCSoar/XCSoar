@@ -90,7 +90,7 @@ AirspaceWarningManager::GetWarning(const AbstractAirspace &airspace)
     return *warning;
 
   // not found, create new entry
-  warnings.push_back(AirspaceWarning(airspace));
+  warnings.emplace_back(airspace);
   return warnings.back();
 }
 

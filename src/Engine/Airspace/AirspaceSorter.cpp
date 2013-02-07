@@ -69,7 +69,7 @@ public:
 
   virtual void Visit(const AbstractAirspace &as) {
     if (filter.Match(location, projection, as))
-      result.push_back(as);
+      result.emplace_back(as);
   }
 };
 

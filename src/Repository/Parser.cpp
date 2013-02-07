@@ -59,7 +59,7 @@ Commit(FileRepository &repository, AvailableFile &file)
   if (!file.IsValid())
     return false;
 
-  repository.files.push_back(std::move(file));
+  repository.files.emplace_back(std::move(file));
   file.Clear();
   return true;
 }

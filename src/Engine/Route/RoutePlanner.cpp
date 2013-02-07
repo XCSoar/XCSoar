@@ -102,7 +102,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
     return false; // trivial
 
   search_hull.clear();
-  search_hull.push_back(SearchPoint(origin_last, task_projection));
+  search_hull.emplace_back(origin_last, task_projection);
 
   RoutePoint start = origin_last;
   astar_goal = destination_last;
@@ -481,8 +481,7 @@ RoutePlanner::IsHullExtended(const RoutePoint &p)
   if (search_hull.IsInside(p))
     return false;
 
-  SearchPoint ps(p, task_projection);
-  search_hull.push_back(ps);
+  search_hull.emplace_back(p, task_projection);
   search_hull.PruneInterior();
   return true;
 }

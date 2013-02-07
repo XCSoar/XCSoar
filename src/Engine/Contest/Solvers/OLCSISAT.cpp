@@ -46,7 +46,7 @@ OLCSISAT::CalculateResult(const ContestTraceVector &solution) const
   // build convex hull from solution
   SearchPointVector spv;
   for (unsigned i = 0; i < num_stages; ++i)
-    spv.push_back(SearchPoint(solution[i].location));
+    spv.emplace_back(solution[i].location);
 
   spv.PruneInterior();
 

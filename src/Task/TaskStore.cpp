@@ -67,7 +67,7 @@ public:
       }
 
       // Add the task to the TaskStore
-      store.push_back(TaskStore::Item(path, name.empty() ? path : name, i));
+      store.emplace_back(path, name.empty() ? path : name, i);
     }
   }
 };

@@ -130,7 +130,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     std::vector< std::pair<fixed, fixed> > thermal_profile;
     thermal_profile.reserve(numtherm);
     for (int i = 0; i < numtherm; ++i)
-      thermal_profile.push_back(std::make_pair(Wt[i], ht[i]));
+      thermal_profile.emplace_back(Wt[i], ht[i]);
 
     chart.DrawFilledY(thermal_profile, look.brush, fpen);
   }

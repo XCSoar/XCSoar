@@ -37,7 +37,7 @@ TrackingGestureManager::Update(PixelScalar x, PixelScalar y)
   if (!GestureManager::Update(x, y))
     return false;
 
-  points.push_back(RasterPoint{ x, y });
+  points.emplace_back(x, y);
   return true;
 }
 
@@ -45,10 +45,10 @@ void
 TrackingGestureManager::Start(PixelScalar x, PixelScalar y, int threshold)
 {
   // Start point
-  points.push_back(RasterPoint{ x, y });
+  points.emplace_back(x, y);
 
   // Next point that is changed by Update()
-  points.push_back(RasterPoint{ x, y });
+  points.emplace_back(x, y);
 
   GestureManager::Start(x, y, threshold);
 }

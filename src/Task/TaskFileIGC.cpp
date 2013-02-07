@@ -63,7 +63,7 @@ ReadIGCDeclaration(const TCHAR *path, IGCDeclarationHeader &header,
 
     IGCDeclarationTurnpoint tp;
     if (IGCParseDeclarationTurnpoint(line, tp))
-      turnpoints.push_back(tp);
+      turnpoints.emplace_back(tp);
   }
 
   return header_found;

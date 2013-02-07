@@ -198,7 +198,7 @@ public:
 
   void Enqueue(const char *uri, const TCHAR *path_relative) {
     ScopeLock protect(mutex);
-    queue.push_back(Item(uri, path_relative));
+    queue.emplace_back(uri, path_relative);
 
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
       (*i)->OnDownloadAdded(path_relative, -1, -1);

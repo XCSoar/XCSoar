@@ -40,7 +40,7 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
   static constexpr Angle delta = Angle::FullCircle() / NUM_SEGMENTS;
   for (unsigned i = 0; i <= NUM_SEGMENTS; ++i, angle += delta) {
     const GeoPoint p = GeoVector(m_radius * fixed(1.1), angle).EndPoint(m_center);
-    m_border.push_back(SearchPoint(p));
+    m_border.emplace_back(p);
   }
 }
 

@@ -245,7 +245,7 @@ FillLastUsedList(WaypointList &list,
     if (waypoint == NULL)
       continue;
 
-    list.push_back(WaypointListItem(*waypoint));
+    list.emplace_back(*waypoint);
   }
 }
 

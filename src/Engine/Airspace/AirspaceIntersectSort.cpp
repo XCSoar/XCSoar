@@ -70,7 +70,7 @@ AirspaceIntersectSort::all()
     // check just beyond the last location
 
     if (m_airspace->Inside(p_mid)) {
-      res.push_back(std::make_pair(p_last, p_this));
+      res.emplace_back(p_last, p_this);
       waiting = false;
     } else {
       if (m_q.top().first >= fixed(1))
@@ -88,7 +88,7 @@ AirspaceIntersectSort::all()
 
   // fill last point if not matched 
   if (waiting)
-    res.push_back(std::make_pair(p_last, p_last));
+    res.emplace_back(p_last, p_last);
 
   return res;
 }

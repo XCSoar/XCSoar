@@ -182,8 +182,7 @@ AbortTask::FillReachable(const AircraftState &state,
 
   while (!q.empty() && !IsTaskFull()) {
     const Alternate top = q.top();
-    task_points.push_back(AlternateTaskPoint(top.waypoint, task_behaviour,
-                                             top.solution));
+    task_points.emplace_back(top.waypoint, task_behaviour, top.solution);
 
     const int i = task_points.size() - 1;
     if (task_points[i].point.GetWaypoint().id == active_waypoint)
@@ -218,7 +217,7 @@ public:
    */
   void Visit(const Waypoint& wp) {
     if (wp.IsLandable())
-      vector.push_back(wp);
+      vector.emplace_back(wp);
   }
 
 private:
