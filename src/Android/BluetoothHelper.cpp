@@ -28,6 +28,7 @@ Copyright_License {
 
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
+  static jmethodID isEnabled_method;
   static jmethodID list_method, connect_method, createServer_method;
 }
 
@@ -41,6 +42,7 @@ BluetoothHelper::Initialise(JNIEnv *env)
     /* Android < 2.0 doesn't have Bluetooth support */
     return false;
 
+  isEnabled_method = env->GetStaticMethodID(cls, "isEnabled", "()Z");
   list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetStaticMethodID(cls, "connect",
                                           "(Ljava/lang/String;)Lorg/xcsoar/AndroidPort;");
@@ -53,6 +55,13 @@ void
 BluetoothHelper::Deinitialise(JNIEnv *env)
 {
   cls.ClearOptional(env);
+}
+
+bool
+BluetoothHelper::isEnabled(JNIEnv *env)
+{
+  return cls.IsDefined() &&
+    env->CallStaticBooleanMethod(cls, isEnabled_method);
 }
 
 jobjectArray

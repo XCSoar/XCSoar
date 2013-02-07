@@ -56,6 +56,10 @@ final class BluetoothHelper {
   public static void Initialize() {
   }
 
+  public static boolean isEnabled() {
+    return adapter != null && adapter.isEnabled();
+  }
+
   /**
    * Turns the #BluetoothDevice into a human-readable string.
    */

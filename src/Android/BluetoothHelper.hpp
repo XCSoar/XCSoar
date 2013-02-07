@@ -39,6 +39,13 @@ namespace BluetoothHelper {
   void Deinitialise(JNIEnv *env);
 
   /**
+   * Is the default Bluetooth adapter enabled in the Android Bluetooth
+   * settings?
+   */
+  gcc_pure
+  bool isEnabled(JNIEnv *env);
+
+  /**
    * Returns a list of all bonded devices.
    */
   gcc_malloc
