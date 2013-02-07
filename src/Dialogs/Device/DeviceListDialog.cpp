@@ -374,7 +374,7 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
 
   DeviceDescriptor &device = *device_list[current];
-  if (device.GetState() == PortState::READY)
+  if (device.GetState() != PortState::READY)
     return;
 
   if (!device.Borrow()) {
