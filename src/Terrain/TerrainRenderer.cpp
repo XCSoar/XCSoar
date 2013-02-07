@@ -25,6 +25,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Screen/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
@@ -156,6 +157,8 @@ static constexpr ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
     {2500,        220, 220, 220}
   }
 };
+static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
+              "mismatched size");
 
 // map scale is approximately 2 points on the grid
 // therefore, want one to one mapping if mapscale is 0.5
