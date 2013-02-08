@@ -13,6 +13,11 @@ Vagrant::Config.run do |config|
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
+  # Use NFS shared folders to speed up the compilation on host systems
+  # that support it.
+  config.vm.share_folder("v-root", "/vagrant", ".", :nfs => (RUBY_PLATFORM =~ /linux/ or RUBY_PLATFORM =~ /darwin/))
+  config.vm.network :hostonly, "192.168.42.2"
+
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
   # You will need to create the manifests directory and a manifest in
