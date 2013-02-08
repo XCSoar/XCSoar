@@ -49,7 +49,7 @@ MapSettings::SetDefaults()
   aircraft_symbol = AircraftSymbol::SIMPLE;
   detour_cost_markers_enabled = false;
   display_ground_track = DisplayGroundTrack::ON;
-  auto_zoom_enabled = false;
+  auto_zoom_enabled = true;
   wind_arrow_style = WindArrowStyle::ARROW_HEAD;
   waypoint.SetDefaults();
   airspace.SetDefaults();
