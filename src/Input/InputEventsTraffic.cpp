@@ -57,7 +57,11 @@ InputEvents::eventTraffic(const TCHAR *misc)
   LoadFlarmDatabases();
 
   if (StringIsEqual(misc, _T("show"))) {
-    UIActions::ShowTrafficRadar();
+    if (IsFlavour(_T("Traffic")))
+      return;
+
+    CommonInterface::main_window->SetWidget(new TrafficWidget());
+    SetFlavour(_T("Traffic"));
     return;
   }
 
