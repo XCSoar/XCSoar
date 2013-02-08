@@ -55,6 +55,7 @@ MapSettings::SetDefaults()
   airspace.SetDefaults();
   map_shift_bias = MapShiftBias::NONE;
   glider_screen_position = 35; // 35% from bottom
+  map_shift_bias = MapShiftBias::TRACK;
   circling_orientation = DisplayOrientation::NORTH_UP;
   cruise_orientation = DisplayOrientation::NORTH_UP;
   circling_scale = fixed(1) / 2;
