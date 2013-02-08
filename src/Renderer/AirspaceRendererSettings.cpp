@@ -73,11 +73,25 @@ AirspaceRendererSettings::SetDefaults()
   classes[OTHER].SetColors(COLOR_CYAN);
   classes[DANGER].SetColors(DarkColor(COLOR_MAGENTA));
   classes[MATZ].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[CLASSC].SetColors(DarkColor(COLOR_MAGENTA));
+
+  classes[AATASK].SetColors(Color(0x00, 0xFF, 0x00));
+
+  classes[CLASSC].SetColors(COLOR_BLUE);
   classes[CLASSD].SetColors(COLOR_BLUE);
-  classes[CTR].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[WAVE].SetColors(DarkColor(COLOR_YELLOW));
-  classes[AATASK].SetColors(COLOR_YELLOW);
-  classes[CLASSE].SetColors(DarkColor(COLOR_GREEN));
-  classes[CLASSF].SetColors(DarkColor(COLOR_GREEN));
+
+  classes[CLASSE].SetColors(Color(0x00, 0x00, 0xFF));
+  classes[CLASSE].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
+  classes[CLASSE].SetColors(Color(0x00, 0x00, 0xFF));
+  classes[CLASSF].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
+
+  classes[TMZ].SetColors(Color(0x80, 0x80, 0x80));
+  classes[TMZ].border_width = 3;
+
+  classes[WAVE].SetColors(Color(0xFF, 0xFF, 0x00));
+  classes[WAVE].border_width = 0;
+  classes[WAVE].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
+
+  classes[CTR].fill_color = Color(0xFF, 0x00, 0x00);
+  classes[CTR].border_color = Color(0x00, 0x00, 0xFF);
+  classes[CTR].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 }
