@@ -53,8 +53,8 @@ MapSettings::SetDefaults()
   wind_arrow_style = WindArrowStyle::ARROW_HEAD;
   waypoint.SetDefaults();
   airspace.SetDefaults();
-  glider_screen_position = 20; // 20% from bottom
   map_shift_bias = MapShiftBias::NONE;
+  glider_screen_position = 35; // 35% from bottom
   circling_orientation = DisplayOrientation::NORTH_UP;
   cruise_orientation = DisplayOrientation::NORTH_UP;
   circling_scale = fixed(1) / 2;
