@@ -139,12 +139,14 @@ public:
      buttons(&_buttons) {
   }
 
+  gcc_pure
   FlarmId GetCursorId() const {
     return items.empty()
       ? FlarmId::Undefined()
       : items[GetList().GetCursorIndex()].id;
   }
 
+private:
   /**
    * Find an existing item by its FLARM id.  This is a simple linear
    * search that doesn't scale well with a large list.
@@ -180,6 +182,9 @@ public:
 
   void UpdateButtons();
 
+  void OpenDetails(unsigned index);
+
+public:
   /* virtual methods from class Widget */
 
   virtual void Prepare(ContainerWindow &parent,
@@ -506,14 +511,23 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
+TrafficListWidget::OpenDetails(unsigned index)
+{
+  if (index >= items.size())
+    return;
+
+  Item &item = items[index];
+  dlgFlarmTrafficDetailsShowModal(item.id);
+  UpdateList();
+}
+
+void
 TrafficListWidget::OnActivateItem(unsigned index)
 {
   if (action_listener != nullptr)
     action_listener->OnAction(mrOK);
-  else {
-    dlgFlarmTrafficDetailsShowModal(GetCursorId());
-    UpdateList();
-  }
+  else
+    OpenDetails(index);
 }
 
 void
@@ -521,8 +535,7 @@ TrafficListWidget::OnAction(int id)
 {
   switch (Buttons(id)) {
   case DETAILS:
-    dlgFlarmTrafficDetailsShowModal(GetCursorId());
-    UpdateList();
+    OpenDetails(GetList().GetCursorIndex());
     break;
   }
 }
