@@ -210,7 +210,7 @@ TrackingGlue::Tick()
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 void
-TrackingGlue::OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
+TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                         const GeoPoint &location, int altitude)
 {
   const ScopeLock protect(skylines_data.mutex);

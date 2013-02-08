@@ -100,7 +100,7 @@ protected:
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 private:
   /* virtual methods from SkyLinesTracking::Handler */
-  virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
+  virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override;
 
 public:

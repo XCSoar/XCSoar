@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <map>
 
+#include <stdint.h>
+
 namespace SkyLinesTracking {
   struct Data {
     struct Traffic {
@@ -43,7 +45,7 @@ namespace SkyLinesTracking {
 
     mutable Mutex mutex;
 
-    std::map<unsigned, Traffic> traffic;
+    std::map<uint32_t, Traffic> traffic;
   };
 }
 

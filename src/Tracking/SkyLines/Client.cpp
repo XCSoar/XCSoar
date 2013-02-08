@@ -104,7 +104,7 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
   packet.header.key = ToBE64(key);
   packet.flags = 0;
 
-  packet.time = ToBE32(unsigned(basic.time * 1000));
+  packet.time = ToBE32(uint32_t(basic.time * 1000));
   packet.reserved = 0;
 
   if (basic.location_available) {
@@ -118,19 +118,19 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 
   if (basic.track_available) {
     packet.flags |= ToBE32(FixPacket::FLAG_TRACK);
-    packet.track = ToBE16(unsigned(basic.track.AsBearing().Degrees()));
+    packet.track = ToBE16(uint16_t(basic.track.AsBearing().Degrees()));
   } else
     packet.track = 0;
 
   if (basic.ground_speed_available) {
     packet.flags |= ToBE32(FixPacket::FLAG_GROUND_SPEED);
-    packet.ground_speed = ToBE16(unsigned(basic.ground_speed * 16));
+    packet.ground_speed = ToBE16(uint16_t(basic.ground_speed * 16));
   } else
     packet.ground_speed = 0;
 
   if (basic.airspeed_available) {
     packet.flags |= ToBE32(FixPacket::FLAG_AIRSPEED);
-    packet.airspeed = ToBE16(unsigned(basic.indicated_airspeed * 16));
+    packet.airspeed = ToBE16(uint16_t(basic.indicated_airspeed * 16));
   } else
     packet.airspeed = 0;
 
