@@ -186,7 +186,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Traffic/TrafficList.cpp \
 	$(SRC)/Dialogs/Traffic/FlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
-	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
+	$(SRC)/Dialogs/Traffic/TrafficRadar.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
