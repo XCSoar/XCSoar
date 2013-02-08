@@ -163,15 +163,15 @@ BITMAP_ICON(IDB_MARGINAL_HD, "winpilot_marginal_160")
 BITMAP_ICON(IDB_SMALL, "map_small")
 BITMAP_ICON(IDB_SMALL_HD, "map_small_160")
 #ifdef TESTING
-BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_red_160")
-BITMAP_GRAPHIC(IDB_LOGO, "logo_red_80")
+BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_turbo_dev_160")
+BITMAP_GRAPHIC(IDB_LOGO, "logo_turbo_dev_80")
 #else
 #ifdef NO_HORIZON
 BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_no_horizon_160")
 BITMAP_GRAPHIC(IDB_LOGO, "logo_no_horizon_80")
 #else
-BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_160")
-BITMAP_GRAPHIC(IDB_LOGO, "logo_80")
+BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_turbo_160")
+BITMAP_GRAPHIC(IDB_LOGO, "logo_turbo_80")
 #endif
 #endif
 BITMAP_ICON(IDB_TARGET, "map_target")
@@ -214,13 +214,8 @@ BITMAP_BITMAP(IDB_UNIT_KMH, "unit_kmh")
 BITMAP_BITMAP(IDB_UNIT_MPH, "unit_mph")
 BITMAP_BITMAP(IDB_VARIOSCALEA, "vario_scale_b")
 BITMAP_BITMAP(IDB_VARIOSCALEC, "vario_scale_c")
-#ifdef TESTING
-BITMAP_GRAPHIC(IDB_TITLE, "title_red_110")
-BITMAP_GRAPHIC(IDB_TITLE_HD, "title_red_320")
-#else
-BITMAP_GRAPHIC(IDB_TITLE, "title_110")
-BITMAP_GRAPHIC(IDB_TITLE_HD, "title_320")
-#endif
+BITMAP_GRAPHIC(IDB_TITLE, "title_turbo_110")
+BITMAP_GRAPHIC(IDB_TITLE_HD, "title_turbo_320")
 BITMAP_ICON(IDB_WEATHER_STATION, "map_weather_station")
 BITMAP_ICON(IDB_WEATHER_STATION_HD, "map_weather_station_160")
 // --- Audio ---

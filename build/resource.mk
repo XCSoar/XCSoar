@@ -3,7 +3,7 @@ include build/imagemagick.mk
 
 ####### market icons
 
-SVG_MARKET_ICONS = Data/graphics/logo.svg Data/graphics/logo_red.svg
+SVG_MARKET_ICONS = Data/graphics/logo_turbo.svg Data/graphics/logo_turbo_dev.svg
 PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_market.png,$(SVG_MARKET_ICONS))
 
 market-icons: $(PNG_MARKET_ICONS)
@@ -43,7 +43,7 @@ $(eval $(call convert-to-bmp,$(BMP_ICONS) $(BMP_ICONS_160),%.bmp,%_tile.png))
 
 ####### splash logo
 
-SVG_SPLASH = Data/graphics/logo.svg Data/graphics/logo_red.svg
+SVG_SPLASH = Data/graphics/logo_turbo.svg Data/graphics/logo_turbo_dev.svg
 PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_160.png,$(SVG_SPLASH))
 BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
 PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_80.png,$(SVG_SPLASH))
@@ -66,7 +66,7 @@ $(ICNS_SPLASH_128): %.icns: %.png
 
 ####### version
 
-SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
+SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg Data/graphics/title_turbo.svg
 PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_110.png,$(SVG_TITLE))
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
 PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_TITLE))
