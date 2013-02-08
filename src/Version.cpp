@@ -51,7 +51,7 @@ Copyright_License {
   #endif
 #endif
 
-#define VERSION_SUFFIX ""
+#define VERSION_SUFFIX "-TE"
 
 #ifdef GIT_COMMIT_ID
 #define GIT_SUFFIX "~git#" GIT_COMMIT_ID
