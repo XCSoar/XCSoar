@@ -35,8 +35,8 @@ TrailSettings::SetDefaults()
 {
   wind_drift_enabled = true;
   scaling_enabled = true;
-  type = Type::VARIO_1;
-  length = Length::LONG;
+  type = Type::VARIO_2_DOTS;
+  length = Length::FULL;
 }
 
 void
