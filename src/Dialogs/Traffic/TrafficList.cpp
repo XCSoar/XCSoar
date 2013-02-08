@@ -47,6 +47,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Components.hpp"
+#include "Pan.hpp"
 
 enum Controls {
   CALLSIGN,
@@ -54,6 +55,7 @@ enum Controls {
 
 enum Buttons {
   DETAILS,
+  MAP,
 };
 
 class TrafficListButtons;
@@ -244,6 +246,7 @@ private:
   void UpdateButtons();
 
   void OpenDetails(unsigned index);
+  void OpenMap(unsigned index);
 
 public:
   /* virtual methods from class Widget */
@@ -332,6 +335,7 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
     AddButton(_("Details"), *list, DETAILS);
+    AddButton(_("Map"), *list, MAP);
     AddButton(_("Close"), dialog, mrCancel);
   }
 };
@@ -485,8 +489,10 @@ TrafficListWidget::UpdateButtons()
   unsigned cursor = GetList().GetCursorIndex();
   bool valid_cursor = cursor < items.size();
   bool flarm_cursor = valid_cursor && items[cursor].IsFlarm();
+  bool valid_location = valid_cursor && items[cursor].location.IsValid();
 
   buttons->SetRowVisible(DETAILS, flarm_cursor);
+  buttons->SetRowVisible(MAP, valid_location);
 }
 
 void
@@ -648,6 +654,20 @@ TrafficListWidget::OpenDetails(unsigned index)
 }
 
 void
+TrafficListWidget::OpenMap(unsigned index)
+{
+  if (index >= items.size())
+    return;
+
+  Item &item = items[index];
+  if (!item.location.IsValid())
+    return;
+
+  if (PanTo(item.location))
+    action_listener.OnAction(mrCancel);
+}
+
+void
 TrafficListWidget::OnActivateItem(unsigned index)
 {
   if (buttons == nullptr)
@@ -663,6 +683,10 @@ TrafficListWidget::OnAction(int id)
   switch (Buttons(id)) {
   case DETAILS:
     OpenDetails(GetList().GetCursorIndex());
+    break;
+
+  case MAP:
+    OpenMap(GetList().GetCursorIndex());
     break;
   }
 }
