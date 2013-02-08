@@ -91,6 +91,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     const TCHAR *callsign;
 
     /**
+     * This object's location.  Check GeoPoint::IsValid().
+     */
+    GeoPoint location;
+
+    /**
      * The vector from the current aircraft location to this object's
      * location (if known).  Check GeoVector::IsValid().
      */
@@ -102,16 +107,20 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
        skylines_id(0),
 #endif
        color(FlarmColor::COUNT),
-       loaded(false), vector(GeoVector::Invalid()) {
+       loaded(false),
+       location(GeoPoint::Invalid()),
+       vector(GeoVector::Invalid()) {
       assert(id.IsDefined());
       assert(IsFlarm());
     }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    explicit Item(uint32_t _id)
+    explicit Item(uint32_t _id, const GeoPoint &_location)
       :id(FlarmId::Undefined()), skylines_id(_id),
        color(FlarmColor::COUNT),
-       loaded(false), vector(GeoVector::Invalid()) {
+       loaded(false),
+       location(_location),
+       vector(GeoVector::Invalid()) {
       assert(IsSkyLines());
     }
 #endif
@@ -376,7 +385,7 @@ TrafficListWidget::UpdateList()
       const auto &data = tracking->GetSkyLinesData();
       const ScopeLock protect(data.mutex);
       for (const auto &i : data.traffic) {
-        items.emplace_back(Item(i.first));
+        items.emplace_back(i.first, i.second.location);
         Item &item = items.back();
 
         if (i.second.location.IsValid() &&
@@ -421,15 +430,42 @@ TrafficListWidget::UpdateVolatile()
              UpdateVolatile() call */
           max_time = live->valid;
 
+        i.location = live->location;
         i.vector = GeoVector(live->distance, live->track);
       } else {
-        if (i.vector.IsValid())
+        if (i.location.IsValid() || i.vector.IsValid())
           /* this item has disappeared from our FLARM: redraw the
              list */
           modified = true;
 
+        i.location.SetInvalid();
         i.vector.SetInvalid();
       }
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    } else if (i.IsSkyLines()) {
+      const auto &data = tracking->GetSkyLinesData();
+      const ScopeLock protect(data.mutex);
+
+      auto live = data.traffic.find(i.skylines_id);
+      if (live != data.traffic.end()) {
+        if (live->second.location != i.location)
+          modified = true;
+
+        i.location = live->second.location;
+
+        if (i.location.IsValid() &&
+            CommonInterface::Basic().location_available)
+          i.vector = GeoVector(CommonInterface::Basic().location,
+                               i.location);
+      } else {
+        if (i.location.IsValid() || i.vector.IsValid())
+          /* this item has disappeared: redraw the list */
+          modified = true;
+
+        i.location.SetInvalid();
+        i.vector.SetInvalid();
+      }
+#endif
     }
   }
 
