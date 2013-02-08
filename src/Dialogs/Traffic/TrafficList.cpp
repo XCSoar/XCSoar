@@ -136,6 +136,13 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
       if (IsFlarm()) {
         record = traffic_databases->flarm_net.FindRecordById(id);
         callsign = traffic_databases->FindNameById(id);
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+      } else if (IsSkyLines()) {
+        record = nullptr;
+        callsign = nullptr;
+#endif
+      } else {
+        gcc_unreachable();
       }
 
       loaded = true;
