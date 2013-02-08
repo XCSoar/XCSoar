@@ -38,11 +38,11 @@ jmethodID PortBridge::write_method;
 void
 PortBridge::Initialise(JNIEnv *env)
 {
-  Java::Class cls(env, "org/xcsoar/AndroidPort");
+  Java::Class cls(env, "org/xcsoarte/AndroidPort");
 
   close_method = env->GetMethodID(cls, "close", "()V");
   setListener_method = env->GetMethodID(cls, "setListener",
-                                        "(Lorg/xcsoar/InputListener;)V");
+                                        "(Lorg/xcsoarte/InputListener;)V");
   getState_method = env->GetMethodID(cls, "getState", "()I");
   drain_method = env->GetMethodID(cls, "drain", "()Z");
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package org.xcsoarte;
 
 /**
  * A #Voltage.Listener implementation that passes method calls to

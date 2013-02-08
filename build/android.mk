@@ -4,7 +4,7 @@
 
 ifeq ($(TARGET),ANDROID)
 
-# When enabled, the package org.xcsoar.testing is created, with a red
+# When enabled, the package org.xcsoarte.testing is created, with a red
 # Activity icon, to allow simultaneous installation of "stable" and
 # "testing".
 # In the stable branch, this should default to "n".
@@ -45,7 +45,7 @@ ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
 JARSIGNER += -storepass:env ANDROID_KEYSTORE_PASS
 endif
 
-JAVA_PACKAGE = org.xcsoar
+JAVA_PACKAGE = org.xcsoarte
 CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
@@ -146,10 +146,10 @@ endif
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoarte
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
-	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoar
+	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoarte
 ifneq ($(IOIOLIB_DIR),)
 	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
@@ -167,7 +167,7 @@ else
 	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
-	$(Q)ln -s ../../../../../../android/src/testing $(@D)/src/org/xcsoar
+	$(Q)ln -s ../../../../../../android/src/testing $(@D)/src/org/xcsoarte
 	$(Q)ln -s ../../../android/testing/testing_rules.xml $(@D)/
 endif
 	@touch $@

@@ -21,7 +21,7 @@
   }
 */
 
-package org.xcsoar;
+package org.xcsoarte;
 
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;

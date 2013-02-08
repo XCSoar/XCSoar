@@ -36,7 +36,7 @@ SoundUtil::Initialise(JNIEnv *env)
   assert(!cls.IsDefined());
   assert(env != NULL);
 
-  cls.Find(env, "org/xcsoar/SoundUtil");
+  cls.Find(env, "org/xcsoarte/SoundUtil");
   play_method = env->GetStaticMethodID(cls, "play",
                                        "(Landroid/content/Context;"
                                        "Ljava/lang/String;)Z");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.xcsoar"
+          package="org.xcsoarte"
           android:installLocation="auto"
           android:versionCode="75"
           android:versionName="6.4.6">

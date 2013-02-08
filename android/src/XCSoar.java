@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoar;
+package org.xcsoarte;
 
 import android.app.Activity;
 import android.app.PendingIntent;

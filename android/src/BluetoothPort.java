@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package org.xcsoarte;
 
 import java.io.IOException;
 import android.bluetooth.BluetoothSocket;

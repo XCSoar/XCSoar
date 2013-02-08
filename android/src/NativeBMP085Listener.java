@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+package org.xcsoarte;
 
 /**
  * A #BMP085.Listener implementation that passes method calls to
