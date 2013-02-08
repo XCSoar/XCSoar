@@ -457,6 +457,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/BigThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/BigThermalAssistantWidget.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
+	$(SRC)/Gauge/FlarmTrafficControl.cpp \
 	$(SRC)/Gauge/BigTrafficWidget.cpp \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
