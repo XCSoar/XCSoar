@@ -207,7 +207,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   };
 
   AddEnum(_("Slope shading"),
-          _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east."),
+          _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from North-West."),
           slope_shading_list, (unsigned)terrain.slope_shading);
   GetDataField(TerrainSlopeShading).SetListener(this);
   SetExpertRow(TerrainSlopeShading);
