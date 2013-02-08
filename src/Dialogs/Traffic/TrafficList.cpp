@@ -400,27 +400,29 @@ TrafficListWidget::UpdateVolatile()
   max_time.Clear();
 
   for (auto &i : items) {
-    const FlarmTraffic *live = live_list.FindTraffic(i.id);
+    if (i.IsFlarm()) {
+      const FlarmTraffic *live = live_list.FindTraffic(i.id);
 
-    if (live != nullptr) {
-      if (live->valid.Modified(last_update))
-        /* if this #FlarmTraffic is newer than #last_update, then we
-           need to redraw the list */
-        modified = true;
+      if (live != nullptr) {
+        if (live->valid.Modified(last_update))
+          /* if this #FlarmTraffic is newer than #last_update, then we
+             need to redraw the list */
+          modified = true;
 
-      if (live->valid.Modified(max_time))
-        /* update max_time (and last_update) for the next
-           UpdateVolatile() call */
-        max_time = live->valid;
+        if (live->valid.Modified(max_time))
+          /* update max_time (and last_update) for the next
+             UpdateVolatile() call */
+          max_time = live->valid;
 
-      i.vector = GeoVector(live->distance, live->track);
-    } else {
-      if (i.vector.IsValid())
-        /* this item has disappeared from our FLARM: redraw the
-           list */
-        modified = true;
+        i.vector = GeoVector(live->distance, live->track);
+      } else {
+        if (i.vector.IsValid())
+          /* this item has disappeared from our FLARM: redraw the
+             list */
+          modified = true;
 
-      i.vector.SetInvalid();
+        i.vector.SetInvalid();
+      }
     }
   }
 
