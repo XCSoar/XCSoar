@@ -74,12 +74,12 @@ struct WaypointRendererSettings {
   int landable_rendering_scale;
 
   void SetDefaults() {
-    display_text_type = DisplayTextType::FIRST_FIVE;
+    display_text_type = DisplayTextType::NAME;
     arrival_height_display = ArrivalHeightDisplay::GLIDE;
     label_selection = LabelSelection::ALL;
-    landable_render_mode = LabelShape::ROUNDED_BLACK;
+    landable_render_mode = LabelShape::OUTLINED_INVERTED;
 
-    landable_style = LandableStyle::PURPLE_CIRCLE;
+    landable_style = LandableStyle::TRAFFIC_LIGHTS;
     vector_landable_rendering = true;
     scale_runway_length = false;
     landable_rendering_scale = 100;
