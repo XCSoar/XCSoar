@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<Form Caption="FLARM Traffic">
+  <Button Name="cmdDetails" Caption="Details" Y="-120" Width="60" Height="30" OnClick="OnDetailsClicked" />
+  <SymbolButton Name="cmdZoomIn" Caption="+" Y="-90" Width="30" Height="30" OnClick="OnZoomInClicked" />
+  <SymbolButton Name="cmdZoomOut" Caption="-" X="30" Y="-90" Width="30" Height="30" OnClick="OnZoomOutClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-60" Width="30" Height="30" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="30" Y="-60" Width="30" Height="30" OnClick="OnNextClicked" />
+  <Button Name="cmdClose" Caption="Close" Y="-30" Width="60" Height="30" OnClick="OnCloseClicked" />
+
+  <Custom Name="frmRadar" X="60" Y="0" Border="1" OnCreate="OnCreateFlarmTrafficControl"/>
+
+  <CheckBox Name="NorthUp" Caption="North up" X="2" Y="2" Width="58" Height="20" OnClick="OnNorthUp"/>
+  <CheckBox Name="AutoZoom" Caption="Auto. zoom" X="2" Y="24" Width="58" Height="20" OnClick="OnAutoZoom"/>
+
+  <Button Name="cmdSwitchData" Caption="AVG/ALT" Y="46" Width="60" Height="30" OnClick="OnSwitchDataClicked" />
+</Form>
