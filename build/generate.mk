@@ -4,7 +4,7 @@ PERL = perl
 
 $(OUT)/include/MathTables.h: $(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
-	$(Q)$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT) >$@
+	$(Q)$(call slash-subst,$(HOST_OUTPUT_DIR)/tools/GenerateSineTables$(HOST_EXEEXT)) >$@
 
 ifeq ($(WINHOST),y)
 # Deactivate printf format warnings for builds with WINHOST=y
