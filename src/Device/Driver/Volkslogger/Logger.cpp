@@ -62,26 +62,24 @@ ConvertDirectoryToRecordedFlightList(DIRECTORY const &dir,
                                      RecordedFlightList &flight_list)
 {
   RecordedFlightInfo flight_info;
-  DIRENTRY *pflight = dir.flights;
+  DIRENTRY flight;
   for (uint8_t i=0; i < dir.nflights;i++)
   {
+    flight = dir.flights[i];
     /*
      * Only show logs with a takeoff detected
      */
-    if  (pflight->takeoff == 1)
+    if  (flight.takeoff == 1)
     {
-
-      if (!ParseDate(pflight->firsttime, flight_info.date) ||
-          !ParseTime(pflight->firsttime, flight_info.start_time) ||
-          !ParseTime(pflight->lasttime, flight_info.end_time) )
+      if (!ParseDate(flight.firsttime, flight_info.date) ||
+          !ParseTime(flight.firsttime, flight_info.start_time) ||
+          !ParseTime(flight.lasttime, flight_info.end_time) )
         return false;
       flight_info.internal.volkslogger = i;
 
       if ( !flight_list.full() )
         flight_list.append(flight_info);
     }
-
-    pflight++;
   }
   return true;
 }

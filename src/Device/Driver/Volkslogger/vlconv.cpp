@@ -1022,10 +1022,12 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 }
 
 // Members of class DIR
-int
-conv_dir(DIRENTRY* flights, uint8_t *p, const int32 data_length, int countonly,
-         OperationEnvironment &env)
+std::vector<DIRENTRY>
+conv_dir(uint8_t *p, int32 const data_length, int countonly, OperationEnvironment &env)
 {
+  std::vector<DIRENTRY> flights;
+  flights.reserve(10);
+
   int number_of_flights;
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
@@ -1053,8 +1055,12 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const int32 data_length, int countonly,
   while (nbytes < data_length) {
 
     //Make user abort possible
-    if (env.IsCancelled())
-      return -1;
+    if (env.IsCancelled()) {
+      //abort function
+      flights.clear();
+      return flights;
+    }
+
 
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
@@ -1068,7 +1074,11 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const int32 data_length, int countonly,
       de.takeoff = 0;
       bfv = p[0] & ~rectyp_msk;
       if (bfv > max_bfv)
-        return -1;
+      {
+        //abort function
+        flights.clear();
+        return flights;
+      }
       l = 1;
       break;
     case rectyp_vrt: // getim'ter variabler DS oder
@@ -1141,7 +1151,7 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const int32 data_length, int countonly,
     case rectyp_poc:
  
       if (p[2] & 0x80) { // Endebedingung
-        return number_of_flights;
+        return flights;
 
       }
       l = pos_ds_size[bfv][1];
@@ -1202,16 +1212,18 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const int32 data_length, int countonly,
         strcat(de.pilot, pilot3);
         strcat(de.pilot, pilot4);
 
-        flights[number_of_flights] = de;
+        flights.push_back(de);
       }
       number_of_flights++;
       l = 7;
       break;
     default:
-      return -1;
+      //abort function
+      flights.clear();
+      return flights;
     };
     p += l;
     nbytes += l;
   }
-  return number_of_flights;
+  return flights;
 }
