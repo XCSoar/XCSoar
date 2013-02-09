@@ -114,7 +114,7 @@ struct DIRECTORY {
  */
 
 std::vector<DIRENTRY> conv_dir(uint8_t *dirbuffer, int32 datalength,
-                               int countonly, OperationEnvironment &env);
+                               OperationEnvironment &env);
 
 
 #endif

@@ -246,15 +246,15 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    std::vector<DIRENTRY> flights = conv_dir(dirbuffer,data_length,1,env);
-    int fcount = flights.size();
+    directory.flights = conv_dir(dirbuffer,data_length,env);
+    int fcount = directory.flights.size();
     if(fcount>0) {
       directory.nflights = fcount;
-      directory.flights = conv_dir(dirbuffer,data_length,0,env);
       return VLA_ERR_NOERR;
     }
     else {
       directory.nflights = 0;
+      directory.flights.clear();
       return VLA_ERR_NOFLIGHTS;
     }
   }

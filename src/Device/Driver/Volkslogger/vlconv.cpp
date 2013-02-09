@@ -1023,12 +1023,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 
 // Members of class DIR
 std::vector<DIRENTRY>
-conv_dir(uint8_t *p, int32 const data_length, int countonly, OperationEnvironment &env)
+conv_dir(uint8_t *p, int32 const data_length, OperationEnvironment &env)
 {
   std::vector<DIRENTRY> flights;
   flights.reserve(10);
 
-  int number_of_flights;
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
@@ -1043,7 +1042,6 @@ conv_dir(uint8_t *p, int32 const data_length, int countonly, OperationEnvironmen
   memset(&timetm1, 0, sizeof(timetm1));
 
   int bfv = 0;
-  number_of_flights = 0;
   char pilot1[17];
   char pilot2[17];
   char pilot3[17];
@@ -1175,7 +1173,6 @@ conv_dir(uint8_t *p, int32 const data_length, int countonly, OperationEnvironmen
       l = 8;
       break;
     case rectyp_end:
-      if (!countonly) {
         // setzt firsttime und lasttime aufgrund der Werte im sta-DS
         temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
         de.firsttime = timetm1;
@@ -1212,9 +1209,7 @@ conv_dir(uint8_t *p, int32 const data_length, int countonly, OperationEnvironmen
         strcat(de.pilot, pilot3);
         strcat(de.pilot, pilot4);
 
-        flights.push_back(de);
-      }
-      number_of_flights++;
+      flights.push_back(de);
       l = 7;
       break;
     default:
