@@ -26,6 +26,7 @@ SVG_ICON_LIST = \
 	map_tower \
 	map_tunnel \
 	map_weather_station \
+	map_bridge \
 	mode_abort \
 	mode_climb \
 	mode_cruise \
