@@ -128,26 +128,64 @@ namespace Volkslogger {
 
   bool WaitForACK(Port &port, OperationEnvironment &env);
 
+  /**
+   * Read data from the Logger
+   * @param timeout_firstchar_ms Prolonged timeout to wait for the first reply
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   */
   int ReadBulk(Port &port, OperationEnvironment &env,
+               unsigned timeout_firstchar_ms,
                void *buffer, unsigned max_length);
 
   bool WriteBulk(Port &port, OperationEnvironment &env,
                  const void *buffer, unsigned length);
 
+  /**
+   * Send command to Volkslogger and after that wait to read
+   * the reply using ReadBulk(). This function uses standard IO
+   * baudrate 9600
+   * @param cmd Volkslogger command sent to logger
+   * @param timeout_firstchar_ms Prolonged timeout to wait for the first reply
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   */
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
-                          Command cmd, void *buffer, unsigned max_length);
+                          Command cmd, unsigned timeout_firstchar_ms,
+                          void *buffer, unsigned max_length);
+
+  /**
+    * Send command to Volkslogger and after that wait to read
+    * the reply using ReadBulk(). This function uses bulk
+    * baudrate (baud_rate).
+    * @param cmd Volkslogger command sent to logger
+    * @param param1 Extension of the Volkslogger command (e.g. log number)
+    * @param timeout_firstchar_ms Prolonged timeout to wait for the first reply
+    * @param buffer Pointer to the buffer containing the reply received from the
+    *        logger
+    * @param max_length Maximum buffer size
+    * @param baud_rate Baudrate to switch to for the data reception
+    */
 
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                           Command cmd, uint8_t param1,
+                          unsigned timeout_firstchar_ms,
                           void *buffer, unsigned max_length,
                           unsigned baud_rate);
 
+  /**
+   * Same Function as the one above. Only without param1.
+   */
   static inline int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                         Command cmd,
+                                        unsigned timeout_firstchar_ms,
                                         void *buffer, unsigned max_length,
-                                        unsigned baud_rate) {
-    return SendCommandReadBulk(port, env, cmd, 0, buffer, max_length,
-                               baud_rate);
+                                        unsigned baud_rate)
+  {
+    return SendCommandReadBulk(port, env, cmd, 0, timeout_firstchar_ms,
+                               buffer, max_length, baud_rate);
   }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,

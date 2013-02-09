@@ -74,7 +74,11 @@ public:
   // read one binary flight log from VL
   int32 flightget(void *buffer, int32 buffersize,
                   int16 flightnr, int16 secmode);
-  VLA_ERROR readdir(void *buffer, int32 buffersize);
+  /**
+   * read Flightlist(Directory) in binary format from VL to buffer,
+   * return the length of the read data in bytes
+   */
+   int readdir(void *buffer, int32 buffersize);
 };
 
 #endif
