@@ -246,14 +246,14 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    int fcount = conv_dir(0,dirbuffer,1,env);
+    int fcount = conv_dir(0,dirbuffer,data_length,1,env);
     delete[] directory.flights;
     directory.flights = NULL;
 
     if(fcount>0) {
       directory.nflights = fcount;
       directory.flights = new DIRENTRY[fcount];
-      conv_dir(directory.flights,dirbuffer,0,env);
+      conv_dir(directory.flights,dirbuffer,data_length,0,env);
       return VLA_ERR_NOERR;
     }
     else {

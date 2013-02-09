@@ -313,6 +313,19 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
     return 0;
 
   // CRC am Ende abschneiden
+
+  /* Overwrite the checksum bytes which are not needed anymore.
+   * This is not necessary anymore since conv_dir() was
+   * fixed. However imo it is not a fault to have it.
+   * The CRC is not needed anymore but might be misinterpreted
+   * as data.
+   * Therefore I think it is a good idea to overwrite
+   * the CRC with 0xFF like the rest of the unused buffer
+   * space.
+   */
+  *(p-2) = 0xFF;
+  *(p-1) = 0xFF;
+
   return nbytes - 2;
 }
 
