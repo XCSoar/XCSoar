@@ -133,11 +133,14 @@ related details.
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.8\textwidth}{l|ccccc}
 
-Nav 1 & \ref{cha:tasks}\bmenus{Task}
- & {\bmenut{Previous}{Turnpoint}} & {\bmenut{Next}{Turnpoint}}
+Nav 1
+ & \ref{cha:tasks}\bmenus{Task}
+ & {\bmenut{Previous}{Turnpoint}}
+ & {\bmenut{Next}{Turnpoint}}
  & \ref{sec:waypoint-selector-dialog}\bmenut{Waypoint}{List}
  & \ref{sec:alternates}\bmenus{Alternates} \\ \\
-Nav 2 & \ref{sec:taskabort}\bmenut{Task}{Abort}
+Nav 2
+ & \ref{sec:taskabort}\bmenut{Task}{Abort}
  & \ref{sec:markers}\bmenut{Mark}{Drop}
  & {}
  & \bmenus{Target}
@@ -153,14 +156,18 @@ country flight and certainly the second step.
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.9\textwidth}{l|ccccc}
 
-Display 1 & \ref{sec:zooming}\bmenut{Zoom}{In}
- & \bmenut{Zoom}{Out} & \bmenut{Zoom}{Auto}
+Display 1
+ & \ref{sec:zooming}\bmenut{Zoom}{In}
+ & \bmenut{Zoom}{Out}
+ & \bmenut{Zoom}{Auto}
  & \bmenus{Info Cruise}
  & \ref{sec:panning}\bmenut{Pan}{On} \\ \\
-Display 2 &  \ref{sec:maplabels}\bmenut{Labels}{All/...}
+Display 2
+ &  \ref{sec:maplabels}\bmenut{Labels}{All/...}
  & \ref{sec:trail}\bmenut{Trail}{Full/...}
  & \bmenut{Terrain}{On/Off}
  & \ref{sec:terrain_topo}\bmenut{Topo.}{On/Off}
+ & \ref{sec:terrain_topo}\bmenut{Airspace}{On/Off}
  
 
 \end{tabularx}}
@@ -172,21 +179,24 @@ will use those menu items less frequently.
 \subsection*{Configuration menu}
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.9\textwidth}{l|ccccc}
-
-Config 1 & \bmenut{MacCready}{$+$} & \ref{sec:stf}\bmenut{MacCready}{$-$}
+Config 1
+ & \bmenut{MacCready}{$+$}
+  & \ref{sec:stf}\bmenut{MacCready}{$-$}
  & \ref{sec:auto-maccready}\bmenut{MacCready}{Auto}
- & \ref{sec:flight-setup}\bmenut{Flight}{Setup}
- & \ref{sec:wind-setup}\bmenut{Setup}{Wind} \\ \\
-Config 2 & \bmenus{Vega}
- & \ref{cha:configuration}\bmenut{Setup}{System}
- & \ref{sec:airspace-filter}\bmenut{Settings}{Airspace}
- & \ref{sec:logger}\bmenut{Logger}{Start}
- & \ref{sec:logger-replay}\bmenus{Replay} \\ \\
-Config 3 & \ref{sec:raw-logger}\bmenus{Raw Logger}
+ & \ref{sec:flight-setup}\bmenus{Flight}
+ & \ref{sec:wind-setup}\bmenus{Wind} \\ \\
+Config 2 
+ & \ref{cha:configuration}\bmenus{System}
+ & \ref{sec:airspace-filter}\bmenus{Plane}
  & \ref{conf:comdevices}\bmenus{Devices}
- & \bmenut{Setup}{Plane}
  & \bmenut{File}{Manager}
-
+ & \ref{sec:logger-replay}\bmenus{Replay} \\ \\
+Config 3 
+ & \ref{sec:logger}\bmenut{Logger}{Start}
+ & \ref{sec:raw-logger}\bmenus{Raw Logger}
+ & \ref{sec:airspace-filter}\bmenus{Airspace}
+ & {}
+ & \bmenus{Vega}
 \end{tabularx}}
 
 The configuration menu is typically part of the ground interaction with 
@@ -199,19 +209,24 @@ comprises a sub-menu.
 \subsection*{Information menu}
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.8\textwidth}{l|ccccc}
-
-Info 1 & \ref{sec:flarm-traffic}\bmenut{FLARM}{Radar}
- & \bmenut{METAR}{TAF} & \bmenut{What's}{here?}
+Info 1 &
+ \ref{sec:flarm-traffic}\bmenut{FLARM}{Radar}
+ & \bmenut{METAR}{TAF}
+ & \bmenut{What's}{here?}
  & \ref{sec:checklist}\bmenut{Check}{list}
  & \ref{sec:analysis-climb}\bmenus{Analysis} \\ \\
-Info 2 & \ref{sec:flight-status}\bmenus{Status}
+Info 2
+ & \ref{sec:flight-status}\bmenus{Status}
  & \ref{sec:weather-forecast}\bmenus{Weather}
  & \ref{sec:team-flying}\bmenut{Team}{Code}
  & \bmenut{FLARM}{Details}
  & \ref{sec:team-flying}\bmenut{Thermal}{Assistant} \\ \\
-Info 3 & \ref{sec:credits}\bmenus{Credits}
+Info 3
+ & \ref{sec:credits}\bmenus{Credits}
+ & {}
+ & {}
+ & {}
  & \bmenut{Message}{Repeat}
-
 \end{tabularx}}
 
 The information menu is always a good address, when not only a clue on 
@@ -223,12 +238,18 @@ larger scope tactical decision on your flight is requested.
 
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.8\textwidth}{l|ccccc}
-
-Vega 1 & \bmenut{Airframe}{Switches} & \bmenut{Setup}{Audio}
- & \bmenut{Manual}{Demo} & \bmenut{Setup}{Stall} & \bmenus{Accel} \\ \\
-Vega 2 & \bmenut{ASI}{Zero} & \bmenut{Accel}{Zero}
- & \bmenus{Store} & \bmenut{Cruise}{Demo} & \bmenut{Climb}{Demo}
-
+Vega 1
+ & \bmenut{Airframe}{Switches}
+ & \bmenut{Setup}{Audio}
+ & \bmenut{Manual}{Demo}
+ & \bmenut{Setup}{Stall}
+ & \bmenus{Accel} \\ \\
+Vega 2
+ & \bmenut{ASI}{Zero}
+ & \bmenut{Accel}{Zero}
+ & \bmenus{Store}
+ & \bmenut{Cruise}{Demo}
+ & \bmenut{Climb}{Demo}
 \end{tabularx}}
 
 The functions in this sub-menu require the Vega intelligent variometer. 
@@ -257,8 +278,7 @@ of buttons in Altair perform the following functions (from left to right):
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
  Altair: & F5 & F6 & F7 & F8 & F9 \\
-& \bmenut{Flight}{Setup} & \bmenut{Task}{Manager} & {} &
-\bmenus{Target} & \bmenut{Drop}{Mark} \\
+& \bmenus{Flight} & \bmenut{Task}{Manager} & {} & \bmenus{Target} & \bmenut{Drop}{Mark} \\
 \end{tabular}	
 \end{center}
 
