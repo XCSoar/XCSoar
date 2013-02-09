@@ -33,6 +33,6 @@ VolksloggerCreateOnPort(const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister volkslogger_driver = {
   _T("Volkslogger"),
   _T("Volkslogger"),
-  DeviceRegister::DECLARE,
+  DeviceRegister::DECLARE | DeviceRegister::LOGGER,
   VolksloggerCreateOnPort,
 };
