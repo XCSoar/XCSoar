@@ -47,7 +47,9 @@ FlarmTrafficControl::FlarmTrafficControl(const FlarmTrafficLook &look)
    enable_auto_zoom(true),
    zoom(2),
    task_direction(Angle::Degrees(-1)),
-   mouse_double_function(nullptr)
+   mouse_double_function(nullptr),
+   auto_zoom_change_function(nullptr),
+   north_up_change_function(nullptr)
 {}
 
 void
@@ -86,7 +88,9 @@ FlarmTrafficControl::SetNorthUp(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.north_up = enable_north_up = enabled;
   Profile::Set(ProfileKeys::FlarmNorthUp, enabled);
-  //north_up->SetState(enabled);
+
+  if (north_up_change_function != nullptr)
+    north_up_change_function(enabled);
 }
 
 void
@@ -95,7 +99,9 @@ FlarmTrafficControl::SetAutoZoom(bool enabled)
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.auto_zoom = enable_auto_zoom = enabled;
   Profile::Set(ProfileKeys::FlarmAutoZoom, enabled);
-  //auto_zoom->SetState(enabled);
+
+  if (auto_zoom_change_function != nullptr)
+    auto_zoom_change_function(enabled);
 }
 
 void

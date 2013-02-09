@@ -33,6 +33,8 @@
 class FlarmTrafficControl : public FlarmTrafficWindow {
 public:
   typedef bool (*MouseDoubleFunction)(PixelScalar x, PixelScalar y);
+  typedef void (*AutoZoomChangeFunction)(bool enabled);
+  typedef void (*NorthUpChangeFunction)(bool enabled);
 
 protected:
   bool enable_auto_zoom;
@@ -41,6 +43,8 @@ protected:
   GestureManager gestures;
 
   MouseDoubleFunction mouse_double_function;
+  AutoZoomChangeFunction auto_zoom_change_function;
+  NorthUpChangeFunction north_up_change_function;
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look);
@@ -100,6 +104,22 @@ public:
 
   void ClearMouseDoubleFunction() {
     mouse_double_function = nullptr;
+  }
+
+  void SetAutoZoomChangeFunction(AutoZoomChangeFunction function) {
+    auto_zoom_change_function = function;
+  }
+
+  void ClearAutoZoomChangeFunction() {
+    auto_zoom_change_function = nullptr;
+  }
+
+  void SetNorthUpChangeFunction(NorthUpChangeFunction function) {
+    north_up_change_function = function;
+  }
+
+  void ClearNorthUpChangeFunction() {
+    north_up_change_function = nullptr;
   }
 
 protected:
