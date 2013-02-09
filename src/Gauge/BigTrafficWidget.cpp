@@ -29,6 +29,7 @@
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "FlarmTrafficControl.hpp"
+#include "Input/InputEvents.hpp"
 
 void
 TrafficWidget::OpenDetails()
@@ -102,6 +103,13 @@ void
 TrafficWidget::ToggleNorthUp()
 {
   view->ToggleNorthUp();
+}
+
+static bool
+OnMouseDouble(PixelScalar x, PixelScalar y)
+{
+  InputEvents::ShowMenu();
+  return true;
 }
 
 void
@@ -238,6 +246,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 
   view = new FlarmTrafficControl(look.flarm_dialog);
   view->Create(GetContainer(), rc, style);
+  view->SetMouseDoubleFunction(OnMouseDouble);
 
   UpdateLayout();
 }

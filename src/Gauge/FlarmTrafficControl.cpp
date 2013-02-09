@@ -46,7 +46,9 @@ FlarmTrafficControl::FlarmTrafficControl(const FlarmTrafficLook &look)
                       Layout::GetMinimumControlHeight() + Layout::Scale(2)),
    enable_auto_zoom(true),
    zoom(2),
-   task_direction(Angle::Degrees(-1)) {}
+   task_direction(Angle::Degrees(-1)),
+   mouse_double_function(nullptr)
+{}
 
 void
 FlarmTrafficControl::OnCreate()
@@ -509,8 +511,10 @@ FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 FlarmTrafficControl::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-  InputEvents::ShowMenu();
-  return true;
+  if (mouse_double_function == nullptr)
+    return false;
+
+  return mouse_double_function(x, y);
 }
 
 bool

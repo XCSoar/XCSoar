@@ -31,11 +31,16 @@
  * A Window which renders FLARM traffic, with user interaction.
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
+public:
+  typedef bool (*MouseDoubleFunction)(PixelScalar x, PixelScalar y);
+
 protected:
   bool enable_auto_zoom;
   unsigned zoom;
   Angle task_direction;
   GestureManager gestures;
+
+  MouseDoubleFunction mouse_double_function;
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look);
@@ -88,6 +93,14 @@ public:
 
   void SwitchData();
   void OpenDetails();
+
+  void SetMouseDoubleFunction(MouseDoubleFunction function) {
+    mouse_double_function = function;
+  }
+
+  void ClearMouseDoubleFunction() {
+    mouse_double_function = nullptr;
+  }
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
