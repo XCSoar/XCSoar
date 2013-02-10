@@ -24,6 +24,7 @@
 #include "Geo/GeoPoint.hpp"
 #include "tchar.h"
 
+
 class DBB;
 
 class VLAPI_DATA {

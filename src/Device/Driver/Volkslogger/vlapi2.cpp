@@ -25,6 +25,9 @@
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/CharUtil.hpp"
+#include "OS/FileUtil.hpp"
+#include "Util/tstring.hpp"
+
 
 #include <memory.h>
 #include <string.h>
@@ -234,6 +237,7 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
 }
 
 VLA_ERROR VLAPI::read_directory() {
+
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
@@ -266,6 +270,20 @@ VLA_ERROR VLAPI::read_directory() {
 VLA_ERROR
 VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
 {
+
+  tstring path = filename;
+
+  //Are there path delimiters present?
+  //If yes split pathname to check if directory exists
+
+  if (path.find_last_of(_T("/\\")) != tstring::npos)
+  {
+    tstring directory = path.substr( 0, path.find_last_of( _T("/\\") ));
+    // If directory does not yet exist. Create it.
+    if (!Directory::Exists(directory.c_str()))
+      Directory::Create(directory.c_str());
+  }
+
   FILE *outfile = _tfopen(filename,_T("wt"));
   if(!outfile)
     return VLA_ERR_FILE;
