@@ -23,16 +23,28 @@ Copyright_License {
 
 #include "../Volkslogger.hpp"
 #include "Internal.hpp"
+#include "Profile/DeviceConfig.hpp"
+
 
 static Device *
 VolksloggerCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new VolksloggerDevice(com_port);
+  unsigned bulkrate;
+  //lowest value the Volkslogger api can accept as bulkrate is 9600
+  if (config.bulk_baud_rate == 0)
+    bulkrate = 115200; //Set fastest rate as default
+  else if(config.bulk_baud_rate < 9600)
+    bulkrate = 9600;
+  else
+    bulkrate = config.bulk_baud_rate;
+
+  return new VolksloggerDevice(com_port, bulkrate);
 }
 
 const struct DeviceRegister volkslogger_driver = {
   _T("Volkslogger"),
   _T("Volkslogger"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER,
+  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
+  DeviceRegister::BULK_BAUD_RATE,
   VolksloggerCreateOnPort,
 };

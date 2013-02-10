@@ -90,6 +90,10 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
 
+  /* The Bulkrate setting has no effect on the flight list download.
+   * Therefore config.bulk_baud_rate does not need to be implemented
+   * here
+   */
 
   VLAPI vl(port, 115200L, env);
 
@@ -114,12 +118,12 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 }
 
 static bool
-DownloadFlightInner(Port &port,
+DownloadFlightInner(Port &port, unsigned _bulkrate,
                     const RecordedFlightInfo &flight,
                     const TCHAR *path,
                     OperationEnvironment &env)
 {
-  VLAPI vl(port, 115200L, env);
+  VLAPI vl(port, _bulkrate, env);
 
   if (vl.connect(4) != VLA_ERR_NOERR && vl.connect(20) != VLA_ERR_NOERR)
       return false;
@@ -173,7 +177,8 @@ bool VolksloggerDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
 
-  bool success = DownloadFlightInner(port,flight,path,env);
+  bool success = DownloadFlightInner(port, bulkrate,
+                                     flight, path, env);
    // restore baudrate
   if (old_baud_rate != 0)
      port.SetBaudrate(old_baud_rate);
