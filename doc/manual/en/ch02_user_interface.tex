@@ -163,9 +163,9 @@ Display 1
  & \bmenus{Info Cruise}
  & \ref{sec:panning}\bmenut{Pan}{On} \\ \\
 Display 2
- &  \ref{sec:maplabels}\bmenut{Labels}{All/...}
+ & \ref{sec:maplabels}\bmenut{Labels}{All/...}
  & \ref{sec:trail}\bmenut{Trail}{Full/...}
- & \bmenut{Terrain}{On/Off}
+ & \ref{sec:terrain_topo}\bmenut{Terrain}{On/Off}
  & \ref{sec:terrain_topo}\bmenut{Topo.}{On/Off}
  & \ref{sec:terrain_topo}\bmenut{Airspace}{On/Off}
  
@@ -181,13 +181,13 @@ will use those menu items less frequently.
 \begin{tabularx}{1.9\textwidth}{l|ccccc}
 Config 1
  & \bmenut{MacCready}{$+$}
-  & \ref{sec:stf}\bmenut{MacCready}{$-$}
+ & \ref{sec:stf}\bmenut{MacCready}{$-$}
  & \ref{sec:auto-maccready}\bmenut{MacCready}{Auto}
  & \ref{sec:flight-setup}\bmenus{Flight}
  & \ref{sec:wind-setup}\bmenus{Wind} \\ \\
 Config 2 
  & \ref{cha:configuration}\bmenus{System}
- & \ref{sec:airspace-filter}\bmenus{Plane}
+ & \bmenus{Plane}
  & \ref{conf:comdevices}\bmenus{Devices}
  & \bmenut{File}{Manager}
  & \ref{sec:logger-replay}\bmenus{Replay} \\ \\
@@ -259,7 +259,10 @@ The menu can only be accessed if `Vega' is selected as the connected device.
 
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.6\textwidth}{l|ccccc}
-Pan & \bmenut{Pan}{Off} & \ref{sec:panning}\bmenut{Zoom}{in} & \bmenut{Zoom}{out}
+Pan
+ & \ref{sec:panning}\bmenut{Pan}{Off}
+ & \bmenut{Zoom}{in}
+ & \bmenut{Zoom}{out}
  & \bmenut{What's}{here?}
 \end{tabularx}}
 
