@@ -224,7 +224,7 @@ public:
         // Add the timezone
         T_FDT.tm_min += zz_min;
         T_FDT.tm_isdst = -1;
-        //JMW TODO	mktime(&T_FDT);
+        mktime(&T_FDT);
         FDT[0] = T_FDT.tm_mday;
         FDT[1] = T_FDT.tm_mon + 1;
         FDT[2] = T_FDT.tm_year % 100;
