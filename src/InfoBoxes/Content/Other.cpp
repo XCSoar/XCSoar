@@ -59,7 +59,10 @@ UpdateInfoBoxBattery(InfoBoxData &data)
   bool DisplaySupplyVoltageAsValue=false;
   switch (Power::External::Status) {
     case Power::External::OFF:
-      data.SetComment(_("AC Off"));
+      if (CommonInterface::Basic().battery_level_available)
+        data.UnsafeFormatComment(_("AC Off;  %d%%"), (int)CommonInterface::Basic().battery_level);
+      else
+        data.SetComment(_("AC Off"));
       break;
     case Power::External::ON:
       if (!CommonInterface::Basic().voltage_available)
