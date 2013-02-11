@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 23:24+0100\n"
-"PO-Revision-Date: 2013-01-30 14:01+0000\n"
-"Last-Translator: Phillip Sz <Unknown>\n"
+"POT-Creation-Date: 2013-02-08 08:18+0100\n"
+"PO-Revision-Date: 2013-02-09 12:24+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-02 09:24+0000\n"
-"X-Generator: Launchpad (build 16462)\n"
+"X-Launchpad-Export-Date: 2013-02-11 13:00+0000\n"
+"X-Generator: Launchpad (build 16482)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -491,7 +491,7 @@ msgstr "Kein Verkehr"
 #: src/Gauge/BigTrafficWidget.cpp:295 src/Gauge/BigTrafficWidget.cpp:296
 #: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
 #: src/Renderer/MapItemListRenderer.cpp:505
-#: src/Dialogs/Device/DeviceListDialog.cpp:320
+#: src/Dialogs/Device/DeviceListDialog.cpp:325
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -521,7 +521,8 @@ msgstr "Distanz"
 msgid "Rel. Alt."
 msgstr "Rel Höhe"
 
-#: src/Gauge/BigTrafficWidget.cpp:878 src/Dialogs/MapItemListDialog.cpp:153
+#: src/Gauge/BigTrafficWidget.cpp:871 src/Dialogs/MapItemListDialog.cpp:153
+#: src/Dialogs/Traffic/TrafficList.cpp:268
 #: src/Dialogs/Task/dlgAlternatesList.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:107 Data/Dialogs/dlgTaskPoint.xml:6
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:10
@@ -529,8 +530,8 @@ msgstr "Rel Höhe"
 msgid "Details"
 msgstr "Details"
 
-#: src/Gauge/BigTrafficWidget.cpp:881 src/Dialogs/XML.cpp:595
-#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:532
+#: src/Gauge/BigTrafficWidget.cpp:874 src/Dialogs/XML.cpp:595
+#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:566
 #: src/Dialogs/Device/PortMonitor.cpp:198
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:160
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:113
@@ -543,6 +544,7 @@ msgstr "Details"
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:273
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:400
+#: src/Dialogs/Traffic/TrafficList.cpp:269
 #: src/Dialogs/Plane/PlaneListDialog.cpp:411 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:122 src/Dialogs/dlgStatus.cpp:94
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:191
@@ -751,7 +753,7 @@ msgstr "Voll"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
 #, no-c-format
 msgid "Off"
 msgstr "Aus"
@@ -2597,7 +2599,7 @@ msgstr "Wind - Pfeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1142
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 #: Data/Input/default.xci:583
 #, no-c-format
@@ -2698,7 +2700,7 @@ msgstr "kein QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:57
 #: src/InfoBoxes/Content/Weather.cpp:111
-#: src/Dialogs/Device/DeviceListDialog.cpp:238
+#: src/Dialogs/Device/DeviceListDialog.cpp:243
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:148
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:7
@@ -2723,9 +2725,9 @@ msgstr "AC aus"
 msgid "AC ON"
 msgstr "AC ein"
 
-#: src/InfoBoxes/Content/Other.cpp:172 src/Profile/DeviceConfig.cpp:138
+#: src/InfoBoxes/Content/Other.cpp:172 src/Profile/DeviceConfig.cpp:141
 #: src/Dialogs/Device/DeviceEditWidget.cpp:64
-#: src/Dialogs/Device/DeviceListDialog.cpp:328
+#: src/Dialogs/Device/DeviceListDialog.cpp:333
 #, no-c-format
 msgid "Disabled"
 msgstr "Deaktiviert"
@@ -2791,7 +2793,7 @@ msgstr "Keine Hilfe verfügbar."
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:76
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
-#: src/Dialogs/Device/DeviceListDialog.cpp:330
+#: src/Dialogs/Device/DeviceListDialog.cpp:335
 msgid "N/A"
 msgstr "n. v."
 
@@ -3076,24 +3078,6 @@ msgstr "Wegpunktbeschriftung"
 msgid "Topography/Terrain"
 msgstr "Topographie/Gelände"
 
-#: src/Input/InputEventsTraffic.cpp:91
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:231
-#: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
-msgid "Competition ID"
-msgstr "Wettbewerbskennung"
-
-#: src/Input/InputEventsTraffic.cpp:99
-msgid "Show details:"
-msgstr "Zeige Details:"
-
-#: src/Input/InputEventsTraffic.cpp:104
-msgid "Unknown competition number"
-msgstr "Unbekannte Wettbewerbskennung"
-
-#: src/Input/InputEventsTraffic.cpp:105
-msgid "Not found"
-msgstr "Nicht gefunden"
-
 #: src/PageSettings.cpp:37
 msgid "Info Hide"
 msgstr "Info ausblenden"
@@ -3107,7 +3091,7 @@ msgid "Map and InfoBoxes"
 msgstr "Karte und InfoBoxen"
 
 #: src/Renderer/ChartRenderer.cpp:169
-#: src/Dialogs/Device/DeviceListDialog.cpp:332
+#: src/Dialogs/Device/DeviceListDialog.cpp:337
 msgid "No data"
 msgstr "Keine Daten"
 
@@ -3327,21 +3311,21 @@ msgid "Australian"
 msgstr "Australisch"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:117 src/Startup.cpp:320
+#: src/UtilsSettings.cpp:117 src/Startup.cpp:318
 msgid "Loading Terrain File..."
 msgstr "Lade Geländedatei..."
 
-#: src/Profile/DeviceConfig.cpp:149 src/Dialogs/Device/DeviceEditWidget.cpp:70
+#: src/Profile/DeviceConfig.cpp:152 src/Dialogs/Device/DeviceEditWidget.cpp:70
 #, no-c-format
 msgid "Bluetooth server"
 msgstr "Bluetoothserver"
 
-#: src/Profile/DeviceConfig.cpp:166 src/Dialogs/Device/DeviceEditWidget.cpp:66
+#: src/Profile/DeviceConfig.cpp:172 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "GPS Intermediate Driver"
 msgstr "GPS Adapter"
 
-#: src/Profile/DeviceConfig.cpp:169 src/Dialogs/Device/DeviceEditWidget.cpp:69
+#: src/Profile/DeviceConfig.cpp:175 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Eingebautes GPS & Sensoren"
@@ -3363,12 +3347,12 @@ msgstr "Warnung"
 msgid "Battery low"
 msgstr "Batteriestand niedrig"
 
-#: src/Startup.cpp:268
+#: src/Startup.cpp:266
 msgid "Initialising"
 msgstr "Initialisierung läuft"
 
 #. Start the device thread(s)
-#: src/Startup.cpp:393
+#: src/Startup.cpp:391
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
@@ -3378,43 +3362,43 @@ msgstr "Starte Geräte"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:403
+#: src/Startup.cpp:401
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
 
 #. Show progress dialog
-#: src/Startup.cpp:501 src/Startup.cpp:538 src/Startup.cpp:582
+#: src/Startup.cpp:499 src/Startup.cpp:536 src/Startup.cpp:580
 msgid "Shutdown, please wait..."
 msgstr "Abstellvorgang, bitte warten..."
 
 #. Stop logger and save igc file
-#: src/Startup.cpp:519
+#: src/Startup.cpp:517
 msgid "Shutdown, saving logs..."
 msgstr "Abschalten, speichere Logs..."
 
 #. Save settings to profile
-#: src/Startup.cpp:531
+#: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
 msgstr "Abstellvorgang, speichere Profil..."
 
 #. Save the task for the next time
-#: src/Startup.cpp:574
+#: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
 msgstr "Abstellvorgang, speichere Aufgabe..."
 
-#: src/Device/Descriptor.cpp:366
+#: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
 msgstr "Kann Port nicht öffnen"
 
-#: src/Device/Descriptor.cpp:855 src/Device/Descriptor.cpp:861
+#: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
 msgstr "Übertrage Deklaration"
 
-#: src/Device/Descriptor.cpp:898
+#: src/Device/Descriptor.cpp:930
 msgid "Reading flight list"
 msgstr "Lese Flugliste"
 
-#: src/Device/Descriptor.cpp:918
+#: src/Device/Descriptor.cpp:950
 msgid "Downloading flight log"
 msgstr "Hole Fluglog"
 
@@ -3454,7 +3438,8 @@ msgstr "Erneut versuchen"
 #: src/Dialogs/MapItemListSettingsDialog.cpp:37
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
-#: src/Dialogs/Settings/FontEdit.cpp:196 src/Dialogs/NumberEntry.cpp:62
+#: src/Dialogs/Settings/FontEdit.cpp:196
+#: src/Dialogs/Traffic/TrafficList.cpp:569 src/Dialogs/NumberEntry.cpp:62
 #: src/Dialogs/NumberEntry.cpp:106 src/Dialogs/NumberEntry.cpp:148
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:217 src/Dialogs/TimeEntry.cpp:67
 #: Data/Dialogs/WaypointList.xml:19 Data/Dialogs/WaypointList_L.xml:17
@@ -3472,8 +3457,8 @@ msgstr "Ignoriere"
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/Dialogs/ListPicker.cpp:189 Data/Dialogs/WaypointList.xml:18
-#: Data/Dialogs/WaypointList_L.xml:16
+#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:568
+#: Data/Dialogs/WaypointList.xml:18 Data/Dialogs/WaypointList_L.xml:16
 msgid "Select"
 msgstr "Auswählen"
 
@@ -3495,7 +3480,7 @@ msgid "Downloading"
 msgstr "Lädt herunter"
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
-#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Device/DeviceListDialog.cpp:345
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
@@ -3543,39 +3528,44 @@ msgstr "Der Dateimanager erfordert Android 2.3."
 msgid "IOIO switches and Nunchuk"
 msgstr "IOIO Schalter und Nunchuk"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:74
+#: src/Dialogs/Device/DeviceEditWidget.cpp:75
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
 msgstr "IOIO i2c Drucksensor"
 
+#: src/Dialogs/Device/DeviceEditWidget.cpp:76
+#, no-c-format
+msgid "IOIO voltage sensor"
+msgstr "IOIO Spannungssensor"
+
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
-#: src/Dialogs/Device/DeviceEditWidget.cpp:80
-#: src/Dialogs/Device/DeviceEditWidget.cpp:604
+#: src/Dialogs/Device/DeviceEditWidget.cpp:81
+#: src/Dialogs/Device/DeviceEditWidget.cpp:606
 #, no-c-format
 msgid "TCP Port"
 msgstr "TCP-Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:81
+#: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "UDP Port"
 msgstr "UDP Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:583
+#: src/Dialogs/Device/DeviceEditWidget.cpp:585
 msgid "Port"
 msgstr "Anschluss"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:589
+#: src/Dialogs/Device/DeviceEditWidget.cpp:591
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
 msgstr "Baudrate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:596
+#: src/Dialogs/Device/DeviceEditWidget.cpp:598
 msgid "Bulk baud rate"
 msgstr "Bündel Baudrate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:597
+#: src/Dialogs/Device/DeviceEditWidget.cpp:599
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -3583,19 +3573,19 @@ msgstr ""
 "Die Baudrate für die gebündelte Übertragung, wie die Aufgabendeklaration "
 "oder der Flugdownload."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:610
+#: src/Dialogs/Device/DeviceEditWidget.cpp:612
 msgid "I2C Bus"
 msgstr "I2C Bus"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:610
+#: src/Dialogs/Device/DeviceEditWidget.cpp:612
 msgid "Select the description or bus number that matches your configuration."
 msgstr "Wähle die Beschreibung oder Busnummer passend zu deiner Konfiguration."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:619
 msgid "I2C Addr"
 msgstr "I2C Adresse"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:619
 msgid ""
 "The i2c address that matches your configuration.This field is not used when "
 "your selection in the I2C Bus field is not an i2c bus number. In case you do "
@@ -3607,11 +3597,11 @@ msgstr ""
 "diese Dinge nicht geläufig sind gehe davon aus, dass dieses Feld nicht "
 "genutzt wird."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:626
+#: src/Dialogs/Device/DeviceEditWidget.cpp:628
 msgid "Pressure use"
 msgstr "Druck Verwendung"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:626
+#: src/Dialogs/Device/DeviceEditWidget.cpp:628
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
@@ -3620,15 +3610,15 @@ msgstr ""
 "Wähle die Verwendung des Drucksensor. Der Sensor misst ein bel. Druck. "
 "Hiermit kann das System den Druck richtig einsetzen."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:641
+#: src/Dialogs/Device/DeviceEditWidget.cpp:643
 msgid "Driver"
 msgstr "Treiber"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:643
+#: src/Dialogs/Device/DeviceEditWidget.cpp:645
 msgid "Sync. from device"
 msgstr "Abgleich vom Gerät"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:644
+#: src/Dialogs/Device/DeviceEditWidget.cpp:646
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
@@ -3636,11 +3626,11 @@ msgstr ""
 "Dies Option veranlasst XCSoar Einstellungen wie z.B. den MacCready Wert, "
 "Verschmutzung und Ballast vom externen Gerät zu übernehmen."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:649
+#: src/Dialogs/Device/DeviceEditWidget.cpp:651
 msgid "Sync. to device"
 msgstr "Abgleich zum Gerät"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:650
+#: src/Dialogs/Device/DeviceEditWidget.cpp:652
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
@@ -3648,20 +3638,20 @@ msgstr ""
 "Dies Option veranlasst XCSoar Einstellungen wie z.B. den MacCready Wert, "
 "Verschmutzung und Ballast zum externen Gerät zu schicken."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:656
+#: src/Dialogs/Device/DeviceEditWidget.cpp:658
 msgid "Enable this if you use a K6Bt to connect the device."
 msgstr "Aktiviere dies, wenn Du ein K6Bt angeschlossen hast."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:663
+#: src/Dialogs/Device/DeviceEditWidget.cpp:665
 msgid "Enable this if you would like to log the communication with the device."
 msgstr ""
 "Dies aktiviert den Mitschnitt der Kommunikation zum angeschlossenen Gerät."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:670
+#: src/Dialogs/Device/DeviceEditWidget.cpp:672
 msgid "Ignore checksum"
 msgstr "Prüfsumme ignorieren"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:671
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
@@ -3669,74 +3659,87 @@ msgstr ""
 "Wenn das angeschlossene GPS ungültige NMEA Prüfsummen sendet, können die "
 "Daten mit dieser Einstellung trotzdem verwendet werden."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:236
-#: src/Dialogs/Device/DeviceListDialog.cpp:359
+#: src/Dialogs/Device/DeviceListDialog.cpp:241
+#: src/Dialogs/Device/DeviceListDialog.cpp:374
+#: src/Dialogs/Device/DeviceListDialog.cpp:382
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
 msgstr "Wiederverbinden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:237
+#: src/Dialogs/Device/DeviceListDialog.cpp:242
 msgid "Flight download"
 msgstr "Flug Download"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:239
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
-#: src/Dialogs/Device/DeviceListDialog.cpp:438
+#: src/Dialogs/Device/DeviceListDialog.cpp:244
+#: src/Dialogs/Device/DeviceListDialog.cpp:404
+#: src/Dialogs/Device/DeviceListDialog.cpp:410
+#: src/Dialogs/Device/DeviceListDialog.cpp:466
+#: src/Dialogs/Device/DeviceListDialog.cpp:472
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:186
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:200
 msgid "Manage"
 msgstr "Verwalten"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:240
+#: src/Dialogs/Device/DeviceListDialog.cpp:245
 msgid "Monitor"
 msgstr "Überwachung"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:286
+#: src/Dialogs/Device/DeviceListDialog.cpp:291
 #: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:184
 #, c-format
 msgid "%s on %s"
 msgstr "%s auf %s"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:300
+#: src/Dialogs/Device/DeviceListDialog.cpp:305
 msgid "GPS fix"
 msgstr "GPS Fix"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:303
+#: src/Dialogs/Device/DeviceListDialog.cpp:308
 msgid "Bad GPS"
 msgstr "GPS Empfang schlecht"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:305
+#: src/Dialogs/Device/DeviceListDialog.cpp:310
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 msgid "Connected"
 msgstr "Verbunden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:310
+#: src/Dialogs/Device/DeviceListDialog.cpp:315
 msgid "Baro"
 msgstr "Baro"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:315 Data/Dialogs/dlgVegaDemo.xml:10
+#: src/Dialogs/Device/DeviceListDialog.cpp:320 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr "Luftgeschwindigkeit"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:336
+#: src/Dialogs/Device/DeviceListDialog.cpp:342
+#: src/Dialogs/Device/DeviceListDialog.cpp:374
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth ist ausgeschaltet"
+
+#: src/Dialogs/Device/DeviceListDialog.cpp:347
 msgid "Not connected"
 msgstr "Nicht verbunden"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:359
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
-#: src/Dialogs/Device/DeviceListDialog.cpp:438
+#: src/Dialogs/Device/DeviceListDialog.cpp:382
+#: src/Dialogs/Device/DeviceListDialog.cpp:410
+#: src/Dialogs/Device/DeviceListDialog.cpp:472
 #: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Device is occupied"
 msgstr "Gerät ist belegt"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:401
+#: src/Dialogs/Device/DeviceListDialog.cpp:404
+#: src/Dialogs/Device/DeviceListDialog.cpp:466
+msgid "Device is not connected"
+msgstr "Gerät ist nicht angeschlossen"
+
+#: src/Dialogs/Device/DeviceListDialog.cpp:430
 msgid "Edit device"
 msgstr "Gerät ändern"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:531
+#: src/Dialogs/Device/DeviceListDialog.cpp:565
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119 Data/Input/default.xci:617
 #: Data/Input/default.xci:1214
 #, no-c-format
@@ -4562,36 +4565,42 @@ msgstr "Schrift bearbeiten"
 msgid "Reset"
 msgstr "Zurücksetzen"
 
-#: src/Dialogs/Traffic/FlarmTrafficList.cpp:107
-msgid "No further information"
-msgstr "Keine weitere Information"
+#: src/Dialogs/Traffic/TrafficList.cpp:250
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
+#: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
+msgid "Competition ID"
+msgstr "Wettbewerbskennung"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:127
+#: src/Dialogs/Traffic/TrafficList.cpp:551
+msgid "Traffic"
+msgstr "Verkehr"
+
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
 msgid "FLARM Traffic Details"
 msgstr "FLARM Flugverkehr Details"
 
 #. Ask for confirmation
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:198
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:200
 msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr "Willst du diesen FLARM Kontakt als neue Teampartner nutzen?"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:201
 msgid "New Teammate"
 msgstr "Neuer Teampartner"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:149
-msgid "Set new teammate:"
-msgstr "Lege neuen Teamkollegen fest:"
-
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:157
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:145
 msgid "Unknown Competition Number"
 msgstr "Unbekannte Wettbewerbskennung"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:158
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:146
 msgid "Not Found"
 msgstr "Nicht gefunden"
+
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:150
+msgid "Set new teammate"
+msgstr "Setze neuen Teamkollegen"
 
 #: src/Dialogs/dlgAnalysis.cpp:288 src/Dialogs/dlgAnalysis.cpp:297
 #: src/Dialogs/dlgAnalysis.cpp:306 src/Dialogs/dlgAnalysis.cpp:315
@@ -5852,7 +5861,7 @@ msgid "Scaled centered"
 msgstr "Skaliert und zentriert"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
 #, no-c-format
 msgid "Fixed"
 msgstr "Fixiert"
@@ -6999,24 +7008,29 @@ msgstr "ICAO"
 msgid "Grey"
 msgstr "Grau"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:192
+#, no-c-format
+msgid "White"
+msgstr "Weiß"
+
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
 msgid "Terrain colors"
 msgstr "Geländefarben"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "Auswahl der Farbpalette für die Geländedarstellung."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:204
 #, no-c-format
 msgid "Sun"
 msgstr "Sonne"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 msgid "Slope shading"
 msgstr "Hangschattierung"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from north-east."
@@ -7024,11 +7038,11 @@ msgstr ""
 "Das Gelände kann unterschiedliche Hänge schattieren um entweder die "
 "Windrichtung, die Sonnenposition, oder die Nord-Ost Richtung zu zeigen."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 msgid "Terrain contrast"
 msgstr "Geländekontrast"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -7037,11 +7051,11 @@ msgstr ""
 "Anpassung der Phong-Tönung der Geländedarstellung. Nimm größere Werte um das "
 "Relief zu betonen, kleinere Werte für steile Berglandschaft."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
 msgid "Terrain brightness"
 msgstr "Geländehelligkeit"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:223
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
@@ -9158,6 +9172,21 @@ msgstr ""
 
 #~ msgid "Height GPS"
 #~ msgstr "Höhe - über MSL (GPS)"
+
+#~ msgid "Show details:"
+#~ msgstr "Zeige Details:"
+
+#~ msgid "No further information"
+#~ msgstr "Keine weitere Information"
+
+#~ msgid "Set new teammate:"
+#~ msgstr "Lege neuen Teamkollegen fest:"
+
+#~ msgid "Unknown competition number"
+#~ msgstr "Unbekannte Wettbewerbskennung"
+
+#~ msgid "Not found"
+#~ msgstr "Nicht gefunden"
 
 #~ msgid "English"
 #~ msgstr "Englisch"
