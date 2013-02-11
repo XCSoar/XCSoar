@@ -86,10 +86,8 @@ ReadFlightListInner(Port &port, unsigned bulkrate,
    */
   VLAPI vl(port, bulkrate, env);
 
-  env.SetProgressRange(10);
   if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
-  env.SetProgressPosition(3);
 
   VLA_ERROR err = vl.read_directory();
 
@@ -100,10 +98,8 @@ ReadFlightListInner(Port &port, unsigned bulkrate,
   else if (err != VLA_ERR_NOERR)
     return false;
 
-  env.SetProgressPosition(8);
-   if (!ConvertDirectoryToRecordedFlightList(vl.directory, flight_list))
+  if (!ConvertDirectoryToRecordedFlightList(vl.directory, flight_list))
     return false;
-  env.SetProgressPosition(10);
 
   return true;
 }
