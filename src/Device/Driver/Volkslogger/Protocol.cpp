@@ -219,10 +219,13 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
 
   unsigned const TIMEOUT_NORMAL_MS = 1000;
 
+  unsigned const PROGRESS_BAR_RANGE = 1000;
+  env.SetProgressRange(PROGRESS_BAR_RANGE);
 
   while (!ende) {
     // Zeichen anfordern und darauf warten
 
+    env.SetProgressPosition(nbytes % PROGRESS_BAR_RANGE);
 
     if (!port.Write(ACK))
       return -1;
@@ -304,6 +307,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
     }
   }
 
+  env.SetProgressPosition(PROGRESS_BAR_RANGE);
   env.Sleep(100);
 
   if (crc16 != 0)

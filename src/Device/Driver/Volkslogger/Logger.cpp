@@ -97,22 +97,14 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 
   VLAPI vl(port, 115200L, env);
 
-  env.SetProgressRange(10);
-
   if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
-  env.SetProgressPosition(3);
 
   if (vl.read_directory() != VLA_ERR_NOERR)
     return false;
 
-  env.SetProgressPosition(8);
-
    if (!ConvertDirectoryToRecordedFlightList(vl.directory,flight_list))
     return false;
-
-  env.SetProgressPosition(10);
-
 
   return true;
 }
