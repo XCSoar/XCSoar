@@ -25,6 +25,7 @@
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/CharUtil.hpp"
+#include "Language/Language.hpp"
 
 #include <memory.h>
 #include <string.h>
@@ -104,6 +105,11 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
    * the log before it responds.
    */
   unsigned timeout_firstchar_ms=300000;
+
+  /*
+   * Make user aware of the Volkslogger needing time to calculate
+   */
+  env.SetText(_("Logger is calculating file security before download starts."));
 
   // Download binary log data supports BulkBaudrate
   int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
