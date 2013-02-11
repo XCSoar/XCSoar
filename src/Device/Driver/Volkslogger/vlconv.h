@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#include "Operation/Operation.hpp"
 
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01
@@ -76,7 +77,8 @@ convert_gcs
   return value:
     length of binary file
 */
-int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
+int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *,
+                  OperationEnvironment &env);
 
 
 /*
@@ -103,7 +105,8 @@ struct DIRECTORY {
 
 //const int MAXDIRENTRY = 100;
 
-int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, int countonly);
+int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, int countonly,
+             OperationEnvironment &env);
 
 
 #endif

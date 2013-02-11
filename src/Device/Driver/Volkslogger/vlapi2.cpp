@@ -230,13 +230,14 @@ VLA_ERROR VLAPI::read_directory() {
   err = readdir(dirbuffer, sizeof(dirbuffer));
 
   if(err == VLA_ERR_NOERR) {
-    int fcount = conv_dir(0,dirbuffer,1);
+    int fcount = conv_dir(0,dirbuffer,1,env);
     delete[] directory.flights;
     directory.flights = NULL;
+
     if(fcount>0) {
       directory.nflights = fcount;
       directory.flights = new DIRENTRY[fcount];
-      conv_dir(directory.flights,dirbuffer,0);
+      conv_dir(directory.flights,dirbuffer,0,env);
       err = VLA_ERR_NOERR;
     }
     else {
@@ -269,7 +270,7 @@ VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
   word serno; long sp;
   long r;
   if(err == VLA_ERR_NOERR) {
-    r = convert_gcs(0,outfile,logbuffer,1,&serno,&sp);
+    r = convert_gcs(0,outfile,logbuffer,1,&serno,&sp,env);
     if(r>0) {
       err = VLA_ERR_NOERR;
       print_g_record(
