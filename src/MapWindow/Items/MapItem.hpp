@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Markers/Marker.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Color.hpp"
@@ -42,6 +41,7 @@ enum class TaskPointType : uint8_t;
 
 class AbstractAirspace;
 struct Waypoint;
+class ObservationZonePoint;
 
 struct MapItem
 {
@@ -114,13 +114,8 @@ struct TaskOZMapItem: public MapItem
   const Waypoint &waypoint;
 
   TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
-                TaskPointType _tp_type, const Waypoint &_waypoint)
-    :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
-     tp_type(_tp_type), waypoint(_waypoint) {}
-
-  ~TaskOZMapItem() {
-    delete oz;
-  }
+                TaskPointType _tp_type, const Waypoint &_waypoint);
+  virtual ~TaskOZMapItem();
 };
 
 struct AirspaceMapItem: public MapItem
