@@ -88,6 +88,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   builder.AddTraffic(basic.flarm.traffic);
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  builder.AddSkyLinesTraffic();
+#endif
+
   // Sort the list of map items
   list.Sort();
 

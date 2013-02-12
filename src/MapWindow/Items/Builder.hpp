@@ -67,6 +67,7 @@ public:
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddMarkers(const ProtectedMarkers &marks);
   void AddTraffic(const TrafficList &flarm);
+  void AddSkyLinesTraffic();
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 

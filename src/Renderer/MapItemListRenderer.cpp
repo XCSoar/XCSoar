@@ -527,6 +527,29 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           item.color, pt);
 }
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+static void
+Draw(Canvas &canvas, const PixelRect rc,
+     const SkyLinesTrafficMapItem &item,
+     const DialogLook &dialog_look)
+{
+  const Font &name_font = *dialog_look.list.font_bold;
+
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
+  const int left = rc.left + line_height + text_padding;
+  const int top = rc.top + text_padding;
+
+  StaticString<64> tmp;
+  tmp.UnsafeFormat(_T("SkyLines %u"), item.id);
+
+  canvas.Select(name_font);
+  canvas.DrawText(left, top, tmp);
+}
+
+#endif /* HAVE_SKYLINES_TRACKING_HANDLER */
+
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapItem &item,
@@ -577,6 +600,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     Draw(canvas, rc, (const TrafficMapItem &)item,
          dialog_look, traffic_look, traffic_list);
     break;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  case MapItem::SKYLINES_TRAFFIC:
+    ::Draw(canvas, rc, (const SkyLinesTrafficMapItem &)item, dialog_look);
+    break;
+#endif
+
   case MapItem::THERMAL:
     Draw(canvas, rc, (const ThermalMapItem &)item, dialog_look, look);
     break;

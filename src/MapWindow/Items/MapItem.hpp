@@ -32,6 +32,7 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Route/ReachResult.hpp"
+#include "Tracking/SkyLines/Features.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -58,6 +59,9 @@ struct MapItem
     THERMAL,
     WAYPOINT,
     TRAFFIC,
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    SKYLINES_TRAFFIC,
+#endif
   } type;
 
 protected:
@@ -161,6 +165,18 @@ struct TrafficMapItem: public MapItem
   TrafficMapItem(FlarmId _id, FlarmColor _color)
     :MapItem(TRAFFIC), id(_id), color(_color) {}
 };
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+struct SkyLinesTrafficMapItem : public MapItem
+{
+  uint32_t id;
+
+  SkyLinesTrafficMapItem(uint32_t _id)
+    :MapItem(SKYLINES_TRAFFIC), id(_id) {}
+};
+
+#endif
 
 struct ThermalMapItem: public MapItem
 {

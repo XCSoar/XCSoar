@@ -46,6 +46,9 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "FLARM/Friends.hpp"
 #include "TeamCodeSettings.hpp"
+#include "Tracking/SkyLines/Data.hpp"
+#include "Tracking/TrackingGlue.hpp"
+#include "Components.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -293,6 +296,24 @@ MapItemListBuilder::AddTraffic(const TrafficList &flarm)
       list.append(new TrafficMapItem(t.id, color));
     }
   }
+}
+
+void
+MapItemListBuilder::AddSkyLinesTraffic()
+{
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  const auto &data = tracking->GetSkyLinesData();
+  const ScopeLock protect(data.mutex);
+
+  for (const auto &i : data.traffic) {
+    if (list.full())
+      break;
+
+    if (i.second.location.IsValid() &&
+        location.Distance(i.second.location) < range)
+      list.append(new SkyLinesTrafficMapItem(i.first));
+  }
+#endif
 }
 
 void
