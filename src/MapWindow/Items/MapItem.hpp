@@ -27,7 +27,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Markers/Marker.hpp"
-#include "FLARM/Traffic.hpp"
+#include "FLARM/FlarmId.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
@@ -158,8 +158,8 @@ struct TrafficMapItem: public MapItem
   FlarmId id;
   FlarmColor color;
 
-  TrafficMapItem(const FlarmTraffic &_traffic, FlarmColor _color)
-    :MapItem(TRAFFIC), id(_traffic.id), color(_color) {}
+  TrafficMapItem(FlarmId _id, FlarmColor _color)
+    :MapItem(TRAFFIC), id(_id), color(_color) {}
 };
 
 struct ThermalMapItem: public MapItem

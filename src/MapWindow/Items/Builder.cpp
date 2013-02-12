@@ -290,7 +290,7 @@ MapItemListBuilder::AddTraffic(const TrafficList &flarm)
 
     if (location.Distance(t.location) < range) {
       auto color = FlarmFriends::GetFriendColor(t.id);
-      list.append(new TrafficMapItem(t, color));
+      list.append(new TrafficMapItem(t.id, color));
     }
   }
 }
