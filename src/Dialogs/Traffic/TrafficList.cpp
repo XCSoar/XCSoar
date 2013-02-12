@@ -168,7 +168,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
   typedef std::vector<Item> ItemList;
 
-  ActionListener *const action_listener;
+  ActionListener &action_listener;
 
   const RowFormWidget *const filter_widget;
 
@@ -185,7 +185,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 public:
   TrafficListWidget(ActionListener &_action_listener,
                     const FlarmId *array, size_t count)
-    :action_listener(&_action_listener), filter_widget(nullptr),
+    :action_listener(_action_listener), filter_widget(nullptr),
      buttons(nullptr) {
     items.reserve(count);
 
@@ -193,9 +193,10 @@ public:
       items.emplace_back(array[i]);
   }
 
-  TrafficListWidget(const RowFormWidget &_filter_widget,
+  TrafficListWidget(ActionListener &_action_listener,
+                    const RowFormWidget &_filter_widget,
                     TrafficListButtons &_buttons)
-    :action_listener(nullptr), filter_widget(&_filter_widget),
+    :action_listener(_action_listener), filter_widget(&_filter_widget),
      buttons(&_buttons) {
   }
 
@@ -381,7 +382,7 @@ TrafficListWidget::UpdateList()
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     /* show SkyLines traffic unless this is a FLARM traffic picker
        dialog (from dlgTeamCode) */
-    if (action_listener == nullptr) {
+    if (buttons != nullptr) {
       const auto &data = tracking->GetSkyLinesData();
       const ScopeLock protect(data.mutex);
       for (const auto &i : data.traffic) {
@@ -649,8 +650,9 @@ TrafficListWidget::OpenDetails(unsigned index)
 void
 TrafficListWidget::OnActivateItem(unsigned index)
 {
-  if (action_listener != nullptr)
-    action_listener->OnAction(mrOK);
+  if (buttons == nullptr)
+    /* it's a traffic picker: finish the dialog */
+    action_listener.OnAction(mrOK);
   else
     OpenDetails(index);
 }
@@ -679,7 +681,7 @@ TrafficListDialog()
     new TwoWidgets(filter_widget, buttons_widget, true);
 
   TrafficListWidget *const list_widget =
-    new TrafficListWidget(*filter_widget, *buttons_widget);
+    new TrafficListWidget(dialog, *filter_widget, *buttons_widget);
 
   filter_widget->SetListener(list_widget);
   buttons_widget->SetList(list_widget);
