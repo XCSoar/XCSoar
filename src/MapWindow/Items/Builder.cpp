@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#include "MapItemListBuilder.hpp"
-
+#include "Builder.hpp"
+#include "MapItem.hpp"
+#include "List.hpp"
 #include "Util/StaticArray.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
@@ -40,8 +41,6 @@ Copyright_License {
 #include "Markers/ProtectedMarkers.hpp"
 #include "Markers/Markers.hpp"
 #include "NMEA/ThermalLocator.hpp"
-#include "MapItem.hpp"
-#include "MapItemList.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Terrain/RasterTerrain.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapItemListRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "MapWindow/MapItem.hpp"
+#include "MapWindow/Items/MapItem.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
