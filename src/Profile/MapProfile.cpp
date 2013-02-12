@@ -69,18 +69,20 @@ Profile::Load(MapSettings &settings)
   bool orientation_found = false;
 
   unsigned Temp = (unsigned)DisplayOrientation::NORTH_UP;
-  if (Get(ProfileKeys::OrientationCircling, Temp))
+  if (Get(ProfileKeys::OrientationCircling, Temp)) {
     orientation_found = true;
 
-  if (IsValidMapOrientation(Temp))
-    settings.circling_orientation = (DisplayOrientation)Temp;
+    if (IsValidMapOrientation(Temp))
+      settings.circling_orientation = (DisplayOrientation)Temp;
+  }
 
   Temp = (unsigned)DisplayOrientation::NORTH_UP;
-  if (Get(ProfileKeys::OrientationCruise, Temp))
+  if (Get(ProfileKeys::OrientationCruise, Temp)) {
     orientation_found = true;
 
-  if (IsValidMapOrientation(Temp))
-    settings.cruise_orientation = (DisplayOrientation)Temp;
+    if (IsValidMapOrientation(Temp))
+      settings.cruise_orientation = (DisplayOrientation)Temp;
+  }
 
   if (!orientation_found) {
     Temp = 1;
