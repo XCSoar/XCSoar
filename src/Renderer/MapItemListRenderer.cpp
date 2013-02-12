@@ -109,7 +109,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
-  PixelScalar left = rc.left + Layout::FastScale(2);
+  const unsigned text_padding = Layout::GetTextPadding();
+  int left = rc.left + text_padding;
 
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (item.vector.IsValid()) {
@@ -126,7 +127,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(name_font);
 
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, info_buffer);
+  canvas.DrawClippedText(left, rc.top + text_padding, rc, info_buffer);
 
 
   TCHAR elevation_buffer[32];
@@ -139,7 +140,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, info_buffer);
 }
 
@@ -192,7 +193,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  const unsigned text_padding = Layout::GetTextPadding();
+  int left = rc.left + line_height + text_padding;
 
 
   // Format title row
@@ -219,7 +221,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw title row
 
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, buffer);
+  canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
 
   // Format comment row
 
@@ -254,7 +256,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, buffer);
 }
 
@@ -265,14 +267,15 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const AircraftLook &look,
                           const MapSettings &settings)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
 
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  int left = rc.left + line_height + text_padding;
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
+  canvas.DrawClippedText(left, rc.top + text_padding, rc,
                          _("Your Position"));
 
   TCHAR buffer[128];
@@ -280,7 +283,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, buffer);
 
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
@@ -316,7 +319,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const DialogLook &dialog_look,
                           const MarkerLook &look)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
 
   const Marker &marker = item.marker;
 
@@ -328,12 +332,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  int left = rc.left + line_height + text_padding;
 
   StaticString<256> buffer;
   buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, buffer);
+  canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
 
   TCHAR time_buffer[32], timespan_buffer[32];
   FormatSignedTimeHHMM(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
@@ -342,7 +346,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, buffer);
 }
 
@@ -364,7 +368,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const DialogLook &dialog_look,
                           const MapLook &look)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
 
   const ThermalSource &thermal = item.thermal;
 
@@ -376,10 +381,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  int left = rc.left + line_height + text_padding;
 
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+  canvas.DrawClippedText(left, rc.top + text_padding,
                          rc, _("Thermal"));
 
   StaticString<256> buffer;
@@ -399,7 +404,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, buffer);
 }
 
@@ -410,7 +415,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TaskLook &look, const AirspaceLook &airspace_look,
                           const AirspaceRendererSettings &airspace_settings)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
 
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
@@ -421,13 +427,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[256];
 
   // Y-Coordinate of the second row
-  UPixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
+  int top2 = rc.top + name_font.GetHeight() + 2 * text_padding;
 
   // Use small font for details
   canvas.Select(small_font);
 
   // Draw details line
-  UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  UPixelScalar left = rc.left + line_height + text_padding;
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
   if (!StringIsEmpty(buffer))
     canvas.DrawClippedText(left, top2, rc.right - left, buffer);
@@ -436,13 +442,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
                         item.index, buffer);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+  canvas.DrawClippedText(left, rc.top + text_padding,
                          rc.right - left, buffer);
 
   const RasterPoint pt(rc.left + line_height / 2,
                        rc.top + line_height / 2);
   PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
+                                            - 2 * text_padding),
                                 Layout::FastScale(10));
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
@@ -456,14 +462,16 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TrafficLook &traffic_look,
                           const TrafficList *traffic_list)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
+  const unsigned line_height = rc.bottom - rc.top;
+  const unsigned text_padding = Layout::GetTextPadding();
+
   const FlarmTraffic *traffic = traffic_list == NULL ? NULL :
       traffic_list->FindTraffic(item.id);
 
   // Now render the text information
   const Font &name_font = *dialog_look.list.font_bold;
   const Font &small_font = *dialog_look.small_font;
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  int left = rc.left + line_height + text_padding;
 
   const FlarmNetRecord *record = FlarmDetails::LookupRecord(item.id);
 
@@ -481,7 +489,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+  canvas.DrawClippedText(left, rc.top + text_padding,
                          rc, title_string);
 
   StaticString<256> info_string;
@@ -507,7 +515,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
   canvas.Select(small_font);
   canvas.DrawClippedText(left,
-                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + 2 * text_padding,
                          rc, info_string);
 
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
