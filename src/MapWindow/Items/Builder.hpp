@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAP_ITEM_LIST_BUILDER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Weather/Features.hpp"
 
 class MapItemList;
 class Angle;
@@ -71,9 +70,7 @@ public:
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 
-#ifdef HAVE_NOAA
   void AddWeatherStations(NOAAStore &store);
-#endif
 };
 
 #endif

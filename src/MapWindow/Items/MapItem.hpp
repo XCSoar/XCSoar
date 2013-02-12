@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_HPP
 #define XCSOAR_MAP_ITEM_HPP
 
-#include "Util/StaticArray.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
