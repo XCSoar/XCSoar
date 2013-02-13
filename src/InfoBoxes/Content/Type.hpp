@@ -141,6 +141,8 @@ namespace InfoBoxFactory
     START_OPEN_TIME,
     START_OPEN_ARRIVAL_TIME,
 
+    NEXT_RADIAL,
+
     e_NUM_TYPES /* Last item */
   };
 

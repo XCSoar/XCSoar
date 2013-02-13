@@ -1174,6 +1174,14 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     START_OPEN_TIME,
   },
 
+  {
+    N_("Next radial"),
+    N_("Radial"),
+    N_("True bearing from the next waypoint to your position."),
+    UpdateInfoBoxRadial,
+    NEXT_RADIAL,
+    NEXT_RADIAL,
+  },
 };
 
 const TCHAR *

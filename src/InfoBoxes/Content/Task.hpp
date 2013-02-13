@@ -32,6 +32,9 @@ UpdateInfoBoxBearing(InfoBoxData &data);
 void
 UpdateInfoBoxBearingDiff(InfoBoxData &data);
 
+void
+UpdateInfoBoxRadial(InfoBoxData &data);
+
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:

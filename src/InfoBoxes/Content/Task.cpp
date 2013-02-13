@@ -70,6 +70,21 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxRadial(InfoBoxData &data)
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid() ||
+      vector_remaining.distance <= fixed(10)) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  data.SetValue(vector_remaining.bearing.Reciprocal());
+}
+
+void
 InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
