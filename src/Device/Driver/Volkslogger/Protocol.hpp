@@ -128,20 +128,50 @@ namespace Volkslogger {
 
   bool WaitForACK(Port &port, OperationEnvironment &env);
 
+  /**
+   * Read data from the Logger
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   */
   int ReadBulk(Port &port, OperationEnvironment &env,
                void *buffer, unsigned max_length);
 
   bool WriteBulk(Port &port, OperationEnvironment &env,
                  const void *buffer, unsigned length);
 
+  /**
+   * Send command to Volkslogger and after that wait to read
+   * the reply using ReadBulk(). This function uses standard IO
+   * baudrate 9600
+   * @param cmd Volkslogger command sent to logger
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   */
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                           Command cmd, void *buffer, unsigned max_length);
+
+  /**
+    * Send command to Volkslogger and after that wait to read
+    * the reply using ReadBulk(). This function uses bulk
+    * baudrate (baud_rate).
+    * @param baud_rate Baudrate to switch to for the data reception
+    * @param cmd Volkslogger command sent to logger
+    * @param param1 Extension of the Volkslogger command (e.g. log number)
+    * @param buffer Pointer to the buffer containing the reply received from the
+    *        logger
+    * @param max_length Maximum buffer size
+    */
 
   int SendCommandReadBulk(Port &port, unsigned baud_rate,
                           OperationEnvironment &env,
                           Command cmd, uint8_t param1,
                           void *buffer, unsigned max_length);
 
+  /**
+   * Same Function as the one above. Only without param1.
+   */
   static inline int SendCommandReadBulk(Port &port, unsigned baud_rate,
                                         OperationEnvironment &env,
                                         Command cmd,
