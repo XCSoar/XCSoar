@@ -340,10 +340,10 @@ Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
 }
 
 int
-Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
+Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
+                                 OperationEnvironment &env,
                                  Command cmd, uint8_t param1,
-                                 void *buffer, unsigned max_length,
-                                 unsigned baud_rate)
+                                 void *buffer, unsigned max_length)
 {
   unsigned old_baud_rate = port.GetBaudrate();
 

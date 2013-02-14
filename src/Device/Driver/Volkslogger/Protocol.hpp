@@ -137,17 +137,17 @@ namespace Volkslogger {
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
                           Command cmd, void *buffer, unsigned max_length);
 
-  int SendCommandReadBulk(Port &port, OperationEnvironment &env,
+  int SendCommandReadBulk(Port &port, unsigned baud_rate,
+                          OperationEnvironment &env,
                           Command cmd, uint8_t param1,
-                          void *buffer, unsigned max_length,
-                          unsigned baud_rate);
+                          void *buffer, unsigned max_length);
 
-  static inline int SendCommandReadBulk(Port &port, OperationEnvironment &env,
+  static inline int SendCommandReadBulk(Port &port, unsigned baud_rate,
+                                        OperationEnvironment &env,
                                         Command cmd,
-                                        void *buffer, unsigned max_length,
-                                        unsigned baud_rate) {
-    return SendCommandReadBulk(port, env, cmd, 0, buffer, max_length,
-                               baud_rate);
+                                        void *buffer, unsigned max_length) {
+    return SendCommandReadBulk(port, baud_rate, env, cmd, 0, buffer,
+                               max_length);
   }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,
