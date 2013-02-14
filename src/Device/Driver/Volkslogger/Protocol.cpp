@@ -197,7 +197,8 @@ Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 
 int
 Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
-                      void *buffer, unsigned max_length)
+                      void *buffer, unsigned max_length,
+                      unsigned timeout_firstchar_ms)
 {
   unsigned nbytes = 0;
   bool dle_r = false;
@@ -207,10 +208,28 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   memset(buffer, 0xff, max_length);
 
   uint8_t *p = (uint8_t *)buffer;
+
+  unsigned const TIMEOUT_NORMAL_MS = 1000;
+  /**
+   * We need to wait longer for the first char to
+   * give the logger time to calculate security
+   * when downloading a log-file.
+   * Therefore timeout_firstchar is configurable.
+   * If the timeout parameter is not specified or 0,
+   * set standard timeout
+   */
+  if (timeout_firstchar_ms == 0)
+    timeout_firstchar_ms = TIMEOUT_NORMAL_MS;
+
   while (!ende) {
     // Zeichen anfordern und darauf warten
-    if (!port.Write(ACK) ||
-        port.WaitRead(env, 1000) != Port::WaitResult::READY)
+
+    if (!port.Write(ACK))
+      return -1;
+
+    // Set longer timeout on first char
+    unsigned timeout = start ? TIMEOUT_NORMAL_MS : timeout_firstchar_ms;
+    if (port.WaitRead(env, timeout) != Port::WaitResult::READY)
       return -1;
 
     int ch = port.GetChar();
@@ -332,10 +351,11 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
 int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  Command cmd,
-                                 void *buffer, unsigned max_length)
+                                 void *buffer, unsigned max_length,
+                                 const unsigned timeout_firstchar_ms)
 {
   return SendCommand(port, env, cmd)
-    ? ReadBulk(port, env, buffer, max_length)
+    ? ReadBulk(port, env, buffer, max_length, timeout_firstchar_ms)
     : -1;
 }
 
@@ -343,7 +363,8 @@ int
 Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
                                  OperationEnvironment &env,
                                  Command cmd, uint8_t param1,
-                                 void *buffer, unsigned max_length)
+                                 void *buffer, unsigned max_length,
+                                 const unsigned timeout_firstchar_ms)
 {
   unsigned old_baud_rate = port.GetBaudrate();
 
@@ -362,7 +383,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
       return -1;
   }
 
-  int nbytes = ReadBulk(port, env, buffer, max_length);
+  int nbytes = ReadBulk(port, env, buffer, max_length, timeout_firstchar_ms);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);

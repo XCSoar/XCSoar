@@ -99,8 +99,18 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
   const Volkslogger::Command cmd = secmode
     ? Volkslogger::cmd_GFS
     : Volkslogger::cmd_GFL;
+
+  /*
+   * It is necessary to wait long for the first reply from
+   * the Logger in ReadBulk.
+   * Since the VL needs time to calculate the Security of
+   * the log before it responds.
+   */
+  unsigned timeout_firstchar_ms=300000;
+
   int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
-                                                 flightnr, buffer, buffersize);
+                                                 flightnr, buffer, buffersize,
+                                                 timeout_firstchar_ms);
   if (groesse <= 0)
     return 0;
 
