@@ -12,6 +12,8 @@ Version 6.6 - not yet released
   - limit the InfoBox aspect ratio
 * tasks
   - MAT tasks (#563)
+* devices
+  - Volkslogger: support IGC file download
 * Android
   - faster map renderer on some Android devices
 
