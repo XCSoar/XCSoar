@@ -108,6 +108,7 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
    */
   unsigned timeout_firstchar_ms=300000;
 
+  // Download binary log data supports BulkBaudrate
   int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
                                                  flightnr, buffer, buffersize,
                                                  timeout_firstchar_ms);
@@ -117,7 +118,11 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
   // read signature
   env.Sleep(300);
 
-  int sgr = Volkslogger::SendCommandReadBulk(*port, databaud, env,
+  /*
+   * Testing has shown that downloading the Signature does not support
+   * BulkRate. It has to be done with standard IO Rate (9600)
+   */
+  int sgr = Volkslogger::SendCommandReadBulk(*port, env,
                                              Volkslogger::cmd_SIG,
                                              (uint8_t *)buffer + groesse,
                                              buffersize - groesse);
