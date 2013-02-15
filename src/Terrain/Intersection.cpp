@@ -34,8 +34,8 @@ Copyright_License {
 #endif
 
 bool
-RasterTileCache::FirstIntersection(int x0, int y0,
-                                   int x1, int y1,
+RasterTileCache::FirstIntersection(const int x0, const int y0,
+                                   const int x1, const int y1,
                                    short h_origin,
                                    short h_dest,
                                    const int slope_fact, const short h_ceiling,
@@ -242,9 +242,9 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 }
 
 RasterLocation
-RasterTileCache::Intersection(int x0, int y0,
-                              int x1, int y1,
-                              short h_origin,
+RasterTileCache::Intersection(const int x0, const int y0,
+                              const int x1, const int y1,
+                              const short h_origin,
                               const int slope_fact) const
 {
   RasterLocation location(x0, y0);
