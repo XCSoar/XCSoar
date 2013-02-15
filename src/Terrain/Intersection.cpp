@@ -33,6 +33,16 @@ Copyright_License {
 #include <stdio.h>
 #endif
 
+/**
+ * Replaces "water" samples with 0.
+ */
+constexpr
+static short
+ReplaceWater0(short h)
+{
+  return RasterBuffer::IsWater(h) ? 0 : h;
+}
+
 bool
 RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    const int x1, const int y1,
@@ -95,13 +105,12 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
 #ifdef DEBUG_TILE
   printf("# fint width %d height %d\n", width, height);
 #endif
-  short h_terrain = 1;
 
   // location of last point within ceiling limit that doesnt intersect
   RasterLocation last_clear_location = location;
   short last_clear_h = h_origin;
 
-  while (h_terrain>=0) {
+  while (true) {
 
     if (!step_counter) {
 
@@ -109,7 +118,10 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
-      h_terrain = field_direct.first + h_safety;
+      if (RasterBuffer::IsInvalid(field_direct.first))
+        break;
+
+      const short h_terrain = ReplaceWater0(field_direct.first) + h_safety;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
@@ -283,12 +295,10 @@ RasterTileCache::Intersection(const int x0, const int y0,
   printf("# step fine %d\n", step_fine);
 #endif
 
-  short h_terrain = 1;
-
   RasterLocation last_clear_location = location;
   short last_clear_h = h_origin;
 
-  while (h_terrain>=0) {
+  while (true) {
 
     if (!step_counter) {
 
@@ -296,7 +306,10 @@ RasterTileCache::Intersection(const int x0, const int y0,
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(location.x, location.y);
-      h_terrain = field_direct.first;
+      if (RasterBuffer::IsInvalid(field_direct.first))
+        break;
+
+      const short h_terrain = ReplaceWater0(field_direct.first);
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
