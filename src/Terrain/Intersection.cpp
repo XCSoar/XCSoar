@@ -98,7 +98,6 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   short h_terrain = 1;
 
   unsigned x_int= x0, y_int= y0;
-  short h_int= h_origin;
   // location of last point within ceiling limit that doesnt intersect
   unsigned last_clear_x = x0;
   unsigned last_clear_y = y0;
@@ -119,7 +118,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
 
       // current aircraft height
-      h_int = dh + h_origin;
+      short h_int = dh + h_origin;
       if (can_climb) {
         h_int = std::min(h_int, h_dest);
       }
