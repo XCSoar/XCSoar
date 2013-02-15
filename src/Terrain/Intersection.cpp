@@ -40,10 +40,11 @@ RasterTileCache::FirstIntersection(int x0, int y0,
                                    short h_dest,
                                    const int slope_fact, const short h_ceiling,
                                    const short h_safety,
-                                   unsigned& _x, unsigned& _y, short &_h,
+                                   RasterLocation &_location, short &_h,
                                    const bool can_climb) const
 {
-  if (((unsigned)x0 >= width) || ((unsigned)y0 >= height))
+  RasterLocation location(x0, y0);
+  if (location.x >= width || location.y >= height)
     // origin is outside overall bounds
     return false;
 
@@ -86,8 +87,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 #ifdef DEBUG_TILE
     printf("# fint start above ceiling %d %d\n", h_origin, h_ceiling);
 #endif
-    _x = (unsigned)x0;
-    _y = (unsigned)y0;
+    _location = location;
     _h = h_origin;
     return true;
   }
@@ -97,20 +97,18 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 #endif
   short h_terrain = 1;
 
-  unsigned x_int= x0, y_int= y0;
   // location of last point within ceiling limit that doesnt intersect
-  unsigned last_clear_x = x0;
-  unsigned last_clear_y = y0;
+  RasterLocation last_clear_location = location;
   short last_clear_h = h_origin;
 
   while (h_terrain>=0) {
 
     if (!step_counter) {
 
-      if (x_int >= width || y_int >= height)
+      if (location.x >= width || location.y >= height)
         break; // outside bounds
 
-      const auto field_direct = GetFieldDirect(x_int, y_int);
+      const auto field_direct = GetFieldDirect(location.x, location.y);
       h_terrain = field_direct.first + h_safety;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
@@ -124,7 +122,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
       }
 
 #ifdef DEBUG_TILE
-      printf("%d %d %d %d %d # fint\n", x_int, y_int, h_int, h_terrain, h_ceiling);
+      printf("%d %d %d %d %d # fint\n", location.x, location.y, h_int, h_terrain, h_ceiling);
 #endif
 
       // this point has intersected if aircraft is below terrain height
@@ -151,8 +149,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
       }
 
       if (h_int > h_ceiling) {
-        _x = last_clear_x;
-        _y = last_clear_y;
+        _location = last_clear_location;
         _h = last_clear_h;
 #ifdef DEBUG_TILE
         printf("# fint reach ceiling\n");
@@ -170,14 +167,12 @@ RasterTileCache::FirstIntersection(int x0, int y0,
           printf("# fint int->clear\n");
 #endif
           if (intersect_counter >= intersect_steps) {
-            _x = x_int;
-            _y = y_int;
+            _location = location;
             _h = h_int;
             return true;
           }
         } else {
-          last_clear_x = x_int;
-          last_clear_y = y_int;
+          last_clear_location = location;
           last_clear_h = h_int;
         }
       }
@@ -193,14 +188,14 @@ RasterTileCache::FirstIntersection(int x0, int y0,
     const int e2 = 2*err;
     if (e2 > -dy) {
       err -= dy;
-      x_int += sx;
+      location.x += sx;
       if (step_counter)
         step_counter--;
       total_steps++;
     }
     if (e2 < dx) {
       err += dx;
-      y_int += sy;
+      location.y += sy;
       if (step_counter)
         step_counter--;
       total_steps++;
@@ -209,8 +204,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 
   // early exit due to inability to find clearance after intersecting
   if (intersect_counter) {
-    _x = last_clear_x;
-    _y = last_clear_y;
+    _location = last_clear_location;
     _h = last_clear_h;
 #ifdef DEBUG_TILE
     printf("# fint early exit\n");
@@ -253,13 +247,11 @@ RasterTileCache::Intersection(int x0, int y0,
                               short h_origin,
                               const int slope_fact) const
 {
-  unsigned _x = (unsigned)x0;
-  unsigned _y = (unsigned)y0;
+  RasterLocation location(x0, y0);
 
-  if ((_x >= width) || (_y >= height)) {
+  if (location.x >= width || location.y >= height)
     // origin is outside overall bounds
-    return RasterLocation(_x, _y);
-  }
+    return location;
 
   // line algorithm parameters
   const int dx = abs(x1-x0);
@@ -294,18 +286,17 @@ RasterTileCache::Intersection(int x0, int y0,
   short h_int= h_origin;
   short h_terrain = 1;
 
-  unsigned last_clear_x = _x;
-  unsigned last_clear_y = _y;
+  RasterLocation last_clear_location = location;
   short last_clear_h = h_int;
 
   while (h_terrain>=0) {
 
     if (!step_counter) {
 
-      if ((_x >= width) || (_y >= height))
+      if (location.x >= width || location.y >= height)
         break; // outside bounds
 
-      const auto field_direct = GetFieldDirect(_x, _y);
+      const auto field_direct = GetFieldDirect(location.x, location.y);
       h_terrain = field_direct.first;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
@@ -317,17 +308,17 @@ RasterTileCache::Intersection(int x0, int y0,
 
       if (h_int < h_terrain) {
         if (refine_step<3) // can't refine any further
-          return RasterLocation(last_clear_x, last_clear_y);
+          return RasterLocation(last_clear_location.x, last_clear_location.y);
 
         // refine solution
-        return Intersection(last_clear_x, last_clear_y, _x, _y, last_clear_h, slope_fact);
+        return Intersection(last_clear_location.x, last_clear_location.y,
+                            location.x, location.y, last_clear_h, slope_fact);
       }
 
       if (h_int <= 0) 
         break; // reached max range
 
-      last_clear_x = _x;
-      last_clear_y = _y;
+      last_clear_location = location;
       last_clear_h = h_int;
     }
 
@@ -337,14 +328,14 @@ RasterTileCache::Intersection(int x0, int y0,
     const int e2 = 2*err;
     if (e2 > -dy) {
       err -= dy;
-      _x += sx;
+      location.x += sx;
       if (step_counter>0)
         step_counter--;
       total_steps++;
     }
     if (e2 < dx) {
       err += dx;
-      _y += sy;
+      location.y += sy;
       if (step_counter>0)
         step_counter--;
       total_steps++;

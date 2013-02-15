@@ -207,12 +207,12 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
   const short vh_origin = std::max(h_origin, (short)(h_destination-
                                                      ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
 
-  RasterLocation c_int = c_destination;
+  RasterLocation c_int;
   if (raster_tile_cache.FirstIntersection(c_origin.x, c_origin.y,
                                           c_destination.x, c_destination.y,
                                           vh_origin, h_destination,
                                           slope_fact, h_ceiling, h_safety,
-                                          c_int.x, c_int.y, h,
+                                          c_int, h,
                                           can_climb)) {
     bool changed = c_int != c_destination ||
       (h > h_destination && c_int == c_destination);

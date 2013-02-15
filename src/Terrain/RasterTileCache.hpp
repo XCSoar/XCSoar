@@ -220,7 +220,7 @@ public:
                          short h_dest,
                          const int slope_fact, const short h_ceiling,
                          const short h_safety,
-                         unsigned& int_x, unsigned& int_y, short &h_int,
+                         RasterLocation &_location, short &h_int,
                          const bool can_climb) const;
 
   gcc_pure RasterLocation
