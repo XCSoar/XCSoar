@@ -283,11 +283,10 @@ RasterTileCache::Intersection(int x0, int y0,
   printf("# step fine %d\n", step_fine);
 #endif
 
-  short h_int= h_origin;
   short h_terrain = 1;
 
   RasterLocation last_clear_location = location;
-  short last_clear_h = h_int;
+  short last_clear_h = h_origin;
 
   while (h_terrain>=0) {
 
@@ -304,7 +303,7 @@ RasterTileCache::Intersection(int x0, int y0,
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
 
       // current aircraft height
-      h_int = h_origin-dh;
+      const short h_int = h_origin-dh;
 
       if (h_int < h_terrain) {
         if (refine_step<3) // can't refine any further
