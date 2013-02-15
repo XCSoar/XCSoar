@@ -224,21 +224,15 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   return false;
 }
 
-#define ACCURATE_TERRAIN_INTERSECTION
-
 inline short
 RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
 {
   assert(px < width);
   assert(py < height);
 
-#ifdef ACCURATE_TERRAIN_INTERSECTION
-
   const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
   if (tile.IsEnabled())
     return tile.GetHeight(px, py);
-
-#endif
 
   // still not found, so go to overview
   tile_index = -1;
