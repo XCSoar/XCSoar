@@ -108,7 +108,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
 
     if (!step_counter) {
 
-      if ((_x >= width) || (_y >= height))
+      if (x_int >= width || y_int >= height)
         break; // outside bounds
 
       const auto field_direct = GetFieldDirect(x_int, y_int);
