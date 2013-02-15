@@ -47,11 +47,7 @@ RasterTileCache::FirstIntersection(int x0, int y0,
     // origin is outside overall bounds
     return false;
 
-  // remember index of active tile, so we dont need to scan each each time
-  // (unless the guess fails)
-  int tile_index = -1;
-
-  h_origin = std::max(h_origin, GetFieldDirect(x0, y0, tile_index));
+  h_origin = std::max(h_origin, GetFieldDirect(x0, y0).first);
   h_dest = std::max(h_dest, h_origin);
 
   // line algorithm parameters
@@ -115,8 +111,9 @@ RasterTileCache::FirstIntersection(int x0, int y0,
       if ((_x >= width) || (_y >= height))
         break; // outside bounds
 
-      h_terrain = GetFieldDirect(x_int, y_int, tile_index)+h_safety;
-      step_counter = tile_index<0? step_coarse: step_fine;
+      const auto field_direct = GetFieldDirect(x_int, y_int);
+      h_terrain = field_direct.first + h_safety;
+      step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
@@ -224,18 +221,17 @@ RasterTileCache::FirstIntersection(int x0, int y0,
   return false;
 }
 
-inline short
-RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_index) const
+inline std::pair<short, bool>
+RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 {
   assert(px < width);
   assert(py < height);
 
   const RasterTile &tile = tiles.Get(px / tile_width, py / tile_height);
   if (tile.IsEnabled())
-    return tile.GetHeight(px, py);
+    return std::make_pair(tile.GetHeight(px, py), true);
 
   // still not found, so go to overview
-  tile_index = -1;
 
   // The overview might not cover the whole tile, if width or height are not
   // a multiple of 2^OVERVIEW_BITS.
@@ -249,7 +245,7 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py, int& tile_
   if (y_overview == overview.GetHeight())
     y_overview--;
 
-  return overview.Get(x_overview, y_overview);
+  return std::make_pair(overview.Get(x_overview, y_overview), false);
 }
 
 RasterLocation
@@ -265,10 +261,6 @@ RasterTileCache::Intersection(int x0, int y0,
     // origin is outside overall bounds
     return RasterLocation(_x, _y);
   }
-
-  // remember index of active tile, so we dont need to scan each each time
-  // (unless the guess fails)
-  int tile_index = -1;
 
   // line algorithm parameters
   const int dx = abs(x1-x0);
@@ -314,8 +306,9 @@ RasterTileCache::Intersection(int x0, int y0,
       if ((_x >= width) || (_y >= height))
         break; // outside bounds
 
-      h_terrain = GetFieldDirect(_x, _y, tile_index);
-      step_counter = tile_index<0? step_coarse: step_fine;
+      const auto field_direct = GetFieldDirect(_x, _y);
+      h_terrain = field_direct.first;
+      step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
       const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
