@@ -109,6 +109,11 @@ public:
       i->second.old = true;
   }
 
+  void MarkAllOld() {
+    for (auto it = map.begin(), it_end = map.end(); it != it_end; ++it)
+      it->second.old = true;
+  }
+
   template<typename K>
   const_iterator Wait(const K &key, OperationEnvironment &env,
                       TimeoutClock &timeout) {
