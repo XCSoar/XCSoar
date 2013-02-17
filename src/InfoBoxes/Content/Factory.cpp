@@ -162,13 +162,13 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_HeightAGL
   {
-    N_("Altitude AGL"),
-    N_("Alt AGL"),
-    N_("This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
+    N_("Height AGL"),
+    N_("H AGL"),
+    N_("This is the navigation altitude minus the terrain elevation obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
     UpdateInfoBoxAltitudeAGL,
     altitude_infobox_panels,
-    e_H_Terrain, // H GND
-    e_HeightGPS, // H GPS
+    e_H_Terrain, // Terr Elev
+    e_HeightGPS, // Alt GPS
   },
 
   // e_Thermal_30s
@@ -354,7 +354,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_H_Terrain
   {
     N_("Terrain elevation"),
-    N_("H GND"),
+    N_("Terr Elev"),
     N_("This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
     UpdateInfoBoxTerrainHeight,
     e_H_Baro, // H Baro
@@ -490,8 +490,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
     UpdateInfoBoxAltitudeBaro,
     altitude_infobox_panels,
-    e_H_QFE, // QFE GPS
-    e_H_Terrain, // H GND
+    e_H_QFE, // H auto QFE
+    e_H_Terrain, // Terr Elev
   },
 
   // e_WP_Speed_MC
@@ -860,13 +860,13 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_H_QFE
   {
-    N_("QFE GPS"),
-    N_("QFE GPS"),
-    N_("Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."),
+    N_("Height on auto QFE"),
+    N_("H auto QFE"),
+    N_("Hight based on automatic QFE. Height is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground."),
     UpdateInfoBoxAltitudeQFE,
     altitude_infobox_panels,
     e_FlightLevel, // Flight Level
-    e_H_Baro, // H Baro
+    e_H_Baro, // Alt Baro
   },
 
   // e_GR_Avg
@@ -947,7 +947,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     UpdateInfoBoxAltitudeFlightLevel,
     altitude_infobox_panels,
     e_Barogram, // Barogram
-    e_H_QFE, // QFE GPS
+    e_H_QFE, // H auto QFE
   },
 
   // e_Barogram

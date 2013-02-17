@@ -105,7 +105,7 @@ namespace InfoBoxFactory
     e_Alternate_2_Name, /* Displays name and bearing to the second alternate landing location */
     e_Alternate_1_GR, /* Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy */
     /* 70..79 */
-    e_H_QFE, /* Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
+    e_H_QFE, /* Height on automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
     e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling */
     e_Experimental1, /* Experimental1 */
     e_OC_Distance, /* Online Contest Distance */
