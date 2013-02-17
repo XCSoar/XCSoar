@@ -201,8 +201,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("GR Cruise"),
     N_("The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
     UpdateInfoBoxGRCruise,
-    e_Fin_GR_TE, // Final LD
-    e_GR_Instantaneous, // LD Inst
+    e_Fin_GR_TE, // Final GR
+    e_GR_Instantaneous, // GR Inst
   },
 
   // e_Speed_GPS
@@ -399,7 +399,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   {
     N_("Wind speed"),
     N_("Wind V"),
-    N_("Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the InfoBox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
+    N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindSpeed,
     wind_infobox_panels,
     e_WindBearing_Est, // Wind B
@@ -410,7 +410,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   {
     N_("Wind bearing"),
     N_("Wind Brng"),
-    N_("Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the InfoBox is active."),
+    N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     UpdateInfoBoxWindBearing,
     wind_infobox_panels,
     HeadWindSimplified,
@@ -685,7 +685,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
     UpdateInfoBoxLDVario,
     e_GR_Avg, // GR Avg
-    e_WP_GR, // Next LD
+    e_WP_GR, // Next GR
   },
 
   // e_Speed
@@ -818,8 +818,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Fin GR"),
     N_("The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
     UpdateInfoBoxFinalGR,
-    e_WP_GR, // Next LD
-    e_Fin_GR_TE, // Fin LD
+    e_WP_GR, // Next GR
+    e_Fin_GR_TE, // Fin GR
   },
 
   // e_Alternate_1_Name
@@ -867,9 +867,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   {
     N_("GR average"),
     N_("GR Avg"),
-    N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of L/D the value is shown as +++ . You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closed to L/D INST, and higher values will be closed to L/D Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
+    N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of GR the value is shown as +++ . You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closed to GR Inst, and higher values will be closed to GR Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
     UpdateInfoBoxGRAvg,
-    e_GR_Instantaneous, // LD Inst
+    e_GR_Instantaneous, // GR Inst
     e_LD, // LD Vario
   },
 
@@ -1140,7 +1140,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   {
     N_("Wind arrow"),
     N_("Wind"),
-    N_("Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the InfoBox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
+    N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
     IBFHelper<InfoBoxContentWindArrow>::Create,
     WIND_ARROW,
     WIND_ARROW,
