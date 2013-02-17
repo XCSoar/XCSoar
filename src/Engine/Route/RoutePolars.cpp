@@ -114,15 +114,15 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
     return true;
 
   GeoPoint int_x;
-  short int_h;
+  int int_h;
   GeoPoint start = proj.Unproject(e.first);
   GeoPoint dest = proj.Unproject(e.second);
 
   assert(map);
 
-  if (!map->FirstIntersection(start, (short)e.first.altitude, dest,
-                              (short)e.second.altitude, (short)CalcVHeight(e),
-                              (short)climb_ceiling, (short)GetSafetyHeight(),
+  if (!map->FirstIntersection(start, (int)e.first.altitude, dest,
+                              (int)e.second.altitude, (int)CalcVHeight(e),
+                              (int)climb_ceiling, (int)GetSafetyHeight(),
                               int_x, int_h))
     return true;
 

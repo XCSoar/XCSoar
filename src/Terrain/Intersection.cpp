@@ -37,7 +37,7 @@ Copyright_License {
  * Replaces "water" samples with 0.
  */
 constexpr
-static short
+static int
 ReplaceWater0(short h)
 {
   return RasterBuffer::IsWater(h) ? 0 : h;
@@ -46,11 +46,11 @@ ReplaceWater0(short h)
 bool
 RasterTileCache::FirstIntersection(const int x0, const int y0,
                                    const int x1, const int y1,
-                                   short h_origin,
-                                   short h_dest,
-                                   const int slope_fact, const short h_ceiling,
-                                   const short h_safety,
-                                   RasterLocation &_location, short &_h,
+                                   int h_origin,
+                                   int h_dest,
+                                   const int slope_fact, const int h_ceiling,
+                                   const int h_safety,
+                                   RasterLocation &_location, int &_h,
                                    const bool can_climb) const
 {
   RasterLocation location(x0, y0);
@@ -66,7 +66,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
   }
 
   if (!RasterBuffer::IsSpecial(h_origin2))
-    h_origin = std::max(h_origin, h_origin2);
+    h_origin = std::max(h_origin, (int)h_origin2);
 
   h_dest = std::max(h_dest, h_origin);
 
@@ -117,7 +117,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
 
   // location of last point within ceiling limit that doesnt intersect
   RasterLocation last_clear_location = location;
-  short last_clear_h = h_origin;
+  int last_clear_h = h_origin;
 
   while (true) {
 
@@ -130,14 +130,14 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
       if (RasterBuffer::IsInvalid(field_direct.first))
         break;
 
-      const short h_terrain = ReplaceWater0(field_direct.first) + h_safety;
+      const int h_terrain = ReplaceWater0(field_direct.first) + h_safety;
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
-      const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
+      const int dh = (total_steps * slope_fact) >> RASTER_SLOPE_FACT;
 
       // current aircraft height
-      short h_int = dh + h_origin;
+      int h_int = dh + h_origin;
       if (can_climb) {
         h_int = std::min(h_int, h_dest);
       }
@@ -153,7 +153,7 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
         intersect_counter = 1;
 
         // when intersecting, consider origin to have started higher
-        const short h_jump = h_terrain - h_int;
+        const int h_jump = h_terrain - h_int;
         h_origin += h_jump;
 
         if (can_climb) {
@@ -265,7 +265,7 @@ RasterTileCache::GetFieldDirect(const unsigned px, const unsigned py) const
 RasterLocation
 RasterTileCache::Intersection(const int x0, const int y0,
                               const int x1, const int y1,
-                              const short h_origin,
+                              const int h_origin,
                               const int slope_fact) const
 {
   RasterLocation location(x0, y0);
@@ -305,7 +305,7 @@ RasterTileCache::Intersection(const int x0, const int y0,
 #endif
 
   RasterLocation last_clear_location = location;
-  short last_clear_h = h_origin;
+  int last_clear_h = h_origin;
 
   while (true) {
 
@@ -318,14 +318,14 @@ RasterTileCache::Intersection(const int x0, const int y0,
       if (RasterBuffer::IsInvalid(field_direct.first))
         break;
 
-      const short h_terrain = ReplaceWater0(field_direct.first);
+      const int h_terrain = ReplaceWater0(field_direct.first);
       step_counter = field_direct.second ? step_fine : step_coarse;
 
       // calculate height of glide so far
-      const short dh = (short)((total_steps*slope_fact)>>RASTER_SLOPE_FACT);
+      const int dh = (total_steps * slope_fact) >> RASTER_SLOPE_FACT;
 
       // current aircraft height
-      const short h_int = h_origin-dh;
+      const int h_int = h_origin - dh;
 
       if (h_int < h_terrain) {
         if (refine_step<3) // can't refine any further

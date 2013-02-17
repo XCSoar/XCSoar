@@ -108,11 +108,10 @@ public:
                 short *buffer, unsigned size, bool interpolate) const;
 
   gcc_pure
-  bool FirstIntersection(const GeoPoint &origin, const short h_origin,
-                         const GeoPoint &destination, const short h_destination,
-                         const short h_virt, const short h_ceiling,
-                         const short h_safety,
-                         GeoPoint& intx, short &h) const;
+  bool FirstIntersection(const GeoPoint &origin, int h_origin,
+                         const GeoPoint &destination, int h_destination,
+                         int h_virt, int h_ceiling, int h_safety,
+                         GeoPoint& intx, int &h) const;
 
   /**
    * Find location where aircraft hits the ground
@@ -128,8 +127,7 @@ public:
    */
   gcc_pure
   GeoPoint Intersection(const GeoPoint& origin,
-                        const short h_origin,
-                        const short h_glide,
+                        int h_origin, int h_glide,
                         const GeoPoint& destination) const;
 
 };

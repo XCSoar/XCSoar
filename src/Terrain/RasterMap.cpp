@@ -187,11 +187,11 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 }
 
 bool
-RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
-                             const GeoPoint &destination, const short h_destination,
-                             const short h_virt, const short h_ceiling,
-                             const short h_safety,
-                             GeoPoint& intx, short &h) const
+RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
+                             const GeoPoint &destination, const int h_destination,
+                             const int h_virt, const int h_ceiling,
+                             const int h_safety,
+                             GeoPoint &intx, int &h) const
 {
   const RasterLocation c_origin = projection.ProjectCoarse(origin);
   const RasterLocation c_destination = projection.ProjectCoarse(destination);
@@ -204,8 +204,9 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
   }
 
   const int slope_fact = (((int)h_virt) << RASTER_SLOPE_FACT) / c_diff;
-  const short vh_origin = std::max(h_origin, (short)(h_destination-
-                                                     ((c_diff*slope_fact)>>RASTER_SLOPE_FACT)));
+  const int vh_origin = std::max(h_origin,
+                                 h_destination
+                                 - ((c_diff * slope_fact) >> RASTER_SLOPE_FACT));
 
   RasterLocation c_int;
   if (raster_tile_cache.FirstIntersection(c_origin.x, c_origin.y,
@@ -228,8 +229,7 @@ RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
 
 GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
-                        const short h_origin,
-                        const short h_glide,
+                        const int h_origin, const int h_glide,
                         const GeoPoint& destination) const
 {
   const RasterLocation c_origin = projection.ProjectCoarse(origin);

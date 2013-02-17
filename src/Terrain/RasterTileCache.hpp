@@ -216,17 +216,17 @@ public:
 
   bool FirstIntersection(int origin_x, int origin_y,
                          int destination_x, int destination_y,
-                         short h_origin,
-                         short h_dest,
-                         const int slope_fact, const short h_ceiling,
-                         const short h_safety,
-                         RasterLocation &_location, short &h_int,
+                         int h_origin,
+                         int h_dest,
+                         const int slope_fact, const int h_ceiling,
+                         const int h_safety,
+                         RasterLocation &_location, int &h_int,
                          const bool can_climb) const;
 
   gcc_pure RasterLocation
   Intersection(int origin_x, int origin_y,
                int destination_x, int destination_y,
-               short h_origin, const int slope_fact) const;
+               int h_origin, const int slope_fact) const;
 
 protected:
   void LoadJPG2000(const char *path);
