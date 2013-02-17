@@ -37,7 +37,7 @@ SkyLinesTracking::Glue::Glue()
   , traffic_clock(fixed(60)), traffic_enabled(false)
 #endif
 {
-#ifdef HAVE_POSIX
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
   assert(io_thread != nullptr);
   client.SetIOThread(io_thread);
 #endif
