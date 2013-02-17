@@ -43,6 +43,8 @@ namespace Profile {
 }
 #endif
 
+#ifdef HAVE_LIVETRACK24
+
 void
 Profile::Load(LiveTrack24Settings &settings)
 {
@@ -52,15 +54,21 @@ Profile::Load(LiveTrack24Settings &settings)
   settings.password = Get(ProfileKeys::LiveTrack24Password, _T(""));
 }
 
+#endif
+
 void
 Profile::Load(TrackingSettings &settings)
 {
+#ifdef HAVE_LIVETRACK24
   Get(ProfileKeys::TrackingInterval, settings.interval);
   GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
+#endif
 #ifdef HAVE_SKYLINES_TRACKING
   Load(settings.skylines);
 #endif
+#ifdef HAVE_LIVETRACK24
   Load(settings.livetrack24);
+#endif
 }
 
 #endif /* HAVE_TRACKING */

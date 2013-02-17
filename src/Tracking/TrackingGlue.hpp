@@ -42,9 +42,17 @@ struct MoreData;
 struct DerivedInfo;
 
 class TrackingGlue final
-  : protected StandbyThread
+#if defined(HAVE_LIVETRACK24) || defined(HAVE_SKYLINES_TRACKING_HANDLER)
+  :
+#endif
+#ifdef HAVE_LIVETRACK24
+  protected StandbyThread
+#endif
+#if defined(HAVE_LIVETRACK24) && defined(HAVE_SKYLINES_TRACKING_HANDLER)
+  ,
+#endif
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  , private SkyLinesTracking::Handler
+  private SkyLinesTracking::Handler
 #endif
 {
   struct LiveTrack24State
@@ -73,6 +81,7 @@ class TrackingGlue final
 #endif
 #endif
 
+#ifdef HAVE_LIVETRACK24
   LiveTrack24State state;
 
   /**
@@ -87,17 +96,26 @@ class TrackingGlue final
   unsigned ground_speed;
   Angle track;
   bool flying, last_flying;
+#endif
 
 public:
   TrackingGlue();
+
+#ifdef HAVE_LIVETRACK24
   void StopAsync();
   void WaitStopped();
+#else
+  void StopAsync() {}
+  void WaitStopped() {}
+#endif
 
   void SetSettings(const TrackingSettings &_settings);
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
+#ifdef HAVE_LIVETRACK24
 protected:
   virtual void Tick();
+#endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 private:

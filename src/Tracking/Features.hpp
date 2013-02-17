@@ -28,6 +28,7 @@ Copyright_License {
 
 /* live tracking requires networking */
 #ifdef HAVE_HTTP
+#define HAVE_LIVETRACK24
 #define HAVE_TRACKING
 #endif
 
