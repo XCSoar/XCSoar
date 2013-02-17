@@ -78,10 +78,15 @@ ConvertDirectoryToRecordedFlightList(const DIRECTORY &dir,
 }
 
 static bool
-ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
+ReadFlightListInner(Port &port, unsigned bulkrate,
+                    RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
-  VLAPI vl(port, 115200L, env);
+  /* Note that the Volkslogger can only download the flight list
+   * with normal IO rate of 9600. The bulkrate setting has no effect
+   * here.
+   */
+  VLAPI vl(port, bulkrate, env);
 
   env.SetProgressRange(10);
   if (vl.connect(20) != VLA_ERR_NOERR)
@@ -106,12 +111,12 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 }
 
 static bool
-DownloadFlightInner(Port &port,
+DownloadFlightInner(Port &port, unsigned bulkrate,
                     const RecordedFlightInfo &flight,
                     const TCHAR *path,
                     OperationEnvironment &env)
 {
-  VLAPI vl(port, 115200L, env);
+  VLAPI vl(port, bulkrate, env);
 
   if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
@@ -140,7 +145,7 @@ VolksloggerDevice::ReadFlightList(RecordedFlightList &flight_list,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
-  bool success = ReadFlightListInner(port, flight_list, env);
+  bool success = ReadFlightListInner(port, bulkrate, flight_list, env);
 
   // restore baudrate
   if (old_baud_rate != 0)
@@ -163,7 +168,8 @@ VolksloggerDevice::DownloadFlight(const RecordedFlightInfo &flight,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
-  bool success = DownloadFlightInner(port, flight, path, env);
+  bool success = DownloadFlightInner(port, bulkrate,
+                                     flight, path, env);
   // restore baudrate
   if (old_baud_rate != 0)
      port.SetBaudrate(old_baud_rate);
