@@ -58,7 +58,16 @@ RasterTileCache::FirstIntersection(const int x0, const int y0,
     // origin is outside overall bounds
     return false;
 
-  h_origin = std::max(h_origin, GetFieldDirect(x0, y0).first);
+  const short h_origin2 = GetFieldDirect(x0, y0).first;
+  if (RasterBuffer::IsInvalid(h_origin2)) {
+    _location = location;
+    _h = h_origin;
+    return true;
+  }
+
+  if (!RasterBuffer::IsSpecial(h_origin2))
+    h_origin = std::max(h_origin, h_origin2);
+
   h_dest = std::max(h_dest, h_origin);
 
   // line algorithm parameters
