@@ -74,7 +74,9 @@ TrackingGlue::WaitStopped()
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
+#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetSettings(_settings.skylines);
+#endif
 
   if (_settings.livetrack24.server != settings.livetrack24.server ||
       _settings.livetrack24.username != settings.livetrack24.username ||
@@ -97,7 +99,9 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
+#ifdef HAVE_SKYLINES_TRACKING
   skylines.Tick(basic);
+#endif
 
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */

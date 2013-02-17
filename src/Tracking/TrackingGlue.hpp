@@ -65,10 +65,12 @@ class TrackingGlue final
 
   TrackingSettings settings;
 
+#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Glue skylines;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SkyLinesTracking::Data skylines_data;
+#endif
 #endif
 
   LiveTrack24State state;
