@@ -343,9 +343,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_Fin_GR_TE
   {
-    N_("Final GR (TE) deprecated"),
-    N_("---"),
-    N_("Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box."),
+    _T("Final GR (TE) deprecated"),
+    _T("---"),
+    _T("Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box."),
     UpdateInfoBoxFinalGR,
     e_Fin_GR, // Final GR
     e_GR_Cruise, // GR Cruise
