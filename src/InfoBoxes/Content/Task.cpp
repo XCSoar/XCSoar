@@ -460,27 +460,6 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxFinalGRTE(InfoBoxData &data)
-{
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
-    data.SetInvalid();
-    return;
-  }
-
-  fixed gradient = task_stats.total.gradient;
-
-  if (!positive(gradient)) {
-    data.SetValue(_T("+++"));
-    return;
-  }
-  if (::GradientValid(gradient))
-    data.SetValueFromGlideRatio(gradient);
-  else
-    data.SetInvalid();
-}
-
-void
 UpdateInfoBoxFinalGR(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;

@@ -82,9 +82,6 @@ void
 UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data);
 
 void
-UpdateInfoBoxFinalGRTE(InfoBoxData &data);
-
-void
 UpdateInfoBoxFinalGR(InfoBoxData &data);
 
 void

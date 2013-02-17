@@ -337,10 +337,10 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_Fin_GR_TE
   {
-    N_("Final GR"),
-    N_("Fin GR"),
-    N_("The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
-    UpdateInfoBoxFinalGRTE,
+    N_("Final GR (TE) deprecated"),
+    N_("---"),
+    N_("Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box."),
+    UpdateInfoBoxFinalGR,
     e_Fin_GR, // Final GR
     e_GR_Cruise, // GR Cruise
   },
