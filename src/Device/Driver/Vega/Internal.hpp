@@ -39,7 +39,7 @@ private:
 
   Vega::VolatileData volatile_data;
 
-  DeviceSettingsMap<int> settings;
+  DeviceSettingsMap<std::string, int> settings;
 
 public:
   VegaDevice(Port &_port)

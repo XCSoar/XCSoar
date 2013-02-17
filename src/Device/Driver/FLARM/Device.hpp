@@ -62,7 +62,7 @@ class FlarmDevice: public AbstractDevice
   /**
    * Settings that were received in PDVSC sentences.
    */
-  DeviceSettingsMap<std::string> settings;
+  DeviceSettingsMap<std::string, std::string> settings;
 
 public:
   FlarmDevice(Port &_port)

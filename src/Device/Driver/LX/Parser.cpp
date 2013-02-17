@@ -197,7 +197,7 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
  * Parse the $PLXV0 sentence (LXNav V7).
  */
 static bool
-PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string, std::string> &settings)
 {
   char name[64];
   line.Read(name, ARRAY_SIZE(name));
@@ -234,7 +234,7 @@ ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
 static void
 PLXVC(NMEAInputLine &line, DeviceInfo &device,
       DeviceInfo &secondary_device,
-      DeviceSettingsMap<std::string> &settings)
+      DeviceSettingsMap<std::string, std::string> &settings)
 {
   char key[64];
   line.Read(key, ARRAY_SIZE(key));

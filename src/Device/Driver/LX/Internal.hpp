@@ -79,12 +79,12 @@ class LXDevice: public AbstractDevice
   /**
    * Settings that were received in PLXV0 (LXNAV V7) sentences.
    */
-  DeviceSettingsMap<std::string> v7_settings;
+  DeviceSettingsMap<std::string, std::string> v7_settings;
 
   /**
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
    */
-  DeviceSettingsMap<std::string> nano_settings;
+  DeviceSettingsMap<std::string, std::string> nano_settings;
 
   Mutex mutex;
   Mode mode;
