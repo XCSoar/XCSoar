@@ -56,13 +56,15 @@ StatsComputer::DoLogging(const MoreData &basic,
                               const DerivedInfo &calculated)
 {
   /// @todo consider putting this sanity check inside Parser
-  if (basic.location_available && last_location.IsValid() &&
-      basic.location.Distance(last_location) > fixed(200))
-    // prevent bad fixes from being logged or added to OLC store
-    return false;
+  bool location_jump = basic.location_available && last_location.IsValid() &&
+                       basic.location.Distance(last_location) > fixed(200);
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
+
+  if (location_jump || !basic.location_available)
+    // prevent bad fixes from being logged or added to OLC store
+    return false;
 
   if (calculated.flight.flying &&
       stats_clock.CheckAdvance(basic.time)) {
