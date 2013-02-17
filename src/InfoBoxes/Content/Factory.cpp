@@ -177,7 +177,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_Bearing
   {
-    N_("Bearing"),
+    N_("Next Bearing"),
     N_("Bearing"),
     N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
     UpdateInfoBoxBearing,
@@ -420,7 +420,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_AA_Time
   {
     N_("AAT time"),
-    N_("AAT time"),
+    N_("AAT Time"),
     N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
     UpdateInfoBoxTaskAATime,
     e_AA_TimeDiff, // AA dTime
@@ -681,7 +681,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_LD
   {
     N_("L/D vario"),
-    N_("L/D vario"),
+    N_("L/D Vario"),
     N_("Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
     UpdateInfoBoxLDVario,
     e_GR_Avg, // GR Avg
@@ -781,7 +781,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_Climb_Avg
   {
     N_("Thermal average over all"),
-    N_("TC All"),
+    N_("TAll Avg"),
     N_("Time-average climb rate in all thermals."),
     UpdateInfoBoxThermalAllAvg,
     e_VerticalSpeed_GPS, // Vario
@@ -916,7 +916,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_WP_H
   {
     N_("Next altitude arrival"),
-    N_("WP alt.A"),
+    N_("WP AltA"),
     N_("Absolute arrival altitude at the next waypoint in final glide.  For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextAltitudeArrival,
     e_WP_AltReq, // WP AltR
