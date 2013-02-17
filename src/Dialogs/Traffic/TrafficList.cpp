@@ -103,6 +103,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     GeoVector vector;
 
+    /**
+     * The display name of the SkyLines account.
+     */
+    std::string name;
+
     explicit Item(FlarmId _id)
       :id(_id),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -117,12 +122,13 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    explicit Item(uint32_t _id, const GeoPoint &_location)
+    explicit Item(uint32_t _id, const GeoPoint &_location,
+                  std::string &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
        color(FlarmColor::COUNT),
        loaded(false),
        location(_location),
-       vector(GeoVector::Invalid()) {
+       vector(GeoVector::Invalid()), name(std::move(_name)) {
       assert(IsSkyLines());
     }
 #endif
@@ -390,7 +396,12 @@ TrafficListWidget::UpdateList()
       const auto &data = tracking->GetSkyLinesData();
       const ScopeLock protect(data.mutex);
       for (const auto &i : data.traffic) {
-        items.emplace_back(i.first, i.second.location);
+        const auto name_i = data.user_names.find(i.first);
+        std::string name = name_i != data.user_names.end()
+          ? name_i->second
+          : std::string();
+
+        items.emplace_back(i.first, i.second.location, std::move(name));
         Item &item = items.back();
 
         if (i.second.location.IsValid() &&
@@ -551,7 +562,10 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       tmp.Format(_T("%s"), tmp_id);
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   } else if (item.IsSkyLines()) {
-    tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
+    if (!item.name.empty())
+      tmp = item.name.c_str();
+    else
+      tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
 #endif
   } else {
     tmp = _T("?");

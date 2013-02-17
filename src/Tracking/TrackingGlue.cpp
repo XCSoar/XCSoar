@@ -209,12 +209,32 @@ TrackingGlue::Tick()
 }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                         const GeoPoint &location, int altitude)
 {
-  const ScopeLock protect(skylines_data.mutex);
-  const SkyLinesTracking::Data::Traffic traffic(location, altitude);
-  skylines_data.traffic[pilot_id] = traffic;
+  bool user_known;
+
+  {
+    const ScopeLock protect(skylines_data.mutex);
+    const SkyLinesTracking::Data::Traffic traffic(location, altitude);
+    skylines_data.traffic[pilot_id] = traffic;
+
+    user_known = skylines_data.IsUserKnown(pilot_id);
+  }
+
+  if (!user_known)
+    /* we don't know this user's name yet - try to find it out by
+       asking the server */
+    skylines.RequestUserName(pilot_id);
 }
+
+void
+TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
+{
+  const ScopeLock protect(skylines_data.mutex);
+  skylines_data.user_names[user_id] = name;
+}
+
 #endif

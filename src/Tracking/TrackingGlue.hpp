@@ -102,6 +102,7 @@ private:
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override;
+    virtual void OnUserName(uint32_t user_id, const TCHAR *name) override;
 
 public:
   const SkyLinesTracking::Data &GetSkyLinesData() const {

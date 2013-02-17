@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Geo/GeoPoint.hpp"
 #include "Thread/Mutex.hpp"
+#include "Util/tstring.hpp"
+#include "Compiler.h"
 
 #include <map>
 
@@ -46,6 +48,17 @@ namespace SkyLinesTracking {
     mutable Mutex mutex;
 
     std::map<uint32_t, Traffic> traffic;
+
+    /**
+     * A database of user-id to display-name.  An empty string means
+     * the server has failed/refused to supply a name.
+     */
+    std::map<uint32_t, tstring> user_names;
+
+    gcc_pure
+    bool IsUserKnown(uint32_t id) const {
+      return user_names.find(id) != user_names.end();
+    }
   };
 }
 

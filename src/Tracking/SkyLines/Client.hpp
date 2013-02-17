@@ -36,6 +36,7 @@ class IOThread;
 
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
+  struct UserNameResponsePacket;
 
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -80,10 +81,13 @@ namespace SkyLinesTracking {
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
     bool SendTrafficRequest(bool followees, bool club);
+    bool SendUserNameRequest(uint32_t user_id);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   private:
     void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
+    void OnUserNameReceived(const UserNameResponsePacket &packet,
+                            size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from FileEventHandler */
