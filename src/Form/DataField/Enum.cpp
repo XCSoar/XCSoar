@@ -64,6 +64,13 @@ DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
   mHelp = _help ? _tcsdup(_help) : NULL;
 }
 
+unsigned
+DataFieldEnum::GetValue() const
+{
+  assert(value < entries.size());
+  return entries[value].GetId();
+}
+
 int
 DataFieldEnum::GetAsInteger() const
 {

@@ -106,6 +106,9 @@ public:
     value(0) {}
 
   gcc_pure
+  unsigned GetValue() const;
+
+  gcc_pure
   bool Exists(const TCHAR *text) const {
     return Find(text) >= 0;
   }

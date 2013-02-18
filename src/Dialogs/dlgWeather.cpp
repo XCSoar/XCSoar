@@ -81,12 +81,12 @@ dlgWeatherShowModal()
   wp = (WndProperty *)wf->FindByName(_T("prpTime"));
   assert(wp != nullptr);
   dfe = (DataFieldEnum *)wp->GetDataField();
-  RASP.SetTime(dfe->GetAsInteger());
+  RASP.SetTime(dfe->GetValue());
 
   wp = (WndProperty *)wf->FindByName(_T("prpDisplayItem"));
   assert(wp != nullptr);
   dfe = (DataFieldEnum *)wp->GetDataField();
-  RASP.SetParameter(dfe->GetAsInteger());
+  RASP.SetParameter(dfe->GetValue());
 
   delete wf;
 }

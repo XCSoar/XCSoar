@@ -151,7 +151,7 @@ OnSelectAccess(DataField *Sender, DataField::DataAccessMode Mode)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
-  SetCurrentInfoBox(dfe.GetAsInteger());
+  SetCurrentInfoBox(dfe.GetValue());
 }
 
 static void
@@ -159,7 +159,7 @@ OnContentAccess(DataField *Sender, DataField::DataAccessMode Mode)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
-  data.contents[current_preview] = (InfoBoxFactory::Type)dfe.GetAsInteger();
+  data.contents[current_preview] = (InfoBoxFactory::Type)dfe.GetValue();
   previews[current_preview].Invalidate();
   RefreshEditContentDescription();
 }
@@ -212,7 +212,8 @@ static void
 OnContentHelp(WindowControl *Sender)
 {
   WndProperty *wp = (WndProperty*)Sender;
-  InfoBoxFactory::Type type = (InfoBoxFactory::Type)wp->GetDataField()->GetAsInteger();
+  const DataFieldEnum &df = *(const DataFieldEnum *)wp->GetDataField();
+  InfoBoxFactory::Type type = (InfoBoxFactory::Type)df.GetValue();
   if (type >= InfoBoxFactory::NUM_TYPES)
     return;
 

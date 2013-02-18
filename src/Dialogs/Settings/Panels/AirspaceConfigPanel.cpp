@@ -167,7 +167,8 @@ void
 AirspaceConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(AirspaceDisplay, df)) {
-    AirspaceDisplayMode mode = (AirspaceDisplayMode)df.GetAsInteger();
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    AirspaceDisplayMode mode = (AirspaceDisplayMode)dfe.GetValue();
     ShowDisplayControls(mode);
   } else if (IsDataField(AirspaceWarnings, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;

@@ -530,9 +530,10 @@ CanSendSettings(const DataField &df)
 
 gcc_pure
 static DeviceConfig::PortType
-GetPortType(DataField &df)
+GetPortType(const DataField &df)
 {
-  unsigned port = df.GetAsInteger();
+  const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+  const unsigned port = dfe.GetValue();
 
   if (port < num_port_types)
     return port_types[port].type;
@@ -684,7 +685,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 static bool
 FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
 {
-  unsigned value = df.GetAsInteger();
+  unsigned value = df.GetValue();
 
   /* decode the port type from the upper 16 bits of the id; we don't
      need the rest, because that's just some serial we don't care

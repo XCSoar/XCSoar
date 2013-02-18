@@ -294,7 +294,7 @@ GetValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
-  switch(wp->GetDataField()->GetAsInteger()) {
+  switch (((const DataFieldEnum *)wp->GetDataField())->GetValue()) {
   case 1:
     global_wpt->flags.turn_point = true;
     global_wpt->type = Waypoint::Type::AIRFIELD;
