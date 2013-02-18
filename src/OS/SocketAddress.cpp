@@ -55,6 +55,7 @@ SocketAddress::MakePort4(unsigned port)
   SocketAddress address;
   auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
   sin.sin_family = AF_INET;
+  sin.sin_addr.s_addr = INADDR_ANY;
   sin.sin_port = htons(port);
   std::fill(sin.sin_zero, sin.sin_zero + ARRAY_SIZE(sin.sin_zero), 0);
   address.length = sizeof(sin);
