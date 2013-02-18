@@ -24,15 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_FEATURES_HPP
 #define XCSOAR_TRACKING_SKYLINES_FEATURES_HPP
 
-#include "Tracking/Features.hpp"
+#ifndef _WIN32_WCE
 
-#ifdef HAVE_TRACKING
 #define HAVE_SKYLINES_TRACKING
 
 #ifdef HAVE_POSIX
 #define HAVE_SKYLINES_TRACKING_HANDLER
 #endif
 
-#endif /* HAVE_TRACKING */
+#endif
 
 #endif
