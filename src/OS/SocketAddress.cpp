@@ -62,6 +62,8 @@ SocketAddress::MakePort4(unsigned port)
   return address;
 }
 
+#ifndef _WIN32_WCE
+
 bool
 SocketAddress::Lookup(const char *host, const char *service, int socktype)
 {
@@ -82,3 +84,5 @@ SocketAddress::Lookup(const char *host, const char *service, int socktype)
   freeaddrinfo(ai);
   return true;
 }
+
+#endif
