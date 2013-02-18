@@ -80,7 +80,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
     client.Close();
   else if (!client.IsDefined())
     // TODO: fix hard-coded IP address:
-    client.Open("78.47.50.46");
+    client.Open(SocketAddress::MakeIPv4Port(78, 47, 50, 46,
+                                            Client::GetDefaultPort()));
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   traffic_enabled = settings.traffic_enabled;

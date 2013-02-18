@@ -62,11 +62,14 @@ SkyLinesTracking::Client::SetHandler(Handler *_handler)
 #endif
 
 bool
-SkyLinesTracking::Client::Open(const char *host)
+SkyLinesTracking::Client::Open(const SocketAddress &_address)
 {
+  assert(_address.IsDefined());
+
   Close();
 
-  if (!address.Lookup(host, "5597", SOCK_DGRAM) || !socket.CreateUDP())
+  address = _address;
+  if (!socket.CreateUDP())
     return false;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER

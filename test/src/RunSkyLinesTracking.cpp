@@ -80,6 +80,12 @@ main(int argc, char *argv[])
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
 
+  SocketAddress address;
+  if (!address.Lookup(host, "5597", SOCK_DGRAM)) {
+    fprintf(stderr, "Failed to look up: %s\n", host);
+    return EXIT_FAILURE;
+  }
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   InitialiseIOThread();
 #endif
@@ -94,7 +100,7 @@ main(int argc, char *argv[])
 #endif
 
   client.SetKey(ParseUint64(key, NULL, 16));
-  if (!client.Open(host)) {
+  if (!client.Open(address)) {
     fprintf(stderr, "Failed to create client\n");
     return EXIT_FAILURE;
   }

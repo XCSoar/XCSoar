@@ -33,6 +33,7 @@ Copyright_License {
 
 struct NMEAInfo;
 class IOThread;
+class SocketAddress;
 
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
@@ -62,6 +63,11 @@ namespace SkyLinesTracking {
       key(0) {}
     ~Client() { Close(); }
 
+    constexpr
+    static unsigned GetDefaultPort() {
+      return 5597;
+    }
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void SetIOThread(IOThread *io_thread);
     void SetHandler(Handler *handler);
@@ -75,7 +81,7 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(const char *host);
+    bool Open(const SocketAddress &_address);
     void Close();
 
     bool SendFix(const NMEAInfo &basic);
