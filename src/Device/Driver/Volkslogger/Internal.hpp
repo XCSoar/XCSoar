@@ -36,6 +36,10 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env) override;
+  virtual bool ReadFlightList(RecordedFlightList &flight_list,
+                              OperationEnvironment &env) override;
+  virtual bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                              OperationEnvironment &env) override;
 };
 
 #endif

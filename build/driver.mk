@@ -12,7 +12,8 @@ VOLKSLOGGER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapi2.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlapihlp.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/vlutils.cpp \
-	$(DRIVER_SRC_DIR)/Volkslogger/vlconv.cpp
+	$(DRIVER_SRC_DIR)/Volkslogger/vlconv.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Logger.cpp
 
 CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Protocol.cpp \
