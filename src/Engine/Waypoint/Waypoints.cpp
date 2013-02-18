@@ -90,6 +90,16 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
   VisitPrefix(normalized, adapter);
 }
 
+TCHAR *
+Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
+                                                     TCHAR *dest,
+                                                     size_t max_length) const
+{
+  TCHAR normalized[_tcslen(prefix) + 1];
+  NormalizeSearchString(normalized, prefix);
+  return Suggest(normalized, dest, max_length);
+}
+
 void
 Waypoints::WaypointNameTree::Add(const Waypoint &wp)
 {

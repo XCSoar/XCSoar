@@ -64,6 +64,8 @@ class Waypoints: private NonCopyable
   public:
     const Waypoint *Get(const TCHAR *name) const;
     void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
+    TCHAR *SuggestNormalisedPrefix(const TCHAR *prefix,
+                                   TCHAR *dest, size_t max_length) const;
     void Add(const Waypoint &wp);
     void Remove(const Waypoint &wp);
   };
@@ -282,7 +284,7 @@ public:
   gcc_pure
   TCHAR *SuggestNamePrefix(const TCHAR *prefix,
                            TCHAR *dest, size_t max_length) const {
-    return name_tree.Suggest(prefix, dest, max_length);
+    return name_tree.SuggestNormalisedPrefix(prefix, dest, max_length);
   }
 
   /**
