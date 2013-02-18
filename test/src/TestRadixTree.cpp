@@ -41,7 +41,7 @@ static int
 all_sum(const RadixTree<int> &rt)
 {
   Sum sum;
-  rt.visit_all(sum);
+  rt.VisitAll(sum);
   return sum.value;
 }
 
@@ -49,7 +49,7 @@ static int
 prefix_sum(const RadixTree<int> &rt, const TCHAR *prefix)
 {
   Sum sum;
-  rt.visit_prefix(prefix, sum);
+  rt.VisitPrefix(prefix, sum);
   return sum.value;
 }
 
@@ -69,7 +69,7 @@ static void
 check_ascending_keys(const RadixTree<T> &tree)
 {
   AscendingKeyVisitor<T> visitor;
-  tree.visit_all_pairs(visitor);
+  tree.VisitAllPairs(visitor);
 }
 
 int main(int argc, char **argv)
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   TCHAR buffer[64], *suggest;
 
   RadixTree<int> irt;
-  irt.add(_T("foo"), 42);
+  irt.Add(_T("foo"), 42);
   ok1(all_sum(irt) == 42);
   ok1(prefix_sum(irt, _T("")) == 42);
   ok1(prefix_sum(irt, _T("f")) == 42);
@@ -87,39 +87,39 @@ int main(int argc, char **argv)
   ok1(prefix_sum(irt, _T("foo")) == 42);
   ok1(prefix_sum(irt, _T("foobar")) == 0);
 
-  irt.add(_T("foa"), 0);
+  irt.Add(_T("foa"), 0);
   ok1(all_sum(irt) == 42);
   check_ascending_keys(irt);
 
-  suggest = irt.suggest(_T("xyz"), buffer, 64);
+  suggest = irt.Suggest(_T("xyz"), buffer, 64);
   ok1(suggest == NULL);
 
-  suggest = irt.suggest(_T(""), buffer, 64);
+  suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("f")) == 0);
 
-  suggest = irt.suggest(_T("f"), buffer, 64);
+  suggest = irt.Suggest(_T("f"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("o")) == 0);
 
-  suggest = irt.suggest(_T("foo"), buffer, 64);
+  suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("")) == 0);
 
-  irt.add(_T("bar"), 1);
+  irt.Add(_T("bar"), 1);
   ok1(all_sum(irt) == 43);
   ok1(prefix_sum(irt, _T("")) == 43);
   ok1(prefix_sum(irt, _T("f")) == 42);
 
-  suggest = irt.suggest(_T(""), buffer, 64);
+  suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("bf")) == 0);
 
-  suggest = irt.suggest(_T("ba"), buffer, 64);
+  suggest = irt.Suggest(_T("ba"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("r")) == 0);
 
-  irt.add(_T("foo"), 2);
+  irt.Add(_T("foo"), 2);
   ok1(all_sum(irt) == 45);
   ok1(prefix_sum(irt, _T("")) == 45);
   ok1(prefix_sum(irt, _T("f")) == 44);
@@ -127,82 +127,82 @@ int main(int argc, char **argv)
   ok1(prefix_sum(irt, _T("foo")) == 44);
   ok1(prefix_sum(irt, _T("foobar")) == 0);
 
-  ok1(irt.get(_T("foo"), 0) == 42 || irt.get(_T("foo"), 0) == 2);
+  ok1(irt.Get(_T("foo"), 0) == 42 || irt.Get(_T("foo"), 0) == 2);
   ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 42)) == 42);
   ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 2)) == 2);
   ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 22)) == 0);
 
-  suggest = irt.suggest(_T("foo"), buffer, 64);
+  suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("")) == 0);
 
-  irt.add(_T("baz"), 3);
+  irt.Add(_T("baz"), 3);
   ok1(all_sum(irt) == 48);
   ok1(prefix_sum(irt, _T("b")) == 4);
   ok1(prefix_sum(irt, _T("ba")) == 4);
   ok1(prefix_sum(irt, _T("bar")) == 1);
   ok1(prefix_sum(irt, _T("baz")) == 3);
 
-  suggest = irt.suggest(_T(""), buffer, 64);
+  suggest = irt.Suggest(_T(""), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("bf")) == 0);
 
-  suggest = irt.suggest(_T("ba"), buffer, 64);
+  suggest = irt.Suggest(_T("ba"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("rz")) == 0);
 
-  irt.add(_T("foobar"), 4);
+  irt.Add(_T("foobar"), 4);
   ok1(all_sum(irt) == 52);
   ok1(prefix_sum(irt, _T("f")) == 48);
   ok1(prefix_sum(irt, _T("fo")) == 48);
   ok1(prefix_sum(irt, _T("foo")) == 48);
   ok1(prefix_sum(irt, _T("foobar")) == 4);
 
-  suggest = irt.suggest(_T("foo"), buffer, 64);
+  suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("b")) == 0);
 
-  irt.add(_T("fo"), 5);
+  irt.Add(_T("fo"), 5);
   ok1(all_sum(irt) == 57);
   ok1(prefix_sum(irt, _T("f")) == 53);
   ok1(prefix_sum(irt, _T("fo")) == 53);
   ok1(prefix_sum(irt, _T("foo")) == 48);
   ok1(prefix_sum(irt, _T("foobar")) == 4);
 
-  irt.add(_T("fooz"), 6);
+  irt.Add(_T("fooz"), 6);
   ok1(all_sum(irt) == 63);
   ok1(prefix_sum(irt, _T("f")) == 59);
   ok1(prefix_sum(irt, _T("fo")) == 59);
   ok1(prefix_sum(irt, _T("foo")) == 54);
 
-  suggest = irt.suggest(_T("foo"), buffer, 64);
+  suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("bz")) == 0);
 
-  irt.add(_T("fooy"), 7);
+  irt.Add(_T("fooy"), 7);
   ok1(all_sum(irt) == 70);
   ok1(prefix_sum(irt, _T("f")) == 66);
   ok1(prefix_sum(irt, _T("fo")) == 66);
   ok1(prefix_sum(irt, _T("foo")) == 61);
 
-  suggest = irt.suggest(_T("foo"), buffer, 64);
+  suggest = irt.Suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);
   ok1(_tcscmp(suggest, _T("byz")) == 0);
 
-  irt.add(_T("foo"), 8);
+  irt.Add(_T("foo"), 8);
   ok1(all_sum(irt) == 78);
   ok1(prefix_sum(irt, _T("foo")) == 69);
 
-  irt.remove(_T("foo"), 42);
+  irt.Remove(_T("foo"), 42);
   ok1(all_sum(irt) == 36);
   ok1(prefix_sum(irt, _T("foo")) == 27);
 
-  irt.remove(_T("foo"));
+  irt.Remove(_T("foo"));
   ok1(all_sum(irt) == 26);
   ok1(prefix_sum(irt, _T("")) == 26);
   ok1(prefix_sum(irt, _T("foo")) == 17);
 
-  irt.add(_T(""), 9);
+  irt.Add(_T(""), 9);
   ok1(all_sum(irt) == 35);
   ok1(prefix_sum(irt, _T("")) == 35);
   ok1(prefix_sum(irt, _T("foo")) == 17);

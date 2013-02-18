@@ -133,8 +133,8 @@ struct EventBuilder {
         
         if (valid) {
           // One entry per key: delete old, create new
-          config.Gesture2Event.remove(data.c_str());
-          config.Gesture2Event.add(data.c_str(), event_id);
+          config.Gesture2Event.Remove(data.c_str());
+          config.Gesture2Event.Add(data.c_str(), event_id);
         } else
           LogStartUp(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
 

@@ -105,7 +105,7 @@ apply_defaults(InputConfig &input_config,
             input_config.events.begin() + 1);
 
   while (default_gesture2event->event > 0) {
-    input_config.Gesture2Event.add(default_gesture2event->data,
+    input_config.Gesture2Event.Add(default_gesture2event->data,
                                    default_gesture2event->event);
     ++default_gesture2event;
   }

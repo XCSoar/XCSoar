@@ -36,7 +36,7 @@ InputConfig::SetDefaults()
 
   std::fill(&Key2Event[0][0], &Key2Event[MAX_MODE][MAX_KEY], 0);
 
-  Gesture2Event.clear();
+  Gesture2Event.Clear();
 
   std::fill(&GC2Event[0], &GC2Event[GCE_COUNT], 0);
   std::fill(&N2Event[0], &N2Event[NE_COUNT], 0);

@@ -343,7 +343,7 @@ InputEvents::processKey(unsigned key_code)
 unsigned
 InputEvents::gesture_to_event(const TCHAR *data)
 {
-  return input_config.Gesture2Event.get(data, 0);
+  return input_config.Gesture2Event.Get(data, 0);
 }
 
 bool

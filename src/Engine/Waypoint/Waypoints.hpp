@@ -282,7 +282,7 @@ public:
   gcc_pure
   TCHAR *SuggestNamePrefix(const TCHAR *prefix,
                            TCHAR *dest, size_t max_length) const {
-    return name_tree.suggest(prefix, dest, max_length);
+    return name_tree.Suggest(prefix, dest, max_length);
   }
 
   /**
