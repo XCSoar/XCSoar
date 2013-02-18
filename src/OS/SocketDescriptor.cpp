@@ -34,7 +34,6 @@
 #include <string.h>
 
 #ifdef HAVE_POSIX
-#include <netinet/in.h>
 #include <sys/socket.h>
 #else
 #include <winsock2.h>
@@ -144,13 +143,9 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 bool
 SocketDescriptor::BindPort(unsigned port)
 {
-  struct sockaddr_in address;
-  memset(&address, 0, sizeof(address));
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons((uint16_t)port);
+  SocketAddress address = SocketAddress::MakePort4(port);
 
-  return bind(Get(), (const struct sockaddr *)&address, sizeof(address)) == 0;
+  return bind(Get(), address, address.GetLength()) == 0;
 }
 
 #ifndef _WIN32_WCE
