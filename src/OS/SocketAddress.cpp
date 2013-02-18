@@ -50,16 +50,22 @@ SocketAddress::operator==(const SocketAddress &other) const
 }
 
 SocketAddress
-SocketAddress::MakePort4(unsigned port)
+SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
 {
   SocketAddress address;
   auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
   sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = INADDR_ANY;
   sin.sin_port = htons(port);
+  sin.sin_addr.s_addr = htonl(ip);
   std::fill(sin.sin_zero, sin.sin_zero + ARRAY_SIZE(sin.sin_zero), 0);
   address.length = sizeof(sin);
   return address;
+}
+
+SocketAddress
+SocketAddress::MakePort4(unsigned port)
+{
+  return MakeIPv4Port(INADDR_ANY, port);
 }
 
 #ifndef _WIN32_WCE

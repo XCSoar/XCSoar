@@ -33,6 +33,7 @@
 #include "Compiler.h"
 
 #include <assert.h>
+#include <stdint.h>
 
 #ifdef HAVE_POSIX
 #include <sys/socket.h>
@@ -49,6 +50,22 @@ class SocketAddress {
 
 public:
   SocketAddress() = default;
+
+  /**
+   * Creates a #SocketAddress with the specified IPv4 address and
+   * port.
+   *
+   * @parm ip the IPv4 address in host byte order
+   */
+  gcc_const
+  static SocketAddress MakeIPv4Port(uint32_t ip, unsigned port);
+
+  gcc_const
+  static SocketAddress MakeIPv4Port(uint8_t a, uint8_t b, uint8_t c,
+                                    uint8_t d, unsigned port) {
+    uint32_t ip = (a << 24) | (b << 16) | (c << 8) | d;
+    return MakeIPv4Port(ip, port);
+  }
 
   /**
    * Creates a #SocketAddress with the IPv4 a wildcard address and the
