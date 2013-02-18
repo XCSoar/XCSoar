@@ -48,6 +48,7 @@ Version 6.5 - not yet released
   - added thermal assistant infobox
   - inverse colors for wind arrow infobox and flarm gauge (#2337)
 * track friends via internet connection (SkyLines live tracking)
+* SkyLines tracking enabled on Windows CE
 * Documentation
   - started a French translation of the manual
   - included an almost complete German translation of the manual

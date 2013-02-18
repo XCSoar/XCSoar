@@ -242,6 +242,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/UnitsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
@@ -278,8 +279,7 @@ endif
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
-	$(SRC)/Dialogs/Weather/NOAADetails.cpp \
-	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp
+	$(SRC)/Dialogs/Weather/NOAADetails.cpp
 endif
 
 XCSOAR_SOURCES := \
@@ -864,11 +864,13 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAUpdater.cpp
 
 XCSOAR_SOURCES += \
+	$(SRC)/Tracking/LiveTrack24.cpp
+endif
+
+XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
-	$(SRC)/Tracking/LiveTrack24.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp
-endif
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
