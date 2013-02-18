@@ -116,7 +116,6 @@ public:
   using FileDescriptor::Write;
 #endif
 
-#ifndef _WIN32_WCE
   /**
    * Receive a datagram and return the source address.
    */
@@ -128,7 +127,6 @@ public:
    */
   ssize_t Write(const void *buffer, size_t length,
                 const SocketAddress &address);
-#endif
 };
 
 #endif

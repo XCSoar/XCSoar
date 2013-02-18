@@ -223,8 +223,6 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
 
 #endif
 
-#ifndef _WIN32_WCE
-
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
                        SocketAddress &address)
@@ -263,5 +261,3 @@ SocketDescriptor::Write(const void *buffer, size_t length,
 #endif
                   address, address.GetLength());
 }
-
-#endif
