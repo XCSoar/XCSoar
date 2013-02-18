@@ -210,11 +210,11 @@ SetValues()
   dfe->addEnumText(_T("Landpoint"));
 
   if (global_wpt->IsAirport())
-    dfe->Set(1);
+    dfe->Set(1u);
   else if (global_wpt->IsLandable())
-    dfe->Set(2);
+    dfe->Set(2u);
   else
-    dfe->Set(0);
+    dfe->Set(0u);
 
   wp->RefreshDisplay();
 }

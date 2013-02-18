@@ -155,7 +155,7 @@ public:
    */
   void EnableItemHelp(bool value) { item_help_enabled = value; }
 
-  void Set(int Value);
+  void Set(unsigned Value);
 
   /**
    * Select the item with the specified text (not display string).
@@ -176,7 +176,7 @@ public:
 
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
-  void Sort(int startindex = 0);
+  void Sort(unsigned startindex = 0);
 
   gcc_pure
   unsigned Count() const {

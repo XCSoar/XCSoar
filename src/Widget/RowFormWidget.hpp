@@ -557,11 +557,11 @@ public:
 
   void LoadValue(unsigned i, int value);
   void LoadValue(unsigned i, bool value);
-  void LoadValueEnum(unsigned i, int value);
+  void LoadValueEnum(unsigned i, unsigned value);
 
   template<typename T>
   void LoadValueEnum(unsigned i, T value) {
-    LoadValueEnum(i, (int)value);
+    LoadValueEnum(i, unsigned(value));
   }
 
   void LoadValue(unsigned i, fixed value);

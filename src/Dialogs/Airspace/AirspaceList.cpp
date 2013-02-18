@@ -320,7 +320,7 @@ FillDistanceEnum(DataFieldEnum &df)
     df.AddChoice(distances[i], buffer);
   }
 
-  df.Set(0);
+  df.Set(0u);
 }
 
 static void
