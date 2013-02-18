@@ -48,51 +48,45 @@ dlgWeatherShowModal()
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpTime"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Now"));
-    for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
-      if (RASP.isWeatherAvailable(i)) {
-        TCHAR timetext[10];
-        _stprintf(timetext, _T("%04d"), RASP.IndexToTime(i));
-        dfe->addEnumText(timetext, i);
-      }
+  assert(wp != nullptr);
+  DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
+  dfe->addEnumText(_("Now"));
+  for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
+    if (RASP.isWeatherAvailable(i)) {
+      TCHAR timetext[10];
+      _stprintf(timetext, _T("%04d"), RASP.IndexToTime(i));
+      dfe->addEnumText(timetext, i);
     }
-
-    dfe->Set(RASP.GetTime());
-
-    wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDisplayItem"));
-  DataFieldEnum* dfe;
-  if (wp) {
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Terrain"));
+  dfe->Set(RASP.GetTime());
+  wp->RefreshDisplay();
 
-    for (int i = 1; i <= 15; i++) {
-      const TCHAR *label = RASP.ItemLabel(i);
-      if (label != NULL)
-        dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
-    }
-    dfe->Set(RASP.GetParameter());
-    wp->RefreshDisplay();
+  wp = (WndProperty *)wf->FindByName(_T("prpDisplayItem"));
+  assert(wp != nullptr);
+  dfe = (DataFieldEnum *)wp->GetDataField();
+  dfe->EnableItemHelp(true);
+  dfe->addEnumText(_("Terrain"));
+
+  for (int i = 1; i <= 15; i++) {
+    const TCHAR *label = RASP.ItemLabel(i);
+    if (label != NULL)
+      dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
   }
+  dfe->Set(RASP.GetParameter());
+  wp->RefreshDisplay();
 
   wf->ShowModal();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTime"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    RASP.SetTime(dfe->GetAsInteger());
-  }
+  wp = (WndProperty *)wf->FindByName(_T("prpTime"));
+  assert(wp != nullptr);
+  dfe = (DataFieldEnum *)wp->GetDataField();
+  RASP.SetTime(dfe->GetAsInteger());
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDisplayItem"));
-  if (wp)
-    RASP.SetParameter(wp->GetDataField()->GetAsInteger());
+  wp = (WndProperty *)wf->FindByName(_T("prpDisplayItem"));
+  assert(wp != nullptr);
+  dfe = (DataFieldEnum *)wp->GetDataField();
+  RASP.SetParameter(dfe->GetAsInteger());
 
   delete wf;
 }
