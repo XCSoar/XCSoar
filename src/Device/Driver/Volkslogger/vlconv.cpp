@@ -40,6 +40,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <memory.h>
+#include <assert.h>
 
 // Conversion-Constants
 
@@ -1015,9 +1016,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 bool
 conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
 {
-  flights.clear();
-  flights.reserve(10);
-
+  assert(flights.empty());
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
@@ -1055,7 +1054,6 @@ conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
       if (bfv > max_bfv)
       {
         //abort function
-        flights.clear();
         return false;
       }
       l = 1;
@@ -1190,7 +1188,6 @@ conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
       break;
     default:
       //abort function
-      flights.clear();
       return false;
     };
     p += l;
