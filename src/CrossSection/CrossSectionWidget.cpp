@@ -66,6 +66,7 @@ CrossSectionWidget::OnCalculatedUpdate(const MoreData &basic,
   if (basic.location_available && basic.track_available) {
     w.SetStart(basic.location);
     w.SetDirection(basic.track);
+    w.SetRange(fixed(50000));
   } else
     w.SetInvalid();
 
