@@ -36,7 +36,7 @@ second title is the label used in the InfoBox title.
 %%%%%%%%%%%
 \section{Altitude}
 
-\ibig{Altitude GPS}{Alt GPS}{This is the height above mean sea level reported by the
+\ibig{Altitude GPS}{Alt GPS}{This is the altitude above mean sea level reported by the
 GPS. (Touch-screen/PC only) In simulation mode this value is adjustable with the
 up/down arrow keys. The right/left arrow keys also cause the glider to turn.\footnotemark[1]}
 {figures/simulator-keys.png}
@@ -45,15 +45,13 @@ device equipped with pressure sensor.\footnotemark}
 \ibi{Altitude (Auto)}{Alt $<$auto$>$}{This is the barometric altitude obtained from a 
 device equipped with a pressure sensor or the GPS altitude if the barometric altitude 
 is not available.}
-\ibi{Altitude AGL}{Alt AGL}{This is the navigation altitude minus the terrain height
+\ibi{Altitude AGL}{H AGL}{This is the navigation altitude minus the terrain elevation 
 obtained from the terrain file. The value is coloured red when the glider is
 below the terrain safety clearance height.\footnotemark[1]}  
-\ibi{Terrain elevation}{H GND}{This is the elevation of the terrain above mean
+\ibi{Terrain elevation}{Terr Elev}{This is the elevation of the terrain above mean
 sea level obtained from the terrain file at the current GPS location.}
-\ibi{QFE GPS}{Auto QFE}{Automatic QFE. This altitude value is constantly reset to 
-0 on ground  \textit{before} taking off. After take-off, it is no more reset 
-automatically even if on ground. During flight you can change QFE with up and 
-down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude.\footnotemark[1]}
+\ibi{Height above take-off}{H T/O}{Height based on an automatic take-off reference 
+elevation (like a QFE reference).\footnotemark[1]}
 \ibi{Flight level}{Flight Level}{Pressure Altitude given as Flight Level. 
 Only available if barometric altitude available and correct QNH set.\footnotemark[1]}
 \ibi{Barogram}{Barogram}{Trace of altitude during flight.}
@@ -148,9 +146,9 @@ or the intelligent vario total energy vario value if connected to one.}
 to vario value less the glider's estimated sink rate.}
 \ibi{Thermal climb trace}{TC Trace}{Trace of average climb rate each turn in 
 circling, based of the reported GPS altitude, or vario if available.}
-\ibi{Thermal average over all}{TAll Avg}{Time-average climb rate in all thermals.}
+\ibi{Thermal average over all}{T Avg}{Time-average climb rate in all thermals.}
 \ibi{Climb band}{Climb Band}{Graph of average circling climb rate (horizontal 
-axis) as a function of height (vertical axis).}
+axis) as a function of altitude (vertical axis).}
 \ibi{Thermal assistant}{Thermal}{A circular thermal assistant that shows the 
 lift distribution over each part of the circle.}
 

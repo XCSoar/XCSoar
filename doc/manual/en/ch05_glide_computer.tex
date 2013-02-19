@@ -62,7 +62,7 @@ which toggles between the normal mode-specific InfoBoxes and
 the auxiliary set of InfoBoxes.
 
 Final glide mode replaces the Cruise mode as soon as the glider is
-above the final glide path. The required height depends most
+above the final glide path. The required altitude depends most
 importantly on the adjusted MC value, but also the ground clearance is
 considered. On entering a thermal while in Final glide mode XCSoar
 will switch to the Circling display and back to the Final glide
@@ -322,8 +322,8 @@ glide computers, instruments and data sources (such as terrain
 elevation models) are subject to some degree of error and the
 atmosphere through which the glider flies is also unpredictable.
 
-XCSoar determines the height above sea level of any turn point or
-landing point either from the waypoint file, of if no height is
+XCSoar determines the elevation above sea level of any turn point or
+landing point either from the waypoint file, or if no height is
 specified in the waypoint file, from the terrain file.
 
 \textbf{The estimated arrival altitude displayed next to landable
@@ -386,7 +386,7 @@ The altitude difference to complete the task is displayed continuously
 as an arrow and in numeric form on the left hand side of the map area
 of the screen.
 
-The height required is adjusted for energy height, compensating for
+The altitude required is adjusted for energy, compensating for
 the fact that the kinetic energy of the glider can be converted to
 height (potential energy).  The kinetic energy that is convertable to
 height is calculated from the difference in the true airspeed to the
@@ -397,15 +397,15 @@ estimated from the wind speed and ground speed.
 \section{Display of altitude required}
 
 On the left side of the map display, a box displays the calculated
-height difference required for the glider to complete the task, or
-reach the final waypoint.  If the glider is above the minimum height
+altitude difference required for the glider to complete the task, or
+reach the final waypoint.  If the glider is above the minimum altitude
 required, a green arrow bar is drawn above the box indicating the
 amount of excess height.
 
-If the glider is below the minimum height required, a red arrow bar is
+If the glider is below the minimum altitude required, a red arrow bar is
 drawn below the box indicating the amount of height deficit.  If,
 however, there are landable waypoints within glide range, but the
-glider is below the minimum height required to complete the task, the
+glider is below the minimum altitude required to complete the task, the
 bar is coloured amber.
 
 \begin{center}
@@ -420,7 +420,7 @@ bar is coloured amber.
 \end{center}
 
 
-\subsection*{Dual height required bars}
+\subsection*{Dual altitude required bars}
 
 The final glide bar has been extended to show the effect of MacCready
 setting on the altitude difference to complete the task.  The display
@@ -460,7 +460,7 @@ bar display is shown below:
 \smallsketch{figures/fig-finalglide-littlebelow.png}
   Here the display shows that at the current MacCready setting, the aircraft
   is below final glide (filled red arrow).  The tip of the red arrow is chopped off
-  to show that the needed height exceeds the 500 meter limit the arrow can scale on.
+  to show that the altitude undercut the 500 meter limit the arrow can scale on.
   The split slightly brighter red arrow shows that by reducing the MacCready 
   setting to zero, the aircraft still is far from final glide.
 
@@ -520,7 +520,7 @@ in the task calculator dialogue.
 Task speed estimates for achieved speed, are compensated for altitude
 variations, such that the effects of climbs are taken into account in
 calculating the average task speed.  Considering two gliders A and B
-flying the same task.  Glider A has cruised faster, trading off height
+flying the same task.  Glider A has cruised faster, trading off altitude
 for speed.  Glider B is behind A but higher and will save time later
 since it has less climbing to do to complete the task.
 
