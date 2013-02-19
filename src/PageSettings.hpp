@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PAGE_SETTINGS_HPP
 #define XCSOAR_PAGE_SETTINGS_HPP
 
+#include <array>
 #include <type_traits>
 
 #include <tchar.h>
@@ -95,7 +96,7 @@ struct PageSettings {
     }
   };
 
-  PageLayout pages[MAX_PAGES];
+  std::array<PageLayout, MAX_PAGES> pages;
 
   void SetDefaults();
 };
