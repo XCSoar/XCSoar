@@ -767,7 +767,7 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
   if (config.UsesI2C()) {
     changed |= SaveValue(I2CBus, config.i2c_bus);
     changed |= SaveValue(I2CAddr, config.i2c_addr);
-    changed |= SaveValue(PressureUsage, (unsigned &)config.press_use);
+    changed |= SaveValueEnum(PressureUsage, config.press_use);
   }
 
   if (config.UsesDriver()) {
