@@ -25,6 +25,8 @@
 #include <time.h>
 #include <vector>
 
+class OperationEnvironment;
+
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01
 #define FLDPLT1      0x01
@@ -77,7 +79,8 @@ convert_gcs
   return value:
     length of binary file
 */
-int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
+int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *,
+                  OperationEnvironment &env);
 
 
 /*
@@ -107,6 +110,6 @@ struct DIRENTRY {
  */
 
 bool conv_dir(std::vector<DIRENTRY> &flights, uint8_t *dirbuffer,
-              size_t length);
+              size_t length, OperationEnvironment &env);
 
 #endif

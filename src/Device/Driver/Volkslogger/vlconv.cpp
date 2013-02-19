@@ -42,6 +42,8 @@
 #include <memory.h>
 #include <assert.h>
 
+#include "Operation/Operation.hpp"
+
 // Conversion-Constants
 
 #define MFR_ID "GCS"   // manufacturer three-letter-code
@@ -513,7 +515,7 @@ const int actual_conv_version = 424;
 
 long
 convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
-    int oo_fillin, word *serno, long *sp)
+    int oo_fillin, word *serno, long *sp, OperationEnvironment &env)
 {
   IGCHEADER igcheader;
   C_RECORD task;
@@ -583,6 +585,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   p = bin_puffer;
 
   do {
+
+    // Make user abort possible
+    if (env.IsCancelled())
+      return 0;
+
     Haupttyp = p[0] & rectyp_msk;
     switch (Haupttyp) {
     case rectyp_tnd:
@@ -869,6 +876,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   ende = 0;
   p = bin_puffer;
   do {
+
+    // Make user abort possible
+    if (env.IsCancelled())
+      return 0;
+
     Haupttyp = p[0] & rectyp_msk;
     switch (Haupttyp) {
     case rectyp_sep:
@@ -1014,7 +1026,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 
 // Members of class DIR
 bool
-conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
+conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length,
+         OperationEnvironment &env)
 {
   assert(flights.empty());
   DIRENTRY de; // directory entry
@@ -1040,6 +1053,10 @@ conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
   size_t nbytes = 0;
 
   while (nbytes < length) {
+    // Make user abort possible
+    if (env.IsCancelled())
+      return -1;
+
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
     case rectyp_sep: // Initialize Dir-Entry
