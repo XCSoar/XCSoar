@@ -269,8 +269,17 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     }
   }
 
-  if (iDescription < n_params)
+  if (iDescription < n_params) {
+    /*
+     * This convention was introduced by the OpenAIP
+     * project (http://www.openaip.net/), since no waypoint type
+     * exists for thermal hotspots.
+     */
+    if (StringStartsWith(params[iDescription], _T("Hotspot")))
+      new_waypoint.type = Waypoint::Type::THERMAL_HOTSPOT;
+
     new_waypoint.comment = params[iDescription];
+  }
 
   waypoints.Append(std::move(new_waypoint));
   return true;
