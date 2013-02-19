@@ -103,7 +103,8 @@ struct DIRECTORY {
 
 //const int MAXDIRENTRY = 100;
 
-int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, int countonly);
+int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, size_t length,
+             int countonly);
 
 
 #endif
