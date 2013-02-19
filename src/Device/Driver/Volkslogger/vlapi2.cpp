@@ -234,6 +234,8 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
 }
 
 VLA_ERROR VLAPI::read_directory() {
+  directory.clear();
+  directory.reserve(10);
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
@@ -245,8 +247,10 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    if (!conv_dir(directory, dirbuffer, data_length))
+    if (!conv_dir(directory, dirbuffer, data_length)) {
+      directory.clear();
       return VLA_ERR_MISC;
+    }
 
     if(!directory.empty())
       return VLA_ERR_NOERR;
