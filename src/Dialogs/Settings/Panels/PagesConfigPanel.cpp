@@ -24,6 +24,9 @@ Copyright_License {
 #include "PagesConfigPanel.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
+#include "Form/ActionListener.hpp"
+#include "Form/Button.hpp"
+#include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Pages.hpp"
@@ -33,7 +36,13 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
 #include "UIGlobals.hpp"
+
+/* this macro exists in the WIN32 API */
+#ifdef DELETE
+#undef DELETE
+#endif
 
 using namespace Pages;
 
@@ -52,7 +61,6 @@ private:
 
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
-  static constexpr unsigned IBP_INVALID = 0x7002;
 
   PageSettings::PageLayout value;
 
@@ -73,10 +81,22 @@ private:
 };
 
 class PageListWidget
-  : public ListWidget, public PageLayoutEditWidget::Listener {
+  : public ListWidget, private ActionListener,
+    public PageLayoutEditWidget::Listener {
+  enum Buttons {
+    ADD,
+    DELETE,
+    MOVE_UP,
+    MOVE_DOWN,
+  };
+
   PageLayoutEditWidget *editor;
 
   PageSettings settings;
+
+  ButtonPanelWidget *buttons;
+  WndButton *add_button, *delete_button;
+  WndButton *move_up_button, *move_down_button;
 
 public:
   ~PageListWidget() {
@@ -86,6 +106,27 @@ public:
 
   void SetEditor(PageLayoutEditWidget &_editor) {
     editor = &_editor;
+  }
+
+  void SetButtonPanel(ButtonPanelWidget &_buttons) {
+    buttons = &_buttons;
+  }
+
+  void CreateButtons(ButtonPanel &buttons) {
+    add_button = buttons.Add(_("Add"), *this, ADD);
+    delete_button = buttons.Add(_("Delete"), *this, DELETE);
+    move_up_button = buttons.AddSymbol(_("^"), *this, MOVE_UP);
+    move_down_button = buttons.AddSymbol(_("v"), *this, MOVE_DOWN);
+  }
+
+  void UpdateButtons() {
+    unsigned length = GetList().GetLength();
+    unsigned cursor = GetList().GetCursorIndex();
+
+    add_button->SetEnabled(length < settings.MAX_PAGES);
+    delete_button->SetEnabled(length >= 2);
+    move_up_button->SetEnabled(cursor > 0);
+    move_down_button->SetEnabled(cursor + 1 < length);
   }
 
   /* virtual methods from class Widget */
@@ -107,6 +148,10 @@ public:
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
   virtual void OnModified(const PageSettings::PageLayout &new_value) override;
+
+private:
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
 };
 
 void
@@ -116,7 +161,6 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     CommonInterface::GetUISettings().info_boxes;
 
   static constexpr StaticEnumChoice ib_list[] = {
-    { IBP_INVALID, _T("---") },
     { IBP_AUTO, N_("Auto") },
     { IBP_NONE, N_("None") },
     { 0 }
@@ -135,13 +179,13 @@ PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
 {
   value = _value;
 
-  unsigned ib = IBP_INVALID;
+  unsigned ib = IBP_NONE;
   switch (value.top_layout) {
   case PageSettings::PageLayout::tlEmpty:
-    break;
+    assert(false);
+    gcc_unreachable();
 
   case PageSettings::PageLayout::tlMap:
-    ib = IBP_NONE;
     break;
 
   case PageSettings::PageLayout::tlMapAndInfoBoxes:
@@ -164,9 +208,7 @@ PageLayoutEditWidget::OnModified(DataField &df)
   if (&df == &GetDataField(INFO_BOX_PANEL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const unsigned ibp = dfe.GetValue();
-    if (ibp == IBP_INVALID)
-      value.top_layout = PageSettings::PageLayout::tlEmpty;
-    else if (ibp == IBP_AUTO) {
+    if (ibp == IBP_AUTO) {
       value.top_layout = PageSettings::PageLayout::tlMapAndInfoBoxes;
       value.infobox_config.auto_switch = true;
       value.infobox_config.panel = 0;
@@ -187,10 +229,18 @@ PageLayoutEditWidget::OnModified(DataField &df)
 void
 PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  CreateList(parent, UIGlobals::GetDialogLook(),
-             rc, Layout::Scale(18)).SetLength(PageSettings::MAX_PAGES);
-
   settings = CommonInterface::GetUISettings().pages;
+  auto end = std::remove_if(settings.pages.begin(), settings.pages.end(),
+                            [](const PageSettings::PageLayout &layout) {
+                              return !layout.IsDefined();
+                            });
+  unsigned n = std::distance(settings.pages.begin(), end);
+
+  CreateList(parent, UIGlobals::GetDialogLook(),
+             rc, Layout::Scale(18)).SetLength(n);
+
+  CreateButtons(buttons->GetButtonPanel());
+  UpdateButtons();
 }
 
 void
@@ -205,6 +255,11 @@ bool
 PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
 {
   bool changed = false;
+
+  std::fill(settings.pages.begin() + GetList().GetLength(),
+            settings.pages.end(),
+            PageSettings::PageLayout(PageSettings::PageLayout::tlEmpty,
+                                     PageSettings::InfoBoxConfig()));
 
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
@@ -236,7 +291,8 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   switch (value.top_layout) {
   case PageSettings::PageLayout::tlEmpty:
-    break;
+    assert(false);
+    gcc_unreachable();
 
   case PageSettings::PageLayout::tlMap:
     text = _("Map (Full screen)");
@@ -263,6 +319,8 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 void
 PageListWidget::OnCursorMoved(unsigned idx)
 {
+  UpdateButtons();
+
   editor->SetValue(settings.pages[idx]);
 }
 
@@ -288,6 +346,57 @@ PageListWidget::OnModified(const PageSettings::PageLayout &new_value)
   GetList().Invalidate();
 }
 
+void
+PageListWidget::OnAction(int id)
+{
+  const unsigned n = GetList().GetLength();
+  const unsigned cursor = GetList().GetCursorIndex();
+
+  switch (id) {
+  case ADD:
+    if (n < PageSettings::MAX_PAGES) {
+      auto &page = settings.pages[n];
+      page = PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
+                                      PageSettings::InfoBoxConfig(true, 0));
+      GetList().SetLength(n + 1);
+      GetList().SetCursorIndex(n);
+    }
+
+    break;
+
+  case DELETE:
+    if (n >= 2 && GetList().GetCursorIndex() < n) {
+      std::copy(settings.pages.begin() + cursor + 1,
+                settings.pages.begin() + n,
+                settings.pages.begin() + cursor);
+      GetList().SetLength(n - 1);
+
+      if (cursor == n - 1)
+        GetList().SetCursorIndex(cursor - 1);
+      else
+        editor->SetValue(settings.pages[cursor]);
+    }
+
+    break;
+
+  case MOVE_UP:
+    if (cursor > 0) {
+      std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
+      GetList().SetCursorIndex(cursor - 1);
+    }
+
+    break;
+
+  case MOVE_DOWN:
+    if (cursor + 1 < n) {
+      std::swap(settings.pages[cursor], settings.pages[cursor + 1]);
+      GetList().SetCursorIndex(cursor + 1);
+    }
+
+    break;
+  }
+}
+
 Widget *
 CreatePagesConfigPanel()
 {
@@ -296,5 +405,9 @@ CreatePagesConfigPanel()
     new PageLayoutEditWidget(UIGlobals::GetDialogLook(), *list);
   list->SetEditor(*editor);
 
-  return new TwoWidgets(list, editor);
+  TwoWidgets *two = new TwoWidgets(list, editor);
+  ButtonPanelWidget *buttons = new ButtonPanelWidget(two, ButtonPanelWidget::Alignment::BOTTOM);
+  list->SetButtonPanel(*buttons);
+
+  return buttons;
 }
