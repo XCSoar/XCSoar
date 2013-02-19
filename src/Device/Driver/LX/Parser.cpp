@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Util/Macros.hpp"
+#include "LX1600.hpp"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
@@ -162,7 +163,8 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 }
 
 static bool
-LXWP3(NMEAInputLine &line, NMEAInfo &info)
+LXWP3(NMEAInputLine &line, NMEAInfo &info,
+      DeviceSettingsMap<LX1600::Setting, std::string> &settings)
 {
   /*
    * $LXWP3,
@@ -189,6 +191,77 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
     auto qnh = AtmosphericPressure::PressureAltitudeToStaticPressure(value);
     info.settings.ProvideQNH(qnh, info.clock);
   }
+
+  char sc_mode[8];
+  line.Read(sc_mode, ARRAY_SIZE(sc_mode));
+  if (StringIsEmpty(sc_mode))
+    return true;
+
+  char vario_filter[8];
+  line.Read(vario_filter, ARRAY_SIZE(vario_filter));
+  if (StringIsEmpty(vario_filter))
+    return true;
+
+  char te_filter[8];
+  line.Read(te_filter, ARRAY_SIZE(te_filter));
+  if (StringIsEmpty(te_filter))
+    return true;
+
+  char te_level[8];
+  line.Read(te_level, ARRAY_SIZE(te_level));
+  if (StringIsEmpty(te_level))
+    return true;
+
+  char vario_avg_time[8];
+  line.Read(vario_avg_time, ARRAY_SIZE(vario_avg_time));
+  if (StringIsEmpty(vario_avg_time))
+    return true;
+
+  char vario_range[8];
+  line.Read(vario_range, ARRAY_SIZE(vario_range));
+  if (StringIsEmpty(vario_range))
+    return true;
+
+  char sc_deadband[8];
+  line.Read(sc_deadband, ARRAY_SIZE(sc_deadband));
+  if (StringIsEmpty(sc_deadband))
+    return true;
+
+  char sc_control_mode[8];
+  line.Read(sc_control_mode, ARRAY_SIZE(sc_control_mode));
+  if (StringIsEmpty(sc_control_mode))
+    return true;
+
+  char sc_threshold_speed[8];
+  line.Read(sc_threshold_speed, ARRAY_SIZE(sc_threshold_speed));
+  if (StringIsEmpty(sc_threshold_speed))
+    return true;
+
+  char smart_vario_filter[8];
+  line.Read(smart_vario_filter, ARRAY_SIZE(smart_vario_filter));
+  if (StringIsEmpty(smart_vario_filter))
+    return true;
+
+  line.Skip();
+
+  char time_offset[8];
+  line.Read(time_offset, ARRAY_SIZE(time_offset));
+  if (StringIsEmpty(time_offset))
+    return true;
+
+  settings.Lock();
+  settings.Set(LX1600::Setting::SC_MODE, sc_mode);
+  settings.Set(LX1600::Setting::VARIO_FILTER, vario_filter);
+  settings.Set(LX1600::Setting::TE_FILTER, te_filter);
+  settings.Set(LX1600::Setting::TE_LEVEL, te_level);
+  settings.Set(LX1600::Setting::VARIO_AVG_TIME, vario_avg_time);
+  settings.Set(LX1600::Setting::VARIO_RANGE, vario_range);
+  settings.Set(LX1600::Setting::SC_DEADBAND, sc_deadband);
+  settings.Set(LX1600::Setting::SC_CONTROL_MODE, sc_control_mode);
+  settings.Set(LX1600::Setting::SC_THRESHOLD_SPEED, sc_threshold_speed);
+  settings.Set(LX1600::Setting::SMART_VARIO_FILTER, smart_vario_filter);
+  settings.Set(LX1600::Setting::TIME_OFFSET, time_offset);
+  settings.Unlock();
 
   return true;
 }
@@ -388,7 +461,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LXWP2(line, info);
 
   if (StringIsEqual(type, "$LXWP3"))
-    return LXWP3(line, info);
+    return LXWP3(line, info, lx16xx_settings);
 
   if (StringIsEqual(type, "$PLXV0")) {
     is_v7 = true;

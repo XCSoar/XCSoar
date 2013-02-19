@@ -32,6 +32,11 @@ Copyright_License {
 #include <atomic>
 #include <stdint.h>
 
+namespace LX1600 {
+  enum class Setting: uint8_t;
+  class SettingsMap;
+}
+
 class LXDevice: public AbstractDevice
 {
   enum class Mode : uint8_t {
@@ -85,6 +90,11 @@ class LXDevice: public AbstractDevice
    * Settings that were received in PLXVC (LXNAV Nano) sentences.
    */
   DeviceSettingsMap<std::string, std::string> nano_settings;
+
+  /**
+   * Settings that were received in PLXVC (LXNAV Nano) sentences.
+   */
+  DeviceSettingsMap<LX1600::Setting, std::string> lx16xx_settings;
 
   Mutex mutex;
   Mode mode;
@@ -188,6 +198,39 @@ public:
    */
   gcc_pure
   std::string GetNanoSetting(const char *name) const;
+
+  /**
+   * Write all settings to a LX 16xx.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the device has understood and processed it)
+   */
+  bool SendLX16xxSettings(const LX1600::SettingsMap &settings,
+                          OperationEnvironment &env);
+
+  /**
+   * Request all settings from a LX 16xx.  The device will send the
+   * values, but this method will not wait for that.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the device has understood and processed it)
+   */
+  bool RequestLX16xxSettings(OperationEnvironment &env);
+
+  /**
+   * Wait for the specified setting to be received.  Returns the value
+   * on success, or an empty string on timeout.
+   */
+  std::string WaitLX16xxSetting(LX1600::Setting key,
+                                OperationEnvironment &env, unsigned timeout_ms);
+
+  /**
+   * Look up the given setting in the table of received LX 16xx
+   * values.  If the value does not exist, an empty string is
+   * returned.
+   */
+  gcc_pure
+  std::string GetLX16xxSetting(LX1600::Setting key) const;
 
 protected:
   /**
