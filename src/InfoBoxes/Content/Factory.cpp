@@ -490,7 +490,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
     UpdateInfoBoxAltitudeBaro,
     altitude_infobox_panels,
-    e_H_QFE, // H auto QFE
+    e_H_QFE, // H T/O
     e_H_Terrain, // Terr Elev
   },
 
@@ -787,7 +787,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_Climb_Avg
   {
     N_("Thermal average over all"),
-    N_("TAll Avg"),
+    N_("T Avg"),
     N_("Time-average climb rate in all thermals."),
     UpdateInfoBoxThermalAllAvg,
     e_VerticalSpeed_GPS, // Vario
@@ -860,9 +860,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_H_QFE
   {
-    N_("Height on auto QFE"),
-    N_("H auto QFE"),
-    N_("Hight based on automatic QFE. Height is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground."),
+    N_("Height above take-off"),
+    N_("H T/O"),
+    N_("Height based on an automatic take-off reference elevation (like a QFE reference)."),
     UpdateInfoBoxAltitudeQFE,
     altitude_infobox_panels,
     e_FlightLevel, // Flight Level
@@ -947,7 +947,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     UpdateInfoBoxAltitudeFlightLevel,
     altitude_infobox_panels,
     e_Barogram, // Barogram
-    e_H_QFE, // H auto QFE
+    e_H_QFE, // H T/O
   },
 
   // e_Barogram
@@ -994,7 +994,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
   {
     N_("Climb band"),
     N_("Climb Band"),
-    N_("Graph of average circling climb rate (horizontal axis) as a function of height (vertical axis)."),
+    N_("Graph of average circling climb rate (horizontal axis) as a function of altitude (vertical axis)."),
     IBFHelper<InfoBoxContentThermalBand>::Create,
     e_Thermal_30s, // TC 30s
     e_CirclingAverage_spark, // TC trace
