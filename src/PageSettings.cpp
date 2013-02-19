@@ -72,6 +72,5 @@ PageSettings::SetDefaults()
   pages[0] = PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
   pages[1] = PageLayout(PageLayout::tlMap, InfoBoxConfig(true, 0));
 
-  for (unsigned i = 2; i < MAX_PAGES; ++i)
-    pages[i].SetDefaults();
+  std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 }

@@ -74,13 +74,25 @@ struct PageSettings {
     constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
       :top_layout(_top_layout), infobox_config(_infobox_config) {}
 
-    bool IsDefined() const {
-      return top_layout != tlEmpty;
+    /**
+     * Return an "undefined" page.  Its IsDefined() method will return
+     * false.
+     */
+    constexpr
+    static PageLayout Undefined() {
+      return PageLayout(tlEmpty, InfoBoxConfig(false, 0));
     }
 
-    void SetDefaults() {
-      top_layout = tlEmpty;
-      infobox_config.SetDefaults();
+    /**
+     * Returns the default page that will be created initially.
+     */
+    constexpr
+    static PageLayout Default() {
+      return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
+    }
+
+    bool IsDefined() const {
+      return top_layout != tlEmpty;
     }
 
     void MakeTitle(const InfoBoxSettings &info_box_settings,

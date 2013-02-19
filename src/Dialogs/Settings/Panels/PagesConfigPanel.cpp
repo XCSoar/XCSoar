@@ -258,8 +258,7 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
 
   std::fill(settings.pages.begin() + GetList().GetLength(),
             settings.pages.end(),
-            PageSettings::PageLayout(PageSettings::PageLayout::tlEmpty,
-                                     PageSettings::InfoBoxConfig()));
+            PageSettings::PageLayout::Undefined());
 
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
@@ -356,8 +355,7 @@ PageListWidget::OnAction(int id)
   case ADD:
     if (n < PageSettings::MAX_PAGES) {
       auto &page = settings.pages[n];
-      page = PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
-                                      PageSettings::InfoBoxConfig(true, 0));
+      page = PageSettings::PageLayout::Default();
       GetList().SetLength(n + 1);
       GetList().SetCursorIndex(n);
     }
