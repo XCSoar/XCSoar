@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/ButtonPanel.hpp"
+#include "SymbolButton.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -63,6 +64,17 @@ ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 {
   WndButton *button = new WndButton(parent, look, caption,
                                     dummy_rc, style, listener, id);
+  buttons.append(button);
+
+  return button;
+}
+
+WndButton *
+ButtonPanel::AddSymbol(tstring::const_pointer caption,
+                       ActionListener &listener, int id)
+{
+  WndButton *button = new WndSymbolButton(parent, look, caption,
+                                          dummy_rc, style, listener, id);
   buttons.append(button);
 
   return button;
