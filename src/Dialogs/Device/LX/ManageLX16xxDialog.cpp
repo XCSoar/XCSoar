@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ManageLX16xxDialog.hpp"
+#include "LX16xxConfigWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
@@ -30,9 +31,13 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
 
-class ManageLX16xxWidget : public RowFormWidget {
+class ManageLX16xxWidget : public RowFormWidget, private ActionListener {
+  enum Controls {
+    SETUP,
+  };
+
   /* This attribute is will be used in the next commits. */
-  gcc_unused_field LXDevice &device;
+  LXDevice &device;
   const DeviceInfo info;
 
 public:
@@ -42,6 +47,10 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+
+private:
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id);
 };
 
 void
@@ -67,6 +76,26 @@ ManageLX16xxWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (!info.software_version.empty()) {
     buffer.SetASCII(info.software_version.c_str());
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
+  }
+
+  AddButton(_("Setup"), *this, SETUP);
+}
+
+void
+ManageLX16xxWidget::OnAction(int id)
+{
+  MessageOperationEnvironment env;
+
+  StaticString<64> title;
+  title.Format(_T("LX %s"), info.product.c_str());
+
+  switch (id) {
+  case SETUP:
+    {
+      LX16xxConfigWidget widget(GetLook(), device);
+      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(), title, widget);
+    }
+    break;
   }
 }
 
