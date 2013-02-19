@@ -73,6 +73,10 @@ struct PageSettings {
     constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
       :top_layout(_top_layout), infobox_config(_infobox_config) {}
 
+    bool IsDefined() const {
+      return top_layout != tlEmpty;
+    }
+
     void SetDefaults() {
       top_layout = tlEmpty;
       infobox_config.SetDefaults();
