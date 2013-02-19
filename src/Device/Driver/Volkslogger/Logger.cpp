@@ -54,25 +54,23 @@ ParseTime(const tm &time,BrokenTime &btime)
 }
 
 static bool
-ConvertDirectoryToRecordedFlightList(const DIRECTORY &dir,
+ConvertDirectoryToRecordedFlightList(const std::vector<DIRENTRY> &dir,
                                      RecordedFlightList &flight_list)
 {
   RecordedFlightInfo flight_info;
-  DIRENTRY *pflight = dir.flights;
-  for (int i=0; (i < dir.nflights) && !flight_list.full(); i++) {
+  for (unsigned i=0; (i < dir.size()) && !flight_list.full(); i++) {
+    const DIRENTRY &flight = dir[i];
     /*
      * Only show logs with a takeoff detected
      */
-    if  (pflight->takeoff == 1) {
-      if (!ParseDate(pflight->firsttime, flight_info.date) ||
-          !ParseTime(pflight->firsttime, flight_info.start_time) ||
-          !ParseTime(pflight->lasttime, flight_info.end_time) )
+    if  (flight.takeoff == 1) {
+      if (!ParseDate(flight.firsttime, flight_info.date) ||
+          !ParseTime(flight.firsttime, flight_info.start_time) ||
+          !ParseTime(flight.lasttime, flight_info.end_time) )
         return false;
       flight_info.internal.volkslogger = i;
       flight_list.append(flight_info);
     }
-
-    pflight++;
   }
   return true;
 }
