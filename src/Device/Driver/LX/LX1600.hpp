@@ -29,6 +29,9 @@ Copyright_License {
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Units/System.hpp"
+#include "Util/StaticString.hpp"
+
+#include <map>
 
 #include <assert.h>
 #include <stdint.h>
@@ -48,6 +51,23 @@ namespace LX1600 {
     INVERTED = 1,
     TASTER = 2,
   };
+
+  enum class Setting : uint8_t {
+    VARIO_AVG_TIME,
+    VARIO_RANGE,
+    VARIO_FILTER,
+    TE_FILTER,
+    TE_LEVEL,
+    SMART_VARIO_FILTER,
+    SC_MODE,
+    SC_DEADBAND,
+    SC_CONTROL_MODE,
+    SC_THRESHOLD_SPEED,
+    GLIDER_NAME,
+    TIME_OFFSET,
+  };
+
+  class SettingsMap : public std::map<Setting, std::string> {};
 
   /**
    * Enable pass-through mode on the LX1600.  This command was provided
@@ -233,6 +253,43 @@ namespace LX1600 {
 
     char buffer[100];
     sprintf(buffer, "PFLX2,,,,,,,%u", volume);
+    return PortWriteNMEA(port, buffer, env);
+  }
+
+  /**
+   * Set the device settings to the values specified in the #settings map.
+   *
+   * This function is not performing any checks on the #settings map. The
+   * caller is responsible for providing correct values in string form.
+   */
+  static inline bool
+  SetSettings(Port &port, OperationEnvironment &env,
+              const SettingsMap &settings)
+  {
+    Setting pflx3_settings[] = {
+      Setting::SC_MODE,
+      Setting::VARIO_FILTER,
+      Setting::TE_FILTER,
+      Setting::TE_LEVEL,
+      Setting::VARIO_AVG_TIME,
+      Setting::VARIO_RANGE,
+      Setting::SC_DEADBAND,
+      Setting::SC_CONTROL_MODE,
+      Setting::SC_THRESHOLD_SPEED,
+      Setting::SMART_VARIO_FILTER,
+      Setting::GLIDER_NAME,
+      Setting::TIME_OFFSET,
+    };
+
+    NarrowString<256> buffer("PFLX3,");
+    for (auto setting : pflx3_settings) {
+      buffer += ',';
+
+      auto it = settings.find(setting);
+      if (it != settings.end())
+        buffer += it->second.c_str();
+    }
+
     return PortWriteNMEA(port, buffer, env);
   }
 
