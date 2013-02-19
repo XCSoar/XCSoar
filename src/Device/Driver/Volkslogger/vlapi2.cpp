@@ -253,7 +253,7 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    if (!conv_dir(directory, dirbuffer, data_length)) {
+    if (!conv_dir(directory, dirbuffer, data_length, env)) {
       directory.clear();
       return VLA_ERR_MISC;
     }
@@ -292,7 +292,7 @@ VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
   word serno; long sp;
   long r;
   if(err == VLA_ERR_NOERR) {
-    r = convert_gcs(0,outfile,logbuffer,1,&serno,&sp);
+    r = convert_gcs(0, outfile, logbuffer, 1, &serno, &sp, env);
     if(r>0) {
       err = VLA_ERR_NOERR;
       print_g_record(
