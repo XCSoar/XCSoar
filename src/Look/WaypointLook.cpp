@@ -38,6 +38,7 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   tower_icon.Load(IDB_TOWER, IDB_TOWER_HD);
   power_plant_icon.Load(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
   obstacle_icon.Load(IDB_OBSTACLE, IDB_OBSTACLE_HD);
+  thermal_hotspot_icon.Load(IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD);
 
   reachable_brush.Set(COLOR_GREEN);
   terrain_unreachable_brush.Set(LightColor(COLOR_RED));

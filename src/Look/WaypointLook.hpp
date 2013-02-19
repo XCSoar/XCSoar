@@ -33,7 +33,7 @@ struct WaypointLook {
   MaskedIcon small_icon, turn_point_icon, task_turn_point_icon;
   MaskedIcon mountain_pass_icon;
   MaskedIcon mountain_top_icon, bridge_icon, obstacle_icon;
-  MaskedIcon tower_icon, power_plant_icon, tunnel_icon;
+  MaskedIcon tower_icon, power_plant_icon, tunnel_icon, thermal_hotspot_icon;
   MaskedIcon airport_reachable_icon, airport_unreachable_icon;
   MaskedIcon airport_marginal_icon;
   MaskedIcon field_marginal_icon, field_reachable_icon, field_unreachable_icon;

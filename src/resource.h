@@ -144,3 +144,5 @@
 #define IDB_MOUNTAIN_PASS_HD           5367
 #define IDB_WEATHER_STATION             368
 #define IDB_WEATHER_STATION_HD         5368
+#define IDB_THERMAL_HOTSPOT             369
+#define IDB_THERMAL_HOTSPOT_HD         5369
