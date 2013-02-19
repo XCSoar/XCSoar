@@ -57,6 +57,7 @@ public:
 private:
   enum Controls {
     INFO_BOX_PANEL,
+    BOTTOM,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
@@ -172,6 +173,17 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum &ib = *(DataFieldEnum *)wp->GetDataField();
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i)
     ib.AddChoice(i, gettext(info_box_settings.panels[i].name));
+
+  static constexpr StaticEnumChoice bottom_list[] = {
+    { (unsigned)PageSettings::PageLayout::Bottom::NOTHING, N_("Nothing") },
+    { (unsigned)PageSettings::PageLayout::Bottom::CROSS_SECTION,
+                N_("Cross section") },
+    { 0 }
+  };
+  AddEnum(_("Bottom"),
+          _("Specifies what should be displayed below the map."),
+          bottom_list,
+          (unsigned)PageSettings::PageLayout::Bottom::NOTHING, this);
 }
 
 void
@@ -219,6 +231,9 @@ PageLayoutEditWidget::OnModified(DataField &df)
       value.infobox_config.auto_switch = false;
       value.infobox_config.panel = ibp;
     }
+  } else if (&df == &GetDataField(BOTTOM)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.bottom = (PageSettings::PageLayout::Bottom)dfe.GetValue();
   } else {
     gcc_unreachable();
   }
@@ -307,6 +322,20 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     else
       buffer.Format(_T("%s (%s)"), text, _("Auto"));
     text = buffer;
+    break;
+  }
+
+  switch (value.bottom) {
+  case PageSettings::PageLayout::Bottom::NOTHING:
+    break;
+
+  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
+    if (text != buffer) {
+      buffer = text;
+      text = buffer;
+    }
+
+    buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
   }
 

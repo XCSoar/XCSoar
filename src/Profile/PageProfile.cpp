@@ -53,6 +53,10 @@ Load(PageSettings::PageLayout &_pl, const unsigned page)
   if (page == 0 && pl.top_layout == PageSettings::PageLayout::tlEmpty)
     return;
 
+  _tcscpy(profileKey + prefixLen, _T("Bottom"));
+  if (!Profile::GetEnum(profileKey, pl.bottom))
+    pl.bottom = PageSettings::PageLayout::Bottom::NOTHING;
+
   _pl = pl;
 }
 
@@ -76,6 +80,8 @@ Profile::Save(const PageSettings::PageLayout &page, const unsigned i)
   Profile::Set(profileKey, page.infobox_config.panel);
   _tcscpy(profileKey + prefixLen, _T("Layout"));
   Profile::Set(profileKey, page.top_layout);
+  _tcscpy(profileKey + prefixLen, _T("Bottom"));
+  Profile::Set(profileKey, (unsigned)page.bottom);
 }
 
 

@@ -64,6 +64,16 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     _tcscpy(buffer, _T("---"));
     break;
   }
+
+  switch (bottom) {
+  case Bottom::NOTHING:
+    break;
+
+  case Bottom::CROSS_SECTION:
+    // TODO: better text and translate
+    _tcscat(buffer, _T(", XS"));
+    break;
+  }
 }
 
 void

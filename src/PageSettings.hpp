@@ -27,6 +27,7 @@ Copyright_License {
 #include <array>
 #include <type_traits>
 
+#include <stdint.h>
 #include <tchar.h>
 
 struct InfoBoxSettings;
@@ -69,10 +70,23 @@ struct PageSettings {
 
     InfoBoxConfig infobox_config;
 
+    /**
+     * What to show below the main area (i.e. map)?
+     */
+    enum class Bottom : uint8_t {
+      NOTHING,
+
+      /**
+       * Show a cross section below the map.
+       */
+      CROSS_SECTION,
+    } bottom;
+
     PageLayout() = default;
 
     constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
-      :top_layout(_top_layout), infobox_config(_infobox_config) {}
+      :top_layout(_top_layout), infobox_config(_infobox_config),
+       bottom(Bottom::NOTHING) {}
 
     /**
      * Return an "undefined" page.  Its IsDefined() method will return
@@ -100,6 +114,7 @@ struct PageSettings {
 
     bool operator==(const PageLayout &other) const {
       return top_layout == other.top_layout &&
+        bottom == other.bottom &&
              infobox_config == other.infobox_config;
     }
 
