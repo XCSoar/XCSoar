@@ -162,8 +162,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_HeightAGL
   {
-    N_("Height AGL"),
-    N_("H AGL"),
+    N_("Altitude AGL"),
+    N_("Alt AGL"),
     N_("This is the navigation altitude minus the terrain elevation obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
     UpdateInfoBoxAltitudeAGL,
     altitude_infobox_panels,
@@ -860,9 +860,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
 
   // e_H_QFE
   {
-    N_("Height above take-off"),
-    N_("H T/O"),
-    N_("Height based on an automatic take-off reference elevation (like a QFE reference)."),
+    N_("Altitude over takeoff"),
+    N_("Alt T/O"),
+    N_("Altitude based on an automatic take-off reference elevation (like a QFE reference)."),
     UpdateInfoBoxAltitudeQFE,
     altitude_infobox_panels,
     e_FlightLevel, // Flight Level
