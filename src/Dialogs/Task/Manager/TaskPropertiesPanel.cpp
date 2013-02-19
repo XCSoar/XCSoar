@@ -170,8 +170,8 @@ TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 void
 TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 {
-  const TaskFactoryType newtype =
-    (TaskFactoryType)df.GetAsInteger();
+  const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+  const TaskFactoryType newtype = (TaskFactoryType)dfe.GetValue();
   if (newtype != ordered_task->GetFactoryType()) {
     ReadValues();
     ordered_task->SetFactory(newtype);

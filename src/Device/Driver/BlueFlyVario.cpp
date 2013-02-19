@@ -54,15 +54,32 @@ BlueFlyDevice::ParseBAT(const char *content, NMEAInfo &info)
   // e.g.
   // BAT 1234
 
-#if 0
-TODO: we want android phone battery AND vario battery.
   char *endptr;
-  long value = strtol(content, &endptr, 16);
-  if (endptr != content) {
-    info.battery_level = fixed(value) / 1000;
-    info.battery_level_available.Update(info.clock);
-  }
-#endif
+  int mV = (int)strtol(content, &endptr, 16);
+  if (endptr == content) return true; 
+
+  do {
+    // piecewise linear approximation
+    if (mV > 3900) {
+      info.battery_level = fixed(70 + (mV - 3900)/10);
+      break;
+    }
+    if (mV > 3700) {
+      info.battery_level = fixed(4 + (mV - 3700)/3);
+      break;
+    }
+    if (mV > 3600) {
+      info.battery_level = fixed(0.04) * (mV - 3600);
+      break;
+    }
+    // considered empty ...
+    info.battery_level = fixed(0);
+    break;
+  }  while (0);
+
+  if (info.battery_level > fixed(100)) info.battery_level = fixed(100);
+  info.battery_level_available.Update(info.clock);
+
   return true;
 }
 

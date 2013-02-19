@@ -201,26 +201,28 @@ non-landable waypoints, the map will then display specific icons accordingly.
 The table contains a collection of the currently supported map icons:
 
 \begin{center}
-\vspace{2cm}
-\begin{tabular}{cc|cc|cc|cc}
+\vspace{2.5cm}
+\begin{tabular}{ccccccccc}
 \begin{rotate}{60}Simple waypoint\end{rotate} &
 \begin{rotate}{60}Mountain top\end{rotate} &
 \begin{rotate}{60}Obstacle\end{rotate} &
 \begin{rotate}{60}Pass\end{rotate} &
 \begin{rotate}{60}Power plant\end{rotate} &
-\begin{rotate}{60}Tower\end{rotate} &
+\begin{rotate}{60}Tower or building\end{rotate} &
 \begin{rotate}{60}Tunnel\end{rotate} &
-\begin{rotate}{60}Weather station\end{rotate}\\
-\hline
+\begin{rotate}{60}Weather station\end{rotate} &
+\begin{rotate}{60}Bridge\end{rotate}\\
+
 \includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
 \includegraphics[width=0.8cm]{icons/map_mountain_top.pdf} &
-\includegraphics[width=0.8cm]{icons/map_obstacle.pdf} &
-\includegraphics[width=0.8cm]{icons/map_pass.pdf} &
+\includegraphics[width=0.7cm]{icons/map_obstacle.pdf} &
+\includegraphics[width=0.7cm]{icons/map_pass.pdf} &
 \includegraphics[width=0.8cm]{icons/map_power_plant.pdf} &
-\includegraphics[width=0.8cm]{icons/map_tower.pdf} &
-\includegraphics[width=0.8cm]{icons/map_tunnel.pdf} &
-\includegraphics[width=0.8cm]{icons/map_weather_station.pdf}\\
-\hline
+\includegraphics[width=0.7cm]{icons/map_tower.pdf} &
+\includegraphics[width=0.6cm]{icons/map_tunnel.pdf} &
+\includegraphics[width=0.6cm]{icons/map_weather_station.pdf} &
+\includegraphics[width=0.8cm]{icons/map_bridge.pdf} \\
+
 \end{tabular}
 \end{center}
 
@@ -261,7 +263,7 @@ The following topographical features are drawn on the map:
 \end{itemize}
 Cities and small population areas are labeled in italics.
 
-Terrain is coloured according to height, and optionally shaded by sun, or 
+Terrain is coloured according to elevation, and optionally shaded by sun, or 
 wind direction.  Invalid terrain, or terrain below
 sea level is coloured blue.
 
@@ -311,7 +313,7 @@ Note that in all cases, the label format is configurable in the
 \section{Trail}\label{sec:trail}
 
 An optional 'snail trail' is drawn on the map showing the glider's
-path history.  The colour and thickness of the trail depends on the height or
+path history.  The colour and thickness of the trail depends on the altitude or
 on the variometer value. 
 
 \begin{center}
@@ -355,7 +357,7 @@ Enabling trail drift compensation is performed through the
 configuration settings.  The compensation is only performed
 whilst in circling mode; the display of the trail in cruise mode is unaffected.
 This can also be performed from the wind settings dialogue.
-\menulabel{\bmenu{Config 1}\blink\bmenut{Setup}{Wind}}
+\menulabel{\bmenu{Config 1}\blink\bmenus{Wind}}
 
 The trail drift display is useful also to show more clearly when thermals
 are cranked due to wind shear.\\
@@ -429,7 +431,7 @@ by the abort task mode, alternate landable option lists and display of
 landable waypoints on the map.
 
 Note that task calculations are otherwise unaffected by reach
-calculations --- for example, heights required as shown in the final
+calculations --- for example, altitudes required as shown in the final
 glide bar or task data as displayed in infoboxes do not take reach into account.
 
 Furthermore, the reach calculations are used for footprint, landable

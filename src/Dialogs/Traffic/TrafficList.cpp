@@ -47,6 +47,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Components.hpp"
+#include "Pan.hpp"
 
 enum Controls {
   CALLSIGN,
@@ -54,6 +55,7 @@ enum Controls {
 
 enum Buttons {
   DETAILS,
+  MAP,
 };
 
 class TrafficListButtons;
@@ -101,6 +103,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      */
     GeoVector vector;
 
+    /**
+     * The display name of the SkyLines account.
+     */
+    std::string name;
+
     explicit Item(FlarmId _id)
       :id(_id),
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -115,12 +122,13 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    explicit Item(uint32_t _id, const GeoPoint &_location)
+    explicit Item(uint32_t _id, const GeoPoint &_location,
+                  std::string &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
        color(FlarmColor::COUNT),
        loaded(false),
        location(_location),
-       vector(GeoVector::Invalid()) {
+       vector(GeoVector::Invalid()), name(std::move(_name)) {
       assert(IsSkyLines());
     }
 #endif
@@ -168,7 +176,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 
   typedef std::vector<Item> ItemList;
 
-  ActionListener *const action_listener;
+  ActionListener &action_listener;
 
   const RowFormWidget *const filter_widget;
 
@@ -185,7 +193,7 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
 public:
   TrafficListWidget(ActionListener &_action_listener,
                     const FlarmId *array, size_t count)
-    :action_listener(&_action_listener), filter_widget(nullptr),
+    :action_listener(_action_listener), filter_widget(nullptr),
      buttons(nullptr) {
     items.reserve(count);
 
@@ -193,9 +201,10 @@ public:
       items.emplace_back(array[i]);
   }
 
-  TrafficListWidget(const RowFormWidget &_filter_widget,
+  TrafficListWidget(ActionListener &_action_listener,
+                    const RowFormWidget &_filter_widget,
                     TrafficListButtons &_buttons)
-    :action_listener(nullptr), filter_widget(&_filter_widget),
+    :action_listener(_action_listener), filter_widget(&_filter_widget),
      buttons(&_buttons) {
   }
 
@@ -243,6 +252,7 @@ private:
   void UpdateButtons();
 
   void OpenDetails(unsigned index);
+  void OpenMap(unsigned index);
 
 public:
   /* virtual methods from class Widget */
@@ -331,6 +341,7 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
     AddButton(_("Details"), *list, DETAILS);
+    AddButton(_("Map"), *list, MAP);
     AddButton(_("Close"), dialog, mrCancel);
   }
 };
@@ -381,11 +392,16 @@ TrafficListWidget::UpdateList()
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     /* show SkyLines traffic unless this is a FLARM traffic picker
        dialog (from dlgTeamCode) */
-    if (action_listener == nullptr) {
+    if (buttons != nullptr) {
       const auto &data = tracking->GetSkyLinesData();
       const ScopeLock protect(data.mutex);
       for (const auto &i : data.traffic) {
-        items.emplace_back(i.first, i.second.location);
+        const auto name_i = data.user_names.find(i.first);
+        std::string name = name_i != data.user_names.end()
+          ? name_i->second
+          : std::string();
+
+        items.emplace_back(i.first, i.second.location, std::move(name));
         Item &item = items.back();
 
         if (i.second.location.IsValid() &&
@@ -484,8 +500,10 @@ TrafficListWidget::UpdateButtons()
   unsigned cursor = GetList().GetCursorIndex();
   bool valid_cursor = cursor < items.size();
   bool flarm_cursor = valid_cursor && items[cursor].IsFlarm();
+  bool valid_location = valid_cursor && items[cursor].location.IsValid();
 
   buttons->SetRowVisible(DETAILS, flarm_cursor);
+  buttons->SetRowVisible(MAP, valid_location);
 }
 
 void
@@ -544,7 +562,10 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       tmp.Format(_T("%s"), tmp_id);
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   } else if (item.IsSkyLines()) {
-    tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
+    if (!item.name.empty())
+      tmp = item.name.c_str();
+    else
+      tmp.UnsafeFormat(_T("SkyLines %u"), item.skylines_id);
 #endif
   } else {
     tmp = _T("?");
@@ -647,10 +668,25 @@ TrafficListWidget::OpenDetails(unsigned index)
 }
 
 void
+TrafficListWidget::OpenMap(unsigned index)
+{
+  if (index >= items.size())
+    return;
+
+  Item &item = items[index];
+  if (!item.location.IsValid())
+    return;
+
+  if (PanTo(item.location))
+    action_listener.OnAction(mrCancel);
+}
+
+void
 TrafficListWidget::OnActivateItem(unsigned index)
 {
-  if (action_listener != nullptr)
-    action_listener->OnAction(mrOK);
+  if (buttons == nullptr)
+    /* it's a traffic picker: finish the dialog */
+    action_listener.OnAction(mrOK);
   else
     OpenDetails(index);
 }
@@ -661,6 +697,10 @@ TrafficListWidget::OnAction(int id)
   switch (Buttons(id)) {
   case DETAILS:
     OpenDetails(GetList().GetCursorIndex());
+    break;
+
+  case MAP:
+    OpenMap(GetList().GetCursorIndex());
     break;
   }
 }
@@ -679,7 +719,7 @@ TrafficListDialog()
     new TwoWidgets(filter_widget, buttons_widget, true);
 
   TrafficListWidget *const list_widget =
-    new TrafficListWidget(*filter_widget, *buttons_widget);
+    new TrafficListWidget(dialog, *filter_widget, *buttons_widget);
 
   filter_widget->SetListener(list_widget);
   buttons_widget->SetList(list_widget);

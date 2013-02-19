@@ -49,15 +49,26 @@ SocketAddress::operator==(const SocketAddress &other) const
     memcmp(&address, &other.address, length) == 0;
 }
 
-void
-SocketAddress::Port(unsigned port)
+SocketAddress
+SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
 {
-  auto &sin = reinterpret_cast<struct sockaddr_in &>(address);
+  SocketAddress address;
+  auto &sin = reinterpret_cast<struct sockaddr_in &>(address.address);
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
+  sin.sin_addr.s_addr = htonl(ip);
   std::fill(sin.sin_zero, sin.sin_zero + ARRAY_SIZE(sin.sin_zero), 0);
-  length = sizeof(sin);
+  address.length = sizeof(sin);
+  return address;
 }
+
+SocketAddress
+SocketAddress::MakePort4(unsigned port)
+{
+  return MakeIPv4Port(INADDR_ANY, port);
+}
+
+#ifndef _WIN32_WCE
 
 bool
 SocketAddress::Lookup(const char *host, const char *service, int socktype)
@@ -79,3 +90,5 @@ SocketAddress::Lookup(const char *host, const char *service, int socktype)
   freeaddrinfo(ai);
   return true;
 }
+
+#endif

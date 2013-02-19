@@ -52,6 +52,10 @@ namespace SkyLinesTracking {
     void SetSettings(const Settings &settings);
 
     void Tick(const NMEAInfo &basic);
+
+    void RequestUserName(uint32_t user_id) {
+      client.SendUserNameRequest(user_id);
+    }
   };
 }
 

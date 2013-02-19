@@ -48,7 +48,7 @@ namespace InfoBoxFactory
     e_Fin_AltReq, /* Additional altitude required to finish the task */
     e_SpeedTaskAvg, /* Average cross country speed while on current task, compensated for altitude */
     e_Fin_Distance, /* Distance to finish around remaining turn points */
-    e_Fin_GR_TE, /* The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
+    e_Fin_GR_TE, /* Deprecated */
     /* 20..29 */
     e_H_Terrain, /* This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location */
     e_Thermal_Avg, /* Altitude gained/lost in the current thermal, divided by time spent thermaling */
@@ -105,8 +105,8 @@ namespace InfoBoxFactory
     e_Alternate_2_Name, /* Displays name and bearing to the second alternate landing location */
     e_Alternate_1_GR, /* Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy */
     /* 70..79 */
-    e_H_QFE, /* Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
-    e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling */
+    e_H_QFE, /* Height on automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
+    e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. */
     e_Experimental1, /* Experimental1 */
     e_OC_Distance, /* Online Contest Distance */
     e_Experimental2, /* Experimental2 */
@@ -140,6 +140,8 @@ namespace InfoBoxFactory
 
     START_OPEN_TIME,
     START_OPEN_ARRIVAL_TIME,
+
+    NEXT_RADIAL,
 
     e_NUM_TYPES /* Last item */
   };

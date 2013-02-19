@@ -196,16 +196,20 @@ private:
 void
 AirspaceFilterListener::OnModified(DataField &df)
 {
-  if (&df == distance_control->GetDataField())
-    dialog_state.distance = (unsigned)df.GetAsInteger() != WILDCARD
-      ? Units::ToSysDistance(fixed(df.GetAsInteger()))
+  if (&df == distance_control->GetDataField()) {
+    DataFieldEnum &dfe = (DataFieldEnum &)df;
+    dialog_state.distance = dfe.GetValue() != WILDCARD
+      ? Units::ToSysDistance(fixed(dfe.GetValue()))
       : fixed(-1);
 
-  else if (&df == direction_control->GetDataField())
-    dialog_state.direction = df.GetAsInteger();
+  } else if (&df == direction_control->GetDataField()) {
+    DataFieldEnum &dfe = (DataFieldEnum &)df;
+    dialog_state.direction = dfe.GetValue();
 
-  else if (&df == type_control->GetDataField())
-    dialog_state.type = df.GetAsInteger();
+  } else if (&df == type_control->GetDataField()) {
+    DataFieldEnum &dfe = (DataFieldEnum &)df;
+    dialog_state.type = dfe.GetValue();
+  }
 
   FilterMode(&df == name_control->GetDataField());
   UpdateList();
@@ -316,7 +320,7 @@ FillDistanceEnum(DataFieldEnum &df)
     df.AddChoice(distances[i], buffer);
   }
 
-  df.Set(0);
+  df.Set(0u);
 }
 
 static void

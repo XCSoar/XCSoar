@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 
+#ifdef HAVE_LIVETRACK24
 
 static LiveTrack24::VehicleType
 MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
@@ -45,17 +46,25 @@ MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
   return vehicleTypeMap[vti];
 }
 
+#endif
+
 TrackingGlue::TrackingGlue()
+#ifdef HAVE_LIVETRACK24
   :last_timestamp(0),
    flying(false)
+#endif
 {
   settings.SetDefaults();
+#ifdef HAVE_LIVETRACK24
   LiveTrack24::SetServer(settings.livetrack24.server);
+#endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   skylines.SetHandler(this);
 #endif
 }
+
+#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::StopAsync()
@@ -71,11 +80,16 @@ TrackingGlue::WaitStopped()
   StandbyThread::WaitStopped();
 }
 
+#endif
+
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
+#ifdef HAVE_SKYLINES_TRACKING
   skylines.SetSettings(_settings.skylines);
+#endif
 
+#ifdef HAVE_LIVETRACK24
   if (_settings.livetrack24.server != settings.livetrack24.server ||
       _settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password) {
@@ -92,13 +106,17 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
     ScopeLock protect(mutex);
     settings = _settings;
   }
+#endif
 }
 
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
+#ifdef HAVE_SKYLINES_TRACKING
   skylines.Tick(basic);
+#endif
 
+#ifdef HAVE_LIVETRACK24
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the
@@ -140,7 +158,10 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   flying = calculated.flight.flying;
 
   Trigger();
+#endif
 }
+
+#ifdef HAVE_LIVETRACK24
 
 void
 TrackingGlue::Tick()
@@ -208,13 +229,35 @@ TrackingGlue::Tick()
   mutex.Lock();
 }
 
+#endif
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
 void
 TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                         const GeoPoint &location, int altitude)
 {
-  const ScopeLock protect(skylines_data.mutex);
-  const SkyLinesTracking::Data::Traffic traffic(location, altitude);
-  skylines_data.traffic[pilot_id] = traffic;
+  bool user_known;
+
+  {
+    const ScopeLock protect(skylines_data.mutex);
+    const SkyLinesTracking::Data::Traffic traffic(location, altitude);
+    skylines_data.traffic[pilot_id] = traffic;
+
+    user_known = skylines_data.IsUserKnown(pilot_id);
+  }
+
+  if (!user_known)
+    /* we don't know this user's name yet - try to find it out by
+       asking the server */
+    skylines.RequestUserName(pilot_id);
 }
+
+void
+TrackingGlue::OnUserName(uint32_t user_id, const TCHAR *name)
+{
+  const ScopeLock protect(skylines_data.mutex);
+  skylines_data.user_names[user_id] = name;
+}
+
 #endif

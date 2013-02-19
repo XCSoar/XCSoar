@@ -1250,16 +1250,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1680"
-     inkscape:window-height="1020"
+     inkscape:window-width="613"
+     inkscape:window-height="457"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="2.3306124"
-     inkscape:cx="290.56964"
-     inkscape:cy="144.12729"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:zoom="1.1653062"
+     inkscape:cx="361.96963"
+     inkscape:cy="64.774929"
+     inkscape:window-x="161"
+     inkscape:window-y="430"
+     inkscape:window-maximized="0"
      inkscape:current-layer="g10" /><g
      id="g10"
      inkscape:groupmode="layer"
@@ -1286,6 +1286,7 @@
        y="-29.700184"
        style="font-size:10.39999962px;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
        id="tspan3240">Sicherheitshöhe</tspan></tspan></text>
+
 
 <path
    style="fill:none;stroke:#000000;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:2.4, 0.8;stroke-dashoffset:0"
@@ -1452,6 +1453,7 @@
        id="tspan3276"
        style="font-size:10.39999962px">Über Endanflug-Gleitpfad</tspan></tspan></text>
 
+
 <text
    xml:space="preserve"
    style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
@@ -1469,9 +1471,10 @@
        id="tspan3270"
        style="font-size:10.39999962px">Unter Gleitpfad</tspan></tspan></text>
 
+
 <text
    xml:space="preserve"
-   style="font-size:10.4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
+   style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
    x="311.16168"
    y="-160.33635"
    id="text3212"
@@ -1484,12 +1487,12 @@
        x="311.16168"
        y="-160.33635"
        id="tspan3216"
-       style="font-size:10.4px">Mc = 0   </tspan><tspan
+       style="font-size:10.39999962px">Mc = 0   </tspan><tspan
        dx="0"
        x="359.52576"
        y="-160.33635"
        id="tspan3218"
-       style="font-size:10.4px" /></tspan><tspan
+       style="font-size:10.39999962px" /></tspan><tspan
      sodipodi:role="line"
      x="311.16168"
      y="-147.33635"
@@ -1497,11 +1500,12 @@
        x="311.16168"
        y="-147.33635"
        id="tspan3222"
-       style="font-size:10.4px">VOpt = 50</tspan></tspan></text>
+       style="font-size:10.39999962px">VOpt = 92</tspan></tspan></text>
+
 
 <text
    xml:space="preserve"
-   style="font-size:10.4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
+   style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
    x="311.16168"
    y="-119.77789"
    id="text3224"
@@ -1514,12 +1518,12 @@
        x="311.16168"
        y="-119.77789"
        id="tspan3228"
-       style="font-size:10.4px">Mc = 1   </tspan><tspan
+       style="font-size:10.39999962px">Mc = 1   </tspan><tspan
        dx="0"
        x="359.52576"
        y="-119.77789"
        id="tspan3230"
-       style="font-size:10.4px" /></tspan><tspan
+       style="font-size:10.39999962px" /></tspan><tspan
      sodipodi:role="line"
      x="311.16168"
      y="-106.77789"
@@ -1527,11 +1531,12 @@
        x="311.16168"
        y="-106.77789"
        id="tspan3234"
-       style="font-size:10.4px">VOpt = 60</tspan></tspan></text>
+       style="font-size:10.39999962px">VOpt = 111</tspan></tspan></text>
+
 
 <text
    xml:space="preserve"
-   style="font-size:10.40000000000000000px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed Bold"
+   style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed Bold"
    x="311.16168"
    y="-80.571396"
    id="text3278"
@@ -1544,12 +1549,12 @@
        x="311.16168"
        y="-80.571396"
        id="tspan3282"
-       style="font-size:10.40000000000000000px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold">Mc = 2   </tspan><tspan
+       style="font-size:10.39999962px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold">Mc = 2   </tspan><tspan
        dx="0"
        x="359.52576"
        y="-80.571396"
        id="tspan3284"
-       style="font-size:10.40000000000000000px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold" /></tspan><tspan
+       style="font-size:10.39999962px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold" /></tspan><tspan
      sodipodi:role="line"
      x="311.16168"
      y="-67.571396"
@@ -1557,11 +1562,12 @@
        x="311.16168"
        y="-67.571396"
        id="tspan3288"
-       style="font-size:10.40000000000000000px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold">VOpt = 70</tspan></tspan></text>
+       style="font-size:10.39999962px;font-weight:bold;-inkscape-font-specification:DejaVu Serif Condensed Bold">VOpt = 130</tspan></tspan></text>
+
 
 <text
    xml:space="preserve"
-   style="font-size:10.4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
+   style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
    x="171.23502"
    y="-55.560345"
    id="text3242"
@@ -1574,12 +1580,12 @@
        x="171.23502"
        y="-55.560345"
        id="tspan3246"
-       style="font-size:10.4px">Mc = 3   </tspan><tspan
+       style="font-size:10.39999962px">Mc = 3   </tspan><tspan
        dx="0"
        x="219.59908"
        y="-55.560345"
        id="tspan3248"
-       style="font-size:10.4px" /></tspan><tspan
+       style="font-size:10.39999962px" /></tspan><tspan
      sodipodi:role="line"
      x="171.23502"
      y="-42.560345"
@@ -1587,11 +1593,12 @@
        x="171.23502"
        y="-42.560345"
        id="tspan3252"
-       style="font-size:10.4px">VOpt = 80</tspan></tspan></text>
+       style="font-size:10.39999962px">VOpt = 148</tspan></tspan></text>
+
 
 <text
    xml:space="preserve"
-   style="font-size:10.4px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
+   style="font-size:10.39999962px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
    x="85.386292"
    y="-55.560345"
    id="text3254"
@@ -1604,12 +1611,12 @@
        x="85.386292"
        y="-55.560345"
        id="tspan3258"
-       style="font-size:10.4px">Mc = 4  </tspan><tspan
+       style="font-size:10.39999962px">Mc = 4  </tspan><tspan
        dx="0"
        x="130.43942"
        y="-55.560345"
        id="tspan3260"
-       style="font-size:10.4px" /></tspan><tspan
+       style="font-size:10.39999962px" /></tspan><tspan
      sodipodi:role="line"
      x="85.386292"
      y="-42.560345"
@@ -1617,6 +1624,7 @@
        x="85.386292"
        y="-42.560345"
        id="tspan3264"
-       style="font-size:10.4px">VOpt = 90</tspan></tspan></text>
+       style="font-size:10.39999962px">VOpt = 167</tspan></tspan></text>
+
 
 </g></svg>

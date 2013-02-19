@@ -77,7 +77,8 @@ void
 SymbolsConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(TRAIL_LENGTH, df)) {
-    TrailSettings::Length trail_length = (TrailSettings::Length)df.GetAsInteger();
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    TrailSettings::Length trail_length = (TrailSettings::Length)dfe.GetValue();
     ShowTrailControls(trail_length != TrailSettings::Length::OFF);
   }
 }

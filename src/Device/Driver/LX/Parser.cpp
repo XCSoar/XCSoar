@@ -171,7 +171,12 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
    * variofil
    * tefilter
    * televel
-   * varioavg.
+   * varioavg
+   * variorange
+   * sctab
+   * sclow
+   * scspeed
+   * SmartDiff
    * glider name
    * time offset
    */

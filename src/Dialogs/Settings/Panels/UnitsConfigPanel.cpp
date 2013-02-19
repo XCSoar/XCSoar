@@ -103,7 +103,8 @@ void
 UnitsConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(UnitsPreset, df)) {
-    int result = df.GetAsInteger();
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    int result = dfe.GetValue();
     if (result > 0) {
       // First selection means not to load any preset.
       const UnitSetting &units = Units::Store::Read(result - 1);

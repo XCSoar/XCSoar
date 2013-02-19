@@ -542,7 +542,7 @@ RowFormWidget::LoadValue(unsigned i, bool value)
 }
 
 void
-RowFormWidget::LoadValueEnum(unsigned i, int value)
+RowFormWidget::LoadValueEnum(unsigned i, unsigned value)
 {
   WndProperty &control = GetControl(i);
   DataFieldEnum &df = *(DataFieldEnum *)control.GetDataField();

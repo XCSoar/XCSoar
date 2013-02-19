@@ -226,81 +226,61 @@ Les enregistrements sont stockés dans le sous répertoire 'logs'  du répertoir
 
 \section{Identification du FLARM}\label{sec:flarm-ident-file}
 
+Le fichier d'identification des FLARMs \verb|xcsoar-flarm.txt| est un tableau mettant en relation le numéro d'identification OACI des FLARMs (émis de manière optionnelle) et l'immatriculation du planeur/nom du pilote. Si un signal FLARM reçu, comporte un identifiant défini dans ce tableau, alors le nom du planeur/pilote est affiché sur la carte à côté du symbole de trafic FLARM.
 
-The FLARM identification file \verb|xcsoar-flarm.txt| defines a table
-of aircraft registrations or pilot names against the ICAO IDs that are
-optionally broadcast by FLARM equipped aircraft.  These names are
-displayed on the map next to FLARM traffic symbols, for matching ICAO
-IDs.
+Le format de ce fichier est une suite de lignes, une par aéronef, ayant le format  {\em oaci id=nom}, oû {\em oaci id} est le code hexadécimal OACI de l'aéronef et {\em name} est un texte libre de 20 caractères maximum. Un minimum de caractères est préférable afin de ne pas rendre illisible la carte, le numéro de concours est un bon choix.
 
-The format of this file is a list of entries, one for each aircraft,
-of the form {\em icao id=name}, where {\em icao id} is the six-digit
-hex value of the ICAO aircraft ID, and {\em name} is free text
-(limited to 20 characters), describing the aircraft and/or pilot name.
-Short names are preferred in order to reduce clutter on the map
-display.
 
-Example:
+Exemple:
 \begin{verbatim}
-DD8F12=WUS
-DA8B06=Chuck Yeager
+DD8F12=C41
+DA8B06=GN
 \end{verbatim}
 
-Currently this file is limited to a maximum of 200 entries.
+A ce jour, ce fichier est limité à 200 lignes.
 
-Additionally the FlarmNet file \verb|data.fln| is supported. It contains all 
-the FLARM identifications distributed by the FlarmNet community. The file can 
-be downloaded from the web site:
+De plus, le fichier de Flarmnet \verb|data.fln| peut être utilisé. Il comporte toutes les identifications fournies par la communauté FlarmNet. Ce fichier est téléchargeable sur le site :
 
 \url{http://www.flarmnet.org}
 
-The file must reside in the XCSoarData directory.
-
+Il doit être copié dans le répertoire XCSoarData.
 
 %%%%%%%%%%%%%% advanced stuff below..
-\section{Input events}
+\section{Événements d'entrée}
 
-The input event file (extension \verb|.xci|) is a plain text file
-designed to control the input and events in your glide computer.
+Le fichier d'événements d'entrée (suffixe  \verb|.xci|) est un fichier texte destiné au contrôle des entrées de votre calculateur de vol.
 
-You do not require access to the source code or understanding of
-programming to write your own input event files but you do require
-some advanced understanding of XCSoar and of gliding.
+Il n'est pas nécessaire d'avoir accès au code source ou de connaitre un langage de programation pour créer votre propre fichier d'événements d'entrée, mais vous devez avoir de bonnes connaissances de XCSoar et du vol à voile.
 
-Some reasons why you might like to use xci:
+
+Quelque raisons qui vous feraient apprécier l'utilisation de xci :
 \begin{itemize}
-\item Modify the layout of button labels
-\item Support a new set or layout of buttons (organiser hardware buttons)
-\item Support an external device such as a bluetooth keyboard or gamepad
-\item Customise any button/key event
-\item Do multiple events from one key or glide computer triggered process
+\item Modification de la présentation des étiquettes.
+\item Possibilité de supporter un nouvel ensemble de positionnement des boutons
+\item Support d'un matériel externe comme un clavier bluetooth ou une manette de jeux.
+\item Personnaliser l'évènement levé par un bouton/touche.
+\item Générer plusieurs évènements en appuyant sur une seule touche ou à partir d'un processus déclenché par le calculateur de vol.
 \end{itemize}
-For more information on editing or writing or your own input event
-file, see the {\em XCSoar Advanced Configuration Manual}.
 
-\section{Status}\label{sec:status-file}
+Pour plus de détails concernant la création de votre propre fichier d'événements d'entré, voir  {\em XCSoar Advanced Configuration Manual}.
 
-Status files are text of the form {\em label=value}, arranged in
-blocks of text where each block corresponds to an individual status
-message.  These are delimited by double spaces.  Each block can
-contain the following fields:
+\section{États}\label{sec:status-file}
+
+Les fichiers d'états sont des fichiers textes de format {\em label=valeur}, arrangés par blocs, chaque bloc  correspondant à un seul message d'état. Les blocs sont séparés par des doubles espaces et peuvent contenir les champs suivants :
 \begin{description}
-\item[key]  This is the text of the status message.
-\item[sound] Location of a WAV audio file to play when the status
-  message appears.  This is optional.
-\item[delay] Duration in milliseconds the status message is
-  to be displayed.  This is optional.
-\item[hide] A boolean (yes/no) that dictates whether the message
- is to be hidden (that is, not displayed). 
+\item[key]  C'est le texte du message d'état.
+\item[sound] Emplacement du fichier audio WAV qui est joué lors de l'apparition du message (optionnel).
+\item[delay] Durée d'affichage (en milliseconde) du message (optionnel).
+\item[hide] Valeur booléenne (yes/no) permettant d'afficher (yes) ou non (no) le message. Si pas défini, le message s'affiche.
 \end{description} 
 
 Example:
 \begin{verbatim}
-key=Simulation\r\nNothing is real!
+key=Simulation\r\nRien est réel
 sound=\My Documents\XCSoarData\Start_Real.wav
 delay=1500
 
-key=Task started
+key=Circuit commencé
 delay=1500
 hide=yes
 \end{verbatim}

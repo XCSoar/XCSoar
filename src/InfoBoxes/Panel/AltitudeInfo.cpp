@@ -100,10 +100,10 @@ AltitudeInfoPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
   TwoWidgets::Set(first, second);
   TwoWidgets::Initialise(parent, rc);
 
-  first->AddReadOnly(_("H GPS"));
-  first->AddReadOnly(_("H Baro"));
+  first->AddReadOnly(_("Alt GPS"));
+  first->AddReadOnly(_("Alt Baro"));
   second->AddReadOnly(_("H AGL"));
-  second->AddReadOnly(_("H GND"));
+  second->AddReadOnly(_("Terrain"));
 }
 
 void

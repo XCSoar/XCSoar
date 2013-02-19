@@ -56,8 +56,11 @@ the variometer is in climb audio mode.
 
 \section{Audio Variometer}
 
-In addition to the variometer display XCSoar provides an acoustic variometer which transfers the variometer measurements are transferre into sounds. The audio variometer is for now only available on android devices. For proper performance connect your device to a barometric sensor or use the internal one of your android device if provided.
-The audio vario is enabled/disabled via the gauges configuration in the system setup menu.
+In addition to the variometer display XCSoar provides an acoustic variometer which transfers the 
+variometer measurements are transferre into sounds. The audio variometer is for now only available 
+on android devices. For proper performance connect your device to a barometric sensor or use the 
+internal one of your android device if provided.
+The audio vario is enabled/disabled via the gauges configuration in the configuration.
 
 
 \section{Air data inputs}
@@ -121,7 +124,7 @@ The wind magnitude and direction can also be adjusted manually from the
 wind settings dialogue (see below).  
 
 Statistics are gathered so that winds are recorded at different
-heights and times.  When the glider's altitude changes significantly,
+altitudes and times.  When the glider's altitude changes significantly,
 the statistics are consulted to determine the best estimate of the
 wind based on previous measurements.
 
@@ -192,7 +195,7 @@ not require zig-zag manoeuvres.
 
 The wind dialogue allows the initial estimate of the wind speed and
 direction to be entered, usually prior to flight.
-\menulabel{\bmenu{Config 1}\blink\bmenut{Setup}{Wind}}
+\menulabel{\bmenu{Config 1}\blink\bmenus{Wind}}
 
 \begin{center}
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/dialog-wind2.png}
@@ -223,10 +226,10 @@ glider is above final glide.
 
 The thermal band meter shows a graph, where the vertical axis is
 height above the break-off height (Section~\ref{sec:safety-heights}), and is
-scaled according to the maximum height achieved.  The horizontal axis is the average climb
-rate achieved at a particular height band.  The horizontal axis is
+scaled according to the maximum altitude achieved.  The horizontal axis is the average climb
+rate achieved at a particular altitude band.  The horizontal axis is
 scaled according to the MacCready setting, and an arrow indicating this
-setting, and the glider's current height is overlaid on the shaded
+setting, and the glider's current altitude is overlaid on the shaded
 area.  This scaling and arrow makes it easy to see how the pilot's
 MacCready setting compares with achieved thermals and to plan the
 desired working height band.
@@ -250,7 +253,7 @@ The thermal locator marks the location of the last 20
 thermals on the map with the thermal symbol during cruise.
 
 This location is calculated to compensate for the thermal drift at 
-the glider's height.  This means that internally XCSoar remembers 
+the glider's altitude.  This means that internally XCSoar remembers 
 the location of the thermal source on the ground.  In other words, 
 if you leave a thermal at the top and later return at low altitude, 
 the position on the map shows the predicted location of the thermal 
@@ -345,8 +348,8 @@ Several pages of interest:
 \begin{description}
 
 \item[Wind at altitude]
-  This shows a graph of the wind speed versus height, and shows the
-  wind vector at several heights.
+  This shows a graph of the wind speed versus altitude, and shows the
+  wind vector at several altitudes.
 
 The `Set wind' button opens the wind settings dialogue (e.g.\ to
 manually set the wind).
@@ -359,8 +362,8 @@ manually set the wind).
   This page is only available if a supported instrument is connected
   to XCSoar that produces outside air temperature and humidity.  The
   chart shows the variation of dry air temperature, dew point
-  temperature and outside air temperature with height.  The convection
-  forecast is summarised as the estimated thermal convection height
+  temperature and outside air temperature with altitude.  The convection
+  forecast is summarised as the estimated thermal convection altitude
   and estimated cloud base.
 
 \begin{center}
@@ -428,7 +431,7 @@ direction through the BL.
 \end{center}
 
 \item[H bl]  
-Height of the top of the mixing layer, which for thermal convection is
+Altitude of the top of the mixing layer, which for thermal convection is
 the average top of a dry thermal.  Over flat terrain, maximum
 thermalling heights will be lower due to the glider descent rate and
 other factors.  In the presence of clouds (which release additional
@@ -446,7 +449,7 @@ glider flying.
 This parameter estimates the height above ground at which the average
 dry updraft strength drops below 225 fpm and is expected to give
 better quantitative numbers for the maximum cloudless thermalling
-height than the BL Top height, especially when mixing results from
+height than the BL Top altitude, especially when mixing results from
 vertical wind shear rather than thermals.  (Note: the present
 assumptions tend to underpredict the max. thermalling height for dry
 consitions.) In the presence of clouds the maximum thermalling height
@@ -459,8 +462,8 @@ formation of clouds within the BL and might be used either in
 conjunction with or instead of the other cloud prediction parameters.
 It assumes a very simple relationship between cloud cover percentage
 and the maximum relative humidity within the BL.  The cloud base
-height is not predicted, but is expected to be below the BL Top
-height.
+altitude is not predicted, but is expected to be below the BL Top
+altitude.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/rasp-blcloudpct.png}
@@ -473,10 +476,10 @@ simulation accuracy; e.g. if observed surface temperatures are
 significantly below those forecast, then soaring conditions will be
 poorer than forecast.
 \item[hwcrit]  
-This parameter estimates the height at which the average dry updraft
+This parameter estimates the altitude at which the average dry updraft
 strength drops below 225 fpm and is expected to give better
 quantitative numbers for the maximum cloudless thermalling height than
-the BL Top height, especially when mixing results from vertical wind
+the BL Top altitude, especially when mixing results from vertical wind
 shear rather than thermals.  (Note: the present assumptions tend to
 underpredict the max. thermalling height for dry consitions.) In the
 presence of clouds the maximum thermalling height may instead be
@@ -488,7 +491,7 @@ the BL as created by horizontal wind convergence. Positive convergence
 is associated with local small-scale convergence lines.  Negative
 convergence (divergence) produces subsiding vertical motion, creating
 low-level inversions which limit thermalling heights.
-\item[blcwbase] This parameter estimates the height of the cumulus cloud
+\item[blcwbase] This parameter estimates the altitude of the cumulus cloud
 base.
 \end{description}
 

@@ -64,6 +64,13 @@ DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
   mHelp = _help ? _tcsdup(_help) : NULL;
 }
 
+unsigned
+DataFieldEnum::GetValue() const
+{
+  assert(value < entries.size());
+  return entries[value].GetId();
+}
+
 int
 DataFieldEnum::GetAsInteger() const
 {
@@ -164,7 +171,7 @@ DataFieldEnum::GetHelp() const
 }
 
 void
-DataFieldEnum::Set(int Value)
+DataFieldEnum::Set(unsigned Value)
 {
   int i = Find(Value);
   if (i >= 0)
@@ -246,7 +253,7 @@ DataFieldEnum::Dec()
 }
 
 void
-DataFieldEnum::Sort(int startindex)
+DataFieldEnum::Sort(unsigned startindex)
 {
   std::sort(entries.begin() + startindex, entries.end(),
             [](const DataFieldEnum::Entry &a, const DataFieldEnum::Entry &b) {

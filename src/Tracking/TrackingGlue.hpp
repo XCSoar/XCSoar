@@ -42,9 +42,17 @@ struct MoreData;
 struct DerivedInfo;
 
 class TrackingGlue final
-  : protected StandbyThread
+#if defined(HAVE_LIVETRACK24) || defined(HAVE_SKYLINES_TRACKING_HANDLER)
+  :
+#endif
+#ifdef HAVE_LIVETRACK24
+  protected StandbyThread
+#endif
+#if defined(HAVE_LIVETRACK24) && defined(HAVE_SKYLINES_TRACKING_HANDLER)
+  ,
+#endif
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-  , private SkyLinesTracking::Handler
+  private SkyLinesTracking::Handler
 #endif
 {
   struct LiveTrack24State
@@ -65,12 +73,15 @@ class TrackingGlue final
 
   TrackingSettings settings;
 
+#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Glue skylines;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SkyLinesTracking::Data skylines_data;
 #endif
+#endif
 
+#ifdef HAVE_LIVETRACK24
   LiveTrack24State state;
 
   /**
@@ -85,23 +96,33 @@ class TrackingGlue final
   unsigned ground_speed;
   Angle track;
   bool flying, last_flying;
+#endif
 
 public:
   TrackingGlue();
+
+#ifdef HAVE_LIVETRACK24
   void StopAsync();
   void WaitStopped();
+#else
+  void StopAsync() {}
+  void WaitStopped() {}
+#endif
 
   void SetSettings(const TrackingSettings &_settings);
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
+#ifdef HAVE_LIVETRACK24
 protected:
   virtual void Tick();
+#endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 private:
   /* virtual methods from SkyLinesTracking::Handler */
   virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                          const GeoPoint &location, int altitude) override;
+    virtual void OnUserName(uint32_t user_id, const TCHAR *name) override;
 
 public:
   const SkyLinesTracking::Data &GetSkyLinesData() const {

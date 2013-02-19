@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+#include "Items/List.hpp"
+#include "Items/Builder.hpp"
 #include "Look/MapLook.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
-#include "MapWindow/MapItemList.hpp"
-#include "MapWindow/MapItemListBuilder.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
@@ -87,6 +87,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 #endif
 
   builder.AddTraffic(basic.flarm.traffic);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  builder.AddSkyLinesTraffic();
+#endif
 
   // Sort the list of map items
   list.Sort();

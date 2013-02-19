@@ -286,12 +286,16 @@ FilterDataFieldListener::OnModified(DataField &df)
 {
   if (&df == name_control->GetDataField())
     dialog_state.name = df.GetAsString();
-  else if (&df == distance_filter->GetDataField())
-    dialog_state.distance_index = df.GetAsInteger();
-  else if (&df == direction_filter->GetDataField())
-    dialog_state.direction_index = df.GetAsInteger();
-  else if (&df == type_filter->GetDataField())
-    dialog_state.type_index = (TypeFilter)df.GetAsInteger();
+  else if (&df == distance_filter->GetDataField()) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    dialog_state.distance_index = dfe.GetValue();
+  } else if (&df == direction_filter->GetDataField()) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    dialog_state.direction_index = dfe.GetValue();
+  } else if (&df == type_filter->GetDataField()) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    dialog_state.type_index = (TypeFilter)dfe.GetValue();
+  }
 
   UpdateList();
 }

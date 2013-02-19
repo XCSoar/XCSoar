@@ -35,12 +35,6 @@ DataFieldBoolean::CreateComboList() const
   return combo_list;
 }
 
-bool
-DataFieldBoolean::GetAsBoolean() const
-{
-  return mValue;
-}
-
 int
 DataFieldBoolean::GetAsInteger() const
 {

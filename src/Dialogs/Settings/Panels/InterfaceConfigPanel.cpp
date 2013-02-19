@@ -244,7 +244,7 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
     TCHAR buffer[MAX_PATH];
     const TCHAR *new_value, *new_base;
 
-    switch (df.GetAsInteger()) {
+    switch (df.GetValue()) {
     case 0:
       new_value = new_base = _T("auto");
       break;

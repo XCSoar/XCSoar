@@ -330,6 +330,16 @@ TestBlueFly()
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 97482));
 
+  ok1(device->ParseNMEA("BAT 1068", nmea_info)); //4.2V
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 100.0));
+  ok1(device->ParseNMEA("BAT EFE", nmea_info)); //3.84V
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 50.0));
+  ok1(device->ParseNMEA("BAT ED8", nmea_info)); //3.80V
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 37.0));
+
   delete device;
 }
 
@@ -1354,7 +1364,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(715);
+  plan_tests(724);
 
   TestGeneric();
   TestTasman();

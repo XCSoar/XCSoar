@@ -68,6 +68,8 @@ namespace SkyLinesTracking {
     FIX = 3,
     TRAFFIC_REQUEST = 4,
     TRAFFIC_RESPONSE = 5,
+    USER_NAME_REQUEST = 6,
+    USER_NAME_RESPONSE = 7,
   };
 
   /**
@@ -323,6 +325,72 @@ namespace SkyLinesTracking {
 
 #ifdef __cplusplus
   static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
+#endif
+
+  /**
+   * The client requests the name of a user.
+   */
+  struct UserNameRequestPacket {
+    Header header;
+
+    /**
+     * The id of the user, as obtained by
+     * #TrafficResponsePacket::Packet::pilot_id.
+     */
+    uint32_t user_id;
+
+    /**
+     * Reserved for future use.
+     */
+    uint32_t reserved;
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(UserNameRequestPacket) == 24, "Wrong struct size");
+#endif
+
+  /**
+   * The server replies with information about a user.
+   */
+  struct UserNameResponsePacket {
+    /**
+     * A user with the specified id was not found.  The following
+     * attributes are undefined.
+     */
+    static const uint32_t FLAG_NOT_FOUND = 0x1;
+
+    Header header;
+
+    /**
+     * The id of the user, as obtained by
+     * #TrafficResponsePacket::Packet::pilot_id.
+     */
+    uint32_t user_id;
+
+    uint32_t flags;
+
+    /**
+     * The club the user belongs to.  0 means no club.
+     */
+    uint32_t club_id;
+
+    /**
+     * The name of the user in UTF-8 bytes.
+     */
+    uint8_t name_length;
+
+    /**
+     * Reserved for future use.
+     */
+    uint8_t reserved1, reserved2, reserved3;
+    uint32_t reserved4, reserved5;
+
+    /* the struct is followed by #name_length bytes of UTF-8
+       containing the name, not null-terminated */
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(UserNameResponsePacket) == 40, "Wrong struct size");
 #endif
 };
 

@@ -486,10 +486,12 @@ RefreshTargetPoint()
 static void
 OnTaskPointData(DataField *sender, DataField::DataAccessMode mode)
 {
+  const DataFieldEnum &dfe = *(const DataFieldEnum *)sender;
+
   unsigned old_target_point = target_point;
   switch (mode) {
   case DataField::daChange:
-    target_point = sender->GetAsInteger() + initial_active_task_point;
+    target_point = dfe.GetValue() + initial_active_task_point;
     if (target_point != old_target_point) {
       RefreshTargetPoint();
     }

@@ -109,7 +109,7 @@ void
 WindSetupPanel::OnAutoWind(DataFieldEnum &Sender)
 {
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
-  settings.SetLegacyAutoWindMode(Sender.GetAsInteger());
+  settings.SetLegacyAutoWindMode(Sender.GetValue());
 }
 
 void

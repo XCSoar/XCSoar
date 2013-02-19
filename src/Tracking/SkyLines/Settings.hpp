@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Features.hpp"
 
+#ifdef HAVE_SKYLINES_TRACKING
+
 #include <stdint.h>
 
 namespace SkyLinesTracking {
@@ -52,5 +54,7 @@ namespace SkyLinesTracking {
     }
   };
 }
+
+#endif
 
 #endif

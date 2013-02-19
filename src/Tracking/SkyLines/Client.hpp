@@ -33,9 +33,11 @@ Copyright_License {
 
 struct NMEAInfo;
 class IOThread;
+class SocketAddress;
 
 namespace SkyLinesTracking {
   struct TrafficResponsePacket;
+  struct UserNameResponsePacket;
 
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -61,6 +63,11 @@ namespace SkyLinesTracking {
       key(0) {}
     ~Client() { Close(); }
 
+    constexpr
+    static unsigned GetDefaultPort() {
+      return 5597;
+    }
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     void SetIOThread(IOThread *io_thread);
     void SetHandler(Handler *handler);
@@ -74,16 +81,19 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(const char *host);
+    bool Open(const SocketAddress &_address);
     void Close();
 
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
     bool SendTrafficRequest(bool followees, bool club);
+    bool SendUserNameRequest(uint32_t user_id);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   private:
     void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
+    void OnUserNameReceived(const UserNameResponsePacket &packet,
+                            size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from FileEventHandler */

@@ -29,6 +29,8 @@ Copyright_License {
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 #include "IO/Async/IOThread.hpp"
+#include "Util/UTF8.hpp"
+#include "Util/ConvertString.hpp"
 #endif
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -60,11 +62,14 @@ SkyLinesTracking::Client::SetHandler(Handler *_handler)
 #endif
 
 bool
-SkyLinesTracking::Client::Open(const char *host)
+SkyLinesTracking::Client::Open(const SocketAddress &_address)
 {
+  assert(_address.IsDefined());
+
   Close();
 
-  if (!address.Lookup(host, "5597", SOCK_DGRAM) || !socket.CreateUDP())
+  address = _address;
+  if (!socket.CreateUDP())
     return false;
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
@@ -206,6 +211,25 @@ SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
   return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
 }
 
+bool
+SkyLinesTracking::Client::SendUserNameRequest(uint32_t user_id)
+{
+  if (key == 0 || !socket.IsDefined())
+    return false;
+
+  UserNameRequestPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::USER_NAME_REQUEST);
+  packet.header.key = ToBE64(key);
+  packet.user_id = ToBE32(user_id);
+  packet.reserved = 0;
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+
+  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+}
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 inline void
@@ -229,6 +253,23 @@ SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
 }
 
 inline void
+SkyLinesTracking::Client::OnUserNameReceived(const UserNameResponsePacket &packet,
+                                             size_t length)
+{
+  if (length != sizeof(packet) + packet.name_length)
+    return;
+
+  /* the name follows the UserNameResponsePacket object */
+  const char *_name = (const char *)(&packet + 1);
+  const std::string name(_name, packet.name_length);
+  if (!ValidateUTF8(name.c_str()))
+    return;
+
+  UTF8ToWideConverter tname(name.c_str());
+  handler->OnUserName(FromBE32(packet.user_id), tname);
+}
+
+inline void
 SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 {
   Header &header = *(Header *)data;
@@ -244,11 +285,14 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 
   const ACKPacket &ack = *(const ACKPacket *)data;
   const TrafficResponsePacket &traffic = *(const TrafficResponsePacket *)data;
+  const UserNameResponsePacket &user_name =
+    *(const UserNameResponsePacket *)data;
 
   switch ((Type)FromBE16(header.type)) {
   case PING:
   case FIX:
   case TRAFFIC_REQUEST:
+  case USER_NAME_REQUEST:
     break;
 
   case ACK:
@@ -257,6 +301,10 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
 
   case TRAFFIC_RESPONSE:
     OnTrafficReceived(traffic, length);
+    break;
+
+  case USER_NAME_RESPONSE:
+    OnUserNameReceived(user_name, length);
     break;
   }
 }

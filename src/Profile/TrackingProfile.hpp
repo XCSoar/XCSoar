@@ -24,11 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_PROFILE_HPP
 #define XCSOAR_TRACKING_PROFILE_HPP
 
+#include "Tracking/Features.hpp"
+
+#ifdef HAVE_LIVETRACK24
 struct LiveTrack24Settings;
+#endif
+
 struct TrackingSettings;
 
 namespace Profile {
+#ifdef HAVE_LIVETRACK24
   void Load(LiveTrack24Settings &settings);
+#endif
+
   void Load(TrackingSettings &settings);
 };
 

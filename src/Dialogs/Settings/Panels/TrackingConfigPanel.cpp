@@ -38,19 +38,25 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 enum ControlIndex {
+#ifdef HAVE_SKYLINES_TRACKING
   SL_ENABLED,
   SL_INTERVAL,
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   SL_TRAFFIC_ENABLED,
 #endif
   SL_KEY,
+#endif
+#if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
   SPACER,
+#endif
+#ifdef HAVE_LIVETRACK24
   LT24Enabled,
   TrackingInterval,
   TrackingVehicleType,
   LT24Server,
   LT24Username,
   LT24Password
+#endif
 };
 
 class TrackingConfigPanel
@@ -60,8 +66,13 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
+#ifdef HAVE_SKYLINES_TRACKING
   void SetSkyLinesEnabled(bool enabled);
+#endif
+
+#ifdef HAVE_LIVETRACK24
   void SetEnabled(bool enabled);
+#endif
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
@@ -71,6 +82,8 @@ private:
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df);
 };
+
+#ifdef HAVE_SKYLINES_TRACKING
 
 void
 TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
@@ -82,6 +95,10 @@ TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
   SetRowEnabled(SL_KEY, enabled);
 }
 
+#endif
+
+#ifdef HAVE_LIVETRACK24
+
 void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
@@ -92,17 +109,28 @@ TrackingConfigPanel::SetEnabled(bool enabled)
   SetRowEnabled(LT24Password, enabled);
 }
 
+#endif
+
 void
 TrackingConfigPanel::OnModified(DataField &df)
 {
+#ifdef HAVE_SKYLINES_TRACKING
   if (IsDataField(SL_ENABLED, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetSkyLinesEnabled(dfb.GetAsBoolean());
-  } else if (IsDataField(LT24Enabled, df)) {
+    return;
+  }
+#endif
+
+#ifdef HAVE_LIVETRACK24
+  if (IsDataField(LT24Enabled, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetEnabled(dfb.GetAsBoolean());
   }
+#endif
 }
+
+#ifdef HAVE_LIVETRACK24
 
 static constexpr StaticEnumChoice server_list[] = {
   { 0, _T("www.livetrack24.com") },
@@ -119,6 +147,8 @@ static constexpr StaticEnumChoice vehicle_type_list[] = {
   { 0 },
 };
 
+#endif
+
 void
 TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -127,6 +157,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
+#ifdef HAVE_SKYLINES_TRACKING
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
   AddTime(_("Tracking Interval"), NULL, 5, 1200, 5,
           settings.skylines.interval);
@@ -143,9 +174,13 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   else
     buffer.clear();
   AddText(_T("Key"), NULL, buffer);
+#endif
 
+#if defined(HAVE_SKYLINES_TRACKING) && defined(HAVE_LIVETRACK24)
   AddSpacer();
+#endif
 
+#ifdef HAVE_LIVETRACK24
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
   AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
@@ -159,11 +194,18 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddText(_("Username"), _T(""), settings.livetrack24.username);
   AddPassword(_("Password"), _T(""), settings.livetrack24.password);
+#endif
 
+#ifdef HAVE_SKYLINES_TRACKING
   SetSkyLinesEnabled(settings.skylines.enabled);
+#endif
+
+#ifdef HAVE_LIVETRACK24
   SetEnabled(settings.livetrack24.enabled);
+#endif
 }
 
+#ifdef HAVE_SKYLINES_TRACKING
 static bool
 SaveKey(const RowFormWidget &form, unsigned idx, const TCHAR *profile_key,
         uint64_t &value_r)
@@ -177,6 +219,7 @@ SaveKey(const RowFormWidget &form, unsigned idx, const TCHAR *profile_key,
   Profile::Set(profile_key, s);
   return true;
 }
+#endif
 
 bool
 TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
@@ -186,11 +229,14 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
   TrackingSettings &settings =
     CommonInterface::SetComputerSettings().tracking;
 
+#ifdef HAVE_LIVETRACK24
   changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.interval);
 
   changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
                            settings.vehicleType);
+#endif
 
+#ifdef HAVE_SKYLINES_TRACKING
   changed |= SaveValue(SL_ENABLED, ProfileKeys::SkyLinesTrackingEnabled,
                        settings.skylines.enabled);
 
@@ -204,7 +250,9 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,
                      settings.skylines.key);
+#endif
 
+#ifdef HAVE_LIVETRACK24
   changed |= SaveValue(LT24Enabled, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
 
   changed |= SaveValue(LT24Server, ProfileKeys::LiveTrack24Server,
@@ -215,6 +263,7 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(LT24Password, ProfileKeys::LiveTrack24Password,
                        settings.livetrack24.password.buffer(), settings.livetrack24.password.MAX_SIZE);
+#endif
 
   _changed |= changed;
   _require_restart |= require_restart;

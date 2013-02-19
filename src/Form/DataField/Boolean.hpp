@@ -46,7 +46,10 @@ public:
   void Dec();
   virtual ComboList *CreateComboList() const;
 
-  bool GetAsBoolean() const;
+  bool GetAsBoolean() const {
+    return mValue;
+  }
+
   virtual int GetAsInteger() const;
   virtual const TCHAR *GetAsString() const;
 

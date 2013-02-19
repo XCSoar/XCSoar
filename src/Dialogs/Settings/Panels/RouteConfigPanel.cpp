@@ -79,12 +79,14 @@ void
 RouteConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(RoutePlannerMode, df)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     RoutePlannerConfig::Mode mode =
-      (RoutePlannerConfig::Mode)df.GetAsInteger();
+      (RoutePlannerConfig::Mode)dfe.GetValue();
     ShowRouteControls(mode != RoutePlannerConfig::Mode::NONE);
   } else if (IsDataField(TurningReach, df)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     RoutePlannerConfig::ReachMode mode =
-      (RoutePlannerConfig::ReachMode)df.GetAsInteger();
+      (RoutePlannerConfig::ReachMode)dfe.GetValue();
     ShowReachControls(mode != RoutePlannerConfig::ReachMode::OFF);
   }
 }

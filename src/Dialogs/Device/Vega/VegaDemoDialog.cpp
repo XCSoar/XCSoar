@@ -92,7 +92,7 @@ OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessMode Mode)
 {
   switch (Mode){
   case DataField::daChange:
-    VegaDemoAudioClimb = Sender->GetAsInteger() == 1;
+    VegaDemoAudioClimb = ((DataFieldBoolean *)Sender)->GetAsBoolean();
     VegaWriteDemo();
     break;
 

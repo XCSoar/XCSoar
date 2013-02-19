@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAP_ITEM_LIST_BUILDER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Weather/Features.hpp"
 
 class MapItemList;
 class Angle;
@@ -68,12 +67,11 @@ public:
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddMarkers(const ProtectedMarkers &marks);
   void AddTraffic(const TrafficList &flarm);
+  void AddSkyLinesTraffic();
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 
-#ifdef HAVE_NOAA
   void AddWeatherStations(NOAAStore &store);
-#endif
 };
 
 #endif

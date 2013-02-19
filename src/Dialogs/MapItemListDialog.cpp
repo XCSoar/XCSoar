@@ -32,8 +32,8 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "MapSettings.hpp"
-#include "MapWindow/MapItem.hpp"
-#include "MapWindow/MapItemList.hpp"
+#include "MapWindow/Items/MapItem.hpp"
+#include "MapWindow/Items/List.hpp"
 #include "Renderer/MapItemListRenderer.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
@@ -55,6 +55,9 @@ HasDetails(const MapItem &item)
   case MapItem::SELF:
   case MapItem::MARKER:
   case MapItem::THERMAL:
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  case MapItem::SKYLINES_TRAFFIC:
+#endif
     return false;
 
   case MapItem::AIRSPACE:
@@ -257,6 +260,9 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
   case MapItem::SELF:
   case MapItem::MARKER:
   case MapItem::THERMAL:
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  case MapItem::SKYLINES_TRAFFIC:
+#endif
     break;
 
   case MapItem::AIRSPACE:

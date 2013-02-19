@@ -77,7 +77,7 @@ Waypoints::WaypointNameTree::Get(const TCHAR *name) const
 {
   TCHAR normalized_name[_tcslen(name) + 1];
   NormalizeSearchString(normalized_name, name);
-  return get(normalized_name, NULL);
+  return RadixTree<const Waypoint *>::Get(normalized_name, NULL);
 }
 
 void
@@ -87,7 +87,17 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
   TCHAR normalized[_tcslen(prefix) + 1];
   NormalizeSearchString(normalized, prefix);
   VisitorAdapter adapter(visitor);
-  visit_prefix(normalized, adapter);
+  VisitPrefix(normalized, adapter);
+}
+
+TCHAR *
+Waypoints::WaypointNameTree::SuggestNormalisedPrefix(const TCHAR *prefix,
+                                                     TCHAR *dest,
+                                                     size_t max_length) const
+{
+  TCHAR normalized[_tcslen(prefix) + 1];
+  NormalizeSearchString(normalized, prefix);
+  return Suggest(normalized, dest, max_length);
 }
 
 void
@@ -95,7 +105,7 @@ Waypoints::WaypointNameTree::Add(const Waypoint &wp)
 {
   TCHAR normalized_name[wp.name.length() + 1];
   NormalizeSearchString(normalized_name, wp.name.c_str());
-  add(normalized_name, &wp);
+  RadixTree<const Waypoint *>::Add(normalized_name, &wp);
 }
 
 void
@@ -103,7 +113,7 @@ Waypoints::WaypointNameTree::Remove(const Waypoint &wp)
 {
   TCHAR normalized_name[wp.name.length() + 1];
   NormalizeSearchString(normalized_name, wp.name.c_str());
-  remove(normalized_name, &wp);
+  RadixTree<const Waypoint *>::Remove(normalized_name, &wp);
 }
 
 Waypoints::Waypoints():
@@ -296,7 +306,7 @@ Waypoints::Clear()
 {
   ++serial;
   home = NULL;
-  name_tree.clear();
+  name_tree.Clear();
   waypoint_tree.clear();
   next_id = 1;
 }

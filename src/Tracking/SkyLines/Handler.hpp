@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
 #include <stdint.h>
+#include <tchar.h>
 
 struct GeoPoint;
 
@@ -38,6 +39,7 @@ namespace SkyLinesTracking {
     virtual void OnAck(unsigned id) {}
     virtual void OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
                            const ::GeoPoint &location, int altitude) {}
+    virtual void OnUserName(uint32_t user_id, const TCHAR *name) {}
   };
 }
 

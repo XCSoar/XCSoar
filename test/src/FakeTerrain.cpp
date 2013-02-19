@@ -31,19 +31,19 @@ RasterMap::GetHeight(const GeoPoint &location) const
 
 GeoPoint
 RasterMap::Intersection(const GeoPoint& origin,
-                        const short h_origin,
-                        const short h_glide,
+                        const int h_origin,
+                        const int h_glide,
                         const GeoPoint& destination) const
 {
   return GeoPoint(Angle::Zero(), Angle::Zero());
 }
 
 bool
-RasterMap::FirstIntersection(const GeoPoint &origin, const short h_origin,
-                             const GeoPoint &destination, const short h_destination,
-                             const short h_virt, const short h_ceiling,
-                             const short h_safety,
-                             GeoPoint& intx, short &h) const
+RasterMap::FirstIntersection(const GeoPoint &origin, const int h_origin,
+                             const GeoPoint &destination, const int h_destination,
+                             const int h_virt, const int h_ceiling,
+                             const int h_safety,
+                             GeoPoint& intx, int &h) const
 {
   return false;
 }

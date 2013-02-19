@@ -32,6 +32,9 @@ UpdateInfoBoxBearing(InfoBoxData &data);
 void
 UpdateInfoBoxBearingDiff(InfoBoxData &data);
 
+void
+UpdateInfoBoxRadial(InfoBoxData &data);
+
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
@@ -77,9 +80,6 @@ UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data);
 
 void
 UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data);
-
-void
-UpdateInfoBoxFinalGRTE(InfoBoxData &data);
 
 void
 UpdateInfoBoxFinalGR(InfoBoxData &data);

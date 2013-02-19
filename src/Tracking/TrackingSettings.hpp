@@ -28,9 +28,12 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
+#include "Tracking/SkyLines/Features.hpp"
 #include "Tracking/SkyLines/Settings.hpp"
 
 #include "Util/StaticString.hpp"
+
+#ifdef HAVE_LIVETRACK24
 
 struct LiveTrack24Settings {
   bool enabled;
@@ -41,7 +44,10 @@ struct LiveTrack24Settings {
   void SetDefaults();
 };
 
+#endif
+
 struct TrackingSettings {
+#ifdef HAVE_LIVETRACK24
   enum class VehicleType {
     GLIDER = 0,
     PARAGLIDER = 1,
@@ -52,9 +58,15 @@ struct TrackingSettings {
   /** Minimum time between two position updates (in seconds) */
   unsigned interval;
   VehicleType vehicleType;
+#endif
 
+#ifdef HAVE_SKYLINES_TRACKING
   SkyLinesTracking::Settings skylines;
+#endif
+
+#ifdef HAVE_LIVETRACK24
   LiveTrack24Settings livetrack24;
+#endif
 
   void SetDefaults();
 };
