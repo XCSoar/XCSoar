@@ -1013,7 +1013,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 
 // Members of class DIR
 int
-conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
+conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
 {
   int number_of_flights;
   DIRENTRY de; // directory entry
@@ -1036,7 +1036,10 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
   char pilot3[17];
   char pilot4[17];
   memset(&de, 0, sizeof(de));
-  while (1) {//number_of_flights < MAXDIRENTRY) {
+
+  size_t nbytes = 0;
+
+  while (nbytes < length) {
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
     case rectyp_sep: // Initialize Dir-Entry
@@ -1107,6 +1110,17 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
     case rectyp_pos:
       l = pos_ds_size[bfv][0];
       break;
+
+
+    /*
+     * This End Condition Statement does not seem to be
+     * valid. At least not for the tested Volkslogger.
+     * To have a valid condition the length is
+     * now known in conv_dir() and the loop will finish when the
+     * end of the data is reached.
+     * Maybe this end condition here is valid in special
+     * cases or on other hardware though.
+     */
     case rectyp_poc:
       if (p[2] & 0x80) { // Endebedingung
         return number_of_flights;
@@ -1176,6 +1190,7 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
       return -1;
     };
     p += l;
+    nbytes += l;
   }
-  return -1;
+  return number_of_flights;
 }
