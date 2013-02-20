@@ -26,6 +26,15 @@ Copyright_License {
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
+/**
+ * Old enum moved from PageSettings.
+ */
+enum eTopLayout {
+  tlEmpty,
+  tlMap,
+  tlMapAndInfoBoxes,
+};
+
 static void
 Load(PageSettings::PageLayout &_pl, const unsigned page)
 {
@@ -34,20 +43,27 @@ Load(PageSettings::PageLayout &_pl, const unsigned page)
   if (prefixLen <= 0)
     return;
 
-  PageSettings::PageLayout pl;
+  PageSettings::PageLayout pl = PageSettings::PageLayout::Default();
   _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
   if (!Profile::Get(profileKey, pl.infobox_config.auto_switch))
     return;
   _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
   if (!Profile::Get(profileKey, pl.infobox_config.panel))
     return;
+
   _tcscpy(profileKey + prefixLen, _T("Layout"));
   unsigned temp = 0;
-  if (!Profile::Get(profileKey, temp))
-    return;
-  pl.top_layout = (PageSettings::PageLayout::eTopLayout) temp;
-  if (pl.top_layout > PageSettings::PageLayout::tlLAST)
-    return;
+  Profile::Get(profileKey, temp);
+  switch (temp) {
+  case tlEmpty:
+    pl.valid = false;
+    break;
+
+  case tlMap:
+    pl.infobox_config.enabled = false;
+    break;
+  }
+
   if (pl.infobox_config.panel >= InfoBoxSettings::MAX_PANELS)
     return;
   if (page == 0 && !pl.IsDefined())
@@ -78,8 +94,15 @@ Profile::Save(const PageSettings::PageLayout &page, const unsigned i)
   Profile::Set(profileKey, page.infobox_config.auto_switch);
   _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
   Profile::Set(profileKey, page.infobox_config.panel);
+
   _tcscpy(profileKey + prefixLen, _T("Layout"));
-  Profile::Set(profileKey, page.top_layout);
+  Profile::Set(profileKey,
+               page.valid
+               ? (page.infobox_config.enabled
+                  ? tlMapAndInfoBoxes
+                  : tlMap)
+               : tlEmpty);
+
   _tcscpy(profileKey + prefixLen, _T("Bottom"));
   Profile::Set(profileKey, (unsigned)page.bottom);
 }

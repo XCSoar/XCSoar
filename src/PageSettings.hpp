@@ -36,13 +36,18 @@ struct PageSettings {
   static constexpr unsigned MAX_PAGES = 8;
 
   struct InfoBoxConfig {
+    /**
+     * If false, InfoBoxes will not be shown.
+     */
+    bool enabled;
+
     bool auto_switch;
     unsigned panel;
 
     InfoBoxConfig() = default;
 
     constexpr InfoBoxConfig(bool _auto_switch, unsigned _panel)
-      : auto_switch(_auto_switch), panel(_panel) {}
+      :enabled(true), auto_switch(_auto_switch), panel(_panel) {}
 
     void SetDefaults() {
       auto_switch = true;
@@ -50,7 +55,8 @@ struct PageSettings {
     }
 
     bool operator==(const InfoBoxConfig &other) const {
-      return auto_switch == other.auto_switch &&
+      return enabled == other.enabled &&
+        auto_switch == other.auto_switch &&
              panel == other.panel;
     }
 
@@ -61,12 +67,7 @@ struct PageSettings {
 
   struct PageLayout
   {
-    enum eTopLayout {
-      tlEmpty,
-      tlMap,
-      tlMapAndInfoBoxes,
-      tlLAST = tlMapAndInfoBoxes
-    } top_layout;
+    bool valid;
 
     InfoBoxConfig infobox_config;
 
@@ -84,8 +85,12 @@ struct PageSettings {
 
     PageLayout() = default;
 
-    constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
-      :top_layout(_top_layout), infobox_config(_infobox_config),
+    constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
+      :valid(_valid), infobox_config(_infobox_config),
+       bottom(Bottom::NOTHING) {}
+
+    constexpr PageLayout(InfoBoxConfig _infobox_config)
+      :valid(true), infobox_config(_infobox_config),
        bottom(Bottom::NOTHING) {}
 
     /**
@@ -94,7 +99,7 @@ struct PageSettings {
      */
     constexpr
     static PageLayout Undefined() {
-      return PageLayout(tlEmpty, InfoBoxConfig(false, 0));
+      return PageLayout(false, InfoBoxConfig(false, 0));
     }
 
     /**
@@ -102,7 +107,7 @@ struct PageSettings {
      */
     constexpr
     static PageLayout Default() {
-      return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
+      return PageLayout(true, InfoBoxConfig(true, 0));
     }
 
     /**
@@ -110,25 +115,27 @@ struct PageSettings {
      */
     constexpr
     static PageLayout Aux() {
-      return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
+      return PageLayout(true, InfoBoxConfig(false, 3));
     }
 
     /**
      * Returns a default full-screen page.
      */
     static PageLayout FullScreen() {
-      return PageLayout(tlMap, InfoBoxConfig(false, 0));
+      PageLayout pl = Default();
+      pl.infobox_config.enabled = false;
+      return pl;
     }
 
     bool IsDefined() const {
-      return top_layout != tlEmpty;
+      return valid;
     }
 
     void MakeTitle(const InfoBoxSettings &info_box_settings,
                    TCHAR *str, const bool concise=false) const;
 
     bool operator==(const PageLayout &other) const {
-      return top_layout == other.top_layout &&
+      return valid == other.valid &&
         bottom == other.bottom &&
              infobox_config == other.infobox_config;
     }

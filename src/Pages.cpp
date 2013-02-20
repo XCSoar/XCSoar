@@ -112,13 +112,13 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
-  switch (layout.top_layout) {
-  case PageSettings::PageLayout::tlMap:
+  if (!layout.valid)
+    return;
+
+  if (!layout.infobox_config.enabled) {
     CommonInterface::main_window->SetFullScreen(true);
     ui_state.auxiliary_enabled = false;
-    break;
-
-  case PageSettings::PageLayout::tlMapAndInfoBoxes:
+  } else {
     if (!layout.infobox_config.auto_switch &&
         layout.infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
       CommonInterface::main_window->SetFullScreen(false);
@@ -129,10 +129,6 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
       CommonInterface::main_window->SetFullScreen(false);
       ui_state.auxiliary_enabled = false;
     }
-    break;
-
-  case PageSettings::PageLayout::tlEmpty:
-    return;
   }
 
   switch (layout.bottom) {
