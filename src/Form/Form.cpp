@@ -500,56 +500,15 @@ WndForm::OnPaint(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
   if (!IsMaximised() && is_active) {
-    /* draw a shade around the current dialog to emphasise it */
     GLEnable blend(GL_BLEND);
-    glEnableClientState(GL_COLOR_ARRAY);
 
-    const PixelRect rc = GetClientRect();
-    const PixelScalar size = Layout::SmallScale(4);
+    const PixelRect pos = GetPosition();
 
-    const RasterPoint vertices[8] = {
-      { rc.left, rc.top },
-      { rc.right, rc.top },
-      { rc.right, rc.bottom },
-      { rc.left, rc.bottom },
-      { rc.left - size, rc.top - size },
-      { rc.right + size, rc.top - size },
-      { rc.right + size, rc.bottom + size },
-      { rc.left - size, rc.bottom + size },
-    };
+    PixelRect rc = main_window.GetClientRect();
+    rc.Offset(-pos.left, -pos.top);
 
-    glVertexPointer(2, GL_VALUE, 0, vertices);
-
-    static constexpr Color inner_color = COLOR_BLACK.WithAlpha(192);
-    static constexpr Color outer_color = COLOR_BLACK.WithAlpha(16);
-    static constexpr Color colors[8] = {
-      inner_color,
-      inner_color,
-      inner_color,
-      inner_color,
-      outer_color,
-      outer_color,
-      outer_color,
-      outer_color,
-    };
-
-#ifdef HAVE_GLES
-    glColorPointer(4, GL_FIXED, 0, colors);
-#else
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-#endif
-
-    static constexpr GLubyte indices[] = {
-      0, 4, 1, 4, 5, 1,
-      1, 5, 2, 5, 6, 2,
-      2, 6, 3, 6, 7, 3,
-      3, 7, 0, 7, 4, 0,
-    };
-
-    glDrawElements(GL_TRIANGLES, ARRAY_SIZE(indices),
-                   GL_UNSIGNED_BYTE, indices);
-
-    glDisableClientState(GL_COLOR_ARRAY);
+    static constexpr Color color = COLOR_BLACK.WithAlpha(192);
+    canvas.DrawFilledRectangle(rc, color);
   }
 #endif
 
