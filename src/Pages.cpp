@@ -26,6 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
+#include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
@@ -138,6 +139,16 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
 
   case PageSettings::PageLayout::tlEmpty:
     return;
+  }
+
+  switch (layout.bottom) {
+  case PageSettings::PageLayout::Bottom::NOTHING:
+    CommonInterface::main_window->SetBottomWidget(nullptr);
+    break;
+
+  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
+    CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
+    break;
   }
 
   ActionInterface::UpdateDisplayMode();

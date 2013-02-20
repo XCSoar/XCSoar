@@ -47,7 +47,7 @@ Copyright_License {
  * The caller is responsible for locking and unlocking an instance for
  * each method call.
  */
-template<typename V>
+template<typename Key, typename V>
 class DeviceSettingsMap {
   Mutex mutex;
 #ifdef HAVE_POSIX
@@ -62,7 +62,7 @@ class DeviceSettingsMap {
     explicit Item(const V &_value):value(_value) {}
   };
 
-  typedef std::map<std::string, Item> Map;
+  typedef std::map<Key, Item> Map;
 
   Map map;
 
@@ -107,6 +107,11 @@ public:
     auto i = map.find(key);
     if (i != map.end())
       i->second.old = true;
+  }
+
+  void MarkAllOld() {
+    for (auto it = map.begin(), it_end = map.end(); it != it_end; ++it)
+      it->second.old = true;
   }
 
   template<typename K>

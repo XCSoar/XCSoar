@@ -114,7 +114,7 @@ static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Turnpoint Types"), 4, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, CreateInterfaceConfigPanel },
   {N_("Screen Layout"), 5, CreateLayoutConfigPanel },
-  {N_("InfoBox Pages"), 5, CreatePagesConfigPanel },
+  {N_("Pages"), 5, CreatePagesConfigPanel },
   {N_("InfoBox Modes"), 5, CreateInfoBoxesConfigPanel },
   {N_("Devices"), 6, CreateDevicesConfigPanel },
   {N_("Polar"), 6, CreatePolarConfigPanel },

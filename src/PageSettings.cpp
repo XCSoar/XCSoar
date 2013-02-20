@@ -64,6 +64,16 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     _tcscpy(buffer, _T("---"));
     break;
   }
+
+  switch (bottom) {
+  case Bottom::NOTHING:
+    break;
+
+  case Bottom::CROSS_SECTION:
+    // TODO: better text and translate
+    _tcscat(buffer, _T(", XS"));
+    break;
+  }
 }
 
 void
@@ -72,6 +82,5 @@ PageSettings::SetDefaults()
   pages[0] = PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
   pages[1] = PageLayout(PageLayout::tlMap, InfoBoxConfig(true, 0));
 
-  for (unsigned i = 2; i < MAX_PAGES; ++i)
-    pages[i].SetDefaults();
+  std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 }

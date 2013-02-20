@@ -128,26 +128,70 @@ namespace Volkslogger {
 
   bool WaitForACK(Port &port, OperationEnvironment &env);
 
+  /**
+   * Read data from the Logger
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+   *        for the first reply. If left out or set to 0(Zero) the standard
+   *        timeout as for the other chars will be applied.
+   */
   int ReadBulk(Port &port, OperationEnvironment &env,
-               void *buffer, unsigned max_length);
+               void *buffer, unsigned max_length,
+               unsigned timeout_firstchar_ms=0);
 
   bool WriteBulk(Port &port, OperationEnvironment &env,
                  const void *buffer, unsigned length);
 
+  /**
+   * Send command to Volkslogger and after that wait to read
+   * the reply using ReadBulk(). This function uses standard IO
+   * baudrate 9600
+   * @param cmd Volkslogger command sent to logger
+   * @param buffer Pointer to the buffer containing the reply received from the
+   *        logger
+   * @param max_length Maximum buffer size
+   * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+   *        for the first reply. If left out or set to 0(Zero) the standard
+   *        timeout as for the other chars will be applied.
+   */
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
-                          Command cmd, void *buffer, unsigned max_length);
+                          Command cmd, void *buffer, unsigned max_length,
+                          unsigned timeout_firstchar_ms=0);
 
-  int SendCommandReadBulk(Port &port, OperationEnvironment &env,
+  /**
+    * Send command to Volkslogger and after that wait to read
+    * the reply using ReadBulk(). This function uses bulk
+    * baudrate (baud_rate).
+    * @param baud_rate Baudrate to switch to for the data reception
+    * @param cmd Volkslogger command sent to logger
+    * @param param1 Extension of the Volkslogger command (e.g. log number)
+    * @param buffer Pointer to the buffer containing the reply received from the
+    *        logger
+    * @param max_length Maximum buffer size
+    * @param timeout_firstchar_ms Optional parameter. Prolonged timeout to wait
+    *        for the first reply. If left out or set to 0(Zero) the standard
+    *        timeout as for the other chars will be applied.
+    */
+
+  int SendCommandReadBulk(Port &port, unsigned baud_rate,
+                          OperationEnvironment &env,
                           Command cmd, uint8_t param1,
                           void *buffer, unsigned max_length,
-                          unsigned baud_rate);
+                          unsigned timeout_firstchar_ms=0);
 
-  static inline int SendCommandReadBulk(Port &port, OperationEnvironment &env,
+  /**
+   * Same Function as the one above. Only without param1.
+   */
+  static inline int SendCommandReadBulk(Port &port, unsigned baud_rate,
+                                        OperationEnvironment &env,
                                         Command cmd,
                                         void *buffer, unsigned max_length,
-                                        unsigned baud_rate) {
-    return SendCommandReadBulk(port, env, cmd, 0, buffer, max_length,
-                               baud_rate);
+                                        unsigned timeout_firstchar_ms=0)
+  {
+    return SendCommandReadBulk(port, baud_rate, env, cmd, 0, buffer,
+                               max_length, timeout_firstchar_ms);
   }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,

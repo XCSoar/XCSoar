@@ -51,9 +51,9 @@ VLA_XFR::dbbput(const void *dbbbuffer, int32 dbbsize)
 VLA_ERROR
 VLA_XFR::dbbget(void *dbbbuffer, int32 dbbsize)
 {
-  int groesse = Volkslogger::SendCommandReadBulk(*port, env,
+  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env,
                                                  Volkslogger::cmd_RDB,
-                                                 dbbbuffer, dbbsize, databaud);
+                                                 dbbbuffer, dbbsize);
   env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
@@ -77,9 +77,9 @@ VLA_XFR::readdir(void *buffer, int32 size) {
 VLA_ERROR
 VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
 {
-  int groesse = Volkslogger::SendCommandReadBulk(*port, env,
+  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env,
                                                  Volkslogger::cmd_ERO,
-                                                 dbbbuffer, dbbsize, databaud);
+                                                 dbbbuffer, dbbsize);
   env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
@@ -99,18 +99,33 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
   const Volkslogger::Command cmd = secmode
     ? Volkslogger::cmd_GFS
     : Volkslogger::cmd_GFL;
-  int groesse = Volkslogger::SendCommandReadBulk(*port, env, cmd, flightnr,
-                                                 buffer, buffersize, databaud);
+
+  /*
+   * It is necessary to wait long for the first reply from
+   * the Logger in ReadBulk.
+   * Since the VL needs time to calculate the Security of
+   * the log before it responds.
+   */
+  unsigned timeout_firstchar_ms=300000;
+
+  // Download binary log data supports BulkBaudrate
+  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
+                                                 flightnr, buffer, buffersize,
+                                                 timeout_firstchar_ms);
   if (groesse <= 0)
     return 0;
 
   // read signature
   env.Sleep(300);
 
-  int sgr = Volkslogger::SendCommandReadBulk(*port, env, Volkslogger::cmd_SIG,
+  /*
+   * Testing has shown that downloading the Signature does not support
+   * BulkRate. It has to be done with standard IO Rate (9600)
+   */
+  int sgr = Volkslogger::SendCommandReadBulk(*port, env,
+                                             Volkslogger::cmd_SIG,
                                              (uint8_t *)buffer + groesse,
-                                             buffersize - groesse,
-                                             databaud);
+                                             buffersize - groesse);
   if (sgr <= 0)
     return 0;
 

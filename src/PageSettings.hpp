@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_PAGE_SETTINGS_HPP
 #define XCSOAR_PAGE_SETTINGS_HPP
 
+#include <array>
 #include <type_traits>
 
+#include <stdint.h>
 #include <tchar.h>
 
 struct InfoBoxSettings;
@@ -68,14 +70,43 @@ struct PageSettings {
 
     InfoBoxConfig infobox_config;
 
+    /**
+     * What to show below the main area (i.e. map)?
+     */
+    enum class Bottom : uint8_t {
+      NOTHING,
+
+      /**
+       * Show a cross section below the map.
+       */
+      CROSS_SECTION,
+    } bottom;
+
     PageLayout() = default;
 
     constexpr PageLayout(eTopLayout _top_layout, InfoBoxConfig _infobox_config)
-      :top_layout(_top_layout), infobox_config(_infobox_config) {}
+      :top_layout(_top_layout), infobox_config(_infobox_config),
+       bottom(Bottom::NOTHING) {}
 
-    void SetDefaults() {
-      top_layout = tlEmpty;
-      infobox_config.SetDefaults();
+    /**
+     * Return an "undefined" page.  Its IsDefined() method will return
+     * false.
+     */
+    constexpr
+    static PageLayout Undefined() {
+      return PageLayout(tlEmpty, InfoBoxConfig(false, 0));
+    }
+
+    /**
+     * Returns the default page that will be created initially.
+     */
+    constexpr
+    static PageLayout Default() {
+      return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
+    }
+
+    bool IsDefined() const {
+      return top_layout != tlEmpty;
     }
 
     void MakeTitle(const InfoBoxSettings &info_box_settings,
@@ -83,6 +114,7 @@ struct PageSettings {
 
     bool operator==(const PageLayout &other) const {
       return top_layout == other.top_layout &&
+        bottom == other.bottom &&
              infobox_config == other.infobox_config;
     }
 
@@ -91,7 +123,7 @@ struct PageSettings {
     }
   };
 
-  PageLayout pages[MAX_PAGES];
+  std::array<PageLayout, MAX_PAGES> pages;
 
   void SetDefaults();
 };

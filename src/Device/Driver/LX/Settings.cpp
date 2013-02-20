@@ -138,6 +138,51 @@ LXDevice::GetNanoSetting(const char *name) const
 }
 
 bool
+LXDevice::SendLX16xxSettings(const LX1600::SettingsMap &settings,
+                             OperationEnvironment &env)
+{
+  lx16xx_settings.Lock();
+  for (auto setting : settings)
+    lx16xx_settings.MarkOld(setting.first);
+  lx16xx_settings.Unlock();
+
+  return LX1600::SetSettings(port, env, settings);
+}
+
+bool
+LXDevice::RequestLX16xxSettings(OperationEnvironment &env)
+{
+  lx16xx_settings.Lock();
+  lx16xx_settings.MarkAllOld();
+  lx16xx_settings.Unlock();
+
+  return LX1600::SetupNMEA(port, env);
+}
+
+std::string
+LXDevice::WaitLX16xxSetting(LX1600::Setting key, OperationEnvironment &env,
+                            unsigned timeout_ms)
+{
+  ScopeLock protect(lx16xx_settings);
+  auto i = lx16xx_settings.Wait(key, env, timeout_ms);
+  if (i == lx16xx_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+std::string
+LXDevice::GetLX16xxSetting(LX1600::Setting key) const
+{
+  ScopeLock protect(lx16xx_settings);
+  auto i = lx16xx_settings.find(key);
+  if (i == lx16xx_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+bool
 LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {

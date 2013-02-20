@@ -46,6 +46,13 @@ public:
                  ActionListener &listener, int id);
 
   /**
+   * Add a symbol button.  The caption is one of the "special"
+   * #WndSymbolButton strings.
+   */
+  WndButton *AddSymbol(tstring::const_pointer caption,
+                       ActionListener &listener, int id);
+
+  /**
    * Call this after all buttons have been added or after the parent
    * window has been resized.
    *
