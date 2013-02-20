@@ -79,8 +79,8 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 void
 PageSettings::SetDefaults()
 {
-  pages[0] = PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
-  pages[1] = PageLayout(PageLayout::tlMap, InfoBoxConfig(true, 0));
+  pages[0] = PageLayout::Default();
+  pages[1] = PageLayout::FullScreen();
 
   std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 }

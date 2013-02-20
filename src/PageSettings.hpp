@@ -105,6 +105,21 @@ struct PageSettings {
       return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
     }
 
+    /**
+     * Returns the default page that will show the "Aux" InfoBoxes.
+     */
+    constexpr
+    static PageLayout Aux() {
+      return PageLayout(tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
+    }
+
+    /**
+     * Returns a default full-screen page.
+     */
+    static PageLayout FullScreen() {
+      return PageLayout(tlMap, InfoBoxConfig(false, 0));
+    }
+
     bool IsDefined() const {
       return top_layout != tlEmpty;
     }
