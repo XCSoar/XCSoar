@@ -51,15 +51,6 @@ namespace Pages
    */
   void OpenLayout(const PageSettings::PageLayout &layout);
 
-  /**
-   * Assigns a new layout to the given page
-   * @param page The page to change
-   * @param layout The layout that should be assigned
-   */
-  void SetLayout(unsigned page, const PageSettings::PageLayout &layout);
-
-  void Initialise(const PageSettings &_settings);
-
   unsigned NextIndex();
   unsigned PrevIndex();
 

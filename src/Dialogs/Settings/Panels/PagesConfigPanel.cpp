@@ -280,12 +280,13 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
     PageSettings::PageLayout &dest = _settings.pages[i];
     const PageSettings::PageLayout &src = settings.pages[i];
     if (src != dest) {
-      SetLayout(i, src);
       dest = src;
       Profile::Save(src, i);
       changed = true;
     }
   }
+
+  Pages::Update();
 
   _changed |= changed;
   return true;

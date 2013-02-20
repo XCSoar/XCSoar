@@ -36,14 +36,13 @@ Copyright_License {
 namespace Pages
 {
   static unsigned current_page = 0;
-
-  static PageSettings settings;
 }
-
 
 void
 Pages::Update()
 {
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
   if (settings.pages[current_page].top_layout == PageSettings::PageLayout::tlEmpty)
     current_page = NextIndex();
 
@@ -54,6 +53,8 @@ Pages::Update()
 unsigned
 Pages::NextIndex()
 {
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
   unsigned i = current_page;
   do {
     i = (i + 1) % PageSettings::MAX_PAGES;
@@ -73,6 +74,8 @@ Pages::Next()
 unsigned
 Pages::PrevIndex()
 {
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
   unsigned i = current_page;
   do {
     i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
@@ -91,6 +94,8 @@ Pages::Prev()
 void
 Pages::Open(unsigned page)
 {
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
   if (page >= PageSettings::MAX_PAGES)
     return;
 
@@ -142,27 +147,4 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
-}
-
-
-void
-Pages::SetLayout(unsigned page, const PageSettings::PageLayout &layout)
-{
-  if (page >= PageSettings::MAX_PAGES)
-    return;
-
-  if (settings.pages[page] != layout) {
-    settings.pages[page] = layout;
-  }
-
-  if (page == current_page)
-    Update();
-}
-
-
-void
-Pages::Initialise(const PageSettings &_settings)
-{
-  settings = _settings;
-  Update();
 }
