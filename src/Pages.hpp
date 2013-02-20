@@ -59,8 +59,6 @@ namespace Pages
   void SetLayout(unsigned page, const PageSettings::PageLayout &layout);
 
   void Initialise(const PageSettings &_settings);
-  void LoadDefault();
-  const PageSettings::PageLayout *PossiblePageLayout(unsigned i);
 
   unsigned NextIndex();
   unsigned PrevIndex();

@@ -38,17 +38,6 @@ namespace Pages
   static unsigned current_page = 0;
 
   static PageSettings settings;
-
-  static constexpr unsigned MAX_VALID_LAYOUTS =
-    1 + // Nothing
-    1 + // Map & Auto InfoBoxes
-    1 + // Map (Full Screen)
-    InfoBoxSettings::MAX_PANELS;
-
-  static unsigned num_valid_layouts = 0;
-  static PageSettings::PageLayout valid_layouts[MAX_VALID_LAYOUTS];
-
-  static void AddValidLayout(const PageSettings::PageLayout& pl);
 }
 
 
@@ -175,36 +164,5 @@ void
 Pages::Initialise(const PageSettings &_settings)
 {
   settings = _settings;
-  LoadDefault();
   Update();
 }
-
-
-void
-Pages::AddValidLayout(const PageSettings::PageLayout &pl)
-{
-  assert(num_valid_layouts < MAX_VALID_LAYOUTS);
-  valid_layouts[num_valid_layouts++] = pl;
-}
-
-
-void
-Pages::LoadDefault()
-{
-  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlEmpty,
-                                          PageSettings::InfoBoxConfig(true, 0)));
-  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
-                                          PageSettings::InfoBoxConfig(true, 0)));
-  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMap,
-                                          PageSettings::InfoBoxConfig(true, 0)));
-  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
-    AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
-                                            PageSettings::InfoBoxConfig(false, i)));
-}
-
-
-const PageSettings::PageLayout*
-Pages::PossiblePageLayout(unsigned i) {
-  return (i < num_valid_layouts) ? &valid_layouts[i] : NULL;
-}
-
