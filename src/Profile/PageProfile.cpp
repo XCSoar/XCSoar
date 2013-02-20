@@ -50,7 +50,7 @@ Load(PageSettings::PageLayout &_pl, const unsigned page)
     return;
   if (pl.infobox_config.panel >= InfoBoxSettings::MAX_PANELS)
     return;
-  if (page == 0 && pl.top_layout == PageSettings::PageLayout::tlEmpty)
+  if (page == 0 && !pl.IsDefined())
     return;
 
   _tcscpy(profileKey + prefixLen, _T("Bottom"));

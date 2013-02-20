@@ -365,7 +365,7 @@ PageListWidget::OnModified(const PageSettings::PageLayout &new_value)
   unsigned i = GetList().GetCursorIndex();
   assert(i < PageSettings::MAX_PAGES);
 
-  if (i == 0 && new_value.top_layout == PageSettings::PageLayout::tlEmpty) {
+  if (i == 0 && !new_value.IsDefined()) {
     /* refuse to delete the first page (kludge) */
     editor->SetValue(settings.pages[i]);
     return;

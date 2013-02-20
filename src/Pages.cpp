@@ -43,7 +43,7 @@ Pages::Update()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
 
-  if (settings.pages[current_page].top_layout == PageSettings::PageLayout::tlEmpty)
+  if (!settings.pages[current_page].IsDefined())
     current_page = NextIndex();
 
   OpenLayout(settings.pages[current_page]);
@@ -58,7 +58,7 @@ Pages::NextIndex()
   unsigned i = current_page;
   do {
     i = (i + 1) % PageSettings::MAX_PAGES;
-  } while (settings.pages[i].top_layout == PageSettings::PageLayout::tlEmpty);
+  } while (!settings.pages[i].IsDefined());
   return i;
 }
 
@@ -79,7 +79,7 @@ Pages::PrevIndex()
   unsigned i = current_page;
   do {
     i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
-  } while (settings.pages[i].top_layout == PageSettings::PageLayout::tlEmpty);
+  } while (!settings.pages[i].IsDefined());
   return i;
 }
 
@@ -99,7 +99,7 @@ Pages::Open(unsigned page)
   if (page >= PageSettings::MAX_PAGES)
     return;
 
-  if (settings.pages[page].top_layout == PageSettings::PageLayout::tlEmpty)
+  if (!settings.pages[page].IsDefined())
     return;
 
   current_page = page;
