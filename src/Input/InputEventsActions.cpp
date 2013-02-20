@@ -147,24 +147,15 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   const UIState &ui_state = CommonInterface::GetUIState();
 
   if (StringIsEqual(misc, _T("normal"))) {
-    const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
-                                      InfoBoxConfig(true, 0));
-    OpenLayout(pl);
+    OpenLayout(PageSettings::PageLayout::Default());
   } else if (StringIsEqual(misc, _T("auxilary"))) {
-    const PageSettings::PageLayout pl(PageLayout::tlMapAndInfoBoxes,
-                                      InfoBoxConfig(false, 3));
-    OpenLayout(pl);
+    OpenLayout(PageSettings::PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("toggleauxiliary"))) {
-    const PageLayout pl(!ui_state.auxiliary_enabled ?
-                        PageLayout(PageLayout::tlMapAndInfoBoxes,
-                                   PageSettings::InfoBoxConfig(false, 3)) :
-                        PageLayout(PageLayout::tlMapAndInfoBoxes,
-                                   PageSettings::InfoBoxConfig(true, 0)));
-    OpenLayout(pl);
+    OpenLayout(ui_state.auxiliary_enabled
+               ? PageSettings::PageLayout::Default()
+               : PageSettings::PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("full"))) {
-    const PageLayout pl(PageLayout::tlMap,
-                        PageSettings::InfoBoxConfig(true, 0));
-    OpenLayout(pl);
+    OpenLayout(PageSettings::PageLayout::FullScreen());
   } else if (StringIsEqual(misc, _T("togglefull"))) {
     CommonInterface::main_window->SetFullScreen(
         !CommonInterface::main_window->GetFullScreen());

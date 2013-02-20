@@ -31,15 +31,12 @@ void
 PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
                                     TCHAR *buffer, const bool concise) const
 {
-  switch (top_layout) {
-  case PageSettings::PageLayout::tlMap:
-    if (concise)
-      _tcscpy(buffer, _("Info Hide"));
-    else
-      _tcscpy(buffer, _("Map (Full screen)"));
-    break;
+  if (!valid) {
+    _tcscpy(buffer, _T("---"));
+    return;
+  }
 
-  case PageSettings::PageLayout::tlMapAndInfoBoxes:
+  if (infobox_config.enabled) {
     _tcscpy(buffer, concise ? _("Info") : _("Map and InfoBoxes"));
 
     if (!infobox_config.auto_switch &&
@@ -58,11 +55,11 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
         _tcscat(buffer, _T(")"));
       }
     }
-    break;
-
-  default:
-    _tcscpy(buffer, _T("---"));
-    break;
+  } else {
+    if (concise)
+      _tcscpy(buffer, _("Info Hide"));
+    else
+      _tcscpy(buffer, _("Map (Full screen)"));
   }
 
   switch (bottom) {
@@ -79,8 +76,8 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 void
 PageSettings::SetDefaults()
 {
-  pages[0] = PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(true, 0));
-  pages[1] = PageLayout(PageLayout::tlMap, InfoBoxConfig(true, 0));
+  pages[0] = PageLayout::Default();
+  pages[1] = PageLayout::FullScreen();
 
   std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 }

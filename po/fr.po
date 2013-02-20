@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-08 08:18+0100\n"
-"PO-Revision-Date: 2013-02-15 16:53+0000\n"
-"Last-Translator: AUDIER Daniel <osteocool@yahoo.fr>\n"
+"POT-Creation-Date: 2013-02-17 20:02+0100\n"
+"PO-Revision-Date: 2013-02-19 21:24+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-17 19:00+0000\n"
+"X-Launchpad-Export-Date: 2013-02-20 16:24+0000\n"
 "X-Generator: Launchpad (build 16491)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -355,7 +355,7 @@ msgstr "Problème critique"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
-#: src/Renderer/MapItemListRenderer.cpp:493
+#: src/Renderer/MapItemListRenderer.cpp:501
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:35
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:44
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:52
@@ -501,8 +501,8 @@ msgid "No Traffic"
 msgstr "Pas de trafic"
 
 #: src/Gauge/BigTrafficWidget.cpp:295 src/Gauge/BigTrafficWidget.cpp:296
-#: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
-#: src/Renderer/MapItemListRenderer.cpp:505
+#: src/InfoBoxes/Content/Factory.cpp:396 src/InfoBoxes/Content/Factory.cpp:397
+#: src/Renderer/MapItemListRenderer.cpp:513
 #: src/Dialogs/Device/DeviceListDialog.cpp:325
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
@@ -512,8 +512,8 @@ msgstr "Pas de trafic"
 msgid "Vario"
 msgstr "Vario"
 
-#: src/Gauge/BigTrafficWidget.cpp:371 src/Renderer/MapItemListRenderer.cpp:120
-#: src/Renderer/MapItemListRenderer.cpp:124
+#: src/Gauge/BigTrafficWidget.cpp:371 src/Renderer/MapItemListRenderer.cpp:121
+#: src/Renderer/MapItemListRenderer.cpp:125
 #: src/Renderer/WaypointListRenderer.cpp:120
 #: src/Renderer/FlightStatisticsRenderer.cpp:129
 #: src/Renderer/FlightStatisticsRenderer.cpp:153
@@ -533,8 +533,8 @@ msgstr "Distance"
 msgid "Rel. Alt."
 msgstr "Alt. Rel."
 
-#: src/Gauge/BigTrafficWidget.cpp:871 src/Dialogs/MapItemListDialog.cpp:153
-#: src/Dialogs/Traffic/TrafficList.cpp:268
+#: src/Gauge/BigTrafficWidget.cpp:871 src/Dialogs/MapItemListDialog.cpp:156
+#: src/Dialogs/Traffic/TrafficList.cpp:337
 #: src/Dialogs/Task/dlgAlternatesList.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:107 Data/Dialogs/dlgTaskPoint.xml:6
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:10
@@ -551,12 +551,12 @@ msgstr "Détails"
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:108
 #: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:80
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:154
-#: src/Dialogs/MapItemListDialog.cpp:154
+#: src/Dialogs/MapItemListDialog.cpp:157
 #: src/Dialogs/Airspace/dlgAirspace.cpp:178
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:273
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:400
-#: src/Dialogs/Traffic/TrafficList.cpp:269
+#: src/Dialogs/Traffic/TrafficList.cpp:339
 #: src/Dialogs/Plane/PlaneListDialog.cpp:411 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:122 src/Dialogs/dlgStatus.cpp:94
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:191
@@ -812,17 +812,17 @@ msgstr "Circuit et Terrains posables"
 msgid "None"
 msgstr "Aucun"
 
-#: src/InfoBoxes/Content/Factory.cpp:149
+#: src/InfoBoxes/Content/Factory.cpp:155
 #, no-c-format
 msgid "Altitude GPS"
 msgstr "Altitude GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:150
+#: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Alt GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:151
+#: src/InfoBoxes/Content/Factory.cpp:157
 #, no-c-format
 msgid ""
 "This is the altitude above mean sea level reported by the GPS. Touch-screen/"
@@ -833,17 +833,17 @@ msgstr ""
 "mode simulation, cette valeur peut être ajustée avec les flèches haut/bas, "
 "les flèches gauche/droite permettant de guider le planeur latéralement."
 
-#: src/InfoBoxes/Content/Factory.cpp:159
+#: src/InfoBoxes/Content/Factory.cpp:165
 #, no-c-format
 msgid "Altitude AGL"
 msgstr "Hauteur sol"
 
-#: src/InfoBoxes/Content/Factory.cpp:160
+#: src/InfoBoxes/Content/Factory.cpp:166
 #, no-c-format
 msgid "Alt AGL"
 msgstr "Alt Sol"
 
-#: src/InfoBoxes/Content/Factory.cpp:161
+#: src/InfoBoxes/Content/Factory.cpp:167
 #, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain height obtained from the "
@@ -854,17 +854,17 @@ msgstr ""
 "du fichier de relief. La valeur est en rouge lorsque le planeur est en "
 "dessous de l'altitude de sécurité."
 
-#: src/InfoBoxes/Content/Factory.cpp:170
+#: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
 msgid "Thermal climb, last 30 s"
 msgstr "Vz moyenne sur les 30 dernières secondes."
 
-#: src/InfoBoxes/Content/Factory.cpp:171
+#: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
 msgid "TC 30s"
 msgstr "TC 30s"
 
-#: src/InfoBoxes/Content/Factory.cpp:172
+#: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
@@ -873,14 +873,19 @@ msgstr ""
 "Une moyenne glissante sur 30 secondes du taux de montée donné par le GPS ou "
 "le vario si disponible."
 
-#: src/InfoBoxes/Content/Factory.cpp:180 src/InfoBoxes/Content/Factory.cpp:181
+#: src/InfoBoxes/Content/Factory.cpp:186
+#, no-c-format
+msgid "Next Bearing"
+msgstr "Prochain Relevement"
+
+#: src/InfoBoxes/Content/Factory.cpp:187
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
 #: Data/Dialogs/dlgTeamCode.xml:15 Data/Dialogs/dlgTeamCode_L.xml:15
 #, no-c-format
 msgid "Bearing"
 msgstr "Cap"
 
-#: src/InfoBoxes/Content/Factory.cpp:182
+#: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
 msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
@@ -889,17 +894,17 @@ msgstr ""
 "Cap vrai du prochain point de virage. Pour les circuits AAT, il s'agit du "
 "cap du prochain point de virage dans le secteur AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:190
+#: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
 msgid "GR instantaneous"
 msgstr "finesse instantanée"
 
-#: src/InfoBoxes/Content/Factory.cpp:191
+#: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "GR Inst"
 msgstr "fin. inst."
 
-#: src/InfoBoxes/Content/Factory.cpp:192
+#: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
 msgid ""
 "Instantaneous glide ratio over ground, given by the ground speed divided by "
@@ -912,17 +917,17 @@ msgstr ""
 "Des valeurs négatives indiquent une montée. Si la vitesse verticale est "
 "proche de zéro, la valeur affichée est '---'."
 
-#: src/InfoBoxes/Content/Factory.cpp:200
+#: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR cruise"
 msgstr "Finesse de croisière"
 
-#: src/InfoBoxes/Content/Factory.cpp:201
+#: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "GR Cruise"
 msgstr "Finesse de croisière"
 
-#: src/InfoBoxes/Content/Factory.cpp:202
+#: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
 msgid ""
 "The distance from the top of the last thermal, divided by the altitude lost "
@@ -936,17 +941,17 @@ msgstr ""
 "thermique). Si la vitesse verticale est proche de zéro, la valeur affichée "
 "est '---'."
 
-#: src/InfoBoxes/Content/Factory.cpp:210
+#: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
 msgid "Speed ground"
 msgstr "Vitesse sol"
 
-#: src/InfoBoxes/Content/Factory.cpp:211
+#: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "V GND"
 msgstr "Vitesse sol"
 
-#: src/InfoBoxes/Content/Factory.cpp:212
+#: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
 msgid ""
 "Ground speed measured by the GPS. If this InfoBox is active in simulation "
@@ -957,17 +962,17 @@ msgstr ""
 "alors les flèches haut et bas ajustent la vitesse, et les flèches gauche et "
 "droite font tourner le planeur."
 
-#: src/InfoBoxes/Content/Factory.cpp:220
+#: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
 msgid "Last thermal average"
 msgstr "Vz Moyenne du dernier thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:221
+#: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
 msgid "TL Avg"
 msgstr "Dern Vz"
 
-#: src/InfoBoxes/Content/Factory.cpp:222
+#: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
@@ -976,47 +981,47 @@ msgstr ""
 "Gain/perte total(e) dans le dernier thermique divisé(e) par le temps passé à "
 "spiraler."
 
-#: src/InfoBoxes/Content/Factory.cpp:230
+#: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "Last thermal gain"
 msgstr "Gain du dernier thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:231
+#: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
 msgid "TL Gain"
 msgstr "Th Gain"
 
-#: src/InfoBoxes/Content/Factory.cpp:232
+#: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
 msgstr "Gain/perte d'altitude total(e) dans le dernier thermique."
 
-#: src/InfoBoxes/Content/Factory.cpp:240
+#: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
 msgid "Last thermal time"
 msgstr "Durée dans le dernier thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:241
+#: src/InfoBoxes/Content/Factory.cpp:247
 #, no-c-format
 msgid "TL Time"
 msgstr "Th Durée"
 
-#: src/InfoBoxes/Content/Factory.cpp:242
+#: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
 msgid "Time spent circling in the last thermal."
 msgstr "Temps passé dans le dernier thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:250
+#: src/InfoBoxes/Content/Factory.cpp:256
 #, no-c-format
 msgid "MacCready setting"
 msgstr "Calage MacCready"
 
-#: src/InfoBoxes/Content/Factory.cpp:251
+#: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "MC"
 msgstr "MC"
 
-#: src/InfoBoxes/Content/Factory.cpp:252
+#: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
 msgid ""
 "The current MacCready setting and the current MacCready mode (manual or "
@@ -1028,17 +1033,17 @@ msgstr ""
 "pour le réglage du MacReady si l'InfoBox est active, en utilisant les "
 "boutons Haut/Bas."
 
-#: src/InfoBoxes/Content/Factory.cpp:260
+#: src/InfoBoxes/Content/Factory.cpp:266
 #, no-c-format
 msgid "Next distance"
 msgstr "Distance prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:261 src/InfoBoxes/Content/Task.cpp:154
+#: src/InfoBoxes/Content/Factory.cpp:267 src/InfoBoxes/Content/Task.cpp:169
 #, no-c-format
 msgid "WP Dist"
 msgstr "Dist WP"
 
-#: src/InfoBoxes/Content/Factory.cpp:262
+#: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
@@ -1048,17 +1053,17 @@ msgstr ""
 "circuits AAT, il s'agit de la distance à l'objectif contenu dans le secteur "
 "AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:270
+#: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Next altitude difference"
 msgstr "Différence d'altitude prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:271
+#: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "WP AltD"
 msgstr "WP AltD"
 
-#: src/InfoBoxes/Content/Factory.cpp:272
+#: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
@@ -1068,17 +1073,17 @@ msgstr ""
 "l'altitude de sécurité en arrivée. Pour les épreuves AAT, c'est le point "
 "cible du secteur AAT qui est utilisé."
 
-#: src/InfoBoxes/Content/Factory.cpp:280
+#: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Next altitude required"
 msgstr "Altitude nécessaire prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:281
+#: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "WP AltR"
 msgstr "WP AltR"
 
-#: src/InfoBoxes/Content/Factory.cpp:282
+#: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
@@ -1087,17 +1092,17 @@ msgstr ""
 "Altitude manquante pour atteindre le prochain point de virage. Pour les "
 "épreuves AAT, c'est le point cible du secteur AAT qui est utilisé."
 
-#: src/InfoBoxes/Content/Factory.cpp:290
+#: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
 msgid "Next waypoint"
 msgstr "Prochain point de virage"
 
-#: src/InfoBoxes/Content/Factory.cpp:291
+#: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
 msgid "Next WP"
 msgstr "Proch. WP"
 
-#: src/InfoBoxes/Content/Factory.cpp:292
+#: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
 msgid ""
 "The name of the currently selected turn point. When this InfoBox is active, "
@@ -1111,17 +1116,17 @@ msgstr ""
 "Pour les terminaux à écran tactile et pour PC seulement: en cliquant sur le "
 "bouton Enter les détails du point de virage s'affichent."
 
-#: src/InfoBoxes/Content/Factory.cpp:300
+#: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid "Final altitude difference"
 msgstr "Différence d'altitude en arrivée"
 
-#: src/InfoBoxes/Content/Factory.cpp:301
+#: src/InfoBoxes/Content/Factory.cpp:307
 #, no-c-format
 msgid "Fin AltD"
 msgstr "Fin AltD"
 
-#: src/InfoBoxes/Content/Factory.cpp:302
+#: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
@@ -1130,32 +1135,32 @@ msgstr ""
 "Altitude d'arrivée au point de virage final du circuit en tenant compte de "
 "l'altitude de sécurité."
 
-#: src/InfoBoxes/Content/Factory.cpp:310
+#: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Final altitude required"
 msgstr "Altitude d'arrivée requise"
 
-#: src/InfoBoxes/Content/Factory.cpp:311
+#: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "Fin AltR"
 msgstr "AltNec Arr"
 
-#: src/InfoBoxes/Content/Factory.cpp:312
+#: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "Additional altitude required to finish the task."
 msgstr "Altitude supplémentaire nécessaire pour finir le circuit."
 
-#: src/InfoBoxes/Content/Factory.cpp:320
+#: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
 msgid "Speed task average"
 msgstr "Vitesse moyenne du circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:321
+#: src/InfoBoxes/Content/Factory.cpp:327
 #, no-c-format
 msgid "V Task Avg"
 msgstr "Vz moyenne du circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:322
+#: src/InfoBoxes/Content/Factory.cpp:328
 #, no-c-format
 msgid ""
 "Average cross country speed while on current task, not compensated for "
@@ -1164,55 +1169,34 @@ msgstr ""
 "Vitesse moyenne du vol campagne pendant le circuit actuel, non compensée "
 "avec l'altitude."
 
-#: src/InfoBoxes/Content/Factory.cpp:330
+#: src/InfoBoxes/Content/Factory.cpp:336
 #, no-c-format
 msgid "Final distance"
 msgstr "Distance jusqu'à l'arrivée."
 
-#: src/InfoBoxes/Content/Factory.cpp:331
+#: src/InfoBoxes/Content/Factory.cpp:337
 #, no-c-format
 msgid "Fin Dist"
 msgstr "Dist d'arr"
 
-#: src/InfoBoxes/Content/Factory.cpp:332
+#: src/InfoBoxes/Content/Factory.cpp:338
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
 msgstr ""
 "Distance jusqu'à l'arrivée en passant par les points de virage restants."
 
-#: src/InfoBoxes/Content/Factory.cpp:340 src/InfoBoxes/Content/Factory.cpp:817
-#, no-c-format
-msgid "Final GR"
-msgstr "Finesse Arrivée"
-
-#: src/InfoBoxes/Content/Factory.cpp:341 src/InfoBoxes/Content/Factory.cpp:818
-#, no-c-format
-msgid "Fin GR"
-msgstr "Fin. Arr."
-
-#: src/InfoBoxes/Content/Factory.cpp:342 src/InfoBoxes/Content/Factory.cpp:819
-#, no-c-format
-msgid ""
-"The required glide ratio over ground to finish the task, given by the "
-"distance to go divided by the height required to arrive at the safety "
-"arrival height."
-msgstr ""
-"Finesse nécessaire pour finir le circuit, calculée comme la distance "
-"restante à parcourir divisée par la hauteur nécessaire pour arriver à la "
-"hauteur de sécurité."
-
-#: src/InfoBoxes/Content/Factory.cpp:350
+#: src/InfoBoxes/Content/Factory.cpp:356
 #, no-c-format
 msgid "Terrain elevation"
 msgstr "Altitude du terrain."
 
-#: src/InfoBoxes/Content/Factory.cpp:351
+#: src/InfoBoxes/Content/Factory.cpp:357
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
 #, no-c-format
 msgid "H GND"
 msgstr "HduSol"
 
-#: src/InfoBoxes/Content/Factory.cpp:352
+#: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
@@ -1221,17 +1205,17 @@ msgstr ""
 "Ceci est la hauteur du sol par rapport au niveau moyen de la mer, obtenue à "
 "partir du fichier de relief et de la position GPS actuelle."
 
-#: src/InfoBoxes/Content/Factory.cpp:360
+#: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "Thermal average"
 msgstr "Vario moyen"
 
-#: src/InfoBoxes/Content/Factory.cpp:361
+#: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
 msgid "TC Avg"
 msgstr "Vz Moy"
 
-#: src/InfoBoxes/Content/Factory.cpp:362
+#: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
@@ -1240,28 +1224,28 @@ msgstr ""
 "Altitude (gain/perte) dans le thermique courant, divisé par le temps passé "
 "en spirale."
 
-#: src/InfoBoxes/Content/Factory.cpp:370
+#: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Thermal gain"
 msgstr "Gain du thermique."
 
-#: src/InfoBoxes/Content/Factory.cpp:371
+#: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "TC Gain"
 msgstr "Gain Th"
 
-#: src/InfoBoxes/Content/Factory.cpp:372
+#: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
 msgstr "Altitude gagnée/perdue dans le thermique actuel."
 
-#: src/InfoBoxes/Content/Factory.cpp:380 src/InfoBoxes/Content/Factory.cpp:381
+#: src/InfoBoxes/Content/Factory.cpp:386 src/InfoBoxes/Content/Factory.cpp:387
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Track"
 msgstr "Route"
 
-#: src/InfoBoxes/Content/Factory.cpp:382
+#: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
@@ -1273,7 +1257,7 @@ msgstr ""
 "si l'InfoBox est active, cette valeur est ajustable à l'aide des boutons "
 "haut/bas."
 
-#: src/InfoBoxes/Content/Factory.cpp:392
+#: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
 msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
@@ -1282,58 +1266,60 @@ msgstr ""
 "Vitesse verticale instantanée, donnée par le GPS, ou par le vario à énergie "
 "totale si connecté."
 
-#: src/InfoBoxes/Content/Factory.cpp:400
+#: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
 msgid "Wind speed"
 msgstr "Vitesse du vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:401
+#: src/InfoBoxes/Content/Factory.cpp:407
 #, no-c-format
 msgid "Wind V"
 msgstr "V Vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:402
-#: src/InfoBoxes/Content/Factory.cpp:1143
+#: src/InfoBoxes/Content/Factory.cpp:408
+#: src/InfoBoxes/Content/Factory.cpp:1149
 #, no-c-format
 msgid ""
-"Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the InfoBox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
+"Wind speed estimated by XCSoar. Manual adjustment is possible with the "
+"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
+"through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Vitesse du vent estimée par XCSoar.\r\n"
-"Pour les terminaux à écran tactile et pour PC seulement:  la vitesse du vent "
-"est ajustable à l'aide des boutons haut/bas. Les boutons droite/gauche "
-"permettent de régler la direction du vent."
+"Vitesse du vent estimée par XCSoar. Un réglage manuel est possible au "
+"travers l'InfoBox correspondante. Les touches haut/bas passent les "
+"paramètres en boucle, les flèches gauche/droite modifient la valeur."
 
-#: src/InfoBoxes/Content/Factory.cpp:411
+#: src/InfoBoxes/Content/Factory.cpp:417
 #, no-c-format
 msgid "Wind bearing"
 msgstr "Direction du vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:412
+#: src/InfoBoxes/Content/Factory.cpp:418
 #, no-c-format
 msgid "Wind Brng"
 msgstr "Dir Vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:413
+#: src/InfoBoxes/Content/Factory.cpp:419
 #, no-c-format
 msgid ""
-"Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
-"is possible by pressing the up/down cursor keys to adjust bearing when the "
-"InfoBox is active."
+"Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
+"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
+"through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Direction du vent estimée par XCSoar. Ecrans tactiles et PC seulement : la "
-"modification manuelle est possible en utilisant les touches haut/bas pour "
-"changer la direction quand l'InfoBox est active."
+"Direction du vent estimée par XCSoar.Un réglage manuel est possible au "
+"travers l'InfoBox correspondante. Les touches haut/bas passent les "
+"paramètres en boucle, les flèches gauche/droite modifient la valeur."
 
-#: src/InfoBoxes/Content/Factory.cpp:422 src/InfoBoxes/Content/Factory.cpp:423
+#: src/InfoBoxes/Content/Factory.cpp:428
 #, no-c-format
 msgid "AAT time"
 msgstr "AAT temps"
 
-#: src/InfoBoxes/Content/Factory.cpp:424
+#: src/InfoBoxes/Content/Factory.cpp:429
+#, no-c-format
+msgid "AAT Time"
+msgstr "Temps AAT"
+
+#: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
@@ -1341,47 +1327,47 @@ msgstr ""
 "Temps restant sur l'AAT. Devient rouge lorsque le temps de l'épreuve est "
 "écoulé."
 
-#: src/InfoBoxes/Content/Factory.cpp:432
+#: src/InfoBoxes/Content/Factory.cpp:438
 #, no-c-format
 msgid "AAT max. distance "
 msgstr "Distance max. AAT "
 
-#: src/InfoBoxes/Content/Factory.cpp:433
+#: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "AAT Dmax"
 msgstr "Dmax AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:434
+#: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr "Distance maximale possible sur le reste de l'AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:442
+#: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "AAT min. distance"
 msgstr "Distance min. AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:443
+#: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "AAT Dmin"
 msgstr "Dmin AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:444
+#: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr "Distance minimale possible sur le reste de l'AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:452
+#: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "AAT speed max. distance"
 msgstr "Vitesse max sur l'AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:453
+#: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
 msgid "AAT Vmax"
 msgstr "Vmax AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:454
+#: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
@@ -1390,17 +1376,17 @@ msgstr ""
 "Vitesse moyenne maximale possible sur l'AAT en parcourant la distance "
 "maximale restante dans le temps minimum de l'épreuve."
 
-#: src/InfoBoxes/Content/Factory.cpp:462
+#: src/InfoBoxes/Content/Factory.cpp:468
 #, no-c-format
 msgid "AAT speed min. distance"
 msgstr "Vit. AAT distance mini"
 
-#: src/InfoBoxes/Content/Factory.cpp:463
+#: src/InfoBoxes/Content/Factory.cpp:469
 #, no-c-format
 msgid "AAT Vmin"
 msgstr "Vmin AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:464
+#: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
@@ -1409,32 +1395,32 @@ msgstr ""
 "Vitesse moyenne minimale possible de l'AAT (en parcourant la distance "
 "minimale restante dans le temps minimum de l'épreuve)."
 
-#: src/InfoBoxes/Content/Factory.cpp:472
+#: src/InfoBoxes/Content/Factory.cpp:478
 #, no-c-format
 msgid "Airspeed IAS"
 msgstr "Vitesse air"
 
-#: src/InfoBoxes/Content/Factory.cpp:473
+#: src/InfoBoxes/Content/Factory.cpp:479
 #, no-c-format
 msgid "V IAS"
 msgstr "V Air"
 
-#: src/InfoBoxes/Content/Factory.cpp:474
+#: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "Vitesse air indiquée par un vario externe intelligent."
 
-#: src/InfoBoxes/Content/Factory.cpp:482
+#: src/InfoBoxes/Content/Factory.cpp:488
 #, no-c-format
 msgid "Barometric altitude"
 msgstr "Altitude barométrique"
 
-#: src/InfoBoxes/Content/Factory.cpp:483
+#: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Alt Baro"
 msgstr "Alt Baro"
 
-#: src/InfoBoxes/Content/Factory.cpp:484
+#: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
@@ -1443,17 +1429,17 @@ msgstr ""
 "Altitude barométrique obtenue à partir d'un appareil ayant un capteur de "
 "pression."
 
-#: src/InfoBoxes/Content/Factory.cpp:493
+#: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
 msgid "Speed MacCready"
 msgstr "Vitesse MacCready"
 
-#: src/InfoBoxes/Content/Factory.cpp:494
+#: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
 msgid "V MC"
 msgstr "V MC"
 
-#: src/InfoBoxes/Content/Factory.cpp:495
+#: src/InfoBoxes/Content/Factory.cpp:501
 #, no-c-format
 msgid ""
 "The MacCready speed-to-fly for optimal flight to the next waypoint. In "
@@ -1464,17 +1450,17 @@ msgstr ""
 "prochain point de virage. En transition, cette vitesse est calculée de façon "
 "à maintenir l'altitude. En arrivée, elle est calculée en descente."
 
-#: src/InfoBoxes/Content/Factory.cpp:503
+#: src/InfoBoxes/Content/Factory.cpp:509
 #, no-c-format
 msgid "Percentage climb"
 msgstr "Pourcentage de montée"
 
-#: src/InfoBoxes/Content/Factory.cpp:504
+#: src/InfoBoxes/Content/Factory.cpp:510
 #, no-c-format
 msgid "% Climb"
 msgstr "% Montée"
 
-#: src/InfoBoxes/Content/Factory.cpp:505
+#: src/InfoBoxes/Content/Factory.cpp:511
 #, no-c-format
 msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
@@ -1483,32 +1469,32 @@ msgstr ""
 "Pourcentage de temps passé à monter. Ces statistiques sont remises à zéro au "
 "départ du circuit."
 
-#: src/InfoBoxes/Content/Factory.cpp:513
+#: src/InfoBoxes/Content/Factory.cpp:519
 #, no-c-format
 msgid "Flight Duration"
 msgstr "Temps de vol"
 
-#: src/InfoBoxes/Content/Factory.cpp:514
+#: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "Flt Duration"
 msgstr "Tps Vol"
 
-#: src/InfoBoxes/Content/Factory.cpp:515
+#: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
 msgstr "Durée depuis la détection du décollage."
 
-#: src/InfoBoxes/Content/Factory.cpp:523
+#: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "G load"
 msgstr "Facteur de charge"
 
-#: src/InfoBoxes/Content/Factory.cpp:524
+#: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "G"
 msgstr "G"
 
-#: src/InfoBoxes/Content/Factory.cpp:525
+#: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
@@ -1517,17 +1503,17 @@ msgstr ""
 "Valeur du facteur de charge mesuré par un vario externe intelligent. Cette "
 "valeur est négative pour des manoeuvres en piqué."
 
-#: src/InfoBoxes/Content/Factory.cpp:533
+#: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "Next GR"
 msgstr "Proch Fin"
 
-#: src/InfoBoxes/Content/Factory.cpp:534
+#: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
 msgid "WP GR"
 msgstr "Fin WP"
 
-#: src/InfoBoxes/Content/Factory.cpp:535
+#: src/InfoBoxes/Content/Factory.cpp:541
 #, no-c-format
 msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
@@ -1538,42 +1524,42 @@ msgstr ""
 "comme le distance au prochain point divisée par la hauteur nécessaire pour y "
 "arriver à la hauteur de sécurité."
 
-#: src/InfoBoxes/Content/Factory.cpp:543
+#: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "Time local"
 msgstr "Heure locale"
 
-#: src/InfoBoxes/Content/Factory.cpp:544
+#: src/InfoBoxes/Content/Factory.cpp:550
 #, no-c-format
 msgid "Time loc"
 msgstr "Heure loc."
 
-#: src/InfoBoxes/Content/Factory.cpp:545
+#: src/InfoBoxes/Content/Factory.cpp:551
 #, no-c-format
 msgid "GPS time expressed in local time zone."
 msgstr "Heure locale GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:553 src/InfoBoxes/Content/Factory.cpp:554
+#: src/InfoBoxes/Content/Factory.cpp:559 src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
 msgid "Time UTC"
 msgstr "Heure UTC"
 
-#: src/InfoBoxes/Content/Factory.cpp:555
+#: src/InfoBoxes/Content/Factory.cpp:561
 #, no-c-format
 msgid "GPS time expressed in UTC."
 msgstr "Heure UTC GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:563
+#: src/InfoBoxes/Content/Factory.cpp:569
 #, no-c-format
 msgid "Task time to go"
 msgstr "Temps restant jusqu'à la fin du circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:564
+#: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
 msgid "Fin ETE"
 msgstr "TVP Fin"
 
-#: src/InfoBoxes/Content/Factory.cpp:565
+#: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
@@ -1582,17 +1568,17 @@ msgstr ""
 "Temps requis estimé pour finir le circuit, en tenant compte des meilleurs "
 "performances du MacCready en transition/spirale."
 
-#: src/InfoBoxes/Content/Factory.cpp:573
+#: src/InfoBoxes/Content/Factory.cpp:579
 #, no-c-format
 msgid "Next time to go"
 msgstr "Temps restant vers prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:574
+#: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "WP ETE"
 msgstr "TVP WP"
 
-#: src/InfoBoxes/Content/Factory.cpp:575
+#: src/InfoBoxes/Content/Factory.cpp:581
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
@@ -1601,17 +1587,17 @@ msgstr ""
 "Temps requis estimé pour rejoindre le prochain waypoint, en tenant compte "
 "des meilleurs performances du MacCready en transition/spirale."
 
-#: src/InfoBoxes/Content/Factory.cpp:583
+#: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
 msgid "Speed dolphin"
 msgstr "Vitesse de vol en dauphin"
 
-#: src/InfoBoxes/Content/Factory.cpp:584
+#: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
 msgid "Vopt"
 msgstr "Vopt"
 
-#: src/InfoBoxes/Content/Factory.cpp:585
+#: src/InfoBoxes/Content/Factory.cpp:591
 #, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
@@ -1630,17 +1616,17 @@ msgstr ""
 "disponible). Si le mode \"vitesse de consigne bloquée\" est sélectionné, "
 "alors la consigne est la vitesse de consigne MacCready."
 
-#: src/InfoBoxes/Content/Factory.cpp:593
+#: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
 msgid "Netto vario"
 msgstr "Vario netto"
 
-#: src/InfoBoxes/Content/Factory.cpp:594
+#: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
 msgid "Netto"
 msgstr "Netto"
 
-#: src/InfoBoxes/Content/Factory.cpp:595
+#: src/InfoBoxes/Content/Factory.cpp:601
 #, no-c-format
 msgid ""
 "Instantaneous vertical speed of air-mass, equal to vario value less the "
@@ -1653,17 +1639,17 @@ msgstr ""
 "badin, un accéléromètre et un vario sont connectés, sinon les calculs sont "
 "basés sur les mesures du GPS et l'estimation du vent."
 
-#: src/InfoBoxes/Content/Factory.cpp:603
+#: src/InfoBoxes/Content/Factory.cpp:609
 #, no-c-format
 msgid "Task arrival time"
 msgstr "Heure d'arrivée du circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:604
+#: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
 msgid "Fin ETA"
 msgstr "Fin ETA"
 
-#: src/InfoBoxes/Content/Factory.cpp:605
+#: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
@@ -1672,17 +1658,17 @@ msgstr ""
 "Heure d'arrivée prévue  en tenant compte des meilleurs performance du "
 "MacCready en transition/ascendance."
 
-#: src/InfoBoxes/Content/Factory.cpp:613
+#: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "Next arrival time"
 msgstr "Heure d'arrivée prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:614
+#: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
 msgid "WP ETA"
 msgstr "WP ETA"
 
-#: src/InfoBoxes/Content/Factory.cpp:615
+#: src/InfoBoxes/Content/Factory.cpp:621
 #, no-c-format
 msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
@@ -1691,17 +1677,17 @@ msgstr ""
 "Heure local d'arrivée au prochain waypoint estimée, en supposant la "
 "performance idéale des cycles transitions/ascendances du MacCready."
 
-#: src/InfoBoxes/Content/Factory.cpp:623
+#: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Bearing difference"
 msgstr "Différence de cap"
 
-#: src/InfoBoxes/Content/Factory.cpp:624
+#: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
 msgid "Brng D"
 msgstr "Diff Cap"
 
-#: src/InfoBoxes/Content/Factory.cpp:625
+#: src/InfoBoxes/Content/Factory.cpp:631
 #, no-c-format
 msgid ""
 "The difference between the glider's track bearing, to the bearing of the "
@@ -1721,17 +1707,17 @@ msgstr ""
 "trajectoire afin de corriger la dérive, et se diriger directement vers le "
 "prochain waypoint. Cette indication prend en compte la courbure de la terre."
 
-#: src/InfoBoxes/Content/Factory.cpp:633
+#: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
 msgid "Outside air temperature"
 msgstr "Température de l'air extérieur"
 
-#: src/InfoBoxes/Content/Factory.cpp:634
+#: src/InfoBoxes/Content/Factory.cpp:640
 #, no-c-format
 msgid "OAT"
 msgstr "OAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:635
+#: src/InfoBoxes/Content/Factory.cpp:641
 #, no-c-format
 msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
@@ -1740,17 +1726,17 @@ msgstr ""
 "Température de l'air extérieur mesurée par une sonde connectée à un vario "
 "intelligent."
 
-#: src/InfoBoxes/Content/Factory.cpp:643
+#: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Relative humidity"
 msgstr "Humidité relative"
 
-#: src/InfoBoxes/Content/Factory.cpp:644
+#: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Rel Hum"
 msgstr "Hum Rel"
 
-#: src/InfoBoxes/Content/Factory.cpp:645
+#: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
@@ -1759,17 +1745,17 @@ msgstr ""
 "Pourcentage d'humidité relative de l'air mesurée par une sonde connectée à "
 "un vario intelligent."
 
-#: src/InfoBoxes/Content/Factory.cpp:653 src/Input/InputEventsSettings.cpp:295
+#: src/InfoBoxes/Content/Factory.cpp:659 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Température prévue"
 
-#: src/InfoBoxes/Content/Factory.cpp:654
+#: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "Max Temp"
 msgstr "Temp Max"
 
-#: src/InfoBoxes/Content/Factory.cpp:655
+#: src/InfoBoxes/Content/Factory.cpp:661
 #, no-c-format
 msgid ""
 "Forecast temperature of the ground at the home airfield, used in estimating "
@@ -1782,44 +1768,49 @@ msgstr ""
 "température extérieure et une sonde d'humidité. Pour écrans tactiles et PC : "
 "les flèches haut/bas ajustent cette température prévue."
 
-#: src/InfoBoxes/Content/Factory.cpp:663
+#: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
 msgid "AAT distance around target"
 msgstr "Distance autour des points de l'AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:664
+#: src/InfoBoxes/Content/Factory.cpp:670
 #, no-c-format
 msgid "AAT Dtgt"
 msgstr "Dist AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:665
+#: src/InfoBoxes/Content/Factory.cpp:671
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr "Distance restante autour des points de l'AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:673
+#: src/InfoBoxes/Content/Factory.cpp:679
 #, no-c-format
 msgid "AAT speed around target"
 msgstr "Vitesse sur l'AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:674
+#: src/InfoBoxes/Content/Factory.cpp:680
 #, no-c-format
 msgid "AAT Vtgt"
 msgstr "V AAT"
 
-#: src/InfoBoxes/Content/Factory.cpp:675
+#: src/InfoBoxes/Content/Factory.cpp:681
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de temps restant."
 
-#: src/InfoBoxes/Content/Factory.cpp:683 src/InfoBoxes/Content/Factory.cpp:684
+#: src/InfoBoxes/Content/Factory.cpp:689
 #, no-c-format
 msgid "L/D vario"
 msgstr "Finesse vario"
 
-#: src/InfoBoxes/Content/Factory.cpp:685
+#: src/InfoBoxes/Content/Factory.cpp:690
+#, no-c-format
+msgid "L/D Vario"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
 msgid ""
 "Instantaneous lift/drag ratio, given by the indicated airspeed divided by "
@@ -1832,33 +1823,33 @@ msgstr ""
 "indiquent une transition en montée. Si le vario à énergie totale est proche "
 "de zéro, alors la valeur affichée est '---'."
 
-#: src/InfoBoxes/Content/Factory.cpp:693
+#: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid "Airspeed TAS"
 msgstr "Vitesse air TAS"
 
-#: src/InfoBoxes/Content/Factory.cpp:694
+#: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
 msgid "V TAS"
 msgstr "V TAS"
 
-#: src/InfoBoxes/Content/Factory.cpp:695
+#: src/InfoBoxes/Content/Factory.cpp:701
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
 msgstr "Vitesse air réelle donnée par un vario intelligent externe."
 
-#: src/InfoBoxes/Content/Factory.cpp:703
+#: src/InfoBoxes/Content/Factory.cpp:709
 #, no-c-format
 msgid "Team code"
 msgstr "Code de l'équipe"
 
-#: src/InfoBoxes/Content/Factory.cpp:704 Data/Dialogs/dlgTeamCode.xml:3
+#: src/InfoBoxes/Content/Factory.cpp:710 Data/Dialogs/dlgTeamCode.xml:3
 #: Data/Dialogs/dlgTeamCode_L.xml:3
 #, no-c-format
 msgid "Team Code"
 msgstr "Code équipe"
 
-#: src/InfoBoxes/Content/Factory.cpp:705
+#: src/InfoBoxes/Content/Factory.cpp:711
 #, no-c-format
 msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
@@ -1868,68 +1859,68 @@ msgstr ""
 "l'attribuer aux autres membres de l'équipe. Le dernier code de l'équipe en "
 "affiché en dessous"
 
-#: src/InfoBoxes/Content/Factory.cpp:713
+#: src/InfoBoxes/Content/Factory.cpp:719
 #, no-c-format
 msgid "Team bearing"
 msgstr "Relèvement de l'équipier"
 
-#: src/InfoBoxes/Content/Factory.cpp:714
+#: src/InfoBoxes/Content/Factory.cpp:720
 #, no-c-format
 msgid "Team Brng"
 msgstr "Rlvt Eqp"
 
-#: src/InfoBoxes/Content/Factory.cpp:715
+#: src/InfoBoxes/Content/Factory.cpp:721
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
 msgstr ""
 "Le relèvement vers la position de l'appareil de la même équipe à la dernière "
 "position connue."
 
-#: src/InfoBoxes/Content/Factory.cpp:723
+#: src/InfoBoxes/Content/Factory.cpp:729
 #, no-c-format
 msgid "Team bearing difference"
 msgstr "Gisement de l'équipier"
 
-#: src/InfoBoxes/Content/Factory.cpp:724
+#: src/InfoBoxes/Content/Factory.cpp:730
 #, no-c-format
 msgid "Team BrngD"
 msgstr "DRlvt Eqp"
 
-#: src/InfoBoxes/Content/Factory.cpp:725
+#: src/InfoBoxes/Content/Factory.cpp:731
 #, no-c-format
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
 msgstr "Le gisement vers l'équipier à sa dernière position."
 
-#: src/InfoBoxes/Content/Factory.cpp:733
+#: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
 msgid "Team range"
 msgstr "Distance équipier"
 
-#: src/InfoBoxes/Content/Factory.cpp:734
+#: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
 msgid "Team Dist"
 msgstr "Dist Eqp"
 
-#: src/InfoBoxes/Content/Factory.cpp:735
+#: src/InfoBoxes/Content/Factory.cpp:741
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
 msgstr ""
 "Distance à l'appareil équipier, mesurée à partir du dernier code d'équipier "
 "reçu."
 
-#: src/InfoBoxes/Content/Factory.cpp:743
+#: src/InfoBoxes/Content/Factory.cpp:749
 #, no-c-format
 msgid "Speed task instantaneous"
 msgstr "Vitesse instantanée sur le circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:744
+#: src/InfoBoxes/Content/Factory.cpp:750
 #, no-c-format
 msgid "V Task Inst"
 msgstr "V Circ Inst"
 
-#: src/InfoBoxes/Content/Factory.cpp:745
+#: src/InfoBoxes/Content/Factory.cpp:751
 #, no-c-format
 msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
@@ -1938,32 +1929,32 @@ msgstr ""
 "Vitesse de croisère instantanée sur le circuit en cours, compensée en "
 "altitude. Equivaut à la vitesse de croisière dite de Pirker."
 
-#: src/InfoBoxes/Content/Factory.cpp:753
+#: src/InfoBoxes/Content/Factory.cpp:759
 #, no-c-format
 msgid "Distance home"
 msgstr "Distance à la base"
 
-#: src/InfoBoxes/Content/Factory.cpp:754
+#: src/InfoBoxes/Content/Factory.cpp:760
 #, no-c-format
 msgid "Home Dist"
 msgstr "Dist Base"
 
-#: src/InfoBoxes/Content/Factory.cpp:755
+#: src/InfoBoxes/Content/Factory.cpp:761
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
 msgstr "Distance jusqu'à la base (si définie)"
 
-#: src/InfoBoxes/Content/Factory.cpp:763
+#: src/InfoBoxes/Content/Factory.cpp:769
 #, no-c-format
 msgid "Speed task achieved"
 msgstr "Vitesse sur le circuit achevé"
 
-#: src/InfoBoxes/Content/Factory.cpp:764
+#: src/InfoBoxes/Content/Factory.cpp:770
 #, no-c-format
 msgid "V Task Ach"
 msgstr "V Circ Real"
 
-#: src/InfoBoxes/Content/Factory.cpp:765
+#: src/InfoBoxes/Content/Factory.cpp:771
 #, no-c-format
 msgid ""
 "Achieved cross country speed while on current task, compensated for "
@@ -1972,17 +1963,17 @@ msgstr ""
 "Vitesse de croisière effective sur circuit, compensée en altitude. Equivaut "
 "à la vitesse de croisière de Pirker."
 
-#: src/InfoBoxes/Content/Factory.cpp:773
+#: src/InfoBoxes/Content/Factory.cpp:779
 #, no-c-format
 msgid "AAT delta time"
 msgstr "AAT delta de temps"
 
-#: src/InfoBoxes/Content/Factory.cpp:774
+#: src/InfoBoxes/Content/Factory.cpp:780
 #, no-c-format
 msgid "AAT dT"
 msgstr "AAT dT"
 
-#: src/InfoBoxes/Content/Factory.cpp:775
+#: src/InfoBoxes/Content/Factory.cpp:781
 #, no-c-format
 msgid ""
 "Difference between estimated task time and AAT minimum time. Coloured red if "
@@ -1994,32 +1985,32 @@ msgstr ""
 "secteur) et si on peut se diriger vers l'arrivée avec une heure d'arrivée "
 "supérieure de 5 minutes à l'heure d'arrivée AAT."
 
-#: src/InfoBoxes/Content/Factory.cpp:783
+#: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
 msgid "Thermal average over all"
 msgstr "Thermique moyen sur l'ensemble"
 
-#: src/InfoBoxes/Content/Factory.cpp:784
+#: src/InfoBoxes/Content/Factory.cpp:790
 #, no-c-format
-msgid "TC All"
-msgstr "Vz Circ"
+msgid "TAll Avg"
+msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:785
+#: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
 msgid "Time-average climb rate in all thermals."
 msgstr "Taux de montée moyen sur tous les thermiques."
 
-#: src/InfoBoxes/Content/Factory.cpp:793
+#: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
 msgid "Task req. total height trend"
 msgstr "Tendance hauteur nécessaire pour le circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:794
+#: src/InfoBoxes/Content/Factory.cpp:800
 #, no-c-format
 msgid "RH Trend"
 msgstr "Tend H Cir"
 
-#: src/InfoBoxes/Content/Factory.cpp:795
+#: src/InfoBoxes/Content/Factory.cpp:801
 #, no-c-format
 msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
@@ -2028,22 +2019,22 @@ msgstr ""
 "Tendance (ici opposé de la dérivée) de la hauteur totale nécessaire pour "
 "terminer le circuit."
 
-#: src/InfoBoxes/Content/Factory.cpp:804
+#: src/InfoBoxes/Content/Factory.cpp:810
 #, no-c-format
 msgid "Battery percent"
 msgstr "Pourcentage Batterie"
 
-#: src/InfoBoxes/Content/Factory.cpp:806
+#: src/InfoBoxes/Content/Factory.cpp:812
 #, no-c-format
 msgid "Battery voltage"
 msgstr "Voltage Batterie"
 
-#: src/InfoBoxes/Content/Factory.cpp:808
+#: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "Battery"
 msgstr "Batterie"
 
-#: src/InfoBoxes/Content/Factory.cpp:809
+#: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
 msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
@@ -2052,47 +2043,68 @@ msgstr ""
 "Affiche le pourcentage restant de batterie (si possible) et le statut/"
 "tension de l'alimentation externe."
 
-#: src/InfoBoxes/Content/Factory.cpp:827
+#: src/InfoBoxes/Content/Factory.cpp:823
+#, no-c-format
+msgid "Final GR"
+msgstr "Finesse Arrivée"
+
+#: src/InfoBoxes/Content/Factory.cpp:824
+#, no-c-format
+msgid "Fin GR"
+msgstr "Fin. Arr."
+
+#: src/InfoBoxes/Content/Factory.cpp:825
+#, no-c-format
+msgid ""
+"The required glide ratio over ground to finish the task, given by the "
+"distance to go divided by the height required to arrive at the safety "
+"arrival height."
+msgstr ""
+"Finesse nécessaire pour finir le circuit, calculée comme la distance "
+"restante à parcourir divisée par la hauteur nécessaire pour arriver à la "
+"hauteur de sécurité."
+
+#: src/InfoBoxes/Content/Factory.cpp:833
 #, no-c-format
 msgid "Alternate 1"
 msgstr "Dégagement 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:828
+#: src/InfoBoxes/Content/Factory.cpp:834
 #, no-c-format
 msgid "Altn 1"
 msgstr "Dgmt 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:829
+#: src/InfoBoxes/Content/Factory.cpp:835
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
 msgstr "Affiche le nom et le cap de la meilleure option d'atterrissage."
 
-#: src/InfoBoxes/Content/Factory.cpp:837
+#: src/InfoBoxes/Content/Factory.cpp:843
 #, no-c-format
 msgid "Alternate 2"
 msgstr "Dégagement 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:838
+#: src/InfoBoxes/Content/Factory.cpp:844
 #, no-c-format
 msgid "Altn 2"
 msgstr "Dgmt 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:839
+#: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
 msgstr "Affiche le nom et le cap de la 2e option d'atterrissage."
 
-#: src/InfoBoxes/Content/Factory.cpp:847
+#: src/InfoBoxes/Content/Factory.cpp:853
 #, no-c-format
 msgid "Alternate 1 GR"
 msgstr "Finesse dégagement 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:848
+#: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Altn1 GR"
 msgstr "Fin Dgmt1"
 
-#: src/InfoBoxes/Content/Factory.cpp:849
+#: src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
@@ -2101,12 +2113,12 @@ msgstr ""
 "Finesse nécessaire pour arriver au premier dégagement. N'est pas compensé en "
 "énergie totale."
 
-#: src/InfoBoxes/Content/Factory.cpp:857 src/InfoBoxes/Content/Factory.cpp:858
+#: src/InfoBoxes/Content/Factory.cpp:863 src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "QFE GPS"
 msgstr "QFE GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:859
+#: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
 msgid ""
 "Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE "
@@ -2120,62 +2132,51 @@ msgstr ""
 "ligne du bas montre l'altitude QNH. Le changement de QFE ne change en rien "
 "l'altitude QNH."
 
-#: src/InfoBoxes/Content/Factory.cpp:868
+#: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
 msgid "GR average"
 msgstr "Finesse moyenne"
 
-#: src/InfoBoxes/Content/Factory.cpp:869
+#: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
 msgid "GR Avg"
 msgstr "Fin. moyenne"
 
-#: src/InfoBoxes/Content/Factory.cpp:870
+#: src/InfoBoxes/Content/Factory.cpp:876
 #, no-c-format
 msgid ""
 "The distance made in the configured period of time , divided by the altitude "
 "lost since then. Negative values are shown as ^^^ and indicate climbing "
-"cruise (height gain). Over 200 of L/D the value is shown as +++ . You can "
+"cruise (height gain). Over 200 of GR the value is shown as +++ . You can "
 "configure the period of averaging in the system setup. Suggested values are "
-"60, 90 or 120. Lower values will be closed to L/D INST, and higher values "
-"will be closed to L/D Cruise. Notice that the distance is NOT the straight "
+"60, 90 or 120. Lower values will be closed to GR Inst, and higher values "
+"will be closed to GR Cruise. Notice that the distance is NOT the straight "
 "line between your old and current position, it's exactly the distance you "
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
-"Distance parcourue durant la période définie divisée par l'altitude perdue "
-"durant cette période. Une valeur négative est représentée par '^^^' et "
-"indique un gain d'altitude. Une finesse supérieure à 200 est représentée par "
-"'+++'. \r\n"
-"La durée de la période de calcul de la finesse moyenne est réglable dans le "
-"menu Config 2/3 > Calculateur de vol > Tps Finesse Moy.\r\n"
-"Les valeurs 60 90 ou 120 sont préconisées: des valeurs inférieures seraient "
-"proches de la finesse instantanée et des valeurs supérieures proches de la "
-"finesse sur circuit. Notez que la distance utilisée pour le calcul n'est pas "
-"la ligne droite mais la distance réellement parcourue lors durant la "
-"précédente période. Il n'y a pas de calcul en spirale."
 
-#: src/InfoBoxes/Content/Factory.cpp:878
+#: src/InfoBoxes/Content/Factory.cpp:884
 #, no-c-format
 msgid "Experimental 1"
 msgstr "Expérimentale 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:879
+#: src/InfoBoxes/Content/Factory.cpp:885
 #, no-c-format
 msgid "Exp1"
 msgstr "Exp 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:888
+#: src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
 msgid "On-Line Contest distance"
 msgstr "Distance On-Line Contest"
 
-#: src/InfoBoxes/Content/Factory.cpp:889
+#: src/InfoBoxes/Content/Factory.cpp:895
 #, no-c-format
 msgid "OLC"
 msgstr "OLC"
 
-#: src/InfoBoxes/Content/Factory.cpp:890
+#: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
@@ -2184,42 +2185,42 @@ msgstr ""
 "Estimation instantanée de la distance parcourue en tenant compte des règles "
 "de concours paramétrées."
 
-#: src/InfoBoxes/Content/Factory.cpp:898
+#: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid "Experimental 2"
 msgstr "Expérimentale 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:899
+#: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
 msgid "Exp2"
 msgstr "Exp 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:908
+#: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
 msgid "CPU load"
 msgstr "Charge CPU"
 
-#: src/InfoBoxes/Content/Factory.cpp:909
+#: src/InfoBoxes/Content/Factory.cpp:915
 #, no-c-format
 msgid "CPU"
 msgstr "CPU"
 
-#: src/InfoBoxes/Content/Factory.cpp:910
+#: src/InfoBoxes/Content/Factory.cpp:916
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
 msgstr "Charge CPU consommée par XCSoar en moyenne sur 5 secondes."
 
-#: src/InfoBoxes/Content/Factory.cpp:918
+#: src/InfoBoxes/Content/Factory.cpp:924
 #, no-c-format
 msgid "Next altitude arrival"
 msgstr "Altitude d'arrivée prochain waypoint"
 
-#: src/InfoBoxes/Content/Factory.cpp:919
+#: src/InfoBoxes/Content/Factory.cpp:925
 #, no-c-format
-msgid "WP alt.A"
-msgstr "WP Alt. Abs"
+msgid "WP AltA"
+msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:920
+#: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
 msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
@@ -2228,27 +2229,27 @@ msgstr ""
 "Altitude d'arrivée absolue au prochain point de virage en arrivée directe. "
 "Pour les AAT le point cible du secteur est utilisé pour le calcul."
 
-#: src/InfoBoxes/Content/Factory.cpp:928 src/InfoBoxes/Content/Factory.cpp:929
+#: src/InfoBoxes/Content/Factory.cpp:934 src/InfoBoxes/Content/Factory.cpp:935
 #, no-c-format
 msgid "Free RAM"
 msgstr "RAM libre"
 
-#: src/InfoBoxes/Content/Factory.cpp:930
+#: src/InfoBoxes/Content/Factory.cpp:936
 #, no-c-format
 msgid "Free RAM as reported by OS."
 msgstr "RAM libre d'après l'OS."
 
-#: src/InfoBoxes/Content/Factory.cpp:938
+#: src/InfoBoxes/Content/Factory.cpp:944
 #, no-c-format
 msgid "Flight level"
 msgstr "Niveau de vol"
 
-#: src/InfoBoxes/Content/Factory.cpp:939
+#: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "FL"
 msgstr "FL"
 
-#: src/InfoBoxes/Content/Factory.cpp:940
+#: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
 msgid ""
 "Pressure Altitude given as Flight Level. Only available if barometric "
@@ -2257,27 +2258,27 @@ msgstr ""
 "Altitude pression donnée en niveau de vol (FL). Disponible seulement si "
 "l'altitude barométrique est disponible et si le QNH est correctement réglé."
 
-#: src/InfoBoxes/Content/Factory.cpp:949 src/InfoBoxes/Content/Factory.cpp:950
+#: src/InfoBoxes/Content/Factory.cpp:955 src/InfoBoxes/Content/Factory.cpp:956
 #, no-c-format
 msgid "Barogram"
 msgstr "Barogramme"
 
-#: src/InfoBoxes/Content/Factory.cpp:951
+#: src/InfoBoxes/Content/Factory.cpp:957
 #, no-c-format
 msgid "Trace of altitude during flight"
 msgstr "Trace de l'altitude durant le vol."
 
-#: src/InfoBoxes/Content/Factory.cpp:959
+#: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Vario trace"
 msgstr "Trace du vario"
 
-#: src/InfoBoxes/Content/Factory.cpp:960
+#: src/InfoBoxes/Content/Factory.cpp:966
 #, no-c-format
 msgid "Vario Trace"
 msgstr "Trace vario"
 
-#: src/InfoBoxes/Content/Factory.cpp:961
+#: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
@@ -2286,17 +2287,17 @@ msgstr ""
 "Trace de la vitesse verticale reportée par le GPS, ou par un vario à énergie "
 "totale  si connecté"
 
-#: src/InfoBoxes/Content/Factory.cpp:969
+#: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
 msgid "Netto vario trace"
 msgstr "Trace vario Netto"
 
-#: src/InfoBoxes/Content/Factory.cpp:970
+#: src/InfoBoxes/Content/Factory.cpp:976
 #, no-c-format
 msgid "Netto Trace"
 msgstr "Trace netto"
 
-#: src/InfoBoxes/Content/Factory.cpp:971
+#: src/InfoBoxes/Content/Factory.cpp:977
 #, no-c-format
 msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
@@ -2305,17 +2306,17 @@ msgstr ""
 "Trace de la vitesse verticale de la masse d'air, égale au vario moins le "
 "taux de chute estimé du planeur."
 
-#: src/InfoBoxes/Content/Factory.cpp:979
+#: src/InfoBoxes/Content/Factory.cpp:985
 #, no-c-format
 msgid "Thermal climb trace"
 msgstr "trace taux de montée"
 
-#: src/InfoBoxes/Content/Factory.cpp:980
+#: src/InfoBoxes/Content/Factory.cpp:986
 #, no-c-format
 msgid "TC Trace"
 msgstr "Trace Montée"
 
-#: src/InfoBoxes/Content/Factory.cpp:981
+#: src/InfoBoxes/Content/Factory.cpp:987
 #, no-c-format
 msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
@@ -2324,17 +2325,17 @@ msgstr ""
 "Trace des taux de montée moyenne de chaque tour en spirale, basé sur "
 "l'altitude GPS ou sur le vario, si disponible."
 
-#: src/InfoBoxes/Content/Factory.cpp:989
+#: src/InfoBoxes/Content/Factory.cpp:995
 #, no-c-format
 msgid "Climb band"
 msgstr "Profil d'ascendance"
 
-#: src/InfoBoxes/Content/Factory.cpp:990
+#: src/InfoBoxes/Content/Factory.cpp:996
 #, no-c-format
 msgid "Climb Band"
 msgstr "Bandeau d'ascendance"
 
-#: src/InfoBoxes/Content/Factory.cpp:991
+#: src/InfoBoxes/Content/Factory.cpp:997
 #, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
@@ -2343,17 +2344,17 @@ msgstr ""
 "Graphique du taux de monté moyen (axe horizontal) en fonction de la hauteur "
 "(axe vertical)."
 
-#: src/InfoBoxes/Content/Factory.cpp:999
+#: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Task progress"
 msgstr "Progression circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:1000
+#: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Progress"
 msgstr "Avancement"
 
-#: src/InfoBoxes/Content/Factory.cpp:1001
+#: src/InfoBoxes/Content/Factory.cpp:1007
 #, no-c-format
 msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
@@ -2362,34 +2363,34 @@ msgstr ""
 "Affichage de type horloge représentant la distance restante du circuit, et "
 "indiquant les points tournés."
 
-#: src/InfoBoxes/Content/Factory.cpp:1009
+#: src/InfoBoxes/Content/Factory.cpp:1015
 #, no-c-format
 msgid "Time under max. start height"
 msgstr "Temps en dessous la hauteur max. du départ."
 
-#: src/InfoBoxes/Content/Factory.cpp:1010
+#: src/InfoBoxes/Content/Factory.cpp:1016
 #, no-c-format
 msgid "Start Height"
 msgstr "Altitude de départ"
 
-#: src/InfoBoxes/Content/Factory.cpp:1011
+#: src/InfoBoxes/Content/Factory.cpp:1017
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
 "La durée continue passée sous l'altitude maximale de départ du circuit."
 
-#: src/InfoBoxes/Content/Factory.cpp:1019
+#: src/InfoBoxes/Content/Factory.cpp:1025
 #, no-c-format
 msgid "Task time to go (ground speed)"
 msgstr "Durée restante circuit (vitesse sol)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1020
+#: src/InfoBoxes/Content/Factory.cpp:1026
 #, no-c-format
 msgid "Fin ETE VMG"
 msgstr "TVP Fin Vsol"
 
-#: src/InfoBoxes/Content/Factory.cpp:1021
+#: src/InfoBoxes/Content/Factory.cpp:1027
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
@@ -2398,17 +2399,17 @@ msgstr ""
 "Temps estimé pour finir la tâche, en supposant que la vitesse sol actuelle "
 "soit maintenue."
 
-#: src/InfoBoxes/Content/Factory.cpp:1029
+#: src/InfoBoxes/Content/Factory.cpp:1035
 #, no-c-format
 msgid "Next time to go (ground speed)"
 msgstr "Durée restante jusqu'au suivant (vitesse sol)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1030
+#: src/InfoBoxes/Content/Factory.cpp:1036
 #, no-c-format
 msgid "WP ETE VMG"
 msgstr "TVP WP Vsol"
 
-#: src/InfoBoxes/Content/Factory.cpp:1031
+#: src/InfoBoxes/Content/Factory.cpp:1037
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
@@ -2417,17 +2418,17 @@ msgstr ""
 "Temps estimé pour rejoindre le prochain point de virage, en supposant que la "
 "vitesse sol actuelle soit maintenue."
 
-#: src/InfoBoxes/Content/Factory.cpp:1039
+#: src/InfoBoxes/Content/Factory.cpp:1045
 #, no-c-format
 msgid "Attitude indicator"
 msgstr "Horizon artificiel"
 
-#: src/InfoBoxes/Content/Factory.cpp:1040
+#: src/InfoBoxes/Content/Factory.cpp:1046
 #, no-c-format
 msgid "Horizon"
 msgstr "Horizon"
 
-#: src/InfoBoxes/Content/Factory.cpp:1041
+#: src/InfoBoxes/Content/Factory.cpp:1047
 #, no-c-format
 msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
@@ -2436,32 +2437,32 @@ msgstr ""
 "Affichage d'attitude (horizon artificiel) calculé selon la direction du vol, "
 "complétée d'accélérations et vario si les données sont disponibles."
 
-#: src/InfoBoxes/Content/Factory.cpp:1049
+#: src/InfoBoxes/Content/Factory.cpp:1055
 #, no-c-format
 msgid "Nearest airspace horizontal"
 msgstr "Espace aérien le plus proche horizontalement"
 
-#: src/InfoBoxes/Content/Factory.cpp:1050
+#: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
 msgid "Near AS H"
 msgstr "H.Dist EA"
 
-#: src/InfoBoxes/Content/Factory.cpp:1051
+#: src/InfoBoxes/Content/Factory.cpp:1057
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace."
 msgstr "Distance horizontale à l'espace aérien le plus proche."
 
-#: src/InfoBoxes/Content/Factory.cpp:1059
+#: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
 msgid "Nearest airspace vertical"
 msgstr "Espace aérien le plus proche verticalement"
 
-#: src/InfoBoxes/Content/Factory.cpp:1060
+#: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
 msgid "Near AS V"
 msgstr "V.Dist EA"
 
-#: src/InfoBoxes/Content/Factory.cpp:1061
+#: src/InfoBoxes/Content/Factory.cpp:1067
 #, no-c-format
 msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
@@ -2471,17 +2472,17 @@ msgstr ""
 "signifie que l'espace aérien est au-dessus, une valeur négative signifie que "
 "l'espace aérien est au-dessous."
 
-#: src/InfoBoxes/Content/Factory.cpp:1069
+#: src/InfoBoxes/Content/Factory.cpp:1075
 #, no-c-format
 msgid "Next MC0 altitude difference"
 msgstr "Différence d'altitude prochain waypoint à MC0"
 
-#: src/InfoBoxes/Content/Factory.cpp:1070
+#: src/InfoBoxes/Content/Factory.cpp:1076
 #, no-c-format
 msgid "WP MC0 AltD"
 msgstr "WPT MC0 AltD"
 
-#: src/InfoBoxes/Content/Factory.cpp:1071
+#: src/InfoBoxes/Content/Factory.cpp:1077
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
@@ -2492,17 +2493,17 @@ msgstr ""
 "en tenant compte de l'altitude de sécurité en arrivée. \r\n"
 "Pour les AAT le point cible du secteur est utilisé pour le calcul."
 
-#: src/InfoBoxes/Content/Factory.cpp:1079
+#: src/InfoBoxes/Content/Factory.cpp:1085
 #, no-c-format
 msgid "Head wind component"
 msgstr "Composante de vent de face"
 
-#: src/InfoBoxes/Content/Factory.cpp:1080
+#: src/InfoBoxes/Content/Factory.cpp:1086
 #, no-c-format
 msgid "Head Wind"
 msgstr "Vent de face"
 
-#: src/InfoBoxes/Content/Factory.cpp:1081
+#: src/InfoBoxes/Content/Factory.cpp:1087
 #, no-c-format
 msgid ""
 "The current head wind component. Head wind is calculated from TAS and GPS "
@@ -2513,17 +2514,17 @@ msgstr ""
 "la route instantanée GPS si la vitesse air est disponible à partir d'un "
 "équipement externe. Sinon l'estimation interne du vent est utilisée."
 
-#: src/InfoBoxes/Content/Factory.cpp:1090
+#: src/InfoBoxes/Content/Factory.cpp:1096
 #, no-c-format
 msgid "Terrain collision"
 msgstr "Collision avec le terrain"
 
-#: src/InfoBoxes/Content/Factory.cpp:1091
+#: src/InfoBoxes/Content/Factory.cpp:1097
 #, no-c-format
 msgid "Terr Coll"
 msgstr "Coll Terr"
 
-#: src/InfoBoxes/Content/Factory.cpp:1092
+#: src/InfoBoxes/Content/Factory.cpp:1098
 #, no-c-format
 msgid ""
 "The distance to the next terrain collision along the current task leg. At "
@@ -2534,17 +2535,17 @@ msgstr ""
 "circuit actuelle. A cet endroit, l'altitude devient inférieure à la "
 "clairance du terrain configurée par l'utilisateur."
 
-#: src/InfoBoxes/Content/Factory.cpp:1099
+#: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Altitude (Auto)"
 msgstr "Altitude (auto)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1100
+#: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Alt Auto"
 msgstr "Alt Auto"
 
-#: src/InfoBoxes/Content/Factory.cpp:1101
+#: src/InfoBoxes/Content/Factory.cpp:1107
 #, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
@@ -2554,17 +2555,17 @@ msgstr ""
 "Altitude barométrique si le terminal utilisé comporte un capteur de "
 "pression. Altitude GPS sinon."
 
-#: src/InfoBoxes/Content/Factory.cpp:1110
+#: src/InfoBoxes/Content/Factory.cpp:1116
 #, no-c-format
 msgid "Thermal next leg equivalent"
 msgstr "Vz moyenne sur la prochaine branche."
 
-#: src/InfoBoxes/Content/Factory.cpp:1111
+#: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "T Next Leg"
 msgstr "Vz Moy. après WP"
 
-#: src/InfoBoxes/Content/Factory.cpp:1112
+#: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
@@ -2573,17 +2574,17 @@ msgstr ""
 "Vz moyenne prévue sur la prochaine branche. Equivalent au calage MacCready "
 "de la branche courante."
 
-#: src/InfoBoxes/Content/Factory.cpp:1120
+#: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "Head wind component (simplified)"
 msgstr "Composante de vent de face (simplifiée)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1121
+#: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
 msgid "Head Wind *"
 msgstr "Vent de face *"
 
-#: src/InfoBoxes/Content/Factory.cpp:1122
+#: src/InfoBoxes/Content/Factory.cpp:1128
 #, no-c-format
 msgid ""
 "The current head wind component. The simplified head wind is calculated by "
@@ -2594,17 +2595,17 @@ msgstr ""
 "calculée en soustrayant la vitesse sol GPS de la vitesse air vraie (TAS) si "
 "la vitesse air est disponible grâce à un équipement externe."
 
-#: src/InfoBoxes/Content/Factory.cpp:1130
+#: src/InfoBoxes/Content/Factory.cpp:1136
 #, no-c-format
 msgid "Task cruise efficiency"
 msgstr "Efficacité en transition en circuit"
 
-#: src/InfoBoxes/Content/Factory.cpp:1131
+#: src/InfoBoxes/Content/Factory.cpp:1137
 #, no-c-format
 msgid "Cruise Eff"
 msgstr "Eff Trans"
 
-#: src/InfoBoxes/Content/Factory.cpp:1132
+#: src/InfoBoxes/Content/Factory.cpp:1138
 #, no-c-format
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance. This "
@@ -2616,13 +2617,13 @@ msgstr ""
 "mesurées pendant le vol, avec le calage MC choisi. Le calcul commence à "
 "partir du départ du circuit ."
 
-#: src/InfoBoxes/Content/Factory.cpp:1141
+#: src/InfoBoxes/Content/Factory.cpp:1147
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:180
 #, no-c-format
 msgid "Wind arrow"
 msgstr "Flèche de Vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:1142
+#: src/InfoBoxes/Content/Factory.cpp:1148
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
@@ -2631,19 +2632,19 @@ msgstr "Flèche de Vent"
 msgid "Wind"
 msgstr "Vent"
 
-#: src/InfoBoxes/Content/Factory.cpp:1150
+#: src/InfoBoxes/Content/Factory.cpp:1156
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "Assistant Thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:1151
-#: src/Renderer/MapItemListRenderer.cpp:383
+#: src/InfoBoxes/Content/Factory.cpp:1157
+#: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
 msgstr "Thermique"
 
-#: src/InfoBoxes/Content/Factory.cpp:1152
+#: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
 msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
@@ -2652,32 +2653,32 @@ msgstr ""
 "Assistant circulaire de spirale qui montre la distribution des zones de "
 "montée le long de la spirale."
 
-#: src/InfoBoxes/Content/Factory.cpp:1160
+#: src/InfoBoxes/Content/Factory.cpp:1166
 #, no-c-format
 msgid "Start open/close countdown"
 msgstr "Start démarrer/arrêter le compte à rebour"
 
-#: src/InfoBoxes/Content/Factory.cpp:1161
+#: src/InfoBoxes/Content/Factory.cpp:1167
 #, no-c-format
 msgid "Start open"
 msgstr "Start ouvert"
 
-#: src/InfoBoxes/Content/Factory.cpp:1162
+#: src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
 msgstr "Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé"
 
-#: src/InfoBoxes/Content/Factory.cpp:1169
+#: src/InfoBoxes/Content/Factory.cpp:1175
 #, no-c-format
 msgid "Start open/close countdown at reaching"
 msgstr "Start: démarrer/arrêter le compte à rebour"
 
-#: src/InfoBoxes/Content/Factory.cpp:1170
+#: src/InfoBoxes/Content/Factory.cpp:1176
 #, no-c-format
 msgid "Start reach"
 msgstr "Start atteint"
 
-#: src/InfoBoxes/Content/Factory.cpp:1171
+#: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
@@ -2685,6 +2686,22 @@ msgid ""
 msgstr ""
 "Montrer le temps restant jusqu'à ce que le start soit ouvert ou fermé, "
 "comparé au temps estimé pour l'atteindre"
+
+#: src/InfoBoxes/Content/Factory.cpp:1184
+#, no-c-format
+msgid "Next radial"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:1185 Data/Dialogs/dlgTarget.xml:25
+#: Data/Dialogs/dlgTarget_L.xml:18
+#, no-c-format
+msgid "Radial"
+msgstr "Radial"
+
+#: src/InfoBoxes/Content/Factory.cpp:1186
+#, no-c-format
+msgid "True bearing from the next waypoint to your position."
+msgstr "Relevement vrai du prochain waypoint"
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
 #, c-format
@@ -2742,15 +2759,20 @@ msgstr "MC AUTO"
 msgid "MC MANUAL"
 msgstr "MC MANUEL"
 
-#: src/InfoBoxes/Content/Other.cpp:62
+#: src/InfoBoxes/Content/Other.cpp:63
+#, c-format
+msgid "AC Off;  %d%%"
+msgstr ""
+
+#: src/InfoBoxes/Content/Other.cpp:65
 msgid "AC Off"
 msgstr "AC Off"
 
-#: src/InfoBoxes/Content/Other.cpp:66
+#: src/InfoBoxes/Content/Other.cpp:69
 msgid "AC ON"
 msgstr "AC ON"
 
-#: src/InfoBoxes/Content/Other.cpp:172 src/Profile/DeviceConfig.cpp:141
+#: src/InfoBoxes/Content/Other.cpp:175 src/Profile/DeviceConfig.cpp:141
 #: src/Dialogs/Device/DeviceEditWidget.cpp:64
 #: src/Dialogs/Device/DeviceListDialog.cpp:333
 #, no-c-format
@@ -2765,23 +2787,23 @@ msgstr "BLOQUER"
 msgid "DOLPHIN"
 msgstr "Dauphin"
 
-#: src/InfoBoxes/Content/Task.cpp:82
+#: src/InfoBoxes/Content/Task.cpp:97
 msgid "Next"
 msgstr "Suivant"
 
-#: src/InfoBoxes/Content/Task.cpp:749
+#: src/InfoBoxes/Content/Task.cpp:743
 msgid "Time Below"
 msgstr "Tps sous alt. depart"
 
-#: src/InfoBoxes/Content/Task.cpp:861 src/InfoBoxes/Content/Task.cpp:906
+#: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
 msgid "Closed"
 msgstr "Fermé"
 
-#: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
+#: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
 msgstr "Ouvert"
 
-#: src/InfoBoxes/Content/Task.cpp:875 src/InfoBoxes/Content/Task.cpp:920
+#: src/InfoBoxes/Content/Task.cpp:869 src/InfoBoxes/Content/Task.cpp:914
 msgid "Waiting"
 msgstr "En attente"
 
@@ -2871,8 +2893,8 @@ msgid "Manual adjustment of wind speed."
 msgstr "Réglage manuel de la vitesse du vent."
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105
-#: src/Renderer/MapItemListRenderer.cpp:121
-#: src/Renderer/MapItemListRenderer.cpp:124
+#: src/Renderer/MapItemListRenderer.cpp:122
+#: src/Renderer/MapItemListRenderer.cpp:125
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:96
 #: Data/Dialogs/AirspaceList.xml:18 Data/Dialogs/AirspaceList_L.xml:12
 #: Data/Dialogs/WaypointList.xml:12 Data/Dialogs/WaypointList_L.xml:8
@@ -3122,68 +3144,68 @@ msgstr "Carte et InfoBoxes"
 msgid "No data"
 msgstr "Pas de données"
 
-#: src/Renderer/MapItemListRenderer.cpp:135
-#: src/Renderer/MapItemListRenderer.cpp:137
+#: src/Renderer/MapItemListRenderer.cpp:136
+#: src/Renderer/MapItemListRenderer.cpp:138
 #: src/Renderer/WaypointListRenderer.cpp:56
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
 msgid "Elevation"
 msgstr "Altitude"
 
-#: src/Renderer/MapItemListRenderer.cpp:211
-#: src/Renderer/MapItemListRenderer.cpp:236
+#: src/Renderer/MapItemListRenderer.cpp:213
+#: src/Renderer/MapItemListRenderer.cpp:238
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:95
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:212
 #, no-c-format
 msgid "AGL"
 msgstr "AGL"
 
-#: src/Renderer/MapItemListRenderer.cpp:217
-#: src/Renderer/MapItemListRenderer.cpp:242
+#: src/Renderer/MapItemListRenderer.cpp:219
+#: src/Renderer/MapItemListRenderer.cpp:244
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:214
 #, no-c-format
 msgid "MSL"
 msgstr "MSL"
 
-#: src/Renderer/MapItemListRenderer.cpp:227
+#: src/Renderer/MapItemListRenderer.cpp:229
 msgid "around terrain"
 msgstr "autour du terrain"
 
-#: src/Renderer/MapItemListRenderer.cpp:246
+#: src/Renderer/MapItemListRenderer.cpp:248
 msgid "Unreachable due to terrain."
 msgstr "Inaccessible à cause du terrain."
 
-#: src/Renderer/MapItemListRenderer.cpp:251
+#: src/Renderer/MapItemListRenderer.cpp:253
 msgid "Arrival altitude incl. safety height"
 msgstr "Altitude d'arrivée avec hauteur de sécurité"
 
-#: src/Renderer/MapItemListRenderer.cpp:276
+#: src/Renderer/MapItemListRenderer.cpp:279
 msgid "Your Position"
 msgstr "Votre position"
 
-#: src/Renderer/MapItemListRenderer.cpp:334
+#: src/Renderer/MapItemListRenderer.cpp:338
 msgid "Marker"
 msgstr "Marqueur"
 
-#: src/Renderer/MapItemListRenderer.cpp:341
+#: src/Renderer/MapItemListRenderer.cpp:345
 #, c-format
 msgid "dropped %s ago"
 msgstr "Déposé il y a %s"
 
-#: src/Renderer/MapItemListRenderer.cpp:396
+#: src/Renderer/MapItemListRenderer.cpp:401
 msgid "Avg. lift"
 msgstr "Asc. moy."
 
-#: src/Renderer/MapItemListRenderer.cpp:398
+#: src/Renderer/MapItemListRenderer.cpp:403
 #, c-format
 msgid "left %s ago"
 msgstr "Quitté il y a %s"
 
-#: src/Renderer/MapItemListRenderer.cpp:474
+#: src/Renderer/MapItemListRenderer.cpp:482
 msgid "FLARM Traffic"
 msgstr "Trafic FLARM"
 
-#: src/Renderer/MapItemListRenderer.cpp:500
+#: src/Renderer/MapItemListRenderer.cpp:508
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:322
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
@@ -3200,12 +3222,12 @@ msgstr "Altitude"
 msgid "Arrival Alt"
 msgstr "Alt. d'arrivée"
 
-#: src/MapWindow/GlueMapWindowItems.cpp:97
+#: src/MapWindow/GlueMapWindowItems.cpp:101
 msgid "There is nothing interesting near this location."
 msgstr "Il n'y a rien d'intéressant à proximité de ce lieu."
 
-#: src/MapWindow/GlueMapWindowItems.cpp:98
-#: src/Dialogs/MapItemListDialog.cpp:239
+#: src/MapWindow/GlueMapWindowItems.cpp:102
+#: src/Dialogs/MapItemListDialog.cpp:242
 msgid "Map elements at this location"
 msgstr "Elements de la carte à cet endroit."
 
@@ -3466,7 +3488,7 @@ msgstr "Réessayer"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
 #: src/Dialogs/Settings/FontEdit.cpp:196
-#: src/Dialogs/Traffic/TrafficList.cpp:569 src/Dialogs/NumberEntry.cpp:62
+#: src/Dialogs/Traffic/TrafficList.cpp:733 src/Dialogs/NumberEntry.cpp:62
 #: src/Dialogs/NumberEntry.cpp:106 src/Dialogs/NumberEntry.cpp:148
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:217 src/Dialogs/TimeEntry.cpp:67
 #: Data/Dialogs/WaypointList.xml:19 Data/Dialogs/WaypointList_L.xml:17
@@ -3484,7 +3506,7 @@ msgstr "Ignorer"
 msgid "Help"
 msgstr "Aide"
 
-#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:568
+#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:732
 #: Data/Dialogs/WaypointList.xml:18 Data/Dialogs/WaypointList_L.xml:16
 msgid "Select"
 msgstr "Sélection"
@@ -4105,12 +4127,12 @@ msgstr "Type"
 msgid "Logger interval"
 msgstr "Intervalle d'enregistrement"
 
-#: src/Dialogs/MapItemListDialog.cpp:151 src/Dialogs/dlgAnalysis.cpp:293
+#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:293
 #: src/Dialogs/dlgAnalysis.cpp:329 src/Dialogs/dlgAnalysis.cpp:338
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/Dialogs/MapItemListDialog.cpp:152
+#: src/Dialogs/MapItemListDialog.cpp:155
 #: src/Dialogs/Task/dlgAlternatesList.cpp:100
 msgid "Goto"
 msgstr "Aller à"
@@ -4598,13 +4620,17 @@ msgstr "Editer Police"
 msgid "Reset"
 msgstr "Reset"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:250
+#: src/Dialogs/Traffic/TrafficList.cpp:319
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
 msgstr "n° de concours"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:551
+#: src/Dialogs/Traffic/TrafficList.cpp:338 Data/Input/default.xci:1013
+msgid "Map"
+msgstr "Carte"
+
+#: src/Dialogs/Traffic/TrafficList.cpp:715
 msgid "Traffic"
 msgstr "Trafic"
 
@@ -7074,11 +7100,8 @@ msgstr "Ombrage des pentes"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
-"sun position or a fixed shading from north-east."
+"sun position or a fixed shading from North-West."
 msgstr ""
-"The terrain peut être ombragé selon les pentes afin d'indiquer la direction "
-"du vent, la position du soleil, ou un ombrage fixe par éclairage par le nord-"
-"est."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 msgid "Terrain contrast"
@@ -8664,10 +8687,6 @@ msgstr "OK Esp."
 msgid "Registration"
 msgstr "Immatriculation"
 
-#: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
-msgid "Radial"
-msgstr "Radial"
-
 #: Data/Dialogs/dlgPlaneDetails.xml:29 Data/Dialogs/dlgPlaneDetails_L.xml:39
 msgid "Max. Ballast"
 msgstr "Ballast max."
@@ -8982,10 +9001,6 @@ msgstr ""
 "Boutons\n"
 "Cockpit"
 
-#: Data/Input/default.xci:1013
-msgid "Map"
-msgstr "Carte"
-
 #: Data/Input/default.xci:132
 msgid ""
 "Pan\n"
@@ -9212,6 +9227,17 @@ msgstr ""
 #~ "Exemple de Texte\n"
 #~ "123"
 
+#~ msgid "TC All"
+#~ msgstr "Vz Circ"
+
+#~ msgid ""
+#~ "The terrain can be shaded among slopes to indicate either wind direction, "
+#~ "sun position or a fixed shading from north-east."
+#~ msgstr ""
+#~ "The terrain peut être ombragé selon les pentes afin d'indiquer la "
+#~ "direction du vent, la position du soleil, ou un ombrage fixe par "
+#~ "éclairage par le nord-est."
+
 #~ msgid "Set new teammate:"
 #~ msgstr "Définir nouvel équipier"
 
@@ -9222,6 +9248,15 @@ msgstr ""
 #~ msgstr "Mon Exemple"
 
 #~ msgid ""
+#~ "Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual "
+#~ "adjustment is possible by pressing the up/down cursor keys to adjust "
+#~ "bearing when the InfoBox is active."
+#~ msgstr ""
+#~ "Direction du vent estimée par XCSoar. Ecrans tactiles et PC seulement : "
+#~ "la modification manuelle est possible en utilisant les touches haut/bas "
+#~ "pour changer la direction quand l'InfoBox est active."
+
+#~ msgid ""
 #~ "This is the height above mean sea level reported by the GPS. Touch-screen/"
 #~ "PC only: In simulation mode, this value is adjustable with the up/down "
 #~ "arrow keys and the right/left arrow keys also cause the glider to turn."
@@ -9230,6 +9265,44 @@ msgstr ""
 #~ "Pour les terminaux à écran tactile et pour PC seulement: en mode "
 #~ "simulation, cette valeur est ajustable à l'aide des boutons haut/bas. Les "
 #~ "boutons droite/gauche permettent au planeur de virer."
+
+#~ msgid ""
+#~ "Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
+#~ "is possible by pressing the up/down cursor keys to adjust magnitude and "
+#~ "left/right cursor keys to adjust bearing when the InfoBox is active. "
+#~ "Pressing the enter cursor key saves the wind value as the initial value "
+#~ "when XCSoar next starts."
+#~ msgstr ""
+#~ "Vitesse du vent estimée par XCSoar.\r\n"
+#~ "Pour les terminaux à écran tactile et pour PC seulement:  la vitesse du "
+#~ "vent est ajustable à l'aide des boutons haut/bas. Les boutons droite/"
+#~ "gauche permettent de régler la direction du vent."
+
+#~ msgid ""
+#~ "The distance made in the configured period of time , divided by the "
+#~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
+#~ "climbing cruise (height gain). Over 200 of L/D the value is shown as ++"
+#~ "+ . You can configure the period of averaging in the system setup. "
+#~ "Suggested values are 60, 90 or 120. Lower values will be closed to L/D "
+#~ "INST, and higher values will be closed to L/D Cruise. Notice that the "
+#~ "distance is NOT the straight line between your old and current position, "
+#~ "it's exactly the distance you have made even in a zigzag glide. This "
+#~ "value is not calculated while circling."
+#~ msgstr ""
+#~ "Distance parcourue durant la période définie divisée par l'altitude "
+#~ "perdue durant cette période. Une valeur négative est représentée par "
+#~ "'^^^' et indique un gain d'altitude. Une finesse supérieure à 200 est "
+#~ "représentée par '+++'. \r\n"
+#~ "La durée de la période de calcul de la finesse moyenne est réglable dans "
+#~ "le menu Config 2/3 > Calculateur de vol > Tps Finesse Moy.\r\n"
+#~ "Les valeurs 60 90 ou 120 sont préconisées: des valeurs inférieures "
+#~ "seraient proches de la finesse instantanée et des valeurs supérieures "
+#~ "proches de la finesse sur circuit. Notez que la distance utilisée pour le "
+#~ "calcul n'est pas la ligne droite mais la distance réellement parcourue "
+#~ "lors durant la précédente période. Il n'y a pas de calcul en spirale."
+
+#~ msgid "WP alt.A"
+#~ msgstr "WP Alt. Abs"
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"

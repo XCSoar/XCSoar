@@ -45,6 +45,7 @@ Version 6.5 - not yet released
   - reduce audio vario latency
   - better bold fonts on Linux
   - add page option to show cross section below map
+  - new translation: Hebrew
 * infoboxes
   - added thermal assistant infobox
   - inverse colors for wind arrow infobox and flarm gauge (#2337)

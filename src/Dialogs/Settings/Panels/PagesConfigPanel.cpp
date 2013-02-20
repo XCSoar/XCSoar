@@ -192,15 +192,7 @@ PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
   value = _value;
 
   unsigned ib = IBP_NONE;
-  switch (value.top_layout) {
-  case PageSettings::PageLayout::tlEmpty:
-    assert(false);
-    gcc_unreachable();
-
-  case PageSettings::PageLayout::tlMap:
-    break;
-
-  case PageSettings::PageLayout::tlMapAndInfoBoxes:
+  if (value.infobox_config.enabled) {
     if (value.infobox_config.auto_switch)
       ib = IBP_AUTO;
     else if (value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
@@ -208,7 +200,6 @@ PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
     else
       /* fix up illegal value */
       ib = 0;
-    break;
   }
 
   LoadValueEnum(INFO_BOX_PANEL, ib);
@@ -221,13 +212,13 @@ PageLayoutEditWidget::OnModified(DataField &df)
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const unsigned ibp = dfe.GetValue();
     if (ibp == IBP_AUTO) {
-      value.top_layout = PageSettings::PageLayout::tlMapAndInfoBoxes;
+      value.infobox_config.enabled = true;
       value.infobox_config.auto_switch = true;
       value.infobox_config.panel = 0;
     } else if (ibp == IBP_NONE)
-      value.top_layout = PageSettings::PageLayout::tlMap;
+      value.infobox_config.enabled = false;
     else if (ibp < InfoBoxSettings::MAX_PANELS) {
-      value.top_layout = PageSettings::PageLayout::tlMapAndInfoBoxes;
+      value.infobox_config.enabled = true;
       value.infobox_config.auto_switch = false;
       value.infobox_config.panel = ibp;
     }
@@ -280,12 +271,13 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
     PageSettings::PageLayout &dest = _settings.pages[i];
     const PageSettings::PageLayout &src = settings.pages[i];
     if (src != dest) {
-      SetLayout(i, src);
       dest = src;
       Profile::Save(src, i);
       changed = true;
     }
   }
+
+  Pages::Update();
 
   _changed |= changed;
   return true;
@@ -303,16 +295,9 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   const TCHAR *text = _T("---");
   StaticString<64> buffer;
 
-  switch (value.top_layout) {
-  case PageSettings::PageLayout::tlEmpty:
-    assert(false);
-    gcc_unreachable();
-
-  case PageSettings::PageLayout::tlMap:
+  if (!value.infobox_config.enabled) {
     text = _("Map (Full screen)");
-    break;
-
-  case PageSettings::PageLayout::tlMapAndInfoBoxes:
+  } else {
     text = _("Map and InfoBoxes");
 
     if (!value.infobox_config.auto_switch &&
@@ -322,7 +307,6 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     else
       buffer.Format(_T("%s (%s)"), text, _("Auto"));
     text = buffer;
-    break;
   }
 
   switch (value.bottom) {
@@ -364,7 +348,7 @@ PageListWidget::OnModified(const PageSettings::PageLayout &new_value)
   unsigned i = GetList().GetCursorIndex();
   assert(i < PageSettings::MAX_PAGES);
 
-  if (i == 0 && new_value.top_layout == PageSettings::PageLayout::tlEmpty) {
+  if (i == 0 && !new_value.IsDefined()) {
     /* refuse to delete the first page (kludge) */
     editor->SetValue(settings.pages[i]);
     return;

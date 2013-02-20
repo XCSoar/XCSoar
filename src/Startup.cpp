@@ -458,7 +458,7 @@ Startup()
   // Give focus to the map
   main_window->SetDefaultFocus();
 
-  Pages::Initialise(ui_settings.pages);
+  Pages::Update();
 
   // Start calculation thread
   merge_thread->Start();
