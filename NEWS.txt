@@ -45,6 +45,7 @@ Version 6.5 - not yet released
   - reduce audio vario latency
   - better bold fonts on Linux
   - add page option to show cross section below map
+  - allow pages with FLARM radar and thermal assistant
   - new translation: Hebrew
 * infoboxes
   - added thermal assistant infobox

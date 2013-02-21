@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PageActions.hpp"
+#include "UIActions.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
@@ -146,6 +147,14 @@ Pages::OpenLayout(const PageLayout &layout)
   switch (layout.main) {
   case PageLayout::Main::MAP:
     CommonInterface::main_window->ActivateMap();
+    break;
+
+  case PageLayout::Main::FLARM_RADAR:
+    UIActions::ShowTrafficRadar();
+    break;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    UIActions::ShowThermalAssistant();
     break;
 
   case PageLayout::Main::MAX:

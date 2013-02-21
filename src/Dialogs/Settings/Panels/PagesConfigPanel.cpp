@@ -164,6 +164,8 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   static constexpr StaticEnumChoice main_list[] = {
     { (unsigned)PageLayout::Main::MAP, N_("Map") },
+    { (unsigned)PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
+    { (unsigned)PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
     { 0 }
   };
   AddEnum(_("Main area"),
@@ -313,6 +315,14 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   switch (value.main) {
   case PageLayout::Main::MAP:
     buffer = _("Map");
+    break;
+
+  case PageLayout::Main::FLARM_RADAR:
+    buffer = _("FLARM radar");
+    break;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    buffer = _("Thermal assistant");
     break;
 
   case PageLayout::Main::MAX:

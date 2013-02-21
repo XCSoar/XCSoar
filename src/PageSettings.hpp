@@ -72,6 +72,10 @@ struct PageLayout
   enum class Main : uint8_t {
     MAP,
 
+    FLARM_RADAR,
+
+    THERMAL_ASSISTANT,
+
     /**
      * A dummy entry that is used for validating profile values.
      */

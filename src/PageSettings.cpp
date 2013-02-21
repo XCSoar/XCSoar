@@ -40,6 +40,14 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   case PageLayout::Main::MAP:
     break;
 
+  case PageLayout::Main::FLARM_RADAR:
+    _tcscpy(buffer, _("FLARM radar"));
+    return;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    _tcscpy(buffer, _("Thermal assistant"));
+    return;
+
   case PageLayout::Main::MAX:
     gcc_unreachable();
   }
