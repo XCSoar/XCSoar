@@ -323,6 +323,9 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
     buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
+
+  case PageLayout::Bottom::MAX:
+    gcc_unreachable();
   }
 
   canvas.DrawText(rc.left + Layout::GetTextPadding(),

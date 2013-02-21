@@ -70,7 +70,8 @@ Load(PageLayout &_pl, const unsigned page)
     return;
 
   _tcscpy(profileKey + prefixLen, _T("Bottom"));
-  if (!Profile::GetEnum(profileKey, pl.bottom))
+  if (!Profile::GetEnum(profileKey, pl.bottom) ||
+      unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
     pl.bottom = PageLayout::Bottom::NOTHING;
 
   _pl = pl;

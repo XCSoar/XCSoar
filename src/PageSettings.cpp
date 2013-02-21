@@ -70,6 +70,9 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     // TODO: better text and translate
     _tcscat(buffer, _T(", XS"));
     break;
+
+  case Bottom::MAX:
+    gcc_unreachable();
   }
 }
 

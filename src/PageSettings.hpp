@@ -78,6 +78,11 @@ struct PageLayout
      * Show a cross section below the map.
      */
     CROSS_SECTION,
+
+    /**
+     * A dummy entry that is used for validating profile values.
+     */
+    MAX
   } bottom;
 
   PageLayout() = default;

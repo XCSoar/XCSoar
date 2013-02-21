@@ -138,6 +138,9 @@ Pages::OpenLayout(const PageLayout &layout)
   case PageLayout::Bottom::CROSS_SECTION:
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
     break;
+
+  case PageLayout::Bottom::MAX:
+    gcc_unreachable();
   }
 
   ActionInterface::UpdateDisplayMode();
