@@ -25,7 +25,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
 
 #include <assert.h>

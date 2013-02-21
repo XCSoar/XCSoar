@@ -87,7 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Compiler.h"

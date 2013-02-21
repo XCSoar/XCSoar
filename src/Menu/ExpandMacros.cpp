@@ -36,7 +36,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Device/device.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Net/Features.hpp"

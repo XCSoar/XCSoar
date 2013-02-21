@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Interface.hpp"

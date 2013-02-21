@@ -21,17 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
-#include "Language/Language.hpp"
-
-#include <stdio.h>
 
 void
 Pages::Update()
