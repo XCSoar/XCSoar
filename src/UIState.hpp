@@ -72,6 +72,12 @@ struct UIState {
    */
   StaticString<32u> panel_name;
 
+  /**
+   * The index of the current page in the list of configured pages,
+   * see #PageSettings.
+   */
+  unsigned page_index;
+
   void Clear();
 };
 

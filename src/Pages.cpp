@@ -33,20 +33,16 @@ Copyright_License {
 
 #include <stdio.h>
 
-namespace Pages
-{
-  static unsigned current_page = 0;
-}
-
 void
 Pages::Update()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  UIState &ui_state = CommonInterface::SetUIState();
 
-  if (!settings.pages[current_page].IsDefined())
-    current_page = NextIndex();
+  if (!settings.pages[ui_state.page_index].IsDefined())
+    ui_state.page_index = NextIndex();
 
-  OpenLayout(settings.pages[current_page]);
+  OpenLayout(settings.pages[ui_state.page_index]);
 }
 
 
@@ -54,8 +50,9 @@ unsigned
 Pages::NextIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = current_page;
+  unsigned i = ui_state.page_index;
   do {
     i = (i + 1) % PageSettings::MAX_PAGES;
   } while (!settings.pages[i].IsDefined());
@@ -66,7 +63,9 @@ Pages::NextIndex()
 void
 Pages::Next()
 {
-  current_page = NextIndex();
+  UIState &ui_state = CommonInterface::SetUIState();
+
+  ui_state.page_index = NextIndex();
   Update();
 }
 
@@ -75,8 +74,9 @@ unsigned
 Pages::PrevIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = current_page;
+  unsigned i = ui_state.page_index;
   do {
     i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
   } while (!settings.pages[i].IsDefined());
@@ -87,7 +87,9 @@ Pages::PrevIndex()
 void
 Pages::Prev()
 {
-  current_page = PrevIndex();
+  UIState &ui_state = CommonInterface::SetUIState();
+
+  ui_state.page_index = PrevIndex();
   Update();
 }
 
@@ -95,6 +97,7 @@ void
 Pages::Open(unsigned page)
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  UIState &ui_state = CommonInterface::SetUIState();
 
   if (page >= PageSettings::MAX_PAGES)
     return;
@@ -102,7 +105,7 @@ Pages::Open(unsigned page)
   if (!settings.pages[page].IsDefined())
     return;
 
-  current_page = page;
+  ui_state.page_index = page;
   Update();
 }
 
