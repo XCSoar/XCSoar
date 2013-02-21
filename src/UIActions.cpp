@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "UIActions.hpp"
+#include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Input/InputEvents.hpp"
 #include "MainWindow.hpp"
@@ -29,6 +30,8 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "FLARM/Glue.hpp"
 #include "Gauge/BigTrafficWidget.hpp"
+#include "Gauge/BigThermalAssistantWidget.hpp"
+#include "Look/Look.hpp"
 
 static bool force_shutdown = false;
 
@@ -60,4 +63,17 @@ UIActions::ShowTrafficRadar()
 
   CommonInterface::main_window->SetWidget(new TrafficWidget());
   InputEvents::SetFlavour(_T("Traffic"));
+}
+
+void
+UIActions::ShowThermalAssistant()
+{
+  if (InputEvents::IsFlavour(_T("TA")))
+    return;
+
+  auto ta_widget =
+    new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard(),
+                                  UIGlobals::GetLook().thermal_assistant_dialog);
+  CommonInterface::main_window->SetWidget(ta_widget);
+  InputEvents::SetFlavour(_T("TA"));
 }

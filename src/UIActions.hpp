@@ -39,6 +39,8 @@ namespace UIActions {
    * Switch to the traffic radar page.
    */
   void ShowTrafficRadar();
+
+  void ShowThermalAssistant();
 };
 
 #endif
