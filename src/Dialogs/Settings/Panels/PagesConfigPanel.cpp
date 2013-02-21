@@ -191,6 +191,8 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 {
   value = _value;
 
+  LoadValueEnum(BOTTOM, value.bottom);
+
   unsigned ib = IBP_NONE;
   if (value.infobox_config.enabled) {
     if (value.infobox_config.auto_switch)
