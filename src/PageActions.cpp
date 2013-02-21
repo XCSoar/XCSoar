@@ -143,6 +143,15 @@ Pages::OpenLayout(const PageLayout &layout)
     gcc_unreachable();
   }
 
+  switch (layout.main) {
+  case PageLayout::Main::MAP:
+    CommonInterface::main_window->ActivateMap();
+    break;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
+  }
+
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
 }

@@ -74,6 +74,11 @@ Load(PageLayout &_pl, const unsigned page)
       unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
     pl.bottom = PageLayout::Bottom::NOTHING;
 
+  _tcscpy(profileKey + prefixLen, _T("Main"));
+  if (!Profile::GetEnum(profileKey, pl.main) ||
+      unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
+    pl.main = PageLayout::Main::MAP;
+
   _pl = pl;
 }
 
@@ -106,6 +111,9 @@ Profile::Save(const PageLayout &page, const unsigned i)
 
   _tcscpy(profileKey + prefixLen, _T("Bottom"));
   Profile::Set(profileKey, (unsigned)page.bottom);
+
+  _tcscpy(profileKey + prefixLen, _T("Main"));
+  Profile::Set(profileKey, (unsigned)page.main);
 }
 
 

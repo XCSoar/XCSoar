@@ -56,6 +56,7 @@ public:
 
 private:
   enum Controls {
+    MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
   };
@@ -161,6 +162,15 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
 
+  static constexpr StaticEnumChoice main_list[] = {
+    { (unsigned)PageLayout::Main::MAP, N_("Map") },
+    { 0 }
+  };
+  AddEnum(_("Main area"),
+          _("Specifies what should be displayed in the main area."),
+          main_list,
+          (unsigned)PageLayout::Main::MAP, this);
+
   static constexpr StaticEnumChoice ib_list[] = {
     { IBP_AUTO, N_("Auto") },
     { IBP_NONE, N_("None") },
@@ -180,8 +190,8 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 N_("Cross section") },
     { 0 }
   };
-  AddEnum(_("Bottom"),
-          _("Specifies what should be displayed below the map."),
+  AddEnum(_("Bottom area"),
+          _("Specifies what should be displayed below the main area."),
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
 }
@@ -191,6 +201,7 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 {
   value = _value;
 
+  LoadValueEnum(MAIN, value.main);
   LoadValueEnum(BOTTOM, value.bottom);
 
   unsigned ib = IBP_NONE;
@@ -210,7 +221,10 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 void
 PageLayoutEditWidget::OnModified(DataField &df)
 {
-  if (&df == &GetDataField(INFO_BOX_PANEL)) {
+  if (&df == &GetDataField(MAIN)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.main = (PageLayout::Main)dfe.GetValue();
+  } else if (&df == &GetDataField(INFO_BOX_PANEL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const unsigned ibp = dfe.GetValue();
     if (ibp == IBP_AUTO) {
@@ -294,21 +308,26 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   assert(idx < PageSettings::MAX_PAGES);
   const auto &value = settings.pages[idx];
 
-  const TCHAR *text = _T("---");
   StaticString<64> buffer;
 
-  if (!value.infobox_config.enabled) {
-    text = _("Map (Full screen)");
-  } else {
-    text = _("Map and InfoBoxes");
+  switch (value.main) {
+  case PageLayout::Main::MAP:
+    buffer = _("Map");
+    break;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
+  }
+
+  if (value.infobox_config.enabled) {
+    buffer.AppendFormat(_T(", %s"), _("InfoBoxes"));
 
     if (!value.infobox_config.auto_switch &&
         value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
-      buffer.Format(_T("%s (%s)"), text,
-                    gettext(info_box_settings.panels[value.infobox_config.panel].name));
+      buffer.AppendFormat(_T(" (%s)"),
+                          gettext(info_box_settings.panels[value.infobox_config.panel].name));
     else
-      buffer.Format(_T("%s (%s)"), text, _("Auto"));
-    text = buffer;
+      buffer.AppendFormat(_T(" (%s)"), _("Auto"));
   }
 
   switch (value.bottom) {
@@ -316,11 +335,6 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     break;
 
   case PageLayout::Bottom::CROSS_SECTION:
-    if (text != buffer) {
-      buffer = text;
-      text = buffer;
-    }
-
     buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
 
@@ -330,7 +344,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   canvas.DrawText(rc.left + Layout::GetTextPadding(),
                   rc.top + Layout::GetTextPadding(),
-                  text);
+                  buffer);
 }
 
 void

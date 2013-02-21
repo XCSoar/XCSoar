@@ -36,6 +36,14 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     return;
   }
 
+  switch (main) {
+  case PageLayout::Main::MAP:
+    break;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
+  }
+
   if (infobox_config.enabled) {
     _tcscpy(buffer, concise ? _("Info") : _("Map and InfoBoxes"));
 
