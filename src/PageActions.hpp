@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
-#include "PageSettings.hpp"
-
-#include <tchar.h>
+struct PageLayout;
 
 namespace Pages
 {
@@ -49,7 +47,7 @@ namespace Pages
    * Attention! Internally the previous page is still selected.
    * @param layout The layout to open
    */
-  void OpenLayout(const PageSettings::PageLayout &layout);
+  void OpenLayout(const PageLayout &layout);
 
   unsigned NextIndex();
   unsigned PrevIndex();

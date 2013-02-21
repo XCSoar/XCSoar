@@ -36,14 +36,14 @@ enum eTopLayout {
 };
 
 static void
-Load(PageSettings::PageLayout &_pl, const unsigned page)
+Load(PageLayout &_pl, const unsigned page)
 {
   TCHAR profileKey[32];
   unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), page);
   if (prefixLen <= 0)
     return;
 
-  PageSettings::PageLayout pl = PageSettings::PageLayout::Default();
+  PageLayout pl = PageLayout::Default();
   _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
   if (!Profile::Get(profileKey, pl.infobox_config.auto_switch))
     return;
@@ -71,7 +71,7 @@ Load(PageSettings::PageLayout &_pl, const unsigned page)
 
   _tcscpy(profileKey + prefixLen, _T("Bottom"));
   if (!Profile::GetEnum(profileKey, pl.bottom))
-    pl.bottom = PageSettings::PageLayout::Bottom::NOTHING;
+    pl.bottom = PageLayout::Bottom::NOTHING;
 
   _pl = pl;
 }
@@ -84,7 +84,7 @@ Profile::Load(PageSettings &settings)
 }
 
 void
-Profile::Save(const PageSettings::PageLayout &page, const unsigned i)
+Profile::Save(const PageLayout &page, const unsigned i)
 {
   TCHAR profileKey[32];
   unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), i);

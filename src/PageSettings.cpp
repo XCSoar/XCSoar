@@ -28,8 +28,8 @@ Copyright_License {
 #include <stdio.h>
 
 void
-PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
-                                    TCHAR *buffer, const bool concise) const
+PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
+                      TCHAR *buffer, const bool concise) const
 {
   if (!valid) {
     _tcscpy(buffer, _T("---"));

@@ -32,9 +32,8 @@ Copyright_License {
 
 struct InfoBoxSettings;
 
-struct PageSettings {
-  static constexpr unsigned MAX_PAGES = 8;
-
+struct PageLayout
+{
   struct InfoBoxConfig {
     /**
      * If false, InfoBoxes will not be shown.
@@ -57,7 +56,7 @@ struct PageSettings {
     bool operator==(const InfoBoxConfig &other) const {
       return enabled == other.enabled &&
         auto_switch == other.auto_switch &&
-             panel == other.panel;
+        panel == other.panel;
     }
 
     bool operator!=(const InfoBoxConfig &other) const {
@@ -65,85 +64,86 @@ struct PageSettings {
     }
   };
 
-  struct PageLayout
-  {
-    bool valid;
+  bool valid;
 
-    InfoBoxConfig infobox_config;
+  InfoBoxConfig infobox_config;
 
-    /**
-     * What to show below the main area (i.e. map)?
-     */
-    enum class Bottom : uint8_t {
-      NOTHING,
-
-      /**
-       * Show a cross section below the map.
-       */
-      CROSS_SECTION,
-    } bottom;
-
-    PageLayout() = default;
-
-    constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
-      :valid(_valid), infobox_config(_infobox_config),
-       bottom(Bottom::NOTHING) {}
-
-    constexpr PageLayout(InfoBoxConfig _infobox_config)
-      :valid(true), infobox_config(_infobox_config),
-       bottom(Bottom::NOTHING) {}
+  /**
+   * What to show below the main area (i.e. map)?
+   */
+  enum class Bottom : uint8_t {
+    NOTHING,
 
     /**
-     * Return an "undefined" page.  Its IsDefined() method will return
-     * false.
+     * Show a cross section below the map.
      */
-    constexpr
-    static PageLayout Undefined() {
-      return PageLayout(false, InfoBoxConfig(false, 0));
-    }
+    CROSS_SECTION,
+  } bottom;
 
-    /**
-     * Returns the default page that will be created initially.
-     */
-    constexpr
-    static PageLayout Default() {
-      return PageLayout(true, InfoBoxConfig(true, 0));
-    }
+  PageLayout() = default;
 
-    /**
-     * Returns the default page that will show the "Aux" InfoBoxes.
-     */
-    constexpr
-    static PageLayout Aux() {
-      return PageLayout(true, InfoBoxConfig(false, 3));
-    }
+  constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
+    :valid(_valid), infobox_config(_infobox_config),
+     bottom(Bottom::NOTHING) {}
 
-    /**
-     * Returns a default full-screen page.
-     */
-    static PageLayout FullScreen() {
-      PageLayout pl = Default();
-      pl.infobox_config.enabled = false;
-      return pl;
-    }
+  constexpr PageLayout(InfoBoxConfig _infobox_config)
+    :valid(true), infobox_config(_infobox_config),
+     bottom(Bottom::NOTHING) {}
 
-    bool IsDefined() const {
-      return valid;
-    }
+  /**
+   * Return an "undefined" page.  Its IsDefined() method will return
+   * false.
+   */
+  constexpr
+  static PageLayout Undefined() {
+    return PageLayout(false, InfoBoxConfig(false, 0));
+  }
 
-    void MakeTitle(const InfoBoxSettings &info_box_settings,
-                   TCHAR *str, const bool concise=false) const;
+  /**
+   * Returns the default page that will be created initially.
+   */
+  constexpr
+  static PageLayout Default() {
+    return PageLayout(true, InfoBoxConfig(true, 0));
+  }
 
-    bool operator==(const PageLayout &other) const {
-      return valid == other.valid &&
-        bottom == other.bottom &&
-             infobox_config == other.infobox_config;
-    }
+  /**
+   * Returns the default page that will show the "Aux" InfoBoxes.
+   */
+  constexpr
+  static PageLayout Aux() {
+    return PageLayout(true, InfoBoxConfig(false, 3));
+  }
 
-    bool operator!=(const PageLayout &other) const {
-      return !(*this == other);
-    }
-  };
+  /**
+   * Returns a default full-screen page.
+   */
+  static PageLayout FullScreen() {
+    PageLayout pl = Default();
+    pl.infobox_config.enabled = false;
+    return pl;
+  }
+
+  bool IsDefined() const {
+    return valid;
+  }
+
+  void MakeTitle(const InfoBoxSettings &info_box_settings,
+                 TCHAR *str, const bool concise=false) const;
+
+  bool operator==(const PageLayout &other) const {
+    return valid == other.valid &&
+      bottom == other.bottom &&
+      infobox_config == other.infobox_config;
+  }
+
+  bool operator!=(const PageLayout &other) const {
+    return !(*this == other);
+  }
+};
+
+struct PageSettings {
+  static constexpr unsigned MAX_PAGES = 8;
 
   std::array<PageLayout, MAX_PAGES> pages;
 

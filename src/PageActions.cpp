@@ -107,7 +107,7 @@ Pages::Open(unsigned page)
 
 
 void
-Pages::OpenLayout(const PageSettings::PageLayout &layout)
+Pages::OpenLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
@@ -131,11 +131,11 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
   }
 
   switch (layout.bottom) {
-  case PageSettings::PageLayout::Bottom::NOTHING:
+  case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 
-  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
+  case PageLayout::Bottom::CROSS_SECTION:
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
     break;
   }

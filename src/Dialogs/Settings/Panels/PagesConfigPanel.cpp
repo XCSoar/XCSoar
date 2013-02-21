@@ -51,7 +51,7 @@ class PageLayoutEditWidget final
 public:
   class Listener {
   public:
-    virtual void OnModified(const PageSettings::PageLayout &new_value) = 0;
+    virtual void OnModified(const PageLayout &new_value) = 0;
   };
 
 private:
@@ -63,7 +63,7 @@ private:
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
 
-  PageSettings::PageLayout value;
+  PageLayout value;
 
   Listener &listener;
 
@@ -71,7 +71,7 @@ public:
   PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
     :RowFormWidget(_look), listener(_listener) {}
 
-  void SetValue(const PageSettings::PageLayout &_value);
+  void SetValue(const PageLayout &_value);
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -148,7 +148,7 @@ public:
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
-  virtual void OnModified(const PageSettings::PageLayout &new_value) override;
+  virtual void OnModified(const PageLayout &new_value) override;
 
 private:
   /* virtual methods from ActionListener */
@@ -175,19 +175,19 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     ib.AddChoice(i, gettext(info_box_settings.panels[i].name));
 
   static constexpr StaticEnumChoice bottom_list[] = {
-    { (unsigned)PageSettings::PageLayout::Bottom::NOTHING, N_("Nothing") },
-    { (unsigned)PageSettings::PageLayout::Bottom::CROSS_SECTION,
+    { (unsigned)PageLayout::Bottom::NOTHING, N_("Nothing") },
+    { (unsigned)PageLayout::Bottom::CROSS_SECTION,
                 N_("Cross section") },
     { 0 }
   };
   AddEnum(_("Bottom"),
           _("Specifies what should be displayed below the map."),
           bottom_list,
-          (unsigned)PageSettings::PageLayout::Bottom::NOTHING, this);
+          (unsigned)PageLayout::Bottom::NOTHING, this);
 }
 
 void
-PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
+PageLayoutEditWidget::SetValue(const PageLayout &_value)
 {
   value = _value;
 
@@ -224,7 +224,7 @@ PageLayoutEditWidget::OnModified(DataField &df)
     }
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.bottom = (PageSettings::PageLayout::Bottom)dfe.GetValue();
+    value.bottom = (PageLayout::Bottom)dfe.GetValue();
   } else {
     gcc_unreachable();
   }
@@ -237,7 +237,7 @@ PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   settings = CommonInterface::GetUISettings().pages;
   auto end = std::remove_if(settings.pages.begin(), settings.pages.end(),
-                            [](const PageSettings::PageLayout &layout) {
+                            [](const PageLayout &layout) {
                               return !layout.IsDefined();
                             });
   unsigned n = std::distance(settings.pages.begin(), end);
@@ -264,12 +264,12 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
 
   std::fill(settings.pages.begin() + GetList().GetLength(),
             settings.pages.end(),
-            PageSettings::PageLayout::Undefined());
+            PageLayout::Undefined());
 
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
-    PageSettings::PageLayout &dest = _settings.pages[i];
-    const PageSettings::PageLayout &src = settings.pages[i];
+    PageLayout &dest = _settings.pages[i];
+    const PageLayout &src = settings.pages[i];
     if (src != dest) {
       dest = src;
       Profile::Save(src, i);
@@ -310,10 +310,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   }
 
   switch (value.bottom) {
-  case PageSettings::PageLayout::Bottom::NOTHING:
+  case PageLayout::Bottom::NOTHING:
     break;
 
-  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
+  case PageLayout::Bottom::CROSS_SECTION:
     if (text != buffer) {
       buffer = text;
       text = buffer;
@@ -343,7 +343,7 @@ PageListWidget::OnActivateItem(unsigned idx)
 }
 
 void
-PageListWidget::OnModified(const PageSettings::PageLayout &new_value)
+PageListWidget::OnModified(const PageLayout &new_value)
 {
   unsigned i = GetList().GetCursorIndex();
   assert(i < PageSettings::MAX_PAGES);
@@ -368,7 +368,7 @@ PageListWidget::OnAction(int id)
   case ADD:
     if (n < PageSettings::MAX_PAGES) {
       auto &page = settings.pages[n];
-      page = PageSettings::PageLayout::Default();
+      page = PageLayout::Default();
       GetList().SetLength(n + 1);
       GetList().SetCursorIndex(n);
     }
