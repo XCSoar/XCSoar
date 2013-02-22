@@ -130,7 +130,9 @@ This page let you specify the favoured map orientation and view.
   south and the glider icon will be rotated to show its course (corrected for
   wind). \\
   {\bf Target up}: The moving map display will be rotated so the current target
-  direction is oriented up.
+  direction is oriented up. \\
+  {\bf Wind up} The moving map display will be rotated so the wind is always 
+  oriented top-down (might be useful for wave flying).
 \item[Circling zoom]  \label{conf:circlingzoom} This determines whether separate
   zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
   map will zoom in automatically when entering circling mode and zoom out
@@ -152,7 +154,7 @@ This page let you specify the favoured map orientation and view.
 This page provides options relating to screen elements overlayed to the map display.
 
 \begin{description}
-\item[Track bearing]  Display the ground track (ground track projection) on the map.
+\item[Ground track]  Display the ground track (ground track projection) on the map.
   The setting "Auto" displays the ground track only if there is a significant 
   difference to plane heading.
 \item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM 
@@ -195,6 +197,8 @@ This page provides options relating to screen elements overlayed to the map disp
   {\bf Off}: No wind arrow is drawn. \\
   {\bf Arrow head}: Draws an arrow head only. \\
   {\bf Full arrow}: Draws an arrow head with a dashed arrow line.
+\item[FAI triangle areas] Whether to show FAI triangle areas on the map.
+  
 \end{description}
 
 
@@ -220,7 +224,7 @@ This page provides options relating to the map display.
   {\bf Terrain avoidance glide}: Arrival height considering terrain avoidance. \\
   {\bf Straight \& terrain glide}: Both arrival heights are
   displayed. \\
-  {\bf Required GR}: Show the glide ratio over ground that is
+  {\bf Required glide ration}: Show the glide ratio over ground that is
   required to reach the waypoint.
 \item[Label style*]  Labels for landables can be shown on a rounded rectangle with 
   white background, or with outlined letters.
@@ -399,19 +403,19 @@ This page allows glide computer algorithms to be configured.
   immediately switch XCSoar's mode to cruise mode.
   Similarly, for Borgelt B50 systems, the speed command switch forces
   XCSoar's climb or cruise mode.
-\item[L/D Average period*]  Average efficiency is always calculated in real-time. 
+\item[GR Average period*]  Average efficiency is always calculated in real-time. 
   Here you can decide on how many seconds of flight this calculation must be done. 
   The real distance covered second by second in this period is divided by the final 
   difference of altitude.  So if for example you go and return back to the same point 
-  after 2 minutes, and you have set 2 minutes as period, average LD will consider the 
-  total distance covered in those two minutes , and not the distance between your 
+  after 2 minutes, and you have set 2 minutes as period, average GR will consider the 
+  total distance covered in those two minutes, and not the distance between your 
   position 2 minutes before and your current position, that in this case could be 
   almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 
-  15 seconds. Lower values will give as a result pretty much the same as LD Instant, 
-  while higher values will look like LD Cruise. Other commercial instruments and 
+  15 seconds. Lower values will give as a result pretty much the same as GR Instant, 
+  while higher values will look like GR Cruise. Other commercial instruments and 
   software use 2 minutes.
-\item[Predict wind drift*]  Account for wind drift for the predicted circling 
-  duration. This reduces the arrival height for legs with head wind.
+\item[Predict wind drift*]  \label{conf:predict-drift}Account for wind drift for the predicted circling 
+  duration. This reduces the arrival height for legs with head wind (on by default).
 \end{description}
 
 
@@ -428,7 +432,7 @@ This page sets the base for wind computations.
   {\bf Circling}: Circling mode requires only a GPS source. \\
   {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
   {\bf Both}:  Uses Circling and ZigZag.
-\item[External wind]  If enabled, the wind vector received from external
+\item[Prefere external wind]  If enabled, the wind vector received from external
   devices overrides XCSoar's internal wind calculation.
 \end{description}
 
@@ -558,6 +562,7 @@ rules. \label{conf:taskrules}
   start height. \\
   {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
   are added to the Classic score. \\
+  {\bf DMSt}: Deutsche Meisterschaft im Streckensegelflug. \\
   {\bf XContest}: \todonum{tbd.} \\
   {\bf DHV-XC}: \todonum{tbd.} \\
   {\bf SIS-AT}: \todonum{tbd.} \\
@@ -828,8 +833,6 @@ purposes.
   not circling. 
 \item[Time step circling*]  This is the time interval between logged points when 
   circling. 
-\item[Short file name*]  This determines whether the logger uses the short or the 
-  long IGC file name.
 \item[Auto logger*]  Enables the automatic starting and stopping of the logger
   on takeoff and landing respectively. Disable when flying paragliders to prevent 
   the low ground speeds from triggering the automatic logger.
@@ -921,18 +924,18 @@ for details on this setup.
 \begin{description}
 \item[SkyLines]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em SkyLines}'.
-\item[Tracking Interval]  The time intervall for which one position is send to 
-  the tracking service. `{\em SkyLines}' implements a very lean protocoll, so that even
+\item[Tracking Interval]  The time interval for which one position is send to 
+  the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
   a 30 sec. interval does not exhaust a plain GPRS connection (ca. 12kbit/sec). 
 \item[Key]  Create a key on the page \url{http://skylines.xcsoar.org/tracking/info} 
   and enter it here, to identify your positions at the tracking service.
 \\
 \item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em LiveTrack24}'.
-\item[Tracking Interval]  The time intervall for which one position is send to 
+\item[Tracking Interval]  The time interval for which one position is send to 
   the tracking service.
 \item[Vehicle Type]  Type of vehicle used.
-\item[Server]  The service's web address to stream your position to. Ther is currently 
+\item[Server]  The service's web address to stream your position to. There is currently 
   a choice of some predefined.
 \item[Username]  If you created an account you can enter those credentials here. 
   Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
