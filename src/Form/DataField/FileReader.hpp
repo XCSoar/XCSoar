@@ -115,7 +115,7 @@ public:
    * @return The number of files in the list
    */
   gcc_pure
-  int GetNumFiles() const;
+  unsigned GetNumFiles() const;
 
   /**
    * Returns the selection index in integer format
@@ -157,7 +157,7 @@ public:
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(int Value);
+  void Set(unsigned Value);
 
   /**
    * @see Set()

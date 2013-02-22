@@ -148,7 +148,7 @@ DataFieldFileReader::Lookup(const TCHAR *Text)
   }
 }
 
-int
+unsigned
 DataFieldFileReader::GetNumFiles() const
 {
   EnsureLoadedDeconst();
@@ -229,14 +229,14 @@ DataFieldFileReader::GetAsDisplayString() const
 }
 
 void
-DataFieldFileReader::Set(int Value)
+DataFieldFileReader::Set(unsigned Value)
 {
   if (Value > 0)
     EnsureLoaded();
   else
     postponed_value.clear();
 
-  if ((unsigned)Value < files.size()) {
+  if (Value < files.size()) {
     mValue = Value;
     Modified();
   }
