@@ -121,7 +121,9 @@ OnPaste()
       continue;
 
     data.contents[item] = content;
-    previews[item].Invalidate();
+
+    if (item < info_box_layout.count)
+      previews[item].Invalidate();
   }
 
   RefreshEditContent();
