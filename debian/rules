@@ -4,6 +4,9 @@
 CFLAGS = -Wall -g
 OPTIONS = TARGET=UNIX
 
+# allow Debian builds in the same repository as normal builds
+OPTIONS += TARGET_OUTPUT_DIR=output/DEBIAN
+
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
   CFLAGS += -O0
   OPTIONS += DEBUG=y
