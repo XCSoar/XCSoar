@@ -17,12 +17,6 @@ Doc/html/*
 output
 perf.data
 perf.data.old
-debian/files
-debian/stamp-*
-debian/tmp
-debian/*.substvars
-debian/xcsoar
-debian/vali-xcs
 rasp/data
 .#*
 callgrind.out.*
