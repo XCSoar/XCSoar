@@ -75,6 +75,12 @@ gcc_const
 static BrokenTime
 BreakHourOfDay(fixed t)
 {
+  /* depending on the time zone, the SunEphemeris library may return a
+     negative time of day; the following check catches this before we
+     cast the value to "unsigned" */
+  if (negative(t))
+    t += fixed(24);
+
   unsigned i = uround(t * 3600);
 
   BrokenTime result;
