@@ -71,6 +71,20 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                              result, settings.task.glide));
 }
 
+gcc_const
+static BrokenTime
+BreakHourOfDay(fixed t)
+{
+  unsigned i = uround(t * 3600);
+
+  BrokenTime result;
+  result.hour = i / 3600;
+  i %= 3600;
+  result.minute = i / 60;
+  result.second = i % 60;
+  return result;
+}
+
 void
 WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -123,12 +137,12 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       SunEphemeris::CalcSunTimes(waypoint.location, basic.date_time_utc,
                                  fixed(GetUTCOffset()) / 3600);
 
-    const unsigned sunrisehours = (int)sun.time_of_sunrise;
-    const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
-    const unsigned sunset_hour = (int)sun.time_of_sunset;
-    const unsigned sunset_minute = (int)((sun.time_of_sunset - fixed(sunset_hour)) * 60);
+    const BrokenTime sunrise = BreakHourOfDay(sun.time_of_sunrise);
+    const BrokenTime sunset = BreakHourOfDay(sun.time_of_sunset);
 
-    buffer.UnsafeFormat(_T("%02u:%02u - %02u:%02u"), sunrisehours, sunrisemins, sunset_hour, sunset_minute);
+    buffer.UnsafeFormat(_T("%02u:%02u - %02u:%02u"),
+                        sunrise.hour, sunrise.minute,
+                        sunset.hour, sunset.minute);
     AddReadOnly(_("Daylight time"), NULL, buffer);
   }
 
