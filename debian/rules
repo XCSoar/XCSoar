@@ -15,13 +15,20 @@ else
   OPTIONS += DEBUG=n
 endif
 
-build: debian/stamp-build
-debian/stamp-build:
+build-indep: debian/stamp-build-indep
+debian/stamp-build-indep:
 	dh_testdir
-
-	$(MAKE) $(OPTIONS) all mo manual
-
+	$(MAKE) $(OPTIONS) manual
 	touch $@
+
+build-arch: debian/stamp-build-arch
+debian/stamp-build-arch:
+	dh_testdir
+	$(MAKE) $(OPTIONS) all mo
+	touch $@
+
+build: debian/stamp-build
+debian/stamp-build: debian/stamp-build-arch debian/stamp-build-indep
 
 clean:
 	dh_testdir
@@ -32,19 +39,33 @@ clean:
 
 	dh_clean
 
-install: debian/stamp-install
-debian/stamp-install: debian/stamp-build
+install-indep: debian/stamp-install-indep
+debian/stamp-install-indep: debian/stamp-build-indep
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 
-	$(MAKE) $(OPTIONS) install DESTDIR=`pwd`/debian/tmp
+	$(MAKE) $(OPTIONS) install-manual DESTDIR=`pwd`/debian/tmp
 
 	touch $@
 
+install-arch: debian/stamp-install-arch
+debian/stamp-install-arch: debian/stamp-build-arch
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	$(MAKE) $(OPTIONS) install-bin install-mo DESTDIR=`pwd`/debian/tmp
+
+	touch $@
+
+install: debian/stamp-install
+debian/stamp-install: debian/stamp-install-arch debian/stamp-install-indep
+
 # Build architecture-independent files here.
-binary-indep: build install
+binary-indep: build-indep install-indep
 	dh_testdir -i
 	dh_testroot -i
 	dh_installdocs -i
@@ -61,7 +82,7 @@ binary-indep: build install
 	dh_builddeb -i
 
 # Build architecture-dependent files here.
-binary-arch: build install
+binary-arch: build-arch install-arch
 	dh_testdir -a
 	dh_testroot -a
 	dh_installdocs -a
