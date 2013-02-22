@@ -88,7 +88,7 @@ StartPoint::find_best_start(const AircraftState &state,
   /* check which boundary point results in the smallest distance to
      fly */
 
-  const OZBoundary boundary = next.GetBoundary();
+  const OZBoundary boundary = GetBoundary();
   assert(!boundary.empty());
 
   const auto end = boundary.end();
