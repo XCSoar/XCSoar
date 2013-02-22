@@ -266,7 +266,8 @@ public:
   virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
 
-    UpdateList();
+    if (filter_widget != nullptr)
+      UpdateList();
 
     CommonInterface::GetLiveBlackboard().AddListener(*this);
   }
