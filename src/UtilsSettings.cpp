@@ -57,6 +57,7 @@ Copyright_License {
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "PageActions.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -116,6 +117,10 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (TerrainFileChanged) {
     operation.SetText(_("Loading Terrain File..."));
 
+    /* just in case the bottom widget uses the old terrain object
+       (e.g. the cross section) */
+    main_window.SetBottomWidget(nullptr);
+
     main_window.SetTerrain(NULL);
     glide_computer->SetTerrain(NULL);
 
@@ -125,6 +130,9 @@ SettingsLeave(const UISettings &old_ui_settings)
 
     main_window.SetTerrain(terrain);
     glide_computer->SetTerrain(terrain);
+
+    /* re-create the bottom widget if it was deleted here */
+    Pages::Update();
   }
 
   if (WaypointFileChanged || AirfieldFileChanged) {
