@@ -361,7 +361,7 @@ dlgBasicSettingsShowModal()
 
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
   StaticString<128> caption(_("Flight Setup"));
-  caption.append(N_(" - "));
+  caption.append(_T(" - "));
   caption.append(plane.polar_name);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());

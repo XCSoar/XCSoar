@@ -117,8 +117,8 @@ public:
   void CreateButtons(ButtonPanel &buttons) {
     add_button = buttons.Add(_("Add"), *this, ADD);
     delete_button = buttons.Add(_("Delete"), *this, DELETE);
-    move_up_button = buttons.AddSymbol(_("^"), *this, MOVE_UP);
-    move_down_button = buttons.AddSymbol(_("v"), *this, MOVE_DOWN);
+    move_up_button = buttons.AddSymbol(_T("^"), *this, MOVE_UP);
+    move_down_button = buttons.AddSymbol(_T("v"), *this, MOVE_DOWN);
   }
 
   void UpdateButtons() {
