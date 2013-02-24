@@ -39,26 +39,9 @@ main(int argc, char **argv)
   puts("#endif");
   puts("};");
 
-  puts("#ifdef FIXED_MATH");
-  puts("const int COSTABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++)
-    printf("  %d,\n",
-           (int)(cos(INT_TO_DEG(i)) * (double)fixed::resolution));
-  puts("#else");
-  puts("const fixed COSTABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++)
-    printf("  fixed(%.20e),\n", cos(INT_TO_DEG(i)));
-  puts("#endif");
-  puts("};");
-
   puts("const short ISINETABLE[4096] = {");
   for (unsigned i = 0; i < 4096; i++)
     printf("  %d,\n", (int)lround(sin(INT_TO_DEG(i)) * 1024));
-  puts("};");
-
-  puts("const short ICOSTABLE[4096] = {");
-  for (unsigned i = 0; i < 4096; i++)
-    printf("  %d,\n", (int)lround(cos(INT_TO_DEG(i)) * 1024));
   puts("};");
 
   puts("#ifdef FIXED_MATH");
