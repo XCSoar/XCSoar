@@ -45,7 +45,7 @@ OpenGL::InitShapes()
 
   GLshort *p = circle_data, *p2 = circle_data + CIRCLE_SIZE;
   for (unsigned i = 0; i < CIRCLE_SIZE / 2; ++i) {
-    GLshort x = ICOSTABLE[i * (4096 / CIRCLE_SIZE)];
+    GLshort x = ISINETABLE[(i * (4096 / CIRCLE_SIZE) + 1024) & 0xfff];
     GLshort y = ISINETABLE[i * (4096 / CIRCLE_SIZE)];
 
     *p++ = x;

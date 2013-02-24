@@ -33,7 +33,7 @@ GLCircleVertices::GLCircleVertices(GLvalue center_x, GLvalue center_y,
   RasterPoint *p = v, *p2 = v + (SIZE/2);
 
   for (unsigned i = 0; i < SIZE/2; ++i) {
-    int offset_x = ICOSTABLE[i * (4096 / SIZE)] * (int)radius / 1024.;
+    int offset_x = ISINETABLE[(i * (4096 / SIZE) + 1024) & 0xfff] * (int)radius / 1024.;
     int offset_y = ISINETABLE[i * (4096 / SIZE)] * (int)radius / 1024.;
 
     p->x = center_x + offset_x;
@@ -52,7 +52,7 @@ GLDonutVertices::GLDonutVertices(GLvalue center_x, GLvalue center_y,
   RasterPoint *p = v, *p2 = v + CIRCLE_SIZE;
 
   for (unsigned i = 0; i < CIRCLE_SIZE/2; ++i) {
-    int cos = ICOSTABLE[i * (4096 / CIRCLE_SIZE)];
+    int cos = ISINETABLE[(i * (4096 / CIRCLE_SIZE) + 1024) & 0xfff];
     int sin = ISINETABLE[i * (4096 / CIRCLE_SIZE)];
 
     int offset_x = cos * (int)radius_inner / 1024.;

@@ -29,17 +29,14 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef FIXED_MATH
-extern const int COSTABLE[4096];
 extern const int SINETABLE[4096];
 extern const fixed::value_t INVCOSINETABLE[4096];
 #else
-extern const fixed COSTABLE[4096];
 extern const fixed SINETABLE[4096];
 extern const fixed INVCOSINETABLE[4096];
 #endif
 
 extern const short ISINETABLE[4096];
-extern const short ICOSTABLE[4096];
 
 #ifdef RADIANS
 #define INT_ANGLE_MULT fixed(4096.0 / M_2PI)
@@ -52,6 +49,13 @@ static inline int
 NATIVE_TO_INT(fixed x)
 {
   return iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) & 0xfff;
+}
+
+gcc_const
+static inline int
+NATIVE_TO_INT_COS(fixed x)
+{
+  return (iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) + 1024) & 0xfff;
 }
 
 gcc_const
@@ -76,7 +80,7 @@ gcc_const
 static inline int
 ifastcosine(fixed x)
 {
-  return ICOSTABLE[NATIVE_TO_INT(x)];
+  return ISINETABLE[NATIVE_TO_INT_COS(x)];
 }
 
 gcc_const
@@ -95,9 +99,9 @@ static inline fixed
 fastcosine(fixed x)
 {
 #ifdef FIXED_MATH
-  return fixed(fixed::internal(), COSTABLE[NATIVE_TO_INT(x)]);
+  return fixed(fixed::internal(), SINETABLE[NATIVE_TO_INT_COS(x)]);
 #else
-  return COSTABLE[NATIVE_TO_INT(x)];
+  return SINETABLE[NATIVE_TO_INT_COS(x)];
 #endif
 }
 

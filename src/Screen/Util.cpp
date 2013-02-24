@@ -33,7 +33,7 @@ CirclePoint(int x, int y, int radius, unsigned angle)
   assert(angle < ARRAY_SIZE(ISINETABLE));
 
   return RasterPoint(x + ISINETABLE[angle] * radius / 1024,
-                     y - ICOSTABLE[angle] * radius / 1024);
+                     y - ISINETABLE[(angle + 1024) & 0xfff] * radius / 1024);
 }
 
 static void
