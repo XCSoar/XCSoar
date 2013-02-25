@@ -40,7 +40,7 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                        const ChartLook &_chart_look)
   :look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
   terrain_renderer(look), terrain(NULL), airspace_database(NULL),
-  start(Angle::Zero(), Angle::Zero()),
+   start(GeoPoint::Invalid()),
    vec(fixed(50000), Angle::Zero()) {}
 
 void
