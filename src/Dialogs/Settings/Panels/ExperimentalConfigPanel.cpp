@@ -49,13 +49,13 @@ static constexpr StaticEnumChoice model_type_list[] = {
 };
 
 
-class ExperimentalConfigPanel : public RowFormWidget {
+class ExperimentalConfigPanel final : public RowFormWidget {
 public:
   ExperimentalConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

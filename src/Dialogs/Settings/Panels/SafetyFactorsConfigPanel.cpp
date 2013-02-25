@@ -42,13 +42,13 @@ enum ControlIndex {
   RiskFactor,
 };
 
-class SafetyFactorsConfigPanel : public RowFormWidget {
+class SafetyFactorsConfigPanel final : public RowFormWidget {
 public:
   SafetyFactorsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

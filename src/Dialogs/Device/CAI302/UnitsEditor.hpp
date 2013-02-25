@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
 
-class CAI302UnitsEditor : public RowFormWidget {
+class CAI302UnitsEditor final : public RowFormWidget {
   enum Controls {
     VarioUnit,
     AltitudeUnit,
@@ -48,8 +48,8 @@ public:
   }
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 #endif

@@ -40,14 +40,14 @@ enum ControlIndex {
 };
 
 
-class VarioConfigPanel : public RowFormWidget {
+class VarioConfigPanel final : public RowFormWidget {
 public:
   VarioConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

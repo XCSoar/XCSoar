@@ -114,9 +114,9 @@ public:
   void Revert();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 #endif

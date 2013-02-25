@@ -36,14 +36,13 @@ enum ControlIndex {
   EnableFinalGlideBarMC0
 };
 
-class GaugesConfigPanel : public RowFormWidget {
-
+class GaugesConfigPanel final : public RowFormWidget {
 public:
   GaugesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

@@ -41,7 +41,7 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 
-class DevicesConfigPanel
+class DevicesConfigPanel final
   : public ListWidget, private DeviceEditWidget::Listener {
   TwoWidgets &container;
   DeviceEditWidget &edit;
@@ -97,19 +97,20 @@ public:
 
   void ShowDevice(unsigned idx);
 
-  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 private:
   /* virtual methods from List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx);
-  virtual void OnCursorMoved(unsigned index);
-  virtual bool CanActivateItem(unsigned index) const;
-  virtual void OnActivateItem(unsigned index);
+                           unsigned idx) override;
+  virtual void OnCursorMoved(unsigned index) override;
+  virtual bool CanActivateItem(unsigned index) const override;
+  virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from DeviceEditWidget::Listener */
-  virtual void OnModified(DeviceEditWidget &widget);
+  virtual void OnModified(DeviceEditWidget &widget) override;
 };
 
 bool

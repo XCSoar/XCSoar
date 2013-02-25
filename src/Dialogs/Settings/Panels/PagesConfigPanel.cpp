@@ -135,7 +135,7 @@ public:
   virtual void Initialise(ContainerWindow &parent,
                           const PixelRect &rc) override;
   virtual void Show(const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
   /* virtual methods from class ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,

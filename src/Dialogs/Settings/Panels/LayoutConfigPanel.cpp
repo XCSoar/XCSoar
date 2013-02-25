@@ -148,14 +148,14 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
   { 0 }
 };
 
-class LayoutConfigPanel : public RowFormWidget {
+class LayoutConfigPanel final : public RowFormWidget {
 public:
   LayoutConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

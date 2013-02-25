@@ -56,7 +56,7 @@ enum ControlIndex {
   HapticFeedback
 };
 
-class InterfaceConfigPanel : public RowFormWidget {
+class InterfaceConfigPanel final : public RowFormWidget {
 public:
   InterfaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()), buttonFonts(0) {}
@@ -64,10 +64,10 @@ public:
   WndButton *buttonFonts;
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 };
 
 void

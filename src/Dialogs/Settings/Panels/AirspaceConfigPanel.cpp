@@ -75,7 +75,7 @@ static constexpr StaticEnumChoice as_fill_mode_list[] = {
   { 0 }
 };
 
-class AirspaceConfigPanel
+class AirspaceConfigPanel final
   : public RowFormWidget, DataFieldListener {
 private:
   WndButton *buttonColors, *buttonMode;
@@ -89,14 +89,14 @@ public:
   void SetButtonsVisible(bool active);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 static void
