@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-22 15:27+0100\n"
-"PO-Revision-Date: 2013-02-19 21:24+0000\n"
+"PO-Revision-Date: 2013-02-24 09:01+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-22 14:28+0000\n"
+"X-Launchpad-Export-Date: 2013-02-25 08:01+0000\n"
 "X-Generator: Launchpad (build 16506)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -849,15 +849,15 @@ msgid "H AGL"
 msgstr "H SOL"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Il s'agit de l'altitude de vol moins l'altitude du relief obtenue à partir "
-"du fichier de relief. La valeur est en rouge lorsque le planeur est en "
-"dessous de l'altitude de sécurité."
+"Altitude courante moins l'altitude du terrain lue dans la base de données de "
+"terrain. La valeur devient rouge lorsqu'elle est inférieure à la hauteur de "
+"sécurité de franchissement du terrain."
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -1196,9 +1196,9 @@ msgid "Terrain elevation"
 msgstr "Altitude du terrain."
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Coll Terr"
+msgstr "Alt Terr"
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1996,9 +1996,9 @@ msgid "Thermal average over all"
 msgstr "Thermique moyen sur l'ensemble"
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "Dern Vz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2121,12 +2121,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:863
 #, no-c-format
 msgid "Height above take-off"
-msgstr ""
+msgstr "Hauteur au-dessus du décollage"
 
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "H/Deco"
 
 #: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
@@ -2134,6 +2134,8 @@ msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
 msgstr ""
+"Hauteur relativement à l'altitude du décollage automatiquement détectée "
+"(type référence QFE)."
 
 #: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
@@ -2158,6 +2160,16 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"Distance parcourue pendant la durée choisie, divisée par l'altitude perdue "
+"pendant cette durée. Les valeurs négatives sont représentées par ^^^ et "
+"indiquent une montée (gain d'altitude). Au-delà de 200 de finesse la valeur "
+"est représentée par +++. Vous pouvez configurer la durée sur laquelle la "
+"moyenne est faite. Les valeurs conseillées sont 60, 90, 120. Les faibles "
+"valeurs donneront des finesses plus proches de la finesse instantanée, et "
+"les plus grandes plus proches de la finesse de transition. Attention, la "
+"distance prise en compte n'est pas la distance directe sur la durée choisie, "
+"mais la distance effectivement parcourue pendant cette durée (zig-zag "
+"inclus). Valeur non calculée en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:884
 #, no-c-format
@@ -2339,12 +2351,12 @@ msgid "Climb Band"
 msgstr "Bandeau d'ascendance"
 
 #: src/InfoBoxes/Content/Factory.cpp:997
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
-"Graphique du taux de monté moyen (axe horizontal) en fonction de la hauteur "
+"Graphique du taux de montée moyen (axe horizontal) en fonction de l'altitude "
 "(axe vertical)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
@@ -4477,9 +4489,9 @@ msgid "Screen Layout"
 msgstr "Agencement de l'écran"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pages"
-msgstr "Page"
+msgstr "Pages"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
 #, no-c-format
@@ -5583,9 +5595,8 @@ msgid "Preferred period for gliders."
 msgstr "Période adaptée pour planeurs."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-#, fuzzy
 msgid "GR average period"
-msgstr "Tps Finesse Moy."
+msgstr "Durée moyennant le calcul de finesse"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid ""
@@ -6236,52 +6247,47 @@ msgstr "Dist. max auto zoom"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:120
 msgid "^"
-msgstr ""
+msgstr "^"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:121
 msgid "v"
 msgstr "v"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
-#, fuzzy
 msgid "Main area"
-msgstr "Surface alaire"
+msgstr "Zone principale"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:172
-#, fuzzy
 msgid "Specifies what should be displayed in the main area."
-msgstr "Spécifie le mode de remplissage de l'espace aérien."
+msgstr "Définit ce qui doit être affiché dans la zone principale."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:333
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "InfoBox"
+msgstr "Boîtes d'informations"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:183
 msgid "Specifies which InfoBoxes should be displayed on this page."
-msgstr ""
+msgstr "Définit quelles InfoBoxes doivent être affichées dans cette page."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #, no-c-format
 msgid "Nothing"
-msgstr ""
+msgstr "Rien"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:192
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:348
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Direction"
+msgstr "Coupe verticale"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:195
-#, fuzzy
 msgid "Bottom area"
-msgstr "En bas à gauche"
+msgstr "Zone inférieure"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:196
-#, fuzzy
 msgid "Specifies what should be displayed below the main area."
-msgstr "Spécifie le mode de remplissage de l'espace aérien."
+msgstr "Définit ce qui doit être affiché sous la zone principale."
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
@@ -7149,6 +7155,9 @@ msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr ""
+"Le terrain peut être éclairé/ombragé de différentes façons au choix : selon "
+"la direction du vent, la position du soleil, ou un éclairage venant en "
+"permanence du nord-ouest."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 msgid "Terrain contrast"
@@ -9228,17 +9237,60 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Altitude AGL"
-#~ msgstr "Hauteur sol"
+#~ msgid "Height GPS"
+#~ msgstr "Altitude GPS"
 
-#~ msgid "Alt AGL"
-#~ msgstr "Alt Sol"
+#~ msgid "QFE GPS"
+#~ msgstr "QFE GPS"
+
+#~ msgid "Weather parameters"
+#~ msgstr "Paramètres météo"
+
+#~ msgid "Sunset"
+#~ msgstr "Coucher du soleil"
+
+#~ msgid "Short file name"
+#~ msgstr "Nom Fichier Court"
+
+#~ msgid "H GPS"
+#~ msgstr "H GPS"
+
+#~ msgid "Not found"
+#~ msgstr "Introuvable"
+
+#~ msgid "English"
+#~ msgstr "Anglais"
+
+#~ msgid "Show details:"
+#~ msgstr "Afficher les détails :"
 
 #~ msgid "H GND"
 #~ msgstr "HduSol"
 
-#~ msgid "QFE GPS"
-#~ msgstr "QFE GPS"
+#~ msgid "H Baro"
+#~ msgstr "Alt Baro"
+
+#~ msgid ""
+#~ "Graph of average circling climb rate (horizontal axis) as a function of "
+#~ "height (vertical axis)."
+#~ msgstr ""
+#~ "Graphique du taux de monté moyen (axe horizontal) en fonction de la "
+#~ "hauteur (axe vertical)."
+
+#~ msgid "Unknown competition number"
+#~ msgstr "Numéro de compétition inconnu"
+
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Il s'agit de l'altitude de vol moins l'altitude du relief obtenue à "
+#~ "partir du fichier de relief. La valeur est en rouge lorsque le planeur "
+#~ "est en dessous de l'altitude de sécurité."
+
+#~ msgid "No further information"
+#~ msgstr "Pas d'autre information"
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9251,45 +9303,6 @@ msgstr ""
 #~ "sol. Pendant le vol, vous pouvez changer le QFE avec les touches haut et "
 #~ "bas. La ligne du bas montre l'altitude QNH. Le changement de QFE ne "
 #~ "change en rien l'altitude QNH."
-
-#~ msgid "H GPS"
-#~ msgstr "H GPS"
-
-#~ msgid "H Baro"
-#~ msgstr "Alt Baro"
-
-#~ msgid "InfoBox Pages"
-#~ msgstr "Pages InfoBoxes"
-
-#~ msgid "Determines the information displayed on different screen pages."
-#~ msgstr "Contenu des informations affichées sur les différentes pages."
-
-#~ msgid "Height GPS"
-#~ msgstr "Altitude GPS"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Paramètres météo"
-
-#~ msgid "Sunset"
-#~ msgstr "Coucher du soleil"
-
-#~ msgid "Short file name"
-#~ msgstr "Nom Fichier Court"
-
-#~ msgid "Not found"
-#~ msgstr "Introuvable"
-
-#~ msgid "English"
-#~ msgstr "Anglais"
-
-#~ msgid "Show details:"
-#~ msgstr "Afficher les détails :"
-
-#~ msgid "Unknown competition number"
-#~ msgstr "Numéro de compétition inconnu"
-
-#~ msgid "No further information"
-#~ msgstr "Pas d'autre information"
 
 #~ msgid "Delete Error"
 #~ msgstr "Erreur de suppression"
@@ -9313,6 +9326,15 @@ msgstr ""
 #~ msgid "TC All"
 #~ msgstr "Vz Circ"
 
+#~ msgid "L/D average period"
+#~ msgstr "Tps Finesse Moy."
+
+#~ msgid "Page"
+#~ msgstr "Page"
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "Contenu des informations affichées sur les différentes pages."
+
 #~ msgid ""
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
 #~ "sun position or a fixed shading from north-east."
@@ -9323,6 +9345,9 @@ msgstr ""
 
 #~ msgid "Set new teammate:"
 #~ msgstr "Définir nouvel équipier"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Pages InfoBoxes"
 
 #~ msgid "My Sample"
 #~ msgstr "Mon Exemple"
@@ -9386,6 +9411,12 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"
+
+#~ msgid "Altitude AGL"
+#~ msgstr "Hauteur sol"
+
+#~ msgid "Alt AGL"
+#~ msgstr "Alt Sol"
 
 #~ msgid "Flap landing"
 #~ msgstr "Volets landing"
