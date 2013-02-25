@@ -42,6 +42,9 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   w->SetTerrain(terrain);
   w->Create(parent, rc, style);
 
+  w->ReadBlackboard(CommonInterface::Basic(), CommonInterface::Calculated(),
+                    CommonInterface::GetMapSettings().airspace);
+
   SetWindow(w);
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
