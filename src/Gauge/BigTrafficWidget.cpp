@@ -712,14 +712,6 @@ FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
     ZoomOut();
     return true;
   }
-  if (StringIsEqual(gesture, _T("L"))) {
-    PrevTarget();
-    return true;
-  }
-  if (StringIsEqual(gesture, _T("R"))) {
-    NextTarget();
-    return true;
-  }
   if (StringIsEqual(gesture, _T("UD"))) {
     SetAutoZoom(true);
     return true;
@@ -754,19 +746,15 @@ FlarmTrafficControl::OnKeyDown(unsigned key_code)
     ZoomOut();
     return true;
 
-  case KEY_LEFT:
 #ifdef GNAV
   case '6':
-#endif
     PrevTarget();
     return true;
 
-  case KEY_RIGHT:
-#ifdef GNAV
   case '7':
-#endif
     NextTarget();
     return true;
+#endif
   }
 
   return FlarmTrafficWindow::OnKeyDown(key_code) ||
