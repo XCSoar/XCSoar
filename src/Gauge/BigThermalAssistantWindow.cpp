@@ -23,12 +23,57 @@ Copyright_License {
 
 #include "BigThermalAssistantWindow.hpp"
 #include "Input/InputEvents.hpp"
+#include "Screen/Layout.hpp"
 
 bool
 BigThermalAssistantWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
+  StopDragging();
   InputEvents::ShowMenu();
   return true;
+}
+
+bool
+BigThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+{
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    gestures.Start(x, y, Layout::Scale(20));
+  }
+
+  return true;
+}
+
+bool
+BigThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (dragging) {
+    StopDragging();
+
+    const TCHAR *gesture = gestures.Finish();
+    if (gesture && InputEvents::processGesture(gesture))
+      return true;
+  }
+
+  return false;
+}
+
+bool
+BigThermalAssistantWindow::OnMouseMove(PixelScalar x, PixelScalar y,
+                                       gcc_unused unsigned keys)
+{
+  if (dragging)
+    gestures.Update(x, y);
+
+  return true;
+}
+
+void
+BigThermalAssistantWindow::OnCancelMode()
+{
+  ThermalAssistantWindow::OnCancelMode();
+  StopDragging();
 }
 
 bool
