@@ -55,6 +55,7 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   WindowStyle style;
   style.Hide();
+  style.Disable();
 
   CrossSectionWindow *w =
     new CrossSectionWindow(look.cross_section, look.map.airspace, look.chart);
