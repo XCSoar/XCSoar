@@ -97,7 +97,7 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
 };
 
 RasterWeather::RasterWeather()
-  :center(Angle::Zero(), Angle::Zero()),
+  :center(GeoPoint::Invalid()),
     _parameter(0),
     _weather_time(0),
     reload(true),
@@ -311,7 +311,7 @@ RasterWeather::_Close()
 {
   delete weather_map;
   weather_map = NULL;
-  center = GeoPoint(Angle::Zero(), Angle::Zero());
+  center = GeoPoint::Invalid();
 }
 
 void
@@ -324,7 +324,7 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
   Poco::ScopedRWLock protect(lock, true);
 
   /* only update the RasterMap if the center was moved far enough */
-  if (center.Distance(location) < fixed(1000))
+  if (center.IsValid() && center.Distance(location) < fixed(1000))
     return;
 
   weather_map->SetViewCenter(location, radius);
