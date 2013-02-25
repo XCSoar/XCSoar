@@ -49,7 +49,7 @@
  */
 class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
-  bool enable_auto_zoom;
+  bool enable_auto_zoom, dragging;
   unsigned zoom;
   Angle task_direction;
   GestureManager gestures;
@@ -58,7 +58,7 @@ public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
                         Layout::GetMinimumControlHeight() + Layout::Scale(2)),
-     enable_auto_zoom(true),
+     enable_auto_zoom(true), dragging(false),
      zoom(2),
      task_direction(Angle::Degrees(-1)) {}
 
@@ -120,6 +120,14 @@ protected:
   void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
+  void StopDragging() {
+    if (!dragging)
+      return;
+
+    dragging = false;
+    ReleaseCapture();
+  }
+
 protected:
   bool OnMouseGesture(const TCHAR* gesture);
 
@@ -130,6 +138,7 @@ protected:
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnKeyDown(unsigned key_code) override;
+  virtual void OnCancelMode() override;
 
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;
@@ -668,7 +677,8 @@ bool
 FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
                                  gcc_unused unsigned keys)
 {
-  gestures.Update(x, y);
+  if (dragging)
+    gestures.Update(x, y);
 
   return true;
 }
@@ -676,7 +686,11 @@ FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
 bool
 FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  gestures.Start(x, y, Layout::Scale(20));
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    gestures.Start(x, y, Layout::Scale(20));
+  }
 
   return true;
 }
@@ -684,9 +698,13 @@ FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  const TCHAR *gesture = gestures.Finish();
-  if (gesture && OnMouseGesture(gesture))
-    return true;
+  if (dragging) {
+    StopDragging();
+
+    const TCHAR *gesture = gestures.Finish();
+    if (gesture && OnMouseGesture(gesture))
+      return true;
+  }
 
   if (!WarningMode())
     SelectNearTarget(x, y, Layout::Scale(15));
@@ -697,6 +715,7 @@ FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 FlarmTrafficControl::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
+  StopDragging();
   InputEvents::ShowMenu();
   return true;
 }
@@ -726,6 +745,13 @@ FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
   }
 
   return InputEvents::processGesture(gesture);
+}
+
+void
+FlarmTrafficControl::OnCancelMode()
+{
+  FlarmTrafficWindow::OnCancelMode();
+  StopDragging();
 }
 
 bool
