@@ -58,12 +58,6 @@ namespace InputEvents
   void setMode(const TCHAR *mode);
 
   /**
-   * Switch back to the default mode if the specified mode is
-   * currently set.  It is a no-op if any other mode is currently set.
-   */
-  void LeaveMode(const TCHAR *mode);
-
-  /**
    * Set the "flavour" of the current mode.  It is an optional string
    * that gets appended to the current mode name, separated with a
    * dot, to build a new "overlay" mode.  This may be used to replace

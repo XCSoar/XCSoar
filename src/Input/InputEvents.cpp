@@ -153,15 +153,6 @@ InputEvents::setMode(const TCHAR *mode)
 }
 
 void
-InputEvents::LeaveMode(const TCHAR *mode)
-{
-  assert(mode != NULL);
-
-  if (input_config.modes[current_mode] == mode)
-    setMode(MODE_DEFAULT);
-}
-
-void
 InputEvents::SetFlavour(const TCHAR *_flavour)
 {
   if (flavour == NULL && _flavour == NULL)
