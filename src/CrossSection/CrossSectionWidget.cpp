@@ -63,18 +63,30 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   w->Create(parent, rc, style);
 
   SetWindow(w);
-
-  Update(CommonInterface::Basic(), CommonInterface::Calculated(),
-         CommonInterface::GetMapSettings().airspace);
-
-  CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
 
 void
 CrossSectionWidget::Unprepare()
 {
-  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
   DeleteWindow();
+}
+
+void
+CrossSectionWidget::Show(const PixelRect &rc)
+{
+  Update(CommonInterface::Basic(), CommonInterface::Calculated(),
+         CommonInterface::GetMapSettings().airspace);
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
+
+  WindowWidget::Show(rc);
+}
+
+void
+CrossSectionWidget::Hide()
+{
+  WindowWidget::Hide();
+
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 }
 
 void

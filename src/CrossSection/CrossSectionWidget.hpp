@@ -40,6 +40,8 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
   /* virtual methods from class BlackboardListener */
