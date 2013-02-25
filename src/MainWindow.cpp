@@ -133,6 +133,7 @@ MainWindow::~MainWindow()
 void
 MainWindow::Create(PixelSize size, TopWindowStyle style)
 {
+  style.EnableDoubleClicks();
   SingleWindow::Create(title, size, style);
 }
 
@@ -528,6 +529,17 @@ MainWindow::OnSetFocus()
   } else
     /* recover the dialog focus if it got lost */
     GetTopDialog().FocusFirstControl();
+}
+
+bool
+MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
+{
+  if (SingleWindow::OnMouseDouble(x, y))
+    return true;
+
+  if (!HasDialog())
+    InputEvents::ShowMenu();
+  return false;
 }
 
 bool

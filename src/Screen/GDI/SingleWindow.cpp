@@ -33,7 +33,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
   WNDCLASS wc;
 
   wc.hInstance = hInstance;
-  wc.style = CS_VREDRAW | CS_HREDRAW;
+  wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
