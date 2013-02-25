@@ -238,7 +238,7 @@ ContainerWindow::AddChild(Window &child) {
 }
 
 void
-ContainerWindow::Removehild(Window &child) {
+ContainerWindow::RemoveChild(Window &child) {
   InvalidateChild(child);
 
   children.Remove(child);
