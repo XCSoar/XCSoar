@@ -47,6 +47,7 @@ Version 6.5 - not yet released
   - add page option to show cross section below map
   - allow pages with FLARM radar and thermal assistant
   - double click on vario opens main menu
+  - allow opening main menu while panning
   - new translation: Hebrew
 * infoboxes
   - added thermal assistant infobox

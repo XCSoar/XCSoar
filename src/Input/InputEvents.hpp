@@ -58,6 +58,11 @@ namespace InputEvents
   void setMode(const TCHAR *mode);
 
   /**
+   * Update the menu after pan mode has been enabled or disabled.
+   */
+  void UpdatePan();
+
+  /**
    * Set the "flavour" of the current mode.  It is an optional string
    * that gets appended to the current mode name, separated with a
    * dot, to build a new "overlay" mode.  This may be used to replace

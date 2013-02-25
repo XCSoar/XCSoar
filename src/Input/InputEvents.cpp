@@ -132,16 +132,10 @@ InputEvents::setMode(Mode mode)
   if (mode == current_mode)
     return;
 
-  if (current_mode == MODE_PAN)
-    /* disable pan mode before displaying the normal menu; leaving pan
-       mode enabled would be confusing for the user, and doesn't look
-       consistent */
-    LeavePan();
-
   current_mode = mode;
   UpdateOverlayMode();
 
-  drawButtons(current_mode, true);
+  drawButtons(getModeID(), true);
 }
 
 void
@@ -150,6 +144,12 @@ InputEvents::setMode(const TCHAR *mode)
   int m = input_config.LookupMode(mode);
   if (m >= 0)
     setMode((InputEvents::Mode)m);
+}
+
+void
+InputEvents::UpdatePan()
+{
+  drawButtons(getModeID(), true);
 }
 
 void
@@ -166,7 +166,7 @@ InputEvents::SetFlavour(const TCHAR *_flavour)
 
   if (overlay_mode != old_overlay_mode)
     /* the overlay_mode has changed, update the displayed menu */
-    drawButtons(current_mode, true);
+    drawButtons(getModeID(), true);
 }
 
 bool
@@ -205,6 +205,9 @@ InputEvents::drawButtons(Mode mode, bool full)
 InputEvents::Mode
 InputEvents::getModeID()
 {
+  if (current_mode == MODE_DEFAULT && IsPanning())
+    return MODE_PAN;
+
   return current_mode;
 }
 
@@ -428,7 +431,7 @@ InputEvents::processGo(unsigned eventid)
 void
 InputEvents::HideMenu()
 {
-  setMode(IsPanning() ? MODE_PAN : MODE_DEFAULT);
+  setMode(MODE_DEFAULT);
 }
 
 void
