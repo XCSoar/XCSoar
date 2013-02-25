@@ -29,6 +29,26 @@
 #include "Components.hpp"
 
 void
+CrossSectionWidget::Update(const MoreData &basic,
+                           const DerivedInfo &calculated,
+                           const AirspaceRendererSettings &settings)
+{
+  CrossSectionWindow &w = *(CrossSectionWindow *)GetWindow();
+
+  w.ReadBlackboard(basic, calculated,
+                   CommonInterface::GetMapSettings().airspace);
+
+  if (basic.location_available && basic.track_available) {
+    w.SetStart(basic.location);
+    w.SetDirection(basic.track);
+    w.SetRange(fixed(50000));
+  } else
+    w.SetInvalid();
+
+  w.Invalidate();
+}
+
+void
 CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const Look &look = UIGlobals::GetLook();
@@ -42,10 +62,10 @@ CrossSectionWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   w->SetTerrain(terrain);
   w->Create(parent, rc, style);
 
-  w->ReadBlackboard(CommonInterface::Basic(), CommonInterface::Calculated(),
-                    CommonInterface::GetMapSettings().airspace);
-
   SetWindow(w);
+
+  Update(CommonInterface::Basic(), CommonInterface::Calculated(),
+         CommonInterface::GetMapSettings().airspace);
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -61,17 +81,5 @@ void
 CrossSectionWidget::OnCalculatedUpdate(const MoreData &basic,
                                        const DerivedInfo &calculated)
 {
-  CrossSectionWindow &w = *(CrossSectionWindow *)GetWindow();
-
-  w.ReadBlackboard(basic, calculated,
-                   CommonInterface::GetMapSettings().airspace);
-
-  if (basic.location_available && basic.track_available) {
-    w.SetStart(basic.location);
-    w.SetDirection(basic.track);
-    w.SetRange(fixed(50000));
-  } else
-    w.SetInvalid();
-
-  w.Invalidate();
+  Update(basic, calculated, CommonInterface::GetMapSettings().airspace);
 }

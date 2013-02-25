@@ -28,8 +28,13 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 
+struct AirspaceRendererSettings;
+
 class CrossSectionWidget : public WindowWidget,
                            private NullBlackboardListener {
+  void Update(const MoreData &basic, const DerivedInfo &calculated,
+              const AirspaceRendererSettings &settings);
+
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
