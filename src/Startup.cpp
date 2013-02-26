@@ -458,11 +458,11 @@ Startup()
   // Give focus to the map
   main_window->SetDefaultFocus();
 
-  Pages::Update();
-
   // Start calculation thread
   merge_thread->Start();
   calculation_thread->Start();
+
+  Pages::Update();
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();
