@@ -29,13 +29,13 @@ Copyright_License {
 class TaskManagerDialog;
 class OrderedTask;
 
-class TaskMiscPanel : public PagerWidget {
+class TaskMiscPanel final : public PagerWidget {
 public:
   TaskMiscPanel(TaskManagerDialog &dialog,
                 OrderedTask **_active_task, bool *_task_modified);
 
-  virtual void ReClick();
-  virtual void Show(const PixelRect &rc);
+  virtual void ReClick() override;
+  virtual void Show(const PixelRect &rc) override;
 };
 
 #endif

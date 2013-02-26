@@ -27,7 +27,7 @@ Copyright_License {
 #include "StatusPanel.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
 
-class SystemStatusPanel
+class SystemStatusPanel final
   : public StatusPanel,
     private NullBlackboardListener {
   RateLimitedBlackboardListener rate_limiter;
@@ -36,14 +36,14 @@ public:
   SystemStatusPanel(const DialogLook &look)
     :StatusPanel(look), rate_limiter(*this, 2000, 500) {}
 
-  virtual void Refresh();
+  virtual void Refresh() override;
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

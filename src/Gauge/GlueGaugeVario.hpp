@@ -35,7 +35,7 @@ class LiveBlackboard;
  * A variant of GaugeVario which auto-updates its data from the device
  * blackboard.
  */
-class GlueGaugeVario
+class GlueGaugeVario final
   : public WindowWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const VarioLook &look;
@@ -46,13 +46,13 @@ public:
                  const UnitsLook &_units_look)
     :blackboard(_blackboard), look(_look), units_look(_units_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

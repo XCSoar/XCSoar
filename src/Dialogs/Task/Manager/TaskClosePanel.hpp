@@ -31,7 +31,7 @@ class OrderedTask;
 class WndFrame;
 class WndButton;
 
-class TaskClosePanel : public XMLWidget {
+class TaskClosePanel final : public XMLWidget {
 public:
   TaskManagerDialog &dialog;
 
@@ -48,11 +48,11 @@ public:
   void CommitAndClose();
   void RefreshStatus();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Click();
-  virtual void ReClick();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Click() override;
+  virtual void ReClick() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 };
 
 #endif

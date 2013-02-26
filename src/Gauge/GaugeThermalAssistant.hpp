@@ -34,7 +34,7 @@ struct ThermalAssistantLook;
 /**
  * Widget to display a FLARM gauge
  */
-class GaugeThermalAssistant
+class GaugeThermalAssistant final
   : public OverlappedWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
@@ -44,17 +44,17 @@ public:
                         const ThermalAssistantLook &_look)
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual bool SetFocus();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual bool SetFocus() override;
 
 private:
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated);
+                                  const DerivedInfo &calculated) override;
 };
 
 #endif
