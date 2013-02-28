@@ -24,6 +24,7 @@ Copyright_License {
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Math/FastMath.h"
+#include "Util/Clamp.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Color.hpp"
@@ -337,12 +338,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 #else
         const int sval = num / (int)sqrt((fixed)mag);
 #endif
-        int sindex = (sval - sz) * contrast / 128;
-        if (gcc_unlikely(sindex < -64))
-          sindex = -64;
-        if (gcc_unlikely(sindex > 63))
-          sindex = 63;
-        *p++ = oColorBuf[h + 256*sindex];
+        const int sindex = (sval - sz) * contrast / 128;
+        *p++ = oColorBuf[h + 256 * Clamp(sindex, -64, 63)];
 #else
         const int num = (dd2 * sz_c + dd0 * sx_c + dd1 * sy_c);
         const int sval = i_normalise_mag3(num, dd0, dd1, dd2);
