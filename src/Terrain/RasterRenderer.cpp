@@ -325,10 +325,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const int dd0 = p22 * p31;
         const int dd1 = p20 * p32;
-        const int dd2 = p20 * p31 * height_slope_factor;
+        const unsigned dd2 = p20 * p31 * height_slope_factor;
 #ifndef FAST_RSQRT
-        const int num = (dd2 * sz + dd0 * sx + dd1 * sy);
-        const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+        const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
+        const unsigned mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
 #ifdef FIXED_MATH
         const int sval = num / (int)isqrt4(mag);
 #else
