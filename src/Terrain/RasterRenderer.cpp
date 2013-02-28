@@ -222,11 +222,7 @@ gcc_const
 static int
 ClipHeightDelta(int d)
 {
-  if (d > 512)
-    d = 512;
-  else if (d < -512)
-    d = -512;
-  return d;
+  return Clamp(d, -512, 512);
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
