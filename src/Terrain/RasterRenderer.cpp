@@ -243,7 +243,12 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   border.right = height_matrix.GetWidth() - quantisation_effective;
   border.bottom = height_matrix.GetHeight() - quantisation_effective;
 
-  const unsigned height_slope_factor = std::max(1, (int)pixel_size);
+  const unsigned height_slope_factor =
+    Clamp((unsigned)pixel_size, 1u,
+          /* this upper limit avoids integer overflows in the "mag"
+             formula; it effectively limits "dd2" so calculating its
+             square will not overflow */
+          8192u / (quantisation_effective * quantisation_effective));
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
