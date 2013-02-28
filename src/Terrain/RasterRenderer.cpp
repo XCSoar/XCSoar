@@ -306,10 +306,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         assert(src - column_minus_index < height_matrix.GetDataEnd());
         assert(src + column_plus_index < height_matrix.GetDataEnd());
 
-        short h_above = src[-(int)row_minus_offset];
-        short h_below = src[row_plus_offset];
-        short h_left = src[-(int)column_minus_index];
-        short h_right = src[column_plus_index];
+        const short h_above = src[-(int)row_minus_offset];
+        const short h_below = src[row_plus_offset];
+        const short h_left = src[-(int)column_minus_index];
+        const short h_right = src[column_plus_index];
 
         if (gcc_unlikely(RasterBuffer::IsSpecial(h_above) ||
                          RasterBuffer::IsSpecial(h_below) ||
