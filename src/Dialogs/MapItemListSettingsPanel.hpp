@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Widget/RowFormWidget.hpp"
 
-class MapItemListSettingsPanel : public RowFormWidget {
+class MapItemListSettingsPanel final : public RowFormWidget {
   enum ControlIndex {
     AddLocation,
     AddArrivalAltitude,
@@ -35,8 +35,8 @@ class MapItemListSettingsPanel : public RowFormWidget {
 public:
   MapItemListSettingsPanel();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 #endif

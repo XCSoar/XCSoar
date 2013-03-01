@@ -28,12 +28,28 @@ Copyright_License {
 #include <stdio.h>
 
 void
-PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
-                                    TCHAR *buffer, const bool concise) const
+PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
+                      TCHAR *buffer, const bool concise) const
 {
   if (!valid) {
     _tcscpy(buffer, _T("---"));
     return;
+  }
+
+  switch (main) {
+  case PageLayout::Main::MAP:
+    break;
+
+  case PageLayout::Main::FLARM_RADAR:
+    _tcscpy(buffer, _("FLARM radar"));
+    return;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    _tcscpy(buffer, _("Thermal assistant"));
+    return;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
   }
 
   if (infobox_config.enabled) {
@@ -70,6 +86,9 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     // TODO: better text and translate
     _tcscat(buffer, _T(", XS"));
     break;
+
+  case Bottom::MAX:
+    gcc_unreachable();
   }
 }
 

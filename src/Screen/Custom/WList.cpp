@@ -104,8 +104,8 @@ Window *
 WindowList::FindAt(PixelScalar x, PixelScalar y)
 {
   for (Window *w : list)
-    if (IsAt(*w, x, y))
-      return w->IsEnabled() ? w : nullptr;
+    if (w->IsEnabled() && IsAt(*w, x, y))
+      return w;
 
   return NULL;
 }

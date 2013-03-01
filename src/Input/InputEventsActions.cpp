@@ -87,7 +87,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Compiler.h"
@@ -141,21 +141,19 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- normal infobox
 
   using namespace Pages;
-  typedef PageSettings::InfoBoxConfig InfoBoxConfig;
-  typedef PageSettings::PageLayout PageLayout;
 
   const UIState &ui_state = CommonInterface::GetUIState();
 
   if (StringIsEqual(misc, _T("normal"))) {
-    OpenLayout(PageSettings::PageLayout::Default());
+    OpenLayout(PageLayout::Default());
   } else if (StringIsEqual(misc, _T("auxilary"))) {
-    OpenLayout(PageSettings::PageLayout::Aux());
+    OpenLayout(PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("toggleauxiliary"))) {
     OpenLayout(ui_state.auxiliary_enabled
-               ? PageSettings::PageLayout::Default()
-               : PageSettings::PageLayout::Aux());
+               ? PageLayout::Default()
+               : PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("full"))) {
-    OpenLayout(PageSettings::PageLayout::FullScreen());
+    OpenLayout(PageLayout::FullScreen());
   } else if (StringIsEqual(misc, _T("togglefull"))) {
     CommonInterface::main_window->SetFullScreen(
         !CommonInterface::main_window->GetFullScreen());

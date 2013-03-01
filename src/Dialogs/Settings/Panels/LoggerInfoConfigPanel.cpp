@@ -37,14 +37,14 @@ enum ControlIndex {
   LoggerID,
 };
 
-class LoggerInfoConfigPanel : public RowFormWidget {
+class LoggerInfoConfigPanel final : public RowFormWidget {
 public:
   LoggerInfoConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

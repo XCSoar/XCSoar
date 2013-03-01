@@ -46,9 +46,6 @@ GlueMapWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 
   mouse_down_clock.Update();
 
-  if (IsPanning())
-    return true;
-
   InputEvents::ShowMenu();
   ignore_single_click = true;
   return true;

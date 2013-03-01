@@ -133,7 +133,7 @@ MapWindow::UpdateTerrain()
 
   GeoPoint location = visible_projection.GetGeoScreenCenter();
   fixed radius = visible_projection.GetScreenWidthMeters() / 2;
-  if (terrain_radius >= radius &&
+  if (terrain_radius >= radius && terrain_center.IsValid() &&
       terrain_center.Distance(location) < fixed(1000))
     return false;
 
@@ -204,8 +204,7 @@ void
 MapWindow::SetTerrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  terrain_center = GeoPoint(Angle::Zero(),
-                            Angle::Zero());
+  terrain_center = GeoPoint::Invalid();
   background.SetTerrain(_terrain);
 }
 

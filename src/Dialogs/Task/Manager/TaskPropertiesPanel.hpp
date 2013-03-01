@@ -33,8 +33,10 @@ class OrderedTask;
 class DataFieldBoolean;
 class DataFieldEnum;
 
-class TaskPropertiesPanel : public RowFormWidget,
-                            private DataFieldListener {
+class TaskPropertiesPanel final
+  : public RowFormWidget,
+    private DataFieldListener {
+
   TaskManagerDialog &dialog;
 
   OrderedTask **ordered_task_pointer, *ordered_task;
@@ -50,17 +52,17 @@ public:
   void OnTaskTypeChange(DataFieldEnum &df);
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void ReClick();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void ReClick() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
   /**
    * Saves the panel's properties of the task to the temporary task
    * so they can be used by other panels editing the task.
    * @return true
    */
-  virtual bool Leave();
+  virtual bool Leave() override;
 
 protected:
   void RefreshView();
@@ -68,7 +70,7 @@ protected:
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 #endif

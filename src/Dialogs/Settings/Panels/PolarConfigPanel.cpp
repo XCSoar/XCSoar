@@ -61,7 +61,7 @@ Copyright_License {
 #include <cstdio>
 #include <windef.h> /* for MAX_PATH */
 
-class PolarConfigPanel : public XMLWidget {
+class PolarConfigPanel final : public XMLWidget {
   bool loading;
   WndButton *buttonList, *buttonImport, *buttonExport;
 
@@ -75,10 +75,10 @@ public:
   void Export();
   void DataChanged();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 };
 
 /** XXX this hack is needed because the form callbacks don't get a

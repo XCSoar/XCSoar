@@ -155,11 +155,11 @@ InitialiseLogFonts()
 
   // new font for map labels
   InitialiseLogfont(&log_map_label, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.39));
+                    UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels big/medium cities
   InitialiseLogfont(&log_map_label_important, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.39));
+                    UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels
   InitialiseLogfont(&log_map, GetStandardFontFace(),

@@ -60,8 +60,9 @@ Copyright_License {
 #include "Android/BluetoothHelper.hpp"
 #endif
 
-class DeviceListWidget : public ListWidget, private ActionListener,
-                         private NullBlackboardListener {
+class DeviceListWidget final
+  : public ListWidget, private ActionListener,
+    private NullBlackboardListener {
   enum Buttons {
     RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
   };
@@ -166,12 +167,12 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare() {
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
-  virtual void Show(const PixelRect &rc) {
+  virtual void Show(const PixelRect &rc) override {
     ListWidget::Show(rc);
 
     CommonInterface::GetLiveBlackboard().AddListener(*this);
@@ -180,7 +181,7 @@ public:
     UpdateButtons();
   }
 
-  virtual void Hide() {
+  virtual void Hide() override {
     ListWidget::Hide();
 
     CommonInterface::GetLiveBlackboard().RemoveListener(*this);
@@ -188,15 +189,15 @@ public:
 
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx);
-  virtual void OnCursorMoved(unsigned index);
+                           unsigned idx) override;
+  virtual void OnCursorMoved(unsigned index) override;
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
   /* virtual methods from class BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 void

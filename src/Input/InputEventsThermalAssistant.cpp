@@ -22,25 +22,10 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Gauge/BigThermalAssistantWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Look/Look.hpp"
-
-/**
- * Evil global variable - please refactor!
- */
-static BigThermalAssistantWidget *ta_widget;
+#include "UIActions.hpp"
 
 void
 InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
 {
-  if (IsFlavour(_T("TA")))
-    return;
-
-  ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard(),
-                                            UIGlobals::GetLook().thermal_assistant_dialog);
-  CommonInterface::main_window->SetWidget(ta_widget);
-  SetFlavour(_T("TA"));
+  UIActions::ShowThermalAssistant();
 }

@@ -40,13 +40,13 @@ enum ControlIndex {
   PredictWindDrift,
 };
 
-class GlideComputerConfigPanel : public RowFormWidget {
+class GlideComputerConfigPanel final : public RowFormWidget {
 public:
   GlideComputerConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

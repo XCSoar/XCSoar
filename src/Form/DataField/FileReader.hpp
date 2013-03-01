@@ -51,10 +51,12 @@ public:
   };
 
 private:
+  static constexpr unsigned MAX_FILES = 100;
+
   /** Index of the active file */
   unsigned int mValue;
   /** FileList item array */
-  StaticArray<Item, 100> files;
+  StaticArray<Item, MAX_FILES> files;
 
   /**
    * Has the file list already been loaded?  This class tries to
@@ -113,7 +115,7 @@ public:
    * @return The number of files in the list
    */
   gcc_pure
-  int GetNumFiles() const;
+  unsigned GetNumFiles() const;
 
   /**
    * Returns the selection index in integer format
@@ -155,7 +157,7 @@ public:
    * Sets the selection to the given index
    * @param Value The array index to select
    */
-  void Set(int Value);
+  void Set(unsigned Value);
 
   /**
    * @see Set()

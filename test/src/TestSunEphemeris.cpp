@@ -48,6 +48,28 @@ test_times()
   ok1(between(sun.evening_twilight, 19.81, 19.82));
 }
 
+#include <stdio.h>
+static void
+test_times_southern()
+{
+  // Benalla
+  const GeoPoint location(Angle::Degrees(146.00666666666666),
+                          Angle::Degrees(-36.551944444444445));
+  BrokenDateTime dt;
+  dt.year = 2013;
+  dt.month = 2;
+  dt.day = 22;
+  dt.hour = 8;
+  dt.minute = 21;
+  dt.second = 12;
+
+  SunEphemeris::Result sun =
+      SunEphemeris::CalcSunTimes(location, dt, fixed(11));
+
+  ok1(between(sun.time_of_sunrise, 6.91, 6.95));
+  ok1(between(sun.time_of_sunset, 20.03, 20.04));
+}
+
 static void
 test_azimuth()
 {
@@ -137,9 +159,10 @@ test_azimuth()
 
 int main(int argc, char **argv)
 {
-  plan_tests(53);
+  plan_tests(55);
 
   test_times();
+  test_times_southern();
   test_azimuth();
 
   return exit_status();

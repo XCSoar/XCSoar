@@ -41,7 +41,7 @@ enum ControlIndex {
   SystemTimeFromGPS
 };
 
-class TimeConfigPanel
+class TimeConfigPanel final
   : public RowFormWidget, DataFieldListener {
 public:
   TimeConfigPanel()
@@ -51,12 +51,12 @@ public:
   void SetLocalTime(int utc_offset);
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 void

@@ -92,7 +92,7 @@ protected:
 public:
 #ifndef USE_GDI
   void AddChild(Window &child);
-  void Removehild(Window &child);
+  void RemoveChild(Window &child);
 
   gcc_pure
   bool HasChild(const Window &w) const {

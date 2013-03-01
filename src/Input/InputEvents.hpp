@@ -58,10 +58,9 @@ namespace InputEvents
   void setMode(const TCHAR *mode);
 
   /**
-   * Switch back to the default mode if the specified mode is
-   * currently set.  It is a no-op if any other mode is currently set.
+   * Update the menu after pan mode has been enabled or disabled.
    */
-  void LeaveMode(const TCHAR *mode);
+  void UpdatePan();
 
   /**
    * Set the "flavour" of the current mode.  It is an optional string

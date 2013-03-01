@@ -359,8 +359,13 @@ dlgBasicSettingsShowModal()
 {
   FlightSetupPanel *instance = new FlightSetupPanel();
 
+  const Plane &plane = CommonInterface::GetComputerSettings().plane;
+  StaticString<128> caption(_("Flight Setup"));
+  caption.append(_T(" - "));
+  caption.append(plane.polar_name);
+
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Flight Setup"), instance);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), caption, instance);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
 

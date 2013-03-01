@@ -92,7 +92,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
@@ -458,11 +458,11 @@ Startup()
   // Give focus to the map
   main_window->SetDefaultFocus();
 
-  Pages::Update();
-
   // Start calculation thread
   merge_thread->Start();
   calculation_thread->Start();
+
+  Pages::Update();
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();

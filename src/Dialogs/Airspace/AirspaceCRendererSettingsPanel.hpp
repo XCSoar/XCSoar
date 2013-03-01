@@ -49,12 +49,12 @@ class AirspaceClassRendererSettingsPanel:
 public:
   AirspaceClassRendererSettingsPanel(AirspaceClass type);
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 protected:
   /* methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
 private:
   void FillAirspaceClasses();

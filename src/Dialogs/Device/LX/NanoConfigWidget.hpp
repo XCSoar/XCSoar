@@ -29,7 +29,7 @@ Copyright_License {
 class LXDevice;
 class OperationEnvironment;
 
-class NanoConfigWidget : public RowFormWidget {
+class NanoConfigWidget final : public RowFormWidget {
   enum Controls {
     BAUDRATE,
     //NMEARATE,
@@ -49,8 +49,8 @@ public:
     :RowFormWidget(look), device(_device) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 protected:
   bool SaveSetting(const char *name, unsigned idx, OperationEnvironment &env);

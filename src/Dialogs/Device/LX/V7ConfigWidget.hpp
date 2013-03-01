@@ -28,7 +28,7 @@ Copyright_License {
 
 class LXDevice;
 
-class V7ConfigWidget : public RowFormWidget {
+class V7ConfigWidget final : public RowFormWidget {
   enum Controls {
     BRGPS,
     BRPDA
@@ -43,8 +43,8 @@ public:
     :RowFormWidget(look), device(_device) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 #endif

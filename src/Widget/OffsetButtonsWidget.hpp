@@ -56,10 +56,10 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual void Move(const PixelRect &rc);
-  virtual bool SetFocus();
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
+  virtual bool SetFocus() override;
 
 protected:
   virtual void OnOffset(fixed offset) = 0;

@@ -63,6 +63,7 @@ void
 SuspensibleThread::BeginSuspend()
 {
   assert(!Thread::IsInside());
+  assert(Thread::IsDefined());
 
 #ifdef HAVE_POSIX
   mutex.Lock();
@@ -79,6 +80,7 @@ void
 SuspensibleThread::WaitUntilSuspended()
 {
   assert(!Thread::IsInside());
+  assert(Thread::IsDefined());
 
 #ifdef HAVE_POSIX
   mutex.Lock();

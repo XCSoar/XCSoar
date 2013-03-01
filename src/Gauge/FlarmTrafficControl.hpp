@@ -37,7 +37,7 @@ public:
   typedef void (*NorthUpChangeFunction)(bool enabled);
 
 protected:
-  bool enable_auto_zoom;
+  bool enable_auto_zoom, dragging;
   unsigned zoom;
   Angle task_direction;
   GestureManager gestures;
@@ -131,6 +131,14 @@ protected:
   void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
+  void StopDragging() {
+    if (!dragging)
+      return;
+
+    dragging = false;
+    ReleaseCapture();
+  }
+
 protected:
   bool OnMouseGesture(const TCHAR* gesture);
 
@@ -141,6 +149,7 @@ protected:
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnKeyDown(unsigned key_code) override;
+  virtual void OnCancelMode() override;
 
   /* virtual methods from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) override;

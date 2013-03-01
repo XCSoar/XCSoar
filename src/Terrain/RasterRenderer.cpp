@@ -24,6 +24,7 @@ Copyright_License {
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Math/FastMath.h"
+#include "Util/Clamp.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Color.hpp"
@@ -221,11 +222,7 @@ gcc_const
 static int
 ClipHeightDelta(int d)
 {
-  if (d > 512)
-    d = 512;
-  else if (d < -512)
-    d = -512;
-  return d;
+  return Clamp(d, -512, 512);
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
@@ -246,7 +243,12 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   border.right = height_matrix.GetWidth() - quantisation_effective;
   border.bottom = height_matrix.GetHeight() - quantisation_effective;
 
-  const unsigned height_slope_factor = std::max(1, (int)pixel_size);
+  const unsigned height_slope_factor =
+    Clamp((unsigned)pixel_size, 1u,
+          /* this upper limit avoids integer overflows in the "mag"
+             formula; it effectively limits "dd2" so calculating its
+             square will not overflow */
+          8192u / (quantisation_effective * quantisation_effective));
 
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
@@ -306,10 +308,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         assert(src - column_minus_index < height_matrix.GetDataEnd());
         assert(src + column_plus_index < height_matrix.GetDataEnd());
 
-        short h_above = src[-(int)row_minus_offset];
-        short h_below = src[row_plus_offset];
-        short h_left = src[-(int)column_minus_index];
-        short h_right = src[column_plus_index];
+        const short h_above = src[-(int)row_minus_offset];
+        const short h_below = src[row_plus_offset];
+        const short h_left = src[-(int)column_minus_index];
+        const short h_right = src[column_plus_index];
 
         if (gcc_unlikely(RasterBuffer::IsSpecial(h_above) ||
                          RasterBuffer::IsSpecial(h_below) ||
@@ -326,23 +328,19 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 
         const unsigned p20 = column_plus_index + column_minus_index;
 
-        const int dd0 = p22 * p31;
-        const int dd1 = p20 * p32;
-        const int dd2 = p20 * p31 * height_slope_factor;
+        const int dd0 = p22 * int(p31);
+        const int dd1 = int(p20) * p32;
+        const unsigned dd2 = p20 * p31 * height_slope_factor;
 #ifndef FAST_RSQRT
-        const int num = (dd2 * sz + dd0 * sx + dd1 * sy);
-        const int mag = (dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+        const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
+        const unsigned mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
 #ifdef FIXED_MATH
         const int sval = num / (int)isqrt4(mag);
 #else
         const int sval = num / (int)sqrt((fixed)mag);
 #endif
-        int sindex = (sval - sz) * contrast / 128;
-        if (gcc_unlikely(sindex < -64))
-          sindex = -64;
-        if (gcc_unlikely(sindex > 63))
-          sindex = 63;
-        *p++ = oColorBuf[h + 256*sindex];
+        const int sindex = (sval - sz) * contrast / 128;
+        *p++ = oColorBuf[h + 256 * Clamp(sindex, -64, 63)];
 #else
         const int num = (dd2 * sz_c + dd0 * sx_c + dd1 * sy_c);
         const int sval = i_normalise_mag3(num, dd0, dd1, dd2);
@@ -372,8 +370,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast, int brightness,
                                    const Angle sunazimuth)
 {
-  const Angle fudgeelevation =
-    Angle::Degrees(fixed(10.0 + 80.0 * brightness / 255.0));
+  const Angle fudgeelevation = Angle::Degrees(10) +
+    Angle::Degrees(80.0 / 255.0) * brightness;
 
   const int sx = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastsine());
   const int sy = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastcosine());

@@ -21,32 +21,25 @@ Copyright_License {
 }
 */
 
-#include "Pages.hpp"
+#include "PageActions.hpp"
+#include "UIActions.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
-#include "Language/Language.hpp"
-
-#include <stdio.h>
-
-namespace Pages
-{
-  static unsigned current_page = 0;
-}
 
 void
 Pages::Update()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  UIState &ui_state = CommonInterface::SetUIState();
 
-  if (!settings.pages[current_page].IsDefined())
-    current_page = NextIndex();
+  if (!settings.pages[ui_state.page_index].IsDefined())
+    ui_state.page_index = NextIndex();
 
-  OpenLayout(settings.pages[current_page]);
+  OpenLayout(settings.pages[ui_state.page_index]);
 }
 
 
@@ -54,8 +47,9 @@ unsigned
 Pages::NextIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = current_page;
+  unsigned i = ui_state.page_index;
   do {
     i = (i + 1) % PageSettings::MAX_PAGES;
   } while (!settings.pages[i].IsDefined());
@@ -66,7 +60,9 @@ Pages::NextIndex()
 void
 Pages::Next()
 {
-  current_page = NextIndex();
+  UIState &ui_state = CommonInterface::SetUIState();
+
+  ui_state.page_index = NextIndex();
   Update();
 }
 
@@ -75,8 +71,9 @@ unsigned
 Pages::PrevIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = current_page;
+  unsigned i = ui_state.page_index;
   do {
     i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
   } while (!settings.pages[i].IsDefined());
@@ -87,7 +84,9 @@ Pages::PrevIndex()
 void
 Pages::Prev()
 {
-  current_page = PrevIndex();
+  UIState &ui_state = CommonInterface::SetUIState();
+
+  ui_state.page_index = PrevIndex();
   Update();
 }
 
@@ -95,6 +94,7 @@ void
 Pages::Open(unsigned page)
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  UIState &ui_state = CommonInterface::SetUIState();
 
   if (page >= PageSettings::MAX_PAGES)
     return;
@@ -102,13 +102,13 @@ Pages::Open(unsigned page)
   if (!settings.pages[page].IsDefined())
     return;
 
-  current_page = page;
+  ui_state.page_index = page;
   Update();
 }
 
 
 void
-Pages::OpenLayout(const PageSettings::PageLayout &layout)
+Pages::OpenLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
@@ -132,13 +132,33 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
   }
 
   switch (layout.bottom) {
-  case PageSettings::PageLayout::Bottom::NOTHING:
+  case PageLayout::Bottom::NOTHING:
     CommonInterface::main_window->SetBottomWidget(nullptr);
     break;
 
-  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
+  case PageLayout::Bottom::CROSS_SECTION:
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
     break;
+
+  case PageLayout::Bottom::MAX:
+    gcc_unreachable();
+  }
+
+  switch (layout.main) {
+  case PageLayout::Main::MAP:
+    CommonInterface::main_window->ActivateMap();
+    break;
+
+  case PageLayout::Main::FLARM_RADAR:
+    UIActions::ShowTrafficRadar();
+    break;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    UIActions::ShowThermalAssistant();
+    break;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
   }
 
   ActionInterface::UpdateDisplayMode();

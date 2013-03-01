@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Interface.hpp"
@@ -51,11 +51,12 @@ class PageLayoutEditWidget final
 public:
   class Listener {
   public:
-    virtual void OnModified(const PageSettings::PageLayout &new_value) = 0;
+    virtual void OnModified(const PageLayout &new_value) = 0;
   };
 
 private:
   enum Controls {
+    MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
   };
@@ -63,7 +64,7 @@ private:
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
 
-  PageSettings::PageLayout value;
+  PageLayout value;
 
   Listener &listener;
 
@@ -71,7 +72,7 @@ public:
   PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
     :RowFormWidget(_look), listener(_listener) {}
 
-  void SetValue(const PageSettings::PageLayout &_value);
+  void SetValue(const PageLayout &_value);
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -116,8 +117,8 @@ public:
   void CreateButtons(ButtonPanel &buttons) {
     add_button = buttons.Add(_("Add"), *this, ADD);
     delete_button = buttons.Add(_("Delete"), *this, DELETE);
-    move_up_button = buttons.AddSymbol(_("^"), *this, MOVE_UP);
-    move_down_button = buttons.AddSymbol(_("v"), *this, MOVE_DOWN);
+    move_up_button = buttons.AddSymbol(_T("^"), *this, MOVE_UP);
+    move_down_button = buttons.AddSymbol(_T("v"), *this, MOVE_DOWN);
   }
 
   void UpdateButtons() {
@@ -134,7 +135,7 @@ public:
   virtual void Initialise(ContainerWindow &parent,
                           const PixelRect &rc) override;
   virtual void Show(const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
   /* virtual methods from class ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -148,7 +149,7 @@ public:
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class PageLayoutEditWidget::Listener */
-  virtual void OnModified(const PageSettings::PageLayout &new_value) override;
+  virtual void OnModified(const PageLayout &new_value) override;
 
 private:
   /* virtual methods from ActionListener */
@@ -160,6 +161,17 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
+
+  static constexpr StaticEnumChoice main_list[] = {
+    { (unsigned)PageLayout::Main::MAP, N_("Map") },
+    { (unsigned)PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
+    { (unsigned)PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
+    { 0 }
+  };
+  AddEnum(_("Main area"),
+          _("Specifies what should be displayed in the main area."),
+          main_list,
+          (unsigned)PageLayout::Main::MAP, this);
 
   static constexpr StaticEnumChoice ib_list[] = {
     { IBP_AUTO, N_("Auto") },
@@ -175,21 +187,24 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     ib.AddChoice(i, gettext(info_box_settings.panels[i].name));
 
   static constexpr StaticEnumChoice bottom_list[] = {
-    { (unsigned)PageSettings::PageLayout::Bottom::NOTHING, N_("Nothing") },
-    { (unsigned)PageSettings::PageLayout::Bottom::CROSS_SECTION,
+    { (unsigned)PageLayout::Bottom::NOTHING, N_("Nothing") },
+    { (unsigned)PageLayout::Bottom::CROSS_SECTION,
                 N_("Cross section") },
     { 0 }
   };
-  AddEnum(_("Bottom"),
-          _("Specifies what should be displayed below the map."),
+  AddEnum(_("Bottom area"),
+          _("Specifies what should be displayed below the main area."),
           bottom_list,
-          (unsigned)PageSettings::PageLayout::Bottom::NOTHING, this);
+          (unsigned)PageLayout::Bottom::NOTHING, this);
 }
 
 void
-PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
+PageLayoutEditWidget::SetValue(const PageLayout &_value)
 {
   value = _value;
+
+  LoadValueEnum(MAIN, value.main);
+  LoadValueEnum(BOTTOM, value.bottom);
 
   unsigned ib = IBP_NONE;
   if (value.infobox_config.enabled) {
@@ -208,7 +223,10 @@ PageLayoutEditWidget::SetValue(const PageSettings::PageLayout &_value)
 void
 PageLayoutEditWidget::OnModified(DataField &df)
 {
-  if (&df == &GetDataField(INFO_BOX_PANEL)) {
+  if (&df == &GetDataField(MAIN)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    value.main = (PageLayout::Main)dfe.GetValue();
+  } else if (&df == &GetDataField(INFO_BOX_PANEL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const unsigned ibp = dfe.GetValue();
     if (ibp == IBP_AUTO) {
@@ -224,7 +242,7 @@ PageLayoutEditWidget::OnModified(DataField &df)
     }
   } else if (&df == &GetDataField(BOTTOM)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.bottom = (PageSettings::PageLayout::Bottom)dfe.GetValue();
+    value.bottom = (PageLayout::Bottom)dfe.GetValue();
   } else {
     gcc_unreachable();
   }
@@ -237,7 +255,7 @@ PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   settings = CommonInterface::GetUISettings().pages;
   auto end = std::remove_if(settings.pages.begin(), settings.pages.end(),
-                            [](const PageSettings::PageLayout &layout) {
+                            [](const PageLayout &layout) {
                               return !layout.IsDefined();
                             });
   unsigned n = std::distance(settings.pages.begin(), end);
@@ -264,12 +282,12 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
 
   std::fill(settings.pages.begin() + GetList().GetLength(),
             settings.pages.end(),
-            PageSettings::PageLayout::Undefined());
+            PageLayout::Undefined());
 
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
-    PageSettings::PageLayout &dest = _settings.pages[i];
-    const PageSettings::PageLayout &src = settings.pages[i];
+    PageLayout &dest = _settings.pages[i];
+    const PageLayout &src = settings.pages[i];
     if (src != dest) {
       dest = src;
       Profile::Save(src, i);
@@ -292,40 +310,51 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   assert(idx < PageSettings::MAX_PAGES);
   const auto &value = settings.pages[idx];
 
-  const TCHAR *text = _T("---");
   StaticString<64> buffer;
 
-  if (!value.infobox_config.enabled) {
-    text = _("Map (Full screen)");
-  } else {
-    text = _("Map and InfoBoxes");
+  switch (value.main) {
+  case PageLayout::Main::MAP:
+    buffer = _("Map");
+    break;
+
+  case PageLayout::Main::FLARM_RADAR:
+    buffer = _("FLARM radar");
+    break;
+
+  case PageLayout::Main::THERMAL_ASSISTANT:
+    buffer = _("Thermal assistant");
+    break;
+
+  case PageLayout::Main::MAX:
+    gcc_unreachable();
+  }
+
+  if (value.infobox_config.enabled) {
+    buffer.AppendFormat(_T(", %s"), _("InfoBoxes"));
 
     if (!value.infobox_config.auto_switch &&
         value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
-      buffer.Format(_T("%s (%s)"), text,
-                    gettext(info_box_settings.panels[value.infobox_config.panel].name));
+      buffer.AppendFormat(_T(" (%s)"),
+                          gettext(info_box_settings.panels[value.infobox_config.panel].name));
     else
-      buffer.Format(_T("%s (%s)"), text, _("Auto"));
-    text = buffer;
+      buffer.AppendFormat(_T(" (%s)"), _("Auto"));
   }
 
   switch (value.bottom) {
-  case PageSettings::PageLayout::Bottom::NOTHING:
+  case PageLayout::Bottom::NOTHING:
     break;
 
-  case PageSettings::PageLayout::Bottom::CROSS_SECTION:
-    if (text != buffer) {
-      buffer = text;
-      text = buffer;
-    }
-
+  case PageLayout::Bottom::CROSS_SECTION:
     buffer.AppendFormat(_T(", %s"), _("Cross section"));
     break;
+
+  case PageLayout::Bottom::MAX:
+    gcc_unreachable();
   }
 
   canvas.DrawText(rc.left + Layout::GetTextPadding(),
                   rc.top + Layout::GetTextPadding(),
-                  text);
+                  buffer);
 }
 
 void
@@ -343,7 +372,7 @@ PageListWidget::OnActivateItem(unsigned idx)
 }
 
 void
-PageListWidget::OnModified(const PageSettings::PageLayout &new_value)
+PageListWidget::OnModified(const PageLayout &new_value)
 {
   unsigned i = GetList().GetCursorIndex();
   assert(i < PageSettings::MAX_PAGES);
@@ -368,7 +397,7 @@ PageListWidget::OnAction(int id)
   case ADD:
     if (n < PageSettings::MAX_PAGES) {
       auto &page = settings.pages[n];
-      page = PageSettings::PageLayout::Default();
+      page = PageLayout::Default();
       GetList().SetLength(n + 1);
       GetList().SetCursorIndex(n);
     }

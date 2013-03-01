@@ -35,16 +35,16 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
-class InfoBoxesConfigPanel : public RowFormWidget,
-                             public ActionListener {
+class InfoBoxesConfigPanel final
+  : public RowFormWidget, public ActionListener {
 public:
   InfoBoxesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void OnAction(int id);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual void OnAction(int id) override;
 };
 
 void

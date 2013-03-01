@@ -34,7 +34,7 @@ struct NMEAInfo;
 /**
  * Widget to display a FLARM gauge
  */
-class GaugeFLARM : public OverlappedWidget, NullBlackboardListener {
+class GaugeFLARM final : public OverlappedWidget, NullBlackboardListener {
   LiveBlackboard &blackboard;
   const FlarmTrafficLook &look;
 
@@ -42,10 +42,10 @@ public:
   GaugeFLARM(LiveBlackboard &_blackboard, const FlarmTrafficLook &_look)
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
   void Update(const NMEAInfo &basic);

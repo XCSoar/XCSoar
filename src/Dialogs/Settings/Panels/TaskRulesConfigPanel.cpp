@@ -45,14 +45,14 @@ enum ControlIndex {
   PREDICT_CONTEST,
 };
 
-class TaskRulesConfigPanel : public RowFormWidget {
+class TaskRulesConfigPanel final : public RowFormWidget {
 public:
   TaskRulesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 void

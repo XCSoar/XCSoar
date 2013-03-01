@@ -278,10 +278,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
     return false;
 
   // Try to receive flight information until the list is full
-  env.SetProgressRange(10);
   for (uint8_t i = 0; !flight_list.full(); ++i) {
-    env.SetProgressPosition(i % 10);
-
     FLARM::MessageType ack_result = SelectFlight(i, env);
 
     // Last record reached -> bail out and return list

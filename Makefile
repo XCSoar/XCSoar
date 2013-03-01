@@ -526,7 +526,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/Input/TaskEventObserver.cpp \
 	$(SRC)/PageSettings.cpp \
-	$(SRC)/Pages.cpp \
+	$(SRC)/PageActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \
 	$(SRC)/Message.cpp \

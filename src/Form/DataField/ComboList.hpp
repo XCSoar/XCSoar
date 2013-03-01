@@ -47,9 +47,7 @@ public:
     ~Item();
   };
 
-  enum {
-    MAX_SIZE = 300,
-  };
+  static constexpr unsigned MAX_SIZE = 300;
 
   int ComboPopupItemSavedIndex;
 

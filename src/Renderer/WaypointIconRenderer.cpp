@@ -54,6 +54,8 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
     return look.obstacle_icon;
   case Waypoint::Type::POWERPLANT:
     return look.power_plant_icon;
+  case Waypoint::Type::THERMAL_HOTSPOT:
+    return look.thermal_hotspot_icon;
   default:
     if (in_task) {
       return look.task_turn_point_icon;

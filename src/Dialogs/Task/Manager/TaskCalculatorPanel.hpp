@@ -32,9 +32,10 @@ Copyright_License {
 class WndForm;
 class WndButton;
 
-class TaskCalculatorPanel : public RowFormWidget,
-                            private DataFieldListener,
-                            private NullBlackboardListener {
+class TaskCalculatorPanel final
+  : public RowFormWidget,
+    private DataFieldListener,
+    private NullBlackboardListener {
   WndButton *target_button;
 
   const bool *task_modified;
@@ -67,18 +68,18 @@ public:
   void Refresh();
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
-  virtual void OnSpecial(DataField &df);
+  virtual void OnModified(DataField &df) override;
+  virtual void OnSpecial(DataField &df) override;
 
   /* virtual methods from NullBlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) {
+                                  const DerivedInfo &calculated) override {
     Refresh();
   }
 };

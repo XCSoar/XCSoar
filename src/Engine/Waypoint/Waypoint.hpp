@@ -55,6 +55,7 @@ struct Waypoint {
     TOWER,
     POWERPLANT,
     OBSTACLE,
+    THERMAL_HOTSPOT,
   };
 
   /**

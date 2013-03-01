@@ -38,14 +38,14 @@ enum ControlIndex {
   EnableFlightLogger,
 };
 
-class LoggerConfigPanel : public RowFormWidget {
+class LoggerConfigPanel final : public RowFormWidget {
 public:
   LoggerConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 };
 
 static constexpr StaticEnumChoice auto_logger_list[] = {

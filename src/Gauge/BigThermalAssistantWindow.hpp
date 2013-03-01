@@ -25,8 +25,12 @@ Copyright_License {
 #define XCSOAR_BIG_THERMAL_ASSISTENT_WINDOW_HPP
 
 #include "ThermalAssistantWindow.hpp"
+#include "UIUtil/GestureManager.hpp"
 
 class BigThermalAssistantWindow : public ThermalAssistantWindow {
+  bool dragging;
+  GestureManager gestures;
+
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
                             UPixelScalar padding)
@@ -38,9 +42,23 @@ public:
     ThermalAssistantWindow::Create(parent, rc, window_style);
   }
 
+private:
+  void StopDragging() {
+    if (!dragging)
+      return;
+
+    dragging = false;
+    ReleaseCapture();
+  }
+
 protected:
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnKeyDown(unsigned key_code) override;
+  virtual void OnCancelMode() override;
 };
 
 #endif

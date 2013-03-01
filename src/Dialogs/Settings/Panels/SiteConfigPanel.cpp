@@ -44,7 +44,7 @@ enum ControlIndex {
   AirfieldFile
 };
 
-class SiteConfigPanel : public RowFormWidget {
+class SiteConfigPanel final : public RowFormWidget {
 public:
   SiteConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()), buttonWaypoints(0) {}
@@ -53,10 +53,10 @@ private:
   WndButton *buttonWaypoints;
 
 public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 };
 
 void

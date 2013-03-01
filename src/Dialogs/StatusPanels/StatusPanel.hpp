@@ -32,7 +32,7 @@ public:
 
   virtual void Refresh() = 0;
 
-  virtual void Show(const PixelRect &rc);
+  virtual void Show(const PixelRect &rc) override;
 };
 
 #endif

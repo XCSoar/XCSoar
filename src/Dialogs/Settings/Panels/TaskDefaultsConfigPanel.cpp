@@ -48,7 +48,7 @@ enum ControlIndex {
   AATTimeMargin
 };
 
-class TaskDefaultsConfigPanel
+class TaskDefaultsConfigPanel final
   : public RowFormWidget, DataFieldListener {
 public:
   TaskDefaultsConfigPanel()
@@ -59,12 +59,12 @@ public:
   void SetFinishLabel();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed, bool &require_restart) override;
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 void

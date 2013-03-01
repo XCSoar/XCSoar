@@ -25,7 +25,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
-#include "Pages.hpp"
+#include "PageActions.hpp"
 #include "Input/InputEvents.hpp"
 
 #include <assert.h>
@@ -50,7 +50,8 @@ EnterPan()
 
   map->SetPan(true);
 
-  InputEvents::setMode(InputEvents::MODE_PAN);
+  InputEvents::setMode(InputEvents::MODE_DEFAULT);
+  InputEvents::UpdatePan();
   CommonInterface::main_window->SetFullScreen(true);
 }
 
@@ -65,7 +66,8 @@ PanTo(const GeoPoint &location)
 
   map->PanTo(location);
 
-  InputEvents::setMode(InputEvents::MODE_PAN);
+  InputEvents::setMode(InputEvents::MODE_DEFAULT);
+  InputEvents::UpdatePan();
   CommonInterface::main_window->SetFullScreen(true);
   return true;
 }
@@ -81,7 +83,7 @@ LeavePan()
 
   map->SetPan(false);
 
-  setMode(InputEvents::MODE_DEFAULT);
+  InputEvents::UpdatePan();
   Pages::Update();
 }
 

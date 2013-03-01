@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_PAGE_PROFILE_HPP
 #define XCSOAR_PAGE_PROFILE_HPP
 
-#include "PageSettings.hpp"
+struct PageLayout;
+struct PageSettings;
 
 namespace Profile {
   void Load(PageSettings &settings);
 
-  void Save(const PageSettings::PageLayout &page, unsigned i);
+  void Save(const PageLayout &page, unsigned i);
   void Save(const PageSettings &settings);
 };
 

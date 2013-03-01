@@ -28,13 +28,20 @@
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 
+struct AirspaceRendererSettings;
+
 class CrossSectionWidget : public WindowWidget,
                            private NullBlackboardListener {
+  void Update(const MoreData &basic, const DerivedInfo &calculated,
+              const AirspaceRendererSettings &settings);
+
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
 private:
   /* virtual methods from class BlackboardListener */

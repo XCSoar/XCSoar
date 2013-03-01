@@ -60,18 +60,14 @@ VLA_XFR::dbbget(void *dbbbuffer, int32 dbbsize)
   return VLA_ERR_NOERR;
 }
 
-VLA_ERROR
+int
 VLA_XFR::readdir(void *buffer, int32 size) {
   if(buffer==0)
-    return VLA_ERR_MISC;
+    return -1;
 
-  int r = Volkslogger::SendCommandReadBulk(*port, env,
+  return Volkslogger::SendCommandReadBulk(*port, env,
                                            Volkslogger::cmd_DIR,
                                            buffer, size);
-  if (r <= 0)
-    return VLA_ERR_NOFLIGHTS;
-  else
-    return VLA_ERR_NOERR;
 }
 
 VLA_ERROR
@@ -242,9 +238,12 @@ VLA_ERROR VLAPI::read_directory() {
     return err;
 
   uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
-  err = readdir(dirbuffer, sizeof(dirbuffer));
+  int data_length = readdir(dirbuffer, sizeof(dirbuffer));
 
-  if(err == VLA_ERR_NOERR) {
+  if (data_length == -1)
+    return VLA_ERR_MISC;
+
+  if(data_length > 0) {
     int fcount = conv_dir(0,dirbuffer,1);
     delete[] directory.flights;
     directory.flights = NULL;
@@ -252,15 +251,15 @@ VLA_ERROR VLAPI::read_directory() {
       directory.nflights = fcount;
       directory.flights = new DIRENTRY[fcount];
       conv_dir(directory.flights,dirbuffer,0);
-      err = VLA_ERR_NOERR;
+      return VLA_ERR_NOERR;
     }
     else {
       directory.nflights = 0;
-      err = VLA_ERR_NOFLIGHTS;
+      return VLA_ERR_NOFLIGHTS;
     }
   }
 
-  return err;
+  return VLA_ERR_MISC;
 
 }
 
