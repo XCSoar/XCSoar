@@ -507,7 +507,7 @@ WndForm::OnPaint(Canvas &canvas)
     PixelRect rc = main_window.GetClientRect();
     rc.Offset(-pos.left, -pos.top);
 
-    static constexpr Color color = COLOR_BLACK.WithAlpha(192);
+    static constexpr Color color = COLOR_BLACK.WithAlpha(64);
     canvas.DrawFilledRectangle(rc, color);
   }
 #endif
