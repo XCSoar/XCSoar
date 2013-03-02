@@ -575,6 +575,10 @@ InfoBoxWindow::OnTimer(WindowTimer &timer)
     FocusParent();
     return true;
   } else if (timer == dialog_timer) {
+    dragging = pressed = false;
+    Invalidate();
+    ReleaseCapture();
+
     dialog_timer.Cancel();
     ShowDialog();
     return true;
