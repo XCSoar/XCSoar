@@ -30,6 +30,14 @@ Copyright_License {
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
+namespace PageActions {
+  /**
+   * Loads the layout without updating current page information in
+   * #UIState.
+   */
+  void LoadLayout(const PageLayout &layout);
+};
+
 static const PageLayout &
 GetConfiguredLayout()
 {
@@ -39,16 +47,20 @@ GetConfiguredLayout()
   return settings.pages[state.page_index];
 }
 
-static const PageLayout &
-GetCurrentLayout()
+const PageLayout &
+PageActions::GetCurrentLayout()
 {
-  return GetConfiguredLayout();
+  const UIState &state = CommonInterface::SetUIState();
+
+  return state.special_page.IsDefined()
+    ? state.special_page
+    : GetConfiguredLayout();
 }
 
 void
 PageActions::Update()
 {
-  OpenLayout(GetCurrentLayout());
+  LoadLayout(GetCurrentLayout());
 }
 
 
@@ -57,6 +69,11 @@ PageActions::NextIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
+
+  if (ui_state.special_page.IsDefined())
+    /* if a "special" page is active, any page switch will return to
+       the last configured page */
+    return ui_state.page_index;
 
   return (ui_state.page_index + 1) % settings.n_pages;
 }
@@ -68,15 +85,21 @@ PageActions::Next()
   UIState &ui_state = CommonInterface::SetUIState();
 
   ui_state.page_index = NextIndex();
+  ui_state.special_page.SetUndefined();
+
   Update();
 }
-
 
 unsigned
 PageActions::PrevIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
+
+  if (ui_state.special_page.IsDefined())
+    /* if a "special" page is active, any page switch will return to
+       the last configured page */
+    return ui_state.page_index;
 
   return (ui_state.page_index + PageSettings::MAX_PAGES - 1)
     % settings.n_pages;
@@ -89,11 +112,13 @@ PageActions::Prev()
   UIState &ui_state = CommonInterface::SetUIState();
 
   ui_state.page_index = PrevIndex();
+  ui_state.special_page.SetUndefined();
+
   Update();
 }
 
 void
-PageActions::OpenLayout(const PageLayout &layout)
+PageActions::LoadLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
@@ -151,9 +176,24 @@ PageActions::OpenLayout(const PageLayout &layout)
 }
 
 void
+PageActions::OpenLayout(const PageLayout &layout)
+{
+  UIState &ui_state = CommonInterface::SetUIState();
+  ui_state.special_page = layout;
+
+  LoadLayout(layout);
+}
+
+void
 PageActions::Restore()
 {
-  OpenLayout(GetConfiguredLayout());
+  PageLayout &special_page = CommonInterface::SetUIState().special_page;
+  if (!special_page.IsDefined())
+    return;
+
+  special_page.SetUndefined();
+
+  LoadLayout(GetConfiguredLayout());
 }
 
 void
@@ -165,13 +205,19 @@ PageActions::DeferredRestore()
 GlueMapWindow *
 PageActions::ShowMap()
 {
-  GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
-  if (map != nullptr)
-    return map;
-
   PageLayout layout = GetCurrentLayout();
-  layout.main = PageLayout::Main::MAP;
-  OpenLayout(layout);
+  if (layout.main != PageLayout::Main::MAP) {
+    /* not showing map currently: activate it */
+
+    if (GetConfiguredLayout().main == PageLayout::Main::MAP)
+      /* the configured page is a map page: restore it */
+      Restore();
+    else {
+      /* generate a "special" map page based on the current page */
+      layout.main = PageLayout::Main::MAP;
+      OpenLayout(layout);
+    }
+  }
 
   return CommonInterface::main_window->ActivateMap();
 }

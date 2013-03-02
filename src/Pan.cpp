@@ -80,7 +80,7 @@ LeavePan()
   map->SetPan(false);
 
   InputEvents::UpdatePan();
-  PageActions::Update();
+  PageActions::Restore();
 }
 
 void

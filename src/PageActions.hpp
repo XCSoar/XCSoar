@@ -31,6 +31,9 @@ class GlueMapWindow;
 
 namespace PageActions
 {
+  gcc_pure
+  const PageLayout &GetCurrentLayout();
+
   /**
    * Opens the next page.
    */
