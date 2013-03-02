@@ -333,12 +333,13 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const unsigned dd2 = p20 * p31 * height_slope_factor;
 #ifndef FAST_RSQRT
         const int num = (int(dd2) * sz + dd0 * sx + dd1 * sy);
-        const unsigned mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
+        const unsigned square_mag = dd0 * dd0 + dd1 * dd1 + dd2 * dd2;
 #ifdef FIXED_MATH
-        const int sval = num / (int)isqrt4(mag);
+        const unsigned mag = isqrt4(square_mag);
 #else
-        const int sval = num / (int)sqrt((fixed)mag);
+        const unsigned mag = (unsigned)sqrt((fixed)square_mag);
 #endif
+        const int sval = num / (int)mag;
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -64, 63)];
 #else
