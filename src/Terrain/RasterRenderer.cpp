@@ -339,7 +339,13 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
 #else
         const unsigned mag = (unsigned)sqrt((fixed)square_mag);
 #endif
-        const int sval = num / (int)mag;
+        /* this is a workaround for a SIGFPE (division by zero)
+           observed by our users on some Android devices (e.g. Nexus
+           7), even though we did our best to make sure that the
+           integer arithmetics above can't overflow */
+        /* TODO: debug this problem and replace this workaround */
+        const unsigned positive_mag = std::max(mag, 1u);
+        const int sval = num / (int)positive_mag;
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -64, 63)];
 #else
