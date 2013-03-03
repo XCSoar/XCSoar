@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
-#include "Widget/OverlappedWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;
@@ -32,7 +32,7 @@ class LiveBlackboard;
 struct ThermalAssistantLook;
 
 class BigThermalAssistantWidget
-  : public OverlappedWidget, private NullBlackboardListener {
+  : public WindowWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
 

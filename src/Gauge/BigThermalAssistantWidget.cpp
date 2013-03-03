@@ -31,7 +31,7 @@ BigThermalAssistantWidget::Update(const AttitudeState &attitude,
                                   const DerivedInfo &calculated)
 {
   BigThermalAssistantWindow *window =
-    (BigThermalAssistantWindow *)OverlappedWidget::GetWindow();
+    (BigThermalAssistantWindow *)WindowWidget::GetWindow();
   window->Update(attitude, calculated);
 }
 
@@ -52,10 +52,10 @@ void
 BigThermalAssistantWidget::Unprepare()
 {
   BigThermalAssistantWindow *window =
-    (BigThermalAssistantWindow *)OverlappedWidget::GetWindow();
+    (BigThermalAssistantWindow *)WindowWidget::GetWindow();
   delete window;
 
-  OverlappedWidget::Unprepare();
+  WindowWidget::Unprepare();
 }
 
 void
@@ -63,7 +63,7 @@ BigThermalAssistantWidget::Show(const PixelRect &rc)
 {
   Update(blackboard.Basic().attitude, blackboard.Calculated());
 
-  OverlappedWidget::Show(rc);
+  WindowWidget::Show(rc);
 
   blackboard.AddListener(*this);
 }
@@ -72,7 +72,7 @@ void
 BigThermalAssistantWidget::Hide()
 {
   blackboard.RemoveListener(*this);
-  OverlappedWidget::Hide();
+  WindowWidget::Hide();
 }
 
 bool
