@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 struct PageLayout;
+class GlueMapWindow;
 
 namespace PageActions
 {
@@ -58,6 +59,22 @@ namespace PageActions
   unsigned PrevIndex();
 
   void Update();
+
+  /**
+   * Show a page with the map, or restore the current page if it was
+   * configured with a map (for example if the user has activated the
+   * FLARM radar page).
+   *
+   * On success, the function returns the map window object.
+   */
+  GlueMapWindow *ShowMap();
+
+  /**
+   * Show a page with a full-screen map.
+   *
+   * On success, the function returns the map window object.
+   */
+  GlueMapWindow *ShowOnlyMap();
 };
 
 #endif

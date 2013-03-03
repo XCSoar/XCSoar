@@ -30,6 +30,15 @@ Copyright_License {
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
+static const PageLayout &
+GetCurrentLayout()
+{
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const UIState &state = CommonInterface::SetUIState();
+
+  return settings.pages[state.page_index];
+}
+
 void
 PageActions::Update()
 {
@@ -163,4 +172,25 @@ PageActions::OpenLayout(const PageLayout &layout)
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
+}
+
+GlueMapWindow *
+PageActions::ShowMap()
+{
+  GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
+  if (map != nullptr)
+    return map;
+
+  PageLayout layout = GetCurrentLayout();
+  layout.main = PageLayout::Main::MAP;
+  OpenLayout(layout);
+
+  return CommonInterface::main_window->ActivateMap();
+}
+
+GlueMapWindow *
+PageActions::ShowOnlyMap()
+{
+  OpenLayout(PageLayout::FullScreen());
+  return CommonInterface::main_window->ActivateMap();
 }

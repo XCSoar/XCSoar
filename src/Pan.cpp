@@ -44,7 +44,7 @@ EnterPan()
 {
   assert(CommonInterface::main_window != NULL);
 
-  GlueMapWindow *map = UIActions::ActivateMap();
+  GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == NULL || map->IsPanning())
     return;
 
@@ -52,7 +52,6 @@ EnterPan()
 
   InputEvents::setMode(InputEvents::MODE_DEFAULT);
   InputEvents::UpdatePan();
-  CommonInterface::main_window->SetFullScreen(true);
 }
 
 bool
@@ -60,7 +59,7 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != NULL);
 
-  GlueMapWindow *map = UIActions::ActivateMap();
+  GlueMapWindow *map = PageActions::ShowOnlyMap();
   if (map == NULL)
     return false;
 
@@ -68,7 +67,6 @@ PanTo(const GeoPoint &location)
 
   InputEvents::setMode(InputEvents::MODE_DEFAULT);
   InputEvents::UpdatePan();
-  CommonInterface::main_window->SetFullScreen(true);
   return true;
 }
 
