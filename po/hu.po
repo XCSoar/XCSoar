@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 23:24+0100\n"
+"POT-Creation-Date: 2013-03-03 18:37+0100\n"
 "PO-Revision-Date: 2013-02-03 17:19+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:556
 #: src/Input/InputEventsSettings.cpp:304 src/Dialogs/dlgAnalysis.cpp:351
 #: src/Dialogs/dlgStatus.cpp:131
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:76
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:190
 #: Data/Input/default.xci:363 Data/Input/default.xci:412
@@ -285,7 +285,7 @@ msgstr "sor kihagyva"
 #: src/Dialogs/Airspace/dlgAirspace.cpp:176
 #: src/Dialogs/Settings/dlgConfiguration.cpp:103
 #: src/Dialogs/dlgAnalysis.cpp:370
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #: Data/Dialogs/dlgVoice.xml:34 Data/Input/default.xci:534
 #: Data/Input/default.xci:666
 #, no-c-format
@@ -342,7 +342,7 @@ msgstr "Végzetes probléma"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
-#: src/Renderer/MapItemListRenderer.cpp:493
+#: src/Renderer/MapItemListRenderer.cpp:501
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:35
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:44
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:52
@@ -487,10 +487,10 @@ msgstr "Nem körözünk"
 msgid "No Traffic"
 msgstr "Nincs forgalom"
 
-#: src/Gauge/BigTrafficWidget.cpp:295 src/Gauge/BigTrafficWidget.cpp:296
-#: src/InfoBoxes/Content/Factory.cpp:390 src/InfoBoxes/Content/Factory.cpp:391
-#: src/Renderer/MapItemListRenderer.cpp:505
-#: src/Dialogs/Device/DeviceListDialog.cpp:320
+#: src/Gauge/BigTrafficWidget.cpp:305 src/Gauge/BigTrafficWidget.cpp:306
+#: src/InfoBoxes/Content/Factory.cpp:396 src/InfoBoxes/Content/Factory.cpp:397
+#: src/Renderer/MapItemListRenderer.cpp:513
+#: src/Dialogs/Device/DeviceListDialog.cpp:326
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -499,15 +499,15 @@ msgstr "Nincs forgalom"
 msgid "Vario"
 msgstr "Varió"
 
-#: src/Gauge/BigTrafficWidget.cpp:371 src/Renderer/MapItemListRenderer.cpp:120
-#: src/Renderer/MapItemListRenderer.cpp:124
+#: src/Gauge/BigTrafficWidget.cpp:381 src/Renderer/MapItemListRenderer.cpp:121
+#: src/Renderer/MapItemListRenderer.cpp:125
 #: src/Renderer/WaypointListRenderer.cpp:120
 #: src/Renderer/FlightStatisticsRenderer.cpp:129
 #: src/Renderer/FlightStatisticsRenderer.cpp:153
 #: src/Renderer/FlightStatisticsRenderer.cpp:182
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:71
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:94
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:159
 #: Data/Dialogs/AirspaceList.xml:14 Data/Dialogs/AirspaceList_L.xml:8
 #: Data/Dialogs/WaypointList.xml:8 Data/Dialogs/WaypointList_L.xml:4
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10
@@ -516,11 +516,12 @@ msgstr "Varió"
 msgid "Distance"
 msgstr "Táv"
 
-#: src/Gauge/BigTrafficWidget.cpp:414 src/Gauge/BigTrafficWidget.cpp:417
+#: src/Gauge/BigTrafficWidget.cpp:424 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
 msgstr "Rel. mgsg."
 
-#: src/Gauge/BigTrafficWidget.cpp:878 src/Dialogs/MapItemListDialog.cpp:153
+#: src/Gauge/BigTrafficWidget.cpp:886 src/Dialogs/MapItemListDialog.cpp:156
+#: src/Dialogs/Traffic/TrafficList.cpp:344
 #: src/Dialogs/Task/dlgAlternatesList.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:107 Data/Dialogs/dlgTaskPoint.xml:6
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:10
@@ -528,20 +529,21 @@ msgstr "Rel. mgsg."
 msgid "Details"
 msgstr "Részletek"
 
-#: src/Gauge/BigTrafficWidget.cpp:881 src/Dialogs/XML.cpp:595
-#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:532
+#: src/Gauge/BigTrafficWidget.cpp:889 src/Dialogs/XML.cpp:595
+#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:567
 #: src/Dialogs/Device/PortMonitor.cpp:198
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:160
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:113
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:128
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:108
-#: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:80
+#: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:83
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:154
-#: src/Dialogs/MapItemListDialog.cpp:154
+#: src/Dialogs/MapItemListDialog.cpp:157
 #: src/Dialogs/Airspace/dlgAirspace.cpp:178
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:273
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:400
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:403
+#: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Plane/PlaneListDialog.cpp:411 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:122 src/Dialogs/dlgStatus.cpp:94
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:191
@@ -681,9 +683,11 @@ msgstr "Kézi"
 
 #: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:539
 #: src/Menu/ExpandMacros.cpp:566 src/Menu/ExpandMacros.cpp:626
-#: src/PageSettings.cpp:54 src/PageSettings.cpp:57
+#: src/PageSettings.cpp:67 src/PageSettings.cpp:70
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:89
 #: Data/Dialogs/dlgBrightness.xml:6
 #, no-c-format
 msgid "Auto"
@@ -711,19 +715,19 @@ msgid "Start"
 msgstr "Indít"
 
 #: src/Menu/ExpandMacros.cpp:460
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Long"
 msgstr "Hosszú"
 
 #: src/Menu/ExpandMacros.cpp:464
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
 msgid "Short"
 msgstr "Rövid"
 
 #: src/Menu/ExpandMacros.cpp:468
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:97
 #, no-c-format
 msgid "Full"
 msgstr "Teljes"
@@ -737,12 +741,12 @@ msgstr "Teljes"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:54
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:129
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:146
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:201
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
 #, no-c-format
 msgid "Off"
 msgstr "Ki"
@@ -755,7 +759,7 @@ msgstr "Ki"
 #: src/Dialogs/XML.cpp:474 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:207
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:52
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
 #, no-c-format
 msgid "On"
 msgstr "Be"
@@ -789,7 +793,8 @@ msgstr "feladat + leszállók"
 
 #: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:305
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
@@ -797,17 +802,18 @@ msgstr "feladat + leszállók"
 msgid "None"
 msgstr "Nincs"
 
-#: src/InfoBoxes/Content/Factory.cpp:149
+#: src/InfoBoxes/Content/Factory.cpp:155
 #, no-c-format
 msgid "Altitude GPS"
 msgstr "Magasság GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:150
+#: src/InfoBoxes/Content/Factory.cpp:156
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Mgsg GPS"
 
-#: src/InfoBoxes/Content/Factory.cpp:151
+#: src/InfoBoxes/Content/Factory.cpp:157
 #, no-c-format
 msgid ""
 "This is the altitude above mean sea level reported by the GPS. Touch-screen/"
@@ -818,37 +824,38 @@ msgstr ""
 "érték a fel/le nyilakkal állítható, a jobb/bal nyilakkal pedig fordítani is "
 "lehet a gépet."
 
-#: src/InfoBoxes/Content/Factory.cpp:159
+#: src/InfoBoxes/Content/Factory.cpp:165
 #, no-c-format
-msgid "Altitude AGL"
-msgstr "Föld feletti magasság"
+msgid "Height AGL"
+msgstr "Magasság terep feletti"
 
-#: src/InfoBoxes/Content/Factory.cpp:160
+#: src/InfoBoxes/Content/Factory.cpp:166
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
 #, no-c-format
-msgid "Alt AGL"
-msgstr "Mgsg ff"
+msgid "H AGL"
+msgstr "Mgsg FF"
 
-#: src/InfoBoxes/Content/Factory.cpp:161
-#, no-c-format
+#: src/InfoBoxes/Content/Factory.cpp:167
+#, fuzzy, no-c-format
 msgid ""
-"This is the navigation altitude minus the terrain height obtained from the "
-"terrain file. The value is coloured red when the glider is below the terrain "
-"safety clearance height."
+"This is the navigation altitude minus the terrain elevation obtained from "
+"the terrain file. The value is coloured red when the glider is below the "
+"terrain safety clearance height."
 msgstr ""
 "Navigációs magasság mínusz a terep magasság a domborzati file-ból.Az érték "
 "piros, ha a repülő a biztonsági szint alatt van."
 
-#: src/InfoBoxes/Content/Factory.cpp:170
+#: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
 msgid "Thermal climb, last 30 s"
 msgstr "Emelkedés termikben,"
 
-#: src/InfoBoxes/Content/Factory.cpp:171
+#: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
 msgid "TC 30s"
 msgstr "Tk 30 átlg"
 
-#: src/InfoBoxes/Content/Factory.cpp:172
+#: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
 msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
@@ -857,14 +864,19 @@ msgstr ""
 "Az emelkedés 30 másodperces görgetett átlaga. A GPS magasságon alapul vagy a "
 "variométeren, ha van."
 
-#: src/InfoBoxes/Content/Factory.cpp:180 src/InfoBoxes/Content/Factory.cpp:181
+#: src/InfoBoxes/Content/Factory.cpp:186
+#, fuzzy, no-c-format
+msgid "Next Bearing"
+msgstr "Útirány"
+
+#: src/InfoBoxes/Content/Factory.cpp:187
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
 #: Data/Dialogs/dlgTeamCode.xml:15 Data/Dialogs/dlgTeamCode_L.xml:15
 #, no-c-format
 msgid "Bearing"
 msgstr "Útirány"
 
-#: src/InfoBoxes/Content/Factory.cpp:182
+#: src/InfoBoxes/Content/Factory.cpp:188
 #, no-c-format
 msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
@@ -873,17 +885,17 @@ msgstr ""
 "A következő fordulópont valódi mágneses irányszöge. HT feladat esetén ez az "
 "irány a célponthoz a HT szektorban."
 
-#: src/InfoBoxes/Content/Factory.cpp:190
+#: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
 msgid "GR instantaneous"
 msgstr "Sklsz pillanatnyi"
 
-#: src/InfoBoxes/Content/Factory.cpp:191
+#: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "GR Inst"
 msgstr "Sklsz pill"
 
-#: src/InfoBoxes/Content/Factory.cpp:192
+#: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
 msgid ""
 "Instantaneous glide ratio over ground, given by the ground speed divided by "
@@ -896,17 +908,17 @@ msgstr ""
 "emelkedést jelentenek. Ha a függőleges sebesség nullához közeli, '---' kerül "
 "kijelzésre."
 
-#: src/InfoBoxes/Content/Factory.cpp:200
+#: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR cruise"
 msgstr "Sklsz utazó"
 
-#: src/InfoBoxes/Content/Factory.cpp:201
+#: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "GR Cruise"
 msgstr "Sklsz utazó"
 
-#: src/InfoBoxes/Content/Factory.cpp:202
+#: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
 msgid ""
 "The distance from the top of the last thermal, divided by the altitude lost "
@@ -919,17 +931,17 @@ msgstr ""
 "magasság). Nulla közeli függőleges sebesség esetén '---' kerül "
 "megjelenítésre."
 
-#: src/InfoBoxes/Content/Factory.cpp:210
+#: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
 msgid "Speed ground"
 msgstr "Sebesség földfeletti"
 
-#: src/InfoBoxes/Content/Factory.cpp:211
+#: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
 msgid "V GND"
 msgstr "Seb ff"
 
-#: src/InfoBoxes/Content/Factory.cpp:212
+#: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
 msgid ""
 "Ground speed measured by the GPS. If this InfoBox is active in simulation "
@@ -940,17 +952,17 @@ msgstr ""
 "vitorlázógép sebességét, a jobbra-balra nyilak pedig az irányát állítják, ha "
 "ez a kijelző van kiválasztva."
 
-#: src/InfoBoxes/Content/Factory.cpp:220
+#: src/InfoBoxes/Content/Factory.cpp:226
 #, no-c-format
 msgid "Last thermal average"
 msgstr "Termik átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:221
+#: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
 msgid "TL Avg"
 msgstr "Tk átlg"
 
-#: src/InfoBoxes/Content/Factory.cpp:222
+#: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
@@ -959,47 +971,47 @@ msgstr ""
 "Az utolsó termikben nyert/veszített magasság és a körözéssel töltött idő "
 "hányadosa."
 
-#: src/InfoBoxes/Content/Factory.cpp:230
+#: src/InfoBoxes/Content/Factory.cpp:236
 #, no-c-format
 msgid "Last thermal gain"
 msgstr "Termik nyereség"
 
-#: src/InfoBoxes/Content/Factory.cpp:231
+#: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
 msgid "TL Gain"
 msgstr "Tk nyrsg"
 
-#: src/InfoBoxes/Content/Factory.cpp:232
+#: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
 msgstr "Összes magasság nyereség/veszteség az utolsó termikben."
 
-#: src/InfoBoxes/Content/Factory.cpp:240
+#: src/InfoBoxes/Content/Factory.cpp:246
 #, no-c-format
 msgid "Last thermal time"
 msgstr "Termik eltöltött idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:241
+#: src/InfoBoxes/Content/Factory.cpp:247
 #, no-c-format
 msgid "TL Time"
 msgstr "Tk idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:242
+#: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
 msgid "Time spent circling in the last thermal."
 msgstr "Eltöltött idő az utolsó termikben"
 
-#: src/InfoBoxes/Content/Factory.cpp:250
+#: src/InfoBoxes/Content/Factory.cpp:256
 #, no-c-format
 msgid "MacCready setting"
 msgstr "MC érték"
 
-#: src/InfoBoxes/Content/Factory.cpp:251
+#: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "MC"
 msgstr "MC"
 
-#: src/InfoBoxes/Content/Factory.cpp:252
+#: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
 msgid ""
 "The current MacCready setting and the current MacCready mode (manual or "
@@ -1010,17 +1022,17 @@ msgstr ""
 "PC:  ha ez a kijelző van kiválasztva, a MacCready érték a fel-le nyilakkal "
 "állítható."
 
-#: src/InfoBoxes/Content/Factory.cpp:260
+#: src/InfoBoxes/Content/Factory.cpp:266
 #, no-c-format
 msgid "Next distance"
 msgstr "FP távolság"
 
-#: src/InfoBoxes/Content/Factory.cpp:261 src/InfoBoxes/Content/Task.cpp:154
+#: src/InfoBoxes/Content/Factory.cpp:267 src/InfoBoxes/Content/Task.cpp:169
 #, no-c-format
 msgid "WP Dist"
 msgstr "FP táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:262
+#: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
@@ -1029,17 +1041,17 @@ msgstr ""
 "A következő fordulópont távolsága. Légtérfeladat (AAT) esetén a szektor "
 "célpontjának távolsága."
 
-#: src/InfoBoxes/Content/Factory.cpp:270
+#: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Next altitude difference"
 msgstr "FP magasság többlet"
 
-#: src/InfoBoxes/Content/Factory.cpp:271
+#: src/InfoBoxes/Content/Factory.cpp:277
 #, no-c-format
 msgid "WP AltD"
 msgstr "FP többlet"
 
-#: src/InfoBoxes/Content/Factory.cpp:272
+#: src/InfoBoxes/Content/Factory.cpp:278
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
@@ -1048,17 +1060,17 @@ msgstr ""
 "A következő fordulópontba érkezés magassága a biztonsági magassághoz képest. "
 "Légtérfeladat (AAT) esetén a szektorban kijelölt célhoz számítva."
 
-#: src/InfoBoxes/Content/Factory.cpp:280
+#: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
 msgid "Next altitude required"
 msgstr "FP magasság hiány"
 
-#: src/InfoBoxes/Content/Factory.cpp:281
+#: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "WP AltR"
 msgstr "FP hiány"
 
-#: src/InfoBoxes/Content/Factory.cpp:282
+#: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
@@ -1067,17 +1079,17 @@ msgstr ""
 "A következő fordulópont eléréséhez hiányzó magasság. Légtérfeladat (AAT) "
 "esetén a szektorban kijelölt célhoz számítva."
 
-#: src/InfoBoxes/Content/Factory.cpp:290
+#: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
 msgid "Next waypoint"
 msgstr "FP név irány infó"
 
-#: src/InfoBoxes/Content/Factory.cpp:291
+#: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
 msgid "Next WP"
 msgstr "FP köv"
 
-#: src/InfoBoxes/Content/Factory.cpp:292
+#: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
 msgid ""
 "The name of the currently selected turn point. When this InfoBox is active, "
@@ -1089,17 +1101,17 @@ msgstr ""
 "nyilak a feladat következő/előző fordulópontját választják ki. "
 "Érintőképernyő/PC: az Enter megjeleníti a fordulópont részleteit."
 
-#: src/InfoBoxes/Content/Factory.cpp:300
+#: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid "Final altitude difference"
 msgstr "Végsiklás magasságtöbblet"
 
-#: src/InfoBoxes/Content/Factory.cpp:301
+#: src/InfoBoxes/Content/Factory.cpp:307
 #, no-c-format
 msgid "Fin AltD"
 msgstr "Vs m tbl"
 
-#: src/InfoBoxes/Content/Factory.cpp:302
+#: src/InfoBoxes/Content/Factory.cpp:308
 #, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
@@ -1108,32 +1120,32 @@ msgstr ""
 "A feladat utolsó fordulópontjába érkezés magassága a biztonsági magassághoz "
 "képest."
 
-#: src/InfoBoxes/Content/Factory.cpp:310
+#: src/InfoBoxes/Content/Factory.cpp:316
 #, no-c-format
 msgid "Final altitude required"
 msgstr "Végsiklás magassághiány"
 
-#: src/InfoBoxes/Content/Factory.cpp:311
+#: src/InfoBoxes/Content/Factory.cpp:317
 #, no-c-format
 msgid "Fin AltR"
 msgstr "Vs m hny"
 
-#: src/InfoBoxes/Content/Factory.cpp:312
+#: src/InfoBoxes/Content/Factory.cpp:318
 #, no-c-format
 msgid "Additional altitude required to finish the task."
 msgstr "A feladat befejezéséhez hiányzó magasság."
 
-#: src/InfoBoxes/Content/Factory.cpp:320
+#: src/InfoBoxes/Content/Factory.cpp:326
 #, no-c-format
 msgid "Speed task average"
 msgstr "SF sebesség átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:321
+#: src/InfoBoxes/Content/Factory.cpp:327
 #, no-c-format
 msgid "V Task Avg"
 msgstr "SF seb átlg"
 
-#: src/InfoBoxes/Content/Factory.cpp:322
+#: src/InfoBoxes/Content/Factory.cpp:328
 #, no-c-format
 msgid ""
 "Average cross country speed while on current task, not compensated for "
@@ -1141,53 +1153,32 @@ msgid ""
 msgstr ""
 "Az aktuális feladat átlagos utazósebessége, magassági kompenzáció nélkül."
 
-#: src/InfoBoxes/Content/Factory.cpp:330
+#: src/InfoBoxes/Content/Factory.cpp:336
 #, no-c-format
 msgid "Final distance"
 msgstr "Végsiklás távolság"
 
-#: src/InfoBoxes/Content/Factory.cpp:331
+#: src/InfoBoxes/Content/Factory.cpp:337
 #, no-c-format
 msgid "Fin Dist"
 msgstr "Vs táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:332
+#: src/InfoBoxes/Content/Factory.cpp:338
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
 msgstr "A hátralevő fordulópontok érintésével számított távolság a célig."
 
-#: src/InfoBoxes/Content/Factory.cpp:340 src/InfoBoxes/Content/Factory.cpp:817
-#, no-c-format
-msgid "Final GR"
-msgstr "Végsiklás meredekség"
-
-#: src/InfoBoxes/Content/Factory.cpp:341 src/InfoBoxes/Content/Factory.cpp:818
-#, no-c-format
-msgid "Fin GR"
-msgstr "Vs mrdk"
-
-#: src/InfoBoxes/Content/Factory.cpp:342 src/InfoBoxes/Content/Factory.cpp:819
-#, no-c-format
-msgid ""
-"The required glide ratio over ground to finish the task, given by the "
-"distance to go divided by the height required to arrive at the safety "
-"arrival height."
-msgstr ""
-"A feladat befejezéséhez szükséges siklószám.A biztonsági magasságban "
-"érkezéshez szükséges magasság és a távolság hányadosa."
-
-#: src/InfoBoxes/Content/Factory.cpp:350
+#: src/InfoBoxes/Content/Factory.cpp:356
 #, no-c-format
 msgid "Terrain elevation"
 msgstr "Terepszint"
 
-#: src/InfoBoxes/Content/Factory.cpp:351
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
-#, no-c-format
-msgid "H GND"
-msgstr "Terep"
+#: src/InfoBoxes/Content/Factory.cpp:357
+#, fuzzy, no-c-format
+msgid "Terr Elev"
+msgstr "Domborzat magasság"
 
-#: src/InfoBoxes/Content/Factory.cpp:352
+#: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
@@ -1196,17 +1187,17 @@ msgstr ""
 "A terep tengerszint feletti magassága a pillanatnyi GPS pozícióban a "
 "domborzati fájl adatai alapján."
 
-#: src/InfoBoxes/Content/Factory.cpp:360
+#: src/InfoBoxes/Content/Factory.cpp:366
 #, no-c-format
 msgid "Thermal average"
 msgstr "Termik emelés átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:361
+#: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
 msgid "TC Avg"
 msgstr "Tk átlg"
 
-#: src/InfoBoxes/Content/Factory.cpp:362
+#: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
@@ -1215,28 +1206,28 @@ msgstr ""
 "Az aktuális termikben nyert/veszített magasság és a körözéssel töltött idő "
 "hányadosa."
 
-#: src/InfoBoxes/Content/Factory.cpp:370
+#: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Thermal gain"
 msgstr "Termik nyereség"
 
-#: src/InfoBoxes/Content/Factory.cpp:371
+#: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "TC Gain"
 msgstr "Tk nyrsg"
 
-#: src/InfoBoxes/Content/Factory.cpp:372
+#: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
 msgstr "Az aktuális termikben nyert/vesztett magasság."
 
-#: src/InfoBoxes/Content/Factory.cpp:380 src/InfoBoxes/Content/Factory.cpp:381
+#: src/InfoBoxes/Content/Factory.cpp:386 src/InfoBoxes/Content/Factory.cpp:387
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Track"
 msgstr "Repirány"
 
-#: src/InfoBoxes/Content/Factory.cpp:382
+#: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
@@ -1246,7 +1237,7 @@ msgstr ""
 "A GPS által mért repirány valódi mágneses irányszöge.Szimuláció során ha ez "
 "a kijelző az aktív, a fel-le nyilakkal állítható az irány."
 
-#: src/InfoBoxes/Content/Factory.cpp:392
+#: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
 msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
@@ -1255,103 +1246,104 @@ msgstr ""
 "A GPS által mért pillanatnyi varió vagy az összenergia-varió, ha intelligens "
 "variométer van csatlakoztatva."
 
-#: src/InfoBoxes/Content/Factory.cpp:400
+#: src/InfoBoxes/Content/Factory.cpp:406
 #, no-c-format
 msgid "Wind speed"
 msgstr "Szélsebesség"
 
-#: src/InfoBoxes/Content/Factory.cpp:401
+#: src/InfoBoxes/Content/Factory.cpp:407
 #, no-c-format
 msgid "Wind V"
 msgstr "Szél seb"
 
-#: src/InfoBoxes/Content/Factory.cpp:402
-#: src/InfoBoxes/Content/Factory.cpp:1143
-#, no-c-format
+#: src/InfoBoxes/Content/Factory.cpp:408
+#: src/InfoBoxes/Content/Factory.cpp:1149
+#, fuzzy, no-c-format
 msgid ""
-"Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is "
-"possible by pressing the up/down cursor keys to adjust magnitude and left/"
-"right cursor keys to adjust bearing when the InfoBox is active. Pressing the "
-"enter cursor key saves the wind value as the initial value when XCSoar next "
-"starts."
-msgstr ""
-"Az XCSoar által becsült szélsebesség.Érintőképernyő/PC: ha ez a kijelző az "
-"aktív, a fel-le nyilak a szélerősséget, a jobbra-balra nyilak a szélirányt "
-"állítják. Az Enter hatására ezek lesznek a kezdőértékek az XCSoar következő "
-"használatakor."
-
-#: src/InfoBoxes/Content/Factory.cpp:411
-#, no-c-format
-msgid "Wind bearing"
-msgstr "Szélirány"
-
-#: src/InfoBoxes/Content/Factory.cpp:412
-#, no-c-format
-msgid "Wind Brng"
-msgstr "Szélirány"
-
-#: src/InfoBoxes/Content/Factory.cpp:413
-#, no-c-format
-msgid ""
-"Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
-"is possible by pressing the up/down cursor keys to adjust bearing when the "
-"InfoBox is active."
+"Wind speed estimated by XCSoar. Manual adjustment is possible with the "
+"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
+"through settings, adjust the values with left/right cursor keys."
 msgstr ""
 "Az XCSoar által becsült szélirány. Érintőképernyő/PC: ha ez a kijelző az "
 "aktív, a fel-le nyilakkal állítható az irány."
 
-#: src/InfoBoxes/Content/Factory.cpp:422 src/InfoBoxes/Content/Factory.cpp:423
+#: src/InfoBoxes/Content/Factory.cpp:417
+#, no-c-format
+msgid "Wind bearing"
+msgstr "Szélirány"
+
+#: src/InfoBoxes/Content/Factory.cpp:418
+#, no-c-format
+msgid "Wind Brng"
+msgstr "Szélirány"
+
+#: src/InfoBoxes/Content/Factory.cpp:419
+#, fuzzy, no-c-format
+msgid ""
+"Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
+"connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
+"through settings, adjust the values with left/right cursor keys."
+msgstr ""
+"Az XCSoar által becsült szélirány. Érintőképernyő/PC: ha ez a kijelző az "
+"aktív, a fel-le nyilakkal állítható az irány."
+
+#: src/InfoBoxes/Content/Factory.cpp:428
 #, no-c-format
 msgid "AAT time"
 msgstr "HT idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:424
+#: src/InfoBoxes/Content/Factory.cpp:429
+#, fuzzy, no-c-format
+msgid "AAT Time"
+msgstr "HT idő"
+
+#: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr "Hátralevő idő légtérfeladatban (AAT). Vörösre vált ha az idő lejárt."
 
-#: src/InfoBoxes/Content/Factory.cpp:432
+#: src/InfoBoxes/Content/Factory.cpp:438
 #, no-c-format
 msgid "AAT max. distance "
 msgstr "HT távolság max "
 
-#: src/InfoBoxes/Content/Factory.cpp:433
+#: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "AAT Dmax"
 msgstr "HT táv max"
 
-#: src/InfoBoxes/Content/Factory.cpp:434
+#: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr "Maximális lehetséges távolság a légtérfeladat (AAT) hátralevő részére."
 
-#: src/InfoBoxes/Content/Factory.cpp:442
+#: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "AAT min. distance"
 msgstr "HT távolság min"
 
-#: src/InfoBoxes/Content/Factory.cpp:443
+#: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "AAT Dmin"
 msgstr "HT táv min"
 
-#: src/InfoBoxes/Content/Factory.cpp:444
+#: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr "Minimális lehetséges távolság a légtérfeladat (AAT) hátralevő részére."
 
-#: src/InfoBoxes/Content/Factory.cpp:452
+#: src/InfoBoxes/Content/Factory.cpp:458
 #, no-c-format
 msgid "AAT speed max. distance"
 msgstr "HT sebesség max"
 
-#: src/InfoBoxes/Content/Factory.cpp:453
+#: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
 msgid "AAT Vmax"
 msgstr "HT seb max"
 
-#: src/InfoBoxes/Content/Factory.cpp:454
+#: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
@@ -1360,17 +1352,17 @@ msgstr ""
 "Légtérfeladaton (AAT) elérhető átlagsebesség, ha a maximális lehetséges "
 "hátralevő távolságot a minimális AAT idő alatt repüljük."
 
-#: src/InfoBoxes/Content/Factory.cpp:462
+#: src/InfoBoxes/Content/Factory.cpp:468
 #, no-c-format
 msgid "AAT speed min. distance"
 msgstr "HT sebesség min"
 
-#: src/InfoBoxes/Content/Factory.cpp:463
+#: src/InfoBoxes/Content/Factory.cpp:469
 #, no-c-format
 msgid "AAT Vmin"
 msgstr "HT seb min"
 
-#: src/InfoBoxes/Content/Factory.cpp:464
+#: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
@@ -1379,49 +1371,50 @@ msgstr ""
 "A légtérfeladat (AAT) elérhető átlagsebessége, ha a lehető legrövidebb távon "
 "repülünk a minimális AAT idő alatt."
 
-#: src/InfoBoxes/Content/Factory.cpp:472
+#: src/InfoBoxes/Content/Factory.cpp:478
 #, no-c-format
 msgid "Airspeed IAS"
 msgstr "Sebesség műszersz."
 
-#: src/InfoBoxes/Content/Factory.cpp:473
+#: src/InfoBoxes/Content/Factory.cpp:479
 #, no-c-format
 msgid "V IAS"
 msgstr "Seb műsz"
 
-#: src/InfoBoxes/Content/Factory.cpp:474
+#: src/InfoBoxes/Content/Factory.cpp:480
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
 msgstr "A külső intelligens variométer által jelzett műszer szerinti sebesség."
 
-#: src/InfoBoxes/Content/Factory.cpp:482
+#: src/InfoBoxes/Content/Factory.cpp:488
 #, no-c-format
 msgid "Barometric altitude"
 msgstr "Barometrikus magasság"
 
-#: src/InfoBoxes/Content/Factory.cpp:483
+#: src/InfoBoxes/Content/Factory.cpp:489
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
 #, no-c-format
 msgid "Alt Baro"
 msgstr "Mag baro"
 
-#: src/InfoBoxes/Content/Factory.cpp:484
+#: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr "Barometrikus magasság nyomásszenzoros eszköztől."
 
-#: src/InfoBoxes/Content/Factory.cpp:493
+#: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
 msgid "Speed MacCready"
 msgstr "MC sebesség"
 
-#: src/InfoBoxes/Content/Factory.cpp:494
+#: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
 msgid "V MC"
 msgstr "MC seb"
 
-#: src/InfoBoxes/Content/Factory.cpp:495
+#: src/InfoBoxes/Content/Factory.cpp:501
 #, no-c-format
 msgid ""
 "The MacCready speed-to-fly for optimal flight to the next waypoint. In "
@@ -1432,17 +1425,17 @@ msgstr ""
 "Siklásban a magasság tartásához szükséges sebességet számítja. Végsiklásban "
 "a kellő merüléshez szükséges sebességet."
 
-#: src/InfoBoxes/Content/Factory.cpp:503
+#: src/InfoBoxes/Content/Factory.cpp:509
 #, no-c-format
 msgid "Percentage climb"
 msgstr "Termik arány"
 
-#: src/InfoBoxes/Content/Factory.cpp:504
+#: src/InfoBoxes/Content/Factory.cpp:510
 #, no-c-format
 msgid "% Climb"
 msgstr "Tk arány"
 
-#: src/InfoBoxes/Content/Factory.cpp:505
+#: src/InfoBoxes/Content/Factory.cpp:511
 #, no-c-format
 msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
@@ -1451,32 +1444,32 @@ msgstr ""
 "Emelkedésben töltött idő aránya. Az arányszámítás feladat megkezdésekor "
 "újraindul."
 
-#: src/InfoBoxes/Content/Factory.cpp:513
+#: src/InfoBoxes/Content/Factory.cpp:519
 #, no-c-format
 msgid "Flight Duration"
 msgstr "Repült idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:514
+#: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "Flt Duration"
 msgstr "Idő repült"
 
-#: src/InfoBoxes/Content/Factory.cpp:515
+#: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
 msgstr "Felszállás óta eltelt idő."
 
-#: src/InfoBoxes/Content/Factory.cpp:523
+#: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "G load"
 msgstr "G terhelés"
 
-#: src/InfoBoxes/Content/Factory.cpp:524
+#: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "G"
 msgstr "G"
 
-#: src/InfoBoxes/Content/Factory.cpp:525
+#: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
 msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
@@ -1485,17 +1478,17 @@ msgstr ""
 "A G terhelés csúcspontja a külső intelligens variometer szerint. Ez bólintás "
 "irányú manővereknél negatív."
 
-#: src/InfoBoxes/Content/Factory.cpp:533
+#: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "Next GR"
 msgstr "Sklsz köv"
 
-#: src/InfoBoxes/Content/Factory.cpp:534
+#: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
 msgid "WP GR"
 msgstr "Sklsz fp"
 
-#: src/InfoBoxes/Content/Factory.cpp:535
+#: src/InfoBoxes/Content/Factory.cpp:541
 #, no-c-format
 msgid ""
 "The required glide ratio over ground to reach the next waypoint, given by "
@@ -1505,42 +1498,42 @@ msgstr ""
 "A következő fordulópont eléréséhez szükséges siklószám. A biztonsági "
 "magasságban érkezéshez szükséges magasság és a távolság hányadosa."
 
-#: src/InfoBoxes/Content/Factory.cpp:543
+#: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "Time local"
 msgstr "Idő helyi"
 
-#: src/InfoBoxes/Content/Factory.cpp:544
+#: src/InfoBoxes/Content/Factory.cpp:550
 #, no-c-format
 msgid "Time loc"
 msgstr "Helyi idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:545
+#: src/InfoBoxes/Content/Factory.cpp:551
 #, no-c-format
 msgid "GPS time expressed in local time zone."
 msgstr "GPS-idő a helyi időzónára átszámítva."
 
-#: src/InfoBoxes/Content/Factory.cpp:553 src/InfoBoxes/Content/Factory.cpp:554
+#: src/InfoBoxes/Content/Factory.cpp:559 src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
 msgid "Time UTC"
 msgstr "Idő UTC"
 
-#: src/InfoBoxes/Content/Factory.cpp:555
+#: src/InfoBoxes/Content/Factory.cpp:561
 #, no-c-format
 msgid "GPS time expressed in UTC."
 msgstr "GPS-idő UTC-re átszámítva."
 
-#: src/InfoBoxes/Content/Factory.cpp:563
+#: src/InfoBoxes/Content/Factory.cpp:569
 #, no-c-format
 msgid "Task time to go"
 msgstr "SF idő úton"
 
-#: src/InfoBoxes/Content/Factory.cpp:564
+#: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
 msgid "Fin ETE"
 msgstr "SF úton"
 
-#: src/InfoBoxes/Content/Factory.cpp:565
+#: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
@@ -1549,17 +1542,17 @@ msgstr ""
 "A feladat befejezéséhez szükséges idő, ideális MacCready siklás/emelkedés "
 "ciklusokat feltételezve."
 
-#: src/InfoBoxes/Content/Factory.cpp:573
+#: src/InfoBoxes/Content/Factory.cpp:579
 #, no-c-format
 msgid "Next time to go"
 msgstr "FP idő úton"
 
-#: src/InfoBoxes/Content/Factory.cpp:574
+#: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "WP ETE"
 msgstr "FP úton"
 
-#: src/InfoBoxes/Content/Factory.cpp:575
+#: src/InfoBoxes/Content/Factory.cpp:581
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
@@ -1568,17 +1561,17 @@ msgstr ""
 "A következő fordulópont eléréséhez szükséges idő, ideális MacCready siklás/"
 "emelkedés ciklusokat feltételezve."
 
-#: src/InfoBoxes/Content/Factory.cpp:583
+#: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
 msgid "Speed dolphin"
 msgstr "MC sebesség delfin"
 
-#: src/InfoBoxes/Content/Factory.cpp:584
+#: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
 msgid "Vopt"
 msgstr "Seb opt"
 
-#: src/InfoBoxes/Content/Factory.cpp:585
+#: src/InfoBoxes/Content/Factory.cpp:591
 #, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
@@ -1597,17 +1590,17 @@ msgstr ""
 "mutatja (ha gyorsulásmérőt csatlakoztattunk). Ha a Cochrane mód lett "
 "kiválasztva, akkor ez a kijelző a MacCready sebességet mutatja."
 
-#: src/InfoBoxes/Content/Factory.cpp:593
+#: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
 msgid "Netto vario"
 msgstr "Nettó varió"
 
-#: src/InfoBoxes/Content/Factory.cpp:594
+#: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
 msgid "Netto"
 msgstr "Ntto var"
 
-#: src/InfoBoxes/Content/Factory.cpp:595
+#: src/InfoBoxes/Content/Factory.cpp:601
 #, no-c-format
 msgid ""
 "Instantaneous vertical speed of air-mass, equal to vario value less the "
@@ -1620,17 +1613,17 @@ msgstr ""
 "gyorsulás- és variométer jeladót csatlakoztatva használni, különben a "
 "számítások a GPS méréseken és a szélbecsléseken alapulnak."
 
-#: src/InfoBoxes/Content/Factory.cpp:603
+#: src/InfoBoxes/Content/Factory.cpp:609
 #, no-c-format
 msgid "Task arrival time"
 msgstr "SF idő érkezés"
 
-#: src/InfoBoxes/Content/Factory.cpp:604
+#: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
 msgid "Fin ETA"
 msgstr "SF érkezés"
 
-#: src/InfoBoxes/Content/Factory.cpp:605
+#: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
@@ -1639,17 +1632,17 @@ msgstr ""
 "Becsült célba érkezés helyi idő szerint, ideális MacCready siklás/emelkedés "
 "ciklusokat feltételezve."
 
-#: src/InfoBoxes/Content/Factory.cpp:613
+#: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "Next arrival time"
 msgstr "FP idő érkezés"
 
-#: src/InfoBoxes/Content/Factory.cpp:614
+#: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
 msgid "WP ETA"
 msgstr "FP érkezés"
 
-#: src/InfoBoxes/Content/Factory.cpp:615
+#: src/InfoBoxes/Content/Factory.cpp:621
 #, no-c-format
 msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
@@ -1658,17 +1651,17 @@ msgstr ""
 "A következő fordulópontba érkezés helyi idő szerint, ideális MacCready "
 "siklás/emelkedés ciklusokat feltételezve."
 
-#: src/InfoBoxes/Content/Factory.cpp:623
+#: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Bearing difference"
 msgstr "FP irány relatív"
 
-#: src/InfoBoxes/Content/Factory.cpp:624
+#: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
 msgid "Brng D"
 msgstr "FP ir rel"
 
-#: src/InfoBoxes/Content/Factory.cpp:625
+#: src/InfoBoxes/Content/Factory.cpp:631
 #, no-c-format
 msgid ""
 "The difference between the glider's track bearing, to the bearing of the "
@@ -1687,17 +1680,17 @@ msgstr ""
 "fordulni, hogy a nyomvonal a következő fordulópont irányába tartson. Ez az "
 "irány számításba veszi a Föld görbületét."
 
-#: src/InfoBoxes/Content/Factory.cpp:633
+#: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
 msgid "Outside air temperature"
 msgstr "Hőmérséklet külső"
 
-#: src/InfoBoxes/Content/Factory.cpp:634
+#: src/InfoBoxes/Content/Factory.cpp:640
 #, no-c-format
 msgid "OAT"
 msgstr "Hőm küls"
 
-#: src/InfoBoxes/Content/Factory.cpp:635
+#: src/InfoBoxes/Content/Factory.cpp:641
 #, no-c-format
 msgid ""
 "Outside air temperature measured by a probe if supported by a connected "
@@ -1706,17 +1699,17 @@ msgstr ""
 "A külső levegő hőmérséklete, ha egy ilyen szondával felszerelt intelligens "
 "variométer lett csatlakoztatva."
 
-#: src/InfoBoxes/Content/Factory.cpp:643
+#: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Relative humidity"
 msgstr "Relatív páratartalom"
 
-#: src/InfoBoxes/Content/Factory.cpp:644
+#: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Rel Hum"
 msgstr "Pára %"
 
-#: src/InfoBoxes/Content/Factory.cpp:645
+#: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
@@ -1725,17 +1718,17 @@ msgstr ""
 "A levegő relatív páratartalma, ha ilyen szondával felszerelt intelligens "
 "variométer lett csatlakoztatva."
 
-#: src/InfoBoxes/Content/Factory.cpp:653 src/Input/InputEventsSettings.cpp:295
+#: src/InfoBoxes/Content/Factory.cpp:659 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "Hőmérséklet várható"
 
-#: src/InfoBoxes/Content/Factory.cpp:654
+#: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "Max Temp"
 msgstr "Hőm várh"
 
-#: src/InfoBoxes/Content/Factory.cpp:655
+#: src/InfoBoxes/Content/Factory.cpp:661
 #, no-c-format
 msgid ""
 "Forecast temperature of the ground at the home airfield, used in estimating "
@@ -1748,34 +1741,34 @@ msgstr ""
 "magasságának becslésére alkalmaz. Érintőképernyő/PC: a fel-le nyilakkal "
 "állítható a várható hőmérséklet."
 
-#: src/InfoBoxes/Content/Factory.cpp:663
+#: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
 msgid "AAT distance around target"
 msgstr "HT távolság cél"
 
-#: src/InfoBoxes/Content/Factory.cpp:664
+#: src/InfoBoxes/Content/Factory.cpp:670
 #, no-c-format
 msgid "AAT Dtgt"
 msgstr "HT táv cél"
 
-#: src/InfoBoxes/Content/Factory.cpp:665
+#: src/InfoBoxes/Content/Factory.cpp:671
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr ""
 "Légtérfeladaton (AAT) a feladat hátralevő részének a célok megkerülésével "
 "számított távolsága ."
 
-#: src/InfoBoxes/Content/Factory.cpp:673
+#: src/InfoBoxes/Content/Factory.cpp:679
 #, no-c-format
 msgid "AAT speed around target"
 msgstr "HT sebesség cél"
 
-#: src/InfoBoxes/Content/Factory.cpp:674
+#: src/InfoBoxes/Content/Factory.cpp:680
 #, no-c-format
 msgid "AAT Vtgt"
 msgstr "HT seb cél"
 
-#: src/InfoBoxes/Content/Factory.cpp:675
+#: src/InfoBoxes/Content/Factory.cpp:681
 #, no-c-format
 msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
@@ -1784,12 +1777,17 @@ msgstr ""
 "Légtérfeladaton (AAT) elérhető átlagsebesség a célok körül, a minimum időnek "
 "megfelelően."
 
-#: src/InfoBoxes/Content/Factory.cpp:683 src/InfoBoxes/Content/Factory.cpp:684
+#: src/InfoBoxes/Content/Factory.cpp:689
 #, no-c-format
 msgid "L/D vario"
 msgstr "Siklószám varióból"
 
-#: src/InfoBoxes/Content/Factory.cpp:685
+#: src/InfoBoxes/Content/Factory.cpp:690
+#, fuzzy, no-c-format
+msgid "L/D Vario"
+msgstr "Siklószám varióból"
+
+#: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
 msgid ""
 "Instantaneous lift/drag ratio, given by the indicated airspeed divided by "
@@ -1802,34 +1800,34 @@ msgstr ""
 "negatív értékek emelkedő siklást jeleznek. Ha az összenergia varió nulla "
 "közeli, '---' kerül kijelzésre."
 
-#: src/InfoBoxes/Content/Factory.cpp:693
+#: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid "Airspeed TAS"
 msgstr "Sebesség valós"
 
-#: src/InfoBoxes/Content/Factory.cpp:694
+#: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
 msgid "V TAS"
 msgstr "Seb vls"
 
-#: src/InfoBoxes/Content/Factory.cpp:695
+#: src/InfoBoxes/Content/Factory.cpp:701
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
 msgstr ""
 "A tényleges sebesség, ha külső intelligens variométer lett csatlakoztatva."
 
-#: src/InfoBoxes/Content/Factory.cpp:703
+#: src/InfoBoxes/Content/Factory.cpp:709
 #, no-c-format
 msgid "Team code"
 msgstr "CS kód"
 
-#: src/InfoBoxes/Content/Factory.cpp:704 Data/Dialogs/dlgTeamCode.xml:3
+#: src/InfoBoxes/Content/Factory.cpp:710 Data/Dialogs/dlgTeamCode.xml:3
 #: Data/Dialogs/dlgTeamCode_L.xml:3
 #, no-c-format
 msgid "Team Code"
 msgstr "Csapatkód"
 
-#: src/InfoBoxes/Content/Factory.cpp:705
+#: src/InfoBoxes/Content/Factory.cpp:711
 #, no-c-format
 msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
@@ -1838,33 +1836,33 @@ msgstr ""
 "Ennek a gépnek a csapatkódja. Ezt kell közölni a csapattaggal. Alul az "
 "utoljára bevitt kód van kijelezve."
 
-#: src/InfoBoxes/Content/Factory.cpp:713
+#: src/InfoBoxes/Content/Factory.cpp:719
 #, no-c-format
 msgid "Team bearing"
 msgstr "CS irány"
 
-#: src/InfoBoxes/Content/Factory.cpp:714
+#: src/InfoBoxes/Content/Factory.cpp:720
 #, no-c-format
 msgid "Team Brng"
 msgstr "Cs irány"
 
-#: src/InfoBoxes/Content/Factory.cpp:715
+#: src/InfoBoxes/Content/Factory.cpp:721
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
 msgstr ""
 "A csapattárs repülőjének mágneses irányszöge az utolsó jelentés alapján."
 
-#: src/InfoBoxes/Content/Factory.cpp:723
+#: src/InfoBoxes/Content/Factory.cpp:729
 #, no-c-format
 msgid "Team bearing difference"
 msgstr "CS irány relatív"
 
-#: src/InfoBoxes/Content/Factory.cpp:724
+#: src/InfoBoxes/Content/Factory.cpp:730
 #, no-c-format
 msgid "Team BrngD"
 msgstr "Cs ir rel"
 
-#: src/InfoBoxes/Content/Factory.cpp:725
+#: src/InfoBoxes/Content/Factory.cpp:731
 #, no-c-format
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
@@ -1872,32 +1870,32 @@ msgid ""
 msgstr ""
 "A csapattárs repülőjének relatív irányszöge az utolsó jelentés alapján."
 
-#: src/InfoBoxes/Content/Factory.cpp:733
+#: src/InfoBoxes/Content/Factory.cpp:739
 #, no-c-format
 msgid "Team range"
 msgstr "CS távolság"
 
-#: src/InfoBoxes/Content/Factory.cpp:734
+#: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
 msgid "Team Dist"
 msgstr "CS táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:735
+#: src/InfoBoxes/Content/Factory.cpp:741
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
 msgstr "A csapattárs repülőjének távolsága az utolsó jelentés alapján."
 
-#: src/InfoBoxes/Content/Factory.cpp:743
+#: src/InfoBoxes/Content/Factory.cpp:749
 #, no-c-format
 msgid "Speed task instantaneous"
 msgstr "SF sebesség most"
 
-#: src/InfoBoxes/Content/Factory.cpp:744
+#: src/InfoBoxes/Content/Factory.cpp:750
 #, no-c-format
 msgid "V Task Inst"
 msgstr "SF seb mst"
 
-#: src/InfoBoxes/Content/Factory.cpp:745
+#: src/InfoBoxes/Content/Factory.cpp:751
 #, no-c-format
 msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
@@ -1906,32 +1904,32 @@ msgstr ""
 "A pillanatnyi utazósebesség, feladat végrehajtása közben, magassági "
 "kompenzációval. Megegyezik a pillanatnyi Pirker utazósebességgel."
 
-#: src/InfoBoxes/Content/Factory.cpp:753
+#: src/InfoBoxes/Content/Factory.cpp:759
 #, no-c-format
 msgid "Distance home"
 msgstr "Bázis távolsága"
 
-#: src/InfoBoxes/Content/Factory.cpp:754
+#: src/InfoBoxes/Content/Factory.cpp:760
 #, no-c-format
 msgid "Home Dist"
 msgstr "Bázis táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:755
+#: src/InfoBoxes/Content/Factory.cpp:761
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
 msgstr "Bázisrepülőtér távolsága (ha definiált)"
 
-#: src/InfoBoxes/Content/Factory.cpp:763
+#: src/InfoBoxes/Content/Factory.cpp:769
 #, no-c-format
 msgid "Speed task achieved"
 msgstr "SF sebesség valós"
 
-#: src/InfoBoxes/Content/Factory.cpp:764
+#: src/InfoBoxes/Content/Factory.cpp:770
 #, no-c-format
 msgid "V Task Ach"
 msgstr "SF seb vls"
 
-#: src/InfoBoxes/Content/Factory.cpp:765
+#: src/InfoBoxes/Content/Factory.cpp:771
 #, no-c-format
 msgid ""
 "Achieved cross country speed while on current task, compensated for "
@@ -1940,17 +1938,17 @@ msgstr ""
 "A feladat alatt elért utazósebesség, magassági kompenzációval. Megegyezik a "
 "maradék táv Pirker utazósebességével."
 
-#: src/InfoBoxes/Content/Factory.cpp:773
+#: src/InfoBoxes/Content/Factory.cpp:779
 #, no-c-format
 msgid "AAT delta time"
 msgstr "HT delta idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:774
+#: src/InfoBoxes/Content/Factory.cpp:780
 #, no-c-format
 msgid "AAT dT"
 msgstr "HT d.idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:775
+#: src/InfoBoxes/Content/Factory.cpp:781
 #, no-c-format
 msgid ""
 "Difference between estimated task time and AAT minimum time. Coloured red if "
@@ -1961,54 +1959,54 @@ msgstr ""
 "ha negatív (túl korai érkezés), kék ha a szektorban vagyunk és fordulhatunk, "
 "mert a becsült érkezés öt perccel meghaladja az AAT időtartamot."
 
-#: src/InfoBoxes/Content/Factory.cpp:783
+#: src/InfoBoxes/Content/Factory.cpp:789
 #, no-c-format
 msgid "Thermal average over all"
 msgstr "Termik emelés napi átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:784
-#, no-c-format
-msgid "TC All"
-msgstr "Tk napi"
+#: src/InfoBoxes/Content/Factory.cpp:790
+#, fuzzy, no-c-format
+msgid "T Avg"
+msgstr "Tk átlg"
 
-#: src/InfoBoxes/Content/Factory.cpp:785
+#: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
 msgid "Time-average climb rate in all thermals."
 msgstr "Az összes termik emelésének átlaga."
 
-#: src/InfoBoxes/Content/Factory.cpp:793
+#: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
 msgid "Task req. total height trend"
 msgstr "SF magasság trend"
 
-#: src/InfoBoxes/Content/Factory.cpp:794
+#: src/InfoBoxes/Content/Factory.cpp:800
 #, no-c-format
 msgid "RH Trend"
 msgstr "SF m trend"
 
-#: src/InfoBoxes/Content/Factory.cpp:795
+#: src/InfoBoxes/Content/Factory.cpp:801
 #, no-c-format
 msgid ""
 "Trend (or neg. of the variation) of the total required height to complete "
 "the task."
 msgstr "A feladat teljesítéséhez szükséges magasság változásának trendje."
 
-#: src/InfoBoxes/Content/Factory.cpp:804
+#: src/InfoBoxes/Content/Factory.cpp:810
 #, no-c-format
 msgid "Battery percent"
 msgstr "Telep"
 
-#: src/InfoBoxes/Content/Factory.cpp:806
+#: src/InfoBoxes/Content/Factory.cpp:812
 #, no-c-format
 msgid "Battery voltage"
 msgstr "Telepfesz"
 
-#: src/InfoBoxes/Content/Factory.cpp:808
+#: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "Battery"
 msgstr "Telep"
 
-#: src/InfoBoxes/Content/Factory.cpp:809
+#: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
 msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
@@ -2017,47 +2015,67 @@ msgstr ""
 "Kijelzi a telep töltöttségét százalékban (ahol lehet) és a külső tápellátás "
 "állapotát/feszültségét."
 
-#: src/InfoBoxes/Content/Factory.cpp:827
+#: src/InfoBoxes/Content/Factory.cpp:823
+#, no-c-format
+msgid "Final GR"
+msgstr "Végsiklás meredekség"
+
+#: src/InfoBoxes/Content/Factory.cpp:824
+#, no-c-format
+msgid "Fin GR"
+msgstr "Vs mrdk"
+
+#: src/InfoBoxes/Content/Factory.cpp:825
+#, no-c-format
+msgid ""
+"The required glide ratio over ground to finish the task, given by the "
+"distance to go divided by the height required to arrive at the safety "
+"arrival height."
+msgstr ""
+"A feladat befejezéséhez szükséges siklószám.A biztonsági magasságban "
+"érkezéshez szükséges magasság és a távolság hányadosa."
+
+#: src/InfoBoxes/Content/Factory.cpp:833
 #, no-c-format
 msgid "Alternate 1"
 msgstr "Kitérő 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:828
+#: src/InfoBoxes/Content/Factory.cpp:834
 #, no-c-format
 msgid "Altn 1"
 msgstr "Ktr1"
 
-#: src/InfoBoxes/Content/Factory.cpp:829
+#: src/InfoBoxes/Content/Factory.cpp:835
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
 msgstr "Kijelzi a legjobb kitérő leszállóhely nevét és irányát."
 
-#: src/InfoBoxes/Content/Factory.cpp:837
+#: src/InfoBoxes/Content/Factory.cpp:843
 #, no-c-format
 msgid "Alternate 2"
 msgstr "Kitérő 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:838
+#: src/InfoBoxes/Content/Factory.cpp:844
 #, no-c-format
 msgid "Altn 2"
 msgstr "Ktr2"
 
-#: src/InfoBoxes/Content/Factory.cpp:839
+#: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "Displays name and bearing to the second alternate landing location."
 msgstr "Kijelzi a második legjobb kitérő leszállóhely nevét és irányát."
 
-#: src/InfoBoxes/Content/Factory.cpp:847
+#: src/InfoBoxes/Content/Factory.cpp:853
 #, no-c-format
 msgid "Alternate 1 GR"
 msgstr "Kitérő1 meredekség"
 
-#: src/InfoBoxes/Content/Factory.cpp:848
+#: src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Altn1 GR"
 msgstr "Ktr1 mrdk"
 
-#: src/InfoBoxes/Content/Factory.cpp:849
+#: src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
@@ -2066,44 +2084,42 @@ msgstr ""
 "A legjobb kitérő leszállóhely érkezési magasságához vezető meredekség. Nincs "
 "korrigálva az összenergiával."
 
-#: src/InfoBoxes/Content/Factory.cpp:857 src/InfoBoxes/Content/Factory.cpp:858
+#: src/InfoBoxes/Content/Factory.cpp:863
 #, no-c-format
-msgid "QFE GPS"
-msgstr "Magasság bázis QFE"
+msgid "Height above take-off"
+msgstr ""
 
-#: src/InfoBoxes/Content/Factory.cpp:859
+#: src/InfoBoxes/Content/Factory.cpp:864
+#, no-c-format
+msgid "H T/O"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
 msgid ""
-"Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE "
-"taking off. After takeoff, it is no more reset automatically even if on "
-"ground. During flight you can change QFE with up and down keys. Bottom line "
-"shows QNH altitude. Changing QFE does not affect QNH altitude."
+"Height based on an automatic take-off reference elevation (like a QFE "
+"reference)."
 msgstr ""
-"Automatikus QFE (reptéri feletti magasság). Ez az érték felszállás ELŐTT "
-"végérvényesen nullázódik. Felszállás után nem kerül automatikus nullázásra, "
-"még a földön sem.  Repülés közben a fel-le nyilakkal állítható a QFE. Az "
-"alsó sorban a QNH (tengerszint szerinti) magasság látható. A QFE állítása "
-"nem hat a QNH magasságra."
 
-#: src/InfoBoxes/Content/Factory.cpp:868
+#: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
 msgid "GR average"
 msgstr "Sklsz átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:869
+#: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
 msgid "GR Avg"
 msgstr "Sklsz átlag"
 
-#: src/InfoBoxes/Content/Factory.cpp:870
-#, no-c-format
+#: src/InfoBoxes/Content/Factory.cpp:876
+#, fuzzy, no-c-format
 msgid ""
 "The distance made in the configured period of time , divided by the altitude "
 "lost since then. Negative values are shown as ^^^ and indicate climbing "
-"cruise (height gain). Over 200 of L/D the value is shown as +++ . You can "
+"cruise (height gain). Over 200 of GR the value is shown as +++ . You can "
 "configure the period of averaging in the system setup. Suggested values are "
-"60, 90 or 120. Lower values will be closed to L/D INST, and higher values "
-"will be closed to L/D Cruise. Notice that the distance is NOT the straight "
+"60, 90 or 120. Lower values will be closed to GR Inst, and higher values "
+"will be closed to GR Cruise. Notice that the distance is NOT the straight "
 "line between your old and current position, it's exactly the distance you "
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
@@ -2117,27 +2133,27 @@ msgstr ""
 "mért pozíció közötti egyenes hossza, hanem a ténylegesen, akár cikkcakkosan "
 "megtett táv. Körözésben nem kerül kiszámításra."
 
-#: src/InfoBoxes/Content/Factory.cpp:878
+#: src/InfoBoxes/Content/Factory.cpp:884
 #, no-c-format
 msgid "Experimental 1"
 msgstr "Kísérleti 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:879
+#: src/InfoBoxes/Content/Factory.cpp:885
 #, no-c-format
 msgid "Exp1"
 msgstr "Kisérl 1"
 
-#: src/InfoBoxes/Content/Factory.cpp:888
+#: src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
 msgid "On-Line Contest distance"
 msgstr "Online verseny repült táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:889
+#: src/InfoBoxes/Content/Factory.cpp:895
 #, no-c-format
 msgid "OLC"
 msgstr "Online táv"
 
-#: src/InfoBoxes/Content/Factory.cpp:890
+#: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
@@ -2146,42 +2162,42 @@ msgstr ""
 "A konfigurált on-line versenyszabályoknak megfelelő, folyamatosan kiértékelt "
 "lerepült távolság."
 
-#: src/InfoBoxes/Content/Factory.cpp:898
+#: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid "Experimental 2"
 msgstr "Kisérleti 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:899
+#: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
 msgid "Exp2"
 msgstr "Kisérl 2"
 
-#: src/InfoBoxes/Content/Factory.cpp:908
+#: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
 msgid "CPU load"
 msgstr "Processzorterhelés"
 
-#: src/InfoBoxes/Content/Factory.cpp:909
+#: src/InfoBoxes/Content/Factory.cpp:915
 #, no-c-format
 msgid "CPU"
 msgstr "Proc terh"
 
-#: src/InfoBoxes/Content/Factory.cpp:910
+#: src/InfoBoxes/Content/Factory.cpp:916
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
 msgstr "Az XCSoar által 5mp alatt okozott átlagos processzorterhelés"
 
-#: src/InfoBoxes/Content/Factory.cpp:918
+#: src/InfoBoxes/Content/Factory.cpp:924
 #, no-c-format
 msgid "Next altitude arrival"
 msgstr "FP magasság érkezés"
 
-#: src/InfoBoxes/Content/Factory.cpp:919
+#: src/InfoBoxes/Content/Factory.cpp:925
 #, no-c-format
-msgid "WP alt.A"
+msgid "WP AltA"
 msgstr "FP mgsg"
 
-#: src/InfoBoxes/Content/Factory.cpp:920
+#: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
 msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
@@ -2190,27 +2206,27 @@ msgstr ""
 "A következő fordulópont elérésének abszolút magassága végsiklás során. "
 "Légtérfeladatok (AAT) során a szektorban kijelölt célon alapul."
 
-#: src/InfoBoxes/Content/Factory.cpp:928 src/InfoBoxes/Content/Factory.cpp:929
+#: src/InfoBoxes/Content/Factory.cpp:934 src/InfoBoxes/Content/Factory.cpp:935
 #, no-c-format
 msgid "Free RAM"
 msgstr "Szabad memória"
 
-#: src/InfoBoxes/Content/Factory.cpp:930
+#: src/InfoBoxes/Content/Factory.cpp:936
 #, no-c-format
 msgid "Free RAM as reported by OS."
 msgstr "A szabad memória mennyisége az operációs rendszer szerint."
 
-#: src/InfoBoxes/Content/Factory.cpp:938
+#: src/InfoBoxes/Content/Factory.cpp:944
 #, no-c-format
 msgid "Flight level"
 msgstr "Repülési szint"
 
-#: src/InfoBoxes/Content/Factory.cpp:939
+#: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "FL"
 msgstr "FL"
 
-#: src/InfoBoxes/Content/Factory.cpp:940
+#: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
 msgid ""
 "Pressure Altitude given as Flight Level. Only available if barometric "
@@ -2220,27 +2236,27 @@ msgstr ""
 "rendelkezésre, ha mérhető a barometrikus magasság és a QNH helyesen be van "
 "állítva."
 
-#: src/InfoBoxes/Content/Factory.cpp:949 src/InfoBoxes/Content/Factory.cpp:950
+#: src/InfoBoxes/Content/Factory.cpp:955 src/InfoBoxes/Content/Factory.cpp:956
 #, no-c-format
 msgid "Barogram"
 msgstr "Barográf"
 
-#: src/InfoBoxes/Content/Factory.cpp:951
+#: src/InfoBoxes/Content/Factory.cpp:957
 #, no-c-format
 msgid "Trace of altitude during flight"
 msgstr "A magasság változása a repülés során."
 
-#: src/InfoBoxes/Content/Factory.cpp:959
+#: src/InfoBoxes/Content/Factory.cpp:965
 #, no-c-format
 msgid "Vario trace"
 msgstr "Varió változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:960
+#: src/InfoBoxes/Content/Factory.cpp:966
 #, no-c-format
 msgid "Vario Trace"
 msgstr "Varió változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:961
+#: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
 msgid ""
 "Trace of vertical speed, as reported by the GPS, or the intelligent vario "
@@ -2249,17 +2265,17 @@ msgstr ""
 "A varió változásai a GPS jele alapján vagy az intelligens variométer "
 "összenergia varió jele alapján, ha ilyen csatlakoztatva lett."
 
-#: src/InfoBoxes/Content/Factory.cpp:969
+#: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
 msgid "Netto vario trace"
 msgstr "Nettó varió változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:970
+#: src/InfoBoxes/Content/Factory.cpp:976
 #, no-c-format
 msgid "Netto Trace"
 msgstr "Emelés változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:971
+#: src/InfoBoxes/Content/Factory.cpp:977
 #, no-c-format
 msgid ""
 "Trace of vertical speed of air-mass, equal to vario value less the glider's "
@@ -2268,17 +2284,17 @@ msgstr ""
 "A légtömeg függőleges sebességének változásai, ami a variónak a gép becsült "
 "merülésével csökkentett értéke."
 
-#: src/InfoBoxes/Content/Factory.cpp:979
+#: src/InfoBoxes/Content/Factory.cpp:985
 #, no-c-format
 msgid "Thermal climb trace"
 msgstr "Termik emelkedés változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:980
+#: src/InfoBoxes/Content/Factory.cpp:986
 #, no-c-format
 msgid "TC Trace"
 msgstr "TC változások"
 
-#: src/InfoBoxes/Content/Factory.cpp:981
+#: src/InfoBoxes/Content/Factory.cpp:987
 #, no-c-format
 msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
@@ -2287,36 +2303,36 @@ msgstr ""
 "Az átlagos emelés változásai az egyes körökben, a GPS magasság vagy ha "
 "csatlakoztattak, a variométer alapján."
 
-#: src/InfoBoxes/Content/Factory.cpp:989
+#: src/InfoBoxes/Content/Factory.cpp:995
 #, no-c-format
 msgid "Climb band"
 msgstr "Emelési sáv"
 
-#: src/InfoBoxes/Content/Factory.cpp:990
+#: src/InfoBoxes/Content/Factory.cpp:996
 #, no-c-format
 msgid "Climb Band"
 msgstr "Emelési sáv"
 
-#: src/InfoBoxes/Content/Factory.cpp:991
-#, no-c-format
+#: src/InfoBoxes/Content/Factory.cpp:997
+#, fuzzy, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
-"height (vertical axis)."
+"altitude (vertical axis)."
 msgstr ""
 "Az átlagos emelkedés (vízszintes tengely) mint a magasság (függőleges "
 "tengely) függvénye."
 
-#: src/InfoBoxes/Content/Factory.cpp:999
+#: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
 msgid "Task progress"
 msgstr "Feladat állapota"
 
-#: src/InfoBoxes/Content/Factory.cpp:1000
+#: src/InfoBoxes/Content/Factory.cpp:1006
 #, no-c-format
 msgid "Progress"
 msgstr "Állapot"
 
-#: src/InfoBoxes/Content/Factory.cpp:1001
+#: src/InfoBoxes/Content/Factory.cpp:1007
 #, no-c-format
 msgid ""
 "Clock-like display of distance remaining along task, showing achieved task "
@@ -2325,34 +2341,34 @@ msgstr ""
 "A feladatból hátralevő távolság óraszerű megjelenítése, az elért pontok "
 "ábrázolásával."
 
-#: src/InfoBoxes/Content/Factory.cpp:1009
+#: src/InfoBoxes/Content/Factory.cpp:1015
 #, no-c-format
 msgid "Time under max. start height"
 msgstr "Startmagasság alatt töltött idő"
 
-#: src/InfoBoxes/Content/Factory.cpp:1010
+#: src/InfoBoxes/Content/Factory.cpp:1016
 #, no-c-format
 msgid "Start Height"
 msgstr "Startmagasság"
 
-#: src/InfoBoxes/Content/Factory.cpp:1011
+#: src/InfoBoxes/Content/Factory.cpp:1017
 #, no-c-format
 msgid ""
 "The contiguous period the ship has been below the task start max. height."
 msgstr ""
 "Az az összefüggő időtartam, amit a startmagasság alatt töltött a repülő."
 
-#: src/InfoBoxes/Content/Factory.cpp:1019
+#: src/InfoBoxes/Content/Factory.cpp:1025
 #, no-c-format
 msgid "Task time to go (ground speed)"
 msgstr "SF idő úton ff"
 
-#: src/InfoBoxes/Content/Factory.cpp:1020
+#: src/InfoBoxes/Content/Factory.cpp:1026
 #, no-c-format
 msgid "Fin ETE VMG"
 msgstr "SF úton ff"
 
-#: src/InfoBoxes/Content/Factory.cpp:1021
+#: src/InfoBoxes/Content/Factory.cpp:1027
 #, no-c-format
 msgid ""
 "Estimated time required to complete task, assuming current ground speed is "
@@ -2361,17 +2377,17 @@ msgstr ""
 "A feladat teljesítéséhez szükséges becsült idő, ha a jelenlegi földfeletti "
 "sebességgel számolunk."
 
-#: src/InfoBoxes/Content/Factory.cpp:1029
+#: src/InfoBoxes/Content/Factory.cpp:1035
 #, no-c-format
 msgid "Next time to go (ground speed)"
 msgstr "FP idő úton ff"
 
-#: src/InfoBoxes/Content/Factory.cpp:1030
+#: src/InfoBoxes/Content/Factory.cpp:1036
 #, no-c-format
 msgid "WP ETE VMG"
 msgstr "FP úton ff"
 
-#: src/InfoBoxes/Content/Factory.cpp:1031
+#: src/InfoBoxes/Content/Factory.cpp:1037
 #, no-c-format
 msgid ""
 "Estimated time required to reach next waypoint, assuming current ground "
@@ -2380,17 +2396,17 @@ msgstr ""
 "A következő fordulópont eléréséhez szükséges becsült idő, ha a jelenlegi "
 "földfeletti sebességgel számolunk."
 
-#: src/InfoBoxes/Content/Factory.cpp:1039
+#: src/InfoBoxes/Content/Factory.cpp:1045
 #, no-c-format
 msgid "Attitude indicator"
 msgstr "Műhorizont"
 
-#: src/InfoBoxes/Content/Factory.cpp:1040
+#: src/InfoBoxes/Content/Factory.cpp:1046
 #, no-c-format
 msgid "Horizon"
 msgstr "Horizont"
 
-#: src/InfoBoxes/Content/Factory.cpp:1041
+#: src/InfoBoxes/Content/Factory.cpp:1047
 #, no-c-format
 msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
@@ -2399,32 +2415,32 @@ msgstr ""
 "A repülés nyomvonalából számított műhorizont kijelző, gyorsulási és varió "
 "adatokkal kiegészítve, ha rendelkezésre állnak."
 
-#: src/InfoBoxes/Content/Factory.cpp:1049
+#: src/InfoBoxes/Content/Factory.cpp:1055
 #, no-c-format
 msgid "Nearest airspace horizontal"
 msgstr "Legközelebbi légtér vízszintesen"
 
-#: src/InfoBoxes/Content/Factory.cpp:1050
+#: src/InfoBoxes/Content/Factory.cpp:1056
 #, no-c-format
 msgid "Near AS H"
 msgstr "Légtér V"
 
-#: src/InfoBoxes/Content/Factory.cpp:1051
+#: src/InfoBoxes/Content/Factory.cpp:1057
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace."
 msgstr "Vízszintes távolság a legközelebbi légtérig"
 
-#: src/InfoBoxes/Content/Factory.cpp:1059
+#: src/InfoBoxes/Content/Factory.cpp:1065
 #, no-c-format
 msgid "Nearest airspace vertical"
 msgstr "Legközelebbi légtér függőlegesen"
 
-#: src/InfoBoxes/Content/Factory.cpp:1060
+#: src/InfoBoxes/Content/Factory.cpp:1066
 #, no-c-format
 msgid "Near AS V"
 msgstr "Közeli légtér függ."
 
-#: src/InfoBoxes/Content/Factory.cpp:1061
+#: src/InfoBoxes/Content/Factory.cpp:1067
 #, no-c-format
 msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
@@ -2433,17 +2449,17 @@ msgstr ""
 "Függőleges távolság a legközelebbi légtértől. A pozitív érték esetén "
 "fölöttünk van, negatív érték esetén alattunk van a légtér."
 
-#: src/InfoBoxes/Content/Factory.cpp:1069
+#: src/InfoBoxes/Content/Factory.cpp:1075
 #, no-c-format
 msgid "Next MC0 altitude difference"
 msgstr "FP magasság érkezés MC0"
 
-#: src/InfoBoxes/Content/Factory.cpp:1070
+#: src/InfoBoxes/Content/Factory.cpp:1076
 #, no-c-format
 msgid "WP MC0 AltD"
 msgstr "FP mgsg MC0"
 
-#: src/InfoBoxes/Content/Factory.cpp:1071
+#: src/InfoBoxes/Content/Factory.cpp:1077
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
@@ -2454,17 +2470,17 @@ msgstr ""
 "érkezési magassághoz képest. Légtérfeladatok (AAT) esetén a szektorban "
 "kijelölt célon alapul."
 
-#: src/InfoBoxes/Content/Factory.cpp:1079
+#: src/InfoBoxes/Content/Factory.cpp:1085
 #, no-c-format
 msgid "Head wind component"
 msgstr "Szembeszél komponens"
 
-#: src/InfoBoxes/Content/Factory.cpp:1080
+#: src/InfoBoxes/Content/Factory.cpp:1086
 #, no-c-format
 msgid "Head Wind"
 msgstr "szembeszel"
 
-#: src/InfoBoxes/Content/Factory.cpp:1081
+#: src/InfoBoxes/Content/Factory.cpp:1087
 #, no-c-format
 msgid ""
 "The current head wind component. Head wind is calculated from TAS and GPS "
@@ -2475,17 +2491,17 @@ msgstr ""
 "rendelkezésre áll, akkor a valódi sebességből és a GPS szerinti föld feletti "
 "sebességből, különben a becsült szélből kerül kiszámításra."
 
-#: src/InfoBoxes/Content/Factory.cpp:1090
+#: src/InfoBoxes/Content/Factory.cpp:1096
 #, no-c-format
 msgid "Terrain collision"
 msgstr "Földnek ütközés"
 
-#: src/InfoBoxes/Content/Factory.cpp:1091
+#: src/InfoBoxes/Content/Factory.cpp:1097
 #, no-c-format
 msgid "Terr Coll"
 msgstr "FÖLD"
 
-#: src/InfoBoxes/Content/Factory.cpp:1092
+#: src/InfoBoxes/Content/Factory.cpp:1098
 #, no-c-format
 msgid ""
 "The distance to the next terrain collision along the current task leg. At "
@@ -2496,17 +2512,17 @@ msgstr ""
 "ponton lesz a magasság kisebb a beállított minimális talaj feletti "
 "magasságnál."
 
-#: src/InfoBoxes/Content/Factory.cpp:1099
+#: src/InfoBoxes/Content/Factory.cpp:1105
 #, no-c-format
 msgid "Altitude (Auto)"
 msgstr "Magasság (Automata)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1100
+#: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
 msgid "Alt Auto"
 msgstr "Mag auto"
 
-#: src/InfoBoxes/Content/Factory.cpp:1101
+#: src/InfoBoxes/Content/Factory.cpp:1107
 #, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
@@ -2516,17 +2532,17 @@ msgstr ""
 "Barometrikus magasság nyomásszenzoros eszközből kinyerve vagy a GPS "
 "magasság, ha ilyen eszköz nem áll rendelkezésre."
 
-#: src/InfoBoxes/Content/Factory.cpp:1110
+#: src/InfoBoxes/Content/Factory.cpp:1116
 #, no-c-format
 msgid "Thermal next leg equivalent"
 msgstr "Termik kövekező szakaszon"
 
-#: src/InfoBoxes/Content/Factory.cpp:1111
+#: src/InfoBoxes/Content/Factory.cpp:1117
 #, no-c-format
 msgid "T Next Leg"
 msgstr "T köv szksz"
 
-#: src/InfoBoxes/Content/Factory.cpp:1112
+#: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
 msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
@@ -2535,17 +2551,17 @@ msgstr ""
 "A termikemelés a következő szakszon, ami megfelel egy, a jelenlegi szakasz "
 "MacCready beállításával megegyező termiknek."
 
-#: src/InfoBoxes/Content/Factory.cpp:1120
+#: src/InfoBoxes/Content/Factory.cpp:1126
 #, no-c-format
 msgid "Head wind component (simplified)"
 msgstr "Szembeszél összetevő (egyszerűsített)"
 
-#: src/InfoBoxes/Content/Factory.cpp:1121
+#: src/InfoBoxes/Content/Factory.cpp:1127
 #, no-c-format
 msgid "Head Wind *"
 msgstr "Szembeszél *"
 
-#: src/InfoBoxes/Content/Factory.cpp:1122
+#: src/InfoBoxes/Content/Factory.cpp:1128
 #, no-c-format
 msgid ""
 "The current head wind component. The simplified head wind is calculated by "
@@ -2556,17 +2572,17 @@ msgstr ""
 "rendelkezésre áll, akkor a valódi sebességből és a GPS szerinti föld feletti "
 "sebességből különbségéből kerül kiszámításra."
 
-#: src/InfoBoxes/Content/Factory.cpp:1130
+#: src/InfoBoxes/Content/Factory.cpp:1136
 #, no-c-format
 msgid "Task cruise efficiency"
 msgstr "Siklás hatásfok feladatban"
 
-#: src/InfoBoxes/Content/Factory.cpp:1131
+#: src/InfoBoxes/Content/Factory.cpp:1137
 #, no-c-format
 msgid "Cruise Eff"
 msgstr "Sikl hfok"
 
-#: src/InfoBoxes/Content/Factory.cpp:1132
+#: src/InfoBoxes/Content/Factory.cpp:1138
 #, no-c-format
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance. This "
@@ -2577,34 +2593,36 @@ msgstr ""
 "becslés ami figyelembe veszi a repülő eddigi útját és a MC értéket. A "
 "számítások a feladattal együtt kezdődnek."
 
-#: src/InfoBoxes/Content/Factory.cpp:1141
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:180
+#: src/InfoBoxes/Content/Factory.cpp:1147
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 #, no-c-format
 msgid "Wind arrow"
 msgstr "Szél nyíl"
 
-#: src/InfoBoxes/Content/Factory.cpp:1142
+#: src/InfoBoxes/Content/Factory.cpp:1148
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 #: Data/Input/default.xci:583
 #, no-c-format
 msgid "Wind"
 msgstr "Szél"
 
-#: src/InfoBoxes/Content/Factory.cpp:1150
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
+#: src/InfoBoxes/Content/Factory.cpp:1156 src/PageSettings.cpp:48
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:323
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "Termik segéd"
 
-#: src/InfoBoxes/Content/Factory.cpp:1151
-#: src/Renderer/MapItemListRenderer.cpp:383
+#: src/InfoBoxes/Content/Factory.cpp:1157
+#: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
 msgstr "Termik"
 
-#: src/InfoBoxes/Content/Factory.cpp:1152
+#: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
 msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
@@ -2612,32 +2630,32 @@ msgid ""
 msgstr ""
 "Kör alakú termiksegéd amely az emelés eloszlását mutatja a kör területén."
 
-#: src/InfoBoxes/Content/Factory.cpp:1160
+#: src/InfoBoxes/Content/Factory.cpp:1166
 #, no-c-format
 msgid "Start open/close countdown"
 msgstr "Hátralevő idő a start nyitásáig/zárásáig."
 
-#: src/InfoBoxes/Content/Factory.cpp:1161
+#: src/InfoBoxes/Content/Factory.cpp:1167
 #, no-c-format
 msgid "Start open"
 msgstr "Start megnyitása"
 
-#: src/InfoBoxes/Content/Factory.cpp:1162
+#: src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
 msgid "Shows the time left until the start point opens or closes."
 msgstr "A start megnyitásáig vagy zárásáig hátralevő időt mutatja."
 
-#: src/InfoBoxes/Content/Factory.cpp:1169
+#: src/InfoBoxes/Content/Factory.cpp:1175
 #, no-c-format
 msgid "Start open/close countdown at reaching"
 msgstr "Időtartalék a start nyitásáig/zárásáig"
 
-#: src/InfoBoxes/Content/Factory.cpp:1170
+#: src/InfoBoxes/Content/Factory.cpp:1176
 #, no-c-format
 msgid "Start reach"
 msgstr "Start tartalék"
 
-#: src/InfoBoxes/Content/Factory.cpp:1171
+#: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
 msgid ""
 "Shows the time left until the start point opens or closes, compared to the "
@@ -2645,6 +2663,22 @@ msgid ""
 msgstr ""
 "A szükséges menetidőt figyelembe véve mutatja a startba érkezéskor a "
 "nyitásig vagy zárásig hátralevő időt."
+
+#: src/InfoBoxes/Content/Factory.cpp:1184
+#, fuzzy, no-c-format
+msgid "Next radial"
+msgstr "Start radiál"
+
+#: src/InfoBoxes/Content/Factory.cpp:1185 Data/Dialogs/dlgTarget.xml:25
+#: Data/Dialogs/dlgTarget_L.xml:18
+#, no-c-format
+msgid "Radial"
+msgstr "Radiál"
+
+#: src/InfoBoxes/Content/Factory.cpp:1186
+#, no-c-format
+msgid "True bearing from the next waypoint to your position."
+msgstr ""
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
 #, c-format
@@ -2659,7 +2693,7 @@ msgstr "Másik %d"
 msgid "Simulator"
 msgstr "Szimulátor"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:43
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:56
 #: Data/Input/default.xci:778 Data/Input/default.xci:828
 #: Data/Input/default.xci:878 Data/Input/default.xci:941
 #, no-c-format
@@ -2685,7 +2719,7 @@ msgstr "nincs QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:57
 #: src/InfoBoxes/Content/Weather.cpp:111
-#: src/Dialogs/Device/DeviceListDialog.cpp:238
+#: src/Dialogs/Device/DeviceListDialog.cpp:244
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:148
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:7
@@ -2702,17 +2736,22 @@ msgstr "Mc auto"
 msgid "MC MANUAL"
 msgstr "Mc kézi"
 
-#: src/InfoBoxes/Content/Other.cpp:62
+#: src/InfoBoxes/Content/Other.cpp:63
+#, fuzzy, c-format
+msgid "AC Off;  %d%%"
+msgstr "TÁP KI"
+
+#: src/InfoBoxes/Content/Other.cpp:65
 msgid "AC Off"
 msgstr "TÁP KI"
 
-#: src/InfoBoxes/Content/Other.cpp:66
+#: src/InfoBoxes/Content/Other.cpp:69
 msgid "AC ON"
 msgstr "TÁP BE"
 
-#: src/InfoBoxes/Content/Other.cpp:172 src/Profile/DeviceConfig.cpp:138
+#: src/InfoBoxes/Content/Other.cpp:175 src/Profile/DeviceConfig.cpp:141
 #: src/Dialogs/Device/DeviceEditWidget.cpp:64
-#: src/Dialogs/Device/DeviceListDialog.cpp:328
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
 msgstr "Tiltva"
@@ -2725,23 +2764,23 @@ msgstr "BLOKK"
 msgid "DOLPHIN"
 msgstr "DELFIN"
 
-#: src/InfoBoxes/Content/Task.cpp:82
+#: src/InfoBoxes/Content/Task.cpp:97
 msgid "Next"
 msgstr "Következő"
 
-#: src/InfoBoxes/Content/Task.cpp:749
+#: src/InfoBoxes/Content/Task.cpp:743
 msgid "Time Below"
 msgstr "Idő alacsonyabban"
 
-#: src/InfoBoxes/Content/Task.cpp:861 src/InfoBoxes/Content/Task.cpp:906
+#: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
 msgid "Closed"
 msgstr "Zárva"
 
-#: src/InfoBoxes/Content/Task.cpp:870 src/InfoBoxes/Content/Task.cpp:915
+#: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
 msgstr "Nyitva"
 
-#: src/InfoBoxes/Content/Task.cpp:875 src/InfoBoxes/Content/Task.cpp:920
+#: src/InfoBoxes/Content/Task.cpp:869 src/InfoBoxes/Content/Task.cpp:914
 msgid "Waiting"
 msgstr "Várakozik"
 
@@ -2763,13 +2802,13 @@ msgid "FinalGlide"
 msgstr "Végsiklás"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:267 src/InfoBoxes/InfoBoxManager.cpp:308
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:224
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:351
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:354
 msgid "InfoBox"
 msgstr "Kijelző"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:272
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:228
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:231
 #, no-c-format
 msgid "No help available on this item"
 msgstr "Ehhez nincs súgó."
@@ -2778,21 +2817,19 @@ msgstr "Ehhez nincs súgó."
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:76
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
-#: src/Dialogs/Device/DeviceListDialog.cpp:330
+#: src/Dialogs/Device/DeviceListDialog.cpp:336
 msgid "N/A"
 msgstr "na."
 
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-msgid "H GPS"
-msgstr "Mgsg TF"
-
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
-msgid "H Baro"
-msgstr "Mgsg baro"
-
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
-msgid "H AGL"
-msgstr "Mgsg FF"
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
+#: src/Dialogs/Settings/dlgConfiguration.cpp:102
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
+#: src/Dialogs/dlgWeather.cpp:69 src/Terrain/RasterWeather.cpp:49
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:520
+#: Data/Input/default.xci:1143
+#, no-c-format
+msgid "Terrain"
+msgstr "Terep"
 
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:75
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:309
@@ -2831,8 +2868,8 @@ msgid "Manual adjustment of wind speed."
 msgstr "A szélsebesség kézi beállítása."
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105
-#: src/Renderer/MapItemListRenderer.cpp:121
-#: src/Renderer/MapItemListRenderer.cpp:124
+#: src/Renderer/MapItemListRenderer.cpp:122
+#: src/Renderer/MapItemListRenderer.cpp:125
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:96
 #: Data/Dialogs/AirspaceList.xml:18 Data/Dialogs/AirspaceList_L.xml:12
 #: Data/Dialogs/WaypointList.xml:12 Data/Dialogs/WaypointList_L.xml:8
@@ -2876,20 +2913,20 @@ msgstr "Cikkcakk"
 #: src/InfoBoxes/Panel/WindSetup.cpp:83
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
 #, no-c-format
 msgid "Both"
 msgstr "Mindkettő"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:92
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:70
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:155
 msgid "Trail drift"
 msgstr "Sodrás"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:71
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode."
@@ -2897,35 +2934,35 @@ msgstr ""
 "A gép által húzott nyomvonal körözés közbeni, szélirány szerinti eltolását "
 "határozza meg."
 
-#: src/Input/InputEventsActions.cpp:173
+#: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
 msgstr "Teljes képernyő"
 
-#: src/Input/InputEventsActions.cpp:175
+#: src/Input/InputEventsActions.cpp:162
 msgid "Auxiliary InfoBoxes"
 msgstr "Külső kijelzők"
 
-#: src/Input/InputEventsActions.cpp:177
+#: src/Input/InputEventsActions.cpp:164
 msgid "Default InfoBoxes"
 msgstr "Alap kijelzők"
 
-#: src/Input/InputEventsActions.cpp:282
+#: src/Input/InputEventsActions.cpp:269
 msgid "No active waypoint!"
 msgstr "Nincs Aktív Fordulópont!"
 
-#: src/Input/InputEventsActions.cpp:372
+#: src/Input/InputEventsActions.cpp:359
 msgid "NMEA log on"
 msgstr "NMEA Logger BE"
 
-#: src/Input/InputEventsActions.cpp:374
+#: src/Input/InputEventsActions.cpp:361
 msgid "NMEA log off"
 msgstr "NMEA Logger KI"
 
-#: src/Input/InputEventsActions.cpp:378
+#: src/Input/InputEventsActions.cpp:365
 msgid "Logger on"
 msgstr "Logger BE"
 
-#: src/Input/InputEventsActions.cpp:380
+#: src/Input/InputEventsActions.cpp:367
 msgid "Logger off"
 msgstr "Logger KI"
 
@@ -3065,108 +3102,98 @@ msgstr "FP címkék"
 msgid "Topography/Terrain"
 msgstr "Jelek/Domborzat"
 
-#: src/Input/InputEventsTraffic.cpp:91
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:231
-#: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
-msgid "Competition ID"
-msgstr "Farokjel"
+#: src/PageSettings.cpp:44
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:319
+#, no-c-format
+msgid "FLARM radar"
+msgstr "FLARM radar"
 
-#: src/Input/InputEventsTraffic.cpp:99
-msgid "Show details:"
-msgstr "Részletek:"
-
-#: src/Input/InputEventsTraffic.cpp:104
-msgid "Unknown competition number"
-msgstr "Ismeretlen farokjel"
-
-#: src/Input/InputEventsTraffic.cpp:105
-msgid "Not found"
-msgstr "Nem található"
-
-#: src/PageSettings.cpp:37
-msgid "Info Hide"
-msgstr "Kijelzők rejtve"
-
-#: src/PageSettings.cpp:39
-msgid "Map (Full screen)"
-msgstr "Térkép (Teljes képernyő)"
-
-#: src/PageSettings.cpp:43
+#: src/PageSettings.cpp:56
 msgid "Map and InfoBoxes"
 msgstr "Térkép és kijelzők"
 
+#: src/PageSettings.cpp:76
+msgid "Info Hide"
+msgstr "Kijelzők rejtve"
+
+#: src/PageSettings.cpp:78
+msgid "Map (Full screen)"
+msgstr "Térkép (Teljes képernyő)"
+
 #: src/Renderer/ChartRenderer.cpp:169
-#: src/Dialogs/Device/DeviceListDialog.cpp:332
+#: src/Dialogs/Device/DeviceListDialog.cpp:338
 msgid "No data"
 msgstr "Nincs adat"
 
-#: src/Renderer/MapItemListRenderer.cpp:135
-#: src/Renderer/MapItemListRenderer.cpp:137
+#: src/Renderer/MapItemListRenderer.cpp:136
+#: src/Renderer/MapItemListRenderer.cpp:138
 #: src/Renderer/WaypointListRenderer.cpp:56
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:139
 msgid "Elevation"
 msgstr "Talajszint"
 
-#: src/Renderer/MapItemListRenderer.cpp:211
-#: src/Renderer/MapItemListRenderer.cpp:236
+#: src/Renderer/MapItemListRenderer.cpp:213
+#: src/Renderer/MapItemListRenderer.cpp:238
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:95
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:212
 #, no-c-format
 msgid "AGL"
 msgstr "Föld feletti"
 
-#: src/Renderer/MapItemListRenderer.cpp:217
-#: src/Renderer/MapItemListRenderer.cpp:242
+#: src/Renderer/MapItemListRenderer.cpp:219
+#: src/Renderer/MapItemListRenderer.cpp:244
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:214
 #, no-c-format
 msgid "MSL"
 msgstr "Tengerszint feletti"
 
-#: src/Renderer/MapItemListRenderer.cpp:227
+#: src/Renderer/MapItemListRenderer.cpp:229
 msgid "around terrain"
 msgstr "terep körül"
 
-#: src/Renderer/MapItemListRenderer.cpp:246
+#: src/Renderer/MapItemListRenderer.cpp:248
 msgid "Unreachable due to terrain."
 msgstr "Terep miatt elérhetetlen."
 
-#: src/Renderer/MapItemListRenderer.cpp:251
+#: src/Renderer/MapItemListRenderer.cpp:253
 msgid "Arrival altitude incl. safety height"
 msgstr "Érkezési magasság beleértve a biztonsági magasságot"
 
-#: src/Renderer/MapItemListRenderer.cpp:276
+#: src/Renderer/MapItemListRenderer.cpp:279
 msgid "Your Position"
 msgstr "Pozíciód"
 
-#: src/Renderer/MapItemListRenderer.cpp:334
+#: src/Renderer/MapItemListRenderer.cpp:338
 msgid "Marker"
 msgstr "Jelölő"
 
-#: src/Renderer/MapItemListRenderer.cpp:341
+#: src/Renderer/MapItemListRenderer.cpp:345
 #, c-format
 msgid "dropped %s ago"
 msgstr "ledobva %s korábban"
 
-#: src/Renderer/MapItemListRenderer.cpp:396
+#: src/Renderer/MapItemListRenderer.cpp:401
 msgid "Avg. lift"
 msgstr "Átl. emelés"
 
-#: src/Renderer/MapItemListRenderer.cpp:398
+#: src/Renderer/MapItemListRenderer.cpp:403
 #, c-format
 msgid "left %s ago"
 msgstr "elhagyva %s korábban"
 
-#: src/Renderer/MapItemListRenderer.cpp:474
+#: src/Renderer/MapItemListRenderer.cpp:482
 msgid "FLARM Traffic"
 msgstr "FLARM forgalom"
 
-#: src/Renderer/MapItemListRenderer.cpp:500
+#: src/Renderer/MapItemListRenderer.cpp:508
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:322
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:182
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:20
 #: Data/Dialogs/dlgWaypointEdit.xml:62 Data/Dialogs/dlgWaypointEdit_L.xml:62
@@ -3178,12 +3205,12 @@ msgstr "Magasság"
 msgid "Arrival Alt"
 msgstr "Érkezési magasság"
 
-#: src/MapWindow/GlueMapWindowItems.cpp:97
+#: src/MapWindow/GlueMapWindowItems.cpp:101
 msgid "There is nothing interesting near this location."
 msgstr "Itt nincs semmi érdekes."
 
-#: src/MapWindow/GlueMapWindowItems.cpp:98
-#: src/Dialogs/MapItemListDialog.cpp:239
+#: src/MapWindow/GlueMapWindowItems.cpp:102
+#: src/Dialogs/MapItemListDialog.cpp:242
 msgid "Map elements at this location"
 msgstr "Térképelemek ezen a helyen"
 
@@ -3291,7 +3318,7 @@ msgstr "Termik magasság"
 msgid "Cloud base"
 msgstr "Felhőalap"
 
-#: src/UIActions.cpp:48
+#: src/UIActions.cpp:51
 msgid "Quit program?"
 msgstr "Kilép a programból?"
 
@@ -3316,21 +3343,21 @@ msgid "Australian"
 msgstr "Ausztrál"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:117 src/Startup.cpp:320
+#: src/UtilsSettings.cpp:118 src/Startup.cpp:318
 msgid "Loading Terrain File..."
 msgstr "Terep fájl betöltése..."
 
-#: src/Profile/DeviceConfig.cpp:149 src/Dialogs/Device/DeviceEditWidget.cpp:70
+#: src/Profile/DeviceConfig.cpp:152 src/Dialogs/Device/DeviceEditWidget.cpp:70
 #, no-c-format
 msgid "Bluetooth server"
 msgstr "Bluetooth szerver"
 
-#: src/Profile/DeviceConfig.cpp:166 src/Dialogs/Device/DeviceEditWidget.cpp:66
+#: src/Profile/DeviceConfig.cpp:172 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "GPS Intermediate Driver"
 msgstr "GPS köztes meghajtó"
 
-#: src/Profile/DeviceConfig.cpp:169 src/Dialogs/Device/DeviceEditWidget.cpp:69
+#: src/Profile/DeviceConfig.cpp:175 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Beépített GPS és érzékelők"
@@ -3352,12 +3379,12 @@ msgstr "Figyelmeztetés"
 msgid "Battery low"
 msgstr "Lemerült a telep"
 
-#: src/Startup.cpp:268
+#: src/Startup.cpp:266
 msgid "Initialising"
 msgstr "Előkészülés"
 
 #. Start the device thread(s)
-#: src/Startup.cpp:393
+#: src/Startup.cpp:391
 msgid "Starting devices"
 msgstr "Eszközök indítása"
 
@@ -3367,43 +3394,43 @@ msgstr "Eszközök indítása"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:403
+#: src/Startup.cpp:401
 msgid "Initialising display"
 msgstr "Kijelző előkészítése"
 
 #. Show progress dialog
-#: src/Startup.cpp:501 src/Startup.cpp:538 src/Startup.cpp:582
+#: src/Startup.cpp:499 src/Startup.cpp:536 src/Startup.cpp:580
 msgid "Shutdown, please wait..."
 msgstr "Leállás, kérem várjon..."
 
 #. Stop logger and save igc file
-#: src/Startup.cpp:519
+#: src/Startup.cpp:517
 msgid "Shutdown, saving logs..."
 msgstr "Leállás, naplók mentése..."
 
 #. Save settings to profile
-#: src/Startup.cpp:531
+#: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
 msgstr "Leállás, profil mentése..."
 
 #. Save the task for the next time
-#: src/Startup.cpp:574
+#: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
 msgstr "Leállás, feladat mentése..."
 
-#: src/Device/Descriptor.cpp:366
+#: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
 msgstr "A port nem nyitható meg."
 
-#: src/Device/Descriptor.cpp:855 src/Device/Descriptor.cpp:861
+#: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
 msgstr "Deklarálás küldése"
 
-#: src/Device/Descriptor.cpp:898
+#: src/Device/Descriptor.cpp:930
 msgid "Reading flight list"
 msgstr "Repülési lista betöltése"
 
-#: src/Device/Descriptor.cpp:918
+#: src/Device/Descriptor.cpp:950
 msgid "Downloading flight log"
 msgstr "Napló letöltése"
 
@@ -3414,7 +3441,7 @@ msgstr "Napló letöltése"
 #: src/Dialogs/MapItemListSettingsDialog.cpp:36
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:37
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:36
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:370
 #: src/Dialogs/Settings/FontEdit.cpp:194 src/Dialogs/NumberEntry.cpp:61
 #: src/Dialogs/NumberEntry.cpp:105 src/Dialogs/NumberEntry.cpp:147
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:213 src/Dialogs/TimeEntry.cpp:66
@@ -3443,7 +3470,8 @@ msgstr "Újra"
 #: src/Dialogs/MapItemListSettingsDialog.cpp:37
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
-#: src/Dialogs/Settings/FontEdit.cpp:196 src/Dialogs/NumberEntry.cpp:62
+#: src/Dialogs/Settings/FontEdit.cpp:196
+#: src/Dialogs/Traffic/TrafficList.cpp:748 src/Dialogs/NumberEntry.cpp:62
 #: src/Dialogs/NumberEntry.cpp:106 src/Dialogs/NumberEntry.cpp:148
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:217 src/Dialogs/TimeEntry.cpp:67
 #: Data/Dialogs/WaypointList.xml:19 Data/Dialogs/WaypointList_L.xml:17
@@ -3461,8 +3489,8 @@ msgstr "Mellőz"
 msgid "Help"
 msgstr "Súgó"
 
-#: src/Dialogs/ListPicker.cpp:189 Data/Dialogs/WaypointList.xml:18
-#: Data/Dialogs/WaypointList_L.xml:16
+#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:747
+#: Data/Dialogs/WaypointList.xml:18 Data/Dialogs/WaypointList_L.xml:16
 msgid "Select"
 msgstr "Kiválaszt"
 
@@ -3471,7 +3499,9 @@ msgstr "Kiválaszt"
 msgid "Download"
 msgstr "Letöltés"
 
-#: src/Dialogs/FileManager.cpp:406 src/Dialogs/Weather/NOAAList.cpp:108
+#: src/Dialogs/FileManager.cpp:406
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:116
+#: src/Dialogs/Weather/NOAAList.cpp:108
 msgid "Add"
 msgstr "Hozzáadás"
 
@@ -3484,7 +3514,7 @@ msgid "Downloading"
 msgstr "Letöltés"
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
-#: src/Dialogs/Device/DeviceListDialog.cpp:334
+#: src/Dialogs/Device/DeviceListDialog.cpp:346
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
@@ -3532,39 +3562,44 @@ msgstr "A fájlkezelőhöz Android 2.3 szükséges."
 msgid "IOIO switches and Nunchuk"
 msgstr "IOIO kapcsolók és Nunchuk"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:74
+#: src/Dialogs/Device/DeviceEditWidget.cpp:75
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
 msgstr "IOIO i2c nyomásszenzor"
 
+#: src/Dialogs/Device/DeviceEditWidget.cpp:76
+#, fuzzy, no-c-format
+msgid "IOIO voltage sensor"
+msgstr "IOIO i2c nyomásszenzor"
+
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
-#: src/Dialogs/Device/DeviceEditWidget.cpp:80
-#: src/Dialogs/Device/DeviceEditWidget.cpp:604
+#: src/Dialogs/Device/DeviceEditWidget.cpp:81
+#: src/Dialogs/Device/DeviceEditWidget.cpp:607
 #, no-c-format
 msgid "TCP Port"
 msgstr "TCP Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:81
+#: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "UDP Port"
 msgstr "UDP port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:583
+#: src/Dialogs/Device/DeviceEditWidget.cpp:586
 msgid "Port"
 msgstr "Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:589
+#: src/Dialogs/Device/DeviceEditWidget.cpp:592
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
 msgstr "Átviteli sebesség (baud)"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:596
+#: src/Dialogs/Device/DeviceEditWidget.cpp:599
 msgid "Bulk baud rate"
 msgstr "Átviteli sebesség"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:597
+#: src/Dialogs/Device/DeviceEditWidget.cpp:600
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -3572,19 +3607,19 @@ msgstr ""
 "Nagy mennyiségű adat (feladat deklarálása, tárolt repülés) átvitele során "
 "alkalmazott sebesség."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:610
+#: src/Dialogs/Device/DeviceEditWidget.cpp:613
 msgid "I2C Bus"
 msgstr "I2C busz"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:610
+#: src/Dialogs/Device/DeviceEditWidget.cpp:613
 msgid "Select the description or bus number that matches your configuration."
 msgstr "Válassza a konfigurációjának megfelelő leírást vagy busz sorszámot."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:620
 msgid "I2C Addr"
 msgstr "I2C cím"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:617
+#: src/Dialogs/Device/DeviceEditWidget.cpp:620
 msgid ""
 "The i2c address that matches your configuration.This field is not used when "
 "your selection in the I2C Bus field is not an i2c bus number. In case you do "
@@ -3595,11 +3630,11 @@ msgstr ""
 "busz mezőben nem számot választott. Ha ezt az előző mondatot nem érti, akkor "
 "feltételezhetően a mező nem használatos."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:626
+#: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid "Pressure use"
 msgstr "Nyomásmérés célja"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:626
+#: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
@@ -3609,15 +3644,15 @@ msgstr ""
 "nyomást mér. Itt megmondhatja a rendszernek, hogy milyen nyomás ez és mire "
 "szeretné használni."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:641
+#: src/Dialogs/Device/DeviceEditWidget.cpp:644
 msgid "Driver"
 msgstr "Illesztőprogram"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:643
+#: src/Dialogs/Device/DeviceEditWidget.cpp:646
 msgid "Sync. from device"
 msgstr "Szinkronizálás eszközből"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:644
+#: src/Dialogs/Device/DeviceEditWidget.cpp:647
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
@@ -3625,11 +3660,11 @@ msgstr ""
 "MacCready érték, bogárpiszok, ballaszt és más beállítások szinkronizálása az "
 "XCSoarba az eszköz értékei alapján."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:649
+#: src/Dialogs/Device/DeviceEditWidget.cpp:652
 msgid "Sync. to device"
 msgstr "Szinkronizálás eszközbe"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:650
+#: src/Dialogs/Device/DeviceEditWidget.cpp:653
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
@@ -3637,19 +3672,19 @@ msgstr ""
 "MacCready érték, bogárpiszok, ballaszt és más beállítások szinkronizálása az "
 "eszközbe az XCSoar értékei alapján."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:656
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "Enable this if you use a K6Bt to connect the device."
 msgstr "Engedélyezze, ha K6Bt-t használ az eszköz csatlakoztatásához"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:663
+#: src/Dialogs/Device/DeviceEditWidget.cpp:666
 msgid "Enable this if you would like to log the communication with the device."
 msgstr "Engedélyezze, ha naplózni szeretné a kommunikációt az eszközzel."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:670
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid "Ignore checksum"
 msgstr "Kontrollszám érdektelen"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:671
+#: src/Dialogs/Device/DeviceEditWidget.cpp:674
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
@@ -3657,74 +3692,89 @@ msgstr ""
 "Ez megengedi érvénytelen NMEA ellenőrzőszám esetén is a GPS adatok "
 "felhasználását."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:236
-#: src/Dialogs/Device/DeviceListDialog.cpp:359
+#: src/Dialogs/Device/DeviceListDialog.cpp:242
+#: src/Dialogs/Device/DeviceListDialog.cpp:375
+#: src/Dialogs/Device/DeviceListDialog.cpp:383
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
 msgstr "Újrakapcsolódás"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:237
+#: src/Dialogs/Device/DeviceListDialog.cpp:243
 msgid "Flight download"
 msgstr "Repülés letöltése"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:239
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
-#: src/Dialogs/Device/DeviceListDialog.cpp:438
+#: src/Dialogs/Device/DeviceListDialog.cpp:245
+#: src/Dialogs/Device/DeviceListDialog.cpp:405
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
+#: src/Dialogs/Device/DeviceListDialog.cpp:467
+#: src/Dialogs/Device/DeviceListDialog.cpp:473
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:186
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:200
 msgid "Manage"
 msgstr "Műveletek"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:240
+#: src/Dialogs/Device/DeviceListDialog.cpp:246
 msgid "Monitor"
 msgstr "Monitor"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:286
-#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:184
+#: src/Dialogs/Device/DeviceListDialog.cpp:292
+#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
 #, c-format
 msgid "%s on %s"
 msgstr "%s %s-n"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:300
+#: src/Dialogs/Device/DeviceListDialog.cpp:306
 msgid "GPS fix"
 msgstr "GPS vétel"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:303
+#: src/Dialogs/Device/DeviceListDialog.cpp:309
 msgid "Bad GPS"
 msgstr "Hibás GPS"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:305
+#: src/Dialogs/Device/DeviceListDialog.cpp:311
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 msgid "Connected"
 msgstr "Kapcsolódva"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:310
+#: src/Dialogs/Device/DeviceListDialog.cpp:316
 msgid "Baro"
 msgstr "Baró"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:315 Data/Dialogs/dlgVegaDemo.xml:10
+#: src/Dialogs/Device/DeviceListDialog.cpp:321 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr "Sebesség"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:336
+#: src/Dialogs/Device/DeviceListDialog.cpp:343
+#: src/Dialogs/Device/DeviceListDialog.cpp:375
+#, fuzzy
+msgid "Bluetooth is disabled"
+msgstr "Bluetooth szerver"
+
+#: src/Dialogs/Device/DeviceListDialog.cpp:348
 msgid "Not connected"
 msgstr "Nincs kapcsolat"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:359
-#: src/Dialogs/Device/DeviceListDialog.cpp:381
-#: src/Dialogs/Device/DeviceListDialog.cpp:438
+#: src/Dialogs/Device/DeviceListDialog.cpp:383
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
+#: src/Dialogs/Device/DeviceListDialog.cpp:473
 #: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Device is occupied"
 msgstr "Az eszköz foglalt."
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:401
+#: src/Dialogs/Device/DeviceListDialog.cpp:405
+#: src/Dialogs/Device/DeviceListDialog.cpp:467
+#, fuzzy
+msgid "Device is not connected"
+msgstr "Az eszköz foglalt."
+
+#: src/Dialogs/Device/DeviceListDialog.cpp:431
 msgid "Edit device"
 msgstr "Eszköz szerkesztése"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:531
+#: src/Dialogs/Device/DeviceListDialog.cpp:566
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119 Data/Input/default.xci:617
 #: Data/Input/default.xci:1214
 #, no-c-format
@@ -3777,13 +3827,13 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr "Valóban letöröl az eszközről minden repülést?"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
 msgid "Temperature"
 msgstr "Hőmérséklet"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
 msgstr "Légnyomás"
@@ -3971,7 +4021,7 @@ msgid "Unkown"
 msgstr "Ismeretlen"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:115
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
 msgstr "Vitorlázó repülő"
@@ -4002,13 +4052,13 @@ msgid "Hang glider"
 msgstr "Sárkányrepülő"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:144
 #, no-c-format
 msgid "Paraglider"
 msgstr "Siklóernyő"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:145
 #, no-c-format
 msgid "Powered aircraft"
 msgstr "Motors repülőgép"
@@ -4057,12 +4107,12 @@ msgstr "Típus"
 msgid "Logger interval"
 msgstr "Logger ütem"
 
-#: src/Dialogs/MapItemListDialog.cpp:151 src/Dialogs/dlgAnalysis.cpp:293
+#: src/Dialogs/MapItemListDialog.cpp:154 src/Dialogs/dlgAnalysis.cpp:293
 #: src/Dialogs/dlgAnalysis.cpp:329 src/Dialogs/dlgAnalysis.cpp:338
 msgid "Settings"
 msgstr "Rep. tényezők"
 
-#: src/Dialogs/MapItemListDialog.cpp:152
+#: src/Dialogs/MapItemListDialog.cpp:155
 #: src/Dialogs/Task/dlgAlternatesList.cpp:100
 msgid "Goto"
 msgstr "Menj"
@@ -4141,12 +4191,12 @@ msgstr "Újra riaszt"
 msgid "Ack Day"
 msgstr "Napi nyugta"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:222
-#: src/Dialogs/Waypoint/WaypointList.cpp:314
+#: src/Dialogs/Airspace/AirspaceList.cpp:226
+#: src/Dialogs/Waypoint/WaypointList.cpp:318
 msgid "No Match!"
 msgstr "Nincs egyezés!"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:245
+#: src/Dialogs/Airspace/AirspaceList.cpp:249
 msgid "Heading"
 msgstr "Irányszög"
 
@@ -4255,7 +4305,7 @@ msgid "Wind Settings"
 msgstr "Szél beállítások"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:145
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:364
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:369
 msgid "Dump"
 msgstr "Ürítés"
 
@@ -4348,15 +4398,6 @@ msgstr "Tájolás"
 msgid "Elements"
 msgstr "Elemek"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:102
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
-#: src/Dialogs/dlgWeather.cpp:73 src/Terrain/RasterWeather.cpp:49
-#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:520
-#: Data/Input/default.xci:1143
-#, no-c-format
-msgid "Terrain"
-msgstr "Terep"
-
 #: src/Dialogs/Settings/dlgConfiguration.cpp:104
 #, no-c-format
 msgid "Safety Factors"
@@ -4398,14 +4439,14 @@ msgid "Screen Layout"
 msgstr "Képernyő elrendezés"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, no-c-format
-msgid "InfoBox Pages"
-msgstr "Kijelző oldalak"
+#, fuzzy, no-c-format
+msgid "Pages"
+msgstr "Oldal"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, no-c-format
-msgid "InfoBox Modes"
-msgstr "Kijelző oldalak tartalma"
+#, fuzzy, no-c-format
+msgid "InfoBox Sets"
+msgstr "Kijelzők"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4491,29 +4532,29 @@ msgstr "Felülírjam?"
 msgid "InfoBox paste"
 msgstr "Kijelzők beillesztés"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:201
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:203
 #: Data/Dialogs/dlgPlanePolar.xml:6 Data/Dialogs/dlgPlanePolar_L.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:6
 msgid "Invalid"
 msgstr "Érvénytelen"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:338
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:341
 #: Data/Dialogs/AirspaceList.xml:8 Data/Dialogs/AirspaceList_L.xml:6
 #: Data/Dialogs/WaypointList.xml:2 Data/Dialogs/WaypointList_L.xml:2
 #: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
 msgid "Name"
 msgstr "Név"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:367
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:370
 msgid "Content"
 msgstr "Tartalom"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:406
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:409
 msgid "Copy"
 msgstr "Másol"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:412
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:415
 msgid "Paste"
 msgstr "Beill."
 
@@ -4545,36 +4586,52 @@ msgstr "Betű szerkesztés"
 msgid "Reset"
 msgstr "Alapállapot"
 
-#: src/Dialogs/Traffic/FlarmTrafficList.cpp:107
-msgid "No further information"
-msgstr "Nincs további információ"
+#: src/Dialogs/Traffic/TrafficList.cpp:326
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
+#: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
+msgid "Competition ID"
+msgstr "Farokjel"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:127
+#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:315
+#: Data/Input/default.xci:1013
+#, no-c-format
+msgid "Map"
+msgstr "Térkép"
+
+#: src/Dialogs/Traffic/TrafficList.cpp:730
+#, fuzzy
+msgid "Traffic"
+msgstr "Nincs forgalom"
+
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
 msgid "FLARM Traffic Details"
 msgstr "FLARM forgalom részletei"
 
 #. Ask for confirmation
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:198
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:200
 msgid "Do you want to set this FLARM contact as your new teammate?"
 msgstr "Ez a FLARM kapcsolat legyen az új csapattárs?"
 
-#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:199
+#: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:201
 msgid "New Teammate"
 msgstr "Új csapattárs"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:149
-msgid "Set new teammate:"
-msgstr "Az új csapattárs:"
-
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:157
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:145
 msgid "Unknown Competition Number"
 msgstr "Ismeretlen farokjel"
 
-#: src/Dialogs/Traffic/TeamCodeDialog.cpp:158
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:146
 msgid "Not Found"
 msgstr "Nem található"
+
+#: src/Dialogs/Traffic/TeamCodeDialog.cpp:150
+#, fuzzy
+msgid "Set new teammate"
+msgstr "Az új csapattárs:"
 
 #: src/Dialogs/dlgAnalysis.cpp:288 src/Dialogs/dlgAnalysis.cpp:297
 #: src/Dialogs/dlgAnalysis.cpp:306 src/Dialogs/dlgAnalysis.cpp:315
@@ -4627,7 +4684,7 @@ msgid "Task calc"
 msgstr "Feladatkezelő"
 
 #: src/Dialogs/dlgAnalysis.cpp:373
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Warnings"
 msgstr "Riasztás"
 
@@ -4652,6 +4709,7 @@ msgstr "Új"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:167
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:117
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:104
 #: Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9
@@ -4777,7 +4835,7 @@ msgid "Times"
 msgstr "Idők"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
 #: Data/Dialogs/dlgTaskPoint.xml:5 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Location"
 msgstr "Hely"
@@ -4914,7 +4972,7 @@ msgid "Landing time"
 msgstr "Leszállás"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
 msgid "Daylight time"
 msgstr "Nappal"
 
@@ -4926,29 +4984,29 @@ msgstr "Túl erős szél"
 msgid "No solution"
 msgstr "Nincs megoldás"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:92
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:112
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:26
 msgid "Radio frequency"
 msgstr "Rádiófrekvencia"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:111
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:131
 msgid "Runway"
 msgstr "Futópálya"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:144
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:164
 msgid "Bearing and Distance"
 msgstr "Irány és távolság"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:156
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:176
 msgid "Alt. diff. MC 0"
 msgstr "Mag.tblt.MC.nul"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:160
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:180
 msgid "Alt. diff. MC safety"
 msgstr "Mag.tblt.MC.biz"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:165
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:185
 msgid "Alt. diff. MC current"
 msgstr "Mag.tblt.MC.akt"
 
@@ -5069,7 +5127,7 @@ msgstr ""
 msgid "Waypoint Editor"
 msgstr "Fordulópontok kezelése"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:314
+#: src/Dialogs/Waypoint/WaypointList.cpp:318
 msgid "Choose a filter or click here"
 msgstr "Válasszon szűrőt vagy kattintson ide"
 
@@ -5152,11 +5210,11 @@ msgstr "Szinek"
 msgid "Filter"
 msgstr "Szűrő"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:189
 msgid "Airspace display"
 msgstr "Légterek kijelzése"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:189
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:190
 msgid ""
 "Controls filtering of airspace for display and warnings.  The airspace "
 "filter button also allows filtering of display and warnings independently "
@@ -5166,11 +5224,11 @@ msgstr ""
 "szűrő nyomógomb ugyancsak lehetővé teszi a megjelenítés és a figyelmeztetés "
 "szűrését, osztályonként."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid "Clip altitude"
 msgstr "Vágási magasság"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
@@ -5178,11 +5236,11 @@ msgstr ""
 "Amikor a légterek megjelenítése vágásra van állítva, az itt megadott szint "
 "alatti légterek lesznek megjelenítve."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 msgid "Margin"
 msgstr "Vágási sáv"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
@@ -5190,25 +5248,25 @@ msgstr ""
 "Az 'automata' vagy az 'alatta mind' légtérvágási módban alkalmazott sáv "
 "magassága."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Enable/disable all airspace warnings."
 msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Warning time"
 msgstr "Riasztás időzítése"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr "Egy légtér megsértése előtt ennyi idővel figyelmezteti a pilótát."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Acknowledge time"
 msgstr "Nyugtázás érvénye"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
@@ -5216,30 +5274,30 @@ msgstr ""
 "Egy tudomásul vett légtérsértési figyelmeztetést ennyi időn belül nem "
 "ismétel meg."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Use black outline"
 msgstr "Fekete keret"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
 "A légtér kerülete fekete színnel kerüljön kirajzolásra, nem a légtér saját "
 "színével."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Airspace fill mode"
 msgstr "Légtér kiszínezésének módja"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:220
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Légtér kiszínezésének módja."
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Airspace transparency"
 msgstr "Légtér átlátszóság"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "Ha bekapcsoljuk, a légtereket átlátszóan színezi ki."
 
@@ -5261,10 +5319,6 @@ msgstr ""
 "érdekében. Ha nincs a listán, válassza a Generic típust."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
-msgid "FLARM radar"
-msgstr "FLARM radar"
-
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -5277,11 +5331,11 @@ msgstr ""
 "háromszög utal a cél relatív magasságára a sajátunkhoz képest. A nyíl színe "
 "minden üzemmódban a fenyegetés szintjére utal."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 msgid "Auto close FLARM"
 msgstr "FLARM autmata bezárása"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -5289,15 +5343,15 @@ msgstr ""
 "Be állásban automatikusan bezáródik a FLARM ablak, ha nincs forgalom. Ki "
 "esetén az ablak nyitva marad, még ha nincs is forgalom."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr "A termiksegéd megjelenését szabályozza."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 msgid "Thermal band"
 msgstr "Termikerő"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
@@ -5305,11 +5359,11 @@ msgstr ""
 "Ezzel a kijelzővel a térkép szélén megjeleníthető a termik erejének "
 "magasságtól függő változása."
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:72
 msgid "Final glide bar MC0"
 msgstr "Siklópálya MC0"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
@@ -5486,7 +5540,8 @@ msgid "Preferred period for gliders."
 msgstr "Ajánlott időtartam siklóernyősöknek"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-msgid "L/D average period"
+#, fuzzy
+msgid "GR average period"
 msgstr "Átlagos siklószám mintavétel"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
@@ -5828,7 +5883,7 @@ msgid "Scaled centered"
 msgstr "Méretezve középen"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:206
 #, no-c-format
 msgid "Fixed"
 msgstr "Rögzített helyen"
@@ -6127,47 +6182,79 @@ msgstr "Automata nagyítás max. táv"
 msgid "The upper limit for auto zoom distance."
 msgstr "Az automata nagyítás felső határa."
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:82
-msgid "Page"
-msgstr "Oldal"
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
+#, fuzzy
+msgid "Main area"
+msgstr "Szárnyfelület"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:84
-msgid "Determines the information displayed on different screen pages."
-msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
+#, fuzzy
+msgid "Specifies what should be displayed in the main area."
+msgstr "Légtér kiszínezésének módja."
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:331
+msgid "InfoBoxes"
+msgstr "Kijelzők"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+msgid "Specifies which InfoBoxes should be displayed on this page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#, no-c-format
+msgid "Nothing"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
+#, fuzzy, no-c-format
+msgid "Cross section"
+msgstr "Irány"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
+#, fuzzy
+msgid "Bottom area"
+msgstr "Bal alsó"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
+#, fuzzy
+msgid "Specifies what should be displayed below the main area."
+msgstr "Légtér kiszínezésének módja."
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
 msgstr "Poláris neve"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
 msgstr "Ne használjon se légteret se terepet az útvonal tervezéshez"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
 #, no-c-format
 msgid "Routes will avoid terrain."
 msgstr "Útvonal elkerüli a terepet"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace."
 msgstr "Útvonal elkerüli a légteret"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:110
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
 msgstr "Útvonal elkerüli a légteret és a trepet"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:114
 msgid "Route mode"
 msgstr "Útvonaltervezés módja"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:115
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:117
 msgid "Route climb"
 msgstr "Emelések az útvonalon"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:118
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
@@ -6175,11 +6262,11 @@ msgstr ""
 "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel számol "
 "a gép helyzete és az úticél között."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:123
 msgid "Route ceiling"
 msgstr "Útvonal teteje"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:124
 msgid ""
 "When enabled, route planning climbs are limited to ceiling defined by "
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
@@ -6190,93 +6277,93 @@ msgstr ""
 "termik magassága, amelyik magasabb. Ha kikapcsoljuk, az emelések korlátlan "
 "magasak."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:130
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
 msgid "Reach calculations disabled."
 msgstr "Elérhető terület kiszámítása letiltva."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "Straight"
 msgstr "Egyenesen"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
 msgstr "Az egyenes vonalú repülésben elérhető terület."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "Turning"
 msgstr "Kerülőkkel"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:136
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
 msgstr "A terepakadályok megkerülésével elérhető terület."
 
 #. Spacer
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
 msgid "Reach mode"
 msgstr "Elérhető számítása"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:143
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr "Az elérhető terület kiszámításának módja."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:147
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #, no-c-format
 msgid "Disables the reach display."
 msgstr "Letiltja az elérhetó terület megjelenítését."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:192
 #, no-c-format
 msgid "Line"
 msgstr "Vonal"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:151
 #, no-c-format
 msgid "Draws a dashed line at the glide reach."
 msgstr "A terület peremét szaggatott vonal jelzi."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:152
 #, no-c-format
 msgid "Shade"
 msgstr "Árnyék"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:151
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:153
 #, no-c-format
 msgid "Shades terrain outside glide reach."
 msgstr "A területen kívüli terep árnyékolva lesz."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:157
 msgid "Reach display"
 msgstr "Elérhető kijelzése"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
 msgid "Uses task glide polar."
 msgstr "A feladat polárgörbéjével."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:94
 #, no-c-format
 msgid "Safety MC"
 msgstr "Biztonságos MC"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
 msgid "Uses safety MacCready value"
 msgstr "A biztonsági MC értékkel."
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 msgid "Reach polar"
 msgstr "Elérhető polárisa"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
@@ -6306,7 +6393,7 @@ msgid "The height above terrain that the glider must clear during final glide."
 msgstr "A végsiklás közben a terep felett megőrizendő magasság."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:75
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
 msgid "Simple"
 msgstr "Egyszerű"
@@ -6453,17 +6540,17 @@ msgstr ""
 "A fájl kiegészítő információkat tartalmazhat fordulópontokról és "
 "repülőterekről."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
 #, no-c-format
 msgid "Disable display of ground track line."
 msgstr "Nem jeleníti meg a nyomvonalat."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
 #, no-c-format
 msgid "Always display ground track line."
 msgstr "Mindig megjeleníti a nyomvonalat."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:89
 #, no-c-format
 msgid ""
 "Display ground track line if there is a significant difference to plane "
@@ -6471,12 +6558,12 @@ msgid ""
 msgstr ""
 "Akkor jeleníti meg a nyomvonalat, ha az lényegesen eltér az orriránytól."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:102
 #, no-c-format
 msgid "Vario #1"
 msgstr "Varió #1"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:102
 #, no-c-format
 msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
@@ -6485,24 +6572,24 @@ msgstr ""
 "Az emelőterekben a vonalak zöldek és vastagabbak, a merülésben barnák és "
 "vékonyak. A nulla emelést szürke vonal jelzi."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:105
 #, no-c-format
 msgid "Vario #1 (with dots)"
 msgstr "Varió 1 (pöttyökkel)"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
 msgstr "Az előzővel megegyező színséma de merülésben pontvonallal."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:107
 #, no-c-format
 msgid "Vario #2"
 msgstr "Varió #2"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:107
 #, no-c-format
 msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
@@ -6511,136 +6598,136 @@ msgstr ""
 "Ebben a színsémában az emelés narancstól vörösig, a merülés világostól "
 "sötétkékig terjedő színű. A nulla emelést sárga vonal jelzi."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
 msgid "Vario #2 (with dots)"
 msgstr "Varió 2 (pöttyökkel)"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
 msgstr "A színséma a magasságnak megfelelő."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Simplified line graphics, black with white contours."
 msgstr "Egyszerűsített vonalas grafika, fekete szín fehér körvonallal."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:119
 #, no-c-format
 msgid "Simple (large)"
 msgstr "Egyszerű (nagy)"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:119
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Enlarged simple graphics."
 msgstr "Felnagyított egyszerű grafika."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Detailed"
 msgstr "Részletes"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
 msgstr "Finom rajzolatú, számított grafika."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
 msgid "HangGlider"
 msgstr "Sárkányrepülő"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr "Egyszerű, vonalas, fehér sárkányrepülő grafika, fekete körvonallal."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
 msgid "ParaGlider"
 msgstr "Siklóernyő"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
 msgstr "Egyszerű, vonalas, fehér siklóernyő grafika, fekete körvonallal."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
 #, no-c-format
 msgid "No wind arrow is drawn."
 msgstr "Szélnyíl nem látszik"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
 msgid "Arrow head"
 msgstr "Nyíl fej"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
 msgid "Draws an arrow head only."
 msgstr "Csak a nyílfej rajzolása"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Full arrow"
 msgstr "Teljes nyíl"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Draws an arrow head with a dashed arrow line."
 msgstr "Nyílfej rajzolása szaggatott vonallal"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 msgid "Ground track"
 msgstr "Nyomvonal"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:143
 msgid "Display the ground track as a grey line on the map."
 msgstr "Szürke vonal formájában jeleníti meg a nyomvonalat a térképen."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "FLARM traffic"
 msgstr "FLARM forgalom"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "This enables the display of FLARM traffic on the map window."
 msgstr "A FLARM forgalom megjelenítése a térképablakban."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:149
 msgid "Trail length"
 msgstr "Nyomvonal hossza"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
 msgstr ""
 "Meghatározza, hogy kell-e és milyen hosszan nyomvonalat rajzolni a gép "
 "mögött."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:161
 msgid "Trail type"
 msgstr "Nyomvonal típusa"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:161
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:162
 msgid "Sets the type of the snail trail display."
 msgstr "A nyomvonal megjelenítésének típusát állítja be."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail scaled"
 msgstr "Nyomvonal méretezés"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr ""
 "Bekapcsolt állapotban a nyomvonal szélessége arányos lesz a varió jelével."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:169
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:170
 msgid "Detour cost markers"
 msgstr "Eltérés költsége"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:170
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:171
 msgid ""
 "If the aircraft heading deviates from the current waypoint, markers are "
 "displayed at points ahead of the aircraft. The value of each marker is the "
@@ -6652,19 +6739,19 @@ msgstr ""
 "annak a pontnak az eléréshez a fordulóponthoz vezető egyenes út hosszához "
 "képest."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:177
 msgid "Aircraft symbol"
 msgstr "Repülőgép szimbólum"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Determines the way the wind arrow is drawn on the map."
 msgstr "Meghatározza a szél megjelenítésének módját a térképen."
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
 msgid "FAI triangle areas"
 msgstr "FAI háromszögek"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:186
 msgid "Show FAI triangle areas on the map."
 msgstr "FAI háromszögek megjelenítése a térképen"
 
@@ -6901,92 +6988,98 @@ msgstr ""
 "optimumszámítás a legrövidebb időnek ezzel a tartalékkal megnövelt értékéhez "
 "igazítja a feladat végrehajtását."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:174
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:177
 msgid "Terrain display"
 msgstr "Domborzat"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:178
 msgid "Draw a digital elevation terrain on the map."
 msgstr "Digitális domborzat kirajzolása a térképre."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:179
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:182
 msgid "Topography display"
 msgstr "Topográfia"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:183
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
 msgstr "Topográfia (utak, folyók, tavak, stb) megjelenítése a térképen."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:187
 #, no-c-format
 msgid "Low lands"
 msgstr "Alföld"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:188
 #, no-c-format
 msgid "Mountainous"
 msgstr "Hegyvidéki"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:189
 #, no-c-format
 msgid "Imhof 7"
 msgstr "Imhof 7"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:190
 #, no-c-format
 msgid "Imhof 4"
 msgstr "Imhof 4"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
 #, no-c-format
 msgid "Imhof 12"
 msgstr "Imhof 12"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:189
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:192
 #, no-c-format
 msgid "Imhof Atlas"
 msgstr "Imhof Atlas"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:193
 #, no-c-format
 msgid "ICAO"
 msgstr "ICAO"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:194
 #, no-c-format
 msgid "Grey"
 msgstr "Szürke"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
+#, no-c-format
+msgid "White"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
 msgstr "Színek"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:200
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "A terep megjelenítése során használt színskála."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
 #, no-c-format
 msgid "Sun"
 msgstr "Nap"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 msgid "Slope shading"
 msgstr "Lejtők árnyalása"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
+#, fuzzy
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
-"sun position or a fixed shading from north-east."
+"sun position or a fixed shading from North-West."
 msgstr ""
 "A domborzat lejtői árnyalhatók vagy észak-dél irányban vagy a szél vagy a "
 "Nap irányától függően."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 msgid "Terrain contrast"
 msgstr "Kontraszt"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -6995,11 +7088,11 @@ msgstr ""
 "A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
 "hangsúlyozására, kisebbeket ha meredek hegyek között repül."
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:221
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:225
 msgid "Terrain brightness"
 msgstr "Fényerő"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:226
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
@@ -7007,34 +7100,34 @@ msgstr ""
 "A terep megjelenítésének fényességét (fehérségét) állítja. Ettől függ a "
 "terep átlagos megvilágítottsága."
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
 msgstr "Beállítás"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Load a set of units."
 msgstr "Mértékegysége beállítások beöltése"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
 msgstr "Egyéni"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
 msgstr "Egyéni mértékegység beállítások betöltése"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:166
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:198
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
 #, no-c-format
 msgid "knots"
 msgstr "csomó"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
 msgid "Aircraft/Wind speed"
 msgstr "Repgép/szél sebesség"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:147
 msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
@@ -7042,54 +7135,54 @@ msgstr ""
 "A repülési és a föld feletti sebességekhez használt mértékegység. A feladat "
 "sebességek egysége külön állítható."
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:160
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr "A vízszintes távolságokhoz használt mértékegység (fordulópont, táv)"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:172
 msgid "Lift"
 msgstr "Emelkedés"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:172
 msgid "Units used for vertical speeds (variometer)."
 msgstr "Vertikális sebességhez (vario) használt mértékegység"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:178
 #, no-c-format
 msgid "foot"
 msgstr "láb"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:179
 #, no-c-format
 msgid "meter"
 msgstr "méter"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:182
 msgid "Units used for altitude and heights."
 msgstr "A magasságokhoz és szintekhez használt mértékegység."
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 msgid "Units used for temperature."
 msgstr "A hőmérsékletekhez használt mértékegység."
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:203
 msgid "Task speed"
 msgstr "Feladat sebesség"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:203
 msgid "Units used for task speeds."
 msgstr "Feladat sebességéhez használt mértékegységek."
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 msgid "Units used for pressures."
 msgstr "Nyomáshoz használt mértékegység"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 msgid "Lat./Lon."
 msgstr "Szél/Hossz"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 msgid "Units used for latitude and longitude."
 msgstr "A földrajzi szélességhez, hosszúsághoz használt mértékegység."
 
@@ -7380,6 +7473,44 @@ msgid ""
 msgstr ""
 "[KI] Egyforma hosszon jelzi a futópályákat\n"
 "[BE] A valós hossz arányában jelzi a futópályákat."
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:146
+#, no-c-format
+msgid "Hot-air balloon"
+msgstr "Hőlég ballon"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
+msgid "Tracking Interval"
+msgstr "Nyomkövetési ütem"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:166
+msgid "Track friends"
+msgstr "Barátok követése"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
+msgid "Download the position of your friends live from the SkyLines server."
+msgstr "Barátok helyzetének letöltése élőben a SkyLines szerverről."
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
+msgid "Vehicle Type"
+msgstr "Jármű típusa"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
+msgid "Type of vehicle used."
+msgstr "Használt jármű típusa"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
+msgid "Server"
+msgstr "Szerver"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:195
+msgid "Username"
+msgstr "Felhasználónév"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:196
+msgid "Password"
+msgstr "Jelszó"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -7802,7 +7933,7 @@ msgstr "nem FAI fordulópontok"
 msgid "Alternates"
 msgstr "Kitérők"
 
-#: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/dlgWeather.cpp:54
+#: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/dlgWeather.cpp:53
 msgid "Now"
 msgstr "Most"
 
@@ -7911,44 +8042,6 @@ msgstr "METAR és TAF"
 #: src/Dialogs/Weather/NOAADetails.cpp:129
 msgid "This function is not available on your platform yet."
 msgstr "Ez a funkció még nem elérhető a platformodon."
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:118
-#, no-c-format
-msgid "Hot-air balloon"
-msgstr "Hőlég ballon"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
-msgid "Tracking Interval"
-msgstr "Nyomkövetési ütem"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-msgid "Track friends"
-msgstr "Barátok követése"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
-msgid "Download the position of your friends live from the SkyLines server."
-msgstr "Barátok helyzetének letöltése élőben a SkyLines szerverről."
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
-msgid "Vehicle Type"
-msgstr "Jármű típusa"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
-msgid "Type of vehicle used."
-msgstr "Használt jármű típusa"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:156
-msgid "Server"
-msgstr "Szerver"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:160
-msgid "Username"
-msgstr "Felhasználónév"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:161
-msgid "Password"
-msgstr "Jelszó"
 
 #: src/Renderer/NOAAListRenderer.cpp:70
 msgid "No METAR available"
@@ -8542,10 +8635,6 @@ msgstr "Légtér nyugta"
 msgid "Registration"
 msgstr "Regisztráció"
 
-#: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
-msgid "Radial"
-msgstr "Radiál"
-
 #: Data/Dialogs/dlgPlaneDetails.xml:29 Data/Dialogs/dlgPlaneDetails_L.xml:39
 msgid "Max. Ballast"
 msgstr "Max. Ballaszt"
@@ -8857,10 +8946,6 @@ msgstr ""
 "Kabin\n"
 "kapcsolók"
 
-#: Data/Input/default.xci:1013
-msgid "Map"
-msgstr "Térkép"
-
 #: Data/Input/default.xci:132
 msgid ""
 "Pan\n"
@@ -9045,6 +9130,75 @@ msgstr ""
 "METAR\n"
 "TAF"
 
+#~ msgid "Altitude AGL"
+#~ msgstr "Föld feletti magasság"
+
+#~ msgid "Alt AGL"
+#~ msgstr "Mgsg ff"
+
+#~ msgid "H GND"
+#~ msgstr "Terep"
+
+#~ msgid ""
+#~ "Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
+#~ "is possible by pressing the up/down cursor keys to adjust magnitude and "
+#~ "left/right cursor keys to adjust bearing when the InfoBox is active. "
+#~ "Pressing the enter cursor key saves the wind value as the initial value "
+#~ "when XCSoar next starts."
+#~ msgstr ""
+#~ "Az XCSoar által becsült szélsebesség.Érintőképernyő/PC: ha ez a kijelző "
+#~ "az aktív, a fel-le nyilak a szélerősséget, a jobbra-balra nyilak a "
+#~ "szélirányt állítják. Az Enter hatására ezek lesznek a kezdőértékek az "
+#~ "XCSoar következő használatakor."
+
+#~ msgid "TC All"
+#~ msgstr "Tk napi"
+
+#~ msgid "QFE GPS"
+#~ msgstr "Magasság bázis QFE"
+
+#~ msgid ""
+#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
+#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
+#~ "if on ground. During flight you can change QFE with up and down keys. "
+#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
+#~ msgstr ""
+#~ "Automatikus QFE (reptéri feletti magasság). Ez az érték felszállás ELŐTT "
+#~ "végérvényesen nullázódik. Felszállás után nem kerül automatikus "
+#~ "nullázásra, még a földön sem.  Repülés közben a fel-le nyilakkal "
+#~ "állítható a QFE. Az alsó sorban a QNH (tengerszint szerinti) magasság "
+#~ "látható. A QFE állítása nem hat a QNH magasságra."
+
+#~ msgid "WP alt.A"
+#~ msgstr "FP mgsg"
+
+#~ msgid "H GPS"
+#~ msgstr "Mgsg TF"
+
+#~ msgid "H Baro"
+#~ msgstr "Mgsg baro"
+
+#~ msgid "Show details:"
+#~ msgstr "Részletek:"
+
+#~ msgid "Unknown competition number"
+#~ msgstr "Ismeretlen farokjel"
+
+#~ msgid "Not found"
+#~ msgstr "Nem található"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Kijelző oldalak"
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "Kijelző oldalak tartalma"
+
+#~ msgid "No further information"
+#~ msgstr "Nincs további információ"
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
+
 #~ msgid "Weather parameters"
 #~ msgstr "Időjárási paraméterek"
 
@@ -9056,9 +9210,6 @@ msgstr ""
 
 #~ msgid "Height GPS"
 #~ msgstr "Magasság tenger feletti"
-
-#~ msgid "Height AGL"
-#~ msgstr "Magasság terep feletti"
 
 #~ msgid "Delete Error"
 #~ msgstr "Törlési hiba"
@@ -9695,9 +9846,6 @@ msgstr ""
 #~ msgid "Final Distance"
 #~ msgstr "Végső távolság"
 
-#~ msgid "Terrain Elevation"
-#~ msgstr "Domborzat magasság"
-
 #~ msgid "Thermal Average"
 #~ msgstr "Termik átlag"
 
@@ -10233,9 +10381,6 @@ msgstr ""
 #~ msgid "Symbols"
 #~ msgstr "Szimbólumok"
 
-#~ msgid "InfoBoxes"
-#~ msgstr "Kijelzők"
-
 #~ msgid "Interface"
 #~ msgstr "Kezelőfelület"
 
@@ -10661,9 +10806,6 @@ msgstr ""
 #~ msgid "Tm Brng"
 #~ msgstr "CS ir mgs"
 
-#~ msgid "WP AltA"
-#~ msgstr "FP mgsg"
-
 #~ msgid "V Gnd"
 #~ msgstr "Seb ff"
 
@@ -10672,9 +10814,6 @@ msgstr ""
 
 #~ msgid "AA Dmax"
 #~ msgstr "HT táv max"
-
-#~ msgid "AA Time"
-#~ msgstr "HT idő"
 
 #~ msgid "AA Vmin"
 #~ msgstr "HT seb min"
