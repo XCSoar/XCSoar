@@ -29,6 +29,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "UIGlobals.hpp"
+#include "UIActions.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
 #include "UIState.hpp"
@@ -201,7 +202,7 @@ void
 InputEvents::sub_SetZoom(fixed value)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
-  GlueMapWindow *map_window = UIGlobals::ActivateMap();
+  GlueMapWindow *map_window = UIActions::ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -230,7 +231,7 @@ InputEvents::sub_SetZoom(fixed value)
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
-  const GlueMapWindow *map_window = UIGlobals::ActivateMap();
+  const GlueMapWindow *map_window = UIActions::ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -263,5 +264,5 @@ void
 InputEvents::eventMap(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("show")))
-    UIGlobals::ActivateMap();
+    UIActions::ActivateMap();
 }

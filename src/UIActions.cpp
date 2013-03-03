@@ -53,6 +53,22 @@ UIActions::CheckShutdown()
 
 }
 
+GlueMapWindow *
+UIActions::ActivateMap()
+{
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->ActivateMap();
+}
+
+void
+UIActions::DeferredActivateMap()
+{
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->DeferredActivateMap();
+}
+
 void
 UIActions::ShowTrafficRadar()
 {
