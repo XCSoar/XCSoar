@@ -84,6 +84,16 @@ namespace PageActions
    * On success, the function returns the map window object.
    */
   GlueMapWindow *ShowOnlyMap();
+
+  /**
+   * Show a page with the traffic radar.
+   */
+  void ShowTrafficRadar();
+
+  /**
+   * Show a page with the thermal assistant.
+   */
+  void ShowThermalAssistant();
 };
 
 #endif

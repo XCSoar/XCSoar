@@ -228,3 +228,42 @@ PageActions::ShowOnlyMap()
   OpenLayout(PageLayout::FullScreen());
   return CommonInterface::main_window->ActivateMap();
 }
+
+void
+PageActions::ShowTrafficRadar()
+{
+  PageLayout layout = GetCurrentLayout();
+  if (layout.main == PageLayout::Main::FLARM_RADAR)
+    /* already showing the traffic radar */
+    return;
+
+  if (GetConfiguredLayout().main == PageLayout::Main::FLARM_RADAR)
+    /* the configured page is a traffic radar page: restore it */
+    Restore();
+  else {
+    /* generate a "special" page based on the current page */
+    layout.main = PageLayout::Main::FLARM_RADAR;
+    layout.bottom = PageLayout::Bottom::NOTHING;
+    OpenLayout(layout);
+  }
+}
+
+
+void
+PageActions::ShowThermalAssistant()
+{
+  PageLayout layout = GetCurrentLayout();
+  if (layout.main == PageLayout::Main::THERMAL_ASSISTANT)
+    /* already showing the traffic radar */
+    return;
+
+  if (GetConfiguredLayout().main == PageLayout::Main::THERMAL_ASSISTANT)
+    /* the configured page is a traffic radar page: restore it */
+    Restore();
+  else {
+    /* generate a "special" page based on the current page */
+    layout.main = PageLayout::Main::THERMAL_ASSISTANT;
+    layout.bottom = PageLayout::Bottom::NOTHING;
+    OpenLayout(layout);
+  }
+}

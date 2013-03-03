@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "UIActions.hpp"
+#include "PageActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Gauge/BigTrafficWidget.hpp"
@@ -48,7 +48,7 @@ InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
-  UIActions::ShowTrafficRadar();
+  PageActions::ShowTrafficRadar();
 }
 
 void
@@ -57,7 +57,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
   LoadFlarmDatabases();
 
   if (StringIsEqual(misc, _T("show"))) {
-    UIActions::ShowTrafficRadar();
+    PageActions::ShowTrafficRadar();
     return;
   }
 

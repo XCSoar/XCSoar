@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "UIActions.hpp"
+#include "PageActions.hpp"
 
 void
 InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
 {
-  UIActions::ShowThermalAssistant();
+  PageActions::ShowThermalAssistant();
 }
