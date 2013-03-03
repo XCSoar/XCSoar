@@ -276,7 +276,8 @@ struct DeviceConfig {
   }
 
   bool UsesSpeed() const {
-    return UsesSpeed(port_type);
+    return UsesSpeed(port_type) ||
+      (MaybeBluetooth() && k6bt);
   }
 
   /**

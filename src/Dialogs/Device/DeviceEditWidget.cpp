@@ -756,7 +756,7 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
   if (config.MaybeBluetooth())
     changed |= SaveValue(K6Bt, config.k6bt);
 
-  if (config.UsesSpeed() || (config.MaybeBluetooth() && config.k6bt)) {
+  if (config.UsesSpeed()) {
     changed |= SaveValue(BaudRate, config.baud_rate);
     changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
   }
