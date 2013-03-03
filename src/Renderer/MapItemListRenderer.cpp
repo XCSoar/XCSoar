@@ -541,11 +541,8 @@ Draw(Canvas &canvas, const PixelRect rc,
   const int left = rc.left + line_height + text_padding;
   const int top = rc.top + text_padding;
 
-  StaticString<64> tmp;
-  tmp.UnsafeFormat(_T("SkyLines %u"), item.id);
-
   canvas.Select(name_font);
-  canvas.DrawText(left, top, tmp);
+  canvas.DrawText(left, top, item.name);
 }
 
 #endif /* HAVE_SKYLINES_TRACKING_HANDLER */

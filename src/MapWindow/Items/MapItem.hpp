@@ -33,6 +33,7 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Tracking/SkyLines/Features.hpp"
+#include "Util/StaticString.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -172,8 +173,10 @@ struct SkyLinesTrafficMapItem : public MapItem
 {
   uint32_t id;
 
-  SkyLinesTrafficMapItem(uint32_t _id)
-    :MapItem(SKYLINES_TRAFFIC), id(_id) {}
+  StaticString<40> name;
+
+  SkyLinesTrafficMapItem(uint32_t _id, const TCHAR *_name)
+    :MapItem(SKYLINES_TRAFFIC), id(_id), name(_name) {}
 };
 
 #endif
