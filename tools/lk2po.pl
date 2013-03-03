@@ -87,7 +87,7 @@ sub load_menu($$) {
 mkdir 'output/po';
 
 # load the English message file
-my @english = load_msg('ASCII', "$lk_language/ENG_MSG.TXT");
+my @english = load_msg('UTF-8', "$lk_language/ENG_MSG.TXT");
 my %english_menu = load_menu('ISO-8859-1', "$lk_language/ENG_MENU.TXT");
 
 # now iterate over all languages of LK8000
