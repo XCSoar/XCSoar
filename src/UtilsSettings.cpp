@@ -132,7 +132,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     glide_computer->SetTerrain(terrain);
 
     /* re-create the bottom widget if it was deleted here */
-    Pages::Update();
+    PageActions::Update();
   }
 
   if (WaypointFileChanged || AirfieldFileChanged) {

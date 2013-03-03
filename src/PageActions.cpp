@@ -31,7 +31,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
 void
-Pages::Update()
+PageActions::Update()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   UIState &ui_state = CommonInterface::SetUIState();
@@ -44,7 +44,7 @@ Pages::Update()
 
 
 unsigned
-Pages::NextIndex()
+PageActions::NextIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
@@ -58,7 +58,7 @@ Pages::NextIndex()
 
 
 void
-Pages::Next()
+PageActions::Next()
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
@@ -68,7 +68,7 @@ Pages::Next()
 
 
 unsigned
-Pages::PrevIndex()
+PageActions::PrevIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
@@ -82,7 +82,7 @@ Pages::PrevIndex()
 
 
 void
-Pages::Prev()
+PageActions::Prev()
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
@@ -91,7 +91,7 @@ Pages::Prev()
 }
 
 void
-Pages::Open(unsigned page)
+PageActions::Open(unsigned page)
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   UIState &ui_state = CommonInterface::SetUIState();
@@ -108,7 +108,7 @@ Pages::Open(unsigned page)
 
 
 void
-Pages::OpenLayout(const PageLayout &layout)
+PageActions::OpenLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 

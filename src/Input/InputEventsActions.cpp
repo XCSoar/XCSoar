@@ -140,20 +140,18 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   //  -- full screen
   //  -- normal infobox
 
-  using namespace Pages;
-
   const UIState &ui_state = CommonInterface::GetUIState();
 
   if (StringIsEqual(misc, _T("normal"))) {
-    OpenLayout(PageLayout::Default());
+    PageActions::OpenLayout(PageLayout::Default());
   } else if (StringIsEqual(misc, _T("auxilary"))) {
-    OpenLayout(PageLayout::Aux());
+    PageActions::OpenLayout(PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("toggleauxiliary"))) {
-    OpenLayout(ui_state.auxiliary_enabled
-               ? PageLayout::Default()
-               : PageLayout::Aux());
+    PageActions::OpenLayout(ui_state.auxiliary_enabled
+                            ? PageLayout::Default()
+                            : PageLayout::Aux());
   } else if (StringIsEqual(misc, _T("full"))) {
-    OpenLayout(PageLayout::FullScreen());
+    PageActions::OpenLayout(PageLayout::FullScreen());
   } else if (StringIsEqual(misc, _T("togglefull"))) {
     CommonInterface::main_window->SetFullScreen(
         !CommonInterface::main_window->GetFullScreen());
@@ -165,9 +163,9 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     else
         Message::AddMessage(_("Default InfoBoxes"));
   } else if (StringIsEqual(misc, _T("previous")))
-    Pages::Prev();
+    PageActions::Prev();
   else
-    Pages::Next();
+    PageActions::Next();
 
 
   trigger_redraw();

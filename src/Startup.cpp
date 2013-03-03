@@ -462,7 +462,7 @@ Startup()
   merge_thread->Start();
   calculation_thread->Start();
 
-  Pages::Update();
+  PageActions::Update();
 
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();

@@ -44,8 +44,6 @@ Copyright_License {
 #undef DELETE
 #endif
 
-using namespace Pages;
-
 class PageLayoutEditWidget final
   : public RowFormWidget, private DataFieldListener {
 public:
@@ -295,7 +293,7 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
     }
   }
 
-  Pages::Update();
+  PageActions::Update();
 
   _changed |= changed;
   return true;

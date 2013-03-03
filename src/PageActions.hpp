@@ -26,7 +26,7 @@ Copyright_License {
 
 struct PageLayout;
 
-namespace Pages
+namespace PageActions
 {
   /**
    * Opens the given page.
