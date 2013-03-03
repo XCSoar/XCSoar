@@ -51,45 +51,10 @@ sub load_msg($$) {
     return @messages;
 }
 
-sub load_menu($$) {
-    my $encoding = shift;
-    my $path = shift;
-    print STDERR "loading $path\n";
-    my %labels;
-    local *FILE;
-    open FILE, "<:encoding($encoding)", $path or die $!;
-    my $key = '';
-    my $label;
-    while (<FILE>) {
-        s,^\s+,,;
-        s,\s+$,,;
-
-        if (/^(mode|type|data|event)=.*$/) {
-            if ($1 eq 'mode') {
-                $labels{$key} = $label
-                  if length $key and defined $label and length $label;
-                $key = '';
-                undef $label;
-            }
-
-            $key .= $_ . "\n";
-        } elsif (/^label=(.+)$/) {
-            $label = $1;
-
-            $label =~ s,(\s|\\n)*[\$\&]\(\w+\),,g;
-        }
-    }
-
-    close FILE;
-
-    return %labels;
-}
-
 mkdir 'output/po';
 
 # load the English message file
 my @english = load_msg('UTF-8', "$lk_language/ENG_MSG.TXT");
-my %english_menu = load_menu('ISO-8859-1', "$lk_language/ENG_MENU.TXT");
 
 # now iterate over all languages of LK8000
 foreach my $lng (keys %languages) {
@@ -105,37 +70,6 @@ foreach my $lng (keys %languages) {
         my $translated = $translated[$i];
         next unless defined $translated;
         next unless length $translated;
-        next if $english eq $translated;
-
-        $english = fold_english($english);
-
-        # store in table
-        $table{$english} = $translated;
-
-        # see if we can merge it with the prefix number stripped
-        if ($english =~ /^(\d+)\s+(.*)$/s) {
-            my ($e_number, $english2) = ($1, $2);
-            if ($translated =~ /^(\d+)\s+(.*)$/s) {
-                my ($t_number, $translated2) = ($1, $2);
-                $table{$english2} = $translated2 if $e_number == $t_number;
-            }
-        }
-
-        # now strip trailing whitespace
-        if ($english =~ /^(.*?)\s+$/s) {
-            my $english2 = $1;
-            my $translated2 = $translated;
-            $translated2 =~ s,\s+$,,;
-            $table{$english2} = $translated2;
-        }
-    }
-
-    my %translated = load_menu('UTF-8',
-                               "$lk_language/Translations/${lng}_MENU.TXT");
-    foreach my $key (keys %english_menu) {
-        my $english = $english_menu{$key};
-        my $translated = $translated{$key};
-        next unless defined $translated;
         next if $english eq $translated;
 
         $english = fold_english($english);
