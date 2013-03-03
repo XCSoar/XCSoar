@@ -28,6 +28,7 @@ my %languages = (
     RUS => 'ru',
     SRB => 'sr',
     SWE => 'sv',
+    VIE => 'vn',
 );
 
 sub fold_english($) {
