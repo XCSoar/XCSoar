@@ -37,8 +37,6 @@ namespace UIActions {
 
   bool CheckShutdown();
 
-  GlueMapWindow *ActivateMap();
-
   /**
    * Switch to the traffic radar page.
    */
