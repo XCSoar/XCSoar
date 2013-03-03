@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "Pan.hpp"
+#include "UIGlobals.hpp"
+#include "UIActions.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
@@ -33,9 +35,7 @@ Copyright_License {
 bool
 IsPanning()
 {
-  assert(CommonInterface::main_window != NULL);
-
-  const GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
+  const GlueMapWindow *map = UIGlobals::GetMapIfActive();
   return map != NULL && map->IsPanning();
 }
 
@@ -44,7 +44,7 @@ EnterPan()
 {
   assert(CommonInterface::main_window != NULL);
 
-  GlueMapWindow *map = CommonInterface::main_window->ActivateMap();
+  GlueMapWindow *map = UIActions::ActivateMap();
   if (map == NULL || map->IsPanning())
     return;
 
@@ -60,7 +60,7 @@ PanTo(const GeoPoint &location)
 {
   assert(CommonInterface::main_window != NULL);
 
-  GlueMapWindow *map = CommonInterface::main_window->ActivateMap();
+  GlueMapWindow *map = UIActions::ActivateMap();
   if (map == NULL)
     return false;
 
@@ -75,9 +75,7 @@ PanTo(const GeoPoint &location)
 void
 LeavePan()
 {
-  assert(CommonInterface::main_window != NULL);
-
-  GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
+  GlueMapWindow *map = UIGlobals::GetMapIfActive();
   if (map == NULL || !map->IsPanning())
     return;
 
@@ -90,9 +88,7 @@ LeavePan()
 void
 TogglePan()
 {
-  assert(CommonInterface::main_window != NULL);
-
-  const GlueMapWindow *map = CommonInterface::main_window->GetMap();
+  GlueMapWindow *map = UIGlobals::GetMap();
   if (map == NULL)
     EnterPan();
   else if (map->IsPanning())
