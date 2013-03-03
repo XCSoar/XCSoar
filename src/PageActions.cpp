@@ -93,23 +93,6 @@ PageActions::Prev()
 }
 
 void
-PageActions::Open(unsigned page)
-{
-  const PageSettings &settings = CommonInterface::GetUISettings().pages;
-  UIState &ui_state = CommonInterface::SetUIState();
-
-  if (page >= PageSettings::MAX_PAGES)
-    return;
-
-  if (!settings.pages[page].IsDefined())
-    return;
-
-  ui_state.page_index = page;
-  Update();
-}
-
-
-void
 PageActions::OpenLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();

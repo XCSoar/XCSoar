@@ -32,11 +32,6 @@ class GlueMapWindow;
 namespace PageActions
 {
   /**
-   * Opens the given page.
-   * @param page The page to open
-   */
-  void Open(unsigned page);
-  /**
    * Opens the next page.
    */
   void Next();
