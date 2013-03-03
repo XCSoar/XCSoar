@@ -29,7 +29,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "UIGlobals.hpp"
-#include "UIActions.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
 #include "UIState.hpp"
