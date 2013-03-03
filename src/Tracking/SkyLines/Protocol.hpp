@@ -277,6 +277,11 @@ namespace SkyLinesTracking {
     struct Traffic {
       uint32_t pilot_id;
 
+      /**
+       * Millisecond of day (UTC).  This is the time this information
+       * was submitted to SkyLines by the pilot described in this
+       * object.
+       */
       uint32_t time;
 
       GeoPoint location;
