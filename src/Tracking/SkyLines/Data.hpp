@@ -36,13 +36,21 @@ Copyright_License {
 namespace SkyLinesTracking {
   struct Data {
     struct Traffic {
+      /**
+       * Millisecond of day.
+       *
+       * @see SkyLinesTracking::TrafficResponsePacket::Traffic::time
+       */
+      uint32_t time_of_day_ms;
+
       GeoPoint location;
       int altitude;
 
       Traffic() = default;
-      constexpr Traffic(GeoPoint _location,
+      constexpr Traffic(uint32_t _time, GeoPoint _location,
                         int _altitude)
-        :location(_location), altitude(_altitude) {}
+        :time_of_day_ms(_time),
+         location(_location), altitude(_altitude) {}
     };
 
     mutable Mutex mutex;

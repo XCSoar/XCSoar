@@ -241,7 +241,8 @@ TrackingGlue::OnTraffic(uint32_t pilot_id, unsigned time_of_day_ms,
 
   {
     const ScopeLock protect(skylines_data.mutex);
-    const SkyLinesTracking::Data::Traffic traffic(location, altitude);
+    const SkyLinesTracking::Data::Traffic traffic(time_of_day_ms,
+                                                  location, altitude);
     skylines_data.traffic[pilot_id] = traffic;
 
     user_known = skylines_data.IsUserKnown(pilot_id);

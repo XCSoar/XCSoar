@@ -324,7 +324,8 @@ MapItemListBuilder::AddSkyLinesTraffic()
         /* we know the name */
         name = name_i->second.c_str();
 
-      list.append(new SkyLinesTrafficMapItem(id, name));
+      list.append(new SkyLinesTrafficMapItem(id, i.second.time_of_day_ms,
+                                             name));
     }
   }
 #endif

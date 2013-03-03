@@ -529,12 +529,36 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
 
+/**
+ * Calculate how many minutes have passed since #past_ms.
+ */
+gcc_const
+static unsigned
+SinceInMinutes(fixed now_s, uint32_t past_ms)
+{
+  const unsigned day_minutes = 24 * 60;
+  unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
+  unsigned past_minutes = (past_ms / 60000) % day_minutes;
+
+  if (past_minutes >= 20 * 60 && now_minutes < 4 * 60)
+    /* midnight rollover */
+    now_minutes += day_minutes;
+
+  if (past_minutes > now_minutes)
+    return 0;
+
+  return now_minutes - past_minutes;
+}
+
+#include "Interface.hpp"
+
 static void
 Draw(Canvas &canvas, const PixelRect rc,
      const SkyLinesTrafficMapItem &item,
      const DialogLook &dialog_look)
 {
   const Font &name_font = *dialog_look.list.font_bold;
+  const Font &small_font = *dialog_look.small_font;
 
   const unsigned line_height = rc.bottom - rc.top;
   const unsigned text_padding = Layout::GetTextPadding();
@@ -543,6 +567,18 @@ Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(name_font);
   canvas.DrawText(left, top, item.name);
+
+  if (CommonInterface::Basic().time_available) {
+    canvas.Select(small_font);
+
+    StaticString<64> buffer;
+    buffer.UnsafeFormat(_("%u minutes ago"),
+                        SinceInMinutes(CommonInterface::Basic().time,
+                                       item.time_of_day_ms));
+
+    canvas.DrawText(left, rc.top + name_font.GetHeight() + 2 * text_padding,
+                    buffer);
+  }
 }
 
 #endif /* HAVE_SKYLINES_TRACKING_HANDLER */
