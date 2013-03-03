@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
+#include "Compiler.h"
+
 struct PageLayout;
 
 namespace PageActions
@@ -49,7 +51,10 @@ namespace PageActions
    */
   void OpenLayout(const PageLayout &layout);
 
+  gcc_pure
   unsigned NextIndex();
+
+  gcc_pure
   unsigned PrevIndex();
 
   void Update();
