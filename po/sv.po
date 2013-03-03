@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2012-06-27 09:24+0000\n"
+"PO-Revision-Date: 2013-03-03 21:22+0000\n"
 "Last-Translator: Peter Cutting <peter.cutting@gmail.com>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-27 16:41+0000\n"
-"X-Generator: Launchpad (build 15490)\n"
+"X-Launchpad-Export-Date: 2013-03-03 21:44+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -776,26 +776,23 @@ msgid "None"
 msgstr "Inget"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Höjd"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt GPS"
-msgstr "H GPS"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:157
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the altitude above mean sea level reported by the GPS. Touch-screen/"
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"Detta är höjden över havet som anges av GPS. Pekskärm/PC: i simuleringsläge "
-"är detta värde inställbart med upp- och ned-tangenten och höger/vänster får "
-"planet att svänga."
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #, no-c-format
@@ -809,14 +806,12 @@ msgid "H AGL"
 msgstr "H AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Detta är GPS-höjden minus terrängens höjd tagen från terrängfilen.  När "
-"värdet är mindre än säkerhetsmarginalen visas det i rött."
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -838,9 +833,9 @@ msgstr ""
 "eller på vario-data om sådan finns tillgänglig."
 
 #: src/InfoBoxes/Content/Factory.cpp:186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "Bäring"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1126,9 +1121,9 @@ msgid "Terrain elevation"
 msgstr "Terräng höjd"
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Terräng höjd"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1237,9 +1232,9 @@ msgid "AAT time"
 msgstr "AAT tid"
 
 #: src/InfoBoxes/Content/Factory.cpp:429
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AAT Time"
-msgstr "AA tid"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1412,9 +1407,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:539
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "Nästa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1677,9 +1672,9 @@ msgid "L/D vario"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:690
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
-msgstr "Vario"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -1843,9 +1838,9 @@ msgid "Thermal average over all"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "TL Avg"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2055,9 +2050,9 @@ msgid "Next altitude arrival"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:925
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP AltA"
-msgstr "BP Höjddiff."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
@@ -2454,9 +2449,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Startpunkt"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
@@ -2469,9 +2464,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1176
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Starthöjd"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
@@ -2481,9 +2476,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1184
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Nästa ben"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1185 Data/Dialogs/dlgTarget.xml:25
 #: Data/Dialogs/dlgTarget_L.xml:18
@@ -2597,9 +2592,8 @@ msgid "Open"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:869 src/InfoBoxes/Content/Task.cpp:914
-#, fuzzy
 msgid "Waiting"
-msgstr "Vindinställnigar"
+msgstr ""
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:80 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:51
@@ -2963,9 +2957,8 @@ msgid "around terrain"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:248
-#, fuzzy
 msgid "Unreachable due to terrain."
-msgstr "Finalglidning genom terräng"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:253
 msgid "Arrival altitude incl. safety height"
@@ -3317,9 +3310,8 @@ msgid "Queued"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
-#, fuzzy
 msgid "Downloading"
-msgstr "Ladda ner flygningen"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
 #: src/Dialogs/Device/DeviceListDialog.cpp:346
@@ -3345,14 +3337,12 @@ msgid "Error"
 msgstr "Fel"
 
 #: src/Dialogs/FileManager.cpp:545
-#, fuzzy
 msgid "Select a file"
-msgstr "Välj Mönster"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:684
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "Kan ej hämla lista med flygningar."
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:625
@@ -3373,14 +3363,14 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Tryck sensor"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO voltage sensor"
-msgstr "Tryck sensor"
+msgstr ""
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3436,9 +3426,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:629
-#, fuzzy
 msgid "Pressure use"
-msgstr "Tryck sensor"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid ""
@@ -3562,9 +3551,8 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:405
 #: src/Dialogs/Device/DeviceListDialog.cpp:467
-#, fuzzy
 msgid "Device is not connected"
-msgstr "Frånkopplad"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:431
 msgid "Edit device"
@@ -3757,9 +3745,9 @@ msgid "Locked"
 msgstr "Låst"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Låst"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -4193,9 +4181,9 @@ msgid "FLARM, Other"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "Vario"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
@@ -4223,9 +4211,9 @@ msgid "Pages"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "Info box titlar"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4595,9 +4583,8 @@ msgid "Status"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:125 Data/Input/default.xci:575
-#, fuzzy
 msgid "Flight"
-msgstr "Flygtid"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
 msgid "System"
@@ -4610,9 +4597,8 @@ msgid "Rules"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Tid"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
@@ -4753,9 +4739,8 @@ msgstr "Landningstid"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
-#, fuzzy
 msgid "Daylight time"
-msgstr "Flygtid"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -5293,9 +5278,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "Över glidbanan"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid ""
@@ -5787,9 +5771,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Vind H"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -5884,9 +5868,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:331
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "Info box titlar"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -5899,9 +5882,9 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Kurs"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
 msgid "Bottom area"
@@ -6523,9 +6506,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:156
-#, fuzzy
 msgid "Predict Contest"
-msgstr "OLC"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:157
 msgid ""
@@ -7190,14 +7172,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Start open time"
-msgstr "Starttid"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
-#, fuzzy
 msgid "Start close time"
-msgstr "Starttid"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -7494,9 +7474,8 @@ msgid "Alternates"
 msgstr "Alternativ"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/dlgWeather.cpp:53
-#, fuzzy
 msgid "Now"
-msgstr "Nej"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
@@ -8585,27 +8564,34 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Height GPS"
-#~ msgstr "GPS-höjd"
-
-#~ msgid "H GND"
-#~ msgstr "H Ter"
-
-#~ msgid "No further information"
-#~ msgstr "Ingen ytterligare information"
-
-#~ msgid "Short file name"
-#~ msgstr "Kort filnamn"
+#~ msgid "Weather parameters"
+#~ msgstr "Väderparametrar"
 
 #~ msgid "Sunset"
 #~ msgstr "Solnedgång"
 
-#~ msgid "Weather parameters"
-#~ msgstr "Väderparametrar"
+#~ msgid "Short file name"
+#~ msgstr "Kort filnamn"
 
-#, fuzzy
-#~ msgid "Start open arr"
-#~ msgstr "Starta logger"
+#~ msgid "Height GPS"
+#~ msgstr "GPS-höjd"
+
+#~ msgid "H GPS"
+#~ msgstr "H GPS"
+
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Detta är GPS-höjden minus terrängens höjd tagen från terrängfilen.  När "
+#~ "värdet är mindre än säkerhetsmarginalen visas det i rött."
+
+#~ msgid "No further information"
+#~ msgstr "Ingen ytterligare information"
+
+#~ msgid "H GND"
+#~ msgstr "H Ter"
 
 #~ msgid "Map labels on"
 #~ msgstr "Kartetiketter På"
@@ -9026,3 +9012,7 @@ msgstr ""
 
 #~ msgid "Wind B"
 #~ msgstr "Vind R"
+
+#, fuzzy
+#~ msgid "Start open arr"
+#~ msgstr "Starta logger"
