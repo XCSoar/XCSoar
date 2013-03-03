@@ -130,7 +130,7 @@ const BuiltinLanguage language_table[] = {
   { LANG_SWEDISH, _T("sv.mo"), _T("Swedish") },
   { LANG_TURKISH, _T("tr.mo"), _T("Turkish") },
   { LANG_UKRAINIAN, _T("uk.mo"), _T("Ukranian") },
-  { LANG_VIETNAMESE, _T("vn.mo"), _T("Vietnamese") },
+  { LANG_VIETNAMESE, _T("vi.mo"), _T("Vietnamese") },
   { 0, NULL }
 };
 
