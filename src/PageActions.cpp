@@ -101,7 +101,7 @@ PageActions::PrevIndex()
        the last configured page */
     return ui_state.page_index;
 
-  return (ui_state.page_index + PageSettings::MAX_PAGES - 1)
+  return (ui_state.page_index + settings.n_pages - 1)
     % settings.n_pages;
 }
 
