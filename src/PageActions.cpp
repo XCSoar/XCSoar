@@ -48,13 +48,7 @@ GetCurrentLayout()
 void
 PageActions::Update()
 {
-  const PageSettings &settings = CommonInterface::GetUISettings().pages;
-  UIState &ui_state = CommonInterface::SetUIState();
-
-  if (!settings.pages[ui_state.page_index].IsDefined())
-    ui_state.page_index = NextIndex();
-
-  OpenLayout(settings.pages[ui_state.page_index]);
+  OpenLayout(GetCurrentLayout());
 }
 
 
@@ -64,11 +58,7 @@ PageActions::NextIndex()
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = ui_state.page_index;
-  do {
-    i = (i + 1) % PageSettings::MAX_PAGES;
-  } while (!settings.pages[i].IsDefined());
-  return i;
+  return (ui_state.page_index + 1) % settings.n_pages;
 }
 
 
@@ -88,11 +78,8 @@ PageActions::PrevIndex()
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &ui_state = CommonInterface::SetUIState();
 
-  unsigned i = ui_state.page_index;
-  do {
-    i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
-  } while (!settings.pages[i].IsDefined());
-  return i;
+  return (ui_state.page_index + PageSettings::MAX_PAGES - 1)
+    % settings.n_pages;
 }
 
 

@@ -171,7 +171,14 @@ struct PageSettings {
 
   std::array<PageLayout, MAX_PAGES> pages;
 
+  unsigned n_pages;
+
   void SetDefaults();
+
+  /**
+   * Eliminate empty pages to make the array contiguous.
+   */
+  void Compress();
 };
 
 static_assert(std::is_trivial<PageSettings>::value, "type is not trivial");

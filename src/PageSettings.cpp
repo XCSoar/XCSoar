@@ -25,6 +25,8 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
 
+#include <algorithm>
+
 #include <stdio.h>
 
 void
@@ -99,4 +101,17 @@ PageSettings::SetDefaults()
   pages[1] = PageLayout::FullScreen();
 
   std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
+
+  n_pages = 2;
+}
+
+void
+PageSettings::Compress()
+{
+  auto last = std::remove_if(pages.begin(), pages.end(),
+                             [](const PageLayout &layout) {
+                               return !layout.IsDefined();
+                             });
+  std::fill(last, pages.end(), PageLayout::Undefined());
+  n_pages = std::distance(pages.begin(), last);
 }
