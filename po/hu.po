@@ -1783,9 +1783,9 @@ msgid "L/D vario"
 msgstr "Siklószám varióból"
 
 #: src/InfoBoxes/Content/Factory.cpp:690
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
-msgstr "Siklószám varióból"
+msgstr "E intelligens variótól"
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -4601,9 +4601,8 @@ msgid "Map"
 msgstr "Térkép"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Nincs forgalom"
+msgstr "Forgalom"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -7047,7 +7046,7 @@ msgstr "Szürke"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Fehér"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"

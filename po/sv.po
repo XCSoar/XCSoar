@@ -2416,7 +2416,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 #, no-c-format
 msgid "Wind arrow"
-msgstr ""
+msgstr "Vindpil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1148
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
@@ -2439,7 +2439,7 @@ msgstr ""
 #: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termik"
 
 #: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
@@ -2570,7 +2570,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Avstängd"
 
 #: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
@@ -2589,9 +2589,8 @@ msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
-#, fuzzy
 msgid "Closed"
-msgstr "Stäng"
+msgstr "Stängd"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -2612,7 +2611,7 @@ msgstr "Kurvläge"
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "Cruise"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:82
 #, no-c-format
@@ -3228,7 +3227,7 @@ msgstr ""
 
 #: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
-msgstr ""
+msgstr "Kan ej öppna port"
 
 #: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
@@ -3633,7 +3632,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Lufttryck"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
@@ -3821,7 +3820,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Segelflygplan"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
@@ -4381,9 +4380,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Ingen trafik"
+msgstr "Trafik"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -5028,7 +5026,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Warning time"
-msgstr ""
+msgstr "Varningstid*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
@@ -5038,7 +5036,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Acknowledge time"
-msgstr ""
+msgstr "Bekr. Tid*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid ""
@@ -5048,7 +5046,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Use black outline"
-msgstr ""
+msgstr "Svart kontur*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
@@ -5225,7 +5223,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Auto Mc"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -5233,7 +5231,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:75
 msgid "Block speed to fly"
-msgstr ""
+msgstr "Blocka rek. Fart"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:76
 msgid ""
@@ -5321,7 +5319,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:128
 msgid "Events"
-msgstr ""
+msgstr "Händelser"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:129
 msgid ""
@@ -5331,7 +5329,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:136
 msgid "Language"
-msgstr ""
+msgstr "Språk"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:137
 msgid ""
@@ -5346,7 +5344,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:174
 msgid "Status message"
-msgstr ""
+msgstr "Status meddelande"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:175
 msgid ""
@@ -5356,7 +5354,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:180
 msgid "Menu timeout"
-msgstr ""
+msgstr "Meny timeout"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:181
 msgid ""
@@ -5376,7 +5374,7 @@ msgstr "HighScore utseende"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:194
 msgid "Text input style"
-msgstr ""
+msgstr "Text Input utseende"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:195
 msgid ""
@@ -5693,7 +5691,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:66
 msgid "Time step cruise"
-msgstr ""
+msgstr "Tidsstegring cruise"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "This is the time interval between logged points when not circling."
@@ -5701,7 +5699,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "Time step circling"
-msgstr ""
+msgstr "Tidsstegring kurvläge"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:72
 msgid "This is the time interval between logged points when circling."
@@ -6118,7 +6116,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 msgid "STF risk factor"
-msgstr ""
+msgstr "STF risk faktor"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:102
 msgid ""
@@ -6663,7 +6661,7 @@ msgstr "Grå"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Vit"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6734,7 +6732,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "Vindstyrka"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:147
 msgid ""
@@ -7239,7 +7237,7 @@ msgstr "Byt namn"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
-msgstr ""
+msgstr "Mer"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
@@ -7268,7 +7266,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
-msgstr ""
+msgstr "Mindre"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:166
 msgid "Calculator excludes unsaved task changes!"
@@ -7964,7 +7962,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Tömningstid"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""

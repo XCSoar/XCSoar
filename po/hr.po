@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2012-10-23 09:23+0000\n"
+"PO-Revision-Date: 2013-03-03 18:49+0100\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
@@ -299,7 +299,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Informacije"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
@@ -381,7 +381,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Ostali"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
@@ -401,7 +401,7 @@ msgstr "Stop logera"
 
 #: src/Logger/ExternalLogger.cpp:89
 msgid "Declare task?"
-msgstr ""
+msgstr "Prijavi zadatak?"
 
 #: src/Logger/ExternalLogger.cpp:98 src/Logger/ExternalLogger.cpp:130
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:108
@@ -416,7 +416,7 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "Task declared!"
-msgstr ""
+msgstr "Zadatak objavljen!"
 
 #: src/Logger/ExternalLogger.cpp:129
 msgid "No logger connected"
@@ -1013,7 +1013,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Iduća točka"
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
@@ -2403,7 +2403,7 @@ msgstr ""
 #: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termika"
 
 #: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
@@ -2489,7 +2489,7 @@ msgstr "INFO"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "Podesi"
 
 #: src/InfoBoxes/Content/Altitude.cpp:77
 #: src/InfoBoxes/Content/Altitude.cpp:182
@@ -2534,7 +2534,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "ONEMOGUĆEN"
 
 #: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
@@ -2553,9 +2553,8 @@ msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
-#, fuzzy
 msgid "Closed"
-msgstr "Zatvori"
+msgstr "ZATVORENO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -3158,7 +3157,7 @@ msgstr ""
 #. Start the device thread(s)
 #: src/Startup.cpp:391
 msgid "Starting devices"
-msgstr ""
+msgstr "Pokretanje uređaja"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3168,35 +3167,35 @@ msgstr ""
 #.
 #: src/Startup.cpp:401
 msgid "Initialising display"
-msgstr ""
+msgstr "Inicijalizacija ekrana"
 
 #. Show progress dialog
 #: src/Startup.cpp:499 src/Startup.cpp:536 src/Startup.cpp:580
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Gašenje, molim sačekaj..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:517
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Gašenje, spremam logove..."
 
 #. Save settings to profile
 #: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Gašenje, spremam profile..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Gašenje, spremam zadatak..."
 
 #: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
-msgstr ""
+msgstr "Nemoguće otvaranje porta"
 
 #: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
-msgstr ""
+msgstr "Šaljem deklaraciju zadatka"
 
 #: src/Device/Descriptor.cpp:930
 msgid "Reading flight list"
@@ -3593,7 +3592,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Tlak zraka"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
@@ -3700,7 +3699,7 @@ msgstr "Sletio"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Gore"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3710,7 +3709,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
 #, no-c-format
 msgid "Down"
-msgstr ""
+msgstr "Dole"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -3781,7 +3780,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Jedrilica"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
@@ -3953,7 +3952,7 @@ msgstr "Ne odgovara!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:249
 msgid "Heading"
-msgstr ""
+msgstr "Kurs"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
@@ -4131,7 +4130,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Orjentacija"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
@@ -4330,7 +4329,7 @@ msgstr ""
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
-msgstr ""
+msgstr "Natjecateljski ID"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
@@ -4342,7 +4341,7 @@ msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
 msgid "Traffic"
-msgstr ""
+msgstr "promet"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -5183,7 +5182,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Auto Mc mod"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -5289,7 +5288,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:136
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:137
 msgid ""
@@ -6620,7 +6619,7 @@ msgstr "Siva"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Bijela"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6676,7 +6675,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
-msgstr ""
+msgstr "Pomoćni"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
@@ -7196,7 +7195,7 @@ msgstr "Preimenuj"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
-msgstr ""
+msgstr "Više"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
@@ -7225,7 +7224,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
-msgstr ""
+msgstr "Malo"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:166
 msgid "Calculator excludes unsaved task changes!"
@@ -7738,7 +7737,7 @@ msgstr ""
 #. during startup, when the other threads aren't running yet
 #: src/Terrain/RasterWeather.cpp:224
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "Skeniranje vremenske prognoze"
 
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
 msgid "V rem."
@@ -7919,11 +7918,11 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:25
 msgid "Airport"
-msgstr ""
+msgstr "Aerodrom"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Vrijeme praž. balasta"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""

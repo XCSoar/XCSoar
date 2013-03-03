@@ -805,9 +805,9 @@ msgid "None"
 msgstr "Nenhum"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Altitude"
+msgstr "Altitude - GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -1074,7 +1074,7 @@ msgstr "Próx. pto. virada"
 #: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Próximo Ponto"
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
@@ -2692,7 +2692,7 @@ msgstr "Tempo Abaixo"
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
 msgid "Closed"
-msgstr ""
+msgstr "FECHADO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -3850,7 +3850,7 @@ msgstr "Pouso"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "SOBE"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3858,14 +3858,14 @@ msgid "Middle"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Baixar"
+msgstr "DESCE"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Travado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, fuzzy, no-c-format
@@ -4481,7 +4481,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:156
 msgid "Italic"
-msgstr ""
+msgstr "Itálico"
 
 #: src/Dialogs/Settings/FontEdit.cpp:187
 msgid "Edit Font"
@@ -4506,9 +4506,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Sem tráfego"
+msgstr "Trafego"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -4729,11 +4728,8 @@ msgid "Flight"
 msgstr "Tempo de voo"
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
-#, fuzzy
 msgid "System"
-msgstr ""
-"Config.\n"
-"Sistema"
+msgstr "SISTEMA"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:188
@@ -6956,7 +6952,7 @@ msgstr "Cinza"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Branco"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -7578,7 +7574,7 @@ msgstr "Renomear"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
-msgstr ""
+msgstr "Mais"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
@@ -7607,7 +7603,7 @@ msgstr "Erro de renomeação"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
-msgstr ""
+msgstr "Menos"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:166
 msgid "Calculator excludes unsaved task changes!"

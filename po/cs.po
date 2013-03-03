@@ -770,9 +770,9 @@ msgid "None"
 msgstr "Žádná"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Výška"
+msgstr "Výška GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -2475,7 +2475,7 @@ msgstr "Termický asistent"
 #: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Stoupání"
 
 #: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
@@ -2525,7 +2525,7 @@ msgstr "Startovní radial"
 #: Data/Dialogs/dlgTarget_L.xml:18
 #, no-c-format
 msgid "Radial"
-msgstr ""
+msgstr "Radiála"
 
 #: src/InfoBoxes/Content/Factory.cpp:1186
 #, no-c-format
@@ -2625,9 +2625,8 @@ msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
-#, fuzzy
 msgid "Closed"
-msgstr "Zavřít"
+msgstr "ZAVŘENO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -2902,7 +2901,7 @@ msgstr "Konec úlohy"
 
 #: src/Input/InputEventsTask.cpp:338
 msgid "In sector, arm advance when ready"
-msgstr ""
+msgstr "V sektoru - odjistěte až budete připraven"
 
 #: src/Input/InputEventsSettings.cpp:54
 msgid "Vario sounds on"
@@ -3776,7 +3775,7 @@ msgstr "Přistání"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "NAHORU"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3784,9 +3783,9 @@ msgid "Middle"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Stáhnout"
+msgstr "DOLŮ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -3804,7 +3803,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
 msgid "Flaps"
-msgstr ""
+msgstr "Klapky"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
@@ -4189,7 +4188,7 @@ msgstr "Zobrazení mapy"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:105
 #, no-c-format
 msgid "Glide Computer"
-msgstr ""
+msgstr "Plachtařské výpočty"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:91
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:224
@@ -4420,9 +4419,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Žádný provoz"
+msgstr "Provoz"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -4543,7 +4541,7 @@ msgstr "Nahrát"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 msgid "Active"
-msgstr ""
+msgstr "AKTIVNÍ"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:246
 #, c-format
@@ -6703,7 +6701,7 @@ msgstr "Šedá"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Bílá"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6759,7 +6757,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
-msgstr ""
+msgstr "Uživatelské"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
@@ -8005,7 +8003,7 @@ msgstr "Letiště"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Doba vypuštění zátěže"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""

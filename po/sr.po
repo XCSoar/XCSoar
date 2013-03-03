@@ -299,9 +299,9 @@ msgid "No error"
 msgstr "Greška"
 
 #: src/FLARM/Error.cpp:30
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Information"
-msgstr "Konfiguracija"
+msgstr "Informacije"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
@@ -381,11 +381,9 @@ msgid "Transponder receiver"
 msgstr ""
 
 #: src/FLARM/Error.cpp:60
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Other"
-msgstr ""
-"Vremens.\n"
-"Prognoza"
+msgstr "Ostali"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
@@ -404,7 +402,6 @@ msgid "Stop Logger"
 msgstr "Stop Dnevnika"
 
 #: src/Logger/ExternalLogger.cpp:89
-#, fuzzy
 msgid "Declare task?"
 msgstr "Objaviti zadatak?"
 
@@ -420,9 +417,8 @@ msgid ""
 msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:109
-#, fuzzy
 msgid "Task declared!"
-msgstr "Zadatak objavljen"
+msgstr "Zadatak objavljen!"
 
 #: src/Logger/ExternalLogger.cpp:129
 msgid "No logger connected"
@@ -777,9 +773,9 @@ msgid "None"
 msgstr "Prazno"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Visina"
+msgstr "GPS visina"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -891,7 +887,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
 msgid "Speed ground"
-msgstr ""
+msgstr "Brzina na zemlji"
 
 #: src/InfoBoxes/Content/Factory.cpp:217
 #, no-c-format
@@ -956,7 +952,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:256
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "MacCready Podešavanja"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
@@ -972,9 +968,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:266
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance"
-msgstr "Udaljenost zadatka"
+msgstr "Sledeća razdaljina"
 
 #: src/InfoBoxes/Content/Factory.cpp:267 src/InfoBoxes/Content/Task.cpp:169
 #, no-c-format
@@ -1106,7 +1102,7 @@ msgid "Distance to finish around remaining turn points."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:356
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terrain elevation"
 msgstr "Visina terena"
 
@@ -1123,9 +1119,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:366
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal average"
-msgstr "Termička visina"
+msgstr "Prosečni Termal"
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format
@@ -1140,9 +1136,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:376
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal gain"
-msgstr "Termička visina"
+msgstr "Dobitak termala"
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
@@ -1158,7 +1154,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:58
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Zapis"
 
 #: src/InfoBoxes/Content/Factory.cpp:388
 #, no-c-format
@@ -1176,9 +1172,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:406
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind speed"
-msgstr "Letilica/Brzina vetra"
+msgstr "Brzina vetra"
 
 #: src/InfoBoxes/Content/Factory.cpp:407
 #, no-c-format
@@ -1413,7 +1409,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "Lokal. vreme"
 
 #: src/InfoBoxes/Content/Factory.cpp:550
 #, no-c-format
@@ -1428,7 +1424,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:559 src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
 msgid "Time UTC"
-msgstr ""
+msgstr "Vreme UTC"
 
 #: src/InfoBoxes/Content/Factory.cpp:561
 #, no-c-format
@@ -1436,9 +1432,9 @@ msgid "GPS time expressed in UTC."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:569
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task time to go"
-msgstr "Doći do zadatka"
+msgstr "Vreme Zada. To go"
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
@@ -1455,7 +1451,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:579
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Sled. vreme To Go"
 
 #: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
@@ -1513,7 +1509,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:609
 #, no-c-format
 msgid "Task arrival time"
-msgstr ""
+msgstr "Zada. Vreme dolaska"
 
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
@@ -1530,7 +1526,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "Next arrival time"
-msgstr ""
+msgstr "Sled. Vreme dolaska"
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1570,12 +1566,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:639
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Spoljna vazdušna temperatura"
 
 #: src/InfoBoxes/Content/Factory.cpp:640
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "SVT"
 
 #: src/InfoBoxes/Content/Factory.cpp:641
 #, no-c-format
@@ -1587,7 +1583,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "Relativna vlažnost"
 
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
@@ -1604,7 +1600,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:659 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Predviđena temperatura"
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
@@ -1674,7 +1670,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
 msgid "Airspeed TAS"
-msgstr ""
+msgstr "Brzina vazduha TAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
@@ -1737,9 +1733,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:739
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team range"
-msgstr "Kod tima"
+msgstr "Rank Tima"
 
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
@@ -1853,17 +1849,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:810
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "Procenat baterije"
 
 #: src/InfoBoxes/Content/Factory.cpp:812
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Battery voltage"
 msgstr "Napon baterije"
 
 #: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Baterija"
 
 #: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
@@ -1986,7 +1982,7 @@ msgstr "Ekspert"
 #: src/InfoBoxes/Content/Factory.cpp:885
 #, no-c-format
 msgid "Exp1"
-msgstr ""
+msgstr "Eks1"
 
 #: src/InfoBoxes/Content/Factory.cpp:894
 #, fuzzy, no-c-format
@@ -2013,7 +2009,7 @@ msgstr "Ekspert"
 #: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
 msgid "Exp2"
-msgstr ""
+msgstr "Eks2"
 
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
@@ -2058,14 +2054,14 @@ msgid "Free RAM as reported by OS."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:944
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flight level"
-msgstr "Ponovljeni let"
+msgstr "Nivo leta"
 
 #: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "FL"
-msgstr ""
+msgstr "NL"
 
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
@@ -2406,7 +2402,7 @@ msgstr "Strelica vetra"
 #: Data/Input/default.xci:583
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "Vetar"
 
 #: src/InfoBoxes/Content/Factory.cpp:1156 src/PageSettings.cpp:48
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:64
@@ -2418,9 +2414,9 @@ msgstr "Termička visina"
 
 #: src/InfoBoxes/Content/Factory.cpp:1157
 #: src/Renderer/MapItemListRenderer.cpp:388
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal"
-msgstr "Termička visina"
+msgstr "TERMAL"
 
 #: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
@@ -2553,7 +2549,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Nedostupno"
 
 #: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
@@ -2565,16 +2561,15 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:97
 msgid "Next"
-msgstr ""
+msgstr "Sledeći"
 
 #: src/InfoBoxes/Content/Task.cpp:743
 msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
-#, fuzzy
 msgid "Closed"
-msgstr "Zatvori"
+msgstr "ZATVORENO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -3197,7 +3192,7 @@ msgstr ""
 #. Start the device thread(s)
 #: src/Startup.cpp:391
 msgid "Starting devices"
-msgstr ""
+msgstr "Startovanje uređaja"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3207,36 +3202,35 @@ msgstr ""
 #.
 #: src/Startup.cpp:401
 msgid "Initialising display"
-msgstr ""
+msgstr "Inicijalizacija ekrana"
 
 #. Show progress dialog
 #: src/Startup.cpp:499 src/Startup.cpp:536 src/Startup.cpp:580
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Gašenje, budite malo strpljivi..."
 
 #. Stop logger and save igc file
 #: src/Startup.cpp:517
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Gašenje, snimanje podataka..."
 
 #. Save settings to profile
 #: src/Startup.cpp:529
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Gašenje, snimanje profila..."
 
 #. Save the task for the next time
 #: src/Startup.cpp:572
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Gašenje, snimanje zadatka..."
 
 #: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
-msgstr ""
+msgstr "Nemoguće otvaranje porta"
 
 #: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
-#, fuzzy
 msgid "Sending declaration"
-msgstr "Visina terena"
+msgstr "Slanje deklaracije"
 
 #: src/Device/Descriptor.cpp:930
 msgid "Reading flight list"
@@ -3643,7 +3637,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Pritisak"
 
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:37
 msgid "Failed to load file."
@@ -3837,9 +3831,9 @@ msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Glider"
-msgstr "Polarni klizač"
+msgstr "Glajder"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
@@ -4095,7 +4089,6 @@ msgid "Use ZigZag and circling."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
-#, fuzzy
 msgid "Auto wind"
 msgstr "Auto vetar"
 
@@ -4167,9 +4160,9 @@ msgid "Site Files"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Map Display"
-msgstr "Ekran"
+msgstr "Prikazivanje mape"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:90
 #: src/Dialogs/Settings/dlgConfiguration.cpp:105
@@ -4194,9 +4187,9 @@ msgid "Look"
 msgstr "Pogledaj"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Orientation"
-msgstr "Kružno uvećanje"
+msgstr "Orjentacija"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, fuzzy, no-c-format
@@ -4398,7 +4391,7 @@ msgstr "Vraćanje"
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
-msgstr ""
+msgstr "Takmičarski ID"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:345
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
@@ -4409,9 +4402,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Visina terena"
+msgstr "Saobracaj"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -5279,9 +5271,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Auto MacCready UKLJUČEN"
+msgstr "Auto Mc mod"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -5379,7 +5370,6 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:128
-#, fuzzy
 msgid "Events"
 msgstr "Dogadjaji"
 
@@ -5390,7 +5380,6 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:136
-#, fuzzy
 msgid "Language"
 msgstr "Jezik"
 
@@ -6769,7 +6758,7 @@ msgstr "Siva"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Belo"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6827,7 +6816,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
-msgstr ""
+msgstr "Običaj"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
@@ -7369,7 +7358,7 @@ msgstr "Promeniti"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
-msgstr ""
+msgstr "Više"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
@@ -7399,7 +7388,7 @@ msgstr "Promeniti"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
-msgstr ""
+msgstr "Manje"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:166
 msgid "Calculator excludes unsaved task changes!"
@@ -7919,7 +7908,7 @@ msgstr ""
 #. during startup, when the other threads aren't running yet
 #: src/Terrain/RasterWeather.cpp:224
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "Skeniranje vremenske prognoze"
 
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
 msgid "V rem."
@@ -8105,10 +8094,9 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:25
 msgid "Airport"
-msgstr ""
+msgstr "Aerodrom"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
-#, fuzzy
 msgid "Dump Time"
 msgstr "Vreme izbaciv."
 

@@ -3975,7 +3975,7 @@ msgstr "Lądowanie"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Góra"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3985,7 +3985,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
 #, no-c-format
 msgid "Down"
-msgstr ""
+msgstr "Dół"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -7027,7 +7027,7 @@ msgstr "Szare"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Biały"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"

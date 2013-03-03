@@ -781,9 +781,9 @@ msgid "None"
 msgstr "Нет"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Высота"
+msgstr "Высота GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -1743,7 +1743,7 @@ msgid "L/D vario"
 msgstr "Качество с вариометра"
 
 #: src/InfoBoxes/Content/Factory.cpp:690
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
 msgstr "Качество с вариометра"
 
@@ -2159,7 +2159,7 @@ msgstr "Эшелон"
 #: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
 msgid "FL"
-msgstr ""
+msgstr "Эшелон"
 
 #: src/InfoBoxes/Content/Factory.cpp:946
 #, no-c-format
@@ -2653,7 +2653,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "ОТКЛЮЧИТЬ"
 
 #: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
@@ -2673,7 +2673,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
 msgid "Closed"
-msgstr ""
+msgstr "ЗАКРЫТО"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -3313,7 +3313,7 @@ msgstr "Ошибка открытия порта"
 
 #: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
-msgstr ""
+msgstr "Отправка заявления"
 
 #: src/Device/Descriptor.cpp:930
 msgid "Reading flight list"
@@ -3824,7 +3824,7 @@ msgstr "приземление"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "Вверх"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3832,14 +3832,14 @@ msgid "Middle"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Down"
-msgstr "Загрузить"
+msgstr "Вниз"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Блокир."
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, no-c-format
@@ -3852,7 +3852,7 @@ msgstr "Воздушный тормоз зафиксирован"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
 msgid "Flaps"
-msgstr ""
+msgstr "Закрылки"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
@@ -3906,7 +3906,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Планер"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
@@ -3997,7 +3997,7 @@ msgstr "Настройки"
 #: src/Dialogs/MapItemListDialog.cpp:155
 #: src/Dialogs/Task/dlgAlternatesList.cpp:100
 msgid "Goto"
-msgstr ""
+msgstr "Лететь к"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
@@ -4078,7 +4078,7 @@ msgstr "Нет совпадений"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:249
 msgid "Heading"
-msgstr ""
+msgstr "По полету"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
@@ -4158,7 +4158,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:60
 msgid "Auto wind"
-msgstr ""
+msgstr "Расчет ветра"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -4256,7 +4256,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Ориентация"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
@@ -4443,7 +4443,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:156
 msgid "Italic"
-msgstr ""
+msgstr "Курсив "
 
 #: src/Dialogs/Settings/FontEdit.cpp:187
 msgid "Edit Font"
@@ -4468,9 +4468,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Нет трафика"
+msgstr "Трафик"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -4591,7 +4590,7 @@ msgstr "Загрузить"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:198
 msgid "Active"
-msgstr ""
+msgstr "АКТИВНО"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:246
 #, c-format
@@ -4688,11 +4687,8 @@ msgid "Flight"
 msgstr "Время полета"
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
-#, fuzzy
 msgid "System"
-msgstr ""
-"Системные\n"
-"настроки"
+msgstr "СИСТЕМА"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:188
@@ -5117,7 +5113,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Warning time"
-msgstr ""
+msgstr "Время предупрежд.*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
@@ -5127,7 +5123,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Acknowledge time"
-msgstr ""
+msgstr "Время подтвержд.*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid ""
@@ -5137,7 +5133,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Use black outline"
-msgstr ""
+msgstr "Черный контур*"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
@@ -5314,7 +5310,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Режим авто MC"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -5644,7 +5640,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Text"
-msgstr ""
+msgstr "ТЕКСТ"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -6773,7 +6769,7 @@ msgstr "Серый"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Белый"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -7233,7 +7229,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:196
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -8061,7 +8057,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
 msgid "Pilot"
-msgstr ""
+msgstr "ПИЛОТ"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Export"
@@ -8115,7 +8111,7 @@ msgstr "Аэропорты"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Время сброса"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""

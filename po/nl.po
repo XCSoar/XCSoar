@@ -810,7 +810,7 @@ msgstr "Geen"
 #: src/InfoBoxes/Content/Factory.cpp:155
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "GPS hoogte"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -4602,7 +4602,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:156
 msgid "Italic"
-msgstr ""
+msgstr "cursief"
 
 #: src/Dialogs/Settings/FontEdit.cpp:187
 msgid "Edit Font"
@@ -4628,7 +4628,7 @@ msgstr "Kaart"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
 msgid "Traffic"
-msgstr ""
+msgstr "Verkeer"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -7105,7 +7105,7 @@ msgstr "Grijs"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Wit"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"

@@ -776,9 +776,9 @@ msgid "None"
 msgstr "Nessuno"
 
 #: src/InfoBoxes/Content/Factory.cpp:155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Altitudine"
+msgstr "Quota GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -2596,7 +2596,7 @@ msgstr "Assistente termica"
 #: src/Renderer/MapItemListRenderer.cpp:388
 #, no-c-format
 msgid "Thermal"
-msgstr ""
+msgstr "Termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:1158
 #, no-c-format
@@ -2746,9 +2746,8 @@ msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
-#, fuzzy
 msgid "Closed"
-msgstr "Chiudi"
+msgstr "CHIUSO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -2922,19 +2921,19 @@ msgstr "Nessun pilone attivo!"
 
 #: src/Input/InputEventsActions.cpp:359
 msgid "NMEA log on"
-msgstr ""
+msgstr "NMEA Log SI"
 
 #: src/Input/InputEventsActions.cpp:361
 msgid "NMEA log off"
-msgstr ""
+msgstr "NMEA Log NO"
 
 #: src/Input/InputEventsActions.cpp:365
 msgid "Logger on"
-msgstr ""
+msgstr "Logger ACCESO"
 
 #: src/Input/InputEventsActions.cpp:367
 msgid "Logger off"
-msgstr ""
+msgstr "Logger SPENTO"
 
 #: src/Input/InputEventsMap.cpp:71
 msgid "Auto. zoom on"
@@ -3391,7 +3390,7 @@ msgstr "Spegnimento, salvataggio tema..."
 
 #: src/Device/Descriptor.cpp:394
 msgid "Unable to open port"
-msgstr ""
+msgstr "Impossibile aprire la Porta"
 
 #: src/Device/Descriptor.cpp:887 src/Device/Descriptor.cpp:893
 msgid "Sending declaration"
@@ -3912,7 +3911,7 @@ msgstr "Atterraggio"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:45
 #, no-c-format
 msgid "Up"
-msgstr ""
+msgstr "SU"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:46
 #, no-c-format
@@ -3922,7 +3921,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:47
 #, no-c-format
 msgid "Down"
-msgstr ""
+msgstr "GIÙ"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
@@ -4085,7 +4084,7 @@ msgstr "Impostazioni"
 #: src/Dialogs/MapItemListDialog.cpp:155
 #: src/Dialogs/Task/dlgAlternatesList.cpp:100
 msgid "Goto"
-msgstr ""
+msgstr "Vola Verso"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
@@ -4128,7 +4127,7 @@ msgstr "Avviso"
 #: src/Dialogs/Airspace/dlgAirspace.cpp:128 Data/Input/default.xci:449
 #: Data/Input/default.xci:497 Data/Input/default.xci:927
 msgid "Display"
-msgstr ""
+msgstr "Mostra"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:177
 msgid "Lookup"
@@ -4148,7 +4147,7 @@ msgstr "Alto"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
-msgstr ""
+msgstr "Lim.Inf."
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
@@ -4170,7 +4169,7 @@ msgstr "Nessuna corrispondenza!"
 
 #: src/Dialogs/Airspace/AirspaceList.cpp:249
 msgid "Heading"
-msgstr ""
+msgstr "Prua"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
 msgid "Airspace Renderer Settings"
@@ -4577,9 +4576,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Nessun Traffico"
+msgstr "Traffico"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -5122,7 +5120,7 @@ msgstr "Tutti gli spazi aerei sono visualizzati."
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:58
 #, no-c-format
 msgid "Clip"
-msgstr ""
+msgstr "Soglia"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:59
 #, no-c-format
@@ -5243,7 +5241,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Acknowledge time"
-msgstr ""
+msgstr "Silenziare per"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid ""
@@ -5774,7 +5772,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:122
 #, no-c-format
 msgid "Text"
-msgstr ""
+msgstr "TESTI"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:123
 #, no-c-format
@@ -5830,7 +5828,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:206
 #, no-c-format
 msgid "Fixed"
-msgstr ""
+msgstr "Fissa"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:146
 #, no-c-format
@@ -6894,7 +6892,7 @@ msgstr "Grigio"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Bianco"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6950,7 +6948,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
-msgstr ""
+msgstr "Person"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
@@ -7508,7 +7506,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:203
 msgid "Set MacCready"
-msgstr ""
+msgstr "Setta MacCready"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:204
 msgid ""
@@ -8017,7 +8015,7 @@ msgstr ""
 #. during startup, when the other threads aren't running yet
 #: src/Terrain/RasterWeather.cpp:224
 msgid "Scanning weather forecast"
-msgstr ""
+msgstr "Ricerca previsioni meteo"
 
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
 msgid "V rem."
@@ -8038,7 +8036,7 @@ msgstr "Ok alarm"
 
 #: Data/Dialogs/dlgWeather.xml:4
 msgid "Field"
-msgstr ""
+msgstr "Campo"
 
 #: Data/Dialogs/dlgVegaDemo.xml:6
 msgid "TE vario"
@@ -8148,7 +8146,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:16
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:24
 msgid "Pilot"
-msgstr ""
+msgstr "PILOTA"
 
 #: Data/Dialogs/dlgConfiguration.xml:16 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Export"
@@ -8198,11 +8196,11 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:17
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:25
 msgid "Airport"
-msgstr ""
+msgstr "Aeroporto"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Tempo scarico"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
@@ -8248,7 +8246,7 @@ msgstr "Esperto"
 
 #: Data/Dialogs/dlgWaypointEdit_L.xml:14
 msgid "Longitude"
-msgstr ""
+msgstr "Longit."
 
 #: Data/Dialogs/dlgConfiguration.xml:17 Data/Dialogs/dlgConfiguration_L.xml:8
 #: Data/Dialogs/dlgPlanePolar.xml:20 Data/Dialogs/dlgPlanePolar_L.xml:20
@@ -8340,7 +8338,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointEdit_L.xml:38
 msgid "Latitude"
-msgstr ""
+msgstr "Latit."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -8451,7 +8449,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
-msgstr ""
+msgstr "Calcola"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:14
 msgid "Lon."
@@ -8470,7 +8468,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails.xml:10
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:1078
 msgid "GoTo"
-msgstr ""
+msgstr "Vola Verso"
 
 #: Data/Dialogs/AirspaceList.xml:4 Data/Dialogs/AirspaceList_L.xml:4
 msgid "Filter..."

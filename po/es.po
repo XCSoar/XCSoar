@@ -2639,7 +2639,7 @@ msgstr ""
 #: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Deshabilitado"
 
 #: src/InfoBoxes/Content/Speed.cpp:125
 msgid "BLOCK"
@@ -2659,7 +2659,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:855 src/InfoBoxes/Content/Task.cpp:900
 msgid "Closed"
-msgstr ""
+msgstr "CERRADO"
 
 #: src/InfoBoxes/Content/Task.cpp:864 src/InfoBoxes/Content/Task.cpp:909
 msgid "Open"
@@ -3819,7 +3819,7 @@ msgstr "Descargar"
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:53
 #, no-c-format
 msgid "Locked"
-msgstr ""
+msgstr "Bloqueado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
 #, fuzzy, no-c-format
@@ -3885,7 +3885,7 @@ msgstr "Desconocido"
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Planeador"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:124
 #, no-c-format
@@ -4235,7 +4235,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Orientación"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
@@ -4420,7 +4420,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/FontEdit.cpp:156
 msgid "Italic"
-msgstr ""
+msgstr "Itálica"
 
 #: src/Dialogs/Settings/FontEdit.cpp:187
 msgid "Edit Font"
@@ -4445,9 +4445,8 @@ msgid "Map"
 msgstr "Mapa"
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "No hay tráfico"
+msgstr "Trafico"
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -4666,7 +4665,7 @@ msgstr "tiempo de vuelo"
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
 #: src/Dialogs/dlgStatus.cpp:134
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:188
@@ -5288,7 +5287,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Modo Mc Auto"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
@@ -6725,7 +6724,7 @@ msgstr "Gris"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
-msgstr ""
+msgstr "Blanco"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
@@ -6781,7 +6780,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
-msgstr ""
+msgstr "Personalizado"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
@@ -7299,7 +7298,7 @@ msgstr "Renombrar"
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:105
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "More"
-msgstr ""
+msgstr "Más"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:248
 msgid "Load the selected task?"
@@ -7328,7 +7327,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:348
 msgid "Less"
-msgstr ""
+msgstr "Menos"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:166
 msgid "Calculator excludes unsaved task changes!"
@@ -8023,7 +8022,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:33 Data/Dialogs/dlgPlaneDetails_L.xml:44
 msgid "Dump Time"
-msgstr ""
+msgstr "Tiempo de deslastrado"
 
 #: Data/Dialogs/dlgBrightness.xml:10
 msgid ""
