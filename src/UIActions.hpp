@@ -40,11 +40,6 @@ namespace UIActions {
   GlueMapWindow *ActivateMap();
 
   /**
-   * @see MainWindow::DeferredActivateMap()
-   */
-  void DeferredActivateMap();
-
-  /**
    * Switch to the traffic radar page.
    */
   void ShowTrafficRadar();

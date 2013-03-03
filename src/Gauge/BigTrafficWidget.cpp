@@ -30,7 +30,7 @@
 #include "Screen/Key.h"
 #include "Form/SymbolButton.hpp"
 #include "UIGlobals.hpp"
-#include "UIActions.hpp"
+#include "PageActions.hpp"
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
@@ -658,7 +658,7 @@ TrafficWidget::Update()
     /* this must be deferred, because this method is called from
        within the BlackboardListener, and we must not unregister the
        listener in this context */
-    UIActions::DeferredActivateMap();
+    PageActions::DeferredRestore();
     return;
   }
 
@@ -957,7 +957,7 @@ TrafficWidget::OnAction(int id)
 {
   switch ((Action)id) {
   case CLOSE:
-    UIActions::ActivateMap();
+    PageActions::Restore();
     break;
 
   case DETAILS:

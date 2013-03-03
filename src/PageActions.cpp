@@ -31,12 +31,18 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 
 static const PageLayout &
-GetCurrentLayout()
+GetConfiguredLayout()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const UIState &state = CommonInterface::SetUIState();
 
   return settings.pages[state.page_index];
+}
+
+static const PageLayout &
+GetCurrentLayout()
+{
+  return GetConfiguredLayout();
 }
 
 void
@@ -172,6 +178,18 @@ PageActions::OpenLayout(const PageLayout &layout)
 
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState();
+}
+
+void
+PageActions::Restore()
+{
+  OpenLayout(GetConfiguredLayout());
+}
+
+void
+PageActions::DeferredRestore()
+{
+  CommonInterface::main_window->DeferredRestorePage();
 }
 
 GlueMapWindow *

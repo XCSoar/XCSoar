@@ -62,14 +62,6 @@ UIActions::ActivateMap()
 }
 
 void
-UIActions::DeferredActivateMap()
-{
-  assert(CommonInterface::main_window != NULL);
-
-  return CommonInterface::main_window->DeferredActivateMap();
-}
-
-void
 UIActions::ShowTrafficRadar()
 {
   if (InputEvents::IsFlavour(_T("Traffic")))

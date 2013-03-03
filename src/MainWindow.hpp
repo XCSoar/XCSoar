@@ -68,9 +68,9 @@ class MainWindow : public SingleWindow {
     CALCULATED_UPDATE,
 
     /**
-     * @see DeferredActivateMap()
+     * @see DeferredRestorePage()
      */
-    ACTIVATE_MAP,
+    RESTORE_PAGE,
   };
 
   static constexpr const TCHAR *title = _T("XCSoar");
@@ -117,7 +117,7 @@ private:
   bool draw_suspended;
 #endif
 
-  bool activate_map_pending;
+  bool restore_page_pending;
 
   bool airspace_warning_pending;
 
@@ -296,11 +296,10 @@ public:
   GlueMapWindow *ActivateMap();
 
   /**
-   * Similar to ActivateMap(), but schedule the switch, do it
-   * asynchronously.  The function returns immediately, and designedly
-   * returns void.  There is no guarantee that this function succeeds.
+   * Schedule a call to PageActions::Restore().  The function returns
+   * immediately, and there is no guarantee that it succeeds.
    */
-  void DeferredActivateMap();
+  void DeferredRestorePage();
 
   /**
    * Show this #Widget below the map.  This replaces (deletes) the

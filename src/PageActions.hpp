@@ -61,6 +61,17 @@ namespace PageActions
   void Update();
 
   /**
+   * Restore the current page as it was configured.
+   */
+  void Restore();
+
+  /**
+   * Schedule a call to Restore().  The function returns immediately,
+   * and there is no guarantee that it succeeds.
+   */
+  void DeferredRestore();
+
+  /**
    * Show a page with the map, or restore the current page if it was
    * configured with a map (for example if the user has activated the
    * FLARM radar page).
