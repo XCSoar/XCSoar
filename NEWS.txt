@@ -48,7 +48,7 @@ Version 6.5 - not yet released
   - allow pages with FLARM radar and thermal assistant
   - double click on vario opens main menu
   - allow opening main menu while panning
-  - new translation: Hebrew
+  - new translations: Hebrew, Vietnamese
 * infoboxes
   - added thermal assistant infobox
   - inverse colors for wind arrow infobox and flarm gauge (#2337)

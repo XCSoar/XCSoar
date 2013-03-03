@@ -320,6 +320,7 @@ MO(sr)
 MO(sv)
 MO(tr)
 MO(uk)
+MO(vn)
 
 TEXT(LICENSE, "COPYING")
 TEXT(AUTHORS, "AUTHORS")
