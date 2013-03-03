@@ -29,6 +29,7 @@
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Form/SymbolButton.hpp"
+#include "UIState.hpp"
 #include "UIGlobals.hpp"
 #include "PageActions.hpp"
 #include "Look/Look.hpp"
@@ -923,6 +924,9 @@ TrafficWidget::Show(const PixelRect &rc)
 
   ContainerWidget::Show(rc);
   UpdateLayout();
+
+  /* show the "Close" button only if this is a "special" page */
+  close_button->SetVisible(CommonInterface::GetUIState().special_page.IsDefined());
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
