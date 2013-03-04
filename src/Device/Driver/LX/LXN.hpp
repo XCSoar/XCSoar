@@ -42,6 +42,7 @@ namespace LXN {
     SERIAL = 0xf6,
     POSITION_OK = 0xbf,
     POSITION_BAD = 0xc3,
+    SECURITY_7000 = 0xef,
     SECURITY = 0xf0,
     COMPETITION_CLASS = 0xf1,
     EVENT = 0xf4,
@@ -106,6 +107,21 @@ namespace LXN {
     uint8_t cmd;
     uint8_t length, type;
     uint8_t foo[64];
+  } gcc_packed;
+
+  /**
+   * The G record found on LXN files downloaded from "LX 7000 pro
+   * IGC".
+   *
+   * Reverse engineered.
+   *
+   * @see #Command::SECURITY_7000
+   */
+  struct Security7000 {
+    uint8_t cmd;
+    uint8_t x40;
+    uint8_t line1[31], line2[32], line3[3];
+    uint8_t zero[0x40];
   } gcc_packed;
 
   struct CompetitionClass {
@@ -186,6 +202,7 @@ namespace LXN {
     const struct SecurityOld *security_old;
     const struct Serial *serial;
     const struct Position *position;
+    const Security7000 *security_7000;
     const struct Security *security;
     const struct CompetitionClass *competition_class;
     const struct Event *event;

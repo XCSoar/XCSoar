@@ -21,6 +21,7 @@ Version 6.5 - not yet released
     for intermediate task turnpoints
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
+  - LX: support flight download from LX5000/LX7000 pro IGC
   - LX: read bugs setting from the LX160 vario (#2167)
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)
   - Android/IOIO: support MS5611 pressure sensor
