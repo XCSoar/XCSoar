@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2012-03-05 21:42+0000\n"
+"PO-Revision-Date: 2013-01-05 07:46+0000\n"
 "Last-Translator: tudor abrudan <tyt2002ro@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-14 01:28+0000\n"
-"X-Generator: Launchpad (build 14933)\n"
+"X-Launchpad-Export-Date: 2013-03-04 16:40+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -294,24 +294,24 @@ msgid "Significant wind change"
 msgstr "Schimbare semnificativă a vântului"
 
 #: src/FLARM/Error.cpp:29
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No error"
-msgstr "Eroare de logger"
+msgstr "Fără eroare"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Informații"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "funcționalitate redusă"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "problemă fatală"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -323,7 +323,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:60
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Necunoscut"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
@@ -343,7 +343,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "configurare GPS"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
@@ -353,7 +353,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Comunicare"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
@@ -363,7 +363,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "senzor de presiune"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:77
 #, no-c-format
@@ -371,9 +371,9 @@ msgid "Obstacle database"
 msgstr ""
 
 #: src/FLARM/Error.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flight recorder"
-msgstr "redare zbor"
+msgstr ""
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -445,7 +445,7 @@ msgstr "descarcare zbor nereusita"
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "doriti sa descarcati un alt zbor?"
 
 #: src/Waypoint/WaypointGlue.cpp:111
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:35
@@ -733,7 +733,7 @@ msgstr "Pornit"
 
 #: src/Menu/ExpandMacros.cpp:491 src/Menu/ExpandMacros.cpp:517
 msgid "Topography On"
-msgstr ""
+msgstr "topografie pornita"
 
 #: src/Menu/ExpandMacros.cpp:495 src/Menu/ExpandMacros.cpp:521
 msgid "Terrain On"
@@ -781,16 +781,12 @@ msgid "Alt GPS"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:157
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the altitude above mean sea level reported by the GPS. Touch-screen/"
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"Aceasta este înălţimea deasupra nivelului mării  raportat de GPS. "
-"Touchscreen / PC-ul numai: în modul de simulare, această valoare este "
-"reglabila cu tastele săgeata sus / jos şi tastele săgeata stanga / dreapta  "
-"acestea de asemenea virand aripa."
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #, no-c-format
@@ -804,20 +800,17 @@ msgid "H AGL"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Aceasta este altitudinea de navigare minus înălţimea terenului, obţinut din "
-"fisierul de teren. Valoarea este de culoare roşie atunci când planorul este "
-"sub distanţa de siguranţă fata de teren ."
 
 #: src/InfoBoxes/Content/Factory.cpp:176
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Termica - ultimele 30 s"
+msgstr "castig inaltime, ultimele 30 s"
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
@@ -832,9 +825,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "urmatorul punct de start"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -851,9 +844,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:196
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR instantaneous"
-msgstr "Viteza task-ului instanta"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
@@ -861,17 +854,13 @@ msgid "GR Inst"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous glide ratio over ground, given by the ground speed divided by "
 "the vertical speed (GPS speed) over the last 20 seconds. Negative values "
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
-"Finetea de moment, raport dat de viteza fata de sol împărţit cu viteza "
-"verticala (viteză GPS), pentru ultimele 20 de secunde. Valorile negative "
-"indică urcare. Dacă viteza verticala este aproape de zero, valoarea afişată "
-"este \"---\"."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
@@ -1013,13 +1002,11 @@ msgid "WP AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:278
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"Altitudine sosirea la punctul final rândul său de activitate în raport cu "
-"înălţimea de sosire de siguranţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
@@ -1044,22 +1031,18 @@ msgid "Next waypoint"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:297
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next WP"
-msgstr "Următorul"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:298
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"Numele punctului de referinta selectat. Când Infobox este activ, folosind "
-"tastele sus / jos cursorul selecteaza punct de referinţă următor / anterior "
-"în sarcina. (Touchscreen / PC-ul numai) apăsând tasta Enter cursorul aduce "
-"detalii punct de referinţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
@@ -1101,9 +1084,9 @@ msgid "Speed task average"
 msgstr "Viteza medie a task-ului."
 
 #: src/InfoBoxes/Content/Factory.cpp:327
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Avg"
-msgstr "V task"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:328
 #, no-c-format
@@ -1135,9 +1118,9 @@ msgid "Terrain elevation"
 msgstr "Elevatie teren"
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Elevatie teren"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1157,13 +1140,11 @@ msgid "TC Avg"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:368
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
-"Altitudinea câştigata/pierduta în curentul termic, diminuata de timp "
-"petrecut tin termica."
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
@@ -1187,15 +1168,12 @@ msgid "Track"
 msgstr "Pistă"
 
 #: src/InfoBoxes/Content/Factory.cpp:388
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"Pistă magnetică raportate de GPS. (Touchscreen / PC-ul numai) Dacă Infobox "
-"este activ în modul de simulare, apăsând în sus şi în jos săgeţile ajustează "
-"pista."
 
 #: src/InfoBoxes/Content/Factory.cpp:398
 #, no-c-format
@@ -1218,17 +1196,12 @@ msgstr "Vant V"
 
 #: src/InfoBoxes/Content/Factory.cpp:408
 #: src/InfoBoxes/Content/Factory.cpp:1149
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Viteza vantului estimat de XCSoar. (Touchscreen / PC-ul numai) ajustarea "
-"manuală este posibilă prin apăsarea tastelor sus / jos cursorul pentru a "
-"ajusta amploarea şi stânga / dreapta tastele de cursor pentru a ajusta "
-"poartă atunci când Infobox este activ. Apăsând tasta Enter cursorul salvează "
-"valoarea vântului ca valoarea iniţială atunci când începe următoarele XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:417
 #, no-c-format
@@ -1236,22 +1209,17 @@ msgid "Wind bearing"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:418
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind Brng"
-msgstr "Vant B"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:419
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Viteza vantului estimat de XCSoar. (Touchscreen / PC-ul numai) ajustarea "
-"manuală este posibilă prin apăsarea tastelor sus / jos cursorul pentru a "
-"ajusta amploarea şi stânga / dreapta tastele de cursor pentru a ajusta "
-"poartă atunci când Infobox este activ. Apăsând tasta Enter cursorul salvează "
-"valoarea vântului ca valoarea iniţială atunci când începe următoarele XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:428
 #, no-c-format
@@ -1357,9 +1325,9 @@ msgstr "Altitudine barometrica"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt Baro"
-msgstr "Alt. Baro."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
@@ -1408,9 +1376,9 @@ msgstr ""
 "incepulul task-ului."
 
 #: src/InfoBoxes/Content/Factory.cpp:519
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flight Duration"
-msgstr "redare zbor"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
@@ -1440,9 +1408,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:539
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "Următorul"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1711,22 +1679,18 @@ msgid "L/D vario"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:690
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
-msgstr "Vario"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:691
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous lift/drag ratio, given by the indicated airspeed divided by "
 "the total energy vertical speed, when connected to an intelligent "
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
-"Finetea de moment, raport dat de viteza fata de sol împărţit cu viteza "
-"verticala (viteză GPS), pentru ultimele 20 de secunde. Valorile negative "
-"indică urcare. Dacă viteza verticala este aproape de zero, valoarea afişată "
-"este \"---\"."
 
 #: src/InfoBoxes/Content/Factory.cpp:699
 #, no-c-format
@@ -1782,9 +1746,9 @@ msgid "Team bearing difference"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:730
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team BrngD"
-msgstr "Distant echipa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:731
 #, no-c-format
@@ -1799,9 +1763,9 @@ msgid "Team range"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:740
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team Dist"
-msgstr "Distant echipa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:741
 #, no-c-format
@@ -1814,9 +1778,9 @@ msgid "Speed task instantaneous"
 msgstr "Viteza task-ului instanta"
 
 #: src/InfoBoxes/Content/Factory.cpp:750
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Inst"
-msgstr "V inst. task"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:751
 #, no-c-format
@@ -1831,9 +1795,9 @@ msgid "Distance home"
 msgstr "Distanta pana acasa"
 
 #: src/InfoBoxes/Content/Factory.cpp:760
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Home Dist"
-msgstr "Distanta casa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:761
 #, no-c-format
@@ -1846,9 +1810,9 @@ msgid "Speed task achieved"
 msgstr "Viteza task-ului atinsa"
 
 #: src/InfoBoxes/Content/Factory.cpp:770
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Ach"
-msgstr "V task"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:771
 #, no-c-format
@@ -1881,9 +1845,9 @@ msgid "Thermal average over all"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "V task"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2014,9 +1978,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:874
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR average"
-msgstr "Termică medie"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
@@ -2149,9 +2113,9 @@ msgid "Vario trace"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:966
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario Trace"
-msgstr "Vario"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:967
 #, no-c-format
@@ -2166,9 +2130,9 @@ msgid "Netto vario trace"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:976
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Netto Trace"
-msgstr "Nici un trafic"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:977
 #, no-c-format
@@ -2178,14 +2142,14 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:985
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal climb trace"
-msgstr "Termică medie"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:986
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Trace"
-msgstr "Pistă"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:987
 #, no-c-format
@@ -2338,14 +2302,12 @@ msgid "WP MC0 AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1077
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"Altitudine sosirea la punctul final rândul său de activitate în raport cu "
-"înălţimea de sosire de siguranţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:1085
 #, no-c-format
@@ -2389,19 +2351,17 @@ msgid "Altitude (Auto)"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt Auto"
-msgstr "Automat"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
-"Aceasta e altitudinea barometrica obtinuta de la un aparat echipat cu senzor "
-"de presiune"
 
 #: src/InfoBoxes/Content/Factory.cpp:1116
 #, no-c-format
@@ -2498,9 +2458,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Logger pornire"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1168
 #, no-c-format
@@ -2513,9 +2473,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1176
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Logger pornire"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
@@ -2525,9 +2485,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1184
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Urmatorul timp de sosire"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1185 Data/Dialogs/dlgTarget.xml:25
 #: Data/Dialogs/dlgTarget_L.xml:18
@@ -3359,9 +3319,8 @@ msgid "Queued"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:441 src/Dialogs/FileManager.cpp:447
-#, fuzzy
 msgid "Downloading"
-msgstr "descarcare zbor"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
 #: src/Dialogs/Device/DeviceListDialog.cpp:346
@@ -3391,9 +3350,8 @@ msgid "Select a file"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:684
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "descarcare lista de zbor nereusita"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:625
@@ -3732,9 +3690,8 @@ msgid "PDA baud rate"
 msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:99
-#, fuzzy
 msgid "Auto off"
-msgstr "Automat"
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:102
 msgid "Auto finish flight"
@@ -3915,9 +3872,9 @@ msgid "Balloon"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Airship"
-msgstr "Spaţiu aerian"
+msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:138
 #, no-c-format
@@ -4233,9 +4190,9 @@ msgid "FLARM, Other"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "LD Vario"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
@@ -4286,9 +4243,9 @@ msgid "Logger"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:122
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Logger Info"
-msgstr "Eroare de logger"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:129
 #, no-c-format
@@ -4420,9 +4377,8 @@ msgid "Map"
 msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:730
-#, fuzzy
 msgid "Traffic"
-msgstr "Nici un trafic"
+msgstr ""
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
@@ -4635,9 +4591,8 @@ msgid "Status"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:125 Data/Input/default.xci:575
-#, fuzzy
 msgid "Flight"
-msgstr "redare zbor"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
 msgid "System"
@@ -4650,9 +4605,8 @@ msgid "Rules"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Timp aici"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
@@ -5311,9 +5265,8 @@ msgid "Preferred period for gliders."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-#, fuzzy
 msgid "GR average period"
-msgstr "Termică medie"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid ""
@@ -5826,9 +5779,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Vant V"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -7228,14 +7181,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Start open time"
-msgstr "Primul punct de cotitură"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
-#, fuzzy
 msgid "Start close time"
-msgstr "Regulile de ştart încălcate"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
@@ -8602,6 +8553,18 @@ msgstr ""
 
 #~ msgid "Height GPS"
 #~ msgstr "înălţime GPS"
+
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Aceasta este altitudinea de navigare minus înălţimea terenului, obţinut "
+#~ "din fisierul de teren. Valoarea este de culoare roşie atunci când "
+#~ "planorul este sub distanţa de siguranţă fata de teren ."
+
+#~ msgid "H GPS"
+#~ msgstr "inaltime GPS"
 
 #, fuzzy
 #~ msgid ""
