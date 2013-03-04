@@ -223,20 +223,26 @@ public class XCSoar extends Activity {
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
     // Overrides Back key to use in our app
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onKeyDown(keyCode, event);
-    return true;
+      return true;
+    } else
+      return super.onKeyDown(keyCode, event);
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onKeyUp(keyCode, event);
-    return true;
+      return true;
+    } else
+      return super.onKeyUp(keyCode, event);
   }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onTouchEvent(ev);
-    return true;
+      return true;
+    } else
+      return super.dispatchTouchEvent(ev);
   }
 }
