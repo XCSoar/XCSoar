@@ -396,16 +396,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     return false;
   }
 
-  while (port->GetState() == PortState::LIMBO) {
-    env.Sleep(200);
-
-    if (env.IsCancelled() || port->GetState() == PortState::FAILED) {
-      delete port;
-      return false;
-    }
-  }
-
-  if (!Open(*port, env)) {
+  if (!port->WaitConnected(env) || !Open(*port, env)) {
     delete port;
     return false;
   }
