@@ -31,6 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Handler;
 import android.os.Message;
@@ -149,6 +150,18 @@ public class XCSoar extends Activity {
   public void initSDL() {
     if (!Loader.loaded)
       return;
+
+    /* check if external storage is available; XCSoar doesn't work as
+       long as external storage is being forwarded to a PC */
+    String state = Environment.getExternalStorageState();
+    Log.d(TAG, "getExternalStorageState() = " + state);
+    if (!Environment.MEDIA_MOUNTED.equals(state)) {
+      TextView tv = new TextView(this);
+      tv.setText("External storage is not available (state='" + state
+                 + "').  Please turn off USB storage.");
+      setContentView(tv);
+      return;
+    }
 
     nativeView = new NativeView(this, quitHandler);
     setContentView(nativeView);
