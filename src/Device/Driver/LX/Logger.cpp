@@ -171,6 +171,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   if (!LX::CommandMode(port, env))
     return false;
 
+  port.Flush();
+
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
   seek.end_address = flight.internal.lx.end_address;
