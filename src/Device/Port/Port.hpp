@@ -83,7 +83,7 @@ public:
    * @return true on success, false on error or if the operation has
    * been cancelled
    */
-  bool WaitConnected(OperationEnvironment &env);
+  virtual bool WaitConnected(OperationEnvironment &env);
 
   /**
    * Writes a string to the serial port

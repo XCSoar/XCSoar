@@ -28,6 +28,7 @@ Version 6.5 - not yet released
   - Leonardo: read indicated airspeed from PDGFTL1 sentence
   - C-Probe: read IAS/TAS from the device
   - K6Bt: fix baud rate switching with various drivers
+  - K6Bt: fix configured baud rate setup on Android
 * data files
   - added MATZ airspace class (#2530)
   - integrated handicaps from DAEC 2012
