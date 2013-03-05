@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2012-12-03 15:23+0000\n"
+"PO-Revision-Date: 2013-03-05 18:19+0000\n"
 "Last-Translator: Henrique Frasson <hfrasson@yahoo.com.br>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
-"X-Generator: Launchpad (build 16341)\n"
+"X-Launchpad-Export-Date: 2013-03-05 23:00+0000\n"
+"X-Generator: Launchpad (build 16514)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -811,9 +811,9 @@ msgstr "Altitude - GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt GPS"
-msgstr "A GPS"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:157
 #, no-c-format
@@ -835,15 +835,12 @@ msgid "H AGL"
 msgstr "A AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Altitude de navegação menos altura do terreno obtida do arquivo de terreno. "
-"O valor fica vermelho se o planador está abaixo da altura de segurança para "
-"vencer o terreno."
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -865,9 +862,9 @@ msgstr ""
 "ou pelo vario se disponível."
 
 #: src/InfoBoxes/Content/Factory.cpp:186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "Proa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:187
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1155,9 +1152,9 @@ msgid "Terrain elevation"
 msgstr "Elevação do terreno"
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Terr Col"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1241,6 +1238,10 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Velocidade do vento estimada pelo XCSoar. Ajuste manual é possível com a "
+"janela Infobox conectada. Apertar as teclas dos cursores para cima/baixo "
+"para percorrer as configurações, ajustar os valores com as teclas dos "
+"cursores esquerda/direita."
 
 #: src/InfoBoxes/Content/Factory.cpp:417
 #, no-c-format
@@ -1266,9 +1267,9 @@ msgid "AAT time"
 msgstr "Tempo AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:429
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AAT Time"
-msgstr "Tempo AA"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1368,7 +1369,7 @@ msgstr "Altitude barométrica"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
 #, no-c-format
 msgid "Alt Baro"
-msgstr ""
+msgstr "Alt Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
@@ -1422,12 +1423,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:519
 #, no-c-format
 msgid "Flight Duration"
-msgstr ""
+msgstr "Duração do Voo"
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "Flt Duration"
-msgstr ""
+msgstr "Dur. Voo"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
@@ -1456,12 +1457,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Próximo RP"
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "WP RP"
 
 #: src/InfoBoxes/Content/Factory.cpp:541
 #, no-c-format
@@ -1470,6 +1471,9 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"A razão de planeio necessária em relação ao solo para alcançar o próximo "
+"waypoint, dado pela distância ao próximo waypoint dividido pela altura "
+"necessária para chegar na altura de chegada segura."
 
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
@@ -1743,9 +1747,9 @@ msgid "L/D vario"
 msgstr "L/D vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:690
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
-msgstr "L/D vario"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -1915,9 +1919,9 @@ msgid "Thermal average over all"
 msgstr "Térmica média total"
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "TL Avg"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2135,9 +2139,9 @@ msgid "Next altitude arrival"
 msgstr "Altirude de chegada próximo ponto"
 
 #: src/InfoBoxes/Content/Factory.cpp:925
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP AltA"
-msgstr "WP AltD"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:926
 #, no-c-format
@@ -2253,13 +2257,11 @@ msgid "Climb Band"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:997
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
-"Gráfico da taxa média de subida (eixo horizontal) como uma função da altura "
-"(eixo vertical)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
@@ -2571,9 +2573,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1176
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Radial largada"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1177
 #, no-c-format
@@ -2583,9 +2585,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1184
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Radial largada"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1185 Data/Dialogs/dlgTarget.xml:25
 #: Data/Dialogs/dlgTarget_L.xml:18
@@ -2599,9 +2601,9 @@ msgid "True bearing from the next waypoint to your position."
 msgstr ""
 
 #: src/InfoBoxes/Content/Alternate.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Altn %d"
-msgstr "Altn 1"
+msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:295
@@ -2655,9 +2657,9 @@ msgid "MC MANUAL"
 msgstr "MC MANUAL"
 
 #: src/InfoBoxes/Content/Other.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "AC Off;  %d%%"
-msgstr "AC deslig"
+msgstr ""
 
 #: src/InfoBoxes/Content/Other.cpp:65
 msgid "AC Off"
@@ -3066,9 +3068,8 @@ msgid "around terrain"
 msgstr "Em torno do terreno"
 
 #: src/Renderer/MapItemListRenderer.cpp:248
-#, fuzzy
 msgid "Unreachable due to terrain."
-msgstr "Planeio Final Através do Terreno"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:253
 msgid "Arrival altitude incl. safety height"
@@ -3475,14 +3476,14 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Transdutor de pressão"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:76
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO voltage sensor"
-msgstr "Transdutor de pressão"
+msgstr ""
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3540,9 +3541,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:629
-#, fuzzy
 msgid "Pressure use"
-msgstr "Transdutor de pressão"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid ""
@@ -3673,9 +3673,8 @@ msgstr "Dispositivo ocupado"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:405
 #: src/Dialogs/Device/DeviceListDialog.cpp:467
-#, fuzzy
 msgid "Device is not connected"
-msgstr "Dispositivo ocupado"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:431
 msgid "Edit device"
@@ -3828,9 +3827,9 @@ msgid "Set new audio scheme?  Old values will be lost."
 msgstr "Configurar novo esquema de áudio? Valores antigos serão perdidos."
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
-msgstr "Flap positivo"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
 #, no-c-format
@@ -3838,9 +3837,9 @@ msgid "Neutral"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
-msgstr "Flap negativo"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:59
 #, no-c-format
@@ -3868,9 +3867,9 @@ msgid "Locked"
 msgstr "Travado"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Desconectado"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
@@ -3897,9 +3896,8 @@ msgid "Speed command"
 msgstr "Comando de velocidade"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "Opções"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -4344,14 +4342,14 @@ msgid "Screen Layout"
 msgstr "Layout da Tela"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pages"
-msgstr "Página"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "Páginas de InfoBox"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4535,9 +4533,8 @@ msgid "Not Found"
 msgstr "Não encontrado"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:150
-#, fuzzy
 msgid "Set new teammate"
-msgstr "Defina novo companheiro de equipe:"
+msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:288 src/Dialogs/dlgAnalysis.cpp:297
 #: src/Dialogs/dlgAnalysis.cpp:306 src/Dialogs/dlgAnalysis.cpp:315
@@ -4723,9 +4720,8 @@ msgid "Status"
 msgstr "Estado"
 
 #: src/Dialogs/dlgStatus.cpp:125 Data/Input/default.xci:575
-#, fuzzy
 msgid "Flight"
-msgstr "Tempo de voo"
+msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:128 Data/Input/default.xci:601
 msgid "System"
@@ -4738,9 +4734,8 @@ msgid "Rules"
 msgstr "Regras"
 
 #: src/Dialogs/dlgStatus.cpp:137
-#, fuzzy
 msgid "Times"
-msgstr "Tempo"
+msgstr ""
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
@@ -4881,9 +4876,8 @@ msgstr "Hora pouso"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
-#, fuzzy
 msgid "Daylight time"
-msgstr "Tempo de voo"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -5451,9 +5445,8 @@ msgid "Preferred period for gliders."
 msgstr "Período preferido por planadores."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-#, fuzzy
 msgid "GR average period"
-msgstr "Período para L/D médio"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid ""
@@ -5999,17 +5992,16 @@ msgid ""
 msgstr "Mapa móvel gira para que o ponto alvo de navegação fique para cima."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "V Vento"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Mapa móvel será rotacionado para que trajetória do planador fique para cima."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
 #, no-c-format
@@ -6094,20 +6086,17 @@ msgid "The upper limit for auto zoom distance."
 msgstr "Limite superior da distância do zoom automático."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
-#, fuzzy
 msgid "Main area"
-msgstr "Área vélica"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
-#, fuzzy
 msgid "Specifies what should be displayed in the main area."
-msgstr "Especifica o modo pelo qual a área do espaço aéreo será preenchida."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:331
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "InfoBox"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -6120,19 +6109,17 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Rumo"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
-#, fuzzy
 msgid "Bottom area"
-msgstr "Inferior-Esquerdo"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
-#, fuzzy
 msgid "Specifies what should be displayed below the main area."
-msgstr "Especifica o modo pelo qual a área do espaço aéreo será preenchida."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
@@ -6972,13 +6959,10 @@ msgid "Slope shading"
 msgstr "Sombreamento"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
-#, fuzzy
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr ""
-"O terreno pode ser sombreado entre encostas para indicar ou a direção do "
-"vento, ou a posição do sol ou uma posição de sombreamento fixo norte-leste."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 msgid "Terrain contrast"
@@ -9035,14 +9019,26 @@ msgstr ""
 #~ msgid "Height GPS"
 #~ msgstr "Altura GPS"
 
-#~ msgid "H GND"
-#~ msgstr "H GND"
+#~ msgid "H GPS"
+#~ msgstr "A GPS"
+
+#~ msgid "H Baro"
+#~ msgstr "A Baro"
 
 #~ msgid "TC All"
 #~ msgstr "Todas Terms"
 
-#~ msgid "QFE GPS"
-#~ msgstr "QFE GPS"
+#~ msgid "Weather parameters"
+#~ msgstr "Parâmetros meteoro"
+
+#~ msgid "Sunset"
+#~ msgstr "Pôr do sol"
+
+#~ msgid "Short file name"
+#~ msgstr "Nome curto arquivo"
+
+#~ msgid "H GND"
+#~ msgstr "H GND"
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9056,8 +9052,24 @@ msgstr ""
 #~ "sobe e desce. A linha de baixo mostra a altitude QNH. Mudar o valor QFE "
 #~ "não afeta a altitude QNH."
 
-#~ msgid "H Baro"
-#~ msgstr "A Baro"
+#~ msgid "QFE GPS"
+#~ msgstr "QFE GPS"
+
+#~ msgid ""
+#~ "Graph of average circling climb rate (horizontal axis) as a function of "
+#~ "height (vertical axis)."
+#~ msgstr ""
+#~ "Gráfico da taxa média de subida (eixo horizontal) como uma função da "
+#~ "altura (eixo vertical)."
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "Modos de InfoBox"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Páginas de InfoBox"
+
+#~ msgid "Delete Error"
+#~ msgstr "Erro de exclusão"
 
 #~ msgid "Show details:"
 #~ msgstr "Mostrar detalhes:"
@@ -9065,20 +9077,26 @@ msgstr ""
 #~ msgid "Unknown competition number"
 #~ msgstr "Número da competição desconhecido"
 
-#~ msgid "Not found"
-#~ msgstr "Não localizado"
-
-#~ msgid "InfoBox Modes"
-#~ msgstr "Modos de InfoBox"
-
 #~ msgid "No further information"
 #~ msgstr "Sem mais informações"
 
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Altitude de navegação menos altura do terreno obtida do arquivo de "
+#~ "terreno. O valor fica vermelho se o planador está abaixo da altura de "
+#~ "segurança para vencer o terreno."
+
+#~ msgid "Not found"
+#~ msgstr "Não localizado"
+
+#~ msgid "L/D average period"
+#~ msgstr "Período para L/D médio"
+
 #~ msgid "English"
 #~ msgstr "Inglês"
-
-#~ msgid "Short file name"
-#~ msgstr "Nome curto arquivo"
 
 #~ msgid ""
 #~ "This determines whether the logger uses the short IGC file name or the "
@@ -9092,6 +9110,20 @@ msgstr ""
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Determina a informação exibida em diferentes páginas da tela."
 
+#~ msgid "Page"
+#~ msgstr "Página"
+
+#~ msgid ""
+#~ "The terrain can be shaded among slopes to indicate either wind direction, "
+#~ "sun position or a fixed shading from north-east."
+#~ msgstr ""
+#~ "O terreno pode ser sombreado entre encostas para indicar ou a direção do "
+#~ "vento, ou a posição do sol ou uma posição de sombreamento fixo norte-"
+#~ "leste."
+
+#~ msgid "Set new teammate:"
+#~ msgstr "Defina novo companheiro de equipe:"
+
 #~ msgid ""
 #~ "Sample Text\n"
 #~ "123"
@@ -9101,15 +9133,6 @@ msgstr ""
 
 #~ msgid "My Sample"
 #~ msgstr "Meu Exemplo"
-
-#~ msgid "Sunset"
-#~ msgstr "Pôr do sol"
-
-#~ msgid "Delete Error"
-#~ msgstr "Erro de exclusão"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Parâmetros meteoro"
 
 #~ msgid "User down"
 #~ msgstr "Usuário fora"
