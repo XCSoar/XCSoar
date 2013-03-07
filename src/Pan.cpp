@@ -98,9 +98,8 @@ LeavePan()
 void
 TogglePan()
 {
-  GlueMapWindow *map = UIGlobals::GetMap();
-  if (map == NULL)
-    EnterPan();
-  else if (map->IsPanning())
+  if (IsPanning())
     LeavePan();
+  else
+    EnterPan();
 }
