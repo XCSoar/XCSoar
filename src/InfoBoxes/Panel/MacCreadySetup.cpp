@@ -59,6 +59,8 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
 
+  virtual void Show(const PixelRect &rc) override;
+
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
 };
@@ -82,6 +84,13 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   SetWindow(new WndButton(parent, UIGlobals::GetDialogLook(), GetCaption(), rc,
                           style, *this, 1));
+}
+
+void
+MacCreadySetupPanel::Show(const PixelRect &rc)
+{
+  UpdateCaption();
+  WindowWidget::Show(rc);
 }
 
 Widget *
