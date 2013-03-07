@@ -24,15 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_PAGES_HPP
 #define XCSOAR_PAGES_HPP
 
-struct PageLayout;
+#include "Compiler.h"
 
-namespace Pages
+struct PageLayout;
+class GlueMapWindow;
+
+namespace PageActions
 {
-  /**
-   * Opens the given page.
-   * @param page The page to open
-   */
-  void Open(unsigned page);
+  gcc_pure
+  const PageLayout &GetCurrentLayout();
+
   /**
    * Opens the next page.
    */
@@ -49,10 +50,50 @@ namespace Pages
    */
   void OpenLayout(const PageLayout &layout);
 
+  gcc_pure
   unsigned NextIndex();
+
+  gcc_pure
   unsigned PrevIndex();
 
   void Update();
+
+  /**
+   * Restore the current page as it was configured.
+   */
+  void Restore();
+
+  /**
+   * Schedule a call to Restore().  The function returns immediately,
+   * and there is no guarantee that it succeeds.
+   */
+  void DeferredRestore();
+
+  /**
+   * Show a page with the map, or restore the current page if it was
+   * configured with a map (for example if the user has activated the
+   * FLARM radar page).
+   *
+   * On success, the function returns the map window object.
+   */
+  GlueMapWindow *ShowMap();
+
+  /**
+   * Show a page with a full-screen map.
+   *
+   * On success, the function returns the map window object.
+   */
+  GlueMapWindow *ShowOnlyMap();
+
+  /**
+   * Show a page with the traffic radar.
+   */
+  void ShowTrafficRadar();
+
+  /**
+   * Show a page with the thermal assistant.
+   */
+  void ShowThermalAssistant();
 };
 
 #endif

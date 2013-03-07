@@ -31,6 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.os.Build;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.os.Handler;
 import android.os.Message;
@@ -150,6 +151,18 @@ public class XCSoar extends Activity {
     if (!Loader.loaded)
       return;
 
+    /* check if external storage is available; XCSoar doesn't work as
+       long as external storage is being forwarded to a PC */
+    String state = Environment.getExternalStorageState();
+    Log.d(TAG, "getExternalStorageState() = " + state);
+    if (!Environment.MEDIA_MOUNTED.equals(state)) {
+      TextView tv = new TextView(this);
+      tv.setText("External storage is not available (state='" + state
+                 + "').  Please turn off USB storage.");
+      setContentView(tv);
+      return;
+    }
+
     nativeView = new NativeView(this, quitHandler);
     setContentView(nativeView);
     // Receive keyboard events
@@ -223,20 +236,26 @@ public class XCSoar extends Activity {
 
   @Override public boolean onKeyDown(int keyCode, final KeyEvent event) {
     // Overrides Back key to use in our app
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onKeyDown(keyCode, event);
-    return true;
+      return true;
+    } else
+      return super.onKeyDown(keyCode, event);
   }
 
   @Override public boolean onKeyUp(int keyCode, final KeyEvent event) {
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onKeyUp(keyCode, event);
-    return true;
+      return true;
+    } else
+      return super.onKeyUp(keyCode, event);
   }
 
   @Override public boolean dispatchTouchEvent(final MotionEvent ev) {
-    if (nativeView != null)
+    if (nativeView != null) {
       nativeView.onTouchEvent(ev);
-    return true;
+      return true;
+    } else
+      return super.dispatchTouchEvent(ev);
   }
 }

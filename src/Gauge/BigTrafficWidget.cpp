@@ -24,7 +24,9 @@
 #include "BigTrafficWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/SymbolButton.hpp"
+#include "UIState.hpp"
 #include "UIGlobals.hpp"
+#include "PageActions.hpp"
 #include "Look/Look.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
@@ -123,7 +125,7 @@ TrafficWidget::Update()
     /* this must be deferred, because this method is called from
        within the BlackboardListener, and we must not unregister the
        listener in this context */
-    UIGlobals::DeferredActivateMap();
+    PageActions::DeferredRestore();
     return;
   }
 
@@ -276,6 +278,11 @@ TrafficWidget::Show(const PixelRect &rc)
   ContainerWidget::Show(rc);
   UpdateLayout();
 
+#ifndef GNAV
+  /* show the "Close" button only if this is a "special" page */
+  close_button->SetVisible(CommonInterface::GetUIState().special_page.IsDefined());
+#endif
+
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
 
@@ -309,7 +316,7 @@ TrafficWidget::OnAction(int id)
 {
   switch ((Action)id) {
   case CLOSE:
-    UIGlobals::ActivateMap();
+    PageActions::Restore();
     break;
 
   case DETAILS:

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
+#include "PageActions.hpp"
 #include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
@@ -57,11 +58,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
   LoadFlarmDatabases();
 
   if (StringIsEqual(misc, _T("show"))) {
-    if (IsFlavour(_T("Traffic")))
-      return;
-
-    CommonInterface::main_window->SetWidget(new TrafficWidget());
-    SetFlavour(_T("Traffic"));
+    PageActions::ShowTrafficRadar();
     return;
   }
 

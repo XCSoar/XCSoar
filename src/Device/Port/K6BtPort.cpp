@@ -34,12 +34,8 @@ Copyright_License {
 #include <string.h>
 
 K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate, DataHandler &_handler)
-  :Port(_handler), port(_port), baud_rate(0)
+  :Port(_handler), port(_port), baud_rate(_baud_rate)
 {
-  /* ensure that the K6Bt is not in command mode */
-  SendCommand(NOP);
-
-  SetBaudrate(_baud_rate);
 }
 
 K6BtPort::~K6BtPort()
@@ -58,6 +54,22 @@ PortState
 K6BtPort::GetState() const
 {
   return port->GetState();
+}
+
+bool
+K6BtPort::WaitConnected(OperationEnvironment &env)
+{
+  if (!port->WaitConnected(env))
+    return false;
+
+  /* ensure that the K6Bt is not in command mode */
+  SendCommand(NOP);
+
+  /* now that the Bluetooth connection has been established, tell our
+     preferred baud rate to the K6Bt */
+  SetBaudrate(baud_rate);
+
+  return true;
 }
 
 size_t

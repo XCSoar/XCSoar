@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UI_ACTIONS_HPP
 #define XCSOAR_UI_ACTIONS_HPP
 
+class GlueMapWindow;
+
 /**
  * This namespace provides access to several user interface actions.
  * These are usually triggered by the user, for example by

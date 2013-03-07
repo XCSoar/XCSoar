@@ -21,12 +21,15 @@ Version 6.5 - not yet released
     for intermediate task turnpoints
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
+  - LX: support flight download from LX5000/LX7000 pro IGC
   - LX: read bugs setting from the LX160 vario (#2167)
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)
   - Android/IOIO: support MS5611 pressure sensor
   - added driver for Levil AHRS device
   - Leonardo: read indicated airspeed from PDGFTL1 sentence
   - C-Probe: read IAS/TAS from the device
+  - K6Bt: fix baud rate switching with various drivers
+  - K6Bt: fix configured baud rate setup on Android
 * data files
   - added MATZ airspace class (#2530)
   - integrated handicaps from DAEC 2012
@@ -48,12 +51,14 @@ Version 6.5 - not yet released
   - allow pages with FLARM radar and thermal assistant
   - double click on vario opens main menu
   - allow opening main menu while panning
-  - new translation: Hebrew
+  - new translations: Hebrew, Vietnamese
 * infoboxes
   - added thermal assistant infobox
   - inverse colors for wind arrow infobox and flarm gauge (#2337)
 * track friends via internet connection (SkyLines live tracking)
 * SkyLines tracking enabled on Windows CE
+* Android
+  - check if external storage is mounted
 * Documentation
   - started a French translation of the manual
   - included an almost complete German translation of the manual

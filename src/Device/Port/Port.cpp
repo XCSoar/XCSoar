@@ -34,6 +34,15 @@ Port::Port(DataHandler &_handler)
 
 Port::~Port() {}
 
+bool
+Port::WaitConnected(OperationEnvironment &env)
+{
+  while (GetState() == PortState::LIMBO && !env.IsCancelled())
+    env.Sleep(200);
+
+  return GetState() == PortState::READY;
+}
+
 size_t
 Port::Write(const char *s)
 {

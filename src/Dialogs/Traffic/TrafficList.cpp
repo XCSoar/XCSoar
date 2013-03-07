@@ -74,6 +74,8 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
      * The SkyLines account id.
      */
     uint32_t skylines_id;
+
+    uint32_t time_of_day_ms;
 #endif
 
     /**
@@ -122,9 +124,11 @@ class TrafficListWidget : public ListWidget, public DataFieldListener,
     }
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
-    explicit Item(uint32_t _id, const GeoPoint &_location,
+    explicit Item(uint32_t _id, uint32_t _time_of_day_ms,
+                  const GeoPoint &_location,
                   std::string &&_name)
       :id(FlarmId::Undefined()), skylines_id(_id),
+       time_of_day_ms(_time_of_day_ms),
        color(FlarmColor::COUNT),
        loaded(false),
        location(_location),
@@ -402,7 +406,8 @@ TrafficListWidget::UpdateList()
           ? name_i->second
           : std::string();
 
-        items.emplace_back(i.first, i.second.location, std::move(name));
+        items.emplace_back(i.first, i.second.time_of_day_ms,
+                           i.second.location, std::move(name));
         Item &item = items.back();
 
         if (i.second.location.IsValid() &&
@@ -521,6 +526,31 @@ TrafficListWidget::Prepare(ContainerWindow &parent,
     list.SetLength(items.size());
 }
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+/**
+ * Calculate how many minutes have passed since #past_ms.
+ */
+gcc_const
+static unsigned
+SinceInMinutes(fixed now_s, uint32_t past_ms)
+{
+  const unsigned day_minutes = 24 * 60;
+  unsigned now_minutes = uint32_t(now_s / 60) % day_minutes;
+  unsigned past_minutes = (past_ms / 60000) % day_minutes;
+
+  if (past_minutes >= 20 * 60 && now_minutes < 4 * 60)
+    /* midnight rollover */
+    now_minutes += day_minutes;
+
+  if (past_minutes > now_minutes)
+    return 0;
+
+  return now_minutes - past_minutes;
+}
+
+#endif
+
 void
 TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                unsigned index)
@@ -633,6 +663,18 @@ TrafficListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                       rc.bottom - small_font.GetHeight() - text_padding,
                       tmp);
     }
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  } else if (item.IsSkyLines() && CommonInterface::Basic().time_available) {
+    canvas.Select(small_font);
+
+    tmp.UnsafeFormat(_("%u minutes ago"),
+                     SinceInMinutes(CommonInterface::Basic().time,
+                                    item.time_of_day_ms));
+    canvas.Select(small_font);
+    canvas.DrawText(rc.left + text_padding,
+                    rc.bottom - small_font.GetHeight() - text_padding,
+                    tmp);
+#endif
   }
 
   /* draw bearing and distance on the right */

@@ -317,6 +317,7 @@ MO(sr)
 MO(sv)
 MO(tr)
 MO(uk)
+MO(vi)
 
 TEXT(LICENSE, "COPYING")
 TEXT(AUTHORS, "AUTHORS")

@@ -250,6 +250,27 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
       fprintf(file, "\r\n");
       break;
 
+    case LXN::SECURITY_7000:
+      data += sizeof(*packet.security_7000);
+      if (data > end ||
+          packet.security_7000->x40 != 0x40)
+        return false;
+
+      fprintf(file, "G3");
+      for (auto ch : packet.security_7000->line1)
+        fprintf(file, "%02X", ch);
+
+      fprintf(file, "\r\nG");
+      for (auto ch : packet.security_7000->line2)
+        fprintf(file, "%02X", ch);
+
+      fprintf(file, "\r\nG");
+      for (auto ch : packet.security_7000->line3)
+        fprintf(file, "%02X", ch);
+
+      fprintf(file, "\r\n");
+      break;
+
     case LXN::COMPETITION_CLASS:
       data += sizeof(*packet.competition_class);
       if (data > end)

@@ -78,6 +78,14 @@ public:
   virtual PortState GetState() const = 0;
 
   /**
+   * Wait until the connection has been established.
+   *
+   * @return true on success, false on error or if the operation has
+   * been cancelled
+   */
+  virtual bool WaitConnected(OperationEnvironment &env);
+
+  /**
    * Writes a string to the serial port
    * @param data Pointer to the first character
    * @param length Length of the string

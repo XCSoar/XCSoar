@@ -87,6 +87,8 @@ Profile::Load(PageSettings &settings)
 {
   for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i)
     ::Load(settings.pages[i], i);
+
+  settings.Compress();
 }
 
 void

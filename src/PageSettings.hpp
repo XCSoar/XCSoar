@@ -151,6 +151,10 @@ struct PageLayout
     return valid;
   }
 
+  void SetUndefined() {
+    valid = false;
+  }
+
   void MakeTitle(const InfoBoxSettings &info_box_settings,
                  TCHAR *str, const bool concise=false) const;
 
@@ -171,7 +175,14 @@ struct PageSettings {
 
   std::array<PageLayout, MAX_PAGES> pages;
 
+  unsigned n_pages;
+
   void SetDefaults();
+
+  /**
+   * Eliminate empty pages to make the array contiguous.
+   */
+  void Compress();
 };
 
 static_assert(std::is_trivial<PageSettings>::value, "type is not trivial");

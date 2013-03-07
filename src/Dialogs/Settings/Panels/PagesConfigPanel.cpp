@@ -44,8 +44,6 @@ Copyright_License {
 #undef DELETE
 #endif
 
-using namespace Pages;
-
 class PageLayoutEditWidget final
   : public RowFormWidget, private DataFieldListener {
 public:
@@ -254,14 +252,9 @@ void
 PageListWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   settings = CommonInterface::GetUISettings().pages;
-  auto end = std::remove_if(settings.pages.begin(), settings.pages.end(),
-                            [](const PageLayout &layout) {
-                              return !layout.IsDefined();
-                            });
-  unsigned n = std::distance(settings.pages.begin(), end);
 
   CreateList(parent, UIGlobals::GetDialogLook(),
-             rc, Layout::Scale(18)).SetLength(n);
+             rc, Layout::Scale(18)).SetLength(settings.n_pages);
 
   CreateButtons(buttons->GetButtonPanel());
   UpdateButtons();
@@ -280,7 +273,8 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
 {
   bool changed = false;
 
-  std::fill(settings.pages.begin() + GetList().GetLength(),
+  settings.n_pages = GetList().GetLength();
+  std::fill(settings.pages.begin() + settings.n_pages,
             settings.pages.end(),
             PageLayout::Undefined());
 
@@ -289,13 +283,15 @@ PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
     PageLayout &dest = _settings.pages[i];
     const PageLayout &src = settings.pages[i];
     if (src != dest) {
-      dest = src;
       Profile::Save(src, i);
       changed = true;
     }
   }
 
-  Pages::Update();
+  if (changed) {
+    _settings = settings;
+    PageActions::Update();
+  }
 
   _changed |= changed;
   return true;

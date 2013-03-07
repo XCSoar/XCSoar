@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-17 20:02+0100\n"
+"POT-Creation-Date: 2013-03-03 18:37+0100\n"
 "PO-Revision-Date: 2013-02-19 05:00+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: src/Task/TaskStore.cpp:66 src/Menu/ExpandMacros.cpp:556
 #: src/Input/InputEventsSettings.cpp:304 src/Dialogs/dlgAnalysis.cpp:351
 #: src/Dialogs/dlgStatus.cpp:131
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:76
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:190
 #: Data/Input/default.xci:363 Data/Input/default.xci:412
@@ -280,7 +280,7 @@ msgstr "リンク　解除されました"
 #: src/Dialogs/Airspace/dlgAirspace.cpp:176
 #: src/Dialogs/Settings/dlgConfiguration.cpp:103
 #: src/Dialogs/dlgAnalysis.cpp:370
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
 #: Data/Dialogs/dlgVoice.xml:34 Data/Input/default.xci:534
 #: Data/Input/default.xci:666
 #, no-c-format
@@ -480,10 +480,10 @@ msgstr "旋回していません"
 msgid "No Traffic"
 msgstr "トラフィックなし"
 
-#: src/Gauge/BigTrafficWidget.cpp:295 src/Gauge/BigTrafficWidget.cpp:296
+#: src/Gauge/BigTrafficWidget.cpp:305 src/Gauge/BigTrafficWidget.cpp:306
 #: src/InfoBoxes/Content/Factory.cpp:396 src/InfoBoxes/Content/Factory.cpp:397
 #: src/Renderer/MapItemListRenderer.cpp:513
-#: src/Dialogs/Device/DeviceListDialog.cpp:325
+#: src/Dialogs/Device/DeviceListDialog.cpp:326
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:38
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
@@ -492,7 +492,7 @@ msgstr "トラフィックなし"
 msgid "Vario"
 msgstr "バリオ"
 
-#: src/Gauge/BigTrafficWidget.cpp:371 src/Renderer/MapItemListRenderer.cpp:121
+#: src/Gauge/BigTrafficWidget.cpp:381 src/Renderer/MapItemListRenderer.cpp:121
 #: src/Renderer/MapItemListRenderer.cpp:125
 #: src/Renderer/WaypointListRenderer.cpp:120
 #: src/Renderer/FlightStatisticsRenderer.cpp:129
@@ -500,7 +500,7 @@ msgstr "バリオ"
 #: src/Renderer/FlightStatisticsRenderer.cpp:182
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:71
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:94
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:159
 #: Data/Dialogs/AirspaceList.xml:14 Data/Dialogs/AirspaceList_L.xml:8
 #: Data/Dialogs/WaypointList.xml:8 Data/Dialogs/WaypointList_L.xml:4
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10
@@ -509,12 +509,12 @@ msgstr "バリオ"
 msgid "Distance"
 msgstr "距離"
 
-#: src/Gauge/BigTrafficWidget.cpp:414 src/Gauge/BigTrafficWidget.cpp:417
+#: src/Gauge/BigTrafficWidget.cpp:424 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
 msgstr "高度差"
 
-#: src/Gauge/BigTrafficWidget.cpp:871 src/Dialogs/MapItemListDialog.cpp:156
-#: src/Dialogs/Traffic/TrafficList.cpp:337
+#: src/Gauge/BigTrafficWidget.cpp:886 src/Dialogs/MapItemListDialog.cpp:156
+#: src/Dialogs/Traffic/TrafficList.cpp:344
 #: src/Dialogs/Task/dlgAlternatesList.cpp:101
 #: src/Dialogs/Weather/NOAAList.cpp:107 Data/Dialogs/dlgTaskPoint.xml:6
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:10
@@ -522,21 +522,21 @@ msgstr "高度差"
 msgid "Details"
 msgstr "詳細"
 
-#: src/Gauge/BigTrafficWidget.cpp:874 src/Dialogs/XML.cpp:595
-#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:566
+#: src/Gauge/BigTrafficWidget.cpp:889 src/Dialogs/XML.cpp:595
+#: src/Dialogs/FileManager.cpp:694 src/Dialogs/Device/DeviceListDialog.cpp:567
 #: src/Dialogs/Device/PortMonitor.cpp:198
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:160
 #: src/Dialogs/Device/ManageFlarmDialog.cpp:113
 #: src/Dialogs/Device/LX/ManageV7Dialog.cpp:128
 #: src/Dialogs/Device/LX/ManageNanoDialog.cpp:108
-#: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:80
+#: src/Dialogs/Device/LX/ManageLX16xxDialog.cpp:83
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:154
 #: src/Dialogs/MapItemListDialog.cpp:157
 #: src/Dialogs/Airspace/dlgAirspace.cpp:178
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:111
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:273
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:400
-#: src/Dialogs/Traffic/TrafficList.cpp:339
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:403
+#: src/Dialogs/Traffic/TrafficList.cpp:346
 #: src/Dialogs/Plane/PlaneListDialog.cpp:411 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:122 src/Dialogs/dlgStatus.cpp:94
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:191
@@ -672,9 +672,11 @@ msgstr "手動"
 
 #: src/Menu/ExpandMacros.cpp:345 src/Menu/ExpandMacros.cpp:539
 #: src/Menu/ExpandMacros.cpp:566 src/Menu/ExpandMacros.cpp:626
-#: src/PageSettings.cpp:54 src/PageSettings.cpp:57
+#: src/PageSettings.cpp:67 src/PageSettings.cpp:70
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:60
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:338
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:89
 #: Data/Dialogs/dlgBrightness.xml:6
 #, no-c-format
 msgid "Auto"
@@ -702,19 +704,19 @@ msgid "Start"
 msgstr "スタート"
 
 #: src/Menu/ExpandMacros.cpp:460
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Long"
 msgstr "長い"
 
 #: src/Menu/ExpandMacros.cpp:464
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
 msgid "Short"
 msgstr "短い"
 
 #: src/Menu/ExpandMacros.cpp:468
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:97
 #, no-c-format
 msgid "Full"
 msgstr "すべて"
@@ -728,12 +730,12 @@ msgstr "すべて"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:206
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:54
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:129
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:146
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:93
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
 #, no-c-format
 msgid "Off"
 msgstr "オフ"
@@ -746,7 +748,7 @@ msgstr "オフ"
 #: src/Dialogs/XML.cpp:474 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:207
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:52
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
 #, no-c-format
 msgid "On"
 msgstr "オン"
@@ -780,7 +782,8 @@ msgstr "タスク＆着陸可能地"
 
 #: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:305
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:57
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
@@ -794,6 +797,7 @@ msgid "Altitude GPS"
 msgstr "GPS 高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS　高度"
@@ -811,20 +815,21 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #, no-c-format
-msgid "Altitude AGL"
+msgid "Height AGL"
 msgstr "対地高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:166
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
 #, no-c-format
-msgid "Alt AGL"
+msgid "H AGL"
 msgstr "対地高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
-"This is the navigation altitude minus the terrain height obtained from the "
-"terrain file. The value is coloured red when the glider is below the terrain "
-"safety clearance height."
+"This is the navigation altitude minus the terrain elevation obtained from "
+"the terrain file. The value is coloured red when the glider is below the "
+"terrain safety clearance height."
 msgstr ""
 "対地高度\r\n"
 "航路の高さから其の地点の標高を引いた数値、マージンを含む\r\n"
@@ -1159,10 +1164,9 @@ msgid "Terrain elevation"
 msgstr "地点標高"
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
-#, no-c-format
-msgid "H GND"
-msgstr "地点標高"
+#, fuzzy, no-c-format
+msgid "Terr Elev"
+msgstr "地面衝突"
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1387,6 +1391,7 @@ msgid "Barometric altitude"
 msgstr "気圧高度計"
 
 #: src/InfoBoxes/Content/Factory.cpp:489
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
 #, no-c-format
 msgid "Alt Baro"
 msgstr "気圧高度"
@@ -1963,9 +1968,9 @@ msgid "Thermal average over all"
 msgstr "全サーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, no-c-format
-msgid "TAll Avg"
-msgstr ""
+#, fuzzy, no-c-format
+msgid "T Avg"
+msgstr "前サーマル平均"
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2085,25 +2090,22 @@ msgstr ""
 "代替飛行場　到着に必要な滑空比\r\n"
 "トータルエナジー補正無し"
 
-#: src/InfoBoxes/Content/Factory.cpp:863 src/InfoBoxes/Content/Factory.cpp:864
+#: src/InfoBoxes/Content/Factory.cpp:863
 #, no-c-format
-msgid "QFE GPS"
-msgstr "QFE　GPS高度"
+msgid "Height above take-off"
+msgstr ""
+
+#: src/InfoBoxes/Content/Factory.cpp:864
+#, no-c-format
+msgid "H T/O"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
 msgid ""
-"Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE "
-"taking off. After takeoff, it is no more reset automatically even if on "
-"ground. During flight you can change QFE with up and down keys. Bottom line "
-"shows QNH altitude. Changing QFE does not affect QNH altitude."
+"Height based on an automatic take-off reference elevation (like a QFE "
+"reference)."
 msgstr ""
-"自動QFE高度　\r\n"
-"離陸前にGPSの高度を０にセットした場合\r\n"
-"離陸地点からのQFE 高度を表示する\r\n"
-"\r\n"
-"QFE高度をセットしてもQNH高度には影響しない。\r\n"
-"QFE高度は次にセットされるまで維持される"
 
 #: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
@@ -2307,10 +2309,10 @@ msgid "Climb Band"
 msgstr "上昇バンド"
 
 #: src/InfoBoxes/Content/Factory.cpp:997
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
-"height (vertical axis)."
+"altitude (vertical axis)."
 msgstr ""
 "平均上昇率のグラフ\r\n"
 "水平軸　上昇率\r\n"
@@ -2582,22 +2584,24 @@ msgstr ""
 "現在までの飛行データー　タスクをスタートしてからの飛行方向"
 
 #: src/InfoBoxes/Content/Factory.cpp:1147
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 #, no-c-format
 msgid "Wind arrow"
 msgstr "風向矢印"
 
 #: src/InfoBoxes/Content/Factory.cpp:1148
 #: src/Dialogs/Settings/dlgConfiguration.cpp:106
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:205
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:208
 #: src/Weather/NOAAFormatter.cpp:95 src/Weather/NOAAFormatter.cpp:102
 #: Data/Input/default.xci:583
 #, no-c-format
 msgid "Wind"
 msgstr "風"
 
-#: src/InfoBoxes/Content/Factory.cpp:1156
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
+#: src/InfoBoxes/Content/Factory.cpp:1156 src/PageSettings.cpp:48
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:64
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:323
 #, no-c-format
 msgid "Thermal assistant"
 msgstr "サーマル　アシスタント"
@@ -2680,7 +2684,7 @@ msgstr "高度　%d"
 msgid "Simulator"
 msgstr "シュミレーター"
 
-#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:43
+#: src/InfoBoxes/Content/Altitude.cpp:58 src/PageSettings.cpp:56
 #: Data/Input/default.xci:778 Data/Input/default.xci:828
 #: Data/Input/default.xci:878 Data/Input/default.xci:941
 #, no-c-format
@@ -2706,7 +2710,7 @@ msgstr "QNHではない"
 
 #: src/InfoBoxes/Content/MacCready.cpp:57
 #: src/InfoBoxes/Content/Weather.cpp:111
-#: src/Dialogs/Device/DeviceListDialog.cpp:243
+#: src/Dialogs/Device/DeviceListDialog.cpp:244
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:148
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:7
@@ -2738,7 +2742,7 @@ msgstr "外部電源　ON"
 
 #: src/InfoBoxes/Content/Other.cpp:175 src/Profile/DeviceConfig.cpp:141
 #: src/Dialogs/Device/DeviceEditWidget.cpp:64
-#: src/Dialogs/Device/DeviceListDialog.cpp:333
+#: src/Dialogs/Device/DeviceListDialog.cpp:334
 #, no-c-format
 msgid "Disabled"
 msgstr "無効"
@@ -2789,13 +2793,13 @@ msgid "FinalGlide"
 msgstr "ファイナルグライド"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:267 src/InfoBoxes/InfoBoxManager.cpp:308
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:224
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:351
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:227
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:354
 msgid "InfoBox"
 msgstr "情報ボックス"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:272
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:228
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:231
 #, no-c-format
 msgid "No help available on this item"
 msgstr "ヘルプモード無し"
@@ -2804,21 +2808,19 @@ msgstr "ヘルプモード無し"
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:68
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:76
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:84
-#: src/Dialogs/Device/DeviceListDialog.cpp:335
+#: src/Dialogs/Device/DeviceListDialog.cpp:336
 msgid "N/A"
 msgstr "設定無し"
 
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-msgid "H GPS"
-msgstr "GPS高度"
-
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
-msgid "H Baro"
-msgstr "気圧高度"
-
-#: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
-msgid "H AGL"
-msgstr "対地高度"
+#: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
+#: src/Dialogs/Settings/dlgConfiguration.cpp:102
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
+#: src/Dialogs/dlgWeather.cpp:69 src/Terrain/RasterWeather.cpp:49
+#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:520
+#: Data/Input/default.xci:1143
+#, no-c-format
+msgid "Terrain"
+msgstr "地形"
 
 #: src/InfoBoxes/Panel/AltitudeSetup.cpp:75
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:309
@@ -2902,54 +2904,54 @@ msgstr "ジグザグ"
 #: src/InfoBoxes/Panel/WindSetup.cpp:83
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:55
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:66
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:107
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:109
 #, no-c-format
 msgid "Both"
 msgstr "両方"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:92
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:70
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:155
 msgid "Trail drift"
 msgstr "航跡の長さ"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:71
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode."
 msgstr "航跡を旋回モードで表示するかの設定"
 
-#: src/Input/InputEventsActions.cpp:173
+#: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
 msgstr "全画面表示"
 
-#: src/Input/InputEventsActions.cpp:175
+#: src/Input/InputEventsActions.cpp:162
 msgid "Auxiliary InfoBoxes"
 msgstr "外部情報ボックス"
 
-#: src/Input/InputEventsActions.cpp:177
+#: src/Input/InputEventsActions.cpp:164
 msgid "Default InfoBoxes"
 msgstr "インフォボックス初期設定"
 
-#: src/Input/InputEventsActions.cpp:282
+#: src/Input/InputEventsActions.cpp:269
 msgid "No active waypoint!"
 msgstr "ウェイポイントが選択されていません！"
 
-#: src/Input/InputEventsActions.cpp:372
+#: src/Input/InputEventsActions.cpp:359
 msgid "NMEA log on"
 msgstr "NMEAログ オン"
 
-#: src/Input/InputEventsActions.cpp:374
+#: src/Input/InputEventsActions.cpp:361
 msgid "NMEA log off"
 msgstr "NMEAログ オフ"
 
-#: src/Input/InputEventsActions.cpp:378
+#: src/Input/InputEventsActions.cpp:365
 msgid "Logger on"
 msgstr "ロガー オン"
 
-#: src/Input/InputEventsActions.cpp:380
+#: src/Input/InputEventsActions.cpp:367
 msgid "Logger off"
 msgstr "ロガー オフ"
 
@@ -3089,27 +3091,35 @@ msgstr "ウエイポイント　ラベル"
 msgid "Topography/Terrain"
 msgstr "地勢図/地形図"
 
-#: src/PageSettings.cpp:37
-msgid "Info Hide"
-msgstr "情報表示　隠す"
+#: src/PageSettings.cpp:44
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:55
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:319
+#, no-c-format
+msgid "FLARM radar"
+msgstr "FLARM　レーダー"
 
-#: src/PageSettings.cpp:39
-msgid "Map (Full screen)"
-msgstr "地図（全画面表示）"
-
-#: src/PageSettings.cpp:43
+#: src/PageSettings.cpp:56
 msgid "Map and InfoBoxes"
 msgstr "地図　および　情報ボックス"
 
+#: src/PageSettings.cpp:76
+msgid "Info Hide"
+msgstr "情報表示　隠す"
+
+#: src/PageSettings.cpp:78
+msgid "Map (Full screen)"
+msgstr "地図（全画面表示）"
+
 #: src/Renderer/ChartRenderer.cpp:169
-#: src/Dialogs/Device/DeviceListDialog.cpp:337
+#: src/Dialogs/Device/DeviceListDialog.cpp:338
 msgid "No data"
 msgstr "データがありません"
 
 #: src/Renderer/MapItemListRenderer.cpp:136
 #: src/Renderer/MapItemListRenderer.cpp:138
 #: src/Renderer/WaypointListRenderer.cpp:56
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:119
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:139
 msgid "Elevation"
 msgstr "標高"
 
@@ -3171,8 +3181,8 @@ msgstr "FLARM　情報"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:322
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:182
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:20
 #: Data/Dialogs/dlgWaypointEdit.xml:62 Data/Dialogs/dlgWaypointEdit_L.xml:62
@@ -3297,7 +3307,7 @@ msgstr "サーマル高さ"
 msgid "Cloud base"
 msgstr "雲底高度"
 
-#: src/UIActions.cpp:48
+#: src/UIActions.cpp:51
 msgid "Quit program?"
 msgstr "XCSoarを終了しますか？"
 
@@ -3322,7 +3332,7 @@ msgid "Australian"
 msgstr "オーストラリア"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:117 src/Startup.cpp:318
+#: src/UtilsSettings.cpp:118 src/Startup.cpp:318
 msgid "Loading Terrain File..."
 msgstr "地形ファイルをロード中..."
 
@@ -3420,7 +3430,7 @@ msgstr "フライトログをダウンロード中"
 #: src/Dialogs/MapItemListSettingsDialog.cpp:36
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:37
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:36
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:365
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:370
 #: src/Dialogs/Settings/FontEdit.cpp:194 src/Dialogs/NumberEntry.cpp:61
 #: src/Dialogs/NumberEntry.cpp:105 src/Dialogs/NumberEntry.cpp:147
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:213 src/Dialogs/TimeEntry.cpp:66
@@ -3450,7 +3460,7 @@ msgstr "再試行"
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:38
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:37
 #: src/Dialogs/Settings/FontEdit.cpp:196
-#: src/Dialogs/Traffic/TrafficList.cpp:733 src/Dialogs/NumberEntry.cpp:62
+#: src/Dialogs/Traffic/TrafficList.cpp:748 src/Dialogs/NumberEntry.cpp:62
 #: src/Dialogs/NumberEntry.cpp:106 src/Dialogs/NumberEntry.cpp:148
 #: src/Dialogs/dlgTextEntry_Keyboard.cpp:217 src/Dialogs/TimeEntry.cpp:67
 #: Data/Dialogs/WaypointList.xml:19 Data/Dialogs/WaypointList_L.xml:17
@@ -3468,7 +3478,7 @@ msgstr "無視"
 msgid "Help"
 msgstr "ヘルプ"
 
-#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:732
+#: src/Dialogs/ListPicker.cpp:189 src/Dialogs/Traffic/TrafficList.cpp:747
 #: Data/Dialogs/WaypointList.xml:18 Data/Dialogs/WaypointList_L.xml:16
 msgid "Select"
 msgstr "選択"
@@ -3478,7 +3488,9 @@ msgstr "選択"
 msgid "Download"
 msgstr "ダウンロード"
 
-#: src/Dialogs/FileManager.cpp:406 src/Dialogs/Weather/NOAAList.cpp:108
+#: src/Dialogs/FileManager.cpp:406
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:116
+#: src/Dialogs/Weather/NOAAList.cpp:108
 msgid "Add"
 msgstr "追加"
 
@@ -3491,7 +3503,7 @@ msgid "Downloading"
 msgstr "ダウンロード中"
 
 #: src/Dialogs/FileManager.cpp:453 src/Dialogs/FileManager.cpp:685
-#: src/Dialogs/Device/DeviceListDialog.cpp:345
+#: src/Dialogs/Device/DeviceListDialog.cpp:346
 #: src/Dialogs/Plane/PlaneListDialog.cpp:245
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
@@ -3552,7 +3564,7 @@ msgstr "IOIO　電圧センサー"
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
 #: src/Dialogs/Device/DeviceEditWidget.cpp:81
-#: src/Dialogs/Device/DeviceEditWidget.cpp:606
+#: src/Dialogs/Device/DeviceEditWidget.cpp:607
 #, no-c-format
 msgid "TCP Port"
 msgstr "TCP ポート"
@@ -3562,21 +3574,21 @@ msgstr "TCP ポート"
 msgid "UDP Port"
 msgstr "UDP　ポート"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:585
+#: src/Dialogs/Device/DeviceEditWidget.cpp:586
 msgid "Port"
 msgstr "ポート"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:591
+#: src/Dialogs/Device/DeviceEditWidget.cpp:592
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
 msgstr "通信速度"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:598
+#: src/Dialogs/Device/DeviceEditWidget.cpp:599
 msgid "Bulk baud rate"
 msgstr "ボーレート"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:599
+#: src/Dialogs/Device/DeviceEditWidget.cpp:600
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -3584,19 +3596,19 @@ msgstr ""
 "データー転送に使用する　ポートの　通信速度\r\n"
 "タスク宣言データーの転送に使用する"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:612
+#: src/Dialogs/Device/DeviceEditWidget.cpp:613
 msgid "I2C Bus"
 msgstr "i2c バス"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:612
+#: src/Dialogs/Device/DeviceEditWidget.cpp:613
 msgid "Select the description or bus number that matches your configuration."
 msgstr "設定に適合するポートを選択してください"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:619
+#: src/Dialogs/Device/DeviceEditWidget.cpp:620
 msgid "I2C Addr"
 msgstr "I2C アドレス"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:619
+#: src/Dialogs/Device/DeviceEditWidget.cpp:620
 msgid ""
 "The i2c address that matches your configuration.This field is not used when "
 "your selection in the I2C Bus field is not an i2c bus number. In case you do "
@@ -3607,140 +3619,140 @@ msgstr ""
 "い場合使用できません\r\n"
 "信号が読めない場合使用しない設定にする"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:628
+#: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid "Pressure use"
 msgstr "圧力用途"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:628
+#: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
 "be used for."
 msgstr "圧力センサーの目的を設定してください"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:643
+#: src/Dialogs/Device/DeviceEditWidget.cpp:644
 msgid "Driver"
 msgstr "ドライバ"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:645
+#: src/Dialogs/Device/DeviceEditWidget.cpp:646
 msgid "Sync. from device"
 msgstr "デバイスのシンク　（データー取得）"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:646
+#: src/Dialogs/Device/DeviceEditWidget.cpp:647
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr "XCSOARの現在の設定　マクレディ値などの情報"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:651
+#: src/Dialogs/Device/DeviceEditWidget.cpp:652
 msgid "Sync. to device"
 msgstr "デバイスのシンク　（データー保存）"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:652
+#: src/Dialogs/Device/DeviceEditWidget.cpp:653
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr "XCSOARの現在の設定　マクレディ値などの情報"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:658
+#: src/Dialogs/Device/DeviceEditWidget.cpp:659
 msgid "Enable this if you use a K6Bt to connect the device."
 msgstr "K6Bなどに接続する場合　この設定ON にする"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:665
+#: src/Dialogs/Device/DeviceEditWidget.cpp:666
 msgid "Enable this if you would like to log the communication with the device."
 msgstr "他のデバイスに接続する場合　ON にする"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:672
+#: src/Dialogs/Device/DeviceEditWidget.cpp:673
 msgid "Ignore checksum"
 msgstr "チェックサムしない"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:673
+#: src/Dialogs/Device/DeviceEditWidget.cpp:674
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
 msgstr "NMEA信号　チェックが不適当であった場合は無視してデーターをそのまま使う"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:241
-#: src/Dialogs/Device/DeviceListDialog.cpp:374
-#: src/Dialogs/Device/DeviceListDialog.cpp:382
+#: src/Dialogs/Device/DeviceListDialog.cpp:242
+#: src/Dialogs/Device/DeviceListDialog.cpp:375
+#: src/Dialogs/Device/DeviceListDialog.cpp:383
 #: src/Dialogs/Device/PortMonitor.cpp:142
 msgid "Reconnect"
 msgstr "再接続"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:242
+#: src/Dialogs/Device/DeviceListDialog.cpp:243
 msgid "Flight download"
 msgstr "フライトログ　ダウンロード"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:244
-#: src/Dialogs/Device/DeviceListDialog.cpp:404
-#: src/Dialogs/Device/DeviceListDialog.cpp:410
-#: src/Dialogs/Device/DeviceListDialog.cpp:466
-#: src/Dialogs/Device/DeviceListDialog.cpp:472
+#: src/Dialogs/Device/DeviceListDialog.cpp:245
+#: src/Dialogs/Device/DeviceListDialog.cpp:405
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
+#: src/Dialogs/Device/DeviceListDialog.cpp:467
+#: src/Dialogs/Device/DeviceListDialog.cpp:473
 #: src/Dialogs/Device/PortMonitor.cpp:150
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:186
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:200
 msgid "Manage"
 msgstr "設定"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:245
+#: src/Dialogs/Device/DeviceListDialog.cpp:246
 msgid "Monitor"
 msgstr "表示項目"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:291
-#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:184
+#: src/Dialogs/Device/DeviceListDialog.cpp:292
+#: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
 #, c-format
 msgid "%s on %s"
 msgstr "%s 内蔵GPSオン %s"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:305
+#: src/Dialogs/Device/DeviceListDialog.cpp:306
 msgid "GPS fix"
 msgstr "GPS　信号捕捉"
 
 #. device sends GPGGA, but no valid location
-#: src/Dialogs/Device/DeviceListDialog.cpp:308
+#: src/Dialogs/Device/DeviceListDialog.cpp:309
 msgid "Bad GPS"
 msgstr "GPS 信号無し"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:310
+#: src/Dialogs/Device/DeviceListDialog.cpp:311
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 msgid "Connected"
 msgstr "接続しました"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:315
+#: src/Dialogs/Device/DeviceListDialog.cpp:316
 msgid "Baro"
 msgstr "気圧"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:320 Data/Dialogs/dlgVegaDemo.xml:10
+#: src/Dialogs/Device/DeviceListDialog.cpp:321 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr "対気速度"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:342
-#: src/Dialogs/Device/DeviceListDialog.cpp:374
+#: src/Dialogs/Device/DeviceListDialog.cpp:343
+#: src/Dialogs/Device/DeviceListDialog.cpp:375
 msgid "Bluetooth is disabled"
 msgstr "Bluetooth は無効"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:347
+#: src/Dialogs/Device/DeviceListDialog.cpp:348
 msgid "Not connected"
 msgstr "未接続"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:382
-#: src/Dialogs/Device/DeviceListDialog.cpp:410
-#: src/Dialogs/Device/DeviceListDialog.cpp:472
+#: src/Dialogs/Device/DeviceListDialog.cpp:383
+#: src/Dialogs/Device/DeviceListDialog.cpp:411
+#: src/Dialogs/Device/DeviceListDialog.cpp:473
 #: src/Dialogs/Device/PortMonitor.cpp:150
 msgid "Device is occupied"
 msgstr "デバイスは　使用中"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:404
-#: src/Dialogs/Device/DeviceListDialog.cpp:466
+#: src/Dialogs/Device/DeviceListDialog.cpp:405
+#: src/Dialogs/Device/DeviceListDialog.cpp:467
 msgid "Device is not connected"
 msgstr "Bluetooth は接続されていません"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:430
+#: src/Dialogs/Device/DeviceListDialog.cpp:431
 msgid "Edit device"
 msgstr "デバイスを設定"
 
-#: src/Dialogs/Device/DeviceListDialog.cpp:565
+#: src/Dialogs/Device/DeviceListDialog.cpp:566
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119 Data/Input/default.xci:617
 #: Data/Input/default.xci:1214
 #, no-c-format
@@ -3793,13 +3805,13 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr "フライトログを全て消去しますか"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
 msgid "Temperature"
 msgstr "気温"
 
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:62
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
 msgstr "気圧"
@@ -3987,7 +3999,7 @@ msgid "Unkown"
 msgstr "不明"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:115
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:143
 #, no-c-format
 msgid "Glider"
 msgstr "グライダー"
@@ -4018,13 +4030,13 @@ msgid "Hang glider"
 msgstr "ハンググライダー"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:144
 #, no-c-format
 msgid "Paraglider"
 msgstr "パラグライダー"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:145
 #, no-c-format
 msgid "Powered aircraft"
 msgstr "動力付航空機"
@@ -4160,12 +4172,12 @@ msgstr "有効"
 msgid "Ack Day"
 msgstr "日付"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:222
-#: src/Dialogs/Waypoint/WaypointList.cpp:314
+#: src/Dialogs/Airspace/AirspaceList.cpp:226
+#: src/Dialogs/Waypoint/WaypointList.cpp:318
 msgid "No Match!"
 msgstr "該当無し"
 
-#: src/Dialogs/Airspace/AirspaceList.cpp:245
+#: src/Dialogs/Airspace/AirspaceList.cpp:249
 msgid "Heading"
 msgstr "針路"
 
@@ -4271,7 +4283,7 @@ msgid "Wind Settings"
 msgstr "風の設定"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:145
-#: src/Dialogs/Settings/dlgBasicSettings.cpp:364
+#: src/Dialogs/Settings/dlgBasicSettings.cpp:369
 msgid "Dump"
 msgstr "水ダンプ"
 
@@ -4362,15 +4374,6 @@ msgstr "向き"
 msgid "Elements"
 msgstr "要素"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:102
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:103
-#: src/Dialogs/dlgWeather.cpp:73 src/Terrain/RasterWeather.cpp:49
-#: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:520
-#: Data/Input/default.xci:1143
-#, no-c-format
-msgid "Terrain"
-msgstr "地形"
-
 #: src/Dialogs/Settings/dlgConfiguration.cpp:104
 #, no-c-format
 msgid "Safety Factors"
@@ -4412,14 +4415,14 @@ msgid "Screen Layout"
 msgstr "画面表示"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, no-c-format
-msgid "InfoBox Pages"
-msgstr "インフォボックスのページ"
+#, fuzzy, no-c-format
+msgid "Pages"
+msgstr "ページ"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, no-c-format
-msgid "InfoBox Modes"
-msgstr "インフォボックス　モード"
+#, fuzzy, no-c-format
+msgid "InfoBox Sets"
+msgstr "インフォボックスのページ"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4505,29 +4508,29 @@ msgstr "上書きしますか?"
 msgid "InfoBox paste"
 msgstr "インフォボックス　ペースト"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:201
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:203
 #: Data/Dialogs/dlgPlanePolar.xml:6 Data/Dialogs/dlgPlanePolar_L.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:6
 msgid "Invalid"
 msgstr "無効"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:338
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:341
 #: Data/Dialogs/AirspaceList.xml:8 Data/Dialogs/AirspaceList_L.xml:6
 #: Data/Dialogs/WaypointList.xml:2 Data/Dialogs/WaypointList_L.xml:2
 #: Data/Dialogs/dlgWaypointEdit.xml:6 Data/Dialogs/dlgWaypointEdit_L.xml:6
 msgid "Name"
 msgstr "名称"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:367
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:370
 msgid "Content"
 msgstr "目次"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:406
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:409
 msgid "Copy"
 msgstr "コピー"
 
-#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:412
+#: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:415
 msgid "Paste"
 msgstr "貼り付け"
 
@@ -4559,17 +4562,21 @@ msgstr "フォントの編集"
 msgid "Reset"
 msgstr "リセット"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:319
+#: src/Dialogs/Traffic/TrafficList.cpp:326
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:218
 #: src/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp:63
 msgid "Competition ID"
 msgstr "コンペ　ID"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:338 Data/Input/default.xci:1013
+#: src/Dialogs/Traffic/TrafficList.cpp:345
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:315
+#: Data/Input/default.xci:1013
+#, no-c-format
 msgid "Map"
 msgstr "地図"
 
-#: src/Dialogs/Traffic/TrafficList.cpp:715
+#: src/Dialogs/Traffic/TrafficList.cpp:730
 msgid "Traffic"
 msgstr "トラフィック"
 
@@ -4651,7 +4658,7 @@ msgid "Task calc"
 msgstr "タスク計算"
 
 #: src/Dialogs/dlgAnalysis.cpp:373
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Warnings"
 msgstr "警告"
 
@@ -4676,6 +4683,7 @@ msgstr "新規"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:167
 #: src/Dialogs/Plane/PlaneListDialog.cpp:362
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:117
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:104
 #: Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9
@@ -4801,7 +4809,7 @@ msgid "Times"
 msgstr "時間"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:135
 #: Data/Dialogs/dlgTaskPoint.xml:5 Data/Dialogs/dlgTaskPoint_L.xml:9
 msgid "Location"
 msgstr "位置"
@@ -4938,7 +4946,7 @@ msgid "Landing time"
 msgstr "着陸時刻"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:115
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:132
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
 msgid "Daylight time"
 msgstr "日出日没時間"
 
@@ -4950,29 +4958,29 @@ msgstr "風強すぎ"
 msgid "No solution"
 msgstr "対応不能"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:92
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:112
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:26
 msgid "Radio frequency"
 msgstr "無線周波数"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:111
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:131
 msgid "Runway"
 msgstr "滑走路"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:144
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:164
 msgid "Bearing and Distance"
 msgstr "進路および距離"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:156
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:176
 msgid "Alt. diff. MC 0"
 msgstr "高度差マクレディー０"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:160
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:180
 msgid "Alt. diff. MC safety"
 msgstr "高度差　マクレディー　安全"
 
-#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:165
+#: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:185
 msgid "Alt. diff. MC current"
 msgstr "高度差　マクレディー現在値"
 
@@ -5092,7 +5100,7 @@ msgstr "Sorry　UTMフォーマットからのウエイポイントの編集は�
 msgid "Waypoint Editor"
 msgstr "ウエイポイントの編集"
 
-#: src/Dialogs/Waypoint/WaypointList.cpp:314
+#: src/Dialogs/Waypoint/WaypointList.cpp:318
 msgid "Choose a filter or click here"
 msgstr "フィルターを選択するか　ここをクリックしてください"
 
@@ -5176,11 +5184,11 @@ msgstr "着色"
 msgid "Filter"
 msgstr "絞り込み"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:189
 msgid "Airspace display"
 msgstr "空域表示"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:189
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:190
 msgid ""
 "Controls filtering of airspace for display and warnings.  The airspace "
 "filter button also allows filtering of display and warnings independently "
@@ -5190,11 +5198,11 @@ msgstr ""
 "警報表示および表示する空域の絞込み選択\r\n"
 "空域の種類ごとに表示非表示の設定可能"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
 msgid "Clip altitude"
 msgstr "高度を選ぶ"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:193
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:194
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
@@ -5202,11 +5210,11 @@ msgstr ""
 "空域表示高度を設定した場合\r\n"
 "設定した高度以下の空域のみを表示する"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
 msgid "Margin"
 msgstr "マージン"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:198
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
@@ -5214,15 +5222,15 @@ msgstr ""
 "自動および全ての空域表示高度\r\n"
 "この高度以下あるいは上の空域を含む表示"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:200
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:201
 msgid "Enable/disable all airspace warnings."
 msgstr "有効/無効　全ての空域の警報"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
 msgid "Warning time"
 msgstr "警報時間"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:205
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
@@ -5230,11 +5238,11 @@ msgstr ""
 "警報時間\r\n"
 "パイロットに警報を発する継続時間"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:208
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
 msgid "Acknowledge time"
 msgstr "通報時間"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:210
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
@@ -5242,28 +5250,28 @@ msgstr ""
 "通報時間\r\n"
 "パイロットに通知を発する継続時間　繰り返しは無し"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Use black outline"
 msgstr "黒い枠"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr "空域色のほかに空域外周に使用する黒い太線"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:218
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Airspace fill mode"
 msgstr "空域塗りつぶしモード"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:220
 msgid "Specifies the mode for filling the airspace area."
 msgstr "塗りつぶしタイプを選択してください"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "Airspace transparency"
 msgstr "空域透明"
 
-#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:225
+#: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:226
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "設定すると空域は透明に塗りつぶされる"
 
@@ -5284,10 +5292,6 @@ msgstr ""
 "PNAのモデルを選択してください　該当が無い場合汎用（GENERIC）を選んでください"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:56
-msgid "FLARM radar"
-msgstr "FLARM　レーダー"
-
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:57
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
 "target relative to the track bearing of the aircraft is displayed as an "
@@ -5300,11 +5304,11 @@ msgstr ""
 "たは下に表示される数字は高度差\r\n"
 "また距離によって色が変化する"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:59
 msgid "Auto close FLARM"
 msgstr "FLARM自動"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:61
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:60
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -5314,25 +5318,25 @@ msgstr ""
 "OFFに設定するとFLARM　ボックスは付近にトラフィックが無くても表示されたままに"
 "なる"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:66
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:65
 msgid "This enables the display of the thermal assistant gauge."
 msgstr "この設定はサーマル　アシスタント　ゲージを表示させる"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:68
 msgid "Thermal band"
 msgstr "サーマル　バンド"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:70
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:69
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
 msgstr "この設定は　ディスプレイに　サーマル　上昇バンドを　地図上に表示する"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:72
 msgid "Final glide bar MC0"
 msgstr "ファイナル　グライド　バー表示　マクレディ０"
 
-#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:74
+#: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:73
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
@@ -5510,7 +5514,8 @@ msgid "Preferred period for gliders."
 msgstr "グライダー向けの時間設定"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-msgid "L/D average period"
+#, fuzzy
+msgid "GR average period"
 msgstr "平均滑空比演算時間"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
@@ -5853,7 +5858,7 @@ msgid "Scaled centered"
 msgstr "中央揃え"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:203
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:206
 #, no-c-format
 msgid "Fixed"
 msgstr "固定"
@@ -6146,47 +6151,80 @@ msgstr "Maxズーム"
 msgid "The upper limit for auto zoom distance."
 msgstr "オートズームの上限距離"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:82
-msgid "Page"
-msgstr "ページ"
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
+#, fuzzy
+msgid "Main area"
+msgstr "翼面積"
 
-#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:84
-msgid "Determines the information displayed on different screen pages."
-msgstr "ディスプレイのスクーン表示の表示選択設定"
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
+#, fuzzy
+msgid "Specifies what should be displayed in the main area."
+msgstr "塗りつぶしタイプを選択してください"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:331
+#, fuzzy
+msgid "InfoBoxes"
+msgstr "情報ボックス"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
+msgid "Specifies which InfoBoxes should be displayed on this page."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
+#, no-c-format
+msgid "Nothing"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:346
+#, fuzzy, no-c-format
+msgid "Cross section"
+msgstr "方角"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
+#, fuzzy
+msgid "Bottom area"
+msgstr "左下"
+
+#: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
+#, fuzzy
+msgid "Specifies what should be displayed below the main area."
+msgstr "塗りつぶしタイプを選択してください"
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
 msgstr "ポーラーカーブの名称"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:102
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
 msgstr "使用する空域または地形図の選択"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
 #, no-c-format
 msgid "Routes will avoid terrain."
 msgstr "ルート設定では地形を避けて設定される"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace."
 msgstr "ルート設定では空域を避けて設定される"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:110
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
 msgstr "ルート設定では地形と空域を避けて設定される"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:112
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:114
 msgid "Route mode"
 msgstr "ルートモード"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:115
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:117
 msgid "Route climb"
 msgstr "上昇ルート"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:118
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
@@ -6194,11 +6232,11 @@ msgstr ""
 "選択されていてマクレディー値が設定されている場合　\r\n"
 "現在位置と目的地の間で上昇するよう設定される"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:123
 msgid "Route ceiling"
 msgstr "ルート　シーリング"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:124
 msgid ""
 "When enabled, route planning climbs are limited to ceiling defined by "
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
@@ -6209,37 +6247,37 @@ msgstr ""
 "る\r\n"
 "設定されていない場合　シーりングは無制限"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:130
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
 #, no-c-format
 msgid "Reach calculations disabled."
 msgstr "到達範囲計算しない"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "Straight"
 msgstr "直線"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
 msgstr "到着はグライダーから直線"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:135
 #, no-c-format
 msgid "Turning"
 msgstr "旋回"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:136
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
 msgstr "到達範囲は　地形上の障害物（標高）を考慮して計算される"
 
 #. Spacer
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:140
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:142
 msgid "Reach mode"
 msgstr "到達範囲モード"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:141
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:143
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
@@ -6247,57 +6285,57 @@ msgstr ""
 "到達範囲計算方法\r\n"
 "地形の影響に対する対応設定"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:147
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
 #, no-c-format
 msgid "Disables the reach display."
 msgstr "到達範囲　非表示"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:192
 #, no-c-format
 msgid "Line"
 msgstr "ライン"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:151
 #, no-c-format
 msgid "Draws a dashed line at the glide reach."
 msgstr "到着ライン（破線）を表示する"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:150
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:152
 #, no-c-format
 msgid "Shade"
 msgstr "シェード"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:151
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:153
 #, no-c-format
 msgid "Shades terrain outside glide reach."
 msgstr "到達範囲外に影をつける"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:155
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:157
 msgid "Reach display"
 msgstr "到達範囲表示"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
 msgid "Uses task glide polar."
 msgstr "タスクに使用するグライダーのポーラー"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:161
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:163
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:94
 #, no-c-format
 msgid "Safety MC"
 msgstr "セーフティ　MC"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:164
 #, no-c-format
 msgid "Uses safety MacCready value"
 msgstr "安全サイドのマクレディー値を使用する"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:166
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:168
 msgid "Reach polar"
 msgstr "到達範囲　ポーラー"
 
-#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:169
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
@@ -6324,7 +6362,7 @@ msgid "The height above terrain that the glider must clear during final glide."
 msgstr "ファイナルグライド中　地形から安全な高度を保っていること"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:75
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:116
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
 msgid "Simple"
 msgstr "シンプル"
@@ -6464,29 +6502,29 @@ msgid ""
 "information about individual waypoints and airfields."
 msgstr "飛行場　ウエイポイント等の情報を記録したファイル"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
 #, no-c-format
 msgid "Disable display of ground track line."
 msgstr "地上航跡を表示しない"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
 #, no-c-format
 msgid "Always display ground track line."
 msgstr "地上航跡を表示する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:89
 #, no-c-format
 msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
 msgstr "地上航跡は機体ののヘッディングが飛行方向と大きく異なる場合のみ表示"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:102
 #, no-c-format
 msgid "Vario #1"
 msgstr "バリオ　＃１"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:101
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:102
 #, no-c-format
 msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
@@ -6494,24 +6532,24 @@ msgid ""
 msgstr ""
 "上昇帯では緑色太線、沈下帯では茶色の細い線、ゼロの場合には灰色の線で表示する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:105
 #, no-c-format
 msgid "Vario #1 (with dots)"
 msgstr "バリオ＃１（.)"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:105
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
 msgstr "前の設定と同じ色を使用する、沈下帯を点線で表示する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:107
 #, no-c-format
 msgid "Vario #2"
 msgstr "バリオ　＃２"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:107
 #, no-c-format
 msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
@@ -6520,133 +6558,133 @@ msgstr ""
 "上昇帯はオレンジから赤色、沈下帯を明るい青から暗い青、ゼロ帯を黄色の線で表示"
 "する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:110
 #, no-c-format
 msgid "Vario #2 (with dots)"
 msgstr "バリオ＃2（.)"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:111
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
 msgstr "表示色は高度によって変化する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Simplified line graphics, black with white contours."
 msgstr "ライン表示単純化　白黒"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:118
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:119
 #, no-c-format
 msgid "Simple (large)"
 msgstr "シンプル　（大きい）"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:119
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Enlarged simple graphics."
 msgstr "グラフィック拡大"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:120
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Detailed"
 msgstr "詳細"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
 msgstr "機体をグラフィック表示しない"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
 msgid "HangGlider"
 msgstr "ハング　グライダー"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr "ハンググライダー　簡易表示　白と黒の線画"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
 msgid "ParaGlider"
 msgstr "パラグライダー"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
 msgstr "パラグライダー　簡易表示　白と黒の線画"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
 #, no-c-format
 msgid "No wind arrow is drawn."
 msgstr "風向矢印を表示しない"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
 msgid "Arrow head"
 msgstr "矢印の頭"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:131
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
 #, no-c-format
 msgid "Draws an arrow head only."
 msgstr "矢印の頭のみ表示"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Full arrow"
 msgstr "矢印すべて表示"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:133
 #, no-c-format
 msgid "Draws an arrow head with a dashed arrow line."
 msgstr "矢印を点線で表示"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:141
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
 msgid "Ground track"
 msgstr "地上航跡"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:143
 msgid "Display the ground track as a grey line on the map."
 msgstr "地上航跡をグレーの線で地図上に表示"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "FLARM traffic"
 msgstr "FLARM　トラフィック"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "This enables the display of FLARM traffic on the map window."
 msgstr "FLARM情報をマップに表示する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:149
 msgid "Trail length"
 msgstr "航跡の長さ"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:149
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:150
 msgid ""
 "Determines whether and how long a snail trail is drawn behind the glider."
 msgstr "航跡の表示長さ選択"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:161
 msgid "Trail type"
 msgstr "航跡　種類"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:161
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:162
 msgid "Sets the type of the snail trail display."
 msgstr "航跡のタイプを設定"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:164
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
 msgid "Trail scaled"
 msgstr "航跡　スケール"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:165
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:166
 msgid ""
 "If set to ON the snail trail width is scaled according to the vario signal."
 msgstr "オンにした場合　バリオのリフトに応じて表示が変わる"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:169
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:170
 msgid "Detour cost markers"
 msgstr "マーカーを迂回する"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:170
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:171
 msgid ""
 "If the aircraft heading deviates from the current waypoint, markers are "
 "displayed at points ahead of the aircraft. The value of each marker is the "
@@ -6658,19 +6696,19 @@ msgstr ""
 "離が\r\n"
 "直線コースに対する比で％表示される"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:176
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:177
 msgid "Aircraft symbol"
 msgstr "航空機シンボル"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:181
 msgid "Determines the way the wind arrow is drawn on the map."
 msgstr "地図上に風向矢印を表示する方法の選択"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
 msgid "FAI triangle areas"
 msgstr "FAI三角コース"
 
-#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:186
 msgid "Show FAI triangle areas on the map."
 msgstr "FAI三角コースを地図上に表示する"
 
@@ -6903,95 +6941,95 @@ msgstr ""
 "AATタスク　安全マージンの最適化\r\n"
 "最適タスクは最小時間＋マージン時間"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:174
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:177
 msgid "Terrain display"
 msgstr "地形表示"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:175
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:178
 msgid "Draw a digital elevation terrain on the map."
 msgstr "標高デジタルマップ"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:179
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:182
 msgid "Topography display"
 msgstr "地勢図　表示"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:180
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:183
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
 msgstr "地勢図　表示　道路,川,湖沼など"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:184
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:187
 #, no-c-format
 msgid "Low lands"
 msgstr "低地"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:185
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:188
 #, no-c-format
 msgid "Mountainous"
 msgstr "山"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:186
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:189
 #, no-c-format
 msgid "Imhof 7"
 msgstr "Imhof 7"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:187
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:190
 #, no-c-format
 msgid "Imhof 4"
 msgstr "Imhof 4"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:188
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
 #, no-c-format
 msgid "Imhof 12"
 msgstr "Imhof 12"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:189
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:192
 #, no-c-format
 msgid "Imhof Atlas"
 msgstr "Imhof Atlas"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:190
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:193
 #, no-c-format
 msgid "ICAO"
 msgstr "ICAO"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:194
 #, no-c-format
 msgid "Grey"
 msgstr "グレー"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:192
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:195
 #, no-c-format
 msgid "White"
 msgstr "白"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:196
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain colors"
 msgstr "地形色"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:200
 msgid "Defines the color ramp used in terrain rendering."
 msgstr "地形表示色の設定"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:204
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:207
 #, no-c-format
 msgid "Sun"
 msgstr "太陽"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 msgid "Slope shading"
 msgstr "斜面の影"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr "地形斜面の陰影及び風蔭の設定、標準設定は北西からの蔭"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
 msgid "Terrain contrast"
 msgstr "地形　コントラスト"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -7001,11 +7039,11 @@ msgstr ""
 "大きな値は緩やかな斜面を\r\n"
 "小さな値は急斜面を使用する"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:222
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:225
 msgid "Terrain brightness"
 msgstr "地形の明るさ"
 
-#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:223
+#: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:226
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
@@ -7013,34 +7051,34 @@ msgstr ""
 "地形の表示の明るさを設定\r\n"
 "地形の平均的な場所の明るさを設定"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
 msgstr "プリセット"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:125
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Load a set of units."
 msgstr "単位設定読み込み"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "Custom"
 msgstr "カスタム色"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:128
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:129
 msgid "My individual set of units."
 msgstr "単位の設定"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:141
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:166
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:198
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:142
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:167
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:199
 #, no-c-format
 msgid "knots"
 msgstr "ノット"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:145
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
 msgid "Aircraft/Wind speed"
 msgstr "航空機/風の速度"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:146
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:147
 msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
@@ -7048,54 +7086,54 @@ msgstr ""
 "対気速度と対地速度の単位\r\n"
 "タスク速度は単位を別に設定可能"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:160
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
 msgstr "水平距離　ウエイポイントまでの距離　目的地までの距離に使用"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:172
 msgid "Lift"
 msgstr "リフト"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:171
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:172
 msgid "Units used for vertical speeds (variometer)."
 msgstr "昇降速度の単位　（バリオメーター）"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:177
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:178
 #, no-c-format
 msgid "foot"
 msgstr "フィート"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:178
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:179
 #, no-c-format
 msgid "meter"
 msgstr "メートル"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:181
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:182
 msgid "Units used for altitude and heights."
 msgstr "高度および高さの単位"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:191
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 msgid "Units used for temperature."
 msgstr "気温の単位"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:203
 msgid "Task speed"
 msgstr "タスク　速度"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:202
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:203
 msgid "Units used for task speeds."
 msgstr "タスク速度の単位"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:213
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:214
 msgid "Units used for pressures."
 msgstr "圧力単位"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 msgid "Lat./Lon."
 msgstr "緯度/経度"
 
-#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:229
+#: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:230
 msgid "Units used for latitude and longitude."
 msgstr "緯度および経度の単位"
 
@@ -7379,6 +7417,44 @@ msgid ""
 msgstr ""
 "「OFF」固定した滑走路の長さを表示\n"
 "「ON」表示スケールに応じて実際の長さの滑走路を表示"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:146
+#, no-c-format
+msgid "Hot-air balloon"
+msgstr "熱気球"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:162
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
+msgid "Tracking Interval"
+msgstr "記録間隔"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:166
+msgid "Track friends"
+msgstr "友人の航跡"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
+msgid "Download the position of your friends live from the SkyLines server."
+msgstr "スカイラインサーバーから、友人の航跡をダウンロードする"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
+msgid "Vehicle Type"
+msgstr "飛行体タイプ"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
+msgid "Type of vehicle used."
+msgstr "使用する　飛行体のタイプ"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
+msgid "Server"
+msgstr "サーバー"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:195
+msgid "Username"
+msgstr "ユーザー名"
+
+#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:196
+msgid "Password"
+msgstr "パスワード"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
@@ -7799,7 +7875,7 @@ msgstr "非FAI旋回点"
 msgid "Alternates"
 msgstr "代替"
 
-#: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/dlgWeather.cpp:54
+#: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/dlgWeather.cpp:53
 msgid "Now"
 msgstr "今"
 
@@ -7902,44 +7978,6 @@ msgstr "METAR　および　TAF"
 #: src/Dialogs/Weather/NOAADetails.cpp:129
 msgid "This function is not available on your platform yet."
 msgstr "この機能はあなたのシステムでは使用できません"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:118
-#, no-c-format
-msgid "Hot-air balloon"
-msgstr "熱気球"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:131
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:151
-msgid "Tracking Interval"
-msgstr "記録間隔"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-msgid "Track friends"
-msgstr "友人の航跡"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
-msgid "Download the position of your friends live from the SkyLines server."
-msgstr "スカイラインサーバーから、友人の航跡をダウンロードする"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
-msgid "Vehicle Type"
-msgstr "飛行体タイプ"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:153
-msgid "Type of vehicle used."
-msgstr "使用する　飛行体のタイプ"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:156
-msgid "Server"
-msgstr "サーバー"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:160
-msgid "Username"
-msgstr "ユーザー名"
-
-#: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:161
-msgid "Password"
-msgstr "パスワード"
 
 #: src/Renderer/NOAAListRenderer.cpp:70
 msgid "No METAR available"
@@ -9012,14 +9050,48 @@ msgstr ""
 "METAR\n"
 "TAF"
 
+#~ msgid "Altitude AGL"
+#~ msgstr "対地高度"
+
+#~ msgid "Alt AGL"
+#~ msgstr "対地高度"
+
+#~ msgid "H GND"
+#~ msgstr "地点標高"
+
+#~ msgid "QFE GPS"
+#~ msgstr "QFE　GPS高度"
+
+#~ msgid ""
+#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
+#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
+#~ "if on ground. During flight you can change QFE with up and down keys. "
+#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
+#~ msgstr ""
+#~ "自動QFE高度　\r\n"
+#~ "離陸前にGPSの高度を０にセットした場合\r\n"
+#~ "離陸地点からのQFE 高度を表示する\r\n"
+#~ "\r\n"
+#~ "QFE高度をセットしてもQNH高度には影響しない。\r\n"
+#~ "QFE高度は次にセットされるまで維持される"
+
+#~ msgid "H GPS"
+#~ msgstr "GPS高度"
+
+#~ msgid "H Baro"
+#~ msgstr "気圧高度"
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "インフォボックス　モード"
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "ディスプレイのスクーン表示の表示選択設定"
+
 #~ msgid "English"
 #~ msgstr "英語"
 
 #~ msgid "Sunset"
 #~ msgstr "日没"
-
-#~ msgid "Height AGL"
-#~ msgstr "対地高度"
 
 #~ msgid "Not found"
 #~ msgstr "見つかりませんでした"

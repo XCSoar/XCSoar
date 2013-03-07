@@ -98,6 +98,12 @@ Port::Port(DataHandler &_handler)
 
 Port::~Port() {}
 
+bool
+Port::WaitConnected(OperationEnvironment &env)
+{
+  return GetState() == PortState::READY;
+}
+
 size_t
 Port::Write(const char *s)
 {
