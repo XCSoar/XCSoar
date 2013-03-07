@@ -84,6 +84,8 @@ public:
   virtual bool Save(bool &changed, bool &require_restart) override;
 
 protected:
+  void UpdateTerrainPreview();
+
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df);
 };
@@ -117,6 +119,21 @@ PercentToByte(short percent)
 }
 
 void
+TerrainDisplayConfigPanel::UpdateTerrainPreview()
+{
+  terrain_settings.slope_shading = (SlopeShading)
+    GetValueInteger(TerrainSlopeShading);
+  terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
+  terrain_settings.brightness =
+    PercentToByte(GetValueInteger(TerrainBrightness));
+  terrain_settings.ramp = GetValueInteger(TerrainColors);
+
+  // Invalidate terrain preview
+  if (terrain != NULL)
+    ((TerrainPreviewWindow &)GetRow(TerrainPreview)).SetSettings(terrain_settings);
+}
+
+void
 TerrainDisplayConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(EnableTerrain, df)) {
@@ -124,16 +141,7 @@ TerrainDisplayConfigPanel::OnModified(DataField &df)
     terrain_settings.enable = dfb.GetAsBoolean();
     ShowTerrainControls();
   } else {
-    terrain_settings.slope_shading = (SlopeShading)
-      GetValueInteger(TerrainSlopeShading);
-    terrain_settings.contrast = PercentToByte(GetValueInteger(TerrainContrast));
-    terrain_settings.brightness =
-      PercentToByte(GetValueInteger(TerrainBrightness));
-    terrain_settings.ramp = GetValueInteger(TerrainColors);
-
-    // Invalidate terrain preview
-    if (terrain != NULL)
-      ((TerrainPreviewWindow &)GetRow(TerrainPreview)).SetSettings(terrain_settings);
+    UpdateTerrainPreview();
   }
 }
 
