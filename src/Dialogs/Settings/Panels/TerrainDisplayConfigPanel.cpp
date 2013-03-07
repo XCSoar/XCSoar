@@ -248,6 +248,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   terrain_settings = terrain;
   ShowTerrainControls();
+  UpdateTerrainPreview();
 }
 
 bool
