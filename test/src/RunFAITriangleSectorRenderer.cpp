@@ -106,7 +106,9 @@ protected:
 
   virtual void OnResize(PixelSize new_size) override {
     SingleWindow::OnResize(new_size);
-    triangle_window.Resize(new_size);
+
+    if (triangle_window.IsDefined())
+      triangle_window.Resize(new_size);
   }
 };
 
