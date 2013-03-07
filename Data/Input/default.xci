@@ -857,7 +857,7 @@ type=key
 data=9
 event=FlarmDetails
 event=Mode default
-label=FLARM\nDetails
+label=Traffic List
 location=8
 
 mode=Info2
