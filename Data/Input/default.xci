@@ -960,11 +960,6 @@ location=9
 # mode=default.TA (ThermalAssistant)
 # ----------------------------------
 
-mode=default.TA
-type=key
-data=ESCAPE
-event=Map show
-
 # ---------------------
 # mode=Display1.Traffic
 # ---------------------
