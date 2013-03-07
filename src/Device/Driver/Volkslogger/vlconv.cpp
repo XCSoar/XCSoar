@@ -40,6 +40,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <memory.h>
+#include <assert.h>
+
+#include "Operation/Operation.hpp"
 
 // Conversion-Constants
 
@@ -512,7 +515,7 @@ const int actual_conv_version = 424;
 
 long
 convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
-    int oo_fillin, word *serno, long *sp)
+    int oo_fillin, word *serno, long *sp, OperationEnvironment &env)
 {
   IGCHEADER igcheader;
   C_RECORD task;
@@ -582,6 +585,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   p = bin_puffer;
 
   do {
+
+    // Make user abort possible
+    if (env.IsCancelled())
+      return 0;
+
     Haupttyp = p[0] & rectyp_msk;
     switch (Haupttyp) {
     case rectyp_tnd:
@@ -868,6 +876,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   ende = 0;
   p = bin_puffer;
   do {
+
+    // Make user abort possible
+    if (env.IsCancelled())
+      return 0;
+
     Haupttyp = p[0] & rectyp_msk;
     switch (Haupttyp) {
     case rectyp_sep:
@@ -1012,10 +1025,11 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 }
 
 // Members of class DIR
-int
-conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
+bool
+conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length,
+         OperationEnvironment &env)
 {
-  int number_of_flights;
+  assert(flights.empty());
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
@@ -1030,13 +1044,19 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
   memset(&timetm1, 0, sizeof(timetm1));
 
   int bfv = 0;
-  number_of_flights = 0;
   char pilot1[17];
   char pilot2[17];
   char pilot3[17];
   char pilot4[17];
   memset(&de, 0, sizeof(de));
-  while (1) {//number_of_flights < MAXDIRENTRY) {
+
+  size_t nbytes = 0;
+
+  while (nbytes < length) {
+    // Make user abort possible
+    if (env.IsCancelled())
+      return -1;
+
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
     case rectyp_sep: // Initialize Dir-Entry
@@ -1049,7 +1069,10 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
       de.takeoff = 0;
       bfv = p[0] & ~rectyp_msk;
       if (bfv > max_bfv)
-        return -1;
+      {
+        //abort function
+        return false;
+      }
       l = 1;
       break;
     case rectyp_vrt: // getim'ter variabler DS oder
@@ -1107,9 +1130,20 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
     case rectyp_pos:
       l = pos_ds_size[bfv][0];
       break;
+
+
+    /*
+     * This End Condition Statement does not seem to be
+     * valid. At least not for the tested Volkslogger.
+     * To have a valid condition the length is
+     * now known in conv_dir() and the loop will finish when the
+     * end of the data is reached.
+     * Maybe this end condition here is valid in special
+     * cases or on other hardware though.
+     */
     case rectyp_poc:
       if (p[2] & 0x80) { // Endebedingung
-        return number_of_flights;
+        return true;
       }
       l = pos_ds_size[bfv][1];
       break;
@@ -1130,52 +1164,51 @@ conv_dir(DIRENTRY* flights, uint8_t *p, int countonly)
       l = 8;
       break;
     case rectyp_end:
-      if (!countonly) {
-        // setzt firsttime und lasttime aufgrund der Werte im sta-DS
-        temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
-        de.firsttime = timetm1;
-        de.firsttime.tm_sec -= temptime % 3600;
+      // setzt firsttime und lasttime aufgrund der Werte im sta-DS
+      temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
+      de.firsttime = timetm1;
+      de.firsttime.tm_sec -= temptime % 3600;
 
-        de.firsttime.tm_hour -= temptime / 3600;
-        de.firsttime.tm_isdst = -1;
-        mktime(&de.firsttime);
-        de.lasttime = de.firsttime;
+      de.firsttime.tm_hour -= temptime / 3600;
+      de.firsttime.tm_isdst = -1;
+      mktime(&de.firsttime);
+      de.lasttime = de.firsttime;
 
-        temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
-        de.recordingtime = temptime;
-        de.lasttime.tm_sec += temptime % 3600;
-        de.lasttime.tm_hour += temptime / 3600;
-        de.lasttime.tm_isdst = -1;
-        mktime(&de.lasttime);
+      temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
+      de.recordingtime = temptime;
+      de.lasttime.tm_sec += temptime % 3600;
+      de.lasttime.tm_hour += temptime / 3600;
+      de.lasttime.tm_isdst = -1;
+      mktime(&de.lasttime);
 
-        if (!olddate_flg) {
-          olddate = de.firsttime;
-          flight_of_day = 0;
-          olddate_flg = 1;
-        }
-        if ((olddate.tm_mday == de.firsttime.tm_mday) && (olddate.tm_mon
-            == de.firsttime.tm_mon)
-            && (olddate.tm_year == de.firsttime.tm_year))
-          flight_of_day++;
-        else {
-          olddate = de.firsttime;
-          flight_of_day = 1;
-          olddate_flg = 1;
-        }
-        strcat(de.pilot, pilot1);
-        strcat(de.pilot, pilot2);
-        strcat(de.pilot, pilot3);
-        strcat(de.pilot, pilot4);
-
-        flights[number_of_flights] = de;
+      if (!olddate_flg) {
+        olddate = de.firsttime;
+        flight_of_day = 0;
+        olddate_flg = 1;
       }
-      number_of_flights++;
+      if ((olddate.tm_mday == de.firsttime.tm_mday) && (olddate.tm_mon
+          == de.firsttime.tm_mon)
+          && (olddate.tm_year == de.firsttime.tm_year))
+        flight_of_day++;
+      else {
+        olddate = de.firsttime;
+        flight_of_day = 1;
+        olddate_flg = 1;
+      }
+      strcat(de.pilot, pilot1);
+      strcat(de.pilot, pilot2);
+      strcat(de.pilot, pilot3);
+      strcat(de.pilot, pilot4);
+
+      flights.push_back(de);
       l = 7;
       break;
     default:
-      return -1;
+      //abort function
+      return false;
     };
     p += l;
+    nbytes += l;
   }
-  return -1;
+  return true;
 }

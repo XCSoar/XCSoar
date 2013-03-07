@@ -25,10 +25,12 @@
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/CharUtil.hpp"
+#include "Language/Language.hpp"
 
 #include <memory.h>
 #include <string.h>
 #include <stdlib.h>
+#include <vector>
 
 // sizes of VL memory regions
 const int VLAPI_DBB_MEMSIZE = 16384;
@@ -103,6 +105,11 @@ VLA_XFR::flightget(void *buffer, int32 buffersize,
    * the log before it responds.
    */
   unsigned timeout_firstchar_ms=300000;
+
+  /*
+   * Make user aware of the Volkslogger needing time to calculate
+   */
+  env.SetText(_("Logger is calculating file security before download starts."));
 
   // Download binary log data supports BulkBaudrate
   int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
@@ -233,6 +240,8 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
 }
 
 VLA_ERROR VLAPI::read_directory() {
+  directory.clear();
+  directory.reserve(10);
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
@@ -244,19 +253,19 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    int fcount = conv_dir(0,dirbuffer,1);
-    delete[] directory.flights;
-    directory.flights = NULL;
-    if(fcount>0) {
-      directory.nflights = fcount;
-      directory.flights = new DIRENTRY[fcount];
-      conv_dir(directory.flights,dirbuffer,0);
+    if (!conv_dir(directory, dirbuffer, data_length, env)) {
+      directory.clear();
+      return VLA_ERR_MISC;
+    }
+
+    if(!directory.empty())
       return VLA_ERR_NOERR;
-    }
-    else {
-      directory.nflights = 0;
+    else
       return VLA_ERR_NOFLIGHTS;
-    }
+  }
+  else {
+    directory.clear();
+    return VLA_ERR_NOFLIGHTS;
   }
 
   return VLA_ERR_MISC;
@@ -283,7 +292,7 @@ VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
   word serno; long sp;
   long r;
   if(err == VLA_ERR_NOERR) {
-    r = convert_gcs(0,outfile,logbuffer,1,&serno,&sp);
+    r = convert_gcs(0, outfile, logbuffer, 1, &serno, &sp, env);
     if(r>0) {
       err = VLA_ERR_NOERR;
       print_g_record(

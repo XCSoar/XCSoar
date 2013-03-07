@@ -150,7 +150,12 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
   VLINFO vlinfo;
   DATABASE database;
   DECLARATION declaration;
-  DIRECTORY directory; // struct DIRECTORY declared in VLCONV.H
+  /*
+   * This vector of directory entries holds the list of Flights
+   * stored in the Volkslogger
+   */
+  std::vector<DIRENTRY> directory;
+
 
   // read info (serial numer, firmware versions etc.) from
   // the logger into the struct VLINFO (see above)
