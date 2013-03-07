@@ -88,15 +88,10 @@ type=key
 data=ESCAPE
 event=Mode default
 
-mode=pan
+mode=default pan
 type=key
 data=ESCAPE
-event=Pan off
-
-mode=default.TA default.Traffic
-type=key
-data=ESCAPE
-event=Map show
+event=Page restore
 
 mode=default.Traffic
 type=key
@@ -857,7 +852,7 @@ type=key
 data=9
 event=FlarmDetails
 event=Mode default
-label=FLARM\nDetails
+label=Traffic List
 location=8
 
 mode=Info2
@@ -960,20 +955,6 @@ location=9
 # mode=default.TA (ThermalAssistant)
 # ----------------------------------
 
-mode=default.TA
-type=key
-data=ESCAPE
-event=Map show
-
-# This hack shows a permanent "Return to map" button when the
-# ThermalAssistant is visible.  This probably needs a redesign.
-mode=default.TA
-type=key
-data=APP1
-event=Map show
-label=Return
-location=1
-
 # ---------------------
 # mode=Display1.Traffic
 # ---------------------
@@ -1001,16 +982,9 @@ location=7
 
 mode=Display1.Traffic
 type=key
-data=9
+data=0
 event=Traffic northup toggle
 label=$(TrafficNorthUpToggleActionName)
-location=8
-
-mode=Display1.TA Display1.Traffic
-type=key
-data=0
-event=Map show
-label=Map
 location=9
 
 mode=Display2.Traffic

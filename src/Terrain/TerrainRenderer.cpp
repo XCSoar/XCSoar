@@ -35,7 +35,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static constexpr ColorRamp terrain_colors[9][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0,           0x70, 0xc0, 0xa7},
     {250,         0xca, 0xe7, 0xb9},
@@ -170,6 +170,25 @@ static constexpr ColorRamp terrain_colors[9][NUM_COLOR_RAMP_LEVELS] = {
     {2000,        255, 255, 255},
     {2250,        255, 255, 255},
     {2500,        255, 255, 255}
+  },
+
+  /**
+   * "Gaudy".  Imitates SeeYouMobile's default ramp.
+   */
+  {
+    {0,           0x00, 0x80, 0x00},
+    {1000,        0xff, 0xff, 0x00},
+    {1500,        0xc0, 0x20, 0x00},
+    {2800,        0xff, 0xff, 0xff},
+    {3000,        0xff, 0xff, 0xff},
+    {3100,        0xff, 0xff, 0xff},
+    {3200,        0xff, 0xff, 0xff},
+    {3300,        0xff, 0xff, 0xff},
+    {3400,        0xff, 0xff, 0xff},
+    {3500,        0xff, 0xff, 0xff},
+    {3600,        0xff, 0xff, 0xff},
+    {3700,        0xff, 0xff, 0xff},
+    {3800,        0xff, 0xff, 0xff},
   }
 };
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,

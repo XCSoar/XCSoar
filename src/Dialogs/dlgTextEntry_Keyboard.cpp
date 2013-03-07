@@ -205,11 +205,6 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
   ButtonWindowStyle button_style;
   button_style.TabStop();
 
-  WndButton backspace_button(client_area, look, _T("<-"),
-                             { backspace_left, padding, rc.right - padding,
-                                 editor_bottom },
-                             button_style, OnBackspace);
-
   WndButton ok_button(client_area, look, _("OK"),
                       { ok_left, button_top, ok_right, button_bottom },
                       button_style, form, mrOK);
@@ -230,6 +225,11 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
                               keyboard_bottom },
                            OnCharacter);
   kb = &keyboard;
+
+  WndButton backspace_button(client_area, look, _T("<-"),
+                             { backspace_left, padding, rc.right - padding,
+                                 editor_bottom },
+                             button_style, OnBackspace);
 
   AllowedCharactersCallback = accb;
 

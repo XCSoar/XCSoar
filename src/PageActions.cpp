@@ -29,6 +29,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Pan.hpp"
 
 namespace PageActions {
   /**
@@ -124,6 +125,8 @@ PageActions::LoadLayout(const PageLayout &layout)
 
   if (!layout.valid)
     return;
+
+  DisablePan();
 
   if (!layout.infobox_config.enabled) {
     CommonInterface::main_window->SetFullScreen(true);

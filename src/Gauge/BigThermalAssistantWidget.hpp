@@ -24,17 +24,34 @@ Copyright_License {
 #ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
-#include "Widget/WindowWidget.hpp"
+#include "Widget/ContainerWidget.hpp"
+#include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;
 class LiveBlackboard;
 struct ThermalAssistantLook;
+class WndButton;
+class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
-  : public WindowWidget, private NullBlackboardListener {
+  : public ContainerWidget,
+#ifndef GNAV
+    private ActionListener,
+#endif
+    private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
+
+  BigThermalAssistantWindow *view;
+
+#ifndef GNAV
+  enum Action {
+    CLOSE,
+  };
+
+  WndButton *close_button;
+#endif
 
 public:
   BigThermalAssistantWidget(LiveBlackboard &_blackboard,
@@ -47,10 +64,17 @@ public:
   virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
 
 private:
+  void UpdateLayout();
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
+
+#ifndef GNAV
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
+#endif
 
   /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,

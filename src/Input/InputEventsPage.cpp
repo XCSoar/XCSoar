@@ -21,35 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PAN_HPP
-#define XCSOAR_PAN_HPP
-
-#include "Compiler.h"
-
-struct GeoPoint;
-
-gcc_pure
-bool
-IsPanning();
+#include "InputEvents.hpp"
+#include "Util/StringUtil.hpp"
+#include "PageActions.hpp"
 
 void
-EnterPan();
-
-bool
-PanTo(const GeoPoint &location);
-
-/**
- * Low-level version of LeavePan().  It disables panning in the map
- * and updates the input mode, but does not restore the page layout.
- * Only to be used by the pages library.
- */
-void
-DisablePan();
-
-void
-LeavePan();
-
-void
-TogglePan();
-
-#endif
+InputEvents::eventPage(const TCHAR *misc)
+{
+  if (StringIsEqual(misc, _T("restore")))
+    PageActions::Restore();
+}
