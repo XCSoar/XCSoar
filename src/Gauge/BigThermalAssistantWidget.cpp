@@ -24,13 +24,31 @@ Copyright_License {
 #include "BigThermalAssistantWidget.hpp"
 #include "Gauge/BigThermalAssistantWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
+#include "Language/Language.hpp"
+#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
+#include "UIState.hpp"
+#include "Interface.hpp"
+#include "PageActions.hpp"
 
 void
 BigThermalAssistantWidget::UpdateLayout()
 {
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
+
+#ifndef GNAV
+  const unsigned margin = Layout::Scale(1);
+  const unsigned button_height = Layout::GetMinimumControlHeight();
+
+  PixelRect button_rc;
+  button_rc.bottom = rc.bottom - margin;
+  button_rc.top = button_rc.bottom - button_height;
+  button_rc.right = rc.right - margin;
+  button_rc.left = button_rc.right - Layout::Scale(50);
+  close_button->Move(button_rc);
+#endif
 }
 
 void
@@ -48,6 +66,12 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 
   const PixelRect rc = GetContainer().GetClientRect();
 
+#ifndef GNAV
+  close_button = new WndButton(GetContainer(), UIGlobals::GetDialogLook(),
+                               _("Close"), rc, ButtonWindowStyle(),
+                               *this, CLOSE);
+#endif
+
   view = new BigThermalAssistantWindow(look, Layout::FastScale(10));
   view->Create(GetContainer(), rc);
 }
@@ -56,6 +80,9 @@ void
 BigThermalAssistantWidget::Unprepare()
 {
   delete view;
+#ifndef GNAV
+  delete close_button;
+#endif
 
   ContainerWidget::Unprepare();
 }
@@ -67,6 +94,11 @@ BigThermalAssistantWidget::Show(const PixelRect &rc)
 
   ContainerWidget::Show(rc);
   UpdateLayout();
+
+#ifndef GNAV
+  /* show the "Close" button only if this is a "special" page */
+  close_button->SetVisible(CommonInterface::GetUIState().special_page.IsDefined());
+#endif
 
   blackboard.AddListener(*this);
 }
@@ -91,6 +123,20 @@ BigThermalAssistantWidget::SetFocus()
 {
   return false;
 }
+
+#ifndef GNAV
+
+void
+BigThermalAssistantWidget::OnAction(int id)
+{
+  switch ((Action)id) {
+  case CLOSE:
+    PageActions::Restore();
+    break;
+  }
+}
+
+#endif
 
 void
 BigThermalAssistantWidget::OnCalculatedUpdate(const MoreData &basic,
