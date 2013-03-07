@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
+#include <vector>
 
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01
@@ -95,16 +96,17 @@ struct DIRENTRY {
 	char gliderid[8];				// enough
 };
 
-struct DIRECTORY {
-	int nflights;
-	DIRENTRY *flights;
-};
+/**
+ * Converts binary flight list (called directory) data to a vector of
+ * logs. Each log entry of type DIRENTRY. This vector is returned through
+ * reference parameter &flights.
+ * The functions returns true if conversion was successful.
+ * @param flights Vector to return the read flights.
+ * @param dirbuffer Pointer to the buffer containing the binary input data.
+ * @param length The length of the data stored in buffer.
+ */
 
-
-//const int MAXDIRENTRY = 100;
-
-int conv_dir(DIRENTRY* flights, uint8_t *dirbuffer, size_t length,
-             int countonly);
-
+bool conv_dir(std::vector<DIRENTRY> &flights, uint8_t *dirbuffer,
+              size_t length);
 
 #endif

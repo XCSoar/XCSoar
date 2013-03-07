@@ -1012,10 +1012,12 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 }
 
 // Members of class DIR
-int
-conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
+bool
+conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
 {
-  int number_of_flights;
+  flights.clear();
+  flights.reserve(10);
+
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
@@ -1030,7 +1032,6 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
   memset(&timetm1, 0, sizeof(timetm1));
 
   int bfv = 0;
-  number_of_flights = 0;
   char pilot1[17];
   char pilot2[17];
   char pilot3[17];
@@ -1052,7 +1053,11 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
       de.takeoff = 0;
       bfv = p[0] & ~rectyp_msk;
       if (bfv > max_bfv)
-        return -1;
+      {
+        //abort function
+        flights.clear();
+        return false;
+      }
       l = 1;
       break;
     case rectyp_vrt: // getim'ter variabler DS oder
@@ -1123,7 +1128,7 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
      */
     case rectyp_poc:
       if (p[2] & 0x80) { // Endebedingung
-        return number_of_flights;
+        return true;
       }
       l = pos_ds_size[bfv][1];
       break;
@@ -1144,53 +1149,52 @@ conv_dir(DIRENTRY* flights, uint8_t *p, const size_t length, int countonly)
       l = 8;
       break;
     case rectyp_end:
-      if (!countonly) {
-        // setzt firsttime und lasttime aufgrund der Werte im sta-DS
-        temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
-        de.firsttime = timetm1;
-        de.firsttime.tm_sec -= temptime % 3600;
+      // setzt firsttime und lasttime aufgrund der Werte im sta-DS
+      temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
+      de.firsttime = timetm1;
+      de.firsttime.tm_sec -= temptime % 3600;
 
-        de.firsttime.tm_hour -= temptime / 3600;
-        de.firsttime.tm_isdst = -1;
-        mktime(&de.firsttime);
-        de.lasttime = de.firsttime;
+      de.firsttime.tm_hour -= temptime / 3600;
+      de.firsttime.tm_isdst = -1;
+      mktime(&de.firsttime);
+      de.lasttime = de.firsttime;
 
-        temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
-        de.recordingtime = temptime;
-        de.lasttime.tm_sec += temptime % 3600;
-        de.lasttime.tm_hour += temptime / 3600;
-        de.lasttime.tm_isdst = -1;
-        mktime(&de.lasttime);
+      temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
+      de.recordingtime = temptime;
+      de.lasttime.tm_sec += temptime % 3600;
+      de.lasttime.tm_hour += temptime / 3600;
+      de.lasttime.tm_isdst = -1;
+      mktime(&de.lasttime);
 
-        if (!olddate_flg) {
-          olddate = de.firsttime;
-          flight_of_day = 0;
-          olddate_flg = 1;
-        }
-        if ((olddate.tm_mday == de.firsttime.tm_mday) && (olddate.tm_mon
-            == de.firsttime.tm_mon)
-            && (olddate.tm_year == de.firsttime.tm_year))
-          flight_of_day++;
-        else {
-          olddate = de.firsttime;
-          flight_of_day = 1;
-          olddate_flg = 1;
-        }
-        strcat(de.pilot, pilot1);
-        strcat(de.pilot, pilot2);
-        strcat(de.pilot, pilot3);
-        strcat(de.pilot, pilot4);
-
-        flights[number_of_flights] = de;
+      if (!olddate_flg) {
+        olddate = de.firsttime;
+        flight_of_day = 0;
+        olddate_flg = 1;
       }
-      number_of_flights++;
+      if ((olddate.tm_mday == de.firsttime.tm_mday) && (olddate.tm_mon
+          == de.firsttime.tm_mon)
+          && (olddate.tm_year == de.firsttime.tm_year))
+        flight_of_day++;
+      else {
+        olddate = de.firsttime;
+        flight_of_day = 1;
+        olddate_flg = 1;
+      }
+      strcat(de.pilot, pilot1);
+      strcat(de.pilot, pilot2);
+      strcat(de.pilot, pilot3);
+      strcat(de.pilot, pilot4);
+
+      flights.push_back(de);
       l = 7;
       break;
     default:
-      return -1;
+      //abort function
+      flights.clear();
+      return false;
     };
     p += l;
     nbytes += l;
   }
-  return number_of_flights;
+  return true;
 }

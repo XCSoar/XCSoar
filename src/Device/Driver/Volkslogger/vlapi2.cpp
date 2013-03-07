@@ -29,6 +29,7 @@
 #include <memory.h>
 #include <string.h>
 #include <stdlib.h>
+#include <vector>
 
 // sizes of VL memory regions
 const int VLAPI_DBB_MEMSIZE = 16384;
@@ -244,19 +245,17 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    int fcount = conv_dir(0, dirbuffer, data_length, 1);
-    delete[] directory.flights;
-    directory.flights = NULL;
-    if(fcount>0) {
-      directory.nflights = fcount;
-      directory.flights = new DIRENTRY[fcount];
-      conv_dir(directory.flights, dirbuffer, data_length, 0);
+    if (!conv_dir(directory, dirbuffer, data_length))
+      return VLA_ERR_MISC;
+
+    if(!directory.empty())
       return VLA_ERR_NOERR;
-    }
-    else {
-      directory.nflights = 0;
+    else
       return VLA_ERR_NOFLIGHTS;
-    }
+  }
+  else {
+    directory.clear();
+    return VLA_ERR_NOFLIGHTS;
   }
 
   return VLA_ERR_MISC;
