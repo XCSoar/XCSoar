@@ -116,7 +116,6 @@ InputEvents::eventZoom(const TCHAR* misc)
  *  on             Turn pan on
  *  off            Turn pan off
  *  toogle         Toogles pan mode
- *  supertoggle    Toggles pan mode and fullscreen
  *  up             Pan up
  *  down           Pan down
  *  left           Pan left
@@ -128,8 +127,7 @@ InputEvents::eventZoom(const TCHAR* misc)
 void
 InputEvents::eventPan(const TCHAR *misc)
 {
-  if (StringIsEqual(misc, _T("toggle")) ||
-      /* deprecated: */ StringIsEqual(misc, _T("supertoggle")))
+  if (StringIsEqual(misc, _T("toggle")))
     TogglePan();
 
   else if (StringIsEqual(misc, _T("on")))
