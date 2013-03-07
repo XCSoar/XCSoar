@@ -259,10 +259,3 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   sub_SetZoom(value);
 }
-
-void
-InputEvents::eventMap(const TCHAR *misc)
-{
-  if (StringIsEqual(misc, _T("show")))
-    PageActions::ShowMap();
-}

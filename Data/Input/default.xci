@@ -88,15 +88,10 @@ type=key
 data=ESCAPE
 event=Mode default
 
-mode=pan
+mode=Default pan
 type=key
 data=ESCAPE
-event=Pan off
-
-mode=default.TA default.Traffic
-type=key
-data=ESCAPE
-event=Map show
+event=Page restore
 
 mode=default.Traffic
 type=key

@@ -131,13 +131,13 @@ namespace InputEvents
   void eventLogger(const TCHAR *misc);
   void eventMacCready(const TCHAR *misc);
   void eventMainMenu(const TCHAR *misc);
-  void eventMap(const TCHAR *misc);
   void eventMarkLocation(const TCHAR *misc);
   void eventMode(const TCHAR *misc);
   void eventNearestAirspaceDetails(const TCHAR *misc);
   void eventNearestWaypointDetails(const TCHAR *misc);
   void eventNearestMapItems(const TCHAR *misc);
   void eventNull(const TCHAR *misc);
+  void eventPage(const TCHAR *misc);
   void eventPan(const TCHAR *misc);
   void eventPlaySound(const TCHAR *misc);
   void eventProfileLoad(const TCHAR *misc);
