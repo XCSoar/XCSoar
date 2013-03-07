@@ -27,35 +27,37 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
+BigThermalAssistantWidget::UpdateLayout()
+{
+  const PixelRect rc = GetContainer().GetClientRect();
+  view->Move(rc);
+}
+
+void
 BigThermalAssistantWidget::Update(const AttitudeState &attitude,
                                   const DerivedInfo &calculated)
 {
-  BigThermalAssistantWindow *window =
-    (BigThermalAssistantWindow *)WindowWidget::GetWindow();
-  window->Update(attitude, calculated);
+  view->Update(attitude, calculated);
 }
 
 void
 BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
-                                   const PixelRect &rc)
+                                   const PixelRect &_rc)
 {
-  WindowStyle style;
-  style.Hide();
+  ContainerWidget::Prepare(parent, _rc);
 
-  BigThermalAssistantWindow *window =
-    new BigThermalAssistantWindow(look, Layout::FastScale(10));
-  window->Create(parent, rc, style);
-  SetWindow(window);
+  const PixelRect rc = GetContainer().GetClientRect();
+
+  view = new BigThermalAssistantWindow(look, Layout::FastScale(10));
+  view->Create(GetContainer(), rc);
 }
 
 void
 BigThermalAssistantWidget::Unprepare()
 {
-  BigThermalAssistantWindow *window =
-    (BigThermalAssistantWindow *)WindowWidget::GetWindow();
-  delete window;
+  delete view;
 
-  WindowWidget::Unprepare();
+  ContainerWidget::Unprepare();
 }
 
 void
@@ -63,7 +65,8 @@ BigThermalAssistantWidget::Show(const PixelRect &rc)
 {
   Update(blackboard.Basic().attitude, blackboard.Calculated());
 
-  WindowWidget::Show(rc);
+  ContainerWidget::Show(rc);
+  UpdateLayout();
 
   blackboard.AddListener(*this);
 }
@@ -72,7 +75,15 @@ void
 BigThermalAssistantWidget::Hide()
 {
   blackboard.RemoveListener(*this);
-  WindowWidget::Hide();
+  ContainerWidget::Hide();
+}
+
+void
+BigThermalAssistantWidget::Move(const PixelRect &rc)
+{
+  ContainerWidget::Move(rc);
+
+  UpdateLayout();
 }
 
 bool

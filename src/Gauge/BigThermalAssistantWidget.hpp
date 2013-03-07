@@ -24,17 +24,20 @@ Copyright_License {
 #ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
-#include "Widget/WindowWidget.hpp"
+#include "Widget/ContainerWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;
 class LiveBlackboard;
 struct ThermalAssistantLook;
+class BigThermalAssistantWindow;
 
 class BigThermalAssistantWidget
-  : public WindowWidget, private NullBlackboardListener {
+  : public ContainerWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
   const ThermalAssistantLook &look;
+
+  BigThermalAssistantWindow *view;
 
 public:
   BigThermalAssistantWidget(LiveBlackboard &_blackboard,
@@ -47,9 +50,11 @@ public:
   virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
 
 private:
+  void UpdateLayout();
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
   /* virtual methods from class BlackboardListener */
