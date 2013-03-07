@@ -88,7 +88,7 @@ type=key
 data=ESCAPE
 event=Mode default
 
-mode=Default pan
+mode=default pan
 type=key
 data=ESCAPE
 event=Page restore
