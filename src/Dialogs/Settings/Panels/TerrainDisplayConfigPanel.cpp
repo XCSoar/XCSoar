@@ -199,6 +199,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 4, N_("Imhof 12"), },
     { 5, N_("Imhof Atlas"), },
     { 6, N_("ICAO"), },
+    { 9, N_("Gaudy"), },
     { 7, N_("Grey"), },
     { 8, N_("White"), },
     { 0 }
