@@ -71,6 +71,18 @@ PanTo(const GeoPoint &location)
 }
 
 void
+DisablePan()
+{
+  GlueMapWindow *map = UIGlobals::GetMapIfActive();
+  if (map == NULL || !map->IsPanning())
+    return;
+
+  map->SetPan(false);
+
+  InputEvents::UpdatePan();
+}
+
+void
 LeavePan()
 {
   GlueMapWindow *map = UIGlobals::GetMapIfActive();

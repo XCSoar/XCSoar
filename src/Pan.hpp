@@ -38,6 +38,14 @@ EnterPan();
 bool
 PanTo(const GeoPoint &location);
 
+/**
+ * Low-level version of LeavePan().  It disables panning in the map
+ * and updates the input mode, but does not restore the page layout.
+ * Only to be used by the pages library.
+ */
+void
+DisablePan();
+
 void
 LeavePan();
 
