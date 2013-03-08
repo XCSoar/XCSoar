@@ -64,6 +64,8 @@ BufferCanvas::Destroy()
 #endif
       ::DeleteObject(bitmap);
     assert(success);
+
+    bitmap = NULL;
   }
 }
 
