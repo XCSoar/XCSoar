@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2013-03-02 21:29+0000\n"
+"PO-Revision-Date: 2013-03-08 06:51+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-03 14:04+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-03-08 09:12+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -36,11 +36,11 @@ msgstr "Zadanie"
 
 #: src/Task/TypeStrings.cpp:37
 msgid "Racing"
-msgstr "Przelot wyczynowy"
+msgstr "Wyczynowy"
 
 #: src/Task/TypeStrings.cpp:39
 msgid "FAI badges/records"
-msgstr "Przelot warunkowy/rekordowy FAI"
+msgstr "War./Rek. FAI"
 
 #: src/Task/TypeStrings.cpp:41 src/Dialogs/Task/dlgTaskHelpers.cpp:82
 msgid "FAI triangle"
@@ -48,7 +48,7 @@ msgstr "Trójkąt FAI"
 
 #: src/Task/TypeStrings.cpp:43
 msgid "FAI out and return"
-msgstr "FAI docel - powrót"
+msgstr "FAI dcp"
 
 #: src/Task/TypeStrings.cpp:45
 msgid "FAI goal"
@@ -56,15 +56,15 @@ msgstr "FAI docel"
 
 #: src/Task/TypeStrings.cpp:47
 msgid "AAT"
-msgstr "Konkurencja obszarowa AAT"
+msgstr "Obsz. AAT"
 
 #: src/Task/TypeStrings.cpp:49
 msgid "Mixed"
-msgstr "Konkurencja mieszana AAT - PZty"
+msgstr "AAT+PZty"
 
 #: src/Task/TypeStrings.cpp:51
 msgid "Touring"
-msgstr "Lot treningowy"
+msgstr "Treningowy"
 
 #: src/Task/TypeStrings.cpp:62
 msgid ""
@@ -4320,7 +4320,7 @@ msgstr "To pozwala na wł/wył automatycznego algorytmu wiatru."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:64
 msgid "Prefer external wind"
-msgstr "Preferencja danych zewn.wiatru"
+msgstr "Dane wiatru z zewn.urz."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:65
 msgid ""
@@ -4475,9 +4475,9 @@ msgid "Pages"
 msgstr "Strony"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "InfoBoxy"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -5111,7 +5111,7 @@ msgstr "Ustaw jako nowy Dom"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Pan To Waypoint"
-msgstr "Przesuń do punktu trasy"
+msgstr "Pokaż Punkt Trasy"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:238
 msgid "Clear current task?"
@@ -6739,7 +6739,7 @@ msgstr "Pokaż na mapie obszary trójkąta FAI."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:201
 msgid "Start max. speed"
-msgstr "Max.prędkośćSTARTU"
+msgstr "Maks. prędk. odejścia"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:202
@@ -6751,7 +6751,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:72
 msgid "Start max. speed margin"
-msgstr "MAXprędkSTARTUmargines"
+msgstr "Maks. prędk. odej. - toler."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:73
 msgid ""
@@ -6764,7 +6764,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:81
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:206
 msgid "Start max. height"
-msgstr "MaxWysokośćSTARTU"
+msgstr "Maks. wysok. odejścia"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:82
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:207
@@ -6777,7 +6777,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:88
 msgid "Start max. height margin"
-msgstr "MaxWysokośćSTARTUmargines"
+msgstr "Maks. wysok. odejścia - toler."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:89
 msgid ""
@@ -6802,7 +6802,7 @@ msgstr "Poziom odniesienia to wysokość nad punktem trasy."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:219
 msgid "Start height ref."
-msgstr "Wysokość referencyjna startu"
+msgstr "Poziom odn. odejścia"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:103
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:220
@@ -6812,7 +6812,7 @@ msgstr "Poz.odn. użyto do wyznaczenia maks.wys.startu."
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:223
 msgid "Finish min. height"
-msgstr "MIN wysokość na mecie"
+msgstr "Min. wysok. na mecie"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:112
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:224
@@ -6826,7 +6826,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:118
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:228
 msgid "Finish height ref."
-msgstr "Wysokość referencyjna na mecie"
+msgstr "Poziom odn. na mecie"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:229
@@ -6945,7 +6945,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:190
 msgid "Default task type for new tasks you create."
-msgstr "Domyślny typ zadania dla nowych zadań."
+msgstr "Domyślny rodzaj przelotu dla nowych zadań."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:207
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:195
@@ -7546,7 +7546,7 @@ msgstr "Edytuj punkt"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
-msgstr "Ustaw jako meta"
+msgstr "Ustaw jako Pkt końcowy"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:176
 msgid "Clear All"
@@ -7570,15 +7570,15 @@ msgstr "Minimalny czas trasy AAT w minutach"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:198
 msgid "Start open time"
-msgstr "Godz.otwarcia startu"
+msgstr "Otwarcie startu lotn."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:199
 msgid "Start close time"
-msgstr "Godz.zamknięcia startu"
+msgstr "Zamknięcie startu lotn."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "FAI start / finish rules"
-msgstr "Zasady FAI dla startu i zakończenia."
+msgstr "Zasady FAI dla startu i mety."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:233
 msgid ""
@@ -7592,7 +7592,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Task type"
-msgstr "Typ zadania"
+msgstr "Rodzaj przelotu"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid "Sets the behaviour for the current task."
@@ -8548,7 +8548,7 @@ msgstr "Rejestracja"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:29 Data/Dialogs/dlgPlaneDetails_L.xml:39
 msgid "Max. Ballast"
-msgstr "Max.balast"
+msgstr "Maks.balast"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8673,7 +8673,7 @@ msgstr "Rel. Kurs"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:36
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:36
 msgid "Max. ballast"
-msgstr "Max. balast"
+msgstr "Maks. balast"
 
 #: Data/Dialogs/dlgVoice.xml:10
 msgid "Enable warnings for final glide through terrain."
@@ -9045,15 +9045,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "InfoBox Modes"
-#~ msgstr "Zestawy Infobox"
-
-#~ msgid "^"
-#~ msgstr "^"
-
-#~ msgid "v"
-#~ msgstr "v"
-
 #~ msgid "Weather parameters"
 #~ msgstr "Parametry pogody"
 
@@ -9213,6 +9204,15 @@ msgstr ""
 
 #~ msgid "Set new teammate:"
 #~ msgstr "Dodaj do zespołu"
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "Zestawy Infobox"
+
+#~ msgid "^"
+#~ msgstr "^"
+
+#~ msgid "v"
+#~ msgstr "v"
 
 #~ msgid "User middle"
 #~ msgstr "Środkowy użytkownika"
