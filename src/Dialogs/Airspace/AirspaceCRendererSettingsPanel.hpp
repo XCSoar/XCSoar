@@ -50,7 +50,7 @@ public:
   AirspaceClassRendererSettingsPanel(AirspaceClass type);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 protected:
   /* methods from ActionListener */

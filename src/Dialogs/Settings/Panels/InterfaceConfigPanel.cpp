@@ -65,7 +65,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 };
@@ -216,10 +216,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
+InterfaceConfigPanel::Save(bool &_changed)
 {
   UISettings &settings = CommonInterface::SetUISettings();
-  bool changed = false, require_restart = false;;
+  bool changed = false;;
 
 #ifdef HAVE_BLANK
   changed |= SaveValue(AutoBlank, ProfileKeys::AutoBlank,
@@ -288,7 +288,6 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
 #endif
 
   _changed |= changed;
-  _require_restart |= require_restart;
   return true;
 }
 

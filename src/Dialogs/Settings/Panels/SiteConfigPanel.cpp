@@ -54,7 +54,7 @@ private:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 };
@@ -121,9 +121,9 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
+SiteConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
@@ -141,7 +141,6 @@ SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged;
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

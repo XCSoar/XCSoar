@@ -100,7 +100,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
+WindSettingsPanel::Save(bool &_changed)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;

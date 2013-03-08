@@ -111,7 +111,7 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const Pixel
 }
 
 bool
-AirspaceClassRendererSettingsPanel::Save(bool &changed, bool &_require_restart)
+AirspaceClassRendererSettingsPanel::Save(bool &changed)
 {
   if (border_color_changed) {
     Profile::SetAirspaceBorderColor(type, settings.border_color);

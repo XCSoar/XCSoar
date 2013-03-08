@@ -82,7 +82,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-CAI302UnitsEditor::Save(bool &_changed, bool &require_restart)
+CAI302UnitsEditor::Save(bool &_changed)
 {
   bool changed = false;
 

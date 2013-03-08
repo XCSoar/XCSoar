@@ -31,6 +31,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "SystemSettings.hpp"
 #include "Interface.hpp"
+#include "UtilsSettings.hpp"
 
 enum ControlIndex {
   DeviceModelType
@@ -55,7 +56,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -73,9 +74,9 @@ ExperimentalConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-ExperimentalConfigPanel::Save(bool &_changed, bool &_require_restart)
+ExperimentalConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
 #ifdef HAVE_MODEL_TYPE
   SystemSettings &system_settings = CommonInterface::SetSystemSettings();
@@ -88,7 +89,6 @@ ExperimentalConfigPanel::Save(bool &_changed, bool &_require_restart)
 #endif
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

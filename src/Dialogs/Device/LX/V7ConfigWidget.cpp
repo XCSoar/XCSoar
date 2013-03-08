@@ -91,7 +91,7 @@ V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-V7ConfigWidget::Save(bool &_changed, bool &require_restart)
+V7ConfigWidget::Save(bool &_changed)
 {
   PopupOperationEnvironment env;
   bool changed = false;

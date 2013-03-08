@@ -72,7 +72,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
@@ -145,7 +145,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
+MapDisplayConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 

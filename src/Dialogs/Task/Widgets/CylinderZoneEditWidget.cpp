@@ -48,7 +48,7 @@ CylinderZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-CylinderZoneEditWidget::Save(bool &_changed, bool &require_restart)
+CylinderZoneEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 

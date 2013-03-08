@@ -101,9 +101,9 @@ ButtonPanelWidget::Unprepare()
 }
 
 bool
-ButtonPanelWidget::Save(bool &changed, bool &require_restart)
+ButtonPanelWidget::Save(bool &changed)
 {
-  return widget->Save(changed, require_restart);
+  return widget->Save(changed);
 }
 
 bool

@@ -259,13 +259,13 @@ PagerWidget::Unprepare()
 }
 
 bool
-PagerWidget::Save(bool &changed, bool &require_restart)
+PagerWidget::Save(bool &changed)
 {
   assert(initialised);
   assert(prepared);
 
   for (auto &i : children)
-    if (i.prepared && !i.widget->Save(changed, require_restart))
+    if (i.prepared && !i.widget->Save(changed))
       return false;
 
   return true;

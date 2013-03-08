@@ -62,7 +62,7 @@ NullWidget::Unprepare()
 }
 
 bool
-NullWidget::Save(bool &changed, bool &require_restart)
+NullWidget::Save(bool &changed)
 {
   return true;
 }

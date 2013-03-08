@@ -47,7 +47,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -90,9 +90,9 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
+VarioConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   VarioSettings &settings = CommonInterface::SetUISettings().vario;
 
@@ -111,7 +111,6 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(AppAveNeedle, ProfileKeys::AppAveNeedle, settings.show_average_needle);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

@@ -81,7 +81,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 protected:
   void UpdateTerrainPreview();
@@ -253,11 +253,11 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
+TerrainDisplayConfigPanel::Save(bool &_changed)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  bool changed = false, require_restart = false;
+  bool changed = false;
   changed = (settings_map.terrain != terrain_settings);
 
   settings_map.terrain = terrain_settings;
@@ -271,7 +271,6 @@ TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings_map.topography_enabled);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

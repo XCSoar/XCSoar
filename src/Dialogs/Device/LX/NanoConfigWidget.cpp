@@ -128,7 +128,7 @@ NanoConfigWidget::SaveSetting(const char *name, unsigned idx,
 }
 
 bool
-NanoConfigWidget::Save(bool &_changed, bool &require_restart)
+NanoConfigWidget::Save(bool &_changed)
 {
   PopupOperationEnvironment env;
   bool changed = false;

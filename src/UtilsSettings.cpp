@@ -70,6 +70,7 @@ bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
+bool require_restart;
 
 static void
 SettingsEnter()
@@ -86,6 +87,7 @@ SettingsEnter()
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
+  require_restart = false;
 }
 
 static void

@@ -52,7 +52,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
@@ -107,9 +107,9 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
+TimeConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
@@ -125,7 +125,6 @@ TimeConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings_computer.set_system_time_from_gps);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

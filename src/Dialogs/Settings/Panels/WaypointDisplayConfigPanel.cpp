@@ -54,7 +54,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
@@ -200,9 +200,9 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
 }
 
 bool
-WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
+WaypointDisplayConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   WaypointRendererSettings &settings = CommonInterface::SetMapSettings().waypoint;
 
@@ -229,7 +229,6 @@ WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings.scale_runway_length);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

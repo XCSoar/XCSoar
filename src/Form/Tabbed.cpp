@@ -90,9 +90,9 @@ TabbedControl::ClickPage(unsigned i)
 }
 
 bool
-TabbedControl::Save(bool &changed, bool &require_restart)
+TabbedControl::Save(bool &changed)
 {
-  return pager.Save(changed, require_restart);
+  return pager.Save(changed);
 }
 
 void

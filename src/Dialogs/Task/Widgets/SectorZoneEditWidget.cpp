@@ -67,7 +67,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SectorZoneEditWidget::Save(bool &_changed, bool &require_restart)
+SectorZoneEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 

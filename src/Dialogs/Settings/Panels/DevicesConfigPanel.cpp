@@ -99,7 +99,7 @@ public:
 
   virtual void Initialise(ContainerWindow &parent,
                           const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* virtual methods from List::Handler */
@@ -116,9 +116,9 @@ private:
 bool
 DevicesConfigPanel::SaveDeviceConfig()
 {
-  bool changed = current_modified, require_restart = false;
+  bool changed = current_modified;
   DeviceEditWidget &widget = GetEditWidget();
-  if (!widget.Save(changed, require_restart))
+  if (!widget.Save(changed))
     return false;
 
   if (changed)
@@ -198,9 +198,9 @@ DevicesConfigPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
+DevicesConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   if (!SaveDeviceConfig())
     return false;
@@ -209,7 +209,6 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
     changed = true;
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }
@@ -217,8 +216,8 @@ DevicesConfigPanel::Save(bool &_changed, bool &_require_restart)
 void
 DevicesConfigPanel::OnModified(DeviceEditWidget &widget)
 {
-  bool changed = false, require_restart = false;
-  if (GetEditWidget().Save(changed, require_restart) && changed) {
+  bool changed = false;
+  if (GetEditWidget().Save(changed) && changed) {
     current_modified = true;
     GetList().Invalidate();
   }

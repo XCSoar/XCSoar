@@ -52,7 +52,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -161,9 +161,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 
 bool
-TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
+TaskRulesConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
@@ -200,7 +200,6 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
                            contest_settings.predict);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

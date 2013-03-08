@@ -105,8 +105,8 @@ public:
   void NextPage();
   void PreviousPage();
 
-  bool Save(bool &changed, bool &require_restart) {
-    return pager.Save(changed, require_restart);
+  bool Save(bool &changed) {
+    return pager.Save(changed);
   }
 
   const PixelRect &GetPagerPosition() const {

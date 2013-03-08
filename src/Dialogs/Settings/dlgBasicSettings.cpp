@@ -107,7 +107,7 @@ public:
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
   virtual void Show(const PixelRect &rc) override {
     RowFormWidget::Show(rc);
@@ -337,7 +337,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-FlightSetupPanel::Save(bool &changed, bool &require_restart)
+FlightSetupPanel::Save(bool &changed)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 

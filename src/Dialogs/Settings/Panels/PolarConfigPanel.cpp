@@ -76,7 +76,7 @@ public:
   void DataChanged();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 };
@@ -112,8 +112,8 @@ static bool
 SavePolarShape(SubForm &form, PolarShape &shape)
 {
   PolarShapeEditWidget &widget = GetShapeEditor(form);
-  bool changed = false, require_restart = false;
-  if (!widget.Save(changed, require_restart))
+  bool changed = false;
+  if (!widget.Save(changed))
     return false;
 
   shape = widget.GetPolarShape();
@@ -377,7 +377,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
+PolarConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 

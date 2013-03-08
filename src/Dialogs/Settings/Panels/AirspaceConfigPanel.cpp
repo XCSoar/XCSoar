@@ -35,6 +35,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "UtilsSettings.hpp"
 
 #ifdef HAVE_ALPHA_BLEND
 #include "Screen/GDI/AlphaBlend.hpp"
@@ -90,7 +91,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
 
@@ -241,7 +242,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 
 bool
-AirspaceConfigPanel::Save(bool &_changed, bool &require_restart)
+AirspaceConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 

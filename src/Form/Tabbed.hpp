@@ -118,7 +118,7 @@ public:
    *
    * @return true if all Widget::Save() were successful
    */
-  bool Save(bool &changed, bool &require_restart);
+  bool Save(bool &changed);
 
   /**
    * Calls Widget::Move() again on the current Widget.  This may be

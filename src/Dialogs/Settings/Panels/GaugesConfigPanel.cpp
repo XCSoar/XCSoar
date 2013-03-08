@@ -42,7 +42,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -77,9 +77,9 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
+GaugesConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
@@ -99,7 +99,6 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
                        ui_settings.map.final_glide_bar_mc0_enabled);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

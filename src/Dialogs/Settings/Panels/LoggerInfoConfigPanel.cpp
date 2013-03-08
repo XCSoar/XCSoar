@@ -44,7 +44,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -66,7 +66,7 @@ LoggerInfoConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LoggerInfoConfigPanel::Save(bool &changed, bool &require_restart)
+LoggerInfoConfigPanel::Save(bool &changed)
 {
   bool plane_settings_changed = false;
 

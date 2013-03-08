@@ -64,6 +64,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
+#include "UtilsSettings.hpp"
 
 #ifdef HAVE_PCM_PLAYER
 #include "Panels/AudioVarioConfigPanel.hpp"
@@ -288,13 +289,12 @@ Save()
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
   bool changed = false;
-  bool requirerestart = false;
-  tab_menu->Save(changed, requirerestart);
+  tab_menu->Save(changed);
 
   if (changed) {
     Profile::Save();
     LogDebug(_T("Configuration: Changes saved"));
-    if (requirerestart)
+    if (require_restart)
       ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
   }

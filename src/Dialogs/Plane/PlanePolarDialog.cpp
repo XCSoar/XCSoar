@@ -80,8 +80,8 @@ static void
 UpdateInvalidLabel()
 {
   PolarShapeEditWidget &widget = GetShapeEditor(*dialog);
-  bool changed = false, require_restart = false;
-  bool valid = widget.Save(changed, require_restart) &&
+  bool changed = false;
+  bool valid = widget.Save(changed) &&
     widget.GetPolarShape().IsValid();
   bool visible = !valid;
 
@@ -100,8 +100,8 @@ static void
 SavePolarShape(SubForm &form, PolarShape &shape)
 {
   PolarShapeEditWidget &widget = GetShapeEditor(form);
-  bool changed = false, require_restart = false;
-  widget.Save(changed, require_restart);
+  bool changed = false;
+  widget.Save(changed);
   shape = widget.GetPolarShape();
 }
 

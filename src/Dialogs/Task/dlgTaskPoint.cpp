@@ -188,8 +188,7 @@ static void
 ReadValues()
 {
   if (properties_widget != nullptr) {
-    bool require_restart;
-    properties_widget->Save(task_modified, require_restart);
+    properties_widget->Save(task_modified);
   }
 }
 
