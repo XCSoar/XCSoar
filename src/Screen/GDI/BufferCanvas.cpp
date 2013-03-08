@@ -77,6 +77,15 @@ BufferCanvas::Resize(PixelSize new_size)
   if (new_size == size)
     return;
 
+  /* create a tiny HBITMAP that will be used to deselect our old
+     HBITMAP while remembering the pixel format for us; we can't use
+     the "stock" HBITMAP here because it is monochrome, and the
+     CreateCompatibleBitmap() below would allocate a monochrome
+     HBITMAP */
+  HBITMAP tmp = ::CreateCompatibleBitmap(dc, 1, 1);
+  ::SelectObject(dc, tmp);
+
+  /* now we can safely deleted our old HBITMAP */
 #ifndef NDEBUG
   bool success =
 #endif
@@ -86,4 +95,11 @@ BufferCanvas::Resize(PixelSize new_size)
   Canvas::Resize(new_size);
   bitmap = ::CreateCompatibleBitmap(dc, new_size.cx, new_size.cy);
   ::SelectObject(dc, bitmap);
+
+  /* delete the temporary HBITMAP */
+#ifndef NDEBUG
+  success =
+#endif
+    ::DeleteObject(tmp);
+  assert(success);
 }
