@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-03 18:37+0100\n"
-"PO-Revision-Date: 2013-02-26 09:09+0000\n"
-"Last-Translator: Christophe Bougault <suspente@free.fr>\n"
+"PO-Revision-Date: 2013-03-07 21:12+0000\n"
+"Last-Translator: Tubuntu <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-27 07:52+0000\n"
-"X-Generator: Launchpad (build 16506)\n"
+"X-Launchpad-Export-Date: 2013-03-08 09:12+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4494,9 +4494,9 @@ msgid "Pages"
 msgstr "Pages"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "Boîtes d'informations"
+msgstr "Paramètres InfoBox"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -9229,15 +9229,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "InfoBox Modes"
-#~ msgstr "Modes InfoBoxes"
-
-#~ msgid "^"
-#~ msgstr "^"
-
-#~ msgid "v"
-#~ msgstr "v"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -9292,6 +9283,9 @@ msgstr ""
 
 #~ msgid "No further information"
 #~ msgstr "Pas d'autre information"
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "Modes InfoBoxes"
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9412,6 +9406,12 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"
+
+#~ msgid "^"
+#~ msgstr "^"
+
+#~ msgid "v"
+#~ msgstr "v"
 
 #~ msgid "Altitude AGL"
 #~ msgstr "Hauteur sol"
