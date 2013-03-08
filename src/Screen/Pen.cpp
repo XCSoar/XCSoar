@@ -80,7 +80,12 @@ Pen::Reset()
   assert(!IsDefined() || IsScreenInitialized());
 
   if (pen != NULL) {
-    ::DeleteObject(pen);
+#ifndef NDEBUG
+    bool success =
+#endif
+      ::DeleteObject(pen);
+    assert(success);
+
     pen = NULL;
   }
 }

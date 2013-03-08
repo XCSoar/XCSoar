@@ -170,7 +170,12 @@ Bitmap::Reset()
   if (bitmap != NULL) {
     assert(IsScreenInitialized());
 
-    DeleteObject(bitmap);
+#ifndef NDEBUG
+    bool success =
+#endif
+      ::DeleteObject(bitmap);
+    assert(success);
+
     bitmap = NULL;
   }
 }
