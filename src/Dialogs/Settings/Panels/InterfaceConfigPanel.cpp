@@ -226,7 +226,8 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings.display.enable_auto_blank);
 #endif
 
-  require_restart |= changed |= SaveValueFileReader(InputFile, ProfileKeys::InputFile);
+  if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
+    require_restart = changed = true;
 
 #ifndef HAVE_NATIVE_GETTEXT
   WndProperty *wp = (WndProperty *)&GetControl(LanguageFile);
@@ -271,7 +272,8 @@ InterfaceConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 #endif
 
-  require_restart |= changed |= SaveValueFileReader(StatusFile, ProfileKeys::StatusFile);
+  if (SaveValueFileReader(StatusFile, ProfileKeys::StatusFile))
+    require_restart = changed = true;
 
   unsigned menu_timeout = GetValueInteger(MenuTimeout) * 2;
   if (settings.menu_timeout != menu_timeout) {
