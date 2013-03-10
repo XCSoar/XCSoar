@@ -56,6 +56,7 @@ protected:
   gcc_pure
   bool IsPathClosed() const;
 
+  void AddTurn0Edges(const ScanTaskPoint origin);
   void AddTurn1Edges(const ScanTaskPoint origin);
   void AddTurn2Edges(const ScanTaskPoint origin);
   void AddFinishEdges(const ScanTaskPoint origin);
@@ -74,7 +75,6 @@ protected:
 
   /* virtual methods from ContestDijkstra */
   virtual void StartSearch() override;
-  virtual void AddStartEdges() override;
   virtual ContestResult CalculateResult(const ContestTraceVector &solution) const override;
 };
 

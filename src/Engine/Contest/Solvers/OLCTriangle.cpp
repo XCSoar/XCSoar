@@ -56,7 +56,7 @@ static constexpr fixed max_distance(5000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict)
-  :ContestDijkstra(_trace, false, 3, 1000),
+  :ContestDijkstra(_trace, false, 4, 1000),
    is_fai(_is_fai), predict(_predict),
    is_closed(false),
    is_complete(false),
@@ -82,8 +82,8 @@ CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = solution[index].GetLocation();
-  const GeoPoint &p_dest = solution[index < 2 ? index + 1 : 0].GetLocation();
+  const GeoPoint &p_start = solution[index + 1].GetLocation();
+  const GeoPoint &p_dest = solution[index < 2 ? index + 2 : 1].GetLocation();
 
   return p_start.Distance(p_dest);
 }
@@ -206,16 +206,20 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
   return Result(0, 0);
 }
 
-
 void
-OLCTriangle::AddStartEdges()
+OLCTriangle::AddTurn0Edges(const ScanTaskPoint origin)
 {
-  // use last point as single start,
-  // this is out of order but required
+  // add points up to finish
 
-  ScanTaskPoint destination(0, n_points - 1);
-  LinkStart(destination);
+  const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
+  const ScanTaskPoint end(origin.GetStageNumber() + 1, origin.GetPointIndex());
+
+  for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
+    // Edge cost is 0, because this edge just moves the first TP.
+    Link(i, origin, 0);
+  }
 }
+
 
 void
 OLCTriangle::AddTurn1Edges(const ScanTaskPoint origin)
@@ -243,9 +247,9 @@ OLCTriangle::AddTurn2Edges(const ScanTaskPoint origin)
   // give first leg points to penultimate node
   TriangleSecondLeg sl(is_fai, GetPoint(previous), GetPoint(origin));
 
-  const ScanTaskPoint begin(origin.GetStageNumber() + 1,
-                            origin.GetPointIndex() + 1);
-  const ScanTaskPoint end(origin.GetStageNumber() + 1, n_points - 1);
+  const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
+  const ScanTaskPoint end(origin.GetStageNumber() + 1,
+                          origin.GetPointIndex());
 
   for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
     TriangleSecondLeg::Result result = sl.Calculate(GetPoint(i), best_d);
@@ -272,9 +276,11 @@ OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
 
   if (predict) {
     // dummy just to close the triangle
+    is_closed = true;
     Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
   } else {
     const ScanTaskPoint start = FindStart(origin);
+    const ScanTaskPoint tp1 = FindStage(origin, 1);
     const TracePoint &start_point = GetPoint(start);
     const TracePoint &origin_point = GetPoint(origin);
 
@@ -288,8 +294,11 @@ OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
                             origin.GetPointIndex());
     for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex())
       if (CalcEdgeDistance(start, i) <= max_range &&
-          start_point.GetLocation().Distance(GetPoint(i).GetLocation()) < max_distance)
-        Link(i, origin, CalcEdgeDistance(origin, i));
+          start_point.GetLocation().Distance(GetPoint(i).GetLocation()) < max_distance) {
+        is_closed = true;
+        // use the cost of tp3 to tp1, omitting the start/end
+        Link(i, origin, GetStageWeight(origin.GetStageNumber()) * CalcEdgeDistance(origin, tp1));
+      }
   }
 }
 
@@ -300,14 +309,18 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 
   switch (origin.GetStageNumber()) {
   case 0:
-    AddTurn1Edges(origin);
+    AddTurn0Edges(origin);
     break;
 
   case 1:
-    AddTurn2Edges(origin);
+    AddTurn1Edges(origin);
     break;
 
   case 2:
+    AddTurn2Edges(origin);
+    break;
+
+  case 3:
     AddFinishEdges(origin);
     break;
 
@@ -323,7 +336,7 @@ OLCTriangle::CalculateResult(const ContestTraceVector &solution) const
   result.time = n_points > 0
     ? fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)))
     : fixed(0);
-  result.distance = is_complete
+  result.distance = (is_complete && is_closed)
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
     : fixed(0);
   result.score = ApplyHandicap(result.distance * fixed(0.001));
@@ -359,7 +372,7 @@ OLCTriangle::CopySolution(ContestTraceVector &result) const
   assert(num_stages <= MAX_STAGES);
 
   ContestDijkstra::CopySolution(result);
-  assert(result.size() == 4);
-  std::swap(result[0], result[3]);
-  std::swap(result[1], result[2]);
+  assert(result.size() == 5);
+
+  std::reverse(result.begin(), result.end());
 }
