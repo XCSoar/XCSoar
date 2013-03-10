@@ -41,13 +41,13 @@ protected:
 void
 MacCreadyOffsetButtons::OnOffset(fixed offset)
 {
-  ActionInterface::OffsetManualMacCready(offset);
+  ActionInterface::OffsetManualMacCready(Units::ToSysVSpeed(offset));
 }
 
 Widget *
 LoadMacCreadyEditPanel(unsigned id)
 {
-  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+  const fixed step = GetUserVerticalSpeedStep();
   return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook(),
                                     GetUserVerticalSpeedFormat(false, true),
                                     step, 5 * step);
