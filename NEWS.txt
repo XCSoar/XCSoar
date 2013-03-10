@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.5.1 - not yet released
+* data files
+  - use the terrain cache even when the system clock is wrong
 
 Version 6.5 - 2013/03/08
 * map
