@@ -29,7 +29,7 @@ Copyright_License {
 bool
 ContainerWindow::FocusFirstControl()
 {
-  HWND hControl = ::GetNextDlgTabItem(hWnd, hWnd, false);
+  HWND hControl = ::GetNextDlgTabItem(hWnd, nullptr, false);
   if (hControl == NULL)
     return false;
 
@@ -45,7 +45,7 @@ ContainerWindow::FocusNextControl()
     return false;
 
   if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
+    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
     if (hControl == hControl_first)
       return false;
   }
@@ -60,7 +60,7 @@ ContainerWindow::FocusPreviousControl()
   HWND hFocus = ::GetFocus();
 
   if (IsAltair()) { // detect and block wraparound 
-    HWND hControl_first = ::GetNextDlgTabItem(hWnd, hWnd, false);
+    HWND hControl_first = ::GetNextDlgTabItem(hWnd, nullptr, false);
     if (hFocus == hControl_first) 
       return false;
   }

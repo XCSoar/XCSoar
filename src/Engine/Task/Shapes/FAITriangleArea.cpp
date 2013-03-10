@@ -294,6 +294,8 @@ GenerateFAITriangleLargeLeft1(GeoPoint *dest,
 
   const fixed total_start = std::min(dist_max, max_total_for_a);
   const fixed total_end = LARGE_THRESHOLD;
+  if (total_start <= total_end)
+    return dest;
 
   const fixed delta_distance = (total_start - total_end) / STEPS;
   fixed total_distance = total_start;

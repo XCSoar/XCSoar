@@ -66,7 +66,12 @@ Brush::Reset()
   hollow = true;
   #else
   if (brush != NULL) {
-    ::DeleteObject(brush);
+#ifndef NDEBUG
+    bool success =
+#endif
+      ::DeleteObject(brush);
+    assert(success);
+
     brush = NULL;
   }
   #endif

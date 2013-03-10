@@ -82,7 +82,11 @@ RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
 RawBitmap::~RawBitmap()
 {
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-  ::DeleteObject(bitmap);
+#ifndef NDEBUG
+  bool success =
+#endif
+    ::DeleteObject(bitmap);
+  assert(success);
 #else
   delete[] buffer;
 #endif

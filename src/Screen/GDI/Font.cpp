@@ -132,7 +132,12 @@ Font::Destroy()
   if (font != NULL) {
     assert(IsScreenInitialized());
 
-    ::DeleteObject(font);
+#ifndef NDEBUG
+    bool success =
+#endif
+      ::DeleteObject(font);
+    assert(success);
+
     font = NULL;
   }
 }

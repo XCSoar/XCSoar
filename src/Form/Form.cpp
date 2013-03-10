@@ -380,7 +380,7 @@ WndForm::ShowModal()
   if (default_focus)
     default_focus->SetFocus();
   else
-    FocusFirstControl();
+    client_area.FocusFirstControl();
 
   bool hastimed = false;
 
