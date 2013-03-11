@@ -61,11 +61,7 @@ Replay::Start(const TCHAR *_path)
 
   /* make sure the old AbstractReplay instance has cleaned up before
      creating a new one */
-  delete replay;
-  replay = NULL;
-
-  delete cli;
-  cli = nullptr;
+  Stop();
 
   _tcscpy(path, _path);
 
