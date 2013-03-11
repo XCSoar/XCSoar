@@ -66,12 +66,15 @@ public:
   void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual int GetAsInteger() const;
-  fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
   void Set(fixed _value) {
     mValue = _value;
+  }
+
+  fixed GetAsFixed() const {
+    return mValue;
   }
 
   fixed SetMin(fixed Value);

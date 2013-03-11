@@ -36,12 +36,6 @@ DataFieldFloat::GetAsInteger() const
   return iround(mValue);
 }
 
-fixed
-DataFieldFloat::GetAsFixed() const
-{
-  return mValue;
-}
-
 const TCHAR *
 DataFieldFloat::GetAsString() const
 {
