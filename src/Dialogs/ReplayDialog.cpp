@@ -37,6 +37,7 @@ Copyright_License {
 enum Buttons {
   START,
   STOP,
+  FAST_FORWARD,
 };
 
 class ReplayControlWidget final
@@ -53,11 +54,13 @@ public:
   void CreateButtons(WidgetDialog &dialog) {
     dialog.AddButton(_("Start"), *this, START);
     dialog.AddButton(_("Stop"), *this, STOP);
+    dialog.AddButton(_T("+10'"), *this, FAST_FORWARD);
   }
 
 private:
   void OnStopClicked();
   void OnStartClicked();
+  void OnFastForwardClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -120,7 +123,17 @@ ReplayControlWidget::OnAction(int id)
   case STOP:
     OnStopClicked();
     break;
+
+  case FAST_FORWARD:
+    OnFastForwardClicked();
+    break;
   }
+}
+
+inline void
+ReplayControlWidget::OnFastForwardClicked()
+{
+  replay->FastForward(fixed(10 * 60));
 }
 
 void

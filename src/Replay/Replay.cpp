@@ -96,6 +96,7 @@ Replay::Start(const TCHAR *_path)
     logger->ClearBuffer();
 
   virtual_time = fixed(-1);
+  fast_forward = fixed(-1);
   next_data.Reset();
 
   Timer::Schedule(100);
@@ -115,14 +116,23 @@ Replay::Update()
   if (!negative(virtual_time)) {
     /* update the virtual time */
     assert(clock.IsDefined());
-    virtual_time += clock.ElapsedUpdate() * time_scale / 1000;
+
+    if (negative(fast_forward)) {
+      virtual_time += clock.ElapsedUpdate() * time_scale / 1000;
+    } else {
+      clock.Update();
+
+      virtual_time += fixed(1);
+      if (virtual_time >= fast_forward)
+        fast_forward = fixed(-1);
+    }
   } else {
     /* if we ever received a valid time from the AbstractReplay, then
        virtual_time must be initialised */
     assert(!next_data.time_available);
   }
 
-  if (cli == nullptr) {
+  if (cli == nullptr || !negative(fast_forward)) {
     if (next_data.time_available && virtual_time < next_data.time)
       /* still not time to use next_data */
       return true;
@@ -209,6 +219,8 @@ Replay::OnTimer()
   unsigned schedule;
   if (!positive(time_scale))
     schedule = 1000;
+  else if (!negative(fast_forward))
+    schedule = 100;
   else if (negative(virtual_time) || !next_data.time_available)
     schedule = 500;
   else if (cli != nullptr)

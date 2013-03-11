@@ -56,6 +56,12 @@ class Replay final
   fixed virtual_time;
 
   /**
+   * If this value is not negative, then we're in fast-forward mode:
+   * replay is going as quickly as possible
+   */
+  fixed fast_forward;
+
+  /**
    * Keeps track of the wall-clock time between two Update() calls.
    */
   PeriodClock clock;
@@ -100,6 +106,16 @@ public:
 
   void SetTimeScale(const fixed _time_scale) {
     time_scale = _time_scale;
+  }
+
+  /**
+   * Start fast-forwarding the replay by the specified number of
+   * seconds.  This replays the given amount of time from the input
+   * time as quickly as possible.
+   */
+  void FastForward(fixed delta_s) {
+    if (IsActive() && !negative(virtual_time))
+      fast_forward = virtual_time + delta_s;
   }
 
 private:
