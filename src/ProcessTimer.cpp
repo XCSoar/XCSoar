@@ -255,15 +255,14 @@ ProcessTimer()
     ConnectionProcessTimer();
   } else {
     static PeriodClock m_clock;
-    if (m_clock.Elapsed() < 0)
-      m_clock.Update();
 
     if (replay && replay->Update()) {
       m_clock.Update();
     } else if (m_clock.Elapsed() >= 1000) {
       m_clock.Update();
       device_blackboard->ProcessSimulation();
-    }
+    } else if (!m_clock.IsDefined())
+      m_clock.Update();
   }
 
 #ifdef HAVE_TRACKING
