@@ -4,6 +4,14 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.6 - not yet released
 
+Version 6.5.1 - not yet released
+* infoboxes
+  - fix MacCready adjustment for non-metric units (#2654)
+* user interface
+  - fix bogus "restart XCSoar" messages
+* data files
+  - use the terrain cache even when the system clock is wrong
+
 Version 6.5 - 2013/03/08
 * map
   - lower zoom levels possible while circling (#1120)

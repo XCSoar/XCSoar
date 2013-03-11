@@ -30,6 +30,7 @@ Copyright_License {
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -41,6 +42,34 @@ Copyright_License {
 
 static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
 
+#ifndef HAVE_POSIX
+
+constexpr
+static uint64_t
+FileTimeToInteger(FILETIME ft)
+{
+  return ft.dwLowDateTime | ((uint64_t)ft.dwHighDateTime << 32);
+}
+
+#endif
+
+gcc_pure
+static uint64_t
+Now()
+{
+#ifdef HAVE_POSIX
+  return time(NULL);
+#else
+  SYSTEMTIME system_time;
+  GetSystemTime(&system_time);
+
+  FILETIME system_time2;
+  SystemTimeToFileTime(&system_time, &system_time2);
+
+  return FileTimeToInteger(system_time2);
+#endif
+}
+
 struct FileInfo {
   uint64_t mtime;
   uint64_t size;
@@ -51,6 +80,14 @@ struct FileInfo {
 
   bool operator!=(const FileInfo &other) const {
     return !(*this == other);
+  }
+
+  /**
+   * Is this date in the future?
+   */
+  gcc_pure
+  bool IsFuture() const {
+    return mtime > Now();
   }
 };
 
@@ -78,8 +115,7 @@ GetRegularFileInfo(const TCHAR *path, FileInfo &info)
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return false;
 
-  info.mtime = data.ftLastWriteTime.dwLowDateTime |
-    ((uint64_t)data.ftLastWriteTime.dwHighDateTime << 32);
+  info.mtime = FileTimeToInteger(data.ftLastWriteTime);
   info.size = data.nFileSizeLow |
     ((uint64_t)data.nFileSizeHigh << 32);
   return true;
@@ -128,16 +164,15 @@ FileCache::Load(const TCHAR *name, const TCHAR *original_path)
   FileInfo cached_info;
   if (!GetRegularFileInfo(path, cached_info))
     return NULL;
-#ifndef _WIN32_WCE
-  /*
-   * WinCE devices often have wrongly-set system clocks.
-   * This allows generated cache files to predate terrain files.
-   */
-  if (original_info.mtime > cached_info.mtime) {
+
+  /* if the original file is newer than the cache, discard the cache -
+     unless the system clock is skewed (origina file's modification
+     time is in the future) */
+  if (original_info.mtime > cached_info.mtime && !original_info.IsFuture()) {
     File::Delete(path);
     return NULL;
   }
-#endif
+
   FILE *file = _tfopen(path, _T("rb"));
   if (file == NULL)
     return NULL;

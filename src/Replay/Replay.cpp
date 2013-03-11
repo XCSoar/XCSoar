@@ -97,10 +97,13 @@ Replay::Update()
     NMEAInfo &data = device_blackboard->SetReplayState();
     const Validity old_alive = data.alive;
 
-    replay->Update(data, time_scale);
+    if (!replay->Update(data, time_scale))
+      return false;
 
     if (data.alive.Modified(old_alive))
       device_blackboard->ScheduleMerge();
+
+    return true;
   }
 
   return false;

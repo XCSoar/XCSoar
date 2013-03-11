@@ -241,14 +241,17 @@ LayoutConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(DialogStyle, ProfileKeys::AppDialogStyle,
                            ui_settings.dialog.dialog_style);
 
-  changed |= require_restart |=
-    SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder, ui_settings.info_boxes.border_style);
+  if (SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
+                    ui_settings.info_boxes.border_style))
+    require_restart = changed = true;
 
-  changed |= require_restart |=
-    SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox, ui_settings.info_boxes.inverse);
+  if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
+                ui_settings.info_boxes.inverse))
+    require_restart = changed = true;
 
-  changed |= require_restart |=
-    SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors, ui_settings.info_boxes.use_colors);
+  if (SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
+                ui_settings.info_boxes.use_colors))
+    require_restart = changed = true;
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);

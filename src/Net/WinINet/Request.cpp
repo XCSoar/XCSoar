@@ -44,12 +44,12 @@ RequestCallback(HINTERNET hInternet,
 Net::Request::Request(Session &session, const char *url,
                       unsigned timeout_ms)
 {
-  INTERNET_STATUS_CALLBACK old_callback =
-    session.handle.SetStatusCallback(RequestCallback);
-
   UTF8ToWideConverter url2(url);
   if (!url2.IsValid())
     return;
+
+  INTERNET_STATUS_CALLBACK old_callback =
+    session.handle.SetStatusCallback(RequestCallback);
 
   HINTERNET h = session.handle.OpenUrl(url2, NULL, 0,
                                        INTERNET_FLAG_NO_AUTH |
