@@ -45,20 +45,8 @@ DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
 }
 
 bool
-DemoReplayGlue::UpdateTime()
+DemoReplayGlue::Update(NMEAInfo &data)
 {
-  if (!clock.Check(1000))
-    return false;
-  clock.Update();
-  return true;
-}
-
-bool
-DemoReplayGlue::Update(NMEAInfo &data, fixed time_scale)
-{
-  if (!UpdateTime())
-    return true;
-
   fixed floor_alt = fixed_300;
   if (device_blackboard->Calculated().terrain_valid) {
     floor_alt += device_blackboard->Calculated().terrain_altitude;
@@ -69,7 +57,7 @@ DemoReplayGlue::Update(NMEAInfo &data, fixed time_scale)
   {
     ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
     TaskAccessor ta(protected_task_manager, floor_alt);
-    retval = DemoReplay::Update(time_scale, ta);
+    retval = DemoReplay::Update(fixed(1), ta);
   }
 
   const AircraftState &s = aircraft.GetState();

@@ -45,15 +45,13 @@ public:
   NmeaReplay(NLineReader *reader, const DeviceConfig &config);
   ~NmeaReplay();
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
+  virtual bool Update(NMEAInfo &data) override;
 
 protected:
   bool ParseLine(const char *line, NMEAInfo &data);
 
-  virtual bool UpdateTime();
-
 private:
-  bool ReadUntilRMC(NMEAInfo &data, bool ignore);
+  bool ReadUntilRMC(NMEAInfo &data);
 };
 
 #endif

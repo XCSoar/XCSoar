@@ -33,7 +33,7 @@ class AbstractReplay
 public:
   virtual ~AbstractReplay() {}
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) = 0;
+  virtual bool Update(NMEAInfo &data) = 0;
 };
 
 #endif

@@ -25,6 +25,8 @@ Copyright_License {
 #define REPLAY_HPP
 
 #include "Math/fixed.hpp"
+#include "NMEA/Info.hpp"
+#include "Time/PeriodClock.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -32,6 +34,7 @@ Copyright_License {
 class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
+class CatmullRomInterpolator;
 
 class Replay
 {
@@ -44,10 +47,29 @@ class Replay
 
   TCHAR path[MAX_PATH];
 
+  /**
+   * The time of day according to replay input.  This is negative if
+   * unknown.
+   */
+  fixed virtual_time;
+
+  /**
+   * Keeps track of the wall-clock time between two Update() calls.
+   */
+  PeriodClock clock;
+
+  /**
+   * The last NMEAInfo returned by the #AbstractReplay instance.  It
+   * is held back until #virtual_time has passed #next_data.time.
+   */
+  NMEAInfo next_data;
+
+  CatmullRomInterpolator *cli;
+
 public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
     :time_scale(fixed(1)), replay(nullptr),
-     logger(_logger), task_manager(_task_manager) {
+     logger(_logger), task_manager(_task_manager), cli(nullptr) {
     path[0] = _T('\0');
   }
 

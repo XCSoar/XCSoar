@@ -26,23 +26,18 @@ Copyright_License {
 
 #include "AbstractReplay.hpp"
 #include "Replay/DemoReplay.hpp"
-#include "Time/PeriodClock.hpp"
 
 class ProtectedTaskManager;
 
 class DemoReplayGlue
   : public AbstractReplay, private DemoReplay
 {
-  PeriodClock clock;
   ProtectedTaskManager* task_manager;
 
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager);
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
-
-protected:
-  bool UpdateTime();
+  virtual bool Update(NMEAInfo &data) override;
 };
 
 #endif

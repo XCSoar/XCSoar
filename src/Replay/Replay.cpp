@@ -22,8 +22,8 @@
 */
 
 #include "Replay.hpp"
-#include "IgcReplayGlue.hpp"
-#include "NmeaReplayGlue.hpp"
+#include "IgcReplay.hpp"
+#include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
 #include "Util/StringUtil.hpp"
 #include "OS/PathName.hpp"
@@ -32,6 +32,7 @@
 #include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
+#include "CatmullRomInterpolator.hpp"
 
 #include <assert.h>
 
@@ -43,6 +44,9 @@ Replay::Stop()
 
   delete replay;
   replay = NULL;
+
+  delete cli;
+  cli = nullptr;
 
   device_blackboard->StopReplay();
 
@@ -60,6 +64,9 @@ Replay::Start(const TCHAR *_path)
   delete replay;
   replay = NULL;
 
+  delete cli;
+  cli = nullptr;
+
   _tcscpy(path, _path);
 
   if (StringIsEmpty(path)) {
@@ -71,7 +78,10 @@ Replay::Start(const TCHAR *_path)
       return false;
     }
 
-    replay = new IgcReplayGlue(reader);
+    replay = new IgcReplay(reader);
+
+    cli = new CatmullRomInterpolator(fixed(0.98));
+    cli->Reset();
   } else {
     auto reader = new FileLineReaderA(path);
     if (reader->error()) {
@@ -79,11 +89,15 @@ Replay::Start(const TCHAR *_path)
       return false;
     }
 
-    replay = new NmeaReplayGlue(reader);
+    replay = new NmeaReplay(reader,
+                            CommonInterface::GetSystemSettings().devices[0]);
   }
 
   if (logger != NULL)
     logger->ClearBuffer();
+
+  virtual_time = fixed(-1);
+  next_data.Reset();
 
   return true;
 }
@@ -97,16 +111,86 @@ Replay::Update()
   if (!positive(time_scale))
     return true;
 
-  ScopeLock protect(device_blackboard->mutex);
+  if (!negative(virtual_time)) {
+    /* update the virtual time */
+    assert(clock.IsDefined());
+    virtual_time += clock.ElapsedUpdate() * time_scale / 1000;
+  } else {
+    /* if we ever received a valid time from the AbstractReplay, then
+       virtual_time must be initialised */
+    assert(!next_data.time_available);
+  }
 
-  NMEAInfo &data = device_blackboard->SetReplayState();
-  const Validity old_alive = data.alive;
+  if (cli == nullptr) {
+    if (next_data.time_available && virtual_time < next_data.time)
+      /* still not time to use next_data */
+      return true;
 
-  if (!replay->Update(data, time_scale))
-    return false;
+    {
+      ScopeLock protect(device_blackboard->mutex);
+      device_blackboard->SetReplayState() = next_data;
+      device_blackboard->ScheduleMerge();
+    }
 
-  if (data.alive.Modified(old_alive))
-    device_blackboard->ScheduleMerge();
+    while (true) {
+      if (!replay->Update(next_data))
+        return false;
+
+      assert(!next_data.gps.real);
+
+      if (next_data.time_available) {
+        if (negative(virtual_time)) {
+          virtual_time = next_data.time;
+          clock.Update();
+          break;
+        }
+
+        if (next_data.time >= virtual_time)
+          break;
+      }
+    }
+  } else {
+    while (cli->NeedData(virtual_time)) {
+      if (!replay->Update(next_data))
+        return false;
+
+      assert(!next_data.gps.real);
+
+      if (next_data.time_available)
+        cli->Update(next_data.time, next_data.location,
+                    next_data.gps_altitude,
+                    next_data.pressure_altitude);
+    }
+
+    if (negative(virtual_time)) {
+      virtual_time = cli->GetMaxTime();
+      clock.Update();
+    }
+
+    const CatmullRomInterpolator::Record r = cli->Interpolate(virtual_time);
+    const GeoVector v = cli->GetVector(virtual_time);
+
+    NMEAInfo data = next_data;
+    data.clock = virtual_time;
+    data.alive.Update(data.clock);
+    data.ProvideTime(virtual_time);
+    data.location = r.location;
+    data.location_available.Update(data.clock);
+    data.ground_speed = v.distance;
+    data.ground_speed_available.Update(data.clock);
+    data.track = v.bearing;
+    data.track_available.Update(data.clock);
+    data.gps_altitude = r.gps_altitude;
+    data.gps_altitude_available.Update(data.clock);
+    data.ProvidePressureAltitude(r.baro_altitude);
+    data.ProvideBaroAltitudeTrue(r.baro_altitude);
+
+    {
+      ScopeLock protect(device_blackboard->mutex);
+      device_blackboard->SetReplayState() = data;
+      device_blackboard->ScheduleMerge();
+    }
+  }
 
   return true;
 }

@@ -119,7 +119,7 @@ test_replay()
   NMEAInfo basic;
   basic.Reset();
 
-  while (sim.Update(basic, fixed(1)) && !sim.started) {
+  while (sim.Update(basic) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -137,7 +137,7 @@ test_replay()
   FlyingState flying_state;
   flying_state.Reset();
 
-  while (sim.Update(basic, fixed(1))) {
+  while (sim.Update(basic)) {
     if (sim.state.time>time_last) {
 
       n_samples++;
