@@ -665,7 +665,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
 	RunMD5 \
-	ReadGRecord VerifyGRecord AppendGRecord \
+	ReadGRecord VerifyGRecord AppendGRecord FixGRecord \
 	AddChecksum \
 	KeyCodeDumper \
 	LoadTopography LoadTerrain \
@@ -993,6 +993,13 @@ APPEND_GRECORD_SOURCES = \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
+
+FIX_GRECORD_SOURCES = \
+	$(SRC)/Logger/GRecord.cpp \
+	$(SRC)/Logger/MD5.cpp \
+	$(TEST_SRC_DIR)/FixGRecord.cpp
+FIX_GRECORD_DEPENDS = IO OS UTIL
+$(eval $(call link-program,FixGRecord,FIX_GRECORD))
 
 ADD_CHECKSUM_SOURCES = \
 	$(TEST_SRC_DIR)/AddChecksum.cpp
