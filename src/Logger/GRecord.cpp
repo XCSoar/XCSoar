@@ -40,10 +40,8 @@ GRecord::Initialize()
 }
 
 bool
-GRecord::AppendRecordToBuffer(const char *record)
+GRecord::AppendRecordToBuffer(const char *in)
 {
-  const unsigned char *in = (const unsigned char *)record;
-
   if (!IncludeRecordInGCalc(in))
     return false;
 
@@ -52,7 +50,7 @@ GRecord::AppendRecordToBuffer(const char *record)
 }
 
 void
-GRecord::AppendStringToBuffer(const unsigned char *in)
+GRecord::AppendStringToBuffer(const char *in)
 {
   for (int i = 0; i < 4; i++)
     // skip whitespace flag=1
@@ -107,7 +105,7 @@ GRecord::Initialize(int key_id)
 }
 
 bool
-GRecord::IncludeRecordInGCalc(const unsigned char *in)
+GRecord::IncludeRecordInGCalc(const char *in)
 {
   bool valid = false;
 

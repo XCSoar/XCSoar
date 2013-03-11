@@ -73,12 +73,12 @@ public:
 
 private:
   void Initialize(int iKey);
-  void AppendStringToBuffer(const unsigned char *szIn);
+  void AppendStringToBuffer(const char *szIn);
   /**
    * returns false if record is not to be included in
    * G record calc (see IGC specs)
    */
-  bool IncludeRecordInGCalc(const unsigned char *szIn);
+  bool IncludeRecordInGCalc(const char *szIn);
 };
 #endif
 

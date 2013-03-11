@@ -146,10 +146,10 @@ MD5::Append(const void *data, size_t length)
 }
 
 void
-MD5::AppendString(const unsigned char *in, bool skip_invalid_igc_chars)
+MD5::AppendString(const char *in, bool skip_invalid_igc_chars)
 {
   for (; *in != 0; ++in) {
-    if (skip_invalid_igc_chars && !IsValidIGCChar(char(*in)))
+    if (skip_invalid_igc_chars && !IsValidIGCChar(*in))
       continue;
 
     Append(*in);

@@ -51,7 +51,7 @@ public:
 
   void Append(uint8_t ch);
   void Append(const void *data, size_t length);
-  void AppendString(const unsigned char *in, bool skip_invalid_igc_chars); // must be NULL-terminated string!
+  void AppendString(const char *in, bool skip_invalid_igc_chars); // must be NULL-terminated string!
 
   void Finalize();
 
