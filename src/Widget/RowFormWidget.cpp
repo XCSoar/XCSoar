@@ -456,9 +456,11 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
     filters += length + 1;
   }
 
-  TCHAR path[MAX_PATH];
-  if (Profile::GetPath(registry_key, path))
-    df->Lookup(path);
+  if (registry_key != nullptr) {
+    TCHAR path[MAX_PATH];
+    if (Profile::GetPath(registry_key, path))
+      df->Lookup(path);
+  }
 
   edit->RefreshDisplay();
 
