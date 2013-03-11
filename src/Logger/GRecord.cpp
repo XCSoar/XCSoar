@@ -34,6 +34,8 @@
 void
 GRecord::Initialize()
 {
+  ignore_comma = true;
+
   // key #1 used w/ Vali 1.0.0
   // key #2 used w/ Vali 1.0.2
   // OLC uses key #2 since 9/1/2008
@@ -46,15 +48,27 @@ GRecord::AppendRecordToBuffer(const char *in)
   if (!IncludeRecordInGCalc(in))
     return false;
 
+  if (memcmp(in, "HFFTYFRTYPE:XCSOAR,XCSOAR ", 26) == 0 &&
+      strstr(in + 25, " 6.5 ") != NULL)
+    /* this is XCSoar 6.5: enable the G record workaround */
+    ignore_comma = false;
+
   AppendStringToBuffer(in);
   return true;
 }
 
+/**
+ * @param ignore_comma if true, then the comma is ignored, even though
+ * it's a valid IGC character
+ */
 static void
-AppendIGCString(MD5 &md5, const char *s)
+AppendIGCString(MD5 &md5, const char *s, bool ignore_comma)
 {
   while (*s != '\0') {
     const char ch = *s++;
+    if (ignore_comma && ch == ',')
+      continue;
+
     if (IsValidIGCChar(ch))
       md5.Append(ch);
   }
@@ -64,7 +78,7 @@ void
 GRecord::AppendStringToBuffer(const char *in)
 {
   for (int i = 0; i < 4; i++)
-    AppendIGCString(md5[i], in);
+    AppendIGCString(md5[i], in, ignore_comma);
 }
 
 void

@@ -9,6 +9,7 @@ Version 6.5.1 - not yet released
   - fix bogus "restart XCSoar" messages
 * data files
   - use the terrain cache even when the system clock is wrong
+  - fix G record regression (#2657)
 
 Version 6.5 - 2013/03/08
 * map
