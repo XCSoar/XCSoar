@@ -52,6 +52,20 @@ protected:
     return MonotonicClockMS();
   }
 
+  constexpr int Elapsed(Stamp now) const {
+    return last == 0
+      ? -1
+      : now - last;
+  }
+
+  constexpr bool Check(Stamp now, unsigned duration) const {
+    return now >= last + duration;
+  }
+
+  void Update(Stamp now) {
+    last = now;
+  }
+
 public:
   bool IsDefined() const {
     return last != 0;
@@ -69,10 +83,7 @@ public:
    * update().  Returns -1 if update() was never called.
    */
   int Elapsed() const {
-    if (last == 0)
-      return -1;
-
-    return GetNow() - last;
+    return Elapsed(GetNow());
   }
 
   /**
@@ -82,14 +93,14 @@ public:
    * @param duration the duration in milliseconds
    */
   bool Check(unsigned duration) const {
-    return GetNow() >= last + duration;
+    return Check(GetNow(), duration);
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
   void Update() {
-    last = GetNow();
+    Update(GetNow());
   }
 
   /**
@@ -97,8 +108,7 @@ public:
    * specified offset.
    */
   void UpdateWithOffset(int offset) {
-    Update();
-    last += offset;
+    Update(GetNow() + offset);
   }
 
   /**
@@ -109,8 +119,8 @@ public:
    */
   bool CheckUpdate(unsigned duration) {
     Stamp now = GetNow();
-    if (now >= last + duration) {
-      last = now;
+    if (Check(now, duration)) {
+      Update(now);
       return true;
     } else
       return false;
@@ -124,8 +134,8 @@ public:
    */
   bool CheckAlwaysUpdate(unsigned duration) {
     Stamp now = GetNow();
-    bool ret = now > last + duration;
-    last = now;
+    bool ret = Check(now, duration);
+    Update(now);
     return ret;
   }
 };
