@@ -91,20 +91,19 @@ Replay::Start(const TCHAR *_path)
 bool
 Replay::Update()
 {
-  if (replay != NULL) {
-    ScopeLock protect(device_blackboard->mutex);
+  if (replay == nullptr)
+    return false;
 
-    NMEAInfo &data = device_blackboard->SetReplayState();
-    const Validity old_alive = data.alive;
+  ScopeLock protect(device_blackboard->mutex);
 
-    if (!replay->Update(data, time_scale))
-      return false;
+  NMEAInfo &data = device_blackboard->SetReplayState();
+  const Validity old_alive = data.alive;
 
-    if (data.alive.Modified(old_alive))
-      device_blackboard->ScheduleMerge();
+  if (!replay->Update(data, time_scale))
+    return false;
 
-    return true;
-  }
+  if (data.alive.Modified(old_alive))
+    device_blackboard->ScheduleMerge();
 
-  return false;
+  return true;
 }
