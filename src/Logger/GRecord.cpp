@@ -22,6 +22,7 @@
 
 #include "Logger/GRecord.hpp"
 #include "Logger/MD5.hpp"
+#include "IGC/IGCString.hpp"
 #include "IO/FileSource.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
@@ -49,12 +50,21 @@ GRecord::AppendRecordToBuffer(const char *in)
   return true;
 }
 
+static void
+AppendIGCString(MD5 &md5, const char *s)
+{
+  while (*s != '\0') {
+    const char ch = *s++;
+    if (IsValidIGCChar(ch))
+      md5.Append(ch);
+  }
+}
+
 void
 GRecord::AppendStringToBuffer(const char *in)
 {
   for (int i = 0; i < 4; i++)
-    // skip whitespace flag=1
-    md5[i].AppendString(in, true);
+    AppendIGCString(md5[i], in);
 }
 
 void

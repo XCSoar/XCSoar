@@ -21,7 +21,6 @@
  */
 
 #include "Logger/MD5.hpp"
-#include "IGC/IGCString.hpp"
 #include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
@@ -143,17 +142,6 @@ MD5::Append(const void *data, size_t length)
 
   while (i != end)
     Append(*i++);
-}
-
-void
-MD5::AppendString(const char *in, bool skip_invalid_igc_chars)
-{
-  for (; *in != 0; ++in) {
-    if (skip_invalid_igc_chars && !IsValidIGCChar(*in))
-      continue;
-
-    Append(*in);
-  }
 }
 
 void
