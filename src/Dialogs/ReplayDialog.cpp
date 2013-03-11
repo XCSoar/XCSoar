@@ -22,83 +22,120 @@ Copyright_License {
 */
 
 #include "ReplayDialog.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
-#include "Units/Units.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "Form/DataField/FileReader.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Language/Language.hpp"
 
-static WndForm *wf = NULL;
+enum Buttons {
+  START,
+  STOP,
+};
 
-static void
-OnStopClicked()
+class ReplayControlWidget final
+  : public RowFormWidget, public ActionListener, DataFieldListener {
+  enum Controls {
+    FILE,
+    RATE,
+  };
+
+public:
+  ReplayControlWidget(const DialogLook &look)
+    :RowFormWidget(look) {}
+
+private:
+  void OnStopClicked();
+  void OnStartClicked();
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+};
+
+void
+ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  auto *file =
+    AddFileReader(_("File"),
+                  _("Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo."),
+                  nullptr,
+                  _T("*.nmea\0*.igc\0"),
+                  true);
+  ((DataFieldFileReader *)file->GetDataField())->Lookup(replay->GetFilename());
+  file->RefreshDisplay();
+
+  AddFloat(_("Rate"),
+           _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
+           _("%.0f x"), _T("%.0f"),
+           fixed(0), fixed(10), fixed(1), false,
+           replay->GetTimeScale(),
+           this);
+}
+
+inline void
+ReplayControlWidget::OnStopClicked()
 {
   replay->Stop();
 }
 
-static void
-OnStartClicked()
+inline void
+ReplayControlWidget::OnStartClicked()
 {
-  const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
+  const DataFieldFileReader &df = (const DataFieldFileReader &)
+    GetDataField(FILE);
+  const TCHAR *path = df.GetPathFile();
   if (!replay->Start(path))
     ShowMessageBox(_("Could not open IGC file!"),
                    _("Replay"), MB_OK | MB_ICONINFORMATION);
 }
 
-static void
-OnRateData(DataField *Sender, DataField::DataAccessMode Mode)
+void
+ReplayControlWidget::OnAction(int id)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
-
-  switch (Mode) {
-  case DataField::daChange:
-    replay->SetTimeScale(df.GetAsFixed());
+  switch (id) {
+  case START:
+    OnStartClicked();
     break;
 
-  case DataField::daSpecial:
-    return;
+  case STOP:
+    OnStopClicked();
+    break;
   }
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnStopClicked),
-  DeclareCallBackEntry(OnStartClicked),
-  DeclareCallBackEntry(OnRateData),
-  DeclareCallBackEntry(NULL)
-};
+void
+ReplayControlWidget::OnModified(DataField &_df)
+{
+  const DataFieldFloat &df = (const DataFieldFloat &)_df;
+
+  replay->SetTimeScale(df.GetAsFixed());
+}
 
 void
 ShowReplayDialog()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_LOGGERREPLAY"));
-  if (!wf)
-    return;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  ReplayControlWidget *widget = new ReplayControlWidget(look);
+  WidgetDialog dialog(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Replay"), widget);
+  dialog.AddButton(_("Start"), *widget, START);
+  dialog.AddButton(_("Stop"), *widget, STOP);
+  dialog.AddButton(_("Close"), mrOK);
 
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectoryTop(_T("*.nmea"));
-    dfe->ScanDirectoryTop(_T("*.igc"));
-    dfe->Lookup(replay->GetFilename());
-    wp->RefreshDisplay();
-  }
-
-  LoadFormProperty(*wf, _T("prpRate"), replay->GetTimeScale());
-
-  wf->ShowModal();
-
-  delete wf;
+  dialog.ShowModal();
 }
