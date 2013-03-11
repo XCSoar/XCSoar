@@ -87,6 +87,16 @@ public:
   }
 
   /**
+   * Combines a call to Elapsed() and Update().
+   */
+  int ElapsedUpdate() {
+    const auto now = GetNow();
+    int result = Elapsed(now);
+    Update(now);
+    return result;
+  }
+
+  /**
    * Checks whether the specified duration has passed since the last
    * update.
    *
