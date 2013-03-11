@@ -129,8 +129,10 @@ Replay::Update()
     }
 
     while (true) {
-      if (!replay->Update(next_data))
+      if (!replay->Update(next_data)) {
+        Stop();
         return false;
+      }
 
       assert(!next_data.gps.real);
 
@@ -147,8 +149,10 @@ Replay::Update()
     }
   } else {
     while (cli->NeedData(virtual_time)) {
-      if (!replay->Update(next_data))
+      if (!replay->Update(next_data)) {
+        Stop();
         return false;
+      }
 
       assert(!next_data.gps.real);
 
