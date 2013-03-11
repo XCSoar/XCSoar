@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
+#include "Event/Timer.hpp"
 #include "Math/fixed.hpp"
 #include "NMEA/Info.hpp"
 #include "Time/PeriodClock.hpp"
@@ -36,7 +37,8 @@ class ProtectedTaskManager;
 class AbstractReplay;
 class CatmullRomInterpolator;
 
-class Replay
+class Replay final
+  : private Timer
 {
   fixed time_scale;
 
@@ -77,7 +79,14 @@ public:
     Stop();
   }
 
+  bool IsActive() const {
+    return replay != nullptr;
+  }
+
+private:
   bool Update();
+
+public:
   void Stop();
   bool Start(const TCHAR *_path);
 
@@ -92,6 +101,9 @@ public:
   void SetTimeScale(const fixed _time_scale) {
     time_scale = _time_scale;
   }
+
+private:
+  virtual void OnTimer() override;
 };
 
 #endif

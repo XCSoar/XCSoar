@@ -26,6 +26,7 @@
 #include "NmeaReplay.hpp"
 #include "DemoReplayGlue.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Clamp.hpp"
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -41,6 +42,8 @@ Replay::Stop()
 {
   if (replay == NULL)
     return;
+
+  Timer::Cancel();
 
   delete replay;
   replay = NULL;
@@ -94,6 +97,8 @@ Replay::Start(const TCHAR *_path)
 
   virtual_time = fixed(-1);
   next_data.Reset();
+
+  Timer::Schedule(100);
 
   return true;
 }
@@ -193,4 +198,26 @@ Replay::Update()
   }
 
   return true;
+}
+
+void
+Replay::OnTimer()
+{
+  if (!Update())
+    return;
+
+  unsigned schedule;
+  if (!positive(time_scale))
+    schedule = 1000;
+  else if (negative(virtual_time) || !next_data.time_available)
+    schedule = 500;
+  else if (cli != nullptr)
+    schedule = 500;
+  else {
+    fixed delta_s = (next_data.time - virtual_time) / time_scale;
+    int delta_ms = int(delta_s * 1000);
+    schedule = Clamp(delta_ms, 100, 3000);
+  }
+
+  Timer::Schedule(schedule);
 }

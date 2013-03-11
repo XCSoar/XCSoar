@@ -247,7 +247,7 @@ ProcessTimer()
     devTick();
 
     // also service replay logger
-    if (replay && replay->Update()) {
+    if (replay && replay->IsActive()) {
       if (CommonInterface::MovementDetected())
         replay->Stop();
     }
@@ -256,7 +256,7 @@ ProcessTimer()
   } else {
     static PeriodClock m_clock;
 
-    if (replay && replay->Update()) {
+    if (replay && replay->IsActive()) {
       m_clock.Update();
     } else if (m_clock.Elapsed() >= 1000) {
       m_clock.Update();
