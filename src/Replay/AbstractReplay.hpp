@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef ABSTRACT_REPLAY_HPP
 #define ABSTRACT_REPLAY_HPP
 
-#include "Math/fixed.hpp"
-
 struct NMEAInfo;
 
 class AbstractReplay 
