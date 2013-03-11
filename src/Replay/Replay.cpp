@@ -94,6 +94,9 @@ Replay::Update()
   if (replay == nullptr)
     return false;
 
+  if (!positive(time_scale))
+    return true;
+
   ScopeLock protect(device_blackboard->mutex);
 
   NMEAInfo &data = device_blackboard->SetReplayState();
