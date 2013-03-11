@@ -50,7 +50,7 @@ enum ControlIndex {
   PREVIEW,
 };
 
-class FontEditWidget
+class FontEditWidget final
   : public RowFormWidget, public ActionListener, DataFieldListener
 {
   LOGFONT data;
@@ -72,14 +72,14 @@ public:
   void UpdatePreview();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
   /* methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 void

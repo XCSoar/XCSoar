@@ -32,7 +32,8 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
 
-class ManageV7Widget : public RowFormWidget, private ActionListener {
+class ManageV7Widget final
+  : public RowFormWidget, private ActionListener {
   enum Controls {
     SETUP,
     NANO,
@@ -50,11 +51,11 @@ public:
      secondary_info(secondary_info) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

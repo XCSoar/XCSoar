@@ -87,7 +87,7 @@ protected:
   void UpdateTerrainPreview();
 
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 /** XXX this hack is needed because the form callbacks don't get a

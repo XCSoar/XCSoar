@@ -31,7 +31,8 @@ Copyright_License {
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Version.hpp"
 
-class ManageFLARMWidget : public RowFormWidget, private ActionListener {
+class ManageFLARMWidget final
+  : public RowFormWidget, private ActionListener {
   enum Controls {
     Setup,
     Reboot,
@@ -46,11 +47,11 @@ public:
     :RowFormWidget(look), device(_device), version(version) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

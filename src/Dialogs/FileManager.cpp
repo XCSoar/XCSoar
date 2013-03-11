@@ -271,16 +271,16 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override;
 
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx);
-  virtual void OnCursorMoved(unsigned index);
+                           unsigned idx) override;
+  virtual void OnCursorMoved(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /* virtual methods from class Timer */
@@ -289,10 +289,11 @@ public:
   /* virtual methods from class Net::DownloadListener */
   virtual void OnDownloadAdded(const TCHAR *path_relative,
                                int64_t size, int64_t position) override;
-  virtual void OnDownloadComplete(const TCHAR *path_relative, bool success);
+  virtual void OnDownloadComplete(const TCHAR *path_relative,
+                                  bool success) override;
 
   /* virtual methods from class Notify */
-  virtual void OnNotification();
+  virtual void OnNotification() override;
 #endif
 };
 

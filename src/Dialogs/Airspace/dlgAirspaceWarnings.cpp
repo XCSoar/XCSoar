@@ -69,14 +69,14 @@ struct WarningItem
   }
 };
 
-class AirspaceWarningListHandler : public ListControl::Handler {
+class AirspaceWarningListHandler final : public ListControl::Handler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
 
-  virtual void OnCursorMoved(unsigned index);
+  virtual void OnCursorMoved(unsigned index) override;
 
-  virtual bool CanActivateItem(unsigned index) const {
+  virtual bool CanActivateItem(unsigned index) const override {
     return true;
   }
 

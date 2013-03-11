@@ -77,7 +77,8 @@ public:
 #undef DELETE
 #endif
 
-class PlaneListWidget : public ListWidget, private ActionListener {
+class PlaneListWidget final
+  : public ListWidget, private ActionListener {
   enum Buttons {
     NEW,
     EDIT,
@@ -123,7 +124,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 gcc_pure

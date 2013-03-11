@@ -66,7 +66,7 @@ public:
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 void

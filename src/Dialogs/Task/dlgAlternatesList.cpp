@@ -36,7 +36,8 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
 
-class AlternatesListWidget : public ListWidget, private ActionListener {
+class AlternatesListWidget final
+  : public ListWidget, private ActionListener {
   enum Buttons {
     SETTINGS,
     GOTO,
@@ -67,8 +68,8 @@ public:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare() {
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
@@ -88,10 +89,10 @@ public:
                                CommonInterface::GetMapSettings().waypoint);
   }
 
-  virtual void OnActivateItem(unsigned index);
+  virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

@@ -60,10 +60,10 @@ enum Actions {
   DUMP = 100,
 };
 
-class FlightSetupPanel : public RowFormWidget,
-                         DataFieldListener,
-                         private Timer,
-                         public ActionListener {
+class FlightSetupPanel final
+  : public RowFormWidget, DataFieldListener,
+    private Timer,
+    public ActionListener {
   WndButton *dump_button;
 
   PolarSettings &polar_settings;
@@ -124,7 +124,7 @@ public:
   }
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
 private:
   /* virtual methods from DataFieldListener */
