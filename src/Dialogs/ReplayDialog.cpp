@@ -40,7 +40,7 @@ enum Buttons {
 };
 
 class ReplayControlWidget final
-  : public RowFormWidget, public ActionListener, DataFieldListener {
+  : public RowFormWidget, ActionListener, DataFieldListener {
   enum Controls {
     FILE,
     RATE,
@@ -49,6 +49,11 @@ class ReplayControlWidget final
 public:
   ReplayControlWidget(const DialogLook &look)
     :RowFormWidget(look) {}
+
+  void CreateButtons(WidgetDialog &dialog) {
+    dialog.AddButton(_("Start"), *this, START);
+    dialog.AddButton(_("Stop"), *this, STOP);
+  }
 
 private:
   void OnStopClicked();
@@ -59,10 +64,10 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
 
+private:
   /* virtual methods from ActionListener */
   virtual void OnAction(int id) override;
 
-private:
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
 };
@@ -133,8 +138,7 @@ ShowReplayDialog()
   ReplayControlWidget *widget = new ReplayControlWidget(look);
   WidgetDialog dialog(look);
   dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Replay"), widget);
-  dialog.AddButton(_("Start"), *widget, START);
-  dialog.AddButton(_("Stop"), *widget, STOP);
+  widget->CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
 
   dialog.ShowModal();
