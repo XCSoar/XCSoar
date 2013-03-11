@@ -48,7 +48,7 @@ public:
   PeriodClock():last(0) {}
 
 protected:
-  static Stamp get_now() {
+  static Stamp GetNow() {
     return MonotonicClockMS();
   }
 
@@ -72,7 +72,7 @@ public:
     if (last == 0)
       return -1;
 
-    return get_now() - last;
+    return GetNow() - last;
   }
 
   /**
@@ -82,14 +82,14 @@ public:
    * @param duration the duration in milliseconds
    */
   bool Check(unsigned duration) const {
-    return get_now() >= last + duration;
+    return GetNow() >= last + duration;
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
   void Update() {
-    last = get_now();
+    last = GetNow();
   }
 
   /**
@@ -108,7 +108,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool CheckUpdate(unsigned duration) {
-    Stamp now = get_now();
+    Stamp now = GetNow();
     if (now >= last + duration) {
       last = now;
       return true;
@@ -123,7 +123,7 @@ public:
    * @param duration the duration in milliseconds
    */
   bool CheckAlwaysUpdate(unsigned duration) {
-    Stamp now = get_now();
+    Stamp now = GetNow();
     bool ret = now > last + duration;
     last = now;
     return ret;
