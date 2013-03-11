@@ -77,9 +77,18 @@ public:
     return mValue;
   }
 
-  fixed SetMin(fixed Value);
-  fixed SetMax(fixed Value);
-  fixed SetStep(fixed Value);
+  void SetMin(fixed v) {
+    mMin = v;
+  }
+
+  void SetMax(fixed v) {
+    mMax = v;
+  }
+
+  void SetStep(fixed v) {
+    mStep = v;
+  }
+
   fixed GetStep() const {
     return mStep;
   }

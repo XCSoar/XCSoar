@@ -50,30 +50,6 @@ DataFieldFloat::GetAsDisplayString() const
   return mOutBuf;
 }
 
-fixed
-DataFieldFloat::SetMin(fixed Value)
-{
-  fixed res = mMin;
-  mMin = Value;
-  return res;
-}
-
-fixed
-DataFieldFloat::SetMax(fixed Value)
-{
-  fixed res = mMax;
-  mMax = Value;
-  return res;
-}
-
-fixed
-DataFieldFloat::SetStep(fixed Value)
-{
-  fixed res = mStep;
-  mStep = Value;
-  return res;
-}
-
 void
 DataFieldFloat::SetAsInteger(int Value)
 {
