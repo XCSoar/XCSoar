@@ -110,9 +110,8 @@ bool
 GRecord::IncludeRecordInGCalc(const unsigned char *in)
 {
   bool valid = false;
-  TCHAR c1 = in[0];
 
-  switch (c1) {
+  switch (in[0]) {
   case 'L':
     if (memcmp(in + 1, XCSOAR_IGC_CODE, 3) == 0)
       // only include L records made by XCS
