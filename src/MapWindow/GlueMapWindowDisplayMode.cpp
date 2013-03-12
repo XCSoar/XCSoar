@@ -190,8 +190,7 @@ GlueMapWindow::UpdateScreenAngle()
   else if (orientation == DisplayOrientation::HEADING_UP)
     visible_projection.SetScreenAngle(
       basic.attitude.heading_available ? basic.attitude.heading : Angle::Zero());
-  else if (orientation == DisplayOrientation::NORTH_UP ||
-           !basic.track_available)
+  else if (orientation == DisplayOrientation::NORTH_UP)
     visible_projection.SetScreenAngle(Angle::Zero());
   else if (orientation == DisplayOrientation::WIND_UP &&
            calculated.wind_available &&
@@ -199,7 +198,8 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(calculated.wind.bearing);
   else
     // normal, glider forward
-    visible_projection.SetScreenAngle(basic.track);
+    visible_projection.SetScreenAngle(
+      basic.track_available ? basic.track : Angle::Zero());
 
   compass_visible = orientation != DisplayOrientation::NORTH_UP;
 }
