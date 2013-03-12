@@ -102,11 +102,4 @@ final class BluetoothServerPort extends MultiPort
 
     super.close();
   }
-
-  public boolean isValid() {
-    /* note: we're not checking MultiPort.isValid(), because we assume
-       the AndroidPort is doing fine even if nobody has connected
-       yet */
-    return serverSocket != null;
-  }
 }
