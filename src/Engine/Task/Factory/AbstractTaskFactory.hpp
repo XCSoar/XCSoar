@@ -522,7 +522,8 @@ public:
    *
    * @param point Point to check
    *
-   * @return Type of supplied point
+   * @return Type of supplied point based on the observation zone shape and
+   * TaskPoint type
    */
   gcc_pure
   TaskPointFactoryType GetType(const OrderedTaskPoint &point) const;
