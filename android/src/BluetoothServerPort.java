@@ -46,14 +46,31 @@ final class BluetoothServerPort extends MultiPort
   private Collection<BluetoothSocket> sockets =
     new LinkedList<BluetoothSocket>();
 
-  private Thread thread = new Thread(this, "Bluetooth server");
-  private InputListener listener;
+  private final Thread thread = new Thread(this, "Bluetooth server");
 
   BluetoothServerPort(BluetoothAdapter adapter, UUID uuid)
     throws IOException {
     serverSocket = adapter.listenUsingRfcommWithServiceRecord("XCSoar", uuid);
 
     thread.start();
+  }
+
+  private synchronized BluetoothServerSocket stealServerSocket() {
+    BluetoothServerSocket s = serverSocket;
+    serverSocket = null;
+    return s;
+  }
+
+  private void closeServerSocket() {
+    BluetoothServerSocket s = stealServerSocket();
+    if (s == null)
+      return;
+
+    try {
+      s.close();
+    } catch (IOException e) {
+      Log.e(TAG, "Failed to close Bluetooth server socket", e);
+    }
   }
 
   @Override public void run() {
@@ -72,34 +89,29 @@ final class BluetoothServerPort extends MultiPort
         add(port);
       } catch (IOException e) {
         Log.e(TAG, "Bluetooth server socket has failed", e);
-        close();
+        closeServerSocket();
         break;
       }
     }
   }
 
-  public synchronized void setListener(InputListener _listener) {
-    listener = _listener;
-  }
+  @Override public void close() {
+    closeServerSocket();
 
-  public synchronized void close() {
-    if (serverSocket != null) {
-      try {
-        serverSocket.close();
-      } catch (IOException e) {
-        Log.e(TAG, "Failed to close Bluetooth server socket", e);
-      } finally {
-        serverSocket = null;
-      }
+    /* ensure that run() has finished before calling
+       MultiPort.close() */
+    try {
+      thread.join();
+    } catch (InterruptedException e) {
     }
 
     super.close();
   }
 
-  public boolean isValid() {
-    /* note: we're not checking MultiPort.isValid(), because we assume
-       the AndroidPort is doing fine even if nobody has connected
-       yet */
-    return serverSocket != null;
+  @Override public int getState() {
+    if (serverSocket == null)
+      return STATE_FAILED;
+
+    return super.getState();
   }
 }
