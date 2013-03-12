@@ -55,6 +55,24 @@ final class BluetoothServerPort extends MultiPort
     thread.start();
   }
 
+  private synchronized BluetoothServerSocket stealServerSocket() {
+    BluetoothServerSocket s = serverSocket;
+    serverSocket = null;
+    return s;
+  }
+
+  private void closeServerSocket() {
+    BluetoothServerSocket s = stealServerSocket();
+    if (s == null)
+      return;
+
+    try {
+      s.close();
+    } catch (IOException e) {
+      Log.e(TAG, "Failed to close Bluetooth server socket", e);
+    }
+  }
+
   @Override public void run() {
     while (true) {
       try {
@@ -77,16 +95,8 @@ final class BluetoothServerPort extends MultiPort
     }
   }
 
-  @Override public synchronized void close() {
-    if (serverSocket != null) {
-      try {
-        serverSocket.close();
-      } catch (IOException e) {
-        Log.e(TAG, "Failed to close Bluetooth server socket", e);
-      } finally {
-        serverSocket = null;
-      }
-    }
+  @Override public void close() {
+    closeServerSocket();
 
     /* ensure that run() has finished before calling
        MultiPort.close() */
