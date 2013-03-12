@@ -89,7 +89,7 @@ final class BluetoothServerPort extends MultiPort
         add(port);
       } catch (IOException e) {
         Log.e(TAG, "Bluetooth server socket has failed", e);
-        close();
+        closeServerSocket();
         break;
       }
     }
