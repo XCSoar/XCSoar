@@ -214,6 +214,12 @@ public:
   const SearchPointVector &GetSearchPoints() const;
 
   gcc_pure
+  bool CheckEnterTransitionMat(const AircraftState &ref_now,
+                               const AircraftState &ref_last) const {
+    return CheckEnterTransition(ref_now, ref_last);
+  }
+
+  gcc_pure
   virtual bool IsInSector(const AircraftState &ref) const;
 
   /**

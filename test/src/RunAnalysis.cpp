@@ -178,6 +178,7 @@ Main()
   OrderedTask *task =
     protected_task_manager.TaskCreateDefault(&way_points, task_type_default);
   if (task != nullptr) {
+    task->FillMatPoints(way_points);
     protected_task_manager.TaskCommit(*task);
     delete task;
   }

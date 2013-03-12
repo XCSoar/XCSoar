@@ -32,6 +32,7 @@ Copyright_License {
 #include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
+#include "Components.hpp"
 
 enum Controls {
   MIN_TIME,
@@ -73,7 +74,8 @@ TaskPropertiesPanel::RefreshView()
   const TaskFactoryType ftype = ordered_task->GetFactoryType();
   const OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
 
-  bool aat_types = (ftype == TaskFactoryType::AAT);
+  const bool aat_types = ftype == TaskFactoryType::AAT ||
+    ftype == TaskFactoryType::MAT;
   bool fai_start_finish = p.finish_constraints.fai_finish;
 
   SetRowVisible(MIN_TIME, aat_types);
@@ -190,6 +192,7 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
   if (newtype != ordered_task->GetFactoryType()) {
     ReadValues();
     ordered_task->SetFactory(newtype);
+    ordered_task->FillMatPoints(way_points);
     *task_changed =true;
     RefreshView();
   }

@@ -450,6 +450,16 @@ public:
    */
   bool ValidateFAIOZs();
 
+  /**
+   * Checks whether shapes of all OZs, start, finish are valid
+   * for an MAT task
+   * Appends warning message to validation_errors
+   * This is used independently of check_task() validation
+   *
+   * @return True if all OZs are valid for a MAT
+   */
+  bool ValidateMATOZs();
+
   gcc_pure
   const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const;
 

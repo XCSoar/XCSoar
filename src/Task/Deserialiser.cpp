@@ -34,6 +34,7 @@
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -127,6 +128,10 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
     fixed radius;
     if (node.GetAttribute(_T("radius"), radius) && positive(radius))
       ls->SetRadius(radius);
+
+    return ls;
+  } else if (StringIsEqual(type, _T("MatCylinder"))) {
+    MatCylinderZone *ls = new MatCylinderZone(wp.location);
 
     return ls;
   } else if (StringIsEqual(type, _T("Sector"))) {
@@ -290,6 +295,8 @@ Deserialiser::GetTaskFactoryType() const
     return TaskFactoryType::RACING;
   else if (StringIsEqual(type, _T("AAT")))
     return TaskFactoryType::AAT;
+  else if (StringIsEqual(type, _T("MAT")))
+    return TaskFactoryType::MAT;
   else if (StringIsEqual(type, _T("Mixed")))
     return TaskFactoryType::MIXED;
   else if (StringIsEqual(type, _T("Touring")))

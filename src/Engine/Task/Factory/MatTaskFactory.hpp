@@ -19,33 +19,35 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
+*/
+
+#ifndef XCSOAR_MAT_TASK_FACTORY_HPP
+#define XCSOAR_MAT_TASK_FACTORY_HPP
+
+#include "AbstractTaskFactory.hpp"
+
+/**
+ * Factory for construction of legal Modified Area Tasks
  */
+class MatTaskFactory final : public AbstractTaskFactory {
+public:
+  /**
+   * Constructor
+   *
+   * @param _task Ordered task to be managed by this factory
+   * @param tb Behaviour (options)
+   */
+  MatTaskFactory(OrderedTask &_task, const TaskBehaviour &tb);
 
-#ifndef XCSOAR_TASK_VALIDATION_ERROR_HPP
-#define XCSOAR_TASK_VALIDATION_ERROR_HPP
-
-#include <vector>
-
-#include <stdint.h>
-
-/** Task Validation Error Types */
-enum class TaskValidationErrorType : uint8_t {
-  NO_VALID_START,
-  NO_VALID_FINISH,
-  TASK_NOT_CLOSED,
-  TASK_NOT_HOMOGENEOUS,
-  INCORRECT_NUMBER_TURNPOINTS,
-  EXCEEDS_MAX_TURNPOINTS,
-  UNDER_MIN_TURNPOINTS,
-  TURNPOINTS_NOT_UNIQUE,
-  INVALID_FAI_TRIANGLE_GEOMETRY,
-  EMPTY_TASK,
-  NON_FAI_OZS,
-  NON_MAT_OZS,
+  /**
+   * converts all intermediate points to AAT Cylinders
+   * Leaves starts and finishes unchanged
+   * @param tp
+   * @return: point type compatible with current factory, most
+   * similar to type of tp
+   */
+  virtual TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const override;
 };
 
-/** Vector of errors returned by validation routine */
-class TaskValidationErrorVector : public std::vector<TaskValidationErrorType> {
-};
 
 #endif

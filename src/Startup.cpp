@@ -157,6 +157,8 @@ AfterStartup()
       defaultTask->CheckDuplicateWaypoints(way_points);
       way_points.Optimise();
     }
+
+    defaultTask->FillMatPoints(way_points);
     protected_task_manager->TaskCommit(*defaultTask);
     delete defaultTask;
   }

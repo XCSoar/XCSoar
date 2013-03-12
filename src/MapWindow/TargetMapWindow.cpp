@@ -263,6 +263,7 @@ GetRadius(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
   case ObservationZonePoint::LINE:
+  case ObservationZonePoint::MAT_CYLINDER:
   case ObservationZonePoint::CYLINDER:
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::FAI_SECTOR:

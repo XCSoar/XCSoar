@@ -40,9 +40,9 @@
 #include "Task/Factory/Create.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
+#include "Task/ObservationZones/MatCylinderZone.hpp"
 
 #include "Waypoint/Waypoints.hpp"
-
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Task/Stats/TaskSummary.hpp"
@@ -66,6 +66,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
 OrderedTask::~OrderedTask()
 {
   RemoveAllPoints();
+  ClearMatPoints();
 
   delete active_factory;
 
@@ -119,6 +120,10 @@ OrderedTask::UpdateGeometry()
   for (const auto *tp : task_points)
     tp->ScanProjection(task_projection);
 
+  // scan location of mat control points
+  for (const auto *i : GetMatPoints())
+    i->ScanProjection(task_projection);
+
   // ... and optional start points
   for (const OrderedTaskPoint *tp : optional_start_points)
     tp->ScanProjection(task_projection);
@@ -128,10 +133,14 @@ OrderedTask::UpdateGeometry()
 
   // update OZ's for items that depend on next-point geometry 
   UpdateObservationZones(task_points, task_projection);
+  UpdateObservationZones(SetMatPoints(), task_projection);
   UpdateObservationZones(optional_start_points, task_projection);
 
   // now that the task projection is stable, and oz is stable,
   // calculate the bounding box in projected coordinates
+  for (const auto tp : GetMatPoints())
+    tp->UpdateBoundingBox(task_projection);
+
   for (const auto tp : task_points)
     tp->UpdateBoundingBox(task_projection);
 
@@ -287,6 +296,38 @@ OrderedTask::ScanDistancePlanned()
   return fixed(0);
 }
 
+unsigned
+OrderedTask::GetLastIntermediateAchieved() const
+{
+  if (TaskSize() < 2)
+    return 0;
+
+  for (unsigned i = 1; i < TaskSize() - 1; i++)
+    if (!task_points[i]->HasEntered())
+      return i - 1;
+  return TaskSize() - 2;
+}
+
+bool
+OrderedTask::ShouldAddToMat(const Waypoint &mat_wp) const
+{
+  unsigned last_achieved_index = GetLastIntermediateAchieved();
+
+  // is this the same point we just achieved? then ignore it
+  if (mat_wp == GetPoint(last_achieved_index).GetWaypoint())
+  {
+    return false;
+  }
+
+  // The TP after the last achieved is already next in the task
+  // and it is not the finish so do nothing
+  if ((last_achieved_index + 1 < TaskSize() -1)
+    && mat_wp == GetPoint(last_achieved_index + 1).GetWaypoint()) {
+    return false;
+  }
+  return true;
+}
+
 // TRANSITIONS
 
 bool 
@@ -343,12 +384,12 @@ OrderedTask::CheckTransitions(const AircraftState &state,
                                            transition_enter,
                                            transition_exit)) {
         task_advance.SetArmed(false);
-        
+
         if (i + 1 < n_task) {
           i++;
           SetActiveTaskPoint(i);
           taskpoint_start->ScanActive(*task_points[active_task_point]);
-          
+
           if (task_events != NULL)
             task_events->ActiveAdvanced(*task_points[i], i);
 
@@ -413,6 +454,17 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
   return full_update;
 }
 
+bool
+OrderedTask::CheckTransitionPointMat(OrderedTaskPoint &point,
+                                     const AircraftState &state,
+                                     const AircraftState &state_last,
+                                     const FlatBoundingBox &bb_now,
+                                     const FlatBoundingBox &bb_last)
+{
+  const bool nearby = point.BoundingBoxOverlaps(bb_now);
+
+  return nearby && point.CheckEnterTransitionMat(state, state_last);
+}
 
 bool
 OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
@@ -1215,6 +1267,8 @@ OrderedTask::Commit(const OrderedTask& that)
     }
   }
 
+  mat_points.CloneFrom(that.mat_points, task_behaviour, ordered_behaviour);
+
   if (modified)
     UpdateGeometry();
     // @todo also re-scan task sample state,
@@ -1297,6 +1351,7 @@ OrderedTask::GetFactoryTypes(bool all) const
   std::vector<TaskFactoryType> f_list;
   f_list.push_back(TaskFactoryType::RACING);
   f_list.push_back(TaskFactoryType::AAT);
+  f_list.push_back(TaskFactoryType::MAT);
   f_list.push_back(TaskFactoryType::FAI_GENERAL);
   return f_list;
 }
@@ -1404,4 +1459,17 @@ OrderedTask::UpdateSummary(TaskSummary& ordered_summary) const
   if (stats.total.remaining.IsDefined() && stats.total.planned.IsDefined())
     ordered_summary.update(stats.total.remaining.GetDistance(),
                            stats.total.planned.GetDistance());
+}
+
+void
+OrderedTask::FillMatPoints(const Waypoints &wps, bool update_geometry)
+{
+  ClearMatPoints();
+
+  if (GetFactoryType() == TaskFactoryType::MAT) {
+    mat_points.FillMatPoints(wps, GetFactory());
+
+    if (update_geometry)
+      UpdateGeometry();
+  }
 }

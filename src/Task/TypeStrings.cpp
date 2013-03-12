@@ -45,6 +45,8 @@ OrderedTaskFactoryName(TaskFactoryType type)
     return _("FAI goal");
   case TaskFactoryType::AAT:
     return _("AAT");
+  case TaskFactoryType::MAT:
+    return _("Modified area task (MAT)");
   case TaskFactoryType::MIXED:
     return _("Mixed");
   case TaskFactoryType::TOURING:
@@ -73,6 +75,8 @@ OrderedTaskFactoryDescription(TaskFactoryType type)
   case TaskFactoryType::AAT:
     return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder "
         "and sector observation zones.");
+  case TaskFactoryType::MAT:
+    return _("Modified area task.  Task with start, finish and at least one predefined 1-mile cylinder.  Pilot can add additional points as needed.  Minimum task time applies.");
   case TaskFactoryType::MIXED:
     return _("Racing task with a mix of assigned areas and turn points, minimum task time applies.");
   case TaskFactoryType::TOURING:
@@ -110,6 +114,10 @@ OrderedTaskPointDescription(TaskPointFactoryType type)
         "Scored from center.");
   case TaskPointFactoryType::AAT_CYLINDER:
     return _("A cylinder.  Scored by farthest point reached in area.");
+
+  case TaskPointFactoryType::MAT_CYLINDER:
+    return _("A 1 mile cylinder.  Scored by farthest point reached in area.");
+
   case TaskPointFactoryType::AAT_SEGMENT:
     return _("A sector that can vary in angle and radius.  Scored by farthest point reached "
         "inside area.");
@@ -151,6 +159,10 @@ OrderedTaskPointName(TaskPointFactoryType type)
     return _("Turn point cylinder");
   case TaskPointFactoryType::AAT_CYLINDER:
     return _("Area cylinder");
+
+  case TaskPointFactoryType::MAT_CYLINDER:
+    return _("Cylinder with 1 mile radius.");
+
   case TaskPointFactoryType::AAT_SEGMENT:
     return _("Area sector");
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:

@@ -39,6 +39,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
+#include "Engine/Task/ObservationZones/MatCylinderZone.hpp"
 #include "Engine/Task/ObservationZones/FAISectorZone.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/BGAFixedCourseZone.hpp"
@@ -50,12 +51,13 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 9,
+  NUM_OZ_TYPES = 10,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("Line"),
   _T("Cylinder"),
+  _T("MAT Cylinder"),
   _T("Sector"),
   _T("FAI Sector"),
   _T("Keyhole"),
@@ -108,6 +110,10 @@ public:
 
     case ObservationZonePoint::CYLINDER:
       oz = new CylinderZone(location, radius);
+      break;
+
+    case ObservationZonePoint::MAT_CYLINDER:
+      oz = new MatCylinderZone(location);
       break;
 
     case ObservationZonePoint::SECTOR:

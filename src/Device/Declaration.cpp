@@ -38,6 +38,7 @@ get_shape(const OrderedTaskPoint &tp)
   case ObservationZonePoint::LINE:
     return Declaration::TurnPoint::LINE;
 
+  case ObservationZonePoint::MAT_CYLINDER:
   case ObservationZonePoint::CYLINDER:
     return Declaration::TurnPoint::CYLINDER;
 

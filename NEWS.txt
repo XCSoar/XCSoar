@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.6 - not yet released
 * user interface
   - replay fast-forward
+* tasks
+  - MAT tasks (#563)
 
 Version 6.5.2 - not yet released
 * user interface

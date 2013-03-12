@@ -155,6 +155,8 @@ SettingsLeave(const UISettings &old_ui_settings)
       delete task;
 
       way_points.Optimise();
+
+      lease->FillMatPoints(way_points);
     }
   }
 

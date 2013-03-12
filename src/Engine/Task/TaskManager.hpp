@@ -202,6 +202,27 @@ public:
   bool UpdateAutoMC(const AircraftState& state_now, const fixed fallback_mc);
 
   /**
+   * Scans all the MAT points to see if any have been entered.
+   * If point is entered and not next unachieved point,
+   * Inserts the point into the active ordered task, and calls Commit().
+   * Assumes the protected task manager already holds an Exclusive Lease
+   * on the Task Manager.
+   * Should be called before CheckTransitions for a MAT task.
+   *
+   * @return true if point is inserted into task
+   */
+  bool ScanInsertMatPoints(const AircraftState &state,
+                           const AircraftState &state_last);
+
+  /**
+   * loads the Mat points vector to the current task if it is a Mat
+   * @param waypoints the list of active waypoints
+   */
+  void FillMatPoints(const Waypoints &waypoints) {
+    task_ordered.FillMatPoints(waypoints);
+  }
+
+  /**
    * Accessor for statistics of active task
    *
    * @return Statistics of active task
@@ -338,6 +359,14 @@ public:
   gcc_pure
   bool IsMode(const TaskType _mode) const {
     return mode == _mode;
+  }
+
+  /**
+   * is the current ordered task a Mat?
+   * return True if so.
+   */
+  bool IsMat() const {
+    return task_ordered.GetFactoryType() == TaskFactoryType::MAT;
   }
 
   /**
