@@ -47,7 +47,6 @@ final class BluetoothServerPort extends MultiPort
     new LinkedList<BluetoothSocket>();
 
   private final Thread thread = new Thread(this, "Bluetooth server");
-  private InputListener listener;
 
   BluetoothServerPort(BluetoothAdapter adapter, UUID uuid)
     throws IOException {
@@ -76,10 +75,6 @@ final class BluetoothServerPort extends MultiPort
         break;
       }
     }
-  }
-
-  @Override public synchronized void setListener(InputListener _listener) {
-    listener = _listener;
   }
 
   @Override public synchronized void close() {

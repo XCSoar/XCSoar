@@ -11,6 +11,7 @@ Version 6.5.1 - not yet released
   - allow gestures in cross section (#2655)
 * devices
   - fix crash in Android Bluetooth driver (#2636, #2656)
+  - fix NMEA input on Android Bluetooth Server
 * data files
   - use the terrain cache even when the system clock is wrong
   - fix G record regression (#2657)
