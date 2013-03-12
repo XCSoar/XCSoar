@@ -36,11 +36,14 @@ class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
 
   private BluetoothSocket socket;
 
+  private Thread thread;
+
   BluetoothClientPort(BluetoothSocket _socket)
     throws IOException {
     socket = _socket;
 
-    new Thread(this, toString()).start();
+    thread = new Thread(this, toString());
+    thread.start();
   }
 
   @Override public String toString() {
@@ -57,6 +60,16 @@ class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
         socket.close();
       } catch (IOException e) {
         Log.w(TAG, "Failed to close BluetoothSocket", e);
+      }
+    }
+
+    /* ensure that run() has finished before calling
+       ProxyAndroidPort.close() */
+    Thread thread = this.thread;
+    if (thread != null) {
+      try {
+        thread.join();
+      } catch (InterruptedException e) {
       }
     }
 
@@ -81,6 +94,7 @@ class BluetoothClientPort extends ProxyAndroidPort implements Runnable {
       Log.e(TAG, "Failed to connect to Bluetooth", e);
     } finally {
       socket = null;
+      thread = null;
     }
   }
 }

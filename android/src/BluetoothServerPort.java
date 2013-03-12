@@ -46,7 +46,7 @@ final class BluetoothServerPort extends MultiPort
   private Collection<BluetoothSocket> sockets =
     new LinkedList<BluetoothSocket>();
 
-  private Thread thread = new Thread(this, "Bluetooth server");
+  private final Thread thread = new Thread(this, "Bluetooth server");
   private InputListener listener;
 
   BluetoothServerPort(BluetoothAdapter adapter, UUID uuid)
@@ -91,6 +91,13 @@ final class BluetoothServerPort extends MultiPort
       } finally {
         serverSocket = null;
       }
+    }
+
+    /* ensure that run() has finished before calling
+       MultiPort.close() */
+    try {
+      thread.join();
+    } catch (InterruptedException e) {
     }
 
     super.close();
