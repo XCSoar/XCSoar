@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.5.2 - not yet released
+* user interface
+  - fix hang during startup (#2662, #2663)
 
 Version 6.5.1 - 2013/03/12
 * infoboxes
