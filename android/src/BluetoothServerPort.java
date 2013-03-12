@@ -107,4 +107,11 @@ final class BluetoothServerPort extends MultiPort
 
     super.close();
   }
+
+  @Override public int getState() {
+    if (serverSocket == null)
+      return STATE_FAILED;
+
+    return super.getState();
+  }
 }
