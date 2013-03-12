@@ -225,16 +225,14 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
     // fails min < 25% worst-case rule!
     return Result(0, 0);
 
-  const unsigned d = df_3 + df_2;
-
   // without FAI rules, allow any triangle
   if (!is_fai)
-    return Result(d, df_total);
+    return Result(df_2, df_total);
 
   if (shortest * 25 >= df_total * 7)
     // passes min > 28% rule,
     // this automatically means we pass max > 45% worst-case
-    return Result(d, df_total);
+    return Result(df_2, df_total);
 
   const unsigned longest = std::max({df_1, df_2, df_3});
   if (longest * 20 > df_total * 9) // fails max > 45% worst-case rule!
@@ -258,7 +256,7 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
   const fixed d_total(df_total* leg / shortest);
   if (d_total >= fixed(500000)) {
     // long distance, ok that it failed 28% rule
-    return Result(d, df_total);
+    return Result(df_2, df_total);
   }
 
   return Result(0, 0);
