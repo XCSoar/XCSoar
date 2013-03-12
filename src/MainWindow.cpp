@@ -553,6 +553,9 @@ MainWindow::OnCancelMode()
 bool
 MainWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
+  if (SingleWindow::OnMouseDown(x, y))
+    return true;
+
   if (!dragging) {
     dragging = true;
     SetCapture();
@@ -565,6 +568,9 @@ MainWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 MainWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
+  if (SingleWindow::OnMouseUp(x, y))
+    return true;
+
   if (dragging) {
     StopDragging();
 
@@ -579,10 +585,10 @@ MainWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
-  StopDragging();
-
   if (SingleWindow::OnMouseDouble(x, y))
     return true;
+
+  StopDragging();
 
   if (!HasDialog())
     InputEvents::ShowMenu();
@@ -590,8 +596,11 @@ MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 }
 
 bool
-MainWindow::OnMouseMove(PixelScalar x, PixelScalar y, gcc_unused unsigned keys)
+MainWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
+  if (SingleWindow::OnMouseMove(x, y, keys))
+    return true;
+
   if (dragging)
     gestures.Update(x, y);
 
