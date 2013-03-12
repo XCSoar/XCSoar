@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.5.1 - not yet released
+Version 6.5.1 - 2013/03/12
 * infoboxes
   - fix MacCready adjustment for non-metric units (#2654)
 * user interface
