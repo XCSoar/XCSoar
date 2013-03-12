@@ -30,6 +30,7 @@ Copyright_License {
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 #include "Widget/ManagedWidget.hpp"
+#include "UIUtil/GestureManager.hpp"
 
 #include <stdint.h>
 #include <assert.h>
@@ -97,6 +98,9 @@ class MainWindow : public SingleWindow {
   bool suppress_traffic_gauge, force_traffic_gauge;
 
   ManagedWidget thermal_assistant;
+
+  bool dragging;
+  GestureManager gestures;
 
 public:
   PopupMessage popup;
@@ -336,11 +340,18 @@ private:
   void UpdateVarioGaugeVisibility();
   void UpdateTrafficGaugeVisibility();
 
+  void StopDragging();
+
 protected:
   /* virtual methods from class Window */
   virtual void OnDestroy() override;
   virtual void OnResize(PixelSize new_size) override;
   virtual void OnSetFocus() override;
+  virtual void OnCancelMode() override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnKeyDown(unsigned key_code) override;
   virtual bool OnUser(unsigned id) override;

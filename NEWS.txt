@@ -8,6 +8,7 @@ Version 6.5.1 - not yet released
 * user interface
   - fix bogus "restart XCSoar" messages
   - fix cross section render error on some OpenGL chips (#2631, #2661)
+  - allow gestures in cross section (#2655)
 * data files
   - use the terrain cache even when the system clock is wrong
   - fix G record regression (#2657)
