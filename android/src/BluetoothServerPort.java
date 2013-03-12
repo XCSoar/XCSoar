@@ -78,11 +78,11 @@ final class BluetoothServerPort extends MultiPort
     }
   }
 
-  public synchronized void setListener(InputListener _listener) {
+  @Override public synchronized void setListener(InputListener _listener) {
     listener = _listener;
   }
 
-  public synchronized void close() {
+  @Override public synchronized void close() {
     if (serverSocket != null) {
       try {
         serverSocket.close();
