@@ -32,6 +32,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Operation/Operation.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 #include <tchar.h>
 
 /**
@@ -175,6 +179,10 @@ MapWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;
+#endif
+
+#ifdef ENABLE_OPENGL
+  GLCanvasScissor scissor(canvas);
 #endif
 
   // Render the moving map
