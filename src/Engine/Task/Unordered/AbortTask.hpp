@@ -32,11 +32,7 @@
 #include <assert.h>
 
 class Waypoints;
-
-class AbortIntersectionTest {
-public:
-  virtual bool Intersects(const AGeoPoint& destination) = 0;
-};
+class AbortIntersectionTest;
 
 /**
  * Abort task provides automatic management of a sorted list of task points

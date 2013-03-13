@@ -21,6 +21,7 @@
  */
 
 #include "AbortTask.hpp"
+#include "AbortIntersectionTest.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
