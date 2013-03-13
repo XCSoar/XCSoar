@@ -266,7 +266,7 @@ RefreshCalculator()
       is_locked = ap->IsTargetLocked();
     }
 
-    aat_time = lease->GetOrderedTaskBehaviour().aat_min_time;
+    aat_time = task.GetOrderedTaskBehaviour().aat_min_time;
   }
 
   if (optimized_checkbox) {

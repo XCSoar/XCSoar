@@ -56,7 +56,7 @@ const OrderedTaskBehaviour
 ProtectedTaskManager::GetOrderedTaskBehaviour() const
 {
   Lease lease(*this);
-  return lease->GetOrderedTaskBehaviour();
+  return lease->GetOrderedTask().GetOrderedTaskBehaviour();
 }
 
 const Waypoint* 
@@ -125,7 +125,7 @@ AircraftState
 ProtectedTaskManager::GetStartState() const
 {
   Lease lease(*this);
-  return lease->GetStartState();
+  return lease->GetOrderedTask().GetStartState();
 }
 
 fixed 

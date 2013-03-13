@@ -399,24 +399,6 @@ public:
   }
 
   /**
-   * Accesses ordered task start state
-   *
-   * @return State at task start (or null state if not started)
-   */
-  AircraftState GetStartState() const {
-    return task_ordered.GetStartState();
-  }
-
-  /**
-   * Accesses ordered task finish state
-   *
-   * @return State at task finish (or null state if not finished)
-   */
-  AircraftState GetFinishState() const {
-    return task_ordered.GetFinishState();
-  }
-
-  /**
    * Return required arrival height of final point in task
    */
   fixed GetFinishHeight() const;
@@ -465,13 +447,11 @@ public:
  bool TargetLock(const unsigned index, bool do_lock);
 
   /** 
-   * Retrieve (const) the OrderedTaskBehaviour used by the OrderedTask
+   * Copy TaskBehaviour to this task
    * 
-   * @return Read-only OrderedTaskBehaviour
+   * @param behaviour Value to set
    */
-  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
-    return task_ordered.GetOrderedTaskBehaviour();
-  }
+  void SetTaskBehaviour(const TaskBehaviour& behaviour);
 
   /** 
    * Retrieve the OrderedTaskBehaviour used by the OrderedTask
@@ -482,13 +462,6 @@ public:
     task_ordered.SetOrderedTaskBehaviour(otb);
   }
 
-  /** 
-   * Copy TaskBehaviour to this task
-   * 
-   * @param behaviour Value to set
-   */
-  void SetTaskBehaviour(const TaskBehaviour& behaviour);
-  
   /** 
    * Retrieve task behaviour
    * 
