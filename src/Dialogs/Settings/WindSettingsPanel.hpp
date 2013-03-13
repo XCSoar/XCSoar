@@ -25,8 +25,10 @@ Copyright_License {
 #define XCSOAR_WIND_SETTINGS_PANEL_HPP
 
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
 
-class WindSettingsPanel final : public RowFormWidget {
+class WindSettingsPanel final
+  : public RowFormWidget, private DataFieldListener {
   enum ControlIndex {
     AutoWind,
     ExternalWind,
@@ -47,6 +49,12 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
+
+private:
+  void UpdateVector();
+
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
 };
 
 #endif

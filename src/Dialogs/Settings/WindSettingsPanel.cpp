@@ -41,7 +41,6 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  const NMEAInfo &basic = CommonInterface::Basic();
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
@@ -64,7 +63,8 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Prefer external wind"),
              _("If enabled, then the wind vector received from external devices overrides "
                  "XCSoar's internal wind calculation."),
-             settings.use_external_wind);
+             settings.use_external_wind,
+             this);
 
   if (edit_trail_drift)
     AddBoolean(_("Trail drift"),
@@ -75,9 +75,6 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddDummy();
 
   if (edit_manual_wind) {
-    external_wind = settings.use_external_wind &&
-      basic.external_wind_available;
-
     SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
 
     WndProperty *wp =
@@ -88,15 +85,15 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                                        Unit::KILOMETER_PER_HOUR)),
                fixed(1), false,
                Units::ToUserWindSpeed(manual_wind.norm));
-    wp->SetEnabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetWindSpeedName());
     wp->RefreshDisplay();
 
     wp = AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
                   manual_wind.bearing, 5u, false);
-    wp->SetEnabled(!external_wind);
   }
+
+  UpdateVector();
 }
 
 bool
@@ -129,4 +126,31 @@ WindSettingsPanel::Save(bool &_changed)
 
   _changed |= changed;
   return true;
+}
+
+void
+WindSettingsPanel::OnModified(DataField &df)
+{
+  UpdateVector();
+}
+
+void
+WindSettingsPanel::UpdateVector()
+{
+  if (!edit_manual_wind)
+    return;
+
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  const bool prefer_external_wind = GetValueBoolean(ExternalWind);
+  external_wind = prefer_external_wind && basic.external_wind_available;
+
+  SetRowEnabled(Speed, !external_wind);
+  SetRowEnabled(Direction, !external_wind);
+
+  if (external_wind) {
+    SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
+    LoadValue(Speed, Units::ToUserWindSpeed(wind.norm));
+    LoadValue(Direction, wind.bearing);
+  }
 }
