@@ -36,7 +36,7 @@ namespace PageActions {
    * Loads the layout without updating current page information in
    * #UIState.
    */
-  void LoadLayout(const PageLayout &layout);
+  static void LoadLayout(const PageLayout &layout);
 };
 
 static const PageLayout &
