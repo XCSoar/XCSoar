@@ -48,7 +48,7 @@ class AlternatesListWidget final
   WndButton *details_button, *cancel_button, *goto_button;
 
 public:
-  AbortTask::AlternateVector alternates;
+  AlternateList alternates;
 
 public:
   void CreateButtons(WidgetDialog &dialog);

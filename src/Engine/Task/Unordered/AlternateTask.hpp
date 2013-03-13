@@ -34,12 +34,12 @@
 class AlternateTask final : public AbortTask
 {
 public:
-  struct Divert : public Alternate {
+  struct Divert : public AlternatePoint {
     fixed delta;
 
     Divert(const Waypoint &_waypoint, const GlideResult &_solution,
            fixed _delta)
-      :Alternate(_waypoint, _solution), delta(_delta) {}
+      :AlternatePoint(_waypoint, _solution), delta(_delta) {}
   };
 
   typedef std::vector<Divert> DivertVector;
@@ -48,7 +48,7 @@ public:
   static const unsigned max_alternates;
 
 private:
-  AlternateVector alternates;
+  AlternateList alternates;
   GeoPoint destination;
 
 public:
@@ -76,7 +76,7 @@ public:
    *
    * @return Vector of alternates
    */
-  const AlternateVector &GetAlternates() const {
+  const AlternateList &GetAlternates() const {
     return alternates;
   }
 

@@ -42,11 +42,11 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
-  const AbortTask::Alternate *alternate;
+  const AlternatePoint *alternate;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
+    const AlternateList &alternates = lease->GetAlternates();
 
     if (!alternates.empty()) {
       if (index >= alternates.size())
@@ -106,11 +106,11 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
-  const AbortTask::Alternate *alternate;
+  const AlternatePoint *alternate;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
+    const AlternateList &alternates = lease->GetAlternates();
 
     if (!alternates.empty()) {
       if (index >= alternates.size())

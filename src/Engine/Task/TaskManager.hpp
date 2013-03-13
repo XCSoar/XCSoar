@@ -139,7 +139,7 @@ public:
    *
    * @return Vector of alternates
    */
-  const AbortTask::AlternateVector &GetAlternates() const {
+  const AlternateList &GetAlternates() const {
     return task_abort.GetAlternates();
   }
 
