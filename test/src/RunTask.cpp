@@ -61,6 +61,7 @@ Run(DebugReplay &replay, TaskManager &task_manager)
                                                   last_calculated);
     task_manager.Update(current_as, last_as);
     task_manager.UpdateIdle(current_as);
+    task_manager.SetTaskAdvance().SetArmed(true);
 
     const CommonStats &common_stats = task_manager.GetCommonStats();
     if (common_stats.active_taskpoint_index != active_taskpoint_index) {
