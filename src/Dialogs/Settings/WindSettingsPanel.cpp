@@ -77,6 +77,8 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (edit_manual_wind) {
     SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
 
+    AddReadOnly(_("Source"));
+
     WndProperty *wp =
       AddFloat(_("Speed"), _("Manual adjustment of wind speed."),
                _T("%.0f %s"), _T("%.0f"),
@@ -141,6 +143,28 @@ WindSettingsPanel::UpdateVector()
     return;
 
   const NMEAInfo &basic = CommonInterface::Basic();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  const TCHAR *source = nullptr;
+  switch (calculated.wind_source) {
+  case DerivedInfo::WindSource::NONE:
+    source = _("None");
+    break;
+
+  case DerivedInfo::WindSource::MANUAL:
+    source = _("Manual");
+    break;
+
+  case DerivedInfo::WindSource::AUTO:
+    source = _("Auto");
+    break;
+
+  case DerivedInfo::WindSource::EXTERNAL:
+    source = _("External");
+    break;
+  }
+
+  SetText(SOURCE, source);
 
   const bool prefer_external_wind = GetValueBoolean(ExternalWind);
   external_wind = prefer_external_wind && basic.external_wind_available;

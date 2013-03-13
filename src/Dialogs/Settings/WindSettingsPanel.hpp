@@ -33,6 +33,7 @@ class WindSettingsPanel final
     AutoWind,
     ExternalWind,
     TrailDrift,
+    SOURCE,
     Speed,
     Direction,
   };
