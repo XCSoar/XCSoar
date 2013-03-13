@@ -64,6 +64,13 @@ public:
   bool task_started;
   /** Whether the task is finished */
   bool task_finished;
+
+  /**
+   * Is the aircraft currently inside the current task point's
+   * observation zone?
+   */
+  bool inside_oz;
+
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
   /** Margin for final glide flight mode transition (m) */

@@ -41,6 +41,7 @@ TaskStats::reset()
   task_valid = false;
   task_started = false;
   task_finished = false;
+  inside_oz = false;
   flight_mode_final_glide = false;
   flight_mode_height_margin = 120;
 }
