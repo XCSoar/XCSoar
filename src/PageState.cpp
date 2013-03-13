@@ -21,16 +21,11 @@ Copyright_License {
 }
 */
 
-#include "UIState.hpp"
+#include "PageState.hpp"
 
 void
-UIState::Clear()
+PagesState::Clear()
 {
-  screen_blanked = false;
-  force_display_mode = DisplayMode::NONE;
-  display_mode = DisplayMode::NONE;
-  auxiliary_enabled = false;
-  panel_index = 0;
-  panel_name.clear();
-  pages.Clear();
+  current_index = 0;
+  special_page.SetUndefined();
 }
