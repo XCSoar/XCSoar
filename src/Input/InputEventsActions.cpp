@@ -473,7 +473,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Plane")))
     dlgPlanesShowModal();
   else if (StringIsEqual(misc, _T("Alternates")))
-    dlgAlternatesListShowModal(*CommonInterface::main_window);
+    dlgAlternatesListShowModal();
 
   trigger_redraw();
 }

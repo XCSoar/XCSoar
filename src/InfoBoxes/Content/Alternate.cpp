@@ -28,8 +28,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Task/Unordered/AlternateList.hpp"
-#include "Dialogs/Dialogs.h"
-#include "UIGlobals.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -80,7 +79,7 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
+    dlgAlternatesListShowModal();
     break;
   case ibkLeft:
   case ibkUp:
@@ -149,7 +148,7 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
+    dlgAlternatesListShowModal();
     break;
   case ibkLeft:
   case ibkUp:

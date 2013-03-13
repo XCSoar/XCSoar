@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "TaskDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Widget/ListWidget.hpp"
@@ -140,7 +140,7 @@ AlternatesListWidget::OnAction(int id)
 }
 
 void
-dlgAlternatesListShowModal(SingleWindow &parent)
+dlgAlternatesListShowModal()
 {
   if (protected_task_manager == NULL)
     return;
@@ -151,7 +151,7 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   widget.Update();
 
   WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(parent, _("Alternates"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Alternates"), &widget);
   widget.CreateButtons(dialog);
 
   int i = dialog.ShowModal() == mrOK
@@ -162,5 +162,6 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (i < 0 || (unsigned)i >= widget.alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(parent, widget.alternates[i].waypoint);
+  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(),
+                              widget.alternates[i].waypoint);
 }

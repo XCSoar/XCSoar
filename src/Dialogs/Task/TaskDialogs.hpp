@@ -52,4 +52,7 @@ dlgTaskPointNew(OrderedTask** task, const unsigned index);
 void
 dlgTargetShowModal(int TargetPoint = -1);
 
+void
+dlgAlternatesListShowModal();
+
 #endif
