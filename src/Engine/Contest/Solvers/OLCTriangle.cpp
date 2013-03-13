@@ -60,7 +60,8 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
    is_fai(_is_fai), predict(_predict),
    is_closed(false),
    is_complete(false),
-   first_tp(0)
+   first_tp(0),
+   closing(0)
 {
 }
 
@@ -72,6 +73,9 @@ OLCTriangle::Reset()
   is_closed = false;
   first_tp = 0;
   best_d = 0;
+  closing = 0;
+  closing_pairs.clear();
+  non_closing_pairs.clear();
 }
 
 gcc_pure
@@ -82,8 +86,8 @@ CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = solution[index + 1].GetLocation();
-  const GeoPoint &p_dest = solution[index < 2 ? index + 2 : 1].GetLocation();
+  const GeoPoint &p_start = solution[index].GetLocation();
+  const GeoPoint &p_dest = solution[index < 2 ? index + 1 : 0].GetLocation();
 
   return p_start.Distance(p_dest);
 }
@@ -115,6 +119,60 @@ OLCTriangle::IsPathClosed() const
   }
 
   return false;
+}
+
+OLCTriangle::ClosingPair
+OLCTriangle::ClosingPoint(unsigned first_index, unsigned last_index,
+                          const int min_altitude, unsigned max_range)
+{
+  // TODO: simplify... :-)
+
+  bool break_pos = false,
+       break_neg = false;
+
+  // if old closing point is prior to tp3 reset it.
+  if (closing < last_index) closing = last_index;
+
+  const SearchPoint first = GetPoint(first_index);
+
+  unsigned alternate = 0;
+  while(true) {
+    if (closing + alternate < n_points) {
+      const SearchPoint last = GetPoint(closing + alternate);
+
+      if (GetPoint(closing + alternate).GetIntegerAltitude() >= min_altitude &&
+          first.FlatDistanceTo(last) < max_range &&
+          first.GetLocation().Distance(last.GetLocation()) < max_distance) {
+        // closing pair found. return
+        closing = closing + alternate;
+        return ClosingPair(first_index, closing);
+      }
+
+    } else {
+      break_pos = true;
+    }
+
+    if (signed(closing) - signed(alternate) >= signed(last_index)) {
+      const SearchPoint last = GetPoint(closing - alternate);
+
+      if (GetPoint(closing - alternate).GetIntegerAltitude() >= min_altitude &&
+          first.FlatDistanceTo(last) < max_range &&
+          first.GetLocation().Distance(last.GetLocation()) < max_distance) {
+        // closing pair found. return
+        closing = closing - alternate;
+        return ClosingPair(first_index, closing);
+      }
+
+    } else {
+      break_neg = true;
+    }
+
+    if (break_pos && break_neg) break;
+    ++alternate;
+  }
+
+  // no closing point pair found
+  return ClosingPair(n_points, n_points);
 }
 
 class TriangleSecondLeg {
@@ -167,16 +225,14 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
     // fails min < 25% worst-case rule!
     return Result(0, 0);
 
-  const unsigned d = df_3 + df_2;
-
   // without FAI rules, allow any triangle
   if (!is_fai)
-    return Result(d, df_total);
+    return Result(df_2, df_total);
 
   if (shortest * 25 >= df_total * 7)
     // passes min > 28% rule,
     // this automatically means we pass max > 45% worst-case
-    return Result(d, df_total);
+    return Result(df_2, df_total);
 
   const unsigned longest = std::max({df_1, df_2, df_3});
   if (longest * 20 > df_total * 9) // fails max > 45% worst-case rule!
@@ -200,26 +256,28 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
   const fixed d_total(df_total* leg / shortest);
   if (d_total >= fixed(500000)) {
     // long distance, ok that it failed 28% rule
-    return Result(d, df_total);
+    return Result(df_2, df_total);
   }
 
   return Result(0, 0);
 }
 
 void
-OLCTriangle::AddTurn0Edges(const ScanTaskPoint origin)
+OLCTriangle::AddStartEdges()
 {
-  // add points up to finish
+  assert(num_stages <= MAX_STAGES);
+  assert(n_points > 0);
 
-  const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
-  const ScanTaskPoint end(origin.GetStageNumber() + 1, origin.GetPointIndex());
+  // don't use ContestDijkstra's AddStartEdges because it
+  // assumes the triangle closing point behind tp3 would be n_points - 1
+  // this might not be true, so the GetMaximumStartAltitude derived
+  // from that point wouldn't apply here, too.
 
-  for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
-    // Edge cost is 0, because this edge just moves the first TP.
-    Link(i, origin, 0);
+  for (ScanTaskPoint destination(0, 0), end(0, n_points);
+       destination != end; destination.IncrementPointIndex()) {
+    LinkStart(destination);
   }
 }
-
 
 void
 OLCTriangle::AddTurn1Edges(const ScanTaskPoint origin)
@@ -232,7 +290,11 @@ OLCTriangle::AddTurn1Edges(const ScanTaskPoint origin)
   for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
     const unsigned d = CalcEdgeDistance(origin, i);
 
-    if (!is_fai || 4 * d >= best_d)
+// invalid: we don't know if the triangle is closed yet. so add all
+// possible solutions without preference
+// TODO: if we'd know that the path _is_ closed, we could check this
+
+//    if (!is_fai || 4 * d >= best_d)
       /* no reason to add candidate if worse than 25% rule for FAI
          tasks */
       Link(i, origin, GetStageWeight(origin.GetStageNumber()) * d);
@@ -252,10 +314,13 @@ OLCTriangle::AddTurn2Edges(const ScanTaskPoint origin)
                           origin.GetPointIndex());
 
   for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
-    TriangleSecondLeg::Result result = sl.Calculate(GetPoint(i), best_d);
+    // check if triangle would match rules. if so, link the next point (tp1), otherwise throw away
+    // don't use the best_d constraint, we still don't know if the triangle can be closed or not.
+    TriangleSecondLeg::Result result = sl.Calculate(GetPoint(i), 0);
+
     const unsigned d = result.leg_distance;
-    if (d > 0) {
-      best_d = result.total_distance;
+    if (result.leg_distance > 0) {
+      //best_d = result.total_distance;
 
       Link(i, origin, GetStageWeight(origin.GetStageNumber()) * d);
 
@@ -272,16 +337,18 @@ OLCTriangle::AddTurn2Edges(const ScanTaskPoint origin)
 void
 OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
 {
-  assert(IsFinal(origin.GetStageNumber() + 1));
+  // we add two stages at once (which is kind of a hack, but we'll have all data we need
+  // to know here, so it saves us some additional processing)
+  assert(IsFinal(origin.GetStageNumber() + 2));
 
   if (predict) {
-    // dummy just to close the triangle
+    // dummy just to close the triangle, adds two edges to the final stage
     is_closed = true;
     Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
+    Link(ScanTaskPoint(origin.GetStageNumber() + 2, n_points - 1),
+         ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), 0);
   } else {
     const ScanTaskPoint start = FindStart(origin);
-    const ScanTaskPoint tp1 = FindStage(origin, 1);
-    const TracePoint &start_point = GetPoint(start);
     const TracePoint &origin_point = GetPoint(origin);
 
     const unsigned max_range =
@@ -292,13 +359,56 @@ OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
     const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
     const ScanTaskPoint end(origin.GetStageNumber() + 1,
                             origin.GetPointIndex());
-    for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex())
-      if (CalcEdgeDistance(start, i) <= max_range &&
-          start_point.GetLocation().Distance(GetPoint(i).GetLocation()) < max_distance) {
+
+    // add the edge from tp1 to the start point and from the start point to the final point.
+    // the first will have the edge cost of tp3 -> tp1, the latter zero cost.
+    // this just adds the start point to the solution, so we don't have to save it anywhere else
+
+    for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
+      auto is_closing = closing_pairs.find(ClosingPair(i.GetPointIndex(), start.GetPointIndex()));
+
+      if (is_closing == closing_pairs.end()) {
+        // pair is not in closing set already. process some more
+
+        auto is_non_closing = non_closing_pairs.find(ClosingPair(i.GetPointIndex(), start.GetPointIndex()));
+
+        if (is_non_closing == non_closing_pairs.end()) {
+          // pair is not in non_closing set already. check if there's a closing pair between
+
+          const int min_altitude = GetMinimumFinishAltitude(GetPoint(i)); 
+          const ClosingPair closing_pair = ClosingPoint(i.GetPointIndex(), start.GetPointIndex(),
+            min_altitude, max_range);
+
+          if (closing_pair.last != n_points) {
+            // there's a closing pair...
+            assert(closing_pair.last >= start.GetPointIndex());
+
+            // add to the set of possible closing options
+            closing_pairs.insert(closing_pair);
+
+            // add tp1 -> start edge with cost of tp1 -> tp3 edge
+            Link(i, origin, GetStageWeight(origin.GetStageNumber()) * CalcEdgeDistance(origin, start));
+
+            // add closing edge with zero cost.
+            const ScanTaskPoint next(i.GetStageNumber() + 1, closing_pair.last);
+            Link(next, i, 0);
+            is_closed = true;
+
+          } else {
+            // this pair of points cannot be closed. add to non_closing_pairs
+            non_closing_pairs.insert(ClosingPair(i.GetPointIndex(), start.GetPointIndex()));
+          }
+        }
+
+      } else {
+        // this pair of points is known to have a closing point pair. skip test...
+        Link(i, origin, GetStageWeight(origin.GetStageNumber()) * CalcEdgeDistance(origin, start));
+
+        const ScanTaskPoint next(i.GetStageNumber() + 1, (*is_closing).last);
+        Link(next, i, 0);
         is_closed = true;
-        // use the cost of tp3 to tp1, omitting the start/end
-        Link(i, origin, GetStageWeight(origin.GetStageNumber()) * CalcEdgeDistance(origin, tp1));
       }
+    }
   }
 }
 
@@ -309,19 +419,19 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 
   switch (origin.GetStageNumber()) {
   case 0:
-    AddTurn0Edges(origin);
-    break;
-
-  case 1:
     AddTurn1Edges(origin);
     break;
 
-  case 2:
+  case 1:
     AddTurn2Edges(origin);
     break;
 
-  case 3:
+  case 2:
     AddFinishEdges(origin);
+    break;
+
+  case 3:
+    // nothing to do at stage 3, should be unreachable
     break;
 
   default:
@@ -334,7 +444,7 @@ OLCTriangle::CalculateResult(const ContestTraceVector &solution) const
 {
   ContestResult result;
   result.time = n_points > 0
-    ? fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)))
+    ? fixed(solution[4].DeltaTime(solution[3]))
     : fixed(0);
   result.distance = (is_complete && is_closed)
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
@@ -374,5 +484,9 @@ OLCTriangle::CopySolution(ContestTraceVector &result) const
   ContestDijkstra::CopySolution(result);
   assert(result.size() == 5);
 
+  // result: tp3 -> tp2 -> tp1 -> start -> finish
+  // should be: start -> tp1 -> tp2 -> tp3 -> finish
+
+  std::rotate(result.begin(), result.end() - 1, result.end());
   std::reverse(result.begin(), result.end());
 }
