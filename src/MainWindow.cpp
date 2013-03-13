@@ -556,7 +556,7 @@ MainWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (SingleWindow::OnMouseDown(x, y))
     return true;
 
-  if (!dragging) {
+  if (!dragging && !HasDialog()) {
     dragging = true;
     SetCapture();
     gestures.Start(x, y, Layout::Scale(20));

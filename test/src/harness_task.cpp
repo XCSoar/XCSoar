@@ -331,8 +331,6 @@ bool test_task_type_manip(TaskManager& task_manager,
   if (!test_task_random_RT_AAT_FAI(task_manager, waypoints, n_points))
     return false;
 
-  AbstractTaskFactory &fact = task_manager.GetFactory();
-
   switch (rand() %3) {
   case 0:
     task_manager.SetFactory(TaskFactoryType::AAT);
@@ -350,6 +348,7 @@ bool test_task_type_manip(TaskManager& task_manager,
     test_note("# unknown task type\n");
   }
 
+  AbstractTaskFactory &fact = task_manager.GetFactory();
   fact.MutateTPsToTaskType();
 
   test_note("# checking mutated start..\n");
@@ -856,7 +855,6 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   const Waypoint *wp;
 
   OrderedTaskPoint *tp;
-  AbstractTaskFactory &fact = task_manager.GetFactory();
   char tmp[255];
   char tskType[20];
   tskType[0] = '\0';
@@ -879,6 +877,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     test_note("# creating random FAI GENERAL\n");
     break;
   }
+
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   //max points includes start & finish
   const TaskFactoryConstraints &constraints =
