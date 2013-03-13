@@ -31,23 +31,30 @@ class MD5
 public:
   static constexpr size_t DIGEST_LENGTH = 32;
 
+  struct State {
+    uint32_t a, b, c, d;
+  };
+
 private:
   uint8_t buff512bits[64];
-  uint32_t h0, h1, h2, h3;
+  State state;
   uint64_t message_length;
 
   void Process512(const uint8_t *in);
 
 public:
   /**
-   * Initialise with the default key.
-   */
-  void InitKey();
-
-  /**
    * Initialise with a custom key.
    */
-  void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
+  void Initialise(const State &_state) {
+    state = _state;
+    message_length = 0;
+  }
+
+  /**
+   * Initialise with the default key.
+   */
+  void Initialise();
 
   void Append(uint8_t ch);
   void Append(const void *data, size_t length);

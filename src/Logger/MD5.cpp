@@ -104,6 +104,10 @@ static constexpr uint32_t r[64] = {
   6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,  6, 10, 15, 21,
 };
 
+static constexpr MD5::State md5_start = {
+  0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
+};
+
 static inline uint32_t
 leftrotate(uint32_t x, uint32_t c)
 {
@@ -111,19 +115,9 @@ leftrotate(uint32_t x, uint32_t c)
 }
 
 void
-MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
+MD5::Initialise()
 {
-  h0 = h0in;
-  h1 = h1in;
-  h2 = h2in;
-  h3 = h3in;
-  message_length = 0;
-}
-
-void
-MD5::InitKey()
-{
-  InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
+  Initialise(md5_start);
 }
 
 void
@@ -199,7 +193,7 @@ MD5::Process512(const uint8_t *s512in)
     w[j] = ToLE32(s512_32[j]);
 
   // Initialize hash value for this chunk:
-  uint32_t a = h0, b = h1, c = h2, d = h3;
+  uint32_t a = state.a, b = state.b, c = state.c, d = state.d;
 
   // Main loop:
   for (int i = 0; i < 64; i++) {
@@ -226,15 +220,15 @@ MD5::Process512(const uint8_t *s512in)
   }
 
   // Add this chunk's hash to result so far:
-  h0 += a;
-  h1 += b;
-  h2 += c;
-  h3 += d;
+  state.a += a;
+  state.b += b;
+  state.c += c;
+  state.d += d;
 }
 
 void
 MD5::GetDigest(char *buffer) const
 {
   sprintf(buffer, "%08x%08x%08x%08x",
-          ByteSwap32(h0), ByteSwap32(h1), ByteSwap32(h2), ByteSwap32(h3));
+          ByteSwap32(state.a), ByteSwap32(state.b), ByteSwap32(state.c), ByteSwap32(state.d));
 }

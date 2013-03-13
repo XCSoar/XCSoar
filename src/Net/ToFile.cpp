@@ -49,7 +49,7 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
   total = 0;
 
   MD5 md5;
-  md5.InitKey();
+  md5.Initialise();
 
   uint8_t buffer[4096];
   while (true) {

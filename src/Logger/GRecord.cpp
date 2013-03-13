@@ -31,15 +31,23 @@
 #include <tchar.h>
 #include <string.h>
 
+/**
+ * Security theater.
+ */
+static constexpr MD5::State g_key[4] = {
+  { 0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76 },
+  { 0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a },
+  { 0x67452301,0xefcdab89,0x98badcfe,0x10325476 },
+  { 0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee },
+};
+
 void
 GRecord::Initialize()
 {
   ignore_comma = true;
 
-  md5[0].InitKey(0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76);
-  md5[1].InitKey(0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a);
-  md5[2].InitKey(0x67452301,0xefcdab89,0x98badcfe,0x10325476);
-  md5[3].InitKey(0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee);
+  for (unsigned i = 0; i < 4; ++i)
+    md5[i].Initialise(g_key[i]);
 }
 
 bool
