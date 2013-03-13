@@ -1,169 +1,200 @@
 \chapter{Navigation}\label{cha:navigation}
 
-In diesem Kapitel wird die ''moving map'' beschreiben, welche einen elementaren Bestandteil von \textsf{XCSoar} zur Navigation darstellt und heute wohl selbstverständlich ist. Weiterhin werden hier die entsprechenden Elemente und Details beschrieben, welche auf der Karte eingeblendet sind, um die Navigation so schnell und einfach wie möglich zu machen.
+In diesem Kapitel wird die ''moving map'' beschreiben, welche einen elementaren Bestandteil von \xc zur Navigation darstellt und heute selbstverständlich ist. 
+Weiterhin werden hier die entsprechenden Elemente beschrieben, welche auf der Karte eingeblendet sind um die Navigation so schnell und einfach wie möglich zu machen.
 
 \section{Elemente der Kartenanzeige}
 
-\begin{maxipage}
-\includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{figures/fig-map.png}
+\begin{maxipage}\centering
+\includegraphics[angle=0,width=0.55\linewidth,keepaspectratio='true']{figures/fig-map.png}
 \end{maxipage}
 
-Der Bildschirm der moving-map zeigt folgende Bestandteile:
+Die moving-map zeigt folgende Bestandteile:
 
-\begin{enumerate}
-  \item Das Segelflugzeug-Symbol
+\begin{enumerate}[itemsep=-0.25ex]
+  \item Das Segelflugzeug Symbol
   \item Die Wegpunkte
-  \item Die aktive Flugaufgabe (den ''task'')
-  \item Den Kurs zum gewählten Wegpunkt (das ''bearing'')
-     (\footnote{Die Kurve zum nächsten Wegpunkt kann auch eine {\em ''route''} sein, wie es im Abschnitt~\ref{sec:route} beschrieben wird.})
+  \item Die aktive Flugaufgabe (''task'')
+  \item Den Kurs zum gewählten Wegpunkt (''bearing'')
+     (\footnote{Der Kurs zum nächsten Wegpunkt kann auch eine {\em Route} sein, wie es im Abschnitt~\ref{sec:route} beschrieben wird.})
     \item Die Lufträume
   \item Die Landkarte und die Topologie (Straßen, Flüsse, Seen)
   \item Markierungen (selbst erstellte ''markers'')
-  \item Den bisher zurückgelegten Flugweg (Flugspur, ''trail'')
-  \item Den Gleitbereich \footnote{Der Gleitbereich wird auch beschrieben im Abschnitt~\ref{sec:reach}.}
+  \item Den bisher zurückgelegten Flugweg (''trail'')
+  \item Den Gleitbereich/Reichweite \footnote{Der Gleitbereich wird auch beschrieben im Abschnitt~\ref{sec:reach}.}
   \item Die aus der aktuellen Höhe erreichbaren Plätze
-  \item Einen Nord- und einen Windpfeil
+  \item Einen Nord-  und einen Windpfeil
 \end{enumerate}
 
-Die Karte ist in einer speziellen Projektion dargestellt, nicht in Längen- und Breitengraden. Sie kann herein- und herausgezoomt werden als auch verschoben werden. Sämtliche Navigationsberechnungen von \textsf{XCSoar} finden unter Berücksichtigung der Erdkrümmung statt.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Die Karte ist in einer speziellen Projektion dargestellt, nicht in Längen- und Breitengraden. Sie kann herein- und herausgezoomt werden als auch verschoben werden. Sämtliche Navigationsberechnungen von \xc finden unter Berücksichtigung der Erdkrümmung statt.
+%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Segelflugzeugsymbol und Kartenausrichtung}\label{Segelflugzeugsymbol}\index{Segelflugzeugsymbol}\index{Kartenausrichtung}
 
-Das Segelflugzeugsymbol zeigt die Position des Flugzeuges auf der Karte. Die Ausrichtung des Symboles gibt die ungefähre Lage des Segelflugzeuges in Bezug auf die Karte wieder(\emph{''heading''}). Das Segelflugzeugsymbol erscheint weiß, wenn die Darstellung des Geländes ausgewählt ist, und schwarz, wenn das Gelände ausgeblendet, ist also nur Straßen, Flüsse, Seen etc.\ dargestellt sind.
+Das Segelflugzeugsymbol zeigt die Position des Flugzeuges auf der Karte. Die Ausrichtung des Symboles gibt die ungefähre Lage des Segelflugzeuges in Bezug auf die Karte wieder.
 
-Die Karte kann in Abhängigkeit des Flugmodus und der gewählten Konfigurationseinstellungen auf drei Arten dargestellt werden:
+Die Karte kann in Abhängigkeit des Flugmodus und der gewählten Einstellungen in der Konfiguration auf drei Arten dargestellt werden:
 
 \begin{description}
-\item[\emph{Kurs nach oben}] Bei dieser Darstellung wird die Karte so gedreht, da\ss{} der Kurs immer nach oben zeigt. Hierbei wird außerdem der Nordpfeil eingeblendet, der die Richtung nach Norden angibt.
-\item[\emph{Flugrichtung oben}] Die angezeigte Karte orientiert sch anhand der Flugrichtung.
-\item[\emph{Norden oben}] Hier wird die Karte immer in Nordrichtung (\emph{true north}) dargestellt. Das Segelflugzeugsymbol bewegt sich gemäß seines Kurses unter Berücksichtigung des Windes.
+\item[\emph{Kurs nach oben}]Kartendarstellung so, daß der Kurs nach oben zeigt.
+\item[\emph{Flugrichtung oben}] Bei dieser Darstellung wird das Flugzeug immer nach oben ausgerichtet und die Karte dreht sich  mit. Hierbei wird außerdem der Nordpfeil eingeblendet, der die Richtung nach Nord angibt (\emph{true north})
+\item[\emph{Norden oben}] Hier wird die Karte immer in Nordrichtung (\emph{true north}) dargestellt. Das Segelflugzeugsymbol bewegt sich gemäß seinem Kurs unter Berücksichtigung des Windes.
 \item[\emph{Ziel nach oben}] Hierbei ist immer das Ziel am oberen Rande der Karte ausgerichtet.
+\item[\emph{Wind oben}] Ausrichtung der Karte gemäß der Windrichtung: Der Wind kommt auf der Karte von oben nach unten
 \end{description}
 
-Über die Konfigurationseinstellungen können die jeweiligen Einstellungen an die Flugsituation (Kurbeln oder Geradeausflug) angepasst werden:
+Über die Konfigurationseinstellungen \config{orientation} können die jeweiligen Einstellungen an die Flugsituation (Kurbeln, Vorflug, Endanflug) angepasst werden.
 
-\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenut{System}{Einstellung}}
-Dies ist evtl.\ sinnvoll, wenn während des Kurbelns kurzzeitig die Orientierung zum Ausleiten verlorengegangen ist. 
-\menulabel{\button{Kartenanzeige}\blink\button{Ausrichtung}} 
-Setzt man bspw.\  \textsf{Vorflug Ausrichtung} auf ''Norden oben'' und \textsf{Steigflug Ausrichtung} ''Ziel nach oben''  dann 
-springt nach dem Kurbeln die Anzeige automatisch wieder auf ''Norden oben''.
+In den Konfigurationseinstellungen kann weiterhin eingestellt werden, ob während des Kurbelns wahlweise das Ziel oben anzuzeigen ist (\emph{Ziel nach oben}). Dies ist evtl.\ sinnvoll, wenn während des Kurbelns kurzzeitig die Orientierung zum Ausleiten verlorengegangen ist. Nach Beendigung des Kurbelns springt die Anzeige dann wieder in \emph{Norden oben} den Modus.
 
-Wenn die Darstellung \emph{''Norden oben''} oder \emph{''Ziel nach oben''} gewählt ist, wird das Segelflugzeugsymbol in der Karte zentriert dargestellt. Normalerweise dagegen ist das Symbol ca.\ 20\% vom unteren Rand der Karte positioniert, um einen guten Überblick in Flugrichtung zu gewährleisten. Auch diese Position kann in den Konfigurationseinstellungen geändert werden.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Wenn die Darstellung \emph{Norden oben} oder \emph{Ziel nach oben} gewählt ist, wird das Segelflugzeugsymbol in der Karte zentriert dargestellt. Normalerweise dagegen ist das Symbol ca.\ 20\% vom unteren Rand der Karte positioniert, um einen guten Überblick in Flugrichtung zu gewährleisten. Auch diese Position und eine evtl.\ Verschiebung relativ zum Ziel oder zum Kurs kann in den Konfigurationseinstellungen geändert werden.
+%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Zoom und Kartenmaßstab}\label{zoom}\label{kartenmasstab}\index{Zoom}\index{Kartenmaßstab}\index{Maßstab}
-Der Kartenmaßstab kann wie folgt geändert werden: \\
-\textcolor{blue}{\textsl{PC} und  \textsl{Pocket PC}:}
+Um den Kartenmaßstab zu ändern  (für \textsf{PC}  und  \textsf{Pocket PC} ):
 \begin{enumerate}
- \item Tippe auf eine leer Stelle des Displays, um die Karte zu aktivieren (keinen Wegpunkt auswählen ! )\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{herein}} 
-        Hiernach die Schaltwippe des \textsf{PDA}s hoch oder runter drücken, um herein- bzw.\ herauszuzoomen. 
- \item Es können ebenfalls\gesture{Up/Down} Gesten benutzt werden, um den Maßstab zu ändern.
-      Die  Geste {\emph ''Hoch''} zoomt herein,  {\emph ''Runter''} zoomt heraus.
- \item Als letzte Möglichkeit kann über das Menü gezoomt werden:
+\item Es kann eine Geste benutzt werden, Die Geste \gesture{Hoch/Runter}
+     ''Hoch'' zoomt herein,  ''Runter'' zoomt heraus.
+  \item Tippe auf eine leere Stelle des Displays, um die Karte zu aktivieren. Falls Du Dich in irgendeinem Menu befindest, funktioniert es nicht! 
+
+  Hiernach die Schaltwippe des \textsf{PDA}s hoch oder runter drücken, um herein- bzw.\ herauszuzoomen.
+  
+     \item Als letzte Möglichkeit kann über das Menü gezoomt werden
+\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{herein}}
+%\begin{quote}
+% \smenus{Anzeige}\blink\smenut{Zoom}{Herein} bzw. %\smenus{Anzeige}\blink\smenut{Zoom}{Heraus}
+%\end{quote}
 \end{enumerate}
 
-\textcolor{blue}{Beim \al} wird der Drehknopf zum ein- und auszoomen verwendet werden.
+Beim Altair wird der Drehknopf zum ein- und auszoomen verwendet werden.
 
-Der Kartenmaßstab (siehe Bild links) \index{Kartenmaßstab}\index{Maßstab} ist in der linken unteren Ecke eingeblendet, weiterhin als schwarzweiß \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
-gestreifter Balken, um je nach Maßstab die Entfernungen anzugeben(z.B.\ 0,1km, 1,0km, 10km etc.).
+Der Kartenmaßstab (siehe Bild links) \index{Kartenmaßstab}\index{Maßstab} ist in der linken unteren Ecke als von links nach rechts weisender Pfeil eingeblendet.  \menulabel{\includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/zoom.png}}
 
 Die Zahl gibt hierbei die Gesamtbreite des Bildschirmes an.
 
-\textcolor{blue}{Für \textsl{Compaq Aero}} Benutzer: Wenn Ihr die \textsl{Compaq Aero Game Keys} aktiviert (im Q-Menü), können auch diese für das Hinein- und Herauszoomen benutzt werden.
+Für \textsc{Compaq Aero} Benutzer: Wenn Ihr die \textsl{Compaq Aero Game Keys} aktiviert (im Q-Menü), können auch diese für das Hinein- und Herauszoomen benutzt werden.\index{Zoom!Maßstab}
 
-Es besteht die Möglichkeit, zwei Zoom Einstellung zu haben: einer, wenn der Segelflieger \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenut{System}{Einstellung}} beim Kurbeln ist, und ein weiterer welcher für den Überlandflug bzw. Endanflugmodus gültig ist.
-Dies ist die ''Steigflug Zoom'' Einstellung, welche unter \config{circlingzoom} eingestellt werden kann.
-Als Standardmaßstab für die ''Steigflug Zoom'' Funktion ist in Abhängigkeit von der Displaygröße ein Kartenmaßstab von 2,5--5km voreingestellt.
+\subsection*{Steigflug Zoom}
+Es besteht die Möglichkeit, zwei Zoom Einstellung zu haben: einer, wenn der Segelflieger beim Kurbeln ist, und ein weiterer welcher für den Überlandflug bzw. Endanflugmodus gültig ist.
 
-Wenn während des Kurbelns hinein oder herausgezoomt wird, \menulabel{\button{Kartenanzeige}\blink\button{Ausrichtung}} so beeinflußt dies nicht den vorher im 
-Geradeausflug eingestellten zu den Zoom-Maßstab. 
+Dies ist die ''Steigflug Zoom'' Einstellung, welche unter \config{circlingzoom} eingestellt werden kann.\index{Zoom!Steigflug}
 
-Sowie das Kurbeln beendet wird, wird automatisch auf \menulabel{~~~~~~~~~~~~\button{Steigflug Zoom}} den vorher eingestellten Maßstab zurückgesetzt.
+Als Standardmaßstab für die ''Steigflug Zoom'' Einstellung ist abhängig  von der Displaygröße ein Kartenmaßstab von 2,5 - 5 km voreingestellt.
+Wenn während des Kurbelns hinein oder herausgesucht wird, so beeinflußt dies nicht den vorher im Grabe Ausflug eingestellten zu den Zoom-Maßstab. Sowie das kurbeln beendet wird, wird automatisch auf den vorher eingestellten Maßstab zurückgesetzt.
+\subsection*{Auto Zoom}
+Die ''Auto-Zoom'' Funktion zoomt automatisch herein, wenn man sich einem Wendepunkt nähert.\index{Zoom!Auto}
+\menulabel{\includegraphics[angle=0,width=0.35\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
+Wenn Auto-Zoom aktiv ist, erscheint und links am Kartenrand ein Text ''Auto-Zoom''
+Es kann trotzdem weiterhin hinein und heraus gesucht werden, die Auto-Zoom Funktion wird in diesem Falle automatisch auf manuell zurückgesetzt.
 
-Die Auto-Zoom Funktion zoomt automatisch herein, wenn man sich einem Wendepunkt nähert. Wenn Auto-Zoom aktiv ist, erscheint und links am Kartenrand ein Text ''Auto-Zoom''
-Es kann trotzdem weiterhin hinein und heraus gezoomt werden, \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}} 
-die Auto-Zoom Funktion wird in diesem Falle automatisch auf manuell zurückgesetzt.
-
-
-Auto-Zoom kann auch \"uber das Men\"u eingeschaltet werden. 
+Um Auto-Zoom einzuschalten, benutze links angegebenes Menü
 %\begin{quote}
-\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{Auto}}
+%\smenus{Anzeige}\blink\smenut{Zoom}{Auto}
 %\end{quote}
+\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Zoom}{Auto}}
+Nachdem sich ein Wegpunkt geändert hat (sei es automatisch, über die Wegpunkt Auswahl, oder durch manuelles Umschalten auf der Karte) wird ''Auto-Zoom'' den Maßstab automatisch so wählen, daß der nächste Wegpunkt sichtbar ist. Während des Kurbelns wird die Karte zentriert bezüglich des Bartes dargestellt, sodaß das Flugzeugsymbol dennoch sichtbar bleibt.
 
-Nachdem ein Wegpunkt sich geändert hat (automatisch, über die Wegpunkt Auswahl, oder durch manuelles Umschalten auf der Karte) wird Auto-Zoom den Maßstab automatisch so wählen, daß der nächste Wegpunkt sichtbar ist. Während des Kurbelns, wenn ein Bart entdeckt wurde, wird die Karte zentriert bezüglich des Bartes dargestellt, sodaß das Flugzeugsymbol dennoch sichtbar bleibt.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Verschieben der Karte - Verschiebe-Modus}\index{Karte!Verschieben}\index{Pan-Mode}
 
-Der Verschiebe-Modus ("Pan-Mode") erlaubt es dem Benutzer die Karte auf der moving map zu verschieben. Damit ist er in der Lage einen weit größeren Bereich zu sehen als auf den Kartenausschnitt dargestellt wird. Insbesondere bei der Aufgabenplanung ist dies sinnvoll und nützlich.
-\begin{enumerate}
-\item Einschalten des Verschiebe-Modus wie folgt:
-\begin{quote}
-\smenus{Anzeige}\blink\smenut{Verschieben}{Ein}
-\end{quote}
-\item Die Karte kann nun mit auf den Touchscreen gedrückten Finger verschoben werden. Auf dem \textsf{PC}  erfolgt dies mit der Maus bei gedrückt gehaltener Maustaste; beim Altair werden der innere und äußere Drehknopf hierzu benutzt.
-\item Der Verschiebemodus wird verlassen mit:
-\begin{quote}
-\smenut{Verschieben}{Aus}
-\end{quote}
-\end{enumerate}
+Der Verschiebe-Modus (''Pan-Mode'') erlaubt es dem Benutzer die Karte auf der moving map zu verschieben. Damit ist er in der Lage einen weit größeren Bereich zu sehen als auf den Kartenausschnitt dargestellt wird. Insbesondere bei der Aufgabenplanung ist dies sinnvoll und nützlich.
 
-Solange der verschiedene Modus aktiv ist, erscheint der Text "Pan" und links an der Karte über den Infoboxen. Außerdem erscheint ein spezielles Verschiebe-Menü (s.u.) sowie ein Fadenkreuz, welches immer in der Mitte der Karte fixiert bleibt.
-\sketch{figures/pan.png}
 
-Der Verschiebe-Modus kann ebenfalls über Gesten aufgerufen werden \gesture{P}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\menulabel{\bmenut{Anzeige}{1/2}\blink\bmenut{Verschieben}{Ein}}
+
+%\begin{enumerate}
+%\item Einschalten des Verschiebe-Modus wie folgt:
+%\begin{quote}
+%\smenus{Anzeige}\blink\smenut{Verschieben}{Ein}
+%\end{quote}
+ 
+Die Karte kann nun mit auf den Touchscreen gedrückten Finger verschoben werden. Auf dem \textsf{PC}  erfolgt dies mit der Maus bei gedrückt gehaltener Maustaste; beim \al werden der innere und äußere Drehknopf hierzu benutzt. Der Verschiebemodus wird verlassen mit 
+%\menulabel{\bmenut{Verschieben}{Aus}} 
+\button{Verschieben Aus}
+%\begin{quote}
+%\smenut{Verschieben}{Aus}
+%\end{quote}
+%\end{enumerate}
+
+Es erscheint ein spezielles Verschiebe-Menü (s.u.) sowie ein Fadenkreuz, welches immer in der Mitte der Karte fixiert bleibt.
+
+Der Verschiebe-Modus kann ebenso über die Geste P \gesture{P} aufgerufen werden.
+
+\begin{center}
+\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/pan.png}
+\end{center}\index{Was ist hier?}
+Mit der Auswahl von \button{Was ist hier} öffnet sich ein Menü, welches entsprechende Kartenelemente wie z.B.\ Wegpunkte und Lufträume die sich in der Nähe des Fadenkreuzes befinden, sowie die eigene Position anzeigt und zur Auswahl/Bearbeitung darstellt. Zu den jeweiligen angezeigten Elementen werden Entfernung und ggf.\ benötigte Höhe angezeigt.
+
+Parallel dazu werden in der oberen rechten Bildschirmecke die Koordinaten des Fadenkreuzes und die dazugehörige Höhe des Geländes über MSL angegeben.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Wegpunkte} \label{sec:waypoint-schemes}
-Die Darstellung und Einfärbung von Wegpunkten erfolgt je nach Situation und Art des jeweiligen Punktes. Hauptmerkmal ist die hierbei Landbarkeit eines Wegpunktes.  Es gibt drei Sätze für die Darstellung von landbaren Wegpunkten  (Lila Punkt, Schwarz Weiß und Ampel), die unter
-\begin{quote}
-\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{4}
-\end{quote}  "Landbare Symbole" eingestellt werden können.\index{Wegpunkte!Darstellung}\index{Wegpunkte!Farben}
+Die Darstellung und Einfärbung von Wegpunkten erfolgt je nach Situation und Art des jeweiligen Punktes.\menulabel{\bmenut{Konf}{2/3}\blink\bmenus{System}} Hauptmerkmal ist die hierbei Landbarkeit bzw. Erreichbarkeit eines Wegpunktes.  Es gibt derzeit drei verschiedene Icon- Sätze  für die Darstellung von landbaren Wegpunkten  (Lila Punkt, Schwarz Weiß und Ampel), die unter \index{Wegpunkte!Farben}
+%\begin{quote}
+%\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}%{Einstellung}\blink\seite{4}
+%\end{quote}
+\button{Landbare Symbole} ausgewählt werden können.\menulabel{\button{Kartenanzeige}\blink\button{Wegpunkte}}\index{Wegpunkte!Darstellung}
 
-Die Symbole sind in untenstehender Tabelle aufgelistet. \config{waypointicons}
+Die Symbole sind in untenstehender Tabelle aufgelistet. 
+\begin{description}
+   \item[Lila Punkt] Bei dieser Darstellung werden die landbaren Plätze als lila Punkt angezeigt. Wenn der Wegpunkt erreichbar ist, bekommt der lila Punkt einen grünen Kreis.  Diese Darstellung ist sehr ähnlich der in WinPilot
+   \item[S/W] \config{waypointicons} Landbare Wegpunkte werden in der Karte weiß/grau dargestellt, ähnlich wie oben bekommen erreichbare Plätze einen grünen Punkt, ist er durch einen Berg versperrt, wird er rot. 
+   \item[Verkehrsampel] Flugplätze und Außenlandefelder werden in den Farben einer Verkehrsampel dargestellt: Grün, wenn erreichbar, Orange, wenn z.B.\ durch einen Berg versperrt und rot, wenn er überhaupt nicht erreicht werden kann.
+\end{description}
 
-\begin{tabular}{c|ccc|ccc|}
-Symbole
-&\begin{sideways}Landbares Feld\end{sideways}
-&\begin{sideways}Grenzwertig\end{sideways}
-&\begin{sideways}Erreichbar\end{sideways}
-&\begin{sideways}Flugplatz\end{sideways}
-&\begin{sideways}Grenzwertig\end{sideways}
-&\begin{sideways}Erreichbar\end{sideways}\\
-\hline
-Lila Punkt &
-\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf} &
-\includegraphics[width=0.8cm]{icons/winpilot_marginal.pdf} &
-\includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} &
-\colorbox{white}{\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf}} &
-\includegraphics[width=0.8cm]{icons/winpilot_marginal.pdf} &
-\includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} \\
-\hline
-S/W & 
-\includegraphics[width=0.9cm]{icons/alt_landable_field.pdf} &
-\includegraphics[width=0.9cm]{icons/alt_marginal_field.pdf} &
-\includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
-\colorbox[rgb]{0.94,0.94,0.94}{\includegraphics[width=0.9cm]{icons/alt_landable_airport.pdf}} &
-\includegraphics[width=0.9cm]{icons/alt_marginal_airport.pdf} &
-\includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
-\hline
-Ampelfarben & 
-\includegraphics[width=0.9cm]{icons/alt2_landable_field.pdf} &
-\includegraphics[width=0.9cm]{icons/alt2_marginal_field.pdf} &
-\includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
-\colorbox{white}{\includegraphics[width=0.9cm]{icons/alt2_landable_airport.pdf}} &
-\includegraphics[width=0.9cm]{icons/alt2_marginal_airport.pdf} &
-\includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
-\hline
-\end{tabular} \\
+\tip Je nach verwendeter Datenbank kann auch die Länge und Richtung der Landebahn mit angezeigt werden. 
+%\begin{center}
+%\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true'{figures/possiblewaypoints.png}
+%\end{center}
 
-Die Wegpunkte können nach mehreren Abkürzungsregeln beschriftet werden \seite{4}), um auf der Karte nicht so viel Platz zu verschwenden. \config{labels} Weiterhin können je nach Sichtbarkeit bzw. Erreichbarkeit die Farben und/oder Formen geändert werden. \config{labelvisibility}. \textsf{XCSoar} berechnet unter Berücksichtigung des Windes permanent, welche Wegpunkte sich innerhalb des Gleitpfades befinden.
+%\begin{tabular}{c|c|cc|cc|}
+%Icon set &\begin{sideways}Einfacher Wegpunkt \end{sideways}
+%&\begin{sideways}Landbares Feld\end{sideways}
+%&\begin{sideways}Erreichbar\end{sideways}
+%&\begin{sideways}Flugplatz\end{sideways}
+%&\begin{sideways}Erreichbar\end{sideways}\\
+%\hline
+%Purple Circle &
+%\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+%\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf} &
+%\includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} &
+%\colorbox{white}{\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf}}
+%& \includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} \\
+%\hline
+%B/W Icon &
+%\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+%\includegraphics[width=0.9cm]{icons/alt_landable_field.pdf} &
+%\includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
+%\colorbox[rgb]{0.94,0.94,0.94}{\includegraphics[width=0.9cm]{icons/alt_landable_airport.pdf}}
+%& \includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
+%\hline
+%Orange Icon &
+%\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+%\includegraphics[width=0.9cm]{icons/alt2_landable_field.pdf} &
+%\includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
+%\colorbox{white}{\includegraphics[width=0.9cm]{icons/alt2_landable_airport.pdf}}
+%& \includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
+%\hline
+%\end{tabular}
+%
 
-Die angenommene Ankunftshöhe {\em oberhalb der Sicherheitshöhe} der erreichbaren  Wegpunkte wird neben dem Wegpunkt  angezeigt. Diese Ankunftshöhe wird berechnet aus der entsprechenden Leistung des Segelflugzeuges und dem MacCready Wert. Hierbei kann gewählt werden, ob die Berechnung mit einem Sicherheits-MacCready Wert, oder aber streng nach der Polare erfolgt \config{reachpolar}.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Die Wegpunkte können nach mehreren Abkürzungsregeln beschriftet werden, um auf \config{labels} der Karte nicht so viel Platz zu verschwenden und den Bildschirm  übersichtlicher darstellen zu können. 
+
+%\menulabel{\bmenut{Konf}{2/3}\blink\bmenus{System}}
+Weiterhin können je nach Sichtbarkeit bzw. Erreichbarkeit die Farben und/oder Formen geändert werden.%\menulabel{\button{Kartenanzeige}\blink\button{Wegpunkte}} 
+\xc berechnet kontinierlich und unter Berücksichtigung des Windes, welche Wegpunkte sich innerhalb des Gleitpfades befinden und stellt dies entsprechend der eingestellten Optionen dar.
+
+Die angenommene Ankunftshöhe {\em oberhalb der Sicherheitshöhe} der erreichbaren  Wegpunkte wird neben dem Wegpunkt  angezeigt. Diese Ankunftshöhe wird berechnet aus der entsprechenden Leistung des Segelflugzeuges und dem MacCready Wert. 
+
+\config{reachpolar} Hierbei kann gewählt werden, ob die Berechnung mit einem Sicherheits-MacCready Wert, oder aber streng nach der Polare erfolgt.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Aktive Aufgabe}
-Die Kurslinie der aktiven Aufgabe wird als eine grüne, gestrichelte Linie auf der Karte dargestellt.
 
-Bei AAT-Aufgaben werden die Sektoren der Aufgabe gelb hinterlegt dargestellt.
-Die Start und Zielpunkte werden als Kreise dargestellt, Linien werden nur gezeichnet, wenn es sich hierbei um Start bzw. Ziellinien handelt.
+Die Linie der aktiven Aufgabe wird als eine grüne, gestrichelte Linie auf der Karte dargestellt.
+
+Bei AAT-Aufgaben werden die Sektoren der Aufgabe gelb transparent hinterlegt dargestellt.
+Die Start und Zielpunkte werden als Kreise dargestellt, Linien werden nur 
+gezeichnet, wenn es sich hierbei um Start bzw. Ziellinien handelt.
 Wendepunktsektoren werden als Segmente dargestellt (auch der DAEC-Schlüssellochsektor kann dargestellt werden).
+
 
 Vom Segelflugzeugsymbol wird eine dicke schwarze Linie direkt zum nächsten aktiven Wendepunkt gezeichnet. Diese Linie stellt normalerweise den direkten Weg zum nächsten Wegpunkt dar, kann aber auch eine {\em Route} darstellen, welche um zum Beispiel Berge und/oder Lufträume herum führt. Nähere Details hierzu werden im Abschnitt Route~\ref{sec:route}  beschrieben.
 \begin{center}
@@ -174,7 +205,7 @@ Vom Segelflugzeugsymbol wird eine dicke schwarze Linie direkt zum nächsten akti
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-barrel.png} \\
 \end{tabular}
 \end{center}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%55
 \section{Gelände und Topologie}
 
 Die folgenden topologischen Details werden auf der Karte dargestellt:
@@ -183,23 +214,25 @@ Die folgenden topologischen Details werden auf der Karte dargestellt:
 \item Flüsse, dargestellt als blaue Linien
 \item Große Wasserflächen (Seen), dargestellt als blaue Flächen
 \item Große Städte, dargestellt als gelbe Flächen
-\item Kleine Siedlungen, dargestellt als gelbe Diamanten
+\item Kleine Siedlungen, dargestellt als gelbe Diamanten, je nach verwendeter Datenbank wird auch nur der Name angezeigt 
 \end{itemize}
 Großstädte und kleine Siedlungen werden in Schrägschrift beschriftet.
 
 Das Gelände wird gemäß der Höhe eingefärbt, optional kann es schattiert werden -  entweder gemäß der Sonneneinstrahlung oder aber entsprechend des Windeinfalles (Luv oder Lee).
 
 Unbekanntes Gelände, oder Gelände das unterhalb der Meereshöhe liegt, wird blau dargestellt.
-Die Schattierung des Geländes erhöht die Erkennbarkeit der Struktur und ist derzeit so gestaltet, daß helle Flächen eines Berges die Luvseite darstellen und dunkle Flächen die Leeseite.
-Die Stärke und Helligkeit der Schattierung kann konfiguriert werden \config{shading}.
 
-Die Unterstützung der Schattierung für Sonneneinstrahlung in Abhängigkeit vom Sonnenstand ist in Arbeit\dots.
+Die Schattierung des Geländes erhöht die Erkennbarkeit der Struktur und ist derzeit so gestaltet, daß helle Flächen eines Berges die Luvseite darstellen \config{shading}. und dunkle Flächen die Leeseite.
+Die Stärke und Helligkeit der Schattierung kann konfiguriert werden 
+
+Die Unterstützung der Schattierung für Sonneneinstrahlung in Abhängigkeit vom \menulabel{\bmenut{Anzeige}{2/2}\blink\bmenut{Gelände}{An}}Sonnenstand ist in Arbeit\dots.
 Gelände- und Topologiedarstellung kann über das Menü ein und ausgeschaltet werden:
-\begin{quote}
-\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Gelände}{An} \\[1em]
-\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Topologie}{An}
-\end{quote}
+%\begin{quote}
+%\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Gelände}{An} \\[1em]
+%\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Topologie}{An}
+%\end{quote}
 
+\menulabel{\bmenut{Anzeige}{2/2}\blink\bmenut{Topologie}{An}}
 \begin{center}
 \begin{tabular}{c c}
 Topology & Terrain \\
@@ -211,15 +244,17 @@ Topology & Terrain \\
 Wenn keine Geländedaten zur Verfügung stehen (oder die Gelände-Anzeige ist abgeschaltet) erscheint der Hintergrund der Karte weiß. Jedes Gelände unterhalb des Meeresspiegels wird blau dargestellt!
 Flüge außerhalb des in der Datenbank bekannten Geländes werden weiß dargestellt.
 
+\menulabel{\bmenut{Anzeige}{2/2}\blink\bmenut{Beschriftung}{Alle}}
 Um die Darstellung auf der Karte übersichtlicher zu machen, können Beschriftungen und Labels der Wegpunkte ein und ausgeschaltet werden, oder aber auf die aktive Aufgabe beschränkt werden.
 
-\begin{quote}
+
+%\begin{quote}
 %\begin{center}
-\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Beschriftung}{Keine}\blink\smenut{Beschriftung} {Aufgabe}\blink \dots
+%\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Beschriftung}%{Keine}\blink\smenut{Beschriftung} {Aufgabe}\blink \dots
  %\\[0.75em] \smenut{Beschriftung}{Alle}\blink\bmenud{Beschriftungen}{Aufgabe\&}
-{Landeplätze}
+%{Landeplätze}
 %\end{center}
-\end{quote}
+%\end{quote}
 
 Folgende Auswahlen stehen zur Verfügung:
 
@@ -228,126 +263,140 @@ Folgende Auswahlen stehen zur Verfügung:
 \jindent{\bmenut{Beschriftung}{Alle}}{ Anzeige aller Beschriftungen für alle Wegpunkte. }
 
 Die Beschriftung und das Aussehen der Beschriftung ist über das Menü \config{labels} konfigurierbar.
-
+%%%%%%%%%%%%%%%%%%%%%%55
 \section{Flugspur (trail)}\label{sec:trail}
 
-Optional kann die bisher geflogen Flugstrecke auf der Karte dargestellt werden. Die Farbe und die Breite dieser Spur hängt von der Höhe oder von Vario-Wert ab und kann gewählt werden. \config{snailtype}
+Wenn gewünscht, kann die bisher geflogen Flugstrecke auf der Karte dargestellt werden. Die Farbe und die Breite dieser Spur hängt von der Höhe oder von Vario-Wert ab und kann entsprechend gewählt werden. \config{snailtype}
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/snail.pdf}
 \end{center}
 
-Wenn das VEGA-Variometer angeschlossen ist und die Netto-Luftbewegung anzeigt, dann können die Farben und Dicken dieser Spur auch die Netto-Luftmassenbewegung darstellen.
+Wenn ein VEGA-Variometer angeschlossen ist und die Netto-Luftmassenbewegung anzeigt, dann können die Farben und Dicken dieser Spur auch die Netto-Luftmassenbewegung darstellen.
 
-Die Flugspur kann wie folgt ausgewählt werden: Kurz (zeigt ungefähr 10 min), Lang, (zeigt ca. eine Stunde), Voll (zeigt die gesamte bisherige Flugstrecke) und aus. Die Einstellung kann jederzeit über das Menü wie folgt vorgenommen werden:
+Die Flugspur kann wie folgt ausgewählt werden: \button{Kurz} (zeigt ungefähr 10 min), \menulabel{\bmenut{Anzeige}{2/2}\blink\bmenut{Spur}{Kurz}} \button{Lang}, (zeigt ca. eine Stunde), \button{Voll} (zeigt die gesamte bisherige Flugstrecke) und aus. Die Einstellung kann jederzeit über das Menü wie folgt vorgenommen werden:
 
-\begin{quote}
-\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Flugspur}{Lang}\blink\smenut{Flugspur}{ Kurz}
-\end{quote}
+%\begin{quote}
+%\smenus{Anzeige}\blink\smenus{Anzeige}\blink\smenut{Flugspur}%{Lang}\blink\smenut{Flugspur}{ Kurz}
+%\end{quote}
 
-Alternativ kann die Einstellung auch im Menü  \config{snailtrail} als Voreinstellung werden als.
+Alternativ kann die Einstellung auch im Menü  \config{snailtrail} als Voreinstellung eingestellt werden.
 Beachtet, daß wegen der Übersichtlichkeit der Kartendarstellung beim Kurbeln die Flugspur grundsätzlich kurz ist.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Spurdrift (Windversatz-Kompensation)}
+Um den Windversatz beim Kurbeln darzustellen und so das Zentrieren zu unterstützen, kann die Spurdrift-Funktion bei der Kartendarstellung eingeschaltet werden.
 
-Um den Windversatz beim Kurbeln darzustellen, und so das Zentrieren zu unterstützen, kann dieser Windversatz der Kartendarstellung eingeschaltet werden.
+ \textcolor{blue}{ Die Spurdrift bzw. Windversatz-Kompensation hat \textbf{nichts}  mit der Funktion ''geschätzte Windabdrift'' \achtung aus der Endanflugskonfiguration nach Kap.~\ref{sec:final-glide} zu tun!}
+ 
+In diesem Fall wird die Flugspur relativ zum Wind aufgezeichnet und nicht mehr absolut über Grund. Das bedeutet, daß  \xc den erflogenen Bart während des Fluges mit dem ermittelten Wind versetzt ganz ähnlich wie auch das Flugzeug versetzt wird. Hiermit wird eine bessere Wiederauffindbarkeit und  Anzeige der Bewegung des Flugzeuges relativ zum Bart ermöglicht.
 
-In diesem Fall wird die Flugspur relativ zum Wind aufgezeichnet und nicht mehr absolut über Grund.
-Dabei hatte mit dem Wind versetzt werden, sollten die Flugspuren ebenfalls in der Kartendarstellung mit dem Wind versetzt werden. Dies, um eine bessere Anzeige zu gestatten, wie sich das Flugzeug relativ zum Bart  bewegt.
+Zur Veranschaulichung ist nachfolgend ein Beispiel beigefügt. 
 
-Zur Demonstration ist unten ein Beispiel beigefügt. Beachte, daß wenn die Windversatzfunktion aktiviert ist (rechtes Bild), sich das Flugzeug mehr in einem parallelversetzen Kreis  bewegt, anstelle einer gekrümmten, langgezogenen Spirale (linkes Bild).
+Beachte, daß, wenn die Spurdriftfunktion aktiviert ist (rechtes Bild), sich das Flugzeug mehr in einem parallelversetzten Kreis  bewegt, anstelle einer gekrümmten, langgezogenen Spirale (linkes Bild).
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/traildrift.png}
 \end{center}
 
-Die Windversatz-Kompensation kann über die Konfiguration Einstellung ein und ausgeschaltet werden. \config{traildrift}.  Die Kompensation ist ausschließlich in Kurbelmodus aktiv; im normalen Geradeausflug wird eine Kompensation über das Wind-Menü ermöglicht:
-
-\begin{quote}
-\smenus{Konfig.\ }\blink\smenut{Wind}{Einstellung}
-\end{quote}
-
-Die Anzeige des Windversatzes zeigt sehr schön, wenn Bärte in der Höhe stark versetzt werden - zum Beispiel durch den Windscherungen.
+\config{traildrift} Die Funktion \button{Spurdrift} kann über die Konfiguration Einstellung ein und ausgeschaltet werden.  Die Kompensation ist ausschließlich in Kurbelmodus aktiv; im normalen Geradeausflug wird eine Kompensation über das Wind-Menü ermöglicht.
+\menulabel{\bmenus{Konfig}\blink\bmenus{Wind}}
+Die Anzeige des Windversatzes zeigt sehr schön, wenn Bärte in der Höhe stark versetzt werden - zum Beispiel durch Windscherungen.
 
 Die Breite der Flugspur  kann optional anhand des Vario-Wertes gesetzt werden (Steigen, Saufen) \config{trailscaled}.
-
+%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Marker}
 
-%\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/map_flag.pdf}
+Marker werden als kleine blaue Flaggen auf der Karte dargestellt. 
+Die Marker können entweder automatisch oder aber durch Knopfdruck gesetzt werden.
 
-Marker werden als kleine rote Flagge auf der Karte dargestellt. Die Marker können entweder automatisch oder aber durch Knopfdruck gesetzt werden.
+\menulabel{\bmenut{Nav}{2/2}\blink\bmenut{Marke}{Setzen}}Ein Beispiel für die Nutzung von automatischem Setzen von Markern ist z.B. die 
+Markierung, wann in den Kurbelmodus gewechselt wurde. Hiermit kann sehr einfach dargestellt werden, wann und wo gekurbelt wurde.\index{Marker}
+\menulabel{\includegraphics[angle=0,width=0.25cm,keepaspectratio='true']{icons/map_flag.pdf}}
 
-Ein Beispiel für die Nutzung von automatischem Setzen von Markern ist z.B. die Markierung, wann in den Kurbelmodus gewechselt wurde. Hiermit kann sehr einfach dargestellt werden, wann und wo gekurbelt wurde.
+Marker werden nicht gespeichert, wenn \xc beendet wird, die Koordinaten aller Marker werden jedoch im File \verb|xcsoar-marks.txt| gespeichert.
 
-Marker werden nicht gespeichert, wenn \textsf{XCSoar} beendet wird, die Koordinaten aller Marker werden jedoch im File \verb|xcsoar-marks.txt| gespeichert.
-
-Um Marker über das Menü zu setzen:
-\begin{quote}
-\smenus{Anzeige}\blink\smenut{Marke}{Setzen}
-\end{quote}
-
-Marker per Geste setzen: \gesture{Left}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Anzeige des Gleitbereiches}\label{sec:reach}
 
-Der aktuelle Gleitbereich kann wahlweise in der Karte auf zwei Weisen dargestellt werden:
-entweder als schwarz-weiß gestrichelte Linie, oder aber als schattierter Bereich.
+Der aktuelle Gleitbereich \button{Erreichbar Anzeige}kann wahlweise in der Karte auf zwei Weisen dargestellt werden:\index{Gleitbereich}\index{Gleitbereich!Darstellung}\index{Reichweite}
+\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}
+\begin{itemize}
+    \item als schwarz-weiß gestrichelte Linie, 
+    \item als schattierter Bereich.
+\end{itemize}
+\menulabel{\button{Endanflug}\blink\button{Routenplaner}}
+Der Gleitbereich schließt alle erreichbaren Gelände ein und markiert - entsprechend der Höhe des Geländes - auch Bereiche, welche evtl.\ umflogen werden müssen.  Dies kann sehr nützlich sein, wenn in niedrigen Höhen nach Steigen gesucht wird, oder man sich in bergigem Gelände aufhält.
 
-Der Gleitbereich schließt alle erreichbaren Gelände ein und markiert, entsprechende der Höhe des Geländes auch Bereich, welche evtl. umflogen werden müssen.  Dies kann sehr nützlich sein, wenn in niedrigen Höhen nach Steigen gesucht wird, oder man sich in bergigem Gelände aufhält.
-
-Die Berechnung der Reichweite kann in zwei Detailstufen \config{turningreach} wie folgt konfiguriert werden:
+Die Berechnung der Reichweite \button{Reichweite Modus} kann in zwei Detailstufen \config{turningreach} wie folgt konfiguriert werden:
 
 \begin{description}
 \item[Aus] Wenn ausgeschaltet, wird die Reichweite nicht berechnet.
-\halt
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach1.png}
 \end{center}
-\item[Direkt] Wenn eingeschaltet, erfolgt die Berechnung der Reichweite geradeaus vom Flugzeug zum Ziel führenden Pfad. Es werden weder Lufträume noch sonstige Hindernisse in die Kalkulation einbezogen.
+\item[Direkt] Wenn eingeschaltet, erfolgt die Berechnung der Reichweite geradeaus vom Flugzeug zum Ziel führenden Pfad. Es werden weder Lufträume noch sonstige Hindernisse in die Kalkulation einbezogen.\index{Gleitbereich!Berechnung}
  \item[mit Umweg] Wenn dies eingeschaltet ist, wird die Reichweite unter Berücksichtigung von Hindernissen und Umwegen berechnet (Gelände und/oder Lufträume, s.o.)
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach2.png}
 \end{center}
 \end{description}
 
-Das Display kann alternativ auch so eingestellt werden, daß das  \emph{nicht} erreichbare Gelände  verwischt / schattiert dargestellt wird.  \config{gliderange}
+Der Weg des Endanfluges wird permanent auf evtl.\ Kollisionen mit einer Geländeerhebung geprüft -- sollte sich eine Kollisionsgefahr ergeben, so wird der vorausgesagte Kollisionspunkt\index{Geländekollision} mit dem Gelände als kleines rotes Kreuz auf der Karte dargestellt.
 
-Der Endanflugsweg wird permanent auf evtl.\ Kollisionen mit einer Geländeerhebung geprüft - sollte sich eine Kollisionsgefahr ergeben, so wird der vorausgesagte Kollisionspunkt\index{Geländekollision} mit dem Gelände als rotes Kreuz auf der Karte dargestellt.
+Wenn der \button{Reichweite Modus} aktiviert ist, dann wird dieser bei Abbruch einer Aufgabe  automatisch benutzt, um landbare Plätze (in allen Richtungen) auf der Karte darzustellen (Im Alternativen - Modus).
 
-Wenn "Reichweite" aktiviert ist, dann wird dies automatisch wird bei Abbruch einer Aufgabe benutzt, um landbare Plätze (in allen Richtungen) auf der Karte darzustellen.
 
-\warning Beachte, daß bei aktiven Aufgaben die "Reichweite" Funktion \textsl{in den InfoBoxen} nicht aktiv ist, hier wird die Funktion nicht verwendet!
+\textcolor{blue}{Beachte, daß bei aktiven Aufgaben die ''Reichweite'' Funktion   \textbf{nicht} in den InfoBoxen aktiv ist, hier wird die Funktion \textbf{nicht} verwendet!}\warning 
 
-Lediglich bei der Darstellung auf der Karte ist diese aktiv. Weiterhin wird sie verwendet für die Kalkulation der Ankunftshöhe der landbaren Wegpunkten, im Alternativen - Fenster, und im "Aufgaben-Abbruch-modus"
 
-Die Leistungsdaten des Segelflugzeuges und die MacCready Einstellung, die für diese Berechnung verwendet werden, können eingestellt werden.  \config{reachpolar}:
+\textcolor{blue}{Sie ist ausschließlich bei der Darstellung auf der Karte und bei abgebrochenen Aufgaben aktiv!}
+
+Die Leistungsdaten des Segelflugzeuges (Polare) bzw.\ die MacCready Einstellung, die für diese Berechnung verwendet werden sollen, können unter %\ref{sec:final-route}
+\button{Erreichbare Polare} eingestellt werden. \config{reachpolar}
 \begin{description}
 \item[Aufgabe] Es wird der MC benutzt, welcher in der Aufgabe gesetzt ist.
-\item[Sicherheits  MC] Hier wird ein voreingestellter, i.d.R. niedriger MC Wert gewählt, den der Pilot vorher festsetzt. Normalerweise etwas schlechter als das beste Gleiten
+\item[Sicherheits  MC] Hier wird ein voreingestellter, i.d.R.\ niedriger MC Wert gewählt, den der Pilot vorher festsetzt. Normalerweise etwas schlechter als das beste Gleiten. (s.~\ref{safety-MC}) 
+
+Die ''Größe'' der Sicherheit bei der Reichweitenkalkulation ist dementsprechend   die Differenz aus bestem Gleiten und dem Gleiten entsprechend der Geschwindigkeit des Sicherheits MC-Wertes.
 \end{description}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\section{Status-Fenster}\label{sec:aircr-stat-dial}\index{Status}
 
-\section{Status Dialog}\label{sec:aircr-stat-dial}
+Das Status-Fenster ist ein reines Informationsfenster und hat fünf Unterfenster. \button{Flug}, \button{System}, \button{Aufgabe}, \button{Regeln} und \button{Zeiten} Es 
+\menulabel{\bmenut{Info}{2/3}\blink\bmenus{Status}} und dient vor allem zur Beobachtung von Zeiten, Koordinaten, Regeln etc.\  
+  
+\achtung Beachte, daß die hier aufgeführten Daten nicht aktualisiert werden, während dies Fenster geöffnet ist. erst nach Schließen und wieder aufrufen sind die Daten wieder auf dem laufenden! 
 
-\begin{quote}
-\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}.
-\end{quote}
 
-Der Status Dialog hat fünf Unterfenster (flight, system, task rules) und dient vor allem zur Beobachtung von Zeiten, Koordinaten, Regeln etc.\
+%\begin{center}
+%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/XCS64-StatusWindow.png}
+%\end{center}
 
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-task.png}
-\end{center}
+Mit dem Button \button{Flug} kann z.B. schnell Deine Position an andere 
+weitergegeben werden, hier wird Deine Position angezeigt, Deine Peilung und Entfernung auf den nächsten aktiven Wegpunkt etc. 
 
-Die Funktion: "Flight" zeigt ein Fenster in dem der nächstgelegene Wegpunkt mit folgenden Details beschrieben wird. Koordinaten, Höhe, Entfernung, Bearing.
-Sinnvoll, wenn Du Deinem Mitflieger deine Position relativ zum Dir nächstgelegenen Punkt durchgeben mußt.
 
-Derzeit werden als "nächste Wegpunkte" ausschließlich Punkte aus der Wegpunkt-Datenbank genommen, in zukünftigen Versionen ist geplant, evtl.\  auch Dörfer und Städte aufzunehmen.
+Derzeit werden als ''nächste Wegpunkte'' ausschließlich Punkte aus der Wegpunkt-Datenbank genommen, in zukünftigen Versionen ist geplant, evtl.\  auch Dörfer und Städte aufzunehmen.\menulabel{\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/status-flight.png}}
 
+Unter \button{Regeln} kannst Du z.B.\ erkennen, ob Dein Abflug gültig war, mit welcher Geschwindigkeit er erfolgte etc.\ 
+
+\button{Zeiten} gibt allerlei Zeiten wieder, z.B.\ die UTC-Zeit, den Sonnenauf- und Untergang (Danke, Helmut\dots), Start- Lande- und Flugzeit. 
+
+\button{System} informiert u.a.\ über die Versorgungsspannung des Geräte, wie der GPS-Empfang ist, ob \fl und Logger angeschlossen sind. 
+
+In \button{Aufgabe} werden Daten und Zeiten zur aktuellen Aufgabe gelistet: aktueller Schnitt, Distanz, bei AAT: zugeteilte und verbleibende Zeit etc\dots 
+
+
+%%%%%%%%%%%%%%%%%%5
 \section{Routen}\label{sec:route}
 
-\textsf{XCSoar} kann Flugwege planen, die um Lufträume und z.B.\ Gebirge herumführen, sowohl in horizontaler als auch in vertikaler Richtung. Solch ein flugweg wird hier als Route beschrieben.
+\xc kann Flugwege planen, die um Lufträume und z.B.\ Gebirge herumführen, sowohl in \menulabel{\bmenut{Konfig.}{2/3}\blink\,\bmenus{System}}
+horizontaler als auch in vertikaler Richtung. Solch ein Flugweg wird hier als ''Route'' bezeichnet kann mit dem \button{Routenplaner} konfiguriert werden..
 
-Die Höhe des Zieles ist hierbei die Ankunftshöhe des Zieles, kann aber auch größer sein, falls die Wegführung durch die in der Aufgabe deklarierten Wegpunkte dies erfordern.
-Die Routen-Funktion ist in folgenden Flugmodi verfügbar:
-Goto Mode, deklarierte (aktive) Aufgaben und Abort modus.
+\menulabel{\blink\,\button{Endanflugrechner}} 
+Die Höhe des Zieles ist hierbei die Ankunftshöhe des Zieles, kann aber auch größer sein, falls die Wegführung durch die in der Aufgabe deklarierten Wegpunkte dies erfordern. Die Routen-Funktion ist in folgenden Flugmodi verfügbar:
+
+Goto Mode, deklarierte (aktive) Aufgaben und Abbruch modus.
 
 \begin{center}
 \includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/route3.png}
@@ -355,29 +404,25 @@ Goto Mode, deklarierte (aktive) Aufgaben und Abort modus.
 
 Bei der Routenberechnung wird die Strecke unter Berücksichtgung der Flugzeugpolaren zeitoptimiert berechnet. Standardmäßig ist die Routenfunktion ausgeschaltet. Sie kann aktiviert werden unter  \config{routemode} Berücksichtigung von Lufträumen, Gelände, Wolkenuntergrenze.
 
-Erreichbar unter:
-\begin{quote}
-\smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{10}
-\end{quote}
-
 Geländekollisionen in vertikaler Richtung werden verhindert durch Einstellung der Gelände-Sicherheitshöhe. \config{safetyterrain} Hierbei ist keine zusätzliche Höhe als Puffer vorgesehen.
 
-Es kann sein, daß manche Routen in einem  zu hohen Eintreffen des Flugzeuges an der Zielposition enden. Dies kann zum Beispiel geschehen, wenn der Zielpunkt exakt hinter einem relativ hohen Berg liegt. Zur Vermeidung von horizontalem Einfliegen in einen Luftraum wird mit ein Sicherheitsabstand von 250 m ohne weitere vertikaler Reserven benutzt.
+Es kann sein, daß manche Routen in einer Ankunft am Ziel höher als erwartet enden. Dies kann zum Beispiel geschehen, wenn der Zielpunkt exakt hinter einem relativ hohen Berg liegt. Zur Vermeidung von horizontalem Einfliegen in einen Luftraum wird mit ein Sicherheitsabstand von 250 m ohne weitere vertikaler Reserven benutzt.
 Richtig deklarierte Routen werden im Flugverlauf über oder unterhalb Lufträumen und auf jeden Fall um Lufträume herum führen.
 
 \warning
-Wenn der MacCready-Wert positiv eingestellt wird, dann ist Steigend während einer Route erlaubt
-\config{routeceiling}  Die maximale Höhe des Steigens  ist auf  500 m unterhalb der Wolkenuntergrenze limitiert, kann jedoch in der Konfiguration abgeschaltet werden.
-\config{routeceiling}.
-Einsteigen über die maximal vorgeschriebene Höhe des Start und Zielpunktes (siehe oben) wird "bestraft" mit einem entsprechend schlechteren Steigrate als der aktuell eingestellte MacCready-Wert
-actual MacCready value.
-\todonum{kapier ich nicht\dots.}
+Wenn der MacCready-Wert größer als 0, dann ist für den Rechner das Steigend während einer Route gemäß der MC-Theorie ''erlaubt''. \config{routeceiling}  Die maximale Höhe des Steigens  ist auf  500 m unterhalb der Wolkenuntergrenze limitiert, kann jedoch in der Konfiguration abgeschaltet werden.
+
+Ein Steigen über die maximal vorgeschriebene Höhe des Start- und Zielpunktes (siehe oben) wird ''bestraft'' mit einer entsprechend schlechteren Steigrate als der aktuell eingestellte MacCready-Wert. 
+
 
 Einige Einschränkungen und Limitierung bezüglich des Routenplanungssystems sind hier aufgelistet:
 
 \begin{itemize}
-\item Wenn Kurbeln notwendig (und verboten) \todonum{hä??} ist, um das Ziel zu erreichen,  wird angenommen, daß das steigen zu Beginn der Route ist. (dies hat den Hintergrund, daß bei einer Einstellung von  MacCready gleich Null kein Steigen mehr erwartet wird (Streng nach der MC-Theorie), somit der Endanflug-Rechner in die Irre geleitet werden würde) \halt
+\item Wenn Kurbeln notwendig ist, um das Ziel zu erreichen,  wird angenommen, daß das Steigen zu Beginn der Route ist. 
+
+Hintergrund: eine Einstellung von  MacCready gleich 0 bedeutet, daß (streng nach der MC-Theorie) kein Steigen erwartet wird!  Andernfalls würde die Rechenalgorythmen in  die Irre geführt werden!   
 \item Strecken mit Steigen im Geradeausflug werden auf einer konstanten Höhe angenommen, gleichbedeutend mit vielen kleinen Steigen verteilt entlang der Strecke
-\item Kurven und Schlenker zwischen den einzelnen Streckensegmenten mit Ablagen größer 90° sind erlaubt
+\item Kurven und Schlenker zwischen den einzelnen Streckensegmenten mit Ablagen größer 90$^\circ$ sind erlaubt
 \item Fehler des Rechenalgorithmus innerhalb der Route können dazu führen, daß der Anflug in einem direkten Anflug auf das Ziel zurückgeführt wird.
 \end{itemize}
+%finished für v6.5 date 16/02/2013 OH
