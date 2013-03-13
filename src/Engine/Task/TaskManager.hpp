@@ -353,14 +353,6 @@ public:
   }
 
   /**
-   * is the current ordered task a Mat?
-   * return True if so.
-   */
-  bool IsMat() const {
-    return task_ordered.GetFactoryType() == TaskFactoryType::MAT;
-  }
-
-  /**
    * Retrieves glide polar used by task system
    *
    * @return Reference to glide polar

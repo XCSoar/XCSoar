@@ -276,7 +276,7 @@ TaskManager::Update(const AircraftState &state,
     Reset();
 
   if (task_ordered.TaskSize() > 1) {
-    if (IsMat())
+    if (task_ordered.GetFactoryType() == TaskFactoryType::MAT)
       ScanInsertMatPoints(state, state_last);
 
     // always update ordered task
@@ -343,7 +343,7 @@ bool
 TaskManager::ScanInsertMatPoints(const AircraftState &state,
                                  const AircraftState &state_last)
 {
-  assert(IsMat());
+  assert(task_ordered.GetFactoryType() == TaskFactoryType::MAT);
 
   //flat boxes 3600m (~2.2 miles/ side) filters out most points
   Angle angle_ur = Angle::FullCircle() / 8;
