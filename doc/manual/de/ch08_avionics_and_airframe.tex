@@ -19,7 +19,7 @@ Um wieder in den normalen  Anzeigemodus zu gelangen, wird einfach einer der Hard
 
 Ein andere Möglichkeit, Strom zu sparen ist, manche Features abzuschalten; so nimmt z.B.\ die ständige Neuberechnung und das Zeichnen des Terrains während des Fluges signifikante Rechenleistung der CPU und somit auch Akku-Kapazität in Anspruch.
 
-Beim \al/VEGA-system wird die externe Versorgungsspannung im Status-Display des System-Dialogfensters angezeigt.  Hierzu auch Abschnitt~\ref{sec:system-status-dialog}).
+Beim \al/VEGA-System wird die externe Versorgungsspannung im Status-Display des System-Dialogfensters angezeigt.  Hierzu auch Abschnitt~\ref{sec:system-status-dialog}).
 
 Für andere Plattformen, ist eine \infobox{Batterie} InfoBox vorgesehen, welche über den Zustand informiert.
 (z.B.\ vorhandene Kapazität, interner/externer Batteriebetrieb, Ladezustand ein/aus)
@@ -30,41 +30,36 @@ Für andere Plattformen, ist eine \infobox{Batterie} InfoBox vorgesehen, welche 
 
 Der Status des GPS wird am unteren Rand des Displays als kleine Icons dargestellt:
 
-\begin{tabular}{c c}%{c c}
+\begin{center}\begin{tabular}{c c}%{c c}
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_acquiring.pdf} & \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_disconnected.pdf}\\
 (a) & (b)
-\end{tabular}
+\end{tabular}\end{center}
 
 \begin{description}
-\item[Warte auf gültigen GPS-Fix (a)]  Das GPS wird vom Programm richtig erkannt. Zur Funktion wird aber ein besserer Empfang benötigt. Es kann sein, daß ein 2D-Fix vorhanden ist, welcher aber nicht für alle Berechnungen ausreichend ist. Solange kein 3D-Fix erkannt wird, erscheint ein kleines Flugzeug als Symbol.
+\item[(a)\quad Warte auf gültigen GPS-Fix]  Das GPS wird vom Programm richtig erkannt. Zur Funktion wird aber ein besserer Empfang benötigt. Es kann sein, daß ein 2D-Fix vorhanden ist, welcher aber nicht für alle Berechnungen ausreichend ist. Solange kein 3D-Fix erkannt wird, erscheint ein kleines Flugzeug als Symbol.
 
-\item[GPS nicht verbunden (b)]  Es kann keine Verbindung zum GPS hergestellt werden.
+\item[(b)\quad GPS nicht verbunden]  Es kann keine Verbindung zum GPS hergestellt werden.
  (GPS ausgeschaltet, Kabelbruch , RTD/TXD vertauscht, falsche Baud-Rate, falscher COM-Port)
 \end{description}\index{GPS!Fehler!Verkabelung}
 
-Falls ein GPS für mehr als eine Minute keine gültigen Daten sendet, wird \xc die Datenverbindung automatisch zurücksetzen, neu aufbauen und wiederum auf gültige Daten warten. Dies wird solange fortgesetzt, bis gültige Daten zur Verarbeitung vorhanden sind. 
+Falls ein GPS für mehr als eine Minute keine gültigen Daten sendet, wird \xc die Datenverbindung automatisch zurücksetzen, neu aufgebaut und wiederum auf gültige Daten gewartet. Dies wird solange fortgesetzt, bis gültige Daten zur Verarbeitung vorhanden sind. 
 
 Diese Methode hat sich als die zuverlässigste bewährt, wenn Kommunikationsfehler auftreten.
 
 \xc kann zur Redundanz bis zu zwei GPS-Quellen verwalten\index{GPS!Redundanz}
-Diese GPS Quellen werden auf der NMEA-Anschluß-Seite konfiguriert und als GERÄT A bzw.\ GERÄT B 
-\menulabel{\bmenut{Konfig.}{2/3}\blink\,\bmenut{System}{Einstellung}\\[5pt]\mbutton{Einstellung}\blink\,\button{\footnotesize NMEA-Anschluß}} 
-bezeichnet.  Gerät  A ist das primäre Gerät und Gerät B ist das sekundäre Gerät.
-\todonum{NMEA-Beschreibung ist out of date. Es gibt kein A und B mehr. Es gibt noch keine Beschreibung, was es stattdessen gibt:(}
+Diese GPS Quellen werden auf der NMEA-Anschluß-Seite konfiguriert
+\menulabel{\bmenut{Konfig.}{2/3}\blink\,\bmenut{System}{Einstellung}\\[5pt]\mbutton{Einstellung}\blink\,\button{\footnotesize NMEA-Anschluß}} und als Gerät A bis F bezeichnet. 
 
-%Einstellungen hierzu über das folgende Menü:
-%\begin{quote}
-%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{System}{Einstellung}\blink
-%\seite{15}
-%\end{quote}
+Hier können sowohl serielle Schnittstellen (COM-Port, bei älteren Geräten), TCP-Ports (für z.B.\ die Anbindung an das Netzwerk), UDP-Ports, Geräteinterne Ports (bei Android) oder IoIo Ports (Schnisttelle von Android auf seriell) etc.\ angewählt und mittels entsprechender Treiber konfiguriert werden.  
+
 
 Falls während des Betriebes das primäre GPS ausfällt, wird auf das sekundäre GPS zurückgegriffen. Wenn beide Geräte gültige Fixe erzeugen, wird grundsätzlich das primäre Gerät benutzt und das sekundäre ignoriert.  Aus diesem Grunde ist es dringend vorzuziehen, das beste und zuverlässigste Gerät als primäres Gerät (Gerät A) zu definieren.
 
 \subsection*{GPS Höhe}
 
-Manch ältere GPS  (und auch manche neue(!)) geben die Höhe nicht relativ zum MSL aus, sondern beziehen sich auf den WGS84-Ellipsoid.  \xc detektiert dies und muß anhand einer internen Tabelle jede Koordinate umrechnen. Diese Umrechnung ist nicht notwendig, wenn \fl oder \al benutzt werden, welche die Höhe korrekt bezogen auf MSL ausgeben.
+Manch ältere GPS  (und auch manche neue!) geben die Höhe nicht relativ zum MSL aus, sondern beziehen sich auf den WGS84-Ellipsoid.  \xc detektiert dies und muß anhand einer internen Tabelle jede Koordinate umrechnen. Diese Umrechnung ist nicht notwendig, wenn \fl oder \al benutzt werden, welche die Höhe korrekt bezogen auf MSL ausgeben.
 %%%%%%%%%%%%%%
-\section{Schalter als digitale Eingänge}\index{Digitale Eingänge}\index{Schalter}
+\section{Schalter als digitale Eingänge}\index{Digitale Eingänge}\index{Externe Schalter}
 
 \xc unterstützt Sensoren und Schalter, welche an einem Hauptrechner angeschlossen sind, um z.B. Alarme auszugeben. Die Zustände dieser Schalter bzw. Eingänge können auf folgende Arten von \xc verarbeitet werden:
 
@@ -84,35 +79,34 @@ In einer an eigene Bedürfnisse angepaßten Datei z.B.\ \texttt{Flugzeug-Meldung
   \item Fahrwerk
 \end{itemize}
 
-\halt Dieser Datensatz kann in kommenden Versionen auch durch Motor- bzw- Spritwarnungen erweitert werden.
-Speziell bei Verwendung des VEGA können komplexe Meldungen erstellt, welche logische Eingänge verknüpfen und geschlossen ausgeben: ''Landeklappen ausgefahren und Fahrwerk verriegelt''  Hierzu sollte die VEGA Dokumentation im Detail herangezogen werden.
+Dieser Datensatz kann in kommenden Versionen auch durch Motor- bzw- Spritwarnungen erweitert werden.
+Speziell bei Verwendung des VEGA können komplexere Meldungen erstellt werden, welche logische Eingänge verknüpfen und geschlossen ausgeben wie zum Beispiel: ''Landeklappen ausgefahren und Fahrwerk verriegelt''. 
+Hierzu sollte die VEGA Dokumentation im Detail herangezogen werden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Schalter-Dialog (\textcolor{red}{nur} bei VEGA Vario)}
+\section{Schalter-Dialog (\textbf{nur} bei VEGA Vario)}
 
-Wenn das VEGA Variometer angeschlossen ist, erscheint gibt es ein zusätzliches Menü für die am VEGA angeschlossenen Schalter und Eingänge. Ohne VEGA ist dieser Menü-Button grau, also nicht verfügbar \menulabel{\bmenut{Konfig}{1/2}\blink\bmenus{Vega}}\footnote{nur bis V6.4, ab V6.5 irgendwoanders}%bis V6.4, danach 
-%\begin{quote}
-%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{VEGA}\blink\smenut{Flugzeug}{Schalter}
-%\end{quote}
-Dieser Dialog wird in Echtzeit aktualisiert, so daß der Pilot direkt nachverfolgen kann, wie seine Meldung verarbeitet wird und ob diese korrekt sind. 
-Sinnvoll z.B. bei einem Klappencheck vor dem \menulabel{~~~~~~~~~~~~~~\bmenut{Flugzeug}{Schalter}}Start.
+Wenn das VEGA Variometer angeschlossen ist, erscheint gibt es ein zusätzliches
+ \menulabel{\bmenut{Konfig}{1/2}\blink\bmenus{Vega}}
+Menü für die am VEGA angeschlossenen Schalter und Eingänge. Ohne VEGA ist dieser Menü-Button grau, also nicht verfügbar. 
+
+
+Dieser Dialog wird in Echtzeit aktualisiert, so daß der Pilot \menulabel{~~~~~~~~~~~~~~\bmenut{Flugzeug}{Schalter}} direkt 
+nachverfolgen kann, wie seine Meldung verarbeitet wird und ob diese korrekt sind. 
+Sinnvoll z.B. bei einem Klappencheck vor dem Start.
 
 
 \begin{center}
 \includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
 \end{center}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Slave Modus, Doppelsitzermodus,  Durchschleifen von Daten}\index{Slave-mode}\index{Dosi-Modus}
+\section{Slave Modus, Doppelsitzermodus, Durchschleifen von Daten}\index{Slave-mode}\index{Dosi-Modus}
 
-Einer der im NMEA-Anschluß Menü befindlichen Treiber (''NMEA-Output'') bietet den sog.\  ''Slave-Modus'', welcher verwendet werden kann,  um z.B. zwei Geräte  (\al oder \textsf{PDA})  im Master-Slave Modus miteinander zu verbinden. \menulabel{\bmenut{Konfig}{3/3}\blink\bmenut{NMEA}{Anschluss}} 
-
-% Erreichbar ist dies unter %Bis V625
-% \begin{quote}
-% \smenus{Konfig.}\blink\smenus{Konfig.}\blink\smenut{System}{Einstellung}\blink\seite{15}
-% \end{quote}
-% Untermenü ''Treiber''
-
-Im als Master definierten Gerät muß dazu der Treiber des zweiten Gerätes \menulabel{\button{Einstellung}\blink\button{NMEA-Anschluss}} (Gerät B) als NMEA-OUT gesetzt werden.
-
+Einer der im NMEA-Anschluß Menü befindlichen Treiber (''NMEA-Output'')
+bietet den 
+\menulabel{\bmenut{Konfig}{3/3}\blink\,\bmenut{NMEA}{Anschluss}} 
+sog.\  ''Slave-Modus'', welcher verwendet werden kann,  um z.B. zwei Geräte  (\al oder \textsf{PDA})  im Master-Slave Modus miteinander zu verbinden. 
+\menulabel{\qquad\quad\blink\,\button{Einstellung}} 
+Im als Master definierten Gerät muß dazu unter \button{NMEA Anschluss}der Treiber des zweiten  Gerätes (Gerät B) als NMEA OUT gesetzt werden.
 Hierdurch werden alle ein- und ausgehenden Datensätze  durchgeschleift und an das als Slave definierte Gerät weitergereicht.
 Im Slave-Gerät muß dann als Gerät A z.B.\ \fl als Treiber angewählt werden.
 
@@ -120,7 +114,8 @@ Als Beispiel seien im linken Bild der Master, rechts der Slave dargestellt, welc
 
 
 \begin{center}%ab V6.4
-\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/config-nmea-ms-master.png}~~~\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/config-nmea-ms-slave.png}
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/config-nmea-ms-master.png}\quad
+\includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/config-nmea-ms-slave.png}
 \end{center}
 
 %\begin{center}% bis V 6.25
@@ -147,49 +142,39 @@ Auf gleiche Weise können zwei \al mit identischen Daten versorgt werden, wenn n
 Zur entsprechenden Verkabelung bitte die entsprechenden Handbücher der Geräte konsultieren.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-\section{Systemstatus Dialog}\label{sec:system-status-dialog}\index{Status!System}\index{Status!Angeschlossene Geräte}\index{Status!Flug}
+\section{Systemstatus / angeschlossene Geräte}\label{sec:system-status-dialog}\index{Status!System}\index{Status!angeschlossene Geräte}
 
-Der Systemstatus-Dialog (auch Kap.~\ref{sec:dialog-windows}) wird hauptsächlich zum Systemcheck benutzt und hier vor allem, ob die Verbindung zu den angeschlossenen Geräten voll etabliert und OK ist
-%\begin{quote}
-%\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}
-%\end{quote}
-\menulabel{\bmenut{Info}{2/3}\blink\bmenus{Status}} In den weiteren Untermenüs \button{Flug}, \button{Aufgabe}, \button{Regeln} und \button{Zeiten} können entsprechende Daten abgeglichen werden. Diese Daten sind rein zur Information und können hier nicht editiert werden! 
-
+Der Systemstatus-Dialog (siehe Kap.~\ref{sec:dialog-windows}) wird hauptsächlich zum Systemcheck benutzt und hier vor allem, ob die Verbindung zu den angeschlossenen \menulabel{\bmenut{Info}{2/3}\blink\,\bmenus{Status}}
+Geräten voll etabliert und OK ist. 
+Im Unterpunkt \button{System} sind die entsprechenden Daten zu finden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Mehrere Verbindungen zu externen Geräten}\index{Externe Geräte}
 
-Es können bis zu zwei externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden können. Einige \textsf{PDA} haben zwei serielle Schnittstellen, Verbindungen per Bluetooth können prinzipiell mehrere unabhängige Verbindung etablieren.
+Es können bis zu zwei externe Geräte konfiguriert werden, welche parallel angeschlossen und betrieben werden (einige \textsf{PDA} haben zwei serielle Schnittstellen, Verbindungen per Bluetooth können prinzipiell mehrere unabhängige Verbindung etablieren)
 
-Wenn  beide Geräte GPS-Signale zur Verfügung stellen können, dann wird das primäre, erste Gerät von \xc ausgewählt und das zweite bleibt ignoriert. Sowie die erste GPS-Quelle aus irgendeinem Grunde versagt, wird automatisch auf die zweite Quelle umgeschaltet und zwar solange, bis die erste Quelle wieder gültige GPS-Daten übermittelt. (fallback)
+Wenn  beide der Geräte GPS-Signale zur Verfügung stellen können, dann wird das primäre, erste Gerät von \xc ausgewählt und das zweite bleibt ignoriert. Sowie die erste GPS -Quelle aus irgendeinem Grunde versagt, wird automatisch auf die zweite Quelle umgeschaltet - solange, bis die erste Quelle wieder gültige GPS-Daten übermittelt. (fallback)
 
-Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindigkeit etc.\
+Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindigkeit etc:
 \xc bevorzugt grundsätzlich das primäre Gerät, und greift auf das sekundäre Gerät zurück, sowie das Primäre versagt.
 
-Beispielkonfiguration:
-Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei \fl. Diese Kombination bietet von beiden Geräten das Beste
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textit{Beispielkonfiguration:}
+Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei \fl -- diese Kombination bietet von beiden Geräten das Beste.
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Verwaltung der angeschlossenen Geräte, NMEA-Anschluß etc.\ }\index{NMEA!Info}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Das NMEA-Ansichtsfenster ist wie folgt zu erreichen:
-%\begin{quote}
-%\smenus{Konfig}\blink\smenus{Konfig}\blink\smenus{Konfig}\blink\smenut{NMEA-}{Anschluß}\blink%bis 6.4
-%\end{quote}
+Hier können angeschlossene Geräte und deren Ausgänge betrachtet werden.
 
-Hier können angeschlossene Geräte und  deren Ausgänge  betrachtet werden.\menulabel{\bmenut{Konfig}{2/3}\blink\bmenut{NMEA}{Anschluss}}
+Der Button \button{Wiederverbinden} dient dazu, das gerät mit \xc neu \menulabel{\bmenut{Konfig}{2/3}\blink\bmenut{NMEA}{Anschluss}} 
+wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ Fehlersuche\dots
 
-Der Button \button{Wiederverbinden} dient dazu, das gerät mit \xc neu wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ Fehlersuche\dots
-
-Der Button \button{Flug Donwload} ist nur verfügbar, wenn ein IGC-Logger an \xc angeschlossen ist.  \ref{sec:supported-varios}
-Wenn anklickt wird, erscheint eine Liste aufgezeichneter Flüge, welche entsprechend geladen werden kann.  Die Datei  wird geladen und in das \texttt{logs}-Unterverzeichnis des  \texttt{XCSorData } - Verzeichnis kopiert.
+Der Button \button{Flug Donwload} ist nur verfügbar, wenn ein IGC-Logger an \xc angeschlossen ist. \ref{sec:supported-varios}
+Wenn anklickt wird, erscheint eine Liste aufgezeichneter Flüge, welche entsprechend geladen werden kann. Die Datei wird geladen und in das \texttt{logs}-Unterverzeichnis des \texttt{XCSorData } - Verzeichnis kopiert.
 
 \button{Bearbeiten} ermöglicht die Bearbeitung der NMEA-Quellen und Anschlüsse
 
-Der Button \button{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt.  Bspw.\  das Löschen des Flugspeichers beim CAI 302. \warning Genau hier kann es Verzögerungen kommen, da teilweise ein Firmware-Fehler  des CAI 302 auftritt.
+Der Button \button{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt. Bspw.\ das Löschen des Flugspeichers beim CAI 302. \warning Genau hier kann es Verzögerungen kommen, da teilweise ein Firmware-Fehler des CAI 302 auftritt.
 
-Mit \button{Überwachung} werden in Klartext die Ausgaben der angeschlossenen Geräte ausgegeben\footnote{Hoffe, das ist richtig so}. Sinnvoll zum Debuggen bzw.\ finden von Fehlern bei ''komischen'' GPS-Quellen.
-%finished für v6.5 date 08/02/2013 OH
-
-
-
-
-
+Mit \button{Überwachung} werden die Ausgaben der angeschlossenen Geräte in Klartext  ausgegeben\footnote{Hoffe, das ist richtig so}. 
+Sinnvoll zum Debuggen bzw.\ finden von Fehlern bei ''komischen'' GPS-Quellen.
+%finished für v6.5 date 09/02/2013 OH

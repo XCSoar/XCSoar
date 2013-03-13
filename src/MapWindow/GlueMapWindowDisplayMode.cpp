@@ -189,7 +189,7 @@ GlueMapWindow::UpdateScreenAngle()
                                       vector_remaining.bearing);
   else if (orientation == DisplayOrientation::HEADING_UP)
     visible_projection.SetScreenAngle(
-      basic.attitude.heading_available ? basic.attitude.heading : Angle::Zero());
+      basic.attitude.IsHeadingUseable() ? basic.attitude.heading : Angle::Zero());
   else if (orientation == DisplayOrientation::NORTH_UP)
     visible_projection.SetScreenAngle(Angle::Zero());
   else if (orientation == DisplayOrientation::WIND_UP &&

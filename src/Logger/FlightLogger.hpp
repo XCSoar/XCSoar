@@ -55,6 +55,10 @@ class FlightLogger {
   BrokenDateTime landing_time;
 
 public:
+  FlightLogger() {
+    Reset();
+  }
+
   /**
    * Call this before Tick().
    */

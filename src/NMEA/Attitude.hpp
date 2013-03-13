@@ -41,11 +41,17 @@ struct AttitudeState
   /** Estimated heading */
   Angle heading;
   Validity heading_available;
+  bool heading_computed;
 
   void Reset() {
     bank_angle_available = false;
     pitch_angle_available = false;
     heading_available.Clear();
+    heading_computed = false;
+  }
+
+  bool IsHeadingUseable() const {
+    return heading_available || heading_computed;
   }
 
   /**
