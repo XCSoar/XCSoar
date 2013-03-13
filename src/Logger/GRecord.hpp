@@ -91,7 +91,6 @@ public:
   bool VerifyGRecordInFile(const TCHAR *path);
 
 private:
-  void Initialize(int iKey);
   void AppendStringToBuffer(const char *szIn);
   /**
    * returns false if record is not to be included in
