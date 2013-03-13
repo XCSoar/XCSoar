@@ -43,20 +43,17 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
+  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  const AlternateList &alternates = lease->GetAlternates();
+
   const AlternatePoint *alternate;
+  if (!alternates.empty()) {
+    if (index >= alternates.size())
+      index = alternates.size() - 1;
 
-  {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AlternateList &alternates = lease->GetAlternates();
-
-    if (!alternates.empty()) {
-      if (index >= alternates.size())
-        index = alternates.size() - 1;
-
-      alternate = &alternates[index];
-    } else {
-      alternate = NULL;
-    }
+    alternate = &alternates[index];
+  } else {
+    alternate = NULL;
   }
 
   data.FormatTitle(_("Altn %d"), index + 1);
@@ -107,20 +104,17 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
+  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  const AlternateList &alternates = lease->GetAlternates();
+
   const AlternatePoint *alternate;
+  if (!alternates.empty()) {
+    if (index >= alternates.size())
+      index = alternates.size() - 1;
 
-  {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AlternateList &alternates = lease->GetAlternates();
-
-    if (!alternates.empty()) {
-      if (index >= alternates.size())
-        index = alternates.size() - 1;
-
-      alternate = &alternates[index];
-    } else {
-      alternate = NULL;
-    }
+    alternate = &alternates[index];
+  } else {
+    alternate = NULL;
   }
 
   data.FormatTitle(_T("Altn %d GR"), index + 1);
