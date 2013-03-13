@@ -326,15 +326,6 @@ public:
    *
    * @return Task advance mechanism
    */
-  const TaskAdvance &GetTaskAdvance() const {
-    return task_ordered.GetTaskAdvance();
-  }
-
-  /**
-   * Accessor for task advance system
-   *
-   * @return Task advance mechanism
-   */
   TaskAdvance &SetTaskAdvance() {
     return task_ordered.SetTaskAdvance();
   }
