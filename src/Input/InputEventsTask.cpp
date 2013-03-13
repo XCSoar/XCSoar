@@ -41,7 +41,9 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskFile.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 

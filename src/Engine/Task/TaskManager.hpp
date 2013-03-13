@@ -25,19 +25,23 @@
 
 #include "Compiler.h"
 #include "Util/NonCopyable.hpp"
-#include "Unordered/AlternateTask.hpp"
-#include "Unordered/GotoTask.hpp"
-#include "Ordered/OrderedTask.hpp"
 #include "Stats/TaskStats.hpp"
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
-#include "Navigation/Aircraft.hpp"
 
 class AbstractTaskFactory;
 class TaskEvents;
 class TaskAdvance;
 class Waypoints;
+class AbstractTask;
+class OrderedTask;
+class GotoTask;
+class AlternateTask;
+class AlternateList;
+class TaskWaypoint;
+class AbortIntersectionTest;
+struct Waypoint;
 struct RangeAndRadial;
 
 /**
@@ -56,9 +60,10 @@ class TaskManager:
   GlidePolar safety_polar;
 
   TaskBehaviour task_behaviour;
-  OrderedTask task_ordered;
-  GotoTask task_goto;
-  AlternateTask task_abort;
+
+  OrderedTask *const ordered_task;
+  GotoTask *const goto_task;
+  AlternateTask *const abort_task;
 
   TaskType mode;
   AbstractTask* active_task;
@@ -76,19 +81,16 @@ public:
    * @return Initialised object
    */
   TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps);
+  ~TaskManager();
 
-  void SetTaskEvents(TaskEvents &_task_events) {
-    task_ordered.SetTaskEvents(_task_events);
-    task_goto.SetTaskEvents(_task_events);
-    task_abort.SetTaskEvents(_task_events);
-  }
+  void SetTaskEvents(TaskEvents &_task_events);
 
   /**
    * Returns a reference to the OrderedTask instance, even if it is
    * invalid or inactive.
    */
   const OrderedTask &GetOrderedTask() const {
-    return task_ordered;
+    return *ordered_task;
   }
 
   /**
@@ -139,9 +141,8 @@ public:
    *
    * @return Vector of alternates
    */
-  const AlternateList &GetAlternates() const {
-    return task_abort.GetAlternates();
-  }
+  gcc_const
+  const AlternateList &GetAlternates() const;
 
   /** Reset the tasks (as if never flown) */
   void Reset();
@@ -218,9 +219,7 @@ public:
    * loads the Mat points vector to the current task if it is a Mat
    * @param waypoints the list of active waypoints
    */
-  void FillMatPoints(const Waypoints &waypoints) {
-    task_ordered.FillMatPoints(waypoints);
-  }
+  void FillMatPoints(const Waypoints &waypoints);
 
   /**
    * Accessor for statistics of active task
@@ -269,9 +268,7 @@ public:
    * @return True if task is valid
    */
   gcc_pure
-  bool CheckOrderedTask() const {
-    return task_ordered.CheckTask();
-  }
+  bool CheckOrderedTask() const;
 
   /**
    * Check whether active task is valid
@@ -287,18 +284,14 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& GetFactory() const {
-    return task_ordered.GetFactory();
-  }
+  AbstractTaskFactory &GetFactory() const;
 
   /**
    * Set type of task factory to be used for constructing tasks
    *
    * @param _factory Type of task
    */
-  void SetFactory(const TaskFactoryType _factory) {
-    task_ordered.SetFactory(_factory);
-  }
+  void SetFactory(const TaskFactoryType _factory);
 
   /**
    * Create a clone of the task. 
@@ -326,9 +319,7 @@ public:
    *
    * @return Task advance mechanism
    */
-  TaskAdvance &SetTaskAdvance() {
-    return task_ordered.SetTaskAdvance();
-  }
+  TaskAdvance &SetTaskAdvance();
 
   /**
    * Access active task mode
@@ -458,9 +449,7 @@ public:
    * 
    * @return OrderedTaskBehaviour reference
    */
-  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {
-    task_ordered.SetOrderedTaskBehaviour(otb);
-  }
+  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb);
 
   /** 
    * Retrieve task behaviour
@@ -474,9 +463,7 @@ public:
   /**
    * Set external test function to be used for additional intersection tests
    */
-  void SetIntersectionTest(AbortIntersectionTest *test) {
-    task_abort.SetIntersectionTest(test);
-  }
+  void SetIntersectionTest(AbortIntersectionTest *test);
 
   /**
    * When called on takeoff, will create a goto task to the nearest waypoint if

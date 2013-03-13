@@ -27,6 +27,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Dialogs/Dialogs.h"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

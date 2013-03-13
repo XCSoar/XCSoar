@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"

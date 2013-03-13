@@ -3,6 +3,8 @@
 #include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "NMEA/FlyingState.hpp"
 #include "OS/PathName.hpp"

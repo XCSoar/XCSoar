@@ -29,6 +29,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Route/ReachResult.hpp"
 
 #include <windef.h> // for MAX_PATH

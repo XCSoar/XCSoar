@@ -49,6 +49,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Computer/GlideComputer.hpp"

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TaskRenderer.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"

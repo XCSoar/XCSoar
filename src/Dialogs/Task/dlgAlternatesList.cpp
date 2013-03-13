@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"

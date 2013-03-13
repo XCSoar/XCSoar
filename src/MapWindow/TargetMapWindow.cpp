@@ -38,6 +38,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Asset.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"

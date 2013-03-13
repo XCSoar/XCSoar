@@ -24,8 +24,10 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Task/TaskFile.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Formatter/TimeFormatter.hpp"
 

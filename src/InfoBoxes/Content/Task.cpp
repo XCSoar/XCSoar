@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/Units.hpp"
 #include "Formatter/TimeFormatter.hpp"

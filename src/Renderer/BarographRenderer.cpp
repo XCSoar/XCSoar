@@ -31,6 +31,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 void

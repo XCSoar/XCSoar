@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
 #include "Language/Language.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
