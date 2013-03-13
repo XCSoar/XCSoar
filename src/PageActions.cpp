@@ -30,14 +30,61 @@ Copyright_License {
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
+#include "UIGlobals.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 namespace PageActions {
+  /**
+   * Call this when we're about to leave the current page.  This
+   * function checks if settings need to be remembered.
+   */
+  static void LeavePage();
+
+  /**
+   * Restore the map zoom afte switching to a configured page.
+   */
+  static void RestoreMapZoom();
+
   /**
    * Loads the layout without updating current page information in
    * #UIState.
    */
   static void LoadLayout(const PageLayout &layout);
 };
+
+void
+PageActions::LeavePage()
+{
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  if (state.special_page.IsDefined())
+    return;
+
+  PageState &page = state.pages[state.current_index];
+
+  const GlueMapWindow *map = UIGlobals::GetMapIfActive();
+  if (map != nullptr)
+    page.map_scale = map->VisibleProjection().GetMapScale();
+}
+
+void
+PageActions::RestoreMapZoom()
+{
+  const PagesState &state = CommonInterface::SetUIState().pages;
+  if (state.special_page.IsDefined())
+    return;
+
+  const PageState &page = state.pages[state.current_index];
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
+  if (settings.distinct_zoom && positive(page.map_scale)) {
+    GlueMapWindow *map = UIGlobals::GetMapIfActive();
+    if (map != nullptr) {
+      map->SetMapScale(page.map_scale);
+      map->QuickRedraw();
+    }
+  }
+}
 
 static const PageLayout &
 GetConfiguredLayout()
@@ -83,12 +130,15 @@ PageActions::NextIndex()
 void
 PageActions::Next()
 {
+  LeavePage();
+
   PagesState &state = CommonInterface::SetUIState().pages;
 
   state.current_index = NextIndex();
   state.special_page.SetUndefined();
 
   Update();
+  RestoreMapZoom();
 }
 
 unsigned
@@ -110,12 +160,15 @@ PageActions::PrevIndex()
 void
 PageActions::Prev()
 {
+  LeavePage();
+
   PagesState &state = CommonInterface::SetUIState().pages;
 
   state.current_index = PrevIndex();
   state.special_page.SetUndefined();
 
   Update();
+  RestoreMapZoom();
 }
 
 void
@@ -197,6 +250,7 @@ PageActions::Restore()
   special_page.SetUndefined();
 
   LoadLayout(GetConfiguredLayout());
+  RestoreMapZoom();
 }
 
 void

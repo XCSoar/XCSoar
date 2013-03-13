@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.6 - not yet released
 * user interface
   - replay fast-forward
+  - optional distinct map zoom on each page (#1603)
 * tasks
   - MAT tasks (#563)
 

@@ -258,4 +258,6 @@ const TCHAR VarioDeadBandEnabled[] = _T("VarioDeadBandEnabled");
 const TCHAR VarioDeadBandMin[] = _T("VarioDeadBandMin");
 const TCHAR VarioDeadBandMax[] = _T("VarioDeadBandMax");
 
+const TCHAR PagesDistinctZoom[] = _T("PagesDistinctZoom");
+
 }

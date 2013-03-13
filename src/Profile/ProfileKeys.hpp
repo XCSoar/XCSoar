@@ -256,6 +256,8 @@ extern const TCHAR VarioDeadBandEnabled[];
 extern const TCHAR VarioDeadBandMin[];
 extern const TCHAR VarioDeadBandMax[];
 
+extern const TCHAR PagesDistinctZoom[];
+
 }
 
 #endif

@@ -38,6 +38,7 @@ enum ControlIndex {
   GliderScreenPosition,
   AUTO_ZOOM,
   MaxAutoZoomDistance,
+  PAGES_DISTINCT_ZOOM,
 };
 
 static constexpr StaticEnumChoice orientation_list[] = {
@@ -106,6 +107,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
+  const PageSettings &page_settings = CommonInterface::GetUISettings().pages;
 
   AddEnum(_("Cruise orientation"),
           _("Determines how the screen is rotated with the glider"),
@@ -147,6 +149,11 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            UnitGroup::DISTANCE, settings_map.max_auto_zoom_distance);
   SetExpertRow(MaxAutoZoomDistance);
 
+  AddBoolean(_("Distinct page zoom"),
+             _("Maintain one map zoom level on each page."),
+             page_settings.distinct_zoom);
+  SetExpertRow(PAGES_DISTINCT_ZOOM);
+
   UpdateVisibilities();
 }
 
@@ -156,6 +163,7 @@ MapDisplayConfigPanel::Save(bool &_changed)
   bool changed = false;
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
+  PageSettings &page_settings = CommonInterface::SetUISettings().pages;
 
   changed |= SaveValueEnum(OrientationCruise, ProfileKeys::OrientationCruise,
                            settings_map.cruise_orientation);
@@ -178,6 +186,9 @@ MapDisplayConfigPanel::Save(bool &_changed)
   changed |= SaveValue(MaxAutoZoomDistance, UnitGroup::DISTANCE,
                        ProfileKeys::MaxAutoZoomDistance,
                        settings_map.max_auto_zoom_distance);
+
+  changed |= SaveValue(PAGES_DISTINCT_ZOOM, ProfileKeys::PagesDistinctZoom,
+                       page_settings.distinct_zoom);
 
   _changed |= changed;
 

@@ -25,13 +25,33 @@ Copyright_License {
 #define XCSOAR_PAGE_STATE_HPP
 
 #include "PageSettings.hpp"
+#include "Math/fixed.hpp"
 
+#include <array>
 #include <type_traits>
+
+/**
+ * The state of one configured page.
+ */
+struct PageState {
+  /**
+   * The last map scale on this page.  Negative means it's undefined.
+   * This attribute is only used if PageSettings::distinct_zoom is
+   * enabled.
+   */
+  fixed map_scale;
+
+  void Clear() {
+    map_scale = fixed(-1);
+  }
+};
 
 /**
  * Keeps track of the state of the "pages" subsystem.
  */
 struct PagesState {
+  static constexpr unsigned MAX_PAGES = PageSettings::MAX_PAGES;
+
   /**
    * The index of the current page in the list of configured pages,
    * see #PageSettings.
@@ -51,6 +71,8 @@ struct PagesState {
    * configured page.
    */
   PageLayout special_page;
+
+  std::array<PageState, MAX_PAGES> pages;
 
   void Clear();
 };

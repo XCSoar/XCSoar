@@ -177,6 +177,12 @@ struct PageSettings {
 
   unsigned n_pages;
 
+  /**
+   * Each page manages its own map zoom level.  Returning to this page
+   * restores the last zoom level.
+   */
+  bool distinct_zoom;
+
   void SetDefaults();
 
   /**
