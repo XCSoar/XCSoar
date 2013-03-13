@@ -187,6 +187,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Bearing"),
     N_("True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector."),
     UpdateInfoBoxBearing,
+    next_waypoint_infobox_panels,
     e_Speed_GPS, // V GND
     e_Horizon,
   },
@@ -267,6 +268,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP Dist"),
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     UpdateInfoBoxNextDistance,
+    next_waypoint_infobox_panels,
     e_WP_AltDiff, // WP AltD
     e_TaskProgress, // Progress
   },
@@ -277,6 +279,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP AltD"),
     N_("Arrival altitude at the next waypoint relative to the safety arrival height. For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextAltitudeDiff,
+    next_waypoint_infobox_panels,
     e_WP_MC0AltDiff, // WP MC0 AltD
     e_WP_Distance, // WP Dist
   },
@@ -287,6 +290,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP AltR"),
     N_("Additional altitude required to reach the next turn point. For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextAltitudeRequire,
+    next_waypoint_infobox_panels,
     e_Fin_AltDiff, // Fin AltD
     e_WP_AltDiff, // WP AltD
   },
@@ -540,6 +544,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP GR"),
     N_("The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height."),
     UpdateInfoBoxNextGR,
+    next_waypoint_infobox_panels,
     e_LD, // LD Vario
     e_Fin_GR, // Final GR
   },
@@ -580,6 +585,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP ETE"),
     N_("Estimated time required to reach next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
     UpdateInfoBoxNextETE,
+    next_waypoint_infobox_panels,
     e_WP_ETE_VMG,
     e_Fin_ETE_VMG
   },
@@ -620,6 +626,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP ETA"),
     N_("Estimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
     UpdateInfoBoxNextETA,
+    next_waypoint_infobox_panels,
     e_RH_Trend, // RH Trend
     e_Fin_TimeLocal, // Fin ETA
   },
@@ -925,6 +932,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP AltA"),
     N_("Absolute arrival altitude at the next waypoint in final glide.  For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextAltitudeArrival,
+    next_waypoint_infobox_panels,
     e_WP_AltReq, // WP AltR
     e_WP_AltDiff, // WP AltD
   },
@@ -1036,6 +1044,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP ETE VMG"),
     N_("Estimated time required to reach next waypoint, assuming current ground speed is maintained."),
     UpdateInfoBoxNextETEVMG,
+    next_waypoint_infobox_panels,
     e_Fin_TimeLocal, // Fin ETA
     e_WP_Time,
   },
@@ -1076,6 +1085,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("WP MC0 AltD"),
     N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height.  For AAT tasks, the target within the AAT sector is used."),
     UpdateInfoBoxNextMC0AltitudeDiff,
+    next_waypoint_infobox_panels,
     e_WP_H, // WP AltA
     e_WP_AltDiff, // WP AltD
   },
@@ -1185,6 +1195,7 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Radial"),
     N_("True bearing from the next waypoint to your position."),
     UpdateInfoBoxRadial,
+    next_waypoint_infobox_panels,
     NEXT_RADIAL,
     NEXT_RADIAL,
   },

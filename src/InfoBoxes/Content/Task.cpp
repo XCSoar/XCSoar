@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Task.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -35,9 +36,38 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Widget/CallbackWidget.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
+
+static void
+ShowNextWaypointDetails()
+{
+  if (protected_task_manager == nullptr)
+    return;
+
+  const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
+  if (wp == nullptr)
+    return;
+
+  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
+}
+
+static Widget *
+LoadNextWaypointDetailsPanel(unsigned id)
+{
+  return new CallbackWidget(ShowNextWaypointDetails);
+}
+
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
+const InfoBoxPanel next_waypoint_infobox_panels[] = {
+  { N_("Details"), LoadNextWaypointDetailsPanel },
+  { nullptr, nullptr }
+};
 
 void
 UpdateInfoBoxBearing(InfoBoxData &data)
@@ -151,14 +181,17 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
     return true;
 
   case ibkEnter:
-    const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
-    if (wp) {
-      dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
-      return true;
-    }
+    ShowNextWaypointDetails();
+    return true;
   }
 
   return false;
+}
+
+const InfoBoxPanel *
+InfoBoxContentNextWaypoint::GetDialogContent()
+{
+  return next_waypoint_infobox_panels;
 }
 
 void

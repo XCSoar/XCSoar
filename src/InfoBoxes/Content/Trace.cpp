@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Trace.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Renderer/BarographRenderer.hpp"
 #include "Renderer/TraceHistoryRenderer.hpp"
@@ -40,6 +41,8 @@ Copyright_License {
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Util/Macros.hpp"
+#include "Language/Language.hpp"
+#include "Widget/CallbackWidget.hpp"
 
 gcc_const
 static PixelRect
@@ -147,26 +150,33 @@ InfoBoxContentBarogram::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
                        CommonInterface::Calculated(), protected_task_manager);
 }
 
-bool
-InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
+static void
+ShowAnalysis0()
 {
-  switch (keycode) {
-  case ibkEnter:
-    dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
-                         UIGlobals::GetLook(),
-                         CommonInterface::Full(), *glide_computer,
-                         protected_task_manager,
-                         &airspace_database,
-                         terrain, 0);
-    return true;
+  dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
+                       UIGlobals::GetLook(),
+                       CommonInterface::Full(), *glide_computer,
+                       protected_task_manager,
+                       &airspace_database,
+                       terrain, 0);
+}
 
-  case ibkUp:
-  case ibkDown:
-  case ibkLeft:
-  case ibkRight:
-    break;
-  }
-  return false;
+static Widget *
+LoadAnalysis0Panel(unsigned id)
+{
+  return new CallbackWidget(ShowAnalysis0);
+}
+
+static constexpr
+InfoBoxPanel analysis0_infobox_panels[] = {
+  { N_("Analysis"), LoadAnalysis0Panel },
+  { nullptr, nullptr }
+};
+
+const InfoBoxPanel *
+InfoBoxContentBarogram::GetDialogContent()
+{
+  return analysis0_infobox_panels;
 }
 
 void

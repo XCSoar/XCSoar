@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Alternate.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -30,9 +31,22 @@ Copyright_License {
 #include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
+#include "Widget/CallbackWidget.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
+
+static Widget *
+LoadAlternatesPanel(unsigned id)
+{
+  return new CallbackWidget(dlgAlternatesListShowModal);
+}
+
+static constexpr
+InfoBoxPanel alternate_infobox_panels[] = {
+  { N_("Alternates"), LoadAlternatesPanel },
+  { nullptr, nullptr }
+};
 
 void
 InfoBoxContentAlternateName::Update(InfoBoxData &data)
@@ -93,6 +107,12 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
   }
 
   return true;
+}
+
+const InfoBoxPanel *
+InfoBoxContentAlternateName::GetDialogContent()
+{
+  return alternate_infobox_panels;
 }
 
 void
@@ -162,4 +182,10 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
   }
 
   return true;
+}
+
+const InfoBoxPanel *
+InfoBoxContentAlternateGR::GetDialogContent()
+{
+  return alternate_infobox_panels;
 }
