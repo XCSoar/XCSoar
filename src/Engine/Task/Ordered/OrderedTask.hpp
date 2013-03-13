@@ -549,7 +549,7 @@ public:
    * 
    * @return Reference to TaskAdvance used by this task
    */
-  TaskAdvance &GetTaskAdvance() {
+  TaskAdvance &SetTaskAdvance() {
     return task_advance;
   }
 

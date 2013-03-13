@@ -88,8 +88,9 @@ void
 ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 {
   ExclusiveLease lease(*this);
+  TaskAdvance &advance = lease->SetTaskAdvance();
 
-  switch (lease->GetTaskAdvance().GetState()) {
+  switch (advance.GetState()) {
   case TaskAdvance::MANUAL:
   case TaskAdvance::AUTO:
     lease->IncrementActiveTaskPoint(offset);
@@ -97,7 +98,7 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
     if (offset>0) {
-      lease->GetTaskAdvance().SetArmed(true);
+      advance.SetArmed(true);
     } else {
       lease->IncrementActiveTaskPoint(offset);
     }
@@ -107,7 +108,7 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
     if (offset>0) {
       lease->IncrementActiveTaskPoint(offset);
     } else {
-      lease->GetTaskAdvance().SetArmed(false);
+      advance.SetArmed(false);
     }
     break;
   }

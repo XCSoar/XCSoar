@@ -66,15 +66,16 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
     return;
 
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskAdvance &advance = task_manager->SetTaskAdvance();
 
   if (StringIsEqual(misc, _T("on"))) {
-    task_manager->GetTaskAdvance().SetArmed(true);
+    advance.SetArmed(true);
   } else if (StringIsEqual(misc, _T("off"))) {
-    task_manager->GetTaskAdvance().SetArmed(false);
+    advance.SetArmed(false);
   } else if (StringIsEqual(misc, _T("toggle"))) {
-    task_manager->GetTaskAdvance().ToggleArmed();
+    advance.ToggleArmed();
   } else if (StringIsEqual(misc, _T("show"))) {
-    switch (task_manager->GetTaskAdvance().GetState()) {
+    switch (advance.GetState()) {
     case TaskAdvance::MANUAL:
       Message::AddMessage(_("Advance manually"));
       break;

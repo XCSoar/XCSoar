@@ -335,8 +335,8 @@ public:
    *
    * @return Task advance mechanism
    */
-  TaskAdvance& GetTaskAdvance() {
-    return task_ordered.GetTaskAdvance();
+  TaskAdvance &SetTaskAdvance() {
+    return task_ordered.SetTaskAdvance();
   }
 
   /**

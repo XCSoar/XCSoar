@@ -150,7 +150,7 @@ test_replay()
       task_manager.Update(sim.state, state_last);
       task_manager.UpdateIdle(sim.state);
       task_manager.UpdateAutoMC(sim.state, fixed(0));
-      task_manager.GetTaskAdvance().SetArmed(true);
+      task_manager.SetTaskAdvance().SetArmed(true);
 
       state_last = sim.state;
 
