@@ -29,7 +29,8 @@ Copyright_License {
 FlarmColor
 FlarmFriends::GetFriendColor(FlarmId id)
 {
-  assert(traffic_databases != nullptr);
+  if (traffic_databases == nullptr)
+    return FlarmColor::NONE;
 
   return traffic_databases->GetColor(id);
 }

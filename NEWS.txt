@@ -7,6 +7,7 @@ Version 6.5.2 - not yet released
   - fix hang during startup (#2662, #2663)
   - fix freeze in dialogs (#2664)
   - automatically re-enable manual wind controls (#2336)
+  - fix crash after connecting FLARM (#2669)
 
 Version 6.5.1 - 2013/03/12
 * infoboxes
