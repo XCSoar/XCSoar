@@ -86,7 +86,7 @@ FindNonASCIIOrZero(const char *p)
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer)
 {
-  if (IsASCII((char)ch)) {
+  if (IsASCII(ch)) {
     *buffer++ = ch;
   } else {
     *buffer++ = 0xc0 | (ch >> 6);
@@ -115,7 +115,7 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
   while (*p != 0) {
     unsigned char ch = *p++;
 
-    if (IsASCII((char)ch)) {
+    if (IsASCII(ch)) {
       *q++ = ch;
 
       if (q >= end)
