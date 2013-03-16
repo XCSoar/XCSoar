@@ -340,6 +340,18 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
   return geometry;
 }
 
+static constexpr unsigned
+CalculateInfoBoxRowHeight(unsigned screen_height)
+{
+  return screen_height / CONTROLHEIGHTRATIO;
+}
+
+static constexpr unsigned
+CalculateInfoBoxColumnWidth(unsigned screen_width)
+{
+  return screen_width / CONTROLHEIGHTRATIO * 1.3;
+}
+
 void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
                                 InfoBoxSettings::Geometry geometry)
@@ -352,40 +364,40 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   case InfoBoxSettings::Geometry::TOP_12:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / layout.count;
-    layout.control_height = screen_size.cy / CONTROLHEIGHTRATIO;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
     break;
 
   case InfoBoxSettings::Geometry::TOP_4:
   case InfoBoxSettings::Geometry::BOTTOM_4:
     // calculate control dimensions
     layout.control_width = screen_size.cx / layout.count;
-    layout.control_height = screen_size.cy / CONTROLHEIGHTRATIO;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = screen_size.cy / CONTROLHEIGHTRATIO;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = screen_size.cy / CONTROLHEIGHTRATIO;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
   case InfoBoxSettings::Geometry::LEFT_8:
   case InfoBoxSettings::Geometry::RIGHT_8:
     // calculate control dimensions
-    layout.control_width = screen_size.cx / CONTROLHEIGHTRATIO * 1.3;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx);
     layout.control_height = 2 * screen_size.cy / layout.count;
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4:
   case InfoBoxSettings::Geometry::RIGHT_4:
     // calculate control dimensions
-    layout.control_width = screen_size.cx / CONTROLHEIGHTRATIO * 1.3;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx);
     layout.control_height = screen_size.cy / layout.count;
     break;
 
