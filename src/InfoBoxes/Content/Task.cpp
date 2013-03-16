@@ -28,7 +28,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/dlgAnalysis.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
@@ -537,48 +536,6 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
     data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
-}
-
-void
-InfoBoxContentOLC::Update(InfoBoxData &data)
-{
-  if (!CommonInterface::GetComputerSettings().contest.enable ||
-      !protected_task_manager) {
-    data.SetInvalid();
-    return;
-  }
-
-  const ContestResult& result_olc = 
-    CommonInterface::Calculated().contest_stats.GetResult();
-
-  if (result_olc.score < fixed(1)) {
-    data.SetInvalid();
-    return;
-  }
-
-  // Set Value
-  data.SetValueFromDistance(result_olc.distance);
-
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
-}
-
-bool
-InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkEnter:
-    dlgAnalysisShowModal(UIGlobals::GetMainWindow(), UIGlobals::GetLook(),
-                         CommonInterface::Full(), *glide_computer,
-                         protected_task_manager,
-                         &airspace_database,
-                         terrain, 8);
-    return true;
-
-  default:
-    break;
-  }
-
-  return false;
 }
 
 void

@@ -90,13 +90,6 @@ UpdateInfoBoxFinalGR(InfoBoxData &data);
 void
 UpdateInfoBoxHomeDistance(InfoBoxData &data);
 
-class InfoBoxContentOLC: public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
-};
-
 void
 UpdateInfoBoxTaskSpeed(InfoBoxData &data);
 
