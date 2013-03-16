@@ -37,8 +37,7 @@ ValidateUTF8(const char *p)
 {
   for (; *p != 0; ++p) {
     unsigned char ch = *p;
-    if (ch < 0x80)
-      /* ASCII */
+    if (IsASCII(ch))
       continue;
 
     if (IsContinuation(ch))
