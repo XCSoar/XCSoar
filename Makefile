@@ -907,6 +907,10 @@ ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
 endif
 
+ifeq ($(HAVE_WIN32),y)
+OUTPUTS += $(LAUNCH_XCSOAR_BIN)
+endif
+
 all: $(OUTPUTS)
 everything: $(OUTPUTS) debug build-check build-harness
 
