@@ -398,7 +398,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
 
   case InfoBoxSettings::Geometry::RIGHT_5:
     // calculate control dimensions
-    layout.control_width = screen_size.cx * 0.2;
+    layout.control_width = screen_size.cx / 5;
     layout.control_height = screen_size.cy / 5;
     break;
 
