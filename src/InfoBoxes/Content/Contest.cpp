@@ -23,30 +23,43 @@ Copyright_License {
 
 #include "Contest.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
+#include "Language/Language.hpp"
+#include "Widget/CallbackWidget.hpp"
 
 #include <tchar.h>
 
-bool
-InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
+static void
+ShowAnalysis8()
 {
-  switch (keycode) {
-  case ibkEnter:
-    dlgAnalysisShowModal(UIGlobals::GetMainWindow(), UIGlobals::GetLook(),
-                         CommonInterface::Full(), *glide_computer,
-                         protected_task_manager,
-                         &airspace_database,
-                         terrain, 8);
-    return true;
+  dlgAnalysisShowModal(UIGlobals::GetMainWindow(),
+                       UIGlobals::GetLook(),
+                       CommonInterface::Full(), *glide_computer,
+                       protected_task_manager,
+                       &airspace_database,
+                       terrain, 8);
+}
 
-  default:
-    break;
-  }
+static Widget *
+LoadAnalysis8Panel(unsigned id)
+{
+  return new CallbackWidget(ShowAnalysis8);
+}
 
-  return false;
+static constexpr
+InfoBoxPanel analysis8_infobox_panels[] = {
+  { N_("Analysis"), LoadAnalysis8Panel },
+  { nullptr, nullptr }
+};
+
+const InfoBoxPanel *
+InfoBoxContentOLC::GetDialogContent()
+{
+  return analysis8_infobox_panels;
 }
 
 void

@@ -29,8 +29,8 @@ Copyright_License {
 class InfoBoxContentOLC: public InfoBoxContent
 {
 public:
+  virtual const InfoBoxPanel *GetDialogContent() override;
   virtual void Update(InfoBoxData &data) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
 };
 
 #endif
