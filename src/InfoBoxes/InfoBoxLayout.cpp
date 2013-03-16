@@ -27,6 +27,8 @@ Copyright_License {
 
 #include <stdio.h>
 
+static constexpr double CONTROLHEIGHTRATIO = 7.4;
+
 /**
  * The number of info boxes in each geometry.
  */
