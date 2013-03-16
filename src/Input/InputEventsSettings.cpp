@@ -299,15 +299,20 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
-  static const TCHAR *const msg[] = {N_("All"),
-                                     N_("Task & Landables"),
-                                     N_("Task"),
-                                     N_("None")};
+  static const TCHAR *const msg[] = {
+    N_("All"),
+    N_("Task & Landables"),
+    N_("Task"),
+    N_("None"),
+  };
   static constexpr unsigned int n = ARRAY_SIZE(msg);
-  static const TCHAR *const actions[n] = {_T("all"),
-                                          _T("task+landables"),
-                                          _T("task"),
-                                          _T("none")};
+
+  static const TCHAR *const actions[n] = {
+    _T("all"),
+    _T("task+landables"),
+    _T("task"),
+    _T("none")
+  };
 
   WaypointRendererSettings::LabelSelection &wls =
     CommonInterface::SetMapSettings().waypoint.label_selection;

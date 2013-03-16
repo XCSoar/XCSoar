@@ -552,10 +552,13 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Off"), _("On"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(MapLabelsToggleActionName)"))) {
-    static const TCHAR *const labels[] = { N_("All"),
-                                           N_("Task & Landables"),
-                                           N_("Task"),
-                                           N_("None") };
+    static const TCHAR *const labels[] = {
+      N_("All"),
+      N_("Task & Landables"),
+      N_("Task"),
+      N_("None"),
+    };
+
     static constexpr unsigned int n = ARRAY_SIZE(labels);
     unsigned int i = (unsigned)GetMapSettings().waypoint.label_selection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
