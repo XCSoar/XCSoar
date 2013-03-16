@@ -301,6 +301,12 @@ protected:
         return;
       break;
 
+    case WaypointRendererSettings::LabelSelection::TASK_AND_AIRFIELD:
+      if (!vwp.in_task && task_valid && !watchedWaypoint &&
+          !way_point.IsAirport())
+        return;
+      break;
+
     case WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE:
       if (!vwp.in_task && task_valid && !watchedWaypoint &&
           !way_point.IsLandable())

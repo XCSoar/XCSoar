@@ -304,6 +304,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     N_("Task & Landables"),
     N_("Task"),
     N_("None"),
+    N_("Task & Airfields"),
   };
   static constexpr unsigned int n = ARRAY_SIZE(msg);
 
@@ -312,6 +313,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
     _T("task+landables"),
     _T("task"),
     _T("none")
+    _T("task+airfields"),
   };
 
   WaypointRendererSettings::LabelSelection &wls =

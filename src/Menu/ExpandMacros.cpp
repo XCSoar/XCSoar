@@ -557,6 +557,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
       N_("Task & Landables"),
       N_("Task"),
       N_("None"),
+      N_("Task & Airfields"),
     };
 
     static constexpr unsigned int n = ARRAY_SIZE(labels);
