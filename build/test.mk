@@ -101,7 +101,7 @@ TEST_NAMES = \
 	TestIGCParser \
 	TestByteOrder \
 	TestByteOrder2 \
-	TestStrings \
+	TestStrings TestUTF8 \
 	TestCRC \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
@@ -434,6 +434,12 @@ TEST_STRINGS_SOURCES = \
 	$(TEST_SRC_DIR)/TestStrings.cpp
 TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
+
+TEST_UTF8_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUTF8.cpp
+TEST_UTF8_DEPENDS = UTIL
+$(eval $(call link-program,TestUTF8,TEST_UTF8))
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \

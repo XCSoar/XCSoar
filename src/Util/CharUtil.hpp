@@ -30,9 +30,16 @@ Copyright_License {
 
 constexpr
 static inline bool
+IsASCII(const unsigned char ch)
+{
+  return ch < 0x80;
+}
+
+constexpr
+static inline bool
 IsASCII(const char ch)
 {
-  return (unsigned char)ch < 0x80;
+  return IsASCII((unsigned char)ch);
 }
 
 #ifdef _UNICODE
