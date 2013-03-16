@@ -113,7 +113,8 @@ ValidateUTF8(const char *p)
           !IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p))
         return false;
-    }
+    } else
+      return false;
   }
 
   return true;
