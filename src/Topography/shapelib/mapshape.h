@@ -15,7 +15,7 @@
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in 
+ * The above copyright notice and this permission notice shall be included in
  * all copies of this Software or works derived from this Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
@@ -47,7 +47,7 @@ extern "C" {
 #ifndef SWIG
 #define MS_PATH_LENGTH 1024
 
-/* Shapefile types */
+  /* Shapefile types */
 #define SHP_POINT 1
 #define SHP_ARC 3
 #define SHP_POLYGON 5
@@ -80,180 +80,167 @@ extern "C" {
 #define MS_SHP_MULTIPOINTM 28
 
 #ifndef SWIG
-typedef unsigned char uchar;
+  typedef unsigned char uchar;
 
-typedef	struct {
-    struct zzip_file *fpSHP;
-    struct zzip_file *fpSHX;
+  typedef struct {
+    struct zzip_file  *fpSHP;
+    struct zzip_file  *fpSHX;
 
-    int		nShapeType;				/* SHPT_* */
-    int		nFileSize;				/* SHP file */
+    int   nShapeType;       /* SHPT_* */
+    int   nFileSize;        /* SHP file */
 
-    int		nRecords;
-    int		nMaxRecords;
+    int   nRecords;
+    int   nMaxRecords;
 
-    int		*panRecOffset;
-    int		*panRecSize;
+    int   *panRecOffset;
+    int   *panRecSize;
     ms_bitarray panRecLoaded;
     int   panRecAllLoaded;
 
-    double	adBoundsMin[4];
-    double	adBoundsMax[4];
+    double  adBoundsMin[4];
+    double  adBoundsMax[4];
 
 #ifdef SHAPELIB_DISABLED
-    int		bUpdated;
+    int   bUpdated;
 #endif /* SHAPELIB_DISABLED */
 
-    int		nBufSize; /* these used static vars in shape readers, moved to be thread-safe */
+    int   nBufSize; /* these used static vars in shape readers, moved to be thread-safe */
     uchar   *pabyRec;
-    int		nPartMax;
-    int		*panParts;
+    int   nPartMax;
+    int   *panParts;
 
-} SHPInfo;
-typedef SHPInfo * SHPHandle;
+  } SHPInfo;
+  typedef SHPInfo * SHPHandle;
 #endif
 
 
 
-typedef	struct
-{
+  typedef struct {
 #ifdef SWIG
-%immutable;
+    %immutable;
 #endif
-    struct zzip_file *fp;
+    struct zzip_file  *fp;
 
-    int		nRecords;
+    int   nRecords;
 
     unsigned int nRecordLength;
-    int		nHeaderLength;
-    int		nFields;
-    int		*panFieldOffset;
-    int		*panFieldSize;
-    int		*panFieldDecimals;
-    char	*pachFieldType;
+    int   nHeaderLength;
+    int   nFields;
+    int   *panFieldOffset;
+    int   *panFieldSize;
+    int   *panFieldDecimals;
+    char  *pachFieldType;
 
-    char	*pszHeader;
+    char  *pszHeader;
 
-    int		nCurrentRecord;
+    int   nCurrentRecord;
 #ifdef SHAPELIB_DISABLED
-    int		bCurrentRecordModified;
+    int   bCurrentRecordModified;
 #endif /* SHAPELIB_DISABLED */
-    char	*pszCurrentRecord;
-    
+    char  *pszCurrentRecord;
+
 #ifdef SHAPELIB_DISABLED
-    int		bNoHeader;
-    int		bUpdated;
+    int   bNoHeader;
+    int   bUpdated;
 #endif /* SHAPELIB_DISABLED */
 
-    char 	*pszStringField;
-    int		nStringFieldLen;    
+    char  *pszStringField;
+    int   nStringFieldLen;
 #ifdef SWIG
-%mutable;
+    %mutable;
 #endif
-} DBFInfo;
-typedef DBFInfo * DBFHandle;
+  } DBFInfo;
+  typedef DBFInfo * DBFHandle;
 
-typedef enum {FTString, FTInteger, FTDouble, FTInvalid} DBFFieldType;
+  typedef enum {FTString, FTInteger, FTDouble, FTInvalid} DBFFieldType;
 
-/* Shapefile object, no write access via scripts */
-typedef struct {
+  /* Shapefile object, no write access via scripts */
+  typedef struct {
 #ifdef SWIG
-%immutable;
+    %immutable;
 #endif
-  char source[MS_PATH_LENGTH]; /* full path to this file data */
+    char source[MS_PATH_LENGTH]; /* full path to this file data */
 
 #ifndef SWIG
-  SHPHandle hSHP; /* SHP/SHX file pointer */
+    SHPHandle hSHP; /* SHP/SHX file pointer */
 #endif
 
-  int type; /* shapefile type */
-  int numshapes; /* number of shapes */
-  rectObj bounds; /* shape extent */
+    int type; /* shapefile type */
+    int numshapes; /* number of shapes */
+    rectObj bounds; /* shape extent */
 
 #ifndef SWIG
-  DBFHandle hDBF; /* DBF file pointer */
+    DBFHandle hDBF; /* DBF file pointer */
 #endif
 
-  int lastshape;
+    int lastshape;
 
-  ms_bitarray status;
-  rectObj statusbounds; /* holds extent associated with the status vector */
+    ms_bitarray status;
+    rectObj statusbounds; /* holds extent associated with the status vector */
 
-  int isopen;
+    int isopen;
 #ifdef SWIG
-%mutable;
+    %mutable;
 #endif
-} shapefileObj;
+  } shapefileObj;
 
 #ifndef SWIG
-/* layerInfo structure for tiled shapefiles */
-typedef struct { 
-  shapefileObj *shpfile;
-  shapefileObj *tileshpfile;
-  int tilelayerindex;
-} msTiledSHPLayerInfo;
+  /* layerInfo structure for tiled shapefiles */
+  typedef struct {
+    shapefileObj *shpfile;
+    shapefileObj *tileshpfile;
+    int tilelayerindex;
+  } msTiledSHPLayerInfo;
 
-#endif /* SHAPELIB_DISABLED */
+  /* shapefileObj function prototypes  */
+  MS_DLL_EXPORT int msShapefileOpen(shapefileObj *shpfile, const char *mode, struct zzip_dir *zdir, const char *filename, int log_failures);
+  MS_DLL_EXPORT int msShapefileCreate(shapefileObj *shpfile, char *filename, int type);
+  MS_DLL_EXPORT void msShapefileClose(shapefileObj *shpfile);
+  MS_DLL_EXPORT int msShapefileWhichShapes(shapefileObj *shpfile, struct zzip_dir *zdir, rectObj rect, int debug);
 
-/* shapefileObj function prototypes  */
-MS_DLL_EXPORT int msShapefileOpen(shapefileObj *shpfile, const char *mode, struct zzip_dir *zdir, const char *filename, int log_failures);
-MS_DLL_EXPORT int msShapefileCreate(shapefileObj *shpfile, char *filename, int type);
-MS_DLL_EXPORT void msShapefileClose(shapefileObj *shpfile);
-MS_DLL_EXPORT int msShapefileWhichShapes(shapefileObj *shpfile, struct zzip_dir *zdir, rectObj rect, int debug);
+  /* SHP/SHX function prototypes */
+  MS_DLL_EXPORT SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszShapeFile, const char * pszAccess );
+  MS_DLL_EXPORT SHPHandle msSHPCreate( const char * pszShapeFile, int nShapeType );
+  MS_DLL_EXPORT void msSHPClose( SHPHandle hSHP );
+  MS_DLL_EXPORT void msSHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType );
+  MS_DLL_EXPORT int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds );
+  MS_DLL_EXPORT void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape );
+  MS_DLL_EXPORT int msSHPReadPoint(SHPHandle psSHP, int hEntity, pointObj *point );
+  MS_DLL_EXPORT int msSHPWriteShape( SHPHandle psSHP, shapeObj *shape );
+  MS_DLL_EXPORT int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
+  /* SHX reading */
+  MS_DLL_EXPORT int msSHXLoadAll( SHPHandle psSHP );
+  MS_DLL_EXPORT int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage );
+  MS_DLL_EXPORT int msSHXReadOffset( SHPHandle psSHP, int hEntity );
+  MS_DLL_EXPORT int msSHXReadSize( SHPHandle psSHP, int hEntity );
 
-/* SHP/SHX function prototypes */
-MS_DLL_EXPORT SHPHandle msSHPOpen(struct zzip_dir *zdir,
-                                  const char *pszShapeFile,
-                                  const char *pszAccess);
-MS_DLL_EXPORT SHPHandle msSHPCreate( const char * pszShapeFile, int nShapeType );
-MS_DLL_EXPORT void msSHPClose( SHPHandle hSHP );
-MS_DLL_EXPORT void msSHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType );
-MS_DLL_EXPORT int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds );
-MS_DLL_EXPORT void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape );
-MS_DLL_EXPORT int msSHPReadPoint(SHPHandle psSHP, int hEntity, pointObj *point );
-MS_DLL_EXPORT int msSHPWriteShape( SHPHandle psSHP, shapeObj *shape );
-MS_DLL_EXPORT int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
-/* SHX reading */
-MS_DLL_EXPORT int msSHXLoadAll( SHPHandle psSHP );
-MS_DLL_EXPORT int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage );
-MS_DLL_EXPORT int msSHXReadOffset( SHPHandle psSHP, int hEntity );
-MS_DLL_EXPORT int msSHXReadSize( SHPHandle psSHP, int hEntity );
 
-/* tiledShapefileObj function prototypes are in mapserver.h */
+  /* tiledShapefileObj function prototypes are in mapserver.h */
 
-/* XBase function prototypes */
-MS_DLL_EXPORT DBFHandle msDBFOpen(struct zzip_dir *zdir,
-                                  const char *pszDBFFile,
-                                  const char *pszAccess);
-MS_DLL_EXPORT void msDBFClose( DBFHandle hDBF );
+  /* XBase function prototypes */
+  MS_DLL_EXPORT DBFHandle msDBFOpen(struct zzip_dir *zdir, const char * pszDBFFile, const char * pszAccess );
+  MS_DLL_EXPORT void msDBFClose( DBFHandle hDBF );
+  MS_DLL_EXPORT DBFHandle msDBFCreate( const char * pszDBFFile );
 
-#ifdef SHAPELIB_DISABLED
-MS_DLL_EXPORT DBFHandle msDBFCreate( const char * pszDBFFile );
+  MS_DLL_EXPORT int msDBFGetFieldCount( DBFHandle psDBF );
+  MS_DLL_EXPORT int msDBFGetRecordCount( DBFHandle psDBF );
+  MS_DLL_EXPORT int msDBFAddField( DBFHandle hDBF, const char * pszFieldName, DBFFieldType eType, int nWidth, int nDecimals );
 
-MS_DLL_EXPORT int msDBFGetFieldCount( DBFHandle psDBF );
-MS_DLL_EXPORT int msDBFGetRecordCount( DBFHandle psDBF );
-MS_DLL_EXPORT int msDBFAddField( DBFHandle hDBF, const char * pszFieldName, DBFFieldType eType, int nWidth, int nDecimals );
+  MS_DLL_EXPORT DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName, int * pnWidth, int * pnDecimals );
 
-MS_DLL_EXPORT DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName, int * pnWidth, int * pnDecimals );
+  MS_DLL_EXPORT int msDBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
+  MS_DLL_EXPORT double msDBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
+  MS_DLL_EXPORT const char *msDBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
 
-MS_DLL_EXPORT int msDBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
-MS_DLL_EXPORT double msDBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
+  MS_DLL_EXPORT int msDBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, int nFieldValue );
+  MS_DLL_EXPORT int msDBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField, double dFieldValue );
+  MS_DLL_EXPORT int msDBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField, const char * pszFieldValue );
 
-#endif /* SHAPELIB_DISABLED */
-
-MS_DLL_EXPORT const char *msDBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
-
-#ifdef SHAPELIB_DISABLED
-
-MS_DLL_EXPORT int msDBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, int nFieldValue );
-MS_DLL_EXPORT int msDBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField, double dFieldValue );
-MS_DLL_EXPORT int msDBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField, const char * pszFieldValue );
-
-MS_DLL_EXPORT char **msDBFGetItems(DBFHandle dbffile);
-MS_DLL_EXPORT char **msDBFGetValues(DBFHandle dbffile, int record);
-MS_DLL_EXPORT char **msDBFGetValueList(DBFHandle dbffile, int record, int *itemindexes, int numitems);
-MS_DLL_EXPORT int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems);
-MS_DLL_EXPORT int msDBFGetItemIndex(DBFHandle dbffile, char *name);
+  MS_DLL_EXPORT char **msDBFGetItems(DBFHandle dbffile);
+  MS_DLL_EXPORT char **msDBFGetValues(DBFHandle dbffile, int record);
+  MS_DLL_EXPORT char **msDBFGetValueList(DBFHandle dbffile, int record, int *itemindexes, int numitems);
+  MS_DLL_EXPORT int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems);
+  MS_DLL_EXPORT int msDBFGetItemIndex(DBFHandle dbffile, char *name);
 
 #endif
 
