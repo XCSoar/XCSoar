@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 
 #include <stdio.h>
 
@@ -341,9 +342,11 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
 }
 
 static constexpr unsigned
-CalculateInfoBoxRowHeight(unsigned screen_height)
+CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
 {
-  return screen_height / CONTROLHEIGHTRATIO;
+  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
+               control_width * 5 / 7,
+               control_width);
 }
 
 static constexpr unsigned
@@ -364,26 +367,30 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   case InfoBoxSettings::Geometry::TOP_12:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / layout.count;
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::TOP_4:
   case InfoBoxSettings::Geometry::BOTTOM_4:
     // calculate control dimensions
     layout.control_width = screen_size.cx / layout.count;
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     // calculate control dimensions
     layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
