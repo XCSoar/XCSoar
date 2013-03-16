@@ -3,9 +3,10 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6 - not yet released
+* map
+  - optional distinct map zoom on each page (#1603)
 * user interface
   - replay fast-forward
-  - optional distinct map zoom on each page (#1603)
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
 * tasks
