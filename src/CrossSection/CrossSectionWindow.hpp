@@ -24,7 +24,7 @@
 #ifndef CROSS_SECTION_WINDOW_HPP
 #define CROSS_SECTION_WINDOW_HPP
 
-#include "Screen/PaintWindow.hpp"
+#include "Screen/AntiFlickerWindow.hpp"
 #include "CrossSectionRenderer.hpp"
 
 struct CrossSectionLook;
@@ -39,8 +39,8 @@ class RasterTerrain;
 /**
  * A Window which renders a terrain and airspace cross-section
  */
-class CrossSectionWindow :
-  public PaintWindow
+class CrossSectionWindow
+  : public AntiFlickerWindow
 {
 protected:
   CrossSectionRenderer renderer;
@@ -105,11 +105,8 @@ public:
   }
 
 protected:
-  /**
-   * OnPaint event called by the message loop
-   * @param canvas Canvas to draw to
-   */
-  virtual void OnPaint(Canvas &canvas) override;
+  /* virtual methods from AntiFlickerWindow */
+  virtual void OnPaintBuffer(Canvas &canvas) override;
 };
 
 #endif

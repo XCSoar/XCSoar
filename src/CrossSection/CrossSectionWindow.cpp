@@ -24,7 +24,7 @@
 #include "CrossSectionWindow.hpp"
 
 void
-CrossSectionWindow::OnPaint(Canvas &canvas)
+CrossSectionWindow::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
 
