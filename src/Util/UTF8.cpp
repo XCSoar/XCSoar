@@ -26,7 +26,52 @@ Copyright_License {
 
 #include <algorithm>
 
-static bool
+/**
+ * Is this a leading byte that is followed by 1 continuation byte?
+ */
+static constexpr bool
+IsLeading1(unsigned char ch)
+{
+  return (ch & 0xe0) == 0xc0;
+}
+
+/**
+ * Is this a leading byte that is followed by 2 continuation byte?
+ */
+static constexpr bool
+IsLeading2(unsigned char ch)
+{
+  return (ch & 0xf0) == 0xe0;
+}
+
+/**
+ * Is this a leading byte that is followed by 3 continuation byte?
+ */
+static constexpr bool
+IsLeading3(unsigned char ch)
+{
+  return (ch & 0xf8) == 0xf0;
+}
+
+/**
+ * Is this a leading byte that is followed by 4 continuation byte?
+ */
+static constexpr bool
+IsLeading4(unsigned char ch)
+{
+  return (ch & 0xfc) == 0xf8;
+}
+
+/**
+ * Is this a leading byte that is followed by 5 continuation byte?
+ */
+static constexpr bool
+IsLeading5(unsigned char ch)
+{
+  return (ch & 0xfe) == 0xfc;
+}
+
+static constexpr bool
 IsContinuation(unsigned char ch)
 {
   return (ch & 0xc0) == 0x80;
@@ -44,25 +89,25 @@ ValidateUTF8(const char *p)
       /* continuation without a prefix */
       return false;
 
-    if ((ch & 0xe0) == 0xc0) {
+    if (IsLeading1(ch)) {
       /* 1 continuation */
       if (!IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xf0) == 0xe0) {
+    } else if (IsLeading2(ch)) {
       /* 2 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xf8) == 0xf0) {
+    } else if (IsLeading3(ch)) {
       /* 3 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xfc) == 0xf8) {
+    } else if (IsLeading4(ch)) {
       /* 4 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p) || !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xfe) == 0xfc) {
+    } else if (IsLeading5(ch)) {
       /* 5 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p) || !IsContinuation(*++p) ||
