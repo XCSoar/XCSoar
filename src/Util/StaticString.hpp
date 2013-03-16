@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2013 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,6 +31,7 @@
 #define XCSOAR_STATIC_STRING_HPP
 
 #include "Util/StringUtil.hpp"
+#include "UTF8.hpp"
 
 #include <assert.h>
 #include <stddef.h>
@@ -323,6 +324,10 @@ public:
   NarrowString<max> &operator +=(char ch) {
     return (NarrowString<max> &)StaticStringBase<char, max>::operator +=(ch);
   }
+
+  void CropIncompleteUTF8() {
+    ::CropIncompleteUTF8(this->buffer());
+  }
 };
 
 #ifdef _UNICODE
@@ -348,6 +353,11 @@ public:
 
   StaticString<max> &operator +=(TCHAR ch) {
     return (StaticString<max> &)StaticStringBase<TCHAR, max>::operator +=(ch);
+  }
+
+  void CropIncompleteUTF8() {
+    /* this is a TCHAR string, it's not multi-byte, therefore we have
+       no incomplete sequences */
   }
 };
 

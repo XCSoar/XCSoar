@@ -67,11 +67,24 @@ static const struct {
   { '\xfc', "\xc3\xbc", },
 };
 
+static const struct {
+  const char *input, *output;
+} crop[] = {
+  { "", "" },
+  { " ", " " },
+  { "foo\xc3\xbc", "foo\xc3\xbc", },
+  { "foo\xc3", "foo", },
+  { "foo\xe7\x9b\xae", "foo\xe7\x9b\xae", },
+  { "foo\xe7\x9b", "foo", },
+  { "foo\xe7", "foo", },
+};
+
 #include <stdio.h>
 int main(int argc, char **argv)
 {
   plan_tests(ARRAY_SIZE(valid) + ARRAY_SIZE(invalid) +
              ARRAY_SIZE(length) +
+             ARRAY_SIZE(crop) +
              ARRAY_SIZE(latin1_chars));
 
   for (auto i : valid)
@@ -88,6 +101,12 @@ int main(int argc, char **argv)
   for (auto &l : latin1_chars) {
     *Latin1ToUTF8(l.ch, buffer) = 0;
     ok1(strcmp(l.utf8, buffer) == 0);
+  }
+
+  for (auto &c : crop) {
+    strcpy(buffer, c.input);
+    CropIncompleteUTF8(buffer);
+    ok1(strcmp(c.output, buffer) == 0);
   }
 
   return exit_status();

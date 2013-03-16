@@ -64,4 +64,18 @@ gcc_pure gcc_nonnull_all
 size_t
 LengthUTF8(const char *p);
 
+/**
+ * Check if the string ends with an incomplete UTF-8 multi-byte
+ * sequence, and if so, insert a null terminator at the first byte of
+ * the incomplete sequence.
+ *
+ * Call this after truncating an UTF-8 string to eliminate the last
+ * incomplete sequence.
+ *
+ * The rest of the string must be valid UTF-8.
+ */
+gcc_nonnull_all
+void
+CropIncompleteUTF8(char *p);
+
 #endif

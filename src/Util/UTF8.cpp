@@ -26,6 +26,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <assert.h>
+
 /**
  * Is this a leading byte that is followed by 1 continuation byte?
  */
@@ -192,4 +194,86 @@ LengthUTF8(const char *p)
     if (!IsContinuation(*p))
       ++n;
   return n;
+}
+
+/**
+ * Find the null terminator.
+ */
+gcc_pure
+static char *
+FindTerminator(char *p)
+{
+  assert(p != nullptr);
+
+  while (*p != 0)
+    ++p;
+
+  return p;
+}
+
+/**
+ * Find the leading byte for the given continuation byte.
+ */
+gcc_pure
+static char *
+FindLeading(gcc_unused char *const begin, char *i)
+{
+  assert(i > begin);
+  assert(IsContinuation(*i));
+
+  while (IsContinuation(*--i)) {
+    assert(i > begin);
+  }
+
+  return i;
+}
+
+void
+CropIncompleteUTF8(char *const p)
+{
+  assert(p != nullptr);
+
+  char *const end = FindTerminator(p);
+  if (end == p)
+    return;
+
+  char *const last = end - 1;
+  if (!IsContinuation(*last)) {
+    if (!IsASCII(*last))
+      *last = 0;
+
+    assert(ValidateUTF8(p));
+    return;
+  }
+
+  char *const leading = FindLeading(p, last);
+  const size_t n_continuations = last - leading;
+  assert(n_continuations > 0);
+
+  const unsigned char ch = *leading;
+
+  unsigned expected_continuations;
+  if (IsLeading1(ch))
+    expected_continuations = 1;
+  else if (IsLeading2(ch))
+    expected_continuations = 2;
+  else if (IsLeading3(ch))
+    expected_continuations = 3;
+  else if (IsLeading4(ch))
+    expected_continuations = 4;
+  else if (IsLeading5(ch))
+    expected_continuations = 5;
+  else {
+    assert(n_continuations == 0);
+    gcc_unreachable();
+  }
+
+  assert(n_continuations <= expected_continuations);
+
+  if (n_continuations < expected_continuations)
+    /* this continuation is incomplete: truncate here */
+    *leading = 0;
+
+  /* now the string must be completely valid */
+  assert(ValidateUTF8(p));
 }
