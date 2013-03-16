@@ -350,9 +350,11 @@ CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
 }
 
 static constexpr unsigned
-CalculateInfoBoxColumnWidth(unsigned screen_width)
+CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
 {
-  return screen_width / CONTROLHEIGHTRATIO * 1.3;
+  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+               control_height,
+               control_height * 7 / 5);
 }
 
 void
@@ -397,15 +399,17 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   case InfoBoxSettings::Geometry::LEFT_8:
   case InfoBoxSettings::Geometry::RIGHT_8:
     // calculate control dimensions
-    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx);
     layout.control_height = 2 * screen_size.cy / layout.count;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                       layout.control_height);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4:
   case InfoBoxSettings::Geometry::RIGHT_4:
     // calculate control dimensions
-    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx);
     layout.control_height = screen_size.cy / layout.count;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                       layout.control_height);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
