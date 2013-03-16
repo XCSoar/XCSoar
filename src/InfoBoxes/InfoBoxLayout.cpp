@@ -34,6 +34,7 @@ static constexpr unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
   12, 9, 8, 4, 4, 4, 4,
+  8,
 };
 
 namespace InfoBoxLayout
@@ -141,6 +142,14 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     rc.bottom = MakeBottomRow(layout, layout.positions, 4,
                               rc.left, rc.bottom);
     break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.right = rc.right;
+    layout.vario.top = rc.top;
+    layout.vario.bottom = rc.top + layout.control_height * 2;
+
+    /* fall through */
 
   case InfoBoxSettings::Geometry::TOP_8:
     rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
@@ -254,6 +263,9 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
       return InfoBoxSettings::Geometry::RIGHT_9_VARIO;
 
+    case InfoBoxSettings::Geometry::TOP_8_VARIO:
+      return InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO;
+
     case InfoBoxSettings::Geometry::TOP_8:
       return InfoBoxSettings::Geometry::LEFT_8;
 
@@ -290,6 +302,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::BOTTOM_8:
     case InfoBoxSettings::Geometry::BOTTOM_4:
     case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+    case InfoBoxSettings::Geometry::TOP_8_VARIO:
     case InfoBoxSettings::Geometry::BOTTOM_12:
     case InfoBoxSettings::Geometry::TOP_8:
     case InfoBoxSettings::Geometry::TOP_4:
@@ -346,6 +359,12 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelRect rc,
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+    // calculate control dimensions
+    layout.control_width = 2 * (rc.right - rc.left) / (layout.count + 2);
+    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
     // calculate control dimensions
     layout.control_width = 2 * (rc.right - rc.left) / (layout.count + 2);
     layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
@@ -421,6 +440,7 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, unsigned i)
     break;
 
   case InfoBoxSettings::Geometry::TOP_8:
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
   case InfoBoxSettings::Geometry::TOP_4:
     border |= BORDERBOTTOM;
 
