@@ -24,73 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_LEGAL_POINT_SET_HPP
 #define XCSOAR_LEGAL_POINT_SET_HPP
 
+#include "Util/EnumBitSet.hpp"
 #include "TaskPointFactoryType.hpp"
 
-#include <stdint.h>
-
-class LegalPointSet {
-  typedef uint32_t T;
-
-  static constexpr T ToMask(TaskPointFactoryType t) {
-    return T(1) << unsigned(t);
-  }
-
-  template<typename... Args>
-  static constexpr T ToMask(TaskPointFactoryType t, Args&&... args) {
-    return ToMask(t) | ToMask(args...);
-  }
-
-  T value;
-
-  constexpr LegalPointSet(T _value):value(_value) {}
-
-public:
-  static constexpr unsigned N = unsigned(TaskPointFactoryType::COUNT);
-
-  constexpr LegalPointSet():value(0) {}
-
-  template<typename... Args>
-  constexpr LegalPointSet(TaskPointFactoryType t, Args&&... args)
-    :value(ToMask(t, args...)) {}
-
-  LegalPointSet operator|(const LegalPointSet other) const {
-    return LegalPointSet(value | other.value);
-  }
-
-  LegalPointSet &operator|=(const LegalPointSet other) {
-    value |= other.value;
-    return *this;
-  }
-
-  bool IsEmpty() const {
-    return value == 0;
-  }
-
-  gcc_pure
-  TaskPointFactoryType UncheckedFirst() const {
-    T t = 1;
-
-    for (unsigned i = 0;; ++i, t <<= 1)
-      if (value & t)
-        return TaskPointFactoryType(i);
-  }
-
-  void Add(const TaskPointFactoryType t) {
-    value |= ToMask(t);
-  }
-
-  constexpr bool Contains(TaskPointFactoryType t) const {
-    return (value & ToMask(t)) != 0;
-  }
-
-  template<typename O>
-  void CopyTo(O o) const {
-    for (unsigned i = 0; i < N; ++i) {
-      const TaskPointFactoryType type = TaskPointFactoryType(i);
-      if (Contains(type))
-        *o++ = type;
-    }
-  }
-};
+typedef EnumBitSet<TaskPointFactoryType> LegalPointSet;
 
 #endif
