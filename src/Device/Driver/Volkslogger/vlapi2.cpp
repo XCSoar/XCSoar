@@ -88,8 +88,8 @@ VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
   Auslesen des Fluges flightnumber im Sicherheitslevel secmode,
   Abspeichern als GCS-Datei im Speicher
 */
-long
-VLA_XFR::flightget(void *buffer, int32 buffersize,
+size_t
+VLA_XFR::flightget(void *buffer, size_t buffersize,
                    int16 flightnr, int16 secmode)
 {
   // read binary flightlog
