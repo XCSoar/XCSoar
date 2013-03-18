@@ -348,8 +348,7 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateFinish(new CylinderZone(wp.location, finish_radius), wp);
   }
 
-  assert(1);
-  return NULL;
+  gcc_unreachable();
 }
 
 StartPoint* 
