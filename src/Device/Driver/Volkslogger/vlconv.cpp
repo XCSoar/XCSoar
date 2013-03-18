@@ -512,7 +512,8 @@ Parameter
 const int actual_conv_version = 424;
 
 size_t
-convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
+convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+            const uint8_t *const bin_puffer,
     int oo_fillin, word *serno, long *sp)
 {
   IGCHEADER igcheader;
@@ -550,8 +551,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
   tm realtime;
   uint8_t Haupttyp;
   uint8_t Untertyp;
-  uint8_t *p;
-  uint8_t *p2;
+  const uint8_t *p;
+  const uint8_t *p2;
   long pl;
   char PILOT[40];
   int tzh, tzm;

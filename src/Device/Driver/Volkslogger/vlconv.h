@@ -79,7 +79,9 @@ convert_gcs
  * @return the length of the output file or 0 on error
  */
 size_t
-convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
+convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+            const uint8_t *const bin_puffer,
+            int oo_fillin, word *serno, long *sp);
 
 
 /*
