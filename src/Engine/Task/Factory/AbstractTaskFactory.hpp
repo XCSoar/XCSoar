@@ -668,6 +668,15 @@ protected:
   void AddValidationError(TaskValidationErrorType e);
 
 private:
+  gcc_pure
+  TaskPointFactoryType GetDefaultStartType() const;
+
+  gcc_pure
+  TaskPointFactoryType GetDefaultIntermediateType() const;
+
+  gcc_pure
+  TaskPointFactoryType GetDefaultFinishType() const;
+
   /**
    * Verifies and sets the finish waypoint per the is_closed
    * property of task type.

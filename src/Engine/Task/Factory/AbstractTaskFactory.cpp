@@ -79,29 +79,19 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 
   switch (tp.GetType()) {
   case TaskPointType::START:
-    if (!IsValidStartType(newtype)) {
-      newtype = behaviour.sector_defaults.start_type;
-      if (!IsValidStartType(newtype))
-        newtype = *start_types.begin();
-    }
+    if (!IsValidStartType(newtype))
+      newtype = GetDefaultStartType();
     break;
 
   case TaskPointType::AST:
   case TaskPointType::AAT:
-    if (!IsValidIntermediateType(newtype)) {
-      newtype = behaviour.sector_defaults.turnpoint_type;
-      if (!IsValidIntermediateType(newtype)) {
-        newtype = *intermediate_types.begin();
-      }
-    }
+    if (!IsValidIntermediateType(newtype))
+      newtype = GetDefaultIntermediateType();
     break;
 
   case TaskPointType::FINISH:
-    if (!IsValidFinishType(newtype)) {
-      newtype = behaviour.sector_defaults.finish_type;
-      if (!IsValidFinishType(newtype))
-        newtype = *finish_types.begin();
-    }
+    if (!IsValidFinishType(newtype))
+      newtype = GetDefaultFinishType();
     break;
 
   case TaskPointType::UNORDERED:
@@ -143,11 +133,7 @@ AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
 StartPoint* 
 AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 {
-  TaskPointFactoryType type = behaviour.sector_defaults.start_type;
-  if (!IsValidStartType(type))
-    type = *start_types.begin();
-
-  return CreateStart(type, wp);
+  return CreateStart(GetDefaultStartType(), wp);
 }
 
 IntermediateTaskPoint* 
@@ -159,21 +145,13 @@ AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
       return CreateIntermediate(type, wp);
   }
 
-  TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
-  if (!IsValidIntermediateType(type))
-    type = *intermediate_types.begin();
-
-  return CreateIntermediate(type, wp);
+  return CreateIntermediate(GetDefaultIntermediateType(), wp);
 }
 
 FinishPoint* 
 AbstractTaskFactory::CreateFinish(const Waypoint &wp) const
 {
-  TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
-  if (!IsValidFinishType(type))
-    type = *finish_types.begin();
-
-  return CreateFinish(type, wp);
+  return CreateFinish(GetDefaultFinishType(), wp);
 }
 
 TaskPointFactoryType 
@@ -693,6 +671,36 @@ AbstractTaskFactory::IsValidFinishType(TaskPointFactoryType type) const
     != finish_types.end();
 }
 
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultStartType() const
+{
+  TaskPointFactoryType type = behaviour.sector_defaults.start_type;
+  if (!IsValidStartType(type))
+    type = *start_types.begin();
+
+  return type;
+}
+
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultIntermediateType() const
+{
+  TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
+  if (!IsValidIntermediateType(type))
+    type = *intermediate_types.begin();
+
+  return type;
+}
+
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultFinishType() const
+{
+  TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
+  if (!IsValidFinishType(type))
+    type = *finish_types.begin();
+
+  return type;
+}
+
 AbstractTaskFactory::LegalPointVector 
 AbstractTaskFactory::GetValidTypes(unsigned position) const
 {
@@ -1036,11 +1044,8 @@ AbstractTaskFactory::MutateTPsToTaskType()
       TaskPointFactoryType newtype = GetMutatedPointType(tp);
       if (IsPositionFinish(i)) {
 
-        if (!IsValidFinishType(newtype)) {
-          newtype = behaviour.sector_defaults.finish_type;
-          if (!IsValidFinishType(newtype))
-            newtype = *finish_types.begin();
-        }
+        if (!IsValidFinishType(newtype))
+          newtype = GetDefaultFinishType();
 
         FinishPoint *fp = (FinishPoint*)CreateMutatedPoint(tp, newtype);
         assert(fp);
@@ -1049,11 +1054,8 @@ AbstractTaskFactory::MutateTPsToTaskType()
         delete fp;
 
       } else if (i == 0) {
-        if (!IsValidStartType(newtype)) {
-          newtype = behaviour.sector_defaults.start_type;
-          if (!IsValidStartType(newtype))
-            newtype = *start_types.begin();
-        }
+        if (!IsValidStartType(newtype))
+          newtype = GetDefaultStartType();
 
         StartPoint *sp = (StartPoint*)CreateMutatedPoint(tp, newtype);
         assert(sp);
@@ -1063,11 +1065,9 @@ AbstractTaskFactory::MutateTPsToTaskType()
 
       } else {
 
-        if (!IsValidIntermediateType(newtype)) {
-          newtype = behaviour.sector_defaults.turnpoint_type;
-          if (!IsValidIntermediateType(newtype))
-            newtype = *intermediate_types.begin();
-        }
+        if (!IsValidIntermediateType(newtype))
+          newtype = GetDefaultIntermediateType();
+
         OrderedTaskPoint *tpnew = (OrderedTaskPoint*)CreateMutatedPoint(tp, newtype);
         if (Replace(*tpnew, i, true))
           changed = true;
