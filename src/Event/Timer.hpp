@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_HPP
 #define XCSOAR_EVENT_TIMER_HPP
 
-#ifdef ANDROID
-#include "Android/Timer.hpp"
-#elif defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_EGL)
 #include <atomic>
 #elif defined(ENABLE_SDL)
 #include <SDL_timer.h>
@@ -38,10 +36,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <stddef.h>
-
-#ifdef ANDROID
-class AndroidTimer;
-#endif
 
 /**
  * A timer that, once initialized, periodically calls OnTimer() after
@@ -60,10 +54,7 @@ class Timer
   : private Window, private WindowTimer
 #endif
 {
-#ifdef ANDROID
-  friend class AndroidTimer;
-  AndroidTimer *timer;
-#elif defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_EGL)
   std::atomic<bool> enabled, queued;
   unsigned ms;
 #elif defined(ENABLE_SDL)
@@ -81,9 +72,7 @@ public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#ifdef ANDROID
-  Timer():timer(NULL) {}
-#elif defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_EGL)
   Timer():enabled(false), queued(false) {}
 #elif defined(ENABLE_SDL)
   Timer():id(NULL), queued(false) {}
@@ -133,9 +122,7 @@ public:
    * end?
    */
   bool IsActive() const {
-#ifdef ANDROID
-    return timer != NULL;
-#elif defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_EGL)
     return enabled.load(std::memory_order_relaxed);
 #elif defined(ENABLE_SDL)
     return id != NULL;
@@ -163,12 +150,7 @@ protected:
    */
   virtual void OnTimer() = 0;
 
-#ifdef ANDROID
-public:
-  void Invoke() {
-    OnTimer();
-  }
-#elif defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_EGL)
 public:
   void Invoke();
 #elif defined(ENABLE_SDL)

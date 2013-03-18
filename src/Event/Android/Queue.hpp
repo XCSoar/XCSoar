@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_ANDROID_QUEUE_HPP
 #define XCSOAR_EVENT_ANDROID_QUEUE_HPP
 
+#include "../Shared/TimerQueue.hpp"
 #include "Event.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
@@ -32,10 +33,11 @@ Copyright_License {
 #include <queue>
 
 class Window;
-class AndroidTimer;
 
 class EventQueue : private NonCopyable {
   std::queue<Event> events;
+
+  TimerQueue timers;
 
   Mutex mutex;
   Cond cond;
@@ -60,7 +62,12 @@ public:
   void Purge(Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
   void Purge(Window &window);
-  void Purge(AndroidTimer &timer);
+
+  void AddTimer(Timer &timer, unsigned ms);
+  void CancelTimer(Timer &timer);
+
+private:
+  bool Generate(Event &event, uint64_t now_us);
 };
 
 #endif

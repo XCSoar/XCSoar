@@ -813,7 +813,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/InternalSensors.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \
-	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
 	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
