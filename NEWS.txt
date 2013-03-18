@@ -36,6 +36,7 @@ Version 6.6 - not yet released
   - optimise start point
   - allow up to 30 turn points in racing tasks
   - local time for task start open/close time (#2645)
+  - enforce the task start open/close time (#2678)
   - fix start auto-advance
 * devices
   - Volkslogger: support IGC file download (#1972)
