@@ -513,9 +513,11 @@ const int actual_conv_version = 424;
 
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
-            const uint8_t *const bin_puffer,
+            const uint8_t *const bin_puffer, size_t length,
     int oo_fillin, word *serno, long *sp)
 {
+  const uint8_t *const end = bin_puffer + length;
+
   IGCHEADER igcheader;
   C_RECORD task;
   struct
@@ -584,9 +586,15 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
   p = bin_puffer;
 
   do {
+    if (p >= end)
+      return 0;
+
     Haupttyp = p[0] & rectyp_msk;
     switch (Haupttyp) {
     case rectyp_tnd:
+      if (p + 8 > end)
+        return 0;
+
       // calculates backwards the time of the first fix
       time_relative += p[1];
       temptime = 65536L * p[2] + 256L * p[3] + p[4];
@@ -625,11 +633,18 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
        */
     case rectyp_pos:
     case rectyp_poc:
+      if (p + 2 >= end)
+        return 0;
+
       if (p[2] & 0x80) { // Endebedingung
         ende = 1;
         l = 0;
         break;
       }
+
+      if (p + 8 > end)
+        return 0;
+
       time_relative += p[2];
       igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
       if (Haupttyp == rectyp_pos) {
@@ -673,6 +688,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       break;
     case rectyp_vrb:
     case rectyp_vrt:
+      if (p + 2 >= end)
+        return 0;
+
       l = p[1];
       switch (Haupttyp) {
       case rectyp_vrb:
@@ -686,23 +704,39 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         p2 = p;
         break;
       }
+
+      if (p2 >= end)
+        return 0;
+
       Untertyp = (p2[0]);
       switch (Untertyp) {
 
       case FLDNTP:
+        if (p2 + 1 >= end)
+          return 0;
+
         task.NTP = p2[1];
         decl_time = time_relative;
         break;
       case FLDTID:
+        if (p2 + 2 >= end)
+          return 0;
+
         task.TID = 256 * p2[1] + p2[2];
         if (igcfile_version >= 422)
           decl_time = time_relative;
         break;
       case FLDFDT:
+        if (p2 + 1 + sizeof(task.FDT) > end)
+          return 0;
+
         //_fmemcpy(&task.FDT,&p2[1],sizeof task.FDT);
         memcpy(&task.FDT, &p2[1], sizeof task.FDT);
         break;
       case FLDTZN: // Reading timezone offset
+        if (p2 + 1 >= end)
+          return 0;
+
         if (p2[1] < 128)
           tzn = 15 * p2[1];
         else
@@ -710,51 +744,96 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         break;
 
       case FLDTKF:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TKF.packed2unpacked(&p2[1]);
         break;
       case FLDSTA:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.STA.packed2unpacked(&p2[1]);
         break;
       case FLDFIN:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.FIN.packed2unpacked(&p2[1]);
         break;
       case FLDLDG:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.LDG.packed2unpacked(&p2[1]);
         break;
       case FLDTP1:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[0].packed2unpacked(&p2[1]);
         break;
       case FLDTP2:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[1].packed2unpacked(&p2[1]);
         break;
       case FLDTP3:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[2].packed2unpacked(&p2[1]);
         break;
 			  case FLDTP4:
         task.TP[3].packed2unpacked(&p2[1]);
         break;
       case FLDTP5:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[4].packed2unpacked(&p2[1]);
         break;
       case FLDTP6:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[5].packed2unpacked(&p2[1]);
         break;
       case FLDTP7:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[6].packed2unpacked(&p2[1]);
         break;
       case FLDTP8:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[7].packed2unpacked(&p2[1]);
         break;
       case FLDTP9:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[8].packed2unpacked(&p2[1]);
         break;
       case FLDTP10:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[9].packed2unpacked(&p2[1]);
         break;
       case FLDTP11:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[10].packed2unpacked(&p2[1]);
         break;
       case FLDTP12:
+        if (p2 + 1 + 12 > end)
+          return 0;
+
         task.TP[11].packed2unpacked(&p2[1]);
         break;
 
@@ -762,6 +841,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       case FLDPLT2: // Reading pilotname
       case FLDPLT3: // Reading pilotname
       case FLDPLT4: // Reading pilotname
+        if (p2 + 1 + sizeof(PILOT) > end)
+          return 0;
+
         // _fmemcpy(igcheader.PLT, &p2[1], (sizeof igcheader.PLT));
         // igcheader.PLT[(sizeof igcheader.PLT)-1] = 0;
         //_fmemcpy(PILOT, &p2[1], (sizeof PILOT));
@@ -772,21 +854,33 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
           strcat(igcheader.PLT, " ");
         break;
       case FLDGTY: // Reading plane type
+        if (p2 + 1 + sizeof(igcheader.GTY) > end)
+          return 0;
+
         //_fmemcpy(igcheader.GTY, &p2[1], (sizeof igcheader.GTY));
         memcpy(igcheader.GTY, &p2[1], (sizeof igcheader.GTY));
         igcheader.GTY[(sizeof igcheader.GTY) - 1] = 0;
         break;
       case FLDGID: // Reading plane reg
+        if (p2 + 1 + sizeof(igcheader.GID) > end)
+          return 0;
+
         //_fmemcpy(igcheader.GID, &p2[1], (sizeof igcheader.GID));
         memcpy(igcheader.GID, &p2[1], (sizeof igcheader.GID));
         igcheader.GID[(sizeof igcheader.GID) - 1] = 0;
         break;
       case FLDCCL: // Reading plane class
+        if (p2 + 1 + sizeof(igcheader.CCL) > end)
+          return 0;
+
         //_fmemcpy(igcheader.CCL, &p2[1], (sizeof igcheader.CCL));
         memcpy(igcheader.CCL, &p2[1], (sizeof igcheader.CCL));
         igcheader.CCL[(sizeof igcheader.CCL) - 1] = 0;
         break;
       case FLDCID: // Reading plane competition sign
+        if (p2 + 1 + sizeof(igcheader.CID) > end)
+          return 0;
+
         //_fmemcpy(igcheader.CID, &p2[1], (sizeof igcheader.CID));
         memcpy(igcheader.CID, &p2[1], (sizeof igcheader.CID));
         igcheader.CID[(sizeof igcheader.CID) - 1] = 0;
@@ -796,6 +890,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         // 19.10.99 weggemacht, weil schon in main vorhanden
         //dsa_y_b[0] = 2; dsa_y_b[1] = 0;
         //memset(&dsa_y_b[2],0,(sizeof dsa_y_b)-2);
+
+        if (p2 + 7 >= end)
+          return 0;
 
         *serno = (256L * p2[1] + p2[2]);
 

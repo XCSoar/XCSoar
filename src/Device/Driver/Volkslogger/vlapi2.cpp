@@ -274,7 +274,8 @@ VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
     return err;
 
   uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
-  if (flightget(logbuffer, sizeof(logbuffer), index, secmode) == 0)
+  const size_t length = flightget(logbuffer, sizeof(logbuffer), index, secmode);
+  if (length == 0)
     return VLA_ERR_MISC;
 
   FILE *outfile = _tfopen(filename, _T("wt"));
@@ -283,7 +284,7 @@ VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
 
   word serno;
   long sp;
-  size_t r = convert_gcs(0, outfile, logbuffer, 1, &serno, &sp);
+  size_t r = convert_gcs(0, outfile, logbuffer, length, 1, &serno, &sp);
   if (r > 0) {
     err = VLA_ERR_NOERR;
     print_g_record(outfile,   // output to stdout

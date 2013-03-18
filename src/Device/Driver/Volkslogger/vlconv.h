@@ -80,7 +80,7 @@ convert_gcs
  */
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
-            const uint8_t *const bin_puffer,
+            const uint8_t *const bin_puffer, size_t length,
             int oo_fillin, word *serno, long *sp);
 
 
