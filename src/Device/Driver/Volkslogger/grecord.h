@@ -18,8 +18,7 @@
 #ifndef GRECORD_H
 #define GRECORD_H
 
-#include "vlapityp.h"
-
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -83,7 +82,8 @@ und je 72 Datenworte als G-Datensatz an datei *dateiname anhängen
 */
 //void append_g_record(char *dateiname, byte huge *puffer, unsigned long puflen);
 
-void print_g_record(FILE *datei, const uint8_t *puffer, int32 puflen);
+void
+print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen);
 
 
 /*
@@ -93,7 +93,7 @@ Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
 gehörender Bereiche zu verhindern
 */
 int
-get_g_record(char *dateiname, uint8_t *puffer, unsigned long puflen);
+get_g_record(char *dateiname, uint8_t *puffer, size_t puflen);
 
 // Eine IGC-Datei von allen Zeilen befreien, die vom Pilot oder OO legal zur
 // Datei hinzugefügt worden sein könnten

@@ -193,11 +193,10 @@ fgetline(char *st, size_t si, FILE *datei)
 }
 
 void
-print_g_record(FILE *datei, const uint8_t *puffer, int32 puflen)
+print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen)
 {
- int32 i;
- GRECORD g1(datei);
-  for(i=0; i<puflen; i++)
+  GRECORD g1(datei);
+  for (size_t i = 0; i < puflen; ++i)
     g1.update(puffer[i]);
   g1.finish();
 }
@@ -209,9 +208,9 @@ Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
 gehörender Bereiche zu verhindern
 */
 int
-get_g_record(char *dateiname, uint8_t *puffer, unsigned long puflen)
+get_g_record(char *dateiname, uint8_t *puffer, size_t puflen)
 {
- unsigned long i = 0;
+  size_t i = 0;
  int	       j;
  const int     zeilemax = 79;
  char          zeile[zeilemax];
