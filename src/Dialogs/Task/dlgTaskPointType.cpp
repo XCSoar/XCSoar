@@ -93,10 +93,6 @@ SetPointType(TaskPointFactoryType type)
     // no change
     return false;
 
-  if (ShowMessageBox(_("Change point type?"), _("Task Point"),
-                     MB_YESNO | MB_ICONQUESTION) != IDYES)
-    return false;
-
   AbstractTaskFactory &factory = ordered_task->GetFactory();
   bool task_modified = false;
 
