@@ -75,30 +75,7 @@ x  x - Binärblock in GR64 konvertieren und anhängen
 
 */
 
-
-/*
-Den Inhalt des Puffers *puffer mit der Länge puflen radix-64 kodieren
-und je 72 Datenworte als G-Datensatz an datei *dateiname anhängen
-*/
-//void append_g_record(char *dateiname, byte huge *puffer, unsigned long puflen);
-
 void
 print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen);
-
-
-/*
-Aus Datei *dateiname die G-Records extrahieren (nur als zusammenhängender
-Block), von radix-64 in Binär umwandeln und in *puffer speichern.
-Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
-gehörender Bereiche zu verhindern
-*/
-int
-get_g_record(char *dateiname, uint8_t *puffer, size_t puflen);
-
-// Eine IGC-Datei von allen Zeilen befreien, die vom Pilot oder OO legal zur
-// Datei hinzugefügt worden sein könnten
-// Speichern der "cleanen" Datei
-void clean_igcfile(char *quelldateiname, char *zieldateiname);
-
 
 #endif
