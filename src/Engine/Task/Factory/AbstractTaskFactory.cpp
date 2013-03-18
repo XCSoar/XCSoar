@@ -324,6 +324,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateFinish(new LineSectorZone(wp.location, finish_radius), wp);
   case TaskPointFactoryType::FINISH_CYLINDER:
     return CreateFinish(new CylinderZone(wp.location, finish_radius), wp);
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();
@@ -788,6 +791,9 @@ AbstractTaskFactory::ValidateFAIOZs()
     case TaskPointFactoryType::FINISH_CYLINDER:
       valid = false;
       break;
+
+    case TaskPointFactoryType::COUNT:
+      gcc_unreachable();
     }
   }
 
@@ -834,6 +840,9 @@ AbstractTaskFactory::ValidateMATOZs()
     case TaskPointFactoryType::FINISH_LINE:
     case TaskPointFactoryType::FINISH_CYLINDER:
       break;
+
+    case TaskPointFactoryType::COUNT:
+      gcc_unreachable();
     }
   }
 

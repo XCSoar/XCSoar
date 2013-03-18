@@ -45,6 +45,12 @@ enum class TaskPointFactoryType : uint8_t {
   FINISH_CYLINDER,
   START_BGA,
   AAT_ANNULAR_SECTOR,
+
+  /**
+   * This special value is used to determine the number of types
+   * above.
+   */
+  COUNT
 };
 
 #endif

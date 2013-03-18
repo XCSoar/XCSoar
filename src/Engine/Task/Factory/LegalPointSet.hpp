@@ -45,7 +45,7 @@ class LegalPointSet {
   constexpr LegalPointSet(T _value):value(_value) {}
 
 public:
-  static constexpr unsigned N = 32;
+  static constexpr unsigned N = unsigned(TaskPointFactoryType::COUNT);
 
   constexpr LegalPointSet():value(0) {}
 

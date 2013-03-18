@@ -97,6 +97,9 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_CYLINDER:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     break;
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   return newtype;

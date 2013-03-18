@@ -91,6 +91,9 @@ MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 
   case TaskPointFactoryType::MAT_CYLINDER:
     break;
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   return newtype;

@@ -130,6 +130,9 @@ OrderedTaskPointDescription(TaskPointFactoryType type)
     return _("Cross finish gate line into area to finish.");
   case TaskPointFactoryType::FINISH_CYLINDER:
     return _("Enter cylinder to finish.");
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();
@@ -173,6 +176,9 @@ OrderedTaskPointName(TaskPointFactoryType type)
     return _("Finish line");
   case TaskPointFactoryType::FINISH_CYLINDER:
     return _("Finish cylinder");
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();

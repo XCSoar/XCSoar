@@ -100,6 +100,9 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_CYLINDER:
     newtype = TaskPointFactoryType::AST_CYLINDER;
     break;
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   return newtype;
