@@ -1016,6 +1016,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 bool
 conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 {
+  const uint8_t *const end = p + length;
+
   assert(flights.empty());
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
@@ -1039,7 +1041,7 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 
   size_t nbytes = 0;
 
-  while (nbytes < length) {
+  while (p < end) {
     Haupttyp = (p[0] & rectyp_msk);
     switch (Haupttyp) {
     case rectyp_sep: // Initialize Dir-Entry
@@ -1060,6 +1062,9 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
       break;
     case rectyp_vrt: // getim'ter variabler DS oder
     case rectyp_vrb: // ungetim'ter variabler DS
+      if (p + 1 >= end)
+        return false;
+
       l = p[1];
       switch (Haupttyp) {
       case rectyp_vrb:
@@ -1072,33 +1077,58 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
         p2 = p;
         break;
       }
+
+      if (p2 >= end)
+        return false;
+
       Untertyp = (p2[0]);
       switch (Untertyp) {
       case FLDCID: // Read pilotname
+        if (p2 + 1 + sizeof(de.competitionid) > end)
+          return false;
+
         memcpy(de.competitionid, &p2[1], sizeof(de.competitionid));
         de.competitionid[sizeof(de.competitionid) - 1] = 0;
         break;
       case FLDGID: // Read pilotname
+        if (p2 + 1 + sizeof(de.gliderid) > end)
+          return false;
+
         memcpy(de.gliderid, &p2[1], sizeof(de.gliderid));
         de.gliderid[sizeof(de.gliderid) - 1] = 0;
         break;
       case FLDPLT1: // Read pilotname
+        if (p2 + 1 + sizeof(pilot1) > end)
+          return false;
+
         memcpy(pilot1, &p2[1], sizeof(pilot1));
         pilot1[sizeof(pilot1) - 1] = 0;
         break;
       case FLDPLT2: // Read pilotname
+        if (p2 + 1 + sizeof(pilot2) > end)
+          return false;
+
         memcpy(pilot2, &p2[1], sizeof(pilot2));
         pilot2[sizeof(pilot2) - 1] = 0;
         break;
       case FLDPLT3: // Read pilotname
+        if (p2 + 1 + sizeof(pilot3) > end)
+          return false;
+
         memcpy(pilot3, &p2[1], sizeof(pilot3));
         pilot3[sizeof(pilot3) - 1] = 0;
         break;
       case FLDPLT4: // Read pilotname
+        if (p2 + 1 + sizeof(pilot4) > end)
+          return false;
+
         memcpy(pilot4, &p2[1], sizeof(pilot4));
         pilot4[sizeof(pilot4) - 1] = 0;
         break;
       case FLDHDR: // Read serial number
+        if (p2 + 2 >= end)
+          return false;
+
         de.serno = 256 * p2[1] + p2[2];
         break;
       case FLDETKF: // set takeoff flag
@@ -1125,12 +1155,18 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
      * cases or on other hardware though.
      */
     case rectyp_poc:
+      if (p + 2 >= end)
+        return false;
+
       if (p[2] & 0x80) { // Endebedingung
         return true;
       }
       l = pos_ds_size[bfv][1];
       break;
     case rectyp_tnd:
+      if (p + 7 >= end)
+        return false;
+
       // speichert in timetm1 den aktuellen tnd-DS ab
       temptime = 65536L * p[2] + 256L * p[3] + p[4];
       timetm1.tm_sec = temptime % 3600;
@@ -1147,6 +1183,9 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
       l = 8;
       break;
     case rectyp_end:
+      if (p + 6 >= end)
+        return false;
+
       // setzt firsttime und lasttime aufgrund der Werte im sta-DS
       temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
       de.firsttime = timetm1;
