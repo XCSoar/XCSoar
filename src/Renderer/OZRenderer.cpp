@@ -103,8 +103,8 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   Prepare(canvas, layer, offset);
 
   switch (_oz.GetShape()) {
-  case ObservationZonePoint::LINE:
-  case ObservationZonePoint::FAI_SECTOR: {
+  case ObservationZone::Shape::LINE:
+  case ObservationZone::Shape::FAI_SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
     RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
@@ -123,7 +123,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZonePoint::MAT_CYLINDER: {
+  case ObservationZone::Shape::MAT_CYLINDER: {
     const MatCylinderZone &oz = (const MatCylinderZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
@@ -135,7 +135,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZonePoint::CYLINDER: {
+  case ObservationZone::Shape::CYLINDER: {
     const CylinderZone &oz = (const CylinderZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
@@ -147,8 +147,8 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZonePoint::BGA_START:
-  case ObservationZonePoint::SECTOR: {
+  case ObservationZone::Shape::BGA_START:
+  case ObservationZone::Shape::SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 
     if (layer != LAYER_INACTIVE) {
@@ -167,9 +167,9 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZonePoint::KEYHOLE:
-  case ObservationZonePoint::BGAFIXEDCOURSE:
-  case ObservationZonePoint::BGAENHANCEDOPTION: {
+  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAENHANCEDOPTION: {
     const SectorZone &oz = (const SectorZone &)_oz;
     RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawKeyhole(p_center.x, p_center.y,
@@ -181,7 +181,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZonePoint::ANNULAR_SECTOR: {
+  case ObservationZone::Shape::ANNULAR_SECTOR: {
     const AnnularSectorZone &oz = (const AnnularSectorZone &)_oz;
     RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawAnnulus(p_center.x, p_center.y,

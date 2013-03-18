@@ -60,7 +60,7 @@ public:
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
                     const fixed _inner_radius = fixed(0.0))
-    :SectorZone(ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
+    :SectorZone(Shape::ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
      inner_radius(_inner_radius)
   {
     UpdateSector();

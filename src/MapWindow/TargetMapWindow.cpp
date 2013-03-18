@@ -263,16 +263,16 @@ static fixed
 GetRadius(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
-  case ObservationZonePoint::LINE:
-  case ObservationZonePoint::MAT_CYLINDER:
-  case ObservationZonePoint::CYLINDER:
-  case ObservationZonePoint::SECTOR:
-  case ObservationZonePoint::FAI_SECTOR:
-  case ObservationZonePoint::KEYHOLE:
-  case ObservationZonePoint::BGAFIXEDCOURSE:
-  case ObservationZonePoint::BGAENHANCEDOPTION:
-  case ObservationZonePoint::BGA_START:
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::LINE:
+  case ObservationZone::Shape::MAT_CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::FAI_SECTOR:
+  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::BGA_START:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     const CylinderZone &cz = (const CylinderZone &)oz;
     return cz.GetRadius();
   }

@@ -96,43 +96,43 @@ void
 Serialiser::Serialise(const ObservationZonePoint &data)
 {
   switch (data.GetShape()) {
-  case ObservationZonePoint::FAI_SECTOR:
+  case ObservationZone::Shape::FAI_SECTOR:
     Visit((const FAISectorZone &)data);
     break;
 
-  case ObservationZonePoint::SECTOR:
+  case ObservationZone::Shape::SECTOR:
     Visit((const SectorZone &)data);
     break;
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     Visit((const LineSectorZone &)data);
     break;
 
-  case ObservationZonePoint::MAT_CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
     Visit((const MatCylinderZone &)data);
     break;
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     Visit((const CylinderZone &)data);
     break;
 
-  case ObservationZonePoint::KEYHOLE:
+  case ObservationZone::Shape::KEYHOLE:
     Visit((const KeyholeZone &)data);
     break;
 
-  case ObservationZonePoint::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
     Visit((const BGAFixedCourseZone &)data);
     break;
 
-  case ObservationZonePoint::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
     Visit((const BGAEnhancedOptionZone &)data);
     break;
 
-  case ObservationZonePoint::BGA_START:
+  case ObservationZone::Shape::BGA_START:
     Visit((const BGAStartSectorZone &)data);
     break;
 
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     Visit((const AnnularSectorZone &)data);
     break;
   }

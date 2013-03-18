@@ -35,11 +35,11 @@ get_shape(const OrderedTaskPoint &tp)
 {
   const ObservationZonePoint &oz = tp.GetObservationZone();
   switch (oz.GetShape()) {
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     return Declaration::TurnPoint::LINE;
 
-  case ObservationZonePoint::MAT_CYLINDER:
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     return Declaration::TurnPoint::CYLINDER;
 
   default:

@@ -48,7 +48,7 @@ public:
    * @return Initialised object
    */
   FAISectorZone(const GeoPoint loc, const bool _is_turnpoint = true)
-    :SymmetricSectorZone(FAI_SECTOR, loc,
+    :SymmetricSectorZone(Shape::FAI_SECTOR, loc,
                          fixed(1000.0 * (_is_turnpoint ? 10 : 1)),
                          Angle::QuarterCircle()),
      is_turnpoint(_is_turnpoint)

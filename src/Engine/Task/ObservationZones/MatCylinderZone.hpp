@@ -48,7 +48,7 @@ public:
    * @return Initialised object
    */
   MatCylinderZone(const GeoPoint &loc)
-    :ObservationZonePoint(MAT_CYLINDER, loc) {}
+    :ObservationZonePoint(Shape::MAT_CYLINDER, loc) {}
 
   /**
    * Get radius property value

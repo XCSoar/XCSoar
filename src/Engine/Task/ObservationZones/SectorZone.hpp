@@ -67,7 +67,7 @@ public:
   SectorZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0),
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
-    :CylinderZone(SECTOR, loc, _radius),
+    :CylinderZone(Shape::SECTOR, loc, _radius),
      start_radial(_start_radial), end_radial(_end_radial)
   {
     UpdateSector();

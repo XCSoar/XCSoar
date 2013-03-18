@@ -43,19 +43,19 @@ static fixed
 GetOZSize(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
-  case ObservationZonePoint::SECTOR:
+  case ObservationZone::Shape::SECTOR:
     return ((const SectorZone &)oz).GetRadius();
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     return ((const LineSectorZone &)oz).GetLength();
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     return ((const CylinderZone &)oz).GetRadius();
 
-  case ObservationZonePoint::MAT_CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
     return ((const MatCylinderZone &)oz).GetRadius();
 
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     return ((const AnnularSectorZone &)oz).GetRadius();
 
   default:
@@ -184,86 +184,86 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   switch (point.GetType()) {
   case TaskPointType::START:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::START_SECTOR;
 
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::START_LINE;
 
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::START_CYLINDER;
 
-    case ObservationZonePoint::BGA_START:
+    case ObservationZone::Shape::BGA_START:
       return TaskPointFactoryType::START_BGA;
     }
     break;
 
   case TaskPointType::AAT:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::FAI_SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::AAT_SEGMENT;
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::AAT_ANNULAR_SECTOR;
-    case ObservationZonePoint::CYLINDER:
+    case ObservationZone::Shape::CYLINDER:
       return TaskPointFactoryType::AAT_CYLINDER;
 
-    case ObservationZonePoint::MAT_CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
       return TaskPointFactoryType::MAT_CYLINDER;
     }
     break;
 
   case TaskPointType::AST:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
-    case ObservationZonePoint::KEYHOLE:
+    case ObservationZone::Shape::KEYHOLE:
       return TaskPointFactoryType::KEYHOLE_SECTOR;
 
-    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
       return TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR;
 
-    case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
       return TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR;
 
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::LINE:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::LINE:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::AST_CYLINDER;
     }
     break;
 
   case TaskPointType::FINISH:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FINISH_SECTOR;
 
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::FINISH_LINE;
 
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::FINISH_CYLINDER;
     }
     break;

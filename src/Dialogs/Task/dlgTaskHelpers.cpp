@@ -180,48 +180,48 @@ void
 OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 {
   switch (ozp.GetShape()) {
-  case ObservationZonePoint::FAI_SECTOR:
+  case ObservationZone::Shape::FAI_SECTOR:
     _tcscpy(buffer, _("FAI quadrant"));
     return;
 
-  case ObservationZonePoint::SECTOR:
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Sector"), _("Radius"),
               (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate Width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Cylinder"), _("Radius"),
               (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::MAT_CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
     _stprintf(buffer,_T("%.1f%s"),
               (double)Units::ToUserDistance(((const MatCylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::KEYHOLE:
+  case ObservationZone::Shape::KEYHOLE:
     _tcscpy(buffer, _("DAeC Keyhole"));
     return;
 
-  case ObservationZonePoint::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
     _tcscpy(buffer, _("BGA Fixed Course"));
     return;
 
-  case ObservationZonePoint::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
     _tcscpy(buffer, _("BGA Enhanced Option"));
     return;
 
-  case ObservationZonePoint::BGA_START:
+  case ObservationZone::Shape::BGA_START:
     _tcscpy(buffer, _("BGA Start Sector"));
     return;
   }
