@@ -698,24 +698,6 @@ AbstractTaskFactory::GetValidTypes(unsigned position) const
   return v;
 }
 
-void
-AbstractTaskFactory::AddValidationError(TaskValidationErrorType e)
-{
-  validation_errors.push_back(e);
-}
-
-void
-AbstractTaskFactory::ClearValidationErrors()
-{
-  validation_errors.clear();
-}
-
-TaskValidationErrorVector
-AbstractTaskFactory::GetValidationErrors()
-{
-  return validation_errors;
-}
-
 bool
 AbstractTaskFactory::CheckAddFinish()
 {

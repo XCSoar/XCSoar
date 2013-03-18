@@ -255,17 +255,21 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
 }
 
 const TCHAR*
-getTaskValidationErrors(const TaskValidationErrorVector &v)
+getTaskValidationErrors(const TaskValidationErrorSet v)
 {
   static TCHAR err[MAX_PATH];
   err[0] = '\0';
 
-  for (unsigned i = 0; i < v.size(); i++)
-    if ((_tcslen(err) + _tcslen(TaskValidationError(v[i]))) < MAX_PATH)
-      _tcscat(err, TaskValidationError(v[i]));
+  for (unsigned i = 0; i < v.N; i++) {
+    const TaskValidationErrorType error = TaskValidationErrorType(i);
+    if (v.Contains(error) &&
+        _tcslen(err) + _tcslen(TaskValidationError(error)) < MAX_PATH)
+      _tcscat(err, TaskValidationError(error));
+  }
 
   return err;
 }
+
 const TCHAR*
 TaskValidationError(TaskValidationErrorType type)
 {
@@ -295,6 +299,9 @@ TaskValidationError(TaskValidationErrorType type)
 
   case TaskValidationErrorType::NON_MAT_OZS:
     return _("non-MAT turn points");
+
+  case TaskValidationErrorType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();

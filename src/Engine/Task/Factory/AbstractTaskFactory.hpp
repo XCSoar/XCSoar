@@ -86,7 +86,7 @@ protected:
   const LegalPointSet finish_types;
 
   /** list of errors returned by task validation */
-  TaskValidationErrorVector validation_errors;
+  TaskValidationErrorSet validation_errors;
 
 protected:
   /**
@@ -619,7 +619,9 @@ public:
    * @return returns vector of errors for current task
    */
   gcc_pure
-  TaskValidationErrorVector GetValidationErrors();
+  const TaskValidationErrorSet &GetValidationErrors() const {
+    return validation_errors;
+  }
 
 protected:
   /**
@@ -671,7 +673,9 @@ protected:
    *
    * @param e The validation error type to be added
    */
-  void AddValidationError(TaskValidationErrorType e);
+  void AddValidationError(TaskValidationErrorType e) {
+    validation_errors.Add(e);
+  }
 
 private:
   gcc_pure
@@ -697,7 +701,9 @@ private:
   /**
    * Clears the vector of validation errors for the current task
    */
-  void ClearValidationErrors();
+  void ClearValidationErrors() {
+    validation_errors = TaskValidationErrorSet();
+  }
 };
 
 #endif
