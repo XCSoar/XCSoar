@@ -33,14 +33,14 @@ static constexpr TaskFactoryConstraints rt_constraints = {
   2, 13,
 };
 
-static constexpr TaskPointFactoryType rt_start_types[] = {
+static constexpr LegalPointSet rt_start_types{
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_BGA,
 };
 
-static constexpr TaskPointFactoryType rt_im_types[] = {
+static constexpr LegalPointSet rt_im_types{
   TaskPointFactoryType::AST_CYLINDER,
   TaskPointFactoryType::KEYHOLE_SECTOR,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
@@ -48,7 +48,7 @@ static constexpr TaskPointFactoryType rt_im_types[] = {
   TaskPointFactoryType::FAI_SECTOR,
 };
 
-static constexpr TaskPointFactoryType rt_finish_types[] = {
+static constexpr LegalPointSet rt_finish_types{
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
   TaskPointFactoryType::FINISH_SECTOR,
@@ -57,12 +57,7 @@ static constexpr TaskPointFactoryType rt_finish_types[] = {
 RTTaskFactory::RTTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb)
   :AbstractTaskFactory(rt_constraints, _task, tb,
-                       LegalPointConstArray(rt_start_types,
-                                            ARRAY_SIZE(rt_start_types)),
-                       LegalPointConstArray(rt_im_types,
-                                            ARRAY_SIZE(rt_im_types)),
-                       LegalPointConstArray(rt_finish_types,
-                                            ARRAY_SIZE(rt_finish_types)))
+                       rt_start_types, rt_im_types, rt_finish_types)
 {
 }
 

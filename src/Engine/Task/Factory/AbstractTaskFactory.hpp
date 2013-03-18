@@ -25,13 +25,12 @@ Copyright_License {
 #define ABSTRACT_TASK_FACTORY_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Util/ConstArray.hpp"
 #include "Compiler.h"
 #include "Math/fixed.hpp"
 #include "TaskPointFactoryType.hpp"
 #include "ValidationError.hpp"
+#include "LegalPointSet.hpp"
 
-#include <vector>
 #include <stdint.h>
 
 struct TaskFactoryConstraints;
@@ -71,11 +70,6 @@ public:
     POINT_FINISH
   };
 
-  /** Vector of legal point types */
-  typedef std::vector<TaskPointFactoryType> LegalPointVector;
-
-  typedef ConstArray<TaskPointFactoryType> LegalPointConstArray;
-
 protected:
   const TaskFactoryConstraints &constraints;
 
@@ -85,11 +79,11 @@ protected:
   const TaskBehaviour &behaviour;
 
   /** list of valid start types, for specialisation */
-  LegalPointConstArray start_types;
+  const LegalPointSet start_types;
   /** list of valid intermediate types, for specialisation */
-  LegalPointConstArray intermediate_types;
+  const LegalPointSet intermediate_types;
   /** list of valid finish types, for specialisation */
-  LegalPointConstArray finish_types;
+  const LegalPointSet finish_types;
 
   /** list of errors returned by task validation */
   TaskValidationErrorVector validation_errors;
@@ -103,9 +97,9 @@ protected:
    */
   AbstractTaskFactory(const TaskFactoryConstraints &_constraints,
                       OrderedTask &_task, const TaskBehaviour &_behaviour,
-                      const LegalPointConstArray _start_types,
-                      const LegalPointConstArray _intermediate_types,
-                      const LegalPointConstArray _finish_types)
+                      const LegalPointSet &_start_types,
+                      const LegalPointSet &_intermediate_types,
+                      const LegalPointSet &_finish_types)
     :constraints(_constraints),
      task(_task), behaviour(_behaviour),
      start_types(_start_types),
@@ -230,7 +224,7 @@ public:
    *
    * @return list of valid start types
    */
-  const LegalPointConstArray &GetStartTypes() const {
+  const LegalPointSet &GetStartTypes() const {
     return start_types;
   }
 
@@ -239,7 +233,7 @@ public:
    *
    * @return list of valid intermediate types
    */
-  const LegalPointConstArray &GetIntermediateTypes() const {
+  const LegalPointSet &GetIntermediateTypes() const {
     return intermediate_types;
   }
 
@@ -248,7 +242,7 @@ public:
    *
    * @return list of valid finish types
    */
-  const LegalPointConstArray &GetFinishTypes() const {
+  const LegalPointSet &GetFinishTypes() const {
     return finish_types;
   }
 
@@ -480,7 +474,7 @@ public:
    * @return Vector of valid types in position
    */
   gcc_pure
-  LegalPointVector GetValidIntermediateTypes(unsigned position) const;
+  LegalPointSet GetValidIntermediateTypes(unsigned position) const;
 
   /**
    * List all valid start types for the task type
@@ -488,7 +482,9 @@ public:
    * @return Vector of valid types in position
    */
   gcc_pure
-  LegalPointVector GetValidStartTypes() const;
+  const LegalPointSet &GetValidStartTypes() const {
+    return start_types;
+  }
 
   /**
    * Checks for a finish point.
@@ -504,7 +500,9 @@ public:
    * @return Vector of valid types in position
    */
   gcc_pure
-  LegalPointVector GetValidIntermediateTypes() const;
+  const LegalPointSet &GetValidIntermediateTypes() const {
+    return intermediate_types;
+  }
 
   /**
    * List all valid finish types for the task type
@@ -512,7 +510,9 @@ public:
    * @return Vector of valid types in position
    */
   gcc_pure
-  LegalPointVector GetValidFinishTypes() const;
+  const LegalPointSet &GetValidFinishTypes() const {
+    return finish_types;
+  }
 
   /**
    * List valid types for a given position
@@ -522,7 +522,7 @@ public:
    * @return Vector of valid types in position
    */
   gcc_pure
-  LegalPointVector GetValidTypes(unsigned position) const;
+  LegalPointSet GetValidTypes(unsigned position) const;
 
   /**
    * Inspect the type of a point
@@ -566,7 +566,9 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidFinishType(TaskPointFactoryType type) const;
+  bool IsValidFinishType(TaskPointFactoryType type) const {
+    return finish_types.Contains(type);
+  }
 
   /**
    * Determine if a type is valid for a StartPoint
@@ -576,7 +578,9 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidStartType(TaskPointFactoryType type) const;
+  bool IsValidStartType(TaskPointFactoryType type) const {
+    return start_types.Contains(type);
+  }
 
   /**
    * Determine if a type is valid for an IntermediateTaskPoint
@@ -586,7 +590,9 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidIntermediateType(TaskPointFactoryType type) const;
+  bool IsValidIntermediateType(TaskPointFactoryType type) const {
+    return intermediate_types.Contains(type);
+  }
 
   /**
    * removes excess turnpoints from end of task if the

@@ -650,33 +650,12 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
   gcc_unreachable();
 }
 
-bool
-AbstractTaskFactory::IsValidIntermediateType(TaskPointFactoryType type) const
-{
-  return std::find(intermediate_types.begin(), intermediate_types.end(), type)
-    != intermediate_types.end();
-}
-
-bool
-AbstractTaskFactory::IsValidStartType(TaskPointFactoryType type) const
-{
-  return std::find(start_types.begin(), start_types.end(), type)
-    != start_types.end();
-}
-
-bool
-AbstractTaskFactory::IsValidFinishType(TaskPointFactoryType type) const
-{
-  return std::find(finish_types.begin(), finish_types.end(), type)
-    != finish_types.end();
-}
-
 TaskPointFactoryType
 AbstractTaskFactory::GetDefaultStartType() const
 {
   TaskPointFactoryType type = behaviour.sector_defaults.start_type;
-  if (!IsValidStartType(type))
-    type = *start_types.begin();
+  if (!IsValidStartType(type) && !start_types.IsEmpty())
+    type = start_types.UncheckedFirst();
 
   return type;
 }
@@ -685,8 +664,8 @@ TaskPointFactoryType
 AbstractTaskFactory::GetDefaultIntermediateType() const
 {
   TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
-  if (!IsValidIntermediateType(type))
-    type = *intermediate_types.begin();
+  if (!IsValidIntermediateType(type) && !intermediate_types.IsEmpty())
+    type = intermediate_types.UncheckedFirst();
 
   return type;
 }
@@ -695,25 +674,23 @@ TaskPointFactoryType
 AbstractTaskFactory::GetDefaultFinishType() const
 {
   TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
-  if (!IsValidFinishType(type))
-    type = *finish_types.begin();
+  if (!IsValidFinishType(type) && !finish_types.IsEmpty())
+    type = finish_types.UncheckedFirst();
 
   return type;
 }
 
-AbstractTaskFactory::LegalPointVector 
+LegalPointSet
 AbstractTaskFactory::GetValidTypes(unsigned position) const
 {
-  LegalPointVector v;
+  LegalPointSet v;
   if (ValidAbstractType(POINT_START, position))
-    v.insert(v.end(), start_types.begin(), start_types.end());
+    v |= start_types;
 
-  LegalPointVector i = GetValidIntermediateTypes(position);
-  if (!i.empty())
-    v.insert(v.end(), i.begin(), i.end());
+  v |= GetValidIntermediateTypes(position);
 
   if (ValidAbstractType(POINT_FINISH, position))
-    v.insert(v.end(), finish_types.begin(), finish_types.end());
+    v |= finish_types;
 
   return v;
 }
@@ -911,52 +888,24 @@ AbstractTaskFactory::Validate()
   return valid;
 }
 
-AbstractTaskFactory::LegalPointVector 
+LegalPointSet
 AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
 {
-  LegalPointVector v;
-
   if (!IsPositionIntermediate(position))
-    return v;
+    return LegalPointSet();
 
   if (constraints.homogeneous_tps &&
       position > 1 && task.TaskSize() > 1) {
     TaskPointFactoryType type = GetType(task.GetPoint(1));
-    if (IsValidIntermediateType(type)) {
-      v.push_back(type);
-      return v;
-    }
+    if (IsValidIntermediateType(type))
+      return LegalPointSet(type);
   }
 
   if (ValidAbstractType(POINT_AAT, position) ||
       ValidAbstractType(POINT_AST, position))
-    v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
+    return intermediate_types;
 
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidStartTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), start_types.begin(), start_types.end());
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidIntermediateTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidFinishTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), finish_types.begin(), finish_types.end());
-  return v;
+  return LegalPointSet();
 }
 
 bool 

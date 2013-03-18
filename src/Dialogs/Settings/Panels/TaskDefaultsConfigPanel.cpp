@@ -103,21 +103,26 @@ TaskDefaultsConfigPanel::SetFinishLabel()
 
 static void
 FillPointTypes(DataFieldEnum &df,
-               const AbstractTaskFactory::LegalPointVector &l,
+               const LegalPointSet &l,
                TaskPointFactoryType value)
 {
   df.EnableItemHelp(true);
 
-  for (const auto type : l)
+  for (unsigned i = 0; i < l.N; ++i) {
+    const TaskPointFactoryType type = TaskPointFactoryType(i);
+    if (!l.Contains(type))
+      continue;
+
     df.addEnumText(OrderedTaskPointName(type), (unsigned)type,
                    OrderedTaskPointDescription(type));
+  }
 
   df.Set((unsigned)value);
 }
 
 static void
 FillPointTypes(WndProperty &wp,
-               const AbstractTaskFactory::LegalPointVector &l,
+               const LegalPointSet &l,
                TaskPointFactoryType value)
 {
   FillPointTypes(*(DataFieldEnum *)wp.GetDataField(), l, value);

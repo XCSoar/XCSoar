@@ -34,20 +34,20 @@ static constexpr TaskFactoryConstraints aat_constraints = {
   2, 13,
 };
 
-static constexpr TaskPointFactoryType aat_start_types[] = {
+static constexpr LegalPointSet aat_start_types{
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_BGA,
 };
 
-static constexpr TaskPointFactoryType aat_im_types[] = {
+static constexpr LegalPointSet aat_im_types{
   TaskPointFactoryType::AAT_CYLINDER,
   TaskPointFactoryType::AAT_SEGMENT,
   TaskPointFactoryType::AAT_ANNULAR_SECTOR,
 };
 
-static constexpr TaskPointFactoryType aat_finish_types[] = {
+static constexpr LegalPointSet aat_finish_types{
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
   TaskPointFactoryType::FINISH_SECTOR,
@@ -55,12 +55,7 @@ static constexpr TaskPointFactoryType aat_finish_types[] = {
 
 AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
   :AbstractTaskFactory(aat_constraints, _task, tb,
-                       LegalPointConstArray(aat_start_types,
-                                            ARRAY_SIZE(aat_start_types)),
-                       LegalPointConstArray(aat_im_types,
-                                            ARRAY_SIZE(aat_im_types)),
-                       LegalPointConstArray(aat_finish_types,
-                                            ARRAY_SIZE(aat_finish_types)))
+                       aat_start_types, aat_im_types, aat_finish_types)
 {
 }
 

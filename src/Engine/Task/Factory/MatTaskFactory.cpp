@@ -34,27 +34,22 @@ static constexpr TaskFactoryConstraints mat_constraints = {
   2, 26,
 };
 
-static constexpr TaskPointFactoryType mat_start_types[] = {
+static constexpr LegalPointSet mat_start_types{
   TaskPointFactoryType::START_CYLINDER,
 };
 
-static constexpr TaskPointFactoryType mat_im_types[] = {
+static constexpr LegalPointSet mat_im_types {
   TaskPointFactoryType::MAT_CYLINDER,
 };
 
-static constexpr TaskPointFactoryType mat_finish_types[] = {
+static constexpr LegalPointSet mat_finish_types{
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
 };
 
 MatTaskFactory::MatTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
 :AbstractTaskFactory(mat_constraints, _task, tb,
-                     LegalPointConstArray(mat_start_types,
-                                          ARRAY_SIZE(mat_start_types)),
-                     LegalPointConstArray(mat_im_types,
-                                          ARRAY_SIZE(mat_im_types)),
-                     LegalPointConstArray(mat_finish_types,
-                                          ARRAY_SIZE(mat_finish_types)))
+                     mat_start_types, mat_im_types, mat_finish_types)
 {
 }
 

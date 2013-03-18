@@ -33,6 +33,7 @@
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Util/StaticArray.hpp"
 
 #include "harness_waypoints.hpp"
 #include <string.h>
@@ -871,6 +872,14 @@ const Waypoint* random_waypoint(const Waypoints &waypoints) {
   return waypoints.LookupId(id);  
 }
 
+static TaskPointFactoryType
+GetRandomType(const LegalPointSet &l)
+{
+  StaticArray<TaskPointFactoryType, LegalPointSet::N> types;
+  l.CopyTo(std::back_inserter(types));
+  return types[(rand() % types.size())];
+}
+
 bool test_task_random(TaskManager& task_manager,
                       const Waypoints &waypoints,
                       const unsigned num_points)
@@ -885,8 +894,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetStartTypes()[(rand() % fact.GetStartTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetStartTypes());
 
     tp = fact.CreateStart(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -902,8 +910,7 @@ bool test_task_random(TaskManager& task_manager,
     task_report(task_manager, "# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      TaskPointFactoryType s =
-        fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
+      const TaskPointFactoryType s = GetRandomType(fact.GetIntermediateTypes());
 
       tp = fact.CreateIntermediate(s,*wp);
       if (!fact.Append(*tp,false)) {
@@ -916,8 +923,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetFinishTypes()[(rand() % fact.GetFinishTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetFinishTypes());
 
     tp = fact.CreateFinish(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -980,8 +986,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetStartTypes()[(rand() % fact.GetStartTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetStartTypes());
 
     tp = fact.CreateStart(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -994,8 +999,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     test_note("# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      TaskPointFactoryType s =
-        fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
+      const TaskPointFactoryType s = GetRandomType(fact.GetIntermediateTypes());
 
       tp = fact.CreateIntermediate(s,*wp);
       if (!fact.Append(*tp,false)) {
@@ -1008,8 +1012,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetFinishTypes()[(rand() % fact.GetFinishTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetFinishTypes());
 
     tp = fact.CreateFinish(s,*wp);
     if (!fact.Append(*tp,false)) {

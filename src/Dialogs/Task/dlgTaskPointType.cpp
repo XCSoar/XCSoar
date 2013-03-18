@@ -32,6 +32,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Language/Language.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/TrivialArray.hpp"
 
 #include <assert.h>
 
@@ -39,7 +40,7 @@ static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
 static unsigned active_index = 0;
 
-static AbstractTaskFactory::LegalPointVector point_types;
+static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
 
 static TaskPointFactoryType
 get_point_type() 
@@ -105,7 +106,10 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
 
   point = &ordered_task->GetPoint(active_index);
 
-  point_types = ordered_task->GetFactory().GetValidTypes(index);
+  point_types.clear();
+  ordered_task->GetFactory().GetValidTypes(index)
+    .CopyTo(std::back_inserter(point_types));
+
   if (point_types.empty()) {
     assert(1);
     return false;
