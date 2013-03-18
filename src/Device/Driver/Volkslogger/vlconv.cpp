@@ -1014,13 +1014,13 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
 
 // Members of class DIR
 bool
-conv_dir(std::vector<DIRENTRY> &flights, uint8_t *p, const size_t length)
+conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 {
   assert(flights.empty());
   DIRENTRY de; // directory entry
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
-  uint8_t *p2; // Pointer to the beginning of the content of a vrb or vrt
+  const uint8_t *p2; // Pointer to the beginning of the content of a vrb or vrt
   tm olddate;
   memset(&olddate, 0, sizeof(olddate));
 

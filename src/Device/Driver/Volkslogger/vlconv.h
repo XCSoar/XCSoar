@@ -102,11 +102,12 @@ struct DIRENTRY {
  * reference parameter &flights.
  * The functions returns true if conversion was successful.
  * @param flights Vector to return the read flights.
- * @param dirbuffer Pointer to the buffer containing the binary input data.
+ * @param src Pointer to the buffer containing the binary input data.
  * @param length The length of the data stored in buffer.
  */
 
-bool conv_dir(std::vector<DIRENTRY> &flights, uint8_t *dirbuffer,
-              size_t length);
+bool
+conv_dir(std::vector<DIRENTRY> &flights,
+         const uint8_t *src, size_t length);
 
 #endif
