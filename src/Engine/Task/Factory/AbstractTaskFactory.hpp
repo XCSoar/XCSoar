@@ -71,9 +71,6 @@ public:
     POINT_FINISH
   };
 
-  /** Vector of legal abstract point types (non-OZ specific) */
-  typedef std::vector<LegalAbstractPointType> LegalAbstractVector;
-
   /** Vector of legal point types */
   typedef std::vector<TaskPointFactoryType> LegalPointVector;
 
