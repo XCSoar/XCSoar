@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_EGL_QUEUE_HPP
 #define XCSOAR_EVENT_EGL_QUEUE_HPP
 
+#include "../Shared/TimerQueue.hpp"
 #include "Event.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
@@ -38,26 +39,6 @@ class Window;
 class Timer;
 
 class EventQueue : private NonCopyable {
-  struct TimerRecord {
-    /**
-     * Projected MonotonicClockUS() value when this timer is due.
-     */
-    uint64_t due_us;
-
-    Timer *timer;
-
-    constexpr TimerRecord(Timer &_timer, uint64_t _due_us)
-      :due_us(_due_us), timer(&_timer) {}
-
-    bool operator<(const TimerRecord &other) const {
-      return due_us < other.due_us;
-    }
-
-    bool IsDue(uint64_t now_us) const {
-      return now_us >= due_us;
-    }
-  };
-
   unsigned screen_width, screen_height;
   unsigned mouse_x, mouse_y;
   bool mouse_pressed;
@@ -66,7 +47,7 @@ class EventQueue : private NonCopyable {
 
   std::queue<Event> events;
 
-  std::multiset<TimerRecord> timers;
+  TimerQueue timers;
 
   ::Poll poll;
   EventPipe event_pipe;
