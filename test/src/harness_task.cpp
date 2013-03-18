@@ -1049,7 +1049,7 @@ bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num)
 {
-  unsigned n_points = rand()%9+1;
+  unsigned n_points = rand()%8+1;
   switch (test_num) {
   case 0:
     return test_task_mixed(task_manager,waypoints);
