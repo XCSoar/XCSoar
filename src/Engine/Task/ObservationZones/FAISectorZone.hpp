@@ -32,11 +32,8 @@
  */
 class FAISectorZone: public SymmetricSectorZone
 {
-  const bool is_turnpoint;
-
   FAISectorZone(const FAISectorZone &other, const GeoPoint &reference)
-    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
-     is_turnpoint(other.is_turnpoint) {}
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
 
 public:  
   /** 
@@ -50,8 +47,7 @@ public:
   FAISectorZone(const GeoPoint loc, const bool _is_turnpoint = true)
     :SymmetricSectorZone(Shape::FAI_SECTOR, loc,
                          _is_turnpoint ? fixed(10000) : fixed(1000),
-                         Angle::QuarterCircle()),
-     is_turnpoint(_is_turnpoint)
+                         Angle::QuarterCircle())
   {
     UpdateSector();
   }
