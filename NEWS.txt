@@ -12,6 +12,8 @@ Version 6.6 - not yet released
   - limit the InfoBox aspect ratio
 * tasks
   - MAT tasks (#563)
+* Android
+  - faster map renderer on some Android devices
 
 Version 6.5.3 - not yet released
 * user interface

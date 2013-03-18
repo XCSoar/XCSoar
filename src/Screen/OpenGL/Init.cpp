@@ -116,11 +116,74 @@ gcc_pure
 static bool
 CheckFBO()
 {
-  return HaveGLES()
-    ? (OpenGL::IsExtensionSupported("GL_OES_framebuffer_object") &&
-       OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
-    : (OpenGL::IsExtensionSupported("GL_EXT_framebuffer_object") &&
-       OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"));
+  return OpenGL::IsExtensionSupported(HaveGLES()
+                                      ? "GL_OES_framebuffer_object"
+                                      : "GL_EXT_framebuffer_object");
+}
+
+/**
+ * Check which depth+stencil internalType is available for a
+ * Renderbuffer.  Returns GL_NONE if the Renderbuffer does not support
+ * it.
+ */
+gcc_pure
+static GLenum
+CheckDepthStencil()
+{
+#ifdef HAVE_GLES
+  if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
+    return GL_DEPTH24_STENCIL8_OES;
+
+  /* not supported */
+  return GL_NONE_OES;
+
+#else
+
+  if (OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"))
+    return FBO::DEPTH_STENCIL;
+
+  /* not supported */
+  return GL_NONE;
+#endif
+}
+
+/**
+ * Check which stencil internalType is available for a Renderbuffer.
+ * Returns GL_NONE if the Renderbuffer does not support it.
+ */
+gcc_pure
+static GLenum
+CheckStencil()
+{
+#ifdef HAVE_GLES
+  if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
+    return GL_STENCIL_INDEX1_OES;
+
+  if (OpenGL::IsExtensionSupported("GL_OES_stencil4"))
+    return GL_STENCIL_INDEX4_OES;
+
+  if (OpenGL::IsExtensionSupported("GL_OES_stencil8"))
+    return GL_STENCIL_INDEX8_OES;
+
+  /* not supported */
+  return GL_NONE_OES;
+
+#else
+
+#if 0
+  /* this one works with Nvidia GF114 on Linux, but
+     https://www.opengl.org/wiki/Image_Format strongly recommends not
+     using it */
+#ifdef GL_STENCIL_INDEX8
+  return GL_STENCIL_INDEX8;
+#else
+  return GL_STENCIL_INDEX8_EXT;
+#endif
+#endif
+
+  /* not supported */
+  return GL_NONE;
+#endif
 }
 
 void
@@ -139,6 +202,14 @@ OpenGL::SetupContext()
 #endif
 
   frame_buffer_object = CheckFBO() && FBO::Initialise();
+  if (frame_buffer_object) {
+    render_buffer_depth_stencil = CheckDepthStencil();
+
+    render_buffer_stencil = CheckStencil();
+    if (!render_buffer_stencil)
+      /* fall back to a packed depth+stencil format */
+      render_buffer_stencil = render_buffer_depth_stencil;
+  }
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);

@@ -35,6 +35,8 @@ namespace OpenGL {
 
   bool frame_buffer_object;
 
+  GLenum render_buffer_depth_stencil, render_buffer_stencil;
+
   UPixelScalar screen_width, screen_height;
 
   RasterPoint translate;
