@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.5.3 - not yet released
 * user interface
   - eliminate flickering in the cross section on Windows
+* devices
+  - FLARM: fix IGC file download on firmware 5.09 (#2619)
 * Android
   - fix crash with Hebrew language
 
