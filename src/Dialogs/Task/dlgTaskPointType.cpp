@@ -68,8 +68,8 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
   else
     buffer.Format(_T(" %s"), text);
 
-  canvas.DrawText(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2),
+  canvas.DrawText(rc.left + Layout::GetTextPadding(),
+                  rc.top + Layout::GetTextPadding(),
                   buffer);
 }
 
