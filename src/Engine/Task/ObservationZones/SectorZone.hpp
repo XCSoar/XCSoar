@@ -41,11 +41,12 @@ class SectorZone: public CylinderZone
   Angle end_radial;
 
 protected:
-  SectorZone(Shape _shape, const GeoPoint &loc,
+  SectorZone(Shape _shape, bool _can_start_through_top,
+             const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
-    :CylinderZone(_shape, loc, _radius),
+    :CylinderZone(_shape, _can_start_through_top, loc, _radius),
      start_radial(_start_radial), end_radial(_end_radial) {}
 
   SectorZone(const SectorZone &other, const GeoPoint &reference)
@@ -67,7 +68,7 @@ public:
   SectorZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0),
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
-    :CylinderZone(Shape::SECTOR, loc, _radius),
+    :CylinderZone(Shape::SECTOR, true, loc, _radius),
      start_radial(_start_radial), end_radial(_end_radial)
   {
     UpdateSector();

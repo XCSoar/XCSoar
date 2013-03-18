@@ -48,7 +48,8 @@ public:
    * @return Initialised object
    */
   LineSectorZone(const GeoPoint loc, const fixed length = fixed(1000.0))
-    :SymmetricSectorZone(Shape::LINE, loc, Half(length), Angle::HalfCircle())
+    :SymmetricSectorZone(Shape::LINE, false, loc,
+                         Half(length), Angle::HalfCircle())
   {
     UpdateSector();
   }
@@ -72,10 +73,6 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool CanStartThroughTop() const override {
-    return false;
-  }
-
   virtual bool TransitionConstraint(const GeoPoint &location,
                                     const GeoPoint &last_location) const override {
     return CylinderZone::IsInSector(location) &&

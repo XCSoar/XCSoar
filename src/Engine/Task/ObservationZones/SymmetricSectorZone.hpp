@@ -41,10 +41,12 @@ protected:
    *
    * @return Initialised object
    */
-  SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
+  SymmetricSectorZone(Shape _shape, bool _can_start_through_top,
+                      const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::QuarterCircle())
-    :SectorZone(_shape, loc, radius), sector_angle(angle) {}
+    :SectorZone(_shape, _can_start_through_top, loc, radius),
+     sector_angle(angle) {}
 
   SymmetricSectorZone(const SymmetricSectorZone &other,
                       const GeoPoint &reference)
@@ -54,7 +56,7 @@ protected:
 public:
   SymmetricSectorZone(const GeoPoint &loc,
                       const fixed radius=fixed(10000.0))
-    :SectorZone(Shape::SYMMETRIC_QUADRANT, loc, radius),
+    :SectorZone(Shape::SYMMETRIC_QUADRANT, true, loc, radius),
      sector_angle(Angle::QuarterCircle()) {
     UpdateSector();
   }

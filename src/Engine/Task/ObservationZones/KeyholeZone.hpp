@@ -43,10 +43,11 @@ protected:
    *
    * @return Initialised object
    */
-  KeyholeZone(Shape _shape, const GeoPoint &loc,
+  KeyholeZone(Shape _shape, bool _can_start_through_top,
+              const GeoPoint &loc,
               const fixed radius = fixed(10000.0),
               const Angle angle = Angle::QuarterCircle())
-    :SymmetricSectorZone(_shape, loc, radius, angle),
+    :SymmetricSectorZone(_shape, _can_start_through_top, loc, radius, angle),
      inner_radius(500) {}
 
   KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
@@ -57,7 +58,7 @@ public:
   static KeyholeZone *CreateCustomKeyholeZone(const GeoPoint &reference,
                                               fixed radius,
                                               Angle angle) {
-    return new KeyholeZone(Shape::CUSTOM_KEYHOLE, reference,
+    return new KeyholeZone(Shape::CUSTOM_KEYHOLE, true, reference,
                            radius, angle);
   }
 
@@ -67,7 +68,7 @@ public:
    * rules.
    */
   static KeyholeZone *CreateDAeCKeyholeZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::DAEC_KEYHOLE, reference,
+    return new KeyholeZone(Shape::DAEC_KEYHOLE, true, reference,
                            fixed(10000),
                            Angle::QuarterCircle());
   }
@@ -79,7 +80,7 @@ public:
    * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
    */
   static KeyholeZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGA_START, reference,
+    return new KeyholeZone(Shape::BGA_START, true, reference,
                            fixed(5000),
                            Angle::HalfCircle());
   }
@@ -89,7 +90,7 @@ public:
    * incoming/outgoing legs, with 500m cylinder.
    */
   static KeyholeZone *CreateBGAFixedCourseZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGAFIXEDCOURSE, reference,
+    return new KeyholeZone(Shape::BGAFIXEDCOURSE, true, reference,
                            fixed(20000),
                            Angle::QuarterCircle());
   }
@@ -99,7 +100,7 @@ public:
    * incoming/outgoing legs, with 500m cylinder
    */
   static KeyholeZone *CreateBGAEnhancedOptionZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGAENHANCEDOPTION, reference,
+    return new KeyholeZone(Shape::BGAENHANCEDOPTION, true, reference,
                            fixed(10000),
                            Angle::HalfCircle());
   }

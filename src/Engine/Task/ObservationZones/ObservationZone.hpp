@@ -57,8 +57,11 @@ public:
 private:
   const Shape shape;
 
+  const bool can_start_through_top;
+
 protected:
-  ObservationZone(Shape _shape):shape(_shape) {}
+  ObservationZone(Shape _shape, bool _can_start_through_top)
+    :shape(_shape), can_start_through_top(_can_start_through_top) {}
 
 public:
   virtual ~ObservationZone() {}
@@ -84,8 +87,8 @@ public:
    * @return True if zone type can have a valid start through top
    */
   gcc_pure
-  virtual bool CanStartThroughTop() const {
-    return true;
+  bool CanStartThroughTop() const {
+    return can_start_through_top;
   }
 
   /**

@@ -38,9 +38,11 @@ class CylinderZone : public ObservationZonePoint
   fixed radius;
 
 protected:
-  CylinderZone(Shape _shape, const GeoPoint &loc,
+  CylinderZone(Shape _shape, bool _can_start_through_top,
+               const GeoPoint &loc,
                const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(_shape, loc), radius(_radius) {
+    :ObservationZonePoint(_shape, _can_start_through_top, loc),
+     radius(_radius) {
     assert(positive(radius));
   }
 
@@ -60,12 +62,12 @@ public:
    * @return Initialised object
    */
   CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(Shape::CYLINDER, loc), radius(_radius) {
+    :ObservationZonePoint(Shape::CYLINDER, true, loc), radius(_radius) {
     assert(positive(radius));
   }
 
   static CylinderZone *CreateMatCylinderZone(const GeoPoint &loc) {
-    return new CylinderZone(Shape::MAT_CYLINDER, loc, fixed(1609.344));
+    return new CylinderZone(Shape::MAT_CYLINDER, true, loc, fixed(1609.344));
   }
 
   /**
