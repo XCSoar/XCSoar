@@ -511,7 +511,7 @@ Parameter
 
 const int actual_conv_version = 424;
 
-long
+size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei, uint8_t *bin_puffer,
     int oo_fillin, word *serno, long *sp)
 {

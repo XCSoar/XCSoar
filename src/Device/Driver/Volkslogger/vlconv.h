@@ -63,7 +63,7 @@
 #define FLDETKF      0x61
 
 
-/*
+/**
 convert_gcs
   function:
     converts a given flight log from VOLKSLOGGER binary to IGC-format
@@ -74,10 +74,12 @@ convert_gcs
     OO-fillin
     serial-number (reference)
     position of signature in binary file (reference)
-  return value:
-    length of binary file
-*/
-int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
+
+ *
+ * @return the length of the output file or 0 on error
+ */
+size_t
+convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *);
 
 
 /*
