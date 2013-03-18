@@ -269,35 +269,30 @@ VLA_ERROR VLAPI::read_directory() {
 VLA_ERROR
 VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
 {
-  FILE *outfile = _tfopen(filename,_T("wt"));
-  if(!outfile)
-    return VLA_ERR_FILE;
-
   VLA_ERROR err = stillconnect();
-  if(err != VLA_ERR_NOERR) {
-    fclose(outfile);
+  if (err != VLA_ERR_NOERR)
     return err;
-  }
 
   uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
-  if (flightget(logbuffer, sizeof(logbuffer), index, secmode)>0)
-    err = VLA_ERR_NOERR;
+  if (flightget(logbuffer, sizeof(logbuffer), index, secmode) == 0)
+    return VLA_ERR_MISC;
 
-  word serno; long sp;
-  long r;
-  if(err == VLA_ERR_NOERR) {
-    r = convert_gcs(0,outfile,logbuffer,1,&serno,&sp);
-    if(r>0) {
-      err = VLA_ERR_NOERR;
-      print_g_record(
-                     outfile,   // output to stdout
-                     logbuffer, // binary file is in buffer
-                     r          // length of binary file to include
-                     );
-    }
-    else
-      err = VLA_ERR_MISC;
-  }
+  FILE *outfile = _tfopen(filename, _T("wt"));
+  if (outfile == nullptr)
+    return VLA_ERR_FILE;
+
+  word serno;
+  long sp;
+  long r = convert_gcs(0, outfile, logbuffer, 1, &serno, &sp);
+  if (r > 0) {
+    err = VLA_ERR_NOERR;
+    print_g_record(outfile,   // output to stdout
+                   logbuffer, // binary file is in buffer
+                   r          // length of binary file to include
+                   );
+  } else
+    err = VLA_ERR_MISC;
+
   fclose(outfile);
   return err;
 }
