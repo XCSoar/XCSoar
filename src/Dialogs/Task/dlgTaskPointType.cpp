@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TaskDialogs.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
@@ -74,7 +73,7 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const TCHAR* text = OrderedTaskPointName(point_types[DrawListIndex]);
 
-  if (point && (point_types[DrawListIndex] == get_point_type()))
+  if (point_types[DrawListIndex] == get_point_type())
     buffer.Format(_T("*%s"), text);
   else
     buffer.Format(_T(" %s"), text);
@@ -90,59 +89,26 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 static bool
 SetPointType(TaskPointFactoryType type)
 {
-  if (point != nullptr) {
-    if (type == get_point_type())
-      // no change
-      return false;
+  if (type == get_point_type())
+    // no change
+    return false;
 
-    if (ShowMessageBox(_("Change point type?"), _("Task Point"),
-                    MB_YESNO | MB_ICONQUESTION) != IDYES)
-      return false;
-  }
+  if (ShowMessageBox(_("Change point type?"), _("Task Point"),
+                     MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return false;
 
   AbstractTaskFactory &factory = ordered_task->GetFactory();
   bool task_modified = false;
 
-  if (point) {
-    point = factory.CreateMutatedPoint(*point, type);
-    if (point == NULL)
-      return false;
+  point = factory.CreateMutatedPoint(*point, type);
+  if (point == NULL)
+    return false;
 
-    if (factory.Replace(*point, active_index, true))
-      task_modified = true;
-    delete point;
-  } else {
-    const Waypoint *way_point;
-    if (factory.IsValidFinishType(type) &&
-        ordered_task->GetFactoryConstraints().is_closed)
-      way_point = &ordered_task->GetPoint(0).GetWaypoint();
-    else {
-      const GeoPoint &location = ordered_task->TaskSize() > 0
-        ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
-        : CommonInterface::Basic().location;
-      way_point =
-        ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
-    }
-    if (!way_point)
-      return false;
-
-    point = factory.CreatePoint(type, *way_point);
-    if (point == NULL)
-      return false;
-
-    if (factory.Append(*point, true))
-      task_modified = true;
-
-    delete point;
-  }
+  if (factory.Replace(*point, active_index, true))
+    task_modified = true;
+  delete point;
 
   return task_modified;
-}
-
-bool
-dlgTaskPointNew(OrderedTask** task, const unsigned index)
-{
-  return dlgTaskPointType(task, index);
 }
 
 bool
@@ -163,12 +129,10 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
     return SetPointType(point_types[0]);
 
   unsigned initial_index = 0;
-  if (point != nullptr) {
-    const auto b = point_types.begin(), e = point_types.end();
-    auto i = std::find(b, e, get_point_type());
-    if (i != e)
-      initial_index = std::distance(b, i);
-  }
+  const auto b = point_types.begin(), e = point_types.end();
+  auto i = std::find(b, e, get_point_type());
+  if (i != e)
+    initial_index = std::distance(b, i);
 
   FunctionListItemRenderer item_renderer(OnPointPaintListItem);
 
