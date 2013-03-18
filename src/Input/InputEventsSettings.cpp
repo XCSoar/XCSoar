@@ -29,7 +29,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Util/Macros.hpp"
-#include "Util/Enum.hpp"
+#include "Util/EnumCast.hpp"
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
