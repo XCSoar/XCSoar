@@ -192,7 +192,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     return;
 
   case ObservationZone::Shape::LINE:
-    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate Width"),
+    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
               Units::GetDistanceName());
     return;
