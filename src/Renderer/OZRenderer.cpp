@@ -168,7 +168,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION: {
     const KeyholeZone &oz = (const KeyholeZone &)_oz;

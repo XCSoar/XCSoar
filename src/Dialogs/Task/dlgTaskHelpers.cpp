@@ -210,7 +210,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
               Units::GetDistanceName());
     return;
 
-  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
     _tcscpy(buffer, _("DAeC Keyhole"));
     return;
 

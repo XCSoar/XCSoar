@@ -163,7 +163,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 
     return new SymmetricSectorZone(wp.location, radius);
   } else if (StringIsEqual(type, _T("Keyhole")))
-    return new KeyholeZone(wp.location);
+    return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("BGAStartSector")))
     return new BGAStartSectorZone(wp.location);
   else if (StringIsEqual(type, _T("BGAFixedCourse")))

@@ -53,20 +53,16 @@ protected:
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
      inner_radius(500) {}
 
-public:  
-  /** 
-   * Constructor
-   * 
-   * @param loc Tip point of sector
-   * @param radius Outer radius (m)
-   * 
-   * @return Initialised object
+public:
+  /**
+   * Create a 90 degree 10km sector centered at the bisector of
+   * incoming/outgoing legs, with 500m cylinder, according to DAeC
+   * rules.
    */
-  KeyholeZone(const GeoPoint loc, const fixed radius = fixed(10000.0))
-    :SymmetricSectorZone(Shape::KEYHOLE, loc, radius, Angle::QuarterCircle()),
-     inner_radius(500)
-  {
-    UpdateSector();
+  static KeyholeZone *CreateDAeCKeyholeZone(const GeoPoint &reference) {
+    return new KeyholeZone(Shape::DAEC_KEYHOLE, reference,
+                           fixed(10000),
+                           Angle::QuarterCircle());
   }
 
   /**

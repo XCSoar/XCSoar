@@ -173,7 +173,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::CYLINDER:
     case ObservationZone::Shape::MAT_CYLINDER:
     case ObservationZone::Shape::SECTOR:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -189,7 +189,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::SECTOR:
     case ObservationZone::Shape::FAI_SECTOR:
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::BGA_START:
@@ -210,7 +210,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
       return TaskPointFactoryType::KEYHOLE_SECTOR;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
@@ -245,7 +245,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::CYLINDER:
     case ObservationZone::Shape::MAT_CYLINDER:
     case ObservationZone::Shape::SECTOR:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -313,7 +313,7 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateASTPoint(new SymmetricSectorZone(wp.location,
                                                   turnpoint_radius), wp);
   case TaskPointFactoryType::KEYHOLE_SECTOR:
-    return CreateASTPoint(new KeyholeZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(wp.location), wp);
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     return CreateASTPoint(new BGAFixedCourseZone(wp.location), wp);
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:

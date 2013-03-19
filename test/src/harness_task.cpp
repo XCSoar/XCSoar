@@ -109,7 +109,7 @@ public:
       Visit((const CylinderZone &)oz);
       break;
 
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
       Visit((const KeyholeZone &)oz);
       break;
 

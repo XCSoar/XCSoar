@@ -97,7 +97,7 @@ CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
     return new CylinderZoneEditWidget((CylinderZone &)oz, !is_fai_general);
 
   case ObservationZone::Shape::FAI_SECTOR:
-  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
   case ObservationZone::Shape::MAT_CYLINDER:
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION:

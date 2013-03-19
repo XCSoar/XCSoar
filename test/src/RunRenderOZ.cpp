@@ -132,8 +132,8 @@ public:
       oz = new FAISectorZone(location);
       break;
 
-    case ObservationZone::Shape::KEYHOLE:
-      oz = new KeyholeZone(location);
+    case ObservationZone::Shape::DAEC_KEYHOLE:
+      oz = KeyholeZone::CreateDAeCKeyholeZone(location);
       break;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:

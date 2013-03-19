@@ -116,7 +116,7 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     Visit((const CylinderZone &)data);
     break;
 
-  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
     Visit((const KeyholeZone &)data);
     break;
 

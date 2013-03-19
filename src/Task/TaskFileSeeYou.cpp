@@ -313,7 +313,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   if (factType == TaskFactoryType::RACING &&
       is_intermediate && isKeyhole(turnpoint_infos))
-    oz = new KeyholeZone(wp->location);
+    oz = KeyholeZone::CreateDAeCKeyholeZone(wp->location);
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
