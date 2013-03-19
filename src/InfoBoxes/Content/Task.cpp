@@ -114,6 +114,8 @@ UpdateInfoBoxRadial(InfoBoxData &data)
   // Set Value
   data.SetValue(vector_remaining.bearing.Reciprocal());
   data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+
+  data.SetCommentFromDistance(vector_remaining.distance);
 }
 
 void
