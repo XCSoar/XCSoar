@@ -309,7 +309,9 @@ Serialiser::GetTaskFactoryType(TaskFactoryType type) const
     return _T("Mixed");
   case TaskFactoryType::TOURING:
     return _T("Touring");
+  case TaskFactoryType::COUNT:
+    gcc_unreachable();
   }
 
-  return NULL;
+  gcc_unreachable();
 }

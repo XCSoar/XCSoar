@@ -59,6 +59,9 @@ IsFAITriangleApplicable(TaskFactoryType factory)
   case TaskFactoryType::MAT:
   case TaskFactoryType::AAT:
     return false;
+
+  case TaskFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();
