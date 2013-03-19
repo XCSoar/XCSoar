@@ -29,16 +29,16 @@ Copyright_License {
 #include <windef.h> // for MAX_PATH
 
 static const TCHAR *const validation_error_strings[] = {
-  N_("No valid start.\n"),
-  N_("No valid finish.\n"),
-  N_("Task not closed.\n"),
-  N_("All turnpoints not the same type.\n"),
-  N_("Incorrect number of turnpoints.\n"),
-  N_("Too many turnpoints.\n"),
-  N_("Not enough turnpoints.\n"),
-  N_("Turnpoints not unique.\n"),
-  N_("Invalid FAI triangle shape.\n"),
-  N_("Empty task.\n"),
+  N_("No valid start"),
+  N_("No valid finish"),
+  N_("Task not closed"),
+  N_("All turnpoints not the same type"),
+  N_("Incorrect number of turnpoints"),
+  N_("Too many turnpoints"),
+  N_("Not enough turnpoints"),
+  N_("Turnpoints not unique"),
+  N_("Invalid FAI triangle shape"),
+  N_("Empty task"),
   N_("non-FAI turn points"),
   N_("non-MAT turn points"),
 };
@@ -58,8 +58,10 @@ getTaskValidationErrors(const TaskValidationErrorSet v)
       continue;
 
     const TCHAR *current = gettext(validation_error_strings[i]);
-    if (_tcslen(err) + _tcslen(current) < MAX_PATH)
+    if (_tcslen(err) + _tcslen(current) + 1 < MAX_PATH) {
       _tcscat(err, current);
+      _tcscat(err, _T("\n"));
+    }
   }
 
   return err;
