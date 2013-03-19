@@ -240,7 +240,7 @@ OrderedTaskSave(const OrderedTask &task)
   assert(protected_task_manager != NULL);
 
   TCHAR fname[69] = _T("");
-  if (!dlgTextEntryShowModal(fname, 64))
+  if (!dlgTextEntryShowModal(fname, 64, _("Enter a task name")))
     return false;
 
   TCHAR path[MAX_PATH];
