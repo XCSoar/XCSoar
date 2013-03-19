@@ -44,6 +44,7 @@ class BGAFixedCourseZone;
 class BGAEnhancedOptionZone;
 class BGAStartSectorZone;
 class AnnularSectorZone;
+class SymmetricSectorZone;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
@@ -82,6 +83,7 @@ public:
   void Visit(const CylinderZone &data);
   void Visit(const MatCylinderZone &data);
   void Visit(const AnnularSectorZone &data);
+  void Visit(const SymmetricSectorZone &data);
 
 protected:
   /** 

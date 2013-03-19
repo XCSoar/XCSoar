@@ -51,7 +51,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 10,
+  NUM_OZ_TYPES = 11,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -65,6 +65,7 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("BGA Enhanced Option"),
   _T("BGA Start"),
   _T("Annular sector"),
+  _T("Symmetric quadrant"),
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -145,6 +146,10 @@ public:
 
     case ObservationZone::Shape::BGA_START:
       oz = new BGAStartSectorZone(location);
+      break;
+
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+      oz = new SymmetricSectorZone(location);
       break;
     }
 

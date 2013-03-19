@@ -135,6 +135,10 @@ Serialiser::Serialise(const ObservationZonePoint &data)
   case ObservationZone::Shape::ANNULAR_SECTOR:
     Visit((const AnnularSectorZone &)data);
     break;
+
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    Visit((const SymmetricSectorZone &)data);
+    break;
   }
 } 
 
@@ -175,6 +179,14 @@ Serialiser::Visit(const SectorZone &data)
   node.SetAttribute(_T("radius"), data.GetRadius());
   node.SetAttribute(_T("start_radial"), data.GetStartRadial());
   node.SetAttribute(_T("end_radial"), data.GetEndRadial());
+}
+
+void
+Serialiser::Visit(const SymmetricSectorZone &data)
+{
+  node.SetAttribute(_T("type"), _T("SymmetricQuadrant"));
+  node.SetAttribute(_T("radius"), data.GetRadius());
+  node.SetAttribute(_T("angle"), data.GetSectorAngle());
 }
 
 void

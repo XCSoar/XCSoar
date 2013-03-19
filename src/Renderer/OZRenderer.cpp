@@ -148,6 +148,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   }
 
   case ObservationZone::Shape::BGA_START:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
   case ObservationZone::Shape::SECTOR: {
     const SectorZone &oz = (const SectorZone &)_oz;
 

@@ -87,6 +87,7 @@ CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
   switch (oz.GetShape()) {
   case ObservationZone::Shape::SECTOR:
   case ObservationZone::Shape::ANNULAR_SECTOR:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
     return new SectorZoneEditWidget((SectorZone &)oz);
 
   case ObservationZone::Shape::LINE:

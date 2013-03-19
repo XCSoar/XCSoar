@@ -84,6 +84,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     break;
 
   case TaskPointFactoryType::FAI_SECTOR:
+  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     newtype = TaskPointFactoryType::AAT_CYLINDER;
     //ToDo: create a 90 degree symmetric AAT sector
     break;

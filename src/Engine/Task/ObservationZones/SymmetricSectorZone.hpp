@@ -52,6 +52,13 @@ protected:
      sector_angle(other.sector_angle) {}
 
 public:
+  SymmetricSectorZone(const GeoPoint &loc,
+                      const fixed radius=fixed(10000.0))
+    :SectorZone(Shape::SYMMETRIC_QUADRANT, loc, radius),
+     sector_angle(Angle::QuarterCircle()) {
+    UpdateSector();
+  }
+
   /** 
    * Accessor for angle of sector (angle between start/end radials)
    * 
@@ -65,6 +72,11 @@ public:
   virtual void SetLegs(const GeoPoint *previous,
                        const GeoPoint *next) override;
   virtual bool Equals(const ObservationZonePoint &other) const override;
+
+  /* virtual methods from class ObservationZonePoint */
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
+    return new SymmetricSectorZone(*this, _reference);
+  }
 };
 
 #endif

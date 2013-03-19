@@ -224,6 +224,10 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
   case ObservationZone::Shape::BGA_START:
     _tcscpy(buffer, _("BGA Start Sector"));
     return;
+
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    _tcscpy(buffer, _("Symmetric quadrant"));
+    return;
   }
 
   gcc_unreachable();

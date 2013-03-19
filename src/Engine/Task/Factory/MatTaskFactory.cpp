@@ -86,6 +86,7 @@ MatTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_SEGMENT:
   case TaskPointFactoryType::AAT_CYLINDER:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     newtype = TaskPointFactoryType::MAT_CYLINDER;
     break;
 

@@ -50,6 +50,7 @@ public:
     BGAENHANCEDOPTION,
     BGA_START,
     ANNULAR_SECTOR,
+    SYMMETRIC_QUADRANT,
   };
 
 private:

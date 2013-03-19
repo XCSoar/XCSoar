@@ -23,6 +23,7 @@
 
 #include "SectorZoneEditWidget.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
+#include "Engine/Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Language/Language.hpp"
 
@@ -41,21 +42,28 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   ObservationZoneEditWidget::Prepare(parent, rc);
 
+  const auto shape = GetObject().GetShape();
+
   AddFloat(_("Radius"), _("Radius of the OZ sector."),
            _T("%.1f %s"), _T("%.1f"),
            fixed(0.1), fixed(200), fixed(1), true,
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
 
-  AddAngle(_("Start radial"), _("Start radial of the OZ area"),
-           GetObject().GetStartRadial(), 10, true,
-           this);
+  if (shape == ObservationZone::Shape::SYMMETRIC_QUADRANT) {
+    AddDummy();
+    AddDummy();
+  } else {
+    AddAngle(_("Start radial"), _("Start radial of the OZ area"),
+             GetObject().GetStartRadial(), 10, true,
+             this);
 
-  AddAngle(_("Finish radial"), _("Finish radial of the OZ area"),
-           GetObject().GetEndRadial(), 10, true,
-           this);
+    AddAngle(_("Finish radial"), _("Finish radial of the OZ area"),
+             GetObject().GetEndRadial(), 10, true,
+             this);
+  }
 
-  if (GetObject().GetShape() == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
+  if (shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {
     const AnnularSectorZone &annulus = (const AnnularSectorZone &)GetObject();
 
     AddFloat(_("Inner radius"), _("Inner radius of the OZ sector."),
@@ -69,6 +77,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 bool
 SectorZoneEditWidget::Save(bool &_changed)
 {
+  const auto shape = GetObject().GetShape();
   bool changed = false;
 
   fixed radius = GetObject().GetRadius();
@@ -77,16 +86,19 @@ SectorZoneEditWidget::Save(bool &_changed)
     changed = true;
   }
 
-  Angle radial = GetObject().GetStartRadial();
-  if (SaveValue(START_RADIAL, radial)) {
-    GetObject().SetStartRadial(radial);
-    changed = true;
-  }
+  if (shape == ObservationZone::Shape::SYMMETRIC_QUADRANT) {
+  } else {
+    Angle radial = GetObject().GetStartRadial();
+    if (SaveValue(START_RADIAL, radial)) {
+      GetObject().SetStartRadial(radial);
+      changed = true;
+    }
 
-  radial = GetObject().GetEndRadial();
-  if (SaveValue(END_RADIAL, radial)) {
-    GetObject().SetEndRadial(radial);
-    changed = true;
+    radial = GetObject().GetEndRadial();
+    if (SaveValue(END_RADIAL, radial)) {
+      GetObject().SetEndRadial(radial);
+      changed = true;
+    }
   }
 
   if (GetObject().GetShape() == ObservationZonePoint::Shape::ANNULAR_SECTOR) {

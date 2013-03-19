@@ -31,6 +31,7 @@
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Util/StaticArray.hpp"
@@ -82,6 +83,10 @@ public:
     printf("# bga start sector zone\n");
   }
 
+  void Visit(const SymmetricSectorZone &oz) {
+    printf("# symmetric quadrant\n");
+  }
+
   void Visit(const ObservationZonePoint &oz) {
     switch (oz.GetShape()) {
     case ObservationZone::Shape::FAI_SECTOR:
@@ -122,6 +127,10 @@ public:
 
     case ObservationZone::Shape::ANNULAR_SECTOR:
       Visit((const AnnularSectorZone &)oz);
+      break;
+
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+      Visit((const SymmetricSectorZone &)oz);
       break;
     }
   }
