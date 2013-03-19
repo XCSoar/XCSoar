@@ -21,34 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef DIALOG_TASK_HELPERS_HPP
-#define DIALOG_TASK_HELPERS_HPP
+#ifndef XCSOAR_TASK_VALIDATION_ERROR_STRINGS_HPP
+#define XCSOAR_TASK_VALIDATION_ERROR_STRINGS_HPP
 
 #include "Engine/Task/Factory/ValidationError.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
-#include <stdint.h>
 
-enum class TaskPointType : uint8_t;
-class OrderedTask;
-class ObservationZonePoint;
-
-/**
- *
- * @param task The Task
- * @param text A buffer written to
- * @param linebreaks True if each summary item should be separated with a line break
- */
-void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
-
-void
-OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
-                      unsigned index, TCHAR *buffer);
-
-void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
-
-bool
-OrderedTaskSave(const OrderedTask &task);
+gcc_pure
+const TCHAR *
+getTaskValidationErrors(const TaskValidationErrorSet v);
 
 #endif
 

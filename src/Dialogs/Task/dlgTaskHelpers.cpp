@@ -27,6 +27,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "Task/TypeStrings.hpp"
+#include "Task/ValidationErrorStrings.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/MatCylinderZone.hpp"
@@ -251,57 +252,4 @@ OrderedTaskSave(const OrderedTask &task)
   LocalPath(path, _T("tasks"), fname);
   protected_task_manager->TaskSave(path, task);
   return true;
-}
-
-const TCHAR*
-getTaskValidationErrors(const TaskValidationErrorSet v)
-{
-  static TCHAR err[MAX_PATH];
-  err[0] = '\0';
-
-  for (unsigned i = 0; i < v.N; i++) {
-    const TaskValidationErrorType error = TaskValidationErrorType(i);
-    if (v.Contains(error) &&
-        _tcslen(err) + _tcslen(TaskValidationError(error)) < MAX_PATH)
-      _tcscat(err, TaskValidationError(error));
-  }
-
-  return err;
-}
-
-const TCHAR*
-TaskValidationError(TaskValidationErrorType type)
-{
-  switch (type) {
-  case TaskValidationErrorType::NO_VALID_START:
-    return _("No valid start.\n");
-  case TaskValidationErrorType::NO_VALID_FINISH:
-    return _("No valid finish.\n");
-  case TaskValidationErrorType::TASK_NOT_CLOSED:
-    return _("Task not closed.\n");
-  case TaskValidationErrorType::TASK_NOT_HOMOGENEOUS:
-    return _("All turnpoints not the same type.\n");
-  case TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS:
-    return _("Incorrect number of turnpoints.\n");
-  case TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS:
-    return _("Too many turnpoints.\n");
-  case TaskValidationErrorType::UNDER_MIN_TURNPOINTS:
-    return _("Not enough turnpoints.\n");
-  case TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE:
-    return _("Turnpoints not unique.\n");
-  case TaskValidationErrorType::INVALID_FAI_TRIANGLE_GEOMETRY:
-    return _("Invalid FAI triangle shape.\n");
-  case TaskValidationErrorType::EMPTY_TASK:
-    return _("Empty task.\n");
-  case TaskValidationErrorType::NON_FAI_OZS:
-    return _("non-FAI turn points");
-
-  case TaskValidationErrorType::NON_MAT_OZS:
-    return _("non-MAT turn points");
-
-  case TaskValidationErrorType::COUNT:
-    gcc_unreachable();
-  }
-
-  gcc_unreachable();
 }
