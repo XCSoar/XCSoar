@@ -623,7 +623,7 @@ DigitEntry::OnPaint(Canvas &canvas)
       break;
 
     case Column::Type::EAST_WEST:
-      buffer[0] = c.IsNegative() ? _T('E') : _T('W');
+      buffer[0] = c.IsNegative() ? _T('W') : _T('E');
       break;
 
     case Column::Type::DEGREES:
