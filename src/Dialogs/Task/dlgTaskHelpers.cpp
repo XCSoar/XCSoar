@@ -235,14 +235,9 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 }
 
 bool
-OrderedTaskSave(const OrderedTask& task, bool noask)
+OrderedTaskSave(const OrderedTask &task)
 {
   assert(protected_task_manager != NULL);
-
-  if (!noask
-      && ShowMessageBox(_("Save task?"), _("Task Selection"),
-                     MB_YESNO | MB_ICONQUESTION) != IDYES)
-    return false;
 
   TCHAR fname[69] = _T("");
   if (!dlgTextEntryShowModal(fname, 64))
