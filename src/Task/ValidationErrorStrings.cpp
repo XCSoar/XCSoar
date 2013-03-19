@@ -23,47 +23,28 @@ Copyright_License {
 
 #include "ValidationErrorStrings.hpp"
 #include "Language/Language.hpp"
+#include "Util/Macros.hpp"
 
 #include <string.h>
 #include <windef.h> // for MAX_PATH
 
-gcc_pure
-static const TCHAR*
-TaskValidationError(TaskValidationErrorType type)
-{
-  switch (type) {
-  case TaskValidationErrorType::NO_VALID_START:
-    return _("No valid start.\n");
-  case TaskValidationErrorType::NO_VALID_FINISH:
-    return _("No valid finish.\n");
-  case TaskValidationErrorType::TASK_NOT_CLOSED:
-    return _("Task not closed.\n");
-  case TaskValidationErrorType::TASK_NOT_HOMOGENEOUS:
-    return _("All turnpoints not the same type.\n");
-  case TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS:
-    return _("Incorrect number of turnpoints.\n");
-  case TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS:
-    return _("Too many turnpoints.\n");
-  case TaskValidationErrorType::UNDER_MIN_TURNPOINTS:
-    return _("Not enough turnpoints.\n");
-  case TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE:
-    return _("Turnpoints not unique.\n");
-  case TaskValidationErrorType::INVALID_FAI_TRIANGLE_GEOMETRY:
-    return _("Invalid FAI triangle shape.\n");
-  case TaskValidationErrorType::EMPTY_TASK:
-    return _("Empty task.\n");
-  case TaskValidationErrorType::NON_FAI_OZS:
-    return _("non-FAI turn points");
+static const TCHAR *const validation_error_strings[] = {
+  N_("No valid start.\n"),
+  N_("No valid finish.\n"),
+  N_("Task not closed.\n"),
+  N_("All turnpoints not the same type.\n"),
+  N_("Incorrect number of turnpoints.\n"),
+  N_("Too many turnpoints.\n"),
+  N_("Not enough turnpoints.\n"),
+  N_("Turnpoints not unique.\n"),
+  N_("Invalid FAI triangle shape.\n"),
+  N_("Empty task.\n"),
+  N_("non-FAI turn points"),
+  N_("non-MAT turn points"),
+};
 
-  case TaskValidationErrorType::NON_MAT_OZS:
-    return _("non-MAT turn points");
-
-  case TaskValidationErrorType::COUNT:
-    gcc_unreachable();
-  }
-
-  gcc_unreachable();
-}
+static_assert(ARRAY_SIZE(validation_error_strings) == unsigned(TaskValidationErrorType::COUNT),
+              "Wrong array size");
 
 const TCHAR*
 getTaskValidationErrors(const TaskValidationErrorSet v)
@@ -73,9 +54,12 @@ getTaskValidationErrors(const TaskValidationErrorSet v)
 
   for (unsigned i = 0; i < v.N; i++) {
     const TaskValidationErrorType error = TaskValidationErrorType(i);
-    if (v.Contains(error) &&
-        _tcslen(err) + _tcslen(TaskValidationError(error)) < MAX_PATH)
-      _tcscat(err, TaskValidationError(error));
+    if (!v.Contains(error))
+      continue;
+
+    const TCHAR *current = gettext(validation_error_strings[i]);
+    if (_tcslen(err) + _tcslen(current) < MAX_PATH)
+      _tcscat(err, current);
   }
 
   return err;
