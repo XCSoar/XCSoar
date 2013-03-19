@@ -76,8 +76,7 @@ OnWaypointEditClicked()
   }
 
   const Waypoint *way_point =
-    ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                           CommonInterface::Basic().location);
+    ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
     if (dlgWaypointEditShowModal(wp_copy)) {

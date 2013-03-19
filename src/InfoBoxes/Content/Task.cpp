@@ -34,7 +34,6 @@ Copyright_License {
 #include "Formatter/Units.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "Widget/CallbackWidget.hpp"
 
 #include <tchar.h>
@@ -50,7 +49,7 @@ ShowNextWaypointDetails()
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
+  dlgWaypointDetailsShowModal(*wp);
 }
 
 static Widget *

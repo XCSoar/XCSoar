@@ -29,11 +29,10 @@ Copyright_License {
 struct GeoPoint;
 struct Waypoint;
 class Waypoints;
-class SingleWindow;
 class OrderedTask;
 
 const Waypoint *
-ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &location,
+ShowWaypointListDialog(const GeoPoint &location,
                        OrderedTask *ordered_task = NULL,
                        unsigned ordered_task_index = 0);
 
@@ -44,7 +43,7 @@ bool
 dlgWaypointEditShowModal(Waypoint &way_point);
 
 void
-dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
+dlgWaypointDetailsShowModal(const Waypoint& waypoint,
                             bool allow_navigation = true);
 
 bool

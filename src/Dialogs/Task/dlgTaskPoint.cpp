@@ -233,8 +233,7 @@ static void
 OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task->GetPoint(active_index);
-  dlgWaypointDetailsShowModal(wf->GetMainWindow(),
-                              task_point.GetWaypoint(), false);
+  dlgWaypointDetailsShowModal(task_point.GetWaypoint(), false);
 }
 
 static void
@@ -244,7 +243,7 @@ OnRelocateClicked()
     ? ordered_task->GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  const Waypoint *wp = ShowWaypointListDialog(wf->GetMainWindow(), gpBearing,
+  const Waypoint *wp = ShowWaypointListDialog(gpBearing,
                                          ordered_task, active_index);
   if (wp == NULL)
     return;

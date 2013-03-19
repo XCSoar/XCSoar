@@ -199,7 +199,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
       ? task.GetPoint(0).GetLocation()
       : CommonInterface::Basic().location;
     const Waypoint* way_point =
-      ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
+      ShowWaypointListDialog(location);
     if (!way_point)
       return;
 
@@ -212,7 +212,7 @@ OptionStartsWidget::Relocate(unsigned ItemIndex)
       ? task.GetPoint(0).GetLocation()
       : CommonInterface::Basic().location;
     const Waypoint* way_point =
-      ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
+      ShowWaypointListDialog(location);
     if (!way_point)
       return;
 

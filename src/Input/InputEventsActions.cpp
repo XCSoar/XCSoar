@@ -270,10 +270,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = ShowWaypointListDialog(*CommonInterface::main_window, basic.location);
+    wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*CommonInterface::main_window, *wp);
+    dlgWaypointDetailsShowModal(*wp);
 }
 
 // StatusMessage

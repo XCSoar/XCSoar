@@ -121,8 +121,7 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                                         basic.location);
+  const Waypoint* wp = ShowWaypointListDialog(basic.location);
   if (wp != NULL) {
     protected_task_manager->DoGoto(*wp);
     trigger_redraw();

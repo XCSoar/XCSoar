@@ -416,10 +416,11 @@ static constexpr CallBackTableEntry callback_table[] = {
 };
 
 const Waypoint*
-ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
+ShowWaypointListDialog(const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
-  dialog = LoadDialog(callback_table, parent, Layout::landscape ?
+  dialog = LoadDialog(callback_table, UIGlobals::GetMainWindow(),
+                      Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
   assert(dialog != NULL);
 

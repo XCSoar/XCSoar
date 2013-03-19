@@ -380,12 +380,12 @@ UpdateCaption()
 }
 
 void 
-dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
+dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
                             bool allow_navigation)
 {
   waypoint = &_waypoint;
 
-  form = LoadDialog(CallBackTable, parent,
+  form = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(form != NULL);

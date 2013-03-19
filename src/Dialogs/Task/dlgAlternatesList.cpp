@@ -166,6 +166,5 @@ dlgAlternatesListShowModal()
   if (i < 0 || (unsigned)i >= widget.alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(),
-                              widget.alternates[i].waypoint);
+  dlgWaypointDetailsShowModal(widget.alternates[i].waypoint);
 }
