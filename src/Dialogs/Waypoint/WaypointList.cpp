@@ -284,9 +284,10 @@ private:
 void
 FilterDataFieldListener::OnModified(DataField &df)
 {
-  if (&df == name_control->GetDataField())
+  if (&df == name_control->GetDataField()) {
     dialog_state.name = df.GetAsString();
-  else if (&df == distance_filter->GetDataField()) {
+    waypoint_list_control->SetFocus();
+  } else if (&df == distance_filter->GetDataField()) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     dialog_state.distance_index = dfe.GetValue();
   } else if (&df == direction_filter->GetDataField()) {
