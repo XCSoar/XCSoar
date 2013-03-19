@@ -58,7 +58,7 @@ FormatGlideResult(TCHAR *buffer, size_t size,
     return _("No solution");
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -68,8 +68,9 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   TCHAR buffer[64];
-  AddReadOnly(label, NULL, FormatGlideResult(buffer, ARRAY_SIZE(buffer),
-                                             result, settings.task.glide));
+  AddReadOnly(label, nullptr,
+              FormatGlideResult(buffer, ARRAY_SIZE(buffer),
+                                result, settings.task.glide));
 }
 
 gcc_const
@@ -108,9 +109,9 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (waypoint.radio_frequency.IsDefined() &&
       waypoint.radio_frequency.Format(buffer.buffer(),
-                                      buffer.MAX_SIZE) != NULL) {
+                                      buffer.MAX_SIZE) != nullptr) {
     buffer += _T(" MHz");
-    AddReadOnly(_("Radio frequency"), NULL, buffer);
+    AddReadOnly(_("Radio frequency"), nullptr, buffer);
   }
 
   if (waypoint.runway.IsDirectionDefined())
@@ -129,15 +130,15 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   if (!buffer.empty())
-    AddReadOnly(_("Runway"), NULL, buffer);
+    AddReadOnly(_("Runway"), nullptr, buffer);
 
   if (FormatGeoPoint(waypoint.location,
-                     buffer.buffer(), buffer.MAX_SIZE) != NULL)
-    AddReadOnly(_("Location"), NULL, buffer);
+                     buffer.buffer(), buffer.MAX_SIZE) != nullptr)
+    AddReadOnly(_("Location"), nullptr, buffer);
 
   FormatUserAltitude(waypoint.elevation,
                             buffer.buffer(), buffer.MAX_SIZE);
-  AddReadOnly(_("Elevation"), NULL, buffer);
+  AddReadOnly(_("Elevation"), nullptr, buffer);
 
   if (basic.time_available) {
     const SunEphemeris::Result sun =
@@ -150,7 +151,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     buffer.UnsafeFormat(_T("%02u:%02u - %02u:%02u"),
                         sunrise.hour, sunrise.minute,
                         sunset.hour, sunset.minute);
-    AddReadOnly(_("Daylight time"), NULL, buffer);
+    AddReadOnly(_("Daylight time"), nullptr, buffer);
   }
 
   if (basic.location_available) {
@@ -162,7 +163,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE,
                   vector.bearing, distance_buffer);
-    AddReadOnly(_("Bearing and Distance"), NULL, buffer);
+    AddReadOnly(_("Bearing and Distance"), nullptr, buffer);
   }
 
   if (basic.location_available && basic.NavAltitudeAvailable() &&

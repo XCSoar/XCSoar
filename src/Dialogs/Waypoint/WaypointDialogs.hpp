@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_WAYPOINT_HPP
 #define XCSOAR_DIALOGS_WAYPOINT_HPP
 
-#include <stddef.h>
-
 struct GeoPoint;
 struct Waypoint;
 class Waypoints;
@@ -33,7 +31,7 @@ class OrderedTask;
 
 const Waypoint *
 ShowWaypointListDialog(const GeoPoint &location,
-                       OrderedTask *ordered_task = NULL,
+                       OrderedTask *ordered_task = nullptr,
                        unsigned ordered_task_index = 0);
 
 void

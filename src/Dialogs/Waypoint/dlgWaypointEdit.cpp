@@ -44,8 +44,8 @@ Copyright_License {
 
 #include <stdio.h>
 
-static WndForm *wf = NULL;
-static Waypoint *global_wpt = NULL;
+static WndForm *wf = nullptr;
+static Waypoint *global_wpt = nullptr;
 
 static void
 SetValues()
@@ -54,7 +54,7 @@ SetValues()
   LoadFormProperty(*wf, _T("Comment"), global_wpt->comment.c_str());
 
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
-  assert(wp != NULL);
+  assert(wp != nullptr);
 
   GeoPointDataField &gpdf = *(GeoPointDataField *)wp->GetDataField();
   gpdf.SetValue(global_wpt->location);
@@ -63,7 +63,7 @@ SetValues()
   LoadFormProperty(*wf, _T("prpAltitude"), UnitGroup::ALTITUDE, global_wpt->elevation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  assert(wp != NULL);
+  assert(wp != nullptr);
   DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
 
   dfe->addEnumText(_T("Turnpoint"));
@@ -87,19 +87,19 @@ GetValues()
   global_wpt->comment = GetFormValueString(*wf, _T("Comment"));
 
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
-  assert(wp != NULL);
+  assert(wp != nullptr);
 
   const GeoPointDataField &gpdf =
     *(const GeoPointDataField *)wp->GetDataField();
   global_wpt->location = gpdf.GetValue();
 
   int ss = GetFormValueInteger(*wf, _T("prpAltitude"));
-  global_wpt->elevation = (ss == 0 && terrain != NULL)
+  global_wpt->elevation = (ss == 0 && terrain != nullptr)
     ? fixed(terrain->GetTerrainHeight(global_wpt->location))
     : Units::ToSysAltitude(fixed(ss));
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  assert(wp != NULL);
+  assert(wp != nullptr);
   switch (((const DataFieldEnum *)wp->GetDataField())->GetValue()) {
   case 1:
     global_wpt->flags.turn_point = true;
@@ -122,7 +122,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
                   Layout::landscape ?
                   _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
-  assert(wf != NULL);
+  assert(wf != nullptr);
 
   SetValues();
 

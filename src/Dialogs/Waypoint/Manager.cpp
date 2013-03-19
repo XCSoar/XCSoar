@@ -136,7 +136,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),
   DeclareCallBackEntry(OnWaypointSaveClicked),
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 void
@@ -146,7 +146,7 @@ dlgConfigWaypointsShowModal()
                            Layout::landscape
                            ? _T("IDR_XML_CONFIG_WAYPOINTS_L")
                            : _T("IDR_XML_CONFIG_WAYPOINTS"));
-  assert(wf != NULL);
+  assert(wf != nullptr);
 
   WaypointsNeedSave = false;
 

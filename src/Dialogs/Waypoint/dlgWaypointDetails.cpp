@@ -70,14 +70,14 @@ class WndOwnerDrawFrame;
 static int page = 0;
 static int last_page = 0;
 
-static WndForm *form = NULL;
-static Window *details_panel = NULL;
-static DockWindow *info_widget = NULL;
-static DockWindow *commands_widget = NULL;
-static PaintWindow *image_window = NULL;
-static WndButton *magnify_button = NULL;
-static WndButton *shrink_button = NULL;
-static const Waypoint *waypoint = NULL;
+static WndForm *form = nullptr;
+static Window *details_panel = nullptr;
+static DockWindow *info_widget = nullptr;
+static DockWindow *commands_widget = nullptr;
+static PaintWindow *image_window = nullptr;
+static WndButton *magnify_button = nullptr;
+static WndButton *shrink_button = nullptr;
+static const Waypoint *waypoint = nullptr;
 
 static StaticArray<Bitmap, 5> images;
 static int zoom = 0;
@@ -191,10 +191,10 @@ FormKeyDown(unsigned key_code)
 static void
 OnGotoClicked()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
-  assert(waypoint != NULL);
+  assert(waypoint != nullptr);
 
   protected_task_manager->DoGoto(*waypoint);
   form->SetModalResult(mrOK);
@@ -207,7 +207,7 @@ OnGotoClicked()
 static task_edit_result
 goto_and_clear_task(const Waypoint &wp)
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return INVALID;
 
   protected_task_manager->DoGoto(wp);
@@ -221,7 +221,7 @@ goto_and_clear_task(const Waypoint &wp)
 static unsigned
 ordered_task_size()
 {
-  assert(protected_task_manager != NULL);
+  assert(protected_task_manager != nullptr);
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
   const OrderedTask &ot = task_manager->get_ordered_task();
   if (ot.check_task())
@@ -233,7 +233,7 @@ ordered_task_size()
 static void
 OnGotoAndClearTaskClicked()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   if ((ordered_task_size() > 2) && ShowMessageBox(_("Clear current task?"),
@@ -348,7 +348,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnPrevClicked),
     DeclareCallBackEntry(OnGotoClicked),
     DeclareCallBackEntry(OnImagePaint),
-    DeclareCallBackEntry(NULL)
+    DeclareCallBackEntry(nullptr)
 };
 
 static void
@@ -357,7 +357,7 @@ UpdateCaption()
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
-  const TCHAR *key = NULL;
+  const TCHAR *key = nullptr;
   switch (waypoint->file_num) {
   case 1:
     key = ProfileKeys::WaypointFile;
@@ -370,9 +370,9 @@ UpdateCaption()
     break;
   }
 
-  if (key != NULL) {
+  if (key != nullptr) {
     const TCHAR *filename = Profile::GetPathBase(key);
-    if (filename != NULL)
+    if (filename != nullptr)
       buffer.AppendFormat(_T(" (%s)"), filename);
   }
 
@@ -388,7 +388,7 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
   form = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
-  assert(form != NULL);
+  assert(form != nullptr);
 
   LastUsedWaypoints::Add(_waypoint);
 
@@ -397,26 +397,26 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
   form->SetKeyDownFunction(FormKeyDown);
 
   info_widget = (DockWindow *)form->FindByName(_T("info"));
-  assert(info_widget != NULL);
+  assert(info_widget != nullptr);
   info_widget->SetWidget(new WaypointInfoWidget(UIGlobals::GetDialogLook(),
                                           _waypoint));
 
   commands_widget = (DockWindow *)form->FindByName(_T("commands"));
-  assert(commands_widget != NULL);
+  assert(commands_widget != nullptr);
   commands_widget->SetWidget(new WaypointCommandsWidget(UIGlobals::GetDialogLook(),
                                                  form, _waypoint,
                                                  protected_task_manager));
   commands_widget->Hide();
 
   details_panel = form->FindByName(_T("frmDetails"));
-  assert(details_panel != NULL);
+  assert(details_panel != nullptr);
 
   ListControl *wFilesList = (ListControl *)form->FindByName(_T("Files"));
-  assert(wFilesList != NULL);
+  assert(wFilesList != nullptr);
 
   LargeTextWindow *wDetailsText = (LargeTextWindow *)
     form->FindByName(_T("Details"));
-  assert(wDetailsText != NULL);
+  assert(wDetailsText != nullptr);
   wDetailsText->SetText(waypoint->details.c_str());
 
 #ifdef ANDROID
@@ -438,17 +438,17 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
     wFilesList->Hide();
 
   image_window = (PaintWindow *)form->FindByName(_T("frmImage"));
-  assert(image_window != NULL);
+  assert(image_window != nullptr);
   magnify_button = (WndButton *)form->FindByName(_T("cmdMagnify"));
-  assert(magnify_button != NULL);
+  assert(magnify_button != nullptr);
   shrink_button = (WndButton *)form->FindByName(_T("cmdShrink"));
-  assert(shrink_button != NULL);
+  assert(shrink_button != nullptr);
 
   if (!allow_navigation) {
     for (const TCHAR *button_name :
          { _T("cmdPrev"), _T("cmdNext"), _T("cmdGoto") }) {
       Window *button = form->FindByName(button_name);
-      assert(button != NULL);
+      assert(button != nullptr);
       button->Hide();
     }
   }
