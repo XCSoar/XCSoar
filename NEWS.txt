@@ -12,12 +12,12 @@ Version 6.6 - not yet released
   - limit the InfoBox aspect ratio
   - new waypoint location editor (#343)
   - show required glide ratio in waypoint details (#1573)
-  - new InfoBox style "Shaded"
+  - new InfoBox style "Shaded" (#1852)
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
 * devices
-  - Volkslogger: support IGC file download
+  - Volkslogger: support IGC file download (#1972)
 * Android
   - faster map renderer on some Android devices
 
