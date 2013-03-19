@@ -43,7 +43,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #ifdef HAVE_NOAA
-#include "Dialogs/Weather.hpp"
+#include "Dialogs/Weather/WeatherDialogs.hpp"
 #endif
 
 static bool
