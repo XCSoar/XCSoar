@@ -1197,6 +1197,16 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("True bearing from the next waypoint to your position."),
     UpdateInfoBoxRadial,
     next_waypoint_infobox_panels,
+    NEXT_RADIAL_ATC,
+    NEXT_RADIAL_ATC,
+  },
+
+  {
+    N_("Next radial ATC"),
+    N_("Radial ATC"),
+    N_("True bearing from the next waypoint to your position.  The distance is displayed in nautical miles for communication with ATC."),
+    UpdateInfoBoxRadialATC,
+    next_waypoint_infobox_panels,
     NEXT_RADIAL,
     NEXT_RADIAL,
   },
