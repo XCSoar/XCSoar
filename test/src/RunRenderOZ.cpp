@@ -48,7 +48,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 11,
+  NUM_OZ_TYPES = 12,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -57,12 +57,13 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("MAT Cylinder"),
   _T("Sector"),
   _T("FAI Sector"),
-  _T("Keyhole"),
+  _T("DAeC Keyhole"),
   _T("BGA Fixed Course"),
   _T("BGA Enhanced Option"),
   _T("BGA Start"),
   _T("Annular sector"),
   _T("Symmetric quadrant"),
+  _T("Custom Keyhole"),
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -127,6 +128,11 @@ public:
 
     case ObservationZone::Shape::FAI_SECTOR:
       oz = new FAISectorZone(location);
+      break;
+
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
+      oz = KeyholeZone::CreateCustomKeyholeZone(location, fixed(10000),
+                                                Angle::QuarterCircle());
       break;
 
     case ObservationZone::Shape::DAEC_KEYHOLE:

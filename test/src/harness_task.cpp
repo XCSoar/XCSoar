@@ -97,6 +97,7 @@ public:
       Visit((const CylinderZone &)oz);
       break;
 
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
     case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:

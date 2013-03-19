@@ -51,9 +51,16 @@ protected:
 
   KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
-     inner_radius(500) {}
+     inner_radius(other.inner_radius) {}
 
 public:
+  static KeyholeZone *CreateCustomKeyholeZone(const GeoPoint &reference,
+                                              fixed radius,
+                                              Angle angle) {
+    return new KeyholeZone(Shape::CUSTOM_KEYHOLE, reference,
+                           radius, angle);
+  }
+
   /**
    * Create a 90 degree 10km sector centered at the bisector of
    * incoming/outgoing legs, with 500m cylinder, according to DAeC
@@ -102,6 +109,10 @@ public:
    */
   fixed GetInnerRadius() const {
     return inner_radius;
+  }
+
+  void SetInnerRadius(fixed _radius) {
+    inner_radius = _radius;
   }
 
   /* virtual methods from class ObservationZone */

@@ -51,6 +51,7 @@ public:
     BGA_START,
     ANNULAR_SECTOR,
     SYMMETRIC_QUADRANT,
+    CUSTOM_KEYHOLE,
   };
 
 private:

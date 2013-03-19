@@ -96,6 +96,10 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::FINISH_CYLINDER:
     break;
 
+  case TaskPointFactoryType::AAT_KEYHOLE:
+    newtype = TaskPointFactoryType::KEYHOLE_SECTOR;
+    break;
+
   case TaskPointFactoryType::AAT_SEGMENT:
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
   case TaskPointFactoryType::MAT_CYLINDER:

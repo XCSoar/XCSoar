@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -18,41 +19,32 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#ifndef XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
-#define XCSOAR_TASK_POINT_FACTORY_TYPE_HPP
+#ifndef XCSOAR_KEYHOLE_ZONE_EDIT_WIDGET_HPP
+#define XCSOAR_KEYHOLE_ZONE_EDIT_WIDGET_HPP
 
-#include <stdint.h>
+#include "ObservationZoneEditWidget.hpp"
+#include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 
-/**
- * Legal types of points with observation zones.
- */
-enum class TaskPointFactoryType : uint8_t {
-  START_SECTOR = 0,
-  START_LINE,
-  START_CYLINDER,
-  FAI_SECTOR,
-  KEYHOLE_SECTOR,
-  BGAFIXEDCOURSE_SECTOR,
-  BGAENHANCEDOPTION_SECTOR,
-  AST_CYLINDER,
-  MAT_CYLINDER,
-  AAT_CYLINDER,
-  AAT_SEGMENT,
-  FINISH_SECTOR,
-  FINISH_LINE,
-  FINISH_CYLINDER,
-  START_BGA,
-  AAT_ANNULAR_SECTOR,
-  SYMMETRIC_QUADRANT,
-  AAT_KEYHOLE,
+class KeyholeZoneEditWidget : public ObservationZoneEditWidget {
+public:
+  KeyholeZoneEditWidget(KeyholeZone &_oz);
 
-  /**
-   * This special value is used to determine the number of types
-   * above.
-   */
-  COUNT
+protected:
+  const KeyholeZone &GetObject() const {
+    return (const KeyholeZone &)ObservationZoneEditWidget::GetObject();
+  }
+
+  KeyholeZone &GetObject() {
+    return (KeyholeZone &)ObservationZoneEditWidget::GetObject();
+  }
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
 };
 
 #endif

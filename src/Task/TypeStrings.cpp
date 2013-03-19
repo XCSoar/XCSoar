@@ -99,6 +99,7 @@ static const TCHAR *const tp_factory_descriptions[] = {
   N_("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
      "reached inside area."),
   N_("A symmetric quadrant with a custom radius."),
+  N_("A keyhole.  Scored by farthest point reached in area."),
 };
 
 static_assert(ARRAY_SIZE(tp_factory_descriptions) == unsigned(TaskPointFactoryType::COUNT),
@@ -128,6 +129,7 @@ static const TCHAR *const tp_factory_names[] = {
   N_("BGA start sector"),
   N_("Area sector with inner radius"),
   N_("Symmetric quadrant"),
+  N_("Area keyhole"),
 };
 
 static_assert(ARRAY_SIZE(tp_factory_names) == unsigned(TaskPointFactoryType::COUNT),

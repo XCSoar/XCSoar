@@ -116,6 +116,10 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     Visit((const CylinderZone &)data);
     break;
 
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+    node.SetAttribute(_T("type"), _T("CustomKeyhole"));
+    break;
+
   case ObservationZone::Shape::DAEC_KEYHOLE:
     node.SetAttribute(_T("type"), _T("Keyhole"));
     break;

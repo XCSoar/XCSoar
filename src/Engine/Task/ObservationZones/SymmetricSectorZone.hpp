@@ -29,7 +29,7 @@
 /** Segment centered on bisector of incoming/outgoing legs */
 class SymmetricSectorZone: public SectorZone
 {
-  const Angle sector_angle;
+  Angle sector_angle;
 
 protected:
   /**
@@ -66,6 +66,11 @@ public:
    */
   Angle GetSectorAngle() const {
     return sector_angle;
+  }
+
+  void SetSectorAngle(Angle _angle) {
+    sector_angle = _angle;
+    UpdateSector();
   }
 
   /* virtual methods from class ObservationZonePoint */

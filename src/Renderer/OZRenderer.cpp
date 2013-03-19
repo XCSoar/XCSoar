@@ -166,6 +166,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
   case ObservationZone::Shape::DAEC_KEYHOLE:
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION: {

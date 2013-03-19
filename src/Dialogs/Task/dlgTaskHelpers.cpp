@@ -33,6 +33,7 @@ Copyright_License {
 #include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/Shapes/FAITriangleTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Points/Type.hpp"
@@ -208,6 +209,13 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     _stprintf(buffer,_T("%.1f%s"),
               (double)Units::ToUserDistance(((const MatCylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
+    return;
+
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+    _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Keyhole"), _("Radius"),
+              (double)Units::ToUserDistance(((const KeyholeZone &)ozp).GetRadius()),
+              Units::GetDistanceName());
+    _tcscpy(buffer, _("DAeC Keyhole"));
     return;
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
