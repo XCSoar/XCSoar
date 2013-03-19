@@ -23,6 +23,8 @@ Vagrant::Config.run do |config|
   # You will need to create the manifests directory and a manifest in
   # the file precise32.pp in the manifests_path directory.
   config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "ide/puppet"
+    puppet.manifests_path = ".puppet/vagrant-manifests"
+    puppet.manifest_file = "default.pp"
+    puppet.module_path = ".puppet/modules"
   end
 end
