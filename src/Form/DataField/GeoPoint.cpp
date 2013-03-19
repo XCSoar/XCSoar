@@ -21,34 +21,26 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
+#include "GeoPoint.hpp"
+#include "Formatter/GeoPointFormatter.hpp"
+#include "Util/Macros.hpp"
 
-int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
+void
+GeoPointDataField::ModifyValue(GeoPoint _value)
 {
-  return -1;
+  if (_value == value)
+    return;
+
+  value = _value;
+  Modified();
 }
 
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t size,
-                      const TCHAR *caption,
-                      AllowedCharacters accb)
+const TCHAR *
+GeoPointDataField::GetAsString() const
 {
-  return false;
-}
+  if (!value.IsValid())
+    return _T("");
 
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
-{
-  return false;
-}
-
-bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
-{
-  return false;
+  static TCHAR buffer[64];
+  return FormatGeoPoint(value, buffer, ARRAY_SIZE(buffer), format);
 }

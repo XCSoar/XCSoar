@@ -34,6 +34,8 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 
+#include <algorithm>
+
 #include <stdio.h>
 
 DigitEntry::DigitEntry(const DialogLook &_look)
@@ -110,6 +112,45 @@ DigitEntry::CreateAngle(ContainerWindow &parent, const PixelRect &rc,
 
   columns[0].type = Column::Type::DIGIT36;
   columns[2].type = Column::Type::DEGREES;
+  cursor = 0;
+
+  CalculateLayout();
+}
+
+void
+DigitEntry::CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
+                           const WindowStyle style)
+{
+  // TODO: support all CoordinateFormats
+
+  Create(parent, rc, style, 9);
+
+  columns[0].type = Column::Type::NORTH_SOUTH;
+  columns[3].type = Column::Type::DEGREES;
+  columns[4].type = Column::Type::DIGIT6;
+  columns[6].type = Column::Type::APOSTROPHE;
+  columns[7].type = Column::Type::DIGIT6;
+
+  cursor = 0;
+
+  CalculateLayout();
+}
+
+void
+DigitEntry::CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
+                            const WindowStyle style)
+{
+  // TODO: support all CoordinateFormats
+
+  Create(parent, rc, style, 9);
+
+  columns[0].type = Column::Type::EAST_WEST;
+  columns[1].type = Column::Type::DIGIT19;
+  columns[3].type = Column::Type::DEGREES;
+  columns[4].type = Column::Type::DIGIT6;
+  columns[6].type = Column::Type::APOSTROPHE;
+  columns[7].type = Column::Type::DIGIT6;
+
   cursor = 0;
 
   CalculateLayout();
@@ -367,6 +408,126 @@ DigitEntry::GetTimeValue() const
 }
 
 void
+DigitEntry::SetLatitude(Angle value)
+{
+  // TODO: support all CoordinateFormats
+
+  value = value.AsBearing();
+
+  assert(length == 9);
+  assert(columns[0].type == Column::Type::NORTH_SOUTH);
+  assert(columns[1].type == Column::Type::DIGIT);
+  assert(columns[2].type == Column::Type::DIGIT);
+  assert(columns[4].type == Column::Type::DIGIT6);
+  assert(columns[5].type == Column::Type::DIGIT);
+  assert(columns[7].type == Column::Type::DIGIT6);
+  assert(columns[8].type == Column::Type::DIGIT);
+
+  columns[0].value = negative(value.Native());
+
+  const fixed degrees = fabs(value.Degrees());
+  const unsigned i_degrees = std::min(unsigned(degrees), 90u);
+  const unsigned full_seconds = unsigned(degrees * 3600u) % 3600u;
+  const unsigned minutes = std::min(full_seconds / 60u, 59u);
+  const unsigned seconds = full_seconds % 60u;
+
+  columns[1].value = i_degrees / 10;
+  columns[2].value = i_degrees % 10;
+
+  columns[4].value = minutes / 10;
+  columns[5].value = minutes % 10;
+
+  columns[7].value = seconds / 10;
+  columns[8].value = seconds % 10;
+
+  Invalidate();
+}
+
+
+void
+DigitEntry::SetLongitude(Angle value)
+{
+  // TODO: support all CoordinateFormats
+
+  value = value.AsBearing();
+
+  assert(length == 9);
+  assert(columns[0].type == Column::Type::EAST_WEST);
+  assert(columns[1].type == Column::Type::DIGIT19);
+  assert(columns[2].type == Column::Type::DIGIT);
+  assert(columns[4].type == Column::Type::DIGIT6);
+  assert(columns[5].type == Column::Type::DIGIT);
+  assert(columns[7].type == Column::Type::DIGIT6);
+  assert(columns[8].type == Column::Type::DIGIT);
+
+  columns[0].value = negative(value.Native());
+
+  const fixed degrees = fabs(value.Degrees());
+  const unsigned i_degrees = std::min(unsigned(degrees), 180u);
+  const unsigned full_seconds = unsigned(degrees * 3600u) % 3600u;
+  const unsigned minutes = std::min(full_seconds / 60u, 59u);
+  const unsigned seconds = full_seconds % 60u;
+
+  columns[1].value = i_degrees / 10;
+  columns[2].value = i_degrees % 10;
+
+  columns[4].value = minutes / 10;
+  columns[5].value = minutes % 10;
+
+  columns[7].value = seconds / 10;
+  columns[8].value = seconds % 10;
+
+  Invalidate();
+}
+
+Angle
+DigitEntry::GetGeoAngle() const
+{
+  // TODO: support all CoordinateFormats
+
+  if (!valid)
+    return Angle::FullCircle();
+
+  assert(columns[0].type == Column::Type::NORTH_SOUTH ||
+         columns[0].type == Column::Type::EAST_WEST);
+  assert(columns[1].type == Column::Type::DIGIT ||
+         columns[1].type == Column::Type::DIGIT19);
+  assert(columns[2].type == Column::Type::DIGIT);
+  assert(columns[4].type == Column::Type::DIGIT6);
+  assert(columns[5].type == Column::Type::DIGIT);
+  assert(columns[7].type == Column::Type::DIGIT6);
+  assert(columns[8].type == Column::Type::DIGIT);
+
+  fixed degrees = fixed(columns[1].value * 10 + columns[2].value)
+    + (columns[4].value * 10 + columns[5].value) * fixed(1 / 60.)
+    + (columns[7].value * 10 + columns[8].value) * fixed(1 / 3600.);
+  if (columns[0].IsNegative())
+    degrees = -degrees;
+
+  return Angle::Degrees(degrees);
+}
+
+Angle
+DigitEntry::GetLatitude() const
+{
+  // TODO: support all CoordinateFormats
+
+  assert(columns[0].type == Column::Type::NORTH_SOUTH);
+  assert(columns[1].type == Column::Type::DIGIT);
+
+  return GetGeoAngle();
+}
+
+Angle
+DigitEntry::GetLongitude() const
+{
+  assert(columns[0].type == Column::Type::EAST_WEST);
+  assert(columns[1].type == Column::Type::DIGIT19);
+
+  return GetGeoAngle();
+}
+
+void
 DigitEntry::IncrementColumn(unsigned i)
 {
   assert(i < length);
@@ -606,6 +767,11 @@ DigitEntry::OnPaint(Canvas &canvas)
       _stprintf(buffer, _T("%02u"), c.value);
       break;
 
+    case Column::Type::DIGIT19:
+      assert(c.value < 19);
+      _stprintf(buffer, _T("%02u"), c.value);
+      break;
+
     case Column::Type::SIGN:
       buffer[0] = c.IsNegative() ? _T('-') : _T('+');
       break;
@@ -628,6 +794,10 @@ DigitEntry::OnPaint(Canvas &canvas)
 
     case Column::Type::DEGREES:
       text = _T("°");
+      break;
+
+    case Column::Type::APOSTROPHE:
+      text = _T("'");
       break;
 
     case Column::Type::UNIT:

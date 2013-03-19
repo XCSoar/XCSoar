@@ -21,34 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
+#ifndef XCSOAR_DATA_FIELD_GEO_POINT_HPP
+#define XCSOAR_DATA_FIELD_GEO_POINT_HPP
 
-int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
-{
-  return -1;
-}
+#include "Base.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/CoordinateFormat.hpp"
 
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t size,
-                      const TCHAR *caption,
-                      AllowedCharacters accb)
-{
-  return false;
-}
+/**
+ * This #DataField implementation stores a #GeoPoint.
+ */
+class GeoPointDataField final : public DataField {
+  GeoPoint value;
 
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
-{
-  return false;
-}
+  CoordinateFormat format;
 
-bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
-{
-  return false;
-}
+public:
+  GeoPointDataField(GeoPoint _value, CoordinateFormat _format,
+                    DataFieldListener *listener=nullptr)
+    :DataField(Type::GEOPOINT, false, listener),
+     value(_value), format(_format) {}
+
+  GeoPoint GetValue() const {
+    return value;
+  }
+
+  void SetValue(GeoPoint _value) {
+    value = _value;
+  }
+
+  void ModifyValue(GeoPoint _value);
+
+  /* virtual methods from class DataField */
+  virtual const TCHAR *GetAsString() const override;
+};
+
+#endif

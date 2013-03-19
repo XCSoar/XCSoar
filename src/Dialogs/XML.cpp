@@ -36,6 +36,7 @@ Copyright_License {
 #include "Form/DataField/Integer.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Time.hpp"
+#include "Form/DataField/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/LargeTextWindow.hpp"
@@ -487,6 +488,11 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 
   if (StringIsEqualIgnoreCase(data_type, _T("string")))
     return new DataFieldString(_T(""), callback);
+
+  if (StringIsEqualIgnoreCase(data_type, _T("geopoint")))
+    // TODO: use configured CoordinateFormat
+    return new GeoPointDataField(GeoPoint::Invalid(),
+                                 CoordinateFormat::DDMMSS);
 
   return NULL;
 }

@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2011 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,34 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
+#ifndef XCSOAR_DIALOGS_GEOPOINT_ENTRY_HPP
+#define XCSOAR_DIALOGS_GEOPOINT_ENTRY_HPP
 
-int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
-{
-  return -1;
-}
+#include <tchar.h>
 
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t size,
-                      const TCHAR *caption,
-                      AllowedCharacters accb)
-{
-  return false;
-}
-
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
-{
-  return false;
-}
+struct GeoPoint;
 
 bool
 GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
-{
-  return false;
-}
+                    bool nullable=false);
+
+#endif

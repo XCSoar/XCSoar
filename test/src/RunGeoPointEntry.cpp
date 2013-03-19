@@ -21,34 +21,30 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
+#define ENABLE_DIALOG
+#define ENABLE_MAIN_WINDOW
+
+#include "Main.hpp"
 #include "Dialogs/GeoPointEntry.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Formatter/GeoPointFormatter.hpp"
+#include "Util/Macros.hpp"
 
-int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
-{
-  return -1;
-}
+#include <stdio.h>
 
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t size,
-                      const TCHAR *caption,
-                      AllowedCharacters accb)
+static void
+Main()
 {
-  return false;
-}
+  GeoPoint value = GeoPoint(Angle::Degrees(7.7061111111111114),
+                            Angle::Degrees(51.051944444444445));
 
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
-{
-  return false;
-}
+  if (!GeoPointEntryDialog(_T("The caption"), value, true))
+    return;
 
-bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
-{
-  return false;
+  if (value.IsValid()) {
+    TCHAR buffer[64];
+    _tprintf(_T("%s\n"), FormatGeoPoint(value, buffer, ARRAY_SIZE(buffer),
+                                        CoordinateFormat::DDMMSS));
+  } else
+    printf("invalid\n");
 }

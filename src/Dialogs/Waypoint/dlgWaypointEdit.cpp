@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/GeoPoint.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -47,163 +48,23 @@ static WndForm *wf = NULL;
 static Waypoint *global_wpt = NULL;
 
 static void
-SetUnits()
-{
-  WndProperty* wp;
-  switch (CommonInterface::GetUISettings().coordinate_format) {
-  case CoordinateFormat::DDMMSS: // ("DDMMSS");
-  case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    break;
-
-  case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    break;
-
-  case CoordinateFormat::DD_DDDD: // ("DD.dddd");
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
-    // hide this field for DD.dddd format
-    assert(wp != NULL);
-    wp->Hide();
-
-    wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
-    assert(wp != NULL);
-    wp->Hide();
-
-    break;
-  case CoordinateFormat::UTM:
-    break;
-  }
-}
-
-static void
 SetValues()
 {
   LoadFormProperty(*wf, _T("Name"), global_wpt->name.c_str());
   LoadFormProperty(*wf, _T("Comment"), global_wpt->comment.c_str());
 
-  WndProperty* wp;
-  bool sign;
-  unsigned dd,mm,ss;
-
-  global_wpt->location.longitude.ToDMS(dd, mm, ss, sign);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
   assert(wp != NULL);
 
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText((_T("W")));
-  dfe->addEnumText((_T("E")));
-  dfe->Set(sign);
+  GeoPointDataField &gpdf = *(GeoPointDataField *)wp->GetDataField();
+  gpdf.SetValue(global_wpt->location);
   wp->RefreshDisplay();
-
-  LoadFormProperty(*wf, _T("prpLongitudeD"), dd);
-
-  switch (CommonInterface::GetUISettings().coordinate_format) {
-  case CoordinateFormat::DDMMSS: // ("DDMMSS");
-  case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
-    LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
-    LoadFormProperty(*wf, _T("prpLongitudeS"), ss);
-    break;
-  case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
-    LoadFormProperty(*wf, _T("prpLongitudeM"), mm);
-    LoadFormProperty(*wf, _T("prpLongitudemmm"), 1000 * fixed(ss) / 60);
-    break;
-  case CoordinateFormat::DD_DDDD: // ("DD.dddd");
-    LoadFormProperty(*wf, _T("prpLongitudeDDDD"),
-                     10000 * (fixed)(mm + ss) / 3600);
-    break;
-  case CoordinateFormat::UTM:
-    break;
-  }
-
-  global_wpt->location.latitude.ToDMS(dd, mm, ss, sign);
-
-  LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeSign"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->addEnumText((_T("S")));
-  dfe->addEnumText((_T("N")));
-  dfe->Set(sign);
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpLatitudeD"));
-  assert(wp != NULL);
-  wp->GetDataField()->SetAsInteger(dd);
-  wp->RefreshDisplay();
-
-  switch (CommonInterface::GetUISettings().coordinate_format) {
-  case CoordinateFormat::DDMMSS: // ("DDMMSS");
-  case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
-    LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
-    LoadFormProperty(*wf, _T("prpLatitudeS"), ss);
-    break;
-  case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
-    LoadFormProperty(*wf, _T("prpLatitudeM"), mm);
-    LoadFormProperty(*wf, _T("prpLatitudemmm"), 1000 * fixed(ss) / 60);
-    break;
-  case CoordinateFormat::DD_DDDD: // ("DD.dddd");
-    LoadFormProperty(*wf, _T("prpLatitudeDDDD"),
-                     10000 * (fixed)(mm + ss) / 3600);
-    break;
-  case CoordinateFormat::UTM:
-    break;
-  }
 
   LoadFormProperty(*wf, _T("prpAltitude"), UnitGroup::ALTITUDE, global_wpt->elevation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
+  DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
 
   dfe->addEnumText(_T("Turnpoint"));
   dfe->addEnumText(_T("Airport"));
@@ -225,69 +86,14 @@ GetValues()
   global_wpt->name = GetFormValueString(*wf, _T("Name"));
   global_wpt->comment = GetFormValueString(*wf, _T("Comment"));
 
-  WndProperty* wp;
-  bool sign = false;
-  int dd = 0;
-  // mm,ss are numerators (division) so don't want to lose decimals
-  double num = 0, mm = 0, ss = 0;
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
+  assert(wp != NULL);
 
-  sign = GetFormValueInteger(*wf, _T("prpLongitudeSign")) == 1;
-  dd = GetFormValueInteger(*wf, _T("prpLongitudeD"));
+  const GeoPointDataField &gpdf =
+    *(const GeoPointDataField *)wp->GetDataField();
+  global_wpt->location = gpdf.GetValue();
 
-  switch (CommonInterface::GetUISettings().coordinate_format) {
-  case CoordinateFormat::DDMMSS: // ("DDMMSS");
-  case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
-    mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
-    ss = GetFormValueInteger(*wf, _T("prpLongitudeS"));
-    num = dd + mm / 60.0 + ss / 3600.0;
-    break;
-  case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
-    mm = GetFormValueInteger(*wf, _T("prpLongitudeM"));
-    ss = GetFormValueInteger(*wf, _T("prpLongitudemmm"));
-    num = dd + (mm + ss / 1000.0) / 60.0;
-    break;
-  case CoordinateFormat::DD_DDDD: // ("DD.dddd");
-    mm = GetFormValueInteger(*wf, _T("prpLongitudeDDDD"));
-    num = dd + mm / 10000;
-    break;
-  case CoordinateFormat::UTM:
-    break;
-  }
-
-  if (!sign)
-    num = -num;
-
-  global_wpt->location.longitude = Angle::Degrees(fixed(num));
-
-  sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
-  dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
-
-  switch (CommonInterface::GetUISettings().coordinate_format) {
-  case CoordinateFormat::DDMMSS: // ("DDMMSS");
-  case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
-    mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
-    ss = GetFormValueInteger(*wf, _T("prpLatitudeS"));
-    num = dd + mm / 60.0 + ss / 3600.0;
-    break;
-  case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
-    mm = GetFormValueInteger(*wf, _T("prpLatitudeM"));
-    ss = GetFormValueInteger(*wf, _T("prpLatitudemmm"));
-    num = dd + (mm + ss / 1000.0) / 60.0;
-    break;
-  case CoordinateFormat::DD_DDDD: // ("DD.dddd");
-    mm = GetFormValueInteger(*wf, _T("prpLatitudeDDDD"));
-    num = dd + mm / 10000;
-    break;
-  case CoordinateFormat::UTM:
-    break;
-  }
-
-  if (!sign)
-    num = -num;
-
-  global_wpt->location.latitude = Angle::Degrees(fixed(num));
-
-  ss = GetFormValueInteger(*wf, _T("prpAltitude"));
+  int ss = GetFormValueInteger(*wf, _T("prpAltitude"));
   global_wpt->elevation = (ss == 0 && terrain != NULL)
     ? fixed(terrain->GetTerrainHeight(global_wpt->location))
     : Units::ToSysAltitude(fixed(ss));
@@ -317,8 +123,6 @@ dlgWaypointEditShowModal(Waypoint &way_point)
                   Layout::landscape ?
                   _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
   assert(wf != NULL);
-
-  SetUnits();
 
   SetValues();
 

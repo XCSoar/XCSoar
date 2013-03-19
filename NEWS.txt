@@ -10,6 +10,7 @@ Version 6.6 - not yet released
   - replay fast-forward
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
+  - new waypoint location editor (#343)
 * tasks
   - MAT tasks (#563)
 * devices
