@@ -30,11 +30,6 @@ Copyright_License {
 
 #include <stdint.h>
 
-enum InfoBoxBorderAppearance_t {
-  apIbBox = 0,
-  apIbTab
-};
-
 struct InfoBoxSettings {
   enum PanelIndex {
     PANEL_CIRCLING,
@@ -118,7 +113,10 @@ struct InfoBoxSettings {
 
   bool inverse, use_colors;
 
-  InfoBoxBorderAppearance_t border_style;
+  enum class BorderStyle : uint8_t {
+    BOX,
+    TAB,
+  } border_style;
 
   Panel panels[MAX_PANELS];
 

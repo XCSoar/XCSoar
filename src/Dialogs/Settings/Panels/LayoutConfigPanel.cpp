@@ -146,8 +146,10 @@ static constexpr StaticEnumChoice dialog_style_list[] = {
 };
 
 static constexpr StaticEnumChoice infobox_border_list[] = {
-  { 0, N_("Box"), N_("Draws boxes around each InfoBox.") },
-  { 1, N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
+  { unsigned(InfoBoxSettings::BorderStyle::BOX),
+    N_("Box"), N_("Draws boxes around each InfoBox.") },
+  { unsigned(InfoBoxSettings::BorderStyle::TAB),
+    N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
   { 0 }
 };
 
@@ -205,7 +207,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              ui_settings.info_boxes.use_colors);
   SetExpertRow(AppInfoBoxColors);
 
-  AddEnum(_("InfoBox border"), NULL, infobox_border_list, ui_settings.info_boxes.border_style);
+  AddEnum(_("InfoBox border"), nullptr, infobox_border_list,
+          unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
 }
 

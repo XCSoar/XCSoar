@@ -232,7 +232,8 @@ InfoBoxManager::Create(ContainerWindow &parent,
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {
     const PixelRect &rc = layout.positions[i];
-    int Border = settings.border_style == apIbTab
+    int Border =
+      settings.border_style == InfoBoxSettings::BorderStyle::TAB
       ? 0
       /* layout.geometry is the effective layout, while
          settings.geometry is the configured layout */

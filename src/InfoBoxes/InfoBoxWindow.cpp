@@ -97,7 +97,8 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   canvas.TextAutoClipped(x, y, data.title);
 
-  if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
+  if (settings.border_style == InfoBoxSettings::BorderStyle::TAB &&
+      halftextwidth > Layout::Scale(3)) {
     PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
     PixelScalar ytopedge = ytop + Layout::GetTextPadding();
     PixelScalar ybottom = title_rect.top + Layout::Scale(6)
