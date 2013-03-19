@@ -322,7 +322,7 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
     AllocatedArray<uint8_t> data;
     uint16_t length;
     bool ack = WaitForACKOrNACK(header.GetSequenceNumber(), data,
-                                length, env, 3000) == FLARM::MT_ACK;
+                                length, env, 10000) == FLARM::MT_ACK;
 
     // If no ACK was received
     if (!ack || length <= 3 || env.IsCancelled())
