@@ -432,9 +432,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
     return HandleKey(InfoBoxContent::ibkRight);
 
   case KEY_RETURN:
-    focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
-    if (!HandleKey(InfoBoxContent::ibkEnter))
-      ShowDialog();
+    ShowDialog();
     return true;
 
   case KEY_ESCAPE:

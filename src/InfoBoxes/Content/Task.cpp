@@ -177,10 +177,6 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkDown:
     protected_task_manager->IncrementActiveTaskPoint(-1);
     return true;
-
-  case ibkEnter:
-    ShowNextWaypointDetails();
-    return true;
   }
 
   return false;
