@@ -34,7 +34,7 @@ KeyholeZone::GetBoundary() const
   boundary.GenerateArcExcluding(GetReference(), GetRadius(),
                                 GetStartRadial(), GetEndRadial());
 
-  const fixed small_radius = fixed(500);
+  const fixed small_radius = GetInnerRadius();
   GeoVector small_vector(small_radius, GetStartRadial());
   boundary.push_front(small_vector.EndPoint(GetReference()));
   small_vector.bearing = GetEndRadial();
@@ -49,7 +49,7 @@ KeyholeZone::GetBoundary() const
 fixed
 KeyholeZone::ScoreAdjustment() const
 {
-  return fixed(500);
+  return GetInnerRadius();
 }
 
 bool 
@@ -57,6 +57,6 @@ KeyholeZone::IsInSector(const GeoPoint &location) const
 {
   GeoVector f(GetReference(), location);
 
-  return f.distance <= fixed(500) ||
+  return f.distance <= GetInnerRadius() ||
     (f.distance <= GetRadius() && IsAngleInSector(f.bearing));
 }

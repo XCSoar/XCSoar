@@ -64,6 +64,13 @@ public:
     UpdateSector();
   }
 
+  /**
+   * Returns the radius of the small cylinder [m].
+   */
+  fixed GetInnerRadius() const {
+    return fixed(500);
+  }
+
   /* virtual methods from class ObservationZone */
   virtual bool IsInSector(const GeoPoint &location) const override;
   virtual OZBoundary GetBoundary() const override;

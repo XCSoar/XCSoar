@@ -171,10 +171,10 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
   case ObservationZone::Shape::KEYHOLE:
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION: {
-    const SectorZone &oz = (const SectorZone &)_oz;
+    const KeyholeZone &oz = (const KeyholeZone &)_oz;
     RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
     canvas.DrawKeyhole(p_center.x, p_center.y,
-                       projection.GeoToScreenDistance(fixed(500)),
+                       projection.GeoToScreenDistance(oz.GetInnerRadius()),
                        projection.GeoToScreenDistance(oz.GetRadius()),
                        oz.GetStartRadial() - projection.GetScreenAngle(),
                        oz.GetEndRadial() - projection.GetScreenAngle());
