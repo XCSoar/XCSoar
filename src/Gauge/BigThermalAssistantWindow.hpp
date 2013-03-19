@@ -34,7 +34,8 @@ class BigThermalAssistantWindow : public ThermalAssistantWindow {
 public:
   BigThermalAssistantWindow(const ThermalAssistantLook &look,
                             UPixelScalar padding)
-    :ThermalAssistantWindow(look, padding, false) {}
+    :ThermalAssistantWindow(look, padding, false),
+     dragging(false) {}
 
   void Create(ContainerWindow &parent, PixelRect rc,
            WindowStyle window_style=WindowStyle()) {

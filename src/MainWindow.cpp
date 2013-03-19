@@ -111,6 +111,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
    traffic_gauge(*this),
    suppress_traffic_gauge(false), force_traffic_gauge(false),
    thermal_assistant(*this),
+   dragging(false),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
@@ -532,15 +533,78 @@ MainWindow::OnSetFocus()
     GetTopDialog().FocusFirstControl();
 }
 
+void
+MainWindow::StopDragging()
+{
+  if (!dragging)
+    return;
+
+  dragging = false;
+  ReleaseCapture();
+}
+
+void
+MainWindow::OnCancelMode()
+{
+  SingleWindow::OnCancelMode();
+  StopDragging();
+}
+
+bool
+MainWindow::OnMouseDown(PixelScalar x, PixelScalar y)
+{
+  if (SingleWindow::OnMouseDown(x, y))
+    return true;
+
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    gestures.Start(x, y, Layout::Scale(20));
+  }
+
+  return true;
+}
+
+bool
+MainWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (SingleWindow::OnMouseUp(x, y))
+    return true;
+
+  if (dragging) {
+    StopDragging();
+
+    const TCHAR *gesture = gestures.Finish();
+    if (gesture && InputEvents::processGesture(gesture))
+      return true;
+  }
+
+  return false;
+}
+
 bool
 MainWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   if (SingleWindow::OnMouseDouble(x, y))
     return true;
 
+  StopDragging();
+
   if (!HasDialog())
     InputEvents::ShowMenu();
   return false;
+}
+
+bool
+MainWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (SingleWindow::OnMouseMove(x, y, keys))
+    return true;
+
+  if (dragging)
+    gestures.Update(x, y);
+
+  return true;
 }
 
 bool

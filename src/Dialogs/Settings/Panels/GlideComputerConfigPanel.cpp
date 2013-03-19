@@ -133,8 +133,9 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
                        settings_computer.circling.external_trigger_cruise_enabled);
 
-  changed |= require_restart |=
-      SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime, settings_computer.average_eff_time);
+  if (SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime,
+                    settings_computer.average_eff_time))
+    require_restart = changed = true;
 
   changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
                        task_behaviour.glide.predict_wind_drift);

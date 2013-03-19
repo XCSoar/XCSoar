@@ -172,7 +172,7 @@ Java_org_xcsoarte_NativeView_runNative(JNIEnv *env, jobject obj)
     ShowMessageBox(_T("How embarassing, we're terribly sorry!\n"
                       "Please submit a bug report and "
                       "include the file from the 'crash' directory.\n"
-                      "http://www.xcsoar.org/trac/newticket\n"
+                      "http://bugs.xcsoar.org/newticket\n"
                       "After your report, we'll fix it ASAP."),
                    _T("XCSoar has crashed recently"),
                    MB_OK|MB_ICONERROR);

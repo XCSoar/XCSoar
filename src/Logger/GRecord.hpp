@@ -40,6 +40,25 @@ public:
 private:
   MD5 md5[4];
 
+  /**
+   * If true, then the comma is ignored in the MD5 calculation, even
+   * though it's a valid IGC character.
+   *
+   * Background information: in XCSoar 6.5, the IGC standard was
+   * implemented correctly for the first time, and the comma became a
+   * legal character.  Up to XCSoar 6.4.6, the comma was not only
+   * ignored for the GRecord, but also eliminated from IGC files.
+   * This made XCSoar 6.5 incompatible with the old vali-xcs program
+   * (TRAC #2657).
+   *
+   * This attribute is the workaround: ignore_comma=false means that
+   * we're currently reading a XCSoar 6.5 IGC file.
+   *
+   * When writing a new IGC file, the comma is written, but ignored
+   * for the G record calculation.
+   */
+  bool ignore_comma;
+
 public:
 
   void Initialize();
@@ -73,12 +92,12 @@ public:
 
 private:
   void Initialize(int iKey);
-  void AppendStringToBuffer(const unsigned char *szIn);
+  void AppendStringToBuffer(const char *szIn);
   /**
    * returns false if record is not to be included in
    * G record calc (see IGC specs)
    */
-  bool IncludeRecordInGCalc(const unsigned char *szIn);
+  bool IncludeRecordInGCalc(const char *szIn);
 };
 #endif
 

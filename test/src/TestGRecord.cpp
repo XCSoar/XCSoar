@@ -20,44 +20,25 @@
 }
 */
 
-#ifndef MD5_HPP
-#define MD5_HPP
+#include "Logger/GRecord.hpp"
+#include "TestUtil.hpp"
 
-#include <stdint.h>
-#include <stddef.h>
-
-class MD5
+static void
+CheckGRecord(const TCHAR *path)
 {
-public:
-  static constexpr size_t DIGEST_LENGTH = 32;
+  GRecord grecord;
+  grecord.Initialize();
+  ok1(grecord.VerifyGRecordInFile(path));
+}
 
-private:
-  uint8_t buff512bits[64];
-  uint32_t h0, h1, h2, h3;
-  uint64_t message_length;
+int main(int argc, char **argv)
+{
+  plan_tests(4);
 
-  void Process512(const uint8_t *in);
+  CheckGRecord(_T("test/data/grecord64a.igc"));
+  CheckGRecord(_T("test/data/grecord64b.igc"));
+  CheckGRecord(_T("test/data/grecord65a.igc"));
+  CheckGRecord(_T("test/data/grecord65b.igc"));
 
-public:
-  /**
-   * Initialise with the default key.
-   */
-  void InitKey();
-
-  /**
-   * Initialise with a custom key.
-   */
-  void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
-
-  void Append(uint8_t ch);
-  void Append(const void *data, size_t length);
-
-  void Finalize();
-
-  /**
-   * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
-   */
-  void GetDigest(char *buffer) const;
-};
-
-#endif
+  return exit_status();
+}
