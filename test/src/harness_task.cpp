@@ -43,9 +43,6 @@ class FAISectorZone;
 class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
-class BGAFixedCourseZone;
-class BGAEnhancedOptionZone;
-class BGAStartSectorZone;
 class AnnularSectorZone;
 class MatCylinderZone;
 
@@ -72,15 +69,6 @@ public:
   }
   void Visit(const MatCylinderZone& oz) {
     printf("# MAT cylinder zone\n");
-  }
-  void Visit(const BGAFixedCourseZone &oz) {
-    printf("# bga fixed course zone\n");
-  }
-  void Visit(const BGAEnhancedOptionZone &oz) {
-    printf("# bga enhanded option zone\n");
-  }
-  void Visit(const BGAStartSectorZone &oz) {
-    printf("# bga start sector zone\n");
   }
 
   void Visit(const SymmetricSectorZone &oz) {
@@ -110,19 +98,10 @@ public:
       break;
 
     case ObservationZone::Shape::DAEC_KEYHOLE:
-      Visit((const KeyholeZone &)oz);
-      break;
-
     case ObservationZone::Shape::BGAFIXEDCOURSE:
-      Visit((const BGAFixedCourseZone &)oz);
-      break;
-
     case ObservationZone::Shape::BGAENHANCEDOPTION:
-      Visit((const BGAEnhancedOptionZone &)oz);
-      break;
-
     case ObservationZone::Shape::BGA_START:
-      Visit((const BGAStartSectorZone &)oz);
+      Visit((const KeyholeZone &)oz);
       break;
 
     case ObservationZone::Shape::ANNULAR_SECTOR:
