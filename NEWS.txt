@@ -11,6 +11,7 @@ Version 6.6 - not yet released
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
   - new waypoint location editor (#343)
+  - show required glide ratio in waypoint details (#1573)
 * tasks
   - MAT tasks (#563)
 * devices
