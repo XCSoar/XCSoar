@@ -37,7 +37,6 @@ static const TCHAR *const validation_error_strings[] = {
   N_("Too many turnpoints"),
   N_("Not enough turnpoints"),
   N_("Turnpoints not unique"),
-  N_("Invalid FAI triangle shape"),
   N_("Empty task"),
   N_("non-FAI turn points"),
   N_("non-MAT turn points"),
