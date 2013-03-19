@@ -28,7 +28,7 @@ Copyright_License {
 #include "Blackboard/LiveBlackboard.hpp"
 #include "NMEA/MoreData.hpp"
 #include "ComputerSettings.hpp"
-#include "PageActions.hpp"
+#include "UIActions.hpp"
 
 #ifdef USE_GDI
 #include "Screen/Canvas.hpp"
@@ -123,7 +123,7 @@ SmallTrafficWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     ReleaseCapture();
 
     if (was_pressed)
-      PageActions::ShowTrafficRadar();
+      UIActions::ShowTrafficRadar();
 
     return true;
   }
