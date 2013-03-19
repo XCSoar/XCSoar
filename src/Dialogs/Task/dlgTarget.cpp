@@ -49,9 +49,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-using std::min;
-using std::max;
-
 class TargetDialogMapWindow : public TargetMapWindow {
 public:
   TargetDialogMapWindow(const WaypointLook &waypoint_look,
