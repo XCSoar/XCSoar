@@ -107,6 +107,12 @@ class oggenc {
   }
 }
 
+class ubuntu-font {
+  package { "ttf-ubuntu-font-family":
+    ensure => present,
+  }
+}
+
 # Stages
 stage { ['pre', 'post']: }
 Stage['pre'] -> Stage['main'] -> Stage['post']
@@ -135,6 +141,7 @@ class {'xsltproc': }
 class {'rsvg': }
 class {'imagemagick': }
 class {'oggenc': }
+class {'ubuntu-font': }
 
 # Android Toolchain
 class {'android': 
