@@ -32,6 +32,8 @@
  */
 class KeyholeZone: public SymmetricSectorZone
 {
+  fixed inner_radius;
+
 protected:
   /**
    * Constructor.
@@ -44,10 +46,12 @@ protected:
   KeyholeZone(Shape _shape, const GeoPoint &loc,
               const fixed radius = fixed(10000.0),
               const Angle angle = Angle::QuarterCircle())
-    :SymmetricSectorZone(_shape, loc, radius, angle) {}
+    :SymmetricSectorZone(_shape, loc, radius, angle),
+     inner_radius(500) {}
 
   KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
-    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
+     inner_radius(500) {}
 
 public:  
   /** 
@@ -59,7 +63,8 @@ public:
    * @return Initialised object
    */
   KeyholeZone(const GeoPoint loc, const fixed radius = fixed(10000.0))
-    :SymmetricSectorZone(Shape::KEYHOLE, loc, radius, Angle::QuarterCircle())
+    :SymmetricSectorZone(Shape::KEYHOLE, loc, radius, Angle::QuarterCircle()),
+     inner_radius(500)
   {
     UpdateSector();
   }
@@ -68,7 +73,7 @@ public:
    * Returns the radius of the small cylinder [m].
    */
   fixed GetInnerRadius() const {
-    return fixed(500);
+    return inner_radius;
   }
 
   /* virtual methods from class ObservationZone */
