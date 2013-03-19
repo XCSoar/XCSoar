@@ -564,7 +564,11 @@ RowFormWidget::LoadValue(unsigned i, fixed value)
 void
 RowFormWidget::LoadValue(unsigned i, Angle value)
 {
-  LoadValue(i, value.Degrees());
+  WndProperty &control = GetControl(i);
+  AngleDataField &df = *(AngleDataField *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::ANGLE);
+  df.SetValue(value);
+  control.RefreshDisplay();
 }
 
 void

@@ -1,4 +1,4 @@
-\documentclass[german,a4paper,10pt]{refrep}
+\documentclass[german,a4paper,11pt]{refrep}
 \usepackage[utf8]{inputenc}
 \usepackage[german]{babel}
 \DeclareUnicodeCharacter{00B0}{$^{\circ}$}
@@ -12,6 +12,7 @@
 \usepackage{rotating}
 \usepackage{todonotes}%		Gestattet Kommentare für Sachen, welche noch zu erldigen sind  .
 \usepackage{paralist}%		etwas geringere Abstände in der item und enumerate...}
+\usepackage{enumitem}
 \usepackage{url}
 \usepackage{hyperref}
 \makeindex
@@ -27,6 +28,12 @@
 \newcommand\fl{\textsf{Flarm }}
 \newcommand\al{\textsf{Altair }}
 \newcommand\trdvvs{Vega}
+%
+% mal die Helvetika wählen zwecks besserer Onlinelesbarkeit..
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+%
 \begin{document}
 \sloppy% ja ich weiß, soll man nicht mehr machen .. dennoch ..
 \shorthandoff{"}%
@@ -61,11 +68,11 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch01_introduction.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{installation.tex}
+\input{installation.tex}%									95%
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch02_user_interface.tex}%                           fertig ...
+\input{ch02_user_interface.tex}%							95%
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch03_navigation.tex}
+\input{ch03_navigation.tex}%								99%
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch04_xc_tasks.tex}
 %%%%%%%%%%%%%%%%%%%%%%
@@ -75,7 +82,7 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch07_airspace_and_flarm.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch08_avionics_and_airframe.tex}
+\input{ch08_avionics_and_airframe.tex}%					 99%
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch09_quickstart.tex}
 %%%%%%%%%%%%%%%%%%%%%%

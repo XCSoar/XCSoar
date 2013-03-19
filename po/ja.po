@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-08 12:06+0100\n"
-"PO-Revision-Date: 2013-02-19 05:00+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2013-03-12 15:51+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-20 16:24+0000\n"
-"X-Generator: Launchpad (build 16491)\n"
+"X-Launchpad-Export-Date: 2013-03-13 07:16+0000\n"
+"X-Generator: Launchpad (build 16532)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -826,15 +826,15 @@ msgid "H AGL"
 msgstr "対地高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"対地高度\r\n"
-"航路の高さから其の地点の標高を引いた数値、マージンを含む\r\n"
-"数値が赤の場合安全高度を下回っている。"
+"これは飛行高度から地点標高を差し引いた値を示します。（地点標高は地勢ファイル"
+"を参照しています。）この数値が赤字で示されている時は、飛行高度が地面との安全"
+"高度を下回っています。"
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -1165,9 +1165,9 @@ msgid "Terrain elevation"
 msgstr "地点標高"
 
 #: src/InfoBoxes/Content/Factory.cpp:357
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "地面衝突"
+msgstr "標高"
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -1969,9 +1969,9 @@ msgid "Thermal average over all"
 msgstr "全サーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:790
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "前サーマル平均"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:791
 #, no-c-format
@@ -2094,7 +2094,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:863
 #, no-c-format
 msgid "Height above take-off"
-msgstr ""
+msgstr "離陸地点からの高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
@@ -2106,7 +2106,7 @@ msgstr ""
 msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
-msgstr ""
+msgstr "離陸地点からの高度（QFEのようなもの）"
 
 #: src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
@@ -2310,14 +2310,11 @@ msgid "Climb Band"
 msgstr "上昇バンド"
 
 #: src/InfoBoxes/Content/Factory.cpp:997
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
-"平均上昇率のグラフ\r\n"
-"水平軸　上昇率\r\n"
-"垂直軸　高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1005
 #, no-c-format
@@ -3195,7 +3192,7 @@ msgstr "高度"
 #: src/Dialogs/Traffic/TrafficList.cpp:670
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u 分前"
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -4422,14 +4419,14 @@ msgid "Screen Layout"
 msgstr "画面表示"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pages"
 msgstr "ページ"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "インフォボックスのページ"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:120
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4745,7 +4742,7 @@ msgstr "機体情報\"%s\"読み込みますか？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:410
 msgid "Planes"
-msgstr "平地"
+msgstr "機体"
 
 #: src/Dialogs/Plane/PlaneDetailsDialog.cpp:44
 #: Data/Dialogs/dlgPlaneDetails.xml:3 Data/Dialogs/dlgPlaneDetails_L.xml:3
@@ -5520,9 +5517,8 @@ msgid "Preferred period for gliders."
 msgstr "グライダー向けの時間設定"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:105
-#, fuzzy
 msgid "GR average period"
-msgstr "平均滑空比演算時間"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid ""
@@ -6158,20 +6154,17 @@ msgid "The upper limit for auto zoom distance."
 msgstr "オートズームの上限距離"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
-#, fuzzy
 msgid "Main area"
-msgstr "翼面積"
+msgstr "主表示部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
-#, fuzzy
 msgid "Specifies what should be displayed in the main area."
-msgstr "塗りつぶしタイプを選択してください"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:329
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "情報ボックス"
+msgstr "情報表示部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -6180,23 +6173,21 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid "Nothing"
-msgstr ""
+msgstr "なし"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:344
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "方角"
+msgstr "断面図"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
-#, fuzzy
 msgid "Bottom area"
-msgstr "左下"
+msgstr "下部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
-#, fuzzy
 msgid "Specifies what should be displayed below the main area."
-msgstr "塗りつぶしタイプを選択してください"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
@@ -8461,7 +8452,7 @@ msgstr "マクレディー"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:19
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:27 Data/Input/default.xci:604
 msgid "Plane"
-msgstr "平地"
+msgstr "機体"
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:8
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
@@ -8927,9 +8918,8 @@ msgid "Zoom"
 msgstr "ズーム"
 
 #: Data/Input/default.xci:855
-#, fuzzy
 msgid "Traffic List"
-msgstr "信号色"
+msgstr "他機一覧"
 
 #: Data/Input/default.xci:733
 msgid "Vario ASI zeroed"
@@ -9054,27 +9044,32 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid ""
-#~ "FLARM\n"
-#~ "Details"
-#~ msgstr ""
-#~ "FLARM\n"
-#~ "非設定"
+#~ msgid "English"
+#~ msgstr "英語"
 
-#~ msgid "Return"
-#~ msgstr "Returnキー"
+#~ msgid "Sunset"
+#~ msgstr "日没"
 
-#~ msgid "Altitude AGL"
-#~ msgstr "対地高度"
+#~ msgid "H Baro"
+#~ msgstr "気圧高度"
 
-#~ msgid "Alt AGL"
-#~ msgstr "対地高度"
+#~ msgid "Not found"
+#~ msgstr "見つかりませんでした"
+
+#~ msgid "Show details:"
+#~ msgstr "詳細を表示"
 
 #~ msgid "H GND"
 #~ msgstr "地点標高"
 
-#~ msgid "QFE GPS"
-#~ msgstr "QFE　GPS高度"
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "対地高度\r\n"
+#~ "航路の高さから其の地点の標高を引いた数値、マージンを含む\r\n"
+#~ "数値が赤の場合安全高度を下回っている。"
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9089,29 +9084,16 @@ msgstr ""
 #~ "QFE高度をセットしてもQNH高度には影響しない。\r\n"
 #~ "QFE高度は次にセットされるまで維持される"
 
-#~ msgid "H GPS"
-#~ msgstr "GPS高度"
+#~ msgid "QFE GPS"
+#~ msgstr "QFE　GPS高度"
 
-#~ msgid "H Baro"
-#~ msgstr "気圧高度"
-
-#~ msgid "InfoBox Modes"
-#~ msgstr "インフォボックス　モード"
-
-#~ msgid "Determines the information displayed on different screen pages."
-#~ msgstr "ディスプレイのスクーン表示の表示選択設定"
-
-#~ msgid "English"
-#~ msgstr "英語"
-
-#~ msgid "Sunset"
-#~ msgstr "日没"
-
-#~ msgid "Not found"
-#~ msgstr "見つかりませんでした"
-
-#~ msgid "Show details:"
-#~ msgstr "詳細を表示"
+#~ msgid ""
+#~ "Graph of average circling climb rate (horizontal axis) as a function of "
+#~ "height (vertical axis)."
+#~ msgstr ""
+#~ "平均上昇率のグラフ\r\n"
+#~ "水平軸　上昇率\r\n"
+#~ "垂直軸　高度"
 
 #~ msgid "Unknown competition number"
 #~ msgstr "コンペID該当無し"
@@ -9119,7 +9101,19 @@ msgstr ""
 #~ msgid "No further information"
 #~ msgstr "追加情報無し"
 
+#~ msgid "InfoBox Modes"
+#~ msgstr "インフォボックス　モード"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "インフォボックスのページ"
+
+#~ msgid "L/D average period"
+#~ msgstr "平均滑空比演算時間"
+
 #~ msgid "Height GPS"
+#~ msgstr "GPS高度"
+
+#~ msgid "H GPS"
 #~ msgstr "GPS高度"
 
 #~ msgid ""
@@ -9135,6 +9129,12 @@ msgstr ""
 
 #~ msgid "Short file name"
 #~ msgstr "ショートファイル名"
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "ディスプレイのスクーン表示の表示選択設定"
+
+#~ msgid "Page"
+#~ msgstr "ページ"
 
 #~ msgid ""
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
@@ -9218,6 +9218,16 @@ msgstr ""
 #~ msgid "My Sample"
 #~ msgstr "サンプル"
 
+#~ msgid ""
+#~ "FLARM\n"
+#~ "Details"
+#~ msgstr ""
+#~ "FLARM\n"
+#~ "非設定"
+
+#~ msgid "Return"
+#~ msgstr "Returnキー"
+
 #~ msgid "TC All"
 #~ msgstr "All TC平均"
 
@@ -9226,6 +9236,12 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
+
+#~ msgid "Altitude AGL"
+#~ msgstr "対地高度"
+
+#~ msgid "Alt AGL"
+#~ msgstr "対地高度"
 
 #~ msgid "User down"
 #~ msgstr "ユーザー　下げ"
