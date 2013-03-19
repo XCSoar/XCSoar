@@ -257,12 +257,12 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Manager/TaskActionsPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskListPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskCalculatorPanel.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskOptionalStarts.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskPoint.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskPointType.cpp \
+	$(SRC)/Dialogs/Task/OptionalStartsDialog.cpp \
+	$(SRC)/Dialogs/Task/TaskPointDialog.cpp \
+	$(SRC)/Dialogs/Task/MutateTaskPointDialog.cpp \
 	$(SRC)/Dialogs/Task/dlgTaskHelpers.cpp \
-	$(SRC)/Dialogs/Task/dlgTarget.cpp \
-	$(SRC)/Dialogs/Task/dlgAlternatesList.cpp \
+	$(SRC)/Dialogs/Task/TargetDialog.cpp \
+	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
