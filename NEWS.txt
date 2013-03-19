@@ -13,6 +13,7 @@ Version 6.6 - not yet released
   - new waypoint location editor (#343)
   - show required glide ratio in waypoint details (#1573)
   - new InfoBox style "Shaded" (#1852)
+  - waypoint details button in target dialog (#1967)
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)

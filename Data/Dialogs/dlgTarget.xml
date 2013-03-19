@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Caption="Target">
-  <Edit Name="prpTaskPoint" Caption="" X="27" Y="0" Width="-27" Height="27"
-  Help="This sets the task point for review.">
-    <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
-  </Edit>
+  <Button Name="Name" Caption="" X="27" Y="0" Width="-27" Height="27" OnClick="OnNameClicked"/>
+
   <SymbolButton Name="btnNext" Caption="&gt;" X="-27" Y="0" Height="27" OnClick="OnNextClicked" />
 
   <Edit Name="prpAATDelta" Caption="Delta T" Y="27" Width="-120" Height="22" CaptionWidth="60" ReadOnly="1"
