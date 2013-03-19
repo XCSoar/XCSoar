@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Engine/Util/Gradient.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/Units.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -51,6 +52,7 @@ UpdateInfoBoxBearing(InfoBoxData &data)
 
   // Set Value
   data.SetValue(vector_remaining.bearing);
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
 }
 
 void
@@ -67,6 +69,7 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data)
 
   Angle Value = vector_remaining.bearing - basic.track;
   data.SetValueFromBearingDifference(Value);
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
 }
 
 void
@@ -82,6 +85,7 @@ UpdateInfoBoxRadial(InfoBoxData &data)
 
   // Set Value
   data.SetValue(vector_remaining.bearing.Reciprocal());
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
 }
 
 void
@@ -182,6 +186,7 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 
   // Set Value
   data.SetValueFromDistance(vector_remaining.distance);
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
 
   if (basic.track_available) {
     Angle bd = vector_remaining.bearing - basic.track;

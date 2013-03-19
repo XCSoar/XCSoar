@@ -94,6 +94,7 @@ AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     break;
 
   case TaskPointFactoryType::AST_CYLINDER:
+  case TaskPointFactoryType::MAT_CYLINDER:
     newtype = TaskPointFactoryType::AAT_CYLINDER;
     break;
 

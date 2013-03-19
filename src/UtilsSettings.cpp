@@ -49,6 +49,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -70,6 +71,7 @@ bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
+bool require_restart;
 
 static void
 SettingsEnter()
@@ -86,6 +88,7 @@ SettingsEnter()
   InputFileChanged = false;
   DevicePortChanged = false;
   LanguageChanged = false;
+  require_restart = false;
 }
 
 static void
@@ -153,6 +156,8 @@ SettingsLeave(const UISettings &old_ui_settings)
       delete task;
 
       way_points.Optimise();
+
+      lease->FillMatPoints(way_points);
     }
   }
 

@@ -133,7 +133,7 @@ public:
   virtual void Initialise(ContainerWindow &parent,
                           const PixelRect &rc) override;
   virtual void Show(const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
   /* virtual methods from class ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -269,7 +269,7 @@ PageListWidget::Show(const PixelRect &rc)
 }
 
 bool
-PageListWidget::Save(bool &_changed, gcc_unused bool &require_restart)
+PageListWidget::Save(bool &_changed)
 {
   bool changed = false;
 

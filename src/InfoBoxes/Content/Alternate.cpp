@@ -27,8 +27,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
-#include "Dialogs/Dialogs.h"
-#include "UIGlobals.hpp"
+#include "Engine/Task/Unordered/AlternateList.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -42,20 +42,17 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data)
     return;
   }
 
-  const AbortTask::Alternate *alternate;
+  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  const AlternateList &alternates = lease->GetAlternates();
 
-  {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
+  const AlternatePoint *alternate;
+  if (!alternates.empty()) {
+    if (index >= alternates.size())
+      index = alternates.size() - 1;
 
-    if (!alternates.empty()) {
-      if (index >= alternates.size())
-        index = alternates.size() - 1;
-
-      alternate = &alternates[index];
-    } else {
-      alternate = NULL;
-    }
+    alternate = &alternates[index];
+  } else {
+    alternate = NULL;
   }
 
   data.FormatTitle(_("Altn %d"), index + 1);
@@ -82,7 +79,7 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
+    dlgAlternatesListShowModal();
     break;
   case ibkLeft:
   case ibkUp:
@@ -106,20 +103,17 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data)
     return;
   }
 
-  const AbortTask::Alternate *alternate;
+  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  const AlternateList &alternates = lease->GetAlternates();
 
-  {
-    ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
+  const AlternatePoint *alternate;
+  if (!alternates.empty()) {
+    if (index >= alternates.size())
+      index = alternates.size() - 1;
 
-    if (!alternates.empty()) {
-      if (index >= alternates.size())
-        index = alternates.size() - 1;
-
-      alternate = &alternates[index];
-    } else {
-      alternate = NULL;
-    }
+    alternate = &alternates[index];
+  } else {
+    alternate = NULL;
   }
 
   data.FormatTitle(_T("Altn %d GR"), index + 1);
@@ -154,7 +148,7 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
+    dlgAlternatesListShowModal();
     break;
   case ibkLeft:
   case ibkUp:

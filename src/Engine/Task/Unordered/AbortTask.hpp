@@ -26,16 +26,13 @@
 #include "UnorderedTask.hpp"
 #include "UnorderedTaskPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "AlternatePoint.hpp"
+#include "AlternateList.hpp"
 
-#include <vector>
 #include <assert.h>
 
 class Waypoints;
-
-class AbortIntersectionTest {
-public:
-  virtual bool Intersects(const AGeoPoint& destination) = 0;
-};
+class AbortIntersectionTest;
 
 /**
  * Abort task provides automatic management of a sorted list of task points
@@ -57,25 +54,6 @@ class AbortTask: public UnorderedTask
 {
   /** max number of items in list */
   static constexpr unsigned max_abort = 10;
-
-public:
-  struct Alternate {
-    Waypoint waypoint;
-
-    GlideResult solution;
-
-    Alternate(const Waypoint &_waypoint)
-      :waypoint(_waypoint)
-    {
-      solution.Reset();
-    }
-
-    Alternate(const Waypoint &_waypoint, const GlideResult &_solution)
-      :waypoint(_waypoint), solution(_solution) {}
-  };
-
-  /** Vector of waypoints and solutions used to store candidates */
-  typedef std::vector <Alternate> AlternateVector;
 
 protected:
   struct AlternateTaskPoint {
@@ -191,7 +169,7 @@ protected:
    * @return True if a landpoint within final glide was found
    */
   bool FillReachable(const AircraftState &state,
-                     AlternateVector &approx_waypoints,
+                     AlternateList &approx_waypoints,
                      const GlidePolar &polar, bool only_airfield,
                      bool final_glide, bool safety);
 

@@ -21,6 +21,9 @@
 }
 */
 
+#ifndef XCSOAR_CATMULL_ROM_INTERPOLATOR_HPP
+#define XCSOAR_CATMULL_ROM_INTERPOLATOR_HPP
+
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
@@ -184,3 +187,5 @@ private:
       return fraction;
   }
 };
+
+#endif

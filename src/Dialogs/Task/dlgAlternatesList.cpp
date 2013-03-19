@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "TaskDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Widget/ListWidget.hpp"
@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Unordered/AlternateList.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
@@ -36,7 +37,8 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
 
-class AlternatesListWidget : public ListWidget, private ActionListener {
+class AlternatesListWidget final
+  : public ListWidget, private ActionListener {
   enum Buttons {
     SETTINGS,
     GOTO,
@@ -47,7 +49,7 @@ class AlternatesListWidget : public ListWidget, private ActionListener {
   WndButton *details_button, *cancel_button, *goto_button;
 
 public:
-  AbortTask::AlternateVector alternates;
+  AlternateList alternates;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -67,8 +69,8 @@ public:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare() {
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
@@ -88,14 +90,10 @@ public:
                                CommonInterface::GetMapSettings().waypoint);
   }
 
-  virtual bool CanActivateItem(unsigned index) const {
-    return true;
-  }
-
-  virtual void OnActivateItem(unsigned index);
+  virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void
@@ -142,7 +140,7 @@ AlternatesListWidget::OnAction(int id)
 }
 
 void
-dlgAlternatesListShowModal(SingleWindow &parent)
+dlgAlternatesListShowModal()
 {
   if (protected_task_manager == NULL)
     return;
@@ -153,7 +151,7 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   widget.Update();
 
   WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(parent, _("Alternates"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Alternates"), &widget);
   widget.CreateButtons(dialog);
 
   int i = dialog.ShowModal() == mrOK
@@ -164,5 +162,6 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (i < 0 || (unsigned)i >= widget.alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(parent, widget.alternates[i].waypoint);
+  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(),
+                              widget.alternates[i].waypoint);
 }

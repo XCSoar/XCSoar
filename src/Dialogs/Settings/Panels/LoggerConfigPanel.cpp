@@ -29,6 +29,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Logger/NMEALogger.hpp"
+#include "UtilsSettings.hpp"
 
 enum ControlIndex {
   PilotName,
@@ -47,7 +48,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 static constexpr StaticEnumChoice auto_logger_list[] = {
@@ -98,7 +99,7 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LoggerConfigPanel::Save(bool &changed, bool &require_restart)
+LoggerConfigPanel::Save(bool &changed)
 {
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;

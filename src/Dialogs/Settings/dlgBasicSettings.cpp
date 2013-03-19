@@ -60,10 +60,10 @@ enum Actions {
   DUMP = 100,
 };
 
-class FlightSetupPanel : public RowFormWidget,
-                         DataFieldListener,
-                         private Timer,
-                         public ActionListener {
+class FlightSetupPanel final
+  : public RowFormWidget, DataFieldListener,
+    private Timer,
+    public ActionListener {
   WndButton *dump_button;
 
   PolarSettings &polar_settings;
@@ -107,7 +107,7 @@ public:
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
   virtual void Show(const PixelRect &rc) override {
     RowFormWidget::Show(rc);
@@ -124,7 +124,7 @@ public:
   }
 
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 
 private:
   /* virtual methods from DataFieldListener */
@@ -337,7 +337,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-FlightSetupPanel::Save(bool &changed, bool &require_restart)
+FlightSetupPanel::Save(bool &changed)
 {
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 

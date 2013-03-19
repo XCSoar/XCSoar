@@ -131,8 +131,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   int result = form.ShowModeless();
 
   if (form.IsDefined()) {
-    bool changed = false, require_restart = false;
-    tab_bar.Save(changed, require_restart);
+    bool changed = false;
+    tab_bar.Save(changed);
   }
 
   if (result == SWITCH_INFO_BOX)

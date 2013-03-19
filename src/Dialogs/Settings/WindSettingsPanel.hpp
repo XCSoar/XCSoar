@@ -25,36 +25,60 @@ Copyright_License {
 #define XCSOAR_WIND_SETTINGS_PANEL_HPP
 
 #include "Widget/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 
 class WindSettingsPanel final
-  : public RowFormWidget, private DataFieldListener {
+  : public RowFormWidget, public ActionListener,
+    private DataFieldListener, private NullBlackboardListener {
   enum ControlIndex {
     AutoWind,
     ExternalWind,
     TrailDrift,
+    SOURCE,
     Speed,
     Direction,
   };
 
   const bool edit_manual_wind, edit_trail_drift;
 
-  bool external_wind;
+  /**
+   * Has the user modified the manual wind?
+   */
+  bool manual_modified;
 
 public:
+  enum Buttons {
+    /**
+     * Clears the manual wind.
+     */
+    CLEAR_MANUAL,
+  };
+
   /**
    * @param manual_wind edit the manual wind setting
    */
   WindSettingsPanel(bool edit_manual_wind, bool edit_trail_drift);
 
+  /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
 
 private:
   void UpdateVector();
 
   /* methods from DataFieldListener */
   virtual void OnModified(DataField &df) override;
+
+  /* virtual methods from class BlackboardListener */
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) override;
 };
 
 #endif

@@ -147,7 +147,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-FLARMConfigWidget::Save(bool &_changed, bool &require_restart)
+FLARMConfigWidget::Save(bool &_changed)
 {
   PopupOperationEnvironment env;
   bool changed = false;

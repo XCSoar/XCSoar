@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/Fonts.hpp"
 #include "Geo/Math.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"

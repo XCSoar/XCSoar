@@ -1,6 +1,7 @@
 WIDGET_SOURCES = \
 	$(SRC)/Widget/Widget.cpp \
 	$(SRC)/Widget/ActionWidget.cpp \
+	$(SRC)/Widget/CallbackWidget.cpp \
 	$(SRC)/Widget/WindowWidget.cpp \
 	$(SRC)/Widget/ListWidget.cpp \
 	$(SRC)/Widget/ContainerWidget.cpp \

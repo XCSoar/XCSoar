@@ -36,6 +36,12 @@ enum class TaskFactoryType: uint8_t {
   FAI_GOAL,
   RACING,
   AAT,
+
+  /**
+   * Modified Area Task.
+   */
+  MAT,
+
   MIXED,
   TOURING
 };

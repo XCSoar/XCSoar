@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "TaskComputer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"

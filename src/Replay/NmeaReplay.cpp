@@ -59,6 +59,9 @@ NmeaReplay::~NmeaReplay()
 bool
 NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 {
+  if (data.time_available)
+    data.clock = data.time;
+
   if ((device != NULL && device->ParseNMEA(line, data)) ||
       (parser != NULL && parser->ParseLine(line, data))) {
     data.gps.replay = true;
@@ -70,13 +73,12 @@ NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 }
 
 bool
-NmeaReplay::ReadUntilRMC(NMEAInfo &data, bool ignore)
+NmeaReplay::ReadUntilRMC(NMEAInfo &data)
 {
   char *buffer;
 
   while ((buffer = reader->ReadLine()) != NULL) {
-    if (!ignore)
-      ParseLine(buffer, data);
+    ParseLine(buffer, data);
 
     if (StringStartsWith(buffer, "$GPRMC") ||
         StringStartsWith(buffer, "$FLYSEN"))
@@ -87,21 +89,7 @@ NmeaReplay::ReadUntilRMC(NMEAInfo &data, bool ignore)
 }
 
 bool
-NmeaReplay::Update(NMEAInfo &data, fixed time_scale)
+NmeaReplay::Update(NMEAInfo &data)
 {
-  if (!UpdateTime())
-    return true;
-
-  for (fixed i = fixed(1); i <= time_scale; i += fixed(1)) {
-    if (!ReadUntilRMC(data, i != time_scale))
-      return false;
-  }
-
-  return true;
-}
-
-bool
-NmeaReplay::UpdateTime()
-{
-  return true;
+  return ReadUntilRMC(data);
 }

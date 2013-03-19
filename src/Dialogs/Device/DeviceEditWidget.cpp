@@ -747,7 +747,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
 }
 
 bool
-DeviceEditWidget::Save(bool &_changed, bool &require_restart)
+DeviceEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 

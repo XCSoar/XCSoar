@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TaskRenderer.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -64,6 +65,15 @@ TaskRenderer::Draw(const OrderedTask &task)
     tpv.SetModeOptional(false);
     for (const auto &tp : task.GetPoints())
       tpv.Draw(tp, (TaskPointRenderer::Layer)i);
+  }
+
+  if (task.GetFactoryType() == TaskFactoryType::MAT) {
+    // now draw MAT circles
+    tpv.ResetIndex();
+    tpv.SetModeOptional(false);
+
+    for (const auto *i : task.GetMatPoints())
+      tpv.Draw(*i, (TaskPointRenderer::Layer)2);
   }
 }
 

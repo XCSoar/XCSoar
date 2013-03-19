@@ -97,6 +97,7 @@ CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 
   case ObservationZonePoint::FAI_SECTOR:
   case ObservationZonePoint::KEYHOLE:
+  case ObservationZonePoint::MAT_CYLINDER:
   case ObservationZonePoint::BGAFIXEDCOURSE:
   case ObservationZonePoint::BGAENHANCEDOPTION:
   case ObservationZonePoint::BGA_START:
@@ -188,8 +189,7 @@ static void
 ReadValues()
 {
   if (properties_widget != nullptr) {
-    bool require_restart;
-    properties_widget->Save(task_modified, require_restart);
+    properties_widget->Save(task_modified);
   }
 }
 

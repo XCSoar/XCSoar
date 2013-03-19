@@ -48,7 +48,7 @@ LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LineSectorZoneEditWidget::Save(bool &_changed, bool &require_restart)
+LineSectorZoneEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 

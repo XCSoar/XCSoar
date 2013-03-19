@@ -51,7 +51,7 @@ enum ControlIndex {
   UnitsLatLon
 };
 
-class UnitsConfigPanel
+class UnitsConfigPanel final
   : public RowFormWidget, DataFieldListener {
 public:
   UnitsConfigPanel()
@@ -61,12 +61,12 @@ public:
   void PresetCheck();
 
   /* methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) override;
 };
 
 void
@@ -234,9 +234,9 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
+UnitsConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   UnitSetting &config = CommonInterface::SetUISettings().units;
   CoordinateFormat &coordinate_format =
@@ -263,7 +263,6 @@ UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(UnitsLatLon, ProfileKeys::LatLonUnits, coordinate_format);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

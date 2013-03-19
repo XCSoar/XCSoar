@@ -31,7 +31,8 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
 
-class ManageNanoWidget : public RowFormWidget, private ActionListener {
+class ManageNanoWidget final
+  : public RowFormWidget, private ActionListener {
   enum Controls {
     SETUP,
   };
@@ -45,11 +46,11 @@ public:
     :RowFormWidget(look), device(_device), info(info) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

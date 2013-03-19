@@ -67,6 +67,7 @@ DerivedInfo::Reset()
 
   estimated_wind_available.Clear();
   wind_available.Clear();
+  wind_source = WindSource::NONE;
   head_wind_available.Clear();
   sun_data_available.Clear();
   task_stats.reset();

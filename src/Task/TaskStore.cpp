@@ -24,6 +24,7 @@ Copyright_License {
 #include "Task/TaskStore.hpp"
 #include "Task/TaskFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Components.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"

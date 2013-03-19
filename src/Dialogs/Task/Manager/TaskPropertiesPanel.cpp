@@ -32,6 +32,7 @@ Copyright_License {
 #include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
+#include "Components.hpp"
 
 enum Controls {
   MIN_TIME,
@@ -46,6 +47,20 @@ enum Controls {
   TASK_TYPE,
 };
 
+/**
+ * returns true if task is an FAI type
+ * @param ftype. task type being checked
+ */
+constexpr
+static bool
+IsFai(TaskFactoryType ftype)
+{
+  return ftype == TaskFactoryType::FAI_GENERAL ||
+    ftype == TaskFactoryType::FAI_GOAL ||
+    ftype == TaskFactoryType::FAI_OR ||
+    ftype == TaskFactoryType::FAI_TRIANGLE;
+}
+
 TaskPropertiesPanel::TaskPropertiesPanel(TaskManagerDialog &_dialog,
                                          OrderedTask **_active_task,
                                          bool *_task_modified)
@@ -59,7 +74,8 @@ TaskPropertiesPanel::RefreshView()
   const TaskFactoryType ftype = ordered_task->GetFactoryType();
   const OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
 
-  bool aat_types = (ftype == TaskFactoryType::AAT);
+  const bool aat_types = ftype == TaskFactoryType::AAT ||
+    ftype == TaskFactoryType::MAT;
   bool fai_start_finish = p.finish_constraints.fai_finish;
 
   SetRowVisible(MIN_TIME, aat_types);
@@ -86,6 +102,7 @@ TaskPropertiesPanel::RefreshView()
   SetRowVisible(FINISH_HEIGHT_REF, !fai_start_finish);
   LoadValueEnum(FINISH_HEIGHT_REF, p.finish_constraints.min_height_ref);
 
+  SetRowVisible(FAI_FINISH_HEIGHT, IsFai(ftype));
   LoadValue(FAI_FINISH_HEIGHT, fai_start_finish);
 
   LoadValueEnum(TASK_TYPE, ftype);
@@ -175,6 +192,7 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
   if (newtype != ordered_task->GetFactoryType()) {
     ReadValues();
     ordered_task->SetFactory(newtype);
+    ordered_task->FillMatPoints(way_points);
     *task_changed =true;
     RefreshView();
   }

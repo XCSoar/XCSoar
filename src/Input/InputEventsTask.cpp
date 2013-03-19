@@ -41,7 +41,9 @@ Copyright_License {
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskFile.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -66,15 +68,16 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
     return;
 
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  TaskAdvance &advance = task_manager->SetTaskAdvance();
 
   if (StringIsEqual(misc, _T("on"))) {
-    task_manager->GetTaskAdvance().SetArmed(true);
+    advance.SetArmed(true);
   } else if (StringIsEqual(misc, _T("off"))) {
-    task_manager->GetTaskAdvance().SetArmed(false);
+    advance.SetArmed(false);
   } else if (StringIsEqual(misc, _T("toggle"))) {
-    task_manager->GetTaskAdvance().ToggleArmed();
+    advance.ToggleArmed();
   } else if (StringIsEqual(misc, _T("show"))) {
-    switch (task_manager->GetTaskAdvance().GetState()) {
+    switch (advance.GetState()) {
     case TaskAdvance::MANUAL:
       Message::AddMessage(_("Advance manually"));
       break;
@@ -286,6 +289,8 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
         task->CheckDuplicateWaypoints(way_points);
         way_points.Optimise();
       }
+
+      task->FillMatPoints(way_points);
       protected_task_manager->TaskCommit(*task);
       delete task;
     }

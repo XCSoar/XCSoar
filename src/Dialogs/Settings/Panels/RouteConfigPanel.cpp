@@ -54,7 +54,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
@@ -175,9 +175,9 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
+RouteConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
@@ -199,7 +199,6 @@ RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(TurningReach, ProfileKeys::TurningReach,
                            route_planner.reach_calc_mode);
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

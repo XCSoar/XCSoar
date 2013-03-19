@@ -32,6 +32,5 @@ UIState::Clear()
   auxiliary_enabled = false;
   panel_index = 0;
   panel_name.clear();
-  page_index = 0;
-  special_page.SetUndefined();
+  pages.Clear();
 }

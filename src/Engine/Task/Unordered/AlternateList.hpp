@@ -1,5 +1,4 @@
-/*
-  Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -19,18 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "Replay/NmeaReplayGlue.hpp"
-#include "Interface.hpp"
+#ifndef XCSOAR_ALTERNATE_LIST_HPP
+#define XCSOAR_ALTERNATE_LIST_HPP
 
-NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
-  :NmeaReplay(reader, CommonInterface::GetSystemSettings().devices[0])
-{
-}
+#include "AlternatePoint.hpp"
 
-bool
-NmeaReplayGlue::UpdateTime()
-{
-  return clock.CheckUpdate(1000);
-}
+#include <vector>
+
+/**
+ * Vector of waypoints and solutions used to store candidates.
+ */
+class AlternateList : public std::vector<AlternatePoint> {
+};
+
+#endif

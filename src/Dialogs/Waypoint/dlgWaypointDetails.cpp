@@ -33,6 +33,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Widget/DockWindow.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Canvas.hpp"
@@ -302,12 +303,13 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *sender, Canvas &canvas)
 
 // TODO: support other platforms
 
-class WaypointExternalFileListHandler : public ListControl::Handler {
+class WaypointExternalFileListHandler final
+  : public ListControl::Handler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
 
-  virtual bool CanActivateItem(unsigned index) const {
+  virtual bool CanActivateItem(unsigned index) const override {
     return true;
   }
 

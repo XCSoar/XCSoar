@@ -56,6 +56,7 @@ IsFAITriangleApplicable(TaskFactoryType factory)
     return true;
 
   case TaskFactoryType::FAI_OR:
+  case TaskFactoryType::MAT:
   case TaskFactoryType::AAT:
     return false;
   }

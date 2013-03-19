@@ -36,7 +36,9 @@ enum ControlIndex {
   CirclingZoom,
   MAP_SHIFT_BIAS,
   GliderScreenPosition,
+  AUTO_ZOOM,
   MaxAutoZoomDistance,
+  PAGES_DISTINCT_ZOOM,
 };
 
 static constexpr StaticEnumChoice orientation_list[] = {
@@ -72,7 +74,7 @@ public:
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 
 private:
   /* methods from DataFieldListener */
@@ -105,6 +107,7 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
+  const PageSettings &page_settings = CommonInterface::GetUISettings().pages;
 
   AddEnum(_("Cruise orientation"),
           _("Determines how the screen is rotated with the glider"),
@@ -135,21 +138,32 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.glider_screen_position);
   SetExpertRow(GliderScreenPosition);
 
+  AddBoolean(_("Auto zoom"),
+             _("Automatically zoom in when approaching a waypoint to keep the waypoint at a reasonable screen distance."),
+             settings_map.auto_zoom_enabled);
+  SetExpertRow(AUTO_ZOOM);
+
   AddFloat(_("Max. auto zoom distance"),
            _("The upper limit for auto zoom distance."),
            _T("%.0f %s"), _T("%.0f"), fixed(20), fixed(250), fixed(10), false,
            UnitGroup::DISTANCE, settings_map.max_auto_zoom_distance);
   SetExpertRow(MaxAutoZoomDistance);
 
+  AddBoolean(_("Distinct page zoom"),
+             _("Maintain one map zoom level on each page."),
+             page_settings.distinct_zoom);
+  SetExpertRow(PAGES_DISTINCT_ZOOM);
+
   UpdateVisibilities();
 }
 
 bool
-MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
+MapDisplayConfigPanel::Save(bool &_changed)
 {
   bool changed = false;
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
+  PageSettings &page_settings = CommonInterface::SetUISettings().pages;
 
   changed |= SaveValueEnum(OrientationCruise, ProfileKeys::OrientationCruise,
                            settings_map.cruise_orientation);
@@ -166,9 +180,15 @@ MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
   changed |= SaveValue(CirclingZoom, ProfileKeys::CircleZoom,
                        settings_map.circle_zoom_enabled);
 
+  changed |= SaveValue(AUTO_ZOOM, ProfileKeys::AutoZoom,
+                       settings_map.auto_zoom_enabled);
+
   changed |= SaveValue(MaxAutoZoomDistance, UnitGroup::DISTANCE,
                        ProfileKeys::MaxAutoZoomDistance,
                        settings_map.max_auto_zoom_distance);
+
+  changed |= SaveValue(PAGES_DISTINCT_ZOOM, ProfileKeys::PagesDistinctZoom,
+                       page_settings.distinct_zoom);
 
   _changed |= changed;
 

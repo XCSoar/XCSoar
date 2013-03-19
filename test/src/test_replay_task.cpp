@@ -3,6 +3,8 @@
 #include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "NMEA/FlyingState.hpp"
 #include "OS/PathName.hpp"
@@ -119,7 +121,7 @@ test_replay()
   NMEAInfo basic;
   basic.Reset();
 
-  while (sim.Update(basic, fixed(1)) && !sim.started) {
+  while (sim.Update(basic) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -137,7 +139,7 @@ test_replay()
   FlyingState flying_state;
   flying_state.Reset();
 
-  while (sim.Update(basic, fixed(1))) {
+  while (sim.Update(basic)) {
     if (sim.state.time>time_last) {
 
       n_samples++;
@@ -150,7 +152,7 @@ test_replay()
       task_manager.Update(sim.state, state_last);
       task_manager.UpdateIdle(sim.state);
       task_manager.UpdateAutoMC(sim.state, fixed(0));
-      task_manager.GetTaskAdvance().SetArmed(true);
+      task_manager.SetTaskAdvance().SetArmed(true);
 
       state_last = sim.state;
 

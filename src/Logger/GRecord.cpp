@@ -31,15 +31,23 @@
 #include <tchar.h>
 #include <string.h>
 
+/**
+ * Security theater.
+ */
+static constexpr MD5::State g_key[4] = {
+  { 0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76 },
+  { 0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a },
+  { 0x67452301,0xefcdab89,0x98badcfe,0x10325476 },
+  { 0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee },
+};
+
 void
 GRecord::Initialize()
 {
   ignore_comma = true;
 
-  // key #1 used w/ Vali 1.0.0
-  // key #2 used w/ Vali 1.0.2
-  // OLC uses key #2 since 9/1/2008
-  return Initialize(2);
+  for (unsigned i = 0; i < 4; ++i)
+    md5[i].Initialise(g_key[i]);
 }
 
 bool
@@ -93,39 +101,6 @@ GRecord::GetDigest(char *output) const
 {
   for (int i = 0; i <= 3; i++, output += MD5::DIGEST_LENGTH)
     md5[i].GetDigest(output);
-}
-
-void
-GRecord::Initialize(int key_id)
-{
-  // 4 different 512 bit keys
-  switch (key_id)
-  {
-  case 2:
-    // key 2
-    md5[0].InitKey(0x1C80A301,0x9EB30b89,0x39CB2Afe,0x0D0FEA76);
-    md5[1].InitKey(0x48327203,0x3948ebea,0x9a9b9c9e,0xb3bed89a);
-    md5[2].InitKey(0x67452301,0xefcdab89,0x98badcfe,0x10325476);
-    md5[3].InitKey(0xc8e899e8,0x9321c28a,0x438eba12,0x8cbe0aee);
-    break;
-
-  case 3:
-    // key 3
-    md5[0].InitKey(0x7894abde,0x9cb4e90a,0x0bc8f0ea,0x03a9e01a);
-    md5[1].InitKey(0x3c4a4c93,0x9cbf7ae3,0xa9bcd0ea,0x9a8c2aaa);
-    md5[2].InitKey(0x3c9ae1f1,0x9fe02a1f,0x3fc9a497,0x93cad3ef);
-    md5[3].InitKey(0x41a0c8e8,0xf0e37acf,0xd8bcabe2,0x9bed015a);
-    break;
-
-  case 1:
-  default:
-    // key 1
-    md5[0].InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
-    md5[1].InitKey(0x48327203, 0x3948ebea, 0x9a9b9c9e, 0xb3bed89a);
-    md5[2].InitKey(0x67452301, 0xefcdab89,  0x98badcfe, 0x10325476);
-    md5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
-    break;
-  }
 }
 
 bool

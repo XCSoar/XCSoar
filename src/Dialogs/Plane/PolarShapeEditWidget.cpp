@@ -206,7 +206,7 @@ PolarShapeEditWidget::Unprepare()
 }
 
 bool
-PolarShapeEditWidget::Save(bool &_changed, bool &require_restart)
+PolarShapeEditWidget::Save(bool &_changed)
 {
   bool changed = false;
 

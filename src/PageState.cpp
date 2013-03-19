@@ -21,22 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef IGC_REPLAY_GLUE_HPP
-#define IGC_REPLAY_GLUE_HPP
+#include "PageState.hpp"
 
-#include "Replay/IgcReplay.hpp"
-#include "Time/PeriodClock.hpp"
-
-class IgcReplayGlue: 
-  public IgcReplay
+void
+PagesState::Clear()
 {
-  PeriodClock clock;
+  current_index = 0;
+  special_page.SetUndefined();
 
-public:
-  IgcReplayGlue(NLineReader *_reader):IgcReplay(_reader) {}
-
-protected:
-  virtual bool UpdateTime(fixed time_scale) override;
-};
-
-#endif
+  for (auto &p : pages)
+    p.Clear();
+}

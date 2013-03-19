@@ -159,10 +159,9 @@ TwoWidgets::Unprepare()
 }
 
 bool
-TwoWidgets::Save(bool &changed, bool &require_restart)
+TwoWidgets::Save(bool &changed)
 {
-  return first->Save(changed, require_restart) &&
-    second->Save(changed, require_restart);
+  return first->Save(changed) && second->Save(changed);
 }
 
 bool

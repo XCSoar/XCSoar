@@ -40,6 +40,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskStore.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "LocalPath.hpp"
@@ -303,6 +304,8 @@ TaskManagerDialog::Commit()
       task->CheckDuplicateWaypoints(way_points);
       way_points.Optimise();
     }
+
+    task->FillMatPoints(way_points);
 
     protected_task_manager->TaskCommit(*task);
     protected_task_manager->TaskSaveDefault();

@@ -48,7 +48,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -107,9 +107,9 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
+SafetyFactorsConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
@@ -148,7 +148,6 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

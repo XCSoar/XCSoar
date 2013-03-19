@@ -29,6 +29,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Route/ReachResult.hpp"
 
 #include <windef.h> // for MAX_PATH
@@ -56,7 +57,7 @@ const OrderedTaskBehaviour
 ProtectedTaskManager::GetOrderedTaskBehaviour() const
 {
   Lease lease(*this);
-  return lease->GetOrderedTaskBehaviour();
+  return lease->GetOrderedTask().GetOrderedTaskBehaviour();
 }
 
 const Waypoint* 
@@ -88,8 +89,9 @@ void
 ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 {
   ExclusiveLease lease(*this);
+  TaskAdvance &advance = lease->SetTaskAdvance();
 
-  switch (lease->GetTaskAdvance().GetState()) {
+  switch (advance.GetState()) {
   case TaskAdvance::MANUAL:
   case TaskAdvance::AUTO:
     lease->IncrementActiveTaskPoint(offset);
@@ -97,7 +99,7 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
     if (offset>0) {
-      lease->GetTaskAdvance().SetArmed(true);
+      advance.SetArmed(true);
     } else {
       lease->IncrementActiveTaskPoint(offset);
     }
@@ -107,7 +109,7 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
     if (offset>0) {
       lease->IncrementActiveTaskPoint(offset);
     } else {
-      lease->GetTaskAdvance().SetArmed(false);
+      advance.SetArmed(false);
     }
     break;
   }
@@ -124,7 +126,7 @@ AircraftState
 ProtectedTaskManager::GetStartState() const
 {
   Lease lease(*this);
-  return lease->GetStartState();
+  return lease->GetOrderedTask().GetStartState();
 }
 
 fixed 

@@ -413,9 +413,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
-	$(SRC)/Replay/IgcReplayGlue.cpp \
 	$(SRC)/Replay/NmeaReplay.cpp \
-	$(SRC)/Replay/NmeaReplayGlue.cpp \
 	$(SRC)/Replay/DemoReplay.cpp \
 	$(SRC)/Replay/DemoReplayGlue.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
@@ -524,6 +522,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputParser.cpp \
 	$(SRC)/Input/TaskEventObserver.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(SRC)/PageState.cpp \
 	$(SRC)/PageActions.cpp \
 	$(SRC)/StatusMessage.cpp \
 	$(SRC)/PopupMessage.cpp \

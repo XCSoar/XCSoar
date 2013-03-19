@@ -48,8 +48,22 @@ public:
   PeriodClock():last(0) {}
 
 protected:
-  static Stamp get_now() {
+  static Stamp GetNow() {
     return MonotonicClockMS();
+  }
+
+  constexpr int Elapsed(Stamp now) const {
+    return last == 0
+      ? -1
+      : now - last;
+  }
+
+  constexpr bool Check(Stamp now, unsigned duration) const {
+    return now >= last + duration;
+  }
+
+  void Update(Stamp now) {
+    last = now;
   }
 
 public:
@@ -69,10 +83,17 @@ public:
    * update().  Returns -1 if update() was never called.
    */
   int Elapsed() const {
-    if (last == 0)
-      return -1;
+    return Elapsed(GetNow());
+  }
 
-    return get_now() - last;
+  /**
+   * Combines a call to Elapsed() and Update().
+   */
+  int ElapsedUpdate() {
+    const auto now = GetNow();
+    int result = Elapsed(now);
+    Update(now);
+    return result;
   }
 
   /**
@@ -82,14 +103,14 @@ public:
    * @param duration the duration in milliseconds
    */
   bool Check(unsigned duration) const {
-    return get_now() >= last + duration;
+    return Check(GetNow(), duration);
   }
 
   /**
    * Updates the time stamp, setting it to the current clock.
    */
   void Update() {
-    last = get_now();
+    Update(GetNow());
   }
 
   /**
@@ -97,8 +118,7 @@ public:
    * specified offset.
    */
   void UpdateWithOffset(int offset) {
-    Update();
-    last += offset;
+    Update(GetNow() + offset);
   }
 
   /**
@@ -108,9 +128,9 @@ public:
    * @param duration the duration in milliseconds
    */
   bool CheckUpdate(unsigned duration) {
-    Stamp now = get_now();
-    if (now >= last + duration) {
-      last = now;
+    Stamp now = GetNow();
+    if (Check(now, duration)) {
+      Update(now);
       return true;
     } else
       return false;
@@ -123,9 +143,9 @@ public:
    * @param duration the duration in milliseconds
    */
   bool CheckAlwaysUpdate(unsigned duration) {
-    Stamp now = get_now();
-    bool ret = now > last + duration;
-    last = now;
+    Stamp now = GetNow();
+    bool ret = Check(now, duration);
+    Update(now);
     return ret;
   }
 };

@@ -73,7 +73,8 @@ HasDetails(const MapItem &item)
   return false;
 }
 
-class MapItemListWidget : public ListWidget, private ActionListener {
+class MapItemListWidget final
+  : public ListWidget, private ActionListener {
   enum Buttons {
     SETTINGS,
     GOTO,
@@ -116,20 +117,20 @@ protected:
 
 public:
   /* virtual methods from class Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare() {
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override {
     DeleteWindow();
   }
 
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx);
+                           unsigned idx) override;
 
-  virtual void OnCursorMoved(unsigned index) {
+  virtual void OnCursorMoved(unsigned index) override {
     UpdateButtons();
   }
 
-  virtual bool CanActivateItem(unsigned index) const {
+  virtual bool CanActivateItem(unsigned index) const override {
     return HasDetails(*list[index]);
   }
 
@@ -142,10 +143,10 @@ public:
       item.type == MapItem::WAYPOINT;
   }
 
-  virtual void OnActivateItem(unsigned index);
+  virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

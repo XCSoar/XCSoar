@@ -40,7 +40,8 @@ enum class TaskValidationErrorType : uint8_t {
   TURNPOINTS_NOT_UNIQUE,
   INVALID_FAI_TRIANGLE_GEOMETRY,
   EMPTY_TASK,
-  NON_FAI_OZS
+  NON_FAI_OZS,
+  NON_MAT_OZS,
 };
 
 /** Vector of errors returned by validation routine */

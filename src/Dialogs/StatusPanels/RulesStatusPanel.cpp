@@ -31,6 +31,7 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 enum Controls {

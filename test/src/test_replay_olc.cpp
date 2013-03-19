@@ -177,7 +177,7 @@ test_replay(const Contest olc_type,
   MoreData basic;
   basic.Reset();
 
-  while (sim.Update(basic, fixed(1)) && !sim.started) {
+  while (sim.Update(basic) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -198,7 +198,7 @@ test_replay(const Contest olc_type,
 
   DerivedInfo calculated;
 
-  while (sim.Update(basic, fixed(1))) {
+  while (sim.Update(basic)) {
     if (sim.state.time>time_last) {
 
       n_samples++;

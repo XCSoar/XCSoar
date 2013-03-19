@@ -26,14 +26,12 @@
 #include "IGC/IGCFix.hpp"
 #include "IO/LineReader.hpp"
 #include "NMEA/Info.hpp"
+#include "Units/System.hpp"
 
 IgcReplay::IgcReplay(NLineReader *_reader)
   :AbstractReplay(),
-   cli(fixed(0.98)),
-   reader(_reader),
-   t_simulation(fixed(0))
+   reader(_reader)
 {
-  cli.Reset();
 }
 
 IgcReplay::~IgcReplay()
@@ -61,59 +59,77 @@ IgcReplay::ReadPoint(IGCFix &fix)
 }
 
 bool
-IgcReplay::UpdateTime(fixed time_scale)
+IgcReplay::Update(NMEAInfo &basic)
 {
-  const fixed t_simulation_last = t_simulation;
+  IGCFix fix;
 
-  t_simulation += fixed(1) * time_scale;
-
-  return (t_simulation > t_simulation_last);
-}
-
-bool
-IgcReplay::Update(NMEAInfo &data, fixed time_scale)
-{
-  if (positive(t_simulation) && !UpdateTime(time_scale))
-    return true;
-
-  // if need a new point
-  while (cli.NeedData(t_simulation)) {
-    IGCFix fix;
+  while (true) {
     if (!ReadPoint(fix))
       return false;
 
-    if (fix.pressure_altitude == 0 && fix.gps_altitude > 0)
-      /* no pressure altitude was recorded - fall back to GPS
-         altitude */
-      fix.pressure_altitude = fix.gps_altitude;
-
     if (fix.time.Plausible())
-      cli.Update(fixed(fix.time.GetSecondOfDay()), fix.location,
-                 fixed(fix.gps_altitude), fixed(fix.pressure_altitude));
+      break;
   }
 
-  if (!positive(t_simulation))
-    t_simulation = cli.GetMaxTime();
+  basic.clock = fixed(fix.time.GetSecondOfDay());
+  basic.alive.Update(basic.clock);
+  basic.ProvideTime(basic.clock);
+  basic.location = fix.location;
+  basic.location_available.Update(basic.clock);
 
-  const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
-  const GeoVector v = cli.GetVector(t_simulation);
+  if (fix.gps_altitude != 0) {
+    basic.gps_altitude = fixed(fix.gps_altitude);
+    basic.gps_altitude_available.Update(basic.clock);
+  } else
+    basic.gps_altitude_available.Clear();
 
-  data.clock = t_simulation;
-  data.alive.Update(data.clock);
-  data.ProvideTime(t_simulation);
-  data.location = r.location;
-  data.location_available.Update(data.clock);
-  data.ground_speed = v.distance;
-  data.ground_speed_available.Update(data.clock);
-  data.track = v.bearing;
-  data.track_available.Update(data.clock);
-  data.gps_altitude = r.gps_altitude;
-  data.gps_altitude_available.Update(data.clock);
-  data.ProvidePressureAltitude(r.baro_altitude);
-  data.ProvideBaroAltitudeTrue(r.baro_altitude);
-  data.gps.real = false;
-  data.gps.replay = true;
-  data.gps.simulator = false;
+  if (fix.pressure_altitude != 0) {
+    basic.ProvidePressureAltitude(fixed(fix.pressure_altitude));
+    basic.ProvideBaroAltitudeTrue(fixed(fix.pressure_altitude));
+  } else {
+    basic.pressure_altitude_available.Clear();
+    basic.baro_altitude_available.Clear();
+  }
+
+  if (fix.enl >= 0) {
+    basic.engine_noise_level = fix.enl;
+    basic.engine_noise_level_available.Update(basic.clock);
+  } else
+    basic.engine_noise_level_available.Clear();
+
+  if (fix.trt >= 0) {
+    basic.track = Angle::Degrees(fixed(fix.trt));
+    basic.track_available.Update(basic.clock);
+  } else
+    basic.track_available.Clear();
+
+  if (fix.gsp >= 0) {
+    basic.ground_speed = Units::ToSysUnit(fixed(fix.gsp),
+                                          Unit::KILOMETER_PER_HOUR);
+    basic.ground_speed_available.Update(basic.clock);
+  } else
+    basic.ground_speed_available.Clear();
+
+  if (fix.ias >= 0) {
+    fixed ias = Units::ToSysUnit(fixed(fix.ias), Unit::KILOMETER_PER_HOUR);
+    if (fix.tas >= 0)
+      basic.ProvideBothAirspeeds(ias,
+                                 Units::ToSysUnit(fixed(fix.tas),
+                                                  Unit::KILOMETER_PER_HOUR));
+    else
+      basic.ProvideIndicatedAirspeedWithAltitude(ias, basic.pressure_altitude);
+  } else if (fix.tas >= 0)
+    basic.ProvideTrueAirspeed(Units::ToSysUnit(fixed(fix.tas),
+                                               Unit::KILOMETER_PER_HOUR));
+
+  if (fix.siu >= 0) {
+    basic.gps.satellites_used = fix.siu;
+    basic.gps.satellites_used_available.Update(basic.clock);
+  }
+
+  basic.gps.real = false;
+  basic.gps.replay = true;
+  basic.gps.simulator = false;
 
   return true;
 }

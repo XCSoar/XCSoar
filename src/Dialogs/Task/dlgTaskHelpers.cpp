@@ -29,9 +29,12 @@ Copyright_License {
 #include "Task/TypeStrings.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/Shapes/FAITriangleTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Points/Type.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
@@ -200,6 +203,12 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
               Units::GetDistanceName());
     return;
 
+  case ObservationZonePoint::MAT_CYLINDER:
+    _stprintf(buffer,_T("%.1f%s"),
+              (double)Units::ToUserDistance(((const MatCylinderZone &)ozp).GetRadius()),
+              Units::GetDistanceName());
+    return;
+
   case ObservationZonePoint::KEYHOLE:
     _tcscpy(buffer, _("DAeC Keyhole"));
     return;
@@ -283,6 +292,9 @@ TaskValidationError(TaskValidationErrorType type)
     return _("Empty task.\n");
   case TaskValidationErrorType::NON_FAI_OZS:
     return _("non-FAI turn points");
+
+  case TaskValidationErrorType::NON_MAT_OZS:
+    return _("non-MAT turn points");
   }
 
   gcc_unreachable();

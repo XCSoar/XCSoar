@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -21,18 +21,14 @@
 }
 */
 
-#include "Replay/IgcReplayGlue.hpp"
+#ifndef XCSOAR_ABORT_INTERSECTION_TEST_HPP
+#define XCSOAR_ABORT_INTERSECTION_TEST_HPP
 
-bool
-IgcReplayGlue::UpdateTime(fixed time_scale)
-{
-  // Allow for poor time slicing, we never get called more
-  // than 4 times per second, so this will yield 1 second updates
-  if (!clock.Check(760))
-    return false;
+struct AGeoPoint;
 
-  t_simulation += time_scale * std::max(clock.Elapsed(), 0) / 1000;
-  clock.Update();
+class AbortIntersectionTest {
+public:
+  virtual bool Intersects(const AGeoPoint &destination) = 0;
+};
 
-  return true;
-}
+#endif

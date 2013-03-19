@@ -66,7 +66,7 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc)
     override;
   virtual void Unprepare() override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual bool Click() override;
   virtual void ReClick() override;
   virtual void Show(const PixelRect &rc) override;

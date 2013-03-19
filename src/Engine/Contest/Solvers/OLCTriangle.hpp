@@ -25,6 +25,8 @@
 
 #include "ContestDijkstra.hpp"
 
+#include <unordered_set>
+
 /**
  * Specialisation of OLC Dijkstra for OLC Triangle (triangle) rules
  */
@@ -45,6 +47,36 @@ private:
   bool is_closed;
   bool is_complete;
   unsigned first_tp;
+  unsigned closing; ///< Stores the last found trace-closing start point
+
+  struct ClosingPair {
+    unsigned first;
+    unsigned last;
+
+    ClosingPair(unsigned _first, unsigned _last)
+      :first(_first), last(_last) {}
+  };
+
+  struct Hash {
+    size_t operator()(ClosingPair p) const {
+      return size_t((p.first << 16) | (p.last & 0xffff));
+    }
+  };
+
+  struct EqualClosing {
+    bool operator()(ClosingPair a, ClosingPair b) const {
+      return (a.first >= b.first && a.last <= b.last);
+    }
+  };
+
+  struct EqualNonClosing {
+    bool operator()(ClosingPair a, ClosingPair b) const {
+      return (a.first <= b.first && a.last >= b.last);
+    }
+  };
+
+  std::unordered_set<ClosingPair, Hash, EqualClosing> closing_pairs;
+  std::unordered_set<ClosingPair, Hash, EqualNonClosing> non_closing_pairs;
 
 protected:
   unsigned best_d;
@@ -56,8 +88,25 @@ protected:
   gcc_pure
   bool IsPathClosed() const;
 
+  /**
+   * This method searches for a pair of points which close the path between
+   * tp3 (last_index) and tp1 (first_index), accounting for the fai rules of
+   * max distance and max height difference.
+   *
+   * It's essentially brute-force, but using the last found closing point as
+   * start value and searching alternating (+ and -) around this point yields
+   * a acceptable speed.
+   */
+  ClosingPair ClosingPoint(unsigned first_index, unsigned last_index,
+                           const int min_altitude, unsigned max_range);
+
+  /* adds tp2 */
   void AddTurn1Edges(const ScanTaskPoint origin);
+
+  /* adds tp3 if triangle rules are satisfied */
   void AddTurn2Edges(const ScanTaskPoint origin);
+
+  /* adds start and final (two stages) if they satisfy the closure rules */
   void AddFinishEdges(const ScanTaskPoint origin);
 
 public:
@@ -70,11 +119,11 @@ protected:
   virtual void CopySolution(ContestTraceVector &vec) const override;
 
   /* virtual methods from NavDijkstra */
+  virtual void AddStartEdges() override;
   virtual void AddEdges(ScanTaskPoint curNode) override;
 
   /* virtual methods from ContestDijkstra */
   virtual void StartSearch() override;
-  virtual void AddStartEdges() override;
   virtual ContestResult CalculateResult(const ContestTraceVector &solution) const override;
 };
 

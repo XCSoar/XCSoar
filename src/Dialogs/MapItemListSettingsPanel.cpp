@@ -49,7 +49,7 @@ MapItemListSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-MapItemListSettingsPanel::Save(bool &changed, bool &_require_restart)
+MapItemListSettingsPanel::Save(bool &changed)
 {
   MapSettings &settings = CommonInterface::SetMapSettings();
 

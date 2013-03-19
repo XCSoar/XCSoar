@@ -89,6 +89,8 @@ Profile::Load(PageSettings &settings)
     ::Load(settings.pages[i], i);
 
   settings.Compress();
+
+  Get(ProfileKeys::PagesDistinctZoom, settings.distinct_zoom);
 }
 
 void

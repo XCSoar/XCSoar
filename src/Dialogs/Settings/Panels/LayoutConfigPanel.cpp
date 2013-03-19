@@ -33,6 +33,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "UtilsSettings.hpp"
 
 enum ControlIndex {
   DisplayOrientation,
@@ -155,7 +156,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -207,9 +208,9 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
+LayoutConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
@@ -268,7 +269,6 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
     CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

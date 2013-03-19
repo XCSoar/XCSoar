@@ -25,7 +25,10 @@
 
 #include "Thread/Guard.hpp"
 #include "Task/TaskManager.hpp"
+#include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
 #include "Compiler.h"
+
+#include <tchar.h>
 
 class GlidePolar;
 class RoutePlannerGlue;

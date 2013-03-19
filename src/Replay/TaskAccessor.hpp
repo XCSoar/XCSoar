@@ -24,6 +24,7 @@
 #define XCSOAR_TASK_ACCESSOR_HPP
 
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 class TaskAccessor {

@@ -29,6 +29,7 @@
 #include "Dialogs/Message.hpp"
 #include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Asset.hpp"
 #include "ComputerSettings.hpp"
 #include "IGCFileCleanup.hpp"

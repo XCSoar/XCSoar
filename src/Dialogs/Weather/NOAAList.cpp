@@ -54,7 +54,8 @@ struct NOAAListItem
   }
 };
 
-class NOAAListWidget : public ListWidget, private ActionListener {
+class NOAAListWidget final
+  : public ListWidget, private ActionListener {
   enum Buttons {
     DETAILS,
     ADD,
@@ -98,7 +99,7 @@ protected:
 
 private:
   /* virtual methods from class ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

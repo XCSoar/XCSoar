@@ -93,7 +93,8 @@ public:
 
   int ShowModal();
 
-  virtual void OnAction(int id);
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
 
 private:
   void AutoSize();

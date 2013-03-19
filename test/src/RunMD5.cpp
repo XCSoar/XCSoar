@@ -40,7 +40,7 @@ main(int argc, char **argv)
   }
 
   MD5 md5;
-  md5.InitKey();
+  md5.Initialise();
 
   while (!feof(file)) {
     int ch = fgetc(file);

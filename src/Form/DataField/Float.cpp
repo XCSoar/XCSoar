@@ -36,12 +36,6 @@ DataFieldFloat::GetAsInteger() const
   return iround(mValue);
 }
 
-fixed
-DataFieldFloat::GetAsFixed() const
-{
-  return mValue;
-}
-
 const TCHAR *
 DataFieldFloat::GetAsString() const
 {
@@ -54,30 +48,6 @@ DataFieldFloat::GetAsDisplayString() const
 {
   _stprintf(mOutBuf, display_format, (double)mValue, unit.c_str());
   return mOutBuf;
-}
-
-fixed
-DataFieldFloat::SetMin(fixed Value)
-{
-  fixed res = mMin;
-  mMin = Value;
-  return res;
-}
-
-fixed
-DataFieldFloat::SetMax(fixed Value)
-{
-  fixed res = mMax;
-  mMax = Value;
-  return res;
-}
-
-fixed
-DataFieldFloat::SetStep(fixed Value)
-{
-  fixed res = mStep;
-  mStep = Value;
-  return res;
 }
 
 void

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Screen/Layout.hpp"

@@ -165,6 +165,32 @@ struct DerivedInfo:
    */
   SpeedVector wind;
 
+  /**
+   * Where did we obtain the effective wind vector?
+   */
+  enum class WindSource : uint8_t {
+    /**
+     * No wind vector available.  This should be kept in sync with
+     * #wind_available.
+     */
+    NONE,
+
+    /**
+     * The user has entered a wind vector manually.
+     */
+    MANUAL,
+
+    /**
+     * XCSoar has calculated the wind vector automatically.
+     */
+    AUTO,
+
+    /**
+     * The wind vector was received from an external device.
+     */
+    EXTERNAL,
+  } wind_source;
+
   Validity head_wind_available;
   fixed head_wind;
 

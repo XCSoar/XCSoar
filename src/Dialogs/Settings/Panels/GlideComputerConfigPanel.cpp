@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "UtilsSettings.hpp"
 
 enum ControlIndex {
   AutoMcMode,
@@ -46,7 +47,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -115,9 +116,9 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
+GlideComputerConfigPanel::Save(bool &_changed)
 {
-  bool changed = false, require_restart = false;
+  bool changed = false;
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
@@ -141,7 +142,6 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
                        task_behaviour.glide.predict_wind_drift);
 
   _changed |= changed;
-  _require_restart |= require_restart;
 
   return true;
 }

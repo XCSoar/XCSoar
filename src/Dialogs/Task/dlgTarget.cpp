@@ -39,6 +39,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Units/Units.hpp"
 #include "Asset.hpp"
@@ -266,7 +267,7 @@ RefreshCalculator()
       is_locked = ap->IsTargetLocked();
     }
 
-    aat_time = lease->GetOrderedTaskBehaviour().aat_min_time;
+    aat_time = task.GetOrderedTaskBehaviour().aat_min_time;
   }
 
   if (optimized_checkbox) {

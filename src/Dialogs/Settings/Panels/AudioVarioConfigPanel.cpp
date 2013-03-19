@@ -55,7 +55,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 void
@@ -125,7 +125,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-AudioVarioConfigPanel::Save(bool &changed, bool &require_restart)
+AudioVarioConfigPanel::Save(bool &changed)
 {
   if (!AudioVarioGlue::HaveAudioVario())
     return true;

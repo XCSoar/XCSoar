@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "TaskEventObserver.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Unordered/AlternateList.hpp"
 #include "InputQueue.hpp"
 
 static unsigned

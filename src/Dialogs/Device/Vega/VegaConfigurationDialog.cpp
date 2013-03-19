@@ -144,8 +144,7 @@ OnPrevClicked()
 static void
 OnCloseClicked()
 {
-  bool require_restart = false;
-  if (!tabbed->Save(changed, require_restart))
+  if (!tabbed->Save(changed))
     return;
 
   // make sure changes are sent to device
@@ -155,8 +154,8 @@ OnCloseClicked()
 static void
 OnSaveClicked()
 {
-  bool _changed = false, require_restart = false;
-  if (!tabbed->Save(_changed, require_restart))
+  bool _changed = false;
+  if (!tabbed->Save(_changed))
     return;
 
   changed |= _changed;
@@ -172,8 +171,7 @@ static void
 OnDemoClicked()
 {
   // retrieve changes from form
-  bool require_restart = false;
-  if (!tabbed->Save(changed, require_restart))
+  if (!tabbed->Save(changed))
     return;
 
   dlgVegaDemoShowModal();

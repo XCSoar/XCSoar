@@ -28,6 +28,7 @@ Copyright_License {
 #include "FAIORTaskFactory.hpp"
 #include "FAIGoalTaskFactory.hpp"
 #include "AATTaskFactory.hpp"
+#include "MatTaskFactory.hpp"
 #include "MixedTaskFactory.hpp"
 #include "TouringTaskFactory.hpp"
 
@@ -55,6 +56,9 @@ CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
 
   case TaskFactoryType::AAT:
     return new AATTaskFactory(task, task_behaviour);
+
+  case TaskFactoryType::MAT:
+    return new MatTaskFactory(task, task_behaviour);
 
   case TaskFactoryType::MIXED:
     return new MixedTaskFactory(task, task_behaviour);

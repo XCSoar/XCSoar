@@ -43,7 +43,7 @@ public:
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
   virtual void OnAction(int id) override;
 };
 
@@ -89,7 +89,7 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 }
 
 bool
-InfoBoxesConfigPanel::Save(bool &_changed, bool &_require_restart)
+InfoBoxesConfigPanel::Save(bool &_changed)
 {
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   SaveValue(InfoBoxSettings::MAX_PANELS, ProfileKeys::UseFinalGlideDisplayMode,

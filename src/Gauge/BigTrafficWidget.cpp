@@ -280,7 +280,7 @@ TrafficWidget::Show(const PixelRect &rc)
 
 #ifndef GNAV
   /* show the "Close" button only if this is a "special" page */
-  close_button->SetVisible(CommonInterface::GetUIState().special_page.IsDefined());
+  close_button->SetVisible(CommonInterface::GetUIState().pages.special_page.IsDefined());
 #endif
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);

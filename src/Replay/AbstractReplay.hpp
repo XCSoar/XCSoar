@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef ABSTRACT_REPLAY_HPP
 #define ABSTRACT_REPLAY_HPP
 
-#include "Math/fixed.hpp"
-
 struct NMEAInfo;
 
 class AbstractReplay 
@@ -33,7 +31,7 @@ class AbstractReplay
 public:
   virtual ~AbstractReplay() {}
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) = 0;
+  virtual bool Update(NMEAInfo &data) = 0;
 };
 
 #endif

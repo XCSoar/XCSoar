@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "AbstractReplay.hpp"
-#include "Replay/CatmullRomInterpolator.hpp"
 
 class NLineReader;
 struct GeoPoint;
@@ -35,22 +34,15 @@ struct IGCFix;
 
 class IgcReplay: public AbstractReplay
 {
-  CatmullRomInterpolator cli;
-
   NLineReader *reader;
-
-protected:
-  fixed t_simulation;
 
 public:
   IgcReplay(NLineReader *reader);
   virtual ~IgcReplay();
 
-  virtual bool Update(NMEAInfo &data, fixed time_scale) override;
+  virtual bool Update(NMEAInfo &data) override;
 
 protected:
-  virtual bool UpdateTime(fixed time_scale);
-
   bool ScanBuffer(const char *buffer, IGCFix &fix);
 
   bool ReadPoint(IGCFix &fix);

@@ -44,7 +44,7 @@ public:
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
-  virtual bool Save(bool &changed, bool &require_restart) override;
+  virtual bool Save(bool &changed) override;
 };
 
 #endif

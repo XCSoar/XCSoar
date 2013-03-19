@@ -24,6 +24,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Interface.hpp"
@@ -212,6 +213,14 @@ MapTaskManager::InsertInTask(const Waypoint &waypoint)
   return result;
 }
 
+MapTaskManager::TaskEditResult
+MapTaskManager::InsertInMatProForma(OrderedTask &task,
+                                    const Waypoint &waypoint)
+{
+  assert(task.CheckTask());
+  return InsertInTask(&task, waypoint);
+}
+
 static MapTaskManager::TaskEditResult
 ReplaceInTask(OrderedTask *task, const Waypoint &waypoint)
 {
@@ -243,6 +252,40 @@ MapTaskManager::ReplaceInTask(const Waypoint &waypoint)
 
   delete task;
   return result;
+}
+
+static int
+GetUnachievedIndexInTask(const OrderedTask &task,
+                         const Waypoint &waypoint)
+{
+  if (task.TaskSize() < 2)
+    return -1;
+
+  unsigned last_achieved_index = task.GetLastIntermediateAchieved();
+
+  int TPindex = -1;
+  for (unsigned i = task.TaskSize() - 2; i > last_achieved_index; i--) {
+    const OrderedTaskPoint &tp = task.GetPoint(i);
+
+    if (tp.GetWaypoint() == waypoint) {
+      TPindex = i;
+      break;
+    }
+  }
+  return TPindex;
+}
+
+int
+MapTaskManager::GetUnachievedIndexInTask(const Waypoint &waypoint)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+
+  if (task_manager->GetMode() == TaskType::ORDERED) {
+    const OrderedTask &task = task_manager->GetOrderedTask();
+    return GetUnachievedIndexInTask(task, waypoint);
+  }
+  return -1;
 }
 
 static int

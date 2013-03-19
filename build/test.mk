@@ -307,6 +307,8 @@ TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TaskPrinting.cpp \

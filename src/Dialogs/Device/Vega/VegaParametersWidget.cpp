@@ -202,7 +202,7 @@ VegaParametersWidget::Show(const PixelRect &rc)
 }
 
 bool
-VegaParametersWidget::Save(bool &changed_r, bool &require_restart)
+VegaParametersWidget::Save(bool &changed_r)
 {
   bool changed = false;
 

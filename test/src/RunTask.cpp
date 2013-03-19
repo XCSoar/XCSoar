@@ -24,8 +24,10 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Task/TaskFile.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Formatter/TimeFormatter.hpp"
 
@@ -61,6 +63,7 @@ Run(DebugReplay &replay, TaskManager &task_manager)
                                                   last_calculated);
     task_manager.Update(current_as, last_as);
     task_manager.UpdateIdle(current_as);
+    task_manager.SetTaskAdvance().SetArmed(true);
 
     const CommonStats &common_stats = task_manager.GetCommonStats();
     if (common_stats.active_taskpoint_index != active_taskpoint_index) {

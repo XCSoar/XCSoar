@@ -49,7 +49,7 @@ struct Result {
   }
 };
 
-static Trace full_trace(0, Trace::null_time, 256);
+static Trace full_trace(0, Trace::null_time, 1024);
 static Trace sprint_trace(0, 9000, 64);
 
 static CirclingComputer circling_computer;

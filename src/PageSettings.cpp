@@ -103,6 +103,8 @@ PageSettings::SetDefaults()
   std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 
   n_pages = 2;
+
+  distinct_zoom = false;
 }
 
 void

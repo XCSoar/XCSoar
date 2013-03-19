@@ -30,28 +30,75 @@ Copyright_License {
 #include "CrossSection/CrossSectionWidget.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
+#include "UIGlobals.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 namespace PageActions {
+  /**
+   * Call this when we're about to leave the current page.  This
+   * function checks if settings need to be remembered.
+   */
+  static void LeavePage();
+
+  /**
+   * Restore the map zoom afte switching to a configured page.
+   */
+  static void RestoreMapZoom();
+
   /**
    * Loads the layout without updating current page information in
    * #UIState.
    */
-  void LoadLayout(const PageLayout &layout);
+  static void LoadLayout(const PageLayout &layout);
 };
+
+void
+PageActions::LeavePage()
+{
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  if (state.special_page.IsDefined())
+    return;
+
+  PageState &page = state.pages[state.current_index];
+
+  const GlueMapWindow *map = UIGlobals::GetMapIfActive();
+  if (map != nullptr)
+    page.map_scale = map->VisibleProjection().GetMapScale();
+}
+
+void
+PageActions::RestoreMapZoom()
+{
+  const PagesState &state = CommonInterface::SetUIState().pages;
+  if (state.special_page.IsDefined())
+    return;
+
+  const PageState &page = state.pages[state.current_index];
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+
+  if (settings.distinct_zoom && positive(page.map_scale)) {
+    GlueMapWindow *map = UIGlobals::GetMapIfActive();
+    if (map != nullptr) {
+      map->SetMapScale(page.map_scale);
+      map->QuickRedraw();
+    }
+  }
+}
 
 static const PageLayout &
 GetConfiguredLayout()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
-  const UIState &state = CommonInterface::SetUIState();
+  const PagesState &state = CommonInterface::GetUIState().pages;
 
-  return settings.pages[state.page_index];
+  return settings.pages[state.current_index];
 }
 
 const PageLayout &
 PageActions::GetCurrentLayout()
 {
-  const UIState &state = CommonInterface::SetUIState();
+  const PagesState &state = CommonInterface::GetUIState().pages;
 
   return state.special_page.IsDefined()
     ? state.special_page
@@ -69,40 +116,43 @@ unsigned
 PageActions::NextIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
-  const UIState &ui_state = CommonInterface::SetUIState();
+  const PagesState &state = CommonInterface::GetUIState().pages;
 
-  if (ui_state.special_page.IsDefined())
+  if (state.special_page.IsDefined())
     /* if a "special" page is active, any page switch will return to
        the last configured page */
-    return ui_state.page_index;
+    return state.current_index;
 
-  return (ui_state.page_index + 1) % settings.n_pages;
+  return (state.current_index + 1) % settings.n_pages;
 }
 
 
 void
 PageActions::Next()
 {
-  UIState &ui_state = CommonInterface::SetUIState();
+  LeavePage();
 
-  ui_state.page_index = NextIndex();
-  ui_state.special_page.SetUndefined();
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  state.current_index = NextIndex();
+  state.special_page.SetUndefined();
 
   Update();
+  RestoreMapZoom();
 }
 
 unsigned
 PageActions::PrevIndex()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
-  const UIState &ui_state = CommonInterface::SetUIState();
+  const PagesState &state = CommonInterface::GetUIState().pages;
 
-  if (ui_state.special_page.IsDefined())
+  if (state.special_page.IsDefined())
     /* if a "special" page is active, any page switch will return to
        the last configured page */
-    return ui_state.page_index;
+    return state.current_index;
 
-  return (ui_state.page_index + settings.n_pages - 1)
+  return (state.current_index + settings.n_pages - 1)
     % settings.n_pages;
 }
 
@@ -110,12 +160,15 @@ PageActions::PrevIndex()
 void
 PageActions::Prev()
 {
-  UIState &ui_state = CommonInterface::SetUIState();
+  LeavePage();
 
-  ui_state.page_index = PrevIndex();
-  ui_state.special_page.SetUndefined();
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  state.current_index = PrevIndex();
+  state.special_page.SetUndefined();
 
   Update();
+  RestoreMapZoom();
 }
 
 void
@@ -181,8 +234,8 @@ PageActions::LoadLayout(const PageLayout &layout)
 void
 PageActions::OpenLayout(const PageLayout &layout)
 {
-  UIState &ui_state = CommonInterface::SetUIState();
-  ui_state.special_page = layout;
+  PagesState &state = CommonInterface::SetUIState().pages;
+  state.special_page = layout;
 
   LoadLayout(layout);
 }
@@ -190,13 +243,14 @@ PageActions::OpenLayout(const PageLayout &layout)
 void
 PageActions::Restore()
 {
-  PageLayout &special_page = CommonInterface::SetUIState().special_page;
+  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
   if (!special_page.IsDefined())
     return;
 
   special_page.SetUndefined();
 
   LoadLayout(GetConfiguredLayout());
+  RestoreMapZoom();
 }
 
 void

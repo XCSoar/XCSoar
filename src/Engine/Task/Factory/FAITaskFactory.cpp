@@ -134,6 +134,7 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     break;
 
   case TaskPointFactoryType::AAT_CYLINDER:
+  case TaskPointFactoryType::MAT_CYLINDER:
     newtype = TaskPointFactoryType::AST_CYLINDER;
     break;
   }

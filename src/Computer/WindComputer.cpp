@@ -107,25 +107,31 @@ WindComputer::Select(const WindSettings &settings,
     // external wind available
     calculated.wind = basic.external_wind;
     calculated.wind_available = basic.external_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::EXTERNAL;
 
   } else if (settings.manual_wind_available && !settings.IsAutoWindEnabled()) {
     // manual wind only if available and desired
     calculated.wind = settings.manual_wind;
     calculated.wind_available = settings.manual_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::MANUAL;
 
   } else if (calculated.estimated_wind_available.Modified(settings.manual_wind_available)
              && settings.IsAutoWindEnabled()) {
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::AUTO;
 
   } else if (settings.manual_wind_available
              && settings.IsAutoWindEnabled()) {
     // manual wind overrides auto wind if available
     calculated.wind = settings.manual_wind;
     calculated.wind_available = settings.manual_wind_available;
+    calculated.wind_source = DerivedInfo::WindSource::MANUAL;
 
-  } else
+  } else {
     // no wind available
     calculated.wind_available.Clear();
+    calculated.wind_source = DerivedInfo::WindSource::NONE;
+  }
 }

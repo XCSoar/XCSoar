@@ -40,7 +40,8 @@ Copyright_License {
 #include <vector>
 #include <windef.h> /* for MAX_PATH */
 
-class ManageCAI302Widget : public RowFormWidget, private ActionListener {
+class ManageCAI302Widget final
+  : public RowFormWidget, private ActionListener {
   enum Controls {
     Units,
     Waypoints,
@@ -57,11 +58,11 @@ public:
     :RowFormWidget(look), device(_device) {}
 
   /* virtual methods from Widget */
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
 private:
   /* virtual methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) override;
 };
 
 void

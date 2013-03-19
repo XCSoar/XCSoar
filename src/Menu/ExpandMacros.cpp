@@ -35,6 +35,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Device/device.hpp"
 #include "PageActions.hpp"
 #include "Util/StringUtil.hpp"
@@ -221,7 +222,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
 
-      switch (task_manager->GetTaskAdvance().GetState()) {
+      switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_ARMED:
@@ -244,7 +245,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
 
-      switch (task_manager->GetTaskAdvance().GetState()) {
+      switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_DISARMED:
@@ -276,7 +277,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
-    switch (task_manager->GetTaskAdvance().GetState()) {
+    switch (task_manager->GetOrderedTask().GetTaskAdvance().GetState()) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
                       _("Advance\n(manual)"), Size);

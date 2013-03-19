@@ -176,8 +176,7 @@ void
 WidgetDialog::OnAction(int id)
 {
   if (id == mrOK) {
-    bool require_restart;
-    if (!widget.Get()->Save(changed, require_restart))
+    if (!widget.Get()->Save(changed))
       return;
   }
 

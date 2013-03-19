@@ -21,22 +21,46 @@ Copyright_License {
 }
 */
 
-#ifndef NMEA_REPLAY_GLUE_HPP
-#define NMEA_REPLAY_GLUE_HPP
+#ifndef XCSOAR_CALLBACK_WIDGET_HPP
+#define XCSOAR_CALLBACK_WIDGET_HPP
 
-#include "Replay/NmeaReplay.hpp"
-#include "Time/PeriodClock.hpp"
+#include "Screen/Features.hpp"
 
-class NmeaReplayGlue:
-  public NmeaReplay
+#ifdef HAVE_CLIPPING
+#include "PanelWidget.hpp"
+#else
+#include "Widget.hpp"
+#endif
+
+/**
+ * A #Widget implementation that invokes a callback when clicked.  It
+ * has no visual representation.
+ */
+class CallbackWidget
+#ifdef HAVE_CLIPPING
+/* need PanelWidget on GDI so dialog background gets rendered in the
+   Widget area just in case this Widget becomes "visible", to avoid
+   uninitialised screen area */
+  : public PanelWidget
+#else
+/* on OpenGL, we can avoid the overhead of creating a panel window */
+  : public NullWidget
+#endif
 {
-  PeriodClock clock;
+  void (*const callback)();
 
 public:
-  NmeaReplayGlue(NLineReader *reader);
+  CallbackWidget(void (*_callback)())
+    :callback(_callback) {}
 
-protected:
-  virtual bool UpdateTime();
+public:
+  virtual bool Click() override;
+  virtual void ReClick() override;
+
+#ifndef HAVE_CLIPPING
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+#endif
 };
 
 #endif

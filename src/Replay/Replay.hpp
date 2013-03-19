@@ -24,7 +24,10 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
+#include "Event/Timer.hpp"
 #include "Math/fixed.hpp"
+#include "NMEA/Info.hpp"
+#include "Time/PeriodClock.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -32,8 +35,10 @@ Copyright_License {
 class Logger;
 class ProtectedTaskManager;
 class AbstractReplay;
+class CatmullRomInterpolator;
 
-class Replay
+class Replay final
+  : private Timer
 {
   fixed time_scale;
 
@@ -44,10 +49,35 @@ class Replay
 
   TCHAR path[MAX_PATH];
 
+  /**
+   * The time of day according to replay input.  This is negative if
+   * unknown.
+   */
+  fixed virtual_time;
+
+  /**
+   * If this value is not negative, then we're in fast-forward mode:
+   * replay is going as quickly as possible
+   */
+  fixed fast_forward;
+
+  /**
+   * Keeps track of the wall-clock time between two Update() calls.
+   */
+  PeriodClock clock;
+
+  /**
+   * The last NMEAInfo returned by the #AbstractReplay instance.  It
+   * is held back until #virtual_time has passed #next_data.time.
+   */
+  NMEAInfo next_data;
+
+  CatmullRomInterpolator *cli;
+
 public:
   Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
     :time_scale(fixed(1)), replay(nullptr),
-     logger(_logger), task_manager(_task_manager) {
+     logger(_logger), task_manager(_task_manager), cli(nullptr) {
     path[0] = _T('\0');
   }
 
@@ -55,7 +85,14 @@ public:
     Stop();
   }
 
+  bool IsActive() const {
+    return replay != nullptr;
+  }
+
+private:
   bool Update();
+
+public:
   void Stop();
   bool Start(const TCHAR *_path);
 
@@ -70,6 +107,19 @@ public:
   void SetTimeScale(const fixed _time_scale) {
     time_scale = _time_scale;
   }
+
+  /**
+   * Start fast-forwarding the replay by the specified number of
+   * seconds.  This replays the given amount of time from the input
+   * time as quickly as possible.
+   */
+  void FastForward(fixed delta_s) {
+    if (IsActive() && !negative(virtual_time))
+      fast_forward = virtual_time + delta_s;
+  }
+
+private:
+  virtual void OnTimer() override;
 };
 
 #endif

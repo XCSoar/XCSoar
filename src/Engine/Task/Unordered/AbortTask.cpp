@@ -21,6 +21,7 @@
  */
 
 #include "AbortTask.hpp"
+#include "AbortIntersectionTest.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
@@ -111,12 +112,11 @@ AbortTask::IsTaskFull() const
 }
 
 /** Function object used to rank waypoints by arrival time */
-struct AbortRank :
-  public std::binary_function<AbortTask::Alternate, AbortTask::Alternate, bool>
+struct AbortRank
+  : public std::binary_function<AlternatePoint, AlternatePoint, bool>
 {
   /** Condition, ranks by arrival time */
-  bool operator()(const AbortTask::Alternate& x, 
-                  const AbortTask::Alternate& y) const {
+  bool operator()(const AlternatePoint &x, const AlternatePoint &y) const {
     return x.solution.time_elapsed + x.solution.time_virtual >
            y.solution.time_elapsed + y.solution.time_virtual;
   }
@@ -133,7 +133,7 @@ IsReachable(const GlideResult &result, bool final_glide)
 
 bool
 AbortTask::FillReachable(const AircraftState &state,
-                         AlternateVector &approx_waypoints,
+                         AlternateList &approx_waypoints,
                          const GlidePolar &polar, bool only_airfield,
                          bool final_glide, bool safety)
 {
@@ -143,7 +143,7 @@ AbortTask::FillReachable(const AircraftState &state,
   const AGeoPoint p_start(state.location, state.altitude);
 
   bool found_final_glide = false;
-  reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;
+  reservable_priority_queue<AlternatePoint, AlternateList, AbortRank> q;
   q.reserve(32);
 
   for (auto v = approx_waypoints.begin(); v != approx_waypoints.end();) {
@@ -166,7 +166,7 @@ AbortTask::FillReachable(const AircraftState &state,
             AGeoPoint(v->waypoint.location, result.min_arrival_altitude));
 
       if (!intersects) {
-        q.push(Alternate(v->waypoint, result));
+        q.push(AlternatePoint(v->waypoint, result));
         // remove it since it's already in the list now      
         approx_waypoints.erase(v);
 
@@ -181,7 +181,7 @@ AbortTask::FillReachable(const AircraftState &state,
   }
 
   while (!q.empty() && !IsTaskFull()) {
-    const Alternate top = q.top();
+    const AlternatePoint top = q.top();
     task_points.emplace_back(top.waypoint, task_behaviour, top.solution);
 
     const int i = task_points.size() - 1;
@@ -200,6 +200,8 @@ AbortTask::FillReachable(const AircraftState &state,
  */
 class WaypointVisitorVector: public WaypointVisitor
 {
+  AlternateList &vector;
+
 public:
   /**
    * Constructor
@@ -208,7 +210,7 @@ public:
    *
    * @return Initialised object
    */
-  WaypointVisitorVector(AbortTask::AlternateVector& wpv):vector(wpv) {}
+  WaypointVisitorVector(AlternateList &wpv):vector(wpv) {}
 
   /**
    * Visit method, adds result to vector
@@ -219,9 +221,6 @@ public:
     if (wp.IsLandable())
       vector.emplace_back(wp);
   }
-
-private:
-  AbortTask::AlternateVector &vector;
 };
 
 void 
@@ -251,7 +250,7 @@ AbortTask::UpdateSample(const AircraftState &state,
     /* can't work without a polar */
     return false;
 
-  AlternateVector approx_waypoints; 
+  AlternateList approx_waypoints;
   approx_waypoints.reserve(128);
 
   WaypointVisitorVector wvv(approx_waypoints);

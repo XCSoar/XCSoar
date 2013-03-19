@@ -61,14 +61,12 @@ public:
     value = _value;
   }
 
-  int SetMin(int _min) {
+  void SetMin(int _min) {
     min = _min;
-    return min;
   }
 
-  int SetMax(int _max) {
+  void SetMax(int _max) {
     max = _max;
-    return max;
   }
 
   virtual void SetAsInteger(int value);

@@ -66,7 +66,6 @@ public:
   void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
 
   virtual int GetAsInteger() const;
-  fixed GetAsFixed() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
@@ -74,9 +73,22 @@ public:
     mValue = _value;
   }
 
-  fixed SetMin(fixed Value);
-  fixed SetMax(fixed Value);
-  fixed SetStep(fixed Value);
+  fixed GetAsFixed() const {
+    return mValue;
+  }
+
+  void SetMin(fixed v) {
+    mMin = v;
+  }
+
+  void SetMax(fixed v) {
+    mMax = v;
+  }
+
+  void SetStep(fixed v) {
+    mStep = v;
+  }
+
   fixed GetStep() const {
     return mStep;
   }
