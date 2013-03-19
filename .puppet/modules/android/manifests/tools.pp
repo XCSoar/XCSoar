@@ -14,6 +14,7 @@ class android::tools {
 
   android::package{ 'tools':
     type => 'tools',
+    require => [Android::Package['platform-tools']],
   }
 
 }
