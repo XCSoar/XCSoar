@@ -83,6 +83,10 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   if (data.title.empty())
     return;
 
+  if (!pressed && !HasFocus() && !dragging && !force_draw_selector &&
+      settings.border_style == InfoBoxSettings::BorderStyle::SHADED)
+    canvas.DrawFilledRectangle(title_rect, look.caption_background_color);
+
   canvas.SetTextColor(look.GetTitleColor(data.title_color));
 
   const Font &font = *look.title.font;

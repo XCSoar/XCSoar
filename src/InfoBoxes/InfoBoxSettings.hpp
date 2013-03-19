@@ -116,6 +116,7 @@ struct InfoBoxSettings {
   enum class BorderStyle : uint8_t {
     BOX,
     TAB,
+    SHADED,
   } border_style;
 
   Panel panels[MAX_PANELS];

@@ -12,6 +12,7 @@ Version 6.6 - not yet released
   - limit the InfoBox aspect ratio
   - new waypoint location editor (#343)
   - show required glide ratio in waypoint details (#1573)
+  - new InfoBox style "Shaded"
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
