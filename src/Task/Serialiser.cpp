@@ -97,7 +97,7 @@ Serialiser::Serialise(const ObservationZonePoint &data)
 {
   switch (data.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
-    Visit((const FAISectorZone &)data);
+    node.SetAttribute(_T("type"), _T("FAISector"));
     break;
 
   case ObservationZone::Shape::SECTOR:
@@ -109,7 +109,7 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     break;
 
   case ObservationZone::Shape::MAT_CYLINDER:
-    Visit((const MatCylinderZone &)data);
+    node.SetAttribute(_T("type"), _T("MatCylinder"));
     break;
 
   case ObservationZone::Shape::CYLINDER:
@@ -117,19 +117,19 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     break;
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
-    Visit((const KeyholeZone &)data);
+    node.SetAttribute(_T("type"), _T("Keyhole"));
     break;
 
   case ObservationZone::Shape::BGAFIXEDCOURSE:
-    Visit((const BGAFixedCourseZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAFixedCourse"));
     break;
 
   case ObservationZone::Shape::BGAENHANCEDOPTION:
-    Visit((const BGAEnhancedOptionZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAEnhancedOption"));
     break;
 
   case ObservationZone::Shape::BGA_START:
-    Visit((const BGAStartSectorZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAStartSector"));
     break;
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -141,36 +141,6 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     break;
   }
 } 
-
-void 
-Serialiser::Visit(gcc_unused const FAISectorZone &data)
-{
-  node.SetAttribute(_T("type"), _T("FAISector"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const KeyholeZone &data)
-{
-  node.SetAttribute(_T("type"), _T("Keyhole"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAFixedCourseZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAFixedCourse"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAEnhancedOptionZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAEnhancedOption"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAStartSectorZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAStartSector"));
-}
 
 void
 Serialiser::Visit(const SectorZone &data)
@@ -208,12 +178,6 @@ Serialiser::Visit(const CylinderZone &data)
 {
   node.SetAttribute(_T("type"), _T("Cylinder"));
   node.SetAttribute(_T("radius"), data.GetRadius());
-}
-
-void 
-Serialiser::Visit(const MatCylinderZone &data)
-{
-  node.SetAttribute(_T("type"), _T("MatCylinder"));
 }
 
 void
