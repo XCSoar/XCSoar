@@ -30,7 +30,7 @@
  * A (default) 90 degree 10km sector centered at the bisector of
  * incoming/outgoing legs, with 500m cylinder
  */
-class KeyholeZone: public SymmetricSectorZone
+class KeyholeZone final : public SymmetricSectorZone
 {
   fixed inner_radius;
 
@@ -63,6 +63,38 @@ public:
     return new KeyholeZone(Shape::DAEC_KEYHOLE, reference,
                            fixed(10000),
                            Angle::QuarterCircle());
+  }
+
+  /**
+   * Create a 180 degree sector centered at the inverse of the
+   * outgoing leg.
+   *
+   * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
+   */
+  static KeyholeZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
+    return new KeyholeZone(Shape::BGA_START, reference,
+                           fixed(5000),
+                           Angle::HalfCircle());
+  }
+
+  /**
+   * Create a 90 degree 20km sector centered at the bisector of
+   * incoming/outgoing legs, with 500m cylinder.
+   */
+  static KeyholeZone *CreateBGAFixedCourseZone(const GeoPoint &reference) {
+    return new KeyholeZone(Shape::BGAFIXEDCOURSE, reference,
+                           fixed(20000),
+                           Angle::QuarterCircle());
+  }
+
+  /**
+   * Create a 180 degree 10km sector centered at the bisector of
+   * incoming/outgoing legs, with 500m cylinder
+   */
+  static KeyholeZone *CreateBGAEnhancedOptionZone(const GeoPoint &reference) {
+    return new KeyholeZone(Shape::BGAENHANCEDOPTION, reference,
+                           fixed(10000),
+                           Angle::HalfCircle());
   }
 
   /**

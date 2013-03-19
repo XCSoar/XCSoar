@@ -30,8 +30,6 @@
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
@@ -317,11 +315,11 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
-    oz = new BGAEnhancedOptionZone(wp->location);
+    oz = KeyholeZone::CreateBGAEnhancedOptionZone(wp->location);
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAFixedCourseZone(turnpoint_infos))
-    oz = new BGAFixedCourseZone(wp->location);
+    oz = KeyholeZone::CreateBGAFixedCourseZone(wp->location);
 
   else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
     oz = new LineSectorZone(wp->location, turnpoint_infos.radius1);

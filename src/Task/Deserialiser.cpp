@@ -30,9 +30,6 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
@@ -165,11 +162,11 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
   } else if (StringIsEqual(type, _T("Keyhole")))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("BGAStartSector")))
-    return new BGAStartSectorZone(wp.location);
+    return KeyholeZone::CreateBGAStartSectorZone(wp.location);
   else if (StringIsEqual(type, _T("BGAFixedCourse")))
-    return new BGAFixedCourseZone(wp.location);
+    return KeyholeZone::CreateBGAFixedCourseZone(wp.location);
   else if (StringIsEqual(type, _T("BGAEnhancedOption")))
-    return new BGAEnhancedOptionZone(wp.location);
+    return KeyholeZone::CreateBGAEnhancedOptionZone(wp.location);
 
   assert(1);
   return nullptr;

@@ -42,9 +42,6 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/MatCylinderZone.hpp"
 #include "Engine/Task/ObservationZones/FAISectorZone.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
-#include "Engine/Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
@@ -137,15 +134,15 @@ public:
       break;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
-      oz = new BGAFixedCourseZone(location);
+      oz = KeyholeZone::CreateBGAFixedCourseZone(location);
       break;
 
     case ObservationZone::Shape::BGAENHANCEDOPTION:
-      oz = new BGAEnhancedOptionZone(location);
+      oz = KeyholeZone::CreateBGAEnhancedOptionZone(location);
       break;
 
     case ObservationZone::Shape::BGA_START:
-      oz = new BGAStartSectorZone(location);
+      oz = KeyholeZone::CreateBGAStartSectorZone(location);
       break;
 
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:

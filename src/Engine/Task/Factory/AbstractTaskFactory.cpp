@@ -30,9 +30,6 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
@@ -306,7 +303,7 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   case TaskPointFactoryType::START_CYLINDER:
     return CreateStart(new CylinderZone(wp.location, start_radius), wp);
   case TaskPointFactoryType::START_BGA:
-    return CreateStart(new BGAStartSectorZone(wp.location), wp);
+    return CreateStart(KeyholeZone::CreateBGAStartSectorZone(wp.location), wp);
   case TaskPointFactoryType::FAI_SECTOR:
     return CreateASTPoint(new FAISectorZone(wp.location, true), wp);
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
@@ -315,9 +312,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   case TaskPointFactoryType::KEYHOLE_SECTOR:
     return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(wp.location), wp);
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
-    return CreateASTPoint(new BGAFixedCourseZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateBGAFixedCourseZone(wp.location), wp);
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
-    return CreateASTPoint(new BGAEnhancedOptionZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateBGAEnhancedOptionZone(wp.location), wp);
   case TaskPointFactoryType::AST_CYLINDER:
     return CreateASTPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::MAT_CYLINDER:

@@ -25,8 +25,6 @@ Copyright_License {
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
