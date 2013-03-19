@@ -42,12 +42,19 @@ Copyright_License {
 #elif !defined(_WIN32_WCE)
   #define TARGET "PC"
 #else
-  #if _WIN32_WCE >= 0x0500
-    #define TARGET "WM5"
-  #elif _WIN32_WCE >= 0x0400
-    #define TARGET "PPC2003"
+
+  #ifdef __XSCALE__
+    #define CPU_SUFFIX "X"
   #else
-    #define TARGET "PPC2000"
+    #define CPU_SUFFIX
+  #endif
+
+  #if _WIN32_WCE >= 0x0500
+    #define TARGET "WM5" CPU_SUFFIX
+  #elif _WIN32_WCE >= 0x0400
+    #define TARGET "PPC2003" CPU_SUFFIX
+  #else
+    #define TARGET "PPC2000" CPU_SUFFIX
   #endif
 #endif
 

@@ -28,6 +28,7 @@ Copyright_License {
 #include "DataField/String.hpp"
 #include "DataField/Prefix.hpp"
 #include "DataField/RoughTime.hpp"
+#include "DataField/GeoPoint.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -36,6 +37,7 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
+#include "Dialogs/GeoPointEntry.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -187,6 +189,16 @@ WndProperty::BeginEditing()
     RoughTimeDataField &df = *(RoughTimeDataField *)mDataField;
     RoughTime value = df.GetValue();
     if (!TimeEntryDialog(GetCaption(), value, true))
+      return true;
+
+    df.ModifyValue(value);
+    RefreshDisplay();
+    return true;
+  } else if (mDataField != NULL &&
+             mDataField->GetType() == DataField::Type::GEOPOINT) {
+    GeoPointDataField &df = *(GeoPointDataField *)mDataField;
+    GeoPoint value = df.GetValue();
+    if (!GeoPointEntryDialog(GetCaption(), value, false))
       return true;
 
     df.ModifyValue(value);

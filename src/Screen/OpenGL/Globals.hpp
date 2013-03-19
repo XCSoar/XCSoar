@@ -76,6 +76,18 @@ namespace OpenGL {
   extern bool frame_buffer_object;
 
   /**
+   * Which depth+stencil internalFormat is supported by the
+   * Renderbuffer?  This is only set if frame_buffer_object is true.
+   */
+  extern GLenum render_buffer_depth_stencil;
+
+  /**
+   * Which stencil internalFormat is supported by the Renderbuffer?
+   * This is only set if frame_buffer_object is true.
+   */
+  extern GLenum render_buffer_stencil;
+
+  /**
    * The dimensions of the screen in pixels.
    */
   extern UPixelScalar screen_width, screen_height;

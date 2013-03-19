@@ -158,6 +158,7 @@ struct InfoBoxData {
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {
     title.Format(fmt, args...);
+    title.CropIncompleteUTF8();
   }
 
   template<typename... Args>
@@ -168,6 +169,7 @@ struct InfoBoxData {
   template<typename... Args>
   void FormatComment(const TCHAR *fmt, Args&&... args) {
     comment.Format(fmt, args...);
+    comment.CropIncompleteUTF8();
   }
 
   template<typename... Args>

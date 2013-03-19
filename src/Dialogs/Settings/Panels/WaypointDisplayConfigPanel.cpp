@@ -140,6 +140,9 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
   static constexpr StaticEnumChoice wp_selection_list[] = {
     { (unsigned)WaypointRendererSettings::LabelSelection::ALL,
       N_("All"), N_("All waypoint labels will be displayed.") },
+    { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_AIRFIELD,
+      N_("Task waypoints & airfields"),
+      N_("All waypoints part of a task and all airfields will be displayed.") },
     { (unsigned)WaypointRendererSettings::LabelSelection::TASK_AND_LANDABLE,
       N_("Task waypoints & landables"),
       N_("All waypoints part of a task and all landables will be displayed.") },

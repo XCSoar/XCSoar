@@ -50,7 +50,7 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors NativeInputListener DownloadUtil
+NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil
 ifneq ($(IOIOLIB_DIR),)
 NATIVE_CLASSES += NativeBMP085Listener
 NATIVE_CLASSES += NativeI2CbaroListener
@@ -206,7 +206,6 @@ else # !FAT_BINARY
 # add dependency to this source file
 $(call SRC_TO_OBJ,$(SRC)/Android/Main.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/EventBridge.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/Timer.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)

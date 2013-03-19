@@ -44,7 +44,8 @@ public:
    * @return Initialised object
    */
   BGAFixedCourseZone(const GeoPoint loc)
-    :KeyholeZone(BGAFIXEDCOURSE, loc, fixed(20000.0))
+    :KeyholeZone(Shape::BGAFIXEDCOURSE,
+                 loc, fixed(20000))
   {
     UpdateSector();
   }

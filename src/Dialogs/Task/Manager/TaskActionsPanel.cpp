@@ -103,7 +103,7 @@ void
 TaskActionsPanel::OnDeclareClicked()
 {
   if (!(*active_task)->CheckTask()) {
-    const TaskValidationErrorVector errors =
+    const auto errors =
       (*active_task)->GetFactory().GetValidationErrors();
     ShowMessageBox(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);

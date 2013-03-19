@@ -11,52 +11,8 @@
     <DataField DataType="string"/>
   </Edit>
 
-  <Edit Name="prpLongitudeSign" Caption="Lon." Y="70" Width="65" Height="28" CaptionWidth="28">
-    <DataField DataType="enum"/>
-  </Edit>
-
-  <Edit Name="prpLongitudeD" X="65" Y="70" Width="60" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fd" EditFormat="%.0f" Min="0" Max="179" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLongitudeM" X="125" Y="70" Width="60" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLongitudeDDDD" X="125" Y="70" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="9999" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLongitudeS" X="185" Y="70" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fs" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLongitudemmm" X="185" Y="70" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="999" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLatitudeSign" Caption="Lat." Y="100" Width="65" Height="28" CaptionWidth="28">
-    <DataField DataType="enum"/>
-  </Edit>
-
-  <Edit Name="prpLatitudeD" X="65" Y="100" Width="60" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fd" EditFormat="%.0f" Min="0" Max="89" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLatitudeM" X="125" Y="100" Width="60" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLatitudeDDDD" X="125" Y="100" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fm" EditFormat="%.0f" Min="0" Max="9999" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLatitudeS" X="185" Y="100" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0fs" EditFormat="%.0f" Min="0" Max="59" Step="1"/>
-  </Edit>
-
-  <Edit Name="prpLatitudemmm" X="185" Y="100" Height="28">
-    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="999" Step="1"/>
+  <Edit Name="Location" Caption="Location" Height="28" CaptionWidth="75">
+    <DataField DataType="geopoint"/>
   </Edit>
 
   <Edit Name="prpAltitude" Caption="Altitude" Height="28" CaptionWidth="90">

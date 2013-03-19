@@ -66,7 +66,7 @@ class InfoBoxContentBarogram : public InfoBoxContentAltitude
 public:
   virtual void Update(InfoBoxData &data) override;
   virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) override;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
+  virtual const InfoBoxPanel *GetDialogContent() override;
 };
 
 class InfoBoxContentThermalBand : public InfoBoxContent

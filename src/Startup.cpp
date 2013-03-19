@@ -216,13 +216,14 @@ Startup()
 #ifdef HAVE_EGL
             "egl=%d "
 #endif
-            "npot=%d vbo=%d fbo=%d",
+            "npot=%d vbo=%d fbo=%d stencil=%#x",
 #ifdef HAVE_EGL
              OpenGL::egl,
 #endif
              OpenGL::texture_non_power_of_two,
              OpenGL::vertex_buffer_object,
-             OpenGL::frame_buffer_object);
+            OpenGL::frame_buffer_object,
+            OpenGL::render_buffer_stencil);
 #endif
 
   main_window->Initialise();

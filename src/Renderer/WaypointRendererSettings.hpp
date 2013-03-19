@@ -56,6 +56,7 @@ struct WaypointRendererSettings {
     TASK_AND_LANDABLE,
     TASK,
     NONE,
+    TASK_AND_AIRFIELD,
   } label_selection;
 
   /** What type of waypoint labels to render */

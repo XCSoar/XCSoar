@@ -98,15 +98,10 @@ EventQueue::Push(const Event &event)
 int
 EventQueue::GetTimeout() const
 {
-  auto i = timers.begin();
-  if (i != timers.end()) {
-    int64_t relative = i->due_us - MonotonicClockUS();
-    if (relative <= 0)
-      return 0;
-    return relative / 1000 + 1;
-  }
-
-  return -1;
+  int64_t timeout = timers.GetTimeoutUS(MonotonicClockUS());
+  return timeout > 0
+    ? int((timeout + 999) / 1000)
+    : int(timeout);
 }
 
 void
@@ -264,11 +259,10 @@ EventQueue::Fill()
 bool
 EventQueue::Generate(Event &event)
 {
-  auto t = timers.begin();
-  if (t != timers.end() && t->IsDue(MonotonicClockUS())) {
+  Timer *timer = timers.Pop(MonotonicClockUS());
+  if (timer != nullptr) {
     event.type = Event::TIMER;
-    event.ptr = t->timer;
-    timers.erase(t);
+    event.ptr = timer;
     return true;
   }
 
@@ -388,7 +382,7 @@ EventQueue::AddTimer(Timer &timer, unsigned ms)
 {
   ScopeLock protect(mutex);
 
-  timers.insert(TimerRecord(timer, MonotonicClockUS() + ms * 1000));
+  timers.Add(timer, MonotonicClockUS() + ms * 1000);
   WakeUp();
 }
 
@@ -397,10 +391,5 @@ EventQueue::CancelTimer(Timer &timer)
 {
   ScopeLock protect(mutex);
 
-  for (auto i = timers.begin(), end = timers.end(); i != end; ++i) {
-    if (i->timer == &timer) {
-      timers.erase(i);
-      return;
-    }
-  }
+  timers.Cancel(timer);
 }

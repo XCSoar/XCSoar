@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
 
+#include "Engine/Task/Factory/ValidationError.hpp"
+
 #include <tchar.h>
 #include <stdint.h>
 
 enum class TaskPointType : uint8_t;
-enum class TaskValidationErrorType : uint8_t;
-class TaskValidationErrorVector;
 class OrderedTask;
 class ObservationZonePoint;
 
@@ -49,7 +49,7 @@ void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
 bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 
 const TCHAR *
-getTaskValidationErrors(const TaskValidationErrorVector &v);
+getTaskValidationErrors(const TaskValidationErrorSet v);
 
 const TCHAR *
 TaskValidationError(TaskValidationErrorType type);

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_VALIDATION_ERROR_HPP
 #define XCSOAR_TASK_VALIDATION_ERROR_HPP
 
-#include <vector>
+#include "Util/EnumBitSet.hpp"
 
 #include <stdint.h>
 
@@ -42,10 +42,14 @@ enum class TaskValidationErrorType : uint8_t {
   EMPTY_TASK,
   NON_FAI_OZS,
   NON_MAT_OZS,
+
+  /**
+   * This special value is used to determine the number of items
+   * above.
+   */
+  COUNT
 };
 
-/** Vector of errors returned by validation routine */
-class TaskValidationErrorVector : public std::vector<TaskValidationErrorType> {
-};
+typedef EnumBitSet<TaskValidationErrorType> TaskValidationErrorSet;
 
 #endif

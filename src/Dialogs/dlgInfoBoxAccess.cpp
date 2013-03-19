@@ -76,6 +76,8 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 
   TabBarControl tab_bar(client_area, look, tab_rc, tab_style, false);
 
+  bool found_setup = false;
+
   if (panels != nullptr) {
     for (; panels->load != nullptr; ++panels) {
       assert(panels->name != nullptr);
@@ -85,9 +87,10 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
       if (widget == NULL)
         continue;
 
-      if (panels[1].load == nullptr) {
-        /* add a "Switch InfoBox" button to the last tab, which we
-           expect to be the "Setup" tab - kludge! */
+      if (!found_setup && _tcscmp(panels->name, _T("Setup")) == 0) {
+        /* add a "Switch InfoBox" button to the "Setup" tab -
+           kludge! */
+        found_setup = true;
 
         PixelRect button_rc;
         button_rc.left = 0;
@@ -113,7 +116,9 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
     }
   }
 
-  if (tab_bar.GetTabCount() == 0) {
+  if (!found_setup) {
+    /* the InfoBox did not provide a "Setup" tab - create a default
+       one that allows switching the contents */
     Widget *wSwitch = new ActionWidget(form, SWITCH_INFO_BOX);
     tab_bar.AddTab(wSwitch, _("Switch InfoBox"));
   }

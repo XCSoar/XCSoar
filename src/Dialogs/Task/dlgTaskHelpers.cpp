@@ -180,49 +180,53 @@ void
 OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 {
   switch (ozp.GetShape()) {
-  case ObservationZonePoint::FAI_SECTOR:
+  case ObservationZone::Shape::FAI_SECTOR:
     _tcscpy(buffer, _("FAI quadrant"));
     return;
 
-  case ObservationZonePoint::SECTOR:
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Sector"), _("Radius"),
               (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Line"), _("Gate Width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).GetLength()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Cylinder"), _("Radius"),
               (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::MAT_CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
     _stprintf(buffer,_T("%.1f%s"),
               (double)Units::ToUserDistance(((const MatCylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
-  case ObservationZonePoint::KEYHOLE:
+  case ObservationZone::Shape::KEYHOLE:
     _tcscpy(buffer, _("DAeC Keyhole"));
     return;
 
-  case ObservationZonePoint::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
     _tcscpy(buffer, _("BGA Fixed Course"));
     return;
 
-  case ObservationZonePoint::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
     _tcscpy(buffer, _("BGA Enhanced Option"));
     return;
 
-  case ObservationZonePoint::BGA_START:
+  case ObservationZone::Shape::BGA_START:
     _tcscpy(buffer, _("BGA Start Sector"));
+    return;
+
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    _tcscpy(buffer, _("Symmetric quadrant"));
     return;
   }
 
@@ -255,17 +259,21 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
 }
 
 const TCHAR*
-getTaskValidationErrors(const TaskValidationErrorVector &v)
+getTaskValidationErrors(const TaskValidationErrorSet v)
 {
   static TCHAR err[MAX_PATH];
   err[0] = '\0';
 
-  for (unsigned i = 0; i < v.size(); i++)
-    if ((_tcslen(err) + _tcslen(TaskValidationError(v[i]))) < MAX_PATH)
-      _tcscat(err, TaskValidationError(v[i]));
+  for (unsigned i = 0; i < v.N; i++) {
+    const TaskValidationErrorType error = TaskValidationErrorType(i);
+    if (v.Contains(error) &&
+        _tcslen(err) + _tcslen(TaskValidationError(error)) < MAX_PATH)
+      _tcscat(err, TaskValidationError(error));
+  }
 
   return err;
 }
+
 const TCHAR*
 TaskValidationError(TaskValidationErrorType type)
 {
@@ -295,6 +303,9 @@ TaskValidationError(TaskValidationErrorType type)
 
   case TaskValidationErrorType::NON_MAT_OZS:
     return _("non-MAT turn points");
+
+  case TaskValidationErrorType::COUNT:
+    gcc_unreachable();
   }
 
   gcc_unreachable();

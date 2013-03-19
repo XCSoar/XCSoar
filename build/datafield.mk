@@ -11,6 +11,7 @@ DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Number.cpp \
 	$(DATA_FIELD_SRC_DIR)/Float.cpp \
 	$(DATA_FIELD_SRC_DIR)/Angle.cpp \
+	$(DATA_FIELD_SRC_DIR)/GeoPoint.cpp \
 	$(DATA_FIELD_SRC_DIR)/RoughTime.cpp \
 	$(DATA_FIELD_SRC_DIR)/Time.cpp \
 	$(DATA_FIELD_SRC_DIR)/Integer.cpp \

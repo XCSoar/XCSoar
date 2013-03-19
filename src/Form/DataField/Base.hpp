@@ -49,6 +49,7 @@ public:
     ROUGH_TIME,
     TIME,
     PREFIX,
+    GEOPOINT,
   };
 
   enum DataAccessMode {

@@ -33,14 +33,14 @@ static constexpr TaskFactoryConstraints mixed_constraints = {
   2, 10,
 };
 
-static constexpr TaskPointFactoryType mixed_start_types[] = {
+static constexpr LegalPointSet mixed_start_types{
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_BGA,
   TaskPointFactoryType::START_SECTOR,
 };
 
-static constexpr TaskPointFactoryType mixed_im_types[] = {
+static constexpr LegalPointSet mixed_im_types{
   TaskPointFactoryType::FAI_SECTOR,
   TaskPointFactoryType::AST_CYLINDER,
   TaskPointFactoryType::AAT_CYLINDER,
@@ -51,7 +51,7 @@ static constexpr TaskPointFactoryType mixed_im_types[] = {
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
 };
 
-static constexpr TaskPointFactoryType mixed_finish_types[] = {
+static constexpr LegalPointSet mixed_finish_types{
   TaskPointFactoryType::FINISH_SECTOR,
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
@@ -60,11 +60,6 @@ static constexpr TaskPointFactoryType mixed_finish_types[] = {
 MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
                                    const TaskBehaviour &tb)
   :AbstractTaskFactory(mixed_constraints, _task, tb,
-                       LegalPointConstArray(mixed_start_types,
-                                            ARRAY_SIZE(mixed_start_types)),
-                       LegalPointConstArray(mixed_im_types,
-                                            ARRAY_SIZE(mixed_im_types)),
-                       LegalPointConstArray(mixed_finish_types,
-                                            ARRAY_SIZE(mixed_finish_types)))
+                       mixed_start_types, mixed_im_types, mixed_finish_types)
 {
 }

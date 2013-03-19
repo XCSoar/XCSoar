@@ -157,7 +157,12 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
     return ls;
   } else if (StringIsEqual(type, _T("FAISector")))
     return new FAISectorZone(wp.location, is_turnpoint);
-  else if (StringIsEqual(type, _T("Keyhole")))
+  else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
+    fixed radius = fixed(10000);
+    node.GetAttribute(_T("radius"), radius);
+
+    return new SymmetricSectorZone(wp.location, radius);
+  } else if (StringIsEqual(type, _T("Keyhole")))
     return new KeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("BGAStartSector")))
     return new BGAStartSectorZone(wp.location);

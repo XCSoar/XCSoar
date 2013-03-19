@@ -90,6 +90,10 @@ public:
                                CommonInterface::GetMapSettings().waypoint);
   }
 
+  virtual bool CanActivateItem(unsigned index) const {
+    return true;
+  }
+
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */

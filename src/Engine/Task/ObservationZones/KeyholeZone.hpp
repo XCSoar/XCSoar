@@ -59,7 +59,7 @@ public:
    * @return Initialised object
    */
   KeyholeZone(const GeoPoint loc, const fixed radius = fixed(10000.0))
-    :SymmetricSectorZone(KEYHOLE, loc, radius, Angle::QuarterCircle())
+    :SymmetricSectorZone(Shape::KEYHOLE, loc, radius, Angle::QuarterCircle())
   {
     UpdateSector();
   }

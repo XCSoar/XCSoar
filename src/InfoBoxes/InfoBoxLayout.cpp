@@ -24,8 +24,11 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
 #include "Util/Macros.hpp"
+#include "Util/Clamp.hpp"
 
 #include <stdio.h>
+
+static constexpr double CONTROLHEIGHTRATIO = 7.4;
 
 /**
  * The number of info boxes in each geometry.
@@ -34,6 +37,7 @@ static constexpr unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
   12, 9, 8, 4, 4, 4, 4,
+  8,
 };
 
 namespace InfoBoxLayout
@@ -44,8 +48,8 @@ namespace InfoBoxLayout
                    UPixelScalar width, UPixelScalar height);
 
   static void
-  CalcInfoBoxSizes(Layout &layout,
-                   PixelRect rc, InfoBoxSettings::Geometry geometry);
+  CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
+                   InfoBoxSettings::Geometry geometry);
 }
 
 static int
@@ -107,8 +111,10 @@ MakeRightColumn(const InfoBoxLayout::Layout &layout,
 InfoBoxLayout::Layout
 InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 {
-  geometry = ValidateGeometry(geometry, rc.right - rc.left,
-                              rc.bottom - rc.top);
+  const PixelSize screen_size = rc.GetSize();
+
+  geometry = ValidateGeometry(geometry, screen_size.cx,
+                              screen_size.cy);
 
   Layout layout;
 
@@ -116,7 +122,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
   layout.count = geometry_counts[(unsigned)geometry];
   assert(layout.count <= InfoBoxSettings::Panel::MAX_CONTENTS);
 
-  CalcInfoBoxSizes(layout, rc, geometry);
+  CalcInfoBoxSizes(layout, screen_size, geometry);
 
   layout.ClearVario();
 
@@ -141,6 +147,14 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     rc.bottom = MakeBottomRow(layout, layout.positions, 4,
                               rc.left, rc.bottom);
     break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.right = rc.right;
+    layout.vario.top = rc.top;
+    layout.vario.bottom = rc.top + layout.control_height * 2;
+
+    /* fall through */
 
   case InfoBoxSettings::Geometry::TOP_8:
     rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
@@ -254,6 +268,9 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
       return InfoBoxSettings::Geometry::RIGHT_9_VARIO;
 
+    case InfoBoxSettings::Geometry::TOP_8_VARIO:
+      return InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO;
+
     case InfoBoxSettings::Geometry::TOP_8:
       return InfoBoxSettings::Geometry::LEFT_8;
 
@@ -290,6 +307,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::BOTTOM_8:
     case InfoBoxSettings::Geometry::BOTTOM_4:
     case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+    case InfoBoxSettings::Geometry::TOP_8_VARIO:
     case InfoBoxSettings::Geometry::BOTTOM_12:
     case InfoBoxSettings::Geometry::TOP_8:
     case InfoBoxSettings::Geometry::TOP_4:
@@ -323,8 +341,24 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
   return geometry;
 }
 
+static constexpr unsigned
+CalculateInfoBoxRowHeight(unsigned screen_height, unsigned control_width)
+{
+  return Clamp(unsigned(screen_height / CONTROLHEIGHTRATIO),
+               control_width * 5 / 7,
+               control_width);
+}
+
+static constexpr unsigned
+CalculateInfoBoxColumnWidth(unsigned screen_width, unsigned control_height)
+{
+  return Clamp(unsigned(screen_width / CONTROLHEIGHTRATIO * 1.3),
+               control_height,
+               control_height * 7 / 5);
+}
+
 void
-InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelRect rc,
+InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
                                 InfoBoxSettings::Geometry geometry)
 {
   switch (geometry) {
@@ -334,55 +368,67 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelRect rc,
   case InfoBoxSettings::Geometry::TOP_8:
   case InfoBoxSettings::Geometry::TOP_12:
     // calculate control dimensions
-    layout.control_width = 2 * (rc.right - rc.left) / layout.count;
-    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    layout.control_width = 2 * screen_size.cx / layout.count;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::TOP_4:
   case InfoBoxSettings::Geometry::BOTTOM_4:
     // calculate control dimensions
-    layout.control_width = (rc.right - rc.left) / layout.count;
-    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    layout.control_width = screen_size.cx / layout.count;
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     // calculate control dimensions
-    layout.control_width = 2 * (rc.right - rc.left) / (layout.count + 2);
-    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    layout.control_width = 2 * screen_size.cx / (layout.count + 2);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    // calculate control dimensions
+    layout.control_width = 2 * screen_size.cx / (layout.count + 2);
+    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                      layout.control_width);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
   case InfoBoxSettings::Geometry::LEFT_8:
   case InfoBoxSettings::Geometry::RIGHT_8:
     // calculate control dimensions
-    layout.control_width = (rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3;
-    layout.control_height = 2 * (rc.bottom - rc.top) / layout.count;
+    layout.control_height = 2 * screen_size.cy / layout.count;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                       layout.control_height);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4:
   case InfoBoxSettings::Geometry::RIGHT_4:
     // calculate control dimensions
-    layout.control_width = (rc.right - rc.left) / CONTROLHEIGHTRATIO * 1.3;
-    layout.control_height = (rc.bottom - rc.top) / layout.count;
+    layout.control_height = screen_size.cy / layout.count;
+    layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                       layout.control_height);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
   case InfoBoxSettings::Geometry::RIGHT_12:
     // calculate control dimensions
-    layout.control_height = (rc.bottom - rc.top) / 6;
+    layout.control_height = screen_size.cy / 6;
     // preserve relative shape
     layout.control_width = layout.control_height * 1.44;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_5:
     // calculate control dimensions
-    layout.control_width = (rc.right - rc.left) * 0.2;
-    layout.control_height = (rc.bottom - rc.top) / 5;
+    layout.control_width = screen_size.cx / 5;
+    layout.control_height = screen_size.cy / 5;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    layout.control_height = (rc.bottom - rc.top) / 8;
+    layout.control_height = screen_size.cy / 8;
     layout.control_width = layout.control_height * 1.44;
     break;
   }
@@ -421,6 +467,7 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, unsigned i)
     break;
 
   case InfoBoxSettings::Geometry::TOP_8:
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
   case InfoBoxSettings::Geometry::TOP_4:
     border |= BORDERBOTTOM;
 

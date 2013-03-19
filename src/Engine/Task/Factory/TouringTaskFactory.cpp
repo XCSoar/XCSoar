@@ -34,27 +34,23 @@ static constexpr TaskFactoryConstraints touring_constraints = {
   2, 10,
 };
 
-static constexpr TaskPointFactoryType touring_start_types[] = {
+static constexpr LegalPointSet touring_start_types{
   TaskPointFactoryType::START_CYLINDER,
 };
 
-static constexpr TaskPointFactoryType touring_im_types[] = {
+static constexpr LegalPointSet touring_im_types{
   TaskPointFactoryType::FAI_SECTOR,
 };
 
-static constexpr TaskPointFactoryType touring_finish_types[] = {
+static constexpr LegalPointSet touring_finish_types{
   TaskPointFactoryType::FINISH_CYLINDER,
 };
 
 TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb)
   :AbstractTaskFactory(touring_constraints, _task, tb,
-                       LegalPointConstArray(touring_start_types,
-                                            ARRAY_SIZE(touring_start_types)),
-                       LegalPointConstArray(touring_im_types,
-                                            ARRAY_SIZE(touring_im_types)),
-                       LegalPointConstArray(touring_finish_types,
-                                            ARRAY_SIZE(touring_finish_types)))
+                       touring_start_types, touring_im_types,
+                       touring_finish_types)
 {
 }
 

@@ -3,12 +3,31 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6 - not yet released
+* map
+  - optional distinct map zoom on each page (#1603)
+  - add label selection "Task waypoints & airfields"
 * user interface
   - replay fast-forward
-  - optional distinct map zoom on each page (#1603)
   - green InfoBox distance when inside observation zone (#2560)
+  - limit the InfoBox aspect ratio
+  - new waypoint location editor (#343)
+  - show required glide ratio in waypoint details (#1573)
+  - new InfoBox style "Shaded"
 * tasks
   - MAT tasks (#563)
+  - custom symmetric quadrant (#2125)
+* devices
+  - Volkslogger: support IGC file download
+* Android
+  - faster map renderer on some Android devices
+
+Version 6.5.3 - not yet released
+* user interface
+  - eliminate flickering in the cross section on Windows
+* devices
+  - FLARM: fix IGC file download on firmware 5.09 (#2619)
+* Android
+  - fix crash with Hebrew language
 
 Version 6.5.2 - 2013/03/15
 * user interface

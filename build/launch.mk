@@ -26,3 +26,14 @@ else
 XCSOARLAUNCH_DLL =
 
 endif
+
+ifeq ($(HAVE_WIN32),y)
+
+LAUNCH_XCSOAR_SOURCES = \
+	$(SRC)/LaunchXCSoar.cpp
+LAUNCH_XCSOAR_DEPENDS = OS
+LAUNCH_XCSOAR_STRIP = y
+
+$(eval $(call link-program,LaunchXCSoar,LAUNCH_XCSOAR))
+
+endif

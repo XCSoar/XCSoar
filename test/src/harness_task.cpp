@@ -31,8 +31,10 @@
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
+#include "Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Util/StaticArray.hpp"
 
 #include "harness_waypoints.hpp"
 #include <string.h>
@@ -81,46 +83,54 @@ public:
     printf("# bga start sector zone\n");
   }
 
+  void Visit(const SymmetricSectorZone &oz) {
+    printf("# symmetric quadrant\n");
+  }
+
   void Visit(const ObservationZonePoint &oz) {
     switch (oz.GetShape()) {
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
       Visit((const FAISectorZone &)oz);
       break;
 
-    case ObservationZonePoint::SECTOR:
+    case ObservationZone::Shape::SECTOR:
       Visit((const SectorZone &)oz);
       break;
 
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       Visit((const LineSectorZone &)oz);
       break;
 
-    case ObservationZonePoint::MAT_CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
       Visit((const MatCylinderZone &)oz);
       break;
 
-    case ObservationZonePoint::CYLINDER:
+    case ObservationZone::Shape::CYLINDER:
       Visit((const CylinderZone &)oz);
       break;
 
-    case ObservationZonePoint::KEYHOLE:
+    case ObservationZone::Shape::KEYHOLE:
       Visit((const KeyholeZone &)oz);
       break;
 
-    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
       Visit((const BGAFixedCourseZone &)oz);
       break;
 
-    case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
       Visit((const BGAEnhancedOptionZone &)oz);
       break;
 
-    case ObservationZonePoint::BGA_START:
+    case ObservationZone::Shape::BGA_START:
       Visit((const BGAStartSectorZone &)oz);
       break;
 
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       Visit((const AnnularSectorZone &)oz);
+      break;
+
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+      Visit((const SymmetricSectorZone &)oz);
       break;
     }
   }
@@ -427,7 +437,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(1);
   if (wp) {
     tp = fact.CreateStart(TaskPointFactoryType::START_LINE,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(5000.0));
       tp->UpdateOZ(projection);
@@ -455,7 +465,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -480,7 +490,7 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(5);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -602,7 +612,7 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
@@ -617,7 +627,7 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(40000.0));
       tp->UpdateOZ(projection);
@@ -676,7 +686,7 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   wp = waypoints.LookupId(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::MAT_CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::MAT_CYLINDER) {
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
@@ -689,7 +699,7 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   wp = waypoints.LookupId(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZonePoint::MAT_CYLINDER) {
+    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::MAT_CYLINDER) {
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
@@ -871,6 +881,14 @@ const Waypoint* random_waypoint(const Waypoints &waypoints) {
   return waypoints.LookupId(id);  
 }
 
+static TaskPointFactoryType
+GetRandomType(const LegalPointSet &l)
+{
+  StaticArray<TaskPointFactoryType, LegalPointSet::N> types;
+  l.CopyTo(std::back_inserter(types));
+  return types[(rand() % types.size())];
+}
+
 bool test_task_random(TaskManager& task_manager,
                       const Waypoints &waypoints,
                       const unsigned num_points)
@@ -885,8 +903,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetStartTypes()[(rand() % fact.GetStartTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetStartTypes());
 
     tp = fact.CreateStart(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -902,8 +919,7 @@ bool test_task_random(TaskManager& task_manager,
     task_report(task_manager, "# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      TaskPointFactoryType s =
-        fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
+      const TaskPointFactoryType s = GetRandomType(fact.GetIntermediateTypes());
 
       tp = fact.CreateIntermediate(s,*wp);
       if (!fact.Append(*tp,false)) {
@@ -916,8 +932,7 @@ bool test_task_random(TaskManager& task_manager,
   task_report(task_manager, "# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetFinishTypes()[(rand() % fact.GetFinishTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetFinishTypes());
 
     tp = fact.CreateFinish(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -980,8 +995,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding start\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetStartTypes()[(rand() % fact.GetStartTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetStartTypes());
 
     tp = fact.CreateStart(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -994,8 +1008,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     test_note("# adding intermediate\n");
     wp = random_waypoint(waypoints);
     if (wp) {
-      TaskPointFactoryType s =
-        fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
+      const TaskPointFactoryType s = GetRandomType(fact.GetIntermediateTypes());
 
       tp = fact.CreateIntermediate(s,*wp);
       if (!fact.Append(*tp,false)) {
@@ -1008,8 +1021,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   test_note("# adding finish\n");
   wp = random_waypoint(waypoints);
   if (wp) {
-    TaskPointFactoryType s =
-      fact.GetFinishTypes()[(rand() % fact.GetFinishTypes().size())];
+    const TaskPointFactoryType s = GetRandomType(fact.GetFinishTypes());
 
     tp = fact.CreateFinish(s,*wp);
     if (!fact.Append(*tp,false)) {
@@ -1049,7 +1061,7 @@ bool test_task(TaskManager& task_manager,
                const Waypoints &waypoints,
                int test_num)
 {
-  unsigned n_points = rand()%9+1;
+  unsigned n_points = rand()%8+1;
   switch (test_num) {
   case 0:
     return test_task_mixed(task_manager,waypoints);

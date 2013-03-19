@@ -51,7 +51,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 10,
+  NUM_OZ_TYPES = 11,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -65,6 +65,7 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("BGA Enhanced Option"),
   _T("BGA Start"),
   _T("Annular sector"),
+  _T("Symmetric quadrant"),
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -87,14 +88,14 @@ public:
   OZWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
     :roz(task_look, airspace_look, airspace_renderer_settings), oz(NULL) {
     projection.SetGeoLocation(location);
-    set_shape(ObservationZonePoint::LINE);
+    set_shape(ObservationZone::Shape::LINE);
   }
 
   ~OZWindow() {
     delete oz;
   }
 
-  void set_shape(ObservationZonePoint::Shape shape) {
+  void set_shape(ObservationZone::Shape shape) {
     if (oz != NULL && shape == oz->GetShape())
       return;
 
@@ -104,47 +105,51 @@ public:
     fixed radius(10000);
 
     switch (shape) {
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       oz = new LineSectorZone(location, 2 * radius);
       break;
 
-    case ObservationZonePoint::CYLINDER:
+    case ObservationZone::Shape::CYLINDER:
       oz = new CylinderZone(location, radius);
       break;
 
-    case ObservationZonePoint::MAT_CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
       oz = new MatCylinderZone(location);
       break;
 
-    case ObservationZonePoint::SECTOR:
+    case ObservationZone::Shape::SECTOR:
       oz = new SectorZone(location, radius,
                           Angle::Degrees(0), Angle::Degrees(70));
       break;
 
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       oz = new AnnularSectorZone(location, radius,
                                  Angle::Degrees(0), Angle::Degrees(70),
                                  Half(radius));
       break;
 
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
       oz = new FAISectorZone(location);
       break;
 
-    case ObservationZonePoint::KEYHOLE:
+    case ObservationZone::Shape::KEYHOLE:
       oz = new KeyholeZone(location);
       break;
 
-    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
       oz = new BGAFixedCourseZone(location);
       break;
 
-    case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
       oz = new BGAEnhancedOptionZone(location);
       break;
 
-    case ObservationZonePoint::BGA_START:
+    case ObservationZone::Shape::BGA_START:
       oz = new BGAStartSectorZone(location);
+      break;
+
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+      oz = new SymmetricSectorZone(location);
       break;
     }
 
@@ -233,7 +238,7 @@ public:
     button_rc.top = button_rc.bottom - 30;
     close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
 
-    oz.set_shape(ObservationZonePoint::LINE);
+    oz.set_shape(ObservationZone::Shape::LINE);
 
     type_list->SetFocus();
   }
@@ -259,7 +264,7 @@ protected:
   virtual void OnCursorMoved(unsigned idx) override {
     assert(idx < NUM_OZ_TYPES);
 
-    oz.set_shape((ObservationZonePoint::Shape)idx);
+    oz.set_shape((ObservationZone::Shape)idx);
   }
 };
 

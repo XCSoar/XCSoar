@@ -36,28 +36,6 @@ byte_bas64(const uint8_t *b)
   return bas64ar;
 }
 
-static uint8_t
-b64b(char c)
-{
-  if ((c >= '0') && (c <= '9'))
-    return(c-'0');
-  else if ((c >= '@') && (c <= 'Z'))
-    return(c-'@'+10);
-  else if ((c >= '`') && (c <= 'z'))
-    return(c-'`'+37);
-  else
-    return(0);
-}
-
-static void
-bas64_byte(uint8_t *b, char *c)
-{
-  b[0] = ( b64b(c[0]) << 2)         | (b64b(c[1]) >> 4);
-  b[1] = ((b64b(c[1]) & 0x0f) << 4) | (b64b(c[2]) >> 2);
-  b[2] = ((b64b(c[2]) & 0x03) << 6) | (b64b(c[3])     );
-}
-
-
 // g-record functions
 //
 GRECORD::GRECORD(FILE *ausgabedatei) {
@@ -91,14 +69,6 @@ void GRECORD::finish(void) {
     fprintf(ausgabe,"G%s\n",grecord);
   }
 }
-
-
-
-
-
-
-
-
 
 /*
 DATA-GCS:
@@ -136,130 +106,11 @@ x  x - Binärblock in GR64 konvertieren und anhängen
 
 */
 
-
-/*
-Den String *st mit dem Zeichen f auf Länge l erweitern, sofern er nicht
-schon die gewünschte Länge hat
-*/
-static char *strexpnd(char *st, char f, unsigned int l) {
- unsigned int i,ll;
-  ll = strlen(st);
-  if (ll > l) st[l] = 0;
-  if (ll < l) for(i=ll; i<l; i++) {st[i] = f; st[i+1] = 0;};
-  return(st);
-}
-
-
-
-/*
-Filtern einer Zeile:
-  - IGC-Zeichenfilter
-  - Falls Datensatzkennzeichen nicht zu den vom Logger stammenden
-    Datensätzen (A,B,C,D,E,F,HF,I,J,K,LGCS-Datensatz) gehört,
-    Leerzeile zurückliefern, sonst den gefilterten String
-*/
-static char *
-filterline(char *st)
-{
-  TrimRight(st);
-  if (!(
-      (st[0]=='A')
-   || (st[0]=='B')
-   || (st[0]=='C')
-   || (st[0]=='D')
-   || (st[0]=='E')
-   || (st[0]=='F')
-   || (st[0]=='G')
-   || ((st[0]=='H') && (st[1]=='F'))
-   || (st[0]=='I')
-   || (st[0]=='J')
-   || (st[0]=='K')
-   || ((st[0]=='L') && (st[1]=='G') && (st[2]=='C') && (st[3]=='S'))
-   )) st[0] = 0;
-  return st;
-}
-
-
-/*
-Zeile aus *datei lesen und über IGC-linefilter laufen lassen
-*/
-static char *
-fgetline(char *st, size_t si, FILE *datei)
-{
- char *stat;
-  if ( (stat = fgets(st,si,datei)) != 0)
-    filterline(st);
-  return stat;
-}
-
 void
-print_g_record(FILE *datei, const uint8_t *puffer, int32 puflen)
+print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen)
 {
- int32 i;
- GRECORD g1(datei);
-  for(i=0; i<puflen; i++)
+  GRECORD g1(datei);
+  for (size_t i = 0; i < puflen; ++i)
     g1.update(puffer[i]);
   g1.finish();
 }
-
-/*
-Aus Datei *dateiname die G-Records extrahieren (nur als zusammenhängender
-Block), von radix-64 in Binär umwandeln und in *puffer speichern.
-Pufferlänge puflen ist angegeben, um ein Überschreiben nicht zum Puffer
-gehörender Bereiche zu verhindern
-*/
-int
-get_g_record(char *dateiname, uint8_t *puffer, unsigned long puflen)
-{
- unsigned long i = 0;
- int	       j;
- const int     zeilemax = 79;
- char          zeile[zeilemax];
- FILE	       *datei;
- uint8_t bin[3];
- char          *stat;
-  if ((datei = fopen(dateiname,"rt")) == NULL)
-    return -1;
-  while ((stat=fgetline(zeile,sizeof(zeile),datei)) != 0) {
-    if (strcmp(zeile,"") == 0) continue;
-    if (zeile[0] == 'G') break;
-  }
-  if (stat) do {
-    if (strcmp(zeile,"") == 0) continue;
-    if (zeile[0] != 'G') break;
-    strexpnd(zeile,'z',73);
-
-    for(j=1; j<73; j=j+4) {
-      bas64_byte(bin,&zeile[j]);
-      //_fmemcpy(&puffer[i],bin,3);
-	  puffer[i] = bin[0];
-	  puffer[i+1] = bin[1];
-	  puffer[i+2] = bin[2];
-      i += 3;
-      if (i+3 > puflen) break;
-    }
-  } while (fgetline(zeile,sizeof(zeile),datei) != 0);
-  fclose(datei); return 0;
-}
-
-
-// Eine IGC-Datei von allen Zeilen befreien, die vom Pilot oder OO legal zur
-// Datei hinzugefügt worden sein könnten
-// Speichern der "cleanen" Datei
-void clean_igcfile(char *quelldateiname, char *zieldateiname) {
- FILE *quelle;
- FILE *ziel;
- const int zeilemax = 79;
- char zeile[zeilemax];
-  quelle = fopen(quelldateiname,"rt");
-  ziel = fopen(zieldateiname,"wt");
-  while ((fgetline(zeile,sizeof(zeile),quelle)) != 0) {
-    if ( (zeile[0]) && (zeile[0] != 'G'))
-      fprintf(ziel,"%s\n",zeile);
-  }
-  fclose(quelle);
-  fclose(ziel);
-}
-
-
-

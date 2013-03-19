@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Queue.hpp"
+#include "OS/Clock.hpp"
 
 void
 EventQueue::Push(const Event &event)
@@ -51,14 +52,41 @@ EventQueue::Pop(Event &event)
 }
 
 bool
+EventQueue::Generate(Event &event, uint64_t now_us)
+{
+  Timer *timer = timers.Pop(now_us);
+  if (timer != nullptr) {
+    event.type = Event::TIMER;
+    event.ptr = timer;
+    return true;
+  }
+
+  return false;
+}
+
+#include "LogFile.hpp"
+bool
 EventQueue::Wait(Event &event)
 {
   ScopeLock protect(mutex);
   if (!running)
     return false;
 
-  while (events.empty())
-    cond.Wait(mutex);
+  while (events.empty()) {
+    const uint64_t now_us = MonotonicClockUS();
+    if (Generate(event, now_us))
+      return true;
+
+    const int64_t timeout_us = timers.GetTimeoutUS(now_us);
+    if (timeout_us < 0)
+      LogFormat("timeout?=%lld", (long long)timeout_us);
+    else
+      LogFormat("timeout_ms=%lld", (long long)((timeout_us + 999) / 1000));
+    if (timeout_us < 0)
+      cond.Wait(mutex);
+    else
+      cond.Wait(mutex, (timeout_us + 999) / 1000);
+  }
 
   event = events.front();
   events.pop();
@@ -121,14 +149,19 @@ EventQueue::Purge(Window &window)
   Purge(match_window, (void *)&window);
 }
 
-static bool
-match_timer(const Event &event, void *ctx)
+void
+EventQueue::AddTimer(Timer &timer, unsigned ms)
 {
-  return event.type == Event::TIMER && event.ptr == ctx;
+  ScopeLock protect(mutex);
+
+  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+  cond.Signal();
 }
 
 void
-EventQueue::Purge(AndroidTimer &timer)
+EventQueue::CancelTimer(Timer &timer)
 {
-  Purge(match_timer, (void *)&timer);
+  ScopeLock protect(mutex);
+
+  timers.Cancel(timer);
 }

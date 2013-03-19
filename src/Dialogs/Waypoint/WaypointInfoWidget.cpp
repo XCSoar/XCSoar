@@ -26,6 +26,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
+#include "Engine/Util/Gradient.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "ComputerSettings.hpp"
@@ -186,5 +187,22 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                    MacCready::Solve(settings.task.glide,
                                     settings.polar.glide_polar_task,
                                     glide_state));
+  }
+
+  if (basic.location_available && basic.NavAltitudeAvailable()) {
+    const TaskBehaviour &task_behaviour =
+      CommonInterface::GetComputerSettings().task;
+
+    const fixed safety_height = task_behaviour.safety_height_arrival;
+    const fixed target_altitude = waypoint.elevation + safety_height;
+    const fixed delta_h = basic.nav_altitude - target_altitude;
+    if (positive(delta_h)) {
+      const fixed distance = basic.location.Distance(waypoint.location);
+      const fixed gr = distance / delta_h;
+      if (GradientValid(gr)) {
+        buffer.UnsafeFormat(_T("%.1f"), (double)gr);
+        AddReadOnly(_("Required glide ratio"), nullptr, buffer);
+      }
+    }
   }
 }

@@ -30,8 +30,6 @@ Copyright_License {
 
 namespace InfoBoxLayout
 {
-  static constexpr double CONTROLHEIGHTRATIO = 7.4;
-
   struct Layout {
     InfoBoxSettings::Geometry geometry;
 

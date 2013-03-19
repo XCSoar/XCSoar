@@ -25,7 +25,15 @@
 #include "harness_waypoints.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Util/StaticArray.hpp"
 
+static TaskPointFactoryType
+GetRandomType(const LegalPointSet &l)
+{
+  StaticArray<TaskPointFactoryType, LegalPointSet::N> types;
+  l.CopyTo(std::back_inserter(types));
+  return types[(rand() % types.size())];
+}
 
 bool test_task_bad(TaskManager& task_manager,
                    const Waypoints& waypoints)
@@ -43,8 +51,7 @@ bool test_task_bad(TaskManager& task_manager,
 
   // now create a taskpoint from FAI
 
-  TaskPointFactoryType s =
-    fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
+  const TaskPointFactoryType s = GetRandomType(fact.GetIntermediateTypes());
 
   // test it is bad for AAT
 

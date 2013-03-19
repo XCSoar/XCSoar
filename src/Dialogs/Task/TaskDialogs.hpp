@@ -39,9 +39,6 @@ dlgTaskPointType(OrderedTask **task, unsigned index);
 bool
 dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task);
 
-bool
-dlgTaskPointNew(OrderedTask** task, const unsigned index);
-
 /**
  * Shows map display zoomed to target point
  * with half dialog popup to manipulate point

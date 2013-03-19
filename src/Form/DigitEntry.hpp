@@ -50,6 +50,7 @@ class DigitEntry : public PaintWindow {
       DIGIT,
       DIGIT6,
       HOUR, // i.e. DIGIT24
+      DIGIT19,
       DIGIT36,
       SIGN,
       DECIMAL_POINT,
@@ -58,6 +59,7 @@ class DigitEntry : public PaintWindow {
       EAST_WEST,
       UNIT,
       DEGREES,
+      APOSTROPHE,
     };
 
     Type type;
@@ -78,6 +80,7 @@ class DigitEntry : public PaintWindow {
     constexpr bool IsNumber() const {
       return type == Type::DIGIT ||
         type == Type::DIGIT6 ||
+        type == Type::DIGIT19 ||
         type == Type::DIGIT36 ||
         type == Type::HOUR;
     }
@@ -85,6 +88,7 @@ class DigitEntry : public PaintWindow {
     constexpr unsigned GetMaxNumber() const {
       return type == Type::DIGIT6 ? 5 :
              type == Type::HOUR ? 23 :
+             type == Type::DIGIT19 ? 18 :
              type == Type::DIGIT36 ? 35 : 9;
     }
 
@@ -104,7 +108,7 @@ class DigitEntry : public PaintWindow {
      */
     constexpr unsigned GetWidth() const {
       return type == Type::UNIT ? 4 :
-             type == Type::HOUR || type == Type::DIGIT36 ? 2 : 1;
+             type == Type::HOUR || type == Type::DIGIT19 || type == Type::DIGIT36 ? 2 : 1;
     }
   };
 
@@ -155,6 +159,12 @@ public:
   void CreateAngle(ContainerWindow &parent, const PixelRect &rc,
                    const WindowStyle style);
 
+  void CreateLatitude(ContainerWindow &parent, const PixelRect &rc,
+                      const WindowStyle style);
+
+  void CreateLongitude(ContainerWindow &parent, const PixelRect &rc,
+                       const WindowStyle style);
+
   void CalculateLayout();
 
   gcc_pure
@@ -195,6 +205,18 @@ public:
 
   gcc_pure
   Angle GetAngleValue() const;
+
+  void SetLatitude(Angle value);
+  void SetLongitude(Angle value);
+
+  gcc_pure
+  Angle GetGeoAngle() const;
+
+  gcc_pure
+  Angle GetLatitude() const;
+
+  gcc_pure
+  Angle GetLongitude() const;
 
 protected:
   gcc_pure

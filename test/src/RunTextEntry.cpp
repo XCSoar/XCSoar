@@ -29,11 +29,19 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs/TimeEntry.hpp"
+#include "Dialogs/GeoPointEntry.hpp"
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 bool
 TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+{
+  return false;
+}
+
+bool
+GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
+                    bool nullable)
 {
   return false;
 }

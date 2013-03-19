@@ -43,19 +43,20 @@ static fixed
 GetOZSize(const ObservationZonePoint &oz)
 {
   switch (oz.GetShape()) {
-  case ObservationZonePoint::SECTOR:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
     return ((const SectorZone &)oz).GetRadius();
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     return ((const LineSectorZone &)oz).GetLength();
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     return ((const CylinderZone &)oz).GetRadius();
 
-  case ObservationZonePoint::MAT_CYLINDER:
+  case ObservationZone::Shape::MAT_CYLINDER:
     return ((const MatCylinderZone &)oz).GetRadius();
 
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
     return ((const AnnularSectorZone &)oz).GetRadius();
 
   default:
@@ -79,29 +80,19 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 
   switch (tp.GetType()) {
   case TaskPointType::START:
-    if (!IsValidStartType(newtype)) {
-      newtype = behaviour.sector_defaults.start_type;
-      if (!IsValidStartType(newtype))
-        newtype = *start_types.begin();
-    }
+    if (!IsValidStartType(newtype))
+      newtype = GetDefaultStartType();
     break;
 
   case TaskPointType::AST:
   case TaskPointType::AAT:
-    if (!IsValidIntermediateType(newtype)) {
-      newtype = behaviour.sector_defaults.turnpoint_type;
-      if (!IsValidIntermediateType(newtype)) {
-        newtype = *intermediate_types.begin();
-      }
-    }
+    if (!IsValidIntermediateType(newtype))
+      newtype = GetDefaultIntermediateType();
     break;
 
   case TaskPointType::FINISH:
-    if (!IsValidFinishType(newtype)) {
-      newtype = behaviour.sector_defaults.finish_type;
-      if (!IsValidFinishType(newtype))
-        newtype = *finish_types.begin();
-    }
+    if (!IsValidFinishType(newtype))
+      newtype = GetDefaultFinishType();
     break;
 
   case TaskPointType::UNORDERED:
@@ -143,11 +134,7 @@ AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
 StartPoint* 
 AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 {
-  TaskPointFactoryType type = behaviour.sector_defaults.start_type;
-  if (!IsValidStartType(type))
-    type = *start_types.begin();
-
-  return CreateStart(type, wp);
+  return CreateStart(GetDefaultStartType(), wp);
 }
 
 IntermediateTaskPoint* 
@@ -159,21 +146,13 @@ AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
       return CreateIntermediate(type, wp);
   }
 
-  TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
-  if (!IsValidIntermediateType(type))
-    type = *intermediate_types.begin();
-
-  return CreateIntermediate(type, wp);
+  return CreateIntermediate(GetDefaultIntermediateType(), wp);
 }
 
 FinishPoint* 
 AbstractTaskFactory::CreateFinish(const Waypoint &wp) const
 {
-  TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
-  if (!IsValidFinishType(type))
-    type = *finish_types.begin();
-
-  return CreateFinish(type, wp);
+  return CreateFinish(GetDefaultFinishType(), wp);
 }
 
 TaskPointFactoryType 
@@ -184,86 +163,92 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   switch (point.GetType()) {
   case TaskPointType::START:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
       return TaskPointFactoryType::START_SECTOR;
 
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::START_LINE;
 
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::START_CYLINDER;
 
-    case ObservationZonePoint::BGA_START:
+    case ObservationZone::Shape::BGA_START:
       return TaskPointFactoryType::START_BGA;
     }
     break;
 
   case TaskPointType::AAT:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::FAI_SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::AAT_SEGMENT;
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::AAT_ANNULAR_SECTOR;
-    case ObservationZonePoint::CYLINDER:
+    case ObservationZone::Shape::CYLINDER:
       return TaskPointFactoryType::AAT_CYLINDER;
 
-    case ObservationZonePoint::MAT_CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
       return TaskPointFactoryType::MAT_CYLINDER;
     }
     break;
 
   case TaskPointType::AST:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
-    case ObservationZonePoint::KEYHOLE:
+    case ObservationZone::Shape::KEYHOLE:
       return TaskPointFactoryType::KEYHOLE_SECTOR;
 
-    case ObservationZonePoint::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
       return TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR;
 
-    case ObservationZonePoint::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
       return TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR;
 
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::LINE:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::LINE:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::AST_CYLINDER;
+
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
+      return TaskPointFactoryType::SYMMETRIC_QUADRANT;
     }
     break;
 
   case TaskPointType::FINISH:
     switch (oz.GetShape()) {
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::FAI_SECTOR:
+    case ObservationZone::Shape::BGA_START:
+    case ObservationZone::Shape::FAI_SECTOR:
+    case ObservationZone::Shape::SYMMETRIC_QUADRANT:
       return TaskPointFactoryType::FINISH_SECTOR;
 
-    case ObservationZonePoint::LINE:
+    case ObservationZone::Shape::LINE:
       return TaskPointFactoryType::FINISH_LINE;
 
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::MAT_CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::ANNULAR_SECTOR:
+    case ObservationZone::Shape::CYLINDER:
+    case ObservationZone::Shape::MAT_CYLINDER:
+    case ObservationZone::Shape::SECTOR:
+    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::BGAFIXEDCOURSE:
+    case ObservationZone::Shape::BGAENHANCEDOPTION:
+    case ObservationZone::Shape::ANNULAR_SECTOR:
       return TaskPointFactoryType::FINISH_CYLINDER;
     }
     break;
@@ -324,6 +309,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateStart(new BGAStartSectorZone(wp.location), wp);
   case TaskPointFactoryType::FAI_SECTOR:
     return CreateASTPoint(new FAISectorZone(wp.location, true), wp);
+  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
+    return CreateASTPoint(new SymmetricSectorZone(wp.location,
+                                                  turnpoint_radius), wp);
   case TaskPointFactoryType::KEYHOLE_SECTOR:
     return CreateASTPoint(new KeyholeZone(wp.location), wp);
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
@@ -346,10 +334,12 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
     return CreateFinish(new LineSectorZone(wp.location, finish_radius), wp);
   case TaskPointFactoryType::FINISH_CYLINDER:
     return CreateFinish(new CylinderZone(wp.location, finish_radius), wp);
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
-  assert(1);
-  return NULL;
+  gcc_unreachable();
 }
 
 StartPoint* 
@@ -673,60 +663,49 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
   gcc_unreachable();
 }
 
-bool
-AbstractTaskFactory::IsValidIntermediateType(TaskPointFactoryType type) const
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultStartType() const
 {
-  return std::find(intermediate_types.begin(), intermediate_types.end(), type)
-    != intermediate_types.end();
+  TaskPointFactoryType type = behaviour.sector_defaults.start_type;
+  if (!IsValidStartType(type) && !start_types.IsEmpty())
+    type = start_types.UncheckedFirst();
+
+  return type;
 }
 
-bool
-AbstractTaskFactory::IsValidStartType(TaskPointFactoryType type) const
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultIntermediateType() const
 {
-  return std::find(start_types.begin(), start_types.end(), type)
-    != start_types.end();
+  TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
+  if (!IsValidIntermediateType(type) && !intermediate_types.IsEmpty())
+    type = intermediate_types.UncheckedFirst();
+
+  return type;
 }
 
-bool
-AbstractTaskFactory::IsValidFinishType(TaskPointFactoryType type) const
+TaskPointFactoryType
+AbstractTaskFactory::GetDefaultFinishType() const
 {
-  return std::find(finish_types.begin(), finish_types.end(), type)
-    != finish_types.end();
+  TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
+  if (!IsValidFinishType(type) && !finish_types.IsEmpty())
+    type = finish_types.UncheckedFirst();
+
+  return type;
 }
 
-AbstractTaskFactory::LegalPointVector 
+LegalPointSet
 AbstractTaskFactory::GetValidTypes(unsigned position) const
 {
-  LegalPointVector v;
+  LegalPointSet v;
   if (ValidAbstractType(POINT_START, position))
-    v.insert(v.end(), start_types.begin(), start_types.end());
+    v |= start_types;
 
-  LegalPointVector i = GetValidIntermediateTypes(position);
-  if (!i.empty())
-    v.insert(v.end(), i.begin(), i.end());
+  v |= GetValidIntermediateTypes(position);
 
   if (ValidAbstractType(POINT_FINISH, position))
-    v.insert(v.end(), finish_types.begin(), finish_types.end());
+    v |= finish_types;
 
   return v;
-}
-
-void
-AbstractTaskFactory::AddValidationError(TaskValidationErrorType e)
-{
-  validation_errors.push_back(e);
-}
-
-void
-AbstractTaskFactory::ClearValidationErrors()
-{
-  validation_errors.clear();
-}
-
-TaskValidationErrorVector
-AbstractTaskFactory::GetValidationErrors()
-{
-  return validation_errors;
 }
 
 bool
@@ -790,6 +769,7 @@ AbstractTaskFactory::ValidateFAIOZs()
     case TaskPointFactoryType::AAT_CYLINDER:
     case TaskPointFactoryType::AAT_SEGMENT:
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
+    case TaskPointFactoryType::SYMMETRIC_QUADRANT:
       valid = false;
       break;
 
@@ -804,6 +784,9 @@ AbstractTaskFactory::ValidateFAIOZs()
     case TaskPointFactoryType::FINISH_CYLINDER:
       valid = false;
       break;
+
+    case TaskPointFactoryType::COUNT:
+      gcc_unreachable();
     }
   }
 
@@ -844,12 +827,16 @@ AbstractTaskFactory::ValidateMATOZs()
     case TaskPointFactoryType::AAT_SEGMENT:
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     case TaskPointFactoryType::FINISH_SECTOR:
+    case TaskPointFactoryType::SYMMETRIC_QUADRANT:
       valid = false;
       break;
 
     case TaskPointFactoryType::FINISH_LINE:
     case TaskPointFactoryType::FINISH_CYLINDER:
       break;
+
+    case TaskPointFactoryType::COUNT:
+      gcc_unreachable();
     }
   }
 
@@ -904,52 +891,24 @@ AbstractTaskFactory::Validate()
   return valid;
 }
 
-AbstractTaskFactory::LegalPointVector 
+LegalPointSet
 AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
 {
-  LegalPointVector v;
-
   if (!IsPositionIntermediate(position))
-    return v;
+    return LegalPointSet();
 
   if (constraints.homogeneous_tps &&
       position > 1 && task.TaskSize() > 1) {
     TaskPointFactoryType type = GetType(task.GetPoint(1));
-    if (IsValidIntermediateType(type)) {
-      v.push_back(type);
-      return v;
-    }
+    if (IsValidIntermediateType(type))
+      return LegalPointSet(type);
   }
 
   if (ValidAbstractType(POINT_AAT, position) ||
       ValidAbstractType(POINT_AST, position))
-    v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
+    return intermediate_types;
 
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidStartTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), start_types.begin(), start_types.end());
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidIntermediateTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
-  return v;
-}
-
-AbstractTaskFactory::LegalPointVector
-AbstractTaskFactory::GetValidFinishTypes() const
-{
-  LegalPointVector v;
-  v.insert(v.end(), finish_types.begin(), finish_types.end());
-  return v;
+  return LegalPointSet();
 }
 
 bool 
@@ -1037,11 +996,8 @@ AbstractTaskFactory::MutateTPsToTaskType()
       TaskPointFactoryType newtype = GetMutatedPointType(tp);
       if (IsPositionFinish(i)) {
 
-        if (!IsValidFinishType(newtype)) {
-          newtype = behaviour.sector_defaults.finish_type;
-          if (!IsValidFinishType(newtype))
-            newtype = *finish_types.begin();
-        }
+        if (!IsValidFinishType(newtype))
+          newtype = GetDefaultFinishType();
 
         FinishPoint *fp = (FinishPoint*)CreateMutatedPoint(tp, newtype);
         assert(fp);
@@ -1050,11 +1006,8 @@ AbstractTaskFactory::MutateTPsToTaskType()
         delete fp;
 
       } else if (i == 0) {
-        if (!IsValidStartType(newtype)) {
-          newtype = behaviour.sector_defaults.start_type;
-          if (!IsValidStartType(newtype))
-            newtype = *start_types.begin();
-        }
+        if (!IsValidStartType(newtype))
+          newtype = GetDefaultStartType();
 
         StartPoint *sp = (StartPoint*)CreateMutatedPoint(tp, newtype);
         assert(sp);
@@ -1064,11 +1017,9 @@ AbstractTaskFactory::MutateTPsToTaskType()
 
       } else {
 
-        if (!IsValidIntermediateType(newtype)) {
-          newtype = behaviour.sector_defaults.turnpoint_type;
-          if (!IsValidIntermediateType(newtype))
-            newtype = *intermediate_types.begin();
-        }
+        if (!IsValidIntermediateType(newtype))
+          newtype = GetDefaultIntermediateType();
+
         OrderedTaskPoint *tpnew = (OrderedTaskPoint*)CreateMutatedPoint(tp, newtype);
         if (Replace(*tpnew, i, true))
           changed = true;

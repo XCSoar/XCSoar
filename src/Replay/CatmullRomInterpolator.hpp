@@ -121,7 +121,7 @@ public:
            [ -t  2-t   t-2   t] u^3
     */
 
-    const fixed u2 = u * u;
+    const fixed u2 = sqr(u);
     const fixed u3 = u2 * u;
     const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
                        (fixed(2) - time) * u3 + (time - fixed(3)) * u2 + fixed(1),

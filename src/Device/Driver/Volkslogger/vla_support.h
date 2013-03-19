@@ -71,9 +71,15 @@ public:
   VLA_ERROR dbbget(void *dbbbuffer, int32 dbbsize);
   // read all binary flight logs from VL
   VLA_ERROR all_logsget(void *dbbbuffer, int32 dbbsize);
-  // read one binary flight log from VL
-  int32 flightget(void *buffer, int32 buffersize,
-                  int16 flightnr, int16 secmode);
+
+  /**
+   * Read one binary flight log from VL.
+   *
+   * @return the number of bytes written to the buffer or 0 on error
+   */
+  size_t flightget(void *buffer, size_t buffersize,
+                   int16 flightnr, int16 secmode);
+
   /**
    * read Flightlist(Directory) in binary format from VL to buffer,
    * return the length of the read data in bytes

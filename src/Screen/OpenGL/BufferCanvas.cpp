@@ -48,17 +48,13 @@ BufferCanvas::Create(PixelSize new_size)
   Destroy();
   texture = new GLTexture(new_size.cx, new_size.cy);
 
-  if (OpenGL::frame_buffer_object) {
+  if (OpenGL::frame_buffer_object && OpenGL::render_buffer_stencil) {
     frame_buffer = new GLFrameBuffer();
 
     stencil_buffer = new GLRenderBuffer();
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-#ifdef HAVE_GLES
-    stencil_buffer->Storage(GL_DEPTH24_STENCIL8_OES, size.cx, size.cy);
-#else
-    stencil_buffer->Storage(FBO::DEPTH_STENCIL, size.cx, size.cy);
-#endif
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);
     stencil_buffer->Unbind();
   }
 
@@ -98,11 +94,7 @@ BufferCanvas::Resize(PixelSize new_size)
   if (stencil_buffer != NULL) {
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-#ifdef HAVE_GLES
-    stencil_buffer->Storage(GL_DEPTH24_STENCIL8_OES, size.cx, size.cy);
-#else
-    stencil_buffer->Storage(FBO::DEPTH_STENCIL, size.cx, size.cy);
-#endif
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.cx, size.cy);
     stencil_buffer->Unbind();
   }
 
@@ -122,7 +114,11 @@ BufferCanvas::Begin(Canvas &other)
     frame_buffer->Bind();
     texture->AttachFramebuffer(FBO::COLOR_ATTACHMENT0);
 
-    stencil_buffer->AttachFramebuffer(FBO::DEPTH_ATTACHMENT);
+    if (OpenGL::render_buffer_stencil == OpenGL::render_buffer_depth_stencil)
+      /* we don't need a depth buffer, but we must attach it to the
+         FBO if the stencil Renderbuffer has one */
+      stencil_buffer->AttachFramebuffer(FBO::DEPTH_ATTACHMENT);
+
     stencil_buffer->AttachFramebuffer(FBO::STENCIL_ATTACHMENT);
 
     /* save the old viewport */

@@ -33,6 +33,7 @@ public:
     InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxData &data) override;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
+  virtual const InfoBoxPanel *GetDialogContent() override;
 
 private:
   unsigned index;
@@ -45,6 +46,7 @@ public:
     InfoBoxContent(), index(_index) {}
   virtual void Update(InfoBoxData &data) override;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) override;
+  virtual const InfoBoxPanel *GetDialogContent() override;
 
 private:
   unsigned index;

@@ -33,22 +33,23 @@ static constexpr TaskFactoryConstraints rt_constraints = {
   2, 13,
 };
 
-static constexpr TaskPointFactoryType rt_start_types[] = {
+static constexpr LegalPointSet rt_start_types{
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_BGA,
 };
 
-static constexpr TaskPointFactoryType rt_im_types[] = {
+static constexpr LegalPointSet rt_im_types{
   TaskPointFactoryType::AST_CYLINDER,
   TaskPointFactoryType::KEYHOLE_SECTOR,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
   TaskPointFactoryType::FAI_SECTOR,
+  TaskPointFactoryType::SYMMETRIC_QUADRANT,
 };
 
-static constexpr TaskPointFactoryType rt_finish_types[] = {
+static constexpr LegalPointSet rt_finish_types{
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
   TaskPointFactoryType::FINISH_SECTOR,
@@ -57,12 +58,7 @@ static constexpr TaskPointFactoryType rt_finish_types[] = {
 RTTaskFactory::RTTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb)
   :AbstractTaskFactory(rt_constraints, _task, tb,
-                       LegalPointConstArray(rt_start_types,
-                                            ARRAY_SIZE(rt_start_types)),
-                       LegalPointConstArray(rt_im_types,
-                                            ARRAY_SIZE(rt_im_types)),
-                       LegalPointConstArray(rt_finish_types,
-                                            ARRAY_SIZE(rt_finish_types)))
+                       rt_start_types, rt_im_types, rt_finish_types)
 {
 }
 
@@ -92,6 +88,7 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
   case TaskPointFactoryType::FAI_SECTOR:
   case TaskPointFactoryType::AST_CYLINDER:
+  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     break;
 
   case TaskPointFactoryType::FINISH_SECTOR:
@@ -105,6 +102,9 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::AAT_CYLINDER:
     newtype = TaskPointFactoryType::AST_CYLINDER;
     break;
+
+  case TaskPointFactoryType::COUNT:
+    gcc_unreachable();
   }
 
   return newtype;

@@ -101,6 +101,33 @@ TaskDefaultsConfigPanel::SetFinishLabel()
     wp.SetCaption(gettext(Caption_Radius));
 }
 
+static void
+FillPointTypes(DataFieldEnum &df,
+               const LegalPointSet &l,
+               TaskPointFactoryType value)
+{
+  df.EnableItemHelp(true);
+
+  for (unsigned i = 0; i < l.N; ++i) {
+    const TaskPointFactoryType type = TaskPointFactoryType(i);
+    if (!l.Contains(type))
+      continue;
+
+    df.addEnumText(OrderedTaskPointName(type), (unsigned)type,
+                   OrderedTaskPointDescription(type));
+  }
+
+  df.Set((unsigned)value);
+}
+
+static void
+FillPointTypes(WndProperty &wp,
+               const LegalPointSet &l,
+               TaskPointFactoryType value)
+{
+  FillPointTypes(*(DataFieldEnum *)wp.GetDataField(), l, value);
+  wp.RefreshDisplay();
+}
 
 void
 TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -116,21 +143,8 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Start point"),
                _("Default start type for new tasks you create."),
                this);
-  if (wp) {
-    const auto point_types = temptask.GetFactory().GetValidStartTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (auto i = point_types.begin(), end = point_types.end();
-         i != end; ++i) {
-      const TaskPointFactoryType type = *i;
-      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
-                       OrderedTaskPointDescription(type));
-      if (type == task_behaviour.sector_defaults.start_type)
-        dfe->Set((unsigned)type);
-    }
-    wp->RefreshDisplay();
-  }
+  FillPointTypes(*wp, temptask.GetFactory().GetValidStartTypes(),
+                 task_behaviour.sector_defaults.start_type);
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the start zone for new tasks."),
            _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(1.0), true, UnitGroup::DISTANCE,
@@ -141,21 +155,8 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Finish point"),
                _("Default finish type for new tasks you create."),
                this);
-  if (wp) {
-    const auto point_types = temptask.GetFactory().GetValidFinishTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (auto i = point_types.begin(), end = point_types.end();
-         i != end; ++i) {
-      const TaskPointFactoryType type = *i;
-      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
-                       OrderedTaskPointDescription(type));
-      if (type == task_behaviour.sector_defaults.finish_type)
-        dfe->Set((unsigned)type);
-    }
-    wp->RefreshDisplay();
-  }
+  FillPointTypes(*wp, temptask.GetFactory().GetValidFinishTypes(),
+                 task_behaviour.sector_defaults.finish_type);
 
   AddFloat(Caption_GateWidth, _("Default radius or gate width of the finish zone in new tasks."),
            _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(1.0), true, UnitGroup::DISTANCE,
@@ -164,22 +165,8 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
 
   wp = AddEnum(_("Turn point"), _("Default turn point type for new tasks you create."));
-  if (wp) {
-    const auto point_types = temptask.GetFactory().GetValidIntermediateTypes();
-    DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-
-    for (auto i = point_types.begin(), end = point_types.end();
-         i != end; ++i) {
-      const TaskPointFactoryType type = *i;
-      dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
-                       OrderedTaskPointDescription(type));
-      if (type == task_behaviour.sector_defaults.turnpoint_type) {
-        dfe->Set((unsigned)type);
-      }
-    }
-    wp->RefreshDisplay();
-  }
+  FillPointTypes(*wp, temptask.GetFactory().GetValidIntermediateTypes(),
+                 task_behaviour.sector_defaults.turnpoint_type);
 
   AddFloat(Caption_Radius, _("Default radius of turnpoint cylinders and sectors in new tasks."),
            _T("%.1f %s"), _T("%.1f"), fixed(0.1), fixed(100), fixed(1.0), true, UnitGroup::DISTANCE,

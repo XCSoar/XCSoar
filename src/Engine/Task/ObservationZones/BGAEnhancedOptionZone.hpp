@@ -46,7 +46,8 @@ public:
    * @return Initialised object
    */
   BGAEnhancedOptionZone(const GeoPoint loc)
-    :KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
+    :KeyholeZone(Shape::BGAENHANCEDOPTION,
+                 loc, fixed(10000),
                  Angle::HalfCircle())
   {
     UpdateSector();

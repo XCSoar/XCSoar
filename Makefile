@@ -267,6 +267,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
+	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
@@ -480,6 +481,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Other.cpp \
 	$(SRC)/InfoBoxes/Content/Speed.cpp \
 	$(SRC)/InfoBoxes/Content/Task.cpp \
+	$(SRC)/InfoBoxes/Content/Contest.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Terrain.cpp \
 	$(SRC)/InfoBoxes/Content/Thermal.cpp \
@@ -812,7 +814,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/InternalSensors.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \
-	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
 	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
@@ -905,6 +906,10 @@ OUTPUTS += $(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL)
 
 ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
+endif
+
+ifeq ($(HAVE_WIN32),y)
+OUTPUTS += $(LAUNCH_XCSOAR_BIN)
 endif
 
 all: $(OUTPUTS)

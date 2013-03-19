@@ -101,7 +101,7 @@ TEST_NAMES = \
 	TestIGCParser \
 	TestByteOrder \
 	TestByteOrder2 \
-	TestStrings \
+	TestStrings TestUTF8 \
 	TestCRC \
 	TestUnitsFormatter \
 	TestGeoPointFormatter \
@@ -435,6 +435,12 @@ TEST_STRINGS_SOURCES = \
 TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
 
+TEST_UTF8_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUTF8.cpp
+TEST_UTF8_DEPENDS = UTIL
+$(eval $(call link-program,TestUTF8,TEST_UTF8))
+
 TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -687,6 +693,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
 	RunTextEntry RunNumberEntry RunTimeEntry RunAngleEntry \
+	RunGeoPointEntry \
 	RunTerminal \
 	RunRenderOZ \
 	RunChartRenderer \
@@ -1758,6 +1765,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1770,7 +1778,7 @@ RUN_DIALOG_SOURCES = \
 RUN_DIALOG_LDADD = \
 	$(RESOURCE_BINARY) \
 	$(FAKE_LIBS)
-RUN_DIALOG_DEPENDS = IO FORM WIDGET DATA_FIELD SCREEN EVENT OS THREAD MATH ZZIP UTIL TIME
+RUN_DIALOG_DEPENDS = GEO IO FORM WIDGET DATA_FIELD SCREEN EVENT OS THREAD MATH ZZIP UTIL TIME
 $(eval $(call link-program,RunDialog,RUN_DIALOG))
 
 RUN_LIST_CONTROL_SOURCES = \
@@ -1804,6 +1812,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1812,7 +1821,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
 RUN_TEXT_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_TEXT_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
+RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 
 RUN_NUMBER_ENTRY_SOURCES = \
@@ -1882,6 +1891,29 @@ RUN_ANGLE_ENTRY_SOURCES = \
 RUN_ANGLE_ENTRY_LDADD = $(RESOURCE_BINARY)
 RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunAngleEntry,RUN_ANGLE_ENTRY))
+
+RUN_GEOPOINT_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/GeoPointEntry.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeListPicker.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/RunGeoPointEntry.cpp
+RUN_GEOPOINT_ENTRY_LDADD = $(RESOURCE_BINARY)
+RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD MATH UTIL ZLIB GEOPOINT
+$(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
@@ -2102,6 +2134,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Hardware/Display.cpp \
@@ -2240,6 +2273,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \

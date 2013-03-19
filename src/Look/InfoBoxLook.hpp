@@ -38,6 +38,11 @@ struct InfoBoxLook {
   Pen border_pen, selector_pen;
   Color background_color, focused_background_color, pressed_background_color;
 
+  /**
+   * Used only by #InfoBoxSettings::BorderStyle::SHADED.
+   */
+  Color caption_background_color;
+
   struct {
     Color fg_color;
     const Font *font;

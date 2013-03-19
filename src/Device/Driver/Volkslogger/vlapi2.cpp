@@ -89,8 +89,8 @@ VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
   Auslesen des Fluges flightnumber im Sicherheitslevel secmode,
   Abspeichern als GCS-Datei im Speicher
 */
-long
-VLA_XFR::flightget(void *buffer, int32 buffersize,
+size_t
+VLA_XFR::flightget(void *buffer, size_t buffersize,
                    int16 flightnr, int16 secmode)
 {
   // read binary flightlog
@@ -253,7 +253,7 @@ VLA_ERROR VLAPI::read_directory() {
     return VLA_ERR_MISC;
 
   if(data_length > 0) {
-    if (!conv_dir(directory, dirbuffer, data_length, env)) {
+    if (!conv_dir(directory, dirbuffer, data_length)) {
       directory.clear();
       return VLA_ERR_MISC;
     }
@@ -275,35 +275,31 @@ VLA_ERROR VLAPI::read_directory() {
 VLA_ERROR
 VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
 {
-  FILE *outfile = _tfopen(filename,_T("wt"));
-  if(!outfile)
-    return VLA_ERR_FILE;
-
   VLA_ERROR err = stillconnect();
-  if(err != VLA_ERR_NOERR) {
-    fclose(outfile);
+  if (err != VLA_ERR_NOERR)
     return err;
-  }
 
   uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
-  if (flightget(logbuffer, sizeof(logbuffer), index, secmode)>0)
-    err = VLA_ERR_NOERR;
+  const size_t length = flightget(logbuffer, sizeof(logbuffer), index, secmode);
+  if (length == 0)
+    return VLA_ERR_MISC;
 
-  word serno; long sp;
-  long r;
-  if(err == VLA_ERR_NOERR) {
-    r = convert_gcs(0, outfile, logbuffer, 1, &serno, &sp, env);
-    if(r>0) {
-      err = VLA_ERR_NOERR;
-      print_g_record(
-                     outfile,   // output to stdout
-                     logbuffer, // binary file is in buffer
-                     r          // length of binary file to include
-                     );
-    }
-    else
-      err = VLA_ERR_MISC;
-  }
+  FILE *outfile = _tfopen(filename, _T("wt"));
+  if (outfile == nullptr)
+    return VLA_ERR_FILE;
+
+  word serno;
+  long sp;
+  size_t r = convert_gcs(0, outfile, logbuffer, length, 1, &serno, &sp);
+  if (r > 0) {
+    err = VLA_ERR_NOERR;
+    print_g_record(outfile,   // output to stdout
+                   logbuffer, // binary file is in buffer
+                   r          // length of binary file to include
+                   );
+  } else
+    err = VLA_ERR_MISC;
+
   fclose(outfile);
   return err;
 }

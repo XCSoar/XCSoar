@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Task.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/dlgAnalysis.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
@@ -35,9 +35,38 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Widget/CallbackWidget.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
+
+static void
+ShowNextWaypointDetails()
+{
+  if (protected_task_manager == nullptr)
+    return;
+
+  const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
+  if (wp == nullptr)
+    return;
+
+  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
+}
+
+static Widget *
+LoadNextWaypointDetailsPanel(unsigned id)
+{
+  return new CallbackWidget(ShowNextWaypointDetails);
+}
+
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
+const InfoBoxPanel next_waypoint_infobox_panels[] = {
+  { N_("Details"), LoadNextWaypointDetailsPanel },
+  { nullptr, nullptr }
+};
 
 void
 UpdateInfoBoxBearing(InfoBoxData &data)
@@ -151,14 +180,17 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
     return true;
 
   case ibkEnter:
-    const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
-    if (wp) {
-      dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
-      return true;
-    }
+    ShowNextWaypointDetails();
+    return true;
   }
 
   return false;
+}
+
+const InfoBoxPanel *
+InfoBoxContentNextWaypoint::GetDialogContent()
+{
+  return next_waypoint_infobox_panels;
 }
 
 void
@@ -504,48 +536,6 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
     data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
-}
-
-void
-InfoBoxContentOLC::Update(InfoBoxData &data)
-{
-  if (!CommonInterface::GetComputerSettings().contest.enable ||
-      !protected_task_manager) {
-    data.SetInvalid();
-    return;
-  }
-
-  const ContestResult& result_olc = 
-    CommonInterface::Calculated().contest_stats.GetResult();
-
-  if (result_olc.score < fixed(1)) {
-    data.SetInvalid();
-    return;
-  }
-
-  // Set Value
-  data.SetValueFromDistance(result_olc.distance);
-
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
-}
-
-bool
-InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
-{
-  switch (keycode) {
-  case ibkEnter:
-    dlgAnalysisShowModal(UIGlobals::GetMainWindow(), UIGlobals::GetLook(),
-                         CommonInterface::Full(), *glide_computer,
-                         protected_task_manager,
-                         &airspace_database,
-                         terrain, 8);
-    return true;
-
-  default:
-    break;
-  }
-
-  return false;
 }
 
 void

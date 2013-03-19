@@ -24,8 +24,8 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Queue.hpp"
 #include "Event.hpp"
+#include "../Timer.hpp"
 #include "Screen/TopWindow.hpp"
-#include "Android/Timer.hpp"
 
 bool
 EventLoop::Get(Event &event)
@@ -54,8 +54,8 @@ EventLoop::Dispatch(const Event &event)
     Window *window = (Window *)event.ptr;
     window->OnUser(event.param);
   } else if (event.type == Event::TIMER) {
-    AndroidTimer *timer = (AndroidTimer *)event.ptr;
-    timer->run();
+    Timer *timer = (Timer *)event.ptr;
+    timer->Invoke();
   } else if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
   } else if (event.type != Event::NOP)

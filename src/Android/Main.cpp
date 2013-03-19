@@ -25,7 +25,6 @@ Copyright_License {
 #include "Android/Environment.hpp"
 #include "Android/Context.hpp"
 #include "Android/NativeView.hpp"
-#include "Android/Timer.hpp"
 #include "Android/SoundUtil.hpp"
 #include "Android/Vibrator.hpp"
 #include "Android/InternalSensors.hpp"
@@ -115,7 +114,6 @@ Java_org_xcsoarte_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Java::URLConnection::Initialise(env);
 
   Environment::Initialise(env);
-  AndroidTimer::Initialise(env);
   InternalSensors::Initialise(env);
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
@@ -225,7 +223,6 @@ Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
-  AndroidTimer::Deinitialise(env);
   Environment::Deinitialise(env);
   Java::URL::Deinitialise(env);
 

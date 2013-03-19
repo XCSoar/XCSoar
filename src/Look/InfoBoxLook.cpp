@@ -46,6 +46,9 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
   value.fg_color = title.fg_color = comment.fg_color =
     inverse ? COLOR_WHITE : COLOR_BLACK;
   background_color = inverse ? COLOR_BLACK : COLOR_WHITE;
+  caption_background_color = inverse
+    ? Color(0x40, 0x40, 0x40)
+    : Color(0xe0, 0xe0, 0xe0);
   focused_background_color = COLOR_XCSOAR_LIGHT;
   pressed_background_color = COLOR_YELLOW;
 

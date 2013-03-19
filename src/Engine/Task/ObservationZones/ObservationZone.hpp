@@ -27,6 +27,8 @@
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
+#include <stdint.h>
+
 struct GeoPoint;
 class OZBoundary;
 
@@ -37,7 +39,7 @@ class OZBoundary;
 class ObservationZone
 {
 public:
-  enum Shape {
+  enum class Shape : uint8_t {
     LINE,
     CYLINDER,
     MAT_CYLINDER,
@@ -48,6 +50,7 @@ public:
     BGAENHANCEDOPTION,
     BGA_START,
     ANNULAR_SECTOR,
+    SYMMETRIC_QUADRANT,
   };
 
 private:

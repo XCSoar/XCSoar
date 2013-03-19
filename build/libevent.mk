@@ -5,11 +5,13 @@ EVENT_SOURCES = \
 
 ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \
+	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/Android/Timer.cpp \
 	$(SRC)/Event/Android/Loop.cpp \
 	$(SRC)/Event/Android/Queue.cpp
 else ifeq ($(EGL),y)
 EVENT_SOURCES += \
+	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/EGL/Globals.cpp \
 	$(SRC)/Event/EGL/Timer.cpp \
 	$(SRC)/Event/EGL/Loop.cpp \

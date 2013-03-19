@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -18,47 +19,14 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
-
-package org.xcsoarte;
-
-import android.os.Handler;
-
-/**
- * A periodic timer used by the native code.
  */
-class Timer implements Runnable {
-  static Handler handler;
 
-  /**
-   * Global initialization of the class.  Must be called from the main
-   * event thread, because the Handler object must be bound to that
-   * thread.
-   */
-  public static void Initialize() {
-    handler = new Handler();
-  }
+#ifndef XCSOAR_LEGAL_POINT_SET_HPP
+#define XCSOAR_LEGAL_POINT_SET_HPP
 
-  long ptr;
-  int period;
+#include "Util/EnumBitSet.hpp"
+#include "TaskPointFactoryType.hpp"
 
-  Timer(long _ptr, int _period) {
-    ptr = _ptr;
-    period = _period;
-    install();
-  }
+typedef EnumBitSet<TaskPointFactoryType> LegalPointSet;
 
-  private void install() {
-    handler.postDelayed(this, period);
-  }
-
-  private void uninstall() {
-    handler.removeCallbacks(this);
-  }
-
-  private native void run(long ptr);
-
-  @Override public void run() {
-    run(ptr);
-  }
-}
+#endif

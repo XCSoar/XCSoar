@@ -96,7 +96,6 @@ public class XCSoar extends Activity {
       return;
     }
 
-    Timer.Initialize();
     InternalGPS.Initialize();
     NonGPSSensors.Initialize();
 

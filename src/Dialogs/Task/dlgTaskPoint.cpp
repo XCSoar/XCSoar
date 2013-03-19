@@ -85,22 +85,23 @@ static ObservationZoneEditWidget *
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
   switch (oz.GetShape()) {
-  case ObservationZonePoint::SECTOR:
-  case ObservationZonePoint::ANNULAR_SECTOR:
+  case ObservationZone::Shape::SECTOR:
+  case ObservationZone::Shape::ANNULAR_SECTOR:
+  case ObservationZone::Shape::SYMMETRIC_QUADRANT:
     return new SectorZoneEditWidget((SectorZone &)oz);
 
-  case ObservationZonePoint::LINE:
+  case ObservationZone::Shape::LINE:
     return new LineSectorZoneEditWidget((LineSectorZone &)oz, !is_fai_general);
 
-  case ObservationZonePoint::CYLINDER:
+  case ObservationZone::Shape::CYLINDER:
     return new CylinderZoneEditWidget((CylinderZone &)oz, !is_fai_general);
 
-  case ObservationZonePoint::FAI_SECTOR:
-  case ObservationZonePoint::KEYHOLE:
-  case ObservationZonePoint::MAT_CYLINDER:
-  case ObservationZonePoint::BGAFIXEDCOURSE:
-  case ObservationZonePoint::BGAENHANCEDOPTION:
-  case ObservationZonePoint::BGA_START:
+  case ObservationZone::Shape::FAI_SECTOR:
+  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::MAT_CYLINDER:
+  case ObservationZone::Shape::BGAFIXEDCOURSE:
+  case ObservationZone::Shape::BGAENHANCEDOPTION:
+  case ObservationZone::Shape::BGA_START:
     break;
   }
 

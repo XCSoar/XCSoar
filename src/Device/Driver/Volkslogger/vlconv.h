@@ -25,8 +25,6 @@
 #include <time.h>
 #include <vector>
 
-class OperationEnvironment;
-
 /* Untertypen des Haupttyps Variabel */
 #define FLDPLT	     0x01
 #define FLDPLT1      0x01
@@ -65,7 +63,7 @@ class OperationEnvironment;
 #define FLDETKF      0x61
 
 
-/*
+/**
 convert_gcs
   function:
     converts a given flight log from VOLKSLOGGER binary to IGC-format
@@ -76,11 +74,13 @@ convert_gcs
     OO-fillin
     serial-number (reference)
     position of signature in binary file (reference)
-  return value:
-    length of binary file
-*/
-int32 convert_gcs(int16, FILE *, uint8_t *, int16, word *, long *,
-                  OperationEnvironment &env);
+ *
+ * @return the length of the output file or 0 on error
+ */
+size_t
+convert_gcs(int igcfile_version, FILE *Ausgabedatei,
+            const uint8_t *const bin_puffer, size_t length,
+            int oo_fillin, word *serno, long *sp);
 
 
 /*
@@ -105,11 +105,12 @@ struct DIRENTRY {
  * reference parameter &flights.
  * The functions returns true if conversion was successful.
  * @param flights Vector to return the read flights.
- * @param dirbuffer Pointer to the buffer containing the binary input data.
+ * @param src Pointer to the buffer containing the binary input data.
  * @param length The length of the data stored in buffer.
  */
 
-bool conv_dir(std::vector<DIRENTRY> &flights, uint8_t *dirbuffer,
-              size_t length, OperationEnvironment &env);
+bool
+conv_dir(std::vector<DIRENTRY> &flights,
+         const uint8_t *src, size_t length);
 
 #endif

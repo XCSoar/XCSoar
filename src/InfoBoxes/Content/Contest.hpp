@@ -21,54 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_TIMER_HXX
-#define XCSOAR_SCREEN_SDL_TIMER_HXX
+#ifndef XCSOAR_INFOBOX_CONTENT_CONTEST_HPP
+#define XCSOAR_INFOBOX_CONTENT_CONTEST_HPP
 
-#include "Java/Object.hpp"
+#include "InfoBoxes/Content/Base.hpp"
 
-#include <jni.h>
-
-class Timer;
-
-class AndroidTimer {
-  class Bridge : protected Java::Object {
-    static jmethodID install_method, uninstall_method;
-
-  public:
-    static void Initialise(JNIEnv *env);
-    static void Deinitialise(JNIEnv *env);
-
-    Bridge(JNIEnv *env, jlong ptr, jint period);
-
-    void install(JNIEnv *env) {
-      env->CallVoidMethod(Get(), install_method);
-    }
-
-    void uninstall(JNIEnv *env) {
-      env->CallVoidMethod(Get(), uninstall_method);
-    }
-  };
-
-private:
-  Timer &timer;
-  Bridge bridge;
-
-  bool disabled, running;
-
+class InfoBoxContentOLC: public InfoBoxContent
+{
 public:
-  static void Initialise(JNIEnv *env) {
-    Bridge::Initialise(env);
-  }
-
-  static void Deinitialise(JNIEnv *env) {
-    Bridge::Deinitialise(env);
-  }
-
-  AndroidTimer(Timer &timer, unsigned ms);
-
-  void disable();
-
-  void run();
+  virtual const InfoBoxPanel *GetDialogContent() override;
+  virtual void Update(InfoBoxData &data) override;
 };
 
 #endif
