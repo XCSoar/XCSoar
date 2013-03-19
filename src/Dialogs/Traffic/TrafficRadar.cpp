@@ -232,14 +232,12 @@ Update()
 }
 
 static Window *
-OnCreateFlarmTrafficControl(ContainerWindow &parent,
-                            PixelScalar left, PixelScalar top,
-                            UPixelScalar width, UPixelScalar height,
+OnCreateFlarmTrafficControl(ContainerWindow &parent, PixelRect rc,
                             const WindowStyle style)
 {
   const Look &look = UIGlobals::GetLook();
   wdf = new FlarmTrafficControl(look.flarm_dialog);
-  wdf->Create(parent, PixelRect(left, top, width, height), style);
+  wdf->Create(parent, rc, style);
 
   return wdf;
 }
