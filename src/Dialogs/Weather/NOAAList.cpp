@@ -223,8 +223,7 @@ void
 NOAAListWidget::OpenDetails(unsigned index)
 {
   assert(index < stations.size());
-  dlgNOAADetailsShowModal(UIGlobals::GetMainWindow(),
-                          stations[index].iterator);
+  dlgNOAADetailsShowModal(stations[index].iterator);
   UpdateList();
 }
 

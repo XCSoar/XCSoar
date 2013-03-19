@@ -43,6 +43,7 @@ Copyright_License {
 #include "Formatter/Units.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 
 #include <stdio.h>
 
@@ -104,11 +105,12 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
+dlgNOAADetailsShowModal(NOAAStore::iterator iterator)
 {
   station_iterator = iterator;
 
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  Layout::landscape ?
                   _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
   assert(wf != NULL);
 
@@ -124,7 +126,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
 #include "Dialogs/Message.hpp"
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, unsigned station_index)
+dlgNOAADetailsShowModal(unsigned station_index)
 {
   ShowMessageBox(_("This function is not available on your platform yet."),
               _("Error"), MB_OK);

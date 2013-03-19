@@ -104,7 +104,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     return false;
   }
 
-  ShowMapItemListDialog(UIGlobals::GetMainWindow(), list,
+  ShowMapItemListDialog(list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         final_glide_bar_renderer.GetLook(), settings,
                         glide_computer != NULL

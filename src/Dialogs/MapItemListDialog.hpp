@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 #define XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 
-class SingleWindow;
 struct MapItem;
 class MapItemList;
 struct GeoVector;
@@ -36,8 +35,7 @@ struct MapSettings;
 class ProtectedAirspaceWarningManager;
 
 void
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &_list,
+ShowMapItemListDialog(const MapItemList &_list,
                       const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,

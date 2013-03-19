@@ -41,6 +41,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/WeatherDialogs.hpp"
@@ -229,8 +230,7 @@ MapItemListWidget::OnAction(int id)
 }
 
 static int
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &list,
+ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look, const MapLook &look,
                       const TrafficLook &traffic_look,
                       const FinalGlideBarLook &final_glide_look,
@@ -240,7 +240,8 @@ ShowMapItemListDialog(SingleWindow &parent,
                            traffic_look, final_glide_look,
                            settings);
   WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(parent, _("Map elements at this location"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(),
+                    _("Map elements at this location"), &widget);
   widget.CreateButtons(dialog);
 
   int result = dialog.ShowModal() == mrOK
@@ -252,7 +253,7 @@ ShowMapItemListDialog(SingleWindow &parent,
 }
 
 static void
-ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
+ShowMapItemDialog(const MapItem &item,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
@@ -282,16 +283,14 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
 
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
-    dlgNOAADetailsShowModal(parent,
-                            ((const WeatherStationMapItem &)item).station);
+    dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
     break;
 #endif
   }
 }
 
 void
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &list,
+ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look,
                       const MapLook &look,
                       const TrafficLook &traffic_look,
@@ -306,16 +305,16 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   case 1:
     /* only one map item, show it */
-    ShowMapItemDialog(*list[0], parent, airspace_warnings);
+    ShowMapItemDialog(*list[0], airspace_warnings);
     break;
 
   default:
     /* more than one map item: show a list */
 
-    int i = ShowMapItemListDialog(parent, list, dialog_look, look,
+    int i = ShowMapItemListDialog(list, dialog_look, look,
                                   traffic_look, final_glide_look, settings);
     assert(i >= -1 && i < (int)list.size());
     if (i >= 0)
-      ShowMapItemDialog(*list[i], parent, airspace_warnings);
+      ShowMapItemDialog(*list[i], airspace_warnings);
   }
 }

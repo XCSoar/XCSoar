@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Weather/NOAAStore.hpp"
 
-class SingleWindow;
-
 void
 dlgWeatherShowModal();
 
@@ -35,7 +33,6 @@ void
 dlgNOAAListShowModal();
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent,
-                        NOAAStore::iterator iterator);
+dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
 
 #endif
