@@ -43,6 +43,18 @@ class gxx {
   }
 }
 
+class java {
+  package { "default-jdk":
+    ensure => present,
+  }
+}
+
+class ant {
+  package { "ant":
+    ensure => present,
+  }
+}
+
 class mingw-w64 {
   package { "gcc-mingw-w64":
     ensure => present,
@@ -89,6 +101,12 @@ class imagemagick {
   }
 }
 
+class oggenc {
+  package { "vorbis-tools":
+    ensure => present,
+  }
+}
+
 # Stages
 stage { ['pre', 'post']: }
 Stage['pre'] -> Stage['main'] -> Stage['post']
@@ -104,6 +122,8 @@ class {'libboost': }
 # Toolchain
 class {'make': }
 class {'gxx': }
+class {'java': }
+class {'ant': }
 class {'ccache': }
 
 # MinGW Toolchain
@@ -114,3 +134,17 @@ class {'gettext': }
 class {'xsltproc': }
 class {'rsvg': }
 class {'imagemagick': }
+class {'oggenc': }
+
+# Android Toolchain
+class {'android': 
+  user => 'vagrant',
+  group => 'vagrant',
+  installdir => '/home/vagrant/opt',
+} -> 
+exec { 'android-sdk-link':
+  command => '/bin/ln -s android-sdk-linux android-sdk-linux_x86',
+  cwd     => '/home/vagrant/opt',
+  creates => '/home/vagrant/opt/android-sdk-linux_x86',
+} ->
+android::platform { 'android-16': }

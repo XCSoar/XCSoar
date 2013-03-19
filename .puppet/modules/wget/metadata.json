@@ -1,0 +1,27 @@
+{
+  "name": "maestrodev-wget",
+  "version": "1.1.0",
+  "source": "http://github.com/maestrodev/puppet-wget.git",
+  "author": "maestrodev",
+  "license": "Apache License, Version 2.0",
+  "summary": "Download files with wget",
+  "description": "A module for wget that allows downloading of files, supporting authentication",
+  "project_page": "http://github.com/maestrodev/puppet-wget",
+  "dependencies": [
+
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "4867df718b033e152c59c2a418e88b92",
+    "Gemfile.lock": "b3e4cf700f055d8d242ad877da298127",
+    "Modulefile": "319654cea17d4ad7af5a45f4746f6678",
+    "README.md": "53e3a8bdf9ad988aae9b9581831bbcd6",
+    "Rakefile": "527f8893f2694a9bc92993074f011cc3",
+    "manifests/init.pp": "7a1575c5a0a755b01dcdd2dbf4f8e956",
+    "spec/classes/init_spec.rb": "337ce66ffc43c7478ff0d3ff166d278a",
+    "spec/fixtures/manifests/site.pp": "627dec82fd1b0d0b4f9e47135ed3e1b7",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc"
+  }
+}

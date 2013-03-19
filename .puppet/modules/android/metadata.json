@@ -1,0 +1,38 @@
+{
+  "name": "maestrodev-android",
+  "version": "1.0.1",
+  "source": "http://github.com/maestrodev/puppet-android",
+  "author": "maestrodev",
+  "license": "Apache License, Version 2.0",
+  "summary": "Android SDK module for Puppet",
+  "description": "A Puppet module to install the Android SDK.",
+  "project_page": "http://github.com/maestrodev/puppet-android",
+  "dependencies": [
+    {
+      "name": "maestrodev/wget",
+      "version_requirement": ">=0.0.1"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "6cf7a55e4acce0c73e063e5d2f9bade0",
+    "Gemfile.lock": "0f1c85ab559eeb082292ad5767efcea0",
+    "Modulefile": "4217a16fd9b55daac0729bf3aa16ff3f",
+    "README.md": "2bc62b191a129162c77f3a647208ed65",
+    "Rakefile": "328b5ac7ff6cd5d6de7fbbd08b9139a2",
+    "manifests/addon.pp": "e8711f052ca722557456d031820c757f",
+    "manifests/init.pp": "f9e4b2cbad4e4e660d7f4ea5c9a4c45a",
+    "manifests/package.pp": "62ac98a69ca5e3287298ee875d719217",
+    "manifests/params.pp": "eeffcf48cc2455c9768a477cc9284bf2",
+    "manifests/paths.pp": "10336d1e7b6f81996c56c870cae5f228",
+    "manifests/platform.pp": "8fed426a207479181c1073ed188062ae",
+    "manifests/platform_tools.pp": "0a13bc0a1890d161d73786a3811d6460",
+    "manifests/sdk.pp": "647d3643d390d7b0267415917832f9e2",
+    "spec/classes/init_spec.rb": "49a07f35e60f3ee999f0fee916fe0ea1",
+    "spec/classes/sdk_spec.rb": "ee23fee5e8a9af99eed1c385260004ec",
+    "spec/defines/package_spec.rb": "0061049e4ec1e264a2372806dae92f8c",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc"
+  }
+}
