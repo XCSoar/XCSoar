@@ -425,14 +425,6 @@ event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
 location=8
 
-mode=Nav2
-type=key
-data=0
-event=WaypointDetails current
-event=Mode default
-label=Waypoint\nDetails$(CheckTask)
-location=9
-
 # -------------
 # mode=Display1
 # -------------
@@ -1059,14 +1051,6 @@ event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
 location=7
-
-mode=RemoteStick
-type=key
-data=0
-event=WaypointDetails current
-event=Mode default
-label=Waypoint\nDetails$(CheckTask)
-location=8
 
 
 mode=RemoteStick
