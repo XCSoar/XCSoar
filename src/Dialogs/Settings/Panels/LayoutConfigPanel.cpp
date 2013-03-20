@@ -152,6 +152,8 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
     N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
   { unsigned(InfoBoxSettings::BorderStyle::SHADED),
     N_("Shaded"), nullptr /* TODO: help text */ },
+  { unsigned(InfoBoxSettings::BorderStyle::GLASS),
+    N_("Glass"), nullptr /* TODO: help text */ },
   { 0 }
 };
 

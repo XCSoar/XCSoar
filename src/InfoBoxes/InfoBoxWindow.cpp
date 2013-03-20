@@ -27,6 +27,7 @@ Copyright_License {
 #include "Look/InfoBoxLook.hpp"
 #include "Look/UnitsLook.hpp"
 #include "Input/InputEvents.hpp"
+#include "Renderer/GlassRenderer.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
@@ -241,11 +242,15 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
-  canvas.Clear(pressed
-               ? look.pressed_background_color
-               : (HasFocus() || dragging || force_draw_selector
-                  ? look.focused_background_color
-                  : look.background_color));
+  const Color background_color = pressed
+    ? look.pressed_background_color
+    : (HasFocus() || dragging || force_draw_selector
+       ? look.focused_background_color
+       : look.background_color);
+  if (settings.border_style == InfoBoxSettings::BorderStyle::GLASS)
+    DrawGlassBackground(canvas, canvas.GetRect(), background_color);
+  else
+    canvas.Clear(background_color);
 
   if (data.GetCustom() && content != NULL) {
     /* if there's no comment, the content object may paint that area,
