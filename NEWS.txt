@@ -10,6 +10,8 @@ Version 6.5.3 - not yet released
   - FLARM: fix IGC file download on firmware 5.09 (#2619)
 * Android
   - fix crash with Hebrew language
+* Mac OS X
+  - fix crash on startup (#2667)
 
 Version 6.5.2 - 2013/03/15
 * user interface
