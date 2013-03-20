@@ -215,7 +215,6 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     _stprintf(buffer,_T("%s - %s: %.1f%s"), _("Keyhole"), _("Radius"),
               (double)Units::ToUserDistance(((const KeyholeZone &)ozp).GetRadius()),
               Units::GetDistanceName());
-    _tcscpy(buffer, _("DAeC Keyhole"));
     return;
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
