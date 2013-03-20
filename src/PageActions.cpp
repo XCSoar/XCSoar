@@ -31,6 +31,12 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Pan.hpp"
 
+#if defined(ENABLE_SDL) && defined(main)
+/* on some platforms, SDL wraps the main() function and clutters our
+   namespace with a macro called "main" */
+#undef main
+#endif
+
 namespace PageActions {
   /**
    * Loads the layout without updating current page information in
