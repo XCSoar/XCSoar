@@ -38,7 +38,7 @@ protected:
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
                     const fixed _inner_radius = fixed(0.0))
-    :SectorZone(_shape, _can_start_through_top, loc, _radiusOuter,
+    :SectorZone(_shape, _can_start_through_top, true, loc, _radiusOuter,
                 _startRadial, _endRadial),
      inner_radius(_inner_radius) {}
 
@@ -62,7 +62,7 @@ public:
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
                     const fixed _inner_radius = fixed(0.0))
-    :SectorZone(Shape::ANNULAR_SECTOR, true, loc,
+    :SectorZone(Shape::ANNULAR_SECTOR, true, true, loc,
                 _radiusOuter, _startRadial, _endRadial),
      inner_radius(_inner_radius)
   {

@@ -32,6 +32,12 @@
  */
 class SectorZone: public CylinderZone
 {
+  /**
+   * Does the boundary include the arc, i.e. is crossing the arc
+   * scored?
+   */
+  const bool arc_boundary;
+
   /** Location of far end point of start radial */
   GeoPoint sector_start;
   /** Location of far end point of end radial */
@@ -42,15 +48,18 @@ class SectorZone: public CylinderZone
 
 protected:
   SectorZone(Shape _shape, bool _can_start_through_top,
+             bool _arc_boundary,
              const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(_shape, _can_start_through_top, loc, _radius),
+     arc_boundary(_arc_boundary),
      start_radial(_start_radial), end_radial(_end_radial) {}
 
   SectorZone(const SectorZone &other, const GeoPoint &reference)
     :CylinderZone((const CylinderZone &)other, reference),
+     arc_boundary(other.arc_boundary),
      sector_start(other.sector_start), sector_end(other.sector_end),
      start_radial(other.start_radial), end_radial(other.end_radial) {}
 
@@ -69,6 +78,7 @@ public:
              const Angle _start_radial = Angle::Zero(),
              const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(Shape::SECTOR, true, loc, _radius),
+     arc_boundary(true),
      start_radial(_start_radial), end_radial(_end_radial)
   {
     UpdateSector();

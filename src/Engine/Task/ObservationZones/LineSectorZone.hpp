@@ -48,7 +48,7 @@ public:
    * @return Initialised object
    */
   LineSectorZone(const GeoPoint loc, const fixed length = fixed(1000.0))
-    :SymmetricSectorZone(Shape::LINE, false, loc,
+    :SymmetricSectorZone(Shape::LINE, false, false, loc,
                          Half(length), Angle::HalfCircle())
   {
     UpdateSector();
@@ -79,7 +79,6 @@ public:
       CylinderZone::IsInSector(last_location);
   }
 
-  virtual OZBoundary GetBoundary() const override;
   virtual fixed ScoreAdjustment() const override;
 
   /* virtual methods from class ObservationZonePoint */

@@ -45,15 +45,12 @@ public:
    * @return Initialised object
    */
   FAISectorZone(const GeoPoint loc, const bool _is_turnpoint = true)
-    :SymmetricSectorZone(Shape::FAI_SECTOR, true, loc,
+    :SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
                          _is_turnpoint ? fixed(10000) : fixed(1000),
                          Angle::QuarterCircle())
   {
     UpdateSector();
   }
-
-  /* virtual methods from class ObservationZone */
-  virtual OZBoundary GetBoundary() const override;
 
   /* virtual methods from class ObservationZonePoint */
   virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
