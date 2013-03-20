@@ -23,6 +23,7 @@
 
 #include "CrossSectionRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
+#include "Renderer/GradientRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/CrossSectionLook.hpp"
@@ -62,7 +63,10 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
-  canvas.Clear(look.background_color);
+  DrawVerticalGradient(canvas, rc,
+                       look.sky_color, look.background_color,
+                       look.background_color);
+
   canvas.SetTextColor(look.text_color);
   canvas.Select(*look.grid_font);
 

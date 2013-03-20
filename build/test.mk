@@ -2121,6 +2121,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
+	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \

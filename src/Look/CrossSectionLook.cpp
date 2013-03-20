@@ -29,7 +29,7 @@ CrossSectionLook::Initialise(const Font &_grid_font)
   background_color = COLOR_WHITE;
   text_color = COLOR_BLACK;
 
-  sky_color = Color(0x0a, 0xb9, 0xf3);
+  sky_color = Color(0xa0, 0xd0, 0xf3);
   terrain_color = Color(0x80, 0x45, 0x15);
   terrain_brush.Set(terrain_color);
   sea_color = Color(0xbd, 0xc5, 0xd5); // ICAO open water area
