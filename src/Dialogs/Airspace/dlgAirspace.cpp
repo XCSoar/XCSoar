@@ -45,10 +45,6 @@ Copyright_License {
 
 #include <assert.h>
 
-enum Buttons {
-  LOOKUP = 100,
-};
-
 class AirspaceSettingsListWidget : public ListWidget {
   const bool color_mode;
   bool changed;
@@ -174,17 +170,13 @@ dlgAirspaceShowModal(bool color_mode)
   AirspaceSettingsListWidget widget(color_mode);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Airspace"), &widget);
-  dialog.AddButton(_("Lookup"), LOOKUP);
   dialog.AddButton(_("Close"), mrOK);
 
-  const int result = dialog.ShowModal();
+  dialog.ShowModal();
   dialog.StealWidget();
 
   // now retrieve back the properties...
   if (widget.IsModified()) {
     Profile::Save();
   }
-
-  if (result == LOOKUP)
-    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
 }

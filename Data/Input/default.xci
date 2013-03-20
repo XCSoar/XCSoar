@@ -877,6 +877,9 @@ location=5
 mode=Info3
 type=key
 data=7
+event=AirSpace list
+event=Mode default
+label=Airspaces
 location=6
 
 mode=Info3

@@ -66,6 +66,9 @@ InputEvents::eventAirSpace(const TCHAR *misc)
     if (settings.enable)
       Message::AddMessage(_("Show airspace on"));
     return;
+  } else if (StringIsEqual(misc, _T("list"))) {
+    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
+    return;
   }
 
   ActionInterface::SendMapSettings(true);
