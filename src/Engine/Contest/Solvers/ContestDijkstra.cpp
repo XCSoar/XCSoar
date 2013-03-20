@@ -39,123 +39,21 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  const unsigned finish_alt_diff)
   :AbstractContest(finish_alt_diff),
    NavDijkstra(n_legs + 1),
-   trace_master(_trace),
+   TraceManager(_trace),
    continuous(_continuous),
-   incremental(false),
-   predicted(TracePoint::Invalid())
+   incremental(false)
 {
   assert(num_stages <= MAX_STAGES);
 
   std::fill(stage_weights, stage_weights + num_stages - 1, 5);
 }
 
-bool
-ContestDijkstra::SetPredicted(const TracePoint &_predicted)
-{
-  TracePoint n(_predicted);
-  if (n.IsDefined() && !trace_master.empty())
-    n.Project(trace_master.GetProjection());
-
-  bool result = false;
-  if (predicted.IsDefined() && n_points > 0) {
-    if (n.IsDefined() && !trace_master.empty() &&
-        n.GetFlatLocation() == predicted.GetFlatLocation()) {
-      /* no change since last call, but update time stamp */
-      predicted = n;
-      return false;
-    }
-
-    /* the predicted location has changed, and the solver must be
-       restarted */
-    Reset();
-    result = true;
-  }
-
-  predicted = n;
-  return result;
-}
-
-bool
-ContestDijkstra::IsMasterUpdated() const
-{
-  assert(num_stages <= MAX_STAGES);
-
-  if (modify_serial != trace_master.GetModifySerial())
-    return true;
-
-  if (continuous)
-    return false;
-
-  if (n_points < num_stages)
-    return true;
-
-  // find min distance and time step within this trace
-  const unsigned threshold_delta_t_trace = trace_master.GetAverageDeltaTime();
-  const unsigned threshold_distance_trace = trace_master.GetAverageDeltaDistance();
-
-  const TracePoint &last_master = trace_master.back();
-  const TracePoint &last_point = *trace.back();
-
-  // update trace if time and distance are greater than significance thresholds
-
-  return last_master.GetTime() > last_point.GetTime() + threshold_delta_t_trace &&
-    last_master.FlatDistanceTo(last_point) > threshold_distance_trace;
-}
-
-void
-ContestDijkstra::ClearTrace()
-{
-  append_serial = modify_serial = Serial();
-  trace_dirty = true;
-  finished = false;
-  trace.clear();
-  n_points = 0;
-}
-
-void
-ContestDijkstra::UpdateTraceFull()
-{
-  trace.reserve(trace_master.GetMaxSize());
-  trace_master.GetPoints(trace);
-  n_points = trace.size();
-
-  if (n_points > 0 && predicted.IsDefined())
-    predicted.Project(trace_master.GetProjection());
-
-  append_serial = trace_master.GetAppendSerial();
-  modify_serial = trace_master.GetModifySerial();
-}
-
-bool
-ContestDijkstra::UpdateTraceTail()
-{
-  assert(continuous);
-  /* the following assertion was disabled because this method doesn't
-     get the "force" parameter */
-  //assert(incremental == finished || force);
-  assert(modify_serial == trace_master.GetModifySerial());
-
-  if (!trace_master.SyncPoints(trace))
-    /* no new points */
-    return false;
-
-  n_points = trace.size();
-
-  if (n_points > 0 && predicted.IsDefined())
-    predicted.Project(trace_master.GetProjection());
-
-  append_serial = trace_master.GetAppendSerial();
-  return true;
-}
-
 void
 ContestDijkstra::UpdateTrace(bool force)
 {
-  if (append_serial == trace_master.GetAppendSerial())
-    /* unmodified */
-    return;
+  if (IsMasterAppended()) return; /* unmodified */
 
-  if (IsMasterUpdated()) {
+  if (IsMasterUpdated(continuous)) {
     UpdateTraceFull();
 
     trace_dirty = true;
@@ -194,6 +92,7 @@ ContestDijkstra::Solve(bool exhaustive)
   if (trace_master.size() < num_stages) {
     /* not enough data in master trace */
     ClearTrace();
+    finished = false;
     return SolverResult::FAILED;
   }
 
@@ -207,7 +106,7 @@ ContestDijkstra::Solve(bool exhaustive)
     if (!trace_dirty && !finished)
       return SolverResult::FAILED;
   } else if (exhaustive || n_points < num_stages ||
-             modify_serial != trace_master.GetModifySerial()) {
+             CheckMasterSerial()) {
     UpdateTrace(exhaustive);
     if (n_points < num_stages)
       return SolverResult::FAILED;
@@ -250,7 +149,7 @@ ContestDijkstra::Reset()
 {
   dijkstra.Clear();
   ClearTrace();
-  predicted = TracePoint::Invalid();
+  finished = false;
 
   AbstractContest::Reset();
 }
@@ -267,8 +166,8 @@ ContestDijkstra::SaveSolution()
          ? predicted
          /* fallback, just in case somebody has deleted the prediction
             meanwhile */
-         : GetPoint(n_points - 1))
-      : GetPoint(NavDijkstra::solution[i]);
+         : TraceManager::GetPoint(n_points - 1))
+      : TraceManager::GetPoint(NavDijkstra::solution[i]);
 
   return AbstractContest::SaveSolution();
 }
@@ -310,7 +209,7 @@ ContestDijkstra::AddStartEdges()
   assert(n_points > 0);
 
   const int max_altitude = incremental
-    ? GetMaximumStartAltitude(GetPoint(n_points - 1))
+    ? GetMaximumStartAltitude(TraceManager::GetPoint(n_points - 1))
     : 0;
 
   for (ScanTaskPoint destination(0, 0), end(0, n_points);

@@ -28,6 +28,7 @@ Copyright_License {
 #include "AbstractContest.hpp"
 #include "PathSolvers/NavDijkstra.hpp"
 #include "Trace/Vector.hpp"
+#include "TraceManager.hpp"
 
 #include <assert.h>
 
@@ -41,25 +42,7 @@ class Trace;
  *
  *
  */
-class ContestDijkstra : public AbstractContest, protected NavDijkstra {
-protected:
-  const Trace &trace_master;
-
-private:
-  /**
-   * This attribute tracks Trace::GetAppendSerial().  It is updated
-   * when appnew copy of the master Trace is obtained, and is used to
-   * check if that copy should be replaced with a new one.
-   */
-  Serial append_serial;
-
-  /**
-   * This attribute tracks Trace::GetModifySerial().  It is updated
-   * when a new copy of the master Trace is obtained, and is used to
-   * check if that copy should be replaced with a new one.
-   */
-  Serial modify_serial;
-
+class ContestDijkstra : public AbstractContest, protected NavDijkstra, public TraceManager {
   /**
    * Is this a contest that allows continuous analysis?
    */
@@ -72,8 +55,6 @@ private:
    */
   bool incremental;
 
-  bool trace_dirty;
-
   /**
    * Did the last Dijkstra search finish (even if without a valid
    * solution)?  This means the Dijkstra object still contains valid
@@ -83,25 +64,11 @@ private:
   bool finished;
 
   /**
-   * Working trace for solver.  This contains pointers to trace_master
-   * records, which get Invalidated when the trace gets thinned.  Be
-   * careful!
-   */
-  TracePointerVector trace;
-
-  /**
    * The last solution.  Use only if Solve() has returned VALID.
    */
   ContestTraceVector solution;
 
-  TracePoint predicted;
-
-  static constexpr unsigned predicted_index = 0xffff;
-
 protected:
-  /** Number of points in current trace set */
-  unsigned n_points;
-
   /**
    * The index of the first finish candidate.  During incremental
    * scan, only the new trace points are considered.
@@ -128,46 +95,15 @@ public:
     incremental = _incremental;
   }
 
-  /**
-   * Sets the location of the "predicted" finish location.  If
-   * defined, then the algorithm will assume that you will reach it.
-   * Pass an "invalid" #TracePoint to disable this prediction (see
-   * TracePoint::Invalid()).
-   *
-   * @return true if the object was reset
-   */
-  bool SetPredicted(const TracePoint &_predicted);
-
 protected:
   bool IsIncremental() const {
     return incremental;
   }
 
   gcc_pure
-  const TracePoint &GetPoint(unsigned i) const {
-    assert(i < n_points);
-
-    return *trace[i];
-  }
-
-  gcc_pure
   const TracePoint &GetPoint(const ScanTaskPoint sp) const {
-    return GetPoint(sp.GetPointIndex());
+    return TraceManager::GetPoint(sp.GetPointIndex());
   }
-
-  void ClearTrace();
-
-  /**
-   * Obtain a new #Trace copy.
-   */
-  void UpdateTraceFull();
-
-  /**
-   * Copy points that were added to the end of the master Trace.
-   *
-   * @return true if new points were added
-   */
-  bool UpdateTraceTail();
 
   void AddEdges(ScanTaskPoint origin, unsigned first_point);
 
@@ -212,9 +148,6 @@ protected:
   }
 
 private:
-  gcc_pure
-  bool IsMasterUpdated() const;
-
   bool SaveSolution();
 
 protected:

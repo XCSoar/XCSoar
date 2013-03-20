@@ -34,8 +34,8 @@ XContestTriangle::CalculateResult(const ContestTraceVector &solution) const
 
   if (positive(result.distance)) {
     // approximation for now: gap is distance from start to finish
-    const fixed d_gap = GetPoint(0).GetLocation()
-      .Distance(GetPoint(n_points - 1).GetLocation());
+    const fixed d_gap = TraceManager::GetPoint(0).GetLocation()
+      .Distance(TraceManager::GetPoint(n_points - 1).GetLocation());
 
     // award no points if gap is >20% of triangle
 
