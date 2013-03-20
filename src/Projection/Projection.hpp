@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
+#include <assert.h>
+
 /**
  * This is a class that can be used for converting geographical into screen
  * coordinates and vice-versa.
@@ -78,6 +80,10 @@ class Projection
 
 public:
   Projection();
+
+  bool IsValid() const {
+    return geo_location.IsValid();
+  }
 
   gcc_pure
   fixed GetScale() const {
@@ -175,6 +181,8 @@ public:
    * @return GeoPoint at the ScreenOrigin
    */
   const GeoPoint &GetGeoLocation() const {
+    assert(IsValid());
+
     return geo_location;
   }
 

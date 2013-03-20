@@ -180,6 +180,9 @@ GlueMapWindow::QuickRedraw()
 bool
 GlueMapWindow::Idle()
 {
+  if (!render_projection.IsValid())
+    return false;
+
   if (idle_robin == unsigned(-1)) {
     /* draw the first frame as quickly as possible, so the user can
        start interacting with XCSoar immediately */

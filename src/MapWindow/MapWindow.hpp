@@ -243,8 +243,10 @@ public:
   }
 
   gcc_pure
-  const GeoPoint &GetLocation() const {
-    return visible_projection.GetGeoLocation();
+  GeoPoint GetLocation() const {
+    return visible_projection.IsValid()
+      ? visible_projection.GetGeoLocation()
+      : GeoPoint::Invalid();
   }
 
   void SetLocation(const GeoPoint location) {

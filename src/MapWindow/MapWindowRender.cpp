@@ -114,15 +114,20 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 { 
   const NMEAInfo &basic = Basic();
 
+  // reset label over-write preventer
+  label_block.reset();
+
   render_projection = visible_projection;
+
+  if (!render_projection.IsValid()) {
+    canvas.ClearWhite();
+    return;
+  }
 
   // Calculate screen position of the aircraft
   RasterPoint aircraft_pos{0,0};
   if (basic.location_available)
       aircraft_pos = render_projection.GeoToScreen(basic.location);
-
-  // reset label over-write preventer
-  label_block.reset();
 
   // Render terrain, groundline and topography
   draw_sw.Mark("RenderTerrain");

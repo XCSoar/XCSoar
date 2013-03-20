@@ -246,6 +246,11 @@ GlueMapWindow::UpdateMapScale()
 void
 GlueMapWindow::SetLocationLazy(const GeoPoint location)
 {
+  if (!visible_projection.IsValid()) {
+    SetLocation(location);
+    return;
+  }
+
   const fixed distance_meters =
     visible_projection.GetGeoLocation().Distance(location);
   const fixed distance_pixels =

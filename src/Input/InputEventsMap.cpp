@@ -167,6 +167,8 @@ InputEvents::sub_PanCursor(int dx, int dy)
     return;
 
   const WindowProjection &projection = map_window->VisibleProjection();
+  if (!projection.IsValid())
+    return;
 
   RasterPoint pt = projection.GetScreenOrigin();
   pt.x -= dx * projection.GetScreenWidth() / 4;
@@ -235,6 +237,8 @@ InputEvents::sub_ScaleZoom(int vswitch)
 
   const MapWindowProjection &projection =
       map_window->VisibleProjection();
+  if (!projection.IsValid())
+    return;
 
   fixed value = projection.GetMapScale();
 

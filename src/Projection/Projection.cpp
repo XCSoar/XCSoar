@@ -27,9 +27,9 @@ Copyright_License {
 
 #include <algorithm>
 
-Projection::Projection() :
-  geo_location(Angle::Zero(), Angle::Zero()),
-  screen_rotation(Angle::Zero())
+Projection::Projection()
+  :geo_location(GeoPoint::Invalid()),
+   screen_rotation(Angle::Zero())
 {
   SetScale(fixed(1));
   screen_origin.x = 0;
@@ -39,6 +39,8 @@ Projection::Projection() :
 GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {
+  assert(IsValid());
+
   const FastIntegerRotation::Pair p =
     screen_rotation.Rotate(x - screen_origin.x, y - screen_origin.y);
 
@@ -60,6 +62,8 @@ Projection::ScreenToGeo(int x, int y) const
 RasterPoint
 Projection::GeoToScreen(const GeoPoint &g) const
 {
+  assert(IsValid());
+
   const GeoPoint d = geo_location-g;
 
   const FastIntegerRotation::Pair p =
