@@ -83,92 +83,100 @@ public:
    * @param black Use black pen?
    * @param type Airspace class
    */
-  void
-  RenderBox(const PixelRect rc, AirspaceClass type) const
-  {
-    if (AirspacePreviewRenderer::PrepareFill(
-        canvas, type, airspace_look, settings)) {
-
-      // Draw thick brushed outlines
-      PixelScalar border_width = Layout::Scale(10);
-      if ((rc.right - rc.left) > border_width * 2 &&
-          (rc.bottom - rc.top) > border_width * 2 &&
-          settings.classes[type].fill_mode ==
-          AirspaceClassRendererSettings::FillMode::PADDING) {
-        PixelRect border = rc;
-        border.left += border_width;
-        border.right -= border_width;
-        border.top += border_width;
-        border.bottom -= border_width;
-
-        // Left border
-        canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
-
-        // Right border
-        canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
-
-        // Bottom border
-        canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
-
-        // Top border
-        canvas.Rectangle(border.left, rc.top, border.right, border.top);
-      } else {
-        // .. or fill the entire rect if the outlines would overlap
-        canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
-      }
-
-      AirspacePreviewRenderer::UnprepareFill(canvas);
-    }
-
-    // Use transparent brush and type-dependent pen for the outlines
-    if (AirspacePreviewRenderer::PrepareOutline(
-        canvas, type, airspace_look, settings))
-      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
-  }
+  void RenderBox(const PixelRect rc, AirspaceClass type) const;
 
   /**
    * Renders the AbstractAirspace on the canvas
    * @param as AbstractAirspace to render
    */
-  void Render(const AbstractAirspace &as) const {
-    AirspaceClass type = as.GetType();
-    if (type <= 0)
-      return;
-
-    // No intersections for this airspace
-    if (intersections.empty())
-      return;
-
-    PixelRect rcd;
-    // Calculate top and bottom coordinate
-    rcd.top = chart.ScreenY(as.GetTopAltitude(state));
-    if (as.IsBaseTerrain())
-      rcd.bottom = chart.ScreenY(fixed(0));
-    else
-      rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
-
-    // Iterate through the intersections
-    for (const auto &i : intersections) {
-      const GeoPoint &p_start = i.first;
-      const GeoPoint &p_end = i.second;
-
-      rcd.left = chart.ScreenX(start.Distance(p_start));
-
-      // only one edge found, next edge must be beyond screen
-      if (p_start == p_end)
-        rcd.right = chart.ScreenX(chart.GetXMax());
-      else
-        rcd.right = chart.ScreenX(start.Distance(p_end));
-
-      // Draw the airspace
-      RenderBox(rcd, type);
-    }
-  }
+  void Render(const AbstractAirspace &as) const;
 
   virtual void Visit(const AbstractAirspace &as) override {
     Render(as);
   }
 };
+
+inline void
+AirspaceIntersectionVisitorSlice::RenderBox(const PixelRect rc,
+                                            AirspaceClass type) const
+{
+  if (AirspacePreviewRenderer::PrepareFill(
+                                           canvas, type, airspace_look, settings)) {
+
+    // Draw thick brushed outlines
+    PixelScalar border_width = Layout::Scale(10);
+    if ((rc.right - rc.left) > border_width * 2 &&
+        (rc.bottom - rc.top) > border_width * 2 &&
+        settings.classes[type].fill_mode ==
+        AirspaceClassRendererSettings::FillMode::PADDING) {
+      PixelRect border = rc;
+      border.left += border_width;
+      border.right -= border_width;
+      border.top += border_width;
+      border.bottom -= border_width;
+
+      // Left border
+      canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
+
+      // Right border
+      canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
+
+      // Bottom border
+      canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
+
+      // Top border
+      canvas.Rectangle(border.left, rc.top, border.right, border.top);
+    } else {
+      // .. or fill the entire rect if the outlines would overlap
+      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    }
+
+    AirspacePreviewRenderer::UnprepareFill(canvas);
+  }
+
+  // Use transparent brush and type-dependent pen for the outlines
+  if (AirspacePreviewRenderer::PrepareOutline(
+                                              canvas, type, airspace_look, settings))
+    canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+}
+
+inline void
+AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
+{
+  AirspaceClass type = as.GetType();
+  if (type <= 0)
+    return;
+
+  // No intersections for this airspace
+  if (intersections.empty())
+    return;
+
+  PixelRect rcd;
+  // Calculate top and bottom coordinate
+  rcd.top = chart.ScreenY(as.GetTopAltitude(state));
+  if (as.IsBaseTerrain())
+    rcd.bottom = chart.ScreenY(fixed(0));
+  else
+    rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
+
+  // Iterate through the intersections
+  for (const auto &i : intersections) {
+    const GeoPoint &p_start = i.first;
+    const GeoPoint &p_end = i.second;
+
+    rcd.left = chart.ScreenX(start.Distance(p_start));
+
+    // only one edge found, next edge must be beyond screen
+    if (p_start == p_end)
+      rcd.right = chart.ScreenX(chart.GetXMax());
+    else
+      rcd.right = chart.ScreenX(start.Distance(p_end));
+
+    // Draw the airspace
+    RenderBox(rcd, type);
+  }
+}
+
 
 void
 AirspaceXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
