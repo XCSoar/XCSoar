@@ -12,7 +12,7 @@ Version 6.6 - not yet released
 * infoboxes
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
-  - new InfoBox style "Shaded" (#1852)
+  - new InfoBox styles "Shaded" (#1852), "Glass" (#2466)
   - waypoint details button in target dialog (#1967)
   - show distance in radial InfoBox comment (#2577)
   - new InfoBox with radial and distance in nautical miles (#2269)
