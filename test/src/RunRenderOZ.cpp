@@ -280,7 +280,7 @@ Main()
   task_look->Initialise();
 
   AirspaceLook *airspace_look = new AirspaceLook();
-  airspace_look->Initialise(airspace_renderer_settings);
+  airspace_look->Initialise(airspace_renderer_settings, normal_font);
 
   TestWindow window(*task_look, *airspace_look);
   window.Create(*dialog_look, {480, 480});

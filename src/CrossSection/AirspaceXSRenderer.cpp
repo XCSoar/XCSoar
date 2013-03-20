@@ -159,6 +159,8 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
   else
     rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 
+  int min_x = 1024, max_x = 0;
+
   // Iterate through the intersections
   for (const auto &i : intersections) {
     const GeoPoint &p_start = i.first;
@@ -172,8 +174,34 @@ AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
     else
       rcd.right = chart.ScreenX(start.Distance(p_end));
 
+    if (rcd.left < min_x)
+      min_x = rcd.left;
+
+    if (rcd.right > max_x)
+      max_x = rcd.right;
+
     // Draw the airspace
     RenderBox(rcd, type);
+  }
+
+  min_x += Layout::GetTextPadding();
+  max_x -= Layout::GetTextPadding();
+
+  /* draw the airspace name */
+  const TCHAR *name = as.GetName();
+  if (name != nullptr && !StringIsEmpty(name) && min_x < max_x) {
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(COLOR_BLACK);
+
+    const unsigned max_width = max_x - min_x;
+
+    const PixelSize name_size = canvas.CalcTextSize(name);
+    const int x = unsigned(name_size.cx) >= max_width
+      ? min_x
+      : (min_x + max_x - name_size.cx) / 2;
+    const int y = (rcd.top + rcd.bottom - name_size.cy) / 2;
+
+    canvas.DrawClippedText(x, y, max_x - x, name);
   }
 }
 
@@ -183,6 +211,8 @@ AirspaceXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
                          const Airspaces &database, const GeoPoint &start,
                          const GeoVector &vec, const AircraftState &state) const
 {
+  canvas.Select(*look.name_font);
+
   // Create IntersectionVisitor to render to the canvas
   AirspaceIntersectionVisitorSlice ivisitor(
       canvas, chart, settings, look, start, state);

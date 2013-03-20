@@ -31,7 +31,7 @@ MapLook::Initialise(const MapSettings &settings,
                     const Font &font, const Font &bold_font)
 {
   waypoint.Initialise(settings.waypoint);
-  airspace.Initialise(settings.airspace);
+  airspace.Initialise(settings.airspace, font);
   aircraft.Initialise();
   task.Initialise();
   marker.Initialise();
