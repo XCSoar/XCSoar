@@ -30,6 +30,8 @@
 #include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Engine/GlideSolvers/GlideState.hpp"
+#include "Engine/GlideSolvers/MacCready.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -46,10 +48,14 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
                                    const DerivedInfo &_calculated_info,
+                                     const GlideSettings &_glide_settings,
+                                     const GlidePolar &_glide_polar,
                                    const AirspaceRendererSettings &ar_settings)
 {
   gps_info = _gps_info;
   calculated_info = _calculated_info;
+  glide_settings = _glide_settings;
+  glide_polar = _glide_polar;
   airspace_renderer.SetSettings(ar_settings);
 }
 
@@ -114,12 +120,21 @@ CrossSectionRenderer::UpdateTerrain(short *elevations) const
 void
 CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
 {
-  if (gps_info.ground_speed_available && gps_info.ground_speed > fixed(10)) {
-    fixed t = vec.distance / gps_info.ground_speed;
-    chart.DrawLine(fixed(0), gps_info.nav_altitude, vec.distance,
-                   gps_info.nav_altitude + calculated_info.average * t,
-                   ChartLook::STYLE_BLUETHIN);
-  }
+  if (!gps_info.NavAltitudeAvailable() || !glide_polar.IsValid())
+    return;
+
+  const fixed altitude = gps_info.nav_altitude;
+
+  const MacCready mc(glide_settings, glide_polar);
+  const GlideState task(vec, fixed(0), altitude,
+                        calculated_info.GetWindOrZero());
+  const GlideResult result = mc.SolveStraight(task);
+  if (!result.IsOk())
+    return;
+
+  chart.DrawLine(fixed(0), altitude, result.vector.distance,
+                 result.GetArrivalAltitude(),
+                 ChartLook::STYLE_BLUETHIN);
 }
 
 void

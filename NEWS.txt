@@ -8,6 +8,7 @@ Version 6.6 - not yet released
   - add label selection "Task waypoints & airfields"
 * cross section
   - show airspace names (#1149, #2390)
+  - use glide polar instead of current glide ratio (#2687)
 * infoboxes
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
