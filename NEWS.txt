@@ -8,16 +8,17 @@ Version 6.6 - not yet released
   - add label selection "Task waypoints & airfields"
 * cross section
   - show airspace names (#1149, #2390)
-* user interface
-  - replay fast-forward
+* infoboxes
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
-  - new waypoint location editor (#343)
-  - show required glide ratio in waypoint details (#1573)
   - new InfoBox style "Shaded" (#1852)
   - waypoint details button in target dialog (#1967)
   - show distance in radial InfoBox comment (#2577)
   - new InfoBox with radial and distance in nautical miles (#2269)
+* user interface
+  - replay fast-forward
+  - new waypoint location editor (#343)
+  - show required glide ratio in waypoint details (#1573)
   - add airspace ack button to map item list (#2139)
 * tasks
   - MAT tasks (#563)
