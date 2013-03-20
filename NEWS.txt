@@ -13,6 +13,7 @@ Version 6.5.3 - not yet released
   - fix crash with Hebrew language
 * Mac OS X
   - fix crash on startup (#2607, #2667)
+  - show missing serial ports, hide internal devices (#2668)
 
 Version 6.5.2 - 2013/03/15
 * user interface

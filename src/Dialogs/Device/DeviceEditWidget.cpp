@@ -119,6 +119,11 @@ DetectSerialPorts(DataFieldEnum &df)
   while ((ent = readdir(dir)) != NULL) {
     /* filter "/dev/tty*" */
     if (memcmp(ent->d_name, "tty", 3) == 0) {
+      /* ignore virtual internal ports on Mac OS X (and probably other
+         BSDs) */
+      if (ent->d_name[3] >= 'p' && ent->d_name[3] <= 'w')
+        continue;
+
       /* filter out "/dev/tty0", ... (valid integer after "tty") */
       char *endptr;
       strtoul(ent->d_name + 3, &endptr, 10);
