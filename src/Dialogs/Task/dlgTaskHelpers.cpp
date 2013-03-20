@@ -30,7 +30,6 @@ Copyright_License {
 #include "Task/ValidationErrorStrings.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
@@ -206,9 +205,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
     return;
 
   case ObservationZone::Shape::MAT_CYLINDER:
-    _stprintf(buffer,_T("%.1f%s"),
-              (double)Units::ToUserDistance(((const MatCylinderZone &)ozp).GetRadius()),
-              Units::GetDistanceName());
+    _tcscpy(buffer, _("MAT cylinder"));
     return;
 
   case ObservationZone::Shape::CUSTOM_KEYHOLE:
