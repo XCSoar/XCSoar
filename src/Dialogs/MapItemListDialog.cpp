@@ -116,6 +116,8 @@ protected:
     goto_button->SetEnabled(CanGotoItem(current));
   }
 
+  void OnGotoClicked();
+
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -205,6 +207,22 @@ MapItemListWidget::OnActivateItem(unsigned index)
   details_button->OnClicked();
 }
 
+inline void
+MapItemListWidget::OnGotoClicked()
+{
+  if (protected_task_manager == NULL)
+    return;
+
+  unsigned index = GetCursorIndex();
+  auto const &item = *list[index];
+
+  assert(item.type == MapItem::WAYPOINT);
+
+  auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
+  protected_task_manager->DoGoto(waypoint);
+  cancel_button->OnClicked();
+}
+
 void
 MapItemListWidget::OnAction(int id)
 {
@@ -213,18 +231,7 @@ MapItemListWidget::OnAction(int id)
     ShowMapItemListSettingsDialog();
     break;
   case GOTO:
-    if (protected_task_manager == NULL)
-      break;
-
-    unsigned index = GetCursorIndex();
-    auto const &item = *list[index];
-
-    assert(item.type == MapItem::WAYPOINT);
-
-    auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
-    protected_task_manager->DoGoto(waypoint);
-    cancel_button->OnClicked();
-
+    OnGotoClicked();
     break;
   }
 }
