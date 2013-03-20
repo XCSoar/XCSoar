@@ -680,6 +680,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
+	EnumeratePorts \
 	ReadPort RunPortHandler LogPort \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
@@ -1127,6 +1128,11 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 RUN_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 RUN_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
+
+ENUMERATE_PORTS_SOURCES = \
+	$(TEST_SRC_DIR)/EnumeratePorts.cpp
+ENUMERATE_PORTS_DEPENDS = PORT
+$(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 
 READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
