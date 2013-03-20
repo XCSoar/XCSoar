@@ -65,6 +65,7 @@ InputEvents::eventAirSpace(const TCHAR *misc)
       Message::AddMessage(_("Show airspace off"));
     if (settings.enable)
       Message::AddMessage(_("Show airspace on"));
+    return;
   }
 
   ActionInterface::SendMapSettings(true);
