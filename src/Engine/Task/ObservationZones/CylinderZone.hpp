@@ -64,6 +64,10 @@ public:
     assert(positive(radius));
   }
 
+  static CylinderZone *CreateMatCylinderZone(const GeoPoint &loc) {
+    return new CylinderZone(Shape::MAT_CYLINDER, loc, fixed(1609.344));
+  }
+
   /**
    * Set radius property
    *

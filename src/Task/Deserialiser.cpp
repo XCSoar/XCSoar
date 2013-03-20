@@ -31,7 +31,6 @@
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -128,9 +127,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 
     return ls;
   } else if (StringIsEqual(type, _T("MatCylinder"))) {
-    MatCylinderZone *ls = new MatCylinderZone(wp.location);
-
-    return ls;
+    return CylinderZone::CreateMatCylinderZone(wp.location);
   } else if (StringIsEqual(type, _T("Sector"))) {
 
     fixed radius, inner_radius;

@@ -31,7 +31,6 @@
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 
 #include <algorithm>
@@ -48,10 +47,8 @@ GetOZSize(const ObservationZonePoint &oz)
     return ((const LineSectorZone &)oz).GetLength();
 
   case ObservationZone::Shape::CYLINDER:
-    return ((const CylinderZone &)oz).GetRadius();
-
   case ObservationZone::Shape::MAT_CYLINDER:
-    return ((const MatCylinderZone &)oz).GetRadius();
+    return ((const CylinderZone &)oz).GetRadius();
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
     return ((const AnnularSectorZone &)oz).GetRadius();
@@ -324,7 +321,8 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   case TaskPointFactoryType::AST_CYLINDER:
     return CreateASTPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::MAT_CYLINDER:
-    return CreateAATPoint(new MatCylinderZone(wp.location), wp);
+    return CreateAATPoint(CylinderZone::CreateMatCylinderZone(wp.location),
+                          wp);
   case TaskPointFactoryType::AAT_CYLINDER:
     return CreateAATPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::AAT_SEGMENT:

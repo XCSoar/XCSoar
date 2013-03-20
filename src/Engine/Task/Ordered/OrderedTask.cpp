@@ -40,7 +40,6 @@
 #include "Task/Factory/Create.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"

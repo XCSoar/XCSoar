@@ -26,7 +26,6 @@ Copyright_License {
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "MapSettings.hpp"
@@ -121,18 +120,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer, const Projection &projection,
     break;
   }
 
-  case ObservationZone::Shape::MAT_CYLINDER: {
-    const MatCylinderZone &oz = (const MatCylinderZone &)_oz;
-
-    if (layer != LAYER_INACTIVE) {
-      RasterPoint p_center = projection.GeoToScreen(oz.GetReference());
-      canvas.DrawCircle(p_center.x, p_center.y,
-                    projection.GeoToScreenDistance(oz.GetRadius()));
-    }
-
-    break;
-  }
-
+  case ObservationZone::Shape::MAT_CYLINDER:
   case ObservationZone::Shape::CYLINDER: {
     const CylinderZone &oz = (const CylinderZone &)_oz;
 

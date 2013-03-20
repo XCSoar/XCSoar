@@ -29,7 +29,6 @@
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 

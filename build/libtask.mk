@@ -47,7 +47,6 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZoneClient.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZonePoint.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/CylinderZone.cpp \
-	$(TASK_SRC_DIR)/ObservationZones/MatCylinderZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/SectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/LineSectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/SymmetricSectorZone.cpp \

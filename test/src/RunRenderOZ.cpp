@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
-#include "Engine/Task/ObservationZones/MatCylinderZone.hpp"
 #include "Engine/Task/ObservationZones/FAISectorZone.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
@@ -112,7 +111,7 @@ public:
       break;
 
     case ObservationZone::Shape::MAT_CYLINDER:
-      oz = new MatCylinderZone(location);
+      oz = CylinderZone::CreateMatCylinderZone(location);
       break;
 
     case ObservationZone::Shape::SECTOR:

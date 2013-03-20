@@ -44,7 +44,6 @@ class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
 class AnnularSectorZone;
-class MatCylinderZone;
 
 class ObservationZoneVisitorPrint
 {
@@ -67,9 +66,6 @@ public:
   void Visit(const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
-  void Visit(const MatCylinderZone& oz) {
-    printf("# MAT cylinder zone\n");
-  }
 
   void Visit(const SymmetricSectorZone &oz) {
     printf("# symmetric quadrant\n");
@@ -90,9 +86,6 @@ public:
       break;
 
     case ObservationZone::Shape::MAT_CYLINDER:
-      Visit((const MatCylinderZone &)oz);
-      break;
-
     case ObservationZone::Shape::CYLINDER:
       Visit((const CylinderZone &)oz);
       break;
