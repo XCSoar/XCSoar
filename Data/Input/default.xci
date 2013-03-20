@@ -423,7 +423,7 @@ data=9
 event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
-location=8
+location=7
 
 # -------------
 # mode=Display1
@@ -658,7 +658,7 @@ type=key
 data=0
 event=Mode Vario1
 label=Vega$(CheckVega)
-location=9
+location=8
 
 # -------------
 # mode=Vario1
@@ -884,20 +884,10 @@ location=6
 
 mode=Info3
 type=key
-data=8
-location=7
-
-mode=Info3
-type=key
-data=9
-location=8
-
-mode=Info3
-type=key
 data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
-location=9
+location=7
 
 # -------------
 # mode=Menu
