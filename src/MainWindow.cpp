@@ -693,6 +693,7 @@ MainWindow::OnDestroy()
   timer.Cancel();
 
   KillWidget();
+  KillBottomWidget();
 
   SingleWindow::OnDestroy();
 }
@@ -830,6 +831,18 @@ MainWindow::KillWidget()
 }
 
 void
+MainWindow::KillBottomWidget()
+{
+  if (bottom_widget == nullptr)
+    return;
+
+  if (widget == nullptr)
+    bottom_widget->Hide();
+  bottom_widget->Unprepare();
+  delete bottom_widget;
+}
+
+void
 MainWindow::SetBottomWidget(Widget *_widget)
 {
   if (bottom_widget == nullptr && _widget == nullptr)
@@ -841,12 +854,7 @@ MainWindow::SetBottomWidget(Widget *_widget)
     return;
   }
 
-  if (bottom_widget != nullptr) {
-    if (widget == nullptr)
-      bottom_widget->Hide();
-    bottom_widget->Unprepare();
-    delete bottom_widget;
-  }
+  KillBottomWidget();
 
   bottom_widget = _widget;
 

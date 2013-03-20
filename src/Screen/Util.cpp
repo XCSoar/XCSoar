@@ -98,7 +98,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
 
-  assert(npoly < ARRAY_SIZE(pt));
+  assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
     canvas.DrawTriangleFan(pt, npoly);
 

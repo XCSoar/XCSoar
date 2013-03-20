@@ -113,6 +113,13 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 
   SetFocus();
 
+  if (!visible_projection.IsValid()) {
+    gestures.Start(x, y, Layout::Scale(20));
+    drag_mode = DRAG_GESTURE;
+    SetCapture();
+    return true;
+  }
+
   drag_start.x = x;
   drag_start.y = y;
   drag_start_geopoint = visible_projection.ScreenToGeo(x, y);

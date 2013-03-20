@@ -33,10 +33,15 @@ Version 6.6 - not yet released
 Version 6.5.3 - not yet released
 * user interface
   - eliminate flickering in the cross section on Windows
+  - fix wrong radial display in target dialog
+  - start at terrain center when there's no GPS fix and no home location
 * devices
   - FLARM: fix IGC file download on firmware 5.09 (#2619)
 * Android
   - fix crash with Hebrew language
+* Mac OS X
+  - fix crash on startup (#2607, #2667)
+  - show missing serial ports, hide internal devices (#2668)
 
 Version 6.5.2 - 2013/03/15
 * user interface

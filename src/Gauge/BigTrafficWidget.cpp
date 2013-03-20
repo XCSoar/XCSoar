@@ -909,6 +909,7 @@ TrafficWidget::Unprepare()
   delete previous_item_button;
   delete next_item_button;
   delete details_button;
+  delete close_button;
 #endif
 
   delete view;

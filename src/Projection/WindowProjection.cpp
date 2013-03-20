@@ -78,6 +78,9 @@ WindowProjection::UpdateScreenBounds()
 {
   assert(screen_size_initialised);
 
+  if (!IsValid())
+    return;
+
   GeoBounds sb(ScreenToGeo(0, 0));
   sb.Extend(ScreenToGeo(screen_width, 0));
   sb.Extend(ScreenToGeo(screen_width, screen_height));

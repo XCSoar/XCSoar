@@ -151,6 +151,13 @@ protected:
    */
   void KillWidget();
 
+  /**
+   * Destroy the current "bottom" Widget, but don't resize the main
+   * area.  The caller is responsible for doing that or installing a
+   * new bottom Widget.
+   */
+  void KillBottomWidget();
+
 public:
   void Create(PixelSize size, TopWindowStyle style=TopWindowStyle());
 

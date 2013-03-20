@@ -153,6 +153,13 @@ TerrainPreviewWindow::OnPaint(Canvas &canvas)
     return;
 
   MapWindowProjection projection = map->VisibleProjection();
+  if (!projection.IsValid()) {
+    /* TODO: initialise projection to middle of map instead of bailing
+       out */
+    canvas.ClearWhite();
+    return;
+  }
+
   projection.SetScreenSize(canvas.GetSize());
   projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
 

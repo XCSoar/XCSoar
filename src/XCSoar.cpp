@@ -51,6 +51,12 @@ Copyright_License {
 #include "Thread/Thread.hpp"
 #endif
 
+#ifdef ENABLE_SDL
+/* this is necessary on Mac OS X, to let libSDL bootstrap Quartz
+   before entering our main() */
+#include <SDL_main.h>
+#endif
+
 #include <assert.h>
 
 static const char *Usage = "\n"
