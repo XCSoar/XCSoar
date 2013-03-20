@@ -28,7 +28,6 @@
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
@@ -150,7 +149,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 
     return ls;
   } else if (StringIsEqual(type, _T("FAISector")))
-    return new FAISectorZone(wp.location, is_turnpoint);
+    return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
   else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
     fixed radius = fixed(10000);
     node.GetAttribute(_T("radius"), radius);

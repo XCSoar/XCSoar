@@ -28,7 +28,6 @@
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
@@ -300,7 +299,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
 
   switch (type) {
   case TaskPointFactoryType::START_SECTOR:
-    return CreateStart(new FAISectorZone(wp.location, false), wp);
+    return CreateStart(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                false),
+                       wp);
   case TaskPointFactoryType::START_LINE:
     return CreateStart(new LineSectorZone(wp.location, start_radius), wp);
   case TaskPointFactoryType::START_CYLINDER:
@@ -308,7 +309,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
   case TaskPointFactoryType::START_BGA:
     return CreateStart(KeyholeZone::CreateBGAStartSectorZone(wp.location), wp);
   case TaskPointFactoryType::FAI_SECTOR:
-    return CreateASTPoint(new FAISectorZone(wp.location, true), wp);
+    return CreateASTPoint(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                   true),
+                          wp);
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     return CreateASTPoint(new SymmetricSectorZone(wp.location,
                                                   turnpoint_radius), wp);
@@ -335,7 +338,9 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                                                Angle::QuarterCircle()),
                           wp);
   case TaskPointFactoryType::FINISH_SECTOR:
-    return CreateFinish(new FAISectorZone(wp.location, false), wp);
+    return CreateFinish(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                 false),
+                        wp);
   case TaskPointFactoryType::FINISH_LINE:
     return CreateFinish(new LineSectorZone(wp.location, finish_radius), wp);
   case TaskPointFactoryType::FINISH_CYLINDER:

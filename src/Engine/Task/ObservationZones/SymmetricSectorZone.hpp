@@ -63,6 +63,22 @@ public:
     UpdateSector();
   }
 
+  /**
+   * A 90 degree sector centered at the bisector of incoming/outgoing legs
+   * \todo This really should have infinite length
+   *
+   * @param is_turnpoint Whether the sector is a turnpoint, or start/finish
+   */
+  static SymmetricSectorZone *CreateFAISectorZone(const GeoPoint loc,
+                                                  const bool _is_turnpoint = true) {
+    auto *oz =
+      new SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
+                              _is_turnpoint ? fixed(10000) : fixed(1000),
+                              Angle::QuarterCircle());
+      oz->UpdateSector();
+    return oz;
+  }
+
   /** 
    * Accessor for angle of sector (angle between start/end radials)
    * 

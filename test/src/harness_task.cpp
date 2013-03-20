@@ -39,7 +39,6 @@
 #include "harness_waypoints.hpp"
 #include <string.h>
 
-class FAISectorZone;
 class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
@@ -50,9 +49,6 @@ class ObservationZoneVisitorPrint
 public:
   void Visit(const KeyholeZone& oz) {
     printf("# kehole zone\n");
-  }
-  void Visit(const FAISectorZone& oz) {
-    printf("# fai sect zone\n");
   }
   void Visit(const SectorZone& oz) {
     printf("# sector zone\n");
@@ -74,9 +70,6 @@ public:
   void Visit(const ObservationZonePoint &oz) {
     switch (oz.GetShape()) {
     case ObservationZone::Shape::FAI_SECTOR:
-      Visit((const FAISectorZone &)oz);
-      break;
-
     case ObservationZone::Shape::SECTOR:
       Visit((const SectorZone &)oz);
       break;

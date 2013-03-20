@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
-#include "Engine/Task/ObservationZones/FAISectorZone.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"
@@ -126,7 +125,7 @@ public:
       break;
 
     case ObservationZone::Shape::FAI_SECTOR:
-      oz = new FAISectorZone(location);
+      oz = SymmetricSectorZone::CreateFAISectorZone(location);
       break;
 
     case ObservationZone::Shape::CUSTOM_KEYHOLE:

@@ -28,7 +28,6 @@
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
@@ -334,7 +333,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED)
       oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
     else
-      oz = new FAISectorZone(wp->location, is_intermediate);
+      oz = SymmetricSectorZone::CreateFAISectorZone(wp->location,
+                                                    is_intermediate);
 
   } else if (is_intermediate) { //AAT intermediate point
     Angle A12adj;
