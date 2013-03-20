@@ -110,10 +110,13 @@ protected:
   gcc_pure
   unsigned CalcDistance(const ScanTaskPoint curNode,
                         const SearchPoint &currentLocation) const {
-    const FlatGeoPoint &a = GetPoint(curNode).GetFlatLocation();
-    const FlatGeoPoint &b = currentLocation.GetFlatLocation();
+    /* using expensive floating point formulas here to avoid integer
+       rounding errors */
 
-    return a.ShiftedDistance(b, 8);
+    const GeoPoint &a = GetPoint(curNode).GetLocation();
+    const GeoPoint &b = currentLocation.GetLocation();
+
+    return (unsigned)a.Distance(b);
   }
 
   /** 
