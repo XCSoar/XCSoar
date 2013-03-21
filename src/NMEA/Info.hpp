@@ -440,6 +440,7 @@ struct NMEAInfo {
   }
 
   void ProvideTime(fixed time);
+  void ProvideDate(const BrokenDate &date);
 
   /**
    * Provide a "true" barometric altitude, but only use it if the
