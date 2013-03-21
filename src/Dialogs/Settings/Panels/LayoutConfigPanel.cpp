@@ -250,9 +250,8 @@ LayoutConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(DialogStyle, ProfileKeys::AppDialogStyle,
                            ui_settings.dialog.dialog_style);
 
-  if (SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
-                    ui_settings.info_boxes.border_style))
-    require_restart = changed = true;
+  changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
+                           ui_settings.info_boxes.border_style);
 
   if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
                 ui_settings.info_boxes.inverse))
