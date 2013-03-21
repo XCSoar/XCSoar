@@ -40,18 +40,25 @@ IgcReplay::~IgcReplay()
 }
 
 bool
-IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix)
+IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix, NMEAInfo &basic)
 {
-  return IGCParseFix(buffer, fix) && fix.gps_valid;
+  if (IGCParseFix(buffer, fix) && fix.gps_valid)
+    return true;
+
+  BrokenDate date;
+  if (IGCParseDateRecord(buffer, date))
+    basic.ProvideDate(date);
+
+  return false;
 }
 
 bool
-IgcReplay::ReadPoint(IGCFix &fix)
+IgcReplay::ReadPoint(IGCFix &fix, NMEAInfo &basic)
 {
   char *buffer;
 
   while ((buffer = reader->ReadLine()) != NULL) {
-    if (ScanBuffer(buffer, fix))
+    if (ScanBuffer(buffer, fix, basic))
       return true;
   }
 
@@ -64,7 +71,7 @@ IgcReplay::Update(NMEAInfo &basic)
   IGCFix fix;
 
   while (true) {
-    if (!ReadPoint(fix))
+    if (!ReadPoint(fix, basic))
       return false;
 
     if (fix.time.Plausible())
