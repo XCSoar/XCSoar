@@ -33,6 +33,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 void
 ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
@@ -132,7 +136,13 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     for (int i = 0; i < numtherm; ++i)
       thermal_profile.emplace_back(Wt[i], ht[i]);
 
-    chart.DrawFilledY(thermal_profile, look.brush, fpen);
+    if (!is_infobox) {
+#ifdef ENABLE_OPENGL
+      const GLEnable blend(GL_BLEND);
+#endif
+      chart.DrawFilledY(thermal_profile, look.brush, fpen);
+    } else
+      chart.DrawFilledY(thermal_profile, look.brush, fpen);
   }
 
   // position of thermal band
