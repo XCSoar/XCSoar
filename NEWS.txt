@@ -36,7 +36,7 @@ Version 6.5.3 - not yet released
   - fix wrong radial display in target dialog
   - start at terrain center when there's no GPS fix and no home location
 * task
-  - fix yet another line OZ rounding error
+  - fix line OZ rounding error (#2599)
 * devices
   - FLARM: fix IGC file download on firmware 5.09 (#2619)
 * Android
