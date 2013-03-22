@@ -31,6 +31,7 @@ class AbstractTaskFactory;
 class OrderedTaskPoint;
 struct TaskBehaviour;
 struct OrderedTaskBehaviour;
+struct GeoPoint;
 
 class MatPoints {
 public:
@@ -51,10 +52,14 @@ public:
   MatPoints &operator=(const MatPoints &other) = delete;
 
   /**
-   * populates the mat_points with the first 128 turnpoints in the waypoint file
+   * populates the mat_points with the first MAX_MAT_POINTS turnpoints
+   * in the waypoint file
    * @param waypoints.  The list of active waypoints
+   * @param center.  the center of the task.  If there are a huge number
+   * of waypoints in the file, it limits to those points with a max distance
    */
-  void FillMatPoints(const Waypoints &wps, const AbstractTaskFactory &factory);
+  void FillMatPoints(const Waypoints &wps, const AbstractTaskFactory &factory,
+                     const GeoPoint &center);
 
   /**
    * removes all points from mat_points

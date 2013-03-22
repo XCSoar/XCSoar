@@ -26,6 +26,10 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Points/OrderedTaskPoint.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Math/fixed.hpp"
+
+#include <map>
 
 /**
  * Class to build vector from visited waypoints.
@@ -35,15 +39,38 @@ class MatWaypointVisitorVector final : public WaypointVisitor {
 public:
   static constexpr unsigned MAX_MAT_POINTS = 256;
 
+  /**
+   * range in km of max distance from center of task
+   * (used for large waypoint files to limit MatPoints size)
+   */
+  static constexpr unsigned OPTIONAL_RANGE_LIMIT = 160;
+
 private:
   MatPoints::MatVector &vector;
 
   /**
-   * only load MAX_MAT_POINTS items for sanity
+   * a temp map used to dedupe mat points when
+   * we're adding via closest first
    */
-  unsigned count;
+  std::map<unsigned, unsigned> dedupe;
 
   const AbstractTaskFactory& factory;
+
+  /**
+   * adds to the vector if it is not already in the vector
+   * assumes vector has only been added to via this function
+   * @param wp.  wp of the TP to be added
+   */
+  void AddUnique(const Waypoint &wp) {
+    const unsigned key = wp.id;
+
+    if (dedupe.find(key) == dedupe.end()) {
+      dedupe[key] = 0;
+      OrderedTaskPoint *tp = (OrderedTaskPoint *)
+        factory.CreateIntermediate(wp);
+      vector.push_back(tp);
+    }
+  }
 
 public:
   /**
@@ -53,29 +80,47 @@ public:
    */
   MatWaypointVisitorVector(MatPoints::MatVector &wpv,
                            const AbstractTaskFactory &_factory)
-    :vector(wpv), count(0u), factory(_factory) {}
+    :vector(wpv), factory(_factory) {}
 
   /**
    * Visit method, adds result to vector
    * @param wp Waypoint that is visited
    */
   void Visit(const Waypoint& wp) {
-    if (wp.IsTurnpoint() && count <= MAX_MAT_POINTS) {
-      count++;
-
-      OrderedTaskPoint* tp = (OrderedTaskPoint*)factory.CreateIntermediate(wp);
-      vector.push_back(tp);
-    }
+    if (wp.IsTurnpoint() && vector.size() <= MAX_MAT_POINTS)
+      AddUnique(wp);
   }
+  /**
+   * number of points in file
+   */
+  unsigned Size() {
+    return vector.size();
+  }
+
 };
 
 void
 MatPoints::FillMatPoints(const Waypoints &wps,
-                         const AbstractTaskFactory &factory)
+                         const AbstractTaskFactory &factory,
+                         const GeoPoint &center)
 {
   points.reserve(MatWaypointVisitorVector::MAX_MAT_POINTS);
   MatWaypointVisitorVector wvv(points, factory);
-  wps.VisitNamePrefix(_T(""), wvv);
+  if (wps.size() <= MatWaypointVisitorVector::MAX_MAT_POINTS)
+    wps.VisitNamePrefix(_T(""), wvv);
+  else {
+    wps.VisitWithinRange(center,
+                         fixed(MatWaypointVisitorVector::OPTIONAL_RANGE_LIMIT * 500),
+                         wvv);
+    if (wvv.Size() <= MatWaypointVisitorVector::MAX_MAT_POINTS)
+      wps.VisitWithinRange(center,
+                           fixed(MatWaypointVisitorVector::OPTIONAL_RANGE_LIMIT * 750),
+                           wvv);
+    if (wvv.Size() <= MatWaypointVisitorVector::MAX_MAT_POINTS)
+      wps.VisitWithinRange(center,
+                           fixed(MatWaypointVisitorVector::OPTIONAL_RANGE_LIMIT * 1000),
+                           wvv);
+  }
 }
 
 void
