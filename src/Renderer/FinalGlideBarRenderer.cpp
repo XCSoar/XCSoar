@@ -70,6 +70,15 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   const int y0 = (rc.bottom + rc.top) / 2;
 
+  /* NOTE: size_divisor replaces the fixed value 9 that was used throughout
+   * the code below which caused fixed size rendering regardless of
+   * map size (except the effects of Layout::Scale()). This method
+   * is not usable with variable map sizes (e.g. because of the cross-section
+   * area). size_divisor is used to introduce a screen size dependent scaling.
+   * That workaround is an ugly hack and needs a rework. */
+  const int size_divisor =
+    std::max((int) Layout::Scale(3000 / (rc.bottom - rc.top)), 4);
+
   PixelScalar dy_glidebar = 0;
   PixelScalar dy_glidebar0 = 0;
 
@@ -95,7 +104,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     altitude_difference = -468;
 
   // 55 units is size, 468 meters div by 9 means 55.
-  int Offset = altitude_difference / 9;
+  int Offset = altitude_difference / size_divisor;
   
   Offset = Layout::Scale(Offset);
   if (altitude_difference <= 0) {
@@ -118,7 +127,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     altitude_difference0 = -468;
 
   // 55 units is size, therefore div by 9.
-  int Offset0 = altitude_difference0 / 9;
+  int Offset0 = altitude_difference0 / size_divisor;
   
   Offset0 = Layout::Scale(Offset0);
   if (altitude_difference0 <= 0) {
