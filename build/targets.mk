@@ -212,7 +212,7 @@ ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8d
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8e
 
   ANDROID_PLATFORM = android-16
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
@@ -261,6 +261,8 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = darwin-x86
   else ifeq ($(WINHOST),y)
     ANDROID_HOST_TAG = windows
+  else ifeq ($(UNAME_M),x86_64)
+    ANDROID_HOST_TAG = linux-x86_64
   else
     ANDROID_HOST_TAG = linux-x86
   endif
