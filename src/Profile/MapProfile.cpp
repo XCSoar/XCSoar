@@ -124,6 +124,8 @@ Profile::Load(MapSettings &settings)
   Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
   Get(ProfileKeys::EnableFinalGlideBarMC0,
       settings.final_glide_bar_mc0_enabled);
+  GetEnum(ProfileKeys::FinalGlideBarDisplayMode,
+          settings.final_glide_bar_display_mode);
   Get(ProfileKeys::ShowFAITriangleAreas,
       settings.show_fai_triangle_areas);
 
