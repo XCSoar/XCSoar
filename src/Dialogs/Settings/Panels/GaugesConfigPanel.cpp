@@ -56,7 +56,21 @@ public:
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
 };
+
+void
+GaugesConfigPanel::OnModified(DataField &df)
+{
+  if (IsDataField(FinalGlideBarDisplayModeControl, df)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    FinalGlideBarDisplayMode fgbdm = (FinalGlideBarDisplayMode)dfe.GetValue();
+    SetRowVisible(EnableFinalGlideBarMC0, fgbdm != FinalGlideBarDisplayMode::OFF);
+  }
+}
 
 void
 GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -96,6 +110,9 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              ui_settings.map.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
 
+  SetRowVisible(EnableFinalGlideBarMC0,
+                settings_map.final_glide_bar_display_mode !=
+                  FinalGlideBarDisplayMode::OFF);
 }
 
 bool
