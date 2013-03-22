@@ -65,6 +65,12 @@ enum class DisplayGroundTrack: uint8_t {
   AUTO,
 };
 
+enum class FinalGlideBarDisplayMode: uint8_t {
+  OFF,
+  ON,
+  AUTO,
+};
+
 struct MapItemListSettings {
 
   /** Add an LocationMapItem to the MapItemList? */
@@ -169,6 +175,9 @@ struct MapSettings {
 
   /** Show FinalGlideBar mc0 arrow */
   bool final_glide_bar_mc0_enabled;
+
+  /** FinalGlideBar display mode configuration */
+  FinalGlideBarDisplayMode final_glide_bar_display_mode;
 
   /**
    * Overlay FAI triangle areas on the map while flying?

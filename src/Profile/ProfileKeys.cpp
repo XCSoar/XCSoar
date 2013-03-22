@@ -190,6 +190,7 @@ const TCHAR RiskGamma[] = _T("RiskGamma");
 const TCHAR PredictWindDrift[] = _T("PredictWindDrift");
 const TCHAR WindArrowStyle[] = _T("WindArrowStyle");
 const TCHAR EnableFinalGlideBarMC0[] = _T("EnableFinalGlideBarMC0");
+const TCHAR FinalGlideBarDisplayMode[] = _T("FinalGlideBarDisplayMode");
 const TCHAR ShowFAITriangleAreas[] = _T("ShowFAITriangleAreas");
 const TCHAR AutoLogger[] = _T("AutoLogger");
 const TCHAR DisableAutoLogger[] = _T("DisableAutoLogger");

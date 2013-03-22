@@ -63,6 +63,7 @@ MapSettings::SetDefaults()
   show_flarm_alarm_level = true;
   show_thermal_profile = true;
   final_glide_bar_mc0_enabled = true;
+  final_glide_bar_display_mode = FinalGlideBarDisplayMode::ON;
   show_fai_triangle_areas = false;
 
   trail.SetDefaults();

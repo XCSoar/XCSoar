@@ -25,6 +25,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 
@@ -33,10 +35,21 @@ enum ControlIndex {
   AutoCloseFlarmDialog,
   EnableTAGauge,
   EnableThermalProfile,
-  EnableFinalGlideBarMC0
+  FinalGlideBarDisplayModeControl,
+  EnableFinalGlideBarMC0,
 };
 
-class GaugesConfigPanel final : public RowFormWidget {
+static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
+  { (unsigned)FinalGlideBarDisplayMode::OFF, N_("Off"),
+    N_("Disable final glide bar.") },
+  { (unsigned)FinalGlideBarDisplayMode::ON, N_("On"),
+    N_("Always show final glide bar.") },
+  { (unsigned)FinalGlideBarDisplayMode::AUTO, N_("Auto"),
+    N_("Show final glide bar if approaching final glide range.") },
+  { 0 }
+};
+
+class GaugesConfigPanel final : public RowFormWidget, DataFieldListener {
 public:
   GaugesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -49,6 +62,7 @@ void
 GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
+  const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -67,13 +81,21 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Thermal band"),
              _("This enables the display of the thermal profile (climb band) display on the map."),
-             CommonInterface::GetMapSettings().show_thermal_profile);
+             settings_map.show_thermal_profile);
+
+  AddEnum(_("Final glide bar"),
+          _("If set to \"On\" the final glide will always be shown, if set to \"Auto\" it will be shown when approaching the final glide possibility."),
+          final_glide_bar_display_mode_list,
+          (unsigned)settings_map.final_glide_bar_display_mode,
+          this);
+  SetExpertRow(FinalGlideBarDisplayModeControl);
 
   AddBoolean(_("Final glide bar MC0"),
              _("If set to ON the final glide bar will show a second arrow indicating the required height "
                  "to reach the final waypoint at MC zero."),
              ui_settings.map.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
+
 }
 
 bool
@@ -82,6 +104,7 @@ GaugesConfigPanel::Save(bool &_changed)
   bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
+  MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   changed |= SaveValue(EnableFLARMGauge, ProfileKeys::EnableFLARMGauge,
                        ui_settings.traffic.enable_gauge);
@@ -93,7 +116,11 @@ GaugesConfigPanel::Save(bool &_changed)
                        ui_settings.enable_thermal_assistant_gauge);
 
   changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
-                       CommonInterface::SetMapSettings().show_thermal_profile);
+                       settings_map.show_thermal_profile);
+
+  changed |= SaveValueEnum(FinalGlideBarDisplayModeControl,
+                           ProfileKeys::FinalGlideBarDisplayMode,
+                           settings_map.final_glide_bar_display_mode);
 
   changed |= SaveValue(EnableFinalGlideBarMC0, ProfileKeys::EnableFinalGlideBarMC0,
                        ui_settings.map.final_glide_bar_mc0_enabled);

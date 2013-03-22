@@ -6,6 +6,7 @@ Version 6.6 - not yet released
 * map
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
+  - allow configuration of "Final glide bar" display (#2554)
 * cross section
   - show airspace names (#1149, #2390)
   - use glide polar instead of current glide ratio (#2687)
