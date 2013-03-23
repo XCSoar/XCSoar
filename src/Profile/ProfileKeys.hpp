@@ -69,6 +69,7 @@ extern const char DrawTopography[];
 extern const char DrawTerrain[];
 extern const char SlopeShading[];
 extern const char SlopeShadingType[];
+extern const char TerrainContours[];
 extern const char FinalGlideTerrain[];
 extern const char AutoWind[];
 extern const char ExternalWind[];

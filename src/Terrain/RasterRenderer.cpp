@@ -48,7 +48,12 @@ inline void
 TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 {
   char x;
-  if (illum < 0) {
+  if (illum == -64) {
+    // brown color mixed in for contours
+    r = MIX(100,r,64);
+    g = MIX(70,g,64);
+    b = MIX(26,b,64);
+  } else if (illum < 0) {
     // shadow to blue
     x = std::min(63, -illum);
     r = MIX(0,r,x);
@@ -69,7 +74,8 @@ RasterRenderer::RasterRenderer()
    last_quantisation_pixels(-1),
    bounds(GeoBounds::Invalid()),
 #endif
-   image(NULL)
+   image(NULL),
+   contour_column_base(NULL)
 {
   // scale quantisation_pixels so resolution is not too high on old hardware
   // with large displays
@@ -81,6 +87,7 @@ RasterRenderer::RasterRenderer()
 RasterRenderer::~RasterRenderer()
 {
   delete image;
+  delete contour_column_base;
 }
 
 #ifdef ENABLE_OPENGL
@@ -160,7 +167,8 @@ void
 RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
                               int contrast, int brightness,
-                              const Angle sunazimuth)
+                              const Angle sunazimuth,
+                              bool do_contour)
 {
   if (image == NULL ||
       height_matrix.GetWidth() > image->GetWidth() ||
@@ -168,20 +176,32 @@ RasterRenderer::GenerateImage(bool do_shading,
     delete image;
     image = new RawBitmap(height_matrix.GetWidth(),
                           height_matrix.GetHeight());
+
+    delete contour_column_base;
+    contour_column_base = new unsigned char[height_matrix.GetWidth()];
   }
 
-  if (quantisation_effective == 0)
+  if (quantisation_effective == 0) {
     do_shading = false;
+    do_contour = false;
+  }
+
+  const unsigned contour_height_scale = do_contour? height_scale * 2 : 16;
+
+  ContourStart(contour_height_scale);
 
   if (do_shading)
     GenerateSlopeImage(height_scale, contrast, brightness,
-                       sunazimuth);
+                       sunazimuth, contour_height_scale);
   else
-    GenerateUnshadedImage(height_scale);
+    GenerateUnshadedImage(height_scale, contour_height_scale);
+
+  image->SetDirty();
 }
 
 void
-RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
+RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
+                                      const unsigned contour_height_scale)
 {
   const short *src = height_matrix.GetData();
   const BGRColor *oColorBuf = color_table + 64 * 256;
@@ -191,14 +211,27 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
+    unsigned char contour_row_base = ContourInterval(*src,
+                                                     contour_height_scale);
+    unsigned char *contour_this_column_base = contour_column_base;
+
     for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
       short h = *src++;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
 
+        const short contour_interval = ContourInterval(h, contour_height_scale);
+
         h = std::min(254, h >> height_scale);
-        *p++ = oColorBuf[h];
+        if (gcc_unlikely((contour_interval != contour_row_base)
+                         || (contour_interval != *contour_this_column_base))) {
+
+          *p++ = oColorBuf[h-64*256];
+          *contour_this_column_base = contour_row_base = contour_interval;
+        } else {
+          *p++ = oColorBuf[h];
+        }
       } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water
         *p++ = oColorBuf[255];
@@ -206,10 +239,10 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
       }
+      contour_this_column_base++;
+
     }
   }
-
-  image->SetDirty();
 }
 
 /**
@@ -233,7 +266,8 @@ ClipHeightDelta(int d)
 void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast,
-                                   const int sx, const int sy, const int sz)
+                                   const int sx, const int sy, const int sz,
+                                   const unsigned contour_height_scale)
 {
   assert(quantisation_effective > 0);
 
@@ -254,7 +288,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   const BGRColor *oColorBuf = color_table + 64 * 256;
 #ifdef FAST_RSQRT
   const short szindex = sz*contrast/128;
-  const short sval_min = szindex-64;
+  const short sval_min = szindex-63;
   const short sval_max = szindex+63;
   const BGRColor *szColorBuf = color_table + (64- szindex) * 256;
   const int sx_c = sx*contrast>>7;
@@ -279,11 +313,17 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
+    unsigned char contour_row_base = ContourInterval(*src,
+                                                     contour_height_scale);
+    unsigned char *contour_this_column_base = contour_column_base;
+
     for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
       short h = *src;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
+
+        const short contour_interval = ContourInterval(h, contour_height_scale);
 
         h = std::min(254, h >> height_scale);
 
@@ -320,6 +360,15 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
           /* some "special" terrain value surrounding us (water or
              invalid), skip slope calculation */
           *p++ = oColorBuf[h];
+          contour_this_column_base++;
+          continue;
+        }
+
+        if (gcc_unlikely((contour_interval != contour_row_base)
+                         || (contour_interval != *contour_this_column_base))) {
+
+          *contour_this_column_base++ = contour_row_base = contour_interval;
+          *p++ = oColorBuf[h-64*256];
           continue;
         }
 
@@ -347,12 +396,12 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         const unsigned positive_mag = std::max(mag, 1u);
         const int sval = num / (int)positive_mag;
         const int sindex = (sval - sz) * contrast / 128;
-        *p++ = oColorBuf[h + 256 * Clamp(sindex, -64, 63)];
+        *p++ = oColorBuf[h + 256 * Clamp(sindex, -63, 63)];
 #else
         const int num = (dd2 * sz_c + dd0 * sx_c + dd1 * sy_c);
         const int sval = i_normalise_mag3(num, dd0, dd1, dd2);
         if (gcc_unlikely(sval<=sval_min))
-          *p++ = color_table[h];
+          *p++ = color_table[h + 256];
         else if (gcc_unlikely(sval >= sval_max))
           *p++ = color_table[h + 127*256];
         else
@@ -366,16 +415,17 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         /* outside the terrain file bounds: white background */
         *p++ = BGRColor(0xff, 0xff, 0xff);
       }
+      contour_this_column_base++;
+
     }
   }
-
-  image->SetDirty();
 }
 
 void
 RasterRenderer::GenerateSlopeImage(unsigned height_scale,
                                    int contrast, int brightness,
-                                   const Angle sunazimuth)
+                                   const Angle sunazimuth,
+                                   const unsigned contour_height_scale)
 {
   const Angle fudgeelevation = Angle::Degrees(10) +
     Angle::Degrees(80.0 / 255.0) * brightness;
@@ -385,7 +435,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   const int sz = (int)(255 * fudgeelevation.fastsine());
 
   GenerateSlopeImage(height_scale, contrast,
-                     sx, sy, sz);
+                     sx, sy, sz, contour_height_scale);
 }
 
 void
@@ -420,6 +470,32 @@ RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
       }
 
       color_table[i + (mag + 64) * 256] = BGRColor(r, g, b);
+    }
+  }
+}
+
+
+unsigned char
+RasterRenderer::ContourInterval(const short h,
+                                const unsigned contour_height_scale)
+{
+  if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
+    if (h < 0)
+      return 0;
+    return std::min(254, h >> contour_height_scale);
+  }
+  return 0;
+}
+
+void
+RasterRenderer::ContourStart(const unsigned contour_height_scale)
+{
+  // initialise column to first row
+  {
+    const short *src = height_matrix.GetData();
+    unsigned char *col_base = contour_column_base;
+    for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
+      *col_base++ = ContourInterval(*src++, contour_height_scale);
     }
   }
 }

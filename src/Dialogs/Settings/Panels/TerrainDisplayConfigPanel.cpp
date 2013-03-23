@@ -48,6 +48,7 @@ enum ControlIndex {
   TerrainSlopeShading,
   TerrainContrast,
   TerrainBrightness,
+  TerrainContours,
   TerrainPreview,
 };
 
@@ -102,6 +103,7 @@ TerrainDisplayConfigPanel::ShowTerrainControls()
   SetRowVisible(TerrainSlopeShading, show);
   SetRowVisible(TerrainContrast, show);
   SetRowVisible(TerrainBrightness, show);
+  SetRowVisible(TerrainContours, show);
   if (terrain != NULL)
     SetRowVisible(TerrainPreview, show);
 }
@@ -127,6 +129,8 @@ TerrainDisplayConfigPanel::UpdateTerrainPreview()
   terrain_settings.brightness =
     PercentToByte(GetValueInteger(TerrainBrightness));
   terrain_settings.ramp = GetValueInteger(TerrainColors);
+  terrain_settings.contours = (Contours)
+    GetValueInteger(TerrainContours);
 
   // Invalidate terrain preview
   if (terrain != NULL)
@@ -250,6 +254,20 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   GetDataField(TerrainBrightness).SetListener(this);
   SetExpertRow(TerrainBrightness);
 
+  // JMW using enum here instead of bool so can provide more contour rendering
+  // options later
+  static constexpr StaticEnumChoice contours_list[] = {
+    { (unsigned)Contours::OFF, N_("Off"), },
+    { (unsigned)Contours::ON, N_("On"), },
+    { 0 }
+  };
+
+  AddEnum(_("Contours"),
+          _("If enabled, draws contour lines on the terrain."),
+          contours_list, (unsigned)terrain.contours);
+  GetDataField(TerrainContours).SetListener(this);
+  SetExpertRow(TerrainContours);
+
   if (::terrain != NULL) {
     WindowStyle style;
     style.Border();
@@ -278,6 +296,7 @@ TerrainDisplayConfigPanel::Save(bool &_changed)
   Profile::Set(ProfileKeys::TerrainBrightness, terrain_settings.brightness);
   Profile::Set(ProfileKeys::TerrainRamp, terrain_settings.ramp);
   Profile::SetEnum(ProfileKeys::SlopeShadingType, terrain_settings.slope_shading);
+  Profile::SetEnum(ProfileKeys::TerrainContours, terrain_settings.contours);
 
   changed |= SaveValue(EnableTopography, ProfileKeys::DrawTopography,
                        settings_map.topography_enabled);

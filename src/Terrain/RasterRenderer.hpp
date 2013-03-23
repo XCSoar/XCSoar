@@ -71,6 +71,8 @@ class RasterRenderer : private NonCopyable {
   HeightMatrix height_matrix;
   RawBitmap *image;
 
+  unsigned char *contour_column_base;
+
   fixed pixel_size;
 
   BGRColor color_table[256 * 128];
@@ -129,7 +131,8 @@ public:
    */
   void GenerateImage(bool do_shading,
                      unsigned height_scale, int contrast, int brightness,
-                     const Angle sunazimuth);
+                     const Angle sunazimuth,
+                     bool do_contour);
 
   const RawBitmap &GetImage() const {
     return *image;
@@ -139,20 +142,31 @@ protected:
   /**
    * Convert the height matrix into the image, without shading.
    */
-  void GenerateUnshadedImage(unsigned height_scale);
+  void GenerateUnshadedImage(unsigned height_scale,
+                             const unsigned contour_height_scale);
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
   void GenerateSlopeImage(unsigned height_scale, int contrast,
-                          const int sx, const int sy, const int sz);
+                          const int sx, const int sy, const int sz,
+                          const unsigned contour_height_scale);
 
   /**
    * Convert the height matrix into the image, with slope shading.
    */
   void GenerateSlopeImage(unsigned height_scale,
                           int contrast, int brightness,
-                          const Angle sunazimuth);
+                          const Angle sunazimuth,
+                          const unsigned contour_height_scale);
+
+private:
+
+  void ContourStart(const unsigned contour_height_scale);
+
+  static unsigned char ContourInterval(const short h,
+                                       const unsigned contour_height_scale);
+
 };
 
 #endif

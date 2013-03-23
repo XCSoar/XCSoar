@@ -49,6 +49,7 @@ const char DistanceUnitsValue[] = "DistanceUnit";
 const char DrawTerrain[] = "DrawTerrain";
 const char SlopeShading[] = "SlopeShading";
 const char SlopeShadingType[] = "SlopeShadingType";
+const char TerrainContours[] = "TerrainContours";
 const char DrawTopography[] = "DrawTopology";
 const char FinalGlideTerrain[] = "FinalGlideTerrain";
 const char AutoWind[] = "AutoWind";

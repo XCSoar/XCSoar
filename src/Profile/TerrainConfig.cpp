@@ -47,4 +47,8 @@ Profile::LoadTerrainRendererSettings(TerrainRendererSettings &settings)
   if (Get(ProfileKeys::TerrainRamp, ramp) &&
       ramp < TerrainRendererSettings::NUM_RAMPS)
     settings.ramp = ramp;
+
+  uint8_t contours = (uint8_t)settings.contours;
+  if (Get(ProfileKeys::TerrainContours, contours))
+    settings.contours = (Contours)contours;
 }
