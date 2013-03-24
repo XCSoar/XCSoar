@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-20 23:11+0100\n"
-"PO-Revision-Date: 2013-03-12 15:51+0000\n"
-"Last-Translator: Masahiro Mori <Unknown>\n"
+"PO-Revision-Date: 2013-03-24 08:45+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-13 07:16+0000\n"
-"X-Generator: Launchpad (build 16532)\n"
+"X-Launchpad-Export-Date: 2013-03-24 11:40+0000\n"
+"X-Generator: Launchpad (build 16540)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -65,7 +65,7 @@ msgstr "AATタスク"
 #: src/Task/TypeStrings.cpp:40
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "変更エリアタスク"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
@@ -126,6 +126,10 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"変更エリアタスク　\r\n"
+"スタート、フィニッシュ、最低１箇所の円筒（１マイル）を含む\r\n"
+"パイロットは追加のポイントを設定することができる。\r\n"
+"最低タスク時間が適用される"
 
 #: src/Task/TypeStrings.cpp:65
 #, no-c-format
@@ -207,9 +211,11 @@ msgid "A cylinder.  Any point within area scored from center."
 msgstr "シリンダー（円筒）　内側から任意の境界線を通過した場合"
 
 #: src/Task/TypeStrings.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr "複数の点で囲まれた筒型のエリアの境界への到着"
+msgstr ""
+"１マイルの　円筒\r\n"
+"エリア内の最も遠い点で採点される"
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -256,12 +262,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "任意方向の左右対称な四角形"
 
 #: src/Task/TypeStrings.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "複数の点で囲まれた筒型のエリアの境界への到着"
+msgstr "キーホール　指定エリア内の最も遠い点で採点される"
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -306,7 +312,7 @@ msgstr "旋回点シリンダー"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "半径１マイル　の円筒"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -344,59 +350,59 @@ msgid "Area sector with inner radius"
 msgstr "シリンダー＆　エリアセクター"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symmetric quadrant"
-msgstr "FAI90度　スタートセクター"
+msgstr "左右対称な四角形"
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "ドイツエアロクラブ　Keyhole"
+msgstr "指定された範囲"
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "スタート無効\n"
+msgstr "無効なスタート"
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "フィニッシュ無効\n"
+msgstr "無効なフィニッシュ"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "タスク未終了\n"
+msgstr "タスクは終了していない"
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "旋回点タイプが同じではありません\n"
+msgstr "すべての旋回点が同じタイプではない"
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "旋回点数が不正です\n"
+msgstr "旋回点の数が不正"
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "旋回点数が多すぎです\n"
+msgstr "旋回点の数が多すぎ"
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "旋回点数が不足です\n"
+msgstr "旋回点の数が不足"
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "旋回点の設定がありません\n"
+msgstr "旋回点が不適切"
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "タスクが有りません\n"
+msgstr "タスクを消去する"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -404,9 +410,9 @@ msgid "non-FAI turn points"
 msgstr "非FAI旋回点"
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "非FAI旋回点"
+msgstr "非MAT旋回点"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -944,9 +950,9 @@ msgid "None"
 msgstr "なし"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "タスク フィニッシュ"
+msgstr "タスクと飛行場"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
@@ -2127,7 +2133,7 @@ msgstr "全サーマル平均上昇率"
 #: src/InfoBoxes/Content/Factory.cpp:798
 #, no-c-format
 msgid "T Avg"
-msgstr ""
+msgstr "平均時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
@@ -2255,7 +2261,7 @@ msgstr "離陸地点からの高度"
 #: src/InfoBoxes/Content/Factory.cpp:872
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "離陸高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:873
 #, no-c-format
@@ -2287,6 +2293,14 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"一定時間内に飛行した距離を失った高度で割った値、　滑空比\r\n"
+"マイナスの値の場合”＾＾＾”で表示し獲得した高度を表示する\r\n"
+"２００以上の値の場合”+++”で表示される\r\n"
+"平均値を求める時間は、６０、９０、１２０秒のいずれかから選択することができ"
+"る、時間が短ければ瞬間値、長ければ巡航値に近づく\r\n"
+"飛行距離はポイントまでの直線距離ではなく、実際に飛行した航跡の距離で計算す"
+"る。\r\n"
+"旋回中の距離は算入されない"
 
 #: src/InfoBoxes/Content/Factory.cpp:892
 #, no-c-format
@@ -2471,6 +2485,8 @@ msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
+"平均上昇率のグラフ\r\n"
+"上昇率　（水平軸）　高度（縦軸）"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -2826,14 +2842,14 @@ msgid "True bearing from the next waypoint to your position."
 msgstr "次のポイントから　現在の位置への方向"
 
 #: src/InfoBoxes/Content/Factory.cpp:1205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial ATC"
-msgstr "次のポイントからの方向"
+msgstr "次のATCポイントからの方角"
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial ATC"
-msgstr "放射状"
+msgstr "ATCポイントからの方角"
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -2841,6 +2857,8 @@ msgid ""
 "True bearing from the next waypoint to your position.  The distance is "
 "displayed in nautical miles for communication with ATC."
 msgstr ""
+"次の旋回点から現在位置までの方角\r\n"
+"距離はATC周波数と共にノーチカルマイルで表示される"
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -4469,7 +4487,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:82
 msgid "Source"
-msgstr ""
+msgstr "供給元"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
@@ -4615,7 +4633,7 @@ msgstr "ページ"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
 #, no-c-format
 msgid "InfoBox Sets"
-msgstr ""
+msgstr "インフォボックス　設定"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4984,7 +5002,7 @@ msgstr "再生j速度の設定　０に設定すると一時停止　１は実�
 #: src/Dialogs/ReplayDialog.cpp:92
 #, c-format
 msgid "%.0f x"
-msgstr ""
+msgstr "%.0f x"
 
 #: src/Dialogs/ReplayDialog.cpp:111
 msgid "Could not open IGC file!"
@@ -5732,7 +5750,7 @@ msgstr "グライダー向けの時間設定"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
-msgstr ""
+msgstr "平均滑空比　時間"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -5914,9 +5932,9 @@ msgid "8 Top (Portrait)"
 msgstr "8上　（縦型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8下　＋バリオ　（縦型）"
+msgstr "８上　＋　バリオ"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6105,14 +6123,14 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "タブ表示はインフォボックスの上タイトル位置"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "シェード"
+msgstr "陰影"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "芝"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Display orientation"
@@ -6375,15 +6393,14 @@ msgid ""
 msgstr "グライダーの画面表示位置"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "自動ズーム オン"
+msgstr "自動ズーム"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
 "Automatically zoom in when approaching a waypoint to keep the waypoint at a "
 "reasonable screen distance."
-msgstr ""
+msgstr "ウエイポイントに近づくと　適切な縮尺に自動的にズームする"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
@@ -6394,13 +6411,12 @@ msgid "The upper limit for auto zoom distance."
 msgstr "オートズームの上限距離"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "ホーム距離"
+msgstr "個別ページズーム"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "ページごとにズームを指定　（自動ズーム）しない"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
 msgid "Main area"
@@ -6408,7 +6424,7 @@ msgstr "主表示部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
 msgid "Specifies what should be displayed in the main area."
-msgstr ""
+msgstr "メインエリアに表示されるアイテムの設定"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:329
@@ -6417,7 +6433,7 @@ msgstr "情報表示部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
-msgstr ""
+msgstr "表示させるインフォボックスの設定"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
@@ -6436,7 +6452,7 @@ msgstr "下部"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
 msgid "Specifies what should be displayed below the main area."
-msgstr ""
+msgstr "メインエリア下部に表示するアイテムの設定"
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:252
 msgid "Polar name"
@@ -7246,7 +7262,7 @@ msgstr "ICAO"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Vibrant"
-msgstr ""
+msgstr "振動"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
@@ -7540,14 +7556,14 @@ msgid "All waypoint labels will be displayed."
 msgstr "すべてのウエイポイントのラベルを表示"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "タスク　WP＆着陸可能地"
+msgstr "タスク旋回点　と　飛行場"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr "タスクで使用るすウエイポイント　及び着陸可能地を表示"
+msgstr "タスクで使用する　すべての旋回点と　すべての飛行場を表示"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -7758,7 +7774,7 @@ msgstr "OZセクターの内側の円"
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "アングル"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:227
@@ -8061,14 +8077,12 @@ msgid "Cylinder"
 msgstr "シリンダー"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "エリア　シリンダー"
+msgstr "MAT　シリンダー"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
-#, fuzzy
 msgid "Keyhole"
-msgstr "ドイツエアロクラブ　Keyhole"
+msgstr "キーホール"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "DAeC Keyhole"
@@ -8087,9 +8101,8 @@ msgid "BGA Start Sector"
 msgstr "英国グライダー協会　スタートセクター"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "予想タスク時間"
+msgstr "タスクの名称を入力"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:53
 msgid "Now"
@@ -9207,51 +9220,23 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Lookup"
-#~ msgstr "検索"
-
-#~ msgid "Gate Width"
-#~ msgstr "ゲート幅"
-
-#~ msgid "Change point type?"
-#~ msgstr "ポイントタイプの変更？"
-
-#~ msgid "Save task?"
-#~ msgstr "タスクを保存しますか？"
-
-#~ msgid "Task Selection"
-#~ msgstr "タスク選択"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "FAIルールに適合しない　三角コースです\n"
-
-#~ msgid "Longitude"
-#~ msgstr "経度"
+#~ msgid "English"
+#~ msgstr "英語"
 
 #~ msgid "Latitude"
 #~ msgstr "緯度"
+
+#~ msgid "Sunset"
+#~ msgstr "日没"
+
+#~ msgid "Longitude"
+#~ msgstr "経度"
 
 #~ msgid "Lon."
 #~ msgstr "経度"
 
 #~ msgid "Lat."
 #~ msgstr "緯度"
-
-#~ msgid "This sets the task point for review."
-#~ msgstr "タスクポイントの見直し"
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "ウエイポイント\n"
-#~ "の詳細"
-
-#~ msgid "English"
-#~ msgstr "英語"
-
-#~ msgid "Sunset"
-#~ msgstr "日没"
 
 #~ msgid "H Baro"
 #~ msgstr "気圧高度"
@@ -9261,6 +9246,9 @@ msgstr ""
 
 #~ msgid "Show details:"
 #~ msgstr "詳細を表示"
+
+#~ msgid "Save task?"
+#~ msgstr "タスクを保存しますか？"
 
 #~ msgid "H GND"
 #~ msgstr "地点標高"
@@ -9383,6 +9371,12 @@ msgstr ""
 #~ msgid "Delete Error"
 #~ msgstr "削除エラー"
 
+#~ msgid "Change point type?"
+#~ msgstr "ポイントタイプの変更？"
+
+#~ msgid "Gate Width"
+#~ msgstr "ゲート幅"
+
 #~ msgid ""
 #~ "The distance made in the configured period of time , divided by the "
 #~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
@@ -9405,6 +9399,39 @@ msgstr ""
 #~ "ジグザグに飛行した場合はその合計距離で計算される　また旋回中の距離は含まれ"
 #~ "ない"
 
+#~ msgid "No valid finish.\n"
+#~ msgstr "フィニッシュ無効\n"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "スタート無効\n"
+
+#~ msgid "Task Selection"
+#~ msgstr "タスク選択"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "タスク未終了\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "旋回点タイプが同じではありません\n"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "旋回点数が不正です\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "旋回点数が多すぎです\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "旋回点数が不足です\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "タスクが有りません\n"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "FAIルールに適合しない　三角コースです\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "旋回点の設定がありません\n"
+
 #~ msgid "Set new teammate:"
 #~ msgstr "新しいチームメートをセット"
 
@@ -9421,6 +9448,9 @@ msgstr ""
 #~ msgid "My Sample"
 #~ msgstr "サンプル"
 
+#~ msgid "This sets the task point for review."
+#~ msgstr "タスクポイントの見直し"
+
 #~ msgid ""
 #~ "FLARM\n"
 #~ "Details"
@@ -9428,11 +9458,21 @@ msgstr ""
 #~ "FLARM\n"
 #~ "非設定"
 
+#~ msgid "Lookup"
+#~ msgstr "検索"
+
 #~ msgid "Return"
 #~ msgstr "Returnキー"
 
 #~ msgid "TC All"
 #~ msgstr "All TC平均"
+
+#~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr ""
+#~ "ウエイポイント\n"
+#~ "の詳細"
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "AAT 残り時間"
