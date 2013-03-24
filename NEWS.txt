@@ -32,6 +32,8 @@ Version 6.6 - not yet released
   - Volkslogger: support IGC file download (#1972)
 * Android
   - faster map renderer on some Android devices
+* data
+  - new polars for two G 102 Astir variants (#2701)
 
 Version 6.5.3 - not yet released
 * user interface
