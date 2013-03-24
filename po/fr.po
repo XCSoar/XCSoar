@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-20 23:11+0100\n"
-"PO-Revision-Date: 2013-03-07 21:12+0000\n"
-"Last-Translator: Tubuntu <Unknown>\n"
+"PO-Revision-Date: 2013-03-22 22:42+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-08 09:12+0000\n"
-"X-Generator: Launchpad (build 16523)\n"
+"X-Launchpad-Export-Date: 2013-03-24 11:40+0000\n"
+"X-Generator: Launchpad (build 16540)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:40
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Circuit à zone modifiée (MAT)"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
@@ -129,6 +129,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Circuit à zone modifiée. Circuit avec un départ, une arrivée et au moins un "
+"cylindre prédéfini de 1 mile. Le pilote peut ajouter autant de points que "
+"nécessaires. Le circuit minimum s'applique."
 
 #: src/Task/TypeStrings.cpp:65
 #, no-c-format
@@ -217,10 +220,9 @@ msgstr ""
 "fait à partir du centre du secteur."
 
 #: src/Task/TypeStrings.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr ""
-"Un cylindre. Le point le plus éloigné est utilisé pour le calcul des points."
+msgstr "Cylindre d'un mile. Calculé au point le plus éloigné de la zone."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -275,13 +277,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Quadrant symétrique avec rayon réglable."
 
 #: src/Task/TypeStrings.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr ""
-"Un cylindre. Le point le plus éloigné est utilisé pour le calcul des points."
+msgstr "Un trou de serrure. Compté au point le plus loin atteint dans la zone."
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -326,7 +327,7 @@ msgstr "Cylindre de point de virage"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cylindre d'un mile de rayon."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -364,59 +365,59 @@ msgid "Area sector with inner radius"
 msgstr "Zone secteur de couronne"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symmetric quadrant"
-msgstr "Quadrant de départ FAI"
+msgstr "Quandrant symétrique"
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "DAeC"
+msgstr "Zone en trou de serrure"
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Pas de départ valide.\n"
+msgstr "Pas de départ valide"
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Pas d'arrivée valide.\n"
+msgstr "Pas d'arrivée valide"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "Épreuve non close\n"
+msgstr "Circuit non fermé"
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Tous les points de virage n'ont pas le même type.\n"
+msgstr "Tous les points de virage ne sont pas du même type"
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Nombre de points de virage incorrect.\n"
+msgstr "Nombre de point de virage incorrect"
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Trop de points de virage.\n"
+msgstr "Trop de points de virage"
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Pas assez de points de virage.\n"
+msgstr "Pas assez de points de virage"
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Points de virage non uniques\n"
+msgstr "Points de virage non uniques"
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "Circuit vide.\n"
+msgstr "Circuit vide"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -424,9 +425,9 @@ msgid "non-FAI turn points"
 msgstr "Points de virage non-FAI."
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "Points de virage non-FAI."
+msgstr "Point de virage non-MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -970,9 +971,9 @@ msgid "None"
 msgstr "Aucun"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "Circuit terminé"
+msgstr "Circuit & aérodromes"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
@@ -1142,8 +1143,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"Gain/perte total(e) dans le dernier thermique divisé(e) par le temps passé à "
-"spiraler."
+"Gain ou perte total(e) d'altitude dans le dernier thermique, divisé par le "
+"temps passé en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
@@ -1158,7 +1159,7 @@ msgstr "Th Gain"
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "Gain/perte d'altitude total(e) dans le dernier thermique."
+msgstr "Gain ou perte total(e) d'altitude dans le dernier thermique."
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
@@ -1426,8 +1427,8 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
-"Vitesse verticale instantanée, donnée par le GPS, ou par le vario à énergie "
-"totale si connecté."
+"Vitesse verticale instantanée, telle que fournie par le GPS, or le "
+"périphérique si connecté."
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -2880,14 +2881,14 @@ msgid "True bearing from the next waypoint to your position."
 msgstr "Relevement vrai du prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:1205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial ATC"
-msgstr "Prch Radiale"
+msgstr "Prochain relèvement ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial ATC"
-msgstr "Radial"
+msgstr "Relèvement ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -2895,6 +2896,8 @@ msgid ""
 "True bearing from the next waypoint to your position.  The distance is "
 "displayed in nautical miles for communication with ATC."
 msgstr ""
+"Relèvement de votre position par rapport au prochain point de virage. La "
+"distance est fournie en miles nautiques pour communication avec l'ATC."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -3436,7 +3439,7 @@ msgstr "Altitude"
 #: src/Dialogs/Traffic/TrafficList.cpp:670
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "il y a %u minutes"
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -4362,7 +4365,7 @@ msgstr "Aller à"
 #: src/Dialogs/MapItemListDialog.cpp:177
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 msgid "Ack Day"
-msgstr "OK Jour"
+msgstr "OK Auj."
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:34
 msgid "Map Item List Settings"
@@ -4546,7 +4549,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:82
 msgid "Source"
-msgstr ""
+msgstr "Source"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
@@ -5064,7 +5067,7 @@ msgstr ""
 #: src/Dialogs/ReplayDialog.cpp:92
 #, c-format
 msgid "%.0f x"
-msgstr ""
+msgstr "%.0f x"
 
 #: src/Dialogs/ReplayDialog.cpp:111
 msgid "Could not open IGC file!"
@@ -6000,9 +6003,9 @@ msgid "8 Top (Portrait)"
 msgstr "8 Haut (Portrait)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8 Bas + Vario (Portrait)"
+msgstr "8 Haut + Vario (Portrait)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6191,14 +6194,14 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "Dessine un onglet au-dessus de l'InfoBox."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "Ombre"
+msgstr "Ombré"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "Vitré"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Display orientation"
@@ -6476,15 +6479,16 @@ msgstr ""
 "l'écran."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Zoom auto ON"
+msgstr "Zoom auto"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
 "Automatically zoom in when approaching a waypoint to keep the waypoint at a "
 "reasonable screen distance."
 msgstr ""
+"Zoom automatique en approchant d'un point de virage afin de maintenir le "
+"point à une distance appropriée sur l'écran."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
@@ -6495,13 +6499,12 @@ msgid "The upper limit for auto zoom distance."
 msgstr "Dist. max auto zoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "Distance à la base"
+msgstr "Zoom différents par page"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Conserve un réglage de zoom par page."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
 msgid "Main area"
@@ -7381,7 +7384,7 @@ msgstr "OACI"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Vibrant"
-msgstr ""
+msgstr "Vibrant"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
@@ -7687,16 +7690,15 @@ msgid "All waypoint labels will be displayed."
 msgstr "Tous les noms de waypoints sont affichés."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Points de virage du circuit & posables"
+msgstr "Points du circuit & aérodromes"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
 msgstr ""
-"Tous les points de virage du circuit et les terrains atterrissables sont "
-"affichés."
+"Tous les points de virage du circuit et les aérodromes seront affichés."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -7914,7 +7916,7 @@ msgstr "Rayon intérieur du secteur d'observation."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "Angle"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:227
@@ -8222,14 +8224,12 @@ msgid "Cylinder"
 msgstr "Cylindre"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "zone cylindrique"
+msgstr "Cylindre MAT"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
-#, fuzzy
 msgid "Keyhole"
-msgstr "DAeC"
+msgstr "Trou de serrure"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "DAeC Keyhole"
@@ -8248,9 +8248,8 @@ msgid "BGA Start Sector"
 msgstr "Secteur de départ type BGA"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Temps circuit estimé"
+msgstr "Nom du circuit"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:53
 msgid "Now"
@@ -8743,7 +8742,7 @@ msgstr "Masse  à vide"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
-msgstr "OK Jour"
+msgstr "OK Auj."
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:36
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:36
@@ -9281,9 +9280,8 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:847
-#, fuzzy
 msgid "Traffic List"
-msgstr "Feux de signalisation"
+msgstr "Liste du traffic"
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -9400,70 +9398,32 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "AC Off;  %d%%"
-#~ msgstr "Hors charge; %d%%"
-
-#~ msgid "Lookup"
-#~ msgstr "Parcourir"
-
-#~ msgid "Gate Width"
-#~ msgstr "Largeur de porte"
-
-#~ msgid "Change point type?"
-#~ msgstr "Changer le type du point?"
-
-#~ msgid "Save task?"
-#~ msgstr "Sauvegarder le circuit ?"
-
-#~ msgid "Task Selection"
-#~ msgstr "Selection de circuit"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "Forme du triangle FAI invalide.\n"
-
-#~ msgid "Longitude"
-#~ msgstr "Longitude"
-
-#~ msgid "Latitude"
-#~ msgstr "Latitude"
-
-#~ msgid "Lon."
-#~ msgstr "Long."
-
-#~ msgid "Lat."
-#~ msgstr "Lat."
-
-#~ msgid "This sets the task point for review."
-#~ msgstr "Définit le point de virage pour vérification."
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Détails\n"
-#~ "Pt de virage"
-
-#~ msgid ""
-#~ "FLARM\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Détails\n"
-#~ "FLARM"
-
-#~ msgid "Return"
-#~ msgstr "Retour"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
 
+#~ msgid "Task Selection"
+#~ msgstr "Selection de circuit"
+
+#~ msgid "Save task?"
+#~ msgstr "Sauvegarder le circuit ?"
+
 #~ msgid "Weather parameters"
 #~ msgstr "Paramètres météo"
 
+#~ msgid "Longitude"
+#~ msgstr "Longitude"
+
 #~ msgid "Sunset"
 #~ msgstr "Coucher du soleil"
+
+#~ msgid "Latitude"
+#~ msgstr "Latitude"
+
+#~ msgid "Lookup"
+#~ msgstr "Parcourir"
 
 #~ msgid "Short file name"
 #~ msgstr "Nom Fichier Court"
@@ -9512,6 +9472,40 @@ msgstr ""
 #~ msgstr "Modes InfoBoxes"
 
 #~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Détails\n"
+#~ "Pt de virage"
+
+#~ msgid "Change point type?"
+#~ msgstr "Changer le type du point?"
+
+#~ msgid "No valid finish.\n"
+#~ msgstr "Pas d'arrivée valide.\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "Tous les points de virage n'ont pas le même type.\n"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "Pas de départ valide.\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "Trop de points de virage.\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "Pas assez de points de virage.\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "Circuit vide.\n"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "Forme du triangle FAI invalide.\n"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "Nombre de points de virage incorrect.\n"
+
+#~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
 #~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
 #~ "if on ground. During flight you can change QFE with up and down keys. "
@@ -9542,6 +9536,13 @@ msgstr ""
 #~ "Exemple de Texte\n"
 #~ "123"
 
+#~ msgid ""
+#~ "FLARM\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Détails\n"
+#~ "FLARM"
+
 #~ msgid "TC All"
 #~ msgstr "Vz Circ"
 
@@ -9550,6 +9551,15 @@ msgstr ""
 
 #~ msgid "Page"
 #~ msgstr "Page"
+
+#~ msgid "Return"
+#~ msgstr "Retour"
+
+#~ msgid "Lat."
+#~ msgstr "Lat."
+
+#~ msgid "Lon."
+#~ msgstr "Long."
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Contenu des informations affichées sur les différentes pages."
@@ -9562,11 +9572,20 @@ msgstr ""
 #~ "direction du vent, la position du soleil, ou un ombrage fixe par "
 #~ "éclairage par le nord-est."
 
+#~ msgid "Gate Width"
+#~ msgstr "Largeur de porte"
+
 #~ msgid "Set new teammate:"
 #~ msgstr "Définir nouvel équipier"
 
 #~ msgid "InfoBox Pages"
 #~ msgstr "Pages InfoBoxes"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "Épreuve non close\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "Points de virage non uniques\n"
 
 #~ msgid "My Sample"
 #~ msgstr "Mon Exemple"
@@ -9628,8 +9647,14 @@ msgstr ""
 #~ msgid "WP alt.A"
 #~ msgstr "WP Alt. Abs"
 
+#~ msgid "This sets the task point for review."
+#~ msgstr "Définit le point de virage pour vérification."
+
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"
+
+#~ msgid "AC Off;  %d%%"
+#~ msgstr "Hors charge; %d%%"
 
 #~ msgid "^"
 #~ msgstr "^"
