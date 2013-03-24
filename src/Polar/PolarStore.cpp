@@ -274,9 +274,12 @@ static constexpr PolarStore::Item internal_polars[] =
   // from marius@sargevicius.com
   { _T("LAK-12"),  430, 190, 75, -0.48, 125, -0.88, 175, -1.97, 14.63, 48.611, 114 },
 
-  // from factory polar (flight manual) by Christopher Schenk
+  // from factory polar (flight manual) (submitted by Christopher Schenk)
   { _T("G 102 Club Astir IIIb"), 380, 0, 75.0, -0.6, 100.0, -0.70, 180.00, -3.1, 12.40, 0.0, 91 },
   { _T("G 102 Standard Astir III"), 380, 70, 75.0, -0.6, 100.0, -0.70, 180.00, -2.8, 12.40, 0.0, 100 },
+  // idaflieg measurement (submitted by Christopher Schenk)
+  { _T("Bergfalke II"), 235, 0, 65, -0.91, 100, -1.12, 140, -2.21, 17.00, 0.0, 80 },
+  { _T("Bergfalke IV"), 300, 0, 70, -0.95, 90, -1.10, 135, -2.59, 17.70, 0.0, 74 },
 };
 
 const PolarStore::Item &

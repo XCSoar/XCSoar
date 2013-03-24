@@ -34,6 +34,7 @@ Version 6.6 - not yet released
   - faster map renderer on some Android devices
 * data
   - new polars for two G 102 Astir variants (#2701)
+  - new polars for Bergfalke II & IV (#2710)
 
 Version 6.5.3 - not yet released
 * user interface
