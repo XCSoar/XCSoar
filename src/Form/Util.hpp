@@ -150,10 +150,11 @@ SaveFormProperty(const SubForm &form, const TCHAR *control_name,
  */
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 bool &value, const TCHAR *registry_name);
+                 bool &value, const char *profile_key);
 
 bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
+SaveFormProperty(const SubForm &form, const TCHAR *field,
+                 const char *profile_key,
                  bool &value);
 
 bool

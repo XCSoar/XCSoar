@@ -30,13 +30,36 @@ Copyright_License {
 #include <assert.h>
 
 void
-FormatHexColor(TCHAR *buffer, size_t size, const Color color)
+FormatHexColor(char *buffer, size_t size, const Color color)
 {
   assert(size >= 7);
 
-  _sntprintf(buffer, size, _T("#%02X%02X%02X"),
-             color.Red(), color.Green(), color.Blue());
+  snprintf(buffer, size, "#%02X%02X%02X",
+           color.Red(), color.Green(), color.Blue());
 }
+
+bool
+ParseHexColor(const char *buffer, Color &color)
+{
+  if (*buffer != '#')
+    return false;
+
+  buffer++;
+
+  char *endptr;
+  unsigned value = ParseUnsigned(buffer, &endptr, 16);
+  if (endptr != buffer + 6)
+    return false;
+
+  uint8_t r = value >> 16;
+  uint8_t g = value >> 8;
+  uint8_t b = value;
+
+  color = Color(r, g, b);
+  return true;
+}
+
+#ifdef _UNICODE
 
 bool
 ParseHexColor(const TCHAR *buffer, Color &color)
@@ -58,3 +81,5 @@ ParseHexColor(const TCHAR *buffer, Color &color)
   color = Color(r, g, b);
   return true;
 }
+
+#endif

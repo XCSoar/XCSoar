@@ -357,7 +357,7 @@ UpdateCaption()
   StaticString<256> buffer;
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint->name.c_str());
 
-  const TCHAR *key = nullptr;
+  const char *key = nullptr;
   switch (waypoint->file_num) {
   case 1:
     key = ProfileKeys::WaypointFile;

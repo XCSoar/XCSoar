@@ -38,20 +38,20 @@ enum eTopLayout {
 static void
 Load(PageLayout &_pl, const unsigned page)
 {
-  TCHAR profileKey[32];
-  unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), page);
+  char profileKey[32];
+  unsigned prefixLen = sprintf(profileKey, "Page%u", page);
   if (prefixLen <= 0)
     return;
 
   PageLayout pl = PageLayout::Default();
-  _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
+  strcpy(profileKey + prefixLen, "InfoBoxMode");
   if (!Profile::Get(profileKey, pl.infobox_config.auto_switch))
     return;
-  _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
+  strcpy(profileKey + prefixLen, "InfoBoxPanel");
   if (!Profile::Get(profileKey, pl.infobox_config.panel))
     return;
 
-  _tcscpy(profileKey + prefixLen, _T("Layout"));
+  strcpy(profileKey + prefixLen, "Layout");
   unsigned temp = 0;
   Profile::Get(profileKey, temp);
   switch (temp) {
@@ -69,12 +69,12 @@ Load(PageLayout &_pl, const unsigned page)
   if (page == 0 && !pl.IsDefined())
     return;
 
-  _tcscpy(profileKey + prefixLen, _T("Bottom"));
+  strcpy(profileKey + prefixLen, "Bottom");
   if (!Profile::GetEnum(profileKey, pl.bottom) ||
       unsigned(pl.bottom) >= unsigned(PageLayout::Bottom::MAX))
     pl.bottom = PageLayout::Bottom::NOTHING;
 
-  _tcscpy(profileKey + prefixLen, _T("Main"));
+  strcpy(profileKey + prefixLen, "Main");
   if (!Profile::GetEnum(profileKey, pl.main) ||
       unsigned(pl.main) >= unsigned(PageLayout::Main::MAX))
     pl.main = PageLayout::Main::MAP;
@@ -96,16 +96,16 @@ Profile::Load(PageSettings &settings)
 void
 Profile::Save(const PageLayout &page, const unsigned i)
 {
-  TCHAR profileKey[32];
-  unsigned prefixLen = _stprintf(profileKey, _T("Page%u"), i);
+  char profileKey[32];
+  unsigned prefixLen = sprintf(profileKey, "Page%u", i);
   if (prefixLen <= 0)
     return;
-  _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
+  strcpy(profileKey + prefixLen, "InfoBoxMode");
   Profile::Set(profileKey, page.infobox_config.auto_switch);
-  _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
+  strcpy(profileKey + prefixLen, "InfoBoxPanel");
   Profile::Set(profileKey, page.infobox_config.panel);
 
-  _tcscpy(profileKey + prefixLen, _T("Layout"));
+  strcpy(profileKey + prefixLen, "Layout");
   Profile::Set(profileKey,
                page.valid
                ? (page.infobox_config.enabled
@@ -113,10 +113,10 @@ Profile::Save(const PageLayout &page, const unsigned i)
                   : tlMap)
                : tlEmpty);
 
-  _tcscpy(profileKey + prefixLen, _T("Bottom"));
+  strcpy(profileKey + prefixLen, "Bottom");
   Profile::Set(profileKey, (unsigned)page.bottom);
 
-  _tcscpy(profileKey + prefixLen, _T("Main"));
+  strcpy(profileKey + prefixLen, "Main");
   Profile::Set(profileKey, (unsigned)page.main);
 }
 

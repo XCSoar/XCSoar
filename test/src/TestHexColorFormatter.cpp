@@ -31,33 +31,33 @@ main(int argc, char **argv)
 {
   plan_tests(18);
 
-  TCHAR buffer[16];
+  char buffer[16];
   Color color;
 
   FormatHexColor(buffer, ARRAY_SIZE(buffer), Color(0x12, 0x34, 0x56));
-  ok1(StringIsEqual(buffer, _T("#123456")));
+  ok1(StringIsEqual(buffer, "#123456"));
   ok1(ParseHexColor(buffer, color));
   ok1(color.Red() == 0x12);
   ok1(color.Green() == 0x34);
   ok1(color.Blue() == 0x56);
 
   FormatHexColor(buffer, ARRAY_SIZE(buffer), Color(0xff, 0x00, 0xcc));
-  ok1(StringIsEqual(buffer, _T("#FF00CC")));
+  ok1(StringIsEqual(buffer, "#FF00CC"));
   ok1(ParseHexColor(buffer, color));
   ok1(color.Red() == 0xFF);
   ok1(color.Green() == 0x00);
   ok1(color.Blue() == 0xCC);
 
   FormatHexColor(buffer, ARRAY_SIZE(buffer), Color(0xA4, 0xB9, 0x3C));
-  ok1(StringIsEqual(buffer, _T("#A4B93C")));
+  ok1(StringIsEqual(buffer, "#A4B93C"));
   ok1(ParseHexColor(buffer, color));
   ok1(color.Red() == 0xA4);
   ok1(color.Green() == 0xB9);
   ok1(color.Blue() == 0x3C);
 
-  ok1(!ParseHexColor(_T("A4B93C"), color));
-  ok1(!ParseHexColor(_T("#A4B93"), color));
-  ok1(!ParseHexColor(_T("#A4B93G"), color));
+  ok1(!ParseHexColor("A4B93C", color));
+  ok1(!ParseHexColor("#A4B93", color));
+  ok1(!ParseHexColor("#A4B93G", color));
 
   return exit_status();
 }

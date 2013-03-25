@@ -31,12 +31,24 @@ Copyright_License {
  *
  * @param profile_key the profile key which is used to read the
  * file name
+ * @return a NLineReader which must be deleted by the caller; nullptr
+ * if there is no such setting, or if an error occurred opening the
+ * file
+ */
+NLineReader *
+OpenConfiguredTextFileA(const char *profile_key);
+
+/**
+ * Opens a file whose name is configured in the profile.
+ *
+ * @param profile_key the profile key which is used to read the
+ * file name
  * @param cs the character set of the input file
  * @return a TLineReader which must be deleted by the caller; NULL if
  * there is no such setting, or if an error occurred opening the file
  */
 TLineReader *
-OpenConfiguredTextFile(const TCHAR *profile_key,
+OpenConfiguredTextFile(const char *profile_key,
                        ConvertLineReader::charset cs=ConvertLineReader::UTF8);
 
 /**
@@ -52,7 +64,7 @@ OpenConfiguredTextFile(const TCHAR *profile_key,
  * there is no such setting, or if an error occurred opening the file
  */
 TLineReader *
-OpenConfiguredTextFile(const TCHAR *profile_key, const TCHAR *in_map_file,
+OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
                        ConvertLineReader::charset cs=ConvertLineReader::UTF8);
 
 #endif

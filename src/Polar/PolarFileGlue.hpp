@@ -27,14 +27,14 @@ Copyright_License {
 #include <tchar.h>
 
 struct PolarInfo;
-class TLineReader;
+class NLineReader;
 class TextWriter;
 
 namespace PolarGlue
 {
   bool LoadFromFile(PolarInfo &polar, const TCHAR* path);
   bool SaveToFile(const PolarInfo &polar, const TCHAR* path);
-  bool LoadFromFile(PolarInfo &polar, TLineReader &reader);
+  bool LoadFromFile(PolarInfo &polar, NLineReader &reader);
   bool SaveToFile(const PolarInfo &polar, TextWriter &writer);
 }
 

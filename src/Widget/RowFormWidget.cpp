@@ -49,6 +49,7 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "LocalPath.hpp"
 #include "Math/Angle.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <windef.h>
 #include <assert.h>
@@ -440,7 +441,7 @@ RowFormWidget::AddSpacer()
 
 WndProperty *
 RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const TCHAR *registry_key, const TCHAR *filters,
+                             const char *registry_key, const TCHAR *filters,
                              bool nullable)
 {
   WndProperty *edit = Add(label, help);
@@ -749,7 +750,7 @@ RowFormWidget::SaveValue(unsigned i, TCHAR *string, size_t max_size) const
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          TCHAR *string, size_t max_size) const
 {
   if (!SaveValue(i, string, max_size))
@@ -760,7 +761,7 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          bool &value, bool negated) const
 {
   if (!SaveValue(i, value, negated))
@@ -771,7 +772,7 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          int &value) const
 {
   if (!SaveValue(i, value))
@@ -782,7 +783,7 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          uint8_t &value) const
 {
   if (!SaveValue(i, value))
@@ -793,7 +794,7 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          uint16_t &value) const
 {
   if (!SaveValue(i, value))
@@ -804,7 +805,7 @@ RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
 }
 
 bool
-RowFormWidget::SaveValue(unsigned i, const TCHAR *registry_key,
+RowFormWidget::SaveValue(unsigned i, const char *registry_key,
                          fixed &value) const
 {
   if (!SaveValue(i, value))
@@ -834,7 +835,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const TCHAR *registry_key, fixed &value) const
+                         const char *registry_key, fixed &value) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
@@ -854,7 +855,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 
 bool
 RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
-                         const TCHAR *registry_key, unsigned int &value) const
+                         const char *registry_key, unsigned int &value) const
 {
   const DataFieldFloat &df =
     (const DataFieldFloat &)GetDataField(i);
@@ -874,7 +875,7 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
 }
 
 bool
-RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
+RowFormWidget::SaveValueFileReader(unsigned i, const char *registry_key)
 {
   const DataFieldFileReader *dfe =
     (const DataFieldFileReader *)GetControl(i).GetDataField();
@@ -882,11 +883,15 @@ RowFormWidget::SaveValueFileReader(unsigned i, const TCHAR *registry_key)
   _tcscpy(new_value, dfe->GetPathFile());
   ContractLocalPath(new_value);
 
-  const TCHAR *old_value = Profile::Get(registry_key, _T(""));
-  if (_tcscmp(old_value, new_value) == 0)
+  const WideToUTF8Converter new_value2(new_value);
+  if (!new_value2.IsValid())
     return false;
 
-  Profile::Set(registry_key, new_value);
+  const char *old_value = Profile::Get(registry_key, "");
+  if (StringIsEqual(old_value, new_value2))
+    return false;
+
+  Profile::Set(registry_key, new_value2);
   return true;
 }
 

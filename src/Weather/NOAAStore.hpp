@@ -29,7 +29,10 @@ Copyright_License {
 #include "TAF.hpp"
 
 #include <list>
+
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 class NOAAStore
 {
@@ -56,7 +59,7 @@ public:
     gcc_pure
     const TCHAR *GetCodeT() const;
 #else
-    const TCHAR *GetCodeT() const {
+    const char *GetCodeT() const {
       return code;
     }
 #endif
@@ -67,7 +70,7 @@ public:
   StationContainer stations;
 
 public:
-  bool LoadFromString(const TCHAR *string);
+  bool LoadFromString(const char *string);
   bool LoadFromProfile();
   void SaveToProfile();
 

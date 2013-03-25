@@ -445,7 +445,7 @@ public:
   void AddSpacer();
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
-                             const TCHAR *registry_key, const TCHAR *filters,
+                             const char *profile_key, const TCHAR *filters,
                              bool nullable = true);
 
   /**
@@ -615,19 +615,19 @@ public:
   bool SaveValue(unsigned i, Angle &value_r) const;
   bool SaveValue(unsigned i, RoughTime &value_r) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
-  bool SaveValue(unsigned i, const TCHAR *registry_key, TCHAR *string, size_t max_size) const;
+  bool SaveValue(unsigned i, const char *profile_key, TCHAR *string, size_t max_size) const;
 
   bool SaveValue(unsigned i, unsigned &value) const {
     return SaveValue(i, (int &)value);
   }
 
-  bool SaveValue(unsigned i, const TCHAR *registry_key, bool &value, bool negated = false) const;
-  bool SaveValue(unsigned i, const TCHAR *registry_key, int &value) const;
-  bool SaveValue(unsigned i, const TCHAR *registry_key, uint8_t &value) const;
-  bool SaveValue(unsigned i, const TCHAR *registry_key, uint16_t &value) const;
-  bool SaveValue(unsigned i, const TCHAR *registry_key, fixed &value) const;
+  bool SaveValue(unsigned i, const char *profile_key, bool &value, bool negated = false) const;
+  bool SaveValue(unsigned i, const char *profile_key, int &value) const;
+  bool SaveValue(unsigned i, const char *profile_key, uint8_t &value) const;
+  bool SaveValue(unsigned i, const char *profile_key, uint16_t &value) const;
+  bool SaveValue(unsigned i, const char *profile_key, fixed &value) const;
 
-  bool SaveValue(unsigned i, const TCHAR *registry_key,
+  bool SaveValue(unsigned i, const char *registry_key,
                  unsigned &value) const {
     return SaveValue(i, registry_key, (int &)value);
   }
@@ -635,10 +635,10 @@ public:
   bool SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const TCHAR *registry_key, fixed &value) const;
+                 const char *profile_key, fixed &value) const;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
-                 const TCHAR *registry_key, unsigned int &value) const;
+                 const char *profile_key, unsigned int &value) const;
 
   template<typename T>
   bool SaveValueEnum(unsigned i, T &value) const {
@@ -646,11 +646,11 @@ public:
   }
 
   template<typename T>
-  bool SaveValueEnum(unsigned i, const TCHAR *registry_key, T &value) const {
+  bool SaveValueEnum(unsigned i, const char *registry_key, T &value) const {
     return SaveValue(i, registry_key, EnumCast<T>()(value));
   }
 
-  bool SaveValueFileReader(unsigned i, const TCHAR *registry_key);
+  bool SaveValueFileReader(unsigned i, const char *profile_key);
 
 protected:
   gcc_pure

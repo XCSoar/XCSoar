@@ -27,7 +27,10 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stdint.h>
+
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 /**
  * The identification number of a FLARM traffic.
@@ -69,7 +72,10 @@ public:
   static FlarmId Parse(const TCHAR *input, TCHAR **endptr_r);
 #endif
 
+  const char *Format(char *buffer) const;
+#ifdef _UNICODE
   const TCHAR *Format(TCHAR *buffer) const;
+#endif
 };
 
 #endif

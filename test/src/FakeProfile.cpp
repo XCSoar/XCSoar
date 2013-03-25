@@ -34,26 +34,26 @@ Profile::SetFiles(const TCHAR* override)
 {
 }
 
-const TCHAR *
-ProfileMap::Get(const TCHAR *key, const TCHAR *default_value)
+const char *
+ProfileMap::Get(const char *key, const char *default_value)
 {
   return NULL;
 }
 
 bool
-ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
+ProfileMap::Get(const char *key, TCHAR *pPos, size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;
 }
 
 void
-ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
+ProfileMap::Set(const char *key, const char *value)
 {
 }
 
 bool
-Profile::GetPath(const TCHAR *key, TCHAR *value)
+Profile::GetPath(const char *key, TCHAR *value)
 {
   *value = _T('\0');
   return false;

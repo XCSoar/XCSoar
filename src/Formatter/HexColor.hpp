@@ -24,7 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_HEX_COLOR_FORMATTER_HPP
 #define XCSOAR_HEX_COLOR_FORMATTER_HPP
 
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
+
 #include <stddef.h>
 
 struct Color;
@@ -32,8 +35,15 @@ struct Color;
 /**
  * Formats a Color struct into a hex-based RGB string, i.e. "#123456"
  */
-void FormatHexColor(TCHAR *buffer, size_t size, const Color color);
+void FormatHexColor(char *buffer, size_t size, const Color color);
+
+bool
+ParseHexColor(const char *buffer, Color &color);
+
+#ifdef _UNICODE
 
 bool ParseHexColor(const TCHAR *buffer, Color &color);
+
+#endif
 
 #endif

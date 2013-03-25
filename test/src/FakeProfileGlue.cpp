@@ -24,7 +24,7 @@ Copyright_License {
 #include "Profile/FontConfig.hpp"
 
 bool
-Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
+Profile::GetFont(const char *key, LOGFONT *lplf)
 {
   return false;
 }

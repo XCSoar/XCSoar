@@ -194,7 +194,7 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   canvas.Select(name_font);
 
-  if (Profile::GetPathIsEqual(_T("PlanePath"), list[i].path)) {
+  if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
     canvas.DrawClippedText(rc.left + Layout::FastScale(2),
@@ -218,7 +218,7 @@ LoadFile(const TCHAR *path)
   if (!PlaneGlue::ReadFile(settings.plane, path))
     return false;
 
-  Profile::SetPath(_T("PlanePath"), path);
+  Profile::SetPath("PlanePath", path);
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
   if (protected_task_manager != NULL)
@@ -336,14 +336,14 @@ PlaneListWidget::EditClicked()
 
       File::Delete(old_path);
       PlaneGlue::WriteFile(plane, path);
-      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path)) {
+      if (Profile::GetPathIsEqual("PlanePath", old_path)) {
         list[index].path = path;
         list[index].name = filename;
         Load(index);
       }
     } else {
       PlaneGlue::WriteFile(plane, old_path);
-      if (Profile::GetPathIsEqual(_T("PlanePath"), old_path))
+      if (Profile::GetPathIsEqual("PlanePath", old_path))
         Load(index);
     }
 

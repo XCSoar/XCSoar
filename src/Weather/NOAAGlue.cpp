@@ -26,18 +26,17 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 #include <algorithm>
-#include <tchar.h>
 
 NOAAStore *noaa_store;
 
 bool
-NOAAStore::LoadFromString(const TCHAR *string)
+NOAAStore::LoadFromString(const char *string)
 {
-  const TCHAR *s = string;
+  const char *s = string;
   while (s != NULL && *s) {
-    const TCHAR *next = _tcschr(s, _T(','));
-    if ((next != NULL && next - s == 4) || (next == NULL && _tcslen(s) == 4)) {
-      TCHAR code[5];
+    const char *next = strchr(s, _T(','));
+    if ((next != NULL && next - s == 4) || (next == NULL && strlen(s) == 4)) {
+      char code[5];
       std::copy(s, s+4, code);
       code[4] = '\0';
       if (IsValidCode(code))
@@ -51,7 +50,7 @@ NOAAStore::LoadFromString(const TCHAR *string)
 bool
 NOAAStore::LoadFromProfile()
 {
-  const TCHAR *stations = Profile::Get(ProfileKeys::WeatherStations);
+  const char *stations = Profile::Get(ProfileKeys::WeatherStations);
   if (stations == NULL)
     return false;
 
@@ -61,10 +60,10 @@ NOAAStore::LoadFromProfile()
 void
 NOAAStore::SaveToProfile()
 {
-  TCHAR buffer[120], *p = buffer;
+  char buffer[120], *p = buffer;
   for (auto i = begin(), e = end(); i != e; ++i) {
-    const TCHAR *code = i->GetCodeT();
-    p = std::copy(code, code + _tcslen(code), p);
+    const char *code = i->code;
+    p = std::copy(code, code + strlen(code), p);
     *p++ = _T(',');
   }
 

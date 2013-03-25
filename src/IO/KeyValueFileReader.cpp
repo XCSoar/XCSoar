@@ -28,25 +28,25 @@ Copyright_License {
 bool
 KeyValueFileReader::Read(KeyValuePair &pair)
 {
-  TCHAR *line;
+  char *line;
   while ((line = reader.ReadLine()) != NULL) {
-    if (StringIsEmpty(line) || *line == _T('#'))
+    if (StringIsEmpty(line) || *line == '#')
       continue;
 
-    TCHAR *p = _tcschr(line, _T('='));
+    char *p = strchr(line, '=');
     if (p == line || p == NULL)
       continue;
 
-    *p = _T('\0');
-    TCHAR *value = p + 1;
+    *p = '\0';
+    char *value = p + 1;
 
-    if (*value == _T('"')) {
+    if (*value == '"') {
       ++value;
-      p = _tcschr(value, _T('"'));
+      p = strchr(value, '"');
       if (p == NULL)
         continue;
 
-      *p = _T('\0');
+      *p = '\0';
     }
 
     pair.key = line;

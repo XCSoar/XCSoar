@@ -26,29 +26,31 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/Macros.hpp"
 
+#include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "COLOR ...");
-  tstring s = args.ExpectNextT();
+  const char *s = args.ExpectNext();
+
   while (true) {
     Color color;
-    if (!ParseHexColor(s.c_str(), color)) {
-      _ftprintf(stderr, _T("Failed to parse '%s'\n"), s.c_str());
+    if (!ParseHexColor(s, color)) {
+      fprintf(stderr, "Failed to parse '%s'\n", s);
       return EXIT_FAILURE;
     }
 
-    TCHAR buffer[32];
+    char buffer[32];
     FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
 
-    _tprintf(_T("%s -> %s\n"), s.c_str(), buffer);
+    printf("%s -> %s\n", s, buffer);
 
     if (args.IsEmpty())
       break;
 
-    s = args.ExpectNextT();
+    s = args.ExpectNext();
   }
 
   return EXIT_SUCCESS;

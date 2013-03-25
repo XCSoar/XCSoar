@@ -39,6 +39,8 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #endif
 
+#include <tchar.h>
+
 enum class TaskPointType : uint8_t;
 
 class AbstractAirspace;

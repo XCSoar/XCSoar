@@ -34,16 +34,16 @@ Copyright_License {
 #include <cstdio>
 
 static bool
-ReadPolar(const TCHAR *string, Plane &plane)
+ReadPolar(const char *string, Plane &plane)
 {
   return ParsePolarShape(plane.polar_shape, string);
 }
 
 static bool
-ReadFixed(const TCHAR *string, fixed &out)
+ReadFixed(const char *string, fixed &out)
 {
-  TCHAR *endptr;
-  double tmp = _tcstod(string, &endptr);
+  char *endptr;
+  double tmp = ParseDouble(string, &endptr);
   if (endptr == string)
     return false;
 
@@ -52,9 +52,9 @@ ReadFixed(const TCHAR *string, fixed &out)
 }
 
 static bool
-ReadUnsigned(const TCHAR *string, unsigned &out)
+ReadUnsigned(const char *string, unsigned &out)
 {
-  TCHAR *endptr;
+  char *endptr;
   unsigned tmp = ParseUnsigned(string, &endptr, 0);
   if (endptr == string)
     return false;
@@ -81,33 +81,33 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 
   KeyValuePair pair;
   while (reader.Read(pair)) {
-    if (!has_registration && StringIsEqual(pair.key, _T("Registration"))) {
-      plane.registration = pair.value;
+    if (!has_registration && StringIsEqual(pair.key, "Registration")) {
+      plane.registration.SetUTF8(pair.value);
       has_registration = true;
-    } else if (!has_competition_id && StringIsEqual(pair.key, _T("CompetitionID"))) {
-      plane.competition_id = pair.value;
+    } else if (!has_competition_id && StringIsEqual(pair.key, "CompetitionID")) {
+      plane.competition_id.SetUTF8(pair.value);
       has_competition_id = true;
-    } else if (!has_type && StringIsEqual(pair.key, _T("Type"))) {
-      plane.type = pair.value;
+    } else if (!has_type && StringIsEqual(pair.key, "Type")) {
+      plane.type.SetUTF8(pair.value);
       has_type = true;
-    } else if (!has_handicap && StringIsEqual(pair.key, _T("Handicap"))) {
+    } else if (!has_handicap && StringIsEqual(pair.key, "Handicap")) {
       has_handicap = ReadUnsigned(pair.value, plane.handicap);
-    } else if (!has_polar_name && StringIsEqual(pair.key, _T("PolarName"))) {
-      plane.polar_name = pair.value;
+    } else if (!has_polar_name && StringIsEqual(pair.key, "PolarName")) {
+      plane.polar_name.SetUTF8(pair.value);
       has_polar_name = true;
-    } else if (!has_polar && StringIsEqual(pair.key, _T("PolarInformation"))) {
+    } else if (!has_polar && StringIsEqual(pair.key, "PolarInformation")) {
       has_polar = ReadPolar(pair.value, plane);
-    } else if (!has_reference_mass && StringIsEqual(pair.key, _T("PolarReferenceMass"))) {
+    } else if (!has_reference_mass && StringIsEqual(pair.key, "PolarReferenceMass")) {
       has_reference_mass = ReadFixed(pair.value, plane.reference_mass);
-    } else if (!has_dry_mass && StringIsEqual(pair.key, _T("PolarDryMass"))) {
+    } else if (!has_dry_mass && StringIsEqual(pair.key, "PolarDryMass")) {
       has_dry_mass = ReadFixed(pair.value, plane.dry_mass);
-    } else if (!has_max_ballast && StringIsEqual(pair.key, _T("MaxBallast"))) {
+    } else if (!has_max_ballast && StringIsEqual(pair.key, "MaxBallast")) {
       has_max_ballast = ReadFixed(pair.value, plane.max_ballast);
-    } else if (!has_dump_time && StringIsEqual(pair.key, _T("DumpTime"))) {
+    } else if (!has_dump_time && StringIsEqual(pair.key, "DumpTime")) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
-    } else if (!has_max_speed && StringIsEqual(pair.key, _T("MaxSpeed"))) {
+    } else if (!has_max_speed && StringIsEqual(pair.key, "MaxSpeed")) {
       has_max_speed = ReadFixed(pair.value, plane.max_speed);
-    } else if (!has_wing_area && StringIsEqual(pair.key, _T("WingArea"))) {
+    } else if (!has_wing_area && StringIsEqual(pair.key, "WingArea")) {
       has_wing_area = ReadFixed(pair.value, plane.wing_area);
     }
   }
@@ -142,7 +142,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
 bool
 PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
 {
-  FileLineReader reader(path);
+  FileLineReaderA reader(path);
   KeyValueFileReader kvreader(reader);
   return Read(plane, kvreader);
 }
@@ -150,31 +150,32 @@ PlaneGlue::ReadFile(Plane &plane, const TCHAR *path)
 void
 PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 {
-  StaticString<255> tmp;
-  writer.Write(_T("Registration"), plane.registration);
-  writer.Write(_T("CompetitionID"), plane.competition_id);
-  writer.Write(_T("Type"), plane.type);
+  NarrowString<255> tmp;
 
-  tmp.Format(_T("%u"), plane.handicap);
-  writer.Write(_T("Handicap"), tmp);
+  writer.Write("Registration", plane.registration);
+  writer.Write("CompetitionID", plane.competition_id);
+  writer.Write("Type", plane.type);
 
-  writer.Write(_T("PolarName"), plane.polar_name);
+  tmp.Format("%u", plane.handicap);
+  writer.Write("Handicap", tmp);
+
+  writer.Write("PolarName", plane.polar_name);
 
   FormatPolarShape(plane.polar_shape, tmp.buffer(), tmp.MAX_SIZE);
-  writer.Write(_T("PolarInformation"), tmp);
+  writer.Write("PolarInformation", tmp);
 
-  tmp.Format(_T("%f"), (double)plane.reference_mass);
-  writer.Write(_T("PolarReferenceMass"), tmp);
-  tmp.Format(_T("%f"), (double)plane.dry_mass);
-  writer.Write(_T("PolarDryMass"), tmp);
-  tmp.Format(_T("%f"), (double)plane.max_ballast);
-  writer.Write(_T("MaxBallast"), tmp);
-  tmp.Format(_T("%f"), (double)plane.dump_time);
-  writer.Write(_T("DumpTime"), tmp);
-  tmp.Format(_T("%f"), (double)plane.max_speed);
-  writer.Write(_T("MaxSpeed"), tmp);
-  tmp.Format(_T("%f"), (double)plane.wing_area);
-  writer.Write(_T("WingArea"), tmp);
+  tmp.Format("%f", (double)plane.reference_mass);
+  writer.Write("PolarReferenceMass", tmp);
+  tmp.Format("%f", (double)plane.dry_mass);
+  writer.Write("PolarDryMass", tmp);
+  tmp.Format("%f", (double)plane.max_ballast);
+  writer.Write("MaxBallast", tmp);
+  tmp.Format("%f", (double)plane.dump_time);
+  writer.Write("DumpTime", tmp);
+  tmp.Format("%f", (double)plane.max_speed);
+  writer.Write("MaxSpeed", tmp);
+  tmp.Format("%f", (double)plane.wing_area);
+  writer.Write("WingArea", tmp);
 }
 
 bool

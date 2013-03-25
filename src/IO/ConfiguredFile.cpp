@@ -30,8 +30,26 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
+NLineReader *
+OpenConfiguredTextFileA(const char *profile_key)
+{
+  assert(profile_key != nullptr);
+
+  TCHAR path[MAX_PATH];
+  if (!Profile::GetPath(profile_key, path))
+    return nullptr;
+
+  FileLineReaderA *reader = new FileLineReaderA(path);
+  if (reader->error()) {
+    delete reader;
+    return nullptr;
+  }
+
+  return reader;
+}
+
 TLineReader *
-OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)
+OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
 {
   assert(profile_key != NULL);
 
@@ -76,7 +94,7 @@ OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
 }
 
 TLineReader *
-OpenConfiguredTextFile(const TCHAR *profile_key, const TCHAR *in_map_file,
+OpenConfiguredTextFile(const char *profile_key, const TCHAR *in_map_file,
                        ConvertLineReader::charset cs)
 {
   assert(profile_key != NULL);

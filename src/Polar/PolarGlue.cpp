@@ -48,7 +48,7 @@ PolarGlue::GetDefault()
 static bool
 ReadPolarFileFromProfile(PolarInfo &polar)
 {
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::PolarFile));
+  std::unique_ptr<NLineReader> reader(OpenConfiguredTextFileA(ProfileKeys::PolarFile));
   return reader && PolarGlue::LoadFromFile(polar, *reader);
 }
 
@@ -88,7 +88,7 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
-  const TCHAR *polar_string = Profile::Get(ProfileKeys::Polar);
+  const char *polar_string = Profile::Get(ProfileKeys::Polar);
   if (polar_string != NULL && !StringIsEmpty(polar_string) &&
       ParsePolar(polar, polar_string)) {
     return true;

@@ -33,7 +33,7 @@
 #include "Util/Macros.hpp"
 
 TLineReader*
-OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)
+OpenConfiguredTextFile(const char *profile_key, ConvertLineReader::charset cs)
 {
   return NULL;
 }
@@ -43,7 +43,7 @@ TestBasic()
 {
   // Test ReadString()
   PolarInfo polar;
-  ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
+  ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918");
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.shape[0].v), 22.2222222));
@@ -54,7 +54,7 @@ TestBasic()
   ok1(equals(fixed(polar.shape[2].w), -1.918));
   ok1(equals(fixed(polar.wing_area), 0.0));
 
-  ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
+  ParsePolar(polar, "318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8");
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.shape[0].v), 22.2222222));
@@ -66,10 +66,10 @@ TestBasic()
   ok1(equals(fixed(polar.wing_area), 9.8));
 
   // Test GetString()
-  TCHAR polar_string[255];
+  char polar_string[255];
   FormatPolar(polar, polar_string, 255);
-  ok(_tcscmp(_T("318,100,80.000,-0.606,120.000,-0.990,160.000,-1.918,9.800"),
-             polar_string) == 0, "GetString()");
+  ok(strcmp("318,100,80.000,-0.606,120.000,-0.990,160.000,-1.918,9.800",
+            polar_string) == 0, "GetString()");
 }
 
 static void
