@@ -28,11 +28,12 @@ Copyright_License {
 
 #include "Terrain/RasterTileCache.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
 
 #include <stdio.h>
+#include <string.h>
 #include <tchar.h>
 
 int main(int argc, char **argv)

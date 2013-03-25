@@ -27,6 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"

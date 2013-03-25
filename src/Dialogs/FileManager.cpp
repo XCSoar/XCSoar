@@ -40,6 +40,7 @@ Copyright_License {
 #include "Time/BrokenDateTime.hpp"
 #include "Net/Features.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 

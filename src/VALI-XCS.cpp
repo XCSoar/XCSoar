@@ -25,7 +25,7 @@
  * to validate the GRecord of an XCSoar-generated IGC file
  */
 
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
 

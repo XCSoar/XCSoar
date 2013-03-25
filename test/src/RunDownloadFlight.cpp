@@ -28,7 +28,7 @@ Copyright_License {
 #include "Device/Port/ConfiguredPort.hpp"
 #include "DebugPort.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"

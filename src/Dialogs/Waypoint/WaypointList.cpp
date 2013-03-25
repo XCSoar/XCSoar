@@ -36,7 +36,6 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Profile/Profile.hpp"
-#include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"

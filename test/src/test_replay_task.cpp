@@ -7,7 +7,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "NMEA/FlyingState.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Task/Deserialiser.hpp"

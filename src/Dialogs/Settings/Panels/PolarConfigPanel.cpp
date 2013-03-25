@@ -50,7 +50,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "OS/FileUtil.hpp"

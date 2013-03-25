@@ -29,7 +29,7 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #ifdef _UNICODE
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #endif
 
 #include <list>
