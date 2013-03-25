@@ -24,10 +24,6 @@ Copyright_License {
 #include "BatchTextWriter.hpp"
 #include "TextWriter.hpp"
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 bool
 BatchTextWriter::WriteLine(const char *line)
 {
