@@ -40,6 +40,14 @@
 #include <tchar.h>
 #endif
 
+bool
+CopyUTF8(char *dest, size_t dest_size, const char *src);
+
+#ifdef _UNICODE
+bool
+CopyUTF8(TCHAR *dest, size_t dest_size, const char *src);
+#endif
+
 /**
  * A string with a maximum size known at compile time.
  */
@@ -118,6 +126,15 @@ public:
    */
   void CleanASCII() {
     CopyASCII(data, data);
+  }
+
+  /**
+   * Copy from the specified UTF-8 string.
+   *
+   * @return false if #src was invalid UTF-8
+   */
+  bool SetUTF8(const char *src) {
+    return ::CopyUTF8(this->buffer(), MAX_SIZE, src);
   }
 
   bool equals(const_pointer other) const {
