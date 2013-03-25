@@ -27,6 +27,7 @@ Copyright_License {
  */
 
 #include "Terrain/RasterTileCache.hpp"
+#include "OS/Args.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
@@ -36,12 +37,9 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s PATH\n", argv[0]);
-    return 1;
-  }
-
-  const char *map_path = argv[1];
+  Args args(argc, argv, "PATH");
+  const char *map_path = args.ExpectNext();
+  args.ExpectEnd();
 
   char jp2_path[4096];
   strcpy(jp2_path, map_path);

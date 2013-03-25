@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Airspace/AirspaceParser.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 
@@ -31,12 +32,11 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s PATH\n", argv[0]);
-    return 1;
-  }
+  Args args(argc, argv, "PATH");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
-  FileLineReader reader(argv[1], ConvertLineReader::AUTO);
+  FileLineReader reader(path, ConvertLineReader::AUTO);
   if (reader.error()) {
     fprintf(stderr, "Failed to open input file\n");
     return 1;

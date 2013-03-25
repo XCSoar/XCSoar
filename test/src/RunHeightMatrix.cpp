@@ -25,6 +25,7 @@ Copyright_License {
 #include "Terrain/HeightMatrix.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
+#include "OS/Args.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
@@ -36,19 +37,16 @@ unsigned Layout::scale_1024 = 1024;
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s PATH\n", argv[0]);
-    return 1;
-  }
-
-  const char *map_path = argv[1];
+  Args args(argc, argv, "PATH");
+  const tstring map_path = args.ExpectNextT();
+  args.ExpectEnd();
 
   TCHAR jp2_path[4096];
-  _tcscpy(jp2_path, PathName(map_path));
+  _tcscpy(jp2_path, map_path.c_str());
   _tcscat(jp2_path, _T(DIR_SEPARATOR_S) _T("terrain.jp2"));
 
   TCHAR j2w_path[4096];
-  _tcscpy(j2w_path, PathName(map_path));
+  _tcscpy(j2w_path, map_path.c_str());
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
   NullOperationEnvironment operation;
