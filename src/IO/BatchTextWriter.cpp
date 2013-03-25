@@ -38,26 +38,6 @@ BatchTextWriter::WriteLine(const char *line)
   return true;
 }
 
-#ifdef _UNICODE
-bool
-BatchTextWriter::WriteLine(const TCHAR *line)
-{
-  if (buffer.IsFull() && !Flush())
-    return false;
-
-  size_t wide_length = _tcslen(line);
-  char narrow[wide_length * 4 + 1];
-  int narrow_length = ::WideCharToMultiByte(CP_UTF8, 0, line, wide_length,
-                                            narrow, sizeof(narrow),
-                                            NULL, NULL);
-  if (narrow_length == 0 && wide_length > 0)
-    return false;
-
-  buffer.Append().assign(narrow, narrow_length);
-  return true;
-}
-#endif
-
 bool
 BatchTextWriter::Flush()
 {

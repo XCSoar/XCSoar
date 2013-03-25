@@ -46,9 +46,6 @@ public:
   }
 
   bool WriteLine(const char *line);
-#ifdef _UNICODE
-  bool WriteLine(const TCHAR *line);
-#endif
   bool Flush();
 };
 
