@@ -25,7 +25,6 @@
 #include "Points/StartPoint.hpp"
 #include "Points/AATPoint.hpp"
 #include "Points/IntermediatePoint.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
 
 TaskAdvanceSmart::TaskAdvanceSmart()
