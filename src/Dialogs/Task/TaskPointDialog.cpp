@@ -270,19 +270,21 @@ OnTypeClicked()
 static void
 OnPreviousClicked()
 {
-  if (active_index > 0) {
-    next_previous=-1;
-    wf->SetModalResult(mrOK);
-  }
+  if (active_index == 0)
+    return;
+
+  next_previous = -1;
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnNextClicked()
 {
-  if (active_index < (ordered_task->TaskSize() - 1)) {
-    next_previous=1;
-    wf->SetModalResult(mrOK);
-  }
+  if (active_index >= ordered_task->TaskSize() - 1)
+    return;
+
+  next_previous = 1;
+  wf->SetModalResult(mrOK);
 }
 
 /**
