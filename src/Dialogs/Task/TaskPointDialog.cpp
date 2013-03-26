@@ -191,12 +191,11 @@ RefreshView()
   }
 }
 
-static void
+static bool
 ReadValues()
 {
-  if (properties_widget != nullptr) {
+  return properties_widget == nullptr ||
     properties_widget->Save(task_modified);
-  }
 }
 
 static void
@@ -270,7 +269,7 @@ OnTypeClicked()
 static void
 OnPreviousClicked()
 {
-  if (active_index == 0)
+  if (active_index == 0 || !ReadValues())
     return;
 
   next_previous = -1;
@@ -280,7 +279,7 @@ OnPreviousClicked()
 static void
 OnNextClicked()
 {
-  if (active_index >= ordered_task->TaskSize() - 1)
+  if (active_index >= ordered_task->TaskSize() - 1 || !ReadValues())
     return;
 
   next_previous = 1;
