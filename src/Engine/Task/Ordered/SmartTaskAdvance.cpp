@@ -24,7 +24,6 @@
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/StartPoint.hpp"
 #include "Points/AATPoint.hpp"
-#include "Points/IntermediatePoint.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
 
 SmartTaskAdvance::SmartTaskAdvance()
@@ -49,7 +48,11 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
   if (armed)
     request_armed = false;
 
-  if (tp.GetType() == TaskPointType::START) {
+  switch (tp.GetType()) {
+  case TaskPointType::UNORDERED:
+    gcc_unreachable();
+
+  case TaskPointType::START: {
     const StartPoint &sp = (const StartPoint &)tp;
     if (start_requires_arm) {
       if (armed) {
@@ -64,7 +67,9 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
       state = TaskAdvance::AUTO;
       return state_ready;
     }
-  } else if (tp.GetType() == TaskPointType::AAT) {
+  }
+
+  case TaskPointType::AAT:
     if (armed) {
       state = TaskAdvance::TURN_ARMED;
     } else {
@@ -73,12 +78,17 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
         request_armed = true;
     }
     return armed && state_ready;
-  } else if (tp.IsIntermediatePoint()) {
+
+  case TaskPointType::AST: {
     state = TaskAdvance::AUTO;
     return state_ready;
   }
 
-  return false;
+  case TaskPointType::FINISH:
+    return false;
+  }
+
+  gcc_unreachable();
 }
 
 TaskAdvance::State
