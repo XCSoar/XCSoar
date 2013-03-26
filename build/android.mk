@@ -224,7 +224,7 @@ $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps compile-jni-classes
 	@touch $@
 
-$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
+$(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
 	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_BUILD)/bin/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
