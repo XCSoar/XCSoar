@@ -73,9 +73,8 @@ IMI::WriteSerialNumber(IMIWORD sn, FILE *file)
   putc(snDigits[sn], file);
 }
 
-static const IMI::IMICHAR* UNKNOWN = "Unknown";
-static const IMI::IMICHAR* devices[] =
-{
+static const IMI::IMICHAR *const UNKNOWN = "Unknown";
+static const IMI::IMICHAR *const devices[] = {
   "Erixx",
   "SaiLog"
 };
@@ -87,7 +86,7 @@ IMI::GetDeviceName(unsigned i)
     ? UNKNOWN : devices[i];
 }
 
-static const IMI::IMICHAR* gpsModules[] =
+static const IMI::IMICHAR *const gpsModules[] =
 {
   "u-blox,LEA-4A,16,max15000m",
   "u-blox,LEA-4H,16,max15000m",
@@ -101,7 +100,7 @@ IMI::GetGPSName(unsigned i)
     ? UNKNOWN : gpsModules[i];
 }
 
-static const IMI::IMICHAR* sensors[] =
+static const IMI::IMICHAR *const sensors[] =
 {
   "Intersema,MS5534A,max10000m",
   "Intersema,MS5534B,max15000m",
