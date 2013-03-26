@@ -31,7 +31,7 @@ static constexpr TaskFactoryConstraints mat_constraints = {
   false,
   false,
   false,
-  2, 26,
+  2, 30,
 };
 
 static constexpr LegalPointSet mat_start_types{

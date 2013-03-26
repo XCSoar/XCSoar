@@ -30,7 +30,7 @@ static constexpr TaskFactoryConstraints rt_constraints = {
   false,
   false,
   false,
-  2, 13,
+  2, 30,
 };
 
 static constexpr LegalPointSet rt_start_types{

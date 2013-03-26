@@ -28,6 +28,7 @@ Version 6.6 - not yet released
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
   - AAT keyhole (#1687)
+  - allow up to 30 turn points in racing tasks
 * devices
   - Volkslogger: support IGC file download (#1972)
 * Android
