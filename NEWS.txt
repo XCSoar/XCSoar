@@ -36,7 +36,7 @@ Version 6.6 - not yet released
 * data
   - new polars for two G 102 Astir variants (#2701)
 
-Version 6.5.3 - not yet released
+Version 6.5.3 - 2013/03/26
 * user interface
   - eliminate flickering in the cross section on Windows
   - fix wrong radial display in target dialog
@@ -50,6 +50,8 @@ Version 6.5.3 - not yet released
 * Mac OS X
   - fix crash on startup (#2607, #2667)
   - show missing serial ports, hide internal devices (#2668)
+* infoboxes
+  - fix rendering of thermal assistant aircraft symbol (#2702)
 
 Version 6.5.2 - 2013/03/15
 * user interface

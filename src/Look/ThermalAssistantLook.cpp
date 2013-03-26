@@ -26,7 +26,7 @@
 #include "Screen/Layout.hpp"
 
 void
-ThermalAssistantLook::Initialise(bool small)
+ThermalAssistantLook::Initialise(bool small, bool inverse)
 {
   background_color = COLOR_WHITE;
   circle_color = Color(0xB0, 0xB0, 0xB0);
@@ -48,7 +48,7 @@ ThermalAssistantLook::Initialise(bool small)
 #endif /* !OPENGL */
   inner_circle_pen.Set(1, circle_color);
   outer_circle_pen.Set(Pen::DASH, 1, circle_color);
-  plane_pen.Set(width, COLOR_BLACK);
+  plane_pen.Set(width, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   overlay_font.Load(GetStandardFontFace(), Layout::FastScale(24));
   circle_label_font.Load(GetStandardFontFace(), Layout::FastScale(12));
