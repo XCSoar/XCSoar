@@ -28,10 +28,10 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
-#include "OS/PathName.hpp"
 #include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 
@@ -57,7 +57,8 @@ ChangePilot(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(pilot_name);
     fprintf(stdout, "Setting pilot name to \"%s\" ...\n", pilot_name);
 
-    if (flarm.SetPilot(PathName(pilot_name), env))
+    const UTF8ToWideConverter value(pilot_name);
+    if (flarm.SetPilot(value, env))
       fprintf(stdout, "Pilot name set to \"%s\"\n", pilot_name);
     else
       fprintf(stdout, "Operation failed!\n");
@@ -86,7 +87,8 @@ ChangeCoPilot(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(copilot_name);
     fprintf(stdout, "Setting copilot name to \"%s\" ...\n", copilot_name);
 
-    if (flarm.SetCoPilot(PathName(copilot_name), env))
+    const UTF8ToWideConverter value(copilot_name);
+    if (flarm.SetCoPilot(value, env))
       fprintf(stdout, "CoPilot name set to \"%s\"\n", copilot_name);
     else
       fprintf(stdout, "Operation failed!\n");
@@ -115,7 +117,8 @@ ChangePlaneType(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(plane_type);
     fprintf(stdout, "Setting plane type to \"%s\" ...\n", plane_type);
 
-    if (flarm.SetPlaneType(PathName(plane_type), env))
+    const UTF8ToWideConverter value(plane_type);
+    if (flarm.SetPlaneType(value, env))
       fprintf(stdout, "Plane type set to \"%s\"\n", plane_type);
     else
       fprintf(stdout, "Operation failed!\n");
@@ -144,7 +147,8 @@ ChangeRegistration(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(registration);
     fprintf(stdout, "Setting plane registration to \"%s\" ...\n", registration);
 
-    if (flarm.SetPlaneRegistration(PathName(registration), env))
+    const UTF8ToWideConverter value(registration);
+    if (flarm.SetPlaneRegistration(value, env))
       fprintf(stdout, "Plane registration set to \"%s\"\n", registration);
     else
       fprintf(stdout, "Operation failed!\n");
@@ -173,7 +177,8 @@ ChangeCompetitionId(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(id);
     fprintf(stdout, "Setting competition id to \"%s\" ...\n", id);
 
-    if (flarm.SetCompetitionId(PathName(id), env))
+    const UTF8ToWideConverter value(id);
+    if (flarm.SetCompetitionId(value, env))
       fprintf(stdout, "competition id set to \"%s\"\n", id);
     else
       fprintf(stdout, "Operation failed!\n");
@@ -202,7 +207,8 @@ ChangeCompetitionClass(FlarmDevice &flarm, OperationEnvironment &env)
     TrimRight(comp_class);
     fprintf(stdout, "Setting competition class to \"%s\" ...\n", comp_class);
 
-    if (flarm.SetCompetitionClass(PathName(comp_class), env))
+    const UTF8ToWideConverter value(comp_class);
+    if (flarm.SetCompetitionClass(value, env))
       fprintf(stdout, "Competition class set to \"%s\"\n", comp_class);
     else
       fprintf(stdout, "Operation failed!\n");

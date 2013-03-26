@@ -33,6 +33,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <stdio.h>
 
@@ -82,7 +83,7 @@ int main(int argc, char **argv)
     const DeviceRegister *driver;
     for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
       if (driver->IsLogger()) {
-        NarrowPathName driver_name(driver->name);
+        WideToUTF8Converter driver_name(driver->name);
         usage.AppendFormat("\n\t%s", (const char *)driver_name);
       }
     }

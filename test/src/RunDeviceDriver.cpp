@@ -30,8 +30,8 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <stdio.h>
 
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
   {
     const DeviceRegister *driver;
     for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
-      NarrowPathName driver_name(driver->name);
+      WideToUTF8Converter driver_name(driver->name);
       usage.AppendFormat("\n\t%s", (const char *)driver_name);
     }
   }
