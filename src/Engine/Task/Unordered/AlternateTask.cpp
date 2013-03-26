@@ -29,8 +29,6 @@
 
 #include <limits.h>
 
-const unsigned AlternateTask::max_alternates = 6;
-
 AlternateTask::AlternateTask(const TaskBehaviour &tb,
                              const Waypoints &wps):
   AbortTask(tb, wps)

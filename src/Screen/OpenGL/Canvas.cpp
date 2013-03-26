@@ -392,7 +392,7 @@ gcc_const
 static std::pair<unsigned,unsigned>
 AngleToDonutVertices(Angle start, Angle end)
 {
-  static const Angle epsilon = Angle::FullCircle()
+  static constexpr Angle epsilon = Angle::FullCircle()
     / (GLDonutVertices::CIRCLE_SIZE * 4u);
 
   const Angle delta = end - start;

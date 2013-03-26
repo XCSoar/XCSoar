@@ -78,7 +78,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   TCHAR ctemp[255];
   const TCHAR *params[20];
-  static const unsigned int max_params = ARRAY_SIZE(params);
+  static constexpr unsigned int max_params = ARRAY_SIZE(params);
   size_t n_params;
 
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))

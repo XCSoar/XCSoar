@@ -488,7 +488,7 @@ fixed rsqrt_guess(fixed x) {
 fixed
 fixed::rsqrt() const
 {
-  static const fixed threehalfs = fixed(1.5);
+  static constexpr fixed threehalfs = fixed(1.5);
 
   fixed y(rsqrt_guess(*this));
   if (y.m_nVal<2) return y;

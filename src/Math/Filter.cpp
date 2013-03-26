@@ -29,8 +29,8 @@
 bool
 Filter::Design(const fixed cutoff_wavelength, const bool bessel)
 {
-  static const unsigned sample_freq = 1;
-  static const unsigned n = 1;
+  static constexpr unsigned sample_freq = 1;
+  static constexpr unsigned n = 1;
   fixed c;
   unsigned g, p;
 

@@ -61,7 +61,7 @@ KalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs,
                        const fixed dt)
 {
   // Some abbreviated constants to make the code line up nicely:
-  static const fixed F1 = fixed(1);
+  static constexpr fixed F1 = fixed(1);
 
   // Validity checks. TODO: more?
   assert(positive(dt));

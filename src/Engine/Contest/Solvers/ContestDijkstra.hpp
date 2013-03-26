@@ -96,7 +96,7 @@ private:
 
   TracePoint predicted;
 
-  static const unsigned predicted_index = 0xffff;
+  static constexpr unsigned predicted_index = 0xffff;
 
 protected:
   /** Number of points in current trace set */

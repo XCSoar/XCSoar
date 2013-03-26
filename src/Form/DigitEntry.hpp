@@ -43,7 +43,7 @@ struct DialogLook;
  * (e.g. Altair).
  */
 class DigitEntry : public PaintWindow {
-  static const unsigned MAX_LENGTH = 16;
+  static constexpr unsigned MAX_LENGTH = 16;
 
   struct Column {
     enum class Type : uint8_t {

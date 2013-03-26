@@ -36,7 +36,7 @@ Copyright_License {
 #define IMI_ISLEAP(y) ((y & 3) == 0) //simple version valid for years 2000-2099
 #define IMI_DAYS_IN_YEAR(year) (IMI_ISLEAP(year) ? 366 : 365)
 
-static const IMI::IMIBYTE IMI_DAYS_IN_MONTH[12] =
+static constexpr IMI::IMIBYTE IMI_DAYS_IN_MONTH[12] =
   { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 void
