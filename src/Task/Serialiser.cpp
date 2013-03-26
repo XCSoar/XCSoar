@@ -81,6 +81,12 @@ Serialiser::Serialise(const OrderedTaskPoint &data, const TCHAR* name)
   std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialiser oser(*ochild);
   oser.Serialise(data.GetObservationZone());
+
+  if (data.GetType() == TaskPointType::AST) {
+    const ASTPoint &ast = (const ASTPoint &)data;
+    if (ast.GetScoreExit())
+      child->SetAttribute(_T("score_exit"), true);
+  }
 }
 
 void

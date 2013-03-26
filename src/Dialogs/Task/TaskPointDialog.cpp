@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Widget/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
@@ -152,6 +153,15 @@ RefreshView()
     wb->SetCaption(tmp);
   }
 
+  CheckBoxControl &score_exit = *(CheckBoxControl *)
+    wf->FindByName(_T("ScoreExit"));
+  if (tp.GetType() == TaskPointType::AST) {
+    const ASTPoint &ast = (const ASTPoint &)tp;
+    score_exit.Show();
+    score_exit.SetState(ast.GetScoreExit());
+  } else
+    score_exit.Hide();
+
   StaticString<100> name_prefix_buffer, type_buffer;
 
   switch (tp.GetType()) {
@@ -193,6 +203,21 @@ RefreshView()
 static bool
 ReadValues()
 {
+  OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
+
+  if (tp.GetType() == TaskPointType::AST) {
+    const CheckBoxControl &score_exit = *(const CheckBoxControl *)
+      wf->FindByName(_T("ScoreExit"));
+    const bool new_score_exit = score_exit.GetState();
+
+    ASTPoint &ast = (ASTPoint &)tp;
+
+    if (new_score_exit != ast.GetScoreExit()) {
+      ast.SetScoreExit(new_score_exit);
+      task_modified = true;
+    }
+  }
+
   return properties_widget == nullptr ||
     properties_widget->Save(task_modified);
 }

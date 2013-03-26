@@ -19,4 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "ASTPoint.hpp"
+
+bool
+ASTPoint::Equals(const OrderedTaskPoint &_other) const
+{
+  const ASTPoint &other = (const ASTPoint &)_other;
+
+  return IntermediateTaskPoint::Equals(_other) &&
+    other.GetScoreExit() == GetScoreExit();
+}

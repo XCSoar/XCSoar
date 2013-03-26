@@ -98,8 +98,17 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
              : fact.CreateFinish(*wp));
   } 
 
-  if (pt)
-    fact.Append(*pt, false);
+  if (!pt)
+    return;
+
+  if (pt->GetType() == TaskPointType::AST) {
+    ASTPoint &ast = (ASTPoint &)*pt;
+    bool score_exit = false;
+    if (node.GetAttribute(_T("score_exit"), score_exit))
+      ast.SetScoreExit(score_exit);
+  }
+
+  fact.Append(*pt, false);
 }
 
 ObservationZonePoint*

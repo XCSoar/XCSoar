@@ -52,7 +52,9 @@ TaskAdvance::IsStateReady(const TaskPoint &tp,
 
   case TaskPointType::AST: {
     const ASTPoint &ip = (const ASTPoint &)tp;
-    return ip.HasEntered();
+    return ip.GetScoreExit()
+      ? x_exit
+      : ip.HasEntered();
   }
 
   case TaskPointType::FINISH:
