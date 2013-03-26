@@ -671,7 +671,6 @@ DEBUG_PROGRAM_NAMES = \
 	RunXMLParser \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
-	WriteProfileString WriteProfileInt \
 	RunMD5 \
 	ReadGRecord VerifyGRecord AppendGRecord FixGRecord \
 	AddChecksum \
@@ -961,22 +960,6 @@ READ_PROFILE_INT_SOURCES = \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
-
-WRITE_PROFILE_STRING_SOURCES = \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/Profile/Profile.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/WriteProfileString.cpp
-WRITE_PROFILE_STRING_DEPENDS = PROFILE IO OS UTIL
-$(eval $(call link-program,WriteProfileString,WRITE_PROFILE_STRING))
-
-WRITE_PROFILE_INT_SOURCES = \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/Profile/Profile.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/WriteProfileInt.cpp
-WRITE_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
-$(eval $(call link-program,WriteProfileInt,WRITE_PROFILE_INT))
 
 RUN_MD5_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
