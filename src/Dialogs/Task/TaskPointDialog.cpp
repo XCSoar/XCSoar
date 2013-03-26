@@ -73,7 +73,6 @@ static ObservationZoneEditWidget *properties_widget;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 static unsigned active_index = 0;
-static int next_previous = 0;
 
 class TPOZListener : public ObservationZoneEditWidget::Listener {
 public:
@@ -272,8 +271,8 @@ OnPreviousClicked()
   if (active_index == 0 || !ReadValues())
     return;
 
-  next_previous = -1;
-  wf->SetModalResult(mrOK);
+  --active_index;
+  RefreshView();
 }
 
 static void
@@ -282,8 +281,8 @@ OnNextClicked()
   if (active_index >= ordered_task->TaskSize() - 1 || !ReadValues())
     return;
 
-  next_previous = 1;
-  wf->SetModalResult(mrOK);
+  ++active_index;
+  RefreshView();
 }
 
 /**
@@ -337,13 +336,9 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   dock = (DockWindow *)wf->FindByName(_T("properties"));
   assert(dock != nullptr);
 
-  do {
-    RefreshView();
-    next_previous=0;
-    if (wf->ShowModal() == mrOK)
-      ReadValues();
-    active_index += next_previous;
-  } while (next_previous != 0);
+  RefreshView();
+  if (wf->ShowModal() == mrOK)
+    ReadValues();
 
   delete wf;
 
