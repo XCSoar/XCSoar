@@ -19,16 +19,16 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
- 
-#ifndef TASKADVANCESMART_HPP
-#define TASKADVANCESMART_HPP
+
+#ifndef XCSOAR_SMART_TASK_ADVANCE_HPP
+#define XCSOAR_SMART_TASK_ADVANCE_HPP
 
 #include "TaskAdvance.hpp"
 
 struct TaskFactoryConstraints;
 
 /** Class used to control advancement through an OrderedTask */
-class TaskAdvanceSmart final : public TaskAdvance {
+class SmartTaskAdvance final : public TaskAdvance {
   /** active advance state */
   State state;
 
@@ -39,7 +39,7 @@ public:
   /** 
    * Constructor.  Sets defaults to auto-mode
    */
-  TaskAdvanceSmart();
+  SmartTaskAdvance();
 
   void SetFactoryConstraints(const TaskFactoryConstraints &constraints);
 

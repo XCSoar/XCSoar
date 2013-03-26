@@ -20,27 +20,27 @@
 }
  */
 
-#include "TaskAdvanceSmart.hpp"
+#include "SmartTaskAdvance.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/StartPoint.hpp"
 #include "Points/AATPoint.hpp"
 #include "Points/IntermediatePoint.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
 
-TaskAdvanceSmart::TaskAdvanceSmart()
+SmartTaskAdvance::SmartTaskAdvance()
   :state(TaskAdvance::MANUAL),
    start_requires_arm(false)
 {
 }
 
 void
-TaskAdvanceSmart::SetFactoryConstraints(const TaskFactoryConstraints &constraints)
+SmartTaskAdvance::SetFactoryConstraints(const TaskFactoryConstraints &constraints)
 {
   start_requires_arm = constraints.start_requires_arm;
 }
 
 bool
-TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
+SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
                                       const AircraftState &aircraft,
                                       const bool x_enter, const bool x_exit)
 {
@@ -82,13 +82,13 @@ TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
 }
 
 TaskAdvance::State
-TaskAdvanceSmart::GetState() const
+SmartTaskAdvance::GetState() const
 {
   return state;
 }
 
 void
-TaskAdvanceSmart::UpdateState()
+SmartTaskAdvance::UpdateState()
 {
   switch (state) {
   case TaskAdvance::START_ARMED:
