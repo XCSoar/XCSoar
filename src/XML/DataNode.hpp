@@ -132,7 +132,7 @@ public:
    * @param name Name of attribute
    * @param value Value (boolean)
    */
-  void SetAttribute(const TCHAR *name, bool &value);
+  void SetAttribute(const TCHAR *name, bool value);
 
   /**
    * Set named attribute value.  No-op if the #RoughTime object is

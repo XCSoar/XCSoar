@@ -63,7 +63,7 @@ DataNode::SetAttribute(const TCHAR *name, unsigned value)
 }
 
 void
-DataNode::SetAttribute(const TCHAR *name, bool &value)
+DataNode::SetAttribute(const TCHAR *name, bool value)
 {
   StaticString<4> buf;
   buf.UnsafeFormat(_T("%d"), (int)value);
