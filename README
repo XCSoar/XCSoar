@@ -115,6 +115,8 @@ Supported targets:
 
  PI: cross-compiling for the Raspberry Pi
 
+ KOBO: cross-compiling for Kobo Mini and others (experimental)
+
  ANDROID: Android with ARMv6 CPU
 
  ANDROID7: Android with ARMv7 CPU

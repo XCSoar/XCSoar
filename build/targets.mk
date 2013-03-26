@@ -2,7 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 \
-	PI \
+	PI KOBO \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN
@@ -36,6 +36,7 @@ FAT_BINARY := n
 TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
 TARGET_IS_PI := n
+TARGET_IS_KOBO := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
@@ -193,6 +194,16 @@ ifeq ($(TARGET),PI)
   PI ?= /opt/pi/root
   TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
+endif
+
+ifeq ($(TARGET),KOBO)
+  # Experimental target for Kobo Mini
+  override TARGET = UNIX
+  TCPREFIX := arm-linux-gnueabihf-
+  KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
+  TARGET_ARCH += -march=armv7-a -mfloat-abi=hard
+  TARGET_IS_KOBO = y
+  ARMV7 := y
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -395,6 +406,11 @@ ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+  TARGET_CPPFLAGS += -DKOBO
+  TARGET_CPPFLAGS += -isystem $(KOBO)/include
+endif
+
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   TARGET_CPPFLAGS += -DANDROID
@@ -467,6 +483,11 @@ endif
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
+endif
+
+ifeq ($(TARGET_IS_KOBO),y)
+  TARGET_LDFLAGS += -L$(KOBO)/lib
+  TARGET_LDFLAGS += -static
 endif
 
 ifeq ($(TARGET),ANDROID)

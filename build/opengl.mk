@@ -1,6 +1,11 @@
 ifeq ($(TARGET),ANDROID)
 # Android must use OpenGL
 OPENGL = y
+
+# the Kobo doesn't have OpenGL support
+else ifeq ($(TARGET_IS_KOBO),y)
+OPENGL = n
+
 # UNIX/Linux defaults to OpenGL, but can use SDL_gfx instead
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
