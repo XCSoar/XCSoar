@@ -156,22 +156,22 @@ RefreshView()
 
   switch (tp.GetType()) {
   case TaskPointType::START:
-    type_buffer = _T("Start point");
+    type_buffer = _("Start point");
     name_prefix_buffer = _T("Start: ");
     break;
 
   case TaskPointType::AST:
-    type_buffer = _T("Task point");
+    type_buffer = _("Task point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPointType::AAT:
-    type_buffer = _T("Assigned area point");
+    type_buffer = _("Assigned area point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPointType::FINISH:
-    type_buffer = _T("Finish point");
+    type_buffer = _("Finish point");
     name_prefix_buffer = _T("Finish: ");
     break;
 
@@ -221,7 +221,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void
 OnRemoveClicked()
 {
-  if (ShowMessageBox(_("Remove task point?"), _("Task Point"),
+  if (ShowMessageBox(_("Remove task point?"), _("Task point"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
