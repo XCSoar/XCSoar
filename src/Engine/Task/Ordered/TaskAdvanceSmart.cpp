@@ -51,13 +51,13 @@ TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
     request_armed = false;
 
   if (tp.GetType() == TaskPointType::START) {
-    const StartPoint *sp = (const StartPoint *)&tp;
+    const StartPoint &sp = (const StartPoint &)tp;
     if (start_requires_arm) {
       if (armed) {
         state = TaskAdvance::START_ARMED;
       } else {
         state = TaskAdvance::START_DISARMED;
-        if (sp->IsInSector(aircraft))
+        if (sp.IsInSector(aircraft))
           request_armed = true;
       }
       return armed && state_ready;

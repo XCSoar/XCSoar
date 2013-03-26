@@ -42,11 +42,11 @@ TaskAdvance::IsStateReady(const TaskPoint &tp,
     return x_exit;
 
   if (tp.GetType() == TaskPointType::AAT) {
-    const AATPoint *ap = (const AATPoint *)&tp;
-    return IsAATStateReady(ap->HasEntered(), ap->IsCloseToTarget(state));
+    const AATPoint &ap = (const AATPoint &)tp;
+    return IsAATStateReady(ap.HasEntered(), ap.IsCloseToTarget(state));
   } else if (tp.IsIntermediatePoint()) {
-    const IntermediateTaskPoint *ip = (const IntermediateTaskPoint *)&tp;
-    return ip->HasEntered();
+    const IntermediateTaskPoint &ip = (const IntermediateTaskPoint &)tp;
+    return ip.HasEntered();
   }
   return false;
 }
