@@ -21,52 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Screen/Bitmap.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Custom/LibPNG.hpp"
-#include "Screen/Custom/UncompressedImage.hpp"
 #include "UncompressedImage.hpp"
 #include "Texture.hpp"
-#include "ResourceLoader.hpp"
+#include "Screen/Custom/UncompressedImage.hpp"
 
-bool
-Bitmap::Load(unsigned id, Type type)
+GLTexture *
+ImportTexture(const UncompressedImage &image)
 {
-  assert(IsScreenInitialized());
+  GLint internal_format;
+  GLenum format, type;
 
-  Reset();
+  switch (image.GetFormat()) {
+  case UncompressedImage::Format::GRAY:
+    internal_format = GL_LUMINANCE;
+    format = GL_LUMINANCE;
+    type = GL_UNSIGNED_BYTE;
+    break;
 
-  ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.first == nullptr)
-    return false;
+  case UncompressedImage::Format::RGB:
+    internal_format = GL_RGB;
+    format = GL_RGB;
+    type = GL_UNSIGNED_BYTE;
+    break;
 
-  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
-  texture = ImportTexture(uncompressed);
-  if (texture == nullptr)
-    return false;
+  case UncompressedImage::Format::INVALID:
+    return nullptr;
 
-  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
-  return true;
-}
-
-#ifdef USE_EGL
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
+#ifdef __OPTIMIZE__
+  default:
+    gcc_unreachable();
 #endif
+  }
 
-#ifndef USE_LIBJPEG
-
-bool
-Bitmap::LoadFile(const TCHAR *path)
-{
-  // TODO: use libjpeg when SDL_image is not available
-  return false;
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  return new GLTexture(internal_format, image.GetWidth(), image.GetHeight(),
+                       format, type, image.GetData());
 }
-
-#endif

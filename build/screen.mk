@@ -51,6 +51,7 @@ endif
 
 ifeq ($(LIBPNG),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/LibPNG.cpp
 endif
 
@@ -73,6 +74,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/UncompressedImage.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
