@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-20 23:11+0100\n"
-"PO-Revision-Date: 2013-02-21 04:37+0000\n"
+"PO-Revision-Date: 2013-03-27 00:38+0000\n"
 "Last-Translator: paz goldberg <pazgoldberg@yahoo.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-22 14:28+0000\n"
-"X-Generator: Launchpad (build 16506)\n"
+"X-Launchpad-Export-Date: 2013-03-27 20:00+0000\n"
+"X-Generator: Launchpad (build 16540)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -357,14 +357,14 @@ msgid "Incorrect number of turnpoints"
 msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "יותר מדי נקודות"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "נקודת פנייה הבאה"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
@@ -936,9 +936,9 @@ msgid ""
 msgstr "זהו הגובה מעל פני הים"
 
 #: src/InfoBoxes/Content/Factory.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Height AGL"
-msgstr "גובה"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:167
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
@@ -1251,9 +1251,9 @@ msgid "Terrain elevation"
 msgstr "גובה קרקע"
 
 #: src/InfoBoxes/Content/Factory.cpp:362
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "גובה קרקע"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:363
 #, no-c-format
@@ -2546,7 +2546,7 @@ msgstr ""
 #: Data/Input/default.xci:570
 #, no-c-format
 msgid "Wind"
-msgstr ""
+msgstr "רוח"
 
 #: src/InfoBoxes/Content/Factory.cpp:1167 src/PageSettings.cpp:50
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:64
@@ -2659,7 +2659,7 @@ msgstr ""
 #: Data/Input/default.xci:865 Data/Input/default.xci:921
 #, no-c-format
 msgid "Info"
-msgstr ""
+msgstr "מידע"
 
 #: src/InfoBoxes/Content/Altitude.cpp:59
 #: src/InfoBoxes/Content/MacCready.cpp:58
@@ -2670,7 +2670,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Setup"
-msgstr ""
+msgstr "הגדרות"
 
 #: src/InfoBoxes/Content/Altitude.cpp:77
 #: src/InfoBoxes/Content/Altitude.cpp:179
@@ -2826,7 +2826,7 @@ msgstr ""
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:80
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:85
 msgid "Speed"
-msgstr ""
+msgstr "מהירות"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:100
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:85
@@ -2840,7 +2840,7 @@ msgstr ""
 #: Data/Dialogs/AirspaceList.xml:18 Data/Dialogs/AirspaceList_L.xml:12
 #: Data/Dialogs/WaypointList.xml:12 Data/Dialogs/WaypointList_L.xml:8
 msgid "Direction"
-msgstr ""
+msgstr "כיוון"
 
 #: src/InfoBoxes/Panel/WindEdit.cpp:105
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:97
@@ -2851,7 +2851,7 @@ msgstr ""
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:212
 #, no-c-format
 msgid "External"
-msgstr ""
+msgstr "חיצוני"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:74 src/InfoBoxes/Panel/WindSetup.cpp:87
 msgid "Auto. wind"
@@ -4318,7 +4318,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:94
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "תצוגה"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:100
 #, no-c-format
@@ -4376,9 +4376,9 @@ msgid "Pages"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "דפי תיבות מידע"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -6051,9 +6051,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "אוטומטית"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6078,9 +6077,8 @@ msgid "Maintain one map zoom level on each page."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
-#, fuzzy
 msgid "Main area"
-msgstr "שטח כנף"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
 msgid "Specifies what should be displayed in the main area."
@@ -6088,9 +6086,8 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:329
-#, fuzzy
 msgid "InfoBoxes"
-msgstr "דפי תיבות מידע"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -6108,9 +6105,8 @@ msgid "Cross section"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
-#, fuzzy
 msgid "Bottom area"
-msgstr "שמאל למטה"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
 msgid "Specifies what should be displayed below the main area."
@@ -8448,11 +8444,13 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
+"רשימת\n"
+"נ''צ"
 
 #: Data/Input/default.xci:531 Data/Input/default.xci:580
 #: Data/Input/default.xci:630 Data/Input/default.xci:914
 msgid "Config"
-msgstr ""
+msgstr "הגדרות"
 
 #: Data/Input/default.xci:492 Data/Input/default.xci:1079
 msgid "Labels"
@@ -8505,7 +8503,7 @@ msgstr "בד''ח"
 msgid ""
 "What's\n"
 "here?"
-msgstr ""
+msgstr "מה יש פה?"
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1061
 msgid "Dropped marker"
@@ -8519,7 +8517,7 @@ msgstr ""
 msgid ""
 "Setup\n"
 "Wind"
-msgstr ""
+msgstr "הגדרות רוח"
 
 #: Data/Input/default.xci:679
 msgid ""
@@ -8575,9 +8573,8 @@ msgid "Zoom"
 msgstr "זום"
 
 #: Data/Input/default.xci:847
-#, fuzzy
 msgid "Traffic List"
-msgstr "תנועה"
+msgstr ""
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -8686,13 +8683,8 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "Lat."
-#~ msgstr "קו אורך"
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr "מידע על הנקודה"
+#~ msgid "Return"
+#~ msgstr "חזור"
 
 #~ msgid ""
 #~ "FLARM\n"
@@ -8701,17 +8693,25 @@ msgstr ""
 #~ "נתוני\n"
 #~ "פלארם"
 
-#~ msgid "Return"
-#~ msgstr "חזור"
+#~ msgid "Lat."
+#~ msgstr "קו אורך"
+
+#~ msgid "H GND"
+#~ msgstr "גובה קרקע"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "דפי תיבות מידע"
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "מצב תיבות מידע"
+
+#~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr "מידע על הנקודה"
 
 #~ msgid "Altitude AGL"
 #~ msgstr "גובה מעל פני הקרקע"
 
 #~ msgid "Alt AGL"
 #~ msgstr "מעל פני הים"
-
-#~ msgid "H GND"
-#~ msgstr "גובה קרקע"
