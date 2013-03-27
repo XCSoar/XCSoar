@@ -147,7 +147,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   // in screen coords
 
 #ifdef ENABLE_OPENGL
-  pen.Set();
+  pen.Bind();
   brush.Set();
 #else
   shape_renderer.Configure(&pen, &brush);
@@ -322,6 +322,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   }
 #ifdef ENABLE_OPENGL
   glPopMatrix();
+  pen.Unbind();
 #else
   shape_renderer.Commit();
 #endif
