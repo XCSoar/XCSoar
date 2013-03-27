@@ -40,9 +40,18 @@ FlarmId::Parse(const TCHAR *input, TCHAR **endptr_r)
 }
 #endif
 
+const char *
+FlarmId::Format(char *buffer) const
+{
+  sprintf(buffer, "%lX", (unsigned long)value);
+  return buffer;
+}
+
+#ifdef _UNICODE
 const TCHAR *
 FlarmId::Format(TCHAR *buffer) const
 {
   _stprintf(buffer, _T("%lX"), (unsigned long)value);
   return buffer;
 }
+#endif

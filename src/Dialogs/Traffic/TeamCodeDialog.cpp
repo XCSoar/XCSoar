@@ -90,8 +90,7 @@ static void
 OnSetWaypointClicked()
 {
   const Waypoint* wp =
-    ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                           CommonInterface::Basic().location);
+    ShowWaypointListDialog(CommonInterface::Basic().location);
   if (wp != NULL) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
     Profile::Set(ProfileKeys::TeamcodeRefWaypoint, wp->id);

@@ -127,6 +127,16 @@ DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 }
 
 void
+DataFieldFileReader::ScanMultiplePatterns(const TCHAR *patterns)
+{
+  size_t length;
+  while ((length = _tcslen(patterns)) > 0) {
+    ScanDirectoryTop(patterns);
+    patterns += length + 1;
+  }
+}
+
+void
 DataFieldFileReader::Lookup(const TCHAR *Text)
 {
   if (!loaded) {

@@ -32,7 +32,7 @@ Copyright_License {
 bool
 Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
 {
-  static const unsigned delay = 2;
+  static constexpr unsigned delay = 2;
 
   while (n-- > 0) {
     if (!port.Write(CAN))
@@ -118,7 +118,7 @@ bool
 Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
                          Command cmd, uint8_t param1, uint8_t param2)
 {
-  static const unsigned delay = 2;
+  static constexpr unsigned delay = 2;
 
   /* flush buffers */
   if (!port.FullFlush(env, 20, 100))

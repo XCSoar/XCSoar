@@ -30,7 +30,7 @@ static constexpr TaskFactoryConstraints rt_constraints = {
   false,
   false,
   false,
-  2, 13,
+  2, 30,
 };
 
 static constexpr LegalPointSet rt_start_types{
@@ -94,6 +94,10 @@ RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   case TaskPointFactoryType::FINISH_SECTOR:
   case TaskPointFactoryType::FINISH_LINE:
   case TaskPointFactoryType::FINISH_CYLINDER:
+    break;
+
+  case TaskPointFactoryType::AAT_KEYHOLE:
+    newtype = TaskPointFactoryType::KEYHOLE_SECTOR;
     break;
 
   case TaskPointFactoryType::AAT_SEGMENT:

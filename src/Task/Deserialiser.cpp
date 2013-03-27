@@ -28,13 +28,8 @@
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -103,8 +98,17 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
              : fact.CreateFinish(*wp));
   } 
 
-  if (pt)
-    fact.Append(*pt, false);
+  if (!pt)
+    return;
+
+  if (pt->GetType() == TaskPointType::AST) {
+    ASTPoint &ast = (ASTPoint &)*pt;
+    bool score_exit = false;
+    if (node.GetAttribute(_T("score_exit"), score_exit))
+      ast.SetScoreExit(score_exit);
+  }
+
+  fact.Append(*pt, false);
 }
 
 ObservationZonePoint*
@@ -131,9 +135,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 
     return ls;
   } else if (StringIsEqual(type, _T("MatCylinder"))) {
-    MatCylinderZone *ls = new MatCylinderZone(wp.location);
-
-    return ls;
+    return CylinderZone::CreateMatCylinderZone(wp.location);
   } else if (StringIsEqual(type, _T("Sector"))) {
 
     fixed radius, inner_radius;
@@ -156,20 +158,28 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 
     return ls;
   } else if (StringIsEqual(type, _T("FAISector")))
-    return new FAISectorZone(wp.location, is_turnpoint);
+    return SymmetricSectorZone::CreateFAISectorZone(wp.location, is_turnpoint);
   else if (StringIsEqual(type, _T("SymmetricQuadrant"))) {
     fixed radius = fixed(10000);
     node.GetAttribute(_T("radius"), radius);
 
     return new SymmetricSectorZone(wp.location, radius);
   } else if (StringIsEqual(type, _T("Keyhole")))
-    return new KeyholeZone(wp.location);
-  else if (StringIsEqual(type, _T("BGAStartSector")))
-    return new BGAStartSectorZone(wp.location);
+    return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
+  else if (StringIsEqual(type, _T("CustomKeyhole"))) {
+    fixed radius = fixed(10000);
+    Angle angle = Angle::QuarterCircle();
+
+    node.GetAttribute(_T("radius"), radius);
+    node.GetAttribute(_T("angle"), angle);
+
+    return KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
+  } else if (StringIsEqual(type, _T("BGAStartSector")))
+    return KeyholeZone::CreateBGAStartSectorZone(wp.location);
   else if (StringIsEqual(type, _T("BGAFixedCourse")))
-    return new BGAFixedCourseZone(wp.location);
+    return KeyholeZone::CreateBGAFixedCourseZone(wp.location);
   else if (StringIsEqual(type, _T("BGAEnhancedOption")))
-    return new BGAEnhancedOptionZone(wp.location);
+    return KeyholeZone::CreateBGAEnhancedOptionZone(wp.location);
 
   assert(1);
   return nullptr;

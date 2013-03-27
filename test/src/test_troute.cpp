@@ -26,7 +26,7 @@
 #include "TestUtil.hpp"
 #include "Route/TerrainRoute.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -34,6 +34,8 @@
 #include "Geo/GeoVector.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
+
+#include <string.h>
 
 static void
 test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)

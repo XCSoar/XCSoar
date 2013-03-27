@@ -6,20 +6,39 @@ Version 6.6 - not yet released
 * map
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
-* user interface
-  - replay fast-forward
+  - allow configuration of "Final glide bar" display (#2554)
+* cross section
+  - show airspace names (#1149, #2390)
+  - use glide polar instead of current glide ratio (#2687)
+* infoboxes
   - green InfoBox distance when inside observation zone (#2560)
   - limit the InfoBox aspect ratio
+  - new InfoBox styles "Shaded" (#1852), "Glass" (#2466)
+  - waypoint details button in target dialog (#1967)
+  - show distance in radial InfoBox comment (#2577)
+  - new InfoBox with radial and distance in nautical miles (#2269)
+* user interface
+  - replay fast-forward
   - new waypoint location editor (#343)
   - show required glide ratio in waypoint details (#1573)
-  - new InfoBox style "Shaded"
+  - add airspace ack button to map item list (#2139)
+  - additionally show airspace altitude in feet (#2379)
+  - show more files in replay file picker (#2582)
+  - clicking with Ctrl key pressed moves the simulator (#199)
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
+  - AAT keyhole (#1687)
+  - add AST point option "Score exit" (#2544)
+  - optimise start point
+  - allow up to 30 turn points in racing tasks
 * devices
-  - Volkslogger: support IGC file download
+  - Volkslogger: support IGC file download (#1972)
+  - CAI302: support uploading all waypoint file types (#2054)
 * Android
   - faster map renderer on some Android devices
+* data
+  - new polars for two G 102 Astir variants (#2701)
 
 Version 6.5.3 - 2013/03/26
 * user interface

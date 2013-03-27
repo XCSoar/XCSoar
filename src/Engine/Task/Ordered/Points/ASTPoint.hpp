@@ -36,6 +36,12 @@
  */
 class ASTPoint final : public IntermediateTaskPoint
 {
+  /**
+   * If this is true, then exiting the observation zone is the goal,
+   * not entering it.
+   */
+  bool score_exit;
+
 public:
   /**
    * Constructor.
@@ -51,7 +57,19 @@ public:
            const Waypoint &wp,
            const TaskBehaviour &tb,
            bool boundary_scored=false)
-    :IntermediateTaskPoint(TaskPointType::AST, _oz, wp, tb, boundary_scored) {}
+    :IntermediateTaskPoint(TaskPointType::AST, _oz, wp, tb, boundary_scored),
+     score_exit(false){}
+
+  bool GetScoreExit() const {
+    return score_exit;
+  }
+
+  void SetScoreExit(bool _score_exit) {
+    score_exit = _score_exit;
+  }
+
+  /* virtual methods from OrderedTaskPoint */
+  virtual bool Equals(const OrderedTaskPoint &_other) const override;
 };
 
 #endif

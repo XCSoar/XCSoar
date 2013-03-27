@@ -39,6 +39,10 @@
 #include "Device/Windows/Enumerator.hpp"
 #endif
 
+#ifdef HAVE_POSIX
+#include "Device/Port/TTYEnumerator.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Java/Global.hpp"
 #include "Android/BluetoothHelper.hpp"
@@ -108,39 +112,18 @@ AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
 static bool
 DetectSerialPorts(DataFieldEnum &df)
 {
-  DIR *dir = opendir("/dev");
-  if (dir == NULL)
+  TTYEnumerator enumerator;
+  if (enumerator.HasFailed())
     return false;
 
   unsigned sort_start = df.Count();
 
   bool found = false;
-  struct dirent *ent;
-  while ((ent = readdir(dir)) != NULL) {
-    /* filter "/dev/tty*" */
-    if (memcmp(ent->d_name, "tty", 3) == 0) {
-      /* ignore virtual internal ports on Mac OS X (and probably other
-         BSDs) */
-      if (ent->d_name[3] >= 'p' && ent->d_name[3] <= 'w')
-        continue;
-
-      /* filter out "/dev/tty0", ... (valid integer after "tty") */
-      char *endptr;
-      strtoul(ent->d_name + 3, &endptr, 10);
-      if (*endptr == 0)
-        continue;
-    } else if (memcmp(ent->d_name, "rfcomm", 6) != 0)
-      continue;
-
-    char path[64];
-    snprintf(path, sizeof(path), "/dev/%s", ent->d_name);
-    if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0) {
-      AddPort(df, DeviceConfig::PortType::SERIAL, path);
-      found = true;
-    }
+  const char *path;
+  while ((path = enumerator.Next()) != nullptr) {
+    AddPort(df, DeviceConfig::PortType::SERIAL, path);
+    found = true;
   }
-
-  closedir(dir);
 
   if (found)
     df.Sort(sort_start);

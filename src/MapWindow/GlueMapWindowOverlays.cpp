@@ -238,6 +238,25 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 void
 GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 {
+
+  if (GetMapSettings().final_glide_bar_display_mode==FinalGlideBarDisplayMode::OFF)
+    return;
+
+  if (GetMapSettings().final_glide_bar_display_mode==FinalGlideBarDisplayMode::AUTO) {
+    const TaskStats &task_stats = Calculated().task_stats;
+    const ElementStat &total = task_stats.total;
+    const GlideResult &solution = total.solution_remaining;
+    const GlideResult &solution_mc0 = total.solution_mc0;
+    const GlideSettings &glide_settings= GetComputerSettings().task.glide;
+
+    if (!task_stats.task_valid || !solution.IsOk() || !solution_mc0.IsDefined())
+      return;
+
+    if (solution_mc0.SelectAltitudeDifference(glide_settings) < fixed(-1000) &&
+        solution.SelectAltitudeDifference(glide_settings) < fixed(-1000))
+      return;
+  }
+
   final_glide_bar_renderer.Draw(canvas, rc, Calculated(),
                                 GetComputerSettings().task.glide,
                                 GetMapSettings().final_glide_bar_mc0_enabled);
@@ -379,7 +398,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
   tb_rect.left = rc.left;
   tb_rect.right = rc.left+Layout::Scale(20);
   tb_rect.top = Layout::Scale(2);
-  tb_rect.bottom = (rc.bottom-rc.top)/2-Layout::Scale(73);
+  tb_rect.bottom = (rc.bottom-rc.top)/5 - Layout::Scale(2);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != NULL) {

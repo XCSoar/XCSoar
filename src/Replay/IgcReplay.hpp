@@ -43,9 +43,9 @@ public:
   virtual bool Update(NMEAInfo &data) override;
 
 protected:
-  bool ScanBuffer(const char *buffer, IGCFix &fix);
+  bool ScanBuffer(const char *buffer, IGCFix &fix, NMEAInfo &basic);
 
-  bool ReadPoint(IGCFix &fix);
+  bool ReadPoint(IGCFix &fix, NMEAInfo &basic);
 };
 
 #endif

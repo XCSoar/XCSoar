@@ -31,16 +31,16 @@ struct PolarShape;
 struct PolarInfo;
 
 bool
-ParsePolarShape(PolarShape &shape, const TCHAR *s);
+ParsePolarShape(PolarShape &shape, const char *s);
 
 bool
-ParsePolar(PolarInfo &polar, const TCHAR *s);
+ParsePolar(PolarInfo &polar, const char *s);
 
 void
-FormatPolarShape(const PolarShape &shape, TCHAR *buffer, size_t max_size);
+FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size);
 
 void
-FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,
+FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
               bool include_v_no=false);
 
 #endif

@@ -46,7 +46,7 @@ namespace WaypointGlue {
 bool
 WaypointGlue::GetPath(int file_number, TCHAR *value)
 {
-  const TCHAR *key;
+  const char *key;
 
   switch (file_number) {
   case 1:

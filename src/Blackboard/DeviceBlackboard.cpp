@@ -112,6 +112,19 @@ DeviceBlackboard::ProcessSimulation()
   ScheduleMerge();
 }
 
+void
+DeviceBlackboard::SetSimulatorLocation(const GeoPoint &location)
+{
+  ScopeLock protect(mutex);
+  NMEAInfo &basic = simulator_data;
+
+  simulator.Touch(basic);
+  basic.track = location.Bearing(basic.location).Reciprocal();
+  basic.location = location;
+
+  ScheduleMerge();
+}
+
 /**
  * Sets the GPS speed and indicated airspeed to val
  *

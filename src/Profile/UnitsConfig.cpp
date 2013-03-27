@@ -59,7 +59,7 @@ ImportSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetLegacySpeedUnit(const TCHAR *key, Unit &value)
+GetLegacySpeedUnit(const char *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportSpeedUnit(tmp));
@@ -75,7 +75,7 @@ ValidSpeedUnit(Unit unit)
 }
 
 static bool
-GetSpeedUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+GetSpeedUnit(const char *key, const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp))
@@ -112,14 +112,14 @@ ImportVerticalSpeedUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyVerticalSpeedUnit(const TCHAR *key, Unit &value)
+GetLegacyVerticalSpeedUnit(const char *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportVerticalSpeedUnit(tmp));
 }
 
 static bool
-GetVerticalSpeedUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+GetVerticalSpeedUnit(const char *key, const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp))
@@ -156,7 +156,7 @@ ImportDistanceUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyDistanceUnit(const TCHAR *key, Unit &value)
+GetLegacyDistanceUnit(const char *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportDistanceUnit(tmp));
@@ -172,7 +172,7 @@ ValidDistanceUnit(Unit unit)
 }
 
 static bool
-GetDistanceUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+GetDistanceUnit(const char *key, const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp))
@@ -206,14 +206,14 @@ ImportAltitudeUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyAltitudeUnit(const TCHAR *key, Unit &value)
+GetLegacyAltitudeUnit(const char *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) && ApplyUnit(value, ImportAltitudeUnit(tmp));
 }
 
 static bool
-GetAltitudeUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+GetAltitudeUnit(const char *key, const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp))
@@ -247,7 +247,7 @@ ImportTemperatureUnit(unsigned tmp)
 }
 
 static bool
-GetLegacyTemperatureUnit(const TCHAR *key, Unit &value)
+GetLegacyTemperatureUnit(const char *key, Unit &value)
 {
   unsigned tmp;
   return Profile::Get(key, tmp) &&
@@ -263,7 +263,7 @@ ValidTemperatureUnit(Unit unit)
 }
 
 static bool
-GetTemperatureUnit(const TCHAR *key, const TCHAR *legacy_key, Unit &value_r)
+GetTemperatureUnit(const char *key, const char *legacy_key, Unit &value_r)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp))
@@ -286,7 +286,7 @@ ValidPressureUnit(Unit unit)
 }
 
 static bool
-GetPressureUnit(const TCHAR *key, Unit &value)
+GetPressureUnit(const char *key, Unit &value)
 {
   Unit tmp;
   if (!Profile::GetEnum(key, tmp) || !ValidPressureUnit(tmp))
@@ -301,17 +301,17 @@ Profile::LoadUnits(UnitSetting &config)
 {
   config = Units::LoadFromOSLanguage();
 
-  GetSpeedUnit(ProfileKeys::SpeedUnitsValue, _T("Speed"), config.speed_unit);
+  GetSpeedUnit(ProfileKeys::SpeedUnitsValue, "Speed", config.speed_unit);
   config.wind_speed_unit = config.speed_unit;
-  GetSpeedUnit(ProfileKeys::TaskSpeedUnitsValue, _T("TaskSpeed"),
+  GetSpeedUnit(ProfileKeys::TaskSpeedUnitsValue, "TaskSpeed",
                config.task_speed_unit);
-  GetDistanceUnit(ProfileKeys::DistanceUnitsValue, _T("Distance"),
+  GetDistanceUnit(ProfileKeys::DistanceUnitsValue, "Distance",
                   config.distance_unit);
-  GetAltitudeUnit(ProfileKeys::AltitudeUnitsValue, _T("Altitude"),
+  GetAltitudeUnit(ProfileKeys::AltitudeUnitsValue, "Altitude",
                   config.altitude_unit);
-  GetTemperatureUnit(ProfileKeys::TemperatureUnitsValue, _T("Temperature"),
+  GetTemperatureUnit(ProfileKeys::TemperatureUnitsValue, "Temperature",
                      config.temperature_unit);
-  GetVerticalSpeedUnit(ProfileKeys::LiftUnitsValue, _T("Lift"),
+  GetVerticalSpeedUnit(ProfileKeys::LiftUnitsValue, "Lift",
                        config.vertical_speed_unit);
   GetPressureUnit(ProfileKeys::PressureUnitsValue, config.pressure_unit);
 }

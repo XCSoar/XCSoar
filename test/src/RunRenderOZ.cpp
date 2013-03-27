@@ -39,19 +39,14 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
-#include "Engine/Task/ObservationZones/MatCylinderZone.hpp"
-#include "Engine/Task/ObservationZones/FAISectorZone.hpp"
 #include "Engine/Task/ObservationZones/KeyholeZone.hpp"
-#include "Engine/Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 
 enum {
-  NUM_OZ_TYPES = 11,
+  NUM_OZ_TYPES = 12,
 };
 
 static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
@@ -60,12 +55,13 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("MAT Cylinder"),
   _T("Sector"),
   _T("FAI Sector"),
-  _T("Keyhole"),
+  _T("DAeC Keyhole"),
   _T("BGA Fixed Course"),
   _T("BGA Enhanced Option"),
   _T("BGA Start"),
   _T("Annular sector"),
   _T("Symmetric quadrant"),
+  _T("Custom Keyhole"),
 };
 
 static GeoPoint location(Angle::Degrees(7.7061111111111114),
@@ -114,7 +110,7 @@ public:
       break;
 
     case ObservationZone::Shape::MAT_CYLINDER:
-      oz = new MatCylinderZone(location);
+      oz = CylinderZone::CreateMatCylinderZone(location);
       break;
 
     case ObservationZone::Shape::SECTOR:
@@ -129,23 +125,28 @@ public:
       break;
 
     case ObservationZone::Shape::FAI_SECTOR:
-      oz = new FAISectorZone(location);
+      oz = SymmetricSectorZone::CreateFAISectorZone(location);
       break;
 
-    case ObservationZone::Shape::KEYHOLE:
-      oz = new KeyholeZone(location);
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
+      oz = KeyholeZone::CreateCustomKeyholeZone(location, fixed(10000),
+                                                Angle::QuarterCircle());
+      break;
+
+    case ObservationZone::Shape::DAEC_KEYHOLE:
+      oz = KeyholeZone::CreateDAeCKeyholeZone(location);
       break;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
-      oz = new BGAFixedCourseZone(location);
+      oz = KeyholeZone::CreateBGAFixedCourseZone(location);
       break;
 
     case ObservationZone::Shape::BGAENHANCEDOPTION:
-      oz = new BGAEnhancedOptionZone(location);
+      oz = KeyholeZone::CreateBGAEnhancedOptionZone(location);
       break;
 
     case ObservationZone::Shape::BGA_START:
-      oz = new BGAStartSectorZone(location);
+      oz = KeyholeZone::CreateBGAStartSectorZone(location);
       break;
 
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
@@ -277,7 +278,7 @@ Main()
   task_look->Initialise();
 
   AirspaceLook *airspace_look = new AirspaceLook();
-  airspace_look->Initialise(airspace_renderer_settings);
+  airspace_look->Initialise(airspace_renderer_settings, normal_font);
 
   TestWindow window(*task_look, *airspace_look);
   window.Create(*dialog_look, {480, 480});

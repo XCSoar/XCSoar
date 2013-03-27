@@ -36,7 +36,7 @@ namespace Profile {
     Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
     Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 
-    const TCHAR *key = Get(ProfileKeys::SkyLinesTrackingKey);
+    const char *key = Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL)
       settings.key = ParseUint64(key, NULL, 16);
   }
@@ -49,9 +49,12 @@ void
 Profile::Load(LiveTrack24Settings &settings)
 {
   Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
-  settings.server = Get(ProfileKeys::LiveTrack24Server, _T("www.livetrack24.com"));
-  settings.username = Get(ProfileKeys::LiveTrack24Username, _T(""));
-  settings.password = Get(ProfileKeys::LiveTrack24Password, _T(""));
+
+  if (!Get(ProfileKeys::LiveTrack24Server, settings.server))
+    settings.server = _T("www.livetrack24.com");
+
+  Get(ProfileKeys::LiveTrack24Username, settings.username);
+  Get(ProfileKeys::LiveTrack24Password, settings.password);
 }
 
 #endif

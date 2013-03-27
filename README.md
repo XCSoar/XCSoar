@@ -70,7 +70,7 @@ On Debian, you may install these using the following command:
 For Android, you need:
 
 - Android SDK level 16 (<http://developer.android.com/sdk/>)
-- Android NDK r8d (<http://developer.android.com/sdk/ndk/>)
+- Android NDK r8e (<http://developer.android.com/sdk/ndk/>)
 - Ogg Vorbis (<http://www.vorbis.com/>)
 - Apache Ant (<http://ant.apache.org/>)
 
@@ -115,6 +115,8 @@ Supported targets:
 - UNIX32, UNIX64: like UNIX, but explicitly choose 32 or 64 bit build
 
 - PI: cross-compiling for the Raspberry Pi
+
+- KOBO: cross-compiling for Kobo Mini and others (experimental)
 
 - ANDROID: Android with ARMv6 CPU
 

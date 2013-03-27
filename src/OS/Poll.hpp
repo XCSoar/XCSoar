@@ -50,12 +50,12 @@ public:
   /**
    * Mask bit for "file is ready for reading".
    */
-  static const unsigned READ = POLLIN;
+  static constexpr unsigned READ = POLLIN;
 
   /**
    * Mask bit for "file is ready for writing".
    */
-  static const unsigned WRITE = POLLOUT;
+  static constexpr unsigned WRITE = POLLOUT;
 
 protected:
   /**

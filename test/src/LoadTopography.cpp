@@ -29,6 +29,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
+#include "OS/Args.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
@@ -61,12 +62,9 @@ TriangulateAll(const TopographyStore &store)
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s PATH\n", argv[0]);
-    return 1;
-  }
-
-  const char *path = argv[1];
+  Args args(argc, argv, "PATH");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
   ZZIP_DIR *dir = zzip_dir_open(path, NULL);
   if (dir == NULL) {

@@ -31,10 +31,12 @@
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "Compatibility/path.h"
 #include "Operation/Operation.hpp"
+
+#include <string.h>
 
 #define NUM_SOL 15
 

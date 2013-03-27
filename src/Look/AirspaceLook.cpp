@@ -51,7 +51,8 @@ const Color AirspaceLook::preset_colors[] = {
 };
 
 void
-AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
+AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
+                         const Font &_name_font)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i) {
     const AirspaceClassRendererSettings &class_settings = settings.classes[i];
@@ -86,4 +87,6 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
   thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);
 
   intercept_icon.Load(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
+
+  name_font = &_name_font;
 }

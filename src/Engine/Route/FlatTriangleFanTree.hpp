@@ -46,7 +46,7 @@ public:
 class FlatTriangleFanTree: public FlatTriangleFan
 {
 public:
-  static const unsigned REACH_MAX_FANS = 300;
+  static constexpr unsigned REACH_MAX_FANS = 300;
 
   typedef std::list<FlatTriangleFanTree,
                     GlobalSliceAllocator<FlatTriangleFanTree, 128u> > LeafVector;

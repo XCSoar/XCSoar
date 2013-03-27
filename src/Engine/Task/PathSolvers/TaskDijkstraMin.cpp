@@ -32,7 +32,7 @@ TaskDijkstraMin::DistanceMin(const OrderedTask &task,
   dijkstra.Reserve(256);
   dijkstra.Clear();
 
-  if (active_stage > 0) {
+  if (currentLocation.IsValid()) {
     AddStartEdges(currentLocation);
   } else {
     LinkStart(ScanTaskPoint(0, 0));

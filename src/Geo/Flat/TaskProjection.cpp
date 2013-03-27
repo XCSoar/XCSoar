@@ -32,11 +32,11 @@
 
 // scaling for flat earth integer representation, gives approximately 50m resolution
 #ifdef RADIANS
-static const int fixed_scale = 57296;
+static constexpr int fixed_scale = 57296;
 #else
-static const int fixed_scale = 1000;
+static constexpr int fixed_scale = 1000;
 #endif
-static const fixed inv_scale(1.0/fixed_scale);
+static constexpr fixed inv_scale(1.0/fixed_scale);
 
 void
 TaskProjection::Reset(const GeoPoint &ref)

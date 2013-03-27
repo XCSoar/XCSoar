@@ -143,7 +143,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(FIGURES_FR)
 	rm -rf $(T)
-	mkdir -p $(T)/figures $(T)/en/figures
+	$(MKDIR) -p $(T)/figures $(T)/en/figures
 	echo $(GIT_COMMIT_ID) >$(T)/git.txt
 	cp VERSION.txt $(TEX_INCLUDES) $(T)/.
 	cp $(SVG_FIGURES) $(SVG_LOGOS) $(T)/figures/.
@@ -152,18 +152,18 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
 	cp $(FIGURES_EN) $(T)/en/figures/.
 	# Incl. the French translation
-	mkdir -p $(T)/fr/figures
+	$(MKDIR) -p $(T)/fr/figures
 	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
 	cp $(FIGURES_FR) $(T)/fr/figures/.
 	# Incl. both German translation
-	mkdir -p $(T)/de/figures $(T)/de/Blitz/Bilder
+	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/Bilder
 	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
 	cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
 	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/Bilder/.
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
-	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\nmkdir -p output" > $(T)/generate_manuals.sh
+	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\$(MKDIR) -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
 	chmod +x $(T)/generate_manuals.sh
 	# Copy an example bat file to generate the manuals with MikTex on Windows

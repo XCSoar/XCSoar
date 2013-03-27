@@ -202,33 +202,33 @@ WaypointCommandsWidget::OnAction(int id)
 {
   switch (id) {
   case REPLACE_IN_TASK:
-    if (ReplaceInTask(*task_manager, waypoint) && form != NULL)
+    if (ReplaceInTask(*task_manager, waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case INSERT_IN_TASK:
-    if (InsertInTask(*task_manager, waypoint) && form != NULL)
+    if (InsertInTask(*task_manager, waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case APPEND_TO_TASK:
-    if (AppendToTask(*task_manager, waypoint) && form != NULL)
+    if (AppendToTask(*task_manager, waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case REMOVE_FROM_TASK:
-    if (RemoveFromTask(*task_manager, waypoint) && form != NULL)
+    if (RemoveFromTask(*task_manager, waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case SET_HOME:
     SetHome(waypoint);
-    if (form != NULL)
+    if (form != nullptr)
       form->SetModalResult(mrOK);
     break;
 
   case PAN:
-    if (ActivatePan(waypoint) && form != NULL)
+    if (ActivatePan(waypoint) && form != nullptr)
       form->SetModalResult(mrOK);
     break;
   }
@@ -239,7 +239,7 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  if (task_manager != NULL) {
+  if (task_manager != nullptr) {
     AddButton(_("Replace In Task"), *this, REPLACE_IN_TASK);
     AddButton(_("Insert In Task"), *this, INSERT_IN_TASK);
     AddButton(_("Append To Task"), *this, APPEND_TO_TASK);

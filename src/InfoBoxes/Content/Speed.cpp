@@ -74,9 +74,6 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkRight:
     device_blackboard->SetTrack(CommonInterface::Basic().track + a5);
     return true;
-
-  case ibkEnter:
-    break;
   }
 
   return false;

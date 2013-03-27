@@ -59,7 +59,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/Weather.hpp"
+#include "Dialogs/Weather/WeatherDialogs.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
@@ -270,10 +270,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = ShowWaypointListDialog(*CommonInterface::main_window, basic.location);
+    wp = ShowWaypointListDialog(basic.location);
   }
   if (wp)
-    dlgWaypointDetailsShowModal(*CommonInterface::main_window, *wp);
+    dlgWaypointDetailsShowModal(*wp);
 }
 
 // StatusMessage

@@ -439,10 +439,10 @@ private:
   gcc_pure
   unsigned CalcAverageDeltaTime(const unsigned no_thin) const;
 
-  static const unsigned null_delta = 0 - 1;
+  static constexpr unsigned null_delta = 0 - 1;
 
 public:
-  static const unsigned null_time = 0 - 1;
+  static constexpr unsigned null_time = 0 - 1;
 
   unsigned GetAverageDeltaDistance() const {
     return average_delta_distance;

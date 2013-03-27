@@ -26,11 +26,10 @@ Copyright_License {
 
 #include <windef.h>
 #include <wingdi.h>
-#include <tchar.h>
 
 namespace Profile {
-  bool GetFont(const TCHAR *key, LOGFONT* lplf);
-  void SetFont(const TCHAR *key, LOGFONT &logfont);
+  bool GetFont(const char *key, LOGFONT* lplf);
+  void SetFont(const char *key, LOGFONT &logfont);
 };
 
 #endif

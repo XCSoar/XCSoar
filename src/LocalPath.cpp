@@ -150,7 +150,7 @@ NormalizeBackslashes(TCHAR *p)
 #endif
 }
 
-static const TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
+static constexpr TCHAR local_path_code[] = _T("%LOCAL_PATH%\\");
 
 void
 ExpandLocalPath(TCHAR *dest, const TCHAR *src)

@@ -23,24 +23,23 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Geo/GeoPoint.hpp"
-
-#include <stdlib.h>
+#include "Util/NumberParser.hpp"
 
 bool
-Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
+Profile::GetGeoPoint(const char *key, GeoPoint &value)
 {
-  const TCHAR *p = Get(key);
-  if (p == NULL)
+  const char *p = Get(key);
+  if (p == nullptr)
     return false;
 
-  TCHAR *endptr;
-  double longitude = _tcstod(p, &endptr);
+  char *endptr;
+  double longitude = ParseDouble(p, &endptr);
   if (endptr == p || *endptr != _T(' ') ||
       longitude < -180.0 || longitude > 180.0)
     return false;
 
   p = endptr + 1;
-  double latitude = _tcstod(p, &endptr);
+  double latitude = ParseDouble(p, &endptr);
   if (endptr == p || *endptr != _T('\0') ||
       longitude < -90.0 || longitude > 90.0)
     return false;
@@ -51,11 +50,11 @@ Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
 }
 
 void
-Profile::SetGeoPoint(const TCHAR *key, const GeoPoint &value)
+Profile::SetGeoPoint(const char *key, const GeoPoint &value)
 {
-  StaticString<128> buffer;
-  buffer.Format(_T("%f %f"),
-                (double)value.longitude.Degrees(),
-                (double)value.latitude.Degrees());
+  NarrowString<128> buffer;
+  buffer.UnsafeFormat("%f %f",
+                      (double)value.longitude.Degrees(),
+                      (double)value.latitude.Degrees());
   Set(key, buffer);
 }

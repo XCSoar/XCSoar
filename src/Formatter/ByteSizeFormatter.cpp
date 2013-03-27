@@ -34,8 +34,8 @@ FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
   assert(buffer != NULL);
   assert(size >= 8);
 
-  static const TCHAR *units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
-  static const TCHAR *simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
+  static const TCHAR *const units[] = { _T("B"), _T("KB"), _T("MB"), _T("GB") };
+  static const TCHAR *const simple_units[] = { _T("B"), _T("K"), _T("M"), _T("G") };
 
   fixed value = fixed(bytes);
 

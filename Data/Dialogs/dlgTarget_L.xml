@@ -3,10 +3,8 @@
 <Form Caption="Target">
   <Custom Name="map" Width="-120" Border="1" OnCreate="OnCreateMap"/>
 
-  <Edit Name="prpTaskPoint" X="-120" Y="0" Height="27"
-    Help="This sets the task point for review.">
-    <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
-  </Edit>
+  <Button Name="Name" Caption="" X="-120" Y="0" Height="27" OnClick="OnNameClicked"/>
+
   <SymbolButton Name="btnPrev" Caption="&lt;" X="-120" Y="27" Width="-60" Height="27" OnClick="OnPrevClicked" />
   <SymbolButton Name="btnNext" Caption="&gt;" X="-60" Y="27" Height="27" OnClick="OnNextClicked" />
 

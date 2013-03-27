@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "IO/TextWriter.hpp"
+#include "OS/Args.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -29,12 +30,10 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s FILE\n", argv[0]);
-    return 1;
-  }
+  Args args(argc, argv, "FILE");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
-  const char *path = argv[1];
   TextWriter writer(path);
   if (!writer.IsOpen()) {
     fprintf(stderr, "Failed to open %s\n", path);

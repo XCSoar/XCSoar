@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Weather.hpp"
+#include "WeatherDialogs.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Language/Language.hpp"
@@ -223,8 +223,7 @@ void
 NOAAListWidget::OpenDetails(unsigned index)
 {
   assert(index < stations.size());
-  dlgNOAADetailsShowModal(UIGlobals::GetMainWindow(),
-                          stations[index].iterator);
+  dlgNOAADetailsShowModal(stations[index].iterator);
   UpdateList();
 }
 

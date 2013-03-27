@@ -152,6 +152,8 @@ static constexpr StaticEnumChoice infobox_border_list[] = {
     N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
   { unsigned(InfoBoxSettings::BorderStyle::SHADED),
     N_("Shaded"), nullptr /* TODO: help text */ },
+  { unsigned(InfoBoxSettings::BorderStyle::GLASS),
+    N_("Glass"), nullptr /* TODO: help text */ },
   { 0 }
 };
 
@@ -248,9 +250,8 @@ LayoutConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(DialogStyle, ProfileKeys::AppDialogStyle,
                            ui_settings.dialog.dialog_style);
 
-  if (SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
-                    ui_settings.info_boxes.border_style))
-    require_restart = changed = true;
+  changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
+                           ui_settings.info_boxes.border_style);
 
   if (SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox,
                 ui_settings.info_boxes.inverse))

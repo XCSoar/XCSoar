@@ -26,6 +26,7 @@ Copyright_License {
 #include "Input/InputLookup.hpp"
 #include "Menu/MenuData.hpp"
 #include "IO/FileLineReader.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -63,12 +64,11 @@ Dump(InputConfig::Event &event, unsigned id)
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s PATH\n", argv[0]);
-    return 1;
-  }
+  Args args(argc, argv, "PATH");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
-  FileLineReader reader(argv[1]);
+  FileLineReader reader(path);
   if (reader.error()) {
     fprintf(stderr, "Failed to open input file\n");
     return 1;

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Util/StaticString.hpp"
 #include "Units/Units.hpp"
+#include "Units/Descriptor.hpp"
 
 void
 AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
@@ -63,6 +64,15 @@ AirspaceFormatter::FormatAltitude(TCHAR *buffer,
                                   const AirspaceAltitude &altitude)
 {
   FormatAltitudeShort(buffer, altitude);
+
+  if ((altitude.reference == AltitudeReference::MSL ||
+       altitude.reference == AltitudeReference::AGL) &&
+      Units::GetUserAltitudeUnit() == Unit::METER)
+    /* additionally show airspace altitude in feet, because aviation
+       charts usually print altitudes in feet */
+    _stprintf(buffer + _tcslen(buffer), _T(" (%d %s)"),
+              iround(Units::ToUserUnit(altitude.altitude, Unit::FEET)),
+              Units::GetUnitName(Unit::FEET));
 
   if (altitude.reference != AltitudeReference::MSL &&
       positive(altitude.altitude))

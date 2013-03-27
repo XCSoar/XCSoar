@@ -26,7 +26,8 @@
 static const char *
 byte_bas64(const uint8_t *b)
 {
- const char *base64tab = "0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ`abcdefghijklmnopqrstuvwxyz";
+ static constexpr char base64tab[] =
+   "0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZ`abcdefghijklmnopqrstuvwxyz";
  static char bas64ar[5];
   bas64ar[0] = base64tab[   b[0] >> 2                           ];
   bas64ar[1] = base64tab[ ((b[0] & 0x03) << 4) | (b[1] >> 4)    ];

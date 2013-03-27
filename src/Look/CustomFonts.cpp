@@ -29,7 +29,7 @@ Copyright_License {
 #include <string.h>
 
 static void
-LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
+LoadCustomFont(Font *theFont, const char FontRegKey[])
 {
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));

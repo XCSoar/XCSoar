@@ -24,7 +24,7 @@ Copyright_License {
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
 #include "Net/Init.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 
 #include <iostream>
 #include <stdio.h>

@@ -209,6 +209,11 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 9, N_("SeeYou"), },
     { 7, N_("Grey"), },
     { 8, N_("White"), },
+    {10, N_("Sandstone"), },
+    {11, N_("Pastel"), },
+    {12, N_("Italian Avioportolano VFR Chart"), },
+    {13, N_("German DFS VFR Chart"), },
+    {14, N_("French SIA VFR Chart"), },
     { 0 }
   };
 

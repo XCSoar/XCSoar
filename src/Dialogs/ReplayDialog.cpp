@@ -89,7 +89,7 @@ ReplayControlWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Rate"),
            _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
-           _("%.0f x"), _T("%.0f"),
+           _T("%.0f x"), _T("%.0f"),
            fixed(0), fixed(10), fixed(1), false,
            replay->GetTimeScale(),
            this);

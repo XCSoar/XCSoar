@@ -40,10 +40,12 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 
 #ifdef HAVE_NOAA
-#include "Dialogs/Weather.hpp"
+#include "Dialogs/Weather/WeatherDialogs.hpp"
 #endif
 
 static bool
@@ -78,6 +80,7 @@ class MapItemListWidget final
   enum Buttons {
     SETTINGS,
     GOTO,
+    ACK,
   };
 
   const MapItemList &list;
@@ -89,6 +92,7 @@ class MapItemListWidget final
   const MapSettings &settings;
 
   WndButton *settings_button, *details_button, *cancel_button, *goto_button;
+  WndButton *ack_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -113,7 +117,11 @@ protected:
     const unsigned current = GetCursorIndex();
     details_button->SetEnabled(HasDetails(*list[current]));
     goto_button->SetEnabled(CanGotoItem(current));
+    ack_button->SetEnabled(CanAckItem(current));
   }
+
+  void OnGotoClicked();
+  void OnAckClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -143,6 +151,18 @@ public:
       item.type == MapItem::WAYPOINT;
   }
 
+  bool CanAckItem(unsigned index) const {
+    return CanAckItem(*list[index]);
+  }
+
+  static bool CanAckItem(const MapItem &item) {
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+
+    return item.type == MapItem::AIRSPACE &&
+      GetAirspaceWarnings() != nullptr &&
+      !GetAirspaceWarnings()->get_ack_day(*as_item.airspace);
+  }
+
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
@@ -154,6 +174,7 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 {
   settings_button = dialog.AddButton(_("Settings"), *this, SETTINGS);
   goto_button = dialog.AddButton(_("Goto"), *this, GOTO);
+  ack_button = dialog.AddButton(_("Ack Day"), *this, ACK);
   details_button = dialog.AddButton(_("Details"), mrOK);
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
@@ -204,6 +225,31 @@ MapItemListWidget::OnActivateItem(unsigned index)
   details_button->OnClicked();
 }
 
+inline void
+MapItemListWidget::OnGotoClicked()
+{
+  if (protected_task_manager == NULL)
+    return;
+
+  unsigned index = GetCursorIndex();
+  auto const &item = *list[index];
+
+  assert(item.type == MapItem::WAYPOINT);
+
+  auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
+  protected_task_manager->DoGoto(waypoint);
+  cancel_button->OnClicked();
+}
+
+inline void
+MapItemListWidget::OnAckClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  GetAirspaceWarnings()->acknowledge_day(*as_item.airspace);
+  UpdateButtons();
+}
+
 void
 MapItemListWidget::OnAction(int id)
 {
@@ -212,25 +258,17 @@ MapItemListWidget::OnAction(int id)
     ShowMapItemListSettingsDialog();
     break;
   case GOTO:
-    if (protected_task_manager == NULL)
-      break;
+    OnGotoClicked();
+    break;
 
-    unsigned index = GetCursorIndex();
-    auto const &item = *list[index];
-
-    assert(item.type == MapItem::WAYPOINT);
-
-    auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
-    protected_task_manager->DoGoto(waypoint);
-    cancel_button->OnClicked();
-
+  case ACK:
+    OnAckClicked();
     break;
   }
 }
 
 static int
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &list,
+ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look, const MapLook &look,
                       const TrafficLook &traffic_look,
                       const FinalGlideBarLook &final_glide_look,
@@ -240,7 +278,8 @@ ShowMapItemListDialog(SingleWindow &parent,
                            traffic_look, final_glide_look,
                            settings);
   WidgetDialog dialog(dialog_look);
-  dialog.CreateFull(parent, _("Map elements at this location"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(),
+                    _("Map elements at this location"), &widget);
   widget.CreateButtons(dialog);
 
   int result = dialog.ShowModal() == mrOK
@@ -252,7 +291,7 @@ ShowMapItemListDialog(SingleWindow &parent,
 }
 
 static void
-ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
+ShowMapItemDialog(const MapItem &item,
                   ProtectedAirspaceWarningManager *airspace_warnings)
 {
   switch (item.type) {
@@ -271,8 +310,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
                        airspace_warnings);
     break;
   case MapItem::WAYPOINT:
-    dlgWaypointDetailsShowModal(parent,
-                                ((const WaypointMapItem &)item).waypoint);
+    dlgWaypointDetailsShowModal(((const WaypointMapItem &)item).waypoint);
     break;
   case MapItem::TASK_OZ:
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
@@ -283,16 +321,14 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
 
 #ifdef HAVE_NOAA
   case MapItem::WEATHER:
-    dlgNOAADetailsShowModal(parent,
-                            ((const WeatherStationMapItem &)item).station);
+    dlgNOAADetailsShowModal(((const WeatherStationMapItem &)item).station);
     break;
 #endif
   }
 }
 
 void
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &list,
+ShowMapItemListDialog(const MapItemList &list,
                       const DialogLook &dialog_look,
                       const MapLook &look,
                       const TrafficLook &traffic_look,
@@ -307,16 +343,16 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   case 1:
     /* only one map item, show it */
-    ShowMapItemDialog(*list[0], parent, airspace_warnings);
+    ShowMapItemDialog(*list[0], airspace_warnings);
     break;
 
   default:
     /* more than one map item: show a list */
 
-    int i = ShowMapItemListDialog(parent, list, dialog_look, look,
+    int i = ShowMapItemListDialog(list, dialog_look, look,
                                   traffic_look, final_glide_look, settings);
     assert(i >= -1 && i < (int)list.size());
     if (i >= 0)
-      ShowMapItemDialog(*list[i], parent, airspace_warnings);
+      ShowMapItemDialog(*list[i], airspace_warnings);
   }
 }

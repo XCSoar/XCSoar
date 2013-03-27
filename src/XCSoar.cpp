@@ -59,7 +59,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static const char *Usage = "\n"
+static const char *const Usage = "\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"

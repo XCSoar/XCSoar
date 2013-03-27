@@ -1,6 +1,7 @@
 # Make library that auto-detects the build environment.
 
 UNAME_S := $(shell uname -s)
+UNAME_M := $(shell uname -m)
 
 HOST_IS_LINUX := $(call string_equals,$(UNAME_S),Linux)
 HOST_IS_DARWIN := $(call string_equals,$(UNAME_S),Darwin)

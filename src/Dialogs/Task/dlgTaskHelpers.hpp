@@ -46,13 +46,9 @@ OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
                       unsigned index, TCHAR *buffer);
 
 void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
-bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 
-const TCHAR *
-getTaskValidationErrors(const TaskValidationErrorSet v);
-
-const TCHAR *
-TaskValidationError(TaskValidationErrorType type);
+bool
+OrderedTaskSave(const OrderedTask &task);
 
 #endif
 

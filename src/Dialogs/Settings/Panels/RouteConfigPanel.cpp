@@ -38,8 +38,8 @@ enum ControlIndex {
   RoutePlannerUseCeiling,
   empty_spacer,
   TurningReach,
+  ReachPolarMode,
   FinalGlideTerrain,
-  ReachPolarMode
 };
 
 class RouteConfigPanel final
@@ -144,19 +144,6 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           turning_reach_list, (unsigned)route_planner.reach_calc_mode,
           this);
 
-  static constexpr StaticEnumChoice final_glide_terrain_list[] = {
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
-      N_("Disables the reach display.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::LINE, N_("Line"),
-      N_("Draws a dashed line at the glide reach.") },
-    { (unsigned)FeaturesSettings::FinalGlideTerrain::SHADE, N_("Shade"),
-      N_("Shades terrain outside glide reach.") },
-    { 0 }
-  };
-
-  AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
-          (unsigned)settings_computer.features.final_glide_terrain);
-
   static constexpr StaticEnumChoice reach_polar_list[] = {
     { (unsigned)RoutePlannerConfig::Polar::TASK, N_("Task"),
       N_("Uses task glide polar.") },
@@ -169,6 +156,19 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("This determines the glide performance used in reach, landable arrival, abort and alternate calculations."),
           reach_polar_list, (unsigned)route_planner.reach_polar_mode);
   SetExpertRow(ReachPolarMode);
+
+  static constexpr StaticEnumChoice final_glide_terrain_list[] = {
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
+      N_("Disables the reach display.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::LINE, N_("Line"),
+      N_("Draws a dashed line at the glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::SHADE, N_("Shade"),
+      N_("Shades terrain outside glide reach.") },
+    { 0 }
+  };
+
+  AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
+          (unsigned)settings_computer.features.final_glide_terrain);
 
   ShowRouteControls(route_planner.mode != RoutePlannerConfig::Mode::NONE);
   ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::ReachMode::OFF);

@@ -88,6 +88,17 @@ NMEAInfo::ProvideTime(fixed _time)
 }
 
 void
+NMEAInfo::ProvideDate(const BrokenDate &date)
+{
+  assert(date.Plausible());
+
+  date_time_utc.year = date.year;
+  date_time_utc.month = date.month;
+  date_time_utc.day = date.day;
+  date_available = true;
+}
+
+void
 NMEAInfo::ProvideTrueAirspeedWithAltitude(fixed tas, fixed altitude)
 {
   true_airspeed = tas;

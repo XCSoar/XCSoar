@@ -33,7 +33,7 @@ Copyright_License {
 class OperationEnvironment;
 
 namespace LX {
-  static const unsigned int NUMTPS = 12;
+  static constexpr unsigned NUMTPS = 12;
 
   enum Command {
     PREFIX = 0x02,
@@ -128,7 +128,7 @@ namespace LX {
   } gcc_packed;
 
   struct MemorySection {
-    static const unsigned N = 0x10;
+    static constexpr unsigned N = 0x10;
 
     uint16_t lengths[N];
   } gcc_packed;

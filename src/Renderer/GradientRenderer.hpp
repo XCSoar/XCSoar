@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2012 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,21 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_WEATHER_HPP
-#define XCSOAR_DIALOGS_WEATHER_HPP
+#ifndef XCSOAR_GRADIENT_RENDERER_HPP
+#define XCSOAR_GRADIENT_RENDERER_HPP
 
-#include "Weather/NOAAStore.hpp"
+class Canvas;
+struct PixelRect;
+struct Color;
 
-class SingleWindow;
-
-void
-dlgWeatherShowModal();
-
-void
-dlgNOAAListShowModal();
-
-void
-dlgNOAADetailsShowModal(SingleWindow &parent,
-                        NOAAStore::iterator iterator);
+/**
+ * Fill the specified rectangle with a color gradient.
+ *
+ * If  gradient drawing is not supported by the platform or the compile-
+ * time option "EYE_CANDY" is disabled the solid fallback color is used.
+ */
+void DrawVerticalGradient(Canvas &canvas, const PixelRect &rc,
+                          Color top_color, Color bottom_color,
+                          Color fallback_color);
 
 #endif

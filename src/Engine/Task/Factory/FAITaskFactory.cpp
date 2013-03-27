@@ -103,6 +103,7 @@ FAITaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     newtype = TaskPointFactoryType::START_SECTOR;
     break;
 
+  case TaskPointFactoryType::AAT_KEYHOLE:
   case TaskPointFactoryType::KEYHOLE_SECTOR:
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:

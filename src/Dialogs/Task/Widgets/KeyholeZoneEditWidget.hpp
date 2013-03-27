@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -20,17 +21,30 @@
 }
 */
 
-#include "Profile/Profile.hpp"
-#include "OS/Args.hpp"
+#ifndef XCSOAR_KEYHOLE_ZONE_EDIT_WIDGET_HPP
+#define XCSOAR_KEYHOLE_ZONE_EDIT_WIDGET_HPP
 
-#include <stdio.h>
+#include "ObservationZoneEditWidget.hpp"
+#include "Engine/Task/ObservationZones/KeyholeZone.hpp"
 
-int main(int argc, char **argv) {
-  Args args(argc, argv, "NAME VALUE");
-  tstring name = args.ExpectNextT();
-  tstring value = args.ExpectNextT();
-  args.ExpectEnd();
+class KeyholeZoneEditWidget : public ObservationZoneEditWidget {
+public:
+  KeyholeZoneEditWidget(KeyholeZone &_oz);
 
-  Profile::Set(name.c_str(), value.c_str());
-  return 0;
-}
+protected:
+  const KeyholeZone &GetObject() const {
+    return (const KeyholeZone &)ObservationZoneEditWidget::GetObject();
+  }
+
+  KeyholeZone &GetObject() {
+    return (KeyholeZone &)ObservationZoneEditWidget::GetObject();
+  }
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+};
+
+#endif

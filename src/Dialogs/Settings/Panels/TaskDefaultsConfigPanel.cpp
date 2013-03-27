@@ -76,8 +76,8 @@ TaskDefaultsConfigPanel::OnModified(DataField &df)
     SetFinishLabel();
 }
 
-static const TCHAR *Caption_GateWidth = N_("Gate width");
-static const TCHAR *Caption_Radius = N_("Radius");
+static const TCHAR *const Caption_GateWidth = N_("Gate width");
+static const TCHAR *const Caption_Radius = N_("Radius");
 
 void
 TaskDefaultsConfigPanel::SetStartLabel()

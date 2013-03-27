@@ -465,8 +465,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
-      ShowWaypointListDialog(dialog.GetMainWindow(),
-                             ordered_task->TaskSize() > 0
+      ShowWaypointListDialog(ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
                              : CommonInterface::Basic().location,
                         ordered_task, ItemIndex);

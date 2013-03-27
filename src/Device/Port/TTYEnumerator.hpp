@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -21,39 +21,43 @@
 }
 */
 
-#ifndef BGAFIXEDCOURSEZONE_HPP
-#define BGAFIXEDCOURSEZONE_HPP
+#ifndef XCSOAR_DEVICE_ENUMERATOR_HPP
+#define XCSOAR_DEVICE_ENUMERATOR_HPP
 
-#include "KeyholeZone.hpp"
+#include <dirent.h>
 
 /**
- *  A 90 degree 20km sector centered at the bisector of incoming/outgoing legs,
- *  with 500m cylinder
+ * A class that can enumerate TTY devices on Linux and other POSIX
+ * systems, by reading directory entries in /dev/.
  */
-class BGAFixedCourseZone: public KeyholeZone
-{
-  BGAFixedCourseZone(const BGAFixedCourseZone &other, const GeoPoint &reference)
-    :KeyholeZone((const KeyholeZone &)other, reference) {}
+class TTYEnumerator {
+  DIR *dir;
+  char path[64];
 
-public:  
-  /** 
-   * Constructor
-   * 
-   * @param loc Tip point of sector
-   * 
-   * @return Initialised object
+public:
+  TTYEnumerator()
+    :dir(opendir("/dev")) {}
+
+  ~TTYEnumerator() {
+    if (dir != nullptr)
+      closedir(dir);
+  }
+
+  /**
+   * Has the constructor failed?
    */
-  BGAFixedCourseZone(const GeoPoint loc)
-    :KeyholeZone(Shape::BGAFIXEDCOURSE,
-                 loc, fixed(20000))
-  {
-    UpdateSector();
+  bool HasFailed() const {
+    return dir == nullptr;
   }
 
-  /* virtual methods from class ObservationZonePoint */
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const override {
-    return new BGAFixedCourseZone(*this, _reference);
-  }
+  /**
+   * Find the next device (or the first one, if this method hasn't
+   * been called so far).
+   *
+   * @return the absolute path of the device, or nullptr if there are
+   * no more devices
+   */
+  const char *Next();
 };
 
 #endif

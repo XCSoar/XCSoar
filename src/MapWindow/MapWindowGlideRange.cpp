@@ -356,7 +356,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
     visitor.fans.Prepare();
-    look.reach_pen.Set();
+    look.reach_pen.Bind();
 #else
     // Select the TerrainLine pen
     canvas.SelectHollowBrush();
@@ -370,6 +370,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     // Draw the TerrainLine polygon
 
     visitor.fans.DrawOutline(canvas);
+
+#ifdef ENABLE_OPENGL
+    look.reach_pen.Unbind();
+#endif
   } else {
     /* more than one fan (turning reach enabled): we have to use a
        stencil to draw the outline, because the fans may overlap */
@@ -392,8 +396,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  look.reach_pen_thick.Set();
+  look.reach_pen_thick.Bind();
   visitor.fans.DrawOutline(canvas);
+  look.reach_pen_thick.Unbind();
 
   glDisable(GL_STENCIL_TEST);
 

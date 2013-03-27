@@ -24,96 +24,9 @@ Copyright_License {
 #ifndef OS_PATH_HPP
 #define OS_PATH_HPP
 
-#include "Util/Macros.hpp"
-#include "Util/ConvertString.hpp"
 #include "Compiler.h"
 
-#ifdef _UNICODE
-#include "Util/ConvertString.hpp"
-#endif
-
 #include <tchar.h>
-
-/**
- * Representation of a file name.  It is automatically converted to
- * the file system character set.  If no conversion is needed, then
- * this object will hold a pointer to the original input string; it
- * must not be Invalidated.
- */
-class PathName {
-#ifdef _UNICODE
-  TCHAR *allocated;
-#endif
-  const TCHAR *value;
-
-public:
-#ifdef _UNICODE
-  explicit PathName(const TCHAR *_value)
-    :allocated(NULL), value(_value) {}
-
-  explicit PathName(const char *_value)
-    :allocated(ConvertACPToWide(_value)), value(allocated) {}
-
-  ~PathName() {
-    delete[] allocated;
-  }
-#else /* !_UNICODE */
-  explicit PathName(const TCHAR *_value):value(_value) {}
-#endif /* !_UNICODE */
-
-public:
-  bool IsDefined() const {
-#ifdef _UNICODE
-    return value != NULL;
-#else
-    return true;
-#endif
-  }
-
-  operator const TCHAR *() const {
-    return value;
-  }
-};
-
-/**
- * Representation of a file name in narrow characters.  If no
- * conversion is needed, then this object will hold a pointer to the
- * original input string; it must not be Invalidated.
- */
-class NarrowPathName {
-#ifdef _UNICODE
-  char *allocated;
-#endif
-  const char *value;
-
-public:
-#ifdef _UNICODE
-  explicit NarrowPathName(const char *_value)
-    :allocated(NULL), value(_value) {}
-
-  explicit NarrowPathName(const TCHAR *_value)
-    :allocated(ConvertWideToACP(_value)), value(allocated) {}
-
-  ~NarrowPathName() {
-    delete[] allocated;
-  }
-#else /* !_UNICODE */
-  explicit NarrowPathName(const char *_value):value(_value) {}
-#endif /* !_UNICODE */
-
-public:
-  bool IsDefined() const {
-#ifdef _UNICODE
-    return value != NULL;
-#else
-    return true;
-#endif
-  }
-
-  operator const char *() const {
-    return value;
-  }
-};
 
 /**
  * Is this path a "base name", i.e. is there no path separate?

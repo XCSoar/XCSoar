@@ -64,7 +64,6 @@ EventQueue::Generate(Event &event, uint64_t now_us)
   return false;
 }
 
-#include "LogFile.hpp"
 bool
 EventQueue::Wait(Event &event)
 {
@@ -78,10 +77,6 @@ EventQueue::Wait(Event &event)
       return true;
 
     const int64_t timeout_us = timers.GetTimeoutUS(now_us);
-    if (timeout_us < 0)
-      LogFormat("timeout?=%lld", (long long)timeout_us);
-    else
-      LogFormat("timeout_ms=%lld", (long long)((timeout_us + 999) / 1000));
     if (timeout_us < 0)
       cond.Wait(mutex);
     else

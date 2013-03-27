@@ -28,13 +28,8 @@
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 
 #include <algorithm>
@@ -51,10 +46,8 @@ GetOZSize(const ObservationZonePoint &oz)
     return ((const LineSectorZone &)oz).GetLength();
 
   case ObservationZone::Shape::CYLINDER:
-    return ((const CylinderZone &)oz).GetRadius();
-
   case ObservationZone::Shape::MAT_CYLINDER:
-    return ((const MatCylinderZone &)oz).GetRadius();
+    return ((const CylinderZone &)oz).GetRadius();
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
     return ((const AnnularSectorZone &)oz).GetRadius();
@@ -173,7 +166,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::CYLINDER:
     case ObservationZone::Shape::MAT_CYLINDER:
     case ObservationZone::Shape::SECTOR:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -189,7 +183,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::SECTOR:
     case ObservationZone::Shape::FAI_SECTOR:
     case ObservationZone::Shape::SYMMETRIC_QUADRANT:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::BGA_START:
@@ -199,6 +193,9 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
       return TaskPointFactoryType::AAT_ANNULAR_SECTOR;
     case ObservationZone::Shape::CYLINDER:
       return TaskPointFactoryType::AAT_CYLINDER;
+
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
+      return TaskPointFactoryType::AAT_KEYHOLE;
 
     case ObservationZone::Shape::MAT_CYLINDER:
       return TaskPointFactoryType::MAT_CYLINDER;
@@ -210,7 +207,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
       return TaskPointFactoryType::KEYHOLE_SECTOR;
 
     case ObservationZone::Shape::BGAFIXEDCOURSE:
@@ -245,7 +243,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZone::Shape::CYLINDER:
     case ObservationZone::Shape::MAT_CYLINDER:
     case ObservationZone::Shape::SECTOR:
-    case ObservationZone::Shape::KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
     case ObservationZone::Shape::BGAENHANCEDOPTION:
     case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -300,36 +299,48 @@ AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
 
   switch (type) {
   case TaskPointFactoryType::START_SECTOR:
-    return CreateStart(new FAISectorZone(wp.location, false), wp);
+    return CreateStart(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                false),
+                       wp);
   case TaskPointFactoryType::START_LINE:
     return CreateStart(new LineSectorZone(wp.location, start_radius), wp);
   case TaskPointFactoryType::START_CYLINDER:
     return CreateStart(new CylinderZone(wp.location, start_radius), wp);
   case TaskPointFactoryType::START_BGA:
-    return CreateStart(new BGAStartSectorZone(wp.location), wp);
+    return CreateStart(KeyholeZone::CreateBGAStartSectorZone(wp.location), wp);
   case TaskPointFactoryType::FAI_SECTOR:
-    return CreateASTPoint(new FAISectorZone(wp.location, true), wp);
+    return CreateASTPoint(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                   true),
+                          wp);
   case TaskPointFactoryType::SYMMETRIC_QUADRANT:
     return CreateASTPoint(new SymmetricSectorZone(wp.location,
                                                   turnpoint_radius), wp);
   case TaskPointFactoryType::KEYHOLE_SECTOR:
-    return CreateASTPoint(new KeyholeZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateDAeCKeyholeZone(wp.location), wp);
   case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
-    return CreateASTPoint(new BGAFixedCourseZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateBGAFixedCourseZone(wp.location), wp);
   case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
-    return CreateASTPoint(new BGAEnhancedOptionZone(wp.location), wp);
+    return CreateASTPoint(KeyholeZone::CreateBGAEnhancedOptionZone(wp.location), wp);
   case TaskPointFactoryType::AST_CYLINDER:
     return CreateASTPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::MAT_CYLINDER:
-    return CreateAATPoint(new MatCylinderZone(wp.location), wp);
+    return CreateAATPoint(CylinderZone::CreateMatCylinderZone(wp.location),
+                          wp);
   case TaskPointFactoryType::AAT_CYLINDER:
     return CreateAATPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::AAT_SEGMENT:
     return CreateAATPoint(new SectorZone(wp.location, turnpoint_radius), wp);
   case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     return CreateAATPoint(new AnnularSectorZone(wp.location, turnpoint_radius), wp);
+  case TaskPointFactoryType::AAT_KEYHOLE:
+    return CreateAATPoint(KeyholeZone::CreateCustomKeyholeZone(wp.location,
+                                                               turnpoint_radius,
+                                                               Angle::QuarterCircle()),
+                          wp);
   case TaskPointFactoryType::FINISH_SECTOR:
-    return CreateFinish(new FAISectorZone(wp.location, false), wp);
+    return CreateFinish(SymmetricSectorZone::CreateFAISectorZone(wp.location,
+                                                                 false),
+                        wp);
   case TaskPointFactoryType::FINISH_LINE:
     return CreateFinish(new LineSectorZone(wp.location, finish_radius), wp);
   case TaskPointFactoryType::FINISH_CYLINDER:
@@ -769,6 +780,7 @@ AbstractTaskFactory::ValidateFAIOZs()
     case TaskPointFactoryType::AAT_CYLINDER:
     case TaskPointFactoryType::AAT_SEGMENT:
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
+    case TaskPointFactoryType::AAT_KEYHOLE:
     case TaskPointFactoryType::SYMMETRIC_QUADRANT:
       valid = false;
       break;
@@ -826,6 +838,7 @@ AbstractTaskFactory::ValidateMATOZs()
     case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     case TaskPointFactoryType::AAT_SEGMENT:
     case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
+    case TaskPointFactoryType::AAT_KEYHOLE:
     case TaskPointFactoryType::FINISH_SECTOR:
     case TaskPointFactoryType::SYMMETRIC_QUADRANT:
       valid = false;

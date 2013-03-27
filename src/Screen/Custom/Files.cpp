@@ -35,6 +35,8 @@ static const char *const all_font_paths[] = {
 #elif defined(WIN32) && !defined(HAVE_POSIX)
   /* just for the experimental WINSDL target */
   "c:\\windows\\fonts\\arial.ttf",
+#elif defined(KOBO)
+  "/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/KoboNickel.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed.ttf",
@@ -60,6 +62,8 @@ static const char *const all_bold_font_paths[] = {
   "/Library/Fonts/Georgia Bold.ttf",
   "/Library/Fonts/Arial Narrow Bold.ttf",
   "/Library/Fonts/Microsoft/Arial Bold.ttf",
+#elif defined(KOBO)
+  "/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/KoboNickel-Bold.ttf",
 #elif defined(HAVE_POSIX)
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed-Bold.ttf",
@@ -79,6 +83,9 @@ static const char *const all_bold_font_paths[] = {
 static const char *const all_monospace_font_paths[] = {
 #ifdef __APPLE__
   "/Library/Fonts/Courier New.ttf",
+#elif defined(KOBO)
+  // TODO: not a monospace font
+  "/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/KoboNickel.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/DejaVuSansMono.ttf",

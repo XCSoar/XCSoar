@@ -76,8 +76,7 @@ OnWaypointEditClicked()
   }
 
   const Waypoint *way_point =
-    ShowWaypointListDialog(UIGlobals::GetMainWindow(),
-                           CommonInterface::Basic().location);
+    ShowWaypointListDialog(CommonInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
     if (dlgWaypointEditShowModal(wp_copy)) {
@@ -137,7 +136,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),
   DeclareCallBackEntry(OnWaypointSaveClicked),
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 void
@@ -147,7 +146,7 @@ dlgConfigWaypointsShowModal()
                            Layout::landscape
                            ? _T("IDR_XML_CONFIG_WAYPOINTS_L")
                            : _T("IDR_XML_CONFIG_WAYPOINTS"));
-  assert(wf != NULL);
+  assert(wf != nullptr);
 
   WaypointsNeedSave = false;
 

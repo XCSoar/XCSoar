@@ -36,7 +36,6 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Profile/Profile.hpp"
-#include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/WaypointListBuilder.hpp"
@@ -69,8 +68,8 @@ Copyright_License {
 class FAITrianglePointValidator;
 
 static GeoPoint location;
-static WndForm *dialog = NULL;
-static ListControl *waypoint_list_control = NULL;
+static WndForm *dialog = nullptr;
+static ListControl *waypoint_list_control = nullptr;
 static WndProperty *name_control;
 static WndProperty *distance_filter;
 static WndProperty *direction_filter;
@@ -98,7 +97,7 @@ static const TCHAR *const type_filter_items[] = {
   _T("Right FAI Triangle"),
   _T("File 1"), _T("File 2"),
   _T("Recently Used"),
-  NULL
+  nullptr
 };
 
 struct WaypointListDialogState
@@ -206,11 +205,11 @@ PrepareData()
   data_field->addEnumTexts(type_filter_items);
 
   const TCHAR *p = Profile::GetPathBase(ProfileKeys::WaypointFile);
-  if (p != NULL)
+  if (p != nullptr)
     data_field->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
 
   p = Profile::GetPathBase(ProfileKeys::AdditionalWaypointFile);
-  if (p != NULL)
+  if (p != nullptr)
     data_field->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
 
   data_field->SetAsInteger((int)dialog_state.type_index);
@@ -242,7 +241,7 @@ FillLastUsedList(WaypointList &list,
 {
   for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
     const Waypoint* waypoint = waypoints.LookupId(*it);
-    if (waypoint == NULL)
+    if (waypoint == nullptr)
       continue;
 
     list.emplace_back(*waypoint);
@@ -412,16 +411,17 @@ FormKeyDown(unsigned key_code)
 static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 const Waypoint*
-ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
+ShowWaypointListDialog(const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
-  dialog = LoadDialog(callback_table, parent, Layout::landscape ?
+  dialog = LoadDialog(callback_table, UIGlobals::GetMainWindow(),
+                      Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
-  assert(dialog != NULL);
+  assert(dialog != nullptr);
 
 #ifdef GNAV
   dialog->SetKeyDownFunction(FormKeyDown);
@@ -432,7 +432,7 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   WaypointListDialog dialog2;
 
   waypoint_list_control = (ListControl*)dialog->FindByName(_T("frmWaypointList"));
-  assert(waypoint_list_control != NULL);
+  assert(waypoint_list_control != nullptr);
   waypoint_list_control->SetItemRenderer(&dialog2);
   waypoint_list_control->SetItemHeight(WaypointListRenderer::GetHeight(dialog_look));
   waypoint_list_control->SetCursorHandler(&dialog2);
@@ -447,15 +447,15 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   name_df->SetListener(&listener);
 
   distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
-  assert(distance_filter != NULL);
+  assert(distance_filter != nullptr);
   distance_filter->GetDataField()->SetListener(&listener);
 
   direction_filter = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
-  assert(direction_filter != NULL);
+  assert(direction_filter != nullptr);
   direction_filter->GetDataField()->SetListener(&listener);
 
   type_filter = (WndProperty *)dialog->FindByName(_T("prpFltType"));
-  assert(type_filter != NULL);
+  assert(type_filter != nullptr);
   type_filter->GetDataField()->SetListener(&listener);
 
   location = _location;
@@ -470,14 +470,14 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
 
   if (dialog->ShowModal() != mrOK) {
     delete dialog;
-    return NULL;
+    return nullptr;
   }
 
   unsigned index = waypoint_list_control->GetCursorIndex();
 
   delete dialog;
 
-  const Waypoint* retval = NULL;
+  const Waypoint* retval = nullptr;
 
   if (index < waypoint_list.size())
     retval = waypoint_list[index].waypoint;

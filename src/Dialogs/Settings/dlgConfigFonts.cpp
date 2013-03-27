@@ -64,7 +64,7 @@ extern LOGFONT log_map_label_important;
 static bool changed = false;
 
 class FontPreviewAndButton : public NullWidget, private ActionListener {
-  const TCHAR *const profile_key;
+  const char *const profile_key;
   const TCHAR *const text;
 
   const LOGFONT defaults;
@@ -78,7 +78,7 @@ class FontPreviewAndButton : public NullWidget, private ActionListener {
   WndButton *button;
 
 public:
-  FontPreviewAndButton(const TCHAR *_key, const TCHAR *_text,
+  FontPreviewAndButton(const char *_key, const TCHAR *_text,
                        const LOGFONT _defaults,
                        bool _enabled)
     :profile_key(_key), text(_text), defaults(_defaults),
@@ -205,7 +205,7 @@ private:
 };
 
 static const struct {
-  const TCHAR *registry_key;
+  const char *registry_key;
   const TCHAR *text;
   const LOGFONT &defaults;
 } customisable_fonts[] = {

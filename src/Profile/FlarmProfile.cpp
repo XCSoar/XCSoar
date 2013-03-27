@@ -24,23 +24,24 @@ Copyright_License {
 #include "FlarmProfile.hpp"
 #include "Profile.hpp"
 #include "FLARM/ColorDatabase.hpp"
-#include "Util/tstring.hpp"
+
+#include <string>
 
 static void
-LoadColor(FlarmColorDatabase &db, const TCHAR *key, FlarmColor color)
+LoadColor(FlarmColorDatabase &db, const char *key, FlarmColor color)
 {
-  const TCHAR *ids = Profile::Get(key);
+  const char *ids = Profile::Get(key);
   if (ids == nullptr)
     return;
 
-  const TCHAR *p = ids;
+  const char *p = ids;
   while (true) {
-    TCHAR *endptr;
+    char *endptr;
     FlarmId id = FlarmId::Parse(p, &endptr);
     if (id.IsDefined())
       db.Set(id, color);
 
-    p = _tcschr(endptr, _T(','));
+    p = strchr(endptr, ',');
     if (p == nullptr)
       break;
 
@@ -51,17 +52,17 @@ LoadColor(FlarmColorDatabase &db, const TCHAR *key, FlarmColor color)
 void
 Profile::Load(FlarmColorDatabase &db)
 {
-  LoadColor(db, _T("FriendsGreen"), FlarmColor::GREEN);
-  LoadColor(db, _T("FriendsBlue"), FlarmColor::BLUE);
-  LoadColor(db, _T("FriendsYellow"), FlarmColor::YELLOW);
-  LoadColor(db, _T("FriendsMagenta"), FlarmColor::MAGENTA);
+  LoadColor(db, "FriendsGreen", FlarmColor::GREEN);
+  LoadColor(db, "FriendsBlue", FlarmColor::BLUE);
+  LoadColor(db, "FriendsYellow", FlarmColor::YELLOW);
+  LoadColor(db, "FriendsMagenta", FlarmColor::MAGENTA);
 }
 
 void
 Profile::Save(const FlarmColorDatabase &db)
 {
-  TCHAR id[16];
-  tstring ids[4];
+  char id[16];
+  std::string ids[4];
 
   for (const auto &i : db) {
     assert(i.first.IsDefined());
@@ -77,8 +78,8 @@ Profile::Save(const FlarmColorDatabase &db)
     ids[color_index] += ',';
   }
 
-  Set(_T("FriendsGreen"), ids[0].c_str());
-  Set(_T("FriendsBlue"), ids[1].c_str());
-  Set(_T("FriendsYellow"), ids[2].c_str());
-  Set(_T("FriendsMagenta"), ids[3].c_str());
+  Set("FriendsGreen", ids[0].c_str());
+  Set("FriendsBlue", ids[1].c_str());
+  Set("FriendsYellow", ids[2].c_str());
+  Set("FriendsMagenta", ids[3].c_str());
 }

@@ -23,36 +23,37 @@ Copyright_License {
 
 #include "Parser.hpp"
 #include "Polar.hpp"
+#include "Util/NumberParser.hpp"
 #include "Units/System.hpp"
 
 #include <cstdio>
 #include <stdlib.h>
 
 bool
-ParsePolarShape(PolarShape &shape, const TCHAR *s)
+ParsePolarShape(PolarShape &shape, const char *s)
 {
-  TCHAR *p;
-  fixed v1 = Units::ToSysUnit(fixed(_tcstod(s, &p)), Unit::KILOMETER_PER_HOUR);
+  char *p;
+  fixed v1 = Units::ToSysUnit(fixed(ParseDouble(s, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w1 = fixed(_tcstod(p + 1, &p));
+  fixed w1 = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  fixed v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  fixed v2 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w2 = fixed(_tcstod(p + 1, &p));
+  fixed w2 = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  fixed v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  fixed v3 = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  fixed w3 = fixed(_tcstod(p + 1, &p));
+  fixed w3 = fixed(ParseDouble(p + 1, &p));
   if (*p != '\0')
     return false;
 
@@ -66,7 +67,7 @@ ParsePolarShape(PolarShape &shape, const TCHAR *s)
 }
 
 bool
-ParsePolar(PolarInfo &polar_r, const TCHAR *s)
+ParsePolar(PolarInfo &polar_r, const char *s)
 {
   PolarInfo polar;
   // Example:
@@ -77,59 +78,59 @@ ParsePolar(PolarInfo &polar_r, const TCHAR *s)
     /* a comment */
     return false;
 
-  TCHAR *p;
-  polar.reference_mass = fixed(_tcstod(s, &p));
+  char *p;
+  polar.reference_mass = fixed(ParseDouble(s, &p));
   if (*p != _T(','))
     return false;
 
-  polar.max_ballast = fixed(_tcstod(p + 1, &p));
+  polar.max_ballast = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.shape[0].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[0].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[0].w = fixed(_tcstod(p + 1, &p));
+  polar.shape[0].w = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.shape[1].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[1].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[1].w = fixed(_tcstod(p + 1, &p));
+  polar.shape[1].w = fixed(ParseDouble(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.shape[2].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[2].v = Units::ToSysUnit(fixed(ParseDouble(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.shape[2].w = fixed(_tcstod(p + 1, &p));
-  polar.wing_area = (*p != _T(',')) ? fixed(0) : fixed(_tcstod(p + 1, &p));
-  polar.v_no = (*p != _T(',')) ? fixed(0) : fixed(_tcstod(p + 1, &p));
+  polar.shape[2].w = fixed(ParseDouble(p + 1, &p));
+  polar.wing_area = (*p != _T(',')) ? fixed(0) : fixed(ParseDouble(p + 1, &p));
+  polar.v_no = (*p != _T(',')) ? fixed(0) : fixed(ParseDouble(p + 1, &p));
 
   polar_r = polar;
   return true;
 }
 
 void
-FormatPolarShape(const PolarShape &shape, TCHAR *buffer, size_t max_size)
+FormatPolarShape(const PolarShape &shape, char *buffer, size_t max_size)
 {
   fixed v1, v2, v3;
   v1 = Units::ToUserUnit(shape[0].v, Unit::KILOMETER_PER_HOUR);
   v2 = Units::ToUserUnit(shape[1].v, Unit::KILOMETER_PER_HOUR);
   v3 = Units::ToUserUnit(shape[2].v, Unit::KILOMETER_PER_HOUR);
 
-  _sntprintf(buffer, max_size, _T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-             (double)v1, (double)shape[0].w,
-             (double)v2, (double)shape[1].w,
-             (double)v3, (double)shape[2].w);
+  snprintf(buffer, max_size, "%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
+           (double)v1, (double)shape[0].w,
+           (double)v2, (double)shape[1].w,
+           (double)v3, (double)shape[2].w);
 }
 
 void
-FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,
+FormatPolar(const PolarInfo &polar, char *buffer, size_t max_size,
             bool include_v_no)
 {
   fixed v1, v2, v3;
@@ -138,19 +139,19 @@ FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,
   v3 = Units::ToUserUnit(polar.shape[2].v, Unit::KILOMETER_PER_HOUR);
 
   if (include_v_no)
-    _sntprintf(buffer, max_size,
-               _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)polar.reference_mass, (double)polar.max_ballast,
-               (double)v1, (double)polar.shape[0].w,
-               (double)v2, (double)polar.shape[1].w,
-               (double)v3, (double)polar.shape[2].w,
-               (double)polar.wing_area, (double)polar.v_no);
+    snprintf(buffer, max_size,
+             "%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
+             (double)polar.reference_mass, (double)polar.max_ballast,
+             (double)v1, (double)polar.shape[0].w,
+             (double)v2, (double)polar.shape[1].w,
+             (double)v3, (double)polar.shape[2].w,
+             (double)polar.wing_area, (double)polar.v_no);
   else
-    _sntprintf(buffer, max_size,
-               _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)polar.reference_mass, (double)polar.max_ballast,
-               (double)v1, (double)polar.shape[0].w,
-               (double)v2, (double)polar.shape[1].w,
-               (double)v3, (double)polar.shape[2].w,
-               (double)polar.wing_area);
+    snprintf(buffer, max_size,
+             "%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
+             (double)polar.reference_mass, (double)polar.max_ballast,
+             (double)v1, (double)polar.shape[0].w,
+             (double)v2, (double)polar.shape[1].w,
+             (double)v3, (double)polar.shape[2].w,
+             (double)polar.wing_area);
 }

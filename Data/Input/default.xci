@@ -423,15 +423,7 @@ data=9
 event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
-location=8
-
-mode=Nav2
-type=key
-data=0
-event=WaypointDetails current
-event=Mode default
-label=Waypoint\nDetails$(CheckTask)
-location=9
+location=7
 
 # -------------
 # mode=Display1
@@ -666,7 +658,7 @@ type=key
 data=0
 event=Mode Vario1
 label=Vega$(CheckVega)
-location=9
+location=8
 
 # -------------
 # mode=Vario1
@@ -885,24 +877,17 @@ location=5
 mode=Info3
 type=key
 data=7
+event=AirSpace list
+event=Mode default
+label=Airspaces
 location=6
-
-mode=Info3
-type=key
-data=8
-location=7
-
-mode=Info3
-type=key
-data=9
-location=8
 
 mode=Info3
 type=key
 data=0
 event=RepeatStatusMessage
 label=Message\nRepeat
-location=9
+location=7
 
 # -------------
 # mode=Menu
@@ -1059,14 +1044,6 @@ event=Setup Target
 event=Mode default
 label=Target$(CheckTask)$(CheckTaskResumed)
 location=7
-
-mode=RemoteStick
-type=key
-data=0
-event=WaypointDetails current
-event=Mode default
-label=Waypoint\nDetails$(CheckTask)
-location=8
 
 
 mode=RemoteStick

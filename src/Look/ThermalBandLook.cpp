@@ -24,12 +24,22 @@ Copyright_License {
 #include "ThermalBandLook.hpp"
 #include "Screen/Layout.hpp"
 
+static Color
+ColorWithAlpha(const Color &c, uint8_t a)
+{
+#ifdef ENABLE_OPENGL
+  return Color(c.Red(), c.Green(), c.Blue(), a);
+#else
+  return c;
+#endif
+}
+
 void
 ThermalBandLook::Initialise(bool _inverse, Color sky_color)
 {
   inverse = _inverse;
 
-  brush.Set(sky_color);
+  brush.Set(ColorWithAlpha(sky_color, 0xA0));
   pen.Set(Layout::ScalePenWidth(1), DarkColor(sky_color));
 
   white_pen.Set(2, COLOR_WHITE);

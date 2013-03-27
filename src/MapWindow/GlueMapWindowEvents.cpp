@@ -37,6 +37,10 @@ Copyright_License {
 #include "Pan.hpp"
 #include "Util/Clamp.hpp"
 
+#ifdef ENABLE_SDL
+#include <SDL_keyboard.h>
+#endif
+
 #include <algorithm>
 
 bool
@@ -95,6 +99,19 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   return MapWindow::OnMouseMove(x, y, keys);
 }
 
+gcc_pure
+static bool
+IsCtrlKeyPressed()
+{
+#ifdef ENABLE_SDL
+  return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
+#elif defined(USE_GDI)
+  return GetKeyState(VK_CONTROL) & 0x8000;
+#else
+  return false;
+#endif
+}
+
 bool
 GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
@@ -107,6 +124,14 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   // Ignore single click event if double click detected
   if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
+
+  if (is_simulator() && IsCtrlKeyPressed() && visible_projection.IsValid()) {
+    /* clicking with Alt key held moves the simulator to the click
+       location instantly */
+    const GeoPoint location = visible_projection.ScreenToGeo(x, y);
+    device_blackboard->SetSimulatorLocation(location);
+    return true;
+  }
 
   mouse_down_clock.Update();
   arm_mapitem_list = HasFocus();

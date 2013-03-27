@@ -212,8 +212,9 @@ public:
 
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                             PixelScalar right, PixelScalar bottom) {
-    pen.Set();
+    pen.Bind();
     OutlineRectangleGL(left, top, right, bottom);
+    pen.Unbind();
   }
 
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,

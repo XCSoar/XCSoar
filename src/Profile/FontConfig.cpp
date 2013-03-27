@@ -29,8 +29,12 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h> /* for strtol() */
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 static bool
-GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
+GetFontFromString(const char *Buffer1, LOGFONT* lplf)
 {
   // FontDescription of format:
   // typical font entry
@@ -41,20 +45,20 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   assert(lplf != NULL);
   memset((void *)&lfTmp, 0, sizeof(LOGFONT));
 
-  TCHAR *p;
-  lfTmp.lfHeight = _tcstol(Buffer1, &p, 10);
+  char *p;
+  lfTmp.lfHeight = strtol(Buffer1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfWidth = _tcstol(p + 1, &p, 10);
+  lfTmp.lfWidth = strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfEscapement = _tcstol(p + 1, &p, 10);
+  lfTmp.lfEscapement = strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfOrientation = _tcstol(p + 1, &p, 10);
+  lfTmp.lfOrientation = strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
@@ -64,31 +68,31 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   //FW_BOLD   700
   //FW_HEAVY  900
 
-  lfTmp.lfWeight = _tcstol(p + 1, &p, 10);
+  lfTmp.lfWeight = strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfItalic = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfItalic = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfUnderline = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfUnderline = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfStrikeOut = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfStrikeOut = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfCharSet = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfCharSet = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfOutPrecision = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfOutPrecision = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfClipPrecision = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfClipPrecision = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
@@ -100,42 +104,56 @@ GetFontFromString(const TCHAR *Buffer1, LOGFONT* lplf)
   // CLEARTYPE_QUALITY       5
   // CLEARTYPE_COMPAT_QUALITY 6
 
-  lfTmp.lfQuality = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfQuality = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(p + 1, &p, 10);
+  lfTmp.lfPitchAndFamily = (unsigned char)strtol(p + 1, &p, 10);
   if (*p != _T(','))
     return false;
 
-  _tcscpy(lfTmp.lfFaceName, p + 1);
+#ifdef _UNICODE
+  MultiByteToWideChar(CP_UTF8, 0, p + 1, -1,
+                      lfTmp.lfFaceName, ARRAY_SIZE(lfTmp.lfFaceName));
+#else
+  strcpy(lfTmp.lfFaceName, p + 1);
+#endif
 
   *lplf = lfTmp;
   return true;
 }
 
 bool
-Profile::GetFont(const TCHAR *key, LOGFONT* lplf)
+Profile::GetFont(const char *key, LOGFONT* lplf)
 {
   assert(key != NULL);
   assert(key[0] != '\0');
   assert(lplf != NULL);
 
-  const TCHAR *value = Get(key);
+  const char *value = Get(key);
   return value != NULL && GetFontFromString(value, lplf);
 }
 
 void
-Profile::SetFont(const TCHAR *key, LOGFONT &logfont)
+Profile::SetFont(const char *key, LOGFONT &logfont)
 {
-  StaticString<256> buffer;
-
   assert(key != NULL);
   assert(key[0] != '\0');
 
-  buffer.Format(_T("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s"), logfont.lfHeight,
+#ifdef _UNICODE
+  char face[256];
+  WideCharToMultiByte(CP_UTF8, 0, logfont.lfFaceName, -1,
+                      face, ARRAY_SIZE(face),
+                      nullptr, nullptr);
+#else
+  const char *face = logfont.lfFaceName;
+#endif
+
+  NarrowString<256> buffer;
+  buffer.Format("%d,%d,0,0,%d,%d,0,0,0,0,0,%d,%d,%s", logfont.lfHeight,
                 logfont.lfWidth, logfont.lfWeight, logfont.lfItalic,
                 logfont.lfQuality, logfont.lfPitchAndFamily,
-                logfont.lfFaceName);
+                face);
+
   Profile::Set(key, buffer);
 }

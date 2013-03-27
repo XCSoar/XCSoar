@@ -22,5 +22,7 @@
 
     <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="-27" Width="180" Height="25"
             OnClick="OnOptionalStartsClicked"/>
+    <CheckBox Name="ScoreExit" Caption="Score exit"
+              X="2" Y="-27" Width="120" Height="-2"/>
   </Panel>
 </Form>

@@ -29,12 +29,13 @@ SectorZone::GetBoundary() const
 {
   OZBoundary boundary;
 
-  boundary.push_front(GetReference());
-  boundary.push_front(GetSectorStart());
-  boundary.push_front(GetSectorEnd());
+  if (arc_boundary)
+    boundary.GenerateArcExcluding(GetReference(), GetRadius(),
+                                  GetStartRadial(), GetEndRadial());
 
-  boundary.GenerateArcExcluding(GetReference(), GetRadius(),
-                                GetStartRadial(), GetEndRadial());
+  boundary.push_front(GetSectorEnd());
+  boundary.push_front(GetSectorStart());
+  boundary.push_front(GetReference());
 
   return boundary;
 }

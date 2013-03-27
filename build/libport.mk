@@ -9,7 +9,9 @@ PORT_SOURCES = \
 	$(SRC)/Device/Port/NullPort.cpp
 
 ifeq ($(HAVE_POSIX),y)
-PORT_SOURCES += $(SRC)/Device/Port/TTYPort.cpp
+PORT_SOURCES += \
+	$(SRC)/Device/Port/TTYEnumerator.cpp \
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 PORT_SOURCES += $(SRC)/Device/Port/SerialPort.cpp
 endif

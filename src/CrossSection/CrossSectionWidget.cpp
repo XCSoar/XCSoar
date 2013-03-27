@@ -36,6 +36,8 @@ CrossSectionWidget::Update(const MoreData &basic,
   CrossSectionWindow &w = *(CrossSectionWindow *)GetWindow();
 
   w.ReadBlackboard(basic, calculated,
+                   CommonInterface::GetComputerSettings().task.glide,
+                   CommonInterface::GetComputerSettings().polar.glide_polar_task,
                    CommonInterface::GetMapSettings().airspace);
 
   if (basic.location_available && basic.track_available) {

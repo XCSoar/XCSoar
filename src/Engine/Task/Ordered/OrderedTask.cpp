@@ -40,7 +40,6 @@
 #include "Task/Factory/Create.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/Flat/FlatBoundingBox.hpp"
@@ -1075,9 +1074,6 @@ OrderedTask::GetPointSearchPoints(unsigned tp) const
 void 
 OrderedTask::SetPointSearchMin(unsigned tp, const SearchPoint &sol)
 {
-  if (!tp && !task_points[0]->HasExited())
-    return;
-
   task_points[tp]->SetSearchMin(sol);
 }
 

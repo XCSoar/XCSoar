@@ -28,14 +28,15 @@ Copyright_License {
 using namespace InfoBoxFactory;
 
 static void
-GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
-  TCHAR profileKey[16];
+GetV60InfoBoxManagerConfig(InfoBoxSettings &settings)
+{
+  char profileKey[16];
 
   assert(settings.MAX_PANELS >= 4);
-  _tcscpy(profileKey, _T("Info"));
+  strcpy(profileKey, "Info");
 
   for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i) {
-    _stprintf(profileKey + 4, _T("%u"), i);
+    sprintf(profileKey + 4, "%u", i);
     unsigned int temp = 0;
     if (Profile::Get(profileKey, temp)) {
       settings.panels[0].contents[i] = (Type)( temp       & 0xFF);
@@ -47,7 +48,7 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
 }
 
 static bool
-GetIBType(const TCHAR *key, InfoBoxFactory::Type &val)
+GetIBType(const char *key, InfoBoxFactory::Type &val)
 {
   unsigned _val = val;
   bool ret = ProfileMap::Get(key, _val);
@@ -75,19 +76,19 @@ Profile::Load(InfoBoxSettings &settings)
   GetEnum(ProfileKeys::AppInfoBoxBorder, settings.border_style);
 
   GetV60InfoBoxManagerConfig(settings);
-  TCHAR profileKey[32];
+  char profileKey[32];
   for (unsigned i = 0; i < settings.MAX_PANELS; ++i) {
     InfoBoxSettings::Panel &panel = settings.panels[i];
 
     if (i >= settings.PREASSIGNED_PANELS) {
-      _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
-      panel.name = Get(profileKey, _T(""));
+      sprintf(profileKey, "InfoBoxPanel%uName", i);
+      Get(profileKey, panel.name.buffer(), panel.name.MAX_SIZE);
       if (panel.name.empty())
         _stprintf(panel.name.buffer(), _T("AUX-%u"), i-2);
     }
 
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
-      _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
+      sprintf(profileKey, "InfoBoxPanel%uBox%u", i, j);
       GetIBType(profileKey, panel.contents[j]);
     }
   }
@@ -96,15 +97,15 @@ Profile::Load(InfoBoxSettings &settings)
 void
 Profile::Save(const InfoBoxSettings::Panel &panel, unsigned index)
 {
-  TCHAR profileKey[32];
+  char profileKey[32];
 
   if (index >= InfoBoxSettings::PREASSIGNED_PANELS) {
-    _stprintf(profileKey, _T("InfoBoxPanel%uName"), index);
+    sprintf(profileKey, "InfoBoxPanel%uName", index);
     Set(profileKey, panel.name);
   }
 
   for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
-    _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), index, j);
+    sprintf(profileKey, "InfoBoxPanel%uBox%u", index, j);
     Set(profileKey, panel.contents[j]);
   }
 }

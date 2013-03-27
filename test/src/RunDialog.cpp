@@ -32,7 +32,6 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
-#include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 
 #include <tchar.h>
@@ -75,8 +74,7 @@ Main()
 
   WndForm *form = LoadDialog(NULL, main_window, xmlfile.c_str());
   if (form == NULL) {
-    fprintf(stderr, "Failed to load resource '%s'\n",
-            (const char *)NarrowPathName(xmlfile.c_str()));
+    _ftprintf(stderr, _T("Failed to load resource '%s'\n"), xmlfile.c_str());
     return;
   }
 

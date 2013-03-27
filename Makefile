@@ -247,6 +247,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp \
+	$(SRC)/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskMapWindow.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
@@ -256,19 +257,19 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Manager/TaskActionsPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskListPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskCalculatorPanel.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskOptionalStarts.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskPoint.cpp \
-	$(SRC)/Dialogs/Task/dlgTaskPointType.cpp \
+	$(SRC)/Dialogs/Task/OptionalStartsDialog.cpp \
+	$(SRC)/Dialogs/Task/TaskPointDialog.cpp \
+	$(SRC)/Dialogs/Task/MutateTaskPointDialog.cpp \
 	$(SRC)/Dialogs/Task/dlgTaskHelpers.cpp \
-	$(SRC)/Dialogs/Task/dlgTarget.cpp \
-	$(SRC)/Dialogs/Task/dlgAlternatesList.cpp \
+	$(SRC)/Dialogs/Task/TargetDialog.cpp \
+	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
-	$(SRC)/Dialogs/dlgWeather.cpp \
+	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
@@ -298,6 +299,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/TaskStore.cpp \
 	$(SRC)/Task/TypeStrings.cpp \
+	$(SRC)/Task/ValidationErrorStrings.cpp \
 	\
 	$(SRC)/RadioFrequency.cpp \
 	\
@@ -307,6 +309,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \

@@ -23,21 +23,41 @@ Copyright_License {
 
 #include "KeyValueFileWriter.hpp"
 #include "TextWriter.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <string.h>
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 void
-KeyValueFileWriter::Write(const TCHAR *key, const TCHAR *value)
+KeyValueFileWriter::Write(const char *key, const char *value)
 {
   assert(key != NULL);
   assert(value != NULL);
 
   // does it contain invalid characters?
-  if (_tcspbrk(value, _T("\r\n\"")) != NULL)
+  if (strpbrk(value, "\r\n\"") != NULL)
     // -> write ="" to the output file an continue with the next subkey
-    value = _T("");
+    value = "";
 
   // write the value to the output file
-  writer.FormatLine(_T("%s=\"%s\""), key, value);
+  writer.FormatLine("%s=\"%s\"", key, value);
 }
+
+#ifdef _UNICODE
+
+void
+KeyValueFileWriter::Write(const char *key, const TCHAR *value)
+{
+  char buffer[1024];
+  int result = WideCharToMultiByte(CP_UTF8, 0, value, -1,
+                                   buffer, ARRAY_SIZE(buffer),
+                                   nullptr, nullptr);
+  if (result > 0)
+    Write(key, buffer);
+}
+
+#endif

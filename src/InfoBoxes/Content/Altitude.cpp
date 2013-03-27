@@ -144,9 +144,6 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
     device_blackboard->SetTrack(
         basic.track + a5);
     return true;
-
-  case ibkEnter:
-    break;
   }
 
   return false;

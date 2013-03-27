@@ -26,7 +26,7 @@
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/AbstractTask.hpp"
 #include "Task/TaskBehaviour.hpp"
-#include "TaskAdvanceSmart.hpp"
+#include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
 #include "MatPoints.hpp"
 
@@ -82,7 +82,7 @@ private:
   TaskFactoryType factory_mode;
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour ordered_behaviour;
-  TaskAdvanceSmart task_advance;
+  SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
 

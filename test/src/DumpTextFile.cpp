@@ -22,17 +22,16 @@ Copyright_License {
 */
 
 #include "IO/FileLineReader.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s FILE\n", argv[0]);
-    return 1;
-  }
+  Args args(argc, argv, "FILE");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
-  const char *path = argv[1];
   FileLineReader reader(path);
   if (reader.error()) {
     fprintf(stderr, "Failed to open %s\n", path);

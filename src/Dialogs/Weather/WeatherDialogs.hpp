@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -21,15 +21,18 @@
 }
 */
 
-#include "FAISectorZone.hpp"
-#include "Boundary.hpp"
+#ifndef XCSOAR_DIALOGS_WEATHER_HPP
+#define XCSOAR_DIALOGS_WEATHER_HPP
 
-OZBoundary
-FAISectorZone::GetBoundary() const
-{
-  OZBoundary boundary;
-  boundary.push_front(GetSectorEnd());
-  boundary.push_front(GetSectorStart());
-  boundary.push_front(GetReference());
-  return boundary;
-}
+#include "Weather/NOAAStore.hpp"
+
+void
+dlgWeatherShowModal();
+
+void
+dlgNOAAListShowModal();
+
+void
+dlgNOAADetailsShowModal(NOAAStore::iterator iterator);
+
+#endif

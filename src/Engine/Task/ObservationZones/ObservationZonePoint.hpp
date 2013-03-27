@@ -37,7 +37,8 @@ class ObservationZonePoint : public ObservationZone {
 protected:
   ObservationZonePoint(const ObservationZonePoint &other,
                        const GeoPoint &_reference)
-    :ObservationZone(other.GetShape()), reference(_reference) {}
+    :ObservationZone(other.GetShape(), other.CanStartThroughTop()),
+     reference(_reference) {}
 
 public:
   /**
@@ -47,8 +48,10 @@ public:
    *
    * @return Initialised object
    */
-  ObservationZonePoint(Shape _shape, const GeoPoint & _location)
-    :ObservationZone(_shape), reference(_location) {}
+  ObservationZonePoint(Shape _shape, bool _can_start_through_top,
+                       const GeoPoint & _location)
+    :ObservationZone(_shape, _can_start_through_top),
+     reference(_location) {}
 
   /**
    * Update geometry when previous/next legs are modified.

@@ -24,6 +24,7 @@ Copyright_License {
 /* Convert LXN files to IGC */
 
 #include "Device/Driver/LX/Convert.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,12 +34,10 @@ static const long MAX_LXN_SIZE = 1024 * 1024;
 int
 main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: lxn2igc FILE.lxn\n");
-    return EXIT_FAILURE;
-  }
+  Args args(argc, argv, "FILE.lxn");
+  const char *lxn_path = args.ExpectNext();
+  args.ExpectEnd();
 
-  const char *lxn_path = argv[1];
   FILE *file = fopen(lxn_path, "rb");
   if (file == NULL) {
     fprintf(stderr, "Failed to open file %s\n", lxn_path);

@@ -26,20 +26,18 @@ Copyright_License {
 #include "Formatter/HexColor.hpp"
 #include "Util/Macros.hpp"
 
-#include <stdio.h>
-
 void
-Profile::SetColor(const TCHAR *key, const Color color)
+Profile::SetColor(const char *key, const Color color)
 {
-  TCHAR buffer[16];
+  char buffer[16];
   FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
   Set(key, buffer);
 }
 
 bool
-Profile::GetColor(const TCHAR *key, Color &color)
+Profile::GetColor(const char *key, Color &color)
 {
-  const TCHAR *color_string = Get(key);
+  const char *color_string = Get(key);
   if (!color_string)
     return false;
 

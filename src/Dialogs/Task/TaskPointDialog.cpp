@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Widget/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
@@ -45,6 +46,7 @@ Copyright_License {
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Compiler.h"
@@ -56,6 +58,7 @@ Copyright_License {
 #include "Widgets/CylinderZoneEditWidget.hpp"
 #include "Widgets/SectorZoneEditWidget.hpp"
 #include "Widgets/LineSectorZoneEditWidget.hpp"
+#include "Widgets/KeyholeZoneEditWidget.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -71,7 +74,6 @@ static ObservationZoneEditWidget *properties_widget;
 static OrderedTask* ordered_task = NULL;
 static bool task_modified = false;
 static unsigned active_index = 0;
-static int next_previous = 0;
 
 class TPOZListener : public ObservationZoneEditWidget::Listener {
 public:
@@ -96,8 +98,11 @@ CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
   case ObservationZone::Shape::CYLINDER:
     return new CylinderZoneEditWidget((CylinderZone &)oz, !is_fai_general);
 
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+    return new KeyholeZoneEditWidget((KeyholeZone &)oz);
+
   case ObservationZone::Shape::FAI_SECTOR:
-  case ObservationZone::Shape::KEYHOLE:
+  case ObservationZone::Shape::DAEC_KEYHOLE:
   case ObservationZone::Shape::MAT_CYLINDER:
   case ObservationZone::Shape::BGAFIXEDCOURSE:
   case ObservationZone::Shape::BGAENHANCEDOPTION:
@@ -148,26 +153,35 @@ RefreshView()
     wb->SetCaption(tmp);
   }
 
+  CheckBoxControl &score_exit = *(CheckBoxControl *)
+    wf->FindByName(_T("ScoreExit"));
+  if (tp.GetType() == TaskPointType::AST) {
+    const ASTPoint &ast = (const ASTPoint &)tp;
+    score_exit.Show();
+    score_exit.SetState(ast.GetScoreExit());
+  } else
+    score_exit.Hide();
+
   StaticString<100> name_prefix_buffer, type_buffer;
 
   switch (tp.GetType()) {
   case TaskPointType::START:
-    type_buffer = _T("Start point");
+    type_buffer = _("Start point");
     name_prefix_buffer = _T("Start: ");
     break;
 
   case TaskPointType::AST:
-    type_buffer = _T("Task point");
+    type_buffer = _("Task point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPointType::AAT:
-    type_buffer = _T("Assigned area point");
+    type_buffer = _("Assigned area point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
   case TaskPointType::FINISH:
-    type_buffer = _T("Finish point");
+    type_buffer = _("Finish point");
     name_prefix_buffer = _T("Finish: ");
     break;
 
@@ -186,12 +200,26 @@ RefreshView()
   }
 }
 
-static void
+static bool
 ReadValues()
 {
-  if (properties_widget != nullptr) {
-    properties_widget->Save(task_modified);
+  OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
+
+  if (tp.GetType() == TaskPointType::AST) {
+    const CheckBoxControl &score_exit = *(const CheckBoxControl *)
+      wf->FindByName(_T("ScoreExit"));
+    const bool new_score_exit = score_exit.GetState();
+
+    ASTPoint &ast = (ASTPoint &)tp;
+
+    if (new_score_exit != ast.GetScoreExit()) {
+      ast.SetScoreExit(new_score_exit);
+      task_modified = true;
+    }
   }
+
+  return properties_widget == nullptr ||
+    properties_widget->Save(task_modified);
 }
 
 static void
@@ -218,7 +246,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void
 OnRemoveClicked()
 {
-  if (ShowMessageBox(_("Remove task point?"), _("Task Point"),
+  if (ShowMessageBox(_("Remove task point?"), _("Task point"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -233,8 +261,7 @@ static void
 OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task->GetPoint(active_index);
-  dlgWaypointDetailsShowModal(wf->GetMainWindow(),
-                              task_point.GetWaypoint(), false);
+  dlgWaypointDetailsShowModal(task_point.GetWaypoint(), false);
 }
 
 static void
@@ -244,7 +271,7 @@ OnRelocateClicked()
     ? ordered_task->GetPoint(active_index - 1).GetLocation()
     : CommonInterface::Basic().location;
 
-  const Waypoint *wp = ShowWaypointListDialog(wf->GetMainWindow(), gpBearing,
+  const Waypoint *wp = ShowWaypointListDialog(gpBearing,
                                          ordered_task, active_index);
   if (wp == NULL)
     return;
@@ -266,19 +293,21 @@ OnTypeClicked()
 static void
 OnPreviousClicked()
 {
-  if (active_index > 0) {
-    next_previous=-1;
-    wf->SetModalResult(mrOK);
-  }
+  if (active_index == 0 || !ReadValues())
+    return;
+
+  --active_index;
+  RefreshView();
 }
 
 static void
 OnNextClicked()
 {
-  if (active_index < (ordered_task->TaskSize() - 1)) {
-    next_previous=1;
-    wf->SetModalResult(mrOK);
-  }
+  if (active_index >= ordered_task->TaskSize() - 1 || !ReadValues())
+    return;
+
+  ++active_index;
+  RefreshView();
 }
 
 /**
@@ -332,13 +361,9 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
   dock = (DockWindow *)wf->FindByName(_T("properties"));
   assert(dock != nullptr);
 
-  do {
-    RefreshView();
-    next_previous=0;
-    if (wf->ShowModal() == mrOK)
-      ReadValues();
-    active_index += next_previous;
-  } while (next_previous != 0);
+  RefreshView();
+  if (wf->ShowModal() == mrOK)
+    ReadValues();
 
   delete wf;
 

@@ -34,12 +34,12 @@ Copyright_License {
 
 namespace NMEALogger
 {
-  Mutex mutex;
-  BatchTextWriter *writer;
+  static Mutex mutex;
+  static BatchTextWriter *writer;
 
   bool enabled = false;
 
-  bool Start();
+  static bool Start();
 }
 
 bool

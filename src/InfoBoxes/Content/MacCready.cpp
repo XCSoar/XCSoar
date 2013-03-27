@@ -106,11 +106,6 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
     task_behaviour.auto_mc = true;
     Profile::Set(ProfileKeys::AutoMc, true);
     return true;
-
-  case ibkEnter:
-    task_behaviour.auto_mc = !task_behaviour.auto_mc;
-    Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
-    return true;
   }
   return false;
 }

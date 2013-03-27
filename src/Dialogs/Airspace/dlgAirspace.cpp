@@ -33,6 +33,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "Look/Fonts.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
@@ -44,10 +45,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <assert.h>
-
-enum Buttons {
-  LOOKUP = 100,
-};
 
 class AirspaceSettingsListWidget : public ListWidget {
   const bool color_mode;
@@ -152,7 +149,7 @@ AirspaceSettingsListWidget::OnActivateItem(unsigned index)
       return;
 
     ActionInterface::SendMapSettings();
-    look.Initialise(renderer);
+    look.Initialise(renderer, Fonts::map);
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)
@@ -174,17 +171,13 @@ dlgAirspaceShowModal(bool color_mode)
   AirspaceSettingsListWidget widget(color_mode);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Airspace"), &widget);
-  dialog.AddButton(_("Lookup"), LOOKUP);
   dialog.AddButton(_("Close"), mrOK);
 
-  const int result = dialog.ShowModal();
+  dialog.ShowModal();
   dialog.StealWidget();
 
   // now retrieve back the properties...
   if (widget.IsModified()) {
     Profile::Save();
   }
-
-  if (result == LOOKUP)
-    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
 }

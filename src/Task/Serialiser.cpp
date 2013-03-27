@@ -29,7 +29,6 @@
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/MatCylinderZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
 
@@ -82,6 +81,12 @@ Serialiser::Serialise(const OrderedTaskPoint &data, const TCHAR* name)
   std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialiser oser(*ochild);
   oser.Serialise(data.GetObservationZone());
+
+  if (data.GetType() == TaskPointType::AST) {
+    const ASTPoint &ast = (const ASTPoint &)data;
+    if (ast.GetScoreExit())
+      child->SetAttribute(_T("score_exit"), true);
+  }
 }
 
 void
@@ -97,7 +102,7 @@ Serialiser::Serialise(const ObservationZonePoint &data)
 {
   switch (data.GetShape()) {
   case ObservationZone::Shape::FAI_SECTOR:
-    Visit((const FAISectorZone &)data);
+    node.SetAttribute(_T("type"), _T("FAISector"));
     break;
 
   case ObservationZone::Shape::SECTOR:
@@ -109,27 +114,31 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     break;
 
   case ObservationZone::Shape::MAT_CYLINDER:
-    Visit((const MatCylinderZone &)data);
+    node.SetAttribute(_T("type"), _T("MatCylinder"));
     break;
 
   case ObservationZone::Shape::CYLINDER:
     Visit((const CylinderZone &)data);
     break;
 
-  case ObservationZone::Shape::KEYHOLE:
-    Visit((const KeyholeZone &)data);
+  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+    node.SetAttribute(_T("type"), _T("CustomKeyhole"));
+    break;
+
+  case ObservationZone::Shape::DAEC_KEYHOLE:
+    node.SetAttribute(_T("type"), _T("Keyhole"));
     break;
 
   case ObservationZone::Shape::BGAFIXEDCOURSE:
-    Visit((const BGAFixedCourseZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAFixedCourse"));
     break;
 
   case ObservationZone::Shape::BGAENHANCEDOPTION:
-    Visit((const BGAEnhancedOptionZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAEnhancedOption"));
     break;
 
   case ObservationZone::Shape::BGA_START:
-    Visit((const BGAStartSectorZone &)data);
+    node.SetAttribute(_T("type"), _T("BGAStartSector"));
     break;
 
   case ObservationZone::Shape::ANNULAR_SECTOR:
@@ -141,36 +150,6 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     break;
   }
 } 
-
-void 
-Serialiser::Visit(gcc_unused const FAISectorZone &data)
-{
-  node.SetAttribute(_T("type"), _T("FAISector"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const KeyholeZone &data)
-{
-  node.SetAttribute(_T("type"), _T("Keyhole"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAFixedCourseZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAFixedCourse"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAEnhancedOptionZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAEnhancedOption"));
-}
-
-void 
-Serialiser::Visit(gcc_unused const BGAStartSectorZone &data)
-{
-  node.SetAttribute(_T("type"), _T("BGAStartSector"));
-}
 
 void
 Serialiser::Visit(const SectorZone &data)
@@ -208,12 +187,6 @@ Serialiser::Visit(const CylinderZone &data)
 {
   node.SetAttribute(_T("type"), _T("Cylinder"));
   node.SetAttribute(_T("radius"), data.GetRadius());
-}
-
-void 
-Serialiser::Visit(const MatCylinderZone &data)
-{
-  node.SetAttribute(_T("type"), _T("MatCylinder"));
 }
 
 void
@@ -309,7 +282,9 @@ Serialiser::GetTaskFactoryType(TaskFactoryType type) const
     return _T("Mixed");
   case TaskFactoryType::TOURING:
     return _T("Touring");
+  case TaskFactoryType::COUNT:
+    gcc_unreachable();
   }
 
-  return NULL;
+  gcc_unreachable();
 }

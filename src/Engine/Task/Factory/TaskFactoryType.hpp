@@ -43,7 +43,13 @@ enum class TaskFactoryType: uint8_t {
   MAT,
 
   MIXED,
-  TOURING
+  TOURING,
+
+  /**
+   * This special value is used to determine the number of items
+   * above.
+   */
+  COUNT
 };
 
 #endif

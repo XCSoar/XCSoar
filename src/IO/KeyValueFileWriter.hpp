@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_KEY_VALUE_FILE_WRITER_HPP
 #define XCSOAR_KEY_VALUE_FILE_WRITER_HPP
 
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 class TextWriter;
 
@@ -34,7 +36,11 @@ class KeyValueFileWriter {
 public:
   KeyValueFileWriter(TextWriter &_writer):writer(_writer) {}
 
-  void Write(const TCHAR *key, const TCHAR *value);
+  void Write(const char *key, const char *value);
+
+#ifdef _UNICODE
+  void Write(const char *key, const TCHAR *value);
+#endif
 };
 
 #endif

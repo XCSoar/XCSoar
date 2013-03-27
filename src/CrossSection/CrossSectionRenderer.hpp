@@ -27,6 +27,8 @@
 #include "Blackboard/BaseBlackboard.hpp"
 #include "TerrainXSRenderer.hpp"
 #include "AirspaceXSRenderer.hpp"
+#include "Engine/GlideSolvers/GlideSettings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 
 struct PixelRect;
 struct MoreData;
@@ -56,6 +58,9 @@ protected:
   const CrossSectionLook &look;
   const ChartLook &chart_look;
 
+  GlideSettings glide_settings;
+  GlidePolar glide_polar;
+
   AirspaceXSRenderer airspace_renderer;
   TerrainXSRenderer terrain_renderer;
 
@@ -80,6 +85,8 @@ public:
 
   void ReadBlackboard(const MoreData &_gps_info,
                       const DerivedInfo &_calculated_info,
+                      const GlideSettings &glide_settings,
+                      const GlidePolar &glide_polar,
                       const AirspaceRendererSettings &ar_settings);
 
   /**

@@ -34,7 +34,6 @@ Copyright_License {
 #include "Formatter/Units.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "Widget/CallbackWidget.hpp"
 
 #include <tchar.h>
@@ -50,7 +49,7 @@ ShowNextWaypointDetails()
   if (wp == nullptr)
     return;
 
-  dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *wp);
+  dlgWaypointDetailsShowModal(*wp);
 }
 
 static Widget *
@@ -115,6 +114,27 @@ UpdateInfoBoxRadial(InfoBoxData &data)
   // Set Value
   data.SetValue(vector_remaining.bearing.Reciprocal());
   data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+
+  data.SetCommentFromDistance(vector_remaining.distance);
+}
+
+void
+UpdateInfoBoxRadialATC(InfoBoxData &data)
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!task_stats.task_valid || !vector_remaining.IsValid() ||
+      vector_remaining.distance <= fixed(10)) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  data.SetValue(vector_remaining.bearing.Reciprocal());
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+
+  FormatDistance(data.comment.buffer(), vector_remaining.distance,
+                 Unit::NAUTICAL_MILES, true, 1);
 }
 
 void
@@ -177,10 +197,6 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkLeft:
   case ibkDown:
     protected_task_manager->IncrementActiveTaskPoint(-1);
-    return true;
-
-  case ibkEnter:
-    ShowNextWaypointDetails();
     return true;
   }
 

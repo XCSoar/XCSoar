@@ -56,8 +56,12 @@ public:
 
   void ReadBlackboard(const MoreData &basic,
                       const DerivedInfo &calculated,
+                      const GlideSettings &glide_settings,
+                      const GlidePolar &glide_polar,
                       const AirspaceRendererSettings &ar_settings) {
-    renderer.ReadBlackboard(basic, calculated, ar_settings);
+    renderer.ReadBlackboard(basic, calculated,
+                            glide_settings, glide_polar,
+                            ar_settings);
   }
 
   /**

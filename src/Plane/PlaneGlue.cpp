@@ -34,21 +34,21 @@ Copyright_License {
 
 void PlaneGlue::DetachFromPlaneFile()
 {
-  Profile::Set(_T("PlanePath"), _T(""));
+  Profile::Set("PlanePath", _T(""));
 }
 
 void
 PlaneGlue::FromProfile(Plane &plane)
 {
   StaticString<MAX_PATH> plane_path;
-  if (Profile::GetPath(_T("PlanePath"), plane_path.buffer()) &&
+  if (Profile::GetPath("PlanePath", plane_path.buffer()) &&
       PlaneGlue::ReadFile(plane, plane_path.c_str()))
     return;
 
-  plane.registration = Profile::Get(ProfileKeys::AircraftReg, _T(""));
-  plane.competition_id = Profile::Get(ProfileKeys::CompetitionId, _T(""));
-  plane.type = Profile::Get(ProfileKeys::AircraftType, _T(""));
-  plane.polar_name = Profile::Get(ProfileKeys::PolarName, _T(""));
+  plane.registration.SetUTF8(Profile::Get(ProfileKeys::AircraftReg, ""));
+  plane.competition_id.SetUTF8(Profile::Get(ProfileKeys::CompetitionId, ""));
+  plane.type.SetUTF8(Profile::Get(ProfileKeys::AircraftType, ""));
+  plane.polar_name.SetUTF8(Profile::Get(ProfileKeys::PolarName, ""));
 
   PolarInfo polar = PolarGlue::LoadFromProfile();
   plane.polar_shape = polar.shape;
@@ -75,7 +75,7 @@ void
 PlaneGlue::ToProfile(const Plane &plane)
 {
   StaticString<MAX_PATH> plane_path;
-  if (Profile::GetPath(_T("PlanePath"), plane_path.buffer())) {
+  if (Profile::GetPath("PlanePath", plane_path.buffer())) {
     PlaneGlue::WriteFile(plane, plane_path.c_str());
     return;
   }
@@ -93,7 +93,7 @@ PlaneGlue::ToProfile(const Plane &plane)
   polar.v_no = plane.max_speed;
   polar.wing_area = plane.wing_area;
 
-  TCHAR polar_string[255];
+  char polar_string[255];
   FormatPolar(polar, polar_string, 255, true);
   Profile::Set(ProfileKeys::Polar, polar_string);
   Profile::Set(ProfileKeys::DryMass, plane.dry_mass);

@@ -28,7 +28,7 @@
 
 int main(int argc, char **argv) {
   Args args(argc, argv, "NAME");
-  tstring name = args.ExpectNextT();
+  const char *name = args.ExpectNext();
   args.ExpectEnd();
 
   InitialiseDataPath();
@@ -36,9 +36,9 @@ int main(int argc, char **argv) {
   Profile::Load();
   DeinitialiseDataPath();
 
-  const TCHAR *value = Profile::Get(name.c_str());
+  const char *value = Profile::Get(name);
   if (value != NULL) {
-    _putts(value);
+    puts(value);
     return 0;
   } else {
     fputs("No such value\n", stderr);

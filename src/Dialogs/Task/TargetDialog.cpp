@@ -24,12 +24,11 @@ Copyright_License {
 #include "TaskDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Form/CheckBox.hpp"
-#include "Form/Edit.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
@@ -48,9 +47,6 @@ Copyright_License {
 #include "Util/Clamp.hpp"
 
 #include <stdio.h>
-
-using std::min;
-using std::max;
 
 class TargetDialogMapWindow : public TargetMapWindow {
 public:
@@ -183,30 +179,6 @@ MoveTarget(gcc_unused double adjust_angle)
   */
 }
 
-static bool
-FormKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_APP2:
-    MoveTarget(0);
-    return true;
-
-  case KEY_APP3:
-    MoveTarget(180);
-    return true;
-
-  case '6':
-    MoveTarget(270);
-    return true;
-
-  case '7':
-    MoveTarget(90);
-    return true;
-  }
-
-  return false;
-}
-
 #endif /* GNAV */
 
 /**
@@ -307,6 +279,26 @@ RefreshCalculator()
                              total.travelled.GetSpeed());
 }
 
+static void
+UpdateNameButton()
+{
+  StaticString<80u> buffer;
+
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    if (target_point < task.TaskSize()) {
+      const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
+      buffer.Format(_T("%u: %s"), target_point,
+                    tp.GetWaypoint().name.c_str());
+    } else
+      buffer.clear();
+  }
+
+  WndButton &name_button = *(WndButton *)wf->FindByName(_T("Name"));
+  name_button.SetText(buffer);
+}
+
 void
 TargetDialogMapWindow::OnTaskModified()
 {
@@ -330,8 +322,7 @@ OnNextClicked()
   else
     target_point = initial_active_task_point;
 
-  LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
-                       target_point - initial_active_task_point);
+  UpdateNameButton();
   RefreshTargetPoint();
 }
 
@@ -343,8 +334,7 @@ OnPrevClicked()
   else
     target_point = task_size - 1;
 
-  LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
-                       target_point - initial_active_task_point);
+  UpdateNameButton();
   RefreshTargetPoint();
 }
 
@@ -481,31 +471,27 @@ RefreshTargetPoint()
   }
 }
 
-/**
- * handles UI event where task point is changed
- */
 static void
-OnTaskPointData(DataField *sender, DataField::DataAccessMode mode)
+OnNameClicked()
 {
-  const DataFieldEnum &dfe = *(const DataFieldEnum *)sender;
+  Waypoint waypoint;
 
-  unsigned old_target_point = target_point;
-  switch (mode) {
-  case DataField::daChange:
-    target_point = dfe.GetValue() + initial_active_task_point;
-    if (target_point != old_target_point) {
-      RefreshTargetPoint();
-    }
-    break;
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    const OrderedTask &task = lease->GetOrderedTask();
+    if (target_point >= task.TaskSize())
+      return;
 
-  case DataField::daSpecial:
-    return;
+    const OrderedTaskPoint &tp = task.GetTaskPoint(target_point);
+    waypoint = tp.GetWaypoint();
   }
+
+  dlgWaypointDetailsShowModal(waypoint);
 }
 
 static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnCreateMap),
-  DeclareCallBackEntry(OnTaskPointData),
+  DeclareCallBackEntry(OnNameClicked),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOptimized),
@@ -515,7 +501,7 @@ static constexpr CallBackTableEntry callback_table[] = {
 };
 
 static bool
-GetTaskData(DataFieldEnum &df)
+GetTaskData()
 {
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
   if (task_manager->GetMode() != TaskType::ORDERED)
@@ -525,14 +511,6 @@ GetTaskData(DataFieldEnum &df)
 
   initial_active_task_point = task.GetActiveIndex();
   task_size = task.TaskSize();
-
-  for (unsigned i = initial_active_task_point; i < task_size; i++) {
-    StaticString<80u> label;
-    label.Format(_T("%d %s"), i,
-                 task.GetTaskPoint(i).GetWaypoint().name.c_str());
-    df.addEnumText(label.c_str());
-  }
-
   return true;
 }
 
@@ -543,9 +521,7 @@ GetTaskData(DataFieldEnum &df)
 static bool
 InitTargetPoints()
 {
-  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpTaskPoint"));
-  DataFieldEnum &dfe = *(DataFieldEnum *)wp.GetDataField();
-  if (!GetTaskData(dfe))
+  if (!GetTaskData())
     return false;
 
   if (task_size <= target_point)
@@ -555,13 +531,11 @@ InitTargetPoints()
 
   target_point = Clamp(int(target_point), 0, (int)task_size - 1);
 
-  dfe.Set(std::max(0, (int)target_point - (int)initial_active_task_point));
-
   if (task_size > target_point) {
     SetTarget();
   }
 
-  wp.RefreshDisplay();
+  UpdateNameButton();
   return true;
 }
 
@@ -569,10 +543,44 @@ static void
 UpdateButtons()
 {
   if (IsAltair()) {
-    // altair already has < and > buttons on WndProperty
+    // Altair uses the rotary knob
     ShowFormControl(*wf, _T("btnNext"), false);
     ShowFormControl(*wf, _T("btnPrev"), false);
   }
+}
+
+static bool
+FormKeyDown(unsigned key_code)
+{
+  switch (key_code) {
+#ifdef GNAV
+  case KEY_APP2:
+    MoveTarget(0);
+    return true;
+
+  case KEY_APP3:
+    MoveTarget(180);
+    return true;
+
+  case '6':
+    MoveTarget(270);
+    return true;
+
+  case '7':
+    MoveTarget(90);
+    return true;
+#endif
+
+  case KEY_LEFT:
+    OnPrevClicked();
+    return true;
+
+  case KEY_RIGHT:
+    OnNextClicked();
+    return true;
+  }
+
+  return false;
 }
 
 void
@@ -600,9 +608,7 @@ dlgTargetShowModal(int _target_point)
 
   UpdateButtons();
 
-#ifdef GNAV
   wf->SetKeyDownFunction(FormKeyDown);
-#endif
 
   struct TargetDialogUpdateListener : public NullBlackboardListener {
     virtual void OnCalculatedUpdate(const MoreData &basic,

@@ -260,7 +260,10 @@ UpdateCrossSection()
   const DerivedInfo &calculated = blackboard->Calculated();
 
   assert(csw != NULL);
-  csw->ReadBlackboard(basic, calculated, blackboard->GetMapSettings().airspace);
+  csw->ReadBlackboard(basic, calculated,
+                      blackboard->GetComputerSettings().task.glide,
+                      blackboard->GetComputerSettings().polar.glide_polar_task,
+                      blackboard->GetMapSettings().airspace);
 
   if (basic.location_available && basic.track_available) {
     csw->SetDirection(basic.track);

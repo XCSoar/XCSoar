@@ -207,7 +207,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_SKYLINES_TRACKING
 static bool
-SaveKey(const RowFormWidget &form, unsigned idx, const TCHAR *profile_key,
+SaveKey(const RowFormWidget &form, unsigned idx, const char *profile_key,
         uint64_t &value_r)
 {
   const TCHAR *const s = form.GetValueString(idx);

@@ -29,8 +29,9 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
-#include "OS/PathName.hpp"
+#include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <stdio.h>
 
@@ -178,21 +179,24 @@ Dump(const NMEAInfo &basic)
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s DRIVER\n"
-            "Where DRIVER is one of:\n", argv[0]);
-
-    const struct DeviceRegister *driver;
-    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
-      _ftprintf(stderr, _T("\t%s\n"), driver->name);
-
-    return 1;
+  NarrowString<1024> usage;
+  usage = "DRIVER\n\n"
+          "Where DRIVER is one of:";
+  {
+    const DeviceRegister *driver;
+    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
+      WideToUTF8Converter driver_name(driver->name);
+      usage.AppendFormat("\n\t%s", (const char *)driver_name);
+    }
   }
 
-  PathName driver_name(argv[1]);
-  driver = FindDriverByName(driver_name);
+  Args args(argc, argv, usage);
+  tstring driver_name = args.ExpectNextT();
+  args.ExpectEnd();
+
+  driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
+    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return 1;
   }
 

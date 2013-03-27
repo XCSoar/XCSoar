@@ -31,7 +31,7 @@ Copyright_License {
 class Font;
 
 struct InfoBoxLook {
-  static const unsigned BORDER_WIDTH = 1;
+  static constexpr unsigned BORDER_WIDTH = 1;
 
   bool inverse;
 

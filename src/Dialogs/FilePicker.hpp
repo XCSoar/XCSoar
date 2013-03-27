@@ -29,12 +29,13 @@ Copyright_License {
 /**
  * Ask the user to pick a file from the data directory.
  *
- * @param filter a wildcard expression such as "*.xcm"
+ * @param patterns a list of shell patterns (such as "*.xcm")
+ * separated by null bytes and terminated by an empty string
  * @return true if the buffer now contains an absolute fil name, or
  * false if the user has cancelled the dialog or if there are no
  * matching files
  */
 bool
-FilePicker(const TCHAR *caption, const TCHAR *filter, TCHAR *buffer);
+FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer);
 
 #endif

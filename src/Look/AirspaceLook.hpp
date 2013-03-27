@@ -34,6 +34,7 @@ Copyright_License {
 #define NUMAIRSPACEBRUSHES 8
 
 struct AirspaceRendererSettings;
+class Font;
 
 struct AirspaceLook {
   static const Color preset_colors[NUMAIRSPACECOLORS];
@@ -56,7 +57,13 @@ struct AirspaceLook {
 
   MaskedIcon intercept_icon;
 
-  void Initialise(const AirspaceRendererSettings &settings);
+  /**
+   * The font used to render the airspace name.
+   */
+  const Font *name_font;
+
+  void Initialise(const AirspaceRendererSettings &settings,
+                  const Font &_name_font);
 };
 
 #endif

@@ -23,7 +23,6 @@ Copyright_License {
 */
 
 #include "WaypointDialogs.hpp"
-#include "UIGlobals.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/LastUsed.hpp"
 
@@ -47,7 +46,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   if (way_point) {
     LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *way_point);
+    dlgWaypointDetailsShowModal(*way_point);
     return true;
   }
   return false;

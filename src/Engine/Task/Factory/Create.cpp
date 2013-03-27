@@ -65,6 +65,9 @@ CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
 
   case TaskFactoryType::TOURING:
     return new TouringTaskFactory(task, task_behaviour);
+
+  case TaskFactoryType::COUNT:
+    gcc_unreachable();
   };
 
   /* not reachable */

@@ -40,7 +40,6 @@ public:
   enum InfoBoxKeyCodes {
     ibkLeft = -2,
     ibkDown = -1,
-    ibkEnter = 0,
     ibkUp = 1,
     ibkRight = 2
   };

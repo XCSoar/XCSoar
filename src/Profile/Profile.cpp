@@ -27,6 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
@@ -66,7 +67,7 @@ Profile::LoadFile(const TCHAR *szFile)
   if (StringIsEmpty(szFile))
     return;
 
-  FileLineReader reader(szFile);
+  FileLineReaderA reader(szFile);
   if (reader.error())
     return;
 
@@ -148,18 +149,18 @@ Profile::SetFiles(const TCHAR *override_path)
 }
 
 bool
-Profile::GetPath(const TCHAR *key, TCHAR *value)
+Profile::GetPath(const char *key, TCHAR *value)
 {
-  const TCHAR *p = Get(key);
-  if (p == NULL || StringIsEmpty(p))
-    return false;
+  TCHAR buffer[MAX_PATH];
+  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+      return false;
 
-  ExpandLocalPath(value, p);
+  ExpandLocalPath(value, buffer);
   return true;
 }
 
 bool
-Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
+Profile::GetPathIsEqual(const char *key, const TCHAR *value)
 {
   TCHAR saved[MAX_PATH];
   if (!GetPath(key, saved))
@@ -169,12 +170,13 @@ Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
 }
 
 const TCHAR *
-Profile::GetPathBase(const TCHAR *key)
+Profile::GetPathBase(const char *key)
 {
-  const TCHAR *p = Get(key);
-  if (p == NULL)
-    return NULL;
+  TCHAR buffer[MAX_PATH];
+  if (!Get(key, buffer, ARRAY_SIZE(buffer)))
+      return nullptr;
 
+  const TCHAR *p = buffer;
   if (DIR_SEPARATOR != '\\') {
     const TCHAR *backslash = _tcsrchr(p, _T('\\'));
     if (backslash != NULL)
@@ -185,7 +187,7 @@ Profile::GetPathBase(const TCHAR *key)
 }
 
 void
-Profile::SetPath(const TCHAR *key, const TCHAR *value)
+Profile::SetPath(const char *key, const TCHAR *value)
 {
   TCHAR path[MAX_PATH];
 

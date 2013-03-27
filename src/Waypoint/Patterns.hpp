@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -20,20 +21,11 @@
 }
 */
 
-#include "Profile/Profile.hpp"
-#include "OS/Args.hpp"
+#ifndef XCSOAR_WAYPOINT_PATTERNS_HPP
+#define XCSOAR_WAYPOINT_PATTERNS_HPP
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <tchar.h>
 
-int main(int argc, char **argv) {
-  Args args(argc, argv, "NAME VALUE");
-  tstring name = args.ExpectNextT();
-  const char *value_string = args.ExpectNext();
-  args.ExpectEnd();
+#define WAYPOINT_FILE_PATTERNS _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0")
 
-  int value = atoi(value_string);
-  Profile::Set(name.c_str(), value);
-
-  return 0;
-}
+#endif

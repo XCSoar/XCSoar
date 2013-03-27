@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Weather.hpp"
+#include "WeatherDialogs.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/XML.hpp"
 #include "Units/Units.hpp"

@@ -26,166 +26,117 @@ Copyright_License {
 #include "Engine/Task/Factory/TaskPointFactoryType.hpp"
 #include "Engine/Task/Points/Type.hpp"
 #include "Language/Language.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
+
+static const TCHAR *const task_factory_names[] = {
+  N_("FAI badges/records"),
+  N_("FAI triangle"),
+  N_("FAI out and return"),
+  N_("FAI goal"),
+  N_("Racing"),
+  N_("AAT"),
+  N_("Modified area task (MAT)"),
+  N_("Mixed"),
+  N_("Touring"),
+};
+
+static_assert(ARRAY_SIZE(task_factory_names) == unsigned(TaskFactoryType::COUNT),
+              "Wrong array size");
 
 const TCHAR*
 OrderedTaskFactoryName(TaskFactoryType type)
 {
-  switch(type) {
-  case TaskFactoryType::RACING:
-    return _("Racing");
-  case TaskFactoryType::FAI_GENERAL:
-    return _("FAI badges/records");
-  case TaskFactoryType::FAI_TRIANGLE:
-    return _("FAI triangle");
-  case TaskFactoryType::FAI_OR:
-    return _("FAI out and return");
-  case TaskFactoryType::FAI_GOAL:
-    return _("FAI goal");
-  case TaskFactoryType::AAT:
-    return _("AAT");
-  case TaskFactoryType::MAT:
-    return _("Modified area task (MAT)");
-  case TaskFactoryType::MIXED:
-    return _("Mixed");
-  case TaskFactoryType::TOURING:
-    return _("Touring");
-  }
-
-  gcc_unreachable();
+  return gettext(task_factory_names[unsigned(type)]);
 }
+
+static const TCHAR *const task_factory_descriptions[] = {
+  N_("FAI rules, allows only FAI start, finish and turn point types, for badges and "
+     "records.  Enables FAI finish height for final glide calculation."),
+  N_("FAI rules, path from a start to two turn points and return."),
+  N_("FAI rules, path from start to a single turn point and return."),
+  N_("FAI rules, path from start to a goal destination."),
+  N_("Racing task around turn points.  Can also be used for FAI badge and record tasks.  "
+     "Allows all shapes of observation zones."),
+  N_("Task through assigned areas, minimum task time applies.  Restricted to cylinder "
+     "and sector observation zones."),
+  N_("Modified area task.  Task with start, finish and at least one predefined 1-mile cylinder.  Pilot can add additional points as needed.  Minimum task time applies."),
+  N_("Racing task with a mix of assigned areas and turn points, minimum task time applies."),
+  N_("Casual touring task, uses start and finish cylinders and FAI sector turn points."),
+};
+
+static_assert(ARRAY_SIZE(task_factory_descriptions) == unsigned(TaskFactoryType::COUNT),
+              "Wrong array size");
 
 const TCHAR*
 OrderedTaskFactoryDescription(TaskFactoryType type)
 {
-  switch(type) {
-  case TaskFactoryType::RACING:
-    return _("Racing task around turn points.  Can also be used for FAI badge and record tasks.  "
-        "Allows all shapes of observation zones.");
-  case TaskFactoryType::FAI_GENERAL:
-    return _("FAI rules, allows only FAI start, finish and turn point types, for badges and "
-        "records.  Enables FAI finish height for final glide calculation.");
-  case TaskFactoryType::FAI_TRIANGLE:
-    return _("FAI rules, path from a start to two turn points and return.");
-  case TaskFactoryType::FAI_OR:
-    return _("FAI rules, path from start to a single turn point and return.");
-  case TaskFactoryType::FAI_GOAL:
-    return _("FAI rules, path from start to a goal destination.");
-  case TaskFactoryType::AAT:
-    return _("Task through assigned areas, minimum task time applies.  Restricted to cylinder "
-        "and sector observation zones.");
-  case TaskFactoryType::MAT:
-    return _("Modified area task.  Task with start, finish and at least one predefined 1-mile cylinder.  Pilot can add additional points as needed.  Minimum task time applies.");
-  case TaskFactoryType::MIXED:
-    return _("Racing task with a mix of assigned areas and turn points, minimum task time applies.");
-  case TaskFactoryType::TOURING:
-    return _("Casual touring task, uses start and finish cylinders and FAI sector turn points.");
-  }
-
-  gcc_unreachable();
+  return gettext(task_factory_descriptions[unsigned(type)]);
 }
+
+static const TCHAR *const tp_factory_descriptions[] = {
+  N_("A 90 degree sector with 1km radius. Cross corner edge from inside area to start."),
+  N_("A straight line start gate.  Cross start gate from inside area to start."),
+  N_("A cylinder.  Exit area to start."),
+  N_("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from "
+     "corner point."),
+  N_("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  "
+     "Scored from center."),
+  N_("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  "
+     "Scored from center."),
+  N_("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  "
+     "Scored from center."),
+  N_("A cylinder.  Any point within area scored from center."),
+  N_("A 1 mile cylinder.  Scored by farthest point reached in area."),
+  N_("A cylinder.  Scored by farthest point reached in area."),
+  N_("A sector that can vary in angle and radius.  Scored by farthest point reached "
+     "inside area."),
+  N_("A 90 degree sector with 1km radius.  Cross edge to finish."),
+  N_("Cross finish gate line into area to finish."),
+  N_("Enter cylinder to finish."),
+  N_("A 180 degree sector with 5km radius.  Exit area in any direction to start."),
+  N_("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
+     "reached inside area."),
+  N_("A symmetric quadrant with a custom radius."),
+  N_("A keyhole.  Scored by farthest point reached in area."),
+};
+
+static_assert(ARRAY_SIZE(tp_factory_descriptions) == unsigned(TaskPointFactoryType::COUNT),
+              "Wrong array size");
 
 const TCHAR*
 OrderedTaskPointDescription(TaskPointFactoryType type)
 {
-  switch (type) {
-  case TaskPointFactoryType::START_SECTOR:
-    return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start.");
-  case TaskPointFactoryType::START_LINE:
-    return _("A straight line start gate.  Cross start gate from inside area to start.");
-  case TaskPointFactoryType::START_CYLINDER:
-    return _("A cylinder.  Exit area to start.");
-  case TaskPointFactoryType::START_BGA:
-    return _("A 180 degree sector with 5km radius.  Exit area in any direction to start.");
-  case TaskPointFactoryType::FAI_SECTOR:
-    return _("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from "
-        "corner point.");
-  case TaskPointFactoryType::AST_CYLINDER:
-    return _("A cylinder.  Any point within area scored from center.");
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
-    return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  "
-        "Scored from center.");
-  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  "
-        "Scored from center.");
-  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
-    return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  "
-        "Scored from center.");
-  case TaskPointFactoryType::AAT_CYLINDER:
-    return _("A cylinder.  Scored by farthest point reached in area.");
-
-  case TaskPointFactoryType::MAT_CYLINDER:
-    return _("A 1 mile cylinder.  Scored by farthest point reached in area.");
-
-  case TaskPointFactoryType::AAT_SEGMENT:
-    return _("A sector that can vary in angle and radius.  Scored by farthest point reached "
-        "inside area.");
-  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
-    return _("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
-        "reached inside area.");
-  case TaskPointFactoryType::FINISH_SECTOR:
-    return _("A 90 degree sector with 1km radius.  Cross edge to finish.");
-  case TaskPointFactoryType::FINISH_LINE:
-    return _("Cross finish gate line into area to finish.");
-  case TaskPointFactoryType::FINISH_CYLINDER:
-    return _("Enter cylinder to finish.");
-
-  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
-    return _("A symmetric quadrant with a custom radius.");
-
-  case TaskPointFactoryType::COUNT:
-    gcc_unreachable();
-  }
-
-  gcc_unreachable();
+  return tp_factory_descriptions[unsigned(type)];
 }
+
+static const TCHAR *const tp_factory_names[] = {
+  N_("FAI start quadrant"),
+  N_("Start line"),
+  N_("Start cylinder"),
+  N_("FAI quadrant"),
+  N_("Keyhole sector (DAeC)"),
+  N_("BGA Fixed Course sector"),
+  N_("BGA Enhanced Option Fixed Course sector"),
+  N_("Turn point cylinder"),
+  N_("Cylinder with 1 mile radius."),
+  N_("Area cylinder"),
+  N_("Area sector"),
+  N_("FAI finish quadrant"),
+  N_("Finish line"),
+  N_("Finish cylinder"),
+  N_("BGA start sector"),
+  N_("Area sector with inner radius"),
+  N_("Symmetric quadrant"),
+  N_("Area keyhole"),
+};
+
+static_assert(ARRAY_SIZE(tp_factory_names) == unsigned(TaskPointFactoryType::COUNT),
+              "Wrong array size");
 
 const TCHAR*
 OrderedTaskPointName(TaskPointFactoryType type)
 {
-  switch (type) {
-  case TaskPointFactoryType::START_SECTOR:
-    return _("FAI start quadrant");
-  case TaskPointFactoryType::START_LINE:
-    return _("Start line");
-  case TaskPointFactoryType::START_CYLINDER:
-    return _("Start cylinder");
-  case TaskPointFactoryType::START_BGA:
-    return _("BGA start sector");
-  case TaskPointFactoryType::FAI_SECTOR:
-    return _("FAI quadrant");
-  case TaskPointFactoryType::KEYHOLE_SECTOR:
-    return _("Keyhole sector (DAeC)");
-  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
-    return _("BGA Fixed Course sector");
-  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
-    return _("BGA Enhanced Option Fixed Course sector");
-  case TaskPointFactoryType::AST_CYLINDER:
-    return _("Turn point cylinder");
-  case TaskPointFactoryType::AAT_CYLINDER:
-    return _("Area cylinder");
-
-  case TaskPointFactoryType::MAT_CYLINDER:
-    return _("Cylinder with 1 mile radius.");
-
-  case TaskPointFactoryType::AAT_SEGMENT:
-    return _("Area sector");
-  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
-    return _("Area sector with inner radius");
-  case TaskPointFactoryType::FINISH_SECTOR:
-    return _("FAI finish quadrant");
-  case TaskPointFactoryType::FINISH_LINE:
-    return _("Finish line");
-  case TaskPointFactoryType::FINISH_CYLINDER:
-    return _("Finish cylinder");
-
-  case TaskPointFactoryType::SYMMETRIC_QUADRANT:
-    return _("Symmetric quadrant");
-
-  case TaskPointFactoryType::COUNT:
-    gcc_unreachable();
-  }
-
-  gcc_unreachable();
+  return tp_factory_names[unsigned(type)];
 }

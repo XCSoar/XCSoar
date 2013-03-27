@@ -47,7 +47,11 @@ public:
     ~Item();
   };
 
+#ifdef _WIN32_WCE
   static constexpr unsigned MAX_SIZE = 300;
+#else
+  static constexpr unsigned MAX_SIZE = 512;
+#endif
 
   int ComboPopupItemSavedIndex;
 

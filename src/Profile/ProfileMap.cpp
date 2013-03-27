@@ -23,14 +23,19 @@ Copyright_License {
 
 #include "Profile/ProfileMap.hpp"
 #include "IO/KeyValueFileWriter.hpp"
-#include "Util/tstring.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/Macros.hpp"
 
 #include <map>
+#include <string>
+
+#ifdef _UNICODE
+#include <windows.h>
+#endif
 
 namespace ProfileMap {
-  typedef std::map<tstring, tstring> map_t;
+  typedef std::map<std::string, std::string> map_t;
 
   static map_t map;
   static bool modified;
@@ -48,8 +53,8 @@ ProfileMap::SetModified(bool _modified)
   modified = _modified;
 }
 
-const TCHAR *
-ProfileMap::Get(const TCHAR *key, const TCHAR *default_value)
+const char *
+ProfileMap::Get(const char *key, const char *default_value)
 {
   map_t::const_iterator it = map.find(key);
   if (it == map.end())
@@ -59,7 +64,7 @@ ProfileMap::Get(const TCHAR *key, const TCHAR *default_value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
+ProfileMap::Get(const char *key, TCHAR *value, size_t max_size)
 {
   map_t::const_iterator it = map.find(key);
   if (it == map.end()) {
@@ -67,22 +72,32 @@ ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
     return false;
   }
 
-  const TCHAR *src = it->second.c_str();
+  const char *src = it->second.c_str();
+
+#ifdef _UNICODE
+  int result = MultiByteToWideChar(CP_UTF8, 0, src, -1,
+                                   value, max_size);
+  return result > 0;
+#else
+  if (!ValidateUTF8(src))
+    return false;
+
   CopyString(value, src, max_size);
   return true;
+#endif
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, int &value)
+ProfileMap::Get(const char *key, int &value)
 {
   // Try to read the profile map
-  const TCHAR *str = Get(key);
+  const char *str = Get(key);
   if (str == NULL)
     return false;
 
   // Parse the string for a number
-  TCHAR *endptr;
-  int tmp = _tcstol(str, &endptr, 0);
+  char *endptr;
+  int tmp = ParseInt(str, &endptr, 0);
   if (endptr == str)
     return false;
 
@@ -92,16 +107,16 @@ ProfileMap::Get(const TCHAR *key, int &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, short &value)
+ProfileMap::Get(const char *key, short &value)
 {
   // Try to read the profile map
-  const TCHAR *str = Get(key);
+  const char *str = Get(key);
   if (str == NULL)
     return false;
 
   // Parse the string for a number
-  TCHAR *endptr;
-  short tmp = _tcstol(str, &endptr, 0);
+  char *endptr;
+  short tmp = ParseInt(str, &endptr, 0);
   if (endptr == str)
     return false;
 
@@ -111,10 +126,10 @@ ProfileMap::Get(const TCHAR *key, short &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, bool &value)
+ProfileMap::Get(const char *key, bool &value)
 {
   // Try to read the profile map
-  const TCHAR *str = Get(key);
+  const char *str = Get(key);
   if (str == NULL)
     return false;
 
@@ -124,15 +139,15 @@ ProfileMap::Get(const TCHAR *key, bool &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, unsigned &value)
+ProfileMap::Get(const char *key, unsigned &value)
 {
   // Try to read the profile map
-  const TCHAR *str = Get(key);
+  const char *str = Get(key);
   if (str == NULL)
     return false;
 
   // Parse the string for a unsigned number
-  TCHAR *endptr;
+  char *endptr;
   unsigned tmp = ParseUnsigned(str, &endptr, 0);
   if (endptr == str)
     return false;
@@ -143,7 +158,7 @@ ProfileMap::Get(const TCHAR *key, unsigned &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, uint16_t &value)
+ProfileMap::Get(const char *key, uint16_t &value)
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x10000)
@@ -154,7 +169,7 @@ ProfileMap::Get(const TCHAR *key, uint16_t &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, uint8_t &value)
+ProfileMap::Get(const char *key, uint8_t &value)
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x100)
@@ -165,16 +180,16 @@ ProfileMap::Get(const TCHAR *key, uint8_t &value)
 }
 
 bool
-ProfileMap::Get(const TCHAR *key, fixed &value)
+ProfileMap::Get(const char *key, fixed &value)
 {
   // Try to read the profile map
-  TCHAR str[50];
-  if (!Get(key, str, 50))
+  const char *str = Get(key);
+  if (str == nullptr)
     return false;
 
   // Parse the string for a floating point number
-  TCHAR *endptr;
-  double tmp = _tcstod(str, &endptr);
+  char *endptr;
+  double tmp = ParseDouble(str, &endptr);
   if (endptr == str)
     return false;
 
@@ -184,7 +199,7 @@ ProfileMap::Get(const TCHAR *key, fixed &value)
 }
 
 void
-ProfileMap::Set(const TCHAR *key, const TCHAR *value)
+ProfileMap::Set(const char *key, const char *value)
 {
   auto i = map.insert(std::make_pair(key, value));
   if (!i.second) {
@@ -200,40 +215,57 @@ ProfileMap::Set(const TCHAR *key, const TCHAR *value)
   modified = true;
 }
 
+#ifdef _UNICODE
+
 void
-ProfileMap::Set(const TCHAR *key, int value)
+ProfileMap::Set(const char *key, const TCHAR *value)
 {
-  TCHAR tmp[50];
-  _sntprintf(tmp, 50, _T("%d"), value);
+  char buffer[MAX_PATH];
+  int length = WideCharToMultiByte(CP_UTF8, 0, value, -1,
+                                   buffer, ARRAY_SIZE(buffer),
+                                   nullptr, nullptr);
+  if (length <= 0)
+    return;
+
+  Set(key, buffer);
+}
+
+#endif
+
+void
+ProfileMap::Set(const char *key, int value)
+{
+  char tmp[50];
+  sprintf(tmp, "%d", value);
   return Set(key, tmp);
 }
 
 void
-ProfileMap::Set(const TCHAR *key, long value)
+ProfileMap::Set(const char *key, long value)
 {
-  TCHAR tmp[50];
-  _sntprintf(tmp, 50, _T("%ld"), value);
+  char tmp[50];
+  sprintf(tmp, "%ld", value);
   return Set(key, tmp);
 }
 
 void
-ProfileMap::Set(const TCHAR *key, unsigned value)
+ProfileMap::Set(const char *key, unsigned value)
 {
-  TCHAR tmp[50];
-  _sntprintf(tmp, 50, _T("%u"), value);
+  char tmp[50];
+  sprintf(tmp, "%u", value);
   return Set(key, tmp);
 }
 
 void
-ProfileMap::Set(const TCHAR *key, fixed value)
+ProfileMap::Set(const char *key, fixed value)
 {
-  TCHAR tmp[50];
-  _sntprintf(tmp, 50, _T("%f"), (double)value);
+  char tmp[50];
+  sprintf(tmp, "%f", (double)value);
   return Set(key, tmp);
 }
 
 bool
-ProfileMap::Exists(const TCHAR *key)
+ProfileMap::Exists(const char *key)
 {
   return map.find(key) != map.end();
 }
@@ -245,7 +277,7 @@ ProfileMap::Export(KeyValueFileWriter &writer)
   for (auto it_str = map.begin(); it_str != map.end(); it_str++)
     /* ignore the "Vega*" values; the Vega driver abuses the profile
        to pass messages between the driver and the user interface */
-    if (_tcsncmp(it_str->first.c_str(), _T("Vega"), 4) != 0)
+    if (strncmp(it_str->first.c_str(), "Vega", 4) != 0)
       writer.Write(it_str->first.c_str(), it_str->second.c_str());
 }
 

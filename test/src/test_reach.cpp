@@ -27,13 +27,15 @@
 #include "Route/TerrainRoute.hpp"
 #include "Engine/Route/ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "Compatibility/path.h"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
+
+#include <string.h>
 
 static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 {

@@ -29,7 +29,7 @@
 /** Segment centered on bisector of incoming/outgoing legs */
 class SymmetricSectorZone: public SectorZone
 {
-  const Angle sector_angle;
+  Angle sector_angle;
 
 protected:
   /**
@@ -41,10 +41,14 @@ protected:
    *
    * @return Initialised object
    */
-  SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
+  SymmetricSectorZone(Shape _shape, bool _can_start_through_top,
+                      bool _arc_boundary,
+                      const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::QuarterCircle())
-    :SectorZone(_shape, loc, radius), sector_angle(angle) {}
+    :SectorZone(_shape, _can_start_through_top, _arc_boundary,
+                loc, radius),
+     sector_angle(angle) {}
 
   SymmetricSectorZone(const SymmetricSectorZone &other,
                       const GeoPoint &reference)
@@ -54,9 +58,25 @@ protected:
 public:
   SymmetricSectorZone(const GeoPoint &loc,
                       const fixed radius=fixed(10000.0))
-    :SectorZone(Shape::SYMMETRIC_QUADRANT, loc, radius),
+    :SectorZone(Shape::SYMMETRIC_QUADRANT, true, true, loc, radius),
      sector_angle(Angle::QuarterCircle()) {
     UpdateSector();
+  }
+
+  /**
+   * A 90 degree sector centered at the bisector of incoming/outgoing legs
+   * \todo This really should have infinite length
+   *
+   * @param is_turnpoint Whether the sector is a turnpoint, or start/finish
+   */
+  static SymmetricSectorZone *CreateFAISectorZone(const GeoPoint loc,
+                                                  const bool _is_turnpoint = true) {
+    auto *oz =
+      new SymmetricSectorZone(Shape::FAI_SECTOR, true, false, loc,
+                              _is_turnpoint ? fixed(10000) : fixed(1000),
+                              Angle::QuarterCircle());
+      oz->UpdateSector();
+    return oz;
   }
 
   /** 
@@ -66,6 +86,11 @@ public:
    */
   Angle GetSectorAngle() const {
     return sector_angle;
+  }
+
+  void SetSectorAngle(Angle _angle) {
+    sector_angle = _angle;
+    UpdateSector();
   }
 
   /* virtual methods from class ObservationZonePoint */

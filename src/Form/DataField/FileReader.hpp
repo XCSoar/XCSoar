@@ -51,7 +51,11 @@ public:
   };
 
 private:
+#ifdef _WIN32_WCE
   static constexpr unsigned MAX_FILES = 100;
+#else
+  static constexpr unsigned MAX_FILES = 512;
+#endif
 
   /** Index of the active file */
   unsigned int mValue;
@@ -168,6 +172,12 @@ public:
   /** Sorts the filelist by filenames */
   void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
+
+  /**
+   * Scan multiple shell patterns.  Each pattern is terminated by a
+   * null byte, and the list ends with an empty pattern.
+   */
+  void ScanMultiplePatterns(const TCHAR *patterns);
 
   /** For use by other classes */
   gcc_pure

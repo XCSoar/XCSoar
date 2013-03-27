@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 
 #include "Screen/SDL/Format.hpp"
 

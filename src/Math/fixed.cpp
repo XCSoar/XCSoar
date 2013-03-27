@@ -488,7 +488,7 @@ fixed rsqrt_guess(fixed x) {
 fixed
 fixed::rsqrt() const
 {
-  static const fixed threehalfs = fixed(1.5);
+  static constexpr fixed threehalfs = fixed(1.5);
 
   fixed y(rsqrt_guess(*this));
   if (y.m_nVal<2) return y;
@@ -504,6 +504,25 @@ fixed::rsqrt() const
       return y;
     v_last = y.m_nVal;
   }
+}
+
+#elif defined(__BIONIC__)
+
+/* Android's Bionic doesn't have sincos(), but with LTO=y, gcc folds
+   sin() and cos() into sincos(); the following kludge works around
+   this problem by providing the symbol */
+
+#pragma GCC optimize ("O0")
+
+extern "C"
+void
+sincos(double x, double *s, double *c);
+
+void
+sincos(double x, double *s, double *c)
+{
+  *s = sin(x);
+  *c = cos(x);
 }
 
 #endif

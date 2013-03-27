@@ -36,6 +36,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Device/Declaration.hpp"
+#include "Task/ValidationErrorStrings.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"

@@ -39,24 +39,16 @@
 #include "harness_waypoints.hpp"
 #include <string.h>
 
-class FAISectorZone;
 class SectorZone;
 class LineSectorZone;
 class KeyholeZone;
-class BGAFixedCourseZone;
-class BGAEnhancedOptionZone;
-class BGAStartSectorZone;
 class AnnularSectorZone;
-class MatCylinderZone;
 
 class ObservationZoneVisitorPrint
 {
 public:
   void Visit(const KeyholeZone& oz) {
     printf("# kehole zone\n");
-  }
-  void Visit(const FAISectorZone& oz) {
-    printf("# fai sect zone\n");
   }
   void Visit(const SectorZone& oz) {
     printf("# sector zone\n");
@@ -70,18 +62,6 @@ public:
   void Visit(const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
-  void Visit(const MatCylinderZone& oz) {
-    printf("# MAT cylinder zone\n");
-  }
-  void Visit(const BGAFixedCourseZone &oz) {
-    printf("# bga fixed course zone\n");
-  }
-  void Visit(const BGAEnhancedOptionZone &oz) {
-    printf("# bga enhanded option zone\n");
-  }
-  void Visit(const BGAStartSectorZone &oz) {
-    printf("# bga start sector zone\n");
-  }
 
   void Visit(const SymmetricSectorZone &oz) {
     printf("# symmetric quadrant\n");
@@ -90,9 +70,6 @@ public:
   void Visit(const ObservationZonePoint &oz) {
     switch (oz.GetShape()) {
     case ObservationZone::Shape::FAI_SECTOR:
-      Visit((const FAISectorZone &)oz);
-      break;
-
     case ObservationZone::Shape::SECTOR:
       Visit((const SectorZone &)oz);
       break;
@@ -102,27 +79,16 @@ public:
       break;
 
     case ObservationZone::Shape::MAT_CYLINDER:
-      Visit((const MatCylinderZone &)oz);
-      break;
-
     case ObservationZone::Shape::CYLINDER:
       Visit((const CylinderZone &)oz);
       break;
 
-    case ObservationZone::Shape::KEYHOLE:
-      Visit((const KeyholeZone &)oz);
-      break;
-
+    case ObservationZone::Shape::CUSTOM_KEYHOLE:
+    case ObservationZone::Shape::DAEC_KEYHOLE:
     case ObservationZone::Shape::BGAFIXEDCOURSE:
-      Visit((const BGAFixedCourseZone &)oz);
-      break;
-
     case ObservationZone::Shape::BGAENHANCEDOPTION:
-      Visit((const BGAEnhancedOptionZone &)oz);
-      break;
-
     case ObservationZone::Shape::BGA_START:
-      Visit((const BGAStartSectorZone &)oz);
+      Visit((const KeyholeZone &)oz);
       break;
 
     case ObservationZone::Shape::ANNULAR_SECTOR:

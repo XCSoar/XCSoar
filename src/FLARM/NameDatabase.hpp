@@ -30,6 +30,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
+#include <tchar.h>
 
 class FlarmNameDatabase {
 public:

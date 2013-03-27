@@ -36,6 +36,7 @@ Copyright_License {
 #include "Device/Driver/CAI302/Protocol.hpp"
 #include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
+#include "Waypoint/Patterns.hpp"
 
 #include <vector>
 #include <windef.h> /* for MAX_PATH */
@@ -98,7 +99,7 @@ static void
 UploadWaypoints(const DialogLook &look, CAI302Device &device)
 {
   TCHAR path[MAX_PATH];
-  if (!FilePicker(_("Waypoints"), _T("*.cup"), path))
+  if (!FilePicker(_("Waypoints"), WAYPOINT_FILE_PATTERNS, path))
     return;
 
   CAI302WaypointUploader job(path, device);

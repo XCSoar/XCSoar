@@ -74,38 +74,38 @@ namespace Profile
    * @param value a buffer which can store at least MAX_PATH
    * characters
    */
-  bool GetPath(const TCHAR *key, TCHAR *value);
-  void SetPath(const TCHAR *key, const TCHAR *value);
-  bool GetPathIsEqual(const TCHAR *key, const TCHAR *value);
+  bool GetPath(const char *key, TCHAR *value);
+  void SetPath(const char *key, const TCHAR *value);
+  bool GetPathIsEqual(const char *key, const TCHAR *value);
 
   /**
    * Gets a path from the profile and return its base name only.
    */
   gcc_pure
-  const TCHAR *GetPathBase(const TCHAR *key);
+  const TCHAR *GetPathBase(const char *key);
 
   /**
    * Load a GeoPoint from the profile.
    */
-  bool GetGeoPoint(const TCHAR *key, GeoPoint &value);
+  bool GetGeoPoint(const char *key, GeoPoint &value);
 
   /**
    * Save a GeoPoint to the profile.  It is stored as a string,
    * longitude and latitude formatted in degrees separated by a space
    * character.
    */
-  void SetGeoPoint(const TCHAR *key, const GeoPoint &value);
+  void SetGeoPoint(const char *key, const GeoPoint &value);
 
   /**
    * Load a Color from the profile.
    */
-  bool GetColor(const TCHAR *key, Color &value);
+  bool GetColor(const char *key, Color &value);
 
   /**
    * Save a Color to the profile.  It is stored as a RGB hex string
    * e.g. #123456
    */
-  void SetColor(const TCHAR *key, const Color value);
+  void SetColor(const char *key, const Color value);
 
   /**
    * Adjusts the application settings according to the profile settings

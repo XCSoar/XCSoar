@@ -28,7 +28,7 @@
 
 int main(int argc, char **argv) {
   Args args(argc, argv, "NAME");
-  tstring name = args.ExpectNextT();
+  const char *name = args.ExpectNext();
   args.ExpectEnd();
 
   InitialiseDataPath();
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   DeinitialiseDataPath();
 
   int value;
-  if (Profile::Get(name.c_str(), value)) {
+  if (Profile::Get(name, value)) {
     printf("%d\n", value);
     return 0;
   } else {

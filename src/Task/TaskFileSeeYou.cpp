@@ -28,10 +28,7 @@
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
@@ -313,15 +310,15 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   if (factType == TaskFactoryType::RACING &&
       is_intermediate && isKeyhole(turnpoint_infos))
-    oz = new KeyholeZone(wp->location);
+    oz = KeyholeZone::CreateDAeCKeyholeZone(wp->location);
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
-    oz = new BGAEnhancedOptionZone(wp->location);
+    oz = KeyholeZone::CreateBGAEnhancedOptionZone(wp->location);
 
   else if (factType == TaskFactoryType::RACING &&
       is_intermediate && isBGAFixedCourseZone(turnpoint_infos))
-    oz = new BGAFixedCourseZone(wp->location);
+    oz = KeyholeZone::CreateBGAFixedCourseZone(wp->location);
 
   else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
     oz = new LineSectorZone(wp->location, turnpoint_infos.radius1);
@@ -336,7 +333,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED)
       oz = new CylinderZone(wp->location, turnpoint_infos.radius1);
     else
-      oz = new FAISectorZone(wp->location, is_intermediate);
+      oz = SymmetricSectorZone::CreateFAISectorZone(wp->location,
+                                                    is_intermediate);
 
   } else if (is_intermediate) { //AAT intermediate point
     Angle A12adj;

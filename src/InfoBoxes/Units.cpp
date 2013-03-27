@@ -55,6 +55,12 @@ InfoBoxData::SetValueFromSpeed(fixed new_value, bool precision)
 }
 
 void
+InfoBoxData::SetCommentFromDistance(fixed new_value)
+{
+  FormatUserDistanceSmart(new_value, comment.buffer());
+}
+
+void
 InfoBoxData::SetCommentFromAlternateAltitude(fixed new_value)
 {
   FormatAlternateUserAltitude(new_value, comment.buffer());

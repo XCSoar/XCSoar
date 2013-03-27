@@ -1,39 +1,39 @@
 \chapter{Installation}\label{cha:installation}
 
-La traduction des chapitres "Installation" et "User Interface" n'est pas encore faite. Cependant vous pouvez télécharger le manuel "Prise en main du logiciel" écrit par Adrien Ott afin d'avoir une vue rapide du logiciel et de son installation.
-Ce manuel est en ligne sur le site XCSoar : {\href{http://download.xcsoar.org/releases/6.4.5/XCSoar-Prise-en-main.pdf}{http://download.xcsoar.org/releases/6.4.5/XCSoar-Prise-en-main.pdf}}
+La traduction des chapitres "Installation" et "User Interface" n'est pas encore faite. Cependant vous pouvez télécharger le manuel "Prise en main du logiciel" afin d'avoir une vue rapide du logiciel et de son installation.
+Ce manuel est en ligne sur le site XCSoar : {\href{http://xcsoar.org/discover/manual.html}{http://xcsoar.org/discover/manual.html}}
 
 
-To run XCSoar, you need to obtain the following:
+Pour lancer XCSoar il vous faut :
 
 \begin{itemize}
-\item a device to run XCSoar on
-\item XCSoar
-\item a GPS receiver
-\item a waypoint file
-\item an airspace file (optional)
-\item a map file (optional)
+\item un appareil sur lequel faire tourner XCSoar
+\item le logiciel XCSoar
+\item un récepteur GPS (peut être dans l'appareil)
+\item un fichier de points de virage
+\item un fichier d'espaces aériens (optionnel)
+\item un fichier de terrain, pour la carte (optionnel)
 \end{itemize}
 
-\section{Compatibility}
+\section{Compatibilité}
 
 \subsection*{Devices for running XCSoar}
 
-XCSoar runs on the following platforms:
+XCSoar tourne sur les plateformes suivantes :
 
 \begin{itemize}
-\item mobile phones and tablets with Android 1.6 or newer \\
-  Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
+\item téléphone portables et tablettes sous Android 1.6 ou plus récent \\
+  Exemples: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
   Motorola Xoom
-\item PDAs with Pocket PC 2000, 2002, 2003 \\
-  Example: iPaq 3800, iPaq 3900
-\item PDAs with Windows Mobile \\
-  Example: iPaq hx4700, Dell Axim x51v
-\item PNAs with Windows CE 3.0 or newer \\
-  Example: HP314, Mio400
+\item PDAs avec Pocket PC 2000, 2002, 2003 \\
+  Exemples: iPaq 3800, iPaq 3900
+\item PDAs avec Windows Mobile \\
+  Exemples: iPaq hx4700, Dell Axim x51v
+\item PNAs sous Windows CE 3.0 ou plus récent \\
+  Exemples: HP314, Mio400
 \item Triadis Altair
 \item LX MiniMap
-\item Windows 2000 or newer
+\item Windows 2000 ou plus récent
 \item Linux
 \item Mac OS X
 \end{itemize}
@@ -88,61 +88,50 @@ as the K6-Bt or the Glidertools VFBT-1.
 
 \section{Software installation}
 
-The software is available as a free download from the XCSoar website
-~\xcsoarwebsite{}.  This section describes which file should be
-downloaded, and how to install it.
+Le logiciel est téléchargeable gratuitement sur le site internet d'XCSoar ~\xcsoarwebsite{}.  Ce paragraphe décrit quel fichier doit être téléchargé, et comment l'installer.
 
-\subsection*{On Android}
+\subsection*{Sous Android}
 
-Obtain XCSoar from Google's Android market, or install the \verb|apk|
-file manually.  Copy the data files on the SD card in the directory
-\verb|XCSoarData|.
+Récupérez XCSoar sur le "Store" de Google depuis votre appareil, ou installez le fichier \verb|apk|
+manuellement.  Copiez les fichiers de données sur la carte SD dans le répertoire \verb|XCSoarData|.
 
-\subsection*{On a PDA (Windows Mobile, PocketPC)}
+\subsection*{Sur un  PDA (Windows Mobile, PocketPC)}
 
-Choose one of the targets:
+Choisissez une des plateformes:
 
 \begin{description}
 \item[\texttt{PPC2000}] Pocket PC 2000/2002, Windows CE 3.0
 \item[\texttt{PPC2003}] Pocket PC 2003, Windows CE 4.0
-\item[\texttt{WM5}] Windows Mobile 5 or newer
-\item[\texttt{WM5X}] Windows Mobile 5 or newer with XScale CPU or
-  better (e.g. hx4700)
+\item[\texttt{WM5}] Windows Mobile 5 ou plus récent
+\item[\texttt{WM5X}] Windows Mobile 5 ou plus récent avec processeur XScale ou mieux
+(e.g. hx4700)
 \end{description}
 
-Download the program file \verb|XCSoar.exe| to a SD card.  You can
-launch it with the File Explorer.
+Téléchargez le fichier programme \verb|XCSoar.exe| sur la carte SD. Vous pouvez le lancer depuis l'explorateur de fichiers.
 \sketch{figures/XCS_Today.png}
-Another method to install XCSoar on a PDA is the CAB file.  Download
-it to the SD card.  Use the File Explorer to install it.  After the
-installation, the XCSoar `FLY' and `SIM' launcher icons will be
-visible on the Today screen.
+Une autre méthode consiste à utiliser le fichier CAB. Téléchargez le sur la carte SD. Utiliser l'explorateur de fichier pour l'installer (en double-cliquant dessus). Après l'installation, les icones `FLY' and `SIM' seont visibles sur l'écran d'accueil.
 
 
-\subsection*{On a PNA (Windows CE)}
+\subsection*{Sur une PNA (Windows CE)}
 
 Download the program file \verb|XCSoar.exe| (target ``WM5'') to a SD
 card.  You can launch it with the File Explorer.
 
-\subsection*{On a Windows PC}
+\subsection*{Sur un PC Windows sous PC}
 
-Download the program file \verb|XCSoar.exe| (target ``PC'') to your
-hard disk.
+Téléchargez le fichier programme \verb|XCSoar.exe| (target ``PC'') sur votre disque dur.
 
-\subsection*{On Unix/Linux}
+\subsection*{Sous Unix/Linux}
 
-The file downloaded is \verb|xcsoar_XXX.deb|, where \verb|XXX| includes
-the version number and platform, e.g. \verb|xcsoar_6.0.4_i386.deb|.
-The is a Debian package and can be installed using 
+Téléchargez \verb|xcsoar_XXX.deb|, où \verb|XXX| contient les numéros de version et la plateforme, e.g. \verb|xcsoar_6.0.4_i386.deb|.
+Il s'agit d'un paquet Debian et peut être installé ainsi 
 \begin{center}
 \verb|sudo dpkg -i xcsoar_XXX.deb|.
 \end{center}
-Use \verb|dpkg-query -L xcsoar| to see where the executable and 
-other files are installed,
-Additional data files must be placed in the directory
+Utilisez \verb|dpkg-query -L xcsoar| pour voir où l'exécutable et les autres fichiers sont installés.
+Les fichiers additionnels doivent être placés dans le répertoire
 \verb|~/.xcsoar/XCSoarData/|.
-If \verb|~/.xcsoar| does not exist, it will be created the first time
-that \verb|xcsoar| is run.
+Si \verb|~/.xcsoar| n'existe pas, il sera créé la première fois que  \verb|xcsoar| sera exécuté.
 
 
 \section{Data files}

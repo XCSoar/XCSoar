@@ -90,7 +90,9 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddBoolean(_("Trail drift"),
-             _("Determines whether the snail trail is drifted with the wind when displayed in circling mode."),
+             _("Determines whether the snail trail is drifted with the wind "
+               "when displayed in circling mode. Switched Off, "
+               "the snail trail stays uncompensated for wind drift."),
              CommonInterface::GetMapSettings().trail.wind_drift_enabled, this);
 }
 

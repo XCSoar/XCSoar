@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "OS/PathName.hpp"
+#include "OS/ConvertPathName.hpp"
 #include "IGC/IGCWriter.hpp"
 #include "Computer/GPSClock.hpp"
 #include "DebugReplay.hpp"

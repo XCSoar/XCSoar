@@ -46,6 +46,7 @@ enum class TaskPointFactoryType : uint8_t {
   START_BGA,
   AAT_ANNULAR_SECTOR,
   SYMMETRIC_QUADRANT,
+  AAT_KEYHOLE,
 
   /**
    * This special value is used to determine the number of types

@@ -273,6 +273,10 @@ static constexpr PolarStore::Item internal_polars[] =
 
   // from marius@sargevicius.com
   { _T("LAK-12"),  430, 190, 75, -0.48, 125, -0.88, 175, -1.97, 14.63, 48.611, 114 },
+
+  // from factory polar (flight manual) by Christopher Schenk
+  { _T("G 102 Club Astir IIIb"), 380, 0, 75.0, -0.6, 100.0, -0.70, 180.00, -3.1, 12.40, 0.0, 91 },
+  { _T("G 102 Standard Astir III"), 380, 70, 75.0, -0.6, 100.0, -0.70, 180.00, -2.8, 12.40, 0.0, 100 },
 };
 
 const PolarStore::Item &

@@ -671,7 +671,6 @@ DEBUG_PROGRAM_NAMES = \
 	RunXMLParser \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
-	WriteProfileString WriteProfileInt \
 	RunMD5 \
 	ReadGRecord VerifyGRecord AppendGRecord FixGRecord \
 	AddChecksum \
@@ -680,6 +679,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
+	EnumeratePorts \
 	ReadPort RunPortHandler LogPort \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
@@ -961,22 +961,6 @@ READ_PROFILE_INT_SOURCES = \
 READ_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,ReadProfileInt,READ_PROFILE_INT))
 
-WRITE_PROFILE_STRING_SOURCES = \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/Profile/Profile.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/WriteProfileString.cpp
-WRITE_PROFILE_STRING_DEPENDS = PROFILE IO OS UTIL
-$(eval $(call link-program,WriteProfileString,WRITE_PROFILE_STRING))
-
-WRITE_PROFILE_INT_SOURCES = \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/Profile/Profile.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/WriteProfileInt.cpp
-WRITE_PROFILE_INT_DEPENDS = PROFILE IO OS UTIL
-$(eval $(call link-program,WriteProfileInt,WRITE_PROFILE_INT))
-
 RUN_MD5_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(TEST_SRC_DIR)/RunMD5.cpp
@@ -1127,6 +1111,11 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 RUN_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 RUN_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
+
+ENUMERATE_PORTS_SOURCES = \
+	$(TEST_SRC_DIR)/EnumeratePorts.cpp
+ENUMERATE_PORTS_DEPENDS = PORT
+$(eval $(call link-program,EnumeratePorts,ENUMERATE_PORTS))
 
 READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
@@ -2121,6 +2110,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
+	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \

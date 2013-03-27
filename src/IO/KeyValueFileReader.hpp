@@ -24,23 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_IO_KEY_VALUE_FILE_READER_HPP
 #define XCSOAR_IO_KEY_VALUE_FILE_READER_HPP
 
-#include <tchar.h>
-
 struct KeyValuePair
 {
-  TCHAR *key;
-  TCHAR *value;
+  char *key;
+  char *value;
 };
 
-class TLineReader;
+class NLineReader;
 
 class KeyValueFileReader
 {
 protected:
-  TLineReader &reader;
+  NLineReader &reader;
 
 public:
-  KeyValueFileReader(TLineReader &_reader): reader(_reader) {}
+  KeyValueFileReader(NLineReader &_reader):reader(_reader) {}
   bool Read(KeyValuePair &pair);
 };
 

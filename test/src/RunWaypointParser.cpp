@@ -24,7 +24,6 @@ Copyright_License {
 #include "Waypoint/WaypointReader.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
-#include "OS/PathName.hpp"
 #include "OS/Args.hpp"
 #include "Operation/Operation.hpp"
 
@@ -44,14 +43,12 @@ public:
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "PATH\n");
-
-  const char *path_arg = args.ExpectNext();
+  const tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
   Waypoints way_points;
 
-  PathName path(path_arg);
-  WaypointReader parser(path, 0);
+  WaypointReader parser(path.c_str(), 0);
   if (parser.Error()) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
     return EXIT_FAILURE;

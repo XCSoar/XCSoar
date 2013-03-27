@@ -32,12 +32,14 @@ class AnnularSectorZone:
   fixed inner_radius;
 
 protected:
-  AnnularSectorZone(Shape _shape, const GeoPoint &loc,
+  AnnularSectorZone(Shape _shape, bool _can_start_through_top,
+                    const GeoPoint &loc,
                     const fixed _radiusOuter = fixed(10000.0),
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
                     const fixed _inner_radius = fixed(0.0))
-    :SectorZone(_shape, loc, _radiusOuter, _startRadial, _endRadial),
+    :SectorZone(_shape, _can_start_through_top, true, loc, _radiusOuter,
+                _startRadial, _endRadial),
      inner_radius(_inner_radius) {}
 
   AnnularSectorZone(const AnnularSectorZone &other, const GeoPoint &reference)
@@ -60,7 +62,8 @@ public:
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
                     const fixed _inner_radius = fixed(0.0))
-    :SectorZone(Shape::ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
+    :SectorZone(Shape::ANNULAR_SECTOR, true, true, loc,
+                _radiusOuter, _startRadial, _endRadial),
      inner_radius(_inner_radius)
   {
     UpdateSector();

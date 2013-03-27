@@ -23,7 +23,7 @@
 #include "TaskAdvance.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/AATPoint.hpp"
-#include "Points/IntermediatePoint.hpp"
+#include "Points/ASTPoint.hpp"
 
 void
 TaskAdvance::Reset()
@@ -38,17 +38,30 @@ TaskAdvance::IsStateReady(const TaskPoint &tp,
                           const bool x_enter,
                           const bool x_exit) const
 {
-  if (tp.GetType() == TaskPointType::START)
+  switch (tp.GetType()) {
+  case TaskPointType::UNORDERED:
+    gcc_unreachable();
+
+  case TaskPointType::START:
     return x_exit;
 
-  if (tp.GetType() == TaskPointType::AAT) {
-    const AATPoint *ap = (const AATPoint *)&tp;
-    return IsAATStateReady(ap->HasEntered(), ap->IsCloseToTarget(state));
-  } else if (tp.IsIntermediatePoint()) {
-    const IntermediateTaskPoint *ip = (const IntermediateTaskPoint *)&tp;
-    return ip->HasEntered();
+  case TaskPointType::AAT: {
+    const AATPoint &ap = (const AATPoint &)tp;
+    return IsAATStateReady(ap.HasEntered(), ap.IsCloseToTarget(state));
   }
-  return false;
+
+  case TaskPointType::AST: {
+    const ASTPoint &ip = (const ASTPoint &)tp;
+    return ip.GetScoreExit()
+      ? x_exit
+      : ip.HasEntered();
+  }
+
+  case TaskPointType::FINISH:
+    return false;
+  }
+
+  gcc_unreachable();
 }
 
 bool

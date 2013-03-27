@@ -92,9 +92,6 @@ bool
 InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case ibkEnter:
-    dlgAlternatesListShowModal();
-    break;
   case ibkLeft:
   case ibkUp:
     if (index > 0)
@@ -167,9 +164,6 @@ bool
 InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
-  case ibkEnter:
-    dlgAlternatesListShowModal();
-    break;
   case ibkLeft:
   case ibkUp:
     if (index > 0)

@@ -137,6 +137,8 @@ struct InfoBoxData {
    */
   void SetComment(Angle comment, const TCHAR *suffix=_T(""));
 
+  void SetCommentFromDistance(fixed value);
+
   void SetCommentFromBearingDifference(Angle delta);
 
   /**

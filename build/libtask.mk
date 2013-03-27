@@ -14,7 +14,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Ordered/OrderedTask.cpp \
 	$(TASK_SRC_DIR)/Ordered/MatPoints.cpp \
 	$(TASK_SRC_DIR)/Ordered/TaskAdvance.cpp \
-	$(TASK_SRC_DIR)/Ordered/TaskAdvanceSmart.cpp \
+	$(TASK_SRC_DIR)/Ordered/SmartTaskAdvance.cpp \
 	$(TASK_SRC_DIR)/Ordered/Points/IntermediatePoint.cpp \
 	$(TASK_SRC_DIR)/Ordered/Points/OrderedTaskPoint.cpp \
 	$(TASK_SRC_DIR)/Ordered/Points/StartPoint.cpp \
@@ -47,13 +47,11 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZoneClient.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZonePoint.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/CylinderZone.cpp \
-	$(TASK_SRC_DIR)/ObservationZones/MatCylinderZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/SectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/LineSectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/SymmetricSectorZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/KeyholeZone.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/AnnularSectorZone.cpp \
-	$(TASK_SRC_DIR)/ObservationZones/FAISectorZone.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstra.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstraMin.cpp \
 	$(TASK_SRC_DIR)/PathSolvers/TaskDijkstraMax.cpp \
