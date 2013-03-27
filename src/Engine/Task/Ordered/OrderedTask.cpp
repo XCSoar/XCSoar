@@ -1074,9 +1074,6 @@ OrderedTask::GetPointSearchPoints(unsigned tp) const
 void 
 OrderedTask::SetPointSearchMin(unsigned tp, const SearchPoint &sol)
 {
-  if (!tp && !task_points[0]->HasExited())
-    return;
-
   task_points[tp]->SetSearchMin(sol);
 }
 
