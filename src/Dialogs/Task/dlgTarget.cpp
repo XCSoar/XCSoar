@@ -411,7 +411,7 @@ OnRadialModified(fixed new_value)
   if (new_radial >= Angle::HalfCircle()) {
     new_radial -= Angle::FullCircle();
     must_reload_radial = true;
-  } else if (new_radial <= Angle::HalfCircle()) {
+  } else if (new_radial <= -Angle::HalfCircle()) {
     new_radial += Angle::FullCircle();
     must_reload_radial = true;
   }

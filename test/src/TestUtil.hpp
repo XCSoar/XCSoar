@@ -112,7 +112,7 @@ equals(const Angle a, double b)
 static inline bool
 equals(const Angle a, const Angle b)
 {
-  return equals(a.Degrees(), b.Degrees());
+  return is_zero((a - b).AsDelta().Degrees());
 }
 
 static inline bool

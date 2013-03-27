@@ -26,7 +26,54 @@ Copyright_License {
 
 #include <algorithm>
 
-static bool
+#include <assert.h>
+
+/**
+ * Is this a leading byte that is followed by 1 continuation byte?
+ */
+static constexpr bool
+IsLeading1(unsigned char ch)
+{
+  return (ch & 0xe0) == 0xc0;
+}
+
+/**
+ * Is this a leading byte that is followed by 2 continuation byte?
+ */
+static constexpr bool
+IsLeading2(unsigned char ch)
+{
+  return (ch & 0xf0) == 0xe0;
+}
+
+/**
+ * Is this a leading byte that is followed by 3 continuation byte?
+ */
+static constexpr bool
+IsLeading3(unsigned char ch)
+{
+  return (ch & 0xf8) == 0xf0;
+}
+
+/**
+ * Is this a leading byte that is followed by 4 continuation byte?
+ */
+static constexpr bool
+IsLeading4(unsigned char ch)
+{
+  return (ch & 0xfc) == 0xf8;
+}
+
+/**
+ * Is this a leading byte that is followed by 5 continuation byte?
+ */
+static constexpr bool
+IsLeading5(unsigned char ch)
+{
+  return (ch & 0xfe) == 0xfc;
+}
+
+static constexpr bool
 IsContinuation(unsigned char ch)
 {
   return (ch & 0xc0) == 0x80;
@@ -37,39 +84,39 @@ ValidateUTF8(const char *p)
 {
   for (; *p != 0; ++p) {
     unsigned char ch = *p;
-    if (ch < 0x80)
-      /* ASCII */
+    if (IsASCII(ch))
       continue;
 
     if (IsContinuation(ch))
       /* continuation without a prefix */
       return false;
 
-    if ((ch & 0xe0) == 0xc0) {
+    if (IsLeading1(ch)) {
       /* 1 continuation */
       if (!IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xf0) == 0xe0) {
+    } else if (IsLeading2(ch)) {
       /* 2 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xf8) == 0xf0) {
+    } else if (IsLeading3(ch)) {
       /* 3 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xfc) == 0xf8) {
+    } else if (IsLeading4(ch)) {
       /* 4 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p) || !IsContinuation(*++p))
         return false;
-    } else if ((ch & 0xfe) == 0xfc) {
+    } else if (IsLeading5(ch)) {
       /* 5 continuations */
       if (!IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p) || !IsContinuation(*++p) ||
           !IsContinuation(*++p))
         return false;
-    }
+    } else
+      return false;
   }
 
   return true;
@@ -86,7 +133,7 @@ FindNonASCIIOrZero(const char *p)
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer)
 {
-  if (IsASCII((char)ch)) {
+  if (IsASCII(ch)) {
     *buffer++ = ch;
   } else {
     *buffer++ = 0xc0 | (ch >> 6);
@@ -115,7 +162,7 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
   while (*p != 0) {
     unsigned char ch = *p++;
 
-    if (IsASCII((char)ch)) {
+    if (IsASCII(ch)) {
       *q++ = ch;
 
       if (q >= end)
@@ -147,4 +194,86 @@ LengthUTF8(const char *p)
     if (!IsContinuation(*p))
       ++n;
   return n;
+}
+
+/**
+ * Find the null terminator.
+ */
+gcc_pure
+static char *
+FindTerminator(char *p)
+{
+  assert(p != nullptr);
+
+  while (*p != 0)
+    ++p;
+
+  return p;
+}
+
+/**
+ * Find the leading byte for the given continuation byte.
+ */
+gcc_pure
+static char *
+FindLeading(gcc_unused char *const begin, char *i)
+{
+  assert(i > begin);
+  assert(IsContinuation(*i));
+
+  while (IsContinuation(*--i)) {
+    assert(i > begin);
+  }
+
+  return i;
+}
+
+void
+CropIncompleteUTF8(char *const p)
+{
+  assert(p != nullptr);
+
+  char *const end = FindTerminator(p);
+  if (end == p)
+    return;
+
+  char *const last = end - 1;
+  if (!IsContinuation(*last)) {
+    if (!IsASCII(*last))
+      *last = 0;
+
+    assert(ValidateUTF8(p));
+    return;
+  }
+
+  char *const leading = FindLeading(p, last);
+  const size_t n_continuations = last - leading;
+  assert(n_continuations > 0);
+
+  const unsigned char ch = *leading;
+
+  unsigned expected_continuations;
+  if (IsLeading1(ch))
+    expected_continuations = 1;
+  else if (IsLeading2(ch))
+    expected_continuations = 2;
+  else if (IsLeading3(ch))
+    expected_continuations = 3;
+  else if (IsLeading4(ch))
+    expected_continuations = 4;
+  else if (IsLeading5(ch))
+    expected_continuations = 5;
+  else {
+    assert(n_continuations == 0);
+    gcc_unreachable();
+  }
+
+  assert(n_continuations <= expected_continuations);
+
+  if (n_continuations < expected_continuations)
+    /* this continuation is incomplete: truncate here */
+    *leading = 0;
+
+  /* now the string must be completely valid */
+  assert(ValidateUTF8(p));
 }

@@ -50,6 +50,7 @@ void
 InfoBoxData::SetTitle(const TCHAR *_title)
 {
   title = _title;
+  title.CropIncompleteUTF8();
 }
 
 void
@@ -62,6 +63,7 @@ void
 InfoBoxData::SetComment(const TCHAR *_comment)
 {
   comment = _comment;
+  comment.CropIncompleteUTF8();
 }
 
 void
