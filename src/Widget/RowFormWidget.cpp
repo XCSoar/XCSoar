@@ -451,11 +451,7 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
   if (nullable)
     df->AddNull();
 
-  size_t length;
-  while ((length = _tcslen(filters)) > 0) {
-    df->ScanDirectoryTop(filters);
-    filters += length + 1;
-  }
+  df->ScanMultiplePatterns(filters);
 
   if (registry_key != nullptr) {
     TCHAR path[MAX_PATH];

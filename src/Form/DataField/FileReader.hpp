@@ -173,6 +173,12 @@ public:
   void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
 
+  /**
+   * Scan multiple shell patterns.  Each pattern is terminated by a
+   * null byte, and the list ends with an empty pattern.
+   */
+  void ScanMultiplePatterns(const TCHAR *patterns);
+
   /** For use by other classes */
   gcc_pure
   unsigned size() const;
