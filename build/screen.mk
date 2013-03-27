@@ -57,6 +57,7 @@ endif
 
 ifeq ($(LIBJPEG),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/LibJPEG.cpp
 endif
 
