@@ -29,7 +29,7 @@ Copyright_License {
 #include "Debug.hpp"
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed)
+Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
   delete texture;
   texture = ImportTexture(uncompressed);

@@ -131,7 +131,7 @@ public:
   }
 #endif
 
-  bool Load(const UncompressedImage &uncompressed);
+  bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
 
 #ifdef ENABLE_SDL
   bool Load(SDL_Surface *_surface, Type type=Type::STANDARD);

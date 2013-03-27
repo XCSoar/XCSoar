@@ -40,7 +40,7 @@ Bitmap::Load(unsigned id, Type type)
     return false;
 
   const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
-  return Load(uncompressed);
+  return Load(uncompressed, type);
 }
 
 #ifdef USE_EGL
@@ -73,7 +73,7 @@ bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   const UncompressedImage uncompressed = LoadJPEGFile(path);
-  return Load(uncompressed);
+return Load(uncompressed);
 }
 
 #endif
