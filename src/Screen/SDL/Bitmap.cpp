@@ -71,7 +71,13 @@ Bitmap::Load(SDL_Surface *_surface, Type type)
     surface = _surface;
 
     assert(surface->format->palette != NULL &&
-           surface->format->palette->ncolors == 2);
+           surface->format->palette->ncolors == 256);
+    assert(surface->format->palette->colors[0].r == 0);
+    assert(surface->format->palette->colors[0].g == 0);
+    assert(surface->format->palette->colors[0].b == 0);
+    assert(surface->format->palette->colors[255].r == 255);
+    assert(surface->format->palette->colors[255].g == 255);
+    assert(surface->format->palette->colors[255].b == 255);
     break;
   }
 

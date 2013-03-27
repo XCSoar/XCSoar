@@ -437,7 +437,7 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 
   SDL_Surface *src_surface = src.GetNative();
   assert(src_surface->format->palette != NULL &&
-         src_surface->format->palette->ncolors == 2);
+         src_surface->format->palette->ncolors == 256);
 
   SDL_Surface *zoomed =
     ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
@@ -447,11 +447,11 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
     return;
 
   assert(zoomed->format->palette != NULL &&
-         zoomed->format->palette->ncolors == 2);
+         zoomed->format->palette->ncolors == 256);
 
   ::SDL_SetColorKey(zoomed, 0, 0);
   zoomed->format->palette->colors[0] = text_color;
-  zoomed->format->palette->colors[1] = bg_color;
+  zoomed->format->palette->colors[255] = bg_color;
 
   Copy(dest_x, dest_y, dest_width, dest_height,
        zoomed, (src_x * dest_width) / src_width,
