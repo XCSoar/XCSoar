@@ -32,6 +32,7 @@ Copyright_License {
 #include "SiteConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Waypoint/Patterns.hpp"
 
 enum ControlIndex {
   DataPath,
@@ -92,18 +93,18 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFileReader(_("Waypoints"),
                 _("Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), "
                     "Zander files (.wpz) or SeeYou files (.cup)."),
-                ProfileKeys::WaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::WaypointFile, WAYPOINT_FILE_PATTERNS);
 
   AddFileReader(_("More waypoints"),
                 _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
-                ProfileKeys::AdditionalWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::AdditionalWaypointFile, WAYPOINT_FILE_PATTERNS);
   SetExpertRow(AdditionalWaypointFile);
 
   AddFileReader(_("Watched waypoints"),
                 _("Waypoint file containing special waypoints for which additional computations like "
                     "calculation of arrival height in map display always takes place. Useful for "
                     "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
-                ProfileKeys::WatchedWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::WatchedWaypointFile, WAYPOINT_FILE_PATTERNS);
   SetExpertRow(WatchedWaypointFile);
 
   AddFileReader(_("Airspaces"), _("The file name of the primary airspace file."),
