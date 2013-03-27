@@ -33,6 +33,12 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 
+#if defined(ENABLE_SDL) && defined(main)
+/* on some platforms, SDL wraps the main() function and clutters our
+   namespace with a macro called "main" */
+#undef main
+#endif
+
 namespace PageActions {
   /**
    * Call this when we're about to leave the current page.  This

@@ -40,6 +40,7 @@ static void
 test_simple()
 {
   Projection prj;
+  prj.SetGeoLocation(GeoPoint::Zero());
 
   TestGeoScreenCouple(prj, GeoPoint(Angle::Zero(),
                                     Angle::Zero()), 0, 0);

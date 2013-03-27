@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
+#include "Terrain/RasterTerrain.hpp"
 #include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
@@ -246,6 +247,11 @@ GlueMapWindow::UpdateMapScale()
 void
 GlueMapWindow::SetLocationLazy(const GeoPoint location)
 {
+  if (!visible_projection.IsValid()) {
+    SetLocation(location);
+    return;
+  }
+
   const fixed distance_meters =
     visible_projection.GetGeoLocation().Distance(location);
   const fixed distance_pixels =
@@ -327,6 +333,11 @@ GlueMapWindow::UpdateProjection()
   } else if (basic.location_available)
     // Pan is off
     SetLocationLazy(basic.location);
+  else if (!visible_projection.IsValid() && terrain != nullptr)
+    /* if there's no GPS fix yet and no home waypoint, start at the
+       map center, to avoid showing a fully white map, which confuses
+       users */
+    SetLocation(terrain->GetTerrainCenter());
 
   visible_projection.UpdateScreenBounds();
 }

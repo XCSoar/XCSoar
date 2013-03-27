@@ -44,7 +44,7 @@ struct ThermalAssistantLook {
 
   Font circle_label_font, overlay_font;
 
-  void Initialise(bool small);
+  void Initialise(bool small, bool inverse);
 };
 
 #endif

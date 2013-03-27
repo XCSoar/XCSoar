@@ -21,13 +21,22 @@ Version 6.6 - not yet released
 * Android
   - faster map renderer on some Android devices
 
-Version 6.5.3 - not yet released
+Version 6.5.3 - 2013/03/26
 * user interface
   - eliminate flickering in the cross section on Windows
+  - fix wrong radial display in target dialog
+  - start at terrain center when there's no GPS fix and no home location
+* task
+  - fix line OZ rounding error (#2599)
 * devices
   - FLARM: fix IGC file download on firmware 5.09 (#2619)
 * Android
   - fix crash with Hebrew language
+* Mac OS X
+  - fix crash on startup (#2607, #2667)
+  - show missing serial ports, hide internal devices (#2668)
+* infoboxes
+  - fix rendering of thermal assistant aircraft symbol (#2702)
 
 Version 6.5.2 - 2013/03/15
 * user interface

@@ -85,7 +85,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSF].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
   classes[TMZ].SetColors(Color(0x80, 0x80, 0x80));
-  classes[TMZ].border_width = 3;
+  classes[TMZ].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
   classes[WAVE].SetColors(Color(0xFF, 0xFF, 0x00));
   classes[WAVE].border_width = 0;
@@ -93,5 +93,6 @@ AirspaceRendererSettings::SetDefaults()
 
   classes[CTR].fill_color = Color(0xFF, 0x00, 0x00);
   classes[CTR].border_color = Color(0x00, 0x00, 0xFF);
+  classes[TMZ].border_width = 1;
   classes[CTR].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 }

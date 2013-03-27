@@ -393,11 +393,15 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
     // big range..
     PopupNearestWaypointDetails(way_points, CommonInterface::Basic().location,
                                 1.0e5);
-  else if (StringIsEqual(misc, _T("pan")))
+  else if (StringIsEqual(misc, _T("pan"))) {
+    const Projection &projection =
+      CommonInterface::main_window->GetProjection();
+
     // big range..
-    PopupNearestWaypointDetails(way_points,
-                                CommonInterface::main_window->GetProjection().GetGeoLocation(),
-                                1.0e5);
+    if (projection.IsValid())
+      PopupNearestWaypointDetails(way_points, projection.GetGeoLocation(),
+                                  1.0e5);
+  }
 }
 
 // NearestMapItems

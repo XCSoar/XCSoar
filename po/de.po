@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-08 12:06+0100\n"
-"PO-Revision-Date: 2013-03-12 15:23+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2013-03-20 12:53+0000\n"
+"Last-Translator: Christopher Schenk <Christopher_Schenk@web.de>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-13 07:16+0000\n"
+"X-Launchpad-Export-Date: 2013-03-20 22:04+0000\n"
 "X-Generator: Launchpad (build 16532)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -64,7 +64,7 @@ msgstr "Gemischt"
 
 #: src/Task/TypeStrings.cpp:51
 msgid "Touring"
-msgstr "Wanderflug"
+msgstr "Reiseflug"
 
 #: src/Task/TypeStrings.cpp:62
 msgid ""
@@ -80,7 +80,7 @@ msgid ""
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
 "FAI Regeln, erlaubt nur den FAI Start-, Ziel- und Wendepunkttyp, für "
-"Abzeichen/Rekorde. Aktiviert die FAI Höhe für die Endanflugberechnung."
+"Abzeichen/Rekorde. Aktiviert die FAI Höhe für die Endanflugsberechnung."
 
 #: src/Task/TypeStrings.cpp:68
 msgid "FAI rules, path from a start to two turn points and return."
@@ -100,7 +100,7 @@ msgid ""
 "cylinder and sector observation zones."
 msgstr ""
 "Geschw. Aufgabe über zugewiesene Gebiete, min. Flugzeit wird angewendet. "
-"Beaschränkt auf Zylinder und Sektor Gebiete (OZ)."
+"Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
 
 #: src/Task/TypeStrings.cpp:77
 msgid ""
@@ -4203,7 +4203,7 @@ msgstr "Untergrenze"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
-msgstr "Lauftraum Details"
+msgstr "Luftraum Details"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:116
 #: Data/Dialogs/dlgAirspaceWarnings.xml:9
@@ -5317,7 +5317,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Airspace fill mode"
-msgstr "Lauftraum Füllmodus"
+msgstr "Luftraum Füllmodus"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:220
 msgid "Specifies the mode for filling the airspace area."
@@ -7537,7 +7537,7 @@ msgstr "Verfolgungsinterval"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:166
 msgid "Track friends"
-msgstr "Kurs-Freunde"
+msgstr "Zeige Freunde"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
 msgid "Download the position of your friends live from the SkyLines server."
@@ -8645,7 +8645,7 @@ msgstr "Eigener Kode"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:31
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:31
 msgid "Handicap"
-msgstr "Handikap"
+msgstr "Handicap"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:8 Data/Dialogs/dlgPlaneDetails_L.xml:10
 msgid "Comp. ID"

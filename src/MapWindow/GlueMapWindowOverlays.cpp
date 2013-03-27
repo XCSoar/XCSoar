@@ -72,6 +72,9 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 {
+  if (!render_projection.IsValid())
+    return;
+
   Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
   canvas.Select(dash_pen);
 
@@ -86,6 +89,9 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 void
 GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 {
+  if (!render_projection.IsValid())
+    return;
+
   GeoPoint location = render_projection.GetGeoLocation();
 
   TextInBoxMode mode;
@@ -241,6 +247,9 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
+  if (!projection.IsValid())
+    return;
+
   StaticString<80> buffer;
 
   fixed map_width = projection.GetScreenWidthMeters();

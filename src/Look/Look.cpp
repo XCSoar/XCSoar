@@ -33,8 +33,7 @@ Look::Initialise(const Font &map_font, const Font &map_bold_font,
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
   gesture.Initialise();
-  thermal_assistant_dialog.Initialise(false);
-  thermal_assistant_gauge.Initialise(true);
+  thermal_assistant_dialog.Initialise(false, false);
   chart.Initialise();
 }
 
@@ -73,6 +72,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                       infobox_title_font);
   wind_arrow_info_box.Initialise(map_bold_font, settings.info_boxes.inverse);
   flarm_gauge.Initialise(traffic, true, settings.info_boxes.inverse);
+  thermal_assistant_gauge.Initialise(true, settings.info_boxes.inverse);
   final_glide_bar.Initialise(map_font);
   map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();

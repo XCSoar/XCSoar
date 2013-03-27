@@ -187,7 +187,7 @@ $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID
 	$$(Q)cp $$< $$@
 
 $$(OUT)/$(3)/bin/lib$(1).so:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) IOIOLIB_DIR=$$(IOIOLIB_DIR) $$@
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) IOIOLIB_DIR=$$(IOIOLIB_DIR) USE_CCACHE=$$(USE_CCACHE) $$@
 
 endef
 
@@ -224,7 +224,7 @@ $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps compile-jni-classes
 	@touch $@
 
-$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
+$(NATIVE_HEADERS): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
 	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_BUILD)/bin/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
