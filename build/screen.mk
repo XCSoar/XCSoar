@@ -50,15 +50,19 @@ SCREEN_SOURCES += \
 endif
 
 ifeq ($(LIBPNG),y)
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/LibPNG.cpp
+  SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibPNG.cpp
+
+  ifeq ($(OPENGL),y)
+    SCREEN_SOURCES += $(SCREEN_SRC_DIR)/OpenGL/LibPNG.cpp
+  endif
 endif
 
 ifeq ($(LIBJPEG),y)
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/LibJPEG.cpp
+  SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp
+
+  ifeq ($(OPENGL),y)
+    SCREEN_SOURCES += $(SCREEN_SRC_DIR)/OpenGL/LibJPEG.cpp
+  endif
 endif
 
 ifeq ($(OPENGL),y)
