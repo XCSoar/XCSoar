@@ -181,6 +181,9 @@ ifeq ($(TARGET),UNIX)
   TCPREFIX := $(LOCAL_TCPREFIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
   TARGET_IS_PI = $(HOST_IS_PI)
+  ARMV6 = $(HOST_IS_ARMV6)
+  ARMV7 = $(HOST_IS_ARMV7)
+  NEON = $(HOST_HAS_NEON)
 endif
 
 ifeq ($(TARGET),UNIX32)
@@ -199,6 +202,7 @@ ifeq ($(TARGET),PI)
   PI ?= /opt/pi/root
   TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
+  ARMV6 = y
 endif
 
 ifeq ($(TARGET),KOBO)
@@ -216,6 +220,18 @@ ifeq ($(TARGET),UNIX)
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
   HAVE_VASPRINTF := y
+
+  ifeq ($(ARMV6),y)
+    TARGET_ARCH += -march=armv6
+  endif
+
+  ifeq ($(ARMV7),y)
+    TARGET_ARCH += -march=armv7-a
+  endif
+
+  ifeq ($(NEON),y)
+    TARGET_ARCH += -mfpu=neon -mfpu=vfpv3-d16
+  endif
 endif
 
 ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
