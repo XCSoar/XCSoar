@@ -51,18 +51,10 @@ endif
 
 ifeq ($(LIBPNG),y)
   SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibPNG.cpp
-
-  ifeq ($(OPENGL),y)
-    SCREEN_SOURCES += $(SCREEN_SRC_DIR)/OpenGL/LibPNG.cpp
-  endif
 endif
 
 ifeq ($(LIBJPEG),y)
   SCREEN_SOURCES += $(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp
-
-  ifeq ($(OPENGL),y)
-    SCREEN_SOURCES += $(SCREEN_SRC_DIR)/OpenGL/LibJPEG.cpp
-  endif
 endif
 
 ifeq ($(OPENGL),y)
@@ -90,6 +82,7 @@ ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
@@ -112,6 +105,7 @@ else ifeq ($(EGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Init.cpp \
 	$(SCREEN_SRC_DIR)/EGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Window.cpp \

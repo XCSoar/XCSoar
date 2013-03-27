@@ -22,8 +22,52 @@ Copyright_License {
 */
 
 #include "Screen/Bitmap.hpp"
-#include "Screen/Custom/LibJPEG.hpp"
-#include "Screen/Custom/UncompressedImage.hpp"
+#include "Screen/Debug.hpp"
+#include "LibPNG.hpp"
+#include "LibJPEG.hpp"
+#include "UncompressedImage.hpp"
+#include "ResourceLoader.hpp"
+
+#ifdef USE_LIBPNG
+
+bool
+Bitmap::Load(unsigned id, Type type)
+{
+  assert(IsScreenInitialized());
+
+  ResourceLoader::Data data = ResourceLoader::Load(id);
+  if (data.first == nullptr)
+    return false;
+
+  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  return Load(uncompressed);
+}
+
+#ifdef USE_EGL
+bool
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
+{
+  assert(zoom > 0);
+
+  // XXX
+  return Load(id);
+}
+#endif
+
+#ifndef USE_LIBJPEG
+
+bool
+Bitmap::LoadFile(const TCHAR *path)
+{
+  // TODO: use libjpeg when SDL_image is not available
+  return false;
+}
+
+#endif
+
+#endif
+
+#ifdef USE_LIBJPEG
 
 bool
 Bitmap::LoadFile(const TCHAR *path)
@@ -31,3 +75,5 @@ Bitmap::LoadFile(const TCHAR *path)
   const UncompressedImage uncompressed = LoadJPEGFile(path);
   return Load(uncompressed);
 }
+
+#endif
