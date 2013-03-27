@@ -85,7 +85,7 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSF].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
   classes[TMZ].SetColors(Color(0x80, 0x80, 0x80));
-  classes[TMZ].border_width = 3;
+  classes[TMZ].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
   classes[WAVE].SetColors(Color(0xFF, 0xFF, 0x00));
   classes[WAVE].border_width = 0;
