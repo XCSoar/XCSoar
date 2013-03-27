@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
 #include "OS/ConvertPathName.hpp"
-
+#include "UncompressedImage.hpp"
 #include "Screen/SDL/Format.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -84,6 +84,22 @@ Bitmap::Load(SDL_Surface *_surface, Type type)
   return true;
 #endif
 }
+
+#ifndef ENABLE_OPENGL
+
+bool
+Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+{
+  Reset();
+
+  SDL_Surface *surface = ImportSurface(uncompressed);
+  if (surface == nullptr)
+    return false;
+
+  return Load(surface, type);
+}
+
+#endif
 
 #ifndef USE_LIBPNG
 

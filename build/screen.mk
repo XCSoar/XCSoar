@@ -95,6 +95,7 @@ SCREEN_SOURCES += \
 endif
 ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/UncompressedImage.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
