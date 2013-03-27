@@ -65,6 +65,7 @@ On Debian, you may install these using the following command:
    libcurl4-openssl-dev \
    libxml-parser-perl \
    librsvg2-bin xsltproc \
+   imagemagick gettext \
    ttf-dejavu
 
 For Android, you need:
