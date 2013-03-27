@@ -51,7 +51,7 @@ static bool
 GetIBType(const char *key, InfoBoxFactory::Type &val)
 {
   unsigned _val = val;
-  bool ret = ProfileMap::Get(key, _val);
+  bool ret = Profile::Get(key, _val);
 
   if (_val >= e_NUM_TYPES)
     return false;

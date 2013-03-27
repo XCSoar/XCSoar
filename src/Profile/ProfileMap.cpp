@@ -34,7 +34,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-namespace ProfileMap {
+namespace Profile {
   typedef std::map<std::string, std::string> map_t;
 
   static map_t map;
@@ -42,19 +42,19 @@ namespace ProfileMap {
 }
 
 bool
-ProfileMap::IsModified()
+Profile::IsModified()
 {
   return modified;
 }
 
 void
-ProfileMap::SetModified(bool _modified)
+Profile::SetModified(bool _modified)
 {
   modified = _modified;
 }
 
 const char *
-ProfileMap::Get(const char *key, const char *default_value)
+Profile::Get(const char *key, const char *default_value)
 {
   map_t::const_iterator it = map.find(key);
   if (it == map.end())
@@ -64,7 +64,7 @@ ProfileMap::Get(const char *key, const char *default_value)
 }
 
 bool
-ProfileMap::Get(const char *key, TCHAR *value, size_t max_size)
+Profile::Get(const char *key, TCHAR *value, size_t max_size)
 {
   map_t::const_iterator it = map.find(key);
   if (it == map.end()) {
@@ -88,7 +88,7 @@ ProfileMap::Get(const char *key, TCHAR *value, size_t max_size)
 }
 
 bool
-ProfileMap::Get(const char *key, int &value)
+Profile::Get(const char *key, int &value)
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -107,7 +107,7 @@ ProfileMap::Get(const char *key, int &value)
 }
 
 bool
-ProfileMap::Get(const char *key, short &value)
+Profile::Get(const char *key, short &value)
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -126,7 +126,7 @@ ProfileMap::Get(const char *key, short &value)
 }
 
 bool
-ProfileMap::Get(const char *key, bool &value)
+Profile::Get(const char *key, bool &value)
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -139,7 +139,7 @@ ProfileMap::Get(const char *key, bool &value)
 }
 
 bool
-ProfileMap::Get(const char *key, unsigned &value)
+Profile::Get(const char *key, unsigned &value)
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -158,7 +158,7 @@ ProfileMap::Get(const char *key, unsigned &value)
 }
 
 bool
-ProfileMap::Get(const char *key, uint16_t &value)
+Profile::Get(const char *key, uint16_t &value)
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x10000)
@@ -169,7 +169,7 @@ ProfileMap::Get(const char *key, uint16_t &value)
 }
 
 bool
-ProfileMap::Get(const char *key, uint8_t &value)
+Profile::Get(const char *key, uint8_t &value)
 {
   unsigned value32;
   if (!Get(key, value32) || value32 >= 0x100)
@@ -180,7 +180,7 @@ ProfileMap::Get(const char *key, uint8_t &value)
 }
 
 bool
-ProfileMap::Get(const char *key, fixed &value)
+Profile::Get(const char *key, fixed &value)
 {
   // Try to read the profile map
   const char *str = Get(key);
@@ -199,7 +199,7 @@ ProfileMap::Get(const char *key, fixed &value)
 }
 
 void
-ProfileMap::Set(const char *key, const char *value)
+Profile::Set(const char *key, const char *value)
 {
   auto i = map.insert(std::make_pair(key, value));
   if (!i.second) {
@@ -218,7 +218,7 @@ ProfileMap::Set(const char *key, const char *value)
 #ifdef _UNICODE
 
 void
-ProfileMap::Set(const char *key, const TCHAR *value)
+Profile::Set(const char *key, const TCHAR *value)
 {
   char buffer[MAX_PATH];
   int length = WideCharToMultiByte(CP_UTF8, 0, value, -1,
@@ -233,7 +233,7 @@ ProfileMap::Set(const char *key, const TCHAR *value)
 #endif
 
 void
-ProfileMap::Set(const char *key, int value)
+Profile::Set(const char *key, int value)
 {
   char tmp[50];
   sprintf(tmp, "%d", value);
@@ -241,7 +241,7 @@ ProfileMap::Set(const char *key, int value)
 }
 
 void
-ProfileMap::Set(const char *key, long value)
+Profile::Set(const char *key, long value)
 {
   char tmp[50];
   sprintf(tmp, "%ld", value);
@@ -249,7 +249,7 @@ ProfileMap::Set(const char *key, long value)
 }
 
 void
-ProfileMap::Set(const char *key, unsigned value)
+Profile::Set(const char *key, unsigned value)
 {
   char tmp[50];
   sprintf(tmp, "%u", value);
@@ -257,7 +257,7 @@ ProfileMap::Set(const char *key, unsigned value)
 }
 
 void
-ProfileMap::Set(const char *key, fixed value)
+Profile::Set(const char *key, fixed value)
 {
   char tmp[50];
   sprintf(tmp, "%f", (double)value);
@@ -265,13 +265,13 @@ ProfileMap::Set(const char *key, fixed value)
 }
 
 bool
-ProfileMap::Exists(const char *key)
+Profile::Exists(const char *key)
 {
   return map.find(key) != map.end();
 }
 
 void
-ProfileMap::Export(KeyValueFileWriter &writer)
+Profile::Export(KeyValueFileWriter &writer)
 {
   // Iterate through the profile maps
   for (auto it_str = map.begin(); it_str != map.end(); it_str++)
@@ -282,7 +282,7 @@ ProfileMap::Export(KeyValueFileWriter &writer)
 }
 
 void
-ProfileMap::Clear()
+Profile::Clear()
 {
   map.clear();
 }

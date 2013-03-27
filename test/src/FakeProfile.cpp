@@ -35,20 +35,20 @@ Profile::SetFiles(const TCHAR* override)
 }
 
 const char *
-ProfileMap::Get(const char *key, const char *default_value)
+Profile::Get(const char *key, const char *default_value)
 {
   return NULL;
 }
 
 bool
-ProfileMap::Get(const char *key, TCHAR *pPos, size_t dwSize)
+Profile::Get(const char *key, TCHAR *pPos, size_t dwSize)
 {
   pPos[0] = _T('\0');
   return false;
 }
 
 void
-ProfileMap::Set(const char *key, const char *value)
+Profile::Set(const char *key, const char *value)
 {
 }
 
