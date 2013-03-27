@@ -24,6 +24,7 @@ Version 6.6 - not yet released
   - add airspace ack button to map item list (#2139)
   - additionally show airspace altitude in feet (#2379)
   - show more files in replay file picker (#2582)
+  - clicking with Alt key pressed moves the simulator
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
