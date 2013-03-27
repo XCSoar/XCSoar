@@ -34,6 +34,7 @@ Version 6.6 - not yet released
   - allow up to 30 turn points in racing tasks
 * devices
   - Volkslogger: support IGC file download (#1972)
+  - CAI302: support uploading all waypoint file types (#2054)
 * Android
   - faster map renderer on some Android devices
 * data
