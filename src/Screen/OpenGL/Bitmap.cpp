@@ -23,8 +23,22 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+#include "Screen/Custom/UncompressedImage.hpp"
+#include "UncompressedImage.hpp"
 #include "Texture.hpp"
 #include "Debug.hpp"
+
+bool
+Bitmap::Load(const UncompressedImage &uncompressed)
+{
+  delete texture;
+  texture = ImportTexture(uncompressed);
+  if (texture == nullptr)
+    return false;
+
+  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
+  return true;
+}
 
 #ifndef ANDROID
 

@@ -25,8 +25,6 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/LibPNG.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
-#include "UncompressedImage.hpp"
-#include "Texture.hpp"
 #include "ResourceLoader.hpp"
 
 bool
@@ -34,19 +32,12 @@ Bitmap::Load(unsigned id, Type type)
 {
   assert(IsScreenInitialized());
 
-  Reset();
-
   ResourceLoader::Data data = ResourceLoader::Load(id);
   if (data.first == nullptr)
     return false;
 
   const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
-  texture = ImportTexture(uncompressed);
-  if (texture == nullptr)
-    return false;
-
-  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
-  return true;
+  return Load(uncompressed);
 }
 
 #ifdef USE_EGL

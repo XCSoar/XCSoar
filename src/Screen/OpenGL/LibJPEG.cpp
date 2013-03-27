@@ -24,41 +24,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Custom/LibJPEG.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
-#include "UncompressedImage.hpp"
-
-#include <jpeglib.h>
-
-#include <setjmp.h>
-
-struct JPEGErrorManager {
-  struct jpeg_error_mgr base;
-
-  jmp_buf setjmp_buffer;
-
-  JPEGErrorManager() {
-    base.error_exit = ErrorExit;
-  }
-
-  gcc_noreturn
-  void ErrorExit() {
-    longjmp(setjmp_buffer, 1);
-  }
-
-  gcc_noreturn
-  static void ErrorExit(j_common_ptr cinfo) {
-    JPEGErrorManager *err = reinterpret_cast<JPEGErrorManager *>(cinfo);
-    err->ErrorExit();
-  }
-};
 
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   const UncompressedImage uncompressed = LoadJPEGFile(path);
-  texture = ImportTexture(uncompressed);
-  if (texture == nullptr)
-    return false;
-
-  size = { uncompressed.GetWidth(), uncompressed.GetHeight() };
-  return true;
+  return Load(uncompressed);
 }
