@@ -101,12 +101,12 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
 gcc_pure
 static bool
-IsAltKeyPressed()
+IsCtrlKeyPressed()
 {
 #ifdef ENABLE_SDL
-  return SDL_GetModState() & (KMOD_LALT|KMOD_RALT|KMOD_LMETA|KMOD_RMETA);
+  return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
 #elif defined(USE_GDI)
-  return GetKeyState(VK_MENU) & 0x8000;
+  return GetKeyState(VK_CONTROL) & 0x8000;
 #else
   return false;
 #endif
@@ -125,7 +125,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
 
-  if (is_simulator() && IsAltKeyPressed() && visible_projection.IsValid()) {
+  if (is_simulator() && IsCtrlKeyPressed() && visible_projection.IsValid()) {
     /* clicking with Alt key held moves the simulator to the click
        location instantly */
     const GeoPoint location = visible_projection.ScreenToGeo(x, y);
