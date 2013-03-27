@@ -114,6 +114,8 @@ Supported targets:
 
  UNIX32, UNIX64: like UNIX, but explicitly choose 32 or 64 bit build
 
+ OPT: alias for UNIX with optimisation and no debugging
+
  PI: cross-compiling for the Raspberry Pi
 
  KOBO: cross-compiling for Kobo Mini and others (experimental)
