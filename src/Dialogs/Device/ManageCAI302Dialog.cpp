@@ -98,7 +98,7 @@ static void
 UploadWaypoints(const DialogLook &look, CAI302Device &device)
 {
   TCHAR path[MAX_PATH];
-  if (!FilePicker(_("Waypoints"), _T("*.cup"), path))
+  if (!FilePicker(_("Waypoints"), _T("*.cup\0"), path))
     return;
 
   CAI302WaypointUploader job(path, device);

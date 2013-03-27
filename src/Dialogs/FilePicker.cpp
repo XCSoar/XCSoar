@@ -27,12 +27,12 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 
 bool
-FilePicker(const TCHAR *caption, const TCHAR *filter, TCHAR *buffer)
+FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 {
-  assert(filter != NULL);
+  assert(patterns != NULL);
 
   DataFieldFileReader df(NULL);
-  df.ScanDirectoryTop(filter);
+  df.ScanMultiplePatterns(patterns);
   ComboList *combo_list = df.CreateComboList();
   if (combo_list == NULL)
     return false;
