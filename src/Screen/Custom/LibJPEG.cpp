@@ -49,7 +49,11 @@ struct JPEGErrorManager {
   }
 
   gcc_noreturn
-  static void ErrorExit(j_common_ptr cinfo) {
+  static void ErrorExit(j_common_ptr _cinfo) {
+    /* cast to void first to suppress bogus -Wcast-align warning
+       ("cast increases required alignment of target type") - the
+       parameter type of this callback is wrong */
+    void *cinfo = (void *)_cinfo;
     JPEGErrorManager *err = reinterpret_cast<JPEGErrorManager *>(cinfo);
     err->ErrorExit();
   }
