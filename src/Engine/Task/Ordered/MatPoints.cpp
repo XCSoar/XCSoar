@@ -30,7 +30,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
-#include <map>
+#include <set>
 
 /**
  * Class to build vector from visited waypoints.
@@ -53,7 +53,7 @@ private:
    * a temp map used to dedupe mat points when
    * we're adding via closest first
    */
-  std::map<unsigned, unsigned> dedupe;
+  std::set<unsigned> dedupe;
 
   const AbstractTaskFactory& factory;
 
@@ -65,8 +65,7 @@ private:
   void AddUnique(const Waypoint &wp) {
     const unsigned key = wp.id;
 
-    if (dedupe.find(key) == dedupe.end()) {
-      dedupe[key] = 0;
+    if (dedupe.insert(key).second) {
       OrderedTaskPoint *tp = factory.CreateIntermediate(wp);
       vector.push_back(tp);
     }
