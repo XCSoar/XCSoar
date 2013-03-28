@@ -26,6 +26,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Points/OrderedTaskPoint.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/Ordered/Points/IntermediatePoint.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
@@ -66,8 +67,7 @@ private:
 
     if (dedupe.find(key) == dedupe.end()) {
       dedupe[key] = 0;
-      OrderedTaskPoint *tp = (OrderedTaskPoint *)
-        factory.CreateIntermediate(wp);
+      OrderedTaskPoint *tp = factory.CreateIntermediate(wp);
       vector.push_back(tp);
     }
   }
