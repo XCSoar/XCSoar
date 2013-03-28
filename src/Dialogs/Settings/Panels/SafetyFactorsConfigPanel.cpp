@@ -72,14 +72,17 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            UnitGroup::ALTITUDE, task_behaviour.route_planner.safety_height_terrain);
 
   static constexpr StaticEnumChoice abort_task_mode_list[] = {
-    { (unsigned)AbortTaskMode::SIMPLE, N_("Simple") },
-    { (unsigned)AbortTaskMode::TASK, N_("Task") },
-    { (unsigned)AbortTaskMode::HOME, N_("Home") },
+    { (unsigned)AbortTaskMode::SIMPLE, N_("Simple"),
+      N_("The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.") },
+    { (unsigned)AbortTaskMode::TASK, N_("Task"),
+      N_("The sorting will also take the current task direction into account.") },
+    { (unsigned)AbortTaskMode::HOME, N_("Home"),
+      N_("The sorting will try to find landing options in the current direction to the configured home waypoint.") },
     { 0 }
   };
 
   AddEnum(_("Alternates mode"),
-          _("Determines sorting of alternates in the alternates dialog and in abort mode:\n[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.\n[Task] The sorting will also take the current task direction into account.\n[Home] The sorting will try to find landing options in the current direction to the configured home waypoint."),
+          _("Determines sorting of alternates in the alternates dialog and in abort mode."),
           abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
   AddFloat(_("Polar degradation"), /* xgettext:no-c-format */
