@@ -92,12 +92,13 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 }
 
 static bool
-DeclareInner(Port &port, const Declaration &declaration, const Waypoint *home,
+DeclareInner(Port &port, const unsigned bulkrate,
+             const Declaration &declaration, const Waypoint *home,
              OperationEnvironment &env)
 {
   assert(declaration.Size() >= 2);
 
-  VLAPI vl(port, 38400L, env);
+  VLAPI vl(port, bulkrate, env);
 
   if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
@@ -158,7 +159,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
-  bool success = DeclareInner(port, declaration, home, env);
+  bool success = DeclareInner(port, bulkrate, declaration, home, env);
 
   // restore baudrate
   if (old_baud_rate != 0)
