@@ -147,7 +147,7 @@ LoadChecklist()
 
   TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
   if (reader == NULL) {
-    addChecklist(_("No checklist loaded"),_("Create xcsoar-checklist.txt\n"));
+    addChecklist(_("No checklist loaded"), _("Create xcsoar-checklist.txt"));
     return;
   }
 
