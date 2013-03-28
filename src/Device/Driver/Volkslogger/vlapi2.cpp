@@ -233,6 +233,36 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
   return err;
 }
 
+VLA_ERROR VLAPI::update_logger_declaration() {
+  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
+  VLA_ERROR err = stillconnect();
+  if(err != VLA_ERR_NOERR)
+    return err;
+
+  //get raw database and declaration from logger
+  err = dbbget(dbbbuffer,sizeof(dbbbuffer));
+  if(err != VLA_ERR_NOERR)
+    return err;
+
+  //populate DBB structure with database(=block) read from logger
+  //do NOT use the declaration(=fdf) from logger
+  DBB dbb1;
+  memcpy(dbb1.block,dbbbuffer,sizeof(dbb1.block));
+  //memcpy(dbb1.fdf,dbbbuffer+DBB::FrmBeg,sizeof(dbb1.fdf));
+  dbb1.open_dbb();
+
+  //update declaration section
+  declaration.put(&dbb1);
+  memcpy(dbbbuffer+DBB::FrmBeg,dbb1.fdf,sizeof(dbb1.fdf));
+
+  // and write buffer back into VOLKSLOGGER
+  err = stillconnect();
+  if(err != VLA_ERR_NOERR)
+    return err;
+  err = dbbput(dbbbuffer,sizeof(dbbbuffer));
+  return err;
+}
+
 VLA_ERROR VLAPI::read_directory() {
   directory.clear();
   directory.reserve(10);

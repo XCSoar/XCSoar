@@ -181,6 +181,10 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
 
   // write database and flight declaration from the structs back into the Volkslogger
   VLA_ERROR write_db_and_declaration();
+
+  // read raw database and declaration from the logger, update the declaration to match
+  // the one present in the DECLARATION struct and write the raw data back to the logger
+  VLA_ERROR update_logger_declaration();
 };
 
 #endif

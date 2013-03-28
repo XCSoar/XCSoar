@@ -103,9 +103,8 @@ DeclareInner(Port &port, const unsigned bulkrate,
   if (vl.connect(20) != VLA_ERR_NOERR)
     return false;
 
-  memset(&vl.database, 0, sizeof(vl.database));
+  //Clear DECLARATION struct and populate with xcs declaration
   memset(&vl.declaration, 0, sizeof(vl.declaration));
-
   CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
 		     sizeof(vl.declaration.flightinfo.pilot),
                      declaration.pilot_name);
@@ -137,7 +136,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
 
   vl.declaration.task.nturnpoints = n;
 
-  bool success = vl.write_db_and_declaration() == VLA_ERR_NOERR;
+  bool success = vl.update_logger_declaration() == VLA_ERR_NOERR;
   Volkslogger::Reset(port, env);
   return success;
 }
