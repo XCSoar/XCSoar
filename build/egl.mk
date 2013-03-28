@@ -10,6 +10,7 @@ ifeq ($(EGL),y)
 OPENGL = y
 FREETYPE = y
 LIBPNG = y
+LIBJPEG = y
 ENABLE_SDL = n
 
 EGL_CPPFLAGS = -DUSE_EGL

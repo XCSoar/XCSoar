@@ -34,7 +34,6 @@ Copyright_License {
 #endif
 
 #include <SDL_endian.h>
-#include <SDL_image.h>
 
 #ifdef WIN32
   #include <windows.h>
@@ -101,70 +100,6 @@ Bitmap::Load(const UncompressedImage &uncompressed, Type type)
 
 #endif
 
-#ifndef USE_LIBPNG
-
-bool
-Bitmap::Load(unsigned id, Type type)
-{
-  assert(IsScreenInitialized());
-
-  Reset();
-
-  ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.first == NULL)
-    return false;
-
-#ifdef WIN32
-  const BITMAPINFO *info = (const BITMAPINFO *)data.first;
-  if (data.second < sizeof(*info))
-    return false;
-
-  int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount + 7) / 8 - 1) | 3) + 1;
-  int data_size = pitch * info->bmiHeader.biHeight;
-
-  /* duplicate the BMP file and re-insert the BITMAPFILEHEADER which
-     is not included in this .EXE file */
-  size_t size = data.second;
-  BITMAPFILEHEADER *header = (BITMAPFILEHEADER *)malloc(sizeof(*header) + size);
-  if (header == NULL)
-    /* out of memory */
-    return false;
-
-  /* byte order?  this constant is correct according to MSDN */
-  header->bfType = 0x4D42;
-  header->bfSize = sizeof(*header) + size;
-  header->bfReserved1 = 0;
-  header->bfReserved2 = 0;
-  header->bfOffBits = sizeof(BITMAPFILEHEADER) + size - data_size;
-  memcpy(header + 1, data.first, data.second);
-
-  const void *bmp_data = header;
-  size_t bmp_size = sizeof(*header) + size;
-#else
-  const void *bmp_data = data.first;
-  size_t bmp_size = data.second;
-#endif
-
-  SDL_RWops *rw = SDL_RWFromConstMem(bmp_data, bmp_size);
-
-#ifdef WIN32
-  SDL_Surface *original = ::SDL_LoadBMP_RW(rw, 1);
-  free(header);
-#else
-  SDL_Surface *original = ::IMG_LoadPNG_RW(rw);
-  SDL_RWclose(rw);
-#endif
-
-  if (original == NULL)
-    return false;
-
-  Load(original, type);
-
-  return true;
-}
-
-#endif /* !USE_LIBPNG */
-
 bool
 Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
@@ -173,18 +108,6 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
   // XXX
   return Load(id);
 }
-
-#ifndef USE_LIBPNG
-
-bool
-Bitmap::LoadFile(const TCHAR *path)
-{
-  NarrowPathName narrow_path(path);
-  SDL_Surface *original = ::IMG_Load(narrow_path);
-  return original != NULL && Load(original);
-}
-
-#endif /* !USE_LIBPNG */
 
 #ifndef ENABLE_OPENGL
 

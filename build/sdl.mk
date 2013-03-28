@@ -12,11 +12,10 @@ endif
 
 ifeq ($(ENABLE_SDL),y)
 
-SDL_PKG = sdl
+LIBPNG = y
+LIBJPEG = y
 
-ifeq ($(LIBPNG),n)
-SDL_PKG += SDL_image
-endif
+SDL_PKG = sdl
 
 ifeq ($(FREETYPE),n)
 SDL_PKG += SDL_ttf
@@ -28,7 +27,7 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
 SDL_CPPFLAGS += -isystem $(KOBO)/include/SDL
-SDL_LDADD += $(KOBO)/lib/libpng.a $(KOBO)/lib/libjpeg.a $(KOBO)/lib/libSDL_image.a
+SDL_LDADD += $(KOBO)/lib/libpng.a $(KOBO)/lib/libjpeg.a
 SDL_LDADD += $(KOBO)/lib/libSDL_ttf.a $(KOBO)/lib/libfreetype.a
 SDL_LDADD += $(KOBO)/lib/libSDL_gfx.a $(KOBO)/lib/libSDL.a
 else

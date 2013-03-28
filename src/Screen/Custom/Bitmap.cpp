@@ -28,8 +28,6 @@ Copyright_License {
 #include "UncompressedImage.hpp"
 #include "ResourceLoader.hpp"
 
-#ifdef USE_LIBPNG
-
 bool
 Bitmap::Load(unsigned id, Type type)
 {
@@ -54,26 +52,9 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
 }
 #endif
 
-#ifndef USE_LIBJPEG
-
-bool
-Bitmap::LoadFile(const TCHAR *path)
-{
-  // TODO: use libjpeg when SDL_image is not available
-  return false;
-}
-
-#endif
-
-#endif
-
-#ifdef USE_LIBJPEG
-
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   const UncompressedImage uncompressed = LoadJPEGFile(path);
-return Load(uncompressed);
+  return Load(uncompressed);
 }
-
-#endif
