@@ -488,6 +488,8 @@ FormKeyDown(unsigned key_code)
   case KEY_LEFT:
 #ifdef GNAV
   case '6':
+    // Key F14 added in order to control the Analysis-Pages with the Altair RemoteStick
+  case KEY_F14:
 #endif
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
     NextPage(-1);
@@ -496,6 +498,8 @@ FormKeyDown(unsigned key_code)
   case KEY_RIGHT:
 #ifdef GNAV
   case '7':
+    // Key F13 added in order to control the Analysis-Pages with the Altair RemoteStick
+  case KEY_F13:
 #endif
     ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
     NextPage(+1);

@@ -458,13 +458,17 @@ WndForm::ShowModal()
 #if !defined USE_GDI || defined _WIN32_WCE
       /* The Windows CE dialog manager does not handle KEY_ESCAPE and
          so we have to do it by ourself */
-      if (event.GetKeyCode() == KEY_ESCAPE) {
-        if (IsAltair())
-          /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
-             expected to be the one that saves and closes a dialog */
+
+      // On Altair, the RemoteKey ("E" Button) shall also close the analyse-page
+      if (IsAltair()) {
+#ifdef GNAV
+        if (event.GetKeyCode() == KEY_ESCAPE || event.GetKeyCode() == KEY_F15) {
           modal_result = mrOK;
-        else
-          modal_result = mrCancel;
+          continue;
+        }
+#endif
+      } else if (event.GetKeyCode() == KEY_ESCAPE) {
+        modal_result = mrCancel;
         continue;
       }
 #endif

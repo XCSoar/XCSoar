@@ -51,6 +51,18 @@ static constexpr struct string_to_key string_to_key[] = {
   { _T("F10"), KEY_F10 },
   { _T("F11"), KEY_F11 },
   { _T("F12"), KEY_F12 },
+#ifdef USE_GDI
+  /* These Keys are used for the Triadis-RemoteStick, as well as for
+     expanded Keyboard-Events */
+  { _T("F13"), KEY_F13 },
+  { _T("F14"), KEY_F14 },
+  { _T("F15"), KEY_F15 },
+  { _T("F16"), KEY_F16 },
+  { _T("F17"), KEY_F17 },
+  { _T("F18"), KEY_F18 },
+  { _T("F19"), KEY_F19 },
+  { _T("F20"), KEY_F20 },
+#endif
   { _T("LEFT"), KEY_LEFT },
   { _T("RIGHT"), KEY_RIGHT },
   { _T("UP"), KEY_UP },
