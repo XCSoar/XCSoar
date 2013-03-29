@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-26 17:28+0000\n"
+"PO-Revision-Date: 2013-03-28 21:03+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-26 21:04+0000\n"
-"X-Generator: Launchpad (build 16540)\n"
+"X-Launchpad-Export-Date: 2013-03-29 17:21+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3164,14 +3164,13 @@ msgstr "Dérive Compensée en spirale"
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
-#, fuzzy
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Détermine si la trace en spirale est déviée avec le vent quand elle est "
-"affichée en mode spirale."
+"Permet de décaler la trace pour compenser sa dérive, en mode spirale. OFF ne "
+"fait aucun décalage de la trace."
 
 #: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
@@ -4941,9 +4940,8 @@ msgid "No checklist loaded"
 msgstr "Pas de checklist chargée"
 
 #: src/Dialogs/dlgChecklist.cpp:150
-#, fuzzy
 msgid "Create xcsoar-checklist.txt"
-msgstr "Créer xcsoar-checklist.txt\n"
+msgstr "Créer xcsoar-checklist.txt"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
@@ -5351,7 +5349,7 @@ msgstr "Retirer du circuit"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
 msgid "Set As New Home"
-msgstr "=> Nvlle Base"
+msgstr "Nouvelle Base"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
 msgid "Pan To Waypoint"
@@ -5604,19 +5602,19 @@ msgstr ""
 "S'il n'est pas listé, alors utilisez \"Générique\"."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Au dessus du Plan d'Arrivée"
+msgstr "Désactive la barre d'arrivée."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Sous le plan d'arrivée"
+msgstr "Affiche la barre d'arrivée"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr ""
+msgstr "Affiche la barre d'arrivée à proximité de l'arrivée."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 msgid ""
@@ -5659,15 +5657,16 @@ msgid ""
 msgstr "Affiche le profile d'ascendance, affiché sur la carte"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:100
-#, fuzzy
 msgid "Final glide bar"
-msgstr "Indicateur d'arrivée à MC0"
+msgstr "Barre d'arrivée"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
+"Sur \"On\", la barre d'arrivée sera toujours affichée, sur \"Auto\", "
+"seulement à proximité de l'arrivée."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid "Final glide bar MC0"
@@ -6754,11 +6753,13 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
+"Les dégagements ne seront ordonnés que par type de points (aérodrome/champ "
+"vachable) et hauteur d'arrivée."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
-msgstr ""
+msgstr "L'ordre prendra aussi en compte la direction en cours du circuit."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:79
 #, no-c-format
@@ -6770,7 +6771,7 @@ msgstr "Base"
 msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
-msgstr ""
+msgstr "L'ordre favorisera les zones posables dans la direction de la base."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:84
 msgid "Alternates mode"
@@ -6780,6 +6781,8 @@ msgstr "Ordre des dégagements"
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
+"Définit l'ordre d'affichage des dégagements dans la fenêtre correspondante "
+"et en interruption de circuit."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Polar degradation"
@@ -7433,27 +7436,27 @@ msgstr "Blanc"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Sandstone"
-msgstr ""
+msgstr "grès"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Coller"
+msgstr "Pastel"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr ""
+msgstr "Cartes VFR Italian Avioportolano"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr ""
+msgstr "Cartes VFR DFS (Allemagne)"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr ""
+msgstr "Cartes VFR du SIA (France)"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 msgid "Terrain colors"
@@ -8222,14 +8225,12 @@ msgstr "Modifier départs alternatifs"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:174
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
-#, fuzzy
 msgid "Task point"
-msgstr "Point du circuit"
+msgstr "Point de virage"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:179
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Durée Circuit AAT"
+msgstr "Point de zone affectée"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
 msgid "Remove task point?"
@@ -9090,9 +9091,8 @@ msgstr ""
 "Active le rétroéclairage automatique, à l'aide d'un capteur de lumière."
 
 #: Data/Dialogs/dlgTaskPoint.xml:21 Data/Dialogs/dlgTaskPoint_L.xml:25
-#, fuzzy
 msgid "Score exit"
-msgstr "Résultat"
+msgstr "Points en sortie"
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
@@ -9469,28 +9469,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "%.0f x"
-#~ msgstr "%.0f x"
-
-#~ msgid ""
-#~ "Determines sorting of alternates in the alternates dialog and in abort "
-#~ "mode:\n"
-#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
-#~ "outlanding field) and arrival height.\n"
-#~ "[Task] The sorting will also take the current task direction into "
-#~ "account.\n"
-#~ "[Home] The sorting will try to find landing options in the current "
-#~ "direction to the configured home waypoint."
-#~ msgstr ""
-#~ "Détermine l'ordre de présentation des dégagements possibles dans la "
-#~ "fenêtre \"Dégagmts\" ou en passage en mode \"abandon de circuit\" :\n"
-#~ "[Simple] sont simplement classés par type (aérodrôme/champs) et hauteur "
-#~ "d'arrivée,\n"
-#~ "[Circuit] l'ordre prend également en compte la direction de la branche du "
-#~ "circuit,\n"
-#~ "[Base] l'ordre essaie de prendre en compte la direction du terrain défini "
-#~ "comme Base."
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -9549,6 +9527,9 @@ msgstr ""
 #~ msgid "Unknown competition number"
 #~ msgstr "Numéro de compétition inconnu"
 
+#~ msgid "Create xcsoar-checklist.txt\n"
+#~ msgstr "Créer xcsoar-checklist.txt\n"
+
 #~ msgid ""
 #~ "This is the navigation altitude minus the terrain height obtained from "
 #~ "the terrain file. The value is coloured red when the glider is below the "
@@ -9570,6 +9551,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Détails\n"
 #~ "Pt de virage"
+
+#~ msgid "Task Point"
+#~ msgstr "Point du circuit"
 
 #~ msgid "Change point type?"
 #~ msgstr "Changer le type du point?"
@@ -9623,6 +9607,13 @@ msgstr ""
 #~ "de fichier long (2008-01-18-XXX-ABC-01.IGC)."
 
 #~ msgid ""
+#~ "Determines whether the snail trail is drifted with the wind when "
+#~ "displayed in circling mode."
+#~ msgstr ""
+#~ "Détermine si la trace en spirale est déviée avec le vent quand elle est "
+#~ "affichée en mode spirale."
+
+#~ msgid ""
 #~ "Sample Text\n"
 #~ "123"
 #~ msgstr ""
@@ -9653,6 +9644,25 @@ msgstr ""
 
 #~ msgid "Lon."
 #~ msgstr "Long."
+
+#~ msgid ""
+#~ "Determines sorting of alternates in the alternates dialog and in abort "
+#~ "mode:\n"
+#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
+#~ "outlanding field) and arrival height.\n"
+#~ "[Task] The sorting will also take the current task direction into "
+#~ "account.\n"
+#~ "[Home] The sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "Détermine l'ordre de présentation des dégagements possibles dans la "
+#~ "fenêtre \"Dégagmts\" ou en passage en mode \"abandon de circuit\" :\n"
+#~ "[Simple] sont simplement classés par type (aérodrôme/champs) et hauteur "
+#~ "d'arrivée,\n"
+#~ "[Circuit] l'ordre prend également en compte la direction de la branche du "
+#~ "circuit,\n"
+#~ "[Base] l'ordre essaie de prendre en compte la direction du terrain défini "
+#~ "comme Base."
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Contenu des informations affichées sur les différentes pages."
@@ -9745,6 +9755,9 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"
+
+#~ msgid "%.0f x"
+#~ msgstr "%.0f x"
 
 #~ msgid "AC Off;  %d%%"
 #~ msgstr "Hors charge; %d%%"
