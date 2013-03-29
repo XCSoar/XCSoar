@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-02-03 17:19+0000\n"
-"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
+"PO-Revision-Date: 2013-03-29 13:09+0000\n"
+"Last-Translator: Gabor LIPTAK <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-06 12:32+0000\n"
-"X-Generator: Launchpad (build 16477)\n"
+"X-Launchpad-Export-Date: 2013-03-29 17:20+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -208,9 +208,9 @@ msgid "A cylinder.  Any point within area scored from center."
 msgstr "Egy henger. Érintse bármelyik pontját a fordulópont teljesítéséhez."
 
 #: src/Task/TypeStrings.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr "Egy henger. A benne elért legtávolabbi pont kerül számításba."
+msgstr ""
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -264,9 +264,9 @@ msgid "A symmetric quadrant with a custom radius."
 msgstr ""
 
 #: src/Task/TypeStrings.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Egy henger. A benne elért legtávolabbi pont kerül számításba."
+msgstr ""
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -311,7 +311,7 @@ msgstr "Henger fordulópont"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Henger 1 mérföldes sugárral."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -349,59 +349,59 @@ msgid "Area sector with inner radius"
 msgstr "Terület szektor belső sugárral"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symmetric quadrant"
-msgstr "FAI startnégyszög"
+msgstr "Szimetrikus négyszög"
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "DAeC kulcslyuk"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Érvénytelen start.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Érvénytelen befutás.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "A feladat nincs lezárva.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Fordulópontok típusa nem egyforma.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Helytelen számú fordulópont.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Túl sok fordulópont.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Kevés a fordulópont.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "A fordulópontok nem egyediek.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "Üres feladat.\n"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -409,9 +409,9 @@ msgid "non-FAI turn points"
 msgstr "nem FAI fordulópontok"
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "nem FAI fordulópontok"
+msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -958,9 +958,9 @@ msgid "None"
 msgstr "Nincs"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "Feladat vége"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
@@ -996,14 +996,12 @@ msgid "H AGL"
 msgstr "Mgsg FF"
 
 #: src/InfoBoxes/Content/Factory.cpp:168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Navigációs magasság mínusz a terep magasság a domborzati file-ból.Az érték "
-"piros, ha a repülő a biztonsági szint alatt van."
 
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
@@ -1025,9 +1023,9 @@ msgstr ""
 "variométeren, ha van."
 
 #: src/InfoBoxes/Content/Factory.cpp:187
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "Útirány"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:188
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1334,9 +1332,9 @@ msgid "Terrain elevation"
 msgstr "Terepszint"
 
 #: src/InfoBoxes/Content/Factory.cpp:362
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Domborzat magasság"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:363
 #, no-c-format
@@ -1418,14 +1416,12 @@ msgstr "Szél seb"
 
 #: src/InfoBoxes/Content/Factory.cpp:413
 #: src/InfoBoxes/Content/Factory.cpp:1160
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Az XCSoar által becsült szélirány. Érintőképernyő/PC: ha ez a kijelző az "
-"aktív, a fel-le nyilakkal állítható az irány."
 
 #: src/InfoBoxes/Content/Factory.cpp:422
 #, no-c-format
@@ -1438,14 +1434,12 @@ msgid "Wind Brng"
 msgstr "Szélirány"
 
 #: src/InfoBoxes/Content/Factory.cpp:424
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Az XCSoar által becsült szélirány. Érintőképernyő/PC: ha ez a kijelző az "
-"aktív, a fel-le nyilakkal állítható az irány."
 
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
@@ -1453,9 +1447,9 @@ msgid "AAT time"
 msgstr "HT idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:434
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AAT Time"
-msgstr "HT idő"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:435
 #, no-c-format
@@ -2125,9 +2119,9 @@ msgid "Thermal average over all"
 msgstr "Termik emelés napi átlag"
 
 #: src/InfoBoxes/Content/Factory.cpp:798
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "Tk átlg"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:799
 #, no-c-format
@@ -2272,7 +2266,7 @@ msgid "GR Avg"
 msgstr "Sklsz átlag"
 
 #: src/InfoBoxes/Content/Factory.cpp:884
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance made in the configured period of time , divided by the altitude "
 "lost since then. Negative values are shown as ^^^ and indicate climbing "
@@ -2284,14 +2278,6 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
-"A beállított idő alatt megtett távolság és az ez idő alatt vesztett magasság "
-"hányadosa. Negatív értékek helyett ^^^ kerül kijelzésre és emelkedő siklásra "
-"utal. 200 feletti érték helyett +++ kerül kijelzésre. Az átlagolás periódusa "
-"a konfigurálás menüben állítható. A javasolt értékek 60, 90 vagy 120: a "
-"kisebb értékek esetén a pillanatnyi, nagyobbak esetén a siklásbeli siklószám "
-"felé közelít az átlag. Figyelem, a távolság nem a periódus elején és végén "
-"mért pozíció közötti egyenes hossza, hanem a ténylegesen, akár cikkcakkosan "
-"megtett táv. Körözésben nem kerül kiszámításra."
 
 #: src/InfoBoxes/Content/Factory.cpp:892
 #, no-c-format
@@ -2474,13 +2460,11 @@ msgid "Climb Band"
 msgstr "Emelési sáv"
 
 #: src/InfoBoxes/Content/Factory.cpp:1006
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
-"Az átlagos emelkedés (vízszintes tengely) mint a magasság (függőleges "
-"tengely) függvénye."
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -2825,9 +2809,9 @@ msgstr ""
 "nyitásig vagy zárásig hátralevő időt."
 
 #: src/InfoBoxes/Content/Factory.cpp:1195
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Start radiál"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1196 Data/Dialogs/dlgTarget.xml:23
 #: Data/Dialogs/dlgTarget_L.xml:16
@@ -2841,14 +2825,14 @@ msgid "True bearing from the next waypoint to your position."
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial ATC"
-msgstr "Start radiál"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial ATC"
-msgstr "Radiál"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -3119,14 +3103,11 @@ msgstr "Sodrás"
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
-#, fuzzy
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"A gép által húzott nyomvonal körözés közbeni, szélirány szerinti eltolását "
-"határozza meg."
 
 #: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
@@ -3397,9 +3378,9 @@ msgstr "Magasság"
 
 #: src/Renderer/MapItemListRenderer.cpp:575
 #: src/Dialogs/Traffic/TrafficList.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "%u minutes ago"
-msgstr "2 perc"
+msgstr "%u perccel ezelőtt"
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -3767,9 +3748,9 @@ msgid "IOIO i2c pressure sensor"
 msgstr "IOIO i2c nyomásszenzor"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:80
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO voltage sensor"
-msgstr "IOIO i2c nyomásszenzor"
+msgstr "IOIO feszültség szenzor"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3948,9 +3929,8 @@ msgstr "Sebesség"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:343
 #: src/Dialogs/Device/DeviceListDialog.cpp:375
-#, fuzzy
 msgid "Bluetooth is disabled"
-msgstr "Bluetooth szerver"
+msgstr "Bluetooth letiltva"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:348
 msgid "Not connected"
@@ -3965,9 +3945,8 @@ msgstr "Az eszköz foglalt."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:405
 #: src/Dialogs/Device/DeviceListDialog.cpp:467
-#, fuzzy
 msgid "Device is not connected"
-msgstr "Az eszköz foglalt."
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:431
 msgid "Edit device"
@@ -4640,14 +4619,14 @@ msgid "Screen Layout"
 msgstr "Képernyő elrendezés"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pages"
-msgstr "Oldal"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "Kijelzők"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:121
 #: src/Dialogs/Plane/PlanePolarDialog.cpp:72
@@ -4828,9 +4807,8 @@ msgid "Not Found"
 msgstr "Nem található"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:149
-#, fuzzy
 msgid "Set new teammate"
-msgstr "Az új csapattárs:"
+msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:292
 msgid "Barograph"
@@ -4887,9 +4865,8 @@ msgid "No checklist loaded"
 msgstr "Ellenőrző lista nincs betöltve"
 
 #: src/Dialogs/dlgChecklist.cpp:150
-#, fuzzy
 msgid "Create xcsoar-checklist.txt"
-msgstr "Hozzon létre xcsoar-checklist.txt fájlt!\n"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
@@ -5541,14 +5518,14 @@ msgstr ""
 "érdekében. Ha nincs a listán, válassza a Generic típust."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Végsiklás szintjelző"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Végsiklás pálya alatt"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
@@ -5787,9 +5764,8 @@ msgid "Preferred period for gliders."
 msgstr "Ajánlott időtartam siklóernyősöknek"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
-#, fuzzy
 msgid "GR average period"
-msgstr "Átlagos siklószám mintavétel"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -5970,9 +5946,9 @@ msgid "8 Top (Portrait)"
 msgstr "8 fent (Álló)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8 lent + varió (álló)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6161,9 +6137,9 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "A kijelző felső élére rajzolt fül."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "Árnyék"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
@@ -6437,9 +6413,8 @@ msgstr ""
 "hosszának arányában."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Auto nagyítás"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6456,23 +6431,20 @@ msgid "The upper limit for auto zoom distance."
 msgstr "Az automata nagyítás felső határa."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "Bázis távolsága"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
-#, fuzzy
 msgid "Main area"
-msgstr "Szárnyfelület"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
-#, fuzzy
 msgid "Specifies what should be displayed in the main area."
-msgstr "Légtér kiszínezésének módja."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:329
@@ -6490,19 +6462,17 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:344
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Irány"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:193
-#, fuzzy
 msgid "Bottom area"
-msgstr "Bal alsó"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
-#, fuzzy
 msgid "Specifies what should be displayed below the main area."
-msgstr "Légtér kiszínezésének módja."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PolarConfigPanel.cpp:251
 msgid "Polar name"
@@ -7355,9 +7325,9 @@ msgid "Sandstone"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Beill."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
@@ -7392,13 +7362,10 @@ msgid "Slope shading"
 msgstr "Lejtők árnyalása"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:234
-#, fuzzy
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr ""
-"A domborzat lejtői árnyalhatók vagy észak-dél irányban vagy a szél vagy a "
-"Nap irányától függően."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:239
 msgid "Terrain contrast"
@@ -7662,14 +7629,14 @@ msgid "All waypoint labels will be displayed."
 msgstr "Minden fordulópont cimke megjelenik."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Feladat pontjai és leszállók"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr "A feladat részét képező fordulópontok és a leszállóhelyek megjelennek."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -8127,14 +8094,12 @@ msgstr "Alternatívok szerkesztése"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:174
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
-#, fuzzy
 msgid "Task point"
-msgstr "Feladat pont"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:179
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Légtérfeladat idő"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
 msgid "Remove task point?"
@@ -8195,9 +8160,8 @@ msgid "Cylinder"
 msgstr "Henger"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "Terület henger"
+msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8220,9 +8184,8 @@ msgid "BGA Start Sector"
 msgstr "BGA Induló Szektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Becsült időszükséglet"
+msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:53
 msgid "Now"
@@ -8986,9 +8949,8 @@ msgstr ""
 "Engedélyezi a háttérvilágítás fénymérő általi automatikus szabályzását."
 
 #: Data/Dialogs/dlgTaskPoint.xml:21 Data/Dialogs/dlgTaskPoint_L.xml:25
-#, fuzzy
 msgid "Score exit"
-msgstr "Pont"
+msgstr ""
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
@@ -9244,9 +9206,8 @@ msgid "Zoom"
 msgstr "Nagyítás"
 
 #: Data/Input/default.xci:847
-#, fuzzy
 msgid "Traffic List"
-msgstr "Közlekedési lámpa"
+msgstr ""
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -9368,6 +9329,203 @@ msgstr ""
 "TAF"
 
 #~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Navigációs magasság mínusz a terep magasság a domborzati file-ból.Az "
+#~ "érték piros, ha a repülő a biztonsági szint alatt van."
+
+#~ msgid "Task Point"
+#~ msgstr "Feladat pont"
+
+#~ msgid "Weather parameters"
+#~ msgstr "Időjárási paraméterek"
+
+#~ msgid "Sunset"
+#~ msgstr "Napnyugta"
+
+#~ msgid "Lookup"
+#~ msgstr "Keresés"
+
+#~ msgid "Short file name"
+#~ msgstr "Rövid fájl név"
+
+#~ msgid ""
+#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
+#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
+#~ "if on ground. During flight you can change QFE with up and down keys. "
+#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
+#~ msgstr ""
+#~ "Automatikus QFE (reptéri feletti magasság). Ez az érték felszállás ELŐTT "
+#~ "végérvényesen nullázódik. Felszállás után nem kerül automatikus "
+#~ "nullázásra, még a földön sem.  Repülés közben a fel-le nyilakkal "
+#~ "állítható a QFE. Az alsó sorban a QNH (tengerszint szerinti) magasság "
+#~ "látható. A QFE állítása nem hat a QNH magasságra."
+
+#~ msgid ""
+#~ "Graph of average circling climb rate (horizontal axis) as a function of "
+#~ "height (vertical axis)."
+#~ msgstr ""
+#~ "Az átlagos emelkedés (vízszintes tengely) mint a magasság (függőleges "
+#~ "tengely) függvénye."
+
+#~ msgid "Height GPS"
+#~ msgstr "Magasság tenger feletti"
+
+#~ msgid "H GND"
+#~ msgstr "Terep"
+
+#~ msgid "TC All"
+#~ msgstr "Tk napi"
+
+#~ msgid "QFE GPS"
+#~ msgstr "Magasság bázis QFE"
+
+#~ msgid "Delete Error"
+#~ msgstr "Törlési hiba"
+
+#~ msgid "Change point type?"
+#~ msgstr "Megváltoztassam a pont típusát?"
+
+#~ msgid "No valid finish.\n"
+#~ msgstr "Érvénytelen befutás.\n"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "A feladat nincs lezárva.\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "Fordulópontok típusa nem egyforma.\n"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "Érvénytelen start.\n"
+
+#~ msgid "Task Selection"
+#~ msgstr "Feladatválasztás"
+
+#~ msgid "Save task?"
+#~ msgstr "Mentsem a feladatot?"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "Helytelen számú fordulópont.\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "Túl sok fordulópont.\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "Kevés a fordulópont.\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "Üres feladat.\n"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "Érvénytelen alakú a FAI háromszög.\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "A fordulópontok nem egyediek.\n"
+
+#~ msgid ""
+#~ "Sample Text\n"
+#~ "123"
+#~ msgstr ""
+#~ "Mintaszöveg\n"
+#~ "123"
+
+#~ msgid "Latitude"
+#~ msgstr "Szélesség"
+
+#~ msgid ""
+#~ "This determines whether the logger uses the short IGC file name or the "
+#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
+#~ "(2008-01-18-XXX-ABC-01.IGC)."
+#~ msgstr ""
+#~ "Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
+#~ "használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: "
+#~ "(2008-01-18-XXX-ABC-01.IGC)"
+
+#~ msgid ""
+#~ "Determines whether the snail trail is drifted with the wind when "
+#~ "displayed in circling mode."
+#~ msgstr ""
+#~ "A gép által húzott nyomvonal körözés közbeni, szélirány szerinti "
+#~ "eltolását határozza meg."
+
+#~ msgid "My Sample"
+#~ msgstr "Saját Mintám"
+
+#~ msgid "Longitude"
+#~ msgstr "Hosszúság"
+
+#~ msgid "Lon."
+#~ msgstr "H."
+
+#~ msgid "Lat."
+#~ msgstr "SZ."
+
+#~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr ""
+#~ "FP\n"
+#~ "részletek"
+
+#~ msgid "This sets the task point for review."
+#~ msgstr "Ezzel kiválasztható a megtekintendő feladatpont."
+
+#~ msgid "H Baro"
+#~ msgstr "Mgsg baro"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Kijelző oldalak"
+
+#~ msgid "InfoBox Modes"
+#~ msgstr "Kijelző oldalak tartalma"
+
+#~ msgid "AAT Est Remaining Help"
+#~ msgstr "HT Becs.Marad"
+
+#~ msgid "Show details:"
+#~ msgstr "Részletek:"
+
+#~ msgid "No further information"
+#~ msgstr "Nincs további információ"
+
+#~ msgid "Unknown competition number"
+#~ msgstr "Ismeretlen farokjel"
+
+#~ msgid "Not found"
+#~ msgstr "Nem található"
+
+#~ msgid "Set new teammate:"
+#~ msgstr "Az új csapattárs:"
+
+#~ msgid ""
+#~ "FLARM\n"
+#~ "Details"
+#~ msgstr ""
+#~ "FLARM\n"
+#~ "részletek"
+
+#~ msgid "H GPS"
+#~ msgstr "Mgsg TF"
+
+#~ msgid "English"
+#~ msgstr "angol"
+
+#~ msgid ""
+#~ "The terrain can be shaded among slopes to indicate either wind direction, "
+#~ "sun position or a fixed shading from north-east."
+#~ msgstr ""
+#~ "A domborzat lejtői árnyalhatók vagy észak-dél irányban vagy a szél vagy a "
+#~ "Nap irányától függően."
+
+#~ msgid "Determines the information displayed on different screen pages."
+#~ msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
+
+#~ msgid "L/D average period"
+#~ msgstr "Átlagos siklószám mintavétel"
+
+#~ msgid ""
 #~ "Determines sorting of alternates in the alternates dialog and in abort "
 #~ "mode:\n"
 #~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
@@ -9384,68 +9542,25 @@ msgstr ""
 #~ "[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
 #~ "[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
 
-#, fuzzy
-#~ msgid "AC Off;  %d%%"
-#~ msgstr "TÁP KI"
-
-#~ msgid "Lookup"
-#~ msgstr "Keresés"
+#~ msgid "Page"
+#~ msgstr "Oldal"
 
 #~ msgid "Gate Width"
 #~ msgstr "Kapu szélesség"
 
-#~ msgid "Change point type?"
-#~ msgstr "Megváltoztassam a pont típusát?"
-
-#~ msgid "Save task?"
-#~ msgstr "Mentsem a feladatot?"
-
-#~ msgid "Task Selection"
-#~ msgstr "Feladatválasztás"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "Érvénytelen alakú a FAI háromszög.\n"
-
-#~ msgid "Longitude"
-#~ msgstr "Hosszúság"
-
-#~ msgid "Latitude"
-#~ msgstr "Szélesség"
-
-#~ msgid "Lon."
-#~ msgstr "H."
-
-#~ msgid "Lat."
-#~ msgstr "SZ."
-
-#~ msgid "This sets the task point for review."
-#~ msgstr "Ezzel kiválasztható a megtekintendő feladatpont."
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "FP\n"
-#~ "részletek"
-
-#~ msgid ""
-#~ "FLARM\n"
-#~ "Details"
-#~ msgstr ""
-#~ "FLARM\n"
-#~ "részletek"
-
 #~ msgid "Return"
 #~ msgstr "Vissza"
 
-#~ msgid "Altitude AGL"
-#~ msgstr "Föld feletti magasság"
+#~ msgid "Create xcsoar-checklist.txt\n"
+#~ msgstr "Hozzon létre xcsoar-checklist.txt fájlt!\n"
 
-#~ msgid "Alt AGL"
-#~ msgstr "Mgsg ff"
-
-#~ msgid "H GND"
-#~ msgstr "Terep"
+#~ msgid ""
+#~ "This is the height above mean sea level reported by the GPS. Touch-screen/"
+#~ "PC only: In simulation mode, this value is adjustable with the up/down "
+#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
+#~ msgstr ""
+#~ "Tengerszint feletti magasság a GPS alapján.Szimulációs módban a fel/le "
+#~ "nyillal állítható, a jobbra/balra billentyűvel pedig fordítható a repülő."
 
 #~ msgid ""
 #~ "Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment "
@@ -9459,101 +9574,47 @@ msgstr ""
 #~ "szélirányt állítják. Az Enter hatására ezek lesznek a kezdőértékek az "
 #~ "XCSoar következő használatakor."
 
-#~ msgid "TC All"
-#~ msgstr "Tk napi"
-
-#~ msgid "QFE GPS"
-#~ msgstr "Magasság bázis QFE"
+#~ msgid ""
+#~ "Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual "
+#~ "adjustment is possible by pressing the up/down cursor keys to adjust "
+#~ "bearing when the InfoBox is active."
+#~ msgstr ""
+#~ "Az XCSoar által becsült szélirány. Érintőképernyő/PC: ha ez a kijelző az "
+#~ "aktív, a fel-le nyilakkal állítható az irány."
 
 #~ msgid ""
-#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
-#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
-#~ "if on ground. During flight you can change QFE with up and down keys. "
-#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
+#~ "The distance made in the configured period of time , divided by the "
+#~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
+#~ "climbing cruise (height gain). Over 200 of L/D the value is shown as ++"
+#~ "+ . You can configure the period of averaging in the system setup. "
+#~ "Suggested values are 60, 90 or 120. Lower values will be closed to L/D "
+#~ "INST, and higher values will be closed to L/D Cruise. Notice that the "
+#~ "distance is NOT the straight line between your old and current position, "
+#~ "it's exactly the distance you have made even in a zigzag glide. This "
+#~ "value is not calculated while circling."
 #~ msgstr ""
-#~ "Automatikus QFE (reptéri feletti magasság). Ez az érték felszállás ELŐTT "
-#~ "végérvényesen nullázódik. Felszállás után nem kerül automatikus "
-#~ "nullázásra, még a földön sem.  Repülés közben a fel-le nyilakkal "
-#~ "állítható a QFE. Az alsó sorban a QNH (tengerszint szerinti) magasság "
-#~ "látható. A QFE állítása nem hat a QNH magasságra."
+#~ "A beállított idő alatt megtett távolság és az ez idő alatt vesztett "
+#~ "magasság hányadosa. Negatív értékek helyett ^^^ kerül kijelzésre és "
+#~ "emelkedő siklásra utal. 200 feletti érték helyett +++ kerül kijelzésre. "
+#~ "Az átlagolás periódusa a konfigurálás menüben állítható. A javasolt "
+#~ "értékek 60, 90 vagy 120: a kisebb értékek esetén a pillanatnyi, nagyobbak "
+#~ "esetén a siklásbeli siklószám felé közelít az átlag. Figyelem, a távolság "
+#~ "nem a periódus elején és végén mért pozíció közötti egyenes hossza, hanem "
+#~ "a ténylegesen, akár cikkcakkosan megtett táv. Körözésben nem kerül "
+#~ "kiszámításra."
 
 #~ msgid "WP alt.A"
 #~ msgstr "FP mgsg"
 
-#~ msgid "H GPS"
-#~ msgstr "Mgsg TF"
+#, fuzzy
+#~ msgid "AC Off;  %d%%"
+#~ msgstr "TÁP KI"
 
-#~ msgid "H Baro"
-#~ msgstr "Mgsg baro"
+#~ msgid "Altitude AGL"
+#~ msgstr "Föld feletti magasság"
 
-#~ msgid "Show details:"
-#~ msgstr "Részletek:"
-
-#~ msgid "Unknown competition number"
-#~ msgstr "Ismeretlen farokjel"
-
-#~ msgid "Not found"
-#~ msgstr "Nem található"
-
-#~ msgid "InfoBox Pages"
-#~ msgstr "Kijelző oldalak"
-
-#~ msgid "InfoBox Modes"
-#~ msgstr "Kijelző oldalak tartalma"
-
-#~ msgid "No further information"
-#~ msgstr "Nincs további információ"
-
-#~ msgid "Determines the information displayed on different screen pages."
-#~ msgstr "A különféle képernyőkön megjelenő információkat határozza meg."
-
-#~ msgid "Weather parameters"
-#~ msgstr "Időjárási paraméterek"
-
-#~ msgid "Sunset"
-#~ msgstr "Napnyugta"
-
-#~ msgid "Short file name"
-#~ msgstr "Rövid fájl név"
-
-#~ msgid "Height GPS"
-#~ msgstr "Magasság tenger feletti"
-
-#~ msgid "Delete Error"
-#~ msgstr "Törlési hiba"
-
-#~ msgid ""
-#~ "Sample Text\n"
-#~ "123"
-#~ msgstr ""
-#~ "Mintaszöveg\n"
-#~ "123"
-
-#~ msgid ""
-#~ "This determines whether the logger uses the short IGC file name or the "
-#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
-#~ "(2008-01-18-XXX-ABC-01.IGC)."
-#~ msgstr ""
-#~ "Ez határozza meg, hogy a logger a rövid vagy a hosszú IGC fájlnevet "
-#~ "használja. Példa rövid fájlnév: (81HXABC1.IGC), hosszú fájlnév: "
-#~ "(2008-01-18-XXX-ABC-01.IGC)"
-
-#~ msgid "My Sample"
-#~ msgstr "Saját Mintám"
-
-#~ msgid "AAT Est Remaining Help"
-#~ msgstr "HT Becs.Marad"
-
-#~ msgid "English"
-#~ msgstr "angol"
-
-#~ msgid ""
-#~ "This is the height above mean sea level reported by the GPS. Touch-screen/"
-#~ "PC only: In simulation mode, this value is adjustable with the up/down "
-#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
-#~ msgstr ""
-#~ "Tengerszint feletti magasság a GPS alapján.Szimulációs módban a fel/le "
-#~ "nyillal állítható, a jobbra/balra billentyűvel pedig fordítható a repülő."
+#~ msgid "Alt AGL"
+#~ msgstr "Mgsg ff"
 
 #~ msgid "User down"
 #~ msgstr "Le"
