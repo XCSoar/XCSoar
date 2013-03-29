@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-20 12:53+0000\n"
-"Last-Translator: Christopher Schenk <Christopher_Schenk@web.de>\n"
+"PO-Revision-Date: 2013-03-28 23:19+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-20 22:04+0000\n"
-"X-Generator: Launchpad (build 16532)\n"
+"X-Launchpad-Export-Date: 2013-03-29 17:21+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:40
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Modifizierte Area-Task (MAT)"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
@@ -91,7 +91,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr "FAI Regel, ein Kurs vom Start über zwei Wenden und wieder zurück."
+msgstr "FAI Regeln, ein Kurs vom Start über zwei Wenden und wieder zurück."
 
 #: src/Task/TypeStrings.cpp:58
 #, no-c-format
@@ -101,7 +101,7 @@ msgstr "FAI Regeln, ein Kurs vom Abflug um eine Wende und wieder zurück."
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI Regel, Kurs vom Abflug zu einem Ziel."
+msgstr "FAI Regeln, Kurs vom Abflug zu einem Ziel."
 
 #: src/Task/TypeStrings.cpp:60
 #, no-c-format
@@ -110,7 +110,8 @@ msgid ""
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
 "Geschwindigkeitsaufgabe um Wendepunkte. Kann für FAI Abzeichen oder auch für "
-"Rekordversuche verwendet werden; alle OZ Typen sind möglich."
+"Rekordversuche verwendet werden; alle OZ Typen (Sektor Gebiets Typen) sind "
+"möglich."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -118,8 +119,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
-"Geschw. Aufgabe über zugewiesene Gebiete, min. Flugzeit wird angewendet. "
-"Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
+"Geschwindigkeitsaufgabe über zugewiesene Gebiete, min. Flugzeit wird "
+"angewendet. Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
 
 #: src/Task/TypeStrings.cpp:64
 #, no-c-format
@@ -128,6 +129,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Modifizierte Area-Task. Aufgabe mit Start, Ziel und einem vordefiniertem 1-"
+"mile Zylinder. Der Pilot kann wenn nötig zusätzliche Punkte hinzufügen.  Die "
+"minimale Aufgabenzeit wird angewendet."
 
 #: src/Task/TypeStrings.cpp:65
 #, no-c-format
@@ -143,7 +147,7 @@ msgstr ""
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "Gelegenheits Aufgabe mit Abflug- und Zielzylinder und FAI Sektorwenden"
+msgstr "Gelegenheitsaufgabe mit Abflug- und Zielzylinder und FAI Sektorwenden"
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -158,7 +162,9 @@ msgstr ""
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr "Ein geradliniges Tor. Überquere die Torlinie von innerhalb nach außen."
+msgstr ""
+"Ein geradliniges Tor. Überquere die Torlinie von innerhalb nach außen zum "
+"Starten des Abflugs."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -171,8 +177,8 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
-"Ein 90° Sektor mit unendlicher Seitenlänge. Überfliege ein Flanke, gewertet "
-"wird vom Eckpunkt."
+"Ein 90° Sektor mit \"unendlichen\" Seitenlängen. Überfliege eine Flanke, "
+"gewertet wird vom Eckpunkt aus."
 
 #: src/Task/TypeStrings.cpp:84
 #, no-c-format
@@ -209,14 +215,15 @@ msgstr ""
 "der Mittelpunkt."
 
 #: src/Task/TypeStrings.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr "Ein Zylinder. Gewerted wird der entfernteste erreichte Punkt darin."
+msgstr ""
+"Ein 1 Meile Zylinder. Gewertet wird der entfernteste erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr "Ein Zylinder. Gewerted wird der entfernteste erreichte Punkt darin."
+msgstr "Ein Zylinder. Gewertet wird der entfernteste erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -224,13 +231,13 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
-"Ein Sektor bestimmt durch Winkel und Radius. Gewerted wird der entfernteste "
-"erreichte Punkt darin."
+"Ein Sektor, welcher sich in Winkel und Radius unterscheiden kann. Gewertet "
+"wird der entfernteste erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr "Ein 90° Sektor mit 1km Radius. Überfliege eine Flnake für die Ankunft."
+msgstr "Ein 90° Sektor mit 1km Radius. Überfliege eine Flanke für die Ankunft."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -247,7 +254,7 @@ msgstr "Fliege in den Zylinder ein für die Ankunft."
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
-"Ein 180° Sektor mit 5km Radius. Verlasse den Sektor in irgend eine Richtung "
+"Ein 180° Sektor mit 5km Radius. Verlasse den Sektor in irgendeine Richtung "
 "für den Abflug."
 
 #: src/Task/TypeStrings.cpp:99
@@ -256,18 +263,19 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
-"Ein Sektor bestimmt durch Winkel, Innerer- und Äußerer-Radius. Gewerted wird "
-"der entfernteste erreichte Punkt darin."
+"Ein Sektor mit veränderbarem Winkel, sowie Innerem- und Äußerem-Radius. "
+"Gewertet wird der entfernteste erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Ein symmetrischer Quadrant/Viertelkreis mit einem beliebigen Radius."
 
 #: src/Task/TypeStrings.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Ein Zylinder. Gewerted wird der entfernteste erreichte Punkt darin."
+msgstr ""
+"Ein Schlüsselloch. Gewertet wird der entfernteste erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -312,7 +320,7 @@ msgstr "Wendepunkt-Zylinder"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Zylinder mit 1 Meile Radius."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -350,59 +358,59 @@ msgid "Area sector with inner radius"
 msgstr "Sektor Gebiet mit innerem Radius"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symmetric quadrant"
-msgstr "FAI Abflug-Quadrant"
+msgstr "Symmetrischer Quadrant"
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "DAeC Schlüsselloch"
+msgstr "Bereichsschlüsselloch"
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Kein gültiger Abflug.\n"
+msgstr "Kein gültiger Abflug"
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Kein gültiger Zielüberflug.\n"
+msgstr "Keine gültige Ankunft"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "Aufgabe nicht geschlossen.\n"
+msgstr "Aufgabe nicht geschlossen"
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Nicht alle Wenden sind vom selben Typ.\n"
+msgstr "Alle Wendepunkte sind nicht vom selben Typen"
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Anzahl der Wenden falsch.\n"
+msgstr "Falsche Anzahl an Wendepunkten"
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Zu viele Wenden.\n"
+msgstr "Zu viele Wendepunkte"
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Nich genügend Wenden.\n"
+msgstr "Nicht genügend Wendepunkte"
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Wenden nicht eindeutig.\n"
+msgstr "Doppelte Wendepunkte"
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "Leere Aufgabe.\n"
+msgstr "Leere Aufgabe"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -410,9 +418,9 @@ msgid "non-FAI turn points"
 msgstr "Nicht-FAI Wendepunkte"
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "Nicht-FAI Wendepunkte"
+msgstr "nicht MAT Wendepunkte"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -967,9 +975,9 @@ msgid "None"
 msgstr "Keine"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "Aufgabenende"
+msgstr "Aufgabe & Flugplatz"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
@@ -1432,9 +1440,9 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Von XCSoar geschätzte Windgeschwindigkeit. Manuelles Einstellen ist mit dem "
+"Von XCSoar geschätzte Windgeschwindigkeit. Manuelles einstellen ist mit dem "
 "InfoBox Dialog möglich. Pfeiltaste hoch/runter wechselt durch die "
-"Einstellungen, links und rechts ändert die Werte."
+"Einstellungen, links und rechts verändert die Werte."
 
 #: src/InfoBoxes/Content/Factory.cpp:422
 #, no-c-format
@@ -1453,9 +1461,9 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Von XCSoar geschätzte Windrichtung. Manuelles Einstellen ist mit dem InfoBox "
+"Von XCSoar geschätzte Windrichtung. Manuelles einstellen ist mit dem InfoBox "
 "Dialog möglich. Pfeiltaste hoch/runter wechselt durch die Einstellungen, "
-"links und rechts ändert die Werte."
+"links und rechts verändert die Werte."
 
 #: src/InfoBoxes/Content/Factory.cpp:433
 #, no-c-format
@@ -2858,14 +2866,14 @@ msgid "True bearing from the next waypoint to your position."
 msgstr "Rechweisende Peilung vom nächsten Wegpunkt zu Dir."
 
 #: src/InfoBoxes/Content/Factory.cpp:1205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial ATC"
-msgstr "Nächster Wegpunkt - Radial"
+msgstr "Nächstes Radial ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial ATC"
-msgstr "Radial"
+msgstr "Radial ATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -2873,6 +2881,8 @@ msgid ""
 "True bearing from the next waypoint to your position.  The distance is "
 "displayed in nautical miles for communication with ATC."
 msgstr ""
+"Rechtweisende Peilung von dem nächsten Wegpunkt zu deiner Position. Die "
+"Entfernung wird in nautischen Meilen angezeigt, zur Kommunikation mit ATC."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -2910,7 +2920,7 @@ msgstr "Info"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:95
 #, no-c-format
 msgid "Setup"
-msgstr "Einstellung"
+msgstr "Einstellungen"
 
 #: src/InfoBoxes/Content/Altitude.cpp:77
 #: src/InfoBoxes/Content/Altitude.cpp:179
@@ -3136,12 +3146,13 @@ msgstr "Spurdrift"
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
-#, fuzzy
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
-msgstr "Bestimmt ob die Flugspur im Steigmodus mit dem Wind verschoben wird."
+msgstr ""
+"Bestimmt ob die Flugspur im Steigmodus mit dem Wind verschoben wird. "
+"Ausgeschaltet bleibt die Flugspur unkompensiert gegenüber dem Wind."
 
 #: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
@@ -4515,7 +4526,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:83
 msgid "Source"
-msgstr ""
+msgstr "Herkunft"
 
 #: src/Dialogs/Settings/WindSettingsDialog.cpp:35
 msgid "Wind Settings"
@@ -4905,9 +4916,8 @@ msgid "No checklist loaded"
 msgstr "Keine Checkliste geladen"
 
 #: src/Dialogs/dlgChecklist.cpp:150
-#, fuzzy
 msgid "Create xcsoar-checklist.txt"
-msgstr "Erstelle xcsoar-checklist.txt\n"
+msgstr "Lege xcsoar-checklist.txt an"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
@@ -5566,19 +5576,19 @@ msgstr ""
 "Wenn es nicht aufgeslistet ist, wähle den generischen Typ."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Über dem Gleitpfad"
+msgstr "Kein Endanflug Anzeigebalken."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Unter dem Gleitpfad"
+msgstr "Endanflug Anzeigebalken immer anzeigen."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr ""
+msgstr "Endanflug Anzeigebalken nur im Endanflug Bereich."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:84
 msgid ""
@@ -5621,15 +5631,16 @@ msgid ""
 msgstr "Aktiviert die Anzeige des Thermikprofils über der Karte."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:100
-#, fuzzy
 msgid "Final glide bar"
-msgstr "Endanflug Anzeige für MC 0"
+msgstr "Endanflug Anzeigebalken"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
+"Eingschaltet wird der Endanflug Balken immer angezeigt, auf \"Auto\" "
+"gestellt wird der Balken nur gezeigt, wenn ein Endanflug möglich ist."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:107
 msgid "Final glide bar MC0"
@@ -5826,15 +5837,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid "Predict wind drift"
-msgstr "Geschätzte Winddrift"
+msgstr "Geschätzte Abdrift"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:113
 msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
-"Berücksichtige die Winddrift für die vorherberechnete Zeit beim Kreisen. Das "
-"reduziert die Ankunftshöhe für Gegenwindschenkel."
+"Berücksichtige die Abdrift für die vorkalkulierte Zeit beim Kreisen. Dies "
+"reduziert die Ankunftshöhe für den Gegenwindschenkel."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -5995,9 +6006,9 @@ msgid "8 Top (Portrait)"
 msgstr "8 Oben (Hochformat)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8 Unten + Vario (Hochformat)"
+msgstr "8 Oben + Vario (Hochformat)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6186,14 +6197,14 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "Zeichnet einen Reiter über den Titel der InfoBox."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "Schattiert"
+msgstr "shattiert"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "Glas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Display orientation"
@@ -6470,15 +6481,16 @@ msgstr ""
 "Prozent vom Bildrand."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Auto. Zoom ein"
+msgstr "automatischer Zoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
 "Automatically zoom in when approaching a waypoint to keep the waypoint at a "
 "reasonable screen distance."
 msgstr ""
+"Zoomt automatisch rein, wenn ein Wegpunkt angeflogen wird. Dadurch wird der "
+"Wegpunkt in einem angemessenem Abstand angezeigt."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
@@ -6489,13 +6501,12 @@ msgid "The upper limit for auto zoom distance."
 msgstr "Die obere Grenze für die auto Zoom Distanz."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "Heimdistanz"
+msgstr "Eigenständiger Seitenzoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Behalte einen Zoom bei auf jeder Seite"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
 msgid "Main area"
@@ -6717,11 +6728,15 @@ msgid ""
 "The alternates will only be sorted by waypoint type (airport/outlanding "
 "field) and arrival height."
 msgstr ""
+"Alternativen werden nur nach Wegpunkt-Typ (Flugplatz/Landefeld) und "
+"Ankunftshöhe sortiert."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
 msgstr ""
+"Die Sortierung berücksichtigt zusätzlich die aktuelle Kursrichtung aus der "
+"Aufgabe."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:79
 #, no-c-format
@@ -6734,6 +6749,8 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
+"Die Sortierung sucht nach Landemöglichkeiten in Richtung der konfigurierten "
+"Heimat."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:84
 msgid "Alternates mode"
@@ -6743,6 +6760,8 @@ msgstr "Alternativen Modus"
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
+"Bestimmt die Sortierung der Alternativen im entsprechenden Dialog und beim "
+"Abbruch der Aufgabe."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:88
 msgid "Polar degradation"
@@ -7387,27 +7406,27 @@ msgstr "Weiß"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Sandstone"
-msgstr ""
+msgstr "Sandstein"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Einfügen"
+msgstr "Pastell"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr ""
+msgstr "Italienische VFR Karten Luftfahrthandbuch"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr ""
+msgstr "Deutsche DFS VFR Karten"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr ""
+msgstr "Französische SIA VFR Karten"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 msgid "Terrain colors"
@@ -7700,14 +7719,16 @@ msgid "All waypoint labels will be displayed."
 msgstr "Alle Wegpunktbeschriftungen werden angezeigt."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Aufgabenwegpunkte & Landbare"
+msgstr "Aufgaben Wegpunkte & Flugplätze"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr "Alle Wegpunkte aus der Aufgabe und alle Landbaren werden angezeigt."
+msgstr ""
+"Alle Wegpunkte die Teil einer Aufgabe sind und alle Flugplätze werden "
+"angezeigt."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -7923,7 +7944,7 @@ msgstr "Innerer Radius des OZ Sektors."
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "Winkel"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:227
@@ -8169,14 +8190,12 @@ msgstr "Startalternativen Bearb."
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:174
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
-#, fuzzy
 msgid "Task point"
-msgstr "Wendepunkt"
+msgstr "Aufgabenpunkt"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:179
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Zugeteilte Aufgabenzeit"
+msgstr "Assigned area Punkt"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
 msgid "Remove task point?"
@@ -8237,14 +8256,12 @@ msgid "Cylinder"
 msgstr "Zylinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "Area Zylinder"
+msgstr "MAT Zylinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
-#, fuzzy
 msgid "Keyhole"
-msgstr "DAeC Schlüsselloch"
+msgstr "Schlüsselloch"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:218
 msgid "DAeC Keyhole"
@@ -8263,9 +8280,8 @@ msgid "BGA Start Sector"
 msgstr "BGA Abflugsektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Geschätzte Aufgabenzeit"
+msgstr "Geben Sie einen Aufgabennamen ein"
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:53
 msgid "Now"
@@ -9043,9 +9059,8 @@ msgstr ""
 "Lichtsensor."
 
 #: Data/Dialogs/dlgTaskPoint.xml:21 Data/Dialogs/dlgTaskPoint_L.xml:25
-#, fuzzy
 msgid "Score exit"
-msgstr "Punkte"
+msgstr "Wertungsstand"
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
@@ -9431,73 +9446,32 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid ""
-#~ "Determines sorting of alternates in the alternates dialog and in abort "
-#~ "mode:\n"
-#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
-#~ "outlanding field) and arrival height.\n"
-#~ "[Task] The sorting will also take the current task direction into "
-#~ "account.\n"
-#~ "[Home] The sorting will try to find landing options in the current "
-#~ "direction to the configured home waypoint."
-#~ msgstr ""
-#~ "Bestimmt die Sortierung der Alternativen im entsprechenden Dialog und "
-#~ "beim Abbruch der Aufgabe:\n"
-#~ "[Einfach] Alternativen werden nur nach Wegpunkt-Typ (Flugplatz/Landefeld) "
-#~ "und Ankunftshöhe sortiert.\n"
-#~ "[Aufgabe] Die Sortierung berücksichtigt zusätzlich die aktuelle "
-#~ "Kursrichtung aus der Aufgabe.\n"
-#~ "[Heimat] Die Sortierung sucht nach Landemöglichkeiten in Richtung der "
-#~ "konfigurierten Heimat."
-
-#~ msgid "AC Off;  %d%%"
-#~ msgstr "AC aus; %d%%"
-
-#~ msgid "Lookup"
-#~ msgstr "Suche"
-
-#~ msgid "Gate Width"
-#~ msgstr "Torbreite"
-
-#~ msgid "Change point type?"
-#~ msgstr "Wendepunkt-Typ ändern?"
-
 #~ msgid "Save task?"
 #~ msgstr "Aufgabe speichern?"
-
-#~ msgid "Task Selection"
-#~ msgstr "Aufgaben Auswahl"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "Ungültiges FAI Dreieck.\n"
-
-#~ msgid "Longitude"
-#~ msgstr "Längengrad"
-
-#~ msgid "Latitude"
-#~ msgstr "Breitengrad"
-
-#~ msgid "Lon."
-#~ msgstr "Länge"
-
-#~ msgid "Lat."
-#~ msgstr "Breite"
-
-#~ msgid "This sets the task point for review."
-#~ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Wegpunkt\n"
-#~ "Details"
 
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
 
+#~ msgid "Longitude"
+#~ msgstr "Längengrad"
+
 #~ msgid "Sunset"
 #~ msgstr "Sonnenuntergang"
+
+#~ msgid "Latitude"
+#~ msgstr "Breitengrad"
+
+#~ msgid "Lookup"
+#~ msgstr "Suche"
+
+#~ msgid "Task Point"
+#~ msgstr "Wendepunkt"
+
+#~ msgid "Change point type?"
+#~ msgstr "Wendepunkt-Typ ändern?"
+
+#~ msgid "Task Selection"
+#~ msgstr "Aufgaben Auswahl"
 
 #~ msgid "Weather parameters"
 #~ msgstr "Wetter Parameter"
@@ -9520,6 +9494,9 @@ msgstr ""
 #~ msgid "H Baro"
 #~ msgstr "H Baro"
 
+#~ msgid "This sets the task point for review."
+#~ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
+
 #~ msgid ""
 #~ "This determines whether the logger uses the short IGC file name or the "
 #~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
@@ -9530,6 +9507,12 @@ msgstr ""
 #~ "\r\n"
 #~ "Kurzer Dateiname - 81HXABC1.IGC,\r\n"
 #~ "langer Dateiname - 2008-01-18-XXX-ABC-01.IGC."
+
+#~ msgid ""
+#~ "Determines whether the snail trail is drifted with the wind when "
+#~ "displayed in circling mode."
+#~ msgstr ""
+#~ "Bestimmt ob die Flugspur im Steigmodus mit dem Wind verschoben wird."
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "Hilfe zu geschätzte verbleibende AAT"
@@ -9553,6 +9536,43 @@ msgstr ""
 #~ "Runtertaste geändert werden. Darunter steht die QNH Höhe. Eine Änderung "
 #~ "der QFE Anzeige lässt die QNH Höhe unberührt."
 
+#~ msgid "No valid finish.\n"
+#~ msgstr "Kein gültiger Zielüberflug.\n"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "Aufgabe nicht geschlossen.\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "Nicht alle Wenden sind vom selben Typ.\n"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "Anzahl der Wenden falsch.\n"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "Kein gültiger Abflug.\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "Zu viele Wenden.\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "Nich genügend Wenden.\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "Wenden nicht eindeutig.\n"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "Ungültiges FAI Dreieck.\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "Leere Aufgabe.\n"
+
+#~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Wegpunkt\n"
+#~ "Details"
+
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
 #~ "height (vertical axis)."
@@ -9571,6 +9591,12 @@ msgstr ""
 
 #~ msgid "My Sample"
 #~ msgstr "Mein Muster"
+
+#~ msgid "Lat."
+#~ msgstr "Breite"
+
+#~ msgid "Lon."
+#~ msgstr "Länge"
 
 #~ msgid "Height GPS"
 #~ msgstr "Höhe - über MSL (GPS)"
@@ -9600,6 +9626,12 @@ msgstr ""
 #~ msgid "English"
 #~ msgstr "Englisch"
 
+#~ msgid "Create xcsoar-checklist.txt\n"
+#~ msgstr "Erstelle xcsoar-checklist.txt\n"
+
+#~ msgid "Gate Width"
+#~ msgstr "Torbreite"
+
 #~ msgid ""
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
 #~ "sun position or a fixed shading from north-east."
@@ -9614,6 +9646,25 @@ msgstr ""
 
 #~ msgid "L/D average period"
 #~ msgstr "Gleitzahl Mittelwertzeitintervall"
+
+#~ msgid ""
+#~ "Determines sorting of alternates in the alternates dialog and in abort "
+#~ "mode:\n"
+#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
+#~ "outlanding field) and arrival height.\n"
+#~ "[Task] The sorting will also take the current task direction into "
+#~ "account.\n"
+#~ "[Home] The sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "Bestimmt die Sortierung der Alternativen im entsprechenden Dialog und "
+#~ "beim Abbruch der Aufgabe:\n"
+#~ "[Einfach] Alternativen werden nur nach Wegpunkt-Typ (Flugplatz/Landefeld) "
+#~ "und Ankunftshöhe sortiert.\n"
+#~ "[Aufgabe] Die Sortierung berücksichtigt zusätzlich die aktuelle "
+#~ "Kursrichtung aus der Aufgabe.\n"
+#~ "[Heimat] Die Sortierung sucht nach Landemöglichkeiten in Richtung der "
+#~ "konfigurierten Heimat."
 
 #~ msgid "Page"
 #~ msgstr "Seite"
@@ -9685,6 +9736,9 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Unerreichbar durch das Gelände."
+
+#~ msgid "AC Off;  %d%%"
+#~ msgstr "AC aus; %d%%"
 
 #~ msgid "^"
 #~ msgstr "^"
