@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-28 22:58+0000\n"
+"PO-Revision-Date: 2013-03-29 21:20+0000\n"
 "Last-Translator: dingetje <antoine.megens@gmail.com>\n"
 "Language-Team: Ikhiwa.com <opensource@ikhiwa.com>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-29 17:21+0000\n"
+"X-Launchpad-Export-Date: 2013-03-29 21:24+0000\n"
 "X-Generator: Launchpad (build 16546)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -354,7 +354,7 @@ msgstr "Gebied sector met binnen straal"
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Symetrisch kwadrant"
 
 #: src/Task/TypeStrings.cpp:132
 #, no-c-format
@@ -374,7 +374,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Taak niet gesloten"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
@@ -3408,7 +3408,7 @@ msgstr "Hoogte"
 #: src/Dialogs/Traffic/TrafficList.cpp:670
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u minuten geleden"
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -6194,7 +6194,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "Glas"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Display orientation"
@@ -6470,7 +6470,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
 msgid "Auto zoom"
-msgstr ""
+msgstr "Auto zoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6505,7 +6505,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:180
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:329
 msgid "InfoBoxes"
-msgstr ""
+msgstr "Informatievakken"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 msgid "Specifies which InfoBoxes should be displayed on this page."
@@ -6514,7 +6514,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:188
 #, no-c-format
 msgid "Nothing"
-msgstr ""
+msgstr "Niets"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:190
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:344
@@ -7394,7 +7394,7 @@ msgstr "Wit"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Sandstone"
-msgstr ""
+msgstr "Zandsteen"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
 #, no-c-format
