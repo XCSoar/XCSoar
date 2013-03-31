@@ -30,11 +30,13 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/GeoPointEntry.hpp"
+#include "Time/RoughTime.hpp"
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+TimeEntryDialog(const TCHAR *caption, RoughTime &value,
+                RoughTimeDelta time_zone, bool nullable)
 {
   return false;
 }

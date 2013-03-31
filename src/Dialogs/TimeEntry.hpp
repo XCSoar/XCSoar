@@ -27,8 +27,10 @@ Copyright_License {
 #include <tchar.h>
 
 class RoughTime;
+class RoughTimeDelta;
 
 bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable=false);
+TimeEntryDialog(const TCHAR *caption, RoughTime &value,
+                RoughTimeDelta time_zone, bool nullable=false);
 
 #endif

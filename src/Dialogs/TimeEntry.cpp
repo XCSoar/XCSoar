@@ -38,7 +38,8 @@ enum {
 };
 
 bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+TimeEntryDialog(const TCHAR *caption, RoughTime &value,
+                RoughTimeDelta time_zone, bool nullable)
 {
   /* create the dialog */
 
@@ -58,7 +59,7 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
   DigitEntry entry(look);
   entry.CreateTime(client_area, client_area.GetClientRect(), control_style);
   entry.Resize(entry.GetRecommendedSize());
-  entry.SetValue(value);
+  entry.SetValue(value + time_zone);
   entry.SetActionListener(dialog, mrOK);
 
   /* create buttons */
@@ -66,9 +67,10 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
   dialog.AddButton(_("OK"), dialog, mrOK);
   dialog.AddButton(_("Cancel"), dialog, mrCancel);
 
-  auto now_listener = MakeLambdaActionListener([&entry](unsigned){
+  auto now_listener = MakeLambdaActionListener([&entry, time_zone](unsigned){
       const BrokenTime bt = BrokenDateTime::NowUTC();
-      entry.SetValue(RoughTime(bt.hour, bt.minute));
+      RoughTime now_utc = RoughTime(bt.hour, bt.minute);
+      entry.SetValue(now_utc + time_zone);
     });
   dialog.AddButton(_("Now"), now_listener, 0);
 
@@ -88,6 +90,6 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
   if (!result)
     return false;
 
-  value = entry.GetTimeValue();
+  value = entry.GetTimeValue() - time_zone;
   return true;
 }

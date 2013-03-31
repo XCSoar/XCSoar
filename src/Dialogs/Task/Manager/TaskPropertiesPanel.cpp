@@ -33,6 +33,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Components.hpp"
+#include "Interface.hpp"
 
 enum Controls {
   TASK_TYPE,
@@ -227,8 +228,12 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
           0, 36000, 60, 180);
 
-  AddRoughTime(_("Start open time"), nullptr, RoughTime::Invalid());
-  AddRoughTime(_("Start close time"), nullptr, RoughTime::Invalid());
+  const RoughTimeDelta time_zone =
+    CommonInterface::GetComputerSettings().utc_offset;
+  AddRoughTime(_("Start open time"), nullptr,
+               RoughTime::Invalid(), time_zone);
+  AddRoughTime(_("Start close time"), nullptr,
+               RoughTime::Invalid(), time_zone);
 
   AddFloat(_("Start max. speed"),
            _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),

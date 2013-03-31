@@ -57,6 +57,18 @@ RoughTimeDataField::GetAsString() const
   return buffer;
 }
 
+const TCHAR *
+RoughTimeDataField::GetAsDisplayString() const
+{
+  if (!value.IsValid())
+    return _T("");
+
+  RoughTime local_value = value + time_zone;
+  _stprintf(buffer, _T("%02u:%02u"),
+            local_value.GetHour(), local_value.GetMinute());
+  return buffer;
+}
+
 void
 RoughTimeDataField::Inc()
 {

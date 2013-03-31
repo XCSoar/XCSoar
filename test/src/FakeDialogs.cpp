@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/GeoPointEntry.hpp"
+#include "Time/RoughTime.hpp"
 
 int
 ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
@@ -41,7 +42,8 @@ dlgTextEntryShowModal(TCHAR *text, size_t size,
 }
 
 bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+TimeEntryDialog(const TCHAR *caption, RoughTime &value,
+                RoughTimeDelta time_zone, bool nullable)
 {
   return false;
 }

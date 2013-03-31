@@ -32,6 +32,7 @@ Version 6.6 - not yet released
   - add AST point option "Score exit" (#2544)
   - optimise start point
   - allow up to 30 turn points in racing tasks
+  - local time for task start open/close time (#2645)
 * devices
   - Volkslogger: support IGC file download (#1972)
   - Volkslogger: declaration no longer erases waypoint database from logger

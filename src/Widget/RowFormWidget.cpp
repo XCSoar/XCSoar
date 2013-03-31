@@ -419,10 +419,11 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
 
 WndProperty *
 RowFormWidget::AddRoughTime(const TCHAR *label, const TCHAR *help,
-                            RoughTime value, DataFieldListener *listener)
+                            RoughTime value, RoughTimeDelta time_zone,
+                            DataFieldListener *listener)
 {
   WndProperty *edit = Add(label, help);
-  RoughTimeDataField *df = new RoughTimeDataField(value, listener);
+  RoughTimeDataField *df = new RoughTimeDataField(value, time_zone, listener);
   edit->SetDataField(df);
   return edit;
 }

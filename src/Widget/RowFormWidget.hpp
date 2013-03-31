@@ -40,6 +40,7 @@ struct StaticEnumChoice;
 class ActionListener;
 class Angle;
 class RoughTime;
+class RoughTimeDelta;
 
 /**
  * A #Widget that contains #WndProperty controls, one in a row.
@@ -439,7 +440,7 @@ public:
   }
 
   WndProperty *AddRoughTime(const TCHAR *label, const TCHAR *help,
-                            RoughTime value,
+                            RoughTime value, RoughTimeDelta time_zone,
                             DataFieldListener *listener=nullptr);
 
   void AddSpacer();

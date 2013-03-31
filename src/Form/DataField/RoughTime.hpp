@@ -29,16 +29,32 @@ Copyright_License {
 #include "Compiler.h"
 
 /**
- * This #DataField implementation stores a time of day with a
- * precision of one minute.
+ * This #DataField implementation stores a UTC time of day with a
+ * precision of one minute.  For displaying, it is converted to the
+ * user's time zone.
  */
 class RoughTimeDataField : public DataField {
   RoughTime value;
 
+  /**
+   * This value is added when displaying the value to the user.  It is
+   * the offset of the user's time zone.
+   */
+  RoughTimeDelta time_zone;
+
 public:
-  RoughTimeDataField(RoughTime _value, DataFieldListener *listener=nullptr)
+  RoughTimeDataField(RoughTime _value, RoughTimeDelta _time_zone,
+                     DataFieldListener *listener=nullptr)
     :DataField(Type::ROUGH_TIME, false, listener),
-     value(_value) {}
+     value(_value), time_zone(_time_zone) {}
+
+  RoughTimeDelta GetTimeZone() const {
+    return time_zone;
+  }
+
+  void SetTimeZone(RoughTimeDelta _time_zone) {
+    time_zone = _time_zone;
+  }
 
   RoughTime GetValue() const {
     return value;
@@ -48,11 +64,16 @@ public:
     value = _value;
   }
 
+  RoughTime GetLocalValue() const {
+    return value + time_zone;
+  }
+
   void ModifyValue(RoughTime _value);
 
   /* virtual methods from class DataField */
   virtual int GetAsInteger() const override;
   virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
 
   virtual void Inc() override;
   virtual void Dec() override;
