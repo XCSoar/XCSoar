@@ -25,7 +25,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
-#include "LocalTime.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Language/Language.hpp"
 
@@ -44,12 +43,14 @@ TimesStatusPanel::Refresh()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const FlyingState &flight = CommonInterface::Calculated().flight;
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   StaticString<64> temp;
 
   if (basic.location_available && basic.date_available) {
-    SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
-        basic.location, basic.date_time_utc, fixed(GetUTCOffset()) / 3600);
+    SunEphemeris::Result sun =
+      SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
+                                 fixed(settings.utc_offset) / 3600);
 
     const unsigned sunrisehours = (int)sun.time_of_sunrise;
     const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
