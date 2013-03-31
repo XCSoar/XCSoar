@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
@@ -64,7 +64,7 @@ TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 {
   TCHAR temp[20];
   int time(CommonInterface::Basic().time);
-  FormatSignedTimeHHMM(temp, TimeLocal(time, utc_offset));
+  FormatLocalTimeHHMM(temp, time, utc_offset);
 
   WndProperty &wp = GetControl(LocalTime);
 
