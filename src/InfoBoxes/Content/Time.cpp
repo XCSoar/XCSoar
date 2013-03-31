@@ -34,6 +34,7 @@ void
 UpdateInfoBoxTimeLocal(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   if (!basic.time_available) {
     data.SetInvalid();
@@ -41,7 +42,8 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data)
   }
 
   // Set Value
-  FormatLocalTimeHHMM(data.value.buffer(), (int)basic.time);
+  FormatLocalTimeHHMM(data.value.buffer(), (int)basic.time,
+                      settings.utc_offset);
 
   // Set Comment
   data.UnsafeFormatComment(_T("%02u"), basic.date_time_utc.second);

@@ -52,6 +52,7 @@ Copyright_License {
 #include "FLARM/FlarmNetRecord.hpp"
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
+#include "Time/RoughTime.hpp"
 
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
@@ -81,6 +82,7 @@ namespace MapItemListRenderer
             const WaypointRendererSettings &renderer_settings);
 
   void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
+            RoughTimeDelta utc_offset,
             const DialogLook &dialog_look, const MarkerLook &look);
 
 #ifdef HAVE_NOAA
@@ -98,6 +100,7 @@ namespace MapItemListRenderer
             const TrafficList *traffic_list);
 
   void Draw(Canvas &canvas, const PixelRect rc, const ThermalMapItem &item,
+            RoughTimeDelta utc_offset,
             const DialogLook &dialog_look, const MapLook &look);
 }
 
@@ -315,7 +318,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const MarkerMapItem &item,
+                          const MarkerMapItem &item, RoughTimeDelta utc_offset,
                           const DialogLook &dialog_look,
                           const MarkerLook &look)
 {
@@ -340,7 +343,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.DrawClippedText(left, rc.top + text_padding, rc, buffer);
 
   TCHAR time_buffer[32], timespan_buffer[32];
-  FormatLocalTimeHHMM(time_buffer, marker.time.GetSecondOfDay());
+  FormatLocalTimeHHMM(time_buffer, marker.time.GetSecondOfDay(), utc_offset);
   FormatTimespanSmart(timespan_buffer, BrokenDateTime::NowUTC() - marker.time);
   buffer.Format(_("dropped %s ago"), timespan_buffer);
   buffer.AppendFormat(_T(" (%s)"), time_buffer);
@@ -365,6 +368,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const ThermalMapItem &item,
+                          RoughTimeDelta utc_offset,
                           const DialogLook &dialog_look,
                           const MapLook &look)
 {
@@ -390,7 +394,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<256> buffer;
   TCHAR lift_buffer[32], time_buffer[32], timespan_buffer[32];
   FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
-  FormatLocalTimeHHMM(time_buffer, (int)thermal.time);
+  FormatLocalTimeHHMM(time_buffer, (int)thermal.time, utc_offset);
 
   int timespan = BrokenDateTime::NowUTC().GetSecondOfDay() - (int)thermal.time;
   if (timespan < 0)
@@ -590,6 +594,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TrafficLook &traffic_look,
                           const FinalGlideBarLook &final_glide_look,
                           const MapSettings &settings,
+                          RoughTimeDelta utc_offset,
                           const TrafficList *traffic_list)
 {
   switch (item.type) {
@@ -620,7 +625,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
          settings.airspace);
     break;
   case MapItem::MARKER:
-    Draw(canvas, rc, (const MarkerMapItem &)item, dialog_look, look.marker);
+    Draw(canvas, rc, (const MarkerMapItem &)item, utc_offset,
+         dialog_look, look.marker);
     break;
 
 #ifdef HAVE_NOAA
@@ -641,7 +647,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 #endif
 
   case MapItem::THERMAL:
-    Draw(canvas, rc, (const ThermalMapItem &)item, dialog_look, look);
+    Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
+         dialog_look, look);
     break;
   }
 }

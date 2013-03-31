@@ -325,7 +325,8 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    FormatLocalTimeHHMM(TempTime, (int)start_state.time);
+    FormatLocalTimeHHMM(TempTime, (int)start_state.time,
+                        CommonInterface::GetComputerSettings().utc_offset);
     FormatUserAltitude(start_state.altitude, TempAlt, true);
     FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
     

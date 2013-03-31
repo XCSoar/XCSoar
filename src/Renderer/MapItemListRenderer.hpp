@@ -33,6 +33,7 @@ struct TrafficLook;
 struct FinalGlideBarLook;
 struct MapSettings;
 struct TrafficList;
+class RoughTimeDelta;
 
 namespace MapItemListRenderer
 {
@@ -42,6 +43,7 @@ namespace MapItemListRenderer
             const TrafficLook &traffic_look,
             const FinalGlideBarLook &final_glide_look,
             const MapSettings &settings,
+            RoughTimeDelta utc_offset,
             const TrafficList *traffic_list=nullptr);
 }
 

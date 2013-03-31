@@ -24,9 +24,10 @@ Copyright_License {
 #include "LocalTimeFormatter.hpp"
 #include "TimeFormatter.hpp"
 #include "LocalTime.hpp"
+#include "Time/RoughTime.hpp"
 
 void
-FormatLocalTimeHHMM(TCHAR *buffer, int _time)
+FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset)
 {
-  FormatSignedTimeHHMM(buffer, TimeLocal(_time));
+  FormatSignedTimeHHMM(buffer, TimeLocal(time, utc_offset));
 }

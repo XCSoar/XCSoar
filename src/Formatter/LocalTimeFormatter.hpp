@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_TIME_FORMATTER_HPP
 #define XCSOAR_LOCAL_TIME_FORMATTER_HPP
 
-#include "Math/fixed.hpp"
-
 #include <tchar.h>
 
 struct BrokenDateTime;
+class RoughTimeDelta;
 
 /**
  * Convert the given time of day from UTC to local time and format it
@@ -37,6 +36,6 @@ struct BrokenDateTime;
  * @param time UTC time of day [seconds]
  */
 void
-FormatLocalTimeHHMM(TCHAR *buffer, int time);
+FormatLocalTimeHHMM(TCHAR *buffer, int time, RoughTimeDelta utc_offset);
 
 #endif
