@@ -25,6 +25,8 @@ Copyright_License {
 
 #include "Compiler.h"
 
+class RoughTimeDelta;
+
 /**
  * Returns the local time express as seconds from midnight
  * @param d UTC time in seconds
@@ -32,7 +34,7 @@ Copyright_License {
  */
 gcc_pure
 unsigned
-TimeLocal(int d, int utc_offset);
+TimeLocal(int d, RoughTimeDelta utc_offset);
 
 /**
  * Returns the local time express as seconds from midnight using the 
@@ -44,7 +46,7 @@ unsigned
 TimeLocal(int d);
 
 gcc_pure
-int
+RoughTimeDelta
 GetUTCOffset();
 
 #endif

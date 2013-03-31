@@ -50,9 +50,9 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
 
   SunEphemeris::Result sun =
     SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
-                               fixed(settings.utc_offset) / 3600);
+                               settings.utc_offset);
 
-  const fixed time_local = basic.time + fixed(settings.utc_offset);
+  const fixed time_local = basic.time + fixed(settings.utc_offset.AsSeconds());
   fixed d1((time_local + res.time_elapsed) / 3600);
   fixed d0(time_local / 3600);
 

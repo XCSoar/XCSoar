@@ -90,7 +90,8 @@ GlideComputer::ProcessGPS(bool force)
 
   const bool last_flying = calculated.flight.flying;
 
-  calculated.date_time_local = basic.date_time_utc + settings.utc_offset;
+  calculated.date_time_local = basic.date_time_utc +
+    settings.utc_offset.AsSeconds();
 
   calculated.Expire(basic.clock);
 

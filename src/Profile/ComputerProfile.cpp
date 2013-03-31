@@ -126,7 +126,7 @@ Profile::Load(CirclingSettings &settings)
 }
 
 static bool
-LoadUTCOffset(int &value_r)
+LoadUTCOffset(RoughTimeDelta &value_r)
 {
   /* NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
      settings file (with negative offsets stored as "utc_offset + 24 *
@@ -145,7 +145,7 @@ LoadUTCOffset(int &value_r)
     /* illegal value */
     return false;
 
-  value_r = value;
+  value_r = RoughTimeDelta::FromSeconds(value);
   return true;
 }
 

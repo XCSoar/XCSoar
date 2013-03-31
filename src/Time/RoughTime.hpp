@@ -188,4 +188,52 @@ public:
   }
 };
 
+/**
+ * This data type stores a (signed) time difference with minute
+ * granularity.  It can be used to store time zone offsets.
+ */
+class RoughTimeDelta {
+  /**
+   * Relative minutes.
+   */
+  int16_t value;
+
+  constexpr RoughTimeDelta(int16_t _value)
+    :value(_value) {}
+
+public:
+  RoughTimeDelta() = default;
+
+  constexpr
+  static RoughTimeDelta FromMinutes(int _value) {
+    return RoughTimeDelta(_value);
+  }
+
+  constexpr
+  static RoughTimeDelta FromSeconds(int _value) {
+    return RoughTimeDelta(_value / 60);
+  }
+
+  constexpr
+  static RoughTimeDelta FromHours(int _value) {
+    return RoughTimeDelta(_value * 60);
+  }
+
+  constexpr int AsMinutes() const {
+    return value;
+  }
+
+  constexpr int AsSeconds() const {
+    return value * 60;
+  }
+
+  constexpr bool operator==(RoughTimeDelta other) const {
+    return value == other.value;
+  }
+
+  constexpr bool operator!=(RoughTimeDelta other) const {
+    return value != other.value;
+  }
+};
+
 #endif

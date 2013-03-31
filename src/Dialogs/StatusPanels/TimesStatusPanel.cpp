@@ -50,7 +50,7 @@ TimesStatusPanel::Refresh()
   if (basic.location_available && basic.date_available) {
     SunEphemeris::Result sun =
       SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
-                                 fixed(settings.utc_offset) / 3600);
+                                 settings.utc_offset);
 
     const unsigned sunrisehours = (int)sun.time_of_sunrise;
     const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);

@@ -94,7 +94,7 @@ ComputerSettings::SetDefaults()
 
   average_eff_time = ae30seconds;
   set_system_time_from_gps = IsAltair() && IsEmbedded();
-  utc_offset = GetSystemUTCOffset();
+  utc_offset = RoughTimeDelta::FromSeconds(GetSystemUTCOffset());
   forecast_temperature = CelsiusToKelvin(fixed(25));
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();

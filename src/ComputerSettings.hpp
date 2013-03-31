@@ -249,7 +249,7 @@ struct ComputerSettings {
   bool set_system_time_from_gps;
 
   /** local time adjustment (in seconds) */
-  int utc_offset;
+  RoughTimeDelta utc_offset;
 
   /**
    * The forecasted maximum ground temperature [Kelvin].

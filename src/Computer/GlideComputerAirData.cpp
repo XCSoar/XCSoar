@@ -404,7 +404,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
   // Calculate new azimuth
   calculated.sun_azimuth =
     SunEphemeris::CalcAzimuth(basic.location, basic.date_time_utc,
-                              fixed(settings.utc_offset) / 3600);
+                              settings.utc_offset);
   calculated.sun_data_available.Update(basic.clock);
 }
 

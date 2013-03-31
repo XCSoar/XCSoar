@@ -23,6 +23,7 @@
 #include "Math/SunEphemeris.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "Time/RoughTime.hpp"
 #include "TestUtil.hpp"
 
 static void
@@ -39,7 +40,7 @@ test_times()
   dt.second = 12;
 
   SunEphemeris::Result sun =
-      SunEphemeris::CalcSunTimes(location, dt, fixed(2));
+    SunEphemeris::CalcSunTimes(location, dt, RoughTimeDelta::FromHours(2));
 
   ok1(between(sun.morning_twilight, 6.88, 6.9));
   ok1(between(sun.time_of_noon, 13.3, 13.4));
@@ -64,7 +65,7 @@ test_times_southern()
   dt.second = 12;
 
   SunEphemeris::Result sun =
-      SunEphemeris::CalcSunTimes(location, dt, fixed(11));
+    SunEphemeris::CalcSunTimes(location, dt, RoughTimeDelta::FromHours(11));
 
   ok1(between(sun.time_of_sunrise, 6.91, 6.95));
   ok1(between(sun.time_of_sunset, 20.03, 20.04));
@@ -140,7 +141,7 @@ test_azimuth()
     dt.hour = hour;
 
     SunEphemeris::Result sun =
-        SunEphemeris::CalcSunTimes(location, dt, fixed(0));
+      SunEphemeris::CalcSunTimes(location, dt, RoughTimeDelta::FromHours(0));
 
     ok1(equals(sun.azimuth, test_data1[hour]));
   }
@@ -151,7 +152,7 @@ test_azimuth()
     dt.hour = hour;
 
     SunEphemeris::Result sun =
-        SunEphemeris::CalcSunTimes(location, dt, fixed(2));
+      SunEphemeris::CalcSunTimes(location, dt, RoughTimeDelta::FromHours(2));
 
     ok1(equals(sun.azimuth, test_data2[hour]));
   }

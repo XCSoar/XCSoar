@@ -25,9 +25,9 @@ Copyright_License {
 #include "Interface.hpp"
 
 unsigned
-TimeLocal(int localtime, int utc_offset)
+TimeLocal(int localtime, RoughTimeDelta utc_offset)
 {
-  localtime += utc_offset;
+  localtime += utc_offset.AsSeconds();
 
   if (localtime < 0)
     localtime += 3600 * 24;
@@ -41,7 +41,7 @@ TimeLocal(int localtime)
   return TimeLocal(localtime, GetUTCOffset());
 }
 
-int
+RoughTimeDelta
 GetUTCOffset()
 {
   return CommonInterface::GetComputerSettings().utc_offset;
