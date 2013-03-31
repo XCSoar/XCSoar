@@ -24,8 +24,8 @@ Copyright_License {
 #include "InfoBoxes/Content/Time.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "LocalTime.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -41,14 +41,10 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data)
   }
 
   // Set Value
-  int dd = DetectCurrentTime(CommonInterface::Basic());
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
-
-  // Set Value
-  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+  FormatLocalTimeHHMM(data.value.buffer(), (int)basic.time);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02u"), t.second);
+  data.UnsafeFormatComment(_T("%02u"), basic.date_time_utc.second);
 }
 
 void

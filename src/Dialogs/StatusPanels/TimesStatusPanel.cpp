@@ -24,6 +24,7 @@ Copyright_License {
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Language/Language.hpp"
@@ -62,7 +63,7 @@ TimesStatusPanel::Refresh()
   }
 
   if (basic.time_available) {
-    FormatSignedTimeHHMM(temp.buffer(), DetectCurrentTime(basic));
+    FormatLocalTimeHHMM(temp.buffer(), (int)basic.time);
     SetText(LocalTime, temp);
     FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
     SetText(UTCTime, temp);
@@ -80,16 +81,15 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(), TimeLocal((int)flight.takeoff_time));
+    FormatLocalTimeHHMM(temp.buffer(), (int)flight.takeoff_time);
     SetText(TakeoffTime, temp);
   } else {
     SetText(TakeoffTime, _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(),
-                      TimeLocal((long)(flight.takeoff_time
-                                       + flight.flight_time)));
+    FormatLocalTimeHHMM(temp.buffer(),
+                        int(flight.takeoff_time + flight.flight_time));
     SetText(LandingTime, temp);
   } else {
     SetText(LandingTime, _T(""));

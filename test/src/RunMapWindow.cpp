@@ -32,7 +32,6 @@ Copyright_License {
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/MapProfile.hpp"
 #include "LocalPath.hpp"
-#include "LocalTime.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
@@ -68,12 +67,6 @@ static Airspaces airspace_database;
 
 static TopographyStore *topography;
 static RasterTerrain *terrain;
-
-unsigned
-TimeLocal(int d)
-{
-  return d;
-}
 
 class DrawThread {
 public:

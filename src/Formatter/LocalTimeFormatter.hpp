@@ -21,28 +21,22 @@ Copyright_License {
 }
 */
 
-#include "LocalTime.hpp"
-#include "Interface.hpp"
+#ifndef XCSOAR_LOCAL_TIME_FORMATTER_HPP
+#define XCSOAR_LOCAL_TIME_FORMATTER_HPP
 
-unsigned
-TimeLocal(int localtime, int utc_offset)
-{
-  localtime += utc_offset;
+#include "Math/fixed.hpp"
 
-  if (localtime < 0)
-    localtime += 3600 * 24;
+#include <tchar.h>
 
-  return localtime;
-}
+struct BrokenDateTime;
 
-unsigned
-TimeLocal(int localtime)
-{
-  return TimeLocal(localtime, GetUTCOffset());
-}
+/**
+ * Convert the given time of day from UTC to local time and format it
+ * to a user-readable string in the form HH:MM.
+ *
+ * @param time UTC time of day [seconds]
+ */
+void
+FormatLocalTimeHHMM(TCHAR *buffer, int time);
 
-int
-GetUTCOffset()
-{
-  return CommonInterface::GetComputerSettings().utc_offset;
-}
+#endif

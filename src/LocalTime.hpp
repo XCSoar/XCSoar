@@ -25,16 +25,6 @@ Copyright_License {
 
 #include "Compiler.h"
 
-struct NMEAInfo;
-
-/**
- * Returns the local time as a number of second since midnight 
- * based on info from the device or GPS
- */
-gcc_pure
-unsigned
-DetectCurrentTime(const NMEAInfo &Basic);
-
 /**
  * Returns the local time express as seconds from midnight
  * @param d UTC time in seconds

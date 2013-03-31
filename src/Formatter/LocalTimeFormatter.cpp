@@ -21,28 +21,12 @@ Copyright_License {
 }
 */
 
+#include "LocalTimeFormatter.hpp"
+#include "TimeFormatter.hpp"
 #include "LocalTime.hpp"
-#include "Interface.hpp"
 
-unsigned
-TimeLocal(int localtime, int utc_offset)
+void
+FormatLocalTimeHHMM(TCHAR *buffer, int _time)
 {
-  localtime += utc_offset;
-
-  if (localtime < 0)
-    localtime += 3600 * 24;
-
-  return localtime;
-}
-
-unsigned
-TimeLocal(int localtime)
-{
-  return TimeLocal(localtime, GetUTCOffset());
-}
-
-int
-GetUTCOffset()
-{
-  return CommonInterface::GetComputerSettings().utc_offset;
+  FormatSignedTimeHHMM(buffer, TimeLocal(_time));
 }
