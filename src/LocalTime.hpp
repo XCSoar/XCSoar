@@ -36,17 +36,4 @@ gcc_pure
 unsigned
 TimeLocal(int d, RoughTimeDelta utc_offset);
 
-/**
- * Returns the local time express as seconds from midnight using the 
- * settings to get the UTC offest
- * @param d UTC time in seconds
- */
-gcc_pure
-unsigned
-TimeLocal(int d);
-
-gcc_pure
-RoughTimeDelta
-GetUTCOffset();
-
 #endif

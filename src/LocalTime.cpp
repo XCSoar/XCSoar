@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "LocalTime.hpp"
-#include "Interface.hpp"
+#include "Time/RoughTime.hpp"
 
 unsigned
 TimeLocal(int localtime, RoughTimeDelta utc_offset)
@@ -33,16 +33,4 @@ TimeLocal(int localtime, RoughTimeDelta utc_offset)
     localtime += 3600 * 24;
 
   return localtime;
-}
-
-unsigned
-TimeLocal(int localtime)
-{
-  return TimeLocal(localtime, GetUTCOffset());
-}
-
-RoughTimeDelta
-GetUTCOffset()
-{
-  return CommonInterface::GetComputerSettings().utc_offset;
 }
