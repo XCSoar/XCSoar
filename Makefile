@@ -653,7 +653,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/ActionInterface.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/ProgressGlue.cpp \
-	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsGlue.cpp \
 	$(SRC)/Units/UnitsStore.cpp \

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "LocalTimeFormatter.hpp"
 #include "TimeFormatter.hpp"
-#include "LocalTime.hpp"
+#include "Time/LocalTime.hpp"
 #include "Time/RoughTime.hpp"
 
 void

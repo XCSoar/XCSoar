@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
-#include "LocalTime.hpp"
+#include "Time/LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"

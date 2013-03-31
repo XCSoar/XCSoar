@@ -2329,7 +2329,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
-	$(SRC)/LocalTime.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
