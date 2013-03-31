@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-28 21:03+0000\n"
+"PO-Revision-Date: 2013-03-30 17:19+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-29 17:21+0000\n"
+"X-Launchpad-Export-Date: 2013-03-31 13:00+0000\n"
 "X-Generator: Launchpad (build 16546)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -959,7 +959,7 @@ msgstr "Tous"
 #: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:304
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Circuit et Terrains posables"
+msgstr "Circuit et Terrains"
 
 #: src/Menu/ExpandMacros.cpp:559 src/Input/InputEventsSettings.cpp:306
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -5789,7 +5789,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:72
 msgid "Auto MC mode"
-msgstr "Auto MC mode"
+msgstr "Mode du MC auto"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:73
 msgid "This option defines which auto MacCready algorithm is used."
@@ -6687,7 +6687,7 @@ msgid ""
 "and alternate calculations."
 msgstr ""
 "Définit la performance du planeur pour calculer la zone d'atteinte au sol, "
-"les terrains vachables, l'arrêt du circuit et le calcul des dégagements"
+"les champs vachables, l'arrêt du circuit et le calcul des dégagements"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:162
 #, no-c-format
@@ -7765,14 +7765,13 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "Points de virage du circuit & posables"
+msgstr "Points de virage du circuit & champs posables"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
-"Tous les points de virage du circuit et les terrains atterrissables sont "
-"affichés."
+"Tous les points de virage du circuit et les champs vachables sont affichés."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:150
 #, no-c-format
@@ -7853,7 +7852,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:179
 msgid "Landable symbols"
-msgstr "Symbo. dégagmts"
+msgstr "Symbo.champ vachable"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:180
 msgid ""
@@ -7868,24 +7867,24 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:185
 msgid "Detailed landables"
-msgstr "Zones posables détaillées"
+msgstr "Champs vachables détaillés"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:186
 msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
-"[Off] Afficher des icônes fixes pour les terrains posables.\n"
-"[On] Montrer des informations variables sur les terrains posables, comme la "
+"[Off] Afficher des icônes fixes pour les champs vachables.\n"
+"[On] Montrer des informations variables sur les champs vachables, comme la "
 "longueur de la piste et l'élévation."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:191
 msgid "Landable size"
-msgstr "Taille de la zone posable"
+msgstr "Taille du champ vachable"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:192
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr "Pourcentage pour la taille des déroutement affichés sur la carte."
+msgstr "Pourcentage pour la taille des champs vachables affichés sur la carte."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:196
 msgid "Scale runway length"
