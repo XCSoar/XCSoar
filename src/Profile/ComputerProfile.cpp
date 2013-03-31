@@ -125,6 +125,30 @@ Profile::Load(CirclingSettings &settings)
       settings.external_trigger_cruise_enabled);
 }
 
+static bool
+LoadUTCOffset(int &value_r)
+{
+  /* NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
+     settings file (with negative offsets stored as "utc_offset + 24 *
+     3600").  Later versions will create a new signed settings key. */
+
+  int value;
+  if (Profile::Get(ProfileKeys::UTCOffsetSigned, value)) {
+  } else if (Profile::Get(ProfileKeys::UTCOffset, value)) {
+    if (value > 12 * 3600)
+      value = (value % (24 * 3600)) - 24 * 3600;
+  } else
+    /* no profile value present */
+    return false;
+
+  if (value > 13 * 3600 || value < -13 * 3600)
+    /* illegal value */
+    return false;
+
+  value_r = value;
+  return true;
+}
+
 void
 Profile::Load(ComputerSettings &settings)
 {
@@ -141,18 +165,7 @@ Profile::Load(ComputerSettings &settings)
 
   Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
 
-  // NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
-  // settings file (with negative offsets stored as "utc_offset + 24 * 3600").
-  // Later versions will create a new signed settings key.
-  if (!Get(ProfileKeys::UTCOffsetSigned, settings.utc_offset)) {
-    if (Get(ProfileKeys::UTCOffset, settings.utc_offset)) {
-      if (settings.utc_offset > 12 * 3600)
-        settings.utc_offset = (settings.utc_offset % (24 * 3600)) - 24 * 3600;
-    }
-  }
-
-  if (settings.utc_offset > 13 * 3600 || settings.utc_offset < -13 * 3600)
-    settings.utc_offset = 0;
+  LoadUTCOffset(settings.utc_offset);
 
   Load(settings.task);
   Load(settings.contest);
