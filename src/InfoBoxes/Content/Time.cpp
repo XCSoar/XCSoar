@@ -33,7 +33,9 @@ Copyright_License {
 void
 UpdateInfoBoxTimeLocal(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().time_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!basic.time_available) {
     data.SetInvalid();
     return;
   }
@@ -52,13 +54,15 @@ UpdateInfoBoxTimeLocal(InfoBoxData &data)
 void
 UpdateInfoBoxTimeUTC(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().time_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!basic.time_available) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  const BrokenDateTime t = CommonInterface::Basic().date_time_utc;
+  const BrokenDateTime t = basic.date_time_utc;
   data.UnsafeFormatValue(_T("%02d:%02d"), t.hour, t.minute);
 
   // Set Comment
@@ -68,15 +72,16 @@ UpdateInfoBoxTimeUTC(InfoBoxData &data)
 void
 UpdateInfoBoxTimeFlight(InfoBoxData &data)
 {
-  if (!positive(CommonInterface::Calculated().flight.flight_time)) {
+  const FlyingState &flight = CommonInterface::Calculated().flight;
+
+  if (!positive(flight.flight_time)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment,
-                         (int)CommonInterface::Calculated().flight.flight_time);
+  FormatTimeTwoLines(value, comment, (int)flight.flight_time);
 
   data.SetValue(value);
   data.SetComment(comment);
