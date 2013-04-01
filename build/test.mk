@@ -687,7 +687,7 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	RunIGCWriter \
 	RunFlightLogger \
-	RunCirclingWind RunWindZigZag RunWindEKF \
+	RunCirclingWind RunWindEKF \
 	RunTask \
 	ViewImage \
 	RunCanvas RunMapWindow \
@@ -1435,14 +1435,6 @@ RUN_CIRCLING_WIND_SOURCES = \
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL TIME
 $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
-
-RUN_WIND_ZIG_ZAG_SOURCES = \
-	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Wind/WindZigZag.cpp \
-	$(TEST_SRC_DIR)/RunWindZigZag.cpp
-RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_WIND_ZIG_ZAG_DEPENDS = GEO MATH UTIL TIME
-$(eval $(call link-program,RunWindZigZag,RUN_WIND_ZIG_ZAG))
 
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
