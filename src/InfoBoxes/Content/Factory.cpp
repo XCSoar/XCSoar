@@ -32,6 +32,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Other.hpp"
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
+#include "InfoBoxes/Content/Places.hpp"
 #include "InfoBoxes/Content/Contest.hpp"
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Terrain.hpp"

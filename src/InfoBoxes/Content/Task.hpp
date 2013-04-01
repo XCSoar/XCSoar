@@ -91,9 +91,6 @@ void
 UpdateInfoBoxFinalGR(InfoBoxData &data);
 
 void
-UpdateInfoBoxHomeDistance(InfoBoxData &data);
-
-void
 UpdateInfoBoxTaskSpeed(InfoBoxData &data);
 
 void
