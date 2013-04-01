@@ -60,6 +60,7 @@ Copyright_License {
 #include <assert.h>
 
 static const char *const Usage = "\n"
+  "  -datapath=      path to XCSoar data can be defined\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"
