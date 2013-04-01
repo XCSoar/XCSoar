@@ -46,7 +46,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "FLARM/Friends.hpp"
-#include "TeamCodeSettings.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Components.hpp"

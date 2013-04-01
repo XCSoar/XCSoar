@@ -20,7 +20,7 @@
 }
 */
 
-#include "TeamCode.hpp"
+#include "TeamCode/TeamCode.hpp"
 #include "TestUtil.hpp"
 #include "Util/StringUtil.hpp"
 

@@ -423,7 +423,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/DemoReplayGlue.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
-	$(SRC)/TeamCode.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/TeamActions.cpp \
 	$(SRC)/Waypoint/WaypointList.cpp \
 	$(SRC)/Waypoint/WaypointListBuilder.cpp \
@@ -617,7 +618,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \

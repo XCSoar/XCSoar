@@ -27,7 +27,7 @@
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/List.hpp"
 #include "FLARM/Color.hpp"
-#include "TeamCodeSettings.hpp"
+#include "TeamCode/Settings.hpp"
 #include "Math/FastRotation.hpp"
 
 struct Color;

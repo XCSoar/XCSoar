@@ -38,7 +38,6 @@
 #include "ComputerSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StringUtil.hpp"
-#include "TeamCode.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"

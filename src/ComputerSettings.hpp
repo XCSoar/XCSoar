@@ -36,7 +36,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "TeamCodeSettings.hpp"
+#include "TeamCode/Settings.hpp"
 #include "Plane/Plane.hpp"
 
 #include <type_traits>

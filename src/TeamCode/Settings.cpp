@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "TeamCodeSettings.hpp"
+#include "Settings.hpp"
 
 void
 TeamCodeSettings::SetDefaults()

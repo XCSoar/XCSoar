@@ -245,7 +245,7 @@ TEST_TASKWAYPOINT_DEPENDS = IO OS TASK GEO MATH UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TEAM_CODE_SOURCES = \
-	$(SRC)/TeamCode.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTeamCode.cpp
 TEST_TEAM_CODE_DEPENDS = GEO MATH UTIL
@@ -1657,7 +1657,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
@@ -2213,14 +2213,14 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
-	$(SRC)/TeamCode.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
