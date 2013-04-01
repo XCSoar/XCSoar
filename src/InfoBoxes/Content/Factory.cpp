@@ -41,6 +41,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Content/Airspace.hpp"
 
+#include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 
 #include <stddef.h>
@@ -150,7 +151,7 @@ struct MetaData {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
-static constexpr MetaData meta_data[NUM_TYPES] = {
+static constexpr MetaData meta_data[] = {
   // e_HeightGPS
   {
     N_("Altitude GPS"),
@@ -1211,6 +1212,9 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     NEXT_RADIAL,
   },
 };
+
+static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
+              "Wrong InfoBox factory size");
 
 const TCHAR *
 InfoBoxFactory::GetName(Type type)
