@@ -24,7 +24,7 @@ Copyright_License {
 #include "AutoQNH.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 void

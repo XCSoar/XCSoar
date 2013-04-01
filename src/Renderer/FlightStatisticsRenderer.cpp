@@ -36,7 +36,7 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Projection/ChartProjection.hpp"

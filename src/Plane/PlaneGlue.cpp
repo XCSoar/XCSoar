@@ -28,7 +28,7 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Polar/Parser.hpp"
 #include "Polar/PolarGlue.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 

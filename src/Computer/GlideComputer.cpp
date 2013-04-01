@@ -22,12 +22,11 @@ Copyright_License {
 */
 
 #include "GlideComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "ConditionMonitor/ConditionMonitors.hpp"
 #include "GlideComputerInterface.hpp"
-#include "ComputerSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 

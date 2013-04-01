@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "WaypointGlue.hpp"
-#include "ComputerSettings.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/StringUtil.hpp"
 #include "LogFile.hpp"

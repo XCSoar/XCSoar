@@ -25,7 +25,7 @@ Copyright_License {
 #include "Input/InputQueue.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 
 void
 GlideComputerEvents::Reset()

@@ -21,24 +21,13 @@ Copyright_License {
 }
 */
 
-#include "CuComputer.hpp"
 #include "Settings.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-struct NMEAInfo;
-struct DerivedInfo;
 
 void
-CuComputer::Reset()
+WindSettings::SetDefaults()
 {
-  cu_sonde.Reset();
-}
-
-void
-CuComputer::Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const ComputerSettings &settings)
-{
-  cu_sonde.SetForecastTemperature(KelvinToCelsius(settings.forecast_temperature));
-
-  cu_sonde.UpdateMeasurements(basic, calculated);
+  circling_wind = true;
+  zig_zag_wind = true;
+  use_external_wind = true;
+  manual_wind_available.Clear();
 }

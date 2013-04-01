@@ -29,7 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 bool
 ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,

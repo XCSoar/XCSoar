@@ -32,7 +32,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"

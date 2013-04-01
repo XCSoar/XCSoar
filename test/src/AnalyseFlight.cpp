@@ -32,7 +32,7 @@
 #include "JSON/GeoWriter.hpp"
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;

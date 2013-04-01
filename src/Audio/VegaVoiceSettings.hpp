@@ -21,24 +21,21 @@ Copyright_License {
 }
 */
 
-#include "CuComputer.hpp"
-#include "Settings.hpp"
-#include "Atmosphere/Temperature.hpp"
+#ifndef XCSOAR_VEGA_VOICE_SETTINGS_HPP
+#define XCSOAR_VEGA_VOICE_SETTINGS_HPP
 
-struct NMEAInfo;
-struct DerivedInfo;
+struct VoiceSettings {
+  // vegavoice stuff
+  bool voice_climb_rate_enabled;
+  bool voice_terrain_enabled;
+  bool voice_waypoint_distance_enabled;
+  bool voice_task_altitude_difference_enabled;
+  bool voice_mac_cready_enabled;
+  bool voice_new_waypoint_enabled;
+  bool voice_in_sector_enabled;
+  bool voice_airspace_enabled;
 
-void
-CuComputer::Reset()
-{
-  cu_sonde.Reset();
-}
+  void SetDefaults();
+};
 
-void
-CuComputer::Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const ComputerSettings &settings)
-{
-  cu_sonde.SetForecastTemperature(KelvinToCelsius(settings.forecast_temperature));
-
-  cu_sonde.UpdateMeasurements(basic, calculated);
-}
+#endif

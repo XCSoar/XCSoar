@@ -21,24 +21,17 @@ Copyright_License {
 }
 */
 
-#include "CuComputer.hpp"
-#include "Settings.hpp"
-#include "Atmosphere/Temperature.hpp"
-
-struct NMEAInfo;
-struct DerivedInfo;
+#include "VegaVoiceSettings.hpp"
 
 void
-CuComputer::Reset()
+VoiceSettings::SetDefaults()
 {
-  cu_sonde.Reset();
-}
-
-void
-CuComputer::Compute(const NMEAInfo &basic, const DerivedInfo &calculated,
-                    const ComputerSettings &settings)
-{
-  cu_sonde.SetForecastTemperature(KelvinToCelsius(settings.forecast_temperature));
-
-  cu_sonde.UpdateMeasurements(basic, calculated);
+  voice_climb_rate_enabled = false;
+  voice_terrain_enabled = false;
+  voice_waypoint_distance_enabled = false;
+  voice_task_altitude_difference_enabled = false;
+  voice_mac_cready_enabled = false;
+  voice_new_waypoint_enabled = false;
+  voice_in_sector_enabled = false;
+  voice_airspace_enabled = false;
 }

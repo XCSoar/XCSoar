@@ -35,7 +35,7 @@
 #include "UIGlobals.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"

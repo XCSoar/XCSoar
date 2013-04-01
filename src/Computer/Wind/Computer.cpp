@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Computer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 

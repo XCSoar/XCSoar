@@ -29,7 +29,7 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"

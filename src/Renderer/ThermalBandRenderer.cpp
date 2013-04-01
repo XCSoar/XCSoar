@@ -25,7 +25,7 @@ Copyright_License {
 #include "ChartRenderer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ThermalBandLook.hpp"
 #include <algorithm>

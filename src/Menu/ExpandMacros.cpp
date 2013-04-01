@@ -28,7 +28,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Gauge/BigTrafficWidget.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Components.hpp"
 #include "MapSettings.hpp"
 #include "Simulator.hpp"

@@ -1648,7 +1648,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/MapSettings.cpp \
-	$(SRC)/ComputerSettings.cpp \
+	$(SRC)/Computer/Settings.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
@@ -2181,6 +2183,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/Wind/Computer.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
@@ -2198,13 +2201,14 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
-	$(SRC)/ComputerSettings.cpp \
+	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/TeamCode/TeamCode.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \

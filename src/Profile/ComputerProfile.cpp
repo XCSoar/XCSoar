@@ -27,7 +27,7 @@ Copyright_License {
 #include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
 #include "ContestProfile.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 namespace Profile {
   static void Load(WindSettings &settings);

@@ -21,20 +21,11 @@ Copyright_License {
 }
 */
 
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "OS/Clock.hpp"
 #include "Asset.hpp"
 #include "Atmosphere/Temperature.hpp"
-
-void
-WindSettings::SetDefaults()
-{
-  circling_wind = true;
-  zig_zag_wind = true;
-  use_external_wind = true;
-  manual_wind_available.Clear();
-}
 
 void
 PolarSettings::SetDefaults()
@@ -43,19 +34,6 @@ PolarSettings::SetDefaults()
   bugs = fixed(1);
   glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
-}
-
-void
-VoiceSettings::SetDefaults()
-{
-  voice_climb_rate_enabled = false;
-  voice_terrain_enabled = false;
-  voice_waypoint_distance_enabled = false;
-  voice_task_altitude_difference_enabled = false;
-  voice_mac_cready_enabled = false;
-  voice_new_waypoint_enabled = false;
-  voice_in_sector_enabled = false;
-  voice_airspace_enabled = false;
 }
 
 void

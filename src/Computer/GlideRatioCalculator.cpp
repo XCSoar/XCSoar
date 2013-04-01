@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "GlideRatioCalculator.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>

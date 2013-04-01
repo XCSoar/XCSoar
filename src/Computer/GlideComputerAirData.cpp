@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "GlideComputerAirData.hpp"
 #include "GlideComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "ThermalBase.hpp"

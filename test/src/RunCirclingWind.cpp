@@ -26,7 +26,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 #include <stdio.h>
 #include <memory>
