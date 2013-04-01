@@ -104,8 +104,14 @@ struct PlacesOfInterestSettings {
 
   GeoPoint home_location;
 
+  /**
+   * The reference location for the "ATC radial" InfoBox.
+   */
+  GeoPoint atc_reference;
+
   void SetDefaults() {
     ClearHome();
+    atc_reference.SetInvalid();
   }
 
   void ClearHome();

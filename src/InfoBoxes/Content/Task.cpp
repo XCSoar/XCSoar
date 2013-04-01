@@ -119,25 +119,6 @@ UpdateInfoBoxRadial(InfoBoxData &data)
 }
 
 void
-UpdateInfoBoxRadialATC(InfoBoxData &data)
-{
-  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
-  if (!task_stats.task_valid || !vector_remaining.IsValid() ||
-      vector_remaining.distance <= fixed(10)) {
-    data.SetInvalid();
-    return;
-  }
-
-  // Set Value
-  data.SetValue(vector_remaining.bearing.Reciprocal());
-  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
-
-  FormatDistance(data.comment.buffer(), vector_remaining.distance,
-                 Unit::NAUTICAL_MILES, true, 1);
-}
-
-void
 InfoBoxContentNextWaypoint::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats

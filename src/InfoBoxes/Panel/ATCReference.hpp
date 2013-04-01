@@ -21,17 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_PLACES_HPP
-#define XCSOAR_INFOBOX_CONTENT_PLACES_HPP
+#ifndef XCSOAR_ATC_REFERENCE_PANEL_HPP
+#define XCSOAR_ATC_REFERENCE_PANEL_HPP
 
-struct InfoBoxData;
+class Widget;
 
-void
-UpdateInfoBoxHomeDistance(InfoBoxData &data);
-
-extern const struct InfoBoxPanel atc_infobox_panels[];
-
-void
-UpdateInfoBoxATCRadial(InfoBoxData &data);
+Widget *
+LoadATCReferencePanel(unsigned id);
 
 #endif

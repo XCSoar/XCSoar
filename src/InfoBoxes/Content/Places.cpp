@@ -23,7 +23,11 @@ Copyright_License {
 
 #include "Places.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
+#include "InfoBoxes/Panel/ATCReference.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "Formatter/Units.hpp"
 
 void
 UpdateInfoBoxHomeDistance(InfoBoxData &data)
@@ -44,4 +48,31 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
     data.SetCommentFromBearingDifference(bd);
   } else
     data.SetCommentInvalid();
+}
+
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
+const InfoBoxPanel atc_infobox_panels[] = {
+  { N_("Reference"), LoadATCReferencePanel },
+  { nullptr, nullptr }
+};
+
+void
+UpdateInfoBoxATCRadial(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const GeoPoint &reference =
+    CommonInterface::GetComputerSettings().poi.atc_reference;
+  if (!basic.location_available || !reference.IsValid()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const GeoVector vector(reference, basic.location);
+
+  data.SetValue(vector.bearing);
+  FormatDistance(data.comment.buffer(), vector.distance,
+                 Unit::NAUTICAL_MILES, true, 1);
 }
