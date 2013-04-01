@@ -59,6 +59,14 @@ public:
   }
 
   gcc_const
+  static RoughTime FromMinuteOfDayChecked(int mod) {
+    while (mod < 0)
+      mod += MAX;
+
+    return FromMinuteOfDayChecked(unsigned(mod));
+  }
+
+  gcc_const
   static RoughTime FromMinuteOfDayChecked(unsigned mod) {
     return RoughTime(mod % MAX);
   }
@@ -234,6 +242,28 @@ public:
   constexpr bool operator!=(RoughTimeDelta other) const {
     return value != other.value;
   }
+
+  constexpr RoughTimeDelta operator-() const {
+    return RoughTimeDelta(-value);
+  }
 };
+
+gcc_const
+static inline RoughTime
+operator+(RoughTime t, RoughTimeDelta delta)
+{
+  if (!t.IsValid())
+    return t;
+
+  int value = t.GetMinuteOfDay() + delta.AsMinutes();
+  return RoughTime::FromMinuteOfDayChecked(value);
+}
+
+gcc_const
+static inline RoughTime
+operator-(RoughTime t, RoughTimeDelta delta)
+{
+  return t + (-delta);
+}
 
 #endif
