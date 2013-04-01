@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_WIND_COMPUTER_HPP
 #define XCSOAR_WIND_COMPUTER_HPP
 
-#include "Wind/CirclingWind.hpp"
-#include "Wind/WindEKFGlue.hpp"
-#include "Wind/WindStore.hpp"
+#include "CirclingWind.hpp"
+#include "WindEKFGlue.hpp"
+#include "Store.hpp"
 
 struct WindSettings;
 class GlidePolar;

@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "Wind/WindEKFGlue.hpp"
+#include "WindEKFGlue.hpp"
 #include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"

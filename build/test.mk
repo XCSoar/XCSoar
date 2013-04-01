@@ -1430,7 +1430,7 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL TIME
@@ -1438,8 +1438,8 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = GEO MATH UTIL TIME
@@ -2092,11 +2092,11 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/Wind/WindStore.cpp \
-	$(SRC)/Wind/WindMeasurementList.cpp \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
@@ -2180,7 +2180,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Computer/WindComputer.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \

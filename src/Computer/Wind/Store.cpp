@@ -24,7 +24,7 @@ Copyright_License {
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
-#include "Wind/WindStore.hpp"
+#include "Store.hpp"
 #include "Math/Constants.h"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

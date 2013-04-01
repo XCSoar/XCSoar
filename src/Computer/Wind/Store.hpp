@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef WINDSTORE_H
-#define WINDSTORE_H
+#ifndef XCSOAR_WIND_STORE_HPP
+#define XCSOAR_WIND_STORE_HPP
 
-#include "Wind/WindMeasurementList.hpp"
+#include "MeasurementList.hpp"
 
 struct NMEAInfo;
 struct MoreData;

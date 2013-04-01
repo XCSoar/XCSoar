@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "Wind/WindEKF.hpp"
+#include "WindEKF.hpp"
 
 #include <stdint.h>
 

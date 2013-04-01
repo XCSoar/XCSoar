@@ -24,7 +24,7 @@ Copyright_License {
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
-#include "Wind/CirclingWind.hpp"
+#include "CirclingWind.hpp"
 #include "Math/Constants.h"
 #include "LogFile.hpp"
 #include "NMEA/MoreData.hpp"

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WindComputer.hpp"
+#include "Computer.hpp"
 #include "ComputerSettings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
-#include "Wind/WindMeasurementList.hpp"
+#include "MeasurementList.hpp"
 
 #include <stdlib.h>
 #include <algorithm>

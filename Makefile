@@ -363,7 +363,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/ThermalBandComputer.cpp \
-	$(SRC)/Computer/WindComputer.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
@@ -442,11 +442,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/Wind/WindMeasurementList.cpp \
-	$(SRC)/Wind/WindStore.cpp \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	\
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \

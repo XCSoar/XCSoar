@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef WINDMEASUREMENTLIST_H
-#define WINDMEASUREMENTLIST_H
+#ifndef XCSOAR_WIND_MEASUREMENT_LIST_HPP
+#define XCSOAR_WIND_MEASUREMENT_LIST_HPP
 
 #include "Util/StaticArray.hpp"
 #include "Math/Vector.hpp"
