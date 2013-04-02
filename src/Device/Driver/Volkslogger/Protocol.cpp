@@ -209,7 +209,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
 
   uint8_t *p = (uint8_t *)buffer;
 
-  unsigned const TIMEOUT_NORMAL_MS = 1000;
+  constexpr unsigned TIMEOUT_NORMAL_MS = 2000;
   /**
    * We need to wait longer for the first char to
    * give the logger time to calculate security
