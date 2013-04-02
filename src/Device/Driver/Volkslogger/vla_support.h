@@ -28,30 +28,15 @@ class Port;
 class OperationEnvironment;
 
 /*
-	VLA_SYS contains target system dependent primitives upon which
-	the subclasses rely.
-	Implement this functions according to	your target system.
-	A sample implementation for Win32(R) can be found in file
-		"VLAPI2SYS_WIN32.CPP"
-*/
-class VLA_SYS {
-protected:
-  //
-  Port *port;
-
- VLA_SYS(Port &_port):port(&_port) {}
-};
-
-
-/*
 	This class contains target system independent base functions
 	for communication with the VOLKSLOGGER.
 	These functions are critical and normally don't need to be changed
 	by the user. If you think that something has to be changed here,
 	contact GARRECHT for comments on your intended changes.
 */
-class VLA_XFR : protected VLA_SYS {
+class VLA_XFR {
 protected:
+  Port &port;
   OperationEnvironment &env;
 
   int32 databaud; // Baudrate as integer (e.g. 115200)

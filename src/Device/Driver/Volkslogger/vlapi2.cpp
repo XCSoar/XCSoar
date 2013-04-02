@@ -43,7 +43,7 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 VLA_ERROR
 VLA_XFR::dbbput(const void *dbbbuffer, int32 dbbsize)
 {
-  return Volkslogger::SendCommandWriteBulk(*port, env, Volkslogger::cmd_PDB,
+  return Volkslogger::SendCommandWriteBulk(port, env, Volkslogger::cmd_PDB,
                                            dbbbuffer, dbbsize)
     ? VLA_ERR_NOERR
     : VLA_ERR_MISC;
@@ -52,7 +52,7 @@ VLA_XFR::dbbput(const void *dbbbuffer, int32 dbbsize)
 VLA_ERROR
 VLA_XFR::dbbget(void *dbbbuffer, int32 dbbsize)
 {
-  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env,
+  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env,
                                                  Volkslogger::cmd_RDB,
                                                  dbbbuffer, dbbsize);
   env.Sleep(300);
@@ -66,7 +66,7 @@ VLA_XFR::readdir(void *buffer, int32 size) {
   if(buffer==0)
     return -1;
 
-  return Volkslogger::SendCommandReadBulk(*port, env,
+  return Volkslogger::SendCommandReadBulk(port, env,
                                            Volkslogger::cmd_DIR,
                                            buffer, size);
 }
@@ -74,7 +74,7 @@ VLA_XFR::readdir(void *buffer, int32 size) {
 VLA_ERROR
 VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
 {
-  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env,
+  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env,
                                                  Volkslogger::cmd_ERO,
                                                  dbbbuffer, dbbsize);
   env.Sleep(300);
@@ -106,7 +106,7 @@ VLA_XFR::flightget(void *buffer, size_t buffersize,
   unsigned timeout_firstchar_ms=300000;
 
   // Download binary log data supports BulkBaudrate
-  int groesse = Volkslogger::SendCommandReadBulk(*port, databaud, env, cmd,
+  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env, cmd,
                                                  flightnr, buffer, buffersize,
                                                  timeout_firstchar_ms);
   if (groesse <= 0)
@@ -119,7 +119,7 @@ VLA_XFR::flightget(void *buffer, size_t buffersize,
    * Testing has shown that downloading the Signature does not support
    * BulkRate. It has to be done with standard IO Rate (9600)
    */
-  int sgr = Volkslogger::SendCommandReadBulk(*port, env,
+  int sgr = Volkslogger::SendCommandReadBulk(port, env,
                                              Volkslogger::cmd_SIG,
                                              (uint8_t *)buffer + groesse,
                                              buffersize - groesse);
@@ -136,18 +136,18 @@ VLA_XFR::flightget(void *buffer, size_t buffersize,
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime) {
   const unsigned timeout_ms = waittime * 1000;
-  return Volkslogger::ConnectAndFlush(*port, env, timeout_ms)
+  return Volkslogger::ConnectAndFlush(port, env, timeout_ms)
     ? VLA_ERR_NOERR
     : VLA_ERR_MISC;
 }
 
 VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
-  :VLA_SYS(_port), env(_env), databaud(_databaud) {
+  :port(_port), env(_env), databaud(_databaud) {
 }
 
 
 VLA_ERROR VLA_XFR::readinfo(void *buffer, int32 buffersize) {
-  int nbytes = Volkslogger::SendCommandReadBulk(*port, env,
+  int nbytes = Volkslogger::SendCommandReadBulk(port, env,
                                                 Volkslogger::cmd_INF,
                                                 buffer, buffersize);
   if (nbytes <= 0)
