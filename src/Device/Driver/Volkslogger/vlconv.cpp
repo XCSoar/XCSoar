@@ -354,7 +354,7 @@ struct IGCHEADER
    * Unused field will be prepared as HO fields.
    */
   void
-  output(int version, int oo_fillin)
+  output(int version, bool oo_fillin)
   {
     igc_filter(PLT);
     igc_filter(GTY);
@@ -419,7 +419,7 @@ struct IGCHEADER
     }
 
     // LCONV-VER-Erzeugung ab Version 4.16
-    if ((version >= 416) && (oo_fillin == 1))
+    if (version >= 416 && oo_fillin)
       fprintf(ausgabe, "LCONV-VER:%01d.%02d\n", version / 100, version % 100);
   }
 };
@@ -514,7 +514,7 @@ const int actual_conv_version = 424;
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
-            int oo_fillin)
+            bool oo_fillin)
 {
   const uint8_t *const end = bin_puffer + length;
 

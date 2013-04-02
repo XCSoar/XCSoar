@@ -312,7 +312,7 @@ VLAPI::read_igcfile(const TCHAR *filename, unsigned index, bool secmode)
   if (outfile == nullptr)
     return VLA_ERR_FILE;
 
-  size_t r = convert_gcs(0, outfile, logbuffer, length, 1);
+  size_t r = convert_gcs(0, outfile, logbuffer, length, true);
   if (r > 0) {
     err = VLA_ERR_NOERR;
     print_g_record(outfile,   // output to stdout
