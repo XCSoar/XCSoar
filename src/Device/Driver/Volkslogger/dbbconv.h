@@ -95,7 +95,7 @@ public:
    * Find an actual record of specified type(id) in the declaration
    * memory and return it's position in the memory array.
    */
-  int16 fdf_findfield(uint8_t id) const;
+  int fdf_findfield(uint8_t id) const;
 };
 
 #endif

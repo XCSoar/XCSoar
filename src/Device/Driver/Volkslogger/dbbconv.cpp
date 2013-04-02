@@ -126,7 +126,7 @@ DBB::AddFDFStringUpper(uint8_t id, const char *src)
   } while (*src != '\0');
 }
 
-int16
+int
 DBB::fdf_findfield(uint8_t id) const
 {
   for (unsigned i = 0; i < sizeof(fdf);) {

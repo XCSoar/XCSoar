@@ -510,7 +510,7 @@ VLAPI_DATA::DATABASE::CopyTo(DBB &dbb) const
 // read flight-declaration fields database into structure
 //
 void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
-  int16 p;
+  int p;
   char plt1[17];
   char plt2[17];
   char plt3[17];
