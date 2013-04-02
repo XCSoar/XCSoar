@@ -39,123 +39,9 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 //                        VLA_XFR
 // ------------------------------------------------------------
 
-// Blockweises Schreiben in den Logger (z.B. Datenbank)
-VLA_ERROR
-VLA_XFR::dbbput(const void *dbbbuffer, int32 dbbsize)
-{
-  return Volkslogger::SendCommandWriteBulk(port, env, Volkslogger::cmd_PDB,
-                                           dbbbuffer, dbbsize)
-    ? VLA_ERR_NOERR
-    : VLA_ERR_MISC;
-}
-
-VLA_ERROR
-VLA_XFR::dbbget(void *dbbbuffer, int32 dbbsize)
-{
-  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env,
-                                                 Volkslogger::cmd_RDB,
-                                                 dbbbuffer, dbbsize);
-  env.Sleep(300);
-  if (groesse <= 0)
-    return VLA_ERR_NODATA;
-  return VLA_ERR_NOERR;
-}
-
-int
-VLA_XFR::readdir(void *buffer, int32 size) {
-  if(buffer==0)
-    return -1;
-
-  return Volkslogger::SendCommandReadBulk(port, env,
-                                           Volkslogger::cmd_DIR,
-                                           buffer, size);
-}
-
-VLA_ERROR
-VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
-{
-  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env,
-                                                 Volkslogger::cmd_ERO,
-                                                 dbbbuffer, dbbsize);
-  env.Sleep(300);
-  if (groesse <= 0)
-    return VLA_ERR_NODATA;
-  return VLA_ERR_NOERR;
-}
-
-
-/*
-  Auslesen des Fluges flightnumber im Sicherheitslevel secmode,
-  Abspeichern als GCS-Datei im Speicher
-*/
-size_t
-VLA_XFR::flightget(void *buffer, size_t buffersize,
-                   unsigned flightnr, bool secmode)
-{
-  // read binary flightlog
-  const Volkslogger::Command cmd = secmode
-    ? Volkslogger::cmd_GFS
-    : Volkslogger::cmd_GFL;
-
-  /*
-   * It is necessary to wait long for the first reply from
-   * the Logger in ReadBulk.
-   * Since the VL needs time to calculate the Security of
-   * the log before it responds.
-   */
-  unsigned timeout_firstchar_ms=300000;
-
-  // Download binary log data supports BulkBaudrate
-  int groesse = Volkslogger::SendCommandReadBulk(port, databaud, env, cmd,
-                                                 flightnr, buffer, buffersize,
-                                                 timeout_firstchar_ms);
-  if (groesse <= 0)
-    return 0;
-
-  // read signature
-  env.Sleep(300);
-
-  /*
-   * Testing has shown that downloading the Signature does not support
-   * BulkRate. It has to be done with standard IO Rate (9600)
-   */
-  int sgr = Volkslogger::SendCommandReadBulk(port, env,
-                                             Volkslogger::cmd_SIG,
-                                             (uint8_t *)buffer + groesse,
-                                             buffersize - groesse);
-  if (sgr <= 0)
-    return 0;
-
-  return groesse + sgr;
-}
-
-
-//
-// wait a specified amount of seconds (waittime) for connection of the
-// VL to the serial port
-//
-VLA_ERROR VLA_XFR::connect(int32 waittime) {
-  const unsigned timeout_ms = waittime * 1000;
-  return Volkslogger::ConnectAndFlush(port, env, timeout_ms)
-    ? VLA_ERR_NOERR
-    : VLA_ERR_MISC;
-}
-
 VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
   :port(_port), env(_env), databaud(_databaud) {
 }
-
-
-VLA_ERROR VLA_XFR::readinfo(void *buffer, int32 buffersize) {
-  int nbytes = Volkslogger::SendCommandReadBulk(port, env,
-                                                Volkslogger::cmd_INF,
-                                                buffer, buffersize);
-  if (nbytes <= 0)
-    return VLA_ERR_NODATA;
-
-  return VLA_ERR_NOERR;
-}
-
 
 // ------------------------------------------------------------
 //                          VLAPI
@@ -170,28 +56,28 @@ VLA_ERROR
 VLAPI::read_info(VLINFO &vlinfo)
 {
   uint8_t buffer[8];
-  VLA_ERROR err;
 
-  if ((err = readinfo(buffer, sizeof(buffer))) == VLA_ERR_NOERR) {
-    // Aufbau der Versions- und sonstigen Nummern
-    vlinfo.sessionid = 256*buffer[0] + buffer[1];
-    vlinfo.vlserno = 256*buffer[2] + buffer[3];
-    vlinfo.fwmajor = buffer[4] / 16;
-    vlinfo.fwminor = buffer[4] % 16;
-    vlinfo.fwbuild = buffer[7];
-  }
+  if (Volkslogger::ReadInfo(port, env,
+                            buffer, sizeof(buffer)) < (int)sizeof(buffer))
+    return VLA_ERR_NODATA;
 
-  return err;
+  // Aufbau der Versions- und sonstigen Nummern
+  vlinfo.sessionid = 256*buffer[0] + buffer[1];
+  vlinfo.vlserno = 256*buffer[2] + buffer[3];
+  vlinfo.fwmajor = buffer[4] / 16;
+  vlinfo.fwminor = buffer[4] % 16;
+  vlinfo.fwbuild = buffer[7];
+
+  return VLA_ERR_NOERR;
 }
 
 // tries a connect without user interaction first.
 // if this fails, ask user to connect the VOLKSLOGGER
 VLA_ERROR VLAPI::stillconnect() {
-  VLA_ERROR err;
-  err = connect(4);
-  if(err != VLA_ERR_NOERR)
-    err = connect(10);
-  return err;
+  return Volkslogger::ConnectAndFlush(port, env, 4000) ||
+    Volkslogger::ConnectAndFlush(port, env, 10000)
+    ? VLA_ERR_NOERR
+    : VLA_ERR_NODATA;
 }
 
 VLA_ERROR
@@ -202,9 +88,9 @@ VLAPI::read_db_and_declaration(DATABASE &database, DECLARATION &declaration)
   if(err != VLA_ERR_NOERR)
     return err;
 
-  err = dbbget(dbbbuffer,sizeof(dbbbuffer));
-  if(err != VLA_ERR_NOERR)
-    return err;
+  if (Volkslogger::ReadDatabase(port, databaud, env,
+                                dbbbuffer, sizeof(dbbbuffer)) <= 0)
+    return VLA_ERR_NODATA;
 
   DBB dbb1;
   memcpy(dbb1.block,dbbbuffer,sizeof(dbb1.block));
@@ -236,8 +122,11 @@ VLAPI::write_db_and_declaration(const DATABASE &database,
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
-  err = dbbput(dbbbuffer,sizeof(dbbbuffer));
-  return err;
+
+  if (!Volkslogger::WriteDatabase(port, env, dbbbuffer, sizeof(dbbbuffer)))
+      return VLA_ERR_NODATA;
+
+  return VLA_ERR_NOERR;
 }
 
 VLA_ERROR
@@ -249,9 +138,9 @@ VLAPI::update_logger_declaration(const DECLARATION &declaration)
     return err;
 
   //get raw database and declaration from logger
-  err = dbbget(dbbbuffer,sizeof(dbbbuffer));
-  if(err != VLA_ERR_NOERR)
-    return err;
+  if (Volkslogger::ReadDatabase(port, databaud, env,
+                                dbbbuffer, sizeof(dbbbuffer)) <= 0)
+    return VLA_ERR_NODATA;
 
   //populate DBB structure with database(=block) read from logger
   //do NOT use the declaration(=fdf) from logger
@@ -268,8 +157,11 @@ VLAPI::update_logger_declaration(const DECLARATION &declaration)
   err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
-  err = dbbput(dbbbuffer,sizeof(dbbbuffer));
-  return err;
+
+  if (!Volkslogger::WriteDatabase(port, env, dbbbuffer, sizeof(dbbbuffer)))
+      return VLA_ERR_NODATA;
+
+  return VLA_ERR_NOERR;
 }
 
 VLA_ERROR
@@ -281,7 +173,8 @@ VLAPI::read_directory(std::vector<DIRENTRY> &directory)
     return err;
 
   uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
-  int data_length = readdir(dirbuffer, sizeof(dirbuffer));
+  int data_length = Volkslogger::ReadFlightList(port, env,
+                                                dirbuffer, sizeof(dirbuffer));
 
   if (data_length == -1)
     return VLA_ERR_MISC;
@@ -314,7 +207,9 @@ VLAPI::read_igcfile(const TCHAR *filename, unsigned index, bool secmode)
     return err;
 
   uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
-  const size_t length = flightget(logbuffer, sizeof(logbuffer), index, secmode);
+  const size_t length = Volkslogger::ReadFlight(port, databaud, env,
+                                                index, secmode,
+                                                logbuffer, sizeof(logbuffer));
   if (length == 0)
     return VLA_ERR_MISC;
 

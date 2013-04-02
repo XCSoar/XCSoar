@@ -100,7 +100,7 @@ DeclareInner(Port &port, const unsigned bulkrate,
 
   VLAPI vl(port, bulkrate, env);
 
-  if (vl.connect(20) != VLA_ERR_NOERR)
+  if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
 
   //Clear DECLARATION struct and populate with xcs declaration

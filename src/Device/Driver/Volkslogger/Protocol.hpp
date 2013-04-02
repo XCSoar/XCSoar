@@ -197,6 +197,64 @@ namespace Volkslogger {
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,
                             Command cmd, const void *data, size_t size);
+
+  static inline int
+  ReadInfo(Port &port, OperationEnvironment &env,
+           void *buffer, size_t max_length)
+  {
+    return SendCommandReadBulk(port, env, Volkslogger::cmd_INF,
+                               buffer, max_length);
+  }
+
+  static inline int
+  ReadDatabase(Port &port, unsigned baud_rate, OperationEnvironment &env,
+               void *buffer, size_t max_length)
+  {
+    return SendCommandReadBulk(port, baud_rate, env, Volkslogger::cmd_RDB,
+                               buffer, max_length);
+  }
+
+  static inline bool
+  WriteDatabase(Port &port, OperationEnvironment &env,
+                const void *buffer, size_t size)
+  {
+    return SendCommandWriteBulk(port, env, Volkslogger::cmd_PDB,
+                                buffer, size);
+  }
+
+  /**
+   * read Flightlist(Directory) in binary format from VL to buffer,
+   * return the length of the read data in bytes
+   * or -1 if a problem was encountered and the data read failed.
+   */
+  static inline int
+  ReadFlightList(Port &port, OperationEnvironment &env,
+                 void *buffer, size_t max_length)
+  {
+    return SendCommandReadBulk(port, env, Volkslogger::cmd_DIR,
+                               buffer, max_length);
+  }
+
+  /**
+   * Read one binary flight log from VL.
+   *
+   * @return the number of bytes written to the buffer or 0 on error
+   */
+  size_t
+  ReadFlight(Port &port, unsigned baud_rate, OperationEnvironment &env,
+             unsigned flight_number, bool secmode,
+             void *buffer, size_t max_length);
+
+  /**
+   * Read all binary flight logs from VL.
+   */
+  static inline int
+  ReadFlight(Port &port, unsigned baud_rate, OperationEnvironment &env,
+             void *buffer, size_t max_length)
+  {
+    return SendCommandReadBulk(port, baud_rate, env, Volkslogger::cmd_ERO,
+                               buffer, max_length);
+  }
 }
 
 #endif

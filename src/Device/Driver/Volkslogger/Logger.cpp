@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "vlapi2.h"
@@ -87,7 +88,7 @@ ReadFlightListInner(Port &port, unsigned bulkrate,
   VLAPI vl(port, bulkrate, env);
 
   env.SetProgressRange(10);
-  if (vl.connect(20) != VLA_ERR_NOERR)
+  if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
   env.SetProgressPosition(3);
 
@@ -117,7 +118,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
 {
   VLAPI vl(port, bulkrate, env);
 
-  if (vl.connect(20) != VLA_ERR_NOERR)
+  if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
 
   /*
