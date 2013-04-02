@@ -42,6 +42,12 @@ ParsePortArgs(Args &args)
   }
 #endif
 
+  if (config.path.equals(_T("k6bt"))) {
+    config = ParsePortArgs(args);
+    config.k6bt = true;
+    return config;
+  }
+
   if (config.path.equals(_T("pty"))) {
     config.port_type = DeviceConfig::PortType::PTY;
     config.path = args.ExpectNextT().c_str();
