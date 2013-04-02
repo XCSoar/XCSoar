@@ -129,18 +129,16 @@ DBB::AddFDFStringUpper(uint8_t id, const char *src)
 int16
 DBB::fdf_findfield(uint8_t id) const
 {
-  int16 ii;
-  ii = -1;
   for (unsigned i = 0; i < sizeof(fdf);) {
-    if (fdf[i+1] == id) {
+    if (fdf[i+1] == id)
       // Feld gefunden
-      ii = i;
-      break;
-    }
+      return i;
+
     if (fdf[i] == 0)
       // Zyklus verhindern
       return -1;
     i = i + fdf[i];
   }
-  return ii;
+
+  return -1;
 }
