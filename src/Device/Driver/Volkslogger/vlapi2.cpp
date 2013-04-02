@@ -510,7 +510,7 @@ VLAPI_DATA::DATABASE::CopyTo(DBB &dbb) const
 // read flight-declaration fields database into structure
 //
 void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
-  int16 i,p;
+  int16 p;
   char plt1[17];
   char plt2[17];
   char plt3[17];
@@ -549,7 +549,7 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
     task.finishpoint.get(dbb->fdf + p + 2);
   if ((p = dbb->fdf_findfield(FLDNTP))>=0)
     task.nturnpoints = dbb->fdf[p+2];
-  for (i=0; i<task.nturnpoints; i++) {
+  for (unsigned i = 0; i < task.nturnpoints; ++i) {
     if ((p = dbb->fdf_findfield(FLDTP1+i))>=0)
       task.turnpoints[i].get(dbb->fdf + p + 2);
   }
@@ -559,8 +559,8 @@ void
 VLAPI_DATA::DECLARATION::put(DBB *dbb) const
 {
   const char *src = flightinfo.pilot;
-  int i;
-  for(i=0; i<4; i++) {
+
+  for (unsigned i = 0; i < 4; ++i) {
     char *dest = (char *)dbb->AddFDF(FLDPLT + i, 17);
     if (dest == nullptr)
       break;
@@ -588,7 +588,7 @@ VLAPI_DATA::DECLARATION::put(DBB *dbb) const
   task.finishpoint.put(fdfwpt);
   dbb->add_fdf(FLDFIN,sizeof(fdfwpt),&fdfwpt);
 
-  for (i=0; i<task.nturnpoints; i++) {
+  for (unsigned i = 0; i < task.nturnpoints; ++i) {
     task.turnpoints[i].put(fdfwpt);
     dbb->add_fdf(FLDTP1+i,sizeof(fdfwpt),&fdfwpt);
   }

@@ -118,7 +118,7 @@ class VLAPI_DATA {
     struct TASK {
       DCLWPT startpoint;
       DCLWPT finishpoint;
-      int nturnpoints;
+      unsigned nturnpoints;
       DCLWPT turnpoints[12];
     } task;
   protected:
