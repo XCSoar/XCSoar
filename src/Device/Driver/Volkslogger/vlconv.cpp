@@ -514,7 +514,7 @@ const int actual_conv_version = 424;
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
-    int oo_fillin, word *serno, long *sp)
+            int oo_fillin)
 {
   const uint8_t *const end = bin_puffer + length;
 
@@ -682,7 +682,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       l = 1; // Füllzeichen
       break;
     case rectyp_end:
-      *sp = (p - bin_puffer) + 1;
+      /* sp = (p - bin_puffer) + 1 */
       l = 41;
       ende = 1;
       break;
@@ -894,10 +894,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         if (p2 + 7 >= end)
           return 0;
 
-        *serno = (256L * p2[1] + p2[2]);
-
         // sonstiges einlesen
-        wordtoserno(igcheader.A, *serno);
+        wordtoserno(igcheader.A, 256 * p2[1] + p2[2]);
 
         sprintf(igcheader.DTM, "%03u", p2[3]);
         sprintf(igcheader.RHW, "%0X.%0X", p2[4] >> 4, (p2[4] & 0xf));
