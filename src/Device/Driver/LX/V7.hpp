@@ -112,12 +112,9 @@ namespace V7 {
   static inline bool
   SetQNH(Port &port, OperationEnvironment &env, const AtmosphericPressure &qnh)
   {
-    fixed altitude_offset = Units::ToUserUnit(
-        qnh.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()),
-        Unit::FEET);
-
     char buffer[100];
-    sprintf(buffer, "PLXV0,QNH,W,%.2f", (double)altitude_offset);
+    unsigned QNHinPascal = uround(qnh.GetPascal());
+    sprintf(buffer, "PLXV0,QNH,W,%u", QNHinPascal); 
     return PortWriteNMEA(port, buffer, env);
   }
 }
