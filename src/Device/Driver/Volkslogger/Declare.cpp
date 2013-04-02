@@ -104,39 +104,40 @@ DeclareInner(Port &port, const unsigned bulkrate,
     return false;
 
   //Clear DECLARATION struct and populate with xcs declaration
-  memset(&vl.declaration, 0, sizeof(vl.declaration));
-  CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
-		     sizeof(vl.declaration.flightinfo.pilot),
+  VLAPI_DATA::DECLARATION vl_declaration;
+  memset(&vl_declaration, 0, sizeof(vl_declaration));
+  CopyToNarrowBuffer(vl_declaration.flightinfo.pilot,
+		     sizeof(vl_declaration.flightinfo.pilot),
                      declaration.pilot_name);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
-                     sizeof(vl.declaration.flightinfo.gliderid),
+  CopyToNarrowBuffer(vl_declaration.flightinfo.gliderid,
+                     sizeof(vl_declaration.flightinfo.gliderid),
                      declaration.aircraft_registration);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
-                     sizeof(vl.declaration.flightinfo.glidertype),
+  CopyToNarrowBuffer(vl_declaration.flightinfo.glidertype,
+                     sizeof(vl_declaration.flightinfo.glidertype),
                      declaration.aircraft_type);
 
   if (home != NULL)
-    CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
+    CopyWaypoint(vl_declaration.flightinfo.homepoint, *home);
 
   // start..
-  CopyTurnPoint(vl.declaration.task.startpoint,
+  CopyTurnPoint(vl_declaration.task.startpoint,
                 declaration.turnpoints.front());
 
   // rest of task...
   const unsigned n = std::min(declaration.Size() - 2, 12u);
   for (unsigned i = 0; i < n; ++i)
-    CopyTurnPoint(vl.declaration.task.turnpoints[i],
+    CopyTurnPoint(vl_declaration.task.turnpoints[i],
                   declaration.turnpoints[i + 1]);
 
   // Finish
-  CopyTurnPoint(vl.declaration.task.finishpoint,
+  CopyTurnPoint(vl_declaration.task.finishpoint,
                 declaration.turnpoints.back());
 
-  vl.declaration.task.nturnpoints = n;
+  vl_declaration.task.nturnpoints = n;
 
-  bool success = vl.update_logger_declaration() == VLA_ERR_NOERR;
+  bool success = vl.update_logger_declaration(vl_declaration) == VLA_ERR_NOERR;
   Volkslogger::Reset(port, env);
   return success;
 }

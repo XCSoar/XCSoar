@@ -147,19 +147,9 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
 
   VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &env);
 
-  VLINFO vlinfo;
-  DATABASE database;
-  DECLARATION declaration;
-  /*
-   * This vector of directory entries holds the list of Flights
-   * stored in the Volkslogger
-   */
-  std::vector<DIRENTRY> directory;
-
-
   // read info (serial numer, firmware versions etc.) from
   // the logger into the struct VLINFO (see above)
-  VLA_ERROR read_info();
+  VLA_ERROR read_info(VLINFO &vlinfo);
 
   // returns version of this API
   int apiversion() {
@@ -167,7 +157,7 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
   }
 
   // read the directory of flight logs into struct DIRECTORY (see file VLCONV.H)
-  VLA_ERROR read_directory();
+  VLA_ERROR read_directory(std::vector<DIRENTRY> &directory);
 
   // read igcfile number index (position in array contained in struct DIRECTORY )
   // into file named "filename".
@@ -177,14 +167,16 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
 
   // read database and flight declaration form from Volkslogger into the
   // predefined structs DECLARATION and DATABASE (see above)
-  VLA_ERROR read_db_and_declaration();
+  VLA_ERROR read_db_and_declaration(DATABASE &database,
+                                    DECLARATION &declaration);
 
   // write database and flight declaration from the structs back into the Volkslogger
-  VLA_ERROR write_db_and_declaration();
+  VLA_ERROR write_db_and_declaration(const DATABASE &database,
+                                     const DECLARATION &declaration);
 
   // read raw database and declaration from the logger, update the declaration to match
   // the one present in the DECLARATION struct and write the raw data back to the logger
-  VLA_ERROR update_logger_declaration();
+  VLA_ERROR update_logger_declaration(const DECLARATION &declaration);
 };
 
 #endif

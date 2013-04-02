@@ -166,7 +166,9 @@ VLAPI::VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &_env)
   :VLA_XFR(_port, _databaud, _env) {
 }
 
-VLA_ERROR VLAPI::read_info() {
+VLA_ERROR
+VLAPI::read_info(VLINFO &vlinfo)
+{
   uint8_t buffer[8];
   VLA_ERROR err;
 
@@ -192,7 +194,9 @@ VLA_ERROR VLAPI::stillconnect() {
   return err;
 }
 
-VLA_ERROR VLAPI::read_db_and_declaration() {
+VLA_ERROR
+VLAPI::read_db_and_declaration(DATABASE &database, DECLARATION &declaration)
+{
   uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
@@ -215,7 +219,10 @@ VLA_ERROR VLAPI::read_db_and_declaration() {
 }
 
 
-VLA_ERROR VLAPI::write_db_and_declaration() {
+VLA_ERROR
+VLAPI::write_db_and_declaration(const DATABASE &database,
+                                const DECLARATION &declaration)
+{
 
   DBB dbb1;
   database.CopyTo(dbb1);
@@ -233,7 +240,9 @@ VLA_ERROR VLAPI::write_db_and_declaration() {
   return err;
 }
 
-VLA_ERROR VLAPI::update_logger_declaration() {
+VLA_ERROR
+VLAPI::update_logger_declaration(const DECLARATION &declaration)
+{
   uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
@@ -263,8 +272,9 @@ VLA_ERROR VLAPI::update_logger_declaration() {
   return err;
 }
 
-VLA_ERROR VLAPI::read_directory() {
-  directory.clear();
+VLA_ERROR
+VLAPI::read_directory(std::vector<DIRENTRY> &directory)
+{
   directory.reserve(10);
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)

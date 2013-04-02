@@ -91,7 +91,8 @@ ReadFlightListInner(Port &port, unsigned bulkrate,
     return false;
   env.SetProgressPosition(3);
 
-  VLA_ERROR err = vl.read_directory();
+  std::vector<DIRENTRY> directory;
+  VLA_ERROR err = vl.read_directory(directory);
 
   if (err == VLA_ERR_NOFLIGHTS) {
     flight_list.clear();
@@ -101,7 +102,7 @@ ReadFlightListInner(Port &port, unsigned bulkrate,
     return false;
 
   env.SetProgressPosition(8);
-   if (!ConvertDirectoryToRecordedFlightList(vl.directory, flight_list))
+   if (!ConvertDirectoryToRecordedFlightList(directory, flight_list))
     return false;
   env.SetProgressPosition(10);
 
