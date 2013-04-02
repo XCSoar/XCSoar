@@ -60,12 +60,12 @@ class VLAPI_DATA {
       OZTYP_CYLSKT = 0,
       OZTYP_LINE = 1
     };
-    int16  lw; // linewidth (start- or finishline)
-    int16  rz;  // cylinder radius in meters (0..1500m)
+    unsigned lw; // linewidth (start- or finishline)
+    unsigned rz;  // cylinder radius in meters (0..1500m)
     // the API will round this to the next lower 100m-step
-    int16  rs;  // sector radius in meters   (0..15000m)
+    unsigned rs;  // sector radius in meters   (0..15000m)
     // the API will round this to the next lower 1000m-step
-    int16  ws;  // sector direction in degrees
+    unsigned ws;  // sector direction in degrees
     // 0..358ø directly specifies the direction
     // into which the 90°-FAI-sector points
     // 360ø means automatic calculation of the direction inside
