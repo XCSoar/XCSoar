@@ -24,7 +24,7 @@
 #include <string.h>
 #include <assert.h>
 
-DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
+DBB::DBB() {
   memset(this,0xff,sizeof *this);
   dbcursor = 8 * 6; // dbcursor direkt hinter den Header-Bereich setzen
   fdfcursor = 0;
@@ -41,9 +41,6 @@ DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
   header[3].keylaenge = 14;
 }
 
-
-// update header of specified table (kennung) of the database
-// and close the table (it can't be extended anymore)
 void DBB::close_db(int kennung) {
   HEADER *h = &header[kennung];
   // calculate position of last record
@@ -57,8 +54,6 @@ void DBB::close_db(int kennung) {
   dest->keylaenge = h->keylaenge;
 }
 
-
-// generate Header-Structure from DBB-File
 void DBB::open_dbb() {
   int i;
   // determine the beginning and length of the database parts
@@ -131,9 +126,6 @@ DBB::AddFDFStringUpper(uint8_t id, const char *src)
   } while (*src != '\0');
 }
 
-// find an actual record of specified type(id) in the declaration memory
-// and return it's position in the memory array
-//
 int16
 DBB::fdf_findfield(uint8_t id) const
 {

@@ -43,6 +43,10 @@ public:
 public:
   uint8_t block[DBBEnd-DBBBeg];
   uint8_t fdf[FrmEnd-FrmBeg];
+
+  /**
+   * Konstruktor: leeren Datenbank-Block erzeugen.
+   */
   DBB();
 
 protected:
@@ -58,8 +62,17 @@ protected:
   }
 
 public:
+  /**
+   * Generate Header-Structure from DBB-File.
+   */
   void open_dbb();
+
+  /**
+   * Update header of specified table (kennung) of the database and
+   * close the table (it can't be extended anymore).
+   */
   void close_db(int kennung);
+
   void add_ds(int kennung, const void *quelle);
 
   /**
@@ -78,6 +91,10 @@ public:
    */
   void AddFDFStringUpper(uint8_t id, const char *value);
 
+  /**
+   * Find an actual record of specified type(id) in the declaration
+   * memory and return it's position in the memory array.
+   */
   int16 fdf_findfield(uint8_t id) const;
 };
 
