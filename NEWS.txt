@@ -37,6 +37,7 @@ Version 6.6 - not yet released
   - Volkslogger: support IGC file download (#1972)
   - Volkslogger: declaration no longer erases waypoint database from logger
   - CAI302: support uploading all waypoint file types (#2054)
+  - V7: support for QNH synchronization to V7 vario
 * Android
   - faster map renderer on some Android devices
 * data
