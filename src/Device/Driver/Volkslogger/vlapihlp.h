@@ -18,8 +18,7 @@
 #ifndef VLAPIHLP_H
 #define VLAPIHLP_H
 
-
-#include "vlapityp.h"
+#include "Compiler.h"
 
 // some generally needed helper-functions
 
@@ -29,7 +28,8 @@ char *igc_filter(char *);
 void
 wordtoserno(char *buffer, unsigned serno);
 
-long pressure2altitude(word);
-
+gcc_pure
+long
+pressure2altitude(unsigned pressure);
 
 #endif

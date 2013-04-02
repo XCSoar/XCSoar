@@ -18,8 +18,6 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "vlapityp.h"
-
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>

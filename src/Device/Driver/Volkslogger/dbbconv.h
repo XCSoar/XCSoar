@@ -18,7 +18,6 @@
 #ifndef DBBCONV_H
 #define DBBCONV_H
 
-#include "vlapityp.h"
 #include "Database.hpp"
 
 #include <stdint.h>

@@ -36,18 +36,4 @@
 #ifndef VLAPITYP_H
 #define VLAPITYP_H
 
-// 16-bit unsigned
-typedef unsigned int
-  word;
-
-
-// 32-bit signed
-typedef long
-	int32;
-
-
-// 16-bit signed
-typedef int
-	int16;
-
 #endif
