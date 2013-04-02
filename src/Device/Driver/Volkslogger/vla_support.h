@@ -78,7 +78,7 @@ public:
    * @return the number of bytes written to the buffer or 0 on error
    */
   size_t flightget(void *buffer, size_t buffersize,
-                   int16 flightnr, int16 secmode);
+                   unsigned flightnr, bool secmode);
 
   /**
    * read Flightlist(Directory) in binary format from VL to buffer,

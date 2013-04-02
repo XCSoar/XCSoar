@@ -90,7 +90,7 @@ VLA_XFR::all_logsget(void *dbbbuffer, int32 dbbsize)
 */
 size_t
 VLA_XFR::flightget(void *buffer, size_t buffersize,
-                   int16 flightnr, int16 secmode)
+                   unsigned flightnr, bool secmode)
 {
   // read binary flightlog
   const Volkslogger::Command cmd = secmode
@@ -297,7 +297,7 @@ VLA_ERROR VLAPI::read_directory() {
 }
 
 VLA_ERROR
-VLAPI::read_igcfile(const TCHAR *filename, int index, int secmode)
+VLAPI::read_igcfile(const TCHAR *filename, unsigned index, bool secmode)
 {
   VLA_ERROR err = stillconnect();
   if (err != VLA_ERR_NOERR)
