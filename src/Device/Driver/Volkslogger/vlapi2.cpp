@@ -32,44 +32,9 @@
 #include <stdlib.h>
 #include <vector>
 
-// sizes of VL memory regions
-const int32 VLAPI_LOG_MEMSIZE = 81920L;
-
-// ------------------------------------------------------------
-//                        VLA_XFR
-// ------------------------------------------------------------
-
-VLA_XFR::VLA_XFR(Port &_port, unsigned _databaud, OperationEnvironment &_env)
-  :port(_port), env(_env), databaud(_databaud) {
-}
-
 // ------------------------------------------------------------
 //                          VLAPI
 // ------------------------------------------------------------
-
-// constructor
-VLAPI::VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &_env)
-  :VLA_XFR(_port, _databaud, _env) {
-}
-
-VLA_ERROR
-VLAPI::read_info(VLINFO &vlinfo)
-{
-  uint8_t buffer[8];
-
-  if (Volkslogger::ReadInfo(port, env,
-                            buffer, sizeof(buffer)) < (int)sizeof(buffer))
-    return VLA_ERR_NODATA;
-
-  // Aufbau der Versions- und sonstigen Nummern
-  vlinfo.sessionid = 256*buffer[0] + buffer[1];
-  vlinfo.vlserno = 256*buffer[2] + buffer[3];
-  vlinfo.fwmajor = buffer[4] / 16;
-  vlinfo.fwminor = buffer[4] % 16;
-  vlinfo.fwbuild = buffer[7];
-
-  return VLA_ERR_NOERR;
-}
 
 // getting a waypoint object out of the database memory
 //

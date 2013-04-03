@@ -18,8 +18,6 @@
 #ifndef VLAPI2_H
 #define VLAPI2_H
 
-#include "vlapierr.h"
-#include "vla_support.h"
 #include "Geo/GeoPoint.hpp"
 
 #include <stdint.h>
@@ -124,31 +122,6 @@ class VLAPI_DATA {
     void get(const DBB &dbb);
     void put(DBB *dbb) const;
   };
-
-  struct VLINFO {
-    word sessionid;
-    word vlserno;
-    uint8_t fwmajor;
-    uint8_t fwminor;
-    uint8_t fwbuild;
-  };
-};
-
-
-// just instatiate an Object of VLAPI in your application
-// and call the functions
-// all data exchange with the API will be done through its
-// public members
-/** API facade for Volkslogger device handler */
-class VLAPI : public VLA_XFR, public VLAPI_DATA {
-  VLA_ERROR stillconnect();
- public:
-
-  VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &env);
-
-  // read info (serial numer, firmware versions etc.) from
-  // the logger into the struct VLINFO (see above)
-  VLA_ERROR read_info(VLINFO &vlinfo);
 };
 
 #endif
