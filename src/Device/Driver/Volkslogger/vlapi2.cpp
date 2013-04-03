@@ -16,6 +16,7 @@
  ***********************************************************************/
 
 #include "vlapi2.h"
+#include "vlconv.h"
 #include "dbbconv.h"
 #include "grecord.h"
 #include "utils.h"
@@ -150,74 +151,6 @@ VLAPI::update_logger_declaration(const DECLARATION &declaration)
 
   return VLA_ERR_NOERR;
 }
-
-VLA_ERROR
-VLAPI::read_directory(std::vector<DIRENTRY> &directory)
-{
-  directory.reserve(10);
-  VLA_ERROR err = stillconnect();
-  if(err != VLA_ERR_NOERR)
-    return err;
-
-  uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
-  int data_length = Volkslogger::ReadFlightList(port, env,
-                                                dirbuffer, sizeof(dirbuffer));
-
-  if (data_length == -1)
-    return VLA_ERR_MISC;
-
-  if(data_length > 0) {
-    if (!conv_dir(directory, dirbuffer, data_length)) {
-      directory.clear();
-      return VLA_ERR_MISC;
-    }
-
-    if(!directory.empty())
-      return VLA_ERR_NOERR;
-    else
-      return VLA_ERR_NOFLIGHTS;
-  }
-  else {
-    directory.clear();
-    return VLA_ERR_NOFLIGHTS;
-  }
-
-  return VLA_ERR_MISC;
-
-}
-
-VLA_ERROR
-VLAPI::read_igcfile(const TCHAR *filename, unsigned index, bool secmode)
-{
-  VLA_ERROR err = stillconnect();
-  if (err != VLA_ERR_NOERR)
-    return err;
-
-  uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
-  const size_t length = Volkslogger::ReadFlight(port, databaud, env,
-                                                index, secmode,
-                                                logbuffer, sizeof(logbuffer));
-  if (length == 0)
-    return VLA_ERR_MISC;
-
-  FILE *outfile = _tfopen(filename, _T("wt"));
-  if (outfile == nullptr)
-    return VLA_ERR_FILE;
-
-  size_t r = convert_gcs(0, outfile, logbuffer, length, true);
-  if (r > 0) {
-    err = VLA_ERR_NOERR;
-    print_g_record(outfile,   // output to stdout
-                   logbuffer, // binary file is in buffer
-                   r          // length of binary file to include
-                   );
-  } else
-    err = VLA_ERR_MISC;
-
-  fclose(outfile);
-  return err;
-}
-
 
 // getting a waypoint object out of the database memory
 //

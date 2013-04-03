@@ -238,6 +238,8 @@ namespace Volkslogger {
   /**
    * Read one binary flight log from VL.
    *
+   * @param secmode true for DSA-signature (valid for FAI
+   * documentation), false for MD-signature only
    * @return the number of bytes written to the buffer or 0 on error
    */
   size_t

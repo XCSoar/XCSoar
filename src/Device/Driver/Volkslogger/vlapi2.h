@@ -20,9 +20,10 @@
 
 #include "vlapierr.h"
 #include "vla_support.h"
-#include "vlconv.h"
 #include "Geo/GeoPoint.hpp"
-#include "tchar.h"
+
+#include <stdint.h>
+#include <tchar.h>
 
 class DBB;
 
@@ -150,15 +151,6 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
   // read info (serial numer, firmware versions etc.) from
   // the logger into the struct VLINFO (see above)
   VLA_ERROR read_info(VLINFO &vlinfo);
-
-  // read the directory of flight logs into struct DIRECTORY (see file VLCONV.H)
-  VLA_ERROR read_directory(std::vector<DIRENTRY> &directory);
-
-  // read igcfile number index (position in array contained in struct DIRECTORY )
-  // into file named "filename".
-  // secure = 1 for DSA-signature, 0 for MD-signature only
-  // DSA is mandatory for DMST and FAI flight validation
-  VLA_ERROR read_igcfile(const TCHAR *filename, unsigned index, bool secure);
 
   // read database and flight declaration form from Volkslogger into the
   // predefined structs DECLARATION and DATABASE (see above)

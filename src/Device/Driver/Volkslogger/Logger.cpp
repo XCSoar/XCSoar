@@ -25,14 +25,15 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
-#include "vlapi2.h"
-
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
+#include "vlconv.h"
+#include "grecord.h"
 
 #include <algorithm>
+
+/**
+ * Sizes of VL memory regions
+ */
+static constexpr size_t VLAPI_LOG_MEMSIZE = 81920L;
 
 static bool
 ParseDate(const tm &time,BrokenDate &date)
@@ -77,33 +78,30 @@ ConvertDirectoryToRecordedFlightList(const std::vector<DIRENTRY> &dir,
 }
 
 static bool
-ReadFlightListInner(Port &port, unsigned bulkrate,
+ReadFlightListInner(Port &port,
                     RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
-  /* Note that the Volkslogger can only download the flight list
-   * with normal IO rate of 9600. The bulkrate setting has no effect
-   * here.
-   */
-  VLAPI vl(port, bulkrate, env);
-
   env.SetProgressRange(10);
   if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
   env.SetProgressPosition(3);
 
-  std::vector<DIRENTRY> directory;
-  VLA_ERROR err = vl.read_directory(directory);
+  uint8_t dirbuffer[VLAPI_LOG_MEMSIZE];
+  int data_length = Volkslogger::ReadFlightList(port, env,
+                                                dirbuffer, sizeof(dirbuffer));
+  if (data_length <= 0)
+    return data_length == 0;
 
-  if (err == VLA_ERR_NOFLIGHTS) {
-    flight_list.clear();
-    return true;
-  }
-  else if (err != VLA_ERR_NOERR)
+  std::vector<DIRENTRY> directory;
+  if (!conv_dir(directory, dirbuffer, data_length))
     return false;
 
+  if (directory.empty())
+    return true;
+
   env.SetProgressPosition(8);
-   if (!ConvertDirectoryToRecordedFlightList(directory, flight_list))
+  if (!ConvertDirectoryToRecordedFlightList(directory, flight_list))
     return false;
   env.SetProgressPosition(10);
 
@@ -116,19 +114,31 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
                     const TCHAR *path,
                     OperationEnvironment &env)
 {
-  VLAPI vl(port, bulkrate, env);
-
   if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
 
-  /*
-   * The third parameter (int secmode) of the function needs to be
-   * 1 to get a g-record which is valid vor FAI-documentation.
-   * See documentation of read_igcfile()
-   */
-  if (vl.read_igcfile(path, flight.internal.volkslogger, 1) != VLA_ERR_NOERR)
+  uint8_t logbuffer[VLAPI_LOG_MEMSIZE];
+  const size_t length = Volkslogger::ReadFlight(port, bulkrate, env,
+                                                flight.internal.volkslogger,
+                                                true,
+                                                logbuffer, sizeof(logbuffer));
+  if (length == 0)
     return false;
 
+  FILE *outfile = _tfopen(path, _T("wt"));
+  if (outfile == nullptr)
+    return false;
+
+  size_t r = convert_gcs(0, outfile, logbuffer, length, true);
+  if (r == 0) {
+    fclose(outfile);
+    return false;
+  }
+
+  print_g_record(outfile,   // output to stdout
+                 logbuffer, // binary file is in buffer
+                 r          // length of binary file to include
+                 );
   return true;
 }
 
@@ -145,7 +155,7 @@ VolksloggerDevice::ReadFlightList(RecordedFlightList &flight_list,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
-  bool success = ReadFlightListInner(port, bulkrate, flight_list, env);
+  bool success = ReadFlightListInner(port, flight_list, env);
 
   // restore baudrate
   if (old_baud_rate != 0)
