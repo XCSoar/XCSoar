@@ -26,12 +26,11 @@
 
 class DBB {
 public:
-  enum {
-    DBBBeg  = 0x0000,
-    DBBEnd  = 0x3000,
-    FrmBeg  = 0x3000,
-    FrmEnd  = 0x4000
-  };
+  static constexpr size_t DBBBeg = 0x0000;
+  static constexpr size_t DBBEnd = 0x3000;
+  static constexpr size_t FrmBeg = 0x3000;
+  static constexpr size_t FrmEnd = 0x4000;
+
   size_t dbcursor;
   size_t fdfcursor;
   struct HEADER {
