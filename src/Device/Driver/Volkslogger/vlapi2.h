@@ -122,7 +122,7 @@ class VLAPI_DATA {
       DCLWPT turnpoints[12];
     } task;
   protected:
-    void get(DBB *dbb);
+    void get(const DBB &dbb);
     void put(DBB *dbb) const;
   };
 

@@ -94,7 +94,7 @@ VLAPI::read_db_and_declaration(DATABASE &database, DECLARATION &declaration)
   dbb1.open_dbb();
 
   database.CopyFrom(dbb1);
-  declaration.get(&dbb1);
+  declaration.get(dbb1);
 
   return VLA_ERR_NOERR;
 }
@@ -399,7 +399,9 @@ VLAPI_DATA::DATABASE::CopyTo(DBB &dbb) const
 
 // read flight-declaration fields database into structure
 //
-void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
+void
+VLAPI_DATA::DECLARATION::get(const DBB &dbb)
+{
   int p;
   char plt1[17];
   char plt2[17];
@@ -409,43 +411,43 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
   plt2[0] = 0;
   plt3[0] = 0;
   plt4[0] = 0;
-  if ((p = dbb->fdf_findfield(FLDPLT1))>=0)
-    strncpy(plt1, (const char *)dbb->GetFDF(p + 2), sizeof(plt1));
-  if ((p = dbb->fdf_findfield(FLDPLT2))>=0)
-    strncpy(plt2, (const char *)dbb->GetFDF(p + 2), sizeof(plt2));
-  if ((p = dbb->fdf_findfield(FLDPLT3))>=0)
-    strncpy(plt3, (const char *)dbb->GetFDF(p + 2), sizeof(plt3));
-  if ((p = dbb->fdf_findfield(FLDPLT4))>=0)
-    strncpy(plt4, (const char *)dbb->GetFDF(p + 2), sizeof(plt4));
+  if ((p = dbb.fdf_findfield(FLDPLT1))>=0)
+    strncpy(plt1, (const char *)dbb.GetFDF(p + 2), sizeof(plt1));
+  if ((p = dbb.fdf_findfield(FLDPLT2))>=0)
+    strncpy(plt2, (const char *)dbb.GetFDF(p + 2), sizeof(plt2));
+  if ((p = dbb.fdf_findfield(FLDPLT3))>=0)
+    strncpy(plt3, (const char *)dbb.GetFDF(p + 2), sizeof(plt3));
+  if ((p = dbb.fdf_findfield(FLDPLT4))>=0)
+    strncpy(plt4, (const char *)dbb.GetFDF(p + 2), sizeof(plt4));
   flightinfo.pilot[0] = 0;
   strcat(flightinfo.pilot,plt1);
   strcat(flightinfo.pilot,plt2);
   strcat(flightinfo.pilot,plt3);
   strcat(flightinfo.pilot,plt4);
-  if ((p = dbb->fdf_findfield(FLDGTY))>=0)
-    strncpy(flightinfo.glidertype, (const char *)dbb->GetFDF(p + 2),
+  if ((p = dbb.fdf_findfield(FLDGTY))>=0)
+    strncpy(flightinfo.glidertype, (const char *)dbb.GetFDF(p + 2),
             sizeof(flightinfo.glidertype));
-  if ((p = dbb->fdf_findfield(FLDGID))>=0)
-    strncpy(flightinfo.gliderid, (const char *)dbb->GetFDF(p + 2),
+  if ((p = dbb.fdf_findfield(FLDGID))>=0)
+    strncpy(flightinfo.gliderid, (const char *)dbb.GetFDF(p + 2),
             sizeof(flightinfo.gliderid));
-  if ((p = dbb->fdf_findfield(FLDCCL))>=0)
-    strncpy(flightinfo.competitionclass, (const char *)dbb->GetFDF(p + 2),
+  if ((p = dbb.fdf_findfield(FLDCCL))>=0)
+    strncpy(flightinfo.competitionclass, (const char *)dbb.GetFDF(p + 2),
             sizeof(flightinfo.competitionclass));
-  if ((p = dbb->fdf_findfield(FLDCID))>=0)
-    strncpy(flightinfo.competitionid, (const char *)dbb->GetFDF(p + 2),
+  if ((p = dbb.fdf_findfield(FLDCID))>=0)
+    strncpy(flightinfo.competitionid, (const char *)dbb.GetFDF(p + 2),
             sizeof(flightinfo.competitionid));
-  if ((p = dbb->fdf_findfield(FLDTKF))>=0)
-    flightinfo.homepoint.get(dbb->GetFDF(p + 2));
+  if ((p = dbb.fdf_findfield(FLDTKF))>=0)
+    flightinfo.homepoint.get(dbb.GetFDF(p + 2));
 
-  if ((p = dbb->fdf_findfield(FLDSTA))>=0)
-    task.startpoint.get(dbb->GetFDF(p + 2));
-  if ((p = dbb->fdf_findfield(FLDFIN))>=0)
-    task.finishpoint.get(dbb->GetFDF(p + 2));
-  if ((p = dbb->fdf_findfield(FLDNTP))>=0)
-    task.nturnpoints = *(const uint8_t *)dbb->GetFDF(p + 2);
+  if ((p = dbb.fdf_findfield(FLDSTA))>=0)
+    task.startpoint.get(dbb.GetFDF(p + 2));
+  if ((p = dbb.fdf_findfield(FLDFIN))>=0)
+    task.finishpoint.get(dbb.GetFDF(p + 2));
+  if ((p = dbb.fdf_findfield(FLDNTP))>=0)
+    task.nturnpoints = *(const uint8_t *)dbb.GetFDF(p + 2);
   for (unsigned i = 0; i < task.nturnpoints; ++i) {
-    if ((p = dbb->fdf_findfield(FLDTP1+i))>=0)
-      task.turnpoints[i].get(dbb->GetFDF(p + 2));
+    if ((p = dbb.fdf_findfield(FLDTP1+i))>=0)
+      task.turnpoints[i].get(dbb.GetFDF(p + 2));
   }
 }
 
