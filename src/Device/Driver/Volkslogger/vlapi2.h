@@ -151,11 +151,6 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
   // the logger into the struct VLINFO (see above)
   VLA_ERROR read_info(VLINFO &vlinfo);
 
-  // returns version of this API
-  int apiversion() {
-    return 200;
-  }
-
   // read the directory of flight logs into struct DIRECTORY (see file VLCONV.H)
   VLA_ERROR read_directory(std::vector<DIRENTRY> &directory);
 
