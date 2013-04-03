@@ -249,8 +249,8 @@ namespace Volkslogger {
    * Read all binary flight logs from VL.
    */
   static inline int
-  ReadFlight(Port &port, unsigned baud_rate, OperationEnvironment &env,
-             void *buffer, size_t max_length)
+  ReadAllFlights(Port &port, unsigned baud_rate, OperationEnvironment &env,
+                 void *buffer, size_t max_length)
   {
     return SendCommandReadBulk(port, baud_rate, env, Volkslogger::cmd_ERO,
                                buffer, max_length);
