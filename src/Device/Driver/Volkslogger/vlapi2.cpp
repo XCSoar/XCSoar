@@ -32,7 +32,6 @@
 #include <vector>
 
 // sizes of VL memory regions
-const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
 // ------------------------------------------------------------
@@ -83,18 +82,14 @@ VLA_ERROR VLAPI::stillconnect() {
 VLA_ERROR
 VLAPI::read_db_and_declaration(DATABASE &database, DECLARATION &declaration)
 {
-  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
 
-  if (Volkslogger::ReadDatabase(port, databaud, env,
-                                dbbbuffer, sizeof(dbbbuffer)) <= 0)
-    return VLA_ERR_NODATA;
-
   DBB dbb1;
-  memcpy(dbb1.block,dbbbuffer,sizeof(dbb1.block));
-  memcpy(dbb1.fdf,dbbbuffer+DBB::FrmBeg,sizeof(dbb1.fdf));
+  if (Volkslogger::ReadDatabase(port, databaud, env,
+                                dbb1.buffer, sizeof(dbb1.buffer)) <= 0)
+    return VLA_ERR_NODATA;
 
   dbb1.open_dbb();
 
@@ -109,21 +104,16 @@ VLA_ERROR
 VLAPI::write_db_and_declaration(const DATABASE &database,
                                 const DECLARATION &declaration)
 {
-
   DBB dbb1;
   database.CopyTo(dbb1);
   declaration.put(&dbb1);
 
-  // copy dbb1 blocks into buffer
-  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
-  memcpy(dbbbuffer,dbb1.block,sizeof(dbb1.block));
-  memcpy(dbbbuffer+DBB::FrmBeg,dbb1.fdf,sizeof(dbb1.fdf));
   // and write buffer back into VOLKSLOGGER
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
 
-  if (!Volkslogger::WriteDatabase(port, env, dbbbuffer, sizeof(dbbbuffer)))
+  if (!Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer)))
       return VLA_ERR_NODATA;
 
   return VLA_ERR_NOERR;
@@ -132,33 +122,30 @@ VLAPI::write_db_and_declaration(const DATABASE &database,
 VLA_ERROR
 VLAPI::update_logger_declaration(const DECLARATION &declaration)
 {
-  uint8_t dbbbuffer[VLAPI_DBB_MEMSIZE];
   VLA_ERROR err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
 
-  //get raw database and declaration from logger
+  //populate DBB structure with database(=block) read from logger
+  DBB dbb1;
   if (Volkslogger::ReadDatabase(port, databaud, env,
-                                dbbbuffer, sizeof(dbbbuffer)) <= 0)
+                                dbb1.buffer, sizeof(dbb1.buffer)) <= 0)
     return VLA_ERR_NODATA;
 
-  //populate DBB structure with database(=block) read from logger
   //do NOT use the declaration(=fdf) from logger
-  DBB dbb1;
-  memcpy(dbb1.block,dbbbuffer,sizeof(dbb1.block));
-  //memcpy(dbb1.fdf,dbbbuffer+DBB::FrmBeg,sizeof(dbb1.fdf));
+  memset(dbb1.GetFDF(), 0xff, dbb1.FRM_SIZE);
+
   dbb1.open_dbb();
 
   //update declaration section
   declaration.put(&dbb1);
-  memcpy(dbbbuffer+DBB::FrmBeg,dbb1.fdf,sizeof(dbb1.fdf));
 
   // and write buffer back into VOLKSLOGGER
   err = stillconnect();
   if(err != VLA_ERR_NOERR)
     return err;
 
-  if (!Volkslogger::WriteDatabase(port, env, dbbbuffer, sizeof(dbbbuffer)))
+  if (!Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer)))
       return VLA_ERR_NODATA;
 
   return VLA_ERR_NOERR;
@@ -353,8 +340,8 @@ VLAPI_DATA::DATABASE::CopyFrom(const DBB &dbb)
     delete[] wpts;
     wpts = new WPT[nwpts];
     for (int i=0; i<nwpts; i++) {
-      wpts[i].get(dbb.block + dbb.header[0].dsfirst +
-                           i*dbb.header[0].dslaenge);
+      wpts[i].get(dbb.GetBlock(dbb.header[0].dsfirst +
+                               i * dbb.header[0].dslaenge));
     }
   }
 
@@ -365,8 +352,8 @@ VLAPI_DATA::DATABASE::CopyFrom(const DBB &dbb)
     delete[] routes;
     routes = new ROUTE[nroutes];
     for (int i=0; i<nroutes; i++) {
-      routes[i].get(dbb.block + dbb.header[3].dsfirst +
-                             i*dbb.header[3].dslaenge);
+      routes[i].get(dbb.GetBlock(dbb.header[3].dsfirst +
+                                 i * dbb.header[3].dslaenge));
     }
   }
 
@@ -377,8 +364,8 @@ VLAPI_DATA::DATABASE::CopyFrom(const DBB &dbb)
     delete[] pilots;
     pilots = new PILOT[npilots];
     for (int i=0; i<npilots; i++) {
-      pilots[i].get(dbb.block + dbb.header[1].dsfirst +
-                             i*dbb.header[1].dslaenge);
+      pilots[i].get(dbb.GetBlock(dbb.header[1].dsfirst +
+                                 i * dbb.header[1].dslaenge));
     }
   }
 }
@@ -423,38 +410,42 @@ void VLAPI_DATA::DECLARATION::get(DBB *dbb) {
   plt3[0] = 0;
   plt4[0] = 0;
   if ((p = dbb->fdf_findfield(FLDPLT1))>=0)
-    strncpy(plt1,(char*)(dbb->fdf+p+2),sizeof(plt1));
+    strncpy(plt1, (const char *)dbb->GetFDF(p + 2), sizeof(plt1));
   if ((p = dbb->fdf_findfield(FLDPLT2))>=0)
-    strncpy(plt2,(char*)(dbb->fdf+p+2),sizeof(plt2));
+    strncpy(plt2, (const char *)dbb->GetFDF(p + 2), sizeof(plt2));
   if ((p = dbb->fdf_findfield(FLDPLT3))>=0)
-    strncpy(plt3,(char*)(dbb->fdf+p+2),sizeof(plt3));
+    strncpy(plt3, (const char *)dbb->GetFDF(p + 2), sizeof(plt3));
   if ((p = dbb->fdf_findfield(FLDPLT4))>=0)
-    strncpy(plt4,(char*)(dbb->fdf+p+2),sizeof(plt4));
+    strncpy(plt4, (const char *)dbb->GetFDF(p + 2), sizeof(plt4));
   flightinfo.pilot[0] = 0;
   strcat(flightinfo.pilot,plt1);
   strcat(flightinfo.pilot,plt2);
   strcat(flightinfo.pilot,plt3);
   strcat(flightinfo.pilot,plt4);
   if ((p = dbb->fdf_findfield(FLDGTY))>=0)
-    strncpy(flightinfo.glidertype,(char*)(dbb->fdf+p+2),sizeof(flightinfo.glidertype));
+    strncpy(flightinfo.glidertype, (const char *)dbb->GetFDF(p + 2),
+            sizeof(flightinfo.glidertype));
   if ((p = dbb->fdf_findfield(FLDGID))>=0)
-    strncpy(flightinfo.gliderid,(char*)(dbb->fdf+p+2),sizeof(flightinfo.gliderid));
+    strncpy(flightinfo.gliderid, (const char *)dbb->GetFDF(p + 2),
+            sizeof(flightinfo.gliderid));
   if ((p = dbb->fdf_findfield(FLDCCL))>=0)
-    strncpy(flightinfo.competitionclass,(char*)(dbb->fdf+p+2),sizeof(flightinfo.competitionclass));
+    strncpy(flightinfo.competitionclass, (const char *)dbb->GetFDF(p + 2),
+            sizeof(flightinfo.competitionclass));
   if ((p = dbb->fdf_findfield(FLDCID))>=0)
-    strncpy(flightinfo.competitionid,(char*)(dbb->fdf+p+2),sizeof(flightinfo.competitionid));
+    strncpy(flightinfo.competitionid, (const char *)dbb->GetFDF(p + 2),
+            sizeof(flightinfo.competitionid));
   if ((p = dbb->fdf_findfield(FLDTKF))>=0)
-    flightinfo.homepoint.get(dbb->fdf + p + 2);
+    flightinfo.homepoint.get(dbb->GetFDF(p + 2));
 
   if ((p = dbb->fdf_findfield(FLDSTA))>=0)
-    task.startpoint.get(dbb->fdf + p + 2);
+    task.startpoint.get(dbb->GetFDF(p + 2));
   if ((p = dbb->fdf_findfield(FLDFIN))>=0)
-    task.finishpoint.get(dbb->fdf + p + 2);
+    task.finishpoint.get(dbb->GetFDF(p + 2));
   if ((p = dbb->fdf_findfield(FLDNTP))>=0)
-    task.nturnpoints = dbb->fdf[p+2];
+    task.nturnpoints = *(const uint8_t *)dbb->GetFDF(p + 2);
   for (unsigned i = 0; i < task.nturnpoints; ++i) {
     if ((p = dbb->fdf_findfield(FLDTP1+i))>=0)
-      task.turnpoints[i].get(dbb->fdf + p + 2);
+      task.turnpoints[i].get(dbb->GetFDF(p + 2));
   }
 }
 

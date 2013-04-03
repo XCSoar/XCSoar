@@ -27,9 +27,12 @@
 class DBB {
 public:
   static constexpr size_t DBBBeg = 0x0000;
-  static constexpr size_t DBBEnd = 0x3000;
+  static constexpr size_t DBB_SIZE = 0x3000;
+  static constexpr size_t DBBEnd = DBBBeg + DBB_SIZE;
   static constexpr size_t FrmBeg = 0x3000;
-  static constexpr size_t FrmEnd = 0x4000;
+  static constexpr size_t FRM_SIZE = 0x1000;
+  static constexpr size_t FrmEnd = FrmBeg + FRM_SIZE;
+  static constexpr size_t SIZE = DBB_SIZE + FRM_SIZE;
 
   size_t dbcursor;
   size_t fdfcursor;
@@ -40,23 +43,38 @@ public:
   };
   HEADER header[8];
 public:
-  uint8_t block[DBBEnd-DBBBeg];
-  uint8_t fdf[FrmEnd-FrmBeg];
+  uint8_t buffer[SIZE];
 
   /**
    * Konstruktor: leeren Datenbank-Block erzeugen.
    */
   DBB();
 
+  void *GetBlock(size_t offset=0) {
+    return buffer + DBBBeg + offset;
+  }
+
+  const void *GetBlock(size_t offset=0) const {
+    return buffer + DBBBeg + offset;
+  }
+
+  void *GetFDF(size_t offset=0) {
+    return buffer + FrmBeg + offset;
+  }
+
+  const void *GetFDF(size_t offset=0) const {
+    return buffer + FrmBeg + offset;
+  }
+
 protected:
   Volkslogger::TableHeader *GetHeader(unsigned i) {
-    Volkslogger::TableHeader *h = (Volkslogger::TableHeader *)block;
+    Volkslogger::TableHeader *h = (Volkslogger::TableHeader *)GetBlock();
     return &h[i];
   }
 
   const Volkslogger::TableHeader *GetHeader(unsigned i) const {
     const Volkslogger::TableHeader *h =
-      (const Volkslogger::TableHeader *)block;
+      (const Volkslogger::TableHeader *)GetBlock();
     return &h[i];
   }
 
