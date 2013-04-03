@@ -197,7 +197,7 @@ Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 
 int
 Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
-                      void *buffer, unsigned max_length,
+                      void *buffer, size_t max_length,
                       unsigned timeout_firstchar_ms)
 {
   unsigned nbytes = 0;
@@ -351,7 +351,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
 int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  Command cmd,
-                                 void *buffer, unsigned max_length,
+                                 void *buffer, size_t max_length,
                                  const unsigned timeout_firstchar_ms)
 {
   return SendCommand(port, env, cmd)
@@ -363,7 +363,7 @@ int
 Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
                                  OperationEnvironment &env,
                                  Command cmd, uint8_t param1,
-                                 void *buffer, unsigned max_length,
+                                 void *buffer, size_t max_length,
                                  const unsigned timeout_firstchar_ms)
 {
   unsigned old_baud_rate = port.GetBaudrate();
@@ -394,7 +394,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
 bool
 Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
                                   Command cmd,
-                                  const void *data, unsigned size)
+                                  const void *data, size_t size)
 {
   if (!SendCommand(port, env, cmd, 0, 0) || !WaitForACK(port, env))
     return false;

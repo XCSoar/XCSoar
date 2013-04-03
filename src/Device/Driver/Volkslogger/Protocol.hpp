@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_PROTOCOL_HPP
 
 #include <stdint.h>
+#include <stddef.h>
 
 class Port;
 class OperationEnvironment;
@@ -138,7 +139,7 @@ namespace Volkslogger {
    *        timeout as for the other chars will be applied.
    */
   int ReadBulk(Port &port, OperationEnvironment &env,
-               void *buffer, unsigned max_length,
+               void *buffer, size_t max_length,
                unsigned timeout_firstchar_ms=0);
 
   bool WriteBulk(Port &port, OperationEnvironment &env,
@@ -157,7 +158,7 @@ namespace Volkslogger {
    *        timeout as for the other chars will be applied.
    */
   int SendCommandReadBulk(Port &port, OperationEnvironment &env,
-                          Command cmd, void *buffer, unsigned max_length,
+                          Command cmd, void *buffer, size_t max_length,
                           unsigned timeout_firstchar_ms=0);
 
   /**
@@ -178,7 +179,7 @@ namespace Volkslogger {
   int SendCommandReadBulk(Port &port, unsigned baud_rate,
                           OperationEnvironment &env,
                           Command cmd, uint8_t param1,
-                          void *buffer, unsigned max_length,
+                          void *buffer, size_t max_length,
                           unsigned timeout_firstchar_ms=0);
 
   /**
@@ -187,7 +188,7 @@ namespace Volkslogger {
   static inline int SendCommandReadBulk(Port &port, unsigned baud_rate,
                                         OperationEnvironment &env,
                                         Command cmd,
-                                        void *buffer, unsigned max_length,
+                                        void *buffer, size_t max_length,
                                         unsigned timeout_firstchar_ms=0)
   {
     return SendCommandReadBulk(port, baud_rate, env, cmd, 0, buffer,
@@ -195,7 +196,7 @@ namespace Volkslogger {
   }
 
   bool SendCommandWriteBulk(Port &port, OperationEnvironment &env,
-                            Command cmd, const void *data, unsigned size);
+                            Command cmd, const void *data, size_t size);
 }
 
 #endif
