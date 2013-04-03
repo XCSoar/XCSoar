@@ -105,9 +105,7 @@ class VLAPI_DATA {
   };
 
   // flight declaration
-  class DECLARATION {
-    friend class VLAPI;
-  public:
+  struct DECLARATION {
     struct FLIGHTINFO {
       char pilot[65];
       char gliderid[8];
@@ -122,7 +120,7 @@ class VLAPI_DATA {
       unsigned nturnpoints;
       DCLWPT turnpoints[12];
     } task;
-  protected:
+
     void get(const DBB &dbb);
     void put(DBB *dbb) const;
   };
@@ -151,19 +149,6 @@ class VLAPI : public VLA_XFR, public VLAPI_DATA {
   // read info (serial numer, firmware versions etc.) from
   // the logger into the struct VLINFO (see above)
   VLA_ERROR read_info(VLINFO &vlinfo);
-
-  // read database and flight declaration form from Volkslogger into the
-  // predefined structs DECLARATION and DATABASE (see above)
-  VLA_ERROR read_db_and_declaration(DATABASE &database,
-                                    DECLARATION &declaration);
-
-  // write database and flight declaration from the structs back into the Volkslogger
-  VLA_ERROR write_db_and_declaration(const DATABASE &database,
-                                     const DECLARATION &declaration);
-
-  // read raw database and declaration from the logger, update the declaration to match
-  // the one present in the DECLARATION struct and write the raw data back to the logger
-  VLA_ERROR update_logger_declaration(const DECLARATION &declaration);
 };
 
 #endif

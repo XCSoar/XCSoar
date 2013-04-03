@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
 #include "vlapi2.h"
+#include "dbbconv.h"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 #ifdef _UNICODE
@@ -98,8 +99,6 @@ DeclareInner(Port &port, const unsigned bulkrate,
 {
   assert(declaration.Size() >= 2);
 
-  VLAPI vl(port, bulkrate, env);
-
   if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
 
@@ -137,7 +136,26 @@ DeclareInner(Port &port, const unsigned bulkrate,
 
   vl_declaration.task.nturnpoints = n;
 
-  bool success = vl.update_logger_declaration(vl_declaration) == VLA_ERR_NOERR;
+  //populate DBB structure with database(=block) read from logger
+  DBB dbb1;
+  if (Volkslogger::ReadDatabase(port, bulkrate, env,
+                                dbb1.buffer, sizeof(dbb1.buffer)) <= 0)
+    return false;
+
+  //do NOT use the declaration(=fdf) from logger
+  memset(dbb1.GetFDF(), 0xff, dbb1.FRM_SIZE);
+
+  dbb1.open_dbb();
+
+  //update declaration section
+  vl_declaration.put(&dbb1);
+
+  // and write buffer back into VOLKSLOGGER
+  if (!Volkslogger::ConnectAndFlush(port, env, 10000))
+    return false;
+
+  const bool success =
+    Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer));
   Volkslogger::Reset(port, env);
   return success;
 }
