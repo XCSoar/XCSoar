@@ -2149,6 +2149,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \
+	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \

@@ -37,6 +37,7 @@ enum ControlIndex {
   EnableThermalProfile,
   FinalGlideBarDisplayModeControl,
   EnableFinalGlideBarMC0,
+  EnableVarioBar
 };
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
@@ -113,6 +114,12 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetRowVisible(EnableFinalGlideBarMC0,
                 map_settings.final_glide_bar_display_mode !=
                   FinalGlideBarDisplayMode::OFF);
+
+  AddBoolean(_("Vario bar"),
+             _("If set to ON the vario bar will be shown"),
+             map_settings.vario_bar_enabled);
+
+  SetExpertRow(EnableVarioBar);
 }
 
 bool
@@ -142,6 +149,8 @@ GaugesConfigPanel::Save(bool &_changed)
   changed |= SaveValue(EnableFinalGlideBarMC0, ProfileKeys::EnableFinalGlideBarMC0,
                        map_settings.final_glide_bar_mc0_enabled);
 
+  changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
+                       map_settings.vario_bar_enabled);
   _changed |= changed;
 
   return true;

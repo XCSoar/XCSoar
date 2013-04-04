@@ -179,6 +179,9 @@ struct MapSettings {
   /** FinalGlideBar display mode configuration */
   FinalGlideBarDisplayMode final_glide_bar_display_mode;
 
+  /** Show Vario Bar arrow */
+  bool vario_bar_enabled;
+
   /**
    * Overlay FAI triangle areas on the map while flying?
    */

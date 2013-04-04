@@ -45,6 +45,7 @@ GlueMapWindow::GlueMapWindow(const Look &look)
    last_display_mode(DisplayMode::NONE),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
+   vario_bar_renderer(look.vario_bar),
    gesture_look(look.gesture),
    map_item_timer(*this)
 {

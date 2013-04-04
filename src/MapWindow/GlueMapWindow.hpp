@@ -30,6 +30,7 @@ Copyright_License {
 #include "UIUtil/KineticManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
+#include "Renderer/VarioBarRenderer.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Features.hpp"
 
@@ -126,6 +127,7 @@ class GlueMapWindow : public MapWindow {
 
   ThermalBandRenderer thermal_band_renderer;
   FinalGlideBarRenderer final_glide_bar_renderer;
+  VarioBarRenderer vario_bar_renderer;
 
   const GestureLook &gesture_look;
 
@@ -220,6 +222,7 @@ private:
   void DrawPanInfo(Canvas &canvas) const;
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
+  void DrawVario(Canvas &canvas, const PixelRect &rc) const;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
 
   void SwitchZoomClimb(bool circling);

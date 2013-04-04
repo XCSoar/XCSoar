@@ -185,6 +185,7 @@ extern const char PredictWindDrift[];
 extern const char WindArrowStyle[];
 extern const char EnableFinalGlideBarMC0[];
 extern const char FinalGlideBarDisplayMode[];
+extern const char EnableVarioBar[];
 extern const char ShowFAITriangleAreas[];
 extern const char AutoLogger[];
 extern const char DisableAutoLogger[];

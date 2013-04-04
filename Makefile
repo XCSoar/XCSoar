@@ -557,6 +557,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
+	$(SRC)/Renderer/VarioBarRenderer.cpp \
 	$(SRC)/Renderer/MapItemListRenderer.cpp \
 	$(SRC)/Renderer/OZPreviewRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
@@ -760,6 +761,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
+	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/UnitsLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \

@@ -191,6 +191,7 @@ const char PredictWindDrift[] = "PredictWindDrift";
 const char WindArrowStyle[] = "WindArrowStyle";
 const char EnableFinalGlideBarMC0[] = "EnableFinalGlideBarMC0";
 const char FinalGlideBarDisplayMode[] = "FinalGlideBarDisplayMode";
+const char EnableVarioBar[] = "EnableVarioBar";
 const char ShowFAITriangleAreas[] = "ShowFAITriangleAreas";
 const char AutoLogger[] = "AutoLogger";
 const char DisableAutoLogger[] = "DisableAutoLogger";
