@@ -65,6 +65,30 @@ class mingw-w64 {
   }
 }
 
+class mingw32ce {
+  exec { 'mingw32ce-mk-2013-04-03-i386.tar.bz2':
+    command => '/usr/bin/wget http://max.kellermann.name/download/xcsoar/devel/cegcc/mingw32ce-mk-2013-04-03-i386.tar.xz',
+    cwd => '/home/vagrant/',
+    creates => '/home/vagrant/mingw32ce-mk-2013-04-03-i386.tar.xz',
+    user => 'vagrant',
+  }
+
+  exec { 'mingw32ce-mk-2013-04-03-i386':
+    command => '/bin/tar -xf mingw32ce-mk-2013-04-03-i386.tar.xz',
+    cwd => '/home/vagrant/',
+    creates => '/home/vagrant/mingw32ce-mk-2013-04-03-i386/bin/arm-mingw32ce-g++',
+    user => 'vagrant',
+    require => Exec['mingw32ce-mk-2013-04-03-i386.tar.xz'],
+  }
+
+  exec { 'mingw32ce-to-path':
+    command => '/bin/echo PATH="/home/vagrant/mingw32ce-mk-2013-04-03-i386/bin:\$PATH" >> .profile',
+    cwd => '/home/vagrant/',
+    require => Exec['mingw32ce-mk-2013-04-03-i386'],
+    unless => '/bin/grep mingw32ce .profile',
+  }
+}
+
 class make {
   package { "make":
     ensure => present,
@@ -134,6 +158,9 @@ class {'ccache': }
 
 # MinGW Toolchain
 class {'mingw-w64': }
+
+# CeGCC Toolchain
+class {'mingw32ce': }
 
 # Resource tools
 class {'gettext': }
