@@ -28,6 +28,7 @@
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
@@ -121,9 +122,12 @@ Serialiser::Serialise(const ObservationZonePoint &data)
     Visit((const CylinderZone &)data);
     break;
 
-  case ObservationZone::Shape::CUSTOM_KEYHOLE:
+  case ObservationZone::Shape::CUSTOM_KEYHOLE: {
+    const KeyholeZone &keyhole = (const KeyholeZone &)data;
     node.SetAttribute(_T("type"), _T("CustomKeyhole"));
+    node.SetAttribute(_T("inner_radius"), keyhole.GetInnerRadius());
     break;
+  }
 
   case ObservationZone::Shape::DAEC_KEYHOLE:
     node.SetAttribute(_T("type"), _T("Keyhole"));

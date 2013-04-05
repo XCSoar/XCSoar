@@ -167,13 +167,17 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
   } else if (StringIsEqual(type, _T("Keyhole")))
     return KeyholeZone::CreateDAeCKeyholeZone(wp.location);
   else if (StringIsEqual(type, _T("CustomKeyhole"))) {
-    fixed radius = fixed(10000);
+    fixed radius = fixed(10000), inner_radius = fixed(500);
     Angle angle = Angle::QuarterCircle();
 
     node.GetAttribute(_T("radius"), radius);
+    node.GetAttribute(_T("inner_radius"), inner_radius);
     node.GetAttribute(_T("angle"), angle);
 
-    return KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
+    KeyholeZone *keyhole =
+      KeyholeZone::CreateCustomKeyholeZone(wp.location, radius, angle);
+    keyhole->SetInnerRadius(inner_radius);
+    return keyhole;
   } else if (StringIsEqual(type, _T("BGAStartSector")))
     return KeyholeZone::CreateBGAStartSectorZone(wp.location);
   else if (StringIsEqual(type, _T("BGAFixedCourse")))
