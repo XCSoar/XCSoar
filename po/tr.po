@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2011-12-20 19:57+0100\n"
-"Last-Translator: zeugma <Unknown>\n"
+"PO-Revision-Date: 2013-04-07 08:29+0000\n"
+"Last-Translator: Buğra SEKMEN <sekmenbugra@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-20 07:36+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
+"X-Launchpad-Export-Date: 2013-04-09 06:28+0000\n"
+"X-Generator: Launchpad (build 16550)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -45,7 +45,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI Gidiş ve Dönüşü"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
@@ -65,12 +65,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:40
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Düzenlenmiş Alanda Görev (DAG)"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Karıştırılmış"
 
 #: src/Task/TypeStrings.cpp:42
 #, no-c-format
@@ -83,6 +83,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI kuralları,sadece FAI başlangıcında kabul edilir,bitiş ve dönüş noktası "
+"tipleri için işaret ve kayıtlar.FAI bitiş yüksekliği hesaplamasına izin verir"
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -92,12 +94,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:58
 #, no-c-format
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "FAI kuralları,başlangıçtan tek bir dönüş ve geri dönüş hattı"
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI kuralları,başlangıçtan hedefe uzanan hat"
 
 #: src/Task/TypeStrings.cpp:60
 #, no-c-format
@@ -141,17 +143,21 @@ msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
+"Yarı çapı 1 km olan 90 derecelik bir yarım daire.Geçiş alanının kenarından "
+"iç alan başlangıcına"
 
 #: src/Task/TypeStrings.cpp:80
 #, no-c-format
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
 msgstr ""
+"Başlangıç kapısına bir kapı.Geçiş başlangıç kapısının içinden başlangıç "
+"alanına"
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Çıkış alanından başlangıca bir silindir"
 
 #: src/Task/TypeStrings.cpp:82
 #, no-c-format
@@ -249,12 +255,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Başlangıç hattı"
 
 #: src/Task/TypeStrings.cpp:117
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Başlangıç Silindiri"
 
 #: src/Task/TypeStrings.cpp:118 src/Dialogs/Task/dlgTaskHelpers.cpp:185
 #, no-c-format
@@ -279,12 +285,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Dönüş noktası silindiri"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "1 mil çapında Silindir"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -304,7 +310,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
 msgid "Finish line"
-msgstr ""
+msgstr "Bitiş Çizgisi"
 
 #: src/Task/TypeStrings.cpp:128
 #, no-c-format
@@ -334,52 +340,52 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Geçerli Bir Başlangıç Değil"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Geçerli bir bitiş değil"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
 msgid "Task not closed"
-msgstr ""
+msgstr "Görev kapanmadı"
 
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Bütün dönüş noktaları aynı türde değil"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Yanlış dönüş noktası numarası"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Çok fazla dönüş noktası"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Yetersiz dönüş noktası"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
 msgid "Turnpoints not unique"
-msgstr ""
+msgstr "Dönüş nokataları benzersiz değil"
 
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Boş görev"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr ""
+msgstr "FAI dönüş noktası değil"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
@@ -388,15 +394,15 @@ msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Hava Saha dosyası yükleniyor..."
 
 #: src/Airspace/AirspaceParser.cpp:272
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Satırda söz dizimi hatası"
 
 #: src/Airspace/AirspaceParser.cpp:272
 msgid "Line skipped."
-msgstr ""
+msgstr "Çizgi atlandı"
 
 #: src/Airspace/AirspaceParser.cpp:273
 #: src/Dialogs/Airspace/dlgAirspace.cpp:173
@@ -407,16 +413,15 @@ msgstr ""
 #: Data/Input/default.xci:653
 #, no-c-format
 msgid "Airspace"
-msgstr ""
+msgstr "Hava Sahası"
 
 #: src/Airspace/AirspaceParser.cpp:921
-#, fuzzy
 msgid "Unknown airspace filetype"
-msgstr "Bilinmeyen Dosya Türü."
+msgstr "Bilinmeyen Havasahası Dosya Türü"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "Göreve erken varmak umuluyor"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid ""
@@ -439,12 +444,12 @@ msgstr ""
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Hata yok"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Bilgi"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
@@ -454,7 +459,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Ciddi Hata"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -466,7 +471,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:64
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Bilinmiyor"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
@@ -476,47 +481,47 @@ msgstr ""
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Güç"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "GPS bağlantısı"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GPS yapılandırması"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "RF bağlantısı"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "İletişim"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Flash Bellek"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Basınç sensörü"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:78
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Veri tabanı engeli"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Uçuş Kaydedicisi"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -526,72 +531,74 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 #: src/Logger/Logger.cpp:113 src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 msgid "Start Logger"
-msgstr ""
+msgstr "Kaydı Başlat"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Kayıt Devredışı ,Yetersiz Deoplama Alanı"
 
 #: src/Logger/Logger.cpp:121
 msgid "Logger Error"
-msgstr ""
+msgstr "Kayıt hatası"
 
 #: src/Logger/Logger.cpp:149 src/Dialogs/Device/ManageCAI302Dialog.cpp:75
 msgid "Stop Logger"
-msgstr ""
+msgstr "Kaydı Durdur"
 
 #: src/Logger/ExternalLogger.cpp:89
 msgid "Declare task?"
-msgstr ""
+msgstr "Görevi Duyur"
 
 #: src/Logger/ExternalLogger.cpp:98 src/Logger/ExternalLogger.cpp:130
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:109
 msgid "Declare task"
-msgstr ""
+msgstr "Görevi Duyur"
 
 #: src/Logger/ExternalLogger.cpp:104
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Hata Oluştu\n"
+"Görev YAYINLANAMADI"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "Task declared!"
-msgstr ""
+msgstr "Görev Yayınlandı!"
 
 #: src/Logger/ExternalLogger.cpp:129
 msgid "No logger connected"
-msgstr ""
+msgstr "Kayıt bağlantısı Yok"
 
 #: src/Logger/ExternalLogger.cpp:271
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Uçuş Listesi indirilmesi başarısız oldu"
 
 #: src/Logger/ExternalLogger.cpp:272 src/Logger/ExternalLogger.cpp:280
 #: src/Logger/ExternalLogger.cpp:297 src/Logger/ExternalLogger.cpp:324
 msgid "Download flight"
-msgstr ""
+msgstr "Uçuşu İndir"
 
 #: src/Logger/ExternalLogger.cpp:279
 msgid "Logger is empty."
-msgstr ""
+msgstr "Kayıt Boş"
 
 #: src/Logger/ExternalLogger.cpp:296
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Uçuşu indirmek başarısız oldu"
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Başka bir uçuş indirmek istermisiniz"
 
 #: src/Waypoint/WaypointGlue.cpp:111
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:35
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Yol işaretleri yükleniyor..."
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -626,11 +633,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:17 Data/Dialogs/dlgVario.xml:6
 #: Data/Dialogs/dlgVario_L.xml:6
 msgid "Close"
-msgstr ""
+msgstr "Kapat"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:228
 msgid "No Traffic"
-msgstr ""
+msgstr "Trafik Yok"
 
 #: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
 #: src/InfoBoxes/Content/Factory.cpp:401 src/InfoBoxes/Content/Factory.cpp:402
@@ -642,7 +649,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Vario"
 
 #: src/Gauge/BigTrafficWidget.cpp:382 src/Renderer/MapItemListRenderer.cpp:121
 #: src/Renderer/MapItemListRenderer.cpp:125
@@ -659,7 +666,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:18 Data/Dialogs/dlgTarget.xml:18
 #: Data/Dialogs/dlgTarget_L.xml:11
 msgid "Distance"
-msgstr ""
+msgstr "Uzaklık"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
@@ -674,37 +681,37 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint_L.xml:23
 #, no-c-format
 msgid "Details"
-msgstr ""
+msgstr "Ayrıntılar"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:152
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Hava Alan detay dosyası yükleniyor..."
 
 #: src/Menu/ExpandMacros.cpp:128 src/Menu/ExpandMacros.cpp:138
 #: src/Menu/ExpandMacros.cpp:204 src/Menu/ExpandMacros.cpp:234
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Sonraki dönüş noktası"
 
 #: src/Menu/ExpandMacros.cpp:133 src/Menu/ExpandMacros.cpp:143
 #: src/Menu/ExpandMacros.cpp:216 src/Menu/ExpandMacros.cpp:262
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Önceki dönüş noktası"
 
 #: src/Menu/ExpandMacros.cpp:155 src/Menu/ExpandMacros.cpp:175
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "En uzak iniş noktası"
 
 #: src/Menu/ExpandMacros.cpp:156 src/Menu/ExpandMacros.cpp:176
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Sonraki iniş noktası"
 
 #: src/Menu/ExpandMacros.cpp:165 src/Menu/ExpandMacros.cpp:185
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "En yakın iniş noktası"
 
 #: src/Menu/ExpandMacros.cpp:166 src/Menu/ExpandMacros.cpp:186
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Önceki iniş noktası"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:233
 msgid "Finish Turnpoint"
@@ -773,12 +780,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:326 src/Menu/ExpandMacros.cpp:330
 #: src/Dialogs/Device/PortMonitor.cpp:166
 msgid "Resume"
-msgstr ""
+msgstr "Devam et"
 
 #: src/Menu/ExpandMacros.cpp:326 src/Menu/ExpandMacros.cpp:330
 #: src/Dialogs/Message.cpp:150
 msgid "Abort"
-msgstr ""
+msgstr "Vazgeç"
 
 #: src/Menu/ExpandMacros.cpp:346 src/Menu/ExpandMacros.cpp:540
 #: src/Menu/ExpandMacros.cpp:571 src/Menu/ExpandMacros.cpp:631
@@ -813,7 +820,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Kuzeye Hizzala"
 
 #: src/Menu/ExpandMacros.cpp:454 src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: src/Dialogs/ReplayDialog.cpp:56
@@ -840,7 +847,7 @@ msgstr "Kısa"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:97
 #, no-c-format
 msgid "Full"
-msgstr ""
+msgstr "Dolu"
 
 #: src/Menu/ExpandMacros.cpp:473 src/Menu/ExpandMacros.cpp:480
 #: src/Menu/ExpandMacros.cpp:537 src/Menu/ExpandMacros.cpp:543
@@ -878,30 +885,30 @@ msgstr "Açık"
 
 #: src/Menu/ExpandMacros.cpp:492 src/Menu/ExpandMacros.cpp:518
 msgid "Topography On"
-msgstr ""
+msgstr "Topograf Açık"
 
 #: src/Menu/ExpandMacros.cpp:496 src/Menu/ExpandMacros.cpp:522
 msgid "Terrain On"
-msgstr ""
+msgstr "Yükseltiler Açık"
 
 #: src/Menu/ExpandMacros.cpp:500 src/Menu/ExpandMacros.cpp:526
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Yükselti ve Topografya"
 
 #: src/Menu/ExpandMacros.cpp:504 src/Menu/ExpandMacros.cpp:530
 msgid "Terrain Off"
-msgstr ""
+msgstr "Yükseltiler Kapalı"
 
 #: src/Menu/ExpandMacros.cpp:556 src/Input/InputEventsSettings.cpp:303
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Tümü"
 
 #: src/Menu/ExpandMacros.cpp:557 src/Input/InputEventsSettings.cpp:304
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Görev ve İnilebilir yerler"
 
 #: src/Menu/ExpandMacros.cpp:559 src/Input/InputEventsSettings.cpp:306
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:201
@@ -913,23 +920,23 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
 #, no-c-format
 msgid "None"
-msgstr ""
+msgstr "Hiçbiri"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Görev ve Hava alanları"
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "GPS Yüksekliği"
 
 #: src/InfoBoxes/Content/Factory.cpp:157
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt GPS"
-msgstr "H GPS"
+msgstr "GPS yüksekliği"
 
 #: src/InfoBoxes/Content/Factory.cpp:158
 #, no-c-format
@@ -942,7 +949,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:166
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "YerÜstüSeviyesinden Yüseklik"
 
 #: src/InfoBoxes/Content/Factory.cpp:167
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:105
@@ -961,7 +968,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:177
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Son 30 saniyedeki Termik Tırmanışı"
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -1038,9 +1045,9 @@ msgid "Speed ground"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:219
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V GND"
-msgstr "H GND"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:220
 #, no-c-format
@@ -1172,9 +1179,9 @@ msgid "Next waypoint"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:302
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next WP"
-msgstr "İleri"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:303
 #, no-c-format
@@ -1537,9 +1544,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:544
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "İleri"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:545
 #, no-c-format
@@ -2472,9 +2479,9 @@ msgid "Altitude (Auto)"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt Auto"
-msgstr "Otomatik"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1118
 #, no-c-format
@@ -2579,9 +2586,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1178
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Başlat"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1179
 #, no-c-format
@@ -2594,9 +2601,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1187
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Başlat"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1188
 #, no-c-format
@@ -3684,9 +3691,8 @@ msgstr ""
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:309
-#, fuzzy
 msgid "Bad GPS"
-msgstr "H GPS"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:311
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:74
@@ -3851,9 +3857,8 @@ msgid "PDA baud rate"
 msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:99
-#, fuzzy
 msgid "Auto off"
-msgstr "Otomatik"
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:102
 msgid "Auto finish flight"
@@ -4227,9 +4232,8 @@ msgid "Use ZigZag and circling."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:61
-#, fuzzy
 msgid "Auto wind"
-msgstr "Otomatik"
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:62
 msgid "This allows switching on or off the automatic wind algorithm."
@@ -5898,9 +5902,9 @@ msgid "InfoBox border"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start only"
-msgstr "Başlat"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:67
 msgid "Time step cruise"
@@ -6080,9 +6084,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Otomatik"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -7484,9 +7487,8 @@ msgid "Minimum AAT task time in minutes."
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:230
-#, fuzzy
 msgid "Start open time"
-msgstr "Başlat"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Start close time"
@@ -8747,12 +8749,19 @@ msgid ""
 "Team\n"
 "Code"
 msgstr ""
+"Ekip\n"
+"Kodu"
 
 #: Data/Input/default.xci:781 Data/Input/default.xci:1188
 msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+"METAR\n"
+"TAF"
+
+#~ msgid "H GPS"
+#~ msgstr "H GPS"
 
 #~ msgid "H GND"
 #~ msgstr "H GND"
