@@ -35,9 +35,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-using std::max;
-
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
 {
@@ -97,19 +94,22 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
   if (type == TrailSettings::Type::ALTITUDE) {
     value_max = fixed(1000);
     value_min = fixed(500);
+
     for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetAltitude(), value_max);
-      value_min = min(it->GetAltitude(), value_min);
+      value_max = std::max(it->GetAltitude(), value_max);
+      value_min = std::min(it->GetAltitude(), value_min);
     }
   } else {
     value_max = fixed(0.75);
     value_min = fixed(-2.0);
+
     for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetVario(), value_max);
-      value_min = min(it->GetVario(), value_min);
+      value_max = std::max(it->GetVario(), value_max);
+      value_min = std::min(it->GetVario(), value_min);
     }
-    value_max = min(fixed(7.5), value_max);
-    value_min = max(fixed(-5.0), value_min);
+
+    value_max = std::min(fixed(7.5), value_max);
+    value_min = std::max(fixed(-5.0), value_min);
   }
 
   return std::make_pair(value_min, value_max);
