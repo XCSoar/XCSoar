@@ -146,7 +146,7 @@ NoFontsAvailable()
   const TCHAR *msg = _T("Font initialisation failed");
 
   /* log the error */
-  LogStartUp(_T("%s"), msg);
+  LogFormat(_T("%s"), msg);
 
   /* now try to get a GUI error message out to the user */
 #ifdef WIN32

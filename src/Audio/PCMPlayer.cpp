@@ -92,7 +92,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   SLObjectItf _object;
   SLresult result = SLES::CreateEngine(&_object, 0, NULL, 0, NULL, NULL);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: slCreateEngine() result=%#x", (int)result);
+    LogFormat("PCMPlayer: slCreateEngine() result=%#x", (int)result);
     return false;
   }
 
@@ -100,7 +100,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   result = engine_object.Realize(false);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Engine.Realize() result=%#x", (int)result);
+    LogFormat("PCMPlayer: Engine.Realize() result=%#x", (int)result);
     engine_object.Destroy();
     return false;
   }
@@ -108,7 +108,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   SLEngineItf _engine;
   result = engine_object.GetInterface(*SLES::IID_ENGINE, &_engine);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Engine.GetInterface(IID_ENGINE) result=%#x",
+    LogFormat("PCMPlayer: Engine.GetInterface(IID_ENGINE) result=%#x",
                (int)result);
     engine_object.Destroy();
     return false;
@@ -118,7 +118,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   result = engine.CreateOutputMix(&_object, 0, NULL, NULL);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: CreateOutputMix() result=%#x", (int)result);
+    LogFormat("PCMPlayer: CreateOutputMix() result=%#x", (int)result);
     engine_object.Destroy();
     return false;
   }
@@ -127,7 +127,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   result = mix_object.Realize(false);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Mix.Realize() result=%#x", (int)result);
+    LogFormat("PCMPlayer: Mix.Realize() result=%#x", (int)result);
     mix_object.Destroy();
     engine_object.Destroy();
     return false;
@@ -172,7 +172,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   result = engine.CreateAudioPlayer(&_object, &audioSrc, &audioSnk,
                                     ARRAY_SIZE(ids2), ids2, req2);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: CreateAudioPlayer() result=%#x", (int)result);
+    LogFormat("PCMPlayer: CreateAudioPlayer() result=%#x", (int)result);
     mix_object.Destroy();
     engine_object.Destroy();
     return false;
@@ -183,7 +183,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   result = play_object.Realize(false);
 
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Play.Realize() result=%#x", (int)result);
+    LogFormat("PCMPlayer: Play.Realize() result=%#x", (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -193,7 +193,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   SLPlayItf _play;
   result = play_object.GetInterface(*SLES::IID_PLAY, &_play);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Play.GetInterface(IID_PLAY) result=%#x",
+    LogFormat("PCMPlayer: Play.GetInterface(IID_PLAY) result=%#x",
                (int)result);
     play_object.Destroy();
     mix_object.Destroy();
@@ -207,7 +207,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   result = play_object.GetInterface(*SLES::IID_ANDROIDSIMPLEBUFFERQUEUE,
                                     &_queue);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Play.GetInterface(IID_ANDROIDSIMPLEBUFFERQUEUE) result=%#x",
+    LogFormat("PCMPlayer: Play.GetInterface(IID_ANDROIDSIMPLEBUFFERQUEUE) result=%#x",
                (int)result);
     play_object.Destroy();
     mix_object.Destroy();
@@ -218,7 +218,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
   queue = SLES::AndroidSimpleBufferQueue(_queue);
   result = queue.RegisterCallback(PlayedCallback, (void *)this);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Play.RegisterCallback() result=%#x", (int)result);
+    LogFormat("PCMPlayer: Play.RegisterCallback() result=%#x", (int)result);
     play_object.Destroy();
     mix_object.Destroy();
     engine_object.Destroy();
@@ -229,7 +229,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
 
   result = play.SetPlayState(SL_PLAYSTATE_PLAYING);
   if (result != SL_RESULT_SUCCESS) {
-    LogStartUp("PCMPlayer: Play.SetPlayState(PLAYING) result=%#x",
+    LogFormat("PCMPlayer: Play.SetPlayState(PLAYING) result=%#x",
                (int)result);
     play_object.Destroy();
     mix_object.Destroy();
@@ -324,7 +324,7 @@ PCMPlayer::Enqueue()
   }
 
   if (result != SL_RESULT_SUCCESS)
-    LogStartUp("PCMPlayer: Enqueue() result=%#x", (int)result);
+    LogFormat("PCMPlayer: Enqueue() result=%#x", (int)result);
 }
 
 #elif defined(WIN32)

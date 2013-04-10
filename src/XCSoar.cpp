@@ -113,7 +113,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   StartupLogFreeRamAndStorage();
 
   // Write startup note + version to logfile
-  LogStartUp(_T("Starting XCSoar %s"), XCSoar_ProductToken);
+  LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
   // Read options from the command line
   {

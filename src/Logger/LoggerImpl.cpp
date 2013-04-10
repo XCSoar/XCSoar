@@ -105,7 +105,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (!simulator)
     writer->Sign();
 
-  LogStartUp(_T("Logger stopped: %s"), filename);
+  LogFormat(_T("Logger stopped: %s"), filename);
 
   // Logger off
   delete writer;
@@ -254,13 +254,13 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   frecord.Reset();
   writer = new IGCWriter(filename);
   if (!writer->IsOpen()) {
-    LogStartUp(_T("Failed to create file %s"), filename);
+    LogFormat(_T("Failed to create file %s"), filename);
     delete writer;
     writer = nullptr;
     return;
   }
 
-  LogStartUp(_T("Logger Started: %s"), filename);
+  LogFormat(_T("Logger Started: %s"), filename);
 }
 
 void

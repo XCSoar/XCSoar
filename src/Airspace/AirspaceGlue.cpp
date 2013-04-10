@@ -41,12 +41,12 @@ ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
 {
   std::unique_ptr<TLineReader> reader(OpenTextFile(path, ConvertLineReader::AUTO));
   if (!reader) {
-    LogStartUp(_T("Failed to open airspace file: %s"), path);
+    LogFormat(_T("Failed to open airspace file: %s"), path);
     return false;
   }
 
   if (!parser.Parse(*reader, operation)) {
-    LogStartUp(_T("Failed to parse airspace file: %s"), path);
+    LogFormat(_T("Failed to parse airspace file: %s"), path);
     return false;
   }
 

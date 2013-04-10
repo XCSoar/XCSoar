@@ -50,7 +50,7 @@ LogLastError(const TCHAR *fmt, ...)
                 NULL, error, 0, msg, ARRAY_SIZE(msg), NULL);
   TrimRight(msg);
 
-  LogStartUp(_T("%s: %s"), buffer, msg);
+  LogFormat(_T("%s: %s"), buffer, msg);
 }
 
 #endif
@@ -71,7 +71,7 @@ LogErrno(const TCHAR *fmt, ...)
   _vsntprintf(buffer, ARRAY_SIZE(buffer), fmt, ap);
   va_end(ap);
 
-  LogStartUp(_T("%s: %s"), buffer, strerror(error));
+  LogFormat(_T("%s: %s"), buffer, strerror(error));
 }
 
 #endif

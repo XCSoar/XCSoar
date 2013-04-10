@@ -107,7 +107,7 @@ struct EventBuilder {
         if (key > 0)
           config.Key2Event[mode_id][key] = event_id;
         else
-          LogStartUp(_T("Invalid key data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid key data: %s at %u"), data.c_str(), line);
 
         // Make gce (Glide Computer Event)
         // GCE - Glide Computer Event
@@ -117,7 +117,7 @@ struct EventBuilder {
         if (key >= 0)
           config.GC2Event[key] = event_id;
         else
-          LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
 
         // Make gesture (Gesture Event)
         // Key - Key Event
@@ -136,7 +136,7 @@ struct EventBuilder {
           config.Gesture2Event.Remove(data.c_str());
           config.Gesture2Event.Add(data.c_str(), event_id);
         } else
-          LogStartUp(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid gesture data: %s at %u"), data.c_str(), line);
 
         // Make ne (NMEA Event)
         // NE - NMEA Event
@@ -146,14 +146,14 @@ struct EventBuilder {
         if (key >= 0)
           config.N2Event[key] = event_id;
         else
-          LogStartUp(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
+          LogFormat(_T("Invalid GCE data: %s at %u"), data.c_str(), line);
 
         // label only - no key associated (label can still be touch screen)
       } else if (type.equals(_T("label"))) {
         // Nothing to do here...
 
       } else {
-        LogStartUp(_T("Invalid type: %s at %u"), type.c_str(), line);
+        LogFormat(_T("Invalid type: %s at %u"), type.c_str(), line);
       }
 
       token = mode.next_token(_T(" "));
@@ -244,7 +244,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
               //free(allocated);
 
             } else {
-              LogStartUp(_T("Invalid event type: %s at %i"), d_event, line);
+              LogFormat(_T("Invalid event type: %s at %i"), d_event, line);
             }
           } else {
             LogFormat("Invalid event type at %i", line);
@@ -256,7 +256,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
         current.location = ParseUnsigned(value);
 
       } else {
-        LogStartUp(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
+        LogFormat(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
       }
     } else  {
       LogFormat("Invalid line at %i", line);

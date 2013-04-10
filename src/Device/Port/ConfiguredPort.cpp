@@ -150,7 +150,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
       return NULL;
     }
 
-    LogStartUp(_T("GPS detected: %s"), buffer);
+    LogFormat(_T("GPS detected: %s"), buffer);
 
     path = buffer;
     break;

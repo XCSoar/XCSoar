@@ -87,14 +87,14 @@ LoadWaypointFile(Waypoints &waypoints, const TCHAR *path, int file_num,
 {
   WaypointReader reader(path, file_num);
   if (reader.Error()) {
-    LogStartUp(_T("Failed to open waypoint file: %s"), path);
+    LogFormat(_T("Failed to open waypoint file: %s"), path);
     return false;
   }
 
   // parse the file
   reader.SetTerrain(terrain);
   if (!reader.Parse(waypoints, operation)) {
-    LogStartUp(_T("Failed to parse waypoint file: %s"), path);
+    LogFormat(_T("Failed to parse waypoint file: %s"), path);
     return false;
   }
 

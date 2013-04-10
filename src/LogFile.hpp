@@ -45,14 +45,9 @@ void
 LogFormat(const TCHAR *fmt, ...);
 #endif
 
-/**
- * Deprecated, don't use in new code.
- */
-#define LogStartUp(...) LogFormat(__VA_ARGS__)
-
 #if !defined(NDEBUG) && !defined(GNAV)
 
-#define LogDebug(...) LogStartUp(__VA_ARGS__)
+#define LogDebug(...) LogFormat(__VA_ARGS__)
 
 #else /* NDEBUG */
 

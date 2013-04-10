@@ -71,7 +71,7 @@ Profile::LoadFile(const TCHAR *szFile)
   if (reader.error())
     return;
 
-  LogStartUp(_T("Loading profile from %s"), szFile);
+  LogFormat(_T("Loading profile from %s"), szFile);
 
   KeyValueFileReader kvreader(reader);
   KeyValuePair pair;
@@ -111,7 +111,7 @@ Profile::SaveFile(const TCHAR *szFile)
   if (StringIsEmpty(szFile))
     return;
 
-  LogStartUp(_T("Saving profile to %s"), szFile);
+  LogFormat(_T("Saving profile to %s"), szFile);
 
   // Try to open the file for writing
   FileTransaction transaction(szFile);
