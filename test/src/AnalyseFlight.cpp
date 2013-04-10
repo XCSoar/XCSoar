@@ -49,7 +49,8 @@ struct Result {
   }
 };
 
-static Trace full_trace(0, Trace::null_time, 1024);
+static Trace full_trace(0, Trace::null_time, 512);
+static Trace triangle_trace(0, Trace::null_time, 1024);
 static Trace sprint_trace(0, 9000, 64);
 
 static CirclingComputer circling_computer;
@@ -152,6 +153,7 @@ Run(DebugReplay &replay, Result &result)
       released = true;
 
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+      triangle_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
       sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
     }
 
@@ -163,6 +165,7 @@ Run(DebugReplay &replay, Result &result)
 
     const TracePoint point(basic);
     full_trace.push_back(point);
+    triangle_trace.push_back(point);
     sprint_trace.push_back(point);
   }
 
@@ -175,7 +178,7 @@ gcc_pure
 static ContestStatistics
 SolveContest(Contest contest)
 {
-  ContestManager manager(contest, full_trace, sprint_trace);
+  ContestManager manager(contest, full_trace, triangle_trace, sprint_trace);
   manager.SolveExhaustive();
   return manager.GetStats();
 }
