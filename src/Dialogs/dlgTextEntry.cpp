@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/DialogSettings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"
@@ -211,7 +210,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
-static void
+void
 dlgTextEntryHighscoreType(TCHAR *text, size_t width,
                           const TCHAR* caption)
 {
@@ -244,26 +243,4 @@ dlgTextEntryHighscoreType(TCHAR *text, size_t width,
   }
 
   delete wf;
-}
-
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t width,
-                      const TCHAR* caption, AllowedCharacters accb)
-{
-  switch (UIGlobals::GetDialogSettings().text_input_style) {
-  case DialogSettings::TextInputStyle::Default:
-  case DialogSettings::TextInputStyle::Keyboard:
-    if (HasPointer())
-      return dlgTextEntryKeyboardShowModal(text, width, caption, accb);
-    else {
-      dlgTextEntryHighscoreType(text, width, caption);
-      return true;
-    }
-
-  case DialogSettings::TextInputStyle::HighScore:
-    dlgTextEntryHighscoreType(text, width, caption);
-    return true;
-  }
-
-  return false;
 }

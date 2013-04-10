@@ -1779,6 +1779,7 @@ RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TEXT_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/XML.cpp \

@@ -47,6 +47,10 @@ TextEntryDialog(StaticString<N> &text,
                                caption, accb);
 }
 
+void
+dlgTextEntryHighscoreType(TCHAR *text, size_t width,
+                          const TCHAR *caption);
+
 bool
 dlgTextEntryKeyboardShowModal(TCHAR *text, size_t size,
                               const TCHAR* caption=nullptr,

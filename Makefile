@@ -266,6 +266,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
+	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
