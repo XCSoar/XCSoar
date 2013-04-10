@@ -48,8 +48,8 @@ TextEntryDialog(StaticString<N> &text,
 }
 
 void
-dlgTextEntryHighscoreType(TCHAR *text, size_t width,
-                          const TCHAR *caption);
+KnobTextEntry(TCHAR *text, size_t width,
+              const TCHAR *caption);
 
 bool
 dlgTextEntryKeyboardShowModal(TCHAR *text, size_t size,

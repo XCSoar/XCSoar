@@ -267,7 +267,7 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \
-	$(SRC)/Dialogs/dlgTextEntry.cpp \
+	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \

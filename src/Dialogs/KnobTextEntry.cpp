@@ -211,8 +211,8 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgTextEntryHighscoreType(TCHAR *text, size_t width,
-                          const TCHAR* caption)
+KnobTextEntry(TCHAR *text, size_t width,
+              const TCHAR *caption)
 {
   wf = NULL;
   wGrid = NULL;

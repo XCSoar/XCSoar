@@ -36,12 +36,12 @@ dlgTextEntryShowModal(TCHAR *text, size_t width,
     if (HasPointer())
       return dlgTextEntryKeyboardShowModal(text, width, caption, accb);
     else {
-      dlgTextEntryHighscoreType(text, width, caption);
+      KnobTextEntry(text, width, caption);
       return true;
     }
 
   case DialogSettings::TextInputStyle::HighScore:
-    dlgTextEntryHighscoreType(text, width, caption);
+    KnobTextEntry(text, width, caption);
     return true;
   }
 
