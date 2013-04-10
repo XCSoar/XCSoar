@@ -52,8 +52,8 @@ KnobTextEntry(TCHAR *text, size_t width,
               const TCHAR *caption);
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text, size_t size,
-                              const TCHAR* caption=nullptr,
-                              AllowedCharacters ac=AllowedCharacters());
+TouchTextEntry(TCHAR *text, size_t size,
+               const TCHAR *caption=nullptr,
+               AllowedCharacters ac=AllowedCharacters());
 
 #endif

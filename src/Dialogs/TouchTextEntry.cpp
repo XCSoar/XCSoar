@@ -137,9 +137,9 @@ ClearText()
 }
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
-                              const TCHAR* caption,
-                              AllowedCharacters accb)
+TouchTextEntry(TCHAR *text, size_t width,
+               const TCHAR *caption,
+               AllowedCharacters accb)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;

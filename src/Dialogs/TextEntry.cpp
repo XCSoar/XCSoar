@@ -34,7 +34,7 @@ dlgTextEntryShowModal(TCHAR *text, size_t width,
   case DialogSettings::TextInputStyle::Default:
   case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
-      return dlgTextEntryKeyboardShowModal(text, width, caption, accb);
+      return TouchTextEntry(text, width, caption, accb);
     else {
       KnobTextEntry(text, width, caption);
       return true;
