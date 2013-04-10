@@ -34,6 +34,7 @@ PolarSettings::SetDefaults()
   bugs = fixed(1);
   glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
+  auto_bugs = false;
 }
 
 void

@@ -170,6 +170,46 @@ BallastDumpProcessTimer()
 }
 
 static void
+ProcessAutoBugs()
+{
+  /**
+   * Increase the bugs value every hour.
+   */
+  static constexpr fixed interval(3600);
+
+  /**
+   * Decrement the bugs setting by 1%.
+   */
+  static constexpr fixed decrement(0.01);
+
+  /**
+   * Don't go below this bugs setting.
+   */
+  static constexpr fixed min_bugs(0.7);
+
+  /**
+   * The time stamp (from FlyingState::flight_time) when we last
+   * increased the bugs value automatically.
+   */
+  static fixed last_auto_bugs;
+
+  const FlyingState &flight = CommonInterface::Calculated().flight;
+  const PolarSettings &polar = CommonInterface::GetComputerSettings().polar;
+
+  if (!flight.flying)
+    /* reset when not flying */
+    last_auto_bugs = fixed(0);
+  else if (!polar.auto_bugs)
+    /* feature is disabled */
+    last_auto_bugs = flight.flight_time;
+  else if (flight.flight_time >= last_auto_bugs + interval &&
+           polar.bugs > min_bugs) {
+    last_auto_bugs = flight.flight_time;
+    ActionInterface::SetBugs(std::max(polar.bugs - decrement, min_bugs));
+  }
+}
+
+static void
 ManualWindProcessTimer()
 {
   ComputerSettings &settings_computer =
@@ -185,6 +225,7 @@ static void
 SettingsProcessTimer()
 {
   BallastDumpProcessTimer();
+  ProcessAutoBugs();
   ManualWindProcessTimer();
 }
 

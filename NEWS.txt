@@ -42,8 +42,9 @@ Version 6.6 - not yet released
   - V7: support for QNH synchronization to V7 vario
 * Android
   - faster map renderer on some Android devices
-* data
+* other
   - new polars for two G 102 Astir variants (#2701)
+  - new option "auto bugs" increases bug setting every hour (#1526)
 
 Version 6.5.4 - 2013/04/10
 * devices

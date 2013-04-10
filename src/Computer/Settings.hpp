@@ -80,6 +80,11 @@ struct PolarSettings {
   /** Whether the ballast countdown timer is active */
   bool ballast_timer_active;
 
+  /**
+   * Add 1% bugs each full hour?
+   */
+  bool auto_bugs;
+
   void SetDefaults();
 
   void SetDegradationFactor(fixed _degradation_factor) {

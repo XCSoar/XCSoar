@@ -50,6 +50,7 @@ extern const char PolarID[];
 extern const char Polar[];
 extern const char PolarName[];
 extern const char PolarDegradation[];
+extern const char AutoBugs[];
 extern const char WaypointFile[];
 extern const char AdditionalWaypointFile[];
 extern const char WatchedWaypointFile[];
