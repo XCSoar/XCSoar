@@ -27,8 +27,8 @@ Copyright_License {
 #include "Asset.hpp"
 
 bool
-dlgTextEntryShowModal(TCHAR *text, size_t width,
-                      const TCHAR *caption, AllowedCharacters accb)
+TextEntryDialog(TCHAR *text, size_t width,
+                const TCHAR *caption, AllowedCharacters accb)
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:

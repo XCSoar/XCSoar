@@ -52,5 +52,5 @@ static void
 Main()
 {
   TCHAR text[64] = _T("");
-  dlgTextEntryShowModal(text, ARRAY_SIZE(text), _T("The caption"));
+  TextEntryDialog(text, ARRAY_SIZE(text), _T("The caption"));
 }

@@ -163,7 +163,7 @@ inline void
 NOAAListWidget::AddClicked()
 {
   TCHAR code[5] = _T("");
-  if (!dlgTextEntryShowModal(code, 5, _("Airport ICAO code")))
+  if (!TextEntryDialog(code, 5, _("Airport ICAO code")))
     return;
 
   if (_tcslen(code) != 4) {
