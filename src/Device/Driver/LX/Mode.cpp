@@ -65,9 +65,12 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     busy = false;
   }
 
-  if (is_colibri)
+  if (is_colibri) {
     /* avoid confusing a Colibri with new protocol commands */
+    if (old_baud_rate != 0)
+      port.SetBaudrate(old_baud_rate);
     return true;
+  }
 
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
