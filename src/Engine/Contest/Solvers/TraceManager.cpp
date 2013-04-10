@@ -71,6 +71,9 @@ TraceManager::IsMasterUpdated(bool continuous) const
   if (continuous)
     return false;
 
+  if (trace.empty())
+    return true;
+
   /* TODO: disabled check, move it to ContestDijkstra */
   //if (n_points < num_stages)
   //  return true;
