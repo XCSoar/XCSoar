@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.5.4 - not yet released
+Version 6.5.4 - 2013/04/10
 * devices
   - Volkslogger: increase timeout for reading flight list
   - V7: fix QNH change
