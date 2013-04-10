@@ -57,7 +57,7 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
 
-  if (location_jump || !basic.location_available)
+  if (location_jump)
     // prevent bad fixes from being logged
     return false;
 
