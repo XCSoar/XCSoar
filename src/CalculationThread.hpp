@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Thread/WorkerThread.hpp"
 #include "Thread/Mutex.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 class GlideComputer;
 

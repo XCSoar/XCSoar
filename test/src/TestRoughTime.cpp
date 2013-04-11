@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(67);
+  plan_tests(77);
 
   RoughTime a = RoughTime::Invalid();
   ok1(!a.IsValid());
@@ -125,6 +125,19 @@ int main(int argc, char **argv)
   ok1(s.IsInside(b));
   ok1(!s.IsInside(c));
   ok1(!s.IsInside(d));
+
+  /* test operator+(RoughTime, RoughTimeDelta) */
+  ok1(RoughTime(0, 0) + RoughTimeDelta::FromMinutes(0) == RoughTime(0, 0));
+  ok1(RoughTime(0, 0) + RoughTimeDelta::FromMinutes(1) == RoughTime(0, 1));
+  ok1(RoughTime(0, 0) + RoughTimeDelta::FromMinutes(60) == RoughTime(1, 0));
+  ok1(RoughTime(0, 0) + RoughTimeDelta::FromHours(24) == RoughTime(0, 0));
+  ok1(RoughTime(0, 0) + RoughTimeDelta::FromHours(25) == RoughTime(1, 0));
+
+  ok1(RoughTime(0, 0) - RoughTimeDelta::FromMinutes(0) == RoughTime(0, 0));
+  ok1(RoughTime(0, 0) - RoughTimeDelta::FromMinutes(1) == RoughTime(23, 59));
+  ok1(RoughTime(0, 0) - RoughTimeDelta::FromMinutes(60) == RoughTime(23, 0));
+  ok1(RoughTime(0, 0) - RoughTimeDelta::FromHours(24) == RoughTime(0, 0));
+  ok1(RoughTime(0, 0) - RoughTimeDelta::FromHours(25) == RoughTime(23, 0));
 
   return exit_status();
 }

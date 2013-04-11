@@ -24,7 +24,7 @@ Copyright_License {
 #include "CirclingComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Util/Clamp.hpp"
 

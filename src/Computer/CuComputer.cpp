@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "CuComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Atmosphere/Temperature.hpp"
 
 struct NMEAInfo;

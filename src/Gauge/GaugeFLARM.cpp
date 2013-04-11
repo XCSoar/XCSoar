@@ -27,7 +27,7 @@ Copyright_License {
 #include "FlarmTrafficWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "NMEA/MoreData.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "UIActions.hpp"
 
 #ifdef USE_GDI

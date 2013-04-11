@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/ConvertPathName.hpp"
 #include "Hardware/Display.hpp"
 #include "Simulator.hpp"
+#include "LocalPath.hpp"
 
 #ifdef WIN32
 #include <windows.h> /* for AllocConsole() */
@@ -68,6 +69,10 @@ CommandLine::Parse(Args &args)
       s += 9;
       PathName convert(s);
       Profile::SetFiles(convert);
+    } else if (strncmp(s, "-datapath=", 10) == 0) {
+      s += 10;
+      PathName convert(s);
+      SetPrimaryDataPath(convert);
     }
 #ifdef SIMULATOR_AVAILABLE
     else if (strcmp(s, "-simulator") == 0) {

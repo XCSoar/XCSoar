@@ -24,7 +24,7 @@ Copyright_License {
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "LocalTime.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "Math/SunEphemeris.hpp"
 #include "Language/Language.hpp"
 
@@ -43,12 +43,14 @@ TimesStatusPanel::Refresh()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const FlyingState &flight = CommonInterface::Calculated().flight;
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   StaticString<64> temp;
 
   if (basic.location_available && basic.date_available) {
-    SunEphemeris::Result sun = SunEphemeris::CalcSunTimes(
-        basic.location, basic.date_time_utc, fixed(GetUTCOffset()) / 3600);
+    SunEphemeris::Result sun =
+      SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
+                                 settings.utc_offset);
 
     const unsigned sunrisehours = (int)sun.time_of_sunrise;
     const unsigned sunrisemins = (int)((sun.time_of_sunrise - fixed(sunrisehours)) * 60);
@@ -62,7 +64,7 @@ TimesStatusPanel::Refresh()
   }
 
   if (basic.time_available) {
-    FormatSignedTimeHHMM(temp.buffer(), DetectCurrentTime(basic));
+    FormatLocalTimeHHMM(temp.buffer(), (int)basic.time, settings.utc_offset);
     SetText(LocalTime, temp);
     FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
     SetText(UTCTime, temp);
@@ -80,16 +82,17 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(), TimeLocal((int)flight.takeoff_time));
+    FormatLocalTimeHHMM(temp.buffer(), (int)flight.takeoff_time,
+                        settings.utc_offset);
     SetText(TakeoffTime, temp);
   } else {
     SetText(TakeoffTime, _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(),
-                      TimeLocal((long)(flight.takeoff_time
-                                       + flight.flight_time)));
+    FormatLocalTimeHHMM(temp.buffer(),
+                        int(flight.takeoff_time + flight.flight_time),
+                        settings.utc_offset);
     SetText(LandingTime, temp);
   } else {
     SetText(LandingTime, _T(""));

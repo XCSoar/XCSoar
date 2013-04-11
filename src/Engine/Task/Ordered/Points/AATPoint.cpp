@@ -23,6 +23,7 @@
 #include "AATPoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Geo/Flat/FlatLine.hpp"
+#include "Util/Clamp.hpp"
 
 const GeoPoint&
 AATPoint::GetLocationRemaining() const
@@ -171,7 +172,10 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());
   const FlatPoint floc = proj.ProjectFloat(GetLocation());
   const FlatLine flb (fprev,floc);
-  const FlatLine fradius (floc,proj.ProjectFloat(GetLocationMin()));
+  const FlatLine fradius(floc,
+                         proj.ProjectFloat(negative(rar.range)
+                                           ? GetLocationMin()
+                                           : GetLocationMax()));
   const fixed radius = fradius.d() * fabs(rar.range);
 
   const Angle angle = rar.radial - flb.angle();
@@ -192,15 +196,16 @@ AATPoint::GetTargetRangeRadial(fixed oldrange) const
   const GeoPoint floc = GetLocation();
   const Angle radialraw = (floc.Bearing(GetTargetLocation()) -
       fprev.Bearing(floc)).AsBearing();
-
-  const fixed d = floc.Distance(GetTargetLocation());
-  const fixed radius = floc.Distance(GetLocationMin());
-  const fixed rangeraw = std::min(fixed(1), d / radius);
-
   Angle radial = radialraw.AsDelta();
-  fixed range = rangeraw;
+
+  fixed d = floc.Distance(GetTargetLocation());
   if (radial < -Angle::QuarterCircle() || radial > Angle::QuarterCircle())
-    range = -range;
+    d = -d;
+
+  const fixed radius = negative(d)
+    ? floc.Distance(GetLocationMin())
+    : floc.Distance(GetLocationMax());
+  const fixed range = Clamp(d / radius, fixed(-1), fixed(1));
 
   if ((oldrange == fixed(0)) && (range == fixed(0)))
     radial = Angle::Zero();

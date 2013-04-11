@@ -5,6 +5,7 @@ CONTEST_SOURCES = \
 	$(CONTEST_SRC_DIR)/ContestManager.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/Contests.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/AbstractContest.cpp \
+	$(CONTEST_SRC_DIR)/Solvers/TraceManager.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/ContestDijkstra.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/DMStQuad.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/OLCLeague.cpp \

@@ -24,7 +24,7 @@
 #include <string.h>
 #include <assert.h>
 
-DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
+DBB::DBB() {
   memset(this,0xff,sizeof *this);
   dbcursor = 8 * 6; // dbcursor direkt hinter den Header-Bereich setzen
   fdfcursor = 0;
@@ -41,9 +41,6 @@ DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
   header[3].keylaenge = 14;
 }
 
-
-// update header of specified table (kennung) of the database
-// and close the table (it can't be extended anymore)
 void DBB::close_db(int kennung) {
   HEADER *h = &header[kennung];
   // calculate position of last record
@@ -57,8 +54,6 @@ void DBB::close_db(int kennung) {
   dest->keylaenge = h->keylaenge;
 }
 
-
-// generate Header-Structure from DBB-File
 void DBB::open_dbb() {
   int i;
   // determine the beginning and length of the database parts
@@ -81,14 +76,14 @@ DBB::add_ds(int kennung, const void *quelle)
 {
   HEADER *h = &header[kennung];
   // append record if there is space for it
-  if ((dbcursor + h->dslaenge) < sizeof(block)) {
+  if ((dbcursor + h->dslaenge) < DBB_SIZE) {
     // and only if the database is still open
     if (h->dslast == 0xffff) {
       // save the position of the first record
       if (h->dsanzahl == 0)
         h->dsfirst = dbcursor;
       // save record in memory
-      memcpy(&block[dbcursor],quelle,h->dslaenge);
+      memcpy(GetBlock(dbcursor), quelle, h->dslaenge);
       dbcursor += h->dslaenge;
       h->dsanzahl++;
     }
@@ -100,15 +95,15 @@ DBB::AddFDF(uint8_t id, size_t size)
 {
   assert(size + 2 <= 0xff);
 
-  if (fdfcursor + size + 2 > sizeof(fdf))
+  if (fdfcursor + size + 2 > FRM_SIZE)
     return nullptr;
 
-  fdf[fdfcursor++] = size + 2;
-  fdf[fdfcursor++] = id;
+  uint8_t *fdf = (uint8_t *)GetFDF(fdfcursor);
+  fdfcursor += size + 2;
 
-  void *result = &fdf[fdfcursor];
-  fdfcursor += size;
-  return result;
+  *fdf++ = size + 2;
+  *fdf++ = id;
+  return fdf;
 }
 
 void
@@ -131,24 +126,22 @@ DBB::AddFDFStringUpper(uint8_t id, const char *src)
   } while (*src != '\0');
 }
 
-// find an actual record of specified type(id) in the declaration memory
-// and return it's position in the memory array
-//
-int16
+int
 DBB::fdf_findfield(uint8_t id) const
 {
-  int16 ii;
-  ii = -1;
-  for (unsigned i = 0; i < sizeof(fdf);) {
-    if (fdf[i+1] == id) {
+  for (size_t i = 0; i < sizeof(FRM_SIZE);) {
+    const uint8_t *fdf = (const uint8_t *)GetFDF(i);
+
+    if (fdf[1] == id)
       // Feld gefunden
-      ii = i;
-      break;
-    }
-    if (fdf[i] == 0)
+      return i;
+
+    if (fdf[0] == 0)
       // Zyklus verhindern
       return -1;
-    i = i + fdf[i];
+
+    i += fdf[0];
   }
-  return ii;
+
+  return -1;
 }

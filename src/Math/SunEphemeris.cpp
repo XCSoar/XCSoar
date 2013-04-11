@@ -29,6 +29,7 @@ Copyright_License {
 #include "Math/SunEphemeris.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
+#include "Time/RoughTime.hpp"
 
 // Sun radius in degrees (?)
 #define SUN_DIAMETER fixed(0.53)
@@ -144,11 +145,12 @@ SunEphemeris::GetMeanSunLongitude(fixed d)
  */
 static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
-                 const fixed time_zone, const Angle dec)
+                 const RoughTimeDelta time_zone, const Angle dec)
 {
   assert(time.Plausible());
 
-  fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12) + time_zone;
+  fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12)
+    + fixed(time_zone.AsMinutes()) / 60;
   Angle t = Angle::Degrees(15) * T;
 
   return -Angle::FromXY(Location.latitude.cos() * dec.sin() -
@@ -159,7 +161,7 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
 SunEphemeris::Result
 SunEphemeris::CalcSunTimes(const GeoPoint &location,
                            const BrokenDateTime &date_time,
-                           const fixed time_zone)
+                           const RoughTimeDelta time_zone)
 {
   Result result;
 
@@ -202,7 +204,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
     // arctic winter
     result.day_length = fixed(0);
 
-  result.time_of_sunrise = fixed(12) - hour_angle.Hours() + time_zone
+  result.time_of_sunrise = fixed(12) - hour_angle.Hours()
+    + fixed(time_zone.AsMinutes()) / 60
     - location.longitude.Degrees() / 15 + equation / 60;
 
   if (result.time_of_sunrise > fixed(24))
@@ -222,7 +225,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 Angle
 SunEphemeris::CalcAzimuth(const GeoPoint &location,
                           const BrokenDateTime &date_time,
-                          const fixed time_zone)
+                          const RoughTimeDelta time_zone)
 {
   assert(date_time.Plausible());
 

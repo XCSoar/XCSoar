@@ -177,9 +177,9 @@ class C_RECORD
 {
 public:
   /** Number of waypoints */
-  word NTP;
+  unsigned NTP;
   /** Task-ID */
-  word TID;
+  unsigned TID;
   /** Time of declaration */
   struct tm TDECL;
   int hasdeclaration;
@@ -203,7 +203,6 @@ public:
   void
   print(int version, FILE *aus)
   {
-    word i;
     char is[8];
 
     if (hasdeclaration) {
@@ -251,7 +250,7 @@ public:
       STA.print(version, aus, "Start  "); // print Start-Point
 
       // print Turnpoints
-      for (i = 0; i < NTP; i++) {
+      for (unsigned i = 0; i < NTP; i++) {
         sprintf(is, "TP%02u   ", i + 1);
         TP[i].print(version, aus, is);
       }
@@ -354,7 +353,7 @@ struct IGCHEADER
    * Unused field will be prepared as HO fields.
    */
   void
-  output(int version, int oo_fillin)
+  output(int version, bool oo_fillin)
   {
     igc_filter(PLT);
     igc_filter(GTY);
@@ -419,7 +418,7 @@ struct IGCHEADER
     }
 
     // LCONV-VER-Erzeugung ab Version 4.16
-    if ((version >= 416) && (oo_fillin == 1))
+    if (version >= 416 && oo_fillin)
       fprintf(ausgabe, "LCONV-VER:%01d.%02d\n", version / 100, version % 100);
   }
 };
@@ -432,11 +431,11 @@ struct IGCHEADER
  * more or less inaccurate conversion from HDOP to fix accuracy.
  * doesn't have to be right. might be changed sometime.
  */
-static word
+static unsigned
 hdop2fxa(uint8_t hdop)
 {
   // return (float) hdop * 100.0/3);
-  return word((float(hdop) * 100.01 / 3));
+  return unsigned((float(hdop) * 100.01 / 3));
 }
 
 /** non-linear conversion of the ENL values */
@@ -514,7 +513,7 @@ const int actual_conv_version = 424;
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
-    int oo_fillin, word *serno, long *sp)
+            bool oo_fillin)
 {
   const uint8_t *const end = bin_puffer + length;
 
@@ -526,18 +525,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
     char time[10];
     char valid;
     long lat;
-    word latdeg;
-    word latmin;
     long lon;
-    word londeg;
-    word lonmin;
-    word press;
-    word gpalt;
-    long pressure_alt;
-    long gps_alt;
-    word fxa;
-    word hdop;
-    word enl;
   } igcfix;
 
   int l = 0;
@@ -682,7 +670,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       l = 1; // Füllzeichen
       break;
     case rectyp_end:
-      *sp = (p - bin_puffer) + 1;
+      /* sp = (p - bin_puffer) + 1 */
       l = 41;
       ende = 1;
       break;
@@ -894,10 +882,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         if (p2 + 7 >= end)
           return 0;
 
-        *serno = (256L * p2[1] + p2[2]);
-
         // sonstiges einlesen
-        wordtoserno(igcheader.A, *serno);
+        wordtoserno(igcheader.A, 256 * p2[1] + p2[2]);
 
         sprintf(igcheader.DTM, "%03u", p2[3]);
         sprintf(igcheader.RHW, "%0X.%0X", p2[4] >> 4, (p2[4] & 0xf));
@@ -981,7 +967,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       l = 1;
       break;
     case rectyp_pos:
-    case rectyp_poc:
+    case rectyp_poc: {
       if (p[2] & 0x80) { // Endebedingung
         ende = 1;
         l = 0;
@@ -992,7 +978,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       realtime.tm_isdst = -1;
       mktime(&realtime);
       igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
-      igcfix.press = ((word)p[0] & 0x0f) << 8 | p[1];
+      const unsigned press = unsigned(p[0] & 0x0f) << 8 | p[1];
+      unsigned gpalt, fxa, enl;
       if (Haupttyp == rectyp_pos) {
         l = pos_ds_size[bfv][0];
         igcfix.lat = ((unsigned long)p[3] & 0x7f) << 16 | ((unsigned long)p[4])
@@ -1005,9 +992,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         if (p[9] & 0x80)
           igcfix.lon = -igcfix.lon;
 
-        igcfix.gpalt = ((word)p[9] & 0x70) << 4 | p[10];
-        igcfix.fxa = hdop2fxa(p[9] & 0x0f);
-        igcfix.enl = 4 * p[11];
+        gpalt = unsigned(p[9] & 0x70) << 4 | p[10];
+        fxa = hdop2fxa(p[9] & 0x0f);
+        enl = 4 * p[11];
       }
 
       else {
@@ -1021,36 +1008,38 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
         igcfix.lat += delta_lat;
         igcfix.lon += delta_lon;
-        igcfix.gpalt = ((word)p[6] & 0x70) << 4 | p[7];
-        igcfix.fxa = hdop2fxa(p[6] & 0x0f);
-        igcfix.enl = 4 * p[8];
+        gpalt = unsigned(p[6] & 0x70) << 4 | p[7];
+        fxa = hdop2fxa(p[6] & 0x0f);
+        enl = 4 * p[8];
       }
-      igcfix.latdeg = labs(igcfix.lat) / 60000;
-      igcfix.latmin = labs(igcfix.lat) % 60000;
-      igcfix.londeg = labs(igcfix.lon) / 60000;
-      igcfix.lonmin = labs(igcfix.lon) % 60000;
 
-      igcfix.gps_alt = 10L * igcfix.gpalt - 1000L;
+      const unsigned latdeg = labs(igcfix.lat) / 60000;
+      const unsigned latmin = labs(igcfix.lat) % 60000;
+      const unsigned londeg = labs(igcfix.lon) / 60000;
+      const unsigned lonmin = labs(igcfix.lon) % 60000;
+
+      long gps_alt = 10L * gpalt - 1000L;
 
       if (igcfile_version >= 423)
-        igcfix.enl = enlflt(igcfix.enl);
-      igcfix.enl = enllim(igcfix.enl);
+        enl = enlflt(enl);
+      enl = enllim(enl);
 
       // Bei allen neuen Dateien auf Wunsch von IAN
       // aber dank neuer Regeln ab
       // Konverter Nr. 4.20 nicht mehr !!
       if ((igcfile_version >= 413) && (igcfile_version < 420))
         if (igcfix.valid == 'V')
-          igcfix.gps_alt = 0;
+          gps_alt = 0;
 
-      igcfix.pressure_alt = pressure2altitude(igcfix.press);
+      const long pressure_alt = pressure2altitude(press);
 
       strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
       fprintf(Ausgabedatei, "B%6s%02u%05u%c%03u%05u%c%c%05ld%05ld%03u",
-          igcfix.time, igcfix.latdeg, igcfix.latmin, ((igcfix.lat < 0) ? 'S'
-              : 'N'), igcfix.londeg, igcfix.lonmin, ((igcfix.lon < 0) ? 'W'
-              : 'E'), igcfix.valid, igcfix.pressure_alt, igcfix.gps_alt,
-          igcfix.fxa);
+              igcfix.time,
+              latdeg, latmin, igcfix.lat < 0 ? 'S' : 'N',
+              londeg, lonmin, igcfix.lon < 0 ? 'W' : 'E',
+              igcfix.valid, pressure_alt, gps_alt,
+              fxa);
 
       // activate on ENL in I record
       if ((igcfile_version >= 413) && (igcfile_version < 416))
@@ -1058,9 +1047,10 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
       // have to be active, if sensor exists
       if (strcmp(igcheader.RHW, "3.3") >= 0)
-        fprintf(Ausgabedatei, "%03u", igcfix.enl);
+        fprintf(Ausgabedatei, "%03u", enl);
 
       fprintf(Ausgabedatei, "\n");
+    }
       break;
 
     case rectyp_vrb:

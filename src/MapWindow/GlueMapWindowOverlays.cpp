@@ -263,6 +263,17 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 }
 
 void
+GlueMapWindow::DrawVario(Canvas &canvas, const PixelRect &rc) const
+{
+  if (!GetMapSettings().vario_bar_enabled)
+   return;
+
+  vario_bar_renderer.Draw(canvas, rc, Basic(), Calculated(),
+                                GetComputerSettings().polar.glide_polar_task,
+                                true); //NOTE: AVG enabled for now, make it configurable ;
+}
+
+void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {

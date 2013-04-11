@@ -109,6 +109,11 @@ static constexpr StaticEnumChoice trail_type_list[] = {
     "Zero lift is presented as a yellow line.") },
   { (unsigned)TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), N_("The same "
     "colour scheme as the previous, but with dotted lines while sinking.") },
+  { (unsigned)TrailSettings::Type::VARIO_DOTS_AND_LINES,
+    N_("Vario-scaled dots and lines"),
+    N_("Vario-scaled dots with lines. "
+       "Orange to red = climb. Light blue to dark blue = sink. "
+       "Zero lift is presented as a yellow line.") },
   { (unsigned)TrailSettings::Type::ALTITUDE, N_("Altitude"), N_("The colour scheme corresponds to the height.") },
   { 0 }
 };

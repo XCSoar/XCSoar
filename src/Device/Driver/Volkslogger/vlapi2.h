@@ -18,11 +18,10 @@
 #ifndef VLAPI2_H
 #define VLAPI2_H
 
-#include "vlapierr.h"
-#include "vla_support.h"
-#include "vlconv.h"
 #include "Geo/GeoPoint.hpp"
-#include "tchar.h"
+
+#include <stdint.h>
+#include <tchar.h>
 
 class DBB;
 
@@ -60,12 +59,12 @@ class VLAPI_DATA {
       OZTYP_CYLSKT = 0,
       OZTYP_LINE = 1
     };
-    int16  lw; // linewidth (start- or finishline)
-    int16  rz;  // cylinder radius in meters (0..1500m)
+    unsigned lw; // linewidth (start- or finishline)
+    unsigned rz;  // cylinder radius in meters (0..1500m)
     // the API will round this to the next lower 100m-step
-    int16  rs;  // sector radius in meters   (0..15000m)
+    unsigned rs;  // sector radius in meters   (0..15000m)
     // the API will round this to the next lower 1000m-step
-    int16  ws;  // sector direction in degrees
+    unsigned ws;  // sector direction in degrees
     // 0..358ø directly specifies the direction
     // into which the 90°-FAI-sector points
     // 360ø means automatic calculation of the direction inside
@@ -104,9 +103,7 @@ class VLAPI_DATA {
   };
 
   // flight declaration
-  class DECLARATION {
-    friend class VLAPI;
-  public:
+  struct DECLARATION {
     struct FLIGHTINFO {
       char pilot[65];
       char gliderid[8];
@@ -118,69 +115,13 @@ class VLAPI_DATA {
     struct TASK {
       DCLWPT startpoint;
       DCLWPT finishpoint;
-      int nturnpoints;
+      unsigned nturnpoints;
       DCLWPT turnpoints[12];
     } task;
-  protected:
-    void get(DBB *dbb);
+
+    void get(const DBB &dbb);
     void put(DBB *dbb) const;
   };
-
-  struct VLINFO {
-    word sessionid;
-    word vlserno;
-    uint8_t fwmajor;
-    uint8_t fwminor;
-    uint8_t fwbuild;
-  };
-};
-
-
-// just instatiate an Object of VLAPI in your application
-// and call the functions
-// all data exchange with the API will be done through its
-// public members
-/** API facade for Volkslogger device handler */
-class VLAPI : public VLA_XFR, public VLAPI_DATA {
-  VLA_ERROR stillconnect();
- public:
-
-  VLAPI(Port &_port, unsigned _databaud, OperationEnvironment &env);
-
-  VLINFO vlinfo;
-  DATABASE database;
-  DECLARATION declaration;
-  /*
-   * This vector of directory entries holds the list of Flights
-   * stored in the Volkslogger
-   */
-  std::vector<DIRENTRY> directory;
-
-
-  // read info (serial numer, firmware versions etc.) from
-  // the logger into the struct VLINFO (see above)
-  VLA_ERROR read_info();
-
-  // returns version of this API
-  int apiversion() {
-    return 200;
-  }
-
-  // read the directory of flight logs into struct DIRECTORY (see file VLCONV.H)
-  VLA_ERROR read_directory();
-
-  // read igcfile number index (position in array contained in struct DIRECTORY )
-  // into file named "filename".
-  // secure = 1 for DSA-signature, 0 for MD-signature only
-  // DSA is mandatory for DMST and FAI flight validation
-  VLA_ERROR read_igcfile(const TCHAR *filename, int index, int secure);
-
-  // read database and flight declaration form from Volkslogger into the
-  // predefined structs DECLARATION and DATABASE (see above)
-  VLA_ERROR read_db_and_declaration();
-
-  // write database and flight declaration from the structs back into the Volkslogger
-  VLA_ERROR write_db_and_declaration();
 };
 
 #endif

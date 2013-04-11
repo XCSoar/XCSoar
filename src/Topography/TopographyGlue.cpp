@@ -54,7 +54,7 @@ LoadConfiguredTopographyZip(TopographyStore &store,
   ZipLineReaderA reader(dir, "topology.tpl");
   if (reader.error()) {
     zzip_dir_close(dir);
-    LogStartUp(_T("No topography in map file: %s"), path);
+    LogFormat(_T("No topography in map file: %s"), path);
     return false;
   }
 

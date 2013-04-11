@@ -30,6 +30,7 @@ Copyright_License {
 
 struct GeoPoint;
 struct BrokenDateTime;
+class RoughTimeDelta;
 
 /**
  * Sun ephemeris model, used largely for calculations of sunset times
@@ -52,7 +53,7 @@ namespace SunEphemeris
    * @return Attributes of the sun
    */
   Result CalcSunTimes(const GeoPoint &location, const BrokenDateTime &date_time,
-                      fixed time_zone);
+                      RoughTimeDelta time_zone);
 
   /**
    * Calculates only the sun's azimuth
@@ -62,7 +63,7 @@ namespace SunEphemeris
    * @return Attributes of the sun
    */
   Angle CalcAzimuth(const GeoPoint &location, const BrokenDateTime &date_time,
-                    fixed time_zone);
+                    RoughTimeDelta time_zone);
 }
 
 #endif

@@ -24,8 +24,8 @@ Copyright_License {
 #include "InfoBoxes/Content/Time.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "LocalTime.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -33,32 +33,34 @@ Copyright_License {
 void
 UpdateInfoBoxTimeLocal(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().time_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+
+  if (!basic.time_available) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  int dd = DetectCurrentTime(CommonInterface::Basic());
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
-
-  // Set Value
-  data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
+  FormatLocalTimeHHMM(data.value.buffer(), (int)basic.time,
+                      settings.utc_offset);
 
   // Set Comment
-  data.UnsafeFormatComment(_T("%02u"), t.second);
+  data.UnsafeFormatComment(_T("%02u"), basic.date_time_utc.second);
 }
 
 void
 UpdateInfoBoxTimeUTC(InfoBoxData &data)
 {
-  if (!CommonInterface::Basic().time_available) {
+  const NMEAInfo &basic = CommonInterface::Basic();
+
+  if (!basic.time_available) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  const BrokenDateTime t = CommonInterface::Basic().date_time_utc;
+  const BrokenDateTime t = basic.date_time_utc;
   data.UnsafeFormatValue(_T("%02d:%02d"), t.hour, t.minute);
 
   // Set Comment
@@ -68,15 +70,16 @@ UpdateInfoBoxTimeUTC(InfoBoxData &data)
 void
 UpdateInfoBoxTimeFlight(InfoBoxData &data)
 {
-  if (!positive(CommonInterface::Calculated().flight.flight_time)) {
+  const FlyingState &flight = CommonInterface::Calculated().flight;
+
+  if (!positive(flight.flight_time)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR value[32], comment[32];
-  FormatTimeTwoLines(value, comment,
-                         (int)CommonInterface::Calculated().flight.flight_time);
+  FormatTimeTwoLines(value, comment, (int)flight.flight_time);
 
   data.SetValue(value);
   data.SetComment(comment);

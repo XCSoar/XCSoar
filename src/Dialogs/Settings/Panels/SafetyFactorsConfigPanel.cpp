@@ -38,6 +38,7 @@ enum ControlIndex {
   TerrainHeight,
   AlternateMode,
   PolarDegradation,
+  AutoBugs,
   SafetyMC,
   RiskFactor,
 };
@@ -72,14 +73,17 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            UnitGroup::ALTITUDE, task_behaviour.route_planner.safety_height_terrain);
 
   static constexpr StaticEnumChoice abort_task_mode_list[] = {
-    { (unsigned)AbortTaskMode::SIMPLE, N_("Simple") },
-    { (unsigned)AbortTaskMode::TASK, N_("Task") },
-    { (unsigned)AbortTaskMode::HOME, N_("Home") },
+    { (unsigned)AbortTaskMode::SIMPLE, N_("Simple"),
+      N_("The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.") },
+    { (unsigned)AbortTaskMode::TASK, N_("Task"),
+      N_("The sorting will also take the current task direction into account.") },
+    { (unsigned)AbortTaskMode::HOME, N_("Home"),
+      N_("The sorting will try to find landing options in the current direction to the configured home waypoint.") },
     { 0 }
   };
 
   AddEnum(_("Alternates mode"),
-          _("Determines sorting of alternates in the alternates dialog and in abort mode:\n[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.\n[Task] The sorting will also take the current task direction into account.\n[Home] The sorting will try to find landing options in the current direction to the configured home waypoint."),
+          _("Determines sorting of alternates in the alternates dialog and in abort mode."),
           abort_task_mode_list, (unsigned)task_behaviour.abort_task_mode);
 
   AddFloat(_("Polar degradation"), /* xgettext:no-c-format */
@@ -90,6 +94,11 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed(0), fixed(50), fixed(1), false,
            (fixed(1) - settings_computer.polar.degradation_factor) * 100);
   SetExpertRow(PolarDegradation);
+
+  AddBoolean(_("Auto bugs"), /* xgettext:no-c-format */
+           _("If enabled, adds 1% to the bugs setting after each full hour while flying."),
+             settings_computer.polar.auto_bugs);
+  SetExpertRow(AutoBugs);
 
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
@@ -132,6 +141,11 @@ SafetyFactorsConfigPanel::Save(bool &_changed)
                  settings_computer.polar.degradation_factor);
     if (protected_task_manager != NULL)
       protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
+    changed = true;
+  }
+
+  if (SaveValue(AutoBugs, settings_computer.polar.auto_bugs)) {
+    Profile::Set(ProfileKeys::AutoBugs, settings_computer.polar.auto_bugs);
     changed = true;
   }
 

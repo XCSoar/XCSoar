@@ -75,7 +75,7 @@ Druckwert ist ein innerhalb des Loggers temperaturkompensierter Wert, der
 proportional zum gemessenen Umgebungsdruck am Logger ist.
 1100 mbar entsprechen einem Druckwert von 4096;
 */
-long pressure2altitude(word druck) {
+long pressure2altitude(unsigned druck) {
 double GMR   = 9.80665*28.9644/8314.32;
 double tgrad = -6.5E-3;
 double p0    = 1013.25;

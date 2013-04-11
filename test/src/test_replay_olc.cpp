@@ -4,7 +4,7 @@
 #include "Computer/TraceComputer.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Contest/ContestManager.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"

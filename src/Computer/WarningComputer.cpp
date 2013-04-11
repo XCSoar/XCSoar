@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WarningComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

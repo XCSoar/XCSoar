@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TraceComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Asset.hpp"

@@ -35,8 +35,6 @@ struct Color;
 
 namespace Profile
 {
-  using namespace ProfileMap;
-
   /**
    * Returns the absolute path of the current profile file.
    */

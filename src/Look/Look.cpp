@@ -74,6 +74,7 @@ Look::InitialiseConfigured(const UISettings &settings,
   flarm_gauge.Initialise(traffic, true, settings.info_boxes.inverse);
   thermal_assistant_gauge.Initialise(true, settings.info_boxes.inverse);
   final_glide_bar.Initialise(map_font);
+  vario_bar.Initialise(map_font);
   map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();
 }

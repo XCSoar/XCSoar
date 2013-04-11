@@ -69,9 +69,12 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     busy = false;
   }
 
-  if (is_colibri)
+  if (is_colibri) {
     /* avoid confusing a Colibri with new protocol commands */
+    if (old_baud_rate != 0)
+      port.SetBaudrate(old_baud_rate);
     return true;
+  }
 
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
@@ -169,6 +172,10 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
         mode = Mode::UNKNOWN;
         return false;
       }
+      /* The first write after the baud rate change fails on an
+         IOIO UART connected device without the small delay (observed
+         with DroidSoar V2 connected to an Colibri 1) */
+      env.Sleep(100);
     }
   } else
     old_baud_rate = 0;

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "Operation/Operation.hpp"
 #include "vlapi2.h"
+#include "dbbconv.h"
 #include "Engine/Waypoint/Waypoint.hpp"
 
 #ifdef _UNICODE
@@ -92,51 +93,69 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 }
 
 static bool
-DeclareInner(Port &port, const Declaration &declaration, const Waypoint *home,
+DeclareInner(Port &port, const unsigned bulkrate,
+             const Declaration &declaration, const Waypoint *home,
              OperationEnvironment &env)
 {
   assert(declaration.Size() >= 2);
 
-  VLAPI vl(port, 38400L, env);
-
-  if (vl.connect(20) != VLA_ERR_NOERR)
+  if (!Volkslogger::ConnectAndFlush(port, env, 20000))
     return false;
 
-  memset(&vl.database, 0, sizeof(vl.database));
-  memset(&vl.declaration, 0, sizeof(vl.declaration));
-
-  CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
-		     sizeof(vl.declaration.flightinfo.pilot),
+  //Clear DECLARATION struct and populate with xcs declaration
+  VLAPI_DATA::DECLARATION vl_declaration;
+  memset(&vl_declaration, 0, sizeof(vl_declaration));
+  CopyToNarrowBuffer(vl_declaration.flightinfo.pilot,
+		     sizeof(vl_declaration.flightinfo.pilot),
                      declaration.pilot_name);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
-                     sizeof(vl.declaration.flightinfo.gliderid),
+  CopyToNarrowBuffer(vl_declaration.flightinfo.gliderid,
+                     sizeof(vl_declaration.flightinfo.gliderid),
                      declaration.aircraft_registration);
 
-  CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
-                     sizeof(vl.declaration.flightinfo.glidertype),
+  CopyToNarrowBuffer(vl_declaration.flightinfo.glidertype,
+                     sizeof(vl_declaration.flightinfo.glidertype),
                      declaration.aircraft_type);
 
   if (home != NULL)
-    CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
+    CopyWaypoint(vl_declaration.flightinfo.homepoint, *home);
 
   // start..
-  CopyTurnPoint(vl.declaration.task.startpoint,
+  CopyTurnPoint(vl_declaration.task.startpoint,
                 declaration.turnpoints.front());
 
   // rest of task...
   const unsigned n = std::min(declaration.Size() - 2, 12u);
   for (unsigned i = 0; i < n; ++i)
-    CopyTurnPoint(vl.declaration.task.turnpoints[i],
+    CopyTurnPoint(vl_declaration.task.turnpoints[i],
                   declaration.turnpoints[i + 1]);
 
   // Finish
-  CopyTurnPoint(vl.declaration.task.finishpoint,
+  CopyTurnPoint(vl_declaration.task.finishpoint,
                 declaration.turnpoints.back());
 
-  vl.declaration.task.nturnpoints = n;
+  vl_declaration.task.nturnpoints = n;
 
-  bool success = vl.write_db_and_declaration() == VLA_ERR_NOERR;
+  //populate DBB structure with database(=block) read from logger
+  DBB dbb1;
+  if (Volkslogger::ReadDatabase(port, bulkrate, env,
+                                dbb1.buffer, sizeof(dbb1.buffer)) <= 0)
+    return false;
+
+  //do NOT use the declaration(=fdf) from logger
+  memset(dbb1.GetFDF(), 0xff, dbb1.FRM_SIZE);
+
+  dbb1.open_dbb();
+
+  //update declaration section
+  vl_declaration.put(&dbb1);
+
+  // and write buffer back into VOLKSLOGGER
+  if (!Volkslogger::ConnectAndFlush(port, env, 10000))
+    return false;
+
+  const bool success =
+    Volkslogger::WriteDatabase(port, env, dbb1.buffer, sizeof(dbb1.buffer));
   Volkslogger::Reset(port, env);
   return success;
 }
@@ -158,7 +177,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
-  bool success = DeclareInner(port, declaration, home, env);
+  bool success = DeclareInner(port, bulkrate, declaration, home, env);
 
   // restore baudrate
   if (old_baud_rate != 0)

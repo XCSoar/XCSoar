@@ -29,9 +29,8 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Math/SunEphemeris.hpp"
-#include "LocalTime.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
@@ -143,7 +142,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (basic.time_available && basic.date_available) {
     const SunEphemeris::Result sun =
       SunEphemeris::CalcSunTimes(waypoint.location, basic.date_time_utc,
-                                 fixed(GetUTCOffset()) / 3600);
+                                 settings.utc_offset);
 
     const BrokenTime sunrise = BreakHourOfDay(sun.time_of_sunrise);
     const BrokenTime sunset = BreakHourOfDay(sun.time_of_sunset);

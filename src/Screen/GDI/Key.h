@@ -49,6 +49,18 @@ enum {
   KEY_F10 = VK_F10,
   KEY_F11 = VK_F11,
   KEY_F12 = VK_F12,
+#ifdef USE_GDI
+  /* These Keys are used for the Triadis-RemoteStick, as well as for
+     expanded Keyboard-Events */
+  KEY_F13 = VK_F13,
+  KEY_F14 = VK_F14,
+  KEY_F15 = VK_F15,
+  KEY_F16 = VK_F16,
+  KEY_F17 = VK_F17,
+  KEY_F18 = VK_F18,
+  KEY_F19 = VK_F19,
+  KEY_F20 = VK_F20,
+#endif
   KEY_ESCAPE = VK_ESCAPE,
   KEY_TAB = VK_TAB,
   KEY_BACK = VK_BACK,

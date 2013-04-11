@@ -29,7 +29,7 @@ Copyright_License {
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
 #include "ThermalBandComputer.hpp"
-#include "WindComputer.hpp"
+#include "Wind/Computer.hpp"
 #include "LiftDatabaseComputer.hpp"
 #include "AverageVarioComputer.hpp"
 #include "ThermalLocator.hpp"

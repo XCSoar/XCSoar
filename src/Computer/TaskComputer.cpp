@@ -29,7 +29,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 
 #include <algorithm>
 

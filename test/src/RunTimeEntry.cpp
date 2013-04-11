@@ -34,7 +34,8 @@ static void
 Main()
 {
   RoughTime value = RoughTime::Invalid();
-  if (!TimeEntryDialog(_T("The caption"), value, true))
+  const RoughTimeDelta time_zone = RoughTimeDelta::FromMinutes(0);
+  if (!TimeEntryDialog(_T("The caption"), value, time_zone, true))
     return;
 
   if (value.IsValid())

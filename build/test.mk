@@ -245,7 +245,7 @@ TEST_TASKWAYPOINT_DEPENDS = IO OS TASK GEO MATH UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TEAM_CODE_SOURCES = \
-	$(SRC)/TeamCode.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTeamCode.cpp
 TEST_TEAM_CODE_DEPENDS = GEO MATH UTIL
@@ -687,7 +687,7 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	RunIGCWriter \
 	RunFlightLogger \
-	RunCirclingWind RunWindZigZag RunWindEKF \
+	RunCirclingWind RunWindEKF \
 	RunTask \
 	ViewImage \
 	RunCanvas RunMapWindow \
@@ -1104,7 +1104,6 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
@@ -1431,24 +1430,16 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = GEO MATH UTIL TIME
 $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
-RUN_WIND_ZIG_ZAG_SOURCES = \
-	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Wind/WindZigZag.cpp \
-	$(TEST_SRC_DIR)/RunWindZigZag.cpp
-RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_WIND_ZIG_ZAG_DEPENDS = GEO MATH UTIL TIME
-$(eval $(call link-program,RunWindZigZag,RUN_WIND_ZIG_ZAG))
-
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = GEO MATH UTIL TIME
@@ -1657,8 +1648,10 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/MapSettings.cpp \
-	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
+	$(SRC)/Computer/Settings.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
@@ -1786,8 +1779,9 @@ RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TEXT_ENTRY_SOURCES = \
-	$(SRC)/Dialogs/dlgTextEntry.cpp \
-	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
+	$(SRC)/Dialogs/TextEntry.cpp \
+	$(SRC)/Dialogs/KnobTextEntry.cpp \
+	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
@@ -2101,11 +2095,11 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/Wind/WindStore.cpp \
-	$(SRC)/Wind/WindMeasurementList.cpp \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
@@ -2156,6 +2150,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \
+	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
@@ -2189,7 +2184,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Computer/WindComputer.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
@@ -2207,21 +2203,22 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/Gauge/VarioSettings.cpp \
 	$(SRC)/Gauge/TrafficSettings.cpp \
-	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
+	$(SRC)/Computer/Settings.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
-	$(SRC)/TeamCode.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -2329,7 +2326,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
-	$(SRC)/LocalTime.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \

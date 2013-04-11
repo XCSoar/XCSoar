@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Wind/WindEKFGlue.hpp"
+#include "Computer/Wind/WindEKFGlue.hpp"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 

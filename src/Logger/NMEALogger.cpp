@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Logger/NMEALogger.hpp"
-#include "IO/BatchTextWriter.hpp"
+#include "IO/TextWriter.hpp"
 #include "LocalPath.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Thread/Mutex.hpp"
@@ -35,7 +35,7 @@ Copyright_License {
 namespace NMEALogger
 {
   static Mutex mutex;
-  static BatchTextWriter *writer;
+  static TextWriter *writer;
 
   bool enabled = false;
 
@@ -62,7 +62,7 @@ NMEALogger::Start()
 
   LocalPath(path, _T("logs"), name);
 
-  writer = new BatchTextWriter(path, false);
+  writer = new TextWriter(path, false);
   return writer != NULL;
 }
 

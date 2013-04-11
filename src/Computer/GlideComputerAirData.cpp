@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "GlideComputerAirData.hpp"
 #include "GlideComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "ThermalBase.hpp"
@@ -404,7 +404,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
   // Calculate new azimuth
   calculated.sun_azimuth =
     SunEphemeris::CalcAzimuth(basic.location, basic.date_time_utc,
-                              fixed(settings.utc_offset) / 3600);
+                              settings.utc_offset);
   calculated.sun_data_available.Update(basic.clock);
 }
 

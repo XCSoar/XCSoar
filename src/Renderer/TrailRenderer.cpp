@@ -35,9 +35,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-using std::max;
-
 bool
 TrailRenderer::LoadTrace(const TraceComputer &trace_computer)
 {
@@ -97,19 +94,22 @@ GetMinMax(TrailSettings::Type type, const TracePointVector &trace)
   if (type == TrailSettings::Type::ALTITUDE) {
     value_max = fixed(1000);
     value_min = fixed(500);
+
     for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetAltitude(), value_max);
-      value_min = min(it->GetAltitude(), value_min);
+      value_max = std::max(it->GetAltitude(), value_max);
+      value_min = std::min(it->GetAltitude(), value_min);
     }
   } else {
     value_max = fixed(0.75);
     value_min = fixed(-2.0);
+
     for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetVario(), value_max);
-      value_min = min(it->GetVario(), value_min);
+      value_max = std::max(it->GetVario(), value_max);
+      value_min = std::min(it->GetVario(), value_min);
     }
-    value_max = min(fixed(7.5), value_max);
-    value_min = max(fixed(-5.0), value_min);
+
+    value_max = std::min(fixed(7.5), value_max);
+    value_min = std::max(fixed(-5.0), value_min);
   }
 
   return std::make_pair(value_min, value_max);
@@ -174,17 +174,26 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                                                   value_min, value_max);
         if (negative(it->GetVario()) &&
             (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
-             settings.type == TrailSettings::Type::VARIO_2_DOTS)) {
+             settings.type == TrailSettings::Type::VARIO_2_DOTS ||
+             settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES)) {
           canvas.SelectNullPen();
           canvas.Select(look.trail_brushes[color_index]);
           canvas.DrawCircle((pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2,
                             look.trail_widths[color_index]);
-
         } else {
-          if (!scaled_trail)
-            canvas.Select(look.trail_pens[color_index]);
-          else
+          // positive vario case
+
+          if (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES) {
+            canvas.Select(look.trail_brushes[color_index]);
+            canvas.Select(look.trail_pens[color_index]); //fixed-width pen
+            canvas.DrawCircle((pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2,
+                              look.trail_widths[color_index]);
+          } else if (scaled_trail)
+            // width scaled to vario
             canvas.Select(look.scaled_trail_pens[color_index]);
+          else
+            // fixed-width pen
+            canvas.Select(look.trail_pens[color_index]);
 
           canvas.DrawLinePiece(last_point, pt);
         }

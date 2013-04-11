@@ -60,6 +60,7 @@ Copyright_License {
 #include <assert.h>
 
 static const char *const Usage = "\n"
+  "  -datapath=      path to XCSoar data can be defined\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
   "  -fly            bypass startup-screen, use fly mode directly\n"
@@ -112,7 +113,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   StartupLogFreeRamAndStorage();
 
   // Write startup note + version to logfile
-  LogStartUp(_T("Starting XCSoar %s"), XCSoar_ProductToken);
+  LogFormat(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
   // Read options from the command line
   {

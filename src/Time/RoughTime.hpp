@@ -59,6 +59,14 @@ public:
   }
 
   gcc_const
+  static RoughTime FromMinuteOfDayChecked(int mod) {
+    while (mod < 0)
+      mod += MAX;
+
+    return FromMinuteOfDayChecked(unsigned(mod));
+  }
+
+  gcc_const
   static RoughTime FromMinuteOfDayChecked(unsigned mod) {
     return RoughTime(mod % MAX);
   }
@@ -187,5 +195,75 @@ public:
     return HasBegun(now) && !HasEnded(now);
   }
 };
+
+/**
+ * This data type stores a (signed) time difference with minute
+ * granularity.  It can be used to store time zone offsets.
+ */
+class RoughTimeDelta {
+  /**
+   * Relative minutes.
+   */
+  int16_t value;
+
+  constexpr RoughTimeDelta(int16_t _value)
+    :value(_value) {}
+
+public:
+  RoughTimeDelta() = default;
+
+  constexpr
+  static RoughTimeDelta FromMinutes(int _value) {
+    return RoughTimeDelta(_value);
+  }
+
+  constexpr
+  static RoughTimeDelta FromSeconds(int _value) {
+    return RoughTimeDelta(_value / 60);
+  }
+
+  constexpr
+  static RoughTimeDelta FromHours(int _value) {
+    return RoughTimeDelta(_value * 60);
+  }
+
+  constexpr int AsMinutes() const {
+    return value;
+  }
+
+  constexpr int AsSeconds() const {
+    return value * 60;
+  }
+
+  constexpr bool operator==(RoughTimeDelta other) const {
+    return value == other.value;
+  }
+
+  constexpr bool operator!=(RoughTimeDelta other) const {
+    return value != other.value;
+  }
+
+  constexpr RoughTimeDelta operator-() const {
+    return RoughTimeDelta(-value);
+  }
+};
+
+gcc_const
+static inline RoughTime
+operator+(RoughTime t, RoughTimeDelta delta)
+{
+  if (!t.IsValid())
+    return t;
+
+  int value = t.GetMinuteOfDay() + delta.AsMinutes();
+  return RoughTime::FromMinuteOfDayChecked(value);
+}
+
+gcc_const
+static inline RoughTime
+operator-(RoughTime t, RoughTimeDelta delta)
+{
+  return t + (-delta);
+}
 
 #endif

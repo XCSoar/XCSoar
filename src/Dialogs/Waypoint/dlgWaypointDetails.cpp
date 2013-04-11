@@ -34,7 +34,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"

@@ -62,10 +62,9 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
     return false;
 
   // log points more often in circling mode
-  if (calculated.circling)
-    log_clock.SetDT(fixed(settings_logger.time_step_circling));
-  else
-    log_clock.SetDT(fixed(settings_logger.time_step_cruise));
+  log_clock.SetDT(fixed(calculated.circling
+                        ? settings_logger.time_step_circling
+                        : settings_logger.time_step_cruise));
 
   if (fast_log_num) {
     log_clock.SetDT(fixed(1));

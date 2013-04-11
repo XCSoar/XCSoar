@@ -62,9 +62,9 @@ include $(topdir)/build/boost.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/freetype.mk
+include $(topdir)/build/sdl.mk
 include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
-include $(topdir)/build/sdl.mk
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
@@ -265,8 +265,9 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
-	$(SRC)/Dialogs/dlgTextEntry.cpp \
-	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
+	$(SRC)/Dialogs/TextEntry.cpp \
+	$(SRC)/Dialogs/KnobTextEntry.cpp \
+	$(SRC)/Dialogs/TouchTextEntry.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/GeoPointEntry.cpp \
 	$(SRC)/Dialogs/Weather/RASPDialog.cpp \
@@ -362,7 +363,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/ThermalBandComputer.cpp \
-	$(SRC)/Computer/WindComputer.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
@@ -422,7 +423,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/DemoReplayGlue.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
-	$(SRC)/TeamCode.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/TeamActions.cpp \
 	$(SRC)/Waypoint/WaypointList.cpp \
 	$(SRC)/Waypoint/WaypointListBuilder.cpp \
@@ -440,11 +442,12 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
-	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/Wind/WindMeasurementList.cpp \
-	$(SRC)/Wind/WindStore.cpp \
-	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
 	\
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
@@ -484,6 +487,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Content/Other.cpp \
 	$(SRC)/InfoBoxes/Content/Speed.cpp \
 	$(SRC)/InfoBoxes/Content/Task.cpp \
+	$(SRC)/InfoBoxes/Content/Places.cpp \
 	$(SRC)/InfoBoxes/Content/Contest.cpp \
 	$(SRC)/InfoBoxes/Content/Team.cpp \
 	$(SRC)/InfoBoxes/Content/Terrain.cpp \
@@ -506,6 +510,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/Panel/MacCreadySetup.cpp \
 	$(SRC)/InfoBoxes/Panel/WindEdit.cpp \
 	$(SRC)/InfoBoxes/Panel/WindSetup.cpp \
+	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
 	$(SRC)/Pan.cpp \
 	$(SRC)/Input/InputConfig.cpp \
 	$(SRC)/Input/InputDefaults.cpp \
@@ -553,6 +558,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
+	$(SRC)/Renderer/VarioBarRenderer.cpp \
 	$(SRC)/Renderer/MapItemListRenderer.cpp \
 	$(SRC)/Renderer/OZPreviewRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
@@ -616,8 +622,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/SystemSettings.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \
-	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
+	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \
@@ -653,7 +658,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/ActionInterface.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/ProgressGlue.cpp \
-	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsGlue.cpp \
 	$(SRC)/Units/UnitsStore.cpp \
@@ -665,6 +669,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/Formatter/UserGeoPointFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/LocalTimeFormatter.cpp \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
@@ -682,6 +687,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
@@ -756,6 +762,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
+	$(SRC)/Look/VarioBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/UnitsLook.cpp \
 	$(SRC)/Look/ThermalAssistantLook.cpp \

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/XML.hpp"
 #include "Units/Units.hpp"
-#include "LocalTime.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Form.hpp"

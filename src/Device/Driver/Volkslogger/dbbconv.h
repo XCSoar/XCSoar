@@ -18,7 +18,6 @@
 #ifndef DBBCONV_H
 #define DBBCONV_H
 
-#include "vlapityp.h"
 #include "Database.hpp"
 
 #include <stdint.h>
@@ -26,12 +25,14 @@
 
 class DBB {
 public:
-  enum {
-    DBBBeg  = 0x0000,
-    DBBEnd  = 0x3000,
-    FrmBeg  = 0x3000,
-    FrmEnd  = 0x4000
-  };
+  static constexpr size_t DBBBeg = 0x0000;
+  static constexpr size_t DBB_SIZE = 0x3000;
+  static constexpr size_t DBBEnd = DBBBeg + DBB_SIZE;
+  static constexpr size_t FrmBeg = 0x3000;
+  static constexpr size_t FRM_SIZE = 0x1000;
+  static constexpr size_t FrmEnd = FrmBeg + FRM_SIZE;
+  static constexpr size_t SIZE = DBB_SIZE + FRM_SIZE;
+
   size_t dbcursor;
   size_t fdfcursor;
   struct HEADER {
@@ -41,25 +42,53 @@ public:
   };
   HEADER header[8];
 public:
-  uint8_t block[DBBEnd-DBBBeg];
-  uint8_t fdf[FrmEnd-FrmBeg];
+  uint8_t buffer[SIZE];
+
+  /**
+   * Konstruktor: leeren Datenbank-Block erzeugen.
+   */
   DBB();
+
+  void *GetBlock(size_t offset=0) {
+    return buffer + DBBBeg + offset;
+  }
+
+  const void *GetBlock(size_t offset=0) const {
+    return buffer + DBBBeg + offset;
+  }
+
+  void *GetFDF(size_t offset=0) {
+    return buffer + FrmBeg + offset;
+  }
+
+  const void *GetFDF(size_t offset=0) const {
+    return buffer + FrmBeg + offset;
+  }
 
 protected:
   Volkslogger::TableHeader *GetHeader(unsigned i) {
-    Volkslogger::TableHeader *h = (Volkslogger::TableHeader *)block;
+    Volkslogger::TableHeader *h = (Volkslogger::TableHeader *)GetBlock();
     return &h[i];
   }
 
   const Volkslogger::TableHeader *GetHeader(unsigned i) const {
     const Volkslogger::TableHeader *h =
-      (const Volkslogger::TableHeader *)block;
+      (const Volkslogger::TableHeader *)GetBlock();
     return &h[i];
   }
 
 public:
+  /**
+   * Generate Header-Structure from DBB-File.
+   */
   void open_dbb();
+
+  /**
+   * Update header of specified table (kennung) of the database and
+   * close the table (it can't be extended anymore).
+   */
   void close_db(int kennung);
+
   void add_ds(int kennung, const void *quelle);
 
   /**
@@ -78,7 +107,11 @@ public:
    */
   void AddFDFStringUpper(uint8_t id, const char *value);
 
-  int16 fdf_findfield(uint8_t id) const;
+  /**
+   * Find an actual record of specified type(id) in the declaration
+   * memory and return it's position in the memory array.
+   */
+  int fdf_findfield(uint8_t id) const;
 };
 
 #endif

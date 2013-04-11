@@ -49,7 +49,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "LogFile.hpp"
 #include "Device/Parser.hpp"
 #include "UIState.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs/Dialogs.h"

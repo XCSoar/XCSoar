@@ -264,12 +264,12 @@ ReadResourceLanguageFile(const TCHAR *resource)
     /* refuse to load resources which are not in the language table */
     return false;
 
-  LogStartUp(_T("Language: loading resource '%s'"), resource);
+  LogFormat(_T("Language: loading resource '%s'"), resource);
 
   // Load resource
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
   if (data.first == NULL) {
-    LogStartUp(_T("Language: resource '%s' not found"), resource);
+    LogFormat(_T("Language: resource '%s' not found"), resource);
     return false;
   }
 
@@ -277,13 +277,13 @@ ReadResourceLanguageFile(const TCHAR *resource)
   delete mo_loader;
   mo_loader = new MOLoader(data.first, data.second);
   if (mo_loader->error()) {
-    LogStartUp(_T("Language: could not load resource '%s'"), resource);
+    LogFormat(_T("Language: could not load resource '%s'"), resource);
     delete mo_loader;
     mo_loader = NULL;
     return false;
   }
 
-  LogStartUp(_T("Loaded translations from resource '%s'"), resource);
+  LogFormat(_T("Loaded translations from resource '%s'"), resource);
 
   mo_file = &mo_loader->get();
   return true;
@@ -338,18 +338,18 @@ LoadLanguageFile(const TCHAR *path)
 
 #else /* !HAVE_NATIVE_GETTEXT */
 
-  LogStartUp(_T("Language: loading file '%s'"), path);
+  LogFormat(_T("Language: loading file '%s'"), path);
 
   delete mo_loader;
   mo_loader = new MOLoader(path);
   if (mo_loader->error()) {
-    LogStartUp(_T("Language: could not load file '%s'"), path);
+    LogFormat(_T("Language: could not load file '%s'"), path);
     delete mo_loader;
     mo_loader = NULL;
     return false;
   }
 
-  LogStartUp(_T("Loaded translations from file '%s'"), path);
+  LogFormat(_T("Loaded translations from file '%s'"), path);
 
   mo_file = &mo_loader->get();
   return true;

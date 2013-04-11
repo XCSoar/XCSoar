@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WindChartRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "Wind/WindStore.hpp"
+#include "Computer/Wind/Store.hpp"
 #include "FlightStatistics.hpp"
 #include "NMEA/Info.hpp"
 #include "Math/LeastSquares.hpp"

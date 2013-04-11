@@ -32,7 +32,7 @@ Copyright_License {
 
 class KeyValueFileWriter;
 
-namespace ProfileMap {
+namespace Profile {
   /**
    * Has the in-memory profile been modified since the last
    * SetModified(false) call?

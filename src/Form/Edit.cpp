@@ -188,7 +188,7 @@ WndProperty::BeginEditing()
              mDataField->GetType() == DataField::Type::ROUGH_TIME) {
     RoughTimeDataField &df = *(RoughTimeDataField *)mDataField;
     RoughTime value = df.GetValue();
-    if (!TimeEntryDialog(GetCaption(), value, true))
+    if (!TimeEntryDialog(GetCaption(), value, df.GetTimeZone(), true))
       return true;
 
     df.ModifyValue(value);

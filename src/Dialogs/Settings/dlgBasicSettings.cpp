@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Protection.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Atmosphere/Temperature.hpp"

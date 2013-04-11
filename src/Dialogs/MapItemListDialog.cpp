@@ -208,6 +208,7 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   MapItemListRenderer::Draw(canvas, rc, item,
                             dialog_look, look, traffic_look,
                             final_glide_look, settings,
+                            CommonInterface::GetComputerSettings().utc_offset,
                             &CommonInterface::Basic().flarm.traffic);
 
   if ((settings.item_list.add_arrival_altitude &&

@@ -31,7 +31,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Asset.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "IGCFileCleanup.hpp"
 
 void

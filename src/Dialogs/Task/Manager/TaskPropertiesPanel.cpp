@@ -33,8 +33,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Components.hpp"
+#include "Interface.hpp"
 
 enum Controls {
+  TASK_TYPE,
   MIN_TIME,
   START_OPEN_TIME,
   START_CLOSE_TIME,
@@ -44,7 +46,6 @@ enum Controls {
   FINISH_MIN_HEIGHT,
   FINISH_HEIGHT_REF,
   FAI_FINISH_HEIGHT,
-  TASK_TYPE,
 };
 
 /**
@@ -210,11 +211,29 @@ TaskPropertiesPanel::OnModified(DataField &df)
 void
 TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  dfe->SetListener(this);
+  dfe->EnableItemHelp(true);
+  const std::vector<TaskFactoryType> factory_types =
+    ordered_task->GetFactoryTypes();
+  for (unsigned i = 0; i < factory_types.size(); i++) {
+    dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
+                     (unsigned)factory_types[i],
+                     OrderedTaskFactoryDescription(factory_types[i]));
+    if (factory_types[i] == ordered_task->GetFactoryType())
+      dfe->Set((unsigned)factory_types[i]);
+  }
+  Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
+
   AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
           0, 36000, 60, 180);
 
-  AddRoughTime(_("Start open time"), nullptr, RoughTime::Invalid());
-  AddRoughTime(_("Start close time"), nullptr, RoughTime::Invalid());
+  const RoughTimeDelta time_zone =
+    CommonInterface::GetComputerSettings().utc_offset;
+  AddRoughTime(_("Start open time"), nullptr,
+               RoughTime::Invalid(), time_zone);
+  AddRoughTime(_("Start close time"), nullptr,
+               RoughTime::Invalid(), time_zone);
 
   AddFloat(_("Start max. speed"),
            _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
@@ -250,20 +269,6 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),
              false, this);
-
-  DataFieldEnum *dfe = new DataFieldEnum(NULL);
-  dfe->SetListener(this);
-  dfe->EnableItemHelp(true);
-  const std::vector<TaskFactoryType> factory_types =
-    ordered_task->GetFactoryTypes();
-  for (unsigned i = 0; i < factory_types.size(); i++) {
-    dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
-                     (unsigned)factory_types[i],
-                     OrderedTaskFactoryDescription(factory_types[i]));
-    if (factory_types[i] == ordered_task->GetFactoryType())
-      dfe->Set((unsigned)factory_types[i]);
-  }
-  Add(_("Task type"), _("Sets the behaviour for the current task."), dfe);
 }
 
 void

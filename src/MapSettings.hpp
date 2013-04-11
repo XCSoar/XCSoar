@@ -96,6 +96,7 @@ struct TrailSettings {
     ALTITUDE,
     VARIO_1_DOTS,
     VARIO_2_DOTS,
+    VARIO_DOTS_AND_LINES,
   } type;
 
   enum class Length: uint8_t {
@@ -178,6 +179,9 @@ struct MapSettings {
 
   /** FinalGlideBar display mode configuration */
   FinalGlideBarDisplayMode final_glide_bar_display_mode;
+
+  /** Show Vario Bar arrow */
+  bool vario_bar_enabled;
 
   /**
    * Overlay FAI triangle areas on the map while flying?

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "MapSettings.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"

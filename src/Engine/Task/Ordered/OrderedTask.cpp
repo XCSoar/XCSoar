@@ -1464,9 +1464,12 @@ void
 OrderedTask::FillMatPoints(const Waypoints &wps, bool update_geometry)
 {
   ClearMatPoints();
+  GeoPoint center = TaskSize() > 0
+    ? GetPoint(0).GetLocation()
+    : task_projection.GetCenter();
 
   if (GetFactoryType() == TaskFactoryType::MAT) {
-    mat_points.FillMatPoints(wps, GetFactory());
+    mat_points.FillMatPoints(wps, GetFactory(), center);
 
     if (update_geometry)
       UpdateGeometry();

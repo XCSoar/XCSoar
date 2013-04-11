@@ -101,7 +101,7 @@ OLCTriangle::IsPathClosed() const
   // note this may fail if resolution of sampled trace is too low
   assert(n_points > 0);
 
-  const GeoPoint end_location = GetPoint(n_points - 1).GetLocation();
+  const GeoPoint end_location = TraceManager::GetPoint(n_points - 1).GetLocation();
 
   fixed d_min(-1);
 
@@ -109,7 +109,7 @@ OLCTriangle::IsPathClosed() const
 
   for (unsigned start_index = 0; start_index <= first_tp; ++start_index) {
     const fixed d_this =
-      GetPoint(start_index).GetLocation().Distance(end_location);
+      TraceManager::GetPoint(start_index).GetLocation().Distance(end_location);
 
     if (!positive(d_min) || d_this < d_min)
       d_min = d_this;
@@ -133,14 +133,14 @@ OLCTriangle::ClosingPoint(unsigned first_index, unsigned last_index,
   // if old closing point is prior to tp3 reset it.
   if (closing < last_index) closing = last_index;
 
-  const SearchPoint first = GetPoint(first_index);
+  const SearchPoint first = TraceManager::GetPoint(first_index);
 
   unsigned alternate = 0;
   while(true) {
     if (closing + alternate < n_points) {
-      const SearchPoint last = GetPoint(closing + alternate);
+      const SearchPoint last = TraceManager::GetPoint(closing + alternate);
 
-      if (GetPoint(closing + alternate).GetIntegerAltitude() >= min_altitude &&
+      if (TraceManager::GetPoint(closing + alternate).GetIntegerAltitude() >= min_altitude &&
           first.FlatDistanceTo(last) < max_range &&
           first.GetLocation().Distance(last.GetLocation()) < max_distance) {
         // closing pair found. return
@@ -153,9 +153,9 @@ OLCTriangle::ClosingPoint(unsigned first_index, unsigned last_index,
     }
 
     if (signed(closing) - signed(alternate) >= signed(last_index)) {
-      const SearchPoint last = GetPoint(closing - alternate);
+      const SearchPoint last = TraceManager::GetPoint(closing - alternate);
 
-      if (GetPoint(closing - alternate).GetIntegerAltitude() >= min_altitude &&
+      if (TraceManager::GetPoint(closing - alternate).GetIntegerAltitude() >= min_altitude &&
           first.FlatDistanceTo(last) < max_range &&
           first.GetLocation().Distance(last.GetLocation()) < max_distance) {
         // closing pair found. return

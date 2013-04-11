@@ -31,7 +31,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
-#include "ComputerSettings.hpp"
 #include "Language/Language.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"

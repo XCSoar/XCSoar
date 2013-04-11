@@ -32,6 +32,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Other.hpp"
 #include "InfoBoxes/Content/Speed.hpp"
 #include "InfoBoxes/Content/Task.hpp"
+#include "InfoBoxes/Content/Places.hpp"
 #include "InfoBoxes/Content/Contest.hpp"
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Content/Terrain.hpp"
@@ -41,6 +42,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Content/Airspace.hpp"
 
+#include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 
 #include <stddef.h>
@@ -150,7 +152,7 @@ struct MetaData {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
-static constexpr MetaData meta_data[NUM_TYPES] = {
+static constexpr MetaData meta_data[] = {
   // e_HeightGPS
   {
     N_("Altitude GPS"),
@@ -1197,20 +1199,23 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("True bearing from the next waypoint to your position."),
     UpdateInfoBoxRadial,
     next_waypoint_infobox_panels,
-    NEXT_RADIAL_ATC,
-    NEXT_RADIAL_ATC,
+    ATC_RADIAL,
+    ATC_RADIAL,
   },
 
   {
-    N_("Next radial ATC"),
-    N_("Radial ATC"),
-    N_("True bearing from the next waypoint to your position.  The distance is displayed in nautical miles for communication with ATC."),
-    UpdateInfoBoxRadialATC,
-    next_waypoint_infobox_panels,
+    N_("ATC radial"),
+    N_("ATC radial"),
+    N_("True bearing from the selected reference location to your position.  The distance is displayed in nautical miles for communication with ATC."),
+    UpdateInfoBoxATCRadial,
+    atc_infobox_panels,
     NEXT_RADIAL,
     NEXT_RADIAL,
   },
 };
+
+static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
+              "Wrong InfoBox factory size");
 
 const TCHAR *
 InfoBoxFactory::GetName(Type type)

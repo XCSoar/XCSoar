@@ -26,8 +26,8 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Formatter/TimeFormatter.hpp"
-#include "LocalTime.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
+#include "Time/LocalTime.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -48,7 +48,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  void SetLocalTime(int utc_offset);
+  void SetLocalTime(RoughTimeDelta utc_offset);
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -60,11 +60,11 @@ private:
 };
 
 void
-TimeConfigPanel::SetLocalTime(int utc_offset)
+TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 {
   TCHAR temp[20];
   int time(CommonInterface::Basic().time);
-  FormatSignedTimeHHMM(temp, TimeLocal(time, utc_offset));
+  FormatLocalTimeHHMM(temp, time, utc_offset);
 
   WndProperty &wp = GetControl(LocalTime);
 
@@ -76,7 +76,7 @@ void
 TimeConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(UTCOffset, df))
-    SetLocalTime(df.GetAsInteger());
+    SetLocalTime(RoughTimeDelta::FromSeconds(df.GetAsInteger()));
 }
 
 void
@@ -87,12 +87,13 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
 
-  int utc_offset = settings_computer.utc_offset;
+  const RoughTimeDelta utc_offset = settings_computer.utc_offset;
   AddTime(_("UTC offset"),
           _("The UTC offset field allows the UTC local time offset to be specified.  The local "
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
-           -13 * 60 * 60, 13  * 60 * 60, 30 * 60, utc_offset, 2, this);
+           -13 * 60 * 60, 13  * 60 * 60, 30 * 60,
+          utc_offset.AsSeconds(), 2, this);
 
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);
@@ -114,8 +115,9 @@ TimeConfigPanel::Save(bool &_changed)
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
   int ival = GetValueInteger(UTCOffset);
-  if (settings_computer.utc_offset != ival) {
-    settings_computer.utc_offset = ival;
+  const RoughTimeDelta new_utc_offset = RoughTimeDelta::FromSeconds(ival);
+  if (new_utc_offset != settings_computer.utc_offset) {
+    settings_computer.utc_offset = new_utc_offset;
 
     Profile::Set(ProfileKeys::UTCOffsetSigned, ival);
     changed = true;

@@ -1,8 +1,8 @@
 XCSoar README
 =============
 
-XCSoar is a tactical glide computer for the Pocket PC operating
-system.
+XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
+Windows and Windows CE/Mobile.
 
 This file is aimed at developers.  Users should read the manual which
 can be found on the XCSoar home page (<http://www.xcsoar.org/>).
@@ -52,7 +52,8 @@ For Linux/Unix, you need:
 - CURL (<http://curl.haxx.se/>)
 - SDL (<http://www.libsdl.org/>)
 - SDL_ttf (<http://www.libsdl.org/projects/SDL_ttf/>)
-- SDL_image (<http://www.libsdl.org/projects/SDL_image/>)
+- libpng (<http://www.libpng.org/>)
+- libjpeg (<http://libjpeg.sourceforge.net/>)
 - OpenGL
 - to run XCSoar, you need one of the following fonts (Debian package):
   DejaVu (`ttf-dejavu`), Droid (`ttf-droid`), Freefont (`ttf-freefont)
@@ -61,10 +62,12 @@ On Debian, you may install these using the following command:
 
     apt-get install make g++ \
         libboost-dev zlib1g-dev \
-        libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev \
+        libsdl1.2-dev libsdl-ttf2.0-dev \
+        libpng-dev libjpeg-dev \
         libcurl4-openssl-dev \
         libxml-parser-perl \
         librsvg2-bin xsltproc \
+        imagemagick gettext \
         ttf-dejavu
 
 For Android, you need:
@@ -82,7 +85,8 @@ For Mac OS X, you need:
 - CURL (<http://curl.haxx.se/>)
 - SDL (<http://www.libsdl.org/>)
 - SDL_ttf (<http://www.libsdl.org/projects/SDL_ttf/>)
-- SDL_image (<http://www.libsdl.org/projects/SDL_image/>)
+- libpng (<http://www.libpng.org/>)
+- libjpeg (<http://libjpeg.sourceforge.net/>)
 - libicns (<http://icns.sourceforge.net/>)
 
 To compile, run:
@@ -113,6 +117,8 @@ Supported targets:
 - UNIX: Linux and other UNIX-like operating systems, including Mac OS X
 
 - UNIX32, UNIX64: like UNIX, but explicitly choose 32 or 64 bit build
+
+- OPT: alias for UNIX with optimisation and no debugging
 
 - PI: cross-compiling for the Raspberry Pi
 

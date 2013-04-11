@@ -197,7 +197,7 @@ Volkslogger::WaitForACK(Port &port, OperationEnvironment &env)
 
 int
 Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
-                      void *buffer, unsigned max_length,
+                      void *buffer, size_t max_length,
                       unsigned timeout_firstchar_ms)
 {
   unsigned nbytes = 0;
@@ -355,7 +355,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
 int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  Command cmd,
-                                 void *buffer, unsigned max_length,
+                                 void *buffer, size_t max_length,
                                  const unsigned timeout_firstchar_ms)
 {
   return SendCommand(port, env, cmd)
@@ -367,7 +367,7 @@ int
 Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
                                  OperationEnvironment &env,
                                  Command cmd, uint8_t param1,
-                                 void *buffer, unsigned max_length,
+                                 void *buffer, size_t max_length,
                                  const unsigned timeout_firstchar_ms)
 {
   unsigned old_baud_rate = port.GetBaudrate();
@@ -398,7 +398,7 @@ Volkslogger::SendCommandReadBulk(Port &port, unsigned baud_rate,
 bool
 Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
                                   Command cmd,
-                                  const void *data, unsigned size)
+                                  const void *data, size_t size)
 {
   if (!SendCommand(port, env, cmd, 0, 0) || !WaitForACK(port, env))
     return false;
@@ -406,4 +406,45 @@ Volkslogger::SendCommandWriteBulk(Port &port, OperationEnvironment &env,
   env.Sleep(100);
 
   return WriteBulk(port, env, data, size) && WaitForACK(port, env);
+}
+
+size_t
+Volkslogger::ReadFlight(Port &port, unsigned databaud,
+                        OperationEnvironment &env,
+                        unsigned flightnr, bool secmode,
+                        void *buffer, size_t buffersize)
+{
+  const Volkslogger::Command cmd = secmode
+    ? Volkslogger::cmd_GFS
+    : Volkslogger::cmd_GFL;
+
+  /*
+   * It is necessary to wait long for the first reply from
+   * the Logger in ReadBulk.
+   * Since the VL needs time to calculate the Security of
+   * the log before it responds.
+   */
+  const unsigned timeout_firstchar_ms = 300000;
+
+  // Download binary log data supports BulkBaudrate
+  int groesse = SendCommandReadBulk(port, databaud, env, cmd,
+                                    flightnr, buffer, buffersize,
+                                    timeout_firstchar_ms);
+  if (groesse <= 0)
+    return 0;
+
+  // read signature
+  env.Sleep(300);
+
+  /*
+   * Testing has shown that downloading the Signature does not support
+   * BulkRate. It has to be done with standard IO Rate (9600)
+   */
+  int sgr = SendCommandReadBulk(port, env, Volkslogger::cmd_SIG,
+                                (uint8_t *)buffer + groesse,
+                                buffersize - groesse);
+  if (sgr <= 0)
+    return 0;
+
+  return groesse + sgr;
 }

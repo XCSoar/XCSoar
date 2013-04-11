@@ -26,9 +26,8 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
-#include "LocalTime.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -54,6 +53,7 @@ RulesStatusPanel::Refresh()
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
   SetText(ValidStart, task_stats.task_started
@@ -65,7 +65,7 @@ RulesStatusPanel::Refresh()
   AircraftState start_state = protected_task_manager->GetStartState();
 
   if (task_stats.task_started) {
-    FormatSignedTimeHHMM(Temp, (int)TimeLocal((int)start_state.time));
+    FormatLocalTimeHHMM(Temp, (int)start_state.time, settings.utc_offset);
     SetText(StartTime, Temp);
 
     FormatUserTaskSpeed(start_state.ground_speed,

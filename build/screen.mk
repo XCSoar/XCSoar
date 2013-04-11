@@ -49,16 +49,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
 endif
 
-ifeq ($(LIBPNG),y)
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/OpenGL/LibPNG.cpp
-endif
-
-ifeq ($(LIBJPEG),y)
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/OpenGL/LibJPEG.cpp
-endif
-
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
@@ -73,6 +63,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/UncompressedImage.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
@@ -83,6 +74,9 @@ ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
@@ -95,6 +89,7 @@ SCREEN_SOURCES += \
 endif
 ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/UncompressedImage.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
@@ -105,6 +100,9 @@ else ifeq ($(EGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Init.cpp \
 	$(SCREEN_SRC_DIR)/EGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Window.cpp \

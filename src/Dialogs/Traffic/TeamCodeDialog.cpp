@@ -35,10 +35,9 @@
 #include "UIGlobals.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StringUtil.hpp"
-#include "TeamCode.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -105,7 +104,7 @@ OnCodeClicked()
   CopyString(newTeammateCode,
              CommonInterface::GetComputerSettings().team_code.team_code.GetCode(), 10);
 
-  if (!dlgTextEntryShowModal(newTeammateCode, 7))
+  if (!TextEntryDialog(newTeammateCode, 7))
     return;
 
   TrimRight(newTeammateCode);
@@ -125,7 +124,7 @@ OnFlarmLockClicked()
   TCHAR newTeamFlarmCNTarget[settings.team_flarm_callsign.MAX_SIZE];
   _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
-  if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
+  if (!TextEntryDialog(newTeamFlarmCNTarget, 4))
     return;
 
   if (StringIsEmpty(newTeamFlarmCNTarget)) {

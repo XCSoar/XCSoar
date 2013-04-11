@@ -174,11 +174,11 @@ void
 ReadAssetNumber()
 {
   if (ReadCompaqID()) {
-    LogStartUp(_T("Asset ID: %s (compaq)"), asset_number);
+    LogFormat(_T("Asset ID: %s (compaq)"), asset_number);
   } else if (ReadUUID()) {
-    LogStartUp(_T("Asset ID: %s (uuid)"), asset_number);
+    LogFormat(_T("Asset ID: %s (uuid)"), asset_number);
   } else {
     _tcscpy(asset_number, _T("AAA"));
-    LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
+    LogFormat(_T("Asset ID: %s (fallback)"), asset_number);
   }
 }

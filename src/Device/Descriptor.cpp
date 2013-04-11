@@ -422,7 +422,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(open_job == NULL);
 
   TCHAR buffer[64];
-  LogStartUp(_T("Opening device %s"), config.GetPortName(buffer, 64));
+  LogFormat(_T("Opening device %s"), config.GetPortName(buffer, 64));
 
   open_job = new OpenDeviceJob(*this);
   async.Start(open_job, env, this);
@@ -510,7 +510,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
     return;
 
   TCHAR buffer[64];
-  LogStartUp(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
+  LogFormat(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
   Reopen(env);

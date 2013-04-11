@@ -71,6 +71,7 @@ GetColor(TrailSettings::Type type, short ramp_h) {
     return GetAltitudeColor(ramp_h);
   case TrailSettings::Type::VARIO_2:
   case TrailSettings::Type::VARIO_2_DOTS:
+  case TrailSettings::Type::VARIO_DOTS_AND_LINES:
     return GetVario2Color(ramp_h);
   default:
     return GetVario1Color(ramp_h);

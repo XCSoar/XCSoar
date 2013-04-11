@@ -28,7 +28,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "OS/PathName.hpp"
 #include "Device/Register.hpp"
-#include "ComputerSettings.hpp"
+#include "Computer/Settings.hpp"
 
 DebugReplay::DebugReplay(NLineReader *_reader)
   :reader(_reader), glide_polar(fixed(1))

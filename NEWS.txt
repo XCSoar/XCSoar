@@ -7,6 +7,7 @@ Version 6.6 - not yet released
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
   - allow configuration of "Final glide bar" display (#2554)
+  - new snail trail option "Vario-scaled dots and lines"
 * cross section
   - show airspace names (#1149, #2390)
   - use glide polar instead of current glide ratio (#2687)
@@ -16,7 +17,7 @@ Version 6.6 - not yet released
   - new InfoBox styles "Shaded" (#1852), "Glass" (#2466)
   - waypoint details button in target dialog (#1967)
   - show distance in radial InfoBox comment (#2577)
-  - new InfoBox with radial and distance in nautical miles (#2269)
+  - new InfoBox "ATC radial" with distance in nautical miles (#2269, #2706)
 * user interface
   - replay fast-forward
   - new waypoint location editor (#343)
@@ -25,6 +26,7 @@ Version 6.6 - not yet released
   - additionally show airspace altitude in feet (#2379)
   - show more files in replay file picker (#2582)
   - clicking with Ctrl key pressed moves the simulator (#199)
+  - vario bar at the right edge of the map
 * tasks
   - MAT tasks (#563)
   - custom symmetric quadrant (#2125)
@@ -32,13 +34,17 @@ Version 6.6 - not yet released
   - add AST point option "Score exit" (#2544)
   - optimise start point
   - allow up to 30 turn points in racing tasks
+  - local time for task start open/close time (#2645)
 * devices
   - Volkslogger: support IGC file download (#1972)
+  - Volkslogger: declaration no longer erases waypoint database from logger
   - CAI302: support uploading all waypoint file types (#2054)
+  - V7: support for QNH synchronization to V7 vario
 * Android
   - faster map renderer on some Android devices
-* data
+* other
   - new polars for two G 102 Astir variants (#2701)
+  - new option "auto bugs" increases bug setting every hour (#1526)
 
 Version 6.5.4 - 2013/04/10
 * devices

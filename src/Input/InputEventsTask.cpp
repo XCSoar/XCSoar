@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Util/Macros.hpp"
-#include "LocalTime.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Components.hpp"
@@ -31,7 +30,7 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Protection.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Formatter/TimeFormatter.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -326,7 +325,8 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    FormatSignedTimeHHMM(TempTime, (int)TimeLocal((int)start_state.time));
+    FormatLocalTimeHHMM(TempTime, (int)start_state.time,
+                        CommonInterface::GetComputerSettings().utc_offset);
     FormatUserAltitude(start_state.altitude, TempAlt, true);
     FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
     

@@ -62,12 +62,12 @@ OLCSprint::FindStart() const
   assert(n_points >= 2);
 
   unsigned start_index = 0;
-  const auto end_time = GetPoint(n_points - 1).GetTime();
+  const auto end_time = TraceManager::GetPoint(n_points - 1).GetTime();
   if (end_time > 9000) {
     // fast forward to 2.5 hours before finish
     const unsigned start_time = end_time-9000;
     assert(start_index < n_points);
-    while (GetPoint(start_index).GetTime() < start_time) {
+    while (TraceManager::GetPoint(start_index).GetTime() < start_time) {
       ++start_index;
       assert(start_index < n_points);
     }
@@ -83,7 +83,7 @@ OLCSprint::AddStartEdges()
   assert(num_stages > 0);
   assert(n_points > 0);
 
-  const int max_altitude = GetMaximumStartAltitude(GetPoint(n_points - 1));
+  const int max_altitude = GetMaximumStartAltitude(TraceManager::GetPoint(n_points - 1));
 
   const ScanTaskPoint start(0, FindStart());
 

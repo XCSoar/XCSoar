@@ -18,8 +18,6 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "vlapityp.h"
-
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -80,7 +78,7 @@ convert_gcs
 size_t
 convert_gcs(int igcfile_version, FILE *Ausgabedatei,
             const uint8_t *const bin_puffer, size_t length,
-            int oo_fillin, word *serno, long *sp);
+            bool oo_fillin);
 
 
 /*

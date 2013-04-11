@@ -39,6 +39,7 @@ Copyright_License {
 #include "FlarmTrafficLook.hpp"
 #include "InfoBoxLook.hpp"
 #include "FinalGlideBarLook.hpp"
+#include "VarioBarLook.hpp"
 #include "IconLook.hpp"
 #include "ThermalAssistantLook.hpp"
 
@@ -63,6 +64,7 @@ struct Look {
   InfoBoxLook info_box;
   WindArrowLook wind_arrow_info_box;
   FinalGlideBarLook final_glide_bar;
+  VarioBarLook vario_bar;
   IconLook icon;
   ThermalAssistantLook thermal_assistant_gauge;
   ThermalAssistantLook thermal_assistant_dialog;

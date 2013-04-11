@@ -24,7 +24,7 @@ Copyright_License {
 #include "ThermalBandComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
+#include "Settings.hpp"
 
 void
 ThermalBandComputer::Reset()

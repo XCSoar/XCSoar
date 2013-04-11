@@ -74,7 +74,6 @@ Copyright_License {
 #include "Computer/ConditionMonitor/ConditionMonitors.hpp"
 #include "Input/InputQueue.hpp"
 #include "Logger/Logger.hpp"
-#include "LocalTime.hpp"
 
 void dlgBasicSettingsShowModal() {}
 void ShowWindSettingsDialog() {}

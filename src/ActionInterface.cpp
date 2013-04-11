@@ -46,6 +46,8 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
+using namespace CommonInterface;
+
 namespace ActionInterface {
   static void SendGetComputerSettings();
 }
@@ -87,8 +89,8 @@ void
 XCSoarInterface::ExchangeBlackboard()
 {
   ExchangeDeviceBlackboard();
-  SendGetComputerSettings();
-  SendMapSettings();
+  ActionInterface::SendGetComputerSettings();
+  ActionInterface::SendMapSettings();
 }
 
 void
