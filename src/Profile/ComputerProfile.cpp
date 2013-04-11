@@ -58,7 +58,7 @@ Profile::Load(PolarSettings &settings)
       degradation >= fixed(0.5) && degradation <= fixed(1))
     settings.SetDegradationFactor(degradation);
 
-  Get(ProfileKeys::AutoBugs, settings.auto_bugs);
+  //Get(ProfileKeys::AutoBugs, settings.auto_bugs);
 }
 
 void

@@ -38,7 +38,7 @@ enum ControlIndex {
   TerrainHeight,
   AlternateMode,
   PolarDegradation,
-  AutoBugs,
+  //AutoBugs,
   SafetyMC,
   RiskFactor,
 };
@@ -95,10 +95,12 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            (fixed(1) - settings_computer.polar.degradation_factor) * 100);
   SetExpertRow(PolarDegradation);
 
-  AddBoolean(_("Auto bugs"), /* xgettext:no-c-format */
+  /*
+  AddBoolean(_("Auto bugs"),
            _("If enabled, adds 1% to the bugs setting after each full hour while flying."),
              settings_computer.polar.auto_bugs);
   SetExpertRow(AutoBugs);
+  */
 
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
@@ -144,10 +146,12 @@ SafetyFactorsConfigPanel::Save(bool &_changed)
     changed = true;
   }
 
+  /*
   if (SaveValue(AutoBugs, settings_computer.polar.auto_bugs)) {
     Profile::Set(ProfileKeys::AutoBugs, settings_computer.polar.auto_bugs);
     changed = true;
   }
+  */
 
   if (SaveValue(SafetyMC, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc)) {
     Profile::Set(ProfileKeys::SafetyMacCready,
