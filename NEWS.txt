@@ -40,6 +40,13 @@ Version 6.6 - not yet released
 * data
   - new polars for two G 102 Astir variants (#2701)
 
+Version 6.5.4 - 2013/04/10
+* devices
+  - Volkslogger: increase timeout for reading flight list
+  - V7: fix QNH change
+* logger
+  - fix failing IGC logger (#2658, #2735, #2736, #2746, #2751)
+
 Version 6.5.3 - 2013/03/26
 * user interface
   - eliminate flickering in the cross section on Windows
