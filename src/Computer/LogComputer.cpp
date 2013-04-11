@@ -50,14 +50,16 @@ bool
 LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
                  const LoggerSettings &settings_logger)
 {
-  /// @todo consider putting this sanity check inside Parser
-  if (basic.location_available && last_location.IsValid() &&
-      basic.location.Distance(last_location) > fixed(200))
-    // prevent bad fixes from being logged or added to OLC store
-    return false;
+  const bool location_jump = basic.location_available &&
+    last_location.IsValid() &&
+    basic.location.Distance(last_location) > fixed(200);
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
+
+  if (location_jump)
+    // prevent bad fixes from being logged
+    return false;
 
   // log points more often in circling mode
   if (calculated.circling)
