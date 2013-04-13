@@ -23,7 +23,11 @@
 #ifndef XCSOAR_START_STATS_HPP
 #define XCSOAR_START_STATS_HPP
 
+#include "Math/fixed.hpp"
+
 #include <type_traits>
+
+struct AircraftState;
 
 /**
  * Container for start point statistics.
@@ -52,6 +56,12 @@ struct StartStats {
   void Reset() {
     task_started = false;
   }
+
+  /**
+   * Enable the #task_started flag and copy data from the
+   * #AircraftState.
+   */
+  void SetStarted(const AircraftState &aircraft);
 };
 
 static_assert(std::is_trivial<StartStats>::value, "type is not trivial");

@@ -72,6 +72,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Stats/CommonStats.cpp \
 	$(TASK_SRC_DIR)/Stats/ElementStat.cpp \
 	$(TASK_SRC_DIR)/Stats/TaskStats.cpp \
+	$(TASK_SRC_DIR)/Stats/StartStats.cpp \
 	$(TASK_SRC_DIR)/Stats/TaskVario.cpp
 
 $(eval $(call link-library,libtask,TASK))
