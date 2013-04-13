@@ -42,7 +42,7 @@ TaskComputer::TaskComputer(ProtectedTaskManager &_task,
                            const Airspaces &airspace_database)
   :task(_task),
    route(airspace_database),
-   contest(trace.GetFull(), trace.GetSprint())
+   contest(trace.GetFull(), trace.GetFull(), trace.GetSprint())
 {
   task.SetRoutePlanner(&route.GetRoutePlanner());
 }

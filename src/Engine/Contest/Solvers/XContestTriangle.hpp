@@ -39,7 +39,9 @@ public:
 protected:
   /* virtual methods from AbstractContest */
   virtual SolverResult Solve(bool exhaustive) override;
-  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const override;
+  
+  /* virtual methods from OLCTriangle */
+  virtual ContestResult CalculateResult() const;
 };
 
 #endif

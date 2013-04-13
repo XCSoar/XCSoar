@@ -23,14 +23,14 @@
 #include "OLCFAI.hpp"
 
 OLCFAI::OLCFAI(const Trace &_trace, bool predict)
-  :OLCTriangle(_trace, true, predict)
+  :OLCTriangle(_trace, true, predict, 1000)
 {
 }
 
 ContestResult
-OLCFAI::CalculateResult(const ContestTraceVector &solution) const
+OLCFAI::CalculateResult() const
 {
-  ContestResult result = OLCTriangle::CalculateResult(solution);
+  ContestResult result = OLCTriangle::CalculateResult();
   // 0.3 points per km
   result.score = ApplyHandicap(result.distance * fixed(0.0003));
   return result;

@@ -193,6 +193,7 @@ test_replay(const Contest olc_type,
 
   ContestManager contest_manager(olc_type,
                                  trace_computer.GetFull(),
+                                 trace_computer.GetFull(),
                                  trace_computer.GetSprint());
   contest_manager.SetHandicap(settings_computer.contest.handicap);
 

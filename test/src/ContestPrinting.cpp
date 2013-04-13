@@ -30,6 +30,7 @@
 void
 PrintHelper::contestmanager_print(const ContestManager &man,
                                   const Trace &trace_full,
+                                  const Trace &trace_triangle,
                                   const Trace &trace_sprint)
 {
   Directory::Create(_T("output/results"));
@@ -38,6 +39,18 @@ PrintHelper::contestmanager_print(const ContestManager &man,
     std::ofstream fs("output/results/res-olc-trace.txt");
     TracePointVector v;
     trace_full.GetPoints(v);
+
+    for (auto it = v.begin(); it != v.end(); ++it)
+      fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
+         << " " << it->GetAltitude() << " " << it->GetTime()
+         << "\n";
+  }
+
+  {
+    std::ofstream fs("output/results/res-olc-trace_triangle.txt");
+
+    TracePointVector v;
+    trace_triangle.GetPoints(v);
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
