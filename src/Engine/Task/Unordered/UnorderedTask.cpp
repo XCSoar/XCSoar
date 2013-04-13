@@ -58,6 +58,14 @@ bool
 UnorderedTask::CheckTransitions(const AircraftState &state_now,
                                 const AircraftState &state_last)
 {
+  if (!stats.task_valid || !state_now.flying)
+    return false;
+
+  if (!stats.start.task_started) {
+    stats.start.SetStarted(state_now);
+    return true;
+  }
+
   return false;
 }
 
