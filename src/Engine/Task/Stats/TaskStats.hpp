@@ -37,9 +37,6 @@ public:
   /** Current (active) leg statistics */
   ElementStat current_leg;
 
-  /** Global time (UTC, s) of last update */
-  fixed Time;
-
   /** Calculated glide angle required */
   fixed glide_required;
   /** Calculated cruise efficiency ratio */

@@ -284,8 +284,6 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 void
 AbstractTask::UpdateStatsTimes(const AircraftState &state)
 {
-  // default for tasks with no start time...
-  stats.Time = state.time;
   if (!TaskFinished()) {
     stats.total.SetTimes(ScanTotalStartTime(state), state);
     stats.current_leg.SetTimes(ScanLegStartTime(state),state);

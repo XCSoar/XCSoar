@@ -29,7 +29,6 @@ TaskStats::reset()
   total.Reset();
   current_leg.Reset();
 
-  Time = fixed(0);
   glide_required = fixed(0);
   cruise_efficiency = fixed(1);
   effective_mc = fixed(0);
