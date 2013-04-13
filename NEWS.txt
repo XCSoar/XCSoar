@@ -8,6 +8,7 @@ Version 6.6 - not yet released
   - add label selection "Task waypoints & airfields"
   - allow configuration of "Final glide bar" display (#2554)
   - new snail trail option "Vario-scaled dots and lines"
+  - topography icons
 * cross section
   - show airspace names (#1149, #2390)
   - use glide polar instead of current glide ratio (#2687)

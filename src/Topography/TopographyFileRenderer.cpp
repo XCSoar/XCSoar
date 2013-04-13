@@ -42,8 +42,9 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.GetPenWidth(), file.GetColor()),
    brush(file.GetColor())
 {
-  if (file.GetIcon() == IDB_TOWN)
-    icon.Load(IDB_TOWN, IDB_TOWN_HD);
+  int icon_ID = file.GetIcon();
+  if (icon_ID != 0)
+    icon.Load(icon_ID, 5000+icon_ID);
 }
 
 void
