@@ -331,8 +331,10 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
     
     TCHAR TempAll[120];
-    _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
-              TempAlt, TempSpeed, TempTime);
+    _stprintf(TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"),
+              _("Altitude"), TempAlt,
+              _("Speed"), TempSpeed,
+              _("Time"), TempTime);
     Message::AddMessage(_("Task start"), TempAll);
   } else if (StringIsEqual(misc, _T("tp"))) {
     Message::AddMessage(_("Next turnpoint"));
