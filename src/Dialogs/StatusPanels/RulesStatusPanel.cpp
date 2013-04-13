@@ -46,9 +46,6 @@ enum Controls {
 void
 RulesStatusPanel::Refresh()
 {
-  if (protected_task_manager == NULL)
-    return;
-
   TCHAR Temp[80];
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -80,9 +77,10 @@ RulesStatusPanel::Refresh()
     ClearValue(StartHeight);
   }
 
+  Temp[0] = _T('\0');
   fixed finish_height(0);
 
-  {
+  if (protected_task_manager != nullptr) {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
     const unsigned task_size = task.TaskSize();
@@ -91,8 +89,7 @@ RulesStatusPanel::Refresh()
       CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
                  ARRAY_SIZE(Temp));
       finish_height = task.GetTaskPoint(task_size - 1).GetElevation();
-    } else
-      Temp[0] = _T('\0');
+    }
   }
 
   SetText(StartPoint, Temp);
