@@ -408,8 +408,14 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   stats.task_finished = TaskFinished();
   stats.start.task_started = TaskStarted();
 
-  if (stats.start.task_started)
-    taskpoint_finish->set_fai_finish_height(GetStartState().altitude - fixed(1000));
+  if (stats.start.task_started) {
+    const AircraftState start_state = taskpoint_start->GetEnteredState();
+    stats.start.time = start_state.time;
+    stats.start.altitude = start_state.altitude;
+    stats.start.ground_speed = start_state.ground_speed;
+
+    taskpoint_finish->set_fai_finish_height(start_state.altitude - fixed(1000));
+  }
 
   if (task_events != NULL) {
     if (stats.start.task_started && !last_started)
@@ -1110,18 +1116,6 @@ OrderedTask::UpdateStartTransition(const AircraftState &state,
     // point to nominal start point
   }
   // @todo: modify this for optional start?
-}
-
-AircraftState 
-OrderedTask::GetStartState() const
-{
-  if (HasStart() && TaskStarted())
-    return taskpoint_start->GetEnteredState();
-
-  // @todo: modify this for optional start?
-
-  AircraftState null_state;
-  return null_state;
 }
 
 AircraftState 

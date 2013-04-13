@@ -53,26 +53,26 @@ RulesStatusPanel::Refresh()
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
+  const StartStats &start_stats = task_stats.start;
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
-  SetText(ValidStart, task_stats.start.task_started
+  SetText(ValidStart, start_stats.task_started
           ? _("Yes") : _T("No"));
 
   SetText(ValidFinish, task_stats.task_finished
           ? _("Yes") : _T("No"));
 
-  AircraftState start_state = protected_task_manager->GetStartState();
-
-  if (task_stats.start.task_started) {
-    FormatLocalTimeHHMM(Temp, (int)start_state.time, settings.utc_offset);
+  if (start_stats.task_started) {
+    FormatLocalTimeHHMM(Temp, (int)start_stats.time,
+                        settings.utc_offset);
     SetText(StartTime, Temp);
 
-    FormatUserTaskSpeed(start_state.ground_speed,
+    FormatUserTaskSpeed(start_stats.ground_speed,
                                Temp, ARRAY_SIZE(Temp));
     SetText(StartSpeed, Temp);
 
-    FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
+    FormatUserAltitude(start_stats.altitude, Temp, ARRAY_SIZE(Temp));
     SetText(StartHeight, Temp);
   } else {
     ClearValue(StartTime);

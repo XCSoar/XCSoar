@@ -363,14 +363,6 @@ public:
   }
 
   /**
-   * Accesses task start state
-   *
-   * @return State at task start (or null state if not started)
-   */
-  gcc_pure
-  AircraftState GetStartState() const;
-
-  /**
    * Accesses task finish state
    *
    * @return State at task finish (or null state if not finished)
