@@ -1118,16 +1118,6 @@ OrderedTask::UpdateStartTransition(const AircraftState &state,
   // @todo: modify this for optional start?
 }
 
-AircraftState 
-OrderedTask::GetFinishState() const
-{
-  if (HasFinish() && TaskFinished())
-    return taskpoint_finish->GetEnteredState();
-
-  AircraftState null_state;
-  return null_state;
-}
-
 bool
 OrderedTask::HasTargets() const
 {

@@ -362,14 +362,6 @@ public:
     return task_projection;
   }
 
-  /**
-   * Accesses task finish state
-   *
-   * @return State at task finish (or null state if not finished)
-   */
-  gcc_pure
-  AircraftState GetFinishState() const;
-
   void CheckDuplicateWaypoints(Waypoints& waypoints);
 
   /**
