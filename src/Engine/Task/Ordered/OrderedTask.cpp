@@ -1323,6 +1323,8 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+
+  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
 
 void 
