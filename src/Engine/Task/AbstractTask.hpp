@@ -156,12 +156,6 @@ public:
   gcc_pure
   virtual bool CheckTask() const = 0;
 
-  /**
-   * Return required arrival height of final point in task
-   */
-  gcc_pure
-  virtual fixed GetFinishHeight() const = 0;
-
 protected:
   /**
    * Pure abstract method to be defined for concrete task classes to update

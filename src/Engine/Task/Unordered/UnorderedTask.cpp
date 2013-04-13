@@ -189,13 +189,3 @@ UnorderedTask::CalcGradient(const AircraftState &state) const
 {
   return CalcLegGradient(state);
 }
-
-fixed
-UnorderedTask::GetFinishHeight() const
-{
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
-    return fixed(0);
-  }
-  return tp->GetElevation();
-}

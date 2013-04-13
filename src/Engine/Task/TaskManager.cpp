@@ -509,15 +509,6 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
   safety_polar.SetMC(task_behaviour.safety_mc);
 }
 
-fixed
-TaskManager::GetFinishHeight() const
-{
-  if (active_task)
-    return active_task->GetFinishHeight();
-
-  return fixed(0);
-}
-
 bool
 TaskManager::UpdateAutoMC(const AircraftState &state_now,
                           const fixed fallback_mc)

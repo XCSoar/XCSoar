@@ -80,22 +80,25 @@ RulesStatusPanel::Refresh()
     ClearValue(StartHeight);
   }
 
-  FormatUserAltitude(protected_task_manager->GetFinishHeight(),
-                            Temp, ARRAY_SIZE(Temp));
-  SetText(FinishAlt, Temp);
+  fixed finish_height(0);
 
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
+    const unsigned task_size = task.TaskSize();
 
-    if (task.TaskSize() > 0)
+    if (task_size > 0) {
       CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
                  ARRAY_SIZE(Temp));
-    else
+      finish_height = task.GetTaskPoint(task_size - 1).GetElevation();
+    } else
       Temp[0] = _T('\0');
   }
 
   SetText(StartPoint, Temp);
+
+  FormatUserAltitude(finish_height, Temp, ARRAY_SIZE(Temp));
+  SetText(FinishAlt, Temp);
 }
 
 void

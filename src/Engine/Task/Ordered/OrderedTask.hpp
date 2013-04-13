@@ -695,7 +695,6 @@ public:
   virtual bool TaskFinished() const override;
   virtual bool TaskStarted(bool soft=false) const override;
   virtual bool CheckTask() const override;
-  virtual fixed GetFinishHeight() const override;
 
 protected:
   /* virtual methods from class AbstractTask */

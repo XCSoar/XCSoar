@@ -390,11 +390,6 @@ public:
   }
 
   /**
-   * Return required arrival height of final point in task
-   */
-  fixed GetFinishHeight() const;
-
-  /**
    * Accessor to get target location of specified tp
    *
    * @param TPindex index of tp in task

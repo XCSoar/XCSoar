@@ -1128,15 +1128,6 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-fixed
-OrderedTask::GetFinishHeight() const
-{
-  if (taskpoint_finish)
-    return taskpoint_finish->GetElevation();
-
-  return fixed(0);
-}
-
 GeoPoint 
 OrderedTask::GetTaskCenter() const
 {
