@@ -70,8 +70,6 @@ public:
 
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
-  /** Margin for final glide flight mode transition (m) */
-  int flight_mode_height_margin;
 
   fixed GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining;

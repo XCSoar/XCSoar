@@ -23,6 +23,9 @@
 #include "TaskStats.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+/** Margin for final glide flight mode transition (m) */
+static constexpr int flight_mode_height_margin = 120;
+
 void
 TaskStats::reset()
 {
@@ -42,7 +45,6 @@ TaskStats::reset()
   task_finished = false;
   inside_oz = false;
   flight_mode_final_glide = false;
-  flight_mode_height_margin = 120;
 }
 
 bool
