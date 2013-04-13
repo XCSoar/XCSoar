@@ -289,13 +289,6 @@ AbortTask::UpdateSample(const AircraftState &state,
   return false; // nothing to do
 }
 
-bool 
-AbortTask::CheckTransitions(const AircraftState &, const AircraftState&)
-{
-  // nothing to do
-  return false;
-}
-
 void 
 AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {

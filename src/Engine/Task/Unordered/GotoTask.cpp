@@ -78,13 +78,6 @@ GotoTask::UpdateSample(gcc_unused const AircraftState &state,
 
 
 bool 
-GotoTask::CheckTransitions(gcc_unused const AircraftState &,
-                            gcc_unused const AircraftState &)
-{
-  return false; // nothing to do
-}
-
-bool 
 GotoTask::DoGoto(const Waypoint & wp)
 {
   if (task_behaviour.goto_nonlandable || wp.IsLandable()) {

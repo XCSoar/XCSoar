@@ -54,6 +54,13 @@ UnorderedTask::CheckTask() const
   return (GetActiveTaskPoint()!=NULL);
 }
 
+bool
+UnorderedTask::CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last)
+{
+  return false;
+}
+
 fixed 
 UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                  const GlidePolar &glide_polar) const
