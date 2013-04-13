@@ -50,8 +50,9 @@ TaskStats::reset()
 bool
 TaskStats::calc_flight_mode(const TaskBehaviour &settings)
 {
-  const int margin =
-      (flight_mode_final_glide ? 1 : 0) * flight_mode_height_margin;
+  const int margin = flight_mode_final_glide
+    ? flight_mode_height_margin
+    : 0;
 
   /* when final glide Auto MacCready is enabled, it will auto-set MC
      to 0 if needed; therefore, we must use the "MC=0" solution to
