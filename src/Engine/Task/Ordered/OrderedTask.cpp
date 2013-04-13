@@ -1191,7 +1191,7 @@ OrderedTask::Commit(const OrderedTask& that)
   SetFactory(that.factory_mode);
 
   // copy across behaviour
-  ordered_behaviour = that.ordered_behaviour;
+  SetOrderedTaskBehaviour(that.ordered_behaviour);
 
   // remove if that task is smaller than this one
   while (TaskSize() > that.TaskSize()) {
