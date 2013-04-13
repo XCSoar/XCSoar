@@ -692,7 +692,6 @@ public:
 
   /* virtual methods from class AbstractTask */
   virtual void Reset() override;
-  virtual bool TaskFinished() const override;
   virtual bool TaskStarted(bool soft=false) const override;
   virtual bool CheckTask() const override;
 

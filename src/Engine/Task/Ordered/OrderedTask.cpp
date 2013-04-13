@@ -351,8 +351,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),
                          1);
 
-  bool last_started = TaskStarted();
-  const bool last_finished = TaskFinished();
+  bool last_started = stats.start.task_started;
+  const bool last_finished = stats.task_finished;
 
   const int t_min = std::max(0, (int)active_task_point - 1);
   const int t_max = std::min(n_task - 1, (int)active_task_point);
@@ -405,7 +405,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
 
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
-  stats.task_finished = TaskFinished();
+  stats.task_finished = taskpoint_finish != nullptr &&
+    taskpoint_finish->HasEntered();
   stats.start.task_started = TaskStarted();
 
   if (stats.start.task_started) {
@@ -1014,15 +1015,6 @@ OrderedTask::Reset()
   stats.start.task_started = false;
   task_advance.Reset();
   SetActiveTaskPoint(0);
-}
-
-bool 
-OrderedTask::TaskFinished() const
-{
-  if (taskpoint_finish)
-    return (taskpoint_finish->HasEntered());
-
-  return false;
 }
 
 bool 

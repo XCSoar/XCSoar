@@ -107,17 +107,6 @@ public:
   }
 
   /**
-   * Test if task has finished.  Used to determine whether
-   * or not to continue updating stats.
-   *
-   * @return True if task is finished
-   */
-  gcc_pure
-  virtual bool TaskFinished() const {
-    return false;
-  }
-
-  /**
    * Test if task has started.  Used to determine whether
    * or not update stats.  Soft starts are defined as when the formal
    * start condition may or may not be satisfied, but the task is evolving
