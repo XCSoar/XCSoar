@@ -428,13 +428,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
       const SearchPoint dest = GetPoint(how_close[n].index);
 
       if (how_close[n].index + 2 < i &&
-          GetPoint(how_close[n].index).GetIntegerAltitude() >= min_altitude &&
+          GetPoint(how_close[n].index).GetIntegerAltitude() <= max_altitude &&
           start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
         // point i is last point
         first = std::min(how_close[n].index, first);
         last = i;
       } else if (how_close[n].index > i + 2 &&
-                 GetPoint(how_close[n].index).GetIntegerAltitude() <= max_altitude &&
+                 GetPoint(how_close[n].index).GetIntegerAltitude() >= min_altitude &&
                  start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
         // point i is first point
         first = i;
