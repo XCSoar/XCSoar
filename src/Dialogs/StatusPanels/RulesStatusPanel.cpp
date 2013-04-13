@@ -56,7 +56,7 @@ RulesStatusPanel::Refresh()
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
-  SetText(ValidStart, task_stats.task_started
+  SetText(ValidStart, task_stats.start.task_started
           ? _("Yes") : _T("No"));
 
   SetText(ValidFinish, task_stats.task_finished
@@ -64,7 +64,7 @@ RulesStatusPanel::Refresh()
 
   AircraftState start_state = protected_task_manager->GetStartState();
 
-  if (task_stats.task_started) {
+  if (task_stats.start.task_started) {
     FormatLocalTimeHHMM(Temp, (int)start_state.time, settings.utc_offset);
     SetText(StartTime, Temp);
 

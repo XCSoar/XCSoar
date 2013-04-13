@@ -41,10 +41,10 @@ TaskStats::reset()
   distance_min = fixed(0);
   distance_scored = fixed(0);
   task_valid = false;
-  task_started = false;
   task_finished = false;
   inside_oz = false;
   flight_mode_final_glide = false;
+  start.Reset();
 }
 
 bool

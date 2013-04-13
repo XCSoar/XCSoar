@@ -54,7 +54,7 @@ public:
 
   gcc_pure
   bool IsStarted() const {
-    return task_manager.GetOrderedTask().GetStats().task_started;
+    return task_manager.GetOrderedTask().GetStats().start.task_started;
   }
 
   gcc_pure

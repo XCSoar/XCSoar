@@ -23,6 +23,7 @@
 #define TASKSTATS_HPP
 
 #include "ElementStat.hpp"
+#include "StartStats.hpp"
 
 #include <type_traits>
 
@@ -57,8 +58,6 @@ public:
 
   /** Whether the task is navigable */
   bool task_valid;
-  /** Whether the task is started */
-  bool task_started;
   /** Whether the task is finished */
   bool task_finished;
 
@@ -70,6 +69,8 @@ public:
 
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
+
+  StartStats start;
 
   fixed GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining;

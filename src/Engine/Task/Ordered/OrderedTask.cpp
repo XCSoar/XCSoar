@@ -406,13 +406,13 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
   stats.task_finished = TaskFinished();
-  stats.task_started = TaskStarted();
+  stats.start.task_started = TaskStarted();
 
-  if (stats.task_started)
+  if (stats.start.task_started)
     taskpoint_finish->set_fai_finish_height(GetStartState().altitude - fixed(1000));
 
   if (task_events != NULL) {
-    if (stats.task_started && !last_started)
+    if (stats.start.task_started && !last_started)
       task_events->TaskStart();
 
     if (stats.task_finished && !last_finished)
@@ -1007,7 +1007,7 @@ OrderedTask::Reset()
 
   AbstractTask::Reset();
   stats.task_finished = false;
-  stats.task_started = false;
+  stats.start.task_started = false;
   task_advance.Reset();
   SetActiveTaskPoint(0);
 }
