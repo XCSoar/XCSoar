@@ -687,7 +687,7 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	RunIGCWriter \
 	RunFlightLogger \
-	RunCirclingWind RunWindEKF \
+	RunCirclingWind RunWindEKF RunWindComputer \
 	RunTask \
 	ViewImage \
 	RunCanvas RunMapWindow \
@@ -1444,6 +1444,22 @@ RUN_WIND_EKF_SOURCES = \
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = GEO MATH UTIL TIME
 $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
+
+RUN_WIND_COMPUTER_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(TEST_SRC_DIR)/RunWindComputer.cpp
+RUN_WIND_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_WIND_COMPUTER_DEPENDS = GEO MATH UTIL TIME
+$(eval $(call link-program,RunWindComputer,RUN_WIND_COMPUTER))
 
 RUN_TASK_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
