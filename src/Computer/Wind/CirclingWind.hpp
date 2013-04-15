@@ -43,7 +43,6 @@ class CirclingWind
    */
   struct Sample
   {
-    Vector v;
     fixed time;
     Angle track;
     fixed mag;

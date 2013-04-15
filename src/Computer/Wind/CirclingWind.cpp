@@ -92,8 +92,6 @@ CirclingWind::NewSample(const MoreData &info)
   last_track_available = info.track_available;
   last_ground_speed_available = info.ground_speed_available;
 
-  Vector curVector;
-
   // Circle detection
   if (previous_track_available)
     current_circle += (info.track - last_track).AsDelta().Absolute();
@@ -109,11 +107,8 @@ CirclingWind::NewSample(const MoreData &info)
     //to determine the quality)
   }
 
-  curVector = Vector(SpeedVector(info.track, info.ground_speed));
-
   if (!samples.full()) {
     Sample &sample = samples.append();
-    sample.v = curVector;
     sample.time = info.clock;
     sample.track = info.track;
     sample.mag = info.ground_speed;
@@ -210,9 +205,6 @@ CirclingWind::CalcWind()
     }
   }
 
-  // jmax is the point where most wind samples are below
-  const Vector max_vector = samples[jmax].v;
-
   // attempt to fit cycloid
 
   fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
@@ -250,6 +242,10 @@ CirclingWind::CalcWind()
     //measurment quality too low
     return Result(0);
 
+
+  // jmax is the point where most wind samples are below
+  const Vector max_vector(SpeedVector(samples[jmax].track,
+                                      samples[jmax].mag));
   Vector a(-mag * max_vector.x / samples[jmax].mag,
            -mag * max_vector.y / samples[jmax].mag);
 
