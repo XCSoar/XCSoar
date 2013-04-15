@@ -241,15 +241,10 @@ CirclingWind::CalcWind()
     //measurment quality too low
     return Result(0);
 
-
-  // jmax is the point where most wind samples are below
-  const Vector max_vector(samples[jmax].vector);
-  Vector a(-mag * max_vector.x / samples[jmax].vector.norm,
-           -mag * max_vector.y / samples[jmax].vector.norm);
-
-  if (a.SquareMagnitude() >= fixed(30 * 30))
+  if (mag >= fixed(30))
     // limit to reasonable values (60 knots), reject otherwise
     return Result(0);
 
-  return Result(quality, a);
+  // jmax is the point where most wind samples are below
+  return Result(quality, Vector(samples[jmax].vector.bearing, -mag));
 }
