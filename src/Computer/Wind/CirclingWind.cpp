@@ -169,6 +169,8 @@ CirclingWind::NewFlightMode(const DerivedInfo &derived)
 
   // initialize analyser-parameters
   active = true;
+  last_track_available.Clear();
+  last_ground_speed_available.Clear();
   first = true;
   samples.clear();
 }

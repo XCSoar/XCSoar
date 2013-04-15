@@ -38,6 +38,8 @@ Version 6.6 - not yet released
   - local time for task start open/close time (#2645)
   - enforce the task start open/close time (#2678)
   - fix start auto-advance
+* calculations
+  - improve the circling wind algorithm (#2690)
 * devices
   - Volkslogger: support IGC file download (#1972)
   - Volkslogger: declaration no longer erases waypoint database from logger
