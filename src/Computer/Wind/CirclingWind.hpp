@@ -44,8 +44,7 @@ class CirclingWind
   struct Sample
   {
     fixed time;
-    Angle track;
-    fixed mag;
+    SpeedVector vector;
   };
 
   Validity last_track_available, last_ground_speed_available;

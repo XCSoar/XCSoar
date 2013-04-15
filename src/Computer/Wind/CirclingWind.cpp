@@ -110,8 +110,7 @@ CirclingWind::NewSample(const MoreData &info)
   if (!samples.full()) {
     Sample &sample = samples.append();
     sample.time = info.clock;
-    sample.track = info.track;
-    sample.mag = info.ground_speed;
+    sample.vector = SpeedVector(info.track, info.ground_speed);
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
@@ -166,7 +165,7 @@ CirclingWind::CalcWind()
   // find average
   fixed av = fixed(0);
   for (unsigned i = 0; i < samples.size(); i++)
-    av += samples[i].mag;
+    av += samples[i].vector.norm;
 
   av /= samples.size();
 
@@ -191,7 +190,7 @@ CirclingWind::CalcWind()
       if (idiff > samples.size() / 2)
         idiff = samples.size() - idiff;
 
-      rthisp += (samples[ithis].mag) * idiff;
+      rthisp += samples[ithis].vector.norm * idiff;
     }
 
     if ((rthisp < rthismax) || (jmax == -1)) {
@@ -207,15 +206,15 @@ CirclingWind::CalcWind()
 
   // attempt to fit cycloid
 
-  fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
+  fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
   fixed rthis = fixed(0);
 
   for (const Sample &sample : samples) {
-    const auto sc = sample.track.SinCos();
+    const auto sc = sample.vector.bearing.SinCos();
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = SmallHypot(wx, wy) - sample.mag;
+    fixed cmag = SmallHypot(wx, wy) - sample.vector.norm;
     rthis += sqr(cmag);
   }
 
@@ -244,10 +243,9 @@ CirclingWind::CalcWind()
 
 
   // jmax is the point where most wind samples are below
-  const Vector max_vector(SpeedVector(samples[jmax].track,
-                                      samples[jmax].mag));
-  Vector a(-mag * max_vector.x / samples[jmax].mag,
-           -mag * max_vector.y / samples[jmax].mag);
+  const Vector max_vector(samples[jmax].vector);
+  Vector a(-mag * max_vector.x / samples[jmax].vector.norm,
+           -mag * max_vector.y / samples[jmax].vector.norm);
 
   if (a.SquareMagnitude() >= fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise
