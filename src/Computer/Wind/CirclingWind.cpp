@@ -210,12 +210,12 @@ CirclingWind::CalcWind()
   fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
   fixed rthis = fixed(0);
 
-  for (unsigned i = 0; i < samples.size(); i++) {
-    const auto sc = samples[i].track.SinCos();
+  for (const Sample &sample : samples) {
+    const auto sc = sample.track.SinCos();
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = SmallHypot(wx, wy) - samples[i].mag;
+    fixed cmag = SmallHypot(wx, wy) - sample.mag;
     rthis += sqr(cmag);
   }
 
