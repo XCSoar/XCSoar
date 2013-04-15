@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_WIND_HPP
 #define XCSOAR_CIRCLING_WIND_HPP
 
-#include "Math/Vector.hpp"
-#include "Geo/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Util/StaticArray.hpp"
 #include "NMEA/Validity.hpp"
 
@@ -67,11 +66,12 @@ public:
   struct Result
   {
     unsigned quality;
-    Vector wind;
+    SpeedVector wind;
 
     Result() {}
-    Result(int _quality):quality(_quality) {}
-    Result(int _quality, Vector _wind):quality(_quality), wind(_wind) {}
+    Result(unsigned _quality):quality(_quality) {}
+    Result(unsigned _quality, SpeedVector _wind)
+      :quality(_quality), wind(_wind) {}
 
     bool IsValid() const {
       return quality > 0;

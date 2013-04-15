@@ -246,5 +246,11 @@ CirclingWind::CalcWind()
     return Result(0);
 
   // jmax is the point where most wind samples are below
-  return Result(quality, Vector(samples[jmax].vector.bearing, -mag));
+  SpeedVector wind(samples[jmax].vector.bearing, mag);
+  if (negative(wind.norm))
+    wind.norm = -wind.norm;
+  else
+    wind.bearing = wind.bearing.Reciprocal();
+
+  return Result(quality, wind);
 }
