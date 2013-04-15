@@ -61,9 +61,6 @@ class CirclingWind
   Angle current_circle;
 
   Angle last_track;
-  Vector min_vector;
-  Vector max_vector;
-  bool first;
 
   StaticArray<Sample, 50> samples;
 

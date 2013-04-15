@@ -121,28 +121,14 @@ CirclingWind::NewSample(const MoreData &info)
     // or use circular buffer
   }
 
-  if (first || (info.ground_speed < min_vector.Magnitude()))
-    min_vector = curVector;
-
-  if (first || (info.ground_speed > max_vector.Magnitude()))
-    max_vector = curVector;
-
   Result result(0);
   if (fullCircle) { //we have completed a full circle!
     if (!samples.full())
       // calculate the wind for this circle, only if it is valid
       result = CalcWind();
 
-    // should set each vector to average
-
-    min_vector = max_vector = Vector((max_vector.x - min_vector.x) / 2,
-                                   (max_vector.y - min_vector.y) / 2);
-
-    first = true;
     samples.clear();
   }
-
-  first = false;
 
   return result;
 }
@@ -168,7 +154,6 @@ CirclingWind::NewFlightMode(const DerivedInfo &derived)
   active = true;
   last_track_available.Clear();
   last_ground_speed_available.Clear();
-  first = true;
   samples.clear();
 }
 
@@ -225,10 +210,7 @@ CirclingWind::CalcWind()
   }
 
   // jmax is the point where most wind samples are below
-  max_vector = samples[jmax].v;
-
-  // jmin is the point where most wind samples are above
-  min_vector = samples[jmin].v;
+  const Vector max_vector = samples[jmax].v;
 
   // attempt to fit cycloid
 
