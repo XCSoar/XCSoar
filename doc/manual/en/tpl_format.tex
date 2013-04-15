@@ -13,7 +13,7 @@ Column name&Data type&Valid range\\
 \cmidrule(r){1-1}\cmidrule(lr){2-2}\cmidrule(l){3-3}
 filename&string&\\
 range&double&-\\
-icon&-&-\\
+icon&string&\\
 label index&-&-\\
 color (red component)&int&0-255\\
 color (green component)&int&0-255\\
@@ -29,13 +29,101 @@ important label range&double&-\\
 \end{table}
 
 \begin{description}
-\item[filename] The filename of the Ttpography layer within the container file.
+\item[filename] The filename of the Topography layer within the container file.
+\item[icon] XCSoar v6.5 and earlier, used only for town icons (219). From XCSoar v6.6, the name of the icon to display. Optional.
 \item[range] A threshold zoom level. All layer elements will not be drawn
 below this threshold.
-\item[pen width] Lines containded within this layer are drawn with pen width.
+\item[pen width] Lines contained within this layer are drawn with pen width.
 \item[label range] A threshold zoom level. Labels contained in the layer file
 will not be rendered below this threshold.
-will not be drawn.
 \item[important label range] A threshold zoom level. Labels contained
 in the layer file will be rendered in standard style below this threshold.
 \end{description}
+\subsection{Point Features}
+From XCSoar v6.6, a user can put an optional string into the icon column in topology.tpl in the .XCM file (e.g.)
+\begin{itemize}
+\item SpotHeight,5,\texttt{mountain\_top},1,64,64,64,1,5,
+\item Mast,10,\texttt{obstacle},,,,,1,10,
+\end{itemize}
+This can be used for Shapefiles containing point features or polygons or linestrings, but is probably only useful for point features.
+
+The icon of the corresponding image and optional label will be displayed. In the first example, 
+the "mountain\_top" icon and a label will be displayed for each point in the SpotHeight shapefile. My
+SpotHeight Shapefile has been generated with the point elevation in feet as the label value). For the second example, only "obstacle" icons 
+(no labels) will be displayed for points in the Mast Shapefile..
+
+Icon names are detected in TopographyStore.cpp. Names must be given in lowercase. If the icon name given is unknown, or no icon name is given, then icons are not displayed for that Shapefile.
+
+
+Names correspond to images which have been linked into XCSoar, although
+it is envisaged that in future these will be names of icon files. Available icon names are:
+\begin{itemize}
+\item mountain\_top \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_mountain_top.pdf}
+\item bridge \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_bridge.pdf}
+\item tunnel \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_tunnel.pdf}
+\item tower \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_tower.pdf}
+\item power\_plant \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_power_plant.pdf}
+\item obstacle \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_obstacle.pdf}
+\item mountain\_pass \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_pass.pdf}
+\item weather\_station \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_weather_station.pdf}
+\item thermal\_hotspot
+\item town
+\item mark \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_flag.pdf}
+\item turnpoint \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/map_turnpoint.pdf}
+\item small
+\item cruise \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/mode_cruise.pdf}
+\item terrainwarning
+\item logger
+\item loggeroff
+\item target
+\item teammate\_pos
+\item airspacei
+\item traffic\_safe
+\item traffic\_warning
+\item traffic\_alarm
+\item taskturnpoint
+\item marginal \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/winpilot_marginal.pdf}
+\item landable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/winpilot_landable.pdf}
+\item reachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/winpilot_reachable.pdf}
+\item airport\_reachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_reachable_airport.pdf}
+\item airport\_unreachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_landable_airport.pdf}
+\item airport\_marginal \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_marginal_airport.pdf}
+\item airport\_unreachable2 \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt2_landable_airport.pdf}
+\item airport\_marginal2 \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt2_marginal_airport.pdf}
+\item outfield\_unreachable2 \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt2_landable_field.pdf}
+\item outfield\_marginal2 \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt2_marginal_field.pdf}
+\item outfield\_reachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_reachable_field.pdf}
+\item outfield\_unreachable \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_landable_field.pdf}
+\item outfield\_marginal \includegraphics[angle=0,width=8pt,keepaspectratio='true']{icons/alt_marginal_field.pdf}
+\end{itemize}
+\subsection{Adding new Icons}
+At the moment, adding new icons requires a rebuild of the XCSoar application.It is envisaged that, in future, 
+this process won't be required... users will include icon files in their .XCM map container files, and refer to them 
+by name. However, that has not yet been implemented. 
+
+To add your own images to the list of icons:
+\begin{enumerate}
+\item Create a .svg file for the icon (e.g. mast.svg) and copy into \texttt{xcsoar/Data/icons}. For Android, the name must be lowercase.
+\item Insert two (for normal and high-res) lines into \texttt{xcsoar/Data/XCSoar.rc},  (e.g.)
+\begin{verbatim}
+BITMAP\_ICON(IDB\_MAST, "mast")
+BITMAP\_ICON(IDB\_MAST\_HD, "mast\_160")
+\end{verbatim}
+\item Insert two lines into \texttt{xcsoar/src/resource.h} (e.g.)
+\begin{verbatim}
+\#define IDB\_MAST                        500
+\#define IDB\_MAST\_HD                    5500
+\end{verbatim}
+\item Add a corresponding line into the \texttt{icon\_list} table in \texttt{xcsoar/src/Topography/TopographyStore.cpp}
+\begin{verbatim}
+  {"mast", IDB\_MAST},
+\end{verbatim}
+\item Make XCSoar
+\end{enumerate} 
+After this, a line can be added in \texttt{topology.tpl} to connect the icon to the Shapefile using the icon name. (e.g.)
+\begin{verbatim}
+Mast,10,mast,,,,,1,10,
+\end{verbatim}
+
+Note that unless these changes are merged into the main XCSoar repository, then only your specific build of XCSoar will be able to 
+display your icon image.

@@ -81,7 +81,8 @@ Run(DebugReplay &replay, TaskManager &task_manager)
   const TaskStats &task_stats = task_manager.GetOrderedTask().GetStats();
 
   printf("task_started=%d task_finished=%d\n",
-         task_stats.task_started, task_stats.task_finished);
+         task_stats.start.task_started,
+         task_stats.task_finished);
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed);
   printf("task speed %1.1f kph\n",

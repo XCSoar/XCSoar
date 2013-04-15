@@ -46,33 +46,30 @@ enum Controls {
 void
 RulesStatusPanel::Refresh()
 {
-  if (protected_task_manager == NULL)
-    return;
-
   TCHAR Temp[80];
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
+  const StartStats &start_stats = task_stats.start;
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   /// @todo proper task validity check
-  SetText(ValidStart, task_stats.task_started
+  SetText(ValidStart, start_stats.task_started
           ? _("Yes") : _T("No"));
 
   SetText(ValidFinish, task_stats.task_finished
           ? _("Yes") : _T("No"));
 
-  AircraftState start_state = protected_task_manager->GetStartState();
-
-  if (task_stats.task_started) {
-    FormatLocalTimeHHMM(Temp, (int)start_state.time, settings.utc_offset);
+  if (start_stats.task_started) {
+    FormatLocalTimeHHMM(Temp, (int)start_stats.time,
+                        settings.utc_offset);
     SetText(StartTime, Temp);
 
-    FormatUserTaskSpeed(start_state.ground_speed,
+    FormatUserTaskSpeed(start_stats.ground_speed,
                                Temp, ARRAY_SIZE(Temp));
     SetText(StartSpeed, Temp);
 
-    FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
+    FormatUserAltitude(start_stats.altitude, Temp, ARRAY_SIZE(Temp));
     SetText(StartHeight, Temp);
   } else {
     ClearValue(StartTime);
@@ -80,22 +77,25 @@ RulesStatusPanel::Refresh()
     ClearValue(StartHeight);
   }
 
-  FormatUserAltitude(protected_task_manager->GetFinishHeight(),
-                            Temp, ARRAY_SIZE(Temp));
-  SetText(FinishAlt, Temp);
+  Temp[0] = _T('\0');
+  fixed finish_height(0);
 
-  {
+  if (protected_task_manager != nullptr) {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
+    const unsigned task_size = task.TaskSize();
 
-    if (task.TaskSize() > 0)
+    if (task_size > 0) {
       CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
                  ARRAY_SIZE(Temp));
-    else
-      Temp[0] = _T('\0');
+      finish_height = task.GetTaskPoint(task_size - 1).GetElevation();
+    }
   }
 
   SetText(StartPoint, Temp);
+
+  FormatUserAltitude(finish_height, Temp, ARRAY_SIZE(Temp));
+  SetText(FinishAlt, Temp);
 }
 
 void

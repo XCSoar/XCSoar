@@ -54,6 +54,21 @@ UnorderedTask::CheckTask() const
   return (GetActiveTaskPoint()!=NULL);
 }
 
+bool
+UnorderedTask::CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last)
+{
+  if (!stats.task_valid || !state_now.flying)
+    return false;
+
+  if (!stats.start.task_started) {
+    stats.start.SetStarted(state_now);
+    return true;
+  }
+
+  return false;
+}
+
 fixed 
 UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                  const GlidePolar &glide_polar) const
@@ -188,14 +203,4 @@ fixed
 UnorderedTask::CalcGradient(const AircraftState &state) const
 {
   return CalcLegGradient(state);
-}
-
-fixed
-UnorderedTask::GetFinishHeight() const
-{
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
-    return fixed(0);
-  }
-  return tp->GetElevation();
 }

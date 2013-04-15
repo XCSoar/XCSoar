@@ -34,26 +34,32 @@
 
 #ifdef BENCHMARK_LK8000
 static Trace full_trace(0, Trace::null_time, 100);
+static Trace triangle_trace(0, Trace::null_time, 100);
 static Trace sprint_trace(0, 9000, 50);
 #else
 static Trace full_trace(0, Trace::null_time, 512);
+static Trace triangle_trace(0, Trace::null_time, 1024);
 static Trace sprint_trace(0, 9000, 128);
 #endif
 
 static ContestManager olc_classic(Contest::OLC_CLASSIC,
-                                  full_trace, sprint_trace);
-static ContestManager olc_fai(Contest::OLC_FAI, full_trace, sprint_trace);
+                                  full_trace, triangle_trace, sprint_trace);
+static ContestManager olc_fai(Contest::OLC_FAI,
+                              full_trace, triangle_trace, sprint_trace);
 static ContestManager olc_sprint(Contest::OLC_SPRINT,
-                                 full_trace, sprint_trace);
+                                 full_trace, triangle_trace, sprint_trace);
 static ContestManager olc_league(Contest::OLC_LEAGUE,
-                                 full_trace, sprint_trace);
-static ContestManager olc_plus(Contest::OLC_PLUS, full_trace, sprint_trace);
-static ContestManager dmst(Contest::DMST, full_trace, sprint_trace);
+                                 full_trace, triangle_trace, sprint_trace);
+static ContestManager olc_plus(Contest::OLC_PLUS,
+                               full_trace, triangle_trace, sprint_trace);
+static ContestManager dmst(Contest::DMST,
+                           full_trace, triangle_trace, sprint_trace);
 static ContestManager xcontest(Contest::XCONTEST,
-                               full_trace, sprint_trace);
-static ContestManager sis_at(Contest::SIS_AT, full_trace, sprint_trace);
+                               full_trace, triangle_trace, sprint_trace);
+static ContestManager sis_at(Contest::SIS_AT,
+                             full_trace, triangle_trace, sprint_trace);
 static ContestManager olc_netcoupe(Contest::NET_COUPE,
-                                   full_trace, sprint_trace);
+                                   full_trace, triangle_trace, sprint_trace);
 
 static int
 TestOLC(DebugReplay &replay)
@@ -74,11 +80,13 @@ TestOLC(DebugReplay &replay)
     if (!released && !negative(replay.Calculated().flight.release_time)) {
       released = true;
 
+      triangle_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
       sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
     }
 
     const TracePoint point(basic);
+    triangle_trace.push_back(point);
     full_trace.push_back(point);
     sprint_trace.push_back(point);
 

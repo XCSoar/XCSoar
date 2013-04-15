@@ -36,7 +36,7 @@ ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
       calculated.common_stats.task_type != TaskType::ORDERED ||
       !calculated.ordered_task_stats.task_valid ||
       !calculated.common_stats.ordered_has_targets ||
-      !calculated.ordered_task_stats.task_started ||
+      !calculated.ordered_task_stats.start.task_started ||
       !calculated.common_stats.active_has_next ||
       calculated.ordered_task_stats.task_finished)
     return false;

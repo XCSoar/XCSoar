@@ -21,66 +21,67 @@ Copyright_License {
 }
 */
 
+#include "Computer/Wind/Computer.hpp"
 #include "Computer/CirclingComputer.hpp"
-#include "Computer/Wind/CirclingWind.hpp"
+#include "Computer/Settings.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
-#include "Formatter/TimeFormatter.hpp"
-#include "Computer/Settings.hpp"
 
 #include <stdio.h>
-#include <memory>
 
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "DRIVER FILE");
-  std::unique_ptr<DebugReplay> replay(CreateDebugReplay(args));
-  if (!replay)
+  DebugReplay *replay = CreateDebugReplay(args);
+  if (replay == NULL)
     return EXIT_FAILURE;
 
   args.ExpectEnd();
 
-  printf("# time quality wind_bearing (deg) wind_speed (m/s)\n");
+  printf("# time wind_bearing (deg) wind_speed (m/s)\n");
+
+  GlidePolar glide_polar(fixed(0));
 
   CirclingSettings circling_settings;
-  circling_settings.SetDefaults();
+
+  WindSettings wind_settings;
+  wind_settings.SetDefaults();
 
   CirclingComputer circling_computer;
   circling_computer.Reset();
 
-  CirclingWind circling_wind;
-  circling_wind.Reset();
+  WindComputer wind_computer;
+  wind_computer.Reset();
+
+  Validity last;
+  last.Clear();
 
   while (replay->Next()) {
-    const bool last_circling = replay->Calculated().circling;
+    const MoreData &basic = replay->Basic();
+    const DerivedInfo &calculated = replay->Calculated();
 
     circling_computer.TurnRate(replay->SetCalculated(),
-                               replay->Basic(),
-                               replay->Calculated().flight);
+                               basic, calculated.flight);
     circling_computer.Turning(replay->SetCalculated(),
-                              replay->Basic(),
-                              replay->Calculated().flight,
+                              basic,
+                              calculated.flight,
                               circling_settings);
 
-    if (replay->Calculated().circling != last_circling)
-      circling_wind.NewFlightMode(replay->Calculated());
+    wind_computer.Compute(wind_settings, glide_polar, basic,
+                          replay->SetCalculated());
 
-    CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
-    if (result.quality > 0) {
-      fixed mag = result.wind.Magnitude();
-
-      Angle bearing;
-      if (result.wind.y == fixed(0) && result.wind.x == fixed(0))
-        bearing = Angle::Zero();
-      else
-        bearing = Angle::FromXY(result.wind.x, result.wind.y).AsBearing();
-
+    if (calculated.estimated_wind_available.Modified(last)) {
       TCHAR time_buffer[32];
       FormatTime(time_buffer, replay->Basic().time);
 
-      _tprintf(_T("%s %d %d %g\n"),
-               time_buffer, result.quality, (int)bearing.Degrees(), (double)mag);
+      _tprintf(_T("%s %d %g\n"),
+               time_buffer, (int)calculated.estimated_wind.bearing.Degrees(),
+               (double)calculated.estimated_wind.norm);
     }
-  }
-}
 
+    last = calculated.estimated_wind_available;
+  }
+
+  delete replay;
+}

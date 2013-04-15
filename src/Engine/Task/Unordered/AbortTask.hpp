@@ -221,8 +221,6 @@ protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
                             bool full_update) override;
-  virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) override;
 };
 
 #endif

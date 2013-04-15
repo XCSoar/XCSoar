@@ -108,7 +108,7 @@ bool
 AbstractTask::UpdateIdle(const AircraftState &state,
                          const GlidePolar &glide_polar)
 {
-  if (TaskStarted() && task_behaviour.calc_cruise_efficiency &&
+  if (stats.start.task_started && task_behaviour.calc_cruise_efficiency &&
       glide_polar.IsValid()) {
     fixed val = fixed(1);
     if (CalcCruiseEfficiency(state, glide_polar, val))
@@ -117,7 +117,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
     stats.cruise_efficiency = ce_lpf.Reset(fixed(1));
   }
 
-  if (TaskStarted() && task_behaviour.calc_effective_mc &&
+  if (stats.start.task_started && task_behaviour.calc_effective_mc &&
       glide_polar.IsValid()) {
     fixed val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
@@ -161,9 +161,9 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
   stats.total.planned.SetDistance(ScanDistancePlanned());
 
   if (IsScored()) {
-    if (!TaskStarted()) 
+    if (!stats.start.task_started)
       stats.distance_scored = fixed(0);
-    else if (!TaskFinished()) 
+    else if (!stats.task_finished)
       stats.distance_scored = ScanDistanceScored(location);
   } else
     stats.distance_scored = fixed(0);
@@ -261,8 +261,8 @@ void
 AbstractTask::UpdateStatsSpeeds(const AircraftState &state, 
                                 const AircraftState &state_last)
 {
-  if (!TaskFinished()) {
-    if (TaskStarted()) {
+  if (!stats.task_finished) {
+    if (stats.start.task_started) {
       const fixed dt = state.time - state_last.time;
       stats_computer.total.CalcSpeeds(stats.total, dt);
       stats_computer.current_leg.CalcSpeeds(stats.current_leg, dt);
@@ -284,9 +284,7 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 void
 AbstractTask::UpdateStatsTimes(const AircraftState &state)
 {
-  // default for tasks with no start time...
-  stats.Time = state.time;
-  if (!TaskFinished()) {
+  if (!stats.task_finished) {
     stats.total.SetTimes(ScanTotalStartTime(state), state);
     stats.current_leg.SetTimes(ScanLegStartTime(state),state);
   }

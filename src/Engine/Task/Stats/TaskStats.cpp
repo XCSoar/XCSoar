@@ -23,13 +23,15 @@
 #include "TaskStats.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+/** Margin for final glide flight mode transition (m) */
+static constexpr int flight_mode_height_margin = 120;
+
 void
 TaskStats::reset()
 {
   total.Reset();
   current_leg.Reset();
 
-  Time = fixed(0);
   glide_required = fixed(0);
   cruise_efficiency = fixed(1);
   effective_mc = fixed(0);
@@ -39,18 +41,18 @@ TaskStats::reset()
   distance_min = fixed(0);
   distance_scored = fixed(0);
   task_valid = false;
-  task_started = false;
   task_finished = false;
   inside_oz = false;
   flight_mode_final_glide = false;
-  flight_mode_height_margin = 120;
+  start.Reset();
 }
 
 bool
 TaskStats::calc_flight_mode(const TaskBehaviour &settings)
 {
-  const int margin =
-      (flight_mode_final_glide ? 1 : 0) * flight_mode_height_margin;
+  const int margin = flight_mode_final_glide
+    ? flight_mode_height_margin
+    : 0;
 
   /* when final glide Auto MacCready is enabled, it will auto-set MC
      to 0 if needed; therefore, we must use the "MC=0" solution to

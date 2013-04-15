@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -19,41 +18,16 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef XCSOAR_CONTEST_COMPUTER_HPP
-#define XCSOAR_CONTEST_COMPUTER_HPP
+#include "StartStats.hpp"
+#include "Navigation/Aircraft.hpp"
 
-#include "Engine/Contest/ContestManager.hpp"
-
-struct ContestSettings;
-struct ContestStatistics;
-class Trace;
-
-class ContestComputer {
-  ContestManager contest_manager;
-
-public:
-  ContestComputer(const Trace &trace_full,
-                  const Trace &trace_triangle,
-                  const Trace &trace_sprint);
-
-  void Reset() {
-    contest_manager.Reset();
-  }
-
-  /**
-   * @see ContestDijkstra::SetPredicted()
-   */
-  void SetPredicted(const TracePoint &predicted) {
-    contest_manager.SetPredicted(predicted);
-  }
-
-  void Solve(const ContestSettings &settings_computer,
-             ContestStatistics &contest_stats);
-
-  bool SolveExhaustive(const ContestSettings &settings_computer,
-                       ContestStatistics &contest_stats);
-};
-
-#endif
+void
+StartStats::SetStarted(const AircraftState &aircraft)
+{
+  task_started = true;
+  time = aircraft.time;
+  altitude = aircraft.altitude;
+  ground_speed = aircraft.ground_speed;
+}

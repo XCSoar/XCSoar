@@ -28,9 +28,9 @@ XContestTriangle::XContestTriangle(const Trace &_trace,
    is_dhv(_is_dhv) {}
 
 ContestResult
-XContestTriangle::CalculateResult(const ContestTraceVector &solution) const
+XContestTriangle::CalculateResult() const
 {
-  ContestResult result = OLCTriangle::CalculateResult(solution);
+  ContestResult result = OLCTriangle::CalculateResult();
 
   if (positive(result.distance)) {
     // approximation for now: gap is distance from start to finish
@@ -60,7 +60,7 @@ XContestTriangle::CalculateResult(const ContestTraceVector &solution) const
 SolverResult
 XContestTriangle::Solve(bool exhaustive)
 {
-  SolverResult result = ContestDijkstra::Solve(exhaustive);
+  SolverResult result = OLCTriangle::Solve(exhaustive);
   if (result != SolverResult::FAILED)
     best_d = 0; // reset heuristic
 

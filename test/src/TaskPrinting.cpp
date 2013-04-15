@@ -253,27 +253,21 @@ PrintHelper::abstracttask_print(const AbstractTask &task,
     f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc v_pirker alt_diff\n";
   }
 
-  if (positive(stats.Time)) {
-    f6 << stats.Time
-       << " " << task.GetActiveTaskPointIndex()
-       << " " << stats.mc_best
-       << " " << stats.total.remaining_effective.GetDistance()
-       << " " << stats.total.remaining.GetDistance() 
-       << " " << stats.cruise_efficiency 
-       << " " << stats.total.remaining.GetSpeed() 
-       << " " << stats.total.remaining.GetSpeedIncremental() 
-       << " " << stats.total.remaining_effective.GetSpeed() 
-       << " " << stats.total.remaining_effective.GetSpeedIncremental() 
-       << " " << stats.total.vario.get_value() 
-       << " " << stats.effective_mc
-       << " " << stats.get_pirker_speed()
-       << " " << stats.total.solution_remaining.altitude_difference
-       << "\n";
-    f6.flush();
-  } else {
-    f6 << "\n";
-    f6.flush();
-  }
+  f6 << " " << task.GetActiveTaskPointIndex()
+     << " " << stats.mc_best
+     << " " << stats.total.remaining_effective.GetDistance()
+     << " " << stats.total.remaining.GetDistance()
+     << " " << stats.cruise_efficiency
+     << " " << stats.total.remaining.GetSpeed()
+     << " " << stats.total.remaining.GetSpeedIncremental()
+     << " " << stats.total.remaining_effective.GetSpeed()
+     << " " << stats.total.remaining_effective.GetSpeedIncremental()
+     << " " << stats.total.vario.get_value()
+     << " " << stats.effective_mc
+     << " " << stats.get_pirker_speed()
+     << " " << stats.total.solution_remaining.altitude_difference
+     << "\n";
+  f6.flush();
 }
 
 

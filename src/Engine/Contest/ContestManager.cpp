@@ -25,19 +25,20 @@
 
 ContestManager::ContestManager(const Contest _contest,
                                const Trace &trace_full,
+                               const Trace &trace_triangle,
                                const Trace &trace_sprint,
                                bool predict_triangle)
   :contest(_contest),
    olc_sprint(trace_sprint),
-   olc_fai(trace_full, predict_triangle),
+   olc_fai(trace_triangle, predict_triangle),
    olc_classic(trace_full),
    olc_league(trace_sprint),
    olc_plus(),
    dmst_quad(trace_full),
    xcontest_free(trace_full, false),
-   xcontest_triangle(trace_full, predict_triangle, false),
+   xcontest_triangle(trace_triangle, predict_triangle, false),
    dhv_xc_free(trace_full, true),
-   dhv_xc_triangle(trace_full, predict_triangle, true),
+   dhv_xc_triangle(trace_triangle, predict_triangle, true),
    sis_at(trace_full),
    net_coupe(trace_full)
 {

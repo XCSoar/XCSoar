@@ -122,6 +122,14 @@ bool
 StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const
 {
+  if (!constraints.open_time_span.HasBegun(RoughTime::FromSecondOfDayChecked(unsigned(ref_last.time))))
+    /* the start gate is not yet open when we left the OZ */
+    return false;
+
+  if (constraints.open_time_span.HasEnded(RoughTime::FromSecondOfDayChecked(unsigned(ref_now.time))))
+    /* the start gate was already closed when we left the OZ */
+    return false;
+
   const bool now_in_height =
     constraints.CheckHeight(ref_now, margins, GetBaseElevation());
   const bool last_in_height =

@@ -30,6 +30,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"
+#include "resource.h"
 
 #include <stdint.h>
 #include <windef.h> // for MAX_PATH
@@ -42,6 +43,52 @@ IsHugeTopographyFile(const char *name)
          StringIsEqual(name, "roadsmall_point") ||
          StringIsEqual(name, "roadsmall_line");
 }
+
+typedef struct {
+    const char *name;
+    int resource_id;
+} LOOKUP_ICON;
+
+static constexpr LOOKUP_ICON icon_list[] = {
+  {"landable", IDB_LANDABLE},
+  {"reachable", IDB_REACHABLE},
+  {"turnpoint", IDB_TURNPOINT},
+  {"small", IDB_SMALL},
+  {"cruise", IDB_CRUISE},
+  {"town", IDB_TOWN},
+  {"mark", IDB_MARK},
+  {"terrainwarning", IDB_TERRAINWARNING},
+  {"logger", IDB_LOGGER},
+  {"loggeroff", IDB_LOGGEROFF},
+  {"airport_reachable", IDB_AIRPORT_REACHABLE},
+  {"airport_unreachable", IDB_AIRPORT_UNREACHABLE},
+  {"outfield_reachable", IDB_OUTFIELD_REACHABLE},
+  {"outfield_reachable", IDB_OUTFIELD_UNREACHABLE},
+  {"target", IDB_TARGET},
+  {"teammate_pos", IDB_TEAMMATE_POS},
+  {"airport_unreachable2", IDB_AIRPORT_UNREACHABLE2},
+  {"outfield_unreachable2", IDB_OUTFIELD_UNREACHABLE2},
+  {"airspacei", IDB_AIRSPACEI},
+  {"mountain_top", IDB_MOUNTAIN_TOP},
+  {"bridge", IDB_BRIDGE},
+  {"tunnel", IDB_TUNNEL},
+  {"tower", IDB_TOWER},
+  {"power_plant", IDB_POWER_PLANT},
+  {"airport_marginal", IDB_AIRPORT_MARGINAL},
+  {"outfield_marginal", IDB_OUTFIELD_MARGINAL},
+  {"airport_marginal2", IDB_AIRPORT_MARGINAL2},
+  {"outfield_marginal2", IDB_OUTFIELD_MARGINAL2},
+  {"marginal", IDB_MARGINAL},
+  {"traffic_safe", IDB_TRAFFIC_SAFE},
+  {"traffic_warning", IDB_TRAFFIC_WARNING},
+  {"traffic_alarm", IDB_TRAFFIC_ALARM},
+  {"taskturnpoint", IDB_TASKTURNPOINT},
+  {"obstacle", IDB_OBSTACLE},
+  {"mountain_pass", IDB_MOUNTAIN_PASS},
+  {"weather_station", IDB_WEATHER_STATION},
+  {"thermal_hotspot", IDB_THERMAL_HOTSPOT},
+  { NULL, 0 }
+};
 
 unsigned
 TopographyStore::ScanVisibility(const WindowProjection &m_projection,
@@ -139,10 +186,25 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     if (*p != _T(','))
       continue;
 
-    // Parse shape icon id
-    long shape_icon = strtol(p + 1, &p, 10);
-    if (*p != _T(','))
-      continue;
+    // Extract shape icon name
+    char icon_name[23];
+    char *start = p + 1;
+    p = strchr(start, ',');
+    // Null-terminate the line string at the next comma for strncpy() call
+    *p = 0;
+    strncpy(icon_name, start, 22);
+    unsigned icon = 0;
+
+    if (strlen(icon_name) > 0) {
+      const LOOKUP_ICON *ip = icon_list;
+      while (ip->name != NULL) {
+        if (StringIsEqual(ip->name, icon_name)) {
+          icon = ip->resource_id;
+          break;
+        }
+        ip++;
+      }
+    }
 
     // Parse shape field for text display
     long shape_field = strtol(p + 1, &p, 10) - 1;
@@ -187,7 +249,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
                                               shape_range, label_range,
                                               labelImportantRange,
                                               Color(red, green, blue),
-                                              shape_field, shape_icon,
+                                              shape_field, icon,
                                               pen_width);
     if (file->IsEmpty())
       // If the shape file could not be read -> skip this line/file

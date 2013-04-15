@@ -78,12 +78,6 @@ public:
 
   bool DoGoto(const Waypoint &wp);
 
-  gcc_pure
-  AircraftState GetStartState() const;
-
-  gcc_pure
-  fixed GetFinishHeight() const;
-
   gcc_malloc
   OrderedTask* TaskClone() const;
 

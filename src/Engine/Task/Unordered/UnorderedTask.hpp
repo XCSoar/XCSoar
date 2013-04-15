@@ -43,7 +43,8 @@ public:
 public:
   /* virtual methods from class AbstractTask */
   virtual bool CheckTask() const override;
-  virtual fixed GetFinishHeight() const override;
+  virtual bool CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last) override;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
                           fixed& best) const override;

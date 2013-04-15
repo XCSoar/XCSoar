@@ -86,7 +86,7 @@ DrawLegs(ChartRenderer &chart,
 {
   const TaskStats &task_stats = calculated.ordered_task_stats;
 
-  if (!task_stats.task_started)
+  if (!task_stats.start.task_started)
     return;
 
   const fixed start_time = task_relative

@@ -122,20 +122,6 @@ ProtectedTaskManager::DoGoto(const Waypoint &wp)
   return lease->DoGoto(wp);
 }
 
-AircraftState 
-ProtectedTaskManager::GetStartState() const
-{
-  Lease lease(*this);
-  return lease->GetOrderedTask().GetStartState();
-}
-
-fixed 
-ProtectedTaskManager::GetFinishHeight() const
-{
-  Lease lease(*this);
-  return lease->GetFinishHeight();
-}
-
 OrderedTask*
 ProtectedTaskManager::TaskClone() const
 {

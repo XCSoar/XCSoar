@@ -319,20 +319,25 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     return;
 
   if (StringIsEqual(misc, _T("start"))) {
-    AircraftState start_state = protected_task_manager->GetStartState();
+    const StartStats &start_stats =
+      CommonInterface::Calculated().ordered_task_stats.start;
+    if (!start_stats.task_started)
+      return;
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    FormatLocalTimeHHMM(TempTime, (int)start_state.time,
+    FormatLocalTimeHHMM(TempTime, (int)start_stats.time,
                         CommonInterface::GetComputerSettings().utc_offset);
-    FormatUserAltitude(start_state.altitude, TempAlt, true);
-    FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
+    FormatUserAltitude(start_stats.altitude, TempAlt, true);
+    FormatUserSpeed(start_stats.ground_speed,TempSpeed, true);
     
     TCHAR TempAll[120];
-    _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),
-              TempAlt, TempSpeed, TempTime);
+    _stprintf(TempAll, _T("\r\n%s: %s\r\n%s:%s\r\n%s: %s"),
+              _("Altitude"), TempAlt,
+              _("Speed"), TempSpeed,
+              _("Time"), TempTime);
     Message::AddMessage(_("Task start"), TempAll);
   } else if (StringIsEqual(misc, _T("tp"))) {
     Message::AddMessage(_("Next turnpoint"));

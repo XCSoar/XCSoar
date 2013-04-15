@@ -60,9 +60,13 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 void 
 AbortTask::SetActiveTaskPoint(unsigned index)
 {
+  if (index == active_task_point)
+    return;
+
   if (index < task_points.size()) {
     active_task_point = index;
     active_waypoint = task_points[index].point.GetWaypoint().id;
+    stats.start.Reset();
   }
 }
 
@@ -282,18 +286,12 @@ AbortTask::UpdateSample(const AircraftState &state,
     const TaskWaypoint &task_point = task_points[active_task_point].point;
     active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint)) {
+      stats.start.Reset();
       return true;
     }
   }
 
   return false; // nothing to do
-}
-
-bool 
-AbortTask::CheckTransitions(const AircraftState &, const AircraftState&)
-{
-  // nothing to do
-  return false;
 }
 
 void 

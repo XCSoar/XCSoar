@@ -780,7 +780,7 @@ void
 UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.task_started) {
+  if (!task_stats.task_valid || !task_stats.start.task_started) {
     data.SetInvalid();
     return;
   }

@@ -362,22 +362,6 @@ public:
     return task_projection;
   }
 
-  /**
-   * Accesses task start state
-   *
-   * @return State at task start (or null state if not started)
-   */
-  gcc_pure
-  AircraftState GetStartState() const;
-
-  /**
-   * Accesses task finish state
-   *
-   * @return State at task finish (or null state if not finished)
-   */
-  gcc_pure
-  AircraftState GetFinishState() const;
-
   void CheckDuplicateWaypoints(Waypoints& waypoints);
 
   /**
@@ -708,10 +692,8 @@ public:
 
   /* virtual methods from class AbstractTask */
   virtual void Reset() override;
-  virtual bool TaskFinished() const override;
   virtual bool TaskStarted(bool soft=false) const override;
   virtual bool CheckTask() const override;
-  virtual fixed GetFinishHeight() const override;
 
 protected:
   /* virtual methods from class AbstractTask */

@@ -85,8 +85,6 @@ protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
                             const bool full_update) override;
-  virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last) override;
 public:
   virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const override;
 };

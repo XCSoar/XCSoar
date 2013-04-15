@@ -25,6 +25,7 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Navigation/Aircraft.hpp"
 
 GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)
@@ -78,18 +79,12 @@ GotoTask::UpdateSample(gcc_unused const AircraftState &state,
 
 
 bool 
-GotoTask::CheckTransitions(gcc_unused const AircraftState &,
-                            gcc_unused const AircraftState &)
-{
-  return false; // nothing to do
-}
-
-bool 
 GotoTask::DoGoto(const Waypoint & wp)
 {
   if (task_behaviour.goto_nonlandable || wp.IsLandable()) {
     delete tp;
     tp = new UnorderedTaskPoint(wp, task_behaviour);
+    stats.start.Reset();
     return true;
   } else {
     return false;

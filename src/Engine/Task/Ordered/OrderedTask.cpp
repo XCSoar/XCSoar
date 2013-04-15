@@ -351,8 +351,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),
                          1);
 
-  bool last_started = TaskStarted();
-  const bool last_finished = TaskFinished();
+  bool last_started = stats.start.task_started;
+  const bool last_finished = stats.task_finished;
 
   const int t_min = std::max(0, (int)active_task_point - 1);
   const int t_max = std::min(n_task - 1, (int)active_task_point);
@@ -405,14 +405,19 @@ OrderedTask::CheckTransitions(const AircraftState &state,
 
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
-  stats.task_finished = TaskFinished();
-  stats.task_started = TaskStarted();
+  stats.task_finished = taskpoint_finish != nullptr &&
+    taskpoint_finish->HasEntered();
+  stats.start.task_started = TaskStarted();
 
-  if (stats.task_started)
-    taskpoint_finish->set_fai_finish_height(GetStartState().altitude - fixed(1000));
+  if (stats.start.task_started) {
+    const AircraftState start_state = taskpoint_start->GetEnteredState();
+    stats.start.SetStarted(start_state);
+
+    taskpoint_finish->set_fai_finish_height(start_state.altitude - fixed(1000));
+  }
 
   if (task_events != NULL) {
-    if (stats.task_started && !last_started)
+    if (stats.start.task_started && !last_started)
       task_events->TaskStart();
 
     if (stats.task_finished && !last_finished)
@@ -1007,18 +1012,9 @@ OrderedTask::Reset()
 
   AbstractTask::Reset();
   stats.task_finished = false;
-  stats.task_started = false;
+  stats.start.task_started = false;
   task_advance.Reset();
   SetActiveTaskPoint(0);
-}
-
-bool 
-OrderedTask::TaskFinished() const
-{
-  if (taskpoint_finish)
-    return (taskpoint_finish->HasEntered());
-
-  return false;
 }
 
 bool 
@@ -1112,28 +1108,6 @@ OrderedTask::UpdateStartTransition(const AircraftState &state,
   // @todo: modify this for optional start?
 }
 
-AircraftState 
-OrderedTask::GetStartState() const
-{
-  if (HasStart() && TaskStarted())
-    return taskpoint_start->GetEnteredState();
-
-  // @todo: modify this for optional start?
-
-  AircraftState null_state;
-  return null_state;
-}
-
-AircraftState 
-OrderedTask::GetFinishState() const
-{
-  if (HasFinish() && TaskFinished())
-    return taskpoint_finish->GetEnteredState();
-
-  AircraftState null_state;
-  return null_state;
-}
-
 bool
 OrderedTask::HasTargets() const
 {
@@ -1142,15 +1116,6 @@ OrderedTask::HasTargets() const
       return true;
 
   return false;
-}
-
-fixed
-OrderedTask::GetFinishHeight() const
-{
-  if (taskpoint_finish)
-    return taskpoint_finish->GetElevation();
-
-  return fixed(0);
 }
 
 GeoPoint 
@@ -1226,7 +1191,7 @@ OrderedTask::Commit(const OrderedTask& that)
   SetFactory(that.factory_mode);
 
   // copy across behaviour
-  ordered_behaviour = that.ordered_behaviour;
+  SetOrderedTaskBehaviour(that.ordered_behaviour);
 
   // remove if that task is smaller than this one
   while (TaskSize() > that.TaskSize()) {
@@ -1323,6 +1288,8 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+
+  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
 
 void 

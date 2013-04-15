@@ -49,8 +49,6 @@ struct Result {
   }
 };
 
-static Trace full_trace(0, Trace::null_time, 1024);
-static Trace sprint_trace(0, 9000, 64);
 
 static CirclingComputer circling_computer;
 static FlightPhaseDetector flight_phase_detector;
@@ -114,7 +112,8 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
 }
 
 static void
-Run(DebugReplay &replay, Result &result)
+Run(DebugReplay &replay, Result &result,
+    Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
 {
   CirclingSettings circling_settings;
   circling_settings.SetDefaults();
@@ -152,6 +151,7 @@ Run(DebugReplay &replay, Result &result)
       released = true;
 
       full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+      triangle_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
       sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
     }
 
@@ -163,6 +163,7 @@ Run(DebugReplay &replay, Result &result)
 
     const TracePoint point(basic);
     full_trace.push_back(point);
+    triangle_trace.push_back(point);
     sprint_trace.push_back(point);
   }
 
@@ -173,9 +174,10 @@ Run(DebugReplay &replay, Result &result)
 
 gcc_pure
 static ContestStatistics
-SolveContest(Contest contest)
+SolveContest(Contest contest,
+             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
 {
-  ContestManager manager(contest, full_trace, sprint_trace);
+  ContestManager manager(contest, full_trace, triangle_trace, sprint_trace);
   manager.SolveExhaustive();
   return manager.GetStats();
 }
@@ -304,19 +306,70 @@ WriteContests(TextWriter &writer, const ContestStatistics &olc_plus,
 
 int main(int argc, char **argv)
 {
-  Args args(argc, argv, "DRIVER FILE");
+  unsigned full_max_points = 512,
+           triangle_max_points = 1024,
+           sprint_max_points = 64;
+
+  Args args(argc, argv,
+            "[options] DRIVER FILE\n"
+            "Options:\n"
+            "  --full-points=512        Maximum number of full trace points (default = 512)\n"
+            "  --triangle-points=1024   Maximum number of triangle trace points (default = 1024)\n"
+            "  --sprint-points=64       Maximum number of sprint trace points (default = 64)");
+
+  const char *arg;
+  while ((arg = args.PeekNext()) != nullptr && *arg == '-') {
+    args.Skip();
+
+    const char *value;
+    if ((value = StringAfterPrefix(arg, "--full-points=")) != nullptr) {
+      unsigned _points = strtol(value, NULL, 10);
+      if (_points > 0)
+        full_max_points = _points;
+      else {
+        fputs("The start parameter could not be parsed correctly.\n", stderr);
+        args.UsageError();
+      }
+
+    } else if ((value = StringAfterPrefix(arg, "--triangle-points=")) != nullptr) {
+      unsigned _points = strtol(value, NULL, 10);
+      if (_points > 0)
+        triangle_max_points = _points;
+      else {
+        fputs("The start parameter could not be parsed correctly.\n", stderr);
+        args.UsageError();
+      }
+
+    } else if ((value = StringAfterPrefix(arg, "--sprint-points=")) != nullptr) {
+      unsigned _points = strtol(value, NULL, 10);
+      if (_points > 0)
+        sprint_max_points = _points;
+      else {
+        fputs("The start parameter could not be parsed correctly.\n", stderr);
+        args.UsageError();
+      }
+
+    } else {
+      args.UsageError();
+    }
+  }
+
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
     return EXIT_FAILURE;
 
   args.ExpectEnd();
 
+  static Trace full_trace(0, Trace::null_time, full_max_points);
+  static Trace triangle_trace(0, Trace::null_time, triangle_max_points);
+  static Trace sprint_trace(0, 9000, sprint_max_points);
+
   Result result;
-  Run(*replay, result);
+  Run(*replay, result, full_trace, triangle_trace, sprint_trace);
   delete replay;
 
-  const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS);
-  const ContestStatistics dmst = SolveContest(Contest::DMST);
+  const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
+  const ContestStatistics dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
 
   TextWriter writer("/dev/stdout", true);
 

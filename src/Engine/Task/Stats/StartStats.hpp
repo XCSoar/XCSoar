@@ -20,28 +20,50 @@
 }
  */
 
-#ifndef XCONTEST_TRIANGLE_HPP
-#define XCONTEST_TRIANGLE_HPP
+#ifndef XCSOAR_START_STATS_HPP
+#define XCSOAR_START_STATS_HPP
 
-#include "OLCTriangle.hpp"
+#include "Math/fixed.hpp"
+
+#include <type_traits>
+
+struct AircraftState;
 
 /**
- * Specialisation of ContestDijkstra for XContest and DHV-XC triangle rules.
- *
- * This solver alternates between searching for FAI and non-FAI triangles
+ * Container for start point statistics.
  */
-class XContestTriangle : public OLCTriangle {
-  const bool is_dhv;
+struct StartStats {
+  bool task_started;
 
-public:
-  XContestTriangle(const Trace &_trace, bool predict, bool _is_dhv);
+  /**
+   * The time when the task was started [UTC seconds of day].  Only
+   * valid if #task_started is true.
+   */
+  fixed time;
 
-protected:
-  /* virtual methods from AbstractContest */
-  virtual SolverResult Solve(bool exhaustive) override;
-  
-  /* virtual methods from OLCTriangle */
-  virtual ContestResult CalculateResult() const;
+  /**
+   * The aircraft's altitude when the task was started [m MSL].  Only
+   * valid if #task_started is true.
+   */
+  fixed altitude;
+
+  /**
+   * The aircraft's ground speed when the task was started [m/s].
+   * Only valid if #task_started is true.
+   */
+  fixed ground_speed;
+
+  void Reset() {
+    task_started = false;
+  }
+
+  /**
+   * Enable the #task_started flag and copy data from the
+   * #AircraftState.
+   */
+  void SetStarted(const AircraftState &aircraft);
 };
+
+static_assert(std::is_trivial<StartStats>::value, "type is not trivial");
 
 #endif

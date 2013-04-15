@@ -23,6 +23,7 @@
 #define TASKSTATS_HPP
 
 #include "ElementStat.hpp"
+#include "StartStats.hpp"
 
 #include <type_traits>
 
@@ -36,9 +37,6 @@ public:
   ElementStat total;
   /** Current (active) leg statistics */
   ElementStat current_leg;
-
-  /** Global time (UTC, s) of last update */
-  fixed Time;
 
   /** Calculated glide angle required */
   fixed glide_required;
@@ -60,8 +58,6 @@ public:
 
   /** Whether the task is navigable */
   bool task_valid;
-  /** Whether the task is started */
-  bool task_started;
   /** Whether the task is finished */
   bool task_finished;
 
@@ -73,8 +69,8 @@ public:
 
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
-  /** Margin for final glide flight mode transition (m) */
-  int flight_mode_height_margin;
+
+  StartStats start;
 
   fixed GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining;
