@@ -69,11 +69,26 @@ CirclingWind::Reset()
 }
 
 CirclingWind::Result
-CirclingWind::NewSample(const MoreData &info)
+CirclingWind::NewSample(const MoreData &info, const CirclingInfo &circling)
 {
-  if (!active)
-    // only work if we are in active mode
+  if (!circling.circling) {
+    Reset();
     return Result(0);
+  }
+
+  if (!active) {
+    active = true;
+
+    /* reset the circlecounter for each flightmode change; the
+       important thing to measure is the number of turns in this
+       thermal only. */
+    circle_count = 0;
+
+    current_circle = Angle::Zero();
+    last_track_available.Clear();
+    last_ground_speed_available.Clear();
+    samples.clear();
+  }
 
   if (last_track_available.FixTimeWarp(info.track_available) ||
       last_ground_speed_available.FixTimeWarp(info.ground_speed_available))
@@ -124,30 +139,6 @@ CirclingWind::NewSample(const MoreData &info)
   }
 
   return result;
-}
-
-void
-CirclingWind::NewFlightMode(const DerivedInfo &derived)
-{
-  // we are inactive by default
-  active = false;
-
-  // reset the circlecounter for each flightmode
-  // change. The important thing to measure is the
-  // number of turns in this thermal only.
-  circle_count = 0;
-
-  current_circle = Angle::Zero();
-
-  // we are not circling? Exit function!
-  if (!derived.circling)
-    return;
-
-  // initialize analyser-parameters
-  active = true;
-  last_track_available.Clear();
-  last_ground_speed_available.Clear();
-  samples.clear();
 }
 
 CirclingWind::Result

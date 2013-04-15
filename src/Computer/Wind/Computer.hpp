@@ -40,8 +40,6 @@ struct DerivedInfo;
  * Dependencies: #FlyingComputer, #CirclingComputer.
  */
 class WindComputer {
-  bool last_circling;
-
   CirclingWind circling_wind;
   WindEKFGlue wind_ekf;
 

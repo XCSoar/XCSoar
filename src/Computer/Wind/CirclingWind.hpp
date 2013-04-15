@@ -29,7 +29,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 
 struct MoreData;
-struct DerivedInfo;
+struct CirclingInfo;
 
 /**
  * Class to provide wind estimates from circling
@@ -84,14 +84,9 @@ public:
   void Reset();
 
   /**
-   * Called if the flightmode changes
-   */
-  void NewFlightMode(const DerivedInfo &derived);
-
-  /**
    * Called if a new sample is available in the samplelist.
    */
-  Result NewSample(const MoreData &info);
+  Result NewSample(const MoreData &info, const CirclingInfo &circling);
 
 private:
   Result CalcWind();
