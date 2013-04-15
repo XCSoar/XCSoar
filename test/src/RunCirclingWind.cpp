@@ -46,7 +46,10 @@ int main(int argc, char **argv)
   circling_settings.SetDefaults();
 
   CirclingComputer circling_computer;
+  circling_computer.Reset();
+
   CirclingWind circling_wind;
+  circling_wind.Reset();
 
   while (replay->Next()) {
     const bool last_circling = replay->Calculated().circling;
