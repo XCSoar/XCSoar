@@ -34,11 +34,15 @@ struct WindMeasurement
 {
   Vector vector;                /**< Wind speed vector */
   int quality;                  /**< Quality of fit */
-  long time;                    /**< Time of fix */
+
+  /**
+   * Time of fix.
+   */
+  unsigned time;
   fixed altitude;               /**< Altitude of fix */
 
   gcc_pure
-  int Score(long _time) const {
+  unsigned Score(unsigned _time) const {
     // Calculate the score of this item. The item with the highest
     // score is the least important one.  We may need to adjust the
     // proportion of the quality and the elapsed time. Currently, one
@@ -63,10 +67,10 @@ public:
    * too low quality data).
    */
   gcc_pure
-  const Vector getWind(fixed Time, fixed alt, bool &found) const;
+  const Vector getWind(unsigned now, fixed alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
-  void addMeasurement(fixed Time, const SpeedVector &vector,
+  void addMeasurement(unsigned time, const SpeedVector &vector,
                       fixed alt, int quality);
 
   void Reset();
@@ -77,7 +81,7 @@ protected:
    * removed if the list is too full. Reimplemented from LimitedList.
    */
   gcc_pure
-  unsigned int getLeastImportantItem(fixed Time);
+  unsigned int getLeastImportantItem(unsigned now);
 };
 
 #endif
