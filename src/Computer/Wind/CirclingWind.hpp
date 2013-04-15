@@ -54,7 +54,12 @@ class CirclingWind
   int circle_count;
   // active is set to true or false by the slot_newFlightMode slot
   bool active;
-  int circle_deg;
+
+  /**
+   * The angle turned in the current circle.
+   */
+  Angle current_circle;
+
   Angle last_track;
   Vector min_vector;
   Vector max_vector;

@@ -95,18 +95,16 @@ CirclingWind::NewSample(const MoreData &info)
   Vector curVector;
 
   // Circle detection
-  if (previous_track_available) {
-    int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
-    circle_deg += diff;
-  }
+  if (previous_track_available)
+    current_circle += (info.track - last_track).AsDelta().Absolute();
 
   last_track = info.track;
 
-  const bool fullCircle = circle_deg >= 360;
+  const bool fullCircle = current_circle >= Angle::FullCircle();
   if (fullCircle) {
     //full circle made!
 
-    circle_deg = 0;
+    current_circle -= Angle::FullCircle();
     circle_count++; //increase the number of circles flown (used
     //to determine the quality)
   }
@@ -160,7 +158,7 @@ CirclingWind::NewFlightMode(const DerivedInfo &derived)
   // number of turns in this thermal only.
   circle_count = 0;
 
-  circle_deg = 0;
+  current_circle = Angle::Zero();
 
   // we are not circling? Exit function!
   if (!derived.circling)
