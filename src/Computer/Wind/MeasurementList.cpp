@@ -69,12 +69,12 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
       unsigned int a_quality =
-          iround(((fixed(2) / (altdiff * altdiff + fixed(1))) - fixed(1))
+        iround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
           * REL_FACTOR_ALTITUDE);
 
       // factor in timedifference. Maximum difference is 1 hours.
       unsigned int t_quality =
-          iround(k * (fixed(1) - timediff) / (timediff * timediff + k)
+        iround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
           * REL_FACTOR_TIME);
 
       if (m.quality == 6) {
