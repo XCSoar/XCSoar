@@ -115,6 +115,7 @@ CirclingWind::NewSample(const MoreData &info)
     Sample &sample = samples.append();
     sample.v = curVector;
     sample.time = info.clock;
+    sample.track = info.track;
     sample.mag = info.ground_speed;
   } else {
     // TODO code: give error, too many wind samples
@@ -217,10 +218,8 @@ CirclingWind::CalcWind()
   fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
   fixed rthis = fixed(0);
 
-  const Angle step = Angle::FullCircle() / samples.size();
-  Angle angle = step * jmax;
-  for (unsigned i = 0; i < samples.size(); i++, angle += step) {
-    const auto sc = angle.SinCos();
+  for (unsigned i = 0; i < samples.size(); i++) {
+    const auto sc = samples[i].track.SinCos();
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;

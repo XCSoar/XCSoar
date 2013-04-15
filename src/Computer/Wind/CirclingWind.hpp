@@ -45,6 +45,7 @@ class CirclingWind
   {
     Vector v;
     fixed time;
+    Angle track;
     fixed mag;
   };
 
