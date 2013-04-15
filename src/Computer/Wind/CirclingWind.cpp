@@ -153,8 +153,8 @@ CirclingWind::NewFlightMode(const DerivedInfo &derived)
 CirclingWind::Result
 CirclingWind::CalcWind()
 {
-  if (samples.empty())
-    return Result(0);
+  assert(circle_count > 0);
+  assert(!samples.empty());
 
   // reject if average time step greater than 2.0 seconds
   if ((samples.last().time - samples[0].time) / (samples.size() - 1) > fixed(2))
@@ -202,7 +202,11 @@ CirclingWind::CalcWind()
 
   // attempt to fit cycloid
 
-  fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
+  const fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
+  if (mag >= fixed(30))
+    // limit to reasonable values (60 knots), reject otherwise
+    return Result(0);
+
   fixed rthis = fixed(0);
 
   for (const Sample &sample : samples) {
@@ -228,19 +232,13 @@ CirclingWind::CalcWind()
     quality--;
   if (circle_count < 2)
     quality--;
-  if (circle_count < 1)
-    return Result(0);
-
-  /* 5 is maximum quality, make sure we honour that */
-  quality = std::min(quality, 5);
 
   if (quality < 1)
     //measurment quality too low
     return Result(0);
 
-  if (mag >= fixed(30))
-    // limit to reasonable values (60 knots), reject otherwise
-    return Result(0);
+  /* 5 is maximum quality, make sure we honour that */
+  quality = std::min(quality, 5);
 
   // jmax is the point where most wind samples are below
   SpeedVector wind(samples[jmax].vector.bearing, mag);
