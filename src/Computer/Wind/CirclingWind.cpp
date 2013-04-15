@@ -93,14 +93,19 @@ CirclingWind::NewSample(const MoreData &info)
     /* no updated GPS fix */
     return Result(0);
 
+  const bool previous_track_available = last_track_available;
+
   last_track_available = info.track_available;
   last_ground_speed_available = info.ground_speed_available;
 
   Vector curVector;
 
   // Circle detection
-  int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
-  circle_deg += diff;
+  if (previous_track_available) {
+    int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
+    circle_deg += diff;
+  }
+
   last_track = info.track;
 
   const bool fullCircle = circle_deg >= 360;
