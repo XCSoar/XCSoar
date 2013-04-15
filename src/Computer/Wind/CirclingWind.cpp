@@ -33,8 +33,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <algorithm>
 
-using std::min;
-
 /*
 About Windanalysation
 
@@ -233,7 +231,8 @@ CirclingWind::CalcWind()
   if (circle_count < 1)
     return Result(0);
 
-  quality = min(quality, 5); //5 is maximum quality, make sure we honour that.
+  /* 5 is maximum quality, make sure we honour that */
+  quality = std::min(quality, 5);
 
   if (quality < 1)
     //measurment quality too low
