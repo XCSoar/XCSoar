@@ -42,7 +42,7 @@ WindStore::reset()
 
 void
 WindStore::SlotMeasurement(const MoreData &info,
-                           Vector windvector, int quality)
+                           const SpeedVector &windvector, int quality)
 {
   updated = true;
   windlist.addMeasurement(info.time, windvector, info.nav_altitude, quality);

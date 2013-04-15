@@ -72,10 +72,8 @@ WindComputer::Compute(const WindSettings &settings,
       basic.airspeed_available && basic.airspeed_real &&
       basic.true_airspeed > GetVTakeoffFallback(glide_polar)) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);
-    if (result.quality > 0) {
-      Vector v_wind = Vector(result.wind);
-      wind_store.SlotMeasurement(basic, v_wind, result.quality);
-    }
+    if (result.quality > 0)
+      wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
 
   if (settings.IsAutoWindEnabled())

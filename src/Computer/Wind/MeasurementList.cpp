@@ -125,8 +125,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
  * Adds the windvector vector with quality quality to the list.
  */
 void
-WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
-    int quality)
+WindMeasurementList::addMeasurement(fixed Time, const SpeedVector &vector,
+                                    fixed alt, int quality)
 {
   WindMeasurement &wind =
       measurements.full() ? measurements[getLeastImportantItem(Time)] :

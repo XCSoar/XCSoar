@@ -66,7 +66,8 @@ public:
   const Vector getWind(fixed Time, fixed alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
-  void addMeasurement(fixed Time, Vector vector, fixed alt, int quality);
+  void addMeasurement(fixed Time, const SpeedVector &vector,
+                      fixed alt, int quality);
 
   void Reset();
 
