@@ -170,21 +170,19 @@ CirclingWind::CalcWind()
   av /= samples.size();
 
   // find zero time for times above average
-  fixed rthisp;
-  int ithis = 0;
   fixed rthismax = fixed(0);
   fixed rthismin = fixed(0);
   int jmax = -1;
   int jmin = -1;
 
   for (unsigned j = 0; j < samples.size(); j++) {
-    rthisp = fixed(0);
+    fixed rthisp = fixed(0);
 
     for (unsigned i = 0; i < samples.size(); i++) {
       if (i == j)
         continue;
 
-      ithis = (i + j) % samples.size();
+      const unsigned ithis = (i + j) % samples.size();
       unsigned idiff = i;
 
       if (idiff > samples.size() / 2)
