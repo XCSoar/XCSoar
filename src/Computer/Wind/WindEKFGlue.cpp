@@ -73,7 +73,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
-       fabs(basic.acceleration.g_load - fixed(1)) > fixed(0.3))) {
+       fabs(basic.acceleration.g_load) > fixed(1.3))) {
 
     SetBlackout(time);
     return Result(0);
