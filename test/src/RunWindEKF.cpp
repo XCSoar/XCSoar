@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
+  printf("# time wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
 
   WindEKFGlue wind_ekf;
   wind_ekf.Reset();
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
       TCHAR time_buffer[32];
       FormatTime(time_buffer, data.time);
 
-      _tprintf(_T("%s %d %d %g %g %g %d\n"), time_buffer, result.quality,
+      _tprintf(_T("%s %d %g %g %g %d\n"), time_buffer,
                (int)result.wind.bearing.Degrees(),
                (double)result.wind.norm,
                (double)data.ground_speed,
