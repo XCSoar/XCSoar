@@ -189,7 +189,6 @@ CirclingWind::CalcWind()
   }
 
   // attempt to fit cycloid
-
   const fixed mag = Half(samples[jmax].vector.norm - samples[jmin].vector.norm);
   if (mag >= fixed(30))
     // limit to reasonable values (60 knots), reject otherwise
@@ -229,11 +228,6 @@ CirclingWind::CalcWind()
   quality = std::min(quality, 5);
 
   // jmax is the point where most wind samples are below
-  SpeedVector wind(samples[jmax].vector.bearing, mag);
-  if (negative(wind.norm))
-    wind.norm = -wind.norm;
-  else
-    wind.bearing = wind.bearing.Reciprocal();
-
+  SpeedVector wind(samples[jmax].vector.bearing.Reciprocal(), mag);
   return Result(quality, wind);
 }
