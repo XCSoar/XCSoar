@@ -167,10 +167,7 @@ CirclingWind::CalcWind()
   for (unsigned j = 0; j < samples.size(); j++) {
     fixed rthisp = fixed(0);
 
-    for (unsigned i = 0; i < samples.size(); i++) {
-      if (i == j)
-        continue;
-
+    for (unsigned i = 1; i < samples.size(); i++) {
       const unsigned ithis = (i + j) % samples.size();
       unsigned idiff = i;
 
