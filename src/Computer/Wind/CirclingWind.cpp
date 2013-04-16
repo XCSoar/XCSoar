@@ -90,8 +90,8 @@ CirclingWind::NewSample(const MoreData &info, const CirclingInfo &circling)
     samples.clear();
   }
 
-  if (last_track_available.FixTimeWarp(info.track_available) ||
-      last_ground_speed_available.FixTimeWarp(info.ground_speed_available))
+  if (last_track_available.FixTimeWarp(info.track_available, 30) ||
+      last_ground_speed_available.FixTimeWarp(info.ground_speed_available, 30))
     /* time warp: start from scratch */
     Reset();
 
