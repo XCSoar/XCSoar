@@ -55,6 +55,12 @@ class WindEKFGlue
    */
   Validity last_ground_speed_available, last_airspeed_available;
 
+  /**
+   * The number of samples we have fed into the #WindEKF.  This is
+   * used to determine the quality.
+   */
+  unsigned i;
+
   unsigned time_blackout;
 
 public:
