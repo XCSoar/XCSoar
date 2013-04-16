@@ -25,12 +25,14 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {
@@ -103,9 +105,11 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed(0), fixed(10), fixed(0.1), false,
-           UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
+           fixed(0), Units::ToUserVSpeed(fixed(10)), GetUserVerticalSpeedStep(),
+           false, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
   SetExpertRow(SafetyMC);
+  DataFieldFloat &safety_mc = (DataFieldFloat &)GetDataField(SafetyMC);
+  safety_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
   AddFloat(_("STF risk factor"),
            _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk. Set to 0.0 for no compensation, 1.0 scales MC linearly with current height (with reference to height of the maximum climb). If considered, 0.3 is recommended."),
