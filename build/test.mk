@@ -1440,6 +1440,7 @@ RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/Wind/WindEKF.cpp \
 	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = GEO MATH UTIL TIME
