@@ -819,14 +819,14 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group, fixed &value) const
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
 
-  fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if (new_value > value - df.GetStep() / 2 &&
-      new_value < value + df.GetStep() / 2)
+  fixed new_value = df.GetAsFixed();
+  fixed old_value = Units::ToUserUnit(value, unit);
+
+  if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
 
-  value = new_value;
+  value = Units::ToSysUnit(new_value, unit);
   return true;
 }
 
@@ -838,15 +838,15 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
     (const DataFieldFloat &)GetDataField(i);
   assert(df.GetType() == DataField::Type::REAL);
 
-  fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if (new_value > value - df.GetStep() / 2 &&
-      new_value < value + df.GetStep() / 2)
+  fixed new_value = df.GetAsFixed();
+  fixed old_value = Units::ToUserUnit(value, unit);
+
+  if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
 
-  value = new_value;
-  Profile::Set(registry_key, new_value);
+  value = Units::ToSysUnit(new_value, unit);
+  Profile::Set(registry_key, value);
   return true;
 }
 
@@ -859,14 +859,14 @@ RowFormWidget::SaveValue(unsigned i, UnitGroup unit_group,
   assert(df.GetType() == DataField::Type::INTEGER ||
          df.GetType() == DataField::Type::REAL);
 
-  fixed new_value = df.GetAsFixed();
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if ((unsigned int)(new_value) > value - iround(df.GetStep()) / 2 &&
-      (unsigned int)(new_value) < value + iround(df.GetStep()) / 2)
+  fixed new_value = df.GetAsFixed();
+  fixed old_value = Units::ToUserUnit(fixed(value), unit);
+
+  if (fabs(new_value - old_value) < df.GetStep() / 100)
     return false;
 
-  value = iround(new_value);
+  value = iround(Units::ToSysUnit(new_value, unit));
   Profile::Set(registry_key, value);
   return true;
 }
