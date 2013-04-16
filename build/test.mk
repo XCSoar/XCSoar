@@ -1438,6 +1438,7 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/Wind/WindEKF.cpp \
 	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \

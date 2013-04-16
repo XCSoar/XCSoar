@@ -21,6 +21,8 @@ Copyright_License {
 }
 */
 
+#include "Computer/Settings.hpp"
+#include "Computer/CirclingComputer.hpp"
 #include "Computer/Wind/WindEKFGlue.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "OS/Args.hpp"
@@ -39,11 +41,21 @@ int main(int argc, char **argv)
 
   printf("# time wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
 
+  CirclingSettings circling_settings;
+  circling_settings.SetDefaults();
+
+  CirclingComputer circling_computer;
+  circling_computer.Reset();
+
   WindEKFGlue wind_ekf;
   wind_ekf.Reset();
 
   while (replay->Next()) {
     const MoreData &data = replay->Basic();
+    const DerivedInfo &calculated = replay->Calculated();
+
+    circling_computer.TurnRate(replay->SetCalculated(),
+                               data, calculated.flight);
 
     WindEKFGlue::Result result =
       wind_ekf.Update(data, replay->Calculated());
