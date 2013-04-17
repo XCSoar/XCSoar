@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-12 06:33+0000\n"
+"PO-Revision-Date: 2013-04-16 03:32+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-12 13:20+0000\n"
-"X-Generator: Launchpad (build 16524)\n"
+"X-Launchpad-Export-Date: 2013-04-17 16:52+0000\n"
+"X-Generator: Launchpad (build 16567)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -213,9 +213,9 @@ msgid "A cylinder.  Any point within area scored from center."
 msgstr "Cylinder. Jakikolwiek punkt w rejonie punktowany z centrum"
 
 #: src/Task/TypeStrings.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr "Cylinder. Punktowany przez najdalszy punkt osiągnięty w rejonie."
+msgstr ""
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -269,9 +269,9 @@ msgid "A symmetric quadrant with a custom radius."
 msgstr ""
 
 #: src/Task/TypeStrings.cpp:102
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
-msgstr "Cylinder. Punktowany przez najdalszy punkt osiągnięty w rejonie."
+msgstr ""
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -316,7 +316,7 @@ msgstr "Cylinder punktu zwrotnego."
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cylinder o promieniu 1 mila."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -354,59 +354,59 @@ msgid "Area sector with inner radius"
 msgstr "Sektor rejonu z wewnętrznym promieniem."
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Symmetric quadrant"
-msgstr "FAI kwadrant startowy"
+msgstr "Symetryczny kwadrant"
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "Cylinder rejonu"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Brak STARTU LOTNEGO.\n"
+msgstr "Brak prawidłowego startu"
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Nie przekroczono LINII METY.\n"
+msgstr "Brak prawidłowego zakończenia"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "Zadanie niezakończone.\n"
+msgstr "Nie zakończono zadania"
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Różne rodzaje Punktów Zwrotnych.\n"
+msgstr "Wszystkie punkty nie są tego samego typu"
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Niewłaściwa liczba Punktów Zwrotnych.\n"
+msgstr "Niewłaściwa liczba punktów swrotnych"
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Zbyt wiele Punktów Zwrotnych.\n"
+msgstr "Zbyt wiele PZ"
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Za mało Punktów Zwrotnych.\n"
+msgstr "Za mało PZ"
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Punkty Zwrotne powtarzają się.\n"
+msgstr "PZ powtarzają się"
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "Puste zadanie.\n"
+msgstr "Puste zadanie"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -414,9 +414,9 @@ msgid "non-FAI turn points"
 msgstr "nie-FAI punkty zwrotne"
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "nie-FAI punkty zwrotne"
+msgstr "PZ typu innego niż MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -967,9 +967,9 @@ msgid "None"
 msgstr "Brak"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "Przerwano trasę"
+msgstr "Zadanie i Lądow."
 
 #: src/InfoBoxes/Content/Factory.cpp:156
 #, no-c-format
@@ -2895,14 +2895,14 @@ msgstr ""
 "aktualnej pozycji."
 
 #: src/InfoBoxes/Content/Factory.cpp:1205
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial ATC"
-msgstr "PT Radial"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Radial ATC"
-msgstr "PT Radial"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -3172,14 +3172,11 @@ msgstr "Dryf śladu"
 #: src/InfoBoxes/Panel/WindSetup.cpp:93
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:73
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:156
-#, fuzzy
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Określa czy ślad jest przesuwany z wiatrem kiedy wyświetlany jest w trybie "
-"krążenia."
 
 #: src/Input/InputEventsActions.cpp:160
 msgid "Screen Mode Full"
@@ -3433,7 +3430,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:482
 msgid "FLARM Traffic"
-msgstr ""
+msgstr "FLARM"
 
 #: src/Renderer/MapItemListRenderer.cpp:508
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
@@ -4938,9 +4935,8 @@ msgid "No checklist loaded"
 msgstr "Nie wczytano Listy kontrolnej"
 
 #: src/Dialogs/dlgChecklist.cpp:150
-#, fuzzy
 msgid "Create xcsoar-checklist.txt"
-msgstr "Utwórz Listę kontrolną xcsoar-checklist.txt\n"
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:166
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
@@ -5587,14 +5583,14 @@ msgstr ""
 "nie jest wymieniony użyj GENERIC TYPE."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Pasek dolotu"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:46
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Poniżej linii dolotu"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:48
 #, no-c-format
@@ -5990,9 +5986,9 @@ msgid "8 Top (Portrait)"
 msgstr "8 na górze (pionowe)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8 na dole + wariometr (pionowo)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:76
 #, no-c-format
@@ -6181,14 +6177,14 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr "Rysuje zakładkę na górze InfoBox'a wzdłuż tytułu."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:154
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
 msgstr "Cieniowanie"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:156
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "Szkło"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:178
 msgid "Display orientation"
@@ -6342,7 +6338,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
 msgid "Heading up"
-msgstr "W osi szybowca - do góry"
+msgstr "Kurs - do góry"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
@@ -6364,7 +6360,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
 #, no-c-format
 msgid "Target up"
-msgstr "Punkt docelowy - u góry"
+msgstr "Pkt.docel. - u góry"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -6460,9 +6456,8 @@ msgstr ""
 "ekranu."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Auto zoom"
+msgstr "Autozoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6479,9 +6474,8 @@ msgid "The upper limit for auto zoom distance."
 msgstr "Górny limit dla odległości auto zoom."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "Do Domu: Odległość do lotniska wyjściowego"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
@@ -7343,7 +7337,7 @@ msgstr "ICAO"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:209
 #, no-c-format
 msgid "Vibrant"
-msgstr ""
+msgstr "Żywe kolory"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:210
 #, no-c-format
@@ -7358,27 +7352,27 @@ msgstr "Biały"
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:212
 #, no-c-format
 msgid "Sandstone"
-msgstr ""
+msgstr "Pustynne"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:213
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Wklej"
+msgstr "Pastelowe"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:214
 #, no-c-format
 msgid "Italian Avioportolano VFR Chart"
-msgstr ""
+msgstr "Mapy włoskie Avioportolano VFR"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:215
 #, no-c-format
 msgid "German DFS VFR Chart"
-msgstr ""
+msgstr "Mapy niemieckie DFS VFR"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:216
 #, no-c-format
 msgid "French SIA VFR Chart"
-msgstr ""
+msgstr "Mapy francuskie SIA VFR"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:220
 msgid "Terrain colors"
@@ -7402,10 +7396,12 @@ msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from North-West."
 msgstr ""
+"Teren może być cieniowany między zboczami w celu zaznaczenia kierunku "
+"wiatru, pozycji słońca lub na stałe od strony Pn-Zach."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:239
 msgid "Terrain contrast"
-msgstr "Kontrast terenu"
+msgstr "Rzeźba terenu"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:240
 msgid ""
@@ -7413,6 +7409,8 @@ msgid ""
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
+"Definiuje intensywność cieniowania Phonga w kolorach terenu. Duże wartości "
+"podkreślą nachylenie zboczy, małe wartości są odpowiednie dla stromych gór."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:246
 msgid "Terrain brightness"
@@ -7661,14 +7659,14 @@ msgid "All waypoint labels will be displayed."
 msgstr "Wszystkie etykiety punktów zwrotnych będą wyświetlane"
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task waypoints & airfields"
-msgstr "Pkt.trasy i lądowiska"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:145
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr "Wszystkie punkty trasy i wszystkie lądowiska będą wyświetlane."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
@@ -7775,6 +7773,8 @@ msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
+"[Wył] Wyświetla tylko ikonki lądowisk.\n"
+"[Wł] Pokazuje lądowiska z dodatkowymi info jak długość i kierunek pasa."
 
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:191
 msgid "Landable size"
@@ -7837,7 +7837,7 @@ msgstr "Hasło"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr "Promień cylindra OZ."
+msgstr "Promień cylindra  Strefy Obserwacyjnej"
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
@@ -7846,7 +7846,7 @@ msgstr "Szerokość bramki startu/mety"
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:47
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
 msgid "Radius of the OZ sector."
-msgstr "Promień sektora StrObs"
+msgstr "Promień sektora Strefy Obserwacyjnej"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:57
 msgid "Start radial"
@@ -7854,15 +7854,15 @@ msgstr "Radial początkowy"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:57
 msgid "Start radial of the OZ area"
-msgstr "Pocżątkowy radial StrObs"
+msgstr "Pocżątkowy radial  Strefy Obserwacyjnej"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:61
 msgid "Finish radial"
-msgstr "Radial mety"
+msgstr "Radial końcowy"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:61
 msgid "Finish radial of the OZ area"
-msgstr "Końcowy radial StrObs"
+msgstr "Końcowy radial  Strefy Obserwacyjnej"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:69
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
@@ -7872,11 +7872,11 @@ msgstr "Promień wewn."
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:69
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:48
 msgid "Inner radius of the OZ sector."
-msgstr "Promień wewn. sektora OZ"
+msgstr "Promień wewn.  Strefy Obserwacyjnej"
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "Kąt"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:227
@@ -8123,14 +8123,12 @@ msgstr "Edytuj alternatywne"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:174
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
-#, fuzzy
 msgid "Task point"
-msgstr "Punkt trasy"
+msgstr "Punkt Zadania"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:179
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Wyznaczony czas zadania"
+msgstr "Punkt Zwrotny obszarówki"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
 msgid "Remove task point?"
@@ -8191,9 +8189,8 @@ msgid "Cylinder"
 msgstr "Cylinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "Cylinder rejonu"
+msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8216,9 +8213,8 @@ msgid "BGA Start Sector"
 msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Szacowany czas zadania"
+msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:73 src/Dialogs/Weather/RASPDialog.cpp:53
 msgid "Now"
@@ -8943,9 +8939,8 @@ msgid "Enables automatic backlight, responsive to light sensor."
 msgstr "Włącza automatyczne podświetlenie, na bazie czujnika oświetlenia"
 
 #: Data/Dialogs/dlgTaskPoint.xml:21 Data/Dialogs/dlgTaskPoint_L.xml:25
-#, fuzzy
 msgid "Score exit"
-msgstr "Wynik"
+msgstr ""
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
 msgid "Calc"
@@ -9327,75 +9322,29 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid ""
-#~ "Determines sorting of alternates in the alternates dialog and in abort "
-#~ "mode:\n"
-#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
-#~ "outlanding field) and arrival height.\n"
-#~ "[Task] The sorting will also take the current task direction into "
-#~ "account.\n"
-#~ "[Home] The sorting will try to find landing options in the current "
-#~ "direction to the configured home waypoint."
-#~ msgstr ""
-#~ "Określa kryteria wyboru lądowisk w trybach: Do lądowiska i Rezygnacja z "
-#~ "Zadania\n"
-#~ "[Prosty] Lądowiska wybierane z uwzgl. typu punktu (lotnisko/pole ) i "
-#~ "wysokości przybycia\n"
-#~ "[Zadanie]Zostanie uwzgl. aktualny kierunek zadania\n"
-#~ "[Dom]Sortowanie spróbuje znaleźć lądowiska w obecnym kierunku do lotniska "
-#~ "macierzystego."
+#~ msgid "Weather parameters"
+#~ msgstr "Parametry pogody"
 
-#~ msgid "AC Off;  %d%%"
-#~ msgstr "WYŁĄCZ; %d%%"
-
-#~ msgid "Lookup"
-#~ msgstr "Wyszukaj"
-
-#~ msgid "Gate Width"
-#~ msgstr "Szerokość bramki"
+#~ msgid "Task Point"
+#~ msgstr "Punkt trasy"
 
 #~ msgid "Change point type?"
 #~ msgstr "Zmienić typ punktu?"
 
-#~ msgid "Save task?"
-#~ msgstr "Zapisać Zadanie?"
-
-#~ msgid "Task Selection"
-#~ msgstr "Wybór Zadania"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "Nieprawidłowy kształt trójkąta FAI.\n"
-
 #~ msgid "Longitude"
 #~ msgstr "Długość"
-
-#~ msgid "Latitude"
-#~ msgstr "Szerokość geograficzna"
-
-#~ msgid "Lon."
-#~ msgstr "Dług."
-
-#~ msgid "Lat."
-#~ msgstr "Szer."
-
-#~ msgid "This sets the task point for review."
-#~ msgstr "To ustawia punkt zadania do przejrzenia."
-
-#~ msgid ""
-#~ "Waypoint\n"
-#~ "Details"
-#~ msgstr ""
-#~ "Szczeg.\n"
-#~ "PZ"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Parametry pogody"
 
 #~ msgid "Sunset"
 #~ msgstr "Zachód słońca"
 
+#~ msgid "Latitude"
+#~ msgstr "Szerokość geograficzna"
+
 #~ msgid "Short file name"
 #~ msgstr "Skrócona nazwa pliku"
+
+#~ msgid "Lookup"
+#~ msgstr "Wyszukaj"
 
 #~ msgid "Not found"
 #~ msgstr "Nie znaleziono"
@@ -9450,8 +9399,24 @@ msgstr ""
 #~ msgid "Page"
 #~ msgstr "Strona"
 
+#~ msgid ""
+#~ "Determines whether the snail trail is drifted with the wind when "
+#~ "displayed in circling mode."
+#~ msgstr ""
+#~ "Określa czy ślad jest przesuwany z wiatrem kiedy wyświetlany jest w "
+#~ "trybie krążenia."
+
 #~ msgid "Return"
 #~ msgstr "Powrót"
+
+#~ msgid "Gate Width"
+#~ msgstr "Szerokość bramki"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "Nieprawidłowy kształt trójkąta FAI.\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "Puste zadanie.\n"
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Określa informacje wyświetlane na różnych stronach ekranu."
@@ -9558,8 +9523,78 @@ msgstr ""
 #~ msgid "Set new teammate:"
 #~ msgstr "Dodaj do zespołu"
 
+#~ msgid ""
+#~ "Determines sorting of alternates in the alternates dialog and in abort "
+#~ "mode:\n"
+#~ "[Simple] The alternates will only be sorted by waypoint type (airport/"
+#~ "outlanding field) and arrival height.\n"
+#~ "[Task] The sorting will also take the current task direction into "
+#~ "account.\n"
+#~ "[Home] The sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "Określa kryteria wyboru lądowisk w trybach: Do lądowiska i Rezygnacja z "
+#~ "Zadania\n"
+#~ "[Prosty] Lądowiska wybierane z uwzgl. typu punktu (lotnisko/pole ) i "
+#~ "wysokości przybycia\n"
+#~ "[Zadanie]Zostanie uwzgl. aktualny kierunek zadania\n"
+#~ "[Dom]Sortowanie spróbuje znaleźć lądowiska w obecnym kierunku do lotniska "
+#~ "macierzystego."
+
+#~ msgid "Save task?"
+#~ msgstr "Zapisać Zadanie?"
+
+#~ msgid "Task Selection"
+#~ msgstr "Wybór Zadania"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "Brak STARTU LOTNEGO.\n"
+
+#~ msgid "No valid finish.\n"
+#~ msgstr "Nie przekroczono LINII METY.\n"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "Zadanie niezakończone.\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "Różne rodzaje Punktów Zwrotnych.\n"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "Niewłaściwa liczba Punktów Zwrotnych.\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "Zbyt wiele Punktów Zwrotnych.\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "Za mało Punktów Zwrotnych.\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "Punkty Zwrotne powtarzają się.\n"
+
+#~ msgid "Lon."
+#~ msgstr "Dług."
+
+#~ msgid "Lat."
+#~ msgstr "Szer."
+
+#~ msgid "This sets the task point for review."
+#~ msgstr "To ustawia punkt zadania do przejrzenia."
+
 #~ msgid "InfoBox Modes"
 #~ msgstr "Zestawy Infobox"
+
+#~ msgid "Create xcsoar-checklist.txt\n"
+#~ msgstr "Utwórz Listę kontrolną xcsoar-checklist.txt\n"
+
+#~ msgid ""
+#~ "Waypoint\n"
+#~ "Details"
+#~ msgstr ""
+#~ "Szczeg.\n"
+#~ "PZ"
+
+#~ msgid "AC Off;  %d%%"
+#~ msgstr "WYŁĄCZ; %d%%"
 
 #~ msgid "^"
 #~ msgstr "^"
