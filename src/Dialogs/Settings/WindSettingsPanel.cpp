@@ -33,9 +33,11 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
+                                     bool _clear_manual_button,
                                      bool _edit_trail_drift)
   :RowFormWidget(UIGlobals::GetDialogLook()),
    edit_manual_wind(_edit_manual_wind),
+   clear_manual_button(_clear_manual_button),
    edit_trail_drift(_edit_trail_drift) {}
 
 void
@@ -101,6 +103,9 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     manual_modified = false;
   }
+
+  if (clear_manual_button)
+    AddButton(_("Clear"), *this, CLEAR_MANUAL);
 
   UpdateVector();
 }

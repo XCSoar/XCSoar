@@ -39,9 +39,10 @@ class WindSettingsPanel final
     SOURCE,
     Speed,
     Direction,
+    CLEAR_MANUAL_BUTTON,
   };
 
-  const bool edit_manual_wind, edit_trail_drift;
+  const bool edit_manual_wind, clear_manual_button, edit_trail_drift;
 
   /**
    * Has the user modified the manual wind?
@@ -58,8 +59,10 @@ public:
 
   /**
    * @param manual_wind edit the manual wind setting
+   * @param clear_manual_button add a "Clear" button
    */
-  WindSettingsPanel(bool edit_manual_wind, bool edit_trail_drift);
+  WindSettingsPanel(bool edit_manual_wind, bool clear_manual_button,
+                    bool edit_trail_drift);
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
