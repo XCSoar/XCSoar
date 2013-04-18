@@ -19,6 +19,7 @@ Version 6.6 - not yet released
   - waypoint details button in target dialog (#1967)
   - show distance in radial InfoBox comment (#2577)
   - new InfoBox "ATC radial" with distance in nautical miles (#2269, #2706)
+  - improved wind edit panel (#2770)
 * user interface
   - replay fast-forward
   - new waypoint location editor (#343)

@@ -24,7 +24,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Weather.hpp"
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/WindEdit.hpp"
-#include "InfoBoxes/Panel/WindSetup.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
@@ -109,7 +108,6 @@ constexpr
 #endif
 const InfoBoxPanel wind_infobox_panels[] = {
   { N_("Edit"), LoadWindEditPanel },
-  { N_("Setup"), LoadWindSetupPanel },
   { nullptr, nullptr }
 };
 
