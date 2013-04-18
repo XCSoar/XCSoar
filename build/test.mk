@@ -686,7 +686,7 @@ DEBUG_PROGRAM_NAMES = \
 	CAI302Tool \
 	lxn2igc \
 	RunIGCWriter \
-	RunFlightLogger \
+	RunFlightLogger RunFlyingComputer \
 	RunCirclingWind RunWindEKF RunWindComputer \
 	RunTask \
 	ViewImage \
@@ -1425,6 +1425,15 @@ RUN_FLIGHT_LOGGER_SOURCES = \
 RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_FLIGHT_LOGGER_DEPENDS = GEO MATH UTIL TIME
 $(eval $(call link-program,RunFlightLogger,RUN_FLIGHT_LOGGER))
+
+RUN_FLYING_COMPUTER_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
+RUN_FLYING_COMPUTER_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_FLYING_COMPUTER_DEPENDS = GEO MATH UTIL TIME
+$(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
