@@ -1,0 +1,39 @@
+language: cpp
+env:
+- TARGET=UNIX
+- TARGET=PC
+#- TARGET=ANDROID
+- TARGET=WM5
+- TARGET=WM5X
+- TARGET=PPC2000
+- TARGET=PPC2003
+- TARGET=PPC2003X
+- TARGET=OPT
+- TARGET=WIN64
+- TARGET=ALTAIR
+
+before_install:
+- cat /proc/cpuinfo
+- uname -a
+- gcc -v
+install: 
+#General
+- sudo apt-get clean
+- sudo apt-get update 
+- sudo apt-get install make g++ libsdl-image1.2-dev libboost-dev zlib1g-dev libsdl1.2-dev libsdl-ttf2.0-dev libpng-dev libjpeg-dev libcurl4-openssl-dev libxml-parser-perl librsvg2-bin xsltproc imagemagick gettext ttf-dejavu
+- /bin/sed 's/SDL_image/SDL_ttf/g' /usr/lib/x86_64-linux-gnu/pkgconfig/SDL_image.pc > SDL_ttf.pc
+- sudo cp SDL_ttf.pc /usr/lib/x86_64-linux-gnu/pkgconfig/SDL_ttf.pc
+#PC
+- if [[ "$TARGET" == "PC" ]]; then sudo apt-get install binutils-mingw-w64-i686 gcc-mingw-w64-i686 g++-mingw-w64-i686 gettext; fi
+- if [[ "$TARGET" == "WIN64" ]]; then sudo apt-get install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 gettext; fi
+#Android
+- if [[ "$TARGET" == "ANDROID" ]]; then sudo apt-get install default-jre default-jdk ant vorbis-tools; fi
+- wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/
+script: 
+#Set environment variables
+- export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"
+- make -j4 TARGET=$TARGET everything
+#Check on platforms where possible (Unix)
+- if [[ "$TARGET" == "UNIX" ]]; then make  TARGET=UNIX check; fi
+- if [[ "$TARGET" == "OPT" ]]; then make  TARGET=OPT check; fi
+
