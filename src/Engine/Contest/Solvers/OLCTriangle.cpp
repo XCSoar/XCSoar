@@ -297,7 +297,9 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d)
 
     // first clean up tree, removeing all nodes with d_max < worst_d
     branch_and_bound.erase(branch_and_bound.begin(), branch_and_bound.lower_bound(worst_d));
-    assert(branch_and_bound.size() != 0);
+
+    // we might have cleaned up the whole tree. nothing to do then...
+    if (branch_and_bound.size() == 0) break;
 
     // get node to work on
     auto node = --branch_and_bound.end();
