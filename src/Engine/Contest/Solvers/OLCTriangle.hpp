@@ -374,6 +374,7 @@ protected:
   RunBranchAndBound(unsigned from, unsigned to, unsigned best_d);
 
   void UpdateTrace(bool force);
+  void ResetBranchAndBound();
 
 public:
   /* virtual methods from AbstractContest */

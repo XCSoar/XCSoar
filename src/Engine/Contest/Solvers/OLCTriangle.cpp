@@ -73,10 +73,16 @@ OLCTriangle::Reset()
   best_d = 0;
   closing_pairs.clear();
   search_point_tree.clear();
-  branch_and_bound.clear();
   ClearTrace();
 
+  ResetBranchAndBound();
   AbstractContest::Reset();
+}
+
+void
+OLCTriangle::ResetBranchAndBound()
+{
+  branch_and_bound.clear();
 }
 
 gcc_pure
@@ -130,8 +136,10 @@ OLCTriangle::Solve(bool exhaustive)
   UpdateTrace(exhaustive);
 
   if (!is_complete) {
-    if (n_points < 3)
+    if (n_points < 3) {
+      ResetBranchAndBound();
       return SolverResult::FAILED;
+    }
 
     if (is_closed)
       SolveTriangle();
