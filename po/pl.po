@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-04-16 03:32+0000\n"
+"PO-Revision-Date: 2013-04-22 00:34+0000\n"
 "Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-17 16:52+0000\n"
+"X-Launchpad-Export-Date: 2013-04-22 07:01+0000\n"
 "X-Generator: Launchpad (build 16567)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -215,7 +215,7 @@ msgstr "Cylinder. Jakikolwiek punkt w rejonie punktowany z centrum"
 #: src/Task/TypeStrings.cpp:91
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Cylinder 1 mila. Punktowany najdalszy osiągnięty w tym obszarze punkt."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -665,7 +665,7 @@ msgstr "Zamknij"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:228
 msgid "No Traffic"
-msgstr "Brak ruchu"
+msgstr "Brak sygn. FLARM"
 
 #: src/Gauge/BigTrafficWidget.cpp:306 src/Gauge/BigTrafficWidget.cpp:307
 #: src/InfoBoxes/Content/Factory.cpp:401 src/InfoBoxes/Content/Factory.cpp:402
@@ -858,13 +858,13 @@ msgstr "Auto"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:45
 #, no-c-format
 msgid "Track up"
-msgstr "Linia Drogi do góry"
+msgstr "Rzeczywista Linia Drogi"
 
 #: src/Menu/ExpandMacros.cpp:349
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
 msgid "North up"
-msgstr "Północ u góry"
+msgstr "Północ"
 
 #: src/Menu/ExpandMacros.cpp:454 src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: src/Dialogs/ReplayDialog.cpp:56
@@ -2897,12 +2897,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1205
 #, no-c-format
 msgid "Next radial ATC"
-msgstr ""
+msgstr "PT RadATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1206
 #, no-c-format
 msgid "Radial ATC"
-msgstr ""
+msgstr "PT RadATC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1207
 #, no-c-format
@@ -2910,6 +2910,8 @@ msgid ""
 "True bearing from the next waypoint to your position.  The distance is "
 "displayed in nautical miles for communication with ATC."
 msgstr ""
+"PT RadATC: Kurs rzeczywisty z następnego PZ do Twojej pozycji. Odległość "
+"podawana jest w milach morskich do celów komunikacji z ATC."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -3329,7 +3331,7 @@ msgstr "Pełny ślad"
 
 #: src/Input/InputEventsSettings.cpp:198
 msgid "Bugs performance"
-msgstr ""
+msgstr "Muchy"
 
 #: src/Input/InputEventsSettings.cpp:241
 #, no-c-format
@@ -5798,13 +5800,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:90
 msgid "Flap forces cruise"
-msgstr "Klapy wymuszają przelot"
+msgstr "Widok Przeskok wg klap"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:91
 msgid ""
 "When Vega variometer is connected and this option is true, the positive flap "
 "setting switches the flight mode between circling and cruise."
 msgstr ""
+"Korzystając z wariometru Vega, po włączeniu tej opcji, ustawienie klap "
+"przełącza widok Krążenie <>Przeskok"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:97
 #, no-c-format
@@ -5818,7 +5822,7 @@ msgstr "Preferowany okres dla szybowców."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
 msgid "GR average period"
-msgstr ""
+msgstr "DSK - okres czasu uśredniania"
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -5831,13 +5835,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:112
 msgid "Predict wind drift"
-msgstr "Przewiduj dryf wiatru."
+msgstr "Uwzgl. znoszenie w krąż."
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:113
 msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
+"Uwzględniaj znoszenie z wiatrem w przewidywanym czasie krążenia. Zmniejsza "
+"obliczoną wysokość przylotu na bokach pod wiatr."
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
 msgid "Use final glide mode"
@@ -6338,7 +6344,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
 msgid "Heading up"
-msgstr "Kurs - do góry"
+msgstr "Kurs szybowca"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
@@ -6360,7 +6366,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:51
 #, no-c-format
 msgid "Target up"
-msgstr "Pkt.docel. - u góry"
+msgstr "Docelowy Punkt Trasy"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:52
 #, no-c-format
@@ -6372,7 +6378,7 @@ msgstr "Mapa będzie obrócona tak, aby punkt docelowy był na górze."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:53
 #, no-c-format
 msgid "Wind up"
-msgstr "Wiatr z góry"
+msgstr "Pod wiatr"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:54
 #, no-c-format
@@ -6409,7 +6415,7 @@ msgstr "Ustaw aktualny punkt trasy jako bazę."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Cruise orientation"
-msgstr "Mapa na przeskoku"
+msgstr "Kierunek do góry na przeskoku"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:113
 msgid "Determines how the screen is rotated with the glider"
@@ -6417,7 +6423,7 @@ msgstr "Określa jak ekran jest obrócony względem szybowca."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:118
 msgid "Circling orientation"
-msgstr "Mapa w krążeniu"
+msgstr "Kierunek do góry w krążeniu"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:119
 msgid "Determines how the screen is rotated with the glider while circling"
@@ -6464,6 +6470,8 @@ msgid ""
 "Automatically zoom in when approaching a waypoint to keep the waypoint at a "
 "reasonable screen distance."
 msgstr ""
+"Automatycznie powiększ gdy zbliżasz się do Punktu Trasy, utrzymując jego "
+"widoczność."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
@@ -6475,11 +6483,11 @@ msgstr "Górny limit dla odległości auto zoom."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
 msgid "Distinct page zoom"
-msgstr ""
+msgstr "Odrębny zoom na stronach"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Ten sam stopień powiększenia na każdej stronie."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:169
 msgid "Main area"
@@ -6984,7 +6992,7 @@ msgstr "Rysuj drogę lotu na mapie szarą linią."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "FLARM traffic"
-msgstr "FLARM ruch"
+msgstr "Ruch pow. z FLARM"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
 msgid "This enables the display of FLARM traffic on the map window."
@@ -7020,7 +7028,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:171
 msgid "Detour cost markers"
-msgstr ""
+msgstr "Markery dod. odległości"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:172
 msgid ""
@@ -7029,6 +7037,10 @@ msgid ""
 "extra distance required to reach that point as a percentage of straight-line "
 "distance to the waypoint."
 msgstr ""
+"Jeżeli kurs szybowca różni się od kursu lotu do punktu, zostaną wyświetlone "
+"markery na bieżącej linii lotu. Wartość markera jest to dodatkowa odległość "
+"do przelecenia, wymagana do osiągnięcia Punktu Trasy, jako %procent "
+"odległości po prostej do aktualnego docelowego Puntu Trasy."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:178
 msgid "Aircraft symbol"
