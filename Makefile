@@ -14,6 +14,8 @@
 #
 #   OPENGL      "y" means render with OpenGL.
 #
+#   GLES        "y" means render with OpenGL/ES.
+#
 #   EYE_CANDY   "n" disables eye candy rendering.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built
