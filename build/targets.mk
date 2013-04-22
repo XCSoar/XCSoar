@@ -24,6 +24,7 @@ TARGET_FLAVOR := $(TARGET)
 HAVE_CE := n
 HAVE_FPU := y
 X64 := n
+TARGET_IS_ARM = n
 XSCALE := n
 ARMV5 = n
 ARMV6 = n
@@ -51,16 +52,19 @@ ifeq ($(TARGET),WIN64)
 endif
 
 ifeq ($(TARGET),PPC2003X)
+  TARGET_IS_ARM = y
   XSCALE := y
   override TARGET = PPC2003
 endif
 
 ifeq ($(TARGET),WM5X)
+  TARGET_IS_ARM = y
   XSCALE := y
   override TARGET = WM5
 endif
 
 ifeq ($(TARGET),ANDROID)
+  TARGET_IS_ARM = y
   ifeq ($(DEBUG),n)
     ARMV6 = y
   else
@@ -75,6 +79,7 @@ ifeq ($(TARGET),ANDROID7NEON)
 endif
 
 ifeq ($(TARGET),ANDROID7)
+  TARGET_IS_ARM = y
   ARMV7 := y
   override TARGET = ANDROID
 endif
@@ -97,6 +102,7 @@ endif
 # real targets
 
 ifeq ($(TARGET),PPC2000)
+  TARGET_IS_ARM = y
   CE_MAJOR := 3
   CE_MINOR := 00
   PCPU := ARM
@@ -105,6 +111,7 @@ ifeq ($(TARGET),PPC2000)
 endif
 
 ifeq ($(TARGET),PPC2003)
+  TARGET_IS_ARM = y
   CE_MAJOR := 4
   CE_MINOR := 00
   PCPU := ARMV4
@@ -150,11 +157,13 @@ ifeq ($(TARGET),ALTAIR)
   CE_MAJOR := 5
   CE_MINOR := 00
 
+  TARGET_IS_ARM = y
   HAVE_CE := y
   XSCALE := y
 endif
 
 ifeq ($(TARGET),WM5)
+  TARGET_IS_ARM = y
   PCPU := ARMV4
   CE_MAJOR := 5
   CE_MINOR := 00
@@ -180,6 +189,7 @@ ifeq ($(TARGET),UNIX)
   # LOCAL_TCPREFIX is set in local-config.mk if configure was run.
   TCPREFIX := $(LOCAL_TCPREFIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
+  TARGET_IS_ARM = $(HOST_IS_ARM)
   TARGET_IS_PI = $(HOST_IS_PI)
   ARMV6 = $(HOST_IS_ARMV6)
   ARMV7 = $(HOST_IS_ARMV7)
@@ -202,6 +212,7 @@ ifeq ($(TARGET),PI)
   PI ?= /opt/pi/root
   TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
+  TARGET_IS_ARM = y
   ARMV6 = y
 endif
 
@@ -212,6 +223,7 @@ ifeq ($(TARGET),KOBO)
   KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
   TARGET_ARCH += -march=armv7-a -mfloat-abi=hard
   TARGET_IS_KOBO = y
+  TARGET_IS_ARM = y
   ARMV7 := y
 endif
 
