@@ -76,6 +76,16 @@ private:
    */
   bool is_complete;
 
+  /**
+   * True if the branch and bound algorithm is running
+   */
+  bool running;
+
+  /**
+   * Number of iterations per tick (only for non-exhaustive,
+   * predictive runs)
+   */
+  unsigned tick_iterations;
 
   typedef std::pair<unsigned, unsigned> ClosingPair;
 
@@ -368,10 +378,10 @@ public:
 
 protected:
   bool FindClosingPairs(unsigned old_size);
-  void SolveTriangle();
+  void SolveTriangle(bool exhaustive);
 
   std::tuple<unsigned, unsigned, unsigned, unsigned>
-  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d);
+  RunBranchAndBound(unsigned from, unsigned to, unsigned best_d, bool exhaustive);
 
   void UpdateTrace(bool force);
   void ResetBranchAndBound();
