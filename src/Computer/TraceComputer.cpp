@@ -31,7 +31,7 @@ static constexpr unsigned full_trace_size =
   HasLittleMemory() ? 512 : 1024;
 
 static constexpr unsigned contest_trace_size =
-  HasLittleMemory() ? 256 : 512;
+  HasLittleMemory() || IsWindowsCE() ? 128 : 256;
 
 static constexpr unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;
@@ -53,6 +53,7 @@ TraceComputer::Reset()
   full.clear();
   mutex.Unlock();
 
+  contest.clear();
   sprint.clear();
 }
 
@@ -95,7 +96,9 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
     mutex.Unlock();
 
     // only olc requires trace_sprint
-    if (settings_computer.contest.enable)
+    if (settings_computer.contest.enable) {
       sprint.push_back(point);
+      contest.push_back(point);
+    }
   }
 }
