@@ -1,85 +1,339 @@
-\documentclass[german,a4paper,twoside]{scrreprt}
-%\usepackage[ansinew]{inputenc}
-\usepackage[utf8]{inputenc}
-\usepackage[german]{babel}
-\usepackage{makeidx}
-\usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
-\usepackage{wrapfig}
-%\usepackage[T1]{fontenc}
-\usepackage{fancyhdr}
-\usepackage[colorlinks]{hyperref}    % Bietet hyperlinks und Zugriffe auf Dateien in Farbe
-\newcommand{\fspec}[1]{\protect\nolinkurl{#1}}
-\makeindex
-\parindent=0pt
-\oddsidemargin=0.75\oddsidemargin
-\evensidemargin=0.75\evensidemargin
-%################# Ein paar Schreibvereinachungen ######################
-\def\i{\itemsep=0.15\itemsep}
-\def\c{\centering}
-\def\bc{\begin{center}}
-\def\ec{\end{center}}
-\def\xc{\textsc{XCSoar~}}
-\def\qo#1{\textsf{"#1"}}
-\def\achtung{\marginpar{\includegraphics[height=3.0em]{Bilder/Achtung-Sign.jpg}}}
-\def\merkes{\marginpar{\includegraphics[height=3.0em]{Bilder/merkesdir.jpg}}}
-\def\stop{\marginpar{\begin{center}\includegraphics[height=2.50em]{Bilder/Stop.png}\\ {\footnotesize  \textbf{Stimmt das?}}\end{center}}}
-\def\far{~{\includegraphics[height=1.0em]{Bilder/farrowr.jpg}}~}
-\def\fal{~{\includegraphics[height=1.0em]{Bilder/farrowl.jpg}}~}
-\def\blitz{ \includegraphics[width=1em]{Bilder/blitz1.png}}
-\def\bblitz{\marginpar{\includegraphics[height=2.0em]{Bilder/blitz1.png}}}
-\def\bbblitz{\includegraphics[height=4.0em]{Bilder/blitz1.png}}
-\def\smallblitz{ \includegraphics[width=0.66em]{Bilder/blitz1.png}}
-\rightmargin=0.55\rightmargin
-\leftmargin=0.55\leftmargin
-
-%----------------------------------------------------------------------------------------------
-%----------------------------------------------------------------------------------------------
+\input{XCBlitzIIKonf.tex}%Konfiguration und Buttondefinitionen
+%\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
+%\DeclareUnicodeCharacter{00B9}{$^1$}
+%\DeclareUnicodeCharacter{00B2}{$^2$}
+%\DeclareUnicodeCharacter{00B3}{$^3$}
+%\DeclareUnicodeCharacter{00B5}{${\mu}$}%
+%{\color{red}\ovalbox{\textcolor{black}{}}}
+\hyphenation{Kon-fi-gu-ra-tions-files Onkel-hotte}
+\setcounter{secnumdepth}{1}
+\renewcommand*{\thesection}{\textsf{\arabic{section}}}
 \begin{document}
-\input{buttons.sty}                      %Lädt buttons, Menüs etc. von XCSoar - leicht variiert von OH.
-\shorthandoff{"}                          %Anführungszeichen erscheinen wie auf Tastatur und nicht als Tastatursteuerzeichen.
-\vspace*{2cm}
-
+\pagestyle{empty}
+\vspace*{3em}
 \begin{center}
-  \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/logo.png}
-  \vskip 0.5cm
-  \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
+{\Huge Die Blitzanleitung zum Glücklichsein mit}
+
+\vspace{3em}
+%\includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{figures/xcsoar-title.png}
+% xcsoar-title.png: 964x394 pixel, 100dpi, 24.49x10.01 cm, bb=0 0 694 284
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
+
+\vspace{2em}
+{\Huge \xc,\\[0,5em]  \textbf{dem} Segelflugrechner}
 \end{center}
 
-\vspace*{2cm}
+\newpage
+\fancyhead[R]{\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/xcsoar-title.png}}
+\pagestyle{fancy}
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{{\textsf XCSoar} Einrichten}\label{ch:XCSeinrichten}
+%%%%%--------------------------------------------------------------------%%%%%
+Nach dem Herunterladen der entsprechenden Programmversion {\textsf (Android, PC, Windows Mobile, PPC2000, PPC2003, Linux, Mac)}
+sollte in ein entsprechendes Verzeichnis entpackt bzw. installiert werden.\\
+Je nach Betriebssystem sollte ein Verzeichnis gewählt werden, welches vollen Zugriff hat.
+Es ist zwingend ein Unterverzeichnis {\verb XCSoarData} zu erstellen, in dem sämtliche
+Konfigurationsfiles,  Luftraumfiles, Wegpunktfiles und das XCM-Terrain/Geländefile
+untergebracht wird.\\
 
+Die Installationsroutinen von Android, Windows Mobile, PPC, PC machen dies von alleine. Der
+Betrieb von einer SD-Karte ist möglich. Es können auch andere über- oder Unterverzeichnisse
+gewählt werden, für den reibungslosen Betrieb und oder/ Updates empfiehlt es sich jedoch bei
+den Vorgaben zu bleiben.\\
+
+
+\begin{compactitem}
+\item[1.] Herunterziehen von der Homepage:
+
+ {\large\url{ http://www.xcsoar.org}}
+\item[2.] XCM File laden (auch auf der Homepage)
+\item[3.] Wegpunkte laden (cup format oder openairformat)
+\item[4.] Luftraumfile laden:
+
+ {\large\url{http://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten}}
+\item[5.] Folgende Kombination eingeben
+\end{compactitem}
+
+\bc\sk\blink\bmw{Standortdatei}\blink\bmw{Standortdatei}\ec\index{Kartendatei}\index{Luftraumdateie}\index{Wegpunktdatei}
+
+Hier dann die entsprechenden Files auswählen. Falls keine Files zur Auswahl bereitstehen, den
+Pfad überprüfen. Alles Files müssen zwingend in {\large\texttt{/XCSoarData}} stehen!!! Mehr dazu im
+Handbuch.
+
+\textbf{Wichtig:} in Kap.~\ref{ch:generell} stehen noch ein paar \textbf{wirklich} lesenswerte Anmerkungen!!!
+
+\subsection{\textcolor{blue}{Dateimanager}}\index{Dateimanager}
+\textbf{Achtung!}
+
+Der Dateimanager funktioniert unter Android erst ab Android 2.2!!!
+
+
+Mit dem in \xc~integrierten Dateimanager ist es möglich --eine funktionierende Internetverbindung vorausgesetzt--
+fehlende Dateien direkt und einfach herunterzuladen:
+
+\bc\konf{2}{Datei}{manager}\blink\bmw{Hinzufügen}\ec
+Hier öffnet sich eine Liste mit etlichen Karten, Lufträumen und Wegpunktfiles, die  Du unverzüglich
+downloaden und in \xc~an die richtige Stelle kopieren kannst. 
+Mit \bmw{Download} werden die Dateien dann heruntergeladen und installiert. 
+
+Sogar eine Karte mit häufigen Thermik-auslösern und -Gegenden sind dabei :
+
+({\large\texttt{\textcolor{blue}{Thermal\_Spaces\_EU.txt}}} und {\large\texttt{\textcolor{blue}{OpenAIP-Hotspots.cup}}} )  
+
+
+\subsection*{\textcolor{blue}{Sprache, Schriften, Klänge  einstellen}}
+Normalerweise lädt \xc~ die Sprache des Betriebsystemes, auf dem es installiert ist.
+Wenn Ihr dennoch auf Norwegisch fliegen wollt:
+
+\bc\sk\blink\bmw{Aussehen}\blink\bmw{Sprache,Eingabe}\ec
+
+Hier könnt Ihr nach Herzenslust Sprachen und Schriften einstellen, auch die Möglichkeit, eine
+eigenen Datei anzugeben, welche bevorzugte Klänge zu bestimmten Situationen abspielt,
+besteht hier.
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Flugzeug}
+%%%%%--------------------------------------------------------------------%%%%%
+\subsection*{\textcolor{blue}{Polare einrichten}}
+\xc~ besitzt intern bereits eine Liste mit Polaren. Die Auswahl erfolgt mit:
+\bc\sk\blink\bmw{Einstellung}\blink\bmw{Polare}\ec
+\begin{small}Der Index der Flugzeuge basiert auf der DAEC-Liste von April  {\textsf 2012} \end{small}
+\subsection*{\textcolor{blue}{Wasserballast, Mücken, QNH, Temperatur eingeben}}
+\bc\konf{1}{Flug}{Einstellung}\blink\bmw{Ballast/Mücken/QNH/Temperatur}\ec
+\subsection*{\textcolor{blue}{Wind, Richtung, Stärke Berechnung, Drift}}
+\bc\konf{1}{Wind}{Einstellung}\blink\bmw{Manuell/Richtung/Geschw\dots}\ec
+\subsection*{\textcolor{blue}{Flugzeugname, Pilotenname}}
+\bc\sk\blink\bmw{Einstellung}\blink\bmw{Logger Info}\ec
+\subsection*{\textcolor{blue}{Logger, Flarm, Cambridge etc\dots NMEA einrichten}}
+\bc\sk\blink\bmw{Einstellung}\blink\bmw{NMEA-Anschluss}\ec
+\subsection*{\textcolor{blue}{Systemzeit einstellen}}
+\bc\sk\blink\bmw{Einstellung}\blink\bmw{Zeit}\ec
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Wegpunkte}
+%%%%%--------------------------------------------------------------------%%%%%
+Voraussetzung, dass mit Wegpunkten gearbeitet werden kann, ist, dass Ihr mindestens eine Wegpunktdatenbank installiert habt,
+s. Kap.~\ref{ch:XCSeinrichten}
+\subsection*{\textcolor{blue}{Wegpunkt/Flugplatz wählen}}\index{Heimatflugplatz}
+\begin{itemize}
+\item Einfacher Klick auf Bildschirm auf eine Stelle in der Nähe des gewünschten Platzes.
+\item Es erscheint das Fenster ''Kartenelemente an diesem Ort''
+\item Flugplatz aus der Liste auswählen,
+\item \button{Ziele auf} drücken
+\end{itemize}
+\subsection*{\textcolor{blue}{Heimatflugplatz einstellen}}\index{Heimatflugplatz}
+\begin{itemize}
+\item Einfacher Klick auf Bildschirm auf eine Stelle in der Nähe des gewünschten Platzes.
+\item Es erscheint das Fenster ''Kartenelemente an diesem Ort''
+\item Flugplatz aus der Liste auswählen,
+\item \button{Details} drücken
+\item Eine Seite nach rechts mit dem schwarzen Pfeil: \quad${\Huge\RHD}$\quad und anschließend
+\item \button{Setze als neuer Heimatort}
+\end{itemize}
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Flug}
+%%%%%--------------------------------------------------------------------%%%%%
+\subsection*{\textcolor{blue}{Separater Maßstab InfoBoxSeiten erst ab V 6.6}}\index{Separater Kartenmaßstab}
+\bc\sk\blink\bmw{Kartenanzeige}\blink\bmw{Ausrichtung}\blink\bmw{Distinct Page Zoom}\ec
+
+Es kann für jede Karten-Seite ein eigener Maßstab eingerichtet werden. Somit ist es möglich, z.B. für den Endanflug den Maßstab auf
+96km zu setzen, während beim Kurbeln etwas mehr Details in einem kleineren Maßstab z.B.\  64km benutzt wird.
+
+Hierzu muss der Schalter \textit{Distinct Page Zoom} auf ''ein'' gesetzt werden, s. oben.
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Aufgaben / Wettbewerb}
+%%%%%--------------------------------------------------------------------%%%%%
+Hier können Voreinstellungen für die jeweiligen Aufgaben gemacht werden. Diese erscheinen
+jedesmal als Default bei Erstellung einer neuen Aufgabe.
+
+\bc\sk\blink\bmw{Aufgaben Voreinstellung}\blink\bmw{Regeln, Wendepunktypen}\ec
+
+\subsection*{\textcolor{blue}{Aufgabe erstellen /Speichern / Laden / Anmelden /Fliegen}}\pdfbookmark[0]{Aufgaben erstellen}{Aufgaben}
+
+\bc\nav{1}{Aufgabe}{}\blink\bmg{Verwalten}\blink\bmg{Neue Aufgabe}\ec
+\begin{itemize}
+\item[1.]Im gleichen Menü findest Du die Buttons für Laden (Durchsuchen), Speichern
+und Anmelden (z.B.\ an Flarm, Logger  o.ä.) Nach dem Erzeugen einer neuen Aufgabe klappt zuerst das Fenster \bmg{Regeln} hoch.
+Hier alles entsprechend anpassen. Wichtig! \bmw{Aufgabentyp} beachten!!
+\item[2.] Mit \bmg{Wendepunkt}\blink\bmw{Wendepunkt hinzufügen} und dem
+Wendepunktfilter die entsprechenden Punkte eingeben.
+ \item[3.] Mit \bmg{Punkt bearbeiten} kann jederzeit der Typ und der Punkt selber
+ bearbeitet werden.
+\end{itemize}
+\textbf{Wichtig:}
+
+Mit \bmw{Schließen} verlässt Du die Aufgabe, welche dann aber {\textsf noch nicht} gespeichert ist!!
+
+Besser daher: \bmw{Verwalten} und anschließend \bmw{Speichern}, dann hast Du die Aufgabe drin
+und kannst letztlich \bmw{Fliegen}
+
+
+\subsection*{\textcolor{blue}{Aufgaben  Startzeit und -fenster eingeben}}\pdfbookmark[0]{Startfenster}{Startfenster}
+\bc\nav{1}{Aufgabe}{}\blink\bmw{Regeln\strut}\blink\bmw{Abflugzeit} etc\dots\ec
+\subsection*{\textcolor{blue}{Aufgabe starten}}\index{Aufgabe starten}\pdfbookmark[0]{Aufgaben starten}{Aufgabenstart}
+Nachdem die Aufgabe erstellt und  gespeichert ist kannst Du den Aufgabeneditor mit \bmg{Fliegen} verlassen.
+Der Flug ist jetzt aktiv und auf der Karte erscheinen die gewählten Sektoren, Start- und Zielline gelb transparent hinterlegt.
+Starten erfolgt, indem Du über die festgelegte Startlinie fliegst.
+
+In dem Moment, wo \xc~detektiert, dass Du im Sektor bist, erscheint eine Meldung ''im Sektor''.
+\xc~gibt Dir in den infoboxen und auf der Karte den optimalen Weg zum Abflugpunkt an.
+Mit \bmt{Abflug}{bereit!} machst Du \xc~ nun scharf. Es werden die nächsten Wendepunkte eingebelendet
+und alles auf den Start vorbereitet.
+
+In dem Moment, wo Du jetzt die Startlinie überfliegst, erscheint die Meldung  ''Aufgabenstart''  zusammen mit Höhe,
+Geschwindigkeit und Uhrzeit.
+
+Willst Du pokern, kannst Du mit \bmt{Abflug}{verschieben} den Abflug wieder zurücksetzen.
+Mit \bmg{Abflugpunkt} kannst Du zum letzten als Abflug markierten Punkt zurücknavigieren. Normalerweise nimmt \xc~den letzten überflug über die Startlinie als Start und wird von da ab rechnen.
+
+\subsection*{\textcolor{blue}{AAT-Aufgaben - $\Delta$- Zeit  / Punkt verschieben}}\pdfbookmark[0]{AAT-Aufgaben}{aattarget}
+\bc\nav{2}{Zielpunkt}{}\ec
+
+Hier werden der Reihe nach die Zielpunkte samt Area in Vergrößerung dargestellt.
+Ganz wichtig hierbei ist das kleine Kästchen ''optimiert'' am unteren linken Bildrand.
+Wenn es angekreuzt ist, setzt Dir \xc~ den Kurs so, das entsprechend Deiner MC-Einstellung
+und Deiner $\Delta$-Zeit, die Du unter den Voreinstellungen eingegeben hast,
+am Ziel ankommen wirst. Wohlgemerkt, \xc~ ist kein Wetterfrosch und kann eine nahende Front
+etc.\ nicht erkennen!
+
+Um diese Punkte verschieben zu können mußt Du daher das ''Optimiert''--Kästchen eben
+ {\bf nicht} ankreuzen. Oben rechts siehst Du den notwendigen Schnitt, um pünktlich
+ anzukommen, oben links die $Delta$--Zeit: positiv, wenn Ankunft OK, negativ Ankunft wenn zu früh.
+ 
+ Die automatische Weiterschaltung der Wendepunkte erfolgt in dem Moment, wo Du in den Sektor geflogen bist,
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Karte und Lufträume Anzeige/Deaktivieren}
+%%%%%--------------------------------------------------------------------%%%%%
+Mit den folgenden Klicks werden die Anzeigen auf der Karte ein oder ausgeschaltet.
+\bc
+\ansi{2}{Gelände}{Aus/Ein}\quad
+\ansi{2}{Luftraum}{Aus/Ein}\quad
+\ansi{2}{Topo}{Aus/Ein}
+\ec
+\subsection{\textcolor{blue}{Geländequerschnitt in Flugrichtung}}\pdfbookmark[0]{Gelaendequerschnitt}{Gelaendequerschnitt}
+\xc~kann einen Geländequerschnitt (ähnlich eines Barogramm mit Geländehöhe) über den Task legen.
+\bc\sk\blink\bmg{Aussehen}\blink\bmw{Pages}\ec
+
+Unter \bmw{Bottom Area} kann dann z.B. für die oben ausgewählten InfoBoxSeiten \bmw{Cross Section} angewählt werden.
+Neben der aktuellen Höhenlinie werden auch evtl. vorhandene Lufträume und die Entfernung angezeigt.
+Ein nettes feature!
+\subsection*{\textcolor{blue}{Lufträume vor Flugbeginn deaktivieren}}\index{Lufträume}\pdfbookmark[0]{Lufträume deaktivieren}{luftraum}
+
+Hier gibt es zwei Möglichkeiten:
+
+\subsubsection*{Global (über die Filterfunktion)}
+\bc\konf{3}{Luftraum}{Einstellungen}\ec
+
+Es erscheint das Luftraum-Fenster, auf dem eingeben kann,ob und welche Lufträume angezeigt werden sollen.
+Dazu \bmw{Warnen}  oder \bmw{Anzeigen} etc. für den jeweiligen Luftraum anklicken.
+
+Ein weiterer Klick auf \bmg{Suche} und man gelangt in das Suchfenster der Lufträume.
+
+Mithilfe der Filterfunktion (z.B.\ ''Entfernung'' 250km) können nun sämtliche Lufträume für diesen Tag vor dem Start
+deaktiviert werden, wenn man möchte. Das Wiederaktivieren erfolgt in umgekehrter Reihenfolge.
+
+
+\subsubsection*{Lokal (direkt über den Bildschirm)}
+Klicke {\bf einmal} auf die Stelle der Karte, wo sich eine Luftraumgrenze befindet.
+Es erscheint das Fenster ''Kartenelemente an diesem Ort''. Anschließend auf  \bmw{Details} und bei
+Bedarf mit \bmg{Best. Tag} deaktivieren. Ab V6.6 kann sogar direkt  im Fenster deaktiviert werden.
+
+Wieder aktivieren geht dann aber nur über \bmw{Details}.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{Infobox im Detail - Was ist was}\pdfbookmark[0]{Infoboxen}{infoboxen}
+%%%%%--------------------------------------------------------------------%%%%%
+\subsection*{\textcolor{blue}{Infoboxen-Seiten anordnen (hochkant, quer, etc\dots)}}\pdfbookmark[0]{Infoboxseiten}{Infoboxseiten}
+\bc\sk\blink\bmw{Aussehen}\blink\bmw{Anordnung}\ec
+\subsection*{\textcolor{blue}{Infoboxen ändern/anpassen}}\pdfbookmark[0]{Infobox ändern}{InfoboxChange}
+\bc\sk\blink\bmw{Aussehen}\blink\bmw{InfoBox Modi}\ec
+Hier auf die entsprechende Seite klicken und Du kannst Deine InfoBoxen
+den Feldern zuordenen.
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Bildnachweis}
+%%%%%--------------------------------------------------------------------%%%%%
+\subsection*{\textcolor{blue}{Geländequerschnitt (Cross-Section) aktiviert}}
+In diesem Bild seht Ihr \xc~Karte zentral, Cross-Section am unteren Bildschirm aktiviert. Nett, da auch gleich die Bezeichnungen 
+der Lufträume dabei sind.
 \begin{center}
-{\Large\textbf{\textsf{Flash\raisebox{-\baselineskip}[\ht\strutbox]{\bbblitz}Manual made by Hotte (OH)}}}\\
+ \includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/CrossSection.png}
+ % CrossSection.png: 489x645 pixel, 72dpi, 17.25x22.75 cm, bb=0 0 489 645
 \end{center}
-% \reflectbox{Spiegelverkehrt ?}? Ja, geht auch ... 
-%\input{einleitung.tex}                                      % Fertig  bis auf die letzten 4 \sections
-%\newpage
-%\input{bedienerOF.tex}                                    % Noch gar nicht fertig ...
-%\newpage
-%\input{navigation.tex}                                     %fast fertig  für v6 machen
-%\newpage
-%\input{XC-Tasks.tex}                                       % Im Bau   für v6 machen ...
-%\newpage
-%\input{Endanflugrechner.tex}                         %Im Bau 
-%\newpage
-%\input{Athmosphaere-und-Instrumente.tex}   % Im Bau 
-%\newpage
-%\input{Airspace-und-Traffic.tex}                    % Im Bau 
-%\newpage
-%\input{Avionik-und-Airframe.tex}                    % Im Bau 
-%\newpage
-%\input{Schnellstart.tex}                                   %  Fertig.  % für v6 abändern-schon weit !
-%\newpage
-%\input{InfoBoxBeschreibung.tex}                    %  Im Bau Sehr Wichtig 
-%\newpage
-%\input{Konfiguration.tex}                               % Im Bau sehr wichtig   
-%\newpage
-\input{Blitzeinstieg}
-%\input{DataFiles.tex}                                     % Im Bau Sehr wichtig 
-%\newpage
-%\input{Entwicklung-und-Entstehung.tex}       % Im Bau  - unwichtig 
-%\begin{small}
- %\input{GnuGeneralPublicLicense.tex}          % Fertig
-%\end{small}
-\tableofcontents
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Generell}\label{ch:generell}\pdfbookmark[0]{Generelles-WICHTIG!}{generelles}
+%%%%%--------------------------------------------------------------------%%%%%
+\begin{itemize}
+\item \xc~ hat pauschal zwei Modi: Aufgabe und ''herumgedödel''. (Intern gibt es Aufgabe, Kurbeln, Endanflug und Aufgabenabbruch)
+Wenn eine Aufgabe aktiv bzw. geladen ist, beziehen sich viele Berechnungen grundsätzlich auf
+das Umrunden der Aufgabe.
+\item \xc~ rechnet ''um die Ecke'', d.h.\ die Endanflugshöhe auf dem Bildschirm links bezieht
+sich immer auf die Vervollständigung der Aufgabe (also dem Umrunden aller Wendepunkte bis zum Ziel)--
+nicht dem Erreichen des nächsten Wegpunktes.
+\item Die Berechnungen während einer Aufgabe finden grundsätzlich mit dem gesetzten (automatisch oder manuell)
+MC--Wert statt. Im Aufgabenabbruchmodus kann ein anderer ''Sicherheits' 'MC--Wert festgelegt
+werden, auf den  \xc~ dann automatisch zurückführt.
+\item Im Aufgabenabbruchmodus zeigt der Endanflugspfeil die benötigte Höhe des nächst\-ge\-le\-ge\-nen
+(falls nicht explizit gewählt) Wegpunktes, andernfalls diejenige des z.B.\ unter
+Alternativen ausgewählten Punktes an.
+\item \textcolor{blue}{Es gibt mitunter Konfusion während des Endanfluges mit MC--Werten größer 0. \\
+\xc~ halt sich streng an die reine MC--Lehre. Das bedeutet, daß ein Endanflug ein reines Gleiten ist, auf dem {\textsf nicht mehr gekurbelt} wird. Das ist gleichbedeutend mit MC=0.
+Die ''übliche Vorgehensweise'' und dies speziell bei Gegenwind, den MC--Wert als Verschiebung der Polare zu mißbrauchen kann
+daher zu außerordentlich verwirrenden Ergebnissen führen.}
+
+\vspace{1em}
+\xc~wird z.B.  bei einem 0.2m Bart und 21km/h Gegenwind errechnen, daß Du nie ans Ziel kommst, da der Versatz größer ist,
+als die gewonnene Höhe. Aus diesem Grunde kann genau diese Funktion unter
+
+\vspace{1em}
+\bc\sk\blink\bmw{Endanflugrechner}\blink\bmw{Endanflugrechner}\blink\bmw{geschätzte Winddrift}\ec
+
+\vspace{1em}
+ausgeschaltet werden und mit dem ''üblichen'' Verhalten anderer Endanflugrechner gerechnet werden.
+
+Es fehlt bislang eine ''was wäre wenn'' Funktion, die es erlaubt, auch beim Gleiten mit Gegenwind und
+evtl.\ noch Kurbeln den Endanflug genügend genau kalkulieren zu können, wenn man die Vorflug--Geschwindigkeit variiert.
+\item In den unzähligen Infoboxen können sowohl Informationen für eine aktivierte Aufgabe als auch für einen Wegpunkt außerhalb
+einer Aufgabe eingegeben werden.
+\end{itemize}
 \printindex
 \end{document}
+%\maketitle%\title{Blitz}
+%\nav{3}{Wegpunkt}{Details}
+%\ansi{2}{Hupatz}{guggsud}
+%\konf{3}{Hurz}{Herjeh}
+%\info{1}{nanu}{nana}
+%\sk
