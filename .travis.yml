@@ -36,8 +36,8 @@ install:
 script: 
 #Set environment variables
 - export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"
-- if [[ "$TARGET" != "MANUAL" ]]; then make -j4 TARGET=$TARGET everything; fi
-- if [[ "$TARGET" == "MANUAL" ]]; then make -j4 TARGET=UNIX manual; fi
+- if [[ "$TARGET" != "MANUAL" ]]; then make -j8 TARGET=$TARGET everything; fi
+- if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
 #Check on platforms where possible (Unix)
 - if [[ "$TARGET" == "UNIX" ]]; then make  TARGET=UNIX check; fi
 - if [[ "$TARGET" == "OPT" ]]; then make  TARGET=OPT check; fi
