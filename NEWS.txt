@@ -17,6 +17,10 @@ XCSoar TE
     (the colors were taken from SeeYou and former users will find it easier)
   - shade rest of the screen when dialog is open
     (replaces the basic shadow effect of the dialogs)
+  - removed "Ack" button from map item list
+    (the "Ack" function is not used as frequently as "Goto" and is only
+     one more tap on the screen away. this additional button is cluttering
+     the dialog)
 * infoboxes
   - renamed "Height AGL" to "Altitude AGL"
     (most users don't know the difference between height and altitude,
