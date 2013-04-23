@@ -43,3 +43,6 @@ script:
   - if [[ "$TARGET" == "UNIX" ]]; then make  TARGET=UNIX check; fi
   - if [[ "$TARGET" == "OPT" ]]; then make  TARGET=OPT check; fi
 
+notifications:
+  email:
+    on_failure: change
