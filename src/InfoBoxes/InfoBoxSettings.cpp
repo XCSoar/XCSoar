@@ -56,7 +56,7 @@ InfoBoxSettings::SetDefaults()
 
   inverse = false;
   use_colors = true;
-  border_style = BorderStyle::BOX;
+  border_style = BorderStyle::SHADED;
 
   for (unsigned i = 0; i < MAX_PANELS; ++i)
     panels[i].Clear();
