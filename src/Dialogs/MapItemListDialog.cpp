@@ -40,7 +40,6 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 
@@ -80,7 +79,6 @@ class MapItemListWidget final
   enum Buttons {
     SETTINGS,
     GOTO,
-    ACK,
   };
 
   const MapItemList &list;
@@ -92,7 +90,6 @@ class MapItemListWidget final
   const MapSettings &settings;
 
   WndButton *settings_button, *details_button, *cancel_button, *goto_button;
-  WndButton *ack_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -117,11 +114,9 @@ protected:
     const unsigned current = GetCursorIndex();
     details_button->SetEnabled(HasDetails(*list[current]));
     goto_button->SetEnabled(CanGotoItem(current));
-    ack_button->SetEnabled(CanAckItem(current));
   }
 
   void OnGotoClicked();
-  void OnAckClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -151,18 +146,6 @@ public:
       item.type == MapItem::WAYPOINT;
   }
 
-  bool CanAckItem(unsigned index) const {
-    return CanAckItem(*list[index]);
-  }
-
-  static bool CanAckItem(const MapItem &item) {
-    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
-
-    return item.type == MapItem::AIRSPACE &&
-      GetAirspaceWarnings() != nullptr &&
-      !GetAirspaceWarnings()->get_ack_day(*as_item.airspace);
-  }
-
   virtual void OnActivateItem(unsigned index) override;
 
   /* virtual methods from class ActionListener */
@@ -174,7 +157,6 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 {
   settings_button = dialog.AddButton(_("Settings"), *this, SETTINGS);
   goto_button = dialog.AddButton(_("Goto"), *this, GOTO);
-  ack_button = dialog.AddButton(_("Ack Day"), *this, ACK);
   details_button = dialog.AddButton(_("Details"), mrOK);
   cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
@@ -242,15 +224,6 @@ MapItemListWidget::OnGotoClicked()
   cancel_button->OnClicked();
 }
 
-inline void
-MapItemListWidget::OnAckClicked()
-{
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
-  GetAirspaceWarnings()->acknowledge_day(*as_item.airspace);
-  UpdateButtons();
-}
-
 void
 MapItemListWidget::OnAction(int id)
 {
@@ -260,10 +233,6 @@ MapItemListWidget::OnAction(int id)
     break;
   case GOTO:
     OnGotoClicked();
-    break;
-
-  case ACK:
-    OnAckClicked();
     break;
   }
 }
