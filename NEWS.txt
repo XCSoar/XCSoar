@@ -2,6 +2,53 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+XCSoar TE
+* user interface
+  - new logo
+  - traditional Flarm radar dialog
+    (the "new" Flarm radar page is too cluttered)
+  - menu label improvements
+    (e.g. Raw logger -> NMEA logger)
+  - removed obsolete/duplicate config panels
+    (devices and planes have dedicated dialogs now)
+  - removed "Auto bugs" feature
+    (not useful if the rate can't be configured)
+  - renamed "Vibrant" terrain color ramp to "SeeYou"
+    (the colors were taken from SeeYou and former users will find it easier)
+  - shade rest of the screen when dialog is open
+    (replaces the basic shadow effect of the dialogs)
+* infoboxes
+  - renamed "Height AGL" to "Altitude AGL"
+    (most users don't know the difference between height and altitude,
+     let's not make it harder for them than it already is)
+  - changed default infobox geometry and contents
+* map
+  - changed trail length and type default to "full" and "Vario #2 with dots"
+    ("Vario #2" has better contrast and having the dots is even better)
+  - enabled the ground track line by default
+    (makes it easier to aim at distant things)
+  - use "North up" with "Track" map shift bias at "35%" by default
+    (north up is most common and the 35% shows more of the task ahead
+     than what is behind you already)
+  - changed default airspace colors
+    (closer to the German ICAO charts)
+  - adjusted default terrain brightness and contrast
+  - changed airport symbol default to "traffic lights"
+    (more intuitive and easier to interpret)
+  - show full waypoint names by default
+  - show reachable airport names outlined
+    (less clutter than the rounded rectangles)
+* devices
+  - LX1600 configuration dialog
+* calculations
+  - more robust landing detection
+    (2 min threshold instead of 10 sec)
+* development
+  - vagrant support
+  - TravisCI support
+  - ccache support for the ANDROIDFAT build
+
+
 Version 6.6 - 2013/04/23
 * map
   - optional distinct map zoom on each page (#1603)
