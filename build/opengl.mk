@@ -11,7 +11,7 @@ GLES = n
 # UNIX/Linux defaults to OpenGL, but can use SDL_gfx instead
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
-GLES ?= $(TARGET_IS_ARM)
+GLES ?= n
 else
 # Windows defaults to GDI (no OpenGL)
 OPENGL ?= n
