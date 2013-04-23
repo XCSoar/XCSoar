@@ -11,11 +11,8 @@ env:
 - TARGET=OPT
 - TARGET=WIN64
 - TARGET=ALTAIR
+- TARGET=MANUAL
 
-before_install:
-- cat /proc/cpuinfo
-- uname -a
-- gcc -v
 install: 
 #General
 - sudo apt-get clean
@@ -28,11 +25,15 @@ install:
 - if [[ "$TARGET" == "WIN64" ]]; then sudo apt-get install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 gettext; fi
 #Android
 - if [[ "$TARGET" == "ANDROID" ]]; then sudo apt-get install default-jre default-jdk ant vorbis-tools; fi
-- wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/
+- if [[ "$TARGET" == "WM"* ]] || [[ "$TARGET" == "PPC"* ]] || [[ "$TARGET" == "ALTAIR" ]]; then wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/; fi
+#Manual
+- if [[ "$TARGET" == "MANUAL" ]]; then sudo apt-get install texlive texlive-latex-extra texlive-lang-ukenglish texlive-lang-german texlive-lang-french latex-xcolor pgf; fi
+
 script: 
 #Set environment variables
 - export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"
-- make -j4 TARGET=$TARGET everything
+- if [[ "$TARGET" != "MANUAL" ]]; then make -j8 TARGET=$TARGET everything; fi
+- if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
 #Check on platforms where possible (Unix)
 - if [[ "$TARGET" == "UNIX" ]]; then make  TARGET=UNIX check; fi
 - if [[ "$TARGET" == "OPT" ]]; then make  TARGET=OPT check; fi
