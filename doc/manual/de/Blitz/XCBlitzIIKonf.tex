@@ -1,0 +1,226 @@
+\documentclass[german,a4paper,12pt,utf8]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[off]{flippdf}                %Spiegelverkehrte Ausgabe ganzer Seiten (sogar Bilder ..) -> Default OFF ..
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{wasysym}
+\usepackage{hhline}
+\usepackage{framed}               % Farbunterstützung
+\usepackage{color}               % Farbunterstützung
+\usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{fancyhdr}
+\usepackage{url}
+% Wir wollen einen Index:
+\usepackage{makeidx}\makeindex
+% Wir wollen aktive Links und einige Dokumentinformationen:
+\usepackage[colorlinks]{hyperref}
+\hypersetup{
+    bookmarks=true,
+    unicode=true,
+    pagebackref=true,
+    pdftoolbar=true,
+    pdfmenubar=true,
+    pdffitwindow=false,
+    pdfstartview={FitH},
+    pdftitle={XCSoar Blitzeinstieg},
+    pdfauthor={OH},
+    pdfsubject={Subject},
+    pdfcreator={HotteTeX},
+    pdfproducer={OH},
+    pdfkeywords={XCSoar}{Schnelleinstieg}{Segelflug}{Endanflug},
+    pdfnewwindow=true,
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=green,
+    filecolor=magenta,
+    urlcolor=blue
+}
+\usepackage[right]{eurosym}% Eurosymbol, rechts neben Text mit \EUR{427,45}, symbol alleine mit\eur{}
+\parindent0mm%kein Einzug-häßlich
+\textwidth=170mm
+\rightmargin=0mm\leftmargin=-10mm\oddsidemargin=-10mm\evensidemargin=-10mm
+\setlength{\baselineskip}{1em}
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+%
+%##############  Farben, Hintergründe, Rahmen ##############
+%
+\fboxrule0.4mm                                                      % Breite des Fbox-Rahmens
+%
+\definecolor{gray}{rgb}{0.8,0.8,0.8}                       %{0.7,0.7,0.7}
+\definecolor{buttongreen}{rgb}{0.625,0.94,0.625}  %
+\definecolor{rahmen1}{gray}{0.5}                            % hellgrauer Rahmen - entweder RGB -Angabe oder wie hier
+\definecolor{hintergrund1}{rgb}{.7,1,.7}                 % hellgrüner Hintergund
+\definecolor{rahmen2}{gray}{0.1}                            % grau eben
+\definecolor{hintergrund2}{rgb}{.9,.9,.9}               % ganz hellgrauer Hintergrund
+\definecolor{rahmen3}{gray}{0.15}                         % grau eben
+\definecolor{hintergrund3}{rgb}{1.0,1.0,0.9}         %hellgelber Hintergund
+% \definecolor{hintergrund3}{rgb}{.7,1,1}              % ganz türkis Hintergrund
+%
+%##############  Makros und  Menus ..##############
+%
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\blink}[0]{{~\LARGE$\triangleright$~}}
+%
+\newcommand{\bmg}[1]{\fcolorbox {black}{gray}{{\strut\sf{\footnotesize#1}}}}
+%
+\newcommand{\bmw}[1]{\fcolorbox {black}{white}{{\strut\sf{\footnotesize#1}}}}
+%
+\newcommand{\bmt}[2]{%Menübutton, zweizeilig
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{#1}}\\
+    {\footnotesize\sf{#2}}
+    \end{tabular}
+    }
+  }
+}
+%
+\newcommand{\bms}[1]{%Menübutton, single, einzeilig
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+      \begin{tabular}{c}
+        {\footnotesize\sf{#1}}\\
+      \\
+    \end{tabular}
+  }
+}
+}
+%
+\newcommand{\button}[1]{% einfache Box für Schaltfläche/Button
+\fcolorbox {black}{gray}{{\sf #1}}}
+%
+%##############  Erweiterte Makros und  Menus ..##############
+\newcommand{\nav}[3]{\bmt{Nav}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%NavMenu
+\newcommand{\ansi}[3]{\bmt{Ansicht}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%AnsichtMenu
+\newcommand{\konf}[3]{\bmt{Konfig}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%KonfigNavMenu
+\newcommand{\info}[3]{\bmt{Info}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%InfoMenu
+%
+% Langform
+%\newcommand{\nav}[3]{% Nav - Makro
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{Nav}}\\
+%    {\footnotesize\sf{#1/2}}
+%    \end{tabular} } }
+%{\LARGE$\triangleright$}\hspace{0.0075em}
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{#2}}\\
+%    {\footnotesize\sf{#3}}
+%    \end{tabular} } } }
+%%
+%\newcommand{\ansi}[3]{% Ansicht - Makro
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{Ansicht}}\\
+%    {\footnotesize\sf{#1/2}}
+%    \end{tabular} } }
+%{\LARGE$\triangleright$}\hspace{0.0075em}
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{#2}}\\
+%    {\footnotesize\sf{#3}}
+%    \end{tabular} } } }
+%%
+%\newcommand{\konf}[3]{% Ansicht - Makro
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{Konfig}}\\
+%    {\footnotesize\sf{#1/3}}
+%    \end{tabular} } }
+%{\LARGE$\triangleright$}\hspace{0.0075em}
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{#2}}\\
+%    {\footnotesize\sf{#3}}
+%    \end{tabular} } } }
+%%
+%\newcommand{\info}[3]{% Ansicht - Makro
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{Info}}\\
+%    {\footnotesize\sf{#1/3}}
+%    \end{tabular} } }
+%{\LARGE$\triangleright$}\hspace{0.0075em}
+%\fcolorbox {black}{gray}{
+%    \makebox[1.4cm][c]{
+%    \begin{tabular}{c}
+%    {\footnotesize\sf{#2}}\\
+%    {\footnotesize\sf{#3}}
+%    \end{tabular} } } }
+%%
+\newcommand{\sk}[0]{%  Häufig benutzt .. konf-konf-system-einstellungen
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{Konfig}}\\
+    {\footnotesize\sf{2/3}}
+    \end{tabular} } }
+{\LARGE$\triangleright$}\hspace{0.0075em}
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{System}}\\
+    {\footnotesize\sf{Einstellung}}
+    \end{tabular} } } }
+%Abkürzungen
+\newcommand{\xc}{{\textsf XCSoar}}
+%
+%##############  Titelseite des Blitzes .##############
+\def\maketitle{%
+  \null
+  \thispagestyle{empty}%
+  \begin{maxipage}
+    \begin{center}
+     \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{figures/xcsoar-title.png}
+    \vskip 0.5cm
+
+    \end{center}
+    \begin{center}
+      \normalfont\huge\textsf{der \textbf{Blitzeinstieg} zu dem quelloffenen-Segelflugrechner für fast jede Hardware}\par
+    \end{center}
+    \vskip 1cm
+    \begin{center}
+      \normalfont\huge\textsf{\@title}\par
+    \end{center}
+    \vskip 1cm
+  \end{maxipage}
+
+  \vfill
+  %\todo[nolist,size=\Large,inline]{Beta-Stadium, inhaltlich OK, am Outfit gibt es noch zu tun\dots}
+
+  \begin{flushright}
+    \large \strut {
+      \sf
+      \today \\
+      Für \xc Version \version \\
+      \xcsoarwebsite \\
+    }
+    \par
+  \end{flushright}
+  \par
+  \vfil
+  \vfil
+  \null
+  \cleardoublepage
+}
+%

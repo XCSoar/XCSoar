@@ -71,12 +71,24 @@ OLCTriangle::Reset()
   is_complete = false;
   is_closed = false;
   best_d = 0;
+
+  // set tick_iterations to a default value,
+  // this should be adjusted when the trace size is known
+  tick_iterations = 1000;
+
   closing_pairs.clear();
   search_point_tree.clear();
-  branch_and_bound.clear();
   ClearTrace();
 
+  ResetBranchAndBound();
   AbstractContest::Reset();
+}
+
+void
+OLCTriangle::ResetBranchAndBound()
+{
+  running = false;
+  branch_and_bound.clear();
 }
 
 gcc_pure
@@ -115,6 +127,15 @@ OLCTriangle::UpdateTrace(bool force)
       is_closed = FindClosingPairs(old_size);
     }
   }
+
+  /**
+   * Update tick_iterations to a sensible value. Statistical analysis
+   * revealed that the branch and bound algorithm worst running time
+   * is around O(n_points^2.2), it's best can be better than O(n_points).
+   * Using n_points^2 / 8 as number of iterations per tick should allow
+   * the algorithm to finish in about 10 to 15 ticks in most cases.
+   */
+  tick_iterations = n_points * n_points / 8;
 }
 
 
@@ -127,14 +148,19 @@ OLCTriangle::Solve(bool exhaustive)
     return SolverResult::FAILED;
   }
 
-  UpdateTrace(exhaustive);
+  if (!running) {
+    // branch and bound is currently in finished state, update trace
+    UpdateTrace(exhaustive);
+  }
 
-  if (!is_complete) {
-    if (n_points < 3)
+  if (!is_complete || running) {
+    if (n_points < 3) {
+      ResetBranchAndBound();
       return SolverResult::FAILED;
+    }
 
     if (is_closed)
-      SolveTriangle();
+      SolveTriangle(exhaustive);
 
     if (!SaveSolution())
       return SolverResult::FAILED;
@@ -146,7 +172,7 @@ OLCTriangle::Solve(bool exhaustive)
 }
 
 void
-OLCTriangle::SolveTriangle()
+OLCTriangle::SolveTriangle(bool exhaustive)
 {
   unsigned tp1 = 0,
            tp2 = 0,
@@ -154,88 +180,112 @@ OLCTriangle::SolveTriangle()
            start = 0,
            finish = 0;
 
-  ClosingPairs relaxed_pairs;
+  if (exhaustive || !predict) {
+    ClosingPairs relaxed_pairs;
 
-  unsigned relax = n_points * 0.03;
+    unsigned relax = n_points * 0.03;
 
-  // for all closed trace loops
-  for (auto closing_pair = closing_pairs.closing_pairs.begin();
-       closing_pair != closing_pairs.closing_pairs.end();
-       ++closing_pair) {
+    // for all closed trace loops
+    for (auto closing_pair = closing_pairs.closing_pairs.begin();
+         closing_pair != closing_pairs.closing_pairs.end();
+         ++closing_pair) {
 
-    auto already_relaxed = relaxed_pairs.findRange(*closing_pair);
-    if (already_relaxed.first != 0 || already_relaxed.second != 0)
-      // this pair is already relaxed... continue with next
-      continue;
+      auto already_relaxed = relaxed_pairs.findRange(*closing_pair);
+      if (already_relaxed.first != 0 || already_relaxed.second != 0)
+        // this pair is already relaxed... continue with next
+        continue;
 
-    unsigned relax_first = closing_pair->first;
-    unsigned relax_last = closing_pair->second;
+      unsigned relax_first = closing_pair->first;
+      unsigned relax_last = closing_pair->second;
 
-    for (auto relaxed = closing_pair;
-         relaxed != closing_pairs.closing_pairs.end() &&
-         relaxed->first <= closing_pair->first + relax &&
-         relaxed->second <= closing_pair->second + relax;
-         ++relaxed)
-      relax_last = relaxed->second;
+      for (auto relaxed = closing_pair;
+           relaxed != closing_pairs.closing_pairs.end() &&
+           relaxed->first <= closing_pair->first + relax &&
+           relaxed->second <= closing_pair->second + relax;
+           ++relaxed)
+        relax_last = relaxed->second;
 
-    relaxed_pairs.insert(ClosingPair(relax_first, relax_last));
-  }
+      relaxed_pairs.insert(ClosingPair(relax_first, relax_last));
+    }
 
-  // TODO: reverse sort relaxed pairs according to number of contained points
+    // TODO: reverse sort relaxed pairs according to number of contained points
 
-  ClosingPairs close_look;
+    ClosingPairs close_look;
 
-  for (auto relaxed_pair = relaxed_pairs.closing_pairs.begin();
-       relaxed_pair != relaxed_pairs.closing_pairs.end();
-       ++relaxed_pair) {
+    for (auto relaxed_pair = relaxed_pairs.closing_pairs.begin();
+         relaxed_pair != relaxed_pairs.closing_pairs.end();
+         ++relaxed_pair) {
 
-    std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
+      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-    triangle = RunBranchAndBound(relaxed_pair->first, relaxed_pair->second, best_d);
+      triangle = RunBranchAndBound(relaxed_pair->first, relaxed_pair->second, best_d, exhaustive);
 
-    if (std::get<3>(triangle) > best_d) {
-      // solution is better than best_d
-      // only if triangle is inside a unrelaxed pair...
+      if (std::get<3>(triangle) > best_d) {
+        // solution is better than best_d
+        // only if triangle is inside a unrelaxed pair...
 
-      auto unrelaxed = closing_pairs.findRange(ClosingPair(std::get<0>(triangle), std::get<2>(triangle)));
-      if (unrelaxed.first != 0 || unrelaxed.second != 0) {
-        // fortunately it is inside a unrelaxed closing pair :-)
-        start = unrelaxed.first;
+        auto unrelaxed = closing_pairs.findRange(ClosingPair(std::get<0>(triangle), std::get<2>(triangle)));
+        if (unrelaxed.first != 0 || unrelaxed.second != 0) {
+          // fortunately it is inside a unrelaxed closing pair :-)
+          start = unrelaxed.first;
+          tp1 = std::get<0>(triangle);
+          tp2 = std::get<1>(triangle);
+          tp3 = std::get<2>(triangle);
+          finish = unrelaxed.second;
+
+          best_d = std::get<3>(triangle);
+        } else {
+          // otherwise we should solve the triangle again for every unrelaxed pair
+          // contained inside the current relaxed pair. *damn!*
+          for (auto closing_pair = closing_pairs.closing_pairs.begin();
+               closing_pair != closing_pairs.closing_pairs.end();
+                ++closing_pair) {
+            if (closing_pair->first >= relaxed_pair->first && closing_pair->second <= relaxed_pair->second)
+              close_look.insert(*closing_pair);
+         }
+       }
+      }
+    }
+
+    for (auto close_look_pair = close_look.closing_pairs.begin();
+         close_look_pair != close_look.closing_pairs.end();
+         ++close_look_pair) {
+
+      std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
+
+      triangle = RunBranchAndBound(close_look_pair->first, close_look_pair->second, best_d, exhaustive);
+
+      if (std::get<3>(triangle) > best_d) {
+        // solution is better than best_d
+
+        start = close_look_pair->first;
         tp1 = std::get<0>(triangle);
         tp2 = std::get<1>(triangle);
         tp3 = std::get<2>(triangle);
-        finish = unrelaxed.second;
+        finish = close_look_pair->second;
 
         best_d = std::get<3>(triangle);
-      } else {
-        // otherwise we should solve the triangle again for every unrelaxed pair
-        // contained inside the current relaxed pair. *damn!*
-        for (auto closing_pair = closing_pairs.closing_pairs.begin();
-             closing_pair != closing_pairs.closing_pairs.end();
-              ++closing_pair) {
-          if (closing_pair->first >= relaxed_pair->first && closing_pair->second <= relaxed_pair->second)
-            close_look.insert(*closing_pair);
-        }
       }
     }
-  }
 
-  for (auto close_look_pair = close_look.closing_pairs.begin();
-       close_look_pair != close_look.closing_pairs.end();
-       ++close_look_pair) {
-
+  } else {
+    /**
+     * We're currently running in predictive, non-exhaustive mode, so we use
+     * one closing pair only (0 -> n_points-1) which allows us to suspend the
+     * solver...
+     */
     std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-    triangle = RunBranchAndBound(close_look_pair->first, close_look_pair->second, best_d);
+    triangle = RunBranchAndBound(0, n_points - 1, best_d, false);
 
     if (std::get<3>(triangle) > best_d) {
       // solution is better than best_d
 
-      start = close_look_pair->first;
+      start = 0;
       tp1 = std::get<0>(triangle);
       tp2 = std::get<1>(triangle);
       tp3 = std::get<2>(triangle);
-      finish = close_look_pair->second;
+      finish = n_points - 1;
 
       best_d = std::get<3>(triangle);
     }
@@ -256,7 +306,7 @@ OLCTriangle::SolveTriangle()
 
 
 std::tuple<unsigned, unsigned, unsigned, unsigned>
-OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d)
+OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, bool exhaustive)
 {
   /* Some general information about the branch and bound method can be found here:
    * http://eaton.math.rpi.edu/faculty/Mitchell/papers/leeejem.html
@@ -270,16 +320,22 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d)
            tp1 = 0,
            tp2 = 0,
            tp3 = 0;
+  unsigned iterations = 0;
 
   // note: this is _not_ the breakepoint between small and large triangles,
   // but a slightly lower value used for relaxed large triangle checking.
   const unsigned large_triangle_check =
     trace_master.ProjectRange(GetPoint(from).GetLocation(), fixed(500000)) * 0.99;
 
-  // initialize bound-and-branch tree with root node
-  CandidateSet root_candidates(this, from, to);
-  if (root_candidates.isFeasible(is_fai, large_triangle_check) && root_candidates.df_max >= worst_d)
-    branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
+  if (!running) {
+    // initiate algorithm. otherwise continue unfinished run
+    running = true;
+
+    // initialize bound-and-branch tree with root node
+    CandidateSet root_candidates(this, from, to);
+    if (root_candidates.isFeasible(is_fai, large_triangle_check) && root_candidates.df_max >= worst_d)
+      branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
+  }
 
   while (branch_and_bound.size() != 0) {
     /* now loop over the tree, branching each found candidate set, adding the branch if it's feasible.
@@ -287,9 +343,16 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d)
      * always work on the node with largest d_min
      */
 
+    iterations++;
+
+    // break loop if tick_iterations exceeded
+    if (!exhaustive && predict && iterations > tick_iterations) break;
+
     // first clean up tree, removeing all nodes with d_max < worst_d
     branch_and_bound.erase(branch_and_bound.begin(), branch_and_bound.lower_bound(worst_d));
-    assert(branch_and_bound.size() != 0);
+
+    // we might have cleaned up the whole tree. nothing to do then...
+    if (branch_and_bound.size() == 0) break;
 
     // get node to work on
     auto node = --branch_and_bound.end();
@@ -363,6 +426,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d)
     // remove current node
     branch_and_bound.erase(node);
   }
+
+
+  if (branch_and_bound.size() == 0)
+    running = false;
 
   if (integral_feasible) {
     if (tp1 > tp2) std::swap(tp1, tp2);

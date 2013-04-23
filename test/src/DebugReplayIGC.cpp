@@ -36,7 +36,7 @@ DebugReplayIGC::Next()
   while ((line = reader->ReadLine()) != NULL) {
     if (line[0] == 'B') {
       IGCFix fix;
-      if (IGCParseFix(line, extensions, fix) && fix.gps_valid) {
+      if (IGCParseFix(line, extensions, fix)) {
         CopyFromFix(fix);
 
         Compute();
@@ -81,12 +81,21 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   basic.date_time_utc.second = fix.time.second;
   basic.alive.Update(basic.clock);
   basic.location = fix.location;
-  basic.location_available.Update(basic.clock);
+
+  if (fix.gps_valid)
+    basic.location_available.Update(basic.clock);
+  else
+    basic.location_available.Clear();
 
   if (fix.gps_altitude != 0) {
     basic.gps_altitude = fixed(fix.gps_altitude);
-    basic.gps_altitude_available.Update(basic.clock);
-  }
+
+    if (fix.gps_valid)
+      basic.gps_altitude_available.Update(basic.clock);
+    else
+      basic.gps_altitude_available.Clear();
+  } else
+    basic.gps_altitude_available.Clear();
 
   if (fix.pressure_altitude != 0) {
     basic.pressure_altitude = basic.baro_altitude = fixed(fix.pressure_altitude);

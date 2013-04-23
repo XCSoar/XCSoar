@@ -33,6 +33,7 @@ WindEKFGlue::Reset()
   reset_pending = true;
   last_ground_speed_available.Clear();
   last_airspeed_available.Clear();
+  i = 0;
 
   ResetBlackout();
 }
@@ -104,16 +105,15 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   ekf.StatePrediction(gps_vel, dT);
   ekf.Correction(dynamic_pressure, gps_vel);
   // CovariancePrediction(dT);
+
+  ++i;
+  if (i % 10 != 0)
+    return Result(0);
+
   const float* x = ekf.get_state();
 
   Result res;
-  static int j=0;
-  j++;
-  if (j%10==0)
-    res.quality = 1;
-  else
-    res.quality = 0;
-
+  res.quality = 1;
   res.wind = SpeedVector(fixed(-x[0]), fixed(-x[1]));
 
   return res;

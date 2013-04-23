@@ -68,7 +68,7 @@ public:
    * object may be used only inside the #CalculationThread.
    */
   const Trace &GetContest() const {
-    return sprint;
+    return contest;
   }
 
   /**

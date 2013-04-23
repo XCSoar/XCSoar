@@ -24,13 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_WIND_HPP
 #define XCSOAR_CIRCLING_WIND_HPP
 
-#include "Math/Vector.hpp"
-#include "Geo/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Util/StaticArray.hpp"
 #include "NMEA/Validity.hpp"
 
 struct MoreData;
-struct DerivedInfo;
+struct CirclingInfo;
 
 /**
  * Class to provide wind estimates from circling
@@ -43,9 +42,8 @@ class CirclingWind
    */
   struct Sample
   {
-    Vector v;
     fixed time;
-    fixed mag;
+    SpeedVector vector;
   };
 
   Validity last_track_available, last_ground_speed_available;
@@ -54,11 +52,13 @@ class CirclingWind
   int circle_count;
   // active is set to true or false by the slot_newFlightMode slot
   bool active;
-  int circle_deg;
+
+  /**
+   * The angle turned in the current circle.
+   */
+  Angle current_circle;
+
   Angle last_track;
-  Vector min_vector;
-  Vector max_vector;
-  bool first;
 
   StaticArray<Sample, 50> samples;
 
@@ -66,11 +66,12 @@ public:
   struct Result
   {
     unsigned quality;
-    Vector wind;
+    SpeedVector wind;
 
     Result() {}
-    Result(int _quality):quality(_quality) {}
-    Result(int _quality, Vector _wind):quality(_quality), wind(_wind) {}
+    Result(unsigned _quality):quality(_quality) {}
+    Result(unsigned _quality, SpeedVector _wind)
+      :quality(_quality), wind(_wind) {}
 
     bool IsValid() const {
       return quality > 0;
@@ -83,14 +84,9 @@ public:
   void Reset();
 
   /**
-   * Called if the flightmode changes
-   */
-  void NewFlightMode(const DerivedInfo &derived);
-
-  /**
    * Called if a new sample is available in the samplelist.
    */
-  Result NewSample(const MoreData &info);
+  Result NewSample(const MoreData &info, const CirclingInfo &circling);
 
 private:
   Result CalcWind();

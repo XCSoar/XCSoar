@@ -52,8 +52,6 @@ int main(int argc, char **argv)
   circling_wind.Reset();
 
   while (replay->Next()) {
-    const bool last_circling = replay->Calculated().circling;
-
     circling_computer.TurnRate(replay->SetCalculated(),
                                replay->Basic(),
                                replay->Calculated().flight);
@@ -62,24 +60,16 @@ int main(int argc, char **argv)
                               replay->Calculated().flight,
                               circling_settings);
 
-    if (replay->Calculated().circling != last_circling)
-      circling_wind.NewFlightMode(replay->Calculated());
-
-    CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
+    CirclingWind::Result result = circling_wind.NewSample(replay->Basic(),
+                                                          replay->Calculated());
     if (result.quality > 0) {
-      fixed mag = result.wind.Magnitude();
-
-      Angle bearing;
-      if (result.wind.y == fixed(0) && result.wind.x == fixed(0))
-        bearing = Angle::Zero();
-      else
-        bearing = Angle::FromXY(result.wind.x, result.wind.y).AsBearing();
-
       TCHAR time_buffer[32];
       FormatTime(time_buffer, replay->Basic().time);
 
       _tprintf(_T("%s %d %d %g\n"),
-               time_buffer, result.quality, (int)bearing.Degrees(), (double)mag);
+               time_buffer, result.quality,
+               (int)result.wind.bearing.Degrees(),
+               (double)result.wind.norm);
     }
   }
 }

@@ -105,6 +105,11 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   PixelScalar y = 0 + padding;
   PixelScalar x = render_projection.GetScreenWidth() - padding;
 
+  if (compass_visible)
+    /* don't obscure the north arrow */
+    /* TODO: obtain offset from CompassRenderer */
+    y += Layout::Scale(19) + Layout::FastScale(13);
+
   if (terrain) {
     short elevation = terrain->GetTerrainHeight(location);
     if (!RasterBuffer::IsSpecial(elevation)) {

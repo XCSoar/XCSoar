@@ -35,7 +35,7 @@ Copyright_License {
  * too low quality data).
  */
 const Vector
-WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
+WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
 {
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
@@ -51,7 +51,6 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
   unsigned int total_quality = 0;
 
   Vector result(fixed(0), fixed(0));
-  int now = (int)(Time);
 
   found = false;
 
@@ -70,12 +69,12 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
       unsigned int a_quality =
-          iround(((fixed(2) / (altdiff * altdiff + fixed(1))) - fixed(1))
+        iround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
           * REL_FACTOR_ALTITUDE);
 
       // factor in timedifference. Maximum difference is 1 hours.
       unsigned int t_quality =
-          iround(k * (fixed(1) - timediff) / (timediff * timediff + k)
+        iround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
           * REL_FACTOR_TIME);
 
       if (m.quality == 6) {
@@ -125,17 +124,17 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
  * Adds the windvector vector with quality quality to the list.
  */
 void
-WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
-    int quality)
+WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
+                                    fixed alt, int quality)
 {
-  WindMeasurement &wind =
-      measurements.full() ? measurements[getLeastImportantItem(Time)] :
-                            measurements.append();
+  WindMeasurement &wind = measurements.full()
+    ? measurements[getLeastImportantItem(time)] :
+    measurements.append();
 
   wind.vector = vector;
   wind.quality = quality;
   wind.altitude = alt;
-  wind.time = (long)Time;
+  wind.time = time;
 }
 
 /**
@@ -143,13 +142,13 @@ WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
  * removed if the list is too full. Reimplemented from LimitedList.
  */
 unsigned
-WindMeasurementList::getLeastImportantItem(fixed Time)
+WindMeasurementList::getLeastImportantItem(unsigned now)
 {
-  int maxscore = 0;
+  unsigned maxscore = 0;
   unsigned int founditem = measurements.size() - 1;
 
   for (int i = founditem; i >= 0; i--) {
-    int score = measurements[i].Score((long)Time);
+    unsigned score = measurements[i].Score(now);
     if (score > maxscore) {
       maxscore = score;
       founditem = i;

@@ -29,8 +29,6 @@ Copyright_License {
 void
 WindComputer::Reset()
 {
-  last_circling = false;
-
   circling_wind.Reset();
   wind_ekf.Reset();
   wind_store.reset();
@@ -52,18 +50,11 @@ WindComputer::Compute(const WindSettings &settings,
                       const GlidePolar &glide_polar,
                       const MoreData &basic, DerivedInfo &calculated)
 {
-  if (settings.CirclingWindEnabled() &&
-      calculated.circling != last_circling)
-    circling_wind.NewFlightMode(calculated);
-
-  last_circling = calculated.circling;
-
   if (!calculated.flight.flying)
     return;
 
-  if (settings.CirclingWindEnabled() &&
-      calculated.turn_mode == CirclingMode::CLIMB) {
-    CirclingWind::Result result = circling_wind.NewSample(basic);
+  if (settings.CirclingWindEnabled()) {
+    CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
@@ -72,10 +63,8 @@ WindComputer::Compute(const WindSettings &settings,
       basic.airspeed_available && basic.airspeed_real &&
       basic.true_airspeed > GetVTakeoffFallback(glide_polar)) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);
-    if (result.quality > 0) {
-      Vector v_wind = Vector(result.wind);
-      wind_store.SlotMeasurement(basic, v_wind, result.quality);
-    }
+    if (result.quality > 0)
+      wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }
 
   if (settings.IsAutoWindEnabled())

@@ -2,13 +2,14 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.6 - not yet released
+Version 6.6 - 2013/04/23
 * map
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
   - allow configuration of "Final glide bar" display (#2554)
   - new snail trail option "Vario-scaled dots and lines"
   - topography icons
+  - don't draw pan info over north arrow (#2765)
 * cross section
   - show airspace names (#1149, #2390)
   - use glide polar instead of current glide ratio (#2687)
@@ -19,6 +20,7 @@ Version 6.6 - not yet released
   - waypoint details button in target dialog (#1967)
   - show distance in radial InfoBox comment (#2577)
   - new InfoBox "ATC radial" with distance in nautical miles (#2269, #2706)
+  - improved wind edit panel (#2770)
 * user interface
   - replay fast-forward
   - new waypoint location editor (#343)
@@ -50,6 +52,8 @@ Version 6.6 - not yet released
 * other
   - new polars for two G 102 Astir variants (#2701)
   - new option "auto bugs" increases bug setting every hour (#1526)
+* configuration
+  - fix saving of configuration values in non-metric setups (#2771)
 
 Version 6.5.4 - 2013/04/10
 * devices

@@ -35,6 +35,12 @@ struct Vector {
 
   constexpr Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 
+  Vector(Angle bearing, fixed norm) {
+    auto sc = bearing.SinCos();
+    x = sc.second * norm;
+    y = sc.first * norm;
+  }
+
   Vector(const SpeedVector speed) {
     auto sc = speed.bearing.SinCos();
     x = sc.second * speed.norm;

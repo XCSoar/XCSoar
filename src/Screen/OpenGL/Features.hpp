@@ -37,11 +37,6 @@ Copyright_License {
 #define HAVE_EGL
 
 /**
- * Running on OpenGL/ES.
- */
-#define HAVE_GLES
-
-/**
  * The OES_draw_texture extension is available.
  */
 #define HAVE_OES_DRAW_TEXTURE
@@ -50,7 +45,6 @@ Copyright_License {
 
 #ifdef USE_VIDEOCORE
 #define HAVE_EGL
-#define HAVE_GLES
 #endif
 
 /**

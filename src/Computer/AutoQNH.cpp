@@ -33,7 +33,6 @@ AutoQNH::Process(const NMEAInfo &basic, DerivedInfo &calculated,
 {
   if (!calculated.flight.on_ground // must be on ground
       || IsFinished()    // only do it once
-      || !basic.gps.real // never in replay mode / simulator
       || !basic.location_available // Reject if no valid GPS fix
       || !basic.static_pressure_available // Reject if no pressure
       || settings_computer.pressure_available // Reject if QNH already known

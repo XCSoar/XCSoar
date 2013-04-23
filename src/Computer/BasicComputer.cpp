@@ -436,12 +436,9 @@ BasicComputer::Compute(MoreData &data,
     ComputeGroundSpeed(data, last_gps);
     ComputeAirspeed(data, calculated);
   }
-#ifndef NDEBUG
-  // For testing without gps.
-  // When CPU load is low enough it can be done for every sample.
-  else if (data.dyn_pressure_available)
+  else if ((data.dyn_pressure_available) ||
+           (data.pitot_pressure_available && data.static_pressure_available))
     ComputeAirspeed(data, calculated);
-#endif
 
   ComputeHeading(data.attitude, data, calculated);
 

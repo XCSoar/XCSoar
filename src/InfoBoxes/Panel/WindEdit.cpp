@@ -22,93 +22,10 @@ Copyright_License {
 */
 
 #include "WindEdit.hpp"
-#include "Form/DataField/Float.hpp"
-#include "Interface.hpp"
-#include "Units/Units.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Listener.hpp"
-#include "Form/DataField/Angle.hpp"
-#include "UIGlobals.hpp"
-#include "Language/Language.hpp"
-
-enum ControlIndex {
-  WindSpeed,
-  WindDirection,
-  LastItemInList,
-};
-
-class WindEditPanel: public RowFormWidget, DataFieldListener {
-public:
-  WindEditPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) override;
-
-protected:
-  /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
-
-private:
-  void OnWindSpeed(DataFieldFloat &Sender);
-  void OnWindDirection(AngleDataField &df);
-};
-
-void
-WindEditPanel::OnModified(DataField &df)
-{
-  if (IsDataField(WindSpeed, df))
-    OnWindSpeed((DataFieldFloat&)df);
-
-  else if (IsDataField(WindDirection, df))
-    OnWindDirection((AngleDataField &)df);
-}
-
-void
-WindEditPanel::OnWindSpeed(DataFieldFloat &Sender)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
-  const bool external_wind = basic.external_wind_available &&
-    settings.use_external_wind;
-
-  if (!external_wind) {
-    settings.manual_wind.norm = Units::ToSysWindSpeed(Sender.GetAsFixed());
-    settings.manual_wind_available.Update(basic.clock);
-  }
-}
-
-void
-WindEditPanel::OnWindDirection(AngleDataField &df)
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
-  const bool external_wind = basic.external_wind_available &&
-    settings.use_external_wind;
-
-  if (!external_wind) {
-    settings.manual_wind.bearing = df.GetValue();
-    settings.manual_wind_available.Update(basic.clock);
-  }
-}
-
-void
-WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  RowFormWidget::Prepare(parent, rc);
-
-  AddFloat(_("Speed"), _("Manual adjustment of wind speed."), _T("%.0f"),
-           _T("%.0f"), fixed(0), fixed(130), fixed(1), false,
-           UnitGroup::WIND_SPEED,
-           CommonInterface::Calculated().GetWindOrZero().norm, this);
-
-  AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
-           CommonInterface::Calculated().GetWindOrZero().bearing, 5u,
-           false, this);
-}
+#include "Dialogs/Settings/WindSettingsPanel.hpp"
 
 Widget *
 LoadWindEditPanel(unsigned id)
 {
-  return new WindEditPanel();
+  return new WindSettingsPanel(true, true, true);
 }

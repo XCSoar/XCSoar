@@ -46,7 +46,7 @@ SVG_LOGOS_DATA = $(wildcard $(topdir)/Data/graphics/logo*.svg)
 SVG_LOGOS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.png,$(SVG_LOGOS_DATA))
 
 TEX_INCLUDES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/*.sty)
-FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/Bilder/*.png $(DOC)/manual/de/Blitz/Bilder/*.jpg
+FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/figures/*.png
  
 TEX_FILES_DE = $(wildcard $(DOC)/manual/de/*.tex)
 TEX_INCLUDES_DE = $(wildcard $(DOC)/manual/de/*.sty)
@@ -100,7 +100,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-develo
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/Blitzeinstieg.tex \
+$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/XCBlitzIIKonf.tex \
 	$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
@@ -157,10 +157,10 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
 	cp $(FIGURES_FR) $(T)/fr/figures/.
 	# Incl. both German translation
-	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/Bilder
+	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/figures
 	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
 	cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
-	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/Bilder/.
+	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/figures/.
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
