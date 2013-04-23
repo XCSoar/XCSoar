@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.6 - not yet released
+Version 6.6 - 2013/04/23
 * map
   - optional distinct map zoom on each page (#1603)
   - add label selection "Task waypoints & airfields"
