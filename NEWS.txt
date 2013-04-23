@@ -26,6 +26,8 @@ XCSoar TE
     (most users don't know the difference between height and altitude,
      let's not make it harder for them than it already is)
   - changed default infobox geometry and contents
+  - enabled "Shaded" infobox styling by default
+    (looks better and helps to guide the eye to the right infobox)
 * map
   - changed trail length and type default to "full" and "Vario #2 with dots"
     ("Vario #2" has better contrast and having the dots is even better)
