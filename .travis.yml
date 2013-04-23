@@ -13,10 +13,6 @@ env:
 - TARGET=ALTAIR
 - TARGET=MANUAL
 
-before_install:
-- cat /proc/cpuinfo
-- uname -a
-- gcc -v
 install: 
 #General
 - sudo apt-get clean
