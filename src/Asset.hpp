@@ -26,6 +26,10 @@ Copyright_License {
 #include "Hardware/ModelType.hpp"
 #include "Compiler.h"
 
+#ifdef ANDROID
+#include "Android/Product.hpp"
+#endif
+
 #include <tchar.h>
 
 // asset/registration data
@@ -158,6 +162,19 @@ IsAndroid()
 {
 #if defined(ANDROID)
   return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running a device with a gray-scale screen
+ */
+static inline bool
+IsGrayScaleScreen()
+{
+#ifdef ANDROID
+  return IsNookSimpleTouch();
 #else
   return false;
 #endif
