@@ -144,11 +144,10 @@ devStartup()
 bool
 HaveCondorDevice()
 {
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i]->IsCondor())
-      return true;
-
-  return false;
+  return ExistsIf(device_list, device_list + NUMDEV,
+                  [](const DeviceDescriptor *d) {
+                    return d->IsCondor();
+                  });
 }
 
 void
