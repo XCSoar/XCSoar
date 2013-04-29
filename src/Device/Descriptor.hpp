@@ -79,7 +79,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   DeviceConfig config;
 
   /**
-   * This object runs the Open() method in background to make it
+   * This object runs the DoOpen() method in background to make it
    * non-blocking.
    */
   AsyncJobRunner async;
@@ -264,7 +264,7 @@ private:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port &port, OperationEnvironment &env);
+  bool OpenOnPort(Port &port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 
