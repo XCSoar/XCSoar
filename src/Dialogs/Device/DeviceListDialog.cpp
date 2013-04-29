@@ -73,10 +73,17 @@ class DeviceListWidget final
   UPixelScalar font_height;
 
   struct Flags {
+    bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
 
-    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+    void Set(const DeviceConfig &config, const DeviceDescriptor &device,
+             const NMEAInfo &basic) {
+      /* if a DeviceDescriptor is "unconfigured" but its DeviceConfig
+         contains a valid configuration, then it got disabled by
+         DeviceConfigOverlaps(), i.e. it's duplicate */
+      duplicate = !config.IsDisabled() && !device.IsConfigured();
+
       switch (device.GetState()) {
       case PortState::READY:
         open = true;
@@ -118,9 +125,10 @@ class DeviceListWidget final
       i = 0;
     }
 
-    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+    void Set(const DeviceConfig &config, const DeviceDescriptor &device,
+             const NMEAInfo &basic) {
       i = 0;
-      flags.Set(device, basic);
+      flags.Set(config, device, basic);
     }
 
     bool operator==(const Item &other) const {
@@ -223,7 +231,8 @@ DeviceListWidget::RefreshList()
     Item &item = items[i];
 
     Item n;
-    n.Set(*device_list[i], device_blackboard->RealState(i));
+    n.Set(CommonInterface::GetSystemSettings().devices[i],
+          *device_list[i], device_blackboard->RealState(i));
 
     if (n != item) {
       item = n;
@@ -342,6 +351,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
              !BluetoothHelper::isEnabled(Java::GetEnv())) {
     status = _("Bluetooth is disabled");
 #endif
+  } else if (flags.duplicate) {
+    status = _("Duplicate");
   } else if (flags.error) {
     status = _("Error");
   } else {
