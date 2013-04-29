@@ -359,7 +359,7 @@ DeviceListWidget::OnCursorMoved(unsigned index)
   UpdateButtons();
 }
 
-void
+inline void
 DeviceListWidget::ReconnectCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
@@ -390,7 +390,7 @@ DeviceListWidget::ReconnectCurrent()
   device.Reopen(env);
 }
 
-void
+inline void
 DeviceListWidget::DownloadFlightFromCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
@@ -416,7 +416,7 @@ DeviceListWidget::DownloadFlightFromCurrent()
   device.Return();
 }
 
-void
+inline void
 DeviceListWidget::EditCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
@@ -452,7 +452,7 @@ DeviceListWidget::EditCurrent()
   descriptor.Reopen(env);
 }
 
-void
+inline void
 DeviceListWidget::ManageCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
@@ -511,7 +511,7 @@ DeviceListWidget::ManageCurrent()
   descriptor.Return();
 }
 
-void
+inline void
 DeviceListWidget::MonitorCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
