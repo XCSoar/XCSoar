@@ -29,6 +29,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "Util/Algorithm.hpp"
 
 #include <assert.h>
 
@@ -84,6 +85,18 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   return a.port_type == b.port_type;
 }
 
+gcc_pure
+static bool
+DeviceConfigOverlaps(const DeviceConfig &config,
+                     const DeviceDescriptor *const*begin,
+                     const DeviceDescriptor *const*const end)
+{
+  return ExistsIf(begin, end,
+                  [&config](const DeviceDescriptor *d) {
+                    return DeviceConfigOverlaps(config, d->GetConfig());
+                  });
+}
+
 void
 devStartup()
 {
@@ -102,12 +115,7 @@ devStartup()
 
     none_available = false;
 
-    bool overlap = false;
-    for (unsigned j = 0; j < i; ++j)
-      if (DeviceConfigOverlaps(config, device_list[j]->GetConfig()))
-        overlap = true;
-
-    if (overlap) {
+    if (DeviceConfigOverlaps(config, device_list, device_list + i)) {
       device.ClearConfig();
       continue;
     }
