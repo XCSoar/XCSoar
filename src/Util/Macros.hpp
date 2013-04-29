@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2013 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_ARRAY_HPP
-#define XCSOAR_UTIL_ARRAY_HPP
+#ifndef XCSOAR_UTIL_MACROS_HPP
+#define XCSOAR_UTIL_MACROS_HPP
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
