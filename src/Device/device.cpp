@@ -42,6 +42,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
 
+  device.ResetFailureCounter();
   device.Open(env);
 }
 
@@ -54,37 +55,38 @@ gcc_pure
 static bool
 DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
+  if (a.port_type != b.port_type)
+    return false;
+
   switch (a.port_type) {
   case DeviceConfig::PortType::SERIAL:
   case DeviceConfig::PortType::PTY:
-    return b.port_type == DeviceConfig::PortType::SERIAL &&
-      a.path.equals(b.path);
+    return a.path.equals(b.path);
 
   case DeviceConfig::PortType::RFCOMM:
-    return b.port_type == DeviceConfig::PortType::RFCOMM &&
-      a.bluetooth_mac.equals(b.bluetooth_mac);
+    return a.bluetooth_mac.equals(b.bluetooth_mac);
 
   case DeviceConfig::PortType::IOIOUART:
-    return (b.port_type == DeviceConfig::PortType::IOIOUART) &&
-      a.ioio_uart_id == b.ioio_uart_id;
+    return a.ioio_uart_id == b.ioio_uart_id;
 
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
-    return b.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR &&
-      a.i2c_bus == b.i2c_bus && a.i2c_addr == b.i2c_addr;
+    return a.i2c_bus == b.i2c_bus && a.i2c_addr == b.i2c_addr;
 
   case DeviceConfig::PortType::DISABLED:
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
-  case DeviceConfig::PortType::TCP_LISTENER:
-  case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
   case DeviceConfig::PortType::NUNCHUCK: // Who wants 2 nunchucks ??
   case DeviceConfig::PortType::IOIOVOLTAGE:
-    break;
+    return true;
+
+  case DeviceConfig::PortType::TCP_LISTENER:
+  case DeviceConfig::PortType::UDP_LISTENER:
+    return a.tcp_port == b.tcp_port;
   }
 
-  return a.port_type == b.port_type;
+  gcc_unreachable();
 }
 
 gcc_pure
