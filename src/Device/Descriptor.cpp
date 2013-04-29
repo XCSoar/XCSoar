@@ -225,7 +225,7 @@ DeviceDescriptor::OpenOnPort(Port &_port, OperationEnvironment &env)
     port->StartRxThread();
 
   EnableNMEA(env);
-  return true;
+  return !env.IsCancelled();
 }
 
 bool
