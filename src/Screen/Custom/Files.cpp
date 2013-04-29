@@ -39,9 +39,11 @@ static const char *const all_font_paths[] = {
   "/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/KoboNickel.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
+  "/usr/share/fonts/TTF/droid/DroidSans.ttf",
   "/usr/share/fonts/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/DroidSans.ttf",
@@ -66,10 +68,12 @@ static const char *const all_bold_font_paths[] = {
   "/usr/local/Trolltech/QtEmbedded-4.6.2-arm/lib/fonts/KoboNickel-Bold.ttf",
 #elif defined(HAVE_POSIX)
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/droid/DroidSans-Bold.ttf",
+  "/usr/share/fonts/TTF/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf",
@@ -90,10 +94,12 @@ static const char *const all_monospace_font_paths[] = {
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
+  "/usr/share/fonts/TTF/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/msttcorefonts/couri.ttf",
   "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
+  "/usr/share/fonts/TTF/freefont/FreeMono.ttf",
 #endif
   NULL
 };
