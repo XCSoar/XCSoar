@@ -72,12 +72,14 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
-  case DeviceConfig::PortType::TCP_LISTENER:
-  case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
   case DeviceConfig::PortType::NUNCHUCK: // Who wants 2 nunchucks ??
   case DeviceConfig::PortType::IOIOVOLTAGE:
     return true;
+
+  case DeviceConfig::PortType::TCP_LISTENER:
+  case DeviceConfig::PortType::UDP_LISTENER:
+    return a.tcp_port == b.tcp_port;
   }
 
   gcc_unreachable();
