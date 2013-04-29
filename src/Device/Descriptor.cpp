@@ -49,6 +49,7 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "Android/Product.hpp"
 #endif
 
@@ -503,6 +504,26 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
     return;
+
+#ifdef ANDROID
+  if (config.port_type == DeviceConfig::PortType::RFCOMM &&
+      native_view->GetAPILevel() < 11 && n_failures >= 2) {
+    /* on Android < 3.0, system_server's "BT EventLoop" thread
+       eventually crashes with JNI reference table overflow due to a
+       memory leak after too many Bluetooth failures
+       (https://code.google.com/p/android/issues/detail?id=8676);
+       don't attempt to reconnect on this Android version over and
+       over to keep the chance of this bug occurring low enough */
+
+    if (n_failures == 2) {
+      LogFormat(_T("Giving up on Bluetooth device %s to avoid Android crash bug"),
+                config.bluetooth_mac.c_str());
+      ++n_failures;
+    }
+
+    return;
+  }
+#endif
 
   TCHAR buffer[64];
   LogFormat(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
