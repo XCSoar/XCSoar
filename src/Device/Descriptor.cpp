@@ -210,31 +210,19 @@ DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
 
   port = &_port;
 
-  assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
-  if (driver->CreateOnPort == NULL) {
-    assert(driver->IsNMEAOut());
-
-    /* start the Port thread for NMEA out; this is a kludge for
-       TCPPort, because TCPPort calls accept() only in the receive
-       thread.  Data received from NMEA out is discarded by our method
-       DataReceived().  Once TCPPort gets fixed, this kludge can be
-       removed. */
-    port->StartRxThread();
-    return true;
-  }
-
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
   parser.SetIgnoreChecksum(config.ignore_checksum);
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
-  Device *new_device = driver->CreateOnPort(config, *port);
+  if (driver->CreateOnPort != nullptr) {
+    Device *new_device = driver->CreateOnPort(config, *port);
 
-  {
     const ScopeLock protect(mutex);
     device = new_device;
-  }
+  } else
+    port->StartRxThread();
 
   EnableNMEA(env);
   return true;
