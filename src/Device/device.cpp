@@ -39,6 +39,7 @@ devInitOne(DeviceDescriptor &device)
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
 
+  device.ResetFailureCounter();
   device.Open(env);
 }
 

@@ -171,6 +171,13 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   ExternalSettings settings_received;
 
   /**
+   * Number of port failures since the device was last reset.
+   *
+   * @param see ResetFailureCounter()
+   */
+  unsigned n_failures;
+
+  /**
    * Internal flag for OnSysTicker() for detecting link timeout.
    */
   bool was_alive;
@@ -280,6 +287,10 @@ public:
    * To be used by OpenDeviceJob, don't call directly.
    */
   bool DoOpen(OperationEnvironment &env);
+
+  void ResetFailureCounter() {
+    n_failures = 0u;
+  }
 
   /**
    * @param env a persistent object
