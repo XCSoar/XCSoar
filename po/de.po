@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-03-28 09:30+0100\n"
-"PO-Revision-Date: 2013-03-28 23:19+0000\n"
+"PO-Revision-Date: 2013-04-23 22:41+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-29 17:21+0000\n"
-"X-Generator: Launchpad (build 16546)\n"
+"X-Launchpad-Export-Date: 2013-04-29 12:44+0000\n"
+"X-Generator: Launchpad (build 16580)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2379,7 +2379,7 @@ msgstr "Nächster Wegpunkt - Ankunftshöhe (MSL)"
 #: src/InfoBoxes/Content/Factory.cpp:933
 #, no-c-format
 msgid "WP AltA"
-msgstr "Wegpunkt Alternative A"
+msgstr "WP Ankfts H"
 
 #: src/InfoBoxes/Content/Factory.cpp:934
 #, no-c-format
