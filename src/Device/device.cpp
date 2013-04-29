@@ -34,8 +34,10 @@ Copyright_License {
 #include <assert.h>
 
 static void
-devInitOne(DeviceDescriptor &device)
+devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
 {
+  device.SetConfig(config);
+
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
@@ -120,8 +122,7 @@ devStartup()
       continue;
     }
 
-    device.SetConfig(config);
-    devInitOne(*device_list[i]);
+    devInitOne(device, config);
   }
 
   if (none_available) {
@@ -135,8 +136,7 @@ devStartup()
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
     DeviceDescriptor &device = *device_list[0];
-    device.SetConfig(config);
-    devInitOne(device);
+    devInitOne(device, config);
 #endif
   }
 }
