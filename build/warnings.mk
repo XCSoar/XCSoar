@@ -4,10 +4,6 @@ WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
 WARNINGS += -Wredundant-decls
 
-ifneq ($(DEBUG),n)
-WARNINGS += -Wuninitialized
-endif
-
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
 
