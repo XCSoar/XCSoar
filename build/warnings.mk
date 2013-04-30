@@ -26,10 +26,8 @@ endif
 
 # make warnings fatal (for perfectionists)
 
-ifeq ($(WERROR),)
 ifneq ($(TARGET),CYGWIN)
-WERROR = $(DEBUG)
-endif
+WERROR ?= $(DEBUG)
 endif
 
 ifeq ($(WERROR),y)
