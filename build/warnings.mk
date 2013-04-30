@@ -2,10 +2,7 @@ WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
-
-ifneq ($(TARGET),ANDROID)
 WARNINGS += -Wredundant-decls
-endif
 
 ifneq ($(DEBUG),n)
 WARNINGS += -Wuninitialized
