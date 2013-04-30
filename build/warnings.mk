@@ -7,6 +7,10 @@ ifneq ($(TARGET),ANDROID)
 WARNINGS += -Wredundant-decls
 endif
 
+ifneq ($(DEBUG),n)
+WARNINGS += -Wuninitialized
+endif
+
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
 
