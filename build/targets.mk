@@ -297,6 +297,10 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(CLANG),y)
     ANDROID_TOOLCHAIN_NAME = llvm-3.2
+
+    # workaround: use libstdc++ 4.6, because 4.7 fails to link with
+    # clang due to missing __atomic_* symbols
+    ANDROID_GCC_VERSION = 4.6
   else
     ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
   endif
