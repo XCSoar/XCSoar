@@ -12,7 +12,7 @@ endif
 
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
-ifeq ($(DEBUG)$(LLVM),nn)
+ifeq ($(DEBUG)$(LLVM)$(LTO),nny)
 AR += --plugin /usr/local/lib/LLVMgold.so
 endif
 

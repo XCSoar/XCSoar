@@ -4,7 +4,7 @@ ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
 else
-  ifeq ($(CLANG)$(LLVM),yn)
+  ifeq ($(CLANG)$(LLVM)$(LTO),yny)
     OPTIMIZE := -O4
   else
     OPTIMIZE := -Os
