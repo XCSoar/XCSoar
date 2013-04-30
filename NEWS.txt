@@ -6,6 +6,8 @@ Version 6.6.1 - not yet released
 * devices
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
+* configuration
+  - fix regression with polar configuration (#2803)
 
 Version 6.6 - 2013/04/23
 * map
