@@ -13,7 +13,6 @@ endif
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 ifeq ($(DEBUG)$(LLVM),nn)
-OPTIMIZE := -O4 -DNDEBUG
 AR += --plugin /usr/local/lib/LLVMgold.so
 endif
 

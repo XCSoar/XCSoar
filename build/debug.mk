@@ -4,7 +4,13 @@ ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
 else
-OPTIMIZE := -Os -DNDEBUG
+  ifeq ($(CLANG)$(LLVM),yn)
+    OPTIMIZE := -O4
+  else
+    OPTIMIZE := -Os
+  endif
+
+  OPTIMIZE += -DNDEBUG
 endif
 
 ifeq ($(CLANG),y)
