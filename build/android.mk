@@ -8,7 +8,7 @@ ifeq ($(TARGET),ANDROID)
 # Activity icon, to allow simultaneous installation of "stable" and
 # "testing".
 # In the stable branch, this should default to "n".
-TESTING = n
+TESTING = y
 
 ANT = ant
 JAVAH = javah
