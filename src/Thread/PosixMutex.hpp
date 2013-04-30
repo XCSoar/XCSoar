@@ -44,7 +44,10 @@ public:
   /**
    * Create a "fast" mutex.
    */
-  constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
+#if !defined(__BIONIC__) || !defined(__clang__)
+  constexpr
+#endif
+  PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
 
   PosixMutex(const PosixMutex &other) = delete;
   PosixMutex &operator=(const PosixMutex &other) = delete;
