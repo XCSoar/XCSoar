@@ -79,7 +79,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
   DeviceConfig config;
 
   /**
-   * This object runs the Open() method in background to make it
+   * This object runs the DoOpen() method in background to make it
    * non-blocking.
    */
   AsyncJobRunner async;
@@ -169,6 +169,13 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
    * having to do a full NMEA_INFO copy.
    */
   ExternalSettings settings_received;
+
+  /**
+   * Number of port failures since the device was last reset.
+   *
+   * @param see ResetFailureCounter()
+   */
+  unsigned n_failures;
 
   /**
    * Internal flag for OnSysTicker() for detecting link timeout.
@@ -264,7 +271,7 @@ private:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port &port, OperationEnvironment &env);
+  bool OpenOnPort(Port &port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 
@@ -280,6 +287,10 @@ public:
    * To be used by OpenDeviceJob, don't call directly.
    */
   bool DoOpen(OperationEnvironment &env);
+
+  void ResetFailureCounter() {
+    n_failures = 0u;
+  }
 
   /**
    * @param env a persistent object

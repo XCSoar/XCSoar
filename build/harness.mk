@@ -13,6 +13,7 @@ HARNESS_SOURCES = \
 	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
+	$(SRC)/Audio/VegaVoiceSettings.cpp \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \

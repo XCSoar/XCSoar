@@ -49,6 +49,7 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Android/InternalSensors.hpp"
 #include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "Android/Product.hpp"
 #endif
 
@@ -107,6 +108,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    voltage(nullptr),
 #endif
 #endif
+   n_failures(0u),
    ticker(false), borrowed(false)
 {
   config.Clear();
@@ -119,6 +121,8 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
 void
 DeviceDescriptor::SetConfig(const DeviceConfig &_config)
 {
+  ResetFailureCounter();
+
   config = _config;
 
   if (config.UsesDriver()) {
@@ -189,7 +193,7 @@ DeviceDescriptor::CancelAsync()
 }
 
 bool
-DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
+DeviceDescriptor::OpenOnPort(Port &_port, OperationEnvironment &env)
 {
   assert(port == NULL);
   assert(device == NULL);
@@ -210,34 +214,22 @@ DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
 
   port = &_port;
 
-  assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
-  if (driver->CreateOnPort == NULL) {
-    assert(driver->IsNMEAOut());
-
-    /* start the Port thread for NMEA out; this is a kludge for
-       TCPPort, because TCPPort calls accept() only in the receive
-       thread.  Data received from NMEA out is discarded by our method
-       DataReceived().  Once TCPPort gets fixed, this kludge can be
-       removed. */
-    port->StartRxThread();
-    return true;
-  }
-
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
   parser.SetIgnoreChecksum(config.ignore_checksum);
   if (config.IsDriver(_T("Condor")))
     parser.DisableGeoid();
 
-  Device *new_device = driver->CreateOnPort(config, *port);
+  if (driver->CreateOnPort != nullptr) {
+    Device *new_device = driver->CreateOnPort(config, *port);
 
-  {
     const ScopeLock protect(mutex);
     device = new_device;
-  }
+  } else
+    port->StartRxThread();
 
   EnableNMEA(env);
-  return true;
+  return !env.IsCancelled();
 }
 
 bool
@@ -396,11 +388,15 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     return false;
   }
 
-  if (!port->WaitConnected(env) || !Open(*port, env)) {
+  if (!port->WaitConnected(env) || !OpenOnPort(*port, env)) {
+    if (!env.IsCancelled())
+      ++n_failures;
+
     delete port;
     return false;
   }
 
+  ResetFailureCounter();
   return true;
 }
 
@@ -508,6 +504,26 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
     return;
+
+#ifdef ANDROID
+  if (config.port_type == DeviceConfig::PortType::RFCOMM &&
+      native_view->GetAPILevel() < 11 && n_failures >= 2) {
+    /* on Android < 3.0, system_server's "BT EventLoop" thread
+       eventually crashes with JNI reference table overflow due to a
+       memory leak after too many Bluetooth failures
+       (https://code.google.com/p/android/issues/detail?id=8676);
+       don't attempt to reconnect on this Android version over and
+       over to keep the chance of this bug occurring low enough */
+
+    if (n_failures == 2) {
+      LogFormat(_T("Giving up on Bluetooth device %s to avoid Android crash bug"),
+                config.bluetooth_mac.c_str());
+      ++n_failures;
+    }
+
+    return;
+  }
+#endif
 
   TCHAR buffer[64];
   LogFormat(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));

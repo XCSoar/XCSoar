@@ -155,6 +155,9 @@ Profile::GetPath(const char *key, TCHAR *value)
   if (!Get(key, buffer, ARRAY_SIZE(buffer)))
       return false;
 
+  if (StringIsEmpty(buffer))
+    return false;
+
   ExpandLocalPath(value, buffer);
   return true;
 }
