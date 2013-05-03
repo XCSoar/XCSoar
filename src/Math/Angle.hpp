@@ -204,6 +204,18 @@ public:
   void ToDMS(unsigned &dd, unsigned &mm, unsigned &ss,
              bool &is_positive) const;
 
+  /**
+   * Converts this Angle to degrees, minute, decimal minutes and a
+   * bool-based east/north variable
+   *
+   * @param dd Degrees (pointer)
+   * @param mm Minutes (pointer)
+   * @param mmm Decimal minutes (pointer)
+   * @param east True if East, False if West (pointer)
+   */
+  void ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
+             bool &is_positive) const;
+
   gcc_pure
   Angle Absolute() const {
     return Angle(fabs(Native()));
