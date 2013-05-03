@@ -21,6 +21,8 @@ XCSoar TE
     (the "Ack" function is not used as frequently as "Goto" and is only
      one more tap on the screen away. this additional button is cluttering
      the dialog)
+  - added AutoZoom gesture (up-down)
+    (will be part of XCSoar 6.7)
 * infoboxes
   - renamed "Height AGL" to "Altitude AGL"
     (most users don't know the difference between height and altitude,
