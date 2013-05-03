@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7 - not yet released
 * map
   - terrain countour lines (#2451)
+* waypoint editor
+  - delete waypoint implemented
 
 Version 6.6.1 - not yet released
 * devices

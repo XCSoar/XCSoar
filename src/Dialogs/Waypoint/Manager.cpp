@@ -114,21 +114,19 @@ OnWaypointDeleteClicked()
     return;
   }
 
-#ifdef OLD_TASK
-  int res;
-  res = ShowWaypointListDialog(CommonInterface::Basic().location);
-  if (res != -1){
-    if(ShowMessageBox(way_points.get(res).name,
-                   _("Delete Waypoint?"),
-                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
-      Waypoint &waypoint = way_points.set(res);
+  const Waypoint *way_point =
+    ShowWaypointListDialog(CommonInterface::Basic().location);
+  if (way_point == nullptr)
+    return;
 
-      waypoint.FileNum = -1;
-      waypoint.original_id = 0;
-      WaypointsNeedSave = true;
-    }
+  if (ShowMessageBox(way_point->name.c_str(), _("Delete waypoint?"),
+                     MB_YESNO | MB_ICONQUESTION) == IDYES) {
+    WaypointsNeedSave = true;
+
+    ScopeSuspendAllThreads suspend;
+    way_points.Erase(*way_point);
+    way_points.Optimise();
   }
-#endif
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
