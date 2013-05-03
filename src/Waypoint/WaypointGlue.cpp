@@ -34,6 +34,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/WaypointWriter.hpp"
 #include "Operation/Operation.hpp"
+#include "WaypointFileType.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -72,6 +73,7 @@ WaypointGlue::IsWritable(int file_number)
     return false;
 
   return (MatchesExtension(file, _T(".dat")) ||
+          MatchesExtension(file, _T(".cup")) ||
           MatchesExtension(file, _T(".xcw")));
 }
 
@@ -166,7 +168,7 @@ WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
   }
 
   WaypointWriter wp_writer(way_points, num);
-  wp_writer.Save(writer);
+  wp_writer.Save(writer, DetermineWaypointFileType(file));
 
   LogFormat("Waypoint file %d saved", num);
   return true;
