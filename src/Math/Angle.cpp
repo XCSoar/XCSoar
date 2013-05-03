@@ -40,6 +40,23 @@ Angle::ToDMS(unsigned &dd, unsigned &mm, unsigned &ss, bool &is_positive) const
   dd = value;
 }
 
+void
+Angle::ToDMM(unsigned &dd, unsigned &mm, unsigned &mmm,
+             bool &is_positive) const
+{
+  is_positive = !negative(value);
+
+  unsigned value = uround(AbsoluteDegrees() * 3600);
+
+  mmm = (float) (value % 60) / 0.06;
+  value /= 60;
+
+  mm = value % 60;
+  value /= 60;
+
+  dd = value;
+}
+
 int
 Angle::Sign(const fixed tolerance) const
 {
