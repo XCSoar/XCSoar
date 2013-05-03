@@ -1,8 +1,8 @@
-XCSoar README
+XCSoar-TE README
 =============
 
-XCSoar is a tactical glide computer for Android, Linux, Mac OS X,
-Windows and Windows CE/Mobile.
+XCSoar-TE is a tactical glide computer for Android, Linux, Mac OS X,
+Windows and Windows CE/Mobile. It was forked from XCSoar.
 
 This file is aimed at developers.  Users should read the manual which
 can be found on the XCSoar home page (<http://www.xcsoar.org/>).
@@ -11,10 +11,10 @@ can be found on the XCSoar home page (<http://www.xcsoar.org/>).
 Getting the source
 ------------------
 
-The XCSoar source code is managed with git (<http://git-scm.com/>).  It
+The XCSoar-TE source code is managed with git (<http://git-scm.com/>).  It
 can be downloaded with the following command:
 
-    git clone git://git.xcsoar.org/xcsoar/master/xcsoar.git
+    git clone git://github.com/XCSoar/XCSoar-TE/
 
 To update your repository, type:
 
@@ -55,7 +55,7 @@ For Linux/Unix, you need:
 - libpng (<http://www.libpng.org/>)
 - libjpeg (<http://libjpeg.sourceforge.net/>)
 - OpenGL
-- to run XCSoar, you need one of the following fonts (Debian package):
+- to run XCSoar-TE, you need one of the following fonts (Debian package):
   DejaVu (`ttf-dejavu`), Droid (`ttf-droid`), Freefont (`ttf-freefont)
 
 On Debian, you may install these using the following command:
