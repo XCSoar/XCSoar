@@ -265,6 +265,12 @@ event=Zoom out
 
 mode=default
 type=gesture
+data=UD
+event=Zoom auto show
+event=Zoom auto on
+
+mode=default
+type=gesture
 data=L
 event=ScreenModes previous
 
