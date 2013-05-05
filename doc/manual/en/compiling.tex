@@ -1,0 +1,234 @@
+\chapter{Compiling XCSoar}\label{cha:compiling}
+
+The \texttt{make} command is used to launch the XCSoar build process.
+You can learn more about the build system internals in chapter
+\ref{cha:build}.
+
+Most of this chapter describes how to build XCSoar on Linux, with
+examples for Debian/Ubuntu.  A cross-compiler is used to build
+binaries for other operating systems (for example Android and
+Windows).
+
+\section{Getting the Source Code}
+
+The XCSoar source code is managed with
+\href{http://git-scm.com/}{git}.  It can be downloaded with the
+following command:
+
+\begin{verbatim*}
+git clone git://git.xcsoar.org/xcsoar/master/xcsoar.git
+\end{verbatim*}
+
+To update your repository, type:
+
+\begin{verbatim*}
+git pull
+\end{verbatim*}
+
+For more information, please read to the git documentation.
+
+\section{Requirements}
+
+The following is needed for all targets:
+
+\begin{itemize}
+\item GNU make
+\item GNU compiler collection (\texttt{gcc}), version 4.6.2 or later
+  or clang/LLVM 3.1 (with "make CLANG=y")
+\item GNU gettext
+\item \href{http://librsvg.sourceforge.net/)}{rsvg}
+\item \href{http://www.imagemagick.org/}{ImageMagick 6.4}
+\item \href{http://xmlsoft.org/XSLT/xsltproc2.html}{xsltproc}
+\item Perl and XML::Parser
+\end{itemize}
+
+The following command installs these on Debian:
+
+\begin{verbatim*}
+apt-get install make \
+  librsvg2-bin xsltproc \
+  imagemagick gettext
+\end{verbatim*}
+
+\section{Target-specific Build Instructions}
+
+\subsection{Compiling for Linux/UNIX}
+
+The following additional packages are needed to build for Linux and
+similar operating systems:
+
+\begin{itemize}
+\item \href{http://www.boost.org/}{Boost}
+\item \href{http://www.zlib.net/}{zlib}
+\item \href{http://curl.haxx.se/}{CURL}
+\item \href{http://www.libsdl.org/}{SDL}
+\item \href{http://www.libsdl.org/projects/SDL\_ttf/}{SDL\_ttf}
+\item \href{http://www.libpng.org/}{libpng}
+\item \href{http://libjpeg.sourceforge.net/}{libjpeg}
+\item OpenGL (Mesa)
+\item to run XCSoar, you need one of the following fonts (Debian
+  package): DejaVu (\texttt{ttf-dejavu}), Droid (\texttt{ttf-droid}),
+  Freefont (\texttt{ttf-freefont})
+\end{itemize}
+
+The following command installs these on Debian:
+
+\begin{verbatim*}
+apt-get install make g++ \
+  libboost-dev zlib1g-dev \
+  libsdl1.2-dev libsdl-ttf2.0-dev \
+  libpng-dev libjpeg-dev \
+  libcurl4-openssl-dev \
+  libxml-parser-perl \
+  librsvg2-bin xsltproc \
+  imagemagick gettext \
+  ttf-dejavu
+\end{verbatim*}
+
+To compile, run:
+
+\begin{verbatim*}
+make
+\end{verbatim*}
+
+You may specify one of the following targets with \texttt{TARGET=x}:
+
+\begin{tabular}{lp{8cm}}
+
+\texttt{UNIX} & regular build (the default setting) \\
+
+\texttt{UNIX32} & generate 32 bit binary \\
+
+\texttt{UNIX64} & generate 64 bit binary \\
+
+\texttt{OPT} & alias for UNIX with optimisation and no debugging \\
+
+\end{tabular}
+
+\subsection{Compiling for Android}
+
+For Android, you need:
+
+\begin{itemize}
+\item \href{http://developer.android.com/sdk/}{Android SDK level 16}
+\item \href{http://developer.android.com/sdk/ndk/}{Android NDK r8e}
+\item \href{http://www.vorbis.com/}{Ogg Vorbis}
+\item \href{http://ant.apache.org/}{Apache Ant}
+\end{itemize}
+
+To compile, run:
+
+\begin{verbatim*}
+make TARGET=ANDROID
+\end{verbatim*}
+
+Use one of the following targets:
+
+\begin{tabular}{lp{8cm}}
+
+\texttt{ANDROID} & for ARMv6 CPUs \\
+
+\texttt{ANDROID7} & for ARMv7 CPUs \\
+
+\texttt{ANDROID7NEON} & with
+\href{http://www.arm.com/products/processors/technologies/neon.php}{NEON}
+extension \\
+
+\texttt{ANDROID86} & for x86 CPUs \\
+
+\texttt{ANDROIDMIPS} & for MIPS CPUs \\
+
+\texttt{ANDROIDFAT} & "fat" package for all supported CPUs \\
+
+\end{tabular}
+
+\subsection{Compiling for Windows}
+
+To cross-compile to (desktop) Windows, you need the mingw-w64 version
+of gcc:
+
+ http://mingw-w64.sourceforge.net/
+
+To compile, run one of the following:
+
+\begin{verbatim*}
+make TARGET=PC
+\end{verbatim*}
+
+Use one of the following targets:
+
+\begin{tabular}{lp{8cm}}
+
+\texttt{PC} & 32 bit Windows (i686) \\
+
+\texttt{WIN64} & Windows x64 (amd64 / x86-64) \\
+
+\texttt{WINE} & WineLib (experimental) \\
+
+\texttt{CYGWIN} & Windows build with Cygwin (experimental) \\
+
+\end{tabular}
+
+\subsection{Compiling for Windows CE}
+
+For PocketPC / Windows CE / Windows Mobile, you need mingw32ce:
+
+\begin{itemize}
+\item \href{http://max.kellermann.name/projects/cegcc/}{mingw32ce}
+\end{itemize}
+
+To compile, run:
+
+\begin{verbatim*}
+make TARGET=WM5X
+\end{verbatim*}
+
+Use one of the following targets:
+
+\begin{tabular}{lp{8cm}}
+
+\texttt{PPC2000} & PocketPC 2000 / Windows CE 3.0 \\
+
+\texttt{PPC2003} & PocketPC 2003 / Windows CE 4.0 \\
+
+\texttt{PPC2003X} & for XScale CPUs \\
+
+\texttt{WM5} & Windows Mobile / Windows CE 5.0 \\
+
+\texttt{WM5X} & for XScale CPUs \\
+
+\texttt{ALTAIR} & for Triadis Altair \\
+
+\end{tabular}
+
+\subsection{Compiling for Mac OS X}
+
+For Mac OS X, you need:
+
+\begin{itemize}
+\item GCC 4.6.2 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
+\item \href{http://www.boost.org/}{Boost}
+\item \href{http://www.zlib.net/}{zlib}
+\item \href{http://curl.haxx.se/}{CURL}
+\item \href{http://www.libsdl.org/}{SDL}
+\item \href{http://www.libsdl.org/projects/SDL\_ttf/}{SDL\_ttf}
+\item \href{http://www.libpng.org/}{libpng}
+\item \href{http://libjpeg.sourceforge.net/}{libjpeg}
+\item \href{http://icns.sourceforge.net/}{libicns}
+\end{itemize}
+
+\subsection{Compiling for the Raspberry Pi}
+
+To compile, run:
+
+\begin{verbatim*}
+make TARGET=PI
+\end{verbatim*}
+
+\subsection{Compiling for Kobo E-book Readers}
+
+To compile, run:
+
+\begin{verbatim*}
+make TARGET=KOBO
+\end{verbatim*}
