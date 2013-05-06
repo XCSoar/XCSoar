@@ -252,3 +252,20 @@ To compile, run:
 \begin{verbatim*}
 make TARGET=KOBO
 \end{verbatim*}
+
+\section{Options}
+
+\subsection{Parallel Build}
+
+Most contemporary computers have multiple CPU cores.  To take
+advantage of these, use the \texttt{make -j} option:
+
+\begin{verbatim*}
+make -j12
+\end{verbatim*}
+
+This command launches 12 compiler processes at the same time.
+
+Rule of thumb: choose a number that is slightly larger than the number
+of CPU cores in your computer.  12 is a good choice for a computer
+with 8 CPU cores.
