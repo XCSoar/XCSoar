@@ -148,6 +148,20 @@ static inline void
 StringFormat(TCHAR *buffer, size_t
  size, const TCHAR *fmt, Args&&... args)
 {
+  /* unlike snprintf(), _sntprintf() does not guarantee that the
+     destination buffer is terminated */
+
+  /* usually, it would be enough to clear the last byte in the output
+     buffer after the _sntprintf() call, but unfortunately WINE 1.4.1
+     has a bug that applies the wrong limit in the overflow branch
+     (confuses number of characters with number of bytes), therefore
+     we must clear the whole buffer and pass an even number of
+     characters; this terminates the string at half the buffer size,
+     but is better than exposing undefined bytes */
+  size &= ~decltype(size)(sizeof(TCHAR) - 1);
+  memset(buffer, 0, size * sizeof(TCHAR));
+  --size;
+
   _sntprintf(buffer, size, fmt, args...);
 }
 
