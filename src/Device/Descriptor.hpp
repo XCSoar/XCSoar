@@ -271,7 +271,8 @@ private:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool OpenOnPort(Port &port, OperationEnvironment &env);
+  gcc_nonnull_all
+  bool OpenOnPort(Port *port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 
