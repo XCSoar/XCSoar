@@ -178,3 +178,6 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	# Copy an example bat file to generate the manuals with MikTex on Windows
 	cp $(DOC)/manual/generate_manuals.bat $(T)/.
 	cd $(@D) && zip -r XCSoar-manual-dev.zip XCSoar-manual-dev
+
+upload-html-manual: $(MANUAL_OUTPUT_DIR)/html/en/index.html $(MANUAL_OUTPUT_DIR)/html/developer/index.html
+	rsync -aP --delete-after --chmod=ugo+rX $(MANUAL_OUTPUT_DIR)/html/ max@www.xcsoar.org:/var/www/xcsoar/doc/
