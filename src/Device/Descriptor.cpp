@@ -193,8 +193,9 @@ DeviceDescriptor::CancelAsync()
 }
 
 bool
-DeviceDescriptor::OpenOnPort(Port &_port, OperationEnvironment &env)
+DeviceDescriptor::OpenOnPort(Port *_port, OperationEnvironment &env)
 {
+  assert(_port != NULL);
   assert(port == NULL);
   assert(device == NULL);
   assert(driver != NULL);
@@ -212,7 +213,7 @@ DeviceDescriptor::OpenOnPort(Port &_port, OperationEnvironment &env)
   settings_received.Clear();
   was_alive = false;
 
-  port = &_port;
+  port = _port;
 
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
@@ -229,7 +230,16 @@ DeviceDescriptor::OpenOnPort(Port &_port, OperationEnvironment &env)
     port->StartRxThread();
 
   EnableNMEA(env);
-  return !env.IsCancelled();
+
+  if (env.IsCancelled()) {
+    /* the caller is responsible for freeing the port on error */
+    port = nullptr;
+    delete device;
+    device = nullptr;
+    return false;
+  }
+
+  return true;
 }
 
 bool
@@ -388,7 +398,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     return false;
   }
 
-  if (!port->WaitConnected(env) || !OpenOnPort(*port, env)) {
+  if (!port->WaitConnected(env) || !OpenOnPort(port, env)) {
     if (!env.IsCancelled())
       ++n_failures;
 

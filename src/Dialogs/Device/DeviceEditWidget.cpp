@@ -25,6 +25,7 @@
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
+#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -269,8 +270,8 @@ FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config)
   TCHAR tempID[4];
   TCHAR tempName[15];
   for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
-    _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
-    _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
+    StringFormatUnsafe(tempID, _T("%u"), i);
+    StringFormat(tempName, sizeof(tempName), _T("IOIO Uart %u"), i);
     unsigned id = AddPort(df, DeviceConfig::PortType::IOIOUART,
                           tempID, tempName,
                           AndroidIOIOUartPort::getPortHelp(i));

@@ -362,9 +362,9 @@ AirspaceWarningListHandler::OnPaintItem(Canvas &canvas,
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    _sntprintf(buffer, ARRAY_SIZE(buffer), _T("%s %s"),
-               airspace.GetName(),
-               AirspaceFormatter::GetClass(airspace));
+    StringFormat(buffer, ARRAY_SIZE(buffer), _T("%s %s"),
+                 airspace.GetName(),
+                 AirspaceFormatter::GetClass(airspace));
 
     canvas.DrawClippedText(paint_rc.left + left0,
                            paint_rc.top + Layout::Scale(text_top),

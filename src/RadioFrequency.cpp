@@ -22,9 +22,8 @@ Copyright_License {
 */
 
 #include "RadioFrequency.hpp"
-
-#include <stdio.h>
-#include <stdlib.h>
+#include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 
 TCHAR *
 RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
@@ -36,7 +35,7 @@ RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
   unsigned mhz = khz / 1000;
   khz %= 1000;
 
-  _sntprintf(buffer, max_size, _T("%u.%03u"), mhz, khz);
+  StringFormat(buffer, max_size, _T("%u.%03u"), mhz, khz);
   return buffer;
 }
 
@@ -44,7 +43,7 @@ RadioFrequency
 RadioFrequency::Parse(const TCHAR *p)
 {
   TCHAR *endptr;
-  double mhz = _tcstod(p, &endptr);
+  double mhz = ParseDouble(p, &endptr);
 
   RadioFrequency frequency;
   if (mhz < 100 || *endptr != _T('\0'))

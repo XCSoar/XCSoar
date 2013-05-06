@@ -40,6 +40,13 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
 
   private IOIOConnectionHolder holder;
   private boolean connected;
+
+  /**
+   * Set to true when the connection is being cycled, e.g. during a
+   * baud rate change.  It is used by waitCycled().
+   */
+  private boolean cycling;
+
   private final int inPin;
   private final int outPin;
   private int baudrate = 0;
@@ -70,6 +77,24 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
     _holder.addListener(this);
   }
 
+  /**
+   * Wait for a certain amoutn of time until the port has been
+   * reconnected after a baud rate change.  Call this to avoid
+   * spurious I/O errors while the baud rate is being changed.
+   */
+  private synchronized void waitCycled() {
+    if (!cycling)
+      return;
+
+    /* wait only once */
+    cycling = false;
+
+    try {
+      wait(200);
+    } catch (InterruptedException e) {
+    }
+  }
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
     connected = true;
@@ -84,6 +109,11 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
     }
 
     set(uart);
+
+    synchronized(this) {
+      cycling = false;
+      notifyAll();
+    }
   }
 
   @Override public void onIOIODisconnect() {
@@ -123,7 +153,14 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
       return false;
 
     baudrate = _baudrate;
+    if (connected)
+      cycling = true;
     holder.cycleListener(this);
     return true;
+  }
+
+  @Override public int write(byte[] data, int length) {
+    waitCycled();
+    return super.write(data, length);
   }
 }

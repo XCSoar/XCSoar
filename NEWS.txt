@@ -11,9 +11,16 @@ Version 6.7 - not yet released
   - delete waypoint implemented
 
 Version 6.6.1 - not yet released
+* cross section
+  - fix airspace display after display rotation (#2825)
+* user interface
+  - fix malformed name in airspace warning dialog (#2813)
 * devices
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
+  - fix spurious errors after IOIO baud rate change (#2733, #2754)
+* configuration
+  - fix regression with polar configuration (#2803)
 
 Version 6.6 - 2013/04/23
 * map

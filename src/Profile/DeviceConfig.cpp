@@ -144,16 +144,15 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return path.c_str();
 
   case PortType::RFCOMM:
-    _sntprintf(buffer, max_size, _T("Bluetooth %s"),
-               bluetooth_mac.c_str());
+    StringFormat(buffer, max_size, _T("Bluetooth %s"),
+                 bluetooth_mac.c_str());
     return buffer;
 
   case PortType::RFCOMM_SERVER:
     return _("Bluetooth server");
 
   case PortType::IOIOUART:
-    _sntprintf(buffer, max_size, _T("IOIO UART %d"),
-               ioio_uart_id);
+    StringFormat(buffer, max_size, _T("IOIO UART %d"), ioio_uart_id);
     return buffer;
 
   case PortType::DROIDSOAR_V2:
@@ -175,15 +174,15 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return _("Built-in GPS & sensors");
 
   case PortType::TCP_LISTENER:
-    _sntprintf(buffer, max_size, _T("TCP port %d"), tcp_port);
+    StringFormat(buffer, max_size, _T("TCP port %d"), tcp_port);
     return buffer;
 
   case PortType::UDP_LISTENER:
-    _sntprintf(buffer, max_size, _T("UDP port %d"), tcp_port);
+    StringFormat(buffer, max_size, _T("UDP port %d"), tcp_port);
     return buffer;
 
   case PortType::PTY:
-    _sntprintf(buffer, max_size, _T("Pseudo-terminal %s"), path.c_str());
+    StringFormat(buffer, max_size, _T("Pseudo-terminal %s"), path.c_str());
     return buffer;
   }
 
