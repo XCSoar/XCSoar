@@ -134,7 +134,7 @@ $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures
 
 $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
-	
+
 $(SVG_LOGOS): $(MANUAL_OUTPUT_DIR)/graphics/%.png: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -z 1.5 -f png $< -o $@
 
