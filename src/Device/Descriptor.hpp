@@ -47,6 +47,7 @@ struct DerivedInfo;
 struct Declaration;
 struct Waypoint;
 class Port;
+class DumpPort;
 class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
@@ -94,7 +95,7 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
    * The #Port used by this device.  This is not applicable to some
    * devices, and is NULL in that case.
    */
-  Port *port;
+  DumpPort *port;
 
   /**
    * A handler that will receive all data, to display it on the
@@ -230,6 +231,22 @@ public:
   }
 
   /**
+   * @see DumpPort::IsEnabled()
+   */
+  gcc_pure
+  bool IsDumpEnabled() const;
+
+  /**
+   * @see DumpPort::Disable()
+   */
+  void DisableDump();
+
+  /**
+   * @see DumpPort::EnableTemporarily()
+   */
+  void EnableDumpTemporarily(unsigned duration_ms);
+
+  /**
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */
@@ -272,7 +289,7 @@ private:
    * Port object.
    */
   gcc_nonnull_all
-  bool OpenOnPort(Port *port, OperationEnvironment &env);
+  bool OpenOnPort(DumpPort *port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 

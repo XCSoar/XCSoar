@@ -6,6 +6,7 @@ PORT_SOURCES = \
 	$(SRC)/Device/Port/SocketPort.cpp \
 	$(SRC)/Device/Port/TCPPort.cpp \
 	$(SRC)/Device/Port/K6BtPort.cpp \
+	$(SRC)/Device/Port/DumpPort.cpp \
 	$(SRC)/Device/Port/NullPort.cpp
 
 ifeq ($(HAVE_POSIX),y)
@@ -18,10 +19,6 @@ endif
 
 ifeq ($(HAVE_CE),y)
 PORT_SOURCES += $(SRC)/Device/Port/Widcomm.cpp
-endif
-
-ifneq ($(DEBUG),n)
-PORT_SOURCES += $(SRC)/Device/Port/DumpPort.cpp
 endif
 
 $(eval $(call link-library,port,PORT))
