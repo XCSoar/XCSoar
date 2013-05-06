@@ -94,7 +94,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
     return o != null && o.drain();
   }
 
-  @Override public final int write(byte[] data, int length) {
+  @Override public int write(byte[] data, int length) {
     OutputThread o = output;
     return o != null
       ? o.write(data, length)

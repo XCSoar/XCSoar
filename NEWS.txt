@@ -10,6 +10,7 @@ Version 6.6.1 - not yet released
 * devices
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
+  - fix spurious errors after IOIO baud rate change (#2733, #2754)
 * configuration
   - fix regression with polar configuration (#2803)
 
