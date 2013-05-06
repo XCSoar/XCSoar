@@ -29,7 +29,7 @@ Copyright_License {
 /**
  * A port wrapper that dumps everything into the log file.
  */
-class DumpPort : public Port {
+class DumpPort final : public Port {
   Port *port;
 
 public:
