@@ -34,7 +34,6 @@ Copyright_License {
 typedef char TCHAR;
 #define _stprintf sprintf
 #define _vstprintf vsprintf
-#define _sntprintf snprintf
 #define _vsntprintf vsnprintf
 #define _tprintf printf
 #define _ftprintf fprintf

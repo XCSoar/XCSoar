@@ -28,9 +28,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/UTM.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
                 CoordinateFormat format)
@@ -61,8 +58,8 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
       mm -= 60;
     }
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
-              dd, mm, ss, sign);
+    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%02d'%02d\" %c"),
+                 dd, mm, ss, sign);
     break;
 
   case CoordinateFormat::DDMMSS_SS:
@@ -74,8 +71,8 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlong = (mlong - mm) * 60.0;
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
-              dd, mm, mlong, sign);
+    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%02d'%05.2f\" %c"),
+                 dd, mm, mlong, sign);
     break;
 
   case CoordinateFormat::DDMM_MMM:
@@ -84,12 +81,13 @@ FormatLongitude(Angle longitude, TCHAR *buffer, size_t size,
     // Calculate minutes
     mlong = (mlong - dd) * 60.0;
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%03d")_T(DEG)_T("%06.3f' %c"), dd, mlong, sign);
+    StringFormat(buffer, size, _T("%03d")_T(DEG)_T("%06.3f' %c"),
+                 dd, mlong, sign);
     break;
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%08.4f" DEG " %c"), mlong, sign);
+    StringFormat(buffer, size, _T("%08.4f" DEG " %c"), mlong, sign);
     break;
 
   case CoordinateFormat::UTM:
@@ -129,8 +127,8 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
       mm -= 60;
     }
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
-              dd, mm, ss, sign);
+    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%02d'%02d\" %c"),
+                 dd, mm, ss, sign);
     break;
 
   case CoordinateFormat::DDMMSS_SS:
@@ -142,8 +140,8 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     // Calculate seconds
     mlat = (mlat - mm) * 60.0;
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
-              dd, mm, mlat, sign);
+    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%02d'%05.2f\" %c"),
+                 dd, mm, mlat, sign);
     break;
 
   case CoordinateFormat::DDMM_MMM:
@@ -152,12 +150,13 @@ FormatLatitude(Angle latitude, TCHAR *buffer, size_t size,
     // Calculate minutes
     mlat = (mlat - dd) * 60.0;
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%02d")_T(DEG)_T("%06.3f' %c"), dd, mlat, sign);
+    StringFormat(buffer, size, _T("%02d")_T(DEG)_T("%06.3f' %c"),
+                 dd, mlat, sign);
     break;
 
   case CoordinateFormat::DD_DDDD:
     // Save the string to the buffer
-    _sntprintf(buffer, size, _T("%07.4f" DEG " %c"), mlat, sign);
+    StringFormat(buffer, size, _T("%07.4f" DEG " %c"), mlat, sign);
     break;
 
   case CoordinateFormat::UTM:
@@ -172,9 +171,10 @@ FormatUTM(const GeoPoint &location, TCHAR *buffer, size_t size,
           TCHAR seperator = _T(' '))
 {
   UTM utm = UTM::FromGeoPoint(location);
-  _sntprintf(buffer, size, _T("%u%c%c%.0f%c%.0f"), utm.zone_number,
-             utm.zone_letter, seperator, (double)utm.easting, seperator,
-             (double)utm.northing);
+  StringFormat(buffer, size, _T("%u%c%c%.0f%c%.0f"),
+               utm.zone_number, utm.zone_letter, seperator,
+               (double)utm.easting, seperator,
+               (double)utm.northing);
   return buffer;
 }
 

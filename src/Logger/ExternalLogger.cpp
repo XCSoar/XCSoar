@@ -43,6 +43,7 @@
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Time/BrokenDate.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -243,11 +244,11 @@ ShowFlightList(const RecordedFlightList &flight_list)
   for (unsigned i = 0; i < flight_list.size(); ++i) {
     const RecordedFlightInfo &flight = flight_list[i];
 
-    TCHAR buffer[64];
-    _sntprintf(buffer, 64, _T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
-           flight.date.year, flight.date.month, flight.date.day,
-           flight.start_time.hour, flight.start_time.minute,
-           flight.end_time.hour, flight.end_time.minute);
+    StaticString<64> buffer;
+    buffer.UnsafeFormat(buffer, _T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
+                        flight.date.year, flight.date.month, flight.date.day,
+                        flight.start_time.hour, flight.start_time.minute,
+                        flight.end_time.hour, flight.end_time.minute);
 
     combo.Append(i, buffer);
   }
