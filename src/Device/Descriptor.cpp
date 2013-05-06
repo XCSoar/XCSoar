@@ -230,7 +230,16 @@ DeviceDescriptor::OpenOnPort(Port *_port, OperationEnvironment &env)
     port->StartRxThread();
 
   EnableNMEA(env);
-  return !env.IsCancelled();
+
+  if (env.IsCancelled()) {
+    /* the caller is responsible for freeing the port on error */
+    port = nullptr;
+    delete device;
+    device = nullptr;
+    return false;
+  }
+
+  return true;
 }
 
 bool
