@@ -72,7 +72,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
       input.setListener(listener);
   }
 
-  public void close() {
+  @Override public void close() {
     InputThread i = stealInput();
     if (i != null)
       i.close();
@@ -89,12 +89,12 @@ abstract class AbstractAndroidPort implements AndroidPort {
       : STATE_FAILED;
   }
 
-  public final boolean drain() {
+  @Override public final boolean drain() {
     OutputThread o = output;
     return o != null && o.drain();
   }
 
-  public final int write(byte[] data, int length) {
+  @Override public final int write(byte[] data, int length) {
     OutputThread o = output;
     return o != null
       ? o.write(data, length)
