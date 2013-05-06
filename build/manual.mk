@@ -62,7 +62,7 @@ TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 XETEX_RUN = $(TEX_VARS) xetex $(TEX_FLAGS) -no-pdf -output-directory $(@D)
 
 LATEX2HTML = latex2html
-LATEX2HTML_RUN = $(TEX_VARS) $(LATEX2HTML) -local_icons -verbosity 0 -split 3
+LATEX2HTML_RUN = $(TEX_VARS) L2HINIT_NAME=$(DOC)/manual/latex2html.config $(LATEX2HTML) -local_icons -verbosity 0 -split 3
 
 MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
