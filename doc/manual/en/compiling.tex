@@ -116,6 +116,11 @@ For Android, you need:
 \item \href{http://ant.apache.org/}{Apache Ant}
 \end{itemize}
 
+The \texttt{Makefile} assumes that the Android SDK is installed in
+\verb|~/opt/android-sdk-linux_x86| and the NDK is installed in
+\verb|~/opt/android-ndk-r8e|.  You can use the options
+\verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
+
 To compile, run:
 
 \begin{verbatim*}
