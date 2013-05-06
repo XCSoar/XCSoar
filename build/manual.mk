@@ -88,9 +88,9 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_RUN) $<
 
 # Generate a HTML version of the manual with latex2html
-$(MANUAL_OUTPUT_DIR)/html/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
+$(MANUAL_OUTPUT_DIR)/html/en/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/dirstamp
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/en/dirstamp
 	$(TEX_VARS) latex2html -dir $(@D) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(DOC)/manual/en/tpl_format.tex \
