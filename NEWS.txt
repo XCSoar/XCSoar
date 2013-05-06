@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.1 - not yet released
+* cross section
+  - fix airspace display after display rotation (#2825)
 * user interface
   - fix malformed name in airspace warning dialog (#2813)
 * devices

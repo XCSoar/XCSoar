@@ -23,10 +23,18 @@
 
 #include "CrossSectionWindow.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 void
 CrossSectionWindow::OnPaintBuffer(Canvas &canvas)
 {
   const PixelRect rc = GetClientRect();
+
+#ifdef ENABLE_OPENGL
+  const GLCanvasScissor scissor(rc);
+#endif
 
   renderer.Paint(canvas, rc);
 }
