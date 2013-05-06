@@ -199,6 +199,20 @@ const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
 #endif
 
+static inline void
+UnsafeCopyString(char *dest, const char *src)
+{
+  strcpy(dest, src);
+}
+
+#ifdef _UNICODE
+static inline void
+UnsafeCopyString(TCHAR *dest, const TCHAR *src)
+{
+  _tcscpy(dest, src);
+}
+#endif
+
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
