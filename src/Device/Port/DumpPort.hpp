@@ -32,11 +32,51 @@ Copyright_License {
 class DumpPort final : public Port {
   Port *port;
 
+  /**
+   * Dumping is enabled until this MonotonicClockMS() time stamp.  0
+   * means completely disabled, unsigned(-1) means enabled forever.
+   */
+  unsigned until_ms;
+
 public:
+  /**
+   * Initialises the new instance.  Dumping is enabled forever by
+   * default.
+   */
   DumpPort(Port *port);
 
   virtual ~DumpPort();
 
+  /**
+   * Disable dumping immediately.
+   */
+  void Disable() {
+    until_ms = 0;
+  }
+
+  /**
+   * Enable dumping forever.
+   */
+  void EnableForever() {
+    until_ms = unsigned(-1);
+  }
+
+  /**
+   * Enable dumping for a certain duration.
+   */
+  void EnableTemporarily(unsigned duration_ms);
+
+  bool IsEnabled() const {
+    return until_ms > 0;
+  }
+
+private:
+  /**
+   * Determine whether dumping is currently enabled.
+   */
+  bool CheckEnabled();
+
+public:
   /* virtual methods from Port */
   virtual PortState GetState() const override;
   virtual size_t Write(const void *data, size_t length) override;
