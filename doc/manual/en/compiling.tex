@@ -274,3 +274,28 @@ This command launches 12 compiler processes at the same time.
 Rule of thumb: choose a number that is slightly larger than the number
 of CPU cores in your computer.  12 is a good choice for a computer
 with 8 CPU cores.
+
+\subsection{Optimised Build}
+
+By default, debugging is enabled and compiler optimisations are
+disabled.  The resulting binaries are very slow.  During development,
+that is helpful, because it catches more bugs.
+
+To produce optimised binaries, use the option \texttt{DEBUG}:
+
+\begin{verbatim*}
+make DEBUG=n
+\end{verbatim*}
+
+Be sure to clean the output directory before you change the
+\texttt{DEBUG} setting, because debug and non-debug output files are
+not compatible.
+
+The convenience target \texttt{OPT} is a shortcut for:
+
+\begin{verbatim*}
+TARGET=UNIX DEBUG=n TARGET_OUTPUT_DIR=output/OPT
+\end{verbatim*}
+
+It allows building both debug and non-debug incrementally, because two
+different output directories are used.
