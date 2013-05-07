@@ -39,6 +39,7 @@ public:
 
   /* virtual methods from Port */
   virtual PortState GetState() const override;
+  virtual bool WaitConnected(OperationEnvironment &env);
   virtual size_t Write(const void *data, size_t length) override;
   virtual bool Drain() override;
   virtual void Flush() override;
