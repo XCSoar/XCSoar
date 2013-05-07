@@ -11,6 +11,8 @@ Version 6.7 - not yet released
   - terrain countour lines (#2451)
 * waypoint editor
   - delete waypoint implemented
+* devices
+  - "debug" button
 
 Version 6.6.1 - not yet released
 * cross section

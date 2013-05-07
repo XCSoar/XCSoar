@@ -65,6 +65,7 @@ class DeviceListWidget final
     private NullBlackboardListener {
   enum Buttons {
     RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
+    DEBUG,
   };
 
   const DialogLook &look;
@@ -76,6 +77,7 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+    bool debug:1;
 
     void Set(const DeviceConfig &config, const DeviceDescriptor &device,
              const NMEAInfo &basic) {
@@ -110,6 +112,7 @@ class DeviceListWidget final
       airspeed = basic.airspeed_available;
       vario = basic.total_energy_vario_available;
       traffic = basic.flarm.IsDetected();
+      debug = device.IsDumpEnabled();
     }
   };
 
@@ -155,6 +158,7 @@ class DeviceListWidget final
   WndButton *reconnect_button, *flight_button;
   WndButton *edit_button;
   WndButton *manage_button, *monitor_button;
+  WndButton *debug_button;
 
 public:
   DeviceListWidget(const DialogLook &_look, const TerminalLook &_terminal_look)
@@ -172,6 +176,7 @@ protected:
   void EditCurrent();
   void ManageCurrent();
   void MonitorCurrent();
+  void DebugCurrent();
 
 public:
   /* virtual methods from class Widget */
@@ -253,6 +258,7 @@ DeviceListWidget::CreateButtons(WidgetDialog &dialog)
   edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
   manage_button = dialog.AddButton(_("Manage"), *this, MANAGE);
   monitor_button = dialog.AddButton(_("Monitor"), *this, MONITOR);
+  debug_button = dialog.AddButton(_("Debug"), *this, DEBUG);
 }
 
 void
@@ -265,6 +271,7 @@ DeviceListWidget::UpdateButtons()
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
     monitor_button->SetEnabled(false);
+    debug_button->SetEnabled(false);
   } else {
     const DeviceDescriptor &device = *device_list[current];
 
@@ -272,6 +279,8 @@ DeviceListWidget::UpdateButtons()
     flight_button->SetEnabled(device.IsLogger());
     manage_button->SetEnabled(device.IsManageable());
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
+    debug_button->SetEnabled(device.GetConfig().UsesPort() &&
+                             device.GetState() == PortState::READY);
   }
 
   edit_button->SetEnabled(current < NUMDEV);
@@ -338,13 +347,25 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     if (flags.traffic)
       buffer.append(_T("; FLARM"));
 
+    if (flags.debug) {
+      buffer.append(_T("; "));
+      buffer.append(_("Debug"));
+    }
+
     status = buffer;
   } else if (config.IsDisabled()) {
     status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
     status = _("N/A");
   } else if (flags.open) {
-    status = _("No data");
+    buffer = _("No data");
+
+    if (flags.debug) {
+      buffer.append(_T("; "));
+      buffer.append(_("Debug"));
+    }
+
+    status = buffer;
 #ifdef ANDROID
   } else if ((config.port_type == DeviceConfig::PortType::RFCOMM ||
               config.port_type == DeviceConfig::PortType::RFCOMM_SERVER) &&
@@ -535,6 +556,28 @@ DeviceListWidget::MonitorCurrent()
                   descriptor);
 }
 
+inline void
+DeviceListWidget::DebugCurrent()
+{
+  const unsigned current = GetList().GetCursorIndex();
+  if (current >= NUMDEV)
+    return;
+
+  DeviceDescriptor &device = *device_list[current];
+  if (!device.GetConfig().UsesPort() || device.GetState() != PortState::READY)
+    return;
+
+  static constexpr unsigned MINUTES = 10;
+
+  device.EnableDumpTemporarily(MINUTES * 60000);
+  RefreshList();
+
+  StaticString<256> msg;
+  msg.Format(_("Communication with this device will be logged for the next %u minutes."),
+             MINUTES);
+  ShowMessageBox(msg, _("Debug"), MB_OK | MB_ICONINFORMATION);
+}
+
 void
 DeviceListWidget::OnAction(int id)
 {
@@ -557,6 +600,10 @@ DeviceListWidget::OnAction(int id)
 
   case MONITOR:
     MonitorCurrent();
+    break;
+
+  case DEBUG:
+    DebugCurrent();
     break;
   }
 }
