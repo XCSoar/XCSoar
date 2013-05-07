@@ -50,6 +50,7 @@ public:
 
 protected:
   bool SendCommand(uint8_t cmd);
+  bool SendSetBaudrate(unsigned baud_rate);
 
 public:
   /* virtual methods from Port */

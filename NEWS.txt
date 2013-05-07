@@ -11,6 +11,7 @@ Version 6.6.1 - not yet released
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
   - fix spurious errors after IOIO baud rate change (#2733, #2754)
+  - K6Bt: fix configured baud rate setup on Android (#2836)
 * configuration
   - fix regression with polar configuration (#2803)
 * support gcc 4.8
