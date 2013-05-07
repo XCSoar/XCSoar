@@ -24,6 +24,8 @@ Version 6.7 - not yet released
 * devices
   - "debug" button
   - more robust midnight wraparound handling (#2857)
+* Android
+  - support IOIO via OpenAccessory (Android 4.x)
 
 Version 6.6.2 - not yet released
 * tasks
