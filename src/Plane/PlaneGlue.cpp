@@ -32,11 +32,6 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-void PlaneGlue::DetachFromPlaneFile()
-{
-  Profile::Set("PlanePath", _T(""));
-}
-
 void
 PlaneGlue::FromProfile(Plane &plane)
 {
@@ -44,6 +39,8 @@ PlaneGlue::FromProfile(Plane &plane)
   if (Profile::GetPath("PlanePath", plane_path.buffer()) &&
       PlaneGlue::ReadFile(plane, plane_path.c_str()))
     return;
+
+  /* the following is just here to load a pre-6.7 profile */
 
   plane.registration.SetUTF8(Profile::Get(ProfileKeys::AircraftReg, ""));
   plane.competition_id.SetUTF8(Profile::Get(ProfileKeys::CompetitionId, ""));
@@ -69,37 +66,6 @@ PlaneGlue::FromProfile(Plane &plane)
 
   if (!Profile::Get(ProfileKeys::Handicap, plane.handicap))
     plane.handicap = 100;
-}
-
-void
-PlaneGlue::ToProfile(const Plane &plane)
-{
-  StaticString<MAX_PATH> plane_path;
-  if (Profile::GetPath("PlanePath", plane_path.buffer())) {
-    PlaneGlue::WriteFile(plane, plane_path.c_str());
-    return;
-  }
-
-  Profile::Set(ProfileKeys::AircraftReg, plane.registration);
-  Profile::Set(ProfileKeys::CompetitionId, plane.competition_id);
-  Profile::Set(ProfileKeys::AircraftType, plane.type);
-
-  Profile::Set(ProfileKeys::PolarName, plane.polar_name);
-
-  PolarInfo polar;
-  polar.shape = plane.polar_shape;
-  polar.reference_mass = plane.reference_mass;
-  polar.max_ballast = plane.max_ballast;
-  polar.v_no = plane.max_speed;
-  polar.wing_area = plane.wing_area;
-
-  char polar_string[255];
-  FormatPolar(polar, polar_string, 255, true);
-  Profile::Set(ProfileKeys::Polar, polar_string);
-  Profile::Set(ProfileKeys::DryMass, plane.dry_mass);
-
-  Profile::Set(ProfileKeys::BallastSecsToEmpty, plane.dump_time);
-  Profile::Set(ProfileKeys::Handicap, plane.handicap);
 }
 
 void
