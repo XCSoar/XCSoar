@@ -311,6 +311,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/HorizonWidget.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \

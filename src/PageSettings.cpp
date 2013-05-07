@@ -50,6 +50,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     _tcscpy(buffer, _("Thermal assistant"));
     return;
 
+  case PageLayout::Main::HORIZON:
+    _tcscpy(buffer, _("Horizon"));
+    return;
+
   case PageLayout::Main::MAX:
     gcc_unreachable();
   }

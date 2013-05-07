@@ -229,6 +229,10 @@ PageActions::LoadLayout(const PageLayout &layout)
     UIActions::ShowThermalAssistant();
     break;
 
+  case PageLayout::Main::HORIZON:
+    UIActions::ShowHorizon();
+    break;
+
   case PageLayout::Main::MAX:
     gcc_unreachable();
   }

@@ -76,6 +76,8 @@ struct PageLayout
 
     THERMAL_ASSISTANT,
 
+    HORIZON,
+
     /**
      * A dummy entry that is used for validating profile values.
      */

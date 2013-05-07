@@ -164,6 +164,7 @@ PageLayoutEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { (unsigned)PageLayout::Main::MAP, N_("Map") },
     { (unsigned)PageLayout::Main::FLARM_RADAR, N_("FLARM radar") },
     { (unsigned)PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal assistant") },
+    { (unsigned)PageLayout::Main::HORIZON, N_("Horizon") },
     { 0 }
   };
   AddEnum(_("Main area"),
@@ -319,6 +320,10 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   case PageLayout::Main::THERMAL_ASSISTANT:
     buffer = _("Thermal assistant");
+    break;
+
+  case PageLayout::Main::HORIZON:
+    buffer = _("Horizon");
     break;
 
   case PageLayout::Main::MAX:

@@ -21,30 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UI_ACTIONS_HPP
-#define XCSOAR_UI_ACTIONS_HPP
+#ifndef XCSOAR_HORIZON_WIDGET_HPP
+#define XCSOAR_HORIZON_WIDGET_HPP
 
-class GlueMapWindow;
+#include "Widget/WindowWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
+#include "Compiler.h"
 
-/**
- * This namespace provides access to several user interface actions.
- * These are usually triggered by the user, for example by
- * (configurable) InputEvents or by hard-coded button handlers.  This
- * API is meant to be lean, without too many header dependencies.
- */
-namespace UIActions {
-  void SignalShutdown(bool force);
+class HorizonWidget : public WindowWidget,
+                      private NullBlackboardListener {
+  void Update(const MoreData &basic);
 
-  bool CheckShutdown();
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+  virtual void Unprepare() override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
 
-  /**
-   * Switch to the traffic radar page.
-   */
-  void ShowTrafficRadar();
-
-  void ShowThermalAssistant();
-
-  void ShowHorizon();
+private:
+  /* virtual methods from class BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic) override;
 };
 
 #endif

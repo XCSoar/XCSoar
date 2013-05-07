@@ -6,6 +6,7 @@ Version 6.7 - not yet released
 * user interface
   - added AutoZoom gesture (up-down)
   - obsolete configuration pages "polar", "logger info" removed
+  - new page: "horizon"
 * map
   - terrain countour lines (#2451)
 * waypoint editor
