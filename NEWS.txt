@@ -13,6 +13,7 @@ Version 6.6.1 - not yet released
   - fix spurious errors after IOIO baud rate change (#2733, #2754)
 * configuration
   - fix regression with polar configuration (#2803)
+* support gcc 4.8
 
 Version 6.6 - 2013/04/23
 * map
