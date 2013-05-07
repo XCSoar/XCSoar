@@ -404,11 +404,6 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Set(buffer, config.k6bt);
 
-#ifndef NDEBUG
-  MakeDeviceSettingName(buffer, "Port", n, "DumpPort");
-  Set(buffer, config.dump_port);
-#endif
-
   MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
   Set(buffer, config.ignore_checksum);
 
