@@ -19,7 +19,7 @@
     <service android:name=".MyService"/>
   </application>
 
-  <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="9"/>
+  <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="17"/>
   <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
