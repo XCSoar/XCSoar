@@ -109,8 +109,4 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(2, 2, XCSoar_ProductToken);
-#ifdef NO_HORIZON
-  const int text_height = canvas.CalcTextSize(XCSoar_ProductToken).cy;
-  canvas.DrawText(2, 4 + text_height, _T("Horizon: disabled"));
-#endif
 }

@@ -311,6 +311,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
@@ -798,11 +799,6 @@ XCSOAR_SOURCES := \
 	$(DIALOG_SOURCES)
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
-
-ifneq ($(NO_HORIZON),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Renderer/HorizonRenderer.cpp
-endif
 
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
