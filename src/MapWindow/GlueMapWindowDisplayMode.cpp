@@ -273,9 +273,7 @@ GlueMapWindow::UpdateProjection()
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-  RasterPoint center;
-  center.x = (rc.left + rc.right) / 2;
-  center.y = (rc.top + rc.bottom) / 2;
+  const RasterPoint center = rc.GetCenter();
 
   if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);

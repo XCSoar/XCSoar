@@ -59,14 +59,14 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
 
   const Color shadow = Shadow(color);
 
-  const int x = (rc.left + rc.right) / 2, y = (rc.top + rc.bottom) / 2;
+  const RasterPoint center = rc.GetCenter();
   const int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 4;
 
   const RasterPoint vertices[] = {
-    { x + 1024, y - 1024 },
-    { x + 1024 + size, y - 1024 + size },
-    { x - 1024, y + 1024 },
-    { x - 1024 + size, y + 1024 + size },
+    { center.x + 1024, center.y - 1024 },
+    { center.x + 1024 + size, center.y - 1024 + size },
+    { center.x - 1024, center.y + 1024 },
+    { center.x - 1024 + size, center.y + 1024 + size },
   };
 
   glVertexPointer(2, GL_VALUE, 0, vertices);

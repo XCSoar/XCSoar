@@ -47,9 +47,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   is the case or not.
   */
 
-  RasterPoint center;
-  center.y = (rc.top + rc.bottom) / 2;
-  center.x = (rc.left + rc.right) / 2;
+  const RasterPoint center = rc.GetCenter();
+
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2
     - Layout::Scale(1);
 
