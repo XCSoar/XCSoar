@@ -240,8 +240,15 @@ TargetMapWindow::OnPaint(Canvas &canvas)
 {
   BufferWindow::OnPaint(canvas);
 
-  if (drag_mode == DRAG_TARGET || drag_mode == DRAG_OZ)
+  switch (drag_mode) {
+  case DRAG_NONE:
+    break;
+
+  case DRAG_TARGET:
+  case DRAG_OZ:
     TargetPaintDrag(canvas, drag_last);
+    break;
+  }
 }
 
 void
