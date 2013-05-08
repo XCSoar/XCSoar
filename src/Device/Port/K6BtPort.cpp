@@ -67,7 +67,7 @@ K6BtPort::WaitConnected(OperationEnvironment &env)
 
   /* now that the Bluetooth connection has been established, tell our
      preferred baud rate to the K6Bt */
-  SetBaudrate(baud_rate);
+  SendSetBaudrate(baud_rate);
 
   return true;
 }
@@ -153,17 +153,23 @@ BaudRateToK6Bt(unsigned baud_rate)
 }
 
 bool
-K6BtPort::SetBaudrate(unsigned _baud_rate)
+K6BtPort::SendSetBaudrate(unsigned _baud_rate)
 {
-  if (_baud_rate == baud_rate)
-    return true;
-
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
     /* not supported by K6Bt */
     return false;
 
-  if (!SendCommand(CHANGE_BAUD_RATE | code))
+  return SendCommand(CHANGE_BAUD_RATE | code);
+}
+
+bool
+K6BtPort::SetBaudrate(unsigned _baud_rate)
+{
+  if (_baud_rate == baud_rate)
+    return true;
+
+  if (!SendSetBaudrate(_baud_rate))
     return false;
 
   baud_rate = _baud_rate;

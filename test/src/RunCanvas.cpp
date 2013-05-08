@@ -137,7 +137,7 @@ private:
       break;
 
     case 3:
-    case 4:
+    case 4: {
       PixelRect rc;
       rc.left = hmiddle - 50;
       rc.top = vmiddle - 20;
@@ -146,6 +146,7 @@ private:
       canvas.DrawButton(rc, page == 4);
       label = page == 4
         ? _T("button down=true") : _T("button down=false");
+    }
       break;
 
     case 5:

@@ -14,17 +14,23 @@ Version 6.7 - not yet released
 * devices
   - "debug" button
 
-Version 6.6.1 - not yet released
+Version 6.6.1 - 2013/05/08
 * cross section
   - fix airspace display after display rotation (#2825)
 * user interface
   - fix malformed name in airspace warning dialog (#2813)
+  - don't lost focus to waypoint list on Altair (#2835)
+  - don't forget map zoom when returning to map (#2805)
 * devices
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
   - fix spurious errors after IOIO baud rate change (#2733, #2754)
+  - K6Bt: fix configured baud rate setup on Android (#2836)
+* tasks
+  - prevent moving target out of the cylinder (#2794)
 * configuration
   - fix regression with polar configuration (#2803)
+* support gcc 4.8
 
 Version 6.6 - 2013/04/23
 * map

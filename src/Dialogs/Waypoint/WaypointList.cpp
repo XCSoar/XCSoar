@@ -285,7 +285,16 @@ FilterDataFieldListener::OnModified(DataField &df)
 {
   if (&df == name_control->GetDataField()) {
     dialog_state.name = df.GetAsString();
-    waypoint_list_control->SetFocus();
+
+    /* pass the focus to the list so the user can use the up/down keys
+       to select an item right away after the text input dialog has
+       been closed; however if the value was changed by
+       incrementing/decrementing the first letter (cursor left/right),
+       don't move the focus; we don't know for sure how the value was
+       changed, but if the filter has only one letter, it's most
+       likely changed by left/right */
+    if (dialog_state.name.length() > 1)
+      waypoint_list_control->SetFocus();
   } else if (&df == distance_filter->GetDataField()) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     dialog_state.distance_index = dfe.GetValue();

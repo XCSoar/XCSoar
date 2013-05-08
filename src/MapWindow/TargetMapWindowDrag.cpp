@@ -62,7 +62,7 @@ TargetMapWindow::TargetDragged(const int x, const int y)
 }
 
 bool
-TargetMapWindow::isClickOnTarget(const RasterPoint pc)
+TargetMapWindow::isClickOnTarget(const RasterPoint pc) const
 {
   if (task == NULL)
     return false;
