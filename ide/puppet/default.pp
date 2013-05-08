@@ -31,12 +31,6 @@ class libsdl {
   }
 }
 
-class libboost {
-  package { "libboost-dev":
-    ensure => present,
-  }
-}
-
 class gxx {
   package { "g++":
     ensure => present,
@@ -99,7 +93,6 @@ class {'apt': stage => 'pre' }
 # Libraries
 class {'libcurl': }
 class {'libsdl': }
-class {'libboost': }
 
 # Toolchain
 class {'make': }

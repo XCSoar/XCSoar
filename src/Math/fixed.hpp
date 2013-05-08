@@ -109,18 +109,10 @@ inline fixed accurate_half_sin(fixed a) {
 #include <type_traits>
 #include <climits>
 
-#ifdef HAVE_BOOST
-#include <boost/cstdint.hpp>
-#else
 #include <stdint.h>
-#endif
 
 class fixed
 {
-#ifdef HAVE_BOOST
-  typedef boost::int64_t int64_t;
-  typedef boost::uint64_t uint64_t;
-#endif
   typedef uint64_t uvalue_t;
 
 public:
