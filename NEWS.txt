@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.6.1 - not yet released
+Version 6.6.1 - 2013/05/08
 * cross section
   - fix airspace display after display rotation (#2825)
 * user interface
