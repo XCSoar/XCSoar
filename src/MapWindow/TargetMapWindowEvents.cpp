@@ -49,7 +49,10 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   drag_last = drag_start;
 
   if (isClickOnTarget(drag_start)) {
-    drag_mode = DRAG_TARGET;
+    drag_mode = isInSector(x, y)
+      ? DRAG_TARGET
+      : DRAG_TARGET_OUTSIDE;
+
     SetCapture();
     PaintWindow::Invalidate();
     return true;
@@ -76,6 +79,7 @@ TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
   switch (old_drag_mode) {
   case DRAG_NONE:
+  case DRAG_TARGET_OUTSIDE:
     break;
 
   case DRAG_TARGET:
@@ -98,9 +102,11 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     break;
 
   case DRAG_TARGET:
+  case DRAG_TARGET_OUTSIDE:
     if (isInSector(x, y)) {
       drag_last.x = x;
       drag_last.y = y;
+      drag_mode = DRAG_TARGET;
 
       /* no full repaint: copy the map from the buffer, draw dragged
          icon on top */

@@ -80,6 +80,19 @@ class TargetMapWindow : public BufferWindow {
 
   enum DragMode {
     DRAG_NONE,
+
+    /**
+     * User has pressed the finger near the target, but this initial
+     * position is outside the OZ.  This mode will be changed to
+     * #DRAG_TARGET as soon as the finger moves to a valid location
+     * inside the OZ.
+     */
+    DRAG_TARGET_OUTSIDE,
+
+    /**
+     * Target is being dragged (it has been moved already).  Releasing
+     * the finger will commit the change.
+     */
     DRAG_TARGET,
 
     /**

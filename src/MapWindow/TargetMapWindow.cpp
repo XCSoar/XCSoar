@@ -244,6 +244,7 @@ TargetMapWindow::OnPaint(Canvas &canvas)
   case DRAG_NONE:
     break;
 
+  case DRAG_TARGET_OUTSIDE:
   case DRAG_TARGET:
   case DRAG_OZ:
     TargetPaintDrag(canvas, drag_last);
