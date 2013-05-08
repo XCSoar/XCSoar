@@ -172,7 +172,8 @@ private:
    *
    * @return true if click is near target
    */
-  bool isClickOnTarget(const RasterPoint drag_last);
+  gcc_pure
+  bool isClickOnTarget(const RasterPoint drag_last) const;
 
   /**
    * If PanTarget, tests if drag destination
