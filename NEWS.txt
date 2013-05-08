@@ -8,6 +8,7 @@ Version 6.6.1 - not yet released
 * user interface
   - fix malformed name in airspace warning dialog (#2813)
   - don't lost focus to waypoint list on Altair (#2835)
+  - don't forget map zoom when returning to map (#2805)
 * devices
   - indicate duplicate devices in list
   - allow using more than one TCP/UDP device
