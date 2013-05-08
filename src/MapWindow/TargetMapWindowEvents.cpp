@@ -51,6 +51,7 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (isClickOnTarget(drag_start)) {
     drag_mode = DRAG_TARGET;
     SetCapture();
+    PaintWindow::Invalidate();
     return true;
   } else if (isInSector(x, y)) {
     drag_mode = DRAG_OZ;
@@ -65,11 +66,13 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  if (drag_mode != DRAG_NONE)
-    ReleaseCapture();
-
   DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
+
+  if (old_drag_mode != DRAG_NONE) {
+    ReleaseCapture();
+    PaintWindow::Invalidate();
+  }
 
   switch (old_drag_mode) {
   case DRAG_NONE:
