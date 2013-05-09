@@ -494,6 +494,20 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
+{
+  const WindowStats &window =
+    CommonInterface::Calculated().task_stats.last_hour;
+  if (negative(window.duration)) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValue(_T("%2.0f"), Units::ToUserTaskSpeed(window.speed));
+  data.SetValueUnit(Units::current.task_speed_unit);
+}
+
+void
 UpdateInfoBoxFinalGR(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;

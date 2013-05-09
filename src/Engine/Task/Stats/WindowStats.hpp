@@ -20,21 +20,31 @@
 }
  */
 
-#include "TaskStatsComputer.hpp"
-#include "Task/Stats/TaskStats.hpp"
+#ifndef XCSOAR_WINDOW_STATS_HPP
+#define XCSOAR_WINDOW_STATS_HPP
 
-void
-TaskStatsComputer::reset(TaskStats &data)
-{
-  total.Reset(data.total);
-  current_leg.Reset(data.current_leg);
+#include "Math/fixed.hpp"
 
-  data.last_hour.Reset();
-  window.Reset();
-}
+struct WindowStats {
+  /**
+   * The duration of this window [seconds].  A negative value means
+   * this object is undefined.
+   */
+  fixed duration;
 
-void
-TaskStatsComputer::ComputeWindow(fixed time, TaskStats &data)
-{
-  window.Compute(time, data, data.last_hour);
-}
+  /**
+   * The distance travelled in this window.
+   */
+  fixed distance;
+
+  /**
+   * The quotient of distance and duration.
+   */
+  fixed speed;
+
+  void Reset() {
+    duration = fixed(-1);
+  }
+};
+
+#endif

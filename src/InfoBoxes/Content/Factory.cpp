@@ -345,7 +345,7 @@ static constexpr MetaData meta_data[] = {
     N_("Distance to finish around remaining turn points."),
     UpdateInfoBoxFinalDistance,
     e_AA_Time, // AA Time
-    e_CC_Speed, // V Task Ach
+    TASK_SPEED_HOUR,
   },
 
   // e_Fin_GR_TE
@@ -780,7 +780,7 @@ static constexpr MetaData meta_data[] = {
     N_("V Task Ach"),
     N_("Achieved cross country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
     UpdateInfoBoxTaskSpeedAchieved,
-    e_Fin_Distance, // Fin Dis
+    TASK_SPEED_HOUR,
     e_CC_SpeedInst, // V Task Inst
   },
 
@@ -1211,6 +1211,15 @@ static constexpr MetaData meta_data[] = {
     atc_infobox_panels,
     NEXT_RADIAL,
     NEXT_RADIAL,
+  },
+
+  {
+    N_("Speed task last hour"),
+    N_("V Task H"),
+    N_("Average cross country speed while on current task over the last hour, not compensated for altitude."),
+    UpdateInfoBoxTaskSpeedHour,
+    e_Fin_Distance,
+    e_CC_Speed,
   },
 };
 

@@ -271,6 +271,8 @@ AbstractTask::UpdateStatsSpeeds(const AircraftState &state,
       stats_computer.current_leg.Reset(stats.current_leg);
     }
   }
+
+  stats_computer.ComputeWindow(state.time, stats);
 }
 
 void

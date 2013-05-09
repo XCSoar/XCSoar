@@ -24,6 +24,7 @@
 #define XCSOAR_TASK_STATS_COMPUTER_HPP
 
 #include "ElementStatComputer.hpp"
+#include "WindowStatsComputer.hpp"
 
 class TaskStats;
 
@@ -31,10 +32,13 @@ class TaskStatsComputer {
 public:
   ElementStatComputer total;
   ElementStatComputer current_leg;
+  WindowStatsComputer window;
 
 public:
   /** Reset each element (for incremental speeds). */
   void reset(TaskStats &data);
+
+  void ComputeWindow(fixed time, TaskStats &data);
 };
 
 #endif

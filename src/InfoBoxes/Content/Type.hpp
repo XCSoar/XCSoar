@@ -144,6 +144,8 @@ namespace InfoBoxFactory
     NEXT_RADIAL,
     ATC_RADIAL,
 
+    TASK_SPEED_HOUR,
+
     e_NUM_TYPES /* Last item */
   };
 

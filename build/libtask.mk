@@ -72,6 +72,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Computer/DistanceStatComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/TaskVarioComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/TaskStatsComputer.cpp \
+	$(TASK_SRC_DIR)/Computer/WindowStatsComputer.cpp \
 	$(TASK_SRC_DIR)/Stats/CommonStats.cpp \
 	$(TASK_SRC_DIR)/Stats/ElementStat.cpp \
 	$(TASK_SRC_DIR)/Stats/TaskStats.cpp \

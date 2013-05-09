@@ -97,6 +97,9 @@ void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data);
 
 void
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data);
+
+void
 UpdateInfoBoxTaskAATime(InfoBoxData &data);
 
 void

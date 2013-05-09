@@ -24,6 +24,8 @@
 
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
+#include "WindowStats.hpp"
+#include "Task/Computer/WindowStatsComputer.hpp"
 
 #include <type_traits>
 
@@ -71,6 +73,8 @@ public:
   bool flight_mode_final_glide;
 
   StartStats start;
+
+  WindowStats last_hour;
 
   fixed GetEstimatedTotalTime() const {
     return total.time_elapsed + total.time_remaining;

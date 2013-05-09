@@ -45,6 +45,7 @@ TaskStats::reset()
   inside_oz = false;
   flight_mode_final_glide = false;
   start.Reset();
+  last_hour.Reset();
 }
 
 bool

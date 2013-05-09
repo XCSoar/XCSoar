@@ -18,23 +18,40 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "TaskStatsComputer.hpp"
+#include "WindowStatsComputer.hpp"
 #include "Task/Stats/TaskStats.hpp"
 
 void
-TaskStatsComputer::reset(TaskStats &data)
+WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
+                             WindowStats &stats)
 {
-  total.Reset(data.total);
-  current_leg.Reset(data.current_leg);
+  if (!task_stats.task_valid || !task_stats.start.task_started ||
+      !task_stats.total.travelled.IsDefined()) {
+    Reset();
+    stats.Reset();
+    return;
+  }
 
-  data.last_hour.Reset();
-  window.Reset();
-}
+  if (task_stats.task_finished)
+    return;
 
-void
-TaskStatsComputer::ComputeWindow(fixed time, TaskStats &data)
-{
-  window.Compute(time, data, data.last_hour);
+  const fixed dt = minute_clock.Update(time, fixed(59), fixed(180));
+  if (negative(dt)) {
+    Reset();
+    stats.Reset();
+    return;
+  }
+
+  if (!positive(dt))
+    return;
+
+  travelled_distance.Push(time, task_stats.total.travelled.GetDistance());
+
+  stats.duration = travelled_distance.GetDeltaXChecked();
+  if (positive(stats.duration)) {
+    stats.distance = travelled_distance.GetDeltaY();
+    stats.speed = stats.distance / stats.duration;
+  }
 }
