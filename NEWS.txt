@@ -13,6 +13,7 @@ Version 6.7 - not yet released
   - new content "Speed task last hour"
 * waypoint editor
   - delete waypoint implemented
+  - CUP file support added
 * devices
   - "debug" button
 
