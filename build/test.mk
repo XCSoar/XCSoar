@@ -29,10 +29,10 @@ HARNESS_PROGRAMS = $(TESTFAST) $(TESTSLOW)
 build-harness: $(call name-to-bin,$(HARNESS_PROGRAMS))
 
 testslow: $(call name-to-bin,$(TESTSLOW))
-	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTSLOW)
+	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(addprefix $(TARGET_BIN_DIR)/,$(TESTSLOW))
 
 testfast: $(call name-to-bin,$(TESTFAST))
-	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
+	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(addprefix $(TARGET_BIN_DIR)/,$(TESTFAST))
 
 TEST1_LDADD = $(HARNESS_LIBS) \
 	$(TASK_LIBS) \
