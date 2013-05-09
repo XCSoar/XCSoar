@@ -48,6 +48,8 @@ XCSoar TE
     (less clutter than the rounded rectangles)
 * devices
   - LX1600 configuration dialog
+* waypoint editor
+  - delete waypoint implemented
 * calculations
   - more robust landing detection
     (2 min threshold instead of 10 sec)
