@@ -40,6 +40,12 @@ DumpPort::GetState() const
   return port->GetState();
 }
 
+bool
+DumpPort::WaitConnected(OperationEnvironment &env)
+{
+  return port->WaitConnected(env);
+}
+
 size_t
 DumpPort::Write(const void *data, size_t length)
 {

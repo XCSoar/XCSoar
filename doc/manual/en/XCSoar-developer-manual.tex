@@ -74,6 +74,8 @@ furnishing, performance, or use of this material.
 
 \chapter{Introduction}\label{cha:introduction}
 
+\input{compiling.tex}
+
 \chapter{Policy}\label{cha:policy}
 
 \section{Writing Patches}
@@ -555,10 +557,13 @@ depends on who you are:
 \end{itemize}
 
 
-\chapter{The build system}
+\chapter{The build system}\label{cha:build}
 
 A big plain \texttt{Makefile} is used to control the XCSoar build.
 GNU extensions are allowed.
+
+This chapter describes the internals of our build system; for
+instructions on compiling XCSoar, see chapter \ref{cha:compiling}.
 
 \section{Linker parameters}
 

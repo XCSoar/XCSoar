@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "GlideRatioFormatter.hpp"
-
-#include <stdio.h>
+#include "Util/StringUtil.hpp"
 
 void
 FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr)
@@ -31,6 +30,6 @@ FormatGlideRatio(TCHAR *buffer, size_t size, fixed gr)
   assert(buffer != NULL);
   assert(size >= 8);
 
-  _sntprintf(buffer, size,
+  StringFormat(buffer, size,
              fabs(gr) < fixed(100) ? _T("%.1f") : _T("%.0f"), (double) gr);
 }

@@ -39,6 +39,7 @@ Copyright_License {
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Util/TrivialArray.hpp"
+#include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Event/LambdaTimer.hpp"
@@ -361,9 +362,9 @@ AirspaceWarningListHandler::OnPaintItem(Canvas &canvas,
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    _sntprintf(buffer, 21, _T("%s %s"),
-               airspace.GetName(),
-               AirspaceFormatter::GetClass(airspace));
+    StringFormat(buffer, ARRAY_SIZE(buffer), _T("%s %s"),
+                 airspace.GetName(),
+                 AirspaceFormatter::GetClass(airspace));
 
     canvas.DrawClippedText(paint_rc.left + left0,
                            paint_rc.top + Layout::Scale(text_top),

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "AngleFormatter.hpp"
 #include "Math/Angle.hpp"
+#include "Util/StringUtil.hpp"
 
-#include <stdio.h>
 #include <string.h>
 
 void
@@ -35,9 +35,9 @@ FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
   assert(size >= 8);
 
   if (suffix != NULL)
-    _sntprintf(buffer, size, _T("%u° %s"), value_degrees, suffix);
+    StringFormat(buffer, size, _T("%u° %s"), value_degrees, suffix);
   else
-    _sntprintf(buffer, size, _T("%u°"), value_degrees);
+    StringFormat(buffer, size, _T("%u°"), value_degrees);
 }
 
 void
@@ -54,9 +54,9 @@ FormatAngleDelta(TCHAR *buffer, size_t size, Angle value)
 
   int degrees = iround(value.AsDelta().Degrees());
   if (degrees > 1)
-    _sntprintf(buffer, size, _T("%u°»"), degrees);
+    StringFormat(buffer, size, _T("%u°»"), degrees);
   else if (degrees < -1)
-    _sntprintf(buffer, size, _T("«%u°"), -degrees);
+    StringFormat(buffer, size, _T("«%u°"), -degrees);
   else
     _tcscpy(buffer, _T("«»"));
 }
@@ -69,7 +69,7 @@ FormatVerticalAngleDelta(TCHAR *buffer, size_t size, Angle value)
 
   int degrees = iround(value.AsDelta().Degrees());
   if (degrees < -1 || degrees > 1)
-    _sntprintf(buffer, size, _T("%+d°"), degrees);
+    StringFormat(buffer, size, _T("%+d°"), degrees);
   else
     _tcscpy(buffer, _T("--"));
 }

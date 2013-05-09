@@ -24,8 +24,8 @@ Copyright_License {
 #include "ByteSizeFormatter.hpp"
 #include "Math/fixed.hpp"
 #include "Util/Macros.hpp"
+#include "Util/StringUtil.hpp"
 
-#include <stdio.h>
 #include <assert.h>
 
 void
@@ -52,5 +52,5 @@ FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
   else
     format = simple ? _T("%.1f%s") : _T("%.2f %s");
 
-  _sntprintf(buffer, size, format, (double)value, unit);
+  StringFormat(buffer, size, format, (double)value, unit);
 }

@@ -172,10 +172,6 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
         mode = Mode::UNKNOWN;
         return false;
       }
-      /* The first write after the baud rate change fails on an
-         IOIO UART connected device without the small delay (observed
-         with DroidSoar V2 connected to an Colibri 1) */
-      env.Sleep(100);
     }
   } else
     old_baud_rate = 0;

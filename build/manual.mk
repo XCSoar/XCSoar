@@ -61,6 +61,9 @@ TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 XETEX_RUN = $(TEX_VARS) xetex $(TEX_FLAGS) -no-pdf -output-directory $(@D)
 
+LATEX2HTML = latex2html
+LATEX2HTML_RUN = $(TEX_VARS) L2HINIT_NAME=$(DOC)/manual/latex2html.config $(LATEX2HTML) -local_icons -verbosity 0 -split 3
+
 MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
@@ -88,17 +91,22 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_RUN) $<
 
 # Generate a HTML version of the manual with latex2html
-$(MANUAL_OUTPUT_DIR)/html/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
+$(MANUAL_OUTPUT_DIR)/html/en/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/dirstamp
-	$(TEX_VARS) latex2html -dir $(@D) $<
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/en/dirstamp
+	$(LATEX2HTML_RUN) -dir $(@D) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(DOC)/manual/en/tpl_format.tex \
-	$(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
+
+$(MANUAL_OUTPUT_DIR)/html/developer/index.html: $(DOC)/manual/en/XCSoar-developer-manual.tex \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/developer/dirstamp
+	$(LATEX2HTML_RUN) -dir $(@D) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/XCBlitzIIKonf.tex \
 	$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -134,7 +142,7 @@ $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures
 
 $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
-	
+
 $(SVG_LOGOS): $(MANUAL_OUTPUT_DIR)/graphics/%.png: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -z 1.5 -f png $< -o $@
 
@@ -170,3 +178,6 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	# Copy an example bat file to generate the manuals with MikTex on Windows
 	cp $(DOC)/manual/generate_manuals.bat $(T)/.
 	cd $(@D) && zip -r XCSoar-manual-dev.zip XCSoar-manual-dev
+
+upload-html-manual: $(MANUAL_OUTPUT_DIR)/html/en/index.html $(MANUAL_OUTPUT_DIR)/html/developer/index.html
+	rsync -aP --delete-after --chmod=ugo+rX $(MANUAL_OUTPUT_DIR)/html/ max@www.xcsoar.org:/var/www/xcsoar/doc/
