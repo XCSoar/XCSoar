@@ -70,10 +70,3 @@ TaskStats::calc_flight_mode(const TaskBehaviour &settings)
   flight_mode_final_glide = this_is_final;
   return true;
 }
-
-void
-TaskStatsComputer::reset(TaskStats &data)
-{
-  total.Reset(data.total);
-  current_leg.Reset(data.current_leg);
-}

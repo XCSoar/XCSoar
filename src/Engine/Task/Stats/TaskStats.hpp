@@ -101,14 +101,4 @@ public:
 
 static_assert(std::is_trivial<TaskStats>::value, "type is not trivial");
 
-class TaskStatsComputer {
-public:
-  ElementStatComputer total;
-  ElementStatComputer current_leg;
-
-public:
-  /** Reset each element (for incremental speeds). */
-  void reset(TaskStats &data);
-};
-
 #endif

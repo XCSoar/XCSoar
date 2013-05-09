@@ -68,11 +68,13 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Solvers/TaskOptTarget.cpp \
 	$(TASK_SRC_DIR)/Solvers/TaskGlideRequired.cpp \
 	$(TASK_SRC_DIR)/Solvers/TaskSolution.cpp \
-	$(TASK_SRC_DIR)/Stats/DistanceStat.cpp \
+	$(TASK_SRC_DIR)/Computer/ElementStatComputer.cpp \
+	$(TASK_SRC_DIR)/Computer/DistanceStatComputer.cpp \
+	$(TASK_SRC_DIR)/Computer/TaskVarioComputer.cpp \
+	$(TASK_SRC_DIR)/Computer/TaskStatsComputer.cpp \
 	$(TASK_SRC_DIR)/Stats/CommonStats.cpp \
 	$(TASK_SRC_DIR)/Stats/ElementStat.cpp \
 	$(TASK_SRC_DIR)/Stats/TaskStats.cpp \
 	$(TASK_SRC_DIR)/Stats/StartStats.cpp \
-	$(TASK_SRC_DIR)/Stats/TaskVario.cpp
 
 $(eval $(call link-library,libtask,TASK))

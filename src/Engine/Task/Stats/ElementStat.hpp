@@ -27,6 +27,7 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
+#include "Task/Computer/DistanceStatComputer.hpp"
 
 #include <type_traits>
 
@@ -118,36 +119,5 @@ struct ElementStat
 };
 
 static_assert(std::is_trivial<ElementStat>::value, "type is not trivial");
-
-class ElementStatComputer
-{
-public:
-  DistanceStatComputer remaining_effective;
-  DistanceStatComputer remaining;
-  DistanceStatComputer planned;
-  DistanceStatComputer travelled;
-  DistanceStatComputer pirker;
-  TaskVarioComputer vario;
-
-private:
-  bool initialised;
-
-public:
-  ElementStatComputer();
-
-  /**
-   * Calculate element speeds.  Incremental speeds are
-   * held at bulk speeds within first minute of elapsed time.
-   *
-   * @param dt Time step of sample (s)
-   */
-  void CalcSpeeds(ElementStat &data, const fixed dt);
-
-  /**
-   * Reset to uninitialised state, to supress calculation
-   * of incremental speeds.
-   */
-  void Reset(ElementStat &data);
-};
 
 #endif

@@ -25,6 +25,7 @@
 
 #include "TaskInterface.hpp"
 #include "Stats/TaskStats.hpp"
+#include "Computer/TaskStatsComputer.hpp"
 #include "TaskBehaviour.hpp"
 #include "Math/Filter.hpp"
 

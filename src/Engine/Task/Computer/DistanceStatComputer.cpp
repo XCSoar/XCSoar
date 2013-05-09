@@ -20,7 +20,8 @@
 }
  */
 
-#include "DistanceStat.hpp"
+#include "DistanceStatComputer.hpp"
+#include "Task/Stats/DistanceStat.hpp"
 
 DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
   :df(fixed(0)),
