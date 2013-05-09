@@ -50,6 +50,7 @@ XCSoar TE
   - LX1600 configuration dialog
 * waypoint editor
   - delete waypoint implemented
+  - CUP file support added
 * calculations
   - more robust landing detection
     (2 min threshold instead of 10 sec)
