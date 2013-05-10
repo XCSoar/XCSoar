@@ -14,6 +14,7 @@ Version 6.6.1 - 2013/05/08
   - allow using more than one TCP/UDP device
   - fix spurious errors after IOIO baud rate change (#2733, #2754)
   - K6Bt: fix configured baud rate setup on Android (#2836)
+  - work around Android 2.3 Bluetooth crash bug
 * tasks
   - prevent moving target out of the cylinder (#2794)
 * configuration
