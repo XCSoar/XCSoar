@@ -185,6 +185,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   InitThreadDebug();
 
   delete CommonInterface::main_window;
+  CommonInterface::main_window = nullptr;
 
   DisallowLanguage();
   Fonts::Deinitialize();
@@ -201,6 +202,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete event_queue;
   event_queue = NULL;
   delete native_view;
+  native_view = nullptr;
 
   TextUtil::Deinitialise(env);
   OpenGL::Deinitialise();
@@ -208,6 +210,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   DeinitialiseDataPath();
 
   delete context;
+  context = nullptr;
 
 #ifdef IOIOLIB
   BMP085Device::Deinitialise(env);
