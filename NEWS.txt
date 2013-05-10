@@ -9,6 +9,8 @@ Version 6.7 - not yet released
   - new page: "horizon" (#1592)
 * map
   - terrain countour lines (#2451)
+* infoboxes
+  - new content "Speed task last hour"
 * waypoint editor
   - delete waypoint implemented
 * devices
