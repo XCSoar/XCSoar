@@ -7,7 +7,7 @@
   <application android:icon="@drawable/icon" android:label="@string/app_name">
     <activity android:name=".XCSoar"
               android:label="@string/app_name"
-              android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation"
+              android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
