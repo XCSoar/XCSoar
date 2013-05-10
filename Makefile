@@ -71,6 +71,7 @@ include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/link.mk
+include $(topdir)/build/java.mk
 include $(topdir)/build/android.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk

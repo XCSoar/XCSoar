@@ -10,9 +10,6 @@ ifeq ($(TARGET),ANDROID)
 # In the stable branch, this should default to "n".
 TESTING = y
 
-ANT = ant
-JAVAH = javah
-JARSIGNER = jarsigner
 ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
@@ -29,10 +26,8 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)
 ANDROID_LIB_NAMES = xcsoar
 
 ifneq ($(V),2)
-ANT += -quiet
 ANDROID_TOOL_OPTIONS = --silent
 else
-JARSIGNER += -verbose
 ANDROID_TOOL_OPTIONS = --verbose
 endif
 
