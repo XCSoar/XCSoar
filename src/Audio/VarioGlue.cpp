@@ -71,7 +71,9 @@ void
 AudioVarioGlue::Deinitialise()
 {
   delete player;
+  player = nullptr;
   delete synthesiser;
+  synthesiser = nullptr;
 }
 
 void
