@@ -49,6 +49,7 @@ class AndroidDownloadManager {
 
 public:
   static bool Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
 
   gcc_pure
   static bool IsAvailable();
