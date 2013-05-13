@@ -21,7 +21,7 @@
  */
 
 #include "FAITriangleTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 #include "Task/Shapes/FAITriangleTask.hpp"
 
 static constexpr TaskFactoryConstraints fai_triangle_constraints = {

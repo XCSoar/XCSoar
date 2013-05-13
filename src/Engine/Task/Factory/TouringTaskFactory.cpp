@@ -21,7 +21,7 @@
  */
 
 #include "TouringTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 #include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 

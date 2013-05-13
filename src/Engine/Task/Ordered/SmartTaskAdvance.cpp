@@ -24,7 +24,7 @@
 #include "Task/Points/TaskPoint.hpp"
 #include "Points/StartPoint.hpp"
 #include "Points/AATPoint.hpp"
-#include "Task/Factory/TaskFactoryConstraints.hpp"
+#include "Task/Factory/Constraints.hpp"
 
 SmartTaskAdvance::SmartTaskAdvance()
   :state(TaskAdvance::MANUAL),

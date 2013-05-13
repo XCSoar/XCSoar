@@ -21,7 +21,7 @@
  */
 
 #include "FAIGoalTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 
 static constexpr TaskFactoryConstraints fai_goal_constraints = {
   true,

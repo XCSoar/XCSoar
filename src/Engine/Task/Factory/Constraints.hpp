@@ -21,8 +21,8 @@ Copyright_License {
 }
  */
 
-#ifndef TASK_FACTORY_CONSTRAINTS_HPP
-#define TASK_FACTORY_CONSTRAINTS_HPP
+#ifndef XCSOAR_TASK_FACTORY_CONSTRAINTS_HPP
+#define XCSOAR_TASK_FACTORY_CONSTRAINTS_HPP
 
 /**
  * This struct describes the constraints imposed by the rules of an
