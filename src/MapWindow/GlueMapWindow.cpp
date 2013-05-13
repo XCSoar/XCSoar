@@ -34,6 +34,9 @@ GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
    logger(NULL),
    idle_robin(-1),
+#ifdef ENABLE_OPENGL
+   data_timer(*this),
+#endif
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
 #ifdef ENABLE_OPENGL
