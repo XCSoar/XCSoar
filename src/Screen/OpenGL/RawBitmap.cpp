@@ -48,6 +48,8 @@ RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
   assert(nWidth > 0);
   assert(nHeight > 0);
 
+  texture->EnableInterpolation();
+
   AddSurfaceListener(*this);
 
   buffer = new BGRColor[corrected_width * height];
@@ -64,8 +66,10 @@ RawBitmap::~RawBitmap()
 void
 RawBitmap::SurfaceCreated()
 {
-  if (texture == NULL)
+  if (texture == NULL) {
     texture = new GLTexture(corrected_width, height);
+    texture->EnableInterpolation();
+  }
 }
 
 void

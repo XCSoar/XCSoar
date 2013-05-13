@@ -120,14 +120,20 @@ public:
   }
 
   /**
+   * Enable interpolation when minifying/magnifying the texture.  The
+   * caller must bind the texture prior to calling this method.
+   */
+  static void EnableInterpolation();
+
+  /**
    * Change the size of the texture, discarding any previous contents.
    */
   void ResizeDiscard(PixelSize new_size);
 
 protected:
-  void Initialise(bool mag_linear=false);
+  void Initialise();
 
-  static void Configure(bool mag_linear=false);
+  static void Configure();
 
 #ifdef ENABLE_SDL
   void Load(SDL_Surface *surface);

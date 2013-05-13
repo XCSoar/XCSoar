@@ -200,8 +200,7 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
    allocated_width(ValidateTextureSize(_width)),
    allocated_height(ValidateTextureSize(_height))
 {
-  /* enable linear filtering for the terrain texture */
-  Initialise(true);
+  Initialise();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
@@ -242,7 +241,7 @@ GLTexture::ResizeDiscard(PixelSize new_size)
 }
 
 void
-GLTexture::Initialise(bool mag_linear)
+GLTexture::Initialise()
 {
 #ifndef NDEBUG
   ++num_textures;
@@ -250,23 +249,27 @@ GLTexture::Initialise(bool mag_linear)
 
   glGenTextures(1, &id);
   Bind();
-  Configure(mag_linear);
+  Configure();
 }
 
 void
-GLTexture::Configure(bool mag_linear)
+GLTexture::Configure()
 {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  if (IsEmbedded()) {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  } else {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  }
+  GLint filter = IsEmbedded() ? GL_NEAREST : GL_LINEAR;
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+}
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                  !IsEmbedded() || mag_linear ? GL_LINEAR : GL_NEAREST);
+void
+GLTexture::EnableInterpolation()
+{
+  if (IsEmbedded()) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
 }
 
 #ifdef ENABLE_SDL

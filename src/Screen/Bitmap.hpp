@@ -79,6 +79,8 @@ protected:
   tstring pathName;
   GLTexture *texture;
   PixelSize size;
+
+  bool interpolation;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -87,8 +89,8 @@ protected:
 
 public:
 #ifdef ENABLE_OPENGL
-  Bitmap():id(0), texture(NULL) {}
-  explicit Bitmap(unsigned id):texture(NULL) {
+  Bitmap():id(0), texture(NULL), interpolation(false) {}
+  explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
     Load(id);
   }
 #elif defined(ENABLE_SDL)
@@ -109,7 +111,6 @@ public:
 
   Bitmap(const Bitmap &other) = delete;
   Bitmap &operator=(const Bitmap &other) = delete;
-
 public:
   bool IsDefined() const {
 #ifdef ENABLE_OPENGL
@@ -129,6 +130,12 @@ public:
   UPixelScalar GetHeight() const {
     return size.cy;
   }
+#endif
+
+#ifdef ENABLE_OPENGL
+  void EnableInterpolation();
+#else
+  void EnableInterpolation() {}
 #endif
 
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
