@@ -359,7 +359,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
-    canvas.DrawText(0, y - canvas.CalcTextSize(buffer).cy, buffer);
+    canvas.DrawText(0, y - font.GetHeight(), buffer);
   }
 }
 
