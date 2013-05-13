@@ -35,6 +35,9 @@ LogoView::LogoView()
 #ifndef USE_GDI
   font.Load(_T("Droid Sans"), 12);
 #endif
+
+  big_logo.EnableInterpolation();
+  big_title.EnableInterpolation();
 }
 
 void
