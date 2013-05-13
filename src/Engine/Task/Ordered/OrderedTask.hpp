@@ -562,6 +562,14 @@ public:
    */
   void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &ob);
 
+protected:
+  /**
+   * Propagate a change to the OrderedTaskBehaviour to all interested
+   * child objects.
+   */
+  void PropagateOrderedTaskBehaviour();
+
+public:
   ConstTaskPointList GetPoints() const {
     return task_points;
   }
