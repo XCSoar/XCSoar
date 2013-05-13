@@ -149,6 +149,7 @@ ifneq ($(IOIOLIB_DIR),)
 	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/target/android/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi2
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio/lib/util
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio/lib/impl
 endif
