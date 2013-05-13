@@ -42,7 +42,7 @@ class TopographyStore : private NonCopyable {
 public:
   enum {
     /** maximum number of topography layers */
-    MAXTOPOGRAPHY = 20,
+    MAXTOPOGRAPHY = 30,
   };
 
 private:
