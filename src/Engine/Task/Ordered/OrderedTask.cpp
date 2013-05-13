@@ -1290,6 +1290,8 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
 
   task_advance.SetFactoryConstraints(active_factory->GetConstraints());
+
+  PropagateOrderedTaskBehaviour();
 }
 
 void 
