@@ -1290,6 +1290,8 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
 
   task_advance.SetFactoryConstraints(active_factory->GetConstraints());
+
+  PropagateOrderedTaskBehaviour();
 }
 
 void 
@@ -1297,11 +1299,17 @@ OrderedTask::SetOrderedTaskBehaviour(const OrderedTaskBehaviour& ob)
 {
   ordered_behaviour = ob;
 
+  PropagateOrderedTaskBehaviour();
+}
+
+void
+OrderedTask::PropagateOrderedTaskBehaviour()
+{
   for (auto tp : task_points)
-    tp->SetOrderedTaskBehaviour(ob);
+    tp->SetOrderedTaskBehaviour(ordered_behaviour);
 
   for (auto tp : optional_start_points)
-    tp->SetOrderedTaskBehaviour(ob);
+    tp->SetOrderedTaskBehaviour(ordered_behaviour);
 }
 
 bool 
