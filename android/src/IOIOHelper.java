@@ -32,6 +32,7 @@ import ioio.lib.api.IOIO;
 import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
+import ioio.lib.util.IOIOConnectionRegistry;
 
 /**
  * A utility class which wraps the Java API into an easier API for the
@@ -62,6 +63,14 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
    */
   private Collection<IOIOConnectionListener> openListeners =
     new LinkedList<IOIOConnectionListener>();
+
+  static {
+    final String[] bootstraps = new String[]{
+      "ioio.lib.impl.SocketIOIOConnectionBootstrap",
+    };
+
+    IOIOConnectionRegistry.addBootstraps(bootstraps);
+  }
 
   public IOIOHelper() {
     super("IOIO");
