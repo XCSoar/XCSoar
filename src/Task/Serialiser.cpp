@@ -32,8 +32,8 @@
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
-
 #include "Compiler.h"
+
 #include <assert.h>
 #include <memory>
 

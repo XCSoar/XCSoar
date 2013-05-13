@@ -34,7 +34,6 @@
 #include "XML/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-#include <assert.h>
 #include <memory>
 
 void
@@ -185,7 +184,6 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
   else if (StringIsEqual(type, _T("BGAEnhancedOption")))
     return KeyholeZone::CreateBGAEnhancedOptionZone(wp.location);
 
-  assert(1);
   return nullptr;
 }
 
@@ -321,6 +319,5 @@ Deserialiser::GetTaskFactoryType() const
   else if (StringIsEqual(type, _T("Touring")))
     return TaskFactoryType::TOURING;
 
-  assert(1);
   return TaskFactoryType::FAI_GENERAL;
 }

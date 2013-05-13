@@ -24,7 +24,7 @@
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Factory/TaskFactoryType.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Geo/AltitudeReference.hpp"
 
 #include <tchar.h>
 
@@ -39,6 +39,7 @@ class LineSectorZone;
 class CylinderZone;
 class AnnularSectorZone;
 class SymmetricSectorZone;
+struct OrderedTaskBehaviour;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
