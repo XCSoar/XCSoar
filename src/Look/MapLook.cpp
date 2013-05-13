@@ -85,4 +85,6 @@ MapLook::Initialise(const MapSettings &settings,
 
   waiting_for_fix_icon.Load(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
   no_gps_icon.Load(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
+
+  overlay_font = &bold_font;
 }

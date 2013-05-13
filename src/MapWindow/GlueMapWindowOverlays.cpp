@@ -24,7 +24,6 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TaskLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
@@ -98,10 +97,11 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   mode.shape = LabelShape::OUTLINED_INVERTED;
   mode.align = TextInBoxMode::Alignment::RIGHT;
 
-  canvas.Select(Fonts::map_bold);
+  const Font &font = *look.overlay_font;
+  canvas.Select(font);
 
   UPixelScalar padding = Layout::FastScale(4);
-  UPixelScalar height = Fonts::map_bold.GetHeight();
+  UPixelScalar height = font.GetHeight();
   PixelScalar y = 0 + padding;
   PixelScalar x = render_projection.GetScreenWidth() - padding;
 
@@ -177,7 +177,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
 
-  canvas.Select(Fonts::map_bold);
+  const Font &font = *look.overlay_font;
+  canvas.Select(font);
   TextInBox(canvas, txt, x, y, mode, rc, NULL);
 }
 
@@ -289,7 +290,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   fixed map_width = projection.GetScreenWidthMeters();
 
-  const Font &font = Fonts::map_bold;
+  const Font &font = *look.overlay_font;
   canvas.Select(font);
   FormatUserMapScale(map_width, buffer.buffer(), true);
   PixelSize text_size = canvas.CalcTextSize(buffer);
