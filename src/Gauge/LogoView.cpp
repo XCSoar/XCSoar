@@ -26,6 +26,8 @@ Copyright_License {
 #include "resource.h"
 #include "Version.hpp"
 
+#include <algorithm>
+
 LogoView::LogoView()
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
@@ -65,11 +67,19 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
       (orientation == SQUARE && width >= 210 && height >= 210) ?
       big_title : title;
 
+  unsigned magnification = 1;
+  if (width > 1024 && height > 512)
+    magnification = std::min(width / 512u, height / 256u);
+
   // Determine logo size
   PixelSize logo_size = bitmap_logo.GetSize();
+  logo_size.cx *= magnification;
+  logo_size.cy *= magnification;
 
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
+  title_size.cx *= magnification;
+  title_size.cy *= magnification;
 
   PixelScalar logox, logoy, titlex, titley;
 
@@ -95,10 +105,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   // Draw 'XCSoar N.N' title
   if (orientation != SQUARE)
-    canvas.Copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
+    canvas.Stretch(titlex, titley, title_size.cx, title_size.cy, bitmap_title);
 
   // Draw XCSoar swift logo
-  canvas.Copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
+  canvas.Stretch(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo);
 
   // Draw full XCSoar version number
 
