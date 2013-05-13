@@ -22,7 +22,7 @@
 
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Engine/Task/Ordered/Settings.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
@@ -31,7 +31,7 @@
 #include "TestUtil.hpp"
 
 static TaskBehaviour task_behaviour;
-static OrderedTaskBehaviour ordered_task_behaviour;
+static OrderedTaskSettings ordered_task_settings;
 static GlidePolar glide_polar(fixed(0));
 
 static GeoPoint
@@ -64,12 +64,12 @@ TestAATPoint()
   OrderedTask task(task_behaviour);
   task.Append(StartPoint(new CylinderZone(wp1.location, fixed(500)), wp1,
                          task_behaviour,
-                         ordered_task_behaviour.start_constraints));
+                         ordered_task_settings.start_constraints));
   task.Append(AATPoint(new CylinderZone(wp2.location, fixed(10000)), wp2,
                        task_behaviour));
   task.Append(FinishPoint(new CylinderZone(wp3.location, fixed(500)), wp3,
                           task_behaviour,
-                          ordered_task_behaviour.finish_constraints));
+                          ordered_task_settings.finish_constraints));
   task.SetActiveTaskPoint(1);
   ok1(task.CheckTask());
 
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
   plan_tests(717);
 
   task_behaviour.SetDefaults();
-  ordered_task_behaviour.SetDefaults();
+  ordered_task_settings.SetDefaults();
 
   TestAll();
 

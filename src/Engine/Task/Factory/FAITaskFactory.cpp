@@ -22,7 +22,7 @@
 
 #include "FAITaskFactory.hpp"
 #include "Constraints.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints fai_constraints = {
@@ -77,9 +77,9 @@ FAITaskFactory::Validate()
 }
 
 void 
-FAITaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
+FAITaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
 {
-  AbstractTaskFactory::UpdateOrderedTaskBehaviour(to);
+  AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 
   to.start_constraints.max_speed = fixed(0);
   to.start_constraints.max_height = 0;

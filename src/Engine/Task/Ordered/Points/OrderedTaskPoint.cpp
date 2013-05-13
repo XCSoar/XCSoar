@@ -147,7 +147,7 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 
 OrderedTaskPoint *
 OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
-                        const OrderedTaskBehaviour &ordered_task_behaviour,
+                        const OrderedTaskSettings &ordered_task_settings,
                         const Waypoint *waypoint) const
 {
   if (waypoint == NULL)
@@ -157,7 +157,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
   case TaskPointType::START:
     return new StartPoint(GetObservationZone().Clone(waypoint->location),
                           *waypoint, task_behaviour,
-                          ordered_task_behaviour.start_constraints);
+                          ordered_task_settings.start_constraints);
 
   case TaskPointType::AST: {
     const ASTPoint &src = *(const ASTPoint *)this;
@@ -175,7 +175,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
   case TaskPointType::FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
                            *waypoint, task_behaviour,
-                           ordered_task_behaviour.finish_constraints,
+                           ordered_task_settings.finish_constraints,
                            IsBoundaryScored());
 
   case TaskPointType::UNORDERED:

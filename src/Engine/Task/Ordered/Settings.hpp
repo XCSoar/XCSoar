@@ -19,8 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef ORDEREDTASK_BEHAVIOUR_HPP
-#define ORDEREDTASK_BEHAVIOUR_HPP
+
+#ifndef XCSOAR_ORDERED_TASK_SETTINGS_HPP
+#define XCSOAR_ORDERED_TASK_SETTINGS_HPP
 
 #include "Math/fixed.hpp"
 #include "StartConstraints.hpp"
@@ -30,7 +31,7 @@
  * Settings for ordered tasks; most of these are set by
  * the #AbstractTaskFactory but can be overriden
  */
-struct OrderedTaskBehaviour {
+struct OrderedTaskSettings {
   /** Desired AAT minimum task time (s) */
   fixed aat_min_time;
 

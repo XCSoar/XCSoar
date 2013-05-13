@@ -30,7 +30,7 @@ class Waypoints;
 class AbstractTaskFactory;
 class OrderedTaskPoint;
 struct TaskBehaviour;
-struct OrderedTaskBehaviour;
+struct OrderedTaskSettings;
 struct GeoPoint;
 
 class MatPoints {
@@ -76,7 +76,7 @@ public:
 
   void CloneFrom(const MatPoints &other,
                  const TaskBehaviour &task_behaviour,
-                 const OrderedTaskBehaviour &ordered_task_behaviour);
+                 const OrderedTaskSettings &ordered_task_settings);
 };
 
 #endif

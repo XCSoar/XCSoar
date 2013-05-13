@@ -167,7 +167,7 @@ TaskRulesConfigPanel::Save(bool &_changed)
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
-  OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
+  OrderedTaskSettings &otb = task_behaviour.ordered_defaults;
   ContestSettings &contest_settings = settings_computer.contest;
 
   changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED,

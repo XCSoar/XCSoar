@@ -83,7 +83,7 @@ TaskCalculatorPanel::Refresh()
   SetRowVisible(AAT_TIME, common_stats.ordered_has_targets);
   if (common_stats.ordered_has_targets)
     LoadValue(AAT_TIME,
-              protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
+              protected_task_manager->GetOrderedTaskSettings().aat_min_time / 60);
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance

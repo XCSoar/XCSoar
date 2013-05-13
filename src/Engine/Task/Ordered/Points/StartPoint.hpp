@@ -45,8 +45,8 @@ class StartPoint final : public OrderedTaskPoint {
   TaskStartMargins margins;
 
   /**
-   * A copy of OrderedTaskBehaviour::start_constraints, managed by
-   * SetOrderedTaskBehaviour().
+   * A copy of OrderedTaskSettings::start_constraints, managed by
+   * SetOrderedTaskSettings().
    */
   StartConstraints constraints;
 
@@ -88,7 +88,7 @@ public:
 
   /* virtual methods from class OrderedTaskPoint */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) override;
-  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) override;
+  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &s) override;
   virtual void SetNeighbours(OrderedTaskPoint *prev,
                              OrderedTaskPoint *next) override;
   virtual bool IsInSector(const AircraftState &ref) const override;

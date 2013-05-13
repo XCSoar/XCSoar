@@ -20,10 +20,10 @@
 }
  */
 
-#include "OrderedTaskBehaviour.hpp"
+#include "Settings.hpp"
 
 void
-OrderedTaskBehaviour::SetDefaults()
+OrderedTaskSettings::SetDefaults()
 {
   aat_min_time = fixed(3600 * 3);
   start_constraints.SetDefaults();

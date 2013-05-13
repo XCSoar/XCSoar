@@ -21,7 +21,7 @@
 */
 
 #include "Deserialiser.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
@@ -246,7 +246,7 @@ Deserialiser::DeserialiseWaypoint()
 }
 
 void 
-Deserialiser::Deserialise(OrderedTaskBehaviour &data)
+Deserialiser::Deserialise(OrderedTaskSettings &data)
 {
   node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
@@ -271,9 +271,9 @@ Deserialiser::Deserialise(OrderedTask &task)
   task.SetFactory(GetTaskFactoryType());
   task.Reset();
 
-  OrderedTaskBehaviour beh = task.GetOrderedTaskBehaviour();
+  OrderedTaskSettings beh = task.GetOrderedTaskSettings();
   Deserialise(beh);
-  task.SetOrderedTaskBehaviour(beh);
+  task.SetOrderedTaskSettings(beh);
 
   const DataNode::List children = node.ListChildrenNamed(_T("Point"));
   for (const auto &i : children) {

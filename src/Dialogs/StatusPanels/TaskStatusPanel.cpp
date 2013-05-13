@@ -54,7 +54,7 @@ TaskStatusPanel::Refresh()
 
   SetRowVisible(TaskTime, common_stats.ordered_has_targets);
   if (common_stats.ordered_has_targets) {
-    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
+    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
     SetText(TaskTime, Temp);
   }
 

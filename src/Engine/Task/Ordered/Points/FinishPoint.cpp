@@ -72,9 +72,9 @@ FinishPoint::GetElevation() const
 }
 
 void
-FinishPoint::SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb)
+FinishPoint::SetOrderedTaskSettings(const OrderedTaskSettings &otb)
 {
-  OrderedTaskPoint::SetOrderedTaskBehaviour(otb);
+  OrderedTaskPoint::SetOrderedTaskSettings(otb);
   constraints = otb.finish_constraints;
 }
 

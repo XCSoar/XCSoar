@@ -54,11 +54,11 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
    taskpoint_finish(NULL),
    factory_mode(tb.task_type_default),
    active_factory(NULL),
-   ordered_behaviour(tb.ordered_defaults),
+   ordered_settings(tb.ordered_defaults),
    dijkstra_min(NULL), dijkstra_max(NULL)
 {
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
-  active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+  active_factory->UpdateOrderedTaskSettings(ordered_settings);
   task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
 
@@ -519,10 +519,10 @@ OrderedTask::UpdateIdle(const AircraftState &state,
   bool retval = AbstractTask::UpdateIdle(state, glide_polar);
 
   if (HasStart() && task_behaviour.optimise_targets_range &&
-      positive(GetOrderedTaskBehaviour().aat_min_time)) {
+      positive(GetOrderedTaskSettings().aat_min_time)) {
 
     CalcMinTarget(state, glide_polar,
-                  GetOrderedTaskBehaviour().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
+                  GetOrderedTaskSettings().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
 
     if (task_behaviour.optimise_targets_bearing &&
         task_points[active_task_point]->GetType() == TaskPointType::AAT) {
@@ -682,7 +682,7 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
        !task_points[task_points.size() - 1]->IsSuccessorAllowed()))
     return false;
 
-  task_points.push_back(new_tp.Clone(task_behaviour, ordered_behaviour));
+  task_points.push_back(new_tp.Clone(task_behaviour, ordered_settings));
   if (task_points.size() > 1)
     SetNeighbours(task_points.size() - 2);
   else {
@@ -699,7 +699,7 @@ bool
 OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
 {
   optional_start_points.push_back(new_tp.Clone(task_behaviour,
-                                               ordered_behaviour));
+                                               ordered_settings));
   if (task_points.size() > 1)
     SetNeighbours(0);
   UpdateGeometry();
@@ -724,7 +724,7 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
     active_task_point++;
 
   task_points.insert(task_points.begin() + position,
-                     new_tp.Clone(task_behaviour, ordered_behaviour));
+                     new_tp.Clone(task_behaviour, ordered_settings));
 
   if (position)
     SetNeighbours(position - 1);
@@ -752,7 +752,7 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
     return false;
 
   delete task_points[position];
-  task_points[position] = new_tp.Clone(task_behaviour, ordered_behaviour);
+  task_points[position] = new_tp.Clone(task_behaviour, ordered_settings);
 
   if (position)
     SetNeighbours(position - 1);
@@ -779,7 +779,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 
   delete optional_start_points[position];
   optional_start_points[position] = new_tp.Clone(task_behaviour,
-                                                 ordered_behaviour);
+                                                 ordered_settings);
 
   SetNeighbours(0);
   UpdateGeometry();
@@ -1141,7 +1141,7 @@ OrderedTask::Clone(const TaskBehaviour &tb) const
 {
   OrderedTask* new_task = new OrderedTask(tb);
 
-  new_task->ordered_behaviour = ordered_behaviour;
+  new_task->ordered_settings = ordered_settings;
 
   new_task->SetFactory(factory_mode);
   for (const OrderedTaskPoint *tp : task_points)
@@ -1166,7 +1166,7 @@ OrderedTask::CheckDuplicateWaypoints(Waypoints& waypoints,
       waypoints.CheckExistsOrAppend((*i)->GetWaypoint());
 
     const OrderedTaskPoint *new_tp =
-      (*i)->Clone(task_behaviour, ordered_behaviour, &wp);
+      (*i)->Clone(task_behaviour, ordered_settings, &wp);
     if (is_task)
       Replace(*new_tp, std::distance(begin, i));
     else
@@ -1191,7 +1191,7 @@ OrderedTask::Commit(const OrderedTask& that)
   SetFactory(that.factory_mode);
 
   // copy across behaviour
-  SetOrderedTaskBehaviour(that.ordered_behaviour);
+  SetOrderedTaskSettings(that.ordered_settings);
 
   // remove if that task is smaller than this one
   while (TaskSize() > that.TaskSize()) {
@@ -1231,7 +1231,7 @@ OrderedTask::Commit(const OrderedTask& that)
     }
   }
 
-  mat_points.CloneFrom(that.mat_points, task_behaviour, ordered_behaviour);
+  mat_points.CloneFrom(that.mat_points, task_behaviour, ordered_settings);
 
   if (modified)
     UpdateGeometry();
@@ -1248,7 +1248,7 @@ OrderedTask::RelocateOptionalStart(const unsigned position, const Waypoint& wayp
     return false;
 
   OrderedTaskPoint *new_tp =
-    optional_start_points[position]->Clone(task_behaviour, ordered_behaviour,
+    optional_start_points[position]->Clone(task_behaviour, ordered_settings,
                                            &waypoint);
   delete optional_start_points[position];
   optional_start_points[position]= new_tp;
@@ -1262,7 +1262,7 @@ OrderedTask::Relocate(const unsigned position, const Waypoint& waypoint)
     return false;
 
   OrderedTaskPoint *new_tp = task_points[position]->Clone(task_behaviour,
-                                                  ordered_behaviour,
+                                                  ordered_settings,
                                                   &waypoint);
   bool success = Replace(*new_tp, position);
   delete new_tp;
@@ -1287,29 +1287,29 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
 
   delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
-  active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+  active_factory->UpdateOrderedTaskSettings(ordered_settings);
 
   task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 
-  PropagateOrderedTaskBehaviour();
-}
-
-void 
-OrderedTask::SetOrderedTaskBehaviour(const OrderedTaskBehaviour& ob)
-{
-  ordered_behaviour = ob;
-
-  PropagateOrderedTaskBehaviour();
+  PropagateOrderedTaskSettings();
 }
 
 void
-OrderedTask::PropagateOrderedTaskBehaviour()
+OrderedTask::SetOrderedTaskSettings(const OrderedTaskSettings& ob)
+{
+  ordered_settings = ob;
+
+  PropagateOrderedTaskSettings();
+}
+
+void
+OrderedTask::PropagateOrderedTaskSettings()
 {
   for (auto tp : task_points)
-    tp->SetOrderedTaskBehaviour(ordered_behaviour);
+    tp->SetOrderedTaskSettings(ordered_settings);
 
   for (auto tp : optional_start_points)
-    tp->SetOrderedTaskBehaviour(ordered_behaviour);
+    tp->SetOrderedTaskSettings(ordered_settings);
 }
 
 bool 
@@ -1350,8 +1350,8 @@ OrderedTask::Clear()
   RemoveAllPoints();
 
   Reset();
-  ordered_behaviour = task_behaviour.ordered_defaults;
-  active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+  ordered_settings = task_behaviour.ordered_defaults;
+  active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
 
 FlatBoundingBox 

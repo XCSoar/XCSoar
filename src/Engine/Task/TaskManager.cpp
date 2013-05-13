@@ -71,9 +71,9 @@ TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour)
 }
 
 void
-TaskManager::SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb)
+TaskManager::SetOrderedTaskSettings(const OrderedTaskSettings &otb)
 {
-  ordered_task->SetOrderedTaskBehaviour(otb);
+  ordered_task->SetOrderedTaskSettings(otb);
 }
 
 TaskType
@@ -157,7 +157,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     common_stats.ordered_has_targets = ordered_task->HasTargets();
 
     common_stats.aat_time_remaining =
-      ordered_task->GetOrderedTaskBehaviour().aat_min_time -
+      ordered_task->GetOrderedTaskSettings().aat_min_time -
       task_stats.total.time_elapsed;
 
     if (task_stats.total.remaining.IsDefined() &&
@@ -168,7 +168,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     else
       common_stats.aat_speed_remaining = fixed(-1);
 
-    fixed aat_min_time = ordered_task->GetOrderedTaskBehaviour().aat_min_time;
+    fixed aat_min_time = ordered_task->GetOrderedTaskSettings().aat_min_time;
 
     if (positive(aat_min_time)) {
       common_stats.aat_speed_max = task_stats.distance_max / aat_min_time;
@@ -179,7 +179,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     }
 
     const StartConstraints &start_constraints =
-      ordered_task->GetOrderedTaskBehaviour().start_constraints;
+      ordered_task->GetOrderedTaskSettings().start_constraints;
     common_stats.start_open_time_span = start_constraints.open_time_span;
     const fixed start_max_height =
       fixed(start_constraints.max_height) +

@@ -58,7 +58,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       ChartRenderer &chart,
                                       const TaskBehaviour& task_props,
                                       const bool is_infobox,
-                                      const OrderedTaskBehaviour *ordered_props) const
+                                      const OrderedTaskSettings *ordered_props) const
 {
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
@@ -169,7 +169,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
                                      const bool is_map,
-                                     const OrderedTaskBehaviour *ordered_props) const
+                                     const OrderedTaskSettings *ordered_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
   if (is_map) {

@@ -21,7 +21,7 @@
 */
 
 #include "Serialiser.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
@@ -214,7 +214,7 @@ Serialiser::Serialise(const Waypoint &data)
 }
 
 void 
-Serialiser::Serialise(const OrderedTaskBehaviour &data)
+Serialiser::Serialise(const OrderedTaskSettings &data)
 {
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.SetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
@@ -236,7 +236,7 @@ void
 Serialiser::Serialise(const OrderedTask &task)
 {
   node.SetAttribute(_T("type"), GetTaskFactoryType(task.GetFactoryType()));
-  Serialise(task.GetOrderedTaskBehaviour());
+  Serialise(task.GetOrderedTaskSettings());
   mode_optional_start = false;
 
   for (const auto &tp : task.GetPoints())

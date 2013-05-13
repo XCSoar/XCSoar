@@ -81,7 +81,7 @@ private:
 
   TaskFactoryType factory_mode;
   AbstractTaskFactory* active_factory;
-  OrderedTaskBehaviour ordered_behaviour;
+  OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
@@ -547,27 +547,27 @@ public:
   }
 
   /** 
-   * Retrieve (const) the OrderedTaskBehaviour used by this task
+   * Retrieve (const) the #OrderedTaskSettings used by this task
    * 
-   * @return Read-only OrderedTaskBehaviour
+   * @return Read-only #OrderedTaskSettings
    */
-  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
-    return ordered_behaviour;
+  const OrderedTaskSettings &GetOrderedTaskSettings() const {
+    return ordered_settings;
   }
 
   /** 
-   * Copy OrderedTaskBehaviour to this task
+   * Copy #OrderedTaskSettings to this task
    * 
    * @param ob Value to set
    */
-  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &ob);
+  void SetOrderedTaskSettings(const OrderedTaskSettings &ob);
 
 protected:
   /**
-   * Propagate a change to the OrderedTaskBehaviour to all interested
+   * Propagate a change to the #OrderedTaskSettings to all interested
    * child objects.
    */
-  void PropagateOrderedTaskBehaviour();
+  void PropagateOrderedTaskSettings();
 
 public:
   ConstTaskPointList GetPoints() const {

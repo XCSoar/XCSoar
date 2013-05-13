@@ -188,9 +188,9 @@ ChartControl::OnPaint(Canvas &canvas)
     break;
   case AnalysisPage::THERMAL_BAND:
   {
-    OrderedTaskBehaviour otb;
+    OrderedTaskSettings otb;
     if (protected_task_manager != NULL) {
-      otb = protected_task_manager->GetOrderedTaskBehaviour();
+      otb = protected_task_manager->GetOrderedTaskSettings();
     }
 
     ThermalBandRenderer renderer(thermal_band_look, chart_look);

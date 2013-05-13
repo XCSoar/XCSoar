@@ -426,7 +426,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
                              tb_rect,
                              GetComputerSettings().task,
                              true,
-                             &task_manager->GetOrderedTask().GetOrderedTaskBehaviour());
+                             &task_manager->GetOrderedTask().GetOrderedTaskSettings());
   } else {
     renderer.DrawThermalBand(Basic(),
                              Calculated(),

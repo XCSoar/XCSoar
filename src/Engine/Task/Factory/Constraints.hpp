@@ -40,7 +40,7 @@ struct TaskFactoryConstraints {
   /**
    * Whether ordered task start and finish requires FAI height rules
    * and (no) speed rule.  This is the default value for
-   * OrderedTaskBehaviour::fai_finish.
+   * OrderedTaskSettings::fai_finish.
    */
   bool fai_finish;
 

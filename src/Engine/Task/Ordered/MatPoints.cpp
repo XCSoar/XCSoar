@@ -138,12 +138,11 @@ MatPoints::ClearMatPoints()
 void
 MatPoints::CloneFrom(const MatPoints &other,
                      const TaskBehaviour &task_behaviour,
-                     const OrderedTaskBehaviour &ordered_task_behaviour)
+                     const OrderedTaskSettings &ordered_task_settings)
 {
   points.clear();
 
   points.reserve(other.GetMatPoints().size());
   for (const auto *i : other.GetMatPoints())
-    points.push_back(i->Clone(task_behaviour,
-                                        ordered_task_behaviour));
+    points.push_back(i->Clone(task_behaviour, ordered_task_settings));
 }

@@ -708,7 +708,7 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
   const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskBehaviour().start_constraints.max_height);
+                                GetOrderedTaskSettings().start_constraints.max_height);
 
   if (!task_stats.task_valid || !positive(maxheight)
       || !protected_task_manager

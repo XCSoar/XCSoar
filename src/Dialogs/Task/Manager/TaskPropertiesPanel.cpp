@@ -73,7 +73,7 @@ void
 TaskPropertiesPanel::RefreshView()
 {
   const TaskFactoryType ftype = ordered_task->GetFactoryType();
-  const OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
+  const OrderedTaskSettings &p = ordered_task->GetOrderedTaskSettings();
 
   const bool aat_types = ftype == TaskFactoryType::AAT ||
     ftype == TaskFactoryType::MAT;
@@ -117,7 +117,7 @@ TaskPropertiesPanel::RefreshView()
 void
 TaskPropertiesPanel::ReadValues()
 {
-  OrderedTaskBehaviour p = ordered_task->GetOrderedTaskBehaviour();
+  OrderedTaskSettings p = ordered_task->GetOrderedTaskSettings();
   bool changed = false;
 
   TaskFactoryType newtype = ordered_task->GetFactoryType();
@@ -165,7 +165,7 @@ TaskPropertiesPanel::ReadValues()
                            p.finish_constraints.min_height_ref);
 
   if (changed)
-    ordered_task->SetOrderedTaskBehaviour(p);
+    ordered_task->SetOrderedTaskSettings(p);
 
   *task_changed |= changed;
 }
@@ -173,12 +173,12 @@ TaskPropertiesPanel::ReadValues()
 void
 TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
-  OrderedTaskBehaviour p = ordered_task->GetOrderedTaskBehaviour();
+  OrderedTaskSettings p = ordered_task->GetOrderedTaskSettings();
   bool newvalue = df.GetAsBoolean();
   if (newvalue != p.finish_constraints.fai_finish) {
     p.finish_constraints.fai_finish = p.start_constraints.fai_finish
       = newvalue;
-    ordered_task->SetOrderedTaskBehaviour(p);
+    ordered_task->SetOrderedTaskSettings(p);
 
     *task_changed = true;
     RefreshView();

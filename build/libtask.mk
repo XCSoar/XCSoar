@@ -10,7 +10,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/AbstractTask.cpp \
 	$(TASK_SRC_DIR)/Ordered/StartConstraints.cpp \
 	$(TASK_SRC_DIR)/Ordered/FinishConstraints.cpp \
-	$(TASK_SRC_DIR)/Ordered/OrderedTaskBehaviour.cpp \
+	$(TASK_SRC_DIR)/Ordered/Settings.cpp \
 	$(TASK_SRC_DIR)/Ordered/OrderedTask.cpp \
 	$(TASK_SRC_DIR)/Ordered/MatPoints.cpp \
 	$(TASK_SRC_DIR)/Ordered/TaskAdvance.cpp \
