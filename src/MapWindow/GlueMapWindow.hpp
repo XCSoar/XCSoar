@@ -146,6 +146,7 @@ class GlueMapWindow : public MapWindow {
 
 public:
   GlueMapWindow(const Look &look);
+  virtual ~GlueMapWindow();
 
   void SetLogger(Logger *_logger) {
     logger = _logger;

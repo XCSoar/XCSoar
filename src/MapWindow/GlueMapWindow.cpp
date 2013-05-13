@@ -54,6 +54,11 @@ GlueMapWindow::GlueMapWindow(const Look &look)
 {
 }
 
+GlueMapWindow::~GlueMapWindow()
+{
+  Destroy();
+}
+
 void
 GlueMapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
 {
