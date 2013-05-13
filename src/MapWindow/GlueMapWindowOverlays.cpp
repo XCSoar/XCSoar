@@ -356,10 +356,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!buffer.empty()) {
     int y = rc.bottom - height;
 
-    canvas.SetBackgroundOpaque();
-    canvas.SetBackgroundColor(COLOR_WHITE);
+    TextInBoxMode mode;
+    mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
+    mode.shape = LabelShape::OUTLINED;
 
-    canvas.DrawText(0, y - font.GetHeight(), buffer);
+    TextInBox(canvas, buffer, 0, y, mode, rc, nullptr);
   }
 }
 
