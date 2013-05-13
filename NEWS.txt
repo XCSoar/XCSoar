@@ -11,6 +11,8 @@ Version 6.7 - not yet released
   - terrain countour lines (#2451)
 * infoboxes
   - new content "Speed task last hour"
+* tasks
+  - custom "start requires arm" setting (#2782)
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added

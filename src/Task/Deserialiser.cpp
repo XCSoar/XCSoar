@@ -249,6 +249,8 @@ void
 Deserialiser::Deserialise(OrderedTaskSettings &data)
 {
   node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
+  node.GetAttribute(_T("start_requires_arm"),
+                    data.start_constraints.require_arm);
   node.GetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
   node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   data.start_constraints.max_height_ref =

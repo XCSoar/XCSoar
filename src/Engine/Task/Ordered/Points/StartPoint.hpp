@@ -67,6 +67,10 @@ public:
              const TaskBehaviour &tb,
              const StartConstraints &constraints);
 
+  bool DoesRequireArm() const {
+    return constraints.require_arm;
+  }
+
   /**
    * Search for the min point on the boundary from
    * the aircraft state to the next point.  Should only

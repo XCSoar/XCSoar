@@ -217,6 +217,8 @@ void
 Serialiser::Serialise(const OrderedTaskSettings &data)
 {
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
+  node.SetAttribute(_T("start_requires_arm"),
+                    data.start_constraints.require_arm);
   node.SetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
   node.SetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   node.SetAttribute(_T("start_max_height_ref"),

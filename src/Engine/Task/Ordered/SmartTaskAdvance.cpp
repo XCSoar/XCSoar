@@ -27,15 +27,8 @@
 #include "Task/Factory/Constraints.hpp"
 
 SmartTaskAdvance::SmartTaskAdvance()
-  :state(TaskAdvance::MANUAL),
-   start_requires_arm(false)
+  :state(TaskAdvance::MANUAL)
 {
-}
-
-void
-SmartTaskAdvance::SetFactoryConstraints(const TaskFactoryConstraints &constraints)
-{
-  start_requires_arm = constraints.start_requires_arm;
 }
 
 bool
@@ -54,7 +47,7 @@ SmartTaskAdvance::CheckReadyToAdvance(const TaskPoint &tp,
 
   case TaskPointType::START: {
     const StartPoint &sp = (const StartPoint &)tp;
-    if (start_requires_arm) {
+    if (sp.DoesRequireArm()) {
       if (armed) {
         state = TaskAdvance::START_ARMED;
       } else {

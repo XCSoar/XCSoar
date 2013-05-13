@@ -59,7 +59,6 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
 {
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
-  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
 
 OrderedTask::~OrderedTask()
@@ -1288,8 +1287,6 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
-
-  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 
   PropagateOrderedTaskSettings();
 }

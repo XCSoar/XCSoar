@@ -38,6 +38,7 @@ Copyright_License {
 enum Controls {
   TASK_TYPE,
   MIN_TIME,
+  START_REQUIRES_ARM,
   START_OPEN_TIME,
   START_CLOSE_TIME,
   START_MAX_SPEED,
@@ -81,6 +82,8 @@ TaskPropertiesPanel::RefreshView()
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueTime(MIN_TIME, (int)p.aat_min_time);
+
+  LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
 
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetStart());
   LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetEnd());
@@ -128,6 +131,9 @@ TaskPropertiesPanel::ReadValues()
     p.aat_min_time = fixed(min_time);
     changed = true;
   }
+
+  if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
+    changed = true;
 
   RoughTime new_open = p.start_constraints.open_time_span.GetStart();
   RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
@@ -227,6 +233,10 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
           0, 36000, 60, 180);
+
+  AddBoolean(_("Arm start manually"),
+             _("Configure whether the start must be armed manually or automatically."),
+             false);
 
   const RoughTimeDelta time_zone =
     CommonInterface::GetComputerSettings().utc_offset;
