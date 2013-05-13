@@ -80,6 +80,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   // Draw Fly bitmap
   else if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
+    launcher1_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
       canvas.InvertStretchTransparent(launcher1_bitmap, COLOR_YELLOW);
@@ -90,6 +91,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   // Draw Simulator bitmap
   else if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
+    launcher2_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
       canvas.InvertStretchTransparent(launcher2_bitmap, COLOR_YELLOW);
