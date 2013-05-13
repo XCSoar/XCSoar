@@ -43,7 +43,7 @@ LogoView::LogoView()
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
-  const UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
+  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   enum {
     LANDSCAPE, PORTRAIT, SQUARE,
@@ -87,7 +87,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   title_size.cx *= magnification;
   title_size.cy *= magnification;
 
-  PixelScalar logox, logoy, titlex, titley;
+  int logox, logoy, titlex, titley;
 
   // Determine logo and title positions
   switch (orientation) {
