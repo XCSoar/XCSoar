@@ -26,6 +26,7 @@ package org.xcsoar;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import android.util.Log;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.IOIOFactory;
@@ -147,11 +148,16 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
 
     IOIO ioio;
 
-    synchronized(this) {
-      if (shutdownFlag || interrupted())
-        return;
+    try {
+      synchronized(this) {
+        if (shutdownFlag || interrupted())
+          return;
 
-      connecting = ioio = IOIOFactory.create();
+        connecting = ioio = IOIOFactory.create();
+      }
+    } catch (NoSuchElementException e) {
+      Log.e(TAG, "IOIOFactory error", e);
+      return;
     }
 
     try {
