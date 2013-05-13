@@ -40,10 +40,8 @@ struct zzip_dir;
  */
 class TopographyStore : private NonCopyable {
 public:
-  enum {
-    /** maximum number of topography layers */
-    MAXTOPOGRAPHY = 30,
-  };
+  /** maximum number of topography layers */
+  static constexpr unsigned MAXTOPOGRAPHY = 30;
 
 private:
   StaticArray<TopographyFile *, MAXTOPOGRAPHY> files;
