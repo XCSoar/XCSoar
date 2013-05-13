@@ -26,6 +26,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 static RasterPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 {
@@ -127,9 +131,17 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
     else
       canvas.SelectWhitePen();
 
-    canvas.SelectWhiteBrush();
-    canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                              Layout::SmallScale(8), Layout::SmallScale(8));
+    {
+#ifdef ENABLE_OPENGL
+      const GLEnable blend(GL_BLEND);
+      canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xa0)));
+#else
+      canvas.SelectWhiteBrush();
+#endif
+
+      canvas.DrawRoundRectangle(rc.left, rc.top, rc.right, rc.bottom,
+                                Layout::SmallScale(8), Layout::SmallScale(8));
+    }
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
