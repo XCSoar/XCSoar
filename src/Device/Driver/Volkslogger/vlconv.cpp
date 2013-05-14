@@ -1111,14 +1111,12 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
   uint8_t Haupttyp, Untertyp;
   uint8_t l; // length of DS
   const uint8_t *p2; // Pointer to the beginning of the content of a vrb or vrt
-  tm olddate;
-  memset(&olddate, 0, sizeof(olddate));
+  BrokenDateTime olddate;
 
   int olddate_flg = 0;
   int flight_of_day = 0;
   long temptime;
-  tm timetm1;
-  memset(&timetm1, 0, sizeof(timetm1));
+  BrokenDateTime datetime1;
 
   int bfv = 0;
   char pilot1[17];
@@ -1257,17 +1255,14 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 
       // speichert in timetm1 den aktuellen tnd-DS ab
       temptime = 65536L * p[2] + 256L * p[3] + p[4];
-      timetm1.tm_sec = temptime % 3600;
-      timetm1.tm_hour = temptime / 3600;
-      timetm1.tm_min = 0;
-      timetm1.tm_mday = 10 * (p[7] >> 4) + (p[7] & 0x0f);
-      timetm1.tm_mon = 10 * (p[6] >> 4) + (p[6] & 0x0f) - 1;
-      timetm1.tm_year = 10 * (p[5] >> 4) + (p[5] & 0x0f);
+      datetime1 = BrokenDateTime(BrokenDate::Invalid(),
+                                 BrokenTime::FromSecondOfDay(temptime));
+      datetime1.day = 10 * (p[7] >> 4) + (p[7] & 0x0f);
+      datetime1.month = 10 * (p[6] >> 4) + (p[6] & 0x0f);
+      datetime1.year = 10 * (p[5] >> 4) + (p[5] & 0x0f) + 1900;
       // Y2K-handling
-      if (timetm1.tm_year < 80)
-        timetm1.tm_year += 100;
-      timetm1.tm_isdst = -1;
-      mktime(&timetm1);
+      if (datetime1.year < 1980)
+        datetime1.year += 100;
       l = 8;
       break;
     case rectyp_end:
@@ -1276,29 +1271,20 @@ conv_dir(std::vector<DIRENTRY> &flights, const uint8_t *p, const size_t length)
 
       // setzt firsttime und lasttime aufgrund der Werte im sta-DS
       temptime = 65536L * p[4] + 256L * p[5] + p[6]; // Aufzeichnungsbeginn
-      de.firsttime = timetm1;
-      de.firsttime.tm_sec -= temptime % 3600;
-
-      de.firsttime.tm_hour -= temptime / 3600;
-      de.firsttime.tm_isdst = -1;
-      mktime(&de.firsttime);
-      de.lasttime = de.firsttime;
+      de.firsttime = datetime1 - temptime;
 
       temptime = 65536L * p[1] + 256L * p[2] + p[3]; // Aufzeichnungsdauer
       de.recordingtime = temptime;
-      de.lasttime.tm_sec += temptime % 3600;
-      de.lasttime.tm_hour += temptime / 3600;
-      de.lasttime.tm_isdst = -1;
-      mktime(&de.lasttime);
+      de.lasttime=de.firsttime + temptime;
 
       if (!olddate_flg) {
         olddate = de.firsttime;
         flight_of_day = 0;
         olddate_flg = 1;
       }
-      if ((olddate.tm_mday == de.firsttime.tm_mday) && (olddate.tm_mon
-          == de.firsttime.tm_mon)
-          && (olddate.tm_year == de.firsttime.tm_year))
+      if ((olddate.day == de.firsttime.day) && (olddate.month
+          == de.firsttime.month)
+          && (olddate.year == de.firsttime.year))
         flight_of_day++;
       else {
         olddate = de.firsttime;
