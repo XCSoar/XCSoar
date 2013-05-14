@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOGGER_FRECORD_HPP
 #define XCSOAR_LOGGER_FRECORD_HPP
 
-#include "Computer/GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 #include "NMEA/Info.hpp"
 
 struct BrokenTime;

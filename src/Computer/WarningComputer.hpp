@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 
 class Airspaces;
 struct ComputerSettings;

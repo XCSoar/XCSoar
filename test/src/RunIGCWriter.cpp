@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "OS/ConvertPathName.hpp"
 #include "IGC/IGCWriter.hpp"
-#include "Computer/GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 #include "DebugReplay.hpp"
 #include "OS/Args.hpp"
 

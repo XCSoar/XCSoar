@@ -27,7 +27,7 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Engine/Task/TaskType.hpp"
 #include "Engine/Route/RoutePlanner.hpp"
-#include "GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 
 struct MoreData;
 struct DerivedInfo;
