@@ -49,7 +49,7 @@ NMEALogger::Start()
     return true;
 
   BrokenDateTime dt = BrokenDateTime::NowUTC();
-  assert(dt.Plausible());
+  assert(dt.IsPlausible());
 
   StaticString<64> name;
   name.Format(_T("%04u-%02u-%02u_%02u-%02u.nmea"),

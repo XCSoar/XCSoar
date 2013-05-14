@@ -95,7 +95,7 @@ struct BrokenDate {
    * Does this object contain plausible values?
    */
   constexpr
-  bool Plausible() const {
+  bool IsPlausible() const {
     return year >= 1800 && year <= 2500 &&
       month >= 1 && month <= 12 &&
       day >= 1 && day <= 31;

@@ -193,7 +193,7 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
   if (endptr == p || *endptr != 0)
     return false;
 
-  return date.Plausible();
+  return date.IsPlausible();
 }
 
 static bool
@@ -217,7 +217,7 @@ ReadTime(NMEAInputLine &line, BrokenTime &time)
   if (endptr == p || *endptr != 0)
     return false;
 
-  return time.Plausible();
+  return time.IsPlausible();
 }
 
 static bool

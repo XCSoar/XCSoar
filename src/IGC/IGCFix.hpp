@@ -105,7 +105,7 @@ struct IGCFix
   }
 
   bool IsDefined() const {
-    return time.Plausible();
+    return time.IsPlausible();
   }
 
   /**

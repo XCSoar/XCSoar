@@ -35,7 +35,7 @@ Markers::Reset()
 void
 Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 {
-  assert(time.Plausible());
+  assert(time.IsPlausible());
 
   Marker marker = { loc, time };
   marker_store.push_back(marker);

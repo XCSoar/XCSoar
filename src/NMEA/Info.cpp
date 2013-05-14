@@ -90,7 +90,7 @@ NMEAInfo::ProvideTime(fixed _time)
 void
 NMEAInfo::ProvideDate(const BrokenDate &date)
 {
-  assert(date.Plausible());
+  assert(date.IsPlausible());
 
   date_time_utc.year = date.year;
   date_time_utc.month = date.month;

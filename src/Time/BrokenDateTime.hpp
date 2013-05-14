@@ -72,8 +72,8 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool Plausible() const {
-    return BrokenDate::Plausible() && BrokenTime::Plausible();
+  bool IsPlausible() const {
+    return BrokenDate::IsPlausible() && BrokenTime::IsPlausible();
   }
 
   /**

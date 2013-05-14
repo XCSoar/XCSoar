@@ -88,7 +88,7 @@ struct BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool Plausible() const {
+  bool IsPlausible() const {
     return hour < 24 && minute < 60 && second < 60;
   }
 

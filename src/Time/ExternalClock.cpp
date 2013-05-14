@@ -28,7 +28,7 @@ fixed
 ExternalClock::Apply(fixed fix_time, BrokenDateTime &date_time,
                      bool date_available)
 {
-  assert(!date_available || BrokenDate(date_time).Plausible());
+  assert(!date_available || BrokenDate(date_time).IsPlausible());
 
   fixed hours, mins, secs;
 

@@ -60,18 +60,18 @@ Update(const MoreData &basic, const FlyingState &state,
   if (!basic.time_available || !basic.date_available)
     return;
 
-  if (state.flying && !result.takeoff_time.Plausible()) {
+  if (state.flying && !result.takeoff_time.IsPlausible()) {
     result.takeoff_time = basic.GetDateTimeAt(state.takeoff_time);
     result.takeoff_location = state.takeoff_location;
   }
 
-  if (!state.flying && result.takeoff_time.Plausible() &&
-      !result.landing_time.Plausible()) {
+  if (!state.flying && result.takeoff_time.IsPlausible() &&
+      !result.landing_time.IsPlausible()) {
     result.landing_time = basic.GetDateTimeAt(state.landing_time);
     result.landing_location = state.landing_location;
   }
 
-  if (!negative(state.release_time) && !result.release_time.Plausible()) {
+  if (!negative(state.release_time) && !result.release_time.IsPlausible()) {
     result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
@@ -103,7 +103,7 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
   if (!basic.time_available || !basic.date_available)
     return;
 
-  if (result.takeoff_time.Plausible() && !result.landing_time.Plausible()) {
+  if (result.takeoff_time.IsPlausible() && !result.landing_time.IsPlausible()) {
     result.landing_time = basic.date_time_utc;
 
     if (basic.location_available)
@@ -188,7 +188,7 @@ WriteEventAttributes(TextWriter &writer,
 {
   JSON::ObjectWriter object(writer);
 
-  if (time.Plausible()) {
+  if (time.IsPlausible()) {
     NarrowString<64> buffer;
     FormatISO8601(buffer.buffer(), time);
     object.WriteElement("time", JSON::WriteString, buffer);
@@ -202,7 +202,7 @@ static void
 WriteEvent(JSON::ObjectWriter &object, const char *name,
            const BrokenDateTime &time, const GeoPoint &location)
 {
-  if (time.Plausible() || location.IsValid())
+  if (time.IsPlausible() || location.IsValid())
     object.WriteElement(name, WriteEventAttributes, time, location);
 }
 
