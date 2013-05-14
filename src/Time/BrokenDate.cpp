@@ -25,6 +25,8 @@ Copyright_License {
 #include "BrokenDateTime.hpp"
 #include "DateUtil.hpp"
 
+#include <assert.h>
+
 BrokenDate
 BrokenDate::TodayUTC()
 {
@@ -34,6 +36,8 @@ BrokenDate::TodayUTC()
 void
 BrokenDate::IncrementDay()
 {
+  assert(IsPlausible());
+
   const unsigned max_day = DaysInMonth(month, year);
 
   ++day;
