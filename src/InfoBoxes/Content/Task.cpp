@@ -225,6 +225,43 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
+{
+  const Waypoint* way_point = protected_task_manager != NULL
+    ? protected_task_manager->GetActiveWaypoint()
+    : NULL;
+
+  // Set title
+  if (!way_point) {
+    data.SetTitle(_("WP Dist-N"));
+    data.SetInvalid();
+  }
+  else {
+    data.SetTitle(way_point->name.c_str());
+
+    const NMEAInfo &basic = CommonInterface::Basic();
+    const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+    if (!task_stats.task_valid || !basic.location_available) {
+        data.SetInvalid();
+        return;
+    }
+
+    const GeoVector vector(basic.location, way_point->location);
+
+    if (!vector.IsValid()) {
+        data.SetInvalid();
+        return;
+    }
+
+    // Set Value
+    data.SetValueFromDistance(vector.distance);
+    data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+    data.SetComment(vector.bearing);
+  }
+}
+
+void
 UpdateInfoBoxNextETE(InfoBoxData &data)
 {
   // use proper non-terminal next task stats

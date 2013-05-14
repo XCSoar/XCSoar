@@ -49,6 +49,9 @@ void
 UpdateInfoBoxNextDistance(InfoBoxData &data);
 
 void
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data);
+
+void
 UpdateInfoBoxNextETE(InfoBoxData &data);
 
 void

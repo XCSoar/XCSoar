@@ -272,8 +272,19 @@ static constexpr MetaData meta_data[] = {
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     UpdateInfoBoxNextDistance,
     next_waypoint_infobox_panels,
-    e_WP_AltDiff, // WP AltD
+    WP_NOMINAL_DIST, // WP Dist-N
     e_TaskProgress, // Progress
+  },
+
+  // WP_NOMINAL_DIST
+  {
+    N_("Next distance (nominal)"),
+    N_("WP Dist-N"),
+    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
+    UpdateInfoBoxNextDistanceNominal,
+    next_waypoint_infobox_panels,
+    e_WP_AltDiff, // WP AltD
+    e_WP_Distance, // WP Dist
   },
 
   // e_WP_AltDiff
@@ -284,7 +295,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxNextAltitudeDiff,
     next_waypoint_infobox_panels,
     e_WP_MC0AltDiff, // WP MC0 AltD
-    e_WP_Distance, // WP Dist
+    WP_NOMINAL_DIST, // WP Dist-N
   },
 
   // e_WP_AltReq

@@ -12,6 +12,7 @@ Version 6.7 - not yet released
   - continue loading terrain/topography without GPS fix (#2723)
 * infoboxes
   - new content "Speed task last hour"
+  - new content "Next distance (nominal)"
 * tasks
   - custom "start requires arm" setting (#2782)
 * waypoint editor
