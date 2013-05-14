@@ -181,7 +181,7 @@ public:
   /** Task-ID */
   unsigned TID;
   /** Time of declaration */
-  struct tm TDECL;
+  BrokenDateTime TDECL;
   int hasdeclaration;
   char sTDECL[20];
   /** Expected date of flight */
@@ -196,7 +196,7 @@ public:
   C2 LDG;
   /** Location of the turnpoints */
   C2 TP[12];
-  struct tm T_FDT;
+  BrokenDateTime T_FDT;
   int zz_min;
 
 public:
@@ -214,20 +214,20 @@ public:
       if (NTP > 12)
         NTP = 12;
 
-      strftime(sTDECL,sizeof sTDECL,"%d%m%y%H%M%S",&TDECL);
+      snprintf(sTDECL, sizeof sTDECL, "%02u%02u%02u%02u%02u%02u",
+               TDECL.day, TDECL.month , TDECL.year % 100,
+               TDECL.hour, TDECL.minute, TDECL.second);
 
       // If no FDT field was received from the logger (from FW 161 upwards)
       // we have to create one
       if (!(FDT[0] | FDT[1] | FDT[2])) {
         // TDECL is used as a base
-        memcpy(&T_FDT, &TDECL, sizeof T_FDT);
+        T_FDT = TDECL;
         // Add the timezone
-        T_FDT.tm_min += zz_min;
-        T_FDT.tm_isdst = -1;
-        mktime(&T_FDT);
-        FDT[0] = T_FDT.tm_mday;
-        FDT[1] = T_FDT.tm_mon + 1;
-        FDT[2] = T_FDT.tm_year % 100;
+        T_FDT = T_FDT + zz_min*60; // add timezone in seconds
+        FDT[0] = T_FDT.day;
+        FDT[1] = T_FDT.month;
+        FDT[2] = T_FDT.year % 100;
       }
 
       if (version >= 422) {
@@ -288,7 +288,7 @@ public:
     TID = 0;
     memset(&T_FDT, 0, sizeof T_FDT);
     zz_min = 0;
-    memset(&TDECL, 0, sizeof TDECL);
+    TDECL = BrokenDateTime::Invalid();
     strcpy(sTDECL, "            ");
     memset(FDT, 0, sizeof FDT);
     //init();
@@ -535,10 +535,9 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
   long time_relative = 0;
   long temptime;
   long decl_time;
-  tm firsttime;
-  memset(&firsttime, 0, sizeof(firsttime));
+  BrokenDateTime firsttime;
 
-  tm realtime;
+  BrokenDateTime realtime;
   uint8_t Haupttyp;
   uint8_t Untertyp;
   const uint8_t *p;
@@ -586,24 +585,17 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       // calculates backwards the time of the first fix
       time_relative += p[1];
       temptime = 65536L * p[2] + 256L * p[3] + p[4];
-      firsttime.tm_sec = temptime % 3600;
-      firsttime.tm_hour = temptime / 3600;
-      firsttime.tm_min = 0;
-      firsttime.tm_mday = 10 * (p[7] >> 4) + (p[7] & 0x0f);
-      firsttime.tm_mon = 10 * (p[6] >> 4) + (p[6] & 0x0f) - 1;
-      firsttime.tm_year = 10 * (p[5] >> 4) + (p[5] & 0x0f);
-
-      // Y2K-patch
+      firsttime = BrokenDateTime(BrokenDate::Invalid(),
+                                 BrokenTime::FromSecondOfDay(temptime));
+      firsttime.day = 10 * (p[7] >> 4) + (p[7] & 0x0f);
+      firsttime.month = 10 * (p[6] >> 4) + (p[6] & 0x0f);
+      firsttime.year = 10 * (p[5] >> 4) + (p[5] & 0x0f) + 1900;
+      // Y2K-handling
       if (igcfile_version >= 424)
-        if (firsttime.tm_year < 80)
-          firsttime.tm_year += 100;
+        if (firsttime.year < 1980)
+          firsttime.year += 100;
 
-      firsttime.tm_isdst = -1;
-      firsttime.tm_sec -= time_relative % 3600;
-      firsttime.tm_hour -= time_relative / 3600;
-      //xxxtime
-
-      mktime(&firsttime);
+      firsttime = firsttime - time_relative;
       l = 8;
       break;
       /*
@@ -930,18 +922,15 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
     sprintf(igcheader.TZN, "UTC%c%02d:%02d", (tzn < 0 ? '-' : '+'), tzh, tzm);
   }
 
-  strftime(igcheader.DTE,sizeof(igcheader.DTE),"%d%m%y",&firsttime);
+  snprintf(igcheader.DTE, sizeof(igcheader.DTE), "%02u%02u%02u",
+           firsttime.day, firsttime.month, firsttime.year % 100);
   igcheader.output(igcfile_version, oo_fillin);
 
   if (igcfile_version >= 414 || (task.STA.koord.lat != 0)
       || (task.STA.koord.lon != 0)) {
     if (decl_time >= 0) {
       task.hasdeclaration = 1;
-      memcpy(&task.TDECL, &firsttime, sizeof task.TDECL);
-      task.TDECL.tm_sec += decl_time % 3600;
-      task.TDECL.tm_hour += decl_time / 3600;
-      task.TDECL.tm_isdst = -1;
-      mktime(&task.TDECL);
+      task.TDECL = firsttime + decl_time;
       task.print(igcfile_version, Ausgabedatei);
     }
   }
@@ -974,9 +963,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         break;
       }
       time_relative += p[2];
-      realtime.tm_sec += p[2];
-      realtime.tm_isdst = -1;
-      mktime(&realtime);
+      realtime = realtime + p[2];
       igcfix.valid = ((p[0] & 0x10) >> 4) ? 'A' : 'V';
       const unsigned press = unsigned(p[0] & 0x0f) << 8 | p[1];
       unsigned gpalt, fxa, enl;
@@ -1033,7 +1020,8 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
 
       const long pressure_alt = pressure2altitude(press);
 
-      strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+      snprintf(igcfix.time,sizeof(igcfix.time), "%02u%02u%02u",
+               realtime.hour, realtime.minute, realtime.second);
       fprintf(Ausgabedatei, "B%6s%02u%05u%c%03u%05u%c%c%05ld%05ld%03u",
               igcfix.time,
               latdeg, latmin, igcfix.lat < 0 ? 'S' : 'N',
@@ -1061,9 +1049,7 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
         p2 = p + 2;
         break;
       case rectyp_vrt:
-        realtime.tm_sec += p[2];
-        realtime.tm_isdst = -1;
-        mktime(&realtime);
+        realtime = realtime + p[2];
         p2 = p + 3;
         break;
       default:
@@ -1073,20 +1059,20 @@ convert_gcs(int igcfile_version, FILE *Ausgabedatei,
       Untertyp = (p2[0]);
       switch (Untertyp) {
       case FLDEPEV:
-        strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+        snprintf(igcfix.time,sizeof(igcfix.time), "%02u%02u%02u",
+                 realtime.hour, realtime.minute, realtime.second);
         fprintf(Ausgabedatei, "E%6sPEVEVENTBUTTON PRESSED\n", igcfix.time);
         break;
       case FLDETKF:
-        strftime(igcfix.time,sizeof(igcfix.time),"%H%M%S",&realtime);
+        snprintf(igcfix.time,sizeof(igcfix.time), "%02u%02u%02u",
+                         realtime.hour, realtime.minute, realtime.second);
         fprintf(Ausgabedatei, "LGCSTKF%6sTAKEOFF DETECTED\n", igcfix.time);
         break;
       }
       ;
       break;
     case rectyp_tnd:
-      realtime.tm_sec += p[1];
-      realtime.tm_isdst = -1;
-      mktime(&realtime);
+      realtime = realtime + p[1];
       l = 8;
       break;
 
