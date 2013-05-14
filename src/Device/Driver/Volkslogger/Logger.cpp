@@ -139,6 +139,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
                  logbuffer, // binary file is in buffer
                  r          // length of binary file to include
                  );
+  fclose(outfile);
   return true;
 }
 
