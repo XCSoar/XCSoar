@@ -35,16 +35,6 @@ Copyright_License {
 #include "OS/Clock.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 
-#include <math.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <algorithm>
-
-using std::min;
-using std::max;
-
 int NMEAParser::start_day = -1;
 
 NMEAParser::NMEAParser(bool _ignore_checksum)
