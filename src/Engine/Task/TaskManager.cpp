@@ -300,9 +300,6 @@ TaskManager::Update(const AircraftState &state,
     Reset();
 
   if (ordered_task->TaskSize() > 1) {
-    if (ordered_task->GetFactoryType() == TaskFactoryType::MAT)
-      ScanInsertMatPoints(state, state_last);
-
     // always update ordered task
     retval |= ordered_task->Update(state, state_last, glide_polar);
   }
@@ -367,56 +364,6 @@ void
 TaskManager::FillMatPoints(const Waypoints &waypoints)
 {
   ordered_task->FillMatPoints(waypoints);
-}
-
-bool
-TaskManager::ScanInsertMatPoints(const AircraftState &state,
-                                 const AircraftState &state_last)
-{
-  assert(ordered_task->GetFactoryType() == TaskFactoryType::MAT);
-
-  //flat boxes 3600m (~2.2 miles/ side) filters out most points
-  Angle angle_ur = Angle::FullCircle() / 8;
-  Angle angle_ll = (Angle::FullCircle() * 5) / 8;
-
-  GeoVector vect_ur(fixed(1800), angle_ur);
-  GeoVector vect_ll(fixed(1800), angle_ll);
-
-  GeoPoint last_ur = vect_ur.EndPoint(state_last.location);
-  GeoPoint last_ll = vect_ll.EndPoint(state_last.location);
-
-  GeoPoint now_ur = vect_ur.EndPoint(state.location);
-  GeoPoint now_ll = vect_ll.EndPoint(state.location);
-
-  const TaskProjection& task_projection = ordered_task->GetTaskProjection();
-  FlatBoundingBox bb_last(task_projection.ProjectInteger(last_ll),
-                          task_projection.ProjectInteger(last_ur));
-  FlatBoundingBox bb_now(task_projection.ProjectInteger(now_ll),
-                         task_projection.ProjectInteger(now_ur));
-
-  const unsigned last_achieved_index = ordered_task->GetLastIntermediateAchieved();
-
-  for (auto *i : ordered_task->GetMatPoints()) {
-    OrderedTaskPoint &mat_tp = *i;
-    if (ordered_task->CheckTransitionPointMat(mat_tp, state, state_last,
-                                              bb_now, bb_last)) {
-      if (!ordered_task->ShouldAddToMat(mat_tp.GetWaypoint()))
-        break;
-
-      OrderedTask *new_task = ordered_task->Clone(task_behaviour);
-      new_task->Insert(mat_tp, last_achieved_index + 1);
-
-      /* kludge: preserve the MatPoints */
-      new_task->SetMatPoints() = ordered_task->GetMatPoints();
-      ordered_task->SetMatPoints().clear();
-
-      Commit(*new_task);
-
-      SetActiveTaskPoint(last_achieved_index + 1);
-      return true;
-    }
-  }
-  return false;
 }
 
 bool

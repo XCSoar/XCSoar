@@ -430,16 +430,6 @@ public:
    */
   bool ScanStartFinish();
 
-  /**
-   * checks if the aircraft has entered the Mat cylinder
-   * updates transition state of point
-   * @return true if enter transition occurs
-   */
-  bool CheckTransitionPointMat(OrderedTaskPoint &point,
-                               const AircraftState &state,
-                               const AircraftState &state_last,
-                               const FlatBoundingBox &bb_now,
-                               const FlatBoundingBox &bb_last);
 private:
 
   fixed ScanDistanceMin(const GeoPoint &ref, bool full);

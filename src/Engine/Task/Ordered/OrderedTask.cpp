@@ -458,18 +458,6 @@ OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
 }
 
 bool
-OrderedTask::CheckTransitionPointMat(OrderedTaskPoint &point,
-                                     const AircraftState &state,
-                                     const AircraftState &state_last,
-                                     const FlatBoundingBox &bb_now,
-                                     const FlatBoundingBox &bb_last)
-{
-  const bool nearby = point.BoundingBoxOverlaps(bb_now);
-
-  return nearby && point.CheckEnterTransitionMat(state, state_last);
-}
-
-bool
 OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
                                   const AircraftState &state,
                                   const AircraftState &state_last,
