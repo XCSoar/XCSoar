@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_PARSER_HPP
 
 #include "Math/fixed.hpp"
+#include "Time/ExternalClock.hpp"
 
 struct NMEAInfo;
 struct BrokenDateTime;
@@ -35,7 +36,7 @@ struct BrokenDate;
 class NMEAParser
 {
   bool ignore_checksum;
-  static int start_day;
+  static ExternalClock external_clock;
   fixed last_time;
 
 public:
@@ -95,7 +96,9 @@ public:
    * @return Seconds-based FixTime
    */
   static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                          bool date_available);
+                          bool date_available) {
+    return external_clock.Apply(fix_time, date_time, date_available);
+  }
 
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
 

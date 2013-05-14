@@ -46,6 +46,8 @@ PrintMoreUsage()
     _ftprintf(stderr, _T("\t%s\n"), driver->name);
 }
 
+ExternalClock NMEAParser::external_clock;
+
 bool
 NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {
@@ -62,13 +64,6 @@ bool
 NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
   return false;
-}
-
-fixed
-NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                       bool date_available)
-{
-  return fixed(0);
 }
 
 int main(int argc, char **argv)

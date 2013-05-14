@@ -34,7 +34,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 
-int NMEAParser::start_day = -1;
+ExternalClock NMEAParser::external_clock;
 
 NMEAParser::NMEAParser(bool _ignore_checksum)
   :ignore_checksum(_ignore_checksum)
@@ -247,49 +247,6 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 fixed
-NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                       bool date_available)
-{
-  assert(!date_available || BrokenDate(date_time).Plausible());
-
-  fixed hours, mins, secs;
-
-  // Calculate Hour
-  hours = fix_time / 10000;
-  date_time.hour = (int)hours;
-
-  // Calculate Minute
-  mins = fix_time / 100;
-  mins = mins - fixed(date_time.hour) * 100;
-  date_time.minute = (int)mins;
-
-  // Calculate Second
-  secs = fix_time - fixed(date_time.hour * 10000 + date_time.minute * 100);
-  date_time.second = (int)secs;
-
-  // FixTime is now seconds-based instead of mixed format
-  fix_time = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
-
-  // If (StartDay not yet set and available) set StartDate;
-  if (start_day == -1 && date_available)
-    start_day = date_time.day;
-
-  if (start_day != -1) {
-    if (date_time.day < start_day)
-      // detect change of month (e.g. day=1, startday=31)
-      start_day = date_time.day - 1;
-
-    int day_difference = date_time.day - start_day;
-    if (day_difference > 0)
-      // Add seconds to fix time so time doesn't wrap around when
-      // going past midnight in UTC
-      fix_time += fixed(day_difference * 86400);
-  }
-
-  return fix_time;
-}
-
-fixed
 NMEAParser::TimeAdvanceTolerance(fixed time) const
 {
   /* tolerance is two seconds: fast-forward if the new time stamp is
@@ -310,7 +267,7 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
   if (this_time < last_time) {
     last_time = this_time;
-    start_day = -1; // reset search for the first day
+    external_clock.Reset();
     return false;
   } else {
     info.time = this_time;
