@@ -76,6 +76,14 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
     return BrokenDate::Plausible() && BrokenTime::Plausible();
   }
 
+  /**
+   * Returns a new #BrokenDateTime with the same date at midnight.
+   */
+  constexpr
+  BrokenDateTime AtMidnight() const {
+    return BrokenDateTime(*this, BrokenTime::Midnight());
+  }
+
 #ifdef HAVE_POSIX
   /**
    * Convert a UNIX UTC time stamp (seconds since epoch) to a
