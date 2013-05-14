@@ -152,6 +152,12 @@ struct MetaData {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
+
+
+/* WARNING: Never insert or delete items or rearrange the order of the items
+ * in this array. This will break existing infobox configurations of all users!
+ */
+
 static constexpr MetaData meta_data[] = {
   // e_HeightGPS
   {
