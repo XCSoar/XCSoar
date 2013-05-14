@@ -24,6 +24,8 @@ Version 6.7 - not yet released
 Version 6.6.2 - not yet released
 * tasks
   - update all settings after task type change
+* devices
+  - Volkslogger: fix IGC file download on Windows CE
 
 Version 6.6.1 - 2013/05/08
 * cross section

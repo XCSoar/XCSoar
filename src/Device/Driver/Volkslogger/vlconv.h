@@ -18,6 +18,8 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
+#include "Time/BrokenDateTime.hpp"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -88,8 +90,8 @@ DIRENTRY
 */
 struct DIRENTRY {
 	unsigned int  serno; // FR serial number
-	tm   firsttime; // time of first fix
-	tm   lasttime;  // time of last fix
+	BrokenDateTime firsttime; // time of first fix
+	BrokenDateTime lasttime;  // time of last fix
   long recordingtime; // length of trace in seconds
   int	 takeoff;				// set to one if VL has detected a takeoff
 											//  (v>10kt) inside this trace

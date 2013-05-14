@@ -80,8 +80,7 @@ TestGeneric()
   nmea_info.alive.Update(nmea_info.clock);
 
   /* no GPS reception */
-  ok1(parser.ParseLine("$GPRMC,082310,V,,,,,230610*3f",
-                                      nmea_info));
+  ok1(parser.ParseLine("$GPRMC,082310.141,V,,,,,230610*25", nmea_info));
   ok1(nmea_info.alive);
   ok1(!nmea_info.location_available);
   ok1(nmea_info.date_time_utc.year == 2010);
@@ -90,6 +89,7 @@ TestGeneric()
   ok1(nmea_info.date_time_utc.hour == 8);
   ok1(nmea_info.date_time_utc.minute == 23);
   ok1(nmea_info.date_time_utc.second == 10);
+  ok1(equals(nmea_info.time, 8 * 3600 + 23 * 60 + 10.141));
 
   /* got a GPS fix */
   ok1(parser.ParseLine("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
@@ -1364,7 +1364,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(724);
+  plan_tests(725);
 
   TestGeneric();
   TestTasman();

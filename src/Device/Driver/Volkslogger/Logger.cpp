@@ -36,26 +36,6 @@ Copyright_License {
 static constexpr size_t VLAPI_LOG_MEMSIZE = 81920L;
 
 static bool
-ParseDate(const tm &time,BrokenDate &date)
-{
-  date.year = time.tm_year + 1900;
-  date.month = time.tm_mon + 1;
-  date.day = time.tm_mday;
-
-  return date.Plausible();
-}
-
-static bool
-ParseTime(const tm &time,BrokenTime &btime)
-{
-  btime.hour = time.tm_hour;
-  btime.minute = time.tm_min;
-  btime.second = time.tm_sec;
-
-  return btime.Plausible();
-}
-
-static bool
 ConvertDirectoryToRecordedFlightList(const std::vector<DIRENTRY> &dir,
                                      RecordedFlightList &flight_list)
 {
@@ -66,10 +46,17 @@ ConvertDirectoryToRecordedFlightList(const std::vector<DIRENTRY> &dir,
      * Only show logs with a takeoff detected
      */
     if  (flight.takeoff == 1) {
-      if (!ParseDate(flight.firsttime, flight_info.date) ||
-          !ParseTime(flight.firsttime, flight_info.start_time) ||
-          !ParseTime(flight.lasttime, flight_info.end_time) )
+      if (!flight.firsttime.Plausible() || !flight.lasttime.Plausible())
         return false;
+      flight_info.date = {flight.firsttime.year,
+                          flight.firsttime.month,
+                          flight.firsttime.day};
+      flight_info.start_time = {flight.firsttime.hour,
+                                flight.firsttime.minute,
+                                flight.firsttime.second};
+      flight_info.end_time = {flight.lasttime.hour,
+                              flight.lasttime.minute,
+                              flight.lasttime.second};
       flight_info.internal.volkslogger = i;
       flight_list.append(flight_info);
     }
@@ -139,6 +126,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
                  logbuffer, // binary file is in buffer
                  r          // length of binary file to include
                  );
+  fclose(outfile);
   return true;
 }
 
