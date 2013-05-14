@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-struct BrokenDateTime;
+struct BrokenTime;
 
 /**
  * This class manages time values from an external clock, such as a
@@ -34,16 +34,7 @@ struct BrokenDateTime;
  * midnight rollover.
  */
 class ExternalClock {
-  int start_day;
-
 public:
-  constexpr ExternalClock():start_day(-1) {}
-
-  void Reset() {
-    // reset search for the first day
-    start_day = -1;
-  }
-
   /**
    * Calculates a seconds-based FixTime and corrects it
    * in case over passing the UTC midnight mark
@@ -51,7 +42,7 @@ public:
    * @param info NMEA_INFO struct to parse into
    * @return Seconds-based FixTime
    */
-  fixed Apply(fixed fix_time, BrokenDateTime &date_time);
+  fixed Apply(fixed fix_time, BrokenTime &broken_time);
 };
 
 #endif

@@ -22,6 +22,7 @@ Version 6.7 - not yet released
   - CUP file support added
 * devices
   - "debug" button
+  - more robust midnight wraparound handling (#2857)
 
 Version 6.6.2 - not yet released
 * tasks

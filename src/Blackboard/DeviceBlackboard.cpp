@@ -47,6 +47,9 @@ DeviceBlackboard::DeviceBlackboard()
   real_data = simulator_data = replay_data = gps_info;
 
   simulator.Init(simulator_data);
+
+  real_clock.Reset();
+  replay_clock.Reset();
 }
 
 /**
@@ -231,6 +234,9 @@ DeviceBlackboard::Merge()
     per_device_data[i].Expire();
     real_data.Complement(per_device_data[i]);
   }
+
+  real_clock.Normalise(real_data);
+  replay_clock.Normalise(replay_data);
 
   if (replay_data.alive) {
     /* the replay may run at a higher speed; use NMEA_INFO::Time as a

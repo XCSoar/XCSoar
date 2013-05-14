@@ -95,8 +95,8 @@ public:
    * @param info NMEA_INFO struct to parse into
    * @return Seconds-based FixTime
    */
-  static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time) {
-    return external_clock.Apply(fix_time, date_time);
+  static fixed TimeModify(fixed fix_time, BrokenTime &broken_time) {
+    return external_clock.Apply(fix_time, broken_time);
   }
 
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
@@ -104,20 +104,6 @@ public:
   static bool ReadDate(NMEAInputLine &line, BrokenDate &date);
 
 private:
-
-  /**
-   * Verifies the given fix time.  If it is smaller than LastTime, but
-   * within a certain tolerance, the LastTime is returned, otherwise
-   * the specified time is returned without modification.
-   *
-   * This is used to reduce quirks when the time stamps in GPGGA and
-   * GPRMC are off by a second.  Without this workaround, XCSoar loses
-   * the GPS fix every now and then, because GPRMC is ignored most of
-   * the time.
-   */
-  gcc_pure
-  fixed TimeAdvanceTolerance(fixed time) const;
-
   /**
    * Checks whether time has advanced since last call and
    * updates the GPS_info if necessary

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Computer/BasicComputer.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Time/WrapClock.hpp"
 
 class NLineReader;
 class Device;
@@ -60,6 +61,8 @@ protected:
   MoreData last_basic;
 
   DerivedInfo calculated;
+
+  WrapClock wrap_clock;
 
 public:
   DebugReplay(NLineReader *reader);

@@ -79,7 +79,7 @@ TEST_NAMES = \
 	test_pressure \
 	test_task \
 	TestOverwritingRingBuffer \
-	TestDateTime TestRoughTime \
+	TestDateTime TestRoughTime TestWrapClock \
 	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestProfile \
@@ -178,6 +178,12 @@ TEST_ROUGH_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestRoughTime.cpp
 TEST_ROUGH_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestRoughTime,TEST_ROUGH_TIME))
+
+TEST_WRAP_CLOCK_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWrapClock.cpp
+TEST_WRAP_CLOCK_DEPENDS = MATH TIME
+$(eval $(call link-program,TestWrapClock,TEST_WRAP_CLOCK))
 
 TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \

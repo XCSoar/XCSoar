@@ -246,16 +246,6 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
   return true;
 }
 
-fixed
-NMEAParser::TimeAdvanceTolerance(fixed time) const
-{
-  /* tolerance is two seconds: fast-forward if the new time stamp is
-     less than two seconds behind the previous one */
-  return time < last_time && time > last_time - fixed(2)
-    ? last_time
-    : time;
-}
-
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
@@ -267,7 +257,6 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
   if (this_time < last_time) {
     last_time = this_time;
-    external_clock.Reset();
     return false;
   } else {
     info.time = this_time;
@@ -333,7 +322,6 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc);
-  this_time = TimeAdvanceTolerance(this_time);
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
@@ -420,7 +408,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   ReadDate(line, info.date_time_utc);
 
   this_time = TimeModify(this_time, info.date_time_utc);
-  this_time = TimeAdvanceTolerance(this_time);
 
   if (!TimeHasAdvanced(this_time, info))
     return true;
@@ -496,7 +483,6 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     return false;
 
   this_time = TimeModify(this_time, info.date_time_utc);
-  this_time = TimeAdvanceTolerance(this_time);
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);

@@ -38,6 +38,8 @@ DebugReplay::DebugReplay(NLineReader *_reader)
   calculated.Reset();
 
   flying_computer.Reset();
+
+  wrap_clock.Reset();
 }
 
 DebugReplay::~DebugReplay()
@@ -62,6 +64,7 @@ DebugReplay::Compute()
 {
   computed_basic.Reset();
   (NMEAInfo &)computed_basic = raw_basic;
+  wrap_clock.Normalise(computed_basic);
 
   FeaturesSettings features;
   features.nav_baro_altitude_enabled = true;

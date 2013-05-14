@@ -22,44 +22,28 @@ Copyright_License {
 */
 
 #include "ExternalClock.hpp"
-#include "BrokenDateTime.hpp"
+#include "BrokenTime.hpp"
 
 fixed
-ExternalClock::Apply(fixed fix_time, BrokenDateTime &date_time)
+ExternalClock::Apply(fixed fix_time, BrokenTime &broken_time)
 {
   fixed hours, mins, secs;
 
   // Calculate Hour
   hours = fix_time / 10000;
-  date_time.hour = (int)hours;
+  broken_time.hour = (int)hours;
 
   // Calculate Minute
   mins = fix_time / 100;
-  mins = mins - fixed(date_time.hour) * 100;
-  date_time.minute = (int)mins;
+  mins = mins - fixed(broken_time.hour) * 100;
+  broken_time.minute = (int)mins;
 
   // Calculate Second
-  secs = fix_time - fixed(date_time.hour * 10000 + date_time.minute * 100);
-  date_time.second = (int)secs;
+  secs = fix_time - fixed(broken_time.hour * 10000 + broken_time.minute * 100);
+  broken_time.second = (int)secs;
 
   // FixTime is now seconds-based instead of mixed format
-  fix_time = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
-
-  // If (StartDay not yet set and available) set StartDate;
-  if (start_day == -1 && date_time.IsDatePlausible())
-    start_day = date_time.day;
-
-  if (start_day != -1) {
-    if (date_time.day < start_day)
-      // detect change of month (e.g. day=1, startday=31)
-      start_day = date_time.day - 1;
-
-    int day_difference = date_time.day - start_day;
-    if (day_difference > 0)
-      // Add seconds to fix time so time doesn't wrap around when
-      // going past midnight in UTC
-      fix_time += fixed(day_difference * 86400);
-  }
+  fix_time = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
 
   return fix_time;
 }

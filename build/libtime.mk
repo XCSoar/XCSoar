@@ -4,6 +4,7 @@ TIME_SRC_DIR = $(SRC)/Time
 
 TIME_SOURCES = \
 	$(TIME_SRC_DIR)/DeltaTime.cpp \
+	$(TIME_SRC_DIR)/WrapClock.cpp \
 	$(TIME_SRC_DIR)/ExternalClock.cpp \
 	$(TIME_SRC_DIR)/LocalTime.cpp \
 	$(TIME_SRC_DIR)/BrokenTime.cpp \
