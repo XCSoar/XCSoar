@@ -77,6 +77,17 @@ TestDate()
   ok1(d == BrokenDate(2012, 2, 29));
   d.IncrementDay();
   ok1(d == BrokenDate(2012, 3, 1));
+
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 31)) == 0);
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 30)) == 1);
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 1)) == 30);
+  ok1(BrokenDate(2012, 10, 1).DaysSince(BrokenDate(2012, 10, 31)) == -30);
+  ok1(BrokenDate(2012, 1, 1).DaysSince(BrokenDate(2011, 12, 31)) == 1);
+  ok1(BrokenDate(2011, 12, 31).DaysSince(BrokenDate(2012, 1, 1)) == -1);
+  ok1(BrokenDate(2013, 3, 1).DaysSince(BrokenDate(2013, 2, 28)) == 1);
+  ok1(BrokenDate(2014, 1, 1).DaysSince(BrokenDate(2013, 1, 1)) == 365);
+  ok1(BrokenDate(2012, 3, 1).DaysSince(BrokenDate(2012, 2, 28)) == 2);
+  ok1(BrokenDate(2013, 1, 1).DaysSince(BrokenDate(2012, 1, 1)) == 366);
 }
 
 static void
@@ -168,7 +179,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(92);
+  plan_tests(102);
 
   TestDate();
   TestTime();

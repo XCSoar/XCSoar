@@ -108,6 +108,14 @@ struct BrokenDate {
   static BrokenDate TodayUTC();
 
   void IncrementDay();
+
+  /**
+   * Returns the number of calendar days that have passed since the
+   * two #BrokenDate structs.  The result may be negative if #other is
+   * bigger than #this.
+   */
+  gcc_pure
+  int DaysSince(const BrokenDate &other) const;
 };
 
 static_assert(std::is_trivial<BrokenDate>::value, "type is not trivial");

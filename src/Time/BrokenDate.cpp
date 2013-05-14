@@ -59,3 +59,15 @@ BrokenDate::IncrementDay()
       day_of_week = 0;
   }
 }
+
+int
+BrokenDate::DaysSince(const BrokenDate &other) const
+{
+  constexpr int SECONDS_PER_DAY = 24 * 60 * 60;
+
+  constexpr BrokenTime midnight = BrokenTime::Midnight();
+  const int64_t a = BrokenDateTime(*this, midnight).ToUnixTimeUTC();
+  const int64_t b = BrokenDateTime(other, midnight).ToUnixTimeUTC();
+  const int64_t delta = a - b;
+  return int(delta / SECONDS_PER_DAY);
+}
