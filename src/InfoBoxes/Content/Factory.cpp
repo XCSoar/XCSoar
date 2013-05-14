@@ -276,17 +276,6 @@ static constexpr MetaData meta_data[] = {
     e_TaskProgress, // Progress
   },
 
-  // WP_NOMINAL_DIST
-  {
-    N_("Next distance (nominal)"),
-    N_("WP Dist-N"),
-    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
-    UpdateInfoBoxNextDistanceNominal,
-    next_waypoint_infobox_panels,
-    e_WP_AltDiff, // WP AltD
-    e_WP_Distance, // WP Dist
-  },
-
   // e_WP_AltDiff
   {
     N_("Next altitude difference"),
@@ -1231,6 +1220,17 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxTaskSpeedHour,
     e_Fin_Distance,
     e_CC_Speed,
+  },
+
+  // WP_NOMINAL_DIST
+  {
+    N_("Next distance (nominal)"),
+    N_("WP Dist-N"),
+    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
+    UpdateInfoBoxNextDistanceNominal,
+    next_waypoint_infobox_panels,
+    e_WP_AltDiff, // WP AltD
+    e_WP_Distance, // WP Dist
   },
 };
 
