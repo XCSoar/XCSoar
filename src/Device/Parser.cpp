@@ -32,7 +32,6 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Util/StringUtil.hpp"
 #include "Units/System.hpp"
-#include "OS/Clock.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 
 int NMEAParser::start_day = -1;
@@ -315,7 +314,7 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
     return false;
   } else {
     info.time = this_time;
-    info.time_available.Update(fixed(MonotonicClockMS()) / 1000);
+    info.time_available.Update(info.clock);
     last_time = this_time;
     return true;
   }
