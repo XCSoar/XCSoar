@@ -137,7 +137,7 @@ public:
    * The constructor opens the given shapefile and clears the cache
    * @param shpname The shapefile to open (*.shp)
    * @param threshold the zoom threshold for displaying this object
-   * @param thecolor The color to use for drawing
+   * @param color The color to use for drawing, including alpha
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
    * @param pen_width The pen width used for line drawing

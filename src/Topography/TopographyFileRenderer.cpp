@@ -44,7 +44,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
 {
   int icon_ID = file.GetIcon();
   if (icon_ID != 0)
-    icon.Load(icon_ID, 5000+icon_ID);
+    icon.LoadResource(icon_ID, 5000+icon_ID);
 }
 
 void

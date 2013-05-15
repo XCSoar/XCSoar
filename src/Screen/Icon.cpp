@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 void
-MaskedIcon::Load(unsigned id, unsigned big_id, bool center)
+MaskedIcon::LoadResource(unsigned id, unsigned big_id, bool center)
 {
   if (Layout::ScaleEnabled()) {
     if (big_id > 0)
