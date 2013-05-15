@@ -23,21 +23,10 @@ Copyright_License {
 
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "UtilsSystem.hpp"
-#include "Asset.hpp"
 #include "Device/All.hpp"
-#include "Math/Constants.h"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
-#include "OS/Clock.hpp"
 
 #include <algorithm>
-
-#include <limits.h>
-
-#ifdef WIN32
-#include <windows.h>
-#endif
 
 /**
  * Initializes the DeviceBlackboard
