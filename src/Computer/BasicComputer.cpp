@@ -415,12 +415,7 @@ BasicComputer::Compute(MoreData &data,
 
   ground_speed.Compute(data);
 
-  if (data.HasTimeAdvancedSince(last_gps)) {
-    ComputeAirspeed(data, calculated);
-  }
-  else if ((data.dyn_pressure_available) ||
-           (data.pitot_pressure_available && data.static_pressure_available))
-    ComputeAirspeed(data, calculated);
+  ComputeAirspeed(data, calculated);
 
   ComputeHeading(data.attitude, data, calculated);
 

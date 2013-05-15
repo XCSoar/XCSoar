@@ -404,11 +404,6 @@ struct NMEAInfo {
   void UpdateClock();
 
   gcc_pure
-  bool HasTimeAdvancedSince(const NMEAInfo &last) const {
-    return time_available && last.time_available && time > last.time;
-  }
-
-  gcc_pure
   bool HasTimeRetreatedSince(const NMEAInfo &last) const {
     return !last.time_available || (time_available && time < last.time);
   }
