@@ -37,14 +37,11 @@ Copyright_License {
 static void
 Run(DebugReplay &replay, TaskManager &task_manager)
 {
-  if (!replay.Next())
-    return;
+  Validity last_location_available;
+  last_location_available.Clear();
 
-  MoreData last_basic;
-  last_basic = replay.Basic();
-
-  DerivedInfo last_calculated;
-  last_calculated = replay.Calculated();
+  AircraftState last_as;
+  bool last_as_valid = false;
 
   unsigned active_taskpoint_index(-1);
 
@@ -54,13 +51,30 @@ Run(DebugReplay &replay, TaskManager &task_manager)
     const MoreData &basic = replay.Basic();
     const DerivedInfo &calculated = replay.Calculated();
 
-    if (!basic.HasTimeAdvancedSince(last_basic) ||
-        !basic.location_available)
+    if (!basic.location_available) {
+      last_location_available.Clear();
       continue;
+    }
 
     const AircraftState current_as = ToAircraftState(basic, calculated);
-    const AircraftState last_as = ToAircraftState(last_basic,
-                                                  last_calculated);
+
+    if (!last_location_available) {
+      last_as = current_as;
+      last_as_valid = true;
+      last_location_available = basic.location_available;
+      continue;
+    }
+
+    if (!basic.location_available.Modified(last_location_available))
+      continue;
+
+    if (!last_as_valid) {
+      last_as = current_as;
+      last_as_valid = true;
+      last_location_available = basic.location_available;
+      continue;
+    }
+
     task_manager.Update(current_as, last_as);
     task_manager.UpdateIdle(current_as);
     task_manager.SetTaskAdvance().SetArmed(true);
@@ -74,8 +88,8 @@ Run(DebugReplay &replay, TaskManager &task_manager)
              time_buffer, active_taskpoint_index);
     }
 
-    last_basic = basic;
-    last_calculated = calculated;
+    last_as = current_as;
+    last_as_valid = true;
   }
 
   const TaskStats &task_stats = task_manager.GetOrderedTask().GetStats();
