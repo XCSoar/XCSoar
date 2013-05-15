@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Time/GPSClock.hpp"
+#include "Time/DeltaTime.hpp"
 
 class Airspaces;
 struct ComputerSettings;
@@ -38,7 +38,7 @@ struct AirspaceWarningsInfo;
  * Manage airspace warnings.
  */
 class WarningComputer {
-  GPSClock clock;
+  DeltaTime delta_time;
 
   Airspaces &airspaces;
 
@@ -59,11 +59,12 @@ public:
   }
 
   void Reset() {
+    delta_time.Reset();
     initialised = false;
   }
 
   void Update(const ComputerSettings &settings_computer,
-              const MoreData &basic, const MoreData &last_basic,
+              const MoreData &basic,
               const DerivedInfo &calculated,
               AirspaceWarningsInfo &result);
 };

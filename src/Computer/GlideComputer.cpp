@@ -165,9 +165,8 @@ GlideComputer::ProcessIdle(bool exhaustive)
   task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
                             exhaustive);
 
-  if (time_advanced())
-    warning_computer.Update(GetComputerSettings(), Basic(), LastBasic(),
-                            Calculated(), SetCalculated().airspace_warnings);
+  warning_computer.Update(GetComputerSettings(), Basic(),
+                          Calculated(), SetCalculated().airspace_warnings);
 }
 
 bool
