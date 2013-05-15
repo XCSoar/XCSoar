@@ -142,8 +142,15 @@ GlideComputer::ProcessGPS(bool force)
   vegavoice.Update(basic, Calculated(), GetComputerSettings().voice);
 
   // update basic trace history
-  if (time_advanced())
-    calculated.trace_history.append(basic);
+  if (basic.time_available) {
+    const fixed dt = trace_history_time.Update(basic.time, fixed(0.5),
+                                               fixed(30));
+    if (positive(dt))
+      calculated.trace_history.append(basic);
+    else if (negative(dt))
+      /* time warp */
+      calculated.trace_history.clear();
+  }
 
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);

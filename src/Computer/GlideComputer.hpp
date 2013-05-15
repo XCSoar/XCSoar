@@ -27,6 +27,7 @@ Copyright_License {
 #include "GlideComputerBlackboard.hpp"
 #include "Audio/VegaVoice.hpp"
 #include "Time/PeriodClock.hpp"
+#include "Time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
 #include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
@@ -61,6 +62,12 @@ class GlideComputer : public GlideComputerBlackboard
 
   PeriodClock idle_clock;
   VegaVoice vegavoice;
+
+  /**
+   * This object is used to check whether to update
+   * DerivedInfo::trace_history.
+   */
+  DeltaTime trace_history_time;
 
 public:
   GlideComputer(const Waypoints &_way_points,
