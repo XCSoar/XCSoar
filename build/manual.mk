@@ -46,15 +46,19 @@ SVG_LOGOS_DATA = $(wildcard $(topdir)/Data/graphics/logo*.svg)
 SVG_LOGOS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.png,$(SVG_LOGOS_DATA))
 
 TEX_INCLUDES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/*.sty)
-FIGURES_BLITZ_DE = $(DOC)/manual/de/Blitz/figures/*.png
+FIGURES_BLITZ_DE = $(wildcard $(DOC)/manual/de/Blitz/figures/*.png)
  
 TEX_FILES_DE = $(wildcard $(DOC)/manual/de/*.tex)
 TEX_INCLUDES_DE = $(wildcard $(DOC)/manual/de/*.sty)
-FIGURES_DE = $(DOC)/manual/de/figures/*.png
+FIGURES_DE = $(wildcard $(DOC)/manual/de/figures/*.png)
  
 TEX_FILES_FR = $(wildcard $(DOC)/manual/fr/*.tex)
 TEX_INCLUDES_FR = $(wildcard $(DOC)/manual/fr/*.sty)
-FIGURES_FR = $(DOC)/manual/fr/figures/*.png
+FIGURES_FR = $(wildcard $(DOC)/manual/fr/figures/*.png)
+
+TEX_FILES_PL = $(wildcard $(DOC)/manual/pl/*.tex)
+TEX_INCLUDES_PL = $(wildcard $(DOC)/manual/pl/*.sty)
+FIGURES_PL = $(wildcard $(DOC)/manual/pl/figures/*.png)
 
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/en:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
@@ -70,7 +74,8 @@ MANUAL_PDF = \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf \
-	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf
 
 .PHONY: manual
 manual: $(MANUAL_PDF)
@@ -134,6 +139,13 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
 
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex \
+	$(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(TEX_INCLUDES) \
+	$(FIGURES_PL) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
+
 $(SVG_ICONS): $(MANUAL_OUTPUT_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(MANUAL_OUTPUT_DIR)/icons/dirstamp
 	rsvg-convert -a -f pdf -w 32 $< -o $@
 
@@ -164,10 +176,14 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	$(MKDIR) -p $(T)/fr/figures
 	cp $(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(T)/fr/.
 	cp $(FIGURES_FR) $(T)/fr/figures/.
+	# Incl. the Polish translation
+	$(MKDIR) -p $(T)/pl/figures
+	cp $(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(T)/pl/.
+	##cp $(FIGURES_PL) $(T)/pl/figures/.
 	# Incl. both German translation
 	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/figures
 	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
-	cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
+	##cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
 	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/figures/.
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
