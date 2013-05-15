@@ -51,7 +51,7 @@ public:
    * @param info NMEA_INFO struct to parse into
    * @return Seconds-based FixTime
    */
-  fixed Apply(fixed fix_time, BrokenDateTime &date_time, bool date_available);
+  fixed Apply(fixed fix_time, BrokenDateTime &date_time);
 };
 
 #endif

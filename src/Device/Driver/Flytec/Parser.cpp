@@ -118,14 +118,13 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   }
 
   //  Date(ddmmyy),   6 Digits (only in firmware version 3.32+)
-  if (has_date_field &&
-      NMEAParser::ReadDate(line, info.date_time_utc))
-    info.date_available = true;
+  if (has_date_field)
+    NMEAParser::ReadDate(line, info.date_time_utc);
 
   //  Time(hhmmss),   6 Digits
   fixed time;
   if (line.ReadChecked(time)) {
-    time = NMEAParser::TimeModify(time, info.date_time_utc, info.date_available);
+    time = NMEAParser::TimeModify(time, info.date_time_utc);
     if (!NMEAParser::TimeHasAdvanced(time, last_time, info))
       return true;
   }

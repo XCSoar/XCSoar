@@ -92,7 +92,7 @@ GlideComputer::ProcessGPS(bool force)
     /* use UTC offset to calculate local time */
     const int utc_offset_s = settings.utc_offset.AsSeconds();
 
-    calculated.date_time_local = basic.date_available
+    calculated.date_time_local = basic.date_time_utc.IsDatePlausible()
       /* known date: apply UTC offset to BrokenDateTime, which may
          increment/decrement date */
       ? basic.date_time_utc + utc_offset_s

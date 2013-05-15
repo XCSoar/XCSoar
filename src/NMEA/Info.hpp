@@ -272,13 +272,13 @@ struct NMEAInfo {
    */
   fixed time;
 
-  /** GPS date and time (UTC) */
-  BrokenDateTime date_time_utc;
-
   /**
-   * Is the BrokenDate part of #date_time_utc available?
+   * GPS date and time (UTC).
+   *
+   * Check BrokenDateTime::IsDatePlausible() before using the date
+   * part.
    */
-  bool date_available;
+  BrokenDateTime date_time_utc;
 
   //###########
   //   Vario

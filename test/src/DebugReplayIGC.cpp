@@ -47,7 +47,6 @@ DebugReplayIGC::Next()
       if (memcmp(line, "HFDTE", 5) == 0 &&
           IGCParseDateRecord(line, date)) {
         (BrokenDate &)raw_basic.date_time_utc = date;
-        raw_basic.date_available = true;
         raw_basic.time_available.Clear();
       }
     } else if (line[0] == 'I') {

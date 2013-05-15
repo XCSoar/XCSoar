@@ -332,8 +332,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc,
-                               info.date_available);
+  fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc);
   this_time = TimeAdvanceTolerance(this_time);
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
@@ -418,10 +417,9 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   bool track_available = ReadBearing(line, track);
 
   // JMW get date info first so TimeModify is accurate
-  if (ReadDate(line, info.date_time_utc))
-    info.date_available = true;
+  ReadDate(line, info.date_time_utc);
 
-  this_time = TimeModify(this_time, info.date_time_utc, info.date_available);
+  this_time = TimeModify(this_time, info.date_time_utc);
   this_time = TimeAdvanceTolerance(this_time);
 
   if (!TimeHasAdvanced(this_time, info))
@@ -497,8 +495,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   if (!line.ReadChecked(this_time))
     return false;
 
-  this_time = TimeModify(this_time, info.date_time_utc,
-                         info.date_available);
+  this_time = TimeModify(this_time, info.date_time_utc);
   this_time = TimeAdvanceTolerance(this_time);
 
   GeoPoint location;

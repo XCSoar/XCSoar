@@ -57,7 +57,7 @@ static void
 Update(const MoreData &basic, const FlyingState &state,
        Result &result)
 {
-  if (!basic.time_available || !basic.date_available)
+  if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())
     return;
 
   if (state.flying && !result.takeoff_time.IsPlausible()) {
@@ -100,7 +100,7 @@ static void
 Finish(const MoreData &basic, const DerivedInfo &calculated,
        Result &result)
 {
-  if (!basic.time_available || !basic.date_available)
+  if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())
     return;
 
   if (result.takeoff_time.IsPlausible() && !result.landing_time.IsPlausible()) {

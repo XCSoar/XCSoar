@@ -47,7 +47,7 @@ TimesStatusPanel::Refresh()
 
   StaticString<64> temp;
 
-  if (basic.location_available && basic.date_available) {
+  if (basic.location_available && basic.date_time_utc.IsDatePlausible()) {
     SunEphemeris::Result sun =
       SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
                                  settings.utc_offset);
@@ -73,7 +73,7 @@ TimesStatusPanel::Refresh()
     SetText(UTCTime, _T(""));
   }
 
-  if (basic.date_available) {
+  if (basic.date_time_utc.IsDatePlausible()) {
     temp.Format(_T("%04d-%02d-%02d"), basic.date_time_utc.year,
                 basic.date_time_utc.month, basic.date_time_utc.day);
     SetText(UTCDate, temp);

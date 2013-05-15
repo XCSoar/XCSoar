@@ -394,7 +394,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
                                  DerivedInfo &calculated,
                                  const ComputerSettings &settings)
 {
-  if (!basic.location_available || !basic.date_available)
+  if (!basic.location_available || !basic.date_time_utc.IsDatePlausible())
     return;
 
   // Only calculate new azimuth if data is older than 15 minutes

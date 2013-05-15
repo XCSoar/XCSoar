@@ -37,7 +37,7 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
                                        const ComputerSettings &settings)
 {
   if (!basic.location_available ||
-      !basic.time_available || !basic.date_available ||
+      !basic.time_available || !basic.date_time_utc.IsDatePlausible() ||
       !calculated.flight.flying || HaveCondorDevice() ||
       !calculated.task_stats.task_valid)
     return false;

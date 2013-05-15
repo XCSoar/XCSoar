@@ -138,7 +138,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     return;
 
   date_time = basic.date_time_utc;
-  if (!basic.date_available)
+  if (!date_time.IsDatePlausible())
     /* use "today" if the GPS didn't provide a date */
     (BrokenDate &)date_time = BrokenDate::TodayUTC();
 

@@ -95,9 +95,8 @@ public:
    * @param info NMEA_INFO struct to parse into
    * @return Seconds-based FixTime
    */
-  static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                          bool date_available) {
-    return external_clock.Apply(fix_time, date_time, date_available);
+  static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time) {
+    return external_clock.Apply(fix_time, date_time);
   }
 
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);

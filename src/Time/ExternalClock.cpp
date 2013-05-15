@@ -25,11 +25,8 @@ Copyright_License {
 #include "BrokenDateTime.hpp"
 
 fixed
-ExternalClock::Apply(fixed fix_time, BrokenDateTime &date_time,
-                     bool date_available)
+ExternalClock::Apply(fixed fix_time, BrokenDateTime &date_time)
 {
-  assert(!date_available || BrokenDate(date_time).IsPlausible());
-
   fixed hours, mins, secs;
 
   // Calculate Hour
@@ -49,7 +46,7 @@ ExternalClock::Apply(fixed fix_time, BrokenDateTime &date_time,
   fix_time = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
 
   // If (StartDay not yet set and available) set StartDate;
-  if (start_day == -1 && date_available)
+  if (start_day == -1 && date_time.IsDatePlausible())
     start_day = date_time.day;
 
   if (start_day != -1) {

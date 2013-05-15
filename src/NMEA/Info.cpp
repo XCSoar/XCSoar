@@ -62,7 +62,7 @@ NMEAInfo::GetDateTimeAt(fixed other_time) const
   if (negative(other_time))
     return BrokenDateTime::Invalid();
 
-  if (!time_available || !date_available)
+  if (!time_available || !date_time_utc.IsDatePlausible())
     return BrokenDateTime(BrokenDate::Invalid(),
                           BrokenTime::FromSecondOfDayChecked(int(other_time)));
 
@@ -92,10 +92,7 @@ NMEAInfo::ProvideDate(const BrokenDate &date)
 {
   assert(date.IsPlausible());
 
-  date_time_utc.year = date.year;
-  date_time_utc.month = date.month;
-  date_time_utc.day = date.day;
-  date_available = true;
+  (BrokenDate &)date_time_utc = date;
 }
 
 void
@@ -174,11 +171,10 @@ NMEAInfo::Reset()
   pressure_altitude_available.Clear();
   pressure_altitude = fixed(0);
 
-  date_available = false;
-
   time_available.Clear();
   time = fixed(0);
-  date_time_utc.hour = date_time_utc.minute = date_time_utc.second = 0;
+
+  date_time_utc = BrokenDateTime::Invalid();
 
   noncomp_vario_available.Clear();
   total_energy_vario_available.Clear();
@@ -278,7 +274,6 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (time_available.Complement(add.time_available)) {
     time = add.time;
     date_time_utc = add.date_time_utc;
-    date_available = add.date_available;
   }
 
   acceleration.Complement(add.acceleration);
