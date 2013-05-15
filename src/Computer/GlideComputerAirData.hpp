@@ -94,7 +94,7 @@ public:
   /**
    * Calculates some other values
    */
-  void ProcessVertical(const MoreData &basic, const MoreData &last_basic,
+  void ProcessVertical(const MoreData &basic,
                        DerivedInfo &calculated,
                        const ComputerSettings &settings);
 

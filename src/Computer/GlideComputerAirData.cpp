@@ -79,7 +79,6 @@ GlideComputerAirData::ProcessBasic(const MoreData &basic,
 
 void
 GlideComputerAirData::ProcessVertical(const MoreData &basic,
-                                      const MoreData &last_basic,
                                       DerivedInfo &calculated,
                                       const ComputerSettings &settings)
 {
@@ -107,7 +106,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
 
   LastThermalStats(basic, calculated, last_circling);
 
-  gr_computer.Compute(basic, last_basic, calculated,
+  gr_computer.Compute(basic, calculated,
                       calculated,
                       settings);
 

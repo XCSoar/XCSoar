@@ -127,7 +127,7 @@ GlideComputer::ProcessGPS(bool force)
     task_computer.ProcessAutoTask(basic, calculated);
 
   // Process extended information
-  air_data_computer.ProcessVertical(Basic(), LastBasic(),
+  air_data_computer.ProcessVertical(Basic(),
                                     SetCalculated(),
                                     GetComputerSettings());
 
