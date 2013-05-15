@@ -116,8 +116,6 @@ private:
   void NettoVario(const NMEAInfo &basic, const FlyingState &flight,
                   VarioInfo &vario, const ComputerSettings &settings_computer);
   void AverageClimbRate(const NMEAInfo &basic, DerivedInfo &calculated);
-  void Average30s(const MoreData &basic, const NMEAInfo &last_basic,
-                  DerivedInfo &calculated, bool last_circling);
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
   void GR(const MoreData &basic, const FlyingState &flying,
