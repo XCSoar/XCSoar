@@ -57,11 +57,12 @@ TaskComputer::ResetFlight(const bool full)
 
   valid_last_state = false;
   last_flying = false;
+
+  last_location_available.Clear();
 }
 
 void
 TaskComputer::ProcessBasicTask(const MoreData &basic,
-                               const MoreData &last_basic,
                                DerivedInfo &calculated,
                                const ComputerSettings &settings_computer,
                                bool force)
@@ -72,8 +73,8 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
 
   _task->SetTaskBehaviour(settings_computer.task);
 
-  if (force || (basic.HasTimeAdvancedSince(last_basic) &&
-                basic.location_available)) {
+  if (force || (last_location_available &&
+                basic.location_available.Modified(last_location_available))) {
     const AircraftState current_as = ToAircraftState(basic, calculated);
     const AircraftState &last_as = valid_last_state ? last_state : current_as;
 
@@ -90,6 +91,8 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
   }
+
+  last_location_available = basic.location_available;
 
   calculated.task_stats = _task->GetStats();
   calculated.ordered_task_stats = _task->GetOrderedTask().GetStats();

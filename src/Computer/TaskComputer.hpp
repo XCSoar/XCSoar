@@ -28,6 +28,7 @@ Copyright_License {
 #include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/Validity.hpp"
 
 struct NMEAInfo;
 class ProtectedTaskManager;
@@ -46,6 +47,8 @@ class TaskComputer
   bool valid_last_state;
 
   bool last_flying;
+
+  Validity last_location_available;
 
 public:
   TaskComputer(ProtectedTaskManager &_task,
@@ -72,7 +75,7 @@ public:
     trace.LockedCopyTo(v, min_time, location, resolution);
   }
 
-  void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
+  void ProcessBasicTask(const MoreData &basic,
                         DerivedInfo &calculated,
                         const ComputerSettings &settings_computer,
                         bool force);

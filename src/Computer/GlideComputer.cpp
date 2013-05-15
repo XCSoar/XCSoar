@@ -110,7 +110,7 @@ GlideComputer::ProcessGPS(bool force)
                                  GetComputerSettings());
 
   // Process basic task information
-  task_computer.ProcessBasicTask(basic, LastBasic(),
+  task_computer.ProcessBasicTask(basic,
                                  calculated,
                                  GetComputerSettings(),
                                  force);
