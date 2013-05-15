@@ -42,8 +42,6 @@ class GlideComputerBlackboard:
   bool _time_retreated;
 
 public:
-  GlideComputerBlackboard();
-
   void ReadBlackboard(const MoreData &nmea_info);
   void ReadComputerSettings(const ComputerSettings &settings);
   const MoreData &LastBasic() const { return last_gps_info; }

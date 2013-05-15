@@ -26,10 +26,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-GlideComputerBlackboard::GlideComputerBlackboard()
-{
-}
-
 /**
  * Resets the GlideComputerBlackboard
  * @param full Reset all data?
