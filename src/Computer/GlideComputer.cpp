@@ -88,8 +88,16 @@ GlideComputer::ProcessGPS(bool force)
 
   const bool last_flying = calculated.flight.flying;
 
-  calculated.date_time_local = basic.date_time_utc +
-    settings.utc_offset.AsSeconds();
+  /* use UTC offset to calculate local time */
+  const int utc_offset_s = settings.utc_offset.AsSeconds();
+  calculated.date_time_local = basic.date_available
+    /* known date: apply UTC offset to BrokenDateTime, which may
+       increment/decrement date */
+    ? basic.date_time_utc + utc_offset_s
+    /* unknown date: apply UTC offset only to BrokenTime, leave the
+       BrokenDate part invalid as it was */
+    : BrokenDateTime(BrokenDate::Invalid(),
+                     ((const BrokenTime &)basic.date_time_utc) + utc_offset_s);
 
   calculated.Expire(basic.clock);
 
