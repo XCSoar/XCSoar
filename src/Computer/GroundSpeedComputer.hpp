@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_GROUND_SPEED_COMPUTER_HPP
 #define XCSOAR_GROUND_SPEED_COMPUTER_HPP
 
+#include "Time/DeltaTime.hpp"
+#include "NMEA/Validity.hpp"
+#include "Geo/GeoPoint.hpp"
+
 struct NMEAInfo;
 
 /**
@@ -31,11 +35,21 @@ struct NMEAInfo;
  * updates if no "real" ground speed input is available.
  */
 class GroundSpeedComputer {
+  DeltaTime delta_time;
+
+  Validity last_location_available;
+  GeoPoint last_location;
+
 public:
+  GroundSpeedComputer() {
+    delta_time.Reset();
+    last_location_available.Clear();
+  }
+
   /**
    * Fill the missing attributes with a fallback.
    */
-  void Compute(NMEAInfo &basic, const NMEAInfo &last_basic);
+  void Compute(NMEAInfo &basic);
 };
 
 #endif

@@ -25,23 +25,26 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 
 void
-GroundSpeedComputer::Compute(NMEAInfo &basic, const NMEAInfo &last_basic)
+GroundSpeedComputer::Compute(NMEAInfo &basic)
 {
-  if (basic.ground_speed_available)
+  if (basic.ground_speed_available ||
+      !basic.time_available || !basic.location_available) {
+    basic.ground_speed = fixed(0);
+    delta_time.Reset();
+    last_location_available.Clear();
     return;
+  }
 
-  if (!basic.HasTimeAdvancedSince(last_basic))
-    return;
+  if (!last_location_available)
+    delta_time.Update(basic.time, fixed(0), fixed(0));
+  else if (basic.location_available.Modified(last_location_available)) {
+    const fixed dt = delta_time.Update(basic.time, fixed(0.2), fixed(5));
+    if (positive(dt)) {
+      fixed distance = basic.location.Distance(last_location);
+      basic.ground_speed = distance / dt;
+    }
+  }
 
-  assert(basic.time_available);
-  assert(last_basic.time_available);
-  assert(basic.time > last_basic.time);
-
-  basic.ground_speed = fixed(0);
-  if (!basic.location_available || !last_basic.location_available)
-    return;
-
-  fixed t = basic.time - last_basic.time;
-  fixed d = basic.location.Distance(last_basic.location);
-  basic.ground_speed = d / t;
+  last_location = basic.location;
+  last_location_available = basic.location_available;
 }

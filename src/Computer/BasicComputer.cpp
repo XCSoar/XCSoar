@@ -413,7 +413,7 @@ BasicComputer::Compute(MoreData &data,
 {
   ComputeTrack(data, last_gps);
 
-  ground_speed.Compute(data, last_gps);
+  ground_speed.Compute(data);
 
   if (data.HasTimeAdvancedSince(last_gps)) {
     ComputeAirspeed(data, calculated);
