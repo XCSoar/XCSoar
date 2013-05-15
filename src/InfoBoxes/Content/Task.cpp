@@ -285,12 +285,14 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
   // use proper non-terminal next task stats
 
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
+      !now_local.IsPlausible()) {
     data.SetInvalid();
     return;
   }
 
-  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   const BrokenTime t = now_local +
     unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
 
@@ -437,12 +439,14 @@ void
 UpdateInfoBoxFinalETA(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+      !now_local.IsPlausible()) {
     data.SetInvalid();
     return;
   }
 
-  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   const BrokenTime t = now_local +
     unsigned(task_stats.total.solution_remaining.time_elapsed);
 
