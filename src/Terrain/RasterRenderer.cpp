@@ -87,7 +87,7 @@ RasterRenderer::RasterRenderer()
 RasterRenderer::~RasterRenderer()
 {
   delete image;
-  delete contour_column_base;
+  delete[] contour_column_base;
 }
 
 #ifdef ENABLE_OPENGL
@@ -177,7 +177,7 @@ RasterRenderer::GenerateImage(bool do_shading,
     image = new RawBitmap(height_matrix.GetWidth(),
                           height_matrix.GetHeight());
 
-    delete contour_column_base;
+    delete[] contour_column_base;
     contour_column_base = new unsigned char[height_matrix.GetWidth()];
   }
 
