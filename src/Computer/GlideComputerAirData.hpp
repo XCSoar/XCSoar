@@ -68,6 +68,11 @@ class GlideComputerAirData {
 
   AverageVarioComputer average_vario;
 
+  /**
+   * Used by FlightTimes() to detect time warps.
+   */
+  DeltaTime delta_time;
+
 public:
   GlideComputerAirData(const Waypoints &way_points);
 
@@ -102,9 +107,8 @@ public:
    * 1. Detects time retreat and calls ResetFlight if GPS lost
    * 2. Detects change in replay status and calls ResetFlight if so
    * 3. Calls DetectStartTime and saves the time of flight
-   * @return true as default, false if something is wrong in time
    */
-  bool FlightTimes(const NMEAInfo &basic, const NMEAInfo &last_basic,
+  void FlightTimes(const NMEAInfo &basic,
                    DerivedInfo &calculated,
                    const ComputerSettings &settings);
 
