@@ -59,10 +59,6 @@ protected:
     return _time_retreated;
   }
 
-  fixed time_delta() const {
-    return Basic().time - LastBasic().time;
-  }
-
   void ResetFlight(const bool full=true);
   void StartTask();
   void SaveFinish();
