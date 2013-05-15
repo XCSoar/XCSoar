@@ -601,6 +601,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/GroundSpeedComputer.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
