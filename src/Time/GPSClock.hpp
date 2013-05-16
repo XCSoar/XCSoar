@@ -89,20 +89,6 @@ public:
     return CheckAdvance(now, dt);
   }
 
-  fixed DeltaAdvance(const fixed now) {
-    if (CheckReverse(now))
-      return fixed(-1);
-
-    // check if time has advanced past dt
-    if (now - last >= dt) {
-      fixed dt = now - last;
-      Update(now);
-      return dt;
-    } else {
-      return fixed(0);
-    }
-  }
-
   /**
    * Checks whether the specified duration (dt) has passed since the last
    * update. If yes, it updates the time stamp.
