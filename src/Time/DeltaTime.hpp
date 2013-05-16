@@ -59,40 +59,7 @@ public:
    * @return the (non-negative) time stamp difference since the last
    * call, or 0 if difference is too small, or -1 on time warp
    */
-  fixed Update(fixed current_time, fixed min_delta, fixed warp_tolerance) {
-    assert(!negative(current_time));
-    assert(!negative(min_delta));
-    assert(!negative(warp_tolerance));
-
-    if (!IsDefined()) {
-      /* first call */
-      last_time = current_time;
-      return fixed(0);
-    }
-
-    if (current_time < last_time) {
-      /* time warp */
-
-      const fixed delta = last_time - current_time;
-      last_time = current_time;
-      return delta < warp_tolerance ? fixed(0) : fixed(-1);
-    }
-
-    const fixed delta = current_time - last_time;
-    if (delta < min_delta)
-      /* difference too small, don't update "last" time stamp to let
-         small differences add up eventually */
-      return fixed(0);
-
-    last_time = current_time;
-
-    if (delta > fixed(4 * 3600))
-      /* after several hours without a signal, we can assume there was
-         a time warp */
-      return fixed(-1);
-
-    return delta;
-  }
+  fixed Update(fixed current_time, fixed min_delta, fixed warp_tolerance);
 };
 
 #endif
