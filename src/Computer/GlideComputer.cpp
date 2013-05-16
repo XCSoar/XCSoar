@@ -122,8 +122,7 @@ GlideComputer::ProcessGPS(bool force)
 
   TakeoffLanding(last_flying);
 
-  if (!time_retreated())
-    task_computer.ProcessAutoTask(basic, calculated);
+  task_computer.ProcessAutoTask(basic, calculated);
 
   // Process extended information
   air_data_computer.ProcessVertical(Basic(),
