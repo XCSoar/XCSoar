@@ -38,20 +38,12 @@ class GlideComputerBlackboard:
   public ComputerSettingsBlackboard
 {
   DerivedInfo Finish_Derived_Info;
-  bool _time_retreated;
 
 public:
   void ReadBlackboard(const MoreData &nmea_info);
   void ReadComputerSettings(const ComputerSettings &settings);
 
 protected:
-  /**
-   * @see GlideComputerBlackboard::ReadBlackboard()
-   */
-  bool time_retreated() const {
-    return _time_retreated;
-  }
-
   void ResetFlight(const bool full=true);
   void StartTask();
   void SaveFinish();

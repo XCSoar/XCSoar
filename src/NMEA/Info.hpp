@@ -403,11 +403,6 @@ struct NMEAInfo {
 
   void UpdateClock();
 
-  gcc_pure
-  bool HasTimeRetreatedSince(const NMEAInfo &last) const {
-    return !last.time_available || (time_available && time < last.time);
-  }
-
   /**
    * Returns a #BrokenDate referring to the given time stamp (all
    * UTC).  This object's #date_time_utc and #time attributes are used
