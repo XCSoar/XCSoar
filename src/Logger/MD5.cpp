@@ -169,7 +169,7 @@ MD5::Finalize()
     Process512(buff512bits);
 
     // now  load 1st 56 bytes of buffer w/ all 0's,
-    std::fill(buff512bits, buff512bits + ARRAY_SIZE(buff512bits), 0);
+    std::fill_n(buff512bits, ARRAY_SIZE(buff512bits), 0);
 
     // ready to append message length
   }

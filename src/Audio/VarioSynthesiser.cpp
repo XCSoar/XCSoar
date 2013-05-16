@@ -146,7 +146,7 @@ VarioSynthesiser::Synthesise(int16_t *buffer, size_t n)
         ? std::min(n, silence_remaining)
         : n;
       /* the "silence" PCM sample value is zero */
-      std::fill(buffer, buffer + o, 0);
+      std::fill_n(buffer, o, 0);
       buffer += o;
       n -= o;
       silence_remaining -= o;

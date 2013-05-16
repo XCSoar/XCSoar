@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Clamp.hpp"
+#include "Util/Macros.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
@@ -103,7 +104,7 @@ RasterWeather::RasterWeather()
     reload(true),
     weather_map(NULL)
 {
-  std::fill(weather_available, weather_available + MAX_WEATHER_TIMES, false);
+  std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
 
 RasterWeather::~RasterWeather() 

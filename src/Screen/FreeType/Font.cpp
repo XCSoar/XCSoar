@@ -253,7 +253,7 @@ void
 Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 {
   uint8_t *buffer = (uint8_t *)_buffer;
-  std::fill(buffer, buffer + BufferSize(size), 0);
+  std::fill_n(buffer, BufferSize(size), 0);
 
   const FT_Face face = this->face;
 

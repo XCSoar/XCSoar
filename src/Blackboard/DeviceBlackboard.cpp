@@ -42,7 +42,7 @@ DeviceBlackboard::DeviceBlackboard()
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
   gps_info.time = fixed(gps_info.date_time_utc.GetSecondOfDay());
 
-  std::fill(per_device_data, per_device_data + NUMDEV, gps_info);
+  std::fill_n(per_device_data, NUMDEV, gps_info);
 
   real_data = simulator_data = replay_data = gps_info;
 

@@ -34,7 +34,7 @@ void
 InfoBoxSettings::Panel::Clear()
 {
   name.clear();
-  std::fill(contents, contents + MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
+  std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
 }
 
 bool
