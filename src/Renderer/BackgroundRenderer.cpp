@@ -32,47 +32,41 @@ Copyright_License {
 #include "Renderer/LabelBlock.hpp"
 #include "NMEA/Derived.hpp"
 
-BackgroundRenderer::BackgroundRenderer():
-  terrain(NULL),
-  weather(NULL),
-  renderer(NULL),
-  shading_angle(Angle::Degrees(-45))
+BackgroundRenderer::BackgroundRenderer()
+  :terrain(nullptr),
+   weather(nullptr),
+   renderer(nullptr),
+   shading_angle(Angle::Degrees(-45))
 {
-}
-
-BackgroundRenderer::~BackgroundRenderer()
-{
-  Reset();
 }
 
 void
 BackgroundRenderer::Reset()
 {
   delete renderer;
-  renderer = NULL;
+  renderer = nullptr;
 }
 
-
-void 
+void
 BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
   Reset();
 }
 
-void 
+void
 BackgroundRenderer::SetWeather(const RasterWeather *_weather)
 {
   weather = _weather;
   Reset();
 }
 
-void 
+void
 BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
                          const TerrainRendererSettings &terrain_settings)
 {
-  if (terrain == NULL) {
+  if (terrain == nullptr) {
     // terrain may have been re-set, so may need new renderer
     Reset();
     canvas.ClearWhite();

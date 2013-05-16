@@ -45,7 +45,10 @@ class BackgroundRenderer {
 
 public:
   BackgroundRenderer();
-  ~BackgroundRenderer();
+
+  ~BackgroundRenderer() {
+    Reset();
+  }
 
   void Draw(Canvas& canvas,
             const WindowProjection& proj,
