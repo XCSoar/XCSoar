@@ -29,7 +29,9 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
 {
   if (basic.ground_speed_available ||
       !basic.time_available || !basic.location_available) {
-    basic.ground_speed = fixed(0);
+    if (!basic.ground_speed_available)
+      basic.ground_speed = fixed(0);
+
     delta_time.Reset();
     last_location_available.Clear();
     return;
