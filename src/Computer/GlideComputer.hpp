@@ -74,7 +74,6 @@ public:
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
                 GlideComputerTaskEvents& events);
-  virtual ~GlideComputer() {}
 
   void SetTerrain(RasterTerrain *_terrain);
 
