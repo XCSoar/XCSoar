@@ -93,7 +93,7 @@ public:
    * Checks whether the specified duration (dt) has passed since the last
    * update. If yes, it updates the time stamp.
    * @param now Current time
-   * @param dt The timestep in milliseconds
+   * @param dt The timestep in seconds
    * @return
    */
   bool CheckAdvance(const fixed now, const fixed dt) {
