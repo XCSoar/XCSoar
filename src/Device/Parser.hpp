@@ -25,18 +25,17 @@ Copyright_License {
 #define XCSOAR_DEVICE_PARSER_HPP
 
 #include "Math/fixed.hpp"
-#include "Time/ExternalClock.hpp"
 
 struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
 struct GeoPoint;
 struct BrokenDate;
+struct BrokenTime;
 
 class NMEAParser
 {
   bool ignore_checksum;
-  static ExternalClock external_clock;
   fixed last_time;
 
 public:
@@ -88,20 +87,15 @@ public:
    */
   static bool TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info);
 
-  /**
-   * Calculates a seconds-based FixTime and corrects it
-   * in case over passing the UTC midnight mark
-   * @param FixTime NMEA format fix time (HHMMSS)
-   * @param info NMEA_INFO struct to parse into
-   * @return Seconds-based FixTime
-   */
-  static fixed TimeModify(fixed fix_time, BrokenTime &broken_time) {
-    return external_clock.Apply(fix_time, broken_time);
-  }
-
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
 
   static bool ReadDate(NMEAInputLine &line, BrokenDate &date);
+
+  /**
+   * Read and parse a time stamp in the form "HHMMSS.SSS".
+   */
+  static bool ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                       fixed &time_of_day_s);
 
 private:
   /**

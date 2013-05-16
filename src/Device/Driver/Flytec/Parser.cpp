@@ -122,12 +122,11 @@ FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
     NMEAParser::ReadDate(line, info.date_time_utc);
 
   //  Time(hhmmss),   6 Digits
+
   fixed time;
-  if (line.ReadChecked(time)) {
-    time = NMEAParser::TimeModify(time, info.date_time_utc);
-    if (!NMEAParser::TimeHasAdvanced(time, last_time, info))
-      return true;
-  }
+  if (NMEAParser::ReadTime(line, info.date_time_utc, time) &&
+      !NMEAParser::TimeHasAdvanced(time, last_time, info))
+    return true;
 
   if (validity == 'V') {
     // In case of V (void=not valid) GPS data should not be used.

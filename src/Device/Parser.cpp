@@ -34,8 +34,6 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
 
-ExternalClock NMEAParser::external_clock;
-
 NMEAParser::NMEAParser(bool _ignore_checksum)
   :ignore_checksum(_ignore_checksum)
 {
@@ -321,7 +319,9 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc);
+  fixed this_time;
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
@@ -368,6 +368,32 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 }
 
 bool
+NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                     fixed &time_of_day_s)
+{
+  fixed value;
+  if (!line.ReadChecked(value))
+    return false;
+
+  // Calculate Hour
+  fixed hours = value / 10000;
+  broken_time.hour = (int)hours;
+
+  // Calculate Minute
+  fixed mins = value / 100;
+  mins = mins - fixed(broken_time.hour) * 100;
+  broken_time.minute = (int)mins;
+
+  // Calculate Second
+  fixed secs = value - fixed(broken_time.hour * 10000 +
+                             broken_time.minute * 100);
+  broken_time.second = (int)secs;
+
+  time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
+  return true;
+}
+
+bool
 NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -390,8 +416,8 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    */
 
   fixed this_time;
-  if (!line.ReadChecked(this_time))
-    return false;
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
@@ -406,8 +432,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   // JMW get date info first so TimeModify is accurate
   ReadDate(line, info.date_time_utc);
-
-  this_time = TimeModify(this_time, info.date_time_utc);
 
   if (!TimeHasAdvanced(this_time, info))
     return true;
@@ -479,10 +503,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   GPSState &gps = info.gps;
 
   fixed this_time;
-  if (!line.ReadChecked(this_time))
-    return false;
-
-  this_time = TimeModify(this_time, info.date_time_utc);
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);

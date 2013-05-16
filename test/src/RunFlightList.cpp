@@ -38,8 +38,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-ExternalClock NMEAParser::external_clock;
-
 bool
 NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {
@@ -48,6 +46,13 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 
 bool
 NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
+{
+  return false;
+}
+
+bool
+NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                     fixed &time_of_day_s)
 {
   return false;
 }
