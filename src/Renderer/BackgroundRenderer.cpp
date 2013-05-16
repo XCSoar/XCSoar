@@ -25,18 +25,18 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
-#include "MapSettings.hpp"
-#include "Geo/SpeedVector.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "NMEA/Derived.hpp"
 
+static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
+
 BackgroundRenderer::BackgroundRenderer()
   :terrain(nullptr),
    weather(nullptr),
    renderer(nullptr),
-   shading_angle(Angle::Degrees(-45))
+   shading_angle(DEFAULT_SHADING_ANGLE)
 {
 }
 
@@ -108,7 +108,7 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
     SetShadingAngle(projection, calculated.sun_azimuth);
 
   else
-    SetShadingAngle(projection, Angle::Degrees(-45));
+    SetShadingAngle(projection, DEFAULT_SHADING_ANGLE);
 
 }
 
