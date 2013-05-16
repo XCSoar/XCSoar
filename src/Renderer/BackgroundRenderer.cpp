@@ -30,8 +30,6 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "Renderer/LabelBlock.hpp"
-#include "Look/Fonts.hpp"
-#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
 BackgroundRenderer::BackgroundRenderer():
