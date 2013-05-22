@@ -28,11 +28,14 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import android.util.Log;
+import android.content.ContextWrapper;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
 import ioio.lib.util.IOIOConnectionRegistry;
+import ioio.lib.util.android.ContextWrapperDependent;
+import ioio.lib.spi.IOIOConnectionBootstrap;
 
 /**
  * A utility class which wraps the Java API into an easier API for the
@@ -70,6 +73,18 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     };
 
     IOIOConnectionRegistry.addBootstraps(bootstraps);
+  }
+
+  static void onCreateContext(ContextWrapper context) {
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).onCreate(context);
+  }
+
+  static void onDestroyContext() {
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).onDestroy();
   }
 
   public IOIOHelper() {
@@ -294,6 +309,10 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
        onIOIOConnect() if the connection is already established */
     if (connecting == null)
       interrupt();
+
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).open();
   }
 
   @Override public synchronized void removeListener(IOIOConnectionListener l) {
