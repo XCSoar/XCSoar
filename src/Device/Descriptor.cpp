@@ -52,9 +52,6 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Product.hpp"
-#endif
-
-#ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
 #include "Android/BMP085Device.hpp"
 #include "Android/I2CbaroDevice.hpp"
@@ -103,17 +100,16 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_sensors(NULL),
-#ifdef IOIOLIB
    droidsoar_v2(nullptr),
    nunchuck(nullptr),
    voltage(nullptr),
-#endif
 #endif
    n_failures(0u),
    ticker(false), borrowed(false)
 {
   config.Clear();
-#ifdef IOIOLIB
+
+#ifdef ANDROID
   for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++)
     i2cbaro[i] = nullptr;
 #endif
@@ -152,7 +148,6 @@ DeviceDescriptor::GetState() const
   if (internal_sensors != nullptr)
     return PortState::READY;
 
-#ifdef IOIOLIB
   if (droidsoar_v2 != nullptr)
     return PortState::READY;
 
@@ -164,7 +159,6 @@ DeviceDescriptor::GetState() const
 
   if (voltage != nullptr)
     return PortState::READY;
-#endif
 #endif
 
   return PortState::FAILED;
@@ -288,7 +282,7 @@ DeviceDescriptor::OpenInternalSensors()
 bool
 DeviceDescriptor::OpenDroidSoarV2()
 {
-#ifdef IOIOLIB
+#ifdef ANDROID
   if (is_simulator())
     return true;
 
@@ -321,7 +315,7 @@ DeviceDescriptor::OpenDroidSoarV2()
 bool
 DeviceDescriptor::OpenI2Cbaro()
 {
-#ifdef IOIOLIB
+#ifdef ANDROID
   if (is_simulator())
     return true;
 
@@ -350,7 +344,7 @@ DeviceDescriptor::OpenI2Cbaro()
 bool
 DeviceDescriptor::OpenNunchuck()
 {
-#ifdef IOIOLIB
+#ifdef ANDROID
   if (is_simulator())
     return true;
 
@@ -369,7 +363,7 @@ DeviceDescriptor::OpenNunchuck()
 bool
 DeviceDescriptor::OpenVoltage()
 {
-#ifdef IOIOLIB
+#ifdef ANDROID
   if (is_simulator())
     return true;
 
@@ -470,7 +464,6 @@ DeviceDescriptor::Close()
   delete internal_sensors;
   internal_sensors = NULL;
 
-#ifdef IOIOLIB
   delete droidsoar_v2;
   droidsoar_v2 = nullptr;
 
@@ -483,8 +476,6 @@ DeviceDescriptor::Close()
 
   delete voltage;
   voltage = nullptr;
-
-#endif
 
 #endif
 

@@ -35,9 +35,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "AndroidBluetoothPort.hpp"
-#ifdef IOIOLIB
 #include "AndroidIOIOUartPort.hpp"
-#endif
 #endif
 
 #if defined(HAVE_POSIX)
@@ -131,7 +129,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 #endif
 
   case DeviceConfig::PortType::IOIOUART:
-#if defined(ANDROID) && defined(IOIOLIB)
+#if defined(ANDROID)
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
       LogFormat("No IOIOUart configured in profile");
       return NULL;
