@@ -123,7 +123,17 @@ we adopt its naming conventions.
 be named after the main class which is provided.  Each class should
 have a separate source file and a separate header.  UNIX text format.
 
-Be \texttt{const}-correct.
+Be \texttt{const}-correct.  Use \verb|constexpr| instead of
+\verb|const| whenever possible.
+
+Use \verb|static| whenever possible.  Functions and global variables
+that are only used in one source file should not be exported.  Methods
+that do not use any instance method/variable should be static to avoid
+the overhead of passing the implicit \verb|this| parameter.
+
+Make methods \verb|virtual| only after careful consideration.  A
+destructor should only be virtual if necessary.  All overrides must
+use the \verb|override| keyword.  Use \verb|final| often.
 
 Compile with \texttt{WERROR=y} and fix all warnings.
 
@@ -216,6 +226,7 @@ C++11.  The following C++11 features are safe to use:
 \item Strongly-typed enums
 \item Defaulted and deleted functions
 \item Generalized constant expressions (\verb|constexpr|)
+\item \verb|override| and \verb|final|
 \item Range-based \verb|for|
 \item \verb|nullptr|
 \end{itemize}
