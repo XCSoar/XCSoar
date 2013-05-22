@@ -131,12 +131,10 @@ class DeviceDescriptor final : private Notify, private PortLineSplitter {
    */
   InternalSensors *internal_sensors;
 
-#ifdef IOIOLIB
   BMP085Device *droidsoar_v2;
   I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
   NunchuckDevice *nunchuck;
   VoltageDevice *voltage;
-#endif
 #endif
 
   /**
