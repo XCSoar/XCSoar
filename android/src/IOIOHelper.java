@@ -44,7 +44,7 @@ final class IOIOHelper implements IOIOConnectionHolder,
                                   IOIOAgent.Listener {
   private static final String TAG = "XCSoar";
 
-  private IOIOAgent agent;
+  private IOIOMultiAgent agent;
 
   private IOIO ioio_;
 
@@ -82,14 +82,8 @@ final class IOIOHelper implements IOIOConnectionHolder,
   }
 
   public IOIOHelper() {
-    Collection<IOIOConnectionFactory> factories =
-      IOIOConnectionRegistry.getConnectionFactories();
-
-    try {
-      agent = new IOIOAgent(factories.iterator().next(), this);
-    } catch (NoSuchElementException e) {
-      Log.e(TAG, "No IOIO connection is available. This shouldn't happen.");
-    }
+    agent = new IOIOMultiAgent(IOIOConnectionRegistry.getConnectionFactories(),
+                               this);
   }
 
   private synchronized boolean isOpen() {
