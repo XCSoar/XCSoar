@@ -413,9 +413,9 @@ NextPage(int Step)
 static void
 OnGesture(const TCHAR* gesture)
 {
-  if (_tcscmp(gesture, _T("L")) == 0)
+  if (_tcscmp(gesture, _T("R")) == 0)
     NextPage(-1);
-  else if (_tcscmp(gesture, _T("R")) == 0)
+  else if (_tcscmp(gesture, _T("L")) == 0)
     NextPage(+1);
 }
 
