@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 11:24+0200\n"
-"PO-Revision-Date: 2013-03-29 21:20+0000\n"
-"Last-Translator: dingetje <antoine.megens@gmail.com>\n"
+"PO-Revision-Date: 2013-05-17 19:12+0000\n"
+"Last-Translator: Frank Schellenberg <frank@schellenberg.nl>\n"
 "Language-Team: Ikhiwa.com <opensource@ikhiwa.com>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-29 21:24+0000\n"
-"X-Generator: Launchpad (build 16546)\n"
+"X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -213,6 +213,7 @@ msgstr ""
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Een 1 mijl cylinder. Score gebaseerd op verst bereikte punt in de sector."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -264,7 +265,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Een symetrisch kwadrant met een instelbare straal."
 
 #: src/Task/TypeStrings.cpp:102
 #, no-c-format
@@ -364,12 +365,12 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Geen geldige start"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Geen geldige finish"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
@@ -379,12 +380,12 @@ msgstr "Taak niet gesloten"
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Niet alle keerpunten zijn van hetzelfde type"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Foutief aantal keerpunten"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
@@ -1442,7 +1443,7 @@ msgstr "AAT tijd"
 #: src/InfoBoxes/Content/Factory.cpp:442
 #, no-c-format
 msgid "AAT Time"
-msgstr ""
+msgstr "AAT Tijd"
 
 #: src/InfoBoxes/Content/Factory.cpp:443
 #, no-c-format
@@ -1941,7 +1942,7 @@ msgstr "L/D vario"
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
 msgid "L/D Vario"
-msgstr ""
+msgstr "L/D Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:707
 #, no-c-format
@@ -2129,7 +2130,7 @@ msgstr "Thermiek totaal gemiddelde"
 #: src/InfoBoxes/Content/Factory.cpp:806
 #, no-c-format
 msgid "T Avg"
-msgstr ""
+msgstr "T Gem"
 
 #: src/InfoBoxes/Content/Factory.cpp:807
 #, no-c-format
@@ -2258,7 +2259,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "H T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -2842,9 +2843,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ATC radial"
-msgstr "Start straal"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1215
 #, no-c-format
@@ -2854,42 +2855,38 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1223
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task last hour"
-msgstr "Snelheid - Opdracht gemiddelde"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "V Opdr Gem"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
-"Gemiddelde overlandsnelheid van de huidige opdracht, niet gecompenseerd voor "
-"hoogte."
 
 #: src/InfoBoxes/Content/Factory.cpp:1233
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance (nominal)"
-msgstr "Volgende afstand"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP Dist-N"
-msgstr "KP Afst"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"De afstand tot het volgende keerpunt. Bij AAT opdrachten is dit de afstand "
-"tot het doel binnen de AAT sector."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:394
@@ -2990,9 +2987,9 @@ msgid "Waiting"
 msgstr "Wachtende"
 
 #: src/InfoBoxes/Content/Places.cpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference"
-msgstr "Referentie massa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Contest.cpp:55 src/InfoBoxes/Content/Trace.cpp:172
 #: src/Dialogs/dlgAnalysis.cpp:291 src/Dialogs/dlgAnalysis.cpp:300
@@ -5357,9 +5354,8 @@ msgid "Waypoints not editable"
 msgstr "Keerpunt niet te wijzigen"
 
 #: src/Dialogs/Waypoint/Manager.cpp:122
-#, fuzzy
 msgid "Delete waypoint?"
-msgstr "Keerpunt Verwijderen?"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:154
 msgid "Save changes to waypoint file?"
@@ -5579,17 +5575,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr ""
+msgstr "Final glide balk uitschakelen"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr ""
+msgstr "Final glide balk altijd zichtbaar"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr ""
+msgstr "Toon final glide balk indien final glide binnen bereik."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:85
 msgid ""
@@ -5636,13 +5632,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:101
 msgid "Final glide bar"
-msgstr ""
+msgstr "Final glide balk"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:102
 msgid ""
 "If set to \"On\" the final glide will always be shown, if set to \"Auto\" it "
 "will be shown when approaching the final glide possibility."
 msgstr ""
+"Ingesteld op \"Aan\" is de final glide balk altijd zichtbaar, op \"Auto\" "
+"wordt de balk zichtbaar als final glide benaderd wordt."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:108
 msgid "Final glide bar MC0"
@@ -5658,9 +5656,8 @@ msgstr ""
 "MacCready nul."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
-#, fuzzy
 msgid "Vario bar"
-msgstr "Vario"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
@@ -6494,6 +6491,8 @@ msgid ""
 "Automatically zoom in when approaching a waypoint to keep the waypoint at a "
 "reasonable screen distance."
 msgstr ""
+"Zoom automatisch in bij nadering keerpunt zodat keerpunt op een redelijke "
+"scherm afstand blijft."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
@@ -6513,11 +6512,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
 msgid "Main area"
-msgstr ""
+msgstr "Hoofdscherm"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:171
 msgid "Specifies what should be displayed in the main area."
-msgstr ""
+msgstr "Specificeer wat op het hoofdscherm getoond moet worden"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:334
@@ -6527,6 +6526,7 @@ msgstr "Informatievakken"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 msgid "Specifies which InfoBoxes should be displayed on this page."
 msgstr ""
+"Specificeer welke informatievakken op deze pagina getoond moeten worden."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
@@ -6545,7 +6545,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:195
 msgid "Specifies what should be displayed below the main area."
-msgstr ""
+msgstr "Specificeer wat onder het hoofdscherm getoond moet worden."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 #, no-c-format
@@ -6735,6 +6735,8 @@ msgstr ""
 #, no-c-format
 msgid "The sorting will also take the current task direction into account."
 msgstr ""
+"Bij sorteren zal rekening worden gehouden met de richting van de huidige "
+"taak."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:82
 #, no-c-format
@@ -6747,6 +6749,8 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
+"De sorteer functie zal proberen landing opties te vinden in de richting van "
+"het geconfigureerde thuis veld."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
@@ -6771,9 +6775,8 @@ msgstr ""
 "geeft aan dat de daalsnelheid wordt verdubbeld."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
-#, fuzzy
 msgid "Auto bugs"
-msgstr "Toon insecten"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
@@ -6959,13 +6962,11 @@ msgid "Vario-scaled dots and lines"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:114
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"Binnen stijg gebieden zijn de kleuren van oranje tot rood, daal gebieden van "
-"licht- tot donder blauw. Bij 0 zakken is het een gele lijn."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -7509,9 +7510,8 @@ msgstr ""
 "de gemiddelde verlichting van het terrein."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:265
-#, fuzzy
 msgid "Contours"
-msgstr "Kleuren"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "If enabled, draws contour lines on the terrain."
@@ -8058,9 +8058,8 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Minimale AAT opdracht tijd in minuten."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
-#, fuzzy
 msgid "Arm start manually"
-msgstr "Start activeren"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:238
 msgid "Configure whether the start must be armed manually or automatically."
@@ -9408,89 +9407,11 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Line skipped."
-#~ msgstr "Lijn overgeslagen."
-
-#~ msgid "Auto. wind"
-#~ msgstr "Auto wind"
-
-#~ msgid ""
-#~ "This allows switching on or off the automatic wind algorithm.  When the "
-#~ "algorithm is switched off, the pilot is responsible for setting the wind "
-#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
-#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
-#~ "and circling."
-#~ msgstr ""
-#~ "Maakt het mogelijk de automatische wind berekening AAN of UIT te zetten. "
-#~ "Indien de berekening UIT staat, moet de vlieger deze handmatig instellen. "
-#~ "&#10;[Thermieken] Alleen een GPS-signaal nodig.&#10;[ZigZag] Een "
-#~ "intelligente vario met sneldheids-output nodig.&#10;[Both] Gebruik "
-#~ "Thermieken en ZigZag."
-
-#~ msgid ""
-#~ "Enable this if you would like to log the communication with the device."
-#~ msgstr ""
-#~ "Schakel in indien de communicatie met het apparaat moet worden gelogged."
-
-#~ msgid "Logger Info"
-#~ msgstr "Logger Info"
+#~ msgid "QFE GPS"
+#~ msgstr "QFE GPS"
 
 #~ msgid "Aircraft type"
 #~ msgstr "Vliegtuigtype"
-
-#~ msgid "Aircraft reg."
-#~ msgstr "Vliegtuigregistraie"
-
-#~ msgid "Polar name"
-#~ msgstr "Polaire naam"
-
-#~ msgid "V rough air"
-#~ msgstr "V onrustige lucht"
-
-#~ msgid "Wing area"
-#~ msgstr "Vleugel oppervlakte"
-
-#~ msgid "Dump time"
-#~ msgstr "Loostijd"
-
-#~ msgid "Dry mass"
-#~ msgstr "Droge massa"
-
-#~ msgid ""
-#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
-#~ "Set to zero if it does not apply."
-#~ msgstr ""
-#~ "Optionele hoeveelheid water ballast die binnen XCSoar als 100% ballast "
-#~ "wordt gebruikt. Stel in op 0 indien dit niet van toepassing is."
-
-#~ msgid ""
-#~ "Optional the maximum manoeuvring speed can be entered on this page to "
-#~ "prevent the glide computer from commanding unrealistic cruise speeds."
-#~ msgstr ""
-#~ "Optionele maximale maneuvreer snelheid, kan op deze pagina worden "
-#~ "ingesteld om te voorkomen dat de computer onrealistische berekeningen en "
-#~ "voorstellen gaat doen."
-
-#~ msgid "Dry mass of the glider (pilot + empty mass)."
-#~ msgstr "Droge massa van het vliegtuig (piloot + leeggewicht)"
-
-#~ msgid "Reference weight at which the given polar is valid."
-#~ msgstr "Juiste polaire voor het referentie gewicht."
-
-#~ msgid "The handicap factor used for the OnLine Contest scoring."
-#~ msgstr "De handicap factor gebruikt voor OLC."
-
-#~ msgid "Optional specification of the wing area."
-#~ msgstr "Optionele specificatie vleugeloppervlak."
-
-#~ msgid "Max. ballast"
-#~ msgstr "Max. ballast"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "De tijd is seconden om de volledige ballast te lozen."
-
-#~ msgid "QFE GPS"
-#~ msgstr "QFE GPS"
 
 #~ msgid "Change point type?"
 #~ msgstr "Punt type veranderen?"
@@ -9507,6 +9428,12 @@ msgstr ""
 #~ msgid "Weather parameters"
 #~ msgstr "Weerparameters"
 
+#~ msgid "V rough air"
+#~ msgstr "V onrustige lucht"
+
+#~ msgid "Dump time"
+#~ msgstr "Loostijd"
+
 #~ msgid "Longitude"
 #~ msgstr "Lengtegraad"
 
@@ -9522,8 +9449,14 @@ msgstr ""
 #~ msgid "Lookup"
 #~ msgstr "Zoek"
 
+#~ msgid "Auto. wind"
+#~ msgstr "Auto wind"
+
 #~ msgid "H GND"
 #~ msgstr "H GND"
+
+#~ msgid "Optional specification of the wing area."
+#~ msgstr "Optionele specificatie vleugeloppervlak."
 
 #~ msgid "Page"
 #~ msgstr "Pagina"
@@ -9566,6 +9499,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Bepaald de informatie weergegeven op de verschillende scherm pagina's."
 
+#~ msgid "Polar name"
+#~ msgstr "Polaire naam"
+
 #~ msgid ""
 #~ "FLARM\n"
 #~ "Details"
@@ -9575,6 +9511,9 @@ msgstr ""
 
 #~ msgid "Return"
 #~ msgstr "Terug"
+
+#~ msgid "Line skipped."
+#~ msgstr "Lijn overgeslagen."
 
 #~ msgid ""
 #~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
@@ -9587,6 +9526,11 @@ msgstr ""
 #~ "gereset. Tijdens de vlucht kan de QFE aangepast worden met pijltje omhoog/"
 #~ "omlaag. De onderste regel toont de QNH (hoogte boven zeeniveau). "
 #~ "Veranderingen in QFE hebben geen invloed op QNH."
+
+#~ msgid ""
+#~ "Enable this if you would like to log the communication with the device."
+#~ msgstr ""
+#~ "Schakel in indien de communicatie met het apparaat moet worden gelogged."
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "InfoBox Modi"
@@ -9609,6 +9553,9 @@ msgstr ""
 
 #~ msgid "WP alt.A"
 #~ msgstr "KP AH"
+
+#~ msgid "Logger Info"
+#~ msgstr "Logger Info"
 
 #~ msgid "Height GPS"
 #~ msgstr "Hoogte GPS"
@@ -9676,6 +9623,19 @@ msgstr ""
 #~ "gevlogen pad. De waarde wordt niet berekend tijdens thermieken."
 
 #~ msgid ""
+#~ "This allows switching on or off the automatic wind algorithm.  When the "
+#~ "algorithm is switched off, the pilot is responsible for setting the wind "
+#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
+#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
+#~ "and circling."
+#~ msgstr ""
+#~ "Maakt het mogelijk de automatische wind berekening AAN of UIT te zetten. "
+#~ "Indien de berekening UIT staat, moet de vlieger deze handmatig instellen. "
+#~ "&#10;[Thermieken] Alleen een GPS-signaal nodig.&#10;[ZigZag] Een "
+#~ "intelligente vario met sneldheids-output nodig.&#10;[Both] Gebruik "
+#~ "Thermieken en ZigZag."
+
+#~ msgid ""
 #~ "Determines whether the snail trail is drifted with the wind when "
 #~ "displayed in circling mode."
 #~ msgstr ""
@@ -9687,6 +9647,9 @@ msgstr ""
 
 #~ msgid "Gate Width"
 #~ msgstr "Startlijn Breedte"
+
+#~ msgid "Delete Waypoint?"
+#~ msgstr "Keerpunt Verwijderen?"
 
 #~ msgid ""
 #~ "Sample Text\n"
@@ -9703,6 +9666,9 @@ msgstr ""
 
 #~ msgid "L/D average period"
 #~ msgstr "L/D gemiddelde periode"
+
+#~ msgid "Aircraft reg."
+#~ msgstr "Vliegtuigregistraie"
 
 #~ msgid ""
 #~ "Determines sorting of alternates in the alternates dialog and in abort "
@@ -9765,11 +9731,50 @@ msgstr ""
 #~ msgid "Set new teammate:"
 #~ msgstr "Stel nieuwe teammaat in:"
 
+#~ msgid "Wing area"
+#~ msgstr "Vleugel oppervlakte"
+
+#~ msgid "Dry mass"
+#~ msgstr "Droge massa"
+
+#~ msgid "Reference mass"
+#~ msgstr "Referentie massa"
+
+#~ msgid ""
+#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
+#~ "Set to zero if it does not apply."
+#~ msgstr ""
+#~ "Optionele hoeveelheid water ballast die binnen XCSoar als 100% ballast "
+#~ "wordt gebruikt. Stel in op 0 indien dit niet van toepassing is."
+
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "AAT Geschatte Resterende Help"
 
+#~ msgid ""
+#~ "Optional the maximum manoeuvring speed can be entered on this page to "
+#~ "prevent the glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "Optionele maximale maneuvreer snelheid, kan op deze pagina worden "
+#~ "ingesteld om te voorkomen dat de computer onrealistische berekeningen en "
+#~ "voorstellen gaat doen."
+
+#~ msgid "Dry mass of the glider (pilot + empty mass)."
+#~ msgstr "Droge massa van het vliegtuig (piloot + leeggewicht)"
+
+#~ msgid "Reference weight at which the given polar is valid."
+#~ msgstr "Juiste polaire voor het referentie gewicht."
+
+#~ msgid "The handicap factor used for the OnLine Contest scoring."
+#~ msgstr "De handicap factor gebruikt voor OLC."
+
 #~ msgid "Lon."
 #~ msgstr "Len."
+
+#~ msgid "Max. ballast"
+#~ msgstr "Max. ballast"
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "De tijd is seconden om de volledige ballast te lozen."
 
 #~ msgid "Lat."
 #~ msgstr "Breedte"
