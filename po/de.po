@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 11:24+0200\n"
-"PO-Revision-Date: 2013-04-30 23:08+0000\n"
+"PO-Revision-Date: 2013-05-20 20:49+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-02 12:24+0000\n"
-"X-Generator: Launchpad (build 16580)\n"
+"X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
+"X-Generator: Launchpad (build 16626)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2869,40 +2869,42 @@ msgstr ""
 "Verständigung wird die Distanz in nautischen Meilen angezeigt."
 
 #: src/InfoBoxes/Content/Factory.cpp:1223
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task last hour"
-msgstr "Aufgabe - Durchschnittsgeschwindigkeit"
+msgstr "Geschwindigkeitsaufgabe letzte Stunde"
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "V Aufgabe mittl"
+msgstr "V Aufg. H"
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
-msgstr "Mittlere Geschwindigkeit über die Aufgabe, nicht höhenkompensiert."
+msgstr ""
+"Über die letzte Stunde gemittelte Überlandgeschwindigkeit während der "
+"Aufgabe, ohne Höhenkompensation."
 
 #: src/InfoBoxes/Content/Factory.cpp:1233
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance (nominal)"
-msgstr "Nächster Wegpunkt - Distanz"
+msgstr "Nächster Wegpunkt - Distanz (nominal)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP Dist-N"
-msgstr "WP Dist"
+msgstr "WP Dist-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Strecke zum ausgewählten Wegpunkt. Für AAT Aufgaben ist dies die Strecke bis "
-"zum Ziel im AAT Sektor."
+"Distanz zum gewählten Wegpunkt. Bei AAT ist das die Distanz zum Ursprung des "
+"Sektors."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:394
@@ -3933,7 +3935,7 @@ msgstr "Überwachung"
 #: src/Dialogs/Device/DeviceListDialog.cpp:365
 #: src/Dialogs/Device/DeviceListDialog.cpp:578
 msgid "Debug"
-msgstr ""
+msgstr "Fehlersuche"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:310
 #: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
@@ -3971,7 +3973,7 @@ msgstr "Bluetooth ist ausgeschaltet"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:376
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplizieren"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:380
 msgid "Not connected"
@@ -3997,6 +3999,8 @@ msgstr "Gerät ändern"
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"Die Kommunikation mit diesem Gerät  wird für die nächsten %u Minuten "
+"aufgezeichnet."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:625
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118 Data/Input/default.xci:610
@@ -5368,7 +5372,6 @@ msgid "Waypoints not editable"
 msgstr "Wegpunkt nicht änderbar"
 
 #: src/Dialogs/Waypoint/Manager.cpp:122
-#, fuzzy
 msgid "Delete waypoint?"
 msgstr "Wegpunkt löschen?"
 
@@ -7520,13 +7523,12 @@ msgstr ""
 "mittlere Beleuchtung des Gelände wird damit beeinflusst."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:265
-#, fuzzy
 msgid "Contours"
-msgstr "Farben"
+msgstr "Konturen"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "Wenn aktiviert, werden Konturlinien über das Gelände gelegt."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -8069,15 +8071,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Minimale AAT Aufgabenzeit in Minuten."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
-#, fuzzy
 msgid "Arm start manually"
-msgstr ""
-"Abflug\n"
-"Bereit!"
+msgstr "Abflug manuell auf Bereit"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:238
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr ""
+msgstr "Legt fest, ob der Abflug manuall oder automatisch aktiviert wird."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
 msgid "Start open time"
@@ -9425,89 +9424,17 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid ""
-#~ "Enable this if you would like to log the communication with the device."
-#~ msgstr ""
-#~ "Dies aktiviert den Mitschnitt der Kommunikation zum angeschlossenen Gerät."
-
-#~ msgid "Logger Info"
-#~ msgstr "Logger Info"
-
-#~ msgid "Aircraft type"
-#~ msgstr "Flugzeugtyp"
-
-#~ msgid "Aircraft reg."
-#~ msgstr "Flugzeugkennz."
-
-#~ msgid "Polar name"
-#~ msgstr "Name der Polare"
-
-#~ msgid "V rough air"
-#~ msgstr "Manövergeschwindigkeit"
-
-#~ msgid "Wing area"
-#~ msgstr "Flügelfläche"
-
-#~ msgid "Dump time"
-#~ msgstr "Ballast Ablasszeit"
-
-#~ msgid "Dry mass"
-#~ msgstr "Trockengewicht"
-
-#~ msgid "Reference mass"
-#~ msgstr "Referenzmasse"
-
-#~ msgid ""
-#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
-#~ "Set to zero if it does not apply."
-#~ msgstr ""
-#~ "Optional wird diese Wasserballastkapazität von XCSoar als 100% Ballast "
-#~ "gesetzt. Setze es auf Null, wenn es nicht passt."
-
-#~ msgid ""
-#~ "Optional the maximum manoeuvring speed can be entered on this page to "
-#~ "prevent the glide computer from commanding unrealistic cruise speeds."
-#~ msgstr ""
-#~ "Optional die Manövergeschwindigkeit, d.h. Geschw. bei der die Ruder noch "
-#~ "voll ausgeschlagen werden dürfen (Handbuch des Seglers). Das hindert den "
-#~ "Rechner daran unsinnige Vorfluggeschwindigkeiten vorzuschlagen."
-
-#~ msgid "Dry mass of the glider (pilot + empty mass)."
-#~ msgstr "Trockengewicht des Seglers (Piloten + Leergewicht)"
-
-#~ msgid "Reference weight at which the given polar is valid."
-#~ msgstr "Referenz Gewicht bei dem die gegebene Polare gültig ist."
-
-#~ msgid "The handicap factor used for the OnLine Contest scoring."
-#~ msgstr "Der Handicap-Faktor für die OnLine Contest Wertung."
-
-#~ msgid "Optional specification of the wing area."
-#~ msgstr "Optionale Angabe der Flügelfläche."
-
-#~ msgid "Max. ballast"
-#~ msgstr "Max. Ballast"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "Zeit in Sekunden, um die komplett gefüllten Tanks zu entleeren."
-
-#~ msgid "Next radial ATC"
-#~ msgstr "Nächstes Radial ATC"
-
-#~ msgid "Radial ATC"
-#~ msgstr "Radial ATC"
-
-#~ msgid ""
-#~ "True bearing from the next waypoint to your position.  The distance is "
-#~ "displayed in nautical miles for communication with ATC."
-#~ msgstr ""
-#~ "Rechtweisende Peilung von dem nächsten Wegpunkt zu deiner Position. Die "
-#~ "Entfernung wird in nautischen Meilen angezeigt, zur Kommunikation mit ATC."
-
 #~ msgid "Save task?"
 #~ msgstr "Aufgabe speichern?"
 
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
+
+#~ msgid "Aircraft type"
+#~ msgstr "Flugzeugtyp"
+
+#~ msgid "Delete Waypoint?"
+#~ msgstr "Wegpunkt löschen?"
 
 #~ msgid "Longitude"
 #~ msgstr "Längengrad"
@@ -9551,8 +9478,14 @@ msgstr ""
 #~ msgid "H Baro"
 #~ msgstr "H Baro"
 
+#~ msgid "V rough air"
+#~ msgstr "Manövergeschwindigkeit"
+
 #~ msgid "Line skipped."
 #~ msgstr "Zeile übersprungen."
+
+#~ msgid "Dump time"
+#~ msgstr "Ballast Ablasszeit"
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "Das setzt den Wegpunkt für die Aufgabe zum Überprüfen."
@@ -9692,8 +9625,27 @@ msgstr ""
 #~ msgid "Create xcsoar-checklist.txt\n"
 #~ msgstr "Erstelle xcsoar-checklist.txt\n"
 
+#~ msgid "Polar name"
+#~ msgstr "Name der Polare"
+
 #~ msgid "Gate Width"
 #~ msgstr "Torbreite"
+
+#~ msgid ""
+#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
+#~ "Set to zero if it does not apply."
+#~ msgstr ""
+#~ "Optional wird diese Wasserballastkapazität von XCSoar als 100% Ballast "
+#~ "gesetzt. Setze es auf Null, wenn es nicht passt."
+
+#~ msgid "Reference weight at which the given polar is valid."
+#~ msgstr "Referenz Gewicht bei dem die gegebene Polare gültig ist."
+
+#~ msgid "The handicap factor used for the OnLine Contest scoring."
+#~ msgstr "Der Handicap-Faktor für die OnLine Contest Wertung."
+
+#~ msgid "Wing area"
+#~ msgstr "Flügelfläche"
 
 #~ msgid ""
 #~ "The terrain can be shaded among slopes to indicate either wind direction, "
@@ -9702,10 +9654,24 @@ msgstr ""
 #~ "Das Gelände kann unterschiedliche Hänge schattieren um entweder die "
 #~ "Windrichtung, die Sonnenposition, oder die Nord-Ost Richtung zu zeigen."
 
+#~ msgid "Reference mass"
+#~ msgstr "Referenzmasse"
+
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr ""
 #~ "Bestimmt die Informationen, die auf den verschiedenen Seiten angezeigt "
 #~ "werden."
+
+#~ msgid ""
+#~ "Optional the maximum manoeuvring speed can be entered on this page to "
+#~ "prevent the glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "Optional die Manövergeschwindigkeit, d.h. Geschw. bei der die Ruder noch "
+#~ "voll ausgeschlagen werden dürfen (Handbuch des Seglers). Das hindert den "
+#~ "Rechner daran unsinnige Vorfluggeschwindigkeiten vorzuschlagen."
+
+#~ msgid "Max. ballast"
+#~ msgstr "Max. Ballast"
 
 #~ msgid "L/D average period"
 #~ msgstr "Gleitzahl Mittelwertzeitintervall"
@@ -9729,11 +9695,25 @@ msgstr ""
 #~ "[Heimat] Die Sortierung sucht nach Landemöglichkeiten in Richtung der "
 #~ "konfigurierten Heimat."
 
+#~ msgid "Optional specification of the wing area."
+#~ msgstr "Optionale Angabe der Flügelfläche."
+
+#~ msgid "Aircraft reg."
+#~ msgstr "Flugzeugkennz."
+
 #~ msgid "Page"
 #~ msgstr "Seite"
 
 #~ msgid "Return"
 #~ msgstr "Zurück"
+
+#~ msgid ""
+#~ "Enable this if you would like to log the communication with the device."
+#~ msgstr ""
+#~ "Dies aktiviert den Mitschnitt der Kommunikation zum angeschlossenen Gerät."
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "Zeit in Sekunden, um die komplett gefüllten Tanks zu entleeren."
 
 #~ msgid "H GND"
 #~ msgstr "GND H"
@@ -9786,6 +9766,9 @@ msgstr ""
 #~ "Durch drücken der Hoch/Runter-Pfeiltasten kann die Richtung manuell "
 #~ "eingestellt werden, wenn die InfoBox aktiv ist. (nur Touchscreen/PC)"
 
+#~ msgid "Logger Info"
+#~ msgstr "Logger Info"
+
 #~ msgid ""
 #~ "The distance made in the configured period of time , divided by the "
 #~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
@@ -9813,6 +9796,25 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Unerreichbar durch das Gelände."
+
+#~ msgid "Dry mass of the glider (pilot + empty mass)."
+#~ msgstr "Trockengewicht des Seglers (Piloten + Leergewicht)"
+
+#~ msgid "Dry mass"
+#~ msgstr "Trockengewicht"
+
+#~ msgid "Next radial ATC"
+#~ msgstr "Nächstes Radial ATC"
+
+#~ msgid "Radial ATC"
+#~ msgstr "Radial ATC"
+
+#~ msgid ""
+#~ "True bearing from the next waypoint to your position.  The distance is "
+#~ "displayed in nautical miles for communication with ATC."
+#~ msgstr ""
+#~ "Rechtweisende Peilung von dem nächsten Wegpunkt zu deiner Position. Die "
+#~ "Entfernung wird in nautischen Meilen angezeigt, zur Kommunikation mit ATC."
 
 #~ msgid "AC Off;  %d%%"
 #~ msgstr "AC aus; %d%%"
