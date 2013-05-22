@@ -125,6 +125,8 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(spacer_3);
 
   const StaticEnumChoice contests_list[] = {
+    { (unsigned)Contest::NONE, ContestToString(Contest::NONE),
+      N_("Disable OLC Calculations") },
     { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
       N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
           "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },

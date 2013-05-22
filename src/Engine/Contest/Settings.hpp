@@ -46,6 +46,8 @@ enum class Contest : uint8_t {
    * Deutsche Meisterschaft im Streckensegelflug (Germany).
    */
   DMST,
+
+  NONE,
 };
 
 struct ContestSettings {

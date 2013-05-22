@@ -35,6 +35,7 @@ static const TCHAR *const contest_to_string[] = {
   _T("SIS-AT"),
   _T("FFVV NetCoupe"),
   _T("DMSt"),
+  _T("None"),
 };
 
 const TCHAR*
