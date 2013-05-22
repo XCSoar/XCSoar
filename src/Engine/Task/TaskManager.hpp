@@ -203,12 +203,6 @@ public:
   bool UpdateAutoMC(const AircraftState& state_now, const fixed fallback_mc);
 
   /**
-   * loads the Mat points vector to the current task if it is a Mat
-   * @param waypoints the list of active waypoints
-   */
-  void FillMatPoints(const Waypoints &waypoints);
-
-  /**
    * Accessor for statistics of active task
    *
    * @return Statistics of active task

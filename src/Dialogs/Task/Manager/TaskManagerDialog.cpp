@@ -305,8 +305,6 @@ TaskManagerDialog::Commit()
       way_points.Optimise();
     }
 
-    task->FillMatPoints(way_points);
-
     protected_task_manager->TaskCommit(*task);
     protected_task_manager->TaskSaveDefault();
 

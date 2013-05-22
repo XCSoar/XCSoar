@@ -360,12 +360,6 @@ TaskManager::GetStats() const
   return null_stats;
 }
 
-void
-TaskManager::FillMatPoints(const Waypoints &waypoints)
-{
-  ordered_task->FillMatPoints(waypoints);
-}
-
 bool
 TaskManager::DoGoto(const Waypoint &wp)
 {

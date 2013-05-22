@@ -64,7 +64,6 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
 OrderedTask::~OrderedTask()
 {
   RemoveAllPoints();
-  ClearMatPoints();
 
   delete active_factory;
 
@@ -118,10 +117,6 @@ OrderedTask::UpdateGeometry()
   for (const auto *tp : task_points)
     tp->ScanProjection(task_projection);
 
-  // scan location of mat control points
-  for (const auto *i : GetMatPoints())
-    i->ScanProjection(task_projection);
-
   // ... and optional start points
   for (const OrderedTaskPoint *tp : optional_start_points)
     tp->ScanProjection(task_projection);
@@ -131,14 +126,10 @@ OrderedTask::UpdateGeometry()
 
   // update OZ's for items that depend on next-point geometry 
   UpdateObservationZones(task_points, task_projection);
-  UpdateObservationZones(SetMatPoints(), task_projection);
   UpdateObservationZones(optional_start_points, task_projection);
 
   // now that the task projection is stable, and oz is stable,
   // calculate the bounding box in projected coordinates
-  for (const auto tp : GetMatPoints())
-    tp->UpdateBoundingBox(task_projection);
-
   for (const auto tp : task_points)
     tp->UpdateBoundingBox(task_projection);
 
@@ -1218,8 +1209,6 @@ OrderedTask::Commit(const OrderedTask& that)
     }
   }
 
-  mat_points.CloneFrom(that.mat_points, task_behaviour, ordered_settings);
-
   if (modified)
     UpdateGeometry();
     // @todo also re-scan task sample state,
@@ -1418,20 +1407,4 @@ OrderedTask::UpdateSummary(TaskSummary& ordered_summary) const
   if (stats.total.remaining.IsDefined() && stats.total.planned.IsDefined())
     ordered_summary.update(stats.total.remaining.GetDistance(),
                            stats.total.planned.GetDistance());
-}
-
-void
-OrderedTask::FillMatPoints(const Waypoints &wps, bool update_geometry)
-{
-  ClearMatPoints();
-  GeoPoint center = TaskSize() > 0
-    ? GetPoint(0).GetLocation()
-    : task_projection.GetCenter();
-
-  if (GetFactoryType() == TaskFactoryType::MAT) {
-    mat_points.FillMatPoints(wps, GetFactory(), center);
-
-    if (update_geometry)
-      UpdateGeometry();
-  }
 }

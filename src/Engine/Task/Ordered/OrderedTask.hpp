@@ -28,7 +28,6 @@
 #include "Task/TaskBehaviour.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
-#include "MatPoints.hpp"
 
 #include <assert.h>
 #include <vector>
@@ -85,11 +84,6 @@ private:
   SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
-
-  /**
-   * maintains a list of Turnpoints from the waypoint file for MAT tasks
-   */
-  MatPoints mat_points;
 
 public:
   /** 
@@ -633,40 +627,6 @@ public:
    * @return index of last intermediate point achieved or 0 if none
    */
   unsigned GetLastIntermediateAchieved() const;
-
-  /**
-   * returns const reference to mat_points
-   */
-  const MatPoints::MatVector& GetMatPoints() const {
-    return mat_points.GetMatPoints();
-  }
-
-  /**
-   * returns reference mat_points
-   */
-  MatPoints::MatVector& SetMatPoints() {
-    return mat_points.SetMatPoints();
-  }
-
-  /**
-   * this is called automatically by Commit
-   * or if the waypoint file changes.
-   * If a client wants to use the Mat Points on an Uncommitted task,
-   * he must Call FillMatPoints himself
-   * The MatPoints will be deleted when the task is deleted
-   * It is the client's responsibility to lock the task manager if
-   * this is called on the active task
-   * @param wps.   Reference to the waypoint file
-   * @param update_geometry.  If true (default) will update the task's geometry
-   */
-  void FillMatPoints(const Waypoints &wps, bool update_geometry = true);
-
-  /**
-   * removes all points from mat_points
-   */
-  void ClearMatPoints() {
-    mat_points.ClearMatPoints();
-  }
 
   /**
    * Should we add this WP to the Mat

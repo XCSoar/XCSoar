@@ -199,7 +199,6 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
   if (newtype != ordered_task->GetFactoryType()) {
     ReadValues();
     ordered_task->SetFactory(newtype);
-    ordered_task->FillMatPoints(way_points);
     *task_changed =true;
     RefreshView();
   }
