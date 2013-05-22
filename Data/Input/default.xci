@@ -271,12 +271,12 @@ event=Zoom auto on
 
 mode=default
 type=gesture
-data=L
+data=R
 event=ScreenModes previous
 
 mode=default
 type=gesture
-data=R
+data=L
 event=ScreenModes next
 
 mode=default
