@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 11:24+0200\n"
-"PO-Revision-Date: 2013-05-22 08:49+0000\n"
+"PO-Revision-Date: 2013-05-22 21:11+0000\n"
 "Last-Translator: Juha Huvilinna <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
+"X-Launchpad-Export-Date: 2013-05-22 21:13+0000\n"
 "X-Generator: Launchpad (build 16626)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -993,7 +993,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR instantaneous"
-msgstr "Liitoluku (GR), tämänhetkinen"
+msgstr "Liitoluku hetkellinen"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
@@ -1836,13 +1836,13 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:725
 #, no-c-format
 msgid "Team code"
-msgstr ""
+msgstr "Tiimikoodi"
 
 #: src/InfoBoxes/Content/Factory.cpp:726 Data/Dialogs/dlgTeamCode_L.xml:3
 #: Data/Dialogs/dlgTeamCode.xml:3
 #, no-c-format
 msgid "Team Code"
-msgstr ""
+msgstr "Tiimikoodi"
 
 #: src/InfoBoxes/Content/Factory.cpp:727
 #, no-c-format
@@ -1854,7 +1854,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:735
 #, no-c-format
 msgid "Team bearing"
-msgstr ""
+msgstr "Tiimin suunta"
 
 #: src/InfoBoxes/Content/Factory.cpp:736
 #, no-c-format
@@ -1869,7 +1869,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
 msgid "Team bearing difference"
-msgstr ""
+msgstr "Tiimin suunnan erotus"
 
 #: src/InfoBoxes/Content/Factory.cpp:746
 #, no-c-format
@@ -1886,7 +1886,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Tiimikaveriin etäisyys"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
@@ -2040,7 +2040,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:849
 #, no-c-format
 msgid "Alternate 1"
-msgstr ""
+msgstr "Vaihtoehto 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:850
 #, no-c-format
@@ -2055,7 +2055,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:859
 #, no-c-format
 msgid "Alternate 2"
-msgstr ""
+msgstr "Vaihtoehto 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:860
 #, no-c-format
@@ -2070,7 +2070,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:869
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr ""
+msgstr "Vaihtoehto 1 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:870
 #, no-c-format
@@ -2690,7 +2690,7 @@ msgstr ""
 #: Data/Input/default.xci:1027
 #, no-c-format
 msgid "Alternates"
-msgstr ""
+msgstr "Vaihtoehdot"
 
 #: src/InfoBoxes/Content/Alternate.cpp:72
 #, c-format
@@ -4133,7 +4133,7 @@ msgstr "Valitse väri"
 #: src/Dialogs/Airspace/dlgAirspace.cpp:100
 #: src/Dialogs/Airspace/dlgAirspace.cpp:121
 msgid "Warn"
-msgstr ""
+msgstr "Varoita"
 
 #: src/Dialogs/Airspace/dlgAirspace.cpp:101
 #: src/Dialogs/Airspace/dlgAirspace.cpp:125 Data/Input/default.xci:442
@@ -4237,7 +4237,7 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceWarnings.cpp:334
 msgid "No Warnings"
-msgstr ""
+msgstr "Ei varoituksia"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:53
 #, no-c-format
@@ -7452,7 +7452,7 @@ msgstr "Seuraa kavereita"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Lataa ystäviesi Live-paikka SkyLines-palvelimelta."
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 msgid "Vehicle Type"
@@ -8284,7 +8284,7 @@ msgstr "Ystävät"
 
 #: Data/Dialogs/dlgPlaneDetails_L.xml:51 Data/Dialogs/dlgPlaneDetails.xml:37
 msgid "Max. Cruise Speed"
-msgstr ""
+msgstr "Maksimi liukunopeus"
 
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8
 #: Data/Dialogs/dlgConfigWaypoints.xml:8 Data/Dialogs/dlgVario_L.xml:8
@@ -8485,7 +8485,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4
 #: Data/Dialogs/dlgWaypointDetails.xml:10 Data/Input/default.xci:1043
 msgid "GoTo"
-msgstr ""
+msgstr "Mene"
 
 #: Data/Dialogs/AirspaceList_L.xml:4 Data/Dialogs/AirspaceList.xml:4
 msgid "Filter..."
@@ -8501,7 +8501,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
-msgstr ""
+msgstr "XCSoar"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:11 Data/Dialogs/dlgTeamCode.xml:11
 msgid "Mate code"
@@ -8693,7 +8693,7 @@ msgstr ""
 #: Data/Input/default.xci:465 Data/Input/default.xci:971
 #: Data/Input/default.xci:1060
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: Data/Input/default.xci:853
 msgid "Traffic List"
