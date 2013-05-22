@@ -139,10 +139,10 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     }
   }
 
-  private synchronized void closeAllListeners() {
+  private synchronized void closeAllListeners(IOIO ioio) {
     for (Iterator<IOIOConnectionListener> i = openListeners.iterator(); i.hasNext();) {
       IOIOConnectionListener listener = i.next();
-      listener.onIOIODisconnect();
+      listener.onIOIODisconnect(ioio);
 
       i.remove();
       closedListeners.add(listener);
@@ -220,7 +220,7 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     if (ioio == null)
       return;
 
-    closeAllListeners();
+    closeAllListeners(ioio);
     ioio.disconnect();
   }
 
@@ -300,7 +300,7 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     if (openListeners.remove(l))
       /* this listener thinks the IOIO connection is established;
          invoke the onIOIODisconnect() method */
-      l.onIOIODisconnect();
+      l.onIOIODisconnect(ioio_);
     else
       /* no method call necessary */
       closedListeners.remove(l);
@@ -323,7 +323,7 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
       return;
 
     if (openListeners.remove(l)) {
-      l.onIOIODisconnect();
+      l.onIOIODisconnect(ioio_);
       closedListeners.add(l);
     } else if (!closedListeners.contains(l))
       return;

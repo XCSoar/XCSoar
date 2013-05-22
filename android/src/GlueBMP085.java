@@ -64,7 +64,7 @@ final class GlueBMP085 implements IOIOConnectionListener {
     instance = new BMP085(ioio, twiNum, eocPin, oversampling, listener);
   }
 
-  @Override public void onIOIODisconnect() {
+  @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 

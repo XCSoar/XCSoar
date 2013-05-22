@@ -65,7 +65,7 @@ final class GlueI2Cbaro implements IOIOConnectionListener {
     instance = new I2Cbaro(ioio, twiNum, i2c_addr, sample_rate, flags, listener);
   }
 
-  @Override public void onIOIODisconnect() {
+  @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 

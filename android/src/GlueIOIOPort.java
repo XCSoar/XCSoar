@@ -116,7 +116,7 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
     }
   }
 
-  @Override public void onIOIODisconnect() {
+  @Override public void onIOIODisconnect(IOIO ioio) {
     connected = false;
 
     super.close();
