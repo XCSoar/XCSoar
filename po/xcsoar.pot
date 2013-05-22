@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-14 23:08+0200\n"
+"POT-Creation-Date: 2013-05-22 11:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2736,19 +2736,19 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:761
+#: src/InfoBoxes/Content/Task.cpp:765
 msgid "Time Below"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:873 src/InfoBoxes/Content/Task.cpp:918
+#: src/InfoBoxes/Content/Task.cpp:877 src/InfoBoxes/Content/Task.cpp:922
 msgid "Closed"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:882 src/InfoBoxes/Content/Task.cpp:927
+#: src/InfoBoxes/Content/Task.cpp:886 src/InfoBoxes/Content/Task.cpp:931
 msgid "Open"
 msgstr ""
 
-#: src/InfoBoxes/Content/Task.cpp:887 src/InfoBoxes/Content/Task.cpp:932
+#: src/InfoBoxes/Content/Task.cpp:891 src/InfoBoxes/Content/Task.cpp:936
 msgid "Waiting"
 msgstr ""
 
@@ -2809,7 +2809,7 @@ msgstr ""
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:106
 #: src/Dialogs/Settings/dlgConfiguration.cpp:101
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:105
-#: src/Dialogs/Weather/RASPDialog.cpp:68 src/Terrain/RasterWeather.cpp:49
+#: src/Dialogs/Weather/RASPDialog.cpp:68 src/Terrain/RasterWeather.cpp:50
 #: Data/Dialogs/dlgVoice.xml:10 Data/Input/default.xci:513
 #: Data/Input/default.xci:1100
 #, no-c-format
@@ -6756,51 +6756,56 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
 #, no-c-format
+msgid "Disable OLC Calculations"
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:131
+#, no-c-format
 msgid ""
 "Conforms to FAI triangle rules. Three turns and common start and finish. No "
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:132
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:134
 #, no-c-format
 msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:135
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:137
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:137
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:139
 #, no-c-format
 msgid ""
 "A combination of Classic and FAI rules. 30% of the FAI score are added to "
 "the Classic score."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:148
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:150
 #, no-c-format
 msgid "The FFVV NetCoupe \"libre\" competiton."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:151
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:153
 msgid "On-Line Contest"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:152
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:154
 msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:156
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:158
 msgid "Predict Contest"
 msgstr ""
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:157
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:159
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
@@ -7914,17 +7919,17 @@ msgstr ""
 msgid "No TAF available!"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:50
+#: src/Terrain/RasterWeather.cpp:51
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:54
+#: src/Terrain/RasterWeather.cpp:55
 #, no-c-format
 msgid "W*"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:55
+#: src/Terrain/RasterWeather.cpp:56
 #, no-c-format
 msgid ""
 "Average dry thermal updraft strength near mid-BL height.  Subtract glider "
@@ -7934,12 +7939,12 @@ msgid ""
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:59
+#: src/Terrain/RasterWeather.cpp:60
 #, no-c-format
 msgid "BL Wind spd"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:60
+#: src/Terrain/RasterWeather.cpp:61
 #, no-c-format
 msgid ""
 "The speed and direction of the vector-averaged wind in the BL.  This "
@@ -7947,12 +7952,12 @@ msgid ""
 "through the BL."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:64
+#: src/Terrain/RasterWeather.cpp:65
 #, no-c-format
 msgid "H bl"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:65
+#: src/Terrain/RasterWeather.cpp:66
 #, no-c-format
 msgid ""
 "Height of the top of the mixing layer, which for thermal convection is the "
@@ -7965,12 +7970,12 @@ msgid ""
 "parameter is not useful for glider flying. "
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:69
+#: src/Terrain/RasterWeather.cpp:70
 #, no-c-format
 msgid "dwcrit"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:70
+#: src/Terrain/RasterWeather.cpp:71
 #, no-c-format
 msgid ""
 "This parameter estimates the height above ground at which the average dry "
@@ -7983,12 +7988,12 @@ msgid ""
 "Being for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:74
+#: src/Terrain/RasterWeather.cpp:75
 #, no-c-format
 msgid "bl cloud"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:75
+#: src/Terrain/RasterWeather.cpp:76
 #, no-c-format
 msgid ""
 "This parameter provides an additional means of evaluating the formation of "
@@ -7999,12 +8004,12 @@ msgid ""
 "expected to be below the BL Top height."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:79
+#: src/Terrain/RasterWeather.cpp:80
 #, no-c-format
 msgid "Sfc temp"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:80
+#: src/Terrain/RasterWeather.cpp:81
 #, no-c-format
 msgid ""
 "The temperature at a height of 2m above ground level.  This can be compared "
@@ -8013,12 +8018,12 @@ msgid ""
 "those forecast, then soaring conditions will be poorer than forecast."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:84
+#: src/Terrain/RasterWeather.cpp:85
 #, no-c-format
 msgid "hwcrit"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:85
+#: src/Terrain/RasterWeather.cpp:86
 #, no-c-format
 msgid ""
 "This parameter estimates the height at which the average dry updraft "
@@ -8031,12 +8036,12 @@ msgid ""
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:89
+#: src/Terrain/RasterWeather.cpp:90
 #, no-c-format
 msgid "wblmaxmin"
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:90
+#: src/Terrain/RasterWeather.cpp:91
 #, no-c-format
 msgid ""
 "Maximum grid-area-averaged extensive upward or downward motion within the BL "
@@ -8046,14 +8051,14 @@ msgid ""
 "inversions which limit thermalling heights."
 msgstr ""
 
-#: src/Terrain/RasterWeather.cpp:94
+#: src/Terrain/RasterWeather.cpp:95
 #, no-c-format
 msgid "blcwbase"
 msgstr ""
 
 #. not holding the lock here, because this method is only called
 #. during startup, when the other threads aren't running yet
-#: src/Terrain/RasterWeather.cpp:224
+#: src/Terrain/RasterWeather.cpp:225
 msgid "Scanning weather forecast"
 msgstr ""
 
