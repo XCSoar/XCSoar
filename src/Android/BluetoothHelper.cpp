@@ -26,10 +26,16 @@ Copyright_License {
 #include "Java/String.hpp"
 #include "Java/Class.hpp"
 
+#include <map>
+#include <string>
+
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
   static jmethodID isEnabled_method;
+  static jmethodID getNameFromAddress_method;
   static jmethodID list_method, connect_method, createServer_method;
+
+  static std::map<std::string, std::string> address_to_name;
 }
 
 bool
@@ -43,6 +49,8 @@ BluetoothHelper::Initialise(JNIEnv *env)
     return false;
 
   isEnabled_method = env->GetStaticMethodID(cls, "isEnabled", "()Z");
+  getNameFromAddress_method = env->GetStaticMethodID(cls, "getNameFromAddress",
+                                                     "(Ljava/lang/String;)Ljava/lang/String;");
   list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetStaticMethodID(cls, "connect",
                                           "(Ljava/lang/String;)Lorg/xcsoar/AndroidPort;");
@@ -62,6 +70,35 @@ BluetoothHelper::isEnabled(JNIEnv *env)
 {
   return cls.IsDefined() &&
     env->CallStaticBooleanMethod(cls, isEnabled_method);
+}
+
+const char *
+BluetoothHelper::GetNameFromAddress(JNIEnv *env, const char *address)
+{
+  assert(env != nullptr);
+  assert(address != nullptr);
+
+  if (!cls.IsDefined())
+    return nullptr;
+
+  std::string x_address(address);
+  auto i = address_to_name.find(x_address);
+  if (i != address_to_name.end())
+    return i->second.c_str();
+
+  const Java::String j_address(env, address);
+  jstring j_name = (jstring)
+    env->CallStaticObjectMethod(cls, getNameFromAddress_method,
+                                j_address.Get());
+  if (j_name == nullptr)
+    return nullptr;
+
+  char name[256];
+  Java::String::CopyTo(env, j_name, name, sizeof(name));
+  env->DeleteLocalRef(j_name);
+
+  auto j = address_to_name.insert(std::make_pair(x_address, name));
+  return j.first->second.c_str();
 }
 
 jobjectArray
