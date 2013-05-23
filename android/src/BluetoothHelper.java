@@ -77,6 +77,18 @@ final class BluetoothHelper {
     return getDisplayString(socket.getRemoteDevice());
   }
 
+  public static String getNameFromAddress(String address) {
+    if (adapter == null)
+      return null;
+
+    try {
+      return adapter.getRemoteDevice(address).getName();
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to look up name of " + address, e);
+      return null;
+    }
+  }
+
   public static String[] list() {
     if (adapter == null)
       return null;
