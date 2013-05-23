@@ -53,6 +53,7 @@ public:
   virtual void ReClick() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+  virtual bool SetFocus() override;
 };
 
 #endif
