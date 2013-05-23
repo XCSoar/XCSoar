@@ -143,7 +143,7 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstam
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi2
 	$(Q)sed -e 's/com\.android\.future\.usb/android.hardware.usb/g' \
 		-e 's/UsbManager.getInstance(wrapper)/(UsbManager)wrapper.getSystemService(Context.USB_SERVICE)/' \
-		<$(IOIOLIB_DIR)/../IOIOLibAccessory/src/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+		<android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
 		>$(ANDROID_BUILD)/src/AccessoryConnectionBootstrap.java
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 	$(Q)ln -s ../../../../android/res/xml $(@D)/res/xml
