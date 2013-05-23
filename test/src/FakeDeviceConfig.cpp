@@ -21,28 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/LX/Internal.hpp"
 #include "Profile/DeviceConfig.hpp"
 
-static Device *
-LXCreateOnPort(const DeviceConfig &config, Port &com_port)
+bool
+DeviceConfig::BluetoothNameStartsWith(const char *prefix) const
 {
-  const bool uses_speed = config.UsesSpeed();
-  const unsigned baud_rate = uses_speed ? config.baud_rate : 0;
-  const unsigned bulk_baud_rate = uses_speed ? config.bulk_baud_rate : 0;
-
-  const bool is_nano = config.BluetoothNameStartsWith("LXNAV-NANO-");
-
-  return new LXDevice(com_port, baud_rate, bulk_baud_rate, is_nano);
+  return false;
 }
-
-const struct DeviceRegister lx_driver = {
-  _T("LX"),
-  _T("LX / Colibri"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
-  DeviceRegister::PASS_THROUGH |
-  DeviceRegister::BULK_BAUD_RATE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
-  LXCreateOnPort,
-};

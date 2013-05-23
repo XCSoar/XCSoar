@@ -275,6 +275,14 @@ struct DeviceConfig {
     return false;
   }
 
+  /**
+   * Check whether the Bluetooth device name starts with the specified
+   * prefix.  Returns false on mismatch or if the name could not be
+   * determined or if this is not a Bluetooth device.
+   */
+  gcc_pure
+  bool BluetoothNameStartsWith(const char *prefix) const;
+
   bool UsesSpeed() const {
     return UsesSpeed(port_type) ||
       (MaybeBluetooth() && k6bt);

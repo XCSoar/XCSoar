@@ -26,6 +26,7 @@ Version 6.7 - not yet released
   - "debug" button
   - more robust midnight wraparound handling (#2857)
   - new driver from Cambridge L-Nav
+  - LX: faster LXNAV Nano detection over Bluetooth
 * Android
   - support IOIO via OpenAccessory (Android 4.x)
   - support USB host mode and USB-RS232 adapters on the Nook (#2886)
