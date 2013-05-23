@@ -86,6 +86,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/BlueFlyVario.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
+	$(DRIVER_SRC_DIR)/CaiLNav.cpp \
 	$(DRIVER_SRC_DIR)/Condor.cpp \
 	$(DRIVER_SRC_DIR)/CProbe.cpp \
 	$(DRIVER_SRC_DIR)/EW.cpp \

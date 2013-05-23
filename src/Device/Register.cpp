@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/CaiGpsNav.hpp"
+#include "Device/Driver/CaiLNav.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver/AltairPro.hpp"
@@ -89,6 +90,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &levil_driver,
   &eye_driver,
   &bluefly_driver,
+  &cai_lnav_driver,
   NULL
 };
 
