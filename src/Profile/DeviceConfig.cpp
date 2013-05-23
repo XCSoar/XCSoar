@@ -138,6 +138,21 @@ DeviceConfig::ShouldReopenOnTimeout() const
   gcc_unreachable();
 }
 
+bool
+DeviceConfig::BluetoothNameStartsWith(const char *prefix) const
+{
+#ifdef ANDROID
+  if (port_type != PortType::RFCOMM)
+    return false;
+
+  const char *name =
+    BluetoothHelper::GetNameFromAddress(Java::GetEnv(), bluetooth_mac.c_str());
+  return name != nullptr && StringStartsWith(name, prefix);
+#else
+  return false;
+#endif
+}
+
 const TCHAR *
 DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 {
