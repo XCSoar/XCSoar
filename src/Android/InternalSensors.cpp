@@ -45,8 +45,8 @@ jmethodID InternalSensors::mid_sensors_cancelAllSensorSubscriptions_;
 bool
 InternalSensors::Initialise(JNIEnv *env)
 {
-  assert(gps_cls == NULL);
-  assert(sensors_cls == NULL);
+  assert(!gps_cls.IsDefined());
+  assert(!sensors_cls.IsDefined());
   assert(env != NULL);
 
   gps_cls.Find(env, "org/xcsoar/InternalGPS");
