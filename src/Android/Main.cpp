@@ -33,6 +33,7 @@ Copyright_License {
 #include "Android/NativeInputListener.hpp"
 #include "Android/TextUtil.hpp"
 #include "Android/LogCat.hpp"
+#include "Android/Product.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -72,6 +73,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <stdlib.h>
 
 Context *context;
 
@@ -144,6 +146,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   vibrator = Vibrator::Create(env, *context);
 
   ioio_helper = new IOIOHelper(env);
+
+  if (IsNookSimpleTouch())
+    /* enable USB host mode if this is a Nook */
+    system("su -c 'echo host > /sys/devices/platform/musb_hdrc/mode'");
 
   ScreenInitialized();
   AllowLanguage();

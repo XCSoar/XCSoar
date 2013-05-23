@@ -27,6 +27,7 @@ Version 6.7 - not yet released
   - new driver from Cambridge L-Nav
 * Android
   - support IOIO via OpenAccessory (Android 4.x)
+  - support USB host mode and USB-RS232 adapters on the Nook (#2886)
 
 Version 6.6.2 - not yet released
 * tasks
