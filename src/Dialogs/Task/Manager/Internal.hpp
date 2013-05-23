@@ -44,6 +44,8 @@ class TaskManagerDialog : public WndForm {
 
   bool modified;
 
+  KeyDownFunction second_key_down_function;
+
 public:
   TaskManagerDialog(const DialogLook &look)
     :WndForm(look),
@@ -81,6 +83,14 @@ public:
   bool Commit();
 
   void Revert();
+
+  void SetKeyDownFunction(KeyDownFunction function) {
+    second_key_down_function = function;
+  }
+
+  void ClearKeyDownFunction() {
+    second_key_down_function = KeyDownFunction();
+  }
 
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;

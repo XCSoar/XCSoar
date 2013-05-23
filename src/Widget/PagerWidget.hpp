@@ -108,6 +108,12 @@ public:
     return GetWidget(current);
   }
 
+  Widget &GetCurrentWidget() {
+    assert(!children.empty());
+
+    return GetWidget(current);
+  }
+
   /**
    * Attempts to display page.  Follows Widget API rules
    * @param i Tab that is requested to be shown.

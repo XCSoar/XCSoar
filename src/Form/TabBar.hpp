@@ -99,6 +99,13 @@ public:
     return pager.GetCurrentWidget();
   }
 
+  /**
+   * Call Widget::SetFocus() on the current widget.
+   */
+  void FocusCurrentWidget() {
+    pager.GetCurrentWidget().SetFocus();
+  }
+
   void ClickPage(unsigned i);
 
   void SetCurrentPage(unsigned i);
