@@ -39,12 +39,10 @@ struct VarioInfo;
 struct OneClimbInfo;
 struct TerrainInfo;
 struct ThermalLocatorInfo;
-struct ThermalBandInfo;
 class Waypoints;
 class Airspaces;
 class RasterTerrain;
 class GlidePolar;
-class ProtectedAirspaceWarningManager;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
