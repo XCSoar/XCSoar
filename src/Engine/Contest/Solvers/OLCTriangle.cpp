@@ -23,6 +23,7 @@
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
+#include "kdtree++/kdtree.hpp"
 
 /*
  @todo potential to use 3d convex hull to speed search
@@ -77,7 +78,6 @@ OLCTriangle::Reset()
   tick_iterations = 1000;
 
   closing_pairs.clear();
-  search_point_tree.clear();
   ClearTrace();
 
   ResetBranchAndBound();
@@ -459,6 +459,8 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
   if (predict) {
     return closing_pairs.insert(ClosingPair(0, n_points-1));
   }
+
+  KDTree::KDTree<2, TracePointNode> search_point_tree;
 
   for (unsigned i = old_size; i < n_points; ++i) {
     TracePointNode node;
