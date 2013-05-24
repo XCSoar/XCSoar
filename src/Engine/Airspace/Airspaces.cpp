@@ -29,6 +29,8 @@
 #include "Geo/Flat/FlatRay.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
+#include <functional>
+
 #ifdef INSTRUMENT_TASK
 extern unsigned n_queries;
 extern long count_intersections;
@@ -152,26 +154,21 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   Airspace bb_target(location, task_projection);
   int projected_range = task_projection.ProjectRangeInteger(location, range);
 
-  std::deque<Airspace> vectors;
-  airspace_tree.find_within_range(bb_target, -projected_range,
-                                  std::back_inserter(vectors));
-
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
 
   AirspaceVector res;
 
-  for (const auto &v : vectors) {
-    if (!condition(*v.GetAirspace()))
-      continue;
-
-    if (fixed(v.Distance(bb_target)) > range)
-      continue;
-
-    if (v.IsInside(location) || positive(range))
+  std::function<void(const Airspace &)> visitor =
+    [&location, range, &condition, &bb_target, &res](const Airspace &v){
+    if (condition(*v.GetAirspace()) &&
+        fixed(v.Distance(bb_target)) <= range &&
+        (v.IsInside(location) || positive(range)))
       res.push_back(v);
-  }
+  };
+
+  airspace_tree.visit_within_range(bb_target, -projected_range, visitor);
 
   return res;
 }
@@ -183,23 +180,24 @@ Airspaces::FindInside(const AircraftState &state,
   Airspace bb_target(state.location, task_projection);
 
   AirspaceVector vectors;
-  airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
 
-  for (auto v = vectors.begin(); v != vectors.end();) {
+  std::function<void(const Airspace &)> visitor =
+    [&state, &condition, &vectors](const Airspace &v){
 
 #ifdef INSTRUMENT_TASK
     count_intersections++;
 #endif
 
-    if (!condition(*v->GetAirspace()) || !(*v).IsInside(state))
-      vectors.erase(v);
-    else
-      ++v;
-  }
+    if (condition(*v.GetAirspace()) &&
+        v.IsInside(state))
+      vectors.push_back(v);
+  };
+
+  airspace_tree.visit_within_range(bb_target, 0, visitor);
 
   return vectors;
 }
@@ -393,10 +391,12 @@ Airspaces::VisitInside(const GeoPoint &loc,
     return;
 
   Airspace bb_target(loc, task_projection);
-  AirspaceVector vectors;
-  airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
-  for (auto &v : vectors)
+  std::function<void(const Airspace &)> visitor2 =
+    [&loc, &visitor](const Airspace &v){
     if (v.IsInside(loc))
       visitor.Visit(v);
+  };
+
+  airspace_tree.visit_within_range(bb_target, 0, visitor2);
 }
