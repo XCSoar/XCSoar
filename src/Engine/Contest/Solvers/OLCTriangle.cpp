@@ -337,7 +337,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }
 
-  while (branch_and_bound.size() != 0) {
+  while (!branch_and_bound.empty()) {
     /* now loop over the tree, branching each found candidate set, adding the branch if it's feasible.
      * remove all candidate sets with d_max smaller than d_min of the largest integral candidate set
      * always work on the node with largest d_min
@@ -352,7 +352,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     branch_and_bound.erase(branch_and_bound.begin(), branch_and_bound.lower_bound(worst_d));
 
     // we might have cleaned up the whole tree. nothing to do then...
-    if (branch_and_bound.size() == 0) break;
+    if (branch_and_bound.empty())
+      break;
 
     // get node to work on
     auto node = --branch_and_bound.end();
@@ -428,7 +429,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   }
 
 
-  if (branch_and_bound.size() == 0)
+  if (branch_and_bound.empty())
     running = false;
 
   if (integral_feasible) {
