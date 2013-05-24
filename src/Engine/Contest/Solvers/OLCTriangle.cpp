@@ -25,6 +25,8 @@
 #include "Trace/Trace.hpp"
 #include "Util/QuadTree.hpp"
 
+#include <limits>
+
 /*
  @todo potential to use 3d convex hull to speed search
 
@@ -333,6 +335,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }
 
+  const unsigned max_iterations = !exhaustive && predict
+    ? tick_iterations
+    : std::numeric_limits<unsigned>::max();
+
   while (!branch_and_bound.empty()) {
     /* now loop over the tree, branching each found candidate set, adding the branch if it's feasible.
      * remove all candidate sets with d_max smaller than d_min of the largest integral candidate set
@@ -342,7 +348,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     iterations++;
 
     // break loop if tick_iterations exceeded
-    if (!exhaustive && predict && iterations > tick_iterations) break;
+    if (iterations > max_iterations)
+      break;
 
     // first clean up tree, removeing all nodes with d_max < worst_d
     branch_and_bound.erase(branch_and_bound.begin(), branch_and_bound.lower_bound(worst_d));
