@@ -28,6 +28,7 @@
 struct GlideSettings;
 class RoughAltitude;
 class RasterTerrain;
+class ProtectedAirspaceWarningManager;
 
 class RoutePlannerGlue {
   const RasterTerrain *terrain;
@@ -45,10 +46,9 @@ public:
     planner.UpdatePolar(settings, polar, safety_polar, wind);
   }
 
-  void Synchronise(const Airspaces &master, const AGeoPoint &origin,
-                   const AGeoPoint &destination) {
-    planner.Synchronise(master, origin, destination);
-  }
+  void Synchronise(const Airspaces &master,
+                   const AGeoPoint &origin,
+                   const AGeoPoint &destination);
 
   bool IsReachEmpty() const {
     return planner.IsReachEmpty();

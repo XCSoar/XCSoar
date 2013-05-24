@@ -37,6 +37,17 @@ RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
   }
 }
 
+void
+RoutePlannerGlue::Synchronise(const Airspaces &master,
+                              const AGeoPoint &origin,
+                              const AGeoPoint &destination)
+{
+  AirspacePredicateTrue true_predicate;
+  const AirspacePredicate &predicate = true_predicate;
+
+  planner.Synchronise(master, predicate, origin, destination);
+}
+
 bool
 RoutePlannerGlue::Solve(const AGeoPoint &origin,
                         const AGeoPoint &destination,

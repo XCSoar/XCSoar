@@ -140,11 +140,13 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::Mode::BOTH;
 
+    AirspacePredicateTrue predicate;
+
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(0.1);
       loc_end.altitude = map.GetHeight(loc_end) + 100;
-      route.Synchronise(airspaces, loc_start, loc_end);
+      route.Synchronise(airspaces, predicate, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {
         sol = true;
         if (verbose) {

@@ -50,7 +50,7 @@ public:
   AirspaceRoute();
   virtual ~AirspaceRoute();
 
-  void Synchronise(const Airspaces &master,
+  void Synchronise(const Airspaces &master, const AirspacePredicate &condition,
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 

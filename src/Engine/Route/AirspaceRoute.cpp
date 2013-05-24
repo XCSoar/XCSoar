@@ -218,6 +218,7 @@ AirspaceRoute::Reset()
 
 void
 AirspaceRoute::Synchronise(const Airspaces &master,
+                           const AirspacePredicate &_condition,
                            const AGeoPoint &origin,
                            const AGeoPoint &destination)
 {
@@ -225,8 +226,12 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   // acknowledged.
   h_min = std::min(origin.altitude, std::min(destination.altitude, h_min));
   h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
+
   // @todo: have margin for h_max to allow for climb
-  AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
+  AirspacePredicateHeightRangeExcludeTwo h_condition(h_min, h_max, origin, destination);
+
+  AndAirspacePredicate condition(h_condition, _condition);
+
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
                                      Half(origin.Distance(destination)),
                                      condition)) {
