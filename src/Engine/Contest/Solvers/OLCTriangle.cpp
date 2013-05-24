@@ -474,8 +474,9 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
   bool new_pair = false;
 
+  std::vector<TracePointNode> how_close;
+
   for (unsigned i = old_size; i < n_points; ++i) {
-    std::vector<TracePointNode> how_close;
     TracePointNode point;
     point.point = &GetPoint(i);
     point.index = i;
@@ -483,6 +484,7 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     const unsigned max_range =
       trace_master.ProjectRange(GetPoint(i).GetLocation(), max_distance);
 
+    how_close.clear();
     search_point_tree.find_within_range(point, max_range,
       std::back_insert_iterator<std::vector<TracePointNode>>(how_close));
 
