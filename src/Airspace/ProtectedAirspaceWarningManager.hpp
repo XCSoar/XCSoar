@@ -39,21 +39,20 @@ public:
   gcc_pure
   const TaskProjection &GetProjection() const;
 
-  void clear();
-  void clear_warnings();
+  void Clear();
+  void AcknowledgeAll();
 
   gcc_pure
-  bool get_ack_day(const AbstractAirspace& airspace) const;
+  bool GetAckDay(const AbstractAirspace& airspace) const;
 
-  void acknowledge_day(const AbstractAirspace& airspace,
-                       const bool set=true);
-  void acknowledge_warning(const AbstractAirspace& airspace,
-                           const bool set=true);
-  void acknowledge_inside(const AbstractAirspace& airspace,
+  void AcknowledgeDay(const AbstractAirspace &airspace, const bool set=true);
+  void AcknowledgeWarning(const AbstractAirspace &airspace,
                           const bool set=true);
+  void AcknowledgeInside(const AbstractAirspace &airspace,
+                         const bool set=true);
 
   gcc_pure
-  bool warning_empty() const;
+  bool IsEmpty() const;
 };
 
 

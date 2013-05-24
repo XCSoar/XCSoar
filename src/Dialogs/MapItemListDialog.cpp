@@ -160,7 +160,7 @@ public:
 
     return item.type == MapItem::AIRSPACE &&
       GetAirspaceWarnings() != nullptr &&
-      !GetAirspaceWarnings()->get_ack_day(*as_item.airspace);
+      !GetAirspaceWarnings()->GetAckDay(*as_item.airspace);
   }
 
   virtual void OnActivateItem(unsigned index) override;
@@ -247,7 +247,7 @@ MapItemListWidget::OnAckClicked()
 {
   const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
     list[GetCursorIndex()];
-  GetAirspaceWarnings()->acknowledge_day(*as_item.airspace);
+  GetAirspaceWarnings()->AcknowledgeDay(*as_item.airspace);
   UpdateButtons();
 }
 

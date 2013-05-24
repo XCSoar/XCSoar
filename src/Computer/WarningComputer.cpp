@@ -62,7 +62,7 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
       !basic.location_available || !basic.NavAltitudeAvailable()) {
     if (initialised) {
       initialised = false;
-      protected_manager.clear();
+      protected_manager.Clear();
     }
 
     return;

@@ -202,7 +202,7 @@ AckInside()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->acknowledge_inside(*airspace, true);
+    airspace_warnings->AcknowledgeInside(*airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -219,7 +219,7 @@ AckWarning()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->acknowledge_warning(*airspace, true);
+    airspace_warnings->AcknowledgeWarning(*airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -236,7 +236,7 @@ AckDay()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->acknowledge_day(*airspace, true);
+    airspace_warnings->AcknowledgeDay(*airspace, true);
     UpdateList();
     AutoHide();
   }

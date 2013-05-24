@@ -178,7 +178,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (AirspaceFileChanged) {
     if (glide_computer != NULL)
-      glide_computer->GetAirspaceWarnings().clear();
+      glide_computer->GetAirspaceWarnings().Clear();
 
     if (glide_computer != NULL)
       glide_computer->ClearAirspaces();

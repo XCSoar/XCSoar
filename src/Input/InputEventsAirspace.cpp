@@ -81,7 +81,7 @@ InputEvents::eventClearAirspaceWarnings(gcc_unused const TCHAR *misc)
 {
   ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
   if (airspace_warnings != NULL)
-    airspace_warnings->clear_warnings();
+    airspace_warnings->AcknowledgeAll();
 }
 
 // NearestAirspaceDetails
@@ -100,7 +100,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
     CommonInterface::GetComputerSettings();
 
   ProtectedAirspaceWarningManager *airspace_warnings = GetAirspaceWarnings();
-  if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {
+  if (airspace_warnings != nullptr && !airspace_warnings->IsEmpty()) {
     // Prevent the dialog from closing itself without active warning
     // This is relevant if there are only acknowledged airspaces in the list
     // AutoClose will be reset when the dialog is closed again by hand
