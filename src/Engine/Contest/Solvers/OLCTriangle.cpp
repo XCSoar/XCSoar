@@ -212,13 +212,11 @@ OLCTriangle::SolveTriangle(bool exhaustive)
 
     ClosingPairs close_look;
 
-    for (auto relaxed_pair = relaxed_pairs.closing_pairs.begin();
-         relaxed_pair != relaxed_pairs.closing_pairs.end();
-         ++relaxed_pair) {
+    for (const auto relaxed_pair : relaxed_pairs.closing_pairs) {
 
       std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-      triangle = RunBranchAndBound(relaxed_pair->first, relaxed_pair->second, best_d, exhaustive);
+      triangle = RunBranchAndBound(relaxed_pair.first, relaxed_pair.second, best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -237,32 +235,30 @@ OLCTriangle::SolveTriangle(bool exhaustive)
         } else {
           // otherwise we should solve the triangle again for every unrelaxed pair
           // contained inside the current relaxed pair. *damn!*
-          for (auto closing_pair = closing_pairs.closing_pairs.begin();
-               closing_pair != closing_pairs.closing_pairs.end();
-                ++closing_pair) {
-            if (closing_pair->first >= relaxed_pair->first && closing_pair->second <= relaxed_pair->second)
-              close_look.insert(*closing_pair);
+          for (const auto closing_pair : closing_pairs.closing_pairs) {
+            if (closing_pair.first >= relaxed_pair.first &&
+                closing_pair.second <= relaxed_pair.second)
+              close_look.insert(closing_pair);
          }
        }
       }
     }
 
-    for (auto close_look_pair = close_look.closing_pairs.begin();
-         close_look_pair != close_look.closing_pairs.end();
-         ++close_look_pair) {
-
+    for (const auto &close_look_pair : close_look.closing_pairs) {
       std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-      triangle = RunBranchAndBound(close_look_pair->first, close_look_pair->second, best_d, exhaustive);
+      triangle = RunBranchAndBound(close_look_pair.first,
+                                   close_look_pair.second,
+                                   best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
 
-        start = close_look_pair->first;
+        start = close_look_pair.first;
         tp1 = std::get<0>(triangle);
         tp2 = std::get<1>(triangle);
         tp3 = std::get<2>(triangle);
-        finish = close_look_pair->second;
+        finish = close_look_pair.second;
 
         best_d = std::get<3>(triangle);
       }
@@ -494,21 +490,21 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
     unsigned last = 0, first = i;
 
-    for (unsigned n = 0; n < how_close.size(); ++n) {
-      const SearchPoint dest = GetPoint(how_close[n].index);
+    for (const TracePointNode &node : how_close) {
+      const SearchPoint dest = GetPoint(node.index);
 
-      if (how_close[n].index + 2 < i &&
-          GetPoint(how_close[n].index).GetIntegerAltitude() <= max_altitude &&
+      if (node.index + 2 < i &&
+          GetPoint(node.index).GetIntegerAltitude() <= max_altitude &&
           start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
         // point i is last point
-        first = std::min(how_close[n].index, first);
+        first = std::min(node.index, first);
         last = i;
-      } else if (how_close[n].index > i + 2 &&
-                 GetPoint(how_close[n].index).GetIntegerAltitude() >= min_altitude &&
+      } else if (node.index > i + 2 &&
+                 GetPoint(node.index).GetIntegerAltitude() >= min_altitude &&
                  start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
         // point i is first point
         first = i;
-        last = std::max(how_close[n].index, last);
+        last = std::max(node.index, last);
       }
     }
 
