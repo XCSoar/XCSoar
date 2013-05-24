@@ -494,7 +494,7 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     const unsigned max_range =
       trace_master.ProjectRange(GetPoint(i).GetLocation(), max_distance);
 
-    const SearchPoint start = GetPoint(i);
+    const GeoPoint start = GetPoint(i).GetLocation();
     const int min_altitude = GetMinimumFinishAltitude(GetPoint(i));
     const int max_altitude = GetMaximumStartAltitude(GetPoint(i));
 
@@ -508,13 +508,13 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
 
       if (node.index + 2 < i &&
           GetPoint(node.index).GetIntegerAltitude() <= max_altitude &&
-          start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
+          start.Distance(dest.GetLocation()) <= max_distance) {
         // point i is last point
         first = std::min(node.index, first);
         last = i;
       } else if (node.index > i + 2 &&
                  GetPoint(node.index).GetIntegerAltitude() >= min_altitude &&
-                 start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
+                 start.Distance(dest.GetLocation()) <= max_distance) {
         // point i is first point
         first = i;
         last = std::max(node.index, last);
