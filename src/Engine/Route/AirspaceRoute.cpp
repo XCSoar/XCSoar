@@ -194,7 +194,7 @@ AirspaceRoute::GetBackupPairs(const SearchPointVector &spv,
 unsigned
 AirspaceRoute::AirspaceSize() const
 {
-  return m_airspaces.size();
+  return m_airspaces.GetSize();
 }
 
 AirspaceRoute::AirspaceRoute(const Airspaces& master):
@@ -214,7 +214,7 @@ AirspaceRoute::Reset()
 {
   RoutePlanner::Reset();
   m_airspaces.ClearClearances();
-  m_airspaces.clear();
+  m_airspaces.Clear();
 }
 
 void
@@ -231,7 +231,7 @@ AirspaceRoute::Synchronise(const Airspaces &master,
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
                                      Half(origin.Distance(destination)),
                                      condition)) {
-    if (m_airspaces.size())
+    if (!m_airspaces.IsEmpty())
       dirty = true;
   }
 }
@@ -307,7 +307,7 @@ AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint &inp) const
 void
 AirspaceRoute::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
 {
-  if (m_airspaces.empty()) {
+  if (m_airspaces.IsEmpty()) {
     task_projection.Reset(origin);
     task_projection.Update();
   } else {

@@ -115,7 +115,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   bool changed = false;
 
   // update warning states
-  if (airspaces.empty()) {
+  if (airspaces.IsEmpty()) {
     // no airspaces, no warnings possible
     assert(warnings.empty());
     return false;

@@ -19,8 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef AIRSPACES_HPP
-#define AIRSPACES_HPP
+
+#ifndef XCSOAR_AIRSPACES_HPP
+#define XCSOAR_AIRSPACES_HPP
 
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
@@ -37,11 +38,11 @@ class AirspaceVisitor;
 class AirspaceIntersectionVisitor;
 
 /**
- * Container for airspaces using kd-tree representation internally for fast 
- * geospatial lookups.
+ * Container for airspaces using kd-tree representation internally for
+ * fast geospatial lookups.
  *
  * Complexity analysis (with kdtree):
- *   
+ *
  *    Find within range (k points found):
  *     O(n^(3/4) + k)
  *
@@ -61,10 +62,7 @@ class AirspaceIntersectionVisitor;
  *     O(n)
  */
 
-class Airspaces:
-  public AirspacesInterface,
-  private NonCopyable
-{
+class Airspaces : public AirspacesInterface, private NonCopyable {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
 
@@ -73,7 +71,7 @@ class Airspaces:
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
 
-  std::deque< AbstractAirspace* > tmp_as;
+  std::deque<AbstractAirspace *> tmp_as;
 
 public:
   /** 
@@ -96,18 +94,20 @@ public:
    * Destructor.
    * This also destroys Airspace objects contained in the tree or temporary buffer
    */
-  ~Airspaces();
+  ~Airspaces() {
+    Clear();
+  }
 
-  /** 
-   * Add airspace to the internal airspace tree.  
+  /**
+   * Add airspace to the internal airspace tree.
    * The airspace is not copied; ownership is transferred to this class if
    * m_owner is true
-   * 
+   *
    * @param asp New airspace to be added.
    */
   void Add(AbstractAirspace *asp);
 
-  /** 
+  /**
    * Re-organise the internal airspace tree after inserting/deleting.
    * Should be called after inserting/deleting airspaces prior to performing
    * any searches, but can be done once after a batch insert/delete.
@@ -117,7 +117,7 @@ public:
   /**
    * Clear the airspace store, deleting airspace objects if m_owner is true
    */
-  void clear();
+  void Clear();
 
   /**
    * Size of airspace (in tree, not in temporary store) ---
@@ -126,7 +126,7 @@ public:
    * @return Number of airspaces in tree
    */
   gcc_pure
-  unsigned size() const;
+  unsigned GetSize() const;
 
   /**
    * Whether airspace store is empty
@@ -134,24 +134,24 @@ public:
    * @return True if no airspace stored
    */
   gcc_pure
-  bool empty() const;
+  bool IsEmpty() const;
 
-  /** 
-   * Set terrain altitude for all AGL-referenced airspace altitudes 
-   * 
+  /**
+   * Set terrain altitude for all AGL-referenced airspace altitudes
+   *
    * @param terrain Terrain model for lookup
    */
   void SetGroundLevels(const RasterTerrain &terrain);
 
-  /** 
+  /**
    * Set QNH pressure for all FL-referenced airspace altitudes.
    * Doesn't do anything if QNH is unchanged
-   * 
+   *
    * @param press Atmospheric pressure model and QNH
    */
   void SetFlightLevels(const AtmosphericPressure &press);
 
-  /** 
+  /**
    * Set activity based on day mask
    *
    * @param days Mask of activity (a particular or range of days matching this day)
@@ -161,7 +161,7 @@ public:
   /**
    * Call visitor class on airspaces within range of location.
    * Note that the visitor is not instantiated separately for each match
-   * 
+   *
    * @param loc location of origin of search
    * @param range distance in meters of search radius
    * @param visitor visitor class to call on airspaces within range
@@ -171,10 +171,10 @@ public:
                         const AirspacePredicate &predicate =
                               AirspacePredicate::always_true) const;
 
-  /** 
+  /**
    * Call visitor class on airspaces intersected by vector.
    * Note that the visitor is not instantiated separately for each match
-   * 
+   *
    * @param loc location of origin of search
    * @param end end of line along with to search for intersections
    * @param visitor visitor class to call on airspaces intersected by line
@@ -199,13 +199,13 @@ public:
                               const AirspacePredicate &condition =
                                     AirspacePredicate::always_true) const;
 
-  /** 
+  /**
    * Search for airspaces within range of the aircraft.
-   * 
+   *
    * @param location location of aircraft, from which to search
    * @param range distance in meters of search radius
    * @param condition condition to be applied to matches
-   * 
+   *
    * @return vector of airspaces intersecting search radius
    */
   gcc_pure
@@ -213,12 +213,12 @@ public:
                                  const AirspacePredicate &condition =
                                        AirspacePredicate::always_true) const;
 
-  /** 
+  /**
    * Find airspaces the aircraft is inside (taking altitude into account)
-   * 
+   *
    * @param state state of aircraft for which to search
    * @param condition condition to be applied to matches
-   * 
+   *
    * @return airspaces enclosing the aircraft
    */
   gcc_pure

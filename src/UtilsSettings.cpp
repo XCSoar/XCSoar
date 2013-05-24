@@ -183,7 +183,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     if (glide_computer != NULL)
       glide_computer->ClearAirspaces();
 
-    airspace_database.clear();
+    airspace_database.Clear();
     ReadAirspace(airspace_database, terrain,
                  CommonInterface::GetComputerSettings().pressure,
                  operation);

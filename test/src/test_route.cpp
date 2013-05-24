@@ -98,12 +98,12 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // real one, see if items changed
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), range);
-      int size_1 = as_route.size();
+      int size_1 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), fixed(1));
-      int size_2 = as_route.size();
+      int size_2 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_2);
 
@@ -111,7 +111,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // go back
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_end), range);
-      int size_3 = as_route.size();
+      int size_3 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_3);
 
@@ -119,7 +119,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // and again
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), range);
-      int size_4 = as_route.size();
+      int size_4 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_4);
 

@@ -64,7 +64,7 @@ protected:
                        const AGeoPoint &destination) override;
 
   virtual bool IsTrivial() const override {
-    return m_airspaces.empty() && RoutePlanner::IsTrivial();
+    return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
 private:

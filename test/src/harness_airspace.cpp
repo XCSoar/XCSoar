@@ -57,7 +57,7 @@ bool test_airspace_extra(Airspaces &airspaces) {
 
   // try clearing now (we haven't called optimise())
 
-  airspaces.clear();
+  airspaces.Clear();
   return true;
 }
 

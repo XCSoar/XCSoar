@@ -637,7 +637,7 @@ Shutdown()
   delete logger;
 
   // Clear airspace database
-  airspace_database.clear();
+  airspace_database.Clear();
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();

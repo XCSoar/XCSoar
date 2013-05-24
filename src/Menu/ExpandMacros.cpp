@@ -390,7 +390,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     return false;
 
   if (_tcsstr(OutBuffer, _T("$(CheckAirspace)"))) {
-    if (airspace_database.empty())
+    if (airspace_database.IsEmpty())
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckAirspace)"), _T(""), Size);

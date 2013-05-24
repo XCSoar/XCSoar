@@ -50,12 +50,12 @@ public:
   }
 };
 
-void 
+void
 Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
                             AirspaceVisitor& visitor,
                             const AirspacePredicate &predicate) const
 {
-  if (empty())
+  if (IsEmpty())
     // nothing to do
     return;
 
@@ -95,7 +95,7 @@ void
 Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
                              AirspaceIntersectionVisitor& visitor) const
 {
-  if (empty())
+  if (IsEmpty())
     // nothing to do
     return;
 
@@ -127,7 +127,7 @@ const Airspace *
 Airspaces::FindNearest(const GeoPoint &location,
                        const AirspacePredicate &condition) const
 {
-  if (empty())
+  if (IsEmpty())
     return NULL;
 
   const Airspace bb_target(location, task_projection);
@@ -145,14 +145,14 @@ const Airspaces::AirspaceVector
 Airspaces::ScanRange(const GeoPoint &location, fixed range,
                      const AirspacePredicate &condition) const
 {
-  if (empty())
+  if (IsEmpty())
     // nothing to do
     return AirspaceVector();
 
   Airspace bb_target(location, task_projection);
   int projected_range = task_projection.ProjectRangeInteger(location, range);
-  
-  std::deque< Airspace > vectors;
+
+  std::deque<Airspace> vectors;
   airspace_tree.find_within_range(bb_target, -projected_range,
                                   std::back_inserter(vectors));
 
@@ -194,7 +194,7 @@ Airspaces::FindInside(const AircraftState &state,
 #ifdef INSTRUMENT_TASK
     count_intersections++;
 #endif
-    
+
     if (!condition(*v->GetAirspace()) || !(*v).IsInside(state))
       vectors.erase(v);
     else
@@ -204,7 +204,7 @@ Airspaces::FindInside(const AircraftState &state,
   return vectors;
 }
 
-void 
+void
 Airspaces::Optimise()
 {
   if (!owns_children || task_projection.Update()) {
@@ -229,7 +229,7 @@ Airspaces::Optimise()
   }
 }
 
-void 
+void
 Airspaces::Add(AbstractAirspace *airspace)
 {
   if (!airspace)
@@ -245,7 +245,7 @@ Airspaces::Add(AbstractAirspace *airspace)
   activity_mask.SetAll();
 
   if (owns_children) {
-    if (empty())
+    if (IsEmpty())
       task_projection.Reset(airspace->GetCenter());
 
     task_projection.Scan(airspace->GetCenter());
@@ -255,7 +255,7 @@ Airspaces::Add(AbstractAirspace *airspace)
 }
 
 void
-Airspaces::clear()
+Airspaces::Clear()
 {
   // delete temporaries in case they were added without an optimise() call
   while (!tmp_as.empty()) {
@@ -279,23 +279,18 @@ Airspaces::clear()
 }
 
 unsigned
-Airspaces::size() const
+Airspaces::GetSize() const
 {
   return airspace_tree.size();
 }
 
 bool
-Airspaces::empty() const
+Airspaces::IsEmpty() const
 {
   return airspace_tree.empty() && tmp_as.empty();
 }
 
-Airspaces::~Airspaces()
-{
-  clear();
-}
-
-void 
+void
 Airspaces::SetFlightLevels(const AtmosphericPressure &press)
 {
   if ((int)press.GetHectoPascal() != (int)qnh.GetHectoPascal()) {
@@ -397,7 +392,9 @@ void
 Airspaces::VisitInside(const GeoPoint &loc,
                         AirspaceVisitor& visitor) const
 {
-  if (empty()) return; // nothing to do
+  if (IsEmpty())
+    // nothing to do
+    return;
 
   Airspace bb_target(loc, task_projection);
   AirspaceVector vectors;
@@ -407,4 +404,3 @@ Airspaces::VisitInside(const GeoPoint &loc,
     if (v.IsInside(loc))
       visitor.Visit(v);
 }
-

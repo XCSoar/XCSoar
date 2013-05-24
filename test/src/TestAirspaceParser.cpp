@@ -87,7 +87,7 @@ TestOpenAir()
     { _T("Class-G-Test"), CLASSG },
   };
 
-  ok1(airspaces.size() == 23);
+  ok1(airspaces.GetSize() == 23);
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->GetAirspace();
@@ -194,7 +194,7 @@ TestTNP()
     { _T("Class-MATZ-Test"), MATZ },
   };
 
-  ok1(airspaces.size() == 24);
+  ok1(airspaces.GetSize() == 24);
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->GetAirspace();
