@@ -21,11 +21,7 @@
  */
 
 #include "RoutePlannerGlue.hpp"
-#include "Thread/Guard.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Geo/SpeedVector.hpp"
-#include "NMEA/Derived.hpp"
-#include <assert.h>
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
