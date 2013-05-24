@@ -20,18 +20,11 @@
 }
  */
 
-#include "AirspacePredicateHeightRange.hpp"
+#include "OutsideAirspacePredicate.hpp"
 #include "../AbstractAirspace.hpp"
 
 bool
-AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
+OutsideAirspacePredicate::operator()(const AbstractAirspace &airspace) const
 {
-  return RoughAltitude(t.GetTop().altitude) >= h_min &&
-    RoughAltitude(t.GetBase().altitude) <= h_max;
-}
-
-bool
-AirspacePredicateHeightRangeExcludeTwo::operator()(const AbstractAirspace& t) const
-{
-  return check_height(t) && outside1(t) && outside2(t);
+  return !airspace.Inside(location);
 }

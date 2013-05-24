@@ -20,18 +20,26 @@
 }
  */
 
-#include "AirspacePredicateHeightRange.hpp"
-#include "../AbstractAirspace.hpp"
+#ifndef XCSOAR_OUTSIDE_AIRSPACE_PREDICATE_HPP
+#define XCSOAR_OUTSIDE_AIRSPACE_PREDICATE_HPP
 
-bool
-AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
-{
-  return RoughAltitude(t.GetTop().altitude) >= h_min &&
-    RoughAltitude(t.GetBase().altitude) <= h_max;
-}
+#include "Geo/GeoPoint.hpp"
+#include "Compiler.h"
 
-bool
-AirspacePredicateHeightRangeExcludeTwo::operator()(const AbstractAirspace& t) const
-{
-  return check_height(t) && outside1(t) && outside2(t);
-}
+class AbstractAirspace;
+
+/**
+ * Matches all airspaces which do not include the given location.
+ */
+class OutsideAirspacePredicate {
+  const AGeoPoint location;
+
+public:
+  constexpr OutsideAirspacePredicate(const AGeoPoint &_location)
+    :location(_location) {}
+
+  gcc_pure
+  bool operator()(const AbstractAirspace &airspace) const;
+};
+
+#endif
