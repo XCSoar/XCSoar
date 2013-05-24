@@ -56,4 +56,21 @@ public:
   }
 };
 
+/**
+ * A class that combines two #AirspacePredicate instances with logical
+ * "and".
+ */
+class AndAirspacePredicate final : public AirspacePredicate {
+  const AirspacePredicate &a, &b;
+
+ public:
+  AndAirspacePredicate(const AirspacePredicate &_a,
+                       const AirspacePredicate &_b)
+    :a(_a), b(_b) {}
+
+  virtual bool operator()(const AbstractAirspace &t) const override {
+    return a(t) && b(t);
+  }
+};
+
 #endif
