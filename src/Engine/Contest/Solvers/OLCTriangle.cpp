@@ -470,6 +470,8 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     search_point_tree.insert(node);
   }
 
+  search_point_tree.optimize();
+
   bool new_pair = false;
 
   std::vector<TracePointNode> how_close;
