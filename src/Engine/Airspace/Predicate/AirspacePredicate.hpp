@@ -49,10 +49,9 @@ public:
 /**
  * Convenience predicate for conditions always true
  */
-class AirspacePredicateTrue: public AirspacePredicate
-{
+class AirspacePredicateTrue final : public AirspacePredicate {
 public:
-  bool operator()(const AbstractAirspace& t) const {
+  virtual bool operator()(const AbstractAirspace& t) const override {
     return true;
   }
 };
