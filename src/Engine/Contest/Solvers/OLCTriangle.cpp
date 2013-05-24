@@ -23,7 +23,7 @@
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
-#include "kdtree++/kdtree.hpp"
+#include "Util/QuadTree.hpp"
 
 /*
  @todo potential to use 3d convex hull to speed search
@@ -460,7 +460,19 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     return closing_pairs.insert(ClosingPair(0, n_points-1));
   }
 
-  KDTree::KDTree<2, TracePointNode> search_point_tree;
+  struct TracePointNodeAccessor {
+    gcc_pure
+    int GetX(const TracePointNode &node) const {
+      return node.point->GetFlatLocation().longitude;
+    }
+
+    gcc_pure
+    int GetY(const TracePointNode &node) const {
+      return node.point->GetFlatLocation().latitude;
+    }
+  };
+
+  QuadTree<TracePointNode, TracePointNodeAccessor> search_point_tree;
 
   for (unsigned i = old_size; i < n_points; ++i) {
     TracePointNode node;
@@ -470,11 +482,9 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     search_point_tree.insert(node);
   }
 
-  search_point_tree.optimize();
+  search_point_tree.Optimise();
 
   bool new_pair = false;
-
-  std::vector<TracePointNode> how_close;
 
   for (unsigned i = old_size; i < n_points; ++i) {
     TracePointNode point;
@@ -484,17 +494,16 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     const unsigned max_range =
       trace_master.ProjectRange(GetPoint(i).GetLocation(), max_distance);
 
-    how_close.clear();
-    search_point_tree.find_within_range(point, max_range,
-      std::back_insert_iterator<std::vector<TracePointNode>>(how_close));
-
     const SearchPoint start = GetPoint(i);
     const int min_altitude = GetMinimumFinishAltitude(GetPoint(i));
     const int max_altitude = GetMaximumStartAltitude(GetPoint(i));
 
     unsigned last = 0, first = i;
 
-    for (const TracePointNode &node : how_close) {
+    const auto visitor = [this, i, start,
+                          min_altitude, max_altitude,
+                          &first, &last]
+      (const TracePointNode &node) {
       const SearchPoint dest = GetPoint(node.index);
 
       if (node.index + 2 < i &&
@@ -510,7 +519,9 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
         first = i;
         last = std::max(node.index, last);
       }
-    }
+    };
+
+    search_point_tree.VisitWithinRange(point, max_range, visitor);
 
     if (last != 0 && closing_pairs.insert(ClosingPair(first, last)))
       new_pair = true;
