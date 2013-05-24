@@ -83,12 +83,8 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces():qnh(AtmosphericPressure::Zero()), owns_children(true) {}
-
-  /**
-   * Make a copy of the airspaces metadata
-   */
-  Airspaces(const Airspaces &master, bool owns_children);
+  Airspaces(bool _owns_children=true)
+    :qnh(AtmosphericPressure::Zero()), owns_children(_owns_children) {}
 
   /**
    * Destructor.

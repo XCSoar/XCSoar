@@ -312,14 +312,6 @@ Airspaces::SetActivity(const AirspaceActivity mask)
   }
 }
 
-Airspaces::Airspaces(const Airspaces& master, bool _owns_children):
-  qnh(master.qnh),
-  activity_mask(master.activity_mask),
-  owns_children(_owns_children),
-  task_projection(master.task_projection)
-{
-}
-
 void
 Airspaces::ClearClearances()
 {
@@ -334,6 +326,10 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
                                 const fixed range,
                                 const AirspacePredicate &condition)
 {
+  qnh = master.qnh;
+  activity_mask = master.activity_mask;
+  task_projection = master.task_projection;
+
   bool changed = false;
   const AirspaceVector contents_master = master.ScanRange(location, range, condition);
   AirspaceVector contents_self;

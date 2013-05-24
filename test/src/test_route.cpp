@@ -93,7 +93,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     state.altitude = loc_start.altitude;
 
     {
-      Airspaces as_route(airspaces, false);
+      Airspaces as_route(false);
       // dummy
 
       // real one, see if items changed
@@ -134,7 +134,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     GlideSettings settings;
     settings.SetDefaults();
-    AirspaceRoute route(airspaces);
+    AirspaceRoute route;
     route.UpdatePolar(settings, polar, polar, wind);
     route.SetTerrain(&map);
     RoutePlannerConfig config;

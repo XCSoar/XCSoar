@@ -47,7 +47,7 @@ class AirspaceRoute : public RoutePlanner {
 public:
   friend class PrintHelper;
 
-  AirspaceRoute(const Airspaces &master);
+  AirspaceRoute();
   virtual ~AirspaceRoute();
 
   void Synchronise(const Airspaces &master,

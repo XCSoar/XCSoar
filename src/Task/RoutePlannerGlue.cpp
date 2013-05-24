@@ -27,12 +27,6 @@
 #include "NMEA/Derived.hpp"
 #include <assert.h>
 
-RoutePlannerGlue::RoutePlannerGlue(const Airspaces &master):
-  terrain(NULL),
-  planner(master)
-{
-}
-
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
 {

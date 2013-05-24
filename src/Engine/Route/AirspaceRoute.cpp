@@ -197,8 +197,7 @@ AirspaceRoute::AirspaceSize() const
   return m_airspaces.GetSize();
 }
 
-AirspaceRoute::AirspaceRoute(const Airspaces& master):
-  m_airspaces(master, false)
+AirspaceRoute::AirspaceRoute():m_airspaces(false)
 {
   Reset();
 }

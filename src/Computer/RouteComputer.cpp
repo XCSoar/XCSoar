@@ -34,8 +34,7 @@ Copyright_License {
 #include <algorithm>
 
 RouteComputer::RouteComputer(const Airspaces &airspace_database)
-  :route_planner(airspace_database),
-   protected_route_planner(route_planner, airspace_database),
+  :protected_route_planner(route_planner, airspace_database),
    route_clock(fixed(5)),
    reach_clock(fixed(5)),
    terrain(NULL)

@@ -33,7 +33,7 @@ class RoutePlannerGlue {
   AirspaceRoute planner;
 
 public:
-  RoutePlannerGlue(const Airspaces &master);
+  RoutePlannerGlue():terrain(nullptr) {}
 
   void SetTerrain(const RasterTerrain *terrain);
 
