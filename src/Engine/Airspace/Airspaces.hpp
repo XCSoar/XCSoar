@@ -66,7 +66,7 @@ class Airspaces : public AirspacesInterface, private NonCopyable {
   AtmosphericPressure qnh;
   AirspaceActivity activity_mask;
 
-  bool owns_children;
+  const bool owns_children;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
