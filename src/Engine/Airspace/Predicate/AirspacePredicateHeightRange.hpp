@@ -32,7 +32,7 @@ class AbstractAirspace;
 /**
  * Convenience predicate for height within a specified range
  */
-class AirspacePredicateHeightRange: public AirspacePredicate
+class AirspacePredicateHeightRange
 {
   const RoughAltitude h_min;
   const RoughAltitude h_max;
@@ -46,24 +46,22 @@ public:
    *
    * @return Initialised object
    */
+  constexpr
   AirspacePredicateHeightRange(const RoughAltitude _h_min,
                                const RoughAltitude _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
-  bool operator()(const AbstractAirspace &t) const {
-    return check_height(t);
-  }
-
-protected:
-  bool check_height(const AbstractAirspace &t) const;
+  gcc_pure
+  bool operator()(const AbstractAirspace &t) const;
 };
 
 /**
  * Convenience predicate for height within a specified range, excluding
  * airspaces enclosing two points
  */
-class AirspacePredicateHeightRangeExcludeTwo: public AirspacePredicateHeightRange
+class AirspacePredicateHeightRangeExcludeTwo : public AirspacePredicate
 {
+  const AirspacePredicateHeightRange height_range;
   const OutsideAirspacePredicate outside1, outside2;
 
 public:
@@ -79,7 +77,7 @@ public:
                                          const RoughAltitude _h_max,
                                          const AGeoPoint& _p1,
                                          const AGeoPoint& _p2)
-    :AirspacePredicateHeightRange(_h_min, _h_max),
+    :height_range(_h_min, _h_max),
      outside1(_p1), outside2(_p2) {}
 
   bool operator()(const AbstractAirspace &t) const;
