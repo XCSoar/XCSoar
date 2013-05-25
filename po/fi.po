@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 11:24+0200\n"
-"PO-Revision-Date: 2013-05-22 21:11+0000\n"
+"PO-Revision-Date: 2013-05-22 21:41+0000\n"
 "Last-Translator: Juha Huvilinna <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-22 21:13+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-05-25 17:20+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2810,7 +2810,7 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxSettings.cpp:81
 #, no-c-format
 msgid "Cruise"
-msgstr ""
+msgstr "Liuku"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:82
 #, no-c-format
@@ -3193,7 +3193,7 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:486
 msgid "FLARM Traffic"
-msgstr ""
+msgstr "FLARM-liikenne"
 
 #: src/Renderer/MapItemListRenderer.cpp:579
 #: src/Dialogs/Traffic/TrafficList.cpp:670
@@ -4161,11 +4161,11 @@ msgstr ""
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
-msgstr ""
+msgstr "Yläraja"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
-msgstr ""
+msgstr "Alaraja"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:110
 msgid "Airspace Details"
@@ -4357,7 +4357,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:325
 msgid "Max. temp."
-msgstr ""
+msgstr "Max. lämpötila"
 
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:326
 msgid ""
@@ -6157,7 +6157,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
 msgid "Distinct page zoom"
-msgstr ""
+msgstr "Sivujen erilliszoom"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
@@ -6655,7 +6655,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid "FLARM traffic"
-msgstr ""
+msgstr "FLARM-liikenne"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:151
 msgid "This enables the display of FLARM traffic on the map window."
@@ -7945,7 +7945,7 @@ msgstr ""
 
 #: src/Renderer/NOAAListRenderer.cpp:70
 msgid "No METAR available"
-msgstr ""
+msgstr "METAR ei saatavilla"
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
@@ -7975,7 +7975,7 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:277
 msgid "No METAR available!"
-msgstr ""
+msgstr "METAR ei saatavilla!"
 
 #: src/Weather/NOAAFormatter.cpp:291
 msgid "No TAF available!"
@@ -8697,7 +8697,7 @@ msgstr "Zoom"
 
 #: Data/Input/default.xci:853
 msgid "Traffic List"
-msgstr ""
+msgstr "Liikennelistaus"
 
 #: Data/Input/default.xci:731
 msgid "Vario ASI zeroed"
@@ -8767,6 +8767,8 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Ilmoituksen\n"
+"toisto"
 
 #: Data/Input/default.xci:134 Data/Input/default.xci:450
 #: Data/Input/default.xci:957
