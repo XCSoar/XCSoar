@@ -36,7 +36,7 @@ Wenn keine deklarierte Aufgabe geladen ist, dann wird nach dem Start unverzügli
 Egal, ob eine Aufgabe deklariert wurde, oder nicht, es wird grundsätzlich ein Startpunkt erfaßt, welcher für spätere Benutzung während des Fluges in der Wegpunktliste erscheint und ganz normal  verwendet werden kann. 
 Dieser Punkt ist auf der Karte als ''take-off' gekennzeichnet' \todonum{wird der auch gespeichert? wo ?}
 
-\section{Aufgaben erstellen und Bearbeiten}\index{Aufgabe!Erstellen}\index{Aufgabe!Bearbeiten}
+\section{Aufgaben erstellen und bearbeiten}\index{Aufgabe!Erstellen}\index{Aufgabe!Bearbeiten}
 
 Aufgaben können auf unterschiedliche Weise erstellt und editiert  werden. Manche Methoden eigentlich mehr für die Bearbeitung und Erstellung vor dem Flug,  andere erlauben es eine Aufgabe während des Fluges zu ergänzen bzw. zu verändern.
 
@@ -201,7 +201,7 @@ Durch Drücken auf den Button \button{Verwalten} wird die Verwaltung der Aufgabe
 \subsection*{Regeln}\index{Regeln}
 Die Werte, die bei Anklicken des Buttons \button{Regeln} erscheinen, hängen vom Typ der Aufgabe ab, die vorher erstellt wurde.
 
-Durch Anklicken der jeweiligen weiß hinterlegten Werte wird ein Untermenü geöffnet, auf dem diese Werte entsprechend geändert werden können. Die di^^versen Aufgabentypen werden in einem Abschnitt weiter unten besprochen.
+Durch Anklicken der jeweiligen weiß hinterlegten Werte wird ein Untermenü geöffnet, auf dem diese Werte entsprechend geändert werden können. Die diversen Aufgabentypen werden in einem Abschnitt weiter unten besprochen.
 
 Ein erneutes Drücken des Buttons  \button{Regeln} öffnet eine Kartenansicht der aktuellen Aufgabe. Erneutes Anklicken des Buttons führt wieder zu den einzelnen werden.
 
@@ -281,10 +281,42 @@ Dies Verhalten, das insbesondere bei AAT- Aufgaben mit nicht festgelegten und se
 
 Für jede der Aktionen  werden Statusmeldungen ausgegeben, z.B.: "Im Sektor", falls der An - oder Abflug in bzw. aus dem Sektor gültig ist und es notwendig ist, den nächsten Wegpunkt manuell scharfzuschalten.
 
+
+
+\subsection*{Startfenster / Startzeit}\label{sec:start-gate}\index{Aufgabe!Startfenster}\index{Aufgabe!Startzeit}
+Für Flüge auf Wettbewerben besteht die Möglichkeit, sich Starzeit und Startfenster von \xc anzeigen zu lassen. 
+\menulabel{\bmenut{Nav}{1/2}\blink\bmenus{Aufgabe}}
+Unter {\button{Regeln}} können die Zeiten können als Countdown angezeigt werden lassen und in den folgenden InfoBoxen dargestellt werden:
+
+''Abflug - geöffnet/geschlossen Countdown'': 
+Zeit als Countdown die  Dauer bis zur Eröffnung des Abflugfensters an, anschließend die Dauer des Abflugfensters bis zum Schließen desselben. 
+
+
+''Countdown mit Erreichen'':
+Zeigt die verbleibende Zeitdifferenz an, bis der Abflug geöffnet ist. 
+Dies unter Berechnung der Zeitdauer, zur Abfluglinie zu gelangen. 
+
+\sketch{figures/rules-start-gate.png}
+
+Wenn die farbige Darstellung der Infoboxen gewählt wurde, erfolgt die Darstellung der Zeiten in verschiedenen 
+Farben:
+
+\begin{itemize}
+ \item[] \raisebox{-1em}{\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/rules-start-gate-waiting.png}}  Zeit bis Freigabe Start / Startenster
+ \item[] \raisebox{-1em}{\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/rules-start-gate-open.png}}  Start frei / Startfenster offen 
+ \item[] \raisebox{-1em}{\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/rules-start-gate-closed.png}}  Start geschlossen / Startfenster geschlossen
+ \end{itemize}
+
+ Die Countdowns sind \textbf{derzeit nur in UTC einzugeben}, es kann zu erheblicher 
+ \warning 
+ Verwirrungen führen, wenn man hier auf ''Sofort'' drückt und anschließend mit der Lokalzeit vergleicht !!! Siehe daher zum Zeitversatz unbedingt auch Kap.~\ref{sec:time-justage}
+
+
 \subsection*{Startvorgang einer Aufgabe}\index{Start eine Aufgabe}\index{Aufgabe!Start}
 
-Sowie eine gültige Aufgabe geladen wurde und das Segelflugzeug sich im Sektor hinter der Startlinie (in Richtung 1. Wendepunkt) befindet, erscheint die Statusmeldung \cmenus{"Im Sektor!  Aktivieren wenn bereit"}.
- Hieraufhin kann mit \smenut{Abflug}{Bereit} der Abflug "scharfgemacht" werden. Bei anschließendem gültigem Überflug über Startlinie erscheint dann die Statusmeldung   \cmenud{Aufgabenstart!}{Uhrzeit}{Geschwindigkeit}  und einige Meldungen zur Uhrzeit, Geschwindigkeit etc.
+Sowie eine gültige Aufgabe geladen wurde und das Segelflugzeug sich im Sektor hinter der Startlinie (in Richtung 1. Wendepunkt) befindet, erscheint die Statusmeldung \button{"Im Sektor!  Aktivieren wenn bereit"}.
+
+Hieraufhin kann mit \smenut{Abflug}{Bereit} der Abflug "scharfgemacht" werden. Bei anschließendem gültigem Überflug über Startlinie erscheint dann die Statusmeldung   \smenut{Aufgabenstart!}{Uhrzeit ...} und einige Meldungen zur  Geschwindigkeit etc.
 
 Muß der Abflug verschoben werden (Warten auf Aufgabenstart bei Wettbewerben/"Pokern"), kann mit \smenut{Abflug}{verschieben} und \smenus{Abflugpunkt} der bis dahin gültige Start wieder rückgängig gemacht werden. Es erscheint nun wieder "Im Sektor".
 Wird wieder über die Startlinie geflogen erscheint wieder die o.g. Meldung "Aufgabenstart"  Dies Spiel kann solange durchgeführt werden, bis ein passender Startpunkt bzw.\ -zeitpunkt  erreicht ist. Von da an kann immer zum jeweils nächsten Punkt weitergeschaltet werden, aber auch (s.o.) zu jedem beliebigen Punkt der Aufgaben  mit diesen Tasten durchgescrollt werden.
@@ -320,7 +352,7 @@ Beispiele:
 \item[\p{Aufgabenende}]  erscheint, wenn das Flugzeug die Ziellinie überflogen hat oder in den Zielzylinder  eingefliogen ist. Dies geschieht sowohl im manuellen als auch im Automatik-modus.odes.
 \end{itemize}
 
-\section{Aufgaben Regeln}\label{sec:task-rules}\index{Aufgabe!Regeln}\index{Wendepunkttypen}\index{Aufgabe!Wendepunkttypen}
+\section{Aufgaben Regeln}\label{sec:task-rules}\index{Aufgabe!Regeln}\index{Wendepunkt!Typen}\index{Aufgabe!Wendepunkttypen}
 Wenn Aufgaben erstellt und bearbeitet werden, können eine ganze Anzahl  von Regeln und Ausnahmen  eingestellt \menulabel{\bmenut{Konfig}{2/3}\blink\bmenus{System}}werden. Dies beinhaltet sowohl die Standard-FAI-Regeln sowie benutzerangepaßte Regeln wie z.B.\ bei AAT-Aufgaben notwendig.
 
 Start- und Ziellinien werden zentriert, bezogen auf den\menulabel{\quad\button{Aufgabeneinstellungen}\blink} Start- bzw.\  Wegpunkt, rechtwinklig zum Kurs in Richtung des nächsten Wegpunktes dargestellt.\\
@@ -569,9 +601,6 @@ In diesem Dialog können OLC - optimierte settings abgespeichert werden, alle In
 Während \textsf{XCSoar} läuft, wird kontinuierlich im Hintergrund nach den OLC Regeln optimiert, die Ergebnisse können  jederzeit  aufgerufen werden.
 Auf der Analysis Seite wird eine graphische Übersicht der optimierten Ergebnisse Schnitt, Strecke und Punkte dargestellt.  Es besteht die Möglichkeit, die OLC-Werte (Strecke oder Punkte) auch in einer InfoBox während es Fluges mitlaufen zu lassen
 
-%\begin{center}
-%\includegraphics[angle=0,width=0.75\linewidth,keepaspectratio='true']{figures/shot-olc.png}
-%\end{center}
 \sketch{figures/shot-olc.png}
 Es ist egal, ob AAT oder Nicht AAT Aufgaben geflogen werden, die interne OLC-Optimierung findet hiervon unabhängig gemäß der vorher gewählten Regeln statt.  Auf In der OLC Analyse-Seite wird der Flugweg als grün gestrichelter Linie dargestellt, der optimale Weg ist rot gestrichelt.
 
@@ -586,9 +615,6 @@ Die Punktzahl und die kalkulierte, optimale Entfernung sind Näherungswerte.Nach
 Wenn sich die Thermikbedingungen derart verschlechtern, daß die Aufgabe nicht mehr fortgesetzt werden kann,
 \menulabel{\bmenut{Nav}{2/2}\blink\bmenut{Aufgabe}{Abbruch}}dann es ist mittels des Aufgabenabbruchs möglich, \textsf{XCSoar} auf eine Art 'Notfall-Navigation' umzustellen.
 Hierbei werden alle navigatorischen Berechnungen der aktuellen Aufgabe abgebrochen und die Priorität auf sicheres Erreichen eines nahe gelegenen Flugfeldes gelegt.
-%\begin{quote}
-%\button{Nav}\blink\button{Nav}\blink\bmenut{Aufgabe}{abbruch}
-%\end{quote}
 
 Wenn dies gewählt wurde,  ist jede Aufgabe, was immer auch vorher programmiert, abgebrochen.
 Die Berechnung der Landefelder erfolgt unter Berücksichtigung des eingestellten Sicherheits MC-Wert.
@@ -599,13 +625,6 @@ Die Anzeige wechselt in der Art, als daß ausschließlich mit \menulabel{\bmenut
 Landefelder angezeigt werden.
 
 Das Verhalten, welche Landefelder in welcher Priorität angezeigt werden, kann \menulabel{\hspace{2.5em}\button{Endanflugrechner}\blink} unter \button{Alternativen Modus} voreingestellt werden.
-%\begin{quote}
-%\button{Konf.}\blink\button{Konf.}\blink\bmenut{System}{Einstellungen}
-%\end{quote}
-
-%\begin{quote}
-%\button{Sicherheitsfaktoren}\blink\button{Endanflug}\blink\button{Alternativen Modus}
-%\end{quote}
 
 Folgende Optionen sind dabei möglich:
 \begin{description}
@@ -640,9 +659,6 @@ keine erreichbaren Wegpunkte gibt.
 Der aktive  Wegpunkt und auch die Liste der nahen landbaren Punkte innerhalb der Aufgabe werden im Aufgabenabbruch-Modus dynamisch aktualisiert, so daß der Pilot ständig eine aktuelle Übersicht von Landeoptionen hat.  Jede dieser Optionen kann  mit dem 'FliegHin' zum aktiven Wegpunkt deklariert und benutzt werden.
 
 Die Aufgabe kann jederzeit wieder aufgenommen werden (''Aufgabe fortstetzen''), wenn sich z.B.\ das Wetter \menulabel{\bmenut{Nav}{2/2}\blink\bmenut{Aufgabe}{Fortsetzen}}wieder erholt hat.
-%\begin{quote}
-%\button{Nav}\blink\button{Nav}\blink\bmenut{Aufgabe}{Fortsetzen}
-%\end{quote}
 
 Alle Daten wurden intern zwischengespeichert und die Navigation geht nun weiter, als "wäre nichts gewesen".
 
@@ -679,12 +695,6 @@ Intern werden die aufgezeichneten Daten für 60sec. gepuffert, bevor die Aufzeic
 \section{Logger Wiedergabe}\index{Logger!IGC-Wiedergabe}
 Flüge die im IGC Format von\textsf{XCSoar} aufgenommen wurden,  können  \menulabel{\bmenut{konfig}{2/3}\blink\bmenus{Wiedergabe}} auch wieder abgespielt werden. Das Abspielen von gespeicherten Flügen erfolgt über:
 
-%\begin{quote}
-%\button{Konfig.}\blink\button{Konfig.}\blink\button{Wiedergabe}
-%\end{quote}
-%\begin{center}
-%\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/loggerreplay.png}
-%\end{center}
 Während der Wiedergabe erscheint ein "REPLAY'' an der linken unteren Ecke des Displays.
 \index{Wiedergabe aufgezeichneter Flüge}
 Um einen aufgezeichneten Flug zu starten, zuerst das File laden und anschließend auf \button{Start} drücken. Anschließend \button{Schließen}. \sketch{figures/loggerreplay.png}Die Wiedergabe kann auch beschleunigt dargestellt werden, hierzu den entsprechend Faktor  (0x, 1x, 2x \dots 10x).
@@ -705,9 +715,6 @@ Die Wiedergabe der aufgezeichneten Flüge funktioniert am besten mit relativ hoh
 
 \section{Analyse -Dialog}\label{sec:analysis-dialog-climb}
 Die Analyse-Seite ist recht hilfreich um den bisherigen oder komplett \menulabel{\bmenut{Info}{1/3}\blink\bmenus{Analyse}}geflogenen Flug komplett zu "durchleuchten".  Aufgerufen wird der Dialog mit
-%\begin{quote}
-%\button{Info}\blink\button{Analyse}
-%\end{quote}
 
 
 Auf diversen Seiten kann nach vielen statisischen etlichen Details  des Fluges gesucht werden:
@@ -720,11 +727,7 @@ Die Statistiken hier können genutzt werden, um die Arbeitshöhe zu ermittlen un
 \sketch{figures/analysis-barograph.png}
 \button{Einstellungen}  öffnet den Flug-Einstellungen - Dialog.
   (z.B. zum einstellen des QNH, Ballast, mücken oder der max.\ Temperatur)
-
 \vspace{7em}
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-barograph.png}
-%\end{center}
 
 \item[\p{Steigen}]
   Zeigt den Verlauf der bisher erfolgenen Bärte.
@@ -733,9 +736,6 @@ Die Statistiken hier können genutzt werden, um die Arbeitshöhe zu ermittlen un
   Der aktuell eingestellte MC-Wert  ist zum Abgleich als dicke, rot-getrichelte Linie eingezeichnet, der Steigwert ist als blaue Linie im Diagramm enthalten.
 
 \vspace{5em}
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-climb.png}
-%\end{center}
 \newpage
 \item[\p{Aufgabe}]
 Diese Seite zeigt einen schematischen Überblick über die gesamte Aufgabe (ohne Karte im Hintergrund).
@@ -752,12 +752,8 @@ Der geflogene Kurs ist grün dargestellt.
 Eine Übersicht über die im Task über- unter, oder durchflogenen Lufträume wird als Grafik über der Zeitachse dargestellt.Lufträume sind als Markierungen mit seitlicher und ober Höhe  dargestellt.
 
 Weitere Seiten, die hier aufgeschlagen werden können,  sind z.B. Konvektionshöhe mit\sketch{figures/analysis-airspace.png} einer Darstellung der erflogenen Basishöhe
-
 \vspace{7em}
 
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-task.png}
-%\end{center}
 \end{description}
 
 \section{Sonneneinstrahlung und -dauer}
@@ -770,7 +766,6 @@ Bei PDA-Systemen wird die Sommer- und Winterzeit automatisch nachgeführt, entsp
 
 Wenn die erwartete Ankunftszeit am Zielpunkt nach Sonnenuntergang liegt, erscheint eine Statusmeldung mit dem Hinweis darauf (z.B. "Erwarte Ankunft nach Sonnenuntergang").
 
-%\section{\textcolor[rgb]{1.00,0.00,0.00}{Heimatflugplatz}}
-\section{Heimatflugplatz}\index{MachMichheimat}\index{Heimatflugplatz}
+\section{Heimatflugplatz}\index{MachMichHeimat}\index{Heimatflugplatz}
 Wenn der Heimatflugplatz über den Wegpunkt-Info-Dialog (auf der zweiten Seite) eingegeben wird, benutzt \textsf{XCSoar} diesen Wegpunkt grundsätzlich beim Starten, sofern keine Aufgabe aktuell geladen ist, keine Standard Aufgabe erstellt und gespeichert wurde oder aber die Aufgabe abgebrochen wird. 
 \clearpage
