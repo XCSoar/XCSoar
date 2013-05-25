@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-22 11:24+0200\n"
-"PO-Revision-Date: 2013-05-20 20:49+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2013-05-24 14:34+0000\n"
+"Last-Translator: Fabian Berstecher <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-22 09:28+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-05-25 17:20+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -7234,9 +7234,9 @@ msgid "Reference used for finish min height rule."
 msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable OLC Calculations"
-msgstr "Kreisen ausschalten"
+msgstr "OLC Berechnungen abschalten"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:131
 #, no-c-format
