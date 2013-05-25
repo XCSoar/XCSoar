@@ -41,8 +41,8 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              ProtectedTaskManager &task,
                              GlideComputerTaskEvents& events):
   air_data_computer(_way_points),
-  task_computer(task, _airspace_database),
   warning_computer(_airspace_database),
+  task_computer(task, _airspace_database, &warning_computer.GetManager()),
   waypoints(_way_points),
   team_code_ref_id(-1)
 {

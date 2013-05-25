@@ -48,11 +48,11 @@ class RasterTerrain;
 class GlideComputer : public GlideComputerBlackboard
 {
   GlideComputerAirData air_data_computer;
+  WarningComputer warning_computer;
   TaskComputer task_computer;
   StatsComputer stats_computer;
   LogComputer log_computer;
   CuComputer cu_computer;
-  WarningComputer warning_computer;
 
   const Waypoints &waypoints;
 

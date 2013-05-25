@@ -47,6 +47,7 @@ public:
   }
 
   void Synchronise(const Airspaces &master,
+                   const ProtectedAirspaceWarningManager *warnings,
                    const AGeoPoint &origin,
                    const AGeoPoint &destination);
 

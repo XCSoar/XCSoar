@@ -32,6 +32,7 @@ Copyright_License {
 
 struct NMEAInfo;
 class ProtectedTaskManager;
+class ProtectedAirspaceWarningManager;
 
 class TaskComputer
 {
@@ -52,7 +53,8 @@ class TaskComputer
 
 public:
   TaskComputer(ProtectedTaskManager &_task,
-               const Airspaces &airspace_database);
+               const Airspaces &airspace_database,
+               const ProtectedAirspaceWarningManager *warnings);
 
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return route.GetProtectedRoutePlanner();

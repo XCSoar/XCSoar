@@ -39,9 +39,10 @@ using std::max;
 // call any event
 
 TaskComputer::TaskComputer(ProtectedTaskManager &_task,
-                           const Airspaces &airspace_database)
+                           const Airspaces &airspace_database,
+                           const ProtectedAirspaceWarningManager *warnings)
   :task(_task),
-   route(airspace_database),
+   route(airspace_database, warnings),
    contest(trace.GetFull(), trace.GetContest(), trace.GetSprint())
 {
   task.SetRoutePlanner(&route.GetRoutePlanner());

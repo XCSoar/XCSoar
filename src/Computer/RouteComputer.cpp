@@ -33,8 +33,9 @@ Copyright_License {
 
 #include <algorithm>
 
-RouteComputer::RouteComputer(const Airspaces &airspace_database)
-  :protected_route_planner(route_planner, airspace_database),
+RouteComputer::RouteComputer(const Airspaces &airspace_database,
+                             const ProtectedAirspaceWarningManager *warnings)
+  :protected_route_planner(route_planner, airspace_database, warnings),
    route_clock(fixed(5)),
    reach_clock(fixed(5)),
    terrain(NULL)

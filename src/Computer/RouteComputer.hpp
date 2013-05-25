@@ -33,6 +33,7 @@ struct MoreData;
 struct DerivedInfo;
 struct GlideSettings;
 struct RoutePlannerConfig;
+class ProtectedAirspaceWarningManager;
 class ProtectedRoutePlanner;
 class RoutePlannerGlue;
 class RasterTerrain;
@@ -51,7 +52,8 @@ class RouteComputer {
   unsigned last_active_tp;
 
 public:
-  RouteComputer(const Airspaces &airspace_database);
+  RouteComputer(const Airspaces &airspace_database,
+                const ProtectedAirspaceWarningManager *warnings);
 
   /**
    * Returns a reference to the unprotected route planner object,

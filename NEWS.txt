@@ -19,6 +19,8 @@ Version 6.7 - not yet released
   - custom "start requires arm" setting (#2782)
   - new option to disable OLC optimisation
   - MAT: remove "auto add" turnpoint feature when fly over it
+* route planner
+  - ignore acknowledged airspaces (#2866)
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added
