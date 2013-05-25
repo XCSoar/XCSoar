@@ -38,7 +38,7 @@
 	\fcolorbox {black}{buttongray}{
     \makebox[1.7cm][c]{
       \begin{tabular}{c}
-        {\footnotesize\sf{#1}}\\
+          \multirow{2}{*}{\footnotesize\sf{#1}} \\
     	  \\
     	\end{tabular}
 	  }
@@ -113,19 +113,19 @@
   }
 }
 \newcommand{\button}[1]{%Normaler button im Text
-	\fcolorbox {black}{buttongray}{{\small{\sf #1}}}
+	\fcolorbox {black}{buttongray}{{\small{\sf\strut #1}}}
 }
 %
 \newcommand{\mbutton}[1]{%Spezial button im \menulabel 
-	\fcolorbox {black}{buttongray}{{\footnotesize{\sf #1}}}
+	\fcolorbox {black}{buttongray}{{\footnotesize{\sf\strut #1}}}
 }
 %
 \newcommand{\infobox}[1]{% Normale Infoboxdarstellung im Text
-	\fcolorbox {black}{white}{\makebox[1.9cm][c]{\sf #1}}
+	\fcolorbox {black}{white}{\makebox[1.9cm][c]{\sf\strut #1}}
 }
 %
 \newcommand{\ibox}[1]{%Spezialinfobox für die Auflistung in der Infoboxreferenz
-	\fcolorbox {black}{gray}{\makebox[3.1cm][c]{\sf #1\rule[-1.5mm]{0mm}{5mm}}}
+	\fcolorbox {black}{gray}{\makebox[3.1cm][c]{\sf\strut #1\rule[-1.5mm]{0mm}{5mm}}}
 }
 %
 \newenvironment{jspecs}{

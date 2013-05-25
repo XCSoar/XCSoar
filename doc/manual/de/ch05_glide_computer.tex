@@ -17,14 +17,14 @@ nämlich auf den letzten Wegpunkt also den Zielpunkt einer Aufgabe hin,  untersc
 \textsf{XCSoar} kann automatisch zwischen Kurbel-  und Vorflugmodus unterscheiden. Die Umschaltung
 der verschiedenen Berechnungsmethoden hierbei geschieht automatisch.  Nach ca.\ 30 Sekunden Kurbelzeit
 schaltet die Software automatisch auf den Kurbelmodus. Nach 30 Sekunden Geradeausflug schaltet das
-Programm auf den Vorflugmodus. Es besteht auch die Möglichkeit diese Umschaltung manuell zu erzwingen.\todonum{Wie?}
+Programm auf den Vorflugmodus. Es besteht auch die Möglichkeit diese Umschaltung manuell über das Menü zu erzwingen.
 
 Ist der letzte Wegpunkt (Zielpunkt) aktiv, wird in den Endanflugmodus geschaltet.
 Der Endanflugmodus wird ebenfalls aktiviert, wenn eine Aufgabe abgebrochen wird, so daß hier immer
 auf die erreichbaren Punkt gerechnet wird.
 
 Ein kleines Symbol in der rechten unteren Ecke zeigt den jeweiligen Flugmodus an:
-
+\begin{center}
 \begin{tabular}{c c c c}%{c c c c}
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_cruise.pdf} &
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_climb.pdf} &
@@ -32,13 +32,15 @@ Ein kleines Symbol in der rechten unteren Ecke zeigt den jeweiligen Flugmodus an
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_abort.pdf}\\
 (a) & (b) & (c) & (d)
 \end{tabular}
+\end{center}
 
 \begin{description}
 \item[Vorflug (a)]   Das Flugzeug ist nicht am Kurbeln  und es ist entweder keine Aufgabe aktiv, oder
 der aktive Wegpunkt ist nicht der Aufgaben-Zielpunkt
 \item[Kurbeln (b)]  Das Flugzeug ist derzeit am Kurbeln (auch wenn es dabei nicht steigt oder gar sinkt!)
 \item[Endanflug (c)]  Das Flugzeug ist nicht am Kurbeln und der aktive Wegpunkt ist der Zielpunkt der Aufgabe.
-\item[Abbruch (d)]  Dieser manuelle Aufgabenabbruch zeigt an, daß sich das Programm in einem  Modus befindet, in dem ausschließlich Außenlandemöglichkeiten auf landbaren Plätzen, Flugplätzen und markierten Feldern  dargestellt und berechnet werden, die sich in den entsprechenden Datenbanken befinden..(see Section~\ref{sec:taskabort})
+\item[Abbruch (d)]  Dieser manuelle Aufgabenabbruch zeigt an, daß sich das Programm in einem  Modus befindet, in dem ausschließlich Außenlandemöglichkeiten auf landbaren Plätzen, Flugplätzen und markierten Feldern  dargestellt und berechnet werden, die sich in den entsprechenden Datenbanken befinden.. 
+(siehe Kap.~\ref{sec:abort-resume-task})
 \end{description}
 
 Die jeweiligen Berechnungen von \textsf{XCSoar} sind direkt abhängig vom jeweiligen Flugmodus. Die
@@ -134,22 +136,21 @@ In diesem Menü können die folgenden Einstellungen vorgenommen werden:
 \begin{itemize}
 \item Wasserballast
 \item Flächenbelastung
-\item Mückenbelastung
+\item Insekten (Mückenbelastung)
 \item QNH
-\item max. Temperatur
+\item Max. Temperatur
 \end{itemize}
 
-Mithilfe der Mückeneinstellung ('clean') kann während des Fluges nachjustiert werden, wie sich die Polare
-durch Mückenbefall verschlechtert.  Ein Setzen auf 100\% 'clean' bedeutet, daß die Software annimmt,
-das Flugzeug bzw. das Profil ist top sauber. \tip
+Mithilfe der Mückeneinstellung kann während des Fluges \achtung nachjustiert werden, wie sich die Polare
+durch Mückenbefall verschlechtert.  0\% bedeutet, daß die Software annimmt, das Flugzeug bzw.\ 
+das Profil ist top sauber. 
 
 Eine Einstellung von 50\%  wird die Polare um 50\% verschlechtern, was in etwa der Verdopplung
 der Sinkrate bei der entsprechenden Geschwindigkeit entspricht.
 
-Die Ballast Einstellungen werden benutzt, um  die Polare entsprechend der Flächenbelastung
-verschieben zu können. Der Ballast wird in Litern angegeben, und sollte \emph{vor} dem Flug
+\sketch{figures/dialog-basicsettings} Die Ballast Einstellungen werden benutzt, um  die Polare entsprechend der Flächenbelastung verschieben zu können. Der Ballast wird in Litern angegeben, und sollte \emph{vor} dem Flug
 korrekt angegeben werden.
-\marginpar{\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}}
+
 
 Dieser Dialog kann vor und während des Fluges benutzt werden, um das QNH einzustellen.
 Die Software benutzt diese Werte um während des Fluges die entsprechenden Flugflächen
@@ -225,13 +226,13 @@ kann eingestellt werden, ob der Delphinstil, oder der "pure" MC-Wert zur
 Berechnung herangezogen werden soll.
 
 Die \infobox{V opt} zeigt ebendiese Geschwindigkeit, je nach
-ausgewählter Methode an.\index{V opt}
+ausgewählter Methode an.\index{Sollfahrt!InfoBox}
 
 Falls an das VEGA Vario angeschlossen, werden die Töne des Varios im Sollfahrt-Modus
 genau anhand dieses Wertes ausgegeben.
 
 
-\section{Sollfahrt  mit Risikofaktor}\label{sec:safty-factors}
+\section{Sollfahrt  mit Risikofaktor}\label{sec:speed-fly-with}\index{Sollfahrt!Risikofaktor}
 Viele Piloten verringern den MC-Wert und somit die Sollfahrt wenn Sie während der Aufgabe niedriger werden.
  Die interne Sollfahrtberechnung kann mit einem Risikofaktor belegt werden, welcher je nach erreichter Flughöhe in beiden Fällen
  (Delphin oder Block-Speed) den MC Wert automatisch verringert, je mehr man sich dem Boden nähert.
@@ -266,7 +267,7 @@ Ein Wert von  $\gamma=0.3$ ist empfohlen.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/riskmc.png}
 \end{center}
 
-\section{Sicherheitshöhen}\label{sec:safety-heights}
+\section{Sicherheitshöhen}\label{sec:safety-heights}\index{Sicherheitshöhen}
 
 In \xc werden drei Sicherheitshöhen deklariert und benutzt, welche ein abgestuftes Maß von Sicherheit in die Berechnungen einfließen lassen.
 
@@ -378,26 +379,26 @@ aus der Wind- und Übergrundgeschwindigkeit ermittelt. Dazu mehr im folgenden Te
 \section{Anzeige der benötigten Höhe für die ganze Aufgabe}\index{Benötigte Höhe für ganze Aufgabe}\index{Endanflugspfeile}
 
 Auf der linken Seite der Karte wird über die gesamte Flugdauer hinweg die für die gesamte Aufgabe benötigte
-Höhe sowohl als Pfeil als auch in numerischer Form dargestellt.  Wenn der Flieger über der minimal erforderlichen
-Höhe \emph{zum Erreichen der Aufgabe} ist, erscheint ein grüner, nach oben gerichteter Pfeil.
- Ist der Flieger zu tief, erfolgt die Anzeige ganz ähnlich, aber in rot und nach unten.
-
+Höhe sowohl als Pfeil als auch in numerischer Form dargestellt.  Wenn der Flieger oberhalb der minimal erforderlichen Höhe \emph{zum Erreichen der Aufgabe} ist, erscheint ein grüner, nach oben gerichteter Pfeil.
+ 
+Ist der Flieger zu tief, erfolgt die Anzeige ganz ähnlich, aber in rot und nach unten.
 
 Bei mehr als 500m positiver oder negativer Höhe wird zusätzlich eine abgesetzte Pfeilspitze in entsprechender
-Farbe dargestellt; dies dient lediglich der augenblicklcihen Erkennung der Lage.
+Farbe dargestellt; dies dient lediglich der augenblicklichen Erkennung der Lage.
 
-\emph{Sollte erreichbare Landepunkte in Reichweite sein, die aktuelle Höhe jedoch nicht ausreichen, um die Aufgabe zu beenden,
-so werden die Pfeile orange angezeigt.}
+\textcolor{blue}{Sollte mit der vorhandenen Höhe \textbf{Landepunkte} \footnote{Achtung!  Das hängt natürlich  davon ab, was in der Datenbank zu den jeweiligen Punkten vermerkt ist!  Ein See, der als landbar markiert ist\dots  tja, da kann man dann auch nix mehr  machen\dots} in Reichweite sein, \achtung die aktuelle Höhe jedoch nicht ausreichen, um die \textbf{ Aufgabe} zu beenden, so werden die Pfeile \textcolor{orange}{orange} angezeigt.}
+
+Wenn man also orange Pfeile sieht, kann man ziemlich sicher sein, daß zumindest ein Landeplatz erreichbar ist, wenngleich die Aufgabe nicht beendet werden kann. 
 
 \begin{center}
 \begin{tabular}{c c}
-{\it Drüber} & {\it Drunter} \\
+{\it Oberhalb}\phantom{ABC} & \phantom{ABC}{\it Unterhalb} \quad  \\
 \includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-above.png} &
-\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-below.png} \\
-\multicolumn{2}{l}{Die Skalierung dieser Pfeile der Endanflugsanzeige beträgt $+/-$ 500 m,} \\
-\multicolumn{2}{l}{darüberhinaus wird die Pfeilspitze abgehoben.}
+\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-below.png}
 \end{tabular}
 \end{center}
+Die Skalierung dieser Pfeile der Endanflugsanzeige beträgt $+/-$ 500 m.  
+Die hellere Hälfte des Pfeils (hier nur rechts) steht für MC=0.
 
 
 \subsection*{Anzeige der benötigten Endanflugshöhe auf dem Bildschirm}\index{Endanflug, benötigte Höhe, Anzeige}
@@ -412,8 +413,7 @@ Hierzu sind die Pfeile in den Farben grün, rot und orange dargestellt und zusä
 abgesetzte gefärbte Pfeilspitze dargestellt, die ab einer zusätzlich notwenigen oder verfügbaren Höhe
 von 500m erscheint.
 
-Halbtransparente Pfeile der gleichen Farbe und halben Breite am linken Rand des Displays geben den entsprechenden
-Wert für MC$=0$ an.
+Halbtransparente Pfeile der gleichen Farbe und halben Breite am linken Rand des Displays geben den entsprechenden Wert für MC$=0$ an.
 
 Die eingeblendete Zahl neben den Pfeilen gibt die notwendige Höhe für den aktuell gewählten  MC-Wert an.
 
@@ -423,17 +423,20 @@ Hier ein paar Beispiele für verschiedene Szenarien:
 \item[Über Endanflug]
 Über dem Endanflugshöhe bei  MC$=M$ und MC$=0$:
 
-Bei der derzeitigen MC Einstellung beträgt die Reserve $132m$ wird auf MC$=0$ umgeschaltet gibt es etwas mehr Reserve.
-\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
+\marginpar{\includegraphics[angle=0,width=2.55em,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
+Bei der derzeitigen MC Einstellung beträgt die Reserve $152m$ wird auf MC$=0$ umgeschaltet gibt es etwas mehr Reserve.
+%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
+
 
 \item[Über Endanflug]
 
 über Endanflughöhe bei MC$=0$ aber unter Endanflughöhe bei  MC$=M$, und :
 
 Hier zeigt  das Display eine Situation, bei der die vorhande Höhe  mit dem eingestellten MC-Wert nicht ausreicht,
-um die Aufgabe zu beenden (roter Pfeil nach unten). Für MC$=0$ jedoch stellt der Rechner das Gelingen
+\marginpar{\includegraphics[angle=0,width=3em,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}um die Aufgabe zu beenden (roter Pfeil nach unten). Für MC$=0$ jedoch stellt der Rechner das Gelingen
 der Aufgabe in Aussicht (halbtransparenter  Pfeil ganz links nach oben) und gibt dafür eine Reserve von 152$m$ an.
-\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}
+%\marginpar{\includegraphics[angle=0,width=1.2cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}
+
 In dieser Situation kann der Pilot entscheiden, ob er den Bart verlässt und den Endanflug
 mit einer geringeren MC-Einstellung fortführt, oder er weitersteigen möchte.
 
@@ -444,30 +447,37 @@ sollte der Bart verlassen werden
 
 \item[Unter Endanflughöhe]
 Unter Endanflughöhe  bei MC$=M$, und etwas weniger als 500m  unterhalb bei MC$=0$
-\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
+%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
 Das Display zeigt an, daß beim aktuellen MC-Wert die Endanflughöhe nicht erreicht ist,
 bei MC$=0$, der jedoch nur weniger als 500m fehlen.
 Mit dem gewählten MC-Wert fehlen satte 733m.
-
+\marginpar{\includegraphics[angle=0,width=3.0em,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
 \item[Unter Endanflughöhe]
 Unter Endanflughöhe bei  MC$=M$, und bei MC$=0$
-\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}}
+
 Die Aufgabe kann so nicht beendet werden, auch nicht bei MC$=0$.
-Die roten Pfeile zeigen, daß eine Außenlandung wahrscheinlich ist,  zu hoch gepokert \texttt{:-(}
+
+Das ist eine typische Anzeige zu Begin Einer Aufgabe, wenn man sich in Startnähe, oder aber noch noch am Boden befindet.  
+Hier kann man sehr schön erkennen, wieviel man noch kurbeln muß.
+\marginpar{\includegraphics[angle=0,width=3.65em,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
+%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
 \end{description}
 
+
+
 Und hier mal ein Beispiel mit einer Komplettansicht der MovingMap:
-\begin{center}
-\includegraphics[angle=0,width=7cm,keepaspectratio='true']{figures/finalglide-allbelow.png}
-\end{center}
-Hier hat man sich  verpokert.
-Der Endanflug reicht weder mit dem eingestellten MC noch mit MC$=0$ aus, man erreicht weder den gewählten Wegpunkt \textsf{Damme},
-dort gibt es deutlich vorher eine Geländekollision (gekennzeichnet durch das orange Kreuz auf der Karte),
-und der Ausweichflugplatz \textsf{Achmer} liegt gaaanz knapp außerhalb der Reichweite.
+
+Hier hat man sich  verpokert. 
+
+
+Die roten Pfeile zeigen, daß eine Außenlandung wahrscheinlich ist,  zu hoch gepokert \texttt{:-(}
+
+Der Endanflug reicht weder mit dem eingestellten MC noch mit MC$=0$ aus, man erreicht weder den gewählten \sketch{figures/finalglide-allbelow.png}Wegpunkt \textsf{Damme}, dort gibt es deutlich vorher eine Geländekollision (gekennzeichnet durch das orange Kreuz auf der Karte), und der Ausweichflugplatz \textsf{Achmer} liegt gaaanz knapp außerhalb der Reichweite.
 
 DG $\rightarrow$ Dumm Gelaufen \verb":-("
 
-\section{Ermittlung der Schnittgeschwindigkeiten }\label{sec:task-speed-estim}
+
+\section{Ermittlung der Schnittgeschwindigkeiten}\label{sec:task-speed-estim}
 
 Viele von \textsf{XCSoar's} internen Algorythmen benutzen \emph{Annahmen} der benötigten Zeit,
 einen bestimmten Punkt zu erreichen.
@@ -484,7 +494,7 @@ Diese Annahme wird benutzt um Ankunftszeiten und Aufgabenankunft zu berechnen.
 Die folgenden Aufgaben-Geschwindigkeiten sind definiert bzw. werden kalkuliert:
 \begin{description}
 \item[Bisher erreichte Aufgabengeschwindigkeit (Task speed achieved)]  Dies ist die \emph{aktuell
-erreichte} Schnittgeschwindigkeit, kompensiert um die Höhe Aufgabenstart \todonum{was heißt das exakt?}
+erreichte} Schnittgeschwindigkeit, kompensiert um die Höhe des Aufgabenstart \todonum{was heißt das exakt? Wird die Höhe GND vom Startpunkt in pot.- Energie umgerechnet? $\frac{1}{2}\cdot m\cdot v^2 = m\cdot g\cdot h $  oder wie?}
 \item[Mittlere Aufgabengeschwindigkeit (Task speed average)] Dies ist die angenommene
 Schnittgeschwindigkeit, kompensiert um die Höhe, welche zur Beendigung der Aufgabe benötigt wird.
 \item[Verbleibende Geschwindigkeit (Task speed remaining)]  Dies ist die angenommene Schnittgeschwindigkeit,
@@ -573,7 +583,8 @@ ein Kurbeln nicht notwendig, daher ist dies einfache Schema optimal.
 \textsf{XCSoar} kann den MC-Wert automatisch anpassen, um den Piloten zu entlasten:
 Dazu sind zwei Methoden bzw. Einstellungen möglich:
 \begin{description}
-\item[Endanflug]  Während des Endanfluges wird der MC-Wert so optimiert, daß das Ziel in der
+\menulabel{\bmenut{Konfig.}{1/3}\blink\bmenut{MacCready}{Auto} }\item[Endanflug]  
+Während des Endanfluges wird der MC-Wert so optimiert, daß das Ziel in der
 \emph{kürzest möglichen Zeit} erreicht wird.
 
 Bei OLC-Sprint tasks wird der MC-Wert dagegen so angepaßt, daß \emph{eine
@@ -591,14 +602,11 @@ Steigen herangezogen wird und im Endanflug optimiert auf die
 (Zu deustch: einmal rechnet er besten Schnitt, einmal größte Strecke\dots im
 dritten Falle kombiniert er beides )
 
-Ein- bzw. ausgeschaltet wird die Auto MC -Funktion mit
-
-\begin{quote}
-\bmenu{Konfig.}\blink\bmenut{Mac}{Auto}
-\end{quote}
-
+%Ein- bzw. ausgeschaltet wird die Auto MC -Funktion mit
+%\begin{quote}
+%\bmenu{Konfig.}\blink\bmenut{Mac}{Auto}
+%\end{quote}
 In den Konfigurationseinstellungen ist  'Beides' als Standard voreingestellt.
-
 
 Falls Auto MacCready angeschaltet wurde, erscheint 'AUTO'  in der MC-Infobox
 anstelle von 'manuell'. Gleichzeitig erscheint in der Vario-Anzeige 'AutoMC' anstelle von 'MC'.
@@ -621,7 +629,7 @@ zu Begin des Fluges erheblich unterhalb der Endanflughöhe befindet und der Rech
 
 \begin{maxipage}
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/figure_auto_maccready-de.pdf}
+\includegraphics[angle=0,width=0.75\linewidth,keepaspectratio='true']{figures/figure_auto_maccready-de.pdf}
 \end{center}
 \end{maxipage}
 
@@ -653,9 +661,11 @@ Regenfront erkennen!}}
 
 Der Analyse-Dialog kann z.B. dazu benutzt werden, um z.B. die Polare zu checken.
 Die Funktion ist erreichbar über:
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Analyse}
-\end{quote}
+
+\menulabel{\bmenus{Info}\blink\bmenus{Analyse}}
+%\begin{quote}
+%\bmenu{Info}\blink\bmenu{Analyse}
+%\end{quote}
 
 Die Polare-Seite zeigt einen  Graphen der Polare mit den aktuellen Mücken und Ballast-Einstellungen.
 Weiterhin ist das beste Gleiten und die dementsprechende Geschwindigkeit abzulesen, sowie das
@@ -664,20 +674,21 @@ Das vorher eingestellte  Startgewicht ist ebenfalls hier  abzulesen.
 
 Mit \button{Einstellungen} wird die entsprechende Seite aufgerufen, auf der genau diese o.g.\ Werte geändert werden können.
 
+\sketch{figures/analysis-glidepolar.png}
 Die Flugzeugpolaren-Seite  des Analyse-Dialoges zeigt die totalenergiekompensierte Sinkrate bei der
 entsprechenden Geschwindigkeit, wenn der Rechner mit einem intelligenten Vario verbunden ist.
 
 Dies erlaubt es dem Piloten z.B. Testflüge in ruhiger Luft durchzuführen, um die Flugzeugpolare exakt zu vermessen.
-Wird nun die gemessene mit der eingegebenen Polaren verglichen, erlaubt dies eine optimale Anpassung des
-Programmes an das jeweilige Flugzeug bei der jeweiligen Beladung und dies unter Berücksichtigung der optimalen
-Klappenstellung und anderen Optimierungsversuchen wie z-.B. Ruderspalteabdichtungen etc.
+Wird nun die gemessene \todonum{Wird hier wirklich die Polare aufgzeichnet?? 
+Wird sie dann auch verwendet?  Wo wird sie abgespeichert? $\rightarrow$ Klärung, bitte ... } mit der eingegebenen Polaren verglichen, erlaubt dies eine optimale Anpassung des Programmes an das jeweilige Flugzeug bei der jeweiligen Beladung und dies unter Berücksichtigung der optimalen Klappenstellung und anderen Optimierungsversuchen wie z-.B. Ruderspaltabdichtungen etc.
 
 Die Daten werden ausschließlich erfaßt wenn die G-Rate zwischen 0,9 und 1,1 ist.
 Man sollte also sehr ruhig fliegen, um die Aufzeichnungen nicht zu beeinflussen
 
-\begin{center}
-\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
-\end{center}
+
+%\begin{center}
+%\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
+%\end{center}
 
 \section{Hinweise zum Flug}\index{Hinweise zum Flug}
 Folgende Meldungen werden je nach Bedarf während des Fluges kontinuierlich in einem
