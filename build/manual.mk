@@ -64,6 +64,7 @@ TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:$(DOC)/manual/e
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 XETEX_RUN = $(TEX_VARS) xetex $(TEX_FLAGS) -no-pdf -output-directory $(@D)
+IDX_RUN = makeindex -q 
 
 LATEX2HTML = latex2html
 LATEX2HTML_RUN = $(TEX_VARS) L2HINIT_NAME=$(DOC)/manual/latex2html.config $(LATEX2HTML) -local_icons -verbosity 0 -split 3
@@ -124,6 +125,8 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex
 	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
+	$(TEX_RUN) $<
+	$(IDX_RUN) $(@:.pdf=.idx)
 	$(TEX_RUN) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-main.tex $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \

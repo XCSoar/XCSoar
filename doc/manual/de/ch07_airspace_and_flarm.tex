@@ -1,12 +1,16 @@
-\chapter{Lufträume, Verkehr und Teamflug}\label{cha:airspace}\index{Lufträume}\index{Flarm}\index{Teamflug}
+\chapter{Lufträume, Verkehr und Teamflug}\label{cha:airspace}\index{Luftraum}\index{FLARM}\index{Teamflug}
 
-Es stehen eine Menge an Luftraumdatenbanken und Geländefiles als OpenSource zur Verfügung. Die
+Es stehen eine Menge an Luftraumdatenbanken und Geländefiles als \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}  OpenSource zur Verfügung. Die
 jeweils aktuellen Luftraumdaten für Deutschland können direct vom DAEC heruntergeladen und sofort
-benutzt werden.: \todonum{Link des DAEC einfügen!}
-Es können zwei Luftraumdateien in den Konfigurationseinstellungen benannt und benutzt werden,
-welche auch beliebig bearbeitet werden können. Benutzt wird hierbei das \textsf{OpenAir}-Format.\index{Lufträume!Format}
+benutzt werden.: 
+\begin{center}
+  \url{http://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten/}
+ \end{center}\menulabel{\bmenus{Standortdatei}\blink\bmenus{Standortdatei}}
+ Neben den stets aktuellen Lufträumen stehen dort auch Sprungzonen und die Grenze Deutschlands zum Download. 
+ 
+ Es können zwei Luftraumdateien \button{Lufträume} und \button{weitere Lufträume}in den Konfigurationseinstellungen benannt und benutzt werden, welche auch beliebig bearbeitet werden können. Benutzt wird hierbei das \textsf{OpenAir}-Format.\index{Luftraum!Dateiformat}
 
-\button{Konfig.}\blink\button{Konfig.}\blink\bmenut{System}{Einstellung}
+
 
 Es obliegt allein dem Benutzer, daß die jeweilige Datenbank aktuell ist.
 
@@ -25,7 +29,7 @@ Flächen kann individuell konfiguriert werden.
 
 Abhängig von den jeweiligen Einstellungen kann der Benutzer alle,
 nur die Lufräume unter, die Lufträume unterhalb einer einzugebenden Höhe oder
-aber Lufträume in einem bestimmten Höhenband angezeigt beklommen.
+aber Lufträume in einem bestimmten Höhenband angezeigt bekommen.
 
 
 \begin{center}
@@ -33,7 +37,7 @@ aber Lufträume in einem bestimmten Höhenband angezeigt beklommen.
 \end{center}
 
 Zur Kennzeichnung der Lufträume werden diverse Stiloptionen wie Transparenz, Farben,
-Schattierungen, und Linienoptionen bereitgestellt.
+Schattierungen, und Linienoptionen bereitgestellt. 
 
 Die nicht-transparenten  Darstellungen erlauben ein Durchscheinen von
 Geländemerkmalen und Topologie, jedoch \emph{kein} Durchscheinen anderer Lufträume!
@@ -41,7 +45,7 @@ Wenn jedoch überlappende Lufträume auftreten sollten, werden die Grenzen der
 Lufträume grundsätzlich angezeigt, egal, ob der Luftraum transparent oder nicht angelegt wurde.
 
 Sowohl die Luftraumwarnungen als auch die Luftraumdarstellungen können individuell editiert werden,
-hierzu siehe Kap.~\ref{sec:airspace-filter}.
+hierzu siehe Kap.~\ref{sec:airsp-filt-dial}.
 
 Die Standard Darstellung und Einfärbung der lufträume ist analog den aktuellen ICAO Karten
 
@@ -98,10 +102,6 @@ Wenn keine weiteren Lufträume in der Nähe sind, welche oberhalb level 0 sind,
 wird der Dialog automatisch geschlossen.
 
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacewarning.png}
-\end{center}
-
 \section{Luftraumwarnungs-Dialog}
 
 Der Luftraumwarnung-Dialog beinhaltet eine Liste von bis zu 4 individuellen  Warnungen.
@@ -156,24 +156,19 @@ nicht deutlich weit genug von scharfgeschalteten Lufträumen entfernt befindet.
 \section{Luftraumwarnung-Bestätigung}
 
 Wenn eine Luftraumwarnung angezeigt wird und der entsprechende
-Luftraum aktiv ist, kann diese Warnung durch ESC geschlossen werden.
+Luftraum aktiv ist, kann diese Warnung durch ''Schließen''  geschlossen werden.
 Hiermit kann das Fenster ohne eine Bestätigung geschlossen werden.
 
+Sollten eine oder mehrere Luftraumwarnungen sichtbar sein, so kann jede einzelne von diesen durch einen entsprechenden Button am unteren Ende bestätigt werden. (Hier ist Paderborn-TMZ blau hinterlegt, also zur Bearbeitung angewählt) 
 
-Sollten eine oder mehrere Luftraumwarnungen sichtbar sein,
-so kann jede einzelne von diesen durch einen entsprechenden Button
-am unteren Ende bestätigt werden.
-
-Die Anwahl des entsprechenden Luftraumes geschieht beim Altair mit dem
-Drehknopf, beim PDA mit dem Cursor.
+\sketch{figures/airspacewarning_2.png} Die Anwahl des entsprechenden Luftraumes geschieht beim Altair mit dem Drehknopf, beim PDA mit dem Cursor.
 
 Die einzelnen Bedeutungen der Bestätigungen sind wie folgt:
 
-
 \begin{description}
-\item[\button{Warnung Bestätigen}] Bestätigung des Warn-Levels. Nur dann,
-wenn sich der Warn-Level \textsl{erhöht} (s. Kap. \ref{airspace-level}) erscheint
-eine neue Warnung entsprechend des neuen Levels.
+%\item[\button{Warnung Bestätigen}] Bestätigung des Warn-Levels. Nur dann,
+%wenn sich der Warn-Level \textsl{erhöht} (s. Kap. \ref{airspace-level}) erscheint
+%eine neue Warnung entsprechend des neuen Levels.
 
 \item[\button{Best. Luftraum}]  Bestätigt alle Warnungen für diesen Luftraum mit einem
 innerhalb eines horizontalen Abstandes von 2500m und vertikal 500m.
@@ -188,16 +183,14 @@ Luftraum explizit wieder aktiviert wurde (s.u.). $\Rightarrow$  (F7 Taste on Alt
 Die Warnungen werden entsprechend wiederholt.
 \end{description}
 
-Einmal bestätigte Lufträume können  wieder zur Warnung aktiviert werden mit:
-
-\bmenu{Info}\blink\bmenut{Was ist}{hier?}\index{Was ist hier?}\blink\bmenu{Details}\blink\bmenu{Aktivieren}
+Einmal bestätigte Lufträume können  wieder zur Warnung aktiviert werden.  Siehe auch im folgenden Kapitel. \ref{sec:air-ack}
 \index{Luftraumwarnung!Aktivieren}\index{Luftraumwarnung!Bestätigen}
 
-Bitte beachtet, daß nicht alle Bestätigungs-Buttons bei allen Warnungen erscheinen!
+\menulabel{\bmenut{Info}{3/3}\blink\bmenus{Lufträume}} Bitte beachtet, daß nicht alle Bestätigungs-Buttons bei allen Warnungen erscheinen!
 Speziell, wenn man sich \textsl{innerhalb} eines Luftraumes befindet, gibt es keine Option
-\button{Warnung Bestätigen}, denn der Warnmechanismus hat keine Veranlassung
-vor einer \textsl{bevorstehenden} Luftraumverletzung zu warnen.
-Ihr seid bereits drin!!!
+zur Bestätigung, denn der Warnmechanismus hat keine Veranlassung vor einer \textsl{bevorstehenden} Luftraumverletzung zu warnen.
+
+Ihr seid ja bereits drin!!!
 
 Generell sollte man mit den Luftraumwarnungen wie folgt umgehen:
 \begin{itemize}
@@ -218,25 +211,25 @@ Flugfläche) sowie der Frequenz des Luftraumes.
 Begleitet wird dies von einem Warnton.
 
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacewarning.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']
+%\end{center}
 
 Bestätigte Lufträume werden nach einer festgelegten Zeit, der "Bestätigungszeit"
-wieder angezeigt und in die Alarmfunktion integriert. Diese Zeit kann in den
-Konfigurationseinstellungen festgelegt werden:
+\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}wieder angezeigt und in die Alarmfunktion integriert. 
 
-\button{Konf.}\blink\button{Konf.}\blink\button{Systemeinstellungen}\blink\button{Kartenanzeige}\blink\button{Luftraum}
+Diese Zeit kann in den Konfigurationseinstellungen unter \button{Bestätigungszeit} festgelegt werden
 
+\menulabel{\button{Kartenanzeige}\blink\button{Luftraum}} 
 Alle Luftraumwarnungen werden für jeden einzelnen Luftraum ausgegeben, das heißt,
-wenn z.B.\ das Flugzeug in einen Luftraum \textsf{A} einfliegt und kurze
+ wenn z.B.\ das Flugzeug in einen Luftraum \textsf{A} einfliegt und kurze
 Zeit später in einen \textsl{darin}liegenden Luftraum \textsf{B}, dann wird
 nach der Meldung für \textsf{A} ebenfalls eine Warnung für den Luftraum
 \textsf{B} zusätzlich erscheinen.
 
 \tip Wenn gewünscht ist, daß die Warnungen nicht wiederholt werden, setze die
  Bestätigungszeit auf einen sehr großen Wert (z.B. 30min)\dots
- \index{Luftraumwarnung!Bestätigen!Bestätigungszeit}
+ \index{Luftraumwarnung!Bestätigungszeit}
 
 Die Luftraumwarnungen werden automatisch zurückgenommen, sobald die
 Flugzeugposition \emph{und}  der angenommene zukünftige Kurs nicht auf einen
@@ -246,98 +239,60 @@ Es kann zu gleichzeitigen  Luftraumwarnungen kommen, wenn  das Flugzeug
 (oder der angenommene zukünftige Kurs) mehrere Lufträume treffen wird und nahe
 genug ist.
 
-\section{Luftraum Bestätigung im Voraus}\index{Luftraum!Bestätigen!Im Voraus}
+\section{Luftraum Bestätigung im Voraus}\index{Luftraum!Bestätigen!Im Voraus}\label{sec:air-ack}
 
-Bei touchscreen- bzw.\ mausgesteuerte Geräte (PDA, Handys, Android)
-kann mit einem \textsl{einfachen} Klick auf die Karte in der Nähe eines
-Luftraumes das Fenster '\textsf{'Kartenelemente an diesem Ort}'' aufgerufen
-werden, in dem u.a.\ die nächstgelegenen Lufträume aufgelistet werden.
+Durch Anwahl des Luftraumauswahlfensters können alle in der Datenbank\menulabel{\bmenut{Info}{3/3}\blink\bmenus{Lufträume}} enthaltenen Lufträume in der üblichen  Filterfunktion  ausgewählt und bereits vor dem Start deaktiviert  werden.  Ein Doppelklick auf den entsprechenden Luftraum holt ein Menü mit Detailinformationen für den entsprechenden Luftraum hervor, wo bestätigt oder aktiviert werden kann.  (s. links) 
 
-Weiterhin bietet dies Fenster die Darstellung des \textsl{gerade angeklickten} Punktes
-samt Geländehöhe, Entfernung, Richtung und Ankunftshöhe inkklusive
-zu diesem eben angeklickten Punkt !
+\textbf{Alternativ:}\\
+Bei Touchscreen oder mausgesteuerte Geräten (PDA, Handys, Android)
+kann alternativ mit einem \textsl{\textcolor{blue}{einfachen Klick}} auf die Karte in der Nähe eines
+\sketch{figures/airspacelookup.png} Luftraumes das Fenster \textsf{''Kartenelemente an diesem Ort}'' aufgerufen werden, in dem u.a.\ auch die nächstgelegenen Lufträume aufgelistet sind. 
 
-\achtung \textsl{Die Meldung bzgl. des angeklickten Punktes ist nicht zu verwechseln mit anderen Wegpunkten oder
-Zielpunkten, die z.B.\ innerhalb der Aufgabe zur Navigation verwendet werden.
-Die Meldungen beziehen sich explizit an den Punkt auf der Karte,
-der gerade angeklickt wurde und haben mit dem Rest jedweder Berechnung
-nichts zu tun!}
-
-
-Über den Button \button{Details} können so Lufträume im Voraus bei der Flugplanung
-als bestätigt eingegeben werden, bevor man in die Nähe kommt und der
-Warnmechanismus greift.
+Über den Button \button{Best. Tag} können so Lufträume im Voraus bei der Flugplanung als bestätigt eingegeben werden, bevor man in die Nähe kommt und der Warnmechanismus greift.
+Ein Doppelklick auf den entsprechenden Luftraum oder Klick auf \button{Details} bringt ein Menü mit Details hervor, auf dem wieder scharfgeschaltet werden kann.
 
 Sinnvoll ist dies z.B.\ bei EDR, welche militärisch genutzt werden und als inaktiv für z.B.\
 einen Flugtag gemeldet werden. Hiermit kann das notwendige Bestätigen von
-Lufträumen während des Fluges umgangen werden.
+Lufträumen während des Fluges umgangen werden.  Siehe hierzu auch Kapitel (\ref{sec:airsp-filt-dial})
 
-%Touching the status message or pressing the enter key makes the message disappear (that
-%is, it acknowledges the query).  The query returns the details of all
-%airspace regions when overlapping airspace is visible at the query location.
+\section{Luftraumfilter Dialog}\label{sec:airsp-filt-dial} \index{Luftraum!Filter}\index{Luftraum!Farben}
 
- Ein weiterer Weg, Lufträume im voraus zu deaktivieren kann über das
- Menü erfolgen:
- \button{Konf.}\blink\button{Konf.}\blink\button{Luftraumeinstellungen}\blink\button{Suche}
-Hier kann bequem innerhalb einer flexiblen Suchliste jeder einzelne Luftraum in
-seinen Details angesehen, bestätigt oder wieder aktiviert werden.
-Siehe hierzu auch nächstes Kapitel (\ref{sec:airspace-filter}
+Über den Luftraum-Filter Dialog können im Hinblick auf deren Anzeige auf dem Bildschirm Gruppen von Lufträumen \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}} ausgewählt werden. 
 
-\section{Luftraumfilter Dialog}\label{sec:airspace-filter}
+Weiterhin ist es hier möglich, zu entscheiden, ob für gewisse Luftraumgruppen Warnungen erfolgen sollen oder aber gar nicht. 
+\menulabel{\button{Kartenanzeige}\blink\button{Luftraum}}
 
-Über den Luftraum-Filter Dialog können alle Lufträume gemäß Ihres Types im
-Erscheinungsbild geändert werden.
+Mit \button{Filter}kann für jede Gruppe kann zwischen ''Warnen, ''Anzeigen'' oder ''gar nichts'' gewählt werden, sodaß der Bildschirm nicht überfrachtet wird. 
 
-Das kann über verschiedene Wege geschehen:
-\begin{itemize}
-\item Aus dem Hauptmenü:\\ \button{Konf.}\blink\button{Konf.}\blink\button{Luftraum Einstellung}
-\item Aus den Konfigurationseinstellungen:\\  \button{Konf.}\blink\button{Konf.}\blink\button{System Einstellung}
-\blink\button{Karteneinstellungen}\blink\button{Luftraum}\blink\button{Filter}
-\end{itemize}
+Mit den Einstellungen im Bild wird Klasse B weder angezeigt noch gewarnt, Klasse E angezeigt, aber nicht gewarnt und Klasse C nur gewarnt, aber nicht angezeigt. Alle anderern wreden angezeigt und gewarnt.  
 
-Hier können mit der Enter-Taste oder durch Berührung des entsprechenden Feldes diverse
-Einstellungen und Warnverhalten eingestellt werden.
+\sketch{figures/airspacefilter.png}  Mit \button{Farben} kann jeder Gruppe von Lufträumen unterschiedliche Farben und Muster zugeordnet werden. Hierkann jeder Pilot eine individuelle Farbgebung vornemen, sollte sich aber bewußt sein, was dies für evtl. andere Piloten beduete, die Luftraum C aus Gewohnheit noch immer grün haben möchten etc\dots  
+ 
+ Die Auswahl erfolgt über eine ganz ähnliche Liste wie beim Filter. 
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacefilter.png}
-\end{center}
-
-Drücken des ''Suchen''-Buttons läßt den Luftraumsuche-Dialog erscheinen.
-Dies Menü funktioniert sehr ähnlich dem Wegpunkt-Dialog und läßt die Lufträume nach Distanz,
-Richtung, Name und Typ auswählen.
-
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
-\end{center}
-
-Wenn ein Luftraum ausgewählt und entsprechend markiert wurde, wird dieser für
-in das Luftraummanagement als "für den Tag  bestätigt" markiert.
-Er kann auf dem gleichen Wege oder aber über den Luftraumdialog  wieder aktiviert werden siehe oben.
 
 \section{Analyse  Dialog - Luftraum in Seitenansicht}\index{Luftraum!Seitenansicht}
 Der Analyse-Dialog enthält eine Seitenansicht des geflogenen Kurses über ca. 50km und stellt
-dabei die Lufträume im vertikalen Schnitt dar.
-Mitunter hilfreich, wenn komplexe lufträume zu überwinden /durchfliegen sind.
-Erreichbar ist diese Ansicht über:
-
-\begin{quote}
-\button{Info}\blink\button{Analysis}
-\end{quote}
+\menulabel{\bmenus{Info}\blink\bmenus{Analyse}}dabei die Lufträume im vertikalen Schnitt dar.
+Mitunter hilfreich, wenn komplexe Lufträume zu überwinden /durchfliegen sind.
 
 und dann weiter weiter mit den schwarzen Pfeil-Buttons  nach rechts oder links.
+
 Die Höhe des Flugzeuges wird hierbei als schwarzer Pfeil am linken Rand Pfeil dargestellt, der linke
 Rand dient als Flugzugposition, die Lufräume fliegen einem quasi von rechts nach links entgegen.
+
+\sketch{figures/analysis-airspace.png}
 Der blaue Strich zeigt ausgehend vom schwarzen Pfeil die derzeitige Höhe an.
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
+%\end{center}
 
 Wenn man sich nahe eines Luftraumes befindet, wird diese Ansicht durch das
 Luftraumwarnfenster unterbrochen.
 
 
-\section{FLARM Luftverkehr, Erkennung und Darstellung}\index{Flarm!Erkennung}\index{Flarm!Darstellung}
+\section{FLARM Luftverkehr, Erkennung und Darstellung}\index{FLARM!Erkennung}\index{FLARM!Darstellung}
 Wenn \xc an ein \fl angeschlossen ist, ermöglicht \xc die Darstellung
 des Luftverkehrs auf dem Display. Jedes erkannte Flugzeug, welches mit \fl
 ausgestattet ist,  erscheint als kleines Dreieck in verschiedenen Farben  auf der Karte.
@@ -353,26 +308,25 @@ kaum nützlich.
 
 \subsection*{FLARM - Kartendarstellung}
 Die \fl-Ziele sind als grüne, gelbe  oder rote kleine Dreiecke auf der Moving Map dargestellt.
-Die Spitzen der Dreiecke geben die Richtung an.
+\config{flarm-on-map}Die Spitzen der Dreiecke geben die Richtung an.
 
 Im \fl-Radar werden die Ziele dagegen deutlich größer als Kreise mit innenliegenden,
 richtungsangebenden Dreiecken  und bekommen je nach Gefahrensituation (Alarmlevel)
 verschiedenen Farben.
 
-\config{flarm-on-map}.
-
 \achtung Beachte unbedingt, daß die Ausrichtung je nach Kartendarstellung variiert!
+
 Ist Nord-Oben eingestellt, so zeigen die Pfeile das absolute Bearing des Zieles.
 Ist Kurs-Oben eingestellt, so zeigen die Pfeile in Richtung den relativen Kurs vom Ziel
 zum eigenen Flugzeug.
 
 
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/flarmmap.png}
-\end{center}
+%\begin{center}
+%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/flarmmap.png}
+%\end{center}
 
 Die Darstellung der Ziele auf dem \fl-Bildschirm kann durch Auswertung eines separaten
-und individuell anpassbaren  \fl-Files Name, Kennzeichen etc.\ enthalten.
+\sketch{figures/flarmmap.png}und individuell anpassbaren  \fl-Files Name, Kennzeichen etc.\ enthalten.
 (Siehe hierzu~\ref{sec:flarm-ident-file} um Dich über Aufbau und Format des Files zu informieren)
 
 Luftfahrzeuge im \fl-Stealth Modus oder die den Privat-Modus eingeschaltet haben können so jedoch nicht angezeigt werden.
@@ -498,37 +452,38 @@ Startplatz entfernt in der diesigen Warmluftpampe voneinander getrennt. '' Wo zu
 ''Unter einer Wolke'', ''rechts neben einer Burg, da wo die Windräder stehen'', '' bei der Autobahn'' etc\dots sind die üblichen
 unbefriedigenden Antworten.
 
-  Das Teamflug system von \xc gestattet es, es einem Partner in \xc seine Position
-  in einem 5- stelligen Kode \textsl{exakt} mitzuteilen, ohne auf die Eingabe von Koordinaten und
+
+Das Teamflugsystem von \xc gestattet es, es einem Partner in \xc seine Position
+\menulabel{\bmenut{Info}{2/3}\blink\bmenut{Team}{kode}}  in einem 5- stelligen Kode \textsl{exakt} mitzuteilen, ohne auf die Eingabe von Koordinaten und
   oder Bearings zurückgreifen zu müssen und ohne, daß es evtl. ''Konkurrenten'' eines Wettbewerbes mitbekommen
   (so sie denn den Referenzpunkt nicht kennen).
 
   Hierzu wird von beiden Piloten der gleiche  Referenzpunkt in \xc angegeben,
   dessen Richtung und Entfernung \xc intern in den Kode umrechnet.
   Anschließend haben beide Piloten die Entfernung und Bearing voneinander ''auf dem Schirm".
-\todonum{wird das permanent aktualisiert?? Man könnte ja dies bei erneutem Flarmkontakt mit dem Piloten abgleichen ??}
 
 So kann  auch ohne Hilfe von  \fl, dessen Entfernungsmessungen und Empfangsstärke
- mitunter oft stark schwanken  eine akkurate Bestimmung der jeweiligen Standorte vorgenommen werden.
+mitunter oft stark schwanken  eine akkurate Bestimmung der jeweiligen Standorte vorgenommen werden.
 Für die Zukunft wird aus o.g.\ Gründen an verschlüsselten Team Codes gearbeitet.
 
 Um den Teamkode zu benutzen sollten alle Piloten eines Teams einen gemeinsamen Wegpunkt als Referenzpunkt
-benutzen - \textsl{Sinnvollerweise sollten die Koordinaten  dieses Referenzpunkts absolut identisch sein!!}.
+benutzen - 
+
+\textsl{Sinnvollerweise sollten die Koordinaten  dieses Referenzpunkts \sketch{figures/dialog-teamcode.png}absolut identisch sein!!}.
+
+
 Das heißt, alle Mitflieger eines Teams sollten identische Datenbanken benutzen.
 
-Der Teamkode-Dialog wird über
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenut{Team}{kode}\index{Teamflug!Eingabe Team-Kode}
-aufgerufen:
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-teamcode.png}
-\end{center}
 
 Um TeamKode zu nutzen geht ihr wie folgt vor:
 \begin{enumerate}
 \item Mit \button{Setze WP} wird ein der Wegpunkt ausgewählt und anschließend bestätigt.
-Es erscheint dann der eigene Kode, der dem Mitflieger übermittelt wird. \achtung \textsl{Es dauert ca.\
-2 Sekunden bis zur Aktualisierung - nicht zu schnell weiterklicken!}
-Sinnvoll: Man einigt sich auf einen definitiven Punkt bereits vor dem Start und gleicht dessen Koordinaten ab\dots
+Es erscheint dann der eigene Kode, der dem Mitflieger übermittelt wird. 
+
+\achtung \textsl{Es dauert ca.\ 2 Sekunden bis zur Aktualisierung - nicht zu schnell weiterklicken!}
+
+Sinnvoll: 
+Man einigt sich auf einen definitiven Punkt bereits vor dem Start und gleicht dessen Koordinaten ab\dots
 \item Der Team-Kumpel macht exakt das gleiche.
 \item Anschließend teilen beide sich Ihren fünfstelligen Kode gegenseitig über Funk mit
 \item Mit \button{Kode Setzen} wird nun die Texteingabemaske aufgerufen und der empfangene Partner-Kode eingegeben.
@@ -536,8 +491,10 @@ Sinnvoll: Man einigt sich auf einen definitiven Punkt bereits vor dem Start und 
 \end{enumerate}
 Mit  \button{\fl Sperre} wird die \fl-Net-Datenbank aufgerufen.
 Eine einfache  Tabelle  mit allen empfangenen Flugzeugen samt Wettbewerbs-ID und \fl-ID erscheint.
-Hier kann schnell per Wettbewerbskennzeichen ein Teampartner ausgwählt werden.
+Hier kann schnell per Wettbewerbskennzeichen ein Teampartner ausgeblendet  werden.
+Mit der Sperre wird dieser TeamPartner ''fixiert'' und während des fluges wenn wieder in Recichweite automatisch als Partner erkannt und dargestellt.
 
+\textbf{Einschränkungen:}\\
 Derzeit erlaubt  es \xc nur, \textsl{einen} Team Partner einzugeben, Ihr könnt aber über
 das \fl-Radar mittels Team-Farben andere Team Mitglieder hinzufügen -- dies hat jedoch den Nachteil,
 daß die Reichweite mitunter begrenzt ist. Dafür wird aktualisiert.

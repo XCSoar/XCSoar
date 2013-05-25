@@ -1,39 +1,69 @@
 \documentclass[german,a4paper,11pt]{refrep}
 \usepackage[utf8]{inputenc}
 \usepackage[german]{babel}
-\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
-\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
 \usepackage[right]{eurosym}%EuroSymbol 
 \usepackage{color}
 \usepackage{times}
-\usepackage{multicol}
+\usepackage{multicol}%komfortable Spalten in Tabellen 
+\usepackage{multirow}%komfortable Zeilen in Tabellen 
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{rotating}
 \usepackage{todonotes}%		Gestattet Kommentare für Sachen, welche noch zu erldigen sind  .
 \usepackage{paralist}%		etwas geringere Abstände in der item und enumerate...}
-\usepackage{enumitem}
-\usepackage{url}
-\usepackage{hyperref}
-\makeindex
+\usepackage{enumitem}%      Listen selber gestalten ... 
+\usepackage[colorlinks=true]{hyperref}
+\hypersetup{linkcolor=blue,%interne Links (ref, cite, etc)
+linktocpage=true,%nur Seitenzahlen nicht der Tex wird eingefärbt
+urlcolor=blue,%externe links 
+pdftitle={XCSoar Deutsches Handuch},
+pdfauthor=Claus-W.Häbel,
+bookmarks=true,
+bookmarksnumbered=true,
+breaklinks=true%Umbruch von links erlaubt
+}
 \makeatletter
-\title{Benutzerhandbuch}%	Titel der ersten Seite 
+\title{Handbuch}%	Titel der ersten Seite 
 \newcommand{\mycontent}[0]{%
 \begin{tabular}{l}\hspace*{-4cm}{\em XCSoar-Handbuch  } \vspace*{2pt}\end{tabular}}% Kopfzeile
 %
-\input{xcsoar.sty}
-\input{title-xcsoar.sty}
 %
-\newcommand\xc{\textsf{XCSoar }}%  ein paar Abkürzungen gegen die nervige Handarbeit ..  
+\input{xcsoar.sty}%XCS-Sytelfile hier laden
+\input{title-xcsoar.sty}%XCS Titelseite hier laden..
+%
+%
+\newcommand\xc{\textsf{XCSoar }}%  ein paar Abkürzungen   
 \newcommand\fl{\textsf{Flarm }}
 \newcommand\al{\textsf{Altair }}
 \newcommand\trdvvs{Vega}
-%
-% mal die Helvetika wählen zwecks besserer Onlinelesbarkeit..
+\newcommand\p[1]{{\textit{#1}}}
+% mal die Helvetika wählen ..
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \fontfamily{phv}\selectfont
 %
+%\renewcommand{\thepage}{\arabic{section}.\arabic{page}} % Der Trenner (der Punkt) muß im *.ist File dem makeindex mitgeteilt werden.
+\begin{filecontents}{\jobname.mst}
+page_compositor "."   
+headings_flag 1
+heading_prefix "{\\bf ---~"
+heading_suffix "~---}"
+delim_0 "\\dotfill{"
+delim_1 "\\dotfill{"
+delim_2 "\\dotfill{"
+delim_t "}"
+delim_n ", "
+delim_r "} -- {"
+suffix_2p "} f.{"
+suffix_3p "} ff.{"
+symhead_negative "Symbols"
+symhead_positive "Symbols"
+numhead_negative "Numbers"
+numhead_positive "Numbers"
+quote ?+?
+line_max 255
+\end{filecontents}
 \begin{document}
 \sloppy% ja ich weiß, soll man nicht mehr machen .. dennoch ..
 \shorthandoff{"}%
@@ -56,7 +86,7 @@ Diese Software darf \emph{auch nicht} als ein Antikollisionssystem benutzt werde
 %
 Diese Software wird gemäß der GNU General Public License Version~2 veröffentlicht. Der ausführliche,
 komplette Text des Einverständnisses hierzu und Anmerkungen zur Garantie befindet sich
-unter~\ref{cha:gnu-general-public}.
+im Anhang~\ref{cha:gnu-general-public}.
 %
 \subsection*{Beschränkte Haftung}
 In keinem Fall übernimmt XCSoar oder dessen Vorsitzende, Teilhaber, Programmierer, Angestellte  oder aber sonstige Mitwirkende  oder aber  Tochterunternehmungen irgendeine Haftung für den Gebrauch oder aber Mißbrauch und auch zufälliges Fehlverhalten dieses Programmes, egal zu welchem Zweck es eingesetzt wird.
@@ -68,11 +98,11 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch01_introduction.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{installation.tex}%									95%
+\input{installation.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch02_user_interface.tex}%							95%
+\input{ch02_user_interface.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch03_navigation.tex}%								99%
+\input{ch03_navigation.tex}
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch04_xc_tasks.tex}
 %%%%%%%%%%%%%%%%%%%%%%
@@ -82,7 +112,7 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch07_airspace_and_flarm.tex}
 %%%%%%%%%%%%%%%%%%%%%%
-\input{ch08_avionics_and_airframe.tex}%					 99%
+\input{ch08_avionics_and_airframe.tex}
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch09_quickstart.tex}
 %%%%%%%%%%%%%%%%%%%%%%
@@ -94,14 +124,15 @@ Dies Programm, alle dazugehörigen Dateien, Daten und Material wird verteilt "so
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch13_history.tex}             
 %%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}\hypersetup{linkcolor=orange}
 \printindex
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
 \input{gpl.tex}
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 \listoftodos
-%\todonum[inline]{alternates list}
-%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
+

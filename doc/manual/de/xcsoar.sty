@@ -5,6 +5,7 @@
 \usepackage{rotating}
 \usepackage{todonotes}
 \usepackage{multirow}
+\usepackage{floatflt}
 \usepackage{makeidx}\makeindex
 \makeatletter
 \usepackage{fancyhdr}
@@ -25,7 +26,6 @@
 \newcommand{\tip}[0]{\marginlabel{\parbox{1.1cm}{\includegraphics[width=0.7cm]{figures/reminder.pdf}}}}
 
 % Define command to insert gesture image
-%\newcommand{\gesture}[1]{\marginlabel{{\it#1{\phantom{aa}}}\parbox{1.1cm}{\hspace{-3mm}\includegraphics[width=0.8cm]{figures/gesture.png}}}}
 \newcommand{\gesture}[1]{\marginlabel{{\it#1{\phantom{aa}}}\parbox{1.1cm}{\hspace{-3mm}\includegraphics[width=0.8cm]{figures/gesture.pdf}}}}
 %
 % Define command to insert warning image
@@ -43,14 +43,14 @@
 % Define command to reference a configuration item
 \newcommand{\config}[1]{\marginlabel{\ref{conf:#1}\parbox{1.3cm}{\includegraphics[width=0.8cm]{figures/config.pdf}}}}
 %
-% Potentially overdue ``InfoBox'' style macro
+% Potentially overdue ``InfoBox'' style macro but sometimes used... so ..let it be alive ..
 \newcommand{\InfoBox}[0]{{InfoBox}}
 %
 % Define command to put a menu label on the margin
 \newcommand{\menulabel}[1]{\marginpar{\parbox{5.0cm}{\raggedright #1}}}
 %
 % Define command to draw a sketch on the margin
-\newcommand{\sketch}[1]{\marginpar{\parbox{3.750cm}{\includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{#1}}}}
+\newcommand{\sketch}[1]{\marginpar{\parbox{4.750cm}{\includegraphics[angle=0,width=0.9\linewidth,keepaspectratio='true']{#1}}}}
 %
 % Define command to draw a small sketch on the margin
 \newcommand{\smallsketch}[1]{\marginpar{\includegraphics[angle=0,keepaspectratio='true']{#1}}}
@@ -63,4 +63,4 @@
 \newcommand{\version}{\begingroup\catcode`\_=\active\input{VERSION.txt}\endgroup}
 %
 %Anführungszeichen per Tastatur einfach so eingeben -> "
-%\shorthandoff{"}%
+\shorthandoff{"}%
