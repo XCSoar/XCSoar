@@ -26,9 +26,6 @@ Intern werden drei Aufgabentypen (modi)  unterschieden
 
 Während des ''Ziele auf''--Modus \menulabel{\bmenut{Nav}{2/2}\blink\bmenut{Aufgabe}{fortsetzen}} kann eine vorher abgebrochene Aufgabe immer wie links fortgesetzt werden.
 
-%\begin{quote}
-%\smenus{Nav}\blink\smenut{Aufgabe}{Fortsetzen}
-%\end{quote} \index{Aufgabe!Fortsetzen}
 \subsection{Automatik ''Ziele auf''}\index{Automatik--''Ziele auf''}\index{Heimatflugplatz!Automatik}
 
 Wenn keine deklarierte Aufgabe geladen ist, dann wird nach dem Start unverzüglich in den ''Ziele auf''--Modus geschaltet. Hierbei wird der Startplatz oder aber (falls es z.B. eine Wiese war, von der man mit einer Wilga im F-Schlepp gestartet ist), der nächstgelegene landbare Flugplatz automatisch als Ziel in den Rechner eingefügt.
@@ -388,11 +385,6 @@ Weiterhin können zusätzliche Regeln wie z.B.\ max. Abfluggeschwindigkeit, -hö
 Für nicht AAT-Aufgaben, gibt es eine Option um die minimale Ankunftshöhe derart einzustellen, daß diese oberhalb 1000m der Abflughöhe ist.
 
 All diese Regeln  können  \index{Aufgabenregeln!Standardeinstellungen}  nachträglich noch in der \menulabel{\bmenut{Nav}{1/2}\blink\bmenus{Aufgabe}} Aufgabenverwaltung  unter dem Punkt   \index{Aufgabenregeln!Feineinstellungen}\button{Regeln} der jeweiligen Aufgabe angepasst werden.
- 
-%\begin{quote}
-%\smenus{Nav}\blink\smenus{Aufgabe}\blink\smenus{Regeln}
-%\end{quote}
-
 
 
 \section{Alternative Startpunkte}\label{sec:alternate-starts}
@@ -408,11 +400,7 @@ Dies Fenster kann aufgerufen werden wie folgt:
 \item Vom Hauptmenü mittels (s. links)
 \item Aus der Analyse-Seite über \smenus{Info}\blink\smenus{Analysis}\blink~\button{Aufgabenberechnung}
 \end{itemize}
-
 \sketch{figures/dialog-taskcalc3.png}
-%\begin{center}
-%\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/dialog-taskcalc3.png}
-%\end{center}
 
 \begin{description}
 \item[\p{AAT Zeit}]  Zeigt die der Aufgabe zugeordnete Mindest-Zeit an.
@@ -432,16 +420,11 @@ Mit dem Schließen des Dialoges wird dieser MC-Wert für die weitere Berechnung 
 Mit dem \button{Zielpunkt} Knopf, der ausschließlich für AAT Aufgaben gedacht ist, kann der entsprechende Wendepunkt innerhalb der AAT-Fläche verschoben werden.
 
  Die Wendepunkte können separat angewählt werden. Ist  "Auto" angeklickt, so berechnet \textsf{XCSoar} anhand der im  Hauptmenü eingestellten Delta-Zeit die optimal gelegenen Wendepunkte, wenn nicht, kann man den Wendepunkt manuell verschieben, solange bi die Ankunftszeit entsprechend des MC Wertes passend erscheint.
-%
+
+
 \section{Task Status Seite}
 Der Task-\textbf{Status}-Dialog (s. Abschnitt~\ref{sec:dialog-windows}) bietet eine Übersicht über zum Teil  \menulabel{\bmenut{Info}{2/2}\blink\bmenus{Status}} wichtige Informationen und den aktuellen Stand der Aufgabe (wie weit ist noch zu fliegen, welche Zeit ist noch "übrig", welcher mittlere Schnitt konnte erflogen werden  etc.\ ). Die Seite ist auch nützlich, um evtl. überflüssige oder nicht mehr benötigte InfoBoxen mit neuen Werten neu zu belegen. Weiterhin kann hier nochmals kontrolliert werden, ob z.B. ein gültiger Start der Aufgabe erkannt wurde.
 
-%Diese Seite kann über das folgende Menü aufgerufen werden:
-%\begin{center}
-%\begin{quote}
-%\button{Info}\blink\button{Info}\blink\button{Status}
-%\end{quote}
-%\end{center}
 
 \section{Assigned Area Aufgaben/Targets}\label{sec:aat-tasks}
 \subsection*{AAT-Wendepunkte (targets)}\index{targets}
@@ -457,6 +440,7 @@ Die automatische Wegpunkt-Weiterschaltung  funktioniert bei AAT-Aufgaben nicht, 
 
 Wenn der vom Piloten gesetzte AAT-Zielpunkt umrundet und zum nächsten Zielpunkt gewechselt wurde, optimiert \textsf{XCSoar} nun für den Rest der Aufgabe. Siehe hierzu Abschnitt ~\ref{sec:advanc-rest-tasks} for details.
 
+
 \subsection*{Manuelles verschieben der Ziele/Zielpunkte}
 
 Um die größtmögliche Fläche bzw. Streckenausbeute der Aufgaben darzustellen, wird die Darstellung beim Verschieben der Zielpunkte  in \% angegeben.  So steht z.B. 100\% für das Maximum der Strecke, welche zum jeweiligen Zeitpunkt möglich ist, -100\% steht für die minimal mögliche Strecke, die zum jeweiligen Zeitpunkt erreicht werden kann. Die Berechnungen der \%-Werte erfolgen immer vom jeweiligen Standort aus.
@@ -467,13 +451,8 @@ Der Aufgabenrechner, siehe~\ref{sec:task-calc-dial}, zeigt die mittlere Strecke 
 
 \menulabel{\bmenut{Nav}{1/2}\blink\bmenus{Zielpunkt}}Die Zielpunkte können individuell über den Zielpunkt-Dialog geändert werden. 
  
- 
- Hierfür muß das Häkchen bei ''optimiert'' entfernt werden! \achtung
+Hierfür muß das Häkchen bei ''optimiert'' entfernt werden! \achtung
 
-
-%\begin{quote}
-%\button{Nav}\blink\button{NAV}\blink\button{Zielpunkt}
-%\end{quote}
 
 \subsection*{AAT-Ziele (targets) und der Aufgabenrechner}
 Hier soll ein typisches Verfahren zur Verwendung bzw.\ Arbeit mit Zielen innerhalb einer AAT-Aufgabe besprochen werden:
@@ -486,9 +465,7 @@ Im \textsf{ETE}-Feld des Aufgabenrechners kann einfach erkannt werden, ob die ei
 \item Während des Fluges, wenn sich z.B.\ die Wettersituation ändert, und infolge der MC-Wert geändert werden muß,  kann der Aufgabenrechner benutzt werden, um sich die nun  einstellende Situation anzeigen zu lassen, um vor allen eine zu frühe Ankunft zu vermeiden.
 \item Alle Einstellungen bzgl. Ausdehnung oder Abkürzung der Aufgabe können über die Aufgabenverwaltung vorgenommen werden.
 \item \textcolor[rgb]{0.00,0.25,0.50}{\textsf{Viel einfacher jedoch ist -vor allem im Fluge- der bereits oben erwähnte Aufruf von}}
-%\begin{quote}
 \button{Nav}\blink\button{NAV}\blink\button{Zielpunkt}
-%\end{quote}
 mit dem mit weniger Tip-Arbeit die AAT-targets problemlos verschoben und die Resultate bzgl.\ der Aufgabe insbesondere der Delta Zeit werden können.
 \end{itemize}
 Der Aufgabenrechner unterstützt weiterhin den Piloten bei Fragestellungen wie z.B:\

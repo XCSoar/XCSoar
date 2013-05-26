@@ -358,7 +358,6 @@ Ziels (MSL) minus der Flughöhe des Flugzeuges (MSL).
 Das Ergebnis entspricht also entweder der aktuellen Flughöhe über dem Gleitpfad oder aber der Ankunftshöhe am Ziel.
 Wenn keine Höhe des Wegpunktes in der Wegpunkt-Datenbank (z.B. \texttt{GER-WP.txt}) hinterlegt ist, wird \textsf{XCSoar}
 die Höhe des Geländes aus dem Gelände File (z.B.: \texttt{GER-High.xcm}) benutzen.
-%\todonum{und wenn nicht vorhanden? Gibt es eine Fehlermeldung?}
 \end{description}
 
 Die Berechnung des Endanfluges ist soweit fortgeführt worden, daß sowohl die Höhen als auch die Höhendifferenzen
@@ -423,15 +422,12 @@ Hier ein paar Beispiele für verschiedene Szenarien:
 
 \marginpar{\includegraphics[angle=0,width=2.55em,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
 Bei der derzeitigen MC Einstellung beträgt die Reserve $152m$ wird auf MC$=0$ umgeschaltet gibt es etwas mehr Reserve.
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
-
 
 \item[\textit{Über Endanflughöhe}] bei MC$=0$ aber unter Endanflughöhe bei  MC$=M$, und :
 
 Hier zeigt  das Display eine Situation, bei der die vorhande Höhe  mit dem eingestellten MC-Wert nicht ausreicht,
 \marginpar{\includegraphics[angle=0,width=3em,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}um die Aufgabe zu beenden (roter Pfeil nach unten). Für MC$=0$ jedoch stellt der Rechner das Gelingen
 der Aufgabe in Aussicht (halbtransparenter  Pfeil ganz links nach oben) und gibt dafür eine Reserve von 152m an.
-%\marginpar{\includegraphics[angle=0,width=1.2cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}
 
 In dieser Situation kann der Pilot entscheiden, ob er den Bart verlässt und den Endanflug
 mit einer geringeren MC-Einstellung fortführt, oder er weitersteigen möchte.
@@ -442,7 +438,6 @@ mit dem MC-Wert zu vergleichen. Wenn das erreichte Steigen unter das MC-Niveau f
 sollte der Bart verlassen werden
 
 \item[\textit{Unter Endanflughöhe}]   bei MC$=M$, und etwas weniger als 500m  unterhalb bei MC$=0$
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
 Das Display zeigt an, daß beim aktuellen MC-Wert die Endanflughöhe nicht erreicht ist,
 bei MC$=0$, der jedoch nur weniger als 500m fehlen.
 Mit dem gewählten MC-Wert fehlen satte 733m.
@@ -455,10 +450,7 @@ Die Aufgabe kann so nicht beendet werden, auch nicht bei MC$=0$.
 Das ist eine typische Anzeige zu Begin Einer Aufgabe, wenn man sich in Startnähe, oder aber noch noch am Boden befindet.  
 Hier kann man sehr schön erkennen, wieviel man noch kurbeln muß.
 \marginpar{\includegraphics[angle=0,width=3.65em,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
 \end{description}
-
-
 
 Und hier mal ein Beispiel mit einer Komplettansicht der MovingMap:
 
@@ -491,7 +483,6 @@ Die folgenden Aufgaben-Geschwindigkeiten sind definiert bzw. werden kalkuliert:
 \begin{description}
 \item[\textit{Bisher erreichte Aufgabengeschwindigkeit}]  Dies ist die \emph{aktuell
 erreichte} Schnittgeschwindigkeit, kompensiert um die Höhe des Aufgabenstart 
-%\todonum{was heißt das exakt? Wird die Höhe GND vom Startpunkt in pot.- Energie umgerechnet? $\frac{1}{2}\cdot m\cdot v^2 = m\cdot g\cdot h $  oder wie?}
 \item[\textit{Mittlere Aufgabengeschwindigkeit}] Dies ist die angenommene
 Schnittgeschwindigkeit, kompensiert um die Höhe, welche zur Beendigung der Aufgabe benötigt wird.
 \item[\textit{Verbleibende Geschwindigkeit}]  Dies ist die angenommene Schnittgeschwindigkeit,
@@ -599,10 +590,6 @@ Steigen herangezogen wird und im Endanflug optimiert auf die
 (Zu deustch: einmal rechnet er besten Schnitt, einmal größte Strecke\dots im
 dritten Falle kombiniert er beides )
 
-%Ein- bzw. ausgeschaltet wird die Auto MC -Funktion mit
-%\begin{quote}
-%\bmenu{Konfig.}\blink\bmenut{Mac}{Auto}
-%\end{quote}
 In den Konfigurationseinstellungen ist  'Beides' als Standard voreingestellt.
 
 Falls Auto MacCready angeschaltet wurde, erscheint 'AUTO'  in der MC-Infobox
@@ -658,11 +645,7 @@ Regenfront erkennen!}}
 
 Der Analyse-Dialog kann z.B. dazu benutzt werden, um z.B. die Polare zu checken.
 Die Funktion ist erreichbar über:
-
 \menulabel{\bmenus{Info}\blink\bmenus{Analyse}}
-%\begin{quote}
-%\bmenu{Info}\blink\bmenu{Analyse}
-%\end{quote}
 
 Die Polare-Seite zeigt einen  Graphen der Polare mit den aktuellen Mücken und Ballast-Einstellungen.
 Weiterhin ist das beste Gleiten und die dementsprechende Geschwindigkeit abzulesen, sowie das
@@ -682,10 +665,6 @@ Wird sie dann auch verwendet?  Wo wird sie dann abgespeichert?} mit der eingegeb
 Die Daten werden ausschließlich erfaßt wenn die G-Rate zwischen 0,9 und 1,1 ist.
 Man sollte also sehr ruhig fliegen, um die Aufzeichnungen nicht zu beeinflussen
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
-%\end{center}
 
 \section{Hinweise zum Flug}\index{Hinweise zum Flug}\index{Meldungen während des Fluges}
 Folgende Meldungen werden während des Fluges in einem

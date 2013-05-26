@@ -11,6 +11,8 @@ Daten-Files werden bei \xc in zwei Kategorien eingeteilt:
 Dies Kapitel beschäftigt sich vor allem mit den Datenfiles, welche der Benutzer selber anlegen und
 bearbeiten kann(und sollte);  die Programm-Datenfiles werden im {\em XCSoar Advanced Configuration
 Guide} beschrieben.
+
+
 \section{File management}
 Alle Filenamen müssen den Konventionen, welche unten aufgelistet sind, entsprechen.
 
@@ -60,6 +62,7 @@ IPAQ File Store/XCSoarData
 Wenn Ihr unsicher seid, startet einfach ein ''jungfräulich'' neu installiertes'' \xc neu und es legt diese
 Verzeichnisse von sich aus an.
 
+
 \section{Karten Datenbank}\label{sec:map}
 
 Ein Kartendatenbank-File (Endung \verb|.xcm|) beinhaltet das Gelände, die Topologie, Topgraphie und
@@ -90,7 +93,6 @@ Ein \xc angegebenes, separates angegebenes Wegpunkt-File wird alle in der Karten
 Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
 
 
-
 \section{Wegpunkte}
 \xc  versteht verschiedene Wegpunkt-Formate:
 
@@ -113,6 +115,7 @@ konvertieren.
 \achtung \textsl{Wenn die Höhe eines Wegpunktes als "Null" innerhalb eines Wegpunktfiles angegeben
 wird, dann wird  \xc  die Höhe aus der Kartendatenbank gemäß des Höhenmmodelles entnehmen und die
 Höhe demgemäß darstellen.}
+
 
 \section{Lufträume}\index{File-Format!Luftraum}
 
@@ -140,6 +143,7 @@ Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Welle
 ''andere''.  Alle anderen Gebiete werden als ''andere'' dargestellt.
 
 In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben (sofern vorhanden).
+
 
 \section{Flugplatz Details}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
 
@@ -194,6 +198,7 @@ image=Benalla_sat.bmp
 Blah blah blah blah
 ...
 \end{verbatim}
+
 
 \section{Polare}\label{sec:glide-polar}\index{Polare!File-Format}
 
@@ -322,10 +327,12 @@ Höxter        123.625
 Damit die Checkliste Umlaute und Sonderzeichen korrekt dargestellt muß die Datei \warning 
 in \textbf{UTF-8} kodiert sein!
 
+
 \section{Aufgaben }\index{File-Format!Aufgaben}
 
 Aufgaben-Files  (Endung: \verb|.tsk|) werden in einem \xc -eigenen, dem  XML-Format, gespeichert.
 SeeYou-Aufgaben können problemlos geladen werden. (Endung: \verb|.cup|).
+
 
 \section{Flug Logger-Mitschriebe} \label{sec:logfiles}
 Der Software Logger von \xc erzeugt  IGC-Files (Endung: \verb|.igc|)
@@ -334,6 +341,7 @@ beschrieben.
 
 Die Log-Files werden  im ''log''- Unterverzeichnis des \xc -Verzeichnisses abgelegt. (normalerweise XCSoarData)
 Nach dem Flug können diese Files kopiert und weiterverarbeitet werden.
+
 
 \section{FLARM Identifikation}\label{sec:flarm-ident-file}\index{File-Format!Flarm}
 
@@ -363,7 +371,8 @@ Diese enthält sämtliche \fl-Daten, welche von der \textsf{\textsf{FlarmNet}}-G
 Dies File kann von  \url{http://www.flarmnet.org}  heruntergeladen werden.
 \textsl{Dies File muß sich innerhalb des XCSoarData - Verzeichnisses befinden.}
 
-%%%%%%%%%%%%%% advanced stuff below..
+
+%%%%%%%%%%%%%%
 \section{Eingabe Ereignisse}
 
 Das Eingabe-Ereignis-File  (Endung \verb|.xci|) ist ein ASCII-Text File,
@@ -383,6 +392,7 @@ Hier einige Gründe, weshalb es evtl.\ sinnvoll sein könnte, \textsf{xci} zu be
 ausgelösten Ereignisses.
 \end{itemize}
 Für nähere Informationen bezüglich eigener Eingabe -Ereignisse, bitte bemüht das {\em XCSoar Advanced Configuration Manual}.
+
 \section{Status}\label{sec:status}\index{File-Format!Status}
 Status-Files sind Text Files in der Form  {\em Bezeichner  = Wert },
 die in Blöcken  angeordnet sind. Jeder Block beinhaltet eine Statusmeldung
@@ -410,4 +420,4 @@ key=Aufgabe begonnen
 delay=1500
 hide=yes
 \end{verbatim}
-%
+

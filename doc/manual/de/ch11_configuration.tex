@@ -26,7 +26,9 @@ selber kompilieren und wirklich \textbf{alles} ändern.
 Solltest Du ein ernstes Interesse daran haben, wirklich detailliert in \xc  einzusteigen, um eventuell Deine
 ganz eigene Oberfläche zu gestalten, so empfehlen wir,  Dich mit dem \xc-Wiki  zu beschäftigen. Hier der
 Link: \url{http://www.xcsoar.org/trac/wiki}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%
 \section{Ändern der Voreinstellungen}
 Es gibt einen Menge an Einstellungen, welche vom Benutzer verändert werden
 können. Bis auf das generelle Layout des Programmes kann
@@ -77,6 +79,8 @@ einfacheren Überblick verborgen.
 \tip In der folgenden Beschreibung werden alle die
 Parameter, die nur im Expertenmodus sicht- und auswählbar sind, mit
 einem$^{\textcolor{blue}{\star}}$ versehen.
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Standortdateien}\index{Standortdatei}\index{Konfiguration!Neuer Flugplatz - neue Karte}\index{Konfiguration!Fliegerlager}\label{sec:site-files}
 Dieser Abschnitt beschreibt die wichtigsten Files, welche konfiguriert werden sollten, wenn
@@ -131,6 +135,8 @@ angewählt werden und \xc nimmt die Wegpunkte aus der XCM-Datenbank.
 
 Es steht Euch frei, beliebige Dateien zu erstellen und einzufügen, welche dann anschließend
 anstelle der Kartenbankdatei benutzt werden soll. Mehr zu den Kartendateien in Kap.~\ref{sec:map}.
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Ausrichtung}\label{sec:map-projection}
 Hier kann eingestellt werden, wie die Kartenanzeige der Moving Map relativ zum Segelflugzeug
@@ -164,6 +170,8 @@ vom unteren Rand in Prozent.
 {\bf Aus}: Alle InfoBox Seiten haben den gleichen Mastab
 
 \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Elemente}\label{sec:map-elements}
 Hier werden diverse Anzeigen wie Kurs-Spuren, Symbole und Luftverkehr konfiguriert werden:
@@ -216,6 +224,8 @@ an der Stelle auf der Karte zum Ziel flöge.
   {\bf Ein}:  Zeigt die Gebiete gelb hinterlegt auf der Karte an \\
   {\bf Aus}: Zeigt die Gebiete nicht an.
   \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Wegpunkte}\label{sec:waypoint-display}
 Hier können Einstellungen zur Darstellung von Wegpunkten und deren Details
@@ -263,6 +273,8 @@ vorgenommen werden.
 {\bf Ein}: Skaliert die Darstellung anhand der realen Bahnlänge.\\
 
 \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Gelände}\label{sec:terrain-display}
 Auf dieser Seite kann das Erscheinungsbild des Geländes auf der Moving Map eingestellt werden.
@@ -304,6 +316,8 @@ Die zur Auswahl stehenden Geländefarbpaletten sind unten aufgelistet:
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
 \end{longtable}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Luftraum}\label{sec:airspace-display}
 
@@ -350,6 +364,7 @@ Zuerst einen Luftraum auswählen, dann doppelkicken und mit \button{Farbe der Um
 \subsection*{Filter}
 Die Filterfunktion ist beschrieben in Kap.~\ref{sec:airspace-filter}.
 
+
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner/Sicherheitsfaktoren}
 Hier werden Einstellungen für die Sicherheitshöhen und deren Verhalten in den Berechnungsalgorythmen vorgenommen.
@@ -380,6 +395,7 @@ wird der MC Wert linear bezogen auf die aktuelle Höhe reduziert, als Bezugspunk
 Fluges erreichte Höhe.
 Ein Wert von ca. $0.3$ ist empfohlen.  Mehr dazu auch in Kap.~\ref{sec:safety-factor}.
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner / Endanflugrechner}\label{sec:final-glide}
@@ -417,6 +433,7 @@ Nach der MC-Theorie heißt MC=0, daß kein Kurbeln mehr stattfindet. Der Algoryt
 mehr gekurbelt wird, andererseits tut man es doch\dots
 \achtung Für das ''normale, althergebrachte Verhalten'' anderer Systeme sollte man sich überlegen, dies auf ''Aus'' stehen zu lassen.
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner / Wind} \label{sec:final-wind}
@@ -616,6 +633,7 @@ Als Schutz gegen ''zu früh ankommen''. Der Optimierungsalgorythmus versucht, di
 Im ''Optimiert''-Modus  werden dabei die AAT-Punkte automatisch verschoben, um diese Zeit einhalten zu können..
 \end{description}
 
+
 %%%%%%%%%%%%%%%%%%
 \section{Aussehen / Sprache, Eingaben}\label{sec:interface}
 
@@ -654,8 +672,9 @@ Elementes und Auswahl der dazu angebotenen Schrift, -größe und -format.
 
 Falls nicht vom Benutzer konfiguriert, werden voreingestellte Standardschriften verwendet.
 \sketch{figures/config-fonts.png}
-%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%%%%
 \vspace{5em}
 \section{Aussehen / Anordnung}\label{sec:interface-appearance}
 
@@ -778,6 +797,8 @@ Die Tabelle unten zeigt einen kurzen Überblick über die Positionen der InfoBox
 \end{tabular}
 \end{multicols}
 \end{center}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / NMEA-Anschluß} \label{conf:comdevices}\index{NMEA!Anschlüsse}\index{GPS!Liste der Geräte}\index{GPS!Treiber}
 
@@ -859,6 +880,8 @@ Am unteren Rande dieses Fensters befinden sich noch drei weitere Felder:\\
 
 \tip Es ist sehr empfehlenswert, eine eigene Polare zu exportieren, da dann alle Eigenschaften darin gespeichert und wieder aufgerufen werden können.
 Die Werte für  die Polare sollten mit Bedacht und Sorgfalt eingegeben werden, da sämtliche Berechnungen von \xc darauf beruhen!
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Logger} \label{conf:logger}
 
@@ -896,6 +919,7 @@ Auf dieser Seite kann der \xc -IGC-Logger programmiert  und Daten wie Kennzeiche
 \item[Logger ID]  Dies ist die Logger ID des verwendeten und angeschlossenen Loggers(\fl, VOLKSLOGGER etc.)
 \end{description}
 \todonum{stimmt das?}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Einheiten}\index{Einheiten!Einstellung}
@@ -949,6 +973,7 @@ Nur sinnvoll, wenn das Gerät nicht über eine Echtzeituhr verfügt, oder aber d
 {\bf Aus}: Es wird die geräteinterne Uhr benutzt.
 \end{description}
 
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Verfolgung}
 
@@ -979,4 +1004,3 @@ erstellt wurde, um Dich zu identifizieren.
 Andernfalls wird die Flugspur als `{\it Gast}'  und somit anonym übermittelt.
 \item[Passwort] Das entsprechende Passwort zum oben angegebenen  Zugang.
 \end{description}
-%finished für v6.5 date 09/02/2013 OH

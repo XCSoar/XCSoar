@@ -6,7 +6,9 @@ assumes a basic knowledge of cross-country soaring, but is suitable
 reading for competition pilots as well as pilots engaging in casual
 cross-country touring.
 
+
 \section{Flight modes} 
+
 XCSoar performs different calculations and may dispay different
 InfoBoxes depending on the flight mode, for example Circling
 (thermalling), Cruise, or Final Glide (cruise to the Finish waypoint).
@@ -72,6 +74,7 @@ considering MC setting and terrain). The potential of having the Final
 glide mode is obvious when flying short tasks in which the aircraft
 may well be above final glide turning the penultimate waypoint.
 
+
 \section{MacCready setting}
 
 The MacCready setting may be adjusted several ways:
@@ -86,6 +89,7 @@ The MacCready setting may be adjusted several ways:
 \end{itemize}
 In addition, an automatic MacCready mode is available as described in
 Section~\ref{sec:auto-maccready}.
+
 
 \section{Glide polar}
 
@@ -202,6 +206,7 @@ Depending on the configuration, speed command chevrons can be
 displayed on the right side of the map area, or on the variometer
 gauge.
 
+
 \section{Speed to fly}\label{sec:stf}
 
 XCSoar continuously calculates two types of speed to fly:
@@ -236,7 +241,9 @@ speed according to whichever mode is selected.  When connected to the
 Vega intelligent variometer, the speed command sounds are based on
 this optimum speed value.
 
+
 \section{Speed to fly with risk}\label{sec:safety-factor}
+
   The speed to fly system can be compensated for risk, in which the
   MacCready setting used for calculating the speed to fly (in both
   Block or Dolphin modes) is reduced as the glider gets low.
@@ -279,6 +286,7 @@ this optimum speed value.
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/riskmc.png}
 \end{center}
+
 
 \section{Safety heights}\label{sec:safety-heights}
 
@@ -393,6 +401,7 @@ height is calculated from the difference in the true airspeed to the
 true airspeed for best glide.  This compensation is most accurate when
 airspeed data is available to XCSoar, otherwise the true airspeed is
 estimated from the wind speed and ground speed.
+
 
 \section{Display of altitude required}
 
@@ -588,6 +597,7 @@ cruise-climb, the overall track becomes curved.
 For the case where the final waypoint is active and one is above final
 glide, circling is not necessary so this simple scheme is optimal.
 
+
 \section{Auto MacCready}\label{sec:auto-maccready}
 
 XCSoar can adjust the MacCready ring setting automatically to relieve the
@@ -619,7 +629,9 @@ gauge displays `AutoMC' instead of `MC'.
 
 The Auto MacCready methods are described in further detail below.
 
+
 \subsection*{Final glide}
+
 When above final glide altitude, the MacCready ring setting may be
 increased, resulting in a higher speed to be commanded.  Because the
 ring setting has increased, this also increases the minimum strength
@@ -643,6 +655,7 @@ setting to zero.
 \end{center}
 \end{maxipage}
 
+
 \subsection*{Average climb}
 
 This method sets the MacCready to the average climb rate achieved
@@ -660,6 +673,7 @@ and may therefore encourage the pilot to continue to select weak thermals.
 
 As a result of these limitations, the pilot should be aware of how the
 system operates and adjust his decision-making accordingly.
+
 
 \section{Analysis dialogue}
 
@@ -696,6 +710,7 @@ smoothly with wings level.
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/shot-glidepolar.png}
 \end{center}
+
 
 \section{Flight notifications}
 
