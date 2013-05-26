@@ -137,8 +137,11 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
 #ifdef ENABLE_OPENGL
     GLEnable blend(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+
+    canvas.SelectNullPen();
+    canvas.Select(Brush(COLOR_YELLOW.WithAlpha(80)));
+
+    DrawCircle(canvas);
 #elif defined(USE_GDI)
     const PixelRect rc = GetClientRect();
     ::InvertRect(canvas, &rc);
