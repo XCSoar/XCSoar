@@ -130,11 +130,11 @@ Die entsprechenden Funktionen werden in nachfolgenden Kapiteln ausführlicher be
 Die vier primären Menübuttons (Hauptmenü) werden beim \al durch Drücken der vertikal angeordneten Knöpfe an der linken Seite wie folgt von unten nach oben aktiviert:
 
 \begin{jspecs}
-\item[\button{Nav}]       Kontrolle und Einstellungen bezüglich Navigation, hauptsächlich gedacht für Tasks (Aufgaben).
-\item[\button{Anzeige}] Einstellungen der Anzeige von \textsf{XCSoar}
+\item[\button{Nav}]      Kontrolle und Einstellungen bezüglich Navigation, hauptsächlich gedacht für Tasks (Aufgaben).
+\item[\button{Anzeige}]  Einstellungen der Anzeige von \textsf{XCSoar}
 \item[\button{Konfig.}]  Konfiguration von \textsf{XCSoar}, angeschlossener Geräte,
                                       Einstellungen während des Fluges (Wind, Ballast, MC etc.\
-\item[\button{Info}]       Aufruf diverser Informations Fenster,  Checkliste, Lufträume, Wetter etc.\
+\item[\button{Info}]     Aufruf diverser Informations Fenster,  Checkliste, Lufträume, Wetter etc.\
 \end{jspecs}
 
 In der \textsf{\textsf{PC}}-Version werden hierfür die Tasten  1, 2, 3 und 4 verwendet.
@@ -450,50 +450,19 @@ Diese Dialoge werden in nachfolgenden Kapiteln behandelt werden. Ausgenommen hie
 
 \subsection*{Checklisten Dialog}\index{Checkliste}
 
-Der Checklisten-Dialog ist gedacht, um mehrere Seiten von Erinnerungen \menulabel{\bmenut{Info}{1/3}\blink\bmenut{Check}{liste}}und frei definierbarem Text des Piloten aufzunehmen. Jeder Oberbegriff ist in eckige Klammern zu setzen! 
+Der Checklisten-Dialog ist gedacht, um mehrere Seiten von Erinnerungen 
+\menulabel{\bmenut{Info}{1/3}\blink\bmenut{Check}{liste}} und 
+frei definierbarem Text des Piloten aufzunehmen. 
 
-
-\achtung Es  muß \textbf{mindestens ein} eckiges Klammernpaar vorhanden sein, ansonsten wird die nicht Liste abgearbeitet.
-Damit die Checkliste entsprechend abgearbeitet werden kann, muß ein entsprechendes Textfile \verb|xcsoar-checklist.txt|  
-im \textsf{XCSoarData}-Verzeichnis stehen.
-
-\warning \textcolor{blue}{Lediglich unter Linux \textbf{muß} dies File im Hauptverzeichnis von \textsf{XCSoar}, also \textbf{nicht} im  \textsf{XCSoarData}-Verzeichnis stehen!}
-
-Die typische Anwendung hierfür ist eine Checkliste vor dem Start. Diese Checkliste ist ein reines Textfile und kann solche Dinge enthalten wie z.B.:
+Die typische Anwendung hierfür ist eine Checkliste vor dem Start. Diese Checkliste kann Dinge enthalten wie z.B.:
+Täglicher Check, Vorflugcheck, Außenlandungscheck, Pinkeltüten Einpacken, Erinnerung an Treibstoff, 
 \sketch{figures/checklist.png}
-Täglicher Check, Vorflugcheck, Außenlandungscheck, Pinkeltüten Einpacken, Erinnerung an Treibstoff, Klappen beim Start verriegelt diverse laberfrequenzen usw.\ je nach Gusto des Piloten.  
+Klappen beim Start verriegelt diverse laberfrequenzen usw.\ je nach Gusto des Piloten.  
 
-Ein kleines Beispiel für eine gültige Checkliste wie oben abgebildet: 
-\begin{small}
-\begin{verbatim}
- [Flugzeug]
- Haube geschlossen und verriegelt
- Gurte Fest
- Steuerung frei
- Klappen eingefahren und verriegelt
- Höhenmesser QNH
- .
- .
- [Motor]
- Sprithahn offen
- Zündung an
- Propellerstopper 
- .
- .
- [Funk]
- Vinsebeck     122.200
- Höxter          123.625
-\end{verbatim}
-\end{small}
+Mit  \button{$<$} und \button{$>$} Buttons  können die jeweils nächsten Seiten angewählt werden.
 
-\achtung \textcolor{blue}{Fehlen die eckigen Klammern, so sind keinerlei Menüeinträge sichtbar!}
+Der Aufbau der kleinen Textdatei \verb|xcsoar-checklist.txt| ist im Kap.~\ref{sec:checklist-file} beschrieben. 
 
-
-Der Text in den Klammern dient hierbei als Überschrift (hier ''Flugzeug'') und wird dem Titel ''Checklist'' nachgestellt. 
-Anschließend kann beliebiger Text eingegeben werden. 
-
-
-Mit  \button{$<$} und \button{$>$} Buttons  können die jeweils nächsten Einträge (hier ''Motor'' bzw.\ ''Funk'')angewählt werden.
 
 \subsection*{Status Dialog}
 
