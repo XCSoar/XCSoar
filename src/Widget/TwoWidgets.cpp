@@ -213,3 +213,9 @@ TwoWidgets::SetFocus()
 {
   return first->SetFocus() || second->SetFocus();
 }
+
+bool
+TwoWidgets::KeyPress(unsigned key_code)
+{
+  return first->KeyPress(key_code) || second->KeyPress(key_code);
+}

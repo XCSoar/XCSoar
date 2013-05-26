@@ -116,6 +116,13 @@ public:
     return pager.Save(changed);
   }
 
+  /**
+   * Pass a key press event to the active widget.
+   */
+  bool InvokeKeyPress(unsigned key_code) {
+    return pager.KeyPress(key_code);
+  }
+
   const PixelRect &GetPagerPosition() const {
     return pager.GetPosition();
   }

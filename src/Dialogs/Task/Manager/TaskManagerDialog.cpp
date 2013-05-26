@@ -81,7 +81,8 @@ TaskManagerDialog::~TaskManagerDialog()
 bool
 TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
 {
-  if (WndForm::OnAnyKeyDown(key_code))
+  if (WndForm::OnAnyKeyDown(key_code) ||
+      tab_bar->InvokeKeyPress(key_code))
     return true;
 
   switch (key_code) {

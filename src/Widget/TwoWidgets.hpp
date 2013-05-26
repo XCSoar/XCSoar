@@ -115,6 +115,7 @@ public:
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
+  virtual bool KeyPress(unsigned key_code) override;
 };
 
 #endif

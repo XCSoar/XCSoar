@@ -251,8 +251,6 @@ public:
   void EditTaskPoint(unsigned ItemIndex);
   void OnMakeFinish();
 
-  bool OnKeyDown(unsigned key_code);
-
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
@@ -263,6 +261,7 @@ public:
   virtual void ReClick() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+  virtual bool KeyPress(unsigned key_code) override;
 
 protected:
   void RefreshView();
@@ -541,7 +540,7 @@ TaskEditPanel::MoveDown()
 }
 
 bool
-TaskEditPanel::OnKeyDown(unsigned key_code)
+TaskEditPanel::KeyPress(unsigned key_code)
 {
   switch (key_code){
   case KEY_ESCAPE:
@@ -599,10 +598,6 @@ TaskEditPanel::Show(const PixelRect &rc)
 
   RefreshView();
 
-  dialog.SetKeyDownFunction([this](unsigned key_code){
-      return this->OnKeyDown(key_code);
-    });
-
   ListWidget::Show(rc);
 }
 
@@ -610,7 +605,6 @@ void
 TaskEditPanel::Hide()
 {
   dialog.ResetTaskView();
-  dialog.ClearKeyDownFunction();
 
   ListWidget::Hide();
 }

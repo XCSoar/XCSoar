@@ -194,6 +194,9 @@ OnCloseClicked()
 static bool
 FormKeyDown(unsigned key_code)
 {
+  if (tab_menu->InvokeKeyPress(key_code))
+    return true;
+
   switch (key_code) {
   case KEY_LEFT:
 #ifdef GNAV
