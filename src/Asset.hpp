@@ -175,6 +175,8 @@ IsGrayScaleScreen()
 {
 #ifdef ANDROID
   return IsNookSimpleTouch();
+#elif defined(KOBO)
+  return true;
 #else
   return false;
 #endif
