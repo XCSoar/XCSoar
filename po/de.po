@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-22 11:24+0200\n"
+"POT-Creation-Date: 2013-05-26 12:00+0200\n"
 "PO-Revision-Date: 2013-05-24 14:34+0000\n"
 "Last-Translator: Fabian Berstecher <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -638,11 +638,11 @@ msgstr "Kein Kreisflug"
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:273
 #: src/Dialogs/Settings/dlgConfigInfoboxes.cpp:403
 #: src/Dialogs/Traffic/TrafficList.cpp:350
-#: src/Dialogs/Plane/PlaneListDialog.cpp:412 src/Dialogs/HelpDialog.cpp:49
+#: src/Dialogs/Plane/PlaneListDialog.cpp:411 src/Dialogs/HelpDialog.cpp:49
 #: src/Dialogs/dlgInfoBoxAccess.cpp:127 src/Dialogs/ReplayDialog.cpp:155
 #: src/Dialogs/dlgStatus.cpp:94
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:192
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:196
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:219
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:223
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:63
 #: src/Dialogs/Task/AlternatesListDialog.cpp:108
 #: src/Dialogs/Weather/NOAAList.cpp:271
@@ -3230,7 +3230,7 @@ msgstr "Reguläre Aufgabe"
 msgid "No task"
 msgstr "Keine Aufgabe"
 
-#: src/Input/InputEventsTask.cpp:338 src/Renderer/MapItemListRenderer.cpp:512
+#: src/Input/InputEventsTask.cpp:337 src/Renderer/MapItemListRenderer.cpp:512
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:46
 #: src/Dialogs/Settings/dlgBasicSettings.cpp:322
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
@@ -3243,7 +3243,7 @@ msgstr "Keine Aufgabe"
 msgid "Altitude"
 msgstr "Höhe"
 
-#: src/Input/InputEventsTask.cpp:339
+#: src/Input/InputEventsTask.cpp:338
 #: src/Renderer/FlightStatisticsRenderer.cpp:133
 #: src/Renderer/FlightStatisticsRenderer.cpp:157
 #: src/Renderer/FlightStatisticsRenderer.cpp:186
@@ -3256,7 +3256,7 @@ msgstr "Geschw."
 #. Important: all pages after Units in this list must not have data fields that are
 #. unit-dependent because they will be saved after their units may have changed.
 #. ToDo: implement API that controls order in which pages are saved
-#: src/Input/InputEventsTask.cpp:340
+#: src/Input/InputEventsTask.cpp:339
 #: src/Renderer/FlightStatisticsRenderer.cpp:132
 #: src/Renderer/FlightStatisticsRenderer.cpp:156
 #: src/Renderer/FlightStatisticsRenderer.cpp:185
@@ -3265,19 +3265,19 @@ msgstr "Geschw."
 msgid "Time"
 msgstr "Zeit"
 
-#: src/Input/InputEventsTask.cpp:341
+#: src/Input/InputEventsTask.cpp:340
 msgid "Task start"
 msgstr "Aufgabenstart"
 
-#: src/Input/InputEventsTask.cpp:343
+#: src/Input/InputEventsTask.cpp:342
 msgid "Next turnpoint"
 msgstr "Nächster Wendepunkt"
 
-#: src/Input/InputEventsTask.cpp:345
+#: src/Input/InputEventsTask.cpp:344
 msgid "Task finished"
 msgstr "Aufgabenende"
 
-#: src/Input/InputEventsTask.cpp:347
+#: src/Input/InputEventsTask.cpp:346
 msgid "In sector, arm advance when ready"
 msgstr "Im Sektor, Weiter aktivieren wenn bereit"
 
@@ -3367,7 +3367,7 @@ msgstr "Höhe"
 #: src/Renderer/MapItemListRenderer.cpp:216
 #: src/Renderer/MapItemListRenderer.cpp:241
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:95
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:258
 #, no-c-format
 msgid "AGL"
 msgstr "AGL"
@@ -3375,7 +3375,7 @@ msgstr "AGL"
 #: src/Renderer/MapItemListRenderer.cpp:222
 #: src/Renderer/MapItemListRenderer.cpp:247
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:97
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
 #, no-c-format
 msgid "MSL"
 msgstr "MSL"
@@ -3554,27 +3554,27 @@ msgid "Australian"
 msgstr "Australisch"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:121 src/Startup.cpp:322
+#: src/UtilsSettings.cpp:121 src/Startup.cpp:321
 msgid "Loading Terrain File..."
 msgstr "Lade Geländedatei..."
 
-#: src/Profile/DeviceConfig.cpp:141 src/Dialogs/Device/DeviceEditWidget.cpp:66
+#: src/Profile/DeviceConfig.cpp:161 src/Dialogs/Device/DeviceEditWidget.cpp:64
 #: src/Dialogs/Device/DeviceListDialog.cpp:357
 #, no-c-format
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: src/Profile/DeviceConfig.cpp:152 src/Dialogs/Device/DeviceEditWidget.cpp:72
+#: src/Profile/DeviceConfig.cpp:180 src/Dialogs/Device/DeviceEditWidget.cpp:70
 #, no-c-format
 msgid "Bluetooth server"
 msgstr "Bluetoothserver"
 
-#: src/Profile/DeviceConfig.cpp:171 src/Dialogs/Device/DeviceEditWidget.cpp:68
+#: src/Profile/DeviceConfig.cpp:199 src/Dialogs/Device/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "GPS Intermediate Driver"
 msgstr "GPS Adapter"
 
-#: src/Profile/DeviceConfig.cpp:174 src/Dialogs/Device/DeviceEditWidget.cpp:71
+#: src/Profile/DeviceConfig.cpp:202 src/Dialogs/Device/DeviceEditWidget.cpp:69
 #, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Eingebautes GPS & Sensoren"
@@ -3596,12 +3596,12 @@ msgstr "Warnung"
 msgid "Battery low"
 msgstr "Batteriestand niedrig"
 
-#: src/Startup.cpp:270
+#: src/Startup.cpp:269
 msgid "Initialising"
 msgstr "Initialisierung läuft"
 
 #. Start the device thread(s)
-#: src/Startup.cpp:395
+#: src/Startup.cpp:394
 msgid "Starting devices"
 msgstr "Starte Geräte"
 
@@ -3611,43 +3611,43 @@ msgstr "Starte Geräte"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Startup.cpp:405
+#: src/Startup.cpp:404
 msgid "Initialising display"
 msgstr "Initialisiere Anzeige"
 
 #. Show progress dialog
-#: src/Startup.cpp:503 src/Startup.cpp:540 src/Startup.cpp:584
+#: src/Startup.cpp:502 src/Startup.cpp:539 src/Startup.cpp:583
 msgid "Shutdown, please wait..."
 msgstr "Abstellvorgang, bitte warten..."
 
 #. Stop logger and save igc file
-#: src/Startup.cpp:521
+#: src/Startup.cpp:520
 msgid "Shutdown, saving logs..."
 msgstr "Abschalten, speichere Logs..."
 
 #. Save settings to profile
-#: src/Startup.cpp:533
+#: src/Startup.cpp:532
 msgid "Shutdown, saving profile..."
 msgstr "Abstellvorgang, speichere Profil..."
 
 #. Save the task for the next time
-#: src/Startup.cpp:576
+#: src/Startup.cpp:575
 msgid "Shutdown, saving task..."
 msgstr "Abstellvorgang, speichere Aufgabe..."
 
-#: src/Device/Descriptor.cpp:417
+#: src/Device/Descriptor.cpp:411
 msgid "Unable to open port"
 msgstr "Kann Port nicht öffnen"
 
-#: src/Device/Descriptor.cpp:929 src/Device/Descriptor.cpp:935
+#: src/Device/Descriptor.cpp:920 src/Device/Descriptor.cpp:926
 msgid "Sending declaration"
 msgstr "Übertrage Deklaration"
 
-#: src/Device/Descriptor.cpp:972
+#: src/Device/Descriptor.cpp:963
 msgid "Reading flight list"
 msgstr "Lese Flugliste"
 
-#: src/Device/Descriptor.cpp:992
+#: src/Device/Descriptor.cpp:983
 msgid "Downloading flight log"
 msgstr "Hole Fluglog"
 
@@ -3773,49 +3773,49 @@ msgstr "Der Dateimanager ist auf diesem Gerät nicht verfügbar."
 msgid "The file manager requires Android 2.3."
 msgstr "Der Dateimanager erfordert Android 2.3."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:75
+#: src/Dialogs/Device/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "IOIO switches and Nunchuk"
 msgstr "IOIO Schalter und Nunchuk"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:77
+#: src/Dialogs/Device/DeviceEditWidget.cpp:75
 #, no-c-format
 msgid "IOIO i2c pressure sensor"
 msgstr "IOIO i2c Drucksensor"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:78
+#: src/Dialogs/Device/DeviceEditWidget.cpp:76
 #, no-c-format
 msgid "IOIO voltage sensor"
 msgstr "IOIO Spannungssensor"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
-#: src/Dialogs/Device/DeviceEditWidget.cpp:83
-#: src/Dialogs/Device/DeviceEditWidget.cpp:579
+#: src/Dialogs/Device/DeviceEditWidget.cpp:81
+#: src/Dialogs/Device/DeviceEditWidget.cpp:577
 #, no-c-format
 msgid "TCP Port"
 msgstr "TCP-Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:84
+#: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "UDP Port"
 msgstr "UDP Port"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:558
+#: src/Dialogs/Device/DeviceEditWidget.cpp:556
 msgid "Port"
 msgstr "Anschluss"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:564
+#: src/Dialogs/Device/DeviceEditWidget.cpp:562
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
 msgstr "Baudrate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:571
+#: src/Dialogs/Device/DeviceEditWidget.cpp:569
 msgid "Bulk baud rate"
 msgstr "Bündel Baudrate"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:572
+#: src/Dialogs/Device/DeviceEditWidget.cpp:570
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
@@ -3823,19 +3823,19 @@ msgstr ""
 "Die Baudrate für die gebündelte Übertragung, wie die Aufgabendeklaration "
 "oder der Flugdownload."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:585
+#: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "I2C Bus"
 msgstr "I2C Bus"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:585
+#: src/Dialogs/Device/DeviceEditWidget.cpp:583
 msgid "Select the description or bus number that matches your configuration."
 msgstr "Wähle die Beschreibung oder Busnummer passend zu deiner Konfiguration."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:592
+#: src/Dialogs/Device/DeviceEditWidget.cpp:590
 msgid "I2C Addr"
 msgstr "I2C Adresse"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:592
+#: src/Dialogs/Device/DeviceEditWidget.cpp:590
 msgid ""
 "The i2c address that matches your configuration.This field is not used when "
 "your selection in the I2C Bus field is not an i2c bus number. In case you do "
@@ -3847,11 +3847,11 @@ msgstr ""
 "diese Dinge nicht geläufig sind gehe davon aus, dass dieses Feld nicht "
 "genutzt wird."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#: src/Dialogs/Device/DeviceEditWidget.cpp:599
 msgid "Pressure use"
 msgstr "Druck Verwendung"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:601
+#: src/Dialogs/Device/DeviceEditWidget.cpp:599
 msgid ""
 "Select the purpose of this pressure sensor. This sensor measures some "
 "pressure. Here you tell the system what pressure this is and what its should "
@@ -3860,15 +3860,15 @@ msgstr ""
 "Wähle die Verwendung des Drucksensor. Der Sensor misst ein bel. Druck. "
 "Hiermit kann das System den Druck richtig einsetzen."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:616
+#: src/Dialogs/Device/DeviceEditWidget.cpp:614
 msgid "Driver"
 msgstr "Treiber"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:618
+#: src/Dialogs/Device/DeviceEditWidget.cpp:616
 msgid "Sync. from device"
 msgstr "Abgleich vom Gerät"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:619
+#: src/Dialogs/Device/DeviceEditWidget.cpp:617
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
@@ -3876,11 +3876,11 @@ msgstr ""
 "Dies Option veranlasst XCSoar Einstellungen wie z.B. den MacCready Wert, "
 "Verschmutzung und Ballast vom externen Gerät zu übernehmen."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:624
+#: src/Dialogs/Device/DeviceEditWidget.cpp:622
 msgid "Sync. to device"
 msgstr "Abgleich zum Gerät"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:625
+#: src/Dialogs/Device/DeviceEditWidget.cpp:623
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
@@ -3888,15 +3888,15 @@ msgstr ""
 "Dies Option veranlasst XCSoar Einstellungen wie z.B. den MacCready Wert, "
 "Verschmutzung und Ballast zum externen Gerät zu schicken."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:631
+#: src/Dialogs/Device/DeviceEditWidget.cpp:629
 msgid "Enable this if you use a K6Bt to connect the device."
 msgstr "Aktiviere dies, wenn Du ein K6Bt angeschlossen hast."
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:635
+#: src/Dialogs/Device/DeviceEditWidget.cpp:633
 msgid "Ignore checksum"
 msgstr "Prüfsumme ignorieren"
 
-#: src/Dialogs/Device/DeviceEditWidget.cpp:636
+#: src/Dialogs/Device/DeviceEditWidget.cpp:634
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
@@ -3921,8 +3921,8 @@ msgstr "Flug Download"
 #: src/Dialogs/Device/DeviceListDialog.cpp:500
 #: src/Dialogs/Device/DeviceListDialog.cpp:506
 #: src/Dialogs/Device/PortMonitor.cpp:150
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:187
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:201
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:214
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:228
 msgid "Manage"
 msgstr "Verwalten"
 
@@ -4739,7 +4739,7 @@ msgstr "Verfolgung"
 msgid "Experimental Features"
 msgstr "Experimentelle Funktionen"
 
-#: src/Dialogs/Settings/dlgConfiguration.cpp:294
+#: src/Dialogs/Settings/dlgConfiguration.cpp:297
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:278
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
@@ -4961,20 +4961,23 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:169
-#: src/Dialogs/Plane/PlaneListDialog.cpp:250
-#: src/Dialogs/Plane/PlaneListDialog.cpp:401
-#: src/Dialogs/Task/Manager/TaskListPanel.cpp:102
-msgid "Load"
-msgstr "Laden"
+#, fuzzy
+msgid "Activate"
+msgstr "Aktiv"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 msgid "Active"
 msgstr "Aktiv"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
-#, c-format
-msgid "Loading of plane profile \"%s\" failed!"
+#, fuzzy, c-format
+msgid "Activating plane profile \"%s\" failed!"
 msgstr "Das Laden des Flugzeugprofils \"%s\" ist fehlgeschlagen!"
+
+#: src/Dialogs/Plane/PlaneListDialog.cpp:250
+#: src/Dialogs/Plane/PlaneListDialog.cpp:401
+msgid " "
+msgstr ""
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:251
 #, c-format
@@ -5004,11 +5007,11 @@ msgid "Do you really want to delete plane profile \"%s\"?"
 msgstr "Möchtest Du das Flugzeugprofil \"%s\" wirklich löschen?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:398
-#, c-format
-msgid "Do you want to load plane profile \"%s\"?"
+#, fuzzy, c-format
+msgid "Do you want to activate plane profile \"%s\"?"
 msgstr "Möchtest Du das Flugzeugprofil \"%s\" laden?"
 
-#: src/Dialogs/Plane/PlaneListDialog.cpp:411
+#: src/Dialogs/Plane/PlaneListDialog.cpp:410
 msgid "Planes"
 msgstr "Flugzeuge"
 
@@ -5097,8 +5100,8 @@ msgid "System"
 msgstr "System"
 
 #: src/Dialogs/dlgStatus.cpp:134
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:189
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:203
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:216
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:230
 msgid "Rules"
 msgstr "Regeln"
 
@@ -6433,7 +6436,7 @@ msgid "Use a recent average of the ground track as basis."
 msgstr "Nehme einen aktuellen mitteleren Kurs über Grund als Basis"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:62
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:145
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:172
 #: Data/Dialogs/dlgTarget_L.xml:3 Data/Dialogs/dlgTarget.xml:3
 #: Data/Dialogs/dlgTaskManager_L.xml:5 Data/Dialogs/dlgTaskManager.xml:5
 #: Data/Input/default.xci:431 Data/Input/default.xci:1051
@@ -7137,12 +7140,12 @@ msgid "Show FAI triangle areas on the map."
 msgstr "Zeige FAI-Dreieck Gebiete auf der Karte"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:247
 msgid "Start max. speed"
 msgstr "Max. Abfluggeschwindigkeit"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:67
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:249
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:248
 msgid ""
 "Maximum speed allowed in start observation zone.  Set to 0 for no limit."
 msgstr ""
@@ -7162,12 +7165,12 @@ msgstr ""
 "gesetzt wird kein Übertritt toleriert."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:81
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:253
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:252
 msgid "Start max. height"
 msgstr "Maximal Abflughöhe"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:82
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:254
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:253
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
@@ -7188,34 +7191,34 @@ msgstr ""
 "wird kein Überhöhen toleriert."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:96
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:262
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:261
 #, no-c-format
 msgid "Reference is altitude above mean sea level."
 msgstr "Referenz ist die Höhe über dem Meeresspiegel ."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:98
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:260
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:259
 #, no-c-format
 msgid "Reference is the height above the task point."
 msgstr "Bezogen auf die Höhe über dem Aufgabenpunkt."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:102
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:266
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:265
 msgid "Start height ref."
 msgstr "Abflughöhe bezogen auf"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:103
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:267
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:266
 msgid "Reference used for start max height rule."
 msgstr "Bezug für die Regel über die max. Abflughöhe."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:111
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:270
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:269
 msgid "Finish min. height"
 msgstr "Min. Ankunftshöhe"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:112
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:271
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:270
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
@@ -7224,12 +7227,12 @@ msgstr ""
 "Setze auf 0 für kein Limit."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:118
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:275
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:274
 msgid "Finish height ref."
 msgstr "Zielhöhenref."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:119
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:276
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:275
 msgid "Reference used for finish min height rule."
 msgstr "Bezug für die Regel über die min. Ankunftshöhe."
 
@@ -7273,16 +7276,39 @@ msgstr ""
 "eine Kombination aus Classic und FAI Regeln. 30% der FAI Punkte werden zur "
 "Classic Wertung dazu gezählt."
 
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:144
+#, no-c-format
+msgid ""
+"PG online contest with different track values: Free flight - 1 km = 1.0 "
+"point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:147
+#, no-c-format
+msgid ""
+"European PG online contest of the DHV organization. Pretty much the same as "
+"the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
+"p and 2.0 p for FAI triangles respectively."
+msgstr ""
+
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:150
+#, no-c-format
+msgid ""
+"Austrian online glider contest. Tracks around max. six waypoints are scored. "
+"The bounding box part with 1 km = 1.0 point and the additional zick-zack "
+"part with 1 km = 0.5 p."
+msgstr ""
+
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:153
 #, no-c-format
 msgid "The FFVV NetCoupe \"libre\" competiton."
 msgstr "Der FFVV NetCoupe \"libre\" Wettbewerb."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:153
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:156
 msgid "On-Line Contest"
 msgstr "On-Line Contest"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:154
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:157
 msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
@@ -7290,11 +7316,11 @@ msgstr ""
 "Wähle die Regeln für die OnLine Contest Punkteoptimierung. Die "
 "Implementierung entspricht der offiziellen Ausgabe vom 23. Sept. 2010."
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:158
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:161
 msgid "Predict Contest"
 msgstr "Wertungs-Vorhersage"
 
-#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:159
+#: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:162
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
@@ -7358,7 +7384,7 @@ msgid "Default task type for new tasks you create."
 msgstr "Standard Aufgabentyp für neue angelegte Aufgaben."
 
 #: src/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp:194
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:233
 msgid "AAT min. time"
 msgstr "AAT min. Zeit"
 
@@ -7998,27 +8024,27 @@ msgstr "Innerer Radius des OZ Sektors."
 msgid "Angle"
 msgstr "Winkel"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:126
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:227
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:321
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:153
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:254
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:346
 #: Data/Dialogs/dlgTaskManager_L.xml:3 Data/Dialogs/dlgTaskManager.xml:3
 msgid "Task Manager"
 msgstr "Aufgaben Verwaltung"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:181
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:208
 msgid "Calculator"
 msgstr "Rechner"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:184
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:198
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:211
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:225
 msgid "Turn Points"
 msgstr "Wendepunkte"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:318
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:343
 msgid "Validation Errors"
 msgstr "Validierungsfehler"
 
-#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:320
+#: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:345
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
@@ -8046,51 +8072,51 @@ msgstr "Als Endpunkt"
 msgid "Clear All"
 msgstr "Alle Löschen"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:322
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:321
 msgid "Clear all points?"
 msgstr "Alle Punkte löschen?"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:322
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:321
 msgid "Task edit"
 msgstr "Aufgabe editieren"
 
-#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:375
+#: src/Dialogs/Task/Manager/TaskEditPanel.cpp:374
 msgid "Add Turnpoint"
 msgstr "Wendepunkt hinzufügen"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Task type"
 msgstr "Aufgabentyp"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:231
 msgid "Sets the behaviour for the current task."
 msgstr "Betimmt das Verhalten der aktuellen Aufgabe."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:234
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:233
 msgid "Minimum AAT task time in minutes."
 msgstr "Minimale AAT Aufgabenzeit in Minuten."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
 msgid "Arm start manually"
 msgstr "Abflug manuell auf Bereit"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:238
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
 msgstr "Legt fest, ob der Abflug manuall oder automatisch aktiviert wird."
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start open time"
 msgstr "Abflugöffnungszeit"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:245
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
 msgid "Start close time"
 msgstr "Abflugschluss"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:279
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:278
 msgid "FAI start / finish rules"
 msgstr "FAI Start- bzw. Zielregeln"
 
-#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:280
+#: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:279
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
@@ -8110,6 +8136,10 @@ msgstr "Erzeuge neue Aufgabe?"
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:82
 msgid "Task New"
 msgstr "Neue Aufgabe"
+
+#: src/Dialogs/Task/Manager/TaskListPanel.cpp:102
+msgid "Load"
+msgstr "Laden"
 
 #: src/Dialogs/Task/Manager/TaskListPanel.cpp:103
 msgid "Rename"
