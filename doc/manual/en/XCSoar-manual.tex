@@ -26,9 +26,6 @@
 % Front page
 \maketitle
 
-%%%%%%%%%%%%%%%%%%%%%%
-% Todo's
-\listoftodos
  
 %%%%%%%%%%%%%%%%%%%%%%
 % Table of contents
@@ -126,9 +123,17 @@ furnishing, performance, or use of this material.
 \input{ch13_history.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}\hypersetup{linkcolor=orange}
+\printindex
+
+%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 
+%%%%%%%%%%%%%%%%%%%%%%
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
 \input{gpl.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
 
 \end{document}
