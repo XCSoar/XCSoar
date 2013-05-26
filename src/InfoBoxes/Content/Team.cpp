@@ -22,13 +22,40 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Team.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Formatter/Units.hpp"
 #include "TeamActions.hpp"
+#include "Dialogs/Traffic/TrafficDialogs.hpp"
+#include "Widget/CallbackWidget.hpp"
+#include "Language/Language.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
+
+static void
+ShowTeamCodeDialog()
+{
+  dlgTeamCodeShowModal();
+}
+
+static Widget *
+LoadTeamCodeDialog(unsigned id)
+{
+  return new CallbackWidget(ShowTeamCodeDialog);
+}
+
+static constexpr InfoBoxPanel team_code_infobox_panels[] = {
+  { N_("Team Code"), LoadTeamCodeDialog },
+  { nullptr, nullptr }
+};
+
+const InfoBoxPanel *
+InfoBoxContentTeamCode::GetDialogContent()
+{
+  return team_code_infobox_panels;
+}
 
 void
 InfoBoxContentTeamCode::Update(InfoBoxData &data)
