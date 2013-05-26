@@ -78,6 +78,32 @@ TaskManagerDialog::~TaskManagerDialog()
   delete task;
 }
 
+bool
+TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
+{
+  if (WndForm::OnAnyKeyDown(key_code))
+    return true;
+
+  switch (key_code) {
+  case KEY_ESCAPE:
+    if (!modified)
+      /* close the dialog immediately if nothing was modified */
+      return false;
+
+    if (tab_bar->GetCurrentPage() != 4) {
+      /* switch to "close" page instead of closing the dialog */
+      tab_bar->SetCurrentPage(4);
+      tab_bar->FocusCurrentWidget();
+      return true;
+    }
+
+    return false;
+
+  default:
+    return false;
+  }
+}
+
 void
 TaskManagerDialog::OnAction(int id)
 {
@@ -207,32 +233,6 @@ TaskManagerDialog::Create(SingleWindow &parent)
   }
 
   UpdateCaption();
-
-  /* keyboard handler */
-
-  WndForm::SetKeyDownFunction([this](unsigned key_code) {
-      if (second_key_down_function && second_key_down_function(key_code))
-        return true;
-
-      switch (key_code) {
-      case KEY_ESCAPE:
-        if (!modified)
-          /* close the dialog immediately if nothing was modified */
-          return false;
-
-        if (tab_bar->GetCurrentPage() != 4) {
-          /* switch to "close" page instead of closing the dialog */
-          tab_bar->SetCurrentPage(4);
-          tab_bar->FocusCurrentWidget();
-          return true;
-        }
-
-        return false;
-
-      default:
-        return false;
-      }
-    });
 }
 
 void

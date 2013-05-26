@@ -418,12 +418,12 @@ WndForm::ShowModal()
     }
 
     if (event.IsKeyDown()) {
-      if (key_down_function &&
+      if (
 #ifdef USE_GDI
           IdentifyDescendant(event.msg.hwnd) &&
 #endif
           !CheckSpecialKey(this, event) &&
-          key_down_function(event.GetKeyCode()))
+          OnAnyKeyDown(event.GetKeyCode()))
         continue;
 
 #ifdef ENABLE_SDL
@@ -644,3 +644,9 @@ WndForm::ReinitialiseLayout()
   }
 }
 #endif
+
+bool
+WndForm::OnAnyKeyDown(unsigned key_code)
+{
+  return key_down_function && key_down_function(key_code);
+}
