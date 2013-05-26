@@ -399,8 +399,7 @@ PlaneListWidget::OnActivateItem(unsigned i)
              list[i].name.c_str());
 
   if (ShowMessageBox(tmp, _("Load"), MB_YESNO) == IDYES)
-    if (LoadWithDialog(i))
-      form->SetModalResult(mrOK);
+    LoadWithDialog(i);
 }
 
 void
