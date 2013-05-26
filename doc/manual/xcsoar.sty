@@ -5,15 +5,24 @@
 \usepackage{rotating}
 \usepackage{multicol}
 \usepackage[disable]{todonotes}
-\usepackage{hyperref}
+\usepackage[colorlinks=true]{hyperref}
 \usepackage{gensymb}
 \makeatletter
 \def\trdvvs{Vega}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
+% Reference colors
+\hypersetup{linkcolor=blue,     % internal links
+linktocpage=true,               % only page numbers
+urlcolor=blue,                  % external links 
+bookmarks=true,
+bookmarksnumbered=true,
+breaklinks=true                 % wrap links is Ok
+}
+
 % Define command to insert XCSoar website
-\newcommand{\xcsoarwebsite}[1]{\href{http://www.xcsoar.org#1}{www.xcsoar.org#1}}
+\newcommand{\xcsoarwebsite}[1]{\url{http://www.xcsoar.org#1}}
 
 \newcommand{\tip}[0]{\marginlabel{\parbox{1.1cm}{\includegraphics[width=0.7cm]{figures/reminder.pdf}}}}
 
