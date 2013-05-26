@@ -20,29 +20,18 @@
 }
 */
 
-#ifndef XCSOAR_NOT_ACKED_DAY_PREDICATE_HPP
-#define XCSOAR_NOT_ACKED_DAY_PREDICATE_HPP
+#include "ActivePredicate.hpp"
+#include "ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
 
-#include "Compiler.h"
-
-class ProtectedAirspaceWarningManager;
-class AbstractAirspace;
-
-/**
- * Exclude airspaces that have been marked as "Ack Day".  This
- * predicate is used for calculations that shall ignore those
- * airspaces.
- */
-class NotAckedDayPredicate {
-  const ProtectedAirspaceWarningManager &warnings;
-
-public:
-  constexpr
-  NotAckedDayPredicate(const ProtectedAirspaceWarningManager &_warnings)
-    :warnings(_warnings) {}
-
-  gcc_pure
-  bool operator()(const AbstractAirspace &airspace) const;
-};
-
-#endif
+bool
+ActiveAirspacePredicate::operator()(const AbstractAirspace &airspace) const
+{
+  if (warnings != nullptr) {
+    ProtectedAirspaceWarningManager::Lease lease(*warnings);
+    return lease->IsActive(airspace);
+  } else
+    /* fallback */
+    return airspace.IsActive();
+}

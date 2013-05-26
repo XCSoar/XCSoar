@@ -22,8 +22,7 @@
 
 #include "RoutePlannerGlue.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Airspace/NotAckedDayPredicate.hpp"
-#include "Util/Manual.hpp"
+#include "Airspace/ActivePredicate.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
@@ -46,20 +45,9 @@ RoutePlannerGlue::Synchronise(const Airspaces &master,
                               const AGeoPoint &destination)
 {
   /* ignore acked airspaces (if we have an AirspaceWarningManager) */
-  Manual<WrapAirspacePredicate<NotAckedDayPredicate>> not_acked_predicate;
-  if (warnings != nullptr)
-    not_acked_predicate.Construct(*warnings);
-
-  const AirspacePredicate &not_acked_predicate2 = not_acked_predicate;
-  AirspacePredicateTrue true_predicate;
-  const AirspacePredicate &predicate = warnings != nullptr
-    ? not_acked_predicate2
-    : true_predicate;
+  WrapAirspacePredicate<ActiveAirspacePredicate> predicate(warnings);
 
   planner.Synchronise(master, predicate, origin, destination);
-
-  if (warnings != nullptr)
-    not_acked_predicate.Destruct();
 }
 
 bool

@@ -20,11 +20,32 @@
 }
 */
 
-#include "NotAckedDayPredicate.hpp"
-#include "ProtectedAirspaceWarningManager.hpp"
+#ifndef XCSOAR_ACTIVE_AIRSPACE_PREDICATE_HPP
+#define XCSOAR_ACTIVE_AIRSPACE_PREDICATE_HPP
 
-bool
-NotAckedDayPredicate::operator()(const AbstractAirspace &airspace) const
-{
-  return !warnings.GetAckDay(airspace);
-}
+#include "Compiler.h"
+
+class ProtectedAirspaceWarningManager;
+class AbstractAirspace;
+
+/**
+ * Match only airspaces that are "active", see
+ * AirspaceWarningManager::IsActive() for a definition.
+ *
+ * The ProtectedAirspaceWarningManager attribute is optional.  It will
+ * only query AbstractAirspace::IsActive() if the
+ * ProtectedAirspaceWarningManager is nullptr.
+ */
+class ActiveAirspacePredicate {
+  const ProtectedAirspaceWarningManager *warnings;
+
+public:
+  constexpr
+  ActiveAirspacePredicate(const ProtectedAirspaceWarningManager *_warnings)
+    :warnings(_warnings) {}
+
+  gcc_pure
+  bool operator()(const AbstractAirspace &airspace) const;
+};
+
+#endif
