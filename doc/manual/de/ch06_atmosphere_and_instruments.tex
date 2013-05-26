@@ -177,9 +177,8 @@ oder ausgeschaltet werden. Nähere Details hierzu in Kap.~\ref{sec:trail}.
 \section{Thermikprofil}\index{Thermikprofil}
 Um das beste Höhenband schnell ausfindig zu machen, werden Daten über die Steigwerte in
 Abhängigkeit von der geflogenen Höhe aufgenommen.
-
 Diese Anzeige wird auf der linken Seite der Karte oberhalb der Endanflugshöhenindikatoren dargestellt.
-Sie ist nicht sichtbar, wenn man sich oberhalb des Gleitpfades befindet. \todonum{wirklich?}
+Sie ist nicht sichtbar, wenn man sich oberhalb des Gleitpfades befindet.
 
 Das Thermikprofil ist horizontal skaliert gemäß des bislang besten mittleren Steigens.
 Vertikal wird die Höhe dargestellt und skaliert gemäß der höchsten bislang erreichten Höhe nach dem Start
@@ -190,27 +189,24 @@ Die Länge des  Pfeil ist nach dem derzeit eingestellten MC-Wert skaliert und gi
 Wenn sich der Pilot auf Thermiksuche befindet kann somit die Position des Pfeiles ein Anhaltspunkt sein,
 wie wichtig es ist, wieder Thermik zu finden\dots
 Wenn der Pfeil sich auf den unteren Rand des Bandes zubewegt, befindet sich das Flugzeug nahe der Aufbruchshöhe und der Pilot sollte sich allmählig damit abfinden, nun auch in schwächerer Thermik kurbeln zu müssen.
+
 \section{Thermikfinder}
 Durch einen Algorythmus wird der Kern der Thermik errechnet und dargestellt.
 Das Symbol für das Zentrum ist eine kleine grüne Spirale auf der Karte der moving map.
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
-\end{center}
+\sketch{figures/shot-tlocator-circling.png}
 Der Thermikfinder markiert \textit{fortlaufend  die letzten 20 Bärte} während des Fluges auf der Karte.
-
 Die Position des Zentrum kann mit der Abdrift durch den ermittelten Wind korrigiert werden.
 
 Dies bedeutet, daß \xc sich die Position der Thermikquelle intern über Grund merkt.
 Mit anderen Worten, wenn Du einen Bart ganz oben verläßt, und später zu diesem in tieferen
 Höhen zurückkehrst wird die angezeigte Position auf der Karte die Position in der
 entsprechenden Höhe sein (welche etwas luvwärts stehen wird als die Basis.)
+\sketch{figures/shot-tlocator-cruise.png}
 
 Wenn sich der Wind ändert und die Thermikquelle noch immer aktiv ist,
 wird die Position auf der Karte ein Hinweis für die Windänderung sein, denn
 durch die Abdrift in der Höhe ist der Bart mit dem Wind gewandert.
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
-\end{center}
+
 \section{Zentrierhilfe (info info Zentrierhilfe)}\index{Zentrierhilfe}
 Die Zentrierhilfe ist eine graphische Hilfe, um den Kern der Thermik zu treffen und einfach zu zentrieren.
 Wenn diese in den Konfigurationseinstellungen aktiviert ist ( \config{thermalassistant}), erscheint beim
@@ -249,7 +245,7 @@ Ein bißchen Training mit diesem Verfahren um  erfolgreich zu zentrieren ist sic
 
 \section{Konvektionsvorhersagen}\label{sec:convection-forecast}\index{Konvektionsvorhersage}
 Wenn das Flugzeug mit einem Außentemperatur- und Feuchtefühler ausgestattet ist, kann anhand
-\menulabel{\bmenut{Konfig}{1/3}\blink\bmenus{Flug}}vorhandener und ermittelter Daten  eine simple Vorhersage der Basishöhe und Konvektion vorgenommen werden. Der Feuchtesensor wird vorwiegend für die Ermittlung der Basishöhe benutzt.\todonum{und wo schließt man den an\dots?}
+\menulabel{\bmenut{Konfig}{1/3}\blink\bmenus{Flug}}vorhandener und ermittelter Daten  eine simple Vorhersage der Basishöhe und Konvektion vorgenommen werden. Der Feuchtesensor wird vorwiegend für die Ermittlung der Basishöhe benutzt.
 
 Hierzu muß der Pilot vor dem Flug die maximal erwartete Temperatur in einer Infobox eingeben.
  Siehe Kap.~\ref{sec:basic-sett-dial}.
@@ -275,21 +271,12 @@ Zeigt die Windgeschwindigkeit und Richtung über die Höhe an.
 
 Der Button \button{Wind einstellen} öffnet die Windeinstellung, z.B.\ um Wind manuell zu korrigieren.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-wind.png}
-%\end{center}
-
 \item[Temperaturverlauf]
 \sketch{figures/analysis-wind.png} Diese Seite ist nur verfügbar bzw.\ mit Daten gefüllt, wenn ein entsprechendes Instrumentan  \xc angeschlossen ist, welches die Außentemperatur und Feuchtigkeit angibt.
 
 Das Diagramm zeigt den Verlauf von Temperatur der trockenen Luft, Taupunkt, und Außentemperatur
 über der Höhe. Weiterhin wird die hieraus ermittelte Wolkenbasis und die Konvektionshöhe  angegeben.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-temptrace.png}
-%\end{center}
 
 \end{description}
 Das Barogramm (Kap.~\ref{sec:analysis-dialog-climb}) und der Verlauf des Steigens über der Höhe sind
@@ -307,14 +294,9 @@ In diesem Abschnitt soll nur auf die Anwendung eingegangen werden; eine ausführ
 Beschreibung der Details von RASP gibt es in  \url{www.drjack.info}.
 und welche Limitierungen diese Art von Vorhersage innehat.
 
-
 Die einzelnen Arten der Überlagerung auf der Karte (z.B.\ Basishöhe, Niederschlag,
 max.\ Temperatur etc.\  können dort aufgerufen werden.
 Die einzelnen Parameter werden unten erklärt und sind auch im Feld \button{Hilfe} zu finden.
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/XCS64-Wetter-Dialog.png}
-%\end{center}
 
 In der Auswahlbox kann der gewünschte darzustellende Wert angeklickt werden.
 Die Vorhersagezeit kann eingestellt werden. Felder bzw.\ Werte, in RASP derzeit nicht verfügbar sind,
