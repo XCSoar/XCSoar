@@ -46,6 +46,8 @@ XCSoar TE
   - show full waypoint names by default
   - show reachable airport names outlined
     (less clutter than the rounded rectangles)
+  - suppress drawing duplicate topography labels
+    (will be part of XCSoar 6.7)
 * devices
   - LX1600 configuration dialog
 * waypoint editor
@@ -895,10 +897,10 @@ Version 6.1 - 2011/05/19
   - configurable aircraft symbol
   - new translations: Danish, Norwegian Bokmal, Romanian
 * route planning
-  - new optional minimum-time route planning around airspace and terrain.  
+  - new optional minimum-time route planning around airspace and terrain.
     - allows avoidance or terrain, airspace or both
     - takes final glide and cruise-climb portions of flight into account
-  - Configuration in Route Planner page of settings.  
+  - Configuration in Route Planner page of settings.
     - Feature is by default disabled.
     - See settings help text for configuration options
   - Limitations of current version:
@@ -952,7 +954,7 @@ Version 6.1 - 2011/05/19
   - FAI Triangle filter when adding turnpoints
   - added BGA start point sector
   - added AAT inner radius sector
-  - configurable alternate sorting 
+  - configurable alternate sorting
     - by arrival altitude
     - along task direction
     - along home direction
@@ -984,7 +986,7 @@ Version 6.1 - 2011/05/19
   - Analysis dialog shows multiple contest (OLC etc) results
   - Analysis dialog includes a thermal band graph
   - Waypoint select dialog allows filtering by start/finish
-  - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
+  - Airspace warning dialog only shows buttons suitable for the respective airspace item,
 
 Version 6.0.10 - 2011-04-29
 * fix crash in flarm teammate setting
