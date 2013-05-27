@@ -34,9 +34,11 @@ Copyright_License {
 #include "Math/Matrix2D.hpp"
 #include "shapelib/mapserver.h"
 #include "Util/AllocatedArray.hpp"
+#include "Util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 
 #include <algorithm>
+#include <set>
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.GetPenWidth(), file.GetColor()),
@@ -368,6 +370,8 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   m1.Scale(projection.GetScale());
 #endif
 
+  std::set<tstring> drawn_labels;
+
   // Iterate over all shapes in the file
   for (auto it = visible_labels.begin(), end = visible_labels.end();
        it != end; ++it) {
@@ -427,6 +431,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       brect.bottom = brect.top + tsize.cy;
 
       if (!label_block.check(brect))
+        continue;
+
+      if (!drawn_labels.insert(label).second)
         continue;
 
       canvas.DrawText(minx, miny, label);
