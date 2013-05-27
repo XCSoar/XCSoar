@@ -33,6 +33,9 @@ install:
   # Manual
   - if [[ "$TARGET" == "MANUAL" ]]; then sudo apt-get install --no-install-recommends texlive texlive-latex-extra texlive-lang-ukenglish texlive-lang-german texlive-lang-french latex-xcolor pgf; fi
 
+  # fix missing floatflt.sty
+  - if [[ "$TARGET" == "MANUAL" ]]; then sudo mkdir -p /usr/share/texmf-texlive/tex/latex/floatflt && cd /usr/share/texmf-texlive/tex/latex/floatflt && sudo wget http://mirror.ctan.org/macros/latex/contrib/floatflt/floatflt.ins && sudo wget http://mirror.ctan.org/macros/latex/contrib/floatflt/floatflt.dtx && sudo latex floatflt.ins && sudo texhash /usr/share/texmf-texlive && cd -; fi
+
 script:
   # Set environment variables
   - export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"
