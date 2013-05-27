@@ -144,8 +144,6 @@ inline void
 AirspaceIntersectionVisitorSlice::Render(const AbstractAirspace &as) const
 {
   AirspaceClass type = as.GetType();
-  if (type <= 0)
-    return;
 
   // No intersections for this airspace
   if (intersections.empty())

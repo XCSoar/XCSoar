@@ -217,6 +217,14 @@ public class XCSoar extends Activity {
   {
     Log.d(TAG, "in onDestroy()");
 
+    unregisterReceiver(batteryReceiver);
+
+    try {
+      DownloadUtil.Deinitialise(this);
+    } catch (VerifyError e) {
+      // Android < 2.3 doesn't have the DownloadManager
+    }
+
     if (nativeView != null) {
       nativeView.exitApp();
       nativeView = null;

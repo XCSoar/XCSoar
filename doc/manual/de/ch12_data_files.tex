@@ -11,6 +11,8 @@ Daten-Files werden bei \xc in zwei Kategorien eingeteilt:
 Dies Kapitel beschäftigt sich vor allem mit den Datenfiles, welche der Benutzer selber anlegen und
 bearbeiten kann(und sollte);  die Programm-Datenfiles werden im {\em XCSoar Advanced Configuration
 Guide} beschrieben.
+
+
 \section{File management}
 Alle Filenamen müssen den Konventionen, welche unten aufgelistet sind, entsprechen.
 
@@ -38,7 +40,7 @@ Bei neuen Geräten wie z.B. ANDROID-Geräten spielt dies nicht mehr die große R
 gewaltigen Fortschritt der letzten 10 Jahre inzwischen alle  Speicherkarten schnell genug sind und den
 Anforderungen locker genügen. Hier kann problemlos die höchste Auflösung der Karte benutzt werden.
 Benutzer wie z.B.\ mich mit den "alten Gurken" sollten dennoch eine fixe SD-Karte benutzen (Class 6
-aufwärts\dotsŽ)
+aufwärts\dots)
 
 Um Streß bei der Installation und Benutzung zu vermeiden, sollten alles Files und Daten bzgl. \xc  genau in
 diesem Verzeichnis stehen:
@@ -60,7 +62,8 @@ IPAQ File Store/XCSoarData
 Wenn Ihr unsicher seid, startet einfach ein ''jungfräulich'' neu installiertes'' \xc neu und es legt diese
 Verzeichnisse von sich aus an.
 
-\section{Karten Map Database}\label{sec:map}
+
+\section{Karten Datenbank}\label{sec:map}
 
 Ein Kartendatenbank-File (Endung \verb|.xcm|) beinhaltet das Gelände, die Topologie, Topgraphie und
 weitere Geländemerkmale wie Türme, Auffälligkeiten sowie Wegpunkte und evtl. Lufträume.  Das
@@ -79,8 +82,8 @@ anderer Kartenausschnitt o.ä.), kann unter \url{http://mapgen.xcsoar.org/}  der
 angeworfen werden, welche das entsprechend File erzeugt und zum Download
 anbietet.
 
-Soweit Wegpunkte und/oder Lufträume in der Kartendatenbank (z.B.\ GER-High.xcm o.ä.) enthalten sind,
-werden diese benutzt.l
+Soweit Wegpunkte und/oder Lufträume in der Kartendatenbank (z.B.\ verb''GER-High.xcm'' o.ä.) enthalten sind,
+werden diese benutzt.
 
 Wenn aber separate oder eine alternative Datenbanken für Wegpunkte und/oder Lufträume angegeben
 wird, so werden alle Wegpunkte der Kartendatenbank (\verb".xcm") ignoriert und durch die separaten
@@ -88,7 +91,6 @@ Daten ersetzt.
 
 Ein \xc angegebenes, separates angegebenes Wegpunkt-File wird alle in der Kartendatenbank enthaltenen
 Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
- \todonum{wirklich?}
 
 
 \section{Wegpunkte}
@@ -103,28 +105,36 @@ Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutze
 \end{itemize}
 
 Diese Files sind z.B. auf dem Server \footnote{Es existieren einige andere gespiegelte Seiten, falls die
-Originalseite nicht erhältlich ist, einfach mal Googlen ...}: \url{http://soaringweb.org/TP} erhältlich. Es
-gibt zahlreiche kommerzielle und frei verfügbare Software um diese Daten in beliebige Formate zu
+Originalseite nicht erhältlich ist, einfach mal Googlen ...}:
+\begin{center}
+\url{http://soaringweb.org/TP}
+\end{center}
+erhältlich. Es gibt zahlreiche kommerzielle und frei verfügbare Software um diese Daten in beliebige Formate zu
 konvertieren.
 
 \achtung \textsl{Wenn die Höhe eines Wegpunktes als "Null" innerhalb eines Wegpunktfiles angegeben
 wird, dann wird  \xc  die Höhe aus der Kartendatenbank gemäß des Höhenmmodelles entnehmen und die
 Höhe demgemäß darstellen.}
 
+
 \section{Lufträume}\index{File-Format!Luftraum}
 
 \xc unterstützt Luftraum Files (extension \verb|.txt|) wobei ein Teil der Syntax
-des weitverbreiteten OpenAir-Formates benutzt wird. Weiterhin wird das ''Tim Newport-Pearce file format''  
+des weitverbreiteten OpenAir-Formates benutzt wird. Weiterhin wird das ''Tim Newport-Pearce file format''
 (extension \verb|.sua|) unterstützt.
 
-Files sind über  \url{http://soaringweb.org/Airspace} erhältlich.
-
+Files sind über
+\begin{center}
+\url{http://soaringweb.org/Airspace}
+\end{center}
+ erhältlich.
 
 Die offiziellen deutschen Lufträume sind über die DAEC-Homepage erhältlich und werden ständig
 aktualisiert:
-
+\begin{center}
 \url{http://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten}\index{Luftraum!Files-Download}
 \index{Luftraum!Files-Fallschirmsprungzonen}\index{Luftraum!Deutsch}
+\end{center}
 
 Hier sind ebenfalls die exakten Daten der deutschen Grenze sowie aller deutschen Fallschirmsprungzonen
 erhältlich. Folgende Lufträume werden von \xc bislang unterstützt und demgemäß zur Auswahl angeboten:
@@ -134,18 +144,18 @@ Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Welle
 
 In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben (sofern vorhanden).
 
+
 \section{Flugplatz Details}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
 
 Das Flugplatz-Detail-File  (extension \verb|.txt|) ist ein einfaches Text-File mit einem Eintrag für jeden
 Flugplatz. Einträge werden in eckigen Klammern gemacht, gefolgt von den Einträgen für den jeweiligen
-Flugplatz/Flugfeld. Der Text sollte nicht zu lang sein, da das Textfeld in  \xc keinen Zeilenumbruch
+Flugplatz/Flugfeld. Der Text sollte nicht zu lang sein, da das Textfeld in  \xc bislang (V6.6) keinen Zeilenumbruch
 erlaubt.
 
 Der Text darf auch Bilder des entsprechenden Flugplatzes enthalten, um ein Bild direkt in \xc einzufügen,
-muß  \verb|image=| gefolgt vom Namen des Files eingefügt werden. (Dies ist derzeit unter Windows nicht
-unterstützt.)
+muß  \verb|image=| gefolgt vom Namen des Files eingefügt werden. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
 
-\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach dem \verb|image=|
+\achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach  \verb|image=|
 auftauchen!!!}
 
 Welche Files unterstützt werden, hängt auch vom Betriebssystem ab, und auch, welche Programme/Apps
@@ -158,7 +168,7 @@ Auf der \xc Website werden Dateien für Flugplätze diverser Länder zu Herunter
 
 
 Die \xc-Homepage enthält Files für viele Länder und bietet Programme (und links), um die
-Files in verschiedene Formate zu konvertieren.  Es steht jedermann frei, Files hinzuzufügen und/oder zu aktualisieren, 
+Files in verschiedene Formate zu konvertieren.  Es steht jedermann frei, Files hinzuzufügen und/oder zu aktualisieren,
 um die Datenbanken jederzeit up to date zu halten.
 
 Ein Beispiel aus dem australischen Flugplatz-File:
@@ -189,10 +199,11 @@ Blah blah blah blah
 ...
 \end{verbatim}
 
+
 \section{Polare}\label{sec:glide-polar}\index{Polare!File-Format}
 
 Viele Polaren bekannter Flugzeuge sind bereits in \xc integriert.  Wenn Dein Flugzeug  hier nicht
-aufgelistet ist, kannst Du problemlos eine Polare im {\sc WinPilot}-Format im Internet suchen (Endung
+aufgelistet ist, kannst Du problemlos eine Polare im {\sc WinPilot}-Format im Internet suchen (Endung:
 \verb|.plr|).
 
 Die Winpilot- und die \xc - Homepage bieten etliche Polaren zum freien Herunterladen an. Files für
@@ -226,23 +237,27 @@ Als Ergänzung können folgende Angaben gemacht werden:
  der zugelassenen Höchstgeschwindigkeit durchführen zu können
 \end{itemize}
 
+Einträge mit einem vorangestellten \verb|*| werden als Kommentar behandelt.
+
 Als Beispiel hier der Inhalt der Datei für eine LS-3:
 \begin{verbatim}
 *LS-3	{\sc WinPilot} POLAR file:
-*  MassDryGross[kg],
-*  Maximaler Wasserballast [Kg],
-* Geschwindigkeit 1 [km/h], Sinken 1 [m/s], Geschwindigkeit 2,
-* Sinken 2, Geschwindigkeit 3, Sinken 3  	
+* MassDryGross[kg],
+* Maximaler Wasserballast [Kg],
+* Geschwindigkeit 1 [km/h], Sinken 1 [m/s],
+* Geschwindigkeit 2, Sinken 2,
+* Geschwindigkeit 3, Sinken 3  	
 373,	121,	74.1,	-0.65,	102.0,	-0.67,	167.0,	-1.85
 \end{verbatim}
 
 Hiermit sollte jeder anhand seines Flughandbuches in der Lage sein, ein eigenes Polaren-File zu
 erstellen, hochzuladen  und der Gemeinschaft der Segelflieger zur Verfügung zustellen.
 
-\tip Achtung! Sie nicht zu optimistisch mit Deiner Gleitzahl in diesem File!
-Alle Berechnungen von  \xc werden aufgrund dieser Daten erzeugt!!  Es geschieht daher zu
-leicht, daß sämtliche Endanflüge auf dem Acker enden, wenn sie hier zu optimistisch
-eingegeben werden!
+Achtung!\\
+Seid nicht zu optimistisch mit der Gleitzahl in diesem File!
+\tip Alle Berechnungen von  \xc werden aufgrund dieser Daten erzeugt!!  Es geschieht daher zu
+leicht, daß sämtliche Endanflüge auf dem Acker enden, wenn hier zu optimistisch
+eingegeben wird!
 
 
 \section{Profile}\index{File-Format!Profile}
@@ -254,7 +269,7 @@ Bestimmte Werte wie Texte bzw.\ Namen sind durch Anführungsstriche getrennt, si
 PilotName="Baron Richthofen"
 \end{verbatim}
 
-Alle anderen Werte sind numerisch, einschließlich der logischen Werte (wahr $=1$, falsch$=0$)Ž.
+Alle anderen Werte sind numerisch, einschließlich der logischen Werte (wahr $=1$, falsch$=0$).
 
 Beispiel:
 
@@ -274,47 +289,59 @@ Einstellungen in \xc überschrieben. Alle anderen Einstellungen bleiben erhalten
 
 Ein Standard-Profil wird grundsätzlich automatisch von  \xc erstellt, in dem Moment, da
 die Konfigurationseinstellungen abgespeichert oder geändert werden.
+
 Dies File hat den Namen  \verb|xcsoar-registry.prf|.
 
 Der einfachste Weg, ein neues Profil zu erzeugen ist, ein altes Profil unter einem neuen
-Namen jedoch mit derselben Endung abzuspeichern.
+Namen jedoch mit derselben Endung abzuspeichern. Bei nächsten Start von \xc  fragt dann das Programm, welches der vorhandenen Profil-Files benutzt werden soll.
 
-Bei nächsten Start von \xc  fragt dann das Programm, welches der vorhandenen Profil-Files benutzt werden soll.
 
-\section{Checklist}\index{File-Format!Checkliste}
+\section{Checklist}\label{sec:checklist-file}\index{File-Format!Checkliste}
 
 Die Checkliste  (\verb|xcsoar-checklist.txt|) benutzt ein ganz ähnliches Format
 wie das Flugplatz-File. \index{Checkliste!File}
-Jeder Seite wird die Überschrift in eckigen Klammern vorangestellt, anschließend erfolgen
+Jeder Seite wird mit der Überschrift in eckigen Klammern eingeleitet, anschließend erfolgen
 zeilenweise die Eingabe der Checklist-Punkte. Die Anzahl der Seiten ist begrenzt auf 20.
 
 Ein Beispiel: (Auszug):
 \begin{verbatim}
-[Vorflugkontrolle]
-Bolzen korrekt gesichert
-Steuerung
-Klappen und Wölbklappen
-Trimmung und Ballast
-Instrumente
-Haube verschlossen und verriegelt
-[Aufrüstfehler]
-Kuller ab
-Tape etc. entfernt
+[Flugzeug]
+Haube geschlossen und verriegelt
+Gurte Fest
+Steuerung frei
+Klappen eingefahren und verriegelt
+Höhenmesser QNH
+.
+.
+[Motor]
+Sprithahn offen
+Zündung an
+Propellerstopper 
+.
+.
+[Funk]
+Vinsebeck     122.200
+Höxter        123.625
 ...
 \end{verbatim}
+Damit die Checkliste Umlaute und Sonderzeichen korrekt dargestellt muß die Datei \warning 
+in \textbf{UTF-8} kodiert sein!
+
 
 \section{Aufgaben }\index{File-Format!Aufgaben}
 
-Aufgaben - Files  (Endung \verb|.tsk|) werden in einem \xc -eigenen  XML-Format, gespeichert.
-SeeYou-Aufgaben können problemlos geladen werden. (Endung \verb|.cup|).
+Aufgaben-Files  (Endung: \verb|.tsk|) werden in einem \xc -eigenen, dem  XML-Format, gespeichert.
+SeeYou-Aufgaben können problemlos geladen werden. (Endung: \verb|.cup|).
+
 
 \section{Flug Logger-Mitschriebe} \label{sec:logfiles}
-Der Software Logger von \xc erzeugt  IGC-Files (extension \verb|.igc|)
+Der Software Logger von \xc erzeugt  IGC-Files (Endung: \verb|.igc|)
 gemäß der Konventionen der FAI wie in  {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.
 beschrieben.
 
 Die Log-Files werden  im ''log''- Unterverzeichnis des \xc -Verzeichnisses abgelegt. (normalerweise XCSoarData)
 Nach dem Flug können diese Files kopiert und weiterverarbeitet werden.
+
 
 \section{FLARM Identifikation}\label{sec:flarm-ident-file}\index{File-Format!Flarm}
 
@@ -337,14 +364,15 @@ DDA556=OnkelHotte
 \end{verbatim}
 
 Derzeit ist dies File auf 200 Einträge begrenzt
-\todonum{(warum das ??)}
 
-Die  FlarmNet -Datenbank \verb|data.fln| wird unterstützt.
+Die  FlarmNet-Datenbank \verb|data.fln| wird unterstützt.
 Diese enthält sämtliche \fl-Daten, welche von der \textsf{\textsf{FlarmNet}}-Gemeinschaft bereitgestellt werden.
+
 Dies File kann von  \url{http://www.flarmnet.org}  heruntergeladen werden.
 \textsl{Dies File muß sich innerhalb des XCSoarData - Verzeichnisses befinden.}
 
-%%%%%%%%%%%%%% advanced stuff below..
+
+%%%%%%%%%%%%%%
 \section{Eingabe Ereignisse}
 
 Das Eingabe-Ereignis-File  (Endung \verb|.xci|) ist ein ASCII-Text File,
@@ -363,13 +391,15 @@ Hier einige Gründe, weshalb es evtl.\ sinnvoll sein könnte, \textsf{xci} zu be
 \item Vielfache Reaktionen auf ein einfachen Ereignis von  \xc oder aber vom Rechner
 ausgelösten Ereignisses.
 \end{itemize}
-Für nähere Informationen bezüglich eigener Eingabe -Ereignisse, bitte bemüht das {\em XCSoar Advanced Configuration Manual}.
+Für nähere Informationen bezüglich einer eigenen Ereignis Datei, ist das 
+{\em XCSoar Developer Manual} ein guter Anfang.
+
+
 \section{Status}\label{sec:status}\index{File-Format!Status}
 Status-Files sind Text Files in der Form  {\em Bezeichner  = Wert },
 die in Blöcken  angeordnet sind. Jeder Block beinhaltet eine Statusmeldung
 mit dem kompletten Parameter Satz.
-Diese werden durch doppelte \todonum{im Beispiel sind es nur einfache Leerzeichen..??}
-Leerzeichen getrennt.
+Diese werden durch doppelte Leerzeichen getrennt.
 
 Jeder Block kann eines der folgenden Felder enthalten:
 
@@ -392,4 +422,4 @@ key=Aufgabe begonnen
 delay=1500
 hide=yes
 \end{verbatim}
-%
+

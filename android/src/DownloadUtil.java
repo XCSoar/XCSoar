@@ -33,9 +33,17 @@ import android.database.Cursor;
 import android.net.Uri;
 
 class DownloadUtil extends BroadcastReceiver {
+  private static DownloadUtil instance;
+
   static void Initialise(Context context) {
-    context.registerReceiver(new DownloadUtil(),
+    instance = new DownloadUtil();
+    context.registerReceiver(instance,
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+  }
+
+  static void Deinitialise(Context context) {
+    context.unregisterReceiver(instance);
+    instance = null;
   }
 
   /**
