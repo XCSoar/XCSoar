@@ -672,8 +672,8 @@ protected:
                                const GlidePolar &glide_polar,
                                fixed &value) const override;
   virtual fixed CalcGradient(const AircraftState &state_now) const override;
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) override;
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) override;
+  virtual fixed ScanTotalStartTime() override;
+  virtual fixed ScanLegStartTime() override;
   virtual fixed ScanDistanceNominal() override;
   virtual fixed ScanDistancePlanned() override;
   virtual fixed ScanDistanceRemaining(const GeoPoint &ref) override;

@@ -287,8 +287,8 @@ void
 AbstractTask::UpdateStatsTimes(const AircraftState &state)
 {
   if (!stats.task_finished) {
-    stats.total.SetTimes(ScanTotalStartTime(state), state);
-    stats.current_leg.SetTimes(ScanLegStartTime(state),state);
+    stats.total.SetTimes(ScanTotalStartTime(), state);
+    stats.current_leg.SetTimes(ScanLegStartTime(),state);
   }
 }
 

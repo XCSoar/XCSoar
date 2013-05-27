@@ -151,7 +151,7 @@ OrderedTask::UpdateGeometry()
 // TIMES
 
 fixed 
-OrderedTask::ScanTotalStartTime(const AircraftState &)
+OrderedTask::ScanTotalStartTime()
 {
   if (taskpoint_start)
     return taskpoint_start->GetEnteredState().time;
@@ -160,7 +160,7 @@ OrderedTask::ScanTotalStartTime(const AircraftState &)
 }
 
 fixed 
-OrderedTask::ScanLegStartTime(const AircraftState &)
+OrderedTask::ScanLegStartTime()
 {
   if (active_task_point)
     return task_points[active_task_point-1]->GetEnteredState().time;

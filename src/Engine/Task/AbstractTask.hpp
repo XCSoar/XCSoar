@@ -262,21 +262,17 @@ protected:
    * Calculate task start time.
    * Default behaviour is current time, to be used for non-ordered tasks.
    *
-   * @param state_now Aircraft state
-   *
    * @return Time (s) of start of task or negative value if not available
    */
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) = 0;
+  virtual fixed ScanTotalStartTime() = 0;
 
   /**
    * Calculate leg start time.
    * Default behaviour is current time, to be used for non-ordered tasks.
    *
-   * @param state_now Aircraft state
-   *
    * @return Time (s) of start of leg or negative value if not available
    */
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) = 0;
+  virtual fixed ScanLegStartTime() = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
