@@ -148,7 +148,7 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstam
 		>$(ANDROID_BUILD)/src/AccessoryConnectionBootstrap.java
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 	$(Q)ln -s ../../../../android/res/xml $(@D)/res/xml
-ifeq ($(WINHOST),y)
+ifeq ($(HOST_IS_WIN32),y)
 	echo "now run your android build followed by exit.  For example:"
 	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_SDK_PLATFORM)"
 	cmd

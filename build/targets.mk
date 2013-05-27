@@ -132,7 +132,7 @@ ifeq ($(TARGET),PC)
     TCPREFIX := $(MINGWPATH)
   endif
 
-  ifeq ($(WINHOST),y)
+  ifeq ($(HOST_IS_WIN32),y)
     TCPREFIX :=
   endif
 
@@ -145,7 +145,6 @@ ifeq ($(TARGET),CYGWIN)
   TARGET_ARCH += -march=i586
 
   WINVER = 0x0500
-  WINHOST := y
 
   HAVE_POSIX := y
   HAVE_WIN32 := y
@@ -307,7 +306,7 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(HOST_IS_DARWIN),y)
     ANDROID_HOST_TAG = darwin-x86
-  else ifeq ($(WINHOST),y)
+  else ifeq ($(HOST_IS_WIN32),y)
     ANDROID_HOST_TAG = windows
   else ifeq ($(UNAME_M),x86_64)
     ANDROID_HOST_TAG = linux-x86_64

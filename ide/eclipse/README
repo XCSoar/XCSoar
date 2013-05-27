@@ -8,6 +8,6 @@ in this directory. On Windows those "dot" files are visible in the file explorer
 you easily drag them to the main project directory.
 
 The templates are set up for developing XCSoar with eclipse on Windows.
-If you like to use them on Linux change the make arguments from WINHOST=y to WINHOST=n. You most likely also want to change the TARGET to something different from PC, but that depends on your intent.
+If you like to use them on Linux you most likely want to change the TARGET to something different from PC, but that depends on your intent.
 
 Have fun
