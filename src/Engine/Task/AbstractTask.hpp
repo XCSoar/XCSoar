@@ -264,7 +264,7 @@ protected:
    *
    * @param state_now Aircraft state
    *
-   * @return Time (s) of start of task
+   * @return Time (s) of start of task or negative value if not available
    */
   virtual fixed ScanTotalStartTime(const AircraftState &state_now) = 0;
 
@@ -274,7 +274,7 @@ protected:
    *
    * @param state_now Aircraft state
    *
-   * @return Time (s) of start of leg
+   * @return Time (s) of start of leg or negative value if not available
    */
   virtual fixed ScanLegStartTime(const AircraftState &state_now) = 0;
 

@@ -142,13 +142,13 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
 fixed 
 UnorderedTask::ScanTotalStartTime(const AircraftState &state)
 {
-  return state.time;
+  return fixed(-1);
 }
 
 fixed 
 UnorderedTask::ScanLegStartTime(const AircraftState &state)
 {
-  return state.time;
+  return fixed(-1);
 }
 
 

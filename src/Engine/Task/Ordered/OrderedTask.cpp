@@ -156,7 +156,7 @@ OrderedTask::ScanTotalStartTime(const AircraftState &)
   if (taskpoint_start)
     return taskpoint_start->GetEnteredState().time;
 
-  return fixed(0);
+  return fixed(-1);
 }
 
 fixed 
