@@ -11,41 +11,41 @@ Im folgenden werden alle Infoboxen beschrieben. Oben, rechtsbündig und fett erf
 wie sie auf der InfoBox-Konfigurationsseite angegeben ist. 
 
 Im grauen Kästchen ist die Beschriftung angegeben, welche innerhalb der InfoBox als Name erscheint.
-%
-\newcommand{\ibi}[3]{%
-\jindent{%
-\begin{tabular}{r}%
-{\bf #1} \\%
-\ibox{{#2}} \\%
-\end{tabular}}{#3}%
-}%
-%
-%
+
+\newcommand{\ibi}[3]{
+\jindent{
+\begin{tabular}{r}
+{\bf #1} \\
+\ibox{{#2}} \\
+\end{tabular}}{#3}
+}
+
+
 %%%%%%%%%%%
 \section{Höhe}
 
 \ibi{Höhe (Auto)}{Höhe Auto}{Die barometrische Höhe eines mit Drucksensor ausgestatteten Gerätes oder die GPS-Höhe des Gerätes, falls die barometrische Höhe nicht verfügbar ist }
-%
+
 \ibi{Höhe über MSL (GPS)}{H GPS}{Dies ist die Höhe über Meereslevel, welche vom GPS ausgegeben wird.
 Nur für TouchScreen und PC: Im \textsl{Simulationsmodus} ist der Wert dieser InfoBox mit den Hoch- und Runter-Tasten ver\"anderbar.
 Die Links- und Rechtstasten bewirken ein Drehen des Flugzeuges auf der Karte.}
 \index{Simulationsmodus!Höhe einstellen}
-%
+
 \ibi{Höhe - über Grund}{H üb GND}{Dies ist die GPS-Höhe abzüglich der Geländehöhe, ermittelt aus GPS und Daten aus der verwendeten
 Kartendatenbank. Der Wert wird \emph{rot} dargestellt, wenn sich das Flugzeug \emph{unterhalb} der eingestellten Gelände-Sicherheitshöhe befindet.}
-%
+
 \ibi{Höhe - vom Gelände}{GND H}{Höhe des Geländes über MSL ermittelt per GPS mithilfe der benutzten Kartendatenbank.}
-%
+
 \ibi{Höhe - barometrisch}{Höhe Baro}{Dies ist die barometrische Höhe ermittelt aus dem angeschlossenen Gerät mit barometrischem
 Drucksensor.}
-%
+
 \ibi{QFE GPS}{QFE GPS}{Automatisches QFE. Diese Höhenangabe am Boden wird \emph{bis zum Start permanent auf Null gesetzt}.  Nach dem Start
 wird sie auf keinen Fall mehr auf Null gesetzt, selbst am Boden. Während des Fluges kann die QFE-Anzeige mit den Hoch- und Runter-Tasten
 geändert werden. Auf einer Fußzeile kann das QNH abgelesen werden. Das Ändern des QFE beeinflußt nicht die QNH-Höhe.}
-%
+
 \ibi{Höhe-Flugfläche}{FL}{Druckhöhe als Flugfläche. Nur verfügbar, wenn eine barometrische Höhenangabe verfügbar und
 auf korrektes QNH eingestellt ist.}
-%
+
 \ibi{Höhe-Barogramm}{Höhe-Barogramm}{Höhen-Seitenansicht des zurückgelegten Flugweges. Im Prinzip ein echtes, winziges Barogramm innerhalb einer InfoBox}
 
 
@@ -55,27 +55,27 @@ auf korrektes QNH eingestellt ist.}
 
 \ibi{Nächster Wegpunkt - Peilung}{Nächster Wegpunkt}{Rechtweisende Peilung zum nächsten Wegpunkt.
 Bei AAT-Aufgaben ist dies die rechtweisende Peilung zum Ziel im  innerhalb der AAT-Area.}
-%
+
 \ibi{Geschwindigkeit - über Grund}{V ü. GND}{Die per GPS gemessene Geschwindigkeit über Grund.
 \textsl{Im Simulationsmodus}: Mit dieser InfoBox kann mit Hoch- und Runter-Pfeilen die Geschwindigkeit eingestellt werden,
 mit den Links- und Rechtspfeilen die Richtung.}\index{Simulationsmodus!Geschwindigkeit einstellen}
-%
+
 \ibi{Kurs}{Kurs}{Magnetischer Kurs ausgegeben vom GPS. (Nur bei Verwendung von Touchscreens/PC). Im Simulatormodus: Hoch und Runter ändern den Kurs.}\index{Simulationsmodus!Kurs einstellen}
-%
+
 \ibi{Geschwindigkeit - angezeigte}{V IAS}{Angezeigte Geschwindigkeit gegenüber der Luft,
 ermittelt über einen externen Sensor, z.B. einem intelligenten Variometer.}
-%
+
 \ibi{G-Last}{G}{Das Lastvielfache laut des angeschlossenen und verwendeten G-Sensors.
 Kann negative Werte anzeigen, wenn stark nachgedrückt wird.}
-%
+
 \ibi{Nächster Wegpunkt - Peildifferenz}{WP Peil Diff}{Die Differenz aus Peilung zum nächsten Wegpunkt (oder AAT-Ziel)
  und geflogenem Kurs. GPS - basiert auf dem Kurs über Grund. Bei Windeinfluß kann sich dieser vom Steuerkurs unterscheiden.
  Die Doppelpfeile  zeigen, in welche Richtung korrigiert werden muß. Einfluß des Erdmodelles wird berücksichtigt.}
-%
+
 \ibi{Geschwindigkeit - wahre}{V TAS}{Wahre Geschwindigkeit gegenüber der Luft, empfangen aus
 externem Gerät mit entsprechendem Sensor wie z.B.\ - intelligenten Varios
  (wenn vorhanden).}
-%
+
 \ibi{Lageindikator}{Horizont}{Künstlicher Horizont, errechnet aus dem Flugweg und -wenn vorhanden- aus Beschleunigungs- und
 Variometerdaten.}
 
@@ -86,11 +86,11 @@ Variometerdaten.}
 der letzten 20 Sekunden. Negative Werte bedeuten Steigflug, für Vertikalgeschwindigkeit nahe Null wird '' - - - ''' angezeigt.
 
 Wenn diese InfoBox aktiv ist, bringt ein Klicken auf diese Fläche den Ballast und Mücken--Dialog zum Vorschein.}
-%
+
 \ibi{Gleitzahl -- im Vorflug}{GZ Vorflug}{Entfernung der max.\ Höhe  des letzten Bartes letzten Thermik dividiert durch die seither
 verlorenen Höhe. Negative Werte bedeuten einen ansteigenden Pfad (Höhengewinn seit letztem Kurbeln), für Variometerwerte nahe 0
 wird ''- - -'' angezeigt.}
-%
+
 \ibi{Endanflug - GZ (TE-kompensiert)}{EndA GZ -TE}{
 
 Erforderliche Gleitzahl, um die Aufgabe zu beenden. Grundlage ist die verbleibende Strecke dividiert durch die benötigte Höhe, um
@@ -99,9 +99,9 @@ auf der eingestellten Sicherheitshöhe anzukommen.\\
 Bei negativen Werten ist ein Steigflug (Kurbeln) zum Beenden notwendig. Für Vertikalgeschwindigkeiten nahe Null wird '' - - - ''  angezeigt.
 \textbf{Beachte}, daß diese Berechnungen zu optimistisch sein können, da hier die potentielle Energie in die Berechnung mit einbezogen
 wird, falls wahre Geschwindigkeit größer ist als die MC-Geschwindigkeit bei optimalem Gleiten.}
-%
+
 \ibi{Endanflug - benötigte Gleitzahl}{EndA benö GZ}{Geometrischer Gradient auf die Ankunftshöhe des letzten Wegpunktes. Nicht Totalenergie-kompensiert.}
-%
+
 \ibi{Nächster Wegpunkt - GZ (TE kompensiert)}{WP GZ-TE}{Die erforderliche Gleitzahl über Grund um den nächsten
 Wegpunkt zu erreichen, errechnet aus der Distanz zum nächsten Wegpunkt geteilt durch die erforderlichen Höhe, um diesen auf Sicherheitshöhe zu erreichen.
 Negative Werte bedeuten, daß Steigen notwendig ist, um den Wegpunkt zu erreichen.
@@ -109,11 +109,11 @@ Negative Werte bedeuten, daß Steigen notwendig ist, um den Wegpunkt zu erreiche
 Wenn die erforderliche Höhendifferenz nahe Null ist erscheint in der Anzeige  '' - - - '.
 Beachte, daß diese Kalkulation  zu optimistisch sein kann, weil es die notwendige Höhe um die potentielle Energie reduziert, wenn die
 wahre Geschwindigkeit größer ist, als die der MacCready Geschwindigkeit und der damit ermittelten optimalen Gleitgeschwindigkeiten.}
-%
+
 \ibi{Gleitzahl - Vario}{Gleitzahl - Vario}{Momentane Gleitzahl, ermittelt aus der aktuellen Geschwindigkeit geteilt durch den
 Totalenergie-kompensierten Variowert, laut angeschlossenem Gerät (intelligentes Variometer). Negative Werte zeigen einen ansteigen
 Vorflug an. Wenn die TE-Anzeige nahe Null ist, wird '' - - - '' angezeigt.}
-%
+
 \ibi{Gleitzahl - Mittelwert}{GZ mittl}{Die zurückgelegte Distanz über eine definierte Zeit, dividiert durch die seitdem verlorene Höhe.
 Negative Werte werden als \^{ }\^{ }\^{ } und zeigen, daß im Vorflug Höhe gewonnen wird.
 Bei einer Gleitzahl von größer als 200 wird  +++ angezeigt.  Die zur Ermittlung verwendete Zeit kann in den Systemeinstellungen
@@ -127,31 +127,31 @@ sie kann also auch Null sein ! Dieser Wert wird daher nicht während des Kurbeln
 
 \ibi{Thermik - Mittel über letzte 30s}{Steig 30s}{Laufend aktualisiertes, gemitteltes Steigen (über 30 Sekunden) basierend auf GPS-Daten,
  oder, falls Vario-Werte verwendbar, auf diesen basierend.}
-%
+
 \ibi{Letzte Thermik - Höhengewinn}{LT H Gewinn}{Gesamthöhengewinn des letzten Bartes.}
-%
+
 \ibi{Letzte Thermik - Zeit im Steigflug}{LSteigZeit}{Gesamtzeit, die in letzter Thermik gekurbelt wurde.}
-%
+
 \ibi{Letzte Thermik - Steigen im Durchschnitt}{LSteig mittl}{Gesamter Höhengewinn (oder Verlust) im letzten Bart geteilt durch die
 Zeit während des Kurbelns.}
-%
+
 \ibi{Thermik - Höhengewinn}{Steig H Gewinn}{Der Höhengewinn (oder Verlust) im aktuellen Bart.}
-%
+
 \ibi{Thermik - gesamt Durchschnitt}{Steig mittl insg}{Mittlerer Steigwert über alle Bärte.}
-%
+
 \ibi{Vario}{Vario}{Momentanes Steigen/Sinken ermittelt aus GPS-Daten, oder wenn verfügbar aus totalenenergiekompensiertem Variosignal.}
-%
+
 \ibi{Vario - netto Steigen}{Netto}{Augenblickliche Vertikalgeschwindigkeit der Luftmasse, entspricht der Varioanzeige minus dem
 geschätzten Eigensinken. Die Angabe ist am genausten, wenn Fahrt-, Beschleunigungs- und Variosensor angeschlossen sind, ansonsten erfolgt die
 Berechnung anhand der GPS-Daten.}
-%
+
 \ibi{Vario - brutto Spur}{Variospur}{Spur des momentanes Steigens (Sinkens). Datenquelle ist die angeschlossenen GPS-Quelle, oder, falls verfügbar und angeschlossen, 
 die Signale eines intelligenten, totalenergiekompensiertem  Variometers.}
-%
+
 \ibi{Vario- netto Variospur}{Netto Spur}{Spur der vertikalen Luftbewegung, gleich dem netto - Variowert.}
-%
+
 \ibi{Thermik  - Steigen Historie}{Steig Spur}{Spur des gemittelten Steigens (nach jedem Bart), basierend auf GPS Daten, oder Vario, falls verfügbar.}
-%
+
 \ibi{Thermik - Vertikalprofil}{Steigband}{Graph der mittleren Steigwerte (horizontale Achse)
 als Funktion der Höhe (vertikale Achse).}
 
@@ -161,20 +161,20 @@ als Funktion der Höhe (vertikale Achse).}
 \ibi{Wind - Geschwindigkeit}{Wind V}{Die über \xc errechnete Windgeschwindigkeit.
 Für PC und Touchscreen: Die Windgeschwindigkeit ist einstellbar mit  Auf- und Ab-Pfeiltasten, die Richtung ist einstellbar über die Rechts- und Links-Pfeiltasten.
 Durch das Betätigen der <Enter>-Taste wird der Wert gespeichert und von  \xc als Default Wert benutzt.}
-%
+
 \ibi{Wind - Richtung}{Windrichtung}{Die von \xc errechnete Windrichtung. Bei Touchscreen und PC:
 Mit den Hoch - und Runter-Tasten kann  den Wert für manuelle Einstellung geändert werden.}
-%
+
 \ibi{Wind - Pfeil}{Wind}{Die von \xc errechnete Windrichtung in Pfeilform  kombiniert mit Geschwindigkeitsangabe.
 Bei Touchscreen und PC: Mit den Hoch - und Runter-Tasten kann  den Wert für manuelle Einstellung geändert werden.}
-%
+
 \ibi{Gegenwind - Komponente}{Gegenwind}{Aktuelle Gegenwindkomponente. Diese wird kalkuliert aus der TAS und GPS-Grundgeschwindigkeit.
 Wenn die Geschwindigkeit nicht von einem externen  Gerät geliefert werden kann, wird der von \xc aus GPS Daten geschätzte Wert benutzt.}
-%
+
 \ibi{Aussentemperatur}{Luft Temp}{Außentemperatur, soweit ein Sensor angeschlossen ist, z.B. über ein intelligentes Variometer.}
-%
+
 \ibi{Relative Luftfeuchtigkeit}{Rel Feuchte}{Relative Luftfeuchtigkeit gemessen mit dem angeschlossenen Sensor, z.B. einem intelligentes Variometer.}
-%
+
 \ibi{Temperaturprognose}{Max Temp}{Vorhergesagte Temperatur am Boden des Heimatflugplatzes, berechnet aus erwarteter
 Konvektionshöhe und Wolkenbasis in Verbindung mit der Außentemperatur und relativen Feuchte.
 Bei TouchScreen und PC: Der Wert kann mit den Hoch- und Runter-Tasten verändert werden.}
@@ -186,13 +186,13 @@ Bei TouchScreen und PC: Der Wert kann mit den Hoch- und Runter-Tasten verändert
 \ibi{MacCready - Einstellung}{MC}{Aktueller MacCready-Wert (manuell oder automatisch) und damit verbundene Sollfahrt. Bei TouchScreen und PC:
 Der MC-Wert kann über die Hoch- und Runter-Tasten geändert werden. Die $<$Enter$>$ Taste schaltet zwischen Auto-MC
 und MC-Manuell hin und her.}
-%
+
 \ibi{MacCready - Sollfahrt}{V MC}{Die optimale MC-Sollfahrt zum nächsten Wegpunkt. Im Vorflug wird die Geschwindigkeit
 berechnet um die Höhe zu halten, im Endanflug diejenige , um unter Berücksichtigung der Sicherheitshöhen an Ziel zu kommen.}
-%
+
 \ibi{Steigfluganteil}{\% Steigen}{Prozentsatz der Zeit, die im Kurbeln verbracht wurde. Die Statistik wird beim Start der
 Aufgabe neu gestartet.}
-%
+
 \ibi{Mc Cready -Sollfahrt (Delphin-Stil)}{V opt.}{Die momentane Sollfahrt nach MacCready, unter Berücksichtigung der Totalenergie beim Fliegen in der aktuellen Flugrichtung.
 Im \textsl{Vorflugmodus} wird dieser Wert zum Beibehalten der Flughöhe benutzt.
 Im \textsl{Kurbelmodus} (beim Kurbeln) wechselt die Anzeige zur Geschwindigkeit des
@@ -205,56 +205,56 @@ Wenn der ''Block-Speed-toFly'' Modus aktiviert ist, zeigt diese InfoBox die MacC
 
 \ibi{Nächster Wegpunkt - Distanz}{WP Dist}{Die Entfernung zum nächsten gewählten Wegpunkt.
 Bei AAT- Aufgaben ist dies der gewählte Zielpunkt innerhalb des AAT-Sektors.}
-%
+
 \ibi{Nächster Wegpunkt - relative Ankunftshöhe}{WP H Diff}{Ankunftshöhe am nächsten Wegpunkt (relativ zur gewählten Sicherheitshöhe).
 Bei AAT-Aufgaben bezogen auf das Ziel innerhalb des AAT - Sektors.}
-%
+
 \ibi{Nächster Wegpunkt - relative MC0 Höhe}{WP MC0 H Diff}{Ankunftshöhe am nächsten
 Wegpunkt mit MC0 relativ zur Sicherheitsankunftshöhe.
 Bei AAT-Aufgaben wird das Ziel innerhalb des AAT-Sektors benutzt.}
-%
+
 \ibi{Nächster Wegpunkt - Ankunftshöhe (MSL)}{WP H Ankunft}{Ankunftshöhe am nächsten Wegpunkt im Endanflug.
 Bei AAT-Aufgaben wird das Ziel innerhalb des AAT-Sektors benutzt.}
-%
+
 \ibi{Nächster Wegpunkt - benötigte Endanflughöhe}{WP benö H}{Zusätzlich benötigte Höhe, um den nächsten Wendepunkt zu erreichen. Bei AAT-Aufgaben wir das Ziel innerhalb des AAT-Sektors benutzt.}
-%
+
 \ibi{Endanflug - Höhenreserve}{EndA H Diff}{Ankunftshöhe am letzten Wegpunkt der Aufgabe, relativ zur eingestellten Sicherheitshöhe.}
-%
+
 \ibi{Endanflug - benötigte Endanflughöhe}{EndA benö H}{Benötigte zusätzliche Höhe, um die Aufgabe zu vollenden.}
-%
+
 \ibi{Aufgabe - Durchschnittsgeschwindigkeit}{V Aufgabe mittl}{Mittlere Geschwindigkeit über die Aufgabe, nicht höhenkompensiert.}
-%
+
 \ibi{Aufgabe - aktuelle m. Geschwindigkeit}{V Aufg aktuell}{Momentane Überland-Geschwindigkeit während der Aufgaben (höhenkompensiert).
 Ähnlich dem Vorschlag von \textsc{Pirker} für  die momentane Überland-Geschwindigkeit.}
-%
+
 \ibi{Aufgabe - erreichte Geschwindigkeit}{V Aufg. errcht.}{Erreichte Überland-Geschwindigkeit während der Aufgabe.
 diese Angaben ist höhenkompensiert. Ähnlich dem Vorschlag von \textsc{Pirker}  zur verbleibenden Überland-Geschwindigkeit.}
-%
+
 \ibi{Endanflug - Distanz}{EndA Dist}{Verbleibende Strecke um alle Wenden bis zum Ziel.}
-%
+
 \ibi{AAT -Zeit}{AAT-Zeit}{Verbleibende Zeit seit Start für die vorgegebene AAT-Aufgabe. Anzeige wird rot, wenn die Zeit verstrichen ist.}
-%
+
 \ibi{AAT - Differenzzeit}{AAT Zeit Diff}{Unterschied zwischen erwarteter Aufgabenzeit und AAT-Mindestzeit.
 Anzeige erfolgt rot, wenn Ankunftszeit zu früh, erscheint blau wenn im Sektor  und bei sofortiger Wende die erwartete Ankunftszeit größer als die AAT-Zeit plus
 vom Benutzer konfigurierte Delta-Zeit (default 5 Minuten)  ist.}
-%
+
 \ibi{AAT -  max. Distanz}{AAT Dmax}{Maximal mögliche Strecke  der vorgegebene AAT-Aufgabe.}
-%
+
 \ibi{AAT - min. Distanz}{AAT Dmin}{Minimal  mögliche Strecke  der vorgegebene AAT-Aufgabe.}
-%
+
 \ibi{AAT - Geschwindigkeit max. Distanz}{AAT V max.}{Erreichbare mittlere AAT-Geschwindigkeit,
 wenn die maximal  mögliche Strecke in der vorgegebenen AAT-Mindest-Zeit erflogen wird.}
-%
+
 \ibi{AAT - Geschwindigkeit für min. Distanz}{AAT V min.}{Erreichbare mittlere AAT-Geschwindigkeit, wenn die minimal mögliche Strecke in der vorgegebenen AAT-Mindest-Zeit erflogen wird.}
-%
+
 \ibi{AAT - Restdistanz zum Ziel}{AAT Dist Ziel}{Verbleibende Strecke der AAT-Aufgabe um alle Zielpunkte gemäß der Einstellungen.}
-%
+
 \ibi{AAT - Geschwindigkeit für geplante Strecke}{AAT VZiel}{Für die AAT-Aufgabe erreichbare mittlere Geschwindigkeit um alle Zielpunkte herum in der vorgegebenen minimalen Aufgabenzeit.}
-%
+
 \ibi{Heimdistanz}{Heimdist.}{Distanz zum Heimat-Wegpunkt (wenn konfiguriert).}
-%
+
 \ibi{On-Line Contest Distance}{OLC}{Momentane Wertung der geflogenen Distanz anhand der konfigurierten OLC-Regeln.}
-%
+
 \ibi{Aufgabe - Fortschritt}{Fortschritt}{Uhrenähnliche Anzeige der verbleibenden Aufgabendistanz. Zeigt auch die bereits erreichten Aufgabenpunkte.}
 
 %%%%%%%%%%%
@@ -263,39 +263,39 @@ wenn die maximal  mögliche Strecke in der vorgegebenen AAT-Mindest-Zeit erfloge
 \ibi{Nächster Wegpunkt}{Nächster WP}{Der Name des aktuell gewählten Wegpunktes.
 Wenn diese InfoBox aktiv ist, kann mit Auf/Ab-Pfeiltasten der nächste /vorherige Wegpunkt der Aufgabe gewählt werden.
 Für Touchscreen und PC: Details zum Wegpunkt können durch Drücken der <Enter> Taste aufgerufen werden.}
-%
+
 \ibi{Zeit - Dauer des Fluges}{Flugzeit}{Flugzeit seit Erkennen des Startes.}
-%
+
 \ibi{Zeit -Lokale Uhrzeit}{Lokalzeit}{Lokale Uhrzeit ermittelt aus dem GPS - Signal.}
-%
+
 \ibi{Zeit - UTC}{Zeit - UTC}{UTC-Zeit ermittelt aus dem GPS-Signal.}
-%
+
 \ibi{Aufgabe - benötigte Zeit}{EndA ETE}{Geschätzte verbleibende Aufgabenzeit bei idealem MacCready Vorflug/Steigen.}
-%
+
 \ibi{Aufgabe - benötigte zeit (Geschwindigkeit über Grund)}{EndA ETE VMG}{Geschätzte Zeit, die benötigt wird, um die Aufgabe zu beenden, vorausgesetzt, die aktuelle Übergrundgeschwindigkeit wird beibehalten.}
-%
+
 \ibi{Nächster Wegpunkt  - benötigte Zeit}{WP ETE}{Geschätzte Zeit zum nächsten bei idealem MacCready-Vorflug und -Steigen.}
-%
+
 \ibi{Nächster Wendepunkt - benötigte Zeit (Geschwindigkeit über Grund)}{WP ETE VMG}{Geschätzte Zeit, die benötigt wird, den nächsten Wendepunkt zu erreichen, vorausgesetzt, die aktuelle Über-Grund-Geschwindigkeit wird beibehalten.}
-%
+
 \ibi{Aufgabe - Ankunftszeit}{EndA ETA}{Geschätzte Lokalzeit nach Vollendung der Aufgabe, basierend auf dem idealen MacCready Vorflug/Steig-Modell.}
-%
+
 \ibi{Nächster Wegpunkt - Ankunftszeit}{WP ETA}{Geschätzte Lokalzeit am nächsten Wegpunkt,
 basierend auf dem idealen MacCready Vorflug/Steig Zyklus.}
-%
+
 \ibi{Aufgabe - Trend benötigte Höhe}{Trend benö H}{Trend (positiv oder negativ) des Steigens der insgesamt für die Aufgabe benötigten Höhe.}
-%
+
 \ibi{Zeit - Dauer unterhalb der max. Abflughöhe}{Zeit unt H Abfl}{Die Zeitdauer, die das Flugzeug unterhalb der maximalen Abflughöhe verbracht hat.}
 
 %%%%%%%%%%%
 \section{Team-Kode}
 
 \ibi{Team - Kode}{Team - Kode}{Der eingestellte Teamkode für diese Flugzeug. Diesen Kode verwenden, um ihn an das Team weiterzugeben. Der zuletzt eingegebene Flugzeugkode wir darunter angezeigt.}
-%
+
 \ibi{Team - Peilung}{Team Peil.}{Peilung zum Teampartner. Bezug ist die \textsl{letzte} Teamkode-Meldung.}
-%
+
 \ibi{Team - Peildifferenz}{Team Kurs}{Die relative Peilung  zum Teampartner. Bezug ist die \textsl{letzte} Teamkode-Meldung.}
-%
+
 \ibi{Team - Distanz}{Teamdist.}{Die Entfernung zum Teampartner. Bezug ist die \textsl{letzte} Teamkode-Meldung.}
 
 %%%%%%%%%%%
@@ -303,28 +303,28 @@ basierend auf dem idealen MacCready Vorflug/Steig Zyklus.}
 
 \ibi{Batterie Ladezustand}{Batterie}{Zeigt den prozentualen Batterieladezustand (soweit vorhanden/anwendbar)
 und den Status, bzw. die Spannung der externen Versorgung an.}
-%
+
 \ibi{CPU - Auslastung}{CPU}{Prozessorlast durch XCSoar über 5 Sekunden gemittelt.}
-%
+
 \ibi{Freier Speicher}{Freier Speicher}{Freier Speicher laut Betriebssystem.}
 
 %%%%%%%%%%%
 \section{Alternativen}
 
 \ibi{Alternative 1}{Altn 1}{Zeigt Namen und Peilung zum besten Ausweichlandeplatz (Alternative) an.}
-%
+
 \ibi{Alternative 2}{Altn 2}{Zeigt Namen und Peilung zum zweitbesten Ausweichlandeplatz (Alternative) an.}
-%
+
 \ibi{Alternative 1 - Gleitzahl}{Altn1 benö GZ}{Gleitzahl zur Ankunftshöhe über der besten Alternative (ohne TE Korrektur)}
 
 %%%%%%%%%%%
 \section{Beobachtungen}
 
 \ibi{Luftraum - horizontal Nächster}{Näch LR horiz}{Die horizontale Distanz zum nächsten Luftraum.}
-%
+
 \ibi{Luftraum - vertikaler Nächster}{näch LR vert}{Der vertikale Abstand zum nächsten Luftraum.
 Ein positiver Wert deutet auf einen Luftraum über Dir hin, ein negativer Wert bedeutet, daß sich ein Luftraum
 Dir befindet.}
-%
+
 \ibi{Geländekollision}{Gelände Koll}{Die Entfernung bis zur nächsten Geländekollision entlang des aktuellen
 Schenkels. An diesem Punkt wird die Höhe die eingestellte Geländefreiheit (Sicherheitshöhe) unterschreiten.}

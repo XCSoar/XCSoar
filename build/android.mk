@@ -18,7 +18,7 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
 else
-  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
+  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)

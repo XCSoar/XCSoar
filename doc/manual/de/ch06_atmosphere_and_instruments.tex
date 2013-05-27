@@ -11,9 +11,7 @@ ist grundsätzlich angebracht. Speziell bei kritischen Situationen wie z.B.\ auc
 Außenlandungen sollten die Augen immer draußen sein, und nicht zu sehr auf die Instrumente
 gerichtet sein.
 \section{Variometer}
-Seit V6.6 sind zwei Darstellungen des Variometers möglich. Neben der bisherigen Analkog animierten Anzeige ginbt es nun auch eine Anzeige, ganz analog dem Endanflugshöhenanzeiger auf der linken Seite der Karte. 
-
-\subsection*{Analog- Variometer}\index{Variometer!Analoganzeige}
+\subsection*{Analog- Variometer}\index{Vario!Analoganzeige}
 Die Anzeige des Variometers als Analoganzeige ist aus Platzgründen nur im Querformat möglich.
 
 Das Variometer \textsl{kann} als animiertes Zeigerinstrument dargestellt werden.
@@ -32,21 +30,27 @@ Der Integrator kann optional ebenfalls dargestellt werden - er erscheint dann al
 Die Vario Anzeige ist komplett varierbar \config{variogauge}, so daß alle Zeiger und Werte einzeln dargestellt
 werden können. 
 
-\subsection*{Digitales Variometer}\index{Variometer!Digitalanzeige}
-Seit V6.6 besteht die Möglichkeit, das Vario nicht ausschließlich als Analoganzeige innerhalb der
+\subsection*{Digitales Variometer}\index{Vario!Digitalanzeige}
+Es besteht die Möglichkeit, das Vario nicht ausschließlich als Analoganzeige innerhalb der
 \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}Infoboxen darstellen zulassen,
 sondern in der Art, wie auch die Endanflughöhe dargestellt wird.
 
 
 Mit \button{Vario Bar} kann dies Verhalten ein- bzw. ausgeschaltet werden.
 
-\menulabel{\button{Anzeigen}\blink\button{Flarm etc.}}Hierzu werden am rechten Rand des Bildschirmes auf gleicher Höhe mit dem Endanflughöhenanzeiger
+\menulabel{\button{Anzeigen}\blink\button{Flarm etc.}}
+Hierzu werden am rechten Rand des Bildschirmes auf gleicher Höhe mit dem Endanflughöhenanzeiger
 Pfeile nach oben in grün für Steigen, und Pfeile in rot nach unten für Saufen angezeigt.
-
 Ein zusätzlicher grauer Teilpfeil zeigt entsprechend der Skalierung den aktuellen MC-Wert an.
 
-Die Zahl im  Textfenster ist das integrierte Steigen der letzten 30 Sekunden an.
+Die Skalierung der Pfeile sind 5m/sec. Werte über 5m/sec werden durch die abgesetzte Peilspitzenangegeben. 
 \sketch{figures/vario-bar.png}
+Der hellgrüne/hellrote  Pfeil zeigt das integrierte Steigen/Saufen  an, so kann man mit einem Blick erkennen, wie gut der MC-Wert (der ja grau hinterlegt ist) gewählt ist. Ist der hellgrüne Pfeil auf gleicher Höhe mit dem MC-Peil, hat man sehr gut gewählt.
+
+Die Zahl im  Textfenster gibt zusätzlich das integrierte Steigen der letzten 30 Sekunden an.
+
+\warning Eine Sollfahrtanzeige  ist bislang nicht vorgesehen.
+
 
 
 Wenn ein intelligentes Vario angeschlossen ist, dann werden die Werte direkt vom Vario an den Zeiger
@@ -71,20 +75,20 @@ erfaßten Singale.
 
 Die wichtigsten von  \xc benutzen Daten sind:
 \begin{description}
-\item[Taotalenergie Vario]
+\item[\textit{Totalenergie Vario}]
 (Änderung der Totaleneergie der durchflogenen Luftmasse)
 Benutzt für die Anzeige und für die Berechnung des Nettosteigens
-\item[Netto Variometer]
+\item[\textit{Netto Variometer}]
 (ermitteltes Steigen der durchflogenen Luftmasse)
 Wird benutzt für die Anzeige und um den Flugweg auf der Karte darzustellen.
 Erlaubt so effektiv eine Darstellung von Steig- uns Sinkpfaden
-\item[Beschleunigung des Flugzeuges]
+\item[\textit{Beschleunigung des Flugzeuges}]
 (g-Wert) Benutzt für die Berechnung des Netto Variometers, falls externe Sensoren (Varios) nicht angeschlossen sind.
-\item[Barometrische Höhe] Wird benutzt für die Anzeige
-\item[IAS Angezeigte Luftgeschwindigkeit]
+\item[\textit{Barometrische Höhe}] Wird benutzt für die Anzeige
+\item[\textit{IAS Angezeigte Luftgeschwindigkeit}]
 Benutzt für die Anzeige, zur Kompensation der kinetischen Energie während des Endanfluges  und im Nettovariometer,
 sofern keine externe Variosignale vorhanden sind.
-\item[Luftdichte] Benutzt für die Berechnung der wahren Geschwindigkeit (TAS) aus der angezeigten Geschwindigkeit (IAS)
+\item[\textit{Luftdichte}] Benutzt für die Berechnung der wahren Geschwindigkeit (TAS) aus der angezeigten Geschwindigkeit (IAS)
 \end{description}
 \section{Windanzeige}
 Windrichtung und -stärke werden kontinuierlich auf der Karte dargestellt.
@@ -101,9 +105,9 @@ Es ist daher möglich, die Winddaten manuell zu korrigieren.
 \section{Wind Ermittlung}\label{sec:wind-estimation}
 \xc bietet zwei verschieden Wege, den Wind während des Fluges zu ermitteln.
 \begin{description}
-\item[Beim Kurbeln]  Diese Methode benutzt die  GPS Koordinaten um die Abdrift während
+\item[\textit{Beim Kurbeln}]  Diese Methode benutzt die  GPS Koordinaten um die Abdrift während
 des Kurbelns zu ermitteln und ist bei allen \xc Installationen verfügbar, da unabhängig von anderen Sensoren.
-\item[ZickZack Flug] Diese Methode benutzt sowohl die GPS Daten wie auch die Werte aus der TAS-Messung.
+\item[\textit{ZickZack Flug}] Diese Methode benutzt sowohl die GPS Daten wie auch die Werte aus der TAS-Messung.
 Dies ist nur verfügbar, wenn \xc an ein inelligentes Variometer mit entsprechendem Ausgang angeschlossen ist.
 \end{description}
 
@@ -157,13 +161,10 @@ im Geradeausflug entdeckt wurden.
 Für Flugzeuge, die mit einem intelligenten Variometer und einem Kompaßabgriff der
 Windrichtung ausgestattet sind, ermöglicht  \xc die Benutzung dieser Werte direkt.
 Hierdurch ist es überflüssig, für die Windermittlung zu kurbeln oder zickZack zu fliegen.
-\section{Windeinstellung}\index{Windeinstellung}\label{sec:Windeinstellung}
+\section{Windeinstellung}\index{Wind!Einstellung}\label{sec:Windeinstellung}
 Der Wind-Dialog gestattet die einmalige Grundeinstellung der Werte  z.B.\ am Boden und\menulabel{\bmenut{Konfig}{1/3}\blink\bmenus{Wind}}
 anschließende Aktualisierung bei Bedarf in der Luft. 
 
-%\begin{center}
-%\includegraphics[angle=0,width=0.75\linewidth,keepaspectratio='true']{figures/XCS64-OptWind.png}
-%\end{center}
 Wenn der Dialog geschlossen wird, werden die ermittelten Werte solange benutzt,
  bis neue Werte aus der ZickZack- oder Kurbelmessung vorliegen.
 
@@ -173,47 +174,40 @@ beide Methoden verwandt werden (s.o. Bild) Siehe Kap.~\ref{sec:wind-estimation}
 
 Die Windabdrift in der Darstellung des geflogenen Pfades  auf der Karte kann ebenso an-
 oder ausgeschaltet werden. Nähere Details hierzu in Kap.~\ref{sec:trail}.
-\section{Thermikprofil}\index{Thermikprofile}
+\section{Thermikprofil}\index{Thermikprofil}
 Um das beste Höhenband schnell ausfindig zu machen, werden Daten über die Steigwerte in
 Abhängigkeit von der geflogenen Höhe aufgenommen.
-
 Diese Anzeige wird auf der linken Seite der Karte oberhalb der Endanflugshöhenindikatoren dargestellt.
-Sie ist\todonum{..was extrem ärgerlich ist, wo es doch Transparenz gibt, im Jahre 2013 :-)} nicht sichtbar, wenn man sich oberhalb des Gleitpfades befindet.
-
+Sie ist nicht sichtbar, wenn man sich oberhalb des Gleitpfades befindet.
 
 Das Thermikprofil ist horizontal skaliert gemäß des bislang besten mittleren Steigens.
 Vertikal wird die Höhe dargestellt und skaliert gemäß der höchsten bislang erreichten Höhe nach dem Start
 \marginpar{\hbox{\vbox{\centering{ \includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/thermalprofile.png}}}}}
 (Siehe hierzu Kap.~\ref{sec:safety-heights}). Ein schwarzer Pfeil gibt die derzeitige Höhe des Flugzeuges an.
-Die Länge des  Pfeil ist nach dem derzeit eingestellten MC-Wert skaliert und gibt somit eine schnellstmögliche
-Übersicht über die Qualität und evtl. Abweichung des aktuellen MC-Wertes innerhalb des durchflogenen Höhenbandes.
+Die Länge des  Pfeil ist nach dem derzeit eingestellten MC-Wert skaliert und gibt somit eine schnellstmögliche Übersicht über die Qualität und evtl. Abweichung des aktuellen MC-Wertes innerhalb des durchflogenen Höhenbandes.
 
 Wenn sich der Pilot auf Thermiksuche befindet kann somit die Position des Pfeiles ein Anhaltspunkt sein,
 wie wichtig es ist, wieder Thermik zu finden\dots
-Wenn der Pfeil sich auf den unteren Rand des Bandes zubewegt, befindet sich das Flugzeug nahe der
-Aufbruchshöhe und der Pilot sollte sich allmählig damit abfinden, nun auch in schwächerer Thermik kurbeln zu müssen.
+Wenn der Pfeil sich auf den unteren Rand des Bandes zubewegt, befindet sich das Flugzeug nahe der Aufbruchshöhe und der Pilot sollte sich allmählig damit abfinden, nun auch in schwächerer Thermik kurbeln zu müssen.
+
 \section{Thermikfinder}
 Durch einen Algorythmus wird der Kern der Thermik errechnet und dargestellt.
 Das Symbol für das Zentrum ist eine kleine grüne Spirale auf der Karte der moving map.
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/shot-tlocator-circling.png}
-\end{center}
+\sketch{figures/shot-tlocator-circling.png}
 Der Thermikfinder markiert \textit{fortlaufend  die letzten 20 Bärte} während des Fluges auf der Karte.
-
 Die Position des Zentrum kann mit der Abdrift durch den ermittelten Wind korrigiert werden.
 
 Dies bedeutet, daß \xc sich die Position der Thermikquelle intern über Grund merkt.
 Mit anderen Worten, wenn Du einen Bart ganz oben verläßt, und später zu diesem in tieferen
 Höhen zurückkehrst wird die angezeigte Position auf der Karte die Position in der
 entsprechenden Höhe sein (welche etwas luvwärts stehen wird als die Basis.)
+\sketch{figures/shot-tlocator-cruise.png}
 
 Wenn sich der Wind ändert und die Thermikquelle noch immer aktiv ist,
 wird die Position auf der Karte ein Hinweis für die Windänderung sein, denn
 durch die Abdrift in der Höhe ist der Bart mit dem Wind gewandert.
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/shot-tlocator-cruise.png}
-\end{center}
-\section{Zentrierhilfe (info info Zentrierhilfe)}
+
+\section{Zentrierhilfe (info info Zentrierhilfe)}\index{Zentrierhilfe}
 Die Zentrierhilfe ist eine graphische Hilfe, um den Kern der Thermik zu treffen und einfach zu zentrieren.
 Wenn diese in den Konfigurationseinstellungen aktiviert ist ( \config{thermalassistant}), erscheint beim
 Kurbeln wodurch ein kleines  rundes Diagramm. Ein kurzer Tip auf dies Diagramm läßt die Zentrierhilfe im Vollbild erscheinen.
@@ -251,7 +245,7 @@ Ein bißchen Training mit diesem Verfahren um  erfolgreich zu zentrieren ist sic
 
 \section{Konvektionsvorhersagen}\label{sec:convection-forecast}\index{Konvektionsvorhersage}
 Wenn das Flugzeug mit einem Außentemperatur- und Feuchtefühler ausgestattet ist, kann anhand
-\menulabel{\bmenut{Konfig}{1/3}\blink\bmenus{Flug}}vorhandener und ermittelter Daten  eine simple Vorhersage der Basishöhe und Konvektion vorgenommen werden. Der Feuchtesensor wird vorwiegend für die Ermittlung der Basishöhe benutzt.\todonum{und wo schließt man den an\dots?}
+\menulabel{\bmenut{Konfig}{1/3}\blink\bmenus{Flug}}vorhandener und ermittelter Daten  eine simple Vorhersage der Basishöhe und Konvektion vorgenommen werden. Der Feuchtesensor wird vorwiegend für die Ermittlung der Basishöhe benutzt.
 
 Hierzu muß der Pilot vor dem Flug die maximal erwartete Temperatur in einer Infobox eingeben.
  Siehe Kap.~\ref{sec:basic-sett-dial}.
@@ -277,21 +271,12 @@ Zeigt die Windgeschwindigkeit und Richtung über die Höhe an.
 
 Der Button \button{Wind einstellen} öffnet die Windeinstellung, z.B.\ um Wind manuell zu korrigieren.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-wind.png}
-%\end{center}
-
 \item[Temperaturverlauf]
 \sketch{figures/analysis-wind.png} Diese Seite ist nur verfügbar bzw.\ mit Daten gefüllt, wenn ein entsprechendes Instrumentan  \xc angeschlossen ist, welches die Außentemperatur und Feuchtigkeit angibt.
 
 Das Diagramm zeigt den Verlauf von Temperatur der trockenen Luft, Taupunkt, und Außentemperatur
 über der Höhe. Weiterhin wird die hieraus ermittelte Wolkenbasis und die Konvektionshöhe  angegeben.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-temptrace.png}
-%\end{center}
 
 \end{description}
 Das Barogramm (Kap.~\ref{sec:analysis-dialog-climb}) und der Verlauf des Steigens über der Höhe sind
@@ -309,14 +294,9 @@ In diesem Abschnitt soll nur auf die Anwendung eingegangen werden; eine ausführ
 Beschreibung der Details von RASP gibt es in  \url{www.drjack.info}.
 und welche Limitierungen diese Art von Vorhersage innehat.
 
-
 Die einzelnen Arten der Überlagerung auf der Karte (z.B.\ Basishöhe, Niederschlag,
 max.\ Temperatur etc.\  können dort aufgerufen werden.
 Die einzelnen Parameter werden unten erklärt und sind auch im Feld \button{Hilfe} zu finden.
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/XCS64-Wetter-Dialog.png}
-%\end{center}
 
 In der Auswahlbox kann der gewünschte darzustellende Wert angeklickt werden.
 Die Vorhersagezeit kann eingestellt werden. Felder bzw.\ Werte, in RASP derzeit nicht verfügbar sind,

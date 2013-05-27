@@ -26,7 +26,9 @@ selber kompilieren und wirklich \textbf{alles} ändern.
 Solltest Du ein ernstes Interesse daran haben, wirklich detailliert in \xc  einzusteigen, um eventuell Deine
 ganz eigene Oberfläche zu gestalten, so empfehlen wir,  Dich mit dem \xc-Wiki  zu beschäftigen. Hier der
 Link: \url{http://www.xcsoar.org/trac/wiki}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%
 \section{Ändern der Voreinstellungen}
 Es gibt einen Menge an Einstellungen, welche vom Benutzer verändert werden
 können. Bis auf das generelle Layout des Programmes kann
@@ -77,36 +79,38 @@ einfacheren Überblick verborgen.
 \tip In der folgenden Beschreibung werden alle die
 Parameter, die nur im Expertenmodus sicht- und auswählbar sind, mit
 einem$^{\textcolor{blue}{\star}}$ versehen.
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Standortdateien}\index{Standortdatei}\index{Konfiguration!Neuer Flugplatz - neue Karte}\index{Konfiguration!Fliegerlager}\label{sec:site-files}
 Dieser Abschnitt beschreibt die wichtigsten Files, welche konfiguriert werden sollten, wenn
 Du Dich an einem neuen Platz befindest - beispielsweise in einem Fliegerlager.
 
 \begin{description}
-\item[XCSoar Daten Pfad]  Ganz oben im Fenster steht der Pfad, an dem diese Dateien \textsl{erwartet} werden.
+\item[\textit{XCSoar Daten Pfad}]  Ganz oben im Fenster steht der Pfad, an dem diese Dateien \textsl{erwartet} werden.
 Steht ein pfad dort, und sind keine Dateien vorhanden, bleiben alle weiteren Felder leer.
 Alle Daten sollten in einem Unterordner\verb "\XCSoarData" enthalten sein.
 Es ist extrem wichtig, und als allererstes durchzuführen!
 
 Der Pfad kann sich auf der Festplatte, der SD-Karte oder im ''normale'' Speicher
 Deines Gerätes befinden.
-\item[Kartenddatenbank]  Name des Kartenfiles (\verb"*.xcm") In diesem File sind alle Daten zur
+\item[\textit{Kartenddatenbank}]  Name des Kartenfiles (\verb"*.xcm") In diesem File sind alle Daten zur
 Karte, Topologie, das Höhenmodell  und die wichtigsten Daten der Wegpunkte enthalten.
 Das File ist intern als ein \verb''*.zip'' File aufgebaut.
-\item[Wegpunkte]  Das primäre Wegpunkt-File. Wenn kein File ausgewählt wird,
+\item[\textit{Wegpunkte}]  Das primäre Wegpunkt-File. Wenn kein File ausgewählt wird,
 werden die Wegpunktdaten aus der Kartendatenbank (\verb"*.xcm"), s.o.\ benutzt
 (sofern dort vorhanden).
-\item[Weitere Wegpunkte$^{\textcolor{blue}{\star}}$]  Sekundäre Wegpunktdatei. Hier können z.B. Wegpunkte und spezielle
+\item[\textit{Weitere Wegpunkte$^{\textcolor{blue}{\star}}$}]  Sekundäre Wegpunktdatei. Hier können z.B. Wegpunkte und spezielle
 Angaben für Wettbewerbe hinterlegt werden.
-\item[Beobachtete Wegpunkte$^{\textcolor{blue}{\star}}$]  Wegpunktdatei in der spezielle Wegpunkte gespeichert werden,
+\item[\textit{Beobachtete Wegpunkte$^{\textcolor{blue}{\star}}$}]  Wegpunktdatei in der spezielle Wegpunkte gespeichert werden,
 für die erweiterte Berechnung wie Ankunftshöhe etc.\  in der Karte (also auf dem Bildschirm)
 angezeigt werden. Die bekommen dann die bekannten grünen Rahmen.
 Sinnvoll für z.B.\ bekannte und zuverlässige Thermikauslösepunkte, Bergrücken, Kraftwerke etc.\
-\item[Lufträume]  Primäres Luftraumdatei. Wenn nichts angewählt wird, werden die Daten aus der
+\item[\textit{Lufträume}]  Primäres Luftraumdatei. Wenn nichts angewählt wird, werden die Daten aus der
 Kartendatenbank (\verb''*.xcm'') benzutzt (sofern vorhanden).
-\item[Weitere Lufträume$^{\textcolor{blue}{\star}}$]  Sekundäre Luftraumdatei. Hier  können z.B.\ Lufträume wie
+\item[\textit{Weitere Lufträume$^{\textcolor{blue}{\star}}$}]  Sekundäre Luftraumdatei. Hier  können z.B.\ Lufträume wie
 Wettbewerbsgebiete oder andere eigene bearbeitete Luftraumdaten  eingegeben werden.
-\item[Wegpunktdetails$^{\textcolor{blue}{\star}}$]  Hier kann eine Datei angegeben werden, in der vor allem
+\item[\textit{Wegpunktdetails$^{\textcolor{blue}{\star}}$}]  Hier kann eine Datei angegeben werden, in der vor allem
  zu  Flugplätzen eingegeben werden können.
 \end{description}
 
@@ -131,62 +135,66 @@ angewählt werden und \xc nimmt die Wegpunkte aus der XCM-Datenbank.
 
 Es steht Euch frei, beliebige Dateien zu erstellen und einzufügen, welche dann anschließend
 anstelle der Kartenbankdatei benutzt werden soll. Mehr zu den Kartendateien in Kap.~\ref{sec:map}.
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Ausrichtung}\label{sec:map-projection}
 Hier kann eingestellt werden, wie die Kartenanzeige der Moving Map relativ zum Segelflugzeug
 ausgerichtet und dargestellt wird.
 \begin{description}
-\item[Vorflug Ausrichtung]  \label{conf:orientation} Einstellung für den Geradeausflug: \\
+\item[\textit{Vorflug Ausrichtung}]  \label{conf:orientation} Einstellung für den Geradeausflug: \\
   {\bf Kurs nach oben}:   Die Kartenanzeige wird so gedreht, daß der Kurs nach oben gedreht ist.\\
   \sketch{figures/config-map_projection.png}
   {\bf Flugrichtung nach oben}:   Die angezeigte Karte orientiert sich anhand der Flugrichtung - diese wird nach oben ausgerichtet.\\
   {\bf Norden oben}:   Die Kartenanzeige bleibt oben nach Norden ausgerichtet; das
   Segelgflugzeugsymbol  wird in Kursrichtung gedreht. Windeinfluß ist hierbei berücksichtigt. \\
   {\bf Ziel nach oben}:   Die Kartenanzeige wird gedreht, sodaß die Richtung zum nächsten   Zielpunkt immer nach oben ausgerichtet ist.
-\item[Steigflug Ausrichtung] Die Beschreibung der einzelnen Möglichkeiten ist identisch wie bei Vorflug-Ausrichtung.
-\item[Steigflug Zoom]  \label{conf:circlingzoom}
+\item[\textit{Steigflug Ausrichtung}] Die Beschreibung der einzelnen Möglichkeiten ist identisch wie bei Vorflug-Ausrichtung.
+\item[\textit{Steigflug Zoom}]  \label{conf:circlingzoom}
 Umschaltung zwischen Auto-zoom und Fix Zoom für Kurbel- und Vorflug-Modus..
   Wenn aktiviert, dann wird bei der Kartendarstellung automatisch beim Umschalten auf Steigflug der Zoom vergrößert,
   beim Zurückschalten auf Sollfahrt wieder verkleinert.
-\item[Kartenreferenzpunkt] Bestimmt die Richtung, in welcher das Segelflugsymbol
+\item[\textit{Kartenreferenzpunkt}] Bestimmt die Richtung, in welcher das Segelflugsymbol
 aus der Mitte heraus verschoben wird. \textsl{Achtung:} \achtung Erscheint nur bei Ausrichtung ''Norden oben''\\
   {\bf Keine}: Keine Anpassung. Segelflugzeugsymbol bleibt fix an der Position (wie unten angegeben)  stehen.\\
   {\bf Kurs}: Nimmt den aktuellen mittleren Kurs als Basis. (um z.B.\ mehr Platz in Flugrichtung auf der Karte zu haben) \\
   {\bf Zielpunkt}: Nimmt den Zielpunkt als Basis der Verschiebung. (verschiebt mehr in Richtung Zielpunkt)
-\item[Seglersymbol Plazierung]  \label{conf:gliderposition} Position des Segelflugzeugsymboles
+\item[\textit{Seglersymbol Plazierung}]  \label{conf:gliderposition} Position des Segelflugzeugsymboles
 vom unteren Rand in Prozent.
-\item[Auto Zoom]  Automatische herein- und Rauszommen, wenn an einen Wendepunkt herangeflogen wird, um die Kartendarstellung übersichtlich zu halten.\\
+\item[\textit{Auto Zoom}]  Automatische herein- und Rauszommen, wenn an einen Wendepunkt herangeflogen wird, um die Kartendarstellung übersichtlich zu halten.\\
 {\bf Ein}:  Karte wird automatisch rein- und rausgezoomt.\\
 {\bf Aus}: Kein automatisches Zoomen.
 \item[Max. auto Zoom Entfernung]  Obere Grenze für die Auto Zoom Entfernungen
-\item[Ab V6.6: Eigenständiger Seitenzoom] Individueller Maßstab für jede InfoboxSeite:\\
+\item[\textit{Eigenständiger Seitenzoom}] Individueller Maßstab für jede InfoboxSeite:\\
 {\bf Ein}: Hiermit kann für jede Infobox-Seite ein eigener Maßstab definiert werden. \\
 {\bf Aus}: Alle InfoBox Seiten haben den gleichen Mastab
 
 \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Elemente}\label{sec:map-elements}
 Hier werden diverse Anzeigen wie Kurs-Spuren, Symbole und Luftverkehr konfiguriert werden:
 \begin{description}
-\item[Kurs über Grund] Zeigt eine Linie des geflogene Kurses projeziert auf den Boden (Bodenspurlinie)\\
+\item[\textit{Kurs über Grund}] Zeigt eine Linie des geflogene Kurses projeziert auf den Boden (Bodenspurlinie)\\
    {\bf Aus}: Zeigt die Bodenspurlinie niemals\\
    {\bf Ein}: Zeigt die Bodenspurlinie immer\\
    {\bf Auto}: Zeigt die Bodenspurlinie nur, wenn es eine signifikante Abweichung des Flugweges zum Kurs gibt.
-\item[FLARM Flugverkehr ]
+\item[\textit{FLARM Flugverkehr}]
    {\bf Ein}:  \label{conf:flarm-on-map} Anzeige des F\fl Flugverkehres auf der Moving Map.\\
    {\bf Aus}: FLARM - Flugverkehrsanzeige ausgeschaltet.
-\item[Spurlänge\textcolor{blue}{$\star$}] \label{conf:snailtrail} Einstellung, ob und wie lang die Spur hinter dem
+\item[\textit{Spurlänge\textcolor{blue}{$\star$}}] \label{conf:snailtrail} Einstellung, ob und wie lang die Spur hinter dem
 Segelflugzeugsymbol dargestellt werden soll. \\
 \sketch{figures/config-map_elements.png}
    {\bf Aus}: Spur wird nicht gezeigt. \\
    {\bf Lang}: Eine lange Spur wird gezeigt (ca. 60 Minuten Flugweg).\\
    {\bf Kurz}: Eine kurze Spur wird angezeigt (ca. 10 Minute Flugweg). \\
    {\bf Voll}: Die komplette Flugspur seit Start wird angezeigt.
-\item[Spurdrift$^{\textcolor{blue}{\star}}$] \label{conf:traildrift} Einstellung, ob die Flugspur im Steigflugmodus
+\item[\textit{Spurdrift$^{\textcolor{blue}{\star}}$}] \label{conf:traildrift} Einstellung, ob die Flugspur im Steigflugmodus
 mit dem Wind verschoben wird. Wenn ausgeschaltet, wird die Flugspur ohne Winddrift angezeigt.\\
    {\bf Ein}: Spurdrift eingeschaltet\\
    {\bf Aus}: Spurdrift ein ausgeschaltet.
-\item[Spurtyp\textcolor{blue}{$\star$}] \label{conf:snailtype} Bestimmt Art und Aussehen der Spur.\\
+\item[\textit{Spurtyp\textcolor{blue}{$\star$}}] \label{conf:snailtype} Bestimmt Art und Aussehen der Spur.\\
   {\bf Vario \#1}: Während des Steigens wird die Spur grün und in dicker werdender Linie dargestellt,
   beim Sinken wird die Linie braun und dünner dargestellt. Nullschieber wird als graue Linie dargestellt.\\
   {\bf Vario \#1 (mit Punkten)}: Dieselbe Anzeige und Farbschema, diesmal aber gepunktete Darstellung
@@ -195,34 +203,36 @@ beim Sinken. \\
   {\bf Vario \#2 (mit Punkten)}: Dieselbe Anzeige und Farbschema, diesmal aber gepunktete Darstellung
   beim Sinken.\\
   {\bf Höhe}: Die Spur zeigt entsprechend des Farbschemas die geflogene Höhe an.
-\item[Skalierte Spur$^{\textcolor{blue}{\star}}$] \label{conf:trailscaled} Wenn eingeschaltet, wird die Spur anhand des Variosingals
+\item[\textit{Skalierte Spur$^{\textcolor{blue}{\star}}$}] \label{conf:trailscaled} Wenn eingeschaltet, wird die Spur anhand des Variosingals
 dünner(Saufen) oder breiter (Steigen) dargestellt .
-\item[Angabe zu Umwegkosten\textcolor{blue}{$\star$}]  Wenn der Steuerkurs vom geplanten Ziel abweicht können vordem
+\item[\textit{Angabe zu Umwegkosten\textcolor{blue}{$\star$}}]  Wenn der Steuerkurs vom geplanten Ziel abweicht können vor dem
 Flugzeug in Flugrichtung Zahlen eingeblendet werden. Dies Zahlen geben am Ort ihres Auftretens auf der Karte
 in Prozent vom geraden Weg zum Ziel den Umweg an. Eine $13$ hieße also die Entfernung zum angeflogenen
 Wegpunkt beträgt das $1,13$ fache der Entfernung direkt zum Ziel, wenn man über diese $13$
 an der Stelle auf der Karte zum Ziel flöge.
-\item[Flugzeugsymbol$\ast$]  Darstellung des Flugzeugsymboles auf der Karte \\
+\item[\textit{Flugzeugsymbol$\ast$}]  Darstellung des Flugzeugsymboles auf der Karte \\
   {\bf Einfach}: Eine einfache Liniendarstellung \\
   {\bf Einfach (groß)}: Eine vergrößerte einfache Darstellung für bessere Sichtbarkeit auf kleinen Displays. \\
   {\bf Detailliert}: Eine aufwendigere Darstellung (gerendert). \\
   {\bf Hängegleiterr}: Ein vereinfachter Hängegleiter, weiß mit schwarzer Kontur. \\
   {\bf Paraglider}: Ein vereinfachter Paragleiter, weiß mit schwarzer Kontur.
-\item[Wind-Pfeil$^{\textcolor{blue}{\star}}$]  Auswahlmöglichkeiten zur Darstellung des Windpfeiles.\\
+\item[\textit{Wind-Pfeil$^{\textcolor{blue}{\star}}$}]  Auswahlmöglichkeiten zur Darstellung des Windpfeiles.\\
   {\bf Aus}: Keine Darstellung des Windes auf der Karte. \\
   {\bf Pfeilspitze}: Zeigt  nur die Spitze des Pfeiles. \\
   {\bf Ganzer Pfeil}: Zeigt einen ganzen Pfeil mit gestrichelter Linien
-\item[FAI--Dreiecke Gebiete$^{\textcolor{blue}{\star}}$]  Zeigt Gebiete erforderlich für FAI-Dreiecke  \\
+\item[\textit{FAI--Dreiecke Gebiete$^{\textcolor{blue}{\star}}$}]  Zeigt Gebiete erforderlich für FAI-Dreiecke  \\
   {\bf Ein}:  Zeigt die Gebiete gelb hinterlegt auf der Karte an \\
   {\bf Aus}: Zeigt die Gebiete nicht an.
   \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Wegpunkte}\label{sec:waypoint-display}
 Hier können Einstellungen zur Darstellung von Wegpunkten und deren Details
 vorgenommen werden.
 
 \begin{description}
-\item[Beschriftungsformat]  diese Einstellungen beeinflussen die Darstellung der Wegpunktebeschreibungen,
+\item[\textit{Beschriftungsformat}]  diese Einstellungen beeinflussen die Darstellung der Wegpunktebeschreibungen,
   welche an jedem Punkt auf der Karte zu sehen sind.\label{conf:labels}
   Es gibt vier verschiedene Formate:\\
   {\bf Vollständiger Name}: Der komplette Name des Wegpunktes wird gezeigt. \\
@@ -231,17 +241,17 @@ vorgenommen werden.
   {\bf Ersten 3 Buchstaben}: Die ersten 3 Buchstaben werden angezeigt. \\
   {\bf Ersten 5 Buchstaben}: Die ersten 5 Buchstaben werden angezeigt. \\
   {\bf Keine}: Es werden keine Namen zu den Wegpunkten auf der Karte dargestellt.
-\item[Ankunftshöhe$^{\textcolor{blue}{\star}}$] Bestimmt ob und wie wie die Ankunftshöhe  in der Wegpunktbeschreibung (s.o.) angezeigt wird. \\
+\item[\textit{Ankunftshöhe$^{\textcolor{blue}{\star}}$}] Bestimmt ob und wie wie die Ankunftshöhe  in der Wegpunktbeschreibung (s.o.) angezeigt wird. \\
   {\bf Keine}: Es wird keine Ankunftshöhe angezeigt. \\
   {\bf Geradliniger Gleitpfad}: Ankunftshöhe auf geradliniegem Gleitpfad wird angezeigt. Das Gelände wird hierbei  nicht berücksichtigt. \\
   {\bf Gleitpfad unter Berücksichtigung des Geländes}: Die Ankunftshöhe unter Berücksichtung der Geländehöhe wird Angezeigt.
   \achtung Dies benötigt den Reichweitenmodus ''mit Umweg'' bei den Routenplanereinstellungen. \\
   {\bf Geraden \& Gelände Gleitpfad}: Es werden beide Höhen angezeigt. Dies benötigt den Reichweitenmodus ''mit Umweg'' bei den Routenplanereinstellungen.  \\
   {\bf Benötigte Gleitzahl}: Zeigt die benötigte Gleitzahl an, welche zum gewählten Wegpunkt  erforderlich ist.
-\item[Stiel der Beschriftung$^{\textcolor{blue}{\star}}$]  Die Form der ''Etiketten'' an den Wegpunkten.\\
+\item[\textit{Stil der Beschriftung$^{\textcolor{blue}{\star}}$}]  Die Form der ''Etiketten'' an den Wegpunkten.\\
     {\bf Abgerundetes Rechteck}: Beschriftung erfolgt in schwarzer Schrift auf weißem Hintergrund in einem abgerundeten Rahmen
     {\bf Umrissen}: Beschriftung erfolgt in weißer Schrift, schwarz umrissen.
-\item[Sichtbarkeit der Beschriftung$^{\textcolor{blue}{\star}}$]  \label{conf:labelvisibility}
+\item[\textit{Sichtbarkeit der Beschriftung$^{\textcolor{blue}{\star}}$}]  \label{conf:labelvisibility}
    Zeigt an, welche Wegpunkte auf der moving map mit Beschriftung (Name und Höhenangabe wie oben
    beschrieben)  versehen werden \\
    {\bf Alle}: Alle Wegpunkte bekommen die Beschriftung. \\
@@ -250,19 +260,21 @@ vorgenommen werden.
    {\bf Aufgabenwegpunkte}:  Nur Wegpunkte, die in der aktuellen Aufgabe gelistet sind, werden
    mit Beschriftung versehen. \\
    {\bf Keine}:  Keine Wegpunkte bekommen eine Beschriftung.
-\item[Landbare Symbole]  \label{conf:waypointicons} Es gibt drei verschiedene Stilarten:
+\item[\textit{Landbare Symbole}]  \label{conf:waypointicons} Es gibt drei verschiedene Stilarten:
    Lila Punkt, (ähnlich WinPilot), S/W (ein hoch kontrastreicher Stil) und ein ''Verkehrsampel''-Stil.
    Mehr dazu in Kap.~\ref{sec:waypoint-schemes}.
-\item[Detaillierte Landbare$^{\textcolor{blue}{\star}}$]  Einstellung für mehr Details der Wegpunkte\\
+\item[\textit{Detaillierte Landbare$^{\textcolor{blue}{\star}}$}]  Einstellung für mehr Details der Wegpunkte\\
   {\bf Aus}: zeigt die gleichen Symbole für alle Wegpunkte\\
   {\bf Ein}: zeigt die Symbole mit zusätzlicher Angabe von Pistenlänge und Richtung
-\item[Größe für Landbare$^{\textcolor{blue}{\star}}$]  Hier besteht die Möglichkeit, die Größe der landbaren    Wegpunkte in Prozent zu vergrößern oder zu verkleinern.
-\item[Skalierte Bahnlänge$^{\textcolor{blue}{\star}}$] Ermöglicht, die Bahnlänge anhand der wirklichen Bahnlänge im Verhältnis zu anderen
+\item[\textit{Größe für Landbare$^{\textcolor{blue}{\star}}$}]  Hier besteht die Möglichkeit, die Größe der landbaren    Wegpunkte in Prozent zu vergrößern oder zu verkleinern.
+\item[\textit{Skalierte Bahnlänge$^{\textcolor{blue}{\star}}$}] Ermöglicht, die Bahnlänge anhand der wirklichen Bahnlänge im Verhältnis zu anderen
    Flugplatzbahnlängen darzustellen.\\
-{\bf }: Zeigt eine fixe Bahnlänge für alle Wegpunkte\\
-{\bf}: Skaliert die Darstellung anhand der realen Bahnlänge.\\
+{\bf Aus}: Zeigt eine fixe Bahnlänge für alle Wegpunkte\\
+{\bf Ein}: Skaliert die Darstellung anhand der realen Bahnlänge.\\
 
 \end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Gelände}\label{sec:terrain-display}
 Auf dieser Seite kann das Erscheinungsbild des Geländes auf der Moving Map eingestellt werden.
@@ -270,23 +282,23 @@ Die Auswirkungen der Einstellungen können sofort auf einem kleinen Ausschnitt
 der Karte beobachtet werden.
 
 \begin{description}
-\item[Gelände darstellen]  Zeigt eine digitalisierte Darstellung des Geländees unter Berücksichtigung eines Höhenmodelles.
-\item[Topographie Anzeige]  Zeigt topographische Eigenschaften der Karte wie Seen, Flüsse, Straßen, Städte etc.\
+\item[\textit{Gelände darstellen}]  Zeigt eine digitalisierte Darstellung des Geländees unter Berücksichtigung eines Höhenmodelles.
+\item[\textit{Topographie Anzeige}]  Zeigt topographische Eigenschaften der Karte wie Seen, Flüsse, Straßen, Städte etc.\
 \sketch{figures/config-terrain.png}\item[Geländefarben]  Hier gibt es eine Auswahl an verschiedenen Farbmodi für das Gelände. Es sollte ausprobiert werden,
 welche Darstellung am besten gefällt. Vor allem die Darstellung des gebirgigen Raumes kann hier gut vorher durchprobiert werden.
 Es gibt aber auch eine ICAO-Darstellung.
-\item[Hangschattierung$^{\textcolor{blue}{\star}}$]  \label{conf:shading} Das Gelände kann unterschiedlich schattiert werden
+\item[\textit{Hangschattierung$^{\textcolor{blue}{\star}}$}]  \label{conf:shading} Das Gelände kann unterschiedlich schattiert werden
 um z.B. Sonnenseite, Lee bzw. Luvseite anzuzeigen. Mögliche Anzeigen:\\
 {\bf Aus}: Aus. Keine Schattierung. Gleiche  Helligkeiten für alle Seiten, nur die Höhe wird analog des
 Höhenmodelles farblich unterschieden.\\
 {\bf Fixiert}: Die Sonnenposition wird fix von Nordwesten angenommen.\\
 {\bf Sonne}: Der sonnenbeschienene  Hang wird heller dargestellt, Schattenseite ist dunkel.\\
 {\bf Wind}: Der Luv-Hang wird hell dargestellt, der Lee-Hang dunkler.\\ \index{Luv und Lee Darstellung}
-\item[Geländekontrast $\ast$]  Hier kann die Einstellung der Tönung (Phong-Tönung) der Geländedarstellung
+\item[\textit{Geländekontrast $\ast$}]  Hier kann die Einstellung der Tönung (Phong-Tönung) der Geländedarstellung
 vorgenommen werden.
 Größerer Werte sind für das Relief sinnvoll, kleinere Werte für eher
 steile Berglandschaften (z.B. Alpen).
-\item[Geländehelligkeit$^{\textcolor{blue}{\star}}$]  Einstellung der Helligkeit (weißton) der Geländedarstellung
+\item[\textit{Geländehelligkeit$^{\textcolor{blue}{\star}}$}]  Einstellung der Helligkeit (weißton) der Geländedarstellung
 \end{description}
 
 Die zur Auswahl stehenden Geländefarbpaletten sind unten aufgelistet:
@@ -304,6 +316,8 @@ Die zur Auswahl stehenden Geländefarbpaletten sind unten aufgelistet:
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
 \end{longtable}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Kartenanzeige / Luftraum}\label{sec:airspace-display}
 
@@ -311,7 +325,7 @@ Hier kann die Darstellung von Lufträumen und mögliche Vorwarnzeiten
  beeinflußt werden.
 
 \begin{description}
-\item[Luftraumanzeige]  Hier können die Anzeigemodi für die Lufträume in
+\item[\textit{Luftraumanzeige}]  Hier können die Anzeigemodi für die Lufträume in
 Abhängigkeit von der Höhe konfiguriert werden.
 Die Luftraumfilter ermöglichen ebenfalls das Filtern von Lufträumen und Warnungen für jede
 \sketch{figures/config-airspace.png} einzelne Luftraumklasse. \\
@@ -320,11 +334,11 @@ Die Luftraumfilter ermöglichen ebenfalls das Filtern von Lufträumen und Warnun
   {\bf Auto}: Alle Lufträume in einem konfigurierbarem Höhenband um das Luftfahrzeug herum werden angezeigt.
 \\
   {\bf Alles unter mir}:  Wie ''Auto'', aber Anzeige sämtlicher Lufträume unterhalb des Flugzeuges.
-\item[Warnungen]  {\bf Ein /Aus}:  Einschalten oder Abschalten der Warnungen für Lufträume.
-\item[Vorwarnzeit$^{\textcolor{blue}{\star}}$]  {\bf sec, min}: Einstellbare Zeit für vorhergesagten Luftraumeintritt, zu der eine Warnung erfolgen wird.
-\item[Bestätigungszeit$^{\textcolor{blue}{\star}}$]  {\bf sec, min}: Für diese Zeit wird die Weiderholung einer Luftraumwarnung ausgesetzt.
-\item[Benutze schwarze Kontur$^{\textcolor{blue}{\star}}$] Zeichnet einen schwarzen Rahmen um jeden Luftraum anstelle der entsprechenden Luftraumfarbe
-\item[Luftraum Füllmodus$^{\textcolor{blue}{\star}}$]  {\bf }:  Hier kann definiert werden, wie die Lufträume gefüllt werden.\\
+\item[\textit{Warnungen}]  {\bf Ein /Aus}:  Einschalten oder Abschalten der Warnungen für Lufträume.
+\item[\textit{Vorwarnzeit$^{\textcolor{blue}{\star}}$}]  {\bf sec, min}: Einstellbare Zeit für vorhergesagten Luftraumeintritt, zu der eine Warnung erfolgen wird.
+\item[\textit{Bestätigungszeit$^{\textcolor{blue}{\star}}$}]  {\bf sec, min}: Für diese Zeit wird die Weiderholung einer Luftraumwarnung ausgesetzt.
+\item[\textit{Benutze schwarze Kontur$^{\textcolor{blue}{\star}}$}] Zeichnet einen schwarzen Rahmen um jeden Luftraum anstelle der entsprechenden Luftraumfarbe
+\item[\textit{Luftraum Füllmodus$^{\textcolor{blue}{\star}}$}]  {\bf }:  Hier kann definiert werden, wie die Lufträume gefüllt werden.\\
    {\bf Voreinstellung}: Sucht anhand der Geräteperformance automatisch die beste Art der Darstellung heraus.
     Normalerweise wird hier --bis auf das PPC2000-Betriebsystem-- der Füllmodus ''Rahmen'' bevorzugt.\\
     {\bf Ganz ausfüllen}:  Transparently fills the airspace colour over the whole area. \\
@@ -350,18 +364,19 @@ Zuerst einen Luftraum auswählen, dann doppelkicken und mit \button{Farbe der Um
 \subsection*{Filter}
 Die Filterfunktion ist beschrieben in Kap.~\ref{sec:airspace-filter}.
 
+
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner/Sicherheitsfaktoren}
 Hier werden Einstellungen für die Sicherheitshöhen und deren Verhalten in den Berechnungsalgorythmen vorgenommen.
 
 \begin{description}
-\item[Ankunftshöhe] Sicherheitshöhe. \index{Sicherheitshöhe!Einstellung} Diese  gibt die Höhe über Grund am Zielpunkt an, in der das
+\item[\textit{Ankunftshöhe}] Sicherheitshöhe. \index{Sicherheitshöhe!Einstellung} Diese  gibt die Höhe über Grund am Zielpunkt an, in der das
 Flugzeug für eine sichere Landung ankommen sollte. Gesetzt auf Null bedeutet, daß man am Zielplatz in Null Meter Höhe ''aufschlägt''.
-\item[Geländefreiheit]  \label{conf:safetyterrain} Sicherheitshöhe. Eine einstellbare Höhe, die das Flugzeug während des Endanfluges
+\item[\textit{Geländefreiheit}]  \label{conf:safetyterrain} Sicherheitshöhe. Eine einstellbare Höhe, die das Flugzeug während des Endanfluges
 \sketch{figures/config-safety.png}nicht unterschreiten sollte. Vermeidet damit ''in den Berg fliegen'', da \xc dann vorschlägt weiter zu Kurbeln. (Man kann natürlich auch
 drumherum fliegen\dots mit dem Rotenplaner\dots)\\
 Mehr zu Sicherheitshöhen, deren Bedeutung und Definition  im Kapitel~\ref{sec:safety-heights}.
-\item[Alternativen Modus]  \label{conf:alternatesmode} Bestimmt, wie beim Abbruch einer Aufgabe die Wegpunktalternativen
+\item[\textit{Alternativen Modus}]  \label{conf:alternatesmode} Bestimmt, wie beim Abbruch einer Aufgabe die Wegpunktalternativen
 innerhalb des Wegpunktdialoges sortiert und vorgeschlagen werden. \\
 {\bf Einfach}: Die Alternativen werden nur Ankunftshöhe sortiert ausgegeben. Der erste Punkt auf der Liste ist der nächstliegende
 und preferierte.\\
@@ -369,36 +384,37 @@ und preferierte.\\
 preferiert wird. \\
 {\bf Heimat}:  Ähnlich wie die ''Aufgabe''-Sortierung, aber  mit dem \textsl{Heimatplatz} als Bezugskurs.   Diese Sortierung berücksichtigt
 auch Wegpunktalternativen in Richtung des konfigurierten \textsl{Heimatplatzes}  - welcher \textsl{nicht unbedingt der Startpunkt} sein muß \achtung
-\item[Polaren Verschlechterung$^{\textcolor{blue}{\star}}$] Einstellung für eine permanente Verschlechterung der Polare. Einstellung auf $0 \% $ bedeutet keine Verschlechterung,
+\item[\textit{Polaren Verschlechterung$^{\textcolor{blue}{\star}}$}] Einstellung für eine permanente Verschlechterung der Polare. Einstellung auf $0 \% $ bedeutet keine Verschlechterung,
 $50 \% $ bedeutet, daß die Sinkrate \textbf{verdoppelt} ist (!)\index{Polare!Auswirkung des Faktors}
-\item[Sicherheits MC$^{\textcolor{blue}{\star}}$]  Wenn Sicherheits MC aktiviert ist, dann wird dieser Wert \textit{nach einem Abbruch einer Aufgabe} für die Kalkulation von Reichweite, Alternativen und Ankunftshöhen an Flugplätzen und Landefeldern benutzt.\label{safety-MC} 
+\item[\textit{Sicherheits MC$^{\textcolor{blue}{\star}}$}]  Wenn Sicherheits MC aktiviert ist, dann wird dieser Wert \textit{nach einem Abbruch einer Aufgabe} für die Kalkulation von Reichweite, Alternativen und Ankunftshöhen an Flugplätzen und Landefeldern benutzt.\label{safety-MC} 
 
-\item[Vorflug Risikofaktor$^{\textcolor{blue}{\star}}$]
+\item[\textit{Vorflug Risikofaktor$^{\textcolor{blue}{\star}}$}]
  Der Vorlfugrisikofaktor reduziert den MC-Wert für die Vorfluggeschwindigkeit mit fallender Flughöhe um das Risko einer
  Außenlandung zu mindern. Wenn zu $0,0$ gesetzt, bedeutet dies keine Anpassung an die aktuelle Flughöhe, gesetzt auf $1,0$
 wird der MC Wert linear bezogen auf die aktuelle Höhe reduziert, als Bezugspunkt gilt dabei die maximal während des
 Fluges erreichte Höhe.
-Ein Wert von ca. $0.3$ ist empfohlen.  Mehr dazu auch in Kap.~\ref{sec:speed-fly-with}.
+Ein Wert von ca. $0.3$ ist empfohlen.  Mehr dazu auch in Kap.~\ref{sec:safety-factor}.
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner / Endanflugrechner}\label{sec:final-glide}
 Über diese Seite können die Routinen des Endanflugrechners von \xc  beinflußt werden.
 
 \begin{description}
-\item[MC Optimierung]  Diese Option setzt fest, welcher MC-Algorythmus verwendet wrd.
+\item[\textit{MC Optimierung}]  Diese Option setzt fest, welcher MC-Algorythmus verwendet wrd.
 Mehr dazu in Kap.~\ref{sec:auto-maccready}. \\
    {\bf Endanflug}: Stellt den MC Wert auf die schnellstmögliche Ankunft ein.
    Bei OLC - Aufgaben werden die Einstellungen  so gewählt, daß \sketch{figures/config-glidecomputer.png} eine möglichst große Strecke innerhalb der verbleibenden Zeit zurückgelegt wird.\\
    {\bf Erwartetes mittleres Steigen}: Die MC Einstellungen basierend auf den bisher ermittelten Steigwerten gesetzt.\\
    {\bf Beides}: Benutzt ''Erwartetes mittleres Steigen'' während der Aufgabe und wechselt im Endanflug automatisch auf  ''Endanflug''.
-\item[Blockgeschwindigkeit$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Wenn eingeschaltet, wird die Sollfahrt für den Vorflug empfohlen, welche für Gleiten ohne vertikale Luftbewegung gilt.
+\item[\textit{Blockgeschwindigkeit$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Wenn eingeschaltet, wird die Sollfahrt für den Vorflug empfohlen, welche für Gleiten ohne vertikale Luftbewegung gilt.
 Andern falls werden die Sollfahrten nach dem Delphin-Stil vorgeschlagen, es wird dann die vertikale Luftbewegung mit in die Sollfahrtberechnung
 einbezogen.
-\item[Nav. mit barometrischer Höhe$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Wenn eingeschaltet und ein barometrischer Höhenmesser angeschlossen ist, dann wird die barometrische Höhe für alle Navigationsfunktionen verwendet. Ansonsten wird die GPS--Höhe benutzt.
-\item[Wechsel Steig-/Vorflugmodus$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Wenn ein Vega Variometer angeschlossen ist und diese Option aktiviert ist, wird mit der Wölbklappe zwischen Kreis- und Vorflug umgeschaltet.
+\item[\textit{Nav. mit barometrischer Höhe$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Wenn eingeschaltet und ein barometrischer Höhenmesser angeschlossen ist, dann wird die barometrische Höhe für alle Navigationsfunktionen verwendet. Ansonsten wird die GPS--Höhe benutzt.
+\item[\textit{Wechsel Steig-/Vorflugmodus$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Wenn ein Vega Variometer angeschlossen ist und diese Option aktiviert ist, wird mit der Wölbklappe zwischen Kreis- und Vorflug umgeschaltet.
 Das bedeutet, daß  beim Umwölben sofort der entsprechende Modus aktiviert wird (auch beim Borgelt B50 verfügbar)
-\item[Gleitzahl Mittelwertzeitintervall$^{\textcolor{blue}{\star}}$] {\bf sec, min}: Hier kann entscheiden werden, welche Zeitspanne für die Mittelwertbildung benutzt werden soll.
+\item[\textit{Gleitzahl Mittelwertzeitintervall$^{\textcolor{blue}{\star}}$}] {\bf sec, min}: Hier kann entscheiden werden, welche Zeitspanne für die Mittelwertbildung benutzt werden soll.
 Die Mittelwertbildung wird grundsätzlich in Echtzeit vorgenommen. Berechnet wird das erreichte Höhen zu Streckenverhältnis
 innerhalb der hier ausgewählten Zeitspanne.
 
@@ -410,24 +426,25 @@ Normalerweise ist für Segelflugzeuge ein Wert von 90 - 120 sec.\ zu bevorzugen,
 für Paragleiter sind 15 sec.\ OK. Kleinere Werte werden als Ergebnis immer näher an den
 aktuellen Wert herankommen, größere Werte immer weiter an den Wert gemittell über den gesamten Flug.
 (Klar, bei einer Mittelwertbildung\dots) Andere kommerziell erhältliche Instrumente benutzen Werte von ca. 120 Sekunden.
-\item[Geschätzte Winddrift$^{\textcolor{blue}{\star}}$]  {\bf Ein / Aus}: Berücksichtigt die Abdrift durch den Wind während des Kurbelns. Dies wird die Ankunftshöhe auf Gegenwindschenkeln reduzieren
+\item[\textit{Geschätzte Winddrift$^{\textcolor{blue}{\star}}$}]  {\bf Ein / Aus}: Berücksichtigt die Abdrift durch den Wind während des Kurbelns. Dies wird die Ankunftshöhe auf Gegenwindschenkeln reduzieren
 und kann mitunter zu interpretationswürdigen Ergebnissen führen,
 wenn man sich im Endanflug unterhalb des Gleitpfades befindet, MC auf Null gestellt hat, und so also noch kurbeln \textsl{muß}.
-Nach der MC-Theorie heißt MC=0, daß kein kurbeln mehr stattfindet. Der Algorythmus befindet sich so in einer Zwickmühle, denn einerseits wird mitgeteilt, daß nicht
+Nach der MC-Theorie heißt MC=0, daß kein Kurbeln mehr stattfindet. Der Algorythmus befindet sich so in einer Zwickmühle, denn einerseits wird mitgeteilt, daß nicht
 mehr gekurbelt wird, andererseits tut man es doch\dots
 \achtung Für das ''normale, althergebrachte Verhalten'' anderer Systeme sollte man sich überlegen, dies auf ''Aus'' stehen zu lassen.
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Endanflugrechner / Wind} \label{sec:final-wind}
 Auf dieser Seite werden die Windeinstellungen vorgenommen. Details zu den verschiedenen Berechnungen in Kap.~\ref{sec:wind-estimation}
 \begin{description}
-\item[Windberech]  \label{conf:autowind}  Auswahl des entsprechenden modus für Ermittlung des Windes in \xc \\
+\item[\textit{Windberech}]  \label{conf:autowind}  Auswahl des entsprechenden modus für Ermittlung des Windes in \xc \\
   {\bf Manuell}: Wenn der Algorythmus ausgeschaltet ist, wird allein die Eingabe des Piloten benutzt. \\
   {\bf beim Kreisen}: Benutzt das GPS zur Ermittlung des Windes durch Berechnung der Abdrift beim Kurbeln.\\
   \sketch{figures/config-wind.png}{\bf ZickZack}: ZickZack-Modus benötigt ein intelligentes Vario  mit einem Ausgang für die TAS.\\
   {\bf Beides}:  Benutzt den ZickZack und GPS-Modus zur Ermittlung des Windes.
-\item[Externer Wind]  Wenn eingeschaltet und ein entsprechendes gerät am \xc angeschlossen ist, dann wird der Wind von einem
+\item[\textit{Externer Wind}]  Wenn eingeschaltet und ein entsprechendes gerät am \xc angeschlossen ist, dann wird der Wind von einem
 externen Gerät in die internen Routinen übernommen.
 \end{description}
 
@@ -437,25 +454,25 @@ externen Gerät in die internen Routinen übernommen.
 Seite für die Einstellungen für die Reichweite und Routenplaner-Optimierungen.
 
 \begin{description}
-\item[Routenplaner Modus]  \label{conf:routemode} {\bf Keine, Gelände, Luftraum, Beides}
+\item[\textit{Routenplaner Modus}]  \label{conf:routemode} {\bf Keine, Gelände, Luftraum, Beides}
   Einstellung, welcher Modus für die Routenplanung benutzt werden soll. Für Details bitte in Kap.~\ref{sec:route} nachschauen.
-\item[Pfadsuche mit Steigen$^{\textcolor{blue}{\star}}$]  {\bf Ein / Aus}: \label{conf:routeclimb} Wenn dies aktiviert und MC größer Null, dann erlaubt der Routenplaner
+\item[\textit{Pfadsuche mit Steigen$^{\textcolor{blue}{\star}}$}]  {\bf Ein / Aus}: \label{conf:routeclimb} Wenn dies aktiviert und MC größer Null, dann erlaubt der Routenplaner
   Steigphasen zwischen der aktuellen Position und dem Ziel.
-\item[Wolkenuntergrenze$^{\textcolor{blue}{\star}}$]  \label{conf:routeceiling}{\bf Ein / Aus}:  Wenn aktiviert wird bei der Routenplanung  das Steigen durch die Wolkenbasis begrenzt. Sie wird mit 500 m über der momentanen Flugzeughöhe und der Thermikhöhe angenommen.
+\item[\textit{Wolkenuntergrenze$^{\textcolor{blue}{\star}}$}]  \label{conf:routeceiling}{\bf Ein / Aus}:  Wenn aktiviert wird bei der Routenplanung  das Steigen durch die Wolkenbasis begrenzt. Sie wird mit 500 m über der momentanen Flugzeughöhe und der Thermikhöhe angenommen.
   Wenn nicht aktiviert wird mit unbegrenztem Steigen geplant.
-\sketch{figures/config-route.png}\item[Reichweiten Modus]  \label{conf:turningreach} Die Reichweitenberechnung kann Umwege durch vorhandene Hindernisse berücksichtiegn.
+\sketch{figures/config-route.png}
+\item[\textit{Reichweiten Modus}]  \label{conf:turningreach} Die Reichweitenberechnung kann Umwege durch vorhandene Hindernisse berücksichtiegn.
   Hier werden die Einstellungen dazu vorgenommen:\\
   {\bf Aus}: Reichweite wird nicht berechnet.\\
   {\bf Direkt}: Reichweite wird in geradem Weg vom Flugzeug aus berechnet.\\
   {\bf Mit Umweg}: Die Reichweitenberechnung wird unter Berücksichtigung von Hindernissen vorgenommen.
-\item[Erreichbare Anzeige]  \label{conf:gliderange} Einstellung, wie die Reichweite auf der moving map dargestellt wird.\\
+\item[\textit{Erreichbare Anzeige}]  \label{conf:gliderange} Einstellung, wie die Reichweite auf der moving map dargestellt wird.\\
   {\bf Aus}: Keine Darstellung des Gleitbereiches.\\
   {\bf Grenzlinie }:Zeichnet eine gestrichelte linie um den aktuell erreichbaren Bereich.\\
   {\bf Schattiert }: Verdunkelt das Gelände außerhalb der aktuellen Reichweite etwas
-\item[Erreichbare Polare$^{\textcolor{blue}{\star}}$]  \label{conf:reachpolar}
+\item[\textit{Erreichbare Polare$^{\textcolor{blue}{\star}}$}]  \label{conf:reachpolar}
    Einstellung der Gleiteigenschaften des Flugzeuges für die Berechnung von Reichweite, Ankunftshöhen, Aufgabenabbruch und alternativen Landeplätzen.\\
-  {\bf Aufgabe}: Verwendet die Polare aus der Aufgabe\\
-\todonum{welche Polare - die im Flug ermittelte, oder die eingegebene/vorhandene?}
+  {\bf Aufgabe}: Verwendet den Mc-Wert aus der Aufgabe\\
   {\bf Sicherheits MC}: Verwendet den eingegebenen Sicherheits-Mc-Wert.
 \end{description}
 
@@ -464,21 +481,21 @@ Seite für die Einstellungen für die Reichweite und Routenplaner-Optimierungen.
 \section{Anzeigen / FLARM, etc.} \label{sec:flarmandother-gauge}
 
 \begin{description}
-\item[FLARM Radar]  \label{conf:flarmdisplay} {\bf Ein / Aus}: \\
+\item[\textit{FLARM Radar}]  \label{conf:flarmdisplay} {\bf Ein / Aus}: \\
 {\bf Ein}: Aktiviert die Anzeige des FLARM Radars. Die Flugrichtung des Ziels relativ zum eigenen Steuerkurs wird als Pfeilkopf dargestellt.
 Ein Dreieck, das nach oben oder nach unten zeigt die Höhe des Zieles relativ zur Eigenen an.
 \sketch{figures/flarmrose.png}\\
 {\bf Aus}: Flarmanzeige des Luftverkehrs  bleibt aus.
-\item[Schließe FLARM automatisch$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: \\
+\item[\textit{Schließe FLARM automatisch$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: \\
 {\bf Ein}: Eingeschaltet, wird der FLARM Dialog automatisch geschlossen, sobald kein Verkehr da ist.\\
 {\bf Aus}: Beläßt den Dialog offen, auch wenn kein Verkehr mehr da ist.
-\item[Zentrierhilfe] \label{conf:thermalassistant} {\bf Ein / Aus}: \\
+\item[\textit{Zentrierhilfe}] \label{conf:thermalassistant} {\bf Ein / Aus}: \\
 {\bf Ein}: Aktiviert die Anzeige des Thermikassistenten (Zentrierhilfe).\\
 {\bf Aus}: Keine Zentrierhilfe.
-\item[Thermikprofil] \label{conf:thermalband} {\bf Ein / Aus}: \\ 
+\item[\textit{Thermikprofil}] \label{conf:thermalband} {\bf Ein / Aus}: \\ 
 {\bf Ein}: Aktiviert die Anzeige des Thermikprofils am linken oberen Rand der Karte\\
 {\bf Aus}: Keine Anzeige
-\item[Endanfluganzeige für MC 0$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}:\\
+\item[\textit{Endanfluganzeige für MC 0$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}:\\
 {\bf Ein}: Wenn aktiviert zeigt der Endanflug--Anzeigepfeil eine zusätzlichen, zweiten, längs halbierten Pfeil für die bei MC 0 Einstellung benötigte Höhe 
 um das Ziel zu erreichen.\\
 {\bf Aus}: Es gibt nur einen vollen Pfeil
@@ -494,16 +511,16 @@ Hier können \textsl{dezimale Anzeigen} auf dem Vario-Anzeige-Bereich  ein- und 
 Mithilfe des Zeigers (ganz unten) kann auch ein Mittelwert-Zeiger an oder ausgeschaltet werden,
 \index{Vario!Elemente} diesen auf der analogen Ringdarstellung zu platzieren.\index{Vario!Aussehen}
 \begin{description}
-\item[Geschwindigkeitspfeile$^{\textcolor{blue}{\star}}$]  \label{conf:variogauge} Ob Pfeile für die Sollfahrt  in der Varioanzeige dargestellt werden sollen.\\
+\item[\textit{Geschwindigkeitspfeile$^{\textcolor{blue}{\star}}$}]  \label{conf:variogauge} Ob Pfeile für die Sollfahrt  in der Varioanzeige dargestellt werden sollen.\\
 {\bf Ein}: Wenn aktiviert weisen im Vorflugmodus  Aufwärtspfeile zum langsamer Fliegen (Ziehen--nach oben ) an,  Abwärtspfeile zum schneller Fliegen an (Drücken--nach unten).
 \sketch{figures/config-othergauges.png}{\bf Aus}:  KeineAnzeige.\\
-\item[Zeige Mittelwert$^{\textcolor{blue}{\star}}$]  {\bf Ein / Aus}: Ob das mittlere Steigen angezeigt werden soll.
+\item[\textit{Zeige Mittelwert$^{\textcolor{blue}{\star}}$}]  {\bf Ein / Aus}: Ob das mittlere Steigen angezeigt werden soll.
 Im Vorflug wird auf mittlere Nettovario Anzeige geschaltet.
-\item[Zeige MacCready$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Anzeige des  MacCready-Wertes  ein oder aus.
-\item[Zeige Mücken$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Anzeige der Mückenbeladung in Prozent.
-\item[Zeige ballast$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}:Anzeige des Wasserballast ein oder aus. Anzeige in Prozent.
-\item[Zeige brutto$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Anzeige des Bruttosteigens ein oder aus.
-\item[Mittelwert Zeiger$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Falls aktiviert ist in der Varioanzeige eine hohle Mittelwertnadel zu sehen.
+\item[\textit{Zeige MacCready$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Anzeige des  MacCready-Wertes  ein oder aus.
+\item[\textit{Zeige Mücken$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Anzeige der Mückenbeladung in Prozent.
+\item[\textit{Zeige ballast$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}:Anzeige des Wasserballast ein oder aus. Anzeige in Prozent.
+\item[\textit{Zeige brutto$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Anzeige des Bruttosteigens ein oder aus.
+\item[\textit{Mittelwert Zeiger$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Falls aktiviert ist in der Varioanzeige eine hohle Mittelwertnadel zu sehen.
 Im \textsl{Vorflug} zeigt diese Nadel das gemittelte Nettovario,
 beim \textsl{Kurbeln} wird das mittlere Bruttovario angezeigt.
 \end{description}
@@ -515,42 +532,44 @@ Hier werden Einstellungen für die Tonausgabe des Varios vorgenommen.\index{Vari
 \label{conf:audiovariogauge}
 
 \begin{description}
-\item[Tonvario]  {\bf Ein / Aus}:  Ein oder Ausschalten der Tonausgabe des Varios
-\item[Volumen]  Einstellung der Laustärke.
-\item[Tonausblendung Ein]  {\bf Ein / Aus}: Unterdrückung der Tonausgabe, wenn das TEiegn (oder Sinken) innerhalbeines betimmten Wertes um Null ist.
-\item[Niedrigster Ton$^{\textcolor{blue}{\star}}$]  Frequenz des Tones bei größtem Saufen.
-\sketch{figures/config-audiovario.png}\item[Null-Ton$^{\textcolor{blue}{\star}}$]  Frequenz des Tones bei Nullschieber.
-\item[Höchster Ton$^{\textcolor{blue}{\star}}$]  Frequenz des Tones bei größtem Steigen.
-\item[Tonausblendung min. Steigen$^{\textcolor{blue}{\star}}$]  Wenn die Tonausblendung aktiviert ist, gibt das Vario unterhalb dieses Grenzwertes Töne aus.
-\item[Tonausblendung max. Steigen$^{\textcolor{blue}{\star}}$]  Wenn die Tonausblendung aktiviert ist, gibt das Vario oberhalb dieses Grenzwertes für das Steigen Töne aus.
+\item[\textit{Tonvario}]  {\bf Ein / Aus}:  Ein oder Ausschalten der Tonausgabe des Varios
+\item[\textit{Volumen}]  Einstellung der Laustärke.
+\item[\textit{Tonausblendung Ein}]  {\bf Ein / Aus}: Unterdrückung der Tonausgabe, wenn das TEiegn (oder Sinken) innerhalbeines betimmten Wertes um Null ist.
+\item[\textit{Niedrigster Ton$^{\textcolor{blue}{\star}}$}]  Frequenz des Tones bei größtem Saufen.
+\sketch{figures/config-audiovario.png}
+\item[\textit{Null-Ton$^{\textcolor{blue}{\star}}$}]  Frequenz des Tones bei Nullschieber.
+\item[\textit{Höchster Ton$^{\textcolor{blue}{\star}}$}]  Frequenz des Tones bei größtem Steigen.
+\item[\textit{Tonausblendung min. Steigen$^{\textcolor{blue}{\star}}$}]  Wenn die Tonausblendung aktiviert ist, gibt das Vario unterhalb dieses Grenzwertes Töne aus.
+\item[\textit{Tonausblendung max. Steigen$^{\textcolor{blue}{\star}}$}]  Wenn die Tonausblendung aktiviert ist, gibt das Vario oberhalb dieses Grenzwertes für das Steigen Töne aus.
 \end{description}
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Aufgabenvoreinstellungen  / Regeln}
+\section{Aufgabenvoreinstellungen / Regeln}
 
 Auf dieser Seite werden Regeln für Aufgaben global voreingestellt.
 rules. \label{conf:taskrules}\index{Aufgabe!Regeln Voreinstellung}
 
 \begin{description}
-\item[Max. Abfluggeschwindigkeit$^{\textcolor{blue}{\star}}$] Einstellung der maximalen Abfluggeschwindigkeit über die deklarierte Abfluglinie.
+\item[\textit{Max. Abfluggeschwindigkeit$^{\textcolor{blue}{\star}}$}] Einstellung der maximalen Abfluggeschwindigkeit über die deklarierte Abfluglinie.
    Wenn kein Limit vorgegeben ist, sollte der Wert auf $0$ gesetzt werden.
-\item[Max. Abflug-Geschwindigkeitstoleranz$^{\textcolor{blue}{\star}}$] Maximal tolerierte Geschwindigkeitstoleranz der vorgegebenen Abfluggeschwindigkeit.
+\item[\textit{Max. Abflug-Geschwindigkeitstoleranz$^{\textcolor{blue}{\star}}$}] Maximal tolerierte Geschwindigkeitstoleranz der vorgegebenen Abfluggeschwindigkeit.
    Für Null-Toleranz zu $0$ setzen.
-\item[Maximale Abflughöhe$^{\textcolor{blue}{\star}}$]  Maximale Abflughöhe bei Überfliegen der Abfluglinie.
+\item[\textit{Maximale Abflughöhe$^{\textcolor{blue}{\star}}$}]  Maximale Abflughöhe bei Überfliegen der Abfluglinie.
    (MSL oder GND möglich--s.u.) Für Start ohne Höhenbegrenzung zu $0$ setzen.
-\item[Max. tolerierte Abflugüberhöhung$^{\textcolor{blue}{\star}}$]  Maximal tolerierte Höhe über der vorgegebenen Abflughöhe
+\item[\textit{Max. tolerierte Abflugüberhöhung$^{\textcolor{blue}{\star}}$}]  Maximal tolerierte Höhe über der vorgegebenen Abflughöhe
    Wenn keine Toleranz erlaubt, zu $0$ setzen.
-\sketch{figures/config-rules.png}\item[Abflughöhe bezogen auf$^{\textcolor{blue}{\star}}$]  Bezugshöhe der max. Abflughöhen:\\
+\sketch{figures/config-rules.png}
+\item[\textit{Abflughöhe bezogen auf$^{\textcolor{blue}{\star}}$}]  Bezugshöhe der max. Abflughöhen:\\
     {\bf MSL}: Abflughöhe ist bezogen auf Meereshöhe.\\
     {\bf AGL}: Abflughöhe ist bezogen auf Höhe über Grund.
-\item[Min. Ankunftshöhe$^{\textcolor{blue}{\star}}$]  Minimale Ankunftshöhe zum Überqueren der Ziellinie / Zielkreises
+\item[\textit{Min. Ankunftshöhe$^{\textcolor{blue}{\star}}$}]  Minimale Ankunftshöhe zum Überqueren der Ziellinie / Zielkreises
     (AGL or MSL). Wenn keine Abweichung erlaubt ist, zu $0$ setzen.
-\item[Zielhöhenref.$^{\textcolor{blue}{\star}}$] Bezugshöhe der Ankunftshöhe:\\
+\item[\textit{Zielhöhenref.$^{\textcolor{blue}{\star}}$}] Bezugshöhe der Ankunftshöhe:\\
     {\bf MSL}: Ankunftshöhe ist bezogen auf Meereshöhe.\\
     {\bf AGL}: Ankunftshöhe ist bezogen auf Höhe über Grund.
-\item[On-Line Contest]  Einstellungen zu den Optimierungsalgorythmen des OLC.
-   Die Implementierung enstpricht der ofiziellen Ausgabe vom 23.September 2010. \\
+\item[\textit{On-Line Contest}]  Einstellungen zu den Optimierungsalgorythmen des OLC.
+   Die Implementierung enstpricht der ofiziellen Ausgabe vom 23. September 2010. \\
    {\bf OLC FAI}: Gleichlautend zu den FAI-Dreiecksregeln. Zwei Wenden, wobei Star-und Zielpunkt identisch sind.
    Kein Schenkel darf kürzer sein als 28\% der Gesamtstrecke. Bei Dreiecken größer als 500Km
    darf kein Schenkel größer sein als 25\% der Gesamtstrecke und länger als 45\% andernfalls kein
@@ -558,7 +577,7 @@ rules. \label{conf:taskrules}\index{Aufgabe!Regeln Voreinstellung}
    {\bf OLC Classic}: Bis zu sieben Punkte einschließlich Start und Ziel, Ankunftshöhe nicht
    mehr als 1000m unter der Abflughöhe. \\
    {\bf OLC League}: Der aktuelle Contest mit Sprint-Wettbewerbsregeln.
-   Aus dem OLC Classic Dreieck wird das 2,5 Stunden Fenster mit dem besten Schnitt herausgschnitten.
+   Aus dem OLC Classic Dreieck wird das 2,5 Stunden Fenster mit dem besten Schnitt herausgschnitten. 
    Ankunftshöhe darf nicht unter Abflughöhe liegen.\\
   {\bf OLC Plus}: Kombination aus Classic und FAI Regeln. 30\% der FAI Punkte werden zur
    Classic Wertung dazugezählt \\
@@ -566,7 +585,7 @@ rules. \label{conf:taskrules}\index{Aufgabe!Regeln Voreinstellung}
   {\bf DHV-XC}: \todonum{noch zu schreiben} \\
   {\bf SIS-AT}: \todonum{noch zu schreiben} \\
   {\bf FFVV NetCoupe}: Der FFVV NetCoupe {\it ''libre''} Wettbewerb.
-\item[Wertungs-Vorhersage]  {\bf Ein / Aus}: Wenn eingeschaltet, wird angenommen, daß der nächste Wegpunkt erreicht wird und
+\item[\textit{Wertungs-Vorhersage}]  {\bf Ein / Aus}: Wenn eingeschaltet, wird angenommen, daß der nächste Wegpunkt erreicht wird und
 die daraus sich ergebende Wertung errechnet.
 \end{description}
 
@@ -581,19 +600,19 @@ Mehr dazu in Kap~\ref{cha:tasks}. \index{Aufgabe!Regeln!Voreinstellungen}
 
 
 \begin{description}
-\item[Startpunkt] Standard Einstellungen für neu zu erstellende Aufgaben.\\
+\item[\textit{Startpunkt}] Standard Einstellungen für neu zu erstellende Aufgaben.\\
 {\bf  Abfluglinie}: Ein geradliniges Tor. Wird auf der Map mit einem Halbkreis entgegengesetzt zum ersten Schenkel
 dargestellt. Überquere diese Linie entsprechend der Aufgabenvorgaben aus dem Sektor heraus.\\
 {\bf  Abflugzylinder}: Ein Zylinder um den Startpunkt herum. Von innen nach außen überfliegen.\\
 {\bf FAI-Abflug-Quadrant}: Ein 90$^\circ$ Sektor mit 1km Radius. Überfliege de Flanken vom inneren her für den Abflug.\\
 {\bf  BGA Abflugsektor}:Ein 180$^\circ$ Sektor mit 5km Radius. Verlasse den Sektor in irgendeine Richtung für den Abflug.
-\item[Torbreite] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
-\item[Zielpunkt] Standard Ziel-Typ für neu zu erstellende Aufgaben.\\
+\item[\textit{Torbreite}] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
+\item[\textit{Zielpunkt}] Standard Ziel-Typ für neu zu erstellende Aufgaben.\\
 {\bf Ziellinie}: Überfliege diese Linie nach Vorgabe der WB-Leitung.\\
 {\bf Zielzylinder}: Fliege in diesen Zylinder.\\
 {\bf FAI Zielquandrant}: Ein 90$^\circ$ Sektor mit 1Km Radius. Überfliege die flanken für gültigen Einflug.
-\item[Radius] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
-\item[Wendepunkt] Standard Wendepunkt-Typ für neu zu erstellende Aufgaben.\\
+\item[\textit{Radius}] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
+\item[\textit{Wendepunkt}] Standard Wendepunkt-Typ für neu zu erstellende Aufgaben.\\
 {\bf Wendepunkt-Zylinder}: Ein Zylinder. Ein Punkt im Zylinder gilt als gültig, gewertet wird der Mittelpunkt\\
 {\bf Schlüssellochsektor (DAEC)}: Jeder Punkt innerhalb eines 500m Zylinders vom Zentrum oder 10Km innerhalb
 des 90$^\circ$ Sektors. Gewertet wird der Mittelpunkt.(deustch)\\
@@ -602,16 +621,17 @@ Gewertet wird das Zentrum des Zylinders.(britisch)\\
 {\bf BGA Erweiterungsoption festgelegter Kurs}:Jeder Punkt innerhalb 500m Zylinder, oder 10Km  in einem 180$^\circ$ Sektor.
 Gewertet wird das Zentrum des Zylinders.(britisch)\\
 {\bf FAI Quadrant}: Ein 90$^\circ$ Sektor mit unendlicher Seitenlänge. Überfliege eine Flanke. Gewertet wird vom Eckpunkt.
-\item[Radius] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
-\item[Aufgabe] Standard Aufgaben-Typ für neu zu erstellende Aufgaben.\\
+\item[\textit{Radius}] Standard Radius oder Torbreite in Km für neu zu erstellende Aufgaben.
+\item[\textit{Aufgabe}] Standard Aufgaben-Typ für neu zu erstellende Aufgaben.\\
 {\bf Racing }:Geschwindigkeitsaufgabe um Wendepunkte. Kann für FAI Abzeichen oder auch Rekordversuche  verwendet werden. Alle OZ-Typen sind möglich.\\
 {\bf  AAT}: Geschwindigkeitsaufgabe über zugeweisene Gebiete. Mindestflugzeit wird vorgegeben. Beschränkt auf Zylinder und Sektorgebiete. Gewertet wird bester Schnitt.\\
 {\bf  FAI Abzeichen / Rekorde}: FAI-Regeln. Erlaubt nur FAI Start-, Ziel- und Wendepunkttypen. Für Abzeichen und Rekorde. Aktiviert die FAI Höhe für die Endanflugbnerechnung.
-\item[AAT min. Zeit] Die bei AAT-Aufgaben mindestens zu fliegende Zeit. Vorgabe durch WB-Leitung.
-\item[Optimierungs-Spielraum$^{\textcolor{blue}{\star}}$] Sicherheitszeitraum für AAT-Optimierung.
+\item[\textit{AAT min. Zeit}] Die bei AAT-Aufgaben mindestens zu fliegende Zeit. Vorgabe durch WB-Leitung.
+\item[\textit{Optimierungs-Spielraum$^{\textcolor{blue}{\star}}$}] Sicherheitszeitraum für AAT-Optimierung.
 Als Schutz gegen ''zu früh ankommen''. Der Optimierungsalgorythmus versucht, die Aufgabe innerhalb der vorgegebenen Mindestflugzeit plus dieser Zusatzzeit zu bneenden.
 Im ''Optimiert''-Modus  werden dabei die AAT-Punkte automatisch verschoben, um diese Zeit einhalten zu können..
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Aussehen / Sprache, Eingaben}\label{sec:interface}
@@ -623,20 +643,20 @@ Auf dieser Seite können Interaktionen und Aussehen der Menüs von \xc beeinflu�
 %\item[Auto Blank\textcolor{blue}{$\star$}]  This determines whether to blank the display after a long
 %  period of inactivity when operating on internal battery power (visible for some mobile
 %  devices only).
-\item[Ereignisss$^{\textcolor{blue}{\star}}$]  Die Eingabeereignisdatei bestimmt, wie \xc auf bestimmte Eingaben wie z.B.\ einen Knopfdruck oder einer
+\item[\textit{Ereignis$^{\textcolor{blue}{\star}}$}]  Die Eingabeereignisdatei bestimmt, wie \xc auf bestimmte Eingaben wie z.B.\ einen Knopfdruck oder einer
 Eingabe eines externen Gerätes reagiert.
-\item[Sprache]  Die Sprache (2 stellige Abkürzungen als Auswahl) der Oberfläche -- übersetzt aus dem Englischen.
+\item[\textit{Sprache}]  Die Sprache (2 stellige Abkürzungen als Auswahl) der Oberfläche -- übersetzt aus dem Englischen.
 {\bf Automatisch} wählt die Sprache anhand der Betriebssystemeinstellung aus.
-\item[Nachricht$^{\textcolor{blue}{\star}}$] Die Statusdatei legt fest, welche Klänge auf welche Ereignisse hin abgespielt werden
+\item[\textit{Nachricht$^{\textcolor{blue}{\star}}$}] Die Statusdatei legt fest, welche Klänge auf welche Ereignisse hin abgespielt werden
 und wie lange die verschiedenen Meldungen auf dem Bildschirm sichtbar bleiben.
-\item[Menü Zeitabschaltung$^{\textcolor{blue}{\star}}$] Diese Zeit bestimmt, wie lange ein Menü ohne weitere Eingabe des Benutzers auf
+\item[\textit{Menü Zeitabschaltung$^{\textcolor{blue}{\star}}$}] Diese Zeit bestimmt, wie lange ein Menü ohne weitere Eingabe des Benutzers auf
 dem Bildschirm sichtbar bleibt, bevor es wieder ausgeblendet wird.
-\item[Texteingabestil$^{\textcolor{blue}{\star}}$]  Auswahl, wie Text eingegeben werden kann. Es stehen drei Möglichkeiten zur Auswahl:
+\item[\textit{Texteingabestil$^{\textcolor{blue}{\star}}$}]  Auswahl, wie Text eingegeben werden kann. Es stehen drei Möglichkeiten zur Auswahl:
   Siehe hierzu Kap.~\ref{sec:textentry} für mehr Info dazu. \\
     {\bf Voreinstellung}: Die Standardeinstellung des Betriebsystemes des Gerätes wird benutzt.\\
     {\bf Tastatur}: Benutzt eine Bildschirmtastatur  für die Eingabe.  \\
     {\bf Ranglisten Stil}: Auswahl von Buchstaben durch unterstrichenen blinkenden Cursor.
-\item[Haptische Rückmeldung$^{\textcolor{blue}{\star}}$]  {\bf Ein / Aus}: (Nur bei Android Geräten) Schaltet die Vibration des Gerätes bei Berührung der TouchScreen-Oberfläche  ein oder aus. Das ist das ''\texttt{brrt..}''\dots
+\item[\textit{Haptische Rückmeldung$^{\textcolor{blue}{\star}}$}]  {\bf Ein / Aus}: (Nur bei Android Geräten) Schaltet die Vibration des Gerätes bei Berührung der TouchScreen-Oberfläche  ein oder aus. Das ist das ''\texttt{brrt..}''\dots
 \end{description}
 
 
@@ -648,11 +668,13 @@ Um die Schriften von \xc anzupassen, drücke auf den hier vorhandenen  \button{S
 Auswahl der verschiedenen Schriften für diverse Anzeigeelemente. Anwahl des beschriebenen
 Elementes und Auswahl der dazu angebotenen Schrift, -größe und -format.
 
-\sketch{figures/config-fonts.png}
 
 Falls nicht vom Benutzer konfiguriert, werden voreingestellte Standardschriften verwendet.
+\sketch{figures/config-fonts.png}
+
 
 %%%%%%%%%%%%%%%%%%
+\vspace{5em}
 \section{Aussehen / Anordnung}\label{sec:interface-appearance}
 
 Auf dieser Seite können weitere Details zum look and feel der Oberfläche
@@ -660,21 +682,21 @@ angepaßt werden.
 
 
 \begin{description}
-\item[InfoBox Geometrie]  Eine Auswahlliste von mehreren Anordnungen der InfoBox Seiten Je nach Gerät und persöhnlichem
+\item[\textit{InfoBox Geometrie}]  Eine Auswahlliste von mehreren Anordnungen der InfoBox Seiten Je nach Gerät und persöhnlichem
 Geschmack muß dies schlicht ausprobiert werden. Die angebene Zahl entspricht der Anzahl der InfoBoxen auf der entsprechenden InfoBoxSeite.
-\item[FLARM Anzeige$^{\textcolor{blue}{\star}}$]  \label{conf:flarmradar-place}
+\item[\textit{FLARM Anzeige$^{\textcolor{blue}{\star}}$}]  \label{conf:flarmradar-place}
 Wen das \fl angeschaltet wird, kannst Du das kleine \fl Radar es hiermit an entsprechenden stellen einer InfoBoxSeite plazieren.
 Als Standard ist ein ''Auto''-Setup vorhanden, was bedeutet, daß das Radar lediglich die InfoBoxen
 überlappt und nicht einen Teil der MovingMap.
-\item[Reiter Dialogstil] Einstellung, ob Icons oder Text auf beschrifteten Seiten angezeigt werden sollen.
+\item[\textit{Reiter Dialogstil}] Einstellung, ob Icons oder Text auf beschrifteten Seiten angezeigt werden sollen.
 Bspw. im Aufgaben Editor.
-\item[Nachrichtenanzeige$^{\textcolor{blue}{\star}}$]  Einstellung, wo Nachrichten und Systemmeldungsfenster
+\item[\textit{Nachrichtenanzeige$^{\textcolor{blue}{\star}}$}]  Einstellung, wo Nachrichten und Systemmeldungsfenster
 erscheinen sollen.   {\bf Zentriert} oder in der {\bf Oben Links} Ecke.
-\item[Dialogfenstergröße$^{\textcolor{blue}{\star}}$]  Einstellung über die Größe der Dialogfenster{\bf Volle Breite},  {\bf Skaliert},  {\bf Skaliert und zentriert} und {\bf fixiert} stehen zur Auswahl.
-\item[Invertierte InfoBox$^{\textcolor{blue}{\star}}$]  Wenn {\bf Ein}, werden die InfoBoxen weiß auf schwarzem Hintergrund, wenn {\bf Aus} schwarz auf weißem Hintergrund dargestellt.
-\item[Farbige InfoBoxen$^{\textcolor{blue}{\star}}$]  Wenn {\bf On}, haben manche InfoBoxen farbige Inhalte. Wenn {\bf Aus}, erfolgt die Darstellung in Schwarz/Weiß.
+\item[\textit{Dialogfenstergröße$^{\textcolor{blue}{\star}}$}]  Einstellung über die Größe der Dialogfenster{\bf Volle Breite},  {\bf Skaliert},  {\bf Skaliert und zentriert} und {\bf fixiert} stehen zur Auswahl.
+\item[\textit{Invertierte InfoBox$^{\textcolor{blue}{\star}}$}]  Wenn {\bf Ein}, werden die InfoBoxen weiß auf schwarzem Hintergrund, wenn {\bf Aus} schwarz auf weißem Hintergrund dargestellt.
+\item[\textit{Farbige InfoBoxen$^{\textcolor{blue}{\star}}$}]  Wenn {\bf On}, haben manche InfoBoxen farbige Inhalte. Wenn {\bf Aus}, erfolgt die Darstellung in Schwarz/Weiß.
 Zum Beispiel wird der aktive Wegpunkt-InfoBox  blau dargestellt, wenn sich das Flugzeug oberhalb des Gleitpfades für den Endanflug  befindet,
-\item[InfoBox Rahmen$^{\textcolor{blue}{\star}}$]  Es gibt zwei Arten, die InfoBoxen zu umrahmen:\\
+\item[\textit{InfoBox Rahmen$^{\textcolor{blue}{\star}}$}]  Es gibt zwei Arten, die InfoBoxen zu umrahmen:\\
   {\bf Kasten}: Zeichnet einen Kasten um jede InfoBox.\\
   {\bf Tab}: Zeichnet einen Reiter über den Titel der InfoBox
   title. \\
@@ -695,9 +717,9 @@ nur eine Karte ganz ohne InfoBoxen zeigt und eine Automatik- InfoboxSeite, welch
 (Vorflug/Kurbeln) automatisch vom System aktiviert wird.
 
 \begin{description}
-\item[Seite  1..3] Wähle aus, was Du meinst, was auf Deinen Seiten stehen sollte.
+\item[\textit{Seite  1..3}] Wähle aus, was Du meinst, was auf Deinen Seiten stehen sollte.
        Auswahl von  ''- - -'' bedeutet, daß die Seite inaktiv bleiben wird.
-\item[Seite 4..8$^{\textcolor{blue}{\star}}$]  ''Experten'' können hier weitere Seiten für Ihre Zwecke definieren
+\item[\textit{Seite 4..8$^{\textcolor{blue}{\star}}$}]  ''Experten'' können hier weitere Seiten für Ihre Zwecke definieren
 \end{description}
 
 
@@ -717,9 +739,9 @@ Es gibt drei vorbereitete Sets von InfoBox-Seiten
 bzw. InfoBox-Seiten, welche ''beim Kurbeln'', ''Vorflug'' und ''Endanflug'' benannt sind.
 
 \begin{description}
-\item[beim Kreisen]  vorbereitete Seite gedacht für das Kurbeln.\\
-\item[Vorflug] vorbereitete InfoBoxSeite, vorbereitet für Vorflug\\
-\item[AUX-4--5]Frei zur Verfügung stehenden InfoBoxSeiten.
+\item[\textit{beim Kreisen}]  vorbereitete Seite gedacht für das Kurbeln.\\
+\item[\textit{Vorflug}] vorbereitete InfoBoxSeite, vorbereitet für Vorflug\\
+\item[\textit{AUX-4--5}]Frei zur Verfügung stehenden InfoBoxSeiten.
 \end{description}
 
 Es können bis zu fünf weitere InfoBoxSeiten erstellt werden, welche
@@ -733,19 +755,16 @@ und mit einem beliebigen Namen benannt werden (z.B.\ AAT-Planung) werden
 \button{Endanflugmodus verwenden}  Bestimmt, ob das ''Endanflug'' InfoBox-Set für die
  ''Auto''-Seite benutzt werden soll.
 %
-\subsection*{InfoBox Seiten-Anpassung}
+\subsection*{InfoBox Seiten-Anpassung}\index{InfoBox!Erstellung}\index{InfoBox!Seiten}
 %
 \begin{description}
-\item[Name]  Hier kann ein Name für die gerade erstellte oder bearbeitete InfoBoxSeite angegeben werden.
-\item[InfoBox]  Nummer der entsprechenden Infobox innerhalb der InfoBoxSeite. (s. Tabelle weiter unten)
-\item[Inhalt]  Hier steht eine Beschreibung des aktuellen Inhaltes der schwarz hinterlegten infoBox.
+\item[\textit{Name}]  Hier kann ein Name für die gerade erstellte oder bearbeitete InfoBoxSeite angegeben werden.
+\item[\textit{InfoBox}]  Nummer der entsprechenden Infobox innerhalb der InfoBoxSeite. (s. Tabelle weiter unten)
+\item[\textit{Inhalt}]  Hier steht eine Beschreibung des aktuellen Inhaltes der schwarz hinterlegten infoBox.
 \end{description}
 
 
-\begin{center}
-\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/config-infoboxset.png}
-\end{center}
-%\menulabel{XCS64-Creating-New-InfoBoxSeite.png}
+\sketch{figures/config-infoboxset.png}
 
 Schwarz hinterlegt ist hier die aktuell angeklickte Position der Infobox, entweder Doppelklick auf das schwarze Feld, um
 den Inhalt festzulegen, oder aber anhand der vorgegebenen Numerierung vorgehen. Mehr Detail in Kap.~\ref{cha:infobox} für die genaue Beschreibung der InfoBoxen und deren Inhalt.
@@ -777,6 +796,8 @@ Die Tabelle unten zeigt einen kurzen Überblick über die Positionen der InfoBox
 \end{tabular}
 \end{multicols}
 \end{center}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / NMEA-Anschluß} \label{conf:comdevices}\index{NMEA!Anschlüsse}\index{GPS!Liste der Geräte}\index{GPS!Treiber}
 
@@ -796,26 +817,25 @@ Wenn kein weiteres Gerät angeschlossen werden soll, so ist im Auswahlfeld des e
 \sketch{figures/config-devices.png}
 
 Es dürfen COM 0 bis 10 verwendet werden,  einschließlich einer TCP/IP Verbinung, welche z.B. für eine
-Rechnerverbindung (\textsc{CONDOR} o.ä. benutzt werden kann. Welcher COM-Port benutzt werden soll, hängt maßgeblich vom angeschlossenen Gerät ab,
+Rechnerverbindung (\textsc{CONDOR} o.ä.) benutzt werden kann. Welcher COM-Port benutzt werden soll, hängt maßgeblich vom angeschlossenen Gerät ab,
 welches diesen Port zur Verfügung stellt und wie es dies tut (BlueTooth, serielles Kabel, IoIo, SDCard, CF Card etc.) Auf alle diese detaillierten
 Eingänge hier im Handbuch einzugehen, überstiege den Umfang des Handbuches, daher bitte auf der \xc-Hompage nachschauen, oder aber
-in einer der mailing-listen  (z.B.:  \url{http:/www.forum.xcsoar.org} im Forum um Hilfe bitten.
+in einer der mailing-listen  (z.B.:  im \href{http://forum.xcsoar.org/}{XCSsoar-Forum}) um Hilfe bitten.
 
 \begin{description}
-\item[Anschluß]  Hier werden die vier möglichen Anschlüsse A..D mit dem entsprechenden Gerät belegt. (Auf das Feld gehen und anschließend entsprechenden Treiber aus Liste (s.u.) auswhälen).
-\item[Baudrate] Hier wird die Baudrate eingestellt, mit der das Programm mit den extern angeschlossenen Geräten kommuniziert.
-\item[Bündel Baudrate]  Hier wird die Baudrate eingestellt, mit der das Programm mit den extern angeschlossenen Geräten kommuniziert, wenn Flüge zu deklarieren oder herunterzuladen sind..
-Falscheinstellungen führen definitiv zu Nichtfunktionieren. Eine der häufigsten \index{FLARM!Baudrate einstellen} \index{GPS Quelle!Baudrate einstellen}Fehlerquellen bei Anfängern.
-\achtung Flarm muß  mindestens mit 9600 oder 19200 eingestellt werden, um auch den Luftverkehr darstellen zu können! Eine Einstellung des \fl auf 4800 bietet ausschließlich die GPS-Daten!
-\item[TCP Port]  Dieser Port ist zu wählen, wenn  im Winter mit \xc trainiert werden soll, z.B.\ indem man  mit dem
+\item[\textit{Anschluß}]  Hier werden die vier möglichen Anschlüsse A..D mit dem entsprechenden Gerät belegt. (Auf das Feld gehen und anschließend entsprechenden Treiber aus Liste (s.u.) auswählen).
+\item[\textit{Baudrate}]  Hier wird die Baudrate eingestellt, mit der das Programm mit den extern angeschlossenen Geräten kommuniziert.
+\item[\textit{Bündel Baudrate}]  Das ist die Baudrate um Flüge zu deklarieren oder herunterzuladen (gibt es nicht bei allen Geräten).
+\achtung Flarm muß  mindestens mit 9600 oder 19200 eingestellt werden, um auch den Luftverkehr darstellen zu können! Eine Einstellung des \fl auf 4800 bietet ausschließlich die GPS-PositionsDaten! Eine der häufigsten \index{FLARM!Baudrate einstellen} \index{GPS Quelle!Baudrate einstellen}Fehlerquellen bei Anfängern.
+\item[\textit{TCP Port}]  Dieser Port ist zu wählen, wenn  im Winter mit \xc trainiert werden soll, z.B.\ indem man  mit dem
 Segelflugsimulator \textsc{Condor} spielt.
-\item[Treiber] Eine Liste von Treibern, welche speziell auf die gelisteten Geräte angepaßt wurden, um deren Funktion in größtmöglichem Umfang zu benutzen.
+\item[\textit{Treiber}] Eine Liste von Treibern, welche speziell auf die gelisteten Geräte angepaßt wurden, um deren Funktion in größtmöglichem Umfang zu benutzen.
 Bislang unterstützt werden: \al, Borgelt B50/B800, Cambridge CAI GPS-NAV, Cambridge CAI302, Compass C-Probe, Condor Soaring Simulator, Digifly Leonardo,  EW Logger, EW microRecorder,
 \fl, FlyNet Vario, Flymaster F1, Flytec 5030 Brauniger, GT Altimeter (GliderTools), ILEC Sn10, IMI Erixx, LX / Colibri, Posigraph Logger, Vega, Volkslogger, Westerboer VW1150, Westerboer VW921/922, XCOm760, Zander/SDI.
 Weiterhin gibt es den Treiber GENERIC, welcher ein Universaltreiber ist, sowie die Auswahl NMEA, die für die Durchschleifung des Singnales gedacht ist, wenn zwei Geräte an einer GPS Quelle installiert sind(z.B.\ im Doppelsitzer.
-\item[Abgleich vom Gerät$^{\textcolor{blue}{\star}}$]  {\bf Ein/Aus}: Mit dieser Option werden im externen Gerät vorgenomme Einstellungen, Berechnungen und Daten wie MacCready, Mücken, und Wind vom externen Gerät zur Verwendung in den internen Routinen empfangen.(Synchronisierung)\index{Synchronisierung externer Geräte mit \xc }
-\item[Abgleich zum Gerät$^{\textcolor{blue}{\star}}$]  {\bf Ein/Aus}: Mit dieser Option werden in \xc eingestellte Daten wie MacCready, Mücken, und Wind zum externen Gerät verschickt. (Synchronisierung)
-\item[Prüfsumme ignorieren$^{\textcolor{blue}{\star}}$] {\bf Ein / Aus}: Wenn das GPS-Gerät ungültige Prüfsummen der Übertragung meldet, werden mit
+\item[\textit{Abgleich vom Gerät$^{\textcolor{blue}{\star}}$}]  {\bf Ein/Aus}: Mit dieser Option werden im externen Gerät vorgenomme Einstellungen, Berechnungen und Daten wie MacCready, Mücken, und Wind vom externen Gerät zur Verwendung in den internen Routinen empfangen.(Synchronisierung)\index{Synchronisierung externer Geräte mit \xc }
+\item[\textit{Abgleich zum Gerät$^{\textcolor{blue}{\star}}$}]  {\bf Ein/Aus}: Mit dieser Option werden in \xc eingestellte Daten wie MacCready, Mücken, und Wind zum externen Gerät verschickt. (Synchronisierung)
+\item[\textit{Prüfsumme ignorieren$^{\textcolor{blue}{\star}}$}] {\bf Ein / Aus}: Wenn das GPS-Gerät ungültige Prüfsummen der Übertragung meldet, werden mit
 dieser Einstellung  die Daten dennoch benutzt.
 \end{description}
 
@@ -857,6 +877,8 @@ Am unteren Rande dieses Fensters befinden sich noch drei weitere Felder:\\
 
 \tip Es ist sehr empfehlenswert, eine eigene Polare zu exportieren, da dann alle Eigenschaften darin gespeichert und wieder aufgerufen werden können.
 Die Werte für  die Polare sollten mit Bedacht und Sorgfalt eingegeben werden, da sämtliche Berechnungen von \xc darauf beruhen!
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Logger} \label{conf:logger}
 
@@ -895,6 +917,7 @@ Auf dieser Seite kann der \xc -IGC-Logger programmiert  und Daten wie Kennzeiche
 \end{description}
 \todonum{stimmt das?}
 
+
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Einheiten}\index{Einheiten!Einstellung}
 
@@ -928,20 +951,25 @@ Es ist jedoch möglich, die angegebenen Werte nach Belieben zu mischen und so z.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Einstellung / Time}
+\section{Einstellung / Time}\index{Zeit!Einstellung}\index{Zeit!Lokal}\index{Zeit!UTC}\index{UTC-Zeit einstellen}\index{Lokalzeit einstellen}\label{sec:time-justage}
 
 Einstellen der Uhr mit Referenz zur UTC-Zeit.
 
 \begin{description}
-\item[Zeitzonenverschiebnung]  {\bf -13 ..+13h}: In diesem Feld wird die Zeitzonenverscheibung zur UTC zeit eingebeben. Die Differenz kann im 30Minuten-Intervall eingegeben werden.
+\item[\textit{Zeitzonenverschiebung}]  {\bf -13 ..+13h}: In diesem Feld wird die Zeitzonenverscheibung zur UTC zeit eingebeben. Die Differenz kann im 30Minuten-Intervall eingegeben werden.
 Zur Kontrolle wird im Feld darunter die entsprechende Lokalzeit angegeben -- um Mißverständnisse zu verhindern.
-\item[Lokalzeit]  Das ist die oben errechnete Lokalzeit -- nur zur Kontrolle.
-\item[Benutze GPS-Zeit$^{\textcolor{blue}{\star}}$] {\bf Ein /Aus}: Einstellung des Empfanges des Zeitsingales über das angeschlossene GPS\\
+
+Achtung! 
+
+Große Falle, wenn ihr versucht, das Starzeitfenster (z.B. per ''sofort'') einzustellen, und Ihr habt \warning hier nicht richtig die Zeitverschiebung eingestellt !! (Siehe z.B. ~\ref{sec:start-gate})
+\item[\textit{Lokalzeit}]  Das ist die oben errechnete Lokalzeit -- nur zur Kontrolle.
+\item[\textit{Benutze GPS-Zeit$^{\textcolor{blue}{\star}}$}] {\bf Ein /Aus}: Einstellung des Empfanges des Zeitsingales über das angeschlossene GPS\\
 {\bf Ein}: Wenn eingeschaltet wird die Uhr des Gerätes auf dem \xc läuft \textsl{bei jedem Fix} durch das empfangene Zeitsignal des GPS neu gesetzt.
 \achtung
 Nur sinnvoll, wenn das Gerät nicht über eine Echtzeituhr verfügt, oder aber das Zeitsingale oft ausfällt oder extrem abweicht.
 {\bf Aus}: Es wird die geräteinterne Uhr benutzt.
 \end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Einstellung / Verfolgung}
@@ -973,4 +1001,3 @@ erstellt wurde, um Dich zu identifizieren.
 Andernfalls wird die Flugspur als `{\it Gast}'  und somit anonym übermittelt.
 \item[Passwort] Das entsprechende Passwort zum oben angegebenen  Zugang.
 \end{description}
-%finished für v6.5 date 09/02/2013 OH

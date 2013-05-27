@@ -19,6 +19,7 @@ A team code function allows teams of pilots to exchange their
 positions via radio in a short code, encoded and decoded by the
 computer.
 
+
 \section{Airspace display}
 
 Local special use airspace regions are drawn on the map as shaded
@@ -44,6 +45,7 @@ Section~\ref{sec:airspace-filter}.
 
 The default colouring of Class C, D, E and F airspace is consistent
 with ICAO charts.
+
 
 \subsection*{Incursion events}
 
@@ -75,6 +77,7 @@ preferentially to GPS altitude in detecting airspace incursions.  This
 makes the system conform to normal conventions of having airspace
 violations based on QNH-adjusted altitude.
 
+
 \section{Airspace warnings}
 
 The concept of airspace warnings in gradual levels is introduced:
@@ -97,6 +100,7 @@ Whenever the warning level increases (above level 0) for any airspace,
 the airspace warning dialogue appears, accompanied by a system beep from
 Altair or the PDA.  When there are no more airspace regions at warning
 levels above 0, the dialogue disappears automatically.
+
 
 \subsection*{Airspace warning dialogue}
 
@@ -126,6 +130,7 @@ CTRgld', with base of terrain surface and ceiling at 1350m.
 If there are airspace warnings any time the airspace warning dialogue is shown 
 you get the details to an airspace by touching it (for Altair: Selecting and 
 pressing the Enter key).
+
 
 \subsection*{Airspace warning acknowledgement}
 
@@ -197,6 +202,7 @@ of the airspace.
 Simultaneous airspace warnings can occur if the aircraft (or its
 estimated future track) penetrates multiple airspace regions.
 
+
 \section{Airspace query and details}
 
 For touchscreen/mouse devices, when an airspace region is visible on
@@ -255,6 +261,7 @@ Once an airspace item has been located, you have the chance to acknowledged it
 for the day.  From the
 airspace management dialogue it is possible to re-enable it again.
 
+
 \section{Analysis dialogue}
 
 The analysis dialogue contains a page showing a cross-section of the
@@ -274,6 +281,7 @@ visualise complex layering of airspace.
 The ``Warnings'' button opens the airspace warning dialogue if close to
 airspace.
 
+
 \section{FLARM traffic}
 
 If connected to a FLARM device, FLARM traffic is displayed on the map
@@ -288,6 +296,7 @@ FLARM traffic will not be easily distinguished. When one is circling,
 the zoom level might be appropriate, but continuous direction change and
 the typical latency of a PDA makes the map display a poor aid at helping
 to locate the traffic.
+
 
 \subsection*{FLARM map display}
 
@@ -305,6 +314,7 @@ made possible via a look-up of the ICAO aircraft ID of FLARM traffic
 in a file.  See Section~\ref{sec:flarm-ident-file} for details on this
 file format.  Aircrafts with the FLARM privacy flag set will not have
 any identification displayed.
+
 
 \subsection*{FLARM radar}
 
@@ -345,6 +355,7 @@ FLARM radar is suppressed, pressing the enter button again cancels the
 suppression and the radar is shown again.  When new traffic appears in
 the radar, or if the FLARM issues a collision warning, the suppression
 is cancelled.
+
 
 \subsection*{FLARM Traffic dialogue}\label{sec:flarm-traffic}
 
@@ -431,7 +442,9 @@ button to open the text entry dialogue to allow entry of the mate's code.
 After entering the mate's code, the relative distance and 
 bearing to the mate is calculated and updated in the dialogue.
 
+
 \subsection*{FLARM Id lookup}
+
 XCSoar also supports the encrypted team codes from the FlarmNet initiative.
 The \button{Flarm Lock} button allows you to accesses the FlarmNet database as well 
 as XCSoar's database for flarm to find a team mate. A simple 
@@ -447,6 +460,7 @@ you search through the competition ID's in the data base and shows the details o
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarmdetails.png}
 \end{center}
+
 
 \subsection*{Klick your buddy}
 Even if XCSoar can `lock' only one team mate by reference waypoint, 

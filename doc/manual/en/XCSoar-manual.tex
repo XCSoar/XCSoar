@@ -26,9 +26,6 @@
 % Front page
 \maketitle
 
-%%%%%%%%%%%%%%%%%%%%%%
-% Todo's
-\listoftodos
  
 %%%%%%%%%%%%%%%%%%%%%%
 % Table of contents
@@ -39,6 +36,7 @@
 \setlength{\parskip}{0.05\baselineskip}
 \tableofcontents
 \endgroup
+
 
 %%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Preface}
@@ -52,6 +50,8 @@ NOT BE USED AS AN AID TO DETERMINE GROUND PROXIMITY FOR AIRCRAFT NAVIGATION. THI
 SHOULD NOT BE USED AS A TRAFFIC COLLISION AVOIDANCE SYSTEM.
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%
 \section*{Legal notices}
 
 \subsection*{Software license agreement}
@@ -68,7 +68,6 @@ organizations, be liable for any incidental, consequential, or
 punitive damages whatsoever relating to the use of the Product.
 
 \subsection*{Disclaimer}
-
 This product, and all accompanying files, data and materials, are
 distributed "as is" and with no warranties of any kind, whether
 express or implied.  This product is used entirely at the risk of the
@@ -83,6 +82,8 @@ furnishing, performance, or use of this material.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \input{ch01_introduction.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
 \input{installation.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
@@ -122,9 +123,17 @@ furnishing, performance, or use of this material.
 \input{ch13_history.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}\hypersetup{linkcolor=orange}
+\printindex
+
+%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 
+%%%%%%%%%%%%%%%%%%%%%%
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
 \input{gpl.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\listoftodos
 
 \end{document}

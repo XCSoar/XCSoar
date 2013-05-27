@@ -649,7 +649,7 @@ protected:
 
     void Optimise(const Rectangle &bounds,
                   BucketAllocator &bucket_allocator) {
-      if (leaves.GetSize() < SPLIT_THRESHOLD)
+      if (leaves.GetSize() < SPLIT_THRESHOLD || !bounds.CanSplit())
         return;
 
       Split(bounds.GetMiddle(), bucket_allocator);

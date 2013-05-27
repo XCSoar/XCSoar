@@ -130,11 +130,11 @@ Die entsprechenden Funktionen werden in nachfolgenden Kapiteln ausführlicher be
 Die vier primären Menübuttons (Hauptmenü) werden beim \al durch Drücken der vertikal angeordneten Knöpfe an der linken Seite wie folgt von unten nach oben aktiviert:
 
 \begin{jspecs}
-\item[\button{Nav}]       Kontrolle und Einstellungen bezüglich Navigation, hauptsächlich gedacht für Tasks (Aufgaben).
-\item[\button{Anzeige}] Einstellungen der Anzeige von \textsf{XCSoar}
+\item[\button{Nav}]      Kontrolle und Einstellungen bezüglich Navigation, hauptsächlich gedacht für Tasks (Aufgaben).
+\item[\button{Anzeige}]  Einstellungen der Anzeige von \textsf{XCSoar}
 \item[\button{Konfig.}]  Konfiguration von \textsf{XCSoar}, angeschlossener Geräte,
                                       Einstellungen während des Fluges (Wind, Ballast, MC etc.\
-\item[\button{Info}]       Aufruf diverser Informations Fenster,  Checkliste, Lufträume, Wetter etc.\
+\item[\button{Info}]     Aufruf diverser Informations Fenster,  Checkliste, Lufträume, Wetter etc.\
 \end{jspecs}
 
 In der \textsf{\textsf{PC}}-Version werden hierfür die Tasten  1, 2, 3 und 4 verwendet.
@@ -340,13 +340,6 @@ Die mögliche Anzahl und das Layout \sketch{figures/infoboxes.png}der {\InfoBox}
 Für ein typisches 320$\times$240 Pixel-Display (Pocket-\textsf{PC} im "Hochkant"-Modus) stehen jeweils vier {\InfoBox}en am oberen und unteren Rand des Displays zur Verfügung. 
 Im Querformat, sind neun {\InfoBox}en an der rechten Seite des Displays vorgesehen. Siehe Bild unten:
 
-%\begin{center}
-%\includegraphics[angle=0,width=0.35\linewidth,keepaspectratio='true']{figures/infoboxes.png}
-%\end{center}
-
-%\begin{quote} \smenus{Konfig.\ }\blink\smenus{Konfig.\  }\blink%
-%\smenut{System}{Einstellung}\blink\seite{19}
-%\end{quote} Unterpunkt  "InfoBox Geometrie"\index{Infbox!Seiten!Anordnung}
 
 \subsection*{Bildschirmanzeige-Modi / InfoBox-Seiten}\index{InfoBoxen!Seiten}
 
@@ -385,10 +378,7 @@ Weiterhin kann hier durch Klicken auf  \button{Setup InfoBox} innerhalb dieser {
 
 \subsection*{Ändern von {\InfoBox}en}
 {\InfoBox}en können entweder über das Konfigurationsmenü geändert werden 
-%\begin{quote}
-%\smenus{Konfig.\ }\blink\smenus{Konfig.\  }\blink\smenut{System}{Einstellung}\blink\seite{21}
-%\end{quote}  Unterpunkt "InfoBox Modi"
-\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}  Ausführlich beschrieben in Kap.\ref{}
+\menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}} (ausführlich beschrieben in Kap.\ref{sec:interface-appearance})
 oder durch einen länger anhaltenden Druck auf die entsprechende  {\InfoBox}, welche geändert werden soll.
  In diesem Fall erscheint ein Dialog mit allen verfügbaren {\InfoBox}en, aus denen die \menulabel{~~\button{Aussehen}\blink\button{Infobox Sets}}gewünschte ausgewählt werden kann.
  
@@ -451,58 +441,24 @@ Eine Liste der wichtigsten Dialoge ist hier aufgelistet:
 
 Diese Dialoge werden in nachfolgenden Kapiteln behandelt werden. Ausgenommen hiervon sind der Checklisten-, der Status-  und der Texteingabe-Dialog, welche hier unten im Anhang behandelt werden.
 
+
 \subsection*{Checklisten Dialog}\index{Checkliste}
 
-Der Checklisten-Dialog ist gedacht, um mehrere Seiten von Erinnerungen \menulabel{\bmenut{Info}{1/3}\blink\bmenut{Check}{liste}}und frei definierbarem Text des Piloten aufzunehmen. Jeder Oberbegriff ist in eckige Klammern zu setzen! 
+Der Checklisten-Dialog ist gedacht, um mehrere Seiten von Erinnerungen 
+\menulabel{\bmenut{Info}{1/3}\blink\bmenut{Check}{liste}} und 
+frei definierbarem Text des Piloten aufzunehmen. 
 
-
-\achtung Es  muß \textbf{mindestens ein} eckiges Klammernpaar vorhanden sein, ansonsten wird die nicht Liste abgearbeitet.
-Damit die Checkliste entsprechend abgearbeitet werden kann, muß ein entsprechendes Textfile \verb|xcsoar-checklist.txt|  
-im \textsf{XCSoarData}-Verzeichnis stehen.
-
-\warning \textcolor{blue}{Lediglich unter Linux \textbf{muß} dies File im Hauptverzeichnis von \textsf{XCSoar}, also \textbf{nicht} im  \textsf{XCSoarData}-Verzeichnis stehen!}
-
-Die typische Anwendung hierfür ist eine Checkliste vor dem Start. Diese Checkliste ist ein reines Textfile und kann solche Dinge enthalten wie z.B.:
+Die typische Anwendung hierfür ist eine Checkliste vor dem Start. Diese Checkliste kann Dinge enthalten wie z.B.:
+Täglicher Check, Vorflugcheck, Außenlandungscheck, Pinkeltüten Einpacken, Erinnerung an Treibstoff, 
 \sketch{figures/checklist.png}
-Täglicher Check, Vorflugcheck, Außenlandungscheck, Pinkeltüten Einpacken, Erinnerung an Treibstoff, Klappen beim Start verriegelt diverse laberfrequenzen usw.\ je nach Gusto des Piloten.  
+Klappen beim Start verriegelt diverse laberfrequenzen usw.\ je nach Gusto des Piloten.  
 
-Ein kleines Beispiel für eine gültige Checkliste wie oben abgebildet: 
-\begin{small}
-\begin{verbatim}
- [Flugzeug]
- Haube geschlossen und verriegelt
- Gurte Fest
- Steuerung frei
- Klappen eingefahren und verriegelt
- Höhenmesser QNH
- .
- .
- [Motor]
- Sprithahn offen
- Zündung an
- Propellerstopper 
- .
- .
- [Funk]
- Vinsebeck     122.200
- Höxter          123.625
-\end{verbatim}
-\end{small}
+Mit  \button{$<$} und \button{$>$} Buttons  können die jeweils nächsten Seiten angewählt werden.
 
-\achtung \textcolor{blue}{Fehlen die eckigen Klammern, so sind keinerlei Menüeinträge sichtbar!}
+Der Aufbau der kleinen Textdatei \verb|xcsoar-checklist.txt| ist im Kap.~\ref{sec:checklist-file} beschrieben. 
 
-
-Der Text in den Klammern dient hierbei als Überschrift (hier ''Flugzeug'') und wird dem Titel ''Checklist'' nachgestellt. 
-Anschließend kann beliebiger Text eingegeben werden. 
-
-
-Mit  \button{$<$} und \button{$>$} Buttons  können die jeweils nächsten Einträge (hier ''Motor'' bzw.\ ''Funk'')angewählt werden.
 
 \subsection*{Status Dialog}
-
-%\begin{quote}
-%\smenus{Info}\blink\smenus{Info}\blink\smenus{Status}
-%\end{quote}
 Der Statusdialog ist ein Dialog mit mehreren Seiten, welcher eine Übersicht über \menulabel{\bmenut{Info}{2/3}\blink\bmenus{Status}}das Flugzeug, das System, die Aufgabe, Regeln zur Aufgabe und Zeiten darstellt. 
 
 \textbf{Achtung!}
@@ -514,30 +470,10 @@ Um die aktualisierten Werte dieser Seite zu betrachten, ist es notwendig diesen 
 
 \begin{description}
 \item[\button{Flug}]Zeigt die aktuelle Position \sketch{figures/status-aircraft.png}des Flugzeuges (Breiten - und Längengrad), den maximalen Höhengewinn, den nächstgelegenen Wegpunkt, dessen Entfernung  und die Peilung (bearing) dorthin.
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-aircraft.png}
-%\end{center}
-
 \item[\button{System}] Zeigt den Status von angeschlossenen Geräten, Satellitenempfang,  Batterielevel
-%\sketch{figures/status-system.png}
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-system.png}
-%\end{center}
-
 \item[\button{Aufgabe}] Anzeige von AAT-Zeit, Differenz-Zeit, Entfernungen und Aufgabengeschwindigkeit
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-task.png}
-%\end{center}
-
 \item[\button{Regeln}] Zeigt Gültigkeit des Abfluges, der Überquerung von Start/Ziellinien gemäß der eingegebenen Regeln der Aufgabe.
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-rules.png}
-%\end{center}
-
 \item[\button{Zeiten}] Anzeige aller Zeiten wie z.B.: lokale zeit, GPS-zeit, Flugdauer, Start-  und Landezeit sowie den Sonnenuntergang.
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-times.png}
-%\end{center}
 \end{description}
 
 \subsection*{Eingabe von Text} \label{sec:textentry}\index{Texteingabe}\index{Eingabe von Text}

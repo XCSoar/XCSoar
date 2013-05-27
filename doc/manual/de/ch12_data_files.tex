@@ -11,6 +11,8 @@ Daten-Files werden bei \xc in zwei Kategorien eingeteilt:
 Dies Kapitel beschäftigt sich vor allem mit den Datenfiles, welche der Benutzer selber anlegen und
 bearbeiten kann(und sollte);  die Programm-Datenfiles werden im {\em XCSoar Advanced Configuration
 Guide} beschrieben.
+
+
 \section{File management}
 Alle Filenamen müssen den Konventionen, welche unten aufgelistet sind, entsprechen.
 
@@ -60,7 +62,8 @@ IPAQ File Store/XCSoarData
 Wenn Ihr unsicher seid, startet einfach ein ''jungfräulich'' neu installiertes'' \xc neu und es legt diese
 Verzeichnisse von sich aus an.
 
-\section{Karten Map Database}\label{sec:map}
+
+\section{Karten Datenbank}\label{sec:map}
 
 Ein Kartendatenbank-File (Endung \verb|.xcm|) beinhaltet das Gelände, die Topologie, Topgraphie und
 weitere Geländemerkmale wie Türme, Auffälligkeiten sowie Wegpunkte und evtl. Lufträume.  Das
@@ -90,7 +93,6 @@ Ein \xc angegebenes, separates angegebenes Wegpunkt-File wird alle in der Karten
 Wegpunkte ignorieren und nur die im separaten File enthaltenen Wegpunkte benutzen.
 
 
-
 \section{Wegpunkte}
 \xc  versteht verschiedene Wegpunkt-Formate:
 
@@ -113,6 +115,7 @@ konvertieren.
 \achtung \textsl{Wenn die Höhe eines Wegpunktes als "Null" innerhalb eines Wegpunktfiles angegeben
 wird, dann wird  \xc  die Höhe aus der Kartendatenbank gemäß des Höhenmmodelles entnehmen und die
 Höhe demgemäß darstellen.}
+
 
 \section{Lufträume}\index{File-Format!Luftraum}
 
@@ -141,6 +144,7 @@ Klasse A-G, Sperrgebiete, Gefahrengebiete, AAT-Gebiete, Segelflugsektoren, Welle
 
 In Ergänzung zum OpenAIR Format wird ebenfalls die Platzfrequenz mit angegeben (sofern vorhanden).
 
+
 \section{Flugplatz Details}\label{sec:airfield-details}\index{File-Format!Flugplatz-File}
 
 Das Flugplatz-Detail-File  (extension \verb|.txt|) ist ein einfaches Text-File mit einem Eintrag für jeden
@@ -149,7 +153,7 @@ Flugplatz/Flugfeld. Der Text sollte nicht zu lang sein, da das Textfeld in  \xc 
 erlaubt.
 
 Der Text darf auch Bilder des entsprechenden Flugplatzes enthalten, um ein Bild direkt in \xc einzufügen,
-muß  \verb|image=| gefolgt vom Namen des Files eingefügt werden. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.}\achtung 
+muß  \verb|image=| gefolgt vom Namen des Files eingefügt werden. \textcolor{blue}{Dies ist derzeit unter Windows nicht unterstützt.} 
 
 \achtung {\sl Es ist sicherzustellen, daß keinerlei Leerzeichen in den Filenamen nach  \verb|image=|
 auftauchen!!!}
@@ -194,6 +198,7 @@ image=Benalla_sat.bmp
 Blah blah blah blah
 ...
 \end{verbatim}
+
 
 \section{Polare}\label{sec:glide-polar}\index{Polare!File-Format}
 
@@ -291,32 +296,43 @@ Der einfachste Weg, ein neues Profil zu erzeugen ist, ein altes Profil unter ein
 Namen jedoch mit derselben Endung abzuspeichern. Bei nächsten Start von \xc  fragt dann das Programm, welches der vorhandenen Profil-Files benutzt werden soll.
 
 
-\section{Checklist}\index{File-Format!Checkliste}
+\section{Checklist}\label{sec:checklist-file}\index{File-Format!Checkliste}
 
 Die Checkliste  (\verb|xcsoar-checklist.txt|) benutzt ein ganz ähnliches Format
 wie das Flugplatz-File. \index{Checkliste!File}
-Jeder Seite wird die Überschrift in eckigen Klammern vorangestellt, anschließend erfolgen
+Jeder Seite wird mit der Überschrift in eckigen Klammern eingeleitet, anschließend erfolgen
 zeilenweise die Eingabe der Checklist-Punkte. Die Anzahl der Seiten ist begrenzt auf 20.
 
 Ein Beispiel: (Auszug):
 \begin{verbatim}
-[Vorflugkontrolle]
-Bolzen korrekt gesichert
-Steuerung
-Klappen und Wölbklappen
-Trimmung und Ballast
-Instrumente
-Haube verschlossen und verriegelt
-[Aufrüstfehler]
-Kuller ab
-Tape etc. entfernt
+[Flugzeug]
+Haube geschlossen und verriegelt
+Gurte Fest
+Steuerung frei
+Klappen eingefahren und verriegelt
+Höhenmesser QNH
+.
+.
+[Motor]
+Sprithahn offen
+Zündung an
+Propellerstopper 
+.
+.
+[Funk]
+Vinsebeck     122.200
+Höxter        123.625
 ...
 \end{verbatim}
+Damit die Checkliste Umlaute und Sonderzeichen korrekt dargestellt muß die Datei \warning 
+in \textbf{UTF-8} kodiert sein!
+
 
 \section{Aufgaben }\index{File-Format!Aufgaben}
 
 Aufgaben-Files  (Endung: \verb|.tsk|) werden in einem \xc -eigenen, dem  XML-Format, gespeichert.
 SeeYou-Aufgaben können problemlos geladen werden. (Endung: \verb|.cup|).
+
 
 \section{Flug Logger-Mitschriebe} \label{sec:logfiles}
 Der Software Logger von \xc erzeugt  IGC-Files (Endung: \verb|.igc|)
@@ -325,6 +341,7 @@ beschrieben.
 
 Die Log-Files werden  im ''log''- Unterverzeichnis des \xc -Verzeichnisses abgelegt. (normalerweise XCSoarData)
 Nach dem Flug können diese Files kopiert und weiterverarbeitet werden.
+
 
 \section{FLARM Identifikation}\label{sec:flarm-ident-file}\index{File-Format!Flarm}
 
@@ -354,7 +371,8 @@ Diese enthält sämtliche \fl-Daten, welche von der \textsf{\textsf{FlarmNet}}-G
 Dies File kann von  \url{http://www.flarmnet.org}  heruntergeladen werden.
 \textsl{Dies File muß sich innerhalb des XCSoarData - Verzeichnisses befinden.}
 
-%%%%%%%%%%%%%% advanced stuff below..
+
+%%%%%%%%%%%%%%
 \section{Eingabe Ereignisse}
 
 Das Eingabe-Ereignis-File  (Endung \verb|.xci|) ist ein ASCII-Text File,
@@ -373,7 +391,10 @@ Hier einige Gründe, weshalb es evtl.\ sinnvoll sein könnte, \textsf{xci} zu be
 \item Vielfache Reaktionen auf ein einfachen Ereignis von  \xc oder aber vom Rechner
 ausgelösten Ereignisses.
 \end{itemize}
-Für nähere Informationen bezüglich eigener Eingabe -Ereignisse, bitte bemüht das {\em XCSoar Advanced Configuration Manual}.
+Für nähere Informationen bezüglich einer eigenen Ereignis Datei, ist das 
+{\em XCSoar Developer Manual} ein guter Anfang.
+
+
 \section{Status}\label{sec:status}\index{File-Format!Status}
 Status-Files sind Text Files in der Form  {\em Bezeichner  = Wert },
 die in Blöcken  angeordnet sind. Jeder Block beinhaltet eine Statusmeldung
@@ -401,4 +422,4 @@ key=Aufgabe begonnen
 delay=1500
 hide=yes
 \end{verbatim}
-%
+

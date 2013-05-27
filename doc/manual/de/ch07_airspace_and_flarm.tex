@@ -45,14 +45,13 @@ Wenn jedoch überlappende Lufträume auftreten sollten, werden die Grenzen der
 Lufträume grundsätzlich angezeigt, egal, ob der Luftraum transparent oder nicht angelegt wurde.
 
 Sowohl die Luftraumwarnungen als auch die Luftraumdarstellungen können individuell editiert werden,
-hierzu siehe Kap.~\ref{sec:airsp-filt-dial}.
+hierzu siehe Kap.~\ref{sec:airspace-filter}.
 
 Die Standard Darstellung und Einfärbung der lufträume ist analog den aktuellen ICAO Karten
 
 \section{Luftraumverletzungs Ereignisse}
 
 Es werden drei Ereignisse in Bezug auf eine evtl. Luftraumverletzung  registriert und verarbeitet:
-%Three types of events are detected by XCSoar in relation to SUA:
 \begin{description}
 \item[Wahrscheinliche Verletzung] Dies Ereignis wird registriert
 wenn das Flugzeug bei Beibehalten des Kurses, der Geschwindigkeit und der Höhe in Kürze in einen Luftraum einfliegen wird.
@@ -210,11 +209,6 @@ des Luftraumes, der Unter- und Obergrenze (Höhe über Grund oder aber
 Flugfläche) sowie der Frequenz des Luftraumes.
 Begleitet wird dies von einem Warnton.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']
-%\end{center}
-
 Bestätigte Lufträume werden nach einer festgelegten Zeit, der "Bestätigungszeit"
 \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}}wieder angezeigt und in die Alarmfunktion integriert. 
 
@@ -253,9 +247,9 @@ Ein Doppelklick auf den entsprechenden Luftraum oder Klick auf \button{Details} 
 
 Sinnvoll ist dies z.B.\ bei EDR, welche militärisch genutzt werden und als inaktiv für z.B.\
 einen Flugtag gemeldet werden. Hiermit kann das notwendige Bestätigen von
-Lufträumen während des Fluges umgangen werden.  Siehe hierzu auch Kapitel (\ref{sec:airsp-filt-dial})
+Lufträumen während des Fluges umgangen werden.  Siehe hierzu auch Kapitel (\ref{sec:airspace-filter})
 
-\section{Luftraumfilter Dialog}\label{sec:airsp-filt-dial} \index{Luftraum!Filter}\index{Luftraum!Farben}
+\section{Luftraumfilter Dialog}\label{sec:airspace-filter} \index{Luftraum!Filter}\index{Luftraum!Farben}
 
 Über den Luftraum-Filter Dialog können im Hinblick auf deren Anzeige auf dem Bildschirm Gruppen von Lufträumen \menulabel{\bmenut{Konfig.}{2/3}\blink\bmenus{System}} ausgewählt werden. 
 
@@ -283,10 +277,6 @@ Rand dient als Flugzugposition, die Lufräume fliegen einem quasi von rechts nac
 
 \sketch{figures/analysis-airspace.png}
 Der blaue Strich zeigt ausgehend vom schwarzen Pfeil die derzeitige Höhe an.
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
-%\end{center}
 
 Wenn man sich nahe eines Luftraumes befindet, wird diese Ansicht durch das
 Luftraumwarnfenster unterbrochen.
@@ -320,16 +310,12 @@ Ist Nord-Oben eingestellt, so zeigen die Pfeile das absolute Bearing des Zieles.
 Ist Kurs-Oben eingestellt, so zeigen die Pfeile in Richtung den relativen Kurs vom Ziel
 zum eigenen Flugzeug.
 
-
-%\begin{center}
-%\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/flarmmap.png}
-%\end{center}
-
 Die Darstellung der Ziele auf dem \fl-Bildschirm kann durch Auswertung eines separaten
 \sketch{figures/flarmmap.png}und individuell anpassbaren  \fl-Files Name, Kennzeichen etc.\ enthalten.
 (Siehe hierzu~\ref{sec:flarm-ident-file} um Dich über Aufbau und Format des Files zu informieren)
 
 Luftfahrzeuge im \fl-Stealth Modus oder die den Privat-Modus eingeschaltet haben können so jedoch nicht angezeigt werden.
+
 
 \subsection*{FLARM Radar}
 Um dieser Situation abzuhelfen, gibt es ein kleines Rechteck in der rechten unteren Kartenecke,

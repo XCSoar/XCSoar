@@ -23,6 +23,27 @@ Beim \al/VEGA-System wird die externe Versorgungsspannung im Status-Display des 
 
 Für andere Plattformen, ist eine \infobox{Batterie} InfoBox vorgesehen, welche über den Zustand informiert.
 (z.B.\ vorhandene Kapazität, interner/externer Batteriebetrieb, Ladezustand ein/aus)
+\section{GPS-Quelle - Verwaltung der angeschlossenen Geräte, NMEA-Anschluß etc.}\index{NMEA!Info}\index{GPS!Quelle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Hier können angeschlossene Geräte und deren Ausgänge und verwaltet werden.
+\menulabel{\bmenut{Konfig}{2/3}\blink\bmenut{NMEA}{Anschluss}} 
+
+\button{Bearbeiten} ermöglicht die Bearbeitung der NMEA-Quellen und Anschlüsse.
+ Bei Verwendung nur einer GPS Quelle ist darauf zu achten, daß dieser an erster Stelle, also unter \textbf{A} eingetragen und der entsprechende Treiber gewählt wird!  Werden mehrere GPS-Quellen angegeben und der erste ist nicht angeschlossen, so können hier Fehler entsehen.
+
+
+Der Button \button{Wiederverbinden} dient dazu, das gerät mit \xc neu 
+wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies \sketch{figures/config-devices.png} 
+manuell zu versuchen - bspw.\ Fehlersuche\dots
+
+Der Button \button{Flug Download} ist nur verfügbar, wenn ein IGC-Logger an \xc angeschlossen ist. (Liste in: ~\ref{sec:supported-varios}) 
+Wenn anklickt wird, erscheint eine Liste aufgezeichneter Flüge, welche entsprechend geladen werden kann. Die Datei wird geladen und in das \texttt{logs}-Unterverzeichnis des \texttt{XCSorData } - Verzeichnis kopiert.
+
+Der Button \button{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt. Bspw.\ das Löschen des Flugspeichers beim CAI 302. \warning Genau hier kann es Verzögerungen kommen, da teilweise ein Firmware-Fehler des CAI 302 auftritt.
+
+Mit \button{Überwachung} werden die Ausgaben der angeschlossenen Geräte in Klartext  ausgegeben. 
+Sinnvoll zum Debuggen bzw.\ finden von Fehlern bei ''komischen'' GPS-Quellen.
 
 \subsection*{GPS Status}\index{GPS!Status}
 
@@ -118,23 +139,6 @@ Als Beispiel seien im linken Bild der Master, rechts der Slave dargestellt, welc
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/config-nmea-ms-slave.png}
 \end{center}
 
-%\begin{center}% bis V 6.25
-%\begin{tabbing}
-%Anschluß\quad\=  COM1  hspace{10em}   \=  Anschluß\quad\=  COM1\kill
-%\textbf{Master-Gerät:} \>             \> \textbf{Slave-Gerät:}\\[0.5em]
-%\textsf{Gerät A}       \>             \> \textsf{Gerät A}\\
-%Anschluß\quad\>  COM1  \>                Anschluß\quad\>  COM1\\
-%Baudrate\> 19200       \>                Baudrate\> 19200\\
-%Treiber                \>           \al\>                           Treiber\> \al\\[0.75em]
-%
-%\textsf{Gerät B}       \>                         \>  \textsf{Gerät B}\\
-%Anschluß\>  COM2       \>           Anschluß\>  COM1\\
-%Baudrate\> 19200       \>           Baudrate\> 19200\\
-%Treiber\> NMEA OUT     \>           Treiber\> \textsl{beliebig}\\[0.75em]
-%\end{tabbing}
-%\end{center}
-
-
 
 Auf diese Art und weise werden beide Geräte mit den identischen Daten versorgt, so, als ob sie direkt vom \fl, VEGA, o.ä.\ kämen. 
 Auf gleiche Weise können zwei \al mit identischen Daten versorgt werden, wenn nur eine Datenquelle zur Verfügung steht.
@@ -160,21 +164,3 @@ Das gleiche gilt für alle Werte wie z.B. barometrische Höhe, Vario, Geschwindi
 \textit{Beispielkonfiguration:}
 Primäres Gerät ist Cambridge CAI 302, das sekundäre Gerät sei \fl -- diese Kombination bietet von beiden Geräten das Beste.
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Verwaltung der angeschlossenen Geräte, NMEA-Anschluß etc.\ }\index{NMEA!Info}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Hier können angeschlossene Geräte und deren Ausgänge betrachtet werden.
-
-Der Button \button{Wiederverbinden} dient dazu, das gerät mit \xc neu \menulabel{\bmenut{Konfig}{2/3}\blink\bmenut{NMEA}{Anschluss}} 
-wiederzuverbinden. Dies geschieht normalerweise automatisch, aber in manchen Fällen kann es sinnvoll sein, dies manuell zu versuchen - bspw.\ Fehlersuche\dots
-
-Der Button \button{Flug Donwload} ist nur verfügbar, wenn ein IGC-Logger an \xc angeschlossen ist. \ref{sec:supported-varios}
-Wenn anklickt wird, erscheint eine Liste aufgezeichneter Flüge, welche entsprechend geladen werden kann. Die Datei wird geladen und in das \texttt{logs}-Unterverzeichnis des \texttt{XCSorData } - Verzeichnis kopiert.
-
-\button{Bearbeiten} ermöglicht die Bearbeitung der NMEA-Quellen und Anschlüsse
-
-Der Button \button{Verwalten} ist nur dann verfügbar, wenn ein VEGA oder ein CAI 302 angeschlossen ist. Hier werden spezielle Eigenschaften dieser beiden Geräte unterstützt. Bspw.\ das Löschen des Flugspeichers beim CAI 302. \warning Genau hier kann es Verzögerungen kommen, da teilweise ein Firmware-Fehler des CAI 302 auftritt.
-
-Mit \button{Überwachung} werden die Ausgaben der angeschlossenen Geräte in Klartext  ausgegeben\footnote{Hoffe, das ist richtig so}. 
-Sinnvoll zum Debuggen bzw.\ finden von Fehlern bei ''komischen'' GPS-Quellen.
-%finished für v6.5 date 09/02/2013 OH

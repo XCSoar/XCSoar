@@ -35,12 +35,12 @@ Ein kleines Symbol in der rechten unteren Ecke zeigt den jeweiligen Flugmodus an
 \end{center}
 
 \begin{description}
-\item[Vorflug (a)]   Das Flugzeug ist nicht am Kurbeln  und es ist entweder keine Aufgabe aktiv, oder
+\item[\textit{Vorflug}  (a)]   Das Flugzeug ist nicht am Kurbeln  und es ist entweder keine Aufgabe aktiv, oder
 der aktive Wegpunkt ist nicht der Aufgaben-Zielpunkt
-\item[Kurbeln (b)]  Das Flugzeug ist derzeit am Kurbeln (auch wenn es dabei nicht steigt oder gar sinkt!)
-\item[Endanflug (c)]  Das Flugzeug ist nicht am Kurbeln und der aktive Wegpunkt ist der Zielpunkt der Aufgabe.
-\item[Abbruch (d)]  Dieser manuelle Aufgabenabbruch zeigt an, daß sich das Programm in einem  Modus befindet, in dem ausschließlich Außenlandemöglichkeiten auf landbaren Plätzen, Flugplätzen und markierten Feldern  dargestellt und berechnet werden, die sich in den entsprechenden Datenbanken befinden.. 
-(siehe Kap.~\ref{sec:abort-resume-task})
+\item[\textit{Kurbeln} (b)]  Das Flugzeug ist derzeit am Kurbeln (auch wenn es dabei nicht steigt oder gar sinkt!)
+\item[\textit{Endanflug} (c)]  Das Flugzeug ist nicht am Kurbeln und der aktive Wegpunkt ist der Zielpunkt der Aufgabe.
+\item[\textit{Abbruch} (d)]  Dieser manuelle Aufgabenabbruch zeigt an, daß sich das Programm in einem  Modus befindet, in dem ausschließlich Außenlandemöglichkeiten auf landbaren Plätzen, Flugplätzen und markierten Feldern  dargestellt und berechnet werden, die sich in den entsprechenden Datenbanken befinden.. 
+(siehe Kap.~\ref{sec:taskabort})
 \end{description}
 
 Die jeweiligen Berechnungen von \textsf{XCSoar} sind direkt abhängig vom jeweiligen Flugmodus. Die
@@ -163,7 +163,6 @@ Die maximale vorhergesagte Boden-Temperatur kann hier eingegeben werden und wird
 Konvektionsvorhersagen verwendet. (siehe Abschnitt~\ref{sec:convection-forecast})
 Hieraus werden dann Höhe der Konvektionsschicht und Basis der Wolken ermittelt.
 
-\tip Es ist möglich, \textsf{XCSoar} so zu konfigurieren, das beim Start als erstes dieser Dialog erscheint\todonum{..und wie ?..}
 
 Beim Systemstrat wird, nachdem ein GPS als solches erkannt ist und über einen Drucksensor verfügt,
 das QNH automatisch ermittelt.  Diese Korrektur setzt das QNH so, daß die Druckhöhe mit der
@@ -195,9 +194,9 @@ am rechten Rande des Bildschirmes oder aber in der Vario-Anzeige.
 MC-Theorie:
 
 \begin{description}
-\item[MacCready Geschwindigkeit]  Diese Geschwindigkeit ist die optimale Vorfluggeschwindigkeit nach der
+\item[\textit{MacCready Geschwindigkeit}]  Diese Geschwindigkeit ist die optimale Vorfluggeschwindigkeit nach der
 MC Theorie in ruhender Luft, unter Berücksichtigung des Windes, wenn im Endanflug.
-\item[Delphin-Stil- Geschwindigkeit]  Dies ist die optimale Vorfluggeschwindigkeit unter
+\item[\textit{Delphin-Stil- Geschwindigkeit}]  Dies ist die optimale Vorfluggeschwindigkeit unter
     Berücksichtigung von aufsteigender und fallender Luft sowie unter Berücksichtigung des Windes,
     wenn im Endanflug.
 \end{description}
@@ -232,7 +231,7 @@ Falls an das VEGA Vario angeschlossen, werden die Töne des Varios im Sollfahrt-
 genau anhand dieses Wertes ausgegeben.
 
 
-\section{Sollfahrt  mit Risikofaktor}\label{sec:speed-fly-with}\index{Sollfahrt!Risikofaktor}
+\section{Sollfahrt  mit Risikofaktor}\label{sec:safety-factor}\index{Sollfahrt!Risikofaktor}
 Viele Piloten verringern den MC-Wert und somit die Sollfahrt wenn Sie während der Aufgabe niedriger werden.
  Die interne Sollfahrtberechnung kann mit einem Risikofaktor belegt werden, welcher je nach erreichter Flughöhe in beiden Fällen
  (Delphin oder Block-Speed) den MC Wert automatisch verringert, je mehr man sich dem Boden nähert.
@@ -267,20 +266,20 @@ Ein Wert von  $\gamma=0.3$ ist empfohlen.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/riskmc.png}
 \end{center}
 
-\section{Sicherheitshöhen}\label{sec:safety-heights}\index{Sicherheitshöhen}
+\section{Sicherheitshöhen}\label{sec:safety-heights}\index{Sicherheitshöhe!Spezielle}
 
 In \xc werden drei Sicherheitshöhen deklariert und benutzt, welche ein abgestuftes Maß von Sicherheit in die Berechnungen einfließen lassen.
 
 Die Sicherheitshöhen sind:
 \begin{description}
-\item[Ankunftshöhe]
+\item[\textit{Ankunftshöhe}]
 Dies ist die Ankunftshöhe über Grund über dem aktiven Wegpunkt, bei welchem das Flugzeug  eine sichere Platzrunde
 zur Landung erreichen wird, zusätzlich einer gewissen Reserve.
 
 Dieser Wert wird im Endanflug benutzt und ist bestimmend für die Anzeige und das Erreichen von alternativen landbaren Feldern.
 
 
-\item[Überlandfreiheit "Terrain  clearance"]
+\item[\textit{Überlandfreiheit "Terrain  clearance"}]
 Dies ist die Höhe über Grund, unterhalb derer jeder berechnete Gleitpfad zu nicht
 angepassten Höhen des Weiterfluges führen wird.
 
@@ -289,7 +288,7 @@ Punkt unterhalb der Höhe über Grund führen sollte, erscheint ein rotes Kreuz 
 
 Sollte das Geländemodell ungültig sein oder außerhalb der Reichweite, dann wird dies Geländewarnmerkmal deaktiviert.
 
-\item[Aufbruchshöhe "Break-off height"]
+\item[\textit{Aufbruchshöhe "Break-off height"}]
 Dies ist die Höhe über Grund, bei der sich der Pilot Gedanken machen sollte, den Überlandflug abzubrechen
 bzw.\ sich mit einen Außenlandeacker beschäftigen sollte.
 
@@ -312,7 +311,7 @@ falls hierin nichts eindeutiges drin vermerkt ist, die Daten aus dem Höhenmodel
 
 \textbf{Die angezeigte Ankunftshöhe  des nächstliegenden, landbaren ausgewählten Wegpunkte werden standardmäßig
 mit MC=0  und mit dem besten Gleiten aus der eingestellten Polare errechnet, der Wind wird hierbei mit berücksichtigt.
-Ein Sicherheits-MC-Wert kann und sollte bestimmt und in den Konfigurationseinstellungen eingestellt werden, wie im Kapitel
+\warning Ein Sicherheits-MC-Wert kann und sollte bestimmt und in den Konfigurationseinstellungen eingestellt werden, wie im Kapitel
 oben beschrieben.}
 
 
@@ -349,24 +348,23 @@ verbunden ist und die IAS angibt.
 Aus den oben genannten Parametern, können zwei Höhen errechnet werden:
 
 \begin{description}
-\item[Benötigte Höhe]
+\item[\textit{Benötigte Höhe}]
 Diese Berechnung gibt die insgesamt benötigte Höhe um das ausgewählte Ziel zu erreichen,
 zusätzlich vom Piloten bestimmter Sicherheitshöhen.
-\item[Höhendifferenz]
+\item[\textit{Höhendifferenz}]
 Diese Kalkulation errechnet die benötigte Höhendifferenz zum Zielpunkt  plus der Höhe des
 Ziels (MSL) minus der Flughöhe des Flugzeuges (MSL).
 
 Das Ergebnis entspricht also entweder der aktuellen Flughöhe über dem Gleitpfad oder aber der Ankunftshöhe am Ziel.
-Wenn keine Höhe des Wegpunktes in der Wegpunkt-Datenbank (z.B. $GER-WP.txt$) hinterlegt ist, wird \textsf{XCSoar}
-die Höhe des Geländes aus dem Gelände File (z.B.: $GER-High.xcm$) benutzen.
-\todonum{und wenn nicht vorhanden? Gibt es eine Fehlermeldung?}
+Wenn keine Höhe des Wegpunktes in der Wegpunkt-Datenbank (z.B. \texttt{GER-WP.txt}) hinterlegt ist, wird \textsf{XCSoar}
+die Höhe des Geländes aus dem Gelände File (z.B.: \texttt{GER-High.xcm}) benutzen.
 \end{description}
 
 Die Berechnung des Endanfluges ist soweit fortgeführt worden, daß sowohl die Höhen als auch die Höhendifferenzen
 berechnet werden, um die komplette Aufgabe zu erfüllen. Auch \textsf{XCSoar} kann also "um die Ecke rechnen"
 
-Diese Höhendifferenz wird permanent am linken Rand des Displays sowohl numerisch als auch als roter,
-grüne oder orangene  Pfeile nach unten oder oben dargestellt.
+\tip Diese Höhendifferenz wird permanent am linken Rand des Displays sowohl numerisch als auch als roter,
+grüne oder orangene  Pfeile nach unten oder oben dargestellt.\index{Höhe!Benötigt für Aufgabe}\index{Höhe!Anzeigepfeile}
 
 Diese Höhe ist korrigiert um die Energie-Höhe (potentielle Energie), aufgrund der Tatsache, daß potentielle
 Energie in kinetische Energie umgewandelt werden kann - abzüglich Verlusten.
@@ -401,7 +399,7 @@ Die Skalierung dieser Pfeile der Endanflugsanzeige beträgt $+/-$ 500 m.
 Die hellere Hälfte des Pfeils (hier nur rechts) steht für MC=0.
 
 
-\subsection*{Anzeige der benötigten Endanflugshöhe auf dem Bildschirm}\index{Endanflug, benötigte Höhe, Anzeige}
+\subsection*{Anzeige der benötigten Endanflugshöhe auf dem Bildschirm}\index{Endanflug, benötigte Höhe, Anzeige}\label{sec:finalheight-indicator}
 
 Die Anzeige der benötigten Endanflugshöhe wurde derart gestaltet, daß auf einen Blick der
 Einfluß des MC-Wertes sehr übersichtlich erkenntlich wird.
@@ -420,22 +418,16 @@ Die eingeblendete Zahl neben den Pfeilen gibt die notwendige Höhe für den aktu
 Hier ein paar Beispiele für verschiedene Szenarien:
 
 \begin{description}
-\item[Über Endanflug]
-Über dem Endanflugshöhe bei  MC$=M$ und MC$=0$:
+\item[\textit{Über Endanflughöhe}] bei  MC$=M$ und MC$=0$:
 
 \marginpar{\includegraphics[angle=0,width=2.55em,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
 Bei der derzeitigen MC Einstellung beträgt die Reserve $152m$ wird auf MC$=0$ umgeschaltet gibt es etwas mehr Reserve.
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}}
 
-
-\item[Über Endanflug]
-
-über Endanflughöhe bei MC$=0$ aber unter Endanflughöhe bei  MC$=M$, und :
+\item[\textit{Über Endanflughöhe}] bei MC$=0$ aber unter Endanflughöhe bei  MC$=M$, und :
 
 Hier zeigt  das Display eine Situation, bei der die vorhande Höhe  mit dem eingestellten MC-Wert nicht ausreicht,
 \marginpar{\includegraphics[angle=0,width=3em,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}um die Aufgabe zu beenden (roter Pfeil nach unten). Für MC$=0$ jedoch stellt der Rechner das Gelingen
-der Aufgabe in Aussicht (halbtransparenter  Pfeil ganz links nach oben) und gibt dafür eine Reserve von 152$m$ an.
-%\marginpar{\includegraphics[angle=0,width=1.2cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}}
+der Aufgabe in Aussicht (halbtransparenter  Pfeil ganz links nach oben) und gibt dafür eine Reserve von 152m an.
 
 In dieser Situation kann der Pilot entscheiden, ob er den Bart verlässt und den Endanflug
 mit einer geringeren MC-Einstellung fortführt, oder er weitersteigen möchte.
@@ -445,28 +437,24 @@ optimalen MC-Wert einstellt. Hierdurch ist es extrem einfach für den Piloten, d
 mit dem MC-Wert zu vergleichen. Wenn das erreichte Steigen unter das MC-Niveau fällt,
 sollte der Bart verlassen werden
 
-\item[Unter Endanflughöhe]
-Unter Endanflughöhe  bei MC$=M$, und etwas weniger als 500m  unterhalb bei MC$=0$
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
+\item[\textit{Unter Endanflughöhe}]   bei MC$=M$, und etwas weniger als 500m  unterhalb bei MC$=0$
 Das Display zeigt an, daß beim aktuellen MC-Wert die Endanflughöhe nicht erreicht ist,
 bei MC$=0$, der jedoch nur weniger als 500m fehlen.
 Mit dem gewählten MC-Wert fehlen satte 733m.
 \marginpar{\includegraphics[angle=0,width=3.0em,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}}
-\item[Unter Endanflughöhe]
-Unter Endanflughöhe bei  MC$=M$, und bei MC$=0$
+\item[\textit{Unter Endanflughöhe}]  bei  MC$=M$, und bei MC$=0$
 
 Die Aufgabe kann so nicht beendet werden, auch nicht bei MC$=0$.
 
+\vspace{2em}
 Das ist eine typische Anzeige zu Begin Einer Aufgabe, wenn man sich in Startnähe, oder aber noch noch am Boden befindet.  
 Hier kann man sehr schön erkennen, wieviel man noch kurbeln muß.
 \marginpar{\includegraphics[angle=0,width=3.65em,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
-%\marginpar{\includegraphics[angle=0,width=1.0cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}} 
 \end{description}
-
-
 
 Und hier mal ein Beispiel mit einer Komplettansicht der MovingMap:
 
+\vspace{2em}
 Hier hat man sich  verpokert. 
 
 
@@ -476,12 +464,12 @@ Der Endanflug reicht weder mit dem eingestellten MC noch mit MC$=0$ aus, man err
 
 DG $\rightarrow$ Dumm Gelaufen \verb":-("
 
-
+\vspace{2em}
 \section{Ermittlung der Schnittgeschwindigkeiten}\label{sec:task-speed-estim}
 
-Viele von \textsf{XCSoar's} internen Algorythmen benutzen \emph{Annahmen} der benötigten Zeit,
-einen bestimmten Punkt zu erreichen.
-(Es sind ja Berechnungen ''in die Zukunft''  aus bisher gesammelten Informationen.
+Viele von \textsf{XCSoar's} internen Algorythmen benutzen Annahmen bzw.\ Vorhersagen für die Zeit, um
+einen bestimmten Punkt zu erreichen. Dies sind Berechnungen ''in die Zukunft''  aus bisher 
+gesammelten Informationen.
 
 Diese Information wird in einigen Infoboxen benutzt, weiterhin auch in AAT-Aufgaben
 sowie zur Warnung bei Erreichen nach Sonnenuntergang.
@@ -493,13 +481,13 @@ Diese Annahme wird benutzt um Ankunftszeiten und Aufgabenankunft zu berechnen.
 
 Die folgenden Aufgaben-Geschwindigkeiten sind definiert bzw. werden kalkuliert:
 \begin{description}
-\item[Bisher erreichte Aufgabengeschwindigkeit (Task speed achieved)]  Dies ist die \emph{aktuell
-erreichte} Schnittgeschwindigkeit, kompensiert um die Höhe des Aufgabenstart \todonum{was heißt das exakt? Wird die Höhe GND vom Startpunkt in pot.- Energie umgerechnet? $\frac{1}{2}\cdot m\cdot v^2 = m\cdot g\cdot h $  oder wie?}
-\item[Mittlere Aufgabengeschwindigkeit (Task speed average)] Dies ist die angenommene
+\item[\textit{Bisher erreichte Aufgabengeschwindigkeit}]  Dies ist die \emph{aktuell
+erreichte} Schnittgeschwindigkeit, kompensiert um die Höhe des Aufgabenstart 
+\item[\textit{Mittlere Aufgabengeschwindigkeit}] Dies ist die angenommene
 Schnittgeschwindigkeit, kompensiert um die Höhe, welche zur Beendigung der Aufgabe benötigt wird.
-\item[Verbleibende Geschwindigkeit (Task speed remaining)]  Dies ist die angenommene Schnittgeschwindigkeit,
+\item[\textit{Verbleibende Geschwindigkeit}]  Dies ist die angenommene Schnittgeschwindigkeit,
 welche sich exakt nach der MC-Theorie ermittelt für den Task ergibt.
-\item[Aktuelle Aufgabengeschwindigkeit (Task speed instantaneous)]  Dies ist der augenblickliche
+\item[\textit{Aktuelle Aufgabengeschwindigkeit}]  Dies ist der augenblickliche
 angenommene Schnitt über die ganze Aufgabe
 Wenn mit aktuell eingestelltem MC-Wert gekurbelt wird, ist dieser Wert
 identisch mit der angenommenen Aufgabenschnittgeschwindigkeit.
@@ -517,7 +505,7 @@ der Wendepunkte errechnet.  \tip Wenn jeder Wendepunkt auf  'auto'  gesetzt wurd
 \textsf{XCSoar} die Position der Wendepunkte derart, daß die AAT - Aufgabe nicht später als z.B. 5
 Minuten nach der vorgegebenen Aufgabenzeit beendet wird.
 
-Analog hierzu, wird ein zusätzlicher MC-Wert '\emph{MC-erreicht}' {\em achieved MacCready} berechntet.
+Analog hierzu wird ein zusätzlicher MC-Wert '\emph{MC-erreicht}' {\em achieved MacCready} berechntet.
 Dieser Wert wird so ermitteltt, indem vom erreichten Schnitt zurückgerechnet wird,
 auf den MC-Wert, welcher dieselbe bisher erreichte Schnittgeschwindigkeit ergibt.
 
@@ -583,17 +571,17 @@ ein Kurbeln nicht notwendig, daher ist dies einfache Schema optimal.
 \textsf{XCSoar} kann den MC-Wert automatisch anpassen, um den Piloten zu entlasten:
 Dazu sind zwei Methoden bzw. Einstellungen möglich:
 \begin{description}
-\menulabel{\bmenut{Konfig.}{1/3}\blink\bmenut{MacCready}{Auto} }\item[Endanflug]  
+\menulabel{\bmenut{Konfig.}{1/3}\blink\bmenut{MacCready}{Auto} }\item[\textit{Endanflug}]  
 Während des Endanfluges wird der MC-Wert so optimiert, daß das Ziel in der
 \emph{kürzest möglichen Zeit} erreicht wird.
 
 Bei OLC-Sprint tasks wird der MC-Wert dagegen so angepaßt, daß \emph{eine
 möglichst große Strecke} in der verbleibenden Zeit zurückgelegt wird und daß
 das Ziel in der vorgegebenen Höhe erreicht wird!
-\item[Erwartetes mittleres Steigen]
+\item[\textit{Erwartetes mittleres Steigen}]
 Wenn man sich nicht im Endanflug befindet, wird der MC-Wert so gewählt, daß er dem
 Mittelwert aller aller bisher erflogenen Bärte entspricht!
-\item[Beides] Zusätzlich können beide Methoden benutzt werden, sodaß vor
+\item[\textit{Beides}] Zusätzlich können beide Methoden benutzt werden, sodaß vor
 Erreichen des Endanfluges -also während der ganzen Aufgabe- das erwartete mittlere
 Steigen herangezogen wird und im Endanflug optimiert auf die
  Ankunftszeit (streng nach MC-Theorie)  gerechnet wird.
@@ -602,14 +590,12 @@ Steigen herangezogen wird und im Endanflug optimiert auf die
 (Zu deustch: einmal rechnet er besten Schnitt, einmal größte Strecke\dots im
 dritten Falle kombiniert er beides )
 
-%Ein- bzw. ausgeschaltet wird die Auto MC -Funktion mit
-%\begin{quote}
-%\bmenu{Konfig.}\blink\bmenut{Mac}{Auto}
-%\end{quote}
 In den Konfigurationseinstellungen ist  'Beides' als Standard voreingestellt.
 
-Falls Auto MacCready angeschaltet wurde, erscheint 'AUTO'  in der MC-Infobox
-anstelle von 'manuell'. Gleichzeitig erscheint in der Vario-Anzeige 'AutoMC' anstelle von 'MC'.
+Falls Auto MacCready angeschaltet wurde, erscheint 'MC auto' in der MC-Infobox
+anstelle von 'MC manuell'. Gleichzeitig erscheint in der Vario-Anzeige 'AutoMC' anstelle von 'MC'.
+\xc gibt den automatisch angepassten MC-Wert auch glaich an das angeschlossene 
+Vario weiter (wenn unterstützt).
 
 Diese Auto MC-Einstellungen werden hier hier im Anschluß beschrieben:
 
@@ -661,11 +647,7 @@ Regenfront erkennen!}}
 
 Der Analyse-Dialog kann z.B. dazu benutzt werden, um z.B. die Polare zu checken.
 Die Funktion ist erreichbar über:
-
 \menulabel{\bmenus{Info}\blink\bmenus{Analyse}}
-%\begin{quote}
-%\bmenu{Info}\blink\bmenu{Analyse}
-%\end{quote}
 
 Die Polare-Seite zeigt einen  Graphen der Polare mit den aktuellen Mücken und Ballast-Einstellungen.
 Weiterhin ist das beste Gleiten und die dementsprechende Geschwindigkeit abzulesen, sowie das
@@ -678,25 +660,24 @@ Mit \button{Einstellungen} wird die entsprechende Seite aufgerufen, auf der gena
 Die Flugzeugpolaren-Seite  des Analyse-Dialoges zeigt die totalenergiekompensierte Sinkrate bei der
 entsprechenden Geschwindigkeit, wenn der Rechner mit einem intelligenten Vario verbunden ist.
 
-Dies erlaubt es dem Piloten z.B. Testflüge in ruhiger Luft durchzuführen, um die Flugzeugpolare exakt zu vermessen.
-Wird nun die gemessene \todonum{Wird hier wirklich die Polare aufgzeichnet?? 
-Wird sie dann auch verwendet?  Wo wird sie abgespeichert? $\rightarrow$ Klärung, bitte ... } mit der eingegebenen Polaren verglichen, erlaubt dies eine optimale Anpassung des Programmes an das jeweilige Flugzeug bei der jeweiligen Beladung und dies unter Berücksichtigung der optimalen Klappenstellung und anderen Optimierungsversuchen wie z-.B. Ruderspaltabdichtungen etc.
+Dies erlaubt es dem Piloten z.B. Testflüge in ruhiger Luft durchzuführen, um die Flugzeugpolare zu vermessen.
+Nun kann die Gemessene mit der eingegebenen Polaren verglichen werden. Das 
+erlaubt eine Anpassung des Programmes an das jeweilige Flugzeug bei der jeweiligen Beladung 
+und dies unter Berücksichtigung der optimalen Klappenstellung und anderen Optimierungsversuchen wie z-.B. 
+Ruderspaltabdichtungen etc.
 
 Die Daten werden ausschließlich erfaßt wenn die G-Rate zwischen 0,9 und 1,1 ist.
 Man sollte also sehr ruhig fliegen, um die Aufzeichnungen nicht zu beeinflussen
 
 
-%\begin{center}
-%\includegraphics[angle=0,width=0.65\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
-%\end{center}
-
-\section{Hinweise zum Flug}\index{Hinweise zum Flug}
-Folgende Meldungen werden je nach Bedarf während des Fluges kontinuierlich in einem
-Meldefenster auf dem Bildschirm eingeblendet:
+\section{Hinweise zum Flug}\index{Hinweise zum Flug}\index{Meldungen während des Fluges}
+Folgende Meldungen werden während des Fluges in einem
+Meldefenster auf dem Bildschirm eingeblendet, wenn \xc errechnet, daß Zeiten bzw. Gleipfade nicht erreicht werden:
 
 \begin{itemize}
-\item Erwarte zu frühe Aufgabenankunft (bei AAT Aufgaben)
-\item Erwarte Ankunft nach Sonnenuntergang
-\item Erhebliche Windänderungen
-\item Flugzeug befindet sich gemäß Berechnung und Einstellungen  über/unter dem Gleitpfad.
+\item[\textit{Erwarte frühe Aufgabenankunft}]  (bei AAT Aufgaben) Wenn die Aufgabe zu früh als gefordert beendet werden wird
+\item[\textit{Erwarte Ankunft nach Sonnenuntergang}] Wenn die Aufgabe erst nach Sonnenuntergang beendet werden wird
+\item[\textit{Erhebliche Windänderungen}] Wenn sich der Wind erheblich in Richtung oder Stärke geändert hat
+\item[\textit{Über/unter dem Gleitpfad}]  Diese Meldung erscheint nur einmal bei Starten des Endanfluges, wenn sich das Flugzeug gemäß der \xc-Kalkulation über bzw.\ unter dem Gleitpfad auf das entsprechende Ziel befindet. 
+Kann auch kontinuierlich während des gesamten Fluges an der linke Seite der Karte abgelesen werden, siehe Kap.\ref{sec:finalheight-indicator}
 \end{itemize}
