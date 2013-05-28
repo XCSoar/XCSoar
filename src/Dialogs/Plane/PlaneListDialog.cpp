@@ -238,21 +238,14 @@ PlaneListWidget::Load(unsigned i)
 bool
 PlaneListWidget::LoadWithDialog(unsigned i)
 {
-  const TCHAR *title;
-  StaticString<256> text;
-
   bool result = Load(i);
   if (!result) {
-    title = _("Error");
+    const TCHAR *title = _("Error");
+    StaticString<256> text;
     text.Format(_("Activating plane profile \"%s\" failed!"),
                 list[i].name.c_str());
-  } else {
-    title = _T(" ");
-    text.Format(_("Plane profile \"%s\" activated."),
-                list[i].name.c_str());
+    ShowMessageBox(text, title, MB_OK);
   }
-
-  ShowMessageBox(text, title, MB_OK);
 
   return result;
 }
