@@ -25,8 +25,6 @@ Copyright_License {
 #include "DebugReplay.hpp"
 #include "Task/TaskFile.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
-#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -35,7 +33,7 @@ Copyright_License {
 #include <stdlib.h>
 
 static void
-Run(DebugReplay &replay, TaskManager &task_manager)
+Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 {
   Validity last_location_available;
   last_location_available.Clear();
@@ -75,13 +73,12 @@ Run(DebugReplay &replay, TaskManager &task_manager)
       continue;
     }
 
-    task_manager.Update(current_as, last_as);
-    task_manager.UpdateIdle(current_as);
-    task_manager.SetTaskAdvance().SetArmed(true);
+    task.Update(current_as, last_as, glide_polar);
+    task.UpdateIdle(current_as, glide_polar);
+    task.SetTaskAdvance().SetArmed(true);
 
-    const CommonStats &common_stats = task_manager.GetCommonStats();
-    if (common_stats.active_taskpoint_index != active_taskpoint_index) {
-      active_taskpoint_index = common_stats.active_taskpoint_index;
+    if (task.GetActiveIndex() != active_taskpoint_index) {
+      active_taskpoint_index = task.GetActiveIndex();
 
       FormatISO8601(time_buffer, basic.date_time_utc);
       printf("%s active_taskpoint_index=%u\n",
@@ -92,7 +89,7 @@ Run(DebugReplay &replay, TaskManager &task_manager)
     last_as_valid = true;
   }
 
-  const TaskStats &task_stats = task_manager.GetOrderedTask().GetStats();
+  const TaskStats &task_stats = task.GetStats();
 
   printf("task_started=%d task_finished=%d\n",
          task_stats.start.task_started,
@@ -121,8 +118,6 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  Waypoints way_points;
-
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
@@ -133,17 +128,10 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  TaskManager task_manager(task_behaviour, way_points);
-  task_manager.SetGlidePolar(GlidePolar(fixed(1)));
+  const GlidePolar glide_polar(fixed(1));
 
-  if (!task_manager.Commit(*task)) {
-    fprintf(stderr, "Failed to commit task\n");
-    return EXIT_FAILURE;
-  }
-
+  Run(*replay, *task, glide_polar);
   delete task;
-
-  Run(*replay, task_manager);
   delete replay;
 
   return EXIT_SUCCESS;
