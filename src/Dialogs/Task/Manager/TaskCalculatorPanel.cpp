@@ -28,6 +28,7 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Float.hpp"
@@ -74,16 +75,19 @@ TaskCalculatorPanel::Refresh()
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
+  TCHAR buffer[32];
+
   if (target_button != NULL)
     target_button->SetVisible(common_stats.ordered_has_targets);
 
-  const fixed aat_estimated = task_stats.GetEstimatedTotalTime();
-  LoadValue(AAT_ESTIMATED, aat_estimated / 60);
-
   SetRowVisible(AAT_TIME, common_stats.ordered_has_targets);
-  if (common_stats.ordered_has_targets)
-    LoadValue(AAT_TIME,
-              protected_task_manager->GetOrderedTaskSettings().aat_min_time / 60);
+  if (common_stats.ordered_has_targets) {
+    FormatTimespanSmart(buffer, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time, 2);
+    SetText(AAT_TIME, buffer);
+  }
+
+  FormatTimespanSmart(buffer, (int)task_stats.GetEstimatedTotalTime(), 2);
+  SetText(AAT_ESTIMATED, buffer);
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance
@@ -195,8 +199,8 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                             PixelRect{0, 0, 100, Layout::Scale(17)},
                             WindowStyle(), OnWarningPaint));
 
-  AddReadOnly(_("Assigned task time"), NULL, _T("%.0f min"), fixed(0));
-  AddReadOnly(_("Estimated task time"), NULL, _T("%.0f min"), fixed(0));
+  AddReadOnly(_("Assigned task time"));
+  AddReadOnly(_("Estimated task time"));
   AddReadOnly(_("Task distance"), NULL, _T("%.0f %s"),
               UnitGroup::DISTANCE, fixed(0));
 
