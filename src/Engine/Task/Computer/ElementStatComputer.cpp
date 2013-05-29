@@ -37,7 +37,7 @@ ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(data, fixed(0));
+  CalcSpeeds(data, fixed(-1));
 }
 
 void 
