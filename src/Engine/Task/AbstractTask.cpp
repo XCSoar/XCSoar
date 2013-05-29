@@ -244,7 +244,8 @@ AbstractTask::Update(const AircraftState &state,
   stats.task_valid = CheckTask();
 
   const bool full_update = 
-    CheckTransitions(state, state_last) ||
+    (state.location.IsValid() && state_last.location.IsValid() &&
+     CheckTransitions(state, state_last)) ||
     (active_task_point != active_task_point_last);
 
   UpdateStatsTimes(state);

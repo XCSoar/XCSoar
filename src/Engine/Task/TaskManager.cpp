@@ -280,13 +280,6 @@ bool
 TaskManager::Update(const AircraftState &state,
                     const AircraftState &state_last)
 {
-  if (!state.location.IsValid()) {
-    /* in case of GPS failure or and during startup (before the first
-       GPS fix), update only the stats */
-    UpdateCommonStats(state);
-    return false;
-  }
-
   /* always update ordered task so even if we are temporarily in a
      different mode, so the task stats are still updated.  Otherwise,
      the task stats would freeze and sampling etc would not be
@@ -296,7 +289,9 @@ TaskManager::Update(const AircraftState &state,
 
   bool retval = false;
 
-  if (state_last.time > state.time)
+  if (!negative(state_last.time) && !negative(state.time) &&
+      state_last.time > state.time)
+    /* time warp */
     Reset();
 
   if (ordered_task->TaskSize() > 1) {
