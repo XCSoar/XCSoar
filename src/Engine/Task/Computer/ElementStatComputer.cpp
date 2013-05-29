@@ -73,7 +73,7 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
   if (data.solution_remaining.IsOk()) {
     remaining_effective.CalcIncrementalSpeed(data.remaining_effective, dt);
     pirker.CalcIncrementalSpeed(data.pirker, dt);
-    vario.update(data.vario, data.solution_remaining, fixed(dt));
+    vario.update(data.vario, data.solution_remaining, dt);
   } else {
     remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
                                                fixed(0));
