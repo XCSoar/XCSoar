@@ -33,13 +33,15 @@ DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
 {
   assert(positive(dt));
 
-  if ((dt + fixed(0.5) >= fixed(1)) && data.IsDefined()) {
+  const unsigned seconds = uround(dt);
+
+  if (seconds > 0 && data.IsDefined()) {
     if (av_dist.Update(data.distance)) {
       const fixed d_av = av_dist.Average() / N_AV;
       av_dist.Reset();
 
       fixed v_f = fixed(0);
-      for (unsigned i = 0; i < (unsigned)(dt + fixed(0.5)); ++i) {
+      for (unsigned i = 0; i < seconds; ++i) {
         const fixed v = df.Update(d_av);
         v_f = v_lpf.Update(v);
       }
