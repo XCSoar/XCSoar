@@ -27,7 +27,6 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
-#include "Task/Computer/DistanceStatComputer.hpp"
 
 #include <type_traits>
 
