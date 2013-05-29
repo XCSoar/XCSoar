@@ -34,6 +34,7 @@
 class DistanceStat
 {
   friend class DistanceStatComputer;
+  friend class IncrementalSpeedComputer;
 
 protected:
   /** Distance (m) of metric */

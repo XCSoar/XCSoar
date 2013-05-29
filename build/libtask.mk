@@ -69,6 +69,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Solvers/TaskSolution.cpp \
 	$(TASK_SRC_DIR)/Computer/ElementStatComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/DistanceStatComputer.cpp \
+	$(TASK_SRC_DIR)/Computer/IncrementalSpeedComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/TaskVarioComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/TaskStatsComputer.cpp \
 	$(TASK_SRC_DIR)/Computer/WindowStatsComputer.cpp \

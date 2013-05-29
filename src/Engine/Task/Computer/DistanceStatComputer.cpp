@@ -23,52 +23,6 @@
 #include "DistanceStatComputer.hpp"
 #include "Task/Stats/DistanceStat.hpp"
 
-DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
-  :df(fixed(0)),
-   v_lpf(fixed(400) / N_AV, false),
-   is_positive(_is_positive) {}
-
-void
-DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
-{
-  assert(positive(dt));
-
-  if (!data.IsDefined()) {
-    ResetIncrementalSpeed(data);
-    return;
-  }
-
-  const unsigned seconds = uround(dt);
-  if (seconds == 0)
-    return;
-
-  if (!av_dist.Update(data.distance))
-    return;
-
-  const fixed d_av = av_dist.Average() / N_AV;
-  av_dist.Reset();
-
-  fixed v_f = fixed(0);
-  for (unsigned i = 0; i < seconds; ++i) {
-    const fixed v = df.Update(d_av);
-    v_f = v_lpf.Update(v);
-  }
-
-  data.speed_incremental = (is_positive ? -v_f : v_f);
-}
-
-void
-DistanceStatComputer::ResetIncrementalSpeed(DistanceStat &data)
-{
-  fixed distance = data.IsDefined() ? data.GetDistance() : fixed(0);
-  fixed speed = data.IsDefined() ? data.GetSpeed() : fixed(0);
-
-  df.Reset(distance, (is_positive ? -1 : 1) * speed);
-  v_lpf.Reset((is_positive ? -1 : 1) * speed);
-  data.speed_incremental = fixed(0); // data.speed;
-  av_dist.Reset();
-}
-
 void
 DistanceStatComputer::CalcSpeed(DistanceStat &data, fixed time)
 {

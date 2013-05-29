@@ -20,31 +20,30 @@
 }
  */
 
-#ifndef XCSOAR_DISTANCE_STAT_COMPUTER_HPP
-#define XCSOAR_DISTANCE_STAT_COMPUTER_HPP
+#ifndef XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
+#define XCSOAR_INCREMENTAL_SPEED_COMPUTER_HPP
 
-#include "IncrementalSpeedComputer.hpp"
+#include "Math/fixed.hpp"
+#include "Math/Filter.hpp"
+#include "Math/AvFilter.hpp"
+#include "Math/DiffFilter.hpp"
 
 class DistanceStat;
 
 /**
- * Computer class for DistanceStat.  It holds the incremental and
- * internal values, while DistanceStat has only the results.
+ * Calculate incremental speed from consecutive distance values.
  */
-class DistanceStatComputer {
-  IncrementalSpeedComputer incremental_speed;
+class IncrementalSpeedComputer {
+  static constexpr unsigned N_AV = 3;
+
+  AvFilter<N_AV> av_dist;
+  DiffFilter df;
+  Filter v_lpf;
+  const bool is_positive;
 
 public:
   /** Constructor; initialises all to zero */
-  DistanceStatComputer(const bool is_positive=true)
-    :incremental_speed(is_positive) {}
-
-  /**
-   * Calculate bulk speed (distance/time), abstract base method
-   *
-   * @param es ElementStat (used for time access)
-   */
-  void CalcSpeed(DistanceStat &data, fixed time);
+  IncrementalSpeedComputer(const bool is_positive=true);
 
   /**
    * Calculate incremental speed from previous step.
@@ -52,13 +51,9 @@ public:
    *
    * @param dt Time step (s)
    */
-  void CalcIncrementalSpeed(DistanceStat &data, const fixed dt) {
-    incremental_speed.Compute(data, dt);
-  }
+  void Compute(DistanceStat &data, const fixed dt);
 
-  void ResetIncrementalSpeed(DistanceStat &data) {
-    incremental_speed.Reset(data);
-  }
+  void Reset(DistanceStat &data);
 };
 
 #endif
