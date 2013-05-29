@@ -54,12 +54,11 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);
-    remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
-                                               fixed(0));
-    remaining.CalcIncrementalSpeed(data.remaining, fixed(0));
-    planned.CalcIncrementalSpeed(data.planned, fixed(0));
-    travelled.CalcIncrementalSpeed(data.travelled, fixed(0));
-    pirker.CalcIncrementalSpeed(data.pirker, fixed(0));
+    remaining_effective.ResetIncrementalSpeed(data.remaining_effective);
+    remaining.ResetIncrementalSpeed(data.remaining);
+    planned.ResetIncrementalSpeed(data.planned);
+    travelled.ResetIncrementalSpeed(data.travelled);
+    pirker.ResetIncrementalSpeed(data.pirker);
     return;
   }
 
@@ -75,9 +74,8 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
     pirker.CalcIncrementalSpeed(data.pirker, dt);
     vario.update(data.vario, data.solution_remaining);
   } else {
-    remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
-                                               fixed(0));
-    pirker.CalcIncrementalSpeed(data.pirker, fixed(0));
+    remaining_effective.ResetIncrementalSpeed(data.remaining_effective);
+    pirker.ResetIncrementalSpeed(data.pirker);
     vario.reset(data.vario, data.solution_remaining);
   }
 }

@@ -62,7 +62,6 @@ public:
    */
   void CalcIncrementalSpeed(DistanceStat &data, const fixed dt);
 
-private:
   void ResetIncrementalSpeed(DistanceStat &data);
 };
 

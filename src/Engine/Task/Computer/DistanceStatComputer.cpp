@@ -31,6 +31,8 @@ DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
 void
 DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
 {
+  assert(positive(dt));
+
   if ((dt + fixed(0.5) >= fixed(1)) && data.IsDefined()) {
     if (av_dist.Update(data.distance)) {
       const fixed d_av = av_dist.Average() / N_AV;
@@ -43,7 +45,7 @@ DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
       }
       data.speed_incremental = (is_positive ? -v_f : v_f);
     }
-  } else if (!positive(dt) || !data.IsDefined()) {
+  } else if (!data.IsDefined()) {
     ResetIncrementalSpeed(data);
   }
 }
