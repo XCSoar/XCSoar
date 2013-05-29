@@ -59,6 +59,7 @@ struct DialogSettings {
     Icon,
   };
 
+  // hard coded to Full Width
   DialogStyle dialog_style;
 
   TextInputStyle text_input_style;
