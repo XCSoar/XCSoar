@@ -41,7 +41,7 @@ private:
   AvFilter<N_AV> av_dist;
   DiffFilter df;
   Filter v_lpf;
-  bool is_positive; // ideally const but then non-copyable
+  const bool is_positive;
 
 public:
   /** Constructor; initialises all to zero */
