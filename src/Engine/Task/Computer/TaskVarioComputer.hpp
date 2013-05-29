@@ -42,9 +42,8 @@ public:
  * Update vario, taking altitude difference from a specified glide solution
  * 
  * @param solution Solution for task element
- * @param dt Time step
  */
-  void update(TaskVario &data, const GlideResult &solution, const fixed dt);
+  void update(TaskVario &data, const GlideResult &solution);
 
 /** 
  * Reset vario value (as if solution is held constant)

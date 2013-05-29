@@ -31,8 +31,7 @@ TaskVarioComputer::TaskVarioComputer()
 }
 
 void 
-TaskVarioComputer::update(TaskVario &data, const GlideResult &solution,
-                          const fixed dt)
+TaskVarioComputer::update(TaskVario &data, const GlideResult &solution)
 {
   fixed v = df.Update(solution.altitude_difference);
   data.value = v_lpf.Update(v);
