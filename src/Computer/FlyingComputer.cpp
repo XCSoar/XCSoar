@@ -275,6 +275,9 @@ FlyingComputer::Compute(fixed takeoff_speed,
                         const AircraftState &state, fixed dt,
                         FlyingState &flying)
 {
+  if (negative(state.time))
+    return;
+
   if (state.ground_speed > takeoff_speed)
     Moving(flying, state.time, dt, state.location);
   else
