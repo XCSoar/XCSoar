@@ -29,15 +29,21 @@ IncrementalSpeedComputer::IncrementalSpeedComputer(const bool _is_positive)
    is_positive(_is_positive) {}
 
 void
-IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed dt)
+IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed time)
 {
-  assert(positive(dt));
-
-  if (!data.IsDefined()) {
+  if (!data.IsDefined() || negative(time) ||
+      (!negative(last_time) && (time < last_time ||
+                                time > last_time + fixed(60)))) {
     Reset(data);
     return;
   }
 
+  if (negative(last_time)) {
+    last_time = time;
+    return;
+  }
+
+  const fixed dt = time - last_time;
   const unsigned seconds = uround(dt);
   if (seconds == 0)
     return;
@@ -45,7 +51,7 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed dt)
   if (!av_dist.Update(data.distance))
     return;
 
-  const fixed d_av = av_dist.Average() / N_AV;
+  const fixed d_av = av_dist.Average();
   av_dist.Reset();
 
   fixed v_f = fixed(0);
@@ -53,6 +59,8 @@ IncrementalSpeedComputer::Compute(DistanceStat &data, const fixed dt)
     const fixed v = df.Update(d_av);
     v_f = v_lpf.Update(v);
   }
+
+  last_time += fixed(seconds);
 
   data.speed_incremental = (is_positive ? -v_f : v_f);
 }
@@ -67,4 +75,6 @@ IncrementalSpeedComputer::Reset(DistanceStat &data)
   v_lpf.Reset((is_positive ? -1 : 1) * speed);
   data.speed_incremental = fixed(0); // data.speed;
   av_dist.Reset();
+
+  last_time = fixed(-1);
 }

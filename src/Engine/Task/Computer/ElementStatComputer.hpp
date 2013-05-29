@@ -48,9 +48,9 @@ public:
    * Calculate element speeds.  Incremental speeds are
    * held at bulk speeds within first minute of elapsed time.
    *
-   * @param dt Time step of sample (s)
+   * @param time monotonic time of day in seconds
    */
-  void CalcSpeeds(ElementStat &data, const fixed dt);
+  void CalcSpeeds(ElementStat &data, fixed time);
 
   /**
    * Reset to uninitialised state, to supress calculation

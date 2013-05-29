@@ -41,7 +41,7 @@ ElementStatComputer::Reset(ElementStat &data)
 }
 
 void 
-ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
+ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
 {
   remaining_effective.CalcSpeed(data.remaining_effective, data.time_remaining);
   remaining.CalcSpeed(data.remaining, data.time_remaining);
@@ -50,7 +50,7 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
   pirker.CalcSpeed(data.pirker, data.time_elapsed);
 
   if (!initialised) {
-    if (positive(dt) && data.time_elapsed > fixed(15))
+    if (data.time_elapsed > fixed(15))
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);
@@ -62,16 +62,13 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
     return;
   }
 
-  if (!positive(dt))
-    return;
-
-  remaining.CalcIncrementalSpeed(data.remaining, dt);
-  planned.CalcIncrementalSpeed(data.planned, dt);
-  travelled.CalcIncrementalSpeed(data.travelled, dt);
+  remaining.CalcIncrementalSpeed(data.remaining, time);
+  planned.CalcIncrementalSpeed(data.planned, time);
+  travelled.CalcIncrementalSpeed(data.travelled, time);
 
   if (data.solution_remaining.IsOk()) {
-    remaining_effective.CalcIncrementalSpeed(data.remaining_effective, dt);
-    pirker.CalcIncrementalSpeed(data.pirker, dt);
+    remaining_effective.CalcIncrementalSpeed(data.remaining_effective, time);
+    pirker.CalcIncrementalSpeed(data.pirker, time);
     vario.update(data.vario, data.solution_remaining);
   } else {
     remaining_effective.ResetIncrementalSpeed(data.remaining_effective);

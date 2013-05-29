@@ -50,10 +50,10 @@ public:
    * Calculate incremental speed from previous step.
    * Resets incremental speed to speed if dt=0
    *
-   * @param dt Time step (s)
+   * @param time monotonic time of day in seconds
    */
-  void CalcIncrementalSpeed(DistanceStat &data, const fixed dt) {
-    incremental_speed.Compute(data, dt);
+  void CalcIncrementalSpeed(DistanceStat &data, const fixed time) {
+    incremental_speed.Compute(data, time);
   }
 
   void ResetIncrementalSpeed(DistanceStat &data) {

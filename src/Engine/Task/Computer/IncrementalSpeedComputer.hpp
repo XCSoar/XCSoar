@@ -41,6 +41,8 @@ class IncrementalSpeedComputer {
   Filter v_lpf;
   const bool is_positive;
 
+  fixed last_time;
+
 public:
   /** Constructor; initialises all to zero */
   IncrementalSpeedComputer(const bool is_positive=true);
@@ -49,9 +51,9 @@ public:
    * Calculate incremental speed from previous step.
    * Resets incremental speed to speed if dt=0
    *
-   * @param dt Time step (s)
+   * @param time monotonic time of day in seconds
    */
-  void Compute(DistanceStat &data, const fixed dt);
+  void Compute(DistanceStat &data, const fixed time);
 
   void Reset(DistanceStat &data);
 };
