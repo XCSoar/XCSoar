@@ -81,6 +81,9 @@ static GeoPoint
 IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
                   Angle dthis, Angle dtotal)
 {
+  assert(loc1.IsValid());
+  assert(loc2.IsValid());
+
   if (loc1.longitude == loc2.longitude &&
       loc1.latitude == loc2.latitude)
     return loc1;
@@ -159,6 +162,9 @@ static void
 DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
                  Angle *distance, Angle *bearing)
 {
+  assert(loc1.IsValid());
+  assert(loc2.IsValid());
+
   const auto sc1 = loc1.latitude.SinCos();
   fixed sin_lat1 = sc1.first, cos_lat1 = sc1.second;
   const auto sc2 = loc2.latitude.SinCos();
@@ -287,6 +293,10 @@ fixed
 DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
                const GeoPoint &loc3)
 {
+  assert(loc1.IsValid());
+  assert(loc2.IsValid());
+  assert(loc3.IsValid());
+
   const fixed cos_loc1_lat = loc1.latitude.cos();
   const fixed cos_loc2_lat = loc2.latitude.cos();
   const fixed cos_loc3_lat = loc3.latitude.cos();
@@ -313,6 +323,8 @@ GeoPoint
 FindLatitudeLongitude(const GeoPoint &loc, const Angle bearing,
                       fixed distance)
 {
+  assert(loc.IsValid());
+
   assert(!negative(distance));
   if (!positive(distance))
     return loc;
