@@ -175,10 +175,6 @@ int main(int argc, char **argv)
          FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
   ok(positive(v.distance) && v.distance < fixed(2), "earth distance short", 0);
 
-  v = l1.DistanceBearing(l4);
-  printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
-
   GeoPoint p10(GeoPoint::Invalid());
   ok1(!p10.IsValid());
 
