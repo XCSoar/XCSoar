@@ -108,7 +108,7 @@ bool
 AbstractTask::UpdateIdle(const AircraftState &state,
                          const GlidePolar &glide_polar)
 {
-  const bool valid = glide_polar.IsValid();
+  const bool valid = state.location.IsValid() && glide_polar.IsValid();
 
   if (stats.start.task_started && task_behaviour.calc_cruise_efficiency &&
       valid) {
