@@ -40,10 +40,11 @@ UnorderedTask::CalcBestMC(const AircraftState &aircraft,
                           fixed& best) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
+  if (tp == nullptr || !aircraft.location.IsValid()) {
     best = glide_polar.GetMC();
     return false;
   }
+
   TaskBestMc bmc(tp, aircraft, task_behaviour.glide, glide_polar);
   return bmc.search(glide_polar.GetMC(), best);
 }
@@ -74,9 +75,9 @@ UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                  const GlidePolar &glide_polar) const
 {
   TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
+  if (tp == nullptr || !aircraft.location.IsValid())
     return fixed(0);
-  }
+
   TaskGlideRequired bgr(tp, aircraft, task_behaviour.glide, glide_polar);
   return bgr.search(fixed(0));
 }
@@ -90,7 +91,7 @@ UnorderedTask::GlideSolutionRemaining(const AircraftState &state,
   GlideResult res;
 
   TaskPoint* tp = GetActiveTaskPoint();
-  if (tp) {
+  if (tp != nullptr && state.location.IsValid()) {
     res = TaskSolution::GlideSolutionRemaining(*tp, state,
                                                task_behaviour.glide, polar);
     res.CalcDeferred();
