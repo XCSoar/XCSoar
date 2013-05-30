@@ -72,6 +72,17 @@ TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
     Link(destination, curNode, CalcDistance(curNode, destination));
 }
 
+void
+TaskDijkstra::AddZeroStartEdges()
+{
+  ScanTaskPoint destination(active_stage, 0);
+  const unsigned dsize = GetStageSize(active_stage);
+
+  for (const ScanTaskPoint end(active_stage, dsize);
+       destination != end; destination.IncrementPointIndex())
+    LinkStart(destination, 0);
+}
+
 void 
 TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
 {

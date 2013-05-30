@@ -98,6 +98,11 @@ protected:
   }
 
   /**
+   * Add a zero-length start edge to each point in the first stage.
+   */
+  void AddZeroStartEdges();
+
+  /**
    * Add a start edge from the given location to each point in the
    * first stage.
    */
