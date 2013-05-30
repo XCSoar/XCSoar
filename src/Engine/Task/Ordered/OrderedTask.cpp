@@ -814,6 +814,12 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                       GlideResult &total,
                                       GlideResult &leg)
 {
+  if (!aircraft.location.IsValid()) {
+    total.Reset();
+    leg.Reset();
+    return;
+  }
+
   TaskMacCreadyTravelled tm(task_points.cbegin(), active_task_point,
                             task_behaviour.glide, glide_polar);
   total = tm.glide_solution(aircraft);
