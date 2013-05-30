@@ -266,13 +266,8 @@ void
 AbstractTask::UpdateStatsSpeeds(const fixed time)
 {
   if (!stats.task_finished) {
-    if (stats.start.task_started) {
-      stats_computer.total.CalcSpeeds(stats.total, time);
-      stats_computer.current_leg.CalcSpeeds(stats.current_leg, time);
-    } else {
-      stats_computer.total.Reset(stats.total);
-      stats_computer.current_leg.Reset(stats.current_leg);
-    }
+    stats_computer.total.CalcSpeeds(stats.total, time);
+    stats_computer.current_leg.CalcSpeeds(stats.current_leg, time);
   }
 
   stats_computer.ComputeWindow(time, stats);
