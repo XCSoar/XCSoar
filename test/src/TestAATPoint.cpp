@@ -73,12 +73,6 @@ TestAATPoint()
   task.SetActiveTaskPoint(1);
   ok1(task.CheckTask());
 
-  AircraftState aircraft;
-  aircraft.Reset();
-  aircraft.location = wp1.location;
-  aircraft.altitude = fixed(2500);
-  task.Update(aircraft, aircraft, glide_polar);
-
   AATPoint &ap = (AATPoint &)task.GetPoint(1);
 
   ok1(!ap.IsTargetLocked());
