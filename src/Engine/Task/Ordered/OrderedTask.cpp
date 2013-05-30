@@ -522,6 +522,7 @@ OrderedTask::UpdateSample(const AircraftState &state,
                            const bool full_update)
 {
   stats.inside_oz = active_task_point < task_points.size() &&
+    state.location.IsValid() &&
     task_points[active_task_point]->IsInSector(state);
 
   return true;
