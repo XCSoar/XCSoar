@@ -248,9 +248,9 @@ AbstractTask::Update(const AircraftState &state,
      CheckTransitions(state, state_last)) ||
     (active_task_point != active_task_point_last);
 
-  UpdateStatsTimes(state);
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
+  UpdateStatsTimes(state);
 
   const bool sample_updated = state.location.IsValid() &&
     UpdateSample(state, glide_polar, full_update);
