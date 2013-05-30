@@ -97,6 +97,10 @@ protected:
     return NavDijkstra::Link(node, parent, value);
   }
 
+  /**
+   * Add a start edge from the given location to each point in the
+   * first stage.
+   */
   void AddStartEdges(const SearchPoint &loc);
 
   /** 
