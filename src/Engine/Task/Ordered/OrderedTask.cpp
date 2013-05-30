@@ -139,8 +139,7 @@ OrderedTask::UpdateGeometry()
   // update stats so data can be used during task construction
   /// @todo this should only be done if not flying! (currently done with has_entered)
   if (!taskpoint_start->HasEntered()) {
-    GeoPoint loc = taskpoint_start->GetLocation();
-    UpdateStatsDistances(loc, true);
+    UpdateStatsDistances(GeoPoint::Invalid(), true);
     if (HasFinish()) {
       /// @todo: call AbstractTask::update stats methods with fake state
       /// so stats are updated
