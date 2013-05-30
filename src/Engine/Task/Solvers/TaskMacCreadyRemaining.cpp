@@ -35,7 +35,7 @@ TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
 }
 
 
-const AircraftState &
+AircraftState
 TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
   return aircraft;
