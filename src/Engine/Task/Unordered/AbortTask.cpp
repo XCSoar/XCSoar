@@ -238,6 +238,8 @@ AbortTask::UpdateSample(const AircraftState &state,
                         const GlidePolar &glide_polar,
                         bool full_update)
 {
+  assert(state.location.IsValid());
+
   Clear();
 
   unsigned active_waypoint_on_entry;

@@ -248,7 +248,10 @@ AbstractTask::Update(const AircraftState &state,
   UpdateStatsTimes(state);
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
-  bool sample_updated = UpdateSample(state, glide_polar, full_update);
+
+  const bool sample_updated = state.location.IsValid() &&
+    UpdateSample(state, glide_polar, full_update);
+
   UpdateStatsSpeeds(state.time);
   UpdateFlightMode();
 
