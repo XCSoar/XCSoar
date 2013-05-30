@@ -399,7 +399,7 @@ private:
   void UpdateGlideSolutions(const AircraftState &state,
                             const GlidePolar &glide_polar);
   void UpdateStatsTimes(const AircraftState &state);
-  void UpdateStatsSpeeds(const AircraftState &state);
+  void UpdateStatsSpeeds(fixed time);
   void UpdateStatsGlide(const AircraftState &state,
                         const GlidePolar &glide_polar);
   void UpdateFlightMode();

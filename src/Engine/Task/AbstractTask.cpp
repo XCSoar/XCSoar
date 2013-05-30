@@ -249,7 +249,7 @@ AbstractTask::Update(const AircraftState &state,
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
   bool sample_updated = UpdateSample(state, glide_polar, full_update);
-  UpdateStatsSpeeds(state);
+  UpdateStatsSpeeds(state.time);
   UpdateFlightMode();
 
   active_task_point_last = active_task_point;
@@ -258,19 +258,19 @@ AbstractTask::Update(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsSpeeds(const AircraftState &state)
+AbstractTask::UpdateStatsSpeeds(const fixed time)
 {
   if (!stats.task_finished) {
     if (stats.start.task_started) {
-      stats_computer.total.CalcSpeeds(stats.total, state.time);
-      stats_computer.current_leg.CalcSpeeds(stats.current_leg, state.time);
+      stats_computer.total.CalcSpeeds(stats.total, time);
+      stats_computer.current_leg.CalcSpeeds(stats.current_leg, time);
     } else {
       stats_computer.total.Reset(stats.total);
       stats_computer.current_leg.Reset(stats.current_leg);
     }
   }
 
-  stats_computer.ComputeWindow(state.time, stats);
+  stats_computer.ComputeWindow(time, stats);
 }
 
 void
