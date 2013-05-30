@@ -39,6 +39,9 @@ TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar)
 {
+  assert(location.IsValid());
+  assert(target.IsValid());
+
   GlideState gs(location.DistanceBearing(target),
                 target_elevation, altitude, wind);
 
@@ -65,6 +68,8 @@ TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const GlidePolar &polar,
                                    const fixed min_h)
 {
+  assert(ac.location.IsValid());
+
   GlideState gs(taskpoint.GetVectorPlanned(),
                 std::max(min_h, taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
@@ -78,6 +83,8 @@ TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const GlidePolar &polar,
                                      const fixed min_h)
 {
+  assert(ac.location.IsValid());
+
   GlideState gs(taskpoint.GetVectorTravelled(),
                 std::max(min_h, taskpoint.GetElevation()),
                 ac.altitude, ac.wind);
@@ -91,6 +98,8 @@ TaskSolution::GlideSolutionSink(const TaskPoint &taskpoint,
                                 const GlidePolar &polar,
                                 const fixed s)
 {
+  assert(ac.location.IsValid());
+
   GlideState gs(taskpoint.GetVectorRemaining(ac.location),
                 taskpoint.GetElevation(),
                 ac.altitude, ac.wind);
