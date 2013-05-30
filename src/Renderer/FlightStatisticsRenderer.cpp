@@ -243,7 +243,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (common.ordered_has_targets) {
-      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining);
+      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining_start);
       FormatSignedTimeHHMM(timetext2, (int)common.aat_time_remaining);
 
       if (Layout::landscape) {
@@ -267,7 +267,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
             Units::GetTaskSpeedName());
       }
     } else {
-      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining);
+      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining_now);
       _stprintf(sTmp, _T("%s: %s\r\n%s: %5.0f %s\r\n"),
                 _("Task to go"), timetext1, _("Distance to go"),
                 (double)Units::ToUserDistance(d_remaining),

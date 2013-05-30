@@ -78,7 +78,7 @@ operator<<(std::ostream &f, const ElementStat &es)
 {
   f << "#  Time started " << es.time_started << " (s)\n";
   f << "#  Time elapsed " << es.time_elapsed << " (s)\n";
-  f << "#  Time remaining " << es.time_remaining << " (s)\n";
+  f << "#  Time remaining " << es.time_remaining_now << " (s)\n";
   f << "#  Time planned " << es.time_planned << " (s)\n";
   f << "#  Gradient " << es.gradient << "\n";
   f << "#  Remaining: \n";

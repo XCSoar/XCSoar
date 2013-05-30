@@ -41,7 +41,7 @@ ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
       calculated.ordered_task_stats.task_finished)
     return false;
 
-  return calculated.ordered_task_stats.total.time_remaining <
+  return calculated.ordered_task_stats.total.time_remaining_now <
     calculated.common_stats.aat_time_remaining;
 }
 

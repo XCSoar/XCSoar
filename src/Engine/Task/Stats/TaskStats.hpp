@@ -77,7 +77,7 @@ public:
   WindowStats last_hour;
 
   fixed GetEstimatedTotalTime() const {
-    return total.time_elapsed + total.time_remaining;
+    return total.time_elapsed + total.time_remaining_start;
   }
 
   /**

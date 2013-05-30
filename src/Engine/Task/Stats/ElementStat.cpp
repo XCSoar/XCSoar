@@ -32,7 +32,7 @@ ElementStat::Reset()
   next_leg_vector = GeoVector::Invalid();
 
   time_started = fixed(-1);
-  time_elapsed = time_remaining = time_planned = fixed(0);
+  time_elapsed = time_remaining_now = time_remaining_start = time_planned = fixed(0);
   gradient = fixed(0);
 
   remaining_effective.Reset();
@@ -50,7 +50,8 @@ ElementStat::Reset()
 }
 
 void
-ElementStat::SetTimes(const fixed ts, const AircraftState& state)
+ElementStat::SetTimes(const fixed until_start_s, const fixed ts,
+                      const AircraftState& state)
 {
   time_started = ts;
   if (negative(time_started))
@@ -60,9 +61,11 @@ ElementStat::SetTimes(const fixed ts, const AircraftState& state)
     time_elapsed = std::max(state.time - fixed(ts), fixed(0));
 
   if (solution_remaining.IsOk()) {
-    time_remaining = solution_remaining.time_elapsed;
-    time_planned = time_elapsed + time_remaining;
+    time_remaining_now = solution_remaining.time_elapsed;
+    time_remaining_start = std::max(time_remaining_now - until_start_s,
+                                    fixed(0));
+    time_planned = time_elapsed + time_remaining_start;
   } else {
-    time_remaining = time_planned = fixed(0);
+    time_remaining_now = time_remaining_start = time_planned = fixed(0);
   }
 }

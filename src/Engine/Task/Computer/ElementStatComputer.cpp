@@ -43,8 +43,9 @@ ElementStatComputer::Reset(ElementStat &data)
 void 
 ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed time)
 {
-  remaining_effective.CalcSpeed(data.remaining_effective, data.time_remaining);
-  remaining.CalcSpeed(data.remaining, data.time_remaining);
+  remaining_effective.CalcSpeed(data.remaining_effective,
+                                data.time_remaining_start);
+  remaining.CalcSpeed(data.remaining, data.time_remaining_now);
   planned.CalcSpeed(data.planned, data.time_planned);
   travelled.CalcSpeed(data.travelled, data.time_elapsed);
   pirker.CalcSpeed(data.pirker, data.time_elapsed);

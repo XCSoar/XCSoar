@@ -143,7 +143,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
         first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
-      result.time_remaining = (double)task_manager.GetStats().total.time_remaining;
+      result.time_remaining = (double)task_manager.GetStats().total.time_remaining_now;
       first = false;
 
       result.time_planned = (double)task_manager.GetStats().total.time_planned;

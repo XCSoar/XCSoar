@@ -62,7 +62,7 @@ TaskStatusPanel::Refresh()
   FormatSignedTimeHHMM(Temp, ete_time);
   SetText(ETETime, Temp);
 
-  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining);
+  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining_now);
   SetText(RemainingTime, Temp);
 
   if (task_stats.total.planned.IsDefined()) {

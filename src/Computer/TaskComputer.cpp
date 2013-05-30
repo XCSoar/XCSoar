@@ -140,7 +140,7 @@ Predicted(const ContestSettings &settings,
   /* predict that the next task point will be reached, using the
      calculated remaining time and the minimum arrival altitude */
   return TracePoint(current_leg.location_remaining,
-                    unsigned(basic.time + current_leg.time_remaining),
+                    unsigned(basic.time + current_leg.time_remaining_now),
                     current_leg.solution_remaining.min_arrival_altitude,
                     fixed(0), 0);
 }

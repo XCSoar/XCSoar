@@ -268,11 +268,11 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.current_leg.time_remaining));
+  assert(!negative(task_stats.current_leg.time_remaining_now));
 
   TCHAR value[32];
   TCHAR comment[32];
-  const int dd = (int)task_stats.current_leg.time_remaining;
+  const int dd = (int)task_stats.current_leg.time_remaining_now;
   FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
@@ -424,11 +424,11 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining));
+  assert(!negative(task_stats.total.time_remaining_now));
 
   TCHAR value[32];
   TCHAR comment[32];
-  const int dd = abs((int)task_stats.total.time_remaining);
+  const int dd = abs((int)task_stats.total.time_remaining_now);
   FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
@@ -603,9 +603,9 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining));
+  assert(!negative(task_stats.total.time_remaining_start));
 
-  fixed diff = task_stats.total.time_remaining -
+  fixed diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
   TCHAR value[32];
@@ -619,7 +619,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 
   // Set Color (red/blue/black)
   data.SetValueColor(negative(diff) ? 1 :
-                   task_stats.total.time_remaining >
+                   task_stats.total.time_remaining_start >
                        common_stats.aat_time_remaining + fixed(5*60) ? 2 : 0);
 }
 
