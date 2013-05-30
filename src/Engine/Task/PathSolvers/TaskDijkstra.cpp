@@ -75,6 +75,8 @@ TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
 void 
 TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
 {
+  assert(currentLocation.IsValid());
+
   ScanTaskPoint destination(active_stage, 0);
   const unsigned dsize = GetStageSize(active_stage);
 
