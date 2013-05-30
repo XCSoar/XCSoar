@@ -107,6 +107,8 @@ OrderedTask::UpdateGeometry()
 {
   ScanStartFinish();
 
+  stats.task_valid = CheckTask();
+
   if (!HasStart() || !task_points[0])
     return;
 
