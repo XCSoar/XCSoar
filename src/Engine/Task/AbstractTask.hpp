@@ -398,7 +398,11 @@ protected:
 private:
   void UpdateGlideSolutions(const AircraftState &state,
                             const GlidePolar &glide_polar);
-  void UpdateStatsTimes(const AircraftState &state);
+
+  /**
+   * @param time monotonic time of day in seconds or -1 if unknown
+   */
+  void UpdateStatsTimes(fixed time);
   void UpdateStatsSpeeds(fixed time);
   void UpdateStatsGlide(const AircraftState &state,
                         const GlidePolar &glide_polar);

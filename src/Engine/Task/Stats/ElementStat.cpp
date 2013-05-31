@@ -51,14 +51,15 @@ ElementStat::Reset()
 
 void
 ElementStat::SetTimes(const fixed until_start_s, const fixed ts,
-                      const AircraftState& state)
+                      const fixed time)
 {
   time_started = ts;
-  if (negative(time_started))
+
+  if (negative(time_started) || negative(time))
     /* not yet started */
     time_elapsed = fixed(0);
   else
-    time_elapsed = std::max(state.time - fixed(ts), fixed(0));
+    time_elapsed = std::max(time - fixed(ts), fixed(0));
 
   if (solution_remaining.IsOk()) {
     time_remaining_now = solution_remaining.time_elapsed;

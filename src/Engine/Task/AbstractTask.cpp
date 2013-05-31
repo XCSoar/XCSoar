@@ -250,7 +250,7 @@ AbstractTask::Update(const AircraftState &state,
 
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
-  UpdateStatsTimes(state);
+  UpdateStatsTimes(state.time);
 
   const bool sample_updated = state.location.IsValid() &&
     UpdateSample(state, glide_polar, full_update);
@@ -283,10 +283,10 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsTimes(const AircraftState &state)
+AbstractTask::UpdateStatsTimes(const fixed time)
 {
   if (!stats.task_finished) {
-    stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), state);
+    stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), time);
 
     const fixed until_start_s = GetType() == TaskType::ORDERED &&
       GetActiveTaskPointIndex() == 0
@@ -297,7 +297,7 @@ AbstractTask::UpdateStatsTimes(const AircraftState &state)
       /* already beyond the start point (or no start point) */
       : fixed(0);
 
-    stats.total.SetTimes(until_start_s, ScanTotalStartTime(), state);
+    stats.total.SetTimes(until_start_s, ScanTotalStartTime(), time);
   }
 }
 

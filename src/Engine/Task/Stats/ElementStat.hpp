@@ -30,8 +30,6 @@
 
 #include <type_traits>
 
-struct AircraftState;
-
 /**
  * Common task element statistics.  Used because we separately want to
  * track overall task statistics as well as that of the current leg.
@@ -115,9 +113,9 @@ struct ElementStat
    * @param until_start_s the estimated time until the task start will
    * be reached [s]; zero if the task has already started
    * @param ts Start time of this element (s)
-   * @param state Aircraft state (to access time)
+   * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void SetTimes(fixed until_start_s, fixed ts, const AircraftState &state);
+  void SetTimes(fixed until_start_s, fixed ts, fixed time);
 
   /**
    * Determine whether the task (or subtask) is able to be finished
