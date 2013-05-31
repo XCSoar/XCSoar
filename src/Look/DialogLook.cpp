@@ -47,7 +47,7 @@ DialogLook::Initialise(const Font &caption_font,
   caption.inactive_background_color = COLOR_GRAY;
 #endif
 
-  if (IsGrayScaleScreen())
+  if (!HasColors())
     SetBackgroundColor(COLOR_WHITE);
   else
     SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));

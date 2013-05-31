@@ -168,21 +168,6 @@ IsAndroid()
 }
 
 /**
- * Returns whether the application is running a device with a gray-scale screen
- */
-static inline bool
-IsGrayScaleScreen()
-{
-#ifdef ANDROID
-  return IsNookSimpleTouch();
-#elif defined(KOBO)
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
  * Does this device have little main memory?  On those, some expensive
  * features are disabled.
  */
@@ -244,14 +229,22 @@ HasKeyboard()
 
 /**
  * Does this device have a display with colors?
- *
- * XXX not yet implemented!
  */
+#ifdef ANDROID
+gcc_const
+#else
 constexpr
+#endif
 static inline bool
 HasColors()
 {
+#ifdef ANDROID
+  return !IsNookSimpleTouch();
+#elif defined(KOBO)
+  return false;
+#else
   return true;
+#endif
 }
 
 #endif
