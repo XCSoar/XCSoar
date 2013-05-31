@@ -298,26 +298,6 @@ OrderedTask::GetLastIntermediateAchieved() const
   return TaskSize() - 2;
 }
 
-bool
-OrderedTask::ShouldAddToMat(const Waypoint &mat_wp) const
-{
-  unsigned last_achieved_index = GetLastIntermediateAchieved();
-
-  // is this the same point we just achieved? then ignore it
-  if (mat_wp == GetPoint(last_achieved_index).GetWaypoint())
-  {
-    return false;
-  }
-
-  // The TP after the last achieved is already next in the task
-  // and it is not the finish so do nothing
-  if ((last_achieved_index + 1 < TaskSize() -1)
-    && mat_wp == GetPoint(last_achieved_index + 1).GetWaypoint()) {
-    return false;
-  }
-  return true;
-}
-
 // TRANSITIONS
 
 bool 

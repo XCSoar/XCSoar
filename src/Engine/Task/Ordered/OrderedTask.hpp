@@ -628,14 +628,6 @@ public:
    */
   unsigned GetLastIntermediateAchieved() const;
 
-  /**
-   * Should we add this WP to the Mat
-   * after the last achieved Intermediate point?
-   * @param mat_wp the wp to test
-   * @return true if this should be added after the last achieved intermediate tp
-   */
-  bool ShouldAddToMat(const Waypoint &mat_wp) const;
-
 public:
   /* virtual methods from class TaskInterface */
   virtual unsigned TaskSize() const override {
