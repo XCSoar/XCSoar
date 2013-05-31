@@ -168,6 +168,20 @@ IsAndroid()
 }
 
 /**
+ * Returns whether the application is running on a Kobo e-book reader.
+ */
+constexpr
+static inline bool
+IsKobo()
+{
+#ifdef KOBO
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Does this device have little main memory?  On those, some expensive
  * features are disabled.
  */
@@ -240,10 +254,8 @@ HasColors()
 {
 #ifdef ANDROID
   return !IsNookSimpleTouch();
-#elif defined(KOBO)
-  return false;
 #else
-  return true;
+  return !IsKobo();
 #endif
 }
 
