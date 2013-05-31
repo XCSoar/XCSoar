@@ -174,7 +174,7 @@ constexpr
 static inline bool
 IsEmbedded()
 {
-  return IsAndroid() || IsWindowsCE();
+  return IsAndroid() || IsWindowsCE() || IsKobo();
 }
 
 /**
