@@ -287,8 +287,17 @@ AbstractTask::UpdateStatsTimes(const AircraftState &state)
 {
   if (!stats.task_finished) {
     stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), state);
-    stats.total.SetTimes(stats.current_leg.time_remaining_now,
-                         ScanTotalStartTime(), state);
+
+    const fixed until_start_s = GetType() == TaskType::ORDERED &&
+      GetActiveTaskPointIndex() == 0
+      /* flying towards the start point in an ordered task: pass
+         current_leg.time_remaining, which is the estimated time to
+         reach the start point */
+      ? stats.current_leg.time_remaining_now
+      /* already beyond the start point (or no start point) */
+      : fixed(0);
+
+    stats.total.SetTimes(until_start_s, ScanTotalStartTime(), state);
   }
 }
 
