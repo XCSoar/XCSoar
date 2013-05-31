@@ -66,21 +66,6 @@ IsDebug()
 }
 
 /**
- * Returns whether the application is running on an embedded platform.
- * @return True if host hardware is an embedded platform, False otherwise
- */
-constexpr
-static inline bool
-IsEmbedded()
-{
-#if defined(_WIN32_WCE) || defined(ANDROID)
-  return true;
-#else
-  return false;
-#endif
-}
-
-/**
  * Returns whether the application is running on Pocket PC / Windows
  * CE / Windows Mobile.
  */
@@ -175,6 +160,21 @@ static inline bool
 IsKobo()
 {
 #ifdef KOBO
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running on an embedded platform.
+ * @return True if host hardware is an embedded platform, False otherwise
+ */
+constexpr
+static inline bool
+IsEmbedded()
+{
+#if defined(_WIN32_WCE) || defined(ANDROID)
   return true;
 #else
   return false;
