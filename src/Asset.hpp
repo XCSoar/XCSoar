@@ -226,7 +226,7 @@ constexpr
 static inline bool
 HasTouchScreen()
 {
-  return IsAndroid() || (IsWindowsCE() && !IsAltair());
+  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo();
 }
 
 /**
