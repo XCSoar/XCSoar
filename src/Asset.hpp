@@ -174,11 +174,7 @@ constexpr
 static inline bool
 IsEmbedded()
 {
-#if defined(_WIN32_WCE) || defined(ANDROID)
-  return true;
-#else
-  return false;
-#endif
+  return IsAndroid() || IsWindowsCE();
 }
 
 /**
