@@ -65,6 +65,8 @@ GlideComputer::ResetFlight(const bool full)
 
   cu_computer.Reset();
   warning_computer.Reset();
+
+  trace_history_time.Reset();
 }
 
 /**
