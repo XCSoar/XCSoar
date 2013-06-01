@@ -26,13 +26,13 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
-#include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Event/Timer.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
@@ -42,8 +42,9 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Event/LambdaTimer.hpp"
-
+#include "Widget/DockWindow.hpp"
+#include "Widget/ListWidget.hpp"
+#include "UIGlobals.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -70,12 +71,66 @@ struct WarningItem
   }
 };
 
-class AirspaceWarningListHandler final
-  : public ListItemRenderer, public ListCursorHandler {
+class AirspaceWarningListWidget final
+  : public ListWidget, private Timer {
+  ProtectedAirspaceWarningManager &airspace_warnings;
+
+  WndButton *ack_warn_button;
+  WndButton *ack_day_button;
+  WndButton *ack_space_button;
+  WndButton *enable_button;
+
+  TrivialArray<WarningItem, 64u> warning_list;
+
+  /**
+   * Current list cursor airspace.
+   */
+  const AbstractAirspace *selected_airspace;
+
+  /**
+   * Current action airspace.
+   */
+  const AbstractAirspace *focused_airspace;
+
 public:
+  AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw, SubForm &form)
+    :airspace_warnings(aw),
+     ack_warn_button((WndButton *)form.FindByName(_T("frmAck1"))),
+     ack_day_button((WndButton *)form.FindByName(_T("frmAck2"))),
+     ack_space_button((WndButton *)form.FindByName(_T("frmAck"))),
+     enable_button((WndButton *)form.FindByName(_T("frmEnable"))),
+     selected_airspace(nullptr), focused_airspace(nullptr)
+  {}
+
+  void CopyList();
+  void UpdateList();
+  void UpdateButtons();
+
+  gcc_pure
+  const AbstractAirspace *GetSelectedAirspace() const;
+
+  gcc_pure
+  bool HasWarning() const;
+
+  void AckInside();
+  void AckWarning();
+  void AckDay();
+  void Enable();
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override {
+    DeleteWindow();
+  }
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual bool KeyPress(unsigned key_code) override;
+
+  /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
 
+  /* virtual methods from ListCursorHandler */
   virtual void OnCursorMoved(unsigned index) override;
 
   virtual bool CanActivateItem(unsigned index) const override {
@@ -83,39 +138,30 @@ public:
   }
 
   virtual void OnActivateItem(unsigned index) override;
+
+  /* virtual methods from Timer */
+  virtual void OnTimer() override;
 };
 
-typedef TrivialArray<WarningItem, 64u> WarningList;
-
-static ProtectedAirspaceWarningManager *airspace_warnings;
 static WndForm *dialog = NULL;
-static WndButton *ack_warn_button = NULL;
-static WndButton *ack_day_button = NULL;
-static WndButton *ack_space_button = NULL;
-static WndButton *enable_button = NULL; // Enable
+static AirspaceWarningListWidget *list;
 
-static ListControl *warning_list_frame = NULL;
 static constexpr Color inside_color(254,50,50);
 static constexpr Color near_color(254,254,50);
 static constexpr Color inside_ack_color(254,100,100);
 static constexpr Color near_ack_color(254,254,100);
 static bool auto_close = true;
 
-static WarningList warning_list;
-
-static const AbstractAirspace* selected_airspace = NULL; // Current list cursor airspace
-static const AbstractAirspace* focused_airspace = NULL;  // Current action airspace
-
-static const AbstractAirspace *
-GetSelectedAirspace()
+const AbstractAirspace *
+AirspaceWarningListWidget::GetSelectedAirspace() const
 {
   return HasPointer() || focused_airspace == NULL
     ? selected_airspace
     : focused_airspace;
 }
 
-static void
-UpdateButtons()
+void
+AirspaceWarningListWidget::UpdateButtons()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL) {
@@ -129,7 +175,7 @@ UpdateButtons()
   bool ack_expired, ack_day, inside;
 
   {
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     const AirspaceWarning &warning = lease->GetWarning(*airspace);
     ack_expired = warning.IsAckExpired();
     ack_day = warning.GetAckDay();
@@ -142,11 +188,16 @@ UpdateButtons()
   enable_button->SetVisible(!ack_expired);
 }
 
-static void
-UpdateList();
+void
+AirspaceWarningListWidget::Prepare(ContainerWindow &parent,
+                                   const PixelRect &rc)
+{
+  CreateList(parent, UIGlobals::GetDialogLook(), rc,
+             Layout::Scale(30));
+}
 
-static void
-AirspaceWarningCursorCallback(unsigned i)
+void
+AirspaceWarningListWidget::OnCursorMoved(unsigned i)
 {
   selected_airspace = i < warning_list.size()
     ? warning_list[i].airspace
@@ -156,26 +207,35 @@ AirspaceWarningCursorCallback(unsigned i)
 }
 
 void
-AirspaceWarningListHandler::OnCursorMoved(unsigned i)
+AirspaceWarningListWidget::Show(const PixelRect &rc)
 {
-  AirspaceWarningCursorCallback(i);
+  ListWidget::Show(rc);
+  UpdateList();
+  Timer::Schedule(500);
 }
 
 void
-AirspaceWarningListHandler::OnActivateItem(gcc_unused unsigned i)
+AirspaceWarningListWidget::Hide()
+{
+  Timer::Cancel();
+  ListWidget::Hide();
+}
+
+void
+AirspaceWarningListWidget::OnActivateItem(gcc_unused unsigned i)
 {
   if (!HasPointer())
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
     focused_airspace = selected_airspace;
   else if (selected_airspace != NULL)
-    dlgAirspaceDetails(*selected_airspace, airspace_warnings);
+    dlgAirspaceDetails(*selected_airspace, &airspace_warnings);
 }
 
-static bool
-HasWarning()
+bool
+AirspaceWarningListWidget::HasWarning() const
 {
-  ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
+  ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
   for (auto i = lease->begin(), end = lease->end(); i != end; ++i)
     if (i->IsAckExpired())
       return true;
@@ -194,16 +254,16 @@ static void
 AutoHide()
 {
   // Close the dialog if no warning exists and AutoClose is set
-  if (!HasWarning() && auto_close)
+  if (!list->HasWarning() && auto_close)
     Hide();
 }
 
-static void
-AckInside()
+void
+AirspaceWarningListWidget::AckInside()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->AcknowledgeInside(*airspace, true);
+    airspace_warnings.AcknowledgeInside(*airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -212,15 +272,15 @@ AckInside()
 static void
 OnAckClicked()
 {
-  AckInside();
+  list->AckInside();
 }
 
-static void
-AckWarning()
+void
+AirspaceWarningListWidget::AckWarning()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->AcknowledgeWarning(*airspace, true);
+    airspace_warnings.AcknowledgeWarning(*airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -229,15 +289,15 @@ AckWarning()
 static void
 OnAck1Clicked()
 {
-  AckWarning();
+  list->AckWarning();
 }
 
-static void
-AckDay()
+void
+AirspaceWarningListWidget::AckDay()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace != NULL) {
-    airspace_warnings->AcknowledgeDay(*airspace, true);
+    airspace_warnings.AcknowledgeDay(*airspace, true);
     UpdateList();
     AutoHide();
   }
@@ -246,18 +306,18 @@ AckDay()
 static void
 OnAck2Clicked()
 {
-  AckDay();
+  list->AckDay();
 }
 
-static void
-Enable()
+void
+AirspaceWarningListWidget::Enable()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL)
     return;
 
   {
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
     AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
     if (warning == NULL)
       return;
@@ -273,7 +333,7 @@ Enable()
 static void
 OnEnableClicked()
 {
-  Enable();
+  list->Enable();
 }
 
 static void
@@ -282,12 +342,12 @@ OnCloseClicked()
   Hide();
 }
 
-static bool
-OnKeyDown(unsigned key_code)
+bool
+AirspaceWarningListWidget::KeyPress(unsigned key_code)
 {
   switch (key_code){
     case KEY_ESCAPE:
-      Hide();
+      ::Hide();
     return true;
 
 #ifdef GNAV
@@ -318,8 +378,8 @@ OnKeyDown(unsigned key_code)
 }
 
 void
-AirspaceWarningListHandler::OnPaintItem(Canvas &canvas,
-                                        const PixelRect paint_rc, unsigned i)
+AirspaceWarningListWidget::OnPaintItem(Canvas &canvas,
+                                       const PixelRect paint_rc, unsigned i)
 {
   TCHAR buffer[128];
 
@@ -449,10 +509,10 @@ AirspaceWarningListHandler::OnPaintItem(Canvas &canvas,
   }
 }
 
-static void
-CopyList()
+inline void
+AirspaceWarningListWidget::CopyList()
 {
-  const ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
+  const ProtectedAirspaceWarningManager::Lease lease(airspace_warnings);
 
   warning_list.clear();
   for (auto i = lease->begin(), end = lease->end();
@@ -460,13 +520,13 @@ CopyList()
     warning_list.push_back(*i);
 }
 
-static void
-UpdateList()
+void
+AirspaceWarningListWidget::UpdateList()
 {
   CopyList();
 
   if (!warning_list.empty()) {
-    warning_list_frame->SetLength(warning_list.size());
+    GetList().SetLength(warning_list.size());
 
     int i = -1;
     if (selected_airspace != NULL) {
@@ -474,20 +534,27 @@ UpdateList()
                           *selected_airspace);
       if (it != warning_list.end()) {
         i = it - warning_list.begin();
-        warning_list_frame->SetCursorIndex(i);
+        GetList().SetCursorIndex(i);
       }
     }
 
     if (i < 0)
       /* the selection may have changed, update CursorAirspace */
-      AirspaceWarningCursorCallback(warning_list_frame->GetCursorIndex());
+      OnCursorMoved(GetList().GetCursorIndex());
   } else {
-    warning_list_frame->SetLength(1);
+    GetList().SetLength(1);
     selected_airspace = NULL;
   }
-  warning_list_frame->Invalidate();
+
+  GetList().Invalidate();
   UpdateButtons();
   AutoHide();
+}
+
+void
+AirspaceWarningListWidget::OnTimer()
+{
+  UpdateList();
 }
 
 bool
@@ -513,50 +580,21 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   if (dlgAirspaceWarningVisible())
     return;
 
-  assert(warning_list.empty());
-
-  airspace_warnings = &_warnings;
-
   dialog = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
   assert(dialog != NULL);
 
-  ack_warn_button = (WndButton *)dialog->FindByName(_T("frmAck1"));
-  ack_day_button = (WndButton *)dialog->FindByName(_T("frmAck2"));
-  ack_space_button = (WndButton *)dialog->FindByName(_T("frmAck"));
-  enable_button = (WndButton *)dialog->FindByName(_T("frmEnable"));
-  assert(ack_warn_button != NULL);
-  assert(ack_day_button != NULL);
-  assert(ack_space_button != NULL);
-  assert(enable_button != NULL);
+  DockWindow *dock = (DockWindow *)dialog->FindByName(_T("list"));
+  assert(dock != nullptr);
 
-  dialog->SetKeyDownFunction(OnKeyDown);
-
-  warning_list_frame =
-    (ListControl*)dialog->FindByName(_T("frmAirspaceWarningList"));
-  assert(warning_list_frame != NULL);
-
-  AirspaceWarningListHandler handler;
-  warning_list_frame->SetItemRenderer(&handler);
-  warning_list_frame->SetCursorHandler(&handler);
+  list = new AirspaceWarningListWidget(_warnings, *dialog);
+  dock->SetWidget(list);
 
   auto_close = _auto_close;
-  UpdateList();
 
-  // JMW need to deselect everything on new reopening of dialog
-  selected_airspace = NULL;
-  focused_airspace = NULL;
-
-  auto update_timer = MakeLambdaTimer([](){ UpdateList(); });
-  update_timer.Schedule(500);
-
-  warning_list_frame->SetCursorIndex(0);
   dialog->ShowModal();
-  update_timer.Cancel();
 
   delete dialog;
 
   // Needed for dlgAirspaceWarningVisible()
   dialog = NULL;
-
-  warning_list.clear();
 }
