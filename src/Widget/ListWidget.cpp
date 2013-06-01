@@ -51,7 +51,8 @@ ListWidget::CreateList(ContainerWindow &parent, const DialogLook &look,
 
   ListControl *list =
     new ListControl(parent, look, rc, list_style, row_height);
-  list->SetHandler(this);
+  list->SetItemRenderer(this);
+  list->SetCursorHandler(this);
   SetWindow(list);
   return *list;
 }

@@ -70,7 +70,8 @@ struct WarningItem
   }
 };
 
-class AirspaceWarningListHandler final : public ListControl::Handler {
+class AirspaceWarningListHandler final
+  : public ListItemRenderer, public ListCursorHandler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
@@ -535,7 +536,8 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   assert(warning_list_frame != NULL);
 
   AirspaceWarningListHandler handler;
-  warning_list_frame->SetHandler(&handler);
+  warning_list_frame->SetItemRenderer(&handler);
+  warning_list_frame->SetCursorHandler(&handler);
 
   auto_close = _auto_close;
   UpdateList();

@@ -96,10 +96,6 @@ public:
  * WindowControl class.
  */
 class ListControl : public PaintWindow {
-public:
-  struct Handler : public ListItemRenderer, ListCursorHandler {
-  };
-
 protected:
   const DialogLook &look;
 
@@ -188,11 +184,6 @@ public:
     assert(cursor_handler == nullptr);
 
     cursor_handler = _cursor_handler;
-  }
-
-  void SetHandler(Handler *_handler) {
-    SetItemRenderer(_handler);
-    SetCursorHandler(_handler);
   }
 
   /**
