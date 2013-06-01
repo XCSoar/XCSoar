@@ -23,9 +23,7 @@ Copyright_License {
 
 #include "AirspaceWarningDialog.hpp"
 #include "Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -42,7 +40,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Widget/DockWindow.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Compiler.h"
@@ -72,7 +69,15 @@ struct WarningItem
 };
 
 class AirspaceWarningListWidget final
-  : public ListWidget, private Timer {
+  : public ListWidget, private ActionListener, private Timer {
+
+  enum Buttons {
+    ACK_WARN,
+    ACK_INSIDE,
+    ACK_DAY,
+    ENABLE,
+  };
+
   ProtectedAirspaceWarningManager &airspace_warnings;
 
   WndButton *ack_warn_button;
@@ -93,14 +98,17 @@ class AirspaceWarningListWidget final
   const AbstractAirspace *focused_airspace;
 
 public:
-  AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw, SubForm &form)
+  AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
     :airspace_warnings(aw),
-     ack_warn_button((WndButton *)form.FindByName(_T("frmAck1"))),
-     ack_day_button((WndButton *)form.FindByName(_T("frmAck2"))),
-     ack_space_button((WndButton *)form.FindByName(_T("frmAck"))),
-     enable_button((WndButton *)form.FindByName(_T("frmEnable"))),
      selected_airspace(nullptr), focused_airspace(nullptr)
   {}
+
+  void CreateButtons(WidgetDialog &buttons) {
+    ack_warn_button = buttons.AddButton(_("ACK Warn"), *this, ACK_WARN);
+    ack_space_button = buttons.AddButton(_("ACK Space"), *this, ACK_INSIDE);
+    ack_day_button = buttons.AddButton(_("ACK Day"), *this, ACK_DAY);
+    enable_button = buttons.AddButton(_("Enable"), *this, ENABLE);
+  }
 
   void CopyList();
   void UpdateList();
@@ -138,6 +146,10 @@ public:
   }
 
   virtual void OnActivateItem(unsigned index) override;
+
+private:
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
 
   /* virtual methods from Timer */
   virtual void OnTimer() override;
@@ -269,12 +281,6 @@ AirspaceWarningListWidget::AckInside()
   }
 }
 
-static void
-OnAckClicked()
-{
-  list->AckInside();
-}
-
 void
 AirspaceWarningListWidget::AckWarning()
 {
@@ -286,12 +292,6 @@ AirspaceWarningListWidget::AckWarning()
   }
 }
 
-static void
-OnAck1Clicked()
-{
-  list->AckWarning();
-}
-
 void
 AirspaceWarningListWidget::AckDay()
 {
@@ -301,12 +301,6 @@ AirspaceWarningListWidget::AckDay()
     UpdateList();
     AutoHide();
   }
-}
-
-static void
-OnAck2Clicked()
-{
-  list->AckDay();
 }
 
 void
@@ -328,18 +322,6 @@ AirspaceWarningListWidget::Enable()
   }
 
   UpdateList();
-}
-
-static void
-OnEnableClicked()
-{
-  list->Enable();
-}
-
-static void
-OnCloseClicked()
-{
-  Hide();
 }
 
 bool
@@ -521,6 +503,28 @@ AirspaceWarningListWidget::CopyList()
 }
 
 void
+AirspaceWarningListWidget::OnAction(int id)
+{
+  switch (id) {
+  case ACK_WARN:
+    AckWarning();
+    break;
+
+  case ACK_INSIDE:
+    AckInside();
+    break;
+
+  case ACK_DAY:
+    AckDay();
+    break;
+
+  case ENABLE:
+    Enable();
+    break;
+  }
+}
+
+void
 AirspaceWarningListWidget::UpdateList()
 {
   CopyList();
@@ -563,15 +567,6 @@ dlgAirspaceWarningVisible()
   return (dialog != NULL);
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnAckClicked),
-  DeclareCallBackEntry(OnAck1Clicked),
-  DeclareCallBackEntry(OnAck2Clicked),
-  DeclareCallBackEntry(OnEnableClicked),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgAirspaceWarningsShowModal(SingleWindow &parent,
                              ProtectedAirspaceWarningManager &_warnings,
@@ -580,20 +575,18 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   if (dlgAirspaceWarningVisible())
     return;
 
-  dialog = LoadDialog(CallBackTable, parent, _T("IDR_XML_AIRSPACEWARNINGS"));
-  assert(dialog != NULL);
-
-  DockWindow *dock = (DockWindow *)dialog->FindByName(_T("list"));
-  assert(dock != nullptr);
-
-  list = new AirspaceWarningListWidget(_warnings, *dialog);
-  dock->SetWidget(list);
-
   auto_close = _auto_close;
 
-  dialog->ShowModal();
+  list = new AirspaceWarningListWidget(_warnings);
 
-  delete dialog;
+  WidgetDialog dialog2(UIGlobals::GetDialogLook());
+  dialog2.CreateFull(parent, _("Airspace Warnings"), list);
+  list->CreateButtons(dialog2);
+  dialog2.AddButton(_("Close"), mrOK);
+
+  dialog = &dialog2;
+
+  dialog2.ShowModal();
 
   // Needed for dlgAirspaceWarningVisible()
   dialog = NULL;
