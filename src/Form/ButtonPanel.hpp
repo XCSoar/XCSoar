@@ -34,6 +34,11 @@ class ButtonPanel {
 
   StaticArray<WndButton *, 8u> buttons;
 
+  /**
+   * Map key codes to the button that "owns" it.  Used by KeyPress().
+   */
+  unsigned keys[8u];
+
 public:
   ButtonPanel(ContainerWindow &parent, const DialogLook &look);
   ~ButtonPanel();
@@ -51,6 +56,21 @@ public:
    */
   WndButton *AddSymbol(tstring::const_pointer caption,
                        ActionListener &listener, int id);
+
+  /**
+   * Assign a hot key to the most recently added button.
+   */
+  void AddKey(unsigned key_code);
+
+  /**
+   * Wrapper for AddKey() which is Altair specific; it a no-op on all
+   * other platforms.
+   */
+  void AddAltairKey(unsigned key_code) {
+#ifdef GNAV
+    AddKey(key_code);
+#endif
+  }
 
   /**
    * Call this after all buttons have been added or after the parent
@@ -75,6 +95,13 @@ public:
 
   void ShowAll();
   void HideAll();
+
+  /**
+   * Handle a hot key.
+   *
+   * @return true if the event has been handled
+   */
+  bool KeyPress(unsigned key_code);
 
 protected:
   gcc_pure

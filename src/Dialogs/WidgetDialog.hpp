@@ -91,6 +91,14 @@ public:
     return AddButton(caption, *this, modal_result);
   }
 
+  void AddButtonKey(unsigned key_code) {
+    return buttons.AddKey(key_code);
+  }
+
+  void AddAltairButtonKey(unsigned key_code) {
+    return buttons.AddAltairKey(key_code);
+  }
+
   int ShowModal();
 
   /* virtual methods from class ActionListener */

@@ -64,6 +64,7 @@ ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 {
   WndButton *button = new WndButton(parent, look, caption,
                                     dummy_rc, style, listener, id);
+  keys[buttons.size()] = 0;
   buttons.append(button);
 
   return button;
@@ -78,6 +79,15 @@ ButtonPanel::AddSymbol(tstring::const_pointer caption,
   buttons.append(button);
 
   return button;
+}
+
+void
+ButtonPanel::AddKey(unsigned key_code)
+{
+  assert(!buttons.empty());
+  assert(keys[buttons.size() - 1] == 0);
+
+  keys[buttons.size() - 1] = key_code;
 }
 
 UPixelScalar
@@ -211,4 +221,20 @@ ButtonPanel::HideAll()
 {
   for (auto i : buttons)
     i->Hide();
+}
+
+bool
+ButtonPanel::KeyPress(unsigned key_code)
+{
+  assert(key_code != 0);
+
+  const unsigned n = buttons.size();
+  for (unsigned i = 0; i < n; ++i) {
+    if (keys[i] == key_code) {
+      buttons[i]->OnClicked();
+      return true;
+    }
+  }
+
+  return false;
 }

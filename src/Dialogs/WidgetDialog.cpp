@@ -205,7 +205,9 @@ WidgetDialog::OnResize(PixelSize new_size)
 bool
 WidgetDialog::OnAnyKeyDown(unsigned key_code)
 {
-  return widget.KeyPress(key_code) || WndForm::OnAnyKeyDown(key_code);
+  return widget.KeyPress(key_code) ||
+    buttons.KeyPress(key_code) ||
+    WndForm::OnAnyKeyDown(key_code);
 }
 
 bool
