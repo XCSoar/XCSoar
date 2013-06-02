@@ -285,9 +285,13 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
                        const Angle angle, const RasterPoint aircraft_pos)
 {
+  bool inverse = !settings_map.terrain.enable;
+#ifdef KOBO
+  inverse = true;
+#endif
   switch (settings_map.aircraft_symbol) {
   case AircraftSymbol::DETAILED:
-    DrawDetailedAircraft(canvas, !settings_map.terrain.enable,
+    DrawDetailedAircraft(canvas, inverse,
                          look, angle, aircraft_pos);
     break;
 
@@ -301,12 +305,12 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
 
   case AircraftSymbol::HANGGLIDER:
     DrawHangGlider(canvas, look, angle, aircraft_pos,
-                   !settings_map.terrain.enable);
+                   inverse);
     break;
 
   case AircraftSymbol::PARAGLIDER:
     DrawParaGlider(canvas, look, angle, aircraft_pos,
-                   !settings_map.terrain.enable);
+                   inverse);
     break;
   }
 }
