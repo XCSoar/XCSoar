@@ -32,7 +32,9 @@ Copyright_License {
 #include <stddef.h>
 #include <setjmp.h>
 
+extern "C" {
 #include <jpeglib.h>
+}
 
 struct JPEGErrorManager {
   struct jpeg_error_mgr base;
