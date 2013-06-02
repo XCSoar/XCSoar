@@ -37,6 +37,7 @@ static const char *const all_font_paths[] = {
   "c:\\windows\\fonts\\arial.ttf",
 #elif defined(KOBO)
   "/mnt/onboard/XCSoar/fonts/DejaVuSansCondensed.ttf",
+  "/mnt/onboard/fonts/Vera.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed.ttf",
@@ -66,6 +67,7 @@ static const char *const all_bold_font_paths[] = {
   "/Library/Fonts/Microsoft/Arial Bold.ttf",
 #elif defined(KOBO)
   "/mnt/onboard/XCSoar/fonts/DejaVuSansCondensed-Bold.ttf",
+  "/mnt/onboard/fonts/VeraBd.ttf",
 #elif defined(HAVE_POSIX)
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Bold.ttf",
@@ -89,6 +91,7 @@ static const char *const all_monospace_font_paths[] = {
   "/Library/Fonts/Courier New.ttf",
 #elif defined(KOBO)
   "/mnt/onboard/XCSoar/fonts/DejaVuSansMono.ttf",
+  "/mnt/onboard/fonts/VeraMono.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/DejaVuSansMono.ttf",
