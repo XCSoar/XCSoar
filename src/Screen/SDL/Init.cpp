@@ -42,7 +42,11 @@ Copyright_License {
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
+  if (::SDL_Init(SDL_INIT_VIDEO|
+#ifndef KOBO
+		 SDL_INIT_AUDIO|
+#endif
+		 SDL_INIT_TIMER) != 0) {
     fprintf(stderr, "SDL_Init() has failed: %s\n", ::SDL_GetError());
     exit(EXIT_FAILURE);
   }
