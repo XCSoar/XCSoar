@@ -51,6 +51,10 @@ ScreenGlobalInit::ScreenGlobalInit()
     exit(EXIT_FAILURE);
   }
 
+#ifdef KOBO
+  SDL_ShowCursor (SDL_FALSE);
+#endif
+
   ::SDL_EnableKeyRepeat(250, 50);
   ::SDL_EnableUNICODE(true);
 
