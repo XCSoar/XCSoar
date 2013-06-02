@@ -84,8 +84,17 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     ::filledCircleColor(surface, x, y, radius,
                         brush.GetColor().GFXColor());
 
-  if (IsPenOverBrush())
-    ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
+  if (IsPenOverBrush()) {
+    if (pen.GetWidth() < 2) {
+      ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
+      return;
+    }
+
+    // no thickCircleColor in SDL_gfx, so need to emulate it with multiple draws (slow!)
+    for (int i= (pen.GetWidth()/2); i>= -(int)(pen.GetWidth()-1)/2; --i) {
+      ::circleColor(surface, x, y, radius+i, pen.GetColor().GFXColor());
+    }
+  }
 }
 
 void
