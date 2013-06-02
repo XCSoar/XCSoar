@@ -303,7 +303,7 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *sender, Canvas &canvas)
 // TODO: support other platforms
 
 class WaypointExternalFileListHandler final
-  : public ListControl::Handler {
+  : public ListItemRenderer, public ListCursorHandler {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
@@ -423,7 +423,8 @@ dlgWaypointDetailsShowModal(const Waypoint &_waypoint,
   int num_files = std::distance(waypoint->files_external.begin(),
                                 waypoint->files_external.end());
   if (num_files > 0) {
-    wFilesList->SetHandler(&handler);
+    wFilesList->SetItemRenderer(&handler);
+    wFilesList->SetCursorHandler(&handler);
 
     unsigned list_height = wFilesList->GetItemHeight() * std::min(num_files, 5);
     wFilesList->Resize(wFilesList->GetWidth(), list_height);
