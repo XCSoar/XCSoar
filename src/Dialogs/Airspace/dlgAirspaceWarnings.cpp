@@ -105,9 +105,16 @@ public:
 
   void CreateButtons(WidgetDialog &buttons) {
     ack_warn_button = buttons.AddButton(_("ACK Warn"), *this, ACK_WARN);
+    buttons.AddAltairButtonKey('6');
+
     ack_space_button = buttons.AddButton(_("ACK Space"), *this, ACK_INSIDE);
+    buttons.AddAltairButtonKey('7');
+
     ack_day_button = buttons.AddButton(_("ACK Day"), *this, ACK_DAY);
+    buttons.AddAltairButtonKey('8');
+
     enable_button = buttons.AddButton(_("Enable"), *this, ENABLE);
+    buttons.AddAltairButtonKey('9');
   }
 
   void CopyList();
@@ -132,7 +139,6 @@ public:
   }
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
-  virtual bool KeyPress(unsigned key_code) override;
 
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -322,41 +328,6 @@ AirspaceWarningListWidget::Enable()
   }
 
   UpdateList();
-}
-
-bool
-AirspaceWarningListWidget::KeyPress(unsigned key_code)
-{
-  switch (key_code){
-    case KEY_ESCAPE:
-      ::Hide();
-    return true;
-
-#ifdef GNAV
-    case KEY_APP1:
-    case '6':
-      AckWarning();
-    return true;
-
-    case KEY_APP2:
-    case '7':
-      AckInside();
-    return true;
-
-    case KEY_APP3:
-    case '8':
-      AckDay();
-    return true;
-
-    case KEY_APP4:
-    case '9':
-      Enable();
-    return true;
-#endif
-
-  default:
-    return false;
-  }
 }
 
 void
