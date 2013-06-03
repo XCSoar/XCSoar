@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
@@ -51,9 +52,8 @@ ScreenGlobalInit::ScreenGlobalInit()
     exit(EXIT_FAILURE);
   }
 
-#ifdef KOBO
-  SDL_ShowCursor (SDL_FALSE);
-#endif
+  if (HasTouchScreen())
+    SDL_ShowCursor (SDL_FALSE);
 
   ::SDL_EnableKeyRepeat(250, 50);
   ::SDL_EnableUNICODE(true);
