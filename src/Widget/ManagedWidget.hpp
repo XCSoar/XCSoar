@@ -103,6 +103,9 @@ public:
   void Hide();
 
   void SetVisible(bool _visible);
+
+  bool SetFocus();
+  bool KeyPress(unsigned key_code);
 };
 
 #endif
