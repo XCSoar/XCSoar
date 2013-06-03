@@ -103,6 +103,9 @@ protected:
   /* virtual methods from class Window */
   virtual void OnDestroy() override;
   virtual void OnResize(PixelSize new_size) override;
+
+  /* virtual methods from class WndForm */
+  virtual bool OnAnyKeyDown(unsigned key_code) override;
 };
 
 /**
