@@ -12,7 +12,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.4 r9939"
    width="725"
    height="400"
    sodipodi:docname="figure_terrain.svg">
@@ -39,7 +39,7 @@
        inkscape:collect="always"
        xlink:href="#pattern6985"
        id="pattern5049"
-       patternTransform="translate(-123.66945,135.76183)" />
+       patternTransform="translate(16.231145,67.389359)" />
     <marker
        inkscape:stockid="EmptyTriangleOutL"
        orient="auto"
@@ -765,38 +765,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1600"
+     inkscape:window-height="1122"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="0.95067501"
-     inkscape:cx="298.4883"
-     inkscape:cy="152.04018"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="1.3444575"
+     inkscape:cx="328.96328"
+     inkscape:cy="101.147"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer#1"
-     style="display:none"
-     transform="translate(0,102)"
-     sodipodi:insensitive="true">
-    <image
-       width="752"
-       height="298"
-       xlink:href="file:///C:/Documents%20and%20Settings/Administrator/My%20Documents/manual/figures/fig-terrain.png"
-       id="image10"
-       x="0"
-       y="-97.59314"
-       style="opacity:0.33000004" />
-  </g>
+     inkscape:current-layer="layer4" />
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="Layer"
-     transform="translate(0,102)">
+     inkscape:label="Layer#1"
+     transform="translate(0,102)"
+     style="display:inline">
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:3, 1;stroke-dashoffset:0"
        d="M 69.468635,-31.554 604.89703,11.39429"
@@ -855,13 +840,34 @@
          style="fill:#000000;fill-opacity:1;stroke:none"
          transform="matrix(0.99999277,0.00380176,0.0022947,0.99999737,0,0)" />
     </g>
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="Layer#3"
-     transform="translate(0,102)">
+    <path
+       style="opacity:0.5;fill:url(#pattern5049);fill-opacity:1;fill-rule:nonzero;stroke:none;display:inline"
+       d="m 247.20433,-17.96814 0,62.84375 c 13.61397,-19.10017 25.41753,-28.09796 42.71875,-8.4375 24.70878,28.07817 20.21186,8.96185 34.8125,23.5625 13.86958,13.8696 20.24123,15.75 33.71875,15.75 39.30943,0 59.50681,42.65625 101.0625,42.65625 41.55568,0 74.13496,15.75 98.84375,15.75 20.48258,0 37.67981,6.10665 43.03125,8.21875 l 0,-131.25 -354.1875,-29.09375 z"
+       id="rect4676"
+       inkscape:connector-curvature="0" />
     <g
+       style="display:inline"
+       id="g4627"
+       transform="translate(-136.85817,-97.59314)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3993"
+         d="m 293.84307,210.64125 0,-111.978033"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL)" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4625"
+         d="m 284.71011,98.318886 18.26592,0"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline"
+       d="m 49.580845,104.9411 c 38.1863,24.70878 62.895095,4.4925 79.741995,4.4925 16.8469,0 10.10814,6.73876 28.07816,6.73876 17.97003,0 47.17132,-7.86188 70.75698,-42.67881 23.58566,-34.81692 37.06318,-65.1413397 61.77197,-37.06318 24.70878,28.07817 20.21628,8.98501 34.81692,23.58566 13.86958,13.8696 20.21628,15.72378 33.6938,15.72378 39.30943,0 59.52571,42.67881 101.0814,42.67881 41.55568,0 74.12635,15.72377 98.83514,15.72377 24.70878,0 44.92506,8.98501 44.92506,8.98501"
+       id="path3838"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssssssssc" />
+    <g
+       style="display:inline"
        transform="translate(-48.274909,-122.65794)"
        id="g4627-3-0">
       <path
@@ -877,20 +883,7 @@
          style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <g
-       id="g4627"
-       transform="translate(-136.85817,-97.59314)">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3993"
-         d="m 293.84307,210.64125 0,-111.978033"
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL)" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4625"
-         d="m 284.71011,98.318886 18.26592,0"
-         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
-    </g>
-    <g
+       style="display:inline"
        transform="translate(63.560785,-135.09274)"
        id="g4627-3">
       <path
@@ -905,6 +898,7 @@
          style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <g
+       style="display:inline"
        transform="translate(263.46932,-77.638716)"
        id="g4627-8">
       <path
@@ -918,24 +912,51 @@
          d="m 284.71011,98.318886 18.26592,0"
          style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
+    <rect
+       style="fill:url(#pattern5051);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.00000005, 1.00000001;stroke-dashoffset:0;display:inline"
+       id="rect3373"
+       width="29"
+       height="29"
+       x="445.55252"
+       y="-94.613152"
+       rx="0.99223018"
+       ry="1.4931692" />
+    <g
+       style="display:inline"
+       id="g3940-9"
+       transform="matrix(2,0,0,2,448.67339,-51.706702)">
+      <g
+         id="layer1-15-9"
+         transform="translate(0,-5)" />
+      <g
+         transform="translate(0,-8)"
+         inkscape:label="MASK_Image"
+         id="layer2-2-8" />
+      <g
+         transform="translate(0,-8)"
+         inkscape:label="NOAA_Image"
+         id="layer5-3">
+        <path
+           sodipodi:nodetypes="cc"
+           id="path4111-8"
+           d="M 0.70833337,18.291667 10.291666,8.7083334"
+           style="fill:none;stroke:#ff0000;stroke-width:0.95833337;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           sodipodi:nodetypes="cc"
+           id="path4111-2-6"
+           d="M 10.291666,18.291667 0.70833341,8.7083338"
+           style="fill:none;stroke:#ff0000;stroke-width:0.95833343;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="Layer#2"
+     inkscape:label="Layer#3"
      style="display:inline"
      transform="translate(0,102)">
-    <path
-       style="opacity:0.5;fill:url(#pattern5049);fill-opacity:1;fill-rule:nonzero;stroke:none"
-       d="m 247.20433,-17.96814 0,62.84375 c 13.61397,-19.10017 25.41753,-28.09796 42.71875,-8.4375 24.70878,28.07817 20.21186,8.96185 34.8125,23.5625 13.86958,13.8696 20.24123,15.75 33.71875,15.75 39.30943,0 59.50681,42.65625 101.0625,42.65625 41.55568,0 74.13496,15.75 98.84375,15.75 20.48258,0 37.67981,6.10665 43.03125,8.21875 l 0,-131.25 -354.1875,-29.09375 z"
-       id="rect4676"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 49.580845,104.9411 c 38.1863,24.70878 62.895095,4.4925 79.741995,4.4925 16.8469,0 10.10814,6.73876 28.07816,6.73876 17.97003,0 47.17132,-7.86188 70.75698,-42.67881 23.58566,-34.81692 37.06318,-65.1413397 61.77197,-37.06318 24.70878,28.07817 20.21628,8.98501 34.81692,23.58566 13.86958,13.8696 20.21628,15.72378 33.6938,15.72378 39.30943,0 59.52571,42.67881 101.0814,42.67881 41.55568,0 74.12635,15.72377 98.83514,15.72377 24.70878,0 44.92506,8.98501 44.92506,8.98501"
-       id="path3838"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cssssssssc" />
     <path
        transform="translate(173.68634,-7.7430097)"
        sodipodi:type="arc"
@@ -956,28 +977,6 @@
        sodipodi:rx="16.846899"
        sodipodi:ry="16.846899"
        d="m 399.83307,140.76227 c 0,9.30428 -7.54261,16.8469 -16.84689,16.8469 -9.30429,0 -16.8469,-7.54262 -16.8469,-16.8469 0,-9.30429 7.54261,-16.8469 16.8469,-16.8469 9.30428,0 16.84689,7.54261 16.84689,16.8469 z" />
-    <g
-       id="g3854"
-       transform="matrix(2,0,0,2,346.87911,64.17824)">
-      <g
-         id="layer1-1"
-         transform="translate(-4,-1)" />
-      <g
-         transform="translate(0,-8)"
-         inkscape:label="MASK_Image"
-         id="layer2-7">
-        <path
-           style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           id="path2830-4-5"
-           d="m 11,13.5 a 5.5,5.5 0 0 1 -11,0 5.5,5.5 0 1 1 11,0 z"
-           inkscape:connector-curvature="0" />
-        <path
-           style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           id="path2830-4-5-9"
-           d="m 10,13.5 a 4.5,4.5 0 0 1 -9,0 4.5,4.5 0 1 1 9,0 z"
-           inkscape:connector-curvature="0" />
-      </g>
-    </g>
     <path
        transform="matrix(1.3,0,0,1.3,-340.48103,-71.311092)"
        sodipodi:type="arc"
@@ -988,7 +987,18 @@
        sodipodi:rx="16.846899"
        sodipodi:ry="16.846899"
        d="m 399.83307,140.76227 c 0,9.30428 -7.54261,16.8469 -16.84689,16.8469 -9.30429,0 -16.8469,-7.54262 -16.8469,-16.8469 0,-9.30429 7.54261,-16.8469 16.8469,-16.8469 9.30428,0 16.84689,7.54261 16.84689,16.8469 z" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3947"
+       sodipodi:cx="382.98618"
+       sodipodi:cy="140.76227"
+       sodipodi:rx="16.846899"
+       sodipodi:ry="16.846899"
+       d="m 399.83307,140.76227 c 0,9.30428 -7.54261,16.8469 -16.84689,16.8469 -9.30429,0 -16.8469,-7.54262 -16.8469,-16.8469 0,-9.30429 7.54261,-16.8469 16.8469,-16.8469 9.30428,0 16.84689,7.54261 16.84689,16.8469 z"
+       transform="translate(-136.85817,-97.59314)" />
     <g
+       style="display:inline"
        inkscape:label="MASK_Image"
        id="layer1-0"
        transform="matrix(2,0,0,2,138.401,93.80298)">
@@ -1028,38 +1038,7 @@
       </g>
     </g>
     <g
-       id="g3854-8"
-       transform="matrix(2,0,0,2,546.23408,122.01927)">
-      <g
-         id="layer1-1-2"
-         transform="translate(-4,-1)" />
-      <g
-         transform="translate(0,-8)"
-         inkscape:label="MASK_Image"
-         id="layer2-7-4">
-        <path
-           style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           id="path2830-4-5-5"
-           d="m 11,13.5 a 5.5,5.5 0 0 1 -11,0 5.5,5.5 0 1 1 11,0 z"
-           inkscape:connector-curvature="0" />
-        <path
-           style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           id="path2830-4-5-9-5"
-           d="m 10,13.5 a 4.5,4.5 0 0 1 -9,0 4.5,4.5 0 1 1 9,0 z"
-           inkscape:connector-curvature="0" />
-      </g>
-    </g>
-    <path
-       sodipodi:type="arc"
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
-       id="path3947"
-       sodipodi:cx="382.98618"
-       sodipodi:cy="140.76227"
-       sodipodi:rx="16.846899"
-       sodipodi:ry="16.846899"
-       d="m 399.83307,140.76227 c 0,9.30428 -7.54261,16.8469 -16.84689,16.8469 -9.30429,0 -16.8469,-7.54262 -16.8469,-16.8469 0,-9.30429 7.54261,-16.8469 16.8469,-16.8469 9.30428,0 16.84689,7.54261 16.84689,16.8469 z"
-       transform="translate(-136.85817,-97.59314)" />
-    <g
+       style="display:inline"
        id="g3940"
        transform="matrix(2,0,0,2,235.12801,33.29226)">
       <g
@@ -1087,14 +1066,62 @@
            inkscape:connector-curvature="0" />
       </g>
     </g>
-    <path
-       inkscape:connector-curvature="0"
-       style="opacity:0.33000004;fill:none;stroke:none;display:inline"
-       d="m 395.01122,215.95683 0,62.84375 c 13.61397,-19.10017 25.41753,-28.09796 42.71875,-8.4375 24.70878,28.07817 20.21186,8.96185 34.8125,23.5625 13.86958,13.8696 20.24123,15.75 33.71875,15.75 39.30943,0 59.50681,42.65625 101.0625,42.65625 41.55568,0 74.13496,15.75 98.84375,15.75 20.48258,0 37.67981,6.10665 43.03125,8.21875 l 0,-131.25 -354.1875,-29.09375 z"
-       id="rect4676-3" />
+    <g
+       style="display:inline"
+       id="g3854"
+       transform="matrix(2,0,0,2,346.87911,64.17824)">
+      <g
+         id="layer1-1"
+         transform="translate(-4,-1)" />
+      <g
+         transform="translate(0,-8)"
+         inkscape:label="MASK_Image"
+         id="layer2-7">
+        <path
+           style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
+           id="path2830-4-5"
+           d="m 11,13.5 a 5.5,5.5 0 0 1 -11,0 5.5,5.5 0 1 1 11,0 z"
+           inkscape:connector-curvature="0" />
+        <path
+           style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
+           id="path2830-4-5-9"
+           d="m 10,13.5 a 4.5,4.5 0 0 1 -9,0 4.5,4.5 0 1 1 9,0 z"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
+       style="display:inline"
+       id="g3854-8"
+       transform="matrix(2,0,0,2,546.23408,122.01927)">
+      <g
+         id="layer1-1-2"
+         transform="translate(-4,-1)" />
+      <g
+         transform="translate(0,-8)"
+         inkscape:label="MASK_Image"
+         id="layer2-7-4">
+        <path
+           style="opacity:0.98999999;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
+           id="path2830-4-5-5"
+           d="m 11,13.5 a 5.5,5.5 0 0 1 -11,0 5.5,5.5 0 1 1 11,0 z"
+           inkscape:connector-curvature="0" />
+        <path
+           style="opacity:0.98999999;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none"
+           id="path2830-4-5-9-5"
+           d="m 10,13.5 a 4.5,4.5 0 0 1 -9,0 4.5,4.5 0 1 1 9,0 z"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Layer#4"
+     transform="translate(0,102)"
+     style="display:inline">
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
        x="481.46146"
        y="-84.086151"
        id="text3362"
@@ -1102,11 +1129,11 @@
          sodipodi:role="line"
          x="481.46146"
          y="-84.086151"
-         id="tspan3364"><tspan
+         id="tspan3198"><tspan
            x="481.46146"
            y="-84.086151"
            style="line-height:125%;fill:#000000;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3366">unreachable due to terrain safety </tspan></tspan><tspan
+           id="tspan3366">unreachable due to</tspan></tspan><tspan
          sodipodi:role="line"
          x="481.46146"
          y="-67.836151"
@@ -1114,46 +1141,97 @@
            x="481.46146"
            y="-67.836151"
            style="line-height:125%;fill:#000000;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3370">height</tspan></tspan></text>
-    <rect
-       style="fill:url(#pattern5051);fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:4.00000005, 1.00000001;stroke-dashoffset:0"
-       id="rect3373"
-       width="29"
-       height="29"
-       x="445.55252"
-       y="-94.613152"
-       rx="0.99223018"
-       ry="1.4931692" />
+           id="tspan3370">terrain safety height</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="161.43031"
-       y="54.861355"
-       id="text3332"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="481.46146"
+       y="-37.166443"
+       id="text3356"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="161.43031"
-         y="54.861355"
-         id="tspan3334"><tspan
-           x="161.43031"
-           y="54.861355"
-           style="line-height:125%;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3336">(a)</tspan></tspan></text>
+         x="481.46146"
+         y="-37.166443"
+         id="tspan3358"><tspan
+           x="481.46146"
+           y="-37.166443"
+           style="line-height:125%;fill:#000000;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3360">terrain warning marker</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="363.78162"
-       y="22.781448"
-       id="text3344"
+       x="155.37427"
+       y="-79.924934"
+       id="text3326"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="363.78162"
-         y="22.781448"
-         id="tspan3346"><tspan
-           x="363.78162"
-           y="22.781448"
-           style="line-height:125%;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3348">(a)</tspan></tspan></text>
+         x="84.293228"
+         y="-79.924934"
+         id="tspan3328"><tspan
+           x="84.293228"
+           y="-79.924934"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3330">Best glide angle in wind</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="239.18204"
+       y="139.60211"
+       id="text3308"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3361"
+         x="239.18204"
+         y="139.60211">Arrival below safety height</tspan><tspan
+         sodipodi:role="line"
+         id="tspan3363"
+         x="239.18204"
+         y="155.85211">Glideslope below terrain safety height</tspan><tspan
+         sodipodi:role="line"
+         id="tspan3365"
+         x="239.18204"
+         y="172.10211">Landpoint unreachable</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="157.66208"
+       y="212.70641"
+       id="text3290"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="44.267551"
+         y="212.70641"
+         id="tspan3292"><tspan
+           x="44.267551"
+           y="212.70641"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3294">Arrival above safety height</tspan><tspan
+           dx="0"
+           x="204.58395"
+           y="212.70641"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3296" /></tspan><tspan
+         sodipodi:role="line"
+         x="44.267551"
+         y="228.95642"
+         id="tspan3298"><tspan
+           x="44.267551"
+           y="228.95642"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3300">Glideslope above terrain safety height</tspan><tspan
+           dx="0"
+           x="271.08197"
+           y="228.95642"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3302" /></tspan><tspan
+         sodipodi:role="line"
+         x="44.267551"
+         y="245.20642"
+         id="tspan3304"><tspan
+           x="44.267551"
+           y="245.20642"
+           style="text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3306">Landpoint reachable</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
@@ -1172,6 +1250,21 @@
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="363.78162"
+       y="22.781448"
+       id="text3344"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="363.78162"
+         y="22.781448"
+         id="tspan3346"><tspan
+           x="363.78162"
+           y="22.781448"
+           style="line-height:125%;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3348">(a)</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
        x="250.85474"
        y="6.9426174"
        id="text3338"
@@ -1186,90 +1279,42 @@
            id="tspan3342">(b)</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="268.63586"
-       y="213.75829"
-       id="text3290"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="161.43031"
+       y="54.861355"
+       id="text3332"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="155.24133"
-         y="213.75829"
-         id="tspan3292"><tspan
-           x="155.24133"
-           y="213.75829"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3294">Arrival above safety height</tspan><tspan
-           dx="0"
-           x="315.55774"
-           y="213.75829"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3296" /></tspan><tspan
-         sodipodi:role="line"
-         x="155.24133"
-         y="230.0083"
-         id="tspan3298"><tspan
-           x="155.24133"
-           y="230.0083"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3300">Glideslope above terrain safety height</tspan><tspan
-           dx="0"
-           x="382.05576"
-           y="230.0083"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3302" /></tspan><tspan
-         sodipodi:role="line"
-         x="155.24133"
-         y="246.2583"
-         id="tspan3304"><tspan
-           x="155.24133"
-           y="246.2583"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3306">Landpoint reachable</tspan></tspan></text>
+         x="161.43031"
+         y="54.861355"
+         id="tspan3334"><tspan
+           x="161.43031"
+           y="54.861355"
+           style="line-height:125%;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+           id="tspan3336">(a)</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="470.07062"
-       y="139.60211"
-       id="text3308"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="430.80194"
+       y="206.3951"
+       id="text3272"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="356.59991"
-         y="139.60211"
-         id="tspan3310"><tspan
-           x="356.59991"
-           y="139.60211"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3312">Arrival below safety height</tspan><tspan
-           dx="0"
-           x="517.06866"
-           y="139.60211"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3314" /></tspan><tspan
+         id="tspan3367"
+         x="430.80194"
+         y="206.3951">Arrival above safety height</tspan><tspan
          sodipodi:role="line"
-         x="356.59991"
-         y="155.85213"
-         id="tspan3316"><tspan
-           x="356.59991"
-           y="155.85213"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3318">Glideslope below terrain safety height</tspan><tspan
-           dx="0"
-           x="583.56671"
-           y="155.85213"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3320" /></tspan><tspan
+         id="tspan3369"
+         x="430.80194"
+         y="222.6451">Glideslope below terrain safety height</tspan><tspan
          sodipodi:role="line"
-         x="356.59991"
-         y="172.10213"
-         id="tspan3322"><tspan
-           x="356.59991"
-           y="172.10213"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3324">Landpoint unreachable</tspan></tspan></text>
+         id="tspan3371"
+         x="430.80194"
+         y="238.8951">Landpoint unreachable</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#TriangleOutL-47);display:inline"
-       d="m 156.93896,157.75968 0,-10"
-       id="path7564"
+       d="m 557.31239,169.14983 0,-10"
+       id="path7564-1-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
@@ -1280,115 +1325,30 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#TriangleOutL-47);display:inline"
-       d="m 557.31239,169.14983 0,-10"
-       id="path7564-1-4"
+       d="m 156.93896,157.75968 0,-10"
+       id="path7564"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
-    <text
-       xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="670.21924"
-       y="213.75829"
-       id="text3272"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="556.74854"
-         y="213.75829"
-         id="tspan3274"><tspan
-           x="556.74854"
-           y="213.75829"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3276">Arrival above safety height</tspan><tspan
-           dx="0"
-           x="717.06488"
-           y="213.75829"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3278" /></tspan><tspan
-         sodipodi:role="line"
-         x="556.74854"
-         y="230.0083"
-         id="tspan3280"><tspan
-           x="556.74854"
-           y="230.0083"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3282">Glideslope below terrain safety height</tspan><tspan
-           dx="0"
-           x="783.71527"
-           y="230.0083"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3284" /></tspan><tspan
-         sodipodi:role="line"
-         x="556.74854"
-         y="246.2583"
-         id="tspan3286"><tspan
-           x="556.74854"
-           y="246.2583"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3288">Landpoint unreachable</tspan></tspan></text>
-    <g
-       style="display:inline"
-       id="g3940-9"
-       transform="matrix(2,0,0,2,448.67339,-51.706702)">
-      <g
-         id="layer1-15-9"
-         transform="translate(0,-5)" />
-      <g
-         transform="translate(0,-8)"
-         inkscape:label="MASK_Image"
-         id="layer2-2-8" />
-      <g
-         transform="translate(0,-8)"
-         inkscape:label="NOAA_Image"
-         id="layer5-3">
-        <path
-           sodipodi:nodetypes="cc"
-           id="path4111-8"
-           d="M 0.70833337,18.291667 10.291666,8.7083334"
-           style="fill:none;stroke:#ff0000;stroke-width:0.95833337;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-        <path
-           sodipodi:nodetypes="cc"
-           id="path4111-2-6"
-           d="M 10.291666,18.291667 0.70833341,8.7083338"
-           style="fill:none;stroke:#ff0000;stroke-width:0.95833343;stroke-linecap:butt;stroke-linejoin:bevel;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-      </g>
-    </g>
-    <text
-       xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="481.46146"
-       y="-45.166443"
-       id="text3356"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="481.46146"
-         y="-45.166443"
-         id="tspan3358"><tspan
-           x="481.46146"
-           y="-45.166443"
-           style="line-height:125%;fill:#000000;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3360">terrain warning marker</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-       x="227.37427"
-       y="-83.924934"
-       id="text3326"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="156.29323"
-         y="-83.924934"
-         id="tspan3328"><tspan
-           x="156.29323"
-           y="-83.924934"
-           style="text-align:center;line-height:125%;text-anchor:middle;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
-           id="tspan3330">Best glide angle in wind</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#TriangleOutL-47);display:inline"
        d="m 156.472,-54.772808 0,10"
        id="path7564-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:DejaVu Serif Condensed;-inkscape-font-specification:'DejaVu Serif Condensed,'"
+       x="265.92792"
+       y="259.55185"
+       id="text3272-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3166"
+         x="265.92792"
+         y="259.55185">(a) Arrival height</tspan><tspan
+         sodipodi:role="line"
+         id="tspan3168"
+         x="265.92792"
+         y="275.80185">(b) Terrain clearance</tspan></text>
   </g>
 </svg>

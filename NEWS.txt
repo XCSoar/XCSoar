@@ -39,6 +39,8 @@ Version 6.7 - not yet released
   - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.2 - not yet released
+* infoboxes
+  - ensure that the unit symbol is visible
 * tasks
   - update all settings after task type change
 * devices
