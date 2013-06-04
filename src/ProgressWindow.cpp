@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProgressWindow.hpp"
 #include "Screen/VirtualCanvas.hpp"
+#include "Asset.hpp"
 #include "resource.h"
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
@@ -42,7 +43,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Determine text height
 #ifndef USE_GDI
-  font.Load(_T("Droid Sans"), 12);
+  font.Load(_T("Droid Sans"), IsKobo() ? 20 : 12);
   text_height = font.GetHeight();
 #else
   VirtualCanvas canvas({1, 1});
