@@ -43,7 +43,7 @@ DialogLook::Initialise(const Font &caption_font,
 #ifdef EYE_CANDY
   caption.background_bitmap.Load(IDB_DIALOGTITLE);
 #else
-  caption.background_color = COLOR_XCSOAR_DARK;
+  caption.background_color = HasColors()? COLOR_XCSOAR_DARK : COLOR_BLACK;
   caption.inactive_background_color = COLOR_GRAY;
 #endif
 
