@@ -348,11 +348,6 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Get(buffer, config.k6bt);
 
-#ifndef NDEBUG
-  MakeDeviceSettingName(buffer, "Port", n, "DumpPort");
-  Get(buffer, config.dump_port);
-#endif
-
   MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
   if (!Get(buffer, config.ignore_checksum))
     Get(ProfileKeys::IgnoreNMEAChecksum, config.ignore_checksum);
