@@ -13,6 +13,13 @@ endif
 ZLIB_CPPFLAGS =
 
 else
+ifeq ($(TARGET),KOBO)
+
+ZLIB_CPPFLAGS =
+ZLIB_LDADD = $(KOBO)/usr/lib/libz.a
+ZLIB_LDLIBS =
+
+else
 ifeq ($(TARGET),ANDROID)
 
 # use the native zlib on ANDROID, see
@@ -40,6 +47,7 @@ ZLIB_CPPFLAGS = -I$(ZLIB_SRC_DIR)
 
 $(eval $(call link-library,zlib,ZLIB))
 
+endif
 endif
 endif
 
