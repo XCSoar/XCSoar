@@ -134,7 +134,7 @@ InitialiseLogFonts()
   }
 
 #ifndef USE_GDI
-  UPixelScalar font_height = Layout::SmallScale(IsAndroid() ? 30 : 24);
+  UPixelScalar font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : 24);
 #else
   UPixelScalar font_height = Layout::SmallScale(35);
 #endif
