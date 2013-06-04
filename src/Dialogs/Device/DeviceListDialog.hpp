@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_LIST_DIALOG_HPP
 #define XCSOAR_DEVICE_LIST_DIALOG_HPP
 
-struct DialogLook;
 struct TerminalLook;
-class SingleWindow;
 
 void
-ShowDeviceList(SingleWindow &parent, const DialogLook &look,
-               const TerminalLook &terminal_look);
+ShowDeviceList(const TerminalLook &terminal_look);
 
 #endif

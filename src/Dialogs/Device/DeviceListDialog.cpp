@@ -616,10 +616,9 @@ DeviceListWidget::OnGPSUpdate(const MoreData &basic)
 }
 
 void
-ShowDeviceList(SingleWindow &parent, const DialogLook &look,
-               const TerminalLook &terminal_look)
+ShowDeviceList(const TerminalLook &terminal_look)
 {
-  DeviceListWidget widget(look, terminal_look);
+  DeviceListWidget widget(UIGlobals::GetDialogLook(), terminal_look);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Devices"), &widget);
