@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/AircraftLook.hpp"
 #include "MapSettings.hpp"
 #include "Util/Macros.hpp"
+#include "Asset.hpp"
 #include "Math/Angle.hpp"
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/CanvasRotateShift.hpp"
@@ -285,10 +286,8 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
                        const Angle angle, const RasterPoint aircraft_pos)
 {
-  bool inverse = !settings_map.terrain.enable;
-#ifdef KOBO
-  inverse = true;
-#endif
+  const bool inverse = IsKobo() || !settings_map.terrain.enable;
+
   switch (settings_map.aircraft_symbol) {
   case AircraftSymbol::DETAILED:
     DrawDetailedAircraft(canvas, inverse,
