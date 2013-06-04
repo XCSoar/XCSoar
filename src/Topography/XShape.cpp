@@ -30,6 +30,7 @@ Copyright_License {
 #include "Geo/Math.hpp"
 #endif
 
+#include "Util/StringUtil.hpp"
 #include <algorithm>
 #include <tchar.h>
 #include <string.h>
@@ -60,7 +61,7 @@ import_label(const char *src)
   if (!ValidateUTF8(src))
     return NULL;
 
-  return strdup(src);
+  return strdup(TrimLeft(src));
 #endif
 }
 
