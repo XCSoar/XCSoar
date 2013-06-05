@@ -43,8 +43,11 @@ Copyright_License {
 static TCHAR *
 import_label(const char *src)
 {
-  if (src == NULL || strcmp(src, "UNK") == 0 ||
-      strcmp(src, "RAILWAY STATION") == 0 ||
+  if (src == nullptr)
+    return nullptr;
+
+  src = TrimLeft(src);
+  if (strcmp(src, "RAILWAY STATION") == 0 ||
       strcmp(src, "RAILROAD STATION") == 0)
     return NULL;
 
@@ -61,7 +64,7 @@ import_label(const char *src)
   if (!ValidateUTF8(src))
     return NULL;
 
-  return strdup(TrimLeft(src));
+  return strdup(src);
 #endif
 }
 
