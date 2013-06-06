@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.2 - not yet released
+* map
+  - fix misplaced topography labels (#2564)
 * infoboxes
   - ensure that the unit symbol is visible
   - fix ballast display in vario gauge (#2911)
