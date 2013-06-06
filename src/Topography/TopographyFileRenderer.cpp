@@ -286,8 +286,15 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);
 #endif
-        glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
-                       triangles);
+        if (brush.GetColor().Alpha() < 255) {
+          glEnable(GL_BLEND); //Enable blending.
+          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                         triangles);
+          glDisable(GL_BLEND); //Disable blending.
+        } else
+          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                         triangles);
       }
 #else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {

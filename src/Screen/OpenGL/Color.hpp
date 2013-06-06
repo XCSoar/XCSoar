@@ -97,6 +97,21 @@ struct Color {
 #endif
   }
 
+  /**
+   * Returns the alpha part of the color
+   * @return The alpha part of the color (0-255)
+   */
+  constexpr
+  uint8_t
+  Alpha() const
+  {
+#ifdef HAVE_GLES
+    return (uint8_t)(a >> 8u);
+#else
+    return a;
+#endif
+  }
+
   constexpr
   Color
   WithAlpha(GLubyte alpha) const {

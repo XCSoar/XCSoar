@@ -151,7 +151,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   // end or max. file number reached
   char *line;
   while (!files.full() && (line = reader.ReadLine()) != NULL) {
-    // Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range
+    // .tpl Line format: filename,range,icon,field,r,g,b,pen_width,label_range,important_range,alpha
 
     // Ignore comments (lines starting with *) and empty lines
     if (StringIsEmpty(line) || line[0] == '*')
@@ -244,11 +244,33 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     if (*p == _T(','))
       labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
 
+    // Handle alpha component
+    // Only used by OpenGL versions... GDI versions ignore anything that has an alpha specified
+#ifdef ENABLE_OPENGL
+    // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque
+    uint8_t alpha = 255;
+    if (*p == _T(',')) {
+      // An alpha component of shading colour is present (v6.7 or later file).
+      alpha = (uint8_t)strtol(p + 1, &p, 10);
+      // Ignore a totally transparent file!
+      if (alpha == 0)
+        continue;
+    }
+#else
+    // GDI versions ignore anything that has an alpha specified
+    if (*p == _T(','))
+      continue;
+#endif
+
     // Create TopographyFile instance from parsed line
     TopographyFile *file = new TopographyFile(zdir, shape_filename,
                                               shape_range, label_range,
                                               labelImportantRange,
+#ifdef ENABLE_OPENGL
+                                              Color(red, green, blue, alpha),
+#else
                                               Color(red, green, blue),
+#endif
                                               shape_field, icon,
                                               pen_width);
     if (file->IsEmpty())
