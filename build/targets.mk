@@ -224,6 +224,7 @@ ifeq ($(TARGET),KOBO)
   TARGET_IS_KOBO = y
   TARGET_IS_ARM = y
   ARMV7 := y
+  NEON := y
 endif
 
 ifeq ($(TARGET),UNIX)
