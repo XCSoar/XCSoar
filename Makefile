@@ -798,7 +798,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port/LineSplitter.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(DIALOG_SOURCES)
+	$(DIALOG_SOURCES) \
+	\
+	$(SRC)/Hardware/Battery.cpp
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
@@ -850,7 +852,6 @@ endif
 else
 XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
-	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/XCSoar.cpp
 endif
 
