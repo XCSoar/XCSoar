@@ -14,6 +14,7 @@ Version 6.6.2 - not yet released
 * devices
   - Volkslogger: fix IGC file download on Windows CE
   - fix potential crash when garbage is received from device
+  - fix IOIO reconnect
 * cross section
   - also display unknown airspace types (#2884)
 

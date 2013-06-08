@@ -46,6 +46,8 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
    */
   private boolean connected;
 
+  private boolean constructing;
+
   /**
    * Set to true when the connection is being cycled, e.g. during a
    * baud rate change.  It is used by waitCycled().
@@ -100,24 +102,32 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
     }
   }
 
+
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
-    connected = true;
 
-    Uart uart;
     try {
-      uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
-                           Uart.StopBits.ONE);
-    } catch (IllegalArgumentException e) {
-      Log.w(TAG, "IOIO.openUart() failed", e);
-      return;
-    }
+      synchronized(this) {
+        connected = true;
+        constructing = true;
+      }
 
-    set(uart);
+      Uart uart;
+      try {
+        uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
+                             Uart.StopBits.ONE);
+      } catch (IllegalArgumentException e) {
+        Log.w(TAG, "IOIO.openUart() failed", e);
+        return;
+      }
 
-    synchronized(this) {
-      cycling = false;
-      notifyAll();
+      set(uart);
+    } finally {
+      synchronized(this) {
+        constructing = false;
+        cycling = false;
+        notifyAll();
+      }
     }
   }
 
@@ -139,7 +149,12 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
   }
 
   @Override public int getState() {
-    return connected
+    boolean ready;
+    synchronized(this) {
+      ready = connected && !constructing;
+    }
+
+    return ready
       ? super.getState()
       : STATE_LIMBO;
   }
