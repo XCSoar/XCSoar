@@ -39,6 +39,11 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
   private static final String TAG = "XCSoar";
 
   private IOIOConnectionHolder holder;
+
+  /**
+   * Is the #IOIOConnectionHolder currently connected to an IOIO
+   * board?
+   */
   private boolean connected;
 
   /**
@@ -78,7 +83,7 @@ final class GlueIOIOPort extends IOIOPort implements IOIOConnectionListener {
   }
 
   /**
-   * Wait for a certain amoutn of time until the port has been
+   * Wait for a certain amount of time until the port has been
    * reconnected after a baud rate change.  Call this to avoid
    * spurious I/O errors while the baud rate is being changed.
    */
