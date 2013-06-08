@@ -39,12 +39,18 @@ Version 6.7 - not yet released
   - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.2 - not yet released
+* map
+  - fix misplaced topography labels (#2564)
+  - fix keyboard panning with track up (#2908)
 * infoboxes
   - ensure that the unit symbol is visible
+  - fix ballast display in vario gauge (#2911)
 * tasks
   - update all settings after task type change
 * devices
   - Volkslogger: fix IGC file download on Windows CE
+  - fix potential crash when garbage is received from device
+  - fix IOIO reconnect
 * cross section
   - also display unknown airspace types (#2884)
 
