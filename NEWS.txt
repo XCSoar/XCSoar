@@ -13,6 +13,7 @@ Version 6.6.2 - not yet released
   - update all settings after task type change
 * devices
   - Volkslogger: fix IGC file download on Windows CE
+  - fix potential crash when garbage is received from device
 * cross section
   - also display unknown airspace types (#2884)
 
