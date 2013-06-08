@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Time/PeriodClock.hpp"
 #include "Screen/Point.hpp"
+#include "Asset.hpp"
 
 /**
  * This class helps turning two "mouse down" events into a "double
@@ -35,12 +36,12 @@ class DoubleClick {
   /**
    * The maximum time span between two clicks for a double click [ms].
    */
-  static constexpr unsigned INTERVAL_MS = 500;
+  static constexpr unsigned INTERVAL_MS = IsKobo()? 750 : 500;
 
   /**
    * The maximum distance between two clicks.
    */
-  static constexpr unsigned MAX_DISTANCE_PX = 50;
+  static constexpr unsigned MAX_DISTANCE_PX = IsKobo()? 70 : 50;
 
   PeriodClock clock;
 
