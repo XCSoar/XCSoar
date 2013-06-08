@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.xcsoar.testing"
           android:installLocation="auto"
-          android:versionCode="76"
-          android:versionName="6.7_preview8">
+          android:versionCode="77"
+          android:versionName="6.7_preview9">
   <application android:icon="@drawable/icon" android:label="@string/app_name"
                android:debuggable="true">
     <activity android:name=".XCSoar"
