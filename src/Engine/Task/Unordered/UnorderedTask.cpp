@@ -194,9 +194,9 @@ fixed
 UnorderedTask::ScanDistanceRemaining(const GeoPoint &location)
 {
   TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
+  if (tp == nullptr || !location.IsValid())
     return fixed(0);
-  }
+
   return tp->Distance(location);
 }
 

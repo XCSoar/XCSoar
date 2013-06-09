@@ -27,6 +27,9 @@ void
 WindowStatsComputer::Compute(fixed time, const TaskStats &task_stats,
                              WindowStats &stats)
 {
+  if (negative(time))
+    return;
+
   if (!task_stats.task_valid || !task_stats.start.task_started ||
       !task_stats.total.travelled.IsDefined()) {
     Reset();
