@@ -26,7 +26,7 @@ Copyright_License {
 #include "SocketPort.hpp"
 #include "TCPPort.hpp"
 #include "K6BtPort.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 #include "LogFile.hpp"
 
 #ifdef _WIN32_WCE

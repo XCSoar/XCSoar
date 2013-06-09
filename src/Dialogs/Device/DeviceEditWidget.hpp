@@ -26,7 +26,7 @@
 
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 #include <assert.h>
 

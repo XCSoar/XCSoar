@@ -32,7 +32,6 @@
 #include "Form/DataField/Boolean.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
 

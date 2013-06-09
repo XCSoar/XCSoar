@@ -51,6 +51,7 @@
 #include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Config.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "NMEA/Info.hpp"
@@ -60,7 +61,6 @@
 #include "Operation/Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Units/System.hpp"
 
 static const DeviceConfig dummy_config = DeviceConfig();

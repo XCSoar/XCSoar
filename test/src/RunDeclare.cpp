@@ -30,10 +30,10 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Config.hpp"
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 

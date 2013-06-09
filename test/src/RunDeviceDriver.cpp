@@ -27,10 +27,10 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
+#include "Device/Config.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
 #include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <stdio.h>

@@ -53,6 +53,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/DeviceConfig.hpp"
 #include "Interface.hpp"
 
 #ifdef ANDROID

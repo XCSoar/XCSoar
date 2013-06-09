@@ -798,6 +798,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port/LineSplitter.cpp \
 	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Config.cpp \
 	$(DIALOG_SOURCES) \
 	\
 	$(SRC)/Hardware/Battery.cpp

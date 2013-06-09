@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Device/Driver/CAI302/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
+#include "Device/Config.hpp"
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"

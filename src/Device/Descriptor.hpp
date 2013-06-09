@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DESCRIPTOR_HPP
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
+#include "Config.hpp"
 #include "IO/DataHandler.hpp"
 #include "Port/LineSplitter.hpp"
 #include "Port/State.hpp"
 #include "Device/Parser.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "Time/PeriodClock.hpp"

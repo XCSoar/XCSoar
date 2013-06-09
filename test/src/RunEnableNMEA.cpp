@@ -27,8 +27,8 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 
 #define MORE_USAGE
