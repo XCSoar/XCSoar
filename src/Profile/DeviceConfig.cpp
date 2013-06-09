@@ -56,6 +56,9 @@ static const char *const port_type_strings[] = {
 bool
 DeviceConfig::IsAvailable() const
 {
+  if (!enabled)
+    return false;
+
   switch (port_type) {
   case PortType::DISABLED:
     return false;
@@ -339,6 +342,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   buffer[strlen(buffer) - 1] += n;
   Get(buffer, config.driver_name);
 
+  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
+  Get(buffer, config.enabled);
+
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
   Get(buffer, config.sync_from_device);
 
@@ -417,6 +423,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   strcpy(buffer, "DeviceA");
   buffer[strlen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
+
+  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
+  Set(buffer, config.enabled);
 
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
   Set(buffer, config.sync_from_device);

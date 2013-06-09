@@ -64,6 +64,7 @@ class DeviceListWidget final
   : public ListWidget, private ActionListener,
     private NullBlackboardListener {
   enum Buttons {
+    DISABLE,
     RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
     DEBUG,
   };
@@ -155,6 +156,7 @@ class DeviceListWidget final
 
   Item items[NUMDEV];
 
+  WndButton *disable_button;
   WndButton *reconnect_button, *flight_button;
   WndButton *edit_button;
   WndButton *manage_button, *monitor_button;
@@ -171,6 +173,7 @@ protected:
 
   void UpdateButtons();
 
+  void EnableDisableCurrent();
   void ReconnectCurrent();
   void DownloadFlightFromCurrent();
   void EditCurrent();
@@ -253,6 +256,7 @@ DeviceListWidget::RefreshList()
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
+  disable_button = dialog.AddButton(_("Disable"), *this, DISABLE);
   reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
   flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
   edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
@@ -265,6 +269,17 @@ void
 DeviceListWidget::UpdateButtons()
 {
   const unsigned current = GetList().GetCursorIndex();
+
+  if (current < NUMDEV) {
+    const auto &config = CommonInterface::GetSystemSettings().devices[current];
+
+    if (config.port_type != DeviceConfig::PortType::DISABLED) {
+      disable_button->SetEnabled(true);
+      disable_button->SetText(config.enabled ? _("Disable") : _("Enable"));
+    } else
+      disable_button->SetEnabled(false);
+  } else
+    disable_button->SetEnabled(false);
 
   if (is_simulator() || current >= NUMDEV) {
     reconnect_button->SetEnabled(false);
@@ -389,6 +404,37 @@ void
 DeviceListWidget::OnCursorMoved(unsigned index)
 {
   UpdateButtons();
+}
+
+inline void
+DeviceListWidget::EnableDisableCurrent()
+{
+  const unsigned index = GetList().GetCursorIndex();
+  if (index >= NUMDEV)
+    return;
+
+  DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
+  if (config.port_type == DeviceConfig::PortType::DISABLED)
+    return;
+
+  /* save new config to profile .. */
+
+  config.enabled = !config.enabled;
+  Profile::SetDeviceConfig(index, config);
+  Profile::Save();
+
+  /* .. and reopen the device */
+
+  DeviceDescriptor &descriptor = *device_list[index];
+  descriptor.SetConfig(config);
+
+  GetList().Invalidate();
+  UpdateButtons();
+
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static MessageOperationEnvironment env;
+  descriptor.Reopen(env);
 }
 
 inline void
@@ -582,6 +628,10 @@ void
 DeviceListWidget::OnAction(int id)
 {
   switch (id) {
+  case DISABLE:
+    EnableDisableCurrent();
+    break;
+
   case RECONNECT:
     ReconnectCurrent();
     break;

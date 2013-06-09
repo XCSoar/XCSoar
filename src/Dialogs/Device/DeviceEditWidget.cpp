@@ -385,6 +385,11 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
 {
   config = _config;
 
+  if (config.port_type == DeviceConfig::PortType::DISABLED)
+    /* if the user configures a new device, forget the old "enabled"
+       flag and re-enable the device */
+    config.enabled = true;
+
   WndProperty &port_control = GetControl(Port);
   DataFieldEnum &port_df = *(DataFieldEnum *)port_control.GetDataField();
   SetPort(port_df, config);

@@ -29,6 +29,7 @@ Version 6.7 - not yet released
   - delete waypoint implemented
   - CUP file support added
 * devices
+  - enabling/disabling devices on-the-fly
   - "debug" button
   - more robust midnight wraparound handling (#2857)
   - new driver from Cambridge L-Nav

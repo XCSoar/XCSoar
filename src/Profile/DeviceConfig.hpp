@@ -177,6 +177,14 @@ struct DeviceConfig {
   unsigned tcp_port;
 
   /**
+   * Is this device currently enabled?  This flag can be used to
+   * maintain a stock of devices, and not all of them are enabled at a
+   * time.  For example, you can disable the logger connection while
+   * you're flying and re-enable it for downloading the flight.
+   */
+  bool enabled;
+
+  /**
    * Use the K6-Bt protocol?
    */
   bool k6bt;
@@ -212,7 +220,7 @@ struct DeviceConfig {
   }
 
   bool IsDisabled() const {
-    return port_type == PortType::DISABLED;
+    return !enabled || port_type == PortType::DISABLED;
   }
 
   /**
@@ -376,6 +384,7 @@ struct DeviceConfig {
     path.clear();
     bluetooth_mac.clear();
     driver_name.clear();
+    enabled = true;
     sync_from_device = true;
     sync_to_device = true;
     k6bt = false;
