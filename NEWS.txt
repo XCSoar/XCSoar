@@ -13,6 +13,7 @@ Version 6.6.2 - not yet released
   - update all settings after task type change
 * devices
   - Volkslogger: fix IGC file download on Windows CE
+  - EWmicroRecorder: fix corrupt task declaration (#2921)
   - fix potential crash when garbage is received from device
   - fix IOIO reconnect
 * cross section
