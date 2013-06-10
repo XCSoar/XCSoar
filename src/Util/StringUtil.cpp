@@ -201,7 +201,7 @@ CopyASCII(TCHAR *dest, size_t dest_size,
   assert(src_end >= src);
 
   const TCHAR *const dest_end = dest + dest_size;
-  while (dest != dest_end && src != src_end)
+  for (; dest != dest_end && src != src_end; ++src)
     if (IsASCII(*src))
       *dest++ = *src;
 
@@ -228,7 +228,7 @@ TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
   assert(src_end >= src);
 
   const D *const dest_end = dest + dest_size;
-  while (dest != dest_end && src != src_end)
+  for (; dest != dest_end && src != src_end; ++src)
     if (IsASCII(*src))
       *dest++ = *src;
 

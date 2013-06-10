@@ -8,6 +8,11 @@ else ifeq ($(TARGET_IS_KOBO),y)
 OPENGL = n
 GLES = n
 
+# the Raspberry Pi uses EGL + GL/ES
+else ifeq ($(TARGET_IS_PI),y)
+OPENGL ?= y
+GLES ?= y
+
 # UNIX/Linux defaults to OpenGL, but can use SDL_gfx instead
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
