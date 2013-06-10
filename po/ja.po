@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-26 12:00+0200\n"
-"PO-Revision-Date: 2013-04-01 14:29+0200\n"
+"PO-Revision-Date: 2013-06-09 20:50+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-01 12:28+0000\n"
-"X-Generator: Launchpad (build 16546)\n"
+"X-Launchpad-Export-Date: 2013-06-10 10:20+0000\n"
+"X-Generator: Launchpad (build 16667)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2834,54 +2834,56 @@ msgstr "次のポイントから　現在の位置への方向"
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ATC radial"
-msgstr "次のポイントからの方向"
+msgstr "ATC 半径"
 
 #: src/InfoBoxes/Content/Factory.cpp:1215
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
-"次の旋回点から現在位置までの方角\r\n"
-"距離はATC周波数と共にノーチカルマイルで表示される"
+"選択された位置からの正磁方位\r\n"
+"距離はATCと共にNMで表示される"
 
 #: src/InfoBoxes/Content/Factory.cpp:1223
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task last hour"
-msgstr "タスク平均速度"
+msgstr "速度タスク　残り時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "タスク平均速度"
+msgstr "速度タスク　残り時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
-msgstr "現在のタスクの平均速度　高度補正無し"
+msgstr ""
+"現在んタスクにおける過去１時間の平均速度\r\n"
+"クロスカントリー中の平均速度で高度補正無し"
 
 #: src/InfoBoxes/Content/Factory.cpp:1233
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance (nominal)"
 msgstr "次のポイントまでの距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP Dist-N"
-msgstr "WP　距離"
+msgstr "ウエイポイント距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"現在選択選択されている、次のウエイポイントまでの距離\r\n"
-"AATタスクの場合、次のAATセクターまでの距離"
+"現在選択されているウエイポイントまでの距離\r\n"
+"AATタスクの場合、AATセクターまでの距離"
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:394
@@ -2982,9 +2984,9 @@ msgid "Waiting"
 msgstr "待機中"
 
 #: src/InfoBoxes/Content/Places.cpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference"
-msgstr "重量設定"
+msgstr "参照"
 
 #: src/InfoBoxes/Content/Contest.cpp:55 src/InfoBoxes/Content/Trace.cpp:172
 #: src/Dialogs/dlgAnalysis.cpp:291 src/Dialogs/dlgAnalysis.cpp:300
@@ -3903,7 +3905,7 @@ msgstr "表示項目"
 #: src/Dialogs/Device/DeviceListDialog.cpp:365
 #: src/Dialogs/Device/DeviceListDialog.cpp:578
 msgid "Debug"
-msgstr ""
+msgstr "デバッグ"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:310
 #: src/Dialogs/Settings/Panels/DevicesConfigPanel.cpp:185
@@ -3941,7 +3943,7 @@ msgstr "Bluetooth は無効"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:376
 msgid "Duplicate"
-msgstr ""
+msgstr "コピー"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:380
 msgid "Not connected"
@@ -3966,7 +3968,7 @@ msgstr "デバイスを設定"
 #: src/Dialogs/Device/DeviceListDialog.cpp:576
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
-msgstr ""
+msgstr "このデバイスとの通信は次の %u 分間記録される"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:625
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118 Data/Input/default.xci:610
@@ -5332,9 +5334,8 @@ msgid "Waypoints not editable"
 msgstr "ウエイポイントは編集できません"
 
 #: src/Dialogs/Waypoint/Manager.cpp:122
-#, fuzzy
 msgid "Delete waypoint?"
-msgstr "ウェイポイントを削除しますか？"
+msgstr "ウエイポイントを削除しますか？"
 
 #: src/Dialogs/Waypoint/Manager.cpp:154
 msgid "Save changes to waypoint file?"
@@ -5630,13 +5631,12 @@ msgstr ""
 "値はマクレディー値０の場合の数値"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
-#, fuzzy
 msgid "Vario bar"
-msgstr "バリオ"
+msgstr "バリオ　バー"
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
-msgstr ""
+msgstr "ONにすると　バリオ　バーが表示される"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
@@ -6722,15 +6722,14 @@ msgid ""
 msgstr "０％は低下なし　５０％は沈下率が２倍に増大する"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
-#, fuzzy
 msgid "Auto bugs"
-msgstr "バグ　レートの表示"
+msgstr "自動　バグ"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
-msgstr ""
+msgstr "設定すると飛行時間1時間ごとに１％バグレートを加算する"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:106
 msgid ""
@@ -6897,16 +6896,16 @@ msgstr "バリオ＃2（.)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr ""
+msgstr "バリオ　スケール　点と線"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:114
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"上昇帯はオレンジから赤色、沈下帯を明るい青から暗い青、ゼロ帯を黄色の線で表示"
-"する"
+"バリオ　スケール　点と線　オレンジから赤＝上昇　ブルーから濃いブルー　＝沈下"
+"　ゼロの場合＝　黄色の線"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -7153,9 +7152,9 @@ msgid "Reference used for finish min height rule."
 msgstr "最低フィニッシュ高度の値"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable OLC Calculations"
-msgstr "旋回表示無し"
+msgstr "OLC計算をしない"
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:131
 #, no-c-format
@@ -7460,13 +7459,12 @@ msgstr ""
 "地形の平均的な場所の明るさを設定"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:265
-#, fuzzy
 msgid "Contours"
-msgstr "着色"
+msgstr "輪郭"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "設定した場合　地形の輪郭線を表示する"
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -7992,13 +7990,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "最小AATタスク時間　分"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
-#, fuzzy
 msgid "Arm start manually"
-msgstr "スタート待機中"
+msgstr "出発　手動設定"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr ""
+msgstr "出発の判断を手動で行うか自動で行うか設定する"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start open time"
@@ -9307,93 +9304,17 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Line skipped."
-#~ msgstr "リンク　解除されました"
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "機体情報%s の読み込み失敗！"
 
-#~ msgid "Next radial ATC"
-#~ msgstr "次のATCポイントからの方角"
-
-#~ msgid "Radial ATC"
-#~ msgstr "ATCポイントからの方角"
-
-#~ msgid "Auto. wind"
-#~ msgstr "風向風速自動"
-
-#~ msgid ""
-#~ "This allows switching on or off the automatic wind algorithm.  When the "
-#~ "algorithm is switched off, the pilot is responsible for setting the wind "
-#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
-#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
-#~ "and circling."
-#~ msgstr ""
-#~ "風向風速の検出モードおよび　自動手動の切り替え　\r\n"
-#~ "手動の場合その設定はパイロットの責任で行う\r\n"
-#~ "「Circling」　GPS信号のみ必要\r\n"
-#~ "「ZigZag」　高機能バリオからの速度信号が必要\r\n"
-#~ "「Both」　　ZigZagと　Circling　両方のデーターを使用"
-
-#~ msgid ""
-#~ "Enable this if you would like to log the communication with the device."
-#~ msgstr "他のデバイスに接続する場合　ON にする"
-
-#~ msgid "Logger Info"
-#~ msgstr "ロガー情報"
-
-#~ msgid "Aircraft type"
-#~ msgstr "機種"
-
-#~ msgid "Aircraft reg."
-#~ msgstr "登録記号"
-
-#~ msgid "Polar name"
-#~ msgstr "ポーラーカーブの名称"
-
-#~ msgid "V rough air"
-#~ msgstr "乱気流速度"
-
-#~ msgid "Wing area"
-#~ msgstr "翼面積"
-
-#~ msgid "Dump time"
-#~ msgstr "排出時間"
-
-#~ msgid "Dry mass"
-#~ msgstr "乾燥重量"
-
-#~ msgid ""
-#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
-#~ "Set to zero if it does not apply."
-#~ msgstr ""
-#~ "XCSOAR　が計算する水バラストの搭載量　１００％　使用しない場合０にセットす"
-#~ "る"
-
-#~ msgid ""
-#~ "Optional the maximum manoeuvring speed can be entered on this page to "
-#~ "prevent the glide computer from commanding unrealistic cruise speeds."
-#~ msgstr ""
-#~ "グライドコンピューターが過大な速度を表示しないよう\r\n"
-#~ "乱気流飛行速度をこのページで入力することができる"
-
-#~ msgid "Dry mass of the glider (pilot + empty mass)."
-#~ msgstr "グライダー乾燥重量（パイロット+機体質量）"
-
-#~ msgid "Reference weight at which the given polar is valid."
-#~ msgstr "ポーラーカーブ設定重量"
-
-#~ msgid "The handicap factor used for the OnLine Contest scoring."
-#~ msgstr "オンラインコンテストで使用する　ハンディキャップ　ファクター"
-
-#~ msgid "Optional specification of the wing area."
-#~ msgstr "翼面積オプション性能"
-
-#~ msgid "Max. ballast"
-#~ msgstr "最大バラスト"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "すべてのバラストを投棄するのに必要な時間"
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "機体情報\"%s\"読み込みますか？"
 
 #~ msgid "English"
 #~ msgstr "英語"
+
+#~ msgid "Aircraft type"
+#~ msgstr "機種"
 
 #~ msgid "Latitude"
 #~ msgstr "緯度"
@@ -9419,8 +9340,17 @@ msgstr ""
 #~ msgid "Show details:"
 #~ msgstr "詳細を表示"
 
+#~ msgid "Delete Waypoint?"
+#~ msgstr "ウェイポイントを削除しますか？"
+
 #~ msgid "Save task?"
 #~ msgstr "タスクを保存しますか？"
+
+#~ msgid "Aircraft reg."
+#~ msgstr "登録記号"
+
+#~ msgid "Line skipped."
+#~ msgstr "リンク　解除されました"
 
 #~ msgid "H GND"
 #~ msgstr "地点標高"
@@ -9461,6 +9391,10 @@ msgstr ""
 #~ msgid "Unknown competition number"
 #~ msgstr "コンペID該当無し"
 
+#~ msgid ""
+#~ "Enable this if you would like to log the communication with the device."
+#~ msgstr "他のデバイスに接続する場合　ON にする"
+
 #~ msgid "No further information"
 #~ msgstr "追加情報無し"
 
@@ -9498,6 +9432,9 @@ msgstr ""
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "ディスプレイのスクーン表示の表示選択設定"
+
+#~ msgid "Polar name"
+#~ msgstr "ポーラーカーブの名称"
 
 #~ msgid "Page"
 #~ msgstr "ページ"
@@ -9562,6 +9499,12 @@ msgstr ""
 
 #~ msgid "WP alt.A"
 #~ msgstr "WP 到着高度"
+
+#~ msgid "Auto. wind"
+#~ msgstr "風向風速自動"
+
+#~ msgid "Logger Info"
+#~ msgstr "ロガー情報"
 
 #~ msgid "Delete Error"
 #~ msgstr "削除エラー"
@@ -9646,8 +9589,55 @@ msgstr ""
 #~ msgid "My Sample"
 #~ msgstr "サンプル"
 
+#~ msgid "V rough air"
+#~ msgstr "乱気流速度"
+
+#~ msgid "Dump time"
+#~ msgstr "排出時間"
+
+#~ msgid "Reference mass"
+#~ msgstr "重量設定"
+
+#~ msgid ""
+#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
+#~ "Set to zero if it does not apply."
+#~ msgstr ""
+#~ "XCSOAR　が計算する水バラストの搭載量　１００％　使用しない場合０にセットす"
+#~ "る"
+
+#~ msgid "Dry mass of the glider (pilot + empty mass)."
+#~ msgstr "グライダー乾燥重量（パイロット+機体質量）"
+
+#~ msgid ""
+#~ "Optional the maximum manoeuvring speed can be entered on this page to "
+#~ "prevent the glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "グライドコンピューターが過大な速度を表示しないよう\r\n"
+#~ "乱気流飛行速度をこのページで入力することができる"
+
+#~ msgid "Reference weight at which the given polar is valid."
+#~ msgstr "ポーラーカーブ設定重量"
+
+#~ msgid "The handicap factor used for the OnLine Contest scoring."
+#~ msgstr "オンラインコンテストで使用する　ハンディキャップ　ファクター"
+
+#~ msgid "Max. ballast"
+#~ msgstr "最大バラスト"
+
 #~ msgid "This sets the task point for review."
 #~ msgstr "タスクポイントの見直し"
+
+#~ msgid "Wing area"
+#~ msgstr "翼面積"
+
+#~ msgid "Dry mass"
+#~ msgstr "乾燥重量"
+
+#~ msgid "Optional specification of the wing area."
+#~ msgstr "翼面積オプション性能"
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "すべてのバラストを投棄するのに必要な時間"
 
 #~ msgid ""
 #~ "FLARM\n"
@@ -9666,6 +9656,19 @@ msgstr ""
 #~ msgstr "All TC平均"
 
 #~ msgid ""
+#~ "This allows switching on or off the automatic wind algorithm.  When the "
+#~ "algorithm is switched off, the pilot is responsible for setting the wind "
+#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
+#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
+#~ "and circling."
+#~ msgstr ""
+#~ "風向風速の検出モードおよび　自動手動の切り替え　\r\n"
+#~ "手動の場合その設定はパイロットの責任で行う\r\n"
+#~ "「Circling」　GPS信号のみ必要\r\n"
+#~ "「ZigZag」　高機能バリオからの速度信号が必要\r\n"
+#~ "「Both」　　ZigZagと　Circling　両方のデーターを使用"
+
+#~ msgid ""
 #~ "Waypoint\n"
 #~ "Details"
 #~ msgstr ""
@@ -9677,6 +9680,12 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
+
+#~ msgid "Next radial ATC"
+#~ msgstr "次のATCポイントからの方角"
+
+#~ msgid "Radial ATC"
+#~ msgstr "ATCポイントからの方角"
 
 #~ msgid "Altitude AGL"
 #~ msgstr "対地高度"
