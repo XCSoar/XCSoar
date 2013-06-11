@@ -152,6 +152,11 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
   while (!pre_takeoff_buffer.empty()) {
     const struct PreTakeoffBuffer &src = pre_takeoff_buffer.shift();
+    if (!simulator && !src.real)
+      /* ignore buffered "unreal" fixes if we're logging a real
+         flight; should never happen, but who knows */
+      continue;
+
     NMEAInfo tmp_info;
     tmp_info.Reset();
 
