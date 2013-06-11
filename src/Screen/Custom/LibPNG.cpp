@@ -136,7 +136,7 @@ LoadPNG(const void *data, size_t size)
   }
 
   UncompressedImage result = LoadPNG(png_ptr, info_ptr, data, size);
-  png_destroy_read_struct(&png_ptr, nullptr, nullptr);
+  png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
   return result;
 }
