@@ -132,7 +132,7 @@ LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
-  if (gps_info.alive && !gps_info.gps.real)
+  if (gps_info.location_available && !gps_info.gps.real)
     simulator = true;
 
   if (writer != NULL)
@@ -208,7 +208,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   assert(gps_info.alive);
   assert(gps_info.time_available);
 
-  if (!gps_info.gps.real)
+  if (gps_info.location_available && !gps_info.gps.real)
     simulator = true;
 
   if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
@@ -307,7 +307,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   if (!StartLogger(gps_info, settings, logger_id))
     return;
 
-  simulator = gps_info.alive && !gps_info.gps.real;
+  simulator = gps_info.location_available && !gps_info.gps.real;
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
