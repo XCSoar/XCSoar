@@ -24,9 +24,9 @@
 #ifndef THERMAL_ASSISTENT_RENDERER_HPP
 #define THERMAL_ASSISTENT_RENDERER_HPP
 
-#include "Screen/BufferWindow.hpp"
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
+#include "Screen/Canvas.hpp"
 
 #include <array>
 
