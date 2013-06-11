@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.6.2 - not yet released
+Version 6.6.2 - 2013/06/12
 * map
   - fix misplaced topography labels (#2564)
   - fix keyboard panning with track up (#2908)
