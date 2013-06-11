@@ -102,6 +102,15 @@
    fun:SDL_Init
 }
 
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   fun:Audio_Available
+   fun:SDL_AudioInit
+}
+
 #
 # libGL suppressions
 #
@@ -180,7 +189,7 @@
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
-   fun:realloc
+   fun:*alloc
    ...
    fun:InitDefaults
 }
@@ -201,6 +210,14 @@
    fun:_XlcCreateLocaleDataBase
 }
 
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   fun:_XrmInternalStringToQuark
+
+}
 #
 # libXext
 #
