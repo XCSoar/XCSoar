@@ -24,6 +24,7 @@ package org.xcsoar;
 
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.Build;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -188,8 +189,15 @@ public class InternalGPS
       return;
 
     try {
-      setConnected(2); // fix found
-      sendLocation(newLocation);
+      /* older Android versions, onStatusChanged() doesn't get called
+         when the GPS signal is lost; checking the accuracy is a
+         kludge */
+      if (Build.VERSION.SDK_INT >= 11 || newLocation.getAccuracy() < 100) {
+        setConnected(2); // fix found
+        sendLocation(newLocation);
+      } else
+        /* low accuracy: waiting for new GPS fix */
+        setConnected(1);
     } finally {
       safeDestruct.Decrement();
     }
