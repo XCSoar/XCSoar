@@ -24,13 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_LOGCAT_HPP
 #define XCSOAR_ANDROID_LOGCAT_HPP
 
+class IOThread;
+
 /**
  * Check the logcat for a XCSoar crash.  Save the logcat in
  * XCSoarData/crash/.
- *
- * @return true if a crash was found
  */
-bool
-CheckLogCat();
+void
+CheckLogCat(IOThread &io_thread);
+
+void
+StopLogCat();
+
+void
+OnLogCatFinished(bool crash_found);
 
 #endif

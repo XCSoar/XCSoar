@@ -23,6 +23,8 @@ Version 6.6.2 - not yet released
   - fix instant crash (#2922)
 * Altair
   - never override data path (#2509)
+* Android
+  - faster startup
 
 Version 6.6.1 - 2013/05/08
 * cross section
