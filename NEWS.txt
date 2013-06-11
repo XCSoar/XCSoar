@@ -21,6 +21,8 @@ Version 6.6.2 - not yet released
   - also display unknown airspace types (#2884)
 * Raspberry Pi
   - fix instant crash (#2922)
+* Altair
+  - never override data path (#2509)
 
 Version 6.6.1 - 2013/05/08
 * cross section
