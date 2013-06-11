@@ -222,7 +222,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   writer->LogPoint(gps_info);
 }
 
-void
+bool
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
                         const char *logger_id)
@@ -257,10 +257,11 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     LogFormat(_T("Failed to create file %s"), filename);
     delete writer;
     writer = nullptr;
-    return;
+    return false;
   }
 
   LogFormat(_T("Logger Started: %s"), filename);
+  return true;
 }
 
 void
@@ -303,7 +304,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                    asset_number[i] : _T('A');
   logger_id[3] = _T('\0');
 
-  StartLogger(gps_info, settings, logger_id);
+  if (!StartLogger(gps_info, settings, logger_id))
+    return;
 
   simulator = gps_info.alive && !gps_info.gps.real;
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
