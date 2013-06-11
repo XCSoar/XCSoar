@@ -16,6 +16,7 @@ Version 6.6.2 - not yet released
   - EWmicroRecorder: fix corrupt task declaration (#2921)
   - fix potential crash when garbage is received from device
   - fix IOIO reconnect
+  - generate G record even when first device has no GPS (#2849)
 * cross section
   - also display unknown airspace types (#2884)
 * Raspberry Pi
