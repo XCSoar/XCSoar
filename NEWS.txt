@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.3 - not yet released
+* Android
+  - fix compatibility issue with Android 2.2
 
 Version 6.6.2 - 2013/06/12
 * map
