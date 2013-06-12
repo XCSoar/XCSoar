@@ -28,9 +28,6 @@
 
 #include "TestUtil.hpp"
 
-
-#include <cstdio>
-
 int main(int argc, char **argv)
 {
   plan_tests(66);
@@ -166,13 +163,9 @@ int main(int argc, char **argv)
   ok1(find_lat_lon_okay);
 
   v = l1.DistanceBearing(l2);
-  printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
   // 116090 @ 343
 
   v = l1.DistanceBearing(l3);
-  printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
   ok(positive(v.distance) && v.distance < fixed(2), "earth distance short", 0);
 
   GeoPoint p10(GeoPoint::Invalid());
