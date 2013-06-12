@@ -17,6 +17,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/OffsetButtonsWidget.cpp \
 	$(SRC)/Widget/XMLWidget.cpp \
 	$(SRC)/Widget/ButtonPanelWidget.cpp \
+	$(SRC)/Widget/QuestionWidget.cpp \
 	$(SRC)/Widget/DockWindow.cpp
 
 WIDGET_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
