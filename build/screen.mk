@@ -13,6 +13,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
+	$(SCREEN_SRC_DIR)/SolidContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/DoubleBufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp

@@ -24,30 +24,13 @@ Copyright_License {
 #include "Form/Panel.hpp"
 #include "Look/DialogLook.hpp"
 
-#ifdef HAVE_CLIPPING
-#include "Screen/Canvas.hpp"
-#endif
-
 PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
                            const PixelRect &rc,
                            const WindowStyle style)
-#ifdef HAVE_CLIPPING
-  :background_color(look.background_color)
-#endif
 {
-  Create(parent, rc, style);
-}
-
-/* don't need to erase the background when it has been done by the
-   parent window already */
+  Create(parent, rc,
 #ifdef HAVE_CLIPPING
-
-void
-PanelControl::OnPaint(Canvas &canvas)
-{
-  canvas.Clear(background_color);
-
-  ContainerWindow::OnPaint(canvas);
-}
-
+         look.background_color,
 #endif
+         style);
+}

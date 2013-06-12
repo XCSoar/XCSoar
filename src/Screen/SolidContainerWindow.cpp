@@ -21,39 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_PANEL_HPP
-#define XCSOAR_FORM_PANEL_HPP
+#include "SolidContainerWindow.hpp"
+#include "Canvas.hpp"
 
-#include "Screen/Features.hpp"
-
-#ifdef HAVE_CLIPPING
-#include "Screen/SolidContainerWindow.hpp"
-#else
-#include "Screen/ContainerWindow.hpp"
-#endif
-
-struct DialogLook;
-
-/**
- * The PanelControl class implements the simplest form of a ContainerControl
- */
-class PanelControl :
-#ifdef HAVE_CLIPPING
-  public SolidContainerWindow
-#else
-  /* don't need to erase the background when it has been done by the
-     parent window already */
-  public ContainerWindow
-#endif
+void
+SolidContainerWindow::OnPaint(Canvas &canvas)
 {
-public:
-  /**
-   * Constructor of the PanelControl class
-   * @param owner Parent ContainerControl
-   */
-  PanelControl(ContainerWindow &parent, const DialogLook &look,
-               const PixelRect &rc,
-               const WindowStyle style=WindowStyle());
-};
+  canvas.Clear(background_color);
 
-#endif
+  ContainerWindow::OnPaint(canvas);
+}

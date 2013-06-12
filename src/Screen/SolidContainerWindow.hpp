@@ -21,39 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FORM_PANEL_HPP
-#define XCSOAR_FORM_PANEL_HPP
+#ifndef XCSOAR_SOLID_CONTAINER_WINDOW_HPP
+#define XCSOAR_SOLID_CONTAINER_WINDOW_HPP
 
-#include "Screen/Features.hpp"
-
-#ifdef HAVE_CLIPPING
-#include "Screen/SolidContainerWindow.hpp"
-#else
-#include "Screen/ContainerWindow.hpp"
-#endif
-
-struct DialogLook;
+#include "ContainerWindow.hpp"
+#include "Color.hpp"
 
 /**
- * The PanelControl class implements the simplest form of a ContainerControl
+ * A #ContainerWindow with a solid background color.
  */
-class PanelControl :
-#ifdef HAVE_CLIPPING
-  public SolidContainerWindow
-#else
-  /* don't need to erase the background when it has been done by the
-     parent window already */
-  public ContainerWindow
-#endif
-{
+class SolidContainerWindow : public ContainerWindow {
+  Color background_color;
+
 public:
-  /**
-   * Constructor of the PanelControl class
-   * @param owner Parent ContainerControl
-   */
-  PanelControl(ContainerWindow &parent, const DialogLook &look,
-               const PixelRect &rc,
-               const WindowStyle style=WindowStyle());
+  void Create(ContainerWindow &parent, PixelRect rc, Color _color,
+              const WindowStyle style=WindowStyle()) {
+    background_color = _color;
+    ContainerWindow::Create(parent, rc, style);
+  }
+
+  void SetBackgroundColor(Color _color) {
+    background_color = _color;
+    Invalidate();
+  }
+
+protected:
+  /* virtual methods from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
 };
 
 #endif
