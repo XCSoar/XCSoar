@@ -73,6 +73,8 @@ Copyright_License {
 #include <unistd.h> /* for execl() */
 #endif
 
+static constexpr unsigned separator_height = 2;
+
 gcc_pure
 static PixelRect
 GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
@@ -106,6 +108,8 @@ GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
 {
   PixelRect result = rc;
   result.bottom = bottom_rect.top;
+  if (bottom_rect.top < bottom_rect.bottom)
+    result.bottom -= separator_height;
   return result;
 }
 
@@ -726,6 +730,20 @@ bool MainWindow::OnClose() {
     Shutdown();
   }
   return true;
+}
+
+void
+MainWindow::OnPaint(Canvas &canvas)
+{
+  if (bottom_widget != nullptr && map != nullptr) {
+    /* draw a separator between main area and bottom area */
+    PixelRect rc = map->GetPosition();
+    rc.top = rc.bottom;
+    rc.bottom += separator_height;
+    canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  }
+
+  SingleWindow::OnPaint(canvas);
 }
 
 void
