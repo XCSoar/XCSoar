@@ -67,7 +67,15 @@ bool
 FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
 {
   int fds[2];
-  if (pipe(fds) < 0)
+
+#ifdef __linux__
+  const int flags = O_CLOEXEC;
+  const int result = pipe2(fds, flags);
+#else
+  const int result = pipe(fds);
+#endif
+
+  if (result < 0)
     return false;
 
   r = FileDescriptor(fds[0]);
