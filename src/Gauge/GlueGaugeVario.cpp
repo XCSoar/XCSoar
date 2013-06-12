@@ -40,7 +40,7 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GlueGaugeVario::Unprepare()
 {
-  delete GetWindow();
+  DeleteWindow();
 }
 
 void

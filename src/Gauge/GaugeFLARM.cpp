@@ -172,10 +172,7 @@ GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GaugeFLARM::Unprepare()
 {
-  SmallTrafficWindow *window =
-    (SmallTrafficWindow *)OverlappedWidget::GetWindow();
-  delete window;
-
+  DeleteWindow();
   OverlappedWidget::Unprepare();
 }
 

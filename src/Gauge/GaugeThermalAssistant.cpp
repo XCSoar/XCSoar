@@ -163,10 +163,7 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GaugeThermalAssistant::Unprepare()
 {
-  GaugeThermalAssistantWindow *window =
-    (GaugeThermalAssistantWindow *)OverlappedWidget::GetWindow();
-  delete window;
-
+  DeleteWindow();
   OverlappedWidget::Unprepare();
 }
 
