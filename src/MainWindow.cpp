@@ -614,7 +614,9 @@ MainWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 bool
 MainWindow::OnKeyDown(unsigned key_code)
 {
-  return InputEvents::processKey(key_code) ||
+  return (widget != nullptr && widget->KeyPress(key_code)) ||
+    (bottom_widget != nullptr && bottom_widget->KeyPress(key_code)) ||
+    InputEvents::processKey(key_code) ||
     SingleWindow::OnKeyDown(key_code);
 }
 
