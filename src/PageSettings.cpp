@@ -86,6 +86,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 
   switch (bottom) {
   case Bottom::NOTHING:
+  case Bottom::CUSTOM:
     break;
 
   case Bottom::CROSS_SECTION:

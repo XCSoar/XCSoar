@@ -343,6 +343,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   switch (value.bottom) {
   case PageLayout::Bottom::NOTHING:
+  case PageLayout::Bottom::CUSTOM:
     break;
 
   case PageLayout::Bottom::CROSS_SECTION:

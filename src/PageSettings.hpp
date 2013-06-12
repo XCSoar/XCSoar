@@ -98,6 +98,12 @@ struct PageLayout
     CROSS_SECTION,
 
     /**
+     * A custom #Widget is being displayed.  This is not a
+     * user-accessible option, it's only used for runtime state.
+     */
+    CUSTOM,
+
+    /**
      * A dummy entry that is used for validating profile values.
      */
     MAX

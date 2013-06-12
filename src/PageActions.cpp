@@ -214,6 +214,10 @@ LoadBottom(PageLayout::Bottom bottom)
     CommonInterface::main_window->SetBottomWidget(new CrossSectionWidget());
     break;
 
+  case PageLayout::Bottom::CUSTOM:
+    /* don't touch */
+    break;
+
   case PageLayout::Bottom::MAX:
     gcc_unreachable();
   }
@@ -286,6 +290,24 @@ PageActions::DeferredRestore()
   CommonInterface::main_window->DeferredRestorePage();
 }
 
+void
+PageActions::RestoreBottom()
+{
+  PageLayout &special_page = CommonInterface::SetUIState().pages.special_page;
+  if (!special_page.IsDefined())
+    return;
+
+  const PageLayout &configured_page = GetConfiguredLayout();
+  if (special_page.bottom == configured_page.bottom)
+    return;
+
+  special_page.bottom = configured_page.bottom;
+  if (special_page == configured_page)
+    special_page.SetUndefined();
+
+  LoadBottom(configured_page.bottom);
+}
+
 GlueMapWindow *
 PageActions::ShowMap()
 {
@@ -350,4 +372,16 @@ PageActions::ShowThermalAssistant()
     layout.bottom = PageLayout::Bottom::NOTHING;
     OpenLayout(layout);
   }
+}
+
+void
+PageActions::SetCustomBottom(Widget *widget)
+{
+  assert(widget != nullptr);
+
+  PagesState &state = CommonInterface::SetUIState().pages;
+
+  state.special_page = GetCurrentLayout();
+  state.special_page.bottom = PageLayout::Bottom::CUSTOM;
+  CommonInterface::main_window->SetBottomWidget(widget);
 }
