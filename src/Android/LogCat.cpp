@@ -26,6 +26,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/Async/IOThread.hpp"
+#include "OS/FileDescriptor.hpp"
 
 #include <atomic>
 
@@ -43,20 +44,20 @@ Copyright_License {
 
 class LogCatReader final : private FileEventHandler {
   IOThread &io_thread;
-  const int fd;
+  FileDescriptor fd;
   std::atomic<pid_t> pid;
 
   std::string data;
 
 public:
-  LogCatReader(IOThread &_io_thread, int _fd, pid_t _pid)
-    :io_thread(_io_thread), fd(_fd), pid(_pid) {
-    io_thread.LockAdd(fd, IOThread::READ, *this);
+  LogCatReader(IOThread &_io_thread, FileDescriptor &&_fd, pid_t _pid)
+    :io_thread(_io_thread), fd(std::move(_fd)), pid(_pid) {
+    io_thread.LockAdd(fd.Get(), IOThread::READ, *this);
   }
 
   ~LogCatReader() {
-    io_thread.LockRemove(fd);
-    ::close(fd);
+    io_thread.LockRemove(fd.Get());
+    fd.Close();
 
     Kill(pid.exchange(0));
   }
@@ -174,10 +175,12 @@ LogCatReader::EndOfFile()
 }
 
 bool
-LogCatReader::OnFileEvent(int fd, unsigned mask)
+LogCatReader::OnFileEvent(int _fd, unsigned mask)
 {
+  assert(_fd == fd.Get());
+
   char buffer[1024];
-  ssize_t nbytes = ::read(fd, buffer, sizeof(buffer));
+  ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
   if (nbytes > 0) {
     if (data.length() < 1024 * 1024)
       data.append(buffer, nbytes);
@@ -195,14 +198,14 @@ CheckLogCat(IOThread &io_thread)
 {
   LogFormat("Launching logcat");
 
-  int fds[2];
-  if (pipe2(fds, O_CLOEXEC) < 0)
+  FileDescriptor r, w;
+  if (!FileDescriptor::CreatePipe(r, w))
     return;
 
   pid_t pid = fork();
   if (pid == 0) {
     /* in the child process */
-    dup2(fds[1], 1);
+    w.Duplicate(1);
 
     execl("/system/bin/logcat", "logcat", "-v", "threadtime",
           "-d", "-t", "1000", NULL);
@@ -211,14 +214,10 @@ CheckLogCat(IOThread &io_thread)
 
   if (pid < 0) {
     LogFormat("Launching logcat has failed: %s", strerror(errno));
-    close(fds[0]);
-    close(fds[1]);
     return;
   }
 
-  close(fds[1]);
-
-  log_cat_reader = new LogCatReader(io_thread, fds[0], pid);
+  log_cat_reader = new LogCatReader(io_thread, std::move(r), pid);
 }
 
 void
