@@ -357,7 +357,7 @@ TaskManagerDialog::Revert()
 }
 
 void
-dlgTaskManagerShowModal(SingleWindow &parent)
+dlgTaskManagerShowModal()
 {
   if (protected_task_manager == NULL)
     return;
@@ -365,7 +365,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   TaskManagerDialog dialog(UIGlobals::GetDialogLook());
   instance = &dialog;
 
-  dialog.Create(parent);
+  dialog.Create(UIGlobals::GetMainWindow());
 
   dialog.ShowModal();
   dialog.Destroy();

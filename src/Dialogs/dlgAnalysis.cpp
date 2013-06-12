@@ -520,7 +520,7 @@ OnCalcClicked()
 
   if (page == AnalysisPage::CLIMB) {
     wf->Hide();
-    dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
+    dlgTaskManagerShowModal();
     wf->Show();
   }
 
@@ -535,7 +535,7 @@ OnCalcClicked()
 
   if ((page == AnalysisPage::TASK) || (page == AnalysisPage::TASK_SPEED)) {
     wf->Hide();
-    dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
+    dlgTaskManagerShowModal();
     wf->Show();
   }
 

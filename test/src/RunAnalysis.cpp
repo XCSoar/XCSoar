@@ -85,7 +85,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
 {
 }
 
-void dlgTaskManagerShowModal(SingleWindow &parent) {}
+void dlgTaskManagerShowModal() {}
 
 void
 ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,

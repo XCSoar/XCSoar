@@ -24,20 +24,19 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_TASK_HPP
 #define XCSOAR_DIALOGS_TASK_HPP
 
-class SingleWindow;
 class OrderedTask;
 
 void
-dlgTaskManagerShowModal(SingleWindow &parent);
+dlgTaskManagerShowModal();
 
 bool
-dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);
+dlgTaskPointShowModal(OrderedTask **task, const unsigned index);
 
 bool
 dlgTaskPointType(OrderedTask **task, unsigned index);
 
 bool
-dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task);
+dlgTaskOptionalStarts(OrderedTask **task);
 
 /**
  * Shows map display zoomed to target point

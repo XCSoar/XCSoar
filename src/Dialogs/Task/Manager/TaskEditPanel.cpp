@@ -452,8 +452,7 @@ void
 TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->TaskSize()) {
-    if (dlgTaskPointShowModal(dialog.GetMainWindow(),
-                              &ordered_task, ItemIndex)) {
+    if (dlgTaskPointShowModal(&ordered_task, ItemIndex)) {
       *task_modified = true;
       RefreshView();
     }
