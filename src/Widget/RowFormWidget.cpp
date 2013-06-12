@@ -197,7 +197,7 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
   if (!read_only)
     style.TabStop();
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
@@ -479,7 +479,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
   else
     style.SunkenEdge();
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
   LargeTextWindow *ltw = new LargeTextWindow();
   ltw->Create(panel, rc, style);
   ltw->SetFont(*look.text_font);
@@ -1079,7 +1079,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 void
 RowFormWidget::Show(const PixelRect &rc)
 {
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  Window &panel = *(Window *)GetWindow();
   panel.Move(rc);
 
   UpdateLayout();
@@ -1101,6 +1101,6 @@ RowFormWidget::SetFocus()
   if (rows.empty())
     return false;
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
   return panel.FocusFirstControl();
 }
