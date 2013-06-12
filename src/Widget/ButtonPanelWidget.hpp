@@ -49,6 +49,10 @@ public:
     :widget(_widget), buttons(nullptr), alignment(_alignment) {}
   virtual ~ButtonPanelWidget();
 
+  Widget &GetWidget() {
+    return *widget;
+  }
+
   ButtonPanel &GetButtonPanel() {
     assert(buttons != nullptr);
 
