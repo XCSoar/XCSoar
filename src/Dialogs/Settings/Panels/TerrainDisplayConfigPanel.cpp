@@ -273,7 +273,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     style.Border();
 
     TerrainPreviewWindow *preview = new TerrainPreviewWindow(::terrain);
-    preview->Create(*(ContainerWindow *)GetWindow(), {0, 0, 100, 100}, style);
+    preview->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100}, style);
     AddRemaining(preview);
   }
 

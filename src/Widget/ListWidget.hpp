@@ -40,11 +40,11 @@ class ListWidget
     protected ListCursorHandler {
 protected:
   const ListControl &GetList() const {
-    return *(const ListControl *)GetWindow();
+    return (const ListControl &)GetWindow();
   }
 
   ListControl &GetList() {
-    return *(ListControl *)GetWindow();
+    return (ListControl &)GetWindow();
   }
 
   ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,

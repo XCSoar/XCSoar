@@ -76,7 +76,7 @@ protected:
 void
 HorizonWidget::Update(const MoreData &basic)
 {
-  HorizonWindow &w = *(HorizonWindow *)GetWindow();
+  HorizonWindow &w = (HorizonWindow &)GetWindow();
   w.ReadBlackboard(basic.attitude);
   w.Invalidate();
 }

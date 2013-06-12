@@ -159,7 +159,7 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LargeTextWindowStyle preview_style;
   preview_style.Border();
   LargeTextWindow *preview = new LargeTextWindow();
-  preview->Create(*(ContainerWindow *)GetWindow(), preview_rc, preview_style);
+  preview->Create((ContainerWindow &)GetWindow(), preview_rc, preview_style);
   Add(preview);
 
   Load();

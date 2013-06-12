@@ -28,9 +28,9 @@ void
 OverlappedWidget::Raise()
 {
   assert(IsDefined());
-  assert(GetWindow()->IsVisible());
+  assert(GetWindow().IsVisible());
 
-  GetWindow()->BringToTop();
+  GetWindow().BringToTop();
 }
 
 #ifdef USE_GDI
@@ -39,12 +39,12 @@ void
 OverlappedWidget::Hide()
 {
   assert(IsDefined());
-  assert(GetWindow()->IsVisible());
+  assert(GetWindow().IsVisible());
 
   /* WindowWidget::Hide() uses Window::FastHide() to reduce overhead,
      but that doesn't work well for overlapped windows, because hiding
      an overlapped Widget must redraw the area behind it */
-  GetWindow()->Hide();
+  GetWindow().Hide();
 }
 
 #endif

@@ -201,8 +201,6 @@ void
 GaugeThermalAssistant::Update(const AttitudeState &attitude,
                               const DerivedInfo &calculated)
 {
-  ThermalAssistantWindow *window =
-    (ThermalAssistantWindow *)GetWindow();
-
-  window->Update(attitude, calculated);
+  ThermalAssistantWindow &window = (ThermalAssistantWindow &)GetWindow();
+  window.Update(attitude, calculated);
 }

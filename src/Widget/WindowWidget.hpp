@@ -57,14 +57,14 @@ protected:
    */
   void DeleteWindow();
 
-  const Window *GetWindow() const {
+  const Window &GetWindow() const {
     assert(window != nullptr);
-    return window;
+    return *window;
   }
 
-  Window *GetWindow() {
+  Window &GetWindow() {
     assert(window != nullptr);
-    return window;
+    return *window;
   }
 
 public:

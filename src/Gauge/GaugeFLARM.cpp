@@ -202,8 +202,6 @@ GaugeFLARM::OnGPSUpdate(const MoreData &basic)
 void
 GaugeFLARM::Update(const NMEAInfo &basic)
 {
-  SmallTrafficWindow *window =
-    (SmallTrafficWindow *)GetWindow();
-
-  window->Update(basic, blackboard.GetComputerSettings().team_code);
+  SmallTrafficWindow &window = (SmallTrafficWindow &)GetWindow();
+  window.Update(basic, blackboard.GetComputerSettings().team_code);
 }

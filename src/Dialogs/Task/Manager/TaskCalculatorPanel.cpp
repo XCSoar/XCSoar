@@ -195,7 +195,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   instance = this;
 
-  Add(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
+  Add(new WndOwnerDrawFrame((ContainerWindow &)GetWindow(),
                             PixelRect{0, 0, 100, Layout::Scale(17)},
                             WindowStyle(), OnWarningPaint));
 

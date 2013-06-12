@@ -33,7 +33,7 @@ CrossSectionWidget::Update(const MoreData &basic,
                            const DerivedInfo &calculated,
                            const AirspaceRendererSettings &settings)
 {
-  CrossSectionWindow &w = *(CrossSectionWindow *)GetWindow();
+  CrossSectionWindow &w = (CrossSectionWindow &)GetWindow();
 
   w.ReadBlackboard(basic, calculated,
                    CommonInterface::GetComputerSettings().task.glide,

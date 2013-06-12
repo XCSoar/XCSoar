@@ -29,8 +29,7 @@ Copyright_License {
 void
 LargeTextWidget::SetText(const TCHAR *text)
 {
-  LargeTextWindow &w = *(LargeTextWindow *)GetWindow();
-
+  LargeTextWindow &w = (LargeTextWindow &)GetWindow();
   w.SetText(text);
 }
 

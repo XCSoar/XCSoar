@@ -62,5 +62,5 @@ GlueGaugeVario::Hide()
 void
 GlueGaugeVario::OnGPSUpdate(const MoreData &basic)
 {
-  ((GaugeVario *)GetWindow())->Invalidate();
+  ((GaugeVario &)GetWindow()).Invalidate();
 }
