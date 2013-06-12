@@ -32,6 +32,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#ifdef ANDROID
+#include <sys/syscall.h>
+#endif
+
 #ifdef HAVE_POSIX
 #include <poll.h>
 #endif
@@ -67,7 +71,21 @@ bool
 FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
 {
   int fds[2];
-  if (pipe(fds) < 0)
+
+#ifdef __linux__
+  const int flags = O_CLOEXEC;
+#ifdef ANDROID
+  /* Bionic provides the pipe2() function only since Android 2.3,
+     therefore we must roll our own system call here */
+  const int result = syscall(__NR_pipe2, fds, flags);
+#else
+  const int result = pipe2(fds, flags);
+#endif
+#else
+  const int result = pipe(fds);
+#endif
+
+  if (result < 0)
     return false;
 
   r = FileDescriptor(fds[0]);
