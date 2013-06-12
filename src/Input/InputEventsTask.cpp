@@ -42,6 +42,9 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
+#include "PageActions.hpp"
+#include "Widget/QuestionWidget.hpp"
+#include "Form/ActionListener.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -310,6 +313,41 @@ InputEvents::eventTaskSave(const TCHAR *misc)
   }
 }
 
+class TaskTransitionWidget final
+  : public QuestionWidget, private ActionListener {
+  enum Action {
+    DISMISS,
+    ARM_ADVANCE,
+  };
+
+public:
+  TaskTransitionWidget()
+    :QuestionWidget(_("In sector, arm advance when ready"), *this) {
+    AddButton(_("Arm"), ARM_ADVANCE);
+    AddButton(_("Dismiss"), DISMISS);
+  }
+
+private:
+  virtual void OnAction(int id) override;
+};
+
+void
+TaskTransitionWidget::OnAction(int id)
+{
+  switch ((Action)id) {
+  case DISMISS:
+    break;
+
+  case ARM_ADVANCE: {
+    ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+    TaskAdvance &advance = task_manager->SetTaskAdvance();
+    advance.SetArmed(true);
+  }
+  }
+
+  PageActions::RestoreBottom();
+}
+
 void
 InputEvents::eventTaskTransition(const TCHAR *misc)
 {
@@ -342,6 +380,6 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
   } else if (StringIsEqual(misc, _T("finish"))) {
     Message::AddMessage(_("Task finished"));
   } else if (StringIsEqual(misc, _T("ready"))) {
-    Message::AddMessage(_("In sector, arm advance when ready"));
+    PageActions::SetCustomBottom(new TaskTransitionWidget());
   }
 }

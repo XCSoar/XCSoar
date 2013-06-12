@@ -23,6 +23,7 @@ Version 6.7 - not yet released
   - MAT: remove "auto add" turnpoint feature when fly over it
   - update the calculator without a GPS fix (#2876)
   - fix task speed and time estimates before task start (#2876)
+  - show "arm advance" button when manual arming is necessary
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
 * waypoint editor
