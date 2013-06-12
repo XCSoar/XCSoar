@@ -21,22 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_LOGCAT_HPP
-#define XCSOAR_ANDROID_LOGCAT_HPP
-
-class IOThread;
-
-/**
- * Check the logcat for a XCSoar crash.  Save the logcat in
- * XCSoarData/crash/.
+/*
+ * Load an image from a resource or a file and exit.
+ *
  */
-void
-CheckLogCat(IOThread &io_thread);
 
-void
-StopLogCat();
+#define ENABLE_SCREEN
+#define ENABLE_CMDLINE
+#define USAGE "{PATH|ID}"
 
-void
-OnLogCatFinished(bool crash_found);
+#include "Main.hpp"
+#include "Screen/Bitmap.hpp"
+#include "Util/NumberParser.hpp"
+#include "Util/StringUtil.hpp"
 
-#endif
+static tstring path;
+static unsigned id;
+
+static void
+ParseCommandLine(Args &args)
+{
+  path = args.ExpectNextT();
+
+  TCHAR *endptr;
+  id = ParseUnsigned(path.c_str(), &endptr);
+  if (!StringIsEmpty(endptr))
+    id = 0;
+}
+
+static void
+Main()
+{
+  Bitmap bitmap;
+  bool success = id != 0
+    ? bitmap.Load(id)
+    : bitmap.LoadFile(path.c_str());
+  if (!success)
+    fprintf(stderr, "Failed to load image\n");
+}

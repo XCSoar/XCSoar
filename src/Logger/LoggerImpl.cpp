@@ -132,7 +132,7 @@ LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
-  if (gps_info.alive && !gps_info.gps.real)
+  if (gps_info.location_available && !gps_info.gps.real)
     simulator = true;
 
   if (writer != NULL)
@@ -152,6 +152,11 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
   while (!pre_takeoff_buffer.empty()) {
     const struct PreTakeoffBuffer &src = pre_takeoff_buffer.shift();
+    if (!simulator && !src.real)
+      /* ignore buffered "unreal" fixes if we're logging a real
+         flight; should never happen, but who knows */
+      continue;
+
     NMEAInfo tmp_info;
     tmp_info.Reset();
 
@@ -208,7 +213,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   assert(gps_info.alive);
   assert(gps_info.time_available);
 
-  if (!gps_info.gps.real)
+  if (gps_info.location_available && !gps_info.gps.real)
     simulator = true;
 
   if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
@@ -222,7 +227,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   writer->LogPoint(gps_info);
 }
 
-void
+bool
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
                         const char *logger_id)
@@ -257,10 +262,11 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     LogFormat(_T("Failed to create file %s"), filename);
     delete writer;
     writer = nullptr;
-    return;
+    return false;
   }
 
   LogFormat(_T("Logger Started: %s"), filename);
+  return true;
 }
 
 void
@@ -303,9 +309,10 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                    asset_number[i] : _T('A');
   logger_id[3] = _T('\0');
 
-  StartLogger(gps_info, settings, logger_id);
+  if (!StartLogger(gps_info, settings, logger_id))
+    return;
 
-  simulator = gps_info.alive && !gps_info.gps.real;
+  simulator = gps_info.location_available && !gps_info.gps.real;
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,

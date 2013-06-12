@@ -279,8 +279,12 @@ NMEAInfo::Complement(const NMEAInfo &add)
   acceleration.Complement(add.acceleration);
   attitude.Complement(add.attitude);
 
-  if (location_available.Complement(add.location_available))
+  if (location_available.Complement(add.location_available)) {
     location = add.location;
+
+    /* the GPSState belongs to the device that provides the GPS fix */
+    gps = add.gps;
+  }
 
   if (track_available.Complement(add.track_available))
     track = add.track;

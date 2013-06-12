@@ -76,10 +76,12 @@ SelectProfile(const TCHAR *path)
 
   Profile::SetFiles(path);
 
-  /* When a profile from a secondary data path is used, this path
-     becomes the primary data path */
-  TCHAR temp[MAX_PATH];
-  SetPrimaryDataPath(DirName(path, temp));
+  if (RelativePath(path) == nullptr) {
+    /* When a profile from a secondary data path is used, this path
+       becomes the primary data path */
+    TCHAR temp[MAX_PATH];
+    SetPrimaryDataPath(DirName(path, temp));
+  }
 
   File::Touch(path);
 }
