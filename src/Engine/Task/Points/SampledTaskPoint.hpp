@@ -188,6 +188,8 @@ public:
    * @param locmax Location of max distance node
    */
   void SetSearchMax(const SearchPoint &locmax) {
+    assert(locmax.IsValid());
+
     search_max = locmax;
   }
 
@@ -198,6 +200,8 @@ public:
    * @param locmin Location of min distance node
    */
   void SetSearchMin(const SearchPoint &locmin) {
+    assert(locmin.IsValid());
+
     search_min = locmin;
   }
 };
