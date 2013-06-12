@@ -1090,8 +1090,7 @@ RowFormWidget::Show(const PixelRect &rc)
 void
 RowFormWidget::Move(const PixelRect &rc)
 {
-  PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.Move(rc);
+  WindowWidget::Move(rc);
 
   UpdateLayout();
 }
