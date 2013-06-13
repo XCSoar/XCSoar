@@ -201,7 +201,7 @@ Fonts::Initialize()
 }
 
 void
-Fonts::SizeInfoboxFont(UPixelScalar control_width)
+Fonts::SizeInfoboxFont(unsigned control_width)
 {
   LOGFONT lf = log_infobox;
 

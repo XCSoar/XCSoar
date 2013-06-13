@@ -24,11 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
 
-#include "Screen/Point.hpp"
-
-#include <tchar.h>
-
-struct Appearance;
 class Font;
 
 namespace Fonts
@@ -55,7 +50,7 @@ namespace Fonts
    */
   bool Initialize();
 
-  void SizeInfoboxFont(UPixelScalar control_width);
+  void SizeInfoboxFont(unsigned control_width);
 
   /**
    * Load custom fonts from the profile.
