@@ -135,8 +135,7 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     canvas.SelectNullPen();
     canvas.Select(Brush(COLOR_YELLOW.WithAlpha(80)));

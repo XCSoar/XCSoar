@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/ProtectedRoutePlanner.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
 #endif
 
@@ -288,7 +289,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     visitor.fans.Prepare();
 
-    glEnable(GL_STENCIL_TEST);
+    const GLEnable stencil_test(GL_STENCIL_TEST);
     glClear(GL_STENCIL_BUFFER_BIT);
 
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
@@ -303,13 +304,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     canvas.Clear(Color(255, 255, 255, 77));
-
-    glDisable(GL_BLEND);
-    glDisable(GL_STENCIL_TEST);
 
 #elif defined(USE_GDI)
 
