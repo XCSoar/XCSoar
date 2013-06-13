@@ -30,7 +30,7 @@ Look::Initialise(const Font &map_font, const Font &map_bold_font,
 {
   dialog.Initialise(map_bold_font, map_font, map_label_font,
                     map_bold_font, map_font, map_bold_font);
-  traffic.Initialise();
+  traffic.Initialise(map_font);
   flarm_dialog.Initialise(traffic, false);
   gesture.Initialise();
   thermal_assistant_dialog.Initialise(false, false);

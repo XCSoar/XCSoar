@@ -26,7 +26,8 @@ Copyright_License {
 #include "resource.h"
 
 void
-WaypointLook::Initialise(const WaypointRendererSettings &settings)
+WaypointLook::Initialise(const WaypointRendererSettings &settings,
+                         const Font &_font, const Font &_bold_font)
 {
   small_icon.LoadResource(IDB_SMALL, IDB_SMALL_HD);
   turn_point_icon.LoadResource(IDB_TURNPOINT, IDB_TURNPOINT_HD);
@@ -88,4 +89,7 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
                                     IDB_OUTFIELD_UNREACHABLE2_HD);
     break;
   }
+
+  font = &_font;
+  bold_font = &_bold_font;
 }

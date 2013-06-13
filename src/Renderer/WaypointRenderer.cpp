@@ -53,7 +53,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/WaypointLook.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -454,12 +454,13 @@ public:
 static void
 MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
                        LabelBlock &label_block,
-                       WaypointLabelList &labels)
+                       WaypointLabelList &labels,
+                       const WaypointLook &look)
 {
   labels.Sort();
 
   for (const auto &l : labels) {
-    canvas.Select(l.bold ? Fonts::map_bold : Fonts::map);
+    canvas.Select(l.bold ? *look.bold_font : *look.font);
 
     TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
               width, height, &label_block);
@@ -507,5 +508,5 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   MapWaypointLabelRender(canvas,
                          projection.GetScreenWidth(),
                          projection.GetScreenHeight(),
-                         label_block, v.labels);
+                         label_block, v.labels, look);
 }
