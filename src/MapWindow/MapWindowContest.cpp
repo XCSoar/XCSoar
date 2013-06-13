@@ -68,7 +68,7 @@ MapWindow::DrawContest(Canvas &canvas)
     buffer_canvas.Select(Brush(fill_color));
 #endif
     buffer_canvas.SelectNullPen();
-    RenderFAISectors(canvas, render_projection,
+    RenderFAISectors(buffer_canvas, render_projection,
                      flying.release_location, flying.far_location);
     canvas.CopyAnd(buffer_canvas);
 
