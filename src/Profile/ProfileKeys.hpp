@@ -200,7 +200,6 @@ extern const char UseCustomFonts[];
 extern const char FontInfoWindowFont[];
 extern const char FontTitleWindowFont[];
 extern const char FontMapWindowFont[];
-extern const char FontTitleSmallWindowFont[];
 extern const char FontMapWindowBoldFont[];
 extern const char FontCDIWindowFont[];
 extern const char FontMapLabelFont[];

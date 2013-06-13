@@ -163,7 +163,12 @@ void
 Profile::Get(FontSettings &settings)
 {
   GetFont(ProfileKeys::FontInfoWindowFont, &settings.infobox);
-  GetFont(ProfileKeys::FontTitleSmallWindowFont, &settings.infobox_small);
+
+  /* the "small" font is derived from the regular font */
+  settings.infobox_small = settings.infobox;
+  settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
+  settings.infobox_small.lfWeight = FW_MEDIUM;
+
   GetFont(ProfileKeys::FontTitleWindowFont, &settings.title);
   GetFont(ProfileKeys::FontCDIWindowFont, &settings.cdi);
   GetFont(ProfileKeys::FontMapLabelFont, &settings.map_label);

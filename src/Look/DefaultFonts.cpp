@@ -102,6 +102,11 @@ InitialiseLogFonts(FontSettings &settings)
   settings.infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
+  /* the "small" font is derived from the regular font */
+  settings.infobox_small = settings.infobox;
+  settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
+  settings.infobox_small.lfWeight = FW_MEDIUM;
+
   InitialiseLogfont(&settings.title, GetStandardFontFace(), font_height / 3);
 
   // new font for CDI Scale
@@ -123,9 +128,6 @@ InitialiseLogFonts(FontSettings &settings)
   // Font for map bold text
   InitialiseLogfont(&settings.map_bold, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.507), true);
-
-  InitialiseLogfont(&settings.infobox_small, GetStandardFontFace(),
-                    Layout::Scale(20));
 
 #ifndef GNAV
   InitialiseLogfont(&settings.infobox_units, GetStandardFontFace(),

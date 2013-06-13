@@ -205,7 +205,6 @@ const char UseCustomFonts[] = "UseCustomFonts";
 const char FontInfoWindowFont[] = "InfoWindowFont";
 const char FontTitleWindowFont[] = "TitleWindowFont";
 const char FontMapWindowFont[] = "MapWindowFont";
-const char FontTitleSmallWindowFont[] = "TeamCodeFont";
 const char FontMapWindowBoldFont[] = "MapWindowBoldFont";
 const char FontCDIWindowFont[] = "CDIWindowFont";
 const char FontMapLabelFont[] = "MapLabelFont";

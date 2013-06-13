@@ -204,10 +204,8 @@ static const struct {
 } customisable_fonts[] = {
   { ProfileKeys::FontTitleWindowFont, N_("InfoBox titles"),
     Fonts::default_settings.title },
-  { ProfileKeys::FontInfoWindowFont, N_("InfoBox values, normal"),
+  { ProfileKeys::FontInfoWindowFont, N_("InfoBox values"),
     Fonts::default_settings.infobox },
-  { ProfileKeys::FontTitleSmallWindowFont, N_("InfoBox values, small"),
-    Fonts::default_settings.infobox_small },
   { ProfileKeys::FontMapWindowFont, N_("Waypoint labels"),
     Fonts::default_settings.map },
   { ProfileKeys::FontMapLabelFont, N_("Topography labels, normal"),
