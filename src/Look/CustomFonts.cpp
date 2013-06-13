@@ -29,25 +29,25 @@ Copyright_License {
 #include <string.h>
 
 static void
-LoadCustomFont(Font *theFont, const char FontRegKey[])
+LoadCustomFont(Font &font, const char *key)
 {
   LOGFONT logfont;
   memset((char *)&logfont, 0, sizeof(LOGFONT));
-  if (Profile::GetFont(FontRegKey, &logfont))
-    theFont->Load(logfont);
+  if (Profile::GetFont(key, &logfont))
+    font.Load(logfont);
 }
 
 bool
 Fonts::LoadCustom()
 {
-  LoadCustomFont(&infobox, ProfileKeys::FontInfoWindowFont);
-  LoadCustomFont(&infobox_small, ProfileKeys::FontTitleSmallWindowFont);
-  LoadCustomFont(&title, ProfileKeys::FontTitleWindowFont);
-  LoadCustomFont(&cdi, ProfileKeys::FontCDIWindowFont);
-  LoadCustomFont(&map_label, ProfileKeys::FontMapLabelFont);
-  LoadCustomFont(&map_label_important, ProfileKeys::FontMapLabelImportantFont);
-  LoadCustomFont(&map, ProfileKeys::FontMapWindowFont);
-  LoadCustomFont(&map_bold, ProfileKeys::FontMapWindowBoldFont);
+  LoadCustomFont(infobox, ProfileKeys::FontInfoWindowFont);
+  LoadCustomFont(infobox_small, ProfileKeys::FontTitleSmallWindowFont);
+  LoadCustomFont(title, ProfileKeys::FontTitleWindowFont);
+  LoadCustomFont(cdi, ProfileKeys::FontCDIWindowFont);
+  LoadCustomFont(map_label, ProfileKeys::FontMapLabelFont);
+  LoadCustomFont(map_label_important, ProfileKeys::FontMapLabelImportantFont);
+  LoadCustomFont(map, ProfileKeys::FontMapWindowFont);
+  LoadCustomFont(map_bold, ProfileKeys::FontMapWindowBoldFont);
 
   return title.IsDefined() && cdi.IsDefined() &&
     map_label.IsDefined() && map_label_important.IsDefined() &&
