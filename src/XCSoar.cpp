@@ -37,7 +37,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Compiler.h"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Screen/Init.hpp"
 #include "Net/Init.hpp"
 #include "UtilsSystem.hpp"

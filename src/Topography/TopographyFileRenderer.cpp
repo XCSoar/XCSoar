@@ -24,7 +24,7 @@ Copyright_License {
 #include "Topography/TopographyFileRenderer.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "resource.h"

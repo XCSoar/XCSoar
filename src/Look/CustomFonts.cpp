@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Fonts.hpp"
+#include "CustomFonts.hpp"
+#include "GlobalFonts.hpp"
 #include "Screen/Font.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/FontConfig.hpp"

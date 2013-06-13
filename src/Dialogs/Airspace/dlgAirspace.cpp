@@ -33,7 +33,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"

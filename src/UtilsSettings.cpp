@@ -24,7 +24,7 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/Settings.hpp"

@@ -63,7 +63,7 @@ Copyright_License {
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "resource.h"
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"

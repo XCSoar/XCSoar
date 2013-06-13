@@ -21,36 +21,42 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FONTS_HPP
-#define XCSOAR_FONTS_HPP
+#include "GlobalFonts.hpp"
+#include "Screen/Font.hpp"
 
-class Font;
-
-namespace Fonts
-{
-  extern Font infobox;
-  extern Font infobox_small;
+/// values inside infoboxes  like numbers, etc.
+Font Fonts::infobox;
+Font Fonts::infobox_small;
 #ifndef GNAV
-  extern Font infobox_units;
+Font Fonts::infobox_units;
 #endif
+/// Titles of infoboxes like Next, WP L/D etc.
+Font Fonts::title;
+/// vario display, runway informations
+Font Fonts::cdi;
+Font Fonts::monospace;
+/// text names on the map
+Font Fonts::map;
+/// menu buttons, waypoint selection, messages, etc.
+Font Fonts::map_bold;
+/// Flarm Traffic draweing and stats, map labels in italic
+Font Fonts::map_label;
+/// font labels for important labels (e.g. big/medium cities)
+Font Fonts::map_label_important;
 
-  extern Font title;
-  extern Font cdi;
-  extern Font monospace;
-
-  extern Font map;
-  extern Font map_bold;
-  extern Font map_label;
-  extern Font map_label_important;
-
-  /**
-   * Load custom fonts from the profile.
-   *
-   * @return true on success
-   */
-  bool LoadCustom();
-
-  void Deinitialize();
+void
+Fonts::Deinitialize()
+{
+  infobox.Destroy();
+  infobox_small.Destroy();
+#ifndef GNAV
+  infobox_units.Destroy();
+#endif
+  title.Destroy();
+  map.Destroy();
+  map_bold.Destroy();
+  cdi.Destroy();
+  map_label.Destroy();
+  map_label_important.Destroy();
+  monospace.Destroy();
 }
-
-#endif

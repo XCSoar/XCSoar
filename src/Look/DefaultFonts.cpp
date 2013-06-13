@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "DefaultFonts.hpp"
 #include "AutoFont.hpp"
-#include "Fonts.hpp"
+#include "GlobalFonts.hpp"
 #include "StandardFonts.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"

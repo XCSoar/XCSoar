@@ -39,7 +39,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Event/Android/Queue.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Dialogs/Message.hpp"

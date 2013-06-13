@@ -1702,7 +1702,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
@@ -2402,7 +2402,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \
