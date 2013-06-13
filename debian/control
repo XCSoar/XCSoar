@@ -12,7 +12,7 @@ Build-Depends: debhelper (>= 5), g++ (>= 4.6),
  gettext,
  texlive, texlive-latex-extra,
  texlive-lang-english, texlive-lang-german, texlive-lang-french,
- latex-xcolor, pgf
+ latex-xcolor, pgf, liblocale-po-perl, libio-captureoutput-perl
 Standards-Version: 3.9.1.0
 Homepage: http://www.xcsoar.org/
 

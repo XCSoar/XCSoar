@@ -121,6 +121,13 @@ The \texttt{Makefile} assumes that the Android SDK is installed in
 \verb|~/opt/android-ndk-r8e|.  You can use the options
 \verb|ANDROID_SDK| and \verb|ANDROID_NDK| to override these paths.
 
+Load/update the IOIO source code:
+
+\begin{verbatim*}
+git submodule init
+git submodule update
+\end{verbatim*}
+
 To compile, run:
 
 \begin{verbatim*}
@@ -146,26 +153,6 @@ extension \\
 \texttt{ANDROIDFAT} & "fat" package for all supported CPUs \\
 
 \end{tabular}
-
-\subsubsection{Enabling IOIO Support}
-
-IOIO support must be enabled explicitly, because it depends on
-IOIOLib.  First get the IOIOLib source code:
-
-\begin{verbatim*}
-git clone git://github.com/ytai/ioio.git
-\end{verbatim*}
-
-Now add the parameter \verb|IOIOLIB_DIR| pointing to this repository:
-
-\begin{verbatim*}
-make TARGET=ANDROID clean
-make TARGET=ANDROID \
- IOIOLIB_DIR=/usr/src/git/ioio/software/IOIOLib
-\end{verbatim*}
-
-The first command may be necessary if the output directory already
-contains binaries without IOIO support.
 
 \subsection{Compiling for Windows}
 

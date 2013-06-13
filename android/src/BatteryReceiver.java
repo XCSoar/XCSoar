@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -21,24 +20,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+package org.xcsoarte;
 
-class Context;
-class NativeView;
-class EventQueue;
-class Vibrator;
-class IOIOHelper;
+import android.content.Context;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.os.BatteryManager;
 
-extern Context *context;
+class BatteryReceiver extends BroadcastReceiver {
+  private static native void setBatteryPercent(int level, int plugged);
 
-extern NativeView *native_view;
-
-extern EventQueue *event_queue;
-
-extern Vibrator *vibrator;
-extern bool os_haptic_feedback_enabled;
-
-extern IOIOHelper *ioio_helper;
-
-#endif
+  @Override public void onReceive(Context context, Intent intent) {
+    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+    int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+    setBatteryPercent(level, plugged);
+  }
+}

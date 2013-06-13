@@ -21,7 +21,7 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
 else
-  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
+  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)
@@ -50,25 +50,16 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil
-ifneq ($(IOIOLIB_DIR),)
+NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil BatteryReceiver
 NATIVE_CLASSES += NativeBMP085Listener
 NATIVE_CLASSES += NativeI2CbaroListener
 NATIVE_CLASSES += NativeNunchuckListener
 NATIVE_CLASSES += NativeVoltageListener
-endif
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 ANDROID_JAVA_SOURCES := $(wildcard android/src/*.java)
-ifeq ($(IOIOLIB_DIR),)
-ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*IOIO*.java),$(ANDROID_JAVA_SOURCES))
-ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*BMP085*.java),$(ANDROID_JAVA_SOURCES))
-ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*I2Cbaro*.java),$(ANDROID_JAVA_SOURCES))
-ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*Nunchuck*.java),$(ANDROID_JAVA_SOURCES))
-ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*Voltage*.java),$(ANDROID_JAVA_SOURCES))
-endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
 RAW_DIR = $(ANDROID_BUILD)/res/raw
@@ -146,17 +137,15 @@ endif
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoarte
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoarte $(ANDROID_BUILD)/src/ioio/lib
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
 	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoarte
-ifneq ($(IOIOLIB_DIR),)
-	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio/lib/util
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio/lib/impl
-endif
+	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/api $(ANDROID_BUILD)/src/ioio/lib/api
+	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi
+	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/util $(ANDROID_BUILD)/src/ioio/lib/util
+	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/impl $(ANDROID_BUILD)/src/ioio/lib/impl
+	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi2
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 ifeq ($(WINHOST),y)
 	echo "now run your android build followed by exit.  For example:"
@@ -187,7 +176,7 @@ $$(ANDROID_BUILD)/libs/$(2)/lib$(1).so: $$(OUT)/$(3)/bin/lib$(1).so | $$(ANDROID
 	$$(Q)cp $$< $$@
 
 $$(OUT)/$(3)/bin/lib$(1).so:
-	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) IOIOLIB_DIR=$$(IOIOLIB_DIR) USE_CCACHE=$$(USE_CCACHE) $$@
+	$$(Q)$$(MAKE) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
 
 endef
 

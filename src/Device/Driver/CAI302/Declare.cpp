@@ -104,10 +104,6 @@ DeclareInner(Port &port, const Declaration &declaration,
   if (!CAI302::DownloadMode(port, env))
     return false;
 
-  char GliderType[13], GliderID[13];
-  convert_string(GliderType, sizeof(GliderType), declaration.aircraft_type);
-  convert_string(GliderID, sizeof(GliderID), declaration.aircraft_registration);
-
   convert_string(pilot.name, sizeof(pilot.name), declaration.pilot_name);
   if (!CAI302::DownloadPilot(port, pilot, 0, env))
     return false;

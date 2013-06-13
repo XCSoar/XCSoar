@@ -72,6 +72,14 @@ class MainWindow : public SingleWindow {
      * @see DeferredRestorePage()
      */
     RESTORE_PAGE,
+
+#ifdef ANDROID
+    /**
+     * A previous crash has been detected, and the crash log was
+     * saved.
+     */
+    CRASH,
+#endif
   };
 
   static constexpr const TCHAR *title = _T("XCSoar");
@@ -257,6 +265,12 @@ public:
   void SendCalculatedUpdate() {
     SendUser((unsigned)Command::CALCULATED_UPDATE);
   }
+
+#ifdef ANDROID
+  void SendCrash() {
+    SendUser((unsigned)Command::CRASH);
+  }
+#endif
 
   void SetTerrain(RasterTerrain *terrain);
   void SetTopography(TopographyStore *topography);

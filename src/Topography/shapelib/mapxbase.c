@@ -28,8 +28,6 @@
  * DEALINGS IN THE SOFTWARE.
  ****************************************************************************/
 
-#define _FILE_OFFSET_BITS 64
-
 #include "mapserver.h"
 
 #include <zzip/util.h>

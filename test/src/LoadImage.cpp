@@ -21,24 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MAIN_HPP
-#define XCSOAR_ANDROID_MAIN_HPP
+/*
+ * Load an image from a resource or a file and exit.
+ *
+ */
 
-class Context;
-class NativeView;
-class EventQueue;
-class Vibrator;
-class IOIOHelper;
+#define ENABLE_SCREEN
+#define ENABLE_CMDLINE
+#define USAGE "{PATH|ID}"
 
-extern Context *context;
+#include "Main.hpp"
+#include "Screen/Bitmap.hpp"
+#include "Util/NumberParser.hpp"
+#include "Util/StringUtil.hpp"
 
-extern NativeView *native_view;
+static tstring path;
+static unsigned id;
 
-extern EventQueue *event_queue;
+static void
+ParseCommandLine(Args &args)
+{
+  path = args.ExpectNextT();
 
-extern Vibrator *vibrator;
-extern bool os_haptic_feedback_enabled;
+  TCHAR *endptr;
+  id = ParseUnsigned(path.c_str(), &endptr);
+  if (!StringIsEmpty(endptr))
+    id = 0;
+}
 
-extern IOIOHelper *ioio_helper;
-
-#endif
+static void
+Main()
+{
+  Bitmap bitmap;
+  bool success = id != 0
+    ? bitmap.Load(id)
+    : bitmap.LoadFile(path.c_str());
+  if (!success)
+    fprintf(stderr, "Failed to load image\n");
+}

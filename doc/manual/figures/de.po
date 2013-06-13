@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: xcsoar-figures\n"
+"PO-Revision-Date: 2013-04-30 23:08+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: de_DE\n"
+"X-Source-Language: en_US\n"
+
+#: doc/manual/figures/figure_auto_maccready.svg:1
+msgid "Safety height"
+msgstr "Sicherheitshöhe"
+
+#: doc/manual/figures/figure_auto_maccready.svg:12
+msgid "Mc = 4"
+msgstr ""
+
+#: doc/manual/figures/figure_terrain.svg:19
+msgid "(b) Terrain clearance"
+msgstr "(b) Geländefreiheit"
+
+#: doc/manual/figures/figure_auto_maccready.svg:10
+msgid "Mc = 3"
+msgstr ""
+
+#: doc/manual/figures/figure_auto_maccready.svg:9
+msgid "VOpt = 70"
+msgstr "VOpt = 130"
+
+#: doc/manual/figures/figure_terrain.svg:13
+msgid "(b)"
+msgstr ""
+
+#: doc/manual/figures/figure_optimal_cruise.svg:3
+msgid "Glider track during cruise"
+msgstr "Gleitpfad während dem Vorflug"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:5
+msgid "Airmass Vertical Motion"
+msgstr "Luftmassenbewegung"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:1
+msgid "Optimal cruise track to reach target"
+msgstr "Optimaler Flugweg um das Ziel zu"
+
+#: doc/manual/figures/figure_auto_maccready.svg:3
+msgid "Below final glide"
+msgstr "Unter Gleitpfad"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:1
+msgid "A constant airspeed is maintained regardless of lift/sink."
+msgstr ""
+"Es wird eine konstante Geschwindigkeit geflogen, egal ob Steigen oder Saufen"
+
+#: doc/manual/figures/figure_auto_maccready.svg:11
+msgid "VOpt = 80"
+msgstr "VOpt = 148"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:7
+msgid "Target"
+msgstr "Ziel"
+
+#: doc/manual/figures/figure_terrain.svg:8
+#: doc/manual/figures/figure_terrain.svg:15
+msgid "Arrival above safety height"
+msgstr "Ankunft über Sicherheitshöhe"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:2
+msgid "maintaining altitude"
+msgstr "erreichen und die Höhe zu halten"
+
+#: doc/manual/figures/figure_terrain.svg:6
+#: doc/manual/figures/figure_terrain.svg:16
+msgid "Glideslope below terrain safety height"
+msgstr "Gleitpfad unterhalb der Geländefreiheit"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:4
+msgid "Dolphin Speed to Fly"
+msgstr "Delfin-Stil"
+
+#: doc/manual/figures/figure_auto_maccready.svg:5
+msgid "VOpt = 50"
+msgstr "VOpt = 92"
+
+#: doc/manual/figures/figure_terrain.svg:7
+#: doc/manual/figures/figure_terrain.svg:17
+msgid "Landpoint unreachable"
+msgstr "Landepunkt unerreichbar"
+
+#: doc/manual/figures/figure_auto_maccready.svg:7
+msgid "VOpt = 60"
+msgstr "VOpt = 111"
+
+#: doc/manual/figures/figure_auto_maccready.svg:13
+msgid "VOpt = 90"
+msgstr "VOpt = 167"
+
+#: doc/manual/figures/figure_terrain.svg:4
+msgid "Best glide angle in wind"
+msgstr "Bester Gleitwinkel mit Wind"
+
+#: doc/manual/figures/figure_auto_maccready.svg:6
+msgid "Mc = 1"
+msgstr ""
+
+#: doc/manual/figures/figure_optimal_cruise.svg:8
+msgid "Wind vector"
+msgstr "Wind Vektor"
+
+#: doc/manual/figures/figure_terrain.svg:10
+msgid "Landpoint reachable"
+msgstr "Landepunkt ist erreichbar"
+
+#: doc/manual/figures/figure_terrain.svg:2
+msgid "terrain safety height"
+msgstr "wegen Geländefreiheit"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:2
+msgid "Airspeed is reduced in lift and increased in sink."
+msgstr "Die Geschwindigkeit wird den Steigen oder Saufen angepasst."
+
+#: doc/manual/figures/figure_optimal_cruise.svg:5
+msgid "Drift during cruise"
+msgstr "Drift während Vorflug"
+
+#: doc/manual/figures/figure_terrain.svg:5
+msgid "Arrival below safety height"
+msgstr "Ankunft unter Sicherheitshöhe"
+
+#: doc/manual/figures/figure_terrain.svg:9
+msgid "Glideslope above terrain safety height"
+msgstr "Gleitpfad über der Geländefreiheit"
+
+#: doc/manual/figures/figure_speed_to_fly.svg:3
+msgid "Block Speed to Fly"
+msgstr "Konstante Geschwindigkeit (Block Speed)"
+
+#: doc/manual/figures/figure_terrain.svg:1
+msgid "unreachable due to"
+msgstr "Unerreichbar"
+
+#: doc/manual/figures/figure_auto_maccready.svg:8
+msgid "Mc = 2"
+msgstr ""
+
+#: doc/manual/figures/figure_terrain.svg:3
+msgid "terrain warning marker"
+msgstr "Gelände Warnung"
+
+#: doc/manual/figures/figure_optimal_cruise.svg:4
+msgid "Glider heading during cruise"
+msgstr "Kurs während dem Vorflug"
+
+#: doc/manual/figures/figure_terrain.svg:11
+#: doc/manual/figures/figure_terrain.svg:12
+#: doc/manual/figures/figure_terrain.svg:14
+msgid "(a)"
+msgstr ""
+
+#: doc/manual/figures/figure_optimal_cruise.svg:6
+msgid "Drift during climb"
+msgstr "Drift beim Kurbeln"
+
+#: doc/manual/figures/figure_terrain.svg:18
+msgid "(a) Arrival height"
+msgstr "(a) Ankunfts Sicherheitshöhe"
+
+#: doc/manual/figures/figure_auto_maccready.svg:2
+msgid "Above final glide"
+msgstr "Über Endanflug-Gleitpfad"
+
+#: doc/manual/figures/figure_auto_maccready.svg:4
+msgid "Mc = 0"
+msgstr "   "

@@ -67,7 +67,7 @@ DeviceConfig::IsAvailable() const
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
   case PortType::IOIOVOLTAGE:
-    return IsAndroid() && HasIOIOLib();
+    return HasIOIOLib();
 
   case PortType::AUTO:
     return IsWindowsCE();

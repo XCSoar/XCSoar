@@ -60,13 +60,34 @@ XCSoar TE
   - vagrant support
   - TravisCI support
 
-Version 6.6.2 - not yet released
+
+Version 6.6.3 - not yet released
+* Android
+  - fix compatibility issue with Android 2.2
+
+Version 6.6.2 - 2013/06/12
+* map
+  - fix misplaced topography labels (#2564)
+  - fix keyboard panning with track up (#2908)
+* infoboxes
+  - ensure that the unit symbol is visible
+  - fix ballast display in vario gauge (#2911)
 * tasks
   - update all settings after task type change
 * devices
   - Volkslogger: fix IGC file download on Windows CE
+  - EWmicroRecorder: fix corrupt task declaration (#2921)
+  - fix potential crash when garbage is received from device
+  - fix IOIO reconnect
+  - generate G record even when first device has no GPS (#2849)
 * cross section
   - also display unknown airspace types (#2884)
+* Raspberry Pi
+  - fix instant crash (#2922)
+* Altair
+  - never override data path (#2509)
+* Android
+  - faster startup
 
 Version 6.6.1 - 2013/05/08
 * cross section

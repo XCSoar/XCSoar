@@ -11,8 +11,8 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
-   width="450"
+   inkscape:version="0.48.4 r9939"
+   width="461"
    height="268"
    sodipodi:docname="figure_optimal_cruise.svg">
   <sodipodi:namedview
@@ -24,17 +24,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1600"
+     inkscape:window-height="1122"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="115.92"
-     inkscape:cy="110.29452"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="2"
+     inkscape:cx="277.50147"
+     inkscape:cy="159.62101"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1">
+     inkscape:current-layer="layer2"
+     showborder="true">
     <inkscape:grid
        id="grid3060"
        type="xygrid"
@@ -296,29 +297,19 @@
      inkscape:groupmode="layer">
     <text
        xml:space="preserve"
-       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
+       style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
        x="194.50781"
        y="118.14598"
        id="text3093"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
+         id="tspan3065"
          x="194.50781"
-         y="118.14598"
-         id="tspan3095"><tspan
-           x="194.50781"
-           y="118.14598"
-           id="tspan3097">Optimal cruise track to reach target </tspan><tspan
-           dx="0"
-           x="413.01953"
-           y="118.14598"
-           id="tspan3099" /></tspan><tspan
+         y="118.14598">Optimal cruise track to reach target</tspan><tspan
          sodipodi:role="line"
+         id="tspan3069"
          x="194.50781"
-         y="134.39598"
-         id="tspan3101"><tspan
-           x="194.50781"
-           y="134.39598"
-           id="tspan3103">maintaining altitude</tspan></tspan></text>
+         y="134.39598">maintaining altitude</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Serif Condensed;-inkscape-font-specification:DejaVu Serif Condensed"
