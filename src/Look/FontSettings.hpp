@@ -28,6 +28,8 @@ Copyright_License {
 #include <wingdi.h>
 
 struct FontSettings {
+  LOGFONT dialog;
+
   LOGFONT infobox;
   LOGFONT infobox_small;
 #ifndef GNAV

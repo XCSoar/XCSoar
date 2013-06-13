@@ -197,6 +197,7 @@ extern const char MapFile[];
 extern const char BallastSecsToEmpty[];
 extern const char AccelerometerZero[];
 extern const char UseCustomFonts[];
+extern const char DialogFont[];
 extern const char FontInfoWindowFont[];
 extern const char FontTitleWindowFont[];
 extern const char FontMapWindowFont[];

@@ -44,6 +44,11 @@ namespace Fonts
    */
   extern FontSettings effective_settings;
 
+  /**
+   * Fonts for user interfaces such as dialogs, pop-up messages etc.
+   */
+  extern Font dialog, dialog_bold, dialog_small;
+
   extern Font infobox;
   extern Font infobox_small;
 #ifndef GNAV

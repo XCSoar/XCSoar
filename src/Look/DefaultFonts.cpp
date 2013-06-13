@@ -94,6 +94,8 @@ InitialiseLogFonts(FontSettings &settings)
   UPixelScalar font_height = Layout::SmallScale(35);
 #endif
 
+  InitialiseLogfont(&settings.dialog, GetStandardFontFace(), font_height / 2);
+
   // oversize first so can then scale down
   InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
                     (int)(font_height * 1.4), true, false, true);

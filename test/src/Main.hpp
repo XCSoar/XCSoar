@@ -137,12 +137,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef ENABLE_LOOK
   look = new Look();
-  look->Initialise(normal_font, bold_font, small_font);
+  look->Initialise(normal_font, bold_font, small_font,
+                   normal_font);
 
   {
     UISettings ui_settings;
     ui_settings.SetDefaults();
     look->InitialiseConfigured(ui_settings,
+                               normal_font, bold_font, small_font,
                                normal_font, bold_font, small_font,
                                small_font, monospace_font,
                                normal_font, small_font,

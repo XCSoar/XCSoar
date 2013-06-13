@@ -25,7 +25,11 @@ Copyright_License {
 #include "FontSettings.hpp"
 #include "Screen/Font.hpp"
 
+#include <algorithm>
+
 FontSettings Fonts::default_settings, Fonts::effective_settings;
+
+Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::infobox;
@@ -50,6 +54,16 @@ Font Fonts::map_label_important;
 bool
 Fonts::Load(const FontSettings &settings)
 {
+  dialog.Load(settings.dialog);
+
+  LOGFONT lf = settings.dialog;
+  lf.lfWeight = FW_BOLD;
+  dialog_bold.Load(lf);
+
+  lf = settings.dialog;
+  lf.lfHeight = std::max(6u, unsigned(lf.lfHeight) * 3u / 4u);
+  dialog_small.Load(lf);
+
   title.Load(settings.title);
   cdi.Load(settings.cdi);
   map_label.Load(settings.map_label);
@@ -67,6 +81,9 @@ Fonts::Load(const FontSettings &settings)
 void
 Fonts::Deinitialize()
 {
+  dialog.Destroy();
+  dialog_bold.Destroy();
+  dialog_small.Destroy();
   infobox.Destroy();
   infobox_small.Destroy();
 #ifndef GNAV

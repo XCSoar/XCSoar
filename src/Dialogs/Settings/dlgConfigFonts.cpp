@@ -202,6 +202,8 @@ static const struct {
   const TCHAR *text;
   const LOGFONT &defaults;
 } customisable_fonts[] = {
+  { ProfileKeys::DialogFont, N_("Dialog text"),
+    Fonts::default_settings.dialog },
   { ProfileKeys::FontTitleWindowFont, N_("InfoBox titles"),
     Fonts::default_settings.title },
   { ProfileKeys::FontInfoWindowFont, N_("InfoBox values"),
@@ -213,7 +215,7 @@ static const struct {
   { ProfileKeys::FontMapLabelImportantFont,
     N_("Topography labels, important"),
     Fonts::default_settings.map_label_important},
-  { ProfileKeys::FontMapWindowBoldFont, N_("Dialog text"),
+  { ProfileKeys::FontMapWindowBoldFont, N_("Overlay text"),
     Fonts::default_settings.map_bold },
   { ProfileKeys::FontCDIWindowFont, N_("Gauges"),
     Fonts::default_settings.cdi },
