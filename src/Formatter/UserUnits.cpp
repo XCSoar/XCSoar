@@ -161,7 +161,7 @@ FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
 const TCHAR*
 GetUserPressureFormat(bool include_unit)
 {
-  return GetPressureFormat(Units::GetUserPressureUnit());
+  return GetPressureFormat(Units::GetUserPressureUnit(), include_unit);
 }
 
 fixed
