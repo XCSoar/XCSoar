@@ -540,7 +540,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
 void
 GaugeVario::RenderBallast(Canvas &canvas)
 {
-  static unsigned last_ballast = -1;
+  static int last_ballast = -1;
   static PixelRect label_rect = {-1,-1,-1,-1};
   static PixelRect value_rect = {-1,-1,-1,-1};
   static RasterPoint label_pos = {-1,-1};
@@ -595,7 +595,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     ballast_initialised = true;
   }
 
-  unsigned ballast = uround(GetGlidePolar().GetBugs() * 100);
+  int ballast = iround(GetGlidePolar().GetBallast() * 100);
 
   if (!IsPersistent() || ballast != last_ballast) {
     // ballast hase been changed
@@ -607,7 +607,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     else
       canvas.SetBackgroundTransparent();
 
-    if (IsPersistent() || last_ballast == 0 || ballast == 0) {
+    if (IsPersistent() || last_ballast < 1 || ballast < 1) {
       // new ballast is 0, hide label
       if (ballast > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
