@@ -47,9 +47,7 @@
 #ifdef ANDROID
 #include "Java/Global.hpp"
 #include "Android/BluetoothHelper.hpp"
-#ifdef IOIOLIB
 #include "Device/Port/AndroidIOIOUartPort.hpp"
-#endif
 #endif
 
 enum ControlIndex {
@@ -264,7 +262,7 @@ FillAndroidBluetoothPorts(DataFieldEnum &df, const DeviceConfig &config)
 static void
 FillAndroidIOIOPorts(DataFieldEnum &df, const DeviceConfig &config)
 {
-#if defined(ANDROID) && defined(IOIOLIB)
+#if defined(ANDROID)
   df.EnableItemHelp(true);
 
   TCHAR tempID[4];

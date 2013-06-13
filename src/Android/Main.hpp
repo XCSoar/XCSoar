@@ -28,9 +28,7 @@ class Context;
 class NativeView;
 class EventQueue;
 class Vibrator;
-#ifdef IOIOLIB
 class IOIOHelper;
-#endif
 
 extern Context *context;
 
@@ -41,8 +39,6 @@ extern EventQueue *event_queue;
 extern Vibrator *vibrator;
 extern bool os_haptic_feedback_enabled;
 
-#ifdef IOIOLIB
 extern IOIOHelper *ioio_helper;
-#endif
 
 #endif

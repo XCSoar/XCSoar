@@ -17,12 +17,6 @@ TARGET_CPPFLAGS += -DEYE_CANDY
 WINDRESFLAGS += -DEYE_CANDY
 endif
 
-ifeq ($(TARGET),ANDROID)
-ifneq ($(IOIOLIB_DIR),)
-TARGET_CPPFLAGS += -DIOIOLIB
-endif
-endif
-
 # show map renderer times?
 STOP_WATCH ?= n
 ifeq ($(STOP_WATCH),y)
