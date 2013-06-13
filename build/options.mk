@@ -12,7 +12,7 @@ TARGET_CPPFLAGS += -DRADIANS
 endif
 
 # shall we paint with some eye candy?
-EYE_CANDY ?= y
+EYE_CANDY ?= $(call bool_not,$(TARGET_IS_KOBO))
 ifeq ($(EYE_CANDY),y)
 TARGET_CPPFLAGS += -DEYE_CANDY
 WINDRESFLAGS += -DEYE_CANDY
