@@ -33,6 +33,8 @@ Copyright_License {
   #define TARGET "Altair"
 #elif defined(ANDROID)
   #define TARGET "Android"
+#elif defined(KOBO)
+  #define TARGET "Kobo"
 #elif defined(__linux__)
   #define TARGET "Linux"
 #elif defined(__APPLE__)
