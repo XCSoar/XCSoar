@@ -220,7 +220,7 @@ ifeq ($(TARGET),KOBO)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
   KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
-  TARGET_ARCH += -mfloat-abi=hard
+  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
   TARGET_IS_KOBO = y
   TARGET_IS_ARM = y
   ARMV7 := y
