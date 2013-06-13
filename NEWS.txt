@@ -42,8 +42,12 @@ Version 6.7 - not yet released
   - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.3 - not yet released
+* map
+  - fill FAI triangle areas on Windows
 * Android
   - fix compatibility issue with Android 2.2
+* user interface
+  - fix unit display for pressure in flight setup dialog (#2933)
 
 Version 6.6.2 - 2013/06/12
 * map
