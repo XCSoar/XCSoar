@@ -58,7 +58,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
     // get brush, can be solid or a 1bpp bitmap
     canvas.Select(airspace_look.brushes[settings.classes[AATASK].brush]);
 #else /* !GDI */
-    canvas.Select(Brush(color));
+    canvas.Select(Brush(color.WithAlpha(64)));
 #endif /* !GDI */
 
     canvas.SelectNullPen();
