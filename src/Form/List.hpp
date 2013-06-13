@@ -256,17 +256,7 @@ public:
     return origin * item_height + pixel_pan;
   }
 
-  void SetPixelOrigin(int pixel_origin) {
-    int max = length * item_height - GetHeight();
-    if (pixel_origin > max)
-      pixel_origin = max;
-
-    if (pixel_origin < 0)
-      pixel_origin = 0;
-
-    SetOrigin(pixel_origin / item_height);
-    SetPixelPan(pixel_origin % item_height);
-  }
+  void SetPixelOrigin(int pixel_origin);
 
   /**
    * Scrolls a number of items up (negative delta) or down (positive

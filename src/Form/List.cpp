@@ -340,6 +340,20 @@ ListControl::SetOrigin(int i)
 }
 
 void
+ListControl::SetPixelOrigin(int pixel_origin)
+{
+  int max = length * item_height - GetHeight();
+  if (pixel_origin > max)
+    pixel_origin = max;
+
+  if (pixel_origin < 0)
+    pixel_origin = 0;
+
+  SetOrigin(pixel_origin / item_height);
+  SetPixelPan(pixel_origin % item_height);
+}
+
+void
 ListControl::MoveOrigin(int delta)
 {
   int pixel_origin = (int)GetPixelOrigin();
