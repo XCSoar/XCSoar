@@ -350,7 +350,9 @@ ListControl::SetPixelOrigin(int pixel_origin)
     pixel_origin = 0;
 
   SetOrigin(pixel_origin / item_height);
-  SetPixelPan(pixel_origin % item_height);
+
+  /* no pixel panning on e-paper screens to avoid tearing */
+  SetPixelPan(HasEPaper() ? 0 : pixel_origin % item_height);
 }
 
 void
