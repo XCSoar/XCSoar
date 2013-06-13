@@ -336,13 +336,9 @@ fgrep(const char *fname, const char *string, const char *string2 = NULL)
 static const TCHAR *
 GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 {
-  if (IsAndroid())
+  if (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
     return NULL;
-
-  if (IsKobo()) {
-    return _tcscat( buffer, _T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
-  }
 
 #ifdef HAVE_POSIX
   /* on Unix or WINE, use ~/.xcsoar */
@@ -405,6 +401,9 @@ FindDataPath()
       return _tcsdup(path);
   }
 #endif
+
+  if (IsKobo())
+    return _tcsdup(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
 
   if (IsAndroid()) {
 #ifdef ANDROID
