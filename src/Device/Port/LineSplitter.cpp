@@ -24,7 +24,25 @@ Copyright_License {
 #include "LineSplitter.hpp"
 #include "Util/CharUtil.hpp"
 
+#include <algorithm>
+
 #include <string.h>
+
+constexpr
+static bool
+IsInsaneChar(char ch)
+{
+  return (unsigned char)ch < 0x20;
+}
+
+/**
+ * Replace all control characters with a regular space character.
+ */
+static void
+SanitiseLine(char *const begin, char *const end)
+{
+  std::replace_if(begin, end, IsInsaneChar, ' ');
+}
 
 void
 PortLineSplitter::DataReceived(const void *_data, size_t length)
@@ -66,6 +84,8 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
         --end;
 
       *end = '\0';
+
+      SanitiseLine(range.data, end);
 
       const char *line = range.data;
 

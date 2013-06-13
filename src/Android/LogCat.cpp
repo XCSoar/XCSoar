@@ -25,6 +25,9 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/Async/IOThread.hpp"
+
+#include <atomic>
 
 #include <assert.h>
 #include <unistd.h>
@@ -36,90 +39,191 @@ Copyright_License {
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
-bool
-CheckLogCat()
+class LogCatReader final : private FileEventHandler {
+  IOThread &io_thread;
+  const int fd;
+  std::atomic<pid_t> pid;
+
+  std::string data;
+
+public:
+  LogCatReader(IOThread &_io_thread, int _fd, pid_t _pid)
+    :io_thread(_io_thread), fd(_fd), pid(_pid) {
+    io_thread.LockAdd(fd, IOThread::READ, *this);
+  }
+
+  ~LogCatReader() {
+    io_thread.LockRemove(fd);
+    ::close(fd);
+
+    Kill(pid.exchange(0));
+  }
+
+private:
+  void Wait(pid_t pid);
+  void Kill(pid_t pid);
+  void Save(int pid) const;
+  void EndOfFile();
+
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
+};
+
+static void
+SaveCrash(int pid, const char *data, size_t length)
 {
-  char path[1024];
-  LocalPath(path, _T("crash"));
-  mkdir(path, 0777);
+  char name[64];
+  time_t t = time(NULL);
+  struct tm tm;
+  strftime(name, sizeof(name),
+           "crash/crash-%Y-%m-%d-%H-%M-%S", gmtime_r(&t, &tm));
 
-  strcat(path, "/new");
+  char path[1024];
+  LocalPath(path, name);
   unlink(path);
 
-  /* run logcat, save to a temporary file */
+  LogFormat("Saving logcat to %s", path);
 
+  const int fd = open(path, O_CREAT|O_EXCL|O_CLOEXEC|O_NOFOLLOW|O_WRONLY,
+                      0777);
+  if (fd < 0)
+    return;
+
+  write(fd, data, length);
+  close(fd);
+}
+
+void
+LogCatReader::Wait(pid_t pid)
+{
+  if (pid <= 0)
+    return;
+
+  int status;
+  pid_t pid2 = ::waitpid(pid, &status, 0);
+  if (pid2 <= 0)
+    return;
+
+  if (WIFSIGNALED(status))
+    LogFormat("logcat was killed by signal %d", WTERMSIG(status));
+
+  if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+    LogFormat("logcat has failed");
+}
+
+void
+LogCatReader::Kill(pid_t pid)
+{
+  if (pid <= 0)
+    return;
+
+  LogFormat("Kill logcat");
+
+  kill(pid, SIGTERM);
+  Wait(pid);
+}
+
+inline void
+LogCatReader::Save(int pid) const
+{
+  ::SaveCrash(pid, data.data(), data.length());
+}
+
+gcc_pure
+static const char *
+FindLine(const char *start, const char *p)
+{
+  while (p > start && p[-1] != '\n')
+    --p;
+
+  return p;
+}
+
+gcc_pure
+static int
+FindCrash(const char *p)
+{
+  /* see if there was a crash; this check is very simple, but I hope
+     it's good enough to avoid false positives */
+
+  const char *q = strstr(p, ">>> org.xcsoarte");
+  if (q == nullptr || strstr(q, "fault addr") == nullptr)
+    return 0;
+
+  const char *r = strstr(FindLine(p, q), "pid:");
+  if (r == nullptr)
+    return 0;
+
+  return atoi(r + 4);
+}
+
+inline void
+LogCatReader::EndOfFile()
+{
+  Wait(pid.exchange(0));
+
+  const int pid = FindCrash(data.c_str());
+  if (pid > 0)
+    Save(pid);
+  else
+    LogFormat("No crash found in logcat");
+
+  StopLogCat();
+  OnLogCatFinished(pid > 0);
+}
+
+bool
+LogCatReader::OnFileEvent(int fd, unsigned mask)
+{
+  char buffer[1024];
+  ssize_t nbytes = ::read(fd, buffer, sizeof(buffer));
+  if (nbytes > 0) {
+    if (data.length() < 1024 * 1024)
+      data.append(buffer, nbytes);
+    return true;
+  } else {
+    EndOfFile();
+    return false;
+  }
+}
+
+static std::atomic<LogCatReader *> log_cat_reader;
+
+void
+CheckLogCat(IOThread &io_thread)
+{
   LogFormat("Launching logcat");
+
+  int fds[2];
+  if (pipe2(fds, O_CLOEXEC) < 0)
+    return;
 
   pid_t pid = fork();
   if (pid == 0) {
     /* in the child process */
+    dup2(fds[1], 1);
+
     execl("/system/bin/logcat", "logcat", "-v", "threadtime",
-          "-d", "-t", "1000", "-f", path, NULL);
+          "-d", "-t", "1000", NULL);
     _exit(EXIT_FAILURE);
   }
 
   if (pid < 0) {
     LogFormat("Launching logcat has failed: %s", strerror(errno));
-    unlink(path);
-    return false;
+    close(fds[0]);
+    close(fds[1]);
+    return;
   }
 
-  int status;
-  pid_t pid2 = waitpid(pid, &status, 0);
-  if (pid2 < 0) {
-    unlink(path);
-    return false;
-  }
+  close(fds[1]);
 
-  if (WIFSIGNALED(status)) {
-    LogFormat("logcat was killed by signal %d", WTERMSIG(status));
-    unlink(path);
-    return false;
-  }
+  log_cat_reader = new LogCatReader(io_thread, fds[0], pid);
+}
 
-  if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-    LogFormat("logcat has failed");
-    unlink(path);
-    return false;
-  }
-
-  /* see if there was a crash; this check is very simple, but I hope
-     it's good enough to avoid false positives */
-
-  int found_xcsoar = 0;
-  bool found_crash = false;
-
-  FileLineReaderA reader(path);
-  char *line;
-  while ((line = reader.ReadLine()) != NULL) {
-    if (strstr(line, ">>> org.xcsoarte") != NULL) {
-      const char *p = strstr(line, "pid:");
-      if (p != NULL)
-        found_xcsoar = atoi(p + 4);
-    } else if (found_xcsoar > 0 && strstr(line, "fault addr") != NULL)
-      found_crash = true;
-  }
-
-  if (!found_crash) {
-    /* no crash was found, delete the temporary file */
-    unlink(path);
-    return false;
-  }
-
-  /* crash found: build a file name and rename the temporary file */
-
-  char final_path[1024];
-  LocalPath(final_path, _T("crash"));
-  strcat(final_path, "/crash-");
-
-  time_t t = time(NULL);
-  struct tm tm;
-  strftime(final_path + strlen(final_path), 32,
-           "%Y-%m-%d-%H-%M-%S", gmtime_r(&t, &tm));
-
-  sprintf(final_path + strlen(final_path), "-%d.txt", found_xcsoar);
-  unlink(final_path);
-  rename(path, final_path);
-  return true;
+void
+StopLogCat()
+{
+  LogCatReader *lcr = log_cat_reader.exchange(nullptr);
+  delete lcr;
 }

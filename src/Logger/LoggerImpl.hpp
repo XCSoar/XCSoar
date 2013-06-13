@@ -135,7 +135,7 @@ private:
    * @param logger_id the ID of the logger, consisting of exactly 3
    * alphanumeric characters (plain ASCII)
    */
-  void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
+  bool StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
                    const char *logger_id);
   
 private:

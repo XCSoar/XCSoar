@@ -124,6 +124,10 @@ struct NMEAInfo {
    */
   Validity alive;
 
+  /**
+   * The state of the GPS module.  Most of this attribute is only
+   * meaningful when #location_available is set.
+   */
   GPSState gps;
 
   AccelerationState acceleration;
