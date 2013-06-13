@@ -55,7 +55,7 @@ Font Fonts::map_label_important;
 // these are the non-custom parameters
 LOGFONT log_infobox;
 #ifndef GNAV
-LOGFONT log_infobox_units;
+static LOGFONT log_infobox_units;
 #endif
 LOGFONT log_title;
 LOGFONT log_map;
