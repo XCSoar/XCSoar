@@ -31,7 +31,7 @@ HI_RES_AWARE CEUX {1}
 
 #define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
 
-#if defined(WIN32) || defined(ANDROID)
+#if defined(WIN32) || defined(ANDROID) || defined(KOBO)
 #define MO(name) name.mo MO DISCARDABLE "../output/po/" #name ".mo"
 #else
 #define MO(name)
