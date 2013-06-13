@@ -26,6 +26,7 @@ Copyright_License {
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
 #include "StandardFonts.hpp"
+#include "Hardware/Display.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
@@ -94,7 +95,12 @@ InitialiseLogFonts(FontSettings &settings)
   unsigned font_height = Layout::SmallScale(35);
 #endif
 
-  InitialiseLogfont(&settings.dialog, GetStandardFontFace(), font_height / 2);
+  const unsigned dpi = Display::GetYDPI();
+  constexpr double physical_dlg_height = 0.18;
+
+  InitialiseLogfont(&settings.dialog, GetStandardFontFace(),
+                    std::min(std::max(8u, unsigned(physical_dlg_height * dpi)),
+                             font_height / 2));
 
   InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
                     font_height, true);
