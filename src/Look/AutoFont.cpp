@@ -67,3 +67,22 @@ AutoSizeFont(LOGFONT &logfont, unsigned width, const TCHAR *text)
 
   ++logfont.lfHeight;
 }
+
+void
+AutoSizeInfoBoxFonts(LOGFONT &value,
+                     LOGFONT &small_value,
+#ifndef GNAV
+                     LOGFONT &units,
+#endif
+                     unsigned control_width)
+{
+  if (!IsAltair())
+    AutoSizeFont(value, control_width, _T("1234m"));
+
+#ifndef GNAV
+  units.lfHeight = (unsigned(value.lfHeight) * 2u) / 5u;
+#endif
+
+  if (!IsAltair())
+    AutoSizeFont(small_value, control_width, _T("12345m"));
+}

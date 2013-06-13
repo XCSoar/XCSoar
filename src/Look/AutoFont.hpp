@@ -28,10 +28,20 @@ Copyright_License {
 #include <wingdi.h>
 #include <tchar.h>
 
+struct FontSettings;
+
 /**
  * Change the font size so that the text fits into the given width.
  */
 void
 AutoSizeFont(LOGFONT &logfont, unsigned width, const TCHAR *text);
+
+void
+AutoSizeInfoBoxFonts(LOGFONT &value,
+                     LOGFONT &small_value,
+#ifndef GNAV
+                     LOGFONT &units,
+#endif
+                     unsigned control_width);
 
 #endif

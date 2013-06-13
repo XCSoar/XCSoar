@@ -168,21 +168,17 @@ Fonts::Initialize()
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
-  if (!IsAltair())
-    AutoSizeFont(log_infobox, control_width, _T("1234m"));
-  infobox.Load(log_infobox);
-
+  AutoSizeInfoBoxFonts(log_infobox, log_infobox_small,
 #ifndef GNAV
-  LOGFONT lf = log_infobox;
-  unsigned height = lf.lfHeight;
-  lf = log_infobox_units;
-  lf.lfHeight = (height * 2) / 5;
-  infobox_units.Load(lf);
+                       log_infobox_units,
 #endif
+                       control_width);
 
-  if (!IsAltair())
-    AutoSizeFont(log_infobox_small, control_width, _T("12345m"));
+  infobox.Load(log_infobox);
   infobox_small.Load(log_infobox_small);
+#ifndef GNAV
+  infobox_units.Load(log_infobox_units);
+#endif
 
 #ifdef ENABLE_OPENGL
   TextCache::Flush();
