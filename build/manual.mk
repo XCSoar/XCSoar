@@ -36,6 +36,16 @@ SVG_ICON_LIST = \
 	gps_disconnected
 SVG_ICONS = $(patsubst %,$(MANUAL_OUTPUT_DIR)/icons/%.pdf,$(SVG_ICON_LIST))
 
+SVG_PO_FILES = $(wildcard $(topdir)/doc/manual/figures/*.po)
+SVG_LINGUAS = $(patsubst $(topdir)/doc/manual/figures/%.po,%,$(SVG_PO_FILES))
+SVG_TRANSLATABLES_LIST = \
+	figure_auto_maccready \
+	figure_optimal_cruise \
+	figure_speed_to_fly \
+	figure_terrain
+SVG_TRANSLATE_DE = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-de.pdf,$(SVG_TRANSLATABLES_LIST))
+SVG_TRANSLATE_FR = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-fr.pdf,$(SVG_TRANSLATABLES_LIST))
+
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/figures/*.svg)
 SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
 
@@ -117,7 +127,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Bli
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex \
 	$(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(TEX_INCLUDES) \
-	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_DE) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -132,7 +142,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
-	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_FR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -140,8 +150,31 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex
 $(SVG_ICONS): $(MANUAL_OUTPUT_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(MANUAL_OUTPUT_DIR)/icons/dirstamp
 	rsvg-convert -a -f pdf -w 32 $< -o $@
 
+# $(call get-translate,<po file>,<target file>,<svg file>)
+define svg-translate
+$(Q)echo "  GEN     $2"
+$(Q)$(PERL) $(topdir)/tools/svgl10n.pl -l $1 -o $2.tmp.svg $3
+$(Q)rsvg-convert -a -f pdf $2.tmp.svg -o $2
+endef
+
+$(SVG_TRANSLATE_DE): $(MANUAL_OUTPUT_DIR)/figures/%-de.pdf: $(topdir)/doc/manual/figures/%.svg \
+	$(topdir)/doc/manual/figures/de.po
+	$(call svg-translate,./doc/manual/figures/de.po,$@,$<)
+
+$(SVG_TRANSLATE_FR): $(MANUAL_OUTPUT_DIR)/figures/%-fr.pdf: $(topdir)/doc/manual/figures/%.svg \
+	$(topdir)/doc/manual/figures/fr.po
+	$(call svg-translate,./doc/manual/figures/fr.po,$@,$<)
+
 $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
+
+$(MANUAL_OUTPUT_DIR)/figures.pot: $(SVG_FIGURES_SHARED) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) $(topdir)/tools/svg2po.pl $^ >$@.tmp
+	$(Q)mv $@.tmp $@
+
+update-manual-po: $(MANUAL_OUTPUT_DIR)/figures.pot
+	$(Q)for i in $(SVG_PO_FILES); do $(MSGMERGE) -o $$i $$i $(MANUAL_OUTPUT_DIR)/figures.pot; done
 
 $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -f pdf $< -o $@

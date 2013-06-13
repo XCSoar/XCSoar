@@ -61,6 +61,8 @@ XCSoar TE
   - TravisCI support
 
 Version 6.6.2 - not yet released
+* infoboxes
+  - ensure that the unit symbol is visible
 * tasks
   - update all settings after task type change
 * devices

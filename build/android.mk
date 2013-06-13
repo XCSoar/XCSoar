@@ -21,7 +21,7 @@ ANDROID_BIN = $(TARGET_BIN_DIR)
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
 else
-  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
+  ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux
 endif
 ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)
@@ -50,7 +50,7 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil
+NATIVE_CLASSES = NativeView EventBridge InternalGPS NonGPSSensors NativeInputListener DownloadUtil BatteryReceiver
 ifneq ($(IOIOLIB_DIR),)
 NATIVE_CLASSES += NativeBMP085Listener
 NATIVE_CLASSES += NativeI2CbaroListener
@@ -154,6 +154,7 @@ ifneq ($(IOIOLIB_DIR),)
 	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/target/android/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi2
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio/lib/util
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio/lib/impl
 endif

@@ -146,7 +146,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     int ascent_height = look.value.font->GetAscentHeight();
 
     PixelSize value_size = canvas.CalcTextSize(data.value);
-    if (value_size.cx > value_rect.right - value_rect.left) {
+    if (value_size.cx + unit_width > value_rect.right - value_rect.left) {
       canvas.Select(*look.small_font);
       ascent_height = look.small_font->GetAscentHeight();
       value_size = canvas.CalcTextSize(data.value);
@@ -178,14 +178,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   UPixelScalar ascent_height = look.value.font->GetAscentHeight();
   UPixelScalar capital_height = look.value.font->GetCapitalHeight();
 
-  PixelSize value_size = canvas.CalcTextSize(data.value);
-  if (value_size.cx > value_rect.right - value_rect.left) {
-    canvas.Select(*look.small_font);
-    ascent_height = look.small_font->GetAscentHeight();
-    capital_height = look.small_font->GetCapitalHeight();
-    value_size = canvas.CalcTextSize(data.value);
-  }
-
   PixelSize unit_size;
   const UnitSymbol *unit_symbol = units_look.GetSymbol(data.value_unit);
   if (unit_symbol != NULL) {
@@ -193,6 +185,14 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   } else {
     unit_size.cx = 0;
     unit_size.cy = 0;
+  }
+
+  PixelSize value_size = canvas.CalcTextSize(data.value);
+  if (value_size.cx + unit_size.cx > value_rect.right - value_rect.left) {
+    canvas.Select(*look.small_font);
+    ascent_height = look.small_font->GetAscentHeight();
+    capital_height = look.small_font->GetCapitalHeight();
+    value_size = canvas.CalcTextSize(data.value);
   }
 
   PixelScalar x = std::max(PixelScalar(1),

@@ -379,47 +379,60 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       const unsigned max_diag = std::max({tp1_diag, tp2_diag, tp3_diag});
 
       CandidateSet left, right;
+      bool add = false;
 
       if (tp1_diag == max_diag && node->second.tp1.size() != 1) {
         // split tp1 range
         const unsigned split = (node->second.tp1.index_min + node->second.tp1.index_max) / 2;
 
-        left = CandidateSet(TurnPointRange(this, node->second.tp1.index_min, split),
-                            node->second.tp2, node->second.tp3);
+        if (split <= node->second.tp2.index_max) {
+          add = true;
 
-        right = CandidateSet(TurnPointRange(this, split, node->second.tp1.index_max),
-                             node->second.tp2, node->second.tp3);
+          left = CandidateSet(TurnPointRange(this, node->second.tp1.index_min, split),
+                              node->second.tp2, node->second.tp3);
 
+          right = CandidateSet(TurnPointRange(this, split, node->second.tp1.index_max),
+                               node->second.tp2, node->second.tp3);
+        }
       } else if (tp2_diag == max_diag && node->second.tp2.size() != 1) {
         // split tp2 range
         const unsigned split = (node->second.tp2.index_min + node->second.tp2.index_max) / 2;
 
-        left = CandidateSet(node->second.tp1,
-                            TurnPointRange(this, node->second.tp2.index_min, split),
-                            node->second.tp3);
+        if (split <= node->second.tp3.index_max && split >= node->second.tp1.index_min) {
+          add = true;
 
-        right = CandidateSet(node->second.tp1,
-                             TurnPointRange(this, split, node->second.tp2.index_max),
-                             node->second.tp3);
+          left = CandidateSet(node->second.tp1,
+                              TurnPointRange(this, node->second.tp2.index_min, split),
+                              node->second.tp3);
 
+          right = CandidateSet(node->second.tp1,
+                               TurnPointRange(this, split, node->second.tp2.index_max),
+                               node->second.tp3);
+        }
       } else if (node->second.tp3.size() != 1) {
         // split tp3 range
         const unsigned split = (node->second.tp3.index_min + node->second.tp3.index_max) / 2;
 
-        left = CandidateSet(node->second.tp1, node->second.tp2,
-                            TurnPointRange(this, node->second.tp3.index_min, split));
+        if (split >= node->second.tp2.index_min) {
+          add = true;
 
-        right = CandidateSet(node->second.tp1, node->second.tp2,
-                             TurnPointRange(this, split, node->second.tp3.index_max));
+          left = CandidateSet(node->second.tp1, node->second.tp2,
+                              TurnPointRange(this, node->second.tp3.index_min, split));
+
+          right = CandidateSet(node->second.tp1, node->second.tp2,
+                               TurnPointRange(this, split, node->second.tp3.index_max));
+        }
       }
 
-      // add the new candidate set only if it it's feasible and has d_min >= worst_d
-      if (left.df_max >= worst_d && left.isFeasible(is_fai, large_triangle_check)) {
-        branch_and_bound.insert(std::pair<unsigned, CandidateSet>(left.df_max, left));
-      }
+      if (add) {
+        // add the new candidate set only if it it's feasible and has d_min >= worst_d
+        if (left.df_max >= worst_d && left.isFeasible(is_fai, large_triangle_check)) {
+          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(left.df_max, left));
+        }
 
-      if (right.df_max >= worst_d && right.isFeasible(is_fai, large_triangle_check)) {
-        branch_and_bound.insert(std::pair<unsigned, CandidateSet>(right.df_max, right));
+        if (right.df_max >= worst_d && right.isFeasible(is_fai, large_triangle_check)) {
+          branch_and_bound.insert(std::pair<unsigned, CandidateSet>(right.df_max, right));
+        }
       }
     }
 

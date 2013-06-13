@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -21,36 +20,19 @@ Copyright_License {
 }
 */
 
-#include "Hardware/Battery.hpp"
-#include "org_xcsoarte_BatteryReceiver.h"
-#include "Compiler.h"
+package org.xcsoarte;
 
-namespace Power {
-  namespace Battery {
-    unsigned RemainingPercent = 0;
-    bool RemainingPercentValid = false;
-  }
+import android.content.Context;
+import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.os.BatteryManager;
 
-  namespace External {
-    externalstatus Status = UNKNOWN;
-  }
-}
+class BatteryReceiver extends BroadcastReceiver {
+  private static native void setBatteryPercent(int level, int plugged);
 
-gcc_visibility_default
-JNIEXPORT void JNICALL
-Java_org_xcsoarte_BatteryReceiver_setBatteryPercent(JNIEnv *env, jclass cls,
-                                                    jint value, jint plugged)
-{
-  Power::Battery::RemainingPercent = value;
-  Power::Battery::RemainingPercentValid = true;
-
-  switch (plugged) {
-  case 0:
-    Power::External::Status = Power::External::OFF;
-    break;
-
-  default:
-    Power::External::Status = Power::External::ON;
-    break;
+  @Override public void onReceive(Context context, Intent intent) {
+    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+    int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+    setBatteryPercent(level, plugged);
   }
 }
