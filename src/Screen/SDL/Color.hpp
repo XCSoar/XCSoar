@@ -31,6 +31,8 @@ Copyright_License {
  * This class represents a color in the RGB color space.  This is used
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
+ *
+ * We used SDL_Color::unused for alpha, because that's what SDL_gfx uses.
  */
 struct Color {
   SDL_Color value;
@@ -38,10 +40,8 @@ struct Color {
   Color() = default;
 
   constexpr
-  Color(uint8_t r, uint8_t g, uint8_t b)
-    :value({r, g, b,
-          /* alpha for SDL_gfx, see GFXColor() */
-          SDL_ALPHA_OPAQUE}) {}
+  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a=SDL_ALPHA_OPAQUE)
+    :value({r, g, b, a}) {}
 
   /**
    * Returns the red part of the color
@@ -82,6 +82,23 @@ struct Color {
   Uint32 GFXColor() const {
     return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
       ((Uint32)value.b << 8) | (Uint32)value.unused;
+  }
+
+  /**
+   * Returns the alpha part of the color
+   * @return The alpha part of the color (0-255)
+   */
+  constexpr
+  uint8_t
+  Alpha() const
+  {
+    return value.unused;
+  }
+
+  constexpr
+  Color
+  WithAlpha(uint8_t alpha) const {
+    return Color(Red(), Green(), Blue(), alpha);
   }
 
   /**
