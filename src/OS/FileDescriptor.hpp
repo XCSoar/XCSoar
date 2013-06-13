@@ -109,6 +109,13 @@ public:
    * Enable non-blocking mode on this file descriptor.
    */
   void SetNonBlocking();
+
+  /**
+   * Duplicate the file descriptor onto the given file descriptor.
+   */
+  bool Duplicate(int new_fd) const {
+    return ::dup2(Get(), new_fd) == 0;
+  }
 #endif
 
   /**
