@@ -96,9 +96,8 @@ InitialiseLogFonts(FontSettings &settings)
 
   InitialiseLogfont(&settings.dialog, GetStandardFontFace(), font_height / 2);
 
-  // oversize first so can then scale down
   InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
-                    (int)(font_height * 1.4), true, false, true);
+                    font_height, true);
 
 #ifdef WIN32
   settings.infobox.lfCharSet = ANSI_CHARSET;
