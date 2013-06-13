@@ -208,23 +208,21 @@ Fonts::Initialize()
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
-  LOGFONT lf = log_infobox;
-
   if (!IsAltair())
-    SizeLogFont(lf, control_width, _T("1234m"));
-  infobox.Load(lf);
+    SizeLogFont(log_infobox, control_width, _T("1234m"));
+  infobox.Load(log_infobox);
 
 #ifndef GNAV
+  LOGFONT lf = log_infobox;
   unsigned height = lf.lfHeight;
   lf = log_infobox_units;
   lf.lfHeight = (height * 2) / 5;
   infobox_units.Load(lf);
 #endif
 
-  lf = log_infobox_small;
   if (!IsAltair())
-    SizeLogFont(lf, control_width, _T("12345m"));
-  infobox_small.Load(lf);
+    SizeLogFont(log_infobox_small, control_width, _T("12345m"));
+  infobox_small.Load(log_infobox_small);
 
 #ifdef ENABLE_OPENGL
   TextCache::Flush();
