@@ -23,34 +23,11 @@ Copyright_License {
 
 #include "CustomFonts.hpp"
 #include "GlobalFonts.hpp"
-#include "Screen/Font.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Profile/FontConfig.hpp"
-
-#include <string.h>
-
-static void
-LoadCustomFont(Font &font, const char *key)
-{
-  LOGFONT logfont;
-  memset((char *)&logfont, 0, sizeof(LOGFONT));
-  if (Profile::GetFont(key, &logfont))
-    font.Load(logfont);
-}
 
 bool
 Fonts::LoadCustom()
 {
-  LoadCustomFont(infobox, ProfileKeys::FontInfoWindowFont);
-  LoadCustomFont(infobox_small, ProfileKeys::FontTitleSmallWindowFont);
-  LoadCustomFont(title, ProfileKeys::FontTitleWindowFont);
-  LoadCustomFont(cdi, ProfileKeys::FontCDIWindowFont);
-  LoadCustomFont(map_label, ProfileKeys::FontMapLabelFont);
-  LoadCustomFont(map_label_important, ProfileKeys::FontMapLabelImportantFont);
-  LoadCustomFont(map, ProfileKeys::FontMapWindowFont);
-  LoadCustomFont(map_bold, ProfileKeys::FontMapWindowBoldFont);
-
-  return title.IsDefined() && cdi.IsDefined() &&
-    map_label.IsDefined() && map_label_important.IsDefined() &&
-    map.IsDefined() && map_bold.IsDefined();
+  Profile::Get(effective_settings);
+  return Load(effective_settings);
 }

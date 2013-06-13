@@ -27,6 +27,8 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/GlobalFonts.hpp"
+#include "Look/FontSettings.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
@@ -51,15 +53,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-
-extern LOGFONT log_infobox;
-extern LOGFONT log_title;
-extern LOGFONT log_map;
-extern LOGFONT log_infobox_small;
-extern LOGFONT log_map_bold;
-extern LOGFONT log_cdi;
-extern LOGFONT log_map_label;
-extern LOGFONT log_map_label_important;
 
 static bool changed = false;
 
@@ -209,19 +202,23 @@ static const struct {
   const TCHAR *text;
   const LOGFONT &defaults;
 } customisable_fonts[] = {
-  { ProfileKeys::FontTitleWindowFont, N_("InfoBox titles"), log_title },
+  { ProfileKeys::FontTitleWindowFont, N_("InfoBox titles"),
+    Fonts::default_settings.title },
   { ProfileKeys::FontInfoWindowFont, N_("InfoBox values, normal"),
-    log_infobox },
+    Fonts::default_settings.infobox },
   { ProfileKeys::FontTitleSmallWindowFont, N_("InfoBox values, small"),
-    log_infobox_small },
-  { ProfileKeys::FontMapWindowFont, N_("Waypoint labels"), log_map },
+    Fonts::default_settings.infobox_small },
+  { ProfileKeys::FontMapWindowFont, N_("Waypoint labels"),
+    Fonts::default_settings.map },
   { ProfileKeys::FontMapLabelFont, N_("Topography labels, normal"),
-    log_map_label },
+    Fonts::default_settings.map_label },
   { ProfileKeys::FontMapLabelImportantFont,
     N_("Topography labels, important"),
-    log_map_label_important},
-  { ProfileKeys::FontMapWindowBoldFont, N_("Dialog text"), log_map_bold },
-  { ProfileKeys::FontCDIWindowFont, N_("Gauges"), log_cdi },
+    Fonts::default_settings.map_label_important},
+  { ProfileKeys::FontMapWindowBoldFont, N_("Dialog text"),
+    Fonts::default_settings.map_bold },
+  { ProfileKeys::FontCDIWindowFont, N_("Gauges"),
+    Fonts::default_settings.cdi },
   { nullptr, nullptr, *(const LOGFONT *)nullptr }
 };
 

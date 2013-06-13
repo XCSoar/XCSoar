@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "AutoFont.hpp"
 #include "StandardFonts.hpp"
+#include "FontSettings.hpp"
 #include "Screen/Font.hpp"
 
 #include <algorithm>
@@ -69,20 +70,15 @@ AutoSizeFont(LOGFONT &logfont, unsigned width, const TCHAR *text)
 }
 
 void
-AutoSizeInfoBoxFonts(LOGFONT &value,
-                     LOGFONT &small_value,
-#ifndef GNAV
-                     LOGFONT &units,
-#endif
-                     unsigned control_width)
+AutoSizeInfoBoxFonts(FontSettings &settings, unsigned control_width)
 {
   if (!IsAltair())
-    AutoSizeFont(value, control_width, _T("1234m"));
+    AutoSizeFont(settings.infobox, control_width, _T("1234m"));
 
 #ifndef GNAV
-  units.lfHeight = (unsigned(value.lfHeight) * 2u) / 5u;
+  settings.infobox_units.lfHeight = unsigned(settings.infobox.lfHeight) * 2u / 5u;
 #endif
 
   if (!IsAltair())
-    AutoSizeFont(small_value, control_width, _T("12345m"));
+    AutoSizeFont(settings.infobox_small, control_width, _T("12345m"));
 }

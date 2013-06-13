@@ -21,47 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLOBAL_FONTS_HPP
-#define XCSOAR_GLOBAL_FONTS_HPP
+#ifndef XCSOAR_FONT_SETTINGS_HPP
+#define XCSOAR_FONT_SETTINGS_HPP
 
-struct FontSettings;
-class Font;
+#include <windef.h>
+#include <wingdi.h>
 
-/**
- * Container for global font variables.  Avoid using it if you can,
- * use the "Look" objects instead.
- */
-namespace Fonts
-{
-  /**
-   * The default font settings, as determined by GetDefaults().
-   */
-  extern FontSettings default_settings;
-
-  /**
-   * The font settings that are effectively used.  This is different
-   * from #default_settings if the user has configured custom fonts.
-   */
-  extern FontSettings effective_settings;
-
-  extern Font infobox;
-  extern Font infobox_small;
+struct FontSettings {
+  LOGFONT infobox;
+  LOGFONT infobox_small;
 #ifndef GNAV
-  extern Font infobox_units;
+  LOGFONT infobox_units;
 #endif
 
-  extern Font title;
-  extern Font cdi;
-  extern Font monospace;
+  LOGFONT title;
+  LOGFONT cdi;
+  LOGFONT monospace;
 
-  extern Font map;
-  extern Font map_bold;
-  extern Font map_label;
-  extern Font map_label_important;
-
-  bool Load(const FontSettings &settings);
-
-  void Deinitialize();
-}
+  LOGFONT map;
+  LOGFONT map_bold;
+  LOGFONT map_label;
+  LOGFONT map_label_important;
+};
 
 #endif

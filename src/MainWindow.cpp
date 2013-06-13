@@ -195,8 +195,6 @@ MainWindow::InitialiseConfigured()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  Fonts::SizeInfoboxFont(ib_layout.control_width);
-
   if (ui_settings.custom_fonts) {
     LogFormat("Load custom fonts");
     if (!Fonts::LoadCustom()) {
@@ -213,6 +211,8 @@ MainWindow::InitialiseConfigured()
     TextCache::Flush();
 #endif
   }
+
+  Fonts::SizeInfoboxFont(ib_layout.control_width);
 
   assert(look != NULL);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),

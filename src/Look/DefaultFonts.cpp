@@ -24,6 +24,7 @@ Copyright_License {
 #include "DefaultFonts.hpp"
 #include "AutoFont.hpp"
 #include "GlobalFonts.hpp"
+#include "FontSettings.hpp"
 #include "StandardFonts.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
@@ -35,20 +36,6 @@ Copyright_License {
 #include <algorithm>
 
 #include <string.h>
-
-// these are the non-custom parameters
-LOGFONT log_infobox;
-#ifndef GNAV
-static LOGFONT log_infobox_units;
-#endif
-LOGFONT log_title;
-LOGFONT log_map;
-LOGFONT log_infobox_small;
-LOGFONT log_map_bold;
-LOGFONT log_cdi;
-LOGFONT log_map_label;
-LOGFONT log_map_label_important;
-static LOGFONT log_monospace;
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
@@ -75,26 +62,29 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
 }
 
 static void
-LoadAltairLogFonts()
+LoadAltairLogFonts(FontSettings &settings)
 {
-  InitialiseLogfont(&log_infobox, _T("RasterGothicTwentyFourCond"), 24, true);
-  InitialiseLogfont(&log_title, _T("RasterGothicNineCond"), 10);
-  InitialiseLogfont(&log_cdi, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&log_map_label, _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&log_map_label_important,
+  InitialiseLogfont(&settings.infobox,
+                    _T("RasterGothicTwentyFourCond"), 24, true);
+  InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);
+  InitialiseLogfont(&settings.cdi, _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&settings.map_label, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(&settings.map_label_important,
                     _T("RasterGothicTwelveCond"), 13);
-  InitialiseLogfont(&log_map, _T("RasterGothicFourteenCond"), 15);
-  InitialiseLogfont(&log_map_bold, _T("RasterGothicFourteenCond"), 15, true);
-  InitialiseLogfont(&log_infobox_small, _T("RasterGothicEighteenCond"), 19, true);
-  InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
+  InitialiseLogfont(&settings.map, _T("RasterGothicFourteenCond"), 15);
+  InitialiseLogfont(&settings.map_bold,
+                    _T("RasterGothicFourteenCond"), 15, true);
+  InitialiseLogfont(&settings.infobox_small,
+                    _T("RasterGothicEighteenCond"), 19, true);
+  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
                     10, false, false, false);
 }
 
 static void
-InitialiseLogFonts()
+InitialiseLogFonts(FontSettings &settings)
 {
   if (IsAltair()) {
-    LoadAltairLogFonts();
+    LoadAltairLogFonts(settings);
     return;
   }
 
@@ -105,79 +95,74 @@ InitialiseLogFonts()
 #endif
 
   // oversize first so can then scale down
-  InitialiseLogfont(&log_infobox, GetStandardFontFace(),
+  InitialiseLogfont(&settings.infobox, GetStandardFontFace(),
                     (int)(font_height * 1.4), true, false, true);
 
 #ifdef WIN32
-  log_infobox.lfCharSet = ANSI_CHARSET;
+  settings.infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
-  InitialiseLogfont(&log_title, GetStandardFontFace(), font_height / 3);
+  InitialiseLogfont(&settings.title, GetStandardFontFace(), font_height / 3);
 
   // new font for CDI Scale
-  InitialiseLogfont(&log_cdi, GetStandardFontFace(),
+  InitialiseLogfont(&settings.cdi, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&log_map_label, GetStandardFontFace(),
+  InitialiseLogfont(&settings.map_label, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(&log_map_label_important, GetStandardFontFace(),
+  InitialiseLogfont(&settings.map_label_important, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.39), false, true);
 
   // new font for map labels
-  InitialiseLogfont(&log_map, GetStandardFontFace(),
+  InitialiseLogfont(&settings.map, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&log_map_bold, GetStandardFontFace(),
+  InitialiseLogfont(&settings.map_bold, GetStandardFontFace(),
                     UPixelScalar(font_height * 0.507), true);
 
-  InitialiseLogfont(&log_infobox_small, GetStandardFontFace(),
+  InitialiseLogfont(&settings.infobox_small, GetStandardFontFace(),
                     Layout::Scale(20));
 
 #ifndef GNAV
-  InitialiseLogfont(&log_infobox_units, GetStandardFontFace(),
+  InitialiseLogfont(&settings.infobox_units, GetStandardFontFace(),
                     (int)(font_height * 0.56));
 #endif
 
-  InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
+  InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
                     UPixelScalar(font_height * 0.39), false, false, false);
+}
+
+FontSettings
+Fonts::GetDefaults()
+{
+  FontSettings settings;
+  InitialiseLogFonts(settings);
+  return settings;
 }
 
 bool
 Fonts::Initialize()
 {
-  InitialiseLogFonts();
+  default_settings = GetDefaults();
+  effective_settings = default_settings;
 
-  title.Load(log_title);
-  cdi.Load(log_cdi);
-  map_label.Load(log_map_label);
-  map_label_important.Load(log_map_label_important);
-  map.Load(log_map);
-  map_bold.Load(log_map_bold);
-  monospace.Load(log_monospace);
-
-  return title.IsDefined() && cdi.IsDefined() &&
-    map_label.IsDefined() && map_label_important.IsDefined() &&
-    map.IsDefined() && map_bold.IsDefined() &&
-    monospace.IsDefined();
+  return Load(effective_settings);
 }
 
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
-  AutoSizeInfoBoxFonts(log_infobox, log_infobox_small,
-#ifndef GNAV
-                       log_infobox_units,
-#endif
-                       control_width);
+  AutoSizeInfoBoxFonts(default_settings, control_width);
+  AutoSizeInfoBoxFonts(effective_settings, control_width);
 
-  infobox.Load(log_infobox);
-  infobox_small.Load(log_infobox_small);
+  infobox.Load(effective_settings.infobox);
+  infobox_small.Load(effective_settings.infobox_small);
 #ifndef GNAV
-  infobox_units.Load(log_infobox_units);
+  infobox_units.Load(effective_settings.infobox_units);
 #endif
 
 #ifdef ENABLE_OPENGL

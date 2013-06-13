@@ -22,7 +22,10 @@ Copyright_License {
 */
 
 #include "GlobalFonts.hpp"
+#include "FontSettings.hpp"
 #include "Screen/Font.hpp"
+
+FontSettings Fonts::default_settings, Fonts::effective_settings;
 
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::infobox;
@@ -43,6 +46,23 @@ Font Fonts::map_bold;
 Font Fonts::map_label;
 /// font labels for important labels (e.g. big/medium cities)
 Font Fonts::map_label_important;
+
+bool
+Fonts::Load(const FontSettings &settings)
+{
+  title.Load(settings.title);
+  cdi.Load(settings.cdi);
+  map_label.Load(settings.map_label);
+  map_label_important.Load(settings.map_label_important);
+  map.Load(settings.map);
+  map_bold.Load(settings.map_bold);
+  monospace.Load(settings.monospace);
+
+  return title.IsDefined() && cdi.IsDefined() &&
+    map_label.IsDefined() && map_label_important.IsDefined() &&
+    map.IsDefined() && map_bold.IsDefined() &&
+    monospace.IsDefined();
+}
 
 void
 Fonts::Deinitialize()

@@ -24,8 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_DEFAULT_FONTS_HPP
 #define XCSOAR_DEFAULT_FONTS_HPP
 
+#include "Compiler.h"
+
+struct FontSettings;
+
 namespace Fonts
 {
+  gcc_pure
+  FontSettings GetDefaults();
+
   /**
    * Load all fonts.
    *

@@ -37,11 +37,6 @@ void
 AutoSizeFont(LOGFONT &logfont, unsigned width, const TCHAR *text);
 
 void
-AutoSizeInfoBoxFonts(LOGFONT &value,
-                     LOGFONT &small_value,
-#ifndef GNAV
-                     LOGFONT &units,
-#endif
-                     unsigned control_width);
+AutoSizeInfoBoxFonts(FontSettings &settings, unsigned control_width);
 
 #endif
