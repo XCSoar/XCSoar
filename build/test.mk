@@ -1703,6 +1703,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \

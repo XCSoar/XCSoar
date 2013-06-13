@@ -46,6 +46,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
 #include "Look/Fonts.hpp"
+#include "Look/DefaultFonts.hpp"
 #include "Thread/Debug.hpp"
 
 void

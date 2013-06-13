@@ -21,36 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FONTS_HPP
-#define XCSOAR_FONTS_HPP
-
-class Font;
+#ifndef XCSOAR_DEFAULT_FONTS_HPP
+#define XCSOAR_DEFAULT_FONTS_HPP
 
 namespace Fonts
 {
-  extern Font infobox;
-  extern Font infobox_small;
-#ifndef GNAV
-  extern Font infobox_units;
-#endif
-
-  extern Font title;
-  extern Font cdi;
-  extern Font monospace;
-
-  extern Font map;
-  extern Font map_bold;
-  extern Font map_label;
-  extern Font map_label_important;
-
   /**
-   * Load custom fonts from the profile.
+   * Load all fonts.
    *
    * @return true on success
    */
-  bool LoadCustom();
+  bool Initialize();
 
-  void Deinitialize();
+  void SizeInfoboxFont(unsigned control_width);
 }
 
 #endif

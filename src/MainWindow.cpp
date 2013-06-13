@@ -48,6 +48,7 @@ Copyright_License {
 #include "Widget/Widget.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/Fonts.hpp"
+#include "Look/DefaultFonts.hpp"
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
