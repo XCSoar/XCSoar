@@ -138,6 +138,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                sdk_version, product);
+  is_nook = strcmp(native_view->GetProduct(), "NOOK") == 0;
 
   event_queue = new EventQueue();
 
