@@ -556,7 +556,7 @@ InfoBoxWindow::OnSetFocus()
 
   // Start the focus-auto-return timer
   // to automatically return focus back to MapWindow if idle
-  focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
+  focus_timer.Schedule(HasCursorKeys() ? FOCUS_TIMEOUT_MAX : 1100);
 
   // Redraw fast to paint the selector
   Invalidate();

@@ -144,7 +144,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
   unsigned last_item = std::min(length, end);
 
-  const bool focused = HasFocus();
+  const bool focused = !HasCursorKeys() || HasFocus();
 
   for (unsigned i = start; i < last_item; i++) {
     const bool selected = i == cursor;
@@ -562,7 +562,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  const bool had_focus = HasFocus();
+  const bool had_focus = !HasCursorKeys() || HasFocus();
   if (!had_focus)
     SetFocus();
 

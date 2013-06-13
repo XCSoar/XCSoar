@@ -35,9 +35,10 @@ void
 WndSymbolButton::OnPaint(Canvas &canvas)
 {
   const bool pressed = IsDown();
+  const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
   PixelRect rc = canvas.GetRect();
-  renderer.DrawButton(canvas, rc, HasFocus(), pressed);
+  renderer.DrawButton(canvas, rc, focused, pressed);
   // If button has text on it
   const tstring caption = GetText();
   if (caption.empty())
@@ -48,7 +49,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   canvas.SelectNullPen();
   if (!IsEnabled())
     canvas.Select(look.button.disabled.brush);
-  else if (HasFocus())
+  else if (focused)
     canvas.Select(look.button.focused.foreground_brush);
   else
     canvas.Select(look.button.standard.foreground_brush);
