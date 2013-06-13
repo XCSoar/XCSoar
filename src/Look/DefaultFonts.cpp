@@ -38,7 +38,7 @@ Copyright_License {
 #include <string.h>
 
 static void
-InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
+InitialiseLogfont(LOGFONT *font, const TCHAR *facename, unsigned height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
@@ -89,9 +89,9 @@ InitialiseLogFonts(FontSettings &settings)
   }
 
 #ifndef USE_GDI
-  UPixelScalar font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : 24);
+  unsigned font_height = Layout::SmallScale((IsAndroid()||IsKobo()) ? 30 : 24);
 #else
-  UPixelScalar font_height = Layout::SmallScale(35);
+  unsigned font_height = Layout::SmallScale(35);
 #endif
 
   InitialiseLogfont(&settings.dialog, GetStandardFontFace(), font_height / 2);
@@ -112,23 +112,23 @@ InitialiseLogFonts(FontSettings &settings)
 
   // new font for CDI Scale
   InitialiseLogfont(&settings.cdi, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.6), false, false, false);
+                    unsigned(font_height * 0.6), false, false, false);
 
   // new font for map labels
   InitialiseLogfont(&settings.map_label, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.39), false, true);
+                    unsigned(font_height * 0.39), false, true);
 
   // new font for map labels big/medium cities
   InitialiseLogfont(&settings.map_label_important, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.39), false, true);
+                    unsigned(font_height * 0.39), false, true);
 
   // new font for map labels
   InitialiseLogfont(&settings.map, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.507));
+                    unsigned(font_height * 0.507));
 
   // Font for map bold text
   InitialiseLogfont(&settings.map_bold, GetStandardFontFace(),
-                    UPixelScalar(font_height * 0.507), true);
+                    unsigned(font_height * 0.507), true);
 
 #ifndef GNAV
   InitialiseLogfont(&settings.infobox_units, GetStandardFontFace(),
@@ -136,7 +136,7 @@ InitialiseLogFonts(FontSettings &settings)
 #endif
 
   InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
-                    UPixelScalar(font_height * 0.39), false, false, false);
+                    unsigned(font_height * 0.39), false, false, false);
 }
 
 FontSettings
