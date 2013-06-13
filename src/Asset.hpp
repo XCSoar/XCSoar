@@ -255,4 +255,25 @@ HasColors()
 #endif
 }
 
+/**
+ * Does this device have an electronic paper screen, such as E-Ink?
+ * Such screens need some special cases, because they are very slow
+ * and show ghosting.  Animations shall be disabled when this function
+ * returns true.
+ */
+#ifdef ANDROID
+gcc_const
+#else
+constexpr
+#endif
+static inline bool
+HasEPaper()
+{
+#ifdef ANDROID
+  return IsNookSimpleTouch();
+#else
+  return IsKobo();
+#endif
+}
+
 #endif
