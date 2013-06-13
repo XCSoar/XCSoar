@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DefaultFonts.hpp"
+#include "AutoFont.hpp"
 #include "Fonts.hpp"
 #include "StandardFonts.hpp"
 #include "Screen/Font.hpp"
@@ -87,47 +88,6 @@ LoadAltairLogFonts()
   InitialiseLogfont(&log_infobox_small, _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
                     10, false, false, false);
-}
-
-static void
-SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
-{
-  // JMW algorithm to auto-size info window font.
-  // this is still required in case title font property doesn't exist.
-
-  /* reasonable start value (ignoring the original input value) */
-  logfont.lfHeight = std::max(10u, unsigned(width) / 4u);
-
-  Font font;
-  if (!font.Load(logfont))
-    return;
-
-  /* double the font size until it is large enough */
-
-  PixelSize tsize = font.TextSize(str);
-  while (unsigned(tsize.cx) < width) {
-    logfont.lfHeight *= 2;
-    if (!font.Load(logfont)) {
-      logfont.lfHeight /= 2;
-      break;
-    }
-
-    tsize = font.TextSize(str);
-  }
-
-  /* decrease font size until it fits exactly */
-
-  do {
-    --logfont.lfHeight;
-
-    Font font;
-    if (!font.Load(logfont))
-      break;
-
-    tsize = font.TextSize(str);
-  } while ((unsigned)tsize.cx > width);
-
-  ++logfont.lfHeight;
 }
 
 static void
@@ -209,7 +169,7 @@ void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
   if (!IsAltair())
-    SizeLogFont(log_infobox, control_width, _T("1234m"));
+    AutoSizeFont(log_infobox, control_width, _T("1234m"));
   infobox.Load(log_infobox);
 
 #ifndef GNAV
@@ -221,7 +181,7 @@ Fonts::SizeInfoboxFont(unsigned control_width)
 #endif
 
   if (!IsAltair())
-    SizeLogFont(log_infobox_small, control_width, _T("12345m"));
+    AutoSizeFont(log_infobox_small, control_width, _T("12345m"));
   infobox_small.Load(log_infobox_small);
 
 #ifdef ENABLE_OPENGL

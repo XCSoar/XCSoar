@@ -740,6 +740,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Look/CustomFonts.cpp \
 	$(SRC)/Look/Look.cpp \
