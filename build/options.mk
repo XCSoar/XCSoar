@@ -12,7 +12,8 @@ TARGET_CPPFLAGS += -DRADIANS
 endif
 
 # shall we paint with some eye candy?
-ifneq ($(EYE_CANDY),n)
+EYE_CANDY ?= y
+ifeq ($(EYE_CANDY),y)
 TARGET_CPPFLAGS += -DEYE_CANDY
 WINDRESFLAGS += -DEYE_CANDY
 endif
