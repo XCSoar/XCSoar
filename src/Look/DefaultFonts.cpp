@@ -31,6 +31,8 @@ Copyright_License {
 #include "Screen/OpenGL/Cache.hpp"
 #endif
 
+#include <algorithm>
+
 #include <string.h>
 
 // these are the non-custom parameters
@@ -92,7 +94,29 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
 {
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
-  PixelSize tsize;
+
+  /* reasonable start value (ignoring the original input value) */
+  logfont.lfHeight = std::max(10u, unsigned(width) / 4u);
+
+  Font font;
+  if (!font.Load(logfont))
+    return;
+
+  /* double the font size until it is large enough */
+
+  PixelSize tsize = font.TextSize(str);
+  while (unsigned(tsize.cx) < width) {
+    logfont.lfHeight *= 2;
+    if (!font.Load(logfont)) {
+      logfont.lfHeight /= 2;
+      break;
+    }
+
+    tsize = font.TextSize(str);
+  }
+
+  /* decrease font size until it fits exactly */
+
   do {
     --logfont.lfHeight;
 
