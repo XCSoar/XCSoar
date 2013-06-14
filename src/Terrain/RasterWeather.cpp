@@ -309,11 +309,13 @@ RasterWeather::_Close()
 void
 RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 {
-  if (_parameter == 0 || weather_map == NULL)
+  if (_parameter == 0)
     // will be drawing terrain
     return;
 
   Poco::ScopedRWLock protect(lock, true);
+  if (weather_map == nullptr)
+    return;
 
   /* only update the RasterMap if the center was moved far enough */
   if (center.IsValid() && center.Distance(location) < fixed(1000))
@@ -327,11 +329,12 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 bool
 RasterWeather::IsDirty() const
 {
-  if (_parameter == 0 || weather_map == NULL)
+  if (_parameter == 0)
+    // will be drawing terrain
     return false;
 
   Poco::ScopedRWLock protect(lock, false);
-  return weather_map->IsDirty();
+  return weather_map != nullptr && weather_map->IsDirty();
 }
 
 const TCHAR*
