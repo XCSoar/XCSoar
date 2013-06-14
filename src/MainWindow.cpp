@@ -463,6 +463,8 @@ void
 MainWindow::BeginShutdown()
 {
   timer.Cancel();
+
+  KillBottomWidget();
 }
 
 void
