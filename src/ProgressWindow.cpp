@@ -22,9 +22,14 @@ Copyright_License {
 */
 
 #include "ProgressWindow.hpp"
-#include "Screen/VirtualCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"
+
+#ifdef USE_GDI
+#include "Screen/VirtualCanvas.hpp"
+#else
+#include "Screen/Canvas.hpp"
+#endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
   :background_color(COLOR_WHITE),
