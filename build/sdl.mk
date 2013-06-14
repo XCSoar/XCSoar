@@ -36,6 +36,10 @@ endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
 
+ifeq ($(OPENGL),n)
+SDL_CPPFLAGS += -DUSE_SDL_GFX
+endif
+
 ifeq ($(TARGET_IS_DARWIN),y)
 # the pkg-config file on MacPorts is broken, we must convert all -l
 # flags to link static libraries instead
