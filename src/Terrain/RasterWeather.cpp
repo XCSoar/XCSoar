@@ -100,7 +100,7 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
 RasterWeather::RasterWeather()
   :center(GeoPoint::Invalid()),
     _parameter(0),
-    _weather_time(0),
+   _weather_time(0), last_weather_time(0),
     reload(true),
     weather_map(NULL)
 {
@@ -245,7 +245,6 @@ RasterWeather::ScanAll(const GeoPoint &location,
 void
 RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
 {
-  static unsigned last_weather_time;
   bool found = false;
   bool now = false;
 

@@ -47,6 +47,8 @@ private:
 
   unsigned _parameter;
   unsigned _weather_time;
+  unsigned last_weather_time;
+
   bool reload;
   RasterMap *weather_map;
 
