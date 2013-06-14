@@ -316,6 +316,10 @@ protected:
 
   virtual bool OnClose();
 
+#ifdef KOBO
+  virtual void OnDestroy() override;
+#endif
+
 #ifdef USE_VIDEOCORE
   virtual void OnPaint(Canvas &canvas) override;
 #endif
