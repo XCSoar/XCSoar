@@ -52,15 +52,6 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
 
 #endif /* !ENABLE_SDL */
 
-#ifndef ENABLE_OPENGL
-
-VirtualCanvas::~VirtualCanvas()
-{
-  Destroy();
-}
-
-#endif /* !OPENGL */
-
 void
 VirtualCanvas::Create(PixelSize new_size)
 {

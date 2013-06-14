@@ -38,7 +38,9 @@ public:
   VirtualCanvas(const Canvas &canvas, PixelSize new_size);
 
 #ifndef ENABLE_OPENGL
-  ~VirtualCanvas();
+  ~VirtualCanvas() {
+    Destroy();
+  }
 #endif
 
   void Create(PixelSize new_size);
