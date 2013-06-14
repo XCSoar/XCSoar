@@ -340,8 +340,7 @@ RasterWeather::IsDirty() const
 const TCHAR*
 RasterWeather::ItemLabel(unsigned i)
 {
-  if (gcc_unlikely(i >= MAX_WEATHER_MAP))
-    return NULL;
+  assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *label = WeatherDescriptors[i].label;
   if (gcc_unlikely(label == NULL))
@@ -353,8 +352,7 @@ RasterWeather::ItemLabel(unsigned i)
 const TCHAR*
 RasterWeather::ItemHelp(unsigned i)
 {
-  if (gcc_unlikely(i >= MAX_WEATHER_MAP))
-    return NULL;
+  assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *help = WeatherDescriptors[i].help;
   if (gcc_unlikely(help == NULL))
