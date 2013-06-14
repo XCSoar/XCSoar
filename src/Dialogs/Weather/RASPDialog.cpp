@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "WeatherDialogs.hpp"
-#include "Dialogs/HelpDialog.hpp"
-#include "Dialogs/XML.hpp"
-#include "Units/Units.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "Screen/Layout.hpp"
-#include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Components.hpp"
@@ -36,19 +33,40 @@ Copyright_License {
 
 #include <stdio.h>
 
+class RASPSettingsPanel final : public RowFormWidget {
+  enum Controls {
+    ITEM,
+    TIME,
+  };
+
+public:
+  RASPSettingsPanel():RowFormWidget(UIGlobals::GetDialogLook()) {}
+
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+};
+
 void
-dlgWeatherShowModal()
+RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-                           _T("IDR_XML_WEATHER"));
-  if (wf == NULL)
-    return;
+  WndProperty *wp;
 
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTime"));
-  assert(wp != nullptr);
+  wp = AddEnum(_("Field"), nullptr);
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
+  dfe->EnableItemHelp(true);
+  dfe->addEnumText(_("Terrain"));
+  for (int i = 1; i <= 15; i++) {
+    const TCHAR *label = RASP.ItemLabel(i);
+    if (label != NULL)
+      dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
+  }
+
+  dfe->Set(RASP.GetParameter());
+  wp->RefreshDisplay();
+
+  wp = AddEnum(_("Time"), nullptr);
+  dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->addEnumText(_("Now"));
   for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_TIMES; i++) {
     if (RASP.isWeatherAvailable(i)) {
@@ -60,34 +78,25 @@ dlgWeatherShowModal()
 
   dfe->Set(RASP.GetTime());
   wp->RefreshDisplay();
+}
 
-  wp = (WndProperty *)wf->FindByName(_T("prpDisplayItem"));
-  assert(wp != nullptr);
-  dfe = (DataFieldEnum *)wp->GetDataField();
-  dfe->EnableItemHelp(true);
-  dfe->addEnumText(_("Terrain"));
+bool
+RASPSettingsPanel::Save(bool &_changed)
+{
+  RASP.SetParameter(GetValueInteger(ITEM));
+  RASP.SetTime(GetValueInteger(TIME));
+  return true;
+}
 
-  for (int i = 1; i <= 15; i++) {
-    const TCHAR *label = RASP.ItemLabel(i);
-    if (label != NULL)
-      dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
-  }
-  dfe->Set(RASP.GetParameter());
-  wp->RefreshDisplay();
+void
+dlgWeatherShowModal()
+{
+  RASPSettingsPanel *widget = new RASPSettingsPanel();
 
-  wf->ShowModal();
-
-  wp = (WndProperty *)wf->FindByName(_T("prpTime"));
-  assert(wp != nullptr);
-  dfe = (DataFieldEnum *)wp->GetDataField();
-  RASP.SetTime(dfe->GetValue());
-
-  wp = (WndProperty *)wf->FindByName(_T("prpDisplayItem"));
-  assert(wp != nullptr);
-  dfe = (DataFieldEnum *)wp->GetDataField();
-  RASP.SetParameter(dfe->GetValue());
-
-  delete wf;
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Weather Forecast"), widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.ShowModal();
 }
 
 /*
