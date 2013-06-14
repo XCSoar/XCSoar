@@ -21,48 +21,44 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
-#define XCSOAR_SCREEN_VIRTUAL_CANVAS_HPP
+#include "Screen/VirtualCanvas.hpp"
 
-#include "Screen/Canvas.hpp"
+#include <assert.h>
 
-/**
- * A #Canvas implementation which draws to an off-screen surface.
- * This is an abstract class; see #BufferCanvas for
- * a concrete implementation.
- */
-class VirtualCanvas : public Canvas {
-public:
-  VirtualCanvas() = default;
-  VirtualCanvas(PixelSize new_size);
-  VirtualCanvas(const Canvas &canvas, PixelSize new_size);
+VirtualCanvas::VirtualCanvas(PixelSize new_size)
+  :Canvas(::CreateCompatibleDC(NULL), new_size)
+{
+}
 
-#ifndef ENABLE_SDL
-  ~VirtualCanvas() {
-    Destroy();
-  }
-#endif
+VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
+  :Canvas(::CreateCompatibleDC(canvas), new_size)
+{
+  assert(canvas.IsDefined());
+}
 
-  void Create(PixelSize new_size);
+void
+VirtualCanvas::Create(PixelSize new_size)
+{
+  assert((PixelScalar)new_size.cx >= 0);
+  assert((PixelScalar)new_size.cy >= 0);
 
-  void Create(const Canvas &canvas, PixelSize new_size);
+  Destroy();
+  Canvas::Create(CreateCompatibleDC(NULL), new_size);
+}
 
-  void Create(const Canvas &canvas) {
-    Create(canvas, canvas.GetSize());
-  }
+void
+VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
+{
+  assert(canvas.IsDefined());
 
-#ifndef ENABLE_SDL
-  void Destroy();
-#endif
+  Destroy();
+  Canvas::Create(CreateCompatibleDC(canvas), new_size);
+}
 
-#ifdef ENABLE_SDL
-  void Resize(PixelSize new_size) {
-    if (new_size != size)
-      Create(*this, new_size);
-  }
+void VirtualCanvas::Destroy()
+{
+  Canvas::Destroy();
 
-  void Grow(PixelSize new_size);
-#endif
-};
-
-#endif
+  if (dc != NULL)
+    ::DeleteDC(dc);
+}

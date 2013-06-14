@@ -25,8 +25,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef ENABLE_SDL
-
 VirtualCanvas::VirtualCanvas(PixelSize new_size)
 {
   Create(new_size);
@@ -37,8 +35,6 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
   Create(new_size);
 }
 
-#endif /* !ENABLE_SDL */
-
 void
 VirtualCanvas::Create(PixelSize new_size)
 {
@@ -47,7 +43,6 @@ VirtualCanvas::Create(PixelSize new_size)
 
   Destroy();
 
-#ifdef ENABLE_SDL
   const SDL_Surface *video = ::SDL_GetVideoSurface();
   assert(video != NULL);
   const SDL_PixelFormat *format = video->format;
@@ -59,9 +54,6 @@ VirtualCanvas::Create(PixelSize new_size)
                                    format->Bmask, format->Amask);
   if (surface != NULL)
     Canvas::Create(surface);
-#else /* !ENABLE_SDL */
-  Canvas::Create(CreateCompatibleDC(NULL), new_size);
-#endif /* !ENABLE_SDL */
 }
 
 void
@@ -69,26 +61,5 @@ VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
 {
   assert(canvas.IsDefined());
 
-#ifdef ENABLE_SDL
   Create(new_size);
-#else /* !ENABLE_SDL */
-  Destroy();
-  Canvas::Create(CreateCompatibleDC(canvas), new_size);
-#endif /* !ENABLE_SDL */
 }
-
-void
-VirtualCanvas::Create(const Canvas &canvas)
-{
-  Create(canvas, canvas.GetSize());
-}
-
-#ifndef ENABLE_SDL
-void VirtualCanvas::Destroy()
-{
-  Canvas::Destroy();
-
-  if (dc != NULL)
-    ::DeleteDC(dc);
-}
-#endif /* !ENABLE_SDL */

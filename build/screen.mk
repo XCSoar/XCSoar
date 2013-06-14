@@ -94,7 +94,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
+	$(SCREEN_SRC_DIR)/SDL/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
 else ifeq ($(EGL),y)
@@ -111,8 +111,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
 	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
