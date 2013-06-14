@@ -70,8 +70,24 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
     ::filledPolygonColor(surface, vx, vy, cPoints,
                          brush.GetColor().GFXColor());
 
-  if (IsPenOverBrush())
-    ::polygonColor(surface, vx, vy, cPoints, pen.GetColor().GFXColor());
+  if (IsPenOverBrush()) {
+    const Uint32 color = pen.GetColor().GFXColor();
+
+#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
+  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
+                                    SDL_GFXPRIMITIVES_MICRO >= 22))
+    /* thickLineColor() was added in SDL_gfx 2.0.22 */
+    const unsigned width = pen.GetWidth();
+    if (width > 1) {
+      for (unsigned i = 1; i < cPoints; ++i)
+        ::thickLineColor(surface, vx[i - 1], vy[i - 1], vx[i], vy[i],
+                         width, color);
+      ::thickLineColor(surface, vx[cPoints - 1], vy[cPoints - 1], vx[0], vy[0],
+                       width, color);
+    } else
+#endif
+      ::polygonColor(surface, vx, vy, cPoints, color);
+  }
 }
 
 void
