@@ -44,6 +44,7 @@ TaskStats::reset()
   task_valid = false;
   task_finished = false;
   inside_oz = false;
+  need_to_arm = false;
   flight_mode_final_glide = false;
   start.Reset();
   last_hour.Reset();

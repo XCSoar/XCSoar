@@ -374,6 +374,8 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     }
   }
 
+  stats.need_to_arm = task_advance.NeedToArm();
+
   taskpoint_start->ScanActive(*task_points[active_task_point]);
 
   stats.task_finished = taskpoint_finish != nullptr &&

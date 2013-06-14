@@ -74,6 +74,11 @@ public:
    */
   bool inside_oz;
 
+  /**
+   * Does the current task point need to be armed?
+   */
+  bool need_to_arm;
+
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
 
