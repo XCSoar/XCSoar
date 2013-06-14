@@ -22,79 +22,106 @@ Copyright_License {
 */
 
 #include "VoiceSettingsDialog.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Button.hpp"
-#include "Form/DataField/Base.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
-#include "Units/Units.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Audio/VegaVoice.hpp"
-#include "LogFile.hpp"
 #include "Interface.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Language/Language.hpp"
 
-static void LoadIntoForm(WndForm &form, const VoiceSettings &settings){
-  LoadFormProperty(form, _T("prpVoiceClimbRate"),
-                   settings.voice_climb_rate_enabled);
-  LoadFormProperty(form, _T("prpVoiceTerrain"), settings.voice_terrain_enabled);
-  LoadFormProperty(form, _T("prpVoiceWaypointDistance"),
-                   settings.voice_waypoint_distance_enabled);
-  LoadFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
-                   settings.voice_task_altitude_difference_enabled);
-  LoadFormProperty(form, _T("prpVoiceMacCready"),
-                   settings.voice_mac_cready_enabled);
-  LoadFormProperty(form, _T("prpVoiceNewWaypoint"),
-                   settings.voice_new_waypoint_enabled);
-  LoadFormProperty(form, _T("prpVoiceInSector"), settings.voice_in_sector_enabled);
-  LoadFormProperty(form, _T("prpVoiceAirspace"), settings.voice_airspace_enabled);
-}
+class VoiceSettingsPanel final : public RowFormWidget {
+  enum Controls {
+    CLIMB_RATE,
+    TERRAIN,
+    WAYPOINT_DISTANCE,
+    TASK_ALTITUDE_DIFFERENCE,
+    MAC_CREADY,
+    NEXT_WAYPOINT,
+    IN_SECTOR,
+    AIRSPACE,
+  };
 
-static bool
-SaveFromForm(const WndForm &form, VoiceSettings &settings)
+public:
+  VoiceSettingsPanel():RowFormWidget(UIGlobals::GetDialogLook()) {}
+
+  /* methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+};
+
+void
+VoiceSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  return
-    SaveFormProperty(form, _T("prpVoiceClimbRate"),
-                     settings.voice_climb_rate_enabled,
-                     ProfileKeys::VoiceClimbRate) ||
-    SaveFormProperty(form, _T("prpVoiceTerrain"),
-                     settings.voice_terrain_enabled, ProfileKeys::VoiceTerrain) ||
-    SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
-                     settings.voice_waypoint_distance_enabled,
-                     ProfileKeys::VoiceWaypointDistance) ||
-    SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
-                     settings.voice_task_altitude_difference_enabled,
-                     ProfileKeys::VoiceTaskAltitudeDifference) ||
-    SaveFormProperty(form, _T("prpVoiceMacCready"),
-                     settings.voice_mac_cready_enabled,
-                     ProfileKeys::VoiceMacCready) ||
-    SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
-                     settings.voice_new_waypoint_enabled,
-                     ProfileKeys::VoiceNewWaypoint) ||
-    SaveFormProperty(form, _T("prpVoiceInSector"),
-                     settings.voice_in_sector_enabled, ProfileKeys::VoiceInSector) ||
-    SaveFormProperty(form, _T("prpVoiceAirspace"),
-                     settings.voice_airspace_enabled, ProfileKeys::VoiceAirspace);
+  const VoiceSettings &settings = CommonInterface::GetComputerSettings().voice;
+
+  AddBoolean(_("Climb rate"),
+             _("Enable voice read-back of the average climb rate when circling."),
+             settings.voice_climb_rate_enabled);
+
+  AddBoolean(_("Terrain"),
+             _("Enable warnings for final glide through terrain."),
+             settings.voice_terrain_enabled);
+
+  AddBoolean(_("Waypoint distance"),
+             _("Enable voice read-back of the distance to next waypoint when in cruise mode."),
+             settings.voice_waypoint_distance_enabled);
+
+  AddBoolean(_("Task altitude difference"),
+             _("Enable voice read-back of height above/below final glide when in final glide."),
+             settings.voice_task_altitude_difference_enabled);
+
+  AddBoolean(_("MacCready"),
+             _("Enable voice read-back of MacReady setting after it is adjusted."),
+             settings.voice_mac_cready_enabled);
+
+  AddBoolean(_("New waypoint"),
+             _("Enable voice announcement that the task waypoint has changed."),
+             settings.voice_new_waypoint_enabled);
+
+  AddBoolean(_("In sector"),
+             _("Enable voice announcement that the glider is within the task observation sector."),
+             settings.voice_in_sector_enabled);
+
+  AddBoolean(_("Airspace"),
+             _("Enable voice warnings for airspace incursions."),
+             settings.voice_airspace_enabled);
 }
 
-
-void dlgVoiceShowModal(){
-  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-                           _T("IDR_XML_VOICE"));
-  assert(wf != nullptr);
-
-  LoadIntoForm(*wf, CommonInterface::GetComputerSettings().voice);
-
-  wf->ShowModal();
-
+bool
+VoiceSettingsPanel::Save(bool &_changed)
+{
+  VoiceSettings &settings = CommonInterface::SetComputerSettings().voice;
   bool changed = false;
 
-  changed = SaveFromForm(*wf, CommonInterface::SetComputerSettings().voice);
-  delete wf;
+  changed |= SaveValueEnum(CLIMB_RATE, ProfileKeys::VoiceClimbRate,
+                           settings.voice_climb_rate_enabled);
+  changed |= SaveValueEnum(TERRAIN, ProfileKeys::VoiceTerrain,
+                           settings.voice_terrain_enabled);
+  changed |= SaveValueEnum(WAYPOINT_DISTANCE,
+                           ProfileKeys::VoiceWaypointDistance,
+                           settings.voice_waypoint_distance_enabled);
+  changed |= SaveValueEnum(TASK_ALTITUDE_DIFFERENCE,
+                           ProfileKeys::VoiceTaskAltitudeDifference,
+                           settings.voice_task_altitude_difference_enabled);
+  changed |= SaveValueEnum(MAC_CREADY, ProfileKeys::VoiceMacCready,
+                           settings.voice_mac_cready_enabled);
+  changed |= SaveValueEnum(NEXT_WAYPOINT, ProfileKeys::VoiceNewWaypoint,
+                           settings.voice_new_waypoint_enabled);
+  changed |= SaveValueEnum(IN_SECTOR, ProfileKeys::VoiceInSector,
+                           settings.voice_in_sector_enabled);
+  changed |= SaveValueEnum(AIRSPACE, ProfileKeys::VoiceAirspace,
+                           settings.voice_airspace_enabled);
 
-  if (changed) {
-    Profile::Save();
-    LogDebug(_T("Voice configuration: Changes saved"));
-  }
+  _changed |= changed;
+  return true;
+}
+
+void dlgVoiceShowModal(){
+  VoiceSettingsPanel *widget = new VoiceSettingsPanel();
+
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Vega Voice Extensions"),
+                    widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.ShowModal();
 }
