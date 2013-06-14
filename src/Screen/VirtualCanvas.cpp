@@ -37,19 +37,6 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
   Create(new_size);
 }
 
-#else /* !ENABLE_SDL */
-
-VirtualCanvas::VirtualCanvas(PixelSize new_size)
-  :Canvas(::CreateCompatibleDC(NULL), new_size)
-{
-}
-
-VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
-  :Canvas(::CreateCompatibleDC(canvas), new_size)
-{
-  assert(canvas.IsDefined());
-}
-
 #endif /* !ENABLE_SDL */
 
 void
@@ -57,10 +44,6 @@ VirtualCanvas::Create(PixelSize new_size)
 {
   assert((PixelScalar)new_size.cx >= 0);
   assert((PixelScalar)new_size.cy >= 0);
-
-#ifdef ENABLE_OPENGL
-  Canvas::Create(new_size);
-#else /* !OPENGL */
 
   Destroy();
 
@@ -79,7 +62,6 @@ VirtualCanvas::Create(PixelSize new_size)
 #else /* !ENABLE_SDL */
   Canvas::Create(CreateCompatibleDC(NULL), new_size);
 #endif /* !ENABLE_SDL */
-#endif /* !OPENGL */
 }
 
 void

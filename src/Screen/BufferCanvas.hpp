@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUFFER_CANVAS_HPP
 #define XCSOAR_SCREEN_BUFFER_CANVAS_HPP
 
-#include "Screen/VirtualCanvas.hpp"
-
 #ifdef ENABLE_OPENGL
 #include "OpenGL/BufferCanvas.hpp"
 #elif defined(ENABLE_SDL)
+#include "Screen/VirtualCanvas.hpp"
 #define BufferCanvas VirtualCanvas
 #else /* GDI */
 #include "GDI/BufferCanvas.hpp"

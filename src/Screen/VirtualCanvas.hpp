@@ -37,7 +37,7 @@ public:
   VirtualCanvas(PixelSize new_size);
   VirtualCanvas(const Canvas &canvas, PixelSize new_size);
 
-#ifndef ENABLE_OPENGL
+#ifndef ENABLE_SDL
   ~VirtualCanvas() {
     Destroy();
   }
