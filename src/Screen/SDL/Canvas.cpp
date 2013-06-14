@@ -47,10 +47,23 @@ Canvas::Destroy()
 }
 
 void
-Canvas::DrawPolyline(const RasterPoint *lppt, unsigned cPoints)
+Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
-  for (unsigned i = 1; i < cPoints; ++i)
-    DrawLine(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
+  const Uint32 color = pen.GetColor().GFXColor();
+
+#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
+  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
+                                    SDL_GFXPRIMITIVES_MICRO >= 22))
+  /* thickLineColor() was added in SDL_gfx 2.0.22 */
+  const unsigned width = pen.GetWidth();
+  if (width > 1)
+    for (unsigned i = 1; i < cPoints; ++i)
+      ::thickLineColor(surface, p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
+                       width, color);
+  else
+#endif
+    for (unsigned i = 1; i < cPoints; ++i)
+      ::lineColor(surface, p[i - 1].x, p[i - 1].y, p[i].x, p[i].y, color);
 }
 
 void
