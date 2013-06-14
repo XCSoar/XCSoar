@@ -241,56 +241,53 @@ void
 RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
 {
   bool found = false;
-  bool now = false;
 
   if (_parameter == 0)
     // will be drawing terrain
     return;
 
   Poco::ScopedRWLock protect(lock, true);
-  if (_weather_time == 0) {
+  unsigned effective_weather_time = _weather_time;
+  if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
     unsigned half_hours = (day_time_local / 1800) % 48;
-    _weather_time = std::max(_weather_time, half_hours);
-    now = true;
+    effective_weather_time = half_hours;
   }
 
   // limit values, for safety
-  _weather_time = std::min(MAX_WEATHER_TIMES - 1, _weather_time);
-  if (_weather_time != last_weather_time)
+  effective_weather_time = std::min(MAX_WEATHER_TIMES - 1,
+                                    effective_weather_time);
+  if (effective_weather_time != last_weather_time)
     reload = true;
 
   if (!reload) {
     // no change, quick exit.
-    if (now)
-      // must return to 0 = Now time on exit
-      _weather_time = 0;
-
     return;
   }
 
   reload = false;
 
-  last_weather_time = _weather_time;
+  last_weather_time = effective_weather_time;
 
   // scan forward to next valid time
-  while ((_weather_time < MAX_WEATHER_TIMES) && (!found)) {
-    if (!weather_available[_weather_time]) {
-      _weather_time++;
+  while (effective_weather_time < MAX_WEATHER_TIMES && !found) {
+    if (!weather_available[effective_weather_time]) {
+      effective_weather_time++;
     } else {
       found = true;
 
       _Close();
 
-      if (!LoadItem(WeatherDescriptors[_parameter].name, _weather_time,
+      if (!LoadItem(WeatherDescriptors[_parameter].name,
+                    effective_weather_time,
                     operation) &&
           _parameter == 1)
-        LoadItem(_T("wstar_bsratio"), _weather_time, operation);
+        LoadItem(_T("wstar_bsratio"), effective_weather_time, operation);
     }
   }
 
   // can't find valid time, so reset to zero
-  if (!found || now)
+  if (!found)
     _weather_time = 0;
 }
 
