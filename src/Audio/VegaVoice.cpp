@@ -55,75 +55,10 @@ enum {
   VWI_HUNDREDS=0,
 };
 
-
-void
-VegaVoiceMessage::TextToDigitsSmall(TCHAR *text, fixed number)
+gcc_const
+static int
+LookupDigit(int number)
 {
-  const int i = iround(number * 10);
-  const int ntens = i / 100;
-  const int nones = (i / 10) % 10;
-  const int ndecimals = i % 10;
-
-  TCHAR tdigit[80];
-
-  if (ntens>0) {
-    _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
-    _tcscat(text,tdigit);
-  }
-
-  _stprintf(tdigit, _T(",%d"), LookupDigit(nones));
-  _tcscat(text,tdigit);
-
-  _stprintf(tdigit, _T(",%d"), LookupDigit(ndecimals));
-  _tcscat(text,tdigit);
-
-}
-
-void
-VegaVoiceMessage::TextToDigitsLarge(TCHAR *text, fixed number)
-{
-  const int i = iround(number);
-  const int nhundreds = i / 100;
-  const int ntens = (i / 10) % 10;
-  const int nones = i % 10;
-
-  TCHAR tdigit[80];
-
-  if (nhundreds>0) {
-    _stprintf(tdigit, _T(",%d"), LookupDigit(nhundreds));
-    _tcscat(text,tdigit);
-  }
-  if ((nhundreds>0)||(ntens>0)) {
-    _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
-    _tcscat(text,tdigit);
-  }
-  _stprintf(tdigit, _T(",%d"), LookupDigit(nones));
-  _tcscat(text,tdigit);
-
-}
-
-void
-VegaVoiceMessage::TextToDigitsHuge(TCHAR *text, fixed number)
-{
-  const int i = iround(number / 100);
-  const int nthousands = i / 10;
-  const int nhundreds = i % 10;
-
-  TCHAR tdigit[80];
-
-  if (nthousands>0) {
-    _stprintf(tdigit, _T(",%d,%d"), LookupDigit(nthousands), VWI_THOUSANDS);
-    _tcscat(text,tdigit);
-  }
-  if (nhundreds>0) {
-    _stprintf(tdigit, _T(",%d,%d"), LookupDigit(nhundreds), VWI_HUNDREDS);
-    _tcscat(text,tdigit);
-  }
-}
-
-
-
-int VegaVoiceMessage::LookupDigit(int number) {
   switch(number) {
   case 0:
     return VWI_ZERO;
@@ -148,6 +83,29 @@ int VegaVoiceMessage::LookupDigit(int number) {
   };
   // shouldn't get here
   return VWI_ZERO;
+}
+
+static void
+TextToDigitsSmall(TCHAR *text, fixed number)
+{
+  const int i = iround(number * 10);
+  const int ntens = i / 100;
+  const int nones = (i / 10) % 10;
+  const int ndecimals = i % 10;
+
+  TCHAR tdigit[80];
+
+  if (ntens>0) {
+    _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
+    _tcscat(text,tdigit);
+  }
+
+  _stprintf(tdigit, _T(",%d"), LookupDigit(nones));
+  _tcscat(text,tdigit);
+
+  _stprintf(tdigit, _T(",%d"), LookupDigit(ndecimals));
+  _tcscat(text,tdigit);
+
 }
 
 void VegaVoiceMessage::Initialise(int the_id) {

@@ -91,15 +91,6 @@ private:
 
   void DoSend(fixed time, TCHAR *text);
 
-  static void TextToDigitsSmall(TCHAR *text, fixed number);
-
-  static void TextToDigitsLarge(TCHAR *text, fixed number);
-
-  static void TextToDigitsHuge(TCHAR *text, fixed number);
-
-  gcc_const
-  static int LookupDigit(int number);
-
 public:
   void SendNullMessage();
 
