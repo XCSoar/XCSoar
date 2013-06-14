@@ -36,6 +36,7 @@ Copyright_License {
 
 #include <SDL_rotozoom.h>
 #include <SDL_imageFilter.h>
+#include <SDL_gfxBlitFunc.h>
 
 void
 Canvas::Destroy()
@@ -874,4 +875,50 @@ Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
 {
   UPixelScalar radius = std::min(ellipse_width, ellipse_height) / 2;
   ::RoundRect(*this, left, top, right, bottom, radius);
+}
+
+void
+Canvas::AlphaBlend(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   SDL_Surface *src,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
+                   uint8_t alpha)
+{
+  // TODO: support scaling; SDL_gfx doesn't implement it
+  // TODO: this method assumes 32 bit RGBA; but what about RGB 565?
+
+  ::SDL_gfxSetAlpha(src, alpha);
+
+  SDL_PixelFormat *format = src->format;
+  if (format->Rmask == 0xff0000 || format->Rmask == 0xff) {
+    src->format->Aloss = 0;
+    src->format->Ashift = 24;
+    src->format->Amask = 0xff000000;
+  } else if (format->Rmask == 0xff000000 || format->Rmask == 0xff00) {
+    src->format->Aloss = 0;
+    src->format->Ashift = 0;
+    src->format->Amask = 0xff;
+  }
+
+  SDL_Rect src_rect = {
+    Sint16(src_x), Sint16(src_y), Uint16(src_width), Uint16(src_height)
+  };
+  SDL_Rect dest_rect = {
+    Sint16(dest_x), Sint16(dest_y), Uint16(dest_width), Uint16(dest_height)
+  };
+  ::SDL_gfxBlitRGBA(src, &src_rect, surface, &dest_rect);
+}
+
+void
+Canvas::AlphaBlend(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
+                   const Canvas &src,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
+                   uint8_t alpha)
+{
+  AlphaBlend(dest_x, dest_y, dest_width, dest_height,
+             src.surface, src_x, src_y, src_width, src_height,
+             alpha);
 }

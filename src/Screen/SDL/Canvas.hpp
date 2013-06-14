@@ -549,6 +549,20 @@ public:
                  const Bitmap &src,
                  PixelScalar src_x, PixelScalar src_y,
                  UPixelScalar src_width, UPixelScalar src_height);
+
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  SDL_Surface *src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
+
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  const Canvas &src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
 };
 
 #endif
