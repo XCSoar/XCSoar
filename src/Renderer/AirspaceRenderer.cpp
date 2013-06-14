@@ -502,6 +502,7 @@ private:
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
+#endif /* HAVE_HATCHED_BRUSH */
 
     buffer.SelectNullPen();
 
@@ -516,8 +517,6 @@ private:
         stencil.SelectHollowBrush();
       }
     }
-
-#endif /* HAVE_HATCHED_BRUSH */
   }
 };
 
