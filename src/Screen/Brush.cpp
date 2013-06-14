@@ -33,7 +33,6 @@ Brush::Set(const Color c)
   assert(IsScreenInitialized());
 
   #ifndef USE_GDI
-  hollow = false;
   color = c;
   #else
   Reset();
@@ -63,7 +62,7 @@ Brush::Reset()
   assert(!IsDefined() || IsScreenInitialized());
 
   #ifndef USE_GDI
-  hollow = true;
+  color = Color::Transparent();
   #else
   if (brush != NULL) {
 #ifndef NDEBUG
