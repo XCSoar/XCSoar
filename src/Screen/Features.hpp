@@ -40,7 +40,7 @@ Copyright_License {
  * Return true when the Canvas implements clipping against its
  * siblings and children.
  */
-static inline bool
+static constexpr inline bool
 HaveClipping()
 {
 #ifdef HAVE_CLIPPING
