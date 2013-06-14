@@ -37,13 +37,6 @@ VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
 
 DeviceDescriptor *devVarioFindVega();
 
-/**
- * Returns true if at least one of the connected device is a Condor
- * flight simulator.
- */
-bool
-HaveCondorDevice();
-
 void devStartup();
 void devShutdown();
 void devRestart();

@@ -143,15 +143,6 @@ devStartup()
   }
 }
 
-bool
-HaveCondorDevice()
-{
-  return ExistsIf(device_list, device_list + NUMDEV,
-                  [](const DeviceDescriptor *d) {
-                    return d->IsCondor();
-                  });
-}
-
 void
 VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 {
