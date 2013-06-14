@@ -883,6 +883,7 @@ MainWindow::KillBottomWidget()
     bottom_widget->Hide();
   bottom_widget->Unprepare();
   delete bottom_widget;
+  bottom_widget = nullptr;
 }
 
 void
