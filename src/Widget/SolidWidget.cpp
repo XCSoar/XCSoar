@@ -123,7 +123,7 @@ void
 SolidWidget::Move(const PixelRect &rc)
 {
   WindowWidget::Move(rc);
-  widget->Move(rc);
+  widget->Move(ToOrigin(rc));
 }
 
 bool
