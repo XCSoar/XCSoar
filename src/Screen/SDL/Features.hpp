@@ -21,37 +21,7 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_FEATURES_HPP
-#define XCSOAR_SCREEN_FEATURES_HPP
-
-#ifdef ANDROID
-#include "Screen/Android/Features.hpp"
-#endif
-
-#ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
-#endif
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Features.hpp"
-#endif
-
-#ifdef USE_GDI
-#include "Screen/GDI/Features.hpp"
-#endif
-
-/**
- * Return true when the Canvas implements clipping against its
- * siblings and children.
- */
-static constexpr inline bool
-HaveClipping()
-{
-#ifdef HAVE_CLIPPING
-  return true;
-#else
-  return false;
-#endif
-}
+#ifndef XCSOAR_SCREEN_SDL_FEATURES_HPP
+#define XCSOAR_SCREEN_SDL_FEATURES_HPP
 
 #endif
