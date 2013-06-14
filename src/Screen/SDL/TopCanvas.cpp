@@ -122,6 +122,9 @@ TopCanvas::OnResize(PixelSize new_size)
 #ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
+#else
+  surface = s;
+  size = new_size;
 #endif
 }
 
