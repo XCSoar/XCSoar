@@ -30,6 +30,10 @@ Copyright_License {
 #include "MapCanvas.hpp"
 #include "Geo/SearchPointVector.hpp"
 
+#ifdef USE_GDI
+#include "Screen/GDI/AlphaBlend.hpp"
+#endif
+
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
                              const AirspaceRendererSettings &_settings)

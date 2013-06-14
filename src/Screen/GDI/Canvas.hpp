@@ -30,7 +30,6 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
-#include "Screen/GDI/AlphaBlend.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -583,19 +582,7 @@ public:
                   HDC src,
                   PixelScalar src_x, PixelScalar src_y,
                   UPixelScalar src_width, UPixelScalar src_height,
-                  uint8_t alpha) {
-    assert(AlphaBlendAvailable());
-
-    BLENDFUNCTION fn;
-    fn.BlendOp = AC_SRC_OVER;
-    fn.BlendFlags = 0;
-    fn.SourceConstantAlpha = alpha;
-    fn.AlphaFormat = 0;
-
-    ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
-                       src, src_x, src_y, src_width, src_height,
-                       fn);
-  }
+                  uint8_t alpha);
 
   void AlphaBlend(PixelScalar dest_x, PixelScalar dest_y,
                   UPixelScalar dest_width, UPixelScalar dest_height,

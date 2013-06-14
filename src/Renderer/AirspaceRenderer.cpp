@@ -43,6 +43,10 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
+#ifdef USE_GDI
+#include "Screen/GDI/AlphaBlend.hpp"
+#endif
+
 class AirspaceWarningCopy
 {
 private:
