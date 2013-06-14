@@ -58,6 +58,11 @@ public:
   /** Scored distance (m) */
   fixed distance_scored;
 
+  /**
+   * Index of the active task point.
+   */
+  unsigned active_index;
+
   /** Whether the task is navigable */
   bool task_valid;
   /** Whether the task is finished */

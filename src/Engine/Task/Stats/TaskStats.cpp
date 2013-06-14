@@ -40,6 +40,7 @@ TaskStats::reset()
   distance_max = fixed(0);
   distance_min = fixed(0);
   distance_scored = fixed(0);
+  active_index = 0;
   task_valid = false;
   task_finished = false;
   inside_oz = false;
