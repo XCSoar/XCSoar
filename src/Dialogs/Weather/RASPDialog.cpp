@@ -56,7 +56,7 @@ RASPSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
   dfe->EnableItemHelp(true);
   dfe->addEnumText(_("Terrain"));
-  for (int i = 1; i <= 15; i++) {
+  for (unsigned i = 1; i < RasterWeather::MAX_WEATHER_MAP; i++) {
     const TCHAR *label = RASP.ItemLabel(i);
     if (label != NULL)
       dfe->AddChoice(i, label, nullptr, RASP.ItemHelp(i));
