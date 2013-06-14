@@ -37,7 +37,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 
-#ifdef HAVE_ALPHA_BLEND
+#ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
