@@ -803,6 +803,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Config.cpp \
 	$(DIALOG_SOURCES) \
 	\
+	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
+	$(SRC)/Monitor/AllMonitors.cpp \
+	\
 	$(SRC)/Hardware/Battery.cpp
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)

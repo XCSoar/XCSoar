@@ -22,12 +22,6 @@ event=TaskTransition next
 
 mode=default
 type=gce
-data=ARM_READY
-event=Beep 1
-event=TaskTransition ready
-
-mode=default
-type=gce
 data=GPS_CONNECTION_WAIT
 
 mode=default
