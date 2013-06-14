@@ -107,11 +107,6 @@ RasterWeather::RasterWeather()
   std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
 
-RasterWeather::~RasterWeather() 
-{
-  Close();
-}
-
 int
 RasterWeather::IndexToTime(int index)
 {

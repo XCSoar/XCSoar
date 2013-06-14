@@ -62,7 +62,9 @@ public:
    */
   RasterWeather();
 
-  ~RasterWeather();
+  ~RasterWeather() {
+    Close();
+  }
   
   /** Close loaded data */
   void Close();
