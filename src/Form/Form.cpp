@@ -472,6 +472,14 @@ WndForm::ShowModal()
         continue;
       }
 #endif
+
+#ifdef KOBO
+      if (event.GetKeyCode() == SDLK_POWER) {
+        /* the Kobo power button closes the modal dialog */
+        modal_result = mrCancel;
+        continue;
+      }
+#endif
     }
 
     if (event.IsCharacter() && character_function &&
