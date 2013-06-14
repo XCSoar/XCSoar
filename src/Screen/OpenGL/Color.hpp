@@ -118,6 +118,21 @@ struct Color {
     return Color(Red(), Green(), Blue(), alpha);
   }
 
+  constexpr bool IsOpaque() const {
+    return Alpha() == 0xff;
+  }
+
+  constexpr bool IsTransparent() const {
+    return a == 0;
+  }
+
+  /**
+   * Construct a #Color object that is transparent.
+   */
+  static constexpr Color Transparent() {
+    return Color(0, 0, 0, 0);
+  }
+
   /**
    * Returns the highlighted version of this color.
    */

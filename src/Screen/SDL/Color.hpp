@@ -101,6 +101,21 @@ struct Color {
     return Color(Red(), Green(), Blue(), alpha);
   }
 
+  constexpr bool IsOpaque() const {
+    return value.unused == SDL_ALPHA_OPAQUE;
+  }
+
+  constexpr bool IsTransparent() const {
+    return value.unused == SDL_ALPHA_TRANSPARENT;
+  }
+
+  /**
+   * Construct a #Color object that is transparent.
+   */
+  static constexpr Color Transparent() {
+    return Color(0, 0, 0, SDL_ALPHA_TRANSPARENT);
+  }
+
   /**
    * Returns the highlighted version of this color.
    */
