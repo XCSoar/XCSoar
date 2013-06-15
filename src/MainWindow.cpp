@@ -151,10 +151,8 @@ MainWindow::Create(PixelSize size, TopWindowStyle style)
 
 gcc_noreturn
 static void
-NoFontsAvailable()
+FatalError(const TCHAR *msg)
 {
-  const TCHAR *msg = _T("Font initialisation failed");
-
   /* log the error */
   LogFormat(_T("%s"), msg);
 
@@ -166,6 +164,13 @@ NoFontsAvailable()
   execl("/usr/X11/bin/xmessage", "xmessage", msg, NULL);
 #endif
   exit(EXIT_FAILURE);
+}
+
+gcc_noreturn
+static void
+NoFontsAvailable()
+{
+  FatalError(_T("Font initialisation failed"));
 }
 
 void
