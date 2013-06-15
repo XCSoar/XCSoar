@@ -67,9 +67,13 @@ operator<<(std::ostream &f, const GlideResult &gl)
 static std::ostream &
 operator<<(std::ostream &f, const DistanceStat &ds)
 {
-  f << "#    Distance " << ds.GetDistance() << " (m)\n";
-  f << "#    Speed " << ds.GetSpeed() << " (m/s)\n";
-  f << "#    Speed incremental " << ds.GetSpeedIncremental() << " (m/s)\n";
+  if (ds.IsDefined()) {
+    f << "#    Distance " << ds.GetDistance() << " (m)\n";
+    f << "#    Speed " << ds.GetSpeed() << " (m/s)\n";
+    f << "#    Speed incremental " << ds.GetSpeedIncremental() << " (m/s)\n";
+  } else {
+    f << "#    (undefined)\n";
+  }
   return f;
 }
 
@@ -255,16 +259,24 @@ PrintHelper::abstracttask_print(const AbstractTask &task,
 
   f6 << " " << task.GetActiveTaskPointIndex()
      << " " << stats.mc_best
-     << " " << stats.total.remaining_effective.GetDistance()
+     << " " << (stats.total.remaining_effective.IsDefined()
+                ? stats.total.remaining_effective.GetDistance()
+                : fixed(0))
      << " " << stats.total.remaining.GetDistance()
      << " " << stats.cruise_efficiency
      << " " << stats.total.remaining.GetSpeed()
      << " " << stats.total.remaining.GetSpeedIncremental()
-     << " " << stats.total.remaining_effective.GetSpeed()
-     << " " << stats.total.remaining_effective.GetSpeedIncremental()
+     << " " << (stats.total.remaining_effective.IsDefined()
+                ? stats.total.remaining_effective.GetSpeed()
+                : fixed(0))
+     << " " << (stats.total.remaining_effective.IsDefined()
+                ? stats.total.remaining_effective.GetSpeedIncremental()
+                : fixed(0))
      << " " << stats.total.vario.get_value()
      << " " << stats.effective_mc
-     << " " << stats.get_pirker_speed()
+     << " " << (stats.total.pirker.IsDefined()
+                ? stats.get_pirker_speed()
+                : fixed(0))
      << " " << stats.total.solution_remaining.altitude_difference
      << "\n";
   f6.flush();
