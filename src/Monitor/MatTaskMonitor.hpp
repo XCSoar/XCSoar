@@ -21,39 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ALL_MONITORS_HPP
-#define XCSOAR_ALL_MONITORS_HPP
-
-#include "Blackboard/BlackboardListener.hpp"
-#include "TaskAdvanceMonitor.hpp"
-#include "MatTaskMonitor.hpp"
+#ifndef XCSOAR_MAT_TASK_MONITOR_HPP
+#define XCSOAR_MAT_TASK_MONITOR_HPP
 
 /**
- * A container that combines all monitor classes.
+ * Monitors the MAT task, watches out for nearby potential turn
+ * points, and asks the user whether to add them to the task.
  */
-class AllMonitors final : private NullBlackboardListener {
-  TaskAdvanceMonitor task_advance;
-  MatTaskMonitor mat_task;
+class MatTaskMonitor {
+  friend class MatTaskAddWidget;
+  class MatTaskAddWidget *widget;
+
+  unsigned last_id;
 
 public:
-  AllMonitors();
-  ~AllMonitors();
+  MatTaskMonitor():widget(nullptr), last_id(-1) {}
 
   void Reset() {
-    task_advance.Reset();
-    mat_task.Reset();
+    last_id = unsigned(-1);
   }
 
-  void Check() {
-    task_advance.Check();
-    mat_task.Check();
-  }
-
-private:
-  virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated) override {
-    Check();
-  }
+  void Check();
 };
 
 #endif

@@ -26,7 +26,7 @@ Version 6.7 - not yet released
 * tasks
   - custom "start requires arm" setting (#2782)
   - new option to disable OLC optimisation
-  - MAT: remove "auto add" turnpoint feature when fly over it
+  - MAT: ask user whether to add turn points while flying over it
   - update the calculator without a GPS fix (#2876)
   - fix task speed and time estimates before task start (#2876)
   - show "arm advance" button when manual arming is necessary (#1729)
