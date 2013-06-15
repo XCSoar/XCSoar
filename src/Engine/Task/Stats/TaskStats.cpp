@@ -43,6 +43,7 @@ TaskStats::reset()
   active_index = 0;
   task_valid = false;
   has_targets = false;
+  is_mat = false;
   has_optional_starts = false;
   task_finished = false;
   inside_oz = false;

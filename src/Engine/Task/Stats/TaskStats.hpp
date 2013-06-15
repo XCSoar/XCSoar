@@ -69,6 +69,11 @@ public:
   /** Whether ordered task has AAT areas */
   bool has_targets;
 
+  /**
+   * Is this a MAT task?
+   */
+  bool is_mat;
+
   /** Whether ordered task has optional starts */
   bool has_optional_starts;
 

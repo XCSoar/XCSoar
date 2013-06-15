@@ -485,13 +485,14 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
 
-    v.SetIsMat(task_manager->IsMat());
+    const TaskStats &task_stats = task_manager->GetStats();
+
+    v.SetIsMat(task_stats.is_mat);
 
     // task items come first, this is the only way we know that an item is in task,
     // and we won't add it if it is already there
-    if (task_manager->StatsValid()) {
+    if (task_stats.task_valid)
       v.set_task_valid();
-    }
 
     const AbstractTask *atask = task_manager->GetActiveTask();
     if (atask != NULL)
