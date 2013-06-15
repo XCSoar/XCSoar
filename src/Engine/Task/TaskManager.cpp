@@ -231,13 +231,11 @@ TaskManager::UpdateCommonStatsTask()
                                 !active_task->IsValidTaskPoint(2);
     common_stats.previous_is_first = active_task->IsValidTaskPoint(-1) &&
                                      !active_task->IsValidTaskPoint(-2);
-    common_stats.active_taskpoint_index = this->active_task->GetActiveTaskPointIndex();
   } else {
     common_stats.active_has_next = false;
     common_stats.active_has_previous = false;
     common_stats.next_is_last = false;
     common_stats.previous_is_first = false;
-    common_stats.active_taskpoint_index = 0;
   }
 }
 
