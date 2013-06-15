@@ -92,37 +92,16 @@ class ReplayLoggerSim: public IgcReplay
 {
 public:
   ReplayLoggerSim(NLineReader *reader)
-    :IgcReplay(reader),
-     started(false) {}
+    :IgcReplay(reader) {}
 
-  AircraftState state;
-
-  void print(std::ostream &f) {
-    f << (double)state.time << " " 
-      <<  (double)state.location.longitude.Degrees() << " " 
-      <<  (double)state.location.latitude.Degrees() << " "
-      <<  (double)state.altitude << "\n";
+  void print(std::ostream &f, const MoreData &basic) {
+    f << (double)basic.time << " " 
+      <<  (double)basic.location.longitude.Degrees() << " " 
+      <<  (double)basic.location.latitude.Degrees() << " "
+      <<  (double)basic.nav_altitude << "\n";
   }
-  bool started;
-
 protected:
   virtual void OnReset() {}
-
-  void OnAdvance(const GeoPoint &loc,
-                  const fixed speed, const Angle bearing,
-                  const fixed alt, const fixed baroalt, const fixed t) {
-
-    state.location = loc;
-    state.ground_speed = speed;
-    state.track = bearing;
-    state.altitude = alt;
-    state.netto_vario = fixed(0);
-    state.vario = fixed(0);
-    state.time = t;
-    if (positive(t)) {
-      started = true;
-    }
-  }
 };
 
 static bool
@@ -133,7 +112,6 @@ test_replay(const Contest olc_type,
   std::ofstream f("output/results/res-sample.txt");
 
   GlidePolar glide_polar(fixed(2));
-  AircraftState state_last;
 
   FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
   if (reader->error()) {
@@ -177,12 +155,6 @@ test_replay(const Contest olc_type,
   MoreData basic;
   basic.Reset();
 
-  while (sim.Update(basic) && !sim.started) {
-  }
-  state_last = sim.state;
-
-  fixed time_last = sim.state.time;
-
   FlyingComputer flying_computer;
   flying_computer.Reset();
 
@@ -200,32 +172,26 @@ test_replay(const Contest olc_type,
   DerivedInfo calculated;
 
   while (sim.Update(basic)) {
-    if (sim.state.time>time_last) {
+    n_samples++;
 
-      n_samples++;
+    flying_computer.Compute(glide_polar.GetVTakeoff(),
+			    basic, calculated,
+			    flying_state);
 
-      flying_computer.Compute(glide_polar.GetVTakeoff(),
-                              sim.state, sim.state.time - time_last,
-                              flying_state);
-
-      calculated.flight.flying = flying_state.flying;
-
-      trace_computer.Update(settings_computer, basic, calculated);
-
-      contest_manager.UpdateIdle();
+    calculated.flight.flying = true;
+    
+    trace_computer.Update(settings_computer, basic, calculated);
+    
+    contest_manager.UpdateIdle();
   
-      state_last = sim.state;
-
-      if (verbose>1) {
-        sim.print(f);
-        f.flush();
-      }
-      if (do_print) {
-        PrintHelper::trace_print(trace_computer.GetFull(), sim.state.location);
-      }
-      do_print = (++print_counter % output_skip ==0) && verbose;
+    if (verbose>1) {
+      sim.print(f, basic);
+      f.flush();
     }
-    time_last = sim.state.time;
+    if (do_print) {
+      PrintHelper::trace_print(trace_computer.GetFull(), basic.location);
+    }
+    do_print = (++print_counter % output_skip ==0) && verbose;
   };
 
   contest_manager.SolveExhaustive();
