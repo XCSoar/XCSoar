@@ -153,6 +153,12 @@ gcc_noreturn
 static void
 FatalError(const TCHAR *msg)
 {
+#if defined(HAVE_POSIX) && defined(NDEBUG)
+  /* make sure this gets written to stderr in any case; LogFormat()
+     will write to stderr only in debug builds */
+  fprintf(stderr, "%s\n", msg);
+#endif
+
   /* log the error */
   LogFormat(_T("%s"), msg);
 
