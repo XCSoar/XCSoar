@@ -190,7 +190,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
     const bool next_is_final = common_stats.next_is_last;
     const bool previous_is_start = common_stats.previous_is_first;
-    const bool has_optional_starts = calculated.common_stats.ordered_has_optional_starts;
+    const bool has_optional_starts = ordered_task_stats.has_optional_starts;
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext

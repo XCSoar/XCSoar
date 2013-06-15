@@ -11,8 +11,6 @@ CommonStats::ResetTask()
   aat_speed_max = fixed(-1);
   aat_speed_min = fixed(-1);
   task_type = TaskType::NONE;
-  ordered_has_targets = false;
-  ordered_has_optional_starts = false;
 
   active_has_next = false;
   active_has_previous = false;

@@ -42,6 +42,8 @@ TaskStats::reset()
   distance_scored = fixed(0);
   active_index = 0;
   task_valid = false;
+  has_targets = false;
+  has_optional_starts = false;
   task_finished = false;
   inside_oz = false;
   need_to_arm = false;

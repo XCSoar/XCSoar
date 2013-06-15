@@ -242,7 +242,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
     const fixed d_remaining = derived.task_stats.total.remaining.GetDistance();
     TCHAR timetext1[100];
     TCHAR timetext2[100];
-    if (common.ordered_has_targets) {
+    if (task_stats.has_targets) {
       FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining_start);
       FormatSignedTimeHHMM(timetext2, (int)common.aat_time_remaining);
 

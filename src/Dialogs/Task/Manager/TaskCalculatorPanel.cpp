@@ -73,15 +73,14 @@ TaskCalculatorPanel::Refresh()
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
   TCHAR buffer[32];
 
   if (target_button != NULL)
-    target_button->SetVisible(common_stats.ordered_has_targets);
+    target_button->SetVisible(task_stats.has_targets);
 
-  SetRowVisible(AAT_TIME, common_stats.ordered_has_targets);
-  if (common_stats.ordered_has_targets) {
+  SetRowVisible(AAT_TIME, task_stats.has_targets);
+  if (task_stats.has_targets) {
     FormatTimespanSmart(buffer, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time, 2);
     SetText(AAT_TIME, buffer);
   }

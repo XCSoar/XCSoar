@@ -65,6 +65,13 @@ public:
 
   /** Whether the task is navigable */
   bool task_valid;
+
+  /** Whether ordered task has AAT areas */
+  bool has_targets;
+
+  /** Whether ordered task has optional starts */
+  bool has_optional_starts;
+
   /** Whether the task is finished */
   bool task_finished;
 

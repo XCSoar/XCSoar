@@ -154,8 +154,6 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
   if (ordered_task->TaskSize() > 1) {
     const TaskStats &task_stats = ordered_task->GetStats();
 
-    common_stats.ordered_has_targets = ordered_task->HasTargets();
-
     common_stats.aat_time_remaining =
       ordered_task->GetOrderedTaskSettings().aat_min_time -
       task_stats.total.time_elapsed;
@@ -220,9 +218,6 @@ void
 TaskManager::UpdateCommonStatsTask()
 {
   common_stats.task_type = mode;
-
-  common_stats.ordered_has_optional_starts =
-    ordered_task->GetStats().task_valid && ordered_task->HasOptionalStarts();
 
   if (active_task && active_task->GetStats().task_valid) {
     common_stats.active_has_next = active_task->IsValidTaskPoint(1);

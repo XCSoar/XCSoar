@@ -572,8 +572,8 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  if (!task_stats.has_targets ||
+      !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
@@ -597,8 +597,8 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  if (!task_stats.has_targets ||
+      !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
@@ -628,10 +628,8 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid ||
+  if (!task_stats.has_targets ||
       !task_stats.total.planned.IsDefined()) {
     data.SetInvalid();
     return;
@@ -646,10 +644,8 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+  if (!task_stats.has_targets) {
     data.SetInvalid();
     return;
   }
@@ -663,10 +659,8 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+  if (!task_stats.has_targets) {
     data.SetInvalid();
     return;
   }
@@ -682,8 +676,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
+  if (!task_stats.has_targets || !positive(common_stats.aat_speed_remaining)) {
     data.SetInvalid();
     return;
   }
@@ -703,8 +696,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
+  if (!task_stats.has_targets || !positive(common_stats.aat_speed_max)) {
     data.SetInvalid();
     return;
   }
@@ -724,7 +716,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
+  if (!task_stats.has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
     data.SetInvalid();
     return;
