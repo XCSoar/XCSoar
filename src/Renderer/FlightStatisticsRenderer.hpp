@@ -40,6 +40,7 @@ class GlidePolar;
 class ProtectedTaskManager;
 class TraceComputer;
 class FlightStatistics;
+class Retrospective;
 struct ContestStatistics;
 struct ChartLook;
 struct MapLook;
@@ -60,7 +61,8 @@ public:
                  const ComputerSettings &settings_computer,
                  const MapSettings &settings_map,
                  const ContestStatistics &contest,
-                 const TraceComputer &trace_computer) const;
+                 const TraceComputer &trace_computer,
+		 const Retrospective &retrospective) const;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,

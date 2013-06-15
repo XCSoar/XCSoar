@@ -236,7 +236,8 @@ ChartControl::OnPaint(Canvas &canvas)
       fs.RenderOLC(canvas, rcgfx, basic,
                    settings_computer, settings_map,
                    calculated.contest_stats,
-                   glide_computer->GetTraceComputer());
+                   glide_computer->GetTraceComputer(),
+		   glide_computer->GetRetrospective());
     }
     break;
   case AnalysisPage::TASK_SPEED:
