@@ -277,6 +277,10 @@ static constexpr PolarStore::Item internal_polars[] =
   // from factory polar (flight manual) by Christopher Schenk
   { _T("G 102 Club Astir IIIb"), 380, 0, 75.0, -0.6, 100.0, -0.70, 180.00, -3.1, 12.40, 0.0, 91 },
   { _T("G 102 Standard Astir III"), 380, 70, 75.0, -0.6, 100.0, -0.70, 180.00, -2.8, 12.40, 0.0, 100 },
+
+  //Derived from Pilatus B4 PH-448, fixed gear serial production, measured at Idaflieg-vergleichsfliegen at Aalen in the year 1973.
+  {_T("Pilatus B4"), 306, 0, 90.0, -0.847, 126.0, -1.644, 198.0, -5.098},
+
 };
 
 const PolarStore::Item &
