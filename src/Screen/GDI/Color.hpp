@@ -107,6 +107,15 @@ public:
                  (Green() + 0xff * 3) / 4,
                  (Blue() + 0xff * 3) / 4);
   }
+
+  /**
+   * Returns the shadowed version of this color.
+   */
+  constexpr Color Shadow() const {
+    return Color(Red() * 15u / 16u,
+                 Green() * 15u / 16u,
+                 Blue() * 15u / 16u);
+  }
 };
 
 /**

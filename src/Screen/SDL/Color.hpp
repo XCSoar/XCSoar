@@ -130,6 +130,16 @@ public:
   }
 
   /**
+   * Returns the shadowed version of this color.
+   */
+  constexpr Color Shadow() const {
+    return Color(Red() * 15u / 16u,
+                 Green() * 15u / 16u,
+                 Blue() * 15u / 16u,
+                 Alpha());
+  }
+
+  /**
    * Compares two colors
    * @param a Color 1
    * @param b Color 2

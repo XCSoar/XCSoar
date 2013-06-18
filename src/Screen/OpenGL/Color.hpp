@@ -161,6 +161,16 @@ public:
   }
 
   /**
+   * Returns the shadowed version of this color.
+   */
+  constexpr Color Shadow() const {
+    return Color(Red() * 15u / 16u,
+                 Green() * 15u / 16u,
+                 Blue() * 15u / 16u,
+                 Alpha());
+  }
+
+  /**
    * Configures this color in the OpenGL context.
    */
   void Set() const {

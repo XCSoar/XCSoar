@@ -29,20 +29,6 @@ Copyright_License {
 #include "Screen/OpenGL/Scissor.hpp"
 #include "Util/Macros.hpp"
 
-constexpr
-static unsigned
-Shadow(unsigned c)
-{
-  return c * 15 / 16;
-}
-
-constexpr
-static Color
-Shadow(Color c)
-{
-  return Color(Shadow(c.Red()), Shadow(c.Green()), Shadow(c.Blue()));
-}
-
 #endif
 
 void
@@ -57,7 +43,7 @@ DrawGlassBackground(Canvas &canvas, const PixelRect &rc, Color color)
 
   const GLCanvasScissor scissor(rc);
 
-  const Color shadow = Shadow(color);
+  const Color shadow = color.Shadow();
 
   const RasterPoint center = rc.GetCenter();
   const int size = std::min(rc.right - rc.left, rc.bottom - rc.top) / 4;
