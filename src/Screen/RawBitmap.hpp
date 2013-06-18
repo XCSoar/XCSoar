@@ -46,14 +46,14 @@ struct BGRColor
 {
   BGRColor() = default;
 
-#ifdef HAVE_GLES
-  RGB565Color value;
+#ifdef GREYSCALE
+  Luminosity8 value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
-#elif defined(KOBO)
-  Luminosity8 value;
+#elif defined(HAVE_GLES)
+  RGB565Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}

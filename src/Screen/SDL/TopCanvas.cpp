@@ -39,6 +39,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
+#ifdef GREYSCALE
+#include "Format.hpp"
+SDL_PixelFormat *greyscale_format;
+#endif
+
 gcc_const
 static Uint32
 MakeSDLFlags(bool full_screen, bool resizable)
@@ -94,6 +99,13 @@ TopCanvas::Create(PixelSize new_size,
   OpenGL::SetupContext();
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
+#elif defined(GREYSCALE)
+  real = s;
+
+  s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
+                             8, 0xff, 0xff, 0xff, 0);
+  greyscale_format = s->format;
+  Canvas::Create(s);
 #else
   Canvas::Create(s);
 #endif
@@ -123,7 +135,18 @@ TopCanvas::OnResize(PixelSize new_size)
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
 #else
+#ifdef GREYSCALE
+  real = s;
+
+  s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
+                             8, 0xff, 0xff, 0xff, 0);
+  greyscale_format = s->format;
+  Canvas::Destroy();
   surface = s;
+#else
+  surface = s;
+#endif
+
   size = new_size;
 #endif
 }
@@ -135,6 +158,82 @@ TopCanvas::Fullscreen()
   ::SDL_WM_ToggleFullScreen(surface);
 #endif
 }
+
+#ifdef GREYSCALE
+
+static uint32_t
+GreyscaleToRGB8(Luminosity8 luminosity)
+{
+  const unsigned value = luminosity.GetLuminosity();
+
+  return value | (value << 8) | (value << 16) | (value << 24);
+}
+
+static void
+CopyGreyscaleToRGB8(uint32_t *gcc_restrict dest,
+                     const Luminosity8 *gcc_restrict src,
+                     unsigned width)
+{
+  for (unsigned i = 0; i < width; ++i)
+    *dest++ = GreyscaleToRGB8(*src++);
+}
+
+static RGB565Color
+GreyscaleToRGB565(Luminosity8 luminosity)
+{
+  const unsigned value = luminosity.GetLuminosity();
+
+  return RGB565Color(value, value, value);
+}
+
+static void
+CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
+                      const Luminosity8 *gcc_restrict src,
+                      unsigned width)
+{
+  for (unsigned i = 0; i < width; ++i)
+    *dest++ = GreyscaleToRGB565(*src++);
+}
+
+static void
+CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
+{
+  assert(src->format->BitsPerPixel == 8);
+  assert(src->format->BytesPerPixel == 1);
+  assert(dest->format->BytesPerPixel == 4 || dest->format->BytesPerPixel == 2);
+
+  if (SDL_LockSurface(dest) != 0)
+    return;
+
+  if (SDL_LockSurface(src) != 0) {
+    SDL_UnlockSurface(dest);
+    return;
+  }
+
+  const uint8_t *src_pixels = (const uint8_t *)src->pixels;
+  uint8_t *dest_pixels = (uint8_t *)dest->pixels;
+
+  const unsigned width = dest->w, height = dest->h;
+  const unsigned src_pitch = src->pitch;
+  const unsigned dest_pitch = dest->pitch;
+
+  if (dest->format->BytesPerPixel == 2) {
+    for (unsigned row = height; row > 0;
+         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+      CopyGreyscaleToRGB565((RGB565Color *)dest_pixels,
+                            (const Luminosity8 *)src_pixels, width);
+  } else {
+    for (unsigned row = height; row > 0;
+         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+      CopyGreyscaleToRGB8((uint32_t *)dest_pixels,
+                           (const Luminosity8 *)src_pixels, width);
+  }
+
+  ::SDL_UnlockSurface(src);
+  ::SDL_UnlockSurface(dest);
+}
+
+#endif
 
 void
 TopCanvas::Flip()
@@ -151,6 +250,13 @@ TopCanvas::Flip()
 
   ::SDL_GL_SwapBuffers();
 #else
+
+#ifdef GREYSCALE
+  CopyFromGreyscale(real, surface);
+  ::SDL_Flip(real);
+#else
   ::SDL_Flip(surface);
+#endif
+
 #endif
 }

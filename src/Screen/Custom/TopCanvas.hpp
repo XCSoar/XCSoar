@@ -47,6 +47,15 @@ class TopCanvas : public Canvas {
   EGLSurface surface;
 #endif
 
+#if defined(GREYSCALE) && defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  /**
+   * The real video surface.  Our #Canvas::surface attribute is only a
+   * software surface with 8 bits per pixel greyscale, which will be
+   * copied to the real video surface in Flip().
+   */
+  SDL_Surface *real;
+#endif
+
 public:
 #ifdef USE_EGL
   ~TopCanvas();

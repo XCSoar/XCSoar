@@ -30,15 +30,29 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifdef GREYSCALE
+/**
+ * Set by TopCanvas::Create().
+ */
+extern SDL_PixelFormat *greyscale_format;
+#endif
+
 gcc_const
 static inline const SDL_PixelFormat &
 GetDisplayFormat()
 {
+#ifdef GREYSCALE
+  /* with the "GREYSCALE" option, we render to software 8-bit
+     surfaces, and TopCanvas::Flip() will convert to the real video
+     surface */
+  return *greyscale_format;
+#else
   SDL_Surface *surface = SDL_GetVideoSurface();
   assert(surface != nullptr);
   assert(surface->format != nullptr);
 
   return *surface->format;
+#endif
 }
 
 gcc_pure
@@ -70,7 +84,13 @@ ConvertToDisplayFormat(SDL_Surface *surface)
     return surface;
 
   /* need to convert */
+#ifdef GREYSCALE
+  SDL_Surface *converted = SDL_ConvertSurface(surface, greyscale_format,
+                                              SDL_SWSURFACE);
+#else
   SDL_Surface *converted = SDL_DisplayFormat(surface);
+#endif
+
   SDL_FreeSurface(surface);
   return converted;
 }
@@ -87,7 +107,11 @@ ConvertToDisplayFormatPreserve(SDL_Surface *surface)
     return surface;
 
   /* need to convert */
+#ifdef GREYSCALE
+  return SDL_ConvertSurface(surface, greyscale_format, SDL_SWSURFACE);
+#else
   return SDL_DisplayFormat(surface);
+#endif
 }
 
 #endif

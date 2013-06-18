@@ -70,8 +70,12 @@ LightColor(uint8_t c)
 static inline constexpr Color
 LightColor(Color c)
 {
+#ifdef GREYSCALE
+  return Color(LightColor(c.GetLuminosity()));
+#else
   return Color(LightColor(c.Red()), LightColor(c.Green()),
                LightColor(c.Blue()));
+#endif
 }
 
 static inline constexpr uint8_t
@@ -86,8 +90,12 @@ DarkColor(uint8_t c)
 static inline constexpr Color
 DarkColor(Color c)
 {
+#ifdef GREYSCALE
+  return Color(DarkColor(c.GetLuminosity()));
+#else
   return Color(DarkColor(c.Red()), DarkColor(c.Green()),
                DarkColor(c.Blue()));
+#endif
 }
 
 Color Desaturate(Color c);

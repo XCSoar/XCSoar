@@ -16,6 +16,8 @@
 #
 #   GLES        "y" means render with OpenGL/ES.
 #
+#   GREYSCALE   "y" means render 8-bit greyscale internally
+#
 #   EYE_CANDY   "n" disables eye candy rendering.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built

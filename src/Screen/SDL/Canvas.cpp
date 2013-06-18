@@ -282,6 +282,29 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
       !Clip(dest_y, dest_height, GetHeight(), src_y))
     return;
 
+#ifdef GREYSCALE
+  assert(surface->format->BytesPerPixel == 1);
+  assert(src_surface->format->BytesPerPixel == 1);
+
+  if ((src_surface->flags & SDL_SRCCOLORKEY) == 0 &&
+      (src_surface->format->palette == nullptr ||
+       src_surface->format->palette->ncolors == 0x100)) {
+    /* optimised fast path for greyscale -> greyscale blitting */
+
+    const unsigned src_pitch = src_surface->pitch;
+    const unsigned dest_pitch = surface->pitch;
+
+    const uint8_t *src_pixels = (const uint8_t *)src_surface->pixels
+      + src_x + src_y * src_pitch;
+    uint8_t *dest_pixels = (uint8_t *)surface->pixels
+      + dest_x + dest_y * dest_pitch;
+
+    for (unsigned row = dest_height; row > 0;
+         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+      memcpy(dest_pixels, src_pixels, dest_width);
+  }
+#endif
+
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
   SDL_Rect dest_rect = { PixelScalar(offset.x + dest_x),
                          PixelScalar(offset.y + dest_y) };

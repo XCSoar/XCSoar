@@ -23,3 +23,13 @@ STOP_WATCH ?= n
 ifeq ($(STOP_WATCH),y)
 TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
+
+ifeq ($(TARGET_IS_KOBO),y)
+GREYSCALE ?= y
+else
+GREYSCALE ?= n
+endif
+
+ifeq ($(GREYSCALE),y)
+TARGET_CPPFLAGS += -DGREYSCALE
+endif

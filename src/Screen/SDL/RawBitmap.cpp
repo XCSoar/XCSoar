@@ -46,16 +46,16 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   Uint32 rmask, gmask, bmask, amask;
   int depth;
 
-#ifdef HAVE_GLES
-  rmask = 0x0000f800;
-  gmask = 0x000007e0;
-  bmask = 0x0000001f;
-  depth = 16;
-#elif defined(KOBO)
+#ifdef GREYSCALE
   rmask = 0x000000ff;
   gmask = 0x000000ff;
   bmask = 0x000000ff;
   depth = 8;
+#elif defined(HAVE_GLES)
+  rmask = 0x0000f800;
+  gmask = 0x000007e0;
+  bmask = 0x0000001f;
+  depth = 16;
 #else
   rmask = 0x00ff0000;
   gmask = 0x0000ff00;
