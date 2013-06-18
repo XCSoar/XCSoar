@@ -68,6 +68,18 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
   }
 }
 
+gcc_const
+static unsigned char
+ContourInterval(const short h, const unsigned contour_height_scale)
+{
+  if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
+    if (h < 0)
+      return 0;
+    return std::min(254, h >> contour_height_scale);
+  }
+  return 0;
+}
+
 RasterRenderer::RasterRenderer()
   :quantisation_pixels(2),
 #ifdef ENABLE_OPENGL
@@ -472,19 +484,6 @@ RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
       color_table[i + (mag + 64) * 256] = BGRColor(r, g, b);
     }
   }
-}
-
-
-unsigned char
-RasterRenderer::ContourInterval(const short h,
-                                const unsigned contour_height_scale)
-{
-  if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
-    if (h < 0)
-      return 0;
-    return std::min(254, h >> contour_height_scale);
-  }
-  return 0;
 }
 
 void

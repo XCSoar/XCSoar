@@ -163,10 +163,6 @@ protected:
 private:
 
   void ContourStart(const unsigned contour_height_scale);
-
-  static unsigned char ContourInterval(const short h,
-                                       const unsigned contour_height_scale);
-
 };
 
 #endif
