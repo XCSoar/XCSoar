@@ -22,13 +22,9 @@
 
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Math/Angle.hpp"
-
-/** search range in m */
-static constexpr fixed search_range = fixed(15000);
 
 Retrospective::Retrospective(const Waypoints &wps):
-  waypoints(wps)
+  waypoints(wps),search_range(fixed(15000)),angle_tolerance(Angle::Degrees(fixed(25)))
 {
 }
 
@@ -49,7 +45,7 @@ Retrospective::PruneCandidates()
   auto it1 = ++candidate_list.begin();
   auto it2 = it1; it2++;
   for (; it2 != candidate_list.end(); ++it1, ++it2) {
-    if (it1->bearing.CompareRoughly(it2->bearing, Angle::Degrees(25))) {
+    if (it1->bearing.CompareRoughly(it2->bearing, angle_tolerance)) {
       it_best = it1;
       erase = true;
     }

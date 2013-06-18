@@ -50,6 +50,7 @@ const char* GetTestName(const char* in, int task_num, int wind_num);
 extern std::string replay_file;
 extern std::string task_file;
 extern std::string waypoint_file;
+extern fixed range_threshold;
 
 bool ParseArgs(int argc, char** argv);
 

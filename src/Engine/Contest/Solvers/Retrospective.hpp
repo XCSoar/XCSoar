@@ -75,8 +75,6 @@ public:
 protected:
   const Waypoints &waypoints;
 
-  void CalcDistances(fixed& d_ach, fixed& d_can);
-
   NearWaypointList candidate_list;
 
   void PruneCandidates();
@@ -91,6 +89,12 @@ public:
   void Reset() { 
     Clear();
   }
+
+  void CalcDistances(fixed& d_ach, fixed& d_can);
+
+/** search range in m */
+  fixed search_range;
+  Angle angle_tolerance;
 };
 
 #endif

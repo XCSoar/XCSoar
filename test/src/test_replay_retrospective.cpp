@@ -41,6 +41,9 @@ test_replay_retrospective()
 
   Retrospective retro(waypoints);
 
+  retro.search_range = range_threshold;
+  retro.angle_tolerance = Angle::Degrees(autopilot_parms.bearing_noise);
+
   FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
   if (reader->error()) {
     delete reader;
@@ -76,6 +79,11 @@ test_replay_retrospective()
     f.flush();
   };
 
+  fixed d_ach, d_can;
+  retro.CalcDistances(d_ach, d_can);
+  printf("# distances %f %f\n", (double)d_ach, (double)d_can);
+  printf("# size %d\n", retro.getNearWaypointList().size());
+
   return true;
 }
 
@@ -83,6 +91,9 @@ test_replay_retrospective()
 int main(int argc, char** argv) 
 {
   output_skip = 60;
+
+  range_threshold = 15000;
+  autopilot_parms.bearing_noise = 25;
 
   replay_file = "test/data/9crx3101.igc";
   waypoint_file = "test/data/benalla9.xcw";
