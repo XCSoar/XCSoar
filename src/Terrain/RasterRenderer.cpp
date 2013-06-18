@@ -45,9 +45,8 @@ MIX(unsigned x, unsigned y, unsigned i)
 }
 
 inline void
-TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
+TerrainShading(const int illum, uint8_t &r, uint8_t &g, uint8_t &b)
 {
-  char x;
   if (illum == -64) {
     // brown color mixed in for contours
     r = MIX(100,r,64);
@@ -55,13 +54,13 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
     b = MIX(26,b,64);
   } else if (illum < 0) {
     // shadow to blue
-    x = std::min(63, -illum);
+    int x = std::min(63, -illum);
     r = MIX(0,r,x);
     g = MIX(0,g,x);
     b = MIX(64,b,x);
   } else if (illum > 0) {
     // highlight to yellow
-    x = std::min(32, illum / 2);
+    int x = std::min(32, illum / 2);
     r = MIX(255,r,x);
     g = MIX(255,g,x);
     b = MIX(16,b,x);
@@ -69,13 +68,13 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 gcc_const
-static unsigned char
-ContourInterval(const short h, const unsigned contour_height_scale)
+static unsigned
+ContourInterval(const int h, const unsigned contour_height_scale)
 {
   if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
     if (h < 0)
       return 0;
-    return std::min(254, h >> contour_height_scale);
+    return std::min(254u, unsigned(h) >> contour_height_scale);
   }
   return 0;
 }
@@ -223,17 +222,18 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned char contour_row_base = ContourInterval(*src,
-                                                     contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src,
+                                                contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
-      short h = *src++;
+      int h = *src++;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
 
-        const short contour_interval = ContourInterval(h, contour_height_scale);
+        const unsigned contour_interval =
+          ContourInterval(h, contour_height_scale);
 
         h = std::min(254, h >> height_scale);
         if (gcc_unlikely((contour_interval != contour_row_base)
@@ -325,17 +325,18 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
     BGRColor *p = dest;
     dest = image->GetNextRow(dest);
 
-    unsigned char contour_row_base = ContourInterval(*src,
-                                                     contour_height_scale);
+    unsigned contour_row_base = ContourInterval(*src,
+                                                contour_height_scale);
     unsigned char *contour_this_column_base = contour_column_base;
 
     for (unsigned x = 0; x < height_matrix.GetWidth(); ++x, ++src) {
-      short h = *src;
+      int h = *src;
       if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
         if (h < 0)
           h = 0;
 
-        const short contour_interval = ContourInterval(h, contour_height_scale);
+        const unsigned contour_interval =
+          ContourInterval(h, contour_height_scale);
 
         h = std::min(254, h >> height_scale);
 
@@ -360,10 +361,10 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
         assert(src - column_minus_index < height_matrix.GetDataEnd());
         assert(src + column_plus_index < height_matrix.GetDataEnd());
 
-        const short h_above = src[-(int)row_minus_offset];
-        const short h_below = src[row_plus_offset];
-        const short h_left = src[-(int)column_minus_index];
-        const short h_right = src[column_plus_index];
+        const int h_above = src[-(int)row_minus_offset];
+        const int h_below = src[row_plus_offset];
+        const int h_left = src[-(int)column_minus_index];
+        const int h_right = src[column_plus_index];
 
         if (gcc_unlikely(RasterBuffer::IsSpecial(h_above) ||
                          RasterBuffer::IsSpecial(h_below) ||
