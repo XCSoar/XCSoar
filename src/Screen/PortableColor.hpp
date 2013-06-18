@@ -118,4 +118,21 @@ public:
   }
 };
 
+class Luminosity8 {
+  uint8_t value;
+
+public:
+  Luminosity8() = default;
+
+  constexpr Luminosity8(uint8_t _value)
+    :value(_value) {}
+
+  constexpr Luminosity8(uint8_t r, uint8_t g, uint8_t b)
+    :value((r * 2126 + g * 7152 + b * 722 + 5000) / 10000) {}
+
+  constexpr uint16_t GetLuminosity() const {
+    return value;
+  }
+};
+
 #endif
