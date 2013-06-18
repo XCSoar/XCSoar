@@ -11,6 +11,8 @@
 #ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
+#include "PortableColor.hpp"
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Features.hpp"
@@ -45,57 +47,40 @@ struct BGRColor
   BGRColor() = default;
 
 #ifdef HAVE_GLES
-  /**
-   * RGB color value encoded with 5/6/5 bits per channel.
-   */
-  uint16_t value;
+  RGB565Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(((R & 0xf8) << 8) |
-           ((G & 0xfc) << 3) |
-           (B >> 3)) {}
+    :value(R, G, B) {}
 
 #elif defined(ENABLE_SDL)
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   uint8_t dummy;
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
+  RGB8Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :dummy(), r(R), g(G), b(B) {}
+    :dummy(), value(R, G, B) {}
 #else /* little endian */
-  uint8_t b;
-  uint8_t g;
-  uint8_t r;
+  BGR8Color value;
   uint8_t dummy;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :b(B), g(G), r(R), dummy() {}
+    :value(R, G, B), dummy() {}
 #endif /* little endian */
 
 #else /* !SDL */
 
 #ifdef _WIN32_WCE
-  /**
-   * RGB color value encoded with 5/5/5 bits per channel.  The most
-   * significant bit is unused.
-   */
-  uint16_t value;
+  RGB555Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(((R & 0xf8) << 7) |
-           ((G & 0xf8) << 2) |
-           (B >> 3)) {}
+    :value(R, G, B) {}
 
 #else /* !_WIN32_WCE */
-  uint8_t b;
-  uint8_t g;
-  uint8_t r;
+  BGR8Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :b(B), g(G), r(R) {}
+    :value(R, G, B) {}
 #endif /* !_WIN32_WCE */
 
 #endif /* !SDL */
