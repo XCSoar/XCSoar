@@ -128,7 +128,11 @@ public:
   }
 
   constexpr bool IsOpaque() const {
-    return Alpha() == 0xff;
+#ifdef HAVE_GLES
+    return a >= 0xff00;
+#else
+    return a == 0xff;
+#endif
   }
 
   constexpr bool IsTransparent() const {
