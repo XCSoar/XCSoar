@@ -25,6 +25,7 @@
 #include "MapSettings.hpp"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -36,7 +37,8 @@ GetVario1Color(short ramp_h) {
     {200, 0x1e, 0xf1, 0x73} // liftColor
   };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario, 3);
+  return ColorRampLookup(ramp_h, snail_colors_vario,
+                         ARRAY_SIZE(snail_colors_vario));
 }
 
 static Color
@@ -48,7 +50,8 @@ GetVario2Color(short ramp_h) {
     {200, 0xff, 0x00, 0x00}
   };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario2, 4);
+  return ColorRampLookup(ramp_h, snail_colors_vario2,
+                         ARRAY_SIZE(snail_colors_vario2));
 }
 
 static Color
@@ -61,7 +64,8 @@ GetAltitudeColor(short ramp_h) {
     {200, 0x00, 0x00, 0xff},
   };
 
-  return ColorRampLookup(ramp_h, snail_colors_alt, 5);
+  return ColorRampLookup(ramp_h, snail_colors_alt,
+                         ARRAY_SIZE(snail_colors_alt));
 }
 
 static Color
