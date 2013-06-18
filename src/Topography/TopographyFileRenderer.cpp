@@ -290,7 +290,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);
 #endif
-        if (brush.GetColor().Alpha() < 255) {
+        if (!brush.GetColor().IsOpaque()) {
           const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
           glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
                          triangles);
