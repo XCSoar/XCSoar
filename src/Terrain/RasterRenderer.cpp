@@ -71,12 +71,10 @@ gcc_const
 static unsigned
 ContourInterval(const int h, const unsigned contour_height_scale)
 {
-  if (gcc_likely(!RasterBuffer::IsSpecial(h))) {
-    if (h < 0)
-      return 0;
-    return std::min(254u, unsigned(h) >> contour_height_scale);
-  }
-  return 0;
+  if (gcc_unlikely(RasterBuffer::IsSpecial(h)) || h <= 0)
+    return 0;
+
+  return std::min(254u, unsigned(h) >> contour_height_scale);
 }
 
 RasterRenderer::RasterRenderer()
@@ -491,11 +489,8 @@ void
 RasterRenderer::ContourStart(const unsigned contour_height_scale)
 {
   // initialise column to first row
-  {
-    const short *src = height_matrix.GetData();
-    unsigned char *col_base = contour_column_base;
-    for (unsigned x = height_matrix.GetWidth(); x > 0; --x) {
-      *col_base++ = ContourInterval(*src++, contour_height_scale);
-    }
-  }
+  const short *src = height_matrix.GetData();
+  unsigned char *col_base = contour_column_base;
+  for (unsigned x = height_matrix.GetWidth(); x > 0; --x)
+    *col_base++ = ContourInterval(*src++, contour_height_scale);
 }
