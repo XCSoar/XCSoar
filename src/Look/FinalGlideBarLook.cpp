@@ -28,7 +28,7 @@ static Color
 ColorWithAlpha(const Color &c, uint8_t a)
 {
 #ifdef ENABLE_OPENGL
-  return Color(c.Red(), c.Green(), c.Blue(), a);
+  return c.WithAlpha(a);
 #else
   return c;
 #endif
