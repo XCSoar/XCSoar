@@ -30,13 +30,13 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline UPixelScalar
-CorrectedWidth(UPixelScalar nWidth)
+static inline unsigned
+CorrectedWidth(unsigned nWidth)
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 {
@@ -74,9 +74,9 @@ RawBitmap::~RawBitmap()
 }
 
 void
-RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
+RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     UPixelScalar dest_width, UPixelScalar dest_height) const
+                     unsigned dest_width, unsigned dest_height) const
 {
   Canvas src_canvas(surface);
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
