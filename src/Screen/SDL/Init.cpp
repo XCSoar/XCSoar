@@ -30,6 +30,10 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #endif
 
+#ifdef KOBO
+#include "OS/FileUtil.hpp"
+#endif
+
 #ifdef USE_FREETYPE
 #include "Screen/FreeType/Init.hpp"
 #else
@@ -43,6 +47,11 @@ Copyright_License {
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
+#ifdef KOBO
+  /* switch to portrait mode */
+  File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
+#endif
+
   Uint32 flags = SDL_INIT_VIDEO|SDL_INIT_TIMER;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
