@@ -155,8 +155,6 @@ struct Color {
   }
 };
 
-#ifndef ENABLE_OPENGL
-
 /**
  * A hardware color on a specific Canvas.  A Canvas maps a Color
  * object into HWColor.  Depending on the platform, Color and
@@ -172,7 +170,5 @@ struct HWColor {
   constexpr
   operator Uint32() const { return value; }
 };
-
-#endif /* !OPENGL */
 
 #endif
