@@ -83,7 +83,6 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
                      unsigned dest_width, unsigned dest_height) const
 {
-  Canvas src_canvas(surface);
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      src_canvas, 0, 0, width, height);
+                      surface, 0, 0, width, height);
 }
