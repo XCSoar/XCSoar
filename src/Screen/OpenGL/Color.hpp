@@ -63,6 +63,12 @@ class Color {
 
   Component r, g, b, a;
 
+  struct Internal {};
+
+  constexpr Color(Internal dummy,
+                  Component _r, Component _g, Component _b, Component _a)
+    :r(_r), g(_g), b(_b), a(_a) {}
+
 public:
   constexpr Color(uint8_t _r, uint8_t _g, uint8_t _b)
     :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(MAX) {}
@@ -117,8 +123,8 @@ public:
 
   constexpr
   Color
-  WithAlpha(GLubyte alpha) const {
-    return Color(Red(), Green(), Blue(), alpha);
+  WithAlpha(uint8_t alpha) const {
+    return Color(Internal(), r, g, b, Import(alpha));
   }
 
   constexpr bool IsOpaque() const {
