@@ -7,7 +7,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \
-	$(SCREEN_SRC_DIR)/Brush.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
@@ -126,6 +125,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \

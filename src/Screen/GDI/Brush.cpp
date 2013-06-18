@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Brush.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/Debug.hpp"
 
 #include <assert.h>
 
@@ -32,12 +31,8 @@ Brush::Set(const Color c)
 {
   assert(IsScreenInitialized());
 
-  #ifndef USE_GDI
-  color = c;
-  #else
   Reset();
   brush = ::CreateSolidBrush(c);
-  #endif
 }
 
 #ifdef HAVE_HATCHED_BRUSH
@@ -61,9 +56,6 @@ Brush::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-  #ifndef USE_GDI
-  color = Color::Transparent();
-  #else
   if (brush != NULL) {
 #ifndef NDEBUG
     bool success =
@@ -73,5 +65,4 @@ Brush::Reset()
 
     brush = NULL;
   }
-  #endif
 }

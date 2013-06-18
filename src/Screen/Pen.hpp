@@ -26,6 +26,9 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
+#include "Debug.hpp"
+
+#include <assert.h>
 
 /**
  * A pen draws lines and borders.
@@ -198,5 +201,19 @@ public:
   }
 #endif /* OPENGL */
 };
+
+#ifndef USE_GDI
+
+inline void
+Pen::Reset()
+{
+  assert(!IsDefined() || IsScreenInitialized());
+
+#ifndef NDEBUG
+  width = 0;
+#endif
+}
+
+#endif
 
 #endif

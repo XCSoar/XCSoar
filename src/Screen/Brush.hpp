@@ -26,7 +26,10 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
+#include "Debug.hpp"
 #include "Compiler.h"
+
+#include <assert.h>
 
 #ifdef USE_GDI
 class Bitmap;
@@ -128,5 +131,25 @@ public:
   }
 #endif /* OPENGL */
 };
+
+#ifndef USE_GDI
+
+inline void
+Brush::Set(const Color c)
+{
+  assert(IsScreenInitialized());
+
+  color = c;
+}
+
+inline void
+Brush::Reset()
+{
+  assert(!IsDefined() || IsScreenInitialized());
+
+  color = Color::Transparent();
+}
+
+#endif
 
 #endif
