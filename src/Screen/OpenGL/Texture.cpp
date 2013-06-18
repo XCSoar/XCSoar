@@ -32,6 +32,10 @@ Copyright_License {
 #include <GLES/glext.h>
 #endif
 
+#ifdef ENABLE_SDL
+#include <SDL.h>
+#endif
+
 #include <assert.h>
 
 #ifndef NDEBUG
@@ -167,21 +171,17 @@ LoadSurfaceIntoTexture(const SDL_Surface *surface)
   } else if (fmt->BitsPerPixel == 24 && fmt->BytesPerPixel == 3 &&
              fmt->Rmask == 0xff0000 && fmt->Gmask == 0xff00 &&
              fmt->Bmask == 0xff) {
-#ifdef ANDROID
-    /* big endian */
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
     format = GL_RGB;
 #else
-    /* little endian */
     format = GL_BGR;
 #endif
     type = GL_UNSIGNED_BYTE;
-#ifndef ANDROID
   } else if ((fmt->BitsPerPixel == 24 || fmt->BitsPerPixel == 32) &&
              fmt->BytesPerPixel == 4 && fmt->Rmask == 0xff0000 &&
              fmt->Gmask == 0xff00 && fmt->Bmask == 0xff) {
     format = GL_BGRA;
     type = GL_UNSIGNED_BYTE;
-#endif
   } else
     return false;
 
