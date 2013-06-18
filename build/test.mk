@@ -2567,3 +2567,26 @@ TODAY_INSTALL_SOURCES = \
 $(eval $(call link-program,TodayInstall,TODAY_INSTALL))
 
 debug: $(DEBUG_PROGRAMS)
+
+TEST_REPLAY_RETROSPECTIVE_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/test_replay_retrospective.cpp
+TEST_REPLAY_RETROSPECTIVE_DEPENDS = WAYPOINT GEO MATH IO UTIL ZZIP OS THREAD
+TEST_REPLAY_RETROSPECTIVE_LDADD = $(TEST1_LDADD)
+TEST_REPLAY_RETROSPECTIVE_LDLIBS = $(TEST1_LDLIBS)
+$(eval $(call link-program,test_replay_retrospective,TEST_REPLAY_RETROSPECTIVE))
