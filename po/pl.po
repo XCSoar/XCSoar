@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-14 21:40+0200\n"
-"PO-Revision-Date: 2013-04-28 21:38+0000\n"
+"PO-Revision-Date: 2013-06-16 23:53+0000\n"
 "Last-Translator: Daniel Nowicki <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-29 12:44+0000\n"
-"X-Generator: Launchpad (build 16580)\n"
+"X-Launchpad-Export-Date: 2013-06-18 06:01+0000\n"
+"X-Generator: Launchpad (build 16667)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1018,7 +1018,7 @@ msgid ""
 "or vario if available."
 msgstr ""
 "Wznoszenie przez ostatnie 30 sekund na podstawie wysokości GPS lub "
-"wariometr, jeśli jest podłączony."
+"wariometru, jeśli jest podłączony."
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -2884,56 +2884,50 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ATC radial"
-msgstr "PT Radial"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1215
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "True bearing from the selected reference location to your position.  The "
 "distance is displayed in nautical miles for communication with ATC."
 msgstr ""
-"PT RadATC: Kurs rzeczywisty z następnego PZ do Twojej pozycji. Odległość "
-"podawana jest w milach morskich do celów komunikacji z ATC."
 
 #: src/InfoBoxes/Content/Factory.cpp:1223
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task last hour"
-msgstr "WprzŚr: Średnia prędkość na trasie"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "Śr prędk trasy"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
-"WprzŚr: Średnia prędkość na bieżącej trasie bez uwzględnienia różnic "
-"wysokości na początku i w aktualnym położeniu szybowca."
 
 #: src/InfoBoxes/Content/Factory.cpp:1233
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance (nominal)"
-msgstr "PT odl: odległość od Punktu Trasy"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP Dist-N"
-msgstr "PT odl"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"PT odl: Odległość do aktualnie wybranego Punktu Trasy. W zadaniach AAT jest "
-"to odległość do wybranego punktu w sektorze AAT."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:394
@@ -3034,9 +3028,9 @@ msgid "Waiting"
 msgstr "Oczek."
 
 #: src/InfoBoxes/Content/Places.cpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference"
-msgstr "Masa referencyjna"
+msgstr ""
 
 #: src/InfoBoxes/Content/Contest.cpp:55 src/InfoBoxes/Content/Trace.cpp:172
 #: src/Dialogs/dlgAnalysis.cpp:291 src/Dialogs/dlgAnalysis.cpp:300
@@ -5425,9 +5419,8 @@ msgid "Waypoints not editable"
 msgstr "Punkty zwrotne nieedytowalne"
 
 #: src/Dialogs/Waypoint/Manager.cpp:122
-#, fuzzy
 msgid "Delete waypoint?"
-msgstr "Usunąć punkt?"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:154
 msgid "Save changes to waypoint file?"
@@ -5706,9 +5699,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
-#, fuzzy
 msgid "Vario bar"
-msgstr "Wariometr"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
@@ -6746,9 +6738,8 @@ msgstr ""
 "opadanie szybowca jest podwojone."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
-#, fuzzy
 msgid "Auto bugs"
-msgstr "Pokaż muchy."
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
@@ -6921,13 +6912,11 @@ msgid "Vario-scaled dots and lines"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:114
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"W noszeniu linia pomarańczowa do czerwonej, a w duszeniu jasnoniebieska do "
-"ciemnoniebieskiej. Zerowe noszenie w kolorze żółtym."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:117
 #, no-c-format
@@ -7178,9 +7167,9 @@ msgid "Reference used for finish min height rule."
 msgstr "Poz.odn. użyto do wyznaczenia min.wys.przylotu."
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:129
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable OLC Calculations"
-msgstr "Wyłącz krążenie"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp:131
 #, no-c-format
@@ -7491,9 +7480,8 @@ msgstr ""
 "Określa jasność renderowania terenu.  To steruje średnim oświetleniem terenu."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:265
-#, fuzzy
 msgid "Contours"
-msgstr "Kolory"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "If enabled, draws contour lines on the terrain."
@@ -8027,9 +8015,8 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Minimalny czas trasy AAT w minutach"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
-#, fuzzy
 msgid "Arm start manually"
-msgstr "Aktywuj start"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
@@ -9316,6 +9303,12 @@ msgstr ""
 #~ msgid "InfoBox values, small"
 #~ msgstr "Wartości InfoBox'ów, małe"
 
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Nieudane wczytywanie danych \"%s\" !"
+
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "Czy chcesz wczytać plik danych \"%s\"?"
+
 #~ msgid "Keyboard"
 #~ msgstr "Klawiatura"
 
@@ -9348,92 +9341,8 @@ msgstr ""
 #~ msgid "Line skipped."
 #~ msgstr "Pominięto wiersz"
 
-#~ msgid "Next radial ATC"
-#~ msgstr "PT RadATC"
-
-#~ msgid "Radial ATC"
-#~ msgstr "PT RadATC"
-
-#~ msgid "Auto. wind"
-#~ msgstr "Autom. wiatr"
-
-#~ msgid ""
-#~ "This allows switching on or off the automatic wind algorithm.  When the "
-#~ "algorithm is switched off, the pilot is responsible for setting the wind "
-#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
-#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
-#~ "and circling."
-#~ msgstr ""
-#~ "Można włączyć lub wyłączyć automatyczne obliczanie wiatru. Gdy wyłączono, "
-#~ "pilot odpowiada za podanie danych wiatru.$#10;[Krążenie] Wymaga tylko "
-#~ "danych z GPS.&#10;[Zygzakowanie] Wymaga wariometru z transmisją "
-#~ "informacji o prędkości powietrznej.&#10;[Oba] Korzysta z danych "
-#~ "Zygzakowania i Krążenia."
-
-#~ msgid ""
-#~ "Enable this if you would like to log the communication with the device."
-#~ msgstr "Włącz to jeśli chciałbyś aby rejestrować komunikację z urządzeniem."
-
-#~ msgid "Logger Info"
-#~ msgstr "Dane pilota/szybowca"
-
-#~ msgid "Aircraft type"
-#~ msgstr "Typ szybowca"
-
-#~ msgid "Aircraft reg."
-#~ msgstr "Znaki rejestracyjne"
-
-#~ msgid "Polar name"
-#~ msgstr "Nazwa biegunowej."
-
-#~ msgid "V rough air"
-#~ msgstr "V w burzliwym pow."
-
-#~ msgid "Wing area"
-#~ msgstr "Powierzchnia skrzydeł"
-
-#~ msgid "Dump time"
-#~ msgstr "Czas zrzutu"
-
-#~ msgid "Dry mass"
-#~ msgstr "Masa bez balastu"
-
-#~ msgid ""
-#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
-#~ "Set to zero if it does not apply."
-#~ msgstr ""
-#~ "Opcjonalnie liczba balastu wodnego jaki XCSoar będzie traktował za 100%. "
-#~ "Ustaw 0 jeśli nie dotyczy."
-
-#~ msgid ""
-#~ "Optional the maximum manoeuvring speed can be entered on this page to "
-#~ "prevent the glide computer from commanding unrealistic cruise speeds."
-#~ msgstr ""
-#~ "Opcjonalnie maksymalna prędkość manewrowa może być wpisana na tej "
-#~ "stronie, aby zapobiec podawaniu przez komputer nierealnych prędkości "
-#~ "przeskoku."
-
-#~ msgid "Dry mass of the glider (pilot + empty mass)."
-#~ msgstr ""
-#~ "Twoja Masa startowa szybowca bez balastu wodnego (pilot, spadochron + "
-#~ "szybowiec bez balastu)"
-
-#~ msgid "Reference weight at which the given polar is valid."
-#~ msgstr ""
-#~ "Masa referencyjna, dla której określono wczytane dane biegunowej, na ogół "
-#~ "na podstawie publikacji producenta szybowca."
-
-#~ msgid "The handicap factor used for the OnLine Contest scoring."
-#~ msgstr "Współczynnik wyrównawczy do punktacji OnLine Contest"
-
-#~ msgid "Optional specification of the wing area."
-#~ msgstr "Opcj.specyfikacja pow. skrzydeł."
-
-#~ msgid "Max. ballast"
-#~ msgstr "Maks. balast"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "Czas w sekundach potrzebny na zrzucenie całego balastu"
+#~ msgid "Delete Waypoint?"
+#~ msgstr "Usunąć punkt?"
 
 #~ msgid "Weather parameters"
 #~ msgstr "Parametry pogody"
@@ -9443,6 +9352,9 @@ msgstr ""
 
 #~ msgid "Change point type?"
 #~ msgstr "Zmienić typ punktu?"
+
+#~ msgid "Dump time"
+#~ msgstr "Czas zrzutu"
 
 #~ msgid "Longitude"
 #~ msgstr "Długość"
@@ -9458,6 +9370,9 @@ msgstr ""
 
 #~ msgid "Lookup"
 #~ msgstr "Wyszukaj"
+
+#~ msgid "V rough air"
+#~ msgstr "V w burzliwym pow."
 
 #~ msgid "Not found"
 #~ msgstr "Nie znaleziono"
@@ -9506,6 +9421,9 @@ msgstr ""
 #~ "Określa czy logger stosuje krótką czy długą nazwę pliku. Przykładowo: "
 #~ "krótka nazwa(81HXABC1.IGC),a długa nazwa(2008-01-18-XXX-ABC-01.IGC)."
 
+#~ msgid "Wing area"
+#~ msgstr "Powierzchnia skrzydeł"
+
 #~ msgid "L/D average period"
 #~ msgstr "Okres uśr. doskonał."
 
@@ -9519,8 +9437,15 @@ msgstr ""
 #~ "Określa czy ślad jest przesuwany z wiatrem kiedy wyświetlany jest w "
 #~ "trybie krążenia."
 
+#~ msgid ""
+#~ "Enable this if you would like to log the communication with the device."
+#~ msgstr "Włącz to jeśli chciałbyś aby rejestrować komunikację z urządzeniem."
+
 #~ msgid "Return"
 #~ msgstr "Powrót"
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "Czas w sekundach potrzebny na zrzucenie całego balastu"
 
 #~ msgid "Gate Width"
 #~ msgstr "Szerokość bramki"
@@ -9533,6 +9458,30 @@ msgstr ""
 
 #~ msgid "Determines the information displayed on different screen pages."
 #~ msgstr "Określa informacje wyświetlane na różnych stronach ekranu."
+
+#~ msgid "Polar name"
+#~ msgstr "Nazwa biegunowej."
+
+#~ msgid ""
+#~ "Optional the amount of water ballast XCSoar refers to as 100% ballast. "
+#~ "Set to zero if it does not apply."
+#~ msgstr ""
+#~ "Opcjonalnie liczba balastu wodnego jaki XCSoar będzie traktował za 100%. "
+#~ "Ustaw 0 jeśli nie dotyczy."
+
+#~ msgid ""
+#~ "Optional the maximum manoeuvring speed can be entered on this page to "
+#~ "prevent the glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "Opcjonalnie maksymalna prędkość manewrowa może być wpisana na tej "
+#~ "stronie, aby zapobiec podawaniu przez komputer nierealnych prędkości "
+#~ "przeskoku."
+
+#~ msgid "The handicap factor used for the OnLine Contest scoring."
+#~ msgstr "Współczynnik wyrównawczy do punktacji OnLine Contest"
+
+#~ msgid "Aircraft reg."
+#~ msgstr "Znaki rejestracyjne"
 
 #~ msgid "Height GPS"
 #~ msgstr "H GPS: wysokość wg GPS"
@@ -9630,11 +9579,20 @@ msgstr ""
 #~ msgid "H Baro"
 #~ msgstr "H baro"
 
+#~ msgid "Auto. wind"
+#~ msgstr "Autom. wiatr"
+
 #~ msgid "InfoBox Pages"
 #~ msgstr "Strony Infobox"
 
+#~ msgid "Logger Info"
+#~ msgstr "Dane pilota/szybowca"
+
 #~ msgid "Set new teammate:"
 #~ msgstr "Dodaj do zespołu"
+
+#~ msgid "Aircraft type"
+#~ msgstr "Typ szybowca"
 
 #~ msgid ""
 #~ "Determines sorting of alternates in the alternates dialog and in abort "
@@ -9684,6 +9642,25 @@ msgstr ""
 #~ msgid "Turnpoints not unique.\n"
 #~ msgstr "Punkty Zwrotne powtarzają się.\n"
 
+#~ msgid "Dry mass"
+#~ msgstr "Masa bez balastu"
+
+#~ msgid "Reference mass"
+#~ msgstr "Masa referencyjna"
+
+#~ msgid "Dry mass of the glider (pilot + empty mass)."
+#~ msgstr ""
+#~ "Twoja Masa startowa szybowca bez balastu wodnego (pilot, spadochron + "
+#~ "szybowiec bez balastu)"
+
+#~ msgid "Reference weight at which the given polar is valid."
+#~ msgstr ""
+#~ "Masa referencyjna, dla której określono wczytane dane biegunowej, na ogół "
+#~ "na podstawie publikacji producenta szybowca."
+
+#~ msgid "Optional specification of the wing area."
+#~ msgstr "Opcj.specyfikacja pow. skrzydeł."
+
 #~ msgid "Lon."
 #~ msgstr "Dług."
 
@@ -9692,6 +9669,19 @@ msgstr ""
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "To ustawia punkt zadania do przejrzenia."
+
+#~ msgid ""
+#~ "This allows switching on or off the automatic wind algorithm.  When the "
+#~ "algorithm is switched off, the pilot is responsible for setting the wind "
+#~ "estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] "
+#~ "Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag "
+#~ "and circling."
+#~ msgstr ""
+#~ "Można włączyć lub wyłączyć automatyczne obliczanie wiatru. Gdy wyłączono, "
+#~ "pilot odpowiada za podanie danych wiatru.$#10;[Krążenie] Wymaga tylko "
+#~ "danych z GPS.&#10;[Zygzakowanie] Wymaga wariometru z transmisją "
+#~ "informacji o prędkości powietrznej.&#10;[Oba] Korzysta z danych "
+#~ "Zygzakowania i Krążenia."
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "Zestawy Infobox"
@@ -9705,6 +9695,15 @@ msgstr ""
 #~ msgstr ""
 #~ "Szczeg.\n"
 #~ "PZ"
+
+#~ msgid "Max. ballast"
+#~ msgstr "Maks. balast"
+
+#~ msgid "Next radial ATC"
+#~ msgstr "PT RadATC"
+
+#~ msgid "Radial ATC"
+#~ msgstr "PT RadATC"
 
 #~ msgid "AC Off;  %d%%"
 #~ msgstr "WYŁĄCZ; %d%%"
