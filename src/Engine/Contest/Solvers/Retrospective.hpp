@@ -27,6 +27,7 @@ class Waypoints;
 #include "Geo/GeoPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include <list>
+#include "Math/Angle.hpp"
 
 class Retrospective {
 public:
@@ -38,6 +39,7 @@ public:
     fixed range;
     fixed leg_in;
     fixed actual_in;
+    Angle bearing;
 
     NearWaypoint(const Waypoint &_waypoint, const GeoPoint& _location)
       :waypoint(_waypoint), location(_location), leg_in(0), actual_in(0) {
@@ -64,6 +66,7 @@ public:
     void update_leg(const NearWaypoint& previous) {
       leg_in = previous.waypoint.location.Distance(waypoint.location);
       actual_in = previous.location.Distance(location);
+      bearing = previous.location.Bearing(location);
     }
   };
 

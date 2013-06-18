@@ -22,10 +22,10 @@
 
 #include "Retrospective.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Math/Angle.hpp"
 
 /** search range in m */
 static constexpr fixed search_range = fixed(15000);
-static size_t max_candidates = 6;
 
 Retrospective::Retrospective(const Waypoints &wps):
   waypoints(wps)
@@ -43,24 +43,22 @@ Retrospective::PruneCandidates()
 {
   assert(candidate_list.size()>2);
 
-  fixed min_loss = fixed(0);
   auto it_best = candidate_list.end();
+  bool erase = false;
 
-  auto it0 = candidate_list.begin();
-  auto it1 = it0; it1++;
+  auto it1 = ++candidate_list.begin();
   auto it2 = it1; it2++;
-  for (; it2 != candidate_list.end(); ++it0, ++it1, ++it2) {
-    fixed dd = it1->leg_in + it2->leg_in;
-    fixed ds = it0->waypoint.location.Distance(it2->waypoint.location);
-    fixed loss = dd-ds;
-    if ((loss < min_loss) || (it_best == candidate_list.end())) {
-      min_loss = loss;
+  for (; it2 != candidate_list.end(); ++it1, ++it2) {
+    if (it1->bearing.CompareRoughly(it2->bearing, Angle::Degrees(25))) {
       it_best = it1;
+      erase = true;
     }
   }
 
-  it_best = candidate_list.erase(it_best);
-  it_best->update_leg(*std::prev(it_best));
+  if (erase) {
+    it_best = candidate_list.erase(it_best);
+    it_best->update_leg(*std::prev(it_best));
+  }
 }
 
 void
@@ -121,7 +119,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
     // first check if it's outside range
     fixed dist_wpwp = waypoint->location.Distance(back.location);
 
-    if ((dist_wpwp <= 2*search_range) && (candidate_list.size()>1)) {
+    if ((dist_wpwp <= search_range) && (candidate_list.size()>1)) {
       // if we have a previous, we can see if this one is a better replacement
       // (replacing it makes a linear collapse of the intermediate point)
 
@@ -139,7 +137,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
     }
 
-    if ((dist_wpwp > 2*search_range) && (back.waypoint.id != waypoint->id)) {
+    if ((dist_wpwp > search_range) && (back.waypoint.id != waypoint->id)) {
       // - far enough away (not overlapping) that can consider this a new point
       candidate_list.push_back (NearWaypoint(*waypoint, aircraft_location, 
 					     candidate_list.back()));
@@ -150,7 +148,7 @@ Retrospective::UpdateSample(const GeoPoint &aircraft_location)
 
   if (candidate_list.size()<2) {
     return changed;
-  } else if (changed && (candidate_list.size() > max_candidates)) {
+  } else if (changed && (candidate_list.size() > 2)) {
     PruneCandidates();
   }
 
