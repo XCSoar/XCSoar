@@ -44,6 +44,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   warning_computer(_airspace_database),
   task_computer(task, _airspace_database, &warning_computer.GetManager()),
   waypoints(_way_points),
+  retrospective(_way_points),
   team_code_ref_id(-1)
 {
   events.SetComputer(*this);
@@ -62,6 +63,7 @@ GlideComputer::ResetFlight(const bool full)
   task_computer.ResetFlight(full);
   stats_computer.ResetFlight(full);
   log_computer.Reset();
+  retrospective.Reset();
 
   cu_computer.Reset();
   warning_computer.Reset();
@@ -174,6 +176,9 @@ GlideComputer::ProcessIdle(bool exhaustive)
 
   warning_computer.Update(GetComputerSettings(), Basic(),
                           Calculated(), SetCalculated().airspace_warnings);
+
+  // Calculate summary of flight
+  retrospective.UpdateSample(Basic().location);
 }
 
 bool

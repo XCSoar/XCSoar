@@ -35,6 +35,7 @@ Copyright_License {
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
 #include "Compiler.h"
+#include "Engine/Contest/Solvers/Retrospective.hpp"
 
 class Waypoints;
 class ProtectedTaskManager;
@@ -56,6 +57,7 @@ class GlideComputer : public GlideComputerBlackboard
 
   const Waypoints &waypoints;
 
+  Retrospective retrospective;
   int team_code_ref_id;
   bool team_code_ref_found;
   GeoPoint team_code_ref_location;
@@ -133,6 +135,10 @@ public:
 
   const FlightStatistics &GetFlightStats() const {
     return stats_computer.GetFlightStats();
+  }
+
+  const Retrospective &GetRetrospective() {
+    return retrospective;
   }
 
 protected:
