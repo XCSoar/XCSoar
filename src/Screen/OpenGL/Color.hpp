@@ -36,19 +36,37 @@ Copyright_License {
  */
 struct Color {
 #ifdef HAVE_GLES
-  GLfixed r, g, b, a;
+  typedef GLfixed Component;
 
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b)
-    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(1u << 16u) {}
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
-    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(_a << 8u) {}
+  static constexpr Component Import(uint8_t value) {
+    return value << 8;
+  }
+
+  static constexpr uint8_t Export(Component value) {
+    return value >> 8;
+  }
+
+  static constexpr Component MAX = 1u << 16u;
 #else
-  GLubyte r, g, b, a;
+  typedef GLubyte Component;
 
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b):r(_r), g(_g), b(_b), a(255) {}
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
-    :r(_r), g(_g), b(_b), a(_a) {}
+  static constexpr Component Import(uint8_t value) {
+    return value;
+  }
+
+  static constexpr uint8_t Export(Component value) {
+    return value;
+  }
+
+  static constexpr Component MAX = 0xff;
 #endif
+
+  Component r, g, b, a;
+
+  constexpr Color(uint8_t _r, uint8_t _g, uint8_t _b)
+    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(MAX) {}
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
+    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(Import(_a)) {}
 
   Color() = default;
 
@@ -60,11 +78,7 @@ struct Color {
   uint8_t
   Red() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(r >> 8u);
-#else
-    return r;
-#endif
+    return Export(r);
   }
 
   /**
@@ -75,11 +89,7 @@ struct Color {
   uint8_t
   Green() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(g >> 8u);
-#else
-    return g;
-#endif
+    return Export(g);
   }
 
   /**
@@ -90,11 +100,7 @@ struct Color {
   uint8_t
   Blue() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(b >> 8u);
-#else
-    return b;
-#endif
+    return Export(b);
   }
 
   /**
@@ -105,11 +111,7 @@ struct Color {
   uint8_t
   Alpha() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(a >> 8u);
-#else
-    return a;
-#endif
+    return Export(a);
   }
 
   constexpr
