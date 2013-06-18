@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <stddef.h>
 
-struct Color;
+class Color;
 
 /**
  * Formats a Color struct into a hex-based RGB string, i.e. "#123456"

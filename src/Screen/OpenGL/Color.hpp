@@ -34,7 +34,7 @@ Copyright_License {
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
  */
-struct Color {
+class Color {
 #ifdef HAVE_GLES
   typedef GLfixed Component;
 
@@ -63,6 +63,7 @@ struct Color {
 
   Component r, g, b, a;
 
+public:
   constexpr Color(uint8_t _r, uint8_t _g, uint8_t _b)
     :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(MAX) {}
   constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)

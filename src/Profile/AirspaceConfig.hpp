@@ -29,7 +29,7 @@ Copyright_License {
 struct AirspaceRendererSettings;
 struct AirspaceClassRendererSettings;
 struct AirspaceComputerSettings;
-struct Color;
+class Color;
 
 namespace Profile
 {

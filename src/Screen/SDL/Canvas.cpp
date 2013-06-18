@@ -345,8 +345,8 @@ Canvas::StretchTransparent(const Bitmap &src, Color key)
   SDL_Surface *surface = src.GetNative();
 
   ::SDL_SetColorKey(surface, SDL_SRCCOLORKEY,
-                    ::SDL_MapRGB(surface->format, key.value.r,
-                                 key.value.g, key.value.b));
+                    ::SDL_MapRGB(surface->format, key.Red(),
+                                 key.Green(), key.Blue()));
   Stretch(surface);
   ::SDL_SetColorKey(surface, 0, 0);
 }
@@ -373,8 +373,8 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
     return;
 
   ::SDL_SetColorKey(zoomed, SDL_SRCCOLORKEY,
-                    ::SDL_MapRGB(zoomed->format, key.value.r,
-                                 key.value.g, key.value.b));
+                    ::SDL_MapRGB(zoomed->format, key.Red(),
+                                 key.Green(), key.Blue()));
 
   CopyNot(dest_x, dest_y, dest_width, dest_height,
            zoomed, (src_x * dest_width) / src_width,

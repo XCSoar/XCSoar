@@ -129,8 +129,8 @@ public:
   gcc_pure
   const HWColor map(const Color color) const
   {
-    return HWColor(::SDL_MapRGB(surface->format, color.value.r,
-                                color.value.g, color.value.b));
+    return HWColor(::SDL_MapRGB(surface->format, color.Red(),
+                                color.Green(), color.Blue()));
   }
 
   void SelectNullPen() {

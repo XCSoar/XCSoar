@@ -26,7 +26,7 @@ Copyright_License {
 
 class Canvas;
 struct PixelRect;
-struct Color;
+class Color;
 
 /**
  * Fill the background with the specified color and a glass-like

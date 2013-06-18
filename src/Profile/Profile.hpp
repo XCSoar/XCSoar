@@ -31,7 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
-struct Color;
+class Color;
 
 namespace Profile
 {

@@ -34,9 +34,10 @@ Copyright_License {
  *
  * We used SDL_Color::unused for alpha, because that's what SDL_gfx uses.
  */
-struct Color {
+class Color {
   SDL_Color value;
 
+public:
   Color() = default;
 
   constexpr
@@ -161,9 +162,10 @@ struct Color {
  * HWColor may be different, e.g. if the Canvas can not display 24
  * bit RGB colors.
  */
-struct HWColor {
+class HWColor {
   Uint32 value;
 
+public:
   constexpr HWColor():value(0) {}
   explicit constexpr HWColor(Uint32 c):value(c) {}
 

@@ -32,9 +32,10 @@ Copyright_License {
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
  */
-struct Color {
+class Color {
   COLORREF value;
 
+public:
   /** Base Constructor (creates an undefined Color object) */
   Color() = default;
 
@@ -91,6 +92,10 @@ struct Color {
   constexpr
   operator COLORREF() const { return value; }
 
+  constexpr COLORREF GetNative() const {
+    return value;
+  }
+
   /**
    * Returns the highlighted version of this color.
    */
@@ -113,7 +118,7 @@ struct Color {
 static inline constexpr bool
 operator ==(const Color a, const Color b)
 {
-  return a.value == b.value;
+  return a.GetNative() == b.GetNative();
 }
 
 /**
@@ -134,9 +139,10 @@ operator !=(const Color a, const Color b)
  * HWColor may be different, e.g. if the Canvas can not display 24
  * bit RGB colors.
  */
-struct HWColor {
+class HWColor {
   COLORREF value;
 
+public:
   constexpr HWColor():value(0) {}
   explicit constexpr HWColor(COLORREF c):value(c) {}
 
