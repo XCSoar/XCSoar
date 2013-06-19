@@ -50,6 +50,18 @@ public:
   constexpr uint8_t Blue() const {
     return b;
   }
+
+  constexpr RGB8Color Invert() const {
+    return RGB8Color(~r, ~g, ~b);
+  }
+
+  constexpr RGB8Color Darken() const {
+    return RGB8Color(r >> 1, g >> 1, b >> 1);
+  }
+
+  constexpr RGB8Color Lighten() const {
+    return Invert().Darken().Invert();
+  }
 };
 
 /**
