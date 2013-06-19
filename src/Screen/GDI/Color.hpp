@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_COLOR_HPP
 #define XCSOAR_SCREEN_GDI_COLOR_HPP
 
+#include "Screen/PortableColor.hpp"
+
 #include <windows.h>
 #include <stdint.h>
 
@@ -51,6 +53,9 @@ public:
    * @param b Blue part
    */
   constexpr Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
+
+  explicit constexpr Color(RGB8Color other)
+    :value(RGB(other.Red(), other.Green(), other.Blue())) {}
 
   /**
    * Returns the red part of the color

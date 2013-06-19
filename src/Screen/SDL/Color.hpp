@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_COLOR_HPP
 #define XCSOAR_SCREEN_SDL_COLOR_HPP
 
+#include "Screen/PortableColor.hpp"
+
 #include <SDL_video.h>
 #include <stdint.h>
 
@@ -43,6 +45,9 @@ public:
   constexpr
   Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a=SDL_ALPHA_OPAQUE)
     :value({r, g, b, a}) {}
+
+  explicit constexpr Color(RGB8Color other)
+    :value({other.Red(), other.Green(), other.Blue(), SDL_ALPHA_OPAQUE}) {}
 
   /**
    * Returns the red part of the color
