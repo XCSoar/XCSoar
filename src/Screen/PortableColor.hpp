@@ -170,6 +170,9 @@ public:
   constexpr Luminosity8(uint8_t r, uint8_t g, uint8_t b)
     :value(FromRGB(r, g, b)) {}
 
+  explicit constexpr Luminosity8(RGB8Color color)
+    :value(FromRGB(color.Red(), color.Green(), color.Blue())) {}
+
   constexpr uint8_t GetLuminosity() const {
     return value;
   }
