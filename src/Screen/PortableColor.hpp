@@ -156,6 +156,11 @@ public:
 class Luminosity8 {
   uint8_t value;
 
+  constexpr
+  static uint8_t FromRGB(uint8_t r, uint8_t g, uint8_t b) {
+    return (r * 2126 + g * 7152 + b * 722 + 5000) / 10000;
+  }
+
 public:
   Luminosity8() = default;
 
@@ -163,7 +168,7 @@ public:
     :value(_value) {}
 
   constexpr Luminosity8(uint8_t r, uint8_t g, uint8_t b)
-    :value((r * 2126 + g * 7152 + b * 722 + 5000) / 10000) {}
+    :value(FromRGB(r, g, b)) {}
 
   constexpr uint8_t GetLuminosity() const {
     return value;
