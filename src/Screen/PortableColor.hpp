@@ -51,6 +51,14 @@ public:
     return b;
   }
 
+  constexpr bool operator ==(const RGB8Color other) const {
+    return r == other.r && g == other.g && b == other.b;
+  }
+
+  constexpr bool operator !=(const RGB8Color other) const {
+    return !(*this == other);
+  }
+
   constexpr RGB8Color Invert() const {
     return RGB8Color(~r, ~g, ~b);
   }
