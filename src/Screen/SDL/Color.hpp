@@ -25,9 +25,12 @@ Copyright_License {
 #define XCSOAR_SCREEN_SDL_COLOR_HPP
 
 #include "Screen/PortableColor.hpp"
+#include "Compiler.h"
 
 #include <SDL_video.h>
 #include <stdint.h>
+
+class HWColor;
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -83,6 +86,9 @@ public:
   operator const SDL_Color&() const {
     return value;
   }
+
+  gcc_pure
+  HWColor Map(SDL_PixelFormat *fmt) const;
 
   constexpr
   Uint32 GFXColor() const {
@@ -187,5 +193,12 @@ public:
   constexpr
   operator Uint32() const { return value; }
 };
+
+gcc_pure
+inline HWColor
+Color::Map(SDL_PixelFormat *fmt) const
+{
+  return HWColor(::SDL_MapRGB(fmt, Red(), Green(), Blue()));
+}
 
 #endif
