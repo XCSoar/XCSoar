@@ -28,6 +28,19 @@ Copyright_License {
 
 #include <SDL.h>
 
+#include <assert.h>
+
+gcc_const
+static inline const SDL_PixelFormat &
+GetDisplayFormat()
+{
+  SDL_Surface *surface = SDL_GetVideoSurface();
+  assert(surface != nullptr);
+  assert(surface->format != nullptr);
+
+  return *surface->format;
+}
+
 gcc_pure
 static inline bool
 CompareFormats(const SDL_PixelFormat &a, const SDL_PixelFormat &b)
@@ -41,7 +54,7 @@ gcc_pure
 static inline bool
 IsDisplayFormat(const SDL_PixelFormat &format)
 {
-  return CompareFormats(format, *SDL_GetVideoSurface()->format);
+  return CompareFormats(format, GetDisplayFormat());
 }
 
 /**
