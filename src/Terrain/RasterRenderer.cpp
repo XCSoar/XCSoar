@@ -44,27 +44,29 @@ MIX(unsigned x, unsigned y, unsigned i)
   return (x * i + y * ((1 << 7) - i)) >> 7;
 }
 
-inline void
-TerrainShading(const int illum, uint8_t &r, uint8_t &g, uint8_t &b)
+gcc_const
+inline BGRColor
+TerrainShading(const int illum, RGB8Color color)
 {
   if (illum == -64) {
     // brown color mixed in for contours
-    r = MIX(100,r,64);
-    g = MIX(70,g,64);
-    b = MIX(26,b,64);
+    return BGRColor(MIX(100, color.Red(), 64),
+                    MIX(70, color.Green(), 64),
+                    MIX(26, color.Blue(), 64));
   } else if (illum < 0) {
     // shadow to blue
     int x = std::min(63, -illum);
-    r = MIX(0,r,x);
-    g = MIX(0,g,x);
-    b = MIX(64,b,x);
+    return BGRColor(MIX(0, color.Red(), x),
+                    MIX(0, color.Green(), x),
+                    MIX(64, color.Blue(), x));
   } else if (illum > 0) {
     // highlight to yellow
     int x = std::min(32, illum / 2);
-    r = MIX(255,r,x);
-    g = MIX(255,g,x);
-    b = MIX(16,b,x);
-  }
+    return BGRColor(MIX(255, color.Red(), x),
+                    MIX(255, color.Green(), x),
+                    MIX(16, color.Blue(), x));
+  } else
+    return BGRColor(color.Red(), color.Green(), color.Blue());
 }
 
 gcc_const
@@ -455,32 +457,27 @@ RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
 {
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {
-      uint8_t r, g, b;
+      BGRColor color;
+
       if (i == 255) {
         if (do_water) {
           // water colours
-          r = 85;
-          g = 160;
-          b = 255;
+          color = BGRColor(85, 160, 255);
         } else {
-          r = 255;
-          g = 255;
-          b = 255;
+          color = BGRColor(255, 255, 255);
 
           // ColorRampLookup(0, r, g, b,
           // Color_ramp, NUM_COLOR_RAMP_LEVELS, interp_levels);
         }
       } else {
-        Color color =  ColorRampLookup(i << height_scale, color_ramp,
-                                       NUM_COLOR_RAMP_LEVELS, interp_levels);
-        r = color.Red();
-        g = color.Green();
-        b = color.Blue();
+        const RGB8Color color2 =
+          ColorRampLookup(i << height_scale, color_ramp,
+                          NUM_COLOR_RAMP_LEVELS, interp_levels);
 
-        TerrainShading(mag, r, g, b);
+        color = TerrainShading(mag, color2);
       }
 
-      color_table[i + (mag + 64) * 256] = BGRColor(r, g, b);
+      color_table[i + (mag + 64) * 256] = color;
     }
   }
 }

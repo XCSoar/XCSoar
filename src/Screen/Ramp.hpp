@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RAMP_HPP
 #define XCSOAR_SCREEN_RAMP_HPP
 
-class Color;
+class RGB8Color;
 
 struct ColorRamp {
   short h;
@@ -33,7 +33,7 @@ struct ColorRamp {
   unsigned char b;
 };
 
-Color
+RGB8Color
 ColorRampLookup(short h,
                 const ColorRamp* ramp_colors,
                 const int numramp,

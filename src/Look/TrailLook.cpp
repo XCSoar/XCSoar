@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-static Color
+static RGB8Color
 GetVario1Color(short ramp_h) {
   static constexpr ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor
@@ -41,7 +41,7 @@ GetVario1Color(short ramp_h) {
                          ARRAY_SIZE(snail_colors_vario));
 }
 
-static Color
+static RGB8Color
 GetVario2Color(short ramp_h) {
   static constexpr ColorRamp snail_colors_vario2[] = {
     {0,   0x00, 0x00, 0xff},
@@ -54,7 +54,7 @@ GetVario2Color(short ramp_h) {
                          ARRAY_SIZE(snail_colors_vario2));
 }
 
-static Color
+static RGB8Color
 GetAltitudeColor(short ramp_h) {
   static constexpr ColorRamp snail_colors_alt[] = {
     {0,   0xff, 0x00, 0x00},
@@ -68,8 +68,10 @@ GetAltitudeColor(short ramp_h) {
                          ARRAY_SIZE(snail_colors_alt));
 }
 
-static Color
-GetColor(TrailSettings::Type type, short ramp_h) {
+gcc_const
+static RGB8Color
+GetPortableColor(TrailSettings::Type type, short ramp_h)
+{
   switch (type) {
   case TrailSettings::Type::ALTITUDE:
     return GetAltitudeColor(ramp_h);
@@ -80,6 +82,13 @@ GetColor(TrailSettings::Type type, short ramp_h) {
   default:
     return GetVario1Color(ramp_h);
   }
+}
+
+gcc_const
+static Color
+GetColor(TrailSettings::Type type, short ramp_h)
+{
+  return Color(GetPortableColor(type, ramp_h));
 }
 
 void
