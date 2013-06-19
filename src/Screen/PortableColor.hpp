@@ -72,6 +72,21 @@ public:
   }
 };
 
+static constexpr RGB8Color RGB8_WHITE = RGB8Color(0xff, 0xff, 0xff);
+static constexpr RGB8Color RGB8_BLACK = RGB8Color(0x00, 0x00, 0x00);
+static constexpr RGB8Color RGB8_GRAY = RGB8Color(0x80, 0x80, 0x80);
+static constexpr RGB8Color RGB8_VERY_LIGHT_GRAY = RGB8Color(0xd8, 0xd8, 0xd8);
+static constexpr RGB8Color RGB8_LIGHT_GRAY = RGB8Color(0xc0, 0xc0, 0xc0);
+static constexpr RGB8Color RGB8_DARK_GRAY = RGB8Color(0x40, 0x40, 0x40);
+static constexpr RGB8Color RGB8_RED = RGB8Color(0xff, 0x00, 0x00);
+static constexpr RGB8Color RGB8_GREEN = RGB8Color(0x00, 0xff, 0x00);
+static constexpr RGB8Color RGB8_BLUE = RGB8Color(0x00, 0x00, 0xff);
+static constexpr RGB8Color RGB8_YELLOW = RGB8Color(0xff, 0xff, 0x00);
+static constexpr RGB8Color RGB8_CYAN = RGB8Color(0x00, 0xff, 0xff);
+static constexpr RGB8Color RGB8_MAGENTA = RGB8Color(0xff, 0x00, 0xff);
+static constexpr RGB8Color RGB8_ORANGE = RGB8Color(0xff, 0xa2, 0x00);
+static constexpr RGB8Color RGB8_BROWN = RGB8Color(0xb7, 0x64, 0x1e);
+
 /**
  * Represents a device-independent color class that stores 8 bits for
  * each channel, ordered BGR.
