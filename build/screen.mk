@@ -43,6 +43,11 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Dither.cpp
+endif
+
 ifeq ($(FREETYPE),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FreeType/Font.cpp \
