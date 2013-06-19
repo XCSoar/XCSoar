@@ -34,24 +34,31 @@ Copyright_License {
 #define NUMAIRSPACEBRUSHES 8
 
 struct AirspaceRendererSettings;
+struct AirspaceClassRendererSettings;
 class Font;
 
-struct AirspaceLook {
-  static const Color preset_colors[NUMAIRSPACECOLORS];
-
+struct AirspaceClassLook {
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
   /**
    * Non-pattern brushes used for transparent
    */
-  Brush solid_brushes[AIRSPACECLASSCOUNT];
+  Brush solid_brush;
 #endif
+
+  Pen border_pen;
+
+  void Initialise(const AirspaceClassRendererSettings &settings);
+};
+
+struct AirspaceLook {
+  static const Color preset_colors[NUMAIRSPACECOLORS];
 
 #ifdef HAVE_HATCHED_BRUSH
   Bitmap bitmaps[NUMAIRSPACEBRUSHES];
   Brush brushes[NUMAIRSPACEBRUSHES];
 #endif
 
-  Pen pens[AIRSPACECLASSCOUNT];
+  AirspaceClassLook classes[AIRSPACECLASSCOUNT];
 
   Pen thick_pen;
 

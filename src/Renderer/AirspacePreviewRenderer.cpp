@@ -120,7 +120,7 @@ AirspacePreviewRenderer::PrepareOutline(
     // Don't draw outlines if border_width == 0
     return false;
   else
-    canvas.Select(look.pens[type]);
+    canvas.Select(look.classes[type].border_pen);
 
   canvas.SelectHollowBrush();
 

@@ -254,7 +254,7 @@ private:
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.pens[type]);
+      canvas.Select(look.classes[type].border_pen);
 
     canvas.SelectHollowBrush();
 
@@ -379,7 +379,7 @@ private:
       // Don't draw outlines if border_width == 0
       return false;
     else
-      canvas.Select(look.pens[type]);
+      canvas.Select(look.classes[type].border_pen);
 
     canvas.SelectHollowBrush();
 
@@ -483,12 +483,12 @@ private:
     AirspaceClass airspace_class = airspace.GetType();
 
 #ifndef HAVE_HATCHED_BRUSH
-    buffer.Select(look.solid_brushes[airspace_class]);
+    buffer.Select(look.classes[airspace_class].solid_brush);
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable()) {
-      buffer.Select(look.solid_brushes[airspace_class]);
+      buffer.Select(look.classes[airspace_class].solid_brush);
     } else {
 #endif
       // this color is used as the black bit
@@ -549,7 +549,7 @@ protected:
       // Don't draw outlines if border_width == 0
       return false;
 
-    canvas.Select(look.pens[type]);
+    canvas.Select(look.classes[type].border_pen);
 
     return true;
   }

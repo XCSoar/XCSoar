@@ -51,23 +51,26 @@ const Color AirspaceLook::preset_colors[] = {
 };
 
 void
+AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
+{
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+#endif
+#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
+    solid_brush.Set(settings.fill_color);
+#endif
+
+  if (settings.border_width != 0)
+    border_pen.Set(Layout::ScalePenWidth(settings.border_width),
+                   settings.border_color);
+}
+
+void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
                          const Font &_name_font)
 {
-  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i) {
-    const AirspaceClassRendererSettings &class_settings = settings.classes[i];
-
-    if (class_settings.border_width != 0)
-      pens[i].Set(Layout::ScalePenWidth(class_settings.border_width),
-                  class_settings.border_color);
-
-#ifdef HAVE_ALPHA_BLEND
-    if (AlphaBlendAvailable())
-#endif
-#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-      solid_brushes[i].Set(class_settings.fill_color);
-#endif
-  }
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i)
+    classes[i].Initialise(settings.classes[i]);
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
