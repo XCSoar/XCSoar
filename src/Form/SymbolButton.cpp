@@ -56,7 +56,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   const char ch = (char)caption[0];
 
-  Color color;
+  RGB8Color color;
 
   // Draw arrow symbol instead of <
   if (ch == '<')
@@ -102,6 +102,6 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   else if (ParseHexColor(caption.c_str(), color)) {
     rc.Grow(-3);
-    canvas.DrawFilledRectangle(rc, color);
+    canvas.DrawFilledRectangle(rc, Color(color));
   }
 }

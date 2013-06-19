@@ -53,7 +53,7 @@ struct AirspaceClassLook {
 };
 
 struct AirspaceLook {
-  static const Color preset_colors[NUMAIRSPACECOLORS];
+  static const RGB8Color preset_colors[NUMAIRSPACECOLORS];
 
 #ifdef HAVE_HATCHED_BRUSH
   Bitmap bitmaps[NUMAIRSPACEBRUSHES];

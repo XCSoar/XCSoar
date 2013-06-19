@@ -30,19 +30,21 @@ Copyright_License {
 
 #include <stddef.h>
 
-class Color;
+class RGB8Color;
 
 /**
  * Formats a Color struct into a hex-based RGB string, i.e. "#123456"
  */
-void FormatHexColor(char *buffer, size_t size, const Color color);
+void
+FormatHexColor(char *buffer, size_t size, const RGB8Color color);
 
 bool
-ParseHexColor(const char *buffer, Color &color);
+ParseHexColor(const char *buffer, RGB8Color &color);
 
 #ifdef _UNICODE
 
-bool ParseHexColor(const TCHAR *buffer, Color &color);
+bool
+ParseHexColor(const TCHAR *buffer, RGB8Color &color);
 
 #endif
 

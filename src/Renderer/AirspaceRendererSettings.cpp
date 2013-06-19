@@ -32,8 +32,8 @@ AirspaceClassRendererSettings::SetDefaults()
 #ifdef HAVE_HATCHED_BRUSH
   brush = 0;
 #endif
-  border_color = COLOR_RED;
-  fill_color = COLOR_RED;
+  border_color = RGB8_RED;
+  fill_color = RGB8_RED;
   border_width = 2;
   fill_mode = FillMode::PADDING;
 }
@@ -70,14 +70,14 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSF].brush = 3;
 #endif
 
-  classes[OTHER].SetColors(COLOR_CYAN);
-  classes[DANGER].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[MATZ].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[CLASSC].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[CLASSD].SetColors(COLOR_BLUE);
-  classes[CTR].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[WAVE].SetColors(DarkColor(COLOR_YELLOW));
-  classes[AATASK].SetColors(COLOR_YELLOW);
-  classes[CLASSE].SetColors(DarkColor(COLOR_GREEN));
-  classes[CLASSF].SetColors(DarkColor(COLOR_GREEN));
+  classes[OTHER].SetColors(RGB8_CYAN);
+  classes[DANGER].SetColors(RGB8_MAGENTA.Darken());
+  classes[MATZ].SetColors(RGB8_MAGENTA.Darken());
+  classes[CLASSC].SetColors(RGB8_MAGENTA.Darken());
+  classes[CLASSD].SetColors(RGB8_BLUE);
+  classes[CTR].SetColors(RGB8_MAGENTA.Darken());
+  classes[WAVE].SetColors(RGB8_YELLOW.Darken());
+  classes[AATASK].SetColors(RGB8_YELLOW);
+  classes[CLASSE].SetColors(RGB8_GREEN.Darken());
+  classes[CLASSF].SetColors(RGB8_GREEN.Darken());
 }

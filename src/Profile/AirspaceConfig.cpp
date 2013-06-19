@@ -45,7 +45,7 @@ MakeAirspaceSettingName(char *buffer, const char *prefix, unsigned n)
  * @see Load(unsigned, AirspaceClassRendererSettings &)
  */
 static bool
-GetAirspaceColor(unsigned i, Color &color)
+GetAirspaceColor(unsigned i, RGB8Color &color)
 {
   char name[64];
   MakeAirspaceSettingName(name, "Colour", i);
@@ -164,7 +164,7 @@ Profile::SetAirspaceBorderWidth(unsigned i, unsigned border_width)
 }
 
 void
-Profile::SetAirspaceBorderColor(unsigned i, const Color &color)
+Profile::SetAirspaceBorderColor(unsigned i, const RGB8Color &color)
 {
   char name[64];
   MakeAirspaceSettingName(name, "AirspaceBorderColor", i);
@@ -172,7 +172,7 @@ Profile::SetAirspaceBorderColor(unsigned i, const Color &color)
 }
 
 void
-Profile::SetAirspaceFillColor(unsigned i, const Color &color)
+Profile::SetAirspaceFillColor(unsigned i, const RGB8Color &color)
 {
   char name[64];
   MakeAirspaceSettingName(name, "AirspaceFillColor", i);

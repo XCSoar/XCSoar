@@ -31,29 +31,29 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
-const Color AirspaceLook::preset_colors[] = {
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_BLUE,
-  COLOR_YELLOW,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  DarkColor(COLOR_RED),
-  DarkColor(COLOR_GREEN),
-  DarkColor(COLOR_BLUE),
-  DarkColor(COLOR_YELLOW),
-  DarkColor(COLOR_MAGENTA),
-  DarkColor(COLOR_CYAN),
-  COLOR_WHITE,
-  COLOR_LIGHT_GRAY,
-  COLOR_GRAY,
-  COLOR_BLACK,
+const RGB8Color AirspaceLook::preset_colors[] = {
+  RGB8_RED,
+  RGB8_GREEN,
+  RGB8_BLUE,
+  RGB8_YELLOW,
+  RGB8_MAGENTA,
+  RGB8_CYAN,
+  RGB8_RED.Darken(),
+  RGB8_GREEN.Darken(),
+  RGB8_BLUE.Darken(),
+  RGB8_YELLOW.Darken(),
+  RGB8_MAGENTA.Darken(),
+  RGB8_CYAN.Darken(),
+  RGB8_WHITE,
+  RGB8_LIGHT_GRAY,
+  RGB8_GRAY,
+  RGB8_BLACK,
 };
 
 void
 AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 {
-  fill_color = settings.fill_color;
+  fill_color = Color(settings.fill_color);
 
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
@@ -64,7 +64,7 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 
   if (settings.border_width != 0)
     border_pen.Set(Layout::ScalePenWidth(settings.border_width),
-                   settings.border_color);
+                   Color(settings.border_color));
 }
 
 void

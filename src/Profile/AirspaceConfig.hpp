@@ -29,7 +29,7 @@ Copyright_License {
 struct AirspaceRendererSettings;
 struct AirspaceClassRendererSettings;
 struct AirspaceComputerSettings;
-class Color;
+class RGB8Color;
 
 namespace Profile
 {
@@ -43,8 +43,8 @@ namespace Profile
    */
   void SetAirspaceMode(unsigned i, bool display, bool warning);
   void SetAirspaceBorderWidth(unsigned i, unsigned border_width);
-  void SetAirspaceBorderColor(unsigned i, const Color &color);
-  void SetAirspaceFillColor(unsigned i, const Color &color);
+  void SetAirspaceBorderColor(unsigned i, const RGB8Color &color);
+  void SetAirspaceFillColor(unsigned i, const RGB8Color &color);
   void SetAirspaceFillMode(unsigned i, uint8_t mode);
   void SetAirspaceBrush(unsigned i, int c);
 };
