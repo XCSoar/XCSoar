@@ -53,11 +53,13 @@ const Color AirspaceLook::preset_colors[] = {
 void
 AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 {
+  fill_color = settings.fill_color;
+
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    solid_brush.Set(settings.fill_color);
+    solid_brush.Set(fill_color);
 #endif
 
   if (settings.border_width != 0)

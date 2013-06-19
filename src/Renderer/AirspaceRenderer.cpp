@@ -163,6 +163,7 @@ private:
   void VisitCircle(const AirspaceCircle &airspace) {
     const AirspaceClassRendererSettings &class_settings =
       settings.classes[airspace.GetType()];
+    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
 
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
@@ -182,7 +183,7 @@ private:
         canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = class_settings.fill_color;
+        Color color = class_look.fill_color;
         Pen pen_donut(look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
@@ -275,8 +276,7 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                       bool check_fillstencil = false) {
-    const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetType()];
+    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
 
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
@@ -286,7 +286,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    canvas.Select(Brush(class_settings.fill_color.WithAlpha(90)));
+    canvas.Select(Brush(class_look.fill_color.WithAlpha(90)));
     canvas.SelectNullPen();
   }
 
@@ -395,9 +395,9 @@ private:
   }
 
   void SetupInterior(const AbstractAirspace &airspace) {
-    const AirspaceClassRendererSettings &class_settings =
-      settings.classes[airspace.GetType()];
-    canvas.Select(Brush(class_settings.fill_color.WithAlpha(48)));
+    const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
+
+    canvas.Select(Brush(class_look.fill_color.WithAlpha(48)));
     canvas.SelectNullPen();
   }
 };
@@ -501,7 +501,7 @@ private:
     } else {
 #endif
       // this color is used as the black bit
-      buffer.SetTextColor(LightColor(settings.classes[airspace_class].fill_color));
+      buffer.SetTextColor(LightColor(look.classes[airspace_class].fill_color));
 
       // get brush, can be solid or a 1bpp bitmap
       buffer.Select(look.brushes[settings.classes[airspace_class].brush]);

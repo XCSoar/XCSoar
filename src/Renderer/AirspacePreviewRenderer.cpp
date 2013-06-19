@@ -71,6 +71,7 @@ AirspacePreviewRenderer::PrepareFill(
     const AirspaceRendererSettings &settings)
 {
   const AirspaceClassRendererSettings &class_settings = settings.classes[type];
+  const AirspaceClassLook &class_look = look.classes[type];
 
   if (class_settings.fill_mode ==
       AirspaceClassRendererSettings::FillMode::NONE)
@@ -80,15 +81,15 @@ AirspacePreviewRenderer::PrepareFill(
   ::glEnable(GL_BLEND);
   ::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  Color color = class_settings.fill_color;
+  Color color = class_look.fill_color;
   canvas.Select(Brush(color.WithAlpha(48)));
 #elif defined(ENABLE_SDL)
-  Color color = class_settings.fill_color;
+  Color color = class_look.fill_color;
   canvas.Select(Brush(LightColor(color)));
 #else
   canvas.Select(look.brushes[settings.transparency ?
                              3 : class_settings.brush]);
-  canvas.SetTextColor(LightColor(class_settings.fill_color));
+  canvas.SetTextColor(LightColor(class_look.fill_color));
   canvas.SetMixMask();
 #endif
 

@@ -38,6 +38,8 @@ struct AirspaceClassRendererSettings;
 class Font;
 
 struct AirspaceClassLook {
+  Color fill_color;
+
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
   /**
    * Non-pattern brushes used for transparent
