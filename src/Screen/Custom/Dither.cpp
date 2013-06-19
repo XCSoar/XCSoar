@@ -35,24 +35,13 @@ void Dither::dither_luminosity8_to_uint16(uint8_t* __restrict src,
   if (width> buffer_width) 
     ResizeBuffer(width);
 
-#ifdef ATKINSON
-  int width_3 = width + 3;
-  memset(error_dist_buffer, 0, (width+3)*3*sizeof(int16_t));
-#else
   int width_2 = width + 2;
-  memset(error_dist_buffer, 0, (width+2)*2*sizeof(int16_t));
-#endif
+  memset(error_dist_buffer, 0, (width_2)*2*sizeof(int16_t));
 
-  for (int row = 0; row < height; ++row) {
+  for (; height; --height) {
 
-#ifdef ATKINSON      
-    int16_t * err_dist_l0 = error_dist_buffer + width_3 * (row % 3) + 1;
-    int16_t * err_dist_l1 = error_dist_buffer + width_3 * ((row + 1) % 3) + 1;
-    int16_t * err_dist_l2 = error_dist_buffer + width_3 * ((row + 2) % 3) + 1;
-#else
-    int16_t * err_dist_l0 = error_dist_buffer + width_2 * (row % 2) + 1;
-    int16_t * err_dist_l1 = error_dist_buffer + width_2 * ((row + 1) % 2) + 1;
-#endif
+    int16_t * err_dist_l0 = error_dist_buffer + width_2 * (height & 1) + 1;
+    int16_t * err_dist_l1 = error_dist_buffer + width_2 * ((height + 1) & 1) + 1;
 
     /* scan the line and convert the Y8 to BW */
     for (int col = width; col; --col) {
@@ -66,23 +55,13 @@ void Dither::dither_luminosity8_to_uint16(uint8_t* __restrict src,
       }
       /* modify the error distribution buffer */
 
-#ifdef ATKINSON      
-      bwPix = bwPix >> 3;
-      *(err_dist_l0 + 1) += bwPix;
-      *(err_dist_l0 + 2) += bwPix;
-      *(err_dist_l1 + 1) += bwPix;
-      *(err_dist_l1 - 1) += bwPix;
-      *err_dist_l1++ += bwPix;
-      *err_dist_l2++ = bwPix;
-      ++err_dist_l0;
-#else
       // SIERRA LITE
       bwPix >>= 1;
       *(++err_dist_l0) += bwPix;
       bwPix >>= 1;
       *(err_dist_l1 - 1) += bwPix;
       *err_dist_l1++ = bwPix;
-#endif
+
     }
   }
 }

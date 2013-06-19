@@ -52,11 +52,7 @@ private:
     if (width != buffer_width) {
       DestroyBuffer();
       buffer_width = width;
-#ifdef ATKINSON
-      error_dist_buffer = new int16_t[(width+3)*3];
-#else
       error_dist_buffer = new int16_t[(width+2)*2];
-#endif
     }
   }
 };
