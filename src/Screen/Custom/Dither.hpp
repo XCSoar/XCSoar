@@ -39,7 +39,9 @@ public:
 				    int width, int height);
 
 private:
-  int16_t* error_dist_buffer;
+  typedef int ErrorDistType; // must be wider than 8bits
+
+  ErrorDistType* error_dist_buffer;
   int buffer_width;
 
   void DestroyBuffer() {
@@ -52,7 +54,7 @@ private:
     if (width != buffer_width) {
       DestroyBuffer();
       buffer_width = width;
-      error_dist_buffer = new int16_t[(width+2)*2];
+      error_dist_buffer = new ErrorDistType[(width+2)*2];
     }
   }
 };

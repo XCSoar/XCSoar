@@ -36,16 +36,16 @@ void Dither::dither_luminosity8_to_uint16(uint8_t* __restrict src,
     ResizeBuffer(width);
 
   int width_2 = width + 2;
-  memset(error_dist_buffer, 0, (width_2)*2*sizeof(int16_t));
+  memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));
 
   for (; height; --height) {
 
-    int16_t * err_dist_l0 = error_dist_buffer + width_2 * (height & 1) + 1;
-    int16_t * err_dist_l1 = error_dist_buffer + width_2 * ((height + 1) & 1) + 1;
+    ErrorDistType* err_dist_l0 = error_dist_buffer + ((height & 1) ? width_2 : 0) + 1;
+    ErrorDistType* err_dist_l1 = error_dist_buffer + ((height & 1) ? 0 : width_2) + 1;
 
     /* scan the line and convert the Y8 to BW */
     for (int col = width; col; --col) {
-      int16_t bwPix = (*err_dist_l0) + (*src++);
+      ErrorDistType bwPix = (*err_dist_l0) + (*src++);
 
       if (bwPix >= 128) {
 	*dest++ = 0xffff;
