@@ -161,25 +161,28 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
+    const AirspaceClassRendererSettings &class_settings =
+      settings.classes[airspace.GetType()];
+
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
 
     if (!warning_manager.IsAcked(airspace) &&
-        settings.classes[airspace.GetType()].fill_mode !=
+        class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       GLEnable blend(GL_BLEND);
       SetupInterior(airspace);
       if (warning_manager.HasWarning(airspace) ||
           warning_manager.IsInside(airspace) ||
           look.thick_pen.GetWidth() >= 2 * screen_radius ||
-          settings.classes[airspace.GetType()].fill_mode ==
+          class_settings.fill_mode ==
           AirspaceClassRendererSettings::FillMode::ALL) {
         // fill whole circle
         canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = settings.classes[airspace.GetType()].fill_color;
+        Color color = class_settings.fill_color;
         Pen pen_donut(look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
@@ -197,14 +200,17 @@ private:
     if (!PreparePolygon(airspace.GetPoints()))
       return;
 
+    const AirspaceClassRendererSettings &class_settings =
+      settings.classes[airspace.GetType()];
+
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
                          warning_manager.IsInside(airspace) ||
-                         settings.classes[airspace.GetType()].fill_mode ==
+      class_settings.fill_mode ==
                          AirspaceClassRendererSettings::FillMode::ALL;
     GLEnable stencil(GL_STENCIL_TEST);
 
     if (!warning_manager.IsAcked(airspace) &&
-        settings.classes[airspace.GetType()].fill_mode !=
+        class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
@@ -269,6 +275,9 @@ private:
 
   void SetupInterior(const AbstractAirspace &airspace,
                       bool check_fillstencil = false) {
+    const AirspaceClassRendererSettings &class_settings =
+      settings.classes[airspace.GetType()];
+
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
       glStencilFunc(GL_EQUAL, 1, 3);
@@ -277,8 +286,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    Color color = settings.classes[airspace.GetType()].fill_color;
-    canvas.Select(Brush(color.WithAlpha(90)));
+    canvas.Select(Brush(class_settings.fill_color.WithAlpha(90)));
     canvas.SelectNullPen();
   }
 
@@ -387,8 +395,9 @@ private:
   }
 
   void SetupInterior(const AbstractAirspace &airspace) {
-    Color color = settings.classes[airspace.GetType()].fill_color;
-    canvas.Select(Brush(color.WithAlpha(48)));
+    const AirspaceClassRendererSettings &class_settings =
+      settings.classes[airspace.GetType()];
+    canvas.Select(Brush(class_settings.fill_color.WithAlpha(48)));
     canvas.SelectNullPen();
   }
 };
