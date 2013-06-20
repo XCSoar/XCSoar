@@ -28,7 +28,7 @@ Copyright_License {
 // Code adapted from imx.60 linux kernel EPD driver by Daiyu Ko <dko@freescale.com>
 //
 
-void Dither::dither_luminosity8_to_uint16(uint8_t* __restrict src, 
+void Dither::dither_luminosity8_to_uint16(const uint8_t *__restrict src,
 					  uint16_t* __restrict dest, 
 					  int width, int height)
 {

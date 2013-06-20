@@ -34,7 +34,7 @@ public:
   ~Dither() {
     DestroyBuffer();
   }
-  void dither_luminosity8_to_uint16(uint8_t* __restrict src, 
+  void dither_luminosity8_to_uint16(const uint8_t *__restrict src,
 				    uint16_t* __restrict dest, 
 				    int width, int height);
 
