@@ -298,6 +298,9 @@ public:
     DrawPolygon(points, num_points);
   }
 
+#ifdef GREYSCALE
+  void DrawLine(int ax, int ay, int bx, int by);
+#else
   void DrawLine(PixelScalar ax, PixelScalar ay,
                 PixelScalar bx, PixelScalar by) {
     ax += offset.x;
@@ -316,6 +319,7 @@ public:
 #endif
       ::lineColor(surface, ax, ay, bx, by, pen.GetColor().GFXColor());
   }
+#endif
 
   void DrawLine(const RasterPoint a, const RasterPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);

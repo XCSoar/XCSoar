@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 
+#ifdef GREYSCALE
+#include "Screen/Custom/RasterCanvas.hpp"
+#endif
+
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
 #endif
@@ -50,6 +54,24 @@ Canvas::Destroy()
 void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
+#ifdef GREYSCALE
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+
+  const unsigned thickness = pen.GetWidth();
+  const auto color = pen.GetColor().GetLuminosity();
+
+  if (thickness > 1)
+    for (unsigned i = 1; i < cPoints; ++i)
+      canvas.DrawThickLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
+                           thickness, color);
+  else
+    for (unsigned i = 1; i < cPoints; ++i)
+      canvas.DrawLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
+                      color);
+
+#else
   const Uint32 color = pen.GetColor().GFXColor();
 
 #if SDL_GFXPRIMITIVES_MAJOR > 2 || \
@@ -65,6 +87,7 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 #endif
     for (unsigned i = 1; i < cPoints; ++i)
       ::lineColor(surface, p[i - 1].x, p[i - 1].y, p[i].x, p[i].y, color);
+#endif
 }
 
 void
@@ -73,6 +96,45 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
+#ifdef GREYSCALE
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+  RasterCanvas<GreyscalePixelTraits>::Point points[cPoints];
+  for (unsigned i = 0; i < cPoints; ++i) {
+    points[i].x = offset.x + lppt[i].x;
+    points[i].y = offset.y + lppt[i].y;
+  }
+
+  if (!brush.IsHollow()) {
+    const auto color = brush.GetColor().GetLuminosity();
+    canvas.FillPolygon(points, cPoints, color);
+  }
+
+  if (IsPenOverBrush()) {
+    const unsigned thickness = pen.GetWidth();
+    const auto color = pen.GetColor().GetLuminosity();
+
+    if (thickness > 1) {
+      for (unsigned i = 1; i < cPoints; ++i)
+        canvas.DrawThickLine(points[i - 1].x, points[i - 1].y,
+                             points[i].x, points[i].y,
+                             thickness, color);
+      canvas.DrawThickLine(points[cPoints - 1].x, points[cPoints - 1].y,
+                           points[0].x, points[0].y,
+                           thickness, color);
+    } else {
+      for (unsigned i = 1; i < cPoints; ++i)
+        canvas.DrawLine(points[i - 1].x, points[i - 1].y,
+                        points[i].x, points[i].y,
+                        color);
+      canvas.DrawLine(points[cPoints - 1].x, points[cPoints - 1].y,
+                      points[0].x, points[0].y,
+                      color);
+    }
+  }
+
+#else
   Sint16 vx[cPoints], vy[cPoints];
 
   for (unsigned i = 0; i < cPoints; ++i) {
@@ -102,7 +164,32 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 #endif
       ::polygonColor(surface, vx, vy, cPoints, color);
   }
+#endif
 }
+
+#ifdef GREYSCALE
+
+void
+Canvas::DrawLine(int ax, int ay, int bx, int by)
+{
+  ax += offset.x;
+  ay += offset.y;
+  bx += offset.x;
+  by += offset.y;
+
+  const unsigned thickness = pen.GetWidth();
+  const auto color = pen.GetColor().GetLuminosity();
+
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+  if (thickness > 1)
+    canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
+  else
+    canvas.DrawLine(ax, ay, bx, by, color);
+}
+
+#endif
 
 void
 Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
@@ -110,9 +197,18 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   x += offset.x;
   y += offset.y;
 
-  if (!brush.IsHollow())
+  if (!brush.IsHollow()) {
+#ifdef GREYSCALE
+    const auto color = brush.GetColor().GetLuminosity();
+    RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                              surface->pitch,
+                                              surface->w, surface->h);
+    canvas.FillCircle(x, y, radius, color);
+#else
     ::filledCircleColor(surface, x, y, radius,
                         brush.GetColor().GFXColor());
+#endif
+  }
 
   if (IsPenOverBrush()) {
     if (pen.GetWidth() < 2) {
