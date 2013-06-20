@@ -45,11 +45,6 @@ class Color {
   uint8_t alpha;
 #else
   SDL_Color value;
-
-protected:
-  constexpr
-  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-    :value({r, g, b, a}) {}
 #endif
 
 public:
