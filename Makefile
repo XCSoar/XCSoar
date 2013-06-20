@@ -18,6 +18,8 @@
 #
 #   GREYSCALE   "y" means render 8-bit greyscale internally
 #
+#   DITHER      "y" means dither to 1-bit black&white
+#
 #   EYE_CANDY   "n" disables eye candy rendering.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built

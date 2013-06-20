@@ -34,6 +34,10 @@ Copyright_License {
 #endif
 #endif
 
+#ifdef DITHER
+#include "Screen/Custom/Dither.hpp"
+#endif
+
 #include <SDL_video.h>
 
 #include <assert.h>
@@ -161,6 +165,10 @@ TopCanvas::Fullscreen()
 
 #ifdef GREYSCALE
 
+#ifdef DITHER
+
+#else
+
 static uint32_t
 GreyscaleToRGB8(Luminosity8 luminosity)
 {
@@ -195,6 +203,8 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
     *dest++ = GreyscaleToRGB565(*src++);
 }
 
+#endif
+
 static void
 CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
 {
@@ -214,6 +224,24 @@ CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
   uint8_t *dest_pixels = (uint8_t *)dest->pixels;
 
   const unsigned width = dest->w, height = dest->h;
+
+#ifdef DITHER
+
+  Dither dither;
+  dither.dither_luminosity8_to_uint16(src_pixels, (uint16_t *)dest_pixels,
+                                      width, height);
+  if (dest->format->BytesPerPixel == 4) {
+    const unsigned n_pixels = width * height;
+    int32_t *d = (int32_t *)dest_pixels + n_pixels;
+    const int16_t *end = (int16_t *)dest_pixels;
+    const int16_t *s = end + n_pixels;
+
+    while (s != end)
+      *--d = *--s;
+  }
+
+#else
+
   const unsigned src_pitch = src->pitch;
   const unsigned dest_pitch = dest->pitch;
 
@@ -228,6 +256,8 @@ CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
       CopyGreyscaleToRGB8((uint32_t *)dest_pixels,
                            (const Luminosity8 *)src_pixels, width);
   }
+
+#endif
 
   ::SDL_UnlockSurface(src);
   ::SDL_UnlockSurface(dest);

@@ -25,10 +25,16 @@ TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
-GREYSCALE ?= y
+DITHER ?= y
 else
-GREYSCALE ?= n
+DITHER ?= n
 endif
+
+ifeq ($(DITHER),y)
+TARGET_CPPFLAGS += -DDITHER
+endif
+
+GREYSCALE ?= $(DITHER)
 
 ifeq ($(GREYSCALE),y)
 TARGET_CPPFLAGS += -DGREYSCALE
