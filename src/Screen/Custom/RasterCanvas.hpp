@@ -33,6 +33,7 @@ Copyright_License {
 
 struct GreyscalePixelTraits {
   typedef uint8_t *pointer_type;
+  typedef const uint8_t *const_pointer_type;
   typedef uint8_t color_type;
 
   int CalcIncrement(int delta) const {
@@ -50,6 +51,10 @@ struct GreyscalePixelTraits {
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
     memset(p, c, n);
   }
+
+  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+    memcpy(p, src, n);
+  }
 };
 
 /**
@@ -60,6 +65,7 @@ struct GreyscalePixelTraits {
 template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
   typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
 
 public:
   typedef typename PixelTraits::color_type color_type;
@@ -96,6 +102,26 @@ protected:
     assert(y < height);
 
     return PixelTraits::Increment(buffer, pitch * y + x);
+  }
+
+  static bool ClipAxis(int &position, unsigned &length, unsigned max,
+                       unsigned &src_position) {
+    if (position < 0) {
+      if (length <= unsigned(-position))
+        return false;
+
+      length -= -position;
+      src_position -= position;
+      position = 0;
+    }
+
+    if (unsigned(position) >= max)
+      return false;
+
+    if (unsigned(position) + length >= max)
+      length = max - position;
+
+    return true;
   }
 
   static constexpr unsigned CLIP_LEFT_EDGE = 0x1;
@@ -411,6 +437,19 @@ public:
       }
       cx++;
     } while (cx <= cy);
+  }
+
+  void CopyRectangle(int x, int y, unsigned w, unsigned h,
+                     const_pointer_type src, unsigned src_pitch) {
+    unsigned src_x = 0, src_y = 0;
+    if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
+      return;
+
+    src += src_y * src_pitch + src_x;
+
+    pointer_type p = At(x, y);
+    for (; h > 0; --h, p += pitch, src += src_pitch)
+      PixelTraits::CopyPixels(p, src, w);
   }
 };
 
