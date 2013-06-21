@@ -114,4 +114,16 @@ ConvertToDisplayFormatPreserve(SDL_Surface *surface)
 #endif
 }
 
+/**
+ * Like SDL_ConvertSurface(), but returns the given surface if it's
+ * already in the given format.  surface.
+ */
+static inline SDL_Surface *
+LazyConvertSurface(SDL_Surface *surface, SDL_PixelFormat *format)
+{
+  return CompareFormats(*surface->format, *format)
+    ? surface
+    : SDL_ConvertSurface(surface, format, SDL_SWSURFACE);
+}
+
 #endif

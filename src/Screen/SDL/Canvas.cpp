@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
+#include "Format.hpp"
 
 #ifdef GREYSCALE
 #include "Screen/Custom/RasterCanvas.hpp"
@@ -668,7 +669,7 @@ blit_not(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* convert src's pixel format */
 
-  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
   if (src == NULL) {
     ::SDL_UnlockSurface(dest);
     return;
@@ -676,7 +677,8 @@ blit_not(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   ret = ::SDL_LockSurface(src);
   if (ret != 0) {
-    ::SDL_FreeSurface(src);
+    if (src != _src)
+      ::SDL_FreeSurface(src);
     ::SDL_UnlockSurface(dest);
     return;
   }
@@ -703,7 +705,8 @@ blit_not(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
   /* cleanup */
 
   ::SDL_UnlockSurface(src);
-  ::SDL_FreeSurface(src);
+  if (src != _src)
+    ::SDL_FreeSurface(src);
   ::SDL_UnlockSurface(dest);
 }
 
@@ -726,7 +729,7 @@ blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* convert src's pixel format */
 
-  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
   if (src == NULL) {
     ::SDL_UnlockSurface(dest);
     return;
@@ -734,7 +737,8 @@ blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   ret = ::SDL_LockSurface(src);
   if (ret != 0) {
-    ::SDL_FreeSurface(src);
+    if (src != _src)
+      ::SDL_FreeSurface(src);
     ::SDL_UnlockSurface(dest);
     return;
   }
@@ -761,7 +765,8 @@ blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
   /* cleanup */
 
   ::SDL_UnlockSurface(src);
-  ::SDL_FreeSurface(src);
+  if (src != _src)
+    ::SDL_FreeSurface(src);
   ::SDL_UnlockSurface(dest);
 }
 
@@ -784,7 +789,7 @@ BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* convert src's pixel format */
 
-  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
   if (src == NULL) {
     ::SDL_UnlockSurface(dest);
     return;
@@ -792,7 +797,8 @@ BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   ret = ::SDL_LockSurface(src);
   if (ret != 0) {
-    ::SDL_FreeSurface(src);
+    if (src != _src)
+      ::SDL_FreeSurface(src);
     ::SDL_UnlockSurface(dest);
     return;
   }
@@ -824,7 +830,8 @@ BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
   /* cleanup */
 
   ::SDL_UnlockSurface(src);
-  ::SDL_FreeSurface(src);
+  if (src != _src)
+    ::SDL_FreeSurface(src);
   ::SDL_UnlockSurface(dest);
 }
 
@@ -847,7 +854,7 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* convert src's pixel format */
 
-  SDL_Surface *src = ::SDL_ConvertSurface(_src, dest->format, SDL_SWSURFACE);
+  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
   if (src == NULL) {
     ::SDL_UnlockSurface(dest);
     return;
@@ -855,7 +862,8 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   ret = ::SDL_LockSurface(src);
   if (ret != 0) {
-    ::SDL_FreeSurface(src);
+    if (src != _src)
+      ::SDL_FreeSurface(src);
     ::SDL_UnlockSurface(dest);
     return;
   }
@@ -882,7 +890,8 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
   /* cleanup */
 
   ::SDL_UnlockSurface(src);
-  ::SDL_FreeSurface(src);
+  if (src != _src)
+    ::SDL_FreeSurface(src);
   ::SDL_UnlockSurface(dest);
 }
 
