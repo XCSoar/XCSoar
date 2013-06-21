@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.7 - not yet released
 * user interface
+  - resizable main window
   - added AutoZoom gesture (up-down)
   - obsolete configuration pages "devices", "polar", "logger info" removed
   - new page: "horizon" (#1592)

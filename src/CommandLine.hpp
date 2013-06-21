@@ -40,13 +40,6 @@ namespace CommandLine {
   static constexpr bool full_screen = false;
 #endif
 
-#if (defined(ENABLE_SDL) && !defined(KOBO)) || defined(USE_GDI)
-#define HAVE_CMDLINE_RESIZABLE
-  extern bool resizable;
-#else
-  static constexpr bool resizable = false;
-#endif
-
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string

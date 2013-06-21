@@ -43,10 +43,6 @@ namespace CommandLine {
 #ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
 #endif
-
-#ifdef HAVE_CMDLINE_RESIZABLE
-  bool resizable = false;
-#endif
 }
 
 void
@@ -111,11 +107,6 @@ CommandLine::Parse(Args &args)
 #ifdef HAVE_CMDLINE_FULLSCREEN
     else if (strcmp(s, "-fullscreen") == 0) {
       full_screen = true;
-    }
-#endif
-#ifdef HAVE_CMDLINE_RESIZABLE
-    else if (strcmp(s, "-resizable") == 0) {
-      resizable = true;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
