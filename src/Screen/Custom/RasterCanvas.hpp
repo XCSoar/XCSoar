@@ -58,6 +58,39 @@ struct GreyscalePixelTraits {
 };
 
 template<typename PixelTraits>
+class AlphaPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  int alpha;
+
+  color_type BlendPixel(color_type a, color_type b) const {
+    return a + ((int(b - a) * alpha) >> 8);
+  }
+
+public:
+  constexpr AlphaPixelOperations(uint8_t _alpha):alpha(_alpha) {}
+
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p = BlendPixel(*p, c);
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      *p = BlendPixel(*p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      *p = BlendPixel(*p, *src);
+  }
+};
+
+template<typename PixelTraits>
 class OpaqueTextPixelOperations {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
@@ -275,7 +308,9 @@ public:
       PixelTraits::FillPixels(p, columns, c);
   }
 
-  void DrawHLine(int x1, int x2, int y, color_type c) {
+  template<typename PixelOperations>
+  void DrawHLine(int x1, int x2, int y, color_type c,
+                 PixelOperations operations) {
     if (y < 0 || unsigned(y) >= height)
       return;
 
@@ -289,7 +324,11 @@ public:
       return;
 
     pointer_type p = At(x1, y);
-    PixelTraits::FillPixels(p, x2 - x1, c);
+    operations.FillPixels(p, x2 - x1, c);
+  }
+
+  void DrawHLine(int x1, int x2, int y, color_type c) {
+    DrawHLine(x1, x2, y, c, *this);
   }
 
   void DrawLine(int x1, int y1, int x2, int y2, color_type c) {
@@ -344,7 +383,9 @@ public:
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
   }
 
-  void FillPolygon(const Point *points, unsigned n, color_type color) {
+  template<typename PixelOperations>
+  void FillPolygon(const Point *points, unsigned n, color_type color,
+                   PixelOperations operations) {
     assert(points != nullptr);
 
     if (n < 3)
@@ -405,12 +446,18 @@ public:
         xa = (xa >> 16) + ((xa & 32768) >> 15);
         int xb = ints[i+1] - 1;
         xb = (xb >> 16) + ((xb & 32768) >> 15);
-        DrawHLine(xa, xb, y, color);
+        DrawHLine(xa, xb, y, color, operations);
       }
     }
   }
 
-  void FillCircle(int x, int y, unsigned rad, color_type color) {
+  void FillPolygon(const Point *points, unsigned n, color_type color) {
+    FillPolygon(points, n, color, *this);
+  }
+
+  template<typename PixelOperations>
+  void FillCircle(int x, int y, unsigned rad, color_type color,
+                  PixelOperations operations) {
     // Special case for rad=0 - draw a point
     if (rad == 0) {
       DrawPixel(x, y, color);
@@ -450,10 +497,10 @@ public:
         if (cy > 0) {
           const int ypcy = y + cy;
           const int ymcy = y - cy;
-          DrawHLine(xmcx, xpcx, ypcy, color);
-          DrawHLine(xmcx, xpcx, ymcy, color);
+          DrawHLine(xmcx, xpcx, ypcy, color, operations);
+          DrawHLine(xmcx, xpcx, ymcy, color, operations);
         } else {
-          DrawHLine(xmcx, xpcx, y, color);
+          DrawHLine(xmcx, xpcx, y, color, operations);
         }
         ocy = cy;
       }
@@ -462,10 +509,10 @@ public:
           if (cx > 0) {
             const int ypcx = y + cx;
             const int ymcx = y - cx;
-            DrawHLine(xmcy, xpcy, ymcx, color);
-            DrawHLine(xmcy, xpcy, ypcx, color);
+            DrawHLine(xmcy, xpcy, ymcx, color, operations);
+            DrawHLine(xmcy, xpcy, ypcx, color, operations);
           } else {
-            DrawHLine(xmcy, xpcy, y, color);
+            DrawHLine(xmcy, xpcy, y, color, operations);
           }
         }
         ocx = cx;
@@ -485,6 +532,10 @@ public:
       }
       cx++;
     } while (cx <= cy);
+  }
+
+  void FillCircle(int x, int y, unsigned rad, color_type color) {
+    FillCircle(x, y, rad, color, *this);
   }
 
   template<typename PixelOperations>

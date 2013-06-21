@@ -109,7 +109,11 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (!brush.IsHollow()) {
     const auto color = brush.GetColor().GetLuminosity();
-    canvas.FillPolygon(points, cPoints, color);
+    if (brush.GetColor().IsOpaque())
+      canvas.FillPolygon(points, cPoints, color);
+    else
+      canvas.FillPolygon(points, cPoints, color,
+                         AlphaPixelOperations<GreyscalePixelTraits>(brush.GetColor().Alpha()));
   }
 
   if (IsPenOverBrush()) {
@@ -201,10 +205,16 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   if (!brush.IsHollow()) {
 #ifdef GREYSCALE
     const auto color = brush.GetColor().GetLuminosity();
+
     RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
                                               surface->pitch,
                                               surface->w, surface->h);
-    canvas.FillCircle(x, y, radius, color);
+
+    if (brush.GetColor().IsOpaque())
+      canvas.FillCircle(x, y, radius, color);
+    else
+      canvas.FillCircle(x, y, radius, color,
+                        AlphaPixelOperations<GreyscalePixelTraits>(brush.GetColor().Alpha()));
 #else
     ::filledCircleColor(surface, x, y, radius,
                         brush.GetColor().GFXColor());
