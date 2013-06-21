@@ -401,6 +401,8 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
     for (unsigned row = dest_height; row > 0;
          --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
       memcpy(dest_pixels, src_pixels, dest_width);
+
+    return;
   }
 #endif
 
