@@ -26,7 +26,7 @@ C_FEATURES += -ffunction-sections
 TARGET_LDFLAGS += -Wl,--gc-sections
 endif
 
-ifeq ($(DEBUG),n)
+ifeq ($(DEBUG),y)
 CXX_FEATURES += -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
 endif
 
