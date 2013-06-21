@@ -57,6 +57,54 @@ struct GreyscalePixelTraits {
   }
 };
 
+template<typename PixelTraits>
+class OpaqueTextPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  color_type background_color, text_color;
+
+public:
+  constexpr OpaqueTextPixelOperations(color_type _b, color_type _t)
+    :background_color(_b), text_color(_t) {}
+
+  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src) {
+      if (*src == 0)
+        *p = background_color;
+      else
+        *p = text_color;
+    }
+
+    memcpy(p, src, n);
+  }
+};
+
+template<typename PixelTraits>
+class TransparentTextPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  color_type text_color;
+
+public:
+  constexpr TransparentTextPixelOperations(color_type _t)
+    :text_color(_t) {}
+
+  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src) {
+      if (*src != 0)
+        *p = text_color;
+    }
+
+    memcpy(p, src, n);
+  }
+};
+
 /**
  * A software renderer for various primitives.
  *
@@ -439,8 +487,10 @@ public:
     } while (cx <= cy);
   }
 
+  template<typename PixelOperations>
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     const_pointer_type src, unsigned src_pitch) {
+                     const_pointer_type src, unsigned src_pitch,
+                     PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
     if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
       return;
@@ -449,7 +499,12 @@ public:
 
     pointer_type p = At(x, y);
     for (; h > 0; --h, p += pitch, src += src_pitch)
-      PixelTraits::CopyPixels(p, src, w);
+      operations.CopyPixels(p, src, w);
+  }
+
+  void CopyRectangle(int x, int y, unsigned w, unsigned h,
+                     const_pointer_type src, unsigned src_pitch) {
+    CopyRectangle(x, y, w, h, src, src_pitch, *this);
   }
 };
 

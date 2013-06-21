@@ -304,6 +304,27 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (s == NULL)
     return;
 
+
+#ifdef GREYSCALE
+  x += offset.x;
+  y += offset.y;
+
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+
+  if (background_mode == OPAQUE) {
+    OpaqueTextPixelOperations<GreyscalePixelTraits> opaque(background_color.GetLuminosity(),
+                                                           text_color.GetLuminosity());
+    canvas.CopyRectangle(x, y, s->w, s->h,
+                         (const uint8_t *)s->pixels, s->pitch, opaque);
+  } else {
+    TransparentTextPixelOperations<GreyscalePixelTraits> opaque(text_color.GetLuminosity());
+    canvas.CopyRectangle(x, y, s->w, s->h,
+                         (const uint8_t *)s->pixels, s->pitch, opaque);
+  }
+
+#else
   if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
     s->format->palette->colors[1] = text_color;
 
@@ -314,6 +335,8 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   }
 
   Copy(x, y, s);
+#endif
+
   ::SDL_FreeSurface(s);
 }
 
