@@ -378,6 +378,9 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
       !Clip(dest_y, dest_height, GetHeight(), src_y))
     return;
 
+  dest_x += offset.x;
+  dest_y += offset.y;
+
 #ifdef GREYSCALE
   assert(surface->format->BytesPerPixel == 1);
   assert(src_surface->format->BytesPerPixel == 1);
@@ -402,8 +405,7 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 #endif
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
-  SDL_Rect dest_rect = { PixelScalar(offset.x + dest_x),
-                         PixelScalar(offset.y + dest_y) };
+  SDL_Rect dest_rect = { dest_x, dest_y };
 
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
