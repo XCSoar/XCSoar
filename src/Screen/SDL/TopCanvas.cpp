@@ -221,19 +221,18 @@ CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
   }
 
   const uint8_t *src_pixels = (const uint8_t *)src->pixels;
-  uint8_t *dest_pixels = (uint8_t *)dest->pixels;
 
   const unsigned width = dest->w, height = dest->h;
 
 #ifdef DITHER
 
   Dither dither;
-  dither.dither_luminosity8_to_uint16(src_pixels, (uint16_t *)dest_pixels,
+  dither.dither_luminosity8_to_uint16(src_pixels, (uint16_t *)dest->pixels,
                                       width, height);
   if (dest->format->BytesPerPixel == 4) {
     const unsigned n_pixels = width * height;
-    int32_t *d = (int32_t *)dest_pixels + n_pixels;
-    const int16_t *end = (int16_t *)dest_pixels;
+    int32_t *d = (int32_t *)dest->pixels + n_pixels;
+    const int16_t *end = (int16_t *)dest->pixels;
     const int16_t *s = end + n_pixels;
 
     while (s != end)
@@ -242,6 +241,7 @@ CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
 
 #else
 
+  uint8_t *dest_pixels = (uint8_t *)dest->pixels;
   const unsigned src_pitch = src->pitch;
   const unsigned dest_pitch = dest->pitch;
 
