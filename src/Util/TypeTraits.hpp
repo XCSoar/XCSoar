@@ -55,7 +55,7 @@ struct has_trivial_copy_and_destructor
 #else
                                   std::has_trivial_assign<T>::value &&
 #endif
-#if GCC_VERSION >= 40800
+#if GCC_VERSION >= 40800 || (defined(__clang__) && CLANG_VERSION >= 30300)
                                   std::is_trivially_destructible<T>::value>
 #else
                                   std::has_trivial_destructor<T>::value>
