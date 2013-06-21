@@ -33,6 +33,9 @@ Copyright_License {
 #endif
 
 #ifdef __clang__
+#  define CLANG_VERSION (__clang_major__ * 10000 \
+			 + __clang_minor__ * 100 \
+			 + __clang_patchlevel__)
 #  if __clang_major__ < 3
 #    error Sorry, your clang version is too old.  You need at least version 3.1.
 #  endif
