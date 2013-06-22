@@ -29,7 +29,9 @@ Copyright_License {
 //
 
 void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
+                                          unsigned src_pitch,
                                           uint16_t *gcc_restrict dest,
+                                          unsigned dest_pitch,
                                           unsigned width, unsigned height)
 {
   allocated_error_dist_buffer.GrowDiscard((width + 2) * 2);
@@ -37,6 +39,9 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
 
   unsigned width_2 = width + 2;
   memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));
+
+  src_pitch -= width;
+  dest_pitch -= width;
 
   for (; height; --height) {
 
@@ -63,5 +68,8 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
       *err_dist_l1++ = bwPix;
 
     }
+
+    src += src_pitch;
+    dest += dest_pitch;
   }
 }

@@ -37,7 +37,9 @@ class Dither {
 
 public:
   void dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
+                                    unsigned src_pitch,
                                     uint16_t *gcc_restrict dest,
+                                    unsigned dest_pitch,
                                     unsigned width, unsigned height);
 };
 

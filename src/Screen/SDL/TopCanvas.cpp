@@ -230,10 +230,13 @@ CopyFromGreyscale(
 
 #ifdef DITHER
 
-  dither.dither_luminosity8_to_uint16(src_pixels, (uint16_t *)dest->pixels,
+  dither.dither_luminosity8_to_uint16(src_pixels, src->pitch,
+                                      (uint16_t *)dest->pixels,
+                                      dest->pitch / dest->format->BytesPerPixel,
                                       width, height);
   if (dest->format->BytesPerPixel == 4) {
-    const unsigned n_pixels = width * height;
+    const unsigned n_pixels = (dest->pitch / dest->format->BytesPerPixel)
+      * height;
     int32_t *d = (int32_t *)dest->pixels + n_pixels;
     const int16_t *end = (int16_t *)dest->pixels;
     const int16_t *s = end + n_pixels;
