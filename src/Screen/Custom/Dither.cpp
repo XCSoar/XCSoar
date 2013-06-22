@@ -32,8 +32,8 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *__restrict src,
 					  uint16_t* __restrict dest, 
 					  int width, int height)
 {
-  if (width> buffer_width) 
-    ResizeBuffer(width);
+  allocated_error_dist_buffer.GrowDiscard((width + 2) * 2);
+  ErrorDistType *const error_dist_buffer = allocated_error_dist_buffer.begin();
 
   int width_2 = width + 2;
   memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));

@@ -24,39 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_DITHER_HPP
 #define XCSOAR_SCREEN_DITHER_HPP
 
+#include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
+
 #include <stddef.h>
 #include <stdint.h>
 
 class Dither {
   typedef int ErrorDistType; // must be wider than 8bits
 
-  ErrorDistType* error_dist_buffer;
-  int buffer_width;
+  AllocatedArray<ErrorDistType> allocated_error_dist_buffer;
 
 public:
-  Dither():error_dist_buffer(NULL),buffer_width(0) {}
-  ~Dither() {
-    DestroyBuffer();
-  }
   void dither_luminosity8_to_uint16(const uint8_t *__restrict src,
 				    uint16_t* __restrict dest, 
 				    int width, int height);
-
-private:
-  void DestroyBuffer() {
-    if (error_dist_buffer) {
-      delete[] error_dist_buffer;      
-    }
-  }
-
-  void ResizeBuffer(const int &width) {
-    if (width != buffer_width) {
-      DestroyBuffer();
-      buffer_width = width;
-      error_dist_buffer = new ErrorDistType[(width+2)*2];
-    }
-  }
 };
 
 #endif
