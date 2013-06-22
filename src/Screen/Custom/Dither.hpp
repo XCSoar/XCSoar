@@ -29,6 +29,11 @@ Copyright_License {
 #include <stdint.h>
 
 class Dither {
+  typedef int ErrorDistType; // must be wider than 8bits
+
+  ErrorDistType* error_dist_buffer;
+  int buffer_width;
+
 public:
   Dither():error_dist_buffer(NULL),buffer_width(0) {}
   ~Dither() {
@@ -39,11 +44,6 @@ public:
 				    int width, int height);
 
 private:
-  typedef int ErrorDistType; // must be wider than 8bits
-
-  ErrorDistType* error_dist_buffer;
-  int buffer_width;
-
   void DestroyBuffer() {
     if (error_dist_buffer) {
       delete[] error_dist_buffer;      
