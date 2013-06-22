@@ -28,8 +28,8 @@ Copyright_License {
 // Code adapted from imx.60 linux kernel EPD driver by Daiyu Ko <dko@freescale.com>
 //
 
-void Dither::dither_luminosity8_to_uint16(const uint8_t *__restrict src,
-					  uint16_t* __restrict dest, 
+void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
+                                          uint16_t *gcc_restrict dest,
 					  int width, int height)
 {
   allocated_error_dist_buffer.GrowDiscard((width + 2) * 2);
