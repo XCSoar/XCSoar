@@ -1044,6 +1044,14 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
   // TODO: support scaling; SDL_gfx doesn't implement it
   // TODO: this method assumes 32 bit RGBA; but what about RGB 565?
 
+#ifdef GREYSCALE
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       (const uint8_t *)src->pixels, src->pitch,
+                       AlphaPixelOperations<GreyscalePixelTraits>(alpha));
+#else
   ::SDL_gfxSetAlpha(src, alpha);
 
   SDL_PixelFormat *format = src->format;
@@ -1064,6 +1072,7 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
     Sint16(dest_x), Sint16(dest_y), Uint16(dest_width), Uint16(dest_height)
   };
   ::SDL_gfxBlitRGBA(src, &src_rect, surface, &dest_rect);
+#endif
 }
 
 void
