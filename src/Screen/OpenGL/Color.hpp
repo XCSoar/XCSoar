@@ -77,7 +77,8 @@ public:
     :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(Import(_a)) {}
 
   explicit constexpr Color(RGB8Color other)
-    :r(other.Red()), g(other.Green()), b(other.Blue()), a(MAX) {}
+    :r(Import(other.Red())), g(Import(other.Green())), b(Import(other.Blue())),
+     a(MAX) {}
 
   Color() = default;
 
