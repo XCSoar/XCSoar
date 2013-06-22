@@ -30,12 +30,12 @@ Copyright_License {
 
 void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
                                           uint16_t *gcc_restrict dest,
-					  int width, int height)
+                                          unsigned width, unsigned height)
 {
   allocated_error_dist_buffer.GrowDiscard((width + 2) * 2);
   ErrorDistType *const error_dist_buffer = allocated_error_dist_buffer.begin();
 
-  int width_2 = width + 2;
+  unsigned width_2 = width + 2;
   memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));
 
   for (; height; --height) {
@@ -44,7 +44,7 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
     ErrorDistType* err_dist_l1 = error_dist_buffer + ((height & 1) ? 0 : width_2) + 1;
 
     /* scan the line and convert the Y8 to BW */
-    for (int col = width; col; --col) {
+    for (unsigned col = width; col > 0; --col) {
       ErrorDistType bwPix = (*err_dist_l0) + (*src++);
 
       if (bwPix >= 128) {
