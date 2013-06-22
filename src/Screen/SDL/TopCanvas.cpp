@@ -206,7 +206,11 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
 #endif
 
 static void
-CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
+CopyFromGreyscale(
+#ifdef DITHER
+                  Dither &dither,
+#endif
+                  SDL_Surface *dest, SDL_Surface *src)
 {
   assert(src->format->BitsPerPixel == 8);
   assert(src->format->BytesPerPixel == 1);
@@ -226,7 +230,6 @@ CopyFromGreyscale(SDL_Surface *dest, SDL_Surface *src)
 
 #ifdef DITHER
 
-  Dither dither;
   dither.dither_luminosity8_to_uint16(src_pixels, (uint16_t *)dest->pixels,
                                       width, height);
   if (dest->format->BytesPerPixel == 4) {
@@ -282,7 +285,11 @@ TopCanvas::Flip()
 #else
 
 #ifdef GREYSCALE
-  CopyFromGreyscale(real, surface);
+  CopyFromGreyscale(
+#ifdef DITHER
+                    dither,
+#endif
+                    real, surface);
   ::SDL_Flip(real);
 #else
   ::SDL_Flip(surface);
