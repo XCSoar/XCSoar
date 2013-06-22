@@ -27,6 +27,7 @@ Copyright_License {
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
 #include "Util/AllocatedArray.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <string.h>
@@ -52,7 +53,8 @@ struct GreyscalePixelTraits {
     memset(p, c, n);
   }
 
-  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
     memcpy(p, src, n);
   }
 };
@@ -84,7 +86,8 @@ public:
   }
 
   gcc_hot
-  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src)
       *p = BlendPixel(*p, *src);
   }
@@ -103,7 +106,8 @@ public:
   constexpr OpaqueTextPixelOperations(color_type _b, color_type _t)
     :background_color(_b), text_color(_t) {}
 
-  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src) {
       if (*src == 0)
         *p = background_color;
@@ -128,7 +132,8 @@ public:
   constexpr TransparentTextPixelOperations(color_type _t)
     :text_color(_t) {}
 
-  void CopyPixels(pointer_type p, const_pointer_type src, unsigned n) const {
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src) {
       if (*src != 0)
         *p = text_color;
