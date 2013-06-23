@@ -214,6 +214,35 @@ protected:
     return true;
   }
 
+  static bool ClipScaleAxis(int &dest_position, unsigned &dest_length,
+                            unsigned dest_max,
+                            unsigned &src_position, unsigned &src_length) {
+    if (dest_position < 0) {
+      if (dest_length <= unsigned(-dest_position))
+        return false;
+
+      dest_length -= -dest_position;
+
+      unsigned src_delta = unsigned(-dest_position) * src_length / dest_length;
+      src_position += src_delta;
+      src_length -= src_delta;
+
+      dest_position = 0;
+    }
+
+    if (unsigned(dest_position) >= dest_max)
+      return false;
+
+    if (unsigned(dest_position) + dest_length >= dest_max) {
+      unsigned new_dest_length = dest_max - dest_position;
+      unsigned dest_delta = dest_length - new_dest_length;
+      src_length -= dest_delta * src_length / dest_length;
+      dest_length = new_dest_length;
+    }
+
+    return true;
+  }
+
   static constexpr unsigned CLIP_LEFT_EDGE = 0x1;
   static constexpr unsigned CLIP_RIGHT_EDGE = 0x2;
   static constexpr unsigned CLIP_BOTTOM_EDGE = 0x4;
@@ -569,6 +598,58 @@ public:
                      const_pointer_type src, unsigned src_pitch) {
     CopyRectangle(x, y, w, h, src, src_pitch,
                   GetPixelTraits());
+  }
+
+  template<typename PixelOperations>
+  void ScalePixels(pointer_type gcc_restrict dest, unsigned dest_size,
+                   const_pointer_type gcc_restrict src,
+                   unsigned src_size,
+                   PixelOperations operations) const {
+    unsigned j = 0;
+    for (unsigned i = dest_size; i > 0; --i) {
+      operations.SetPixel(dest++, *src);
+
+      j += src_size;
+      while (j >= dest_size) {
+        j -= dest_size;
+        ++src;
+      }
+    }
+  }
+
+  template<typename PixelOperations>
+  void ScaleRectangle(int dest_x, int dest_y,
+                      unsigned dest_width, unsigned dest_height,
+                      const_pointer_type src, unsigned src_pitch,
+                      unsigned src_width, unsigned src_height,
+                      PixelOperations operations) {
+    unsigned src_x = 0, src_y = 0;
+    if (!ClipScaleAxis(dest_x, dest_width, width, src_x, src_width) ||
+        !ClipScaleAxis(dest_y, dest_height, height, src_y, src_height))
+      return;
+
+    src += src_y * src_pitch + src_x;
+
+    unsigned j = 0;
+    pointer_type dest = At(dest_x, dest_y);
+    for (unsigned i = dest_height; i > 0; --i, dest += pitch) {
+      ScalePixels(dest, dest_width, src, src_width, operations);
+
+      j += src_height;
+      while (j >= dest_height) {
+        j -= dest_height;
+        src += src_pitch;
+      }
+    }
+  }
+
+  void ScaleRectangle(int dest_x, int dest_y,
+                      unsigned dest_width, unsigned dest_height,
+                      const_pointer_type src, unsigned src_pitch,
+                      unsigned src_width, unsigned src_height) {
+    ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
+                   src, src_pitch, src_width, src_height,
+                   GetPixelTraits());
   }
 };
 

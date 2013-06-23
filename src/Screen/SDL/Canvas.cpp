@@ -551,6 +551,20 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
+#ifdef GREYSCALE
+  dest_x += offset.x;
+  dest_y += offset.y;
+
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+
+  canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
+                        (uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                        src->pitch, src_width, src_height);
+
+#else
+
   SDL_Surface *zoomed =
     ::zoomSurface(src, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
@@ -565,6 +579,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
+#endif
 }
 
 void
