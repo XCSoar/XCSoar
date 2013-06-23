@@ -143,6 +143,24 @@ public:
   }
 };
 
+template<typename PixelTraits>
+class TransparentInvertPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  color_type key;
+
+public:
+  constexpr TransparentInvertPixelOperations(color_type _key):key(_key) {}
+
+  void SetPixel(pointer_type p, color_type c) const {
+    if (c != key)
+      *p = ~c;
+  }
+};
+
 /**
  * A software renderer for various primitives.
  *
