@@ -268,22 +268,7 @@ void
 Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                     Angle start, Angle end, bool horizon)
 {
-  // XXX horizon
-
-  x += offset.x;
-  y += offset.y;
-
-  if (!brush.IsHollow())
-    ::filledPieColor(surface, x, y, radius, 
-                     (int)start.Degrees() - 90,
-                     (int)end.Degrees() - 90,
-                     brush.GetColor().GFXColor());
-
-  if (IsPenOverBrush())
-    ::pieColor(surface, x, y, radius, 
-               (int)start.Degrees() - 90,
-               (int)end.Degrees() - 90,
-               pen.GetColor().GFXColor());
+  Segment(*this, x, y, radius, start, end, horizon);
 }
 
 void
