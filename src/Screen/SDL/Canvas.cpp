@@ -222,13 +222,15 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   x += offset.x;
   y += offset.y;
 
+#ifdef GREYSCALE
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+#endif
+
   if (!brush.IsHollow()) {
 #ifdef GREYSCALE
     const auto color = brush.GetColor().GetLuminosity();
-
-    RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                              surface->pitch,
-                                              surface->w, surface->h);
 
     if (brush.GetColor().IsOpaque())
       canvas.FillCircle(x, y, radius, color);
@@ -243,13 +245,21 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 
   if (IsPenOverBrush()) {
     if (pen.GetWidth() < 2) {
+#ifdef GREYSCALE
+      canvas.DrawCircle(x, y, radius, pen.GetColor().GetLuminosity());
+#else
       ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
+#endif
       return;
     }
 
     // no thickCircleColor in SDL_gfx, so need to emulate it with multiple draws (slow!)
     for (int i= (pen.GetWidth()/2); i>= -(int)(pen.GetWidth()-1)/2; --i) {
+#ifdef GREYSCALE
+      canvas.DrawCircle(x, y, radius + i, pen.GetColor().GetLuminosity());
+#else
       ::circleColor(surface, x, y, radius+i, pen.GetColor().GFXColor());
+#endif
     }
   }
 }

@@ -556,6 +556,88 @@ public:
   }
 
   template<typename PixelOperations>
+  void DrawCircle(int x, int y, unsigned rad, color_type color,
+                  PixelOperations operations) {
+    // Special case for rad=0 - draw a point
+    if (rad == 0) {
+      DrawPixel(x, y, color, operations);
+      return;
+    }
+
+    /* Get circle and clipping boundary and test if bounding box of
+       circle is visible */
+    const int x2 = x + rad;
+    if (x2 < 0)
+      return;
+
+    const int x1 = x - rad;
+    if (x1 >= int(width))
+      return;
+
+    const int y2 = y + rad;
+    if (y2 < 0)
+      return;
+
+    const int y1 = y - rad;
+    if (y1 >= int(height))
+      return;
+
+    // draw
+    int cx = 0, cy = rad;
+    int df = 1 - rad;
+    int d_e = 3;
+    int d_se = -2 * rad + 5;
+
+    do {
+      const int ypcy = y + cy, ymcy = y - cy;
+
+      if (cx > 0) {
+        const int xpcx = x + cx, xmcx = x - cx;
+
+        DrawPixel(xmcx, ypcy, color, operations);
+        DrawPixel(xpcx, ypcy, color, operations);
+        DrawPixel(xmcx, ymcy, color, operations);
+        DrawPixel(xpcx, ymcy, color, operations);
+      } else {
+        DrawPixel(x, ymcy, color, operations);
+        DrawPixel(x, ypcy, color, operations);
+      }
+
+      const int xpcy = x + cy;
+      const int xmcy = x - cy;
+      if (cx > 0 && cx != cy) {
+        const int ypcx = y + cx, ymcx = y - cx;
+
+        DrawPixel(xmcy, ypcx, color, operations);
+        DrawPixel(xpcy, ypcx, color, operations);
+        DrawPixel(xmcy, ymcx, color, operations);
+        DrawPixel(xpcy, ymcx, color, operations);
+      } else if (cx == 0) {
+        DrawPixel(xmcy, y, color, operations);
+        DrawPixel(xpcy, y, color, operations);
+      }
+
+      // Update
+      if (df < 0) {
+        df += d_e;
+        d_e += 2;
+        d_se += 2;
+      } else {
+        df += d_se;
+        d_e += 2;
+        d_se += 4;
+        cy--;
+      }
+      cx++;
+    } while (cx <= cy);
+  }
+
+  void DrawCircle(int x, int y, unsigned rad, color_type color) {
+    DrawCircle(x, y, rad, color,
+               GetPixelTraits());
+  }
+
+  template<typename PixelOperations>
   void FillCircle(int x, int y, unsigned rad, color_type color,
                   PixelOperations operations) {
     // Special case for rad=0 - draw a point
