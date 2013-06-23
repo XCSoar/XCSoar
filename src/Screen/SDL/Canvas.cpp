@@ -39,7 +39,10 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
+#ifndef GREYSCALE
 #include <SDL_rotozoom.h>
+#endif
+
 #include <SDL_imageFilter.h>
 #include <SDL_gfxBlitFunc.h>
 
@@ -652,6 +655,19 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
     return;
 
   SDL_Surface *src_surface = src.GetNative();
+
+#ifdef GREYSCALE
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels, surface->pitch, surface->w, surface->h);
+
+  canvas.ScaleRectangle(dest_x + offset.x, dest_y + offset.y,
+                        dest_width, dest_height,
+                        (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
+                        src_surface->pitch, src_width, src_height,
+                        OpaqueTextPixelOperations<GreyscalePixelTraits>(fg_color.GetLuminosity(),
+                                                                        bg_color.GetLuminosity()));
+
+#else
+
   assert(src_surface->format->palette != NULL &&
          src_surface->format->palette->ncolors == 256);
 
@@ -673,6 +689,7 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
+#endif
 }
 
 static bool

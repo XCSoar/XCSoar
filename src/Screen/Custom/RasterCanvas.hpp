@@ -106,13 +106,17 @@ public:
   constexpr OpaqueTextPixelOperations(color_type _b, color_type _t)
     :background_color(_b), text_color(_t) {}
 
+  inline void SetPixel(pointer_type p, color_type c) const {
+    if (c == 0)
+      *p = background_color;
+    else
+      *p = text_color;
+  }
+
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src) {
-      if (*src == 0)
-        *p = background_color;
-      else
-        *p = text_color;
+      SetPixel(p, *src);
     }
 
     memcpy(p, src, n);
