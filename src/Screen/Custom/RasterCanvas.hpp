@@ -340,9 +340,14 @@ protected:
   }
 
 public:
-  void DrawPixel(int x, int y, color_type c) {
+  template<typename PixelOperations>
+  void DrawPixel(int x, int y, color_type c, PixelOperations operations) {
     if (Check(x, y))
       PixelTraits::SetPixel(At(x, y), c);
+  }
+
+  void DrawPixel(int x, int y, color_type c) {
+    DrawPixel(x, y, c, GetPixelTraits());
   }
 
   void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
@@ -555,7 +560,7 @@ public:
                   PixelOperations operations) {
     // Special case for rad=0 - draw a point
     if (rad == 0) {
-      DrawPixel(x, y, color);
+      DrawPixel(x, y, color, operations);
       return;
     }
 
