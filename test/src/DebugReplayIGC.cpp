@@ -69,7 +69,6 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
       fix.time.hour == 0) {
     /* midnight roll-over */
     ++day;
-    raw_basic.date_time_utc.IncrementDay();
   }
 
   basic.clock = basic.time =
