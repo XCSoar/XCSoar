@@ -178,6 +178,10 @@ public:
      pitch(_pitch), width(_width), height(_height) {}
 
 protected:
+  PixelTraits &GetPixelTraits() {
+    return *this;
+  }
+
   gcc_pure
   bool Check(unsigned x, unsigned y) const {
     return x < width && y < height;
@@ -333,7 +337,8 @@ public:
   }
 
   void DrawHLine(int x1, int x2, int y, color_type c) {
-    DrawHLine(x1, x2, y, c, *this);
+    DrawHLine(x1, x2, y, c,
+              GetPixelTraits());
   }
 
   void DrawLine(int x1, int y1, int x2, int y2, color_type c) {
@@ -457,7 +462,8 @@ public:
   }
 
   void FillPolygon(const Point *points, unsigned n, color_type color) {
-    FillPolygon(points, n, color, *this);
+    FillPolygon(points, n, color,
+                GetPixelTraits());
   }
 
   template<typename PixelOperations>
@@ -540,7 +546,8 @@ public:
   }
 
   void FillCircle(int x, int y, unsigned rad, color_type color) {
-    FillCircle(x, y, rad, color, *this);
+    FillCircle(x, y, rad, color,
+               GetPixelTraits());
   }
 
   template<typename PixelOperations>
@@ -560,7 +567,8 @@ public:
 
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
                      const_pointer_type src, unsigned src_pitch) {
-    CopyRectangle(x, y, w, h, src, src_pitch, *this);
+    CopyRectangle(x, y, w, h, src, src_pitch,
+                  GetPixelTraits());
   }
 };
 
