@@ -392,6 +392,39 @@ public:
               GetPixelTraits());
   }
 
+  template<typename PixelOperations>
+  void DrawVLine(int x, int y1, int y2, color_type c,
+                 PixelOperations operations) {
+    if (x < 0 || unsigned(x) >= width)
+      return;
+
+    if (y1 < 0)
+      y1 = 0;
+
+    if (y2 > int(height))
+      y2 = height;
+
+    if (y1 >= y2)
+      return;
+
+    pointer_type p = At(x, y1);
+    for (unsigned h = y2 - y1; h > 0; --h, p += pitch)
+      operations.SetPixel(p, c);
+  }
+
+  template<typename PixelOperations>
+  void DrawRectangle(int x1, int y1, int x2, int y2, color_type c,
+                     PixelOperations operations) {
+    DrawHLine(x1, x2, y1, c, operations);
+    DrawHLine(x1, x2, y2 - 1, c, operations);
+    DrawVLine(x1, y1 + 1, y2 - 1, c, operations);
+    DrawVLine(x2, y1 + 1, y2 - 1, c, operations);
+  }
+
+  void DrawRectangle(int x1, int y1, int x2, int y2, color_type c) {
+    DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
+  }
+
   void DrawLine(int x1, int y1, int x2, int y2, color_type c) {
     /* optimised Bresenham algorithm */
 

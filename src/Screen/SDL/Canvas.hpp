@@ -192,12 +192,18 @@ public:
     background_mode = TRANSPARENT;
   }
 
+#ifdef GREYSCALE
+  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
+                            PixelScalar right, PixelScalar bottom,
+                            Color color);
+#else
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                             PixelScalar right, PixelScalar bottom,
                             Color color) {
     ::rectangleColor(surface, left + offset.x, top + offset.y,
                      right + offset.x, bottom + offset.y, color.GFXColor());
   }
+#endif
 
   void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {

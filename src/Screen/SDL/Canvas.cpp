@@ -55,6 +55,23 @@ Canvas::Destroy()
   }
 }
 
+#ifdef GREYSCALE
+
+void
+Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
+                             PixelScalar right, PixelScalar bottom,
+                             Color color)
+{
+  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
+                                            surface->pitch,
+                                            surface->w, surface->h);
+  canvas.DrawRectangle(left + offset.x, top + offset.y,
+                       right + offset.x, bottom + offset.y,
+                       color.GetLuminosity());
+}
+
+#endif
+
 void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
