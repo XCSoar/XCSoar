@@ -75,7 +75,7 @@ Profile::Load(AirspaceRendererSettings &settings)
   GetEnum(ProfileKeys::AltMode, settings.altitude_mode);
   Get(ProfileKeys::ClipAlt, settings.clip_altitude);
 
-#ifndef ENABLE_OPENGL
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   Get(ProfileKeys::AirspaceTransparency, settings.transparency);
 #endif
 

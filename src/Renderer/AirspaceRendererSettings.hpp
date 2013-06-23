@@ -95,7 +95,7 @@ struct AirspaceRendererSettings {
   /** Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;
 
-#ifndef ENABLE_OPENGL
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   /**
    * Should the airspace be rendered with a transparent brush instead
    * of a pattern brush?
