@@ -28,14 +28,14 @@ bool
 IOThread::Start()
 {
   assert(!IsDefined());
-  assert(files.empty());
+  assert(loop.IsEmpty());
 
-  modified = quit = running = false;
+  quit = false;
 
   if (!pipe.Create())
     return false;
 
-  poll.SetMask(pipe.GetReadFD(), Poll::READ);
+  loop.Add(pipe.GetReadFD(), READ, *this);
 
   return Thread::Start();
 }
@@ -44,9 +44,9 @@ void
 IOThread::Stop()
 {
   /* set the "quit" flag and wake up the thread */
-  mutex.Lock();
+  loop.Lock();
   quit = true;
-  mutex.Unlock();
+  loop.Unlock();
   pipe.Signal();
 
   /* wait for the thread to finish */
@@ -54,64 +54,13 @@ IOThread::Stop()
 }
 
 void
-IOThread::Add(int fd, unsigned mask, FileEventHandler &handler)
-{
-  assert(fd >= 0);
-  assert(mask != 0);
-
-  auto i = files.insert(std::make_pair(fd, File(fd, mask, handler)));
-  File &file = i.first->second;
-
-  if (!i.second) {
-    /* already exists; update it */
-
-    assert(file.mask == 0 || file.handler == &handler);
-
-    if (file.mask == mask)
-      /* mask has not been modified, no-op */
-      return;
-
-    file.mask = mask;
-    file.ready_mask &= mask;
-    file.handler = &handler;
-  }
-
-  file.modified = true;
-
-  /* schedule an Update() call */
-  modified = true;
-}
-
-void
-IOThread::Remove(int fd)
-{
-  assert(fd >= 0);
-
-  auto i = files.find(fd);
-  if (i == files.end())
-    return;
-
-  assert(i->first == fd);
-
-  File &file = i->second;
-  assert(file.fd == fd);
-
-  if (file.mask != 0) {
-    /* schedule for removal */
-    file.mask = file.ready_mask = 0;
-    file.modified = true;
-    modified = true;
-  }
-}
-
-void
 IOThread::LockAdd(int fd, unsigned mask, FileEventHandler &handler)
 {
-  mutex.Lock();
-  const bool old_modified = modified;
+  loop.Lock();
+  const bool old_modified = loop.IsModified();
   Add(fd, mask, handler);
-  const bool new_modified = modified;
-  mutex.Unlock();
+  const bool new_modified = loop.IsModified();
+  loop.Unlock();
 
   if (!old_modified && new_modified)
     pipe.Signal();
@@ -120,137 +69,47 @@ IOThread::LockAdd(int fd, unsigned mask, FileEventHandler &handler)
 void
 IOThread::LockRemove(int fd)
 {
-  mutex.Lock();
-  const bool old_modified = modified;
+  loop.Lock();
+  const bool old_modified = loop.IsModified();
   Remove(fd);
-  const bool new_modified = modified;
+  const bool new_modified = loop.IsModified();
 
-  if (new_modified && running && !IsInside()) {
+  if (new_modified && !IsInside()) {
     /* this method is synchronous: after returning, all handlers must
        be finished */
 
-    do {
-      cond.Wait(mutex);
-    } while (running);
+    loop.WaitUntilNotRunning();
   }
 
-  mutex.Unlock();
+  loop.Unlock();
 
   if (!old_modified && new_modified)
     pipe.Signal();
 }
 
 void
-IOThread::Update()
-{
-  for (auto i = files.begin(), end = files.end(); i != end;) {
-    File &file = i->second;
-    assert(file.fd == i->first);
-
-    if (!file.modified) {
-      ++i;
-      continue;
-    }
-
-    file.modified = false;
-
-    poll.SetMask(file.fd, file.mask);
-    if (file.mask == 0)
-      i = files.erase(i);
-    else
-      ++i;
-  }
-}
-
-IOThread::File *
-IOThread::CollectReady()
-{
-  File *ready = NULL;
-  for (auto i = poll.begin(), end = poll.end(); i != end; ++i) {
-    const int fd = *i;
-    const unsigned mask = i.GetMask();
-    assert(mask != 0);
-
-    if (fd == pipe.GetReadFD()) {
-      pipe.Read();
-      continue;
-    }
-
-    auto j = files.find(fd);
-    assert(j != files.end());
-
-    File &file = j->second;
-    assert(file.fd == fd);
-
-    file.ready_mask = mask;
-    file.next_ready = ready;
-    ready = &file;
-  }
-
-  return ready;
-}
-
-void
-IOThread::HandleReady(File *ready)
-{
-  if (ready == NULL)
-    return;
-
-  /* set the "running" flag so other threads calling LockRemove() know
-     they have to wait for this method to finish */
-  assert(!running);
-  running = true;
-
-  do {
-    /* must check ready_mask, just in case some other handler has
-       removed the current file descriptor */
-    const unsigned mask = ready->ready_mask;
-    if (ready->mask == 0 || mask == 0) {
-      ready = ready->next_ready;
-      continue;
-    }
-
-    mutex.Unlock();
-    bool result = ready->handler->OnFileEvent(ready->fd, mask);
-    mutex.Lock();
-
-    if (!result && ready->mask != 0) {
-      ready->mask = 0;
-      ready->modified = true;
-      modified = true;
-    }
-
-    ready = ready->next_ready;
-  } while (ready != NULL);
-
-  /* clear the "running" flag and wake up threads waiting inside
-     LockRemove() */
-  running = false;
-  cond.Broadcast();
-}
-
-void
 IOThread::Run()
 {
-  assert(!running);
-
-  mutex.Lock();
+  loop.Lock();
 
   while (!quit) {
-    if (modified) {
-      modified = false;
-      Update();
-    }
-
-    mutex.Unlock();
-    poll.Wait();
-    mutex.Lock();
+    loop.Wait();
 
     if (quit)
       break;
 
-    HandleReady(CollectReady());
+    loop.Dispatch();
   }
 
-  mutex.Unlock();
+  loop.Unlock();
 }
+
+bool
+IOThread::OnFileEvent(int fd, unsigned mask)
+{
+  assert(fd == pipe.GetReadFD());
+
+  pipe.Read();
+  return true;
+}
+

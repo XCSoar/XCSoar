@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_IO_THREAD_HPP
 #define XCSOAR_IO_THREAD_HPP
 
-#include "OS/Poll.hpp"
 #include "OS/EventPipe.hpp"
 #include "Thread/Thread.hpp"
-#include "Thread/Mutex.hpp"
-#include "Thread/Cond.hpp"
-#include "FileEventHandler.hpp"
+#include "IOLoop.hpp"
 
 #include <map>
 
@@ -38,52 +35,16 @@ class FileEventHandler;
 /**
  * A thread that is used for asynchronous (non-blocking) I/O.
  */
-class IOThread final : protected Thread {
-  struct File {
-    File *next_ready;
-
-    const int fd;
-
-    unsigned mask, ready_mask;
-
-    FileEventHandler *handler;
-
-    /**
-     * Has this object been modified?  i.e. does it need to be
-     * synchronised with the #Poll instance?
-     */
-    bool modified;
-
-    File(int fd):fd(fd) {}
-
-    File(int fd, unsigned mask, FileEventHandler &handler)
-      :fd(fd), mask(mask), ready_mask(0),
-       handler(&handler), modified(false) {}
-
-    bool operator<(const File &other) const {
-      return fd < other.fd;
-    }
-  };
-
-  Poll poll;
+class IOThread final : protected Thread, private FileEventHandler {
+  IOLoop loop;
 
   EventPipe pipe;
 
-  Mutex mutex;
-
-  /**
-   * Used to synchronise removal.  The calling thread waits for this
-   * condition, which is triggered when #running becomes false.
-   */
-  Cond cond;
-
-  std::map<int, File> files;
-
-  bool modified, quit, running;
+  bool quit;
 
 public:
-  static constexpr unsigned READ = Poll::READ;
-  static constexpr unsigned WRITE = Poll::WRITE;
+  static constexpr unsigned READ = IOLoop::READ;
+  static constexpr unsigned WRITE = IOLoop::WRITE;
 
   /**
    * Start the thread.  This method should be called after creating
@@ -103,7 +64,9 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Add(int fd, unsigned mask, FileEventHandler &handler);
+  void Add(int fd, unsigned mask, FileEventHandler &handler) {
+    loop.Add(fd, mask, handler);
+  }
 
   /**
    * Remove a file descriptor from the I/O loop.
@@ -111,13 +74,12 @@ public:
    * This method is not thread-safe, it may only be called from within
    * the thread.
    */
-  void Remove(int fd);
+  void Remove(int fd) {
+    loop.Remove(fd);
+  }
 
   void Set(int fd, unsigned mask, FileEventHandler &handler) {
-    if (mask != 0)
-      Add(fd, mask, handler);
-    else
-      Remove(fd);
+    loop.Set(fd, mask, handler);
   }
 
   /**
@@ -144,23 +106,11 @@ public:
   }
 
 protected:
-  /**
-   * Synchronise the file list with the #Poll instance.
-   */
-  void Update();
-
-  /**
-   * Collect a linked list of all file descriptors that are "ready".
-   */
-  File *CollectReady();
-
-  /**
-   * Invoke callbacks for the given linked list.
-   */
-  void HandleReady(File *ready);
-
   /* virtual methods from Thread */
   virtual void Run() override;
+
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif
