@@ -36,7 +36,7 @@ endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
 
-ifeq ($(OPENGL),n)
+ifeq ($(OPENGL)$(GREYSCALE),nn)
 SDL_CPPFLAGS += -DUSE_SDL_GFX
 endif
 

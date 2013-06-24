@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_FEATURES_HPP
 #define XCSOAR_SCREEN_SDL_FEATURES_HPP
 
-#ifdef USE_SDL_GFX
+#if defined(USE_SDL_GFX) || defined(GREYSCALE)
 #define HAVE_ALPHA_BLEND
 
 static constexpr inline bool
