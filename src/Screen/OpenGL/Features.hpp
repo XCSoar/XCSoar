@@ -43,10 +43,6 @@ Copyright_License {
 
 #endif
 
-#ifdef USE_VIDEOCORE
-#define HAVE_EGL
-#endif
-
 /**
  * Running on OpenGL/ES?
  */
