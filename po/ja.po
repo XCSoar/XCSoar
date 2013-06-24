@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-14 21:40+0200\n"
-"PO-Revision-Date: 2013-06-09 20:50+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2013-06-24 00:00+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-10 10:20+0000\n"
-"X-Generator: Launchpad (build 16667)\n"
+"X-Launchpad-Export-Date: 2013-06-24 11:24+0000\n"
+"X-Generator: Launchpad (build 16677)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3636,7 +3636,7 @@ msgstr "GPS　ドライバー"
 #: src/Device/Config.cpp:255 src/Dialogs/Device/DeviceEditWidget.cpp:68
 #, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr "内臓GPSセンサー"
+msgstr "内蔵GPSセンサー"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. create buttons
@@ -9276,6 +9276,12 @@ msgstr ""
 #~ msgid "InfoBox values, small"
 #~ msgstr "インフォボックス　小さい"
 
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "機体情報%s の読み込み失敗！"
+
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "機体情報\"%s\"読み込みますか？"
+
 #~ msgid "Keyboard"
 #~ msgstr "キーボード"
 
@@ -9306,12 +9312,6 @@ msgstr ""
 
 #~ msgid "Choose the display size of dialogs."
 #~ msgstr "ダイアログの表示サイズ選択"
-
-#~ msgid "Loading of plane profile \"%s\" failed!"
-#~ msgstr "機体情報%s の読み込み失敗！"
-
-#~ msgid "Do you want to load plane profile \"%s\"?"
-#~ msgstr "機体情報\"%s\"読み込みますか？"
 
 #~ msgid "English"
 #~ msgstr "英語"
@@ -9406,6 +9406,9 @@ msgstr ""
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "インフォボックス　モード"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "インフォボックスのページ"
 
 #~ msgid "L/D average period"
 #~ msgstr "平均滑空比演算時間"
