@@ -41,9 +41,9 @@ Copyright_License {
 
 #ifndef GREYSCALE
 #include <SDL_rotozoom.h>
+#include <SDL_imageFilter.h>
 #endif
 
-#include <SDL_imageFilter.h>
 #include <SDL_gfxBlitFunc.h>
 
 #ifdef GREYSCALE
@@ -685,6 +685,8 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 #endif
 }
 
+#ifndef GREYSCALE
+
 static bool
 ClipRange(PixelScalar &a, UPixelScalar a_size,
           PixelScalar &b, UPixelScalar b_size,
@@ -962,6 +964,8 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
   ::SDL_UnlockSurface(dest);
 }
 
+#endif
+
 void
 Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
@@ -969,11 +973,21 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
+#ifdef GREYSCALE
+  SDLRasterCanvas canvas(surface, offset, size);
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       src->pitch,
+                       BitNotPixelOperations<SDLPixelTraits>());
+
+#else
   dest_x += offset.x;
   dest_y += offset.y;
 
   ::blit_not(surface, dest_x, dest_y, dest_width, dest_height,
              src, src_x, src_y);
+#endif
 }
 
 void
@@ -983,11 +997,21 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
+#ifdef GREYSCALE
+  SDLRasterCanvas canvas(surface, offset, size);
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       src->pitch,
+                       BitOrPixelOperations<SDLPixelTraits>());
+
+#else
   dest_x += offset.x;
   dest_y += offset.y;
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src, src_x, src_y);
+#endif
 }
 
 void
@@ -997,11 +1021,21 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
+#ifdef GREYSCALE
+  SDLRasterCanvas canvas(surface, offset, size);
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       src->pitch,
+                       BitNotOrPixelOperations<SDLPixelTraits>());
+
+#else
   dest_x += offset.x;
   dest_y += offset.y;
 
   ::BlitNotOr(surface, dest_x, dest_y, dest_width, dest_height,
               src, src_x, src_y);
+#endif
 }
 
 void
@@ -1022,11 +1056,22 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
+#ifdef GREYSCALE
+  SDLRasterCanvas canvas(surface, offset, size);
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       src->pitch,
+                       BitAndPixelOperations<SDLPixelTraits>());
+
+#else
+
   dest_x += offset.x;
   dest_y += offset.y;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src, src_x, src_y);
+#endif
 }
 
 void

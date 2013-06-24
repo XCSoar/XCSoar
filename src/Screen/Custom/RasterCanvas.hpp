@@ -60,6 +60,110 @@ struct GreyscalePixelTraits {
 };
 
 template<typename PixelTraits>
+class BitNotPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+public:
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p = ~c;
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      SetPixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      SetPixel(p, *src);
+  }
+};
+
+template<typename PixelTraits>
+class BitOrPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+public:
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p |= c;
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      SetPixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      SetPixel(p, *src);
+  }
+};
+
+template<typename PixelTraits>
+class BitNotOrPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+public:
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p |= ~c;
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      SetPixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      SetPixel(p, *src);
+  }
+};
+
+template<typename PixelTraits>
+class BitAndPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+public:
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p &= c;
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      SetPixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      SetPixel(p, *src);
+  }
+};
+
+template<typename PixelTraits>
 class AlphaPixelOperations {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
