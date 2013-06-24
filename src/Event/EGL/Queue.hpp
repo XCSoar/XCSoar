@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
+#include "../Linux/Mouse.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/Poll.hpp"
@@ -39,9 +40,7 @@ class Window;
 class Timer;
 
 class EventQueue : private NonCopyable {
-  unsigned screen_width, screen_height;
-  unsigned mouse_x, mouse_y;
-  bool mouse_pressed;
+  LinuxMouse mouse;
 
   Mutex mutex;
 
@@ -51,7 +50,6 @@ class EventQueue : private NonCopyable {
 
   ::Poll poll;
   EventPipe event_pipe;
-  FileDescriptor mouse;
 
   enum class InputState : uint8_t {
     NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
@@ -65,10 +63,12 @@ public:
   EventQueue();
   ~EventQueue();
 
-  void SetScreenSize(unsigned width, unsigned height);
+  void SetScreenSize(unsigned width, unsigned height) {
+    mouse.SetScreenSize(width, height);
+  }
 
   RasterPoint GetMousePosition() const {
-    return { int(mouse_x), int(mouse_y) };
+    return { int(mouse.GetX()), int(mouse.GetY()) };
   }
 
   void Quit() {
