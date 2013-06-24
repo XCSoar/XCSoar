@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_ANDROID_EVENT_HPP
-#define XCSOAR_EVENT_ANDROID_EVENT_HPP
+#ifndef XCSOAR_EVENT_SHARED_EVENT_HPP
+#define XCSOAR_EVENT_SHARED_EVENT_HPP
 
 #include "Screen/Point.hpp"
 
@@ -32,6 +32,11 @@ struct Event {
   enum Type {
     NOP,
     QUIT,
+
+#ifdef USE_EGL
+    CLOSE,
+#endif
+
     TIMER,
     USER,
 
@@ -43,6 +48,7 @@ struct Event {
     MOUSE_DOWN,
     MOUSE_UP,
 
+#ifdef ANDROID
     POINTER_DOWN,
     POINTER_UP,
 
@@ -63,6 +69,7 @@ struct Event {
      * can be created again.
      */
     RESUME,
+#endif
   };
 
   typedef void (*Callback)(void *ctx);
