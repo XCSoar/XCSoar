@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-14 21:40+0200\n"
-"PO-Revision-Date: 2013-06-16 21:50+0000\n"
-"Last-Translator: Piero <pieromissa@virgilio.it>\n"
+"PO-Revision-Date: 2013-06-18 22:33+0000\n"
+"Last-Translator: Damiano Bortolato <damiano@damib.net>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-18 06:01+0000\n"
-"X-Generator: Launchpad (build 16667)\n"
+"X-Launchpad-Export-Date: 2013-06-24 11:24+0000\n"
+"X-Generator: Launchpad (build 16677)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -205,11 +205,12 @@ msgstr ""
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Un cilindro di un miglio. Vale il punto più lotano raggiunto nell'area."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Un cilindro. Vale il punto più lotano raggiunto nell'area."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -217,6 +218,8 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Un settore variabile in angolo e raggio. Vale il punto più lotano raggiunto "
+"nell'area."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
@@ -248,11 +251,13 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Un settore varibile in angolo e raggio interno ed esterno. Vale il punto più "
+"lotano raggiunto nell'area."
 
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Un quadrante simmetrico di raggio a piacere."
 
 #: src/Task/TypeStrings.cpp:102
 #, no-c-format
@@ -302,22 +307,22 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cilindro di un miglio di raggio."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
 msgid "Area cylinder"
-msgstr ""
+msgstr "Area cilindro"
 
 #: src/Task/TypeStrings.cpp:125
 #, no-c-format
 msgid "Area sector"
-msgstr ""
+msgstr "Area settore"
 
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "Quadrante FAI di arrivo"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
@@ -337,12 +342,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:130
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Settore con raggio interno"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Quadrante simmetrico"
 
 #: src/Task/TypeStrings.cpp:132
 #, no-c-format
@@ -957,6 +962,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Questa è la quota sul livello medio del mare riportata dal GPS. Solo per "
+"Touch-screen/PC : In modalità simulazione questo valore è modificabile con "
+"le frecce su/giù mentre le frecce destra/sinistra fanno virare l'aliante."
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
@@ -976,6 +984,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Questa e la quota di navigazione meno l'elevazione ottenuta dal file del "
+"terreno. Il valore è colorato di rosso quando l'aliante si trova al di sotto "
+"dell'altezza di sicurezza."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -999,7 +1010,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "Next Bearing"
-msgstr ""
+msgstr "Prossima direzione"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1312,7 +1323,7 @@ msgstr "Elevazione del terreno"
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "Terr Elev"
-msgstr ""
+msgstr "Elev Terr"
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
@@ -1401,6 +1412,10 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Velocità del vento stimata da XCSoar. Modifiche manuali sono possibili "
+"attraverso la casella di dialogo dell'InfoBox. Premere i tasti cursore su/"
+"giù per scorrere le impostazioni, modificare i valori usando i tasti cursore "
+"sinistra/destra."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1419,6 +1434,10 @@ msgid ""
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
+"Direzione del vento stimata da XCSoar. Modifiche manuali sono possibili "
+"attraverso la casella di dialogo dell'InfoBox. Premere i tasti cursore su/"
+"giù per scorrere le impostazioni, modificare i valori usando i tasti cursore "
+"sinistra/destra."
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1428,7 +1447,7 @@ msgstr "Tempo AAT"
 #: src/InfoBoxes/Content/Factory.cpp:442
 #, no-c-format
 msgid "AAT Time"
-msgstr ""
+msgstr "Tempo AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:443
 #, no-c-format
@@ -2233,6 +2252,8 @@ msgid ""
 "Height based on an automatic take-off reference elevation (like a QFE "
 "reference)."
 msgstr ""
+"Altezza rispetto all'evazione  automaticamente rilevata al decollo "
+"(equivalente al QFE)."
 
 #: src/InfoBoxes/Content/Factory.cpp:890
 #, no-c-format
@@ -2540,7 +2561,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1073
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr ""
+msgstr "Spazio aereo orizzontalmente più vicino."
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
@@ -3097,11 +3118,11 @@ msgstr "Logger SPENTO"
 
 #: src/Input/InputEventsMap.cpp:71
 msgid "Auto. zoom on"
-msgstr ""
+msgstr "Zoom auto. on"
 
 #: src/Input/InputEventsMap.cpp:73 src/Input/InputEventsMap.cpp:215
 msgid "Auto. zoom off"
-msgstr ""
+msgstr "Zoom auto. off"
 
 #: src/Input/InputEventsMap.cpp:98
 msgid "Circling zoom on"
@@ -3145,11 +3166,11 @@ msgstr ""
 
 #: src/Input/InputEventsTask.cpp:164
 msgid "Auto. MacCready on"
-msgstr ""
+msgstr "MacCready auto. on"
 
 #: src/Input/InputEventsTask.cpp:166
 msgid "Auto. MacCready off"
-msgstr ""
+msgstr "MacCready auto. off"
 
 #: src/Input/InputEventsTask.cpp:171
 msgid "MacCready "
@@ -3372,7 +3393,7 @@ msgstr "Traffico FLARM"
 #: src/Dialogs/Traffic/TrafficList.cpp:670
 #, c-format
 msgid "%u minutes ago"
-msgstr ""
+msgstr "%u minuti fa"
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -3448,7 +3469,7 @@ msgstr "Andamento plafond"
 #: src/Renderer/ClimbChartRenderer.cpp:41
 #: src/Renderer/ClimbChartRenderer.cpp:46
 msgid "Avg. climb"
-msgstr ""
+msgstr "Salita med."
 
 #: src/Renderer/ClimbChartRenderer.cpp:49
 msgid "Climb trend"
@@ -3460,7 +3481,7 @@ msgstr ""
 
 #: src/Renderer/GlidePolarRenderer.cpp:51
 msgid "Min. sink"
-msgstr ""
+msgstr "Min. disc."
 
 #: src/Renderer/GlidePolarRenderer.cpp:125 src/Dialogs/dlgAnalysis.cpp:327
 msgid "Mass"
@@ -3491,12 +3512,12 @@ msgstr "Europeo"
 #: src/Units/UnitsStore.cpp:47
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britannico"
 
 #: src/Units/UnitsStore.cpp:57
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Americano"
 
 #: src/Units/UnitsStore.cpp:67
 #, no-c-format
@@ -3904,11 +3925,11 @@ msgstr "Abilita"
 #: src/Dialogs/Device/DeviceListDialog.cpp:326
 #, c-format
 msgid "%s on %s"
-msgstr ""
+msgstr "%s su %s"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:340
 msgid "GPS fix"
-msgstr ""
+msgstr "Fix GPS"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/Device/DeviceListDialog.cpp:343
@@ -3962,6 +3983,8 @@ msgstr "Modifica dispositivo"
 #, c-format
 msgid "Communication with this device will be logged for the next %u minutes."
 msgstr ""
+"La comunicazione con questo dispositivo verrà registrata per i prossimi %u "
+"minuti."
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:675 Data/Input/default.xci:610
 #: Data/Input/default.xci:1171
@@ -3975,7 +3998,7 @@ msgstr "Pausa"
 
 #: src/Dialogs/Device/PortMonitor.cpp:187
 msgid "Port monitor"
-msgstr ""
+msgstr "Monitor porta"
 
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 #: src/Dialogs/Device/ManageCAI302Dialog.cpp:92
@@ -4155,11 +4178,11 @@ msgstr "Flaps"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
-msgstr ""
+msgstr "Carrello estratto"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:75
 msgid "Acknowledge"
-msgstr ""
+msgstr "Accetta"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:76
 msgid "Repeat"
@@ -4658,7 +4681,7 @@ msgstr "FLARM, altro"
 #: src/Dialogs/Settings/dlgConfiguration.cpp:109
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "Vario Acustico"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
 #, no-c-format
@@ -4678,12 +4701,12 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfiguration.cpp:114
 #, no-c-format
 msgid "Screen Layout"
-msgstr ""
+msgstr "Disposizione schermo"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:115
 #, no-c-format
 msgid "Pages"
-msgstr ""
+msgstr "Pagine"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:116
 #, no-c-format
@@ -4717,7 +4740,7 @@ msgstr ""
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:205
 #, no-c-format
 msgid "Dialog text"
-msgstr ""
+msgstr "Testo dialogo"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:207
 #, no-c-format
@@ -4732,12 +4755,12 @@ msgstr "Valori InfoBox"
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:213
 #, no-c-format
 msgid "Topography labels, normal"
-msgstr ""
+msgstr "Testo mappa, normale"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:216
 #, no-c-format
 msgid "Topography labels, important"
-msgstr ""
+msgstr "Testo mappa, piccolo"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:218
 #, no-c-format
@@ -4955,7 +4978,7 @@ msgstr "Profilo aliante \"%s\" attivato."
 #: src/Dialogs/Plane/PlaneListDialog.cpp:274
 #: src/Dialogs/Plane/PlaneListDialog.cpp:314
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Inserire le marche dell'aeromobile!"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:287
 #: src/Dialogs/Plane/PlaneListDialog.cpp:330
@@ -9043,6 +9066,12 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
+
+#~ msgid "InfoBox values, normal"
+#~ msgstr "Valori InfoBox, normali"
+
+#~ msgid "InfoBox values, small"
+#~ msgstr "Valori InfoBox, piccoli"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
 #~ msgstr "Impossibile caricare il profilo aliante \"%s\"!"
