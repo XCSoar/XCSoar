@@ -183,8 +183,10 @@ Font::TextSize(const TCHAR *text) const
 #endif
 
   const FT_Face face = this->face;
+  const bool use_kerning = FT_HAS_KERNING(face);
 
   int x = 0, minx = 0, maxx = 0;
+  unsigned prev_index = 0;
 
   while (true) {
     const auto n = NextChar(text);
@@ -208,6 +210,17 @@ Font::TextSize(const TCHAR *text) const
     const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
     const int glyph_maxx = minx + FT_CEIL(metrics.width);
     const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+
+    if (use_kerning) {
+      if (prev_index != 0 && i != 0) {
+        FT_Vector delta;
+        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
+                       &delta);
+        x += delta.x >> 6;
+      }
+
+      prev_index = i;
+    }
 
     int z = x + glyph_minx;
     if (z < minx)
@@ -285,8 +298,10 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
   std::fill_n(buffer, BufferSize(size), 0);
 
   const FT_Face face = this->face;
+  const bool use_kerning = FT_HAS_KERNING(face);
 
   int x = 0, minx = 0;
+  unsigned prev_index = 0;
 
   while (true) {
     const auto n = NextChar(text);
@@ -309,6 +324,17 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 
     const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
     const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+
+    if (use_kerning) {
+      if (prev_index != 0) {
+        FT_Vector delta;
+        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
+                       &delta);
+        x += delta.x >> 6;
+      }
+
+      prev_index = i;
+    }
 
     int z = x + glyph_minx;
     if (z < minx)
