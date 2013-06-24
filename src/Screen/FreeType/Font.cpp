@@ -26,6 +26,10 @@ Copyright_License {
 #include "Screen/Custom/Files.hpp"
 #include "Init.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "Thread/Mutex.hpp"
+#endif
+
 #ifndef _UNICODE
 #include "Util/UTF8.hpp"
 #endif
@@ -36,6 +40,14 @@ Copyright_License {
 #include <algorithm>
 
 #include <assert.h>
+
+#ifndef ENABLE_OPENGL
+/**
+ * libfreetype is not thread-safe; this global Mutex is used to
+ * protect libfreetype from multi-threaded access.
+ */
+static Mutex freetype_mutex;
+#endif
 
 static const char *font_path;
 static const char *bold_font_path;
@@ -174,9 +186,6 @@ Font::Destroy()
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  // TODO: kerning
-  // TODO: overhang
-
   assert(text != nullptr);
 #ifndef _UNICODE
   assert(ValidateUTF8(text));
@@ -187,6 +196,10 @@ Font::TextSize(const TCHAR *text) const
 
   int x = 0, minx = 0, maxx = 0;
   unsigned prev_index = 0;
+
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(freetype_mutex);
+#endif
 
   while (true) {
     const auto n = NextChar(text);
@@ -302,6 +315,10 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 
   int x = 0, minx = 0;
   unsigned prev_index = 0;
+
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(freetype_mutex);
+#endif
 
   while (true) {
     const auto n = NextChar(text);
