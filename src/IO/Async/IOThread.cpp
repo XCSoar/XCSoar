@@ -156,10 +156,7 @@ IOThread::Update()
 
     poll.SetMask(file.fd, file.mask);
     if (file.mask == 0)
-      /* the iterator must be incremented before calling map::erase()
-         (with its old value), because map::erase() invalidates the
-         iterator */
-      files.erase(i++);
+      i = files.erase(i);
     else
       ++i;
   }
