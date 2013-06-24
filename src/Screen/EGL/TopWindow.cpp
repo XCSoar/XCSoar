@@ -41,13 +41,7 @@ TopWindow::SetCaption(const TCHAR *caption)
 void
 TopWindow::Invalidate()
 {
-  if (invalidated.exchange(true, std::memory_order_relaxed))
-    /* already invalidated, don't send the event twice */
-    return;
-
-  /* wake up the event loop */
-
-  event_queue->WakeUp();
+  invalidated = true;
 }
 
 void

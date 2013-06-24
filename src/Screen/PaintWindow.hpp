@@ -92,6 +92,8 @@ public:
    * occur in the main thread).
    */
   void Invalidate() {
+    AssertThread();
+
 #ifndef USE_GDI
     Window::Invalidate();
 #else

@@ -33,7 +33,7 @@ void
 TopWindow::Create(const TCHAR *text, PixelSize size,
                   TopWindowStyle style)
 {
-  invalidated.store(true, std::memory_order_relaxed);
+  invalidated = true;
 
   delete screen;
   screen = new TopCanvas();
@@ -77,8 +77,10 @@ TopWindow::Refresh()
        OpenGL surface - ignore all drawing requests */
     return;
 
-  if (!invalidated.exchange(false, std::memory_order_relaxed))
+  if (!invalidated)
     return;
+
+  invalidated = false;
 
   Expose();
 }

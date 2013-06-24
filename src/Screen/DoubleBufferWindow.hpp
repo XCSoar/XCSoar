@@ -45,6 +45,8 @@ class DoubleBufferWindow : public BufferWindow {
  * copies the other buffer to the screen.
  */
 class DoubleBufferWindow : public PaintWindow {
+  static constexpr unsigned INVALIDATE = 4242;
+
   BufferCanvas buffers[2];
 
   /**
@@ -91,6 +93,7 @@ protected:
 protected:
   virtual void OnCreate() override;
   virtual void OnDestroy() override;
+  virtual bool OnUser(unsigned id) override;
   virtual void OnPaint(Canvas &canvas) override;
   virtual void OnPaintBuffer(Canvas &canvas) = 0;
 
