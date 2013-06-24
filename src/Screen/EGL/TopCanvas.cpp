@@ -92,6 +92,12 @@ TopCanvas::Create(PixelSize new_size,
 
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   const EGLNativeWindowType native_window = &vc_window;
+#elif defined(HAVE_MALI)
+  const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
+  struct mali_native_window _native_window = {
+    new_size.cx, new_size.cy,
+  };
+  struct mali_native_window *native_window = &_native_window;
 #endif
 
   display = eglGetDisplay(native_display);
