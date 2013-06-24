@@ -132,14 +132,23 @@ TopCanvas::Create(PixelSize new_size,
     exit(EXIT_FAILURE);
   }
 
+  GLint egl_width, egl_height;
+  if (!eglQuerySurface(display, surface, EGL_WIDTH, &egl_width) ||
+      !eglQuerySurface(display, surface, EGL_HEIGHT, &egl_height)) {
+    fprintf(stderr, "eglQuerySurface()\n");
+    exit(EXIT_FAILURE);
+  }
+
+  const PixelSize effective_size = { egl_width, egl_height };
+
   context = eglCreateContext(display, chosen_config,
                              EGL_NO_CONTEXT, nullptr);
 
   eglMakeCurrent(display, surface, surface, context);
 
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(new_size.cx, new_size.cy);
-  Canvas::Create(new_size);
+  OpenGL::SetupViewport(effective_size.cx, effective_size.cy);
+  Canvas::Create(effective_size);
 }
 
 TopCanvas::~TopCanvas()
