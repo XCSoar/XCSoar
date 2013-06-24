@@ -4,6 +4,12 @@ ENABLE_SDL = n
 else ifeq ($(HAVE_WIN32),y)
 # Windows defaults to GDI
 ENABLE_SDL ?= n
+else ifeq ($(USE_FB),y)
+# FrameBuffer and SDL are mutually exclusive
+ENABLE_SDL = n
+else ifeq ($(TARGET_IS_KOBO),y)
+# the Kobo uses the frame buffer
+ENABLE_SDL ?= n
 else
 # everything else defaults to SDL
 ENABLE_SDL ?= y

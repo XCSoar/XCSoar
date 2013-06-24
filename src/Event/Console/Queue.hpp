@@ -26,11 +26,16 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
-#include "../Linux/TTYKeyboard.hpp"
-#include "../Linux/Mouse.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
+
+#ifdef KOBO
+#include "../Linux/Input.hpp"
+#else
+#include "../Linux/TTYKeyboard.hpp"
+#include "../Linux/Mouse.hpp"
+#endif
 
 #include <queue>
 #include <set>
@@ -41,8 +46,12 @@ class Timer;
 class EventQueue final : private FileEventHandler {
   IOLoop io_loop;
 
+#ifdef KOBO
+  LinuxInputDevice mouse;
+#else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
+#endif
 
   Mutex mutex;
 
@@ -59,12 +68,16 @@ public:
   ~EventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {
+#ifndef KOBO
     mouse.SetScreenSize(width, height);
+#endif
   }
 
+#ifndef KOBO
   RasterPoint GetMousePosition() const {
     return { int(mouse.GetX()), int(mouse.GetY()) };
   }
+#endif
 
   void Quit() {
     running = false;

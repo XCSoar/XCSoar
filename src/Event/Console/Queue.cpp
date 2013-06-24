@@ -25,12 +25,22 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :keyboard(*this, io_loop), mouse(io_loop), running(true)
+  :
+#ifndef KOBO
+   keyboard(*this, io_loop),
+#endif
+   mouse(io_loop),
+   running(true)
 {
   event_pipe.Create();
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, *this);
 
+#ifdef KOBO
+  /* Kobo touch screen */
+  mouse.Open("/dev/input/event1");
+#else
   mouse.Open();
+#endif
 }
 
 EventQueue::~EventQueue()

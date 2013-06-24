@@ -21,42 +21,47 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_KEY_H
-#define XCSOAR_SCREEN_SDL_KEY_H
+#include "Screen/Init.hpp"
+#include "Event/Console/Globals.hpp"
+#include "Event/Console/Queue.hpp"
+#include "Screen/Debug.hpp"
+#include "Screen/Font.hpp"
+#include "Asset.hpp"
 
-enum {
-  KEY_SPACE = ' ',
-  KEY_UP = 0403,
-  KEY_DOWN = 0402,
-  KEY_LEFT = 0404,
-  KEY_RIGHT = 0405,
-  KEY_HOME = 0406,
-  KEY_END = 0550,
-  KEY_PRIOR = 0523,
-  KEY_NEXT = 0522,
-  KEY_RETURN = '\n',
-  KEY_F1 = 0411,
-  KEY_F2 = 0412,
-  KEY_F3 = 0413,
-  KEY_F4 = 0414,
-  KEY_F5 = 0415,
-  KEY_F6 = 0416,
-  KEY_F7 = 0417,
-  KEY_F8 = 0420,
-  KEY_F9 = 0421,
-  KEY_F10 = 0422,
-  KEY_F11 = 0423,
-  KEY_F12 = 0424,
-  KEY_ESCAPE = 0x1b,
-  KEY_TAB = '\t',
-  KEY_BACK = 0407,
-  KEY_MENU,
-  KEY_APP1,
-  KEY_APP2,
-  KEY_APP3,
-  KEY_APP4,
-  KEY_APP5,
-  KEY_APP6,
-};
-
+#ifdef KOBO
+#include "OS/FileUtil.hpp"
 #endif
+
+#ifdef USE_FREETYPE
+#include "Screen/FreeType/Init.hpp"
+#endif
+
+ScreenGlobalInit::ScreenGlobalInit()
+{
+#ifdef KOBO
+  /* switch to portrait mode */
+  File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
+#endif
+
+#ifdef USE_FREETYPE
+  FreeType::Initialise();
+#endif
+
+  Font::Initialise();
+
+  event_queue = new EventQueue();
+
+  ScreenInitialized();
+}
+
+ScreenGlobalInit::~ScreenGlobalInit()
+{
+  delete event_queue;
+  event_queue = nullptr;
+
+#ifdef USE_FREETYPE
+  FreeType::Deinitialise();
+#endif
+
+  ScreenDeinitialized();
+}
