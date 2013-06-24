@@ -23,37 +23,12 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "OS/Clock.hpp"
-#include "Util/Macros.hpp"
-#include "Util/CharUtil.hpp"
-#include "Screen/Key.h"
-
-#include <poll.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <termios.h>
-
-static struct termios restore_attr;
 
 EventQueue::EventQueue()
-  :input_state(InputState::NONE), running(true)
+  :running(true)
 {
   event_pipe.Create();
   poll.SetMask(event_pipe.GetReadFD(), Poll::READ);
-
-  /* make stdin non-blocking */
-  fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
-
-  struct termios attr;
-  if (tcgetattr(STDIN_FILENO, &attr) == 0) {
-    restore_attr = attr;
-    attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
-                      INLCR | IGNCR | ICRNL | IXON);
-    attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG);
-    attr.c_cflag &= ~(CSIZE | PARENB);
-    attr.c_cflag |= CS8;
-    tcsetattr(STDIN_FILENO, TCSANOW, &attr);
-  }
 
   poll.SetMask(STDIN_FILENO, Poll::READ);
 
@@ -63,7 +38,6 @@ EventQueue::EventQueue()
 
 EventQueue::~EventQueue()
 {
-  tcsetattr(STDIN_FILENO, TCSANOW, &restore_attr);
 }
 
 void
@@ -100,108 +74,11 @@ EventQueue::PushKeyPress(unsigned key_code)
   events.push(Event(Event::KEY_UP, key_code));
 }
 
-inline void
-EventQueue::HandleInputByte(char ch)
-{
-  switch (ch) {
-  case 0x03:
-    /* user has pressed Ctrl-C */
-    input_state = InputState::NONE;
-    events.push(Event::CLOSE);
-    return;
-
-  case ' ':
-    input_state = InputState::NONE;
-    PushKeyPress(ch);
-    return;
-
-  case 0x0d:
-    input_state = InputState::NONE;
-    PushKeyPress(KEY_RETURN);
-    return;
-
-  case 0x1b:
-    if (input_state == InputState::ESCAPE)
-      PushKeyPress(KEY_ESCAPE);
-    else
-      input_state = InputState::ESCAPE;
-    return;
-  }
-
-  switch (input_state) {
-  case InputState::NONE:
-    break;
-
-  case InputState::ESCAPE:
-    if (ch == '[')
-      input_state = InputState::ESCAPE_BRACKET;
-    else
-      input_state = InputState::NONE;
-    return;
-
-  case InputState::ESCAPE_BRACKET:
-    input_state = InputState::NONE;
-    switch (ch) {
-    case 'A':
-      PushKeyPress(KEY_UP);
-      break;
-
-    case 'B':
-      PushKeyPress(KEY_DOWN);
-      break;
-
-    case 'C':
-      PushKeyPress(KEY_RIGHT);
-      break;
-
-    case 'D':
-      PushKeyPress(KEY_LEFT);
-      break;
-
-    default:
-      if (ch >= '0' && ch <= '9') {
-        input_state = InputState::ESCAPE_NUMBER;
-        input_number = ch - '0';
-      }
-    }
-
-    return;
-
-  case InputState::ESCAPE_NUMBER:
-    if (IsDigitASCII(ch))
-      input_number = input_number * 10 + ch - '0';
-    else {
-      input_state = InputState::NONE;
-      if (ch == '~') {
-        if (input_number >= 11 && input_number <= 16)
-          PushKeyPress(KEY_F1 + input_number - 11);
-        else if (input_number >= 17 && input_number <= 21)
-          PushKeyPress(KEY_F6 + input_number - 17);
-        else if (input_number >= 23 && input_number <= 24)
-          PushKeyPress(KEY_F11 + input_number - 23);
-      }
-    }
-
-    return;
-  }
-
-  if (IsAlphaNumericASCII(ch)) {
-      PushKeyPress(ch);
-      return;
-  }
-}
-
 void
 EventQueue::Fill()
 {
-  char buffer[256];
-  const ssize_t nbytes = read(STDIN_FILENO, buffer, sizeof(buffer));
-  if (nbytes > 0) {
-    for (ssize_t i = 0; i < nbytes; ++i)
-      HandleInputByte(buffer[i]);
-  } else if (nbytes == 0 || errno != EAGAIN) {
+  if (!keyboard.Read(*this))
     running = false;
-  }
 
   if (mouse.IsOpen())
     mouse.Read();

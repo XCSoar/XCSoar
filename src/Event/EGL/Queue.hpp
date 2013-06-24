@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
+#include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
@@ -40,6 +41,9 @@ class Window;
 class Timer;
 
 class EventQueue : private NonCopyable {
+  friend class TTYKeyboard;
+
+  TTYKeyboard keyboard;
   LinuxMouse mouse;
 
   Mutex mutex;
@@ -50,12 +54,6 @@ class EventQueue : private NonCopyable {
 
   ::Poll poll;
   EventPipe event_pipe;
-
-  enum class InputState : uint8_t {
-    NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
-  } input_state;
-
-  unsigned input_number;
 
   bool running;
 
@@ -85,7 +83,6 @@ private:
 
   void Poll();
   void PushKeyPress(unsigned key_code);
-  void HandleInputByte(char ch);
   void Fill();
   bool Generate(Event &event);
 
