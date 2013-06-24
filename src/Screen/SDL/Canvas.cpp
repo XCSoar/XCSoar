@@ -46,6 +46,19 @@ Copyright_License {
 #include <SDL_imageFilter.h>
 #include <SDL_gfxBlitFunc.h>
 
+#ifdef GREYSCALE
+
+using SDLPixelTraits = GreyscalePixelTraits;
+
+class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
+public:
+  SDLRasterCanvas(SDL_Surface *surface)
+    :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::pointer_type(surface->pixels),
+                                  surface->pitch, surface->w, surface->h) {}
+};
+
+#endif
+
 void
 Canvas::Destroy()
 {
@@ -62,9 +75,7 @@ Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                              PixelScalar right, PixelScalar bottom,
                              Color color)
 {
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
   canvas.DrawRectangle(left + offset.x, top + offset.y,
                        right + offset.x, bottom + offset.y,
                        color.GetLuminosity());
@@ -76,9 +87,7 @@ void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 
   const unsigned thickness = pen.GetWidth();
   const auto color = pen.GetColor().GetLuminosity();
@@ -118,10 +127,9 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
     return;
 
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
-  RasterCanvas<GreyscalePixelTraits>::Point points[cPoints];
+  SDLRasterCanvas canvas(surface);
+
+  SDLRasterCanvas::Point points[cPoints];
   for (unsigned i = 0; i < cPoints; ++i) {
     points[i].x = offset.x + lppt[i].x;
     points[i].y = offset.y + lppt[i].y;
@@ -133,7 +141,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
       canvas.FillPolygon(points, cPoints, color);
     else
       canvas.FillPolygon(points, cPoints, color,
-                         AlphaPixelOperations<GreyscalePixelTraits>(brush.GetColor().Alpha()));
+                         AlphaPixelOperations<SDLPixelTraits>(brush.GetColor().Alpha()));
   }
 
   if (IsPenOverBrush()) {
@@ -205,9 +213,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
   const unsigned thickness = pen.GetWidth();
   const auto color = pen.GetColor().GetLuminosity();
 
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
   if (thickness > 1)
     canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
   else
@@ -223,9 +229,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   y += offset.y;
 
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 #endif
 
   if (!brush.IsHollow()) {
@@ -236,7 +240,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
       canvas.FillCircle(x, y, radius, color);
     else
       canvas.FillCircle(x, y, radius, color,
-                        AlphaPixelOperations<GreyscalePixelTraits>(brush.GetColor().Alpha()));
+                        AlphaPixelOperations<SDLPixelTraits>(brush.GetColor().Alpha()));
 #else
     ::filledCircleColor(surface, x, y, radius,
                         brush.GetColor().GFXColor());
@@ -334,19 +338,17 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   x += offset.x;
   y += offset.y;
 
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 
   if (background_mode == OPAQUE) {
-    OpaqueTextPixelOperations<GreyscalePixelTraits> opaque(background_color.GetLuminosity(),
-                                                           text_color.GetLuminosity());
+    OpaqueTextPixelOperations<SDLPixelTraits> opaque(background_color.GetLuminosity(),
+                                                     text_color.GetLuminosity());
     canvas.CopyRectangle(x, y, s->w, s->h,
                          (const uint8_t *)s->pixels, s->pitch, opaque);
   } else {
-    TransparentTextPixelOperations<GreyscalePixelTraits> opaque(text_color.GetLuminosity());
+    TransparentTextPixelOperations<SDLPixelTraits> transparent(text_color.GetLuminosity());
     canvas.CopyRectangle(x, y, s->w, s->h,
-                         (const uint8_t *)s->pixels, s->pitch, opaque);
+                         (const uint8_t *)s->pixels, s->pitch, transparent);
   }
 
 #else
@@ -439,9 +441,7 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
        src_surface->format->palette->ncolors == 0x100)) {
     /* optimised fast path for greyscale -> greyscale blitting */
 
-    RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                              surface->pitch,
-                                              surface->w, surface->h);
+    SDLRasterCanvas canvas(surface);
     canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                          (const uint8_t *)src_surface->pixels,
                          src_surface->pitch);
@@ -530,15 +530,13 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   const UPixelScalar dest_height = GetHeight();
 
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 
   canvas.ScaleRectangle(dest_x + offset.x, dest_y + offset.y,
                         dest_width, dest_height,
                         (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
-                        TransparentInvertPixelOperations<GreyscalePixelTraits>(key.GetLuminosity()));
+                        TransparentInvertPixelOperations<SDLPixelTraits>(key.GetLuminosity()));
 
 #else
 
@@ -584,9 +582,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
   dest_x += offset.x;
   dest_y += offset.y;
 
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         (uint8_t *)src->pixels + src_y * src->pitch + src_x,
@@ -669,14 +665,14 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
   SDL_Surface *src_surface = src.GetNative();
 
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels, surface->pitch, surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
 
   canvas.ScaleRectangle(dest_x + offset.x, dest_y + offset.y,
                         dest_width, dest_height,
                         (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
-                        OpaqueTextPixelOperations<GreyscalePixelTraits>(fg_color.GetLuminosity(),
-                                                                        bg_color.GetLuminosity()));
+                        OpaqueTextPixelOperations<SDLPixelTraits>(fg_color.GetLuminosity(),
+                                                                  bg_color.GetLuminosity()));
 
 #else
 
@@ -1103,12 +1099,10 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
   // TODO: this method assumes 32 bit RGBA; but what about RGB 565?
 
 #ifdef GREYSCALE
-  RasterCanvas<GreyscalePixelTraits> canvas((uint8_t *)surface->pixels,
-                                            surface->pitch,
-                                            surface->w, surface->h);
+  SDLRasterCanvas canvas(surface);
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        (const uint8_t *)src->pixels, src->pitch,
-                       AlphaPixelOperations<GreyscalePixelTraits>(alpha));
+                       AlphaPixelOperations<SDLPixelTraits>(alpha));
 #else
   ::SDL_gfxSetAlpha(src, alpha);
 
