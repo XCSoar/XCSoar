@@ -43,6 +43,10 @@ Copyright_License {
 
 #endif
 
+#if defined(USE_VIDEOCORE) || defined(HAVE_MALI)
+#define DRAW_MOUSE_CURSOR
+#endif
+
 /**
  * Running on OpenGL/ES?
  */

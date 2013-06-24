@@ -316,7 +316,7 @@ protected:
   virtual void OnDestroy() override;
 #endif
 
-#ifdef USE_VIDEOCORE
+#ifdef DRAW_MOUSE_CURSOR
   virtual void OnPaint(Canvas &canvas) override;
 #endif
 
