@@ -222,8 +222,6 @@ public:
     for (; n > 0; --n, ++p, ++src) {
       SetPixel(p, *src);
     }
-
-    memcpy(p, src, n);
   }
 };
 
@@ -246,8 +244,6 @@ public:
       if (*src != 0)
         *p = text_color;
     }
-
-    memcpy(p, src, n);
   }
 };
 
