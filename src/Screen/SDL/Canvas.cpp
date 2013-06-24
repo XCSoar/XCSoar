@@ -303,6 +303,22 @@ Canvas::CalcTextSize(const TCHAR *text) const
   return font->TextSize(text);
 }
 
+static SDL_Surface *
+RenderText(const Font *font, const TCHAR *text)
+{
+  if (font == nullptr)
+    return nullptr;
+
+  assert(font->IsDefined());
+
+#ifdef UNICODE
+  return ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
+                                   COLOR_BLACK);
+#else
+  return ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
+#endif
+}
+
 void
 Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
@@ -311,20 +327,9 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   assert(ValidateUTF8(text));
 #endif
 
-  SDL_Surface *s;
-
-  if (font == NULL)
-    return;
-
-#ifdef UNICODE
-  s = ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
-                                COLOR_BLACK);
-#else
-  s = ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
-#endif
+  SDL_Surface *s = RenderText(font, text);
   if (s == NULL)
     return;
-
 
 #ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
@@ -364,17 +369,7 @@ Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
   assert(ValidateUTF8(text));
 #endif
 
-  SDL_Surface *s;
-
-  if (font == NULL)
-    return;
-
-#ifdef UNICODE
-  s = ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
-                                COLOR_BLACK);
-#else
-  s = ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
-#endif
+  SDL_Surface *s = RenderText(font, text);
   if (s == NULL)
     return;
 
