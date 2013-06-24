@@ -76,7 +76,5 @@ InputEvents::eventDevice(const TCHAR *misc)
   assert(misc != NULL);
 
   if (StringIsEqual(misc, _T("list")))
-    ShowDeviceList(UIGlobals::GetMainWindow(),
-                   UIGlobals::GetDialogLook(),
-                   UIGlobals::GetLook().terminal);
+    ShowDeviceList(UIGlobals::GetLook().terminal);
 }

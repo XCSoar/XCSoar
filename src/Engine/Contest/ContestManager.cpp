@@ -123,6 +123,10 @@ ContestManager::UpdateIdle(bool exhaustive)
   bool retval = false;
 
   switch (contest) {
+  case Contest::NONE:
+    retval = true;
+    break;
+
   case Contest::OLC_SPRINT:
     retval = RunContest(olc_sprint, stats.result[0],
                         stats.solution[0], exhaustive);

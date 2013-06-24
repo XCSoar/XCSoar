@@ -46,7 +46,7 @@ ConvertDirectoryToRecordedFlightList(const std::vector<DIRENTRY> &dir,
      * Only show logs with a takeoff detected
      */
     if  (flight.takeoff == 1) {
-      if (!flight.firsttime.Plausible() || !flight.lasttime.Plausible())
+      if (!flight.firsttime.IsPlausible() || !flight.lasttime.IsPlausible())
         return false;
       flight_info.date = {flight.firsttime.year,
                           flight.firsttime.month,

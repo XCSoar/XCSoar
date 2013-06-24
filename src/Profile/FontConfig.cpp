@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/FontConfig.hpp"
 #include "Profile/Profile.hpp"
+#include "Look/FontSettings.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -156,4 +157,24 @@ Profile::SetFont(const char *key, LOGFONT &logfont)
                 face);
 
   Profile::Set(key, buffer);
+}
+
+void
+Profile::Get(FontSettings &settings)
+{
+  GetFont(ProfileKeys::FontInfoWindowFont, &settings.infobox);
+
+  /* the "small" font is derived from the regular font */
+  settings.infobox_small = settings.infobox;
+  settings.infobox_small.lfHeight = settings.infobox_small.lfHeight * 4 / 5;
+  settings.infobox_small.lfWeight = FW_MEDIUM;
+
+  GetFont(ProfileKeys::DialogFont, &settings.dialog);
+  GetFont(ProfileKeys::FontTitleWindowFont, &settings.title);
+  GetFont(ProfileKeys::FontCDIWindowFont, &settings.cdi);
+  GetFont(ProfileKeys::FontMapLabelFont, &settings.map_label);
+  GetFont(ProfileKeys::FontMapLabelImportantFont,
+          &settings.map_label_important);
+  GetFont(ProfileKeys::FontMapWindowFont, &settings.map);
+  GetFont(ProfileKeys::FontMapWindowBoldFont, &settings.map_bold);
 }

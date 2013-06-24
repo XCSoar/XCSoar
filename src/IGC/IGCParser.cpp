@@ -106,7 +106,7 @@ IGCParseDateRecord(const char *line, BrokenDate &date)
   date.month = (value / 100) % 100;
   date.day = value / 10000;
 
-  return date.Plausible();
+  return date.IsPlausible();
 }
 
 static int
@@ -339,7 +339,7 @@ IGCParseTime(const char *buffer, BrokenTime &time)
     return false;
 
   time = BrokenTime(hour, minute, second);
-  return time.Plausible();
+  return time.IsPlausible();
 }
 
 static bool
@@ -351,7 +351,7 @@ IGCParseDate(const char *buffer, BrokenDate &date)
     return false;
 
   date = BrokenDate(year + 2000, month, day);
-  return date.Plausible();
+  return date.IsPlausible();
 }
 
 bool

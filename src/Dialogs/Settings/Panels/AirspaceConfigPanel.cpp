@@ -37,7 +37,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
 
-#ifdef HAVE_ALPHA_BLEND
+#ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
@@ -222,7 +222,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           as_fill_mode_list, (unsigned)renderer.fill_mode);
   SetExpertRow(AirspaceFillMode);
 
-#if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable()) {
     AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
                renderer.transparency);
@@ -274,13 +274,11 @@ AirspaceConfigPanel::Save(bool &_changed)
 
   changed |= SaveValueEnum(AirspaceFillMode, ProfileKeys::AirspaceFillMode, renderer.fill_mode);
 
-#ifndef ENABLE_OPENGL
-#ifdef HAVE_ALPHA_BLEND
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable())
     changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
                          renderer.transparency);
 #endif
-#endif /* !OpenGL */
 
   _changed |= changed;
 

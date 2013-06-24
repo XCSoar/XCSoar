@@ -124,7 +124,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   const fixed total_distance = start.Distance(end);
   if (!positive(total_distance)) {
-    std::fill(buffer, buffer + size, invalid);
+    std::fill_n(buffer, size, invalid);
     return;
   }
 
@@ -133,7 +133,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   GeoPoint clipped_start = start, clipped_end = end;
   const GeoClip clip(GetBounds());
   if (!clip.ClipLine(clipped_start, clipped_end)) {
-    std::fill(buffer, buffer + size, invalid);
+    std::fill_n(buffer, size, invalid);
     return;
   }
 
@@ -151,7 +151,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   if (clipped_end_offset > size)
     clipped_end_offset = size;
   if (clipped_start_offset + 2 > clipped_end_offset) {
-    std::fill(buffer, buffer + size, invalid);
+    std::fill_n(buffer, size, invalid);
     return;
   }
 

@@ -115,7 +115,7 @@ AirspaceWarningManager::Update(const AircraftState& state,
   bool changed = false;
 
   // update warning states
-  if (airspaces.empty()) {
+  if (airspaces.IsEmpty()) {
     // no airspaces, no warnings possible
     assert(warnings.empty());
     return false;
@@ -435,6 +435,12 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
   return (warning != NULL ? warning->GetAckDay() : false);
 }
 
+bool
+AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const
+{
+  return airspace.IsActive() && config.IsClassEnabled(airspace.GetType()) &&
+    !GetAckDay(airspace);
+}
 
 void 
 AirspaceWarningManager::AcknowledgeAll()

@@ -353,7 +353,7 @@ WndProperty::DecValue()
 void
 WndProperty::OnPaint(Canvas &canvas)
 {
-  const bool focused = HasFocus();
+  const bool focused = HasCursorKeys() && HasFocus();
 
   /* background and selector */
   if (pressed) {

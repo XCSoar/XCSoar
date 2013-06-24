@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "DeltaTime.hpp"
+#include "Time/DeltaTime.hpp"
 
 struct CirclingInfo;
 struct NMEAInfo;

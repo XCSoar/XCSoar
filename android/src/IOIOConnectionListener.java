@@ -48,6 +48,9 @@ interface IOIOConnectionListener {
    * Invoked when the connection to the IOIO has been torn down.  Also
    * invoked when this listener gets removed from the #IOIOHelper and
    * there is already a connection.
+   *
+   * @param ioio the IOIO connection that was disconnected; this is
+   * the same object that was passed to onIOIOConnect()
    */
-  void onIOIODisconnect();
+  void onIOIODisconnect(IOIO ioio);
 }

@@ -28,9 +28,11 @@ Copyright_License {
 #include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/Validity.hpp"
 
 struct NMEAInfo;
 class ProtectedTaskManager;
+class ProtectedAirspaceWarningManager;
 
 class TaskComputer
 {
@@ -47,9 +49,12 @@ class TaskComputer
 
   bool last_flying;
 
+  Validity last_location_available;
+
 public:
   TaskComputer(ProtectedTaskManager &_task,
-               const Airspaces &airspace_database);
+               const Airspaces &airspace_database,
+               const ProtectedAirspaceWarningManager *warnings);
 
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
     return route.GetProtectedRoutePlanner();
@@ -72,7 +77,7 @@ public:
     trace.LockedCopyTo(v, min_time, location, resolution);
   }
 
-  void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
+  void ProcessBasicTask(const MoreData &basic,
                         DerivedInfo &calculated,
                         const ComputerSettings &settings_computer,
                         bool force);

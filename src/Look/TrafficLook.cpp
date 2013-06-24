@@ -26,7 +26,7 @@ Copyright_License {
 #include "resource.h"
 
 void
-TrafficLook::Initialise()
+TrafficLook::Initialise(const Font &_font)
 {
   safe_color = Color(0x1d,0x9b,0xc5);
   warning_color = Color(0xfe,0x84,0x38);
@@ -42,5 +42,7 @@ TrafficLook::Initialise()
   team_pen_yellow.Set(width, Color(0xFF, 0xE8, 0));
   team_pen_magenta.Set(width, Color(0xFF, 0, 0xCB));
 
-  teammate_icon.Load(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
+  teammate_icon.LoadResource(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
+
+  font = &_font;
 }

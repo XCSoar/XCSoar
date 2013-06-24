@@ -25,12 +25,13 @@ Copyright_License {
 #include "UISettings.hpp"
 
 void
-Look::Initialise(const Font &map_font, const Font &map_bold_font,
-                 const Font &map_label_font)
+Look::Initialise(const Font &dialog_font, const Font &dialog_bold_font,
+                 const Font &dialog_small_font,
+                 const Font &map_font)
 {
-  dialog.Initialise(map_bold_font, map_font, map_label_font,
-                    map_bold_font, map_font, map_bold_font);
-  traffic.Initialise();
+  dialog.Initialise(dialog_bold_font, dialog_font, dialog_small_font,
+                    dialog_bold_font, dialog_font, dialog_bold_font);
+  traffic.Initialise(map_font);
   flarm_dialog.Initialise(traffic, false);
   gesture.Initialise();
   thermal_assistant_dialog.Initialise(false, false);
@@ -39,6 +40,9 @@ Look::Initialise(const Font &map_font, const Font &map_bold_font,
 
 void
 Look::InitialiseConfigured(const UISettings &settings,
+                           const Font &dialog_font,
+                           const Font &dialog_bold_font,
+                           const Font &dialog_small_font,
                            const Font &map_font, const Font &map_bold_font,
                            const Font &map_label_font,
                            const Font &cdi_font,
@@ -50,8 +54,8 @@ Look::InitialiseConfigured(const UISettings &settings,
 #endif
                            const Font &infobox_title_font)
 {
-  dialog.Initialise(map_bold_font, map_font, map_label_font,
-                    map_bold_font, map_font, map_bold_font);
+  dialog.Initialise(dialog_bold_font, dialog_font, dialog_small_font,
+                    dialog_bold_font, dialog_font, dialog_bold_font);
   terminal.Initialise(monospace_font);
   units.Initialise();
   vario.Initialise(settings.info_boxes.inverse,

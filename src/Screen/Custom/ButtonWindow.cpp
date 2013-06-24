@@ -152,7 +152,9 @@ ButtonWindow::OnCancelMode()
 void
 ButtonWindow::OnPaint(Canvas &canvas)
 {
-  if (HasFocus()) {
+  const bool focused = HasCursorKeys() ? HasFocus() : down;
+
+  if (focused) {
     Pen pen(Layout::Scale(1), COLOR_BLACK);
     canvas.Select(pen);
     canvas.SelectHollowBrush();

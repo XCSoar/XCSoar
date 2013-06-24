@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 DeviceConfig
 ParsePortArgs(Args &args)

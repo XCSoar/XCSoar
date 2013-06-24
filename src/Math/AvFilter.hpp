@@ -27,6 +27,7 @@
 #include "Util/StaticArray.hpp"
 #include "Compiler.h"
 
+#include <numeric>
 #include <cassert>
 
 /**
@@ -67,11 +68,7 @@ public:
   fixed Average() const {
     assert(!x.empty());
 
-    fixed y = fixed(0);
-    for (unsigned i = 0; i < x.size(); i++)
-      y += x[i];
-
-    return y / x.size();
+    return std::accumulate(x.begin(), x.end(), fixed(0)) / x.size();
   }
 
   /**

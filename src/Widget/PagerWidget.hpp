@@ -108,6 +108,12 @@ public:
     return GetWidget(current);
   }
 
+  Widget &GetCurrentWidget() {
+    assert(!children.empty());
+
+    return GetWidget(current);
+  }
+
   /**
    * Attempts to display page.  Follows Widget API rules
    * @param i Tab that is requested to be shown.
@@ -163,6 +169,7 @@ public:
   virtual bool Leave() override;
   virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
+  virtual bool KeyPress(unsigned key_code) override;
 };
 
 #endif

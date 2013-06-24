@@ -151,7 +151,7 @@ CheckBox::OnCancelMode()
 void
 CheckBox::OnPaint(Canvas &canvas)
 {
-  if (HasFocus())
+  if (HasCursorKeys() && HasFocus())
     canvas.Clear(COLOR_XCSOAR_DARK);
 
   Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);

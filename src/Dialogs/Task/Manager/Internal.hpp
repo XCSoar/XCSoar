@@ -82,6 +82,9 @@ public:
 
   void Revert();
 
+  /* virtual methods from class WndForm */
+  virtual bool OnAnyKeyDown(unsigned key_code) override;
+
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
 };

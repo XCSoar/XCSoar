@@ -53,6 +53,18 @@ TopWindow::Invalidate()
   ::SDL_PushEvent(&event);
 }
 
+#ifdef KOBO
+void
+TopWindow::OnDestroy()
+{
+  /* clear the screen before exiting XCSoar */
+  screen->ClearWhite();
+  screen->Flip();
+
+  ContainerWindow::OnDestroy();
+}
+#endif
+
 bool
 TopWindow::OnEvent(const SDL_Event &event)
 {

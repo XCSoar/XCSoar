@@ -30,7 +30,7 @@ Copyright_License {
 #ifndef XCSOAR_AUDIO_FEATURES_HPP
 #define XCSOAR_AUDIO_FEATURES_HPP
 
-#if defined(ENABLE_SDL) || defined(ANDROID)
+#if !defined(KOBO) && (defined(ENABLE_SDL) || defined(ANDROID))
 #define HAVE_PCM_PLAYER
 #endif
 

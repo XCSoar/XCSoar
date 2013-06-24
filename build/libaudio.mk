@@ -3,7 +3,9 @@
 HAVE_PCM_PLAYER = n
 
 ifeq ($(ENABLE_SDL),y)
+ifeq ($(TARGET_IS_KOBO),n)
 HAVE_PCM_PLAYER = y
+endif
 endif
 
 ifeq ($(TARGET),ANDROID)

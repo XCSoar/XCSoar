@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 static Device *
 LXCreateOnPort(const DeviceConfig &config, Port &com_port)
@@ -32,7 +32,9 @@ LXCreateOnPort(const DeviceConfig &config, Port &com_port)
   const unsigned baud_rate = uses_speed ? config.baud_rate : 0;
   const unsigned bulk_baud_rate = uses_speed ? config.bulk_baud_rate : 0;
 
-  return new LXDevice(com_port, baud_rate, bulk_baud_rate);
+  const bool is_nano = config.BluetoothNameStartsWith("LXNAV-NANO-");
+
+  return new LXDevice(com_port, baud_rate, bulk_baud_rate, is_nano);
 }
 
 const struct DeviceRegister lx_driver = {

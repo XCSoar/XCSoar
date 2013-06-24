@@ -32,7 +32,9 @@ Copyright_License {
 #include <stddef.h>
 #include <setjmp.h>
 
+extern "C" {
 #include <jpeglib.h>
+}
 
 struct JPEGErrorManager {
   struct jpeg_error_mgr base;
@@ -78,7 +80,7 @@ LoadJPEGFile(const char *path)
 
   jpeg_create_decompress(&cinfo);
   jpeg_stdio_src(&cinfo, file);
-  jpeg_read_header(&cinfo, true);
+  jpeg_read_header(&cinfo, (boolean)true);
 
   if (cinfo.num_components != 3) {
     jpeg_destroy_decompress(&cinfo);
@@ -87,7 +89,7 @@ LoadJPEGFile(const char *path)
   }
 
   cinfo.out_color_space = JCS_RGB;
-  cinfo.quantize_colors = false;
+  cinfo.quantize_colors = (boolean)false;
   jpeg_calc_output_dimensions(&cinfo);
 
   jpeg_start_decompress(&cinfo);

@@ -37,14 +37,19 @@ public:
   VirtualCanvas(PixelSize new_size);
   VirtualCanvas(const Canvas &canvas, PixelSize new_size);
 
-#ifndef ENABLE_OPENGL
-  ~VirtualCanvas();
+#ifndef ENABLE_SDL
+  ~VirtualCanvas() {
+    Destroy();
+  }
 #endif
 
   void Create(PixelSize new_size);
 
   void Create(const Canvas &canvas, PixelSize new_size);
-  void Create(const Canvas &canvas);
+
+  void Create(const Canvas &canvas) {
+    Create(canvas, canvas.GetSize());
+  }
 
 #ifndef ENABLE_SDL
   void Destroy();

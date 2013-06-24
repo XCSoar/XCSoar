@@ -64,6 +64,8 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 
   thermal_band_computer.Reset();
   wind_computer.Reset();
+
+  delta_time.Reset();
 }
 
 void
@@ -79,7 +81,6 @@ GlideComputerAirData::ProcessBasic(const MoreData &basic,
 
 void
 GlideComputerAirData::ProcessVertical(const MoreData &basic,
-                                      const MoreData &last_basic,
                                       DerivedInfo &calculated,
                                       const ComputerSettings &settings)
 {
@@ -107,7 +108,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
 
   LastThermalStats(basic, calculated, last_circling);
 
-  gr_computer.Compute(basic, last_basic, calculated,
+  gr_computer.Compute(basic, calculated,
                       calculated,
                       settings);
 
@@ -254,30 +255,18 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
     calculated.altitude_agl_valid = false;
 }
 
-bool
+void
 GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
-                                  const NMEAInfo &last_basic,
                                   DerivedInfo &calculated,
                                   const ComputerSettings &settings)
 {
-  if (basic.gps.replay != last_basic.gps.replay)
-    // reset flight before/after replay logger
-    ResetFlight(calculated, basic.gps.replay);
-
-  if (basic.time_available && basic.HasTimeRetreatedSince(last_basic)) {
-    // 20060519:sgi added (basic.Time != 0) due to always return here
-    // if no GPS time available
-    if (basic.location_available)
-      // Reset statistics.. (probably due to being in IGC replay mode)
-      ResetFlight(calculated, false);
-
-    return false;
-  }
+  if (basic.time_available &&
+      negative(delta_time.Update(basic.time, fixed(0), fixed(180))))
+    /* time warp: reset the computer */
+    ResetFlight(calculated, true);
 
   FlightState(basic, calculated, calculated.flight,
               settings.polar.glide_polar_task);
-
-  return true;
 }
 
 inline void
@@ -394,7 +383,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
                                  DerivedInfo &calculated,
                                  const ComputerSettings &settings)
 {
-  if (!basic.location_available || !basic.date_available)
+  if (!basic.location_available || !basic.date_time_utc.IsDatePlausible())
     return;
 
   // Only calculate new azimuth if data is older than 15 minutes

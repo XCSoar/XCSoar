@@ -25,6 +25,7 @@ Copyright_License {
 
 #ifdef HAVE_BATTERY
 
+#if (defined(_WIN32_WCE) && !defined(GNAV))
 #include <windows.h>
 
 namespace Power
@@ -94,5 +95,82 @@ UpdateBatteryInfo()
     Power::External::Status = Power::External::UNKNOWN;
   }
 }
+
+#endif
+
+#ifdef KOBO
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+namespace Power
+{
+  namespace Battery{
+    unsigned Temperature = 0;
+    unsigned RemainingPercent = 0;
+    bool RemainingPercentValid = false;
+    batterystatus Status = UNKNOWN;
+  };
+
+  namespace External{
+    externalstatus Status = UNKNOWN;
+  };
+};
+
+void
+UpdateBatteryInfo()
+{
+  // assume failure at entry
+  Power::Battery::RemainingPercentValid = false;
+  Power::Battery::Status = Power::Battery::UNKNOWN;
+  Power::External::Status = Power::External::UNKNOWN;
+
+  // code shamelessly copied from OS/SystemLoad.cpp
+  int fd = open("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent", 
+		O_RDONLY|O_NOCTTY);
+  if (fd < 0) 
+    return;
+
+  char line[256];
+  ssize_t nbytes = read(fd, line, sizeof(line) - 1);
+  close(fd);
+
+  if (nbytes <= 0)
+    return;
+
+  line[nbytes] = 0;
+  char field[80], value[80];
+  int n;
+  char* ptr = line;
+  while (sscanf(ptr, "%[^=]=%[^\n]\n%n", field, value, &n)==2) {
+    ptr += n;
+    if (!strcmp(field,"POWER_SUPPLY_STATUS")) {
+      if (!strcmp(value,"Not charging") || !strcmp(value,"Charging")) {
+	Power::External::Status = Power::External::ON;
+      } else if (!strcmp(value,"Discharging")) {
+	Power::External::Status = Power::External::OFF;
+      }
+    } else if (!strcmp(field,"POWER_SUPPLY_CAPACITY")) {
+      int rem = atoi(value);
+      Power::Battery::RemainingPercentValid = true;
+      Power::Battery::RemainingPercent = rem;
+      if (Power::External::Status == Power::External::OFF) {
+	if (rem>30) {
+	  Power::Battery::Status = Power::Battery::HIGH;
+	} else if (rem>10) {
+	  Power::Battery::Status = Power::Battery::LOW;
+	} else if (rem<10) {
+	  Power::Battery::Status = Power::Battery::CRITICAL;
+	}
+      } else {
+	Power::Battery::Status = Power::Battery::CHARGING;
+      }
+    }
+  }
+}
+
+#endif
 
 #endif

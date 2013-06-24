@@ -78,20 +78,6 @@ struct AirspaceFilterData {
              const AbstractAirspace &as) const;
 };
 
-class AirspaceFilterPredicate : public AirspacePredicate {
-  GeoPoint location;
-  const TaskProjection &projection;
-  const AirspaceFilterData &filter;
-
-public:
-  AirspaceFilterPredicate(const GeoPoint &_location,
-                          const TaskProjection &_projection,
-                          const AirspaceFilterData &_filter)
-    :location(_location), projection(_projection), filter(_filter) {}
-
-  virtual bool operator()(const AbstractAirspace &as) const override;
-};
-
 /**
  * Returns a filtered list of airspaces, sorted by name or distance.
  *

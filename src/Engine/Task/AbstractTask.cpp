@@ -108,8 +108,10 @@ bool
 AbstractTask::UpdateIdle(const AircraftState &state,
                          const GlidePolar &glide_polar)
 {
+  const bool valid = state.location.IsValid() && glide_polar.IsValid();
+
   if (stats.start.task_started && task_behaviour.calc_cruise_efficiency &&
-      glide_polar.IsValid()) {
+      valid) {
     fixed val = fixed(1);
     if (CalcCruiseEfficiency(state, glide_polar, val))
       stats.cruise_efficiency = std::max(ce_lpf.Update(val), fixed(0));
@@ -118,7 +120,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
   }
 
   if (stats.start.task_started && task_behaviour.calc_effective_mc &&
-      glide_polar.IsValid()) {
+      valid) {
     fixed val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
       stats.effective_mc = std::max(em_lpf.Update(val), fixed(0));
@@ -126,7 +128,7 @@ AbstractTask::UpdateIdle(const AircraftState &state,
     stats.effective_mc = em_lpf.Reset(glide_polar.GetMC());
   }
 
-  if (task_behaviour.calc_glide_required && glide_polar.IsValid())
+  if (task_behaviour.calc_glide_required && valid)
     UpdateStatsGlide(state, glide_polar);
   else
     stats.glide_required = fixed(0); // error
@@ -239,17 +241,22 @@ AbstractTask::Update(const AircraftState &state,
                      const AircraftState &state_last,
                      const GlidePolar &glide_polar)
 {
+  stats.active_index = GetActiveTaskPointIndex();
   stats.task_valid = CheckTask();
 
   const bool full_update = 
-    CheckTransitions(state, state_last) ||
+    (state.location.IsValid() && state_last.location.IsValid() &&
+     CheckTransitions(state, state_last)) ||
     (active_task_point != active_task_point_last);
 
-  UpdateStatsTimes(state);
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
-  bool sample_updated = UpdateSample(state, glide_polar, full_update);
-  UpdateStatsSpeeds(state, state_last);
+  UpdateStatsTimes(state.time);
+
+  const bool sample_updated = state.location.IsValid() &&
+    UpdateSample(state, glide_polar, full_update);
+
+  UpdateStatsSpeeds(state.time);
   UpdateFlightMode();
 
   active_task_point_last = active_task_point;
@@ -258,19 +265,14 @@ AbstractTask::Update(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsSpeeds(const AircraftState &state, 
-                                const AircraftState &state_last)
+AbstractTask::UpdateStatsSpeeds(const fixed time)
 {
   if (!stats.task_finished) {
-    if (stats.start.task_started) {
-      const fixed dt = state.time - state_last.time;
-      stats_computer.total.CalcSpeeds(stats.total, dt);
-      stats_computer.current_leg.CalcSpeeds(stats.current_leg, dt);
-    } else {
-      stats_computer.total.Reset(stats.total);
-      stats_computer.current_leg.Reset(stats.current_leg);
-    }
+    stats_computer.total.CalcSpeeds(stats.total, time);
+    stats_computer.current_leg.CalcSpeeds(stats.current_leg, time);
   }
+
+  stats_computer.ComputeWindow(time, stats);
 }
 
 void
@@ -282,11 +284,21 @@ AbstractTask::UpdateStatsGlide(const AircraftState &state,
 }
 
 void
-AbstractTask::UpdateStatsTimes(const AircraftState &state)
+AbstractTask::UpdateStatsTimes(const fixed time)
 {
   if (!stats.task_finished) {
-    stats.total.SetTimes(ScanTotalStartTime(state), state);
-    stats.current_leg.SetTimes(ScanLegStartTime(state),state);
+    stats.current_leg.SetTimes(fixed(0), ScanLegStartTime(), time);
+
+    const fixed until_start_s = GetType() == TaskType::ORDERED &&
+      GetActiveTaskPointIndex() == 0
+      /* flying towards the start point in an ordered task: pass
+         current_leg.time_remaining, which is the estimated time to
+         reach the start point */
+      ? stats.current_leg.time_remaining_now
+      /* already beyond the start point (or no start point) */
+      : fixed(0);
+
+    stats.total.SetTimes(until_start_s, ScanTotalStartTime(), time);
   }
 }
 

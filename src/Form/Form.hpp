@@ -241,6 +241,15 @@ public:
    */
   void ReinitialiseLayout();
 #endif
+
+protected:
+  /**
+   * This method can intercept a "key down" event before it gets
+   * delivered to the focused dialog control.
+   *
+   * @return true if the event has been handled and shall be consumed
+   */
+  virtual bool OnAnyKeyDown(unsigned key_code);
 };
 
 #endif

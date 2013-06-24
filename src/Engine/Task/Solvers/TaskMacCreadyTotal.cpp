@@ -37,7 +37,7 @@ TaskMacCreadyTotal::SolvePoint(const TaskPoint &tp,
                                             settings, glide_polar, minH);
 }
 
-const AircraftState &
+AircraftState
 TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
 {
   const OrderedTaskPoint &tp = *(const OrderedTaskPoint *)points[0];
@@ -45,8 +45,13 @@ TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
 
   if (tp.HasEntered()) {
     return tp.GetEnteredState();
-  } else {
+  } else if (aircraft.location.IsValid()) {
     return aircraft;
+  } else {
+    /* fall back to actual start location */
+    AircraftState aircraft2 = aircraft;
+    aircraft2.location = tp.GetLocation();
+    return aircraft2;
   }
 }
 

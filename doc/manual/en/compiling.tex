@@ -34,7 +34,7 @@ The following is needed for all targets:
 \begin{itemize}
 \item GNU make
 \item GNU compiler collection (\texttt{gcc}), version 4.6.2 or later
-  or clang/LLVM 3.1 (with "make CLANG=y")
+  or clang/LLVM 3.2 (with "make CLANG=y")
 \item GNU gettext
 \item \href{http://librsvg.sourceforge.net/)}{rsvg}
 \item \href{http://www.imagemagick.org/}{ImageMagick 6.4}
@@ -58,7 +58,6 @@ The following additional packages are needed to build for Linux and
 similar operating systems:
 
 \begin{itemize}
-\item \href{http://www.boost.org/}{Boost}
 \item \href{http://www.zlib.net/}{zlib}
 \item \href{http://curl.haxx.se/}{CURL}
 \item \href{http://www.libsdl.org/}{SDL}
@@ -75,7 +74,7 @@ The following command installs these on Debian:
 
 \begin{verbatim*}
 apt-get install make g++ \
-  libboost-dev zlib1g-dev \
+  zlib1g-dev \
   libsdl1.2-dev libsdl-ttf2.0-dev \
   libpng-dev libjpeg-dev \
   libcurl4-openssl-dev \
@@ -110,7 +109,7 @@ You may specify one of the following targets with \texttt{TARGET=x}:
 For Android, you need:
 
 \begin{itemize}
-\item \href{http://developer.android.com/sdk/}{Android SDK level 16}
+\item \href{http://developer.android.com/sdk/}{Android SDK level 17}
 \item \href{http://developer.android.com/sdk/ndk/}{Android NDK r8e}
 \item \href{http://www.vorbis.com/}{Ogg Vorbis}
 \item \href{http://ant.apache.org/}{Apache Ant}
@@ -219,7 +218,6 @@ For Mac OS X, you need:
 
 \begin{itemize}
 \item GCC 4.6.2 or newer (http://hpc.sourceforge.net/, or homebrew, or Macports)
-\item \href{http://www.boost.org/}{Boost}
 \item \href{http://www.zlib.net/}{zlib}
 \item \href{http://curl.haxx.se/}{CURL}
 \item \href{http://www.libsdl.org/}{SDL}

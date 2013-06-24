@@ -204,7 +204,7 @@ TestDeclarationHeader()
   ok1(header.datetime.hour == 8);
   ok1(header.datetime.minute == 43);
   ok1(header.datetime.second == 45);
-  ok1(!header.flight_date.Plausible());
+  ok1(!header.flight_date.IsPlausible());
   ok1(header.num_turnpoints == 2);
   ok1(header.task_id[0] == '0' &&
       header.task_id[1] == '0' &&

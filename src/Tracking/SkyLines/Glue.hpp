@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TRACKING_SKYLINES_GLUE_HPP
 
 #include "Client.hpp"
-#include "Computer/GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 
 namespace SkyLinesTracking {
   struct Settings;

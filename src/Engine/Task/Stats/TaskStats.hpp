@@ -24,6 +24,8 @@
 
 #include "ElementStat.hpp"
 #include "StartStats.hpp"
+#include "WindowStats.hpp"
+#include "Task/Computer/WindowStatsComputer.hpp"
 
 #include <type_traits>
 
@@ -56,8 +58,25 @@ public:
   /** Scored distance (m) */
   fixed distance_scored;
 
+  /**
+   * Index of the active task point.
+   */
+  unsigned active_index;
+
   /** Whether the task is navigable */
   bool task_valid;
+
+  /** Whether ordered task has AAT areas */
+  bool has_targets;
+
+  /**
+   * Is this a MAT task?
+   */
+  bool is_mat;
+
+  /** Whether ordered task has optional starts */
+  bool has_optional_starts;
+
   /** Whether the task is finished */
   bool task_finished;
 
@@ -67,13 +86,20 @@ public:
    */
   bool inside_oz;
 
+  /**
+   * Does the current task point need to be armed?
+   */
+  bool need_to_arm;
+
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
 
   StartStats start;
 
+  WindowStats last_hour;
+
   fixed GetEstimatedTotalTime() const {
-    return total.time_elapsed + total.time_remaining;
+    return total.time_elapsed + total.time_remaining_start;
   }
 
   /**
@@ -100,15 +126,5 @@ public:
 };
 
 static_assert(std::is_trivial<TaskStats>::value, "type is not trivial");
-
-class TaskStatsComputer {
-public:
-  ElementStatComputer total;
-  ElementStatComputer current_leg;
-
-public:
-  /** Reset each element (for incremental speeds). */
-  void reset(TaskStats &data);
-};
 
 #endif

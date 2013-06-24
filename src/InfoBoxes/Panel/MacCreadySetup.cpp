@@ -37,7 +37,7 @@ class MacCreadySetupPanel : public WindowWidget,
                             private ActionListener {
 public:
   WndButton &GetButton() {
-    return *(WndButton *)GetWindow();
+    return (WndButton &)GetWindow();
   }
 
   gcc_pure

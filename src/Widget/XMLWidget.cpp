@@ -53,6 +53,6 @@ XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
 bool
 XMLWidget::SetFocus()
 {
-  ContainerWindow &window = *(ContainerWindow *)GetWindow();
+  ContainerWindow &window = (ContainerWindow &)GetWindow();
   return window.FocusFirstControl();
 }

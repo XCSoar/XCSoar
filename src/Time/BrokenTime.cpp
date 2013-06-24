@@ -44,6 +44,8 @@ BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
 BrokenTime
 BrokenTime::operator+(unsigned seconds) const
 {
+  assert(IsPlausible());
+
   seconds += GetSecondOfDay();
   return FromSecondOfDayChecked(seconds);
 }
@@ -51,6 +53,8 @@ BrokenTime::operator+(unsigned seconds) const
 BrokenTime
 BrokenTime::operator+(int seconds) const
 {
+  assert(IsPlausible());
+
   seconds += GetSecondOfDay();
   while (seconds < 0)
     seconds += 3600 * 24;

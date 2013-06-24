@@ -66,15 +66,6 @@ TaskRenderer::Draw(const OrderedTask &task)
     for (const auto &tp : task.GetPoints())
       tpv.Draw(tp, (TaskPointRenderer::Layer)i);
   }
-
-  if (task.GetFactoryType() == TaskFactoryType::MAT) {
-    // now draw MAT circles
-    tpv.ResetIndex();
-    tpv.SetModeOptional(false);
-
-    for (const auto *i : task.GetMatPoints())
-      tpv.Draw(*i, (TaskPointRenderer::Layer)2);
-  }
 }
 
 void 

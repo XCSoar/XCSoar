@@ -24,6 +24,7 @@ Copyright_License {
 #include "BrokenDateTime.hpp"
 #include "DateUtil.hpp"
 
+#include <assert.h>
 #include <time.h>
 
 #ifndef HAVE_POSIX
@@ -169,6 +170,8 @@ timegm (struct tm *tm)
 int64_t
 BrokenDateTime::ToUnixTimeUTC() const
 {
+  assert(IsPlausible());
+
   struct tm tm;
   tm.tm_year = year - 1900;
   tm.tm_mon = month - 1;
@@ -214,6 +217,8 @@ BrokenDateTime::NowLocal()
 BrokenDateTime
 BrokenDateTime::operator+(int seconds) const
 {
+  assert(IsPlausible());
+
 #ifdef HAVE_POSIX
   return FromUnixTimeUTC(ToUnixTimeUTC() + seconds);
 #else

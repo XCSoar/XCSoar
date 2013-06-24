@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_PANEL_HPP
 #define XCSOAR_FORM_PANEL_HPP
 
-#include "Screen/ContainerWindow.hpp"
 #include "Screen/Features.hpp"
 
 #ifdef HAVE_CLIPPING
-#include "Screen/Color.hpp"
+#include "Screen/SolidContainerWindow.hpp"
+#else
+#include "Screen/ContainerWindow.hpp"
 #endif
 
 struct DialogLook;
@@ -36,11 +37,15 @@ struct DialogLook;
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
-class PanelControl : public ContainerWindow {
+class PanelControl :
 #ifdef HAVE_CLIPPING
-  Color background_color;
+  public SolidContainerWindow
+#else
+  /* don't need to erase the background when it has been done by the
+     parent window already */
+  public ContainerWindow
 #endif
-
+{
 public:
   /**
    * Constructor of the PanelControl class
@@ -49,12 +54,6 @@ public:
   PanelControl(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc,
                const WindowStyle style=WindowStyle());
-
-#ifdef HAVE_CLIPPING
-protected:
-  /* virtual methods from class PaintWindow */
-  void OnPaint(Canvas &canvas) override;
-#endif
 };
 
 #endif

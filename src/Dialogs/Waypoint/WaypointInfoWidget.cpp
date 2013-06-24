@@ -139,7 +139,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                             buffer.buffer(), buffer.MAX_SIZE);
   AddReadOnly(_("Elevation"), nullptr, buffer);
 
-  if (basic.time_available && basic.date_available) {
+  if (basic.time_available && basic.date_time_utc.IsDatePlausible()) {
     const SunEphemeris::Result sun =
       SunEphemeris::CalcSunTimes(waypoint.location, basic.date_time_utc,
                                  settings.utc_offset);

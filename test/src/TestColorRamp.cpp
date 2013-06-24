@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     {    0, 0xff, 0xff, 0x00},
     { 1000, 0xff, 0x00, 0x00},
   };
-  Color color;
+  RGB8Color color;
 
   plan_tests(39);
 

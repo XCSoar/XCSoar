@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Features.hpp"
-#include "Screen/Color.hpp"
+#include "Screen/PortableColor.hpp"
 
 #include <stdint.h>
 
@@ -50,8 +50,8 @@ struct AirspaceClassRendererSettings
   uint8_t brush;
 #endif
 
-  Color border_color;
-  Color fill_color;
+  RGB8Color border_color;
+  RGB8Color fill_color;
 
   unsigned border_width;
 
@@ -75,7 +75,7 @@ struct AirspaceClassRendererSettings
 
   void SetDefaults();
 
-  void SetColors(Color color) {
+  void SetColors(RGB8Color color) {
     border_color = fill_color = color;
   }
 };
@@ -95,7 +95,7 @@ struct AirspaceRendererSettings {
   /** Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;
 
-#ifndef ENABLE_OPENGL
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   /**
    * Should the airspace be rendered with a transparent brush instead
    * of a pattern brush?

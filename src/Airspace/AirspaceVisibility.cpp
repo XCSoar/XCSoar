@@ -72,9 +72,3 @@ AirspaceVisibility::operator()(const AbstractAirspace &airspace) const
     IsAirspaceAltitudeVisible(airspace, state,
                               computer_settings, renderer_settings);
 }
-
-bool
-AirspaceVisiblePredicate::operator()(const AbstractAirspace &airspace) const
-{
-  return AirspaceVisibility::operator()(airspace);
-}

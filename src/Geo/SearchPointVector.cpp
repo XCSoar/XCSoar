@@ -210,11 +210,11 @@ SearchPointVector::PreviousCircular(const_iterator i) const
 bool
 SearchPointVector::IsInside(const GeoPoint &pt) const
 {
-  return PolygonInterior(pt, &*begin(), &*end());
+  return PolygonInterior(pt, begin(), end());
 }
 
 bool
 SearchPointVector::IsInside(const FlatGeoPoint &pt) const
 {
-  return PolygonInterior(pt, &*begin(), &*end());
+  return PolygonInterior(pt, begin(), end());
 }

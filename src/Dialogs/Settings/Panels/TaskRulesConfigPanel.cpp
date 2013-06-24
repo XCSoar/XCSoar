@@ -125,6 +125,8 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(spacer_3);
 
   const StaticEnumChoice contests_list[] = {
+    { (unsigned)Contest::NONE, ContestToString(Contest::NONE),
+      N_("Disable OLC Calculations") },
     { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
       N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
           "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
@@ -139,11 +141,14 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       /* German competition, no translation */
       _T("Deutsche Meisterschaft im Streckensegelflug.") },
     { (unsigned)Contest::XCONTEST, ContestToString(Contest::XCONTEST),
-      _T("tbd.") },
+      N_("PG online contest with different track values: Free flight - 1 km = 1.0 point; "
+          "flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p.") },
     { (unsigned)Contest::DHV_XC, ContestToString(Contest::DHV_XC),
-      _T("tbd.") },
+      N_("European PG online contest of the DHV organization. Pretty much the same as the XContest rules, "
+          "but with different track values: 1 km = 1.5 points, 1.75 p and 2.0 p for FAI triangles respectively.") },
     { (unsigned)Contest::SIS_AT, ContestToString(Contest::SIS_AT),
-      _T("tbd.") },
+      N_("Austrian online glider contest. Tracks around max. six waypoints are scored. The "
+          "bounding box part with 1 km = 1.0 point and the additional zick-zack part with 1 km = 0.5 p.") },
     { (unsigned)Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
       N_("The FFVV NetCoupe \"libre\" competiton.") },
     { 0 }
@@ -167,7 +172,7 @@ TaskRulesConfigPanel::Save(bool &_changed)
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
-  OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
+  OrderedTaskSettings &otb = task_behaviour.ordered_defaults;
   ContestSettings &contest_settings = settings_computer.contest;
 
   changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED,

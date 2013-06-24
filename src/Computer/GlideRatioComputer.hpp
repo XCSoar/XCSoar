@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_GLIDE_RATIO_COMPUTER_HPP
 
 #include "GlideRatioCalculator.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "NMEA/Validity.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -35,10 +37,14 @@ class GlideRatioComputer {
 
   GlideRatioCalculator gr_calculator;
 
+  GeoPoint last_location;
+  fixed last_altitude;
+  Validity last_location_available;
+
 public:
   void Reset();
 
-  void Compute(const MoreData &basic, const MoreData &last_basic,
+  void Compute(const MoreData &basic,
                const DerivedInfo &calculated,
                VarioInfo &vario_info,
                const ComputerSettings &settings);

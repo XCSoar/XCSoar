@@ -59,7 +59,7 @@ final class GlueVoltage implements IOIOConnectionListener {
     instance = new Voltage(ioio, sample_rate, listener);
   }
 
-  @Override public void onIOIODisconnect() {
+  @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 

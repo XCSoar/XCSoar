@@ -224,7 +224,7 @@ Replay::OnTimer()
   else if (negative(virtual_time) || !next_data.time_available)
     schedule = 500;
   else if (cli != nullptr)
-    schedule = 500;
+    schedule = 1000;
   else {
     fixed delta_s = (next_data.time - virtual_time) / time_scale;
     int delta_ms = int(delta_s * 1000);

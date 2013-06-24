@@ -43,14 +43,14 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
-#include "Event/Android/Event.hpp"
+#include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #elif defined(USE_EGL)
 #include "Event/EGL/Globals.hpp"
-#include "Event/EGL/Event.hpp"
+#include "Event/Shared/Event.hpp"
 #include "Event/EGL/Loop.hpp"
 #elif defined(USE_GDI)
 #include "Event/GDI/Event.hpp"
@@ -418,12 +418,12 @@ WndForm::ShowModal()
     }
 
     if (event.IsKeyDown()) {
-      if (key_down_function &&
+      if (
 #ifdef USE_GDI
           IdentifyDescendant(event.msg.hwnd) &&
 #endif
           !CheckSpecialKey(this, event) &&
-          key_down_function(event.GetKeyCode()))
+          OnAnyKeyDown(event.GetKeyCode()))
         continue;
 
 #ifdef ENABLE_SDL
@@ -472,6 +472,14 @@ WndForm::ShowModal()
         continue;
       }
 #endif
+
+#ifdef KOBO
+      if (event.GetKeyCode() == SDLK_POWER) {
+        /* the Kobo power button closes the modal dialog */
+        modal_result = mrCancel;
+        continue;
+      }
+#endif
     }
 
     if (event.IsCharacter() && character_function &&
@@ -504,7 +512,8 @@ WndForm::OnPaint(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
   if (!IsMaximised() && is_active) {
-    GLEnable blend(GL_BLEND);
+    /* draw a shade around the current dialog to emphasise it */
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const PixelRect pos = GetPosition();
 
@@ -554,8 +563,7 @@ WndForm::OnPaint(Canvas &canvas)
 
   if (dragging) {
 #ifdef ENABLE_OPENGL
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
@@ -603,3 +611,9 @@ WndForm::ReinitialiseLayout()
   }
 }
 #endif
+
+bool
+WndForm::OnAnyKeyDown(unsigned key_code)
+{
+  return key_down_function && key_down_function(key_code);
+}

@@ -87,5 +87,5 @@ ReadAirspace(Airspaces &airspaces,
       airspaces.SetGroundLevels(*terrain);
   } else
     // there was a problem
-    airspaces.clear();
+    airspaces.Clear();
 }

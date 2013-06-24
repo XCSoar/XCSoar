@@ -161,7 +161,7 @@ MapWindow::UpdateWeather()
   // always service weather even if it's not used by the map,
   // because it's potentially used by other calculations
 
-  if (weather == NULL)
+  if (weather == NULL || Calculated().date_time_local.IsTimePlausible())
     return false;
 
   QuietOperationEnvironment operation;

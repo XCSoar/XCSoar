@@ -99,6 +99,13 @@ public:
     return pager.GetCurrentWidget();
   }
 
+  /**
+   * Call Widget::SetFocus() on the current widget.
+   */
+  void FocusCurrentWidget() {
+    pager.GetCurrentWidget().SetFocus();
+  }
+
   void ClickPage(unsigned i);
 
   void SetCurrentPage(unsigned i);
@@ -107,6 +114,13 @@ public:
 
   bool Save(bool &changed) {
     return pager.Save(changed);
+  }
+
+  /**
+   * Pass a key press event to the active widget.
+   */
+  bool InvokeKeyPress(unsigned key_code) {
+    return pager.KeyPress(key_code);
   }
 
   const PixelRect &GetPagerPosition() const {

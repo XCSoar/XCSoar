@@ -52,7 +52,7 @@ private:
                                  const AircraftState &aircraft,
                                  fixed minH) const override;
 
-  virtual const AircraftState &get_aircraft_start(const AircraftState &aircraft) const override;
+  virtual AircraftState get_aircraft_start(const AircraftState &aircraft) const override;
 };
 
 #endif

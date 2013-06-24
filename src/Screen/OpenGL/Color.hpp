@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_COLOR_HPP
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
+#include "Screen/PortableColor.hpp"
 #include "Features.hpp"
 #include "System.hpp"
 
@@ -34,21 +35,50 @@ Copyright_License {
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
  */
-struct Color {
+class Color {
 #ifdef HAVE_GLES
-  GLfixed r, g, b, a;
+  typedef GLfixed Component;
 
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b)
-    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(1u << 16u) {}
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
-    :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(_a << 8u) {}
+  static constexpr Component Import(uint8_t value) {
+    return value << 8;
+  }
+
+  static constexpr uint8_t Export(Component value) {
+    return value >> 8;
+  }
+
+  static constexpr Component MAX = 1u << 16u;
 #else
-  GLubyte r, g, b, a;
+  typedef GLubyte Component;
 
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b):r(_r), g(_g), b(_b), a(255) {}
-  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
-    :r(_r), g(_g), b(_b), a(_a) {}
+  static constexpr Component Import(uint8_t value) {
+    return value;
+  }
+
+  static constexpr uint8_t Export(Component value) {
+    return value;
+  }
+
+  static constexpr Component MAX = 0xff;
 #endif
+
+  Component r, g, b, a;
+
+  struct Internal {};
+
+  constexpr Color(Internal dummy,
+                  Component _r, Component _g, Component _b, Component _a)
+    :r(_r), g(_g), b(_b), a(_a) {}
+
+public:
+  constexpr Color(uint8_t _r, uint8_t _g, uint8_t _b)
+    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(MAX) {}
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
+    :r(Import(_r)), g(Import(_g)), b(Import(_b)), a(Import(_a)) {}
+
+  explicit constexpr Color(RGB8Color other)
+    :r(Import(other.Red())), g(Import(other.Green())), b(Import(other.Blue())),
+     a(MAX) {}
 
   Color() = default;
 
@@ -60,11 +90,7 @@ struct Color {
   uint8_t
   Red() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(r >> 8u);
-#else
-    return r;
-#endif
+    return Export(r);
   }
 
   /**
@@ -75,11 +101,7 @@ struct Color {
   uint8_t
   Green() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(g >> 8u);
-#else
-    return g;
-#endif
+    return Export(g);
   }
 
   /**
@@ -90,17 +112,43 @@ struct Color {
   uint8_t
   Blue() const
   {
-#ifdef HAVE_GLES
-    return (uint8_t)(b >> 8u);
-#else
-    return b;
-#endif
+    return Export(b);
+  }
+
+  /**
+   * Returns the alpha part of the color
+   * @return The alpha part of the color (0-255)
+   */
+  constexpr
+  uint8_t
+  Alpha() const
+  {
+    return Export(a);
   }
 
   constexpr
   Color
-  WithAlpha(GLubyte alpha) const {
-    return Color(Red(), Green(), Blue(), alpha);
+  WithAlpha(uint8_t alpha) const {
+    return Color(Internal(), r, g, b, Import(alpha));
+  }
+
+  constexpr bool IsOpaque() const {
+#ifdef HAVE_GLES
+    return a >= 0xff00;
+#else
+    return a == 0xff;
+#endif
+  }
+
+  constexpr bool IsTransparent() const {
+    return a == 0;
+  }
+
+  /**
+   * Construct a #Color object that is transparent.
+   */
+  static constexpr Color Transparent() {
+    return Color(0, 0, 0, 0);
   }
 
   /**
@@ -115,6 +163,16 @@ struct Color {
 #else
     return Color((r + 0xff * 3) / 4, (g + 0xff * 3) / 4, (b + 0xff * 3) / 4);
 #endif
+  }
+
+  /**
+   * Returns the shadowed version of this color.
+   */
+  constexpr Color Shadow() const {
+    return Color(Red() * 15u / 16u,
+                 Green() * 15u / 16u,
+                 Blue() * 15u / 16u,
+                 Alpha());
   }
 
   /**

@@ -21,7 +21,7 @@
  */
 
 #include "RTTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 #include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints rt_constraints = {

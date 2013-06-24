@@ -68,7 +68,7 @@ public:
   void SetGlidePolar(const GlidePolar &glide_polar);
 
   gcc_pure
-  const OrderedTaskBehaviour GetOrderedTaskBehaviour() const;
+  const OrderedTaskSettings GetOrderedTaskSettings() const;
 
   gcc_pure
   const Waypoint* GetActiveWaypoint() const;

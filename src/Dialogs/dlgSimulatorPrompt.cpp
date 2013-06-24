@@ -28,13 +28,9 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
-#include "resource.h"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
-
-#include <stdio.h>
 
 #ifdef SIMULATOR_AVAILABLE
 

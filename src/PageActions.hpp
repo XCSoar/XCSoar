@@ -28,6 +28,7 @@ Copyright_License {
 
 struct PageLayout;
 class GlueMapWindow;
+class Widget;
 
 namespace PageActions
 {
@@ -70,6 +71,11 @@ namespace PageActions
   void DeferredRestore();
 
   /**
+   * Like Restore(), but affects only the bottom area.
+   */
+  void RestoreBottom();
+
+  /**
    * Show a page with the map, or restore the current page if it was
    * configured with a map (for example if the user has activated the
    * FLARM radar page).
@@ -94,6 +100,12 @@ namespace PageActions
    * Show a page with the thermal assistant.
    */
   void ShowThermalAssistant();
+
+  /**
+   * Use a custom widget for the "bottom" area.  This is a wrapper for
+   * MainWindow::SetBottomWidget().  Call RestoreBottom() to undo this.
+   */
+  void SetCustomBottom(Widget *widget);
 };
 
 #endif

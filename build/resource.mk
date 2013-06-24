@@ -159,6 +159,8 @@ RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
+else ifeq ($(TARGET_IS_KOBO),y)
+RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 else
 
 ifeq ($(HAVE_WIN32),y)

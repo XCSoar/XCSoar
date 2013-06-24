@@ -135,10 +135,12 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                               COLOR_YELLOW.WithAlpha(80));
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    canvas.SelectNullPen();
+    canvas.Select(Brush(COLOR_YELLOW.WithAlpha(80)));
+
+    DrawCircle(canvas);
 #elif defined(USE_GDI)
     const PixelRect rc = GetClientRect();
     ::InvertRect(canvas, &rc);
@@ -160,10 +162,7 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GaugeThermalAssistant::Unprepare()
 {
-  GaugeThermalAssistantWindow *window =
-    (GaugeThermalAssistantWindow *)OverlappedWidget::GetWindow();
-  delete window;
-
+  DeleteWindow();
   OverlappedWidget::Unprepare();
 }
 
@@ -201,8 +200,6 @@ void
 GaugeThermalAssistant::Update(const AttitudeState &attitude,
                               const DerivedInfo &calculated)
 {
-  ThermalAssistantWindow *window =
-    (ThermalAssistantWindow *)GetWindow();
-
-  window->Update(attitude, calculated);
+  ThermalAssistantWindow &window = (ThermalAssistantWindow &)GetWindow();
+  window.Update(attitude, calculated);
 }

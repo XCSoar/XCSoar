@@ -94,8 +94,8 @@ AirspaceDetailsWidget::OnAction(int id)
 {
   assert(warnings != nullptr);
 
-  bool acked = warnings->get_ack_day(airspace);
-  warnings->acknowledge_day(airspace, !acked);
+  const bool acked = warnings->GetAckDay(airspace);
+  warnings->AcknowledgeDay(airspace, !acked);
 
   listener->OnAction(mrOK);
 }
@@ -112,7 +112,7 @@ dlgAirspaceDetails(const AbstractAirspace &airspace,
 
   if (warnings != nullptr) {
     widget->listener = &dialog;
-    dialog.AddButton(warnings->get_ack_day(airspace)
+    dialog.AddButton(warnings->GetAckDay(airspace)
                      ? _("Enable") : _("Ack Day"),
                      *widget, 1);
   }

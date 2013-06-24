@@ -63,9 +63,18 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
     // this leg totally included
     return GetPlannedVector();
 
-  case OrderedTaskPoint::CURRENT_ACTIVE:
+  case OrderedTaskPoint::CURRENT_ACTIVE: {
     // this leg partially included
+
+    if (!ref.IsValid())
+      /* if we don't have a GPS fix yet, we fall back to the "planned"
+         vector unless this task leg has already been achieved */
+      return destination.HasEntered()
+        ? GeoVector::Zero()
+        : GetPlannedVector();
+
     return memo_remaining.calc(ref, destination.GetLocationRemaining());
+  }
 
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
@@ -93,11 +102,15 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
     // this leg partially included
     if (!GetOrigin())
       return GeoVector(fixed(0), 
-                       ref.Bearing(destination.GetLocationRemaining()));
+                       ref.IsValid()
+                       ? ref.Bearing(destination.GetLocationRemaining())
+                       : Angle::Zero());
 
     if (destination.HasEntered())
       return memo_travelled.calc(GetOrigin()->GetLocationTravelled(),
                                  destination.GetLocationTravelled());
+    else if (!ref.IsValid())
+      return GeoVector::Zero();
     else
       return memo_travelled.calc(GetOrigin()->GetLocationTravelled(), ref);
 

@@ -9,8 +9,6 @@ XCSoar TE
     (the "new" Flarm radar page is too cluttered)
   - menu label improvements
     (e.g. Raw logger -> NMEA logger)
-  - removed obsolete/duplicate config panels
-    (devices and planes have dedicated dialogs now)
   - removed "Auto bugs" feature
     (not useful if the rate can't be configured)
   - renamed "Vibrant" terrain color ramp to "SeeYou"
@@ -21,8 +19,6 @@ XCSoar TE
     (the "Ack" function is not used as frequently as "Goto" and is only
      one more tap on the screen away. this additional button is cluttering
      the dialog)
-  - added AutoZoom gesture (up-down)
-    (will be part of XCSoar 6.7)
 * infoboxes
   - renamed "Height AGL" to "Altitude AGL"
     (most users don't know the difference between height and altitude,
@@ -46,8 +42,6 @@ XCSoar TE
   - show full waypoint names by default
   - show reachable airport names outlined
     (less clutter than the rounded rectangles)
-  - suppress drawing duplicate topography labels
-    (will be part of XCSoar 6.7)
 * devices
   - LX1600 configuration dialog
 * waypoint editor
@@ -61,9 +55,58 @@ XCSoar TE
   - TravisCI support
 
 
+Version 6.7 - not yet released
+* user interface
+  - resizable main window
+  - added AutoZoom gesture (up-down)
+  - obsolete configuration pages "devices", "polar", "logger info" removed
+  - new page: "horizon" (#1592)
+  - default page gesture changed right/left sense according to other xc ui interaction pattern
+  - pressing the Escape key in task manager switches to "Close" tab (#2877)
+  - separate font for dialogs (#723, #2806)
+* map
+  - terrain countour lines (#2451)
+  - continue loading terrain/topography without GPS fix (#2723)
+  - suppress drawing duplicate topography labels
+* infoboxes
+  - new content "Speed task last hour"
+  - new content "Next distance (nominal)"
+  - new panel for "Team code" provides quick access to team code settings (#2899)
+* tasks
+  - custom "start requires arm" setting (#2782)
+  - new option to disable OLC optimisation
+  - MAT: remove "auto add" turnpoint feature when fly over it
+  - update the calculator without a GPS fix (#2876)
+  - fix task speed and time estimates before task start (#2876)
+  - show "arm advance" button when manual arming is necessary
+* route planner
+  - ignore inactive and acknowledged airspaces (#2866)
+* waypoint editor
+  - delete waypoint implemented
+  - CUP file support added
+* devices
+  - enabling/disabling devices on-the-fly
+  - "debug" button
+  - more robust midnight wraparound handling (#2857)
+  - new driver from Cambridge L-Nav
+  - LX: faster LXNAV Nano detection over Bluetooth
+* Android
+  - support IOIO via OpenAccessory (Android 4.x)
+  - support USB host mode and USB-RS232 adapters on the Nook (#2886)
+  - show Bluetooth name instead of MAC address in device list
+* Analysis
+  - a retrospective task is compiled that summarises waypoints the aircraft has 
+    visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
+
 Version 6.6.3 - not yet released
+* map
+  - fill FAI triangle areas on Windows
 * Android
   - fix compatibility issue with Android 2.2
+* user interface
+  - fix unit display for pressure in flight setup dialog (#2933)
+* data files
+  - added "Pilatus B4" polar
 
 Version 6.6.2 - 2013/06/12
 * map

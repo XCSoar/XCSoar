@@ -45,6 +45,7 @@ Copyright_License {
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Computer/TraceComputer.hpp"
+#include "Engine/Contest/Solvers/Retrospective.hpp"
 
 #include <algorithm>
 
@@ -64,7 +65,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const ComputerSettings &settings_computer,
                             const MapSettings &settings_map,
                             const ContestStatistics &contest,
-                                    const TraceComputer &trace_computer) const
+                                    const TraceComputer &trace_computer,
+				    const Retrospective &retrospective) const
 {
   if (!trail_renderer.LoadTrace(trace_computer)) {
     ChartRenderer chart(chart_look, canvas, rc);
@@ -85,6 +87,21 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
 
   const ChartProjection proj(rc, task_projection);
+
+  { 
+    // draw place names found in the retrospective task
+    //    canvas.Select(*dialog_look.small_font);
+    canvas.Select(chart_look.label_font);
+    canvas.SetBackgroundTransparent();
+
+    auto end = retrospective.getNearWaypointList().end();
+    for (auto it = retrospective.getNearWaypointList().begin(); it!= end; ++it) {
+      RasterPoint wp_pos = proj.GeoToScreen(it->waypoint.location);
+      canvas.DrawText(wp_pos.x,
+		      wp_pos.y,
+		      it->waypoint.name.c_str());
+    }
+  }
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
@@ -242,8 +259,8 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
     const fixed d_remaining = derived.task_stats.total.remaining.GetDistance();
     TCHAR timetext1[100];
     TCHAR timetext2[100];
-    if (common.ordered_has_targets) {
-      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining);
+    if (task_stats.has_targets) {
+      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining_start);
       FormatSignedTimeHHMM(timetext2, (int)common.aat_time_remaining);
 
       if (Layout::landscape) {
@@ -267,7 +284,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
             Units::GetTaskSpeedName());
       }
     } else {
-      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining);
+      FormatSignedTimeHHMM(timetext1, (int)task_stats.total.time_remaining_now);
       _stprintf(sTmp, _T("%s: %s\r\n%s: %5.0f %s\r\n"),
                 _("Task to go"), timetext1, _("Distance to go"),
                 (double)Units::ToUserDistance(d_remaining),

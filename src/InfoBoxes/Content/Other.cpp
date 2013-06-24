@@ -160,22 +160,16 @@ UpdateInfoBoxFreeRAM(InfoBoxData &data)
 void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
-#ifndef NO_HORIZON
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
     HorizonRenderer::Draw(canvas, rc,
                           look.horizon, CommonInterface::Basic().attitude);
   }
-#endif
 }
 
 void
 InfoBoxContentHorizon::Update(InfoBoxData &data)
 {
-#ifdef NO_HORIZON
-  data.SetInvalid();
-  data.SetComment(_("Disabled"));
-#else
   if (!CommonInterface::Basic().attitude.bank_angle_available &&
       !CommonInterface::Basic().attitude.pitch_angle_available) {
     data.SetInvalid();
@@ -183,5 +177,4 @@ InfoBoxContentHorizon::Update(InfoBoxData &data)
   }
 
   data.SetCustom();
-#endif
 }

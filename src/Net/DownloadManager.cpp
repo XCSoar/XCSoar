@@ -52,6 +52,7 @@ Net::DownloadManager::Deinitialise()
 {
   delete download_manager;
   download_manager = NULL;
+  AndroidDownloadManager::Deinitialise(Java::GetEnv());
 }
 
 bool

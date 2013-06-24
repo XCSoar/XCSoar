@@ -27,21 +27,13 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Topography/XShapePoint.hpp"
 
-#ifdef HAVE_BOOST
-#include <boost/cstdint.hpp>
-#else
 #include <stdint.h>
-#endif
 
 /**
  * This is an equivalent to OpenGL ES 32-bit fixed point matrix math, for the
  * 2D case only. Functions ending with x expect fixed point parameters.
  */
 class Matrix2D {
-#ifdef HAVE_BOOST
-  typedef boost::int64_t int64_t;
-#endif
-
   int32_t m[3][2];
 public:
   Matrix2D() {

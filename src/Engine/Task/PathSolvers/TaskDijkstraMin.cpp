@@ -35,7 +35,7 @@ TaskDijkstraMin::DistanceMin(const OrderedTask &task,
   if (currentLocation.IsValid()) {
     AddStartEdges(currentLocation);
   } else {
-    LinkStart(ScanTaskPoint(0, 0));
+    AddZeroStartEdges();
   }
 
   return Run();

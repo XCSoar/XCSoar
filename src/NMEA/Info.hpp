@@ -276,13 +276,13 @@ struct NMEAInfo {
    */
   fixed time;
 
-  /** GPS date and time (UTC) */
-  BrokenDateTime date_time_utc;
-
   /**
-   * Is the BrokenDate part of #date_time_utc available?
+   * GPS date and time (UTC).
+   *
+   * Check BrokenDateTime::IsDatePlausible() before using the date
+   * part.
    */
-  bool date_available;
+  BrokenDateTime date_time_utc;
 
   //###########
   //   Vario
@@ -406,16 +406,6 @@ struct NMEAInfo {
   FlarmData flarm;
 
   void UpdateClock();
-
-  gcc_pure
-  bool HasTimeAdvancedSince(const NMEAInfo &last) const {
-    return time_available && last.time_available && time > last.time;
-  }
-
-  gcc_pure
-  bool HasTimeRetreatedSince(const NMEAInfo &last) const {
-    return !last.time_available || (time_available && time < last.time);
-  }
 
   /**
    * Returns a #BrokenDate referring to the given time stamp (all

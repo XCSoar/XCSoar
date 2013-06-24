@@ -25,6 +25,7 @@
 
 #include "TaskInterface.hpp"
 #include "Stats/TaskStats.hpp"
+#include "Computer/TaskStatsComputer.hpp"
 #include "TaskBehaviour.hpp"
 #include "Math/Filter.hpp"
 
@@ -261,21 +262,17 @@ protected:
    * Calculate task start time.
    * Default behaviour is current time, to be used for non-ordered tasks.
    *
-   * @param state_now Aircraft state
-   *
-   * @return Time (s) of start of task
+   * @return Time (s) of start of task or negative value if not available
    */
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) = 0;
+  virtual fixed ScanTotalStartTime() = 0;
 
   /**
    * Calculate leg start time.
    * Default behaviour is current time, to be used for non-ordered tasks.
    *
-   * @param state_now Aircraft state
-   *
-   * @return Time (s) of start of leg
+   * @return Time (s) of start of leg or negative value if not available
    */
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) = 0;
+  virtual fixed ScanLegStartTime() = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -401,9 +398,12 @@ protected:
 private:
   void UpdateGlideSolutions(const AircraftState &state,
                             const GlidePolar &glide_polar);
-  void UpdateStatsTimes(const AircraftState &state);
-  void UpdateStatsSpeeds(const AircraftState &state,
-                         const AircraftState &state_last);
+
+  /**
+   * @param time monotonic time of day in seconds or -1 if unknown
+   */
+  void UpdateStatsTimes(fixed time);
+  void UpdateStatsSpeeds(fixed time);
   void UpdateStatsGlide(const AircraftState &state,
                         const GlidePolar &glide_polar);
   void UpdateFlightMode();

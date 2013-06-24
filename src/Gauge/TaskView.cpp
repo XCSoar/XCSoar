@@ -136,9 +136,11 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 
   if (fai_sectors && IsFAITriangleApplicable(task)) {
     static constexpr Color fill_color = COLOR_YELLOW;
+#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL)
 #ifdef ENABLE_OPENGL
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
+
     canvas.Select(Brush(fill_color.WithAlpha(40)));
     canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(80)));
     RenderFAISectors(canvas, projection, task);

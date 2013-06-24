@@ -51,8 +51,8 @@ public:
   virtual fixed CalcRequiredGlide(const AircraftState &state_now,
                                   const GlidePolar &glide_polar) const override;
   virtual fixed CalcGradient(const AircraftState &state_now) const override;
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) override;
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) override;
+  virtual fixed ScanTotalStartTime() override;
+  virtual fixed ScanLegStartTime() override;
   virtual fixed ScanDistanceNominal() override;
   virtual fixed ScanDistancePlanned() override;
   virtual fixed ScanDistanceRemaining(const GeoPoint &ref) override;

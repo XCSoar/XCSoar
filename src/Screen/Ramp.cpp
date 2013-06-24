@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Screen/Ramp.hpp"
-#include "Color.hpp"
+#include "PortableColor.hpp"
 
 #include <assert.h>
 #include <stddef.h>
 
-Color
+RGB8Color
 ColorRampLookup(const short h,
                 const ColorRamp* ramp_colors,
                 const int numramp,
@@ -41,9 +41,9 @@ ColorRampLookup(const short h,
 
   // gone past end, so use last color
   if (h >= ramp_colors[numramp - 1].h) {
-    return Color(ramp_colors[numramp-1].r,
-                 ramp_colors[numramp-1].g,
-                 ramp_colors[numramp-1].b);
+    return RGB8Color(ramp_colors[numramp-1].r,
+                     ramp_colors[numramp-1].g,
+                     ramp_colors[numramp-1].b);
   }
   for (int i = numramp - 2; i >= 0; i--) {
     assert(ramp_colors[i].h < ramp_colors[i + 1].h);
@@ -54,11 +54,11 @@ ColorRampLookup(const short h,
           / (unsigned short)(ramp_colors[i + 1].h - ramp_colors[i].h);
         of = is - f;
 
-        return Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
-                     (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
-                     (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
+        return RGB8Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
+                         (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
+                         (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
       } else {
-        return Color(ramp_colors[i].r, ramp_colors[i].g, ramp_colors[i].b);
+        return RGB8Color(ramp_colors[i].r, ramp_colors[i].g, ramp_colors[i].b);
       }
     }
   }
@@ -66,5 +66,7 @@ ColorRampLookup(const short h,
   // check if h lower than lowest
   assert(h <= ramp_colors[0].h);
 
-  return Color(ramp_colors[0].r, ramp_colors[0].g, ramp_colors[0].b);
+  return RGB8Color(ramp_colors[0].r,
+                   ramp_colors[0].g,
+                   ramp_colors[0].b);
 }

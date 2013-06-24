@@ -93,17 +93,17 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     state.altitude = loc_start.altitude;
 
     {
-      Airspaces as_route(airspaces, false);
+      Airspaces as_route(false);
       // dummy
 
       // real one, see if items changed
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), range);
-      int size_1 = as_route.size();
+      int size_1 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), fixed(1));
-      int size_2 = as_route.size();
+      int size_2 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_2);
 
@@ -111,7 +111,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // go back
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_end), range);
-      int size_3 = as_route.size();
+      int size_3 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_3);
 
@@ -119,7 +119,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // and again
       as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), range);
-      int size_4 = as_route.size();
+      int size_4 = as_route.GetSize();
       if (verbose)
         printf("# route airspace size %d\n", size_4);
 
@@ -134,17 +134,19 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     GlideSettings settings;
     settings.SetDefaults();
-    AirspaceRoute route(airspaces);
+    AirspaceRoute route;
     route.UpdatePolar(settings, polar, polar, wind);
     route.SetTerrain(&map);
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::Mode::BOTH;
 
+    AirspacePredicateTrue predicate;
+
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
       loc_end.latitude += Angle::Degrees(0.1);
       loc_end.altitude = map.GetHeight(loc_end) + 100;
-      route.Synchronise(airspaces, loc_start, loc_end);
+      route.Synchronise(airspaces, predicate, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {
         sol = true;
         if (verbose) {

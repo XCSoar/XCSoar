@@ -51,6 +51,7 @@ typedef char TCHAR;
 #define _tcspbrk strpbrk
 #define _tcscat strcat
 #define _T(x) x
+#define _topen open
 #define _tfopen fopen
 #define _TEOF EOF
 #define _putts puts

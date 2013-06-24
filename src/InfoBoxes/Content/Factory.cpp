@@ -152,6 +152,12 @@ struct MetaData {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
+
+
+/* WARNING: Never insert or delete items or rearrange the order of the items
+ * in this array. This will break existing infobox configurations of all users!
+ */
+
 static constexpr MetaData meta_data[] = {
   // e_HeightGPS
   {
@@ -272,7 +278,7 @@ static constexpr MetaData meta_data[] = {
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     UpdateInfoBoxNextDistance,
     next_waypoint_infobox_panels,
-    e_WP_AltDiff, // WP AltD
+    WP_NOMINAL_DIST, // WP Dist-N
     e_TaskProgress, // Progress
   },
 
@@ -284,7 +290,7 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxNextAltitudeDiff,
     next_waypoint_infobox_panels,
     e_WP_MC0AltDiff, // WP MC0 AltD
-    e_WP_Distance, // WP Dist
+    WP_NOMINAL_DIST, // WP Dist-N
   },
 
   // e_WP_AltReq
@@ -345,7 +351,7 @@ static constexpr MetaData meta_data[] = {
     N_("Distance to finish around remaining turn points."),
     UpdateInfoBoxFinalDistance,
     e_AA_Time, // AA Time
-    e_CC_Speed, // V Task Ach
+    TASK_SPEED_HOUR,
   },
 
   // e_Fin_GR_TE
@@ -780,7 +786,7 @@ static constexpr MetaData meta_data[] = {
     N_("V Task Ach"),
     N_("Achieved cross country speed while on current task, compensated for altitude.  Equivalent to Pirker cross-country speed remaining."),
     UpdateInfoBoxTaskSpeedAchieved,
-    e_Fin_Distance, // Fin Dis
+    TASK_SPEED_HOUR,
     e_CC_SpeedInst, // V Task Inst
   },
 
@@ -1211,6 +1217,26 @@ static constexpr MetaData meta_data[] = {
     atc_infobox_panels,
     NEXT_RADIAL,
     NEXT_RADIAL,
+  },
+
+  {
+    N_("Speed task last hour"),
+    N_("V Task H"),
+    N_("Average cross country speed while on current task over the last hour, not compensated for altitude."),
+    UpdateInfoBoxTaskSpeedHour,
+    e_Fin_Distance,
+    e_CC_Speed,
+  },
+
+  // WP_NOMINAL_DIST
+  {
+    N_("Next distance (nominal)"),
+    N_("WP Dist-N"),
+    N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
+    UpdateInfoBoxNextDistanceNominal,
+    next_waypoint_infobox_panels,
+    e_WP_AltDiff, // WP AltD
+    e_WP_Distance, // WP Dist
   },
 };
 

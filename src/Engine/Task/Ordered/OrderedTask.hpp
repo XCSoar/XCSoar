@@ -28,7 +28,6 @@
 #include "Task/TaskBehaviour.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
-#include "MatPoints.hpp"
 
 #include <assert.h>
 #include <vector>
@@ -81,15 +80,10 @@ private:
 
   TaskFactoryType factory_mode;
   AbstractTaskFactory* active_factory;
-  OrderedTaskBehaviour ordered_behaviour;
+  OrderedTaskSettings ordered_settings;
   SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
-
-  /**
-   * maintains a list of Turnpoints from the waypoint file for MAT tasks
-   */
-  MatPoints mat_points;
 
 public:
   /** 
@@ -430,16 +424,6 @@ public:
    */
   bool ScanStartFinish();
 
-  /**
-   * checks if the aircraft has entered the Mat cylinder
-   * updates transition state of point
-   * @return true if enter transition occurs
-   */
-  bool CheckTransitionPointMat(OrderedTaskPoint &point,
-                               const AircraftState &state,
-                               const AircraftState &state_last,
-                               const FlatBoundingBox &bb_now,
-                               const FlatBoundingBox &bb_last);
 private:
 
   fixed ScanDistanceMin(const GeoPoint &ref, bool full);
@@ -547,27 +531,27 @@ public:
   }
 
   /** 
-   * Retrieve (const) the OrderedTaskBehaviour used by this task
+   * Retrieve (const) the #OrderedTaskSettings used by this task
    * 
-   * @return Read-only OrderedTaskBehaviour
+   * @return Read-only #OrderedTaskSettings
    */
-  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
-    return ordered_behaviour;
+  const OrderedTaskSettings &GetOrderedTaskSettings() const {
+    return ordered_settings;
   }
 
   /** 
-   * Copy OrderedTaskBehaviour to this task
+   * Copy #OrderedTaskSettings to this task
    * 
    * @param ob Value to set
    */
-  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &ob);
+  void SetOrderedTaskSettings(const OrderedTaskSettings &ob);
 
 protected:
   /**
-   * Propagate a change to the OrderedTaskBehaviour to all interested
+   * Propagate a change to the #OrderedTaskSettings to all interested
    * child objects.
    */
-  void PropagateOrderedTaskBehaviour();
+  void PropagateOrderedTaskSettings();
 
 public:
   ConstTaskPointList GetPoints() const {
@@ -644,48 +628,6 @@ public:
    */
   unsigned GetLastIntermediateAchieved() const;
 
-  /**
-   * returns const reference to mat_points
-   */
-  const MatPoints::MatVector& GetMatPoints() const {
-    return mat_points.GetMatPoints();
-  }
-
-  /**
-   * returns reference mat_points
-   */
-  MatPoints::MatVector& SetMatPoints() {
-    return mat_points.SetMatPoints();
-  }
-
-  /**
-   * this is called automatically by Commit
-   * or if the waypoint file changes.
-   * If a client wants to use the Mat Points on an Uncommitted task,
-   * he must Call FillMatPoints himself
-   * The MatPoints will be deleted when the task is deleted
-   * It is the client's responsibility to lock the task manager if
-   * this is called on the active task
-   * @param wps.   Reference to the waypoint file
-   * @param update_geometry.  If true (default) will update the task's geometry
-   */
-  void FillMatPoints(const Waypoints &wps, bool update_geometry = true);
-
-  /**
-   * removes all points from mat_points
-   */
-  void ClearMatPoints() {
-    mat_points.ClearMatPoints();
-  }
-
-  /**
-   * Should we add this WP to the Mat
-   * after the last achieved Intermediate point?
-   * @param mat_wp the wp to test
-   * @return true if this should be added after the last achieved intermediate tp
-   */
-  bool ShouldAddToMat(const Waypoint &mat_wp) const;
-
 public:
   /* virtual methods from class TaskInterface */
   virtual unsigned TaskSize() const override {
@@ -722,8 +664,8 @@ protected:
                                const GlidePolar &glide_polar,
                                fixed &value) const override;
   virtual fixed CalcGradient(const AircraftState &state_now) const override;
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now) override;
-  virtual fixed ScanLegStartTime(const AircraftState &state_now) override;
+  virtual fixed ScanTotalStartTime() override;
+  virtual fixed ScanLegStartTime() override;
   virtual fixed ScanDistanceNominal() override;
   virtual fixed ScanDistancePlanned() override;
   virtual fixed ScanDistanceRemaining(const GeoPoint &ref) override;

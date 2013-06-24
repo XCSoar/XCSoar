@@ -125,7 +125,7 @@ ActionInterface::SetBallast(fixed ballast, bool to_devices)
 
   if (calculation_thread != NULL) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->Trigger();
+    calculation_thread->ForceTrigger();
   }
 
   // send to external devices
@@ -154,7 +154,7 @@ ActionInterface::SetBugs(fixed bugs, bool to_devices)
 
   if (calculation_thread != NULL) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->Trigger();
+    calculation_thread->ForceTrigger();
   }
 
   // send to external devices
@@ -190,7 +190,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 
   if (calculation_thread != NULL) {
     calculation_thread->SetComputerSettings(GetComputerSettings());
-    calculation_thread->Trigger();
+    calculation_thread->ForceTrigger();
   }
 
   /* send to external devices */

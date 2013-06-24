@@ -237,11 +237,12 @@ OptionStartsWidget::Remove(unsigned i)
 }
 
 bool
-dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task)
+dlgTaskOptionalStarts(OrderedTask** task)
 {
   OptionStartsWidget widget(**task);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(parent, _("Alternate Start Points"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(),
+                    _("Alternate Start Points"), &widget);
   widget.CreateButtons(dialog);
 
   dialog.ShowModal();

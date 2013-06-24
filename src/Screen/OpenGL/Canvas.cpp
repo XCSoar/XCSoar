@@ -83,7 +83,7 @@ Canvas::OutlineRectangleGL(PixelScalar left, PixelScalar top,
 void
 Canvas::FadeToWhite(GLubyte alpha)
 {
-  const GLEnable blend(GL_BLEND);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   const Color color(0xff, 0xff, 0xff, alpha);
   Clear(color);
 }
@@ -91,7 +91,7 @@ Canvas::FadeToWhite(GLubyte alpha)
 void
 Canvas::FadeToWhite(PixelRect rc, GLubyte alpha)
 {
-  const GLEnable blend(GL_BLEND);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   const Color color(0xff, 0xff, 0xff, alpha);
   DrawFilledRectangle(rc.left, rc.right, rc.right, rc.bottom, color);
 }

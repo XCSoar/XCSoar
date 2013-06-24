@@ -106,9 +106,8 @@ public:
   virtual void UpdateState(const TaskAccessor& task,
                            AircraftState& state, const fixed timestep=fixed(1));
 
-  bool UpdateAutopilot(TaskAccessor& task,
-                       const AircraftState& state,
-                       const AircraftState& state_last);
+  bool UpdateAutopilot(TaskAccessor &task,
+                       const AircraftState &state);
 
   gcc_pure
   GeoPoint GetTarget(const TaskAccessor& task) const;

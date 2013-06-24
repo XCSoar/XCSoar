@@ -50,6 +50,10 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
     _tcscpy(buffer, _("Thermal assistant"));
     return;
 
+  case PageLayout::Main::HORIZON:
+    _tcscpy(buffer, _("Horizon"));
+    return;
+
   case PageLayout::Main::MAX:
     gcc_unreachable();
   }
@@ -82,6 +86,7 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
 
   switch (bottom) {
   case Bottom::NOTHING:
+  case Bottom::CUSTOM:
     break;
 
   case Bottom::CROSS_SECTION:

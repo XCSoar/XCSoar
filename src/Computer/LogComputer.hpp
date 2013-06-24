@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_LOG_COMPUTER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "GPSClock.hpp"
+#include "Time/GPSClock.hpp"
 
 #include <assert.h>
 

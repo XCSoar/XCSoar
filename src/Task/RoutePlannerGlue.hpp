@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ROUTE_PLANNER_GLUE_HPP
 #define ROUTE_PLANNER_GLUE_HPP
 
@@ -27,13 +28,14 @@
 struct GlideSettings;
 class RoughAltitude;
 class RasterTerrain;
+class ProtectedAirspaceWarningManager;
 
 class RoutePlannerGlue {
   const RasterTerrain *terrain;
   AirspaceRoute planner;
 
 public:
-  RoutePlannerGlue(const Airspaces &master);
+  RoutePlannerGlue():terrain(nullptr) {}
 
   void SetTerrain(const RasterTerrain *terrain);
 
@@ -44,10 +46,10 @@ public:
     planner.UpdatePolar(settings, polar, safety_polar, wind);
   }
 
-  void Synchronise(const Airspaces &master, const AGeoPoint &origin,
-                   const AGeoPoint &destination) {
-    planner.Synchronise(master, origin, destination);
-  }
+  void Synchronise(const Airspaces &master,
+                   const ProtectedAirspaceWarningManager *warnings,
+                   const AGeoPoint &origin,
+                   const AGeoPoint &destination);
 
   bool IsReachEmpty() const {
     return planner.IsReachEmpty();

@@ -106,7 +106,7 @@ CrossSectionRenderer::UpdateTerrain(short *elevations) const
 {
   if (terrain == NULL) {
     const auto invalid = RasterBuffer::TERRAIN_INVALID;
-    std::fill(elevations, elevations + NUM_SLICES, invalid);
+    std::fill_n(elevations, NUM_SLICES, invalid);
     return;
   }
 

@@ -20,7 +20,7 @@
 					<folderInfo id="0.697445322.381966687.1829290776.1755796292." name="/" resourcePath="">
 						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1897114771" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.PE" id="org.eclipse.cdt.build.core.prefbase.toolchain.1897114771.256012921" name=""/>
-							<builder arguments="" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1142369414" incrementalBuildTarget="everything WINHOST=y TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder arguments="" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1142369414" incrementalBuildTarget="everything TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.616746650" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1893918740" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.507017671" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -71,7 +71,7 @@
 					<target name="PC-Win" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PC WINHOST=y</buildTarget>
+						<buildTarget>TARGET=PC</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -672,7 +672,7 @@
 					<target name="PC-Win" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PC WINHOST=y</buildTarget>
+						<buildTarget>TARGET=PC</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -1243,7 +1243,7 @@
 					<folderInfo id="0.697445322.381966687.1829290776.1755796292.252670475." name="/" resourcePath="">
 						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.145566267" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.PE" id="org.eclipse.cdt.build.core.prefbase.toolchain.145566267.1360731032" name=""/>
-							<builder arguments="USE_CCACHE=y" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1543407657" incrementalBuildTarget="everything WINHOST=y TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder arguments="USE_CCACHE=y" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1543407657" incrementalBuildTarget="everything TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.1695733905" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.520959231" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1061025219" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -1294,7 +1294,7 @@
 					<target name="PC-Win" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PC WINHOST=y</buildTarget>
+						<buildTarget>TARGET=PC</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>
@@ -1865,7 +1865,7 @@
 					<folderInfo id="0.697445322.381966687.1829290776.1755796292.1512046099." name="/" resourcePath="">
 						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.610474631" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 							<targetPlatform binaryParser="org.eclipse.cdt.core.PE" id="org.eclipse.cdt.build.core.prefbase.toolchain.610474631.1812397831" name=""/>
-							<builder arguments="FIXED=y" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1428830373" incrementalBuildTarget="everything WINHOST=y TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder arguments="FIXED=y" cleanBuildTarget="clean" command="make" id="org.eclipse.cdt.build.core.settings.default.builder.1428830373" incrementalBuildTarget="everything TARGET=PC" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="4" stopOnErr="true" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.434684726" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1481353933" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.705007348" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
@@ -1916,7 +1916,7 @@
 					<target name="PC-Win" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>make</buildCommand>
 						<buildArguments>everything  -j4</buildArguments>
-						<buildTarget>TARGET=PC WINHOST=y</buildTarget>
+						<buildTarget>TARGET=PC</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>true</runAllBuilders>

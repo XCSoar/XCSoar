@@ -45,6 +45,9 @@ namespace BluetoothHelper {
   gcc_pure
   bool isEnabled(JNIEnv *env);
 
+  gcc_pure
+  const char *GetNameFromAddress(JNIEnv *env, const char *address);
+
   /**
    * Returns a list of all bonded devices.
    */

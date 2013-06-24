@@ -24,7 +24,7 @@
 #include "../AbstractAirspace.hpp"
 
 bool
-AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
+AirspacePredicateHeightRange::operator()(const AbstractAirspace& t) const
 {
   return RoughAltitude(t.GetTop().altitude) >= h_min &&
     RoughAltitude(t.GetBase().altitude) <= h_max;
@@ -33,8 +33,5 @@ AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 bool
 AirspacePredicateHeightRangeExcludeTwo::operator()(const AbstractAirspace& t) const
 {
-  if (!check_height(t))
-    return false;
-
-  return !t.Inside(p1) && !t.Inside(p2);
+  return height_range(t) && outside1(t) && outside2(t);
 }

@@ -63,11 +63,12 @@ Copyright_License {
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "resource.h"
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
 #include "Computer/Events.hpp"
+#include "Monitor/AllMonitors.hpp"
 #include "StatusMessage.hpp"
 #include "MergeThread.hpp"
 #include "CalculationThread.hpp"
@@ -113,6 +114,7 @@ Copyright_License {
 static Markers *marks;
 static TaskManager *task_manager;
 static GlideComputerEvents *glide_computer_events;
+static AllMonitors *all_monitors;
 static GlideComputerTaskEvents *task_events;
 
 static bool
@@ -159,7 +161,6 @@ AfterStartup()
       way_points.Optimise();
     }
 
-    defaultTask->FillMatPoints(way_points);
     protected_task_manager->TaskCommit(*defaultTask);
     delete defaultTask;
   }
@@ -202,8 +203,7 @@ Startup()
   TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
-  if (CommandLine::resizable)
-    style.Resizable();
+  style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow(CommonInterface::status_messages);
@@ -448,6 +448,8 @@ Startup()
   glide_computer_events->Reset();
   live_blackboard.AddListener(*glide_computer_events);
 
+  all_monitors = new AllMonitors();
+
   if (computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
     LocalPath(path, _T("flights.log"));
@@ -524,6 +526,7 @@ Shutdown()
   delete flight_logger;
   flight_logger = NULL;
 
+  delete all_monitors;
   live_blackboard.RemoveListener(*glide_computer_events);
   delete glide_computer_events;
 
@@ -638,7 +641,7 @@ Shutdown()
   delete logger;
 
   // Clear airspace database
-  airspace_database.clear();
+  airspace_database.Clear();
 
   // Destroy FlarmNet records
   DeinitTrafficGlobals();

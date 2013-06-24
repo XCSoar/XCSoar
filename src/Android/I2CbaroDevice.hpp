@@ -28,7 +28,7 @@ Copyright_License {
 #include "Java/Object.hpp"
 #include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Compiler.h"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 #include <jni.h>
 

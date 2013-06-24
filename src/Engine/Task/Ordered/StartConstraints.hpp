@@ -46,6 +46,13 @@ struct StartConstraints {
   AltitudeReference max_height_ref;
 
   /**
+   * Does the start point need to be armed manually?
+   *
+   * This defaults to #TaskFactoryConstraints::start_requires_arm
+   */
+  bool require_arm;
+
+  /**
    * This is a copy of FinishConstraints::fai_finish.  If true, then
    * the constraints defined in this class will be ignored.
    */

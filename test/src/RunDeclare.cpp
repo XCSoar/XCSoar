@@ -30,10 +30,10 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Config.hpp"
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 
@@ -72,16 +72,16 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                     fixed &time_of_day_s)
 {
   return false;
 }
 
-fixed
-NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                       bool date_available)
+bool
+NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
-  return fixed(0);
+  return false;
 }
 
 static Waypoint

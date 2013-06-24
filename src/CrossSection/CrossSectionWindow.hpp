@@ -24,7 +24,7 @@
 #ifndef CROSS_SECTION_WINDOW_HPP
 #define CROSS_SECTION_WINDOW_HPP
 
-#include "Screen/AntiFlickerWindow.hpp"
+#include "Screen/BufferWindow.hpp"
 #include "CrossSectionRenderer.hpp"
 
 struct CrossSectionLook;
@@ -40,7 +40,7 @@ class RasterTerrain;
  * A Window which renders a terrain and airspace cross-section
  */
 class CrossSectionWindow
-  : public AntiFlickerWindow
+  : public BufferWindow
 {
 protected:
   CrossSectionRenderer renderer;
@@ -62,6 +62,7 @@ public:
     renderer.ReadBlackboard(basic, calculated,
                             glide_settings, glide_polar,
                             ar_settings);
+    Invalidate();
   }
 
   /**

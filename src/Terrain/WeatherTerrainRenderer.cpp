@@ -205,5 +205,5 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
 
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
-                                sunazimuth);
+                                sunazimuth, false);
 }

@@ -37,7 +37,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "LocalPath.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

@@ -82,7 +82,7 @@ public:
 
     --inject_port_fault;
     char *p = (char *)Buffer;
-    std::fill(p, p + Size, ' ');
+    std::fill_n(p, Size, ' ');
     return Size;
   }
 

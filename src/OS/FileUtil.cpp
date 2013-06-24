@@ -30,6 +30,7 @@ Copyright_License {
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 #ifdef HAVE_POSIX
 #include <dirent.h>
@@ -387,4 +388,24 @@ File::Touch(const TCHAR *path)
 
   return result;
 #endif
+}
+
+bool
+File::WriteExisting(const TCHAR *path, const char *value)
+{
+  assert(path != nullptr);
+  assert(value != nullptr);
+
+  int flags = O_WRONLY;
+#ifdef O_NOCTTY
+  flags |= O_NOCTTY;
+#endif
+
+  int fd = _topen(path, flags);
+  if (fd < 0)
+    return false;
+
+  const size_t length = strlen(value);
+  ssize_t nbytes = write(fd, value, length);
+  return close(fd) == 0 && nbytes == (ssize_t)length;
 }

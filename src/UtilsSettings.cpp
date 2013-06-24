@@ -24,6 +24,7 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/Settings.hpp"
@@ -156,8 +157,6 @@ SettingsLeave(const UISettings &old_ui_settings)
       delete task;
 
       way_points.Optimise();
-
-      lease->FillMatPoints(way_points);
     }
   }
 
@@ -180,12 +179,12 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   if (AirspaceFileChanged) {
     if (glide_computer != NULL)
-      glide_computer->GetAirspaceWarnings().clear();
+      glide_computer->GetAirspaceWarnings().Clear();
 
     if (glide_computer != NULL)
       glide_computer->ClearAirspaces();
 
-    airspace_database.clear();
+    airspace_database.Clear();
     ReadAirspace(airspace_database, terrain,
                  CommonInterface::GetComputerSettings().pressure,
                  operation);
@@ -207,7 +206,8 @@ SettingsLeave(const UISettings &old_ui_settings)
     main_window.SetLook().map.trail.Initialise(settings_map.trail);
 
   if (settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)
-    main_window.SetLook().map.waypoint.Initialise(settings_map.waypoint);
+    main_window.SetLook().map.waypoint.Initialise(settings_map.waypoint,
+                                                  Fonts::map, Fonts::map_bold);
 
   ResumeAllThreads();
   main_window.ResumeThreads();

@@ -318,9 +318,10 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
 
   WaypointRendererSettings::LabelSelection &wls =
     CommonInterface::SetMapSettings().waypoint.label_selection;
-  if (StringIsEqual(misc, _T("toggle")))
+  if (StringIsEqual(misc, _T("toggle"))) {
     wls = WaypointRendererSettings::LabelSelection(((unsigned)wls + 1) %  n);
-  else if (StringIsEqual(misc, _T("show"))) {
+    Profile::Set(ProfileKeys::WaypointLabelSelection, (int)wls);
+  } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR tbuf[64];
     _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"),
               gettext(msg[(unsigned)wls]));

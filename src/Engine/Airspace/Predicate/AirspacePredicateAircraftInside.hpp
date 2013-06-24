@@ -34,7 +34,8 @@ class AirspacePredicateAircraftInside: public AirspacePredicate
   const AircraftState &state;
 
 public:
-  AirspacePredicateAircraftInside(const AircraftState &_state);
+  AirspacePredicateAircraftInside(const AircraftState &_state)
+    :state(_state) {}
 
   bool operator()(const AbstractAirspace &airspace) const;
 };

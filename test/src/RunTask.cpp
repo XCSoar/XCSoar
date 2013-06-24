@@ -25,8 +25,6 @@ Copyright_License {
 #include "DebugReplay.hpp"
 #include "Task/TaskFile.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
-#include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -35,16 +33,13 @@ Copyright_License {
 #include <stdlib.h>
 
 static void
-Run(DebugReplay &replay, TaskManager &task_manager)
+Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 {
-  if (!replay.Next())
-    return;
+  Validity last_location_available;
+  last_location_available.Clear();
 
-  MoreData last_basic;
-  last_basic = replay.Basic();
-
-  DerivedInfo last_calculated;
-  last_calculated = replay.Calculated();
+  AircraftState last_as;
+  bool last_as_valid = false;
 
   unsigned active_taskpoint_index(-1);
 
@@ -54,31 +49,47 @@ Run(DebugReplay &replay, TaskManager &task_manager)
     const MoreData &basic = replay.Basic();
     const DerivedInfo &calculated = replay.Calculated();
 
-    if (!basic.HasTimeAdvancedSince(last_basic) ||
-        !basic.location_available)
+    if (!basic.location_available) {
+      last_location_available.Clear();
       continue;
+    }
 
     const AircraftState current_as = ToAircraftState(basic, calculated);
-    const AircraftState last_as = ToAircraftState(last_basic,
-                                                  last_calculated);
-    task_manager.Update(current_as, last_as);
-    task_manager.UpdateIdle(current_as);
-    task_manager.SetTaskAdvance().SetArmed(true);
 
-    const CommonStats &common_stats = task_manager.GetCommonStats();
-    if (common_stats.active_taskpoint_index != active_taskpoint_index) {
-      active_taskpoint_index = common_stats.active_taskpoint_index;
+    if (!last_location_available) {
+      last_as = current_as;
+      last_as_valid = true;
+      last_location_available = basic.location_available;
+      continue;
+    }
+
+    if (!basic.location_available.Modified(last_location_available))
+      continue;
+
+    if (!last_as_valid) {
+      last_as = current_as;
+      last_as_valid = true;
+      last_location_available = basic.location_available;
+      continue;
+    }
+
+    task.Update(current_as, last_as, glide_polar);
+    task.UpdateIdle(current_as, glide_polar);
+    task.SetTaskAdvance().SetArmed(true);
+
+    if (task.GetActiveIndex() != active_taskpoint_index) {
+      active_taskpoint_index = task.GetActiveIndex();
 
       FormatISO8601(time_buffer, basic.date_time_utc);
       printf("%s active_taskpoint_index=%u\n",
              time_buffer, active_taskpoint_index);
     }
 
-    last_basic = basic;
-    last_calculated = calculated;
+    last_as = current_as;
+    last_as_valid = true;
   }
 
-  const TaskStats &task_stats = task_manager.GetOrderedTask().GetStats();
+  const TaskStats &task_stats = task.GetStats();
 
   printf("task_started=%d task_finished=%d\n",
          task_stats.start.task_started,
@@ -107,8 +118,6 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  Waypoints way_points;
-
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
 
@@ -119,17 +128,10 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  TaskManager task_manager(task_behaviour, way_points);
-  task_manager.SetGlidePolar(GlidePolar(fixed(1)));
+  const GlidePolar glide_polar(fixed(1));
 
-  if (!task_manager.Commit(*task)) {
-    fprintf(stderr, "Failed to commit task\n");
-    return EXIT_FAILURE;
-  }
-
+  Run(*replay, *task, glide_polar);
   delete task;
-
-  Run(*replay, task_manager);
   delete replay;
 
   return EXIT_SUCCESS;

@@ -29,6 +29,8 @@
 #include "Screen/Brush.hpp"
 #include "Screen/Icon.hpp"
 
+class Font;
+
 struct TrafficLook {
   Color safe_color;
   Color warning_color;
@@ -45,7 +47,9 @@ struct TrafficLook {
 
   MaskedIcon teammate_icon;
 
-  void Initialise();
+  const Font *font;
+
+  void Initialise(const Font &font);
 };
 
 #endif

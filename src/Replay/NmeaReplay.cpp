@@ -26,7 +26,7 @@
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 #include "OS/Clock.hpp"
 #include "NMEA/Info.hpp"
 

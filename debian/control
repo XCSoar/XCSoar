@@ -3,7 +3,6 @@ Section: misc
 Priority: extra
 Maintainer: Max Kellermann <max@duempel.org>
 Build-Depends: debhelper (>= 5), g++ (>= 4.6),
- libboost-dev,
  libsdl1.2-dev, libsdl-ttf2.0-dev,
  libgl-dev,
  libpng-dev, libjpeg-dev,

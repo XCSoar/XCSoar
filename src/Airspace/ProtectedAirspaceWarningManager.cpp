@@ -32,52 +32,52 @@ ProtectedAirspaceWarningManager::GetProjection() const
 }
 
 void
-ProtectedAirspaceWarningManager::clear()
+ProtectedAirspaceWarningManager::Clear()
 {
   ExclusiveLease lease(*this);
   lease->clear();
 }
 
 void
-ProtectedAirspaceWarningManager::clear_warnings()
+ProtectedAirspaceWarningManager::AcknowledgeAll()
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeAll();
 }
 
 bool
-ProtectedAirspaceWarningManager::warning_empty() const
+ProtectedAirspaceWarningManager::IsEmpty() const
 {
   Lease lease(*this);
   return lease->empty();
 }
 
 bool
-ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace) const
+ProtectedAirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
 {
   Lease lease(*this);
   return lease->GetAckDay(airspace);
 }
 
 void
-ProtectedAirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
-                                                 const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeDay(const AbstractAirspace &airspace,
+                                                const bool set)
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeDay(airspace, set);
 }
 
 void
-ProtectedAirspaceWarningManager::acknowledge_warning(const AbstractAirspace& airspace,
-                                                     const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeWarning(const AbstractAirspace &airspace,
+                                                    const bool set)
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeWarning(airspace, set);
 }
 
 void
-ProtectedAirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airspace,
-                                                    const bool set)
+ProtectedAirspaceWarningManager::AcknowledgeInside(const AbstractAirspace &airspace,
+                                                   const bool set)
 {
   ExclusiveLease lease(*this);
   lease->AcknowledgeInside(airspace, set);

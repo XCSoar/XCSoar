@@ -31,7 +31,7 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 #include "Operation/ConsoleOperationEnvironment.hpp"

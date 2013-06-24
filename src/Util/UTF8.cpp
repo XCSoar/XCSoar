@@ -277,3 +277,82 @@ CropIncompleteUTF8(char *const p)
   /* now the string must be completely valid */
   assert(ValidateUTF8(p));
 }
+
+std::pair<unsigned, const char *>
+NextUTF8(const char *p)
+{
+  assert(p != nullptr);
+
+  unsigned char a = *p++;
+  if (a == 0)
+    return std::make_pair(0u, nullptr);
+
+  if (IsASCII(a))
+    return std::make_pair(unsigned(a), p);
+
+  assert(!IsContinuation(a));
+
+  if (IsLeading1(a)) {
+    /* 1 continuation */
+    unsigned char b = *p++;
+    assert(IsContinuation(b));
+
+    return std::make_pair(((a & 0x1f) << 6) | (b & 0x3f), p);
+  } else if (IsLeading2(a)) {
+    /* 2 continuations */
+    unsigned char b = *p++;
+    assert(IsContinuation(b));
+    unsigned char c = *p++;
+    assert(IsContinuation(c));
+
+    return std::make_pair(((a & 0xf) << 12) | ((b & 0x3f) << 6) | (c & 0x3f),
+                          p);
+  } else if (IsLeading3(a)) {
+    /* 3 continuations */
+    unsigned char b = *p++;
+    assert(IsContinuation(b));
+    unsigned char c = *p++;
+    assert(IsContinuation(c));
+    unsigned char d = *p++;
+    assert(IsContinuation(d));
+
+    return std::make_pair(((a & 0x7) << 18) | ((b & 0x3f) << 12)
+                          | ((c & 0x3f) << 6) | (d & 0x3f),
+                          p);
+  } else if (IsLeading4(a)) {
+    /* 4 continuations */
+    unsigned char b = *p++;
+    assert(IsContinuation(b));
+    unsigned char c = *p++;
+    assert(IsContinuation(c));
+    unsigned char d = *p++;
+    assert(IsContinuation(d));
+    unsigned char e = *p++;
+    assert(IsContinuation(e));
+
+    return std::make_pair(((a & 0x3) << 24) | ((b & 0x3f) << 18)
+                          | ((c & 0x3f) << 12) | ((d & 0x3f) << 6)
+                          | (e & 0x3f),
+                          p);
+  } else if (IsLeading5(a)) {
+    /* 5 continuations */
+    unsigned char b = *p++;
+    unsigned char c = *p++;
+    unsigned char d = *p++;
+    unsigned char e = *p++;
+    unsigned char f = *p++;
+    assert(IsContinuation(b));
+    assert(IsContinuation(c));
+    assert(IsContinuation(d));
+    assert(IsContinuation(e));
+    assert(IsContinuation(f));
+
+    return std::make_pair(((a & 0x1) << 30) | ((b & 0x3f) << 24)
+                          | ((c & 0x3f) << 18) | ((d & 0x3f) << 12)
+                          | ((e & 0x3f) << 6) | (f & 0x3f),
+                          p);
+  } else {
+    assert(false);
+    gcc_unreachable();
+  }
+}

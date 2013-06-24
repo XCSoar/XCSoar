@@ -62,6 +62,17 @@ class GlueMapWindow : public MapWindow {
 
   unsigned idle_robin;
 
+#ifdef ENABLE_OPENGL
+  /**
+   * A timer that triggers a redraw periodically until all data files
+   * (terrain, topography, ...) have been loaded / updated.  This is
+   * necessary if there is no valid GPS input, and no other reason to
+   * redraw is present.  This timer will cease automatically once all
+   * data is loaded, i.e. Idle() returned false.
+   */
+  WindowTimer data_timer;
+#endif
+
   PeriodClock mouse_down_clock;
 
   enum DragMode {
@@ -135,6 +146,7 @@ class GlueMapWindow : public MapWindow {
 
 public:
   GlueMapWindow(const Look &look);
+  virtual ~GlueMapWindow();
 
   void SetLogger(Logger *_logger) {
     logger = _logger;
@@ -186,6 +198,7 @@ protected:
                            const RasterPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
+  virtual void OnDestroy() override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) override;

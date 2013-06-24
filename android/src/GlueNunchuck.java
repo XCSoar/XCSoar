@@ -63,7 +63,7 @@ final class GlueNunchuck implements IOIOConnectionListener {
     instance = new Nunchuck(ioio, twiNum, sample_rate, listener);
   }
 
-  @Override public void onIOIODisconnect() {
+  @Override public void onIOIODisconnect(IOIO ioio) {
     if (instance == null)
       return;
 

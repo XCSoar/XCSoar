@@ -121,6 +121,13 @@ public:
   bool Save(bool &changed);
 
   /**
+   * Pass a key press event to the active widget.
+   */
+  bool InvokeKeyPress(unsigned key_code) {
+    return pager.KeyPress(key_code);
+  }
+
+  /**
    * Calls Widget::Move() again on the current Widget.  This may be
    * used to trick the Widget into updating its layout.
    */

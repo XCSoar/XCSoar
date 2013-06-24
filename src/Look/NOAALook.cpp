@@ -27,5 +27,5 @@ Copyright_License {
 void
 NOAALook::Initialise()
 {
-  icon.Load(IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD);
+  icon.LoadResource(IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD);
 }

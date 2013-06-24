@@ -23,6 +23,9 @@
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
 #include "Trace/Trace.hpp"
+#include "Util/QuadTree.hpp"
+
+#include <limits>
 
 /*
  @todo potential to use 3d convex hull to speed search
@@ -77,7 +80,6 @@ OLCTriangle::Reset()
   tick_iterations = 1000;
 
   closing_pairs.clear();
-  search_point_tree.clear();
   ClearTrace();
 
   ResetBranchAndBound();
@@ -212,13 +214,11 @@ OLCTriangle::SolveTriangle(bool exhaustive)
 
     ClosingPairs close_look;
 
-    for (auto relaxed_pair = relaxed_pairs.closing_pairs.begin();
-         relaxed_pair != relaxed_pairs.closing_pairs.end();
-         ++relaxed_pair) {
+    for (const auto relaxed_pair : relaxed_pairs.closing_pairs) {
 
       std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-      triangle = RunBranchAndBound(relaxed_pair->first, relaxed_pair->second, best_d, exhaustive);
+      triangle = RunBranchAndBound(relaxed_pair.first, relaxed_pair.second, best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
@@ -237,32 +237,30 @@ OLCTriangle::SolveTriangle(bool exhaustive)
         } else {
           // otherwise we should solve the triangle again for every unrelaxed pair
           // contained inside the current relaxed pair. *damn!*
-          for (auto closing_pair = closing_pairs.closing_pairs.begin();
-               closing_pair != closing_pairs.closing_pairs.end();
-                ++closing_pair) {
-            if (closing_pair->first >= relaxed_pair->first && closing_pair->second <= relaxed_pair->second)
-              close_look.insert(*closing_pair);
+          for (const auto closing_pair : closing_pairs.closing_pairs) {
+            if (closing_pair.first >= relaxed_pair.first &&
+                closing_pair.second <= relaxed_pair.second)
+              close_look.insert(closing_pair);
          }
        }
       }
     }
 
-    for (auto close_look_pair = close_look.closing_pairs.begin();
-         close_look_pair != close_look.closing_pairs.end();
-         ++close_look_pair) {
-
+    for (const auto &close_look_pair : close_look.closing_pairs) {
       std::tuple<unsigned, unsigned, unsigned, unsigned> triangle;
 
-      triangle = RunBranchAndBound(close_look_pair->first, close_look_pair->second, best_d, exhaustive);
+      triangle = RunBranchAndBound(close_look_pair.first,
+                                   close_look_pair.second,
+                                   best_d, exhaustive);
 
       if (std::get<3>(triangle) > best_d) {
         // solution is better than best_d
 
-        start = close_look_pair->first;
+        start = close_look_pair.first;
         tp1 = std::get<0>(triangle);
         tp2 = std::get<1>(triangle);
         tp3 = std::get<2>(triangle);
-        finish = close_look_pair->second;
+        finish = close_look_pair.second;
 
         best_d = std::get<3>(triangle);
       }
@@ -337,7 +335,11 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }
 
-  while (branch_and_bound.size() != 0) {
+  const unsigned max_iterations = !exhaustive && predict
+    ? tick_iterations
+    : std::numeric_limits<unsigned>::max();
+
+  while (!branch_and_bound.empty()) {
     /* now loop over the tree, branching each found candidate set, adding the branch if it's feasible.
      * remove all candidate sets with d_max smaller than d_min of the largest integral candidate set
      * always work on the node with largest d_min
@@ -346,13 +348,15 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     iterations++;
 
     // break loop if tick_iterations exceeded
-    if (!exhaustive && predict && iterations > tick_iterations) break;
+    if (iterations > max_iterations)
+      break;
 
     // first clean up tree, removeing all nodes with d_max < worst_d
     branch_and_bound.erase(branch_and_bound.begin(), branch_and_bound.lower_bound(worst_d));
 
     // we might have cleaned up the whole tree. nothing to do then...
-    if (branch_and_bound.size() == 0) break;
+    if (branch_and_bound.empty())
+      break;
 
     // get node to work on
     auto node = --branch_and_bound.end();
@@ -441,7 +445,7 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
   }
 
 
-  if (branch_and_bound.size() == 0)
+  if (branch_and_bound.empty())
     running = false;
 
   if (integral_feasible) {
@@ -476,6 +480,20 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     return closing_pairs.insert(ClosingPair(0, n_points-1));
   }
 
+  struct TracePointNodeAccessor {
+    gcc_pure
+    int GetX(const TracePointNode &node) const {
+      return node.point->GetFlatLocation().longitude;
+    }
+
+    gcc_pure
+    int GetY(const TracePointNode &node) const {
+      return node.point->GetFlatLocation().latitude;
+    }
+  };
+
+  QuadTree<TracePointNode, TracePointNodeAccessor> search_point_tree;
+
   for (unsigned i = old_size; i < n_points; ++i) {
     TracePointNode node;
     node.point = &GetPoint(i);
@@ -484,10 +502,11 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     search_point_tree.insert(node);
   }
 
+  search_point_tree.Optimise();
+
   bool new_pair = false;
 
   for (unsigned i = old_size; i < n_points; ++i) {
-    std::vector<TracePointNode> how_close;
     TracePointNode point;
     point.point = &GetPoint(i);
     point.index = i;
@@ -495,32 +514,34 @@ OLCTriangle::FindClosingPairs(unsigned old_size)
     const unsigned max_range =
       trace_master.ProjectRange(GetPoint(i).GetLocation(), max_distance);
 
-    search_point_tree.find_within_range(point, max_range,
-      std::back_insert_iterator<std::vector<TracePointNode>>(how_close));
-
-    const SearchPoint start = GetPoint(i);
+    const GeoPoint start = GetPoint(i).GetLocation();
     const int min_altitude = GetMinimumFinishAltitude(GetPoint(i));
     const int max_altitude = GetMaximumStartAltitude(GetPoint(i));
 
     unsigned last = 0, first = i;
 
-    for (unsigned n = 0; n < how_close.size(); ++n) {
-      const SearchPoint dest = GetPoint(how_close[n].index);
+    const auto visitor = [this, i, start,
+                          min_altitude, max_altitude,
+                          &first, &last]
+      (const TracePointNode &node) {
+      const SearchPoint dest = GetPoint(node.index);
 
-      if (how_close[n].index + 2 < i &&
-          GetPoint(how_close[n].index).GetIntegerAltitude() <= max_altitude &&
-          start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
+      if (node.index + 2 < i &&
+          GetPoint(node.index).GetIntegerAltitude() <= max_altitude &&
+          start.Distance(dest.GetLocation()) <= max_distance) {
         // point i is last point
-        first = std::min(how_close[n].index, first);
+        first = std::min(node.index, first);
         last = i;
-      } else if (how_close[n].index > i + 2 &&
-                 GetPoint(how_close[n].index).GetIntegerAltitude() >= min_altitude &&
-                 start.GetLocation().Distance(dest.GetLocation()) <= max_distance) {
+      } else if (node.index > i + 2 &&
+                 GetPoint(node.index).GetIntegerAltitude() >= min_altitude &&
+                 start.Distance(dest.GetLocation()) <= max_distance) {
         // point i is first point
         first = i;
-        last = std::max(how_close[n].index, last);
+        last = std::max(node.index, last);
       }
-    }
+    };
+
+    search_point_tree.VisitWithinRange(point, max_range, visitor);
 
     if (last != 0 && closing_pairs.insert(ClosingPair(first, last)))
       new_pair = true;

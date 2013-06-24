@@ -44,7 +44,7 @@ void
 OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
-    Color color = settings.classes[AATASK].fill_color;
+    Color color = airspace_look.classes[AATASK].fill_color;
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -58,7 +58,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
     // get brush, can be solid or a 1bpp bitmap
     canvas.Select(airspace_look.brushes[settings.classes[AATASK].brush]);
 #else /* !GDI */
-    canvas.Select(Brush(color));
+    canvas.Select(Brush(color.WithAlpha(64)));
 #endif /* !GDI */
 
     canvas.SelectNullPen();

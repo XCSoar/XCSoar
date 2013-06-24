@@ -33,7 +33,7 @@ public:
   FixedWindowWidget(Window *window):WindowWidget(window) {}
 
   virtual PixelSize GetMinimumSize() const override {
-    return GetWindow()->GetSize();
+    return GetWindow().GetSize();
   }
 };
 

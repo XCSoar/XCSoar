@@ -42,11 +42,13 @@ class ProtectedRoutePlanner: public Guard<RoutePlannerGlue>
 {
 protected:
   const Airspaces &airspaces;
+  const ProtectedAirspaceWarningManager *warnings;
 
 public:
-  ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces)
+  ProtectedRoutePlanner(RoutePlannerGlue &route, const Airspaces &_airspaces,
+                        const ProtectedAirspaceWarningManager *_warnings)
     :Guard<RoutePlannerGlue>(route),
-     airspaces(_airspaces) {}
+     airspaces(_airspaces), warnings(_warnings) {}
 
   void Reset() {
     ExclusiveLease lease(*this);

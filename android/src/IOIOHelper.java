@@ -28,28 +28,25 @@ import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import android.util.Log;
+import android.content.ContextWrapper;
 import ioio.lib.api.IOIO;
-import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.exception.ConnectionLostException;
-import ioio.lib.api.exception.IncompatibilityException;
 import ioio.lib.util.IOIOConnectionRegistry;
+import ioio.lib.util.android.ContextWrapperDependent;
+import ioio.lib.spi.IOIOConnectionBootstrap;
+import ioio.lib.spi.IOIOConnectionFactory;
 
 /**
  * A utility class which wraps the Java API into an easier API for the
  * C++ code.
  */
-final class IOIOHelper extends Thread implements IOIOConnectionHolder {
+final class IOIOHelper implements IOIOConnectionHolder,
+                                  IOIOAgent.Listener {
   private static final String TAG = "XCSoar";
 
-  private boolean shutdownFlag;
+  private IOIOMultiAgent agent;
 
   private IOIO ioio_;
-
-  /**
-   * The IOIO connection that is currently being established.  It may
-   * be used by the client thread to cancel the connection.
-   */
-  private IOIO connecting;
 
   /**
    * The list of listeners that believe there is no IOIO connection.
@@ -67,15 +64,27 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
   static {
     final String[] bootstraps = new String[]{
       "ioio.lib.impl.SocketIOIOConnectionBootstrap",
+      "ioio.lib.android.accessory.AccessoryConnectionBootstrap",
     };
 
     IOIOConnectionRegistry.addBootstraps(bootstraps);
   }
 
-  public IOIOHelper() {
-    super("IOIO");
+  static void onCreateContext(ContextWrapper context) {
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).onCreate(context);
+  }
 
-    start();
+  static void onDestroyContext() {
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).onDestroy();
+  }
+
+  public IOIOHelper() {
+    agent = new IOIOMultiAgent(IOIOConnectionRegistry.getConnectionFactories(),
+                               this);
   }
 
   private synchronized boolean isOpen() {
@@ -91,28 +100,12 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
   }
 
   public void shutdown() {
-    synchronized(this) {
-      shutdownFlag = true;
-
-      IOIO ioio = connecting;
-      if (ioio != null)
-        ioio.disconnect();
-    }
-
-    interrupt();
-
-    try {
-      join();
-    } catch (InterruptedException e) {
-    }
+    if (agent != null)
+      agent.shutdown();
   }
 
   private static void openListener(IOIOConnectionListener listener, IOIO ioio)
     throws ConnectionLostException {
-    /* clear this thread's "interrupted" flag, to avoid interrupting
-       the listener */
-    interrupted();
-
     try {
       try {
         listener.onIOIOConnect(ioio);
@@ -139,89 +132,14 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     }
   }
 
-  private synchronized void closeAllListeners() {
+  private synchronized void closeAllListeners(IOIO ioio) {
     for (Iterator<IOIOConnectionListener> i = openListeners.iterator(); i.hasNext();) {
       IOIOConnectionListener listener = i.next();
-      listener.onIOIODisconnect();
+      listener.onIOIODisconnect(ioio);
 
       i.remove();
       closedListeners.add(listener);
     }
-  }
-
-  /**
-   * Called by the connection thread to open a connection.
-   */
-  private void synchronousOpen() {
-    Log.d(TAG, "open IOIO");
-
-    IOIO ioio;
-
-    try {
-      synchronized(this) {
-        if (shutdownFlag || interrupted())
-          return;
-
-        connecting = ioio = IOIOFactory.create();
-      }
-    } catch (NoSuchElementException e) {
-      Log.e(TAG, "IOIOFactory error", e);
-      return;
-    }
-
-    try {
-      ioio.waitForConnect();
-      if (ioio.getState() == IOIO.State.CONNECTED) {
-        Log.d(TAG, "IOIO connection established");
-
-        Log.i(TAG, "IOIO hardware version " +
-              ioio.getImplVersion(IOIO.VersionType.HARDWARE_VER));
-        Log.i(TAG, "IOIO bootloader version " +
-              ioio.getImplVersion(IOIO.VersionType.BOOTLOADER_VER));
-        Log.i(TAG, "IOIO firmware version " +
-              ioio.getImplVersion(IOIO.VersionType.APP_FIRMWARE_VER));
-        Log.i(TAG, "IOIOLib version " +
-              ioio.getImplVersion(IOIO.VersionType.IOIOLIB_VER));
-
-        ioio.softReset();
-
-        synchronized(this) {
-          openAllListeners(ioio);
-          ioio_ = ioio;
-        }
-      } else {
-        Log.w(TAG, "IOIO connection failed");
-        ioio.disconnect();
-      }
-    } catch (ConnectionLostException e) {
-      Log.w(TAG, "IOIO connection lost");
-      ioio.disconnect();
-    } catch (IncompatibilityException e) {
-      Log.e(TAG, "IOIO incompatible", e);
-      ioio.disconnect();
-    } finally {
-      synchronized(this) {
-        connecting = null;
-      }
-    }
-  }
-
-  private synchronized IOIO steal() {
-    IOIO ioio = this.ioio_;
-    this.ioio_ = null;
-    return ioio;
-  }
-
-  /**
-   * Called by the connection thread to close the connection.
-   */
-  private void synchronousClose() {
-    IOIO ioio = steal();
-    if (ioio == null)
-      return;
-
-    closeAllListeners();
-    ioio.disconnect();
   }
 
   private synchronized boolean handleNewListeners() {
@@ -240,81 +158,27 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
     return true;
   }
 
-  private void idle() {
-    if (interrupted())
-      return;
-
-    try {
-      if (ioio_ != null) {
-        /* there is a connection: wait for connection error or
-           until Thread.interrupt() gets called */
-        ioio_.waitForDisconnect();
-        Log.w(TAG, "IOIO connection lost");
-      } else {
-        /* there is no connection: wait until Thread.interrupt()
-           gets called */
-        synchronized(this) {
-          /* we're not actually waiting for an Object.notify() call,
-             this is just a dummy call to make this thread idle and
-             interruptible */
-          wait();
-        }
-      }
-    } catch (InterruptedException e) {
-    }
-  }
-
-  /**
-   * The connection thread.
-   */
-  public void run() {
-    while (true) {
-      if (ioio_ != null && (ioio_.getState() != IOIO.State.CONNECTED ||
-                            !isInUse()))
-        synchronousClose();
-      else if (ioio_ == null && isInUse() && !shutdownFlag)
-        synchronousOpen();
-
-      if (shutdownFlag) {
-        synchronousClose();
-        return;
-      }
-
-      if (handleNewListeners())
-        continue;
-
-      idle();
-    }
-  }
-
   @Override public synchronized void addListener(IOIOConnectionListener l) {
     closedListeners.add(l);
 
-    /* ask the thread to initiate a connection or to invoke
-       onIOIOConnect() if the connection is already established */
-    if (connecting == null)
-      interrupt();
+    agent.enable();
+
+    for (IOIOConnectionBootstrap bootstrap : IOIOConnectionRegistry.getBootstraps())
+      if (bootstrap instanceof ContextWrapperDependent)
+        ((ContextWrapperDependent) bootstrap).open();
   }
 
   @Override public synchronized void removeListener(IOIOConnectionListener l) {
     if (openListeners.remove(l))
       /* this listener thinks the IOIO connection is established;
          invoke the onIOIODisconnect() method */
-      l.onIOIODisconnect();
+      l.onIOIODisconnect(ioio_);
     else
       /* no method call necessary */
       closedListeners.remove(l);
 
-    if (!isInUse()) {
-      if (isOpen())
-        /* ask the thread to auto-close the connection */
-        interrupt();
-
-      if (connecting != null)
-        /* cancel the current connect attempt after the last listener
-           got removed */
-        connecting.disconnect();
-    }
+    if (!isInUse())
+      agent.disable();
   }
 
   @Override
@@ -323,13 +187,28 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
       return;
 
     if (openListeners.remove(l)) {
-      l.onIOIODisconnect();
+      l.onIOIODisconnect(ioio_);
       closedListeners.add(l);
     } else if (!closedListeners.contains(l))
       return;
 
     /* ask the thread to reopen the listener */
-    interrupt();
+    agent.wakeUp();
+  }
+
+  @Override public synchronized void onIOIOConnect(IOIO ioio)
+    throws ConnectionLostException, InterruptedException {
+    openAllListeners(ioio);
+    ioio_ = ioio;
+  }
+
+  @Override public synchronized void onIOIODisconnect(IOIO ioio) {
+    ioio_ = null;
+    closeAllListeners(ioio);
+  }
+
+  @Override public synchronized boolean onIOIOIdle(IOIO ioio) {
+    return handleNewListeners();
   }
 
   /**

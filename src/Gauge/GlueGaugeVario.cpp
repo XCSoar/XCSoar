@@ -40,7 +40,7 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GlueGaugeVario::Unprepare()
 {
-  delete GetWindow();
+  DeleteWindow();
 }
 
 void
@@ -62,5 +62,5 @@ GlueGaugeVario::Hide()
 void
 GlueGaugeVario::OnGPSUpdate(const MoreData &basic)
 {
-  ((GaugeVario *)GetWindow())->Invalidate();
+  ((GaugeVario &)GetWindow()).Invalidate();
 }

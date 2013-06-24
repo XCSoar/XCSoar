@@ -317,7 +317,7 @@ OnNextClicked()
 static void
 OnOptionalStartsClicked()
 {
-  if (dlgTaskOptionalStarts(wf->GetMainWindow(), &ordered_task)) {
+  if (dlgTaskOptionalStarts(&ordered_task)) {
     task_modified = true;
     RefreshView();
   }
@@ -343,14 +343,14 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
+dlgTaskPointShowModal(OrderedTask **task,
                       const unsigned index)
 {
   ordered_task = *task;
   task_modified = false;
   active_index = index;
 
-  wf = LoadDialog(CallBackTable, parent,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TASKPOINT_L") :
                                       _T("IDR_XML_TASKPOINT"));
   assert(wf != NULL);

@@ -27,10 +27,10 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
+#include "Device/Config.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
 #include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <stdio.h>
@@ -72,7 +72,7 @@ Dump(const ExternalSettings &settings)
 static void
 Dump(const NMEAInfo &basic)
 {
-  if (basic.date_available)
+  if (basic.date_time_utc.IsDatePlausible())
     printf("Date=%02u.%02u.%04u\n",
            basic.date_time_utc.day, basic.date_time_utc.month, basic.date_time_utc.year);
 

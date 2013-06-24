@@ -27,9 +27,13 @@ Copyright_License {
 #include <windef.h>
 #include <wingdi.h>
 
+struct FontSettings;
+
 namespace Profile {
   bool GetFont(const char *key, LOGFONT* lplf);
   void SetFont(const char *key, LOGFONT &logfont);
+
+  void Get(FontSettings &settings);
 };
 
 #endif

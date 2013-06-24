@@ -39,9 +39,10 @@ using std::max;
 // call any event
 
 TaskComputer::TaskComputer(ProtectedTaskManager &_task,
-                           const Airspaces &airspace_database)
+                           const Airspaces &airspace_database,
+                           const ProtectedAirspaceWarningManager *warnings)
   :task(_task),
-   route(airspace_database),
+   route(airspace_database, warnings),
    contest(trace.GetFull(), trace.GetContest(), trace.GetSprint())
 {
   task.SetRoutePlanner(&route.GetRoutePlanner());
@@ -57,11 +58,12 @@ TaskComputer::ResetFlight(const bool full)
 
   valid_last_state = false;
   last_flying = false;
+
+  last_location_available.Clear();
 }
 
 void
 TaskComputer::ProcessBasicTask(const MoreData &basic,
-                               const MoreData &last_basic,
                                DerivedInfo &calculated,
                                const ComputerSettings &settings_computer,
                                bool force)
@@ -72,8 +74,8 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
 
   _task->SetTaskBehaviour(settings_computer.task);
 
-  if (force || (basic.HasTimeAdvancedSince(last_basic) &&
-                basic.location_available)) {
+  if (force || (last_location_available &&
+                basic.location_available.Modified(last_location_available))) {
     const AircraftState current_as = ToAircraftState(basic, calculated);
     const AircraftState &last_as = valid_last_state ? last_state : current_as;
 
@@ -90,6 +92,8 @@ TaskComputer::ProcessBasicTask(const MoreData &basic,
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
   }
+
+  last_location_available = basic.location_available;
 
   calculated.task_stats = _task->GetStats();
   calculated.ordered_task_stats = _task->GetOrderedTask().GetStats();
@@ -136,7 +140,7 @@ Predicted(const ContestSettings &settings,
   /* predict that the next task point will be reached, using the
      calculated remaining time and the minimum arrival altitude */
   return TracePoint(current_leg.location_remaining,
-                    unsigned(basic.time + current_leg.time_remaining),
+                    unsigned(basic.time + current_leg.time_remaining_now),
                     current_leg.solution_remaining.min_arrival_altitude,
                     fixed(0), 0);
 }

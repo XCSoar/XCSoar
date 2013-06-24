@@ -24,7 +24,6 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TaskLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
@@ -95,13 +94,14 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   GeoPoint location = render_projection.GetGeoLocation();
 
   TextInBoxMode mode;
-  mode.shape = LabelShape::OUTLINED_INVERTED;
+  mode.shape = LabelShape::OUTLINED;
   mode.align = TextInBoxMode::Alignment::RIGHT;
 
-  canvas.Select(Fonts::map_bold);
+  const Font &font = *look.overlay_font;
+  canvas.Select(font);
 
   UPixelScalar padding = Layout::FastScale(4);
-  UPixelScalar height = Fonts::map_bold.GetHeight();
+  UPixelScalar height = font.GetHeight();
   PixelScalar y = 0 + padding;
   PixelScalar x = render_projection.GetScreenWidth() - padding;
 
@@ -177,7 +177,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
 
-  canvas.Select(Fonts::map_bold);
+  const Font &font = *look.overlay_font;
+  canvas.Select(font);
   TextInBox(canvas, txt, x, y, mode, rc, NULL);
 }
 
@@ -289,12 +290,13 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   fixed map_width = projection.GetScreenWidthMeters();
 
-  canvas.Select(Fonts::map_bold);
+  const Font &font = *look.overlay_font;
+  canvas.Select(font);
   FormatUserMapScale(map_width, buffer.buffer(), true);
   PixelSize text_size = canvas.CalcTextSize(buffer);
 
   const PixelScalar text_padding_x = Layout::GetTextPadding();
-  const PixelScalar height = Fonts::map_bold.GetCapitalHeight()
+  const PixelScalar height = font.GetCapitalHeight()
     + Layout::GetTextPadding();
 
   PixelScalar x = 0;
@@ -309,7 +311,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   canvas.SetTextColor(COLOR_BLACK);
   x += text_padding_x;
   canvas.DrawText(x,
-                  rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
+                  rc.bottom - font.GetAscentHeight() - Layout::Scale(1),
                   buffer);
 
   x += text_padding_x + text_size.cx;
@@ -355,10 +357,11 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!buffer.empty()) {
     int y = rc.bottom - height;
 
-    canvas.SetBackgroundOpaque();
-    canvas.SetBackgroundColor(COLOR_WHITE);
+    TextInBoxMode mode;
+    mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
+    mode.shape = LabelShape::OUTLINED;
 
-    canvas.DrawText(0, y - canvas.CalcTextSize(buffer).cy, buffer);
+    TextInBox(canvas, buffer, 0, y, mode, rc, nullptr);
   }
 }
 
@@ -426,7 +429,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
                              tb_rect,
                              GetComputerSettings().task,
                              true,
-                             &task_manager->GetOrderedTask().GetOrderedTaskBehaviour());
+                             &task_manager->GetOrderedTask().GetOrderedTaskSettings());
   } else {
     renderer.DrawThermalBand(Basic(),
                              Calculated(),

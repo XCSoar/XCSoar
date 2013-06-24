@@ -32,7 +32,7 @@ class Canvas;
 struct MoreData;
 struct DerivedInfo;
 struct ComputerSettings;
-struct OrderedTaskBehaviour;
+struct OrderedTaskSettings;
 struct TaskBehaviour;
 
 class ThermalBandRenderer {
@@ -51,7 +51,7 @@ public:
                        const PixelRect &rc,
                        const TaskBehaviour& task_props,
                        const bool is_map,
-                       const OrderedTaskBehaviour *ordered_props=nullptr) const;
+                       const OrderedTaskSettings *ordered_props=nullptr) const;
 
   void DrawThermalBandSpark(const MoreData &basic,
                             const DerivedInfo& calculated,
@@ -67,7 +67,7 @@ protected:
                         ChartRenderer &chart,
                         const TaskBehaviour& task_props,
                         const bool is_infobox,
-                        const OrderedTaskBehaviour* ordered_props) const;
+                        const OrderedTaskSettings* ordered_props) const;
 
   void ScaleChart(const DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,

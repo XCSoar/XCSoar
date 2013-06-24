@@ -35,9 +35,10 @@ void
 WndSymbolButton::OnPaint(Canvas &canvas)
 {
   const bool pressed = IsDown();
+  const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
   PixelRect rc = canvas.GetRect();
-  renderer.DrawButton(canvas, rc, HasFocus(), pressed);
+  renderer.DrawButton(canvas, rc, focused, pressed);
   // If button has text on it
   const tstring caption = GetText();
   if (caption.empty())
@@ -48,14 +49,14 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   canvas.SelectNullPen();
   if (!IsEnabled())
     canvas.Select(look.button.disabled.brush);
-  else if (HasFocus())
+  else if (focused)
     canvas.Select(look.button.focused.foreground_brush);
   else
     canvas.Select(look.button.standard.foreground_brush);
 
   const char ch = (char)caption[0];
 
-  Color color;
+  RGB8Color color;
 
   // Draw arrow symbol instead of <
   if (ch == '<')
@@ -80,6 +81,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   // Draw Fly bitmap
   else if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
+    launcher1_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
       canvas.InvertStretchTransparent(launcher1_bitmap, COLOR_YELLOW);
@@ -90,6 +92,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   // Draw Simulator bitmap
   else if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
+    launcher2_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
       canvas.InvertStretchTransparent(launcher2_bitmap, COLOR_YELLOW);
@@ -99,6 +102,6 @@ WndSymbolButton::OnPaint(Canvas &canvas)
 
   else if (ParseHexColor(caption.c_str(), color)) {
     rc.Grow(-3);
-    canvas.DrawFilledRectangle(rc, color);
+    canvas.DrawFilledRectangle(rc, Color(color));
   }
 }

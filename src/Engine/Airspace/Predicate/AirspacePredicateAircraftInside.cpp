@@ -21,12 +21,7 @@
  */
 
 #include "AirspacePredicateAircraftInside.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "../AbstractAirspace.hpp"
-
-AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(
-    const AircraftState &_state)
-  :state(_state) {}
 
 bool 
 AirspacePredicateAircraftInside::operator()(const AbstractAirspace &airspace) const

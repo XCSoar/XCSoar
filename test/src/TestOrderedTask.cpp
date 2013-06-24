@@ -22,7 +22,7 @@
 
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Task/TaskEvents.hpp"
-#include "Engine/Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Engine/Task/Ordered/Settings.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
@@ -38,7 +38,7 @@
 #include "TestUtil.hpp"
 
 static TaskBehaviour task_behaviour;
-static OrderedTaskBehaviour ordered_task_behaviour;
+static OrderedTaskSettings ordered_task_settings;
 static GlidePolar glide_polar(fixed(0));
 
 static GeoPoint
@@ -178,11 +178,11 @@ TestFlightToFinish(fixed aircraft_altitude)
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new LineSectorZone(wp1.location),
                        wp1, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   const FinishPoint tp2(new LineSectorZone(wp2.location),
                         wp2, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -218,11 +218,11 @@ TestSimpleTask()
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new LineSectorZone(wp1.location),
                        wp1, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   const FinishPoint tp2(new LineSectorZone(wp3.location),
                         wp3, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
 
   ok1(task.CheckTask());
@@ -254,13 +254,13 @@ TestHighFinish()
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new LineSectorZone(wp1.location),
                        wp1, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   Waypoint wp2b(wp2);
   wp2b.elevation = fixed(1000);
   const FinishPoint tp2(new LineSectorZone(wp2b.location),
                         wp2b, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -297,7 +297,7 @@ TestHighTP()
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new LineSectorZone(wp1.location, width),
                        wp1, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
   const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
@@ -306,7 +306,7 @@ TestHighTP()
   const Waypoint wp4b = MakeWaypoint(wp4, 100);
   const FinishPoint tp3(new LineSectorZone(wp4b.location, width),
                         wp4b, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -335,7 +335,7 @@ TestHighTPFinal()
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new LineSectorZone(wp1.location, width),
                        wp1, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
   const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
@@ -344,7 +344,7 @@ TestHighTPFinal()
   const Waypoint wp5b = MakeWaypoint(wp5, 200);
   const FinishPoint tp3(new LineSectorZone(wp5b.location, width),
                         wp5b, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -374,14 +374,14 @@ TestLowTPFinal()
   const Waypoint wp1b = MakeWaypoint(wp1, 1500);
   const StartPoint tp1(new LineSectorZone(wp1b.location, width),
                        wp1b, task_behaviour,
-                       ordered_task_behaviour.start_constraints);
+                       ordered_task_settings.start_constraints);
   task.Append(tp1);
   const ASTPoint tp2(new LineSectorZone(wp2.location, width),
                      wp2, task_behaviour);
   task.Append(tp2);
   const FinishPoint tp3(new LineSectorZone(wp3.location, width),
                         wp3, task_behaviour,
-                        ordered_task_behaviour.finish_constraints, false);
+                        ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 

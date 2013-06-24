@@ -22,12 +22,6 @@ event=TaskTransition next
 
 mode=default
 type=gce
-data=ARM_READY
-event=Beep 1
-event=TaskTransition ready
-
-mode=default
-type=gce
 data=GPS_CONNECTION_WAIT
 
 mode=default
@@ -271,12 +265,12 @@ event=Zoom auto on
 
 mode=default
 type=gesture
-data=L
+data=R
 event=ScreenModes previous
 
 mode=default
 type=gesture
-data=R
+data=L
 event=ScreenModes next
 
 mode=default

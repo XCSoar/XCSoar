@@ -47,16 +47,6 @@ Pen::Set(unsigned width, const Color c)
   Set(SOLID, width, c);
 }
 
-void
-Pen::Reset()
-{
-  assert(!IsDefined() || IsScreenInitialized());
-
-#ifndef NDEBUG
-  width = 0;
-#endif
-}
-
 #else /* USE_GDI */
 
 void

@@ -71,6 +71,11 @@ struct BrokenTime {
                               (minute == other.minute && second > other.second)));
   }
 
+  constexpr
+  static BrokenTime Midnight() {
+    return BrokenTime(0, 0);
+  }
+
   /**
    * Returns an instance that fails the Plausible() check.
    */
@@ -83,7 +88,7 @@ struct BrokenTime {
    * Does this object contain plausible values?
    */
   constexpr
-  bool Plausible() const {
+  bool IsPlausible() const {
     return hour < 24 && minute < 60 && second < 60;
   }
 

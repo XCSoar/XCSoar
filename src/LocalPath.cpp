@@ -73,6 +73,11 @@ Copyright_License {
 #define ANDROID_SAMSUNG_EXTERNAL_SD "/sdcard/external_sd"
 
 /**
+ * This is the partition that the Kobo software mounts on PCs
+ */
+#define KOBO_USER_DATA "/mnt/onboard"
+
+/**
  * The absolute location of the XCSoarData directory.
  */
 static TCHAR *gcc_restrict data_path;
@@ -331,7 +336,7 @@ fgrep(const char *fname, const char *string, const char *string2 = NULL)
 static const TCHAR *
 GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 {
-  if (IsAndroid())
+  if (IsAndroid() || IsKobo())
     /* hard-coded path for Android */
     return NULL;
 
@@ -396,6 +401,9 @@ FindDataPath()
       return _tcsdup(path);
   }
 #endif
+
+  if (IsKobo())
+    return _tcsdup(_T(KOBO_USER_DATA DIR_SEPARATOR_S XCSDATADIR));
 
   if (IsAndroid()) {
 #ifdef ANDROID

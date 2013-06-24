@@ -38,6 +38,11 @@
 #include <assert.h>
 #include <stdio.h>
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
+
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
                                        unsigned _h_padding,
                                        unsigned _v_padding,
@@ -701,7 +706,18 @@ FlarmTrafficWindow::Paint(Canvas &canvas)
 void
 FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
-  canvas.Clear(look.background_color);
+#ifdef ENABLE_OPENGL
+  if (small) {
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    canvas.SelectBlackPen();
+    canvas.Select(Brush(look.background_color.WithAlpha(0xd0)));
+    canvas.DrawCircle(radar_mid.x, radar_mid.y, radius);
+
+  } else
+#endif
+    canvas.Clear(look.background_color);
+
   Paint(canvas);
 }
 

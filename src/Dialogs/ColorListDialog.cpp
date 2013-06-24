@@ -37,7 +37,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < ARRAY_SIZE(AirspaceLook::preset_colors));
 
-  const Color &color = AirspaceLook::preset_colors[i];
+  const Color color(AirspaceLook::preset_colors[i]);
 
   PixelRect rc2 = rc;
   rc2.Grow(-Layout::FastScale(2));
@@ -55,7 +55,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 }
 
 bool
-ShowColorListDialog(Color &color)
+ShowColorListDialog(RGB8Color &color)
 {
   unsigned default_index = 0;
   for (unsigned i = 1; i < ARRAY_SIZE(AirspaceLook::preset_colors); ++i)

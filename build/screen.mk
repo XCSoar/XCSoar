@@ -7,12 +7,12 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \
-	$(SCREEN_SRC_DIR)/Brush.cpp \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
+	$(SCREEN_SRC_DIR)/SolidContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/DoubleBufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
@@ -41,6 +41,11 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Android/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp
+endif
+
+ifeq ($(DITHER),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Dither.cpp
 endif
 
 ifeq ($(FREETYPE),y)
@@ -93,7 +98,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
+	$(SCREEN_SRC_DIR)/SDL/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
 else ifeq ($(EGL),y)
@@ -110,8 +115,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
 	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
@@ -125,6 +130,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \

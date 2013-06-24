@@ -2,10 +2,7 @@ WARNINGS = -Wall -Wextra
 WARNINGS += -Wwrite-strings -Wcast-qual -Wpointer-arith -Wsign-compare
 WARNINGS += -Wundef
 WARNINGS += -Wmissing-declarations
-
-ifneq ($(TARGET),ANDROID)
 WARNINGS += -Wredundant-decls
-endif
 
 CXXFLAGS += $(WARNINGS)
 CXXFLAGS += -Wmissing-noreturn
@@ -19,17 +16,12 @@ CXXFLAGS += -Wcast-align
 
 CFLAGS += $(WARNINGS)
 CFLAGS += -Wmissing-prototypes -Wstrict-prototypes
-
-ifneq ($(TARGET),ANDROID)
 CFLAGS += -Wnested-externs
-endif
 
 # make warnings fatal (for perfectionists)
 
-ifeq ($(WERROR),)
 ifneq ($(TARGET),CYGWIN)
-WERROR = $(DEBUG)
-endif
+WERROR ?= $(DEBUG)
 endif
 
 ifeq ($(WERROR),y)

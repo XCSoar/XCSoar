@@ -25,23 +25,16 @@
 
 #include "TaskAdvance.hpp"
 
-struct TaskFactoryConstraints;
-
 /** Class used to control advancement through an OrderedTask */
 class SmartTaskAdvance final : public TaskAdvance {
   /** active advance state */
   State state;
-
-private:
-  bool start_requires_arm;
 
 public:
   /** 
    * Constructor.  Sets defaults to auto-mode
    */
   SmartTaskAdvance();
-
-  void SetFactoryConstraints(const TaskFactoryConstraints &constraints);
 
   virtual State GetState() const;
 

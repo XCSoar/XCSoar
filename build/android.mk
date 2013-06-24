@@ -8,11 +8,8 @@ ifeq ($(TARGET),ANDROID)
 # Activity icon, to allow simultaneous installation of "stable" and
 # "testing".
 # In the stable branch, this should default to "n".
-TESTING = n
+TESTING = y
 
-ANT = ant
-JAVAH = javah
-JARSIGNER = jarsigner
 ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
@@ -29,10 +26,8 @@ ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)
 ANDROID_LIB_NAMES = xcsoar
 
 ifneq ($(V),2)
-ANT += -quiet
 ANDROID_TOOL_OPTIONS = --silent
 else
-JARSIGNER += -verbose
 ANDROID_TOOL_OPTIONS = --verbose
 endif
 
@@ -136,7 +131,7 @@ endif
 # SDK generate build.xml
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
+	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values $(@D)/res/xml
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoarte $(ANDROID_BUILD)/src/ioio/lib
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
@@ -146,8 +141,14 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstam
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/util $(ANDROID_BUILD)/src/ioio/lib/util
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/src/ioio/lib/impl $(ANDROID_BUILD)/src/ioio/lib/impl
 	$(Q)ln -s ../../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/spi $(ANDROID_BUILD)/src/ioio/lib/spi2
+	$(Q)ln -s ../../../../../android/ioio/software/IOIOLib/target/android/src/ioio/lib/util/android/ContextWrapperDependent.java $(ANDROID_BUILD)/src/ioio/
+	$(Q)sed -e 's/com\.android\.future\.usb/android.hardware.usb/g' \
+		-e 's/UsbManager.getInstance(wrapper)/(UsbManager)wrapper.getSystemService(Context.USB_SERVICE)/' \
+		<android/ioio/software/IOIOLibAccessory/src/ioio/lib/android/accessory/AccessoryConnectionBootstrap.java \
+		>$(ANDROID_BUILD)/src/AccessoryConnectionBootstrap.java
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
-ifeq ($(WINHOST),y)
+	$(Q)ln -s ../../../../android/res/xml $(@D)/res/xml
+ifeq ($(HOST_IS_WIN32),y)
 	echo "now run your android build followed by exit.  For example:"
 	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_SDK_PLATFORM)"
 	cmd

@@ -15,6 +15,7 @@ endif
 # dependencies low
 ifeq ($(TARGET_IS_DARWIN),n)
 ifeq ($(TARGET),UNIX)
+ifeq ($(TARGET_IS_KOBO),n)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
@@ -27,6 +28,7 @@ $(eval $(call pkg-config-library,CURL,libcurl))
 
 LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDLIBS = $(CURL_LDLIBS)
+endif
 endif
 endif
 

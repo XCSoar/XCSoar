@@ -51,6 +51,7 @@
 #include "Device/device.hpp"
 #include "Device/Port/NullPort.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Config.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "NMEA/Info.hpp"
@@ -60,7 +61,6 @@
 #include "Operation/Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Units/System.hpp"
 
 static const DeviceConfig dummy_config = DeviceConfig();
@@ -641,7 +641,7 @@ TestFlytec()
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*72",
                         nmea_info));
-  ok1(!nmea_info.date_available);
+  ok1(!nmea_info.date_time_utc.IsDatePlausible());
   ok1(!nmea_info.time_available);
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101450));
@@ -657,7 +657,7 @@ TestFlytec()
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
                         nmea_info));
-  ok1(!nmea_info.date_available);
+  ok1(!nmea_info.date_time_utc.IsDatePlausible());
   ok1(!nmea_info.time_available);
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101450));
@@ -678,7 +678,7 @@ TestFlytec()
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,A,09,097517,01321,-001,01030,P,023,,038,"
                         "088,00090,00088,800,,*29", nmea_info));
-  ok1(nmea_info.date_available);
+  ok1(nmea_info.date_time_utc.IsDatePlausible());
   ok1(nmea_info.date_time_utc.day == 24);
   ok1(nmea_info.date_time_utc.month == 12);
   ok1(nmea_info.date_time_utc.year == 2011);
@@ -715,7 +715,7 @@ TestFlytec()
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,V,09,097517,01321,-001,01030,P,023,017,038,"
                         ",00090,00088,800,,*38", nmea_info));
-  ok1(nmea_info.date_available);
+  ok1(nmea_info.date_time_utc.IsDatePlausible());
   ok1(nmea_info.date_time_utc.day == 24);
   ok1(nmea_info.date_time_utc.month == 12);
   ok1(nmea_info.date_time_utc.year == 2011);

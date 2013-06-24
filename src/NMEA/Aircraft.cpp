@@ -52,7 +52,7 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   aircraft.netto_vario = info.netto_vario;
 
   /* AIRCRAFT_STATE */
-  aircraft.time = info.time;
+  aircraft.time = info.time_available ? info.time : fixed(-1);
   aircraft.location = info.location_available
     ? info.location
     : GeoPoint::Invalid();

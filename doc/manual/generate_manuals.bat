@@ -22,9 +22,13 @@ REM  German XCSoar-Blitzeinstieg generation
 REM  German XCSoar-Handbuch generation
 %PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0de --include-directory=%~dp0 --include-directory=%~dp0en --output-directory=%~dp0output  %~dp0de\XCSoar-manual-de.tex
 
-REM  french XCSoar-Prise-en-main generation
+REM  French XCSoar-Prise-en-main generation
 %PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0fr  --include-directory=%~dp0 --output-directory=%~dp0output  %~dp0fr\XCSoar-Prise-en-main.tex 
 
-REM  french XCSoar-manual-fr generation
+REM  French XCSoar-manual-fr generation
 %PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0fr --include-directory=%~dp0 --include-directory=%~dp0en --output-directory=%~dp0output  %~dp0fr\XCSoar-manual-fr.tex
+
+REM  Polish XCSoar-manual-pl generation
+%PDFLATEXBIN% --halt-on-error --interaction=nonstopmode --include-directory=%~dp0pl --include-directory=%~dp0 --include-directory=%~dp0en --output-directory=%~dp0output  %~dp0pl\XCSoar-manual-pl.tex
+
 

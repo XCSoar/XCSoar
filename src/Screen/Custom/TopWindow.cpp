@@ -39,6 +39,12 @@ TopWindow::Create(const TCHAR *text, PixelSize size,
   screen = new TopCanvas();
   screen->Create(size, style.GetFullScreen(), style.GetResizable());
 
+  if (!screen->IsDefined()) {
+    delete screen;
+    screen = nullptr;
+    return;
+  }
+
   ContainerWindow::Create(NULL, screen->GetRect(), style);
 
   SetCaption(text);

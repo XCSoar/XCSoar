@@ -46,7 +46,6 @@ Simulator::Init(NMEAInfo &basic)
   basic.track = Angle::Zero();
   basic.ground_speed = fixed(0);
   basic.gps_altitude = fixed(0);
-  basic.date_available = true;
 }
 
 /**

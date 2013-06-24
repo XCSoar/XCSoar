@@ -201,8 +201,7 @@ void
 ThermalAssistantRenderer::UpdateLayout(const PixelRect &rc)
 {
   radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - padding;
-  mid.x = (rc.left + rc.right) / 2;
-  mid.y = (rc.top + rc.bottom) / 2;
+  mid = rc.GetCenter();
 }
 
 void

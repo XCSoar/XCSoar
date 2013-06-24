@@ -138,7 +138,12 @@ struct DerivedInfo:
   public TerrainInfo,
   public TeamInfo
 {
-  /** GPS date and time (local) */
+  /**
+   * GPS date and time (local).
+   *
+   * Check IsPlausible(), IsDatePlausible() or IsTimePlausible()
+   * before using this attribute.
+   */
   BrokenDateTime date_time_local;
 
   /** Speed to fly block/dolphin (m/s) */

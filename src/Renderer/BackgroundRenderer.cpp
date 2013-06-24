@@ -25,56 +25,48 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
-#include "MapSettings.hpp"
-#include "Geo/SpeedVector.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "Renderer/LabelBlock.hpp"
-#include "Look/Fonts.hpp"
-#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-BackgroundRenderer::BackgroundRenderer():
-  terrain(NULL),
-  weather(NULL),
-  renderer(NULL),
-  shading_angle(Angle::Degrees(-45))
-{
-}
+static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
 
-BackgroundRenderer::~BackgroundRenderer()
+BackgroundRenderer::BackgroundRenderer()
+  :terrain(nullptr),
+   weather(nullptr),
+   renderer(nullptr),
+   shading_angle(DEFAULT_SHADING_ANGLE)
 {
-  Reset();
 }
 
 void
 BackgroundRenderer::Reset()
 {
   delete renderer;
-  renderer = NULL;
+  renderer = nullptr;
 }
 
-
-void 
+void
 BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
   Reset();
 }
 
-void 
+void
 BackgroundRenderer::SetWeather(const RasterWeather *_weather)
 {
   weather = _weather;
   Reset();
 }
 
-void 
+void
 BackgroundRenderer::Draw(Canvas& canvas,
                          const WindowProjection& proj,
                          const TerrainRendererSettings &terrain_settings)
 {
-  if (terrain == NULL) {
+  if (terrain == nullptr) {
     // terrain may have been re-set, so may need new renderer
     Reset();
     canvas.ClearWhite();
@@ -116,7 +108,7 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
     SetShadingAngle(projection, calculated.sun_azimuth);
 
   else
-    SetShadingAngle(projection, Angle::Degrees(-45));
+    SetShadingAngle(projection, DEFAULT_SHADING_ANGLE);
 
 }
 

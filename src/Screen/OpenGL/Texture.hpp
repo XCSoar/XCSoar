@@ -120,34 +120,20 @@ public:
   }
 
   /**
+   * Enable interpolation when minifying/magnifying the texture.  The
+   * caller must bind the texture prior to calling this method.
+   */
+  static void EnableInterpolation();
+
+  /**
    * Change the size of the texture, discarding any previous contents.
    */
   void ResizeDiscard(PixelSize new_size);
 
 protected:
-  void Initialise(bool mag_linear=false) {
-#ifndef NDEBUG
-    ++num_textures;
-#endif
+  void Initialise();
 
-    glGenTextures(1, &id);
-    Bind();
-    Configure(mag_linear);
-  }
-
-  static inline void Configure(bool mag_linear=false) {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    if (IsEmbedded()) {
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    } else {
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    }
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-                    !IsEmbedded() || mag_linear ? GL_LINEAR : GL_NEAREST);
-  }
+  static void Configure();
 
 #ifdef ENABLE_SDL
   void Load(SDL_Surface *surface);

@@ -39,12 +39,10 @@ struct VarioInfo;
 struct OneClimbInfo;
 struct TerrainInfo;
 struct ThermalLocatorInfo;
-struct ThermalBandInfo;
 class Waypoints;
 class Airspaces;
 class RasterTerrain;
 class GlidePolar;
-class ProtectedAirspaceWarningManager;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -67,6 +65,11 @@ class GlideComputerAirData {
   ThermalLocator thermallocator;
 
   AverageVarioComputer average_vario;
+
+  /**
+   * Used by FlightTimes() to detect time warps.
+   */
+  DeltaTime delta_time;
 
 public:
   GlideComputerAirData(const Waypoints &way_points);
@@ -94,7 +97,7 @@ public:
   /**
    * Calculates some other values
    */
-  void ProcessVertical(const MoreData &basic, const MoreData &last_basic,
+  void ProcessVertical(const MoreData &basic,
                        DerivedInfo &calculated,
                        const ComputerSettings &settings);
 
@@ -102,9 +105,8 @@ public:
    * 1. Detects time retreat and calls ResetFlight if GPS lost
    * 2. Detects change in replay status and calls ResetFlight if so
    * 3. Calls DetectStartTime and saves the time of flight
-   * @return true as default, false if something is wrong in time
    */
-  bool FlightTimes(const NMEAInfo &basic, const NMEAInfo &last_basic,
+  void FlightTimes(const NMEAInfo &basic,
                    DerivedInfo &calculated,
                    const ComputerSettings &settings);
 
@@ -112,8 +114,6 @@ private:
   void NettoVario(const NMEAInfo &basic, const FlyingState &flight,
                   VarioInfo &vario, const ComputerSettings &settings_computer);
   void AverageClimbRate(const NMEAInfo &basic, DerivedInfo &calculated);
-  void Average30s(const MoreData &basic, const NMEAInfo &last_basic,
-                  DerivedInfo &calculated, bool last_circling);
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
   void GR(const MoreData &basic, const FlyingState &flying,

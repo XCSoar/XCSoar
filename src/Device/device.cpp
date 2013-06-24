@@ -29,12 +29,15 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "Util/Algorithm.hpp"
 
 #include <assert.h>
 
 static void
-devInitOne(DeviceDescriptor &device)
+devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
 {
+  device.SetConfig(config);
+
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
@@ -86,6 +89,18 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   gcc_unreachable();
 }
 
+gcc_pure
+static bool
+DeviceConfigOverlaps(const DeviceConfig &config,
+                     const DeviceDescriptor *const*begin,
+                     const DeviceDescriptor *const*const end)
+{
+  return ExistsIf(begin, end,
+                  [&config](const DeviceDescriptor *d) {
+                    return DeviceConfigOverlaps(config, d->GetConfig());
+                  });
+}
+
 void
 devStartup()
 {
@@ -104,18 +119,12 @@ devStartup()
 
     none_available = false;
 
-    bool overlap = false;
-    for (unsigned j = 0; j < i; ++j)
-      if (DeviceConfigOverlaps(config, device_list[j]->GetConfig()))
-        overlap = true;
-
-    if (overlap) {
+    if (DeviceConfigOverlaps(config, device_list, device_list + i)) {
       device.ClearConfig();
       continue;
     }
 
-    device.SetConfig(config);
-    devInitOne(*device_list[i]);
+    devInitOne(device, config);
   }
 
   if (none_available) {
@@ -129,20 +138,9 @@ devStartup()
     config.port_type = DeviceConfig::PortType::INTERNAL;
 
     DeviceDescriptor &device = *device_list[0];
-    device.SetConfig(config);
-    devInitOne(device);
+    devInitOne(device, config);
 #endif
   }
-}
-
-bool
-HaveCondorDevice()
-{
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i]->IsCondor())
-      return true;
-
-  return false;
 }
 
 void

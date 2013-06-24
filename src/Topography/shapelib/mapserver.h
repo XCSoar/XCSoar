@@ -45,7 +45,7 @@
 
 #define MS_VERSION_NUM (MS_VERSION_MAJOR*10000+MS_VERSION_MINOR*100+MS_VERSION_REV)
 
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__BIONIC__)
 #define NEED_STRLCAT
 #define NEED_STRLCPY
 #endif

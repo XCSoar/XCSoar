@@ -27,5 +27,5 @@ Copyright_License {
 void
 MarkerLook::Initialise()
 {
-  icon.Load(IDB_MARK, IDB_MARK_HD);
+  icon.LoadResource(IDB_MARK, IDB_MARK_HD);
 }

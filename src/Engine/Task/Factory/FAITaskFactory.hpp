@@ -49,7 +49,7 @@ public:
 
   virtual ~FAITaskFactory() {};
 
-  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
+  virtual void UpdateOrderedTaskSettings(OrderedTaskSettings& to) override;
 
   /**
    * Check whether task is complete and valid according to factory rules

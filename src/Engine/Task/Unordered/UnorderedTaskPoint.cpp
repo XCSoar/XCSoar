@@ -39,6 +39,9 @@ UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 GeoVector
 UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
 {
+  if (!reference.IsValid())
+    return GeoVector::Invalid();
+
   return GeoVector(reference, GetLocationRemaining());
 }
 

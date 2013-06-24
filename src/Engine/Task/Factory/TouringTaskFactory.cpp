@@ -21,8 +21,8 @@
  */
 
 #include "TouringTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Constraints.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Util/Macros.hpp"
 
 static constexpr TaskFactoryConstraints touring_constraints = {
@@ -55,9 +55,9 @@ TouringTaskFactory::TouringTaskFactory(OrderedTask& _task,
 }
 
 void 
-TouringTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
+TouringTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings& to)
 {
-  AbstractTaskFactory::UpdateOrderedTaskBehaviour(to);
+  AbstractTaskFactory::UpdateOrderedTaskSettings(to);
 
   to.aat_min_time = fixed(0);
 

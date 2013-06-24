@@ -225,6 +225,39 @@ UpdateInfoBoxNextDistance(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data)
+{
+  const Waypoint* way_point = protected_task_manager != NULL
+    ? protected_task_manager->GetActiveWaypoint()
+    : NULL;
+
+  if (!way_point) {
+    data.SetInvalid();
+    return;
+  }
+
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  if (!task_stats.task_valid || !basic.location_available) {
+      data.SetInvalid();
+      return;
+  }
+
+  const GeoVector vector(basic.location, way_point->location);
+
+  if (!vector.IsValid()) {
+      data.SetInvalid();
+      return;
+  }
+
+  // Set Value
+  data.SetValueFromDistance(vector.distance);
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+  data.SetComment(vector.bearing);
+}
+
+void
 UpdateInfoBoxNextETE(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
@@ -235,11 +268,11 @@ UpdateInfoBoxNextETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.current_leg.time_remaining));
+  assert(!negative(task_stats.current_leg.time_remaining_now));
 
   TCHAR value[32];
   TCHAR comment[32];
-  const int dd = (int)task_stats.current_leg.time_remaining;
+  const int dd = (int)task_stats.current_leg.time_remaining_now;
   FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
@@ -252,12 +285,14 @@ UpdateInfoBoxNextETA(InfoBoxData &data)
   // use proper non-terminal next task stats
 
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+
+  if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable() ||
+      !now_local.IsPlausible()) {
     data.SetInvalid();
     return;
   }
 
-  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   const BrokenTime t = now_local +
     unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
 
@@ -389,11 +424,11 @@ UpdateInfoBoxFinalETE(InfoBoxData &data)
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining));
+  assert(!negative(task_stats.total.time_remaining_now));
 
   TCHAR value[32];
   TCHAR comment[32];
-  const int dd = abs((int)task_stats.total.time_remaining);
+  const int dd = abs((int)task_stats.total.time_remaining_now);
   FormatTimeTwoLines(value, comment, dd);
 
   data.SetValue(value);
@@ -404,12 +439,14 @@ void
 UpdateInfoBoxFinalETA(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+      !now_local.IsPlausible()) {
     data.SetInvalid();
     return;
   }
 
-  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   const BrokenTime t = now_local +
     unsigned(task_stats.total.solution_remaining.time_elapsed);
 
@@ -494,6 +531,20 @@ UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data)
+{
+  const WindowStats &window =
+    CommonInterface::Calculated().task_stats.last_hour;
+  if (negative(window.duration)) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValue(_T("%2.0f"), Units::ToUserTaskSpeed(window.speed));
+  data.SetValueUnit(Units::current.task_speed_unit);
+}
+
+void
 UpdateInfoBoxFinalGR(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -521,8 +572,8 @@ UpdateInfoBoxTaskAATime(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  if (!task_stats.has_targets ||
+      !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
@@ -546,15 +597,15 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !task_stats.total.IsAchievable()) {
+  if (!task_stats.has_targets ||
+      !task_stats.total.IsAchievable()) {
     data.SetInvalid();
     return;
   }
 
-  assert(!negative(task_stats.total.time_remaining));
+  assert(!negative(task_stats.total.time_remaining_start));
 
-  fixed diff = task_stats.total.time_remaining -
+  fixed diff = task_stats.total.time_remaining_start -
     common_stats.aat_time_remaining;
 
   TCHAR value[32];
@@ -568,7 +619,7 @@ UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 
   // Set Color (red/blue/black)
   data.SetValueColor(negative(diff) ? 1 :
-                   task_stats.total.time_remaining >
+                   task_stats.total.time_remaining_start >
                        common_stats.aat_time_remaining + fixed(5*60) ? 2 : 0);
 }
 
@@ -577,10 +628,8 @@ UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid ||
+  if (!task_stats.has_targets ||
       !task_stats.total.planned.IsDefined()) {
     data.SetInvalid();
     return;
@@ -595,10 +644,8 @@ UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+  if (!task_stats.has_targets) {
     data.SetInvalid();
     return;
   }
@@ -612,10 +659,8 @@ UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid) {
+  if (!task_stats.has_targets) {
     data.SetInvalid();
     return;
   }
@@ -631,8 +676,7 @@ UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
+  if (!task_stats.has_targets || !positive(common_stats.aat_speed_remaining)) {
     data.SetInvalid();
     return;
   }
@@ -652,8 +696,7 @@ UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
-      !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
+  if (!task_stats.has_targets || !positive(common_stats.aat_speed_max)) {
     data.SetInvalid();
     return;
   }
@@ -673,7 +716,7 @@ UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
 
-  if (!common_stats.ordered_has_targets ||
+  if (!task_stats.has_targets ||
       !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
     data.SetInvalid();
     return;
@@ -694,7 +737,7 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
   const TaskStats &task_stats = calculated.ordered_task_stats;
   const CommonStats &common_stats = calculated.common_stats;
   const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskBehaviour().start_constraints.max_height);
+                                GetOrderedTaskSettings().start_constraints.max_height);
 
   if (!task_stats.task_valid || !positive(maxheight)
       || !protected_task_manager

@@ -26,12 +26,28 @@ Copyright_License {
 #include "Screen/Custom/Files.hpp"
 #include "Init.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "Thread/Mutex.hpp"
+#endif
+
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include <algorithm>
 
 #include <assert.h>
+
+#ifndef ENABLE_OPENGL
+/**
+ * libfreetype is not thread-safe; this global Mutex is used to
+ * protect libfreetype from multi-threaded access.
+ */
+static Mutex freetype_mutex;
+#endif
 
 static const char *font_path;
 static const char *bold_font_path;
@@ -49,6 +65,17 @@ static inline FT_Long
 FT_CEIL(FT_Long x)
 {
   return ((x + 63) & -64) / 64;
+}
+
+gcc_pure
+static std::pair<unsigned, const TCHAR *>
+NextChar(const TCHAR *p)
+{
+#ifdef _UNICODE
+  return std::make_pair(unsigned(*p), p + 1);
+#else
+  return NextUTF8(p);
+#endif
 }
 
 void
@@ -159,16 +186,28 @@ Font::Destroy()
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  // TODO: parse UTF-8
-  // TODO: kerning
-  // TODO: overhang
+  assert(text != nullptr);
+#ifndef _UNICODE
+  assert(ValidateUTF8(text));
+#endif
 
   const FT_Face face = this->face;
+  const bool use_kerning = FT_HAS_KERNING(face);
 
   int x = 0, minx = 0, maxx = 0;
+  unsigned prev_index = 0;
 
-  for (const TCHAR *p = text; *p != 0; ++p) {
-    const auto ch = *p;
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(freetype_mutex);
+#endif
+
+  while (true) {
+    const auto n = NextChar(text);
+    if (n.first == 0)
+      break;
+
+    const unsigned ch = n.first;
+    text = n.second;
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
@@ -184,6 +223,17 @@ Font::TextSize(const TCHAR *text) const
     const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
     const int glyph_maxx = minx + FT_CEIL(metrics.width);
     const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+
+    if (use_kerning) {
+      if (prev_index != 0 && i != 0) {
+        FT_Vector delta;
+        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
+                       &delta);
+        x += delta.x >> 6;
+      }
+
+      prev_index = i;
+    }
 
     int z = x + glyph_minx;
     if (z < minx)
@@ -252,15 +302,31 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 void
 Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 {
+  assert(text != nullptr);
+#ifndef _UNICODE
+  assert(ValidateUTF8(text));
+#endif
+
   uint8_t *buffer = (uint8_t *)_buffer;
-  std::fill(buffer, buffer + BufferSize(size), 0);
+  std::fill_n(buffer, BufferSize(size), 0);
 
   const FT_Face face = this->face;
+  const bool use_kerning = FT_HAS_KERNING(face);
 
   int x = 0, minx = 0;
+  unsigned prev_index = 0;
 
-  for (const TCHAR *p = text; *p != 0; ++p) {
-    const auto ch = *p;
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(freetype_mutex);
+#endif
+
+  while (true) {
+    const auto n = NextChar(text);
+    if (n.first == 0)
+      break;
+
+    const unsigned ch = n.first;
+    text = n.second;
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
@@ -275,6 +341,17 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 
     const int glyph_minx = FT_FLOOR(metrics.horiBearingX);
     const int glyph_advance = FT_CEIL(metrics.horiAdvance);
+
+    if (use_kerning) {
+      if (prev_index != 0) {
+        FT_Vector delta;
+        FT_Get_Kerning(face, prev_index, i, ft_kerning_default,
+                       &delta);
+        x += delta.x >> 6;
+      }
+
+      prev_index = i;
+    }
 
     int z = x + glyph_minx;
     if (z < minx)

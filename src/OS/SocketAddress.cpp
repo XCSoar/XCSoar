@@ -57,7 +57,7 @@ SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port);
   sin.sin_addr.s_addr = htonl(ip);
-  std::fill(sin.sin_zero, sin.sin_zero + ARRAY_SIZE(sin.sin_zero), 0);
+  std::fill_n(sin.sin_zero, ARRAY_SIZE(sin.sin_zero), 0);
   address.length = sizeof(sin);
   return address;
 }

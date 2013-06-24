@@ -29,7 +29,7 @@ void ReadLanguageFile();
 void
 CloseLanguageFile();
 
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO)
 
 /**
  * Using the C library's gettext implementation instead of rolling our
@@ -37,7 +37,7 @@ CloseLanguageFile();
  */
 #define HAVE_NATIVE_GETTEXT
 
-#elif defined(WIN32) || defined(ANDROID)
+#elif defined(WIN32) || defined(ANDROID) || defined(KOBO)
 
 #define HAVE_BUILTIN_LANGUAGES
 

@@ -23,15 +23,43 @@ Copyright_License {
 
 #include "DumpPort.hpp"
 #include "HexDump.hpp"
+#include "OS/Clock.hpp"
 
 #include <stdint.h>
 #include <stdio.h>
 
-DumpPort::DumpPort(Port *_port):Port(*(DataHandler *)NULL), port(_port) {}
+DumpPort::DumpPort(Port *_port)
+  :Port(*(DataHandler *)NULL), port(_port),
+   until_ms(-1) {}
 
 DumpPort::~DumpPort()
 {
   delete port;
+}
+
+void
+DumpPort::EnableTemporarily(unsigned duration_ms)
+{
+  until_ms = MonotonicClockMS() + duration_ms;
+}
+
+bool
+DumpPort::CheckEnabled()
+{
+  if (until_ms == 0)
+    return false;
+
+  if (until_ms == unsigned(-1))
+    return true;
+
+  if (MonotonicClockMS() >= until_ms) {
+    /* duration has just expired; clear to avoid calling
+       MonotonicClockMS() again in the next call */
+    until_ms = 0;
+    return false;
+  }
+
+  return true;
 }
 
 PortState
@@ -49,24 +77,35 @@ DumpPort::WaitConnected(OperationEnvironment &env)
 size_t
 DumpPort::Write(const void *data, size_t length)
 {
-  LogFormat("Write(%u)", (unsigned)length);
+  const bool enabled = CheckEnabled();
+  if (enabled)
+    LogFormat("Write(%u)", (unsigned)length);
+
   size_t nbytes = port->Write(data, length);
-  LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
-  HexDump("W ", data, nbytes);
+
+  if (enabled) {
+    LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
+    HexDump("W ", data, nbytes);
+  }
+
   return nbytes;
 }
 
 bool
 DumpPort::Drain()
 {
-  LogFormat("Drain");
+  if (CheckEnabled())
+    LogFormat("Drain");
+
   return port->Drain();
 }
 
 void
 DumpPort::Flush()
 {
-  LogFormat("Flush");
+  if (CheckEnabled())
+    LogFormat("Flush");
+
   port->Flush();
 }
 
@@ -79,40 +118,59 @@ DumpPort::GetBaudrate() const
 bool
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
-  LogFormat("SetBaudrate %u", baud_rate);
+  if (CheckEnabled())
+    LogFormat("SetBaudrate %u", baud_rate);
+
   return port->SetBaudrate(baud_rate);
 }
 
 bool
 DumpPort::StopRxThread()
 {
-  LogFormat("StopRxThread");
+  if (CheckEnabled())
+    LogFormat("StopRxThread");
+
   return port->StopRxThread();
 }
 
 bool
 DumpPort::StartRxThread()
 {
-  LogFormat("StartRxThread");
+  if (CheckEnabled())
+    LogFormat("StartRxThread");
+
   return port->StartRxThread();
 }
 
 int
 DumpPort::Read(void *buffer, size_t size)
 {
-  LogFormat("Read(%u)", (unsigned)size);
+  const bool enabled = CheckEnabled();
+  if (enabled)
+    LogFormat("Read(%u)", (unsigned)size);
+
   int nbytes = port->Read(buffer, size);
-  LogFormat("Read(%u)=%d", (unsigned)size, nbytes);
-  if (nbytes > 0)
-    HexDump("R ", buffer, nbytes);
+
+  if (enabled) {
+    LogFormat("Read(%u)=%d", (unsigned)size, nbytes);
+    if (nbytes > 0)
+      HexDump("R ", buffer, nbytes);
+  }
+
   return nbytes;
 }
 
 Port::WaitResult
 DumpPort::WaitRead(unsigned timeout_ms)
 {
-  LogFormat("WaitRead %u", timeout_ms);
+  const bool enabled = CheckEnabled();
+  if (enabled)
+    LogFormat("WaitRead %u", timeout_ms);
+
   Port::WaitResult result = port->WaitRead(timeout_ms);
-  LogFormat("WaitRead %u = %d", timeout_ms, (int)result);
+
+  if (enabled)
+    LogFormat("WaitRead %u = %d", timeout_ms, (int)result);
+
   return result;
 }

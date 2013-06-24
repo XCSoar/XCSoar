@@ -27,8 +27,8 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Config.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 
 #define MORE_USAGE
@@ -59,16 +59,16 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 }
 
 bool
-NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                     fixed &time_of_day_s)
 {
   return false;
 }
 
-fixed
-NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                       bool date_available)
+bool
+NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
-  return fixed(0);
+  return false;
 }
 
 int main(int argc, char **argv)
