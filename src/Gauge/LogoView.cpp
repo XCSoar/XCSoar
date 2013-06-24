@@ -23,22 +23,28 @@ Copyright_License {
 
 #include "LogoView.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "resource.h"
 #include "Version.hpp"
+
+#include <algorithm>
 
 LogoView::LogoView()
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
 #ifndef USE_GDI
-  font.Load(_T("Droid Sans"), 12);
+  font.Load(_T("Droid Sans"), Layout::SmallScale(8));
 #endif
+
+  big_logo.EnableInterpolation();
+  big_title.EnableInterpolation();
 }
 
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
-  const UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
+  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   enum {
     LANDSCAPE, PORTRAIT, SQUARE,
@@ -71,7 +77,18 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.GetSize();
 
-  PixelScalar logox, logoy, titlex, titley;
+  const unsigned magnification =
+    std::max(1u,
+             std::min((width - 16u) / unsigned(logo_size.cx + title_size.cx),
+                      (height - 16u) / std::max(unsigned(logo_size.cy),
+                                                unsigned(title_size.cx))));
+
+  logo_size.cx *= magnification;
+  logo_size.cy *= magnification;
+  title_size.cx *= magnification;
+  title_size.cy *= magnification;
+
+  int logox, logoy, titlex, titley;
 
   // Determine logo and title positions
   switch (orientation) {
@@ -95,10 +112,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   // Draw 'XCSoar N.N' title
   if (orientation != SQUARE)
-    canvas.Copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
+    canvas.Stretch(titlex, titley, title_size.cx, title_size.cy, bitmap_title);
 
   // Draw XCSoar swift logo
-  canvas.Copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
+  canvas.Stretch(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo);
 
   // Draw full XCSoar version number
 
@@ -109,8 +126,4 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   canvas.DrawText(2, 2, XCSoar_ProductToken);
-#ifdef NO_HORIZON
-  const int text_height = canvas.CalcTextSize(XCSoar_ProductToken).cy;
-  canvas.DrawText(2, 4 + text_height, _T("Horizon: disabled"));
-#endif
 }

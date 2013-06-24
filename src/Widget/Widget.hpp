@@ -149,6 +149,11 @@ public:
    * @return false if the Widget is not interested in keyboard focus
    */
   virtual bool SetFocus() = 0;
+
+  /**
+   * Allow the #Widget to handle a key press.
+   */
+  virtual bool KeyPress(unsigned key_code) = 0;
 };
 
 /**
@@ -172,6 +177,7 @@ public:
   virtual bool Leave() override;
   virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
+  virtual bool KeyPress(unsigned key_code) override;
 };
 
 #endif

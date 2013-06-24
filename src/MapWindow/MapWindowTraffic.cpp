@@ -32,7 +32,6 @@ Copyright_License {
 #include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Friends.hpp"
-#include "Look/Fonts.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 
 #include <stdio.h>
@@ -62,7 +61,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   if (projection.GetMapScale() > fixed(7300))
     return;
 
-  canvas.Select(Fonts::map);
+  canvas.Select(*traffic_look.font);
 
   // Circle through the FLARM targets
   for (auto it = flarm.list.begin(), end = flarm.list.end();
@@ -146,7 +145,7 @@ MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
   if (skylines_data == nullptr)
     return;
 
-  canvas.Select(Fonts::map);
+  canvas.Select(*traffic_look.font);
 
   ScopeLock protect(skylines_data->mutex);
   for (auto &i : skylines_data->traffic) {

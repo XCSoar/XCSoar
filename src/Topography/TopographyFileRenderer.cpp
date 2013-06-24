@@ -24,7 +24,7 @@ Copyright_License {
 #include "Topography/TopographyFileRenderer.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "resource.h"
@@ -37,6 +37,10 @@ Copyright_License {
 #include "Util/tstring.hpp"
 #include "Geo/GeoClip.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 #include <algorithm>
 #include <set>
 
@@ -46,7 +50,7 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
 {
   int icon_ID = file.GetIcon();
   if (icon_ID != 0)
-    icon.Load(icon_ID, 5000+icon_ID);
+    icon.LoadResource(icon_ID, 5000+icon_ID);
 }
 
 void
@@ -286,8 +290,13 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);
 #endif
-        glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
-                       triangles);
+        if (!brush.GetColor().IsOpaque()) {
+          const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                         triangles);
+        } else
+          glDrawElements(GL_TRIANGLE_STRIP, *index_count, GL_UNSIGNED_SHORT,
+                         triangles);
       }
 #else // !ENABLE_OPENGL
       for (; lines < end_lines; ++lines) {

@@ -30,6 +30,10 @@ Copyright_License {
 #include "MapCanvas.hpp"
 #include "Geo/SearchPointVector.hpp"
 
+#ifdef USE_GDI
+#include "Screen/GDI/AlphaBlend.hpp"
+#endif
+
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
                              const AirspaceRendererSettings &_settings)
@@ -108,14 +112,20 @@ MapDrawHelper::BufferRenderFinish()
     }
 
 #ifdef HAVE_ALPHA_BLEND
+#ifdef HAVE_HATCHED_BRUSH
     if (settings.transparency && AlphaBlendAvailable())
+#endif
       canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                            buffer,
                            0, 0, canvas.GetWidth(), canvas.GetHeight(),
                            60);
+#ifdef HAVE_HATCHED_BRUSH
     else
 #endif
+#endif
+#ifdef HAVE_HATCHED_BRUSH
       canvas.CopyAnd(buffer);
+#endif
 
     buffer_drawn = false;
   }

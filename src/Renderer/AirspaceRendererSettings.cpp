@@ -32,8 +32,8 @@ AirspaceClassRendererSettings::SetDefaults()
 #ifdef HAVE_HATCHED_BRUSH
   brush = 0;
 #endif
-  border_color = COLOR_RED;
-  fill_color = COLOR_RED;
+  border_color = RGB8_RED;
+  fill_color = RGB8_RED;
   border_width = 2;
   fill_mode = FillMode::PADDING;
 }
@@ -46,7 +46,7 @@ AirspaceRendererSettings::SetDefaults()
   altitude_mode = AirspaceDisplayMode::ALLON;
   clip_altitude = 1000;
 
-#ifndef ENABLE_OPENGL
+#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   transparency = false;
 #endif
 
@@ -70,29 +70,29 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSF].brush = 3;
 #endif
 
-  classes[OTHER].SetColors(COLOR_CYAN);
-  classes[DANGER].SetColors(DarkColor(COLOR_MAGENTA));
-  classes[MATZ].SetColors(DarkColor(COLOR_MAGENTA));
+  classes[OTHER].SetColors(RGB8_CYAN);
+  classes[DANGER].SetColors(RGB8_MAGENTA.Darken());
+  classes[MATZ].SetColors(RGB8_MAGENTA.Darken());
 
-  classes[AATASK].SetColors(Color(0x00, 0xFF, 0x00));
+  classes[AATASK].SetColors(RGB8_GREEN);
 
-  classes[CLASSC].SetColors(COLOR_BLUE);
-  classes[CLASSD].SetColors(COLOR_BLUE);
+  classes[CLASSC].SetColors(RGB8_BLUE);
+  classes[CLASSD].SetColors(RGB8_BLUE);
 
-  classes[CLASSE].SetColors(Color(0x00, 0x00, 0xFF));
+  classes[CLASSE].SetColors(RGB8_BLUE);
   classes[CLASSE].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
-  classes[CLASSE].SetColors(Color(0x00, 0x00, 0xFF));
+  classes[CLASSE].SetColors(RGB8_BLUE);
   classes[CLASSF].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
-  classes[TMZ].SetColors(Color(0x80, 0x80, 0x80));
+  classes[TMZ].SetColors(RGB8_GRAY);
   classes[TMZ].fill_mode = AirspaceClassRendererSettings::FillMode::NONE;
 
-  classes[WAVE].SetColors(Color(0xFF, 0xFF, 0x00));
+  classes[WAVE].SetColors(RGB8_YELLOW);
   classes[WAVE].border_width = 0;
   classes[WAVE].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 
-  classes[CTR].fill_color = Color(0xFF, 0x00, 0x00);
-  classes[CTR].border_color = Color(0x00, 0x00, 0xFF);
+  classes[CTR].fill_color = RGB8_RED;
+  classes[CTR].border_color = RGB8_BLUE;
   classes[TMZ].border_width = 1;
   classes[CTR].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 }

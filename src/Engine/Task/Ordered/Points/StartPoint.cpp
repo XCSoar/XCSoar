@@ -21,7 +21,7 @@
 */
 
 #include "StartPoint.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Geo/Math.hpp"
@@ -53,10 +53,10 @@ StartPoint::GetElevation() const
 }
 
 void
-StartPoint::SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb)
+StartPoint::SetOrderedTaskSettings(const OrderedTaskSettings &settings)
 {
-  OrderedTaskPoint::SetOrderedTaskBehaviour(otb);
-  constraints = otb.start_constraints;
+  OrderedTaskPoint::SetOrderedTaskSettings(settings);
+  constraints = settings.start_constraints;
 }
 
 void

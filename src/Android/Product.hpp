@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Compiler.h"
 
+extern bool is_nook;
+
 /**
  * Returns whether the application is running on Galaxy Tab with Android 2.2
  */
@@ -37,7 +39,10 @@ IsGalaxyTab22();
  * Returns whether the application is running on Nook Simple Touch
  */
 gcc_const
-bool
-IsNookSimpleTouch();
+static inline bool
+IsNookSimpleTouch()
+{
+  return is_nook;
+}
 
 #endif

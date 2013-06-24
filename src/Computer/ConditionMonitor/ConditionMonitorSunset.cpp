@@ -25,7 +25,6 @@ Copyright_License {
 #include "ConditionMonitorSunset.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Device/device.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Math/SunEphemeris.hpp"
@@ -37,8 +36,8 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
                                        const ComputerSettings &settings)
 {
   if (!basic.location_available ||
-      !basic.time_available || !basic.date_available ||
-      !calculated.flight.flying || HaveCondorDevice() ||
+      !basic.time_available || !basic.date_time_utc.IsDatePlausible() ||
+      !calculated.flight.flying || !basic.gps.real ||
       !calculated.task_stats.task_valid)
     return false;
 

@@ -305,6 +305,9 @@ Display::GetXDPI()
   return GetDeviceCaps(dc, LOGPIXELSX);
 #elif defined(ANDROID)
   return native_view->GetXDPI();
+#elif defined(KOBO)
+  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
+  return 200;
 #else
   return 96;
 #endif
@@ -322,6 +325,9 @@ Display::GetYDPI()
   return GetDeviceCaps(dc, LOGPIXELSY);
 #elif defined(ANDROID)
   return native_view->GetYDPI();
+#elif defined(KOBO)
+  /* Kobo Mini 200 dpi; Kobo Glo 212 dpi (according to Wikipedia) */
+  return 200;
 #else
   return 96;
 #endif

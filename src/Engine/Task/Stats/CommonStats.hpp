@@ -65,11 +65,6 @@ public:
   /** The current task type/mode */
   TaskType task_type;
 
-  /** Whether ordered task has AAT areas */
-  bool ordered_has_targets;
-  /** Whether ordered task has optional starts */
-  bool ordered_has_optional_starts;
-
   /** Is there a tp after this */
   bool active_has_next;
   /** Is there a tp before this */
@@ -78,8 +73,6 @@ public:
   bool next_is_last;
   /** Is previous turnpoint the first */
   bool previous_is_first;
-  /** index of active tp */
-  unsigned active_taskpoint_index;
 
   /** Block speed to fly */
   fixed V_block;

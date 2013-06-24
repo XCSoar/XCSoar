@@ -27,6 +27,7 @@ Copyright_License {
 #include "GlideComputerBlackboard.hpp"
 #include "Audio/VegaVoice.hpp"
 #include "Time/PeriodClock.hpp"
+#include "Time/DeltaTime.hpp"
 #include "GlideComputerAirData.hpp"
 #include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
@@ -34,6 +35,7 @@ Copyright_License {
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
 #include "Compiler.h"
+#include "Engine/Contest/Solvers/Retrospective.hpp"
 
 class Waypoints;
 class ProtectedTaskManager;
@@ -47,14 +49,15 @@ class RasterTerrain;
 class GlideComputer : public GlideComputerBlackboard
 {
   GlideComputerAirData air_data_computer;
+  WarningComputer warning_computer;
   TaskComputer task_computer;
   StatsComputer stats_computer;
   LogComputer log_computer;
   CuComputer cu_computer;
-  WarningComputer warning_computer;
 
   const Waypoints &waypoints;
 
+  Retrospective retrospective;
   int team_code_ref_id;
   bool team_code_ref_found;
   GeoPoint team_code_ref_location;
@@ -62,12 +65,17 @@ class GlideComputer : public GlideComputerBlackboard
   PeriodClock idle_clock;
   VegaVoice vegavoice;
 
+  /**
+   * This object is used to check whether to update
+   * DerivedInfo::trace_history.
+   */
+  DeltaTime trace_history_time;
+
 public:
   GlideComputer(const Waypoints &_way_points,
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
                 GlideComputerTaskEvents& events);
-  virtual ~GlideComputer() {}
 
   void SetTerrain(RasterTerrain *_terrain);
 
@@ -127,6 +135,10 @@ public:
 
   const FlightStatistics &GetFlightStats() const {
     return stats_computer.GetFlightStats();
+  }
+
+  const Retrospective &GetRetrospective() {
+    return retrospective;
   }
 
 protected:

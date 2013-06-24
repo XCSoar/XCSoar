@@ -21,7 +21,7 @@
  */
 
 #include "AbstractTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
@@ -99,7 +99,7 @@ AbstractTaskFactory::CreateStart(ObservationZonePoint* oz,
                                  const Waypoint& wp) const
 {
   return new StartPoint(oz, wp, behaviour,
-                        GetOrderedTaskBehaviour().start_constraints);
+                        GetOrderedTaskSettings().start_constraints);
 }
 
 FinishPoint*
@@ -107,7 +107,7 @@ AbstractTaskFactory::CreateFinish(ObservationZonePoint* oz,
                                   const Waypoint& wp) const
 {
   return new FinishPoint(oz, wp, behaviour,
-                         GetOrderedTaskBehaviour().finish_constraints);
+                         GetOrderedTaskSettings().finish_constraints);
 }
 
 AATPoint*
@@ -567,15 +567,16 @@ AbstractTaskFactory::Relocate(const unsigned position,
   return task.GetTaskPoint(position);
 }
 
-const OrderedTaskBehaviour &
-AbstractTaskFactory::GetOrderedTaskBehaviour() const
+const OrderedTaskSettings &
+AbstractTaskFactory::GetOrderedTaskSettings() const
 {
-  return task.GetOrderedTaskBehaviour();
+  return task.GetOrderedTaskSettings();
 }
 
-void 
-AbstractTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
+void
+AbstractTaskFactory::UpdateOrderedTaskSettings(OrderedTaskSettings &to)
 {
+  to.start_constraints.require_arm = constraints.start_requires_arm;
   to.finish_constraints.fai_finish = constraints.fai_finish;
 }
 
@@ -1077,8 +1078,7 @@ AbstractTaskFactory::AppendOptionalStart(const Waypoint& wp)
 {
   OrderedTaskPoint* tp = NULL;
   if (task.TaskSize())
-    tp = task.GetPoint(0).Clone(behaviour,
-                                  GetOrderedTaskBehaviour(), &wp);
+    tp = task.GetPoint(0).Clone(behaviour, GetOrderedTaskSettings(), &wp);
   else
     tp = CreateStart(wp);
 

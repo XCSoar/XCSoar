@@ -31,7 +31,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
-struct OrderedTaskBehaviour;
+struct OrderedTaskSettings;
 
 /**
  * Abstract compound specialisation of TaskLeg and ScoredTaskPoint,
@@ -96,12 +96,12 @@ public:
    * Caller is responsible for destruction.
    *
    * @param task_behaviour Task behaviour of clone
-   * @param ordered_task_behaviour Ordered task behaviour of clone
+   * @param ordered_task_settings Ordered task behaviour of clone
    * @param waypoint Waypoint to shift to (or NULL)
    */
   gcc_malloc
   OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
-                          const OrderedTaskBehaviour &ordered_task_behaviour,
+                          const OrderedTaskSettings &ordered_task_settings,
                           const Waypoint* waypoint=NULL) const;
 
   /**
@@ -121,7 +121,7 @@ public:
   }
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
-  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {}
+  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &otb) {}
 
   /**
    * Set previous/next task points.

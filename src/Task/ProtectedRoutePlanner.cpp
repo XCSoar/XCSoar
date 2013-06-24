@@ -47,7 +47,7 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const RoughAltitude h_ceiling)
 {
   ExclusiveLease lease(*this);
-  lease->Synchronise(airspaces, dest, start);
+  lease->Synchronise(airspaces, warnings, dest, start);
   lease->Solve(dest, start, config, h_ceiling);
 }
 

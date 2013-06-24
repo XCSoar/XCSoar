@@ -21,7 +21,7 @@ DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
 WINDRES = $(TCPREFIX)windres$(EXE)
-ARFLAGS = rcs
+ARFLAGS = -rcs
 
 ifeq ($(TARGET),WINE)
 AR = ar$(EXE)

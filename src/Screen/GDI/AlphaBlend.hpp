@@ -58,7 +58,7 @@ AlphaBlendAvailable()
 
 #elif defined(HAVE_BUILTIN_ALPHA_BLEND)
 
-static inline bool
+static constexpr inline bool
 AlphaBlendAvailable()
 {
   return true;

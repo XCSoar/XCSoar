@@ -66,7 +66,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
 #endif
 
   colors[0] = border_color;
-  if (use_colors) {
+  if (HasColors() && use_colors) {
     colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
     colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
     colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_GREEN;

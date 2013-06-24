@@ -44,6 +44,10 @@
 #define O_NOCTTY 0
 #endif
 
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
+
 bool
 FileDescriptor::Open(const char *pathname, int flags)
 {
@@ -56,7 +60,7 @@ FileDescriptor::Open(const char *pathname, int flags)
 bool
 FileDescriptor::OpenReadOnly(const char *pathname)
 {
-  return Open(pathname, O_RDONLY | O_NOCTTY);
+  return Open(pathname, O_RDONLY | O_NOCTTY | O_CLOEXEC);
 }
 
 #ifdef HAVE_POSIX
@@ -64,7 +68,7 @@ FileDescriptor::OpenReadOnly(const char *pathname)
 bool
 FileDescriptor::OpenNonBlocking(const char *pathname)
 {
-  return Open(pathname, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  return Open(pathname, O_RDWR | O_NOCTTY | O_CLOEXEC | O_NONBLOCK);
 }
 
 bool

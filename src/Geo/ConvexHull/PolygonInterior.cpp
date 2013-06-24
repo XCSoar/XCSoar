@@ -67,7 +67,8 @@ isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 
 bool
 PolygonInterior(const GeoPoint &P,
-                const SearchPoint *begin, const SearchPoint *end)
+                SearchPointVector::const_iterator begin,
+                SearchPointVector::const_iterator end)
 {
   if (std::distance(begin, end) < 3)
     return false;
@@ -104,7 +105,8 @@ PolygonInterior(const GeoPoint &P,
 
 bool
 PolygonInterior(const FlatGeoPoint &P,
-                const SearchPoint *begin, const SearchPoint *end)
+                SearchPointVector::const_iterator begin,
+                SearchPointVector::const_iterator end)
 {
   if (std::distance(begin, end) < 3)
     return false;

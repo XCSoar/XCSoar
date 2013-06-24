@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
 #include "Thread/Mutex.hpp"
+#include "Time/WrapClock.hpp"
 
 #include <cassert>
 
@@ -69,6 +70,11 @@ class DeviceBlackboard:
    * Data from replay.
    */
   NMEAInfo replay_data;
+
+  /**
+   * Clock management for #real_data and #replay_data.
+   */
+  WrapClock real_clock, replay_clock;
 
 public:
   Mutex mutex;

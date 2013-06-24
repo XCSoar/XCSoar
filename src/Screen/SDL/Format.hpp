@@ -28,6 +28,33 @@ Copyright_License {
 
 #include <SDL.h>
 
+#include <assert.h>
+
+#ifdef GREYSCALE
+/**
+ * Set by TopCanvas::Create().
+ */
+extern SDL_PixelFormat *greyscale_format;
+#endif
+
+gcc_const
+static inline const SDL_PixelFormat &
+GetDisplayFormat()
+{
+#ifdef GREYSCALE
+  /* with the "GREYSCALE" option, we render to software 8-bit
+     surfaces, and TopCanvas::Flip() will convert to the real video
+     surface */
+  return *greyscale_format;
+#else
+  SDL_Surface *surface = SDL_GetVideoSurface();
+  assert(surface != nullptr);
+  assert(surface->format != nullptr);
+
+  return *surface->format;
+#endif
+}
+
 gcc_pure
 static inline bool
 CompareFormats(const SDL_PixelFormat &a, const SDL_PixelFormat &b)
@@ -41,7 +68,7 @@ gcc_pure
 static inline bool
 IsDisplayFormat(const SDL_PixelFormat &format)
 {
-  return CompareFormats(format, *SDL_GetVideoSurface()->format);
+  return CompareFormats(format, GetDisplayFormat());
 }
 
 /**
@@ -57,7 +84,13 @@ ConvertToDisplayFormat(SDL_Surface *surface)
     return surface;
 
   /* need to convert */
+#ifdef GREYSCALE
+  SDL_Surface *converted = SDL_ConvertSurface(surface, greyscale_format,
+                                              SDL_SWSURFACE);
+#else
   SDL_Surface *converted = SDL_DisplayFormat(surface);
+#endif
+
   SDL_FreeSurface(surface);
   return converted;
 }
@@ -74,7 +107,23 @@ ConvertToDisplayFormatPreserve(SDL_Surface *surface)
     return surface;
 
   /* need to convert */
+#ifdef GREYSCALE
+  return SDL_ConvertSurface(surface, greyscale_format, SDL_SWSURFACE);
+#else
   return SDL_DisplayFormat(surface);
+#endif
+}
+
+/**
+ * Like SDL_ConvertSurface(), but returns the given surface if it's
+ * already in the given format.  surface.
+ */
+static inline SDL_Surface *
+LazyConvertSurface(SDL_Surface *surface, SDL_PixelFormat *format)
+{
+  return CompareFormats(*surface->format, *format)
+    ? surface
+    : SDL_ConvertSurface(surface, format, SDL_SWSURFACE);
 }
 
 #endif

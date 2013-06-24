@@ -38,31 +38,12 @@ class GlideComputerBlackboard:
   public ComputerSettingsBlackboard
 {
   DerivedInfo Finish_Derived_Info;
-  MoreData last_gps_info;
-  bool _time_retreated;
 
 public:
-  GlideComputerBlackboard();
-
   void ReadBlackboard(const MoreData &nmea_info);
   void ReadComputerSettings(const ComputerSettings &settings);
-  const MoreData &LastBasic() const { return last_gps_info; }
 
 protected:
-  bool time_advanced() const {
-    return Basic().HasTimeAdvancedSince(LastBasic());
-  }
-  /**
-   * @see GlideComputerBlackboard::ReadBlackboard()
-   */
-  bool time_retreated() const {
-    return _time_retreated;
-  }
-
-  fixed time_delta() const {
-    return Basic().time - LastBasic().time;
-  }
-
   void ResetFlight(const bool full=true);
   void StartTask();
   void SaveFinish();

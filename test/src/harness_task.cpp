@@ -24,7 +24,7 @@
 #include "test_debug.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Task/Factory/TaskFactoryConstraints.hpp"
+#include "Task/Factory/Constraints.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"

@@ -36,7 +36,16 @@ TopCanvas::Create(PixelSize new_size,
 {
 #ifdef USE_X11
   X11Display *const x_display = XOpenDisplay(nullptr);
+  if (x_display == nullptr) {
+    fprintf(stderr, "XOpenDisplay() failed\n");
+    exit(EXIT_FAILURE);
+  }
+
   const X11Window x_root = DefaultRootWindow(x_display);
+  if (x_root == 0) {
+    fprintf(stderr, "DefaultRootWindow() failed\n");
+    exit(EXIT_FAILURE);
+  }
 
   XSetWindowAttributes swa;
   swa.event_mask = ExposureMask | PointerMotionMask | KeyPressMask;
@@ -46,6 +55,10 @@ TopCanvas::Create(PixelSize new_size,
                            CopyFromParent, InputOutput,
                            CopyFromParent, CWEventMask,
                            &swa);
+  if (x_window == 0) {
+    fprintf(stderr, "XCreateWindow() failed\n");
+    exit(EXIT_FAILURE);
+  }
 
   XMapWindow(x_display, x_window);
   XStoreName(x_display, x_window, "XCSoar");

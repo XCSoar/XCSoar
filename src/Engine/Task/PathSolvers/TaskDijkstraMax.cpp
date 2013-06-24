@@ -30,6 +30,6 @@ TaskDijkstraMax::DistanceMax(const OrderedTask &task)
 
   dijkstra.Reserve(256);
   dijkstra.Clear();
-  LinkStart(ScanTaskPoint(0, 0));
+  AddZeroStartEdges();
   return Run();
 }

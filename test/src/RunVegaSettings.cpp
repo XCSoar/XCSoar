@@ -25,8 +25,8 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
+#include "Device/Config.hpp"
 #include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 

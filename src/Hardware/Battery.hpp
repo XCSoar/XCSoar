@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_BATTERY_H
 #define XCSOAR_HARDWARE_BATTERY_H
 
-#if defined(ANDROID) || (defined(_WIN32_WCE) && !defined(GNAV))
+#if defined(ANDROID) || (defined(_WIN32_WCE) && !defined(GNAV)) || defined(KOBO)
 #define HAVE_BATTERY
 
 #include <stdbool.h>
@@ -66,12 +66,12 @@ UpdateBatteryInfo()
   /* nothing to do, this is updated by Android callbacks */
 }
 
-#else /* _WIN32_WCE */
+#else /* _WIN32_WCE or KOBO*/
 
 void
 UpdateBatteryInfo();
 
-#endif /* _WIN32_WCE */
+#endif /* _WIN32_WCE or KOBO */
 
 #endif /* !HAVE_BATTERY */
 

@@ -38,7 +38,7 @@ TaskMacCreadyTravelled::SolvePoint(const TaskPoint &tp,
                                               settings, glide_polar, minH);
 }
 
-const AircraftState &
+AircraftState
 TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
 {
   const OrderedTaskPoint &tp = *(const OrderedTaskPoint *)points[0];

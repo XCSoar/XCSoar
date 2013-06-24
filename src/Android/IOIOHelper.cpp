@@ -33,7 +33,7 @@ jmethodID IOIOHelper::ctor,
 bool
 IOIOHelper::Initialise(JNIEnv *env)
 {
-  assert(cls == NULL);
+  assert(!cls.IsDefined());
   assert(env != NULL);
 
   if (!cls.FindOptional(env, "org/xcsoarte/IOIOHelper"))

@@ -33,9 +33,9 @@ Copyright_License {
 
 #include <algorithm>
 
-RouteComputer::RouteComputer(const Airspaces &airspace_database)
-  :route_planner(airspace_database),
-   protected_route_planner(route_planner, airspace_database),
+RouteComputer::RouteComputer(const Airspaces &airspace_database,
+                             const ProtectedAirspaceWarningManager *warnings)
+  :protected_route_planner(route_planner, airspace_database, warnings),
    route_clock(fixed(5)),
    reach_clock(fixed(5)),
    terrain(NULL)
@@ -100,7 +100,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
 
       if (!dirty) {
         dirty =
-          calculated.common_stats.active_taskpoint_index != last_active_tp ||
+          calculated.task_stats.active_index != last_active_tp ||
           calculated.common_stats.task_type != last_task_type;
         if (dirty) {
           // restart clock
@@ -110,7 +110,7 @@ RouteComputer::TerrainWarning(const MoreData &basic,
       }
 
       last_task_type = calculated.common_stats.task_type;
-      last_active_tp = calculated.common_stats.active_taskpoint_index;
+      last_active_tp = calculated.task_stats.active_index;
 
       if (dirty) {
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling);

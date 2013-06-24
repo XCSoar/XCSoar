@@ -149,8 +149,7 @@ SmallTrafficWindow::OnPaint(Canvas &canvas)
 
   if (pressed) {
 #ifdef ENABLE_OPENGL
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
@@ -172,10 +171,7 @@ GaugeFLARM::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 GaugeFLARM::Unprepare()
 {
-  SmallTrafficWindow *window =
-    (SmallTrafficWindow *)OverlappedWidget::GetWindow();
-  delete window;
-
+  DeleteWindow();
   OverlappedWidget::Unprepare();
 }
 
@@ -205,8 +201,6 @@ GaugeFLARM::OnGPSUpdate(const MoreData &basic)
 void
 GaugeFLARM::Update(const NMEAInfo &basic)
 {
-  SmallTrafficWindow *window =
-    (SmallTrafficWindow *)GetWindow();
-
-  window->Update(basic, blackboard.GetComputerSettings().team_code);
+  SmallTrafficWindow &window = (SmallTrafficWindow &)GetWindow();
+  window.Update(basic, blackboard.GetComputerSettings().team_code);
 }

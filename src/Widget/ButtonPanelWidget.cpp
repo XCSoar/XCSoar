@@ -153,3 +153,9 @@ ButtonPanelWidget::SetFocus()
 {
   return widget->SetFocus();
 }
+
+bool
+ButtonPanelWidget::KeyPress(unsigned key_code)
+{
+  return widget->KeyPress(key_code) || buttons->KeyPress(key_code);
+}

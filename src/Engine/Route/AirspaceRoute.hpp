@@ -19,13 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef AIRSPACE_ROUTE_HPP
-#define AIRSPACE_ROUTE_HPP
+
+#ifndef XCSOAR_AIRSPACE_ROUTE_HPP
+#define XCSOAR_AIRSPACE_ROUTE_HPP
 
 #include "RoutePlanner.hpp"
 #include "Airspace/Airspaces.hpp"
 
-class AirspaceRoute: public RoutePlanner {
+class AirspaceRoute : public RoutePlanner {
   Airspaces m_airspaces;
 
   struct RouteAirspaceIntersection {
@@ -46,51 +47,51 @@ class AirspaceRoute: public RoutePlanner {
 public:
   friend class PrintHelper;
 
-  AirspaceRoute(const Airspaces& master);
+  AirspaceRoute();
   virtual ~AirspaceRoute();
 
-  void Synchronise(const Airspaces& master,
-                   const AGeoPoint& origin,
-                   const AGeoPoint& destination);
+  void Synchronise(const Airspaces &master, const AirspacePredicate &condition,
+                   const AGeoPoint &origin,
+                   const AGeoPoint &destination);
 
-  virtual void Reset();
+  virtual void Reset() override;
 
   unsigned AirspaceSize() const;
 
 protected:
 
-  virtual void OnSolve(const AGeoPoint& origin,
-                        const AGeoPoint& destination);
+  virtual void OnSolve(const AGeoPoint &origin,
+                       const AGeoPoint &destination) override;
 
-  virtual bool IsTrivial() const {
-    return m_airspaces.empty() && RoutePlanner::IsTrivial();
+  virtual bool IsTrivial() const override {
+    return m_airspaces.IsEmpty() && RoutePlanner::IsTrivial();
   }
 
 private:
-  virtual bool CheckClearance(const RouteLink &e, RoutePoint& inp) const;
-  virtual void AddNearby(const RouteLink& e);
-  virtual bool CheckSecondary(const RouteLink &e);
+  virtual bool CheckClearance(const RouteLink &e,
+                              RoutePoint &inp) const override;
+  virtual void AddNearby(const RouteLink &e) override;
+  virtual bool CheckSecondary(const RouteLink &e) override;
 
-  void AddNearbyAirspace(const RouteAirspaceIntersection &inx, const RouteLink& e);
+  void AddNearbyAirspace(const RouteAirspaceIntersection &inx,
+                         const RouteLink &e);
 
-  RouteAirspaceIntersection
-  FirstIntersecting(const RouteLink& e) const;
+  RouteAirspaceIntersection FirstIntersecting(const RouteLink &e) const;
 
-  const AbstractAirspace*
-  InsideOthers(const AGeoPoint& origin) const;
+  const AbstractAirspace *InsideOthers(const AGeoPoint &origin) const;
 
-  ClearingPair FindClearingPair(const SearchPointVector& spv,
+  ClearingPair FindClearingPair(const SearchPointVector &spv,
                                 const SearchPointVector::const_iterator start,
                                 const SearchPointVector::const_iterator end,
                                 const AFlatGeoPoint &dest) const;
 
-  ClearingPair GetPairs(const SearchPointVector& spv,
-                        const RoutePoint& start,
-                        const RoutePoint& dest) const;
+  ClearingPair GetPairs(const SearchPointVector &spv,
+                        const RoutePoint &start,
+                        const RoutePoint &dest) const;
 
-  ClearingPair GetBackupPairs(const SearchPointVector& spv,
-                              const RoutePoint& start,
-                              const RoutePoint& intc) const;
+  ClearingPair GetBackupPairs(const SearchPointVector &spv,
+                              const RoutePoint &start,
+                              const RoutePoint &intc) const;
 };
 
 #endif

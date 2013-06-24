@@ -24,7 +24,7 @@ Copyright_License {
 */
 
 #include "PopupMessage.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
@@ -117,7 +117,7 @@ PopupMessage::Create(const PixelRect _rc)
 
   LargeTextWindow::Create(parent, GetRect(100), style);
 
-  SetFont(Fonts::map_bold);
+  SetFont(Fonts::dialog_bold);
   InstallWndProc();
 }
 
@@ -165,7 +165,7 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
   } else {
     SetText(text);
 
-    const UPixelScalar font_height = Fonts::map_bold.GetHeight();
+    const UPixelScalar font_height = Fonts::dialog_bold.GetHeight();
 
     unsigned n_lines = max(n_visible, max(1u, GetRowCount()));
 

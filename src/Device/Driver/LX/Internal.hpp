@@ -101,11 +101,13 @@ class LXDevice: public AbstractDevice
   unsigned old_baud_rate;
 
 public:
-  LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate)
+  LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate,
+           bool _is_nano=false)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
      busy(false),
      is_colibri(baud_rate == 4800),
-     is_v7(false), is_nano(false), is_lx16xx(false), is_forwarded_nano(false),
+     is_v7(false), is_nano(_is_nano), is_lx16xx(false),
+     is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
 
   /**

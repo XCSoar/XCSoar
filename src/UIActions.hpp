@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UI_ACTIONS_HPP
 #define XCSOAR_UI_ACTIONS_HPP
 
-class GlueMapWindow;
+class Widget;
 
 /**
  * This namespace provides access to several user interface actions.
@@ -43,6 +43,8 @@ namespace UIActions {
   void ShowTrafficRadar();
 
   void ShowThermalAssistant();
+
+  void ShowHorizon();
 };
 
 #endif

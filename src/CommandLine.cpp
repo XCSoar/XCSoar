@@ -28,6 +28,7 @@ Copyright_License {
 #include "Hardware/Display.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
+#include "Asset.hpp"
 
 #ifdef WIN32
 #include <windows.h> /* for AllocConsole() */
@@ -35,15 +36,12 @@ Copyright_License {
 
 namespace CommandLine {
 #if !defined(_WIN32_WCE)
-  unsigned width = 640, height = 480;
+  unsigned width = IsKobo() ? 600 : 640;
+  unsigned height = IsKobo() ? 800 : 480;
 #endif
 
 #ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
-#endif
-
-#ifdef HAVE_CMDLINE_RESIZABLE
-  bool resizable = false;
 #endif
 }
 
@@ -109,11 +107,6 @@ CommandLine::Parse(Args &args)
 #ifdef HAVE_CMDLINE_FULLSCREEN
     else if (strcmp(s, "-fullscreen") == 0) {
       full_screen = true;
-    }
-#endif
-#ifdef HAVE_CMDLINE_RESIZABLE
-    else if (strcmp(s, "-resizable") == 0) {
-      resizable = true;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)

@@ -78,6 +78,33 @@ TaskManagerDialog::~TaskManagerDialog()
   delete task;
 }
 
+bool
+TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
+{
+  if (WndForm::OnAnyKeyDown(key_code) ||
+      tab_bar->InvokeKeyPress(key_code))
+    return true;
+
+  switch (key_code) {
+  case KEY_ESCAPE:
+    if (!modified)
+      /* close the dialog immediately if nothing was modified */
+      return false;
+
+    if (tab_bar->GetCurrentPage() != 4) {
+      /* switch to "close" page instead of closing the dialog */
+      tab_bar->SetCurrentPage(4);
+      tab_bar->FocusCurrentWidget();
+      return true;
+    }
+
+    return false;
+
+  default:
+    return false;
+  }
+}
+
 void
 TaskManagerDialog::OnAction(int id)
 {
@@ -305,8 +332,6 @@ TaskManagerDialog::Commit()
       way_points.Optimise();
     }
 
-    task->FillMatPoints(way_points);
-
     protected_task_manager->TaskCommit(*task);
     protected_task_manager->TaskSaveDefault();
 
@@ -332,7 +357,7 @@ TaskManagerDialog::Revert()
 }
 
 void
-dlgTaskManagerShowModal(SingleWindow &parent)
+dlgTaskManagerShowModal()
 {
   if (protected_task_manager == NULL)
     return;
@@ -340,7 +365,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   TaskManagerDialog dialog(UIGlobals::GetDialogLook());
   instance = &dialog;
 
-  dialog.Create(parent);
+  dialog.Create(UIGlobals::GetMainWindow());
 
   dialog.ShowModal();
   dialog.Destroy();

@@ -37,6 +37,8 @@ bool
 SampledTaskPoint::AddInsideSample(const AircraftState& state,
                                   const TaskProjection &projection)
 {
+  assert(state.location.IsValid());
+
   // if sample is inside sample polygon
   if (sampled_points.IsInside(state.location))
     // return false (no update required)

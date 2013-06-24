@@ -64,6 +64,12 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
   return true;
 }
 
+void
+AndroidDownloadManager::Deinitialise(JNIEnv *env)
+{
+  util_class.ClearOptional(env);
+}
+
 bool
 AndroidDownloadManager::IsAvailable()
 {

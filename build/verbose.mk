@@ -15,6 +15,6 @@ else
 NQ		:=
 endif
 endif
-ifeq ($(WINHOST),y)
+ifeq ($(HOST_IS_WIN32),y)
 NQ		:=
 endif

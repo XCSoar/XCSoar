@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Screen/Color.hpp"
+#include "Screen/PortableColor.hpp"
 #include "Formatter/HexColor.hpp"
 #include "Util/Macros.hpp"
 
 void
-Profile::SetColor(const char *key, const Color color)
+Profile::SetColor(const char *key, const RGB8Color color)
 {
   char buffer[16];
   FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
@@ -35,7 +35,7 @@ Profile::SetColor(const char *key, const Color color)
 }
 
 bool
-Profile::GetColor(const char *key, Color &color)
+Profile::GetColor(const char *key, RGB8Color &color)
 {
   const char *color_string = Get(key);
   if (!color_string)

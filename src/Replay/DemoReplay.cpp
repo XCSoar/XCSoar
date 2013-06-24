@@ -43,6 +43,5 @@ DemoReplay::Update(fixed time_scale, TaskAccessor& task)
 {
   autopilot.UpdateState(task, aircraft.GetState(), time_scale);
   aircraft.Update(autopilot.heading, time_scale);
-  return autopilot.UpdateAutopilot(task, aircraft.GetState(),
-                                   aircraft.GetLastState());
+  return autopilot.UpdateAutopilot(task, aircraft.GetState());
 }

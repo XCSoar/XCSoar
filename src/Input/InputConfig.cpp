@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputConfig.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -38,8 +39,8 @@ InputConfig::SetDefaults()
 
   Gesture2Event.Clear();
 
-  std::fill(&GC2Event[0], &GC2Event[GCE_COUNT], 0);
-  std::fill(&N2Event[0], &N2Event[NE_COUNT], 0);
+  std::fill_n(&GC2Event[0], ARRAY_SIZE(GC2Event), 0);
+  std::fill_n(&N2Event[0], ARRAY_SIZE(N2Event), 0);
 
   /* This is initialized with 1 because event 0 is reserved - it
      stands for "no event" */

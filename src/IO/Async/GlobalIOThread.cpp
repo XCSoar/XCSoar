@@ -40,4 +40,5 @@ DeinitialiseIOThread()
 {
   io_thread->Stop();
   delete io_thread;
+  io_thread = nullptr;
 }

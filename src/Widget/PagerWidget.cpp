@@ -368,3 +368,15 @@ PagerWidget::SetFocus()
 
   return children[current].widget->SetFocus();
 }
+
+bool
+PagerWidget::KeyPress(unsigned key_code)
+{
+  assert(initialised);
+  assert(prepared);
+  assert(visible);
+  assert(!children.empty());
+  assert(children[current].prepared);
+
+  return children[current].widget->KeyPress(key_code);
+}

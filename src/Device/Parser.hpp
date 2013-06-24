@@ -31,11 +31,11 @@ struct BrokenDateTime;
 class NMEAInputLine;
 struct GeoPoint;
 struct BrokenDate;
+struct BrokenTime;
 
 class NMEAParser
 {
   bool ignore_checksum;
-  static int start_day;
   fixed last_time;
 
 public:
@@ -87,35 +87,17 @@ public:
    */
   static bool TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info);
 
-  /**
-   * Calculates a seconds-based FixTime and corrects it
-   * in case over passing the UTC midnight mark
-   * @param FixTime NMEA format fix time (HHMMSS)
-   * @param info NMEA_INFO struct to parse into
-   * @return Seconds-based FixTime
-   */
-  static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                          bool date_available);
-
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
 
   static bool ReadDate(NMEAInputLine &line, BrokenDate &date);
 
-private:
-
   /**
-   * Verifies the given fix time.  If it is smaller than LastTime, but
-   * within a certain tolerance, the LastTime is returned, otherwise
-   * the specified time is returned without modification.
-   *
-   * This is used to reduce quirks when the time stamps in GPGGA and
-   * GPRMC are off by a second.  Without this workaround, XCSoar loses
-   * the GPS fix every now and then, because GPRMC is ignored most of
-   * the time.
+   * Read and parse a time stamp in the form "HHMMSS.SSS".
    */
-  gcc_pure
-  fixed TimeAdvanceTolerance(fixed time) const;
+  static bool ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                       fixed &time_of_day_s);
 
+private:
   /**
    * Checks whether time has advanced since last call and
    * updates the GPS_info if necessary

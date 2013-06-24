@@ -161,25 +161,6 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   attitude.heading_computed = true;
 }
 
-static void
-ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
-{
-  assert(basic.time_available);
-  assert(last.time_available);
-  assert(basic.time > last.time);
-
-  if (basic.ground_speed_available)
-    return;
-
-  basic.ground_speed = fixed(0);
-  if (!basic.location_available || !last.location_available)
-    return;
-
-  fixed t = basic.time - last.time;
-  fixed d = basic.location.Distance(last.location);
-  basic.ground_speed = d / t;
-}
-
 /**
  * Attempt to compute airspeed when it is not yet available from:
  * 1) dynamic pressure and air density derived from some altitude.
@@ -432,13 +413,9 @@ BasicComputer::Compute(MoreData &data,
 {
   ComputeTrack(data, last_gps);
 
-  if (data.HasTimeAdvancedSince(last_gps)) {
-    ComputeGroundSpeed(data, last_gps);
-    ComputeAirspeed(data, calculated);
-  }
-  else if ((data.dyn_pressure_available) ||
-           (data.pitot_pressure_available && data.static_pressure_available))
-    ComputeAirspeed(data, calculated);
+  ground_speed.Compute(data);
+
+  ComputeAirspeed(data, calculated);
 
   ComputeHeading(data.attitude, data, calculated);
 

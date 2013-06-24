@@ -24,7 +24,7 @@
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Factory/TaskFactoryType.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Geo/AltitudeReference.hpp"
 
 #include <tchar.h>
 
@@ -39,6 +39,7 @@ class LineSectorZone;
 class CylinderZone;
 class AnnularSectorZone;
 class SymmetricSectorZone;
+struct OrderedTaskSettings;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
@@ -75,11 +76,11 @@ public:
 
 protected:
   /** 
-   * Serialise OrderedTaskBehaviour
+   * Serialise #OrderedTaskSettings
    * 
    * @param data Item to serialise
    */
-  void Serialise(const OrderedTaskBehaviour &data);
+  void Serialise(const OrderedTaskSettings &data);
 
   /** 
    * Serialise a Waypoint

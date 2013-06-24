@@ -129,8 +129,7 @@ public:
   gcc_pure
   const HWColor map(const Color color) const
   {
-    return HWColor(::SDL_MapRGB(surface->format, color.value.r,
-                                color.value.g, color.value.b));
+    return color.Map(surface->format);
   }
 
   void SelectNullPen() {
@@ -193,12 +192,18 @@ public:
     background_mode = TRANSPARENT;
   }
 
+#ifdef GREYSCALE
+  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
+                            PixelScalar right, PixelScalar bottom,
+                            Color color);
+#else
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                             PixelScalar right, PixelScalar bottom,
                             Color color) {
     ::rectangleColor(surface, left + offset.x, top + offset.y,
                      right + offset.x, bottom + offset.y, color.GFXColor());
   }
+#endif
 
   void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {
@@ -299,6 +304,9 @@ public:
     DrawPolygon(points, num_points);
   }
 
+#ifdef GREYSCALE
+  void DrawLine(int ax, int ay, int bx, int by);
+#else
   void DrawLine(PixelScalar ax, PixelScalar ay,
                 PixelScalar bx, PixelScalar by) {
     ax += offset.x;
@@ -317,6 +325,7 @@ public:
 #endif
       ::lineColor(surface, ax, ay, bx, by, pen.GetColor().GFXColor());
   }
+#endif
 
   void DrawLine(const RasterPoint a, const RasterPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
@@ -549,6 +558,20 @@ public:
                  const Bitmap &src,
                  PixelScalar src_x, PixelScalar src_y,
                  UPixelScalar src_width, UPixelScalar src_height);
+
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  SDL_Surface *src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
+
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  const Canvas &src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
 };
 
 #endif

@@ -49,7 +49,7 @@ public:
     return bitmap.IsDefined();
   }
 
-  void Load(unsigned id, unsigned big_id = 0, bool center=true);
+  void LoadResource(unsigned id, unsigned big_id = 0, bool center=true);
 
   void Reset() {
     bitmap.Reset();

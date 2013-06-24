@@ -152,7 +152,7 @@ FlightPhaseDetector::Update(const MoreData &basic, const DerivedInfo &calculated
     }
   }
 
-  if (!current_phase.start_datetime.Plausible()) {
+  if (!current_phase.start_datetime.IsPlausible()) {
     // Initialize new phase.
     current_phase.phase_type = GetPhaseType(calculated);
     current_phase.end_loc = basic.location;

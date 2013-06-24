@@ -26,7 +26,7 @@ Copyright_License {
 
 class Canvas;
 struct PixelRect;
-struct Color;
+class Color;
 
 /**
  * Fill the specified rectangle with a color gradient.

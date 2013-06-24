@@ -34,6 +34,7 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
+#include "Asset.hpp"
 
 enum ControlIndex {
   DisplayOrientation,
@@ -41,7 +42,6 @@ enum ControlIndex {
   AppFlarmLocation,
   TabDialogStyle,
   AppStatusMessageAlignment,
-  DialogStyle,
   AppInverseInfoBox,
   AppInfoBoxColors,
   AppInfoBoxBorder
@@ -137,14 +137,6 @@ static constexpr StaticEnumChoice popup_msg_position_list[] = {
   { 0 }
 };
 
-static constexpr StaticEnumChoice dialog_style_list[] = {
-  { 0, N_("Full width") },
-  { 1, N_("Scaled") },
-  { 2, N_("Scaled centered") },
-  { 3, N_("Fixed") },
-  { 0 }
-};
-
 static constexpr StaticEnumChoice infobox_border_list[] = {
   { unsigned(InfoBoxSettings::BorderStyle::BOX),
     N_("Box"), N_("Draws boxes around each InfoBox.") },
@@ -197,19 +189,18 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
 
-  AddEnum(_("Dialog size"), _("Choose the display size of dialogs."),
-          dialog_style_list, ui_settings.dialog.dialog_style);
-  SetExpertRow(DialogStyle);
-
   AddBoolean(_("Inverse InfoBoxes"), _("If true, the InfoBoxes are white on black, otherwise black on white."),
              ui_settings.info_boxes.inverse);
   SetExpertRow(AppInverseInfoBox);
 
-  AddBoolean(_("Colored InfoBoxes"),
-             _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
+  if (HasColors()) {
+    AddBoolean(_("Colored InfoBoxes"),
+               _("If true, certain InfoBoxes will have coloured text.  For example, the active waypoint "
                  "InfoBox will be blue when the glider is above final glide."),
-             ui_settings.info_boxes.use_colors);
-  SetExpertRow(AppInfoBoxColors);
+               ui_settings.info_boxes.use_colors);
+    SetExpertRow(AppInfoBoxColors);
+  } else
+    AddDummy();
 
   AddEnum(_("InfoBox border"), nullptr, infobox_border_list,
           unsigned(ui_settings.info_boxes.border_style));
@@ -247,9 +238,6 @@ LayoutConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AppStatusMessageAlignment, ProfileKeys::AppStatusMessageAlignment,
                            ui_settings.popup_message_position);
 
-  changed |= SaveValueEnum(DialogStyle, ProfileKeys::AppDialogStyle,
-                           ui_settings.dialog.dialog_style);
-
   changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
                            ui_settings.info_boxes.border_style);
 
@@ -257,7 +245,8 @@ LayoutConfigPanel::Save(bool &_changed)
                 ui_settings.info_boxes.inverse))
     require_restart = changed = true;
 
-  if (SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
+  if (HasColors() &&
+      SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors,
                 ui_settings.info_boxes.use_colors))
     require_restart = changed = true;
 

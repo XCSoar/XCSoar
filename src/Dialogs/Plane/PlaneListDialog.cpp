@@ -166,7 +166,7 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog)
   dialog.AddButton(_("New"), *this, NEW);
   edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
   delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
-  load_button = dialog.AddButton(_("Load"), *this, LOAD);
+  load_button = dialog.AddButton(_("Activate"), *this, LOAD);
 }
 
 void
@@ -244,10 +244,10 @@ PlaneListWidget::LoadWithDialog(unsigned i)
   bool result = Load(i);
   if (!result) {
     title = _("Error");
-    text.Format(_("Loading of plane profile \"%s\" failed!"),
+    text.Format(_("Activating plane profile \"%s\" failed!"),
                 list[i].name.c_str());
   } else {
-    title = _("Load");
+    title = _(" ");
     text.Format(_("Plane profile \"%s\" activated."),
                 list[i].name.c_str());
   }
@@ -395,12 +395,11 @@ PlaneListWidget::OnActivateItem(unsigned i)
   assert(i < list.size());
 
   StaticString<256> tmp;
-  tmp.Format(_("Do you want to load plane profile \"%s\"?"),
+  tmp.Format(_("Do you want to activate plane profile \"%s\"?"),
              list[i].name.c_str());
 
-  if (ShowMessageBox(tmp, _("Load"), MB_YESNO) == IDYES)
-    if (LoadWithDialog(i))
-      form->SetModalResult(mrOK);
+  if (ShowMessageBox(tmp, _(" "), MB_YESNO) == IDYES)
+    LoadWithDialog(i);
 }
 
 void

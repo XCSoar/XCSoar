@@ -172,7 +172,7 @@ AbortTask::FillReachable(const AircraftState &state,
       if (!intersects) {
         q.push(AlternatePoint(v->waypoint, result));
         // remove it since it's already in the list now      
-        approx_waypoints.erase(v);
+        v = approx_waypoints.erase(v);
 
         if (is_reachable_final)
           found_final_glide = true;
@@ -238,6 +238,8 @@ AbortTask::UpdateSample(const AircraftState &state,
                         const GlidePolar &glide_polar,
                         bool full_update)
 {
+  assert(state.location.IsValid());
+
   Clear();
 
   unsigned active_waypoint_on_entry;

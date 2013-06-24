@@ -35,7 +35,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "LocalPath.hpp"
-#include "UIGlobals.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -107,7 +106,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 void
 InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
 {
-  dlgTaskManagerShowModal(UIGlobals::GetMainWindow());
+  dlgTaskManagerShowModal();
 
   trigger_redraw();
 }
@@ -288,7 +287,6 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
         way_points.Optimise();
       }
 
-      task->FillMatPoints(way_points);
       protected_task_manager->TaskCommit(*task);
       delete task;
     }
@@ -343,7 +341,5 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     Message::AddMessage(_("Next turnpoint"));
   } else if (StringIsEqual(misc, _T("finish"))) {
     Message::AddMessage(_("Task finished"));
-  } else if (StringIsEqual(misc, _T("ready"))) {
-    Message::AddMessage(_("In sector, arm advance when ready"));
   }
 }

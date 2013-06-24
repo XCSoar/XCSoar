@@ -44,13 +44,14 @@ TaskLook::Initialise()
 
   isoline_pen.Set(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
 
-  bearing_pen.Set(Layout::ScalePenWidth(2), bearing_color);
+  bearing_pen.Set(Layout::ScalePenWidth(2), !HasColors()? COLOR_BLACK: bearing_color);
   best_cruise_track_brush.Set(bearing_color);
-  best_cruise_track_pen.Set(Layout::ScalePenWidth(1), DarkColor(bearing_color));
+  best_cruise_track_pen.Set(Layout::ScalePenWidth(1), HasColors()?
+			    DarkColor(bearing_color) : COLOR_BLACK);
 
   highlight_pen.Set(Layout::ScalePenWidth(4), COLOR_BLACK);
 
-  target_icon.Load(IDB_TARGET, IDB_TARGET_HD);
+  target_icon.LoadResource(IDB_TARGET, IDB_TARGET_HD);
 
   hbGreen.Set(COLOR_GRAY);
   hbGreen.Set(COLOR_GREEN);

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_COLOR_HPP
 #define XCSOAR_SCREEN_GDI_COLOR_HPP
 
+#include "Screen/PortableColor.hpp"
+
 #include <windows.h>
 #include <stdint.h>
 
@@ -32,9 +34,10 @@ Copyright_License {
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
  */
-struct Color {
+class Color {
   COLORREF value;
 
+public:
   /** Base Constructor (creates an undefined Color object) */
   Color() = default;
 
@@ -50,6 +53,9 @@ struct Color {
    * @param b Blue part
    */
   constexpr Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
+
+  explicit constexpr Color(RGB8Color other)
+    :value(RGB(other.Red(), other.Green(), other.Blue())) {}
 
   /**
    * Returns the red part of the color
@@ -91,6 +97,10 @@ struct Color {
   constexpr
   operator COLORREF() const { return value; }
 
+  constexpr COLORREF GetNative() const {
+    return value;
+  }
+
   /**
    * Returns the highlighted version of this color.
    */
@@ -101,6 +111,15 @@ struct Color {
     return Color((Red() + 0xff * 3) / 4,
                  (Green() + 0xff * 3) / 4,
                  (Blue() + 0xff * 3) / 4);
+  }
+
+  /**
+   * Returns the shadowed version of this color.
+   */
+  constexpr Color Shadow() const {
+    return Color(Red() * 15u / 16u,
+                 Green() * 15u / 16u,
+                 Blue() * 15u / 16u);
   }
 };
 
@@ -113,7 +132,7 @@ struct Color {
 static inline constexpr bool
 operator ==(const Color a, const Color b)
 {
-  return a.value == b.value;
+  return a.GetNative() == b.GetNative();
 }
 
 /**
@@ -134,9 +153,10 @@ operator !=(const Color a, const Color b)
  * HWColor may be different, e.g. if the Canvas can not display 24
  * bit RGB colors.
  */
-struct HWColor {
+class HWColor {
   COLORREF value;
 
+public:
   constexpr HWColor():value(0) {}
   explicit constexpr HWColor(COLORREF c):value(c) {}
 

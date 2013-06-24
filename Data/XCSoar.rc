@@ -31,7 +31,7 @@ HI_RES_AWARE CEUX {1}
 
 #define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
 
-#if defined(WIN32) || defined(ANDROID)
+#if defined(WIN32) || defined(ANDROID) || defined(KOBO)
 #define MO(name) name.mo MO DISCARDABLE "../output/po/" #name ".mo"
 #else
 #define MO(name)
@@ -166,13 +166,8 @@ BITMAP_ICON(IDB_SMALL_HD, "map_small_160")
 BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_turbo_dev_160")
 BITMAP_GRAPHIC(IDB_LOGO, "logo_turbo_dev_80")
 #else
-#ifdef NO_HORIZON
-BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_no_horizon_160")
-BITMAP_GRAPHIC(IDB_LOGO, "logo_no_horizon_80")
-#else
 BITMAP_GRAPHIC(IDB_LOGO_HD, "logo_turbo_160")
 BITMAP_GRAPHIC(IDB_LOGO, "logo_turbo_80")
-#endif
 #endif
 BITMAP_ICON(IDB_TARGET, "map_target")
 BITMAP_ICON(IDB_TARGET_HD, "map_target_160")
@@ -235,7 +230,6 @@ SOUND(IDR_WAV_DRIP, "beep_drip")
 // --- XML Dialogs ---
 XMLDIALOG(IDR_XML_AIRSPACESELECT, "AirspaceList")
 XMLDIALOG(IDR_XML_AIRSPACESELECT_L, "AirspaceList_L")
-XMLDIALOG(IDR_XML_AIRSPACEWARNINGS, "dlgAirspaceWarnings")
 XMLDIALOG(IDR_XML_ANALYSIS, "dlgAnalysis")
 XMLDIALOG(IDR_XML_ANALYSIS_L, "dlgAnalysis_L")
 XMLDIALOG(IDR_XML_BRIGHTNESS, "dlgBrightness")
@@ -269,18 +263,12 @@ XMLDIALOG(IDR_XML_TEXTENTRY, "dlgTextEntry")
 XMLDIALOG(IDR_XML_VARIO, "dlgVario")
 XMLDIALOG(IDR_XML_VARIO_L, "dlgVario_L")
 XMLDIALOG(IDR_XML_VEGADEMO, "dlgVegaDemo")
-XMLDIALOG(IDR_XML_VOICE, "dlgVoice")
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS, "dlgWaypointDetails")
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS_L, "dlgWaypointDetails_L")
 XMLDIALOG(IDR_XML_WAYPOINTEDIT, "dlgWaypointEdit")
 XMLDIALOG(IDR_XML_WAYPOINTEDIT_L, "dlgWaypointEdit_L")
 XMLDIALOG(IDR_XML_WAYPOINTSELECT, "WaypointList")
 XMLDIALOG(IDR_XML_WAYPOINTSELECT_L, "WaypointList_L")
-XMLDIALOG(IDR_XML_WEATHER, "dlgWeather")
-
-// configuration menu
-XMLDIALOG(IDR_XML_POLARCONFIGPANEL, "Configuration/PolarConfigPanel")
-XMLDIALOG(IDR_XML_POLARCONFIGPANEL_L, "Configuration/PolarConfigPanel_L")
 
 // new task editor
 XMLDIALOG(IDR_XML_TASKACTIONS, "pnlTaskActions")

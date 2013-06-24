@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Formatter/HexColor.hpp"
-#include "Screen/Color.hpp"
+#include "Screen/PortableColor.hpp"
 #include "OS/Args.hpp"
 #include "Util/Macros.hpp"
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   const char *s = args.ExpectNext();
 
   while (true) {
-    Color color;
+    RGB8Color color;
     if (!ParseHexColor(s, color)) {
       fprintf(stderr, "Failed to parse '%s'\n", s);
       return EXIT_FAILURE;

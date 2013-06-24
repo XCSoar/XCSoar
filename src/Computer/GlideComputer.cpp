@@ -41,9 +41,10 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              ProtectedTaskManager &task,
                              GlideComputerTaskEvents& events):
   air_data_computer(_way_points),
-  task_computer(task, _airspace_database),
   warning_computer(_airspace_database),
+  task_computer(task, _airspace_database, &warning_computer.GetManager()),
   waypoints(_way_points),
+  retrospective(_way_points),
   team_code_ref_id(-1)
 {
   events.SetComputer(*this);
@@ -62,9 +63,12 @@ GlideComputer::ResetFlight(const bool full)
   task_computer.ResetFlight(full);
   stats_computer.ResetFlight(full);
   log_computer.Reset();
+  retrospective.Reset();
 
   cu_computer.Reset();
   warning_computer.Reset();
+
+  trace_history_time.Reset();
 }
 
 /**
@@ -88,8 +92,20 @@ GlideComputer::ProcessGPS(bool force)
 
   const bool last_flying = calculated.flight.flying;
 
-  calculated.date_time_local = basic.date_time_utc +
-    settings.utc_offset.AsSeconds();
+  if (basic.time_available) {
+    /* use UTC offset to calculate local time */
+    const int utc_offset_s = settings.utc_offset.AsSeconds();
+
+    calculated.date_time_local = basic.date_time_utc.IsDatePlausible()
+      /* known date: apply UTC offset to BrokenDateTime, which may
+         increment/decrement date */
+      ? basic.date_time_utc + utc_offset_s
+      /* unknown date: apply UTC offset only to BrokenTime, leave the
+         BrokenDate part invalid as it was */
+      : BrokenDateTime(BrokenDate::Invalid(),
+                       ((const BrokenTime &)basic.date_time_utc) + utc_offset_s);
+  } else
+    calculated.date_time_local = BrokenDateTime::Invalid();
 
   calculated.Expire(basic.clock);
 
@@ -98,29 +114,26 @@ GlideComputer::ProcessGPS(bool force)
                                  GetComputerSettings());
 
   // Process basic task information
-  task_computer.ProcessBasicTask(basic, LastBasic(),
+  task_computer.ProcessBasicTask(basic,
                                  calculated,
                                  GetComputerSettings(),
                                  force);
   task_computer.ProcessMoreTask(basic, calculated, GetComputerSettings());
 
   // Check if everything is okay with the gps time and process it
-  if (!air_data_computer.FlightTimes(Basic(), LastBasic(), SetCalculated(),
-                                     GetComputerSettings()))
-    return false;
+  air_data_computer.FlightTimes(Basic(), SetCalculated(),
+                                GetComputerSettings());
 
   TakeoffLanding(last_flying);
 
-  if (!time_retreated())
-    task_computer.ProcessAutoTask(basic, calculated);
+  task_computer.ProcessAutoTask(basic, calculated);
 
   // Process extended information
-  air_data_computer.ProcessVertical(Basic(), LastBasic(),
+  air_data_computer.ProcessVertical(Basic(),
                                     SetCalculated(),
                                     GetComputerSettings());
 
-  if (!time_retreated())
-    stats_computer.ProcessClimbEvents(calculated);
+  stats_computer.ProcessClimbEvents(calculated);
 
   // Calculate the team code
   CalculateOwnTeamCode();
@@ -131,8 +144,15 @@ GlideComputer::ProcessGPS(bool force)
   vegavoice.Update(basic, Calculated(), GetComputerSettings().voice);
 
   // update basic trace history
-  if (time_advanced())
-    calculated.trace_history.append(basic);
+  if (basic.time_available) {
+    const fixed dt = trace_history_time.Update(basic.time, fixed(0.5),
+                                               fixed(30));
+    if (positive(dt))
+      calculated.trace_history.append(basic);
+    else if (negative(dt))
+      /* time warp */
+      calculated.trace_history.clear();
+  }
 
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(Basic(), Calculated(), settings);
@@ -154,9 +174,11 @@ GlideComputer::ProcessIdle(bool exhaustive)
   task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
                             exhaustive);
 
-  if (time_advanced())
-    warning_computer.Update(GetComputerSettings(), Basic(), LastBasic(),
-                            Calculated(), SetCalculated().airspace_warnings);
+  warning_computer.Update(GetComputerSettings(), Basic(),
+                          Calculated(), SetCalculated().airspace_warnings);
+
+  // Calculate summary of flight
+  retrospective.UpdateSample(Basic().location);
 }
 
 bool

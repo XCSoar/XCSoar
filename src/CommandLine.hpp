@@ -31,18 +31,13 @@ namespace CommandLine {
   extern unsigned width, height;
 #endif
 
-#ifdef ENABLE_SDL
+#ifdef KOBO
+  static constexpr bool full_screen = false;
+#elif defined(ENABLE_SDL)
 #define HAVE_CMDLINE_FULLSCREEN
   extern bool full_screen;
 #else
   static constexpr bool full_screen = false;
-#endif
-
-#if defined(ENABLE_SDL) || defined(USE_GDI)
-#define HAVE_CMDLINE_RESIZABLE
-  extern bool resizable;
-#else
-  static constexpr bool resizable = false;
 #endif
 
 /**

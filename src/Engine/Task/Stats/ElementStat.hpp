@@ -30,8 +30,6 @@
 
 #include <type_traits>
 
-struct AircraftState;
-
 /**
  * Common task element statistics.  Used because we separately want to
  * track overall task statistics as well as that of the current leg.
@@ -64,8 +62,19 @@ struct ElementStat
   fixed time_started;
   /** Time (s) since element was started */
   fixed time_elapsed;
-  /** Time (s) to element completion */
-  fixed time_remaining;
+
+  /**
+   * Time (s) remaining to element completion from now, including the
+   * time to reach the start point (if task was not yet started).
+   */
+  fixed time_remaining_now;
+
+  /**
+   * Time (s) remaining to element completion, counted from the start
+   * of the task.
+   */
+  fixed time_remaining_start;
+
   /** Time (s) of overall element */
   fixed time_planned;
 
@@ -101,10 +110,12 @@ struct ElementStat
   /**
    * Calculate element times
    *
+   * @param until_start_s the estimated time until the task start will
+   * be reached [s]; zero if the task has already started
    * @param ts Start time of this element (s)
-   * @param state Aircraft state (to access time)
+   * @param time monotonic time of day in seconds or -1 if unknown
    */
-  void SetTimes(const fixed ts, const AircraftState& state);
+  void SetTimes(fixed until_start_s, fixed ts, fixed time);
 
   /**
    * Determine whether the task (or subtask) is able to be finished
@@ -118,36 +129,5 @@ struct ElementStat
 };
 
 static_assert(std::is_trivial<ElementStat>::value, "type is not trivial");
-
-class ElementStatComputer
-{
-public:
-  DistanceStatComputer remaining_effective;
-  DistanceStatComputer remaining;
-  DistanceStatComputer planned;
-  DistanceStatComputer travelled;
-  DistanceStatComputer pirker;
-  TaskVarioComputer vario;
-
-private:
-  bool initialised;
-
-public:
-  ElementStatComputer();
-
-  /**
-   * Calculate element speeds.  Incremental speeds are
-   * held at bulk speeds within first minute of elapsed time.
-   *
-   * @param dt Time step of sample (s)
-   */
-  void CalcSpeeds(ElementStat &data, const fixed dt);
-
-  /**
-   * Reset to uninitialised state, to supress calculation
-   * of incremental speeds.
-   */
-  void Reset(ElementStat &data);
-};
 
 #endif

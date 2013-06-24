@@ -114,7 +114,10 @@ struct AircraftState:
   //   Time
   //##########
 
-  /** global time (seconds UTC) */
+  /**
+   * Global time (seconds after UTC midnight).  A negative value means
+   * "no time available", e.g. if no GPS fix was obtained yet.
+   */
   fixed time;
 
   //################

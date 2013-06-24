@@ -31,6 +31,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
+#include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/StringUtil.hpp"
@@ -164,6 +165,26 @@ DeviceDescriptor::GetState() const
 }
 
 bool
+DeviceDescriptor::IsDumpEnabled() const
+{
+  return port != nullptr && port->IsEnabled();
+}
+
+void
+DeviceDescriptor::DisableDump()
+{
+  if (port != nullptr)
+    port->Disable();
+}
+
+void
+DeviceDescriptor::EnableDumpTemporarily(unsigned duration_ms)
+{
+  if (port != nullptr)
+    port->EnableTemporarily(duration_ms);
+}
+
+bool
 DeviceDescriptor::ShouldReopenDriverOnTimeout() const
 {
   return driver == NULL || driver->HasTimeout();
@@ -187,7 +208,7 @@ DeviceDescriptor::CancelAsync()
 }
 
 bool
-DeviceDescriptor::OpenOnPort(Port *_port, OperationEnvironment &env)
+DeviceDescriptor::OpenOnPort(DumpPort *_port, OperationEnvironment &env)
 {
   assert(_port != NULL);
   assert(port == NULL);
@@ -392,11 +413,14 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     return false;
   }
 
-  if (!port->WaitConnected(env) || !OpenOnPort(port, env)) {
+  DumpPort *dump_port = new DumpPort(port);
+  dump_port->Disable();
+
+  if (!port->WaitConnected(env) || !OpenOnPort(dump_port, env)) {
     if (!env.IsCancelled())
       ++n_failures;
 
-    delete port;
+    delete dump_port;
     return false;
   }
 
@@ -678,8 +702,9 @@ DeviceDescriptor::ForwardLine(const char *line)
      any thread, and if the Port gets closed, bad things happen */
 
   if (IsNMEAOut() && port != NULL) {
-    port->Write(line);
-    port->Write("\r\n");
+    Port *p = port;
+    p->Write(line);
+    p->Write("\r\n");
   }
 }
 

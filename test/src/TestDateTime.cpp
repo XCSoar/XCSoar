@@ -49,16 +49,16 @@ TestDate()
   ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2011, 1, 1)));
   ok1(BrokenDate(2011, 1, 1) > BrokenDate(2010, 1, 1));
 
-  ok1(BrokenDate(2011, 1, 1).Plausible());
-  ok1(BrokenDate(2011, 12, 31).Plausible());
-  ok1(BrokenDate(2500, 1, 1).Plausible());
-  ok1(BrokenDate(1800, 1, 1).Plausible());
-  ok1(!BrokenDate(2501, 1, 1).Plausible());
-  ok1(!BrokenDate(1799, 1, 1).Plausible());
-  ok1(!BrokenDate(2011, 1, 0).Plausible());
-  ok1(!BrokenDate(2011, 0, 1).Plausible());
-  ok1(!BrokenDate(2011, 13, 1).Plausible());
-  ok1(!BrokenDate(2011, 1, 32).Plausible());
+  ok1(BrokenDate(2011, 1, 1).IsPlausible());
+  ok1(BrokenDate(2011, 12, 31).IsPlausible());
+  ok1(BrokenDate(2500, 1, 1).IsPlausible());
+  ok1(BrokenDate(1800, 1, 1).IsPlausible());
+  ok1(!BrokenDate(2501, 1, 1).IsPlausible());
+  ok1(!BrokenDate(1799, 1, 1).IsPlausible());
+  ok1(!BrokenDate(2011, 1, 0).IsPlausible());
+  ok1(!BrokenDate(2011, 0, 1).IsPlausible());
+  ok1(!BrokenDate(2011, 13, 1).IsPlausible());
+  ok1(!BrokenDate(2011, 1, 32).IsPlausible());
 
   BrokenDate d(2010, 2, 27);
   d.IncrementDay();
@@ -77,6 +77,17 @@ TestDate()
   ok1(d == BrokenDate(2012, 2, 29));
   d.IncrementDay();
   ok1(d == BrokenDate(2012, 3, 1));
+
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 31)) == 0);
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 30)) == 1);
+  ok1(BrokenDate(2012, 10, 31).DaysSince(BrokenDate(2012, 10, 1)) == 30);
+  ok1(BrokenDate(2012, 10, 1).DaysSince(BrokenDate(2012, 10, 31)) == -30);
+  ok1(BrokenDate(2012, 1, 1).DaysSince(BrokenDate(2011, 12, 31)) == 1);
+  ok1(BrokenDate(2011, 12, 31).DaysSince(BrokenDate(2012, 1, 1)) == -1);
+  ok1(BrokenDate(2013, 3, 1).DaysSince(BrokenDate(2013, 2, 28)) == 1);
+  ok1(BrokenDate(2014, 1, 1).DaysSince(BrokenDate(2013, 1, 1)) == 365);
+  ok1(BrokenDate(2012, 3, 1).DaysSince(BrokenDate(2012, 2, 28)) == 2);
+  ok1(BrokenDate(2013, 1, 1).DaysSince(BrokenDate(2012, 1, 1)) == 366);
 }
 
 static void
@@ -107,11 +118,11 @@ TestTime()
   ok1(!(BrokenTime(12, 15, 30) > BrokenTime(13, 15, 30)));
   ok1(BrokenTime(13, 15, 30) > BrokenTime(12, 15, 30));
 
-  ok1(BrokenTime(23, 59, 59).Plausible());
-  ok1(BrokenTime(0, 0, 0).Plausible());
-  ok1(!BrokenTime(24, 0, 0).Plausible());
-  ok1(!BrokenTime(12, 60, 1).Plausible());
-  ok1(!BrokenTime(12, 15, 60).Plausible());
+  ok1(BrokenTime(23, 59, 59).IsPlausible());
+  ok1(BrokenTime(0, 0, 0).IsPlausible());
+  ok1(!BrokenTime(24, 0, 0).IsPlausible());
+  ok1(!BrokenTime(12, 60, 1).IsPlausible());
+  ok1(!BrokenTime(12, 15, 60).IsPlausible());
 
   ok1(BrokenTime(12, 15, 30).GetSecondOfDay() == 44130);
   ok1(BrokenTime::FromSecondOfDay(44130) == BrokenTime(12, 15, 30));
@@ -168,7 +179,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(92);
+  plan_tests(102);
 
   TestDate();
   TestTime();

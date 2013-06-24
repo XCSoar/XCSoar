@@ -55,7 +55,7 @@ static bool
 IsAcked(const AbstractAirspace &airspace)
 {
   return glide_computer == NULL ||
-    glide_computer->GetAirspaceWarnings().get_ack_day(airspace);
+    glide_computer->GetAirspaceWarnings().GetAckDay(airspace);
 }
 
 gcc_pure

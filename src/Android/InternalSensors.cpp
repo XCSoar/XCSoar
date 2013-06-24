@@ -45,8 +45,8 @@ jmethodID InternalSensors::mid_sensors_cancelAllSensorSubscriptions_;
 bool
 InternalSensors::Initialise(JNIEnv *env)
 {
-  assert(gps_cls == NULL);
-  assert(sensors_cls == NULL);
+  assert(!gps_cls.IsDefined());
+  assert(!sensors_cls.IsDefined());
   assert(env != NULL);
 
   gps_cls.Find(env, "org/xcsoarte/InternalGPS");
@@ -229,7 +229,7 @@ Java_org_xcsoarte_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     fixed((unsigned)(time % 1000)) / 1000u;
 
   if (second_of_day < basic.time &&
-      basic.date_available &&
+      basic.date_time_utc.IsDatePlausible() &&
       (BrokenDate)date_time > (BrokenDate)basic.date_time_utc)
     /* don't wrap around when going past midnight in UTC */
     second_of_day += fixed(24u * 3600u);
@@ -237,7 +237,6 @@ Java_org_xcsoarte_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.time = second_of_day;
   basic.time_available.Update(basic.clock);
   basic.date_time_utc = date_time;
-  basic.date_available = true;
 
   basic.gps.satellites_used = n_satellites;
   basic.gps.satellites_used_available.Update(basic.clock);

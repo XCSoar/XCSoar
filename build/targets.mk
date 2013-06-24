@@ -132,7 +132,7 @@ ifeq ($(TARGET),PC)
     TCPREFIX := $(MINGWPATH)
   endif
 
-  ifeq ($(WINHOST),y)
+  ifeq ($(HOST_IS_WIN32),y)
     TCPREFIX :=
   endif
 
@@ -145,7 +145,6 @@ ifeq ($(TARGET),CYGWIN)
   TARGET_ARCH += -march=i586
 
   WINVER = 0x0500
-  WINHOST := y
 
   HAVE_POSIX := y
   HAVE_WIN32 := y
@@ -221,10 +220,11 @@ ifeq ($(TARGET),KOBO)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
   KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
-  TARGET_ARCH += -march=armv7-a -mfloat-abi=hard
+  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
   TARGET_IS_KOBO = y
   TARGET_IS_ARM = y
   ARMV7 := y
+  NEON := y
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -258,7 +258,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8e
 
-  ANDROID_PLATFORM = android-16
+  ANDROID_PLATFORM = android-17
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
 
   # NDK r8b has only android-14
@@ -297,13 +297,17 @@ ifeq ($(TARGET),ANDROID)
 
   ifeq ($(CLANG),y)
     ANDROID_TOOLCHAIN_NAME = llvm-3.2
+
+    # workaround: use libstdc++ 4.6, because 4.7 fails to link with
+    # clang due to missing __atomic_* symbols
+    ANDROID_GCC_VERSION = 4.6
   else
     ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
   endif
 
   ifeq ($(HOST_IS_DARWIN),y)
     ANDROID_HOST_TAG = darwin-x86
-  else ifeq ($(WINHOST),y)
+  else ifeq ($(HOST_IS_WIN32),y)
     ANDROID_HOST_TAG = windows
   else ifeq ($(UNAME_M),x86_64)
     ANDROID_HOST_TAG = linux-x86_64

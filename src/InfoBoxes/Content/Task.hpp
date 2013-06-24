@@ -49,6 +49,9 @@ void
 UpdateInfoBoxNextDistance(InfoBoxData &data);
 
 void
+UpdateInfoBoxNextDistanceNominal(InfoBoxData &data);
+
+void
 UpdateInfoBoxNextETE(InfoBoxData &data);
 
 void
@@ -95,6 +98,9 @@ UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data);
 
 void
 UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data);
+
+void
+UpdateInfoBoxTaskSpeedHour(InfoBoxData &data);
 
 void
 UpdateInfoBoxTaskAATime(InfoBoxData &data);

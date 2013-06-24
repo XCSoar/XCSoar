@@ -31,4 +31,5 @@ TerrainRendererSettings::SetDefaults()
   contrast = 192;
   brightness = 205;
   ramp = 0;
+  contours = Contours::OFF;
 }

@@ -35,14 +35,16 @@ class Window;
  * #ListControl.  It is not deleted automatically; call
  * WindowWidget::DeleteWindow() to do that at your choice.
  */
-class ListWidget : public WindowWidget, protected ListControl::Handler {
+class ListWidget
+  : public WindowWidget, protected ListItemRenderer,
+    protected ListCursorHandler {
 protected:
   const ListControl &GetList() const {
-    return *(const ListControl *)GetWindow();
+    return (const ListControl &)GetWindow();
   }
 
   ListControl &GetList() {
-    return *(ListControl *)GetWindow();
+    return (ListControl &)GetWindow();
   }
 
   ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,

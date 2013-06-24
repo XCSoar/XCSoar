@@ -30,6 +30,10 @@ Copyright_License {
 #include "Screen/EGL/System.hpp"
 #endif
 
+#ifdef DITHER
+#include "Dither.hpp"
+#endif
+
 class TopCanvas : public Canvas {
 #ifdef USE_EGL
 #ifdef USE_X11
@@ -45,6 +49,20 @@ class TopCanvas : public Canvas {
   EGLDisplay display;
   EGLContext context;
   EGLSurface surface;
+#endif
+
+#if defined(GREYSCALE) && defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  /**
+   * The real video surface.  Our #Canvas::surface attribute is only a
+   * software surface with 8 bits per pixel greyscale, which will be
+   * copied to the real video surface in Flip().
+   */
+  SDL_Surface *real;
+
+#ifdef DITHER
+  Dither dither;
+#endif
+
 #endif
 
 public:

@@ -69,9 +69,13 @@ struct Look {
   ThermalAssistantLook thermal_assistant_gauge;
   ThermalAssistantLook thermal_assistant_dialog;
 
-  void Initialise(const Font &map_font, const Font &map_bold_font,
-                  const Font &map_label_font);
+  void Initialise(const Font &dialog_font, const Font &dialog_bold_font,
+                  const Font &dialog_small_font,
+                  const Font &map_font);
   void InitialiseConfigured(const UISettings &settings,
+                            const Font &dialog_font,
+                            const Font &dialog_bold_font,
+                            const Font &dialog_small_font,
                             const Font &map_font, const Font &map_bold_font,
                             const Font &map_label_font,
                             const Font &cdi_font,

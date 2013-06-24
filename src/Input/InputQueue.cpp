@@ -26,6 +26,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Debug.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -41,8 +42,8 @@ InputEvents::ClearQueues()
 {
   ScopeLock protect(mutexEventQueue);
 
-  std::fill(GCE_Queue, GCE_Queue + MAX_GCE_QUEUE, -1);
-  std::fill(NMEA_Queue, NMEA_Queue + MAX_NMEA_QUEUE, -1);
+  std::fill_n(GCE_Queue, ARRAY_SIZE(GCE_Queue), -1);
+  std::fill_n(NMEA_Queue, ARRAY_SIZE(NMEA_Queue), -1);
 }
 
 bool

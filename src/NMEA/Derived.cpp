@@ -54,6 +54,8 @@ AirspaceWarningsInfo::Clear()
 void
 DerivedInfo::Reset()
 {
+  date_time_local = BrokenDateTime::Invalid();
+
   VarioInfo::Clear();
   ClimbInfo::Clear();
   CirclingInfo::Clear();

@@ -29,6 +29,7 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/Clamp.hpp"
+#include "Util/Macros.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
@@ -99,16 +100,11 @@ static constexpr WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER
 RasterWeather::RasterWeather()
   :center(GeoPoint::Invalid()),
     _parameter(0),
-    _weather_time(0),
+   _weather_time(0), last_weather_time(0),
     reload(true),
     weather_map(NULL)
 {
-  std::fill(weather_available, weather_available + MAX_WEATHER_TIMES, false);
-}
-
-RasterWeather::~RasterWeather() 
-{
-  Close();
+  std::fill_n(weather_available, ARRAY_SIZE(weather_available), false);
 }
 
 int
@@ -244,58 +240,54 @@ RasterWeather::ScanAll(const GeoPoint &location,
 void
 RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
 {
-  static unsigned last_weather_time;
   bool found = false;
-  bool now = false;
 
   if (_parameter == 0)
     // will be drawing terrain
     return;
 
   Poco::ScopedRWLock protect(lock, true);
-  if (_weather_time == 0) {
+  unsigned effective_weather_time = _weather_time;
+  if (effective_weather_time == 0) {
     // "Now" time, so find time in half hours
     unsigned half_hours = (day_time_local / 1800) % 48;
-    _weather_time = std::max(_weather_time, half_hours);
-    now = true;
+    effective_weather_time = half_hours;
   }
 
   // limit values, for safety
-  _weather_time = std::min(MAX_WEATHER_TIMES - 1, _weather_time);
-  if (_weather_time != last_weather_time)
+  effective_weather_time = std::min(MAX_WEATHER_TIMES - 1,
+                                    effective_weather_time);
+  if (effective_weather_time != last_weather_time)
     reload = true;
 
   if (!reload) {
     // no change, quick exit.
-    if (now)
-      // must return to 0 = Now time on exit
-      _weather_time = 0;
-
     return;
   }
 
   reload = false;
 
-  last_weather_time = _weather_time;
+  last_weather_time = effective_weather_time;
 
   // scan forward to next valid time
-  while ((_weather_time < MAX_WEATHER_TIMES) && (!found)) {
-    if (!weather_available[_weather_time]) {
-      _weather_time++;
+  while (effective_weather_time < MAX_WEATHER_TIMES && !found) {
+    if (!weather_available[effective_weather_time]) {
+      effective_weather_time++;
     } else {
       found = true;
 
       _Close();
 
-      if (!LoadItem(WeatherDescriptors[_parameter].name, _weather_time,
+      if (!LoadItem(WeatherDescriptors[_parameter].name,
+                    effective_weather_time,
                     operation) &&
           _parameter == 1)
-        LoadItem(_T("wstar_bsratio"), _weather_time, operation);
+        LoadItem(_T("wstar_bsratio"), effective_weather_time, operation);
     }
   }
 
   // can't find valid time, so reset to zero
-  if (!found || now)
+  if (!found)
     _weather_time = 0;
 }
 
@@ -317,11 +309,13 @@ RasterWeather::_Close()
 void
 RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 {
-  if (_parameter == 0 || weather_map == NULL)
+  if (_parameter == 0)
     // will be drawing terrain
     return;
 
   Poco::ScopedRWLock protect(lock, true);
+  if (weather_map == nullptr)
+    return;
 
   /* only update the RasterMap if the center was moved far enough */
   if (center.IsValid() && center.Distance(location) < fixed(1000))
@@ -335,18 +329,18 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
 bool
 RasterWeather::IsDirty() const
 {
-  if (_parameter == 0 || weather_map == NULL)
+  if (_parameter == 0)
+    // will be drawing terrain
     return false;
 
   Poco::ScopedRWLock protect(lock, false);
-  return weather_map->IsDirty();
+  return weather_map != nullptr && weather_map->IsDirty();
 }
 
 const TCHAR*
 RasterWeather::ItemLabel(unsigned i)
 {
-  if (gcc_unlikely(i >= MAX_WEATHER_MAP))
-    return NULL;
+  assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *label = WeatherDescriptors[i].label;
   if (gcc_unlikely(label == NULL))
@@ -358,8 +352,7 @@ RasterWeather::ItemLabel(unsigned i)
 const TCHAR*
 RasterWeather::ItemHelp(unsigned i)
 {
-  if (gcc_unlikely(i >= MAX_WEATHER_MAP))
-    return NULL;
+  assert(i < MAX_WEATHER_MAP);
 
   const TCHAR *help = WeatherDescriptors[i].help;
   if (gcc_unlikely(help == NULL))

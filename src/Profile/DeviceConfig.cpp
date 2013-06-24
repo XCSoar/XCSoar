@@ -23,10 +23,9 @@ Copyright_License {
 
 #include "Profile/DeviceConfig.hpp"
 #include "Profile/Profile.hpp"
-#include "Asset.hpp"
-#include "Language/Language.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
+#include "Device/Config.hpp"
 
 #include <stdio.h>
 
@@ -47,147 +46,6 @@ static const char *const port_type_strings[] = {
   "pty",
   NULL
 };
-
-bool
-DeviceConfig::IsAvailable() const
-{
-  switch (port_type) {
-  case PortType::DISABLED:
-    return false;
-
-  case PortType::SERIAL:
-    return true;
-
-  case PortType::RFCOMM:
-  case PortType::RFCOMM_SERVER:
-    return IsAndroid();
-
-  case PortType::IOIOUART:
-  case PortType::DROIDSOAR_V2:
-  case PortType::NUNCHUCK:
-  case PortType::I2CPRESSURESENSOR:
-  case PortType::IOIOVOLTAGE:
-    return HasIOIOLib();
-
-  case PortType::AUTO:
-    return IsWindowsCE();
-
-  case PortType::INTERNAL:
-    return IsAndroid();
-
-  case PortType::TCP_LISTENER:
-  case PortType::UDP_LISTENER:
-    return true;
-
-  case PortType::PTY:
-#if defined(HAVE_POSIX) && !defined(ANDROID)
-    return true;
-#else
-    return false;
-#endif
-  }
-
-  /* unreachable */
-  return false;
-}
-
-bool
-DeviceConfig::ShouldReopenOnTimeout() const
-{
-  switch (port_type) {
-  case PortType::DISABLED:
-    return false;
-
-  case PortType::SERIAL:
-  case PortType::AUTO:
-    /* auto-reopen on Windows CE due to its quirks, but not Altair,
-       because Altair ports are known to be "kind of sane" (no flaky
-       Bluetooth drivers, because there's no Bluetooth) */
-    return IsWindowsCE() && !IsAltair();
-
-  case PortType::RFCOMM:
-  case PortType::RFCOMM_SERVER:
-  case PortType::IOIOUART:
-  case PortType::DROIDSOAR_V2:
-  case PortType::NUNCHUCK:
-  case PortType::I2CPRESSURESENSOR:
-  case PortType::IOIOVOLTAGE:
-    /* errors on these are detected automatically by the driver */
-    return false;
-
-  case PortType::INTERNAL:
-    /* reopening the Android internal GPS doesn't help */
-    return false;
-
-  case PortType::TCP_LISTENER:
-  case PortType::UDP_LISTENER:
-    /* this is a server, and if no data gets received, this can just
-       mean that nobody connected to it, but reopening it periodically
-       doesn't help */
-    return false;
-
-  case PortType::PTY:
-    return false;
-  }
-
-  gcc_unreachable();
-}
-
-const TCHAR *
-DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
-{
-  switch (port_type) {
-  case PortType::DISABLED:
-    return _("Disabled");
-
-  case PortType::SERIAL:
-    return path.c_str();
-
-  case PortType::RFCOMM:
-    StringFormat(buffer, max_size, _T("Bluetooth %s"),
-                 bluetooth_mac.c_str());
-    return buffer;
-
-  case PortType::RFCOMM_SERVER:
-    return _("Bluetooth server");
-
-  case PortType::IOIOUART:
-    StringFormat(buffer, max_size, _T("IOIO UART %d"), ioio_uart_id);
-    return buffer;
-
-  case PortType::DROIDSOAR_V2:
-    return _T("DroidSoar V2");
-
-  case PortType::NUNCHUCK:
-    return _T("Nunchuck");
-
-  case PortType::I2CPRESSURESENSOR:
-    return _T("IOIO i2c pressure sensor");
-
-  case PortType::IOIOVOLTAGE:
-    return _T("IOIO voltage sensor");
-
-  case PortType::AUTO:
-    return _("GPS Intermediate Driver");
-
-  case PortType::INTERNAL:
-    return _("Built-in GPS & sensors");
-
-  case PortType::TCP_LISTENER:
-    StringFormat(buffer, max_size, _T("TCP port %d"), tcp_port);
-    return buffer;
-
-  case PortType::UDP_LISTENER:
-    StringFormat(buffer, max_size, _T("UDP port %d"), tcp_port);
-    return buffer;
-
-  case PortType::PTY:
-    StringFormat(buffer, max_size, _T("Pseudo-terminal %s"), path.c_str());
-    return buffer;
-  }
-
-  gcc_unreachable();
-}
 
 static const char *
 MakeDeviceSettingName(char *buffer, const char *prefix, unsigned n,
@@ -311,6 +169,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   buffer[strlen(buffer) - 1] += n;
   Get(buffer, config.driver_name);
 
+  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
+  Get(buffer, config.enabled);
+
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
   Get(buffer, config.sync_from_device);
 
@@ -319,11 +180,6 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Get(buffer, config.k6bt);
-
-#ifndef NDEBUG
-  MakeDeviceSettingName(buffer, "Port", n, "DumpPort");
-  Get(buffer, config.dump_port);
-#endif
 
   MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
   if (!Get(buffer, config.ignore_checksum))
@@ -395,6 +251,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   buffer[strlen(buffer) - 1] += n;
   Set(buffer, config.driver_name);
 
+  MakeDeviceSettingName(buffer, "Port", n, "Enabled");
+  Set(buffer, config.enabled);
+
   MakeDeviceSettingName(buffer, "Port", n, "SyncFromDevice");
   Set(buffer, config.sync_from_device);
 
@@ -403,11 +262,6 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, "Port", n, "K6Bt");
   Set(buffer, config.k6bt);
-
-#ifndef NDEBUG
-  MakeDeviceSettingName(buffer, "Port", n, "DumpPort");
-  Set(buffer, config.dump_port);
-#endif
 
   MakeDeviceSettingName(buffer, "Port", n, "IgnoreChecksum");
   Set(buffer, config.ignore_checksum);

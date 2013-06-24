@@ -32,7 +32,7 @@ namespace Profile {
   static void Load(SectorDefaults &settings);
   static void Load(StartConstraints &constraints);
   static void Load(FinishConstraints &constraints);
-  static void Load(OrderedTaskBehaviour &settings);
+  static void Load(OrderedTaskSettings &settings);
 };
 
 void
@@ -75,7 +75,7 @@ Profile::Load(FinishConstraints &constraints)
 }
 
 void
-Profile::Load(OrderedTaskBehaviour &settings)
+Profile::Load(OrderedTaskSettings &settings)
 {
   Load(settings.start_constraints);
   Load(settings.finish_constraints);

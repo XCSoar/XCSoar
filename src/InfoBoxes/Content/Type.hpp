@@ -144,6 +144,9 @@ namespace InfoBoxFactory
     NEXT_RADIAL,
     ATC_RADIAL,
 
+    TASK_SPEED_HOUR,
+    WP_NOMINAL_DIST, /* The nominal distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector */
+
     e_NUM_TYPES /* Last item */
   };
 

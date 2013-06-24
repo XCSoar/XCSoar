@@ -23,19 +23,10 @@ Copyright_License {
 
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
-#include "UtilsSystem.hpp"
-#include "Asset.hpp"
 #include "Device/All.hpp"
-#include "Math/Constants.h"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Simulator.hpp"
-#include "OS/Clock.hpp"
 
-#include <limits.h>
-
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include <algorithm>
 
 /**
  * Initializes the DeviceBlackboard
@@ -51,12 +42,14 @@ DeviceBlackboard::DeviceBlackboard()
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
   gps_info.time = fixed(gps_info.date_time_utc.GetSecondOfDay());
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    per_device_data[i] = gps_info;
+  std::fill_n(per_device_data, NUMDEV, gps_info);
 
   real_data = simulator_data = replay_data = gps_info;
 
   simulator.Init(simulator_data);
+
+  real_clock.Reset();
+  replay_clock.Reset();
 }
 
 /**
@@ -241,6 +234,9 @@ DeviceBlackboard::Merge()
     per_device_data[i].Expire();
     real_data.Complement(per_device_data[i]);
   }
+
+  real_clock.Normalise(real_data);
+  replay_clock.Normalise(replay_data);
 
   if (replay_data.alive) {
     /* the replay may run at a higher speed; use NMEA_INFO::Time as a

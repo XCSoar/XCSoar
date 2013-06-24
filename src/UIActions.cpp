@@ -32,6 +32,7 @@ Copyright_License {
 #include "Gauge/BigThermalAssistantWidget.hpp"
 #include "Input/InputEvents.hpp"
 #include "Look/Look.hpp"
+#include "HorizonWidget.hpp"
 
 static bool force_shutdown = false;
 
@@ -72,4 +73,15 @@ UIActions::ShowThermalAssistant()
                                   UIGlobals::GetLook().thermal_assistant_dialog);
   CommonInterface::main_window->SetWidget(ta_widget);
   InputEvents::SetFlavour(_T("TA"));
+}
+
+void
+UIActions::ShowHorizon()
+{
+  if (InputEvents::IsFlavour(_T("Horizon")))
+    return;
+
+  auto widget = new HorizonWidget();
+  CommonInterface::main_window->SetWidget(widget);
+  InputEvents::SetFlavour(_T("Horizon"));
 }

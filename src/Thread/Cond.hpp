@@ -36,7 +36,10 @@ class Cond {
   pthread_cond_t cond;
 
 public:
-  constexpr Cond():cond(PTHREAD_COND_INITIALIZER) {}
+#if !defined(__BIONIC__) || !defined(__clang__)
+  constexpr
+#endif
+  Cond():cond(PTHREAD_COND_INITIALIZER) {}
 
   Cond(const Cond &other) = delete;
   Cond &operator=(const Cond &other) = delete;

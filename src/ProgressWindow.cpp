@@ -22,8 +22,14 @@ Copyright_License {
 */
 
 #include "ProgressWindow.hpp"
-#include "Screen/VirtualCanvas.hpp"
+#include "Screen/Layout.hpp"
 #include "resource.h"
+
+#ifdef USE_GDI
+#include "Screen/VirtualCanvas.hpp"
+#else
+#include "Screen/Canvas.hpp"
+#endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
   :background_color(COLOR_WHITE),
@@ -42,7 +48,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Determine text height
 #ifndef USE_GDI
-  font.Load(_T("Droid Sans"), 12);
+  font.Load(_T("Droid Sans"), Layout::SmallScale(10));
   text_height = font.GetHeight();
 #else
   VirtualCanvas canvas({1, 1});

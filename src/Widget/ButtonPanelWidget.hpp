@@ -49,6 +49,10 @@ public:
     :widget(_widget), buttons(nullptr), alignment(_alignment) {}
   virtual ~ButtonPanelWidget();
 
+  Widget &GetWidget() {
+    return *widget;
+  }
+
   ButtonPanel &GetButtonPanel() {
     assert(buttons != nullptr);
 
@@ -74,6 +78,7 @@ public:
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
+  virtual bool KeyPress(unsigned key_code) override;
 };
 
 #endif

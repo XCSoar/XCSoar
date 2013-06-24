@@ -24,6 +24,10 @@ Copyright_License {
 #include "Screen/Color.hpp"
 
 Color Desaturate(Color c) {
+#ifdef GREYSCALE
+  return c;
+#else
   int a = (c.Red() + c.Green() + c.Blue()) / 3;
   return Color((c.Red() + a) / 2, (c.Green() + a) / 2, (c.Blue() + a) / 2);
+#endif
 }

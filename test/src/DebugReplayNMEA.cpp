@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Port/NullPort.hpp"
 #include "Device/Parser.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 static DeviceConfig config;
 static NullPort port;

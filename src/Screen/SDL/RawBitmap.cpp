@@ -30,13 +30,13 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline UPixelScalar
-CorrectedWidth(UPixelScalar nWidth)
+static inline unsigned
+CorrectedWidth(unsigned nWidth)
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
+RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 {
@@ -46,7 +46,12 @@ RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
   Uint32 rmask, gmask, bmask, amask;
   int depth;
 
-#ifdef HAVE_GLES
+#ifdef GREYSCALE
+  rmask = 0x000000ff;
+  gmask = 0x000000ff;
+  bmask = 0x000000ff;
+  depth = 8;
+#elif defined(HAVE_GLES)
   rmask = 0x0000f800;
   gmask = 0x000007e0;
   bmask = 0x0000001f;
@@ -74,11 +79,10 @@ RawBitmap::~RawBitmap()
 }
 
 void
-RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
+RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
-                     UPixelScalar dest_width, UPixelScalar dest_height) const
+                     unsigned dest_width, unsigned dest_height) const
 {
-  Canvas src_canvas(surface);
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      src_canvas, 0, 0, width, height);
+                      surface, 0, 0, width, height);
 }

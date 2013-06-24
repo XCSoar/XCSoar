@@ -82,7 +82,7 @@ namespace SunEphemeris
 fixed
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
-  assert(date_time.Plausible());
+  assert(date_time.IsPlausible());
 
   long int luku = -7 * (date_time.year + (date_time.month + 9) / 12) / 4 +
                   275 * date_time.month / 9 + date_time.day +
@@ -147,7 +147,7 @@ static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                  const RoughTimeDelta time_zone, const Angle dec)
 {
-  assert(time.Plausible());
+  assert(time.IsPlausible());
 
   fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12)
     + fixed(time_zone.AsMinutes()) / 60;
@@ -165,7 +165,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 {
   Result result;
 
-  assert(date_time.Plausible());
+  assert(date_time.IsPlausible());
 
   fixed days_to_j2000 = FNday(date_time);
 
@@ -227,7 +227,7 @@ SunEphemeris::CalcAzimuth(const GeoPoint &location,
                           const BrokenDateTime &date_time,
                           const RoughTimeDelta time_zone)
 {
-  assert(date_time.Plausible());
+  assert(date_time.IsPlausible());
 
   fixed days_to_j2000 = FNday(date_time);
 

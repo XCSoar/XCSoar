@@ -23,7 +23,7 @@
 #define DESERIALISER_HPP
 
 #include "Task/Factory/TaskFactoryType.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Geo/AltitudeReference.hpp"
 
 #include <tchar.h>
 
@@ -33,6 +33,7 @@ struct Waypoint;
 class Waypoints;
 class OrderedTask;
 class ObservationZonePoint;
+struct OrderedTaskSettings;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
@@ -64,11 +65,11 @@ public:
 
 protected:
   /** 
-   * Deserialise OrderedTaskBehaviour
+   * Deserialise #OrderedTaskSettings
    * 
    * @param data Item to deserialise
    */
-  void Deserialise(OrderedTaskBehaviour &data);
+  void Deserialise(OrderedTaskSettings &data);
 
   /** 
    * Deserialise a Waypoint; client responsible for deletion

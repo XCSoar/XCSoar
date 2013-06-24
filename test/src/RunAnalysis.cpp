@@ -62,7 +62,6 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Look/Look.hpp"
-#include "Look/Fonts.hpp"
 #include "OS/Args.hpp"
 
 #ifdef WIN32
@@ -85,7 +84,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
 {
 }
 
-void dlgTaskManagerShowModal(SingleWindow &parent) {}
+void dlgTaskManagerShowModal() {}
 
 void
 ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
@@ -178,7 +177,6 @@ Main()
   OrderedTask *task =
     protected_task_manager.TaskCreateDefault(&way_points, task_type_default);
   if (task != nullptr) {
-    task->FillMatPoints(way_points);
     protected_task_manager.TaskCommit(*task);
     delete task;
   }

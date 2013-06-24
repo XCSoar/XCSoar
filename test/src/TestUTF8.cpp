@@ -85,7 +85,8 @@ int main(int argc, char **argv)
   plan_tests(ARRAY_SIZE(valid) + ARRAY_SIZE(invalid) +
              ARRAY_SIZE(length) +
              ARRAY_SIZE(crop) +
-             ARRAY_SIZE(latin1_chars));
+             ARRAY_SIZE(latin1_chars) +
+             9);
 
   for (auto i : valid)
     ok1(ValidateUTF8(i));
@@ -107,6 +108,28 @@ int main(int argc, char **argv)
     strcpy(buffer, c.input);
     CropIncompleteUTF8(buffer);
     ok1(strcmp(c.output, buffer) == 0);
+  }
+
+  {
+    const char *p = "foo\xe7\x9b\xae";
+    auto n = NextUTF8(p);
+    ok1(n.first == 'f');
+    ok1(n.second == p + 1);
+
+    n = NextUTF8(p + 1);
+    ok1(n.first == 'o');
+    ok1(n.second == p + 2);
+
+    n = NextUTF8(p + 2);
+    ok1(n.first == 'o');
+    ok1(n.second == p + 3);
+
+    n = NextUTF8(p + 3);
+    ok1(n.first == 30446);
+    ok1(n.second == p + 6);
+
+    n = NextUTF8(p + 6);
+    ok1(n.first == 0);
   }
 
   return exit_status();

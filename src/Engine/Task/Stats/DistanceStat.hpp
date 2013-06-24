@@ -24,10 +24,6 @@
 
 #include "Math/fixed.hpp"
 
-#include "Math/Filter.hpp"
-#include "Math/AvFilter.hpp"
-#include "Math/DiffFilter.hpp"
-
 #include <assert.h>
 
 /**
@@ -38,6 +34,7 @@
 class DistanceStat
 {
   friend class DistanceStatComputer;
+  friend class IncrementalSpeedComputer;
 
 protected:
   /** Distance (m) of metric */
@@ -100,42 +97,6 @@ public:
 
     return speed_incremental;
   }
-};
-
-/**
- * Computer class for DistanceStat.  It holds the incremental and
- * internal values, while DistanceStat has only the results.
- */
-class DistanceStatComputer {
-private:
-  static const unsigned N_AV = 3;
-
-  AvFilter<N_AV> av_dist;
-  DiffFilter df;
-  Filter v_lpf;
-  bool is_positive; // ideally const but then non-copyable
-
-public:
-  /** Constructor; initialises all to zero */
-  DistanceStatComputer(const bool is_positive=true);
-
-  /**
-   * Calculate bulk speed (distance/time), abstract base method
-   *
-   * @param es ElementStat (used for time access)
-   */
-  void CalcSpeed(DistanceStat &data, fixed time);
-
-  /**
-   * Calculate incremental speed from previous step.
-   * Resets incremental speed to speed if dt=0
-   *
-   * @param dt Time step (s)
-   */
-  void CalcIncrementalSpeed(DistanceStat &data, const fixed dt);
-
-private:
-  void ResetIncrementalSpeed(DistanceStat &data);
 };
 
 #endif

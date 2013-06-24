@@ -44,16 +44,6 @@ public:
   bool operator()(const AbstractAirspace &airspace) const;
 };
 
-class AirspaceVisiblePredicate
-  :public AirspacePredicate, private AirspaceVisibility
-{
-public:
-  AirspaceVisiblePredicate(const AirspaceComputerSettings &_computer_settings,
-                           const AirspaceRendererSettings &_renderer_settings,
-                           const AltitudeState& _state)
-    :AirspaceVisibility(_computer_settings, _renderer_settings, _state) {}
-
-  virtual bool operator()(const AbstractAirspace &airspace) const override;
-};
+typedef WrapAirspacePredicate<AirspaceVisibility> AirspaceVisiblePredicate;
 
 #endif

@@ -30,9 +30,7 @@ class GlidePolar;
 
 namespace PlaneGlue
 {
-  void DetachFromPlaneFile();
   void FromProfile(Plane &plane);
-  void ToProfile(const Plane &plane);
 
   void Synchronize(const Plane &plane, ComputerSettings &settings,
                    GlidePolar &gp);

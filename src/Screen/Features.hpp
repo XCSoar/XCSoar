@@ -28,6 +28,10 @@ Copyright_License {
 #include "Screen/Android/Features.hpp"
 #endif
 
+#ifdef ENABLE_SDL
+#include "Screen/SDL/Features.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Features.hpp"
 #endif
@@ -40,7 +44,7 @@ Copyright_License {
  * Return true when the Canvas implements clipping against its
  * siblings and children.
  */
-static inline bool
+static constexpr inline bool
 HaveClipping()
 {
 #ifdef HAVE_CLIPPING

@@ -24,9 +24,14 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
+#endif
+
+#ifdef KOBO
+#include "OS/FileUtil.hpp"
 #endif
 
 #ifdef USE_FREETYPE
@@ -42,10 +47,22 @@ Copyright_License {
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
+#ifdef KOBO
+  /* switch to portrait mode */
+  File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
+#endif
+
+  Uint32 flags = SDL_INIT_VIDEO|SDL_INIT_TIMER;
+  if (!IsKobo())
+    flags |= SDL_INIT_AUDIO;
+
+  if (::SDL_Init(flags) != 0) {
     fprintf(stderr, "SDL_Init() has failed: %s\n", ::SDL_GetError());
     exit(EXIT_FAILURE);
   }
+
+  if (HasTouchScreen())
+    SDL_ShowCursor (SDL_FALSE);
 
   ::SDL_EnableKeyRepeat(250, 50);
   ::SDL_EnableUNICODE(true);

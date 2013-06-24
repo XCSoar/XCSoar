@@ -28,7 +28,7 @@ static Color
 ColorWithAlpha(const Color &c, uint8_t a)
 {
 #ifdef ENABLE_OPENGL
-  return Color(c.Red(), c.Green(), c.Blue(), a);
+  return c.WithAlpha(a);
 #else
   return c;
 #endif
@@ -42,16 +42,16 @@ FinalGlideBarLook::Initialise(const Font &_font)
 
   brush_below.Set(ColorWithAlpha(COLOR_RED, alpha));
   brush_below_mc0.Set(ColorWithAlpha(LightColor(COLOR_RED), alpha));
-  pen_below.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_RED));
+  pen_below.Set(Layout::ScalePenWidth(1), HasColors()? DarkColor(COLOR_RED) : COLOR_BLACK);
 
   brush_below_landable.Set(ColorWithAlpha(COLOR_ORANGE, alpha));
   brush_below_landable_mc0.Set(ColorWithAlpha(LightColor(COLOR_ORANGE), alpha));
   pen_below_landable.Set(Layout::ScalePenWidth(1),
-                         DarkColor(COLOR_ORANGE));
+                         HasColors()? DarkColor(COLOR_ORANGE) : COLOR_BLACK);
 
   brush_above.Set(ColorWithAlpha(COLOR_GREEN, alpha));
   brush_above_mc0.Set(ColorWithAlpha(LightColor(LightColor(COLOR_GREEN)), alpha));
-  pen_above.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_GREEN));
+  pen_above.Set(Layout::ScalePenWidth(1), HasColors()? DarkColor(COLOR_GREEN) : COLOR_BLACK);
 
   font = &_font;
 }

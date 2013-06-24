@@ -1,0 +1,132 @@
+\documentclass[a4paper,11pt]{refrep}
+
+% Set the title
+\title{Podręcznik}
+
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+
+% Set the page title
+\newcommand{\mycontent}[0]{
+\begin{tabular}{l}
+\hspace*{-6cm} \em Podręcznik dla XCSoar\vspace*{2pt}
+\end{tabular}}
+
+% Define some xc doc styles
+\input{xcsoar.sty}
+\input{title-xcsoar.sty}
+
+% Select the right encoding and language package
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\DeclareUnicodeCharacter{00B0}{$^{\circ}$}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Front page
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Todo's
+\listoftodos
+ 
+%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents
+\begingroup
+\fontfamily{ptm}
+\normalsize
+\fontseries{c}\selectfont
+\setlength{\parskip}{0.05\baselineskip}
+\tableofcontents
+\endgroup
+
+%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Preface}
+
+\section*{Warnings and precautions}
+
+\warning IT IS THE USER'S RESPONSIBILITY TO USE THIS SOFT\-WARE PRUDENTLY. THIS SOFTWARE IS 
+INTENDED TO BE USED ONLY AS A NAVIGATION AID AND MUST NOT BE USED FOR ANY PURPOSE REQUIRING 
+PRECISE MEASURE\-MENT OF DIRECTION, DISTANCE, LOCATION, OR TOPO\-GRAPHY. THIS SOFTWARE SHOULD 
+NOT BE USED AS AN AID TO DETERMINE GROUND PROXIMITY FOR AIRCRAFT NAVIGATION. THIS SOFTWARE 
+SHOULD NOT BE USED AS A TRAFFIC COLLISION AVOIDANCE SYSTEM.
+
+
+\section*{Legal notices}
+
+\subsection*{Software license agreement}
+
+This software is released according to the GNU General Public License
+Version~2.  See Appendix~\ref{cha:gnu-general-public} for the full
+text of the agreement and warranty notice.
+
+\subsection*{Limited liability}
+
+In no event shall XCSoar, or its principals, shareholders, officers,
+employees, affiliates, contractors, subsidiaries, or parent
+organizations, be liable for any incidental, consequential, or
+punitive damages whatsoever relating to the use of the Product.
+
+\subsection*{Disclaimer}
+
+This product, and all accompanying files, data and materials, are
+distributed "as is" and with no warranties of any kind, whether
+express or implied.  This product is used entirely at the risk of the
+user.  Although great care has been taken to eliminate defects during
+its development it is not claimed to be fault-free. No claims are made
+regarding its correctness, reliability or fitness for any particular
+purpose.  The XCSoar project developers and contributors shall not be
+liable for errors contained herein or for incidental or consequential
+damages, loss of data or personal injury in connection with
+furnishing, performance, or use of this material.
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch01_introduction.tex}
+\input{installation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch02_user_interface.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch03_navigation.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch04_xc_tasks.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch05_glide_computer.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch06_atmosphere_and_instruments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch07_airspace_and_flarm.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch08_avionics_and_airframe.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch09_quickstart.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch10_infobox_reference.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch11_configuration.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch12_data_files.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\input{ch13_history.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+
+\chapter{GNU General Public License}\label{cha:gnu-general-public}
+\input{gpl.tex}
+
+\end{document}

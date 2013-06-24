@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Util.hpp"
 #include "Compatibility/gdi.h"
 #include "Asset.hpp" /* for needclipping */
+#include "AlphaBlend.hpp"
 
 #include <algorithm>
 
@@ -399,3 +400,28 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
   Stretch(dest_x, dest_y, dest_width, dest_height,
           src, src_x, src_y, src_width, src_height);
 }
+
+#ifdef HAVE_ALPHA_BLEND
+
+void
+Canvas::AlphaBlend(PixelScalar dest_x, PixelScalar dest_y,
+                   UPixelScalar dest_width, UPixelScalar dest_height,
+                   HDC src,
+                   PixelScalar src_x, PixelScalar src_y,
+                   UPixelScalar src_width, UPixelScalar src_height,
+                   uint8_t alpha)
+{
+  assert(AlphaBlendAvailable());
+
+  BLENDFUNCTION fn;
+  fn.BlendOp = AC_SRC_OVER;
+  fn.BlendFlags = 0;
+  fn.SourceConstantAlpha = alpha;
+  fn.AlphaFormat = 0;
+
+  ::AlphaBlendInvoke(dc, dest_x, dest_y, dest_width, dest_height,
+                     src, src_x, src_y, src_width, src_height,
+                     fn);
+}
+
+#endif

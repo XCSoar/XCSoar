@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <utility>
+
 #include <stddef.h>
 
 /**
@@ -77,5 +79,17 @@ LengthUTF8(const char *p);
 gcc_nonnull_all
 void
 CropIncompleteUTF8(char *p);
+
+/**
+ * Decode the next UNICODE character.
+ *
+ * @param p a null-terminated valid UTF-8 string
+ * @return a pair containing the next UNICODE character code and a
+ * pointer to the first byte of the following character or 0 if
+ * already at the end of the string
+ */
+gcc_pure gcc_nonnull_all
+std::pair<unsigned, const char *>
+NextUTF8(const char *p);
 
 #endif

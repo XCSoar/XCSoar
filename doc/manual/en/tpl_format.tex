@@ -1,7 +1,11 @@
-\section{Topography layer description file}
-Each line of the topography layer description file (topography.tpl) contains
-a comma seperated list (CSV) of information needed for rendering of an
+\section{Topography layer description file (topology.tpl)}
+
+Each line of the topography layer description file (topology.tpl) contains
+a comma separated list (CSV) of information needed for rendering of an
 individual topography layer. Lines starting with '*' are ignored.
+
+XCSoar v6.6 and earlier will display at most 20 topography layers.
+XCSoar v6.7 and later will display at most 30 topography layers.
 \begin{table}[ht]
 \centering
 \sffamily
@@ -12,15 +16,16 @@ Column name&Data type&Valid range\\
 %\midrule
 \cmidrule(r){1-1}\cmidrule(lr){2-2}\cmidrule(l){3-3}
 filename&string&\\
-range&double&-\\
+range&double (nm)&-\\
 icon&string&\\
-label index&-&-\\
+label index&int&0-1\\
 color (red component)&int&0-255\\
 color (green component)&int&0-255\\
 color (blue component)&int&0-255\\
 pen width&int&0-31\\
-label range&double&-\\
-important label range&double&-\\
+label range (nm)&double&-\\
+important label range (nm)&double&-\\
+alpha&int&0-255\\
 %\addlinespace
 \bottomrule
 \end{tabular}
@@ -30,16 +35,23 @@ important label range&double&-\\
 
 \begin{description}
 \item[filename] The filename of the Topography layer within the container file.
-\item[icon] XCSoar v6.5 and earlier, used only for town icons (219). From XCSoar v6.6, the name of the icon to display. Optional.
-\item[range] A threshold zoom level. All layer elements will not be drawn
-below this threshold.
+\item[icon] XCSoar v6.5 and earlier, Only the value 219 is recognised, for town icons.
+From XCSoar v6.6, the name of the icon to display. Optional. See below for a list of available names.
+\item[range] Zoom level threshold. Layer elements will not be drawn unless zoomed in closer than this threshold.
 \item[pen width] Lines contained within this layer are drawn with pen width.
-\item[label range] A threshold zoom level. Labels contained in the layer file
-will not be rendered below this threshold.
-\item[important label range] A threshold zoom level. Labels contained
-in the layer file will be rendered in standard style below this threshold.
+\item[label range] Label display zoom level threshold. Labels contained in the layer file
+will not be rendered unless zoomed in closer than this threshold.
+\item[important label range] A zoom level threshold. Labels contained in the layer file will be
+rendered in standard style when the display zoom level is greater than this threshold.
+\item[alpha] The alpha component controls transparency of polygons...
+0 means polygons are completely transparent, 255 means they are completely opaque.
+Only used by XCSoar v6.7 and later.
+
+\texttt{Versions of XCSoar running on Windows and WinCE ignore any item where transparency is specified.}
+
 \end{description}
 \subsection{Point Features}
+Prior to XCSoar v6.6, this could contain the value 219 to display an icon for a town
 From XCSoar v6.6, a user can put an optional string into the icon column in topology.tpl in the .XCM file (e.g.)
 \begin{itemize}
 \item SpotHeight,5,\texttt{mountain\_top},1,64,64,64,1,5,

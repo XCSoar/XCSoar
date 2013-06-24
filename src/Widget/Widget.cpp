@@ -96,3 +96,9 @@ NullWidget::SetFocus()
 {
   return false;
 }
+
+bool
+NullWidget::KeyPress(unsigned key_code)
+{
+  return false;
+}

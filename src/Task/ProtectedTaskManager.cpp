@@ -53,11 +53,11 @@ ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
   lease->SetGlidePolar(glide_polar);
 }
 
-const OrderedTaskBehaviour 
-ProtectedTaskManager::GetOrderedTaskBehaviour() const
+const OrderedTaskSettings
+ProtectedTaskManager::GetOrderedTaskSettings() const
 {
   Lease lease(*this);
-  return lease->GetOrderedTask().GetOrderedTaskBehaviour();
+  return lease->GetOrderedTask().GetOrderedTaskSettings();
 }
 
 const Waypoint* 

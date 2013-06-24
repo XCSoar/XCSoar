@@ -22,14 +22,15 @@ Copyright_License {
 */
 
 #include "ClimbHistory.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
 void
 ClimbHistory::Clear()
 {
-  std::fill(vario, vario + SIZE, fixed(0));
-  std::fill(count, count + SIZE, 0);
+  std::fill_n(vario, ARRAY_SIZE(vario), fixed(0));
+  std::fill_n(count, ARRAY_SIZE(count), 0);
 }
 
 void

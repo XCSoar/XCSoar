@@ -53,7 +53,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/WaypointLook.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -144,6 +144,10 @@ class WaypointVisitorMap:
   const WaypointLook &look;
   const TaskBehaviour &task_behaviour;
   const MoreData &basic;
+  /**
+   * is the ordered task a MAT
+   */
+  bool is_mat;
 
   TCHAR sAltUnit[4];
   bool task_valid;
@@ -169,10 +173,18 @@ public:
     :projection(_projection),
      settings(_settings), look(_look), task_behaviour(_task_behaviour),
      basic(_basic),
+     is_mat(false),
      task_valid(false),
      labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     _tcscpy(sAltUnit, Units::GetAltitudeName());
+  }
+
+  /**
+   * Indicate the ordered task is a MAT
+   */
+  void SetIsMat(bool v) {
+    is_mat = v;
   }
 
 protected:
@@ -366,7 +378,7 @@ public:
   void
   Visit(const Waypoint& way_point)
   {
-    AddWaypoint(way_point, false);
+    AddWaypoint(way_point, way_point.IsTurnpoint() && is_mat);
   }
 
   virtual void Visit(const TaskPoint &tp) override {
@@ -442,12 +454,13 @@ public:
 static void
 MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
                        LabelBlock &label_block,
-                       WaypointLabelList &labels)
+                       WaypointLabelList &labels,
+                       const WaypointLook &look)
 {
   labels.Sort();
 
   for (const auto &l : labels) {
-    canvas.Select(l.bold ? Fonts::map_bold : Fonts::map);
+    canvas.Select(l.bold ? *look.bold_font : *look.font);
 
     TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
               width, height, &label_block);
@@ -472,11 +485,14 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
 
+    const TaskStats &task_stats = task_manager->GetStats();
+
+    v.SetIsMat(task_stats.is_mat);
+
     // task items come first, this is the only way we know that an item is in task,
     // and we won't add it if it is already there
-    if (task_manager->StatsValid()) {
+    if (task_stats.task_valid)
       v.set_task_valid();
-    }
 
     const AbstractTask *atask = task_manager->GetActiveTask();
     if (atask != NULL)
@@ -493,5 +509,5 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   MapWaypointLabelRender(canvas,
                          projection.GetScreenWidth(),
                          projection.GetScreenHeight(),
-                         label_block, v.labels);
+                         label_block, v.labels, look);
 }

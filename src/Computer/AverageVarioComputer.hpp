@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_AVERAGE_VARIO_COMPUTER_HPP
 
 #include "Math/WindowFilter.hpp"
-#include "DeltaTime.hpp"
+#include "Time/DeltaTime.hpp"
 
 struct MoreData;
 struct CirclingInfo;

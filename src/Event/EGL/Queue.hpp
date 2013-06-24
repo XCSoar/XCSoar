@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_EVENT_EGL_QUEUE_HPP
 
 #include "../Shared/TimerQueue.hpp"
-#include "Event.hpp"
+#include "../Shared/Event.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/Poll.hpp"

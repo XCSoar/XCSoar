@@ -129,10 +129,8 @@ RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
 
 RowFormWidget::~RowFormWidget()
 {
-  if (IsDefined()) {
-    PanelControl *panel = (PanelControl *)GetWindow();
-    delete panel;
-  }
+  if (IsDefined())
+    DeleteWindow();
 
   /* destroy all rows */
   for (auto &i : rows)
@@ -177,7 +175,7 @@ RowFormWidget::Add(Row::Type type, Window *window)
 {
   assert(IsDefined());
 #ifndef USE_GDI
-  assert(window->GetParent() == GetWindow());
+  assert(window->GetParent() == &GetWindow());
 #endif
   assert(window->IsVisible());
   /* cannot append rows after a REMAINING row */
@@ -199,7 +197,7 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
   if (!read_only)
     style.TabStop();
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
@@ -434,7 +432,7 @@ RowFormWidget::AddSpacer()
   assert(IsDefined());
 
   HLine *window = new HLine(GetLook());
-  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
   const PixelRect rc = InitialControlRect(Layout::Scale(3));
   window->Create(panel, rc);
   Add(window);
@@ -481,7 +479,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
   else
     style.SunkenEdge();
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
   LargeTextWindow *ltw = new LargeTextWindow();
   ltw->Create(panel, rc, style);
   ltw->SetFont(*look.text_font);
@@ -504,7 +502,7 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
   button_style.TabStop();
   button_style.multiline();
 
-  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
   WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
 
@@ -915,7 +913,7 @@ RowFormWidget::GetRecommendedCaptionWidth() const
 void
 RowFormWidget::UpdateLayout()
 {
-  PixelRect current_rect = GetWindow()->GetClientRect();
+  PixelRect current_rect = GetWindow().GetClientRect();
   const unsigned total_width = current_rect.right - current_rect.left;
   const unsigned total_height = current_rect.bottom - current_rect.top;
   current_rect.bottom = current_rect.top;
@@ -995,12 +993,12 @@ RowFormWidget::UpdateLayout()
 
       if (!i.initialised) {
         i.initialised = true;
-        widget.Initialise(*(ContainerWindow *)GetWindow(), current_rect);
+        widget.Initialise((ContainerWindow &)GetWindow(), current_rect);
       }
 
       if (!i.prepared) {
         i.prepared = true;
-        widget.Prepare(*(ContainerWindow *)GetWindow(), current_rect);
+        widget.Prepare((ContainerWindow &)GetWindow(), current_rect);
       }
 
       widget.Show(current_rect);
@@ -1081,7 +1079,7 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 void
 RowFormWidget::Show(const PixelRect &rc)
 {
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  Window &panel = GetWindow();
   panel.Move(rc);
 
   UpdateLayout();
@@ -1092,8 +1090,7 @@ RowFormWidget::Show(const PixelRect &rc)
 void
 RowFormWidget::Move(const PixelRect &rc)
 {
-  PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.Move(rc);
+  WindowWidget::Move(rc);
 
   UpdateLayout();
 }
@@ -1104,6 +1101,6 @@ RowFormWidget::SetFocus()
   if (rows.empty())
     return false;
 
-  PanelControl &panel = *(PanelControl *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
   return panel.FocusFirstControl();
 }

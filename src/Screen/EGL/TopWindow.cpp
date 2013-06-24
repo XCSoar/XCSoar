@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Event/EGL/Event.hpp"
+#include "Event/Shared/Event.hpp"
 #include "Event/EGL/Loop.hpp"
 #include "Event/EGL/Queue.hpp"
 #include "Event/EGL/Globals.hpp"

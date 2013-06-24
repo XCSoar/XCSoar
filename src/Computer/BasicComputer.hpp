@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef BASIC_COMPUTER_HPP
 #define BASIC_COMPUTER_HPP
 
+#include "GroundSpeedComputer.hpp"
+
 struct MoreData;
 struct DerivedInfo;
 class AtmosphericPressure;
@@ -36,6 +38,8 @@ struct ComputerSettings;
  * to run outside of the #CalculationThread.
  */
 class BasicComputer {
+  GroundSpeedComputer ground_speed;
+
 public:
   /**
    * Fill the missing attributes with a fallback.

@@ -26,6 +26,10 @@ Copyright_License {
 #include "Hardware/ModelType.hpp"
 #include "Compiler.h"
 
+#ifdef ANDROID
+#include "Android/Product.hpp"
+#endif
+
 #include <tchar.h>
 
 // asset/registration data
@@ -58,21 +62,6 @@ IsDebug()
   return false;
 #else
   return true;
-#endif
-}
-
-/**
- * Returns whether the application is running on an embedded platform.
- * @return True if host hardware is an embedded platform, False otherwise
- */
-constexpr
-static inline bool
-IsEmbedded()
-{
-#if defined(_WIN32_WCE) || defined(ANDROID)
-  return true;
-#else
-  return false;
 #endif
 }
 
@@ -164,6 +153,31 @@ IsAndroid()
 }
 
 /**
+ * Returns whether the application is running on a Kobo e-book reader.
+ */
+constexpr
+static inline bool
+IsKobo()
+{
+#ifdef KOBO
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
+ * Returns whether the application is running on an embedded platform.
+ * @return True if host hardware is an embedded platform, False otherwise
+ */
+constexpr
+static inline bool
+IsEmbedded()
+{
+  return IsAndroid() || IsWindowsCE() || IsKobo();
+}
+
+/**
  * Does this device have little main memory?  On those, some expensive
  * features are disabled.
  */
@@ -208,7 +222,7 @@ constexpr
 static inline bool
 HasTouchScreen()
 {
-  return IsAndroid() || (IsWindowsCE() && !IsAltair());
+  return IsAndroid() || (IsWindowsCE() && !IsAltair()) || IsKobo();
 }
 
 /**
@@ -224,15 +238,59 @@ HasKeyboard()
 }
 
 /**
- * Does this device have a display with colors?
- *
- * XXX not yet implemented!
+ * Does this device have a cursor keys?  These may be used to navigate
+ * in modal dialogs.  Without cursor keys, focused controls do not
+ * need to be highlighted.
  */
 constexpr
 static inline bool
+HasCursorKeys()
+{
+  /* we assume that all Windows (CE) devices have cursor keys; some do
+     not, but that's hard to detect */
+
+  /* TODO: check Configuration.keyboard on Android */
+
+  return !IsKobo() && !IsAndroid();
+}
+
+/**
+ * Does this device have a display with colors?
+ */
+#ifdef ANDROID
+gcc_const
+#else
+constexpr
+#endif
+static inline bool
 HasColors()
 {
-  return true;
+#ifdef ANDROID
+  return !IsNookSimpleTouch();
+#else
+  return !IsKobo();
+#endif
+}
+
+/**
+ * Does this device have an electronic paper screen, such as E-Ink?
+ * Such screens need some special cases, because they are very slow
+ * and show ghosting.  Animations shall be disabled when this function
+ * returns true.
+ */
+#ifdef ANDROID
+gcc_const
+#else
+constexpr
+#endif
+static inline bool
+HasEPaper()
+{
+#ifdef ANDROID
+  return IsNookSimpleTouch();
+#else
+  return IsKobo();
+#endif
 }
 
 #endif

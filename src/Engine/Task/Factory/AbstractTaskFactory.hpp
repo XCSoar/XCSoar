@@ -41,7 +41,7 @@ class ASTPoint;
 class FinishPoint;
 class OrderedTask;
 struct TaskBehaviour;
-struct OrderedTaskBehaviour;
+struct OrderedTaskSettings;
 class OrderedTaskPoint;
 class ObservationZonePoint;
 struct Waypoint;
@@ -114,10 +114,10 @@ public:
   }
 
   /**
-   * Updates the OrderedTaskBehaviour with values required by
+   * Updates the #OrderedTaskSettings with values required by
    * the factory type of the task.
    */
-  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
+  virtual void UpdateOrderedTaskSettings(OrderedTaskSettings &to);
 
   /**
    * Replace taskpoint in ordered task.
@@ -452,7 +452,7 @@ public:
   bool ValidateMATOZs();
 
   gcc_pure
-  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const;
+  const OrderedTaskSettings &GetOrderedTaskSettings() const;
 
   /**
    * Check whether an abstract type is valid in a specified position

@@ -32,6 +32,10 @@ Copyright_License {
 #include <GLES/glext.h>
 #endif
 
+#ifdef ENABLE_SDL
+#include <SDL.h>
+#endif
+
 #include <assert.h>
 
 #ifndef NDEBUG
@@ -167,21 +171,17 @@ LoadSurfaceIntoTexture(const SDL_Surface *surface)
   } else if (fmt->BitsPerPixel == 24 && fmt->BytesPerPixel == 3 &&
              fmt->Rmask == 0xff0000 && fmt->Gmask == 0xff00 &&
              fmt->Bmask == 0xff) {
-#ifdef ANDROID
-    /* big endian */
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
     format = GL_RGB;
 #else
-    /* little endian */
     format = GL_BGR;
 #endif
     type = GL_UNSIGNED_BYTE;
-#ifndef ANDROID
   } else if ((fmt->BitsPerPixel == 24 || fmt->BitsPerPixel == 32) &&
              fmt->BytesPerPixel == 4 && fmt->Rmask == 0xff0000 &&
              fmt->Gmask == 0xff00 && fmt->Bmask == 0xff) {
     format = GL_BGRA;
     type = GL_UNSIGNED_BYTE;
-#endif
   } else
     return false;
 
@@ -200,8 +200,7 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
    allocated_width(ValidateTextureSize(_width)),
    allocated_height(ValidateTextureSize(_height))
 {
-  /* enable linear filtering for the terrain texture */
-  Initialise(true);
+  Initialise();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
@@ -239,6 +238,38 @@ GLTexture::ResizeDiscard(PixelSize new_size)
                validated_size.cx, validated_size.cy,
                0, GL_RGB, GetType(), nullptr);
 
+}
+
+void
+GLTexture::Initialise()
+{
+#ifndef NDEBUG
+  ++num_textures;
+#endif
+
+  glGenTextures(1, &id);
+  Bind();
+  Configure();
+}
+
+void
+GLTexture::Configure()
+{
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  GLint filter = IsEmbedded() ? GL_NEAREST : GL_LINEAR;
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
+}
+
+void
+GLTexture::EnableInterpolation()
+{
+  if (IsEmbedded()) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  }
 }
 
 #ifdef ENABLE_SDL

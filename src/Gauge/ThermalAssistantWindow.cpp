@@ -55,17 +55,22 @@ ThermalAssistantWindow::OnResize(PixelSize new_size)
 }
 
 void
+ThermalAssistantWindow::DrawCircle(Canvas &canvas)
+{
+  canvas.DrawCircle(renderer.GetMiddle().x, renderer.GetMiddle().y,
+                    renderer.GetRadius());
+}
+
+void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (transparent) {
-    GLEnable blend(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     canvas.SelectBlackPen();
     canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xd0)));
-    canvas.DrawCircle(renderer.GetMiddle().x, renderer.GetMiddle().y,
-                      renderer.GetRadius());
+    DrawCircle(canvas);
   } else
 #endif
     canvas.Clear(renderer.GetLook().background_color);

@@ -48,13 +48,12 @@ TaskStatusPanel::Refresh()
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.ordered_task_stats;
-  const CommonStats &common_stats = calculated.common_stats;
 
   TCHAR Temp[80];
 
-  SetRowVisible(TaskTime, common_stats.ordered_has_targets);
-  if (common_stats.ordered_has_targets) {
-    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
+  SetRowVisible(TaskTime, task_stats.has_targets);
+  if (task_stats.has_targets) {
+    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskSettings().aat_min_time);
     SetText(TaskTime, Temp);
   }
 
@@ -62,7 +61,7 @@ TaskStatusPanel::Refresh()
   FormatSignedTimeHHMM(Temp, ete_time);
   SetText(ETETime, Temp);
 
-  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining);
+  FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining_now);
   SetText(RemainingTime, Temp);
 
   if (task_stats.total.planned.IsDefined()) {

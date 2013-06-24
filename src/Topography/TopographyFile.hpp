@@ -137,13 +137,13 @@ public:
    * The constructor opens the given shapefile and clears the cache
    * @param shpname The shapefile to open (*.shp)
    * @param threshold the zoom threshold for displaying this object
-   * @param thecolor The color to use for drawing
+   * @param color The color to use for drawing, including alpha for OpenGL
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
    * @param pen_width The pen width used for line drawing
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
-   * be renderd in default style
+   * be rendered in default style
    * @return
    */
   TopographyFile(struct zzip_dir *dir, const char *shpname,

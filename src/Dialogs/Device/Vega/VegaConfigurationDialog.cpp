@@ -41,19 +41,12 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Form/Tabbed.hpp"
 #include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Device/device.hpp"
-#include "Device/Descriptor.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "UIGlobals.hpp"
-#include "Simulator.hpp"
 #include "Compiler.h"
-#include "OS/Sleep.h"
-#include "Util/Macros.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
 #include <assert.h>
@@ -185,7 +178,7 @@ FormKeyDown(unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
+    wf->FindByName(_T("cmdPrev"))->SetFocus();
     tabbed->PreviousPage();
     PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
@@ -195,10 +188,9 @@ FormKeyDown(unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
+    wf->FindByName(_T("cmdNext"))->SetFocus();
     tabbed->NextPage();
     PageSwitched();
-    //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);
     return true;
 
   default:

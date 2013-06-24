@@ -16,6 +16,10 @@
 #
 #   GLES        "y" means render with OpenGL/ES.
 #
+#   GREYSCALE   "y" means render 8-bit greyscale internally
+#
+#   DITHER      "y" means dither to 1-bit black&white
+#
 #   EYE_CANDY   "n" disables eye candy rendering.
 #
 #   DEBUG       If set to "y", the debugging version of XCSoar is built
@@ -60,7 +64,6 @@ include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
-include $(topdir)/build/boost.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/freetype.mk
@@ -72,6 +75,7 @@ include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
 include $(topdir)/build/compile.mk
 include $(topdir)/build/link.mk
+include $(topdir)/build/java.mk
 include $(topdir)/build/android.mk
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
@@ -290,6 +294,7 @@ XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/Airspace/ActivePredicate.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/TaskFile.cpp \
@@ -312,6 +317,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/HorizonWidget.cpp \
+	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
@@ -601,6 +608,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/GroundSpeedComputer.cpp \
 	$(SRC)/Computer/AutoQNH.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
@@ -738,7 +746,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
-	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/GlobalFonts.cpp \
+	$(SRC)/Look/AutoFont.cpp \
+	$(SRC)/Look/DefaultFonts.cpp \
 	$(SRC)/Look/CustomFonts.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -797,14 +807,15 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port/LineSplitter.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(DIALOG_SOURCES)
+	$(SRC)/Device/Config.cpp \
+	$(DIALOG_SOURCES) \
+	\
+	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
+	$(SRC)/Monitor/AllMonitors.cpp \
+	\
+	$(SRC)/Hardware/Battery.cpp
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
-
-ifneq ($(NO_HORIZON),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Renderer/HorizonRenderer.cpp
-endif
 
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
@@ -854,7 +865,6 @@ endif
 else
 XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
-	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/XCSoar.cpp
 endif
 

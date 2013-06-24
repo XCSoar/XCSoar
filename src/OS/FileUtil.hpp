@@ -180,6 +180,13 @@ namespace File
    * @return True in case of success, False otherwise
    */
   bool Touch(const TCHAR *path);
+
+  /**
+   * Write a string to an existing file.  It will never create a new
+   * file or truncate the existing file.  This function may be useful
+   * for writing sysfs files.
+   */
+  bool WriteExisting(const TCHAR *path, const char *value);
 }
 
 #endif

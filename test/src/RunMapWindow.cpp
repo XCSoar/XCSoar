@@ -45,7 +45,8 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
+#include "Look/DefaultFonts.hpp"
 #include "Thread/Debug.hpp"
 
 void
@@ -258,7 +259,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   map_look->Initialise(settings_map, Fonts::map, Fonts::map_bold);
 
   TrafficLook *traffic_look = new TrafficLook();
-  traffic_look->Initialise();
+  traffic_look->Initialise(Fonts::map);
 
   TestWindow window(*map_look, *traffic_look);
   window.Create({640, 480});

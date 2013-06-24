@@ -30,8 +30,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 WarningComputer::WarningComputer(Airspaces &_airspaces)
-  :clock(fixed(1)), // scan airspace every second
-   airspaces(_airspaces),
+  :airspaces(_airspaces),
    manager(airspaces),
    protected_manager(manager)
 {
@@ -39,12 +38,19 @@ WarningComputer::WarningComputer(Airspaces &_airspaces)
 
 void
 WarningComputer::Update(const ComputerSettings &settings_computer,
-                        const MoreData &basic, const MoreData &last_basic,
+                        const MoreData &basic,
                         const DerivedInfo &calculated,
                         AirspaceWarningsInfo &result)
 {
-  if (!basic.HasTimeAdvancedSince(last_basic) ||
-      !clock.CheckAdvance(basic.time))
+  if (!basic.time_available)
+    return;
+
+  const fixed dt = delta_time.Update(basic.time, fixed(1), fixed(20));
+  if (negative(dt))
+    /* time warp */
+    Reset();
+
+  if (!positive(dt))
     return;
 
   airspaces.SetFlightLevels(settings_computer.pressure);
@@ -56,7 +62,7 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
       !basic.location_available || !basic.NavAltitudeAvailable()) {
     if (initialised) {
       initialised = false;
-      protected_manager.clear();
+      protected_manager.Clear();
     }
 
     return;
@@ -75,6 +81,6 @@ WarningComputer::Update(const ComputerSettings &settings_computer,
   if (lease->Update(as, settings_computer.polar.glide_polar_task,
                     calculated.task_stats,
                     calculated.circling,
-                    uround(basic.time - last_basic.time)))
+                    uround(dt)))
     result.latest.Update(basic.clock);
 }

@@ -112,7 +112,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
-  if (gps_info.gps.real && gps_info.date_available)
+  if (gps_info.gps.real && gps_info.date_time_utc.IsDatePlausible())
     IGCFileCleanup(gps_info.date_time_utc.year);
 
   pre_takeoff_buffer.clear();
@@ -243,7 +243,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
 
-  const BrokenDate today = gps_info.date_available
+  const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? (const BrokenDate &)gps_info.date_time_utc
     : BrokenDate::TodayUTC();
 

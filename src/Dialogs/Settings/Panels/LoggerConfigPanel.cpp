@@ -95,7 +95,6 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddText(_("Logger ID"), NULL, logger.logger_id);
   SetExpertRow(LoggerID);
-
 }
 
 bool

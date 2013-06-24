@@ -115,3 +115,15 @@ ManagedWidget::SetVisible(bool _visible)
   else
     Hide();
 }
+
+bool
+ManagedWidget::SetFocus()
+{
+  return IsVisible() && widget->SetFocus();
+}
+
+bool
+ManagedWidget::KeyPress(unsigned key_code)
+{
+  return IsVisible() && widget->KeyPress(key_code);
+}

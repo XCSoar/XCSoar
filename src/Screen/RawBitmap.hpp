@@ -11,7 +11,7 @@
 #ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
-#include "Screen/Point.hpp"
+#include "PortableColor.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Surface.hpp"
@@ -22,7 +22,13 @@
 #include <SDL_endian.h>
 #endif
 
+#ifdef USE_GDI
+#include <windef.h>
+#include <wingdi.h>
+#endif
+
 #include <stdint.h>
+#include "Compiler.h"
 
 class Canvas;
 
@@ -40,58 +46,47 @@ struct BGRColor
 {
   BGRColor() = default;
 
-#ifdef HAVE_GLES
-  /**
-   * RGB color value encoded with 5/6/5 bits per channel.
-   */
-  uint16_t value;
+#ifdef GREYSCALE
+  Luminosity8 value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(((R & 0xf8) << 8) |
-           ((G & 0xfc) << 3) |
-           (B >> 3)) {}
+    :value(R, G, B) {}
+
+#elif defined(HAVE_GLES)
+  RGB565Color value;
+
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+    :value(R, G, B) {}
 
 #elif defined(ENABLE_SDL)
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   uint8_t dummy;
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
+  RGB8Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :dummy(), r(R), g(G), b(B) {}
+    :dummy(), value(R, G, B) {}
 #else /* little endian */
-  uint8_t b;
-  uint8_t g;
-  uint8_t r;
+  BGR8Color value;
   uint8_t dummy;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :b(B), g(G), r(R), dummy() {}
+    :value(R, G, B), dummy() {}
 #endif /* little endian */
 
 #else /* !SDL */
 
 #ifdef _WIN32_WCE
-  /**
-   * RGB color value encoded with 5/5/5 bits per channel.  The most
-   * significant bit is unused.
-   */
-  uint16_t value;
+  RGB555Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :value(((R & 0xf8) << 7) |
-           ((G & 0xf8) << 2) |
-           (B >> 3)) {}
+    :value(R, G, B) {}
 
 #else /* !_WIN32_WCE */
-  uint8_t b;
-  uint8_t g;
-  uint8_t r;
+  BGR8Color value;
 
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :b(B), g(G), r(R) {}
+    :value(R, G, B) {}
 #endif /* !_WIN32_WCE */
 
 #endif /* !SDL */
@@ -106,9 +101,9 @@ class RawBitmap
 #endif
 {
 protected:
-  const UPixelScalar width;
-  const UPixelScalar height;
-  const UPixelScalar corrected_width;
+  const unsigned width;
+  const unsigned height;
+  const unsigned corrected_width;
   BGRColor *buffer;
 
 #ifdef ENABLE_OPENGL
@@ -144,7 +139,7 @@ public:
    * @param nHeight Height of the buffer
    * @param clr Fill color of the buffer
    */
-  RawBitmap(UPixelScalar width, UPixelScalar height);
+  RawBitmap(unsigned width, unsigned height);
 
 #ifdef ENABLE_OPENGL
   virtual
@@ -194,7 +189,7 @@ public:
    * points array directly (using GetPointsArray function).
    * @return Real width of the screen buffer
    */
-  UPixelScalar GetCorrectedWidth() const {
+  unsigned GetCorrectedWidth() const {
     return corrected_width;
   }
 
@@ -202,7 +197,7 @@ public:
    * Returns the screen buffer width
    * @return The screen buffer width
    */
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     return width;
   }
 
@@ -210,7 +205,7 @@ public:
    * Returns screen buffer height
    * @return The screen buffer height
    */
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return height;
   }
 
@@ -223,8 +218,8 @@ public:
   GLTexture &BindAndGetTexture() const;
 #endif
 
-  void StretchTo(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
-                 UPixelScalar dest_width, UPixelScalar dest_height) const;
+  void StretchTo(unsigned width, unsigned height, Canvas &dest_canvas,
+                 unsigned dest_width, unsigned dest_height) const;
 
 #ifdef ENABLE_OPENGL
 private:

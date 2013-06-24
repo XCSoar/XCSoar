@@ -74,7 +74,7 @@ IgcReplay::Update(NMEAInfo &basic)
     if (!ReadPoint(fix, basic))
       return false;
 
-    if (fix.time.Plausible())
+    if (fix.time.IsPlausible())
       break;
   }
 

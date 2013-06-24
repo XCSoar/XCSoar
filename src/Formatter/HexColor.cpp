@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "HexColor.hpp"
-#include "Screen/Color.hpp"
+#include "Screen/PortableColor.hpp"
 #include "Util/NumberParser.hpp"
 
 #include <stdio.h>
@@ -30,7 +30,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-FormatHexColor(char *buffer, size_t size, const Color color)
+FormatHexColor(char *buffer, size_t size, const RGB8Color color)
 {
   assert(size >= 7);
 
@@ -39,7 +39,7 @@ FormatHexColor(char *buffer, size_t size, const Color color)
 }
 
 bool
-ParseHexColor(const char *buffer, Color &color)
+ParseHexColor(const char *buffer, RGB8Color &color)
 {
   if (*buffer != '#')
     return false;
@@ -55,14 +55,14 @@ ParseHexColor(const char *buffer, Color &color)
   uint8_t g = value >> 8;
   uint8_t b = value;
 
-  color = Color(r, g, b);
+  color = RGB8Color(r, g, b);
   return true;
 }
 
 #ifdef _UNICODE
 
 bool
-ParseHexColor(const TCHAR *buffer, Color &color)
+ParseHexColor(const TCHAR *buffer, RGB8Color &color)
 {
   if (*buffer != _T('#'))
     return false;
@@ -78,7 +78,7 @@ ParseHexColor(const TCHAR *buffer, Color &color)
   uint8_t g = value >> 8;
   uint8_t b = value;
 
-  color = Color(r, g, b);
+  color = RGB8Color(r, g, b);
   return true;
 }
 

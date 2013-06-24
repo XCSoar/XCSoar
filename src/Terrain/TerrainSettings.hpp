@@ -33,6 +33,11 @@ enum class SlopeShading: uint8_t {
   WIND,
 };
 
+enum class Contours: uint8_t {
+  OFF,
+  ON
+};
+
 struct TerrainRendererSettings {
   /** Number of available color ramps */
   static constexpr unsigned NUM_RAMPS = 15;
@@ -54,6 +59,11 @@ struct TerrainRendererSettings {
   unsigned short ramp;
 
   /**
+   * Draw contours on terrain?
+   */
+  Contours contours;
+
+  /**
    * Set all attributes to the default values.
    */
   void SetDefaults();
@@ -63,7 +73,8 @@ struct TerrainRendererSettings {
       slope_shading == other.slope_shading &&
       contrast == other.contrast &&
       brightness == other.brightness &&
-      ramp == other.ramp;
+      ramp == other.ramp &&
+      contours == other.contours;
   }
 
   bool operator!=(const TerrainRendererSettings &other) const {

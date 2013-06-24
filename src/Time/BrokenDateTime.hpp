@@ -69,11 +69,35 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   }
 
   /**
+   * Does the "date" part of this object contain plausible values?
+   */
+  constexpr
+  bool IsDatePlausible() const {
+    return BrokenDate::IsPlausible();
+  }
+
+  /**
+   * Does the "time" part of this object contain plausible values?
+   */
+  constexpr
+  bool IsTimePlausible() const {
+    return BrokenTime::IsPlausible();
+  }
+
+  /**
    * Does this object contain plausible values?
    */
   constexpr
-  bool Plausible() const {
-    return BrokenDate::Plausible() && BrokenTime::Plausible();
+  bool IsPlausible() const {
+    return IsDatePlausible() && IsTimePlausible();
+  }
+
+  /**
+   * Returns a new #BrokenDateTime with the same date at midnight.
+   */
+  constexpr
+  BrokenDateTime AtMidnight() const {
+    return BrokenDateTime(*this, BrokenTime::Midnight());
   }
 
 #ifdef HAVE_POSIX

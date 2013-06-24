@@ -128,3 +128,10 @@ TaskClosePanel::Hide()
 
   XMLWidget::Hide();
 }
+
+bool
+TaskClosePanel::SetFocus()
+{
+  cmdClose->SetFocus();
+  return true;
+}

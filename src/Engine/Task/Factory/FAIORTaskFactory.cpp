@@ -21,7 +21,7 @@
  */
 
 #include "FAIORTaskFactory.hpp"
-#include "TaskFactoryConstraints.hpp"
+#include "Constraints.hpp"
 
 static constexpr TaskFactoryConstraints fai_or_constraints = {
   true,

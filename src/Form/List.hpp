@@ -96,10 +96,6 @@ public:
  * WindowControl class.
  */
 class ListControl : public PaintWindow {
-public:
-  struct Handler : public ListItemRenderer, ListCursorHandler {
-  };
-
 protected:
   const DialogLook &look;
 
@@ -190,11 +186,6 @@ public:
     cursor_handler = _cursor_handler;
   }
 
-  void SetHandler(Handler *_handler) {
-    SetItemRenderer(_handler);
-    SetCursorHandler(_handler);
-  }
-
   /**
    * Returns the height of list items
    * @return height of list items in pixel
@@ -265,17 +256,7 @@ public:
     return origin * item_height + pixel_pan;
   }
 
-  void SetPixelOrigin(int pixel_origin) {
-    int max = length * item_height - GetHeight();
-    if (pixel_origin > max)
-      pixel_origin = max;
-
-    if (pixel_origin < 0)
-      pixel_origin = 0;
-
-    SetOrigin(pixel_origin / item_height);
-    SetPixelPan(pixel_origin % item_height);
-  }
+  void SetPixelOrigin(int pixel_origin);
 
   /**
    * Scrolls a number of items up (negative delta) or down (positive

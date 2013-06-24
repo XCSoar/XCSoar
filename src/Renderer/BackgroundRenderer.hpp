@@ -26,18 +26,12 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 
-#include <tchar.h>
-
-struct RasterPoint;
 class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
 class TerrainRenderer;
-struct SpeedVector;
 class RasterTerrain;
 class RasterWeather;
-class LabelBlock;
-struct NMEAInfo;
 struct DerivedInfo;
 
 /**
@@ -51,7 +45,10 @@ class BackgroundRenderer {
 
 public:
   BackgroundRenderer();
-  ~BackgroundRenderer();
+
+  ~BackgroundRenderer() {
+    Reset();
+  }
 
   void Draw(Canvas& canvas,
             const WindowProjection& proj,

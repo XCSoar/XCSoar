@@ -21,7 +21,7 @@
 */
 
 #include "Serialiser.hpp"
-#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/Ordered/OrderedTask.hpp"
 #include "Task/Ordered/Points/StartPoint.hpp"
 #include "Task/Ordered/Points/FinishPoint.hpp"
@@ -32,8 +32,8 @@
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "XML/DataNode.hpp"
-
 #include "Compiler.h"
+
 #include <assert.h>
 #include <memory>
 
@@ -214,9 +214,11 @@ Serialiser::Serialise(const Waypoint &data)
 }
 
 void 
-Serialiser::Serialise(const OrderedTaskBehaviour &data)
+Serialiser::Serialise(const OrderedTaskSettings &data)
 {
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
+  node.SetAttribute(_T("start_requires_arm"),
+                    data.start_constraints.require_arm);
   node.SetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
   node.SetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   node.SetAttribute(_T("start_max_height_ref"),
@@ -236,7 +238,7 @@ void
 Serialiser::Serialise(const OrderedTask &task)
 {
   node.SetAttribute(_T("type"), GetTaskFactoryType(task.GetFactoryType()));
-  Serialise(task.GetOrderedTaskBehaviour());
+  Serialise(task.GetOrderedTaskSettings());
   mode_optional_start = false;
 
   for (const auto &tp : task.GetPoints())

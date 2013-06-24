@@ -32,20 +32,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Util/StringUtil.hpp"
 #include "Units/System.hpp"
-#include "OS/Clock.hpp"
 #include "Driver/FLARM/StaticParser.hpp"
-
-#include <math.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <algorithm>
-
-using std::min;
-using std::max;
-
-int NMEAParser::start_day = -1;
 
 NMEAParser::NMEAParser(bool _ignore_checksum)
   :ignore_checksum(_ignore_checksum)
@@ -257,59 +244,6 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
   return true;
 }
 
-fixed
-NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
-                       bool date_available)
-{
-  assert(!date_available || BrokenDate(date_time).Plausible());
-
-  fixed hours, mins, secs;
-
-  // Calculate Hour
-  hours = fix_time / 10000;
-  date_time.hour = (int)hours;
-
-  // Calculate Minute
-  mins = fix_time / 100;
-  mins = mins - fixed(date_time.hour) * 100;
-  date_time.minute = (int)mins;
-
-  // Calculate Second
-  secs = fix_time - fixed(date_time.hour * 10000 + date_time.minute * 100);
-  date_time.second = (int)secs;
-
-  // FixTime is now seconds-based instead of mixed format
-  fix_time = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
-
-  // If (StartDay not yet set and available) set StartDate;
-  if (start_day == -1 && date_available)
-    start_day = date_time.day;
-
-  if (start_day != -1) {
-    if (date_time.day < start_day)
-      // detect change of month (e.g. day=1, startday=31)
-      start_day = date_time.day - 1;
-
-    int day_difference = date_time.day - start_day;
-    if (day_difference > 0)
-      // Add seconds to fix time so time doesn't wrap around when
-      // going past midnight in UTC
-      fix_time += fixed(day_difference * 86400);
-  }
-
-  return fix_time;
-}
-
-fixed
-NMEAParser::TimeAdvanceTolerance(fixed time) const
-{
-  /* tolerance is two seconds: fast-forward if the new time stamp is
-     less than two seconds behind the previous one */
-  return time < last_time && time > last_time - fixed(2)
-    ? last_time
-    : time;
-}
-
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
@@ -321,11 +255,10 @@ NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
   if (this_time < last_time) {
     last_time = this_time;
-    start_day = -1; // reset search for the first day
     return false;
   } else {
     info.time = this_time;
-    info.time_available.Update(fixed(MonotonicClockMS()) / 1000);
+    info.time_available.Update(info.clock);
     last_time = this_time;
     return true;
   }
@@ -386,9 +319,9 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc,
-                               info.date_available);
-  this_time = TimeAdvanceTolerance(this_time);
+  fixed this_time;
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
@@ -427,10 +360,36 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
   buffer[2] = '\0';
   new_value.day = atoi(buffer);
 
-  if (!new_value.Plausible())
+  if (!new_value.IsPlausible())
     return false;
 
   date = new_value;
+  return true;
+}
+
+bool
+NMEAParser::ReadTime(NMEAInputLine &line, BrokenTime &broken_time,
+                     fixed &time_of_day_s)
+{
+  fixed value;
+  if (!line.ReadChecked(value))
+    return false;
+
+  // Calculate Hour
+  fixed hours = value / 10000;
+  broken_time.hour = (int)hours;
+
+  // Calculate Minute
+  fixed mins = value / 100;
+  mins = mins - fixed(broken_time.hour) * 100;
+  broken_time.minute = (int)mins;
+
+  // Calculate Second
+  fixed secs = value - fixed(broken_time.hour * 10000 +
+                             broken_time.minute * 100);
+  broken_time.second = (int)secs;
+
+  time_of_day_s = secs + fixed(broken_time.minute * 60 + broken_time.hour * 3600);
   return true;
 }
 
@@ -457,8 +416,8 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    */
 
   fixed this_time;
-  if (!line.ReadChecked(this_time))
-    return false;
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
@@ -472,11 +431,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   bool track_available = ReadBearing(line, track);
 
   // JMW get date info first so TimeModify is accurate
-  if (ReadDate(line, info.date_time_utc))
-    info.date_available = true;
-
-  this_time = TimeModify(this_time, info.date_time_utc, info.date_available);
-  this_time = TimeAdvanceTolerance(this_time);
+  ReadDate(line, info.date_time_utc);
 
   if (!TimeHasAdvanced(this_time, info))
     return true;
@@ -548,12 +503,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   GPSState &gps = info.gps;
 
   fixed this_time;
-  if (!line.ReadChecked(this_time))
-    return false;
-
-  this_time = TimeModify(this_time, info.date_time_utc,
-                         info.date_available);
-  this_time = TimeAdvanceTolerance(this_time);
+  if (!ReadTime(line, info.date_time_utc, this_time))
+    return true;
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);

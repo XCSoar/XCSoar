@@ -4,7 +4,13 @@ ifeq ($(DEBUG),y)
 OPTIMIZE := -O0
 OPTIMIZE += -funit-at-a-time
 else
-OPTIMIZE := -Os -DNDEBUG -Wuninitialized
+  ifeq ($(CLANG)$(LLVM)$(LTO),yny)
+    OPTIMIZE := -O4
+  else
+    OPTIMIZE := -Os
+  endif
+
+  OPTIMIZE += -DNDEBUG
 endif
 
 ifeq ($(CLANG),y)
@@ -35,10 +41,6 @@ endif
 
 ifeq ($(LTO),y)
 OPTIMIZE += -flto -fwhole-program
-
-# workaround for gcc 4.5.0 bug, see
-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43898
-OPTIMIZE := $(filter-out -ggdb -gstabs,$(OPTIMIZE))
 endif
 
 ifeq ($(LLVM),y)

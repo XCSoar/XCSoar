@@ -24,8 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_COLOR_LIST_DIALOG_HPP
 #define XCSOAR_COLOR_LIST_DIALOG_HPP
 
-struct Color;
+class RGB8Color;
 
-bool ShowColorListDialog(Color &color);
+bool
+ShowColorListDialog(RGB8Color &color);
 
 #endif

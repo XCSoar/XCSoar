@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Screen/Icon.hpp"
-#include "Look/Fonts.hpp"
 #include "Geo/Math.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
@@ -127,7 +126,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 
   GeoPoint start = Basic().location;
   
-  canvas.Select(Fonts::map_bold);
+  canvas.Select(*look.overlay_font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
   

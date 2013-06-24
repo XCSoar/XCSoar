@@ -109,8 +109,8 @@ WndButton::OnKillFocus()
 void
 WndButton::OnPaint(Canvas &canvas)
 {
-  const bool focused = HasFocus();
   const bool pressed = IsDown();
+  const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
   PixelRect rc = canvas.GetRect();
   renderer.DrawButton(canvas, rc, focused, pressed);

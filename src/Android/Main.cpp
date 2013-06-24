@@ -33,12 +33,13 @@ Copyright_License {
 #include "Android/NativeInputListener.hpp"
 #include "Android/TextUtil.hpp"
 #include "Android/LogCat.hpp"
+#include "Android/Product.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/GlobalFonts.hpp"
 #include "Event/Android/Queue.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Dialogs/Message.hpp"
@@ -72,6 +73,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <stdlib.h>
 
 Context *context;
 
@@ -136,6 +138,7 @@ Java_org_xcsoarte_NativeView_initializeNative(JNIEnv *env, jobject obj,
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                sdk_version, product);
+  is_nook = strcmp(native_view->GetProduct(), "NOOK") == 0;
 
   event_queue = new EventQueue();
 
@@ -144,6 +147,10 @@ Java_org_xcsoarte_NativeView_initializeNative(JNIEnv *env, jobject obj,
   vibrator = Vibrator::Create(env, *context);
 
   ioio_helper = new IOIOHelper(env);
+
+  if (IsNookSimpleTouch())
+    /* enable USB host mode if this is a Nook */
+    system("su -c 'echo host > /sys/devices/platform/musb_hdrc/mode'");
 
   ScreenInitialized();
   AllowLanguage();
@@ -179,6 +186,7 @@ Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   InitThreadDebug();
 
   delete CommonInterface::main_window;
+  CommonInterface::main_window = nullptr;
 
   DisallowLanguage();
   Fonts::Deinitialize();
@@ -193,6 +201,7 @@ Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete event_queue;
   event_queue = NULL;
   delete native_view;
+  native_view = nullptr;
 
   TextUtil::Deinitialise(env);
   OpenGL::Deinitialise();
@@ -200,6 +209,7 @@ Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   DeinitialiseDataPath();
 
   delete context;
+  context = nullptr;
 
   BMP085Device::Deinitialise(env);
   NativeBMP085Listener::Deinitialise(env);

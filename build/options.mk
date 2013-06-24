@@ -12,7 +12,8 @@ TARGET_CPPFLAGS += -DRADIANS
 endif
 
 # shall we paint with some eye candy?
-ifneq ($(EYE_CANDY),n)
+EYE_CANDY ?= $(call bool_not,$(TARGET_IS_KOBO))
+ifeq ($(EYE_CANDY),y)
 TARGET_CPPFLAGS += -DEYE_CANDY
 WINDRESFLAGS += -DEYE_CANDY
 endif
@@ -23,8 +24,18 @@ ifeq ($(STOP_WATCH),y)
 TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
 
-# this option must not be used if TESTING=y
-ifeq ($(NO_HORIZON),y)
-TARGET_CPPFLAGS += -DNO_HORIZON
-WINDRESFLAGS += -DNO_HORIZON
+ifeq ($(TARGET_IS_KOBO),y)
+DITHER ?= y
+else
+DITHER ?= n
+endif
+
+ifeq ($(DITHER),y)
+TARGET_CPPFLAGS += -DDITHER
+endif
+
+GREYSCALE ?= $(DITHER)
+
+ifeq ($(GREYSCALE),y)
+TARGET_CPPFLAGS += -DGREYSCALE
 endif

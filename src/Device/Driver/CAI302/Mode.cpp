@@ -26,7 +26,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Operation/NoCancelOperationEnvironment.hpp"
 #include "Device/Port/Port.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Config.hpp"
 
 bool
 CAI302Device::CommandMode(OperationEnvironment &env)

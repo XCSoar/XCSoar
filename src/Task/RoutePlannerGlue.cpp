@@ -21,17 +21,8 @@
  */
 
 #include "RoutePlannerGlue.hpp"
-#include "Thread/Guard.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Geo/SpeedVector.hpp"
-#include "NMEA/Derived.hpp"
-#include <assert.h>
-
-RoutePlannerGlue::RoutePlannerGlue(const Airspaces &master):
-  terrain(NULL),
-  planner(master)
-{
-}
+#include "Airspace/ActivePredicate.hpp"
 
 void
 RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
@@ -45,6 +36,18 @@ RoutePlannerGlue::SetTerrain(const RasterTerrain *_terrain)
     planner.Reset();
     planner.SetTerrain(NULL);
   }
+}
+
+void
+RoutePlannerGlue::Synchronise(const Airspaces &master,
+                              const ProtectedAirspaceWarningManager *warnings,
+                              const AGeoPoint &origin,
+                              const AGeoPoint &destination)
+{
+  /* ignore acked airspaces (if we have an AirspaceWarningManager) */
+  WrapAirspacePredicate<ActiveAirspacePredicate> predicate(warnings);
+
+  planner.Synchronise(master, predicate, origin, destination);
 }
 
 bool

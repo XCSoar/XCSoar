@@ -2,12 +2,8 @@
 #define TASK_VARIO_HPP
 
 #include "Math/fixed.hpp"
-#include "Math/Filter.hpp"
-#include "Math/DiffFilter.hpp"
 
 #include <type_traits>
-
-struct GlideResult;
 
 /**
  * Helper class to produce pseudo variometer based on rate of change
@@ -35,29 +31,5 @@ public:
 };
 
 static_assert(std::is_trivial<TaskVario>::value, "type is not trivial");
-
-class TaskVarioComputer
-{
-  DiffFilter df;
-  Filter v_lpf;
-
-public:
-  TaskVarioComputer();
-
-/** 
- * Update vario, taking altitude difference from a specified glide solution
- * 
- * @param solution Solution for task element
- * @param dt Time step
- */
-  void update(TaskVario &data, const GlideResult &solution, const fixed dt);
-
-/** 
- * Reset vario value (as if solution is held constant)
- * 
- * @param solution Element
- */
-  void reset(TaskVario &data, const GlideResult &solution);
-};
 
 #endif

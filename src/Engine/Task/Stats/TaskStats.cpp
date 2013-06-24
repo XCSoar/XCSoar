@@ -40,11 +40,17 @@ TaskStats::reset()
   distance_max = fixed(0);
   distance_min = fixed(0);
   distance_scored = fixed(0);
+  active_index = 0;
   task_valid = false;
+  has_targets = false;
+  is_mat = false;
+  has_optional_starts = false;
   task_finished = false;
   inside_oz = false;
+  need_to_arm = false;
   flight_mode_final_glide = false;
   start.Reset();
+  last_hour.Reset();
 }
 
 bool
@@ -69,11 +75,4 @@ TaskStats::calc_flight_mode(const TaskBehaviour &settings)
 
   flight_mode_final_glide = this_is_final;
   return true;
-}
-
-void
-TaskStatsComputer::reset(TaskStats &data)
-{
-  total.Reset(data.total);
-  current_leg.Reset(data.current_leg);
 }

@@ -144,7 +144,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
   unsigned last_item = std::min(length, end);
 
-  const bool focused = HasFocus();
+  const bool focused = !HasCursorKeys() || HasFocus();
 
   for (unsigned i = start; i < last_item; i++) {
     const bool selected = i == cursor;
@@ -337,6 +337,22 @@ ListControl::SetOrigin(int i)
 #endif
 
   Invalidate();
+}
+
+void
+ListControl::SetPixelOrigin(int pixel_origin)
+{
+  int max = length * item_height - GetHeight();
+  if (pixel_origin > max)
+    pixel_origin = max;
+
+  if (pixel_origin < 0)
+    pixel_origin = 0;
+
+  SetOrigin(pixel_origin / item_height);
+
+  /* no pixel panning on e-paper screens to avoid tearing */
+  SetPixelPan(HasEPaper() ? 0 : pixel_origin % item_height);
 }
 
 void
@@ -546,7 +562,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  const bool had_focus = HasFocus();
+  const bool had_focus = !HasCursorKeys() || HasFocus();
   if (!had_focus)
     SetFocus();
 

@@ -31,7 +31,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct GeoPoint;
-struct Color;
+class RGB8Color;
 
 namespace Profile
 {
@@ -97,13 +97,13 @@ namespace Profile
   /**
    * Load a Color from the profile.
    */
-  bool GetColor(const char *key, Color &value);
+  bool GetColor(const char *key, RGB8Color &value);
 
   /**
    * Save a Color to the profile.  It is stored as a RGB hex string
    * e.g. #123456
    */
-  void SetColor(const char *key, const Color value);
+  void SetColor(const char *key, const RGB8Color value);
 
   /**
    * Adjusts the application settings according to the profile settings

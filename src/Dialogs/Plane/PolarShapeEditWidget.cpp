@@ -117,7 +117,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
   PanelWidget::Prepare(parent, _rc);
   const DialogLook &look = UIGlobals::GetDialogLook();
-  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
+  ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
   const unsigned width = _rc.right - _rc.left;
   const unsigned height = _rc.bottom - _rc.top;

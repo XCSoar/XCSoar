@@ -29,8 +29,7 @@ Copyright_License {
 void
 TextWidget::SetText(const TCHAR *text)
 {
-  WndFrame &w = *(WndFrame *)GetWindow();
-
+  WndFrame &w = (WndFrame &)GetWindow();
   w.SetText(text);
 }
 
@@ -46,7 +45,7 @@ TextWidget::GetMaximumSize() const
   PixelSize size = GetMinimumSize();
 
   if (IsDefined()) {
-    const WndFrame &w = *(const WndFrame *)GetWindow();
+    const WndFrame &w = (const WndFrame &)GetWindow();
     PixelScalar text_height = w.GetTextHeight() + Layout::Scale(4);
     if (text_height > size.cy)
       size.cy = text_height;

@@ -220,6 +220,17 @@ public:
   gcc_pure
   bool GetAckDay(const AbstractAirspace& airspace) const;
 
+  /**
+   * Returns true if this airspace would be warned about,
+   * i.e. trespassing it would not be possible.
+   *
+   * This returns false for airspaces that have been "acknowledged for
+   * day" (see GetAckDay()) or airspaces that are inactive or
+   * airspaces that are not configured for airspace warnings.
+   */
+  gcc_pure
+  bool IsActive(const AbstractAirspace &airspace) const;
+
 private:
   bool UpdateTask(const AircraftState &state, const GlidePolar &glide_polar,
                   const TaskStats &task_stats);

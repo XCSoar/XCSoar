@@ -37,7 +37,7 @@
 fixed
 aat_min_time(int test_num)
 {
-  OrderedTaskBehaviour beh;
+  OrderedTaskSettings beh;
   switch (test_num) {
   case 2:
     return fixed(3600 * 3.8);
@@ -143,7 +143,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
         first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
-      result.time_remaining = (double)task_manager.GetStats().total.time_remaining;
+      result.time_remaining = (double)task_manager.GetStats().total.time_remaining_now;
       first = false;
 
       result.time_planned = (double)task_manager.GetStats().total.time_planned;
@@ -210,7 +210,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
       task_manager.UpdateAutoMC(state, fixed(0));
     }
 
-  } while (autopilot.UpdateAutopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
+  } while (autopilot.UpdateAutopilot(ta, aircraft.GetState()));
 
   if (verbose) {
     PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
@@ -276,9 +276,9 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
   task_manager.SetTaskEvents(default_events);
   task_manager.SetGlidePolar(glide_polar);
 
-  OrderedTaskBehaviour otb = task_manager.GetOrderedTask().GetOrderedTaskBehaviour();
+  OrderedTaskSettings otb = task_manager.GetOrderedTask().GetOrderedTaskSettings();
   otb.aat_min_time = aat_min_time(test_num);
-  task_manager.SetOrderedTaskBehaviour(otb);
+  task_manager.SetOrderedTaskSettings(otb);
 
   bool goto_target = false;
 
