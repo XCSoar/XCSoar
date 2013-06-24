@@ -66,7 +66,7 @@ LinuxMouse::Read()
 {
   bool old_down = down;
   int8_t mb[3];
-  while (read(fd.Get(), mb, sizeof(mb)) == sizeof(mb)) {
+  while (fd.Read(mb, sizeof(mb)) == sizeof(mb)) {
     down = (mb[0] & 0x7) != 0;
     if (down != old_down) {
       if (down)
