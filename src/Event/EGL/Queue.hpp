@@ -28,11 +28,9 @@ Copyright_License {
 #include "../Shared/Event.hpp"
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
-#include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
-#include "OS/Poll.hpp"
 #include "OS/EventPipe.hpp"
-#include "OS/FileDescriptor.hpp"
+#include "IO/Async/IOLoop.hpp"
 
 #include <queue>
 #include <set>
@@ -40,8 +38,8 @@ Copyright_License {
 class Window;
 class Timer;
 
-class EventQueue : private NonCopyable {
-  friend class TTYKeyboard;
+class EventQueue final : private FileEventHandler {
+  IOLoop io_loop;
 
   TTYKeyboard keyboard;
   LinuxMouse mouse;
@@ -52,7 +50,6 @@ class EventQueue : private NonCopyable {
 
   TimerQueue timers;
 
-  ::Poll poll;
   EventPipe event_pipe;
 
   bool running;
@@ -82,12 +79,11 @@ private:
   int GetTimeout() const;
 
   void Poll();
-  void PushKeyPress(unsigned key_code);
-  void Fill();
   bool Generate(Event &event);
 
 public:
   void Push(const Event &event);
+  void PushKeyPress(unsigned key_code);
 
   bool Pop(Event &event);
 
@@ -101,6 +97,13 @@ public:
 
   void AddTimer(Timer &timer, unsigned ms);
   void CancelTimer(Timer &timer);
+
+private:
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override {
+    event_pipe.Read();
+    return true;
+  }
 };
 
 #endif

@@ -24,14 +24,20 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_LINUX_TTY_KEYBOARD_HPP
 #define XCSOAR_EVENT_LINUX_TTY_KEYBOARD_HPP
 
+#include "IO/Async/FileEventHandler.hpp"
+
 #include <stdint.h>
 
 class EventQueue;
+class IOLoop;
 
 /**
  * A keyboard driver reading key presses from the TTY.
  */
-class TTYKeyboard {
+class TTYKeyboard final : private FileEventHandler {
+  EventQueue &queue;
+  IOLoop &io_loop;
+
   enum class InputState : uint8_t {
     NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
   } input_state;
@@ -39,13 +45,14 @@ class TTYKeyboard {
   unsigned input_number;
 
 public:
-  TTYKeyboard();
+  TTYKeyboard(EventQueue &queue, IOLoop &io_loop);
   ~TTYKeyboard();
 
-  bool Read(EventQueue &queue);
-
 private:
-  void HandleInputByte(EventQueue &queue, char ch);
+  void HandleInputByte(char ch);
+
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

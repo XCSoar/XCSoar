@@ -25,6 +25,7 @@ Copyright_License {
 #include "Event/EGL/Queue.hpp"
 #include "Screen/Key.h"
 #include "Util/CharUtil.hpp"
+#include "IO/Async/IOLoop.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -33,7 +34,8 @@ Copyright_License {
 
 static struct termios restore_attr;
 
-TTYKeyboard::TTYKeyboard():input_state(InputState::NONE)
+TTYKeyboard::TTYKeyboard(EventQueue &_queue, IOLoop &_io_loop)
+  :queue(_queue), io_loop(_io_loop), input_state(InputState::NONE)
 {
   /* make stdin non-blocking */
   fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
@@ -48,15 +50,19 @@ TTYKeyboard::TTYKeyboard():input_state(InputState::NONE)
     attr.c_cflag |= CS8;
     tcsetattr(STDIN_FILENO, TCSANOW, &attr);
   }
+
+  io_loop.Add(STDIN_FILENO, io_loop.READ, *this);
 }
 
 TTYKeyboard::~TTYKeyboard()
 {
+  io_loop.Remove(STDIN_FILENO);
+
   tcsetattr(STDIN_FILENO, TCSANOW, &restore_attr);
 }
 
 inline void
-TTYKeyboard::HandleInputByte(EventQueue &queue, char ch)
+TTYKeyboard::HandleInputByte(char ch)
 {
   switch (ch) {
   case 0x03:
@@ -147,14 +153,15 @@ TTYKeyboard::HandleInputByte(EventQueue &queue, char ch)
 }
 
 bool
-TTYKeyboard::Read(EventQueue &queue)
+TTYKeyboard::OnFileEvent(int fd, unsigned mask)
 {
   char buffer[256];
-  const ssize_t nbytes = read(STDIN_FILENO, buffer, sizeof(buffer));
+  const ssize_t nbytes = read(fd, buffer, sizeof(buffer));
   if (nbytes > 0) {
     for (ssize_t i = 0; i < nbytes; ++i)
-      HandleInputByte(queue, buffer[i]);
+      HandleInputByte(buffer[i]);
   } else if (nbytes == 0 || errno != EAGAIN) {
+    queue.Quit();
     return false;
   }
 

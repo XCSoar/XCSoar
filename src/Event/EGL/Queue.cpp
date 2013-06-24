@@ -25,15 +25,12 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :running(true)
+  :keyboard(*this, io_loop), mouse(io_loop), running(true)
 {
   event_pipe.Create();
-  poll.SetMask(event_pipe.GetReadFD(), Poll::READ);
+  io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, *this);
 
-  poll.SetMask(STDIN_FILENO, Poll::READ);
-
-  if (mouse.Open())
-    poll.SetMask(mouse.GetFD(), Poll::READ);
+  mouse.Open();
 }
 
 EventQueue::~EventQueue()
@@ -63,25 +60,17 @@ EventQueue::GetTimeout() const
 void
 EventQueue::Poll()
 {
-  poll.Wait(GetTimeout());
-  event_pipe.Read();
+  io_loop.Lock();
+  io_loop.Wait(GetTimeout());
+  io_loop.Dispatch();
+  io_loop.Unlock();
 }
 
 void
 EventQueue::PushKeyPress(unsigned key_code)
 {
-  events.push(Event(Event::KEY_DOWN, key_code));
-  events.push(Event(Event::KEY_UP, key_code));
-}
-
-void
-EventQueue::Fill()
-{
-  if (!keyboard.Read(*this))
-    running = false;
-
-  if (mouse.IsOpen())
-    mouse.Read();
+  Push(Event(Event::KEY_DOWN, key_code));
+  Push(Event(Event::KEY_UP, key_code));
 }
 
 bool
@@ -111,8 +100,6 @@ EventQueue::Pop(Event &event)
   if (events.empty()) {
     if (Generate(event))
       return true;
-
-    Fill();
   }
 
   event = events.front();
@@ -135,7 +122,6 @@ EventQueue::Wait(Event &event)
     if (Generate(event))
       return true;
 
-    Fill();
     while (events.empty()) {
       mutex.Unlock();
       Poll();
@@ -143,8 +129,6 @@ EventQueue::Wait(Event &event)
 
       if (Generate(event))
         return true;
-
-      Fill();
     }
   }
 

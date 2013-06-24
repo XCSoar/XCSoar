@@ -25,13 +25,17 @@ Copyright_License {
 #define XCSOAR_EVENT_LINUX_MOUSE_HPP
 
 #include "OS/FileDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
 
+class IOLoop;
 struct Event;
 
 /**
  * A driver for the Linux mouse (/dev/input/mouse*, /dev/input/mice).
  */
-class LinuxMouse {
+class LinuxMouse final : private FileEventHandler {
+  IOLoop &io_loop;
+
   unsigned screen_width, screen_height;
   unsigned x, y;
   bool down;
@@ -41,8 +45,9 @@ class LinuxMouse {
   FileDescriptor fd;
 
 public:
-  LinuxMouse()
-    :screen_width(0), screen_height(0),
+  explicit LinuxMouse(IOLoop &_io_loop)
+    :io_loop(_io_loop),
+     screen_width(0), screen_height(0),
      x(0), y(0) {}
 
   ~LinuxMouse() {
@@ -66,13 +71,13 @@ public:
     return fd.IsDefined();
   }
 
-  gcc_pure
-  int GetFD() const {
-    return fd.Get();
-  }
-
-  void Read();
   Event Generate();
+
+private:
+  void Read();
+
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

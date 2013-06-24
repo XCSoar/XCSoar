@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Mouse.hpp"
-#include "IO/Async/IOThread.hpp"
 #include "Event/Shared/Event.hpp"
+#include "IO/Async/IOLoop.hpp"
 
 void
 LinuxMouse::SetScreenSize(unsigned width, unsigned height)
@@ -46,6 +46,7 @@ LinuxMouse::Open(const char *path)
     return false;
 
   fd.SetNonBlocking();
+  io_loop.Add(fd.Get(), io_loop.READ, *this);
 
   down = false;
   moved = pressed = released = false;
@@ -58,6 +59,7 @@ LinuxMouse::Close()
   if (!IsOpen())
     return;
 
+  io_loop.Remove(fd.Get());
   fd.Close();
 }
 
@@ -126,4 +128,12 @@ LinuxMouse::Generate()
   }
 
   return Event(Event::Type::NOP);
+}
+
+bool
+LinuxMouse::OnFileEvent(int fd, unsigned mask)
+{
+  Read();
+
+  return true;
 }
