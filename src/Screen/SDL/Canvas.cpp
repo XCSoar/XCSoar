@@ -50,7 +50,7 @@ Copyright_License {
 
 #ifdef GREYSCALE
 
-using SDLPixelTraits = GreyscalePixelTraits;
+typedef GreyscalePixelTraits SDLPixelTraits;
 
 static inline unsigned
 ClipMax(unsigned limit, int offset, unsigned size)
