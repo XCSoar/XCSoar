@@ -311,7 +311,21 @@ RenderText(const Font *font, const TCHAR *text)
 
   assert(font->IsDefined());
 
-#ifdef UNICODE
+#ifdef USE_FREETYPE
+  PixelSize size = font->TextSize(text);
+  if (size.cx == 0 && size.cy == 0)
+    return nullptr;
+
+  SDL_Surface *s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, size.cx, size.cy,
+                                          8, 0xff, 0xff, 0xff, 0x00);
+  if (s == nullptr)
+    return nullptr;
+
+  size.cx = s->pitch;
+
+  font->Render(text, size, s->pixels);
+  return s;
+#elif defined(UNICODE)
   return ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
                                    COLOR_BLACK);
 #else
