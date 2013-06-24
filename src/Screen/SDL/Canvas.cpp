@@ -349,12 +349,12 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   SDLRasterCanvas canvas(surface, offset, size);
 
   if (background_mode == OPAQUE) {
-    OpaqueTextPixelOperations<SDLPixelTraits> opaque(background_color.GetLuminosity(),
-                                                     text_color.GetLuminosity());
+    OpaqueAlphaPixelOperations<SDLPixelTraits> opaque(background_color.GetLuminosity(),
+                                                      text_color.GetLuminosity());
     canvas.CopyRectangle(x, y, s->w, s->h,
                          (const uint8_t *)s->pixels, s->pitch, opaque);
   } else {
-    TransparentTextPixelOperations<SDLPixelTraits> transparent(text_color.GetLuminosity());
+    ColoredAlphaPixelOperations<SDLPixelTraits> transparent(text_color.GetLuminosity());
     canvas.CopyRectangle(x, y, s->w, s->h,
                          (const uint8_t *)s->pixels, s->pitch, transparent);
   }

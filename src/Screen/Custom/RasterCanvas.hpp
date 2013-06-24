@@ -247,6 +247,61 @@ public:
   }
 };
 
+/**
+ * The input buffer contains alpha values, and each pixel is blended
+ * using the alpha value, the existing color and the given color.
+ */
+template<typename PixelTraits>
+class ColoredAlphaPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  color_type color;
+
+  constexpr color_type BlendPixel(color_type a, uint8_t alpha) const {
+    return a + ((int(color - a) * alpha) >> 8);
+  }
+
+public:
+  constexpr ColoredAlphaPixelOperations(color_type _color):color(_color) {}
+
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      *p = BlendPixel(*p, *src);
+  }
+};
+
+/**
+ * The input buffer contains alpha values, and each pixel is blended
+ * using the alpha value between the two given colors.
+ */
+template<typename PixelTraits>
+class OpaqueAlphaPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+  int base_color, delta_color;
+
+  constexpr color_type BlendPixel(uint8_t alpha) const {
+    return base_color + ((delta_color * alpha) >> 8);
+  }
+
+public:
+  constexpr OpaqueAlphaPixelOperations(color_type _a, color_type _b)
+    :base_color(_a), delta_color(_b - _a) {}
+
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      *p = BlendPixel(*src);
+  }
+};
+
 template<typename PixelTraits>
 class TransparentInvertPixelOperations {
   typedef typename PixelTraits::pointer_type pointer_type;
