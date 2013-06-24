@@ -34,7 +34,7 @@ Copyright_License {
  * The EGL API is available.  May require a runtime check
  * (OpenGL::egl).
  */
-#define HAVE_EGL
+#define HAVE_DYNAMIC_EGL
 
 /**
  * The OES_draw_texture extension is available.
