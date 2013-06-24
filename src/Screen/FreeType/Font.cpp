@@ -26,6 +26,10 @@ Copyright_License {
 #include "Screen/Custom/Files.hpp"
 #include "Init.hpp"
 
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -49,6 +53,17 @@ static inline FT_Long
 FT_CEIL(FT_Long x)
 {
   return ((x + 63) & -64) / 64;
+}
+
+gcc_pure
+static std::pair<unsigned, const TCHAR *>
+NextChar(const TCHAR *p)
+{
+#ifdef _UNICODE
+  return std::make_pair(unsigned(*p), p + 1);
+#else
+  return NextUTF8(p);
+#endif
 }
 
 void
@@ -159,16 +174,25 @@ Font::Destroy()
 PixelSize
 Font::TextSize(const TCHAR *text) const
 {
-  // TODO: parse UTF-8
   // TODO: kerning
   // TODO: overhang
+
+  assert(text != nullptr);
+#ifndef _UNICODE
+  assert(ValidateUTF8(text));
+#endif
 
   const FT_Face face = this->face;
 
   int x = 0, minx = 0, maxx = 0;
 
-  for (const TCHAR *p = text; *p != 0; ++p) {
-    const auto ch = *p;
+  while (true) {
+    const auto n = NextChar(text);
+    if (n.first == 0)
+      break;
+
+    const unsigned ch = n.first;
+    text = n.second;
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
@@ -252,6 +276,11 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
 void
 Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 {
+  assert(text != nullptr);
+#ifndef _UNICODE
+  assert(ValidateUTF8(text));
+#endif
+
   uint8_t *buffer = (uint8_t *)_buffer;
   std::fill_n(buffer, BufferSize(size), 0);
 
@@ -259,8 +288,13 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
 
   int x = 0, minx = 0;
 
-  for (const TCHAR *p = text; *p != 0; ++p) {
-    const auto ch = *p;
+  while (true) {
+    const auto n = NextChar(text);
+    if (n.first == 0)
+      break;
+
+    const unsigned ch = n.first;
+    text = n.second;
 
     FT_UInt i = FT_Get_Char_Index(face, ch);
     if (i == 0)
