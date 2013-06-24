@@ -39,7 +39,7 @@ FlarmCalculations::CleanUp(fixed now)
   for (auto it = averageCalculatorMap.begin(),
        it_end = averageCalculatorMap.end(); it != it_end;)
     if (it->second.Expired(now, MAX_AGE))
-      averageCalculatorMap.erase(it++);
+      it = averageCalculatorMap.erase(it);
     else
       ++it;
 }
