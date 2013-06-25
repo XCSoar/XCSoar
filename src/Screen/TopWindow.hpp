@@ -46,10 +46,6 @@ struct Event;
 union SDL_Event;
 #endif
 
-#ifndef USE_GDI
-#include <atomic>
-#endif
-
 #include <tchar.h>
 
 #ifndef USE_GDI
@@ -119,7 +115,7 @@ class TopWindow : public ContainerWindow {
 #ifndef USE_GDI
   TopCanvas *screen;
 
-  std::atomic<bool> invalidated;
+  bool invalidated;
 
 #ifdef ANDROID
   Mutex paused_mutex;
@@ -320,7 +316,7 @@ protected:
   virtual void OnDestroy() override;
 #endif
 
-#ifdef USE_VIDEOCORE
+#ifdef DRAW_MOUSE_CURSOR
   virtual void OnPaint(Canvas &canvas) override;
 #endif
 

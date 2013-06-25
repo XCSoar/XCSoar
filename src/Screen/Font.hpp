@@ -29,8 +29,6 @@ Copyright_License {
 
 #ifdef USE_FREETYPE
 typedef struct FT_FaceRec_ *FT_Face;
-#elif defined(ENABLE_SDL)
-#include <SDL_ttf.h>
 #endif
 
 #ifdef WIN32
@@ -57,7 +55,7 @@ protected:
 #elif defined(USE_GDI)
   HFONT font;
 #else
-  TTF_Font *font;
+#error No font renderer
 #endif
 
   unsigned height, ascent_height, capital_height;
@@ -121,11 +119,6 @@ public:
   HFONT Native() const {
     return font;
   }
-#else
-  TTF_Font*
-  Native() const {
-    return font;
-  }
 #endif
 
   UPixelScalar GetHeight() const {
@@ -145,11 +138,6 @@ public:
 #elif defined(ANDROID)
   UPixelScalar GetLineSpacing() const {
     return line_spacing;
-  }
-#elif defined(ENABLE_SDL)
-  gcc_pure
-  UPixelScalar GetLineSpacing() const {
-    return ::TTF_FontLineSkip(font);
   }
 #endif
 };

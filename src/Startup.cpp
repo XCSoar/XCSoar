@@ -213,11 +213,11 @@ Startup()
 
 #ifdef ENABLE_OPENGL
   LogFormat("OpenGL: "
-#ifdef HAVE_EGL
+#ifdef HAVE_DYNAMIC_EGL
             "egl=%d "
 #endif
             "npot=%d vbo=%d fbo=%d stencil=%#x",
-#ifdef HAVE_EGL
+#ifdef HAVE_DYNAMIC_EGL
              OpenGL::egl,
 #endif
              OpenGL::texture_non_power_of_two,

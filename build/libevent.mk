@@ -12,6 +12,8 @@ EVENT_SOURCES += \
 else ifeq ($(EGL),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Shared/TimerQueue.cpp \
+	$(SRC)/Event/Linux/TTYKeyboard.cpp \
+	$(SRC)/Event/Linux/Mouse.cpp \
 	$(SRC)/Event/EGL/Globals.cpp \
 	$(SRC)/Event/EGL/Timer.cpp \
 	$(SRC)/Event/EGL/Loop.cpp \

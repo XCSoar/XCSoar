@@ -26,3 +26,9 @@ HOST_IS_PI := $(call string_equals,$(shell test -f /opt/vc/include/interface/vmc
 else
 HOST_IS_PI := n
 endif
+
+ifeq ($(HOST_IS_LINUX)$(HOST_IS_ARMV7),yy)
+HOST_HAS_MALI := $(call string_equals,$(shell test -c /dev/mali && echo y),y)
+else
+HOST_HAS_MALI := n
+endif

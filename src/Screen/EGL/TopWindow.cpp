@@ -28,7 +28,7 @@ Copyright_License {
 #include "Event/EGL/Queue.hpp"
 #include "Event/EGL/Globals.hpp"
 
-#ifdef USE_VIDEOCORE
+#ifdef DRAW_MOUSE_CURSOR
 #include "Util/Macros.hpp"
 #include "Screen/Layout.hpp"
 #endif
@@ -41,13 +41,7 @@ TopWindow::SetCaption(const TCHAR *caption)
 void
 TopWindow::Invalidate()
 {
-  if (invalidated.exchange(true, std::memory_order_relaxed))
-    /* already invalidated, don't send the event twice */
-    return;
-
-  /* wake up the event loop */
-
-  event_queue->WakeUp();
+  invalidated = true;
 }
 
 void
@@ -58,7 +52,7 @@ TopWindow::OnResize(PixelSize new_size)
   ContainerWindow::OnResize(new_size);
 }
 
-#ifdef USE_VIDEOCORE
+#ifdef DRAW_MOUSE_CURSOR
 void
 TopWindow::OnPaint(Canvas &canvas)
 {
@@ -111,7 +105,7 @@ TopWindow::OnEvent(const Event &event)
     return w->OnKeyUp(event.param);
 
   case Event::MOUSE_MOTION:
-#ifdef USE_VIDEOCORE
+#ifdef DRAW_MOUSE_CURSOR
     /* redraw to update the mouse cursor position */
     Invalidate();
 #endif

@@ -23,65 +23,18 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "OS/Clock.hpp"
-#include "Util/Macros.hpp"
-#include "Util/CharUtil.hpp"
-#include "Screen/Key.h"
-
-#include <poll.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <errno.h>
-#include <termios.h>
-
-static struct termios restore_attr;
 
 EventQueue::EventQueue()
-  :screen_width(0), screen_height(0),
-   mouse_x(0), mouse_y(0), mouse_pressed(false),
-   input_state(InputState::NONE), running(true)
+  :keyboard(*this, io_loop), mouse(io_loop), running(true)
 {
   event_pipe.Create();
-  poll.SetMask(event_pipe.GetReadFD(), Poll::READ);
+  io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, *this);
 
-  /* make stdin non-blocking */
-  fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
-
-  struct termios attr;
-  if (tcgetattr(STDIN_FILENO, &attr) == 0) {
-    restore_attr = attr;
-    attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP |
-                      INLCR | IGNCR | ICRNL | IXON);
-    attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG);
-    attr.c_cflag &= ~(CSIZE | PARENB);
-    attr.c_cflag |= CS8;
-    tcsetattr(STDIN_FILENO, TCSANOW, &attr);
-  }
-
-  poll.SetMask(STDIN_FILENO, Poll::READ);
-
-  if (mouse.OpenReadOnly("/dev/input/mice")) {
-    mouse.SetNonBlocking();
-    poll.SetMask(mouse.Get(), Poll::READ);
-  }
+  mouse.Open();
 }
 
 EventQueue::~EventQueue()
 {
-  tcsetattr(STDIN_FILENO, TCSANOW, &restore_attr);
-}
-
-void
-EventQueue::SetScreenSize(unsigned width, unsigned height)
-{
-  if (width != screen_width) {
-    screen_width = width;
-    mouse_x = screen_width / 2;
-  }
-
-  if (height != screen_height) {
-    screen_height = height;
-    mouse_y = screen_height / 2;
-  }
 }
 
 void
@@ -107,153 +60,17 @@ EventQueue::GetTimeout() const
 void
 EventQueue::Poll()
 {
-  poll.Wait(GetTimeout());
-  event_pipe.Read();
+  io_loop.Lock();
+  io_loop.Wait(GetTimeout());
+  io_loop.Dispatch();
+  io_loop.Unlock();
 }
 
 void
 EventQueue::PushKeyPress(unsigned key_code)
 {
-  events.push(Event(Event::KEY_DOWN, key_code));
-  events.push(Event(Event::KEY_UP, key_code));
-}
-
-inline void
-EventQueue::HandleInputByte(char ch)
-{
-  switch (ch) {
-  case 0x03:
-    /* user has pressed Ctrl-C */
-    input_state = InputState::NONE;
-    events.push(Event::CLOSE);
-    return;
-
-  case ' ':
-    input_state = InputState::NONE;
-    PushKeyPress(ch);
-    return;
-
-  case 0x0d:
-    input_state = InputState::NONE;
-    PushKeyPress(KEY_RETURN);
-    return;
-
-  case 0x1b:
-    if (input_state == InputState::ESCAPE)
-      PushKeyPress(KEY_ESCAPE);
-    else
-      input_state = InputState::ESCAPE;
-    return;
-  }
-
-  switch (input_state) {
-  case InputState::NONE:
-    break;
-
-  case InputState::ESCAPE:
-    if (ch == '[')
-      input_state = InputState::ESCAPE_BRACKET;
-    else
-      input_state = InputState::NONE;
-    return;
-
-  case InputState::ESCAPE_BRACKET:
-    input_state = InputState::NONE;
-    switch (ch) {
-    case 'A':
-      PushKeyPress(KEY_UP);
-      break;
-
-    case 'B':
-      PushKeyPress(KEY_DOWN);
-      break;
-
-    case 'C':
-      PushKeyPress(KEY_RIGHT);
-      break;
-
-    case 'D':
-      PushKeyPress(KEY_LEFT);
-      break;
-
-    default:
-      if (ch >= '0' && ch <= '9') {
-        input_state = InputState::ESCAPE_NUMBER;
-        input_number = ch - '0';
-      }
-    }
-
-    return;
-
-  case InputState::ESCAPE_NUMBER:
-    if (IsDigitASCII(ch))
-      input_number = input_number * 10 + ch - '0';
-    else {
-      input_state = InputState::NONE;
-      if (ch == '~') {
-        if (input_number >= 11 && input_number <= 16)
-          PushKeyPress(KEY_F1 + input_number - 11);
-        else if (input_number >= 17 && input_number <= 21)
-          PushKeyPress(KEY_F6 + input_number - 17);
-        else if (input_number >= 23 && input_number <= 24)
-          PushKeyPress(KEY_F11 + input_number - 23);
-      }
-    }
-
-    return;
-  }
-
-  if (IsAlphaNumericASCII(ch)) {
-      PushKeyPress(ch);
-      return;
-  }
-}
-
-void
-EventQueue::Fill()
-{
-  char buffer[256];
-  const ssize_t nbytes = read(STDIN_FILENO, buffer, sizeof(buffer));
-  if (nbytes > 0) {
-    for (ssize_t i = 0; i < nbytes; ++i)
-      HandleInputByte(buffer[i]);
-  } else if (nbytes == 0 || errno != EAGAIN) {
-    running = false;
-  }
-
-  const unsigned old_x = mouse_x, old_y = mouse_y;
-  const bool old_pressed = mouse_pressed;
-  int8_t mb[3];
-  while (read(mouse.Get(), mb, sizeof(mb)) == sizeof(mb)) {
-    mouse_pressed = (mb[0] & 0x7) != 0;
-
-    const int dx = mb[1], dy = mb[2];
-
-    if (screen_width > 0) {
-      int new_x = mouse_x + dx;
-      if (new_x < 0)
-        new_x = 0;
-      else if (unsigned(new_x) > screen_width)
-        new_x = screen_width - 1;
-      mouse_x = new_x;
-    }
-
-    if (screen_height > 0) {
-      int new_y = mouse_y - dy;
-      if (new_y < 0)
-        new_y = 0;
-      else if (unsigned(new_y) > screen_height)
-        new_y = screen_height - 1;
-      mouse_y = new_y;
-    }
-  }
-
-  if (mouse_x != old_x || mouse_y != old_y)
-    events.push(Event(Event::MOUSE_MOTION, mouse_x, mouse_y));
-
-  if (mouse_pressed != old_pressed)
-    events.push(Event(mouse_pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
-                      mouse_x, mouse_y));
+  Push(Event(Event::KEY_DOWN, key_code));
+  Push(Event(Event::KEY_UP, key_code));
 }
 
 bool
@@ -265,6 +82,10 @@ EventQueue::Generate(Event &event)
     event.ptr = timer;
     return true;
   }
+
+  event = mouse.Generate();
+  if (event.type != Event::Type::NOP)
+    return true;
 
   return false;
 }
@@ -279,8 +100,6 @@ EventQueue::Pop(Event &event)
   if (events.empty()) {
     if (Generate(event))
       return true;
-
-    Fill();
   }
 
   event = events.front();
@@ -303,7 +122,6 @@ EventQueue::Wait(Event &event)
     if (Generate(event))
       return true;
 
-    Fill();
     while (events.empty()) {
       mutex.Unlock();
       Poll();
@@ -311,8 +129,6 @@ EventQueue::Wait(Event &event)
 
       if (Generate(event))
         return true;
-
-      Fill();
     }
   }
 

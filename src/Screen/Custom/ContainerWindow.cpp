@@ -265,6 +265,8 @@ ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
 void
 ContainerWindow::InvalidateChild(const Window &child)
 {
+  AssertThread();
+
   if (!children.IsCovered(child))
     Invalidate();
 }

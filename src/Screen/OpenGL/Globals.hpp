@@ -39,7 +39,7 @@ Copyright_License {
 #endif
 
 namespace OpenGL {
-#ifdef HAVE_EGL
+#ifdef HAVE_DYNAMIC_EGL
   /**
    * Was EGL detected at runtime?  The EGL API has been supported
    * since Android API level 9, but we require API level 4, so we need

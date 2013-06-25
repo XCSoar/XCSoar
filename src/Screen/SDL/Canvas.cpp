@@ -27,6 +27,8 @@ Copyright_License {
 #include "Format.hpp"
 
 #ifdef GREYSCALE
+#include "Screen/Custom/PixelOperations.hpp"
+#include "Screen/Custom/PixelTraits.hpp"
 #include "Screen/Custom/RasterCanvas.hpp"
 #endif
 
@@ -48,14 +50,23 @@ Copyright_License {
 
 #ifdef GREYSCALE
 
-using SDLPixelTraits = GreyscalePixelTraits;
+typedef GreyscalePixelTraits SDLPixelTraits;
+
+static inline unsigned
+ClipMax(unsigned limit, int offset, unsigned size)
+{
+  return std::min(unsigned(size),
+                  unsigned(std::max(int(limit - offset), 0)));
+}
 
 class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
 public:
   SDLRasterCanvas(SDL_Surface *surface, RasterPoint offset, PixelSize size)
     :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::pointer_type(surface->pixels)
                                   + offset.y * surface->pitch + offset.x,
-                                  surface->pitch, size.cx, size.cy) {}
+                                  surface->pitch,
+                                  ClipMax(surface->w, offset.x, size.cx),
+                                  ClipMax(surface->h, offset.y, size.cy)) {}
 };
 
 #endif
@@ -325,11 +336,6 @@ RenderText(const Font *font, const TCHAR *text)
 
   font->Render(text, size, s->pixels);
   return s;
-#elif defined(UNICODE)
-  return ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
-                                   COLOR_BLACK);
-#else
-  return ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
 #endif
 }
 

@@ -34,7 +34,7 @@ Copyright_License {
  * The EGL API is available.  May require a runtime check
  * (OpenGL::egl).
  */
-#define HAVE_EGL
+#define HAVE_DYNAMIC_EGL
 
 /**
  * The OES_draw_texture extension is available.
@@ -43,8 +43,8 @@ Copyright_License {
 
 #endif
 
-#ifdef USE_VIDEOCORE
-#define HAVE_EGL
+#if defined(USE_VIDEOCORE) || defined(HAVE_MALI)
+#define DRAW_MOUSE_CURSOR
 #endif
 
 /**

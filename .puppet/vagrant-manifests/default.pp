@@ -14,20 +14,11 @@ class libsdl {
   package { "libsdl1.2-dev":
     ensure => present,
   }
+}
 
-  package { "libsdl-image1.2-dev":
+class libfreetype {
+  package { "libfreetype6-dev":
     ensure => present,
-  }
-
-  package { "libsdl-ttf2.0-dev":
-    ensure => present,
-  }
-
-  # Workaround for broken libsdl-ttf2.0-dev package on Ubuntu 12.04
-  exec { 'SDL_ttf.pc':
-    command => '/bin/sed \'s/SDL_image/SDL_ttf/g\' /usr/lib/i386-linux-gnu/pkgconfig/SDL_image.pc > /usr/lib/i386-linux-gnu/pkgconfig/SDL_ttf.pc',
-    require => [Package['libsdl-ttf2.0-dev'], Package['libsdl-image1.2-dev']],
-    creates => '/usr/lib/i386-linux-gnu/pkgconfig/SDL_ttf.pc',
   }
 }
 
@@ -141,6 +132,7 @@ class {'apt': stage => 'pre' }
 # Libraries
 class {'libcurl': }
 class {'libsdl': }
+class {'libfreetype': }
 
 # Toolchain
 class {'make': }

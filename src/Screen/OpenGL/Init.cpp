@@ -35,7 +35,7 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#if defined(HAVE_EGL) && defined(ANDROID)
+#if defined(HAVE_DYNAMIC_EGL)
 #include "EGL.hpp"
 #endif
 
@@ -189,7 +189,7 @@ CheckStencil()
 void
 OpenGL::SetupContext()
 {
-#if defined(HAVE_EGL) && defined(ANDROID)
+#if defined(HAVE_DYNAMIC_EGL)
   egl = EGLInit();
 #endif
 

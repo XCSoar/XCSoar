@@ -186,6 +186,7 @@ Window::Setup(Canvas &canvas)
 void
 Window::Invalidate()
 {
+  AssertThread();
   assert(IsDefined());
 
   if (visible && parent != NULL)
