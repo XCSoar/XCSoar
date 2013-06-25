@@ -240,9 +240,9 @@ using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>>;
 
 template<typename PixelTraits>
-class TransparentInvertPixelOperations : private PixelTraits {
-  using typename PixelTraits::pointer_type;
-  using typename PixelTraits::color_type;
+class TransparentInvertPixelOperations {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::color_type color_type;
 
   color_type key;
 
