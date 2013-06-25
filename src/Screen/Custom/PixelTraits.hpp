@@ -63,12 +63,14 @@ struct GreyscalePixelTraits {
   }
 
   template<typename F>
+  gcc_hot
   static void ForHorizontal(pointer_type p, unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
   template<typename F>
+  gcc_hot
   static void ForHorizontal(pointer_type p, const_pointer_type q,
                             unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
@@ -76,6 +78,7 @@ struct GreyscalePixelTraits {
   }
 
   template<typename F>
+  gcc_hot
   static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
     for (; n > 0; --n, p = Next(p, pitch))
       f(p);
