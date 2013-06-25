@@ -70,7 +70,7 @@ public:
                                   ClipMax(surface->h, offset.y, size.cy)) {}
 
   static constexpr SDLPixelTraits::color_type Import(Color color) {
-    return color.GetLuminosity();
+    return Luminosity8(color.GetLuminosity());
   }
 };
 

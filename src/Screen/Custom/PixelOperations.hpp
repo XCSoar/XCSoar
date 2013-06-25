@@ -266,11 +266,11 @@ class PixelColoredAlpha {
 public:
   constexpr explicit PixelColoredAlpha(color_type _color):color(_color) {}
 
-  constexpr color_type operator()(color_type a, uint8_t alpha) const {
+  constexpr color_type operator()(color_type a, Luminosity8 alpha) const {
     return PixelTraits::TransformChannels(a, color,
                                           [alpha](channel_type a,
                                                   channel_type color) {
-        return a + ((int(color - a) * int(alpha)) >> 8);
+        return a + ((int(color - a) * int(alpha.GetLuminosity())) >> 8);
       });
   }
 };
@@ -293,11 +293,11 @@ class PixelOpaqueAlpha {
 public:
   constexpr PixelOpaqueAlpha(color_type _a, color_type _b):a(_a), b(_b) {}
 
-  constexpr color_type operator()(uint8_t alpha) const {
+  constexpr color_type operator()(Luminosity8 alpha) const {
     return PixelTraits::TransformChannels(a, b,
                                           [alpha](channel_type a,
                                                   channel_type b) {
-        return a + ((int(b - a) * int(alpha)) >> 8);
+        return a + ((int(b - a) * int(alpha.GetLuminosity())) >> 8);
       });
   }
 };

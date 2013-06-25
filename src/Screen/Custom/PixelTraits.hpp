@@ -24,39 +24,40 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 #define XCSOAR_SCREEN_PIXEL_TRAITS_HPP
 
+#include "Screen/PortableColor.hpp"
 #include "Compiler.h"
 
 #include <string.h>
 
 struct GreyscalePixelTraits {
-  typedef uint8_t *pointer_type;
-  typedef const uint8_t *const_pointer_type;
-  typedef uint8_t color_type;
-  typedef color_type channel_type;
-  typedef color_type integer_type;
+  typedef Luminosity8 color_type;
+  typedef uint8_t channel_type;
+  typedef uint8_t integer_type;
+  typedef color_type *pointer_type;
+  typedef const color_type *const_pointer_type;
 
   template<typename F>
   static color_type TransformInteger(color_type c, F f) {
-    return f(c);
+    return f(c.GetLuminosity());
   }
 
   template<typename F>
   static color_type TransformInteger(color_type a, color_type b, F f) {
-    return f(a, b);
+    return f(a.GetLuminosity(), b.GetLuminosity());
   }
 
   template<typename F>
   static color_type TransformChannels(color_type c, F f) {
-    return f(c);
+    return f(c.GetLuminosity());
   }
 
   template<typename F>
   static color_type TransformChannels(color_type a, color_type b, F f) {
-    return f(a, b);
+    return f(a.GetLuminosity(), b.GetLuminosity());
   }
 
   static constexpr bool IsBlack(color_type c) {
-    return c == 0;
+    return c.GetLuminosity() == 0;
   }
 
   static constexpr int CalcIncrement(int delta) {
@@ -109,7 +110,7 @@ struct GreyscalePixelTraits {
   }
 
   static void FillPixels(pointer_type p, unsigned n, color_type c) {
-    memset(p, c, n);
+    memset(p, c.GetLuminosity(), n);
   }
 
   static void CopyPixels(pointer_type gcc_restrict p,
