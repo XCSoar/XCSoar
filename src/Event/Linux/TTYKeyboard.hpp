@@ -21,29 +21,38 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Debug.hpp"
+#ifndef XCSOAR_EVENT_LINUX_TTY_KEYBOARD_HPP
+#define XCSOAR_EVENT_LINUX_TTY_KEYBOARD_HPP
 
-namespace OpenGL {
-#ifdef HAVE_DYNAMIC_EGL
-  bool egl;
-#endif
+#include "IO/Async/FileEventHandler.hpp"
 
-  bool texture_non_power_of_two;
+#include <stdint.h>
 
-#ifdef ANDROID
-  bool vertex_buffer_object;
-#endif
+class EventQueue;
+class IOLoop;
 
-  bool frame_buffer_object;
+/**
+ * A keyboard driver reading key presses from the TTY.
+ */
+class TTYKeyboard final : private FileEventHandler {
+  EventQueue &queue;
+  IOLoop &io_loop;
 
-  GLenum render_buffer_depth_stencil, render_buffer_stencil;
+  enum class InputState : uint8_t {
+    NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
+  } input_state;
 
-  UPixelScalar screen_width, screen_height;
+  unsigned input_number;
 
-  RasterPoint translate;
+public:
+  TTYKeyboard(EventQueue &queue, IOLoop &io_loop);
+  ~TTYKeyboard();
 
-#ifndef NDEBUG
-  pthread_t thread;
-#endif
+private:
+  void HandleInputByte(char ch);
+
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
+
+#endif

@@ -56,7 +56,7 @@ OpenGL::InitShapes()
   }
 
   circle_buffer = new GLArrayBuffer();
-  circle_buffer->Load(sizeof(circle_data), circle_data);
+  circle_buffer->Load(GLsizeiptr(sizeof(circle_data)), circle_data);
 
   p = small_circle_data;
   p2 = circle_data;
@@ -68,7 +68,8 @@ OpenGL::InitShapes()
   }
 
   small_circle_buffer = new GLArrayBuffer();
-  small_circle_buffer->Load(sizeof(small_circle_data), small_circle_data);
+  small_circle_buffer->Load(GLsizeiptr(sizeof(small_circle_data)),
+                            small_circle_data);
 }
 
 void

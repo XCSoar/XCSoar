@@ -30,295 +30,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
-#include <string.h>
-
-struct GreyscalePixelTraits {
-  typedef uint8_t *pointer_type;
-  typedef const uint8_t *const_pointer_type;
-  typedef uint8_t color_type;
-
-  int CalcIncrement(int delta) const {
-    return delta;
-  }
-
-  pointer_type Increment(pointer_type p, int delta) const {
-    return p + CalcIncrement(delta);
-  }
-
-  void SetPixel(pointer_type p, color_type c) const {
-    *p = c;
-  }
-
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    memset(p, c, n);
-  }
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    memcpy(p, src, n);
-  }
-};
-
-template<typename PixelTraits>
-class BitNotPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p = ~c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
-  }
-};
-
-template<typename PixelTraits>
-class BitOrPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p |= c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
-  }
-};
-
-template<typename PixelTraits>
-class BitNotOrPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p |= ~c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
-  }
-};
-
-template<typename PixelTraits>
-class BitAndPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p &= c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
-  }
-};
-
-template<typename PixelTraits>
-class AlphaPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  int alpha;
-
-  color_type BlendPixel(color_type a, color_type b) const {
-    return a + ((int(b - a) * alpha) >> 8);
-  }
-
-public:
-  constexpr AlphaPixelOperations(uint8_t _alpha):alpha(_alpha) {}
-
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p = BlendPixel(*p, c);
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      *p = BlendPixel(*p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*p, *src);
-  }
-};
-
-template<typename PixelTraits>
-class OpaqueTextPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type background_color, text_color;
-
-public:
-  constexpr OpaqueTextPixelOperations(color_type _b, color_type _t)
-    :background_color(_b), text_color(_t) {}
-
-  inline void SetPixel(pointer_type p, color_type c) const {
-    if (c == 0)
-      *p = background_color;
-    else
-      *p = text_color;
-  }
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src) {
-      SetPixel(p, *src);
-    }
-  }
-};
-
-template<typename PixelTraits>
-class TransparentTextPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type text_color;
-
-public:
-  constexpr TransparentTextPixelOperations(color_type _t)
-    :text_color(_t) {}
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src) {
-      if (*src != 0)
-        *p = text_color;
-    }
-  }
-};
-
-/**
- * The input buffer contains alpha values, and each pixel is blended
- * using the alpha value, the existing color and the given color.
- */
-template<typename PixelTraits>
-class ColoredAlphaPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type color;
-
-  constexpr color_type BlendPixel(color_type a, uint8_t alpha) const {
-    return a + ((int(color - a) * alpha) >> 8);
-  }
-
-public:
-  constexpr ColoredAlphaPixelOperations(color_type _color):color(_color) {}
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*p, *src);
-  }
-};
-
-/**
- * The input buffer contains alpha values, and each pixel is blended
- * using the alpha value between the two given colors.
- */
-template<typename PixelTraits>
-class OpaqueAlphaPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  int base_color, delta_color;
-
-  constexpr color_type BlendPixel(uint8_t alpha) const {
-    return base_color + ((delta_color * alpha) >> 8);
-  }
-
-public:
-  constexpr OpaqueAlphaPixelOperations(color_type _a, color_type _b)
-    :base_color(_a), delta_color(_b - _a) {}
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*src);
-  }
-};
-
-template<typename PixelTraits>
-class TransparentInvertPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type key;
-
-public:
-  constexpr TransparentInvertPixelOperations(color_type _key):key(_key) {}
-
-  void SetPixel(pointer_type p, color_type c) const {
-    if (c != key)
-      *p = ~c;
-  }
-};
 
 /**
  * A software renderer for various primitives.
@@ -327,11 +38,13 @@ public:
  */
 template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::const_pointer_type;
+  using PixelTraits::ReadPixel;
+  using PixelTraits::ForVertical;
 
 public:
-  typedef typename PixelTraits::color_type color_type;
+  using typename PixelTraits::color_type;
 
   struct Point {
     int x, y;
@@ -368,7 +81,7 @@ protected:
     assert(x < width);
     assert(y < height);
 
-    return PixelTraits::Increment(buffer, pitch * y + x);
+    return PixelTraits::Next(buffer, pitch * y + x);
   }
 
   static bool ClipAxis(int &position, unsigned &length, unsigned max,
@@ -398,11 +111,11 @@ protected:
       if (dest_length <= unsigned(-dest_position))
         return false;
 
-      dest_length -= -dest_position;
-
-      unsigned src_delta = unsigned(-dest_position) * src_length / dest_length;
+      const unsigned dest_delta = -dest_position;
+      const unsigned src_delta = dest_delta * src_length / dest_length;
       src_position += src_delta;
       src_length -= src_delta;
+      dest_length -= dest_delta;
 
       dest_position = 0;
     }
@@ -498,7 +211,7 @@ public:
   template<typename PixelOperations>
   void DrawPixel(int x, int y, color_type c, PixelOperations operations) {
     if (Check(x, y))
-      PixelTraits::SetPixel(At(x, y), c);
+      PixelTraits::WritePixel(At(x, y), c);
   }
 
   void DrawPixel(int x, int y, color_type c) {
@@ -524,8 +237,9 @@ public:
     const unsigned columns = x2 - x1;
 
     pointer_type p = At(x1, y1);
-    for (unsigned rows = y2 - y1; rows > 0; --rows, p += pitch)
-      PixelTraits::FillPixels(p, columns, c);
+    ForVertical(p, pitch, y2 - y1, [this, columns, c](pointer_type q){
+        this->FillPixels(q, columns, c);
+      });
   }
 
   template<typename PixelOperations>
@@ -568,8 +282,9 @@ public:
       return;
 
     pointer_type p = At(x, y1);
-    for (unsigned h = y2 - y1; h > 0; --h, p += pitch)
-      operations.SetPixel(p, c);
+    ForVertical(p, pitch, y2 - y1, [operations, c](pointer_type q){
+        operations.WritePixel(q, c);
+      });
   }
 
   template<typename PixelOperations>
@@ -610,7 +325,7 @@ public:
     }
 
     for (int x = 0, y = 0; x < dx; x++, p += pixx) {
-      PixelTraits::SetPixel(p, c);
+      PixelTraits::WritePixel(p, c);
 
       y += dy;
       if (y >= dx) {
@@ -903,8 +618,9 @@ public:
                    unsigned src_size,
                    PixelOperations operations) const {
     unsigned j = 0;
-    for (unsigned i = dest_size; i > 0; --i) {
-      operations.SetPixel(dest++, *src);
+    for (unsigned i = 0; i < dest_size; ++i) {
+      operations.WritePixel(PixelTraits::Next(dest, i),
+                            ReadPixel(src));
 
       j += src_size;
       while (j >= dest_size) {

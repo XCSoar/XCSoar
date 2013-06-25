@@ -1,4 +1,4 @@
-FREETYPE ?= $(GREYSCALE)
+FREETYPE ?= n
 
 ifeq ($(FREETYPE),y)
 

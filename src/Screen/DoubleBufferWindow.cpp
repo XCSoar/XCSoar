@@ -46,6 +46,16 @@ DoubleBufferWindow::OnDestroy()
   buffers[1].Destroy();
 }
 
+bool
+DoubleBufferWindow::OnUser(unsigned id)
+{
+  if (id == INVALIDATE) {
+    Invalidate();
+    return true;
+  } else
+    return false;
+}
+
 void
 DoubleBufferWindow::Flip()
 {
@@ -55,7 +65,7 @@ DoubleBufferWindow::Flip()
   mutex.Unlock();
 
   /* commit the finished buffer to the screen (asynchronously) */
-  Invalidate();
+  SendUser(INVALIDATE);
 
   /* grow the current buffer, just in case the window has been
      resized */
