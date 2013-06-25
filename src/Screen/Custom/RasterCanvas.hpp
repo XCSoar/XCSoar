@@ -30,61 +30,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
-#include <string.h>
-
-struct GreyscalePixelTraits {
-  typedef uint8_t *pointer_type;
-  typedef const uint8_t *const_pointer_type;
-  typedef uint8_t color_type;
-
-  int CalcIncrement(int delta) const {
-    return delta;
-  }
-
-  pointer_type Next(pointer_type p, int delta) const {
-    return p + CalcIncrement(delta);
-  }
-
-  const_pointer_type Next(const_pointer_type p, int delta) const {
-    return p + CalcIncrement(delta);
-  }
-
-  color_type ReadPixel(const_pointer_type p) const {
-    return *p;
-  }
-
-  void WritePixel(pointer_type p, color_type c) const {
-    *p = c;
-  }
-
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    memset(p, c, n);
-  }
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    memcpy(p, src, n);
-  }
-
-  template<typename F>
-  void ForHorizontal(pointer_type p, unsigned n, F f) const {
-    for (unsigned i = 0; i < n; ++i)
-      f(Next(p, i));
-  }
-
-  template<typename F>
-  void ForHorizontal(pointer_type p, const_pointer_type q,
-                     unsigned n, F f) const {
-    for (unsigned i = 0; i < n; ++i)
-      f(Next(p, i), Next(q, i));
-  }
-
-  template<typename F>
-  void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) const {
-    for (; n > 0; --n, p = Next(p, pitch))
-      f(p);
-  }
-};
 
 /**
  * A software renderer for various primitives.
