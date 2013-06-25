@@ -36,8 +36,7 @@ script:
   - if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
 
   # Check on platforms where possible (Unix)
-  - if [[ "$TARGET" == "UNIX" ]]; then make  TARGET=UNIX check; fi
-  - if [[ "$TARGET" == "OPT" ]]; then make  TARGET=OPT check; fi
+  - if [[ "$TARGET" == "UNIX" ]] || [[ "$TARGET" == "OPT" ]]; then make TARGET=$TARGET check; fi
 
 notifications:
   email:
