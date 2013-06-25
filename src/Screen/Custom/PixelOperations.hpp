@@ -27,14 +27,10 @@ Copyright_License {
 #include <functional>
 
 template<typename PixelTraits, template<typename T> class Operation>
-class UnaryPerPixelOperations
-  : private PixelTraits, private Operation<PixelTraits> {
-
-  using typename PixelTraits::pointer_type;
-  using typename PixelTraits::const_pointer_type;
-  using typename PixelTraits::color_type;
-  using PixelTraits::ReadPixel;
-  using PixelTraits::ForHorizontal;
+class UnaryPerPixelOperations : private Operation<PixelTraits> {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  typedef typename PixelTraits::color_type color_type;
 
 public:
   UnaryPerPixelOperations() = default;
@@ -44,12 +40,13 @@ public:
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
-    PixelTraits::WritePixel(p, Operation<PixelTraits>::operator()(c));
+    PixelTraits::WritePixel(p, (*this)(c));
   }
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    ForHorizontal(p, n, [this, c](pointer_type p){
+    PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
+        /* requires "this->" due to gcc 4.7.2 crash bug */
         this->WritePixel(p, c);
       });
   }
@@ -57,20 +54,19 @@ public:
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
-    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        this->WritePixel(p, this->ReadPixel(src));
+    PixelTraits::ForHorizontal(p, src, n, [this](pointer_type p,
+                                                 const_pointer_type src){
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        this->WritePixel(p, PixelTraits::ReadPixel(src));
       });
   }
 };
 
 template<typename PixelTraits, template<typename T> class Operation>
-class BinaryPerPixelOperations
-  : private PixelTraits, private Operation<PixelTraits> {
-  using typename PixelTraits::pointer_type;
-  using typename PixelTraits::const_pointer_type;
-  using typename PixelTraits::color_type;
-  using PixelTraits::ReadPixel;
-  using PixelTraits::ForHorizontal;
+class BinaryPerPixelOperations : private Operation<PixelTraits> {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  typedef typename PixelTraits::color_type color_type;
 
 public:
   BinaryPerPixelOperations() = default;
@@ -80,12 +76,13 @@ public:
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
-    PixelTraits::WritePixel(p, Operation<PixelTraits>::operator()(ReadPixel(p), c));
+    PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
   }
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    ForHorizontal(p, n, [this, c](pointer_type p){
+    PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
+        /* requires "this->" due to gcc 4.7.2 crash bug */
         this->WritePixel(p, c);
       });
   }
@@ -93,8 +90,10 @@ public:
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
-    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        this->WritePixel(p, this->ReadPixel(src));
+    PixelTraits::ForHorizontal(p, src, n, [this](pointer_type p,
+                                                 const_pointer_type src){
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        this->WritePixel(p, PixelTraits::ReadPixel(src));
       });
   }
 };
