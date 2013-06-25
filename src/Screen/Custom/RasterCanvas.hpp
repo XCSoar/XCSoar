@@ -166,11 +166,11 @@ protected:
       if (dest_length <= unsigned(-dest_position))
         return false;
 
-      dest_length -= -dest_position;
-
-      unsigned src_delta = unsigned(-dest_position) * src_length / dest_length;
+      const unsigned dest_delta = -dest_position;
+      const unsigned src_delta = dest_delta * src_length / dest_length;
       src_position += src_delta;
       src_length -= src_delta;
+      dest_length -= dest_delta;
 
       dest_position = 0;
     }
