@@ -14,12 +14,9 @@ ifeq ($(ENABLE_SDL),y)
 
 LIBPNG = y
 LIBJPEG = y
+FREETYPE = y
 
 SDL_PKG = sdl
-
-ifeq ($(FREETYPE),n)
-SDL_PKG += SDL_ttf
-endif
 
 ifeq ($(OPENGL)$(GREYSCALE),nn)
 SDL_PKG += SDL_gfx

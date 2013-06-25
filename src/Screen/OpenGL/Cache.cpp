@@ -224,17 +224,7 @@ TextCache::Get(const Font *font, const char *text)
 
   RenderedText rt(texture_id, size.cx, size.cy);
 #else
-  static constexpr SDL_Color background_color { 0, 0, 0, 0 };
-  static constexpr SDL_Color text_color = { 0xff, 0xff, 0xff, 0 };
-  SDL_Surface *surface = ::TTF_RenderUTF8_Shaded(font->Native(), text,
-                                                 text_color, background_color);
-  if (surface == NULL)
-    return NULL;
-
-  /* insert into cache */
-
-  RenderedText rt(surface);
-  SDL_FreeSurface(surface);
+#error No font renderer
 #endif
 
   GLTexture *texture = rt.texture;

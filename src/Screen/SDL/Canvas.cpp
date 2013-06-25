@@ -325,11 +325,6 @@ RenderText(const Font *font, const TCHAR *text)
 
   font->Render(text, size, s->pixels);
   return s;
-#elif defined(UNICODE)
-  return ::TTF_RenderUNICODE_Solid(font->Native(), (const Uint16 *)text,
-                                   COLOR_BLACK);
-#else
-  return ::TTF_RenderUTF8_Solid(font->Native(), text, COLOR_BLACK);
 #endif
 }
 
