@@ -26,8 +26,8 @@ Copyright_License {
 
 #include <functional>
 
-template<typename PixelTraits, template<typename T> class Operation>
-class UnaryPerPixelOperations : private Operation<PixelTraits> {
+template<typename PixelTraits, class Operation>
+class UnaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
   typedef typename PixelTraits::color_type color_type;
@@ -37,7 +37,7 @@ public:
 
   template<typename... Args>
   explicit constexpr UnaryPerPixelOperations(Args&&... args)
-    :Operation<PixelTraits>(std::forward<Args>(args)...) {}
+    :Operation(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
     PixelTraits::WritePixel(p, (*this)(c));
@@ -62,8 +62,8 @@ public:
   }
 };
 
-template<typename PixelTraits, template<typename T> class Operation>
-class BinaryPerPixelOperations : private Operation<PixelTraits> {
+template<typename PixelTraits, class Operation>
+class BinaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
   typedef typename PixelTraits::color_type color_type;
@@ -73,7 +73,7 @@ public:
 
   template<typename... Args>
   explicit constexpr BinaryPerPixelOperations(Args&&... args)
-    :Operation<PixelTraits>(std::forward<Args>(args)...) {}
+    :Operation(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
     PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
@@ -109,7 +109,8 @@ public:
 };
 
 template<typename PixelTraits>
-using BitNotPixelOperations = UnaryPerPixelOperations<PixelTraits, PixelBitNot>;
+using BitNotPixelOperations =
+  UnaryPerPixelOperations<PixelTraits, PixelBitNot<PixelTraits>>;
 
 template<typename PixelTraits>
 class PixelBitOr {
@@ -122,7 +123,8 @@ public:
 };
 
 template<typename PixelTraits>
-using BitOrPixelOperations = BinaryPerPixelOperations<PixelTraits, PixelBitOr>;
+using BitOrPixelOperations =
+  BinaryPerPixelOperations<PixelTraits, PixelBitOr<PixelTraits>>;
 
 template<typename PixelTraits>
 class PixelBitNotOr {
@@ -135,8 +137,8 @@ public:
 };
 
 template<typename PixelTraits>
-using BitNotOrPixelOperations = BinaryPerPixelOperations<PixelTraits,
-                                                         PixelBitNotOr>;
+using BitNotOrPixelOperations =
+  BinaryPerPixelOperations<PixelTraits, PixelBitNotOr<PixelTraits>>;
 
 template<typename PixelTraits>
 class PixelBitAnd {
@@ -149,8 +151,8 @@ public:
 };
 
 template<typename PixelTraits>
-using BitAndPixelOperations = BinaryPerPixelOperations<PixelTraits,
-                                                       PixelBitAnd>;
+using BitAndPixelOperations =
+  BinaryPerPixelOperations<PixelTraits, PixelBitAnd<PixelTraits>>;
 
 template<typename PixelTraits>
 class PixelAlphaOperation {
@@ -167,8 +169,8 @@ public:
 };
 
 template<typename PixelTraits>
-using AlphaPixelOperations = BinaryPerPixelOperations<PixelTraits,
-                                                      PixelAlphaOperation>;
+using AlphaPixelOperations =
+  BinaryPerPixelOperations<PixelTraits, PixelAlphaOperation<PixelTraits>>;
 
 template<typename PixelTraits>
 class PixelOpaqueText {
@@ -188,8 +190,8 @@ public:
 };
 
 template<typename PixelTraits>
-using OpaqueTextPixelOperations = UnaryPerPixelOperations<PixelTraits,
-                                                          PixelOpaqueText>;
+using OpaqueTextPixelOperations =
+  UnaryPerPixelOperations<PixelTraits, PixelOpaqueText<PixelTraits>>;
 
 /**
  * The input buffer contains alpha values, and each pixel is blended
@@ -210,8 +212,8 @@ public:
 };
 
 template<typename PixelTraits>
-using ColoredAlphaPixelOperations = BinaryPerPixelOperations<PixelTraits,
-                                                             PixelColoredAlpha>;
+using ColoredAlphaPixelOperations =
+  BinaryPerPixelOperations<PixelTraits, PixelColoredAlpha<PixelTraits>>;
 
 /**
  * The input buffer contains alpha values, and each pixel is blended
@@ -234,8 +236,8 @@ public:
 };
 
 template<typename PixelTraits>
-using OpaqueAlphaPixelOperations = UnaryPerPixelOperations<PixelTraits,
-                                                           PixelOpaqueAlpha>;
+using OpaqueAlphaPixelOperations =
+  UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>>;
 
 template<typename PixelTraits>
 class TransparentInvertPixelOperations : private PixelTraits {
