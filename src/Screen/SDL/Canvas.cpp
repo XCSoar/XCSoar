@@ -362,12 +362,14 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
     OpaqueAlphaPixelOperations<SDLPixelTraits>
       opaque(canvas.Import(background_color), canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
-                         (const uint8_t *)s->pixels, s->pitch, opaque);
+                         GreyscalePixelTraits::const_pointer_type(s->pixels),
+                         s->pitch, opaque);
   } else {
     ColoredAlphaPixelOperations<SDLPixelTraits>
       transparent(canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
-                         (const uint8_t *)s->pixels, s->pitch, transparent);
+                         GreyscalePixelTraits::const_pointer_type(s->pixels),
+                         s->pitch, transparent);
   }
 
 #else
@@ -449,7 +451,7 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 
     SDLRasterCanvas canvas(surface, offset, size);
     canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                         (const uint8_t *)src_surface->pixels,
+                         SDLPixelTraits::const_pointer_type(src_surface->pixels),
                          src_surface->pitch);
 
     return;
@@ -542,7 +544,7 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
+                        SDLPixelTraits::const_pointer_type(src_surface->pixels) + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
                         TransparentInvertPixelOperations<SDLPixelTraits>(canvas.Import(key)));
 
@@ -590,7 +592,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        (uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                        SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
                         src->pitch, src_width, src_height);
 
 #else
@@ -674,7 +676,7 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 
   canvas.ScaleRectangle(dest_x, dest_y,
                         dest_width, dest_height,
-                        (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
+                        SDLPixelTraits::const_pointer_type(src_surface->pixels) + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
                         OpaqueTextPixelOperations<SDLPixelTraits>(canvas.Import(fg_color),
                                                                   canvas.Import(bg_color)));
@@ -997,7 +999,7 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
                        src->pitch,
                        BitNotPixelOperations<SDLPixelTraits>());
 
@@ -1021,7 +1023,7 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
                        src->pitch,
                        BitOrPixelOperations<SDLPixelTraits>());
 
@@ -1045,7 +1047,7 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
                        src->pitch,
                        BitNotOrPixelOperations<SDLPixelTraits>());
 
@@ -1080,7 +1082,7 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       (const uint8_t *)src->pixels + src_y * src->pitch + src_x,
+                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
                        src->pitch,
                        BitAndPixelOperations<SDLPixelTraits>());
 
@@ -1151,7 +1153,7 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
 #ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       (const uint8_t *)src->pixels, src->pitch,
+                       SDLPixelTraits::const_pointer_type(src->pixels), src->pitch,
                        AlphaPixelOperations<SDLPixelTraits>(alpha));
 #else
   ::SDL_gfxSetAlpha(src, alpha);
