@@ -591,19 +591,19 @@ public:
                GetPixelTraits());
   }
 
-  template<typename PixelOperations>
+  template<typename PixelOperations, typename SPT=PixelTraits>
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     const_pointer_type src, unsigned src_pitch,
+                     typename SPT::const_pointer_type src, unsigned src_pitch,
                      PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
     if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
       return;
 
-    src = PixelTraits::At(src, src_pitch, src_x, src_y);
+    src = SPT::At(src, src_pitch, src_x, src_y);
 
     pointer_type p = At(x, y);
     for (; h > 0; --h, p = PixelTraits::NextRow(p, pitch, 1),
-           src = PixelTraits::NextRow(src, src_pitch, 1))
+           src = SPT::NextRow(src, src_pitch, 1))
       operations.CopyPixels(p, src, w);
   }
 
@@ -613,15 +613,15 @@ public:
                   GetPixelTraits());
   }
 
-  template<typename PixelOperations>
+  template<typename PixelOperations, typename SPT=PixelTraits>
   void ScalePixels(pointer_type gcc_restrict dest, unsigned dest_size,
-                   const_pointer_type gcc_restrict src,
+                   typename SPT::const_pointer_type src,
                    unsigned src_size,
                    PixelOperations operations) const {
     unsigned j = 0;
     for (unsigned i = 0; i < dest_size; ++i) {
       operations.WritePixel(PixelTraits::Next(dest, i),
-                            ReadPixel(src));
+                            SPT::ReadPixel(src));
 
       j += src_size;
       while (j >= dest_size) {
@@ -631,10 +631,10 @@ public:
     }
   }
 
-  template<typename PixelOperations>
+  template<typename PixelOperations, typename SPT=PixelTraits>
   void ScaleRectangle(int dest_x, int dest_y,
                       unsigned dest_width, unsigned dest_height,
-                      const_pointer_type src, unsigned src_pitch,
+                      typename SPT::const_pointer_type src, unsigned src_pitch,
                       unsigned src_width, unsigned src_height,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
@@ -642,18 +642,19 @@ public:
         !ClipScaleAxis(dest_y, dest_height, height, src_y, src_height))
       return;
 
-    src = PixelTraits::At(src, src_pitch, src_x, src_y);
+    src = SPT::At(src, src_pitch, src_x, src_y);
 
     unsigned j = 0;
     pointer_type dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, pitch, 1)) {
-      ScalePixels(dest, dest_width, src, src_width, operations);
+      ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
+                                             operations);
 
       j += src_height;
       while (j >= dest_height) {
         j -= dest_height;
-        src = PixelTraits::NextRow(src, src_pitch, 1);
+        src = SPT::NextRow(src, src_pitch, 1);
       }
     }
   }

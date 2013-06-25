@@ -116,6 +116,18 @@ struct GreyscalePixelTraits {
     for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
+
+  template<typename SPT>
+  struct Mixed {
+    template<typename F>
+    gcc_hot
+    static void ForHorizontal(pointer_type p,
+                              typename SPT::const_pointer_type q,
+                              unsigned n, F f) {
+      for (unsigned i = 0; i < n; ++i)
+        f(Next(p, i), SPT::Next(q, i));
+    }
+  };
 };
 
 #endif

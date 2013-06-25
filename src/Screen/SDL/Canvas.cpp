@@ -360,13 +360,13 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   SDLRasterCanvas canvas(surface, offset, size);
 
   if (background_mode == OPAQUE) {
-    OpaqueAlphaPixelOperations<SDLPixelTraits>
+    OpaqueAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       opaque(canvas.Import(background_color), canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
                          GreyscalePixelTraits::const_pointer_type(s->pixels),
                          s->pitch, opaque);
   } else {
-    ColoredAlphaPixelOperations<SDLPixelTraits>
+    ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       transparent(canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
                          GreyscalePixelTraits::const_pointer_type(s->pixels),
@@ -677,13 +677,16 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 #ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
-  canvas.ScaleRectangle(dest_x, dest_y,
-                        dest_width, dest_height,
-                        SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src_surface->pixels),
-                                           src_surface->pitch, src_x, src_y,
-                        src_surface->pitch, src_width, src_height,
-                        OpaqueTextPixelOperations<SDLPixelTraits>(canvas.Import(fg_color),
-                                                                  canvas.Import(bg_color)));
+  OpaqueTextPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
+    opaque(canvas.Import(fg_color), canvas.Import(bg_color));
+
+  canvas.ScaleRectangle<decltype(opaque), GreyscalePixelTraits>
+    (dest_x, dest_y,
+     dest_width, dest_height,
+     GreyscalePixelTraits::At(GreyscalePixelTraits::const_pointer_type(src_surface->pixels),
+                              src_surface->pitch, src_x, src_y),
+     src_surface->pitch, src_width, src_height,
+     opaque);
 
 #else
 

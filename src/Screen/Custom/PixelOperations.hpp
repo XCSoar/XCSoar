@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <functional>
 
-template<typename PixelTraits, class Operation>
+template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class UnaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
@@ -39,7 +39,7 @@ public:
   explicit constexpr UnaryPerPixelOperations(Args&&... args)
     :Operation(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, color_type c) const {
+  inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
     PixelTraits::WritePixel(p, (*this)(c));
   }
 
@@ -53,16 +53,14 @@ public:
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    PixelTraits::ForHorizontal(p, src, n, [this](pointer_type p,
-                                                 const_pointer_type src){
-        /* requires "this->" due to gcc 4.7.2 crash bug */
-        this->WritePixel(p, PixelTraits::ReadPixel(src));
-      });
+                  typename SPT::const_pointer_type gcc_restrict src,
+                  unsigned n) const {
+    for (unsigned i = 0; i < n; ++i)
+      WritePixel(PixelTraits::Next(p, i), SPT::ReadPixel(SPT::Next(src, i)));
   }
 };
 
-template<typename PixelTraits, class Operation>
+template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class BinaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
@@ -75,12 +73,13 @@ public:
   explicit constexpr BinaryPerPixelOperations(Args&&... args)
     :Operation(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, color_type c) const {
+  inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
     PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
   }
 
   gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+  void FillPixels(pointer_type p, unsigned n,
+                  typename SPT::color_type c) const {
     PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
         /* requires "this->" due to gcc 4.7.2 crash bug */
         this->WritePixel(p, c);
@@ -89,12 +88,10 @@ public:
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    PixelTraits::ForHorizontal(p, src, n, [this](pointer_type p,
-                                                 const_pointer_type src){
-        /* requires "this->" due to gcc 4.7.2 crash bug */
-        this->WritePixel(p, PixelTraits::ReadPixel(src));
-      });
+                  typename SPT::const_pointer_type gcc_restrict src,
+                  unsigned n) const {
+    for (unsigned i = 0; i < n; ++i)
+      WritePixel(PixelTraits::Next(p, i), SPT::ReadPixel(SPT::Next(src, i)));
   }
 };
 
@@ -172,7 +169,7 @@ template<typename PixelTraits>
 using AlphaPixelOperations =
   BinaryPerPixelOperations<PixelTraits, PixelAlphaOperation<PixelTraits>>;
 
-template<typename PixelTraits>
+template<typename PixelTraits, typename SPT>
 class PixelOpaqueText {
   typedef typename PixelTraits::color_type color_type;
 
@@ -182,16 +179,16 @@ public:
   constexpr PixelOpaqueText(color_type _b, color_type _t)
     :background_color(_b), text_color(_t) {}
 
-  inline color_type operator()(color_type x) const {
-    return PixelTraits::IsBlack(x)
+  inline color_type operator()(typename SPT::color_type x) const {
+    return SPT::IsBlack(x)
       ? background_color
       : text_color;
   }
 };
 
-template<typename PixelTraits>
+template<typename PixelTraits, typename SPT>
 using OpaqueTextPixelOperations =
-  UnaryPerPixelOperations<PixelTraits, PixelOpaqueText<PixelTraits>>;
+  UnaryPerPixelOperations<PixelTraits, PixelOpaqueText<PixelTraits, SPT>, SPT>;
 
 /**
  * The input buffer contains alpha values, and each pixel is blended
@@ -211,9 +208,9 @@ public:
   }
 };
 
-template<typename PixelTraits>
+template<typename PixelTraits, typename SPT>
 using ColoredAlphaPixelOperations =
-  BinaryPerPixelOperations<PixelTraits, PixelColoredAlpha<PixelTraits>>;
+  BinaryPerPixelOperations<PixelTraits, PixelColoredAlpha<PixelTraits>, SPT>;
 
 /**
  * The input buffer contains alpha values, and each pixel is blended
@@ -235,9 +232,9 @@ public:
   }
 };
 
-template<typename PixelTraits>
+template<typename PixelTraits, typename SPT>
 using OpaqueAlphaPixelOperations =
-  UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>>;
+  UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>, SPT>;
 
 template<typename PixelTraits>
 class TransparentInvertPixelOperations {
