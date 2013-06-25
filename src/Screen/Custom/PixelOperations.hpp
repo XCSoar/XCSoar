@@ -191,33 +191,6 @@ template<typename PixelTraits>
 using OpaqueTextPixelOperations = UnaryPerPixelOperations<PixelTraits,
                                                           PixelOpaqueText>;
 
-template<typename PixelTraits>
-class TransparentTextPixelOperations : private PixelTraits {
-  using typename PixelTraits::pointer_type;
-  using typename PixelTraits::const_pointer_type;
-  using typename PixelTraits::color_type;
-  using PixelTraits::ReadPixel;
-  using PixelTraits::ForHorizontal;
-
-  color_type text_color;
-
-public:
-  constexpr TransparentTextPixelOperations(color_type _t)
-    :text_color(_t) {}
-
-  void WritePixel(pointer_type p, color_type c) const {
-    if (c != 0)
-      PixelTraits::WritePixel(p, text_color);
-  }
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        WritePixel(p, ReadPixel(src));
-      });
-  }
-};
-
 /**
  * The input buffer contains alpha values, and each pixel is blended
  * using the alpha value, the existing color and the given color.
