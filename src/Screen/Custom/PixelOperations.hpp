@@ -33,6 +33,7 @@ class UnaryPerPixelOperations
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
   using typename PixelTraits::color_type;
+  using PixelTraits::ReadPixel;
   using PixelTraits::ForHorizontal;
 
 public:
@@ -43,7 +44,7 @@ public:
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
-    *p = Operation<PixelTraits>::operator()(c);
+    PixelTraits::WritePixel(p, Operation<PixelTraits>::operator()(c));
   }
 
   gcc_hot
@@ -57,7 +58,7 @@ public:
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        this->WritePixel(p, *src);
+        this->WritePixel(p, this->ReadPixel(src));
       });
   }
 };
@@ -68,6 +69,7 @@ class BinaryPerPixelOperations
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
   using typename PixelTraits::color_type;
+  using PixelTraits::ReadPixel;
   using PixelTraits::ForHorizontal;
 
 public:
@@ -78,7 +80,7 @@ public:
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
-    *p = Operation<PixelTraits>::operator()(*p, c);
+    PixelTraits::WritePixel(p, Operation<PixelTraits>::operator()(ReadPixel(p), c));
   }
 
   gcc_hot
@@ -92,7 +94,7 @@ public:
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        this->WritePixel(p, *src);
+        this->WritePixel(p, this->ReadPixel(src));
       });
   }
 };
@@ -195,6 +197,7 @@ class TransparentTextPixelOperations : private PixelTraits {
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
   using typename PixelTraits::color_type;
+  using PixelTraits::ReadPixel;
   using PixelTraits::ForHorizontal;
 
   color_type text_color;
@@ -203,11 +206,15 @@ public:
   constexpr TransparentTextPixelOperations(color_type _t)
     :text_color(_t) {}
 
+  void WritePixel(pointer_type p, color_type c) const {
+    if (c != 0)
+      PixelTraits::WritePixel(p, text_color);
+  }
+
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
-        if (*src != 0)
-          *p = text_color;
+        WritePixel(p, ReadPixel(src));
       });
   }
 };
@@ -270,7 +277,7 @@ public:
 
   void WritePixel(pointer_type p, color_type c) const {
     if (c != key)
-      *p = ~c;
+      PixelTraits::WritePixel(p, ~c);
   }
 };
 

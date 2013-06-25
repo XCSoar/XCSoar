@@ -49,7 +49,7 @@ struct GreyscalePixelTraits {
     return p + CalcIncrement(delta);
   }
 
-  color_type ReadPixel(pointer_type p) const {
+  color_type ReadPixel(const_pointer_type p) const {
     return *p;
   }
 
@@ -95,6 +95,7 @@ template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
+  using PixelTraits::ReadPixel;
   using PixelTraits::ForVertical;
 
 public:
@@ -672,8 +673,9 @@ public:
                    unsigned src_size,
                    PixelOperations operations) const {
     unsigned j = 0;
-    for (unsigned i = dest_size; i > 0; --i) {
-      operations.WritePixel(dest++, *src);
+    for (unsigned i = 0; i < dest_size; ++i) {
+      operations.WritePixel(PixelTraits::Next(dest, i),
+                            ReadPixel(src));
 
       j += src_size;
       while (j >= dest_size) {
