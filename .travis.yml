@@ -3,7 +3,7 @@ language: cpp
 env:
   - TARGET=UNIX
   - TARGET=PC
-  #- TARGET=ANDROID
+  - TARGET=ANDROID
   - TARGET=WM5
   - TARGET=WM5X
   - TARGET=PPC2000
@@ -26,6 +26,13 @@ install:
 
   # Android
   - if [[ "$TARGET" == "ANDROID" ]]; then sudo apt-get install default-jre default-jdk ant vorbis-tools; fi
+  - if [[ "$TARGET" == "ANDROID" ]] && [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/android-sdk_r22.0.1-linux.tgz; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r22.0.1-linux.tgz -C ~/opt; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r8e-linux-x86_64.tar.bz2 -C ~/opt; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-17.0.0,android-17; fi
 
   # Windows Mobile
   - if [[ "$TARGET" == "WM"* ]] || [[ "$TARGET" == "PPC"* ]] || [[ "$TARGET" == "ALTAIR" ]]; then wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/; export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"; fi
@@ -35,7 +42,8 @@ install:
 
 script:
   # Compile
-  - if [[ "$TARGET" != "MANUAL" ]]; then make -j8 TARGET=$TARGET everything; fi
+  - if [[ "$TARGET" != "MANUAL" ]] && [[ "$TARGET" != "ANDROID" ]]; then make -j8 TARGET=$TARGET everything; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then make -j8 TARGET=ANDROID; fi
   - if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
 
   # Run unit tests on platforms where possible (Unix)
