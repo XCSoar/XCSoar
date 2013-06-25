@@ -45,7 +45,7 @@ struct GreyscalePixelTraits {
     return p + CalcIncrement(delta);
   }
 
-  void SetPixel(pointer_type p, color_type c) const {
+  void WritePixel(pointer_type p, color_type c) const {
     *p = c;
   }
 
@@ -237,7 +237,7 @@ public:
   template<typename PixelOperations>
   void DrawPixel(int x, int y, color_type c, PixelOperations operations) {
     if (Check(x, y))
-      PixelTraits::SetPixel(At(x, y), c);
+      PixelTraits::WritePixel(At(x, y), c);
   }
 
   void DrawPixel(int x, int y, color_type c) {
@@ -308,7 +308,7 @@ public:
 
     pointer_type p = At(x, y1);
     for (unsigned h = y2 - y1; h > 0; --h, p += pitch)
-      operations.SetPixel(p, c);
+      operations.WritePixel(p, c);
   }
 
   template<typename PixelOperations>
@@ -349,7 +349,7 @@ public:
     }
 
     for (int x = 0, y = 0; x < dx; x++, p += pixx) {
-      PixelTraits::SetPixel(p, c);
+      PixelTraits::WritePixel(p, c);
 
       y += dy;
       if (y >= dx) {
@@ -643,7 +643,7 @@ public:
                    PixelOperations operations) const {
     unsigned j = 0;
     for (unsigned i = dest_size; i > 0; --i) {
-      operations.SetPixel(dest++, *src);
+      operations.WritePixel(dest++, *src);
 
       j += src_size;
       while (j >= dest_size) {

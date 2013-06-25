@@ -42,21 +42,21 @@ public:
   constexpr UnaryPerPixelOperations(Args&&... args)
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
-  inline void SetPixel(pointer_type p, color_type c) const {
+  inline void WritePixel(pointer_type p, color_type c) const {
     *p = Operation<PixelTraits>::operator()(c);
   }
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
     for (; n > 0; --n, ++p)
-      SetPixel(p, c);
+      WritePixel(p, c);
   }
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
+      WritePixel(p, *src);
   }
 };
 
@@ -75,21 +75,21 @@ public:
   constexpr BinaryPerPixelOperations(Args&&... args)
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
-  inline void SetPixel(pointer_type p, color_type c) const {
+  inline void WritePixel(pointer_type p, color_type c) const {
     *p = Operation<PixelTraits>::operator()(*p, c);
   }
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
     for (; n > 0; --n, ++p)
-      SetPixel(p, c);
+      WritePixel(p, c);
   }
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
     for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
+      WritePixel(p, *src);
   }
 };
 
@@ -263,7 +263,7 @@ class TransparentInvertPixelOperations : private PixelTraits {
 public:
   constexpr TransparentInvertPixelOperations(color_type _key):key(_key) {}
 
-  void SetPixel(pointer_type p, color_type c) const {
+  void WritePixel(pointer_type p, color_type c) const {
     if (c != key)
       *p = ~c;
   }
