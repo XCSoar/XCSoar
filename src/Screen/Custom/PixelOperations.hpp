@@ -27,11 +27,13 @@ Copyright_License {
 #include <functional>
 
 template<typename PixelTraits, template<typename T> class Operation>
-class UnaryPerPixelOperations : private Operation<PixelTraits> {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+class UnaryPerPixelOperations
+  : private PixelTraits, private Operation<PixelTraits> {
 
-  typedef typename PixelTraits::color_type color_type;
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::const_pointer_type;
+
+  using typename PixelTraits::color_type;
 
 public:
   UnaryPerPixelOperations() = default;
@@ -59,11 +61,12 @@ public:
 };
 
 template<typename PixelTraits, template<typename T> class Operation>
-class BinaryPerPixelOperations : private Operation<PixelTraits> {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+class BinaryPerPixelOperations
+  : private PixelTraits, private Operation<PixelTraits> {
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::const_pointer_type;
 
-  typedef typename PixelTraits::color_type color_type;
+  using typename PixelTraits::color_type;
 
 public:
   BinaryPerPixelOperations() = default;
@@ -184,11 +187,10 @@ using OpaqueTextPixelOperations = UnaryPerPixelOperations<PixelTraits,
                                                           PixelOpaqueText>;
 
 template<typename PixelTraits>
-class TransparentTextPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
+class TransparentTextPixelOperations : private PixelTraits {
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::const_pointer_type;
+  using typename PixelTraits::color_type;
 
   color_type text_color;
 
@@ -234,8 +236,6 @@ using ColoredAlphaPixelOperations = BinaryPerPixelOperations<PixelTraits,
 template<typename PixelTraits>
 class PixelOpaqueAlpha {
   typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
   typedef typename PixelTraits::color_type color_type;
 
   const int base_color, delta_color;
@@ -254,11 +254,9 @@ using OpaqueAlphaPixelOperations = UnaryPerPixelOperations<PixelTraits,
                                                            PixelOpaqueAlpha>;
 
 template<typename PixelTraits>
-class TransparentInvertPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
+class TransparentInvertPixelOperations : private PixelTraits {
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::color_type;
 
   color_type key;
 

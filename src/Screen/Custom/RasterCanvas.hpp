@@ -66,11 +66,11 @@ struct GreyscalePixelTraits {
  */
 template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  using typename PixelTraits::pointer_type;
+  using typename PixelTraits::const_pointer_type;
 
 public:
-  typedef typename PixelTraits::color_type color_type;
+  using typename PixelTraits::color_type;
 
   struct Point {
     int x, y;
