@@ -45,6 +45,10 @@ struct GreyscalePixelTraits {
     return p + CalcIncrement(delta);
   }
 
+  color_type ReadPixel(pointer_type p) const {
+    return *p;
+  }
+
   void WritePixel(pointer_type p, color_type c) const {
     *p = c;
   }
