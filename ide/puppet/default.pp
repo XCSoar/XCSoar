@@ -15,10 +15,6 @@ class libsdl {
     ensure => present,
   }
 
-  package { "libsdl-image1.2-dev":
-    ensure => present,
-  }
-
   package { "libsdl-ttf2.0-dev":
     ensure => present,
   }
