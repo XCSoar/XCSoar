@@ -67,6 +67,10 @@ public:
                                   surface->pitch,
                                   ClipMax(surface->w, offset.x, size.cx),
                                   ClipMax(surface->h, offset.y, size.cy)) {}
+
+  static constexpr SDLPixelTraits::color_type Import(Color color) {
+    return color.GetLuminosity();
+  }
 };
 
 #endif
@@ -89,7 +93,7 @@ Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
 {
   SDLRasterCanvas canvas(surface, offset, size);
   canvas.DrawRectangle(left, top, right, bottom,
-                       color.GetLuminosity());
+                       canvas.Import(color));
 }
 
 #endif
@@ -101,7 +105,7 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
   SDLRasterCanvas canvas(surface, offset, size);
 
   const unsigned thickness = pen.GetWidth();
-  const auto color = pen.GetColor().GetLuminosity();
+  const auto color = canvas.Import(pen.GetColor());
 
   if (thickness > 1)
     for (unsigned i = 1; i < cPoints; ++i)
@@ -147,7 +151,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
   }
 
   if (!brush.IsHollow()) {
-    const auto color = brush.GetColor().GetLuminosity();
+    const auto color = canvas.Import(brush.GetColor());
     if (brush.GetColor().IsOpaque())
       canvas.FillPolygon(points, cPoints, color);
     else
@@ -157,7 +161,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (IsPenOverBrush()) {
     const unsigned thickness = pen.GetWidth();
-    const auto color = pen.GetColor().GetLuminosity();
+    const auto color = canvas.Import(pen.GetColor());
 
     if (thickness > 1) {
       for (unsigned i = 1; i < cPoints; ++i)
@@ -217,9 +221,9 @@ void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   const unsigned thickness = pen.GetWidth();
-  const auto color = pen.GetColor().GetLuminosity();
 
   SDLRasterCanvas canvas(surface, offset, size);
+  const auto color = canvas.Import(pen.GetColor());
   if (thickness > 1)
     canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
   else
@@ -237,7 +241,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 
   if (!brush.IsHollow()) {
 #ifdef GREYSCALE
-    const auto color = brush.GetColor().GetLuminosity();
+    const auto color = canvas.Import(brush.GetColor());
 
     if (brush.GetColor().IsOpaque())
       canvas.FillCircle(x, y, radius, color);
@@ -253,7 +257,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
   if (IsPenOverBrush()) {
     if (pen.GetWidth() < 2) {
 #ifdef GREYSCALE
-      canvas.DrawCircle(x, y, radius, pen.GetColor().GetLuminosity());
+      canvas.DrawCircle(x, y, radius, canvas.Import(pen.GetColor()));
 #else
       ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
 #endif
@@ -263,7 +267,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     // no thickCircleColor in SDL_gfx, so need to emulate it with multiple draws (slow!)
     for (int i= (pen.GetWidth()/2); i>= -(int)(pen.GetWidth()-1)/2; --i) {
 #ifdef GREYSCALE
-      canvas.DrawCircle(x, y, radius + i, pen.GetColor().GetLuminosity());
+      canvas.DrawCircle(x, y, radius + i, canvas.Import(pen.GetColor()));
 #else
       ::circleColor(surface, x, y, radius+i, pen.GetColor().GFXColor());
 #endif
@@ -355,12 +359,13 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   SDLRasterCanvas canvas(surface, offset, size);
 
   if (background_mode == OPAQUE) {
-    OpaqueAlphaPixelOperations<SDLPixelTraits> opaque(background_color.GetLuminosity(),
-                                                      text_color.GetLuminosity());
+    OpaqueAlphaPixelOperations<SDLPixelTraits>
+      opaque(canvas.Import(background_color), canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
                          (const uint8_t *)s->pixels, s->pitch, opaque);
   } else {
-    ColoredAlphaPixelOperations<SDLPixelTraits> transparent(text_color.GetLuminosity());
+    ColoredAlphaPixelOperations<SDLPixelTraits>
+      transparent(canvas.Import(text_color));
     canvas.CopyRectangle(x, y, s->w, s->h,
                          (const uint8_t *)s->pixels, s->pitch, transparent);
   }
@@ -539,7 +544,7 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
-                        TransparentInvertPixelOperations<SDLPixelTraits>(key.GetLuminosity()));
+                        TransparentInvertPixelOperations<SDLPixelTraits>(canvas.Import(key)));
 
 #else
 
@@ -671,8 +676,8 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
                         dest_width, dest_height,
                         (uint8_t *)src_surface->pixels + src_y * src_surface->pitch + src_x,
                         src_surface->pitch, src_width, src_height,
-                        OpaqueTextPixelOperations<SDLPixelTraits>(fg_color.GetLuminosity(),
-                                                                  bg_color.GetLuminosity()));
+                        OpaqueTextPixelOperations<SDLPixelTraits>(canvas.Import(fg_color),
+                                                                  canvas.Import(bg_color)));
 
 #else
 
