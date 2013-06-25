@@ -33,50 +33,50 @@ struct GreyscalePixelTraits {
   typedef const uint8_t *const_pointer_type;
   typedef uint8_t color_type;
 
-  int CalcIncrement(int delta) const {
+  static int CalcIncrement(int delta) {
     return delta;
   }
 
-  pointer_type Next(pointer_type p, int delta) const {
+  static pointer_type Next(pointer_type p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  const_pointer_type Next(const_pointer_type p, int delta) const {
+  static const_pointer_type Next(const_pointer_type p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  color_type ReadPixel(const_pointer_type p) const {
+  static color_type ReadPixel(const_pointer_type p) {
     return *p;
   }
 
-  void WritePixel(pointer_type p, color_type c) const {
+  static void WritePixel(pointer_type p, color_type c) {
     *p = c;
   }
 
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+  static void FillPixels(pointer_type p, unsigned n, color_type c) {
     memset(p, c, n);
   }
 
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
+  static void CopyPixels(pointer_type gcc_restrict p,
+                         const_pointer_type gcc_restrict src, unsigned n) {
     memcpy(p, src, n);
   }
 
   template<typename F>
-  void ForHorizontal(pointer_type p, unsigned n, F f) const {
+  static void ForHorizontal(pointer_type p, unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i));
   }
 
   template<typename F>
-  void ForHorizontal(pointer_type p, const_pointer_type q,
-                     unsigned n, F f) const {
+  static void ForHorizontal(pointer_type p, const_pointer_type q,
+                            unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
   }
 
   template<typename F>
-  void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) const {
+  static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
     for (; n > 0; --n, p = Next(p, pitch))
       f(p);
   }
