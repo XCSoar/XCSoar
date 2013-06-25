@@ -95,79 +95,141 @@ public:
   }
 };
 
-template<typename PixelTraits>
-class PixelBitNot {
+template<typename PixelTraits, typename Operation>
+class PixelPerChannelAdapter : private Operation {
   typedef typename PixelTraits::color_type color_type;
+  typedef typename PixelTraits::channel_type channel_type;
 
 public:
+  PixelPerChannelAdapter() = default;
+
+  template<typename... Args>
+  explicit constexpr PixelPerChannelAdapter(Args&&... args)
+    :Operation(std::forward<Args>(args)...) {}
+
   constexpr color_type operator()(color_type x) const {
+    return PixelTraits::TransformChannels(x, [this](channel_type x) {
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        return this->Operation::operator()(x);
+      });
+  }
+
+  constexpr color_type operator()(color_type a, color_type b) const {
+    return PixelTraits::TransformChannels(a, b,
+                                          [this](channel_type a,
+                                                 channel_type b) {
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        return this->Operation::operator()(a, b);
+      });
+  }
+};
+
+template<typename PixelTraits, typename Operation>
+using UnaryPerChannelOperations =
+  UnaryPerPixelOperations<PixelTraits,
+                          PixelPerChannelAdapter<PixelTraits, Operation>>;
+
+template<typename PixelTraits, typename Operation>
+using BinaryPerChannelOperations =
+  BinaryPerPixelOperations<PixelTraits,
+                           PixelPerChannelAdapter<PixelTraits, Operation>>;
+
+template<typename PixelTraits, typename Operation>
+class PixelIntegerAdapter : private Operation {
+  typedef typename PixelTraits::color_type color_type;
+  typedef typename PixelTraits::integer_type integer_type;
+
+public:
+  PixelIntegerAdapter() = default;
+
+  template<typename... Args>
+  explicit constexpr PixelIntegerAdapter(Args&&... args)
+    :Operation(std::forward<Args>(args)...) {}
+
+  constexpr color_type operator()(color_type x) const {
+    return PixelTraits::TransformInteger(x, [this](integer_type x) {
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        return this->Operation::operator()(x);
+      });
+  }
+
+  constexpr color_type operator()(color_type a, color_type b) const {
+    return PixelTraits::TransformInteger(a, b,
+                                         [this](integer_type a,
+                                                integer_type b) {
+        /* requires "this->" due to gcc 4.7.2 crash bug */
+        return this->Operation::operator()(a, b);
+      });
+  }
+};
+
+template<typename PixelTraits, typename Operation>
+using UnaryIntegerOperations =
+  UnaryPerPixelOperations<PixelTraits,
+                          PixelIntegerAdapter<PixelTraits, Operation>>;
+
+template<typename PixelTraits, typename Operation>
+using BinaryIntegerOperations =
+  BinaryPerPixelOperations<PixelTraits,
+                           PixelIntegerAdapter<PixelTraits, Operation>>;
+
+template<typename integer_type>
+struct PixelBitNot {
+  constexpr integer_type operator()(integer_type x) const {
     return ~x;
   }
 };
 
 template<typename PixelTraits>
 using BitNotPixelOperations =
-  UnaryPerPixelOperations<PixelTraits, PixelBitNot<PixelTraits>>;
-
-template<typename PixelTraits>
-class PixelBitOr {
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  constexpr color_type operator()(color_type a, color_type b) const {
-    return a | b;
-  }
-};
+  UnaryIntegerOperations<PixelTraits,
+                         PixelBitNot<typename PixelTraits::integer_type>>;
 
 template<typename PixelTraits>
 using BitOrPixelOperations =
-  BinaryPerPixelOperations<PixelTraits, PixelBitOr<PixelTraits>>;
+  BinaryIntegerOperations<PixelTraits,
+                          std::bit_or<typename PixelTraits::integer_type>>;
 
-template<typename PixelTraits>
-class PixelBitNotOr {
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  constexpr color_type operator()(color_type a, color_type b) const {
+template<typename integer_type>
+struct PixelBitNotOr {
+  constexpr integer_type operator()(integer_type a, integer_type b) const {
     return a | ~b;
   }
 };
 
 template<typename PixelTraits>
 using BitNotOrPixelOperations =
-  BinaryPerPixelOperations<PixelTraits, PixelBitNotOr<PixelTraits>>;
+  BinaryIntegerOperations<PixelTraits,
+                          PixelBitNotOr<typename PixelTraits::integer_type>>;
 
-template<typename PixelTraits>
-class PixelBitAnd {
-  typedef typename PixelTraits::color_type color_type;
-
-public:
-  constexpr color_type operator()(color_type a, color_type b) const {
+template<typename integer_type>
+struct PixelBitAnd {
+  constexpr integer_type operator()(integer_type a, integer_type b) const {
     return a & b;
   }
 };
 
 template<typename PixelTraits>
 using BitAndPixelOperations =
-  BinaryPerPixelOperations<PixelTraits, PixelBitAnd<PixelTraits>>;
+  BinaryIntegerOperations<PixelTraits,
+                          PixelBitAnd<typename PixelTraits::integer_type>>;
 
-template<typename PixelTraits>
+template<typename T>
 class PixelAlphaOperation {
-  typedef typename PixelTraits::color_type color_type;
-
   const int alpha;
 
 public:
   constexpr explicit PixelAlphaOperation(uint8_t _alpha):alpha(_alpha) {}
 
-  color_type operator()(color_type a, color_type b) const {
+  T operator()(T a, T b) const {
     return a + ((int(b - a) * alpha) >> 8);
   }
 };
 
 template<typename PixelTraits>
 using AlphaPixelOperations =
-  BinaryPerPixelOperations<PixelTraits, PixelAlphaOperation<PixelTraits>>;
+  BinaryPerChannelOperations<PixelTraits,
+                             PixelAlphaOperation<typename PixelTraits::channel_type>>;
 
 template<typename PixelTraits, typename SPT>
 class PixelOpaqueText {
@@ -197,6 +259,7 @@ using OpaqueTextPixelOperations =
 template<typename PixelTraits>
 class PixelColoredAlpha {
   typedef typename PixelTraits::color_type color_type;
+  typedef typename PixelTraits::channel_type channel_type;
 
   color_type color;
 
@@ -204,7 +267,11 @@ public:
   constexpr explicit PixelColoredAlpha(color_type _color):color(_color) {}
 
   constexpr color_type operator()(color_type a, uint8_t alpha) const {
-    return a + ((int(color - a) * int(alpha)) >> 8);
+    return PixelTraits::TransformChannels(a, color,
+                                          [alpha](channel_type a,
+                                                  channel_type color) {
+        return a + ((int(color - a) * int(alpha)) >> 8);
+      });
   }
 };
 
@@ -218,17 +285,20 @@ using ColoredAlphaPixelOperations =
  */
 template<typename PixelTraits>
 class PixelOpaqueAlpha {
-  typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::color_type color_type;
+  typedef typename PixelTraits::channel_type channel_type;
 
-  const int base_color, delta_color;
+  const color_type a, b;
 
 public:
-  constexpr PixelOpaqueAlpha(color_type _a, color_type _b)
-    :base_color(_a), delta_color(_b - _a) {}
+  constexpr PixelOpaqueAlpha(color_type _a, color_type _b):a(_a), b(_b) {}
 
   constexpr color_type operator()(uint8_t alpha) const {
-    return base_color + ((delta_color * alpha) >> 8);
+    return PixelTraits::TransformChannels(a, b,
+                                          [alpha](channel_type a,
+                                                  channel_type b) {
+        return a + ((int(b - a) * int(alpha)) >> 8);
+      });
   }
 };
 
@@ -237,7 +307,9 @@ using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>, SPT>;
 
 template<typename PixelTraits>
-class TransparentInvertPixelOperations {
+class TransparentInvertPixelOperations
+  : private PixelIntegerAdapter<PixelTraits,
+                                PixelBitNot<typename PixelTraits::integer_type>> {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::color_type color_type;
 
@@ -248,7 +320,7 @@ public:
 
   void WritePixel(pointer_type p, color_type c) const {
     if (c != key)
-      PixelTraits::WritePixel(p, ~c);
+      PixelTraits::WritePixel(p, (*this)(c));
   }
 };
 

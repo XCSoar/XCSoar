@@ -32,6 +32,28 @@ struct GreyscalePixelTraits {
   typedef uint8_t *pointer_type;
   typedef const uint8_t *const_pointer_type;
   typedef uint8_t color_type;
+  typedef color_type channel_type;
+  typedef color_type integer_type;
+
+  template<typename F>
+  static color_type TransformInteger(color_type c, F f) {
+    return f(c);
+  }
+
+  template<typename F>
+  static color_type TransformInteger(color_type a, color_type b, F f) {
+    return f(a, b);
+  }
+
+  template<typename F>
+  static color_type TransformChannels(color_type c, F f) {
+    return f(c);
+  }
+
+  template<typename F>
+  static color_type TransformChannels(color_type a, color_type b, F f) {
+    return f(a, b);
+  }
 
   static constexpr bool IsBlack(color_type c) {
     return c == 0;
