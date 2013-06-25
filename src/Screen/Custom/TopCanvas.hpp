@@ -44,6 +44,8 @@ class TopCanvas : public Canvas {
   DISPMANX_UPDATE_HANDLE_T vc_update;
   DISPMANX_ELEMENT_HANDLE_T vc_element;
   EGL_DISPMANX_WINDOW_T vc_window;
+#elif defined(HAVE_MALI)
+  struct mali_native_window mali_native_window;
 #endif
 
   EGLDisplay display;
