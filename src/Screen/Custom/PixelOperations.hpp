@@ -181,7 +181,7 @@ public:
     :background_color(_b), text_color(_t) {}
 
   inline color_type operator()(color_type x) const {
-    return x == 0
+    return PixelTraits::IsBlack(x)
       ? background_color
       : text_color;
   }

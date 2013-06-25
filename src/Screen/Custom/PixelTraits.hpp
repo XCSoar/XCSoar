@@ -33,6 +33,10 @@ struct GreyscalePixelTraits {
   typedef const uint8_t *const_pointer_type;
   typedef uint8_t color_type;
 
+  static constexpr bool IsBlack(color_type c) {
+    return c == 0;
+  }
+
   static int CalcIncrement(int delta) {
     return delta;
   }
