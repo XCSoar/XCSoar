@@ -41,7 +41,7 @@ struct GreyscalePixelTraits {
     return delta;
   }
 
-  pointer_type Increment(pointer_type p, int delta) const {
+  pointer_type Next(pointer_type p, int delta) const {
     return p + CalcIncrement(delta);
   }
 
@@ -111,7 +111,7 @@ protected:
     assert(x < width);
     assert(y < height);
 
-    return PixelTraits::Increment(buffer, pitch * y + x);
+    return PixelTraits::Next(buffer, pitch * y + x);
   }
 
   static bool ClipAxis(int &position, unsigned &length, unsigned max,
