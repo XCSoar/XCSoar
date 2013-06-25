@@ -32,8 +32,8 @@ class UnaryPerPixelOperations
 
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
-
   using typename PixelTraits::color_type;
+  using PixelTraits::ForHorizontal;
 
 public:
   UnaryPerPixelOperations() = default;
@@ -48,15 +48,17 @@ public:
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      WritePixel(p, c);
+    ForHorizontal(p, n, [this, c](pointer_type p){
+        this->WritePixel(p, c);
+      });
   }
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      WritePixel(p, *src);
+    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
+        this->WritePixel(p, *src);
+      });
   }
 };
 
@@ -65,8 +67,8 @@ class BinaryPerPixelOperations
   : private PixelTraits, private Operation<PixelTraits> {
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
-
   using typename PixelTraits::color_type;
+  using PixelTraits::ForHorizontal;
 
 public:
   BinaryPerPixelOperations() = default;
@@ -81,15 +83,17 @@ public:
 
   gcc_hot
   void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      WritePixel(p, c);
+    ForHorizontal(p, n, [this, c](pointer_type p){
+        this->WritePixel(p, c);
+      });
   }
 
   gcc_hot
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      WritePixel(p, *src);
+    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
+        this->WritePixel(p, *src);
+      });
   }
 };
 
@@ -191,6 +195,7 @@ class TransparentTextPixelOperations : private PixelTraits {
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
   using typename PixelTraits::color_type;
+  using PixelTraits::ForHorizontal;
 
   color_type text_color;
 
@@ -200,10 +205,10 @@ public:
 
   void CopyPixels(pointer_type gcc_restrict p,
                   const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src) {
-      if (*src != 0)
-        *p = text_color;
-    }
+    ForHorizontal(p, src, n, [this](pointer_type p, const_pointer_type src){
+        if (*src != 0)
+          *p = text_color;
+      });
   }
 };
 

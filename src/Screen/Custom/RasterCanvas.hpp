@@ -45,6 +45,10 @@ struct GreyscalePixelTraits {
     return p + CalcIncrement(delta);
   }
 
+  const_pointer_type Next(const_pointer_type p, int delta) const {
+    return p + CalcIncrement(delta);
+  }
+
   color_type ReadPixel(pointer_type p) const {
     return *p;
   }
@@ -61,6 +65,25 @@ struct GreyscalePixelTraits {
                   const_pointer_type gcc_restrict src, unsigned n) const {
     memcpy(p, src, n);
   }
+
+  template<typename F>
+  void ForHorizontal(pointer_type p, unsigned n, F f) const {
+    for (unsigned i = 0; i < n; ++i)
+      f(Next(p, i));
+  }
+
+  template<typename F>
+  void ForHorizontal(pointer_type p, const_pointer_type q,
+                     unsigned n, F f) const {
+    for (unsigned i = 0; i < n; ++i)
+      f(Next(p, i), Next(q, i));
+  }
+
+  template<typename F>
+  void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) const {
+    for (; n > 0; --n, p = Next(p, pitch))
+      f(p);
+  }
 };
 
 /**
@@ -72,6 +95,7 @@ template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
   using typename PixelTraits::pointer_type;
   using typename PixelTraits::const_pointer_type;
+  using PixelTraits::ForVertical;
 
 public:
   using typename PixelTraits::color_type;
@@ -267,8 +291,9 @@ public:
     const unsigned columns = x2 - x1;
 
     pointer_type p = At(x1, y1);
-    for (unsigned rows = y2 - y1; rows > 0; --rows, p += pitch)
-      PixelTraits::FillPixels(p, columns, c);
+    ForVertical(p, pitch, y2 - y1, [this, columns, c](pointer_type q){
+        this->FillPixels(q, columns, c);
+      });
   }
 
   template<typename PixelOperations>
@@ -311,8 +336,9 @@ public:
       return;
 
     pointer_type p = At(x, y1);
-    for (unsigned h = y2 - y1; h > 0; --h, p += pitch)
-      operations.WritePixel(p, c);
+    ForVertical(p, pitch, y2 - y1, [operations, c](pointer_type q){
+        operations.WritePixel(q, c);
+      });
   }
 
   template<typename PixelOperations>
