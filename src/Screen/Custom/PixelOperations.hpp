@@ -40,7 +40,7 @@ public:
   UnaryPerPixelOperations() = default;
 
   template<typename... Args>
-  constexpr UnaryPerPixelOperations(Args&&... args)
+  explicit constexpr UnaryPerPixelOperations(Args&&... args)
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
@@ -76,7 +76,7 @@ public:
   BinaryPerPixelOperations() = default;
 
   template<typename... Args>
-  constexpr BinaryPerPixelOperations(Args&&... args)
+  explicit constexpr BinaryPerPixelOperations(Args&&... args)
     :Operation<PixelTraits>(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, color_type c) const {
