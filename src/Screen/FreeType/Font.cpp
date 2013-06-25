@@ -90,6 +90,10 @@ gcc_pure
 static unsigned
 GetCapitalHeight(FT_Face face)
 {
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(freetype_mutex);
+#endif
+
   FT_UInt i = FT_Get_Char_Index(face, 'M');
   if (i == 0)
     return 0;
