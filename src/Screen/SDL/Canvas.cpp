@@ -27,6 +27,7 @@ Copyright_License {
 #include "Format.hpp"
 
 #ifdef GREYSCALE
+#include "Screen/Custom/PixelOperations.hpp"
 #include "Screen/Custom/RasterCanvas.hpp"
 #endif
 
