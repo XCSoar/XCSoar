@@ -176,6 +176,14 @@ public:
   constexpr uint8_t GetLuminosity() const {
     return value;
   }
+
+  constexpr bool operator ==(const Luminosity8 other) const {
+    return value == other.value;
+  }
+
+  constexpr bool operator !=(const Luminosity8 other) const {
+    return !(*this == other);
+  }
 };
 
 #endif
