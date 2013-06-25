@@ -24,16 +24,56 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 #define XCSOAR_SCREEN_PIXEL_OPERATIONS_HPP
 
-template<typename PixelTraits>
-class BitNotPixelOperations {
+#include <functional>
+
+template<typename PixelTraits, template<typename T> class Operation>
+class UnaryPerPixelOperations : private Operation<PixelTraits> {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
 
   typedef typename PixelTraits::color_type color_type;
 
 public:
+  UnaryPerPixelOperations() = default;
+
+  template<typename... Args>
+  constexpr UnaryPerPixelOperations(Args&&... args)
+    :Operation<PixelTraits>(std::forward<Args>(args)...) {}
+
   inline void SetPixel(pointer_type p, color_type c) const {
-    *p = ~c;
+    *p = Operation<PixelTraits>::operator()(c);
+  }
+
+  gcc_hot
+  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+    for (; n > 0; --n, ++p)
+      SetPixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) const {
+    for (; n > 0; --n, ++p, ++src)
+      SetPixel(p, *src);
+  }
+};
+
+template<typename PixelTraits, template<typename T> class Operation>
+class BinaryPerPixelOperations : private Operation<PixelTraits> {
+  typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+
+  typedef typename PixelTraits::color_type color_type;
+
+public:
+  BinaryPerPixelOperations() = default;
+
+  template<typename... Args>
+  constexpr BinaryPerPixelOperations(Args&&... args)
+    :Operation<PixelTraits>(std::forward<Args>(args)...) {}
+
+  inline void SetPixel(pointer_type p, color_type c) const {
+    *p = Operation<PixelTraits>::operator()(*p, c);
   }
 
   gcc_hot
@@ -51,144 +91,97 @@ public:
 };
 
 template<typename PixelTraits>
-class BitOrPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
+class PixelBitNot {
   typedef typename PixelTraits::color_type color_type;
 
 public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p |= c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
+  constexpr color_type operator()(color_type x) const {
+    return ~x;
   }
 };
 
 template<typename PixelTraits>
-class BitNotOrPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+using BitNotPixelOperations = UnaryPerPixelOperations<PixelTraits, PixelBitNot>;
 
+template<typename PixelTraits>
+class PixelBitOr {
   typedef typename PixelTraits::color_type color_type;
 
 public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p |= ~c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
+  constexpr color_type operator()(color_type a, color_type b) const {
+    return a | b;
   }
 };
 
 template<typename PixelTraits>
-class BitAndPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+using BitOrPixelOperations = BinaryPerPixelOperations<PixelTraits, PixelBitOr>;
 
+template<typename PixelTraits>
+class PixelBitNotOr {
   typedef typename PixelTraits::color_type color_type;
 
 public:
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p &= c;
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      SetPixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      SetPixel(p, *src);
+  constexpr color_type operator()(color_type a, color_type b) const {
+    return a | ~b;
   }
 };
 
 template<typename PixelTraits>
-class AlphaPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+using BitNotOrPixelOperations = BinaryPerPixelOperations<PixelTraits,
+                                                         PixelBitNotOr>;
 
+template<typename PixelTraits>
+class PixelBitAnd {
   typedef typename PixelTraits::color_type color_type;
 
-  int alpha;
+public:
+  constexpr color_type operator()(color_type a, color_type b) const {
+    return a & b;
+  }
+};
 
-  color_type BlendPixel(color_type a, color_type b) const {
+template<typename PixelTraits>
+using BitAndPixelOperations = BinaryPerPixelOperations<PixelTraits,
+                                                       PixelBitAnd>;
+
+template<typename PixelTraits>
+class PixelAlphaOperation {
+  typedef typename PixelTraits::color_type color_type;
+
+  const int alpha;
+
+public:
+  constexpr explicit PixelAlphaOperation(uint8_t _alpha):alpha(_alpha) {}
+
+  color_type operator()(color_type a, color_type b) const {
     return a + ((int(b - a) * alpha) >> 8);
   }
+};
+
+template<typename PixelTraits>
+using AlphaPixelOperations = BinaryPerPixelOperations<PixelTraits,
+                                                      PixelAlphaOperation>;
+
+template<typename PixelTraits>
+class PixelOpaqueText {
+  typedef typename PixelTraits::color_type color_type;
+
+  const color_type background_color, text_color;
 
 public:
-  constexpr AlphaPixelOperations(uint8_t _alpha):alpha(_alpha) {}
+  constexpr PixelOpaqueText(color_type _b, color_type _t)
+    :background_color(_b), text_color(_t) {}
 
-  inline void SetPixel(pointer_type p, color_type c) const {
-    *p = BlendPixel(*p, c);
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
-    for (; n > 0; --n, ++p)
-      *p = BlendPixel(*p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*p, *src);
+  inline color_type operator()(color_type x) const {
+    return x == 0
+      ? background_color
+      : text_color;
   }
 };
 
 template<typename PixelTraits>
-class OpaqueTextPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type background_color, text_color;
-
-public:
-  constexpr OpaqueTextPixelOperations(color_type _b, color_type _t)
-    :background_color(_b), text_color(_t) {}
-
-  inline void SetPixel(pointer_type p, color_type c) const {
-    if (c == 0)
-      *p = background_color;
-    else
-      *p = text_color;
-  }
-
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src) {
-      SetPixel(p, *src);
-    }
-  }
-};
+using OpaqueTextPixelOperations = UnaryPerPixelOperations<PixelTraits,
+                                                          PixelOpaqueText>;
 
 template<typename PixelTraits>
 class TransparentTextPixelOperations {
@@ -217,55 +210,48 @@ public:
  * using the alpha value, the existing color and the given color.
  */
 template<typename PixelTraits>
-class ColoredAlphaPixelOperations {
-  typedef typename PixelTraits::pointer_type pointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
-
+class PixelColoredAlpha {
   typedef typename PixelTraits::color_type color_type;
 
   color_type color;
 
-  constexpr color_type BlendPixel(color_type a, uint8_t alpha) const {
-    return a + ((int(color - a) * alpha) >> 8);
-  }
-
 public:
-  constexpr ColoredAlphaPixelOperations(color_type _color):color(_color) {}
+  constexpr explicit PixelColoredAlpha(color_type _color):color(_color) {}
 
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*p, *src);
+  constexpr color_type operator()(color_type a, uint8_t alpha) const {
+    return a + ((int(color - a) * int(alpha)) >> 8);
   }
 };
+
+template<typename PixelTraits>
+using ColoredAlphaPixelOperations = BinaryPerPixelOperations<PixelTraits,
+                                                             PixelColoredAlpha>;
 
 /**
  * The input buffer contains alpha values, and each pixel is blended
  * using the alpha value between the two given colors.
  */
 template<typename PixelTraits>
-class OpaqueAlphaPixelOperations {
+class PixelOpaqueAlpha {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
 
   typedef typename PixelTraits::color_type color_type;
 
-  int base_color, delta_color;
-
-  constexpr color_type BlendPixel(uint8_t alpha) const {
-    return base_color + ((delta_color * alpha) >> 8);
-  }
+  const int base_color, delta_color;
 
 public:
-  constexpr OpaqueAlphaPixelOperations(color_type _a, color_type _b)
+  constexpr PixelOpaqueAlpha(color_type _a, color_type _b)
     :base_color(_a), delta_color(_b - _a) {}
 
-  void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) const {
-    for (; n > 0; --n, ++p, ++src)
-      *p = BlendPixel(*src);
+  constexpr color_type operator()(uint8_t alpha) const {
+    return base_color + ((delta_color * alpha) >> 8);
   }
 };
+
+template<typename PixelTraits>
+using OpaqueAlphaPixelOperations = UnaryPerPixelOperations<PixelTraits,
+                                                           PixelOpaqueAlpha>;
 
 template<typename PixelTraits>
 class TransparentInvertPixelOperations {
