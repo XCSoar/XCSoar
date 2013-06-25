@@ -25,12 +25,9 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
 #include "Format.hpp"
-
-#ifdef GREYSCALE
 #include "Screen/Custom/PixelOperations.hpp"
 #include "Screen/Custom/PixelTraits.hpp"
 #include "Screen/Custom/RasterCanvas.hpp"
-#endif
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -41,16 +38,15 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
-#ifndef GREYSCALE
-#include <SDL_rotozoom.h>
-#include <SDL_imageFilter.h>
-#endif
-
-#include <SDL_gfxBlitFunc.h>
-
 #ifdef GREYSCALE
 
 using SDLPixelTraits = GreyscalePixelTraits;
+
+#else
+
+using SDLPixelTraits = BGRAPixelTraits;
+
+#endif
 
 static inline unsigned
 ClipMax(unsigned limit, int offset, unsigned size)
@@ -70,11 +66,13 @@ public:
                                   ClipMax(surface->h, offset.y, size.cy)) {}
 
   static constexpr SDLPixelTraits::color_type Import(Color color) {
+#ifdef GREYSCALE
     return Luminosity8(color.GetLuminosity());
+#else
+    return BGRA8Color(color.Red(), color.Green(), color.Blue(), color.Alpha());
+#endif
   }
 };
-
-#endif
 
 void
 Canvas::Destroy()
@@ -84,8 +82,6 @@ Canvas::Destroy()
     surface = NULL;
   }
 }
-
-#ifdef GREYSCALE
 
 void
 Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
@@ -97,12 +93,9 @@ Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                        canvas.Import(color));
 }
 
-#endif
-
 void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   const unsigned thickness = pen.GetWidth();
@@ -116,24 +109,6 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
     for (unsigned i = 1; i < cPoints; ++i)
       canvas.DrawLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
                       color);
-
-#else
-  const Uint32 color = pen.GetColor().GFXColor();
-
-#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
-  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
-                                    SDL_GFXPRIMITIVES_MICRO >= 22))
-  /* thickLineColor() was added in SDL_gfx 2.0.22 */
-  const unsigned width = pen.GetWidth();
-  if (width > 1)
-    for (unsigned i = 1; i < cPoints; ++i)
-      ::thickLineColor(surface, p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
-                       width, color);
-  else
-#endif
-    for (unsigned i = 1; i < cPoints; ++i)
-      ::lineColor(surface, p[i - 1].x, p[i - 1].y, p[i].x, p[i].y, color);
-#endif
 }
 
 void
@@ -142,7 +117,6 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   SDLRasterCanvas::Point points[cPoints];
@@ -182,41 +156,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
                       color);
     }
   }
-
-#else
-  Sint16 vx[cPoints], vy[cPoints];
-
-  for (unsigned i = 0; i < cPoints; ++i) {
-    vx[i] = offset.x + lppt[i].x;
-    vy[i] = offset.y + lppt[i].y;
-  }
-
-  if (!brush.IsHollow())
-    ::filledPolygonColor(surface, vx, vy, cPoints,
-                         brush.GetColor().GFXColor());
-
-  if (IsPenOverBrush()) {
-    const Uint32 color = pen.GetColor().GFXColor();
-
-#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
-  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
-                                    SDL_GFXPRIMITIVES_MICRO >= 22))
-    /* thickLineColor() was added in SDL_gfx 2.0.22 */
-    const unsigned width = pen.GetWidth();
-    if (width > 1) {
-      for (unsigned i = 1; i < cPoints; ++i)
-        ::thickLineColor(surface, vx[i - 1], vy[i - 1], vx[i], vy[i],
-                         width, color);
-      ::thickLineColor(surface, vx[cPoints - 1], vy[cPoints - 1], vx[0], vy[0],
-                       width, color);
-    } else
-#endif
-      ::polygonColor(surface, vx, vy, cPoints, color);
-  }
-#endif
 }
-
-#ifdef GREYSCALE
 
 void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
@@ -231,17 +171,12 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
     canvas.DrawLine(ax, ay, bx, by, color);
 }
 
-#endif
-
 void
 Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
-#endif
 
   if (!brush.IsHollow()) {
-#ifdef GREYSCALE
     const auto color = canvas.Import(brush.GetColor());
 
     if (brush.GetColor().IsOpaque())
@@ -249,29 +184,17 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     else
       canvas.FillCircle(x, y, radius, color,
                         AlphaPixelOperations<SDLPixelTraits>(brush.GetColor().Alpha()));
-#else
-    ::filledCircleColor(surface, x, y, radius,
-                        brush.GetColor().GFXColor());
-#endif
   }
 
   if (IsPenOverBrush()) {
     if (pen.GetWidth() < 2) {
-#ifdef GREYSCALE
       canvas.DrawCircle(x, y, radius, canvas.Import(pen.GetColor()));
-#else
-      ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
-#endif
       return;
     }
 
     // no thickCircleColor in SDL_gfx, so need to emulate it with multiple draws (slow!)
     for (int i= (pen.GetWidth()/2); i>= -(int)(pen.GetWidth()-1)/2; --i) {
-#ifdef GREYSCALE
       canvas.DrawCircle(x, y, radius + i, canvas.Import(pen.GetColor()));
-#else
-      ::circleColor(surface, x, y, radius+i, pen.GetColor().GFXColor());
-#endif
     }
   }
 }
@@ -356,35 +279,23 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (s == NULL)
     return;
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   if (background_mode == OPAQUE) {
     OpaqueAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       opaque(canvas.Import(background_color), canvas.Import(text_color));
-    canvas.CopyRectangle(x, y, s->w, s->h,
-                         GreyscalePixelTraits::const_pointer_type(s->pixels),
-                         s->pitch, opaque);
+    canvas.CopyRectangle<decltype(opaque), GreyscalePixelTraits>
+      (x, y, s->w, s->h,
+       GreyscalePixelTraits::const_pointer_type(s->pixels),
+       s->pitch, opaque);
   } else {
     ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       transparent(canvas.Import(text_color));
-    canvas.CopyRectangle(x, y, s->w, s->h,
-                         GreyscalePixelTraits::const_pointer_type(s->pixels),
-                         s->pitch, transparent);
+    canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
+      (x, y, s->w, s->h,
+       GreyscalePixelTraits::const_pointer_type(s->pixels),
+       s->pitch, transparent);
   }
-
-#else
-  if (s->format->palette != NULL && s->format->palette->ncolors >= 2) {
-    s->format->palette->colors[1] = text_color;
-
-    if (background_mode == OPAQUE) {
-      s->flags &= ~SDL_SRCCOLORKEY;
-      s->format->palette->colors[0] = background_color;
-    }
-  }
-
-  Copy(x, y, s);
-#endif
 
   ::SDL_FreeSurface(s);
 }
@@ -541,7 +452,6 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   const UPixelScalar dest_width = GetWidth();
   const UPixelScalar dest_height = GetHeight();
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -549,24 +459,6 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
                                            src_surface->pitch, src_x, src_y),
                         src_surface->pitch, src_width, src_height,
                         TransparentInvertPixelOperations<SDLPixelTraits>(canvas.Import(key)));
-
-#else
-
-  SDL_Surface *zoomed =
-    ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
-                  (double)dest_height / (double)src_height,
-                  SMOOTHING_OFF);
-
-  if (zoomed == NULL)
-    return;
-
-  ::SDL_SetColorKey(zoomed, SDL_SRCCOLORKEY, key.Map(zoomed->format));
-
-  CopyNot(dest_x, dest_y, dest_width, dest_height,
-           zoomed, (src_x * dest_width) / src_width,
-           (src_y * dest_height) / src_height);
-  ::SDL_FreeSurface(zoomed);
-#endif
 }
 
 void
@@ -590,31 +482,12 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
                                            src->pitch, src_x, src_y),
                         src->pitch, src_width, src_height);
-
-#else
-
-  SDL_Surface *zoomed =
-    ::zoomSurface(src, (double)dest_width / (double)src_width,
-                  (double)dest_height / (double)src_height,
-                  SMOOTHING_OFF);
-
-  if (zoomed == NULL)
-    return;
-
-  ::SDL_SetColorKey(zoomed, 0, 0);
-
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       zoomed, (src_x * dest_width) / src_width,
-       (src_y * dest_height) / src_height);
-  ::SDL_FreeSurface(zoomed);
-#endif
 }
 
 void
@@ -673,8 +546,8 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
     return;
 
   SDL_Surface *src_surface = src.GetNative();
+  assert(src_surface->format->BytesPerPixel == 1);
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   OpaqueTextPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
@@ -687,313 +560,7 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
                               src_surface->pitch, src_x, src_y),
      src_surface->pitch, src_width, src_height,
      opaque);
-
-#else
-
-  assert(src_surface->format->palette != NULL &&
-         src_surface->format->palette->ncolors == 256);
-
-  SDL_Surface *zoomed =
-    ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
-                  (double)dest_height / (double)src_height,
-                  SMOOTHING_OFF);
-  if (zoomed == NULL)
-    return;
-
-  assert(zoomed->format->palette != NULL &&
-         zoomed->format->palette->ncolors == 256);
-
-  ::SDL_SetColorKey(zoomed, 0, 0);
-  zoomed->format->palette->colors[0] = text_color;
-  zoomed->format->palette->colors[255] = bg_color;
-
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       zoomed, (src_x * dest_width) / src_width,
-       (src_y * dest_height) / src_height);
-  ::SDL_FreeSurface(zoomed);
-#endif
 }
-
-#ifndef GREYSCALE
-
-static bool
-ClipRange(PixelScalar &a, UPixelScalar a_size,
-          PixelScalar &b, UPixelScalar b_size,
-          UPixelScalar &size)
-{
-  if (a < 0) {
-    b -= a;
-    size += a;
-    a = 0;
-  }
-
-  if (b < 0) {
-    a -= b;
-    size += b;
-    b = 0;
-  }
-
-  if ((PixelScalar)size <= 0)
-    return false;
-
-  if (a + size > a_size)
-    size = a_size - a;
-
-  if ((PixelScalar)size <= 0)
-    return false;
-
-  if (b + size > b_size)
-    size = b_size - b;
-
-  return (PixelScalar)size > 0;
-}
-
-static void
-blit_not(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
-         UPixelScalar dest_width, UPixelScalar dest_height,
-         SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
-{
-  int ret;
-
-  /* obey the dest and src surface borders */
-
-  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
-    return;
-
-  ret = ::SDL_LockSurface(dest);
-  if (ret != 0)
-    return;
-
-  /* convert src's pixel format */
-
-  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
-  if (src == NULL) {
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  ret = ::SDL_LockSurface(src);
-  if (ret != 0) {
-    if (src != _src)
-      ::SDL_FreeSurface(src);
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  /* get pointers to the upper left dest/src pixel */
-
-  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
-  dest_buffer += dest_y * dest->pitch +
-    dest_x * dest->format->BytesPerPixel;
-
-  unsigned char *src_buffer = (unsigned char *)src->pixels;
-  src_buffer += src_y * src->pitch +
-    src_x * src->format->BytesPerPixel;
-
-  /* copy line by line */
-
-  for (UPixelScalar y = 0; y < dest_height; ++y) {
-    ::SDL_imageFilterBitNegation(src_buffer, dest_buffer,
-                                 dest_width * dest->format->BytesPerPixel);
-    src_buffer += src->pitch;
-    dest_buffer += dest->pitch;
-  }
-
-  /* cleanup */
-
-  ::SDL_UnlockSurface(src);
-  if (src != _src)
-    ::SDL_FreeSurface(src);
-  ::SDL_UnlockSurface(dest);
-}
-
-static void
-blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
-        UPixelScalar dest_width, UPixelScalar dest_height,
-        SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
-{
-  int ret;
-
-  /* obey the dest and src surface borders */
-
-  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
-    return;
-
-  ret = ::SDL_LockSurface(dest);
-  if (ret != 0)
-    return;
-
-  /* convert src's pixel format */
-
-  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
-  if (src == NULL) {
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  ret = ::SDL_LockSurface(src);
-  if (ret != 0) {
-    if (src != _src)
-      ::SDL_FreeSurface(src);
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  /* get pointers to the upper left dest/src pixel */
-
-  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
-  dest_buffer += dest_y * dest->pitch +
-    dest_x * dest->format->BytesPerPixel;
-
-  unsigned char *src_buffer = (unsigned char *)src->pixels;
-  src_buffer += src_y * src->pitch +
-    src_x * src->format->BytesPerPixel;
-
-  /* copy line by line */
-
-  for (UPixelScalar y = 0; y < dest_height; ++y) {
-    ::SDL_imageFilterBitOr(src_buffer, dest_buffer, dest_buffer,
-                           dest_width * dest->format->BytesPerPixel);
-    src_buffer += src->pitch;
-    dest_buffer += dest->pitch;
-  }
-
-  /* cleanup */
-
-  ::SDL_UnlockSurface(src);
-  if (src != _src)
-    ::SDL_FreeSurface(src);
-  ::SDL_UnlockSurface(dest);
-}
-
-static void
-BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
-          UPixelScalar dest_width, UPixelScalar dest_height,
-          SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
-{
-  int ret;
-
-  /* obey the dest and src surface borders */
-
-  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
-    return;
-
-  ret = ::SDL_LockSurface(dest);
-  if (ret != 0)
-    return;
-
-  /* convert src's pixel format */
-
-  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
-  if (src == NULL) {
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  ret = ::SDL_LockSurface(src);
-  if (ret != 0) {
-    if (src != _src)
-      ::SDL_FreeSurface(src);
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  /* get pointers to the upper left dest/src pixel */
-
-  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
-  dest_buffer += dest_y * dest->pitch +
-    dest_x * dest->format->BytesPerPixel;
-
-  unsigned char *src_buffer = (unsigned char *)src->pixels;
-  src_buffer += src_y * src->pitch +
-    src_x * src->format->BytesPerPixel;
-
-  /* copy line by line */
-
-  const size_t line_size = dest_width * dest->format->BytesPerPixel;
-  unsigned char *tmp = new unsigned char[line_size];
-
-  for (UPixelScalar y = 0; y < dest_height; ++y) {
-    ::SDL_imageFilterBitNegation(src_buffer, tmp, line_size);
-    src_buffer += src->pitch;
-    ::SDL_imageFilterBitOr(tmp, dest_buffer, dest_buffer, line_size);
-    dest_buffer += dest->pitch;
-  }
-
-  delete[] tmp;
-
-  /* cleanup */
-
-  ::SDL_UnlockSurface(src);
-  if (src != _src)
-    ::SDL_FreeSurface(src);
-  ::SDL_UnlockSurface(dest);
-}
-
-static void
-blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
-         UPixelScalar dest_width, UPixelScalar dest_height,
-         SDL_Surface *_src, PixelScalar src_x, PixelScalar src_y)
-{
-  int ret;
-
-  /* obey the dest and src surface borders */
-
-  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
-    return;
-
-  ret = ::SDL_LockSurface(dest);
-  if (ret != 0)
-    return;
-
-  /* convert src's pixel format */
-
-  SDL_Surface *src = LazyConvertSurface(_src, dest->format);
-  if (src == NULL) {
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  ret = ::SDL_LockSurface(src);
-  if (ret != 0) {
-    if (src != _src)
-      ::SDL_FreeSurface(src);
-    ::SDL_UnlockSurface(dest);
-    return;
-  }
-
-  /* get pointers to the upper left dest/src pixel */
-
-  unsigned char *dest_buffer = (unsigned char *)dest->pixels;
-  dest_buffer += dest_y * dest->pitch +
-    dest_x * dest->format->BytesPerPixel;
-
-  unsigned char *src_buffer = (unsigned char *)src->pixels;
-  src_buffer += src_y * src->pitch +
-    src_x * src->format->BytesPerPixel;
-
-  /* copy line by line */
-
-  for (UPixelScalar y = 0; y < dest_height; ++y) {
-    ::SDL_imageFilterBitAnd(src_buffer, dest_buffer, dest_buffer,
-                            dest_width * dest->format->BytesPerPixel);
-    src_buffer += src->pitch;
-    dest_buffer += dest->pitch;
-  }
-
-  /* cleanup */
-
-  ::SDL_UnlockSurface(src);
-  if (src != _src)
-    ::SDL_FreeSurface(src);
-  ::SDL_UnlockSurface(dest);
-}
-
-#endif
 
 void
 Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
@@ -1002,7 +569,6 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -1010,14 +576,6 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                                           src->pitch, src_x, src_y),
                        src->pitch,
                        BitNotPixelOperations<SDLPixelTraits>());
-
-#else
-  dest_x += offset.x;
-  dest_y += offset.y;
-
-  ::blit_not(surface, dest_x, dest_y, dest_width, dest_height,
-             src, src_x, src_y);
-#endif
 }
 
 void
@@ -1027,7 +585,6 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -1035,14 +592,6 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                                           src->pitch, src_x, src_y),
                        src->pitch,
                        BitOrPixelOperations<SDLPixelTraits>());
-
-#else
-  dest_x += offset.x;
-  dest_y += offset.y;
-
-  ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y);
-#endif
 }
 
 void
@@ -1052,7 +601,6 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -1060,14 +608,6 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
                                           src->pitch, src_x, src_y),
                        src->pitch,
                        BitNotOrPixelOperations<SDLPixelTraits>());
-
-#else
-  dest_x += offset.x;
-  dest_y += offset.y;
-
-  ::BlitNotOr(surface, dest_x, dest_y, dest_width, dest_height,
-              src, src_x, src_y);
-#endif
 }
 
 void
@@ -1088,7 +628,6 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -1096,15 +635,6 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                                           src->pitch, src_x, src_y),
                        src->pitch,
                        BitAndPixelOperations<SDLPixelTraits>());
-
-#else
-
-  dest_x += offset.x;
-  dest_y += offset.y;
-
-  ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
-             src, src_x, src_y);
-#endif
 }
 
 void
@@ -1158,36 +688,12 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
                    unsigned src_width, unsigned src_height,
                    uint8_t alpha)
 {
-  // TODO: support scaling; SDL_gfx doesn't implement it
-  // TODO: this method assumes 32 bit RGBA; but what about RGB 565?
+  // TODO: support scaling
 
-#ifdef GREYSCALE
   SDLRasterCanvas canvas(surface, offset, size);
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        SDLPixelTraits::const_pointer_type(src->pixels), src->pitch,
                        AlphaPixelOperations<SDLPixelTraits>(alpha));
-#else
-  ::SDL_gfxSetAlpha(src, alpha);
-
-  SDL_PixelFormat *format = src->format;
-  if (format->Rmask == 0xff0000 || format->Rmask == 0xff) {
-    src->format->Aloss = 0;
-    src->format->Ashift = 24;
-    src->format->Amask = 0xff000000;
-  } else if (format->Rmask == 0xff000000 || format->Rmask == 0xff00) {
-    src->format->Aloss = 0;
-    src->format->Ashift = 0;
-    src->format->Amask = 0xff;
-  }
-
-  SDL_Rect src_rect = {
-    Sint16(src_x), Sint16(src_y), Uint16(src_width), Uint16(src_height)
-  };
-  SDL_Rect dest_rect = {
-    Sint16(dest_x), Sint16(dest_y), Uint16(dest_width), Uint16(dest_height)
-  };
-  ::SDL_gfxBlitRGBA(src, &src_rect, surface, &dest_rect);
-#endif
 }
 
 void

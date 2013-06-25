@@ -40,8 +40,6 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
-#include <SDL_gfxPrimitives.h>
-
 #ifdef WIN32
 /* those are WIN32 macros - undefine, or Canvas::background_mode will
    break */
@@ -192,18 +190,9 @@ public:
     background_mode = TRANSPARENT;
   }
 
-#ifdef GREYSCALE
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                             PixelScalar right, PixelScalar bottom,
                             Color color);
-#else
-  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                            PixelScalar right, PixelScalar bottom,
-                            Color color) {
-    ::rectangleColor(surface, left + offset.x, top + offset.y,
-                     right + offset.x, bottom + offset.y, color.GFXColor());
-  }
-#endif
 
   void Rectangle(PixelScalar left, PixelScalar top,
                  PixelScalar right, PixelScalar bottom) {
@@ -304,28 +293,7 @@ public:
     DrawPolygon(points, num_points);
   }
 
-#ifdef GREYSCALE
   void DrawLine(int ax, int ay, int bx, int by);
-#else
-  void DrawLine(PixelScalar ax, PixelScalar ay,
-                PixelScalar bx, PixelScalar by) {
-    ax += offset.x;
-    bx += offset.x;
-    ay += offset.y;
-    by += offset.y;
-
-#if SDL_GFXPRIMITIVES_MAJOR > 2 || \
-  (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
-                                    SDL_GFXPRIMITIVES_MICRO >= 22))
-    /* thickLineColor() was added in SDL_gfx 2.0.22 */
-    if (pen.GetWidth() > 1)
-      ::thickLineColor(surface, ax, ay, bx, by,
-                       pen.GetWidth(), pen.GetColor().GFXColor());
-    else
-#endif
-      ::lineColor(surface, ax, ay, bx, by, pen.GetColor().GFXColor());
-  }
-#endif
 
   void DrawLine(const RasterPoint a, const RasterPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);

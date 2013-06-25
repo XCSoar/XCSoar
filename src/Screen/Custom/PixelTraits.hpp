@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/PortableColor.hpp"
 #include "Compiler.h"
 
+#include <algorithm>
+
 #include <string.h>
 
 struct GreyscalePixelTraits {
@@ -152,5 +154,129 @@ struct GreyscalePixelTraits {
     }
   };
 };
+
+#ifndef GREYSCALE
+
+struct BGRAPixelTraits {
+  typedef BGRA8Color color_type;
+  typedef uint8_t channel_type;
+  typedef uint32_t integer_type;
+  typedef color_type *pointer_type;
+  typedef const color_type *const_pointer_type;
+
+  static constexpr integer_type ToInteger(color_type c) {
+    return *reinterpret_cast<const integer_type *>(&c);
+  }
+
+  static constexpr color_type FromInteger(integer_type i) {
+    return *reinterpret_cast<const color_type *>(&i);
+  }
+
+  template<typename F>
+  static color_type TransformInteger(color_type c, F f) {
+    return FromInteger(f(ToInteger(c)));
+  }
+
+  template<typename F>
+  static color_type TransformInteger(color_type a, color_type b, F f) {
+    return FromInteger(f(ToInteger(a), ToInteger(b)));
+  }
+
+  template<typename F>
+  static color_type TransformChannels(color_type c, F f) {
+    return BGRA8Color(f(c.Red()), f(c.Green()), f(c.Blue()), c.Alpha());
+  }
+
+  template<typename F>
+  static color_type TransformChannels(color_type a, color_type b, F f) {
+    return BGRA8Color(f(a.Red(), b.Red()),
+                      f(a.Green(), b.Green()),
+                      f(a.Blue(), b.Blue()),
+                      a.Alpha());
+  }
+
+  static constexpr bool IsBlack(color_type c) {
+    return c.Red() == 0 && c.Green() == 0 && c.Blue() == 0;
+  }
+
+  static constexpr int CalcIncrement(int delta) {
+    return delta;
+  }
+
+  static constexpr pointer_type Next(pointer_type p, int delta) {
+    return p + CalcIncrement(delta);
+  }
+
+  static constexpr const_pointer_type Next(const_pointer_type p, int delta) {
+    return p + CalcIncrement(delta);
+  }
+
+  static constexpr pointer_type NextByte(pointer_type p, int delta) {
+    return pointer_type((uint8_t *)p + delta);
+  }
+
+  static constexpr const_pointer_type NextByte(const_pointer_type p,
+                                               int delta) {
+    return const_pointer_type((const uint8_t *)p + delta);
+  }
+
+  static constexpr pointer_type NextRow(pointer_type p,
+                                        unsigned pitch, int delta) {
+    return NextByte(p, int(pitch) * delta);
+  }
+
+  static constexpr const_pointer_type NextRow(const_pointer_type p,
+                                              unsigned pitch, int delta) {
+    return NextByte(p, int(pitch) * delta);
+  }
+
+  static constexpr pointer_type At(pointer_type p, unsigned pitch,
+                                   int x, int y) {
+    return Next(NextRow(p, pitch, y), x);
+  }
+
+  static constexpr const_pointer_type At(const_pointer_type p, unsigned pitch,
+                                         int x, int y) {
+    return Next(NextRow(p, pitch, y), x);
+  }
+
+  static color_type ReadPixel(const_pointer_type p) {
+    return *p;
+  }
+
+  static void WritePixel(pointer_type p, color_type c) {
+    *p = c;
+  }
+
+  static void FillPixels(pointer_type p, unsigned n, color_type c) {
+    std::fill_n(p, n, c);
+  }
+
+  static void CopyPixels(pointer_type gcc_restrict p,
+                  const_pointer_type gcc_restrict src, unsigned n) {
+    std::copy_n(src, n, p);
+  }
+
+  template<typename F>
+  static void ForHorizontal(pointer_type p, unsigned n, F f) {
+    for (unsigned i = 0; i < n; ++i)
+      f(Next(p, i));
+  }
+
+  template<typename F>
+  static void ForHorizontal(pointer_type p, const_pointer_type q,
+                     unsigned n, F f) {
+    for (unsigned i = 0; i < n; ++i)
+      f(Next(p, i), Next(q, i));
+  }
+
+  template<typename F>
+  static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
+    for (; n > 0; --n, p = NextByte(p, pitch))
+      f(p);
+  }
+};
+
+#endif
 
 #endif
