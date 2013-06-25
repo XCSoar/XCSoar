@@ -51,12 +51,21 @@ Copyright_License {
 
 using SDLPixelTraits = GreyscalePixelTraits;
 
+static inline unsigned
+ClipMax(unsigned limit, int offset, unsigned size)
+{
+  return std::min(unsigned(size),
+                  unsigned(std::max(int(limit - offset), 0)));
+}
+
 class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
 public:
   SDLRasterCanvas(SDL_Surface *surface, RasterPoint offset, PixelSize size)
     :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::pointer_type(surface->pixels)
                                   + offset.y * surface->pitch + offset.x,
-                                  surface->pitch, size.cx, size.cy) {}
+                                  surface->pitch,
+                                  ClipMax(surface->w, offset.x, size.cx),
+                                  ClipMax(surface->h, offset.y, size.cy)) {}
 };
 
 #endif
