@@ -193,11 +193,11 @@ protected:
         y1 += -x1 * m;
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
-        y1 += int((width - x1) * m);
+        y1 += int((width - 1 - x1) * m);
         x1 = width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
         if (x2 != x1)
-          x1 += int((height - y1) / m);
+          x1 += int((height - 1 - y1) / m);
 
         y1 = height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
