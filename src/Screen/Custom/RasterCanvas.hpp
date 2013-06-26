@@ -185,25 +185,25 @@ protected:
       if (code1 & CLIP_LEFT_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(y2 - y1) / float(x2 - x1);
-	  y1 += -x1 * m;
+	  y1 -= x1 * m;
 	}
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(y2 - y1) / float(x2 - x1);
-	  y1 += int((buffer.width - 1 - x1) * m);
+	  y1 -= int((x1 - (buffer.width - 1)) * m);
 	}
         x1 = buffer.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(x2 - x1) / float(y2 - y1);
-          x1 += int((buffer.height - 1 - y1) * m);
+          x1 -= int((y1 - (buffer.height - 1)) * m);
 	}
         y1 = buffer.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(x2 - x1) / float(y2 - y1);
-          x1 += -y1 * m;
+          x1 -= y1 * m;
 	}
         y1 = 0;
       }
