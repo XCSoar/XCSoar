@@ -182,25 +182,38 @@ protected:
         std::swap(code1, code2);
       }
 
-      const float m = x1 != x2
-        ? float(y2 - y1) / float(x2 - x1)
-        : 1.0f;
-
       if (code1 & CLIP_LEFT_EDGE) {
-        y1 += -x1 * m;
+	if (y2 != y1) {
+	  const float m = x1 != x2
+	    ? float(y2 - y1) / float(x2 - x1)
+	    : 1.0f;
+
+	  y1 += -x1 * m;
+	}
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
-        y1 += int((buffer.width - 1 - x1) * m);
+	if (y2 != y1) {
+	  const float m = x1 != x2
+	    ? float(y2 - y1) / float(x2 - x1)
+	    : 1.0f;
+	  y1 += int((buffer.width - 1 - x1) * m);
+	}
         x1 = buffer.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
-        if (x2 != x1)
-          x1 += int((buffer.height - 1 - y1) / m);
-
+        if (x2 != x1) {
+	  const float m = y1 != y2
+	    ? float(x2 - x1) / float(y2 - y1)
+	    : 1.0f;
+          x1 += int((buffer.height - 1 - y1) * m);
+	}
         y1 = buffer.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
-        if (x2 != x1)
-          x1 += -y1 / m;
-
+        if (x2 != x1) {
+	  const float m = y1 != y2
+	    ? float(x2 - x1) / float(y2 - y1)
+	    : 1.0f;
+          x1 += -y1 * m;
+	}
         y1 = 0;
       }
     }
