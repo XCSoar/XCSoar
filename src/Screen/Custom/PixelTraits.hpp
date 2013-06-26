@@ -36,7 +36,9 @@ struct GreyscalePixelTraits {
   typedef uint8_t channel_type;
   typedef uint8_t integer_type;
   typedef color_type *pointer_type;
+  typedef color_type *gcc_restrict rpointer_type;
   typedef const color_type *const_pointer_type;
+  typedef const color_type *gcc_restrict const_rpointer_type;
 
   template<typename F>
   static color_type TransformInteger(color_type c, F f) {
@@ -115,8 +117,8 @@ struct GreyscalePixelTraits {
     memset(p, c.GetLuminosity(), n);
   }
 
-  static void CopyPixels(pointer_type gcc_restrict p,
-                         const_pointer_type gcc_restrict src, unsigned n) {
+  static void CopyPixels(rpointer_type p, const_rpointer_type src,
+                         unsigned n) {
     memcpy(p, src, n);
   }
 
@@ -129,7 +131,7 @@ struct GreyscalePixelTraits {
 
   template<typename F>
   gcc_hot
-  static void ForHorizontal(pointer_type p, const_pointer_type q,
+  static void ForHorizontal(rpointer_type p, const_rpointer_type q,
                             unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
@@ -162,7 +164,9 @@ struct BGRAPixelTraits {
   typedef uint8_t channel_type;
   typedef uint32_t integer_type;
   typedef color_type *pointer_type;
+  typedef color_type *gcc_restrict rpointer_type;
   typedef const color_type *const_pointer_type;
+  typedef const color_type *gcc_restrict const_rpointer_type;
 
   static constexpr integer_type ToInteger(color_type c) {
     return *reinterpret_cast<const integer_type *>(&c);
@@ -252,8 +256,8 @@ struct BGRAPixelTraits {
     std::fill_n(p, n, c);
   }
 
-  static void CopyPixels(pointer_type gcc_restrict p,
-                  const_pointer_type gcc_restrict src, unsigned n) {
+  static void CopyPixels(rpointer_type p,
+                         const_rpointer_type src, unsigned n) {
     std::copy_n(src, n, p);
   }
 
@@ -264,8 +268,8 @@ struct BGRAPixelTraits {
   }
 
   template<typename F>
-  static void ForHorizontal(pointer_type p, const_pointer_type q,
-                     unsigned n, F f) {
+  static void ForHorizontal(rpointer_type p, const_rpointer_type q,
+                            unsigned n, F f) {
     for (unsigned i = 0; i < n; ++i)
       f(Next(p, i), Next(q, i));
   }

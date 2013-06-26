@@ -39,7 +39,9 @@ Copyright_License {
 template<typename PixelTraits>
 class RasterCanvas : private PixelTraits {
   using typename PixelTraits::pointer_type;
+  using typename PixelTraits::rpointer_type;
   using typename PixelTraits::const_pointer_type;
+  using typename PixelTraits::const_rpointer_type;
   using PixelTraits::ReadPixel;
   using PixelTraits::ForVertical;
 
@@ -55,13 +57,13 @@ public:
   };
 
 private:
-  const pointer_type buffer;
+  const rpointer_type buffer;
   const unsigned pitch, width, height;
 
   AllocatedArray<int> polygon_buffer;
 
 public:
-  RasterCanvas(pointer_type _buffer,
+  RasterCanvas(rpointer_type _buffer,
                unsigned _pitch, unsigned _width, unsigned _height,
                PixelTraits _traits=PixelTraits())
     :PixelTraits(_traits), buffer(_buffer),
@@ -593,7 +595,7 @@ public:
 
   template<typename PixelOperations, typename SPT=PixelTraits>
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
-                     typename SPT::const_pointer_type src, unsigned src_pitch,
+                     typename SPT::const_rpointer_type src, unsigned src_pitch,
                      PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
     if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
@@ -614,8 +616,8 @@ public:
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
-  void ScalePixels(pointer_type gcc_restrict dest, unsigned dest_size,
-                   typename SPT::const_pointer_type src,
+  void ScalePixels(rpointer_type dest, unsigned dest_size,
+                   typename SPT::const_rpointer_type src,
                    unsigned src_size,
                    PixelOperations operations) const {
     unsigned j = 0;
@@ -634,7 +636,7 @@ public:
   template<typename PixelOperations, typename SPT=PixelTraits>
   void ScaleRectangle(int dest_x, int dest_y,
                       unsigned dest_width, unsigned dest_height,
-                      typename SPT::const_pointer_type src, unsigned src_pitch,
+                      typename SPT::const_rpointer_type src, unsigned src_pitch,
                       unsigned src_width, unsigned src_height,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
@@ -645,7 +647,7 @@ public:
     src = SPT::At(src, src_pitch, src_x, src_y);
 
     unsigned j = 0;
-    pointer_type dest = At(dest_x, dest_y);
+    rpointer_type dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, pitch, 1)) {
       ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
@@ -661,7 +663,7 @@ public:
 
   void ScaleRectangle(int dest_x, int dest_y,
                       unsigned dest_width, unsigned dest_height,
-                      const_pointer_type src, unsigned src_pitch,
+                      const_rpointer_type src, unsigned src_pitch,
                       unsigned src_width, unsigned src_height) {
     ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                    src, src_pitch, src_width, src_height,

@@ -29,6 +29,7 @@ Copyright_License {
 template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class UnaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::rpointer_type rpointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
   typedef typename PixelTraits::color_type color_type;
 
@@ -52,8 +53,8 @@ public:
   }
 
   gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  typename SPT::const_pointer_type gcc_restrict src,
+  void CopyPixels(rpointer_type p,
+                  typename SPT::const_rpointer_type src,
                   unsigned n) const {
     for (unsigned i = 0; i < n; ++i)
       WritePixel(PixelTraits::Next(p, i), SPT::ReadPixel(SPT::Next(src, i)));
@@ -63,6 +64,7 @@ public:
 template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class BinaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
+  typedef typename PixelTraits::rpointer_type rpointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
   typedef typename PixelTraits::color_type color_type;
 
@@ -87,8 +89,7 @@ public:
   }
 
   gcc_hot
-  void CopyPixels(pointer_type gcc_restrict p,
-                  typename SPT::const_pointer_type gcc_restrict src,
+  void CopyPixels(rpointer_type p, typename SPT::const_rpointer_type src,
                   unsigned n) const {
     for (unsigned i = 0; i < n; ++i)
       WritePixel(PixelTraits::Next(p, i), SPT::ReadPixel(SPT::Next(src, i)));
