@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RASTER_HPP
 #define XCSOAR_SCREEN_RASTER_HPP
 
+#include "Buffer.hpp"
 #include "Bresenham.hpp"
 #include "Murphy.hpp"
 #include "Util/AllocatedArray.hpp"
@@ -57,33 +58,29 @@ public:
   };
 
 private:
-  const rpointer_type buffer;
-  const unsigned pitch, width, height;
+  WritableImageBuffer<PixelTraits> buffer;
 
   AllocatedArray<int> polygon_buffer;
 
 public:
-  RasterCanvas(rpointer_type _buffer,
-               unsigned _pitch, unsigned _width, unsigned _height,
+  RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
                PixelTraits _traits=PixelTraits())
-    :PixelTraits(_traits), buffer(_buffer),
-     pitch(_pitch), width(_width), height(_height) {}
+    :PixelTraits(_traits), buffer(_buffer) {}
 
 protected:
   PixelTraits &GetPixelTraits() {
     return *this;
   }
 
-  gcc_pure
-  bool Check(unsigned x, unsigned y) const {
-    return x < width && y < height;
+  constexpr bool Check(unsigned x, unsigned y) const {
+    return buffer.Check(x, y);
   }
 
   pointer_type At(unsigned x, unsigned y) {
-    assert(x < width);
-    assert(y < height);
+    assert(x < buffer.width);
+    assert(y < buffer.height);
 
-    return PixelTraits::At(buffer, pitch, x, y);
+    return buffer.At(x, y);
   }
 
   static bool ClipAxis(int &position, unsigned &length, unsigned max,
@@ -158,12 +155,12 @@ protected:
 
     if (x < 0)
       code |= CLIP_LEFT_EDGE;
-    else if (unsigned(x) >= width)
+    else if (unsigned(x) >= buffer.width)
       code |= CLIP_RIGHT_EDGE;
 
     if (y < 0)
       code |= CLIP_TOP_EDGE;
-    else if (unsigned(y) >= height)
+    else if (unsigned(y) >= buffer.height)
       code |= CLIP_BOTTOM_EDGE;
 
     return code;
@@ -193,13 +190,13 @@ protected:
         y1 += -x1 * m;
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
-        y1 += int((width - 1 - x1) * m);
-        x1 = width - 1;
+        y1 += int((buffer.width - 1 - x1) * m);
+        x1 = buffer.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
         if (x2 != x1)
-          x1 += int((height - 1 - y1) / m);
+          x1 += int((buffer.height - 1 - y1) / m);
 
-        y1 = height - 1;
+        y1 = buffer.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
         if (x2 != x1)
           x1 += -y1 / m;
@@ -227,11 +224,11 @@ public:
     if (y1 < 0)
       y1 = 0;
 
-    if (x2 > int(width))
-      x2 = width;
+    if (x2 > int(buffer.width))
+      x2 = buffer.width;
 
-    if (y2 > int(height))
-      y2 = height;
+    if (y2 > int(buffer.height))
+      y2 = buffer.height;
 
     if (x1 >= x2 || y1 >= y2)
       return;
@@ -239,7 +236,7 @@ public:
     const unsigned columns = x2 - x1;
 
     pointer_type p = At(x1, y1);
-    ForVertical(p, pitch, y2 - y1, [this, columns, c](pointer_type q){
+    ForVertical(p, buffer.pitch, y2 - y1, [this, columns, c](pointer_type q){
         this->FillPixels(q, columns, c);
       });
   }
@@ -247,14 +244,14 @@ public:
   template<typename PixelOperations>
   void DrawHLine(int x1, int x2, int y, color_type c,
                  PixelOperations operations) {
-    if (y < 0 || unsigned(y) >= height)
+    if (y < 0 || unsigned(y) >= buffer.height)
       return;
 
     if (x1 < 0)
       x1 = 0;
 
-    if (x2 > int(width))
-      x2 = width;
+    if (x2 > int(buffer.width))
+      x2 = buffer.width;
 
     if (x1 >= x2)
       return;
@@ -271,20 +268,20 @@ public:
   template<typename PixelOperations>
   void DrawVLine(int x, int y1, int y2, color_type c,
                  PixelOperations operations) {
-    if (x < 0 || unsigned(x) >= width)
+    if (x < 0 || unsigned(x) >= buffer.width)
       return;
 
     if (y1 < 0)
       y1 = 0;
 
-    if (y2 > int(height))
-      y2 = height;
+    if (y2 > int(buffer.height))
+      y2 = buffer.height;
 
     if (y1 >= y2)
       return;
 
     pointer_type p = At(x, y1);
-    ForVertical(p, pitch, y2 - y1, [operations, c](pointer_type q){
+    ForVertical(p, buffer.pitch, y2 - y1, [operations, c](pointer_type q){
         operations.WritePixel(q, c);
       });
   }
@@ -319,7 +316,7 @@ public:
     pointer_type p = At(x1, y1);
 
     int pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
-    int pixy = sy * pitch;
+    int pixy = sy * buffer.pitch;
 
     if (dx < dy) {
       std::swap(dx, dy);
@@ -443,7 +440,7 @@ public:
       return;
 
     const int x1 = x - rad;
-    if (x1 >= int(width))
+    if (x1 >= int(buffer.width))
       return;
 
     const int y2 = y + rad;
@@ -451,7 +448,7 @@ public:
       return;
 
     const int y1 = y - rad;
-    if (y1 >= int(height))
+    if (y1 >= int(buffer.height))
       return;
 
     // draw
@@ -525,7 +522,7 @@ public:
       return;
 
     const int x1 = x - rad;
-    if (x1 >= int(width))
+    if (x1 >= int(buffer.width))
       return;
 
     const int y2 = y + rad;
@@ -533,7 +530,7 @@ public:
       return;
 
     const int y1 = y - rad;
-    if (y1 >= int(height))
+    if (y1 >= int(buffer.height))
       return;
 
     // draw
@@ -598,13 +595,14 @@ public:
                      typename SPT::const_rpointer_type src, unsigned src_pitch,
                      PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
+    if (!ClipAxis(x, w, buffer.width, src_x) ||
+        !ClipAxis(y, h, buffer.height, src_y))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);
 
     pointer_type p = At(x, y);
-    for (; h > 0; --h, p = PixelTraits::NextRow(p, pitch, 1),
+    for (; h > 0; --h, p = PixelTraits::NextRow(p, buffer.pitch, 1),
            src = SPT::NextRow(src, src_pitch, 1))
       operations.CopyPixels(p, src, w);
   }
@@ -640,8 +638,8 @@ public:
                       unsigned src_width, unsigned src_height,
                       PixelOperations operations) {
     unsigned src_x = 0, src_y = 0;
-    if (!ClipScaleAxis(dest_x, dest_width, width, src_x, src_width) ||
-        !ClipScaleAxis(dest_y, dest_height, height, src_y, src_height))
+    if (!ClipScaleAxis(dest_x, dest_width, buffer.width, src_x, src_width) ||
+        !ClipScaleAxis(dest_y, dest_height, buffer.height, src_y, src_height))
       return;
 
     src = SPT::At(src, src_pitch, src_x, src_y);
@@ -649,7 +647,7 @@ public:
     unsigned j = 0;
     rpointer_type dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
-           dest = PixelTraits::NextRow(dest, pitch, 1)) {
+           dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
       ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
                                              operations);
 

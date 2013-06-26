@@ -56,15 +56,23 @@ ClipMax(unsigned limit, int offset, unsigned size)
                   unsigned(std::max(int(limit - offset), 0)));
 }
 
+template<typename PixelTraits>
+static constexpr WritableImageBuffer<PixelTraits>
+MakeWritableImageBuffer(SDL_Surface *surface, RasterPoint offset,
+                        PixelSize size)
+{
+  return {PixelTraits::At(typename PixelTraits::pointer_type(surface->pixels),
+                          surface->pitch, offset.x, offset.y),
+      surface->pitch,
+      ClipMax(surface->w, offset.x, size.cx),
+      ClipMax(surface->h, offset.y, size.cy)};
+}
+
 class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
 public:
   SDLRasterCanvas(SDL_Surface *surface, RasterPoint offset, PixelSize size)
-    :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::At(SDLPixelTraits::pointer_type(surface->pixels),
-                                                     surface->pitch,
-                                                     offset.x, offset.y),
-                                  surface->pitch,
-                                  ClipMax(surface->w, offset.x, size.cx),
-                                  ClipMax(surface->h, offset.y, size.cy)) {}
+    :RasterCanvas<SDLPixelTraits>(MakeWritableImageBuffer<SDLPixelTraits>(surface,
+                                                                          offset, size)) {}
 
   static constexpr SDLPixelTraits::color_type Import(Color color) {
 #ifdef GREYSCALE
