@@ -118,11 +118,10 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 
   SDLRasterCanvas canvas(surface, offset, size);
 
-  SDLRasterCanvas::Point points[cPoints];
-  for (unsigned i = 0; i < cPoints; ++i) {
-    points[i].x = lppt[i].x;
-    points[i].y = lppt[i].y;
-  }
+  static_assert(sizeof(RasterPoint) == sizeof(SDLRasterCanvas::Point),
+                "Incompatible point types");
+  const SDLRasterCanvas::Point *points =
+    reinterpret_cast<const SDLRasterCanvas::Point *>(lppt);
 
   if (!brush.IsHollow()) {
     const auto color = canvas.Import(brush.GetColor());
