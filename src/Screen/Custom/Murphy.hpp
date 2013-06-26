@@ -39,8 +39,6 @@ struct MurphyIterator {
   Canvas &canvas;
   const typename Canvas::color_type color;
 
-  SDL_Surface *dst;
-
   /* delta x , delta y */
   int u, v;
 
