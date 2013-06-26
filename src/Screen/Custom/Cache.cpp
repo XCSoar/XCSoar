@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Color.hpp"
-#include "Util/ListHead.hpp"
 #include "Util/Cache.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -113,7 +112,7 @@ struct TextCacheKey {
   };
 };
 
-struct RenderedText : public ListHead {
+struct RenderedText {
   GLTexture *texture;
 
   RenderedText(const RenderedText &other) = delete;
