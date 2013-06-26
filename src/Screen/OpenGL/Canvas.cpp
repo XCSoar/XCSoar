@@ -529,7 +529,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 
@@ -571,7 +571,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 
@@ -607,7 +607,7 @@ Canvas::DrawClippedText(int x, int y,
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 

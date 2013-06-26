@@ -184,16 +184,16 @@ TextCache::LookupSize(const Font &font, const char *text)
 }
 
 GLTexture *
-TextCache::Get(const Font *font, const char *text)
+TextCache::Get(const Font &font, const char *text)
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-  assert(font != NULL);
+  assert(font.IsDefined());
   assert(text != NULL);
 
   if (*text == 0)
     return NULL;
 
-  TextCacheKey key(*font, text);
+  TextCacheKey key(font, text);
 
   /* look it up */
 
@@ -204,8 +204,8 @@ TextCache::Get(const Font *font, const char *text)
   /* render the text into a OpenGL texture */
 
 #ifdef USE_FREETYPE
-  PixelSize size = font->TextSize(text);
-  size_t buffer_size = font->BufferSize(size);
+  PixelSize size = font.TextSize(text);
+  size_t buffer_size = font.BufferSize(size);
   if (buffer_size == 0)
     return nullptr;
 
@@ -213,12 +213,12 @@ TextCache::Get(const Font *font, const char *text)
   if (buffer == nullptr)
     return nullptr;
 
-  font->Render(text, size, buffer);
+  font.Render(text, size, buffer);
   RenderedText rt(size.cx, size.cy, buffer);
   delete[] buffer;
 #elif defined(ANDROID)
   PixelSize size;
-  int texture_id = font->TextTextureGL(text, size);
+  int texture_id = font.TextTextureGL(text, size);
   if (texture_id == 0)
     return NULL;
 
