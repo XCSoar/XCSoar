@@ -168,12 +168,20 @@ struct BGRAPixelTraits {
   typedef const color_type *const_pointer_type;
   typedef const color_type *gcc_restrict const_rpointer_type;
 
+  union U {
+    color_type c;
+    integer_type i;
+
+    constexpr U(color_type _c):c(_c) {}
+    constexpr U(integer_type _i):i(_i) {}
+  };
+
   static constexpr integer_type ToInteger(color_type c) {
-    return *reinterpret_cast<const integer_type *>(&c);
+    return U(c).i;
   }
 
   static constexpr color_type FromInteger(integer_type i) {
-    return *reinterpret_cast<const color_type *>(&i);
+    return U(i).c;
   }
 
   template<typename F>
