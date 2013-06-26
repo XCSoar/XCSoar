@@ -38,44 +38,14 @@ CorrectedWidth(unsigned nWidth)
 
 RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   :width(nWidth), height(nHeight),
-   corrected_width(CorrectedWidth(nWidth))
+   corrected_width(CorrectedWidth(nWidth)),
+   buffer(new BGRColor[corrected_width * height])
 {
-  assert(nWidth > 0);
-  assert(nHeight > 0);
-
-  Uint32 rmask, gmask, bmask, amask;
-  int depth;
-
-#ifdef GREYSCALE
-  rmask = 0x000000ff;
-  gmask = 0x000000ff;
-  bmask = 0x000000ff;
-  depth = 8;
-#elif defined(HAVE_GLES)
-  rmask = 0x0000f800;
-  gmask = 0x000007e0;
-  bmask = 0x0000001f;
-  depth = 16;
-#else
-  rmask = 0x00ff0000;
-  gmask = 0x0000ff00;
-  bmask = 0x000000ff;
-  depth = 32;
-#endif
-  amask = 0x00000000;
-
-  assert(sizeof(BGRColor) * 8 == depth);
-
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height,
-                                   depth, rmask, gmask, bmask, amask);
-  assert(!SDL_MUSTLOCK(surface));
-
-  buffer = (BGRColor *)surface->pixels;
 }
 
 RawBitmap::~RawBitmap()
 {
-  ::SDL_FreeSurface(surface);
+  delete[] buffer;
 }
 
 void
@@ -83,8 +53,9 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
                      unsigned dest_width, unsigned dest_height) const
 {
-  ConstImageBuffer<SDLPixelTraits> src(SDLPixelTraits::const_pointer_type(surface->pixels),
-                                       surface->pitch, width, height);
+  ConstImageBuffer<SDLPixelTraits> src(SDLPixelTraits::const_pointer_type(buffer),
+                                       corrected_width * sizeof(*buffer),
+                                       width, height);
 
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
                       src, 0, 0, width, height);
