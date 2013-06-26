@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Custom/PixelOperations.hpp"
 #include "Screen/Custom/PixelTraits.hpp"
 #include "Screen/Custom/RasterCanvas.hpp"
+#include "Screen/Custom/Cache.hpp"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -237,31 +238,24 @@ Canvas::CalcTextSize(const TCHAR *text) const
   if (font == NULL)
     return size;
 
-  return font->TextSize(text);
+  /* see if the TextCache can handle this request */
+  size = TextCache::LookupSize(*font, text);
+  if (size.cy > 0)
+    return size;
+
+  return TextCache::GetSize(*font, text);
 }
 
-static SDL_Surface *
+static TextCache::Result
 RenderText(const Font *font, const TCHAR *text)
 {
   if (font == nullptr)
-    return nullptr;
+    return TextCache::Result::Null();
 
   assert(font->IsDefined());
 
 #ifdef USE_FREETYPE
-  PixelSize size = font->TextSize(text);
-  if (size.cx == 0 && size.cy == 0)
-    return nullptr;
-
-  SDL_Surface *s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, size.cx, size.cy,
-                                          8, 0xff, 0xff, 0xff, 0x00);
-  if (s == nullptr)
-    return nullptr;
-
-  size.cx = s->pitch;
-
-  font->Render(text, size, s->pixels);
-  return s;
+  return TextCache::Get(*font, text);
 #endif
 }
 
@@ -273,8 +267,8 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   assert(ValidateUTF8(text));
 #endif
 
-  SDL_Surface *s = RenderText(font, text);
-  if (s == NULL)
+  auto s = RenderText(font, text);
+  if (s.data == nullptr)
     return;
 
   SDLRasterCanvas canvas(surface, offset, size);
@@ -283,19 +277,17 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
     OpaqueAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       opaque(canvas.Import(background_color), canvas.Import(text_color));
     canvas.CopyRectangle<decltype(opaque), GreyscalePixelTraits>
-      (x, y, s->w, s->h,
-       GreyscalePixelTraits::const_pointer_type(s->pixels),
-       s->pitch, opaque);
+      (x, y, s.width, s.height,
+       GreyscalePixelTraits::const_pointer_type(s.data),
+       s.pitch, opaque);
   } else {
     ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
       transparent(canvas.Import(text_color));
     canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
-      (x, y, s->w, s->h,
-       GreyscalePixelTraits::const_pointer_type(s->pixels),
-       s->pitch, transparent);
+      (x, y, s.width, s.height,
+       GreyscalePixelTraits::const_pointer_type(s.data),
+       s.pitch, transparent);
   }
-
-  ::SDL_FreeSurface(s);
 }
 
 void
@@ -306,19 +298,17 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   assert(ValidateUTF8(text));
 #endif
 
-  SDL_Surface *s = RenderText(font, text);
-  if (s == NULL)
+  auto s = RenderText(font, text);
+  if (s.data == nullptr)
     return;
 
   SDLRasterCanvas canvas(surface, offset, size);
   ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
   canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
-    (x, y, s->w, s->h,
-     GreyscalePixelTraits::const_pointer_type(s->pixels),
-     s->pitch, transparent);
-
-  ::SDL_FreeSurface(s);
+    (x, y, s.width, s.height,
+     GreyscalePixelTraits::const_pointer_type(s.data),
+     s.pitch, transparent);
 }
 
 static bool

@@ -27,10 +27,26 @@ Copyright_License {
 #include "Compiler.h"
 
 struct PixelSize;
-class GLTexture;
 class Font;
 
+#ifdef ENABLE_OPENGL
+class GLTexture;
+#endif
+
 namespace TextCache {
+#ifdef ENABLE_OPENGL
+  typedef GLTexture *Result;
+#else
+  struct Result {
+    const void *data;
+    unsigned pitch, width, height;
+
+    static constexpr Result Null() {
+      return { nullptr, 0, 0, 0 };
+    }
+  };
+#endif
+
   gcc_pure
   PixelSize GetSize(const Font &font, const char *text);
 
@@ -38,7 +54,7 @@ namespace TextCache {
   PixelSize LookupSize(const Font &font, const char *text);
 
   gcc_pure
-  GLTexture *Get(const Font &font, const char *text);
+  Result Get(const Font &font, const char *text);
 
   void Flush();
 };
