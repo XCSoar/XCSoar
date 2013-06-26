@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Debug.hpp"
-#include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
 #include "FBO.hpp"
+#include "Screen/Custom/Cache.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"

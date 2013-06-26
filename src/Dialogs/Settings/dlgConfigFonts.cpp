@@ -49,7 +49,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/Custom/Cache.hpp"
 #endif
 
 #include <assert.h>

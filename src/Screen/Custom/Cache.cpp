@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Cache.hpp"
+#include "Cache.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
-#include "Screen/OpenGL/Point.hpp"
+#include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Color.hpp"
 #include "Util/ListHead.hpp"

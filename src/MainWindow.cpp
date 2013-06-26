@@ -64,7 +64,7 @@ Copyright_License {
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/Custom/Cache.hpp"
 #endif
 
 #if !defined(WIN32) && !defined(ANDROID)

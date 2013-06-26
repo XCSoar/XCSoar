@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/Custom/Cache.hpp"
 #endif
 
 #include <algorithm>

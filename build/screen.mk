@@ -56,6 +56,7 @@ endif
 
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \
@@ -63,7 +64,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
