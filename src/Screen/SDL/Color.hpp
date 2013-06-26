@@ -120,16 +120,6 @@ public:
   gcc_pure
   HWColor Map(SDL_PixelFormat *fmt) const;
 
-  constexpr
-  Uint32 GFXColor() const {
-#ifdef GREYSCALE
-    return luminosity.GetLuminosity();
-#else
-    return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
-      ((Uint32)value.b << 8) | (Uint32)value.unused;
-#endif
-  }
-
   /**
    * Returns the alpha part of the color
    * @return The alpha part of the color (0-255)
