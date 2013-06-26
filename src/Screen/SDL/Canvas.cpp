@@ -351,32 +351,13 @@ Canvas::Copy(int dest_x, int dest_y,
       !Clip(dest_y, dest_height, GetHeight(), src_y))
     return;
 
-#ifdef GREYSCALE
-  assert(surface->format->BytesPerPixel == 1);
-  assert(src_surface->format->BytesPerPixel == 1);
+  assert(surface->format->BytesPerPixel == src_surface->format->BytesPerPixel);
 
-  if ((src_surface->flags & SDL_SRCCOLORKEY) == 0 &&
-      (src_surface->format->palette == nullptr ||
-       src_surface->format->palette->ncolors == 0x100)) {
-    /* optimised fast path for greyscale -> greyscale blitting */
-
-    SDLRasterCanvas canvas(surface, offset, size);
-    canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                         SDLPixelTraits::const_pointer_type(src_surface->pixels),
-                         src_surface->pitch);
-
-    return;
-  }
-#endif
-
-  dest_x += offset.x;
-  dest_y += offset.y;
-
-  SDL_Rect src_rect = { Sint16(src_x), Sint16(src_y),
-                        Uint16(dest_width), Uint16(dest_height) };
-  SDL_Rect dest_rect = { Sint16(dest_x), Sint16(dest_y) };
-
-  ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
+  SDLRasterCanvas canvas(surface, offset, size);
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src_surface->pixels),
+                                          src_surface->pitch, src_x, src_y),
+                       src_surface->pitch);
 }
 
 void
