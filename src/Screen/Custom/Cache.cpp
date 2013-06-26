@@ -140,9 +140,6 @@ struct RenderedText {
 #elif defined(ANDROID)
   RenderedText(int id, unsigned width, unsigned height)
     :texture(new GLTexture(id, width, height)) {}
-#else
-  RenderedText(SDL_Surface *surface)
-    :texture(new GLTexture(surface)) {}
 #endif
 #else
   RenderedText(RenderedText &&other)
