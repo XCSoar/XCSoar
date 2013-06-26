@@ -21,12 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_CANVAS_HPP
-#define XCSOAR_SCREEN_SDL_CANVAS_HPP
-
-#ifdef ENABLE_OPENGL
-#error Please include OpenGL/Canvas.hpp
-#endif
+#ifndef XCSOAR_SCREEN_CUSTOM_CANVAS_HPP
+#define XCSOAR_SCREEN_CUSTOM_CANVAS_HPP
 
 #include "Math/fixed.hpp"
 #include "Screen/Brush.hpp"

@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #else
-#include "Canvas.hpp"
+#include "Screen/Canvas.hpp"
 #endif
 
 #ifdef DITHER

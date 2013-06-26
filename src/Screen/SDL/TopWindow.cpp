@@ -28,7 +28,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 
 #ifdef KOBO
-#include "Canvas.hpp"
+#include "Screen/Custom/Canvas.hpp"
 #endif
 
 void
