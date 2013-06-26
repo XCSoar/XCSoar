@@ -28,6 +28,8 @@ Copyright_License {
 #error Please include OpenGL/Canvas.hpp
 #endif
 
+#include "Screen/Custom/PixelTraits.hpp"
+#include "Screen/Custom/Buffer.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
@@ -38,8 +40,6 @@ Copyright_License {
 #include "Screen/Custom/PixelTraits.hpp"
 #include "Screen/Custom/Buffer.hpp"
 #include "Compiler.h"
-
-#include <SDL_video.h>
 
 #include <assert.h>
 #include <tchar.h>
@@ -69,17 +69,8 @@ class Canvas {
 
   using ConstImageBuffer = ::ConstImageBuffer<SDLPixelTraits>;
 
-  static constexpr ConstImageBuffer
-  MakeConstImageBuffer(SDL_Surface *surface) {
-    return ConstImageBuffer(typename SDLPixelTraits::pointer_type(surface->pixels),
-                            surface->pitch, surface->w, surface->h);
-  }
-
 protected:
-  SDL_Surface *surface;
-
-  RasterPoint offset;
-  PixelSize size;
+  WritableImageBuffer<SDLPixelTraits> buffer;
 
   Pen pen;
   Brush brush;
@@ -91,23 +82,19 @@ protected:
 
 public:
   Canvas()
-    :surface(NULL), offset(0, 0), size(0, 0),
+    :buffer(WritableImageBuffer<SDLPixelTraits>::Empty()),
      font(NULL), background_mode(OPAQUE) {}
-  explicit Canvas(SDL_Surface *_surface)
-    :surface(_surface), offset(0, 0), size(_surface->w, _surface->h),
+
+  explicit Canvas(WritableImageBuffer<SDLPixelTraits> _buffer)
+    :buffer(_buffer),
      font(NULL), background_mode(OPAQUE) {}
 
   Canvas(const Canvas &other) = delete;
   Canvas &operator=(const Canvas &other) = delete;
 
-  void Create(SDL_Surface *_surface) {
-    Destroy();
-
-    surface = _surface;
-    size = { surface->w, surface->h };
+  void Create(WritableImageBuffer<SDLPixelTraits> _buffer) {
+    buffer = _buffer;
   }
-
-  void Destroy();
 
 protected:
   /**
@@ -122,24 +109,24 @@ protected:
 
 public:
   bool IsDefined() const {
-    return surface != NULL;
+    return buffer.data != nullptr;
   }
 
   PixelSize GetSize() const {
-    return size;
+    return { buffer.width, buffer.height };
   }
 
   unsigned GetWidth() const {
-    return size.cx;
+    return buffer.width;
   }
 
   unsigned GetHeight() const {
-    return size.cy;
+    return buffer.height;
   }
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect(size);
+    return PixelRect(GetSize());
   }
 
   void SelectNullPen() {
@@ -380,7 +367,7 @@ public:
   void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
             const Canvas &src, int src_x, int src_y) {
     Copy(dest_x, dest_y, dest_width, dest_height,
-         MakeConstImageBuffer(src.surface), src_x, src_y);
+         src.buffer, src_x, src_y);
   }
 
   void Copy(const Canvas &src, int src_x, int src_y);
@@ -412,8 +399,7 @@ public:
                int src_x, int src_y,
                unsigned src_width, unsigned src_height) {
     Stretch(dest_x, dest_y, dest_width, dest_height,
-            MakeConstImageBuffer(src.surface),
-            src_x, src_y, src_width, src_height);
+            src.buffer, src_x, src_y, src_width, src_height);
   }
 
   void Stretch(const Canvas &src,
@@ -429,7 +415,7 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch(0, 0, size.cx, size.cy, src);
+    Stretch(0, 0, buffer.width, buffer.height, src);
   }
 
   void StretchMono(int dest_x, int dest_y,
@@ -475,12 +461,12 @@ public:
                unsigned dest_width, unsigned dest_height,
                const Canvas &src, int src_x, int src_y) {
     CopyAnd(dest_x, dest_y, dest_width, dest_height,
-            MakeConstImageBuffer(src.surface), src_x, src_y);
+            src.buffer, src_x, src_y);
   }
 
   void CopyAnd(const Canvas &src) {
     CopyAnd(0, 0, src.GetWidth(), src.GetHeight(),
-            MakeConstImageBuffer(src.surface), 0, 0);
+            src.buffer, 0, 0);
   }
 
   void CopyAnd(int dest_x, int dest_y,

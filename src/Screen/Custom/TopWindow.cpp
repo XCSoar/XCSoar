@@ -65,7 +65,11 @@ TopWindow::Fullscreen()
 void
 TopWindow::Expose()
 {
-  OnPaint(*screen);
+  if (screen->Lock()) {
+    OnPaint(*screen);
+    screen->Unlock();
+  }
+
   screen->Flip();
 }
 

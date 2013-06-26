@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
 #include "OS/ConvertPathName.hpp"
-#include "Screen/SDL/Format.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"

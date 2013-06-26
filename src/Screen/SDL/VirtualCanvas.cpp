@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/VirtualCanvas.hpp"
-#include "Format.hpp"
 
 #include <assert.h>
 
@@ -44,21 +43,21 @@ VirtualCanvas::Create(PixelSize new_size)
 
   Destroy();
 
-  const SDL_PixelFormat &format = ::GetDisplayFormat();
-
-  SDL_Surface *surface;
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
-                                   format.BitsPerPixel,
-                                   format.Rmask, format.Gmask,
-                                   format.Bmask, format.Amask);
-  if (surface != NULL)
-    Canvas::Create(surface);
+  buffer.Allocate(new_size.cx, new_size.cy);
 }
 
 void
 VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
 {
+#if defined(ENABLE_OPENGL) || defined(USE_GDI)
   assert(canvas.IsDefined());
+#endif
 
   Create(new_size);
+}
+
+void
+VirtualCanvas::Destroy()
+{
+  buffer.Free();
 }

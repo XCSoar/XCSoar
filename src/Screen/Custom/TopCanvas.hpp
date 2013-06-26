@@ -34,6 +34,10 @@ Copyright_License {
 #include "Dither.hpp"
 #endif
 
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#include <SDL_video.h>
+#endif
+
 class TopCanvas : public Canvas {
 #ifdef USE_EGL
 #ifdef USE_X11
@@ -53,22 +57,16 @@ class TopCanvas : public Canvas {
   EGLSurface surface;
 #endif
 
-#if defined(GREYSCALE) && defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
-  /**
-   * The real video surface.  Our #Canvas::surface attribute is only a
-   * software surface with 8 bits per pixel greyscale, which will be
-   * copied to the real video surface in Flip().
-   */
-  SDL_Surface *real;
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  SDL_Surface *surface;
 
-#ifdef DITHER
+#if defined(GREYSCALE) && defined(DITHER)
   Dither dither;
 #endif
-
 #endif
 
 public:
-#ifdef USE_EGL
+#if defined(USE_EGL) || (defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE))
   ~TopCanvas();
 #endif
 
@@ -88,6 +86,18 @@ public:
   void Fullscreen() {}
 #else
   void Fullscreen();
+#endif
+
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && !defined(GREYSCALE)
+  bool Lock();
+  void Unlock();
+#else
+  bool Lock() {
+    return true;
+  }
+
+  void Unlock() {
+  }
 #endif
 
   void Flip();

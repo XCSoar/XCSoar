@@ -24,9 +24,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
-#include "Format.hpp"
 #include "Screen/Custom/PixelOperations.hpp"
-#include "Screen/Custom/PixelTraits.hpp"
 #include "Screen/Custom/RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
 
@@ -39,30 +37,10 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
-static inline unsigned
-ClipMax(unsigned limit, int offset, unsigned size)
-{
-  return std::min(unsigned(size),
-                  unsigned(std::max(int(limit - offset), 0)));
-}
-
-template<typename PixelTraits>
-static constexpr WritableImageBuffer<PixelTraits>
-MakeWritableImageBuffer(SDL_Surface *surface, RasterPoint offset,
-                        PixelSize size)
-{
-  return {PixelTraits::At(typename PixelTraits::pointer_type(surface->pixels),
-                          surface->pitch, offset.x, offset.y),
-      surface->pitch,
-      ClipMax(surface->w, offset.x, size.cx),
-      ClipMax(surface->h, offset.y, size.cy)};
-}
-
 class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
 public:
-  SDLRasterCanvas(SDL_Surface *surface, RasterPoint offset, PixelSize size)
-    :RasterCanvas<SDLPixelTraits>(MakeWritableImageBuffer<SDLPixelTraits>(surface,
-                                                                          offset, size)) {}
+  SDLRasterCanvas(WritableImageBuffer<SDLPixelTraits> buffer)
+    :RasterCanvas<SDLPixelTraits>(buffer) {}
 
   static constexpr SDLPixelTraits::color_type Import(Color color) {
 #ifdef GREYSCALE
@@ -74,19 +52,10 @@ public:
 };
 
 void
-Canvas::Destroy()
-{
-  if (surface != NULL) {
-    SDL_FreeSurface(surface);
-    surface = NULL;
-  }
-}
-
-void
 Canvas::DrawOutlineRectangle(int left, int top, int right, int bottom,
                              Color color)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   canvas.DrawRectangle(left, top, right, bottom,
                        canvas.Import(color));
 }
@@ -98,7 +67,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
   if (left >= right || top >= bottom)
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   canvas.FillRectangle(left, top, right, bottom,
                        canvas.Import(color));
 }
@@ -106,7 +75,7 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   const unsigned thickness = pen.GetWidth();
   const auto color = canvas.Import(pen.GetColor());
@@ -127,7 +96,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
   if (brush.IsHollow() && !pen.IsDefined())
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   static_assert(sizeof(RasterPoint) == sizeof(SDLRasterCanvas::Point),
                 "Incompatible point types");
@@ -172,7 +141,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   const unsigned thickness = pen.GetWidth();
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   const auto color = canvas.Import(pen.GetColor());
   if (thickness > 1)
     canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
@@ -183,7 +152,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 void
 Canvas::DrawCircle(int x, int y, unsigned radius)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   if (!brush.IsHollow()) {
     const auto color = canvas.Import(brush.GetColor());
@@ -281,7 +250,7 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
   if (s.data == nullptr)
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   if (background_mode == OPAQUE) {
     OpaqueAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
@@ -312,7 +281,7 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (s.data == nullptr)
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
   canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
@@ -352,7 +321,7 @@ Canvas::Copy(int dest_x, int dest_y,
       !Clip(dest_y, dest_height, GetHeight(), src_y))
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch);
 }
@@ -389,25 +358,21 @@ Canvas::Copy(const Bitmap &_src)
 void
 Canvas::CopyTransparentWhite(const Canvas &src)
 {
-  assert(src.surface != NULL);
-
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_WHITE));
   canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
-                       SDLPixelTraits::const_pointer_type(src.surface->pixels),
-                       src.surface->pitch, operations);
+                       src.buffer.data, src.buffer.pitch,
+                       operations);
 }
 
 void
 Canvas::CopyTransparentBlack(const Canvas &src)
 {
-  assert(src.surface != NULL);
-
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_BLACK));
   canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
-                       SDLPixelTraits::const_pointer_type(src.surface->pixels),
-                       src.surface->pitch, operations);
+                       src.buffer.data, src.buffer.pitch,
+                       operations);
 }
 
 void
@@ -417,7 +382,7 @@ Canvas::StretchTransparent(const Bitmap &_src, Color key)
 
   ConstImageBuffer src = _src.GetNative();
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   canvas.ScaleRectangle(0, 0, GetWidth(), GetHeight(),
                         src.data, src.pitch, src.width, src.height,
                         TransparentPixelOperations<SDLPixelTraits>(canvas.Import(key)));
@@ -434,7 +399,7 @@ Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
   const unsigned dest_width = GetWidth();
   const unsigned dest_height = GetHeight();
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(key));
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
@@ -462,7 +427,7 @@ Canvas::Stretch(int dest_x, int dest_y,
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         src.At(src_x, src_y), src.pitch, src_width, src_height);
@@ -522,7 +487,7 @@ Canvas::StretchMono(int dest_x, int dest_y,
     /* paranoid sanity check; shouldn't ever happen */
     return;
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   OpaqueTextPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
     opaque(canvas.Import(fg_color), canvas.Import(bg_color));
@@ -539,7 +504,7 @@ Canvas::CopyNot(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 ConstImageBuffer src, int src_x, int src_y)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
@@ -551,7 +516,7 @@ Canvas::CopyOr(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                ConstImageBuffer src, int src_x, int src_y)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
@@ -563,7 +528,7 @@ Canvas::CopyNotOr(int dest_x, int dest_y,
                   unsigned dest_width, unsigned dest_height,
                   ConstImageBuffer src, int src_x, int src_y)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
@@ -586,7 +551,7 @@ Canvas::CopyAnd(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 ConstImageBuffer src, int src_x, int src_y)
 {
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
@@ -653,7 +618,7 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
 {
   // TODO: support scaling
 
-  SDLRasterCanvas canvas(surface, offset, size);
+  SDLRasterCanvas canvas(buffer);
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
                        AlphaPixelOperations<SDLPixelTraits>(alpha));
@@ -668,7 +633,7 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
                    uint8_t alpha)
 {
   AlphaBlend(dest_x, dest_y, dest_width, dest_height,
-             MakeConstImageBuffer(src.surface),
+             src.buffer,
              src_x, src_y, src_width, src_height,
              alpha);
 }
