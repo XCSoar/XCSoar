@@ -413,9 +413,7 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     value_info->last_unit = Units::current.vertical_speed_unit;
     const UnitSymbol *unit_symbol = units_look.GetSymbol(value_info->last_unit);
     unit_symbol->Draw(canvas, x - Layout::Scale(5), value_info->rc.top,
-                      look.inverse
-                      ? UnitSymbol::INVERSE_GRAY
-                      : UnitSymbol::GRAY);
+                      look.background_color, COLOR_GRAY);
   }
 }
 

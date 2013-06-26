@@ -34,14 +34,9 @@ UnitSymbol::GetScreenSize() const
 }
 
 void 
-UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y, Kind kind) const
+UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+                 Color bg_color, Color text_color) const
 {
-  Color text_color = COLOR_BLACK, bg_color = COLOR_WHITE;
-  if (kind & INVERSE)
-    std::swap(text_color, bg_color);
-  if (kind & GRAY)
-    text_color = COLOR_GRAY;
-
   const PixelSize size = GetSize();
   const PixelSize screen_size = GetScreenSize();
   canvas.StretchMono(x, y, screen_size.cx, screen_size.cy,

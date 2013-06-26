@@ -29,17 +29,9 @@ Copyright_License {
 #include "Compiler.h"
 
 class Canvas;
+class Color;
 
 class UnitSymbol {
-public:
-  enum Kind {
-    NORMAL = 0,
-    INVERSE = 1,
-    GRAY = 2,
-    INVERSE_GRAY = INVERSE | GRAY,
-  };
-
-protected:
   Bitmap bitmap;
   PixelSize size;
 
@@ -66,7 +58,7 @@ public:
   PixelSize GetScreenSize() const;
 
   void Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
-            Kind kind = NORMAL) const;
+            Color bg_color, Color text_color) const;
 };
 
 #endif
