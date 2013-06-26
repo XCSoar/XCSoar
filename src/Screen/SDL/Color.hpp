@@ -27,56 +27,51 @@ Copyright_License {
 #include "Screen/PortableColor.hpp"
 #include "Compiler.h"
 
-#include <SDL_video.h>
 #include <stdint.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used
  * for compile-time constant colors, or for colors loaded from the
  * configuration.
- *
- * We used SDL_Color::unused for alpha, because that's what SDL_gfx uses.
  */
 class Color {
 #ifdef GREYSCALE
   Luminosity8 luminosity;
   uint8_t alpha;
 #else
-  SDL_Color value;
+  BGRA8Color value;
 #endif
 
 public:
+  static constexpr uint8_t TRANSPARENT = 0x00;
+  static constexpr uint8_t OPAQUE = 0xff;
+
   Color() = default;
 
 #ifdef GREYSCALE
   explicit constexpr Color(uint8_t _luminosity,
-                           uint8_t _alpha=SDL_ALPHA_OPAQUE)
+                           uint8_t _alpha=OPAQUE)
     :luminosity(_luminosity), alpha(_alpha) {}
 
   constexpr Color(uint8_t r, uint8_t g, uint8_t b,
-                  uint8_t _alpha=SDL_ALPHA_OPAQUE)
+                  uint8_t _alpha=OPAQUE)
     :luminosity(r, g, b), alpha(_alpha) {}
 
-  explicit constexpr Color(RGB8Color other, uint8_t _alpha=SDL_ALPHA_OPAQUE)
+  explicit constexpr Color(RGB8Color other, uint8_t _alpha=OPAQUE)
     :luminosity(other), alpha(_alpha) {}
 
 #else
   constexpr
-  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a=SDL_ALPHA_OPAQUE)
+  Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a=OPAQUE)
     :value({r, g, b, a}) {}
 
   explicit constexpr Color(RGB8Color other)
-    :value({other.Red(), other.Green(), other.Blue(), SDL_ALPHA_OPAQUE}) {}
+    :value({other.Red(), other.Green(), other.Blue(), OPAQUE}) {}
 #endif
 
 #ifdef GREYSCALE
   constexpr uint8_t GetLuminosity() const {
     return luminosity.GetLuminosity();
-  }
-
-  constexpr
-  operator const SDL_Color() const {
-    return { GetLuminosity(), GetLuminosity(), GetLuminosity(), alpha };
   }
 #else
   /**
@@ -86,7 +81,7 @@ public:
   constexpr
   uint8_t Red() const
   {
-    return value.r;
+    return value.Red();
   }
 
   /**
@@ -96,7 +91,7 @@ public:
   constexpr
   uint8_t Green() const
   {
-    return value.g;
+    return value.Green();
   }
 
   /**
@@ -106,12 +101,7 @@ public:
   constexpr
   uint8_t Blue() const
   {
-    return value.b;
-  }
-
-  constexpr
-  operator const SDL_Color&() const {
-    return value;
+    return value.Blue();
   }
 #endif
 
@@ -126,7 +116,7 @@ public:
 #ifdef GREYSCALE
     return alpha;
 #else
-    return value.unused;
+    return value.Alpha();
 #endif
   }
 
@@ -141,18 +131,18 @@ public:
   }
 
   constexpr bool IsOpaque() const {
-    return Alpha() == SDL_ALPHA_OPAQUE;
+    return Alpha() == OPAQUE;
   }
 
   constexpr bool IsTransparent() const {
-    return Alpha() == SDL_ALPHA_TRANSPARENT;
+    return Alpha() == TRANSPARENT;
   }
 
   /**
    * Construct a #Color object that is transparent.
    */
   static constexpr Color Transparent() {
-    return Color(0, 0, 0, SDL_ALPHA_TRANSPARENT);
+    return Color(0, 0, 0, TRANSPARENT);
   }
 
   /**
@@ -165,9 +155,9 @@ public:
 #ifdef GREYSCALE
     return Color((GetLuminosity() + 0xff * 3) / 4);
 #else
-    return Color((value.r + 0xff * 3) / 4,
-                 (value.g + 0xff * 3) / 4,
-                 (value.b + 0xff * 3) / 4);
+    return Color((Red() + 0xff * 3) / 4,
+                 (Green() + 0xff * 3) / 4,
+                 (Blue() + 0xff * 3) / 4);
 #endif
   }
 
@@ -194,12 +184,13 @@ public:
   constexpr
   bool operator ==(const Color other) const
   {
+    // TODO: compare alpha?
 #ifdef GREYSCALE
     return GetLuminosity() == other.GetLuminosity();
 #else
-    return value.r == other.value.r
-      && value.g == other.value.g
-      && value.b == other.value.b;
+    return value.Red() == other.value.Red() &&
+      value.Green() == other.value.Green() &&
+      value.Blue() == other.value.Blue();
 #endif
   }
 

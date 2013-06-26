@@ -37,6 +37,8 @@ Copyright_License {
 #include "Screen/SDL/Point.hpp"
 #include "Compiler.h"
 
+#include <SDL_video.h>
+
 #include <assert.h>
 #include <tchar.h>
 
