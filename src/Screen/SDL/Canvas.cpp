@@ -310,10 +310,14 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (s == NULL)
     return;
 
-  if (s->format->palette != NULL && s->format->palette->ncolors >= 2)
-    s->format->palette->colors[1] = text_color;
+  SDLRasterCanvas canvas(surface, offset, size);
+  ColoredAlphaPixelOperations<SDLPixelTraits, GreyscalePixelTraits>
+    transparent(canvas.Import(text_color));
+  canvas.CopyRectangle<decltype(transparent), GreyscalePixelTraits>
+    (x, y, s->w, s->h,
+     GreyscalePixelTraits::const_pointer_type(s->pixels),
+     s->pitch, transparent);
 
-  Copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
 
