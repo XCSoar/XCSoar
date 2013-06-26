@@ -62,8 +62,9 @@ ClipMax(unsigned limit, int offset, unsigned size)
 class SDLRasterCanvas : public RasterCanvas<SDLPixelTraits> {
 public:
   SDLRasterCanvas(SDL_Surface *surface, RasterPoint offset, PixelSize size)
-    :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::pointer_type(surface->pixels)
-                                  + offset.y * surface->pitch + offset.x,
+    :RasterCanvas<SDLPixelTraits>(SDLPixelTraits::At(SDLPixelTraits::pointer_type(surface->pixels),
+                                                     surface->pitch,
+                                                     offset.x, offset.y),
                                   surface->pitch,
                                   ClipMax(surface->w, offset.x, size.cx),
                                   ClipMax(surface->h, offset.y, size.cy)) {}
@@ -544,7 +545,8 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        SDLPixelTraits::const_pointer_type(src_surface->pixels) + src_y * src_surface->pitch + src_x,
+                        SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src_surface->pixels),
+                                           src_surface->pitch, src_x, src_y),
                         src_surface->pitch, src_width, src_height,
                         TransparentInvertPixelOperations<SDLPixelTraits>(canvas.Import(key)));
 
@@ -592,7 +594,8 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
-                        SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
+                        SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
+                                           src->pitch, src_x, src_y),
                         src->pitch, src_width, src_height);
 
 #else
@@ -676,7 +679,8 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 
   canvas.ScaleRectangle(dest_x, dest_y,
                         dest_width, dest_height,
-                        SDLPixelTraits::const_pointer_type(src_surface->pixels) + src_y * src_surface->pitch + src_x,
+                        SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src_surface->pixels),
+                                           src_surface->pitch, src_x, src_y,
                         src_surface->pitch, src_width, src_height,
                         OpaqueTextPixelOperations<SDLPixelTraits>(canvas.Import(fg_color),
                                                                   canvas.Import(bg_color)));
@@ -999,7 +1003,8 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
+                       SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
+                                          src->pitch, src_x, src_y),
                        src->pitch,
                        BitNotPixelOperations<SDLPixelTraits>());
 
@@ -1023,7 +1028,8 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
+                       SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
+                                          src->pitch, src_x, src_y),
                        src->pitch,
                        BitOrPixelOperations<SDLPixelTraits>());
 
@@ -1047,7 +1053,8 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
+                       SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
+                                          src->pitch, src_x, src_y),
                        src->pitch,
                        BitNotOrPixelOperations<SDLPixelTraits>());
 
@@ -1082,7 +1089,8 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
   SDLRasterCanvas canvas(surface, offset, size);
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
-                       SDLPixelTraits::const_pointer_type(src->pixels) + src_y * src->pitch + src_x,
+                       SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src->pixels),
+                                          src->pitch, src_x, src_y),
                        src->pitch,
                        BitAndPixelOperations<SDLPixelTraits>());
 

@@ -81,7 +81,7 @@ protected:
     assert(x < width);
     assert(y < height);
 
-    return PixelTraits::Next(buffer, pitch * y + x);
+    return PixelTraits::At(buffer, pitch, x, y);
   }
 
   static bool ClipAxis(int &position, unsigned &length, unsigned max,
@@ -316,21 +316,21 @@ public:
 
     pointer_type p = At(x1, y1);
 
-    int pixx = PixelTraits::CalcIncrement(sx);
-    int pixy = PixelTraits::CalcIncrement(sy * pitch);
+    int pixx = PixelTraits::CalcIncrement(sx) * sizeof(*p);
+    int pixy = sy * pitch;
 
     if (dx < dy) {
       std::swap(dx, dy);
       std::swap(pixx, pixy);
     }
 
-    for (int x = 0, y = 0; x < dx; x++, p += pixx) {
+    for (int x = 0, y = 0; x < dx; x++, p = PixelTraits::NextByte(p, pixx)) {
       PixelTraits::WritePixel(p, c);
 
       y += dy;
       if (y >= dx) {
         y -= dx;
-        p += pixy;
+        p = PixelTraits::NextByte(p, pixy);
       }
     }
   }
@@ -599,10 +599,11 @@ public:
     if (!ClipAxis(x, w, width, src_x) || !ClipAxis(y, h, height, src_y))
       return;
 
-    src += src_y * src_pitch + src_x;
+    src = PixelTraits::At(src, src_pitch, src_x, src_y);
 
     pointer_type p = At(x, y);
-    for (; h > 0; --h, p += pitch, src += src_pitch)
+    for (; h > 0; --h, p = PixelTraits::NextRow(p, pitch, 1),
+           src = PixelTraits::NextRow(src, src_pitch, 1))
       operations.CopyPixels(p, src, w);
   }
 
@@ -641,17 +642,18 @@ public:
         !ClipScaleAxis(dest_y, dest_height, height, src_y, src_height))
       return;
 
-    src += src_y * src_pitch + src_x;
+    src = PixelTraits::At(src, src_pitch, src_x, src_y);
 
     unsigned j = 0;
     pointer_type dest = At(dest_x, dest_y);
-    for (unsigned i = dest_height; i > 0; --i, dest += pitch) {
+    for (unsigned i = dest_height; i > 0; --i,
+           dest = PixelTraits::NextRow(dest, pitch, 1)) {
       ScalePixels(dest, dest_width, src, src_width, operations);
 
       j += src_height;
       while (j >= dest_height) {
         j -= dest_height;
-        src += src_pitch;
+        src = PixelTraits::NextRow(src, src_pitch, 1);
       }
     }
   }

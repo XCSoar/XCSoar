@@ -37,16 +37,45 @@ struct GreyscalePixelTraits {
     return c == 0;
   }
 
-  static int CalcIncrement(int delta) {
+  static constexpr int CalcIncrement(int delta) {
     return delta;
   }
 
-  static pointer_type Next(pointer_type p, int delta) {
+  static constexpr pointer_type Next(pointer_type p, int delta) {
     return p + CalcIncrement(delta);
   }
 
-  static const_pointer_type Next(const_pointer_type p, int delta) {
+  static constexpr const_pointer_type Next(const_pointer_type p, int delta) {
     return p + CalcIncrement(delta);
+  }
+
+  static constexpr pointer_type NextByte(pointer_type p, int delta) {
+    return pointer_type((uint8_t *)p + delta);
+  }
+
+  static constexpr const_pointer_type NextByte(const_pointer_type p,
+                                               int delta) {
+    return const_pointer_type((const uint8_t *)p + delta);
+  }
+
+  static constexpr pointer_type NextRow(pointer_type p,
+                                        unsigned pitch, int delta) {
+    return NextByte(p, int(pitch) * delta);
+  }
+
+  static constexpr const_pointer_type NextRow(const_pointer_type p,
+                                              unsigned pitch, int delta) {
+    return NextByte(p, int(pitch) * delta);
+  }
+
+  static constexpr pointer_type At(pointer_type p, unsigned pitch,
+                                   int x, int y) {
+    return Next(NextRow(p, pitch, y), x);
+  }
+
+  static constexpr const_pointer_type At(const_pointer_type p, unsigned pitch,
+                                         int x, int y) {
+    return Next(NextRow(p, pitch, y), x);
   }
 
   static color_type ReadPixel(const_pointer_type p) {
@@ -84,7 +113,7 @@ struct GreyscalePixelTraits {
   template<typename F>
   gcc_hot
   static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
-    for (; n > 0; --n, p = Next(p, pitch))
+    for (; n > 0; --n, p = NextByte(p, pitch))
       f(p);
   }
 };
