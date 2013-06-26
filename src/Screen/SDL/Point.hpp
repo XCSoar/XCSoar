@@ -24,10 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_POINT_HPP
 #define XCSOAR_SCREEN_SDL_POINT_HPP
 
-#include <SDL_stdinc.h>
-
-typedef Sint16 PixelScalar;
-typedef Uint16 UPixelScalar;
+typedef int PixelScalar;
+typedef unsigned UPixelScalar;
 
 #include "Screen/Custom/Point.hpp"
 
