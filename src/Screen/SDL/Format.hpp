@@ -95,35 +95,4 @@ ConvertToDisplayFormat(SDL_Surface *surface)
   return converted;
 }
 
-/**
- * Like ConvertToDisplayFormat(), but does not destroy the old
- * surface.
- */
-static inline SDL_Surface *
-ConvertToDisplayFormatPreserve(SDL_Surface *surface)
-{
-  if (IsDisplayFormat(*surface->format))
-    /* already using the display format */
-    return surface;
-
-  /* need to convert */
-#ifdef GREYSCALE
-  return SDL_ConvertSurface(surface, greyscale_format, SDL_SWSURFACE);
-#else
-  return SDL_DisplayFormat(surface);
-#endif
-}
-
-/**
- * Like SDL_ConvertSurface(), but returns the given surface if it's
- * already in the given format.  surface.
- */
-static inline SDL_Surface *
-LazyConvertSurface(SDL_Surface *surface, SDL_PixelFormat *format)
-{
-  return CompareFormats(*surface->format, *format)
-    ? surface
-    : SDL_ConvertSurface(surface, format, SDL_SWSURFACE);
-}
-
 #endif
