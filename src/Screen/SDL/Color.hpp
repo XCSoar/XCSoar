@@ -30,8 +30,6 @@ Copyright_License {
 #include <SDL_video.h>
 #include <stdint.h>
 
-class HWColor;
-
 /**
  * This class represents a color in the RGB color space.  This is used
  * for compile-time constant colors, or for colors loaded from the
@@ -116,9 +114,6 @@ public:
     return value;
   }
 #endif
-
-  gcc_pure
-  HWColor Map(SDL_PixelFormat *fmt) const;
 
   /**
    * Returns the alpha part of the color
@@ -220,33 +215,5 @@ public:
     return !(*this == other);
   }
 };
-
-/**
- * A hardware color on a specific Canvas.  A Canvas maps a Color
- * object into HWColor.  Depending on the platform, Color and
- * HWColor may be different, e.g. if the Canvas can not display 24
- * bit RGB colors.
- */
-class HWColor {
-  Uint32 value;
-
-public:
-  constexpr HWColor():value(0) {}
-  explicit constexpr HWColor(Uint32 c):value(c) {}
-
-  constexpr
-  operator Uint32() const { return value; }
-};
-
-gcc_pure
-inline HWColor
-Color::Map(SDL_PixelFormat *fmt) const
-{
-#ifdef GREYSCALE
-  return HWColor(GetLuminosity());
-#else
-  return HWColor(::SDL_MapRGB(fmt, Red(), Green(), Blue()));
-#endif
-}
 
 #endif

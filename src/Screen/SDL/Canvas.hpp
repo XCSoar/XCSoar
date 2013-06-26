@@ -124,12 +124,6 @@ public:
     return PixelRect(size);
   }
 
-  gcc_pure
-  const HWColor map(const Color color) const
-  {
-    return color.Map(surface->format);
-  }
-
   void SelectNullPen() {
     pen = Pen(0, COLOR_BLACK);
   }
