@@ -39,8 +39,6 @@ Copyright_License {
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
   RasterPoint relative;
-#else
-  SDL_Rect old_clip_rect;
 #endif
 
 public:
@@ -68,14 +66,6 @@ public:
       glTranslatef(relative.x, relative.y, 0);
 #endif
     }
-#else
-    ::SDL_GetClipRect(surface, &old_clip_rect);
-
-    SDL_Rect new_clip_rect = {
-      Sint16(offset.x), Sint16(offset.y), Uint16(size.cx), Uint16(size.cy)
-    };
-
-    ::SDL_SetClipRect(surface, &new_clip_rect);
 #endif
   }
 
@@ -88,8 +78,6 @@ public:
 
       glPopMatrix();
     }
-#else
-    ::SDL_SetClipRect(surface, &old_clip_rect);
 #endif
   }
 };
