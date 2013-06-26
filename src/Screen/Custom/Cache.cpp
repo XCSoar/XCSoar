@@ -26,12 +26,9 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
-#include "Screen/Color.hpp"
 #include "Util/Cache.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <unordered_map>
-#include <string>
 #include <assert.h>
 
 /**
