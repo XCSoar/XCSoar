@@ -441,7 +441,7 @@ public:
 
   void StretchMono(int dest_x, int dest_y,
                    unsigned dest_width, unsigned dest_height,
-                   const Bitmap &src,
+                   ::ConstImageBuffer<GreyscalePixelTraits> src,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height,
                    Color fg_color, Color bg_color);

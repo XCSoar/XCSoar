@@ -509,22 +509,18 @@ Canvas::Stretch(int dest_x, int dest_y,
 void
 Canvas::StretchMono(int dest_x, int dest_y,
                     unsigned dest_width, unsigned dest_height,
-                    const Bitmap &_src,
+                    ::ConstImageBuffer<GreyscalePixelTraits> src,
                     int src_x, int src_y,
                     unsigned src_width, unsigned src_height,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
-  assert(_src.IsDefined());
   assert(dest_width < 0x4000);
   assert(dest_height < 0x4000);
 
   if (dest_width >= 0x4000 || dest_height >= 0x4000)
     /* paranoid sanity check; shouldn't ever happen */
     return;
-
-  ::ConstImageBuffer<GreyscalePixelTraits> src
-      = MakeGreyConstImageBuffer(_src.GetNative());
 
   SDLRasterCanvas canvas(surface, offset, size);
 
