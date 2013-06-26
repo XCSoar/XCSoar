@@ -24,15 +24,92 @@ Copyright_License {
 #ifndef XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
 #define XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
 
-struct SDL_Surface;
-class UncompressedImage;
+#include "Screen/Custom/Buffer.hpp"
+#include "Screen/Custom/UncompressedImage.hpp"
+
+template<typename PixelTraits>
+static inline void
+ConvertFromRGB(typename PixelTraits::rpointer_type dest,
+               const uint8_t *src, unsigned n)
+{
+  for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
+    const uint8_t r = *src++, g = *src++, b = *src++;
+    typename PixelTraits::color_type color(r, g, b);
+    PixelTraits::WritePixel(dest, color);
+  }
+}
+
+template<typename PixelTraits>
+static inline void
+ConvertFromRGB(WritableImageBuffer<PixelTraits> buffer,
+               const uint8_t *src, unsigned src_pitch)
+{
+  typename PixelTraits::rpointer_type dest = buffer.data;
+
+  for (unsigned i = 0; i < buffer.height; ++i,
+         dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
+         src += src_pitch)
+    ConvertFromRGB<PixelTraits>(dest, src, buffer.width);
+}
+
+template<typename PixelTraits>
+static inline void
+ConvertFromGray(typename PixelTraits::rpointer_type dest,
+                const uint8_t *src, unsigned n)
+{
+  for (unsigned i = 0; i < n; ++i, dest = PixelTraits::Next(dest, 1)) {
+    const uint8_t l = *src++;
+    typename PixelTraits::color_type color(l, l, l);
+    PixelTraits::WritePixel(dest, color);
+  }
+}
+
+template<typename PixelTraits>
+static inline void
+ConvertFromGray(WritableImageBuffer<PixelTraits> buffer,
+                const uint8_t *src, unsigned src_pitch)
+{
+  typename PixelTraits::rpointer_type dest = buffer.data;
+
+  for (unsigned i = 0; i < buffer.height; ++i,
+         dest = PixelTraits::NextRow(dest, buffer.pitch, 1),
+         src += src_pitch)
+    ConvertFromGray<PixelTraits>(dest, src, buffer.width);
+}
 
 /**
  * Convert an #UncompressedImage to a SDL_Surface.
  *
  * @return the new SDL_Surface object or nullptr on error
  */
-SDL_Surface *
-ImportSurface(const UncompressedImage &image);
+template<typename PixelTraits>
+static inline void
+ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
+              const UncompressedImage &uncompressed)
+{
+  buffer.width = uncompressed.GetWidth();
+  const unsigned increment = PixelTraits::CalcIncrement(buffer.width);
+  buffer.pitch = increment * sizeof(buffer.data[0]);
+  buffer.height = uncompressed.GetHeight();
+  buffer.data = new typename PixelTraits::color_type[increment * buffer.height];
+
+  switch (uncompressed.GetFormat()) {
+  case UncompressedImage::Format::INVALID:
+    assert(false);
+    gcc_unreachable();
+
+  case UncompressedImage::Format::RGB:
+    ConvertFromRGB<PixelTraits>(buffer,
+                                (const uint8_t *)uncompressed.GetData(),
+                                uncompressed.GetPitch());
+    break;
+
+  case UncompressedImage::Format::GRAY:
+    ConvertFromGray<PixelTraits>(buffer,
+                                 (const uint8_t *)uncompressed.GetData(),
+                                 uncompressed.GetPitch());
+    break;
+  }
+}
 
 #endif

@@ -55,44 +55,4 @@ GetDisplayFormat()
 #endif
 }
 
-gcc_pure
-static inline bool
-CompareFormats(const SDL_PixelFormat &a, const SDL_PixelFormat &b)
-{
-  return a.BitsPerPixel == b.BitsPerPixel &&
-    a.Rmask == b.Rmask && a.Gmask == b.Gmask &&
-    a.Bmask == b.Bmask && a.Amask == b.Amask;
-}
-
-gcc_pure
-static inline bool
-IsDisplayFormat(const SDL_PixelFormat &format)
-{
-  return CompareFormats(format, GetDisplayFormat());
-}
-
-/**
- * Returns the unmodified surface if it is compatible with the video
- * surface.  If not, the surface is converted, and the parameter is
- * freed.
- */
-static inline SDL_Surface *
-ConvertToDisplayFormat(SDL_Surface *surface)
-{
-  if (IsDisplayFormat(*surface->format))
-    /* already using the display format */
-    return surface;
-
-  /* need to convert */
-#ifdef GREYSCALE
-  SDL_Surface *converted = SDL_ConvertSurface(surface, greyscale_format,
-                                              SDL_SWSURFACE);
-#else
-  SDL_Surface *converted = SDL_DisplayFormat(surface);
-#endif
-
-  SDL_FreeSurface(surface);
-  return converted;
-}
-
 #endif

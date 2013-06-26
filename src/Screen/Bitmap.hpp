@@ -26,6 +26,11 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
+#include "Screen/Custom/Buffer.hpp"
+#include "Screen/Custom/PixelTraits.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
@@ -43,10 +48,12 @@ class UncompressedImage;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
+#elif !defined(USE_GDI)
+#ifdef GREYSCALE
+using BitmapPixelTraits = GreyscalePixelTraits;
+#else
+using BitmapPixelTraits = BGRAPixelTraits;
 #endif
-
-#ifdef ENABLE_SDL
-struct SDL_Surface;
 #endif
 
 /**
@@ -82,7 +89,7 @@ protected:
 
   bool interpolation;
 #elif defined(ENABLE_SDL)
-  SDL_Surface *surface;
+  WritableImageBuffer<BitmapPixelTraits> buffer;
 #else
   HBITMAP bitmap;
 #endif
@@ -94,8 +101,12 @@ public:
     Load(id);
   }
 #elif defined(ENABLE_SDL)
-  Bitmap():surface(NULL) {}
-  explicit Bitmap(unsigned id):surface(NULL) {
+  Bitmap() {
+    buffer.data = nullptr;
+  }
+
+  explicit Bitmap(unsigned id) {
+    buffer.data = nullptr;
     Load(id);
   }
 #else
@@ -116,7 +127,7 @@ public:
 #ifdef ENABLE_OPENGL
     return texture != NULL;
 #elif defined(ENABLE_SDL)
-    return surface != NULL;
+    return buffer.data != nullptr;
 #else
     return bitmap != NULL;
 #endif
@@ -140,10 +151,6 @@ public:
 
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
-  bool Load(SDL_Surface *_surface, Type type=Type::STANDARD);
-#endif
-
   bool Load(unsigned id, Type type=Type::STANDARD);
 
   /**
@@ -162,8 +169,8 @@ public:
     return texture;
   }
 #elif defined(ENABLE_SDL)
-  SDL_Surface* GetNative() const {
-    return surface;
+  ConstImageBuffer<BitmapPixelTraits> GetNative() const {
+    return buffer;
   }
 #else
   HBITMAP GetNative() const {

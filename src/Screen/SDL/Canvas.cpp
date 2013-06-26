@@ -375,13 +375,13 @@ Canvas::Copy(int dest_x, int dest_y,
              const Bitmap &src, int src_x, int src_y)
 {
   Copy(dest_x, dest_y, dest_width, dest_height,
-       MakeConstImageBuffer(src.GetNative()), src_x, src_y);
+       src.GetNative(), src_x, src_y);
 }
 
 void
 Canvas::Copy(const Bitmap &_src)
 {
-  ConstImageBuffer src = MakeConstImageBuffer(_src.GetNative());
+  ConstImageBuffer src = _src.GetNative();
 
   Copy(0, 0, src.width, src.height, src, 0, 0);
 }
@@ -415,7 +415,7 @@ Canvas::StretchTransparent(const Bitmap &_src, Color key)
 {
   assert(_src.IsDefined());
 
-  ConstImageBuffer src = MakeConstImageBuffer(_src.GetNative());
+  ConstImageBuffer src = _src.GetNative();
 
   SDLRasterCanvas canvas(surface, offset, size);
   canvas.ScaleRectangle(0, 0, GetWidth(), GetHeight(),
@@ -428,7 +428,7 @@ Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
 {
   assert(_src.IsDefined());
 
-  ConstImageBuffer src = MakeConstImageBuffer(_src.GetNative());
+  ConstImageBuffer src = _src.GetNative();
   const unsigned src_x = 0, src_y = 0;
   const unsigned dest_x = 0, dest_y = 0;
   const unsigned dest_width = GetWidth();
@@ -489,7 +489,7 @@ Canvas::Stretch(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   Stretch(dest_x, dest_y, dest_width, dest_height,
-          MakeConstImageBuffer(src.GetNative()),
+          src.GetNative(),
           src_x, src_y, src_width, src_height);
 }
 
@@ -501,7 +501,7 @@ Canvas::Stretch(int dest_x, int dest_y,
   assert(IsDefined());
   assert(_src.IsDefined());
 
-  ConstImageBuffer src = MakeConstImageBuffer(_src.GetNative());
+  ConstImageBuffer src = _src.GetNative();
   Stretch(dest_x, dest_y, dest_width, dest_height,
           src, 0, 0, src.width, src.height);
 }
@@ -578,7 +578,7 @@ Canvas::CopyNotOr(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   CopyNotOr(dest_x, dest_y, dest_width, dest_height,
-            MakeConstImageBuffer(src.GetNative()), src_x, src_y);
+            src.GetNative(), src_x, src_y);
 }
 
 void
@@ -601,7 +601,7 @@ Canvas::CopyNot(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   CopyNot(dest_x, dest_y, dest_width, dest_height,
-          MakeConstImageBuffer(src.GetNative()), src_x, src_y);
+          src.GetNative(), src_x, src_y);
 }
 
 void
@@ -612,7 +612,7 @@ Canvas::CopyOr(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   CopyOr(dest_x, dest_y, dest_width, dest_height,
-         MakeConstImageBuffer(src.GetNative()), src_x, src_y);
+         src.GetNative(), src_x, src_y);
 }
 
 void
@@ -623,14 +623,14 @@ Canvas::CopyAnd(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   CopyAnd(dest_x, dest_y, dest_width, dest_height,
-          MakeConstImageBuffer(src.GetNative()), src_x, src_y);
+          src.GetNative(), src_x, src_y);
 }
 
 void
 Canvas::CopyAnd(const Bitmap &src)
 {
   CopyAnd(0, 0, GetWidth(), GetHeight(),
-          MakeConstImageBuffer(src.GetNative()), 0, 0);
+          src.GetNative(), 0, 0);
 }
 
 void

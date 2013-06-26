@@ -25,15 +25,15 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
 #include "OS/ConvertPathName.hpp"
-#include "UncompressedImage.hpp"
 #include "Screen/SDL/Format.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
+#else
+#include "Screen/Custom/UncompressedImage.hpp"
+#include "UncompressedImage.hpp"
 #endif
-
-#include <SDL_endian.h>
 
 #ifdef WIN32
   #include <windows.h>
@@ -44,46 +44,15 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 
 bool
-Bitmap::Load(SDL_Surface *_surface, Type type)
-{
-  assert(IsScreenInitialized());
-  assert(_surface != NULL);
-
-  assert(surface == NULL);
-
-  switch (type) {
-  case Type::STANDARD:
-    surface = ConvertToDisplayFormat(_surface);
-    break;
-
-  case Type::MONO:
-    // XXX convert?
-    surface = _surface;
-
-    assert(surface->format->palette != NULL &&
-           surface->format->palette->ncolors == 256);
-    assert(surface->format->palette->colors[0].r == 0);
-    assert(surface->format->palette->colors[0].g == 0);
-    assert(surface->format->palette->colors[0].b == 0);
-    assert(surface->format->palette->colors[255].r == 255);
-    assert(surface->format->palette->colors[255].g == 255);
-    assert(surface->format->palette->colors[255].b == 255);
-    break;
-  }
-
-  return true;
-}
-
-bool
 Bitmap::Load(const UncompressedImage &uncompressed, Type type)
 {
+  assert(IsScreenInitialized());
+  assert(uncompressed.IsVisible());
+
   Reset();
 
-  SDL_Surface *surface = ImportSurface(uncompressed);
-  if (surface == nullptr)
-    return false;
-
-  return Load(surface, type);
+  ImportSurface(buffer, uncompressed);
+  return true;
 }
 
 #endif
@@ -104,10 +73,8 @@ Bitmap::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-  if (surface != NULL) {
-    SDL_FreeSurface(surface);
-    surface = NULL;
-  }
+  delete[] buffer.data;
+  buffer.data = nullptr;
 }
 
 const PixelSize
@@ -115,7 +82,7 @@ Bitmap::GetSize() const
 {
   assert(IsDefined());
 
-  return { surface->w, surface->h };
+  return { buffer.width, buffer.height };
 }
 
 #endif /* !OpenGL */
