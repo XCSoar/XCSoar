@@ -94,6 +94,18 @@ Canvas::DrawOutlineRectangle(int left, int top, int right, int bottom,
 }
 
 void
+Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
+                            Color color)
+{
+  if (left >= right || top >= bottom)
+    return;
+
+  SDLRasterCanvas canvas(surface, offset, size);
+  canvas.FillRectangle(left, top, right, bottom,
+                       canvas.Import(color));
+}
+
+void
 Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
 {
   SDLRasterCanvas canvas(surface, offset, size);

@@ -201,24 +201,7 @@ public:
   }
 
   void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const HWColor color) {
-    if (left >= right || top >= bottom)
-      return;
-
-    left += offset.x;
-    right += offset.x;
-    top += offset.y;
-    bottom += offset.y;
-
-    SDL_Rect r = { (Sint16)left, (Sint16)top,
-                   (Uint16)(right - left), (Uint16)(bottom - top) };
-    SDL_FillRect(surface, &r, color);
-  }
-
-  void DrawFilledRectangle(int left, int top, int right, int bottom,
-                           const Color color) {
-    DrawFilledRectangle(left, top, right, bottom, map(color));
-  }
+                           Color color);
 
   void DrawFilledRectangle(int left, int top, int right, int bottom,
                            const Brush &brush) {
@@ -226,10 +209,6 @@ public:
       return;
 
     DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
-  }
-
-  void DrawFilledRectangle(const PixelRect &rc, const HWColor color) {
-    DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
   void DrawFilledRectangle(const PixelRect &rc, const Color color) {
@@ -242,10 +221,6 @@ public:
 
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
-  }
-
-  void Clear(const HWColor color) {
-    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Color color) {
