@@ -271,8 +271,10 @@ private:
       df_23_max = tp2.max_dist(tp3);
       df_31_max = tp3.max_dist(tp1);
 
-      df_min = df_12_min + df_23_min + df_31_min;
-      df_max = df_12_max + df_23_max + df_31_max;
+      df_min = std::max(df_12_min + df_23_min + df_31_min,
+                        std::max({df_12_min, df_23_min, df_31_min}) * 2);
+      df_max = std::min(df_12_max + df_23_max + df_31_max,
+                        std::min({df_12_max, df_23_max, df_31_max}) * 4);
     }
 
     bool operator==(CandidateSet other) const {
