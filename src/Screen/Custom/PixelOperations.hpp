@@ -308,6 +308,30 @@ using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>, SPT>;
 
 template<typename PixelTraits>
+class TransparentPixelOperations {
+  typedef typename PixelTraits::rpointer_type rpointer_type;
+  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
+  typedef typename PixelTraits::color_type color_type;
+
+  color_type key;
+
+public:
+  constexpr TransparentPixelOperations(color_type _key):key(_key) {}
+
+  void WritePixel(rpointer_type p, color_type c) const {
+    if (c != key)
+      PixelTraits::WritePixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(rpointer_type p, const_rpointer_type src, unsigned n) const {
+    for (unsigned i = 0; i < n; ++i)
+      WritePixel(PixelTraits::Next(p, i),
+                 PixelTraits::ReadPixel(PixelTraits::Next(src, i)));
+  }
+};
+
+template<typename PixelTraits>
 class TransparentInvertPixelOperations
   : private PixelIntegerAdapter<PixelTraits,
                                 PixelBitNot<typename PixelTraits::integer_type>> {

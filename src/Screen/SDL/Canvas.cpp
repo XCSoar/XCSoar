@@ -412,9 +412,11 @@ Canvas::CopyTransparentWhite(const Canvas &src)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_WHITE));
-  Copy(src);
-  ::SDL_SetColorKey(src.surface, 0, 0);
+  SDLRasterCanvas canvas(surface, offset, size);
+  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_WHITE));
+  canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
+                       SDLPixelTraits::const_pointer_type(src.surface->pixels),
+                       src.surface->pitch, operations);
 }
 
 void
@@ -422,9 +424,11 @@ Canvas::CopyTransparentBlack(const Canvas &src)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_BLACK));
-  Copy(src);
-  ::SDL_SetColorKey(src.surface, 0, 0);
+  SDLRasterCanvas canvas(surface, offset, size);
+  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_BLACK));
+  canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
+                       SDLPixelTraits::const_pointer_type(src.surface->pixels),
+                       src.surface->pitch, operations);
 }
 
 void
@@ -432,11 +436,13 @@ Canvas::StretchTransparent(const Bitmap &src, Color key)
 {
   assert(src.IsDefined());
 
-  SDL_Surface *surface = src.GetNative();
+  SDL_Surface *src_surface = src.GetNative();
 
-  ::SDL_SetColorKey(surface, SDL_SRCCOLORKEY, key.Map(surface->format));
-  Stretch(surface);
-  ::SDL_SetColorKey(surface, 0, 0);
+  SDLRasterCanvas canvas(surface, offset, size);
+  canvas.ScaleRectangle(0, 0, GetWidth(), GetHeight(),
+                        SDLPixelTraits::const_pointer_type(src_surface->pixels),
+                        src_surface->pitch, src_surface->w, src_surface->h,
+                        TransparentPixelOperations<SDLPixelTraits>(canvas.Import(key)));
 }
 
 void
@@ -453,12 +459,13 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   const unsigned dest_height = GetHeight();
 
   SDLRasterCanvas canvas(surface, offset, size);
+  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(key));
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         SDLPixelTraits::At(SDLPixelTraits::const_pointer_type(src_surface->pixels),
                                            src_surface->pitch, src_x, src_y),
                         src_surface->pitch, src_width, src_height,
-                        TransparentInvertPixelOperations<SDLPixelTraits>(canvas.Import(key)));
+                        operations);
 }
 
 void
