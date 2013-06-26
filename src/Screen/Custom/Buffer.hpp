@@ -47,4 +47,37 @@ struct WritableImageBuffer {
   }
 };
 
+/**
+ * A reference to an image buffer (or a portion of it) that is
+ * read-only.  This class does not allocate or free any memory, it
+ * refers to a buffer owned by somebody else.
+ */
+template<typename PixelTraits>
+struct ConstImageBuffer {
+  typedef typename PixelTraits::const_pointer_type pointer_type;
+  typedef typename PixelTraits::const_rpointer_type rpointer_type;
+
+  rpointer_type data;
+
+  unsigned pitch, width, height;
+
+  ConstImageBuffer() = default;
+
+  constexpr ConstImageBuffer(rpointer_type _data, unsigned _pitch,
+                             unsigned _width, unsigned _height)
+    :data(_data), pitch(_pitch), width(_width), height(_height) {}
+
+  constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other)
+    :data(other.data), pitch(other.pitch),
+     width(other.width), height(other.height) {}
+
+  constexpr bool Check(unsigned x, unsigned y) const {
+    return x < width && y < height;
+  }
+
+  constexpr pointer_type At(unsigned x, unsigned y) {
+    return PixelTraits::At(data, pitch, x, y);
+  }
+};
+
 #endif

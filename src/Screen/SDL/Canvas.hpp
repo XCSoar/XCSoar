@@ -35,6 +35,8 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/SDL/Color.hpp"
 #include "Screen/SDL/Point.hpp"
+#include "Screen/Custom/PixelTraits.hpp"
+#include "Screen/Custom/Buffer.hpp"
 #include "Compiler.h"
 
 #include <SDL_video.h>
@@ -51,6 +53,12 @@ Copyright_License {
 
 class Bitmap;
 
+#ifdef GREYSCALE
+using SDLPixelTraits = GreyscalePixelTraits;
+#else
+using SDLPixelTraits = BGRAPixelTraits;
+#endif
+
 /**
  * Base drawable canvas class
  * 
@@ -58,6 +66,21 @@ class Bitmap;
 class Canvas {
   friend class WindowCanvas;
   friend class SubCanvas;
+
+  using ConstImageBuffer = ::ConstImageBuffer<SDLPixelTraits>;
+
+  static constexpr ConstImageBuffer
+  MakeConstImageBuffer(SDL_Surface *surface) {
+    return ConstImageBuffer(typename SDLPixelTraits::pointer_type(surface->pixels),
+                            surface->pitch, surface->w, surface->h);
+  }
+
+  static constexpr ::ConstImageBuffer<GreyscalePixelTraits>
+  MakeGreyConstImageBuffer(SDL_Surface *surface) {
+    return ::ConstImageBuffer<GreyscalePixelTraits>
+      (typename GreyscalePixelTraits::pointer_type(surface->pixels),
+       surface->pitch, surface->w, surface->h);
+  }
 
 protected:
   SDL_Surface *surface;
@@ -355,16 +378,16 @@ public:
 
   void Copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
-            SDL_Surface *surface, int src_x, int src_y);
+            ConstImageBuffer src, int src_x, int src_y);
 
-  void Copy(int dest_x, int dest_y, SDL_Surface *surface) {
-    Copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
+  void Copy(int dest_x, int dest_y, ConstImageBuffer src) {
+    Copy(dest_x, dest_y, src.width, src.height, src, 0, 0);
   }
 
   void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
             const Canvas &src, int src_x, int src_y) {
     Copy(dest_x, dest_y, dest_width, dest_height,
-         src.surface, src_x, src_y);
+         MakeConstImageBuffer(src.surface), src_x, src_y);
   }
 
   void Copy(const Canvas &src, int src_x, int src_y);
@@ -382,12 +405,12 @@ public:
 
   void Stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src,
+               ConstImageBuffer src,
                int src_x, int src_y, unsigned src_width, unsigned src_height);
 
-  void Stretch(SDL_Surface *src) {
+  void Stretch(ConstImageBuffer src) {
     Stretch(0, 0, GetWidth(), GetHeight(),
-            src, 0, 0, src->w, src->h);
+            src, 0, 0, src.width, src.height);
   }
 
   void Stretch(int dest_x, int dest_y,
@@ -396,7 +419,7 @@ public:
                int src_x, int src_y,
                unsigned src_width, unsigned src_height) {
     Stretch(dest_x, dest_y, dest_width, dest_height,
-            src.surface,
+            MakeConstImageBuffer(src.surface),
             src_x, src_y, src_width, src_height);
   }
 
@@ -425,7 +448,7 @@ public:
 
   void CopyNot(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src, int src_x, int src_y);
+               ConstImageBuffer src, int src_x, int src_y);
 
   void CopyNot(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -433,7 +456,7 @@ public:
 
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,
-              SDL_Surface *src, int src_x, int src_y);
+              ConstImageBuffer src, int src_x, int src_y);
 
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,
@@ -445,7 +468,7 @@ public:
 
   void CopyNotOr(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
-                 SDL_Surface *src, int src_x, int src_y);
+                 ConstImageBuffer src, int src_x, int src_y);
 
   void CopyNotOr(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
@@ -453,26 +476,25 @@ public:
 
   void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src, int src_x, int src_y);
+               ConstImageBuffer src, int src_x, int src_y);
 
   void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Canvas &src, int src_x, int src_y) {
     CopyAnd(dest_x, dest_y, dest_width, dest_height,
-            src.surface, src_x, src_y);
+            MakeConstImageBuffer(src.surface), src_x, src_y);
   }
 
   void CopyAnd(const Canvas &src) {
-    CopyAnd(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
+    CopyAnd(0, 0, src.GetWidth(), src.GetHeight(),
+            MakeConstImageBuffer(src.surface), 0, 0);
   }
 
   void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Bitmap &src, int src_x, int src_y);
 
-  void CopyAnd(const Bitmap &src) {
-    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
-  }
+  void CopyAnd(const Bitmap &src);
 
   void ScaleCopy(int dest_x, int dest_y,
                  const Bitmap &src,
@@ -481,7 +503,7 @@ public:
 
   void AlphaBlend(int dest_x, int dest_y,
                   unsigned dest_width, unsigned dest_height,
-                  SDL_Surface *src,
+                  ConstImageBuffer src,
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height,
                   uint8_t alpha);

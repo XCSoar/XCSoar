@@ -83,6 +83,9 @@ RawBitmap::StretchTo(unsigned width, unsigned height,
                      Canvas &dest_canvas,
                      unsigned dest_width, unsigned dest_height) const
 {
+  ConstImageBuffer<SDLPixelTraits> src(SDLPixelTraits::const_pointer_type(surface->pixels),
+                                       surface->pitch, width, height);
+
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      surface, 0, 0, width, height);
+                      src, 0, 0, width, height);
 }
