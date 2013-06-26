@@ -75,13 +75,6 @@ class Canvas {
                             surface->pitch, surface->w, surface->h);
   }
 
-  static constexpr ::ConstImageBuffer<GreyscalePixelTraits>
-  MakeGreyConstImageBuffer(SDL_Surface *surface) {
-    return ::ConstImageBuffer<GreyscalePixelTraits>
-      (typename GreyscalePixelTraits::pointer_type(surface->pixels),
-       surface->pitch, surface->w, surface->h);
-  }
-
 protected:
   SDL_Surface *surface;
 
