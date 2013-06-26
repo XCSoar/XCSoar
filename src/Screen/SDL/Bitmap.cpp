@@ -41,23 +41,14 @@ Copyright_License {
 
 #include <assert.h>
 
+#ifndef ENABLE_OPENGL
+
 bool
 Bitmap::Load(SDL_Surface *_surface, Type type)
 {
   assert(IsScreenInitialized());
   assert(_surface != NULL);
 
-#ifdef ENABLE_OPENGL
-  assert(texture == NULL);
-  assert(pthread_equal(pthread_self(), OpenGL::thread));
-
-  texture = new GLTexture(_surface);
-  size.cx = _surface->w;
-  size.cy = _surface->h;
-  SDL_FreeSurface(_surface);
-
-  return true;
-#else
   assert(surface == NULL);
 
   switch (type) {
@@ -81,10 +72,7 @@ Bitmap::Load(SDL_Surface *_surface, Type type)
   }
 
   return true;
-#endif
 }
-
-#ifndef ENABLE_OPENGL
 
 bool
 Bitmap::Load(const UncompressedImage &uncompressed, Type type)
