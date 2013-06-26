@@ -28,6 +28,8 @@ Copyright_License {
 #error No OpenGL
 #endif
 
+#define HAVE_TEXT_CACHE
+
 #ifdef ANDROID
 
 /**

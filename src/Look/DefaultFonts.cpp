@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
 #include "Screen/Custom/Cache.hpp"
 #endif
 
@@ -174,7 +174,7 @@ Fonts::SizeInfoboxFont(unsigned control_width)
   infobox_units.Load(effective_settings.infobox_units);
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
   TextCache::Flush();
 #endif
 }

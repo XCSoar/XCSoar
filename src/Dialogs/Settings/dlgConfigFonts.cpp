@@ -48,7 +48,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
 #include "Screen/Custom/Cache.hpp"
 #endif
 
@@ -114,7 +114,7 @@ private:
       custom = defaults;
 
     if (font.Load(custom)) {
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
       TextCache::Flush();
 #endif
       preview.SetFont(font);

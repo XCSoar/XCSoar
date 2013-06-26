@@ -63,7 +63,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
 #include "Screen/Custom/Cache.hpp"
 #endif
 
@@ -217,7 +217,7 @@ MainWindow::InitialiseConfigured()
       }
     }
 
-#ifdef ENABLE_OPENGL
+#ifdef HAVE_TEXT_CACHE
     /* fonts may have changed, discard all pre-rendered font
        textures */
     TextCache::Flush();
