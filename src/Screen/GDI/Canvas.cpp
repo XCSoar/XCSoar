@@ -32,7 +32,7 @@ Copyright_License {
 #include <algorithm>
 
 void
-Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
+Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   assert(IsDefined());
 
@@ -46,9 +46,7 @@ Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 }
 
 void
-Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
-                  PixelScalar bx, PixelScalar by,
-                  PixelScalar cx, PixelScalar cy)
+Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 {
   assert(IsDefined());
 
@@ -72,8 +70,8 @@ Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
 }
 
 void
-Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
-                Angle start, Angle end, bool horizon)
+Canvas::DrawSegment(int x, int y, unsigned radius,
+                    Angle start, Angle end, bool horizon)
 {
   assert(IsDefined());
 
@@ -81,9 +79,9 @@ Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 }
 
 void
-Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+Canvas::DrawAnnulus(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
+                    Angle start, Angle end)
 {
   assert(IsDefined());
 
@@ -91,9 +89,9 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+Canvas::DrawKeyhole(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
+                    Angle start, Angle end)
 {
   assert(IsDefined());
 
@@ -116,7 +114,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
   return CalcTextSize(text, _tcslen(text));
 }
 
-UPixelScalar
+unsigned
 Canvas::GetFontHeight() const
 {
   assert(IsDefined());
@@ -127,7 +125,7 @@ Canvas::GetFontHeight() const
 }
 
 void
-Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawText(int x, int y, const TCHAR *text)
 {
   assert(IsDefined());
 
@@ -135,7 +133,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::DrawText(PixelScalar x, PixelScalar y,
+Canvas::DrawText(int x, int y,
                  const TCHAR *text, size_t length)
 {
   assert(IsDefined());
@@ -144,7 +142,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
                        const TCHAR *text)
 {
   assert(IsDefined());
@@ -153,7 +151,7 @@ Canvas::DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
 }
 
 void
-Canvas::DrawClippedText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+Canvas::DrawClippedText(int x, int y, const PixelRect &rc,
                         const TCHAR *text)
 {
   assert(IsDefined());
@@ -162,20 +160,20 @@ Canvas::DrawClippedText(PixelScalar x, PixelScalar y, const PixelRect &rc,
 }
 
 void
-Canvas::DrawClippedText(PixelScalar x, PixelScalar y, UPixelScalar width,
+Canvas::DrawClippedText(int x, int y, unsigned width,
                         const TCHAR *text)
 {
   const PixelSize size = CalcTextSize(text);
 
   PixelRect rc;
-  ::SetRect(&rc, x, y, x + std::min(width, (UPixelScalar)size.cx), y + size.cy);
+  ::SetRect(&rc, x, y, x + std::min(width, unsigned(size.cx)), y + size.cy);
   DrawClippedText(x, y, rc, text);
 }
 
 void
-Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
-             UPixelScalar dest_width, UPixelScalar dest_height,
-             HBITMAP src, PixelScalar src_x, PixelScalar src_y,
+Canvas::Copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             HBITMAP src, int src_x, int src_y,
              DWORD dwRop)
 {
   assert(IsDefined());
@@ -190,9 +188,9 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
-             UPixelScalar dest_width, UPixelScalar dest_height,
-             const Bitmap &src, PixelScalar src_x, PixelScalar src_y,
+Canvas::Copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y,
              DWORD dwRop)
 {
   Copy(dest_x, dest_y, dest_width, dest_height,
@@ -201,7 +199,7 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(const Canvas &src, int src_x, int src_y)
 {
   Copy(0, 0, GetWidth(), GetHeight(), src, src_x, src_y);
 }
@@ -303,11 +301,11 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 HBITMAP src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height,
                 DWORD dwRop)
 {
   assert(IsDefined());
@@ -322,11 +320,11 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height,
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height,
                 DWORD dwRop)
 {
   assert(IsDefined());
@@ -339,16 +337,16 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 
 void
 Canvas::Stretch(const Canvas &src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   Stretch(0, 0, GetWidth(), GetHeight(),
           src, src_x, src_y, src_width, src_height);
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src)
 {
   assert(src.IsDefined());
@@ -368,11 +366,11 @@ Canvas::Stretch(const Bitmap &src)
 }
 
 void
-Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
-                    UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::StretchMono(int dest_x, int dest_y,
+                    unsigned dest_width, unsigned dest_height,
                     const Bitmap &src,
-                    PixelScalar src_x, PixelScalar src_y,
-                    UPixelScalar src_width, UPixelScalar src_height,
+                    int src_x, int src_y,
+                    unsigned src_width, unsigned src_height,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
@@ -404,11 +402,11 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 #ifdef HAVE_ALPHA_BLEND
 
 void
-Canvas::AlphaBlend(PixelScalar dest_x, PixelScalar dest_y,
-                   UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::AlphaBlend(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
                    HDC src,
-                   PixelScalar src_x, PixelScalar src_y,
-                   UPixelScalar src_width, UPixelScalar src_height,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
                    uint8_t alpha)
 {
   assert(AlphaBlendAvailable());

@@ -84,8 +84,7 @@ Canvas::Destroy()
 }
 
 void
-Canvas::DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                             PixelScalar right, PixelScalar bottom,
+Canvas::DrawOutlineRectangle(int left, int top, int right, int bottom,
                              Color color)
 {
   SDLRasterCanvas canvas(surface, offset, size);
@@ -172,7 +171,7 @@ Canvas::DrawLine(int ax, int ay, int bx, int by)
 }
 
 void
-Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
+Canvas::DrawCircle(int x, int y, unsigned radius)
 {
   SDLRasterCanvas canvas(surface, offset, size);
 
@@ -200,15 +199,15 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 }
 
 void
-Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+Canvas::DrawSegment(int x, int y, unsigned radius,
                     Angle start, Angle end, bool horizon)
 {
   Segment(*this, x, y, radius, start, end, horizon);
 }
 
 void
-Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
-                    UPixelScalar small_radius, UPixelScalar big_radius,
+Canvas::DrawAnnulus(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
@@ -217,8 +216,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
-                    UPixelScalar small_radius, UPixelScalar big_radius,
+Canvas::DrawKeyhole(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
                     Angle start, Angle end)
 {
   assert(IsDefined());
@@ -268,7 +267,7 @@ RenderText(const Font *font, const TCHAR *text)
 }
 
 void
-Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawText(int x, int y, const TCHAR *text)
 {
   assert(text != NULL);
 #ifndef UNICODE
@@ -301,7 +300,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
 {
   assert(text != NULL);
 #ifndef UNICODE
@@ -320,11 +319,11 @@ Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 static bool
-Clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
-     PixelScalar &src_position)
+Clip(int &position, unsigned &length, unsigned max,
+     int &src_position)
 {
   if (position < 0) {
-    if (length <= (UPixelScalar)-position)
+    if (length <= unsigned(-position))
       return false;
 
     length -= -position;
@@ -332,7 +331,7 @@ Clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
     position = 0;
   }
 
-  if ((UPixelScalar)position >= max)
+  if (unsigned(position) >= max)
     return false;
 
   if (position + length >= max)
@@ -342,9 +341,9 @@ Clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
 }
 
 void
-Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
-             UPixelScalar dest_width, UPixelScalar dest_height,
-             SDL_Surface *src_surface, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             SDL_Surface *src_surface, int src_x, int src_y)
 {
   assert(src_surface != NULL);
 
@@ -373,14 +372,15 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
   dest_x += offset.x;
   dest_y += offset.y;
 
-  SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
-  SDL_Rect dest_rect = { dest_x, dest_y };
+  SDL_Rect src_rect = { Sint16(src_x), Sint16(src_y),
+                        Uint16(dest_width), Uint16(dest_height) };
+  SDL_Rect dest_rect = { Sint16(dest_x), Sint16(dest_y) };
 
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
 
 void
-Canvas::Copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(const Canvas &src, int src_x, int src_y)
 {
   Copy(0, 0, src.GetWidth(), src.GetHeight(), src, src_x, src_y);
 }
@@ -392,9 +392,9 @@ Canvas::Copy(const Canvas &src)
 }
 
 void
-Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
-             UPixelScalar dest_width, UPixelScalar dest_height,
-             const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y)
 {
   Copy(dest_x, dest_y, dest_width, dest_height,
        src.GetNative(), src_x, src_y);
@@ -445,12 +445,12 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
   assert(src.IsDefined());
 
   SDL_Surface *src_surface = src.GetNative();
-  const UPixelScalar src_x = 0, src_y = 0;
-  const UPixelScalar src_width = src_surface->w;
-  const UPixelScalar src_height = src_surface->h;
-  const UPixelScalar dest_x = 0, dest_y = 0;
-  const UPixelScalar dest_width = GetWidth();
-  const UPixelScalar dest_height = GetHeight();
+  const unsigned src_x = 0, src_y = 0;
+  const unsigned src_width = src_surface->w;
+  const unsigned src_height = src_surface->h;
+  const unsigned dest_x = 0, dest_y = 0;
+  const unsigned dest_width = GetWidth();
+  const unsigned dest_height = GetHeight();
 
   SDLRasterCanvas canvas(surface, offset, size);
 
@@ -462,11 +462,11 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 SDL_Surface *src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   assert(src != NULL);
   assert(dest_width < 0x4000);
@@ -492,8 +492,8 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 
 void
 Canvas::Stretch(const Canvas &src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   // XXX
   Stretch(0, 0, GetWidth(), GetHeight(),
@@ -501,11 +501,11 @@ Canvas::Stretch(const Canvas &src,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
   assert(IsDefined());
   assert(src.IsDefined());
@@ -516,8 +516,8 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src)
 {
   assert(IsDefined());
@@ -529,11 +529,11 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
-                    UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::StretchMono(int dest_x, int dest_y,
+                    unsigned dest_width, unsigned dest_height,
                     const Bitmap &src,
-                    PixelScalar src_x, PixelScalar src_y,
-                    UPixelScalar src_width, UPixelScalar src_height,
+                    int src_x, int src_y,
+                    unsigned src_width, unsigned src_height,
                     Color fg_color, Color bg_color)
 {
   assert(IsDefined());
@@ -563,9 +563,9 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNot(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 SDL_Surface *src, int src_x, int src_y)
 {
   assert(src != NULL);
 
@@ -579,9 +579,9 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyOr(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                SDL_Surface *src, int src_x, int src_y)
 {
   assert(src != NULL);
 
@@ -595,9 +595,9 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                  UPixelScalar dest_width, UPixelScalar dest_height,
-                  SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNotOr(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  SDL_Surface *src, int src_x, int src_y)
 {
   assert(src != NULL);
 
@@ -611,9 +611,9 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                  UPixelScalar dest_width, UPixelScalar dest_height,
-                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNotOr(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -622,9 +622,9 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyAnd(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                SDL_Surface *src, int src_x, int src_y)
 {
   assert(src != NULL);
 
@@ -638,9 +638,9 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNot(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -649,9 +649,9 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
-               const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyOr(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -660,9 +660,9 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyAnd(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -671,12 +671,12 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                           PixelScalar right, PixelScalar bottom,
-                           UPixelScalar ellipse_width,
-                           UPixelScalar ellipse_height)
+Canvas::DrawRoundRectangle(int left, int top,
+                           int right, int bottom,
+                           unsigned ellipse_width,
+                           unsigned ellipse_height)
 {
-  UPixelScalar radius = std::min(ellipse_width, ellipse_height) / 2;
+  unsigned radius = std::min(ellipse_width, ellipse_height) / 2u;
   ::RoundRect(*this, left, top, right, bottom, radius);
 }
 

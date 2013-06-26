@@ -103,11 +103,11 @@ public:
     return size;
   }
 
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     return size.cx;
   }
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return size.cy;
   }
 
@@ -176,20 +176,19 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void Rectangle(PixelScalar left, PixelScalar top,
-                 PixelScalar right, PixelScalar bottom) {
+  void Rectangle(int left, int top, int right, int bottom) {
     DrawFilledRectangle(left, top, right, bottom, brush);
 
     if (IsPenOverBrush())
       DrawOutlineRectangle(left, top, right, bottom);
   }
 
-  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                           PixelScalar right, PixelScalar bottom,
+  void DrawFilledRectangle(int left, int top,
+                           int right, int bottom,
                            const Color color);
 
-  void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                           PixelScalar right, PixelScalar bottom,
+  void DrawFilledRectangle(int left, int top,
+                           int right, int bottom,
                            const Brush &brush) {
     if (!brush.IsHollow())
       DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
@@ -207,18 +206,15 @@ public:
    * Draw a rectangle outline with the current OpenGL color and
    * settings.
    */
-  void OutlineRectangleGL(PixelScalar left, PixelScalar top,
-                          PixelScalar right, PixelScalar bottom);
+  void OutlineRectangleGL(int left, int top, int right, int bottom);
 
-  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                            PixelScalar right, PixelScalar bottom) {
+  void DrawOutlineRectangle(int left, int top, int right, int bottom) {
     pen.Bind();
     OutlineRectangleGL(left, top, right, bottom);
     pen.Unbind();
   }
 
-  void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                            PixelScalar right, PixelScalar bottom,
+  void DrawOutlineRectangle(int left, int top, int right, int bottom,
                             Color color) {
     color.Set();
 #ifdef HAVE_GLES
@@ -255,10 +251,8 @@ public:
     Clear(COLOR_WHITE);
   }
 
-  void DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                       PixelScalar right, PixelScalar bottom,
-                       UPixelScalar ellipse_width,
-                       UPixelScalar ellipse_height);
+  void DrawRoundRectangle(int left, int top, int right, int bottom,
+                          unsigned ellipse_width, unsigned ellipse_height);
 
   void DrawRaisedEdge(PixelRect &rc);
 
@@ -272,7 +266,7 @@ public:
    */
   void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
 
-  void DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by);
+  void DrawLine(int ax, int ay, int bx, int by);
 
   void DrawLine(const RasterPoint a, const RasterPoint b) {
     DrawLine(a.x, a.y, b.x, b.y);
@@ -283,8 +277,7 @@ public:
    * may be more expensive on some platforms, and works only for thin
    * lines.
    */
-  void DrawExactLine(PixelScalar ax, PixelScalar ay,
-                     PixelScalar bx, PixelScalar by);
+  void DrawExactLine(int ax, int ay, int bx, int by);
 
   void DrawExactLine(const RasterPoint a, const RasterPoint b) {
     DrawExactLine(a.x, a.y, b.x, b.y);
@@ -292,9 +285,7 @@ public:
 
   void DrawLinePiece(const RasterPoint a, const RasterPoint b);
 
-  void DrawTwoLines(PixelScalar ax, PixelScalar ay,
-                    PixelScalar bx, PixelScalar by,
-                    PixelScalar cx, PixelScalar cy);
+  void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy);
   void DrawTwoLines(const RasterPoint a, const RasterPoint b,
                     const RasterPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
@@ -303,21 +294,19 @@ public:
   /**
    * @see DrawTwoLines(), DrawExactLine()
    */
-  void DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
-                         PixelScalar bx, PixelScalar by,
-                         PixelScalar cx, PixelScalar cy);
+  void DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy);
 
-  void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius);
+  void DrawCircle(int x, int y, unsigned radius);
 
-  void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
+  void DrawSegment(int x, int y, unsigned radius,
                    Angle start, Angle end, bool horizon=false);
 
-  void DrawAnnulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-                   UPixelScalar big_radius,
+  void DrawAnnulus(int x, int y, unsigned small_radius,
+                   unsigned big_radius,
                    Angle start, Angle end);
 
-  void DrawKeyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-                   UPixelScalar big_radius,
+  void DrawKeyhole(int x, int y, unsigned small_radius,
+                   unsigned big_radius,
                    Angle start, Angle end);
 
   void DrawFocusRectangle(PixelRect rc);
@@ -331,25 +320,24 @@ public:
   const PixelSize CalcTextSize(const TCHAR *text) const;
 
   gcc_pure
-  UPixelScalar CalcTextWidth(const TCHAR *text) const {
+  unsigned CalcTextWidth(const TCHAR *text) const {
     return CalcTextSize(text).cx;
   }
 
   gcc_pure
-  UPixelScalar GetFontHeight() const {
+  unsigned GetFontHeight() const {
     return font != NULL ? font->GetHeight() : 0;
   }
 
-  void DrawText(PixelScalar x, PixelScalar y, const TCHAR *text);
-  void DrawText(PixelScalar x, PixelScalar y,
-                const TCHAR *text, size_t length);
+  void DrawText(int x, int y, const TCHAR *text);
+  void DrawText(int x, int y, const TCHAR *text, size_t length);
 
-  void DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void DrawTransparentText(int x, int y, const TCHAR *text);
 
-  void DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+  void DrawOpaqueText(int x, int y, const PixelRect &rc,
                       const TCHAR *text);
 
-  void DrawClippedText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+  void DrawClippedText(int x, int y, const PixelRect &rc,
                        const TCHAR *text) {
     // XXX
 
@@ -357,11 +345,11 @@ public:
       DrawClippedText(x, y, rc.right - x, text);
   }
 
-  void DrawClippedText(PixelScalar x, PixelScalar y,
-                       UPixelScalar width, UPixelScalar height,
+  void DrawClippedText(int x, int y,
+                       unsigned width, unsigned height,
                        const TCHAR *text);
 
-  void DrawClippedText(PixelScalar x, PixelScalar y, UPixelScalar width,
+  void DrawClippedText(int x, int y, unsigned width,
                        const TCHAR *text) {
     DrawClippedText(x, y, width, 16384, text);
   }
@@ -369,7 +357,7 @@ public:
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
+  void TextAutoClipped(int x, int y, const TCHAR *t) {
     if (x < (int)GetWidth() && y < (int)GetHeight())
       DrawClippedText(x, y, GetWidth() - x, GetHeight() - y, t);
   }
@@ -380,49 +368,49 @@ public:
    * Draws a texture.  The caller is responsible for binding it and
    * enabling GL_TEXTURE_2D.
    */
-  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
                const GLTexture &texture,
-               PixelScalar src_x, PixelScalar src_y,
-               UPixelScalar src_width, UPixelScalar src_height);
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
 
-  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
                const GLTexture &texture);
 
 
-  void Copy(PixelScalar dest_x, PixelScalar dest_y,
-            UPixelScalar dest_width, UPixelScalar dest_height,
-            const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+  void Copy(int dest_x, int dest_y,
+            unsigned dest_width, unsigned dest_height,
+            const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
   void StretchTransparent(const Bitmap &src, Color key);
   void InvertStretchTransparent(const Bitmap &src, Color key);
 
-  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
                const Bitmap &src,
-               PixelScalar src_x, PixelScalar src_y,
-               UPixelScalar src_width, UPixelScalar src_height);
-  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height);
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
     Stretch(0, 0, size.cx, size.cy, src);
   }
 
-  void StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
-                  UPixelScalar dest_width, UPixelScalar dest_height,
+  void StretchAnd(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
                   const Bitmap &src,
-                  PixelScalar src_x, PixelScalar src_y,
-                  UPixelScalar src_width, UPixelScalar src_height);
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height);
 
-  void StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                    UPixelScalar dest_width, UPixelScalar dest_height,
+  void StretchNotOr(int dest_x, int dest_y,
+                    unsigned dest_width, unsigned dest_height,
                     const Bitmap &src,
-                    PixelScalar src_x, PixelScalar src_y,
-                    UPixelScalar src_width, UPixelScalar src_height);
+                    int src_x, int src_y,
+                    unsigned src_width, unsigned src_height);
 
   /**
    * Stretches a monochrome bitmap (1 bit per pixel), painting the
@@ -433,41 +421,41 @@ public:
    * @param fg_color draw this color instead of "black"
    * @param bg_color draw this color instead of "white"
    */
-  void StretchMono(PixelScalar dest_x, PixelScalar dest_y,
-                   UPixelScalar dest_width, UPixelScalar dest_height,
+  void StretchMono(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
                    const Bitmap &src,
-                   PixelScalar src_x, PixelScalar src_y,
-                   UPixelScalar src_width, UPixelScalar src_height,
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height,
                    Color fg_color, Color bg_color);
 
-  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
-               UPixelScalar dest_width, UPixelScalar dest_height,
-               const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+  void CopyOr(int dest_x, int dest_y,
+              unsigned dest_width, unsigned dest_height,
+              const Bitmap &src, int src_x, int src_y);
 
   void CopyOr(const Bitmap &src) {
     CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
-  void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+  void CopyNotOr(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Bitmap &src, int src_x, int src_y);
 
-  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+  void CopyNot(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y);
 
-  void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+  void CopyAnd(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y);
 
   void CopyAnd(const Bitmap &src) {
     CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
-  void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
-                  const Bitmap &src,
-                  PixelScalar src_x, PixelScalar src_y,
-                  UPixelScalar src_width, UPixelScalar src_height);
+  void ScaleCopy(int dest_x, int dest_y,
+                 const Bitmap &src,
+                 int src_x, int src_y,
+                 unsigned src_width, unsigned src_height);
 
   /**
    * Copy pixels from this object to a texture.  The texture must be
