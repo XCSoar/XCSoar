@@ -72,13 +72,6 @@ public:
   GLTexture(GLint internal_format, GLsizei width, GLsizei height,
             GLenum format, GLenum type, const GLvoid *data);
 
-#ifdef ENABLE_SDL
-  GLTexture(SDL_Surface *surface) {
-    Initialise();
-    Load(surface);
-  }
-#endif
-
   ~GLTexture() {
     glDeleteTextures(1, &id);
 
@@ -134,10 +127,6 @@ protected:
   void Initialise();
 
   static void Configure();
-
-#ifdef ENABLE_SDL
-  void Load(SDL_Surface *surface);
-#endif
 
 public:
   void Bind() {
