@@ -21,18 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Cache.hpp"
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Debug.hpp"
-#include "Screen/OpenGL/Point.hpp"
+#include "Cache.hpp"
+#include "Screen/Point.hpp"
 #include "Screen/Font.hpp"
-#include "Screen/Color.hpp"
-#include "Util/ListHead.hpp"
 #include "Util/Cache.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <unordered_map>
-#include <string>
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Debug.hpp"
+#else
+#include "Thread/Mutex.hpp"
+#endif
+
 #include <assert.h>
 
 /**
@@ -113,10 +114,17 @@ struct TextCacheKey {
   };
 };
 
-struct RenderedText : public ListHead {
+struct RenderedText {
+#ifdef ENABLE_OPENGL
   GLTexture *texture;
+#else
+  uint8_t *data;
+  unsigned width, height;
+#endif
 
   RenderedText(const RenderedText &other) = delete;
+
+#ifdef ENABLE_OPENGL
   RenderedText(RenderedText &&other)
     :texture(other.texture) {
     other.texture = NULL;
@@ -132,22 +140,54 @@ struct RenderedText : public ListHead {
 #elif defined(ANDROID)
   RenderedText(int id, unsigned width, unsigned height)
     :texture(new GLTexture(id, width, height)) {}
+#endif
 #else
-  RenderedText(SDL_Surface *surface)
-    :texture(new GLTexture(surface)) {}
+  RenderedText(RenderedText &&other)
+    :data(other.data), width(other.width), height(other.height) {
+    other.data = nullptr;
+  }
+
+  RenderedText(unsigned _width, unsigned _height, uint8_t *_data)
+    :data(_data), width(_width), height(_height) {}
 #endif
 
   ~RenderedText() {
+#ifdef ENABLE_OPENGL
     delete texture;
+#else
+    delete[] data;
+#endif
   }
 
   RenderedText &operator=(const RenderedText &other) = delete;
 
   RenderedText &operator=(RenderedText &&other) {
+#ifdef ENABLE_OPENGL
     std::swap(texture, other.texture);
+#else
+    std::swap(data, other.data);
+    width = other.width;
+    height = other.height;
+#endif
     return *this;
   }
+
+  operator TextCache::Result() const {
+#ifdef ENABLE_OPENGL
+    return texture;
+#else
+    return { data, width, width, height };
+#endif
+  }
 };
+
+#ifndef ENABLE_OPENGL
+/**
+ * Without OpenGL, this library is accessed from DrawThread and UI
+ * thread, therefore we need to protect it.
+ */
+static Mutex text_cache_mutex;
+#endif
 
 static Cache<TextCacheKey, PixelSize, 1024u, TextCacheKey::Hash> size_cache;
 static Cache<TextCacheKey, RenderedText, 256u, TextCacheKey::Hash> text_cache;
@@ -155,6 +195,10 @@ static Cache<TextCacheKey, RenderedText, 256u, TextCacheKey::Hash> text_cache;
 PixelSize
 TextCache::GetSize(const Font &font, const char *text)
 {
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(text_cache_mutex);
+#endif
+
   TextCacheKey key(font, text);
   const PixelSize *cached = size_cache.Get(key);
   if (cached != NULL)
@@ -170,6 +214,10 @@ TextCache::GetSize(const Font &font, const char *text)
 PixelSize
 TextCache::LookupSize(const Font &font, const char *text)
 {
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(text_cache_mutex);
+#endif
+
   PixelSize size = { 0, 0 };
 
   if (*text == 0)
@@ -180,45 +228,72 @@ TextCache::LookupSize(const Font &font, const char *text)
   if (cached == NULL)
     return size;
 
+#ifdef ENABLE_OPENGL
   return cached->texture->GetSize();
+#else
+  return { cached->width, cached->height };
+#endif
 }
 
-GLTexture *
-TextCache::Get(const Font *font, const char *text)
+TextCache::Result
+TextCache::Get(const Font &font, const char *text)
 {
+#ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-  assert(font != NULL);
+#endif
+  assert(font.IsDefined());
   assert(text != NULL);
 
-  if (*text == 0)
-    return NULL;
+  if (StringIsEmpty(text)) {
+#ifdef ENABLE_OPENGL
+    return nullptr;
+#else
+    return Result::Null();
+#endif
+  }
 
-  TextCacheKey key(*font, text);
+  TextCacheKey key(font, text);
 
   /* look it up */
 
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(text_cache_mutex);
+#endif
+
   const RenderedText *cached = text_cache.Get(key);
   if (cached != NULL)
-    return cached->texture;
+    return *cached;
 
   /* render the text into a OpenGL texture */
 
 #ifdef USE_FREETYPE
-  PixelSize size = font->TextSize(text);
-  size_t buffer_size = font->BufferSize(size);
-  if (buffer_size == 0)
+  PixelSize size = font.TextSize(text);
+  size_t buffer_size = font.BufferSize(size);
+  if (buffer_size == 0) {
+#ifdef ENABLE_OPENGL
     return nullptr;
+#else
+    return Result::Null();
+#endif
+  }
 
   uint8_t *buffer = new uint8_t[buffer_size];
-  if (buffer == nullptr)
+  if (buffer == nullptr) {
+#ifdef ENABLE_OPENGL
     return nullptr;
+#else
+    return Result::Null();
+#endif
+  }
 
-  font->Render(text, size, buffer);
+  font.Render(text, size, buffer);
   RenderedText rt(size.cx, size.cy, buffer);
+#ifdef ENABLE_OPENGL
   delete[] buffer;
+#endif
 #elif defined(ANDROID)
   PixelSize size;
-  int texture_id = font->TextTextureGL(text, size);
+  int texture_id = font.TextTextureGL(text, size);
   if (texture_id == 0)
     return NULL;
 
@@ -227,20 +302,26 @@ TextCache::Get(const Font *font, const char *text)
 #error No font renderer
 #endif
 
-  GLTexture *texture = rt.texture;
+  Result result = rt;
 
   key.Allocate();
   text_cache.Put(std::move(key), std::move(rt));
 
   /* done */
 
-  return texture;
+  return result;
 }
 
 void
 TextCache::Flush()
 {
+#ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
+#endif
+
+#ifndef ENABLE_OPENGL
+  const ScopeLock protect(text_cache_mutex);
+#endif
 
   size_cache.Clear();
   text_cache.Clear();

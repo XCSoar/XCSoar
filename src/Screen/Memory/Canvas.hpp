@@ -21,39 +21,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_CANVAS_HPP
-#define XCSOAR_SCREEN_OPENGL_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_MEMORY_CANVAS_HPP
+#define XCSOAR_SCREEN_MEMORY_CANVAS_HPP
 
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/OpenGL/Color.hpp"
-#include "Screen/OpenGL/Point.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
-#include "Screen/OpenGL/Features.hpp"
-#include "Screen/OpenGL/System.hpp"
-#include "Util/AllocatedArray.hpp"
+#include "Color.hpp"
+#include "Point.hpp"
+#include "PixelTraits.hpp"
+#include "Buffer.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
 #include <tchar.h>
 
+#ifdef WIN32
+/* those are WIN32 macros - undefine, or Canvas::background_mode will
+   break */
+#undef OPAQUE
+#undef TRANSPARENT
+#endif
+
+class Angle;
 class Bitmap;
-class GLTexture;
+
+#ifdef GREYSCALE
+using SDLPixelTraits = GreyscalePixelTraits;
+#else
+using SDLPixelTraits = BGRAPixelTraits;
+#endif
 
 /**
  * Base drawable canvas class
  * 
  */
 class Canvas {
+  friend class WindowCanvas;
   friend class SubCanvas;
-  friend class BufferCanvas;
+
+  using ConstImageBuffer = ::ConstImageBuffer<SDLPixelTraits>;
 
 protected:
-  RasterPoint offset;
-  PixelSize size;
+  WritableImageBuffer<SDLPixelTraits> buffer;
 
   Pen pen;
   Brush brush;
@@ -63,24 +73,17 @@ protected:
     OPAQUE, TRANSPARENT
   } background_mode;
 
-  /**
-   * static buffer to store vertices of wide lines.
-   */
-  static AllocatedArray<RasterPoint> vertex_buffer;
-
 public:
   Canvas()
-    :offset(0, 0), size(0, 0),
-     font(NULL), background_mode(OPAQUE) {}
-  Canvas(PixelSize _size)
-    :offset(0, 0), size(_size),
+    :buffer(WritableImageBuffer<SDLPixelTraits>::Empty()),
      font(NULL), background_mode(OPAQUE) {}
 
-  Canvas(const Canvas &other) = delete;
-  Canvas &operator=(const Canvas &other) = delete;
+  explicit Canvas(WritableImageBuffer<SDLPixelTraits> _buffer)
+    :buffer(_buffer),
+     font(NULL), background_mode(OPAQUE) {}
 
-  void Create(PixelSize _size) {
-    size = _size;
+  void Create(WritableImageBuffer<SDLPixelTraits> _buffer) {
+    buffer = _buffer;
   }
 
 protected:
@@ -96,24 +99,24 @@ protected:
 
 public:
   bool IsDefined() const {
-    return true;
+    return buffer.data != nullptr;
   }
 
   PixelSize GetSize() const {
-    return size;
+    return { buffer.width, buffer.height };
   }
 
   unsigned GetWidth() const {
-    return size.cx;
+    return buffer.width;
   }
 
   unsigned GetHeight() const {
-    return size.cy;
+    return buffer.height;
   }
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect(size);
+    return PixelRect(GetSize());
   }
 
   void SelectNullPen() {
@@ -176,22 +179,25 @@ public:
     background_mode = TRANSPARENT;
   }
 
+  void DrawOutlineRectangle(int left, int top, int right, int bottom,
+                            Color color);
+
   void Rectangle(int left, int top, int right, int bottom) {
     DrawFilledRectangle(left, top, right, bottom, brush);
 
     if (IsPenOverBrush())
-      DrawOutlineRectangle(left, top, right, bottom);
+      DrawOutlineRectangle(left, top, right, bottom, pen.GetColor());
   }
 
-  void DrawFilledRectangle(int left, int top,
-                           int right, int bottom,
-                           const Color color);
+  void DrawFilledRectangle(int left, int top, int right, int bottom,
+                           Color color);
 
-  void DrawFilledRectangle(int left, int top,
-                           int right, int bottom,
+  void DrawFilledRectangle(int left, int top, int right, int bottom,
                            const Brush &brush) {
-    if (!brush.IsHollow())
-      DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
+    if (brush.IsHollow())
+      return;
+
+    DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
   }
 
   void DrawFilledRectangle(const PixelRect &rc, const Color color) {
@@ -201,39 +207,6 @@ public:
   void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
-
-  /**
-   * Draw a rectangle outline with the current OpenGL color and
-   * settings.
-   */
-  void OutlineRectangleGL(int left, int top, int right, int bottom);
-
-  void DrawOutlineRectangle(int left, int top, int right, int bottom) {
-    pen.Bind();
-    OutlineRectangleGL(left, top, right, bottom);
-    pen.Unbind();
-  }
-
-  void DrawOutlineRectangle(int left, int top, int right, int bottom,
-                            Color color) {
-    color.Set();
-#ifdef HAVE_GLES
-    glLineWidthx(1 << 16);
-#else
-    glLineWidth(1);
-#endif
-
-    OutlineRectangleGL(left, top, right, bottom);
-  }
-
-  /**
-   * Fade to white.  This enables GL_BLEND and disables it before
-   * returning.
-   *
-   * @param alpha the alpha value, 0=no change, 0xff=fully white.
-   */
-  void FadeToWhite(PixelRect rc, GLubyte alpha);
-  void FadeToWhite(GLubyte alpha);
 
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
@@ -254,17 +227,29 @@ public:
   void DrawRoundRectangle(int left, int top, int right, int bottom,
                           unsigned ellipse_width, unsigned ellipse_height);
 
-  void DrawRaisedEdge(PixelRect &rc);
+  void DrawRaisedEdge(PixelRect &rc) {
+    Pen bright(1, Color(240, 240, 240));
+    Select(bright);
+    DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
+              rc.right - 2, rc.top);
+
+    Pen dark(1, Color(128, 128, 128));
+    Select(dark);
+    DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+              rc.right - 1, rc.top + 1);
+
+    ++rc.left;
+    ++rc.top;
+    --rc.right;
+    --rc.bottom;
+  }
 
   void DrawPolyline(const RasterPoint *points, unsigned num_points);
-
   void DrawPolygon(const RasterPoint *points, unsigned num_points);
 
-  /**
-   * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
-   * origin of the fan.
-   */
-  void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
+  void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
+    DrawPolygon(points, num_points);
+  }
 
   void DrawLine(int ax, int ay, int bx, int by);
 
@@ -272,44 +257,49 @@ public:
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
-  /**
-   * Similar to DrawLine(), but force exact pixel coordinates.  This
-   * may be more expensive on some platforms, and works only for thin
-   * lines.
-   */
-  void DrawExactLine(int ax, int ay, int bx, int by);
-
-  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
-    DrawExactLine(a.x, a.y, b.x, b.y);
+  void DrawExactLine(int ax, int ay, int bx, int by) {
+    DrawLine(ax, ay, bx, by);
   }
 
-  void DrawLinePiece(const RasterPoint a, const RasterPoint b);
+  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a, b);
+  }
 
-  void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy);
+  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a, b);
+  }
+
+  void DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
+  {
+    DrawLine(ax, ay, bx, by);
+    DrawLine(bx, by, cx, cy);
+  }
+
   void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                    const RasterPoint c) {
+                 const RasterPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
-  /**
-   * @see DrawTwoLines(), DrawExactLine()
-   */
-  void DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy);
+  void DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy) {
+    DrawTwoLines(ax, ay, bx, by, cx, cy);
+  }
 
   void DrawCircle(int x, int y, unsigned radius);
 
   void DrawSegment(int x, int y, unsigned radius,
                    Angle start, Angle end, bool horizon=false);
 
-  void DrawAnnulus(int x, int y, unsigned small_radius,
-                   unsigned big_radius,
+  void DrawAnnulus(int x, int y, unsigned small_radius, unsigned big_radius,
                    Angle start, Angle end);
 
-  void DrawKeyhole(int x, int y, unsigned small_radius,
-                   unsigned big_radius,
+  void DrawKeyhole(int x, int y,
+                   unsigned small_radius, unsigned big_radius,
                    Angle start, Angle end);
 
-  void DrawFocusRectangle(PixelRect rc);
+  void DrawFocusRectangle(const PixelRect &rc) {
+    DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
+                         COLOR_DARK_GRAY);
+  }
 
   void DrawButton(PixelRect rc, bool down);
 
@@ -330,62 +320,80 @@ public:
   }
 
   void DrawText(int x, int y, const TCHAR *text);
-  void DrawText(int x, int y, const TCHAR *text, size_t length);
+  void DrawText(int x, int y,
+                const TCHAR *text, size_t length);
 
   void DrawTransparentText(int x, int y, const TCHAR *text);
 
-  void DrawOpaqueText(int x, int y, const PixelRect &rc,
-                      const TCHAR *text);
+  void DrawOpaqueText(int x, int y, const PixelRect &rc, const TCHAR *text);
 
-  void DrawClippedText(int x, int y, const PixelRect &rc,
-                       const TCHAR *text) {
+  void DrawClippedText(int x, int y, const PixelRect &rc, const TCHAR *text) {
     // XXX
-
-    if (x < rc.right)
-      DrawClippedText(x, y, rc.right - x, text);
+    DrawText(x, y, text);
   }
 
-  void DrawClippedText(int x, int y,
-                       unsigned width, unsigned height,
-                       const TCHAR *text);
-
-  void DrawClippedText(int x, int y, unsigned width,
-                       const TCHAR *text) {
-    DrawClippedText(x, y, width, 16384, text);
+  void DrawClippedText(int x, int y, unsigned width, const TCHAR *text) {
+    // XXX
+    DrawText(x, y, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
   void TextAutoClipped(int x, int y, const TCHAR *t) {
-    if (x < (int)GetWidth() && y < (int)GetHeight())
-      DrawClippedText(x, y, GetWidth() - x, GetHeight() - y, t);
+    DrawText(x, y, t);
   }
 
   void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
 
-  /**
-   * Draws a texture.  The caller is responsible for binding it and
-   * enabling GL_TEXTURE_2D.
-   */
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const GLTexture &texture,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
-
-  void Stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const GLTexture &texture);
-
-
   void Copy(int dest_x, int dest_y,
             unsigned dest_width, unsigned dest_height,
+            ConstImageBuffer src, int src_x, int src_y);
+
+  void Copy(int dest_x, int dest_y, ConstImageBuffer src) {
+    Copy(dest_x, dest_y, src.width, src.height, src, 0, 0);
+  }
+
+  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
+            const Canvas &src, int src_x, int src_y) {
+    Copy(dest_x, dest_y, dest_width, dest_height,
+         src.buffer, src_x, src_y);
+  }
+
+  void Copy(const Canvas &src, int src_x, int src_y);
+  void Copy(const Canvas &src);
+
+  void Copy(int dest_x, int dest_y, unsigned dest_width, unsigned dest_height,
             const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
+  void CopyTransparentWhite(const Canvas &src);
+  void CopyTransparentBlack(const Canvas &src);
+
   void StretchTransparent(const Bitmap &src, Color key);
   void InvertStretchTransparent(const Bitmap &src, Color key);
+
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               ConstImageBuffer src,
+               int src_x, int src_y, unsigned src_width, unsigned src_height);
+
+  void Stretch(ConstImageBuffer src) {
+    Stretch(0, 0, GetWidth(), GetHeight(),
+            src, 0, 0, src.width, src.height);
+  }
+
+  void Stretch(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Canvas &src,
+               int src_x, int src_y,
+               unsigned src_width, unsigned src_height) {
+    Stretch(dest_x, dest_y, dest_width, dest_height,
+            src.buffer, src_x, src_y, src_width, src_height);
+  }
+
+  void Stretch(const Canvas &src,
+               int src_x, int src_y, unsigned src_width, unsigned src_height);
 
   void Stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
@@ -397,36 +405,27 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch(0, 0, size.cx, size.cy, src);
+    Stretch(0, 0, buffer.width, buffer.height, src);
   }
 
-  void StretchAnd(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height);
-
-  void StretchNotOr(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
-                    const Bitmap &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height);
-
-  /**
-   * Stretches a monochrome bitmap (1 bit per pixel), painting the
-   * black pixels in the specified foreground color.  The white pixels
-   * will be either transparent or drawn in the specified background
-   * color, whichever operation is faster on the Canvas.
-   *
-   * @param fg_color draw this color instead of "black"
-   * @param bg_color draw this color instead of "white"
-   */
   void StretchMono(int dest_x, int dest_y,
                    unsigned dest_width, unsigned dest_height,
-                   const Bitmap &src,
+                   ::ConstImageBuffer<GreyscalePixelTraits> src,
                    int src_x, int src_y,
                    unsigned src_width, unsigned src_height,
                    Color fg_color, Color bg_color);
+
+  void CopyNot(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               ConstImageBuffer src, int src_x, int src_y);
+
+  void CopyNot(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y);
+
+  void CopyOr(int dest_x, int dest_y,
+              unsigned dest_width, unsigned dest_height,
+              ConstImageBuffer src, int src_x, int src_y);
 
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,
@@ -438,32 +437,52 @@ public:
 
   void CopyNotOr(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
+                 ConstImageBuffer src, int src_x, int src_y);
+
+  void CopyNotOr(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
                  const Bitmap &src, int src_x, int src_y);
 
-  void CopyNot(int dest_x, int dest_y,
+  void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
+               ConstImageBuffer src, int src_x, int src_y);
+
+  void CopyAnd(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Canvas &src, int src_x, int src_y) {
+    CopyAnd(dest_x, dest_y, dest_width, dest_height,
+            src.buffer, src_x, src_y);
+  }
+
+  void CopyAnd(const Canvas &src) {
+    CopyAnd(0, 0, src.GetWidth(), src.GetHeight(),
+            src.buffer, 0, 0);
+  }
 
   void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,
                const Bitmap &src, int src_x, int src_y);
 
-  void CopyAnd(const Bitmap &src) {
-    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
-  }
+  void CopyAnd(const Bitmap &src);
 
   void ScaleCopy(int dest_x, int dest_y,
                  const Bitmap &src,
                  int src_x, int src_y,
                  unsigned src_width, unsigned src_height);
 
-  /**
-   * Copy pixels from this object to a texture.  The texture must be
-   * initialised already.  Note that the texture will be flipped
-   * vertically, and to draw it back to the screen, you need
-   * GLTexture::DrawFlipped().
-   */
-  void CopyToTexture(GLTexture &texture, PixelRect src_rc) const;
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  ConstImageBuffer src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
+
+  void AlphaBlend(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  const Canvas &src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height,
+                  uint8_t alpha);
 };
 
 #endif

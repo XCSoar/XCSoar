@@ -25,26 +25,61 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 
+#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
+#include "Debug.hpp"
+#include "Custom/LibPNG.hpp"
+#include "Custom/UncompressedImage.hpp"
+#include "ResourceLoader.hpp"
+#endif
+
 #include <assert.h>
 
 PixelSize
 UnitSymbol::GetScreenSize() const
 {
-  return { Layout::Scale(size.cx), Layout::Scale(size.cy) };
+  PixelSize s = GetSize();
+  return { Layout::Scale(s.cx), Layout::Scale(s.cy) };
 }
 
-void 
-UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y, Kind kind) const
+#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
+
+void
+UnitSymbol::Load(unsigned id)
 {
-  Color text_color = COLOR_BLACK, bg_color = COLOR_WHITE;
-  if (kind & INVERSE)
-    std::swap(text_color, bg_color);
-  if (kind & GRAY)
-    text_color = COLOR_GRAY;
+  assert(IsScreenInitialized());
+  assert(buffer.data == nullptr);
+
+  ResourceLoader::Data data = ResourceLoader::Load(id);
+  assert(data.first != nullptr);
+
+  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  assert(uncompressed.GetFormat() == UncompressedImage::Format::GRAY);
+
+  const size_t size = uncompressed.GetPitch() * uncompressed.GetHeight();
+  buffer.data = new Luminosity8[size];
+  memcpy(buffer.data, uncompressed.GetData(), size);
+
+  buffer.pitch = uncompressed.GetPitch();
+  buffer.width = uncompressed.GetWidth();
+  buffer.height = uncompressed.GetHeight();
+}
+
+#endif
+
+void 
+UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+                 Color bg_color, Color text_color) const
+{
+  assert(IsDefined());
 
   const PixelSize size = GetSize();
   const PixelSize screen_size = GetScreenSize();
   canvas.StretchMono(x, y, screen_size.cx, screen_size.cy,
-                     bitmap, 0, 0, size.cx, size.cy,
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
+                     bitmap,
+#else
+                     buffer,
+#endif
+                     0, 0, size.cx, size.cy,
                      text_color, bg_color);
 }

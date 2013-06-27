@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_EGL_QUEUE_HPP
-#define XCSOAR_EVENT_EGL_QUEUE_HPP
+#ifndef XCSOAR_EVENT_CONSOLE_QUEUE_HPP
+#define XCSOAR_EVENT_CONSOLE_QUEUE_HPP
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"

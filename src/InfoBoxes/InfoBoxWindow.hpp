@@ -33,6 +33,7 @@ Copyright_License {
 struct InfoBoxSettings;
 struct InfoBoxLook;
 struct UnitsLook;
+class Color;
 
 class InfoBoxWindow : public PaintWindow
 {
@@ -88,7 +89,7 @@ private:
    * Paints the InfoBox value to the given canvas
    * @param canvas The canvas to paint on
    */
-  void PaintValue(Canvas &canvas);
+  void PaintValue(Canvas &canvas, Color background_color);
   /**
    * Paints the InfoBox comment on the given canvas
    * @param canvas The canvas to paint on

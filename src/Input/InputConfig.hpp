@@ -40,7 +40,7 @@ struct InputConfig {
     MAX_MODE_STRING = 24,
 #ifdef ENABLE_SDL
     MAX_KEY = 400,
-#elif defined(USE_EGL)
+#elif defined(USE_CONSOLE)
     MAX_KEY = 0600,
 #else
     MAX_KEY = 255,

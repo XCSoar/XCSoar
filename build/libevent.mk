@@ -1,3 +1,5 @@
+USE_CONSOLE ?= $(EGL)
+
 EVENT_SOURCES = \
 	$(SRC)/Event/Idle.cpp \
 	$(SRC)/Event/DelayedNotify.cpp \
@@ -9,15 +11,16 @@ EVENT_SOURCES += \
 	$(SRC)/Event/Android/Timer.cpp \
 	$(SRC)/Event/Android/Loop.cpp \
 	$(SRC)/Event/Android/Queue.cpp
-else ifeq ($(EGL),y)
+else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp \
-	$(SRC)/Event/EGL/Globals.cpp \
-	$(SRC)/Event/EGL/Timer.cpp \
-	$(SRC)/Event/EGL/Loop.cpp \
-	$(SRC)/Event/EGL/Queue.cpp
+	$(SRC)/Event/Console/Globals.cpp \
+	$(SRC)/Event/Console/Timer.cpp \
+	$(SRC)/Event/Console/Loop.cpp \
+	$(SRC)/Event/Console/Queue.cpp
+CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 else ifeq ($(ENABLE_SDL),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/SDL/Timer.cpp \
@@ -30,6 +33,6 @@ EVENT_SOURCES += \
 	$(SRC)/Event/GDI/Queue.cpp
 endif
 
-EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS)
+EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS)
 
 $(eval $(call link-library,libevent,EVENT))

@@ -46,7 +46,7 @@ class Notify : private
 {
   std::atomic<bool> pending;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   friend class EventLoop;
 #elif defined(ENABLE_SDL)
   friend class EventLoop;

@@ -21,26 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_CACHE_HPP
-#define XCSOAR_SCREEN_OPENGL_CACHE_HPP
+#include "Screen/WindowCanvas.hpp"
+#include "Screen/PaintWindow.hpp"
 
-#include "Compiler.h"
-
-struct PixelSize;
-class GLTexture;
-class Font;
-
-namespace TextCache {
-  gcc_pure
-  PixelSize GetSize(const Font &font, const char *text);
-
-  gcc_pure
-  PixelSize LookupSize(const Font &font, const char *text);
-
-  gcc_pure
-  GLTexture *Get(const Font *font, const char *text);
-
-  void Flush();
-};
-
-#endif
+WindowCanvas::WindowCanvas(PaintWindow &window)
+  :Canvas(::GetDC(window), window.GetSize()),
+   wnd(window) {}

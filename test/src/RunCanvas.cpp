@@ -24,6 +24,7 @@ Copyright_License {
 #define ENABLE_SCREEN
 
 #include "Main.hpp"
+#include "Math/Angle.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
@@ -32,10 +33,7 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #endif
 
-#ifndef _MSC_VER
 #include <algorithm>
-using std::min;
-#endif
 
 class TestWindow : public SingleWindow {
 #ifndef ENABLE_OPENGL
@@ -116,7 +114,7 @@ private:
     switch (page) {
     case 0:
       canvas.DrawSegment(hmiddle, vmiddle,
-                     min(width, height) / 3,
+                         std::min(width, height) / 3,
                      Angle::Zero(), Angle::Degrees(90),
                      false);
       label = _T("segment 0-90 horizon=false");
@@ -124,7 +122,7 @@ private:
 
     case 1:
       canvas.DrawSegment(hmiddle, vmiddle,
-                     min(width, height) / 3,
+                         std::min(width, height) / 3,
                      Angle::Degrees(45), Angle::Degrees(180),
                      true);
       label = _T("segment 45-180 horizon=true");
@@ -132,7 +130,7 @@ private:
 
     case 2:
       canvas.DrawCircle(hmiddle, vmiddle,
-                    min(width, height) / 3);
+                        std::min(width, height) / 3);
       label = _T("circle");
       break;
 

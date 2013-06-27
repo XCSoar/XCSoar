@@ -111,6 +111,53 @@ public:
   constexpr uint8_t Blue() const {
     return b;
   }
+
+  constexpr bool operator ==(const BGR8Color other) const {
+    return r == other.r && g == other.g && b == other.b;
+  }
+
+  constexpr bool operator !=(const BGR8Color other) const {
+    return !(*this == other);
+  }
+};
+
+/**
+ * Represents a device-independent color class that stores 8 bits for
+ * each channel, ordered BGRA.
+ */
+class BGRA8Color {
+  BGR8Color base;
+  uint8_t a;
+
+public:
+  BGRA8Color() = default;
+
+  constexpr BGRA8Color(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a=0xff)
+    :base(_r, _g, _b), a(_a) {}
+
+  constexpr uint8_t Red() const {
+    return base.Red();
+  }
+
+  constexpr uint8_t Green() const {
+    return base.Green();
+  }
+
+  constexpr uint8_t Blue() const {
+    return base.Blue();
+  }
+
+  constexpr uint8_t Alpha() const {
+    return a;
+  }
+
+  constexpr bool operator ==(const BGRA8Color other) const {
+    return base == other.base && a == other.a;
+  }
+
+  constexpr bool operator !=(const BGRA8Color other) const {
+    return !(*this == other);
+  }
 };
 
 /**
@@ -175,6 +222,14 @@ public:
 
   constexpr uint8_t GetLuminosity() const {
     return value;
+  }
+
+  constexpr bool operator ==(const Luminosity8 other) const {
+    return value == other.value;
+  }
+
+  constexpr bool operator !=(const Luminosity8 other) const {
+    return !(*this == other);
   }
 };
 

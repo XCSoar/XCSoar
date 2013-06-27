@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
 #define XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
 
-#ifdef ENABLE_OPENGL
+#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL)
 
 #include "PaintWindow.hpp"
 
@@ -32,7 +32,7 @@ Copyright_License {
  * A #PaintWindow implementation that avoids flickering.  Some
  * platforms such as Windows draw directly to the screen, which may
  * expose the window before drawing has finished.  On these,
- * #AntiFlickerWindow will be buffered.  On OpenGL, which has
+ * #AntiFlickerWindow will be buffered.  On OpenGL/SDL, which both have
  * full-screen double-buffering, this class is a simple #PaintWindow
  * without extra buffering.
  *

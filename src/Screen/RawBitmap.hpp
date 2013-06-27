@@ -34,8 +34,6 @@ class Canvas;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
-#elif defined(ENABLE_SDL)
-struct SDL_Surface;
 #endif
 
 /**
@@ -89,7 +87,7 @@ struct BGRColor
     :value(R, G, B) {}
 #endif /* !_WIN32_WCE */
 
-#endif /* !SDL */
+#endif
 };
 
 /**
@@ -114,9 +112,7 @@ protected:
    * texture?
    */
   mutable bool dirty;
-#elif defined(ENABLE_SDL)
-  SDL_Surface *surface;
-#else
+#elif defined(USE_GDI)
   BITMAPINFO bi;
 #ifdef _WIN32_WCE
   /**

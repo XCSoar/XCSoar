@@ -28,8 +28,8 @@ Copyright_License {
 #include "Screen/Android/Features.hpp"
 #endif
 
-#ifdef ENABLE_SDL
-#include "Screen/SDL/Features.hpp"
+#ifdef USE_MEMORY_CANVAS
+#include "Screen/Memory/Features.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL

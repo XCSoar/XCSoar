@@ -36,8 +36,10 @@ class PaintWindow;
 class WindowCanvas : public Canvas {
 #ifdef ENABLE_SDL
 public:
-  explicit WindowCanvas(Window &window)
-    :Canvas(::SDL_GetVideoSurface()) {}
+  explicit WindowCanvas(Window &window) {
+    buffer.width = window.GetWidth();
+    buffer.height = window.GetHeight();
+  }
 
 #else /* !ENABLE_SDL */
 

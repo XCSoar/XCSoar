@@ -32,6 +32,8 @@ Copyright_License {
 #include "Screen/OpenGL/System.hpp"
 #endif
 
+#include <algorithm>
+
 /**
  * A #Canvas implementation which maps into a part of an existing
  * #Canvas.
@@ -39,9 +41,13 @@ Copyright_License {
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
   RasterPoint relative;
-#else
-  SDL_Rect old_clip_rect;
 #endif
+
+  static inline unsigned
+  ClipMax(unsigned limit, int offset, unsigned size) {
+    return std::min(unsigned(size),
+                    unsigned(std::max(int(limit - offset), 0)));
+  }
 
 public:
   SubCanvas(Canvas &canvas, RasterPoint _offset, PixelSize _size)
@@ -51,13 +57,9 @@ public:
   {
 #ifdef ENABLE_OPENGL
     assert(canvas.offset == OpenGL::translate);
-#else
-    surface = canvas.surface;
-#endif
     offset = canvas.offset + _offset;
     size = _size;
 
-#ifdef ENABLE_OPENGL
     if (relative.x != 0 || relative.y != 0) {
       OpenGL::translate += _offset;
 
@@ -69,13 +71,10 @@ public:
 #endif
     }
 #else
-    ::SDL_GetClipRect(surface, &old_clip_rect);
-
-    SDL_Rect new_clip_rect = {
-      Sint16(offset.x), Sint16(offset.y), Uint16(size.cx), Uint16(size.cy)
-    };
-
-    ::SDL_SetClipRect(surface, &new_clip_rect);
+    buffer = canvas.buffer;
+    buffer.data = buffer.At(_offset.x, _offset.y);
+    buffer.width = ClipMax(buffer.width, _offset.x, _size.cx);
+    buffer.height = ClipMax(buffer.height, _offset.y, _size.cy);
 #endif
   }
 
@@ -88,8 +87,6 @@ public:
 
       glPopMatrix();
     }
-#else
-    ::SDL_SetClipRect(surface, &old_clip_rect);
 #endif
   }
 };

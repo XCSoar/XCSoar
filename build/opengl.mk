@@ -18,7 +18,7 @@ else ifeq ($(TARGET_HAS_MALI),y)
 OPENGL ?= y
 GLES ?= y
 
-# UNIX/Linux defaults to OpenGL, but can use SDL_gfx instead
+# UNIX/Linux defaults to OpenGL
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
 GLES ?= n

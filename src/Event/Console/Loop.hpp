@@ -21,13 +21,34 @@ Copyright_License {
 }
 */
 
-#include "Screen/WindowCanvas.hpp"
-#include "Screen/PaintWindow.hpp"
+#ifndef XCSOAR_EVENT_CONSOLE_LOOP_HPP
+#define XCSOAR_EVENT_CONSOLE_LOOP_HPP
 
-#ifdef USE_GDI
+#include "Util/NonCopyable.hpp"
 
-WindowCanvas::WindowCanvas(PaintWindow &window)
-  :Canvas(::GetDC(window), window.GetSize()),
-   wnd(window) {}
+struct Event;
+class EventQueue;
+class TopWindow;
 
-#endif /* USE_GDI */
+class EventLoop : private NonCopyable {
+  EventQueue &queue;
+  TopWindow *top_window;
+
+  /**
+   * True if working on a bulk of events.  At the end of that bulk,
+   * TopWindow::validate() gets called.
+   */
+  bool bulk;
+
+public:
+  EventLoop(EventQueue &_queue, TopWindow &_top_window)
+    :queue(_queue), top_window(&_top_window), bulk(true) {}
+
+  EventLoop(EventQueue &_queue)
+    :queue(_queue), top_window(nullptr), bulk(true) {}
+
+  bool Get(Event &event);
+  void Dispatch(const Event &event);
+};
+
+#endif

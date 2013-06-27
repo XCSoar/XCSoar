@@ -24,7 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
 #define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
+#include "Compiler.h"
+
+#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
 #include "Screen/Canvas.hpp"
+#elif defined(GREYSCALE)
+#include "Screen/Memory/PixelTraits.hpp"
+#include "Screen/Memory/Buffer.hpp"
+#endif
 
 #ifdef USE_EGL
 #include "Screen/EGL/System.hpp"
@@ -34,7 +41,16 @@ Copyright_License {
 #include "Dither.hpp"
 #endif
 
-class TopCanvas : public Canvas {
+struct SDL_Surface;
+class Canvas;
+struct PixelSize;
+struct PixelRect;
+
+class TopCanvas
+#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+  : public Canvas
+#endif
+{
 #ifdef USE_EGL
 #ifdef USE_X11
   X11Window x_window;
@@ -53,23 +69,30 @@ class TopCanvas : public Canvas {
   EGLSurface surface;
 #endif
 
-#if defined(GREYSCALE) && defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
-  /**
-   * The real video surface.  Our #Canvas::surface attribute is only a
-   * software surface with 8 bits per pixel greyscale, which will be
-   * copied to the real video surface in Flip().
-   */
-  SDL_Surface *real;
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  SDL_Surface *surface;
+
+#ifdef GREYSCALE
+  WritableImageBuffer<GreyscalePixelTraits> buffer;
 
 #ifdef DITHER
   Dither dither;
 #endif
-
+#endif
 #endif
 
 public:
-#ifdef USE_EGL
+#if defined(USE_EGL) || (defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE))
   ~TopCanvas();
+#endif
+
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  bool IsDefined() const {
+    return surface != nullptr;
+  }
+
+  gcc_pure
+  PixelRect GetRect() const;
 #endif
 
   void Create(PixelSize new_size,
@@ -88,6 +111,11 @@ public:
   void Fullscreen() {}
 #else
   void Fullscreen();
+#endif
+
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  Canvas Lock();
+  void Unlock();
 #endif
 
   void Flip();

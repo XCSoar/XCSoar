@@ -33,7 +33,7 @@ struct Event {
     NOP,
     QUIT,
 
-#ifdef USE_EGL
+#ifdef USE_CONSOLE
     CLOSE,
 #endif
 
