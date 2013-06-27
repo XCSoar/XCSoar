@@ -24,10 +24,6 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
-#ifdef USE_GDI
-
 WindowCanvas::WindowCanvas(PaintWindow &window)
   :Canvas(::GetDC(window), window.GetSize()),
    wnd(window) {}
-
-#endif /* USE_GDI */

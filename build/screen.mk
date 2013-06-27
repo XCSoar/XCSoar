@@ -91,8 +91,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
 else ifeq ($(EGL),y)
 SCREEN_SOURCES += \
@@ -108,7 +106,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
