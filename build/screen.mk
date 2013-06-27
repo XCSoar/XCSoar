@@ -92,8 +92,6 @@ SCREEN_SOURCES += \
 ifeq ($(OPENGL),n)
 USE_MEMORY_CANVAS = y
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
-	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
 else ifeq ($(EGL),y)
@@ -146,7 +144,9 @@ endif
 
 ifeq ($(USE_MEMORY_CANVAS),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
 	$(SCREEN_SRC_DIR)/Memory/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Memory/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Memory/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Memory/Canvas.cpp
 MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS

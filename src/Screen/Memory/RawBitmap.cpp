@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "../RawBitmap.hpp"
-#include "Screen/Canvas.hpp"
+#include "Canvas.hpp"
 
 #include <assert.h>
 
