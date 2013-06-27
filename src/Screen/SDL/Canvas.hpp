@@ -86,9 +86,6 @@ public:
     :buffer(_buffer),
      font(NULL), background_mode(OPAQUE) {}
 
-  Canvas(const Canvas &other) = delete;
-  Canvas &operator=(const Canvas &other) = delete;
-
   void Create(WritableImageBuffer<SDLPixelTraits> _buffer) {
     buffer = _buffer;
   }

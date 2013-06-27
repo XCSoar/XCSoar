@@ -24,6 +24,10 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#include "Screen/SDL/Canvas.hpp"
+#endif
+
 TopWindow::~TopWindow()
 {
   delete screen;
@@ -65,10 +69,15 @@ TopWindow::Fullscreen()
 void
 TopWindow::Expose()
 {
-  if (screen->Lock()) {
-    OnPaint(*screen);
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  Canvas canvas = screen->Lock();
+  if (canvas.IsDefined()) {
+    OnPaint(canvas);
     screen->Unlock();
   }
+#else
+  OnPaint(*screen);
+#endif
 
   screen->Flip();
 }

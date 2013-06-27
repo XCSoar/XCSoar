@@ -23,11 +23,14 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Features.hpp"
+#include "Screen/Point.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#else
+#include "Canvas.hpp"
 #endif
 
 #ifdef DITHER
@@ -39,11 +42,23 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE)
+#if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
 TopCanvas::~TopCanvas()
 {
   buffer.Free();
 }
+#endif
+
+#ifndef ENABLE_OPENGL
+
+PixelRect
+TopCanvas::GetRect() const
+{
+  assert(IsDefined());
+
+  return { 0, 0, surface->w, surface->h };
+}
+
 #endif
 
 gcc_const
@@ -106,10 +121,6 @@ TopCanvas::Create(PixelSize new_size,
 
 #ifdef GREYSCALE
   buffer.Allocate(new_size.cx, new_size.cy);
-#else
-  buffer.data = SDLPixelTraits::pointer_type(surface->pixels);
-  buffer.width = surface->w;
-  buffer.height = surface->h;
 #endif
 #endif
 }
@@ -117,12 +128,15 @@ TopCanvas::Create(PixelSize new_size,
 void
 TopCanvas::OnResize(PixelSize new_size)
 {
+#ifdef ENABLE_OPENGL
   if (new_size == GetSize())
     return;
 
-#ifdef ENABLE_OPENGL
   const SDL_Surface *old = ::SDL_GetVideoSurface();
 #else
+  if (new_size.cx == surface->w && new_size.cy == surface->h)
+    return;
+
   const SDL_Surface *old = surface;
 #endif
   if (old == nullptr)
@@ -256,26 +270,31 @@ CopyFromGreyscale(
 
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && !defined(GREYSCALE)
+#ifndef ENABLE_OPENGL
 
-bool
+Canvas
 TopCanvas::Lock()
 {
+#ifndef GREYSCALE
   if (SDL_LockSurface(surface) != 0)
-    return false;
+    return Canvas();
 
+  WritableImageBuffer<SDLPixelTraits> buffer;
   buffer.data = (SDLPixelTraits::pointer_type)surface->pixels;
   buffer.pitch = surface->pitch;
   buffer.width = surface->w;
   buffer.height = surface->h;
+#endif
 
-  return true;
+  return Canvas(buffer);
 }
 
 void
 TopCanvas::Unlock()
 {
+#ifndef GREYSCALE
   SDL_UnlockSurface(surface);
+#endif
 }
 
 #endif

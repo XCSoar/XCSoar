@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
 
+#ifdef KOBO
+#include "Canvas.hpp"
+#endif
+
 void
 TopWindow::SetCaption(const TCHAR *caption)
 {
@@ -46,8 +50,12 @@ void
 TopWindow::OnDestroy()
 {
   /* clear the screen before exiting XCSoar */
-  screen->ClearWhite();
-  screen->Flip();
+  Canvas canvas = screen->Lock();
+  if (canvas.IsDefined()) {
+    canvas.ClearWhite();
+    screen->Unlock();
+    screen->Flip();
+  }
 
   ContainerWindow::OnDestroy();
 }

@@ -24,7 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
 #define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
+#include "Compiler.h"
+
+#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
 #include "Screen/Canvas.hpp"
+#elif defined(GREYSCALE)
+#include "Screen/Custom/PixelTraits.hpp"
+#include "Screen/Custom/Buffer.hpp"
+#endif
 
 #ifdef USE_EGL
 #include "Screen/EGL/System.hpp"
@@ -35,8 +42,15 @@ Copyright_License {
 #endif
 
 struct SDL_Surface;
+class Canvas;
+struct PixelSize;
+struct PixelRect;
 
-class TopCanvas : public Canvas {
+class TopCanvas
+#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+  : public Canvas
+#endif
+{
 #ifdef USE_EGL
 #ifdef USE_X11
   X11Window x_window;
@@ -58,14 +72,27 @@ class TopCanvas : public Canvas {
 #if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
   SDL_Surface *surface;
 
-#if defined(GREYSCALE) && defined(DITHER)
+#ifdef GREYSCALE
+  WritableImageBuffer<GreyscalePixelTraits> buffer;
+
+#ifdef DITHER
   Dither dither;
+#endif
 #endif
 #endif
 
 public:
 #if defined(USE_EGL) || (defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE))
   ~TopCanvas();
+#endif
+
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  bool IsDefined() const {
+    return surface != nullptr;
+  }
+
+  gcc_pure
+  PixelRect GetRect() const;
 #endif
 
   void Create(PixelSize new_size,
@@ -86,16 +113,9 @@ public:
   void Fullscreen();
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && !defined(GREYSCALE)
-  bool Lock();
+#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+  Canvas Lock();
   void Unlock();
-#else
-  bool Lock() {
-    return true;
-  }
-
-  void Unlock() {
-  }
 #endif
 
   void Flip();
