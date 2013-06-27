@@ -42,6 +42,19 @@ struct WritableImageBuffer {
     return { nullptr, 0, 0, 0 };
   }
 
+  void Allocate(unsigned _width, unsigned _height) {
+    unsigned i = PixelTraits::CalcIncrement(_width);
+    data = new typename PixelTraits::color_type[i * _height];
+    pitch = i * sizeof(typename PixelTraits::color_type);
+    width = _width;
+    height = _height;
+  }
+
+  void Free() {
+    delete[] data;
+    data = nullptr;
+  }
+
   constexpr bool Check(unsigned x, unsigned y) const {
     return x < width && y < height;
   }

@@ -87,11 +87,7 @@ static inline void
 ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
               const UncompressedImage &uncompressed)
 {
-  buffer.width = uncompressed.GetWidth();
-  const unsigned increment = PixelTraits::CalcIncrement(buffer.width);
-  buffer.pitch = increment * sizeof(buffer.data[0]);
-  buffer.height = uncompressed.GetHeight();
-  buffer.data = new typename PixelTraits::color_type[increment * buffer.height];
+  buffer.Allocate(uncompressed.GetWidth(), uncompressed.GetHeight());
 
   switch (uncompressed.GetFormat()) {
   case UncompressedImage::Format::INVALID:

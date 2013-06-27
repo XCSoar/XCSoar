@@ -73,8 +73,7 @@ Bitmap::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-  delete[] buffer.data;
-  buffer.data = nullptr;
+  buffer.Free();
 }
 
 const PixelSize

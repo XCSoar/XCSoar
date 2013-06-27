@@ -57,7 +57,7 @@ public:
   }
 
   ~UnitSymbol() {
-    delete[] buffer.data;
+    Reset();
   }
 
   void Load(unsigned id);
@@ -67,8 +67,7 @@ public:
 #if defined(USE_GDI) || defined(ENABLE_OPENGL)
     bitmap.Reset();
 #else
-    delete[] buffer.data;
-    buffer.data = nullptr;
+    buffer.Free();
 #endif
   }
 
