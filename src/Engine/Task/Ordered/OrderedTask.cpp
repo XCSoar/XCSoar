@@ -649,7 +649,9 @@ OrderedTask::Remove(const unsigned position)
 
   ErasePoint(position);
 
-  SetNeighbours(position);
+  if (position < task_points.size())
+    SetNeighbours(position);
+
   if (position)
     SetNeighbours(position - 1);
 
@@ -1342,6 +1344,9 @@ OrderedTask::RemoveAllPoints()
     delete i;
 
   optional_start_points.clear();
+
+  taskpoint_start = NULL;
+  taskpoint_finish = NULL;
 }
 
 void

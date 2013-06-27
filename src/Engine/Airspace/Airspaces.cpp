@@ -196,7 +196,7 @@ Airspaces::FindInside(const AircraftState &state,
 #endif
     
     if (!condition(*v->GetAirspace()) || !(*v).IsInside(state))
-      vectors.erase(v);
+      v = vectors.erase(v);
     else
       ++v;
   }

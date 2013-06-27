@@ -36,6 +36,7 @@ AutopilotParameters autopilot_parms;
 
 int terrain_height = 1;
 std::string replay_file = "test/data/0asljd01.igc";
+std::string waypoint_file = "test/data/waypoints_geo.wpt";
 std::string task_file = "";
 
 #ifdef INSTRUMENT_TASK
@@ -127,12 +128,13 @@ ParseArgs(int argc, char** argv)
 	{"turnspeed", required_argument,       0, 'r'},
 	{"igc", required_argument,       0, 'f'},
 	{"task", required_argument,       0, 'x'},
+	{"waypoints", required_argument,       0, 'w'},
 	{0, 0, 0, 0}
       };
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
-    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:x:",
+    int c = getopt_long (argc, argv, "s:v:i:n:t:r:a:f:x:w:",
                          long_options, &option_index);
     /* Detect the end of the options. */
     if (c == -1)
@@ -150,6 +152,9 @@ ParseArgs(int argc, char** argv)
       break;
     case 'f':
       replay_file = optarg;
+      break;
+    case 'w':
+      waypoint_file = optarg;
       break;
     case 'x':
       task_file = optarg;

@@ -22,8 +22,7 @@
 #ifndef POLYGON_INTERIOR_HPP
 #define POLYGON_INTERIOR_HPP
 
-#include <vector>
-#include "Geo/SearchPoint.hpp"
+#include "Geo/SearchPointVector.hpp"
 #include "Compiler.h"
 
 struct GeoPoint;
@@ -36,10 +35,12 @@ class SearchPoint;
  */
 gcc_pure bool
 PolygonInterior(const GeoPoint &p,
-                const SearchPoint *begin, const SearchPoint *end);
+                SearchPointVector::const_iterator begin,
+                SearchPointVector::const_iterator end);
 
 gcc_pure bool
 PolygonInterior(const FlatGeoPoint &p,
-                const SearchPoint *begin, const SearchPoint *end);
+                SearchPointVector::const_iterator begin,
+                SearchPointVector::const_iterator end);
 
 #endif
