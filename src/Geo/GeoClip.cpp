@@ -52,50 +52,84 @@ clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
   return GeoPoint(origin.longitude + ex, at);
 }
 
-bool
-GeoClip::ClipPoint(const GeoPoint &origin, GeoPoint &pt) const
-{
-  const Angle zero = Angle::Zero();
+static constexpr unsigned CLIP_LEFT_EDGE = 0x1;
+static constexpr unsigned CLIP_RIGHT_EDGE = 0x2;
+static constexpr unsigned CLIP_BOTTOM_EDGE = 0x4;
+static constexpr unsigned CLIP_TOP_EDGE = 0x8;
 
-  if (pt.longitude < zero) {
-    if (origin.longitude <= zero)
-      return false;
+static constexpr bool CLIP_INSIDE(unsigned a) {
+  return !a;
+}
 
-    pt = clip_longitude(origin, pt, zero);
-  } else if (pt.longitude > width) {
-    if (origin.longitude >= width)
-      return false;
+static constexpr bool CLIP_REJECT(unsigned a, unsigned b) {
+  return a & b;
+}
 
-    pt = clip_longitude(origin, pt, width);
-  }
+static constexpr bool CLIP_ACCEPT(unsigned a, unsigned b) {
+  return !(a | b);
+}
 
-  if (pt.latitude < GetSouth()) {
-    if (origin.latitude <= GetSouth())
-      return false;
+gcc_pure
+unsigned GeoClip::ClipEncodeX(const Angle& x) const {
+  if (x< Angle::Zero())
+    return CLIP_LEFT_EDGE;
+  if (x>width)
+    return CLIP_RIGHT_EDGE;
+  return 0;
+}
 
-    pt = clip_latitude(origin, pt, GetSouth());
-  } else if (pt.latitude > GetNorth()) {
-    if (origin.latitude >= GetNorth())
-      return false;
+gcc_pure
+unsigned GeoClip::ClipEncodeY(const Angle& y) const {
+  if (y< GetSouth())
+    return CLIP_BOTTOM_EDGE;
+  if (y> GetNorth())
+    return CLIP_TOP_EDGE;
+  return 0;
+}
 
-    pt = clip_latitude(origin, pt, GetNorth());
-  }
-
-  return true;
+gcc_pure
+unsigned GeoClip::ClipEncode(const GeoPoint &pt) const {
+  return ClipEncodeX(pt.longitude) | ClipEncodeY(pt.latitude);
 }
 
 bool
 GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
 {
+  const Angle zero = Angle::Zero();
+
   GeoPoint a2 = ImportPoint(a);
   GeoPoint b2 = ImportPoint(b);
 
-  if (!ClipPoint(a2, b2) || !ClipPoint(b2, a2))
-    return false;
+  unsigned code1 = ClipEncode(a2);
+  unsigned code2 = ClipEncode(b2);
 
-  a = ExportPoint(a2);
-  b = ExportPoint(b2);
-  return true;
+  while (true) {
+
+    if (CLIP_ACCEPT(code1, code2)) {
+      a = ExportPoint(a2);
+      b = ExportPoint(b2);
+      return true;
+    }
+
+    if (CLIP_REJECT(code1, code2))
+      return false;
+
+    if (CLIP_INSIDE(code1)) {
+      std::swap(a2, b2);
+      std::swap(code1, code2);
+    }
+
+    if (code1 & CLIP_LEFT_EDGE) {
+      a2 = clip_longitude(b2, a2, zero);
+    } else if (code1 & CLIP_RIGHT_EDGE) {
+      a2 = clip_longitude(b2, a2, width);
+    } else if (code1 & CLIP_BOTTOM_EDGE) {
+      a2 = clip_latitude(b2, a2, GetSouth());
+    } else if (code1 & CLIP_TOP_EDGE) {
+      a2 = clip_latitude(b2, a2, GetNorth());
+    }
+    code1 = ClipEncode(a2);
+  }
 }
 
 static unsigned

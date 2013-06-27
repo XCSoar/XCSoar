@@ -63,14 +63,6 @@ protected:
   }
 
   /**
-   * Clips a point to be bounds.
-   *
-   * @param pt the point to be clipped (in and out)
-   * @return false if neither origin nor pt are visible
-   */
-  bool ClipPoint(const GeoPoint &origin, GeoPoint &pt) const;
-
-  /**
    * Clips a vertex.
    *
    * @param prev the previous vertex
@@ -109,6 +101,11 @@ public:
    */
   unsigned ClipPolygon(GeoPoint *dest,
                        const GeoPoint *src, unsigned src_length) const;
+private:
+  gcc_pure unsigned ClipEncodeX(const Angle& x) const;
+  gcc_pure unsigned ClipEncodeY(const Angle& y) const;
+  gcc_pure unsigned ClipEncode(const GeoPoint &pt) const;
+
 };
 
 #endif
