@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import java.util.HashMap;
 import android.media.MediaPlayer;

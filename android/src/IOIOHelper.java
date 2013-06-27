@@ -21,7 +21,7 @@
   }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import java.util.Collection;
 import java.util.LinkedList;

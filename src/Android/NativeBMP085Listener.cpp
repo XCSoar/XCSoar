@@ -26,7 +26,7 @@ Copyright_License {
 #include "Atmosphere/Temperature.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Java/Class.hpp"
-#include "org_xcsoarte_NativeBMP085Listener.h"
+#include "org_xcsoar_NativeBMP085Listener.h"
 
 #include <stddef.h>
 
@@ -37,7 +37,7 @@ namespace NativeBMP085Listener {
 };
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeBMP085Listener_onBMP085Values(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeBMP085Listener_onBMP085Values(JNIEnv *env, jobject obj,
                                                     jdouble temperature,
                                                     jint pressure)
 {
@@ -51,7 +51,7 @@ Java_org_xcsoarte_NativeBMP085Listener_onBMP085Values(JNIEnv *env, jobject obj,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeBMP085Listener_onBMP085Error(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeBMP085Listener_onBMP085Error(JNIEnv *env, jobject obj)
 {
   jlong ptr = env->GetLongField(obj, NativeBMP085Listener::ptr_field);
   if (ptr == 0)
@@ -64,7 +64,7 @@ Java_org_xcsoarte_NativeBMP085Listener_onBMP085Error(JNIEnv *env, jobject obj)
 void
 NativeBMP085Listener::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoarte/NativeBMP085Listener");
+  cls.Find(env, "org/xcsoar/NativeBMP085Listener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
