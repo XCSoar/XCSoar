@@ -41,17 +41,6 @@ Bitmap::Load(unsigned id, Type type)
   return Load(uncompressed, type);
 }
 
-#ifdef USE_EGL
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-#endif
-
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {

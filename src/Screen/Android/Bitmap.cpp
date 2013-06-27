@@ -97,15 +97,6 @@ Bitmap::Load(unsigned _id, Type type)
 }
 
 bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
-bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   assert(path != NULL && *path != _T('\0'));

@@ -23,24 +23,10 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "ResourceLoader.hpp"
-#include "OS/ConvertPathName.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Debug.hpp"
-#else
 #include "Screen/Custom/UncompressedImage.hpp"
 #include "Screen/Memory/UncompressedImage.hpp"
-#endif
-
-#ifdef WIN32
-  #include <windows.h>
-#endif
 
 #include <assert.h>
-
-#ifndef ENABLE_OPENGL
 
 bool
 Bitmap::Load(const UncompressedImage &uncompressed, Type type)
@@ -54,8 +40,6 @@ Bitmap::Load(const UncompressedImage &uncompressed, Type type)
   return true;
 }
 
-#endif
-
 bool
 Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
@@ -64,8 +48,6 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
   // XXX
   return Load(id);
 }
-
-#ifndef ENABLE_OPENGL
 
 void
 Bitmap::Reset()
@@ -82,5 +64,3 @@ Bitmap::GetSize() const
 
   return { buffer.width, buffer.height };
 }
-
-#endif /* !OpenGL */
