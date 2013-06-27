@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_COLOR_HPP
-#define XCSOAR_SCREEN_SDL_COLOR_HPP
+#ifndef XCSOAR_SCREEN_MEMORY_COLOR_HPP
+#define XCSOAR_SCREEN_MEMORY_COLOR_HPP
 
 #include "Screen/PortableColor.hpp"
 #include "Compiler.h"

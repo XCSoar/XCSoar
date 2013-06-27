@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
-#include "Screen/SDL/Color.hpp"
+#include "Color.hpp"
 #include "Screen/SDL/Point.hpp"
 #include "PixelTraits.hpp"
 #include "Buffer.hpp"
