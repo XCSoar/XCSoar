@@ -150,20 +150,26 @@ protected:
   }
 
   gcc_pure
+  unsigned ClipEncodeX(int x) const {
+    if (unsigned(x)< buffer.width)
+      return 0;
+    if (x<0)
+      return CLIP_LEFT_EDGE;
+    return CLIP_RIGHT_EDGE;
+  }
+
+  gcc_pure
+  unsigned ClipEncodeY(int y) const {
+    if (unsigned(y)< buffer.height)
+      return 0;
+    if (y<0)
+      return CLIP_TOP_EDGE;
+    return CLIP_BOTTOM_EDGE;
+  }
+
+  gcc_pure
   unsigned ClipEncode(int x, int y) const {
-    unsigned code = 0;
-
-    if (x < 0)
-      code |= CLIP_LEFT_EDGE;
-    else if (unsigned(x) >= buffer.width)
-      code |= CLIP_RIGHT_EDGE;
-
-    if (y < 0)
-      code |= CLIP_TOP_EDGE;
-    else if (unsigned(y) >= buffer.height)
-      code |= CLIP_BOTTOM_EDGE;
-
-    return code;
+    return ClipEncodeX(x) | ClipEncodeY(y);
   }
 
   bool ClipLine(int &x1, int &y1, int &x2, int &y2) {
