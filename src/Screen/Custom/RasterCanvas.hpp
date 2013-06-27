@@ -169,12 +169,13 @@ protected:
   bool ClipLine(int &x1, int &y1, int &x2, int &y2) {
     unsigned code1 = ClipEncode(x1, y1);
     unsigned code2 = ClipEncode(x2, y2);
+
+    if (CLIP_REJECT(code1, code2))
+      return false;
+
     while (true) {
       if (CLIP_ACCEPT(code1, code2))
         return true;
-
-      if (CLIP_REJECT(code1, code2))
-        return false;
 
       if (CLIP_INSIDE(code1)) {
         std::swap(x1, x2);
