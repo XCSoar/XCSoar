@@ -155,7 +155,7 @@ Window::OnDestroy()
     parent = NULL;
   }
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   event_queue->Purge(*this);
 #else
   EventQueue::Purge(*this);

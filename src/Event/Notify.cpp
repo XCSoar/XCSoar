@@ -59,7 +59,7 @@ Notify::SendNotification()
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   event_queue->Push(Event(Callback, this));
 #elif defined(ENABLE_SDL)
   EventQueue::Push(Callback, this);
@@ -74,7 +74,7 @@ Notify::ClearNotification()
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   event_queue->Purge(Callback, this);
 #elif defined(ENABLE_SDL)
   EventQueue::Purge(Callback, this);

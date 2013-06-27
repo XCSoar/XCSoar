@@ -46,6 +46,9 @@
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
 void TopWindow::Refresh() {}
+#endif
+
+#ifdef USE_CONSOLE
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 
@@ -76,7 +79,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   EventLoop loop(*event_queue);
 #else
   EventLoop loop;

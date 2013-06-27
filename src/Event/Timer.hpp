@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_HPP
 #define XCSOAR_EVENT_TIMER_HPP
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
 #include <atomic>
 #elif defined(ENABLE_SDL)
 #include <SDL_timer.h>
@@ -54,7 +54,7 @@ class Timer
   : private Window, private WindowTimer
 #endif
 {
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   std::atomic<bool> enabled, queued;
   unsigned ms;
 #elif defined(ENABLE_SDL)
@@ -72,7 +72,7 @@ public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   Timer():enabled(false), queued(false) {}
 #elif defined(ENABLE_SDL)
   Timer():id(NULL), queued(false) {}
@@ -104,7 +104,7 @@ public:
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
 
-#ifdef USE_EGL
+#ifdef USE_CONSOLE
     assert(!queued.load(std::memory_order_relaxed));
     assert(!enabled.load(std::memory_order_relaxed));
 #endif
@@ -122,7 +122,7 @@ public:
    * end?
    */
   bool IsActive() const {
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
     return enabled.load(std::memory_order_relaxed);
 #elif defined(ENABLE_SDL)
     return id != NULL;
@@ -150,7 +150,7 @@ protected:
    */
   virtual void OnTimer() = 0;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
 public:
   void Invoke();
 #elif defined(ENABLE_SDL)
