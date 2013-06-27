@@ -29,7 +29,7 @@ SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Canvas.cpp
+	$(SCREEN_SRC_DIR)/Custom/MoreCanvas.cpp
 
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
