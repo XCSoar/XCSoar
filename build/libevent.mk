@@ -16,6 +16,7 @@ EVENT_SOURCES += \
 	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp \
+	$(SRC)/Event/Linux/Input.cpp \
 	$(SRC)/Event/Console/Globals.cpp \
 	$(SRC)/Event/Console/Timer.cpp \
 	$(SRC)/Event/Console/Loop.cpp \
