@@ -38,6 +38,10 @@ struct WritableImageBuffer {
 
   unsigned pitch, width, height;
 
+  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+    return { nullptr, 0, 0, 0 };
+  }
+
   constexpr bool Check(unsigned x, unsigned y) const {
     return x < width && y < height;
   }
@@ -70,6 +74,10 @@ struct ConstImageBuffer {
   constexpr ConstImageBuffer(WritableImageBuffer<PixelTraits> other)
     :data(other.data), pitch(other.pitch),
      width(other.width), height(other.height) {}
+
+  static constexpr WritableImageBuffer<PixelTraits> Empty() {
+    return { nullptr, 0, 0, 0 };
+  }
 
   constexpr bool Check(unsigned x, unsigned y) const {
     return x < width && y < height;

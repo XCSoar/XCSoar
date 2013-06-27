@@ -101,12 +101,10 @@ public:
     Load(id);
   }
 #elif defined(ENABLE_SDL)
-  Bitmap() {
-    buffer.data = nullptr;
-  }
+  constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
 
-  explicit Bitmap(unsigned id) {
-    buffer.data = nullptr;
+  explicit Bitmap(unsigned id)
+    :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {
     Load(id);
   }
 #else
