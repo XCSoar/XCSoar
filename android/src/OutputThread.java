@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import java.io.IOException;
 import java.io.OutputStream;

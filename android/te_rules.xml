@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="xcsoar_testing_rules">
+<project name="xcsoar_te_rules">
   <target name="-pre-compile">
-    <copy file="${gen.absolute.dir}/org/xcsoarte/testing/R.java"
+    <copy file="${gen.absolute.dir}/org/xcsoarte/R.java"
           toFile="${gen.absolute.dir}/org/xcsoar/R.java">
       <filterset begintoken="package " endtoken=";">
-        <filter token="org.xcsoarte.testing"
+        <filter token="org.xcsoarte"
                 value="package org.xcsoar;"/>
       </filterset>
     </copy>

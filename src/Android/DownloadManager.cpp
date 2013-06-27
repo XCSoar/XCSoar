@@ -29,7 +29,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/Macros.hpp"
-#include "org_xcsoarte_DownloadUtil.h"
+#include "org_xcsoar_DownloadUtil.h"
 
 #include <algorithm>
 
@@ -47,7 +47,7 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
   assert(util_class == NULL);
   assert(env != NULL);
 
-  if (!util_class.FindOptional(env, "org/xcsoarte/DownloadUtil"))
+  if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
     return false;
 
   enumerate_method = env->GetStaticMethodID(util_class, "enumerate",
@@ -130,7 +130,7 @@ EraseSuffix(char *p, const char *suffix)
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
+Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
                                              jlong j_handler, jstring j_path,
                                              jlong size, jlong position)
 {
@@ -151,7 +151,7 @@ Java_org_xcsoarte_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
+Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
                                                 jstring j_path,
                                                 jboolean success)
 {

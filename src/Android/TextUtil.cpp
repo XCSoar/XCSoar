@@ -39,7 +39,7 @@ TextUtil::Initialise(JNIEnv *_env)
 {
   env = _env;
 
-  cls.Find(env, "org/xcsoarte/TextUtil");
+  cls.Find(env, "org/xcsoar/TextUtil");
 
   midTextUtil = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;II)V");
   midGetFontMetrics = env->GetMethodID(cls, "getFontMetrics", "([I)V");
@@ -88,7 +88,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
     paramStyle |= 2;
   paramTextSize = height;
 
-  // construct org.xcsoarte.TextUtil object
+  // construct org.xcsoar.TextUtil object
   localObject = env->NewObject(cls, midTextUtil,
                                paramFamilyName.Get(),
                                paramStyle, paramTextSize);

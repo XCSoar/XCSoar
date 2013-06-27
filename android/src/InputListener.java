@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * A listener that gets called when data is received on a socket.

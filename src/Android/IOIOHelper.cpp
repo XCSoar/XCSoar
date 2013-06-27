@@ -36,12 +36,12 @@ IOIOHelper::Initialise(JNIEnv *env)
   assert(cls == NULL);
   assert(env != NULL);
 
-  if (!cls.FindOptional(env, "org/xcsoarte/IOIOHelper"))
+  if (!cls.FindOptional(env, "org/xcsoar/IOIOHelper"))
     return false;
 
   ctor = env->GetMethodID(cls, "<init>", "()V");
   openUart_method = env->GetMethodID(cls, "openUart",
-                                     "(II)Lorg/xcsoarte/AndroidPort;");
+                                     "(II)Lorg/xcsoar/AndroidPort;");
   shutdown_method = env->GetMethodID(cls, "shutdown", "()V");
 
   return true;

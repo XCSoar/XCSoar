@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * A #I2Cbaro.Listener implementation that passes method calls to

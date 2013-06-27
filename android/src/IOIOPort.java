@@ -21,7 +21,7 @@
   }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import ioio.lib.api.Uart;
 

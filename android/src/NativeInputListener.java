@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * An #InputListener implementation that passes method calls to native
