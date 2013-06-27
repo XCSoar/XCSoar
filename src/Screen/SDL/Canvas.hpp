@@ -28,10 +28,7 @@ Copyright_License {
 #error Please include OpenGL/Canvas.hpp
 #endif
 
-#include "Screen/Custom/PixelTraits.hpp"
-#include "Screen/Custom/Buffer.hpp"
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
@@ -41,7 +38,6 @@ Copyright_License {
 #include "Screen/Custom/Buffer.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
 #include <tchar.h>
 
 #ifdef WIN32
@@ -51,6 +47,7 @@ Copyright_License {
 #undef TRANSPARENT
 #endif
 
+class Angle;
 class Bitmap;
 
 #ifdef GREYSCALE

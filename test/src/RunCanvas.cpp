@@ -24,6 +24,7 @@ Copyright_License {
 #define ENABLE_SCREEN
 
 #include "Main.hpp"
+#include "Math/Angle.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
