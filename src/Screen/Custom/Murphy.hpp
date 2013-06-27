@@ -29,6 +29,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <math.h>
+#include <stdint.h>
 
 /**
  * Implementation of the Murphy line drawing algorithm.  Based on
@@ -85,7 +86,7 @@ public:
     tempy = y;
   }
 
-  void Iteration(Uint8 miter,
+  void Iteration(uint8_t miter,
                  unsigned ml1bx, unsigned ml1by,
                  unsigned ml2bx, unsigned ml2by,
                  unsigned ml1x, unsigned ml1y,
@@ -180,7 +181,7 @@ public:
     first2y = ml2by;
   }
 
-  void Wideline(int x1, int y1, int x2, int y2, Uint8 width, Uint8 miter) {
+  void Wideline(int x1, int y1, int x2, int y2, uint8_t width, uint8_t miter) {
     assert(x1 != x2 || y1 != y2);
 
     float offset = (float)width / 2.f;
