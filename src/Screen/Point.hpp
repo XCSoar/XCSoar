@@ -26,10 +26,12 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Point.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Point.hpp"
-#else
+#elif defined(USE_MEMORY_CANVAS)
+#include "Screen/Memory/Point.hpp"
+#elif defined(USE_GDI)
 #include "Screen/GDI/Point.hpp"
+#else
+#error No Point implementation
 #endif
 
 #include "Compiler.h"
