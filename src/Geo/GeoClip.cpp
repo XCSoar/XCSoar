@@ -135,22 +135,50 @@ GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
   }
 }
 
+class ClipGeoPoint: public GeoPoint {
+public:
+  ClipGeoPoint(const GeoPoint& _p): GeoPoint(_p), clip_code(0)
+  {
+  };
+
+  ClipGeoPoint(): clip_code(0) {}
+
+  unsigned clip_code;
+
+  void ClipEncodeY(const Angle& south, const Angle& north) {
+    if (latitude< south)
+      clip_code = CLIP_BOTTOM_EDGE;
+    if (latitude> north)
+      clip_code = CLIP_TOP_EDGE;
+    clip_code = 0;
+  }
+
+  void ClipEncodeX(const Angle& west, const Angle& east) {
+    if (longitude< west)
+      clip_code = CLIP_LEFT_EDGE;
+    if (longitude> east)
+      clip_code = CLIP_RIGHT_EDGE;
+    clip_code = 0;
+  }
+
+};
+
 static unsigned
 ClipVertexLongitude(const Angle west, const Angle east,
-                    const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
-                    const GeoPoint &next)
+                    const ClipGeoPoint &prev, ClipGeoPoint &pt, ClipGeoPoint &insert,
+                    const ClipGeoPoint &next)
 {
   unsigned num_insert = 0;
 
-  if (pt.longitude < west) {
-    if (prev.longitude <= west) {
-      if (next.longitude <= west)
+  if (pt.clip_code & CLIP_LEFT_EDGE) {
+    if (prev.clip_code & CLIP_LEFT_EDGE) {
+      if (next.clip_code & CLIP_LEFT_EDGE)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, west);
     } else {
-      if (next.longitude > west) {
+      if (! (next.clip_code & CLIP_LEFT_EDGE)) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, west);
@@ -159,15 +187,15 @@ ClipVertexLongitude(const Angle west, const Angle east,
 
       pt = clip_longitude(prev, pt, west);
     }
-  } else if (pt.longitude > east) {
-    if (prev.longitude >= east) {
-      if (next.longitude >= east)
+  } else if (pt.clip_code & CLIP_RIGHT_EDGE) {
+    if (prev.clip_code & CLIP_RIGHT_EDGE) {
+      if (next.clip_code & CLIP_RIGHT_EDGE)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, east);
     } else {
-      if (next.longitude < east) {
+      if (! (next.clip_code & CLIP_RIGHT_EDGE)) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, east);
@@ -183,20 +211,21 @@ ClipVertexLongitude(const Angle west, const Angle east,
 
 static unsigned
 ClipVertex_latitude(const Angle south, const Angle north,
-                    const GeoPoint &prev, GeoPoint &pt, GeoPoint &insert,
-                    const GeoPoint &next)
+                    const ClipGeoPoint &prev, ClipGeoPoint &pt, ClipGeoPoint &insert,
+                    const ClipGeoPoint &next)
 {
   unsigned num_insert = 0;
 
-  if (pt.latitude < south) {
-    if (prev.latitude <= south) {
-      if (next.latitude <= south)
+  if (pt.clip_code & CLIP_BOTTOM_EDGE) {
+    if (prev.clip_code & CLIP_BOTTOM_EDGE) {
+      if (next.clip_code & CLIP_BOTTOM_EDGE)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, south);
+
     } else {
-      if (next.latitude > south) {
+      if (! (next.clip_code & CLIP_BOTTOM_EDGE)) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, south);
@@ -205,15 +234,15 @@ ClipVertex_latitude(const Angle south, const Angle north,
 
       pt = clip_latitude(prev, pt, south);
     }
-  } else if (pt.latitude > north) {
-    if (prev.latitude >= north) {
-      if (next.latitude >= north)
+  } else if (pt.clip_code & CLIP_TOP_EDGE) {
+    if (prev.clip_code & CLIP_TOP_EDGE) {
+      if (next.clip_code & CLIP_TOP_EDGE)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, north);
     } else {
-      if (next.latitude < north) {
+      if (! (next.clip_code & CLIP_TOP_EDGE)) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, north);
@@ -234,15 +263,18 @@ ClipPolygonLongitude(const Angle west, const Angle east, GeoPoint *dest,
   /* this array always holds the current vertex and its two neighbors;
      it is filled in advance with the last two points, because that
      avoids range checking inside the loop */
-  GeoPoint three[3];
+  ClipGeoPoint three[3];
   three[0] = src[src_length - 2];
+  three[0].ClipEncodeX(west, east);
   three[1] = src[src_length - 1];
+  three[1].ClipEncodeX(west, east);
 
   unsigned dest_length = 0;
   for (unsigned i = 0; i < src_length; ++i) {
-    if (i < src_length - 1)
+    if (i < src_length - 1) {
       three[2] = src[i];
-    else {
+      three[2].ClipEncodeX(west, east);
+    } else {
       /* the last vertex may have been removed in the first iteration,
          so use the first element of the "dest" buffer instead */
 
@@ -250,9 +282,10 @@ ClipPolygonLongitude(const Angle west, const Angle east, GeoPoint *dest,
         return 0;
 
       three[2] = dest[0];
+      three[2].ClipEncodeX(west, east);
     }
 
-    GeoPoint insert;
+    ClipGeoPoint insert;
     unsigned n = ClipVertexLongitude(west, east,
                                      three[0], three[1], insert, three[2]);
     assert(n <= 2);
@@ -287,14 +320,18 @@ ClipPolygonLatitude(const Angle south, const Angle north, GeoPoint *dest,
   /* this array always holds the current vertex and its two neighbors;
      it is filled in advance with the last two points, because that
      avoids range checking inside the loop */
-  GeoPoint three[3];
-  three[0] = src[src_length - 2];
-  three[1] = src[src_length - 1];
+  ClipGeoPoint three[3];
+  three[0] = src[src_length - 2]; 
+  three[0].ClipEncodeY(south, north);
+  three[1] = src[src_length - 1]; 
+  three[1].ClipEncodeY(south, north);
 
   unsigned dest_length = 0;
   for (unsigned i = 0; i < src_length; ++i) {
-    if (i < src_length - 1)
-      three[2] = src[i];
+    if (i < src_length - 1) {
+      three[2] = src[i]; 
+      three[2].ClipEncodeY(south, north);
+    }
     else {
       /* the last vertex may have been removed in the first iteration,
          so use the first element of the "dest" buffer instead */
@@ -303,9 +340,10 @@ ClipPolygonLatitude(const Angle south, const Angle north, GeoPoint *dest,
         return 0;
 
       three[2] = dest[0];
+      three[2].ClipEncodeY(south, north);
     }
 
-    GeoPoint insert;
+    ClipGeoPoint insert;
     unsigned n = ClipVertex_latitude(south, north,
                                      three[0], three[1], insert, three[2]);
     assert(n <= 2);
