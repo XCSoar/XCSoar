@@ -34,9 +34,7 @@ Copyright_License {
 #include "Dither.hpp"
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
-#include <SDL_video.h>
-#endif
+struct SDL_Surface;
 
 class TopCanvas : public Canvas {
 #ifdef USE_EGL
