@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import android.os.Build;
 import android.view.MotionEvent;

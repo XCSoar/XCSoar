@@ -98,7 +98,7 @@ MapWindow::OnPaint(Canvas &canvas)
 #else /* !ENABLE_OPENGL */
   if (buffer_generation == ui_generation)
     DoubleBufferWindow::OnPaint(canvas);
-  else if (scale_buffer > 0) {
+  else if (scale_buffer > 0 && visible_projection.IsValid()) {
     /* while zooming/panning, project the current buffer into the
        Canvas */
 

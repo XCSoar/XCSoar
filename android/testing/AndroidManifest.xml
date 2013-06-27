@@ -6,7 +6,7 @@
           android:versionName="6.7_preview10">
   <application android:icon="@drawable/icon" android:label="@string/app_name"
                android:debuggable="true">
-    <activity android:name=".XCSoar"
+    <activity android:name="org.xcsoar.testing.XCSoar"
               android:label="@string/app_name_testing"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
@@ -22,7 +22,7 @@
 		 android:resource="@xml/accessory_filter" />
     </activity>
 
-    <service android:name=".MyService"/>
+    <service android:name="org.xcsoar.testing.MyService"/>
   </application>
 
   <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="17"/>

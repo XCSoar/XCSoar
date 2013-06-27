@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * A an abstract base class for #AndroidPort implementations that act

@@ -9,5 +9,6 @@
   <target name="compile-jni-classes"
           depends="-set-debug-mode,-compile"/>
 
+  <import file="te_rules.xml" optional="true" />
   <import file="testing_rules.xml" optional="true" />
 </project>

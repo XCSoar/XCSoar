@@ -21,7 +21,7 @@
   }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import java.util.ArrayList;
 import java.util.Collection;

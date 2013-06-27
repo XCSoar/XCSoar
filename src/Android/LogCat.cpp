@@ -148,7 +148,7 @@ FindCrash(const char *p)
   /* see if there was a crash; this check is very simple, but I hope
      it's good enough to avoid false positives */
 
-  const char *q = strstr(p, ">>> org.xcsoarte");
+  const char *q = strstr(p, ">>> org.xcsoar");
   if (q == nullptr || strstr(q, "fault addr") == nullptr)
     return 0;
 
