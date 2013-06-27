@@ -29,10 +29,10 @@
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Android/Main.hpp"
-#elif defined(USE_EGL)
+#elif defined(USE_CONSOLE)
 #include "Event/Shared/Event.hpp"
-#include "Event/EGL/Loop.hpp"
-#include "Event/EGL/Globals.hpp"
+#include "Event/Console/Loop.hpp"
+#include "Event/Console/Globals.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"

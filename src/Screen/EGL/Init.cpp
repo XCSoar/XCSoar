@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/Init.hpp"
-#include "Event/EGL/Globals.hpp"
-#include "Event/EGL/Queue.hpp"
+#include "Event/Console/Globals.hpp"
+#include "Event/Console/Queue.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/OpenGL/Init.hpp"

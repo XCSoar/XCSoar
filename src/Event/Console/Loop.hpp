@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_EGL_LOOP_HPP
-#define XCSOAR_EVENT_EGL_LOOP_HPP
+#ifndef XCSOAR_EVENT_CONSOLE_LOOP_HPP
+#define XCSOAR_EVENT_CONSOLE_LOOP_HPP
 
 #include "Util/NonCopyable.hpp"
 

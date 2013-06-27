@@ -30,9 +30,9 @@ Copyright_License {
 #include "Android/Main.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Queue.hpp"
-#elif defined(USE_EGL)
-#include "Event/EGL/Queue.hpp"
-#include "Event/EGL/Globals.hpp"
+#elif defined(USE_CONSOLE)
+#include "Event/Console/Queue.hpp"
+#include "Event/Console/Globals.hpp"
 #endif /* ENABLE_SDL */
 
 #ifdef ENABLE_OPENGL

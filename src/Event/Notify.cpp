@@ -26,9 +26,9 @@ Copyright_License {
 #ifdef ANDROID
 #include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
-#elif defined(USE_EGL)
-#include "Event/EGL/Queue.hpp"
-#include "Event/EGL/Globals.hpp"
+#elif defined(USE_CONSOLE)
+#include "Event/Console/Queue.hpp"
+#include "Event/Console/Globals.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Queue.hpp"
