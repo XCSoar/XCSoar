@@ -167,9 +167,9 @@ protected:
   }
 
   bool ClipLine(int &x1, int &y1, int &x2, int &y2) {
+    unsigned code1 = ClipEncode(x1, y1);
+    unsigned code2 = ClipEncode(x2, y2);
     while (true) {
-      unsigned code1 = ClipEncode(x1, y1);
-      unsigned code2 = ClipEncode(x2, y2);
       if (CLIP_ACCEPT(code1, code2))
         return true;
 
@@ -207,6 +207,7 @@ protected:
 	}
         y1 = 0;
       }
+      code1 = ClipEncode(x1, y1);
     }
   }
 
