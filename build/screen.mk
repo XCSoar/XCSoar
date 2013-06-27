@@ -91,7 +91,7 @@ SCREEN_SOURCES += \
 ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Canvas.cpp \
+	$(SCREEN_SRC_DIR)/Memory/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/VirtualCanvas.cpp \

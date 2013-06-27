@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Canvas.hpp"
 #elif defined(ENABLE_SDL)
-#include "Screen/Custom/Canvas.hpp"
+#include "Screen/Memory/Canvas.hpp"
 #else
 #include "Screen/GDI/Canvas.hpp"
 #endif

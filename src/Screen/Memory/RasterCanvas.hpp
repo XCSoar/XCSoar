@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_RASTER_HPP
-#define XCSOAR_SCREEN_RASTER_HPP
+#ifndef XCSOAR_SCREEN_RASTER_CANVAS_HPP
+#define XCSOAR_SCREEN_RASTER_CANVAS_HPP
 
 #include "Buffer.hpp"
 #include "Bresenham.hpp"

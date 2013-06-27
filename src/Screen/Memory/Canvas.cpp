@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
-#include "Screen/Custom/PixelOperations.hpp"
-#include "Screen/Custom/RasterCanvas.hpp"
+#include "PixelOperations.hpp"
+#include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
 
 #ifndef NDEBUG

@@ -27,8 +27,8 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 #if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
-#include "Screen/Custom/Buffer.hpp"
-#include "Screen/Custom/PixelTraits.hpp"
+#include "Screen/Memory/Buffer.hpp"
+#include "Screen/Memory/PixelTraits.hpp"
 #endif
 
 #ifdef ENABLE_OPENGL

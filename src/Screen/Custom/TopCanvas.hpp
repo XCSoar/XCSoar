@@ -29,8 +29,8 @@ Copyright_License {
 #if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
 #include "Screen/Canvas.hpp"
 #elif defined(GREYSCALE)
-#include "Screen/Custom/PixelTraits.hpp"
-#include "Screen/Custom/Buffer.hpp"
+#include "Screen/Memory/PixelTraits.hpp"
+#include "Screen/Memory/Buffer.hpp"
 #endif
 
 #ifdef USE_EGL

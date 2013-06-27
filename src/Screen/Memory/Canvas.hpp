@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_CUSTOM_CANVAS_HPP
-#define XCSOAR_SCREEN_CUSTOM_CANVAS_HPP
+#ifndef XCSOAR_SCREEN_MEMORY_CANVAS_HPP
+#define XCSOAR_SCREEN_MEMORY_CANVAS_HPP
 
 #include "Math/fixed.hpp"
 #include "Screen/Brush.hpp"
@@ -30,8 +30,8 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/SDL/Color.hpp"
 #include "Screen/SDL/Point.hpp"
-#include "Screen/Custom/PixelTraits.hpp"
-#include "Screen/Custom/Buffer.hpp"
+#include "PixelTraits.hpp"
+#include "Buffer.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>

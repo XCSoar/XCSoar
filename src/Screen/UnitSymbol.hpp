@@ -30,8 +30,8 @@ Copyright_License {
 #if defined(USE_GDI) || defined(ENABLE_OPENGL)
 #include "Screen/Bitmap.hpp"
 #else
-#include "Screen/Custom/Buffer.hpp"
-#include "Screen/Custom/PixelTraits.hpp"
+#include "Screen/Memory/Buffer.hpp"
+#include "Screen/Memory/PixelTraits.hpp"
 #endif
 
 class Canvas;

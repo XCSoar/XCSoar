@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 #else
 #include "Screen/Custom/UncompressedImage.hpp"
-#include "UncompressedImage.hpp"
+#include "Screen/Memory/UncompressedImage.hpp"
 #endif
 
 #ifdef WIN32

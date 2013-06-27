@@ -21,10 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
-#define XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
+#ifndef XCSOAR_SCREEN_MEMORY_UNCOMPRESSED_IMAGE_HPP
+#define XCSOAR_SCREEN_MEMORY_UNCOMPRESSED_IMAGE_HPP
 
-#include "Screen/Custom/Buffer.hpp"
+#include "Buffer.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
 
 template<typename PixelTraits>

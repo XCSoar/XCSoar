@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 
 #if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
-#include "Screen/Custom/Canvas.hpp"
+#include "Screen/Memory/Canvas.hpp"
 #endif
 
 TopWindow::~TopWindow()
