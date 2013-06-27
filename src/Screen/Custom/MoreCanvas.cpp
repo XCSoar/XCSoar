@@ -87,7 +87,7 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
   if (font == NULL)
     return;
 
-  UPixelScalar skip = font->GetLineSpacing();
+  unsigned skip = font->GetLineSpacing();
   unsigned max_lines = (format & DT_CALCRECT) ? -1 :
                        (rc->bottom - rc->top + skip - 1) / skip;
 
@@ -147,12 +147,12 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
     return;
   }
 
-  PixelScalar y = (format & DT_VCENTER) && lines < max_lines
-    ? (PixelScalar)(rc->top + rc->bottom - lines * skip) / 2
+  int y = (format & DT_VCENTER) && lines < max_lines
+    ? (rc->top + rc->bottom - lines * skip) / 2
     : rc->top;
   for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
-      PixelScalar x;
+      int x;
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = CalcTextSize(duplicated + i);
         x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
@@ -172,7 +172,7 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
 }
 
 void
-Canvas::DrawText(PixelScalar x, PixelScalar y,
+Canvas::DrawText(int x, int y,
                  const TCHAR *_text, size_t length)
 {
   assert(_text != NULL);
@@ -189,7 +189,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+Canvas::DrawOpaqueText(int x, int y, const PixelRect &rc,
                        const TCHAR *_text)
 {
   assert(_text != NULL);

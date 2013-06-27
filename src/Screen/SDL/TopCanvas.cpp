@@ -23,11 +23,14 @@ Copyright_License {
 
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Features.hpp"
+#include "Screen/Point.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#else
+#include "Screen/Canvas.hpp"
 #endif
 
 #ifdef DITHER
@@ -39,9 +42,23 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#ifdef GREYSCALE
-#include "Format.hpp"
-SDL_PixelFormat *greyscale_format;
+#if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
+TopCanvas::~TopCanvas()
+{
+  buffer.Free();
+}
+#endif
+
+#ifndef ENABLE_OPENGL
+
+PixelRect
+TopCanvas::GetRect() const
+{
+  assert(IsDefined());
+
+  return { 0, 0, surface->w, surface->h };
+}
+
 #endif
 
 gcc_const
@@ -99,27 +116,27 @@ TopCanvas::Create(PixelSize new_size,
   OpenGL::SetupContext();
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
-#elif defined(GREYSCALE)
-  real = s;
-
-  s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
-                             8, 0xff, 0xff, 0xff, 0);
-  greyscale_format = s->format;
-  Canvas::Create(s);
 #else
-  Canvas::Create(s);
+  surface = s;
+
+#ifdef GREYSCALE
+  buffer.Allocate(new_size.cx, new_size.cy);
+#endif
 #endif
 }
 
 void
 TopCanvas::OnResize(PixelSize new_size)
 {
-  if (new_size == size)
+#ifdef ENABLE_OPENGL
+  if (new_size == GetSize())
     return;
 
-#ifdef ENABLE_OPENGL
   const SDL_Surface *old = ::SDL_GetVideoSurface();
 #else
+  if (new_size.cx == surface->w && new_size.cy == surface->h)
+    return;
+
   const SDL_Surface *old = surface;
 #endif
   if (old == nullptr)
@@ -135,19 +152,12 @@ TopCanvas::OnResize(PixelSize new_size)
   OpenGL::SetupViewport(new_size.cx, new_size.cy);
   Canvas::Create(new_size);
 #else
+  surface = s;
+
 #ifdef GREYSCALE
-  real = s;
-
-  s = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
-                             8, 0xff, 0xff, 0xff, 0);
-  greyscale_format = s->format;
-  Canvas::Destroy();
-  surface = s;
-#else
-  surface = s;
+  buffer.Free();
+  buffer.Allocate(new_size.cx, new_size.cy);
 #endif
-
-  size = new_size;
 #endif
 }
 
@@ -206,27 +216,21 @@ CopyFromGreyscale(
 #ifdef DITHER
                   Dither &dither,
 #endif
-                  SDL_Surface *dest, SDL_Surface *src)
+                  SDL_Surface *dest,
+                  ConstImageBuffer<GreyscalePixelTraits> src)
 {
-  assert(src->format->BitsPerPixel == 8);
-  assert(src->format->BytesPerPixel == 1);
   assert(dest->format->BytesPerPixel == 4 || dest->format->BytesPerPixel == 2);
 
   if (SDL_LockSurface(dest) != 0)
     return;
 
-  if (SDL_LockSurface(src) != 0) {
-    SDL_UnlockSurface(dest);
-    return;
-  }
+  const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);
 
-  const uint8_t *src_pixels = (const uint8_t *)src->pixels;
-
-  const unsigned width = dest->w, height = dest->h;
+  const unsigned width = src.width, height = src.height;
 
 #ifdef DITHER
 
-  dither.dither_luminosity8_to_uint16(src_pixels, src->pitch,
+  dither.dither_luminosity8_to_uint16(src_pixels, src.pitch,
                                       (uint16_t *)dest->pixels,
                                       dest->pitch / dest->format->BytesPerPixel,
                                       width, height);
@@ -244,7 +248,7 @@ CopyFromGreyscale(
 #else
 
   uint8_t *dest_pixels = (uint8_t *)dest->pixels;
-  const unsigned src_pitch = src->pitch;
+  const unsigned src_pitch = src.pitch;
   const unsigned dest_pitch = dest->pitch;
 
   if (dest->format->BytesPerPixel == 2) {
@@ -261,8 +265,36 @@ CopyFromGreyscale(
 
 #endif
 
-  ::SDL_UnlockSurface(src);
   ::SDL_UnlockSurface(dest);
+}
+
+#endif
+
+#ifndef ENABLE_OPENGL
+
+Canvas
+TopCanvas::Lock()
+{
+#ifndef GREYSCALE
+  if (SDL_LockSurface(surface) != 0)
+    return Canvas();
+
+  WritableImageBuffer<SDLPixelTraits> buffer;
+  buffer.data = (SDLPixelTraits::pointer_type)surface->pixels;
+  buffer.pitch = surface->pitch;
+  buffer.width = surface->w;
+  buffer.height = surface->h;
+#endif
+
+  return Canvas(buffer);
+}
+
+void
+TopCanvas::Unlock()
+{
+#ifndef GREYSCALE
+  SDL_UnlockSurface(surface);
+#endif
 }
 
 #endif
@@ -279,11 +311,9 @@ TopCanvas::Flip()
 #ifdef DITHER
                     dither,
 #endif
-                    real, surface);
-  ::SDL_Flip(real);
-#else
-  ::SDL_Flip(surface);
+                    surface, buffer);
 #endif
 
+  ::SDL_Flip(surface);
 #endif
 }

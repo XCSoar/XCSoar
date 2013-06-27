@@ -29,10 +29,10 @@
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Android/Main.hpp"
-#elif defined(USE_EGL)
+#elif defined(USE_CONSOLE)
 #include "Event/Shared/Event.hpp"
-#include "Event/EGL/Loop.hpp"
-#include "Event/EGL/Globals.hpp"
+#include "Event/Console/Loop.hpp"
+#include "Event/Console/Globals.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
@@ -46,6 +46,9 @@
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
 void TopWindow::Refresh() {}
+#endif
+
+#ifdef USE_CONSOLE
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 
@@ -76,7 +79,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   EventLoop loop(*event_queue);
 #else
   EventLoop loop;

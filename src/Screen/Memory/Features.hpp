@@ -21,44 +21,17 @@ Copyright_License {
 }
 */
 
-#include "Screen/VirtualCanvas.hpp"
-#include "Format.hpp"
+#ifndef XCSOAR_SCREEN_MEMORY_FEATURES_HPP
+#define XCSOAR_SCREEN_MEMORY_FEATURES_HPP
 
-#include <assert.h>
+#define HAVE_TEXT_CACHE
 
-VirtualCanvas::VirtualCanvas(PixelSize new_size)
+#define HAVE_ALPHA_BLEND
+
+static constexpr inline bool
+AlphaBlendAvailable()
 {
-  Create(new_size);
+  return true;
 }
 
-VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
-{
-  Create(new_size);
-}
-
-void
-VirtualCanvas::Create(PixelSize new_size)
-{
-  assert((PixelScalar)new_size.cx >= 0);
-  assert((PixelScalar)new_size.cy >= 0);
-
-  Destroy();
-
-  const SDL_PixelFormat &format = ::GetDisplayFormat();
-
-  SDL_Surface *surface;
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, new_size.cx, new_size.cy,
-                                   format.BitsPerPixel,
-                                   format.Rmask, format.Gmask,
-                                   format.Bmask, format.Amask);
-  if (surface != NULL)
-    Canvas::Create(surface);
-}
-
-void
-VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
-{
-  assert(canvas.IsDefined());
-
-  Create(new_size);
-}
+#endif

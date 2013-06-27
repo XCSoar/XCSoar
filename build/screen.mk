@@ -1,5 +1,7 @@
 # Build rules for the portable screen library
 
+USE_MEMORY_CANVAS = n
+
 SCREEN_SRC_DIR = $(SRC)/Screen
 
 SCREEN_SOURCES = \
@@ -29,7 +31,7 @@ SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/Custom/Canvas.cpp
+	$(SCREEN_SRC_DIR)/Custom/MoreCanvas.cpp
 
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
@@ -56,6 +58,7 @@ endif
 
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Globals.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Extension.cpp \
@@ -63,7 +66,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
@@ -86,16 +88,9 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp
 ifeq ($(OPENGL),n)
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/SDL/UncompressedImage.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
-	$(SCREEN_SRC_DIR)/SDL/VirtualCanvas.cpp \
-	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
+USE_MEMORY_CANVAS = y
 endif
 else ifeq ($(EGL),y)
 SCREEN_SOURCES += \
@@ -111,7 +106,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/WindowCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Init.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
@@ -145,7 +140,17 @@ GDI_LDLIBS += -Wl,-subsystem,windows
 endif
 endif
 
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS)
+ifeq ($(USE_MEMORY_CANVAS),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Cache.cpp \
+	$(SCREEN_SRC_DIR)/Memory/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Memory/RawBitmap.cpp \
+	$(SCREEN_SRC_DIR)/Memory/VirtualCanvas.cpp \
+	$(SCREEN_SRC_DIR)/Memory/Canvas.cpp
+MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
+endif
+
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS)
 SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS) $(FREETYPE_LDLIBS) $(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) $(EGL_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))

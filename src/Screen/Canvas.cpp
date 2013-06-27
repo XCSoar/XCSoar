@@ -26,10 +26,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 
 void
-Canvas::ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
-                   const Bitmap &src,
-                   PixelScalar src_x, PixelScalar src_y,
-                   UPixelScalar src_width, UPixelScalar src_height)
+Canvas::ScaleCopy(int dest_x, int dest_y,
+                  const Bitmap &src,
+                  int src_x, int src_y,
+                  unsigned src_width, unsigned src_height)
 {
   if (Layout::ScaleEnabled())
     Stretch(dest_x, dest_y,

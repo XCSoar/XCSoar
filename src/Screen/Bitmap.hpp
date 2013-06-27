@@ -26,6 +26,11 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+#ifdef USE_MEMORY_CANVAS
+#include "Screen/Memory/Buffer.hpp"
+#include "Screen/Memory/PixelTraits.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
@@ -43,10 +48,12 @@ class UncompressedImage;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
+#elif !defined(USE_GDI)
+#ifdef GREYSCALE
+using BitmapPixelTraits = GreyscalePixelTraits;
+#else
+using BitmapPixelTraits = BGRAPixelTraits;
 #endif
-
-#ifdef ENABLE_SDL
-struct SDL_Surface;
 #endif
 
 /**
@@ -81,8 +88,8 @@ protected:
   PixelSize size;
 
   bool interpolation;
-#elif defined(ENABLE_SDL)
-  SDL_Surface *surface;
+#elif defined(USE_MEMORY_CANVAS)
+  WritableImageBuffer<BitmapPixelTraits> buffer;
 #else
   HBITMAP bitmap;
 #endif
@@ -93,9 +100,11 @@ public:
   explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
     Load(id);
   }
-#elif defined(ENABLE_SDL)
-  Bitmap():surface(NULL) {}
-  explicit Bitmap(unsigned id):surface(NULL) {
+#elif defined(USE_MEMORY_CANVAS)
+  constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
+
+  explicit Bitmap(unsigned id)
+    :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {
     Load(id);
   }
 #else
@@ -115,8 +124,8 @@ public:
   bool IsDefined() const {
 #ifdef ENABLE_OPENGL
     return texture != NULL;
-#elif defined(ENABLE_SDL)
-    return surface != NULL;
+#elif defined(USE_MEMORY_CANVAS)
+    return buffer.data != nullptr;
 #else
     return bitmap != NULL;
 #endif
@@ -140,10 +149,6 @@ public:
 
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
 
-#ifdef ENABLE_SDL
-  bool Load(SDL_Surface *_surface, Type type=Type::STANDARD);
-#endif
-
   bool Load(unsigned id, Type type=Type::STANDARD);
 
   /**
@@ -161,9 +166,9 @@ public:
   GLTexture *GetNative() const {
     return texture;
   }
-#elif defined(ENABLE_SDL)
-  SDL_Surface* GetNative() const {
-    return surface;
+#elif defined(USE_MEMORY_CANVAS)
+  ConstImageBuffer<BitmapPixelTraits> GetNative() const {
+    return buffer;
   }
 #else
   HBITMAP GetNative() const {

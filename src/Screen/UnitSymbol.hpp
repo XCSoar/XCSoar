@@ -24,49 +24,75 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 #define XCSOAR_SCREEN_UNIT_SYMBOL_HPP
 
-#include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"
 
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
+#include "Screen/Bitmap.hpp"
+#else
+#include "Screen/Memory/Buffer.hpp"
+#include "Screen/Memory/PixelTraits.hpp"
+#endif
+
 class Canvas;
+class Color;
 
 class UnitSymbol {
-public:
-  enum Kind {
-    NORMAL = 0,
-    INVERSE = 1,
-    GRAY = 2,
-    INVERSE_GRAY = INVERSE | GRAY,
-  };
-
-protected:
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
   Bitmap bitmap;
   PixelSize size;
+#else
+  WritableImageBuffer<GreyscalePixelTraits> buffer;
+#endif
 
 public:
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
   void Load(unsigned id) {
     bitmap.Load(id, Bitmap::Type::MONO);
     size = bitmap.GetSize();
   }
+#else
+  UnitSymbol() {
+    buffer.data = nullptr;
+  }
+
+  ~UnitSymbol() {
+    Reset();
+  }
+
+  void Load(unsigned id);
+#endif
 
   void Reset() {
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
     bitmap.Reset();
+#else
+    buffer.Free();
+#endif
   }
 
   gcc_pure
   bool IsDefined() const {
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
     return bitmap.IsDefined();
+#else
+    return buffer.data != nullptr;
+#endif
   }
 
   const PixelSize GetSize() const {
+#if defined(USE_GDI) || defined(ENABLE_OPENGL)
     return size;
+#else
+    return { buffer.width, buffer.height };
+#endif
   }
 
   gcc_pure
   PixelSize GetScreenSize() const;
 
   void Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
-            Kind kind = NORMAL) const;
+            Color bg_color, Color text_color) const;
 };
 
 #endif

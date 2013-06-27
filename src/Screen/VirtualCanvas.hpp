@@ -51,13 +51,11 @@ public:
     Create(canvas, canvas.GetSize());
   }
 
-#ifndef ENABLE_SDL
   void Destroy();
-#endif
 
 #ifdef ENABLE_SDL
   void Resize(PixelSize new_size) {
-    if (new_size != size)
+    if (new_size != GetSize())
       Create(*this, new_size);
   }
 

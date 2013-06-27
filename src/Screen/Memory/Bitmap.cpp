@@ -21,18 +21,46 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_FEATURES_HPP
-#define XCSOAR_SCREEN_SDL_FEATURES_HPP
+#include "Screen/Bitmap.hpp"
+#include "Screen/Debug.hpp"
+#include "Screen/Custom/UncompressedImage.hpp"
+#include "UncompressedImage.hpp"
 
-#if defined(USE_SDL_GFX) || defined(GREYSCALE)
-#define HAVE_ALPHA_BLEND
+#include <assert.h>
 
-static constexpr inline bool
-AlphaBlendAvailable()
+bool
+Bitmap::Load(const UncompressedImage &uncompressed, Type type)
 {
+  assert(IsScreenInitialized());
+  assert(uncompressed.IsVisible());
+
+  Reset();
+
+  ImportSurface(buffer, uncompressed);
   return true;
 }
 
-#endif
+bool
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
+{
+  assert(zoom > 0);
 
-#endif
+  // XXX
+  return Load(id);
+}
+
+void
+Bitmap::Reset()
+{
+  assert(!IsDefined() || IsScreenInitialized());
+
+  buffer.Free();
+}
+
+const PixelSize
+Bitmap::GetSize() const
+{
+  assert(IsDefined());
+
+  return { buffer.width, buffer.height };
+}

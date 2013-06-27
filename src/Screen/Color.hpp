@@ -26,10 +26,12 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Color.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Color.hpp"
-#else
+#elif defined(USE_MEMORY_CANVAS)
+#include "Screen/Memory/Color.hpp"
+#elif defined(USE_GDI)
 #include "Screen/GDI/Color.hpp"
+#else
+#error No Color implementation
 #endif
 
 #ifdef TESTING

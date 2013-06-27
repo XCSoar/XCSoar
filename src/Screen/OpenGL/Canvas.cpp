@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/Custom/Cache.hpp"
 #include "Screen/OpenGL/VertexArray.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
@@ -44,8 +44,7 @@ Copyright_License {
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
-Canvas::DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                            PixelScalar right, PixelScalar bottom,
+Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                             const Color color)
 {
   color.Set();
@@ -66,8 +65,7 @@ Canvas::DrawFilledRectangle(PixelScalar left, PixelScalar top,
 }
 
 void
-Canvas::OutlineRectangleGL(PixelScalar left, PixelScalar top,
-                           PixelScalar right, PixelScalar bottom)
+Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
 {
   const ExactRasterPoint vertices[] = {
     RasterPoint{left, top},
@@ -194,11 +192,11 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
 }
 
 void
-Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
+Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   pen.Bind();
 
-  const GLvalue v[] = { ax, ay, bx, by };
+  const GLvalue v[] = { GLvalue(ax), GLvalue(ay), GLvalue(bx), GLvalue(by) };
   glVertexPointer(2, GL_VALUE, 0, v);
   glDrawArrays(GL_LINE_STRIP, 0, 2);
 
@@ -206,8 +204,7 @@ Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 }
 
 void
-Canvas::DrawExactLine(PixelScalar ax, PixelScalar ay,
-                      PixelScalar bx, PixelScalar by)
+Canvas::DrawExactLine(int ax, int ay, int bx, int by)
 {
   pen.Bind();
 
@@ -248,13 +245,14 @@ Canvas::DrawLinePiece(const RasterPoint a, const RasterPoint b)
 }
 
 void
-Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
-                  PixelScalar bx, PixelScalar by,
-                  PixelScalar cx, PixelScalar cy)
+Canvas::DrawTwoLines(int ax, int ay, int bx, int by, int cx, int cy)
 {
   pen.Bind();
 
-  const GLvalue v[] = { ax, ay, bx, by, cx, cy };
+  const GLvalue v[] = {
+    GLvalue(ax), GLvalue(ay), GLvalue(bx), GLvalue(by),
+    GLvalue(cx), GLvalue(cy),
+  };
   glVertexPointer(2, GL_VALUE, 0, v);
   glDrawArrays(GL_LINE_STRIP, 0, 3);
 
@@ -262,9 +260,7 @@ Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
 }
 
 void
-Canvas::DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
-                          PixelScalar bx, PixelScalar by,
-                          PixelScalar cx, PixelScalar cy)
+Canvas::DrawTwoLinesExact(int ax, int ay, int bx, int by, int cx, int cy)
 {
   pen.Bind();
 
@@ -281,7 +277,7 @@ Canvas::DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
 }
 
 void
-Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
+Canvas::DrawCircle(int x, int y, unsigned radius)
 {
   if (IsPenOverBrush() && pen.GetWidth() > 2) {
     GLDonutVertices vertices(x, y,
@@ -373,8 +369,8 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 }
 
 void
-Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
-                Angle start, Angle end, bool horizon)
+Canvas::DrawSegment(int x, int y, unsigned radius,
+                    Angle start, Angle end, bool horizon)
 {
   ::Segment(*this, x, y, radius, start, end, horizon);
 }
@@ -417,9 +413,9 @@ AngleToDonutVertices(Angle start, Angle end)
 }
 
 void
-Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+Canvas::DrawAnnulus(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
+                    Angle start, Angle end)
 {
   if (1 == 1) {
     /* TODO: switched to the unoptimised generic implementation due to
@@ -486,9 +482,9 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+Canvas::DrawKeyhole(int x, int y,
+                    unsigned small_radius, unsigned big_radius,
+                    Angle start, Angle end)
 {
   ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
 }
@@ -521,7 +517,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 }
 
 void
-Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawText(int x, int y, const TCHAR *text)
 {
   assert(text != NULL);
   assert(ValidateUTF8(text));
@@ -533,7 +529,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 
@@ -563,7 +559,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
 {
   assert(text != NULL);
   assert(ValidateUTF8(text));
@@ -575,7 +571,7 @@ Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 
@@ -597,8 +593,8 @@ Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::DrawClippedText(PixelScalar x, PixelScalar y,
-                        UPixelScalar width, UPixelScalar height,
+Canvas::DrawClippedText(int x, int y,
+                        unsigned width, unsigned height,
                         const TCHAR *text)
 {
   assert(text != NULL);
@@ -611,7 +607,7 @@ Canvas::DrawClippedText(PixelScalar x, PixelScalar y,
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::Get(font, text);
+  GLTexture *texture = TextCache::Get(*font, text);
   if (texture == NULL)
     return;
 
@@ -638,11 +634,11 @@ Canvas::DrawClippedText(PixelScalar x, PixelScalar y,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const GLTexture &texture,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+                int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -653,8 +649,8 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const GLTexture &texture)
 {
   Stretch(dest_x, dest_y, dest_width, dest_height,
@@ -662,9 +658,9 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
-             UPixelScalar dest_width, UPixelScalar dest_height,
-             const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(int dest_x, int dest_y,
+             unsigned dest_width, unsigned dest_height,
+             const Bitmap &src, int src_x, int src_y)
 {
   Stretch(dest_x, dest_y, dest_width, dest_height,
           src, src_x, src_y, dest_width, dest_height);
@@ -696,10 +692,10 @@ Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height)
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y,
+                unsigned src_width, unsigned src_height)
 {
 #ifdef HAVE_GLES
   assert(offset == OpenGL::translate);
@@ -716,8 +712,8 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::Stretch(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
                 const Bitmap &src)
 {
 #ifdef HAVE_GLES
@@ -735,11 +731,11 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
-                   UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::StretchAnd(int dest_x, int dest_y,
+                   unsigned dest_width, unsigned dest_height,
                    const Bitmap &src,
-                   PixelScalar src_x, PixelScalar src_y,
-                   UPixelScalar src_width, UPixelScalar src_height)
+                   int src_x, int src_y,
+                   unsigned src_width, unsigned src_height)
 {
   GLLogicOp logic_op(GL_AND);
   Stretch(dest_x, dest_y, dest_width, dest_height,
@@ -747,11 +743,11 @@ Canvas::StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                     UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::StretchNotOr(int dest_x, int dest_y,
+                     unsigned dest_width, unsigned dest_height,
                      const Bitmap &src,
-                     PixelScalar src_x, PixelScalar src_y,
-                     UPixelScalar src_width, UPixelScalar src_height)
+                     int src_x, int src_y,
+                     unsigned src_width, unsigned src_height)
 {
   GLLogicOp logic_op(GL_OR_INVERTED);
   Stretch(dest_x, dest_y, dest_width, dest_height,
@@ -759,11 +755,11 @@ Canvas::StretchNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
-                    UPixelScalar dest_width, UPixelScalar dest_height,
+Canvas::StretchMono(int dest_x, int dest_y,
+                    unsigned dest_width, unsigned dest_height,
                     const Bitmap &src,
-                    PixelScalar src_x, PixelScalar src_y,
-                    UPixelScalar src_width, UPixelScalar src_height,
+                    int src_x, int src_y,
+                    unsigned src_width, unsigned src_height,
                     Color fg_color, Color bg_color)
 {
   /* note that this implementation ignores the background color; it is
@@ -828,9 +824,9 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyOr(int dest_x, int dest_y,
+               unsigned dest_width, unsigned dest_height,
+               const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -840,9 +836,9 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
-                  UPixelScalar dest_width, UPixelScalar dest_height,
-                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNotOr(int dest_x, int dest_y,
+                  unsigned dest_width, unsigned dest_height,
+                  const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -852,9 +848,9 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyAnd(int dest_x, int dest_y,
+                 unsigned dest_width, unsigned dest_height,
+                 const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -864,9 +860,9 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::CopyNot(int dest_x, int dest_y,
+                unsigned dest_width, unsigned dest_height,
+                const Bitmap &src, int src_x, int src_y)
 {
   assert(src.IsDefined());
 
@@ -892,13 +888,12 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 }
 
 void
-Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                           PixelScalar right, PixelScalar bottom,
-                           UPixelScalar ellipse_width,
-                           UPixelScalar ellipse_height)
+Canvas::DrawRoundRectangle(int left, int top, int right, int bottom,
+                           unsigned ellipse_width,
+                           unsigned ellipse_height)
 {
-  UPixelScalar radius = std::min(std::min(ellipse_width, ellipse_height),
-                                 (UPixelScalar) std::min(bottom - top,
-                                                         right - left)) / 2;
+  unsigned radius = std::min(std::min(ellipse_width, ellipse_height),
+                             unsigned(std::min(bottom - top,
+                                               right - left))) / 2u;
   ::RoundRect(*this, left, top, right, bottom, radius);
 }

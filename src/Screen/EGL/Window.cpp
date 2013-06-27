@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Event/Shared/Event.hpp"
-#include "Event/EGL/Queue.hpp"
-#include "Event/EGL/Globals.hpp"
+#include "Event/Console/Queue.hpp"
+#include "Event/Console/Globals.hpp"
 
 void
 Window::SendUser(unsigned id)

@@ -48,10 +48,10 @@ Copyright_License {
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
-#elif defined(USE_EGL)
-#include "Event/EGL/Globals.hpp"
+#elif defined(USE_CONSOLE)
+#include "Event/Console/Globals.hpp"
 #include "Event/Shared/Event.hpp"
-#include "Event/EGL/Loop.hpp"
+#include "Event/Console/Loop.hpp"
 #elif defined(USE_GDI)
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
@@ -390,7 +390,7 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#if defined(ANDROID) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_CONSOLE)
   EventLoop loop(*event_queue, main_window);
 #elif defined(ENABLE_SDL)
   EventLoop loop(main_window);

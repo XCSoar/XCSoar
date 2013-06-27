@@ -28,6 +28,8 @@ Copyright_License {
 #include "Units/Unit.hpp"
 #include "Util/Macros.hpp"
 
+#include <assert.h>
+
 struct UnitsLook {
   UnitSymbol symbols[(unsigned)Unit::COUNT];
 

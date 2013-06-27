@@ -21,34 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_EGL_LOOP_HPP
-#define XCSOAR_EVENT_EGL_LOOP_HPP
+#include "Screen/VirtualCanvas.hpp"
 
-#include "Util/NonCopyable.hpp"
+#include <assert.h>
 
-struct Event;
-class EventQueue;
-class TopWindow;
+VirtualCanvas::VirtualCanvas(PixelSize new_size)
+{
+  Create(new_size);
+}
 
-class EventLoop : private NonCopyable {
-  EventQueue &queue;
-  TopWindow *top_window;
+VirtualCanvas::VirtualCanvas(const Canvas &canvas, PixelSize new_size)
+{
+  Create(new_size);
+}
 
-  /**
-   * True if working on a bulk of events.  At the end of that bulk,
-   * TopWindow::validate() gets called.
-   */
-  bool bulk;
+void
+VirtualCanvas::Create(PixelSize new_size)
+{
+  assert((PixelScalar)new_size.cx >= 0);
+  assert((PixelScalar)new_size.cy >= 0);
 
-public:
-  EventLoop(EventQueue &_queue, TopWindow &_top_window)
-    :queue(_queue), top_window(&_top_window), bulk(true) {}
+  Destroy();
 
-  EventLoop(EventQueue &_queue)
-    :queue(_queue), top_window(nullptr), bulk(true) {}
+  buffer.Allocate(new_size.cx, new_size.cy);
+}
 
-  bool Get(Event &event);
-  void Dispatch(const Event &event);
-};
-
+void
+VirtualCanvas::Create(const Canvas &canvas, PixelSize new_size)
+{
+#if defined(ENABLE_OPENGL) || defined(USE_GDI)
+  assert(canvas.IsDefined());
 #endif
+
+  Create(new_size);
+}
+
+void
+VirtualCanvas::Destroy()
+{
+  buffer.Free();
+}

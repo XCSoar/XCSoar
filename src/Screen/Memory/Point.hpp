@@ -21,18 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
-#define XCSOAR_SDL_UNCOMPRESSED_IMAGE_HPP
+#ifndef XCSOAR_SCREEN_SDL_POINT_HPP
+#define XCSOAR_SCREEN_SDL_POINT_HPP
 
-struct SDL_Surface;
-class UncompressedImage;
+typedef int PixelScalar;
+typedef unsigned UPixelScalar;
 
-/**
- * Convert an #UncompressedImage to a SDL_Surface.
- *
- * @return the new SDL_Surface object or nullptr on error
- */
-SDL_Surface *
-ImportSurface(const UncompressedImage &image);
+#include "Screen/Custom/Point.hpp"
 
 #endif
