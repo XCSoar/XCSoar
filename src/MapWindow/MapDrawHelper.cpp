@@ -104,7 +104,7 @@ MapDrawHelper::BufferRenderFinish()
 {
   if (buffer_drawn) {
     if (use_stencil) {
-#ifdef ENABLE_SDL
+#ifdef USE_MEMORY_CANVAS
       buffer.CopyTransparentBlack(stencil);
 #else
       buffer.CopyOr(stencil);

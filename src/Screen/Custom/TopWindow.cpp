@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
@@ -69,7 +69,7 @@ TopWindow::Fullscreen()
 void
 TopWindow::Expose()
 {
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   Canvas canvas = screen->Lock();
   if (canvas.IsDefined()) {
     OnPaint(canvas);

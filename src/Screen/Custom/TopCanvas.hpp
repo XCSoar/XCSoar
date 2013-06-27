@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+#ifndef USE_MEMORY_CANVAS
 #include "Screen/Canvas.hpp"
 #elif defined(GREYSCALE)
 #include "Screen/Memory/PixelTraits.hpp"
@@ -47,7 +47,7 @@ struct PixelSize;
 struct PixelRect;
 
 class TopCanvas
-#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+#ifndef USE_MEMORY_CANVAS
   : public Canvas
 #endif
 {
@@ -69,7 +69,7 @@ class TopCanvas
   EGLSurface surface;
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   SDL_Surface *surface;
 
 #ifdef GREYSCALE
@@ -82,11 +82,11 @@ class TopCanvas
 #endif
 
 public:
-#if defined(USE_EGL) || (defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE))
+#if defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE))
   ~TopCanvas();
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
     return surface != nullptr;
   }
@@ -113,7 +113,7 @@ public:
   void Fullscreen();
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   Canvas Lock();
   void Unlock();
 #endif
