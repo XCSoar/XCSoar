@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/UncompressedImage.hpp"
-#include "Screen/Memory/UncompressedImage.hpp"
+#include "UncompressedImage.hpp"
 
 #include <assert.h>
 
