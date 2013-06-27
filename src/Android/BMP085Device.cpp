@@ -41,10 +41,10 @@ static jmethodID bmp085_ctor, close_method;
 void
 BMP085Device::Initialise(JNIEnv *env)
 {
-  bmp085_class.Find(env, "org/xcsoarte/GlueBMP085");
+  bmp085_class.Find(env, "org/xcsoar/GlueBMP085");
 
   bmp085_ctor = env->GetMethodID(bmp085_class, "<init>",
-                                 "(Lorg/xcsoarte/IOIOConnectionHolder;IIILorg/xcsoarte/BMP085$Listener;)V");
+                                 "(Lorg/xcsoar/IOIOConnectionHolder;IIILorg/xcsoar/BMP085$Listener;)V");
   close_method = env->GetMethodID(bmp085_class, "close", "()V");
 }
 

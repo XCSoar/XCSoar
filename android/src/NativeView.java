@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;

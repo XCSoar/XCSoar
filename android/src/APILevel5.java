@@ -20,7 +20,7 @@
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 import android.app.Service;
 import android.app.Notification;

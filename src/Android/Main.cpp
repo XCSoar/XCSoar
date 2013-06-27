@@ -53,7 +53,7 @@ Copyright_License {
 #include "Java/InputStream.hpp"
 #include "Java/URL.hpp"
 #include "Compiler.h"
-#include "org_xcsoarte_NativeView.h"
+#include "org_xcsoar_NativeView.h"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "Thread/Debug.hpp"
 
@@ -95,7 +95,7 @@ extern "C" {
 
 gcc_visibility_default
 JNIEXPORT jboolean JNICALL
-Java_org_xcsoarte_NativeView_initializeNative(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jobject _context,
                                             jint width, jint height,
                                             jint xdpi, jint ydpi,
@@ -166,7 +166,7 @@ OnLogCatFinished(bool crash_found)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_runNative(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
   InitThreadDebug();
 
@@ -179,7 +179,7 @@ Java_org_xcsoarte_NativeView_runNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
   StopLogCat();
 
@@ -231,7 +231,7 @@ Java_org_xcsoarte_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_resizedNative(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint width, jint height)
 {
   if (event_queue == NULL)
@@ -248,7 +248,7 @@ Java_org_xcsoarte_NativeView_resizedNative(JNIEnv *env, jobject obj,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_pauseNative(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
 {
   if (event_queue == nullptr || CommonInterface::main_window == nullptr)
     /* pause before we have initialized the event subsystem does not
@@ -263,7 +263,7 @@ Java_org_xcsoarte_NativeView_pauseNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_resumeNative(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
 {
   if (event_queue == nullptr || CommonInterface::main_window == nullptr)
     /* there is nothing here yet which can be resumed */
@@ -274,7 +274,7 @@ Java_org_xcsoarte_NativeView_resumeNative(JNIEnv *env, jobject obj)
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeView_setHapticFeedback(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeView_setHapticFeedback(JNIEnv *env, jobject obj,
                                              jboolean on)
 {
   os_haptic_feedback_enabled = on;

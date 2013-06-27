@@ -75,7 +75,7 @@ public:
      xdpi(_xdpi), ydpi(_ydpi),
      sdk_version(_sdk_version) {
     Java::String::CopyTo(env, _product, product, sizeof(product));
-    Java::Class cls(env, "org/xcsoarte/NativeView");
+    Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
     setRequestedOrientationID =

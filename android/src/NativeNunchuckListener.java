@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * A #Nunchuck.Listener implementation that passes method calls to

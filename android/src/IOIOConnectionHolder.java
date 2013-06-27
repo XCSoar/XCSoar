@@ -21,7 +21,7 @@
   }
 */
 
-package org.xcsoarte;
+package org.xcsoar;
 
 /**
  * An object that manages the connection to a IOIO board.

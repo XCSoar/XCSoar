@@ -24,7 +24,7 @@ Copyright_License {
 #include "NativeVoltageListener.hpp"
 #include "VoltageListener.hpp"
 #include "Java/Class.hpp"
-#include "org_xcsoarte_NativeVoltageListener.h"
+#include "org_xcsoar_NativeVoltageListener.h"
 
 #include <stddef.h>
 
@@ -35,7 +35,7 @@ namespace NativeVoltageListener {
 };
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeVoltageListener_onVoltageValues(JNIEnv *env, jobject obj,
+Java_org_xcsoar_NativeVoltageListener_onVoltageValues(JNIEnv *env, jobject obj,
                        jint temp_adc, jint voltage_index, jint volt_adc)
  {
   jlong ptr = env->GetLongField(obj, NativeVoltageListener::ptr_field);
@@ -47,7 +47,7 @@ Java_org_xcsoarte_NativeVoltageListener_onVoltageValues(JNIEnv *env, jobject obj
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoarte_NativeVoltageListener_onVoltageError(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeVoltageListener_onVoltageError(JNIEnv *env, jobject obj)
 {
   jlong ptr = env->GetLongField(obj, NativeVoltageListener::ptr_field);
   if (ptr == 0)
@@ -60,7 +60,7 @@ Java_org_xcsoarte_NativeVoltageListener_onVoltageError(JNIEnv *env, jobject obj)
 void
 NativeVoltageListener::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoarte/NativeVoltageListener");
+  cls.Find(env, "org/xcsoar/NativeVoltageListener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
