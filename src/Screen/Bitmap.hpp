@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/Buffer.hpp"
 #include "Screen/Memory/PixelTraits.hpp"
 #endif
@@ -88,7 +88,7 @@ protected:
   PixelSize size;
 
   bool interpolation;
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
   WritableImageBuffer<BitmapPixelTraits> buffer;
 #else
   HBITMAP bitmap;
@@ -100,7 +100,7 @@ public:
   explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
     Load(id);
   }
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
   constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
 
   explicit Bitmap(unsigned id)
@@ -124,7 +124,7 @@ public:
   bool IsDefined() const {
 #ifdef ENABLE_OPENGL
     return texture != NULL;
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
     return buffer.data != nullptr;
 #else
     return bitmap != NULL;
@@ -166,7 +166,7 @@ public:
   GLTexture *GetNative() const {
     return texture;
   }
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
   ConstImageBuffer<BitmapPixelTraits> GetNative() const {
     return buffer;
   }

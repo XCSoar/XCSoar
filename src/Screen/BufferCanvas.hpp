@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "OpenGL/BufferCanvas.hpp"
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
 #include "Screen/VirtualCanvas.hpp"
 #define BufferCanvas VirtualCanvas
 #else /* GDI */
