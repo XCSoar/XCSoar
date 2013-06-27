@@ -121,14 +121,17 @@ GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
 
     if (code1 & CLIP_LEFT_EDGE) {
       a2 = clip_longitude(b2, a2, zero);
+      code1 = ClipEncodeY(a2.latitude);
     } else if (code1 & CLIP_RIGHT_EDGE) {
       a2 = clip_longitude(b2, a2, width);
+      code1 = ClipEncodeY(a2.latitude);
     } else if (code1 & CLIP_BOTTOM_EDGE) {
       a2 = clip_latitude(b2, a2, GetSouth());
+      code1 = ClipEncodeX(a2.longitude);
     } else if (code1 & CLIP_TOP_EDGE) {
       a2 = clip_latitude(b2, a2, GetNorth());
+      code1 = ClipEncodeX(a2.longitude);
     }
-    code1 = ClipEncode(a2);
   }
 }
 
