@@ -31,15 +31,64 @@ Copyright_License {
 
 #include <string.h>
 
+/**
+ * Description for the 8 bit greyscale pixel format.
+ *
+ * About PixelTraits: this class contains only typedefs and static
+ * methods.  It provides operations to manipulate image buffers.
+ */
 struct GreyscalePixelTraits {
+  /**
+   * One color for passing as parameter or return type.
+   */
   typedef Luminosity8 color_type;
+
+  /**
+   * An integer type that holds the value of one channel.  It is used
+   * by TransformChannels().
+   */
   typedef uint8_t channel_type;
+
+  /**
+   * An integer type that may hold more than one channel.  It is used
+   * by TransformInteger().
+   */
   typedef uint8_t integer_type;
+
+  /**
+   * A pointer/iterator to a writable image buffer.
+   *
+   * Note that some pixel formats may decide not to use #color_type
+   * here.  Make no assumptions on the nature of this type, don't
+   * dereference.  This class provides functions for all of this, use
+   * them.
+   */
   typedef color_type *pointer_type;
+
+  /**
+   * Same as #pointer_type, but with "restrict".  This guarantees the
+   * compiler that there will be no aliasing, and allows the compiler
+   * to apply more optimisations, e.g. auto vectorisation.
+   */
   typedef color_type *gcc_restrict rpointer_type;
+
+  /**
+   * A pointer/iterator to a read-only image buffer.
+   */
   typedef const color_type *const_pointer_type;
+
+  /**
+   * Like #rpointer_type, but read-only.
+   */
   typedef const color_type *gcc_restrict const_rpointer_type;
 
+  /**
+   * Transform a color by passing integers to the given functions.
+   * The function must be able to deal with more than channel at a
+   * time.  A classic example would be bit-wise OR/AND.  It does not
+   * work with arithmetics such as "add", because it may overflow one
+   * channel and bleed to the next.
+   */
   template<typename F>
   static color_type TransformInteger(color_type c, F f) {
     return f(c.GetLuminosity());
@@ -50,6 +99,9 @@ struct GreyscalePixelTraits {
     return f(a.GetLuminosity(), b.GetLuminosity());
   }
 
+  /**
+   * Transform a color by calling the given function for each channel.
+   */
   template<typename F>
   static color_type TransformChannels(color_type c, F f) {
     return f(c.GetLuminosity());
@@ -64,10 +116,16 @@ struct GreyscalePixelTraits {
     return c.GetLuminosity() == 0;
   }
 
+  /**
+   * How much to add to this pointer to go #delta pixels ahead?
+   */
   static constexpr int CalcIncrement(int delta) {
     return delta;
   }
 
+  /**
+   * Calculate a pointer to the pixel with the given offset.
+   */
   static constexpr pointer_type Next(pointer_type p, int delta) {
     return p + CalcIncrement(delta);
   }
@@ -85,6 +143,11 @@ struct GreyscalePixelTraits {
     return const_pointer_type((const uint8_t *)p + delta);
   }
 
+  /**
+   * Calculate a pointer to the pixel with the given row offset.
+   *
+   * @param pitch the number of bytes per row
+   */
   static constexpr pointer_type NextRow(pointer_type p,
                                         unsigned pitch, int delta) {
     return NextByte(p, int(pitch) * delta);
@@ -95,6 +158,11 @@ struct GreyscalePixelTraits {
     return NextByte(p, int(pitch) * delta);
   }
 
+  /**
+   * Calculate a pointer to the pixel with the given 2D offset.
+   *
+   * @param pitch the number of bytes per row
+   */
   static constexpr pointer_type At(pointer_type p, unsigned pitch,
                                    int x, int y) {
     return Next(NextRow(p, pitch, y), x);
@@ -105,23 +173,39 @@ struct GreyscalePixelTraits {
     return Next(NextRow(p, pitch, y), x);
   }
 
+  /**
+   * Read the pixel at the location pointed to.
+   */
   static color_type ReadPixel(const_pointer_type p) {
     return *p;
   }
 
+  /**
+   * Write the pixel at the location pointed to.
+   */
   static void WritePixel(pointer_type p, color_type c) {
     *p = c;
   }
 
+  /**
+   * Fill #n horizontal pixels with the given color.
+   */
   static void FillPixels(pointer_type p, unsigned n, color_type c) {
     memset(p, c.GetLuminosity(), n);
   }
 
+  /**
+   * Copy #n horizontal pixels from #src.
+   */
   static void CopyPixels(rpointer_type p, const_rpointer_type src,
                          unsigned n) {
     memcpy(p, src, n);
   }
 
+  /**
+   * Call the given function for the next #n pixels in the current
+   * row.  Pass the pointer to each pixel.
+   */
   template<typename F>
   gcc_hot
   static void ForHorizontal(pointer_type p, unsigned n, F f) {
@@ -137,6 +221,10 @@ struct GreyscalePixelTraits {
       f(Next(p, i), Next(q, i));
   }
 
+  /**
+   * Call the given function for the next #n pixels in the current
+   * column.  Pass the pointer to each pixel.
+   */
   template<typename F>
   gcc_hot
   static void ForVertical(pointer_type p, unsigned pitch, unsigned n, F f) {
@@ -144,6 +232,12 @@ struct GreyscalePixelTraits {
       f(p);
   }
 
+  /**
+   * Container for mixed operations, to allow operations with pointers
+   * to two different image buffers with two different pixel formats.
+   *
+   * @param SPT the source pixel format
+   */
   template<typename SPT>
   struct Mixed {
     template<typename F>
@@ -159,6 +253,12 @@ struct GreyscalePixelTraits {
 
 #ifndef GREYSCALE
 
+/**
+ * Description for the 32 bit pixel format with four channels: blue,
+ * green, red and alpha.
+ *
+ * See #GreyscalePixelTraits for documentation about PixelTraits.
+ */
 struct BGRAPixelTraits {
   typedef BGRA8Color color_type;
   typedef uint8_t channel_type;
