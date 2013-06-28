@@ -203,17 +203,10 @@ using BitNotOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           PixelBitNotOr<typename PixelTraits::integer_type>>;
 
-template<typename integer_type>
-struct PixelBitAnd {
-  constexpr integer_type operator()(integer_type a, integer_type b) const {
-    return a & b;
-  }
-};
-
 template<typename PixelTraits>
 using BitAndPixelOperations =
   BinaryIntegerOperations<PixelTraits,
-                          PixelBitAnd<typename PixelTraits::integer_type>>;
+                          std::bit_and<typename PixelTraits::integer_type>>;
 
 template<typename T>
 class PixelAlphaOperation {
