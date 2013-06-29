@@ -76,18 +76,20 @@ AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 
 void
 AllDevicesPutActiveFrequency(RadioFrequency frequency,
+                             const TCHAR *name,
                              OperationEnvironment &env)
 {
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutActiveFrequency(frequency, env);
+    device_list[i]->PutActiveFrequency(frequency, name, env);
 }
 
 void
 AllDevicesPutStandbyFrequency(RadioFrequency frequency,
+                              const TCHAR *name,
                               OperationEnvironment &env)
 {
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i]->PutStandbyFrequency(frequency, env);
+    device_list[i]->PutStandbyFrequency(frequency, name, env);
 }
 
 void

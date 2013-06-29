@@ -831,6 +831,7 @@ DeviceDescriptor::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
+                                     const TCHAR *name,
                                      OperationEnvironment &env)
 {
   assert(InMainThread());
@@ -843,11 +844,12 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
     return false;
 
   ScopeReturnDevice restore(*this, env);
-  return device->PutActiveFrequency(frequency, env);
+  return device->PutActiveFrequency(frequency, name, env);
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
+                                      const TCHAR *name,
                                       OperationEnvironment &env)
 {
   assert(InMainThread());
@@ -860,7 +862,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
     return false;
 
   ScopeReturnDevice restore(*this, env);
-  return device->PutStandbyFrequency(frequency, env);
+  return device->PutStandbyFrequency(frequency, name, env);
 }
 
 bool

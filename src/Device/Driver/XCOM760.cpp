@@ -38,8 +38,10 @@ public:
 public:
   virtual bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  const TCHAR *name,
                                   OperationEnvironment &env) override;
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
                                    OperationEnvironment &env) override;
 };
 
@@ -54,6 +56,7 @@ XCOM760Device::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 XCOM760Device::PutActiveFrequency(RadioFrequency frequency,
+                                  const TCHAR *name,
                                   OperationEnvironment &env)
 {
   char szTmp[32];
@@ -66,6 +69,7 @@ XCOM760Device::PutActiveFrequency(RadioFrequency frequency,
 
 bool
 XCOM760Device::PutStandbyFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
                                    OperationEnvironment &env)
 {
   char szTmp[32];
