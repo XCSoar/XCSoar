@@ -28,6 +28,8 @@ Copyright_License {
 #include "Math/LowPassFilter.hpp"
 #include "Util/Clamp.hpp"
 
+#include "LogFile.hpp"
+
 static constexpr fixed MIN_TURN_RATE(4);
 static constexpr fixed CRUISE_CLIMB_SWITCH(15);
 static constexpr fixed CLIMB_CRUISE_SWITCH(10);
@@ -57,6 +59,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate = fixed(0);
     circling_info.turn_rate_heading = fixed(0);
     circling_info.turn_rate_smoothed = fixed(0);
+    circling_info.turn_rate_heading_smoothed = fixed(0);
     return;
   }
 
@@ -66,6 +69,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     circling_info.turn_rate = fixed(0);
     circling_info.turn_rate_heading = fixed(0);
     circling_info.turn_rate_smoothed = fixed(0);
+    circling_info.turn_rate_heading_smoothed = fixed(0);
     return;
   }
 
@@ -83,6 +87,13 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     turn_rate = LowPassFilter(circling_info.turn_rate_smoothed,
                               turn_rate, fixed(0.3));
     circling_info.turn_rate_smoothed = turn_rate;
+
+    // Makes smoothing of heading turn rate
+    turn_rate = Clamp(circling_info.turn_rate_heading, fixed(-50), fixed(50));
+    // Make the heading turn rate more smooth using the LowPassFilter
+    turn_rate = LowPassFilter(circling_info.turn_rate_heading_smoothed,
+                              turn_rate, fixed(0.3));
+    circling_info.turn_rate_heading_smoothed = turn_rate;
   }
 
   last_track = basic.track;
