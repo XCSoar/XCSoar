@@ -75,6 +75,7 @@ const char DisplayTrackBearing[] = "DisplayTrackBearing";
 const char SpeedUnitsValue[] = "SpeedUnit";
 const char TaskSpeedUnitsValue[] = "TaskSpeedUnit";
 const char WarningTime[] = "WarnTime";
+const char RepetitiveSound[] = "RepetitiveSound";
 const char AcknowledgementTime[] = "AcknowledgementTime";
 const char AirfieldFile[] = "AirfieldFile"; // pL
 const char AirspaceFile[] = "AirspaceFile"; // pL

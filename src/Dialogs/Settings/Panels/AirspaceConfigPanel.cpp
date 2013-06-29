@@ -47,6 +47,7 @@ enum ControlIndex {
   AltWarningMargin,
   AirspaceWarnings,
   WarningTime,
+  RepetitiveSound,
   AcknowledgeTime,
   UseBlackOutline,
   AirspaceFillMode,
@@ -127,6 +128,7 @@ void
 AirspaceConfigPanel::ShowWarningControls(bool visible)
 {
   SetRowVisible(WarningTime, visible);
+  SetRowVisible(RepetitiveSound, visible);
   SetRowVisible(AcknowledgeTime, visible);
 }
 
@@ -207,6 +209,11 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           10, 1000, 5, computer.warnings.warning_time);
   SetExpertRow(WarningTime);
 
+  AddBoolean(_("Repetitive sound"),
+             _("Enable/disable repetitive warning sound when airspaces warnings dialog is displayed."),
+             computer.warnings.repetitive_sound, this);
+  SetExpertRow(RepetitiveSound);
+
   AddTime(_("Acknowledge time"),
           _("This is the time period in which an acknowledged airspace warning will not be repeated."),
           10, 1000, 5, computer.warnings.acknowledgement_time);
@@ -263,6 +270,9 @@ AirspaceConfigPanel::Save(bool &_changed)
     changed = true;
     require_restart = true;
   }
+
+  changed |= SaveValue(RepetitiveSound, ProfileKeys::RepetitiveSound,
+                       computer.warnings.repetitive_sound);
 
   if (SaveValue(AcknowledgeTime, ProfileKeys::AcknowledgementTime,
                 computer.warnings.acknowledgement_time)) {

@@ -78,6 +78,7 @@ extern const char AirspaceBlackOutline[];
 extern const char AirspaceTransparency[];
 extern const char AirspaceFillMode[];
 extern const char WarningTime[];
+extern const char RepetitiveSound[];
 extern const char AcknowledgementTime[];
 extern const char CircleZoom[];
 extern const char MaxAutoZoomDistance[];
