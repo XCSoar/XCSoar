@@ -120,6 +120,9 @@ Middle(const GeoPoint &a, const GeoPoint &b);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
+ * Warning: this method uses spherical calculations only! That's ok since
+ *          it's only used to calculate alternate airports, which is no
+ *          distance-critical task.
  * 
  * @param loc1 Location 1
  * @param loc2 Location 2

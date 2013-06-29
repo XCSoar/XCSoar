@@ -33,12 +33,21 @@ TestLinearDistance()
                            lon_start.latitude);
     fixed distance = Distance(lon_start, lon_end);
 
+#ifdef USE_WGS84
+    double min = 111300 * i;
+    double max = 111340 * i;
+#else
     double min = 111100 * i;
     double max = 111200 * i;
+#endif
 
     ok1(between(distance, min, max));
   }
 
+#ifndef USE_WGS84
+  /* Unfortunately this test doesn't make sense
+   * on the earth ellipsoid...
+   */
   const GeoPoint lat_start(Angle::Zero(),
                            Angle::Zero());
   for (unsigned i = 0; i < 90; i += 5) {
@@ -51,11 +60,17 @@ TestLinearDistance()
 
     ok1(between(distance, min, max));
   }
+#endif
+
 }
 
 int main(int argc, char **argv)
 {
+#ifdef USE_WGS84
+  plan_tests(9 + 36);
+#else
   plan_tests(9 + 36 + 18);
+#endif
 
   const GeoPoint a(Angle::Degrees(7.7061111111111114),
                    Angle::Degrees(51.051944444444445));
@@ -65,7 +80,11 @@ int main(int argc, char **argv)
                    Angle::Degrees(47.099444444444444));
 
   fixed distance = Distance(a, b);
+#ifdef USE_WGS84
+  ok1(distance > fixed(9150) && distance < fixed(9160));
+#else
   ok1(distance > fixed(9130) && distance < fixed(9140));
+#endif
 
   Angle bearing = Bearing(a, b);
   ok1(bearing.Degrees() > fixed(304));
@@ -78,12 +97,21 @@ int main(int argc, char **argv)
   distance = ProjectedDistance(a, b, a);
   ok1(is_zero(distance));
   distance = ProjectedDistance(a, b, b);
+
+#ifdef USE_WGS84
+  ok1(distance > fixed(9150) && distance < fixed(9180));
+#else
   ok1(distance > fixed(9120) && distance < fixed(9140));
+#endif
 
   const GeoPoint middle(a.longitude.Fraction(b.longitude, fixed(0.5)),
                         a.latitude.Fraction(b.latitude, fixed(0.5)));
   distance = ProjectedDistance(a, b, middle);
+#ifdef USE_WGS84
+  ok1(distance > fixed(9150/2) && distance < fixed(9180/2));
+#else
   ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
+#endif
 
   fixed big_distance = Distance(a, c);
   ok1(big_distance > fixed(494000) && big_distance < fixed(495000));
