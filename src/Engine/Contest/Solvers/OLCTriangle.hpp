@@ -109,9 +109,12 @@ private:
     }
 
     void removeRange(unsigned first, unsigned last) {
-      for (auto it = closing_pairs.begin(); it != closing_pairs.end(); ++it) {
+      auto it = closing_pairs.begin();
+      while (it != closing_pairs.end()) {
         if (it->first > first && it->second < last)
-          closing_pairs.erase(it);
+          it = closing_pairs.erase(it);
+        else
+          it++;
       }
     }
 
