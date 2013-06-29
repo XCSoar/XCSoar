@@ -243,7 +243,7 @@ ifeq ($(TARGET),UNIX)
   endif
 
   ifeq ($(NEON),y)
-    TARGET_ARCH += -mfpu=neon -mfpu=vfpv3-d16
+    TARGET_ARCH += -mfpu=neon
   endif
 endif
 
