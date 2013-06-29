@@ -33,11 +33,9 @@ struct IGCFix;
 class DebugReplayIGC : public DebugReplay {
   IGCExtensions extensions;
 
-  unsigned day;
-
 public:
   DebugReplayIGC(NLineReader *reader)
-    :DebugReplay(reader), day(0) {
+    :DebugReplay(reader) {
     extensions.clear();
   }
 
