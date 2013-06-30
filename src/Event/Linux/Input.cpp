@@ -82,11 +82,17 @@ LinuxInputDevice::Read()
 
     case EV_ABS:
       moved = true;
-      if (e.code == 0)
+
+      switch (e.code) {
+      case ABS_X:
+        x = e.value;
+        break;
+
+      case ABS_Y:
         y = e.value;
-      else if (e.code == 1)
-        // TODO: hard-coded number
-        x = 600 - e.value;
+        break;
+      }
+
       break;
     }
   }

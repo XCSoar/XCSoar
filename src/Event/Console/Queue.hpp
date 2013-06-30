@@ -32,6 +32,7 @@ Copyright_License {
 
 #ifdef KOBO
 #include "../Linux/Input.hpp"
+#include "../Shared/RotatePointer.hpp"
 #else
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
@@ -48,6 +49,7 @@ class EventQueue final : private FileEventHandler {
 
 #ifdef KOBO
   LinuxInputDevice mouse;
+  RotatePointer rotate_mouse;
 #else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
@@ -68,10 +70,19 @@ public:
   ~EventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {
-#ifndef KOBO
+#ifdef KOBO
+    rotate_mouse.SetSize(width, height);
+#else
     mouse.SetScreenSize(width, height);
 #endif
   }
+
+#ifdef KOBO
+  void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
+    rotate_mouse.SetSwap(swap);
+    rotate_mouse.SetInvert(invert_x, invert_y);
+  }
+#endif
 
 #ifndef KOBO
   RasterPoint GetMousePosition() const {

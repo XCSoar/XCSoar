@@ -63,6 +63,10 @@ void
 TopWindow::OnResize(PixelSize new_size)
 {
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
+#ifdef KOBO
+  event_queue->SetMouseRotation(true, true, false);
+#endif
+
   screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);
 }

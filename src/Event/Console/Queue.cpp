@@ -94,8 +94,13 @@ EventQueue::Generate(Event &event)
   }
 
   event = mouse.Generate();
-  if (event.type != Event::Type::NOP)
+  if (event.type != Event::Type::NOP) {
+#ifdef KOBO
+    rotate_mouse.Do(event.point);
+#endif
+
     return true;
+  }
 
   return false;
 }
