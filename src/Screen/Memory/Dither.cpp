@@ -48,9 +48,12 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
     ErrorDistType *gcc_restrict err_dist_l1 =
       error_dist_buffer + ((height & 1) ? 0 : width_2);
 
+    int e0 = *err_dist_l0++;
+    int e1 = *err_dist_l1;
+
     /* scan the line and convert the Y8 to BW */
     for (unsigned col = width; col > 0; --col) {
-      ErrorDistType bwPix = (*err_dist_l0) + (*src++);
+      ErrorDistType bwPix = e0 + (*src++);
 
       if (bwPix >= 128) {
 	*dest++ = 0xffff;
@@ -62,12 +65,17 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
 
       // SIERRA LITE
       bwPix >>= 1;
-      *(++err_dist_l0) += bwPix;
-      bwPix >>= 1;
-      *err_dist_l1 += bwPix;
-      *++err_dist_l1 = bwPix;
 
+      e0 = *err_dist_l0 + bwPix;
+      *err_dist_l0++ = e0;
+
+      bwPix >>= 1;
+
+      *err_dist_l1++ = e1 + bwPix;
+      e1 = bwPix;
     }
+
+    *err_dist_l1 = e1;
 
     src += src_pitch;
     dest += dest_pitch;
