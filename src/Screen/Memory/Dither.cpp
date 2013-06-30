@@ -39,9 +39,6 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
   ErrorDistType *const error_dist_buffer = allocated_error_dist_buffer.begin();
   std::fill(error_dist_buffer, error_dist_buffer + width_2 * 2u, 0);
 
-  src_pitch -= width;
-  dest_pitch -= width;
-
   for (; height; --height) {
     ErrorDistType *gcc_restrict err_dist_l0 =
       error_dist_buffer + ((height & 1) ? width_2 : 0) + 1;
@@ -52,8 +49,8 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
     int e1 = *err_dist_l1;
 
     /* scan the line and convert the Y8 to BW */
-    for (unsigned col = width; col > 0; --col) {
-      ErrorDistType bwPix = e0 + (*src++);
+    for (unsigned column = 0; column < width; ++column) {
+      ErrorDistType bwPix = e0 + src[column];
 
       uint16_t color = 0;
       if (bwPix >= 128) {
@@ -61,7 +58,7 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
 	bwPix -= 255;
       }
 
-      *dest++ = color;
+      dest[column] = color;
 
       /* modify the error distribution buffer */
 
