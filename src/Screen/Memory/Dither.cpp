@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dither.hpp"
 
-#include <string.h>
+#include <algorithm>
 
 // Code adapted from imx.60 linux kernel EPD driver by Daiyu Ko <dko@freescale.com>
 //
@@ -37,8 +37,7 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
   const unsigned width_2 = width + 2;
   allocated_error_dist_buffer.GrowDiscard(width_2 * 2u);
   ErrorDistType *const error_dist_buffer = allocated_error_dist_buffer.begin();
-
-  memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));
+  std::fill(error_dist_buffer, error_dist_buffer + width_2 * 2u, 0);
 
   src_pitch -= width;
   dest_pitch -= width;
