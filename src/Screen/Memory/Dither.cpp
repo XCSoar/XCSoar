@@ -55,12 +55,14 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
     for (unsigned col = width; col > 0; --col) {
       ErrorDistType bwPix = e0 + (*src++);
 
+      uint16_t color = 0;
       if (bwPix >= 128) {
-	*dest++ = 0xffff;
+        --color;
 	bwPix -= 255;
-      } else {
-	*dest++ = 0;
       }
+
+      *dest++ = color;
+
       /* modify the error distribution buffer */
 
       // SIERRA LITE
