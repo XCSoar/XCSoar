@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Dither.hpp"
-#include <assert.h>
+
 #include <string.h>
 
 // Code adapted from imx.60 linux kernel EPD driver by Daiyu Ko <dko@freescale.com>

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
-#include <stddef.h>
 #include <stdint.h>
 
 class Dither {
