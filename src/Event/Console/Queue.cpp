@@ -47,6 +47,33 @@ EventQueue::~EventQueue()
 {
 }
 
+#ifdef KOBO
+
+void
+EventQueue::SetMouseRotation(DisplaySettings::Orientation orientation)
+{
+  switch (orientation) {
+  case DisplaySettings::Orientation::DEFAULT:
+  case DisplaySettings::Orientation::PORTRAIT:
+    SetMouseRotation(true, true, false);
+    break;
+
+  case DisplaySettings::Orientation::LANDSCAPE:
+    SetMouseRotation(false, false, false);
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+    SetMouseRotation(true, false, true);
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+    SetMouseRotation(false, true, true);
+    break;
+  }
+}
+
+#endif
+
 void
 EventQueue::Push(const Event &event)
 {

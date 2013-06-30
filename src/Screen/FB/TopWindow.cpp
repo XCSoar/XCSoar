@@ -37,6 +37,19 @@ Copyright_License {
 #include "Screen/Memory/Canvas.hpp"
 #endif
 
+#ifdef USE_FB
+
+void
+TopWindow::CheckResize()
+{
+  assert(screen != nullptr);
+
+  if (screen->CheckResize())
+    Resize(screen->GetWidth(), screen->GetHeight());
+}
+
+#endif
+
 void
 TopWindow::Invalidate()
 {
@@ -63,9 +76,6 @@ void
 TopWindow::OnResize(PixelSize new_size)
 {
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
-#ifdef KOBO
-  event_queue->SetMouseRotation(true, true, false);
-#endif
 
   screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);

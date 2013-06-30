@@ -33,6 +33,7 @@ Copyright_License {
 #ifdef KOBO
 #include "../Linux/Input.hpp"
 #include "../Shared/RotatePointer.hpp"
+#include "DisplaySettings.hpp"
 #else
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
@@ -82,6 +83,8 @@ public:
     rotate_mouse.SetSwap(swap);
     rotate_mouse.SetInvert(invert_x, invert_y);
   }
+
+  void SetMouseRotation(DisplaySettings::Orientation orientation);
 #endif
 
 #ifndef KOBO

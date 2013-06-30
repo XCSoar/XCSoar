@@ -141,6 +141,25 @@ TopCanvas::Create(PixelSize new_size,
   buffer.Allocate(vinfo.xres, vinfo.yres);
 }
 
+bool
+TopCanvas::CheckResize()
+{
+  /* get new frame buffer dimensions and check if they have changed */
+  struct fb_var_screeninfo vinfo;
+  ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
+
+  if (vinfo.xres == buffer.width && vinfo.yres == buffer.height)
+    return false;
+
+  /* yes, they did change: update the size and allocate a new buffer */
+
+  map_pitch = vinfo.xres_virtual * map_bpp;
+
+  buffer.Free();
+  buffer.Allocate(vinfo.xres, vinfo.yres);
+  return true;
+}
+
 void
 TopCanvas::OnResize(PixelSize new_size)
 {

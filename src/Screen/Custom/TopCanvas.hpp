@@ -122,6 +122,25 @@ public:
   void Create(PixelSize new_size,
               bool full_screen, bool resizable);
 
+#ifdef USE_FB
+  /**
+   * Check if the screen has been resized.
+   *
+   * @return true if the screen has been resized
+   */
+  bool CheckResize();
+
+  gcc_pure
+  unsigned GetWidth() const {
+    return buffer.width;
+  }
+
+  gcc_pure
+  unsigned GetHeight() const {
+    return buffer.height;
+  }
+#endif
+
 #ifdef ENABLE_OPENGL
   /**
    * Initialise the new OpenGL context.

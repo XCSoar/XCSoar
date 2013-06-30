@@ -36,6 +36,11 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
 
+#ifdef KOBO
+#include "Event/Console/Globals.hpp"
+#include "Event/Console/Queue.hpp"
+#endif
+
 enum ControlIndex {
   DisplayOrientation,
   AppInfoBoxGeom,
@@ -262,6 +267,12 @@ LayoutConfigPanel::Save(bool &_changed)
       if (!Display::Rotate(ui_settings.display.orientation))
         LogFormat("Display rotation failed");
     }
+
+#ifdef KOBO
+    event_queue->SetMouseRotation(ui_settings.display.orientation);
+#endif
+
+    CommonInterface::main_window->CheckResize();
   } else if (info_box_geometry_changed)
     CommonInterface::main_window->ReinitialiseLayout();
 

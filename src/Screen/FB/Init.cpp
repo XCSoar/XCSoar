@@ -29,7 +29,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef KOBO
-#include "OS/FileUtil.hpp"
+#include "Hardware/Display.hpp"
 #endif
 
 #ifdef USE_FREETYPE
@@ -38,11 +38,6 @@ Copyright_License {
 
 ScreenGlobalInit::ScreenGlobalInit()
 {
-#ifdef KOBO
-  /* switch to portrait mode */
-  File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
-#endif
-
 #ifdef USE_FREETYPE
   FreeType::Initialise();
 #endif
@@ -50,6 +45,11 @@ ScreenGlobalInit::ScreenGlobalInit()
   Font::Initialise();
 
   event_queue = new EventQueue();
+
+#ifdef KOBO
+  Display::Rotate(DisplaySettings::Orientation::DEFAULT);
+  event_queue->SetMouseRotation(DisplaySettings::Orientation::DEFAULT);
+#endif
 
   ScreenInitialized();
 }
