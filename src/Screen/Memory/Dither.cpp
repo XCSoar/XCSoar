@@ -34,10 +34,10 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
                                           unsigned dest_pitch,
                                           unsigned width, unsigned height)
 {
-  allocated_error_dist_buffer.GrowDiscard((width + 2) * 2);
+  const unsigned width_2 = width + 2;
+  allocated_error_dist_buffer.GrowDiscard(width_2 * 2u);
   ErrorDistType *const error_dist_buffer = allocated_error_dist_buffer.begin();
 
-  unsigned width_2 = width + 2;
   memset(error_dist_buffer, 0, (width_2)*2*sizeof(ErrorDistType));
 
   src_pitch -= width;
