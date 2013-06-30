@@ -38,7 +38,7 @@ Copyright_License {
 #endif
 
 #ifdef DITHER
-#include "Dither.hpp"
+#include "../Memory/Dither.hpp"
 #endif
 
 struct SDL_Surface;

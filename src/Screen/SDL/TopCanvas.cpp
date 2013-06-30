@@ -34,7 +34,7 @@ Copyright_License {
 #endif
 
 #ifdef DITHER
-#include "Screen/Custom/Dither.hpp"
+#include "Screen/Memory/Dither.hpp"
 #endif
 
 #include <SDL_video.h>

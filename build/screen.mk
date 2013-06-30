@@ -47,7 +47,7 @@ endif
 
 ifeq ($(DITHER),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/Custom/Dither.cpp
+	$(SCREEN_SRC_DIR)/Memory/Dither.cpp
 endif
 
 ifeq ($(FREETYPE),y)

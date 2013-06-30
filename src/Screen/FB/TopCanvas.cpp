@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 #ifdef DITHER
-#include "Screen/Custom/Dither.hpp"
+#include "../Memory/Dither.hpp"
 #endif
 
 #ifdef KOBO
