@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "Event.hpp"
+#include "OS/Sleep.h"
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
@@ -43,7 +44,19 @@ EventQueue::Pop(Event &event)
 bool
 EventQueue::Wait(Event &event)
 {
-  return ::SDL_WaitEvent(&event.event);
+  /* this busy loop is ugly, and I wish we could do better than that,
+     but SDL_WaitEvent() is just as bad; however copying this busy
+     loop allows us to plug in more event sources */
+
+  while (true) {
+    ::SDL_PumpEvents();
+    int result = ::SDL_PeepEvents(&event.event, 1,
+                                  SDL_GETEVENT, SDL_ALLEVENTS);
+    if (result != 0)
+      return result > 0;
+
+    Sleep(10);
+  }
 }
 
 void
