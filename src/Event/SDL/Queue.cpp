@@ -34,6 +34,18 @@ EventQueue::Push(EventLoop::Callback callback, void *ctx)
   ::SDL_PushEvent(&event);
 }
 
+bool
+EventQueue::Pop(Event &event)
+{
+  return ::SDL_PollEvent(&event.event);
+}
+
+bool
+EventQueue::Wait(Event &event)
+{
+  return ::SDL_WaitEvent(&event.event);
+}
+
 void
 EventQueue::Purge(Uint32 mask,
                   bool (*match)(const SDL_Event &event, void *ctx),

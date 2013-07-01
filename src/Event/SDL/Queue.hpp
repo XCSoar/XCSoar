@@ -35,6 +35,9 @@ class EventQueue {
 public:
   void Push(EventLoop::Callback callback, void *ctx);
 
+  bool Pop(Event &event);
+  bool Wait(Event &event);
+
   /**
    * Purge all matching events from the event queue.
    */

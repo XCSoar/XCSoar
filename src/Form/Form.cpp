@@ -46,6 +46,7 @@ Copyright_License {
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
 #elif defined(ENABLE_SDL)
+#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #elif defined(USE_CONSOLE)
@@ -390,10 +391,8 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue, main_window);
-#elif defined(ENABLE_SDL)
-  EventLoop loop(main_window);
 #else
   DialogEventLoop loop(*this);
 #endif

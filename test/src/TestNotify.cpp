@@ -35,6 +35,7 @@
 #include "Event/Console/Globals.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
+#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
@@ -79,7 +80,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue);
 #else
   EventLoop loop;
