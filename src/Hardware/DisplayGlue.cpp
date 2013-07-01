@@ -74,9 +74,9 @@ Display::RestoreOrientation()
   if (!Display::RotateSupported())
     return;
 
+#ifndef KOBO
   DisplaySettings::Orientation orientation =
     CommonInterface::GetUISettings().display.orientation;
-#ifndef KOBO
   if (orientation == DisplaySettings::Orientation::DEFAULT)
     return;
 #endif
