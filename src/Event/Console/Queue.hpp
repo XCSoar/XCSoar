@@ -110,6 +110,11 @@ private:
 
 public:
   void Push(const Event &event);
+
+  void Push(Event::Callback callback, void *ctx) {
+    Push(Event(callback, ctx));
+  }
+
   void PushKeyPress(unsigned key_code);
 
   bool Pop(Event &event);

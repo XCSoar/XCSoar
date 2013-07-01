@@ -60,7 +60,7 @@ Notify::SendNotification()
     return;
 
 #if defined(ANDROID) || defined(USE_CONSOLE)
-  event_queue->Push(Event(Callback, this));
+  event_queue->Push(Callback, this);
 #elif defined(ENABLE_SDL)
   EventQueue::Push(Callback, this);
 #else
