@@ -56,7 +56,7 @@ struct BGRColor
   constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(R, G, B) {}
 
-#elif defined(USE_MEMORY_CANVAS)
+#elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL)
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
   uint8_t dummy;
