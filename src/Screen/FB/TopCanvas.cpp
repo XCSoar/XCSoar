@@ -332,3 +332,13 @@ TopCanvas::Flip()
   ioctl(fd, MXCFB_SEND_UPDATE, &epd_update_data);
 #endif
 }
+
+#ifdef KOBO
+
+void
+TopCanvas::Wait()
+{
+  ioctl(fd, MXCFB_WAIT_FOR_UPDATE_COMPLETE, &epd_update_marker);
+}
+
+#endif

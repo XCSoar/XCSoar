@@ -162,6 +162,13 @@ public:
 #endif
 
   void Flip();
+
+#ifdef KOBO
+  /**
+   * Wait until the screen update is complete.
+   */
+  void Wait();
+#endif
 };
 
 #endif
