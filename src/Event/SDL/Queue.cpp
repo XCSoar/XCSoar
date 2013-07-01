@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "Event.hpp"
+#include "../Timer.hpp"
 #include "OS/Sleep.h"
+#include "OS/Clock.hpp"
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
@@ -35,10 +37,31 @@ EventQueue::Push(EventLoop::Callback callback, void *ctx)
   ::SDL_PushEvent(&event);
 }
 
+static void
+InvokeTimer(void *ctx)
+{
+  Timer *timer = (Timer *)ctx;
+  timer->Invoke();
+}
+
+bool
+EventQueue::Generate(Event &event)
+{
+  Timer *timer = timers.Pop(MonotonicClockUS());
+  if (timer != nullptr) {
+    event.event.type = EVENT_CALLBACK;
+    event.event.user.data1 = (void *)InvokeTimer;
+    event.event.user.data2 = (void *)timer;
+    return true;
+  }
+
+  return false;
+}
+
 bool
 EventQueue::Pop(Event &event)
 {
-  return ::SDL_PollEvent(&event.event);
+  return Generate(event) || ::SDL_PollEvent(&event.event);
 }
 
 bool
@@ -49,6 +72,9 @@ EventQueue::Wait(Event &event)
      loop allows us to plug in more event sources */
 
   while (true) {
+    if (Generate(event))
+      return true;
+
     ::SDL_PumpEvents();
     int result = ::SDL_PeepEvents(&event.event, 1,
                                   SDL_GETEVENT, SDL_ALLEVENTS);
@@ -107,4 +133,20 @@ EventQueue::Purge(Window &window)
 {
   Purge(SDL_EVENTMASK(EVENT_USER),
         match_window, (void *)&window);
+}
+
+void
+EventQueue::AddTimer(Timer &timer, unsigned ms)
+{
+  ScopeLock protect(mutex);
+
+  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+}
+
+void
+EventQueue::CancelTimer(Timer &timer)
+{
+  ScopeLock protect(mutex);
+
+  timers.Cancel(timer);
 }

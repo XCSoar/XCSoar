@@ -24,6 +24,7 @@ EVENT_SOURCES += \
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE
 else ifeq ($(ENABLE_SDL),y)
 EVENT_SOURCES += \
+	$(SRC)/Event/Shared/TimerQueue.cpp \
 	$(SRC)/Event/SDL/Globals.cpp \
 	$(SRC)/Event/SDL/Timer.cpp \
 	$(SRC)/Event/SDL/Loop.cpp \

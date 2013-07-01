@@ -52,7 +52,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
 #endif
 
-  Uint32 flags = SDL_INIT_VIDEO|SDL_INIT_TIMER;
+  Uint32 flags = SDL_INIT_VIDEO;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
 

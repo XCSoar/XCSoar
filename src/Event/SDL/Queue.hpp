@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_EVENT_SDL_QUEUE_HPP
 
 #include "Loop.hpp"
+#include "../Shared/TimerQueue.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <SDL_version.h>
 #include <SDL_events.h>
@@ -32,9 +34,16 @@ Copyright_License {
 class Window;
 
 class EventQueue {
+  Mutex mutex;
+  TimerQueue timers;
+
 public:
   void Push(EventLoop::Callback callback, void *ctx);
 
+private:
+  bool Generate(Event &event);
+
+public:
   bool Pop(Event &event);
   bool Wait(Event &event);
 
@@ -53,6 +62,9 @@ public:
    * Purge all events for this Window from the event queue.
    */
   void Purge(Window &window);
+
+  void AddTimer(Timer &timer, unsigned ms);
+  void CancelTimer(Timer &timer);
 };
 
 #endif
