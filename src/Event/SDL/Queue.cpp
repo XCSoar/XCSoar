@@ -23,10 +23,6 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "Event.hpp"
-#include "Thread/Debug.hpp"
-#include "Asset.hpp"
-
-#include "Screen/TopWindow.hpp"
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
