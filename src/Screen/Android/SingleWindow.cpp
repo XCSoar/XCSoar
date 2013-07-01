@@ -33,7 +33,7 @@ SingleWindow::FilterEvent(const Event &event, Window *allowed) const
   case Event::MOUSE_MOTION:
   case Event::MOUSE_DOWN:
   case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+    return FilterMouseEvent(event.point, allowed);
 
   default:
     return true;

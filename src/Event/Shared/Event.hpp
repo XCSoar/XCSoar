@@ -82,7 +82,7 @@ struct Event {
 
   Callback callback;
 
-  PixelScalar x, y;
+  RasterPoint point;
 
   Event() = default;
   Event(Type _type):type(_type) {}
@@ -93,12 +93,7 @@ struct Event {
   Event(Callback _callback, void *_ptr)
     :type(CALLBACK), ptr(_ptr), callback(_callback) {}
   Event(Type _type, PixelScalar _x, PixelScalar _y)
-    :type(_type), x(_x), y(_y) {}
-
-  constexpr
-  RasterPoint GetPoint() const {
-    return RasterPoint{x, y};
-  }
+    :type(_type), point(_x, _y) {}
 
   bool IsKeyDown() const {
     return type == KEY_DOWN;

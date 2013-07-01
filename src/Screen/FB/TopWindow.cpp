@@ -126,17 +126,17 @@ TopWindow::OnEvent(const Event &event)
 #endif
 
     // XXX keys
-    return OnMouseMove(event.x, event.y, 0);
+    return OnMouseMove(event.point.x, event.point.y, 0);
 
   case Event::MOUSE_DOWN:
-    return double_click.Check(event.GetPoint())
-      ? OnMouseDouble(event.x, event.y)
-      : OnMouseDown(event.x, event.y);
+    return double_click.Check(event.point)
+      ? OnMouseDouble(event.point.x, event.point.y)
+      : OnMouseDown(event.point.x, event.point.y);
 
   case Event::MOUSE_UP:
-    double_click.Moved(event.GetPoint());
+    double_click.Moved(event.point);
 
-    return OnMouseUp(event.x, event.y);
+    return OnMouseUp(event.point.x, event.point.y);
   }
 
   return false;

@@ -39,7 +39,8 @@ SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
   case SDL_MOUSEMOTION:
   case SDL_MOUSEBUTTONDOWN:
   case SDL_MOUSEBUTTONUP:
-    return FilterMouseEvent(event.button.x, event.button.y, allowed);
+    return FilterMouseEvent(RasterPoint(event.button.x, event.button.y),
+                            allowed);
 
   default:
     return true;
