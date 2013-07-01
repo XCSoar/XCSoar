@@ -650,6 +650,15 @@ WndForm::ReinitialiseLayout()
     if (GetBottom() > (PixelScalar) main_window.GetHeight())
       top = main_window.GetHeight() - GetHeight();
 
+#ifdef USE_MEMORY_CANVAS
+    /* the RasterCanvas class doesn't clip negative window positions
+       properly, therefore we avoid this problem at this stage */
+    if (left < 0)
+      left = 0;
+    if (top < 0)
+      top = 0;
+#endif
+
     if (left != GetLeft() || top != GetTop())
       Move(left, top);
   }
