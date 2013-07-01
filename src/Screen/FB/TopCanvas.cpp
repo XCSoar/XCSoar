@@ -131,7 +131,7 @@ TopCanvas::Create(PixelSize new_size,
     return;
   }
 
-  map_pitch = vinfo.xres_virtual * map_bpp;
+  map_pitch = finfo.line_length;
   epd_update_marker = 0;
 
 #ifdef KOBO
