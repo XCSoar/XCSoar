@@ -21,57 +21,6 @@ Copyright_License {
 }
 */
 
-#include "../Timer.hpp"
-#include "Queue.hpp"
 #include "Globals.hpp"
 
-void
-Timer::Schedule(unsigned ms)
-{
-  Cancel();
-
-  id = ::SDL_AddTimer(ms, Callback, this);
-}
-
-void
-Timer::Cancel()
-{
-  if (!IsActive())
-    return;
-
-  ::SDL_RemoveTimer(id);
-  id = NULL;
-
-  event_queue->Purge(Invoke, (void *)this);
-  queued.store(false, std::memory_order_relaxed);
-}
-
-void
-Timer::Invoke()
-{
-  OnTimer();
-  queued.store(false, std::memory_order_relaxed);
-}
-
-void
-Timer::Invoke(void *ctx)
-{
-  Timer *timer = (Timer *)ctx;
-  timer->Invoke();
-}
-
-Uint32
-Timer::Callback(Uint32 interval)
-{
-  if (!queued.exchange(true, std::memory_order_relaxed))
-    event_queue->Push(Invoke, (void *)this);
-  return interval;
-}
-
-Uint32
-Timer::Callback(Uint32 interval, void *param)
-{
-  Timer *timer = (Timer *)param;
-
-  return timer->Callback(interval);
-}
+EventQueue *event_queue;

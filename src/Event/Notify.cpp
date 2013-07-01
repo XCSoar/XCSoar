@@ -30,6 +30,7 @@ Copyright_License {
 #include "Event/Console/Queue.hpp"
 #include "Event/Console/Globals.hpp"
 #elif defined(ENABLE_SDL)
+#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Queue.hpp"
 #endif
@@ -45,10 +46,8 @@ Notify::Notify()
 Notify::~Notify()
 {
   if (pending.load(std::memory_order_relaxed)) {
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
     event_queue->Purge(Callback, this);
-#elif defined(ENABLE_SDL)
-    EventQueue::Purge(Callback, this);
 #endif
   }
 }
@@ -59,10 +58,8 @@ Notify::SendNotification()
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   event_queue->Push(Callback, this);
-#elif defined(ENABLE_SDL)
-  EventQueue::Push(Callback, this);
 #else
   SendUser(0);
 #endif
@@ -74,10 +71,8 @@ Notify::ClearNotification()
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   event_queue->Purge(Callback, this);
-#elif defined(ENABLE_SDL)
-  EventQueue::Purge(Callback, this);
 #endif
 }
 

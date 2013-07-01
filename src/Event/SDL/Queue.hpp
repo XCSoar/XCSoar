@@ -31,7 +31,8 @@ Copyright_License {
 
 class Window;
 
-namespace EventQueue {
+class EventQueue {
+public:
   void Push(EventLoop::Callback callback, void *ctx);
 
   /**

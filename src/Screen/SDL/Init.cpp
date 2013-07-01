@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
+#include "Event/SDL/Globals.hpp"
+#include "Event/SDL/Queue.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -78,11 +80,16 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   Font::Initialise();
 
+  event_queue = new EventQueue();
+
   ScreenInitialized();
 }
 
 ScreenGlobalInit::~ScreenGlobalInit()
 {
+  delete event_queue;
+  event_queue = nullptr;
+
 #ifdef ENABLE_OPENGL
   OpenGL::Deinitialise();
 #endif

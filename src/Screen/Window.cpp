@@ -30,6 +30,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Queue.hpp"
+#include "Event/SDL/Globals.hpp"
 #elif defined(USE_CONSOLE)
 #include "Event/Console/Queue.hpp"
 #include "Event/Console/Globals.hpp"
@@ -155,11 +156,7 @@ Window::OnDestroy()
     parent = NULL;
   }
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
   event_queue->Purge(*this);
-#else
-  EventQueue::Purge(*this);
-#endif
 #else /* USE_GDI */
   assert(hWnd != NULL);
 
