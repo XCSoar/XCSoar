@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.6.3 - not yet released
 * map
   - fill FAI triangle areas on Windows
+* devices
+  - LX: support Nano firmware 2.10 (#2819)
 * Android
   - fix compatibility issue with Android 2.2
 * user interface
