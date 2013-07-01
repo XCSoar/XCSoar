@@ -63,6 +63,10 @@ TopWindow::OnDestroy()
   /* clear the screen before exiting XCSoar */
   Canvas canvas = screen->Lock();
   if (canvas.IsDefined()) {
+    canvas.Clear(COLOR_BLACK);
+    screen->Flip();
+    screen->Wait();
+
     canvas.ClearWhite();
     screen->Unlock();
     screen->Flip();

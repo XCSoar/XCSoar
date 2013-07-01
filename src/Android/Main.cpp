@@ -185,8 +185,11 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   InitThreadDebug();
 
-  delete CommonInterface::main_window;
-  CommonInterface::main_window = nullptr;
+  if (CommonInterface::main_window != nullptr) {
+    CommonInterface::main_window->Destroy();
+    delete CommonInterface::main_window;
+    CommonInterface::main_window = nullptr;
+  }
 
   DisallowLanguage();
   Fonts::Deinitialize();
