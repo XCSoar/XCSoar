@@ -153,7 +153,10 @@ TopCanvas::CheckResize()
 
   /* yes, they did change: update the size and allocate a new buffer */
 
-  map_pitch = vinfo.xres_virtual * map_bpp;
+  struct fb_fix_screeninfo finfo;
+  ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
+
+  map_pitch = finfo.line_length;
 
   buffer.Free();
   buffer.Allocate(vinfo.xres, vinfo.yres);
