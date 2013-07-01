@@ -196,7 +196,7 @@ public:
 #endif
 
 #ifndef USE_GDI
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else
   void SetCaption(const TCHAR *caption);

@@ -38,11 +38,6 @@ Copyright_License {
 #endif
 
 void
-TopWindow::SetCaption(const TCHAR *caption)
-{
-}
-
-void
 TopWindow::Invalidate()
 {
   invalidated = true;
