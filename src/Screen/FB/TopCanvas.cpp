@@ -124,12 +124,31 @@ TopCanvas::Create(PixelSize new_size,
     return;
   }
 
+#ifdef GREYSCALE
+  /* switch the frame buffer to 8 bits per pixel greyscale */
+
+  vinfo.bits_per_pixel = 8;
+  vinfo.grayscale = true;
+
+  if (ioctl(fd, FBIOPUT_VSCREENINFO, &vinfo) < 0) {
+    fprintf(stderr, "Couldn't set greyscale pixel format: %s\n",
+            strerror(errno));
+    Destroy();
+    return;
+  }
+
+  /* read new finfo */
+  ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
+
+  map_bpp = 1;
+#else
   map_bpp = vinfo.bits_per_pixel / 8;
   if (map_bpp != 2 && map_bpp != 4) {
     fprintf(stderr, "Unsupported console hardware\n");
     Destroy();
     return;
   }
+#endif
 
   map_pitch = finfo.line_length;
   epd_update_marker = 0;
@@ -241,20 +260,23 @@ CopyFromGreyscale(
 
 #ifdef DITHER
 
-  dither.dither_luminosity8_to_uint16(src_pixels, src.pitch,
-                                      (uint16_t *)dest_pixels,
-                                      dest_pitch / dest_bpp,
-                                      width, height);
+  dither.DitherGreyscale(src_pixels, src.pitch,
+                         (uint8_t *)dest_pixels,
+                         dest_pitch,
+                         width, height);
+
+#ifndef KOBO
   if (dest_bpp == 4) {
     const unsigned n_pixels = (dest_pitch / dest_bpp)
       * height;
     int32_t *d = (int32_t *)dest_pixels + n_pixels;
-    const int16_t *end = (int16_t *)dest_pixels;
-    const int16_t *s = end + n_pixels;
+    const int8_t *end = (int8_t *)dest_pixels;
+    const int8_t *s = end + n_pixels;
 
     while (s != end)
       *--d = *--s;
   }
+#endif
 
 #else
 

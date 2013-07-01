@@ -35,11 +35,11 @@ class Dither {
   AllocatedArray<ErrorDistType> allocated_error_dist_buffer;
 
 public:
-  void dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
-                                    unsigned src_pitch,
-                                    uint16_t *gcc_restrict dest,
-                                    unsigned dest_pitch,
-                                    unsigned width, unsigned height);
+  void DitherGreyscale(const uint8_t *gcc_restrict src,
+                       unsigned src_pitch,
+                       uint8_t *gcc_restrict dest,
+                       unsigned dest_pitch,
+                       unsigned width, unsigned height);
 };
 
 #endif

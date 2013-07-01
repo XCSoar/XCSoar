@@ -28,11 +28,12 @@ Copyright_License {
 // Code adapted from imx.60 linux kernel EPD driver by Daiyu Ko <dko@freescale.com>
 //
 
-void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
-                                          unsigned src_pitch,
-                                          uint16_t *gcc_restrict dest,
-                                          unsigned dest_pitch,
-                                          unsigned width, unsigned height)
+void
+Dither::DitherGreyscale(const uint8_t *gcc_restrict src,
+                        unsigned src_pitch,
+                        uint8_t *gcc_restrict dest,
+                        unsigned dest_pitch,
+                        unsigned width, unsigned height)
 {
   const unsigned width_2 = width + 2;
   allocated_error_dist_buffer.GrowDiscard(width_2 * 2u);
@@ -52,7 +53,7 @@ void Dither::dither_luminosity8_to_uint16(const uint8_t *gcc_restrict src,
     for (unsigned column = 0; column < width; ++column) {
       ErrorDistType bwPix = e0 + src[column];
 
-      uint16_t color = 0;
+      uint8_t color = 0;
       if (bwPix >= 128) {
         --color;
 	bwPix -= 255;
