@@ -24,8 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_GDI_QUEUE_HPP
 #define XCSOAR_EVENT_GDI_QUEUE_HPP
 
+struct Event;
+
 class EventQueue {
 public:
+  bool Wait(Event &event);
+
   /**
    * Handle all pending repaint messages.
    */

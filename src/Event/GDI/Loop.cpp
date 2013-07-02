@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Loop.hpp"
 #include "Event.hpp"
+#include "Queue.hpp"
 #include "Transcode.hpp"
 #include "Screen/GDI/Key.h"
 #include "Thread/Debug.hpp"
@@ -33,7 +34,7 @@ EventLoop::Get(Event &event)
 {
   AssertNoneLocked();
 
-  if (!::GetMessage(&event.msg, NULL, 0, 0))
+  if (!queue.Wait(event))
     return false;
 
   if (IsOldWindowsCE() && event.IsKey() &&

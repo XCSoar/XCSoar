@@ -22,8 +22,16 @@ Copyright_License {
 */
 
 #include "Queue.hpp"
-#include "Screen/GDI/Key.h"
+#include "Event.hpp"
 #include "Thread/Debug.hpp"
+
+bool
+EventQueue::Wait(Event &event)
+{
+  assert(InMainThread());
+
+  return ::GetMessage(&event.msg, nullptr, 0, 0);
+}
 
 static void
 HandleMessages(UINT wMsgFilterMin, UINT wMsgFilterMax)
