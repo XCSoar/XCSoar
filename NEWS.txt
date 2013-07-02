@@ -6,6 +6,7 @@ Version 6.6.3 - not yet released
 * map
   - fill FAI triangle areas on Windows
 * devices
+  - FLARM: improve task declaration reliability
   - LX: support Nano firmware 2.10 (#2819)
 * Android
   - fix compatibility issue with Android 2.2
