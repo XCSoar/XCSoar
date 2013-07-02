@@ -49,9 +49,11 @@ class Notify : private
 public:
   Notify();
 
+#ifndef USE_GDI
   ~Notify() {
     ClearNotification();
   }
+#endif
 
   /**
    * Send a notification to this object.  This method can be called
