@@ -26,6 +26,7 @@ Copyright_License {
 
 EventQueue::EventQueue()
   :SignalListener(io_loop),
+   thread(ThreadHandle::GetCurrent()),
 #ifndef KOBO
    keyboard(*this, io_loop),
 #endif

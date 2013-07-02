@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_CONSOLE_QUEUE_HPP
 #define XCSOAR_EVENT_CONSOLE_QUEUE_HPP
 
+#include "Thread/Handle.hpp"
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
@@ -48,6 +49,8 @@ class Window;
 class Timer;
 
 class EventQueue final : private SignalListener {
+  const ThreadHandle thread;
+
   IOLoop io_loop;
 
 #ifdef KOBO
@@ -101,7 +104,8 @@ public:
   }
 
   void WakeUp() {
-    event_pipe.Signal();
+    if (!thread.IsInside())
+      event_pipe.Signal();
   }
 
 private:
