@@ -33,7 +33,7 @@ EventQueue::EventQueue()
    running(true)
 {
   event_pipe.Create();
-  io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, *this);
+  io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
 
 #ifdef KOBO
   /* Kobo touch screen */

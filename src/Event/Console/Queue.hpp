@@ -29,6 +29,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
+#include "IO/Async/DiscardFileEventHandler.hpp"
 
 #ifdef KOBO
 #include "../Linux/Input.hpp"
@@ -45,7 +46,7 @@ Copyright_License {
 class Window;
 class Timer;
 
-class EventQueue final : private FileEventHandler {
+class EventQueue final {
   IOLoop io_loop;
 
 #ifdef KOBO
@@ -63,6 +64,7 @@ class EventQueue final : private FileEventHandler {
   TimerQueue timers;
 
   EventPipe event_pipe;
+  DiscardFileEventHandler discard;
 
   bool running;
 
@@ -129,13 +131,6 @@ public:
 
   void AddTimer(Timer &timer, unsigned ms);
   void CancelTimer(Timer &timer);
-
-private:
-  /* virtual methods from FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override {
-    event_pipe.Read();
-    return true;
-  }
 };
 
 #endif
