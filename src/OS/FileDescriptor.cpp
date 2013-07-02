@@ -32,7 +32,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifdef ANDROID
+#ifdef __BIONIC__
 #include <sys/syscall.h>
 #endif
 
@@ -78,7 +78,7 @@ FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
 
 #ifdef __linux__
   const int flags = O_CLOEXEC;
-#ifdef ANDROID
+#ifdef __BIONIC__
   /* Bionic provides the pipe2() function only since Android 2.3,
      therefore we must roll our own system call here */
   const int result = syscall(__NR_pipe2, fds, flags);
