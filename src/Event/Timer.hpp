@@ -90,6 +90,12 @@ public:
   void Schedule(unsigned ms);
 
   /**
+   * Schedule the timer.  Preserves the previous setting if there was
+   * one.
+   */
+  void SchedulePreserve(unsigned ms);
+
+  /**
    * Cancels the scheduled timer, if any.  This is safe to be called
    * while the timer is running.
    */

@@ -39,6 +39,13 @@ Timer::Schedule(unsigned _ms)
 }
 
 void
+Timer::SchedulePreserve(unsigned _ms)
+{
+  if (!IsActive())
+    Schedule(_ms);
+}
+
+void
 Timer::Cancel()
 {
   if (enabled.exchange(false) && queued.exchange(false))
