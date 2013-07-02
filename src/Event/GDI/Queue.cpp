@@ -30,7 +30,19 @@ EventQueue::Wait(Event &event)
 {
   assert(InMainThread());
 
-  return ::GetMessage(&event.msg, nullptr, 0, 0);
+  while (true) {
+    if (::PeekMessage(&event.msg, nullptr, 0, 0, PM_REMOVE))
+      return event.msg.message != WM_QUIT;
+
+    const DWORD n = 0;
+    const LPHANDLE handles = nullptr;
+
+    const DWORD timeout = INFINITE;
+    DWORD result = ::MsgWaitForMultipleObjects(n, handles, false,
+                                               timeout, QS_ALLEVENTS);
+    if (result == 0xffffffff)
+      return false;
+  }
 }
 
 static void
