@@ -32,6 +32,7 @@ EVENT_SOURCES += \
 	$(SRC)/Event/SDL/Queue.cpp
 else ifeq ($(HAVE_WIN32),y)
 EVENT_SOURCES += \
+	$(SRC)/Event/GDI/Globals.cpp \
 	$(SRC)/Event/GDI/Transcode.cpp \
 	$(SRC)/Event/GDI/Loop.cpp \
 	$(SRC)/Event/GDI/Queue.cpp

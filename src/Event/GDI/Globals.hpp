@@ -21,35 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_GDI_LOOP_HPP
-#define XCSOAR_EVENT_GDI_LOOP_HPP
+#ifndef XCSOAR_EVENT_GDI_GLOBALS_HPP
+#define XCSOAR_EVENT_GDI_GLOBALS_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Compiler.h"
-
-#include <windows.h>
-
-struct Event;
 class EventQueue;
 
-class EventLoop : private NonCopyable {
-  EventQueue &queue;
-
-public:
-  EventLoop(EventQueue &_queue):queue(_queue) {}
-
-  bool Get(Event &msg);
-  void Dispatch(const Event &msg);
-};
-
-class DialogEventLoop : public EventLoop {
-  HWND dialog;
-
-public:
-  DialogEventLoop(EventQueue &_loop, HWND _dialog)
-    :EventLoop(_loop), dialog(_dialog) {}
-
-  void Dispatch(Event &msg);
-};
+extern EventQueue *event_queue;
 
 #endif

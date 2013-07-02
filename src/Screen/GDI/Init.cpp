@@ -26,6 +26,8 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Event/GDI/Globals.hpp"
+#include "Event/GDI/Queue.hpp"
 
 #include <windows.h>
 #include <commctrl.h>
@@ -38,6 +40,8 @@ ScreenGlobalInit::ScreenGlobalInit()
   AlphaBlendInit();
 #endif
 
+  event_queue = new EventQueue();
+
   HINSTANCE hInstance = ::GetModuleHandle(NULL);
   PaintWindow::register_class(hInstance);
   SingleWindow::RegisterClass(hInstance);
@@ -47,6 +51,9 @@ ScreenGlobalInit::ScreenGlobalInit()
 
 ScreenGlobalInit::~ScreenGlobalInit()
 {
+  delete event_queue;
+  event_queue = nullptr;
+
 #ifdef HAVE_DYNAMIC_ALPHA_BLEND
   AlphaBlendDeinit();
 #endif

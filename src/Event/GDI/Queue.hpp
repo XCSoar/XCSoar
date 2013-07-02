@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_GDI_QUEUE_HPP
 #define XCSOAR_EVENT_GDI_QUEUE_HPP
 
-namespace EventQueue {
+class EventQueue {
+public:
   /**
    * Handle all pending repaint messages.
    */
-  void
-  HandlePaintMessages();
-}
+  static void HandlePaintMessages();
+};
 
 #endif

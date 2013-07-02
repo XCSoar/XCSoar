@@ -54,6 +54,7 @@ Copyright_License {
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
 #elif defined(USE_GDI)
+#include "Event/GDI/Globals.hpp"
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #endif
@@ -394,7 +395,7 @@ WndForm::ShowModal()
 #if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue, main_window);
 #else
-  DialogEventLoop loop(*this);
+  DialogEventLoop loop(*event_queue, *this);
 #endif
   Event event;
 

@@ -39,6 +39,7 @@
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
+#include "Event/GDI/Globals.hpp"
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #endif
@@ -80,11 +81,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue);
-#else
-  EventLoop loop;
-#endif
   Event event;
 
   TestNotify notify;
