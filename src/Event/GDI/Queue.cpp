@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "Event.hpp"
+#include "../Timer.hpp"
 #include "Thread/Debug.hpp"
+#include "OS/Clock.hpp"
 
 bool
 EventQueue::Wait(Event &event)
@@ -31,13 +33,36 @@ EventQueue::Wait(Event &event)
   assert(InMainThread());
 
   while (true) {
+    ::ResetEvent(trigger);
+
+    /* invoke all due timers */
+
+    const uint64_t now_us = MonotonicClockUS();
+    int64_t timeout_us;
+    while (true) {
+      timeout_us = timers.GetTimeoutUS(now_us);
+      if (timeout_us != 0)
+        break;
+
+      Timer *timer = timers.Pop(now_us);
+      if (timer == nullptr)
+        break;
+
+      timer->Invoke();
+    }
+
+    /* check for WIN32 event */
+
     if (::PeekMessage(&event.msg, nullptr, 0, 0, PM_REMOVE))
       return event.msg.message != WM_QUIT;
 
-    const DWORD n = 0;
-    const LPHANDLE handles = nullptr;
+    const DWORD n = 1;
+    const LPHANDLE handles = &trigger;
 
-    const DWORD timeout = INFINITE;
+    const DWORD timeout = timeout_us >= 0
+      ? DWORD(timeout_us / 1000) + 1
+      : INFINITE;
+
     DWORD result = ::MsgWaitForMultipleObjects(n, handles, false,
                                                timeout, QS_ALLEVENTS);
     if (result == 0xffffffff)
@@ -62,4 +87,21 @@ EventQueue::HandlePaintMessages()
 
   HandleMessages(WM_SIZE, WM_SIZE);
   HandleMessages(WM_PAINT, WM_PAINT);
+}
+
+void
+EventQueue::AddTimer(Timer &timer, unsigned ms)
+{
+  ScopeLock protect(mutex);
+
+  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+  WakeUp();
+}
+
+void
+EventQueue::CancelTimer(Timer &timer)
+{
+  ScopeLock protect(mutex);
+
+  timers.Cancel(timer);
 }
