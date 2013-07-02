@@ -23,11 +23,6 @@ Copyright_License {
 
 #include "DelayedNotify.hpp"
 
-DelayedNotify::~DelayedNotify()
-{
-  Cancel();
-}
-
 void
 DelayedNotify::SendNotification()
 {

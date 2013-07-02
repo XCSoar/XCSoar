@@ -41,7 +41,10 @@ class DelayedNotify : private Timer {
 
 public:
   DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms), pending(false) {}
-  ~DelayedNotify();
+
+  ~DelayedNotify() {
+    ClearNotification();
+  }
 
   /**
    * Send a notification to this object.  This method can be called
