@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.6.3 - not yet released
+Version 6.6.3 - 2013/07/02
 * map
   - fill FAI triangle areas on Windows
 * devices
