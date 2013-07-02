@@ -54,7 +54,10 @@ class Notify : private
 
 public:
   Notify();
-  ~Notify();
+
+  ~Notify() {
+    ClearNotification();
+  }
 
   /**
    * Send a notification to this object.  This method can be called

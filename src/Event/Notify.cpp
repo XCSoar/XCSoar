@@ -43,15 +43,6 @@ Notify::Notify()
 #endif
 }
 
-Notify::~Notify()
-{
-  if (pending.load(std::memory_order_relaxed)) {
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
-    event_queue->Purge(Callback, this);
-#endif
-  }
-}
-
 void
 Notify::SendNotification()
 {
