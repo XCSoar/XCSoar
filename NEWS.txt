@@ -61,11 +61,15 @@ XCSoar TE
   - TravisCI support
 
 
-Version 6.6.3 - not yet released
+Version 6.6.3 - 2013/07/02
 * map
   - fill FAI triangle areas on Windows
+* devices
+  - FLARM: improve task declaration reliability
+  - LX: support Nano firmware 2.10 (#2819)
 * Android
   - fix compatibility issue with Android 2.2
+  - detect when internal GPS is lost on Android 2.3 and older (#2929)
 * user interface
   - fix unit display for pressure in flight setup dialog (#2933)
 * data files
