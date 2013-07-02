@@ -40,6 +40,14 @@
 #include <poll.h>
 #endif
 
+#ifdef HAVE_EVENTFD
+#include <sys/eventfd.h>
+#endif
+
+#if defined(HAVE_SIGNALFD) && !defined(__BIONIC__)
+#include <sys/signalfd.h>
+#endif
+
 #ifndef O_NOCTTY
 #define O_NOCTTY 0
 #endif
@@ -104,6 +112,39 @@ FileDescriptor::SetNonBlocking()
 
   int flags = fcntl(fd, F_GETFL);
   fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
+#endif
+
+#ifdef HAVE_EVENTFD
+
+bool
+FileDescriptor::CreateEventFD(unsigned initval)
+{
+  assert(!IsDefined());
+
+  fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
+  return fd >= 0;
+}
+
+#endif
+
+#ifdef HAVE_SIGNALFD
+
+bool
+FileDescriptor::CreateSignalFD(const sigset_t *mask)
+{
+#ifdef __BIONIC__
+  int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
+                       O_NONBLOCK|O_CLOEXEC);
+#else
+  int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
+#endif
+  if (new_fd < 0)
+    return false;
+
+  fd = new_fd;
+  return true;
 }
 
 #endif
