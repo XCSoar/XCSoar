@@ -25,13 +25,15 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :
+  :SignalListener(io_loop),
 #ifndef KOBO
    keyboard(*this, io_loop),
 #endif
    mouse(io_loop),
    running(true)
 {
+  SignalListener::Create(SIGINT, SIGTERM);
+
   event_pipe.Create();
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
 
@@ -253,4 +255,10 @@ EventQueue::CancelTimer(Timer &timer)
   ScopeLock protect(mutex);
 
   timers.Cancel(timer);
+}
+
+void
+EventQueue::OnSignal(int signo)
+{
+  Quit();
 }

@@ -30,6 +30,7 @@ Copyright_License {
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
 #include "IO/Async/DiscardFileEventHandler.hpp"
+#include "../Linux/SignalListener.hpp"
 
 #ifdef KOBO
 #include "../Linux/Input.hpp"
@@ -46,7 +47,7 @@ Copyright_License {
 class Window;
 class Timer;
 
-class EventQueue final {
+class EventQueue final : private SignalListener {
   IOLoop io_loop;
 
 #ifdef KOBO
@@ -131,6 +132,10 @@ public:
 
   void AddTimer(Timer &timer, unsigned ms);
   void CancelTimer(Timer &timer);
+
+private:
+  /* virtual methods from SignalListener */
+  virtual void OnSignal(int signo) override;
 };
 
 #endif

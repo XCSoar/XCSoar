@@ -14,6 +14,7 @@ EVENT_SOURCES += \
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Shared/TimerQueue.cpp \
+	$(SRC)/Event/Linux/SignalListener.cpp \
 	$(SRC)/Event/Linux/TTYKeyboard.cpp \
 	$(SRC)/Event/Linux/Mouse.cpp \
 	$(SRC)/Event/Linux/Input.cpp \
