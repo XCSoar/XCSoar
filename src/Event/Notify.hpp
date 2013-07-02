@@ -69,10 +69,12 @@ public:
 private:
   void RunNotification();
 
+#ifndef USE_GDI
   /**
    * Called by the event loop when the "notify" message is received.
    */
   static void Callback(void *ctx);
+#endif
 
 protected:
   /**

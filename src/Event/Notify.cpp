@@ -74,13 +74,6 @@ Notify::RunNotification()
     OnNotification();
 }
 
-void
-Notify::Callback(void *ctx)
-{
-  Notify &notify = *(Notify *)ctx;
-  notify.RunNotification();
-}
-
 #ifdef USE_GDI
 
 bool
@@ -88,6 +81,15 @@ Notify::OnUser(unsigned id)
 {
   RunNotification();
   return true;
+}
+
+#else
+
+void
+Notify::Callback(void *ctx)
+{
+  Notify &notify = *(Notify *)ctx;
+  notify.RunNotification();
 }
 
 #endif
