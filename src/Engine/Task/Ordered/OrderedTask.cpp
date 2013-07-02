@@ -1312,6 +1312,9 @@ OrderedTask::RemoveAllPoints()
     delete i;
 
   optional_start_points.clear();
+
+  taskpoint_start = NULL;
+  taskpoint_finish = NULL;
 }
 
 void

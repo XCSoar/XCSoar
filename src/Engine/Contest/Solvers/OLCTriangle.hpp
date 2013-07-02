@@ -236,13 +236,11 @@ private:
   struct CandidateSet {
     TurnPointRange tp1, tp2, tp3;
     unsigned df_min, df_max;
-    unsigned df_12_min, df_23_min, df_31_min,
-             df_12_max, df_23_max, df_31_max;
+    unsigned shortest_max, longest_min, longest_max;
     
     CandidateSet() :
       df_min(0), df_max(0),
-      df_12_min(0), df_23_min(0), df_31_min(0),
-      df_12_max(0), df_23_max(0), df_31_max(0) {}
+      shortest_max(0), longest_min(0), longest_max(0) {}
 
     CandidateSet(OLCTriangle *parent, unsigned first, unsigned last) {
       tp1.update(parent, first, last);
@@ -261,17 +259,24 @@ private:
     }
 
     void updateDistances() {  
-      df_12_min = tp1.min_dist(tp2);
-      df_23_min = tp2.min_dist(tp3);
-      df_31_min = tp3.min_dist(tp1);
+      const unsigned df_12_min = tp1.min_dist(tp2),
+                     df_23_min = tp2.min_dist(tp3),
+                     df_31_min = tp3.min_dist(tp1);
       
-      df_12_max = tp1.max_dist(tp2);
-      df_23_max = tp2.max_dist(tp3);
-      df_31_max = tp3.max_dist(tp1);
+      const unsigned df_12_max = tp1.max_dist(tp2),
+                     df_23_max = tp2.max_dist(tp3),
+                     df_31_max = tp3.max_dist(tp1);
 
-      df_min = df_12_min + df_23_min + df_31_min;
-      df_max = df_12_max + df_23_max + df_31_max;
+      shortest_max = std::min({df_12_max, df_23_max, df_31_max});
+      longest_min = std::max({df_12_min, df_23_min, df_31_min});
+      longest_max = std::max({df_12_max, df_23_max, df_31_max});
+
+      df_min = std::max(df_12_min + df_23_min + df_31_min,
+                        longest_min * 2);
+      df_max = std::min(df_12_max + df_23_max + df_31_max,
+                        shortest_max * 4);
     }
+
 
     bool operator==(CandidateSet other) const {
       return (tp1 == other.tp1 && tp2 == other.tp2 && tp3 == other.tp3);
@@ -286,7 +291,6 @@ private:
       // always feasible if no fai constraints
       if (!fai) return true;
 
-      const unsigned shortest_max = std::min({df_12_max, df_23_max, df_31_max});
       // shortest leg min 28% (here: 27.5%) for small triangle,
       // min 25% (here: 24.3%) for large triangle
       if ((df_max > large_triangle_check && shortest_max * 37 < df_min * 9) ||
@@ -294,7 +298,6 @@ private:
         return false;
       }
 
-      const unsigned longest_min = std::max({df_12_min, df_23_min, df_31_min});
       // longest leg max 45% (here: 47%)
       if (longest_min * 19 > df_max * 9) {
         return false;
@@ -312,25 +315,20 @@ private:
 
       if (!fai) return true;
 
-      assert(df_12_max == df_12_min);
-      assert(df_23_max == df_23_min);
-      assert(df_31_max == df_31_min);
       assert(df_min == df_max);
 
       // fast checks, as in isFeasible
 
-      const unsigned shortest_flat = std::min({df_12_max, df_23_max, df_31_max});
       // shortest >= 28.2% * dist_total
-      if (shortest_flat * 39 >= df_max * 11)
+      if (shortest_max * 39 >= df_max * 11)
         return true;
 
-      const unsigned longest_flat = std::max({df_12_max, df_23_max, df_31_max});
       // longest >= 45.8% * dist_total
-      if (longest_flat * 24 > df_max * 11)
+      if (longest_max * 24 > df_max * 11)
         return false;
 
       // small triangle and shortest < 27.5% dist_total
-      if (df_max < large_triangle_check && shortest_flat * 29 < df_max * 8)
+      if (df_max < large_triangle_check && shortest_max * 29 < df_max * 8)
         return false;
 
       // detailed checks

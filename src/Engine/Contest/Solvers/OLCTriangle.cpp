@@ -358,8 +358,19 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     if (branch_and_bound.empty())
       break;
 
-    // get node to work on
-    auto node = --branch_and_bound.end();
+    /* get node to work on.
+     * change node selection strategy if the tree grows too big.
+     * this is a mixed depht-first/breadth-first approach, the latter
+     * beeing faster, but the first a lot more memory efficient.
+     */
+    std::multimap<unsigned, CandidateSet>::iterator node;
+
+    if (branch_and_bound.size() > n_points * 4 && iterations % 16 != 0) {
+      node = branch_and_bound.upper_bound(branch_and_bound.rbegin()->first / 2);
+      if (node == branch_and_bound.end()) --node;
+    } else {
+      node = --branch_and_bound.end();
+    }
 
     if (node->second.df_min >= worst_d && node->second.integral(this, is_fai, large_triangle_check)) {
       // node is integral feasible -> a possible solution
