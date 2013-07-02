@@ -40,6 +40,8 @@ DelayedNotify::ClearNotification()
 void
 DelayedNotify::OnTimer()
 {
+  Cancel();
+
   if (pending.exchange(false, std::memory_order_relaxed))
     OnNotification();
 }

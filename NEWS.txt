@@ -45,6 +45,10 @@ Version 6.7 - not yet released
   - a retrospective task is compiled that summarises waypoints the aircraft has 
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 
+Version 6.6.4 - not yet released
+* devices
+  - Volkslogger: increase timeout to calculate security (#2910)
+
 Version 6.6.3 - 2013/07/02
 * map
   - fill FAI triangle areas on Windows
