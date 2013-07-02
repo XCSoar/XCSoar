@@ -21,6 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Globals.hpp"
+#ifndef XCSOAR_EVENT_QUEUE_HPP
+#define XCSOAR_EVENT_QUEUE_HPP
 
-EventQueue *event_queue;
+#ifdef ANDROID
+#include "Android/Queue.hpp"
+#elif defined(USE_CONSOLE)
+#include "Console/Queue.hpp"
+#elif defined(ENABLE_SDL)
+#include "SDL/Queue.hpp"
+#elif defined(USE_GDI)
+#include "GDI/Queue.hpp"
+#else
+#error No EventQueue implementation
+#endif
+
+#endif

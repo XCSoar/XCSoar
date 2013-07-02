@@ -24,8 +24,8 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
-#include "Event/SDL/Globals.hpp"
-#include "Event/SDL/Queue.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL

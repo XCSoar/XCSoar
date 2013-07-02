@@ -22,18 +22,8 @@ Copyright_License {
 */
 
 #include "Notify.hpp"
-
-#ifdef ANDROID
-#include "Event/Android/Queue.hpp"
-#include "Android/Main.hpp"
-#elif defined(USE_CONSOLE)
-#include "Event/Console/Queue.hpp"
-#include "Event/Console/Globals.hpp"
-#elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Queue.hpp"
-#endif
+#include "Globals.hpp"
+#include "Queue.hpp"
 
 Notify::Notify()
   :pending(false)

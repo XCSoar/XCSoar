@@ -32,6 +32,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Look/DialogLook.hpp"
+#include "Event/Globals.hpp"
 
 #ifndef USE_GDI
 #include "Screen/Custom/Reference.hpp"
@@ -42,19 +43,15 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Android/Main.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #elif defined(USE_CONSOLE)
-#include "Event/Console/Globals.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
 #elif defined(USE_GDI)
-#include "Event/GDI/Globals.hpp"
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #endif

@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Event/Android/Queue.hpp"
-#include "Android/Main.hpp"
+#include "Event/Queue.hpp"
+#include "Event/Globals.hpp"
 
 void
 Window::SendUser(unsigned id)

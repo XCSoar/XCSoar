@@ -26,8 +26,8 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Event/GDI/Globals.hpp"
-#include "Event/GDI/Queue.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 
 #include <windows.h>
 #include <commctrl.h>

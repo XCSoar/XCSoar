@@ -29,8 +29,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 
 #ifdef KOBO
-#include "Event/Console/Globals.hpp"
-#include "Event/Console/Queue.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 #endif
 
 void

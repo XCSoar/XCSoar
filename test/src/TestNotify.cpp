@@ -22,24 +22,21 @@
 
 #include "Thread/Thread.hpp"
 #include "Event/Notify.hpp"
+#include "Event/Globals.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
-#include "Android/Main.hpp"
 #elif defined(USE_CONSOLE)
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
-#include "Event/Console/Globals.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
-#include "Event/GDI/Globals.hpp"
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #endif

@@ -25,8 +25,8 @@ Copyright_License {
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
-#include "Event/Console/Queue.hpp"
-#include "Event/Console/Globals.hpp"
+#include "Event/Queue.hpp"
+#include "Event/Globals.hpp"
 
 #ifdef DRAW_MOUSE_CURSOR
 #include "Util/Macros.hpp"

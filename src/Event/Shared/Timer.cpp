@@ -21,6 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Globals.hpp"
+#include "../Timer.hpp"
+#include "../Globals.hpp"
+#include "../Queue.hpp"
 
-EventQueue *event_queue;
+void
+Timer::Schedule(unsigned _ms)
+{
+  if (queued.exchange(false))
+    event_queue->CancelTimer(*this);
+
+  enabled.store(true);
+  ms = _ms;
+
+  if (!queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
+}
+
+void
+Timer::Cancel()
+{
+  if (enabled.exchange(false) && queued.exchange(false))
+    event_queue->CancelTimer(*this);
+}
+
+void
+Timer::Invoke()
+{
+  if (!queued.exchange(false))
+    /* was cancelled by another thread */
+    return;
+
+  OnTimer();
+
+  if (enabled.load() && !queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
+}
