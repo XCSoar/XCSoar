@@ -23,10 +23,9 @@ Copyright_License {
 
 #include "Queue.hpp"
 #include "Event.hpp"
-#include "Thread/Debug.hpp"
-#include "Asset.hpp"
-
-#include "Screen/TopWindow.hpp"
+#include "../Timer.hpp"
+#include "OS/Sleep.h"
+#include "OS/Clock.hpp"
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)
@@ -36,6 +35,54 @@ EventQueue::Push(EventLoop::Callback callback, void *ctx)
   event.user.data1 = (void *)callback;
   event.user.data2 = ctx;
   ::SDL_PushEvent(&event);
+}
+
+static void
+InvokeTimer(void *ctx)
+{
+  Timer *timer = (Timer *)ctx;
+  timer->Invoke();
+}
+
+bool
+EventQueue::Generate(Event &event)
+{
+  Timer *timer = timers.Pop(MonotonicClockUS());
+  if (timer != nullptr) {
+    event.event.type = EVENT_CALLBACK;
+    event.event.user.data1 = (void *)InvokeTimer;
+    event.event.user.data2 = (void *)timer;
+    return true;
+  }
+
+  return false;
+}
+
+bool
+EventQueue::Pop(Event &event)
+{
+  return Generate(event) || ::SDL_PollEvent(&event.event);
+}
+
+bool
+EventQueue::Wait(Event &event)
+{
+  /* this busy loop is ugly, and I wish we could do better than that,
+     but SDL_WaitEvent() is just as bad; however copying this busy
+     loop allows us to plug in more event sources */
+
+  while (true) {
+    if (Generate(event))
+      return true;
+
+    ::SDL_PumpEvents();
+    int result = ::SDL_PeepEvents(&event.event, 1,
+                                  SDL_GETEVENT, SDL_ALLEVENTS);
+    if (result != 0)
+      return result > 0;
+
+    Sleep(10);
+  }
 }
 
 void
@@ -86,4 +133,20 @@ EventQueue::Purge(Window &window)
 {
   Purge(SDL_EVENTMASK(EVENT_USER),
         match_window, (void *)&window);
+}
+
+void
+EventQueue::AddTimer(Timer &timer, unsigned ms)
+{
+  ScopeLock protect(mutex);
+
+  timers.Add(timer, MonotonicClockUS() + ms * 1000);
+}
+
+void
+EventQueue::CancelTimer(Timer &timer)
+{
+  ScopeLock protect(mutex);
+
+  timers.Cancel(timer);
 }

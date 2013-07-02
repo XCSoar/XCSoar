@@ -55,6 +55,9 @@ struct CirclingInfo
   /** Turn rate after low pass filter */
   fixed turn_rate_smoothed;
 
+  /** Turn rate based on heading after low pass filter */
+  fixed turn_rate_heading_smoothed;
+
   /** StartLocation of the current/last climb */
   GeoPoint climb_start_location;
 

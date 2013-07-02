@@ -154,9 +154,23 @@ GetNumberOfFlights(Port &port, PortNMEAReader &reader,
   if (!RequestLogbookInfo(port, env))
     return -1;
 
-  const char *response = ReadLogbookLine(reader, timeout);
-  if (response == nullptr)
-    return -1;
+  const char *response;
+  while (true) {
+    response = reader.ExpectLine("PLXVC,LOGBOOK", timeout);
+    if (response == nullptr)
+      return -1;
+
+    if (memcmp(response, ",A,", 3) == 0) {
+      /* old Nano firmware versions (e.g. 2.05) print "LOGBOOK,A,n" */
+      response += 3;
+      break;
+    } else if (memcmp(response, "SIZE,A,", 7) == 0) {
+      /* new Nano firmware versions (e.g. 2.10) print
+         "LOGBOOKSIZE,A,n" */
+      response += 7;
+      break;
+    }
+  }
 
   char *endptr;
   unsigned nflights = strtoul(response, &endptr, 10);

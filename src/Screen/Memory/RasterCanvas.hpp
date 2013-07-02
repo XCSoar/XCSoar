@@ -193,28 +193,39 @@ protected:
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(y2 - y1) / float(x2 - x1);
 	  y1 -= x1 * m;
+	  code1 = ClipEncodeY(y1);
+	} else {
+	  code1 &= ~CLIP_LEFT_EDGE;
 	}
         x1 = 0;
       } else if (code1 & CLIP_RIGHT_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(y2 - y1) / float(x2 - x1);
 	  y1 -= int((x1 - (buffer.width - 1)) * m);
+	  code1 = ClipEncodeY(y1);
+	} else {
+	  code1 &= ~CLIP_RIGHT_EDGE;
 	}
         x1 = buffer.width - 1;
       } else if (code1 & CLIP_BOTTOM_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(x2 - x1) / float(y2 - y1);
           x1 -= int((y1 - (buffer.height - 1)) * m);
+	  code1 = ClipEncodeX(x1);
+	} else {
+	  code1 &= ~CLIP_BOTTOM_EDGE;
 	}
         y1 = buffer.height - 1;
       } else if (code1 & CLIP_TOP_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(x2 - x1) / float(y2 - y1);
           x1 -= y1 * m;
+	  code1 = ClipEncodeX(x1);
+	} else {
+	  code1 &= ~CLIP_TOP_EDGE;
 	}
         y1 = 0;
       }
-      code1 = ClipEncode(x1, y1);
     }
   }
 

@@ -40,13 +40,13 @@ IsAncestor(const Window *maybe_ancestor, const Window *w)
 }
 
 bool
-SingleWindow::FilterMouseEvent(PixelScalar x, PixelScalar y,
+SingleWindow::FilterMouseEvent(RasterPoint pt,
                                Window *allowed) const
 {
   const ContainerWindow *container = this;
   while (true) {
     const Window *child =
-      const_cast<ContainerWindow *>(container)->EventChildAt(x, y);
+      const_cast<ContainerWindow *>(container)->EventChildAt(pt.x, pt.y);
     if (child == NULL)
       /* no receiver for the event */
       return false;

@@ -21,50 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_SDL_QUEUE_HPP
-#define XCSOAR_EVENT_SDL_QUEUE_HPP
+#ifndef XCSOAR_SCREEN_DITHER_HPP
+#define XCSOAR_SCREEN_DITHER_HPP
 
-#include "Loop.hpp"
-#include "../Shared/TimerQueue.hpp"
-#include "Thread/Mutex.hpp"
+#include "Util/AllocatedArray.hpp"
+#include "Compiler.h"
 
-#include <SDL_version.h>
-#include <SDL_events.h>
+#include <stdint.h>
 
-class Window;
+class Dither {
+  typedef int ErrorDistType; // must be wider than 8bits
 
-class EventQueue {
-  Mutex mutex;
-  TimerQueue timers;
+  AllocatedArray<ErrorDistType> allocated_error_dist_buffer;
 
 public:
-  void Push(EventLoop::Callback callback, void *ctx);
-
-private:
-  bool Generate(Event &event);
-
-public:
-  bool Pop(Event &event);
-  bool Wait(Event &event);
-
-  /**
-   * Purge all matching events from the event queue.
-   */
-  void Purge(Uint32 mask,
-             bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
-
-  /**
-   * Purge all events for this callback from the event queue.
-   */
-  void Purge(EventLoop::Callback callback, void *ctx);
-
-  /**
-   * Purge all events for this Window from the event queue.
-   */
-  void Purge(Window &window);
-
-  void AddTimer(Timer &timer, unsigned ms);
-  void CancelTimer(Timer &timer);
+  void DitherGreyscale(const uint8_t *gcc_restrict src,
+                       unsigned src_pitch,
+                       uint8_t *gcc_restrict dest,
+                       unsigned dest_pitch,
+                       unsigned width, unsigned height);
 };
 
 #endif
+

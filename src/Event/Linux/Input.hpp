@@ -21,50 +21,51 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_SDL_QUEUE_HPP
-#define XCSOAR_EVENT_SDL_QUEUE_HPP
+#ifndef XCSOAR_EVENT_LINUX_INPUT_HPP
+#define XCSOAR_EVENT_LINUX_INPUT_HPP
 
-#include "Loop.hpp"
-#include "../Shared/TimerQueue.hpp"
-#include "Thread/Mutex.hpp"
+#include "OS/FileDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
 
-#include <SDL_version.h>
-#include <SDL_events.h>
+class IOLoop;
+struct Event;
 
-class Window;
+/**
+ * A driver for Linux input devices (/dev/input/event*).
+ */
+class LinuxInputDevice final : private FileEventHandler {
+  IOLoop &io_loop;
 
-class EventQueue {
-  Mutex mutex;
-  TimerQueue timers;
+  unsigned x, y;
+  bool down;
+
+  bool moved, pressed, released;
+
+  FileDescriptor fd;
 
 public:
-  void Push(EventLoop::Callback callback, void *ctx);
+  explicit LinuxInputDevice(IOLoop &_io_loop)
+    :io_loop(_io_loop),
+     x(0), y(0) {}
+
+  ~LinuxInputDevice() {
+    Close();
+  }
+
+  bool Open(const char *path);
+  void Close();
+
+  bool IsOpen() const {
+    return fd.IsDefined();
+  }
+
+  Event Generate();
 
 private:
-  bool Generate(Event &event);
+  void Read();
 
-public:
-  bool Pop(Event &event);
-  bool Wait(Event &event);
-
-  /**
-   * Purge all matching events from the event queue.
-   */
-  void Purge(Uint32 mask,
-             bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
-
-  /**
-   * Purge all events for this callback from the event queue.
-   */
-  void Purge(EventLoop::Callback callback, void *ctx);
-
-  /**
-   * Purge all events for this Window from the event queue.
-   */
-  void Purge(Window &window);
-
-  void AddTimer(Timer &timer, unsigned ms);
-  void CancelTimer(Timer &timer);
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

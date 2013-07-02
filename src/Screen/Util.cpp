@@ -72,15 +72,20 @@ segment_poly(RasterPoint* pt, const int x, const int y,
   pt[npoly++] = CirclePoint(x, y, radius, iend);
 }
 
+gcc_pure
+static bool
+IsCircleVisible(const Canvas &canvas, int x, int y, unsigned radius)
+{
+  return int(x + radius) < 0 || unsigned(x) >= canvas.GetWidth() + radius ||
+    int(y + radius) < 0 || unsigned(y) >= canvas.GetHeight() + radius;
+}
+
 bool
 Segment(Canvas &canvas, int x, int y, unsigned radius,
         Angle start, Angle end, bool horizon)
 {
   // dont draw if out of view
-  PixelRect rc, bounds;
-  SetRect(rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
-  SetRect(bounds, x - radius, y - radius, x + radius, y + radius);
-  if (!OverlapsRect(bounds, rc))
+  if (!IsCircleVisible(canvas, x, y, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());
@@ -110,10 +115,7 @@ Annulus(Canvas &canvas, int x, int y, unsigned radius,
         Angle start, Angle end, unsigned inner_radius)
 {
   // dont draw if out of view
-  PixelRect rc, bounds;
-  SetRect(rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
-  SetRect(bounds, x - radius, y - radius, x + radius, y + radius);
-  if (!OverlapsRect(bounds, rc))
+  if (!IsCircleVisible(canvas, x, y, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());
@@ -137,10 +139,7 @@ KeyHole(Canvas &canvas, int x, int y, unsigned radius,
         Angle start, Angle end, unsigned inner_radius)
 {
   // dont draw if out of view
-  PixelRect rc, bounds;
-  SetRect(rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
-  SetRect(bounds, x - radius, y - radius, x + radius, y + radius);
-  if (!OverlapsRect(bounds, rc))
+  if (!IsCircleVisible(canvas, x, y, radius))
     return false;
 
   const int istart = NATIVE_TO_INT(start.Native());

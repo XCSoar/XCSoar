@@ -27,6 +27,7 @@ Copyright_License {
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/tstring.hpp"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
@@ -175,18 +176,22 @@ public:
    * Set a new radio frequency.
    *
    * @param frequency the new frequency
+   * @param name name of the radio station
    * @return true on success
    */
   virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  const TCHAR *name,
                                   OperationEnvironment &env) = 0;
 
   /**
    * Set a new "standby" radio frequency.
    *
    * @param frequency the new frequency
+   * @param name name of the radio station
    * @return true on success
    */
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
                                    OperationEnvironment &env) = 0;
 
   /**
@@ -295,8 +300,10 @@ public:
                       OperationEnvironment &env) override;
   virtual bool PutVolume(unsigned volume, OperationEnvironment &env) override;
   virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  const TCHAR *name,
                                   OperationEnvironment &env) override;
   virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
                                    OperationEnvironment &env) override;
 
   virtual bool EnablePassThrough(OperationEnvironment &env) override;

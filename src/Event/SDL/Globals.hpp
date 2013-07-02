@@ -21,21 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/Shared/Event.hpp"
+#ifndef XCSOAR_EVENT_SDL_GLOBALS_HPP
+#define XCSOAR_EVENT_SDL_GLOBALS_HPP
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
-{
-  assert(allowed != NULL);
+class EventQueue;
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.point, allowed);
+extern EventQueue *event_queue;
 
-  default:
-    return true;
-  }
-}
+#endif

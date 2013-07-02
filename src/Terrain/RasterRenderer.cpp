@@ -406,8 +406,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
            7), even though we did our best to make sure that the
            integer arithmetics above can't overflow */
         /* TODO: debug this problem and replace this workaround */
-        const unsigned positive_mag = std::max(mag, 1u);
-        const int sval = num / (int)positive_mag;
+        const int sval = num / (mag|1);
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -63, 63)];
 #else
@@ -419,7 +418,6 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
           *p++ = color_table[h + 127*256];
         else
           *p++ = szColorBuf[h + (sval*256)];
-
 #endif
       } else if (RasterBuffer::IsWater(h)) {
         // we're in the water, so look up the color for water

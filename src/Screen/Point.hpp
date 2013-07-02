@@ -55,18 +55,4 @@ OverlapsRect(const PixelRect &a, const PixelRect &b)
     a.top <= b.bottom && b.top <= a.bottom;
 }
 
-static inline void
-SetRect(PixelRect &rc, PixelScalar left, PixelScalar top,
-        PixelScalar right, PixelScalar bottom)
-{
-#ifdef USE_GDI
-  SetRect(&rc, left, top, right, bottom);
-#else
-  rc.left = left;
-  rc.top = top;
-  rc.right = right;
-  rc.bottom = bottom;
-#endif
-}
-
 #endif

@@ -46,6 +46,7 @@ Copyright_License {
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
 #elif defined(ENABLE_SDL)
+#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #elif defined(USE_CONSOLE)
@@ -390,10 +391,8 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue, main_window);
-#elif defined(ENABLE_SDL)
-  EventLoop loop(main_window);
 #else
   DialogEventLoop loop(*this);
 #endif
@@ -474,11 +473,15 @@ WndForm::ShowModal()
 #endif
 
 #ifdef KOBO
+#ifdef ENABLE_SDL
       if (event.GetKeyCode() == SDLK_POWER) {
         /* the Kobo power button closes the modal dialog */
         modal_result = mrCancel;
         continue;
       }
+#else
+  // TODO: check the console key code
+#endif
 #endif
     }
 
@@ -605,6 +608,15 @@ WndForm::ReinitialiseLayout()
       left = main_window.GetWidth() - GetWidth();
     if (GetBottom() > (PixelScalar) main_window.GetHeight())
       top = main_window.GetHeight() - GetHeight();
+
+#ifdef USE_MEMORY_CANVAS
+    /* the RasterCanvas class doesn't clip negative window positions
+       properly, therefore we avoid this problem at this stage */
+    if (left < 0)
+      left = 0;
+    if (top < 0)
+      top = 0;
+#endif
 
     if (left != GetLeft() || top != GetTop())
       Move(left, top);

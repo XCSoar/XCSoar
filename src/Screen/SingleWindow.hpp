@@ -97,7 +97,7 @@ public:
 #ifndef USE_GDI
 protected:
   gcc_pure
-  bool FilterMouseEvent(PixelScalar x, PixelScalar y, Window *allowed) const;
+  bool FilterMouseEvent(RasterPoint pt, Window *allowed) const;
 #endif
 
 public:

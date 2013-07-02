@@ -195,8 +195,17 @@ public:
   void Destroy();
 #endif
 
+  /**
+   * Check if the screen has been resized.
+   */
+#ifdef USE_FB
+  void CheckResize();
+#else
+  void CheckResize() {}
+#endif
+
 #ifndef USE_GDI
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else
   void SetCaption(const TCHAR *caption);

@@ -30,6 +30,7 @@ Copyright_License {
 #include "Port/State.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
+#include "Util/tstring.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"
@@ -445,8 +446,10 @@ public:
                   OperationEnvironment &env);
   bool PutVolume(unsigned volume, OperationEnvironment &env);
   bool PutActiveFrequency(RadioFrequency frequency,
+                          const TCHAR *name,
                           OperationEnvironment &env);
   bool PutStandbyFrequency(RadioFrequency frequency,
+                           const TCHAR *name,
                            OperationEnvironment &env);
   bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
 #define XCSOAR_SCREEN_ANTI_FLICKER_WINDOW_HXX
 
-#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL)
+#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 
 #include "PaintWindow.hpp"
 

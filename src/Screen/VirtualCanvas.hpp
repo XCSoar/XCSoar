@@ -37,11 +37,9 @@ public:
   VirtualCanvas(PixelSize new_size);
   VirtualCanvas(const Canvas &canvas, PixelSize new_size);
 
-#ifndef ENABLE_SDL
   ~VirtualCanvas() {
     Destroy();
   }
-#endif
 
   void Create(PixelSize new_size);
 
@@ -53,7 +51,7 @@ public:
 
   void Destroy();
 
-#ifdef ENABLE_SDL
+#ifdef USE_MEMORY_CANVAS
   void Resize(PixelSize new_size) {
     if (new_size != GetSize())
       Create(*this, new_size);

@@ -21,21 +21,47 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/Shared/Event.hpp"
+#include "Screen/Init.hpp"
+#include "Event/Console/Globals.hpp"
+#include "Event/Console/Queue.hpp"
+#include "Screen/Debug.hpp"
+#include "Screen/Font.hpp"
+#include "Asset.hpp"
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+#ifdef KOBO
+#include "Hardware/Display.hpp"
+#endif
+
+#ifdef USE_FREETYPE
+#include "Screen/FreeType/Init.hpp"
+#endif
+
+ScreenGlobalInit::ScreenGlobalInit()
 {
-  assert(allowed != NULL);
+#ifdef USE_FREETYPE
+  FreeType::Initialise();
+#endif
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+  Font::Initialise();
 
-  default:
-    return true;
-  }
+  event_queue = new EventQueue();
+
+#ifdef KOBO
+  Display::Rotate(DisplaySettings::Orientation::DEFAULT);
+  event_queue->SetMouseRotation(DisplaySettings::Orientation::DEFAULT);
+#endif
+
+  ScreenInitialized();
+}
+
+ScreenGlobalInit::~ScreenGlobalInit()
+{
+  delete event_queue;
+  event_queue = nullptr;
+
+#ifdef USE_FREETYPE
+  FreeType::Deinitialise();
+#endif
+
+  ScreenDeinitialized();
 }

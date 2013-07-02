@@ -22,16 +22,16 @@ Copyright_License {
 */
 
 #include "Loop.hpp"
+#include "Queue.hpp"
 #include "Event.hpp"
 #include "Event/Idle.hpp"
-#include "Thread/Debug.hpp"
 #include "Screen/TopWindow.hpp"
 
 bool
 EventLoop::Get(Event &event)
 {
   if (bulk) {
-    if (::SDL_PollEvent(&event.event))
+    if (queue.Pop(event))
       return true;
 
     /* that was the last event for now, refresh the screen now */
@@ -41,7 +41,7 @@ EventLoop::Get(Event &event)
     bulk = false;
   }
 
-  if (::SDL_WaitEvent(&event.event)) {
+  if (queue.Wait(event)) {
     bulk = true;
     return true;
   }

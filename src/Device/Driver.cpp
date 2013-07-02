@@ -77,6 +77,7 @@ AbstractDevice::PutVolume(unsigned volume, OperationEnvironment &env)
 
 bool
 AbstractDevice::PutActiveFrequency(RadioFrequency frequency,
+                                   const TCHAR *name,
                                    OperationEnvironment &env)
 {
   return true;
@@ -84,6 +85,7 @@ AbstractDevice::PutActiveFrequency(RadioFrequency frequency,
 
 bool
 AbstractDevice::PutStandbyFrequency(RadioFrequency frequency,
+                                    const TCHAR *name,
                                     OperationEnvironment &env)
 {
   return true;

@@ -31,6 +31,10 @@ Copyright_License {
 #include "Android/Product.hpp"
 #endif
 
+#ifdef KOBO
+#include "OS/FileUtil.hpp"
+#endif
+
 #ifdef WIN32
 #include "Screen/RootDC.hpp"
 #include "Config/Registry.hpp"
@@ -176,7 +180,7 @@ Display::RotateSupported()
     return false;
 
   return dm.dmDisplayOrientation != DMDO_0;
-#elif defined(ANDROID)
+#elif defined(ANDROID) || defined(KOBO)
   return true;
 #else
   return false;
@@ -186,7 +190,7 @@ Display::RotateSupported()
 bool
 Display::Rotate(DisplaySettings::Orientation orientation)
 {
-#ifndef ANDROID
+#if !defined(ANDROID) && !defined(KOBO)
   if (orientation == DisplaySettings::Orientation::DEFAULT)
     /* leave it as it is */
     return true;
@@ -260,6 +264,28 @@ Display::Rotate(DisplaySettings::Orientation orientation)
   };
 
   return native_view->setRequestedOrientation(android_orientation);
+#elif defined(KOBO)
+  const char *rotate = "3";
+
+  switch (orientation) {
+  case DisplaySettings::Orientation::DEFAULT:
+  case DisplaySettings::Orientation::PORTRAIT:
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+    rotate = "1";
+    break;
+
+  case DisplaySettings::Orientation::LANDSCAPE:
+    rotate = "0";
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+    rotate = "2";
+    break;
+  };
+
+  return File::WriteExisting("/sys/class/graphics/fb0/rotate", rotate);
 #else
   return false;
 #endif
@@ -279,6 +305,8 @@ Display::RotateRestore()
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
 #elif defined(ANDROID)
   return native_view->setRequestedOrientation(NativeView::ScreenOrientation::SENSOR);
+#elif defined(KOBO)
+  return Rotate(DisplaySettings::Orientation::DEFAULT);
 #else
   return false;
 #endif

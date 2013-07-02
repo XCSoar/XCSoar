@@ -26,11 +26,18 @@ Copyright_License {
 
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
-#include "../Linux/TTYKeyboard.hpp"
-#include "../Linux/Mouse.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
+
+#ifdef KOBO
+#include "../Linux/Input.hpp"
+#include "../Shared/RotatePointer.hpp"
+#include "DisplaySettings.hpp"
+#else
+#include "../Linux/TTYKeyboard.hpp"
+#include "../Linux/Mouse.hpp"
+#endif
 
 #include <queue>
 #include <set>
@@ -41,8 +48,13 @@ class Timer;
 class EventQueue final : private FileEventHandler {
   IOLoop io_loop;
 
+#ifdef KOBO
+  LinuxInputDevice mouse;
+  RotatePointer rotate_mouse;
+#else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
+#endif
 
   Mutex mutex;
 
@@ -59,12 +71,27 @@ public:
   ~EventQueue();
 
   void SetScreenSize(unsigned width, unsigned height) {
+#ifdef KOBO
+    rotate_mouse.SetSize(width, height);
+#else
     mouse.SetScreenSize(width, height);
+#endif
   }
 
+#ifdef KOBO
+  void SetMouseRotation(bool swap, bool invert_x, bool invert_y) {
+    rotate_mouse.SetSwap(swap);
+    rotate_mouse.SetInvert(invert_x, invert_y);
+  }
+
+  void SetMouseRotation(DisplaySettings::Orientation orientation);
+#endif
+
+#ifndef KOBO
   RasterPoint GetMousePosition() const {
     return { int(mouse.GetX()), int(mouse.GetY()) };
   }
+#endif
 
   void Quit() {
     running = false;
@@ -83,6 +110,11 @@ private:
 
 public:
   void Push(const Event &event);
+
+  void Push(Event::Callback callback, void *ctx) {
+    Push(Event(callback, ctx));
+  }
+
   void PushKeyPress(unsigned key_code);
 
   bool Pop(Event &event);

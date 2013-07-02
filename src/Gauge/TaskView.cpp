@@ -136,7 +136,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 
   if (fai_sectors && IsFAITriangleApplicable(task)) {
     static constexpr Color fill_color = COLOR_YELLOW;
-#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL)
+#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif

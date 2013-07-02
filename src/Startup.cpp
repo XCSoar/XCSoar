@@ -273,6 +273,7 @@ Startup()
   CreateDataPath();
 
   Display::LoadOrientation(operation);
+  main_window->CheckResize();
 
   main_window->InitialiseConfigured();
 

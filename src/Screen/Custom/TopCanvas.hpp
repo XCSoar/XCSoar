@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+#ifndef USE_MEMORY_CANVAS
 #include "Screen/Canvas.hpp"
 #elif defined(GREYSCALE)
 #include "Screen/Memory/PixelTraits.hpp"
@@ -38,7 +38,7 @@ Copyright_License {
 #endif
 
 #ifdef DITHER
-#include "Dither.hpp"
+#include "../Memory/Dither.hpp"
 #endif
 
 struct SDL_Surface;
@@ -47,7 +47,7 @@ struct PixelSize;
 struct PixelRect;
 
 class TopCanvas
-#if !defined(ENABLE_SDL) || defined(ENABLE_OPENGL)
+#ifndef USE_MEMORY_CANVAS
   : public Canvas
 #endif
 {
@@ -69,8 +69,10 @@ class TopCanvas
   EGLSurface surface;
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
+#ifdef ENABLE_SDL
   SDL_Surface *surface;
+#endif
 
 #ifdef GREYSCALE
   WritableImageBuffer<GreyscalePixelTraits> buffer;
@@ -81,14 +83,36 @@ class TopCanvas
 #endif
 #endif
 
+#ifdef USE_FB
+  int fd;
+
+  void *map;
+  unsigned map_pitch, map_bpp;
+
+  uint32_t epd_update_marker;
+#endif
+
 public:
-#if defined(USE_EGL) || (defined(ENABLE_SDL) && !defined(ENABLE_OPENGL) && defined(GREYSCALE))
+#ifdef USE_FB
+  TopCanvas():fd(-1), map(nullptr) {}
+  ~TopCanvas() {
+    Destroy();
+  }
+
+  void Destroy();
+#endif
+
+#if defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE) && !defined(USE_FB))
   ~TopCanvas();
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
+#ifdef ENABLE_SDL
     return surface != nullptr;
+#else
+    return fd >= 0;
+#endif
   }
 
   gcc_pure
@@ -97,6 +121,25 @@ public:
 
   void Create(PixelSize new_size,
               bool full_screen, bool resizable);
+
+#ifdef USE_FB
+  /**
+   * Check if the screen has been resized.
+   *
+   * @return true if the screen has been resized
+   */
+  bool CheckResize();
+
+  gcc_pure
+  unsigned GetWidth() const {
+    return buffer.width;
+  }
+
+  gcc_pure
+  unsigned GetHeight() const {
+    return buffer.height;
+  }
+#endif
 
 #ifdef ENABLE_OPENGL
   /**
@@ -113,12 +156,19 @@ public:
   void Fullscreen();
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
   Canvas Lock();
   void Unlock();
 #endif
 
   void Flip();
+
+#ifdef KOBO
+  /**
+   * Wait until the screen update is complete.
+   */
+  void Wait();
+#endif
 };
 
 #endif

@@ -21,50 +21,56 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_SDL_QUEUE_HPP
-#define XCSOAR_EVENT_SDL_QUEUE_HPP
+#ifndef XCSOAR_EVENT_ROTATE_POINTER_HPP
+#define XCSOAR_EVENT_ROTATE_POINTER_HPP
 
-#include "Loop.hpp"
-#include "../Shared/TimerQueue.hpp"
-#include "Thread/Mutex.hpp"
+#include <algorithm>
 
-#include <SDL_version.h>
-#include <SDL_events.h>
+/**
+ * This class knows how to rotate the coordinates of a pointer device
+ * (touch screen) to match the coordinates of a rotated screen.
+ */
+class RotatePointer {
+  /**
+   * Swap x and y?
+   */
+  bool swap;
 
-class Window;
+  /**
+   * Invert x or y?
+   */
+  bool invert_x, invert_y;
 
-class EventQueue {
-  Mutex mutex;
-  TimerQueue timers;
+  /**
+   * Screen dimensions in pixels.
+   */
+  unsigned width, height;
 
 public:
-  void Push(EventLoop::Callback callback, void *ctx);
+  void SetSize(unsigned _width, unsigned _height) {
+    width = _width;
+    height = _height;
+  }
 
-private:
-  bool Generate(Event &event);
+  void SetSwap(bool _swap) {
+    swap = _swap;
+  }
 
-public:
-  bool Pop(Event &event);
-  bool Wait(Event &event);
+  void SetInvert(bool _invert_x, bool _invert_y) {
+    invert_x = _invert_x;
+    invert_y = _invert_y;
+  }
 
-  /**
-   * Purge all matching events from the event queue.
-   */
-  void Purge(Uint32 mask,
-             bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
+  void Do(RasterPoint &p) {
+    if (swap)
+      std::swap(p.x, p.y);
 
-  /**
-   * Purge all events for this callback from the event queue.
-   */
-  void Purge(EventLoop::Callback callback, void *ctx);
+    if (invert_x)
+      p.x = width - p.x;
 
-  /**
-   * Purge all events for this Window from the event queue.
-   */
-  void Purge(Window &window);
-
-  void AddTimer(Timer &timer, unsigned ms);
-  void CancelTimer(Timer &timer);
+    if (invert_y)
+      p.y = height - p.y;
+  }
 };
 
 #endif

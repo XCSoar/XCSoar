@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+#include <tchar.h>
+
 struct MoreData;
 struct DerivedInfo;
 class OperationEnvironment;
@@ -53,10 +55,12 @@ AllDevicesPutVolume(unsigned volume, OperationEnvironment &env);
 
 void
 AllDevicesPutActiveFrequency(RadioFrequency frequency,
+                             const TCHAR *name,
                              OperationEnvironment &env);
 
 void
 AllDevicesPutStandbyFrequency(RadioFrequency frequency,
+                              const TCHAR *name,
                               OperationEnvironment &env);
 
 void

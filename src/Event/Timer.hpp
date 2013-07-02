@@ -24,14 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_HPP
 #define XCSOAR_EVENT_TIMER_HPP
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
-#include <atomic>
-#elif defined(ENABLE_SDL)
-#include <SDL_timer.h>
-#include <atomic>
-#else
+#ifdef USE_GDI
 #include "Screen/Window.hpp"
 #include "Screen/Timer.hpp"
+#else
+#include <atomic>
 #endif
 
 #include <assert.h>
@@ -54,32 +51,21 @@ class Timer
   : private Window, private WindowTimer
 #endif
 {
-#if defined(ANDROID) || defined(USE_CONSOLE)
+#ifndef USE_GDI
   std::atomic<bool> enabled, queued;
   unsigned ms;
-#elif defined(ENABLE_SDL)
-  SDL_TimerID id;
-
-  /**
-   * True when the timer event has been pushed to the event queue.
-   * This is used to prevent duplicate items stacking on the event
-   * queue.
-   */
-  std::atomic<bool> queued;
 #endif
 
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#if defined(ANDROID) || defined(USE_CONSOLE)
-  Timer():enabled(false), queued(false) {}
-#elif defined(ENABLE_SDL)
-  Timer():id(NULL), queued(false) {}
-#else
+#ifdef USE_GDI
   Timer():WindowTimer(*(Window *)this) {
     Window::CreateMessageWindow();
   }
+#else
+  Timer():enabled(false), queued(false) {}
 #endif
 
   Timer(const Timer &other) = delete;
@@ -122,11 +108,7 @@ public:
    * end?
    */
   bool IsActive() const {
-#if defined(ANDROID) || defined(USE_CONSOLE)
     return enabled.load(std::memory_order_relaxed);
-#elif defined(ENABLE_SDL)
-    return id != NULL;
-#endif
   }
 
   /**
@@ -150,20 +132,13 @@ protected:
    */
   virtual void OnTimer() = 0;
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
-public:
-  void Invoke();
-#elif defined(ENABLE_SDL)
-private:
-  void Invoke();
-  static void Invoke(void *ctx);
-
-  Uint32 Callback(Uint32 interval);
-  static Uint32 Callback(Uint32 interval, void *param);
-#else
+#ifdef USE_GDI
 private:
   /* virtual methods from class Window */
   virtual bool OnTimer(WindowTimer &timer) override;
+#else
+public:
+  void Invoke();
 #endif
 };
 

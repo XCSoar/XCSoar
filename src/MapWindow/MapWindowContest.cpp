@@ -48,7 +48,7 @@ MapWindow::DrawContest(Canvas &canvas)
       flying.release_location.IsValid() && flying.far_location.IsValid()) {
     /* draw FAI triangle areas */
     static constexpr Color fill_color = COLOR_YELLOW;
-#if defined(ENABLE_OPENGL) || defined(ENABLE_SDL)
+#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif

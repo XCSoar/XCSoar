@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
+#include "Event/SDL/Globals.hpp"
+#include "Event/SDL/Queue.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -50,7 +52,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   File::WriteExisting("/sys/class/graphics/fb0/rotate", "3");
 #endif
 
-  Uint32 flags = SDL_INIT_VIDEO|SDL_INIT_TIMER;
+  Uint32 flags = SDL_INIT_VIDEO;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
 
@@ -78,11 +80,16 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   Font::Initialise();
 
+  event_queue = new EventQueue();
+
   ScreenInitialized();
 }
 
 ScreenGlobalInit::~ScreenGlobalInit()
 {
+  delete event_queue;
+  event_queue = nullptr;
+
 #ifdef ENABLE_OPENGL
   OpenGL::Deinitialise();
 #endif

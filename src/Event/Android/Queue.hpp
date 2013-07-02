@@ -53,6 +53,10 @@ public:
 
   void Push(const Event &event);
 
+  void Push(Event::Callback callback, void *ctx) {
+    Push(Event(callback, ctx));
+  }
+
   bool Pop(Event &event);
 
   bool Wait(Event &event);

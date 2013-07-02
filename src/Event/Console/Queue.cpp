@@ -25,17 +25,54 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 EventQueue::EventQueue()
-  :keyboard(*this, io_loop), mouse(io_loop), running(true)
+  :
+#ifndef KOBO
+   keyboard(*this, io_loop),
+#endif
+   mouse(io_loop),
+   running(true)
 {
   event_pipe.Create();
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, *this);
 
+#ifdef KOBO
+  /* Kobo touch screen */
+  mouse.Open("/dev/input/event1");
+#else
   mouse.Open();
+#endif
 }
 
 EventQueue::~EventQueue()
 {
 }
+
+#ifdef KOBO
+
+void
+EventQueue::SetMouseRotation(DisplaySettings::Orientation orientation)
+{
+  switch (orientation) {
+  case DisplaySettings::Orientation::DEFAULT:
+  case DisplaySettings::Orientation::PORTRAIT:
+    SetMouseRotation(true, true, false);
+    break;
+
+  case DisplaySettings::Orientation::LANDSCAPE:
+    SetMouseRotation(false, false, false);
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_PORTRAIT:
+    SetMouseRotation(true, false, true);
+    break;
+
+  case DisplaySettings::Orientation::REVERSE_LANDSCAPE:
+    SetMouseRotation(false, true, true);
+    break;
+  }
+}
+
+#endif
 
 void
 EventQueue::Push(const Event &event)
@@ -84,8 +121,13 @@ EventQueue::Generate(Event &event)
   }
 
   event = mouse.Generate();
-  if (event.type != Event::Type::NOP)
+  if (event.type != Event::Type::NOP) {
+#ifdef KOBO
+    rotate_mouse.Do(event.point);
+#endif
+
     return true;
+  }
 
   return false;
 }

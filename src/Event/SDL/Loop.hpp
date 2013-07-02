@@ -28,8 +28,10 @@ Copyright_License {
 
 class TopWindow;
 struct Event;
+class EventQueue;
 
 class EventLoop : private NonCopyable {
+  EventQueue &queue;
   TopWindow *top_window;
 
   /**
@@ -41,11 +43,11 @@ class EventLoop : private NonCopyable {
 public:
   typedef void (*Callback)(void *ctx);
 
-  EventLoop(TopWindow &_top_window)
-    :top_window(&_top_window), bulk(true) {}
+  EventLoop(EventQueue &_queue, TopWindow &_top_window)
+    :queue(_queue), top_window(&_top_window), bulk(true) {}
 
-  EventLoop()
-    :top_window(nullptr), bulk(true) {}
+  EventLoop(EventQueue &_queue)
+    :queue(_queue), top_window(nullptr), bulk(true) {}
 
   bool Get(Event &event);
   void Dispatch(const Event &event);

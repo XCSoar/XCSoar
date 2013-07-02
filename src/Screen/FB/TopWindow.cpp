@@ -33,10 +33,22 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #endif
 
+#ifdef KOBO
+#include "Screen/Memory/Canvas.hpp"
+#endif
+
+#ifdef USE_FB
+
 void
-TopWindow::SetCaption(const TCHAR *caption)
+TopWindow::CheckResize()
 {
+  assert(screen != nullptr);
+
+  if (screen->CheckResize())
+    Resize(screen->GetWidth(), screen->GetHeight());
 }
+
+#endif
 
 void
 TopWindow::Invalidate()
@@ -44,10 +56,31 @@ TopWindow::Invalidate()
   invalidated = true;
 }
 
+#ifdef KOBO
+void
+TopWindow::OnDestroy()
+{
+  /* clear the screen before exiting XCSoar */
+  Canvas canvas = screen->Lock();
+  if (canvas.IsDefined()) {
+    canvas.Clear(COLOR_BLACK);
+    screen->Flip();
+    screen->Wait();
+
+    canvas.ClearWhite();
+    screen->Unlock();
+    screen->Flip();
+  }
+
+  ContainerWindow::OnDestroy();
+}
+#endif
+
 void
 TopWindow::OnResize(PixelSize new_size)
 {
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
+
   screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);
 }
@@ -111,17 +144,17 @@ TopWindow::OnEvent(const Event &event)
 #endif
 
     // XXX keys
-    return OnMouseMove(event.x, event.y, 0);
+    return OnMouseMove(event.point.x, event.point.y, 0);
 
   case Event::MOUSE_DOWN:
-    return double_click.Check(event.GetPoint())
-      ? OnMouseDouble(event.x, event.y)
-      : OnMouseDown(event.x, event.y);
+    return double_click.Check(event.point)
+      ? OnMouseDouble(event.point.x, event.point.y)
+      : OnMouseDown(event.point.x, event.point.y);
 
   case Event::MOUSE_UP:
-    double_click.Moved(event.GetPoint());
+    double_click.Moved(event.point);
 
-    return OnMouseUp(event.x, event.y);
+    return OnMouseUp(event.point.x, event.point.y);
   }
 
   return false;

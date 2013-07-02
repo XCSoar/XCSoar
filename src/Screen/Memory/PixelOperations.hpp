@@ -26,6 +26,11 @@ Copyright_License {
 
 #include <functional>
 
+/**
+ * Build a PixelOperations class with a function object that
+ * manipulates the source color.  It is called "unary" because the
+ * function object has one parameter.
+ */
 template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class UnaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
@@ -61,6 +66,12 @@ public:
   }
 };
 
+/**
+ * Build a PixelOperations class with a function object that
+ * manipulates the source color, blending with the (old) destination
+ * color.  It is called "binary" because the function object has two
+ * parameters.
+ */
 template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
 class BinaryPerPixelOperations : private Operation {
   typedef typename PixelTraits::pointer_type pointer_type;
@@ -96,6 +107,11 @@ public:
   }
 };
 
+/**
+ * Wrap an existing function object that expects to operate on one
+ * channel.  The resulting function object will operate on a
+ * PixelTraits::color_type.
+ */
 template<typename PixelTraits, typename Operation>
 class PixelPerChannelAdapter : private Operation {
   typedef typename PixelTraits::color_type color_type;
@@ -125,16 +141,29 @@ public:
   }
 };
 
+/**
+ * Wrapper that glues #UnaryPerPixelOperations,
+ * #PixelPerChannelAdapter and a custom function class together.
+ */
 template<typename PixelTraits, typename Operation>
 using UnaryPerChannelOperations =
   UnaryPerPixelOperations<PixelTraits,
                           PixelPerChannelAdapter<PixelTraits, Operation>>;
 
+/**
+ * Wrapper that glues #BinaryPerPixelOperations,
+ * #PixelPerChannelAdapter and a custom function class together.
+ */
 template<typename PixelTraits, typename Operation>
 using BinaryPerChannelOperations =
   BinaryPerPixelOperations<PixelTraits,
                            PixelPerChannelAdapter<PixelTraits, Operation>>;
 
+/**
+ * Wrap an existing function object that expects to operate on one
+ * integer.  The resulting function object will operate on a
+ * PixelTraits::color_type.
+ */
 template<typename PixelTraits, typename Operation>
 class PixelIntegerAdapter : private Operation {
   typedef typename PixelTraits::color_type color_type;
@@ -164,16 +193,27 @@ public:
   }
 };
 
+/**
+ * Wrapper that glues #UnaryPerPixelOperations, #PixelIntegerAdapter
+ * and a custom function class together.
+ */
 template<typename PixelTraits, typename Operation>
 using UnaryIntegerOperations =
   UnaryPerPixelOperations<PixelTraits,
                           PixelIntegerAdapter<PixelTraits, Operation>>;
 
+/**
+ * Wrapper that glues #BinaryPerPixelOperations, #PixelIntegerAdapter
+ * and a custom function class together.
+ */
 template<typename PixelTraits, typename Operation>
 using BinaryIntegerOperations =
   BinaryPerPixelOperations<PixelTraits,
                            PixelIntegerAdapter<PixelTraits, Operation>>;
 
+/**
+ * Function that inverts all bits in the given integer.
+ */
 template<typename integer_type>
 struct PixelBitNot {
   constexpr integer_type operator()(integer_type x) const {
@@ -181,11 +221,17 @@ struct PixelBitNot {
   }
 };
 
+/**
+ * Invert all source colors.
+ */
 template<typename PixelTraits>
 using BitNotPixelOperations =
   UnaryIntegerOperations<PixelTraits,
                          PixelBitNot<typename PixelTraits::integer_type>>;
 
+/**
+ * Combine source and destination color with bit-wise "or".
+ */
 template<typename PixelTraits>
 using BitOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
@@ -203,18 +249,18 @@ using BitNotOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           PixelBitNotOr<typename PixelTraits::integer_type>>;
 
-template<typename integer_type>
-struct PixelBitAnd {
-  constexpr integer_type operator()(integer_type a, integer_type b) const {
-    return a & b;
-  }
-};
-
+/**
+ * Combine source and destination color with bit-wise "and".
+ */
 template<typename PixelTraits>
 using BitAndPixelOperations =
   BinaryIntegerOperations<PixelTraits,
-                          PixelBitAnd<typename PixelTraits::integer_type>>;
+                          std::bit_and<typename PixelTraits::integer_type>>;
 
+/**
+ * Blend source and destination color with a given alpha value.  This
+ * is a per-channel function.
+ */
 template<typename T>
 class PixelAlphaOperation {
   const int alpha;
@@ -227,6 +273,9 @@ public:
   }
 };
 
+/**
+ * Blend source and destination color with a given alpha value.
+ */
 template<typename PixelTraits>
 using AlphaPixelOperations =
   BinaryPerChannelOperations<PixelTraits,
@@ -307,6 +356,10 @@ template<typename PixelTraits, typename SPT>
 using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>, SPT>;
 
+/**
+ * Color keying: skip writing a pixel if the source color matches the
+ * given color key.
+ */
 template<typename PixelTraits>
 class TransparentPixelOperations {
   typedef typename PixelTraits::rpointer_type rpointer_type;

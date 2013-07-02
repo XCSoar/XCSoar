@@ -83,7 +83,7 @@ AirspacePreviewRenderer::PrepareFill(
 
   Color color = class_look.fill_color;
   canvas.Select(Brush(color.WithAlpha(48)));
-#elif defined(ENABLE_SDL)
+#elif defined(USE_MEMORY_CANVAS)
   Color color = class_look.fill_color;
   canvas.Select(Brush(LightColor(color)));
 #else

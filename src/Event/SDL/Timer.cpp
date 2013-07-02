@@ -23,54 +23,37 @@ Copyright_License {
 
 #include "../Timer.hpp"
 #include "Queue.hpp"
+#include "Globals.hpp"
 
 void
-Timer::Schedule(unsigned ms)
+Timer::Schedule(unsigned _ms)
 {
-  Cancel();
+  if (queued.exchange(false))
+    event_queue->CancelTimer(*this);
 
-  id = ::SDL_AddTimer(ms, Callback, this);
+  enabled.store(true);
+  ms = _ms;
+
+  if (!queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
 }
 
 void
 Timer::Cancel()
 {
-  if (!IsActive())
-    return;
-
-  ::SDL_RemoveTimer(id);
-  id = NULL;
-
-  EventQueue::Purge(Invoke, (void *)this);
-  queued.store(false, std::memory_order_relaxed);
+  if (enabled.exchange(false) && queued.exchange(false))
+    event_queue->CancelTimer(*this);
 }
 
 void
 Timer::Invoke()
 {
+  if (!queued.exchange(false))
+    /* was cancelled by another thread */
+    return;
+
   OnTimer();
-  queued.store(false, std::memory_order_relaxed);
-}
 
-void
-Timer::Invoke(void *ctx)
-{
-  Timer *timer = (Timer *)ctx;
-  timer->Invoke();
-}
-
-Uint32
-Timer::Callback(Uint32 interval)
-{
-  if (!queued.exchange(true, std::memory_order_relaxed))
-    EventQueue::Push(Invoke, (void *)this);
-  return interval;
-}
-
-Uint32
-Timer::Callback(Uint32 interval, void *param)
-{
-  Timer *timer = (Timer *)param;
-
-  return timer->Callback(interval);
+  if (enabled.load() && !queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
 }

@@ -21,42 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_KEY_H
-#define XCSOAR_SCREEN_SDL_KEY_H
+#include "Screen/SingleWindow.hpp"
+#include "Event/Shared/Event.hpp"
 
-enum {
-  KEY_SPACE = ' ',
-  KEY_UP = 0403,
-  KEY_DOWN = 0402,
-  KEY_LEFT = 0404,
-  KEY_RIGHT = 0405,
-  KEY_HOME = 0406,
-  KEY_END = 0550,
-  KEY_PRIOR = 0523,
-  KEY_NEXT = 0522,
-  KEY_RETURN = '\n',
-  KEY_F1 = 0411,
-  KEY_F2 = 0412,
-  KEY_F3 = 0413,
-  KEY_F4 = 0414,
-  KEY_F5 = 0415,
-  KEY_F6 = 0416,
-  KEY_F7 = 0417,
-  KEY_F8 = 0420,
-  KEY_F9 = 0421,
-  KEY_F10 = 0422,
-  KEY_F11 = 0423,
-  KEY_F12 = 0424,
-  KEY_ESCAPE = 0x1b,
-  KEY_TAB = '\t',
-  KEY_BACK = 0407,
-  KEY_MENU,
-  KEY_APP1,
-  KEY_APP2,
-  KEY_APP3,
-  KEY_APP4,
-  KEY_APP5,
-  KEY_APP6,
-};
+bool
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+{
+  assert(allowed != NULL);
 
-#endif
+  switch (event.type) {
+  case Event::MOUSE_MOTION:
+  case Event::MOUSE_DOWN:
+  case Event::MOUSE_UP:
+    return FilterMouseEvent(event.point, allowed);
+
+  default:
+    return true;
+  }
+}
