@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Event/Timer.hpp"
 
-#include <atomic>
-
 /**
  * This class is similar to #Notify, but it delivers the notification
  * with a certain delay, to limit the rate of redundant notifications.
@@ -37,10 +35,8 @@ Copyright_License {
 class DelayedNotify : private Timer {
   const unsigned delay_ms;
 
-  std::atomic<bool> pending;
-
 public:
-  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms), pending(false) {}
+  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms) {}
 
   ~DelayedNotify() {
     ClearNotification();
@@ -50,12 +46,16 @@ public:
    * Send a notification to this object.  This method can be called
    * from any thread.
    */
-  void SendNotification();
+  void SendNotification() {
+    SchedulePreserve(delay_ms);
+  }
 
   /**
    * Clear any pending notification.
    */
-  void ClearNotification();
+  void ClearNotification() {
+    Cancel();
+  }
 
 protected:
   /**
