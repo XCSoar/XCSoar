@@ -24,9 +24,13 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
-#include "PixelOperations.hpp"
+#include "Optimised.hpp"
 #include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
+
+#ifdef __ARM_NEON__
+#include "NEON.hpp"
+#endif
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -606,9 +610,16 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
   // TODO: support scaling
 
   SDLRasterCanvas canvas(buffer);
+
+#ifdef __ARM_NEON__
+  NEONAlphaPixelOperations operations(alpha);
+#else
+  AlphaPixelOperations<SDLPixelTraits> operations(alpha);
+#endif
+
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
-                       AlphaPixelOperations<SDLPixelTraits>(alpha));
+                       operations);
 }
 
 void

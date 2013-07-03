@@ -327,7 +327,7 @@ public:
  * Blend source and destination color with a given alpha value.
  */
 template<typename PixelTraits>
-using AlphaPixelOperations =
+using PortableAlphaPixelOperations =
   BinaryPerChannelOperations<PixelTraits,
                              PixelAlphaOperation<typename PixelTraits::channel_type>>;
 

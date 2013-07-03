@@ -267,7 +267,7 @@ public:
   }
 
   void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
-    FillRectangle(x1, y1, x2, y2, c, GetPixelTraits());
+    FillRectangle<PixelTraits>(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
   template<typename PixelOperations>
@@ -620,6 +620,9 @@ public:
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
+#ifndef __clang__
+  __attribute__((flatten))
+#endif
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
                      typename SPT::const_rpointer_type src, unsigned src_pitch,
                      PixelOperations operations) {
