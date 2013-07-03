@@ -45,7 +45,7 @@ OBJ_SUFFIX = .o
 endif
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))
+SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1)))))
 
 ####### dependency handling
 
