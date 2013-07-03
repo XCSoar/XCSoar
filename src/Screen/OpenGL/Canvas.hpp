@@ -384,8 +384,7 @@ public:
             const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
-  void StretchTransparent(const Bitmap &src, Color key);
-  void InvertStretchTransparent(const Bitmap &src, Color key);
+  void StretchNot(const Bitmap &src);
 
   void Stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

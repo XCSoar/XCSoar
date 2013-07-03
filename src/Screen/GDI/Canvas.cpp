@@ -252,52 +252,16 @@ Canvas::CopyTransparentWhite(const Canvas &src)
 }
 
 void
-Canvas::StretchTransparent(const Bitmap &src, Color key)
+Canvas::StretchNot(const Bitmap &src)
 {
   assert(IsDefined());
   assert(src.IsDefined());
 
-  HDC virtual_dc = GetCompatibleDC();
-  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
-
-  const PixelSize size = src.GetSize();
-#ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
-                     virtual_dc, 0, 0, size.cx, size.cy,
-                     key);
-#else
-  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
-                   virtual_dc, 0, 0, size.cx, size.cy,
-                   key);
-#endif
-
-  ::SelectObject(virtual_dc, old);
-}
-
-void
-Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
-{
-  assert(IsDefined());
-  assert(src.IsDefined());
-
-  HDC virtual_dc = GetCompatibleDC();
-  HBITMAP old = (HBITMAP)::SelectObject(virtual_dc, src.GetNative());
   const PixelSize size = src.GetSize();
 
-  BufferCanvas inverted(*this, size);
-  ::BitBlt(inverted, 0, 0, size.cx, size.cy,
-           virtual_dc, 0, 0, NOTSRCCOPY);
-  ::SelectObject(virtual_dc, old);
-
-#ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
-                     inverted, 0, 0, size.cx, size.cy,
-                     key);
-#else
-  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
-                   inverted, 0, 0, size.cx, size.cy,
-                   key);
-#endif
+  Stretch(0, 0, GetWidth(), GetHeight(),
+          src.GetNative(), 0, 0, size.cx, size.cy,
+          NOTSRCCOPY);
 }
 
 void

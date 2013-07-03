@@ -376,20 +376,7 @@ Canvas::CopyTransparentBlack(const Canvas &src)
 }
 
 void
-Canvas::StretchTransparent(const Bitmap &_src, Color key)
-{
-  assert(_src.IsDefined());
-
-  ConstImageBuffer src = _src.GetNative();
-
-  SDLRasterCanvas canvas(buffer);
-  canvas.ScaleRectangle(0, 0, GetWidth(), GetHeight(),
-                        src.data, src.pitch, src.width, src.height,
-                        TransparentPixelOperations<SDLPixelTraits>(canvas.Import(key)));
-}
-
-void
-Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
+Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());
 
@@ -400,7 +387,7 @@ Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
   const unsigned dest_height = GetHeight();
 
   SDLRasterCanvas canvas(buffer);
-  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(key));
+  BitNotPixelOperations<SDLPixelTraits> operations;
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         src.At(src_x, src_y), src.pitch, src.width, src.height,
