@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Thread/RecursivelySuspensibleThread.hpp"
 #include "Thread/Trigger.hpp"
+#include "Compiler.h"
 
 class GlueMapWindow;
 
@@ -37,7 +38,7 @@ class GlueMapWindow;
  * why it is not handled by this thread.
  * 
  */
-class DrawThread : public RecursivelySuspensibleThread {
+class DrawThread final : public RecursivelySuspensibleThread {
   enum {
     MIN_WAIT_TIME = 100,
   };
