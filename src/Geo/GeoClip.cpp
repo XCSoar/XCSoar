@@ -196,7 +196,7 @@ ClipVertexLongitude(const Angle west, const Angle east,
         return 0;
 
       pt = clip_longitude(next, pt, west);
-      pt.ClipEncodeX(west, east);
+      pt.clip_code = CLIP_LEFT_EQUALS;
     } else {
       if (! (next.clip_code & (CLIP_LEFT_EDGE | CLIP_LEFT_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
@@ -206,7 +206,7 @@ ClipVertexLongitude(const Angle west, const Angle east,
       }
 
       pt = clip_longitude(prev, pt, west);
-      pt.ClipEncodeX(west, east);
+      pt.clip_code = CLIP_LEFT_EQUALS;
     }
   } else if (pt.clip_code & CLIP_RIGHT_EDGE) {
     if (prev.clip_code & (CLIP_RIGHT_EDGE | CLIP_RIGHT_EQUALS)) {
@@ -215,7 +215,7 @@ ClipVertexLongitude(const Angle west, const Angle east,
         return 0;
 
       pt = clip_longitude(next, pt, east);
-      pt.ClipEncodeX(west, east);
+      pt.clip_code = CLIP_RIGHT_EQUALS;
     } else {
       if (! (next.clip_code & (CLIP_RIGHT_EDGE | CLIP_RIGHT_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
@@ -225,7 +225,7 @@ ClipVertexLongitude(const Angle west, const Angle east,
       }
 
       pt = clip_longitude(prev, pt, east);
-      pt.ClipEncodeX(west, east);
+      pt.clip_code = CLIP_RIGHT_EQUALS;
     }
   }
 
@@ -246,7 +246,7 @@ ClipVertex_latitude(const Angle south, const Angle north,
         return 0;
 
       pt = clip_latitude(next, pt, south);
-      pt.ClipEncodeY(south, north);
+      pt.clip_code = CLIP_BOTTOM_EQUALS;
 
     } else {
       if (! (next.clip_code & (CLIP_BOTTOM_EDGE | CLIP_BOTTOM_EQUALS) )) {
@@ -257,7 +257,7 @@ ClipVertex_latitude(const Angle south, const Angle north,
       }
 
       pt = clip_latitude(prev, pt, south);
-      pt.ClipEncodeY(south, north);
+      pt.clip_code = CLIP_BOTTOM_EQUALS;
     }
   } else if (pt.clip_code & CLIP_TOP_EDGE) {
     if (prev.clip_code & (CLIP_TOP_EDGE | CLIP_TOP_EQUALS)) {
@@ -266,7 +266,7 @@ ClipVertex_latitude(const Angle south, const Angle north,
         return 0;
 
       pt = clip_latitude(next, pt, north);
-      pt.ClipEncodeY(south, north);
+      pt.clip_code = CLIP_TOP_EQUALS;
     } else {
       if (! (next.clip_code & (CLIP_TOP_EDGE | CLIP_TOP_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
@@ -277,7 +277,7 @@ ClipVertex_latitude(const Angle south, const Angle north,
       }
 
       pt = clip_latitude(prev, pt, north);
-      pt.ClipEncodeY(south, north);
+      pt.clip_code = CLIP_TOP_EQUALS;
     }
   }
 
