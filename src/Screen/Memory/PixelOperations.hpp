@@ -222,20 +222,26 @@ struct PixelIntegerAdapter : private Operation {
 
   typedef PixelTraits SourcePixelTraits;
 
+  typedef color_type argument_type;
+  typedef color_type first_argument_type;
+  typedef color_type second_argument_type;
+  typedef color_type result_type;
+
   PixelIntegerAdapter() = default;
 
   template<typename... Args>
   explicit constexpr PixelIntegerAdapter(Args&&... args)
     :Operation(std::forward<Args>(args)...) {}
 
-  constexpr color_type operator()(color_type x) const {
+  constexpr result_type operator()(argument_type x) const {
     return PixelTraits::TransformInteger(x, [this](integer_type x) {
         /* requires "this->" due to gcc 4.7.2 crash bug */
         return this->Operation::operator()(x);
       });
   }
 
-  constexpr color_type operator()(color_type a, color_type b) const {
+  constexpr result_type operator()(first_argument_type a,
+                                   second_argument_type b) const {
     return PixelTraits::TransformInteger(a, b,
                                          [this](integer_type a,
                                                 integer_type b) {
