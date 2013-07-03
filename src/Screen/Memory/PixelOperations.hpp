@@ -108,6 +108,34 @@ public:
 };
 
 /**
+ * Modify a destination pixel only if the check returns true.
+ */
+template<typename PixelTraits, typename Check>
+struct ConditionalPixelOperations : private Check {
+  typedef typename PixelTraits::rpointer_type rpointer_type;
+  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
+  typedef typename PixelTraits::color_type color_type;
+
+  ConditionalPixelOperations() = default;
+
+  template<typename... Args>
+  explicit constexpr ConditionalPixelOperations(Args&&... args)
+    :Check(std::forward<Args>(args)...) {}
+
+  void WritePixel(rpointer_type p, color_type c) const {
+    if (Check::operator()(c))
+      PixelTraits::WritePixel(p, c);
+  }
+
+  gcc_hot
+  void CopyPixels(rpointer_type p, const_rpointer_type src, unsigned n) const {
+    for (unsigned i = 0; i < n; ++i)
+      WritePixel(PixelTraits::Next(p, i),
+                 PixelTraits::ReadPixel(PixelTraits::Next(src, i)));
+  }
+};
+
+/**
  * Wrap an existing function object that expects to operate on one
  * channel.  The resulting function object will operate on a
  * PixelTraits::color_type.
@@ -356,33 +384,28 @@ template<typename PixelTraits, typename SPT>
 using OpaqueAlphaPixelOperations =
   UnaryPerPixelOperations<PixelTraits, PixelOpaqueAlpha<PixelTraits>, SPT>;
 
+template<typename PixelTraits>
+struct ColorKey {
+  typedef typename PixelTraits::color_type color_type;
+  typedef color_type argument_type;
+  typedef bool result_type;
+
+  argument_type key;
+
+  explicit constexpr ColorKey(argument_type _key):key(_key) {}
+
+  result_type operator()(argument_type c) const {
+    return c != key;
+  }
+};
+
 /**
  * Color keying: skip writing a pixel if the source color matches the
  * given color key.
  */
 template<typename PixelTraits>
-class TransparentPixelOperations {
-  typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
-  typedef typename PixelTraits::color_type color_type;
-
-  color_type key;
-
-public:
-  constexpr TransparentPixelOperations(color_type _key):key(_key) {}
-
-  void WritePixel(rpointer_type p, color_type c) const {
-    if (c != key)
-      PixelTraits::WritePixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(rpointer_type p, const_rpointer_type src, unsigned n) const {
-    for (unsigned i = 0; i < n; ++i)
-      WritePixel(PixelTraits::Next(p, i),
-                 PixelTraits::ReadPixel(PixelTraits::Next(src, i)));
-  }
-};
+using TransparentPixelOperations =
+  ConditionalPixelOperations<PixelTraits, ColorKey<PixelTraits>>;
 
 template<typename PixelTraits>
 class TransparentInvertPixelOperations
