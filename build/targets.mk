@@ -227,7 +227,9 @@ ifeq ($(TARGET),NEON)
   # Experimental target for generic ARMv7 with NEON
   override TARGET = UNIX
   TCPREFIX = arm-linux-gnueabihf-
-  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
+  ifeq ($(CLANG),n)
+    TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
+  endif
   TARGET_IS_ARM = y
   ARMV7 := y
   NEON := y
@@ -244,7 +246,11 @@ ifeq ($(TARGET),UNIX)
   endif
 
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a
+    ifeq ($(CLANG),y)
+      TARGET_ARCH += -target armv7-none-linux-gnueabihf -integrated-as
+    else
+      TARGET_ARCH += -march=armv7-a
+    endif
   endif
 
   ifeq ($(NEON),y)
