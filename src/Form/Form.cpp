@@ -227,6 +227,16 @@ WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     if (new_position.top < 0)
       new_position.Offset(0, -new_position.top);
 
+#ifdef USE_MEMORY_CANVAS
+    /* the RasterCanvas class doesn't clip negative window positions
+       properly, therefore we avoid this problem at this stage */
+    if (new_position.left < 0)
+      new_position.left = 0;
+
+    if (new_position.top < 0)
+      new_position.top = 0;
+#endif
+
     Move(new_position.left, new_position.top);
 
     return true;
