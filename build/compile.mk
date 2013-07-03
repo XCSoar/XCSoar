@@ -58,13 +58,13 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_C
 # Useful debugging targets - make preprocessed versions of the source
 #
 $(TARGET_OUTPUT_DIR)/%.i: %.cpp FORCE
-	$(CXX) $(cxx-flags) -E $(OUTPUT_OPTION) $<
+	$(CXX) $(cxx-flags) -E -o $@ $<
 
 $(TARGET_OUTPUT_DIR)/%.s: %.cpp FORCE
-	$(CXX) $(cxx-flags) -S $(OUTPUT_OPTION) $<
+	$(CXX) $(cxx-flags) -S -o $@ $<
 
 $(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
-	$(CC) $(cc-flags) -E $(OUTPUT_OPTION) $<
+	$(CC) $(cc-flags) -E -o $@ $<
 
 ####### build rules
 #
