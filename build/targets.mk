@@ -2,7 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 OPT \
-	PI KOBO \
+	PI KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN
@@ -218,11 +218,16 @@ endif
 
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
-  override TARGET = UNIX
-  TCPREFIX := arm-linux-gnueabihf-
+  override TARGET = NEON
   KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
-  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
   TARGET_IS_KOBO = y
+endif
+
+ifeq ($(TARGET),NEON)
+  # Experimental target for generic ARMv7 with NEON
+  override TARGET = UNIX
+  TCPREFIX = arm-linux-gnueabihf-
+  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
   TARGET_IS_ARM = y
   ARMV7 := y
   NEON := y
