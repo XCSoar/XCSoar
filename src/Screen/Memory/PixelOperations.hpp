@@ -27,30 +27,31 @@ Copyright_License {
 #include <functional>
 
 /**
- * Build a PixelOperations class with a function object that
- * manipulates the source color.  It is called "unary" because the
- * function object has one parameter.
+ * Build a PixelOperations class with a base class that implements
+ * only WritePixelOperation().
  */
-template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
-class UnaryPerPixelOperations : private Operation {
+template<typename PixelTraits, class WritePixelOperation,
+         typename SPT=PixelTraits>
+class PerPixelOperations : private WritePixelOperation {
   typedef typename PixelTraits::pointer_type pointer_type;
   typedef typename PixelTraits::rpointer_type rpointer_type;
   typedef typename PixelTraits::const_pointer_type const_pointer_type;
   typedef typename PixelTraits::color_type color_type;
 
 public:
-  UnaryPerPixelOperations() = default;
+  PerPixelOperations() = default;
 
   template<typename... Args>
-  explicit constexpr UnaryPerPixelOperations(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  explicit constexpr PerPixelOperations(Args&&... args)
+    :WritePixelOperation(std::forward<Args>(args)...) {}
 
   inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
-    PixelTraits::WritePixel(p, (*this)(c));
+    WritePixelOperation::WritePixel(p, c);
   }
 
   gcc_hot
-  void FillPixels(pointer_type p, unsigned n, color_type c) const {
+  void FillPixels(pointer_type p, unsigned n,
+                  typename SPT::color_type c) const {
     PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
         /* requires "this->" due to gcc 4.7.2 crash bug */
         this->WritePixel(p, c);
@@ -66,6 +67,49 @@ public:
   }
 };
 
+template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
+class UnaryWritePixel : private Operation {
+  typedef typename PixelTraits::pointer_type pointer_type;
+
+public:
+  UnaryWritePixel() = default;
+
+  template<typename... Args>
+  explicit constexpr UnaryWritePixel(Args&&... args)
+    :Operation(std::forward<Args>(args)...) {}
+
+  inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
+    PixelTraits::WritePixel(p, (*this)(c));
+  }
+};
+
+/**
+ * Build a PixelOperations class with a function object that
+ * manipulates the source color.  It is called "unary" because the
+ * function object has one parameter.
+ */
+template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
+using UnaryPerPixelOperations =
+  PerPixelOperations<PixelTraits,
+                     UnaryWritePixel<PixelTraits, Operation, SPT>,
+                     SPT>;
+
+template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
+class BinaryWritePixel : private Operation {
+  typedef typename PixelTraits::pointer_type pointer_type;
+
+public:
+  BinaryWritePixel() = default;
+
+  template<typename... Args>
+  explicit constexpr BinaryWritePixel(Args&&... args)
+    :Operation(std::forward<Args>(args)...) {}
+
+  inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
+    PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
+  }
+};
+
 /**
  * Build a PixelOperations class with a function object that
  * manipulates the source color, blending with the (old) destination
@@ -73,37 +117,29 @@ public:
  * parameters.
  */
 template<typename PixelTraits, class Operation, typename SPT=PixelTraits>
-class BinaryPerPixelOperations : private Operation {
-  typedef typename PixelTraits::pointer_type pointer_type;
+using BinaryPerPixelOperations =
+  PerPixelOperations<PixelTraits,
+                     BinaryWritePixel<PixelTraits, Operation, SPT>,
+                     SPT>;
+
+/**
+ * Modify a destination pixel only if the check returns true.
+ */
+template<typename PixelTraits, typename Check>
+struct ConditionalWritePixel : private Check {
   typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_pointer_type const_pointer_type;
+  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
   typedef typename PixelTraits::color_type color_type;
 
-public:
-  BinaryPerPixelOperations() = default;
+  ConditionalWritePixel() = default;
 
   template<typename... Args>
-  explicit constexpr BinaryPerPixelOperations(Args&&... args)
-    :Operation(std::forward<Args>(args)...) {}
+  explicit constexpr ConditionalWritePixel(Args&&... args)
+    :Check(std::forward<Args>(args)...) {}
 
-  inline void WritePixel(pointer_type p, typename SPT::color_type c) const {
-    PixelTraits::WritePixel(p, (*this)(PixelTraits::ReadPixel(p), c));
-  }
-
-  gcc_hot
-  void FillPixels(pointer_type p, unsigned n,
-                  typename SPT::color_type c) const {
-    PixelTraits::ForHorizontal(p, n, [this, c](pointer_type p){
-        /* requires "this->" due to gcc 4.7.2 crash bug */
-        this->WritePixel(p, c);
-      });
-  }
-
-  gcc_hot
-  void CopyPixels(rpointer_type p, typename SPT::const_rpointer_type src,
-                  unsigned n) const {
-    for (unsigned i = 0; i < n; ++i)
-      WritePixel(PixelTraits::Next(p, i), SPT::ReadPixel(SPT::Next(src, i)));
+  void WritePixel(rpointer_type p, color_type c) const {
+    if (Check::operator()(c))
+      PixelTraits::WritePixel(p, c);
   }
 };
 
@@ -111,29 +147,8 @@ public:
  * Modify a destination pixel only if the check returns true.
  */
 template<typename PixelTraits, typename Check>
-struct ConditionalPixelOperations : private Check {
-  typedef typename PixelTraits::rpointer_type rpointer_type;
-  typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
-  typedef typename PixelTraits::color_type color_type;
-
-  ConditionalPixelOperations() = default;
-
-  template<typename... Args>
-  explicit constexpr ConditionalPixelOperations(Args&&... args)
-    :Check(std::forward<Args>(args)...) {}
-
-  void WritePixel(rpointer_type p, color_type c) const {
-    if (Check::operator()(c))
-      PixelTraits::WritePixel(p, c);
-  }
-
-  gcc_hot
-  void CopyPixels(rpointer_type p, const_rpointer_type src, unsigned n) const {
-    for (unsigned i = 0; i < n; ++i)
-      WritePixel(PixelTraits::Next(p, i),
-                 PixelTraits::ReadPixel(PixelTraits::Next(src, i)));
-  }
-};
+using ConditionalPixelOperations =
+  PerPixelOperations<PixelTraits, ConditionalWritePixel<PixelTraits, Check>>;
 
 /**
  * Wrap an existing function object that expects to operate on one
