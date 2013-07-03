@@ -27,6 +27,8 @@
 #include "Task/Ordered/AATIsolineSegment.hpp"
 #include "Math/ZeroFinder.hpp"
 
+#include <vector>
+
 class StartPoint;
 
 /**

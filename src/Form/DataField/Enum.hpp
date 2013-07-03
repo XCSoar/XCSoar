@@ -28,6 +28,8 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
+#include <stdlib.h>
+
 /**
  * A struct that is used for static initialisation of the enum list.
  */

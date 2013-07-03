@@ -30,6 +30,7 @@
 #include "OS/ByteOrder.hpp"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseDate(BrokenDate &date, const char *p)

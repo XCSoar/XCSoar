@@ -29,6 +29,7 @@ Copyright_License {
 #include <algorithm>
 
 #include <assert.h>
+#include <stdlib.h>
 
 int
 compare_squared(int a, int b, int c)

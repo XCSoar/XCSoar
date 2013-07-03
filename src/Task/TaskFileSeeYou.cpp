@@ -38,6 +38,8 @@
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 
+#include <stdlib.h>
+
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool wp_dis;

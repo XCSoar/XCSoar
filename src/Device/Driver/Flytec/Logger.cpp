@@ -32,6 +32,8 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "IGC/IGCParser.hpp"
 
+#include <stdlib.h>
+
 static bool
 ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)
 {

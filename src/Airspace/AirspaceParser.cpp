@@ -42,6 +42,7 @@ Copyright_License {
 #include <tchar.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <windef.h> /* for MAX_PATH */
 
 enum AirspaceFileType {

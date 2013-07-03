@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <algorithm>
 #include <assert.h>
+#include <stdlib.h>
 
 void
 RasterBuffer::Resize(unsigned _width, unsigned _height)

@@ -26,6 +26,8 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Util/Clamp.hpp"
 
+#include <stdlib.h>
+
 void
 AutopilotParameters::SetIdeal()
 {

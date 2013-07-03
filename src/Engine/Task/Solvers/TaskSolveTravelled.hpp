@@ -25,6 +25,8 @@
 #include "TaskMacCreadyTravelled.hpp"
 #include "Math/ZeroFinder.hpp"
 
+#include <vector>
+
 /**
  *  Abstract class to solve for travelled time.
  */

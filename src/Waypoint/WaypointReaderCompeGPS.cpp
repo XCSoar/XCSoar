@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Geo/UTM.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR *&src, Angle &angle)

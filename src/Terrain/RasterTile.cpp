@@ -25,6 +25,8 @@ Copyright_License {
 
 #include <algorithm>
 
+#include <stdlib.h>
+
 bool
 RasterTile::SaveCache(FILE *file) const
 {

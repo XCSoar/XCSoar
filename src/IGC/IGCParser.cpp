@@ -32,7 +32,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 #include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Character table for base-36.

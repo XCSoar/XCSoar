@@ -27,7 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR *src, Angle &angle)
