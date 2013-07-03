@@ -10,6 +10,8 @@
 #   TARGET      The name of the target platform.  See the TARGETS variable
 #               in build/targets.mk for a list of valid target platforms.
 #
+#   HEADLESS    If set to "y", no UI is available.
+#
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
 #   OPENGL      "y" means render with OpenGL.
@@ -64,6 +66,9 @@ include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
+
+ifeq ($(HEADLESS),y)
+else
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/fb.mk
@@ -71,6 +76,8 @@ include $(topdir)/build/sdl.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk
 include $(topdir)/build/libjpeg.mk
+endif
+
 include $(topdir)/build/flags.mk
 include $(topdir)/build/charset.mk
 include $(topdir)/build/warnings.mk
