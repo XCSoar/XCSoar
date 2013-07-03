@@ -77,7 +77,7 @@ public:
     }
   }
 
-  AIVResult GetNeastest() const {
+  AIVResult GetNearest() const {
     return nearest;
   }
 };
@@ -106,7 +106,7 @@ AirspaceRoute::FirstIntersecting(const RouteLink &e) const
   const GeoPoint dest(task_projection.Unproject(e.second));
   AIV visitor(e, task_projection, rpolars_route);
   m_airspaces.VisitIntersecting(origin, dest, visitor);
-  const AIV::AIVResult res(visitor.GetNeastest());
+  const AIV::AIVResult res(visitor.GetNearest());
   ++count_airspace;
   return RouteAirspaceIntersection(res.first, res.second);
 }
