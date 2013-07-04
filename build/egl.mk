@@ -1,11 +1,11 @@
 ifeq ($(TARGET)$(TARGET_IS_PI),UNIXy)
 # auto-enable EGL on the Raspberry Pi.
-EGL = y
+EGL ?= y
 else ifeq ($(TARGET)$(TARGET_HAS_MALI),UNIXy)
 # auto-enable EGL on the Cubieboard.
-EGL = y
+EGL ?= y
 else
-EGL = n
+EGL ?= n
 endif
 
 ifeq ($(EGL),y)
