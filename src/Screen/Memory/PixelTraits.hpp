@@ -268,6 +268,9 @@ struct BGRAPixelTraits {
   typedef const color_type *const_pointer_type;
   typedef const color_type *gcc_restrict const_rpointer_type;
 
+  static_assert(sizeof(color_type) == sizeof(integer_type),
+                "Wrong integer_type");
+
   union U {
     color_type c;
     integer_type i;
@@ -353,11 +356,13 @@ struct BGRAPixelTraits {
   }
 
   static color_type ReadPixel(const_pointer_type p) {
-    return *p;
+    const integer_type *const pi = reinterpret_cast<const integer_type *>(p);
+    return FromInteger(*pi);
   }
 
   static void WritePixel(pointer_type p, color_type c) {
-    *p = c;
+    integer_type *const pi = reinterpret_cast<integer_type *>(p);
+    *pi = ToInteger(c);
   }
 
   static void FillPixels(pointer_type p, unsigned n, color_type c) {
