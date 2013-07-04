@@ -170,3 +170,23 @@ SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS) $(FREETYPE_LDLIBS) 
 $(eval $(call link-library,screen,SCREEN))
 
 SCREEN_LDADD += $(SDL_LDADD) $(FB_LDADD)
+
+ifeq ($(USE_FB)$(EGL),yy)
+$(error USE_FB and EGL are mutually exclusive)
+endif
+
+ifeq ($(USE_FB)$(ENABLE_SDL),yy)
+$(error USE_FB and SDL are mutually exclusive)
+endif
+
+ifeq ($(EGL)$(ENABLE_SDL),yy)
+$(error EGL and SDL are mutually exclusive)
+endif
+
+ifeq ($(EGL)$(OPENGL),yn)
+$(error EGL requires OpenGL)
+endif
+
+ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yn)
+$(error MemoryCanvas and OpenGL are mutually exclusive)
+endif
