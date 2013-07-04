@@ -74,6 +74,8 @@ Copyright_License {
 #define gcc_visibility_hidden __attribute__((visibility("hidden")))
 #define gcc_visibility_default __attribute__((visibility("default")))
 
+#define gcc_always_inline __attribute__((always_inline))
+
 #else /* ! GCC_VERSION >= 30000 */
 
 /* generic C compiler */
@@ -101,6 +103,8 @@ Copyright_License {
 #define gcc_visibility_hidden
 #define gcc_visibility_default
 
+#define gcc_always_inline inline
+
 #endif /* ! GCC_VERSION >= 30000 */
 
 #if GCC_VERSION >= 40300
@@ -114,6 +118,12 @@ Copyright_License {
 #define gcc_cold
 
 #endif /* ! GCC_UNUSED >= 40300 */
+
+#if GCC_VERSION >= 40600 && !defined(__clang__)
+#define gcc_flatten __attribute__((flatten))
+#else
+#define gcc_flatten
+#endif
 
 #ifndef __cplusplus
 /* plain C99 has "restrict" */
