@@ -12,7 +12,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
-	$(SCREEN_SRC_DIR)/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
 	$(SCREEN_SRC_DIR)/SolidContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
@@ -20,6 +19,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 SCREEN_CUSTOM_SOURCES = \
+	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
@@ -147,6 +147,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Pen.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \

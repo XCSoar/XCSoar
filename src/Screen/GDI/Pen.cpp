@@ -26,29 +26,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifndef USE_GDI
-
-void
-Pen::Set(Style _style, unsigned _width, const Color c)
-{
-  assert(IsScreenInitialized());
-
-  width = _width;
-  color = c;
-
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
-  style = _style;
-#endif
-}
-
-void
-Pen::Set(unsigned width, const Color c)
-{
-  Set(SOLID, width, c);
-}
-
-#else /* USE_GDI */
-
 void
 Pen::Set(Style Style, unsigned width, const Color c)
 {
@@ -79,5 +56,3 @@ Pen::Reset()
     pen = NULL;
   }
 }
-
-#endif /* USE_GDI */
