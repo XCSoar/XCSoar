@@ -240,7 +240,9 @@ public:
     DrawPixel(x, y, c, GetPixelTraits());
   }
 
-  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
+  template<typename PixelOperations>
+  void FillRectangle(int x1, int y1, int x2, int y2, color_type c,
+                     PixelOperations operations) {
     if (x1 < 0)
       x1 = 0;
 
@@ -259,9 +261,13 @@ public:
     const unsigned columns = x2 - x1;
 
     pointer_type p = At(x1, y1);
-    ForVertical(p, buffer.pitch, y2 - y1, [this, columns, c](pointer_type q){
-        this->FillPixels(q, columns, c);
+    ForVertical(p, buffer.pitch, y2 - y1, [operations, columns, c](pointer_type q){
+        operations.FillPixels(q, columns, c);
       });
+  }
+
+  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
+    FillRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
   template<typename PixelOperations>
