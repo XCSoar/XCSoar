@@ -47,7 +47,7 @@
 void TopWindow::Refresh() {}
 #endif
 
-#ifdef USE_CONSOLE || defined(NON_INTERACTIVE)
+#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 
