@@ -32,6 +32,8 @@ Copyright_License {
 #include "mxcfb.h"
 #endif
 
+#include <algorithm>
+
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -297,6 +299,25 @@ CopyFromGreyscale(
 #endif
 }
 
+#else
+
+static void
+CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
+             ConstImageBuffer<BGRAPixelTraits> src)
+{
+  assert(dest_bpp == 32); // TODO: support RGB565
+
+  uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
+  const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
+
+  const uint32_t dest_pitch = _dest_pitch / (dest_bpp / 8);
+  const uint32_t src_pitch = src.pitch / (dest_bpp / 8);
+
+  for (unsigned row = src.height; row > 0;
+       --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+    std::copy_n(src_pixels, src.width, dest_pixels);
+}
+
 #endif
 
 void
@@ -310,7 +331,7 @@ TopCanvas::Flip()
                     map, map_pitch, map_bpp,
                     buffer);
 #else
-  // TODO
+  CopyFromBGRA(map, map_pitch, map_bpp, buffer);
 #endif
 
 

@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifndef USE_MEMORY_CANVAS
-#include "Screen/Canvas.hpp"
-#elif defined(GREYSCALE)
+#ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/PixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
+#else
+#include "Screen/Canvas.hpp"
 #endif
 
 #ifdef USE_EGL
@@ -82,6 +82,10 @@ class TopCanvas
 #ifdef DITHER
   Dither dither;
 #endif
+#else
+
+  WritableImageBuffer<BGRAPixelTraits> buffer;
+
 #endif
 #endif
 
