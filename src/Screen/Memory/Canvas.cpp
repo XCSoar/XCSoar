@@ -611,11 +611,7 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
 
   SDLRasterCanvas canvas(buffer);
 
-#ifdef __ARM_NEON__
-  NEONAlphaPixelOperations operations(alpha);
-#else
   AlphaPixelOperations<SDLPixelTraits> operations(alpha);
-#endif
 
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
