@@ -30,6 +30,10 @@ Copyright_License {
 #include "NEON.hpp"
 #endif
 
+#ifdef __MMX__
+#include "MMX.hpp"
+#endif
+
 /**
  * This class hosts two base classes: one that is optimised (e.g. via
  * SIMD) and one that is portable (but slow).  The optimised one will
@@ -90,6 +94,22 @@ class AlphaPixelOperations<GreyscalePixelTraits>
   : public SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
   using Base = SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
+                                              PortableAlphaPixelOperations<GreyscalePixelTraits>>;
+
+public:
+  explicit constexpr AlphaPixelOperations(const uint8_t alpha)
+    :SelectOptimisedPixelOperations(alpha) {}
+};
+
+#endif
+
+#ifdef __MMX__
+
+template<>
+class AlphaPixelOperations<GreyscalePixelTraits>
+  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
+                                          PortableAlphaPixelOperations<GreyscalePixelTraits>> {
+  using Base = SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
                                               PortableAlphaPixelOperations<GreyscalePixelTraits>>;
 
 public:
