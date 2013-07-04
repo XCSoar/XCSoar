@@ -41,6 +41,8 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
+#include <stdint.h>
+
 struct SDL_Surface;
 class Canvas;
 struct PixelSize;
