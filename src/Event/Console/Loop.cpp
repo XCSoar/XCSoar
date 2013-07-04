@@ -60,6 +60,9 @@ EventLoop::Dispatch(const Event &event)
     timer->Invoke();
   } else if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
-  } else if (top_window != nullptr && event.type != Event::NOP)
+  } else if (top_window != nullptr && event.type != Event::NOP) {
+#ifndef NON_INTERACTIVE
     top_window->OnEvent(event);
+#endif
+  }
 }

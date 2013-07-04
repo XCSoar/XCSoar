@@ -29,7 +29,7 @@
 #ifdef ANDROID
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
-#elif defined(USE_CONSOLE)
+#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
 #include "Screen/TopWindow.hpp"
@@ -47,7 +47,7 @@
 void TopWindow::Refresh() {}
 #endif
 
-#ifdef USE_CONSOLE
+#ifdef USE_CONSOLE || defined(NON_INTERACTIVE)
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 

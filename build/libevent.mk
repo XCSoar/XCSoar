@@ -12,6 +12,12 @@ ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \
 	$(SRC)/Event/Android/Loop.cpp \
 	$(SRC)/Event/Android/Queue.cpp
+else ifeq ($(VFB),y)
+EVENT_SOURCES += \
+	$(SRC)/Event/Linux/SignalListener.cpp \
+	$(SRC)/Event/Console/Loop.cpp \
+	$(SRC)/Event/Console/Queue.cpp
+VFB_CPPFLAGS = -DNON_INTERACTIVE
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
 	$(SRC)/Event/Linux/SignalListener.cpp \
@@ -32,6 +38,6 @@ EVENT_SOURCES += \
 	$(SRC)/Event/GDI/Queue.cpp
 endif
 
-EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS)
+EVENT_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
 $(eval $(call link-library,libevent,EVENT))

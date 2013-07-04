@@ -69,7 +69,7 @@ public:
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
 
-#ifdef USE_CONSOLE
+#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
     assert(!queued.load(std::memory_order_relaxed));
     assert(!enabled.load(std::memory_order_relaxed));
 #endif

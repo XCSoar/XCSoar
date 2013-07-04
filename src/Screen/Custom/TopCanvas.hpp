@@ -116,6 +116,8 @@ public:
   bool IsDefined() const {
 #ifdef ENABLE_SDL
     return surface != nullptr;
+#elif defined(USE_VFB)
+    return true;
 #else
     return fd >= 0;
 #endif

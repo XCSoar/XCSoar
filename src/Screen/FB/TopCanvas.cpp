@@ -28,12 +28,13 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
-#ifdef KOBO
+#if defined(KOBO) && defined(USE_FB)
 #include "mxcfb.h"
 #endif
 
 #include <algorithm>
 
+#ifdef USE_FB
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -43,6 +44,9 @@ Copyright_License {
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#endif
+
+#ifdef USE_FB
 
 void
 TopCanvas::Destroy()
@@ -54,6 +58,8 @@ TopCanvas::Destroy()
     fd = -1;
   }
 }
+
+#endif
 
 PixelRect
 TopCanvas::GetRect() const
@@ -67,6 +73,7 @@ void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
 {
+#ifdef USE_FB
   assert(fd < 0);
 
   const char *path = "/dev/fb0";
@@ -159,8 +166,17 @@ TopCanvas::Create(PixelSize new_size,
   ioctl(fd, MXCFB_SET_UPDATE_SCHEME, UPDATE_SCHEME_QUEUE_AND_MERGE);
 #endif
 
-  buffer.Allocate(vinfo.xres, vinfo.yres);
+  const unsigned width = vinfo.xres, height = vinfo.yes;
+#elif defined(USE_VFB)
+  const unsigned width = new_size.cx, height = new_size.cy;
+#else
+#error No implementation
+#endif
+
+  buffer.Allocate(width, height);
 }
+
+#ifdef USE_FB
 
 bool
 TopCanvas::CheckResize()
@@ -184,6 +200,8 @@ TopCanvas::CheckResize()
   return true;
 }
 
+#endif
+
 void
 TopCanvas::OnResize(PixelSize new_size)
 {
@@ -205,6 +223,8 @@ void
 TopCanvas::Unlock()
 {
 }
+
+#ifdef USE_FB
 
 #ifdef GREYSCALE
 
@@ -320,9 +340,13 @@ CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
 
 #endif
 
+#endif /* USE_FB */
+
 void
 TopCanvas::Flip()
 {
+#ifdef USE_FB
+
 #ifdef GREYSCALE
   CopyFromGreyscale(
 #ifdef DITHER
@@ -352,6 +376,8 @@ TopCanvas::Flip()
 
   ioctl(fd, MXCFB_SEND_UPDATE, &epd_update_data);
 #endif
+
+#endif /* USE_FB */
 }
 
 #ifdef KOBO

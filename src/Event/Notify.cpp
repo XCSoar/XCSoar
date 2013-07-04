@@ -39,7 +39,7 @@ Notify::SendNotification()
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL) || defined(NON_INTERACTIVE)
   event_queue->Push(Callback, this);
 #else
   SendUser(0);
@@ -52,7 +52,7 @@ Notify::ClearNotification()
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL) || defined(NON_INTERACTIVE)
   event_queue->Purge(Callback, this);
 #endif
 }

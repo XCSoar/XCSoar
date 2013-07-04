@@ -33,6 +33,7 @@ Copyright_License {
 #include "IO/Async/DiscardFileEventHandler.hpp"
 #include "../Linux/SignalListener.hpp"
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
 #include "../Linux/Input.hpp"
 #include "../Shared/RotatePointer.hpp"
@@ -40,6 +41,7 @@ Copyright_License {
 #else
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
+#endif
 #endif
 
 #include <queue>
@@ -53,12 +55,14 @@ class EventQueue final : private SignalListener {
 
   IOLoop io_loop;
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
+#endif
 #endif
 
   Mutex mutex;
@@ -75,6 +79,8 @@ class EventQueue final : private SignalListener {
 public:
   EventQueue();
   ~EventQueue();
+
+#ifndef NON_INTERACTIVE
 
   void SetScreenSize(unsigned width, unsigned height) {
 #ifdef KOBO
@@ -98,6 +104,8 @@ public:
     return { int(mouse.GetX()), int(mouse.GetY()) };
   }
 #endif
+
+#endif /* !NON_INTERACTIVE */
 
   void Quit() {
     running = false;

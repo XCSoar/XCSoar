@@ -12,6 +12,9 @@
 #
 #   HEADLESS    If set to "y", no UI is available.
 #
+#   VFB         "y" means software rendering to non-interactive virtual
+#               frame buffer
+#
 #   USE_FB      "y" means software rendering to /dev/fb0
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
@@ -71,6 +74,7 @@ include $(topdir)/build/libintl.mk
 
 ifeq ($(HEADLESS),y)
 else
+include $(topdir)/build/vfb.mk
 include $(topdir)/build/fb.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk

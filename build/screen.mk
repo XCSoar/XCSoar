@@ -104,6 +104,19 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
+else ifeq ($(VFB),y)
+SCREEN_SOURCES += \
+	$(SCREEN_CUSTOM_SOURCES) \
+	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/FB/Window.cpp \
+	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/FB/Init.cpp
+FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
@@ -114,7 +127,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
-	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/Init.cpp
 FB_CPPFLAGS = -DUSE_FB
@@ -164,12 +176,16 @@ SCREEN_SOURCES += \
 MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
 endif
 
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS)
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS) $(FREETYPE_LDLIBS) $(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) $(EGL_LDLIBS) $(FB_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 
 SCREEN_LDADD += $(SDL_LDADD) $(FB_LDADD)
+
+ifeq ($(USE_FB)$(VFB),yy)
+$(error USE_FB and VFB are mutually exclusive)
+endif
 
 ifeq ($(USE_FB)$(EGL),yy)
 $(error USE_FB and EGL are mutually exclusive)
@@ -177,6 +193,14 @@ endif
 
 ifeq ($(USE_FB)$(ENABLE_SDL),yy)
 $(error USE_FB and SDL are mutually exclusive)
+endif
+
+ifeq ($(VFB)$(EGL),yy)
+$(error VFB and EGL are mutually exclusive)
+endif
+
+ifeq ($(VFB)$(ENABLE_SDL),yy)
+$(error VFB and SDL are mutually exclusive)
 endif
 
 ifeq ($(EGL)$(ENABLE_SDL),yy)

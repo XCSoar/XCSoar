@@ -27,10 +27,12 @@ Copyright_License {
 EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
+#ifndef NON_INTERACTIVE
 #ifndef KOBO
    keyboard(*this, io_loop),
 #endif
    mouse(io_loop),
+#endif
    running(true)
 {
   SignalListener::Create(SIGINT, SIGTERM);
@@ -38,11 +40,13 @@ EventQueue::EventQueue()
   event_pipe.Create();
   io_loop.Add(event_pipe.GetReadFD(), io_loop.READ, discard);
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
   /* Kobo touch screen */
   mouse.Open("/dev/input/event1");
 #else
   mouse.Open();
+#endif
 #endif
 }
 
@@ -50,6 +54,7 @@ EventQueue::~EventQueue()
 {
 }
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
 
 void
@@ -75,6 +80,7 @@ EventQueue::SetMouseRotation(DisplaySettings::Orientation orientation)
   }
 }
 
+#endif
 #endif
 
 void
@@ -123,6 +129,7 @@ EventQueue::Generate(Event &event)
     return true;
   }
 
+#ifndef NON_INTERACTIVE
   event = mouse.Generate();
   if (event.type != Event::Type::NOP) {
 #ifdef KOBO
@@ -131,6 +138,7 @@ EventQueue::Generate(Event &event)
 
     return true;
   }
+#endif
 
   return false;
 }

@@ -79,7 +79,9 @@ TopWindow::OnDestroy()
 void
 TopWindow::OnResize(PixelSize new_size)
 {
+#ifndef NON_INTERACTIVE
   event_queue->SetScreenSize(new_size.cx, new_size.cy);
+#endif
 
   screen->OnResize(new_size);
   ContainerWindow::OnResize(new_size);
@@ -105,6 +107,8 @@ TopWindow::OnPaint(Canvas &canvas)
   canvas.DrawTriangleFan(p, ARRAY_SIZE(p));
 }
 #endif
+
+#ifndef NON_INTERACTIVE
 
 bool
 TopWindow::OnEvent(const Event &event)
@@ -159,6 +163,8 @@ TopWindow::OnEvent(const Event &event)
 
   return false;
 }
+
+#endif
 
 int
 TopWindow::RunEventLoop()
