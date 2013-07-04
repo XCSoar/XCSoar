@@ -34,7 +34,7 @@ Pen::Set(Style _style, unsigned _width, const Color c)
   width = _width;
   color = c;
 
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
   style = _style;
 #endif
 }

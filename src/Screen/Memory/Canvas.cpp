@@ -82,16 +82,17 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
   SDLRasterCanvas canvas(buffer);
 
   const unsigned thickness = pen.GetWidth();
+  const unsigned mask = pen.GetMask();
   const auto color = canvas.Import(pen.GetColor());
 
   if (thickness > 1)
     for (unsigned i = 1; i < cPoints; ++i)
       canvas.DrawThickLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
-                           thickness, color);
+                           thickness, color, mask);
   else
     for (unsigned i = 1; i < cPoints; ++i)
       canvas.DrawLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
-                      color);
+                      color, mask);
 }
 
 void
@@ -118,24 +119,25 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (IsPenOverBrush()) {
     const unsigned thickness = pen.GetWidth();
+    const unsigned mask = pen.GetMask();
     const auto color = canvas.Import(pen.GetColor());
 
     if (thickness > 1) {
       for (unsigned i = 1; i < cPoints; ++i)
         canvas.DrawThickLine(points[i - 1].x, points[i - 1].y,
                              points[i].x, points[i].y,
-                             thickness, color);
+                             thickness, color, mask);
       canvas.DrawThickLine(points[cPoints - 1].x, points[cPoints - 1].y,
                            points[0].x, points[0].y,
-                           thickness, color);
+                           thickness, color, mask);
     } else {
       for (unsigned i = 1; i < cPoints; ++i)
         canvas.DrawLine(points[i - 1].x, points[i - 1].y,
                         points[i].x, points[i].y,
-                        color);
+                        color, mask);
       canvas.DrawLine(points[cPoints - 1].x, points[cPoints - 1].y,
                       points[0].x, points[0].y,
-                      color);
+                      color, mask);
     }
   }
 }
@@ -144,13 +146,14 @@ void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   const unsigned thickness = pen.GetWidth();
+  const unsigned mask = pen.GetMask();
 
   SDLRasterCanvas canvas(buffer);
   const auto color = canvas.Import(pen.GetColor());
   if (thickness > 1)
-    canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
+    canvas.DrawThickLine(ax, ay, bx, by, thickness, color, mask);
   else
-    canvas.DrawLine(ax, ay, bx, by, color);
+    canvas.DrawLine(ax, ay, bx, by, color, mask);
 }
 
 void

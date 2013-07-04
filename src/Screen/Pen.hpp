@@ -42,6 +42,11 @@ public:
     DASH = PS_DASH,
     BLANK = PS_NULL
   };
+#elif defined(USE_MEMORY_CANVAS)
+  typedef uint8_t Style;
+  static constexpr uint8_t SOLID = -1;
+  static constexpr uint8_t DASH = -1-0b1000;
+  static constexpr uint8_t BLANK = 0;
 #else
   enum Style : uint8_t {
     SOLID,
@@ -58,7 +63,7 @@ protected:
 
   uint8_t width;
 
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
   Style style;
 #endif
 #endif
@@ -99,7 +104,7 @@ public:
   constexpr
   Pen(Style _style, unsigned _width, const Color _color)
     :color(_color), width(_width)
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
     , style(_style)
 #endif
   {}
@@ -107,7 +112,7 @@ public:
   constexpr
   Pen(unsigned _width, const Color _color)
     :color(_color), width(_width)
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
     , style(SOLID)
 #endif
   {}
@@ -205,6 +210,12 @@ public:
 #endif
   }
 #endif /* OPENGL */
+
+#ifdef USE_MEMORY_CANVAS
+  constexpr unsigned GetMask() const {
+    return style | (-1 & ~0xff);
+  }
+#endif
 };
 
 #ifndef USE_GDI
