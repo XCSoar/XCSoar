@@ -12,6 +12,8 @@
 #
 #   HEADLESS    If set to "y", no UI is available.
 #
+#   USE_FB      "y" means software rendering to /dev/fb0
+#
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
 #   OPENGL      "y" means render with OpenGL.
