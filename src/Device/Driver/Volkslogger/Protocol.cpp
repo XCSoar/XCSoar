@@ -424,7 +424,7 @@ Volkslogger::ReadFlight(Port &port, unsigned databaud,
    * Since the VL needs time to calculate the Security of
    * the log before it responds.
    */
-  const unsigned timeout_firstchar_ms = 300000;
+  const unsigned timeout_firstchar_ms = 600000;
 
   // Download binary log data supports BulkBaudrate
   int groesse = SendCommandReadBulk(port, databaud, env, cmd,

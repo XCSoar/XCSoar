@@ -61,6 +61,10 @@ XCSoar TE
   - TravisCI support
 
 
+Version 6.6.4 - not yet released
+* devices
+  - Volkslogger: increase timeout to calculate security (#2910)
+
 Version 6.6.3 - 2013/07/02
 * map
   - fill FAI triangle areas on Windows
