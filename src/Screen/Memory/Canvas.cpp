@@ -24,9 +24,13 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Util.hpp"
-#include "PixelOperations.hpp"
+#include "Optimised.hpp"
 #include "RasterCanvas.hpp"
 #include "Screen/Custom/Cache.hpp"
+
+#ifdef __ARM_NEON__
+#include "NEON.hpp"
+#endif
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -78,16 +82,17 @@ Canvas::DrawPolyline(const RasterPoint *p, unsigned cPoints)
   SDLRasterCanvas canvas(buffer);
 
   const unsigned thickness = pen.GetWidth();
+  const unsigned mask = pen.GetMask();
   const auto color = canvas.Import(pen.GetColor());
 
   if (thickness > 1)
     for (unsigned i = 1; i < cPoints; ++i)
       canvas.DrawThickLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
-                           thickness, color);
+                           thickness, color, mask);
   else
     for (unsigned i = 1; i < cPoints; ++i)
       canvas.DrawLine(p[i - 1].x, p[i - 1].y, p[i].x, p[i].y,
-                      color);
+                      color, mask);
 }
 
 void
@@ -114,24 +119,25 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 
   if (IsPenOverBrush()) {
     const unsigned thickness = pen.GetWidth();
+    const unsigned mask = pen.GetMask();
     const auto color = canvas.Import(pen.GetColor());
 
     if (thickness > 1) {
       for (unsigned i = 1; i < cPoints; ++i)
         canvas.DrawThickLine(points[i - 1].x, points[i - 1].y,
                              points[i].x, points[i].y,
-                             thickness, color);
+                             thickness, color, mask);
       canvas.DrawThickLine(points[cPoints - 1].x, points[cPoints - 1].y,
                            points[0].x, points[0].y,
-                           thickness, color);
+                           thickness, color, mask);
     } else {
       for (unsigned i = 1; i < cPoints; ++i)
         canvas.DrawLine(points[i - 1].x, points[i - 1].y,
                         points[i].x, points[i].y,
-                        color);
+                        color, mask);
       canvas.DrawLine(points[cPoints - 1].x, points[cPoints - 1].y,
                       points[0].x, points[0].y,
-                      color);
+                      color, mask);
     }
   }
 }
@@ -140,13 +146,14 @@ void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   const unsigned thickness = pen.GetWidth();
+  const unsigned mask = pen.GetMask();
 
   SDLRasterCanvas canvas(buffer);
   const auto color = canvas.Import(pen.GetColor());
   if (thickness > 1)
-    canvas.DrawThickLine(ax, ay, bx, by, thickness, color);
+    canvas.DrawThickLine(ax, ay, bx, by, thickness, color, mask);
   else
-    canvas.DrawLine(ax, ay, bx, by, color);
+    canvas.DrawLine(ax, ay, bx, by, color, mask);
 }
 
 void
@@ -376,20 +383,7 @@ Canvas::CopyTransparentBlack(const Canvas &src)
 }
 
 void
-Canvas::StretchTransparent(const Bitmap &_src, Color key)
-{
-  assert(_src.IsDefined());
-
-  ConstImageBuffer src = _src.GetNative();
-
-  SDLRasterCanvas canvas(buffer);
-  canvas.ScaleRectangle(0, 0, GetWidth(), GetHeight(),
-                        src.data, src.pitch, src.width, src.height,
-                        TransparentPixelOperations<SDLPixelTraits>(canvas.Import(key)));
-}
-
-void
-Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
+Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());
 
@@ -400,7 +394,7 @@ Canvas::InvertStretchTransparent(const Bitmap &_src, Color key)
   const unsigned dest_height = GetHeight();
 
   SDLRasterCanvas canvas(buffer);
-  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(key));
+  BitNotPixelOperations<SDLPixelTraits> operations;
 
   canvas.ScaleRectangle(dest_x, dest_y, dest_width, dest_height,
                         src.At(src_x, src_y), src.pitch, src.width, src.height,
@@ -619,9 +613,12 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
   // TODO: support scaling
 
   SDLRasterCanvas canvas(buffer);
+
+  AlphaPixelOperations<SDLPixelTraits> operations(alpha);
+
   canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
                        src.At(src_x, src_y), src.pitch,
-                       AlphaPixelOperations<SDLPixelTraits>(alpha));
+                       operations);
 }
 
 void

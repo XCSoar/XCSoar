@@ -2,7 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 OPT \
-	PI KOBO \
+	PI KOBO NEON \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN
@@ -208,7 +208,7 @@ endif
 
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
-  TCPREFIX := arm-linux-gnueabihf-
+  TCPREFIX := arm-unknown-linux-gnueabi-
   PI ?= /opt/pi/root
   TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
   TARGET_IS_PI = y
@@ -218,11 +218,18 @@ endif
 
 ifeq ($(TARGET),KOBO)
   # Experimental target for Kobo Mini
-  override TARGET = UNIX
-  TCPREFIX := arm-linux-gnueabihf-
+  override TARGET = NEON
   KOBO ?= /opt/kobo/arm-unknown-linux-gnueabi
-  TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
   TARGET_IS_KOBO = y
+endif
+
+ifeq ($(TARGET),NEON)
+  # Experimental target for generic ARMv7 with NEON
+  override TARGET = UNIX
+  TCPREFIX = arm-unknown-linux-gnueabi-
+  ifeq ($(CLANG),n)
+    TARGET_ARCH += -mcpu=cortex-a8 -mfloat-abi=hard
+  endif
   TARGET_IS_ARM = y
   ARMV7 := y
   NEON := y
@@ -239,7 +246,11 @@ ifeq ($(TARGET),UNIX)
   endif
 
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a
+    ifeq ($(CLANG),y)
+      TARGET_ARCH += -target armv7-none-linux-gnueabihf -integrated-as
+    else
+      TARGET_ARCH += -march=armv7-a
+    endif
   endif
 
   ifeq ($(NEON),y)

@@ -21,39 +21,19 @@ Copyright_License {
 }
 */
 
-#include "../Timer.hpp"
-#include "Globals.hpp"
-#include "Queue.hpp"
+#ifndef XCSOAR_DISCARD_FILE_EVENT_HANDLER_HPP
+#define XCSOAR_DISCARD_FILE_EVENT_HANDLER_HPP
 
-void
-Timer::Schedule(unsigned _ms)
-{
-  if (queued.exchange(false))
-    event_queue->CancelTimer(*this);
+#include "FileEventHandler.hpp"
+#include "Compiler.h"
 
-  enabled.store(true);
-  ms = _ms;
+/**
+ * A #FileEventHandler that reads and discards all data from the file
+ * descriptor.
+ */
+class DiscardFileEventHandler final : public FileEventHandler {
+public:
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
+};
 
-  if (!queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
-}
-
-void
-Timer::Cancel()
-{
-  if (enabled.exchange(false) && queued.exchange(false))
-    event_queue->CancelTimer(*this);
-}
-
-void
-Timer::Invoke()
-{
-  if (!queued.exchange(false))
-    /* was cancelled by another thread */
-    return;
-
-  OnTimer();
-
-  if (enabled.load() && !queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
-}
+#endif

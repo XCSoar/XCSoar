@@ -7,10 +7,18 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifneq ($(LIBCXX),)
+  # using libc++
+
   include $(topdir)/build/libcxx.mk
   LIBSTDCXX_CPPFLAGS = $(LIBCXX_CPPFLAGS)
   LIBSTDCXX_LDADD = $(LIBCXX_LDADD)
   LIBSTDCXX_LDFLAGS = $(LIBCXX_LDFLAGS)
+else
+  # using GNU libstdc++
+
+  ifeq ($(DEBUG),y)
+    LIBSTDCXX_CPPFLAGS += -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
+  endif
 endif
 
 # Add the C++ standard library to every library and every program

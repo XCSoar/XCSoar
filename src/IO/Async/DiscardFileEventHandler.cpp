@@ -21,11 +21,14 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_SDL_GLOBALS_HPP
-#define XCSOAR_EVENT_SDL_GLOBALS_HPP
+#include "DiscardFileEventHandler.hpp"
 
-class EventQueue;
+#include <unistd.h>
 
-extern EventQueue *event_queue;
-
-#endif
+bool
+DiscardFileEventHandler::OnFileEvent(int fd, unsigned mask)
+{
+  char buffer[256];
+  ssize_t nbytes = read(fd, buffer, sizeof(buffer));
+  return nbytes > 0;
+}

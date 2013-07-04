@@ -32,12 +32,20 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifdef ANDROID
+#ifdef __BIONIC__
 #include <sys/syscall.h>
 #endif
 
 #ifdef HAVE_POSIX
 #include <poll.h>
+#endif
+
+#ifdef HAVE_EVENTFD
+#include <sys/eventfd.h>
+#endif
+
+#if defined(HAVE_SIGNALFD) && !defined(__BIONIC__)
+#include <sys/signalfd.h>
 #endif
 
 #ifndef O_NOCTTY
@@ -78,7 +86,7 @@ FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
 
 #ifdef __linux__
   const int flags = O_CLOEXEC;
-#ifdef ANDROID
+#ifdef __BIONIC__
   /* Bionic provides the pipe2() function only since Android 2.3,
      therefore we must roll our own system call here */
   const int result = syscall(__NR_pipe2, fds, flags);
@@ -104,6 +112,39 @@ FileDescriptor::SetNonBlocking()
 
   int flags = fcntl(fd, F_GETFL);
   fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
+#endif
+
+#ifdef HAVE_EVENTFD
+
+bool
+FileDescriptor::CreateEventFD(unsigned initval)
+{
+  assert(!IsDefined());
+
+  fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
+  return fd >= 0;
+}
+
+#endif
+
+#ifdef HAVE_SIGNALFD
+
+bool
+FileDescriptor::CreateSignalFD(const sigset_t *mask)
+{
+#ifdef __BIONIC__
+  int new_fd = syscall(__NR_signalfd4, fd, mask, sizeof(*mask),
+                       O_NONBLOCK|O_CLOEXEC);
+#else
+  int new_fd = ::signalfd(fd, mask, SFD_NONBLOCK|SFD_CLOEXEC);
+#endif
+  if (new_fd < 0)
+    return false;
+
+  fd = new_fd;
+  return true;
 }
 
 #endif

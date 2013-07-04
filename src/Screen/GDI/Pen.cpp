@@ -21,6 +21,38 @@ Copyright_License {
 }
 */
 
-#include "Globals.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Debug.hpp"
 
-EventQueue *event_queue;
+#include <assert.h>
+
+void
+Pen::Set(Style Style, unsigned width, const Color c)
+{
+  assert(IsScreenInitialized());
+
+  Reset();
+  pen = ::CreatePen(Style, width, c);
+}
+
+void
+Pen::Set(unsigned width, const Color c)
+{
+  Set(SOLID, width, c);
+}
+
+void
+Pen::Reset()
+{
+  assert(!IsDefined() || IsScreenInitialized());
+
+  if (pen != NULL) {
+#ifndef NDEBUG
+    bool success =
+#endif
+      ::DeleteObject(pen);
+    assert(success);
+
+    pen = NULL;
+  }
+}

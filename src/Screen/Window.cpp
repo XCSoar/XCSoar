@@ -24,17 +24,8 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Debug.hpp"
-
-#ifdef ANDROID
-#include "Event/Android/Queue.hpp"
-#include "Android/Main.hpp"
-#elif defined(ENABLE_SDL)
-#include "Event/SDL/Queue.hpp"
-#include "Event/SDL/Globals.hpp"
-#elif defined(USE_CONSOLE)
-#include "Event/Console/Queue.hpp"
-#include "Event/Console/Globals.hpp"
-#endif /* ENABLE_SDL */
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Debug.hpp"

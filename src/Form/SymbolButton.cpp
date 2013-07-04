@@ -84,9 +84,9 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     launcher1_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
-      canvas.InvertStretchTransparent(launcher1_bitmap, COLOR_YELLOW);
+      canvas.StretchNot(launcher1_bitmap);
     else
-      canvas.StretchTransparent(launcher1_bitmap, COLOR_BLUE);
+      canvas.Stretch(launcher1_bitmap);
   }
 
   // Draw Simulator bitmap
@@ -95,9 +95,9 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     launcher2_bitmap.EnableInterpolation();
     canvas.ClearWhite();
     if (pressed)
-      canvas.InvertStretchTransparent(launcher2_bitmap, COLOR_YELLOW);
+      canvas.StretchNot(launcher2_bitmap);
     else
-      canvas.StretchTransparent(launcher2_bitmap, COLOR_BLUE);
+      canvas.Stretch(launcher2_bitmap);
   }
 
   else if (ParseHexColor(caption.c_str(), color)) {

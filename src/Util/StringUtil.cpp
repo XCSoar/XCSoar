@@ -24,8 +24,10 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "CharUtil.hpp"
 
-#include <string.h>
 #include <algorithm>
+
+#include <string.h>
+#include <stdlib.h>
 
 bool
 StringEndsWith(const char *haystack, const char *needle)

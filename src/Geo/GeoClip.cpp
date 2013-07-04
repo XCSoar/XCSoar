@@ -56,6 +56,10 @@ static constexpr unsigned CLIP_LEFT_EDGE = 0x1;
 static constexpr unsigned CLIP_RIGHT_EDGE = 0x2;
 static constexpr unsigned CLIP_BOTTOM_EDGE = 0x4;
 static constexpr unsigned CLIP_TOP_EDGE = 0x8;
+static constexpr unsigned CLIP_LEFT_EQUALS = 0x10;
+static constexpr unsigned CLIP_RIGHT_EQUALS = 0x20;
+static constexpr unsigned CLIP_BOTTOM_EQUALS = 0x40;
+static constexpr unsigned CLIP_TOP_EQUALS = 0x80;
 
 static constexpr bool CLIP_INSIDE(unsigned a) {
   return !a;
@@ -73,7 +77,7 @@ gcc_pure
 unsigned GeoClip::ClipEncodeX(const Angle& x) const {
   if (x< Angle::Zero())
     return CLIP_LEFT_EDGE;
-  if (x>width)
+  if (x> width)
     return CLIP_RIGHT_EDGE;
   return 0;
 }
@@ -103,9 +107,13 @@ GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
   unsigned code1 = ClipEncode(a2);
   unsigned code2 = ClipEncode(b2);
 
+  bool swapped = false;
+
   while (true) {
 
     if (CLIP_ACCEPT(code1, code2)) {
+      if (swapped) 
+        std::swap(a2, b2);      
       a = ExportPoint(a2);
       b = ExportPoint(b2);
       return true;
@@ -115,6 +123,7 @@ GeoClip::ClipLine(GeoPoint &a, GeoPoint &b) const
       return false;
 
     if (CLIP_INSIDE(code1)) {
+      swapped = !swapped;
       std::swap(a2, b2);
       std::swap(code1, code2);
     }
@@ -148,17 +157,27 @@ public:
   void ClipEncodeY(const Angle& south, const Angle& north) {
     if (latitude< south)
       clip_code = CLIP_BOTTOM_EDGE;
-    if (latitude> north)
+    else if (latitude == south) 
+      clip_code = CLIP_BOTTOM_EQUALS;
+    else if (latitude> north)
       clip_code = CLIP_TOP_EDGE;
-    clip_code = 0;
+    else if (latitude == north)
+      clip_code = CLIP_TOP_EQUALS;
+    else
+      clip_code = 0;
   }
 
   void ClipEncodeX(const Angle& west, const Angle& east) {
     if (longitude< west)
       clip_code = CLIP_LEFT_EDGE;
-    if (longitude> east)
+    else if (longitude == west)
+      clip_code = CLIP_LEFT_EQUALS;
+    else if (longitude> east)
       clip_code = CLIP_RIGHT_EDGE;
-    clip_code = 0;
+    else if (longitude == east)
+      clip_code = CLIP_RIGHT_EQUALS;
+    else
+      clip_code = 0;
   }
 
 };
@@ -171,14 +190,15 @@ ClipVertexLongitude(const Angle west, const Angle east,
   unsigned num_insert = 0;
 
   if (pt.clip_code & CLIP_LEFT_EDGE) {
-    if (prev.clip_code & CLIP_LEFT_EDGE) {
-      if (next.clip_code & CLIP_LEFT_EDGE)
+    if (prev.clip_code & (CLIP_LEFT_EDGE | CLIP_LEFT_EQUALS)) {
+      if (next.clip_code & (CLIP_LEFT_EDGE | CLIP_LEFT_EQUALS))
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, west);
+      pt.clip_code = CLIP_LEFT_EQUALS;
     } else {
-      if (! (next.clip_code & CLIP_LEFT_EDGE)) {
+      if (! (next.clip_code & (CLIP_LEFT_EDGE | CLIP_LEFT_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, west);
@@ -186,16 +206,18 @@ ClipVertexLongitude(const Angle west, const Angle east,
       }
 
       pt = clip_longitude(prev, pt, west);
+      pt.clip_code = CLIP_LEFT_EQUALS;
     }
   } else if (pt.clip_code & CLIP_RIGHT_EDGE) {
-    if (prev.clip_code & CLIP_RIGHT_EDGE) {
-      if (next.clip_code & CLIP_RIGHT_EDGE)
+    if (prev.clip_code & (CLIP_RIGHT_EDGE | CLIP_RIGHT_EQUALS)) {
+      if (next.clip_code & (CLIP_RIGHT_EDGE | CLIP_RIGHT_EQUALS))
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, east);
+      pt.clip_code = CLIP_RIGHT_EQUALS;
     } else {
-      if (! (next.clip_code & CLIP_RIGHT_EDGE)) {
+      if (! (next.clip_code & (CLIP_RIGHT_EDGE | CLIP_RIGHT_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, east);
@@ -203,6 +225,7 @@ ClipVertexLongitude(const Angle west, const Angle east,
       }
 
       pt = clip_longitude(prev, pt, east);
+      pt.clip_code = CLIP_RIGHT_EQUALS;
     }
   }
 
@@ -217,15 +240,16 @@ ClipVertex_latitude(const Angle south, const Angle north,
   unsigned num_insert = 0;
 
   if (pt.clip_code & CLIP_BOTTOM_EDGE) {
-    if (prev.clip_code & CLIP_BOTTOM_EDGE) {
-      if (next.clip_code & CLIP_BOTTOM_EDGE)
+    if (prev.clip_code & (CLIP_BOTTOM_EDGE | CLIP_BOTTOM_EQUALS)) {
+      if (next.clip_code & (CLIP_BOTTOM_EDGE | CLIP_BOTTOM_EQUALS))
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, south);
+      pt.clip_code = CLIP_BOTTOM_EQUALS;
 
     } else {
-      if (! (next.clip_code & CLIP_BOTTOM_EDGE)) {
+      if (! (next.clip_code & (CLIP_BOTTOM_EDGE | CLIP_BOTTOM_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, south);
@@ -233,23 +257,27 @@ ClipVertex_latitude(const Angle south, const Angle north,
       }
 
       pt = clip_latitude(prev, pt, south);
+      pt.clip_code = CLIP_BOTTOM_EQUALS;
     }
   } else if (pt.clip_code & CLIP_TOP_EDGE) {
-    if (prev.clip_code & CLIP_TOP_EDGE) {
-      if (next.clip_code & CLIP_TOP_EDGE)
+    if (prev.clip_code & (CLIP_TOP_EDGE | CLIP_TOP_EQUALS)) {
+      if (next.clip_code & (CLIP_TOP_EDGE | CLIP_TOP_EQUALS))
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, north);
+      pt.clip_code = CLIP_TOP_EQUALS;
     } else {
-      if (! (next.clip_code & CLIP_TOP_EDGE)) {
+      if (! (next.clip_code & (CLIP_TOP_EDGE | CLIP_TOP_EQUALS) )) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, north);
+
         ++num_insert;
       }
 
       pt = clip_latitude(prev, pt, north);
+      pt.clip_code = CLIP_TOP_EQUALS;
     }
   }
 

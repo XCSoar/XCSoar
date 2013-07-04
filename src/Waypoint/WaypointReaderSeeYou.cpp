@@ -26,7 +26,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Util/Macros.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR* src, Angle& dest, const bool lat)

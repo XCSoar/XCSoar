@@ -31,9 +31,8 @@ Copyright_License {
 #include "IO/Async/IOThread.hpp"
 #include "Util/UTF8.hpp"
 #include "Util/ConvertString.hpp"
-#endif
 
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#include <string>
 
 void
 SkyLinesTracking::Client::SetIOThread(IOThread *_io_thread)

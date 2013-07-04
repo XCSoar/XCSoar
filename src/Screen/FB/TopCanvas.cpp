@@ -28,10 +28,13 @@ Copyright_License {
 #include "../Memory/Dither.hpp"
 #endif
 
-#ifdef KOBO
+#if defined(KOBO) && defined(USE_FB)
 #include "mxcfb.h"
 #endif
 
+#include <algorithm>
+
+#ifdef USE_FB
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
@@ -41,16 +44,19 @@ Copyright_License {
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#endif
 
 void
 TopCanvas::Destroy()
 {
   buffer.Free();
 
+#ifdef USE_FB
   if (fd >= 0) {
     close(fd);
     fd = -1;
   }
+#endif
 }
 
 PixelRect
@@ -65,6 +71,7 @@ void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
 {
+#ifdef USE_FB
   assert(fd < 0);
 
   const char *path = "/dev/fb0";
@@ -157,8 +164,17 @@ TopCanvas::Create(PixelSize new_size,
   ioctl(fd, MXCFB_SET_UPDATE_SCHEME, UPDATE_SCHEME_QUEUE_AND_MERGE);
 #endif
 
-  buffer.Allocate(vinfo.xres, vinfo.yres);
+  const unsigned width = vinfo.xres, height = vinfo.yres;
+#elif defined(USE_VFB)
+  const unsigned width = new_size.cx, height = new_size.cy;
+#else
+#error No implementation
+#endif
+
+  buffer.Allocate(width, height);
 }
+
+#ifdef USE_FB
 
 bool
 TopCanvas::CheckResize()
@@ -182,6 +198,8 @@ TopCanvas::CheckResize()
   return true;
 }
 
+#endif
+
 void
 TopCanvas::OnResize(PixelSize new_size)
 {
@@ -203,6 +221,8 @@ void
 TopCanvas::Unlock()
 {
 }
+
+#ifdef USE_FB
 
 #ifdef GREYSCALE
 
@@ -297,11 +317,34 @@ CopyFromGreyscale(
 #endif
 }
 
+#else
+
+static void
+CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
+             ConstImageBuffer<BGRAPixelTraits> src)
+{
+  assert(dest_bpp == 32); // TODO: support RGB565
+
+  uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
+  const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
+
+  const uint32_t dest_pitch = _dest_pitch / (dest_bpp / 8);
+  const uint32_t src_pitch = src.pitch / (dest_bpp / 8);
+
+  for (unsigned row = src.height; row > 0;
+       --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+    std::copy_n(src_pixels, src.width, dest_pixels);
+}
+
 #endif
+
+#endif /* USE_FB */
 
 void
 TopCanvas::Flip()
 {
+#ifdef USE_FB
+
 #ifdef GREYSCALE
   CopyFromGreyscale(
 #ifdef DITHER
@@ -310,7 +353,7 @@ TopCanvas::Flip()
                     map, map_pitch, map_bpp,
                     buffer);
 #else
-  // TODO
+  CopyFromBGRA(map, map_pitch, map_bpp, buffer);
 #endif
 
 
@@ -331,6 +374,8 @@ TopCanvas::Flip()
 
   ioctl(fd, MXCFB_SEND_UPDATE, &epd_update_data);
 #endif
+
+#endif /* USE_FB */
 }
 
 #ifdef KOBO

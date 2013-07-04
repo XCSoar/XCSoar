@@ -38,6 +38,12 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+#ifdef __linux__
+#define HAVE_EVENTFD
+#define HAVE_SIGNALFD
+#include <signal.h>
+#endif
+
 /**
  * An OO wrapper for a UNIX file descriptor.
  */
@@ -116,6 +122,14 @@ public:
   bool Duplicate(int new_fd) const {
     return ::dup2(Get(), new_fd) == 0;
   }
+#endif
+
+#ifdef HAVE_EVENTFD
+  bool CreateEventFD(unsigned initval=0);
+#endif
+
+#ifdef HAVE_SIGNALFD
+  bool CreateSignalFD(const sigset_t *mask);
 #endif
 
   /**

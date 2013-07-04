@@ -37,8 +37,8 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef KOBO
-#include "Event/Console/Globals.hpp"
-#include "Event/Console/Queue.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 #endif
 
 enum ControlIndex {

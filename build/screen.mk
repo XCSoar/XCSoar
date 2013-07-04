@@ -12,7 +12,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/Color.cpp \
 	$(SCREEN_SRC_DIR)/BufferCanvas.cpp \
-	$(SCREEN_SRC_DIR)/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Window.cpp \
 	$(SCREEN_SRC_DIR)/SolidContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
@@ -20,6 +19,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 SCREEN_CUSTOM_SOURCES = \
+	$(SCREEN_SRC_DIR)/Custom/Pen.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
@@ -104,6 +104,19 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp
+else ifeq ($(VFB),y)
+SCREEN_SOURCES += \
+	$(SCREEN_CUSTOM_SOURCES) \
+	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/FB/Window.cpp \
+	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/FB/Init.cpp
+FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
@@ -114,7 +127,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
-	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/Init.cpp
 FB_CPPFLAGS = -DUSE_FB
@@ -135,6 +147,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/Pen.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
@@ -164,9 +177,41 @@ SCREEN_SOURCES += \
 MEMORY_CANVAS_CPPFLAGS = -DUSE_MEMORY_CANVAS
 endif
 
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS)
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS) $(LIBPNG_CPPFLAGS) $(LIBJPEG_CPPFLAGS) $(EGL_CPPFLAGS) $(MEMORY_CANVAS_CPPFLAGS) $(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS) $(FREETYPE_LDLIBS) $(LIBPNG_LDLIBS) $(LIBJPEG_LDLIBS) $(EGL_LDLIBS) $(FB_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 
 SCREEN_LDADD += $(SDL_LDADD) $(FB_LDADD)
+
+ifeq ($(USE_FB)$(VFB),yy)
+$(error USE_FB and VFB are mutually exclusive)
+endif
+
+ifeq ($(USE_FB)$(EGL),yy)
+$(error USE_FB and EGL are mutually exclusive)
+endif
+
+ifeq ($(USE_FB)$(ENABLE_SDL),yy)
+$(error USE_FB and SDL are mutually exclusive)
+endif
+
+ifeq ($(VFB)$(EGL),yy)
+$(error VFB and EGL are mutually exclusive)
+endif
+
+ifeq ($(VFB)$(ENABLE_SDL),yy)
+$(error VFB and SDL are mutually exclusive)
+endif
+
+ifeq ($(EGL)$(ENABLE_SDL),yy)
+$(error EGL and SDL are mutually exclusive)
+endif
+
+ifeq ($(EGL)$(OPENGL),yn)
+$(error EGL requires OpenGL)
+endif
+
+ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yy)
+$(error MemoryCanvas and OpenGL are mutually exclusive)
+endif

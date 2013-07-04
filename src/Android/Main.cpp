@@ -40,7 +40,8 @@ Copyright_License {
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/GlobalFonts.hpp"
-#include "Event/Android/Queue.hpp"
+#include "Event/Globals.hpp"
+#include "Event/Queue.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Dialogs/Message.hpp"
 #include "Simulator.hpp"
@@ -78,8 +79,6 @@ Copyright_License {
 Context *context;
 
 NativeView *native_view;
-
-EventQueue *event_queue;
 
 Vibrator *vibrator;
 bool os_haptic_feedback_enabled;

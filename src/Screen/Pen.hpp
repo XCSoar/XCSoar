@@ -36,52 +36,41 @@ Copyright_License {
 class Pen
 {
 public:
-#ifndef USE_GDI
-  enum Style {
-    SOLID,
-    DASH,
-    BLANK
-  };
-#else
+#ifdef USE_GDI
   enum Style {
     SOLID = PS_SOLID,
     DASH = PS_DASH,
     BLANK = PS_NULL
   };
+#elif defined(USE_MEMORY_CANVAS)
+  typedef uint8_t Style;
+  static constexpr uint8_t SOLID = -1;
+  static constexpr uint8_t DASH = -1-0b1000;
+  static constexpr uint8_t BLANK = 0;
+#else
+  enum Style : uint8_t {
+    SOLID,
+    DASH,
+    BLANK
+  };
 #endif
 
 protected:
-#ifndef USE_GDI
-  unsigned width;
+#ifdef USE_GDI
+  HPEN pen;
+#else
   Color color;
 
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
+  uint8_t width;
+
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
   Style style;
 #endif
-#else
-  HPEN pen;
 #endif
 
 public:
-#ifndef USE_GDI
-  Pen():width(0) {}
+#ifdef USE_GDI
 
-  constexpr
-  Pen(Style _style, unsigned _width, const Color _color)
-    :width(_width), color(_color)
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
-    , style(_style)
-#endif
-  {}
-
-  constexpr
-  Pen(unsigned _width, const Color _color)
-    :width(_width), color(_color)
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
-    , style(SOLID)
-#endif
-  {}
-#else /* USE_GDI */
   /** Base Constructor for the Pen class */
   Pen() : pen(NULL) {}
   /**
@@ -107,7 +96,28 @@ public:
 
   Pen(const Pen &other) = delete;
   Pen &operator=(const Pen &other) = delete;
-#endif /* USE_GDI */
+
+#else /* !USE_GDI */
+
+  Pen():width(0) {}
+
+  constexpr
+  Pen(Style _style, unsigned _width, const Color _color)
+    :color(_color), width(_width)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+    , style(_style)
+#endif
+  {}
+
+  constexpr
+  Pen(unsigned _width, const Color _color)
+    :color(_color), width(_width)
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+    , style(SOLID)
+#endif
+  {}
+
+#endif /* !USE_GDI */
 
 public:
   /**
@@ -135,14 +145,20 @@ public:
   bool
   IsDefined() const
   {
-#ifndef USE_GDI
-    return width > 0;
+#ifdef USE_GDI
+    return pen != nullptr;
 #else
-    return pen != NULL;
+    return width > 0;
 #endif
   }
 
-#ifndef USE_GDI
+#ifdef USE_GDI
+  /**
+   * Returns the native HPEN object
+   * @return The native HPEN object
+   */
+  HPEN Native() const { return pen; }
+#else
   unsigned
   GetWidth() const
   {
@@ -154,12 +170,6 @@ public:
   {
     return color;
   }
-#else
-  /**
-   * Returns the native HPEN object
-   * @return The native HPEN object
-   */
-  HPEN Native() const { return pen; }
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -200,6 +210,12 @@ public:
 #endif
   }
 #endif /* OPENGL */
+
+#ifdef USE_MEMORY_CANVAS
+  constexpr unsigned GetMask() const {
+    return style | (-1 & ~0xff);
+  }
+#endif
 };
 
 #ifndef USE_GDI

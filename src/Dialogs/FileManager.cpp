@@ -610,8 +610,8 @@ ManagedFileListWidget::OnTimer()
     Net::DownloadManager::Enumerate(*this);
     RefreshList();
     UpdateButtons();
-    Timer::Schedule(1000);
-  }
+  } else
+    Timer::Cancel();
 }
 
 void

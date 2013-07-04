@@ -32,6 +32,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Look/DialogLook.hpp"
+#include "Event/Globals.hpp"
 
 #ifndef USE_GDI
 #include "Screen/Custom/Reference.hpp"
@@ -42,15 +43,12 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Android/Main.hpp"
 #include "Event/Shared/Event.hpp"
 #include "Event/Android/Loop.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
-#elif defined(USE_CONSOLE)
-#include "Event/Console/Globals.hpp"
+#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
 #elif defined(USE_GDI)
@@ -229,6 +227,16 @@ WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     if (new_position.top < 0)
       new_position.Offset(0, -new_position.top);
 
+#ifdef USE_MEMORY_CANVAS
+    /* the RasterCanvas class doesn't clip negative window positions
+       properly, therefore we avoid this problem at this stage */
+    if (new_position.left < 0)
+      new_position.left = 0;
+
+    if (new_position.top < 0)
+      new_position.top = 0;
+#endif
+
     Move(new_position.left, new_position.top);
 
     return true;
@@ -391,10 +399,10 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL) || defined(NON_INTERACTIVE)
   EventLoop loop(*event_queue, main_window);
 #else
-  DialogEventLoop loop(*this);
+  DialogEventLoop loop(*event_queue, *this);
 #endif
   Event event;
 

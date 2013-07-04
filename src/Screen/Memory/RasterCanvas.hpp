@@ -32,6 +32,15 @@ Copyright_License {
 
 #include <assert.h>
 
+/*
+  line_masks:
+   -1               SOLID
+   -1-0b100         DASH
+   -1-0b1000        LONGDASH
+   -1-0b1100        DOTS
+   -1-0b10100       DDOT
+ */
+
 /**
  * A software renderer for various primitives.
  *
@@ -240,7 +249,9 @@ public:
     DrawPixel(x, y, c, GetPixelTraits());
   }
 
-  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
+  template<typename PixelOperations>
+  void FillRectangle(int x1, int y1, int x2, int y2, color_type c,
+                     PixelOperations operations) {
     if (x1 < 0)
       x1 = 0;
 
@@ -259,9 +270,13 @@ public:
     const unsigned columns = x2 - x1;
 
     pointer_type p = At(x1, y1);
-    ForVertical(p, buffer.pitch, y2 - y1, [this, columns, c](pointer_type q){
-        this->FillPixels(q, columns, c);
+    ForVertical(p, buffer.pitch, y2 - y1, [operations, columns, c](pointer_type q){
+        operations.FillPixels(q, columns, c);
       });
+  }
+
+  void FillRectangle(int x1, int y1, int x2, int y2, color_type c) {
+    FillRectangle<PixelTraits>(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
   template<typename PixelOperations>
@@ -322,7 +337,8 @@ public:
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
-  void DrawLine(int x1, int y1, int x2, int y2, color_type c) {
+  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
+                unsigned line_mask=-1) {
     /* optimised Bresenham algorithm */
 
     if (!ClipLine(x1, y1, x2, y2))
@@ -347,7 +363,8 @@ public:
     }
 
     for (int x = 0, y = 0; x < dx; x++, p = PixelTraits::NextByte(p, pixx)) {
-      PixelTraits::WritePixel(p, c);
+      if ((x | line_mask) == unsigned(-1))
+        PixelTraits::WritePixel(p, c);
 
       y += dy;
       if (y >= dx) {
@@ -358,7 +375,8 @@ public:
   }
 
   void DrawThickLine(int x1, int y1, int x2, int y2,
-                     unsigned thickness, color_type c) {
+                     unsigned thickness, color_type c,
+                     unsigned line_mask=-1) {
     if (thickness == 0)
       return;
 
@@ -369,7 +387,7 @@ public:
       return;
     }
 
-    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c);
+    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
   }
@@ -614,6 +632,9 @@ public:
   }
 
   template<typename PixelOperations, typename SPT=PixelTraits>
+#ifndef __clang__
+  __attribute__((flatten))
+#endif
   void CopyRectangle(int x, int y, unsigned w, unsigned h,
                      typename SPT::const_rpointer_type src, unsigned src_pitch,
                      PixelOperations operations) {

@@ -18,10 +18,6 @@
 #include "Screen/OpenGL/Features.hpp"
 #endif
 
-#ifdef ENABLE_SDL
-#include <SDL_endian.h>
-#endif
-
 #ifdef USE_GDI
 #include <windef.h>
 #include <wingdi.h>
@@ -58,7 +54,8 @@ struct BGRColor
 
 #elif defined(USE_MEMORY_CANVAS) || defined(ENABLE_SDL)
 
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+#if !defined(__i386__) && !defined(__x86_64__) && !defined(__ARMEL__)
+  /* big-endian */
   uint8_t dummy;
   RGB8Color value;
 

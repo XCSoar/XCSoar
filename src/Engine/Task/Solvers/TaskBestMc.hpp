@@ -26,6 +26,8 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
+#include <vector>
+
 /**
  *  Class to solve for MacCready value, being the highest MC value to produce a
  *  pure glide solution for the remainder of the task.

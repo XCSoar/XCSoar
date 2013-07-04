@@ -46,15 +46,14 @@ class Notify : private
 {
   std::atomic<bool> pending;
 
-#if defined(ANDROID) || defined(USE_CONSOLE)
-  friend class EventLoop;
-#elif defined(ENABLE_SDL)
-  friend class EventLoop;
-#endif
-
 public:
   Notify();
-  ~Notify();
+
+#ifndef USE_GDI
+  ~Notify() {
+    ClearNotification();
+  }
+#endif
 
   /**
    * Send a notification to this object.  This method can be called
@@ -70,10 +69,12 @@ public:
 private:
   void RunNotification();
 
+#ifndef USE_GDI
   /**
    * Called by the event loop when the "notify" message is received.
    */
   static void Callback(void *ctx);
+#endif
 
 protected:
   /**

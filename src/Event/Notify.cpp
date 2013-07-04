@@ -22,18 +22,8 @@ Copyright_License {
 */
 
 #include "Notify.hpp"
-
-#ifdef ANDROID
-#include "Event/Android/Queue.hpp"
-#include "Android/Main.hpp"
-#elif defined(USE_CONSOLE)
-#include "Event/Console/Queue.hpp"
-#include "Event/Console/Globals.hpp"
-#elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
-#include "Event/SDL/Event.hpp"
-#include "Event/SDL/Queue.hpp"
-#endif
+#include "Globals.hpp"
+#include "Queue.hpp"
 
 Notify::Notify()
   :pending(false)
@@ -43,22 +33,13 @@ Notify::Notify()
 #endif
 }
 
-Notify::~Notify()
-{
-  if (pending.load(std::memory_order_relaxed)) {
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
-    event_queue->Purge(Callback, this);
-#endif
-  }
-}
-
 void
 Notify::SendNotification()
 {
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL) || defined(NON_INTERACTIVE)
   event_queue->Push(Callback, this);
 #else
   SendUser(0);
@@ -71,7 +52,7 @@ Notify::ClearNotification()
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
+#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL) || defined(NON_INTERACTIVE)
   event_queue->Purge(Callback, this);
 #endif
 }
@@ -83,13 +64,6 @@ Notify::RunNotification()
     OnNotification();
 }
 
-void
-Notify::Callback(void *ctx)
-{
-  Notify &notify = *(Notify *)ctx;
-  notify.RunNotification();
-}
-
 #ifdef USE_GDI
 
 bool
@@ -97,6 +71,15 @@ Notify::OnUser(unsigned id)
 {
   RunNotification();
   return true;
+}
+
+#else
+
+void
+Notify::Callback(void *ctx)
+{
+  Notify &notify = *(Notify *)ctx;
+  notify.RunNotification();
 }
 
 #endif

@@ -25,6 +25,8 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
+#include <vector>
+
 /**
  *  Class to solve for virtual sink rate such that pure glide at
  *  block MacCready speeds with this sink rate would result in

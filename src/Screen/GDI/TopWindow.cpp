@@ -22,9 +22,10 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
+#include "Event/Globals.hpp"
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
-#include "Event/GDI/Queue.hpp"
+#include "Event/Queue.hpp"
 
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
@@ -199,7 +200,7 @@ TopWindow::OnMessage(HWND _hWnd, UINT message,
 int
 TopWindow::RunEventLoop()
 {
-  EventLoop loop;
+  EventLoop loop(*event_queue);
   Event event;
   while (loop.Get(event))
     loop.Dispatch(event);

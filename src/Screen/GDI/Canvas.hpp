@@ -448,8 +448,7 @@ public:
 
   void CopyTransparentWhite(const Canvas &src);
   void CopyTransparentBlack(const Canvas &src);
-  void StretchTransparent(const Bitmap &src, Color key);
-  void InvertStretchTransparent(const Bitmap &src, Color key);
+  void StretchNot(const Bitmap &src);
 
   void Stretch(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

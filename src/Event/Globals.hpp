@@ -21,39 +21,11 @@ Copyright_License {
 }
 */
 
-#include "../Timer.hpp"
-#include "Queue.hpp"
-#include "Globals.hpp"
+#ifndef XCSOAR_EVENT_GLOBALS_HPP
+#define XCSOAR_EVENT_GLOBALS_HPP
 
-void
-Timer::Schedule(unsigned _ms)
-{
-  if (queued.exchange(false))
-    event_queue->CancelTimer(*this);
+class EventQueue;
 
-  enabled.store(true);
-  ms = _ms;
+extern EventQueue *event_queue;
 
-  if (!queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
-}
-
-void
-Timer::Cancel()
-{
-  if (enabled.exchange(false) && queued.exchange(false))
-    event_queue->CancelTimer(*this);
-}
-
-void
-Timer::Invoke()
-{
-  if (!queued.exchange(false))
-    /* was cancelled by another thread */
-    return;
-
-  OnTimer();
-
-  if (enabled.load() && !queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
-}
+#endif

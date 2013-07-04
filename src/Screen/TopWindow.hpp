@@ -40,7 +40,7 @@ Copyright_License {
 
 struct Event;
 
-#elif defined(USE_CONSOLE)
+#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 struct Event;
 #elif defined(ENABLE_SDL)
 union SDL_Event;
@@ -205,7 +205,7 @@ public:
 #endif
 
 #ifndef USE_GDI
-#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL)
+#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_VFB)
   void SetCaption(gcc_unused const TCHAR *caption) {}
 #else
   void SetCaption(const TCHAR *caption);

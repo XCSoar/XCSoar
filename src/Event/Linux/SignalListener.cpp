@@ -21,11 +21,42 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_CONSOLE_GLOBALS_HPP
-#define XCSOAR_EVENT_CONSOLE_GLOBALS_HPP
+#include "SignalListener.hpp"
+#include "IO/Async/IOLoop.hpp"
 
-class EventQueue;
+#include <sys/signalfd.h>
 
-extern EventQueue *event_queue;
+bool
+SignalListener::InternalCreate(const sigset_t &mask)
+{
+  if (!fd.CreateSignalFD(&mask))
+    return false;
 
-#endif
+  if (sigprocmask(SIG_BLOCK, &mask, nullptr) < 0) {
+    fd.Close();
+    return false;
+  }
+
+  io_loop.Add(fd.Get(), io_loop.READ, *this);
+  return true;
+}
+
+void
+SignalListener::Destroy()
+{
+  if (!fd.IsDefined())
+    return;
+
+  io_loop.Remove(fd.Get());
+  fd.Close();
+}
+
+bool
+SignalListener::OnFileEvent(int _fd, unsigned mask)
+{
+  signalfd_siginfo info;
+  while (fd.Read(&info, sizeof(info)) > 0)
+    OnSignal(info.ssi_signo);
+
+  return true;
+}

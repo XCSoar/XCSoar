@@ -22,20 +22,18 @@
 
 #include "Thread/Thread.hpp"
 #include "Event/Notify.hpp"
+#include "Event/Globals.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
 #ifdef ANDROID
 #include "Event/Android/Loop.hpp"
 #include "Event/Shared/Event.hpp"
-#include "Android/Main.hpp"
-#elif defined(USE_CONSOLE)
+#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 #include "Event/Shared/Event.hpp"
 #include "Event/Console/Loop.hpp"
-#include "Event/Console/Globals.hpp"
 #include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
-#include "Event/SDL/Globals.hpp"
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
@@ -49,7 +47,7 @@
 void TopWindow::Refresh() {}
 #endif
 
-#ifdef USE_CONSOLE
+#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 
@@ -80,11 +78,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#if defined(ANDROID) || defined(USE_CONSOLE) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue);
-#else
-  EventLoop loop;
-#endif
   Event event;
 
   TestNotify notify;

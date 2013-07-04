@@ -21,35 +21,48 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EVENT_GDI_LOOP_HPP
-#define XCSOAR_EVENT_GDI_LOOP_HPP
+#ifndef XCSOAR_SIGNAL_LISTENER_HPP
+#define XCSOAR_SIGNAL_LISTENER_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Compiler.h"
+#include "IO/Async/FileEventHandler.hpp"
+#include "OS/FileDescriptor.hpp"
 
-#include <windows.h>
+class IOLoop;
 
-struct Event;
-class EventQueue;
-
-class EventLoop : private NonCopyable {
-  EventQueue &queue;
+class SignalListener : private FileEventHandler {
+  IOLoop &io_loop;
+  FileDescriptor fd;
 
 public:
-  EventLoop(EventQueue &_queue):queue(_queue) {}
+  explicit SignalListener(IOLoop &_io_loop)
+    :io_loop(_io_loop) {}
 
-  bool Get(Event &msg);
-  void Dispatch(const Event &msg);
-};
+private:
+  bool InternalCreate(const sigset_t &mask);
 
-class DialogEventLoop : public EventLoop {
-  HWND dialog;
+  template<typename... Args>
+  bool InternalCreate(sigset_t &mask, unsigned signo,
+                      Args&&... args) {
+    sigaddset(&mask, signo);
+    return InternalCreate(mask, args...);
+  }
 
 public:
-  DialogEventLoop(EventQueue &_loop, HWND _dialog)
-    :EventLoop(_loop), dialog(_dialog) {}
+  template<typename... Args>
+  bool Create(unsigned signo, Args&&... args) {
+    sigset_t mask;
+    sigemptyset(&mask);
+    return InternalCreate(mask, signo, args...);
+  }
 
-  void Dispatch(Event &msg);
+  void Destroy();
+
+protected:
+  virtual void OnSignal(int signo) = 0;
+
+private:
+  /* virtual methods from FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
 };
 
 #endif

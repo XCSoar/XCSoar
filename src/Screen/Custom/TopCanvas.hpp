@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#ifndef USE_MEMORY_CANVAS
-#include "Screen/Canvas.hpp"
-#elif defined(GREYSCALE)
+#ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/PixelTraits.hpp"
 #include "Screen/Memory/Buffer.hpp"
+#else
+#include "Screen/Canvas.hpp"
 #endif
 
 #ifdef USE_EGL
@@ -40,6 +40,8 @@ Copyright_License {
 #ifdef DITHER
 #include "../Memory/Dither.hpp"
 #endif
+
+#include <stdint.h>
 
 struct SDL_Surface;
 class Canvas;
@@ -80,6 +82,10 @@ class TopCanvas
 #ifdef DITHER
   Dither dither;
 #endif
+#else
+
+  WritableImageBuffer<BGRAPixelTraits> buffer;
+
 #endif
 #endif
 
@@ -95,21 +101,24 @@ class TopCanvas
 public:
 #ifdef USE_FB
   TopCanvas():fd(-1), map(nullptr) {}
+#endif
+
+#if defined(USE_FB) || defined(USE_VFB)
   ~TopCanvas() {
     Destroy();
   }
-
-  void Destroy();
-#endif
-
-#if defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE) && !defined(USE_FB))
+#elif defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE))
   ~TopCanvas();
 #endif
+
+  void Destroy();
 
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
 #ifdef ENABLE_SDL
     return surface != nullptr;
+#elif defined(USE_VFB)
+    return true;
 #else
     return fd >= 0;
 #endif

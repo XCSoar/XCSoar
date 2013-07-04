@@ -24,6 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_BUFFER_HPP
 #define XCSOAR_SCREEN_BUFFER_HPP
 
+#include "Compiler.h"
+
+#if defined(CLANG_VERSION) && CLANG_VERSION >= 30300
+/* no thanks, constexpr without const is fine -
+   WritableImageBuffer::At() returns a writable buffer; the pointer
+   itself is constexpr, but the result may modify the buffer object */
+#pragma GCC diagnostic ignored "-Wconstexpr-not-const"
+#endif
+
 /**
  * A reference to an image buffer (or a portion of it) that we can
  * write to.  This class does not allocate or free any memory, it

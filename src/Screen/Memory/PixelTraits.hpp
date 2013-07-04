@@ -268,6 +268,9 @@ struct BGRAPixelTraits {
   typedef const color_type *const_pointer_type;
   typedef const color_type *gcc_restrict const_rpointer_type;
 
+  static_assert(sizeof(color_type) == sizeof(integer_type),
+                "Wrong integer_type");
+
   union U {
     color_type c;
     integer_type i;
@@ -353,15 +356,45 @@ struct BGRAPixelTraits {
   }
 
   static color_type ReadPixel(const_pointer_type p) {
-    return *p;
+    const integer_type *const pi = reinterpret_cast<const integer_type *>(p);
+    return FromInteger(*pi);
   }
 
   static void WritePixel(pointer_type p, color_type c) {
-    *p = c;
+    integer_type *const pi = reinterpret_cast<integer_type *>(p);
+    *pi = ToInteger(c);
   }
 
   static void FillPixels(pointer_type p, unsigned n, color_type c) {
-    std::fill_n(p, n, c);
+    /* gcc is pretty bad at optimising BGRA8Color assignment; the
+       following switches to 32 bit integer operations */
+    integer_type *const pi = reinterpret_cast<integer_type *>(p);
+    const integer_type ci = ToInteger(c);
+
+#if defined(__GNUC__) && defined(__x86_64__)
+    const uint64_t cl = (uint64_t(ci) << 32) | uint64_t(ci);
+
+    gcc_unused size_t dummy0, dummy1;
+    asm volatile("cld\n"
+
+                 /* n /= 2 (remainder is moved to the "Carry Flag") */
+                 "shr %3\n"
+
+                 /* fill two pixels at a time */
+                 "rep stosq\n"
+
+                 /* fill the remaining pixel (if any) */
+                 "jnc 0f\n"
+                 "stosl\n"
+                 "0:\n"
+
+                 : "=&c"(dummy0), "=&D"(dummy1)
+                 : "a"(cl), "0"(size_t(n)), "1"(pi)
+                 : "memory"
+                 );
+#else
+    std::fill_n(pi, n, ci);
+#endif
   }
 
   static void CopyPixels(rpointer_type p,

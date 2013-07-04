@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "../Timer.hpp"
-#include "Queue.hpp"
-#include "Android/Main.hpp"
+#include "../Globals.hpp"
+#include "../Queue.hpp"
 
 void
 Timer::Schedule(unsigned _ms)
@@ -36,6 +36,13 @@ Timer::Schedule(unsigned _ms)
 
   if (!queued.exchange(true))
     event_queue->AddTimer(*this, ms);
+}
+
+void
+Timer::SchedulePreserve(unsigned _ms)
+{
+  if (!IsActive())
+    Schedule(_ms);
 }
 
 void

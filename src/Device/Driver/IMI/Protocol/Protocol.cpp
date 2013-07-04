@@ -37,6 +37,8 @@ Copyright_License {
 
 #include <cstdio>
 
+#include <stdlib.h>
+
 namespace IMI
 {
   bool _connected = false;

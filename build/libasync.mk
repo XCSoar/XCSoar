@@ -4,6 +4,7 @@ ASYNC_SRC_DIR = $(SRC)/IO/Async
 
 ifeq ($(HAVE_POSIX),y)
 ASYNC_SOURCES += \
+	$(SRC)/IO/Async/DiscardFileEventHandler.cpp \
 	$(SRC)/IO/Async/IOLoop.cpp \
 	$(SRC)/IO/Async/IOThread.cpp \
 	$(SRC)/IO/Async/GlobalIOThread.cpp

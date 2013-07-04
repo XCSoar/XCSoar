@@ -673,20 +673,10 @@ Canvas::Copy(const Bitmap &src)
 }
 
 void
-Canvas::StretchTransparent(const Bitmap &src, Color key)
+Canvas::StretchNot(const Bitmap &src)
 {
   assert(src.IsDefined());
 
-  // XXX
-  Stretch(src);
-}
-
-void
-Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
-{
-  assert(src.IsDefined());
-
-  // XXX
   GLLogicOp invert(GL_COPY_INVERTED);
   Stretch(src);
 }

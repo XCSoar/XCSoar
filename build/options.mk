@@ -24,6 +24,9 @@ ifeq ($(STOP_WATCH),y)
 TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
 
+# compile without UI?
+HEADLESS ?= n
+
 ifeq ($(TARGET_IS_KOBO),y)
 DITHER ?= y
 else

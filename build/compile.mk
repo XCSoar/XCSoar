@@ -45,7 +45,7 @@ OBJ_SUFFIX = .o
 endif
 
 # Converts a list of source file names to *.o
-SRC_TO_OBJ = $(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1))))
+SRC_TO_OBJ = $(subst /./,/,$(patsubst %.cpp,%$(OBJ_SUFFIX),$(patsubst %.c,%$(OBJ_SUFFIX),$(addprefix $(TARGET_OUTPUT_DIR)/,$(1)))))
 
 ####### dependency handling
 
@@ -58,13 +58,13 @@ cxx-flags = $(DEPFLAGS) $(ALL_CXXFLAGS) $(ALL_CPPFLAGS) $(TARGET_ARCH) $(FLAGS_C
 # Useful debugging targets - make preprocessed versions of the source
 #
 $(TARGET_OUTPUT_DIR)/%.i: %.cpp FORCE
-	$(CXX) $(cxx-flags) -E $(OUTPUT_OPTION) $<
+	$(CXX) $< -E -o $@ $(cxx-flags)
 
 $(TARGET_OUTPUT_DIR)/%.s: %.cpp FORCE
-	$(CXX) $(cxx-flags) -S $(OUTPUT_OPTION) $<
+	$(CXX) $< -S -o $@ $(cxx-flags)
 
 $(TARGET_OUTPUT_DIR)/%.i: %.c FORCE
-	$(CC) $(cc-flags) -E $(OUTPUT_OPTION) $<
+	$(CC) $< -E -o $@ $(cc-flags)
 
 ####### build rules
 #
@@ -77,8 +77,8 @@ WRAPPED_CXX = $(CCACHE) $(CXX)
 
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(WRAPPED_CC) -c -o $@ $(cc-flags) $<
+	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(WRAPPED_CXX) -c -o $@ $(cxx-flags) $<
+	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)

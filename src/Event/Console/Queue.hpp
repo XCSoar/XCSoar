@@ -24,12 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_CONSOLE_QUEUE_HPP
 #define XCSOAR_EVENT_CONSOLE_QUEUE_HPP
 
+#include "Thread/Handle.hpp"
 #include "../Shared/TimerQueue.hpp"
 #include "../Shared/Event.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/EventPipe.hpp"
 #include "IO/Async/IOLoop.hpp"
+#include "IO/Async/DiscardFileEventHandler.hpp"
+#include "../Linux/SignalListener.hpp"
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
 #include "../Linux/Input.hpp"
 #include "../Shared/RotatePointer.hpp"
@@ -38,6 +42,7 @@ Copyright_License {
 #include "../Linux/TTYKeyboard.hpp"
 #include "../Linux/Mouse.hpp"
 #endif
+#endif
 
 #include <queue>
 #include <set>
@@ -45,15 +50,19 @@ Copyright_License {
 class Window;
 class Timer;
 
-class EventQueue final : private FileEventHandler {
+class EventQueue final : private SignalListener {
+  const ThreadHandle thread;
+
   IOLoop io_loop;
 
+#ifndef NON_INTERACTIVE
 #ifdef KOBO
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
   TTYKeyboard keyboard;
   LinuxMouse mouse;
+#endif
 #endif
 
   Mutex mutex;
@@ -63,12 +72,15 @@ class EventQueue final : private FileEventHandler {
   TimerQueue timers;
 
   EventPipe event_pipe;
+  DiscardFileEventHandler discard;
 
   bool running;
 
 public:
   EventQueue();
   ~EventQueue();
+
+#ifndef NON_INTERACTIVE
 
   void SetScreenSize(unsigned width, unsigned height) {
 #ifdef KOBO
@@ -93,12 +105,15 @@ public:
   }
 #endif
 
+#endif /* !NON_INTERACTIVE */
+
   void Quit() {
     running = false;
   }
 
   void WakeUp() {
-    event_pipe.Signal();
+    if (!thread.IsInside())
+      event_pipe.Signal();
   }
 
 private:
@@ -131,11 +146,8 @@ public:
   void CancelTimer(Timer &timer);
 
 private:
-  /* virtual methods from FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask) override {
-    event_pipe.Read();
-    return true;
-  }
+  /* virtual methods from SignalListener */
+  virtual void OnSignal(int signo) override;
 };
 
 #endif

@@ -27,7 +27,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "IO/TextFile.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR *src, Angle &angle)

@@ -21,63 +21,19 @@ Copyright_License {
 }
 */
 
-#include "Screen/Pen.hpp"
-#include "Screen/Debug.hpp"
+#ifndef XCSOAR_EVENT_QUEUE_HPP
+#define XCSOAR_EVENT_QUEUE_HPP
 
-#include <assert.h>
-
-#ifndef USE_GDI
-
-void
-Pen::Set(Style _style, unsigned _width, const Color c)
-{
-  assert(IsScreenInitialized());
-
-  width = _width;
-  color = c;
-
-#if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
-  style = _style;
+#ifdef ANDROID
+#include "Android/Queue.hpp"
+#elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
+#include "Console/Queue.hpp"
+#elif defined(ENABLE_SDL)
+#include "SDL/Queue.hpp"
+#elif defined(USE_GDI)
+#include "GDI/Queue.hpp"
+#else
+#error No EventQueue implementation
 #endif
-}
 
-void
-Pen::Set(unsigned width, const Color c)
-{
-  Set(SOLID, width, c);
-}
-
-#else /* USE_GDI */
-
-void
-Pen::Set(Style Style, unsigned width, const Color c)
-{
-  assert(IsScreenInitialized());
-
-  Reset();
-  pen = ::CreatePen(Style, width, c);
-}
-
-void
-Pen::Set(unsigned width, const Color c)
-{
-  Set(SOLID, width, c);
-}
-
-void
-Pen::Reset()
-{
-  assert(!IsDefined() || IsScreenInitialized());
-
-  if (pen != NULL) {
-#ifndef NDEBUG
-    bool success =
 #endif
-      ::DeleteObject(pen);
-    assert(success);
-
-    pen = NULL;
-  }
-}
-
-#endif /* USE_GDI */

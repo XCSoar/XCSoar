@@ -24,12 +24,42 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_GDI_QUEUE_HPP
 #define XCSOAR_EVENT_GDI_QUEUE_HPP
 
-namespace EventQueue {
+#include "../Shared/TimerQueue.hpp"
+#include "Thread/Mutex.hpp"
+
+#include <windows.h>
+
+struct Event;
+
+class EventQueue {
+  HANDLE trigger;
+
+  Mutex mutex;
+  TimerQueue timers;
+
+public:
+  EventQueue()
+    :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
+
+  ~EventQueue() {
+    ::CloseHandle(trigger);
+  }
+
+  bool Wait(Event &event);
+
+private:
+  void WakeUp() {
+    ::SetEvent(trigger);
+  }
+
+public:
+  void AddTimer(Timer &timer, unsigned ms);
+  void CancelTimer(Timer &timer);
+
   /**
    * Handle all pending repaint messages.
    */
-  void
-  HandlePaintMessages();
-}
+  static void HandlePaintMessages();
+};
 
 #endif

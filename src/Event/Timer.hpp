@@ -24,12 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_EVENT_TIMER_HPP
 #define XCSOAR_EVENT_TIMER_HPP
 
-#ifdef USE_GDI
-#include "Screen/Window.hpp"
-#include "Screen/Timer.hpp"
-#else
 #include <atomic>
-#endif
 
 #include <assert.h>
 #include <stddef.h>
@@ -46,27 +41,15 @@ Copyright_License {
  * The class #WindowTimer is cheaper on WIN32; use it instead of this
  * class if you are implementing a #Window.
  */
-class Timer
-#ifdef USE_GDI
-  : private Window, private WindowTimer
-#endif
-{
-#ifndef USE_GDI
+class Timer {
   std::atomic<bool> enabled, queued;
   unsigned ms;
-#endif
 
 public:
   /**
    * Construct a Timer object that is not set initially.
    */
-#ifdef USE_GDI
-  Timer():WindowTimer(*(Window *)this) {
-    Window::CreateMessageWindow();
-  }
-#else
   Timer():enabled(false), queued(false) {}
-#endif
 
   Timer(const Timer &other) = delete;
 
@@ -76,11 +59,7 @@ protected:
    * shall only be used by derived classes to pass inactive instances
    * around.
    */
-  Timer(Timer &&other)
-#ifdef USE_GDI
-    :WindowTimer(*(Window *)this)
-#endif
-  {
+  Timer(Timer &&other) {
     assert(!IsActive());
     assert(!other.IsActive());
   }
@@ -90,18 +69,11 @@ public:
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
 
-#ifdef USE_CONSOLE
+#if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
     assert(!queued.load(std::memory_order_relaxed));
     assert(!enabled.load(std::memory_order_relaxed));
 #endif
   }
-
-#ifdef USE_GDI
-  /* inherit WindowTimer's methods */
-  using WindowTimer::IsActive;
-  using WindowTimer::Schedule;
-  using WindowTimer::Cancel;
-#else
 
   /**
    * Is the timer active, i.e. is it waiting for the current period to
@@ -118,12 +90,16 @@ public:
   void Schedule(unsigned ms);
 
   /**
+   * Schedule the timer.  Preserves the previous setting if there was
+   * one.
+   */
+  void SchedulePreserve(unsigned ms);
+
+  /**
    * Cancels the scheduled timer, if any.  This is safe to be called
    * while the timer is running.
    */
   void Cancel();
-
-#endif /* !GDI */
 
 protected:
   /**
@@ -132,14 +108,8 @@ protected:
    */
   virtual void OnTimer() = 0;
 
-#ifdef USE_GDI
-private:
-  /* virtual methods from class Window */
-  virtual bool OnTimer(WindowTimer &timer) override;
-#else
 public:
   void Invoke();
-#endif
 };
 
 #endif

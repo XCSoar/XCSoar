@@ -24,7 +24,7 @@ Copyright_License {
 #include "WaypointReaderZander.hpp"
 #include "Waypoint/Waypoints.hpp"
 
-#include <stdio.h>
+#include <stdlib.h>
 
 static bool
 ParseString(const TCHAR* src, tstring& dest, unsigned len)

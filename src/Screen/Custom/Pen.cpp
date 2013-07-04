@@ -21,42 +21,26 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Event/Globals.hpp"
-#include "Event/Queue.hpp"
+#include "Screen/Pen.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
-#include "Screen/OpenGL/Init.hpp"
-#include "Screen/FreeType/Init.hpp"
 
-#ifdef USE_VIDEOCORE
-#include "bcm_host.h"
-#endif
+#include <assert.h>
 
-ScreenGlobalInit::ScreenGlobalInit()
+void
+Pen::Set(Style _style, unsigned _width, const Color c)
 {
-#ifdef USE_VIDEOCORE
-  bcm_host_init();
+  assert(IsScreenInitialized());
+
+  width = _width;
+  color = c;
+
+#if defined(USE_MEMORY_CANVAS) || (defined(ENABLE_OPENGL) && !defined(HAVE_GLES))
+  style = _style;
 #endif
-
-  OpenGL::Initialise();
-
-  FreeType::Initialise();
-  Font::Initialise();
-
-  event_queue = new EventQueue();
-
-  ScreenInitialized();
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+void
+Pen::Set(unsigned width, const Color c)
 {
-  delete event_queue;
-  event_queue = nullptr;
-
-  OpenGL::Deinitialise();
-
-  FreeType::Deinitialise();
-
-  ScreenDeinitialized();
+  Set(SOLID, width, c);
 }

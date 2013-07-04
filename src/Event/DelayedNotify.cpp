@@ -23,28 +23,9 @@ Copyright_License {
 
 #include "DelayedNotify.hpp"
 
-DelayedNotify::~DelayedNotify()
-{
-  Cancel();
-}
-
-void
-DelayedNotify::SendNotification()
-{
-  if (!pending.exchange(true, std::memory_order_relaxed))
-    Schedule(delay_ms);
-}
-
-void
-DelayedNotify::ClearNotification()
-{
-  if (pending.exchange(false, std::memory_order_relaxed))
-    Cancel();
-}
-
 void
 DelayedNotify::OnTimer()
 {
-  if (pending.exchange(false, std::memory_order_relaxed))
-    OnNotification();
+  Cancel();
+  OnNotification();
 }

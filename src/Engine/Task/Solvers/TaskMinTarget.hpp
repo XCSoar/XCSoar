@@ -25,6 +25,8 @@
 #include "TaskMacCreadyRemaining.hpp"
 #include "Math/ZeroFinder.hpp"
 
+#include <vector>
+
 class StartPoint;
 
 /**
