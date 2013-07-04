@@ -93,9 +93,6 @@ template<>
 class AlphaPixelOperations<GreyscalePixelTraits>
   : public SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
-  using Base = SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
-                                              PortableAlphaPixelOperations<GreyscalePixelTraits>>;
-
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
@@ -109,9 +106,6 @@ template<>
 class AlphaPixelOperations<GreyscalePixelTraits>
   : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
-  using Base = SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
-                                              PortableAlphaPixelOperations<GreyscalePixelTraits>>;
-
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
@@ -123,9 +117,6 @@ template<>
 class AlphaPixelOperations<BGRAPixelTraits>
   : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
                                           PortableAlphaPixelOperations<BGRAPixelTraits>> {
-  using Base = SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
-                                              PortableAlphaPixelOperations<BGRAPixelTraits>>;
-
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
