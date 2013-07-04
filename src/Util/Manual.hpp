@@ -61,12 +61,7 @@
  */
 template<class T>
 class Manual {
-#if !defined(__clang__) && __GNUC__ && GCC_VERSION < 40800
-  /* no alignas() on gcc < 4.8: apply worst-case fallback */
-  __attribute__((aligned(8)))
-#else
-  alignas(T)
-#endif
+  gcc_alignas(T, 8)
   char data[sizeof(T)];
 
 #ifndef NDEBUG

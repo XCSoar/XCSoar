@@ -146,6 +146,12 @@ Copyright_License {
 #define final
 #endif
 
+#if defined(__clang__) || GCC_VERSION >= 40800
+#define gcc_alignas(T, fallback) alignas(T)
+#else
+#define gcc_alignas(T, fallback) gcc_aligned(fallback)
+#endif
+
 #endif
 
 #ifndef __has_feature
