@@ -166,7 +166,7 @@ TopCanvas::Create(PixelSize new_size,
   ioctl(fd, MXCFB_SET_UPDATE_SCHEME, UPDATE_SCHEME_QUEUE_AND_MERGE);
 #endif
 
-  const unsigned width = vinfo.xres, height = vinfo.yes;
+  const unsigned width = vinfo.xres, height = vinfo.yres;
 #elif defined(USE_VFB)
   const unsigned width = new_size.cx, height = new_size.cy;
 #else
