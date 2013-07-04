@@ -70,6 +70,7 @@ private:
   WritableImageBuffer<PixelTraits> buffer;
 
   AllocatedArray<int> polygon_buffer;
+  AllocatedArray<BresenhamIterator> edge_buffer;
 
 public:
   RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
@@ -393,6 +394,105 @@ public:
   }
 
   template<typename PixelOperations>
+  void FillPolygonFast(const Point *points, unsigned n, color_type color,
+                       PixelOperations operations) {
+
+    assert(points != nullptr);
+
+    if (n < 3)
+      return;
+
+    edge_buffer.GrowDiscard(n);
+
+    // initialise buffer of edge iterators, and find y range to scan
+    int miny = points[0].y;
+    int maxy = points[0].y;
+
+    const Point* p_1 = points;
+    const Point* p_0 = points+n-1;
+    int n_edges = 0;
+
+    while (p_1 < points+n) {
+      if (p_1->y == p_0->y) {
+        // don't add horizontal line, just draw it now?
+      } else if (p_1->y < p_0->y) {
+        edge_buffer[n_edges] = BresenhamIterator(p_1->x, p_1->y, p_0->x, p_0->y);
+        n_edges++;
+      } else {
+        edge_buffer[n_edges] = BresenhamIterator(p_0->x, p_0->y, p_1->x, p_1->y);
+        n_edges++;
+      }
+      miny = std::min(p_0->y, miny);
+      maxy = std::max(p_0->y, maxy);
+
+      p_0 = p_1;
+      p_1++;
+    }
+
+    if (n_edges < 2)
+      return;
+
+    auto edge_start = edge_buffer.begin();
+    auto edge_end = edge_start+n_edges;
+
+    // sort array by y value (top best), then x value (left best)
+    std::sort(edge_start, edge_end, BresenhamIterator::CompareVerticalHorizontal);
+
+    // perform scans
+
+    for (int y = miny; y <= maxy; y++) {
+
+      bool changed = false;
+
+      // advance active items
+      int x = -1;
+      for (auto it= edge_start; it!= edge_end; ++it) {
+        // advance line until it gets to next y value (if possible)
+        changed |= it->AdvanceTo(y);
+        if (it->y == y) {
+          if (it->x < x)
+            changed = true; // order changed
+          else
+            x = it->x;
+        }
+      }
+
+      if (changed) {
+//        printf("re-sort\n");
+        std::sort(edge_start, edge_end, BresenhamIterator::CompareHorizontal);
+
+        while ((edge_start != edge_end) && (!edge_start->count)) {
+//          printf("skipping forward\n");
+          edge_start++;
+        }
+
+/*
+        for (auto it= edge_start; it!= edge_end; ++it) {
+          printf("%d,%d %d\n", it->x, it->y, it->count);
+        }
+*/
+      }
+
+      // draw line and determine status
+      bool mode = false;
+      int x0 = -1;
+      for (auto it= edge_start; it!= edge_end; ++it) {
+        // if this item is valid, it's a start point or end point of a line
+        if (it->y != y) 
+          continue;
+
+        int x1 = it->x;
+        if (mode) 
+          DrawHLine(x0, x1, y, color, operations);
+        mode = !mode;
+        x0 = x1;
+      }
+
+    }
+
+  }
+
+  template<typename PixelOperations>
   void FillPolygon(const Point *points, unsigned n, color_type color,
                    PixelOperations operations) {
     assert(points != nullptr);
@@ -461,8 +561,10 @@ public:
   }
 
   void FillPolygon(const Point *points, unsigned n, color_type color) {
-    FillPolygon(points, n, color,
-                GetPixelTraits());
+    FillPolygonFast(points, n, color,
+                    GetPixelTraits());
+//    FillPolygon(points, n, color,
+//                GetPixelTraits());
   }
 
   template<typename PixelOperations>
