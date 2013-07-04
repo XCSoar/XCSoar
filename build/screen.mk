@@ -187,6 +187,6 @@ ifeq ($(EGL)$(OPENGL),yn)
 $(error EGL requires OpenGL)
 endif
 
-ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yn)
+ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yy)
 $(error MemoryCanvas and OpenGL are mutually exclusive)
 endif
