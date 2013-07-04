@@ -46,20 +46,18 @@ Copyright_License {
 #include <errno.h>
 #endif
 
-#ifdef USE_FB
-
 void
 TopCanvas::Destroy()
 {
   buffer.Free();
 
+#ifdef USE_FB
   if (fd >= 0) {
     close(fd);
     fd = -1;
   }
-}
-
 #endif
+}
 
 PixelRect
 TopCanvas::GetRect() const

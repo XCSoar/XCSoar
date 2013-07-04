@@ -101,16 +101,17 @@ class TopCanvas
 public:
 #ifdef USE_FB
   TopCanvas():fd(-1), map(nullptr) {}
+#endif
+
+#if defined(USE_FB) || defined(USE_VFB)
   ~TopCanvas() {
     Destroy();
   }
-
-  void Destroy();
-#endif
-
-#if defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE) && !defined(USE_FB))
+#elif defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE))
   ~TopCanvas();
 #endif
+
+  void Destroy();
 
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
