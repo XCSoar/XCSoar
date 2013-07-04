@@ -54,8 +54,9 @@ protected:
 #ifdef USE_GDI
   HPEN pen;
 #else
-  unsigned width;
   Color color;
+
+  unsigned width;
 
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
   Style style;
@@ -97,7 +98,7 @@ public:
 
   constexpr
   Pen(Style _style, unsigned _width, const Color _color)
-    :width(_width), color(_color)
+    :color(_color), width(_width)
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
     , style(_style)
 #endif
@@ -105,7 +106,7 @@ public:
 
   constexpr
   Pen(unsigned _width, const Color _color)
-    :width(_width), color(_color)
+    :color(_color), width(_width)
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
     , style(SOLID)
 #endif
