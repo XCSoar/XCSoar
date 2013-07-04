@@ -60,7 +60,7 @@ public:
 
     const __m64 v_alpha = _mm_set1_pi16(alpha ^ 0xff);
     const __m64 v_color = _mm_set1_pi16(c * alpha);
-    const __m64 zero = _mm_set1_pi16(0);
+    const __m64 zero = _mm_setzero_si64();
 
     __m64 *p2 = (__m64 *)p;
 
@@ -96,7 +96,7 @@ public:
 
     const __m64 v_alpha = _mm_set1_pi16(alpha);
     const __m64 inverse_alpha = _mm_set1_pi16(alpha ^ 0xff);
-    const __m64 zero = _mm_set1_pi16(0);
+    const __m64 zero = _mm_setzero_si64();
 
     __m64 *p2 = (__m64 *)p;
     const __m64 *q2 = (const __m64 *)q;
