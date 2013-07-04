@@ -43,7 +43,7 @@ public:
     BLANK = PS_NULL
   };
 #else
-  enum Style {
+  enum Style : uint8_t {
     SOLID,
     DASH,
     BLANK
@@ -56,7 +56,7 @@ protected:
 #else
   Color color;
 
-  unsigned width;
+  uint8_t width;
 
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
   Style style;
