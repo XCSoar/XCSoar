@@ -79,6 +79,18 @@ public:
     _mm_empty();
   }
 
+  gcc_hot
+  void FillPixels(BGRA8Color *p, unsigned n, BGRA8Color c) const {
+    _mm_empty();
+
+    __m64 v_alpha = _mm_set1_pi16(alpha);
+    __m64 v_color = _mm_setr_pi16(c.Blue(), c.Green(), c.Red(), c.Alpha());
+
+    FillPixels((__m64 *)p, n / 2, _mm_mullo_pi16(v_color, v_alpha));
+
+    _mm_empty();
+  }
+
   gcc_hot gcc_always_inline
   static __m64 AlphaBlend4(__m64 p, __m64 q,
                            __m64 alpha, __m64 inverse_alpha) {
@@ -118,6 +130,10 @@ public:
 
   void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
     CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+
+  void CopyPixels(BGRA8Color *p, const BGRA8Color *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n * 4);
   }
 };
 

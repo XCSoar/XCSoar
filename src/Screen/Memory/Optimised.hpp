@@ -117,6 +117,22 @@ public:
     :SelectOptimisedPixelOperations(alpha) {}
 };
 
+#ifndef GREYSCALE
+
+template<>
+class AlphaPixelOperations<BGRAPixelTraits>
+  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
+                                          PortableAlphaPixelOperations<BGRAPixelTraits>> {
+  using Base = SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
+                                              PortableAlphaPixelOperations<BGRAPixelTraits>>;
+
+public:
+  explicit constexpr AlphaPixelOperations(const uint8_t alpha)
+    :SelectOptimisedPixelOperations(alpha) {}
+};
+
+#endif /* !GREYSCALE */
+
 #endif
 
 #endif
