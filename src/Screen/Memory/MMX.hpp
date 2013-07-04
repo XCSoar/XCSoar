@@ -55,30 +55,28 @@ public:
   }
 
   gcc_hot gcc_flatten gcc_nonnull_all
-  void FillPixels(uint8_t *p, unsigned n, uint8_t c) const {
-    _mm_empty();
-
+  void FillPixels(__m64 *p, unsigned n, __m64 v_color) const {
     const __m64 v_alpha = _mm_set1_pi16(alpha ^ 0xff);
-    const __m64 v_color = _mm_set1_pi16(c * alpha);
     const __m64 zero = _mm_setzero_si64();
 
-    __m64 *p2 = (__m64 *)p;
-
-    for (unsigned i = 0; i < n / 8; ++i) {
-      __m64 x = p2[i];
+    for (unsigned i = 0; i < n; ++i) {
+      __m64 x = p[i];
 
       __m64 lo = FillPixel(_mm_unpacklo_pi8(x, zero), v_alpha, v_color);
       __m64 hi = FillPixel(_mm_unpackhi_pi8(x, zero), v_alpha, v_color);
 
-      p2[i] = _mm_packs_pu16(lo, hi);
+      p[i] = _mm_packs_pu16(lo, hi);
     }
-
-    _mm_empty();
   }
 
-  gcc_hot
+  gcc_hot gcc_flatten gcc_nonnull_all
   void FillPixels(Luminosity8 *p, unsigned n, Luminosity8 c) const {
-    FillPixels((uint8_t *)p, n, c.GetLuminosity());
+    _mm_empty();
+
+    FillPixels((__m64 *)p, n / 8,
+               _mm_set1_pi16(c.GetLuminosity() * alpha));
+
+    _mm_empty();
   }
 
   gcc_hot gcc_always_inline
