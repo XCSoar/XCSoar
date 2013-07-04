@@ -71,12 +71,10 @@ private:
 
   AllocatedArray<int> polygon_buffer;
 
-  unsigned line_mask;
-
 public:
   RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
                PixelTraits _traits=PixelTraits())
-    :PixelTraits(_traits), buffer(_buffer), line_mask(-1) {}
+    :PixelTraits(_traits), buffer(_buffer) {}
 
 protected:
   PixelTraits &GetPixelTraits() {
@@ -339,7 +337,8 @@ public:
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
-  void DrawLine(int x1, int y1, int x2, int y2, color_type c) {
+  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
+                unsigned line_mask=-1) {
     /* optimised Bresenham algorithm */
 
     if (!ClipLine(x1, y1, x2, y2))
@@ -376,7 +375,8 @@ public:
   }
 
   void DrawThickLine(int x1, int y1, int x2, int y2,
-                     unsigned thickness, color_type c) {
+                     unsigned thickness, color_type c,
+                     unsigned line_mask=-1) {
     if (thickness == 0)
       return;
 
