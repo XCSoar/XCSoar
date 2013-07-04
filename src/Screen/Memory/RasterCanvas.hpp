@@ -32,6 +32,15 @@ Copyright_License {
 
 #include <assert.h>
 
+/*
+  line_masks:
+   -1               SOLID
+   -1-0b100         DASH
+   -1-0b1000        LONGDASH
+   -1-0b1100        DOTS
+   -1-0b10100       DDOT
+ */
+
 /**
  * A software renderer for various primitives.
  *
@@ -62,10 +71,12 @@ private:
 
   AllocatedArray<int> polygon_buffer;
 
+  unsigned line_mask;
+
 public:
   RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
                PixelTraits _traits=PixelTraits())
-    :PixelTraits(_traits), buffer(_buffer) {}
+    :PixelTraits(_traits), buffer(_buffer), line_mask(-1) {}
 
 protected:
   PixelTraits &GetPixelTraits() {
@@ -353,7 +364,8 @@ public:
     }
 
     for (int x = 0, y = 0; x < dx; x++, p = PixelTraits::NextByte(p, pixx)) {
-      PixelTraits::WritePixel(p, c);
+      if ((x | line_mask) == unsigned(-1))
+        PixelTraits::WritePixel(p, c);
 
       y += dy;
       if (y >= dx) {
@@ -375,7 +387,7 @@ public:
       return;
     }
 
-    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c);
+    MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
   }
