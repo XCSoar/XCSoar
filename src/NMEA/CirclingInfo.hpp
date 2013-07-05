@@ -46,17 +46,17 @@ enum class CirclingMode: uint8_t {
 /** Data for tracking of climb/cruise mode and transition points */
 struct CirclingInfo
 {
-  /** Turn rate based on track */
-  fixed turn_rate;
+  /** Turn rate based on track (angle/s)*/
+  Angle turn_rate;
 
-  /** Turn rate based on heading (including wind) */
-  fixed turn_rate_heading;
+  /** Turn rate based on heading (including wind) (angle/s)*/
+  Angle turn_rate_heading;
 
-  /** Turn rate after low pass filter */
-  fixed turn_rate_smoothed;
+  /** Turn rate after low pass filter (angle/s)*/
+  Angle turn_rate_smoothed;
 
-  /** Turn rate based on heading after low pass filter */
-  fixed turn_rate_heading_smoothed;
+  /** Turn rate based on heading after low pass filter (angle/s)*/
+  Angle turn_rate_heading_smoothed;
 
   /** StartLocation of the current/last climb */
   GeoPoint climb_start_location;
@@ -114,7 +114,7 @@ struct CirclingInfo
   void Clear();
 
   bool TurningLeft() const {
-    return negative(turn_rate_smoothed);
+    return negative(turn_rate_smoothed.Degrees());
   }
 };
 

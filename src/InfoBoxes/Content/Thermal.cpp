@@ -197,7 +197,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
     return;
   }
 
-  const fixed turn_rate = fabs(CommonInterface::Calculated().turn_rate_heading_smoothed);
+  const fixed turn_rate = fabs(CommonInterface::Calculated().turn_rate_heading_smoothed.Degrees());
 
   // deal with div zero and small turn rates
   if (turn_rate < fixed(1)) {
