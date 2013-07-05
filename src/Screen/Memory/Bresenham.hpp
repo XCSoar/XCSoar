@@ -80,20 +80,18 @@ public:
     if (count == 0)
       return false;
 
-    while (error >= 0) {
-      if (swapdir) {
-        x += sx;
-      } else  {
-        y += sy;
-      }
-
-      error -= dx;
-    }
-
     if (swapdir) {
       y += sy;
+      while (error >= 0) {
+        x+= sx;
+        error -= dx;
+      }
     } else {
       x += sx;
+      while (error >= 0) {
+        y+= sy;
+        error -= dx;
+      }
     }
 
     error += dy;
