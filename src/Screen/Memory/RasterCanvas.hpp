@@ -186,14 +186,22 @@ protected:
     unsigned code1 = ClipEncode(x1, y1);
     unsigned code2 = ClipEncode(x2, y2);
 
+    bool swapped = false;
+
     while (true) {
-      if (CLIP_ACCEPT(code1, code2))
+      if (CLIP_ACCEPT(code1, code2)) {
+        if (swapped) {
+          std::swap(x1, x2);
+          std::swap(y1, y2);
+        }
         return true;
+      }
 
       if (CLIP_REJECT(code1, code2))
 	return false;
 
       if (CLIP_INSIDE(code1)) {
+        swapped = !swapped;
         std::swap(x1, x2);
         std::swap(y1, y2);
         std::swap(code1, code2);
