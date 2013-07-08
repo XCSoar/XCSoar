@@ -33,6 +33,33 @@ Copyright_License {
 #include <arm_neon.h>
 
 /**
+ * Implementation of BitOrPixelOperations using ARM NEON instructions.
+ */
+class NEONBitOrPixelOperations {
+public:
+  gcc_always_inline
+  static void Blend16(uint8_t *gcc_restrict p,
+                      const uint8_t *gcc_restrict q) {
+    uint8x16_t pv = vld1q_u8(p);
+    uint8x16_t qv = vld1q_u8(q);
+
+    uint8x16_t r = vorrq_u8(pv, qv);
+    vst1q_u8(p, r);
+  }
+
+  gcc_flatten
+  void CopyPixels(uint8_t *gcc_restrict p,
+                  const uint8_t *gcc_restrict q, unsigned n) const {
+    for (unsigned i = 0; i < n / 16; ++i, p += 16, q += 16)
+      Blend16(p, q);
+  }
+
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+/**
  * Implementation of AlphaPixelOperations using ARM NEON instructions.
  */
 class NEONAlphaPixelOperations {

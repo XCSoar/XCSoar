@@ -283,7 +283,7 @@ using BitNotPixelOperations =
  * Combine source and destination color with bit-wise "or".
  */
 template<typename PixelTraits>
-using BitOrPixelOperations =
+using PortableBitOrPixelOperations =
   BinaryIntegerOperations<PixelTraits,
                           std::bit_or<typename PixelTraits::integer_type>>;
 

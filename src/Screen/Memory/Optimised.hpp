@@ -80,6 +80,21 @@ public:
 };
 
 template<typename PixelTraits>
+struct BitOrPixelOperations
+  : PortableBitOrPixelOperations<PixelTraits> {
+};
+
+#ifdef __ARM_NEON__
+
+template<>
+struct BitOrPixelOperations<GreyscalePixelTraits>
+  : SelectOptimisedPixelOperations<NEONBitOrPixelOperations, 16,
+                                   PortableBitOrPixelOperations<GreyscalePixelTraits>> {
+};
+
+#endif
+
+template<typename PixelTraits>
 class AlphaPixelOperations
   : public PortableAlphaPixelOperations<PixelTraits> {
 public:
