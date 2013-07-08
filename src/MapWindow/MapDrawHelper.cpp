@@ -102,33 +102,34 @@ MapDrawHelper::DrawCircle(const RasterPoint &center, unsigned radius)
 void 
 MapDrawHelper::BufferRenderFinish() 
 {
-  if (buffer_drawn) {
-    if (use_stencil) {
+  if (!buffer_drawn)
+    return;
+
+  buffer_drawn = false;
+
+  if (use_stencil) {
 #ifdef USE_MEMORY_CANVAS
-      buffer.CopyTransparentBlack(stencil);
+    buffer.CopyTransparentBlack(stencil);
 #else
-      buffer.CopyOr(stencil);
+    buffer.CopyOr(stencil);
 #endif
-    }
+  }
 
 #ifdef HAVE_ALPHA_BLEND
 #ifdef HAVE_HATCHED_BRUSH
-    if (settings.transparency && AlphaBlendAvailable())
+  if (settings.transparency && AlphaBlendAvailable())
 #endif
-      canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                           buffer,
-                           0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                           60);
+    canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
+                      buffer,
+                      0, 0, canvas.GetWidth(), canvas.GetHeight(),
+                      60);
 #ifdef HAVE_HATCHED_BRUSH
-    else
+  else
 #endif
 #endif
 #ifdef HAVE_HATCHED_BRUSH
-      canvas.CopyAnd(buffer);
+    canvas.CopyAnd(buffer);
 #endif
-
-    buffer_drawn = false;
-  }
 }
 
 void 
