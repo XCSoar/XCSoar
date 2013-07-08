@@ -328,8 +328,8 @@ CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
   uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
   const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
 
-  const uint32_t dest_pitch = _dest_pitch / (dest_bpp / 8);
-  const uint32_t src_pitch = src.pitch / (dest_bpp / 8);
+  const uint32_t dest_pitch = _dest_pitch / dest_bpp;
+  const uint32_t src_pitch = src.pitch / dest_bpp;
 
   for (unsigned row = src.height; row > 0;
        --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
