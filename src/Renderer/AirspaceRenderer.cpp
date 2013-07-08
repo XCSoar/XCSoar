@@ -439,23 +439,17 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    if (warnings.IsAcked(airspace))
-      return;
-
-    AirspaceClass airspace_class = airspace.GetType();
-    if (settings.classes[airspace_class].fill_mode ==
-        AirspaceClassRendererSettings::FillMode::NONE)
-      return;
-
-    Begin();
-    SetBufferPens(airspace);
-
     RasterPoint center = proj.GeoToScreen(airspace.GetCenter());
     unsigned radius = proj.GeoToScreenDistance(airspace.GetRadius());
     DrawCircle(center, radius);
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
+    DrawSearchPointVector(airspace.GetPoints());
+  }
+
+protected:
+  virtual void Visit(const AbstractAirspace &airspace) override {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -466,11 +460,7 @@ private:
 
     Begin();
     SetBufferPens(airspace);
-    DrawSearchPointVector(airspace.GetPoints());
-  }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -558,18 +548,20 @@ protected:
     return true;
   }
 
-public:
+private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    if (SetupCanvas(airspace))
-      DrawCircle(airspace.GetCenter(), airspace.GetRadius());
+    DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
-    if (SetupCanvas(airspace))
-      DrawPolygon(airspace.GetPoints());
+    DrawPolygon(airspace.GetPoints());
   }
 
+public:
   virtual void Visit(const AbstractAirspace &airspace) override {
+    if (!SetupCanvas(airspace))
+      return;
+
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
