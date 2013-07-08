@@ -116,6 +116,10 @@ struct GreyscalePixelTraits {
     return c.GetLuminosity() == 0;
   }
 
+  static constexpr bool IsWhite(color_type c) {
+    return c.GetLuminosity() == 0xff;
+  }
+
   /**
    * How much to add to this pointer to go #delta pixels ahead?
    */
@@ -312,6 +316,15 @@ struct BGRAPixelTraits {
 
   static constexpr bool IsBlack(color_type c) {
     return c.Red() == 0 && c.Green() == 0 && c.Blue() == 0;
+  }
+
+  static constexpr bool IsWhite(color_type c) {
+#if defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+    /* little-endian */
+    return (ToInteger(c) & 0xffffff) == 0xffffff;
+#else
+    return (ToInteger(c) & 0xffffff00) == 0xffffff00;
+#endif
   }
 
   static constexpr int CalcIncrement(int delta) {
