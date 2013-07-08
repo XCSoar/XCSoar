@@ -399,18 +399,6 @@ public:
     Stretch(0, 0, size.cx, size.cy, src);
   }
 
-  void StretchAnd(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height);
-
-  void StretchNotOr(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
-                    const Bitmap &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height);
-
   /**
    * Stretches a monochrome bitmap (1 bit per pixel), painting the
    * black pixels in the specified foreground color.  The white pixels

@@ -218,23 +218,6 @@ Canvas::Copy(const Bitmap &src)
 }
 
 void
-Canvas::CopyTransparentBlack(const Canvas &src)
-{
-  assert(IsDefined());
-  assert(src.IsDefined());
-
-#ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
-                     src.dc, 0, 0, GetWidth(), GetHeight(),
-                     COLOR_BLACK);
-#else
-  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
-                   src.dc, 0, 0, GetWidth(), GetHeight(),
-                   COLOR_BLACK);
-#endif
-}
-
-void
 Canvas::CopyTransparentWhite(const Canvas &src)
 {
   assert(IsDefined());

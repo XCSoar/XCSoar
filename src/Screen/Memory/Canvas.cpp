@@ -375,16 +375,6 @@ Canvas::CopyTransparentWhite(const Canvas &src)
 }
 
 void
-Canvas::CopyTransparentBlack(const Canvas &src)
-{
-  SDLRasterCanvas canvas(buffer);
-  TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_BLACK));
-  canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
-                       src.buffer.data, src.buffer.pitch,
-                       operations);
-}
-
-void
 Canvas::StretchNot(const Bitmap &_src)
 {
   assert(_src.IsDefined());

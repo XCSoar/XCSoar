@@ -721,30 +721,6 @@ Canvas::Stretch(int dest_x, int dest_y,
 }
 
 void
-Canvas::StretchAnd(int dest_x, int dest_y,
-                   unsigned dest_width, unsigned dest_height,
-                   const Bitmap &src,
-                   int src_x, int src_y,
-                   unsigned src_width, unsigned src_height)
-{
-  GLLogicOp logic_op(GL_AND);
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
-}
-
-void
-Canvas::StretchNotOr(int dest_x, int dest_y,
-                     unsigned dest_width, unsigned dest_height,
-                     const Bitmap &src,
-                     int src_x, int src_y,
-                     unsigned src_width, unsigned src_height)
-{
-  GLLogicOp logic_op(GL_OR_INVERTED);
-  Stretch(dest_x, dest_y, dest_width, dest_height,
-          src, src_x, src_y, src_width, src_height);
-}
-
-void
 Canvas::StretchMono(int dest_x, int dest_y,
                     unsigned dest_width, unsigned dest_height,
                     const Bitmap &src,
