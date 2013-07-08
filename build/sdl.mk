@@ -18,9 +18,7 @@ LIBPNG = y
 LIBJPEG = y
 FREETYPE = y
 
-SDL_PKG = sdl
-
-$(eval $(call pkg-config-library,SDL,$(SDL_PKG)))
+$(eval $(call pkg-config-library,SDL,sdl))
 
 SDL_CPPFLAGS += -DENABLE_SDL
 
