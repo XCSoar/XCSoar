@@ -72,8 +72,8 @@ protected:
 
   void DrawCircle(const RasterPoint &center, unsigned radius);
 
-  void BufferRenderStart();
-  void BufferRenderFinish();
+  void Begin();
+  void Commit();
 
   void ClearBuffer();
 };

@@ -101,7 +101,7 @@ StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
 }
 
 void
-StencilMapCanvas::BufferRenderFinish()
+StencilMapCanvas::Commit()
 {
   if (!buffer_drawn)
     return;
@@ -134,7 +134,7 @@ StencilMapCanvas::BufferRenderFinish()
 }
 
 void
-StencilMapCanvas::BufferRenderStart()
+StencilMapCanvas::Begin()
 {
   if (!buffer_drawn) {
     ClearBuffer();

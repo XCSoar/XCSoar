@@ -447,7 +447,7 @@ private:
         AirspaceClassRendererSettings::FillMode::NONE)
       return;
 
-    BufferRenderStart();
+    Begin();
     SetBufferPens(airspace);
 
     RasterPoint center = proj.GeoToScreen(airspace.GetCenter());
@@ -464,7 +464,7 @@ private:
         AirspaceClassRendererSettings::FillMode::NONE)
       return;
 
-    BufferRenderStart();
+    Begin();
     SetBufferPens(airspace);
     DrawSearchPointVector(airspace.GetPoints());
   }
@@ -484,7 +484,7 @@ protected:
 
 public:
   void DrawIntercepts() {
-    BufferRenderFinish();
+    Commit();
   }
 
 private:
