@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "MapCanvas.hpp"
 #include "Geo/SearchPointVector.hpp"
 
 #ifdef USE_GDI
@@ -83,9 +82,6 @@ StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
   RasterPoint screen[size];
   for (unsigned i = 0; i < size; ++i)
     screen[i] = proj.GeoToScreen(geo_points[i]);
-
-  if (!MapCanvas::IsVisible(canvas, screen, size))
-    return;
 
   buffer.DrawPolygon(&screen[0], size);
   if (use_stencil)

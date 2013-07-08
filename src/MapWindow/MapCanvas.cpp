@@ -72,36 +72,6 @@ MapCanvas::Project(const Projection &projection,
     *screen++ = projection.GeoToScreen(it->GetLocation());
 }
 
-static void
-UpdateBounds(PixelRect &bounds, const RasterPoint &pt)
-{
-  if (pt.x < bounds.left)
-    bounds.left = pt.x;
-  if (pt.x >= bounds.right)
-    bounds.right = pt.x + 1;
-  if (pt.y < bounds.top)
-    bounds.top = pt.y;
-  if (pt.y >= bounds.bottom)
-    bounds.bottom = pt.y + 1;
-}
-
-bool
-MapCanvas::IsVisible(const Canvas &canvas,
-                     const RasterPoint *screen, unsigned num)
-{
-  PixelRect bounds;
-  bounds.left = 0x7fff;
-  bounds.top = 0x7fff;
-  bounds.right = -1;
-  bounds.bottom = -1;
-
-  for (unsigned i = 0; i < num; ++i)
-    UpdateBounds(bounds, screen[i]);
-
-  return bounds.left < (int)canvas.GetWidth() && bounds.right >= 0 &&
-    bounds.top < (int)canvas.GetHeight() && bounds.bottom >= 0;
-}
-
 bool
 MapCanvas::PreparePolygon(const SearchPointVector &points)
 {
@@ -126,7 +96,7 @@ MapCanvas::PreparePolygon(const SearchPointVector &points)
   for (unsigned i = 0; i < num_raster_points; ++i)
     raster_points[i] = projection.GeoToScreen(geo_points[i]);
 
-  return IsVisible(raster_points.begin(), num_raster_points);
+  return true;
 }
 
 void
