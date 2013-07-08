@@ -102,11 +102,8 @@ StencilMapCanvas::Commit(Canvas &canvas)
   buffer_drawn = false;
 
   if (use_stencil) {
-#ifdef USE_MEMORY_CANVAS
-    buffer.CopyTransparentBlack(stencil);
-#else
-    buffer.CopyOr(stencil);
-#endif
+    buffer.CopyOr(0, 0, canvas.GetWidth(), canvas.GetHeight(),
+                  stencil, 0, 0);
   }
 
   CopyTo(canvas);

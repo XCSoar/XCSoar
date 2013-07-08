@@ -428,6 +428,13 @@ public:
 
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,
+              const Canvas &src, int src_x, int src_y) {
+    CopyOr(dest_x, dest_y, dest_width, dest_height,
+           src.buffer, src_x, src_y);
+  }
+
+  void CopyOr(int dest_x, int dest_y,
+              unsigned dest_width, unsigned dest_height,
               const Bitmap &src, int src_x, int src_y);
 
   void CopyOr(const Bitmap &src) {
