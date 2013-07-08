@@ -84,12 +84,31 @@ struct BitOrPixelOperations
   : PortableBitOrPixelOperations<PixelTraits> {
 };
 
+template<typename PixelTraits>
+struct TransparentPixelOperations
+  : PortableTransparentPixelOperations<PixelTraits> {
+  typedef typename PixelTraits::color_type color_type;
+
+  explicit constexpr TransparentPixelOperations(const color_type key)
+    :PortableTransparentPixelOperations<PixelTraits>(key) {}
+};
+
 #ifdef __ARM_NEON__
 
 template<>
 struct BitOrPixelOperations<GreyscalePixelTraits>
   : SelectOptimisedPixelOperations<NEONBitOrPixelOperations, 16,
                                    PortableBitOrPixelOperations<GreyscalePixelTraits>> {
+};
+
+template<>
+struct TransparentPixelOperations<GreyscalePixelTraits>
+  : public SelectOptimisedPixelOperations<NEONTransparentPixelOperations, 16,
+                                          PortableTransparentPixelOperations<GreyscalePixelTraits>> {
+  typedef typename PixelTraits::color_type color_type;
+
+  explicit constexpr TransparentPixelOperations(const color_type key)
+    :SelectOptimisedPixelOperations(key) {}
 };
 
 #endif

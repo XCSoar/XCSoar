@@ -439,7 +439,7 @@ struct ColorKey {
  * given color key.
  */
 template<typename PixelTraits>
-using TransparentPixelOperations =
+using PortableTransparentPixelOperations =
   ConditionalPixelOperations<ColorKey<PixelTraits>>;
 
 template<typename PixelTraits>
