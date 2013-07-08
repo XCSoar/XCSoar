@@ -197,16 +197,17 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
     return;
   }
 
-  const fixed turn_rate = fabs(CommonInterface::Calculated().turn_rate_heading_smoothed.Degrees());
+  const Angle turn_rate =
+    CommonInterface::Calculated().turn_rate_heading_smoothed.Absolute();
 
   // deal with div zero and small turn rates
-  if (turn_rate < fixed(1)) {
+  if (turn_rate < Angle::Degrees(1)) {
     data.SetInvalid();
     return;
   }
 
   const fixed circle_diameter = CommonInterface::Basic().true_airspeed
-     / Angle::Degrees(turn_rate).Radians()
+     / turn_rate.Radians()
      * fixed(2); // convert turn rate to radians/s and double it to get estimated circle diameter
 
   if (circle_diameter > fixed (2000)){ // arbitrary estimated that any diameter bigger than 2km will not be interesting
@@ -219,7 +220,8 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data)
   data.SetValue (buffer);
   data.SetValueUnit(unit);
 
-  const fixed circle_duration = Angle::FullCircle().Degrees() / turn_rate;
+  const fixed circle_duration =
+    Angle::FullCircle().Native() / turn_rate.Native();
 
   StaticString<16> duration_buffer;
   duration_buffer.Format(_T("%u s"), int(circle_duration));

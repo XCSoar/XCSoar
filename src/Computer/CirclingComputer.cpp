@@ -30,7 +30,7 @@ Copyright_License {
 
 #include "LogFile.hpp"
 
-static constexpr fixed MIN_TURN_RATE(4);
+static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
 static constexpr fixed CRUISE_CLIMB_SWITCH(15);
 static constexpr fixed CLIMB_CRUISE_SWITCH(10);
 
@@ -81,19 +81,21 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
     // JMW limit rate to 50 deg per second otherwise a big spike
     // will cause spurious lock on circling for a long time
-    fixed turn_rate = Clamp(circling_info.turn_rate.Degrees(), fixed(-50), fixed(50));
+    Angle turn_rate = Clamp(circling_info.turn_rate,
+                            Angle::Degrees(-50), Angle::Degrees(50));
 
     // Make the turn rate more smooth using the LowPassFilter
-    turn_rate = LowPassFilter(circling_info.turn_rate_smoothed.Degrees(),
-                              turn_rate, fixed(0.3));
-    circling_info.turn_rate_smoothed = Angle::Degrees(turn_rate);
+    fixed smoothed = LowPassFilter(circling_info.turn_rate_smoothed.Native(),
+                                   turn_rate.Native(), fixed(0.3));
+    circling_info.turn_rate_smoothed = Angle::Native(smoothed);
 
     // Makes smoothing of heading turn rate
-    turn_rate = Clamp(circling_info.turn_rate_heading.Degrees(), fixed(-50), fixed(50));
+    turn_rate = Clamp(circling_info.turn_rate_heading,
+                      Angle::Degrees(-50), Angle::Degrees(50));
     // Make the heading turn rate more smooth using the LowPassFilter
-    turn_rate = LowPassFilter(circling_info.turn_rate_heading_smoothed.Degrees(),
-                              turn_rate, fixed(0.3));
-    circling_info.turn_rate_heading_smoothed = Angle::Degrees(turn_rate);
+    smoothed = LowPassFilter(circling_info.turn_rate_heading_smoothed.Native(),
+                             turn_rate.Native(), fixed(0.3));
+    circling_info.turn_rate_heading_smoothed = Angle::Native(smoothed);
   }
 
   last_track = basic.track;
@@ -116,7 +118,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     return;
 
   circling_info.turning =
-    fabs(circling_info.turn_rate_smoothed.Degrees()) >= MIN_TURN_RATE;
+    circling_info.turn_rate_smoothed.Absolute() >= MIN_TURN_RATE;
 
   // Force cruise or climb mode if external device says so
   bool force_cruise = false;
