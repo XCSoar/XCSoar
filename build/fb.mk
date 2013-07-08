@@ -9,10 +9,4 @@ LIBJPEG = y
 EGL = n
 OPENGL = n
 ENABLE_SDL = n
-
-ifeq ($(TARGET_IS_KOBO),y)
-SDL_LDADD += $(KOBO)/lib/libpng.a $(KOBO)/lib/libjpeg.a
-SDL_LDADD += $(KOBO)/lib/libfreetype.a
-endif
-
 endif
