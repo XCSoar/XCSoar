@@ -482,11 +482,6 @@ protected:
     }
   }
 
-public:
-  void DrawIntercepts() {
-    Commit();
-  }
-
 private:
   void SetBufferPens(const AbstractAirspace &airspace) {
     AirspaceClass airspace_class = airspace.GetType();
@@ -628,7 +623,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                           renderer, visible);
   }
 #else
-  StencilMapCanvas helper(canvas, buffer_canvas, stencil_canvas, projection,
+  StencilMapCanvas helper(buffer_canvas, stencil_canvas, projection,
                           settings);
   AirspaceVisitorMap v(helper, awc, settings,
                        look);
@@ -643,7 +638,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
   awc.VisitWarnings(v);
   awc.VisitInside(v);
 
-  v.DrawIntercepts();
+  v.Commit(canvas);
 
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
   airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),

@@ -49,7 +49,6 @@ class StencilMapCanvas
   AllocatedArray<GeoPoint> geo_points;
 
 public:
-  Canvas &canvas;
   Canvas &buffer;
   Canvas &stencil;
   const Projection &proj;
@@ -59,22 +58,21 @@ public:
   const AirspaceRendererSettings &settings;
 
 public:
-  StencilMapCanvas(Canvas &_canvas,
-                   Canvas &_buffer,
+  StencilMapCanvas(Canvas &_buffer,
                    Canvas &_stencil,
                    const WindowProjection &_proj,
                    const AirspaceRendererSettings &_settings);
 
   StencilMapCanvas(const StencilMapCanvas &other);
 
-protected:
   void DrawSearchPointVector(const SearchPointVector &points);
 
   void DrawCircle(const RasterPoint &center, unsigned radius);
 
   void Begin();
-  void Commit();
+  void Commit(Canvas &canvas);
 
+protected:
   void ClearBuffer();
 };
 

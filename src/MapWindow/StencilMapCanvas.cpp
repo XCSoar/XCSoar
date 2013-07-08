@@ -33,12 +33,10 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
-StencilMapCanvas::StencilMapCanvas(Canvas &_canvas,
-                                   Canvas &_buffer, Canvas &_stencil,
+StencilMapCanvas::StencilMapCanvas(Canvas &_buffer, Canvas &_stencil,
                                    const WindowProjection &_proj,
                                    const AirspaceRendererSettings &_settings)
   :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
-   canvas(_canvas),
    buffer(_buffer),
    stencil(_stencil),
    proj(_proj),
@@ -50,7 +48,6 @@ StencilMapCanvas::StencilMapCanvas(Canvas &_canvas,
 
 StencilMapCanvas::StencilMapCanvas(const StencilMapCanvas &other)
   :clip(other.clip),
-   canvas(other.canvas),
    buffer(other.buffer),
    stencil(other.stencil),
    proj(other.proj),
@@ -97,7 +94,7 @@ StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
 }
 
 void
-StencilMapCanvas::Commit()
+StencilMapCanvas::Commit(Canvas &canvas)
 {
   if (!buffer_drawn)
     return;
