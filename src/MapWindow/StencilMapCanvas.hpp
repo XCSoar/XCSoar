@@ -71,6 +71,7 @@ public:
 
   void Begin();
   void Commit(Canvas &canvas);
+  void CopyTo(Canvas &canvas);
 
 protected:
   void ClearBuffer();

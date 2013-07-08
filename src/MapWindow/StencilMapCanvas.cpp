@@ -109,6 +109,12 @@ StencilMapCanvas::Commit(Canvas &canvas)
 #endif
   }
 
+  CopyTo(canvas);
+}
+
+void
+StencilMapCanvas::CopyTo(Canvas &canvas)
+{
 #ifdef HAVE_ALPHA_BLEND
 #ifdef HAVE_HATCHED_BRUSH
   if (settings.transparency && AlphaBlendAvailable())
