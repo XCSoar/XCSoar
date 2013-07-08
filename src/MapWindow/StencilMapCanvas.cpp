@@ -23,7 +23,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include "MapDrawHelper.hpp"
+#include "StencilMapCanvas.hpp"
 #include "Screen/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
@@ -34,9 +34,10 @@ Copyright_License {
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
-MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
-                             const WindowProjection &_proj,
-                             const AirspaceRendererSettings &_settings)
+StencilMapCanvas::StencilMapCanvas(Canvas &_canvas,
+                                   Canvas &_buffer, Canvas &_stencil,
+                                   const WindowProjection &_proj,
+                                   const AirspaceRendererSettings &_settings)
   :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
    canvas(_canvas),
    buffer(_buffer),
@@ -48,7 +49,7 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
 {
 }
 
-MapDrawHelper::MapDrawHelper(const MapDrawHelper &other)
+StencilMapCanvas::StencilMapCanvas(const StencilMapCanvas &other)
   :clip(other.clip),
    canvas(other.canvas),
    buffer(other.buffer),
@@ -60,8 +61,8 @@ MapDrawHelper::MapDrawHelper(const MapDrawHelper &other)
 {
 }
 
-void 
-MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
+void
+StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
 {
   size_t size = points.size();
   if (size < 3)
@@ -91,16 +92,16 @@ MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
     stencil.DrawPolygon(&screen[0], size);
 }
 
-void 
-MapDrawHelper::DrawCircle(const RasterPoint &center, unsigned radius)
+void
+StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
 {
   buffer.DrawCircle(center.x, center.y, radius);
   if (use_stencil)
     stencil.DrawCircle(center.x, center.y, radius);
 }
 
-void 
-MapDrawHelper::BufferRenderFinish() 
+void
+StencilMapCanvas::BufferRenderFinish()
 {
   if (!buffer_drawn)
     return;
@@ -132,8 +133,8 @@ MapDrawHelper::BufferRenderFinish()
 #endif
 }
 
-void 
-MapDrawHelper::BufferRenderStart() 
+void
+StencilMapCanvas::BufferRenderStart()
 {
   if (!buffer_drawn) {
     ClearBuffer();
@@ -141,8 +142,8 @@ MapDrawHelper::BufferRenderStart()
   }
 }
 
-void 
-MapDrawHelper::ClearBuffer()
+void
+StencilMapCanvas::ClearBuffer()
 {
   buffer.ClearWhite();
 

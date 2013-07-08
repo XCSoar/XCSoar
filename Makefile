@@ -560,7 +560,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Geo/Geoid.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
-	$(SRC)/MapWindow/MapDrawHelper.cpp \
+	$(SRC)/MapWindow/StencilMapCanvas.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \

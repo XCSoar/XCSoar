@@ -39,7 +39,7 @@ class SearchPointVector;
 /**
  * Utility class to draw multilayer items on a canvas with stencil masking
  */
-class MapDrawHelper
+class StencilMapCanvas
 {
   const GeoClip clip;
 
@@ -59,13 +59,13 @@ public:
   const AirspaceRendererSettings &settings;
 
 public:
-  MapDrawHelper(Canvas &_canvas,
-                Canvas &_buffer,
-                Canvas &_stencil,
-                const WindowProjection &_proj,
-                const AirspaceRendererSettings &_settings);
+  StencilMapCanvas(Canvas &_canvas,
+                   Canvas &_buffer,
+                   Canvas &_stencil,
+                   const WindowProjection &_proj,
+                   const AirspaceRendererSettings &_settings);
 
-  MapDrawHelper(const MapDrawHelper &other);
+  StencilMapCanvas(const StencilMapCanvas &other);
 
 protected:
   void DrawSearchPointVector(const SearchPointVector &points);

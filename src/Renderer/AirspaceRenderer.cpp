@@ -35,7 +35,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "MapWindow/MapDrawHelper.hpp"
+#include "MapWindow/StencilMapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Aircraft.hpp"
 
@@ -412,17 +412,17 @@ private:
  * of code overhead.
  */
 class AirspaceVisitorMap final
-  : public AirspaceVisitor, public MapDrawHelper
+  : public AirspaceVisitor, public StencilMapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warnings;
 
 public:
-  AirspaceVisitorMap(MapDrawHelper &_helper,
+  AirspaceVisitorMap(StencilMapCanvas &_helper,
                      const AirspaceWarningCopy &_warnings,
                      const AirspaceRendererSettings &_settings,
                      const AirspaceLook &_airspace_look)
-    :MapDrawHelper(_helper),
+    :StencilMapCanvas(_helper),
      look(_airspace_look), warnings(_warnings)
   {
     switch (settings.fill_mode) {
@@ -628,8 +628,8 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                           renderer, visible);
   }
 #else
-  MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, projection,
-                       settings);
+  StencilMapCanvas helper(canvas, buffer_canvas, stencil_canvas, projection,
+                          settings);
   AirspaceVisitorMap v(helper, awc, settings,
                        look);
 
