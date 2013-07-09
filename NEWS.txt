@@ -7,6 +7,7 @@ Version 6.6.4 - not yet released
   - fix stuttering terrain on Windows CE
   - fix multi-touch pan gesture (#2684)
 * devices
+  - FLARM: work around a Garrecht TRX-1090 firmware bug (#2745, #2749)
   - Volkslogger: increase timeout to calculate security (#2910)
   - fix bogus error message after pressing "Cancel"
 
