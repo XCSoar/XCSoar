@@ -70,32 +70,27 @@ TransparentRendererCache::Commit(Canvas &canvas,
   assert(Check(projection));
 }
 
+#ifdef HAVE_ALPHA_BLEND
+
 void
-TransparentRendererCache::CopyTo(Canvas &canvas,
-                                 const WindowProjection &projection) const
+TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
+                                       const WindowProjection &projection,
+                                       uint8_t alpha) const
 {
+  assert(AlphaBlendAvailable());
   assert(canvas.IsDefined());
   assert(buffer.IsDefined());
   assert(projection.IsValid());
   assert(compare_projection.IsDefined());
   assert(Check(projection));
 
-#ifdef HAVE_ALPHA_BLEND
-#ifdef HAVE_HATCHED_BRUSH
-  if (alpha < 0xff && AlphaBlendAvailable()) {
-#endif
-    const unsigned width = projection.GetScreenWidth(),
-      height = projection.GetScreenHeight();
-    canvas.AlphaBlend(0, 0, width, height,
-                      buffer, 0, 0, width, height,
-                      alpha);
-#ifdef HAVE_HATCHED_BRUSH
-  } else
-#endif
-#endif
-#ifdef HAVE_HATCHED_BRUSH
-    canvas.CopyAnd(buffer);
-#endif
+  const unsigned width = projection.GetScreenWidth(),
+    height = projection.GetScreenHeight();
+  canvas.AlphaBlend(0, 0, width, height,
+                    buffer, 0, 0, width, height,
+                    alpha);
 }
+
+#endif
 
 #endif

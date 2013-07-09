@@ -45,8 +45,6 @@ class TransparentRendererCache {
   /* this class is a no-op on OpenGL, because OpenGL doesn't support
      color keying */
 public:
-  constexpr TransparentRendererCache(uint8_t _alpha) {}
-
   void Invalidate() {
   }
 
@@ -62,16 +60,17 @@ public:
   void Commit(Canvas &canvas, const WindowProjection &projection) {
   }
 
-  void CopyTo(Canvas &canvas, const WindowProjection &projection) const {
+  void CopyAndTo(Canvas &canvas) const {
+  }
+
+  void AlphaBlendTo(Canvas &canvas, const WindowProjection &projection,
+                    uint8_t alpha) const {
   }
 #else
-  const uint8_t alpha;
   CompareProjection compare_projection;
   BufferCanvas buffer;
 
 public:
-  TransparentRendererCache(uint8_t _alpha):alpha(_alpha) {}
-
   void Invalidate() {
     compare_projection.Clear();
   }
@@ -96,10 +95,17 @@ public:
    */
   void Commit(Canvas &canvas, const WindowProjection &projection);
 
+  void CopyAndTo(Canvas &canvas) const {
+    canvas.CopyAnd(buffer);
+  }
+
+#ifdef HAVE_ALPHA_BLEND
   /**
    * Copy the cache to the given Canvas.
    */
-  void CopyTo(Canvas &canvas, const WindowProjection &projection) const;
+  void AlphaBlendTo(Canvas &canvas, const WindowProjection &projection,
+                    uint8_t alpha) const;
+#endif
 #endif
 };
 

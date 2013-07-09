@@ -624,7 +624,18 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
     fill_cache.Commit(canvas, projection);
   }
 
-  fill_cache.CopyTo(canvas, projection);
+#ifdef HAVE_ALPHA_BLEND
+#ifdef HAVE_HATCHED_BRUSH
+  if (settings.transparency && AlphaBlendAvailable())
+#endif
+    fill_cache.AlphaBlendTo(canvas, projection, 60);
+#ifdef HAVE_HATCHED_BRUSH
+  else
+#endif
+#endif
+#ifdef HAVE_HATCHED_BRUSH
+    fill_cache.CopyAndTo(canvas);
+#endif
 }
 
 inline void

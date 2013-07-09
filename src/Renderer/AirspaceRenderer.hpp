@@ -66,7 +66,7 @@ public:
   AirspaceRenderer(const AirspaceLook &_look)
     :look(_look), airspaces(nullptr), warning_manager(nullptr)
 #ifndef ENABLE_OPENGL
-    , fill_cache(60), last_warning_serial(0)
+    , last_warning_serial(0)
 #endif
   {}
 
