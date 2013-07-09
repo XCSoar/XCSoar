@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Topography/TopographyStore.hpp"
-#include "Topography/TopographyRenderer.hpp"
+#include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -211,7 +211,7 @@ MapWindow::SetTopography(TopographyStore *_topography)
 
   delete topography_renderer;
   topography_renderer = topography != NULL
-    ? new TopographyRenderer(*topography)
+    ? new CachedTopographyRenderer(*topography)
     : NULL;
 }
 

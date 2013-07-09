@@ -21,42 +21,50 @@ Copyright_License {
 }
 */
 
-#ifndef TOPOGRAPHY_RENDERER_HPP
-#define TOPOGRAPHY_RENDERER_HPP
+#ifndef XCSOAR_CACHED_TOPOGRAPHY_RENDERER_HPP
+#define XCSOAR_CACHED_TOPOGRAPHY_RENDERER_HPP
 
-#include "Topography/TopographyStore.hpp"
-#include "Util/StaticArray.hpp"
-#include "Util/NonCopyable.hpp"
-
-class Canvas;
-class WindowProjection;
-class LabelBlock;
-class TopographyFileRenderer;
+#include "TopographyRenderer.hpp"
+#include "Renderer/TransparentRendererCache.hpp"
 
 /**
  * Class used to manage and render vector topography layers
  */
-class TopographyRenderer : private NonCopyable {
-  const TopographyStore &store;
-  StaticArray<TopographyFileRenderer *, TopographyStore::MAXTOPOGRAPHY> files;
+class CachedTopographyRenderer {
+  TopographyRenderer renderer;
+
+#ifndef ENABLE_OPENGL
+  TransparentRendererCache cache;
+
+  unsigned last_serial;
+#endif
 
 public:
-  TopographyRenderer(const TopographyStore &store);
-  ~TopographyRenderer();
+  CachedTopographyRenderer(const TopographyStore &store)
+    :renderer(store)
+#ifndef ENABLE_OPENGL
+    , last_serial(0)
+#endif
+  {}
 
-  const TopographyStore &GetStore() const {
-    return store;
+  void Flush() {
+#ifndef ENABLE_OPENGL
+    cache.Invalidate();
+#endif
   }
 
-  /**
-   * Draws the topography to the given canvas
-   * @param canvas The drawing canvas
-   * @param rc The area to draw in
-   */
-  void Draw(Canvas &canvas, const WindowProjection &projection) const;
+#ifdef ENABLE_OPENGL
+  void Draw(Canvas &canvas, const WindowProjection &projection) {
+    renderer.Draw(canvas, projection);
+  }
+#else
+  void Draw(Canvas &canvas, const WindowProjection &projection);
+#endif
 
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
-                  LabelBlock &label_block) const;
+                  LabelBlock &label_block) const {
+    renderer.DrawLabels(canvas, projection, label_block);
+  }
 };
 
 #endif

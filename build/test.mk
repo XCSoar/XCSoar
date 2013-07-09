@@ -1745,6 +1745,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
+	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \

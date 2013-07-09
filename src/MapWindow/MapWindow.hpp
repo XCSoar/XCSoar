@@ -43,7 +43,7 @@ Copyright_License {
 struct MapLook;
 struct TrafficLook;
 class TopographyStore;
-class TopographyRenderer;
+class CachedTopographyRenderer;
 class RasterTerrain;
 class RasterWeather;
 class ProtectedMarkers;
@@ -116,7 +116,7 @@ protected:
 
   const Waypoints *waypoints;
   TopographyStore *topography;
-  TopographyRenderer *topography_renderer;
+  CachedTopographyRenderer *topography_renderer;
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;

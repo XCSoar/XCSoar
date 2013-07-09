@@ -654,6 +654,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
+	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	\
