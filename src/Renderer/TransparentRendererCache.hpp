@@ -63,6 +63,9 @@ public:
   void CopyAndTo(Canvas &canvas) const {
   }
 
+  void CopyTransparentWhiteTo(Canvas &canvas) const {
+  }
+
   void AlphaBlendTo(Canvas &canvas, const WindowProjection &projection,
                     uint8_t alpha) const {
   }
@@ -97,6 +100,10 @@ public:
 
   void CopyAndTo(Canvas &canvas) const {
     canvas.CopyAnd(buffer);
+  }
+
+  void CopyTransparentWhiteTo(Canvas &canvas) const {
+    canvas.CopyTransparentWhite(buffer);
   }
 
 #ifdef HAVE_ALPHA_BLEND
