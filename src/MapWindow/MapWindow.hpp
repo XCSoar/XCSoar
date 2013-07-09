@@ -231,6 +231,8 @@ public:
   }
 #endif
 
+  void FlushCaches();
+
   using MapWindowBlackboard::ReadBlackboard;
 
   void ReadBlackboard(const MoreData &nmea_info,

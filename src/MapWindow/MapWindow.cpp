@@ -101,6 +101,12 @@ MapWindow::SetGlideComputer(GlideComputer *_gc)
                                         : NULL);
 }
 
+void
+MapWindow::FlushCaches()
+{
+  background.Flush();
+}
+
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.

@@ -502,6 +502,13 @@ MainWindow::SetDefaultFocus()
 }
 
 void
+MainWindow::FlushRendererCaches()
+{
+  if (map != nullptr)
+    map->FlushCaches();
+}
+
+void
 MainWindow::FullRedraw()
 {
   if (map != NULL)
