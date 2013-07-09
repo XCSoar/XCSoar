@@ -304,12 +304,7 @@ TerrainRenderer::SetSettings(const TerrainRendererSettings &_settings)
     return;
 
   settings = _settings;
-
-#ifdef ENABLE_OPENGL
-  raster_renderer.Invalidate();
-#else
-  compare_projection.Clear();
-#endif
+  Flush();
 }
 
 #ifdef ENABLE_OPENGL

@@ -60,6 +60,17 @@ public:
   TerrainRenderer(const RasterTerrain *_terrain);
   virtual ~TerrainRenderer() {}
 
+  /**
+   * Flush the cache.
+   */
+  void Flush() {
+#ifdef ENABLE_OPENGL
+    raster_renderer.Invalidate();
+#else
+    compare_projection.Clear();
+#endif
+  }
+
 protected:
   void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
 
