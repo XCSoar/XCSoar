@@ -297,16 +297,6 @@ TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
                                         width, height);
 }
 
-void
-TerrainRenderer::SetSettings(const TerrainRendererSettings &_settings)
-{
-  if (settings == _settings)
-    return;
-
-  settings = _settings;
-  Flush();
-}
-
 #ifdef ENABLE_OPENGL
 /**
  * Checks if the size difference of any dimension is more than a

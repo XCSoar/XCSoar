@@ -79,7 +79,9 @@ public:
     return settings;
   }
 
-  void SetSettings(const TerrainRendererSettings &_settings);
+  void SetSettings(const TerrainRendererSettings &_settings) {
+    settings = _settings;
+  }
 
   virtual void Generate(const WindowProjection &map_projection,
                         const Angle sunazimuth);
