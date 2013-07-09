@@ -8,6 +8,7 @@ Version 6.6.4 - not yet released
   - fix multi-touch pan gesture (#2684)
 * devices
   - Volkslogger: increase timeout to calculate security (#2910)
+  - fix bogus error message after pressing "Cancel"
 
 Version 6.6.3 - 2013/07/02
 * map
