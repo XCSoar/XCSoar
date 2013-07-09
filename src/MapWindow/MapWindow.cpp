@@ -105,6 +105,7 @@ void
 MapWindow::FlushCaches()
 {
   background.Flush();
+  airspace_renderer.Flush();
 }
 
 /**

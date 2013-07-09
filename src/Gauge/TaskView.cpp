@@ -117,14 +117,13 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     airspace_renderer.SetAirspaces(airspaces);
 
 #ifndef ENABLE_OPENGL
-    BufferCanvas buffer_canvas, stencil_canvas;
-    buffer_canvas.Create(canvas);
+    BufferCanvas stencil_canvas;
     stencil_canvas.Create(canvas);
 #endif
 
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
-                           buffer_canvas, stencil_canvas,
+                           stencil_canvas,
 #endif
                            projection, settings_map.airspace);
   }

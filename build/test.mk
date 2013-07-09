@@ -1658,6 +1658,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Renderer/TransparentRendererCache.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
 	$(SRC)/Renderer/MarkerRenderer.cpp \

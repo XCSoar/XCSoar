@@ -94,7 +94,7 @@ StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
 }
 
 void
-StencilMapCanvas::Commit(Canvas &canvas)
+StencilMapCanvas::Commit()
 {
   if (!buffer_drawn)
     return;
@@ -102,31 +102,9 @@ StencilMapCanvas::Commit(Canvas &canvas)
   buffer_drawn = false;
 
   if (use_stencil) {
-    buffer.CopyOr(0, 0, canvas.GetWidth(), canvas.GetHeight(),
+    buffer.CopyOr(0, 0, proj.GetScreenWidth(), proj.GetScreenHeight(),
                   stencil, 0, 0);
   }
-
-  CopyTo(canvas);
-}
-
-void
-StencilMapCanvas::CopyTo(Canvas &canvas)
-{
-#ifdef HAVE_ALPHA_BLEND
-#ifdef HAVE_HATCHED_BRUSH
-  if (settings.transparency && AlphaBlendAvailable())
-#endif
-    canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                      buffer,
-                      0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                      60);
-#ifdef HAVE_HATCHED_BRUSH
-  else
-#endif
-#endif
-#ifdef HAVE_HATCHED_BRUSH
-    canvas.CopyAnd(buffer);
-#endif
 }
 
 void

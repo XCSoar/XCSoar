@@ -51,7 +51,7 @@ class StencilMapCanvas
 public:
   Canvas &buffer;
   Canvas &stencil;
-  const Projection &proj;
+  const WindowProjection &proj;
   bool buffer_drawn;
   bool use_stencil;
 
@@ -70,8 +70,7 @@ public:
   void DrawCircle(const RasterPoint &center, unsigned radius);
 
   void Begin();
-  void Commit(Canvas &canvas);
-  void CopyTo(Canvas &canvas);
+  void Commit();
 
 protected:
   void ClearBuffer();

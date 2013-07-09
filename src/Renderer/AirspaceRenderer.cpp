@@ -53,7 +53,13 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
 
+  unsigned serial;
+
 public:
+  unsigned GetSerial() const {
+    return serial;
+  }
+
   void Visit(const AirspaceWarning& as) {
     if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
       ids_inside.checked_append(&as.GetAirspace());
@@ -67,6 +73,8 @@ public:
   }
 
   void Visit(const AirspaceWarningManager &awm) {
+    serial = awm.GetSerial();
+
     for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
       Visit(*i);
   }
@@ -578,8 +586,7 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
 #ifndef ENABLE_OPENGL
 
 inline void
-AirspaceRenderer::DrawFill(Canvas &canvas,
-                           Canvas &buffer_canvas, Canvas &stencil_canvas,
+AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
                            const WindowProjection &projection,
                            const AirspaceRendererSettings &settings,
                            const AirspaceWarningCopy &awc,
@@ -597,7 +604,27 @@ AirspaceRenderer::DrawFill(Canvas &canvas,
                                         projection.GetScreenDistanceMeters(),
                                         v, visible);
 
-  v.Commit(canvas);
+  v.Commit();
+}
+
+inline void
+AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
+                                 const WindowProjection &projection,
+                                 const AirspaceRendererSettings &settings,
+                                 const AirspaceWarningCopy &awc,
+                                 const AirspacePredicate &visible)
+{
+  if (awc.GetSerial() != last_warning_serial ||
+      !fill_cache.Check(projection)) {
+    last_warning_serial = awc.GetSerial();
+
+    Canvas &buffer_canvas = fill_cache.Begin(canvas, projection);
+    DrawFill(buffer_canvas, stencil_canvas,
+             projection, settings, awc, visible);
+    fill_cache.Commit(canvas, projection);
+  }
+
+  fill_cache.CopyTo(canvas, projection);
 }
 
 inline void
@@ -617,7 +644,7 @@ AirspaceRenderer::DrawOutline(Canvas &canvas,
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings,
@@ -642,7 +669,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                           renderer, visible);
   }
 #else
-  DrawFill(canvas, buffer_canvas, stencil_canvas, projection, settings, awc, visible);
+  DrawFillCached(canvas, stencil_canvas, projection, settings, awc, visible);
   DrawOutline(canvas, projection, settings, visible);
 #endif
 
@@ -652,7 +679,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings)
@@ -666,7 +693,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   Draw(canvas,
 #ifndef ENABLE_OPENGL
-       buffer_canvas, stencil_canvas,
+       stencil_canvas,
 #endif
        projection, settings, awc, AirspacePredicateTrue());
 }
@@ -674,7 +701,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const MoreData &basic,
@@ -693,7 +720,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                    ToAircraftState(basic, calculated), awc);
   Draw(canvas,
 #ifndef ENABLE_OPENGL
-       buffer_canvas, stencil_canvas,
+       stencil_canvas,
 #endif
        projection, settings, awc, visible);
 }
