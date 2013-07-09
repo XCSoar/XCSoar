@@ -36,8 +36,8 @@ static fixed
 SimpleSquareDistance(const GeoPoint &a, const GeoPoint &b,
                      const fixed latitude_cos)
 {
-  return SmallHypot((a.longitude - b.longitude).AsDelta().Native(),
-                    (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
+  return TinyHypot((a.longitude - b.longitude).AsDelta().Native(),
+                   (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
 }
 
 CompareProjection::CompareProjection(const WindowProjection &projection)

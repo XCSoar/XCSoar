@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.4 - not yet released
+* map
+  - fix stuttering terrain on Windows CE
 * devices
   - Volkslogger: increase timeout to calculate security (#2910)
 
