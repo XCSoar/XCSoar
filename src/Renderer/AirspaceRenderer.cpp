@@ -92,18 +92,6 @@ public:
     return as.IsActive() && Find(as, ids_inside);
   }
 
-  void VisitWarnings(AirspaceVisitor &visitor) const {
-    for (auto it = ids_warning.begin(), end = ids_warning.end(); it != end; ++it)
-      if (!IsAcked(**it))
-        visitor.Visit(**it);
-  }
-
-  void VisitInside(AirspaceVisitor &visitor) const {
-    for (auto it = ids_inside.begin(), end = ids_inside.end(); it != end; ++it)
-      if (!IsAcked(**it))
-        visitor.Visit(**it);
-  }
-
 private:
   bool Find(const AbstractAirspace& as,
             const StaticArray<const AbstractAirspace *,64> &list) const {
@@ -609,9 +597,6 @@ AirspaceRenderer::DrawFill(Canvas &canvas,
                                         projection.GetScreenDistanceMeters(),
                                         v, visible);
 
-  awc.VisitWarnings(v);
-  awc.VisitInside(v);
-
   v.Commit(canvas);
 }
 
@@ -619,15 +604,12 @@ inline void
 AirspaceRenderer::DrawOutline(Canvas &canvas,
                               const WindowProjection &projection,
                               const AirspaceRendererSettings &settings,
-                              const AirspaceWarningCopy &awc,
                               const AirspacePredicate &visible) const
 {
   AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
   airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                         projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
-  awc.VisitWarnings(outline_renderer);
-  awc.VisitInside(outline_renderer);
 }
 
 #endif
@@ -661,7 +643,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
   }
 #else
   DrawFill(canvas, buffer_canvas, stencil_canvas, projection, settings, awc, visible);
-  DrawOutline(canvas, projection, settings, awc, visible);
+  DrawOutline(canvas, projection, settings, visible);
 #endif
 
   intersections = awc.GetLocations();

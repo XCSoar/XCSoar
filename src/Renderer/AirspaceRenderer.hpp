@@ -89,7 +89,6 @@ private:
   void DrawOutline(Canvas &canvas,
                    const WindowProjection &projection,
                    const AirspaceRendererSettings &settings,
-                   const AirspaceWarningCopy &awc,
                    const AirspacePredicate &visible) const;
 
 public:
