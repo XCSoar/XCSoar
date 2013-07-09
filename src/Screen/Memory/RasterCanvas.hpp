@@ -772,6 +772,20 @@ public:
                    typename SPT::const_rpointer_type src,
                    unsigned src_size,
                    PixelOperations operations) const {
+#if defined(__ARM_NEON__) && defined(GREYSCALE)
+    if (dest_size == src_size * 2) {
+      /* NEON-optimised special case */
+      NEONBytesTwice neon;
+      neon.CopyPixels(dest, src, src_size);
+
+      /* use the portable version for the remainder */
+      src += src_size & ~0xf;
+      dest += (src_size & ~0xf) * 2;
+      src_size &= 0xf;
+      dest_size = src_size * 2;
+    }
+#endif
+
     unsigned j = 0;
     for (unsigned i = 0; i < dest_size; ++i) {
       operations.WritePixel(PixelTraits::Next(dest, i),

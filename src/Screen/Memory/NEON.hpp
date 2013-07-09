@@ -174,4 +174,35 @@ public:
   }
 };
 
+/**
+ * Read bytes and emit each byte twice.  This class reads 16 bytes at
+ * a time, and writes 32 bytes at a time.
+ */
+struct NEONBytesTwice {
+  static void Copy16(uint8_t *gcc_restrict p, const uint8_t *gcc_restrict q) {
+    const uint8x8_t a1 = vld1_u8(q);
+    const uint8x8x2_t a2 = vzip_u8(a1, a1);
+
+    const uint8x8_t b1 = vld1_u8(q);
+    const uint8x8x2_t b2 = vzip_u8(b1, b1);
+
+    vst2_u8(p, a2);
+    vst2_u8(p + 16, b2);
+  }
+
+  gcc_flatten
+  void CopyPixels(uint8_t *gcc_restrict p,
+                  const uint8_t *gcc_restrict q, unsigned n) const {
+    for (unsigned i = 0; i < n / 16; ++i, p += 32, q += 16)
+      Copy16(p, q);
+  }
+
+  /**
+   * @param n the number of source pixels (multiple of 16)
+   */
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
 #endif
