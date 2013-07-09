@@ -77,6 +77,24 @@ public:
     warning_manager = NULL;
   }
 
+#ifndef ENABLE_OPENGL
+private:
+  void DrawFill(Canvas &canvas,
+                Canvas &buffer_canvas, Canvas &stencil_canvas,
+                const WindowProjection &projection,
+                const AirspaceRendererSettings &settings,
+                const AirspaceWarningCopy &awc,
+                const AirspacePredicate &visible);
+
+  void DrawOutline(Canvas &canvas,
+                   const WindowProjection &projection,
+                   const AirspaceRendererSettings &settings,
+                   const AirspaceWarningCopy &awc,
+                   const AirspacePredicate &visible) const;
+
+public:
+#endif
+
   /**
    * Draw airspaces selected by the given #AirspacePredicate.
    */

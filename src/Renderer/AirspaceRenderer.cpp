@@ -587,6 +587,51 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
   }
 }
 
+#ifndef ENABLE_OPENGL
+
+inline void
+AirspaceRenderer::DrawFill(Canvas &canvas,
+                           Canvas &buffer_canvas, Canvas &stencil_canvas,
+                           const WindowProjection &projection,
+                           const AirspaceRendererSettings &settings,
+                           const AirspaceWarningCopy &awc,
+                           const AirspacePredicate &visible)
+{
+  StencilMapCanvas helper(buffer_canvas, stencil_canvas, projection,
+                          settings);
+  AirspaceVisitorMap v(helper, awc, settings,
+                       look);
+
+  // JMW TODO wasteful to draw twice, can't it be drawn once?
+  // we are using two draws so borders go on top of everything
+
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
+                                        v, visible);
+
+  awc.VisitWarnings(v);
+  awc.VisitInside(v);
+
+  v.Commit(canvas);
+}
+
+inline void
+AirspaceRenderer::DrawOutline(Canvas &canvas,
+                              const WindowProjection &projection,
+                              const AirspaceRendererSettings &settings,
+                              const AirspaceWarningCopy &awc,
+                              const AirspacePredicate &visible) const
+{
+  AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
+                                        outline_renderer, visible);
+  awc.VisitWarnings(outline_renderer);
+  awc.VisitInside(outline_renderer);
+}
+
+#endif
+
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
@@ -615,29 +660,8 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                           renderer, visible);
   }
 #else
-  StencilMapCanvas helper(buffer_canvas, stencil_canvas, projection,
-                          settings);
-  AirspaceVisitorMap v(helper, awc, settings,
-                       look);
-
-  // JMW TODO wasteful to draw twice, can't it be drawn once?
-  // we are using two draws so borders go on top of everything
-
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        v, visible);
-
-  awc.VisitWarnings(v);
-  awc.VisitInside(v);
-
-  v.Commit(canvas);
-
-  AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        outline_renderer, visible);
-  awc.VisitWarnings(outline_renderer);
-  awc.VisitInside(outline_renderer);
+  DrawFill(canvas, buffer_canvas, stencil_canvas, projection, settings, awc, visible);
+  DrawOutline(canvas, projection, settings, awc, visible);
 #endif
 
   intersections = awc.GetLocations();
