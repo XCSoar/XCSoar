@@ -70,7 +70,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
   if (GetMapSettings().airspace.enable)
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
-                           stencil_canvas,
+                           buffer_canvas,
 #endif
                            render_projection,
                            Basic(), Calculated(),

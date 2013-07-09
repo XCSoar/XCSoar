@@ -135,7 +135,7 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
   if (GetMapSettings().airspace.enable)
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
-                           stencil_canvas,
+                           buffer_canvas,
 #endif
                            projection,
                            Basic(), Calculated(),
@@ -330,9 +330,6 @@ TargetMapWindow::OnResize(PixelSize new_size)
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.Grow(new_size);
-
-  if (!IsAncientHardware())
-    stencil_canvas.Grow(new_size);
 #endif
 
   projection.SetScreenSize(new_size);
@@ -350,9 +347,6 @@ TargetMapWindow::OnCreate()
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
   buffer_canvas.Create(canvas);
-
-  if (!IsAncientHardware())
-    stencil_canvas.Create(canvas);
 #endif
 }
 
@@ -366,9 +360,6 @@ TargetMapWindow::OnDestroy()
 
 #ifndef ENABLE_OPENGL
   buffer_canvas.Destroy();
-
-  if (!IsAncientHardware())
-    stencil_canvas.Destroy();
 #endif
 
   BufferWindow::OnDestroy();

@@ -68,7 +68,6 @@ class MapWindow :
   // graphics vars
 
   BufferCanvas buffer_canvas;
-  BufferCanvas stencil_canvas;
 #endif
 
   LabelBlock label_block;
