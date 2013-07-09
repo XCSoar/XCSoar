@@ -798,12 +798,24 @@ public:
 
     src = SPT::At(src, src_pitch, src_x, src_y);
 
+    typename SPT::const_rpointer_type old_src = nullptr;
+
     unsigned j = 0;
     rpointer_type dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
-      ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
-                                             operations);
+      if (src == old_src) {
+        /* the previous iteration has already scaled this row: copy
+           the previous destination row to the current destination
+           row, to avoid redundant ScalePixels() calls */
+        PixelTraits::CopyPixels(dest,
+                                PixelTraits::NextRow(dest, buffer.pitch, -1),
+                                dest_width);
+      } else {
+        ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
+                                               operations);
+        old_src = src;
+      }
 
       j += src_height;
       while (j >= dest_height) {
