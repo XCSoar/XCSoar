@@ -28,6 +28,12 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "MapSettings.hpp"
+#include "Projection/WindowProjection.hpp"
+#include "Geo/Math.hpp"
+
+#define ARC_STEPS 10
+static constexpr Angle ARC_SWEEP = Angle::Degrees(135.0);
+static constexpr Angle MIN_RATE = Angle::Degrees(1.0); // degrees/s
 
 void
 TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
@@ -45,13 +51,23 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
 }
 
 void
-TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
+TrackLineRenderer::Draw(Canvas &canvas,
+                        const WindowProjection &projection,
                         const RasterPoint pos, const NMEAInfo &basic,
                         const DerivedInfo &calculated,
-                        const MapSettings &settings)
+                        const MapSettings &settings,
+                        bool wind_relative)
 {
+  if (!basic.track_available || !basic.attitude.IsHeadingUseable())
+    return;
+
+  if (basic.airspeed_available.IsValid() &&
+      (calculated.turn_rate_heading_smoothed.Absolute()>= MIN_RATE)) {
+    TrackLineRenderer::DrawProjected(canvas, projection, basic, calculated, settings,
+      wind_relative);
+  }
+
   if (settings.display_ground_track == DisplayGroundTrack::OFF ||
-      !basic.track_available || !basic.attitude.IsHeadingUseable() ||
       calculated.circling)
     return;
 
@@ -59,5 +75,47 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       (basic.track - basic.attitude.heading).AsDelta().AbsoluteDegrees() < fixed(5))
     return;
 
-  TrackLineRenderer::Draw(canvas, screen_angle, basic.track, pos);
+  TrackLineRenderer::Draw(canvas, projection.GetScreenAngle(), basic.track, pos);
+}
+
+void
+TrackLineRenderer::DrawProjected(Canvas &canvas,
+                                 const WindowProjection &projection,
+                                 const NMEAInfo &basic,
+                                 const DerivedInfo &calculated,
+                                 const MapSettings &settings,
+                                 bool wind_relative)
+{
+  // projection.GetMapScale() <= fixed(6000);
+
+  GeoPoint traildrift;
+
+  if (calculated.wind_available && !wind_relative) {
+    GeoPoint tp1 = FindLatitudeLongitude(basic.location,
+                                         calculated.wind.bearing,
+                                         calculated.wind.norm);
+    traildrift = basic.location - tp1;
+  } else {
+    traildrift = GeoPoint(Angle::Native(fixed(0)),Angle::Native(fixed(0)));
+  }
+
+  fixed dt = ARC_SWEEP/ARC_STEPS/
+    std::max(MIN_RATE,calculated.turn_rate_heading_smoothed.Absolute());
+
+  Angle heading = basic.attitude.heading;
+  GeoPoint loc = basic.location;
+
+  RasterPoint pts[ARC_STEPS+1];
+  pts[0] = projection.GeoToScreen(loc);
+  int i = 1;
+
+  while (i <= ARC_STEPS) {
+    GeoVector v(basic.true_airspeed*dt, heading);
+    loc = v.EndPoint(loc.Parametric(traildrift, dt));
+    pts[i] = projection.GeoToScreen(loc);
+    heading += calculated.turn_rate_heading_smoothed*dt;
+    i++;
+  }
+  canvas.Select(look.track_line_pen);
+  canvas.DrawPolyline(pts, i);
 }

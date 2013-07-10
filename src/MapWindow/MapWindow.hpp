@@ -258,7 +258,7 @@ protected:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;
   void DrawTrackBearing(Canvas &canvas,
-                        const RasterPoint aircraft_pos) const;
+                        const RasterPoint aircraft_pos, bool circling) const;
   void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const PixelRect &rc) const;
@@ -267,6 +267,7 @@ protected:
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                  unsigned min_time, bool enable_traildrift = false);
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
+  virtual void RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   void DrawSkyLinesTraffic(Canvas &canvas) const;

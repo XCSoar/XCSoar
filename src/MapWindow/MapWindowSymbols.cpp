@@ -60,12 +60,15 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 }
 
 void
-MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) const
+MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos, bool circling) const
 {
   if (!Basic().location_available)
     return;
 
+  bool wind_relative = GetMapSettings().trail.wind_drift_enabled && circling;
+
   TrackLineRenderer track_line_renderer(look);
-  track_line_renderer.Draw(canvas, render_projection.GetScreenAngle(),
-                           aircraft_pos, Basic(), Calculated(), GetMapSettings());
+  track_line_renderer.Draw(canvas, render_projection,
+                           aircraft_pos, Basic(), Calculated(), GetMapSettings(),
+                           wind_relative);
 }

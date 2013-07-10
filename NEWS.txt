@@ -15,6 +15,7 @@ Version 6.7 - not yet released
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)
   - suppress drawing duplicate topography labels
+  - draw projected path when turning
 * infoboxes
   - new content "Speed task last hour"
   - new content "Next distance (nominal)"

@@ -406,6 +406,12 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 }
 
 void
+GlueMapWindow::RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos)
+{
+  DrawTrackBearing(canvas, aircraft_pos, InCirclingMode());
+}
+
+void
 GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
   if (Calculated().task_stats.total.solution_remaining.IsOk() &&

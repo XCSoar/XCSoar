@@ -27,6 +27,7 @@ Copyright_License {
 struct RasterPoint;
 class Canvas;
 class Angle;
+class WindowProjection;
 struct MapLook;
 struct NMEAInfo;
 struct DerivedInfo;
@@ -41,9 +42,19 @@ public:
   void Draw(Canvas &canvas, const Angle screen_angle, const Angle track_angle,
             const RasterPoint pos);
 
-  void Draw(Canvas &canvas, const Angle screen_angle,
+  void Draw(Canvas &canvas,
+            const WindowProjection &projection,
             const RasterPoint pos, const NMEAInfo &basic,
-            const DerivedInfo &calculated, const MapSettings &settings);
+            const DerivedInfo &calculated, const MapSettings &settings,
+            bool wind_relative);
+
+protected:
+  void DrawProjected(Canvas &canvas,
+                     const WindowProjection &projection,
+                     const NMEAInfo &basic,
+                     const DerivedInfo &calculated,
+                     const MapSettings &settings,
+                     bool wind_relative);
 };
 
 #endif

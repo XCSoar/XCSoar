@@ -35,6 +35,13 @@ Copyright_License {
 #endif
 
 void
+MapWindow::RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos)
+{
+  // default rendering option assumes circling is off, so ground-relative
+  DrawTrackBearing(canvas, aircraft_pos, false);
+}
+
+void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
   background.SetShadingAngle(render_projection, GetMapSettings().terrain,
@@ -139,9 +146,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   draw_sw.Mark("RenderFinalGlideShading");
   RenderFinalGlideShading(canvas);
 
-  // Render track bearing (ground track)
+  // Render track bearing (projected track ground/air relative)
   draw_sw.Mark("DrawTrackBearing");
-  DrawTrackBearing(canvas, aircraft_pos);
+  RenderTrackBearing(canvas, aircraft_pos);
 
   // Render airspace
   draw_sw.Mark("RenderAirspace");
