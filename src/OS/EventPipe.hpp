@@ -39,7 +39,11 @@
  * poll().
  */
 class EventPipe {
-  FileDescriptor r, w;
+  FileDescriptor r;
+
+#ifndef HAVE_EVENTFD
+  FileDescriptor w;
+#endif
 
 public:
   bool IsDefined() const {

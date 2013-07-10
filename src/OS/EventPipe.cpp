@@ -29,11 +29,16 @@
 
 #include "EventPipe.hpp"
 
+#include <stdint.h>
+
 bool
 EventPipe::Create()
 {
   assert(!IsDefined());
 
+#ifdef HAVE_EVENTFD
+  return r.CreateEventFD();
+#else
   if (!FileDescriptor::CreatePipe(r, w))
     return false;
 
@@ -41,19 +46,30 @@ EventPipe::Create()
   w.SetNonBlocking();
 
   return true;
+#endif
 }
 
 void
 EventPipe::Signal()
 {
+#ifdef HAVE_EVENTFD
+  static constexpr uint64_t value = 1;
+  r.Write(&value, sizeof(value));
+#else
   static constexpr char dummy = 0;
   w.Write(&dummy, 1);
+#endif
 }
 
 bool
 EventPipe::Read()
 {
+#ifdef HAVE_EVENTFD
+  uint64_t value;
+  return r.Read(&value, sizeof(value)) > 0;
+#else
   char buffer[256];
   ssize_t nbytes = r.Read(buffer, sizeof(buffer));
   return nbytes > 0;
+#endif
 }
