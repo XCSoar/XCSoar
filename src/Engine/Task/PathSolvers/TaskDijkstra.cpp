@@ -75,10 +75,11 @@ TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
 void
 TaskDijkstra::AddZeroStartEdges()
 {
-  ScanTaskPoint destination(active_stage, 0);
-  const unsigned dsize = GetStageSize(active_stage);
+  const unsigned stage = 0;
+  ScanTaskPoint destination(stage, 0);
+  const unsigned dsize = GetStageSize(stage);
 
-  for (const ScanTaskPoint end(active_stage, dsize);
+  for (const ScanTaskPoint end(stage, dsize);
        destination != end; destination.IncrementPointIndex())
     LinkStart(destination, 0);
 }
