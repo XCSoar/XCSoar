@@ -218,6 +218,7 @@
    fun:_XrmInternalStringToQuark
 
 }
+
 #
 # libXext
 #
@@ -231,4 +232,38 @@
    fun:xgeExtRegister
    fun:XextAddDisplay
    fun:XShmQueryExtension
+}
+
+#
+# Nouveau (free NVidia driver)
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   fun:drmCommandWriteRead
+   ...
+   fun:nouveau_drm_screen_create
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   ...
+   fun:dri_st_framebuffer_validate
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   fun:nouveau_bo_kfree
 }
