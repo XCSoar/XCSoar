@@ -79,34 +79,16 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
 template<typename Canvas, typename PixelOperations>
 static void
 DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
-             const RasterPoint *points, unsigned n_points,
+             const RasterPoint *lppt, unsigned n_points,
              bool loop)
 {
   const unsigned thickness = pen.GetWidth();
   const unsigned mask = pen.GetMask();
   const auto color = canvas.Import(pen.GetColor());
 
-  if (thickness > 1) {
-    for (unsigned i = 1; i < n_points; ++i)
-      canvas.DrawThickLine(points[i - 1].x, points[i - 1].y,
-                           points[i].x, points[i].y,
-                           thickness, color, mask);
-
-    if (loop)
-      canvas.DrawThickLine(points[n_points - 1].x, points[n_points - 1].y,
-                           points[0].x, points[0].y,
-                           thickness, color, mask);
-  } else {
-    for (unsigned i = 1; i < n_points; ++i)
-      canvas.DrawLine(points[i - 1].x, points[i - 1].y,
-                      points[i].x, points[i].y,
-                      color, mask);
-
-    if (loop)
-      canvas.DrawLine(points[n_points - 1].x, points[n_points - 1].y,
-                      points[0].x, points[0].y,
-                      color, mask);
-  }
+  const SDLRasterCanvas::Point *points =
+    reinterpret_cast<const SDLRasterCanvas::Point *>(lppt);
+  canvas.DrawPolyline(points, n_points, loop, color, thickness, mask);
 }
 
 void

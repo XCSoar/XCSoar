@@ -182,9 +182,8 @@ protected:
     return ClipEncodeX(x) | ClipEncodeY(y);
   }
 
-  bool ClipLine(int &x1, int &y1, int &x2, int &y2) {
-    unsigned code1 = ClipEncode(x1, y1);
-    unsigned code2 = ClipEncode(x2, y2);
+  bool ClipIncremental(int &x1, int &y1, int &x2, int &y2,
+                       unsigned& code1, unsigned& code2) const {
 
     bool swapped = false;
 
@@ -193,6 +192,7 @@ protected:
         if (swapped) {
           std::swap(x1, x2);
           std::swap(y1, y2);
+          std::swap(code1, code2);
         }
         return true;
       }
@@ -245,6 +245,12 @@ protected:
         y1 = 0;
       }
     }
+  }
+
+  bool ClipLine(int &x1, int &y1, int &x2, int &y2) const {
+    unsigned code1 = ClipEncode(x1, y1);
+    unsigned code2 = ClipEncode(x2, y2);
+    return ClipIncremental(x1, y1, x2, y2, code1, code2);
   }
 
 public:
@@ -346,12 +352,9 @@ public:
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
-  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
-                unsigned line_mask=-1) {
+  void DrawLineDirect(const int& x1, const int& y1, const int& x2, const int& y2, color_type c,
+                      unsigned line_mask=-1) {
     /* optimised Bresenham algorithm */
-
-    if (!ClipLine(x1, y1, x2, y2))
-      return;
 
     int dx = x2 - x1;
     int dy = y2 - y1;
@@ -383,6 +386,16 @@ public:
     }
   }
 
+  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
+                unsigned line_mask=-1) {
+    /* optimised Bresenham algorithm */
+
+    if (!ClipLine(x1, y1, x2, y2))
+      return;
+
+    DrawLineDirect(x1, y1, x2, y2, c, line_mask);
+  }
+
   void DrawThickLine(int x1, int y1, int x2, int y2,
                      unsigned thickness, color_type c,
                      unsigned line_mask=-1) {
@@ -399,6 +412,49 @@ public:
     MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
+  }
+
+  void DrawPolyline(const Point *points, unsigned n, bool loop,
+                    color_type color,
+                    unsigned thickness,
+                    unsigned line_mask=-1) {
+
+    Point p_last = points[loop? n-1 : 0];
+    unsigned code2_orig;
+    unsigned code2;
+    bool last_visible = false;
+
+    for (unsigned i= loop? 0: 1; i<n; ++i) {
+      Point p_this = points[i];
+      if (!last_visible) {
+        // don't have a start point yet
+        code2_orig = ClipEncode(p_last.x, p_last.y);
+        code2 = code2_orig;
+      }
+      unsigned code1_orig = ClipEncode(p_this.x, p_this.y);
+
+      if (CLIP_REJECT(code1_orig, code2_orig)) {
+        // both not visible, skip
+        p_last = p_this;
+        last_visible = false;
+        continue;
+      }
+
+      unsigned code1 = code1_orig;
+      if (ClipIncremental(p_this.x, p_this.y, p_last.x, p_last.y, code1, code2)) {
+        if (thickness > 1)
+          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color, line_mask);
+        else
+          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
+        last_visible = true;
+      } else {
+        last_visible = false;
+      }
+      p_last = p_this;
+      code2 = code1;
+      code2_orig = code1_orig;
+    }
+
   }
 
   template<typename PixelOperations>
