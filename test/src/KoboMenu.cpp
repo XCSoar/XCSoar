@@ -234,24 +234,17 @@ LogMonitorGlue::ToggleWifi()
   }
 }
 
-static DialogLook *dialog_look;
-static SingleWindow main_window;
-
-static int action = 0;
-
-static void
-Main()
+static int
+Main(SingleWindow &main_window, const DialogLook &dialog_look,
+     const TerminalLook &terminal_look)
 {
-  WndForm dialog(*dialog_look);
+  WndForm dialog(dialog_look);
   dialog.Create(main_window, _T("Kobo XCSoar Launcher"));
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
-  TerminalLook terminal_look;
-  terminal_look.Initialise(normal_font);
-
   LogMonitorGlue glue(terminal_look, dialog);
 
-  ButtonPanel buttons(client_area, *dialog_look);
+  ButtonPanel buttons(client_area, dialog_look);
 
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());
@@ -263,7 +256,7 @@ Main()
 
   dialog.ShowModal();
 
-  action = glue.last_action;
+  return glue.last_action;
 
   // /proc/kmsg
 }
@@ -271,23 +264,28 @@ Main()
 
 int main(int argc, char **argv)
 {
+  int action;
+
   {
     ScreenGlobalInit screen_init;
     Layout::Initialize({600, 800});
     InitialiseFonts();
 
+    DialogLook dialog_look;
+    dialog_look.Initialise(bold_font, normal_font, small_font,
+                           bold_font, bold_font, bold_font);
+
+    TerminalLook terminal_look;
+    terminal_look.Initialise(normal_font);
+
+    SingleWindow main_window;
     main_window.Create(_T("Test"), {600, 800});
     main_window.Show();
 
-    dialog_look = new DialogLook();
-    dialog_look->Initialise(bold_font, normal_font, small_font,
-                            bold_font, bold_font, bold_font);
-
-    Main();
+    action = Main(main_window, dialog_look, terminal_look);
 
     main_window.Destroy();
 
-    delete dialog_look;
     DeinitialiseFonts();
   }
 
@@ -307,6 +305,8 @@ int main(int argc, char **argv)
   } else {
     fflush(stdout);
   }
+#else
+  (void)action;
 #endif
   return 0;
 }
