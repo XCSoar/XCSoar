@@ -239,7 +239,7 @@ WindEKF::Init()
   }
 
   P[0][0] = P[1][1] = 10.0;	// initial wind speed variance ((m/s)^2)
-  P[2][2] = 1.0e-4; // initial sf variance
+  P[2][2] = 1.0e-1; // initial sf variance
 
   X[0] = X[1] = 0;	// initial wind speed (m/s)
   X[2] = 1; // initial scale factor
