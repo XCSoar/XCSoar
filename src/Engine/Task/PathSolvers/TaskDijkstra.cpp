@@ -85,14 +85,14 @@ TaskDijkstra::AddZeroStartEdges()
 }
 
 void 
-TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
+TaskDijkstra::AddStartEdges(unsigned stage, const SearchPoint &currentLocation)
 {
   assert(currentLocation.IsValid());
 
-  ScanTaskPoint destination(active_stage, 0);
-  const unsigned dsize = GetStageSize(active_stage);
+  ScanTaskPoint destination(stage, 0);
+  const unsigned dsize = GetStageSize(stage);
 
-  for (const ScanTaskPoint end(active_stage, dsize);
+  for (const ScanTaskPoint end(stage, dsize);
        destination != end; destination.IncrementPointIndex())
     LinkStart(destination, CalcDistance(destination, currentLocation));
 }
