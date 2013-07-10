@@ -36,7 +36,6 @@ Version 6.7 - not yet released
   - "debug" button
   - more robust midnight wraparound handling (#2857)
   - new driver from Cambridge L-Nav
-  - LX: faster LXNAV Nano detection over Bluetooth
 * Android
   - support IOIO via OpenAccessory (Android 4.x)
   - support USB host mode and USB-RS232 adapters on the Nook (#2886)
@@ -46,8 +45,15 @@ Version 6.7 - not yet released
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 
 Version 6.6.4 - not yet released
+* map
+  - fix stuttering terrain on Windows CE
+  - fix multi-touch pan gesture (#2684)
 * devices
+  - FLARM: work around a Garrecht TRX-1090 firmware bug (#2745, #2749)
+  - LX: faster LXNAV Nano detection over Bluetooth (#2819)
   - Volkslogger: increase timeout to calculate security (#2910)
+  - fix bogus error message after pressing "Cancel"
+  - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.3 - 2013/07/02
 * map

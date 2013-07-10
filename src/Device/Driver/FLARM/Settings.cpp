@@ -46,7 +46,7 @@ FlarmDevice::SendSetting(const char *name, const char *value,
 
   char buffer[64];
   sprintf(buffer, "PFLAC,S,%s,%s", name, value);
-  return PortWriteNMEA(port, buffer, env);
+  return Send(buffer, env);
 }
 
 bool
@@ -54,7 +54,7 @@ FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PFLAC,R,%s", name);
-  return PortWriteNMEA(port, buffer, env);
+  return Send(buffer, env);
 }
 
 std::pair<bool, std::string>

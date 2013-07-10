@@ -48,6 +48,12 @@ FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
 {
   assert(sentence != NULL);
 
+  /* workaround for a Garrecht TRX-1090 firmware bug: start with a new
+     line, because the TRX-1090 expects the '$' to be the first
+     character, or it won't forward the sentence to the FLARM  */
+  if (!port.Write('\n'))
+    return false;
+
   /* From the FLARM data port specification: "All sentences must [...]
      end with [...] two checksum characters [...].  [...] these
      characters [...] must be provided in sentences to FLARM and are
