@@ -39,7 +39,7 @@ IgcReplay::~IgcReplay()
   delete reader;
 }
 
-bool
+inline bool
 IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix, NMEAInfo &basic)
 {
   if (IGCParseFix(buffer, fix) && fix.gps_valid)
@@ -52,7 +52,7 @@ IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix, NMEAInfo &basic)
   return false;
 }
 
-bool
+inline bool
 IgcReplay::ReadPoint(IGCFix &fix, NMEAInfo &basic)
 {
   char *buffer;

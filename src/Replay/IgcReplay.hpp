@@ -42,7 +42,7 @@ public:
 
   virtual bool Update(NMEAInfo &data) override;
 
-protected:
+private:
   /**
    * Parse a line.
    *
