@@ -22,6 +22,7 @@
 
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
+#include "IGC/IGCExtensions.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Trace/Vector.hpp"
@@ -59,6 +60,9 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
   printf("# %d", ntrace);  
   Trace trace(1000, ntrace);
 
+  IGCExtensions extensions;
+  extensions.clear();
+
   char *line;
   int i = 0;
   for (; (line = reader.ReadLine()) != NULL; i++) {
@@ -68,7 +72,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
     }
 
     IGCFix fix;
-    if (!IGCParseFix(line, fix) || !fix.gps_valid)
+    if (!IGCParseFix(line, extensions, fix) || !fix.gps_valid)
       continue;
 
     OnAdvance(trace,
