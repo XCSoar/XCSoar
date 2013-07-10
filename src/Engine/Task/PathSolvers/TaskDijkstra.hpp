@@ -50,10 +50,6 @@ class SearchPointVector;
  */
 class TaskDijkstra : protected NavDijkstra
 {
-protected:
-  unsigned active_stage;
-
-private:
   const SearchPointVector *boundaries[MAX_STAGES];
 
   const bool is_min;

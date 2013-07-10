@@ -39,8 +39,6 @@ TaskDijkstra::RefreshTask(const OrderedTask &task)
 
   SetStageCount(task_size);
 
-  active_stage = task.GetActiveTaskPointIndex();
-
   for (unsigned stage = 0; stage != num_stages; ++stage)
     boundaries[stage] = &task.GetPointSearchPoints(stage);
 
