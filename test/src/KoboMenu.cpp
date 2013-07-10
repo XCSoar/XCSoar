@@ -273,7 +273,7 @@ Main()
                          bold_font, bold_font, bold_font);
 
   TerminalLook terminal_look;
-  terminal_look.Initialise(normal_font);
+  terminal_look.Initialise(monospace_font);
 
   SingleWindow main_window;
   main_window.Create(_T("Test"), {600, 800});
