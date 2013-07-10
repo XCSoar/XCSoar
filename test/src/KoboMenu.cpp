@@ -236,7 +236,6 @@ LogMonitorGlue::ToggleWifi()
 
 static DialogLook *dialog_look;
 static SingleWindow main_window;
-static DialogSettings dialog_settings;
 
 static int action = 0;
 
@@ -279,8 +278,6 @@ int main(int argc, char **argv)
 
     main_window.Create(_T("Test"), {600, 800});
     main_window.Show();
-
-    dialog_settings.SetDefaults();
 
     dialog_look = new DialogLook();
     dialog_look->Initialise(bold_font, normal_font, small_font,
