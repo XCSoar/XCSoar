@@ -71,35 +71,35 @@ public:
     :key(_key.GetLuminosity()) {}
 
   gcc_always_inline
-  static void Blend16(uint8_t *gcc_restrict p,
+  static void Blend32(uint8_t *gcc_restrict p,
                       const uint8_t *gcc_restrict q,
-                      uint8x8_t key) {
-    uint8x8x2_t q2 = vld2_u8(q);
+                      uint8x16_t key) {
+    uint8x16x2_t q2 = vld2q_u8(q);
 
-    uint8x8_t mask0 = vceq_u8(q2.val[0], key);
-    uint8x8_t mask1 = vceq_u8(q2.val[1], key);
-    uint8x8_t q0 = vbic_u8(q2.val[0], mask0);
-    uint8x8_t q1 = vbic_u8(q2.val[1], mask1);
+    uint8x16_t mask0 = vceqq_u8(q2.val[0], key);
+    uint8x16_t mask1 = vceqq_u8(q2.val[1], key);
+    uint8x16_t q0 = vbicq_u8(q2.val[0], mask0);
+    uint8x16_t q1 = vbicq_u8(q2.val[1], mask1);
 
-    uint8x8x2_t p2 = vld2_u8(p);
-    uint8x8_t p0 = vand_u8(p2.val[0], mask0);
-    uint8x8_t p1 = vand_u8(p2.val[1], mask1);
+    uint8x16x2_t p2 = vld2q_u8(p);
+    uint8x16_t p0 = vandq_u8(p2.val[0], mask0);
+    uint8x16_t p1 = vandq_u8(p2.val[1], mask1);
 
-    uint8x8_t r0 = vorr_u8(p0, q0);
-    uint8x8_t r1 = vorr_u8(p1, q1);
+    uint8x16_t r0 = vorrq_u8(p0, q0);
+    uint8x16_t r1 = vorrq_u8(p1, q1);
 
-    uint8x8x2_t r = { { r0, r1 } };
+    uint8x16x2_t r = { { r0, r1 } };
 
-    vst2_u8(p, r);
+    vst2q_u8(p, r);
   }
 
   gcc_flatten
   void CopyPixels(uint8_t *gcc_restrict p,
                   const uint8_t *gcc_restrict q, unsigned n) const {
-    const uint8x8_t v_key = vdup_n_u8(key);
+    const uint8x16_t v_key = vdupq_n_u8(key);
 
-    for (unsigned i = 0; i < n / 16; ++i, p += 16, q += 16)
-      Blend16(p, q, v_key);
+    for (unsigned i = 0; i < n / 32; ++i, p += 32, q += 32)
+      Blend32(p, q, v_key);
   }
 
   void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {

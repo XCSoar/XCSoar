@@ -103,7 +103,7 @@ struct BitOrPixelOperations<GreyscalePixelTraits>
 
 template<>
 struct TransparentPixelOperations<GreyscalePixelTraits>
-  : public SelectOptimisedPixelOperations<NEONTransparentPixelOperations, 16,
+  : public SelectOptimisedPixelOperations<NEONTransparentPixelOperations, 32,
                                           PortableTransparentPixelOperations<GreyscalePixelTraits>> {
   typedef typename PixelTraits::color_type color_type;
 
