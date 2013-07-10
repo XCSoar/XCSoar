@@ -261,33 +261,36 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
   // /proc/kmsg
 }
 
+static int
+Main()
+{
+  ScreenGlobalInit screen_init;
+  Layout::Initialize({600, 800});
+  InitialiseFonts();
+
+  DialogLook dialog_look;
+  dialog_look.Initialise(bold_font, normal_font, small_font,
+                         bold_font, bold_font, bold_font);
+
+  TerminalLook terminal_look;
+  terminal_look.Initialise(normal_font);
+
+  SingleWindow main_window;
+  main_window.Create(_T("Test"), {600, 800});
+  main_window.Show();
+
+  int action = Main(main_window, dialog_look, terminal_look);
+
+  main_window.Destroy();
+
+  DeinitialiseFonts();
+
+  return action;
+}
 
 int main(int argc, char **argv)
 {
-  int action;
-
-  {
-    ScreenGlobalInit screen_init;
-    Layout::Initialize({600, 800});
-    InitialiseFonts();
-
-    DialogLook dialog_look;
-    dialog_look.Initialise(bold_font, normal_font, small_font,
-                           bold_font, bold_font, bold_font);
-
-    TerminalLook terminal_look;
-    terminal_look.Initialise(normal_font);
-
-    SingleWindow main_window;
-    main_window.Create(_T("Test"), {600, 800});
-    main_window.Show();
-
-    action = Main(main_window, dialog_look, terminal_look);
-
-    main_window.Destroy();
-
-    DeinitialiseFonts();
-  }
+  int action = Main();
 
 #ifdef KOBO
   if (action == LAUNCH_NICKEL) {
