@@ -77,7 +77,7 @@ public:
     uint8x8x2_t q2 = vld2_u8(q);
 
     uint8x8_t mask0 = vceq_u8(q2.val[0], key);
-    uint8x8_t mask1 = vceq_u8(q2.val[0], key);
+    uint8x8_t mask1 = vceq_u8(q2.val[1], key);
     uint8x8_t q0 = vbic_u8(q2.val[0], mask0);
     uint8x8_t q1 = vbic_u8(q2.val[1], mask1);
 
