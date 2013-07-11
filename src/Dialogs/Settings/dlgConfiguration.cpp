@@ -57,6 +57,7 @@ Copyright_License {
 #include "Panels/VarioConfigPanel.hpp"
 #include "Panels/TaskRulesConfigPanel.hpp"
 #include "Panels/TaskDefaultsConfigPanel.hpp"
+#include "Panels/ScoringConfigPanel.hpp"
 #include "Panels/InfoBoxesConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -103,6 +104,7 @@ static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Glide Computer"), 2, CreateGlideComputerConfigPanel },
   {N_("Wind"), 2, CreateWindConfigPanel },
   {N_("Route"), 2, CreateRouteConfigPanel },
+  {N_("Scoring"), 2, CreateScoringConfigPanel },
   {N_("FLARM, Other"), 3, CreateGaugesConfigPanel },
   {N_("Vario"), 3, CreateVarioConfigPanel },
 #ifdef HAVE_PCM_PLAYER
