@@ -1,6 +1,7 @@
 TASK_SRC_DIR = $(SRC)/Engine/Task
 
 TASK_SOURCES = \
+	$(TASK_SRC_DIR)/Shapes/FAITriangleSettings.cpp \
 	$(TASK_SRC_DIR)/Shapes/FAITriangleRules.cpp \
 	$(TASK_SRC_DIR)/Shapes/FAITriangleArea.cpp \
 	$(TASK_SRC_DIR)/Shapes/FAITriangleTask.cpp \

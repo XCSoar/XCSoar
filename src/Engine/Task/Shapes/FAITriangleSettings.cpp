@@ -19,43 +19,24 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#ifndef XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
-#define XCSOAR_FAI_TRIANGLE_SETTINGS_HPP
+#include "FAITriangleSettings.hpp"
+#include "FAITriangleRules.hpp"
 
-#include "Math/fixed.hpp"
+#include <assert.h>
 
-#include <stdint.h>
+fixed
+FAITriangleSettings::GetThreshold() const
+{
+  switch (threshold) {
+  case Threshold::FAI:
+    return FAITriangleRules::LARGE_THRESHOLD;
 
-struct FAITriangleSettings {
-  /**
-   * Specifies which threshold is used for applying the "large
-   * triangle" rules.
-   */
-  enum class Threshold : uint8_t {
-    /**
-     * Standard FAI (750km).
-     */
-    FAI,
-
-    /**
-     * A dummy entry that is used for validating profile values.
-     */
-    MAX
-  };
-
-  Threshold threshold;
-
-  void SetDefaults() {
-    threshold = Threshold::FAI;
+  case Threshold::MAX:
+    break;
   }
 
-  /**
-   * Returns the threshold for large triangles [m].
-   */
-  gcc_pure
-  fixed GetThreshold() const;
-};
-
-#endif
+  assert(false);
+  gcc_unreachable();
+}

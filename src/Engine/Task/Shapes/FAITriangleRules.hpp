@@ -46,6 +46,11 @@ namespace FAITriangleRules
   /**
    * The threshold which allows applying the "large FAI triangle"
    * rules [m].
+   *
+   * Don't use this variable.  Use FAITriangleSettings::GetThreshold()
+   * instead.
+   *
+   * @see FAITriangleSettings::Threshold::FAI
    */
   static constexpr fixed LARGE_THRESHOLD(750000);
 
