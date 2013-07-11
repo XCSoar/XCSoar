@@ -40,6 +40,11 @@ struct FAITriangleSettings {
     FAI,
 
     /**
+     * OLC, DMSt and others: 500km.
+     */
+    KM500,
+
+    /**
      * A dummy entry that is used for validating profile values.
      */
     MAX

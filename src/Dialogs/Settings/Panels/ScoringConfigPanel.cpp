@@ -76,6 +76,7 @@ ScoringConfigPanel::ShowFAITriangleControls(bool show)
 
 static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
   { (unsigned)FAITriangleSettings::Threshold::FAI, _T("750km (FAI)") },
+  { (unsigned)FAITriangleSettings::Threshold::FAI, _T("500km (OLC, DMSt)") },
   { 0 }
 };
 

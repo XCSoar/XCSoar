@@ -31,7 +31,10 @@ FAITriangleSettings::GetThreshold() const
 {
   switch (threshold) {
   case Threshold::FAI:
-    return FAITriangleRules::LARGE_THRESHOLD;
+    return FAITriangleRules::LARGE_THRESHOLD_FAI;
+
+  case Threshold::KM500:
+    return FAITriangleRules::LARGE_THRESHOLD_500;
 
   case Threshold::MAX:
     break;

@@ -52,7 +52,17 @@ namespace FAITriangleRules
    *
    * @see FAITriangleSettings::Threshold::FAI
    */
-  static constexpr fixed LARGE_THRESHOLD(750000);
+  static constexpr fixed LARGE_THRESHOLD_FAI(750000);
+
+  /**
+   * Relaxed threshold used by some contests such as OLC and DMSt.
+   *
+   * Don't use this variable.  Use FAITriangleSettings::GetThreshold()
+   * instead.
+   *
+   * @see FAITriangleSettings::Threshold::KM500
+   */
+  static constexpr fixed LARGE_THRESHOLD_500(500000);
 
   /**
    * The minimum leg percentage for "large FAI triangles".
