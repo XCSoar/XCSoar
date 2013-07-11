@@ -735,11 +735,6 @@ DEBUG_PROGRAM_NAMES += \
 	FeedFlyNetData
 endif
 
-ifeq ($(TARGET),UNIX)
-DEBUG_PROGRAM_NAMES += \
-	KoboMenu
-endif
-
 ifeq ($(TARGET),PC)
 DEBUG_PROGRAM_NAMES += FeedTCP \
   FeedFlyNetData
@@ -2570,28 +2565,6 @@ IGC2NMEA_DEPENDS = GEO MATH UTIL TIME
 IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
 
 $(eval $(call link-program,IGC2NMEA,IGC2NMEA))
-
-KOBO_MENU_SOURCES = \
-	$(SRC)/Formatter/HexColor.cpp \
-	$(SRC)/Hardware/Display.cpp \
-	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/Screen/TerminalWindow.cpp \
-	$(SRC)/Look/TerminalLook.cpp \
-	$(SRC)/Look/DialogLook.cpp \
-	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/IO/Async/IOLoop.cpp \
-	$(SRC)/IO/Async/DiscardFileEventHandler.cpp \
-	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
-	$(TEST_SRC_DIR)/KoboMenu.cpp
-KOBO_MENU_LDADD = $(FAKE_LIBS)
-KOBO_MENU_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
-$(eval $(call link-program,KoboMenu,KOBO_MENU))
 
 TODAY_INSTALL_SOURCES = \
 	$(TEST_SRC_DIR)/TodayInstall.cpp

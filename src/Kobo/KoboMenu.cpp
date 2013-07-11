@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Fonts.hpp"
+#include "../test/src/Fonts.hpp"
 #include "UIGlobals.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"

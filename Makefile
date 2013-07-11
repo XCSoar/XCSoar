@@ -135,6 +135,7 @@ include $(topdir)/build/harness.mk
 include $(topdir)/build/setup.mk
 include $(topdir)/build/launch.mk
 include $(topdir)/build/vali.mk
+include $(topdir)/build/kobo.mk
 include $(topdir)/build/test.mk
 include $(topdir)/build/hot.mk
 
@@ -945,7 +946,7 @@ OUTPUTS += $(LAUNCH_XCSOAR_BIN)
 endif
 
 all: $(OUTPUTS)
-everything: $(OUTPUTS) debug build-check build-harness
+everything: $(OUTPUTS) $(OPTIONAL_OUTPUTS) debug build-check build-harness
 
 clean: FORCE
 	@$(NQ)echo "cleaning all"
