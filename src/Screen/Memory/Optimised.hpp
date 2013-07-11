@@ -30,6 +30,10 @@ Copyright_License {
 #include "NEON.hpp"
 #endif
 
+#ifdef __MMX__
+#include "MMX.hpp"
+#endif
+
 /**
  * This class hosts two base classes: one that is optimised (e.g. via
  * SIMD) and one that is portable (but slow).  The optimised one will
@@ -76,6 +80,40 @@ public:
 };
 
 template<typename PixelTraits>
+struct BitOrPixelOperations
+  : PortableBitOrPixelOperations<PixelTraits> {
+};
+
+template<typename PixelTraits>
+struct TransparentPixelOperations
+  : PortableTransparentPixelOperations<PixelTraits> {
+  typedef typename PixelTraits::color_type color_type;
+
+  explicit constexpr TransparentPixelOperations(const color_type key)
+    :PortableTransparentPixelOperations<PixelTraits>(key) {}
+};
+
+#ifdef __ARM_NEON__
+
+template<>
+struct BitOrPixelOperations<GreyscalePixelTraits>
+  : SelectOptimisedPixelOperations<NEONBitOrPixelOperations, 16,
+                                   PortableBitOrPixelOperations<GreyscalePixelTraits>> {
+};
+
+template<>
+struct TransparentPixelOperations<GreyscalePixelTraits>
+  : public SelectOptimisedPixelOperations<NEONTransparentPixelOperations, 32,
+                                          PortableTransparentPixelOperations<GreyscalePixelTraits>> {
+  typedef typename PixelTraits::color_type color_type;
+
+  explicit constexpr TransparentPixelOperations(const color_type key)
+    :SelectOptimisedPixelOperations(key) {}
+};
+
+#endif
+
+template<typename PixelTraits>
 class AlphaPixelOperations
   : public PortableAlphaPixelOperations<PixelTraits> {
 public:
@@ -89,13 +127,36 @@ template<>
 class AlphaPixelOperations<GreyscalePixelTraits>
   : public SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
                                           PortableAlphaPixelOperations<GreyscalePixelTraits>> {
-  using Base = SelectOptimisedPixelOperations<NEONAlphaPixelOperations, 16,
-                                              PortableAlphaPixelOperations<GreyscalePixelTraits>>;
-
 public:
   explicit constexpr AlphaPixelOperations(const uint8_t alpha)
     :SelectOptimisedPixelOperations(alpha) {}
 };
+
+#endif
+
+#ifdef __MMX__
+
+template<>
+class AlphaPixelOperations<GreyscalePixelTraits>
+  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 8,
+                                          PortableAlphaPixelOperations<GreyscalePixelTraits>> {
+public:
+  explicit constexpr AlphaPixelOperations(const uint8_t alpha)
+    :SelectOptimisedPixelOperations(alpha) {}
+};
+
+#ifndef GREYSCALE
+
+template<>
+class AlphaPixelOperations<BGRAPixelTraits>
+  : public SelectOptimisedPixelOperations<MMXAlphaPixelOperations, 2,
+                                          PortableAlphaPixelOperations<BGRAPixelTraits>> {
+public:
+  explicit constexpr AlphaPixelOperations(const uint8_t alpha)
+    :SelectOptimisedPixelOperations(alpha) {}
+};
+
+#endif /* !GREYSCALE */
 
 #endif
 

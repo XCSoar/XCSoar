@@ -24,8 +24,6 @@ Copyright_License {
 
 #include "WindEKF.hpp"
 
-#include <stdint.h>
-
 void
 WindEKF::StatePrediction(float gps_vel[2], float dT)
 {
@@ -104,33 +102,32 @@ WindEKF::SerialUpdate(float Z[NUMV], float Y[NUMV])
   //            - or see Simon, "Optimal State Estimation," 1st Ed, p.150
 
   float HP[NUMX], HPHR, Error;
-  uint8_t i, j, k, m;
 
-  for (m = 0; m < NUMV; m++) {
+  for (unsigned m = 0; m < NUMV; m++) {
 
-    for (j = 0; j < NUMX; j++) {	// Find Hp = H*P
+    for (unsigned j = 0; j < NUMX; j++) {	// Find Hp = H*P
       HP[j] = 0;
-      for (k = 0; k < NUMX; k++)
+      for (unsigned k = 0; k < NUMX; k++)
         HP[j] += H[m][k] * P[k][j];
     }
     HPHR = R[m];	// Find  HPHR = H*P*H' + R
-    for (k = 0; k < NUMX; k++)
+    for (unsigned k = 0; k < NUMX; k++)
       HPHR += HP[k] * H[m][k];
 
     assert(HPHR>0.0); // JMW prevent potential crash
     if (HPHR <= 0.0) continue;
 
-    for (k = 0; k < NUMX; k++)
+    for (unsigned k = 0; k < NUMX; k++)
       K[k][m] = HP[k] / HPHR;	// find K = HP/HPHR
 
-    for (i = 0; i < NUMX; i++) {	// Find P(m)= P(m-1) + K*HP
-      for (j = i; j < NUMX; j++)
+    for (unsigned i = 0; i < NUMX; i++) {	// Find P(m)= P(m-1) + K*HP
+      for (unsigned j = i; j < NUMX; j++)
         P[i][j] = P[j][i] =
           P[i][j] - K[i][m] * HP[j];
     }
 
     Error = Z[m] - Y[m];
-    for (i = 0; i < NUMX; i++)	// Find X(m)= X(m-1) + K*Error
+    for (unsigned i = 0; i < NUMX; i++)	// Find X(m)= X(m-1) + K*Error
       X[i] = X[i] + K[i][m] * Error;
 
   }
@@ -145,24 +142,23 @@ WindEKF::RungeKutta(float U[NUMU], float dT)
 
   float dT2 =
     dT / 2, K1[NUMX], K2[NUMX], K3[NUMX], K4[NUMX], Xlast[NUMX];
-  uint8_t i;
 
-  for (i = 0; i < NUMX; i++)
+  for (unsigned i = 0; i < NUMX; i++)
     Xlast[i] = X[i];	// make a working copy
 
   StateEq(U, K1);	// k1 = f(x,u)
-  for (i = 0; i < NUMX; i++)
+  for (unsigned i = 0; i < NUMX; i++)
     X[i] = Xlast[i] + dT2 * K1[i];
   StateEq(U, K2);	// k2 = f(x+0.5*dT*k1,u)
-  for (i = 0; i < NUMX; i++)
+  for (unsigned i = 0; i < NUMX; i++)
     X[i] = Xlast[i] + dT2 * K2[i];
   StateEq(U, K3);	// k3 = f(x+0.5*dT*k2,u)
-  for (i = 0; i < NUMX; i++)
+  for (unsigned i = 0; i < NUMX; i++)
     X[i] = Xlast[i] + dT * K3[i];
   StateEq(U, K4);	// k4 = f(x+dT*k3,u)
 
   // Xnew  = X + dT*(k1+2*k2+2*k3+k4)/6
-  for (i = 0; i < NUMX; i++)
+  for (unsigned i = 0; i < NUMX; i++)
     X[i] =
       Xlast[i] + dT * (K1[i] + 2 * K2[i] + 2 * K3[i] +
                        K4[i]) / 6;
@@ -239,7 +235,7 @@ WindEKF::Init()
   }
 
   P[0][0] = P[1][1] = 10.0;	// initial wind speed variance ((m/s)^2)
-  P[2][2] = 1.0e-4; // initial sf variance
+  P[2][2] = 1.0e-1; // initial sf variance
 
   X[0] = X[1] = 0;	// initial wind speed (m/s)
   X[2] = 1; // initial scale factor

@@ -33,6 +33,81 @@ Copyright_License {
 #include <arm_neon.h>
 
 /**
+ * Implementation of BitOrPixelOperations using ARM NEON instructions.
+ */
+class NEONBitOrPixelOperations {
+public:
+  gcc_always_inline
+  static void Blend16(uint8_t *gcc_restrict p,
+                      const uint8_t *gcc_restrict q) {
+    uint8x16_t pv = vld1q_u8(p);
+    uint8x16_t qv = vld1q_u8(q);
+
+    uint8x16_t r = vorrq_u8(pv, qv);
+    vst1q_u8(p, r);
+  }
+
+  gcc_flatten
+  void CopyPixels(uint8_t *gcc_restrict p,
+                  const uint8_t *gcc_restrict q, unsigned n) const {
+    for (unsigned i = 0; i < n / 16; ++i, p += 16, q += 16)
+      Blend16(p, q);
+  }
+
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+/**
+ * Implementation of TransparentPixelOperations using ARM NEON
+ * instructions.
+ */
+class NEONTransparentPixelOperations {
+  uint8_t key;
+
+public:
+  constexpr NEONTransparentPixelOperations(Luminosity8 _key)
+    :key(_key.GetLuminosity()) {}
+
+  gcc_always_inline
+  static void Blend32(uint8_t *gcc_restrict p,
+                      const uint8_t *gcc_restrict q,
+                      uint8x16_t key) {
+    uint8x16x2_t q2 = vld2q_u8(q);
+
+    uint8x16_t mask0 = vceqq_u8(q2.val[0], key);
+    uint8x16_t mask1 = vceqq_u8(q2.val[1], key);
+    uint8x16_t q0 = vbicq_u8(q2.val[0], mask0);
+    uint8x16_t q1 = vbicq_u8(q2.val[1], mask1);
+
+    uint8x16x2_t p2 = vld2q_u8(p);
+    uint8x16_t p0 = vandq_u8(p2.val[0], mask0);
+    uint8x16_t p1 = vandq_u8(p2.val[1], mask1);
+
+    uint8x16_t r0 = vorrq_u8(p0, q0);
+    uint8x16_t r1 = vorrq_u8(p1, q1);
+
+    uint8x16x2_t r = { { r0, r1 } };
+
+    vst2q_u8(p, r);
+  }
+
+  gcc_flatten
+  void CopyPixels(uint8_t *gcc_restrict p,
+                  const uint8_t *gcc_restrict q, unsigned n) const {
+    const uint8x16_t v_key = vdupq_n_u8(key);
+
+    for (unsigned i = 0; i < n / 32; ++i, p += 32, q += 32)
+      Blend32(p, q, v_key);
+  }
+
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+/**
  * Implementation of AlphaPixelOperations using ARM NEON instructions.
  */
 class NEONAlphaPixelOperations {
@@ -94,6 +169,37 @@ public:
       AlphaBlend16(p, q, inverse_alpha, v_alpha);
   }
 
+  void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
+    CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
+  }
+};
+
+/**
+ * Read bytes and emit each byte twice.  This class reads 16 bytes at
+ * a time, and writes 32 bytes at a time.
+ */
+struct NEONBytesTwice {
+  static void Copy16(uint8_t *gcc_restrict p, const uint8_t *gcc_restrict q) {
+    const uint8x8_t a1 = vld1_u8(q);
+    const uint8x8x2_t a2 = vzip_u8(a1, a1);
+
+    const uint8x8_t b1 = vld1_u8(q);
+    const uint8x8x2_t b2 = vzip_u8(b1, b1);
+
+    vst2_u8(p, a2);
+    vst2_u8(p + 16, b2);
+  }
+
+  gcc_flatten
+  void CopyPixels(uint8_t *gcc_restrict p,
+                  const uint8_t *gcc_restrict q, unsigned n) const {
+    for (unsigned i = 0; i < n / 16; ++i, p += 32, q += 16)
+      Copy16(p, q);
+  }
+
+  /**
+   * @param n the number of source pixels (multiple of 16)
+   */
   void CopyPixels(Luminosity8 *p, const Luminosity8 *q, unsigned n) const {
     CopyPixels((uint8_t *)p, (const uint8_t *)q, n);
   }

@@ -44,6 +44,10 @@ public:
   TopographyRenderer(const TopographyStore &store);
   ~TopographyRenderer();
 
+  const TopographyStore &GetStore() const {
+    return store;
+  }
+
   /**
    * Draws the topography to the given canvas
    * @param canvas The drawing canvas

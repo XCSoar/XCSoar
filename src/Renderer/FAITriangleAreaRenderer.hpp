@@ -27,10 +27,11 @@ Copyright_License {
 struct GeoPoint;
 class Canvas;
 class WindowProjection;
+struct FAITriangleSettings;
 
 void
 RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
-                bool reverse);
+                bool reverse, const FAITriangleSettings &settings);
 
 #endif

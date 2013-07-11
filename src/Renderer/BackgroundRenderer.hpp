@@ -50,6 +50,11 @@ public:
     Reset();
   }
 
+  /**
+   * Flush all caches.
+   */
+  void Flush();
+
   void Draw(Canvas& canvas,
             const WindowProjection& proj,
             const TerrainRendererSettings &terrain_settings);

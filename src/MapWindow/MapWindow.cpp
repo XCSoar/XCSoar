@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Topography/TopographyStore.hpp"
-#include "Topography/TopographyRenderer.hpp"
+#include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -99,6 +99,13 @@ MapWindow::SetGlideComputer(GlideComputer *_gc)
   airspace_renderer.SetAirspaceWarnings(glide_computer != NULL
                                         ? &glide_computer->GetAirspaceWarnings()
                                         : NULL);
+}
+
+void
+MapWindow::FlushCaches()
+{
+  background.Flush();
+  airspace_renderer.Flush();
 }
 
 /**
@@ -204,7 +211,7 @@ MapWindow::SetTopography(TopographyStore *_topography)
 
   delete topography_renderer;
   topography_renderer = topography != NULL
-    ? new TopographyRenderer(*topography)
+    ? new CachedTopographyRenderer(*topography)
     : NULL;
 }
 

@@ -57,7 +57,6 @@ class TargetMapWindow : public BufferWindow {
   // graphics vars
 
   BufferCanvas buffer_canvas;
-  BufferCanvas stencil_canvas;
 #endif
 
   MapWindowProjection projection;

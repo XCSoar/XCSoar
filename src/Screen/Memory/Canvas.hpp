@@ -368,7 +368,6 @@ public:
   void Copy(const Bitmap &src);
 
   void CopyTransparentWhite(const Canvas &src);
-  void CopyTransparentBlack(const Canvas &src);
 
   void StretchNot(const Bitmap &src);
 
@@ -425,6 +424,13 @@ public:
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,
               ConstImageBuffer src, int src_x, int src_y);
+
+  void CopyOr(int dest_x, int dest_y,
+              unsigned dest_width, unsigned dest_height,
+              const Canvas &src, int src_x, int src_y) {
+    CopyOr(dest_x, dest_y, dest_width, dest_height,
+           src.buffer, src_x, src_y);
+  }
 
   void CopyOr(int dest_x, int dest_y,
               unsigned dest_width, unsigned dest_height,

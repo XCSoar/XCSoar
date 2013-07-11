@@ -50,10 +50,6 @@ class SearchPointVector;
  */
 class TaskDijkstra : protected NavDijkstra
 {
-protected:
-  unsigned active_stage;
-
-private:
   const SearchPointVector *boundaries[MAX_STAGES];
 
   const bool is_min;
@@ -104,9 +100,9 @@ protected:
 
   /**
    * Add a start edge from the given location to each point in the
-   * first stage.
+   * given stage.
    */
-  void AddStartEdges(const SearchPoint &loc);
+  void AddStartEdges(unsigned stage, const SearchPoint &loc);
 
   /** 
    * Distance function for free point

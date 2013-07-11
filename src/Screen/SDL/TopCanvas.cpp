@@ -211,6 +211,11 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
 
 #endif
 
+#if defined(__clang__) || GCC_VERSION >= 40800
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-align"
+#endif
+
 static void
 CopyFromGreyscale(
 #ifdef DITHER
@@ -267,6 +272,10 @@ CopyFromGreyscale(
 
   ::SDL_UnlockSurface(dest);
 }
+
+#if defined(__clang__) || GCC_VERSION >= 40800
+#pragma GCC diagnostic pop
+#endif
 
 #endif
 

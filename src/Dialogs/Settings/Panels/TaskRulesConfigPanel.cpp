@@ -28,7 +28,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "Engine/Contest/Solvers/Contests.hpp"
 
 enum ControlIndex {
   StartMaxSpeed,
@@ -40,9 +39,6 @@ enum ControlIndex {
   spacer_2,
   FinishMinHeight,
   FinishHeightRef,
-  spacer_3,
-  Contests,
-  PREDICT_CONTEST,
 };
 
 class TaskRulesConfigPanel final : public RowFormWidget {
@@ -60,7 +56,6 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
-  const ContestSettings &contest_settings = settings_computer.contest;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -120,48 +115,6 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           altitude_reference_list,
           (unsigned)task_behaviour.ordered_defaults.finish_constraints.min_height_ref);
   SetExpertRow(FinishHeightRef);
-
-  AddSpacer();
-  SetExpertRow(spacer_3);
-
-  const StaticEnumChoice contests_list[] = {
-    { (unsigned)Contest::NONE, ContestToString(Contest::NONE),
-      N_("Disable OLC Calculations") },
-    { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
-      N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
-          "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
-    { (unsigned)Contest::OLC_CLASSIC, ContestToString(Contest::OLC_CLASSIC),
-      N_("Up to seven points including start and finish, finish height must not be lower than "
-          "start height less 1000 meters.") },
-    { (unsigned)Contest::OLC_LEAGUE, ContestToString(Contest::OLC_LEAGUE),
-      N_("The most recent contest with Sprint task rules.") },
-    { (unsigned)Contest::OLC_PLUS, ContestToString(Contest::OLC_PLUS),
-      N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
-    { (unsigned)Contest::DMST, ContestToString(Contest::DMST),
-      /* German competition, no translation */
-      _T("Deutsche Meisterschaft im Streckensegelflug.") },
-    { (unsigned)Contest::XCONTEST, ContestToString(Contest::XCONTEST),
-      N_("PG online contest with different track values: Free flight - 1 km = 1.0 point; "
-          "flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p.") },
-    { (unsigned)Contest::DHV_XC, ContestToString(Contest::DHV_XC),
-      N_("European PG online contest of the DHV organization. Pretty much the same as the XContest rules, "
-          "but with different track values: 1 km = 1.5 points, 1.75 p and 2.0 p for FAI triangles respectively.") },
-    { (unsigned)Contest::SIS_AT, ContestToString(Contest::SIS_AT),
-      N_("Austrian online glider contest. Tracks around max. six waypoints are scored. The "
-          "bounding box part with 1 km = 1.0 point and the additional zick-zack part with 1 km = 0.5 p.") },
-    { (unsigned)Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
-      N_("The FFVV NetCoupe \"libre\" competiton.") },
-    { 0 }
-  };
-  AddEnum(_("On-Line Contest"),
-      _("Select the rules used for calculating optimal points for the On-Line Contest. "
-          "The implementation  conforms to the official release 2010, Sept.23."),
-          contests_list, (unsigned)contest_settings.contest);
-
-  AddBoolean(_("Predict Contest"),
-             _("If enabled, then the next task point is included in the "
-               "score calculation, assuming that you will reach it."),
-             contest_settings.predict);
 }
 
 
@@ -173,7 +126,6 @@ TaskRulesConfigPanel::Save(bool &_changed)
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTaskSettings &otb = task_behaviour.ordered_defaults;
-  ContestSettings &contest_settings = settings_computer.contest;
 
   changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED,
                        ProfileKeys::StartMaxSpeed,
@@ -198,11 +150,6 @@ TaskRulesConfigPanel::Save(bool &_changed)
 
   changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef,
                            otb.finish_constraints.min_height_ref);
-
-  changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules,
-                           contest_settings.contest);
-  changed |= SaveValueEnum(PREDICT_CONTEST, ProfileKeys::PredictContest,
-                           contest_settings.predict);
 
   _changed |= changed;
 

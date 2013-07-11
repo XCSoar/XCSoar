@@ -61,6 +61,7 @@ public:
 
   void SetSettings(const TerrainRendererSettings &settings) {
     renderer.SetSettings(settings);
+    renderer.Flush();
     Invalidate();
   }
 

@@ -74,12 +74,6 @@ bool
 IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix);
 
 /**
- * For API backwards compatibility.  To be removed.
- */
-bool
-IGCParseFix(const char *buffer, IGCFix &fix);
-
-/**
  * Parse a time in IGC file format (HHMMSS).
  *
  * @return true on success, false if the time was not recognized

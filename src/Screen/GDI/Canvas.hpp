@@ -447,7 +447,7 @@ public:
   void Copy(const Bitmap &src);
 
   void CopyTransparentWhite(const Canvas &src);
-  void CopyTransparentBlack(const Canvas &src);
+
   void StretchNot(const Bitmap &src);
 
   void Stretch(int dest_x, int dest_y,
@@ -522,26 +522,6 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src);
-
-  void StretchAnd(int dest_x, int dest_y,
-                  unsigned dest_width, unsigned dest_height,
-                  const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height) {
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height,
-            SRCAND);
-  }
-
-  void StretchNotOr(int dest_x, int dest_y,
-                    unsigned dest_width, unsigned dest_height,
-                    const Bitmap &src,
-                    int src_x, int src_y,
-                    unsigned src_width, unsigned src_height) {
-    Stretch(dest_x, dest_y, dest_width, dest_height,
-            src, src_x, src_y, src_width, src_height,
-            MERGEPAINT);
-  }
 
   /**
    * Stretches a monochrome bitmap (1 bit per pixel), painting the

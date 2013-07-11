@@ -65,6 +65,10 @@ public:
     max_delta = fixed(-1);
   }
 
+  bool IsDefined() const {
+    return positive(max_delta);
+  }
+
   bool Compare(const CompareProjection &other) const;
 
   /**

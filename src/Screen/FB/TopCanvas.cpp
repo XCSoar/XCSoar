@@ -319,21 +319,47 @@ CopyFromGreyscale(
 
 #else
 
+static RGB565Color
+ToRGB565(BGRA8Color c)
+{
+  return RGB565Color(c.Red(), c.Green(), c.Blue());
+}
+
+static void
+BGRAToRGB565(RGB565Color *dest, const BGRA8Color *src, unsigned n)
+{
+  for (unsigned i = 0; i < n; ++i)
+    dest[i] = ToRGB565(src[i]);
+}
+
 static void
 CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
              ConstImageBuffer<BGRAPixelTraits> src)
 {
-  assert(dest_bpp == 32); // TODO: support RGB565
+  assert(dest_bpp == 4 || dest_bpp == 2);
 
-  uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
-  const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
+  const uint32_t dest_pitch = _dest_pitch / dest_bpp;
+  const uint32_t src_pitch = src.pitch / sizeof(*src.data);
 
-  const uint32_t dest_pitch = _dest_pitch / (dest_bpp / 8);
-  const uint32_t src_pitch = src.pitch / (dest_bpp / 8);
+  if (dest_bpp == 2) {
+    /* convert to RGB565 */
 
-  for (unsigned row = src.height; row > 0;
-       --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
-    std::copy_n(src_pixels, src.width, dest_pixels);
+    RGB565Color *dest_pixels = reinterpret_cast<RGB565Color *>(_dest_pixels);
+    const BGRA8Color *src_pixels = src.data;
+
+    for (unsigned row = src.height; row > 0;
+         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+      BGRAToRGB565((RGB565Color *)dest_pixels,
+                   (const BGRA8Color *)src_pixels,
+                   src.width);
+  } else {
+    uint32_t *dest_pixels = reinterpret_cast<uint32_t *>(_dest_pixels);
+    const uint32_t *src_pixels = reinterpret_cast<const uint32_t *>(src.data);
+
+    for (unsigned row = src.height; row > 0;
+         --row, src_pixels += src_pitch, dest_pixels += dest_pitch)
+      std::copy_n(src_pixels, src.width, dest_pixels);
+  }
 }
 
 #endif

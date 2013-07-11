@@ -63,6 +63,9 @@ UpdateInfoBoxVarioDistance(InfoBoxData &data);
 void
 UpdateInfoBoxNextLegEqThermal(InfoBoxData &data);
 
+void
+UpdateInfoBoxCircleDiameter(InfoBoxData &data);
+
 class InfoBoxContentThermalAssistant: public InfoBoxContent
 {
   ThermalAssistantRenderer renderer;

@@ -384,6 +384,13 @@ public:
     return Angle(value / x);
   }
 
+  gcc_pure
+  fixed
+  operator/(const Angle x) const
+  {
+    return value / x.value;
+  }
+
   constexpr
   Angle
   operator/(const int x) const

@@ -68,6 +68,7 @@ Version 6.7 - not yet released
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)
   - suppress drawing duplicate topography labels
+  - draw projected path when turning
 * infoboxes
   - new content "Speed task last hour"
   - new content "Next distance (nominal)"
@@ -79,6 +80,7 @@ Version 6.7 - not yet released
   - update the calculator without a GPS fix (#2876)
   - fix task speed and time estimates before task start (#2876)
   - show "arm advance" button when manual arming is necessary
+  - support the OLC/DMSt 500km triangle threshold (#2963)
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
 * waypoint editor
@@ -89,7 +91,6 @@ Version 6.7 - not yet released
   - "debug" button
   - more robust midnight wraparound handling (#2857)
   - new driver from Cambridge L-Nav
-  - LX: faster LXNAV Nano detection over Bluetooth
 * Android
   - support IOIO via OpenAccessory (Android 4.x)
   - support USB host mode and USB-RS232 adapters on the Nook (#2886)
@@ -98,9 +99,18 @@ Version 6.7 - not yet released
   - a retrospective task is compiled that summarises waypoints the aircraft has 
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 
-Version 6.6.4 - not yet released
+Version 6.6.4 - 2013/07/11
+* map
+  - fix stuttering terrain on Windows CE
+  - fix multi-touch pan gesture (#2684)
+* calculations
+  - improve robustness of the zig-zag wind algorithm (#2961)
 * devices
+  - FLARM: work around a Garrecht TRX-1090 firmware bug (#2745, #2749)
+  - LX: faster LXNAV Nano detection over Bluetooth (#2819)
   - Volkslogger: increase timeout to calculate security (#2910)
+  - fix bogus error message after pressing "Cancel"
+  - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.3 - 2013/07/02
 * map

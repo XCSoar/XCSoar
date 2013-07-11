@@ -196,6 +196,8 @@ protected:
   virtual void DrawThermalEstimate(Canvas &canvas) const override;
   virtual void RenderTrail(Canvas &canvas,
                            const RasterPoint aircraft_pos) override;
+  virtual void RenderTrackBearing(Canvas &canvas,
+                                  const RasterPoint aircraft_pos) override;
 
   /* virtual methods from class Window */
   virtual void OnDestroy() override;

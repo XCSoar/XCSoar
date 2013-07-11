@@ -70,6 +70,7 @@ private:
   WritableImageBuffer<PixelTraits> buffer;
 
   AllocatedArray<int> polygon_buffer;
+  AllocatedArray<BresenhamIterator> edge_buffer;
 
 public:
   RasterCanvas(WritableImageBuffer<PixelTraits> _buffer,
@@ -181,18 +182,26 @@ protected:
     return ClipEncodeX(x) | ClipEncodeY(y);
   }
 
-  bool ClipLine(int &x1, int &y1, int &x2, int &y2) {
-    unsigned code1 = ClipEncode(x1, y1);
-    unsigned code2 = ClipEncode(x2, y2);
+  bool ClipIncremental(int &x1, int &y1, int &x2, int &y2,
+                       unsigned& code1, unsigned& code2) const {
+
+    bool swapped = false;
 
     while (true) {
-      if (CLIP_ACCEPT(code1, code2))
+      if (CLIP_ACCEPT(code1, code2)) {
+        if (swapped) {
+          std::swap(x1, x2);
+          std::swap(y1, y2);
+          std::swap(code1, code2);
+        }
         return true;
+      }
 
       if (CLIP_REJECT(code1, code2))
 	return false;
 
       if (CLIP_INSIDE(code1)) {
+        swapped = !swapped;
         std::swap(x1, x2);
         std::swap(y1, y2);
         std::swap(code1, code2);
@@ -236,6 +245,12 @@ protected:
         y1 = 0;
       }
     }
+  }
+
+  bool ClipLine(int &x1, int &y1, int &x2, int &y2) const {
+    unsigned code1 = ClipEncode(x1, y1);
+    unsigned code2 = ClipEncode(x2, y2);
+    return ClipIncremental(x1, y1, x2, y2, code1, code2);
   }
 
 public:
@@ -337,12 +352,9 @@ public:
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
-  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
-                unsigned line_mask=-1) {
+  void DrawLineDirect(const int& x1, const int& y1, const int& x2, const int& y2, color_type c,
+                      unsigned line_mask=-1) {
     /* optimised Bresenham algorithm */
-
-    if (!ClipLine(x1, y1, x2, y2))
-      return;
 
     int dx = x2 - x1;
     int dy = y2 - y1;
@@ -374,6 +386,16 @@ public:
     }
   }
 
+  void DrawLine(int x1, int y1, int x2, int y2, color_type c,
+                unsigned line_mask=-1) {
+    /* optimised Bresenham algorithm */
+
+    if (!ClipLine(x1, y1, x2, y2))
+      return;
+
+    DrawLineDirect(x1, y1, x2, y2, c, line_mask);
+  }
+
   void DrawThickLine(int x1, int y1, int x2, int y2,
                      unsigned thickness, color_type c,
                      unsigned line_mask=-1) {
@@ -390,6 +412,148 @@ public:
     MurphyIterator<RasterCanvas<PixelTraits>> murphy(*this, c, line_mask);
     murphy.Wideline(x1, y1, x2, y2, thickness, 0);
     murphy.Wideline(x1, y1, x2, y2, thickness, 1);
+  }
+
+  void DrawPolyline(const Point *points, unsigned n, bool loop,
+                    color_type color,
+                    unsigned thickness,
+                    unsigned line_mask=-1) {
+
+    Point p_last = points[loop? n-1 : 0];
+    unsigned code2_orig;
+    unsigned code2;
+    bool last_visible = false;
+
+    for (unsigned i= loop? 0: 1; i<n; ++i) {
+      Point p_this = points[i];
+      if (!last_visible) {
+        // don't have a start point yet
+        code2_orig = ClipEncode(p_last.x, p_last.y);
+        code2 = code2_orig;
+      }
+      unsigned code1_orig = ClipEncode(p_this.x, p_this.y);
+
+      if (CLIP_REJECT(code1_orig, code2_orig)) {
+        // both not visible, skip
+        p_last = p_this;
+        last_visible = false;
+        continue;
+      }
+
+      unsigned code1 = code1_orig;
+      if (ClipIncremental(p_this.x, p_this.y, p_last.x, p_last.y, code1, code2)) {
+        if (thickness > 1)
+          DrawThickLine(p_this.x, p_this.y, p_last.x, p_last.y, thickness, color, line_mask);
+        else
+          DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
+        last_visible = true;
+      } else {
+        last_visible = false;
+      }
+      p_last = p_this;
+      code2 = code1;
+      code2_orig = code1_orig;
+    }
+
+  }
+
+  template<typename PixelOperations>
+  void FillPolygonFast(const Point *points, unsigned n, color_type color,
+                       PixelOperations operations) {
+
+    assert(points != nullptr);
+
+    if (n < 3)
+      return;
+
+    edge_buffer.GrowDiscard(n);
+
+    // initialise buffer of edge iterators, and find y range to scan
+    int miny = points[0].y;
+    int maxy = points[0].y;
+
+    const Point* p_1 = points;
+    const Point* p_0 = points+n-1;
+    int n_edges = 0;
+
+    while (p_1 < points+n) {
+      if (p_1->y == p_0->y) {
+        // don't add horizontal line, just draw it now?
+      } else if (p_1->y < p_0->y) {
+        edge_buffer[n_edges] = BresenhamIterator(p_1->x, p_1->y, p_0->x, p_0->y);
+        n_edges++;
+      } else {
+        edge_buffer[n_edges] = BresenhamIterator(p_0->x, p_0->y, p_1->x, p_1->y);
+        n_edges++;
+      }
+      miny = std::min(p_0->y, miny);
+      maxy = std::max(p_0->y, maxy);
+
+      p_0 = p_1;
+      p_1++;
+    }
+
+    if (n_edges < 2)
+      return;
+
+    auto edge_start = edge_buffer.begin();
+    auto edge_end = edge_start+n_edges;
+
+    // sort array by y value (top best), then x value (left best)
+    std::sort(edge_start, edge_end, BresenhamIterator::CompareVerticalHorizontal);
+
+    // perform scans
+
+    for (int y = miny; y <= maxy; y++) {
+
+      bool changed = false;
+
+      // advance active items
+      int x = -1;
+      for (auto it= edge_start; it!= edge_end; ++it) {
+        // advance line until it gets to next y value (if possible)
+        changed |= it->AdvanceTo(y);
+        if (it->y == y) {
+          if (it->x < x)
+            changed = true; // order changed
+          else
+            x = it->x;
+        }
+      }
+
+      if (changed) {
+//        printf("re-sort\n");
+        std::sort(edge_start, edge_end, BresenhamIterator::CompareHorizontal);
+
+        while ((edge_start != edge_end) && (!edge_start->count)) {
+//          printf("skipping forward\n");
+          edge_start++;
+        }
+
+/*
+        for (auto it= edge_start; it!= edge_end; ++it) {
+          printf("%d,%d %d\n", it->x, it->y, it->count);
+        }
+*/
+      }
+
+      // draw line and determine status
+      bool mode = false;
+      int x0 = -1;
+      for (auto it= edge_start; it!= edge_end; ++it) {
+        // if this item is valid, it's a start point or end point of a line
+        if (it->y != y) 
+          continue;
+
+        int x1 = it->x;
+        if (mode) 
+          DrawHLine(x0, x1, y, color, operations);
+        mode = !mode;
+        x0 = x1;
+      }
+
+    }
+
   }
 
   template<typename PixelOperations>
@@ -461,8 +625,10 @@ public:
   }
 
   void FillPolygon(const Point *points, unsigned n, color_type color) {
-    FillPolygon(points, n, color,
-                GetPixelTraits());
+    FillPolygonFast(points, n, color,
+                    GetPixelTraits());
+//    FillPolygon(points, n, color,
+//                GetPixelTraits());
   }
 
   template<typename PixelOperations>
@@ -662,6 +828,20 @@ public:
                    typename SPT::const_rpointer_type src,
                    unsigned src_size,
                    PixelOperations operations) const {
+#if defined(__ARM_NEON__) && defined(GREYSCALE)
+    if (dest_size == src_size * 2) {
+      /* NEON-optimised special case */
+      NEONBytesTwice neon;
+      neon.CopyPixels(dest, src, src_size);
+
+      /* use the portable version for the remainder */
+      src += src_size & ~0xf;
+      dest += (src_size & ~0xf) * 2;
+      src_size &= 0xf;
+      dest_size = src_size * 2;
+    }
+#endif
+
     unsigned j = 0;
     for (unsigned i = 0; i < dest_size; ++i) {
       operations.WritePixel(PixelTraits::Next(dest, i),
@@ -688,12 +868,24 @@ public:
 
     src = SPT::At(src, src_pitch, src_x, src_y);
 
+    typename SPT::const_rpointer_type old_src = nullptr;
+
     unsigned j = 0;
     rpointer_type dest = At(dest_x, dest_y);
     for (unsigned i = dest_height; i > 0; --i,
            dest = PixelTraits::NextRow(dest, buffer.pitch, 1)) {
-      ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
-                                             operations);
+      if (src == old_src) {
+        /* the previous iteration has already scaled this row: copy
+           the previous destination row to the current destination
+           row, to avoid redundant ScalePixels() calls */
+        PixelTraits::CopyPixels(dest,
+                                PixelTraits::NextRow(dest, buffer.pitch, -1),
+                                dest_width);
+      } else {
+        ScalePixels<decltype(operations), SPT>(dest, dest_width, src, src_width,
+                                               operations);
+        old_src = src;
+      }
 
       j += src_height;
       while (j >= dest_height) {

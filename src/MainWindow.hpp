@@ -237,6 +237,8 @@ public:
    */
   void SetDefaultFocus();
 
+  void FlushRendererCaches();
+
   /**
    * Trigger a full redraw of the screen.
    */

@@ -30,6 +30,7 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Renderer/WaypointRendererSettings.hpp"
+#include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "Math/fixed.hpp"
 
@@ -187,6 +188,8 @@ struct MapSettings {
    * Overlay FAI triangle areas on the map while flying?
    */
   bool show_fai_triangle_areas;
+
+  FAITriangleSettings fai_triangle_settings;
 
   TrailSettings trail;
   MapItemListSettings item_list;

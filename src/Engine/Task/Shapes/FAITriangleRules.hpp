@@ -27,6 +27,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 struct GeoPoint;
+struct FAITriangleSettings;
 
 namespace FAITriangleRules
 {
@@ -45,8 +46,23 @@ namespace FAITriangleRules
   /**
    * The threshold which allows applying the "large FAI triangle"
    * rules [m].
+   *
+   * Don't use this variable.  Use FAITriangleSettings::GetThreshold()
+   * instead.
+   *
+   * @see FAITriangleSettings::Threshold::FAI
    */
-  static constexpr fixed LARGE_THRESHOLD(750000);
+  static constexpr fixed LARGE_THRESHOLD_FAI(750000);
+
+  /**
+   * Relaxed threshold used by some contests such as OLC and DMSt.
+   *
+   * Don't use this variable.  Use FAITriangleSettings::GetThreshold()
+   * instead.
+   *
+   * @see FAITriangleSettings::Threshold::KM500
+   */
+  static constexpr fixed LARGE_THRESHOLD_500(500000);
 
   /**
    * The minimum leg percentage for "large FAI triangles".
@@ -63,10 +79,12 @@ namespace FAITriangleRules
   }
 
   gcc_pure
-  bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
+  bool TestDistances(const fixed d1, const fixed d2, const fixed d3,
+                     const FAITriangleSettings &settings);
 
   gcc_pure
-  bool TestDistances(const GeoPoint &a, const GeoPoint &b, const GeoPoint &c);
+  bool TestDistances(const GeoPoint &a, const GeoPoint &b, const GeoPoint &c,
+                     const FAITriangleSettings &settings);
 }
 
 #endif

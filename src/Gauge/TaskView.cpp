@@ -81,6 +81,9 @@ static void
 RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
                  const OrderedTask &task)
 {
+  const FAITriangleSettings &settings =
+    task.GetOrderedTaskSettings().fai_triangle;
+
   const unsigned size = task.TaskSize();
   const unsigned end = size - 1;
 
@@ -88,13 +91,13 @@ RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
     RenderFAISector(canvas, projection,
                     task.GetPoint(i).GetLocation(),
                     task.GetPoint(i + 1).GetLocation(),
-                    true);
+                    true, settings);
 
   for (unsigned i = 0; i != end; ++i)
     RenderFAISector(canvas, projection,
                     task.GetPoint(i).GetLocation(),
                     task.GetPoint(i + 1).GetLocation(),
-                    false);
+                    false, settings);
 }
 
 void
@@ -117,14 +120,13 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     airspace_renderer.SetAirspaces(airspaces);
 
 #ifndef ENABLE_OPENGL
-    BufferCanvas buffer_canvas, stencil_canvas;
-    buffer_canvas.Create(canvas);
+    BufferCanvas stencil_canvas;
     stencil_canvas.Create(canvas);
 #endif
 
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
-                           buffer_canvas, stencil_canvas,
+                           stencil_canvas,
 #endif
                            projection, settings_map.airspace);
   }

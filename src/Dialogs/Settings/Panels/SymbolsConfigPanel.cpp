@@ -44,7 +44,6 @@ enum ControlIndex {
   ENABLE_DETOUR_COST_MARKERS,
   AIRCRAFT_SYMBOL,
   WIND_ARROW_STYLE,
-  SHOW_FAI_TRIANGLE_AREAS,
 };
 
 class SymbolsConfigPanel final
@@ -188,11 +187,6 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
   SetExpertRow(WIND_ARROW_STYLE);
 
-  AddBoolean(_("FAI triangle areas"),
-             _("Show FAI triangle areas on the map."),
-             settings_map.show_fai_triangle_areas);
-  SetExpertRow(SHOW_FAI_TRIANGLE_AREAS);
-
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
 
@@ -224,10 +218,6 @@ SymbolsConfigPanel::Save(bool &_changed)
   changed |= SaveValueEnum(AIRCRAFT_SYMBOL, ProfileKeys::AircraftSymbol, settings_map.aircraft_symbol);
 
   changed |= SaveValueEnum(WIND_ARROW_STYLE, ProfileKeys::WindArrowStyle, settings_map.wind_arrow_style);
-
-  changed |= SaveValue(SHOW_FAI_TRIANGLE_AREAS,
-                       ProfileKeys::ShowFAITriangleAreas,
-                       settings_map.show_fai_triangle_areas);
 
   _changed |= changed;
 

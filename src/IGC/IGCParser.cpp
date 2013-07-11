@@ -322,15 +322,6 @@ IGCParseLocation(const char *buffer, GeoPoint &location)
 }
 
 bool
-IGCParseFix(const char *buffer, IGCFix &fix)
-{
-  IGCExtensions extensions;
-  extensions.clear();
-
-  return IGCParseFix(buffer, extensions, fix);
-}
-
-bool
 IGCParseTime(const char *buffer, BrokenTime &time)
 {
   unsigned hour, minute, second;

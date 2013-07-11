@@ -40,7 +40,7 @@
 #include <poll.h>
 #endif
 
-#ifdef HAVE_EVENTFD
+#if defined(HAVE_EVENTFD) && !defined(__BIONIC__)
 #include <sys/eventfd.h>
 #endif
 
@@ -123,7 +123,13 @@ FileDescriptor::CreateEventFD(unsigned initval)
 {
   assert(!IsDefined());
 
+#ifdef __BIONIC__
+  /* Bionic provides the eventfd() function only since Android 2.3,
+     therefore we must roll our own system call here */
+  fd = syscall(__NR_eventfd2, initval, O_NONBLOCK|O_CLOEXEC);
+#else
   fd = ::eventfd(initval, EFD_NONBLOCK|EFD_CLOEXEC);
+#endif
   return fd >= 0;
 }
 

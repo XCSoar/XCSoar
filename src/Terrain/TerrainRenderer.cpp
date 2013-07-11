@@ -297,21 +297,6 @@ TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
                                         width, height);
 }
 
-void
-TerrainRenderer::SetSettings(const TerrainRendererSettings &_settings)
-{
-  if (settings == _settings)
-    return;
-
-  settings = _settings;
-
-#ifdef ENABLE_OPENGL
-  raster_renderer.Invalidate();
-#else
-  compare_projection.Clear();
-#endif
-}
-
 #ifdef ENABLE_OPENGL
 /**
  * Checks if the size difference of any dimension is more than a

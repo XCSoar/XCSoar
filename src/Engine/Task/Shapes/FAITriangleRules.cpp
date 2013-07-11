@@ -21,6 +21,7 @@
 */
 
 #include "FAITriangleRules.hpp"
+#include "FAITriangleSettings.hpp"
 #include "Geo/Math.hpp"
 
 using namespace FAITriangleRules;
@@ -37,9 +38,10 @@ IsSmallFAITriangle(const fixed d_total,
 gcc_const
 static bool
 IsLargeFAITriangle(const fixed d_total,
-                   const fixed d1, const fixed d2, const fixed d3)
+                   const fixed d1, const fixed d2, const fixed d3,
+                   const fixed large_threshold)
 {
-  if (d_total < LARGE_THRESHOLD)
+  if (d_total < large_threshold)
     return false;
 
   const fixed d_min = LargeMinLeg(d_total);
@@ -51,7 +53,8 @@ IsLargeFAITriangle(const fixed d_total,
 }
 
 bool
-FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
+FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3,
+                                const FAITriangleSettings &settings)
 {
   const fixed d_wp = d1 + d2 + d3;
 
@@ -63,12 +66,14 @@ FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
    */
 
   return IsSmallFAITriangle(d_wp, d1, d2, d3) ||
-    IsLargeFAITriangle(d_wp, d1, d2, d3);
+    IsLargeFAITriangle(d_wp, d1, d2, d3, settings.GetThreshold());
 }
 
 bool
 FAITriangleRules::TestDistances(const GeoPoint &a, const GeoPoint &b,
-                                const GeoPoint &c)
+                                const GeoPoint &c,
+                                const FAITriangleSettings &settings)
 {
-  return TestDistances(Distance(a, b), Distance(b, c), Distance(c, a));
+  return TestDistances(Distance(a, b), Distance(b, c), Distance(c, a),
+                       settings);
 }

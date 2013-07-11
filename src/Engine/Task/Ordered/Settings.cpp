@@ -28,4 +28,5 @@ OrderedTaskSettings::SetDefaults()
   aat_min_time = fixed(3600 * 3);
   start_constraints.SetDefaults();
   finish_constraints.SetDefaults();
+  fai_triangle.SetDefaults();
 }

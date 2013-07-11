@@ -1219,6 +1219,7 @@ static constexpr MetaData meta_data[] = {
     NEXT_RADIAL,
   },
 
+
   {
     N_("Speed task last hour"),
     N_("V Task H"),
@@ -1238,6 +1239,16 @@ static constexpr MetaData meta_data[] = {
     e_WP_AltDiff, // WP AltD
     e_WP_Distance, // WP Dist
   },
+
+  {
+    N_("Circle Diameter"),
+    N_("Circle D"),
+    N_("Cirle diameter. Displays estimated circle diameter and full circle flight time. Useful for evaluating best thermalling mode with a glider at different wing loading."),
+    UpdateInfoBoxCircleDiameter,
+    CIRCLE_DIAMETER,
+    CIRCLE_DIAMETER,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

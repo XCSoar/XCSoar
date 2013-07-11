@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FAITriangleArea.hpp"
 #include "FAITriangleRules.hpp"
+#include "FAITriangleSettings.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
@@ -68,11 +69,11 @@ static GeoPoint *
 GenerateFAITriangleRight(GeoPoint *dest,
                          const GeoPoint &origin, const GeoVector &leg_c,
                          const fixed dist_min, const fixed dist_max,
-                         bool reverse)
+                         bool reverse, const fixed large_threshold)
 {
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
   fixed total_distance = dist_min;
-  for (unsigned i = 0; i < STEPS && total_distance < LARGE_THRESHOLD; ++i,
+  for (unsigned i = 0; i < STEPS && total_distance < large_threshold; ++i,
          total_distance += delta_distance) {
     const fixed dist_a = SMALL_MIN_LEG * total_distance;
     const fixed dist_b = total_distance - dist_a - leg_c.distance;
@@ -114,13 +115,13 @@ static GeoPoint *
 GenerateFAITriangleLeft(GeoPoint *dest,
                         const GeoPoint &origin, const GeoVector &leg_c,
                         const fixed dist_min, const fixed dist_max,
-                        bool reverse)
+                        bool reverse, const fixed large_threshold)
 {
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
   fixed total_distance = dist_max;
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance -= delta_distance) {
-    if (total_distance >= LARGE_THRESHOLD)
+    if (total_distance >= large_threshold)
       continue;
 
     const fixed dist_b = SMALL_MIN_LEG * total_distance;
@@ -139,21 +140,21 @@ GenerateFAITriangleLeft(GeoPoint *dest,
 static GeoPoint *
 GenerateFAITriangleLargeBottomRight(GeoPoint *dest,
                                     const GeoPoint &origin, const GeoVector &leg_c,
-                                    bool reverse)
+                                    bool reverse, const fixed large_threshold)
 {
-  const fixed max_leg = LARGE_THRESHOLD * LARGE_MAX_LEG;
-  const fixed min_leg = LARGE_THRESHOLD - max_leg - leg_c.distance;
+  const fixed max_leg = large_threshold * LARGE_MAX_LEG;
+  const fixed min_leg = large_threshold - max_leg - leg_c.distance;
   assert(max_leg >= min_leg);
 
-  const fixed min_a = LargeMinLeg(LARGE_THRESHOLD);
+  const fixed min_a = LargeMinLeg(large_threshold);
 
-  const fixed a_start = LARGE_THRESHOLD * SMALL_MIN_LEG;
+  const fixed a_start = large_threshold * SMALL_MIN_LEG;
   const fixed a_end = std::max(min_leg, min_a);
   if (a_start <= a_end)
     return dest;
 
   fixed dist_a = a_start;
-  fixed dist_b = LARGE_THRESHOLD - leg_c.distance - dist_a;
+  fixed dist_b = large_threshold - leg_c.distance - dist_a;
 
   const fixed delta_distance = (a_start - a_end) / STEPS;
   for (unsigned i = 0; i < STEPS; ++i,
@@ -172,15 +173,15 @@ static GeoPoint *
 GenerateFAITriangleLargeRight1(GeoPoint *dest,
                                const GeoPoint &origin, const GeoVector &leg_c,
                                const fixed dist_min, const fixed dist_max,
-                               bool reverse)
+                               bool reverse, const fixed large_threshold)
 {
-  if (dist_min >= LARGE_THRESHOLD)
+  if (dist_min >= large_threshold)
     /* BottomRight already goes to Right2, and this arc doesn't
        exist */
     return dest;
 
-  const fixed delta_distance = (dist_max - LARGE_THRESHOLD) / STEPS;
-  fixed total_distance = LARGE_THRESHOLD;
+  const fixed delta_distance = (dist_max - large_threshold) / STEPS;
+  fixed total_distance = large_threshold;
 
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance += delta_distance) {
@@ -203,7 +204,7 @@ static GeoPoint *
 GenerateFAITriangleLargeRight2(GeoPoint *dest,
                                const GeoPoint &origin, const GeoVector &leg_c,
                                const fixed dist_min, const fixed dist_max,
-                               bool reverse)
+                               bool reverse, const fixed large_threshold)
 {
   /* this is the total distance where the Right1 arc ends; here, A is
      25% */
@@ -211,7 +212,7 @@ GenerateFAITriangleLargeRight2(GeoPoint *dest,
     / (fixed(1) - LARGE_MAX_LEG - LARGE_MIN_LEG);
 
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
-  fixed total_distance = std::max(std::max(dist_min, LARGE_THRESHOLD),
+  fixed total_distance = std::max(std::max(dist_min, large_threshold),
                                   min_total_for_a);
   for (unsigned i = 0; i < STEPS && total_distance < dist_max; ++i,
          total_distance += delta_distance) {
@@ -253,13 +254,13 @@ static GeoPoint *
 GenerateFAITriangleLargeLeft2(GeoPoint *dest,
                               const GeoPoint &origin, const GeoVector &leg_c,
                               const fixed dist_min, const fixed dist_max,
-                              bool reverse)
+                              bool reverse, const fixed large_threshold)
 {
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
   fixed total_distance = dist_max;
   for (unsigned i = 0; i < STEPS; ++i,
          total_distance -= delta_distance) {
-    if (total_distance < LARGE_THRESHOLD)
+    if (total_distance < large_threshold)
       break;
 
     const fixed dist_a = total_distance * LARGE_MAX_LEG;
@@ -281,9 +282,9 @@ static GeoPoint *
 GenerateFAITriangleLargeLeft1(GeoPoint *dest,
                               const GeoPoint &origin, const GeoVector &leg_c,
                               const fixed dist_min, const fixed dist_max,
-                              bool reverse)
+                              bool reverse, const fixed large_threshold)
 {
-  if (dist_min >= LARGE_THRESHOLD)
+  if (dist_min >= large_threshold)
     /* Left2 already goes to BottomLeft, and this arc doesn't exist */
     return dest;
 
@@ -293,7 +294,7 @@ GenerateFAITriangleLargeLeft1(GeoPoint *dest,
     / (fixed(1) - LARGE_MAX_LEG - LARGE_MIN_LEG);
 
   const fixed total_start = std::min(dist_max, max_total_for_a);
-  const fixed total_end = LARGE_THRESHOLD;
+  const fixed total_end = large_threshold;
   if (total_start <= total_end)
     return dest;
 
@@ -320,21 +321,21 @@ GenerateFAITriangleLargeLeft1(GeoPoint *dest,
 static GeoPoint *
 GenerateFAITriangleLargeBottomLeft(GeoPoint *dest,
                                     const GeoPoint &origin, const GeoVector &leg_c,
-                                    bool reverse)
+                                    bool reverse, const fixed large_threshold)
 {
-  const fixed max_leg = LARGE_THRESHOLD * LARGE_MAX_LEG;
-  const fixed min_leg = LARGE_THRESHOLD - max_leg - leg_c.distance;
+  const fixed max_leg = large_threshold * LARGE_MAX_LEG;
+  const fixed min_leg = large_threshold - max_leg - leg_c.distance;
   assert(max_leg >= min_leg);
 
-  const fixed min_b = LargeMinLeg(LARGE_THRESHOLD);
+  const fixed min_b = LargeMinLeg(large_threshold);
 
   const fixed b_start = std::max(min_leg, min_b);
-  const fixed b_end = LARGE_THRESHOLD * SMALL_MIN_LEG;
+  const fixed b_end = large_threshold * SMALL_MIN_LEG;
   if (b_start >= b_end)
     return dest;
 
   fixed dist_b = b_start;
-  fixed dist_a = LARGE_THRESHOLD - leg_c.distance - dist_b;
+  fixed dist_a = large_threshold - leg_c.distance - dist_b;
 
   const fixed delta_distance = (b_end - b_start) / STEPS;
   for (unsigned i = 0; i < STEPS; ++i,
@@ -349,8 +350,11 @@ GenerateFAITriangleLargeBottomLeft(GeoPoint *dest,
 GeoPoint *
 GenerateFAITriangleArea(GeoPoint *dest,
                         const GeoPoint &pt1, const GeoPoint &pt2,
-                        bool reverse)
+                        bool reverse,
+                        const FAITriangleSettings &settings)
 {
+  const fixed large_threshold = settings.GetThreshold();
+
   const GeoVector leg_c = pt1.DistanceBearing(pt2);
 
   const fixed dist_max = leg_c.distance / SMALL_MIN_LEG;
@@ -361,19 +365,19 @@ GenerateFAITriangleArea(GeoPoint *dest,
 
   dest = GenerateFAITriangleRight(dest, pt1, leg_c,
                                   dist_min, dist_max,
-                                  reverse);
+                                  reverse, large_threshold);
 
-  if (large_dist_max > LARGE_THRESHOLD) {
+  if (large_dist_max > large_threshold) {
     dest = GenerateFAITriangleLargeBottomRight(dest, pt1, leg_c,
-                                               reverse);
+                                               reverse, large_threshold);
 
     dest = GenerateFAITriangleLargeRight1(dest, pt1, leg_c,
                                           large_dist_min, large_dist_max,
-                                          reverse);
+                                          reverse, large_threshold);
 
     dest = GenerateFAITriangleLargeRight2(dest, pt1, leg_c,
                                           large_dist_min, large_dist_max,
-                                          reverse);
+                                          reverse, large_threshold);
 
     dest = GenerateFAITriangleLargeTop(dest, pt1, leg_c,
                                        large_dist_max,
@@ -381,14 +385,14 @@ GenerateFAITriangleArea(GeoPoint *dest,
 
     dest = GenerateFAITriangleLargeLeft2(dest, pt1, leg_c,
                                          large_dist_min, large_dist_max,
-                                         reverse);
+                                         reverse, large_threshold);
 
     dest = GenerateFAITriangleLargeLeft1(dest, pt1, leg_c,
                                          large_dist_min, large_dist_max,
-                                         reverse);
+                                         reverse, large_threshold);
 
     dest = GenerateFAITriangleLargeBottomLeft(dest, pt1, leg_c,
-                                              reverse);
+                                              reverse, large_threshold);
   } else {
     dest = GenerateFAITriangleTop(dest, pt1, leg_c,
                                   dist_max,
@@ -397,7 +401,7 @@ GenerateFAITriangleArea(GeoPoint *dest,
 
   dest = GenerateFAITriangleLeft(dest, pt1, leg_c,
                                  dist_min, dist_max,
-                                 reverse);
+                                 reverse, large_threshold);
 
   return dest;
 }

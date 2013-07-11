@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "AbstractReplay.hpp"
+#include "IGC/IGCExtensions.hpp"
 
 class NLineReader;
 struct GeoPoint;
@@ -36,15 +37,27 @@ class IgcReplay: public AbstractReplay
 {
   NLineReader *reader;
 
+  IGCExtensions extensions;
+
 public:
   IgcReplay(NLineReader *reader);
   virtual ~IgcReplay();
 
   virtual bool Update(NMEAInfo &data) override;
 
-protected:
+private:
+  /**
+   * Parse a line.
+   *
+   * @return true if a new fix was found
+   */
   bool ScanBuffer(const char *buffer, IGCFix &fix, NMEAInfo &basic);
 
+  /**
+   * Read from the IGC file until a new fix was found.
+   *
+   * @return false on end-of-file
+   */
   bool ReadPoint(IGCFix &fix, NMEAInfo &basic);
 };
 

@@ -27,6 +27,10 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Geo/GeoPoint.hpp"
 
+#ifndef ENABLE_OPENGL
+#include "TransparentRendererCache.hpp"
+#endif
+
 struct AirspaceLook;
 struct MoreData;
 struct DerivedInfo;
@@ -48,9 +52,23 @@ class AirspaceRenderer
 
   StaticArray<GeoPoint,32> intersections;
 
+#ifndef ENABLE_OPENGL
+  /**
+   * This object caches the airspace fill.  This avoids drawing it
+   * again and again each frame when nothing has changed.
+   */
+  TransparentRendererCache fill_cache;
+
+  unsigned last_warning_serial;
+#endif
+
 public:
   AirspaceRenderer(const AirspaceLook &_look)
-    :look(_look), airspaces(NULL), warning_manager(NULL) {}
+    :look(_look), airspaces(nullptr), warning_manager(nullptr)
+#ifndef ENABLE_OPENGL
+    , last_warning_serial(0)
+#endif
+  {}
 
   const AirspaceLook &GetLook() const {
     return look;
@@ -77,12 +95,41 @@ public:
     warning_manager = NULL;
   }
 
+  void Flush() {
+#ifndef ENABLE_OPENGL
+    fill_cache.Invalidate();
+#endif
+  }
+
+#ifndef ENABLE_OPENGL
+private:
+  void DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
+                const WindowProjection &projection,
+                const AirspaceRendererSettings &settings,
+                const AirspaceWarningCopy &awc,
+                const AirspacePredicate &visible);
+
+  void DrawFillCached(Canvas &canvas,
+                      Canvas &stencil_canvas,
+                      const WindowProjection &projection,
+                      const AirspaceRendererSettings &settings,
+                      const AirspaceWarningCopy &awc,
+                      const AirspacePredicate &visible);
+
+  void DrawOutline(Canvas &canvas,
+                   const WindowProjection &projection,
+                   const AirspaceRendererSettings &settings,
+                   const AirspacePredicate &visible) const;
+
+public:
+#endif
+
   /**
    * Draw airspaces selected by the given #AirspacePredicate.
    */
   void Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-            Canvas &buffer_canvas, Canvas &stencil_canvas,
+            Canvas &stencil_canvas,
 #endif
             const WindowProjection &projection,
             const AirspaceRendererSettings &settings,
@@ -94,7 +141,7 @@ public:
    */
   void Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-            Canvas &buffer_canvas, Canvas &stencil_canvas,
+            Canvas &stencil_canvas,
 #endif
             const WindowProjection &projection,
             const AirspaceRendererSettings &settings);
@@ -104,7 +151,7 @@ public:
    */
   void Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-            Canvas &buffer_canvas, Canvas &stencil_canvas,
+            Canvas &stencil_canvas,
 #endif
             const WindowProjection &projection,
             const MoreData &basic, const DerivedInfo &calculated,

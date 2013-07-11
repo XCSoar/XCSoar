@@ -27,6 +27,11 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Device/Config.hpp"
 
+#ifdef ANDROID
+#include "Android/BluetoothHelper.hpp"
+#include "Java/Global.hpp"
+#endif
+
 #include <stdio.h>
 
 static const char *const port_type_strings[] = {

@@ -22,6 +22,7 @@
 
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
+#include "IGC/IGCExtensions.hpp"
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hpp"
@@ -130,13 +131,16 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
     return;
   }
 
+  IGCExtensions extensions;
+  extensions.clear();
+
   FlightCheck flight(filename);
   char *line;
   while ((line = reader.ReadLine()) != NULL) {
     unsigned day, month, year;
 
     IGCFix fix;
-    if (IGCParseFix(line, fix))
+    if (IGCParseFix(line, extensions, fix))
       flight.fix(fix);
     else if (sscanf(line, "HFDTE%02u%02u%02u", &day, &month, &year)) {
       /* damn you, Y2K bug! */

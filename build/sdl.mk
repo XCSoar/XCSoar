@@ -18,16 +18,7 @@ LIBPNG = y
 LIBJPEG = y
 FREETYPE = y
 
-SDL_PKG = sdl
-
-ifeq ($(TARGET_IS_KOBO),y)
-SDL_CPPFLAGS += -isystem $(KOBO)/include/SDL
-SDL_LDADD += $(KOBO)/lib/libpng.a $(KOBO)/lib/libjpeg.a
-SDL_LDADD += $(KOBO)/lib/libfreetype.a
-SDL_LDADD += $(KOBO)/lib/libSDL.a
-else
-$(eval $(call pkg-config-library,SDL,$(SDL_PKG)))
-endif
+$(eval $(call pkg-config-library,SDL,sdl))
 
 SDL_CPPFLAGS += -DENABLE_SDL
 

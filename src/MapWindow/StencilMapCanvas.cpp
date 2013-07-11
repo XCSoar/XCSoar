@@ -23,22 +23,20 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include "MapDrawHelper.hpp"
+#include "StencilMapCanvas.hpp"
 #include "Screen/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "MapCanvas.hpp"
 #include "Geo/SearchPointVector.hpp"
 
 #ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 
-MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
-                             const WindowProjection &_proj,
-                             const AirspaceRendererSettings &_settings)
+StencilMapCanvas::StencilMapCanvas(Canvas &_buffer, Canvas &_stencil,
+                                   const WindowProjection &_proj,
+                                   const AirspaceRendererSettings &_settings)
   :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
-   canvas(_canvas),
    buffer(_buffer),
    stencil(_stencil),
    proj(_proj),
@@ -48,9 +46,8 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
 {
 }
 
-MapDrawHelper::MapDrawHelper(const MapDrawHelper &other)
+StencilMapCanvas::StencilMapCanvas(const StencilMapCanvas &other)
   :clip(other.clip),
-   canvas(other.canvas),
    buffer(other.buffer),
    stencil(other.stencil),
    proj(other.proj),
@@ -60,8 +57,8 @@ MapDrawHelper::MapDrawHelper(const MapDrawHelper &other)
 {
 }
 
-void 
-MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
+void
+StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
 {
   size_t size = points.size();
   if (size < 3)
@@ -83,56 +80,35 @@ MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
   for (unsigned i = 0; i < size; ++i)
     screen[i] = proj.GeoToScreen(geo_points[i]);
 
-  if (!MapCanvas::IsVisible(canvas, screen, size))
-    return;
-
   buffer.DrawPolygon(&screen[0], size);
   if (use_stencil)
     stencil.DrawPolygon(&screen[0], size);
 }
 
-void 
-MapDrawHelper::DrawCircle(const RasterPoint &center, unsigned radius)
+void
+StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
 {
   buffer.DrawCircle(center.x, center.y, radius);
   if (use_stencil)
     stencil.DrawCircle(center.x, center.y, radius);
 }
 
-void 
-MapDrawHelper::BufferRenderFinish() 
+void
+StencilMapCanvas::Commit()
 {
-  if (buffer_drawn) {
-    if (use_stencil) {
-#ifdef USE_MEMORY_CANVAS
-      buffer.CopyTransparentBlack(stencil);
-#else
-      buffer.CopyOr(stencil);
-#endif
-    }
+  if (!buffer_drawn)
+    return;
 
-#ifdef HAVE_ALPHA_BLEND
-#ifdef HAVE_HATCHED_BRUSH
-    if (settings.transparency && AlphaBlendAvailable())
-#endif
-      canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                           buffer,
-                           0, 0, canvas.GetWidth(), canvas.GetHeight(),
-                           60);
-#ifdef HAVE_HATCHED_BRUSH
-    else
-#endif
-#endif
-#ifdef HAVE_HATCHED_BRUSH
-      canvas.CopyAnd(buffer);
-#endif
+  buffer_drawn = false;
 
-    buffer_drawn = false;
+  if (use_stencil) {
+    buffer.CopyOr(0, 0, proj.GetScreenWidth(), proj.GetScreenHeight(),
+                  stencil, 0, 0);
   }
 }
 
-void 
-MapDrawHelper::BufferRenderStart() 
+void
+StencilMapCanvas::Begin()
 {
   if (!buffer_drawn) {
     ClearBuffer();
@@ -140,8 +116,8 @@ MapDrawHelper::BufferRenderStart()
   }
 }
 
-void 
-MapDrawHelper::ClearBuffer()
+void
+StencilMapCanvas::ClearBuffer()
 {
   buffer.ClearWhite();
 

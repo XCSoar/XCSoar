@@ -33,10 +33,11 @@ Copyright_License {
 
 static void
 RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
-                 const GeoPoint &a, const GeoPoint &b)
+                 const GeoPoint &a, const GeoPoint &b,
+                 const FAITriangleSettings &settings)
 {
-  RenderFAISector(canvas, projection, a, b, false);
-  RenderFAISector(canvas, projection, a, b, true);
+  RenderFAISector(canvas, projection, a, b, false, settings);
+  RenderFAISector(canvas, projection, a, b, true, settings);
 }
 
 void
@@ -46,6 +47,9 @@ MapWindow::DrawContest(Canvas &canvas)
 
   if (GetMapSettings().show_fai_triangle_areas &&
       flying.release_location.IsValid() && flying.far_location.IsValid()) {
+    const FAITriangleSettings &settings =
+      GetMapSettings().fai_triangle_settings;
+
     /* draw FAI triangle areas */
     static constexpr Color fill_color = COLOR_YELLOW;
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
@@ -56,7 +60,8 @@ MapWindow::DrawContest(Canvas &canvas)
     canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(90)));
 
     RenderFAISectors(canvas, render_projection,
-                     flying.release_location, flying.far_location);
+                     flying.release_location, flying.far_location,
+                     settings);
 #else
     BufferCanvas buffer_canvas;
     buffer_canvas.Create(canvas);
@@ -70,7 +75,8 @@ MapWindow::DrawContest(Canvas &canvas)
 #endif
     buffer_canvas.SelectBlackPen();
     RenderFAISectors(buffer_canvas, render_projection,
-                     flying.release_location, flying.far_location);
+                     flying.release_location, flying.far_location,
+                     settings);
     canvas.CopyAnd(buffer_canvas);
 #endif
   }

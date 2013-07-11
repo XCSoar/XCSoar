@@ -35,7 +35,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "MapWindow/MapDrawHelper.hpp"
+#include "MapWindow/StencilMapCanvas.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Aircraft.hpp"
 
@@ -53,7 +53,13 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
   StaticArray<GeoPoint,32> locations;
 
+  unsigned serial;
+
 public:
+  unsigned GetSerial() const {
+    return serial;
+  }
+
   void Visit(const AirspaceWarning& as) {
     if (as.GetWarningState() == AirspaceWarning::WARNING_INSIDE) {
       ids_inside.checked_append(&as.GetAirspace());
@@ -67,6 +73,8 @@ public:
   }
 
   void Visit(const AirspaceWarningManager &awm) {
+    serial = awm.GetSerial();
+
     for (auto i = awm.begin(), end = awm.end(); i != end; ++i)
       Visit(*i);
   }
@@ -90,18 +98,6 @@ public:
 
   bool IsInside(const AbstractAirspace &as) const {
     return as.IsActive() && Find(as, ids_inside);
-  }
-
-  void VisitWarnings(AirspaceVisitor &visitor) const {
-    for (auto it = ids_warning.begin(), end = ids_warning.end(); it != end; ++it)
-      if (!IsAcked(**it))
-        visitor.Visit(**it);
-  }
-
-  void VisitInside(AirspaceVisitor &visitor) const {
-    for (auto it = ids_inside.begin(), end = ids_inside.end(); it != end; ++it)
-      if (!IsAcked(**it))
-        visitor.Visit(**it);
   }
 
 private:
@@ -412,17 +408,17 @@ private:
  * of code overhead.
  */
 class AirspaceVisitorMap final
-  : public AirspaceVisitor, public MapDrawHelper
+  : public AirspaceVisitor, public StencilMapCanvas
 {
   const AirspaceLook &look;
   const AirspaceWarningCopy &warnings;
 
 public:
-  AirspaceVisitorMap(MapDrawHelper &_helper,
+  AirspaceVisitorMap(StencilMapCanvas &_helper,
                      const AirspaceWarningCopy &_warnings,
                      const AirspaceRendererSettings &_settings,
                      const AirspaceLook &_airspace_look)
-    :MapDrawHelper(_helper),
+    :StencilMapCanvas(_helper),
      look(_airspace_look), warnings(_warnings)
   {
     switch (settings.fill_mode) {
@@ -439,23 +435,17 @@ public:
 
 private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    if (warnings.IsAcked(airspace))
-      return;
-
-    AirspaceClass airspace_class = airspace.GetType();
-    if (settings.classes[airspace_class].fill_mode ==
-        AirspaceClassRendererSettings::FillMode::NONE)
-      return;
-
-    BufferRenderStart();
-    SetBufferPens(airspace);
-
     RasterPoint center = proj.GeoToScreen(airspace.GetCenter());
     unsigned radius = proj.GeoToScreenDistance(airspace.GetRadius());
     DrawCircle(center, radius);
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
+    DrawSearchPointVector(airspace.GetPoints());
+  }
+
+protected:
+  virtual void Visit(const AbstractAirspace &airspace) override {
     if (warnings.IsAcked(airspace))
       return;
 
@@ -464,13 +454,9 @@ private:
         AirspaceClassRendererSettings::FillMode::NONE)
       return;
 
-    BufferRenderStart();
+    Begin();
     SetBufferPens(airspace);
-    DrawSearchPointVector(airspace.GetPoints());
-  }
 
-protected:
-  virtual void Visit(const AbstractAirspace &airspace) override {
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -480,11 +466,6 @@ protected:
       VisitPolygon((const AirspacePolygon &)airspace);
       break;
     }
-  }
-
-public:
-  void DrawIntercepts() {
-    BufferRenderFinish();
   }
 
 private:
@@ -563,18 +544,20 @@ protected:
     return true;
   }
 
-public:
+private:
   void VisitCircle(const AirspaceCircle &airspace) {
-    if (SetupCanvas(airspace))
-      DrawCircle(airspace.GetCenter(), airspace.GetRadius());
+    DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
-    if (SetupCanvas(airspace))
-      DrawPolygon(airspace.GetPoints());
+    DrawPolygon(airspace.GetPoints());
   }
 
+public:
   virtual void Visit(const AbstractAirspace &airspace) override {
+    if (!SetupCanvas(airspace))
+      return;
+
     switch (airspace.GetShape()) {
     case AbstractAirspace::Shape::CIRCLE:
       VisitCircle((const AirspaceCircle &)airspace);
@@ -600,10 +583,79 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
   }
 }
 
+#ifndef ENABLE_OPENGL
+
+inline void
+AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
+                           const WindowProjection &projection,
+                           const AirspaceRendererSettings &settings,
+                           const AirspaceWarningCopy &awc,
+                           const AirspacePredicate &visible)
+{
+  StencilMapCanvas helper(buffer_canvas, stencil_canvas, projection,
+                          settings);
+  AirspaceVisitorMap v(helper, awc, settings,
+                       look);
+
+  // JMW TODO wasteful to draw twice, can't it be drawn once?
+  // we are using two draws so borders go on top of everything
+
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
+                                        v, visible);
+
+  v.Commit();
+}
+
+inline void
+AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
+                                 const WindowProjection &projection,
+                                 const AirspaceRendererSettings &settings,
+                                 const AirspaceWarningCopy &awc,
+                                 const AirspacePredicate &visible)
+{
+  if (awc.GetSerial() != last_warning_serial ||
+      !fill_cache.Check(projection)) {
+    last_warning_serial = awc.GetSerial();
+
+    Canvas &buffer_canvas = fill_cache.Begin(canvas, projection);
+    DrawFill(buffer_canvas, stencil_canvas,
+             projection, settings, awc, visible);
+    fill_cache.Commit(canvas, projection);
+  }
+
+#ifdef HAVE_ALPHA_BLEND
+#ifdef HAVE_HATCHED_BRUSH
+  if (settings.transparency && AlphaBlendAvailable())
+#endif
+    fill_cache.AlphaBlendTo(canvas, projection, 60);
+#ifdef HAVE_HATCHED_BRUSH
+  else
+#endif
+#endif
+#ifdef HAVE_HATCHED_BRUSH
+    fill_cache.CopyAndTo(canvas);
+#endif
+}
+
+inline void
+AirspaceRenderer::DrawOutline(Canvas &canvas,
+                              const WindowProjection &projection,
+                              const AirspaceRendererSettings &settings,
+                              const AirspacePredicate &visible) const
+{
+  AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
+                                        outline_renderer, visible);
+}
+
+#endif
+
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings,
@@ -628,29 +680,8 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                           renderer, visible);
   }
 #else
-  MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, projection,
-                       settings);
-  AirspaceVisitorMap v(helper, awc, settings,
-                       look);
-
-  // JMW TODO wasteful to draw twice, can't it be drawn once?
-  // we are using two draws so borders go on top of everything
-
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        v, visible);
-
-  awc.VisitWarnings(v);
-  awc.VisitInside(v);
-
-  v.DrawIntercepts();
-
-  AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
-  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        outline_renderer, visible);
-  awc.VisitWarnings(outline_renderer);
-  awc.VisitInside(outline_renderer);
+  DrawFillCached(canvas, stencil_canvas, projection, settings, awc, visible);
+  DrawOutline(canvas, projection, settings, visible);
 #endif
 
   intersections = awc.GetLocations();
@@ -659,7 +690,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const AirspaceRendererSettings &settings)
@@ -673,7 +704,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   Draw(canvas,
 #ifndef ENABLE_OPENGL
-       buffer_canvas, stencil_canvas,
+       stencil_canvas,
 #endif
        projection, settings, awc, AirspacePredicateTrue());
 }
@@ -681,7 +712,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 void
 AirspaceRenderer::Draw(Canvas &canvas,
 #ifndef ENABLE_OPENGL
-                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+                       Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
                        const MoreData &basic,
@@ -700,7 +731,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                    ToAircraftState(basic, calculated), awc);
   Draw(canvas,
 #ifndef ENABLE_OPENGL
-       buffer_canvas, stencil_canvas,
+       stencil_canvas,
 #endif
        projection, settings, awc, visible);
 }

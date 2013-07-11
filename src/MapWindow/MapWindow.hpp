@@ -43,7 +43,7 @@ Copyright_License {
 struct MapLook;
 struct TrafficLook;
 class TopographyStore;
-class TopographyRenderer;
+class CachedTopographyRenderer;
 class RasterTerrain;
 class RasterWeather;
 class ProtectedMarkers;
@@ -68,7 +68,6 @@ class MapWindow :
   // graphics vars
 
   BufferCanvas buffer_canvas;
-  BufferCanvas stencil_canvas;
 #endif
 
   LabelBlock label_block;
@@ -117,7 +116,7 @@ protected:
 
   const Waypoints *waypoints;
   TopographyStore *topography;
-  TopographyRenderer *topography_renderer;
+  CachedTopographyRenderer *topography_renderer;
 
   RasterTerrain *terrain;
   GeoPoint terrain_center;
@@ -231,6 +230,8 @@ public:
   }
 #endif
 
+  void FlushCaches();
+
   using MapWindowBlackboard::ReadBlackboard;
 
   void ReadBlackboard(const MoreData &nmea_info,
@@ -257,7 +258,7 @@ protected:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;
   void DrawTrackBearing(Canvas &canvas,
-                        const RasterPoint aircraft_pos) const;
+                        const RasterPoint aircraft_pos, bool circling) const;
   void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const PixelRect &rc) const;
@@ -266,6 +267,7 @@ protected:
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                  unsigned min_time, bool enable_traildrift = false);
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
+  virtual void RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   void DrawSkyLinesTraffic(Canvas &canvas) const;

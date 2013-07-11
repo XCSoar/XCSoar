@@ -257,6 +257,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/ScoringConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/UnitsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
@@ -335,6 +336,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Renderer/GlassRenderer.cpp \
+	$(SRC)/Renderer/TransparentRendererCache.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
@@ -563,7 +565,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Geo/Geoid.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
-	$(SRC)/MapWindow/MapDrawHelper.cpp \
+	$(SRC)/MapWindow/StencilMapCanvas.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
@@ -656,6 +658,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Topography/TopographyRenderer.cpp \
 	$(SRC)/Topography/TopographyGlue.cpp \
 	$(SRC)/Topography/XShape.cpp \
+	$(SRC)/Topography/CachedTopographyRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	\

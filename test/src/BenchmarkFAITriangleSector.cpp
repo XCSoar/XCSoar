@@ -22,12 +22,16 @@ Copyright_License {
 */
 
 #include "Engine/Task/Shapes/FAITriangleArea.hpp"
+#include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
 int
 main(gcc_unused int argc, gcc_unused char **argv)
 {
+  FAITriangleSettings settings;
+  settings.SetDefaults();
+
   const GeoPoint a(Angle::Degrees(7.70722),
                    Angle::Degrees(51.052));
   const GeoPoint b(Angle::Degrees(11.5228),
@@ -36,7 +40,7 @@ main(gcc_unused int argc, gcc_unused char **argv)
   GeoPoint buffer[FAI_TRIANGLE_SECTOR_MAX];
 
   for (unsigned i = 256 * 1024; i-- > 0;)
-    GenerateFAITriangleArea(buffer, a, b, false);
+    GenerateFAITriangleArea(buffer, a, b, false, settings);
 
   return 0;
 }

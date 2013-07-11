@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Markers/ProtectedMarkers.hpp"
-#include "Topography/TopographyRenderer.hpp"
+#include "Topography/CachedTopographyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units/Units.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -33,6 +33,13 @@ Copyright_License {
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
 #endif
+
+void
+MapWindow::RenderTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos)
+{
+  // default rendering option assumes circling is off, so ground-relative
+  DrawTrackBearing(canvas, aircraft_pos, false);
+}
 
 void
 MapWindow::RenderTerrain(Canvas &canvas)
@@ -70,7 +77,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
   if (GetMapSettings().airspace.enable)
     airspace_renderer.Draw(canvas,
 #ifndef ENABLE_OPENGL
-                           buffer_canvas, stencil_canvas,
+                           buffer_canvas,
 #endif
                            render_projection,
                            Basic(), Calculated(),
@@ -139,9 +146,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   draw_sw.Mark("RenderFinalGlideShading");
   RenderFinalGlideShading(canvas);
 
-  // Render track bearing (ground track)
+  // Render track bearing (projected track ground/air relative)
   draw_sw.Mark("DrawTrackBearing");
-  DrawTrackBearing(canvas, aircraft_pos);
+  RenderTrackBearing(canvas, aircraft_pos);
 
   // Render airspace
   draw_sw.Mark("RenderAirspace");

@@ -48,6 +48,13 @@ BackgroundRenderer::Reset()
 }
 
 void
+BackgroundRenderer::Flush()
+{
+  if (renderer != nullptr)
+    renderer->Flush();
+}
+
+void
 BackgroundRenderer::SetTerrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;

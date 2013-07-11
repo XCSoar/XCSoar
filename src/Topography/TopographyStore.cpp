@@ -108,6 +108,7 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
     }
   }
 
+  serial += num_updated;
   return num_updated;
 }
 
