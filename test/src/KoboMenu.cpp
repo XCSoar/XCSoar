@@ -42,6 +42,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "IO/DataHandler.hpp"
+#include "OS/PathName.hpp"
 
 #include <algorithm>
 #include <stdio.h>
@@ -303,7 +304,12 @@ int main(int argc, char **argv)
     printf("launch xcsoar\n");
     fflush(stdout);
 
-    const char cmd[] = "/mnt/onboard/XCSoar/xcsoar";
+    char buffer[256], *cmd = buffer;
+    if (readlink("/proc/self/exe", buffer, sizeof(buffer)) > 0)
+      ReplaceBaseName(buffer, "xcsoar");
+    else
+      cmd = "/mnt/onboard/XCSoar/xcsoar";
+
     execl(cmd, cmd, nullptr);
   } else {
     fflush(stdout);
