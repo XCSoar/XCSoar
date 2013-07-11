@@ -195,6 +195,7 @@ const char EnableFinalGlideBarMC0[] = "EnableFinalGlideBarMC0";
 const char FinalGlideBarDisplayMode[] = "FinalGlideBarDisplayMode";
 const char EnableVarioBar[] = "EnableVarioBar";
 const char ShowFAITriangleAreas[] = "ShowFAITriangleAreas";
+const char FAITriangleThreshold[] = "FAITriangleThreshold";
 const char AutoLogger[] = "AutoLogger";
 const char DisableAutoLogger[] = "DisableAutoLogger";
 const char EnableFlightLogger[] = "EnableFlightLogger";

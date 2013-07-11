@@ -27,7 +27,26 @@ Copyright_License {
 #include <stdint.h>
 
 struct FAITriangleSettings {
+  /**
+   * Specifies which threshold is used for applying the "large
+   * triangle" rules.
+   */
+  enum class Threshold : uint8_t {
+    /**
+     * Standard FAI (750km).
+     */
+    FAI,
+
+    /**
+     * A dummy entry that is used for validating profile values.
+     */
+    MAX
+  };
+
+  Threshold threshold;
+
   void SetDefaults() {
+    threshold = Threshold::FAI;
   }
 };
 

@@ -24,6 +24,8 @@ Copyright_License {
 #include "ScoringConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -35,17 +37,46 @@ enum ControlIndex {
   PREDICT_CONTEST,
   SPACER,
   SHOW_FAI_TRIANGLE_AREAS,
+  FAI_TRIANGLE_THRESHOLD,
 };
 
-class ScoringConfigPanel final : public RowFormWidget {
+class ScoringConfigPanel final
+  : public RowFormWidget, DataFieldListener {
 public:
   ScoringConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
+
+protected:
+  void ShowFAITriangleControls(bool show);
 
 public:
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
   virtual bool Save(bool &changed) override;
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+};
+
+void
+ScoringConfigPanel::OnModified(DataField &df)
+{
+  if (IsDataField(SHOW_FAI_TRIANGLE_AREAS, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    ShowFAITriangleControls(dfb.GetAsBoolean());
+  }
+}
+
+void
+ScoringConfigPanel::ShowFAITriangleControls(bool show)
+{
+  SetRowVisible(FAI_TRIANGLE_THRESHOLD, show);
+}
+
+static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
+  { (unsigned)FAITriangleSettings::Threshold::FAI, _T("750km (FAI)") },
+  { 0 }
 };
 
 void
@@ -99,8 +130,16 @@ ScoringConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("FAI triangle areas"),
              _("Show FAI triangle areas on the map."),
-             map_settings.show_fai_triangle_areas);
+             map_settings.show_fai_triangle_areas, this);
   SetExpertRow(SHOW_FAI_TRIANGLE_AREAS);
+
+  AddEnum(_("FAI triangle threshold"),
+          _("Specifies which threshold is used for \"large\" FAI triangles."),
+          fai_triangle_threshold_list,
+          (unsigned)map_settings.fai_triangle_settings.threshold);
+  SetExpertRow(FAI_TRIANGLE_THRESHOLD);
+
+  ShowFAITriangleControls(map_settings.show_fai_triangle_areas);
 }
 
 bool
@@ -120,6 +159,10 @@ ScoringConfigPanel::Save(bool &_changed)
   changed |= SaveValue(SHOW_FAI_TRIANGLE_AREAS,
                        ProfileKeys::ShowFAITriangleAreas,
                        map_settings.show_fai_triangle_areas);
+
+  changed |= SaveValueEnum(FAI_TRIANGLE_THRESHOLD,
+                           ProfileKeys::FAITriangleThreshold,
+                           map_settings.fai_triangle_settings.threshold);
 
   _changed |= changed;
 

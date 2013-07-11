@@ -46,6 +46,10 @@ IsValidMapOrientation(unsigned value)
 static void
 Load(FAITriangleSettings &settings)
 {
+  FAITriangleSettings::Threshold threshold;
+  if (Profile::GetEnum(ProfileKeys::FAITriangleThreshold, threshold) &&
+      unsigned(threshold) < unsigned(FAITriangleSettings::Threshold::MAX))
+    settings.threshold = threshold;
 }
 
 void
