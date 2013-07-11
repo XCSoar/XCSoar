@@ -47,12 +47,13 @@ FAITrianglePointValidator::FAITrianglePointValidator(
 
 bool
 FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
-                                           const fixed d3)
+                                           const fixed d3,
+                                           const FAITriangleSettings &settings)
 {
   if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
     return false;
 
-  return FAITriangleRules::TestDistances(d1, d2, d3);
+  return FAITriangleRules::TestDistances(d1, d2, d3, settings);
 }
 
 bool
@@ -82,6 +83,9 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
   if (t_size == 0)
     return true;
 
+  const FAITriangleSettings &settings =
+    task->GetOrderedTaskSettings().fai_triangle;
+
   const GeoPoint &p = wp.location;
   // replace start
   if (t_index == 0) {
@@ -101,12 +105,13 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
       if (t_size == 3) {
         return TestFAITriangle(p.Distance(task->GetPoint(1).GetLocation()),
                                leg2,
-                               task->GetPoint(2).GetLocation().Distance(p));
+                               task->GetPoint(2).GetLocation().Distance(p),
+                               settings);
       } else if (t_size == 4) {
         return (wp == task->GetPoint(3).GetWaypoint()) &&
                TestFAITriangle(p.Distance(task->GetPoint(1).GetLocation()),
-                               leg2,
-                               leg3);
+                               leg2, leg3,
+                               settings);
       }
     }
   }
@@ -127,11 +132,13 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
       return TestFAITriangle(p.Distance(task->GetPoint(0).GetLocation()),
                              p.Distance(task->GetPoint(2).GetLocation()),
                              task->GetPoint(2).GetLocation().
-                                Distance(task->GetPoint(0).GetLocation()));
+                             Distance(task->GetPoint(0).GetLocation()),
+                             settings);
     } else if (t_size == 4) {
       return TestFAITriangle(p.Distance(task->GetPoint(0).GetLocation()),
                              p.Distance(task->GetPoint(2).GetLocation()),
-                             leg3);
+                             leg3,
+                             settings);
     }
   }
   // append or replace point #2
@@ -145,13 +152,15 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
     if (t_size < 4) { // no finish point yet
       return TestFAITriangle(leg1,
                              p.Distance(task->GetPoint(1).GetLocation()),
-                             p.Distance(task->GetPoint(0).GetLocation()));
+                             p.Distance(task->GetPoint(0).GetLocation()),
+                             settings);
 
     } else { // already finish point(#3) exists
       return task->GetPoint(0).GetWaypoint() == task->GetPoint(3).GetWaypoint() &&
         TestFAITriangle(leg1,
                         p.Distance(task->GetPoint(1).GetLocation()),
-                        p.Distance(task->GetPoint(0).GetLocation()));
+                        p.Distance(task->GetPoint(0).GetLocation()),
+                        settings);
     }
   }
   // append or replace finish
@@ -160,7 +169,8 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
     return (wp == task->GetPoint(0).GetWaypoint()) &&
             TestFAITriangle(leg1,
                             leg2,
-                            p.Distance(task->GetPoint(2).GetLocation()));
+                            p.Distance(task->GetPoint(2).GetLocation()),
+                            settings);
   }
   return true;
 }

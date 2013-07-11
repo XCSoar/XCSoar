@@ -26,6 +26,7 @@
 #include "Math/fixed.hpp"
 #include "StartConstraints.hpp"
 #include "FinishConstraints.hpp"
+#include "Task/Shapes/FAITriangleSettings.hpp"
 
 /**
  * Settings for ordered tasks; most of these are set by
@@ -37,6 +38,8 @@ struct OrderedTaskSettings {
 
   StartConstraints start_constraints;
   FinishConstraints finish_constraints;
+
+  FAITriangleSettings fai_triangle;
 
   void SetDefaults();
 };

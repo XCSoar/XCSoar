@@ -30,9 +30,17 @@ Copyright_License {
 #include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Engine/Task/Shapes/FAITriangleSettings.hpp"
 
 class FAITriangleWindow : public PaintWindow
 {
+  FAITriangleSettings settings;
+
+public:
+  FAITriangleWindow() {
+    settings.SetDefaults();
+  }
+
 protected:
   virtual void OnPaint(Canvas &canvas) override {
     canvas.ClearWhite();
@@ -58,7 +66,7 @@ protected:
     RasterPoint pb = projection.GeoToScreen(b);
     canvas.DrawCircle(pb.x, pb.y, 4);
 
-    RenderFAISector(canvas, projection, a, b, false);
+    RenderFAISector(canvas, projection, a, b, false, settings);
   }
 };
 

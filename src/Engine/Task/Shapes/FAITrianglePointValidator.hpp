@@ -29,6 +29,7 @@ Copyright_License {
 class OrderedTask;
 struct GeoPoint;
 struct Waypoint;
+struct FAITriangleSettings;
 
 /**
  * Helper class to filter waypoints in list based on whether the filter is set
@@ -50,7 +51,8 @@ public:
                             const unsigned ordered_task_index);
 
   gcc_pure
-  static bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3);
+  static bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3,
+                              const FAITriangleSettings &settings);
 
   /**
    * Perform fast check to exclude point as from further consideration

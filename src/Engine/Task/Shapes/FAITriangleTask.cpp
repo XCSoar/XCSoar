@@ -39,5 +39,6 @@ FAITriangleValidator::Validate(const OrderedTask &task)
   const fixed d2 = task.GetTaskPoint(2).GetVectorPlanned().distance;
   const fixed d3 = task.GetTaskPoint(3).GetVectorPlanned().distance;
 
-  return FAITriangleRules::TestDistances(d1, d2, d3);
+  return FAITriangleRules::TestDistances(d1, d2, d3,
+                                         task.GetOrderedTaskSettings().fai_triangle);
 }

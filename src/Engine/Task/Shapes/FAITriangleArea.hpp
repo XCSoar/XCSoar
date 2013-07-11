@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 struct GeoPoint;
+struct FAITriangleSettings;
 
 static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 8 * 3 * 10;
 
@@ -36,6 +37,7 @@ static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 8 * 3 * 10;
 GeoPoint *
 GenerateFAITriangleArea(GeoPoint *dest,
                         const GeoPoint &pt1, const GeoPoint &pt2,
-                        bool reverse);
+                        bool reverse,
+                        const FAITriangleSettings &settings);
 
 #endif

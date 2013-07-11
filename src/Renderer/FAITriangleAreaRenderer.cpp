@@ -31,10 +31,11 @@ Copyright_License {
 void
 RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
-                bool reverse)
+                bool reverse, const FAITriangleSettings &settings)
 {
   GeoPoint geo_points[FAI_TRIANGLE_SECTOR_MAX];
-  GeoPoint *geo_end = GenerateFAITriangleArea(geo_points, pt1, pt2, reverse);
+  GeoPoint *geo_end = GenerateFAITriangleArea(geo_points, pt1, pt2,
+                                              reverse, settings);
 
   GeoPoint clipped[FAI_TRIANGLE_SECTOR_MAX * 3],
     *clipped_end = clipped +

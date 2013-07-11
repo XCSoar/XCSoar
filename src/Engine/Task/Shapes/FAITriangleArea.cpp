@@ -349,7 +349,8 @@ GenerateFAITriangleLargeBottomLeft(GeoPoint *dest,
 GeoPoint *
 GenerateFAITriangleArea(GeoPoint *dest,
                         const GeoPoint &pt1, const GeoPoint &pt2,
-                        bool reverse)
+                        bool reverse,
+                        const FAITriangleSettings &settings)
 {
   const GeoVector leg_c = pt1.DistanceBearing(pt2);
 

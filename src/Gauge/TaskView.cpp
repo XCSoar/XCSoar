@@ -81,6 +81,9 @@ static void
 RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
                  const OrderedTask &task)
 {
+  const FAITriangleSettings &settings =
+    task.GetOrderedTaskSettings().fai_triangle;
+
   const unsigned size = task.TaskSize();
   const unsigned end = size - 1;
 
@@ -88,13 +91,13 @@ RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
     RenderFAISector(canvas, projection,
                     task.GetPoint(i).GetLocation(),
                     task.GetPoint(i + 1).GetLocation(),
-                    true);
+                    true, settings);
 
   for (unsigned i = 0; i != end; ++i)
     RenderFAISector(canvas, projection,
                     task.GetPoint(i).GetLocation(),
                     task.GetPoint(i + 1).GetLocation(),
-                    false);
+                    false, settings);
 }
 
 void
