@@ -46,7 +46,7 @@ class NavDijkstra:
 {
 protected:
   enum {
-    MAX_STAGES = 16,
+    MAX_STAGES = 32,
   };
 
   struct DijkstraMap {

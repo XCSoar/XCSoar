@@ -44,10 +44,12 @@ Version 6.7 - not yet released
   - a retrospective task is compiled that summarises waypoints the aircraft has 
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 
-Version 6.6.4 - not yet released
+Version 6.6.4 - 2013/07/11
 * map
   - fix stuttering terrain on Windows CE
   - fix multi-touch pan gesture (#2684)
+* calculations
+  - improve robustness of the zig-zag wind algorithm (#2961)
 * devices
   - FLARM: work around a Garrecht TRX-1090 firmware bug (#2745, #2749)
   - LX: faster LXNAV Nano detection over Bluetooth (#2819)
