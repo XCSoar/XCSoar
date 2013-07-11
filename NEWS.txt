@@ -61,9 +61,18 @@ XCSoar TE
   - TravisCI support
 
 
-Version 6.6.4 - not yet released
+Version 6.6.4 - 2013/07/11
+* map
+  - fix stuttering terrain on Windows CE
+  - fix multi-touch pan gesture (#2684)
+* calculations
+  - improve robustness of the zig-zag wind algorithm (#2961)
 * devices
+  - FLARM: work around a Garrecht TRX-1090 firmware bug (#2745, #2749)
+  - LX: faster LXNAV Nano detection over Bluetooth (#2819)
   - Volkslogger: increase timeout to calculate security (#2910)
+  - fix bogus error message after pressing "Cancel"
+  - show Bluetooth name instead of MAC address in device list
 
 Version 6.6.3 - 2013/07/02
 * map

@@ -207,7 +207,7 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 #ifdef HAVE_MULTI_TOUCH
   case DRAG_MULTI_TOUCH_PAN:
     follow_mode = FOLLOW_SELF;
-    EnterPan();
+    ::PanTo(visible_projection.GetGeoScreenCenter());
     return true;
 #endif
 

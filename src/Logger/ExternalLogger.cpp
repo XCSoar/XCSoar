@@ -36,7 +36,7 @@
 #include "Operation/Operation.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Job/Job.hpp"
+#include "Job/TriStateJob.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IGC/IGCParser.hpp"
@@ -47,34 +47,26 @@
 
 #include <windef.h> /* for MAX_PATH */
 
-class DeclareJob : public Job {
+class DeclareJob {
   DeviceDescriptor &device;
   const struct Declaration &declaration;
   const Waypoint *home;
-
-  bool result;
 
 public:
   DeclareJob(DeviceDescriptor &_device, const struct Declaration &_declaration,
              const Waypoint *_home)
     :device(_device), declaration(_declaration), home(_home) {}
 
-  bool GetResult() const {
-    return result;
-  }
-
-  virtual void Run(OperationEnvironment &env) {
-    result = device.Declare(declaration, home, env);
-
-    device.EnableNMEA(env);
+  bool Run(OperationEnvironment &env) {
+    return device.Declare(declaration, home, env);
   }
 };
 
-static bool
+static TriStateJobResult
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration,
                 const Waypoint *home)
 {
-  DeclareJob job(device, declaration, home);
+  TriStateJob<DeclareJob> job(device, declaration, home);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
@@ -98,18 +90,25 @@ DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
   if (caption == NULL)
     caption = _("Declare task");
 
-  bool success = DoDeviceDeclare(dev, declaration, home);
+  auto result = DoDeviceDeclare(dev, declaration, home);
   dev.Return();
 
-  if (!success) {
+  switch (result) {
+  case TriStateJobResult::SUCCESS:
+    ShowMessageBox(_("Task declared!"),
+                   caption, MB_OK | MB_ICONINFORMATION);
+    return true;
+
+  case TriStateJobResult::ERROR:
     ShowMessageBox(_("Error occured,\nTask NOT declared!"),
-                caption, MB_OK | MB_ICONERROR);
+                   caption, MB_OK | MB_ICONERROR);
+    return false;
+
+  case TriStateJobResult::CANCELLED:
     return false;
   }
 
-  ShowMessageBox(_("Task declared!"),
-              caption, MB_OK | MB_ICONINFORMATION);
-  return true;
+  gcc_unreachable();
 }
 
 void
@@ -131,61 +130,49 @@ ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
                 _("Declare task"), MB_OK | MB_ICONINFORMATION);
 }
 
-class ReadFlightListJob : public Job {
+class ReadFlightListJob {
   DeviceDescriptor &device;
   RecordedFlightList &flight_list;
-
-  bool result;
 
 public:
   ReadFlightListJob(DeviceDescriptor &_device,
                     RecordedFlightList &_flight_list)
     :device(_device), flight_list(_flight_list) {}
 
-  bool GetResult() const {
-    return result;
-  }
-
-  virtual void Run(OperationEnvironment &env) {
-    result = device.ReadFlightList(flight_list, env);
+  bool Run(OperationEnvironment &env) {
+    return device.ReadFlightList(flight_list, env);
   }
 };
 
-static bool
+static TriStateJobResult
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
-  ReadFlightListJob job(device, flight_list);
+  TriStateJob<ReadFlightListJob> job(device, flight_list);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
 }
 
-class DownloadFlightJob : public Job {
+class DownloadFlightJob {
   DeviceDescriptor &device;
   const RecordedFlightInfo &flight;
   const TCHAR *path;
-
-  bool result;
 
 public:
   DownloadFlightJob(DeviceDescriptor &_device,
                     const RecordedFlightInfo &_flight, const TCHAR *_path)
     :device(_device), flight(_flight), path(_path) {}
 
-  bool GetResult() const {
-    return result;
-  }
-
-  virtual void Run(OperationEnvironment &env) {
-    result = device.DownloadFlight(flight, path, env);
+  bool Run(OperationEnvironment &env) {
+    return device.DownloadFlight(flight, path, env);
   }
 };
 
-static bool
+static TriStateJobResult
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
-  DownloadFlightJob job(device, flight, path);
+  TriStateJob<DownloadFlightJob> job(device, flight, path);
   JobDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
             _T(""), job, true);
   return job.GetResult();
@@ -267,10 +254,17 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
-  if (!DoReadFlightList(device, flight_list)) {
+  switch (DoReadFlightList(device, flight_list)) {
+  case TriStateJobResult::SUCCESS:
+    break;
+
+  case TriStateJobResult::ERROR:
     device.EnableNMEA(env);
     ShowMessageBox(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
+    return;
+
+  case TriStateJobResult::CANCELLED:
     return;
   }
 
@@ -291,11 +285,20 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     // Download chosen IGC file into temporary file
     TCHAR path[MAX_PATH];
     LocalPath(path, _T("logs"), _T("temp.igc"));
-    if (!DoDownloadFlight(device, *flight, path)) {
+    switch (DoDownloadFlight(device, *flight, path)) {
+    case TriStateJobResult::SUCCESS:
+      break;
+
+    case TriStateJobResult::ERROR:
       // Delete temporary file
       File::Delete(path);
       ShowMessageBox(_("Failed to download flight."),
                   _("Download flight"), MB_OK | MB_ICONERROR);
+      continue;
+
+    case TriStateJobResult::CANCELLED:
+      // Delete temporary file
+      File::Delete(path);
       continue;
     }
 

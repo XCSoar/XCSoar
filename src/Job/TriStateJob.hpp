@@ -21,28 +21,48 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/LX/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
+#ifndef XCSOAR_TRI_STATE_JOB_HPP
+#define XCSOAR_TRI_STATE_JOB_HPP
 
-static Device *
-LXCreateOnPort(const DeviceConfig &config, Port &com_port)
-{
-  const bool uses_speed = config.UsesSpeed();
-  const unsigned baud_rate = uses_speed ? config.baud_rate : 0;
-  const unsigned bulk_baud_rate = uses_speed ? config.bulk_baud_rate : 0;
+#include "Job.hpp"
+#include "Operation/Operation.hpp"
 
-  const bool is_nano = config.BluetoothNameStartsWith("LXNAV-NANO-");
+/* damn you, windows.h! */
+#ifdef ERROR
+#undef ERROR
+#endif
 
-  return new LXDevice(com_port, baud_rate, bulk_baud_rate, is_nano);
-}
-
-const struct DeviceRegister lx_driver = {
-  _T("LX"),
-  _T("LX / Colibri"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
-  DeviceRegister::PASS_THROUGH |
-  DeviceRegister::BULK_BAUD_RATE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
-  LXCreateOnPort,
+enum class TriStateJobResult {
+  SUCCESS, ERROR, CANCELLED
 };
+
+/**
+ * A wrapper that keeps track of whether the job was successful,
+ * cancelled or whether it failed.
+ */
+template<typename T>
+class TriStateJob final : public Job, public T {
+private:
+  TriStateJobResult result;
+
+public:
+  TriStateJob() = default;
+
+  template<typename... Args>
+  explicit TriStateJob(Args&&... args)
+    :T(std::forward<Args>(args)...) {}
+
+  TriStateJobResult GetResult() const {
+    return result;
+  }
+
+  virtual void Run(OperationEnvironment &env) {
+    result = T::Run(env)
+      ? TriStateJobResult::SUCCESS
+      : (env.IsCancelled()
+         ? TriStateJobResult::CANCELLED
+         : TriStateJobResult::ERROR);
+  }
+};
+
+#endif
