@@ -37,7 +37,7 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-17.0.0,android-17; fi
 
   # Kobo
-  - if [[ "$TARGET" == "KOBO" ]]; then sudo apt-get install gcc-4.8-arm-linux-gnueabihf g++-4.8-arm-linux-gnueabihf; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then sudo apt-get install gcc-4.8-armhf-cross; fi
   - if [[ "$TARGET" == "KOBO" ]]; then wget http://spekje.snt.utwente.nl/~roel/kobo-libs.tar.xz; fi
   - if [[ "$TARGET" == "KOBO" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "KOBO" ]]; then tar -xJf kobo-libs.tar.xz -C ~/opt; fi
