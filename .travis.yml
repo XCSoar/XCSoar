@@ -1,22 +1,24 @@
 language: cpp
 
 env:
-  - TARGET=UNIX
-  - TARGET=PC
-  - TARGET=ANDROID
-  - TARGET=WM5
-  - TARGET=WM5X
-  - TARGET=PPC2000
-  - TARGET=PPC2003
-  - TARGET=PPC2003X
-  - TARGET=OPT
-  - TARGET=WIN64
-  - TARGET=ALTAIR
-  - TARGET=MANUAL
+#  - TARGET=UNIX
+#  - TARGET=PC
+#  - TARGET=ANDROID
+#  - TARGET=WM5
+#  - TARGET=WM5X
+#  - TARGET=PPC2000
+#  - TARGET=PPC2003
+#  - TARGET=PPC2003X
+#  - TARGET=OPT
+#  - TARGET=WIN64
+#  - TARGET=ALTAIR
+#  - TARGET=MANUAL
+  - TARGET=KOBO
 
 install:
   # General
   - sudo apt-get clean
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update
   - sudo apt-get install make g++ libsdl-image1.2-dev libboost-dev zlib1g-dev libsdl1.2-dev libfreetype6-dev libpng-dev libjpeg-dev libcurl4-openssl-dev libxml-parser-perl librsvg2-bin xsltproc imagemagick gettext ttf-dejavu
 
@@ -34,6 +36,13 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r8e-linux-x86_64.tar.bz2 -C ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-17.0.0,android-17; fi
 
+  # Kobo
+  - if [[ "$TARGET" == "KOBO" ]]; then sudo apt-get install gcc-4.8-armhf-cross; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then wget http://spekje.snt.utwente.nl/~roel/kobo-libs.tar.xz; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then mkdir ~/opt; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then tar -xJf kobo-libs.tar.xz -C ~/opt; fi
+
+
   # Windows Mobile
   - if [[ "$TARGET" == "WM"* ]] || [[ "$TARGET" == "PPC"* ]] || [[ "$TARGET" == "ALTAIR" ]]; then wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/; export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"; fi
 
@@ -42,10 +51,11 @@ install:
 
 script:
   # Compile
-  - if [[ "$TARGET" != "MANUAL" ]] && [[ "$TARGET" != "ANDROID" ]]; then make -j8 TARGET=$TARGET everything; fi
+  - if [[ "$TARGET" != "MANUAL" ]] && [[ "$TARGET" != "ANDROID" ]] && [[ "$TARGET" != "KOBO" ]]; then make -j8 TARGET=$TARGET everything; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then make -j8 TARGET=ANDROID; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then make -j8 TARGET=KOBO KOBO=~/opt/kobo/arm-unknown-linux-gnueabi CC=arm-linux-gnueabihf-gcc-4.8 CXX=/arm-linux-gnueabihf-g++-4.8; fi
   - if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
-
+  
   # Run unit tests on platforms where possible (Unix)
   - if [[ "$TARGET" == "UNIX" ]] || [[ "$TARGET" == "OPT" ]]; then make TARGET=$TARGET check; fi
 
