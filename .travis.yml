@@ -52,7 +52,7 @@ script:
   # Compile
   - if [[ "$TARGET" != "MANUAL" ]] && [[ "$TARGET" != "ANDROID" ]] && [[ "$TARGET" != "KOBO" ]]; then make -j8 TARGET=$TARGET everything; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then make -j8 TARGET=ANDROID; fi
-  - if [[ "$TARGET" == "KOBO" ]]; then make -j8 TARGET=KOBO KOBO=~/opt/kobo/arm-unknown-linux-gnueabi; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then make -j8 TARGET=KOBO KOBO=~/opt/kobo/arm-unknown-linux-gnueabi CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++; fi
   - if [[ "$TARGET" == "MANUAL" ]]; then make -j8 TARGET=UNIX manual; fi
   
   # Run unit tests on platforms where possible (Unix)
