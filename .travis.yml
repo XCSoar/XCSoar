@@ -1,18 +1,18 @@
 language: cpp
 
 env:
-  - TARGET=UNIX
-  - TARGET=PC
-  - TARGET=ANDROID
-  - TARGET=WM5
-  - TARGET=WM5X
-  - TARGET=PPC2000
-  - TARGET=PPC2003
-  - TARGET=PPC2003X
-  - TARGET=OPT
-  - TARGET=WIN64
-  - TARGET=ALTAIR
-  - TARGET=MANUAL
+#  - TARGET=UNIX
+#  - TARGET=PC
+#  - TARGET=ANDROID
+#  - TARGET=WM5
+#  - TARGET=WM5X
+#  - TARGET=PPC2000
+#  - TARGET=PPC2003
+#  - TARGET=PPC2003X
+#  - TARGET=OPT
+#  - TARGET=WIN64
+#  - TARGET=ALTAIR
+#  - TARGET=MANUAL
   - TARGET=KOBO
 
 install:
@@ -36,7 +36,7 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-17.0.0,android-17; fi
 
   # Kobo
-  - if [[ "$TARGET" == "KOBO" ]]; then sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf; fi
+  - if [[ "$TARGET" == "KOBO" ]]; then sudo apt-get install gcc-4.7-arm-linux-gnueabihf g++-4.7-arm-linux-gnueabihf; fi
   - if [[ "$TARGET" == "KOBO" ]]; then wget http://spekje.snt.utwente.nl/~roel/kobo-libs.tar.xz; fi
   - if [[ "$TARGET" == "KOBO" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "KOBO" ]]; then tar -xJf kobo-libs.tar.xz -C ~/opt; fi
