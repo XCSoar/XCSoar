@@ -9,6 +9,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
 KOBO_MENU_LDADD = $(FAKE_LIBS)
 KOBO_MENU_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL

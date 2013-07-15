@@ -39,11 +39,10 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "IO/DataHandler.hpp"
-#include "OS/PathName.hpp"
+#include "System.hpp"
 
 #include <algorithm>
 #include <stdio.h>
-#include <unistd.h>
 
 enum Buttons {
   LAUNCH_XCSOAR = 100,
@@ -135,14 +134,10 @@ public:
     terminal.Clear();
   }
   void Reboot() {
-#ifdef KOBO
-    system("reboot");
-#endif
+    KoboReboot();
   }
   void Poweroff() {
-#ifdef KOBO
-    system("poweroff");
-#endif
+    KoboPowerOff();
   }
 
   void TogglePause();
@@ -219,16 +214,12 @@ LogMonitorGlue::ToggleWifi()
 
   if (wifi) {
     wifi_button->SetCaption(("Wifi OFF"));
-#ifdef KOBO
-    system("/mnt/onboard/XCSoar/wifiup.sh");
-#endif
+    KoboWifiOn();
     //    device.SetMonitor(nullptr);
   } else {
     wifi_button->SetCaption(("Wifi ON"));
     //    device.SetMonitor(&bridge);
-#ifdef KOBO
-    system("/mnt/onboard/XCSoar/wifidown.sh");
-#endif
+    KoboWifiOff();
   }
 }
 
@@ -247,10 +238,8 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());
 
-#ifdef KOBO
   // must be down at start
-  system("/mnt/onboard/XCSoar/wifidown.sh");
-#endif
+  KoboWifiOff();
 
   dialog.ShowModal();
 
@@ -290,29 +279,19 @@ int main(int argc, char **argv)
 {
   int action = Main();
 
-#ifdef KOBO
   if (action == LAUNCH_NICKEL) {
     printf("launch nickel\n");
     fflush(stdout);
 
-    const char cmd[] = "/mnt/onboard/XCSoar/restartnickel.sh";
-    execl(cmd, cmd, nullptr);
+    KoboExecNickel();
   } else if (action == LAUNCH_XCSOAR) {
     printf("launch xcsoar\n");
     fflush(stdout);
 
-    char buffer[256], *cmd = buffer;
-    if (readlink("/proc/self/exe", buffer, sizeof(buffer)) > 0)
-      ReplaceBaseName(buffer, "xcsoar");
-    else
-      cmd = "/mnt/onboard/XCSoar/xcsoar";
-
-    execl(cmd, cmd, nullptr);
+    KoboExecXCSoar();
   } else {
     fflush(stdout);
   }
-#else
-  (void)action;
-#endif
+
   return 0;
 }
