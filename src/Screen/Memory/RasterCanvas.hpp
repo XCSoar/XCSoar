@@ -447,12 +447,13 @@ public:
         else
           DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
         last_visible = true;
+        p_last = p_this;
+        code2 = code1;
+        code2_orig = code1_orig;
       } else {
         last_visible = false;
+        p_last = points[i];
       }
-      p_last = p_this;
-      code2 = code1;
-      code2_orig = code1_orig;
     }
 
   }
