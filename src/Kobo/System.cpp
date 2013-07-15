@@ -23,9 +23,31 @@ Copyright_License {
 
 #include "System.hpp"
 #include "OS/PathName.hpp"
+#include "OS/Sleep.h"
+#include "Util/StaticString.hpp"
 
 #include <stdlib.h>
 #include <unistd.h>
+
+#ifdef KOBO
+
+static bool
+InsMod(const char *path)
+{
+  NarrowString<256> buffer;
+  buffer.Format("/sbin/insmod '%s'", path);
+  return system(buffer) == 0;
+}
+
+static bool
+RmMod(const char *name)
+{
+  NarrowString<256> buffer;
+  buffer.Format("/sbin/rmmod '%s'", name);
+  return system(buffer) == 0;
+}
+
+#endif
 
 bool
 KoboReboot()
@@ -51,7 +73,20 @@ bool
 KoboWifiOn()
 {
 #ifdef KOBO
-  return system("/mnt/onboard/XCSoar/wifiup.sh") == 0;
+  InsMod("/drivers/ntx508/wifi/sdio_wifi_pwr.ko");
+  InsMod("/drivers/ntx508/wifi/dhd.ko");
+
+  Sleep(2000);
+
+  system("/sbin/ifconfig eth0 up");
+  system("/bin/wlarm_le -i eth0 up");
+  system("/bin/wpa_supplicant -s -i eth0 -c /etc/wpa_supplicant/wpa_supplicant.conf -C /var/run/wpa_supplicant -B");
+
+  Sleep(2000);
+
+  system("/sbin/udhcpc -S -i eth0 -s /etc/udhcpc.d/default.script -t15 -T10 -A3 -f -q");
+
+  return true;
 #else
   return false;
 #endif
@@ -61,7 +96,14 @@ bool
 KoboWifiOff()
 {
 #ifdef KOBO
-  return system("/mnt/onboard/XCSoar/wifidown.sh") == 0;
+  system("/usr/bin/killall wpa_supplicant");
+  system("/bin/wlarm_le -i eth0 down");
+  system("/sbin/ifconfig eth0 down");
+
+  RmMod("dhd");
+  RmMod("sdio_wifi_pwr");
+
+  return true;
 #else
   return false;
 #endif
