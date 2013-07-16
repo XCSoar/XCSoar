@@ -1016,7 +1016,6 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_LDADD = $(FAKE_LIBS)
 KEY_CODE_DUMPER_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -1593,7 +1592,6 @@ LOAD_IMAGE_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/LoadImage.cpp
 LOAD_IMAGE_LDADD = $(FAKE_LIBS)
 LOAD_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -1606,7 +1604,6 @@ VIEW_IMAGE_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/ViewImage.cpp
 VIEW_IMAGE_LDADD = $(FAKE_LIBS)
 VIEW_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -1619,7 +1616,6 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
 RUN_CANVAS_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -1791,7 +1787,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1825,7 +1820,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1848,7 +1842,6 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
 RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -1873,7 +1866,6 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -1897,7 +1889,6 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -1919,7 +1910,6 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -1941,7 +1931,6 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -1964,7 +1953,6 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -1980,7 +1968,6 @@ RUN_TERMINAL_SOURCES = \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
@@ -1999,7 +1986,6 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
 RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
@@ -2015,7 +2001,6 @@ RUN_CHART_RENDERER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunChartRenderer.cpp
@@ -2037,7 +2022,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
@@ -2053,7 +2037,6 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
 RUN_HORIZON_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
@@ -2085,7 +2068,6 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
@@ -2103,7 +2085,6 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSettings.cpp \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFAITriangleSectorRenderer.cpp
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_LDADD = $(RESOURCE_BINARY)
@@ -2118,7 +2099,6 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
 RUN_PROGRESS_WINDOW_LDADD = $(RESOURCE_BINARY)
@@ -2140,7 +2120,6 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
@@ -2310,7 +2289,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
@@ -2355,7 +2333,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
@@ -2430,7 +2407,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -2446,7 +2422,6 @@ $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 TEST_NOTIFY_SOURCES = \
 	$(SRC)/Event/Idle.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp
 TEST_NOTIFY_DEPENDS = EVENT SCREEN MATH UTIL ASYNC OS THREAD
