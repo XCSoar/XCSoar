@@ -496,6 +496,7 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
+TARGET_STATIC ?= n
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=5
@@ -516,7 +517,7 @@ ifeq ($(HAVE_WIN32),y)
   else
   ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
-    TARGET_LDFLAGS += -static
+    TARGET_STATIC = y
   endif
   endif
 endif
@@ -536,7 +537,7 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += -L$(KOBO)/lib
-  TARGET_LDFLAGS += -static
+  TARGET_STATIC = y
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -575,6 +576,10 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc -lm
   TARGET_LDLIBS += -llog
   TARGET_LDADD += $(ANDROID_GCC_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION2)/$(ANDROID_ABI_SUBDIR)/libgcc.a
+endif
+
+ifeq ($(TARGET_STATIC),y)
+  TARGET_LDFLAGS += -static
 endif
 
 ######## output files
