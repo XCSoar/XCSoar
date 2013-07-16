@@ -79,9 +79,6 @@ include $(topdir)/build/fb.mk
 include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/sdl.mk
-include $(topdir)/build/freetype.mk
-include $(topdir)/build/libpng.mk
-include $(topdir)/build/libjpeg.mk
 endif
 
 include $(topdir)/build/flags.mk
@@ -124,6 +121,9 @@ include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/libevent.mk
+include $(topdir)/build/freetype.mk
+include $(topdir)/build/libpng.mk
+include $(topdir)/build/libjpeg.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk
