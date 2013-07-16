@@ -41,6 +41,15 @@
 #include "Event/GDI/Loop.hpp"
 #endif
 
+#ifdef USE_FB
+#include "Hardware/Display.hpp"
+bool
+Display::Rotate(DisplaySettings::Orientation orientation)
+{
+  return false;
+}
+#endif
+
 #ifdef USE_EGL
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
