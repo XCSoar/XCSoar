@@ -261,18 +261,24 @@ int main(int argc, char **argv)
   while (true) {
     int action = Main();
 
-    if (action == LAUNCH_NICKEL) {
+    switch (action) {
+    case LAUNCH_NICKEL:
       printf("launch nickel\n");
       fflush(stdout);
 
       KoboExecNickel();
       return EXIT_FAILURE;
-    } else if (action == LAUNCH_XCSOAR) {
+
+    case LAUNCH_XCSOAR:
       printf("launch xcsoar\n");
       fflush(stdout);
 
       KoboRunXCSoar();
-    } else
+      /* return to menu after XCSoar quits */
+      break;
+
+    default:
       return EXIT_SUCCESS;
+    }
   }
 }
