@@ -114,10 +114,8 @@ class LogMonitorGlue : public ActionListener {
   WndForm &dialog;
 
 public:
-  int last_action;
-
   LogMonitorGlue(const TerminalLook &look, WndForm &_dialog)
-    :terminal(look), bridge(terminal), paused(false), wifi(false), dialog(_dialog),last_action(0) {}
+    :terminal(look), bridge(terminal), paused(false), wifi(false), dialog(_dialog) {}
 
   ~LogMonitorGlue() {
     // device.SetMonitor(nullptr);
@@ -143,23 +141,8 @@ public:
   void TogglePause();
   void ToggleWifi();
 
-  void LaunchXCSoar() {
-    dialog.SetModalResult(mrOK);
-  }
-
-  void LaunchNickel() {
-    dialog.SetModalResult(mrOK);
-  }
-
   virtual void OnAction(int id) override {
-    last_action = id;
     switch (id) {
-    case LAUNCH_XCSOAR:
-      LaunchXCSoar();
-      break;
-    case LAUNCH_NICKEL:
-      LaunchNickel();
-      break;
     case CLEAR:
       Clear();
       break;
@@ -184,8 +167,8 @@ public:
 void
 LogMonitorGlue::CreateButtons(ButtonPanel &buttons)
 {
-  buttons.Add(("XCSoar"), *this, LAUNCH_XCSOAR);
-  buttons.Add(("Nickel"), *this, LAUNCH_NICKEL);
+  buttons.Add(("XCSoar"), dialog, LAUNCH_XCSOAR);
+  buttons.Add(("Nickel"), dialog, LAUNCH_NICKEL);
   buttons.Add(("Clear"), *this, CLEAR);
   pause_button = buttons.Add(("Pause"), *this, PAUSE);
   wifi_button = buttons.Add(("Wifi ON"), *this, WIFI);
@@ -241,9 +224,7 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
   // must be down at start
   KoboWifiOff();
 
-  dialog.ShowModal();
-
-  return glue.last_action;
+  return dialog.ShowModal();
 
   // /proc/kmsg
 }
