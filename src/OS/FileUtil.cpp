@@ -400,6 +400,9 @@ File::WriteExisting(const TCHAR *path, const char *value)
 #ifdef O_NOCTTY
   flags |= O_NOCTTY;
 #endif
+#ifdef O_CLOEXEC
+  flags |= O_CLOEXEC;
+#endif
 
   int fd = _topen(path, flags);
   if (fd < 0)
