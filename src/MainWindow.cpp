@@ -34,7 +34,6 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Blank.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
 #include "Components.hpp"

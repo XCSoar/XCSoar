@@ -24,7 +24,6 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
-#include "Screen/Blank.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
