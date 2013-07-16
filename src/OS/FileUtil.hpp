@@ -182,6 +182,15 @@ namespace File
   bool Touch(const TCHAR *path);
 
   /**
+   * Read data from a file and null-terminate it.
+   *
+   * @param size the size of the buffer, including space for the null
+   * terminator
+   * @return false on error
+   */
+  bool ReadString(const TCHAR *path, char *buffer, size_t size);
+
+  /**
    * Write a string to an existing file.  It will never create a new
    * file or truncate the existing file.  This function may be useful
    * for writing sysfs files.

@@ -78,11 +78,9 @@ unsigned SystemLoadCPU()
 
 #elif defined(__linux__) || defined(ANDROID)
 
-#include <algorithm>
+#include "OS/FileUtil.hpp"
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+#include <algorithm>
 
 struct cpu {
   long busy, idle;
@@ -91,17 +89,9 @@ struct cpu {
 unsigned
 SystemLoadCPU()
 {
-  int fd = open("/proc/stat", O_RDONLY|O_NOCTTY);
-  if (fd < 0)
-    return (unsigned)-1;
-
   char line[256];
-  ssize_t nbytes = read(fd, line, sizeof(line) - 1);
-  close(fd);
-  if (nbytes <= 0)
+  if (!File::ReadString("/proc/stat", line, sizeof(line)))
     return (unsigned)-1;
-
-  line[nbytes] = 0;
 
   static constexpr unsigned HISTORY_LENGTH = 5;
   static cpu history[HISTORY_LENGTH];
