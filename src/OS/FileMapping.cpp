@@ -40,7 +40,15 @@ FileMapping::FileMapping(const TCHAR *path)
 #endif
 {
 #ifdef HAVE_POSIX
-  int fd = open(path, O_RDONLY);
+  int flags = O_RDONLY;
+#ifdef O_NOCTTY
+  flags |= O_NOCTTY;
+#endif
+#ifdef O_CLOEXEC
+  flags |= O_CLOEXEC;
+#endif
+
+  int fd = open(path, flags);
   if (fd < 0)
     return;
 
