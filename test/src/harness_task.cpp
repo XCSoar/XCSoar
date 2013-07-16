@@ -144,7 +144,8 @@ void test_note(const char* text)
   }
 }
 
-void task_report(TaskManager& task_manager, const char* text)
+void
+task_report(const TaskManager &task_manager, const char *text)
 {
   AircraftState ac;
   if (verbose) {
