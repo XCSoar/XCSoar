@@ -131,12 +131,6 @@ public:
   void Clear() {
     terminal.Clear();
   }
-  void Reboot() {
-    KoboReboot();
-  }
-  void Poweroff() {
-    KoboPowerOff();
-  }
 
   void TogglePause();
   void ToggleWifi();
@@ -145,12 +139,6 @@ public:
     switch (id) {
     case CLEAR:
       Clear();
-      break;
-    case REBOOT:
-      Reboot();
-      break;
-    case POWEROFF:
-      Poweroff();
       break;
     case PAUSE:
       TogglePause();
@@ -172,8 +160,8 @@ LogMonitorGlue::CreateButtons(ButtonPanel &buttons)
   buttons.Add(("Clear"), *this, CLEAR);
   pause_button = buttons.Add(("Pause"), *this, PAUSE);
   wifi_button = buttons.Add(("Wifi ON"), *this, WIFI);
-  buttons.Add(("Reboot"), *this, REBOOT);
-  buttons.Add(("Poweroff"), *this, POWEROFF);
+  buttons.Add(("Reboot"), dialog, REBOOT);
+  buttons.Add(("Poweroff"), dialog, POWEROFF);
 }
 
 void
@@ -276,6 +264,14 @@ int main(int argc, char **argv)
       KoboRunXCSoar();
       /* return to menu after XCSoar quits */
       break;
+
+    case REBOOT:
+      KoboReboot();
+      return EXIT_SUCCESS;
+
+    case POWEROFF:
+      KoboPowerOff();
+      return EXIT_SUCCESS;
 
     default:
       return EXIT_SUCCESS;
