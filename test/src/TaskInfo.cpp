@@ -17,6 +17,7 @@ LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour)
   des.Deserialise(*task);
   delete node;
 
+  task->UpdateGeometry();
   if (!task->CheckTask()) {
     fprintf(stderr, "Failed to load task from XML\n");
     delete task;

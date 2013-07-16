@@ -160,6 +160,7 @@ task_report(const TaskManager &task_manager, const char *text)
 
       case TaskType::ORDERED:
         printf("# task is ordered\n");
+        task_manager.GetFactory().UpdateGeometry();
         break;
 
       case TaskType::ABORT:
@@ -301,6 +302,8 @@ bool test_task_manip(TaskManager& task_manager,
 
   task_report(task_manager, "# checking task\n");
 
+  fact.UpdateStatsGeometry();
+
   if (task_manager.CheckOrderedTask()) {
     task_manager.Reset();
     task_manager.SetActiveTaskPoint(0);
@@ -340,6 +343,7 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   AbstractTaskFactory &fact = task_manager.GetFactory();
   fact.MutateTPsToTaskType();
+  fact.UpdateStatsGeometry();
 
   test_note("# checking mutated start..\n");
   if (!fact.IsValidStartType(fact.GetType(task_manager.GetOrderedTask().GetTaskPoint(0))))
@@ -472,6 +476,8 @@ bool test_task_mixed(TaskManager& task_manager,
     return false;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task\n");
   if (!fact.Validate()) {
     return false;
@@ -533,6 +539,8 @@ bool test_task_fai(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task\n");
   if (!fact.Validate()) {
@@ -604,6 +612,8 @@ bool test_task_aat(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -665,6 +675,8 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -718,6 +730,8 @@ bool test_task_or(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -762,6 +776,8 @@ bool test_task_dash(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -805,6 +821,8 @@ bool test_task_fg(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
@@ -887,6 +905,8 @@ bool test_task_random(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# validating task..\n");
   if (!fact.Validate()) {
@@ -976,6 +996,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   test_note("# validating task..\n");
   if (!fact.Validate()) {

@@ -62,12 +62,15 @@ bool test_task_bad(TaskManager& task_manager,
   ok (!bfact.CreateIntermediate(s,*wp),"bad intermediate type (after task change)",0);
 
   bfact.Remove(1);
+  bfact.UpdateStatsGeometry();
   ok (bfact.Validate(),"ok with one tp",0);
 
   bfact.Remove(1);
+  bfact.UpdateStatsGeometry();
   ok (bfact.Validate(),"ok with zero tps (just start and finish)",0);
 
   ok (bfact.Remove(task_manager.TaskSize()-1,false),"remove finish manually",0);
+  bfact.UpdateStatsGeometry();
   ok (!bfact.Validate(),"aat is invalid (no finish)",0);
 
   return true;

@@ -321,6 +321,7 @@ TaskManagerDialog::Commit()
   if (!modified)
     return true;
 
+  task->UpdateStatsGeometry();
   modified |= task->GetFactory().CheckAddFinish();
 
   if (!task->TaskSize() || task->CheckTask()) {

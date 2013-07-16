@@ -1104,3 +1104,15 @@ AbstractTaskFactory::AppendOptionalStart(const OrderedTaskPoint &new_tp,
   // ok to add directly
   return task.AppendOptionalStart(new_tp);
 }
+
+void
+AbstractTaskFactory::UpdateStatsGeometry()
+{
+  task.UpdateStatsGeometry();
+}
+
+void
+AbstractTaskFactory::UpdateGeometry()
+{
+  task.UpdateGeometry();
+}

@@ -627,7 +627,6 @@ OrderedTask::Remove(const unsigned position)
   if (position)
     SetNeighbours(position - 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -642,7 +641,6 @@ OrderedTask::RemoveOptionalStart(const unsigned position)
   if (task_points.size()>1)
     SetNeighbours(0);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -665,7 +663,6 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
   }
 
   SetNeighbours(task_points.size() - 1);
-  UpdateGeometry();
   return true;
 }
 
@@ -676,7 +673,6 @@ OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
                                                ordered_settings));
   if (task_points.size() > 1)
     SetNeighbours(0);
-  UpdateGeometry();
   return true;
 }
 
@@ -706,7 +702,6 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
   SetNeighbours(position);
   SetNeighbours(position + 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -735,7 +730,6 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
   if (position + 1 < task_points.size())
     SetNeighbours(position + 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -756,7 +750,6 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
                                                  ordered_settings);
 
   SetNeighbours(0);
-  UpdateGeometry();
   return true;
 }
 

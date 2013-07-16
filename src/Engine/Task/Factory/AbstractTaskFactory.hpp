@@ -114,6 +114,16 @@ public:
   }
 
   /**
+   * Wrapper for OrderedTask::UpdateStatsGeometry().
+   */
+  void UpdateStatsGeometry();
+
+  /**
+   * Wrapper for OrderedTask::UpdateGeometry().
+   */
+  void UpdateGeometry();
+
+  /**
    * Updates the #OrderedTaskSettings with values required by
    * the factory type of the task.
    */

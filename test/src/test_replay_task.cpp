@@ -25,6 +25,7 @@ static OrderedTask* task_load(OrderedTask* task) {
 
   Deserialiser des(*root);
   des.Deserialise(*task);
+  task->UpdateStatsGeometry();
   if (task->CheckTask()) {
     delete root;
     return task;
