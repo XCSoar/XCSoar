@@ -119,7 +119,7 @@ KoboExecNickel()
 }
 
 void
-KoboExecXCSoar()
+KoboRunXCSoar()
 {
 #ifdef KOBO
   char buffer[256];
@@ -130,6 +130,6 @@ KoboExecXCSoar()
   else
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
-  execl(cmd, cmd, nullptr);
+  system(cmd);
 #endif
 }

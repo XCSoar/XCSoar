@@ -40,6 +40,6 @@ void
 KoboExecNickel();
 
 void
-KoboExecXCSoar();
+KoboRunXCSoar();
 
 #endif
