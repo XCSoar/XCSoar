@@ -6,7 +6,7 @@ $(TARGET_BIN_DIR)/XCSoar.inf: build/cab.inf $(TARGET_BIN_DIR)/dirstamp
 $(addprefix $(TARGET_BIN_DIR)/,$(THIRDPARTY_DLLS)): $(TARGET_BIN_DIR)/%.dll: $(THIRDPARTY_DLL_DIR)/%.dll
 	$(Q)cp $< $@
 
-$(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB: $(TARGET_BIN_DIR)/XCSoar.inf $(OUTPUTS) \
+$(TARGET_BIN_DIR)/XCSoar.$(PCPU).CAB: $(TARGET_BIN_DIR)/XCSoar.inf $(XCSOAR_BIN) \
 	$(XCSOARSETUP_DLL) $(XCSOARLAUNCH_DLL) \
 	$(MO_FILES) \
 	$(addprefix $(TARGET_BIN_DIR)/,$(THIRDPARTY_DLLS))
