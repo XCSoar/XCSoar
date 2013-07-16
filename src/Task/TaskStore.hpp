@@ -29,8 +29,6 @@ Copyright_License {
 
 #include <vector>
 
-#include <tchar.h>
-
 struct TaskBehaviour;
 class OrderedTask;
 
