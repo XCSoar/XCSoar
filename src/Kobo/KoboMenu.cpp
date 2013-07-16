@@ -265,14 +265,15 @@ int main(int argc, char **argv)
     fflush(stdout);
 
     KoboExecNickel();
+    return EXIT_FAILURE;
   } else if (action == LAUNCH_XCSOAR) {
     printf("launch xcsoar\n");
     fflush(stdout);
 
     KoboExecXCSoar();
+    return EXIT_FAILURE;
   } else {
     fflush(stdout);
+    return EXIT_SUCCESS;
   }
-
-  return 0;
 }
