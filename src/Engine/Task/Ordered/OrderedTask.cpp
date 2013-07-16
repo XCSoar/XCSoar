@@ -103,7 +103,7 @@ UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
 }
 
 void
-OrderedTask::UpdateGeometry()
+OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
@@ -111,6 +111,12 @@ OrderedTask::UpdateGeometry()
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
   stats.has_optional_starts = stats.task_valid && HasOptionalStarts();
+}
+
+void
+OrderedTask::UpdateGeometry()
+{
+  UpdateStatsGeometry();
 
   if (!HasStart() || !task_points[0])
     return;

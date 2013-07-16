@@ -359,6 +359,11 @@ public:
   void CheckDuplicateWaypoints(Waypoints& waypoints);
 
   /**
+   * Update TaskStats::{task_valid, has_targets, is_mat, has_optional_starts}.
+   */
+  void UpdateStatsGeometry();
+
+  /**
    * Update internal geometric state of task points.
    * Typically called after task geometry or observation zones are modified.
    *
