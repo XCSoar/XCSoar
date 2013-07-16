@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Language/Language.hpp"
 
-#ifndef HAVE_POSIX
+#ifndef USE_LIBINTL
 
 const TCHAR *
 gettext(const TCHAR *text)
