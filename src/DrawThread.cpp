@@ -26,6 +26,8 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
+#include "Hardware/CPU.hpp"
+
 /**
  * Main loop of the DrawThread
  */
@@ -68,6 +70,10 @@ DrawThread::Run()
         continue;
       }
 
+#ifdef HAVE_CPU_FREQUENCY
+      const ScopeLockCPU cpu;
+#endif
+
       // Get data from the DeviceBlackboard
       map.ExchangeBlackboard();
 
@@ -86,6 +92,10 @@ DrawThread::Run()
       /* got the "stop" trigger? */
       if (CheckStoppedOrSuspended())
         break;
+
+#ifdef HAVE_CPU_FREQUENCY
+      const ScopeLockCPU cpu;
+#endif
 
       bounds_dirty = map.Idle();
     }

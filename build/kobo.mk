@@ -1,5 +1,6 @@
 KOBO_MENU_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
+	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \

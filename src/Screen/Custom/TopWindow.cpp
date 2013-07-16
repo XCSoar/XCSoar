@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
+#include "Hardware/CPU.hpp"
 
 #ifdef USE_MEMORY_CANVAS
 #include "Screen/Memory/Canvas.hpp"
@@ -69,6 +70,10 @@ TopWindow::Fullscreen()
 void
 TopWindow::Expose()
 {
+#ifdef HAVE_CPU_FREQUENCY
+  const ScopeLockCPU cpu;
+#endif
+
 #ifdef USE_MEMORY_CANVAS
   Canvas canvas = screen->Lock();
   if (canvas.IsDefined()) {

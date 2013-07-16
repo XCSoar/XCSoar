@@ -514,6 +514,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
+	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Hardware/DisplayGlue.cpp \
 	$(SRC)/Hardware/Vibrator.cpp \
