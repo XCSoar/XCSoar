@@ -90,5 +90,7 @@ int main(int argc, char **argv)
 
   ok1(quit);
 
+  thread.Join();
+
   return exit_status();
 }
