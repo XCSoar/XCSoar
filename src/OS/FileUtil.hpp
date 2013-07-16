@@ -196,6 +196,14 @@ namespace File
    * for writing sysfs files.
    */
   bool WriteExisting(const TCHAR *path, const char *value);
+
+  /**
+   * Create a file with the given name, and leave it empty.
+   *
+   * @return true on success, false on error or if the file already
+   * exists
+   */
+  bool CreateExclusive(const TCHAR *path);
 }
 
 #endif

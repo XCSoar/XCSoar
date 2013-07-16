@@ -440,3 +440,24 @@ File::WriteExisting(const TCHAR *path, const char *value)
   ssize_t nbytes = write(fd, value, length);
   return close(fd) == 0 && nbytes == (ssize_t)length;
 }
+
+bool
+File::CreateExclusive(const TCHAR *path)
+{
+  assert(path != nullptr);
+
+  int flags = O_WRONLY | O_CREAT | O_EXCL;
+#ifdef O_NOCTTY
+  flags |= O_NOCTTY;
+#endif
+#ifdef O_CLOEXEC
+  flags |= O_CLOEXEC;
+#endif
+
+  int fd = _topen(path, flags, 0666);
+  if (fd < 0)
+    return false;
+
+  close(fd);
+  return true;
+}
