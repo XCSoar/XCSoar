@@ -22,12 +22,14 @@ Copyright_License {
 */
 
 #include "System.hpp"
+#include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "OS/Sleep.h"
 #include "Util/StaticString.hpp"
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #ifdef KOBO
 
@@ -113,8 +115,15 @@ void
 KoboExecNickel()
 {
 #ifdef KOBO
-  const char *cmd = "/mnt/onboard/XCSoar/restartnickel.sh";
-  execl(cmd, cmd, nullptr);
+  /* our "rcS" will call the original Kobo "rcS" if start_nickel
+     exists */
+  mkdir("/mnt/onboard/XCSoarData", 0777);
+  mkdir("/mnt/onboard/XCSoarData/kobo", 0777);
+  File::CreateExclusive("/mnt/onboard/XCSoarData/kobo/start_nickel");
+
+  /* unfortunately, a bug in the Kobo applications forces us to reboot
+     the Kobo at this point */
+  KoboReboot();
 #endif
 }
 
