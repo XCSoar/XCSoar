@@ -50,6 +50,8 @@ Display::Rotate(DisplaySettings::Orientation orientation)
 }
 #endif
 
+#ifndef KOBO
+
 #ifdef USE_EGL
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
@@ -58,6 +60,8 @@ void TopWindow::Refresh() {}
 
 #if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 bool TopWindow::OnEvent(const Event &event) { return false; }
+#endif
+
 #endif
 
 static bool quit;
