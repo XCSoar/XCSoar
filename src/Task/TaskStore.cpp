@@ -113,6 +113,8 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 
   if (task == NULL)
     valid = false;
+  else
+    task->UpdateGeometry();
 
   return task;
 }
