@@ -39,7 +39,8 @@ class ObservationZonePoint;
  * @param text A buffer written to
  * @param linebreaks True if each summary item should be separated with a line break
  */
-void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
+void
+OrderedTaskSummary(const OrderedTask *task, TCHAR *text, bool linebreaks);
 
 void
 OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,

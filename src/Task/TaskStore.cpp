@@ -101,7 +101,7 @@ TaskStore::Item::~Item()
     delete task;
 }
 
-OrderedTask*
+const OrderedTask *
 TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 {
   if (task != NULL)
@@ -129,7 +129,7 @@ TaskStore::GetPath(unsigned index) const
   return store[index].GetPath();
 }
 
-OrderedTask* 
+const OrderedTask *
 TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour)
 {
   return store[index].GetTask(task_behaviour);
