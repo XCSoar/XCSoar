@@ -537,8 +537,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   rc.right = rc.left + size.cx;
   rc.bottom = rc.top + size.cy;
 
-  bool expert = (StringToIntDflt(node.GetAttribute(_T("Expert")), 0) == 1);
-
   // PropertyControl (WndProperty)
   if (StringIsEqual(node.GetName(), _T("Edit"))) {
     // Determine the width of the caption field
@@ -771,9 +769,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   if (window != NULL) {
     if (!StringIsEmpty(name))
       form.AddNamed(name, window);
-
-    if (expert)
-      form.AddExpert(window);
 
     form.AddDestruct(window);
   }
