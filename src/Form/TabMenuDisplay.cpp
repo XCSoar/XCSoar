@@ -313,7 +313,7 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
   canvas.Select(*look.button.font);
 
-  const unsigned caption_style = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
+  const unsigned caption_style = DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
   PaintMainMenuItems(canvas, caption_style);
