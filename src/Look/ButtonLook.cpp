@@ -44,11 +44,12 @@ ButtonLook::Initialise(const Font &_font)
   focused.foreground_brush.Set(focused.foreground_color);
   focused.background_color = COLOR_XCSOAR_DARK;
   if (!HasColors()) {
-    standard.light_border_pen.Set(1, LightColor(COLOR_DARK_GRAY));
-    standard.dark_border_pen.Set(1, COLOR_BLACK);
+    focused.light_border_pen.Set(1, LightColor(COLOR_DARK_GRAY));
+    focused.dark_border_pen.Set(1, COLOR_BLACK);
   } else {
     focused.light_border_pen.Set(1, LightColor(focused.background_color));
-    focused.dark_border_pen.Set(1, DarkColor(focused.background_color));  }
+    focused.dark_border_pen.Set(1, DarkColor(focused.background_color));
+  }
 
   disabled.color = COLOR_GRAY;
   disabled.brush.Set(disabled.color);
