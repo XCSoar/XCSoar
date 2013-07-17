@@ -273,6 +273,20 @@ HasColors()
 }
 
 /**
+ * Is dithering black&white used on the display?
+ */
+constexpr
+static inline bool
+IsDithered()
+{
+#ifdef DITHER
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Does this device have an electronic paper screen, such as E-Ink?
  * Such screens need some special cases, because they are very slow
  * and show ghosting.  Animations shall be disabled when this function
