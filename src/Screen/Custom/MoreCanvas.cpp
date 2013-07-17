@@ -162,6 +162,10 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
       }
 
       TextAutoClipped(x, y, duplicated + i);
+
+      if (format & DT_UNDERLINE)
+        DrawHLine(x, x + CalcTextWidth(duplicated + i),
+                  y + font->GetAscentHeight() + 1, text_color);
     }
     y += skip;
     if (y >= rc->bottom)
