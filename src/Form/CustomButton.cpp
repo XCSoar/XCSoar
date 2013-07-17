@@ -62,7 +62,6 @@ WndCustomButton::OnPaint(Canvas &canvas)
   canvas.DrawFormattedText(&rc, caption.c_str(), GetTextStyle());
 #else
   unsigned s = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-  canvas.Select(*(look.button.font));
   canvas.DrawFormattedText(&rc, caption.c_str(), s);
 #endif
 }
