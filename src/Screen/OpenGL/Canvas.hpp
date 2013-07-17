@@ -266,6 +266,11 @@ public:
    */
   void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
 
+  /**
+   * Draw a solid thin horizontal line.
+   */
+  void DrawHLine(int x1, int x2, int y, Color color);
+
   void DrawLine(int ax, int ay, int bx, int by);
 
   void DrawLine(const RasterPoint a, const RasterPoint b) {

@@ -127,6 +127,13 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 }
 
 void
+Canvas::DrawHLine(int x1, int x2, int y, Color color)
+{
+  SDLRasterCanvas canvas(buffer);
+  canvas.DrawHLine(x1, x2, y, canvas.Import(color));
+}
+
+void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   const unsigned thickness = pen.GetWidth();

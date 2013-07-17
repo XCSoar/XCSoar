@@ -192,6 +192,16 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
 }
 
 void
+Canvas::DrawHLine(int x1, int x2, int y, Color color)
+{
+  color.Set();
+
+  const GLvalue v[] = { GLvalue(x1), GLvalue(y), GLvalue(x2), GLvalue(y) };
+  glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+}
+
+void
 Canvas::DrawLine(int ax, int ay, int bx, int by)
 {
   pen.Bind();
