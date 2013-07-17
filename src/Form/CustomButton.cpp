@@ -55,8 +55,6 @@ WndCustomButton::OnPaint(Canvas &canvas)
   PixelRect rc = GetClientRect();
 
   canvas.Select(*look.button.font);
-
-  canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();
 
 #ifdef USE_GDI
