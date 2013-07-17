@@ -133,7 +133,12 @@ WndButton::OnPaint(Canvas &canvas)
   canvas.Select(*(look.button.font));
 
 #ifndef USE_GDI
-  canvas.DrawFormattedText(&rc, caption.c_str(), GetTextStyle());
+  unsigned style = GetTextStyle();
+
+  if (IsDithered())
+    style |= DT_UNDERLINE;
+
+  canvas.DrawFormattedText(&rc, caption.c_str(), style);
 #else
   unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
 
