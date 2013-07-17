@@ -76,8 +76,8 @@ gcc_pure
 static bool
 IsCircleVisible(const Canvas &canvas, int x, int y, unsigned radius)
 {
-  return int(x + radius) < 0 || unsigned(x) >= canvas.GetWidth() + radius ||
-    int(y + radius) < 0 || unsigned(y) >= canvas.GetHeight() + radius;
+  return int(x + radius) >= 0 && unsigned(x) < canvas.GetWidth() + radius &&
+    int(y + radius) >= 0 && unsigned(y) < canvas.GetHeight() + radius;
 }
 
 bool
