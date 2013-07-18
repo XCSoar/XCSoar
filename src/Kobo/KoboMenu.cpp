@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "../test/src/Fonts.hpp"
 #include "UIGlobals.hpp"
 #include "Form/Form.hpp"
@@ -199,6 +200,19 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
      const TerminalLook &terminal_look)
 {
   WndForm dialog(dialog_look);
+#ifdef USE_LINUX_INPUT
+  dialog.SetKeyDownFunction([&dialog](unsigned key_code){
+      switch (key_code) {
+      case KEY_POWER:
+        dialog.SetModalResult(POWEROFF);
+        return true;
+
+      default:
+        return false;
+      }
+    });
+#endif
+
   dialog.Create(main_window, _T("Kobo XCSoar Launcher"));
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
