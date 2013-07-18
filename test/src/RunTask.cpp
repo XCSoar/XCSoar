@@ -40,6 +40,7 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
 
   AircraftState last_as;
   bool last_as_valid = false;
+  bool task_finished = false;
 
   unsigned active_taskpoint_index(-1);
 
@@ -83,6 +84,13 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
       FormatISO8601(time_buffer, basic.date_time_utc);
       printf("%s active_taskpoint_index=%u\n",
              time_buffer, active_taskpoint_index);
+    }
+
+    const TaskStats &task_stats = task.GetStats();
+    if (task_finished != task_stats.task_finished) {
+      task_finished = true;
+      FormatISO8601(time_buffer, basic.date_time_utc);
+      printf("%s task finished\n", time_buffer);
     }
 
     last_as = current_as;
