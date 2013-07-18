@@ -183,7 +183,7 @@ struct NEONBytesTwice {
     const uint8x8_t a1 = vld1_u8(q);
     const uint8x8x2_t a2 = vzip_u8(a1, a1);
 
-    const uint8x8_t b1 = vld1_u8(q);
+    const uint8x8_t b1 = vld1_u8(q + 8);
     const uint8x8x2_t b2 = vzip_u8(b1, b1);
 
     vst2_u8(p, a2);
