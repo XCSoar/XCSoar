@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/FileDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
 
+class EventQueue;
 class IOLoop;
 struct Event;
 
@@ -34,6 +35,7 @@ struct Event;
  * A driver for Linux input devices (/dev/input/event*).
  */
 class LinuxInputDevice final : private FileEventHandler {
+  EventQueue &queue;
   IOLoop &io_loop;
 
   unsigned x, y;
@@ -44,8 +46,8 @@ class LinuxInputDevice final : private FileEventHandler {
   FileDescriptor fd;
 
 public:
-  explicit LinuxInputDevice(IOLoop &_io_loop)
-    :io_loop(_io_loop),
+  explicit LinuxInputDevice(EventQueue &_queue, IOLoop &_io_loop)
+    :queue(_queue), io_loop(_io_loop),
      x(0), y(0) {}
 
   ~LinuxInputDevice() {

@@ -28,10 +28,12 @@ EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
 #ifndef NON_INTERACTIVE
-#ifndef KOBO
    keyboard(*this, io_loop),
-#endif
+#ifdef KOBO
+   mouse(*this, io_loop),
+#else
    mouse(io_loop),
+#endif
 #endif
    running(true)
 {
@@ -42,6 +44,9 @@ EventQueue::EventQueue()
 
 #ifndef NON_INTERACTIVE
 #ifdef KOBO
+  /* power button */
+  keyboard.Open("/dev/input/event0");
+
   /* Kobo touch screen */
   mouse.Open("/dev/input/event1");
 #else

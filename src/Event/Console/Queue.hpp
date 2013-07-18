@@ -57,6 +57,7 @@ class EventQueue final : private SignalListener {
 
 #ifndef NON_INTERACTIVE
 #ifdef KOBO
+  LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
