@@ -480,16 +480,12 @@ WndForm::ShowModal()
       }
 #endif
 
-#ifdef KOBO
-#ifdef ENABLE_SDL
-      if (event.GetKeyCode() == SDLK_POWER) {
+#ifdef USE_LINUX_INPUT
+      if (event.GetKeyCode() == KEY_POWER) {
         /* the Kobo power button closes the modal dialog */
         modal_result = mrCancel;
         continue;
       }
-#else
-  // TODO: check the console key code
-#endif
 #endif
     }
 
