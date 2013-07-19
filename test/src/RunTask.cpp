@@ -104,14 +104,14 @@ Run(DebugReplay &replay, OrderedTask &task, const GlidePolar &glide_polar)
          task_stats.task_finished);
 
   printf("task elapsed %ds\n", (int)task_stats.total.time_elapsed);
-  printf("task speed %1.1f kph\n",
+  printf("task speed %1.2f kph\n",
          double(task_stats.total.travelled.GetSpeed() * fixed(3.6)));
-  printf("travelled distance %1.1f km\n",
+  printf("travelled distance %1.3f km\n",
          double(task_stats.total.travelled.GetDistance() / 1000));
-  printf("scored distance %1.1f km\n",
+  printf("scored distance %1.3f km\n",
          double(task_stats.distance_scored / 1000));
   if (positive(task_stats.total.time_elapsed))
-    printf("scored speed %1.1f kph\n",
+    printf("scored speed %1.2f kph\n",
            double(task_stats.distance_scored
                   / task_stats.total.time_elapsed * fixed(3.6)));
 }
