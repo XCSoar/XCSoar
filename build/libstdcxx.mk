@@ -16,7 +16,7 @@ ifneq ($(LIBCXX),)
 else
   # using GNU libstdc++
 
-  ifeq ($(DEBUG),y)
+  ifeq ($(DEBUG_GLIBCXX),y)
     LIBSTDCXX_CPPFLAGS += -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
   endif
 endif
