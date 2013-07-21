@@ -27,7 +27,12 @@ then
     rm ${DEST}
     exit 0
 fi
-
+if [ "`uname -s`" == "Darwin" ];
+then
+    LOCATOR="mdfind -name"
+else
+    LOCATOR="locate"
+fi
 
 # Current OS X distributions come with GCC 4.2, which is too old.
 
@@ -61,7 +66,7 @@ echo "Using toolchain in ${LOCAL_TCPREFIX} for UNIX targets."
 
 # Building for Android 
 
-ANDROID_SDK=${ANDROID_SDK-`locate android-sdk-macosx | head -n1`}
+ANDROID_SDK=${ANDROID_SDK-`${LOCATOR} android-sdk-macosx | head -n1`}
 if [ -d ${ANDROID_SDK} ]; then
   echo "Using Android SDK: ${ANDROID_SDK}"
   ANDROID_NDK=${ANDROID_NDK-${ANDROID_SDK}/../android-ndk-*}
