@@ -86,12 +86,12 @@ if [ -d ${ANDROID_SDK} ]; then
 
   if [ ! -d "${ANDROID_SDK_PLATFORM}" ]; then
       echo "Android SDK platform $ANDROID_PLATFORM not found.
-  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  Install platform with ${ANDROID_SDK}/tools/android 
   or adapt targets.mk in order to build for Android."
   fi
   if [ ! -d "${ANDROID_NDK_PLATFORM}" ]; then
       echo "Android NDK platform ${ANDROID_PLATFORM} not found.  
-  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  Install platform with ${ANDROID_SDK}/tools/android 
   or adapt targets.mk in order to build for Android.
   The NDK platform must match the SDK one.  It is set in targets.mk."
   fi
