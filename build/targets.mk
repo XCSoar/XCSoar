@@ -318,7 +318,11 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(HOST_IS_DARWIN),y)
-    ANDROID_HOST_TAG = darwin-x86
+    ifeq ($(UNAME_M),x86_64)
+      ANDROID_HOST_TAG = darwin-x86_64
+    else
+      ANDROID_HOST_TAG = darwin-x86
+    endif
   else ifeq ($(HOST_IS_WIN32),y)
     ANDROID_HOST_TAG = windows
   else ifeq ($(UNAME_M),x86_64)
