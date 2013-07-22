@@ -21,14 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_DISPLAY_H
-#define XCSOAR_HARDWARE_DISPLAY_H
+#ifndef XCSOAR_HARDWARE_BLANK_DISPLAY_HPP
+#define XCSOAR_HARDWARE_BLANK_DISPLAY_HPP
 
 namespace Display {
-#ifdef _WIN32_WCE
-  bool SetBacklight();
+#if defined(_WIN32_WCE) && !defined(GNAV)
+#define HAVE_HARDWARE_BLANK
+  bool BlankSupported();
+  bool Blank(bool blank);
 #else
-  static inline bool SetBacklight() {
+  static inline bool BlankSupported() {
+    return false;
+  }
+
+  static inline bool Blank(bool blank) {
     return false;
   }
 #endif

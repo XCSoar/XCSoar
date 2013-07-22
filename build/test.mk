@@ -856,7 +856,7 @@ DUMP_HEX_COLOR_DEPENDS = SCREEN EVENT UTIL
 $(eval $(call link-program,DumpHexColor,DUMP_HEX_COLOR))
 
 DEBUG_DISPLAY_SOURCES = \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/DebugDisplay.cpp
 DEBUG_DISPLAY_DEPENDS = IO
@@ -1011,7 +1011,8 @@ $(eval $(call link-program,AddChecksum,ADD_CHECKSUM))
 
 KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
@@ -1587,7 +1588,8 @@ FLIGHT_PATH_DEPENDS = UTIL GEO MATH TIME
 $(eval $(call link-program,FlightPath,FLIGHT_PATH))
 
 LOAD_IMAGE_SOURCES = \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
@@ -1600,7 +1602,8 @@ $(eval $(call link-program,LoadImage,LOAD_IMAGE))
 
 VIEW_IMAGE_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
@@ -1613,7 +1616,8 @@ $(eval $(call link-program,ViewImage,VIEW_IMAGE))
 
 RUN_CANVAS_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
@@ -1702,7 +1706,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
@@ -1818,7 +1823,8 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
@@ -1840,7 +1846,8 @@ $(eval $(call link-program,RunDialog,RUN_DIALOG))
 
 RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1862,7 +1869,8 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1887,7 +1895,8 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1911,7 +1920,8 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1933,7 +1943,8 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1955,7 +1966,8 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -1975,7 +1987,8 @@ $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
@@ -1992,7 +2005,8 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Projection/Projection.cpp \
@@ -2010,7 +2024,8 @@ RUN_CHART_RENDERER_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
@@ -2025,7 +2040,8 @@ $(eval $(call link-program,RunChartRenderer,RUN_CHART_RENDERER))
 RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
@@ -2046,7 +2062,8 @@ $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -2062,7 +2079,8 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
@@ -2095,7 +2113,8 @@ $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Projection/Projection.cpp \
@@ -2113,7 +2132,8 @@ $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
@@ -2131,7 +2151,8 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -2199,7 +2220,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
@@ -2348,7 +2370,8 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
@@ -2405,7 +2428,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Hardware/CPU.cpp \
-	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Task/TaskFile.cpp \

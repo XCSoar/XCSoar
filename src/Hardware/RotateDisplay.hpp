@@ -21,17 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_DISPLAY_H
-#define XCSOAR_HARDWARE_DISPLAY_H
+#ifndef XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
+#define XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
+
+#include "DisplaySettings.hpp"
+#include "Compiler.h"
 
 namespace Display {
-#ifdef _WIN32_WCE
-  bool SetBacklight();
-#else
-  static inline bool SetBacklight() {
-    return false;
-  }
-#endif
+  void RotateInitialize();
+
+  gcc_const
+  bool RotateSupported();
+
+  /**
+   * Change the orientation of the screen.
+   */
+  bool
+  Rotate(DisplaySettings::Orientation orientation);
+
+  /**
+   * Restores the display rotation setting.
+   */
+  bool
+  RotateRestore();
 }
 
 #endif

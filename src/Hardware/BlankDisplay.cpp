@@ -21,17 +21,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_DISPLAY_H
-#define XCSOAR_HARDWARE_DISPLAY_H
+#include "BlankDisplay.hpp"
 
-namespace Display {
-#ifdef _WIN32_WCE
-  bool SetBacklight();
-#else
-  static inline bool SetBacklight() {
-    return false;
-  }
-#endif
+#ifdef HAVE_HARDWARE_BLANK
+
+#include "Screen/RootDC.hpp"
+#include "VideoPower.h"
+
+#include <windows.h>
+
+bool
+Display::BlankSupported()
+{
+  RootDC dc;
+  int i = SETPOWERMANAGEMENT;
+  return ExtEscape(dc, QUERYESCSUPPORT,
+                   sizeof(i), (LPCSTR)&i, 0, NULL) > 0;
 }
 
-#endif
+bool
+Display::Blank(bool blank)
+{
+  RootDC dc;
+
+  VIDEO_POWER_MANAGEMENT vpm;
+  vpm.Length = sizeof(vpm);
+  vpm.DPMSVersion = 0x0001;
+  vpm.PowerState = blank ? VideoPowerOff : VideoPowerOn;
+
+  return ExtEscape(dc, SETPOWERMANAGEMENT,
+                   sizeof(vpm), (LPCSTR)&vpm, 0, NULL) > 0;
+}
+
+#endif /* HAVE_HARDWARE_BLANK */

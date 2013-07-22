@@ -516,6 +516,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/BlankDisplay.cpp \
 	$(SRC)/Hardware/DisplayGlue.cpp \
 	$(SRC)/Hardware/Vibrator.cpp \
 	$(SRC)/Language/MOFile.cpp \

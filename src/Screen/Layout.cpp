@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Layout.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
 #include <algorithm>
 

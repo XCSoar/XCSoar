@@ -77,7 +77,7 @@ Copyright_License {
 #include "IO/FileCache.hpp"
 #include "Net/DownloadManager.hpp"
 #include "Hardware/AltairControl.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Compiler.h"
 #include "NMEA/Aircraft.hpp"

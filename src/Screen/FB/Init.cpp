@@ -29,7 +29,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef KOBO
-#include "Hardware/Display.hpp"
+#include "Hardware/RotateDisplay.hpp"
 #endif
 
 #ifdef USE_FREETYPE

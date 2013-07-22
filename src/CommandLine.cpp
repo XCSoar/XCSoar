@@ -25,7 +25,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "OS/Args.hpp"
 #include "OS/ConvertPathName.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
 #include "Asset.hpp"

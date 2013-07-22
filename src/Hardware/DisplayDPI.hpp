@@ -21,17 +21,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_DISPLAY_H
-#define XCSOAR_HARDWARE_DISPLAY_H
+#ifndef XCSOAR_HARDWARE_DISPLAY_DPI_HPP
+#define XCSOAR_HARDWARE_DISPLAY_DPI_HPP
+
+#include "Compiler.h"
 
 namespace Display {
-#ifdef _WIN32_WCE
-  bool SetBacklight();
-#else
-  static inline bool SetBacklight() {
-    return false;
-  }
-#endif
+  /**
+   * Sets the displays x/y DPI
+   * @param x Number of pixels per logical inch along the screen width
+   * @param y Number of pixels per logical inch along the screen height
+   */
+  void SetDPI(unsigned x_dpi, unsigned y_dpi);
+
+  /**
+   * Returns the number of pixels per logical inch along the screen width
+   * @return Number of pixels per logical inch along the screen width
+   */
+  gcc_const
+  unsigned GetXDPI();
+  /**
+   * Returns the number of pixels per logical inch along the screen height
+   * @return Number of pixels per logical inch along the screen height
+   */
+  gcc_const
+  unsigned GetYDPI();
 }
 
 #endif

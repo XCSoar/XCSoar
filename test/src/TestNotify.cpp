@@ -42,7 +42,7 @@
 #endif
 
 #ifdef USE_FB
-#include "Hardware/Display.hpp"
+#include "Hardware/RotateDisplay.hpp"
 bool
 Display::Rotate(DisplaySettings::Orientation orientation)
 {

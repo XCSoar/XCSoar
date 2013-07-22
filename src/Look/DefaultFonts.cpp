@@ -26,7 +26,7 @@ Copyright_License {
 #include "GlobalFonts.hpp"
 #include "FontSettings.hpp"
 #include "StandardFonts.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
