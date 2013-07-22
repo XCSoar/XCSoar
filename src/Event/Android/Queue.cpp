@@ -24,6 +24,10 @@ Copyright_License {
 #include "Queue.hpp"
 #include "OS/Clock.hpp"
 
+EventQueue::EventQueue()
+ :now_us(MonotonicClockUS()),
+  running(true) {}
+
 void
 EventQueue::Push(const Event &event)
 {
@@ -52,7 +56,7 @@ EventQueue::Pop(Event &event)
 }
 
 bool
-EventQueue::Generate(Event &event, uint64_t now_us)
+EventQueue::Generate(Event &event)
 {
   Timer *timer = timers.Pop(now_us);
   if (timer != nullptr) {
@@ -71,9 +75,11 @@ EventQueue::Wait(Event &event)
   if (!running)
     return false;
 
+  if (events.empty())
+    now_us = MonotonicClockUS();
+
   while (events.empty()) {
-    const uint64_t now_us = MonotonicClockUS();
-    if (Generate(event, now_us))
+    if (Generate(event))
       return true;
 
     const int64_t timeout_us = timers.GetTimeoutUS(now_us);
@@ -81,6 +87,8 @@ EventQueue::Wait(Event &event)
       cond.Wait(mutex);
     else
       cond.Wait(mutex, (timeout_us + 999) / 1000);
+
+    now_us = MonotonicClockUS();
   }
 
   event = events.front();

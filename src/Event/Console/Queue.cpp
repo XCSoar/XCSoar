@@ -27,6 +27,7 @@ Copyright_License {
 EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
+   now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
    keyboard(*this, io_loop),
 #ifdef KOBO
@@ -102,7 +103,7 @@ EventQueue::Push(const Event &event)
 int
 EventQueue::GetTimeout() const
 {
-  int64_t timeout = timers.GetTimeoutUS(MonotonicClockUS());
+  int64_t timeout = timers.GetTimeoutUS(now_us);
   return timeout > 0
     ? int((timeout + 999) / 1000)
     : int(timeout);
@@ -112,7 +113,9 @@ void
 EventQueue::Poll()
 {
   io_loop.Lock();
+  now_us = MonotonicClockUS();
   io_loop.Wait(GetTimeout());
+  now_us = MonotonicClockUS();
   io_loop.Dispatch();
   io_loop.Unlock();
 }
@@ -127,7 +130,7 @@ EventQueue::PushKeyPress(unsigned key_code)
 bool
 EventQueue::Generate(Event &event)
 {
-  Timer *timer = timers.Pop(MonotonicClockUS());
+  Timer *timer = timers.Pop(now_us);
   if (timer != nullptr) {
     event.type = Event::TIMER;
     event.ptr = timer;
