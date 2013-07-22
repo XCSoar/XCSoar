@@ -65,6 +65,16 @@ public:
   TimerQueue &operator=(const TimerQueue &other) = delete;
 
   /**
+   * Does the specified time stamp occur before the first scheduled
+   * timer?  If this returns true, then adding a timer at the
+   * specified time stamp will require adjusting the poll timeout,
+   * i.e. the event thread must be woken up.
+   */
+  bool IsBefore(uint64_t t) const {
+    return timers.empty() || t < timers.begin()->due_us;
+  }
+
+  /**
    * Returns the number of microseconds until the next timer expires,
    * 0 if at least one has already expired, -1 if there are no timers.
    *
