@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.5 - not yet released
+* tasks
+  - remove keyhole from the BGA start sector zone
 
 Version 6.6.4 - 2013/07/11
 * map
