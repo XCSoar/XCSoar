@@ -41,6 +41,17 @@
 #include "Event/GDI/Loop.hpp"
 #endif
 
+#ifdef USE_FB
+#include "Hardware/RotateDisplay.hpp"
+bool
+Display::Rotate(DisplaySettings::Orientation orientation)
+{
+  return false;
+}
+#endif
+
+#ifndef KOBO
+
 #ifdef USE_EGL
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
@@ -49,6 +60,8 @@ void TopWindow::Refresh() {}
 
 #if defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
 bool TopWindow::OnEvent(const Event &event) { return false; }
+#endif
+
 #endif
 
 static bool quit;
@@ -89,6 +102,8 @@ int main(int argc, char **argv)
     loop.Dispatch(event);
 
   ok1(quit);
+
+  thread.Join();
 
   return exit_status();
 }

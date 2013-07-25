@@ -103,7 +103,7 @@ UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
 }
 
 void
-OrderedTask::UpdateGeometry()
+OrderedTask::UpdateStatsGeometry()
 {
   ScanStartFinish();
 
@@ -111,6 +111,12 @@ OrderedTask::UpdateGeometry()
   stats.has_targets = stats.task_valid && HasTargets();
   stats.is_mat = GetFactoryType() == TaskFactoryType::MAT;
   stats.has_optional_starts = stats.task_valid && HasOptionalStarts();
+}
+
+void
+OrderedTask::UpdateGeometry()
+{
+  UpdateStatsGeometry();
 
   if (!HasStart() || !task_points[0])
     return;
@@ -177,6 +183,25 @@ OrderedTask::ScanLegStartTime()
 inline fixed
 OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
 {
+  if (full && location.IsValid() && last_min_location.IsValid()) {
+    const TaskWaypoint *active = GetActiveTaskPoint();
+    if (active != nullptr) {
+      const GeoPoint &target = active->GetWaypoint().location;
+      const unsigned last_distance =
+        (unsigned)last_min_location.Distance(target);
+      const unsigned cur_distance =
+        (unsigned)location.Distance(target);
+
+      /* skip this call if the distance to the active task point has
+         changed by less than 5%, because we don't expect any relevant
+         changes */
+      if (last_distance >= 2000 && cur_distance >= 2000 &&
+          last_distance * 20 < cur_distance * 21 &&
+          cur_distance * 20 < last_distance * 21)
+        full = false;
+    }
+  }
+
   if (full) {
     if (dijkstra_min == NULL)
       dijkstra_min = new TaskDijkstraMin();
@@ -621,7 +646,6 @@ OrderedTask::Remove(const unsigned position)
   if (position)
     SetNeighbours(position - 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -636,7 +660,6 @@ OrderedTask::RemoveOptionalStart(const unsigned position)
   if (task_points.size()>1)
     SetNeighbours(0);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -659,7 +682,6 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
   }
 
   SetNeighbours(task_points.size() - 1);
-  UpdateGeometry();
   return true;
 }
 
@@ -670,7 +692,6 @@ OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
                                                ordered_settings));
   if (task_points.size() > 1)
     SetNeighbours(0);
-  UpdateGeometry();
   return true;
 }
 
@@ -700,7 +721,6 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
   SetNeighbours(position);
   SetNeighbours(position + 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -729,7 +749,6 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
   if (position + 1 < task_points.size())
     SetNeighbours(position + 1);
 
-  UpdateGeometry();
   return true;
 }
 
@@ -750,7 +769,6 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
                                                  ordered_settings);
 
   SetNeighbours(0);
-  UpdateGeometry();
   return true;
 }
 

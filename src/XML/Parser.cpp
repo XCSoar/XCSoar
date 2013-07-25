@@ -252,7 +252,6 @@ XML::GetNextToken(Parser *pXML)
   // Cache the current string pointer
   lpXML = pXML->lpXML;
   result.pStr = &lpXML[pXML->nIndex - 1];
-  temp_ch = 0;
 
   switch (ch) {
     // Check for quotes

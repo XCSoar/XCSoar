@@ -1,0 +1,14 @@
+#
+#  XCSoar Glide Computer - http://www.xcsoar.org/
+#  Copyright (C) 2000-2013 The XCSoar Project
+#
+
+# This inittab has been installed by XCSoar.  It launches a menu that
+# allows the user to choose between XCSoar and Nickel (the original
+# Kobo software)
+
+::sysinit:/opt/xcsoar/bin/rcS
+::respawn:/sbin/getty -L ttymxc0 115200 vt100
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
+::restart:/sbin/init

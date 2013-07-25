@@ -25,7 +25,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "LogFile.hpp"

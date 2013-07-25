@@ -56,7 +56,7 @@ protected:
   bool tab_stop, control_parent;
   bool double_clicks;
   bool has_border;
-  int text_style;
+  unsigned text_style;
 
 public:
   constexpr
@@ -197,7 +197,7 @@ private:
 
 private:
   const Font *font;
-  int text_style;
+  unsigned text_style;
 
   bool tab_stop, control_parent;
 
@@ -344,7 +344,7 @@ public:
     return GetTop() + GetHeight();
   }
 
-  int GetTextStyle() const {
+  unsigned GetTextStyle() const {
     return text_style;
   }
 #else /* USE_GDI */

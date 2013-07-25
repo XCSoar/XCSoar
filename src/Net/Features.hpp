@@ -29,7 +29,7 @@ Copyright_License {
 #define HAVE_WININET
 #endif
 
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID) && !defined(__APPLE__) && !defined(KOBO)
+#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID) && !defined(__APPLE__)
 #define HAVE_HTTP
 #define HAVE_CURL
 #endif

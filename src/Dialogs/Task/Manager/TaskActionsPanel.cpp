@@ -48,7 +48,10 @@ static TaskActionsPanel *instance;
 void
 TaskActionsPanel::SaveTask()
 {
-  (*active_task)->GetFactory().CheckAddFinish();
+  AbstractTaskFactory &factory = (*active_task)->GetFactory();
+  factory.UpdateStatsGeometry();
+  if (factory.CheckAddFinish())
+    factory.UpdateGeometry();
 
   if ((*active_task)->CheckTask()) {
     if (!OrderedTaskSave(**active_task))

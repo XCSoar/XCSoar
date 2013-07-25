@@ -45,7 +45,9 @@ endif
 # during installation (the Debian package is explicitly stripped), and
 # we often need the debug symbols while developing.
 ifeq ($$(TARGET),UNIX)
+ifeq ($$(TARGET_IS_KOBO),n) # .. but do strip Kobo binaries
 $(2)_STRIP := n
+endif
 endif
 
 ifeq ($$($(2)_STRIP),y)

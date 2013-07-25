@@ -32,6 +32,9 @@ struct AirspaceWarningConfig
   /** Warning time before airspace entry */
   unsigned warning_time;
 
+  /** Enable repetitive sound */
+  bool repetitive_sound;
+
   /** Time an acknowledgement will persist before a warning is reissued */
   unsigned acknowledgement_time;
 

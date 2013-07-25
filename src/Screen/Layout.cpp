@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "Screen/Layout.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
 #include <algorithm>
-
-using std::min;
-using std::max;
 
 namespace Layout
 {
@@ -55,10 +52,10 @@ Layout::Initialize(PixelSize new_size)
 
   const unsigned x_dpi = Display::GetXDPI();
 
-  unsigned minsize = min(width, height);
+  unsigned minsize = std::min(width, height);
   // always start w/ shortest dimension
   // square should be shrunk
-  scale_1024 = max(1024U, minsize * 1024 / (square ? 320 : 240));
+  scale_1024 = std::max(1024U, minsize * 1024 / (square ? 320 : 240));
   scale = scale_1024 / 1024;
 
   small_scale = (scale_1024 - 1024) / 2 + 1024;

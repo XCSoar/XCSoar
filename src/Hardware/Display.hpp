@@ -24,24 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_HARDWARE_DISPLAY_H
 #define XCSOAR_HARDWARE_DISPLAY_H
 
-#include "DisplaySettings.hpp"
-#include "Compiler.h"
-
 namespace Display {
-#if defined(_WIN32_WCE) && !defined(GNAV)
-#define HAVE_HARDWARE_BLANK
-  bool BlankSupported();
-  bool Blank(bool blank);
-#else
-  static inline bool BlankSupported() {
-    return false;
-  }
-
-  static inline bool Blank(bool blank) {
-    return false;
-  }
-#endif
-
 #ifdef _WIN32_WCE
   bool SetBacklight();
 #else
@@ -49,43 +32,6 @@ namespace Display {
     return false;
   }
 #endif
-
-  void RotateInitialize();
-
-  gcc_const
-  bool RotateSupported();
-
-  /**
-   * Change the orientation of the screen.
-   */
-  bool
-  Rotate(DisplaySettings::Orientation orientation);
-
-  /**
-   * Restores the display rotation setting.
-   */
-  bool
-  RotateRestore();
-
-  /**
-   * Sets the displays x/y DPI
-   * @param x Number of pixels per logical inch along the screen width
-   * @param y Number of pixels per logical inch along the screen height
-   */
-  void SetDPI(unsigned x_dpi, unsigned y_dpi);
-
-  /**
-   * Returns the number of pixels per logical inch along the screen width
-   * @return Number of pixels per logical inch along the screen width
-   */
-  gcc_const
-  unsigned GetXDPI();
-  /**
-   * Returns the number of pixels per logical inch along the screen height
-   * @return Number of pixels per logical inch along the screen height
-   */
-  gcc_const
-  unsigned GetYDPI();
 }
 
 #endif

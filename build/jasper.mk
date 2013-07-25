@@ -16,15 +16,14 @@ JASPER_SOURCES = \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c
 
-JASPER_CFLAGS = -Wno-type-limits
+JASPER_CFLAGS_INTERNAL = -Wno-type-limits
 
 ifneq ($(CLANG),y)
 ifneq ($(TARGET),CYGWIN)
-JASPER_CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
+JASPER_CFLAGS_INTERNAL += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
 endif
 endif
 
-JASPER_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS)
 JASPER_CPPFLAGS = -I$(JASSRC)/..
 
 $(eval $(call link-library,jasper,JASPER))

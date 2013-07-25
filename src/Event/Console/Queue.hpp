@@ -53,10 +53,16 @@ class Timer;
 class EventQueue final : private SignalListener {
   const ThreadHandle thread;
 
+  /**
+   * The current time after the event thread returned from sleeping.
+   */
+  uint64_t now_us;
+
   IOLoop io_loop;
 
 #ifndef NON_INTERACTIVE
 #ifdef KOBO
+  LinuxInputDevice keyboard;
   LinuxInputDevice mouse;
   RotatePointer rotate_mouse;
 #else
@@ -106,6 +112,17 @@ public:
 #endif
 
 #endif /* !NON_INTERACTIVE */
+
+  /**
+   * Returns the monotonic clock in microseconds.  This method is only
+   * available in the main thread.
+   */
+  gcc_pure
+  uint64_t ClockUS() const {
+    assert(thread.IsInside());
+
+    return now_us;
+  }
 
   void Quit() {
     running = false;

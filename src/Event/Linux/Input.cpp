@@ -23,9 +23,17 @@ Copyright_License {
 
 #include "Input.hpp"
 #include "Event/Shared/Event.hpp"
+#include "Event/Queue.hpp"
 #include "IO/Async/IOLoop.hpp"
 
 #include <linux/input.h>
+
+#ifdef KEY_DOWN
+#undef KEY_DOWN
+#endif
+#ifdef KEY_UP
+#undef KEY_UP
+#endif
 
 bool
 LinuxInputDevice::Open(const char *path)
@@ -76,7 +84,8 @@ LinuxInputDevice::Read()
           else
             released = true;
         }
-      }
+      } else
+        queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP, e.code));
 
       break;
 

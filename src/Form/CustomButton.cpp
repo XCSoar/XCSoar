@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Asset.hpp"
 
 void
 WndCustomButton::OnPaint(Canvas &canvas)
@@ -55,14 +55,16 @@ WndCustomButton::OnPaint(Canvas &canvas)
   PixelRect rc = GetClientRect();
 
   canvas.Select(*look.button.font);
-
-  canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();
-#ifndef USE_GDI
-  canvas.DrawFormattedText(&rc, caption.c_str(), GetTextStyle());
+
+#ifdef USE_GDI
+  const unsigned text_style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
 #else
-  unsigned s = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-  canvas.Select(*(look.button.font));
-  canvas.DrawFormattedText(&rc, caption.c_str(), s);
+  unsigned text_style = GetTextStyle();
+
+  if (IsDithered())
+    text_style |= DT_UNDERLINE;
 #endif
+
+  canvas.DrawFormattedText(&rc, caption.c_str(), text_style);
 }

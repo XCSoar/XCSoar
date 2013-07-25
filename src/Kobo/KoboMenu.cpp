@@ -25,16 +25,14 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Fonts.hpp"
+#include "Screen/Key.h"
+#include "../test/src/Fonts.hpp"
 #include "UIGlobals.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
 #include "Screen/Canvas.hpp"
-#include "NMEA/Checksum.hpp"
-#include "Util/StaticString.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "Look/TerminalLook.hpp"
 #include "Event/DelayedNotify.hpp"
@@ -42,10 +40,10 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "IO/DataHandler.hpp"
+#include "System.hpp"
 
 #include <algorithm>
 #include <stdio.h>
-#include <unistd.h>
 
 enum Buttons {
   LAUNCH_XCSOAR = 100,
@@ -117,10 +115,8 @@ class LogMonitorGlue : public ActionListener {
   WndForm &dialog;
 
 public:
-  int last_action;
-
   LogMonitorGlue(const TerminalLook &look, WndForm &_dialog)
-    :terminal(look), bridge(terminal), paused(false), wifi(false), dialog(_dialog),last_action(0) {}
+    :terminal(look), bridge(terminal), paused(false), wifi(false), dialog(_dialog) {}
 
   ~LogMonitorGlue() {
     // device.SetMonitor(nullptr);
@@ -136,45 +132,14 @@ public:
   void Clear() {
     terminal.Clear();
   }
-  void Reboot() {
-#ifdef KOBO
-    system("reboot");
-#endif
-  }
-  void Poweroff() {
-#ifdef KOBO
-    system("poweroff");
-#endif
-  }
 
   void TogglePause();
   void ToggleWifi();
 
-  void LaunchXCSoar() {
-    dialog.SetModalResult(mrOK);
-  }
-
-  void LaunchNickel() {
-    dialog.SetModalResult(mrOK);
-  }
-
   virtual void OnAction(int id) override {
-    last_action = id;
     switch (id) {
-    case LAUNCH_XCSOAR:
-      LaunchXCSoar();
-      break;
-    case LAUNCH_NICKEL:
-      LaunchNickel();
-      break;
     case CLEAR:
       Clear();
-      break;
-    case REBOOT:
-      Reboot();
-      break;
-    case POWEROFF:
-      Poweroff();
       break;
     case PAUSE:
       TogglePause();
@@ -191,13 +156,13 @@ public:
 void
 LogMonitorGlue::CreateButtons(ButtonPanel &buttons)
 {
-  buttons.Add(("XCSoar"), *this, LAUNCH_XCSOAR);
-  buttons.Add(("Nickel"), *this, LAUNCH_NICKEL);
+  buttons.Add(("XCSoar"), dialog, LAUNCH_XCSOAR);
+  buttons.Add(("Nickel"), dialog, LAUNCH_NICKEL);
   buttons.Add(("Clear"), *this, CLEAR);
   pause_button = buttons.Add(("Pause"), *this, PAUSE);
   wifi_button = buttons.Add(("Wifi ON"), *this, WIFI);
-  buttons.Add(("Reboot"), *this, REBOOT);
-  buttons.Add(("Poweroff"), *this, POWEROFF);
+  buttons.Add(("Reboot"), dialog, REBOOT);
+  buttons.Add(("Poweroff"), dialog, POWEROFF);
 }
 
 void
@@ -221,16 +186,12 @@ LogMonitorGlue::ToggleWifi()
 
   if (wifi) {
     wifi_button->SetCaption(("Wifi OFF"));
-#ifdef KOBO
-    system("/mnt/onboard/XCSoar/wifiup.sh");
-#endif
+    KoboWifiOn();
     //    device.SetMonitor(nullptr);
   } else {
     wifi_button->SetCaption(("Wifi ON"));
     //    device.SetMonitor(&bridge);
-#ifdef KOBO
-    system("/mnt/onboard/XCSoar/wifidown.sh");
-#endif
+    KoboWifiOff();
   }
 }
 
@@ -239,6 +200,19 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
      const TerminalLook &terminal_look)
 {
   WndForm dialog(dialog_look);
+#ifdef USE_LINUX_INPUT
+  dialog.SetKeyDownFunction([&dialog](unsigned key_code){
+      switch (key_code) {
+      case KEY_POWER:
+        dialog.SetModalResult(POWEROFF);
+        return true;
+
+      default:
+        return false;
+      }
+    });
+#endif
+
   dialog.Create(main_window, _T("Kobo XCSoar Launcher"));
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
@@ -249,14 +223,10 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());
 
-#ifdef KOBO
   // must be down at start
-  system("/mnt/onboard/XCSoar/wifidown.sh");
-#endif
+  KoboWifiOff();
 
-  dialog.ShowModal();
-
-  return glue.last_action;
+  return dialog.ShowModal();
 
   // /proc/kmsg
 }
@@ -290,26 +260,35 @@ Main()
 
 int main(int argc, char **argv)
 {
-  int action = Main();
+  while (true) {
+    int action = Main();
 
-#ifdef KOBO
-  if (action == LAUNCH_NICKEL) {
-    printf("launch nickel\n");
-    fflush(stdout);
+    switch (action) {
+    case LAUNCH_NICKEL:
+      printf("launch nickel\n");
+      fflush(stdout);
 
-    const char cmd[] = "/mnt/onboard/XCSoar/restartnickel.sh";
-    execl(cmd, cmd, nullptr);
-  } else if (action == LAUNCH_XCSOAR) {
-    printf("launch xcsoar\n");
-    fflush(stdout);
+      KoboExecNickel();
+      return EXIT_FAILURE;
 
-    const char cmd[] = "/mnt/onboard/XCSoar/xcsoar";
-    execl(cmd, cmd, nullptr);
-  } else {
-    fflush(stdout);
+    case LAUNCH_XCSOAR:
+      printf("launch xcsoar\n");
+      fflush(stdout);
+
+      KoboRunXCSoar();
+      /* return to menu after XCSoar quits */
+      break;
+
+    case REBOOT:
+      KoboReboot();
+      return EXIT_SUCCESS;
+
+    case POWEROFF:
+      KoboPowerOff();
+      return EXIT_SUCCESS;
+
+    default:
+      return EXIT_SUCCESS;
+    }
   }
-#else
-  (void)action;
-#endif
-  return 0;
 }

@@ -79,7 +79,8 @@ bool test_task_bad(TaskManager& task_manager,
 
 void test_note(const char* text);
 
-void task_report(TaskManager& task_manager, const char* text);
+void
+task_report(const TaskManager &task_manager, const char *text);
 
 const char* task_name(int test_num);
 

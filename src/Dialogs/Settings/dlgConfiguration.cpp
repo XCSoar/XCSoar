@@ -163,7 +163,6 @@ OnUserLevel(CheckBoxControl &control)
   const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(ProfileKeys::UserLevel, expert);
-  dialog->FilterAdvanced(expert);
   tab_menu->UpdateLayout();
 }
 
@@ -266,7 +265,6 @@ PrepareConfigurationDialog()
   bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
   CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));
   cb->SetState(expert_mode);
-  dialog->FilterAdvanced(expert_mode);
 
   PrepareConfigurationMenu();
 

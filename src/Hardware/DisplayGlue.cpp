@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DisplayGlue.hpp"
-#include "Display.hpp"
+#include "RotateDisplay.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"

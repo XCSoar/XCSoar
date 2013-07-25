@@ -27,17 +27,22 @@ Copyright_License {
 #include "Thread/Debug.hpp"
 #include "OS/Clock.hpp"
 
+EventQueue::EventQueue()
+  :now_us(MonotonicClockUS()),
+   trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
+
 bool
 EventQueue::Wait(Event &event)
 {
   assert(InMainThread());
+
+  now_us = MonotonicClockUS();
 
   while (true) {
     ::ResetEvent(trigger);
 
     /* invoke all due timers */
 
-    const uint64_t now_us = MonotonicClockUS();
     int64_t timeout_us;
     while (true) {
       timeout_us = timers.GetTimeoutUS(now_us);
@@ -67,6 +72,8 @@ EventQueue::Wait(Event &event)
                                                timeout, QS_ALLEVENTS);
     if (result == 0xffffffff)
       return false;
+
+    now_us = MonotonicClockUS();
   }
 }
 
@@ -94,8 +101,11 @@ EventQueue::AddTimer(Timer &timer, unsigned ms)
 {
   ScopeLock protect(mutex);
 
+  const uint64_t due_us = MonotonicClockUS() + ms * 1000;
   timers.Add(timer, MonotonicClockUS() + ms * 1000);
-  WakeUp();
+
+  if (timers.IsBefore(due_us))
+    WakeUp();
 }
 
 void

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 enum {
-  DT_EXPANDTABS = 0x1,
   DT_LEFT = 0x2,
   DT_NOCLIP = 0x4,
   DT_WORDBREAK = 0x8,
@@ -36,6 +35,7 @@ enum {
   DT_VCENTER = 0x80,
   DT_RIGHT = 0x100,
   DT_CALCRECT = 0x400,
+  DT_UNDERLINE = 0x800,
 };
 
 #endif

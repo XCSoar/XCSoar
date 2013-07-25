@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Canvas.hpp"
+#include "Asset.hpp"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -37,11 +38,13 @@ Canvas::DrawButton(PixelRect rc, bool down)
 {
   const Pen old_pen = pen;
 
-  Color gray = COLOR_LIGHT_GRAY;
+  Color gray = IsDithered()
+    ? COLOR_WHITE
+    : COLOR_LIGHT_GRAY;
   DrawFilledRectangle(rc, gray);
 
-  Pen bright(1, LightColor(gray));
-  Pen dark(1, DarkColor(gray));
+  Pen bright(1, IsDithered() ? COLOR_BLACK : LightColor(gray));
+  Pen dark(1, IsDithered() ? COLOR_BLACK : DarkColor(gray));
 
   Select(down ? dark : bright);
   DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
@@ -162,6 +165,10 @@ Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
       }
 
       TextAutoClipped(x, y, duplicated + i);
+
+      if (format & DT_UNDERLINE)
+        DrawHLine(x, x + CalcTextWidth(duplicated + i),
+                  y + font->GetAscentHeight() + 1, text_color);
     }
     y += skip;
     if (y >= rc->bottom)

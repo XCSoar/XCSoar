@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+#  XCSoar Glide Computer - http://www.xcsoar.org/
+#  Copyright (C) 2000-2013 The XCSoar Project
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+
+# This script is launched by /etc/inittab on boot.  It initialises the
+# Kobo Mini and launches XCSoar's KoboMenu.
+
+/bin/mount -o remount,noatime,nodiratime /dev/mmcblk0p1 /
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+umask 022
+
+# mount the data partition
+/bin/dosfsck -a -w /dev/mmcblk0p3
+/bin/mkdir -p /mnt/onboard
+/bin/mount -t vfat -o iocharset=utf8 /dev/mmcblk0p3 /mnt/onboard
+/bin/rm -rf /mnt/onboard/fsck* /mnt/onboard/FSCK*
+
+# launch the original Kobo init script if:
+# - there's a pending update
+# - Nickel start was scheduled
+# - the XCSoar installation is broken
+if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
+    -o -f /mnt/onboard/XCSoarData/kobo/start_nickel \
+    -o ! -x /opt/xcsoar/bin/KoboMenu \
+    -o ! -d /mnt/onboard/XCSoarData ]; then
+    rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
+    umount -l /mnt/onboard
+    exec /etc/init.d/rcS
+fi
+
+# prepare file system
+
+/bin/mkdir -p /proc /dev /root /tmp /sys /var/lib /var/log /var/run
+
+/bin/mount -t proc none /proc
+/bin/mount -t tmpfs none -o size=16m /tmp
+/bin/mount -t tmpfs none /dev
+/bin/mount -t tmpfs none -o size=16k /var/lib
+/bin/mount -t tmpfs none -o size=16k /var/log
+/bin/mount -t tmpfs none -o size=128k /var/run
+/bin/mount -t sysfs none -o size=500k /sys
+
+/bin/mknod /dev/null c 1 3
+/bin/mknod /dev/zero c 1 5
+/bin/mknod /dev/random c 1 8
+/bin/mknod /dev/urandom c 1 9
+/bin/mknod /dev/ptmx c 5 2
+/bin/mkdir /dev/input
+/bin/mknod /dev/input/event0 c 13 64
+/bin/mknod /dev/input/event1 c 13 65
+/bin/mknod /dev/fb0 c 29 0
+/bin/mknod /dev/ttymxc0 c 207 16
+/bin/mknod /dev/rtc0 c 254 0
+
+/bin/mknod /dev/mmcblk0 b 179 0
+/bin/mknod /dev/mmcblk0p1 b 179 1
+/bin/mknod /dev/mmcblk0p2 b 179 2
+/bin/mknod /dev/mmcblk0p3 b 179 3
+
+/sbin/hwclock -s -u
+
+# launch user script
+if [ -f /mnt/onboard/XCSoarData/kobo/init.sh ]; then
+    source /mnt/onboard/XCSoarData/kobo/init.sh
+fi
+
+# finally, open the menu
+exec /opt/xcsoar/bin/KoboMenu
+
+# just in case launching KoboMenu fails: try xcsoar
+exec /opt/xcsoar/bin/xcsoar

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Hardware/Display.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
 #ifdef WIN32
 #include <windows.h>

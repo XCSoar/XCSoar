@@ -128,6 +128,8 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  task->UpdateGeometry();
+
   const GlidePolar glide_polar(fixed(1));
 
   Run(*replay, *task, glide_polar);

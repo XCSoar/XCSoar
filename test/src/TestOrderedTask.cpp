@@ -185,6 +185,7 @@ TestFlightToFinish(fixed aircraft_altitude)
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 
@@ -224,6 +225,7 @@ TestSimpleTask()
                         wp3, task_behaviour,
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 
@@ -263,6 +265,7 @@ TestHighFinish()
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 
@@ -309,6 +312,7 @@ TestHighTP()
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 
@@ -347,6 +351,7 @@ TestHighTPFinal()
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 
@@ -384,6 +389,7 @@ TestLowTPFinal()
                         ordered_task_settings.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
 
   ok1(task.CheckTask());
 

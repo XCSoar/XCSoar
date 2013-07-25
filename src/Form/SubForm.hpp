@@ -57,11 +57,6 @@ class SubForm {
    */
   std::map<tstring, Window *, tstring_less_than> name_to_window;
 
-  /**
-   * List of windows which should only be visible in "advanced" mode.
-   */
-  std::forward_list<Window *> expert_windows;
-
 public:
   /**
    * Add a #Window to the "destruct" list: the object will be deleted
@@ -101,32 +96,11 @@ public:
   }
 
   /**
-   * Adds a #Window to the "advanced window list" (#advanced_windows).
-   */
-  void AddExpert(Window *window) {
-    expert_windows.push_front(window);
-  }
-
-  /**
-   * Removes a #Window from the "advanced window list" (#advanced_windows).
-   */
-  void RemoveExpert(Window *window) {
-    expert_windows.remove(window);
-  }
-
-  /**
    * Deletes all windows added to the SubForm's
    * destruct_windows list and clears the SubForm's
    * lists of windows
    */
   void Clear();
-
-  /**
-   * Shows/Hides the ClientControls depending on the given value of advanced and
-   * whether their caption includes an asterisk.
-   * @param advanced True if advanced mode activated
-   */
-  void FilterAdvanced(bool advanced);
 };
 
 #endif

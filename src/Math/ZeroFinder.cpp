@@ -189,7 +189,7 @@ ZeroFinder::find_zero_actual(const fixed xstart)
     if (fabs(new_step) <= tol_act || fabs(fb) < sqrt_epsilon) {
       if (!b_best)
         // call once more
-        fb = f(b);
+        f(b);
 
       // Acceptable approx. is found
       return b;
@@ -352,7 +352,7 @@ ZeroFinder::find_min_actual(const fixed xstart)
     if (fabs(x-middle_range) + Half(range) <= double_tol_act) {
       if (!x_best)
         // call once more
-        fx = f(x);
+        f(x);
 
       // Acceptable approx. is found
       return x;

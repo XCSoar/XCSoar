@@ -311,8 +311,10 @@ bool
 TaskPropertiesPanel::Leave()
 {
   ReadValues();
-  if (orig_taskType != ordered_task->GetFactoryType())
-    ordered_task->GetFactory().MutateTPsToTaskType();
+  if (orig_taskType != ordered_task->GetFactoryType()) {
+    if (ordered_task->GetFactory().MutateTPsToTaskType())
+      ordered_task->UpdateGeometry();
+  }
 
   return true;
 }

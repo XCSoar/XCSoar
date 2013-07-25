@@ -21,8 +21,29 @@ Copyright_License {
 }
 */
 
-#include "Screen/Blank.hpp"
+#ifndef XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
+#define XCSOAR_HARDWARE_ROTATE_DISPLAY_HPP
 
-#ifdef HAVE_BLANK
-unsigned DisplayTimeOut;
+#include "DisplaySettings.hpp"
+#include "Compiler.h"
+
+namespace Display {
+  void RotateInitialize();
+
+  gcc_const
+  bool RotateSupported();
+
+  /**
+   * Change the orientation of the screen.
+   */
+  bool
+  Rotate(DisplaySettings::Orientation orientation);
+
+  /**
+   * Restores the display rotation setting.
+   */
+  bool
+  RotateRestore();
+}
+
 #endif

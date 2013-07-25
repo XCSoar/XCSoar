@@ -144,7 +144,8 @@ void test_note(const char* text)
   }
 }
 
-void task_report(TaskManager& task_manager, const char* text)
+void
+task_report(const TaskManager &task_manager, const char *text)
 {
   AircraftState ac;
   if (verbose) {
@@ -159,6 +160,7 @@ void task_report(TaskManager& task_manager, const char* text)
 
       case TaskType::ORDERED:
         printf("# task is ordered\n");
+        task_manager.GetFactory().UpdateGeometry();
         break;
 
       case TaskType::ABORT:
@@ -300,6 +302,8 @@ bool test_task_manip(TaskManager& task_manager,
 
   task_report(task_manager, "# checking task\n");
 
+  fact.UpdateStatsGeometry();
+
   if (task_manager.CheckOrderedTask()) {
     task_manager.Reset();
     task_manager.SetActiveTaskPoint(0);
@@ -339,6 +343,7 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   AbstractTaskFactory &fact = task_manager.GetFactory();
   fact.MutateTPsToTaskType();
+  fact.UpdateStatsGeometry();
 
   test_note("# checking mutated start..\n");
   if (!fact.IsValidStartType(fact.GetType(task_manager.GetOrderedTask().GetTaskPoint(0))))
@@ -390,9 +395,6 @@ bool test_task_type_manip(TaskManager& task_manager,
 bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
-  const TaskProjection &projection =
-    task_manager.GetOrderedTask().GetTaskProjection();
-
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
@@ -406,7 +408,6 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(5000.0));
-      tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -434,7 +435,6 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
-      tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -459,7 +459,6 @@ bool test_task_mixed(TaskManager& task_manager,
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
-      tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
     delete tp;
@@ -476,6 +475,8 @@ bool test_task_mixed(TaskManager& task_manager,
   } else {
     return false;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task\n");
   if (!fact.Validate()) {
@@ -539,6 +540,8 @@ bool test_task_fai(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task\n");
   if (!fact.Validate()) {
     return false;
@@ -554,9 +557,6 @@ bool test_task_fai(TaskManager& task_manager,
 bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  const TaskProjection &projection =
-    task_manager.GetOrderedTask().GetTaskProjection();
-
   task_manager.SetFactory(TaskFactoryType::AAT);
   AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
@@ -581,7 +581,6 @@ bool test_task_aat(TaskManager& task_manager,
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(30000.0));
-      tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
       return false;
@@ -596,7 +595,6 @@ bool test_task_aat(TaskManager& task_manager,
     if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::CYLINDER) {
       CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
       cz.SetRadius(fixed(40000.0));
-      tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
       return false;
@@ -614,6 +612,8 @@ bool test_task_aat(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -628,9 +628,6 @@ bool test_task_aat(TaskManager& task_manager,
 static bool
 test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
 {
-  const TaskProjection &projection =
-    task_manager.GetOrderedTask().GetTaskProjection();
-
   task_manager.SetFactory(TaskFactoryType::MAT);
   AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
@@ -652,9 +649,6 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   wp = waypoints.LookupId(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::MAT_CYLINDER) {
-      tp->UpdateOZ(projection);
-    }
     if (!fact.Append(*tp,false)) {
       return false;
     }
@@ -665,9 +659,6 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
   wp = waypoints.LookupId(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::MAT_CYLINDER,*wp);
-    if (tp->GetObservationZone().GetShape() == ObservationZone::Shape::MAT_CYLINDER) {
-      tp->UpdateOZ(projection);
-    }
     if (!fact.Append(*tp,false)) {
       return false;
     }
@@ -683,6 +674,8 @@ test_task_mat(TaskManager &task_manager, const Waypoints &waypoints)
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
@@ -737,6 +730,8 @@ bool test_task_or(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -781,6 +776,8 @@ bool test_task_dash(TaskManager& task_manager,
     delete tp;
   }
 
+  fact.UpdateStatsGeometry();
+
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
     return false;
@@ -824,6 +821,8 @@ bool test_task_fg(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# checking task..\n");
   if (!fact.Validate()) {
@@ -906,6 +905,8 @@ bool test_task_random(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   task_report(task_manager, "# validating task..\n");
   if (!fact.Validate()) {
@@ -995,6 +996,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
     }
     delete tp;
   }
+
+  fact.UpdateStatsGeometry();
 
   test_note("# validating task..\n");
   if (!fact.Validate()) {

@@ -66,7 +66,6 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
 
   const Angle angle = Angle::FullCircle() * i / 255;
   Angle dangle = (angle + Angle::Degrees(120)).AsBearing();
-  Angle hangle = dangle.Flipped().AsBearing();
 
   int alt = (angle.ifastsine()) / 7;
   int north = (angle.ifastsine()) / 2 - 200;
@@ -86,7 +85,6 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   alt = (angle.ifastcosine()) / 10;
   north = (dangle.ifastsine()) / 1.20 + 300;
   east = (dangle.ifastcosine()) + 500;
-  track = (int)hangle.Degrees();
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>

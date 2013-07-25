@@ -43,6 +43,7 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Compiler.h"
+#include "Audio/Sound.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -97,10 +98,16 @@ class AirspaceWarningListWidget final
    */
   const AbstractAirspace *focused_airspace;
 
+  /**
+   * Airspace repetitive warning sound interval counter.
+   */
+  unsigned sound_interval_counter;
+
 public:
   AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
     :airspace_warnings(aw),
-     selected_airspace(nullptr), focused_airspace(nullptr)
+     selected_airspace(nullptr), focused_airspace(nullptr),
+     sound_interval_counter(1)
   {}
 
   void CreateButtons(WidgetDialog &buttons) {
@@ -170,6 +177,7 @@ static constexpr Color inside_ack_color(254,100,100);
 static constexpr Color near_ack_color(254,254,100);
 static bool auto_close = true;
 
+
 const AbstractAirspace *
 AirspaceWarningListWidget::GetSelectedAirspace() const
 {
@@ -227,6 +235,7 @@ AirspaceWarningListWidget::OnCursorMoved(unsigned i)
 void
 AirspaceWarningListWidget::Show(const PixelRect &rc)
 {
+  sound_interval_counter = 0;
   ListWidget::Show(rc);
   UpdateList();
   Timer::Schedule(500);
@@ -516,9 +525,35 @@ AirspaceWarningListWidget::UpdateList()
     if (i < 0)
       /* the selection may have changed, update CursorAirspace */
       OnCursorMoved(GetList().GetCursorIndex());
+
+    // Process repetitive sound warnings if they are enabled in config
+    const AirspaceWarningConfig &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    if (warning_config.repetitive_sound) {
+      unsigned tt_closest_airspace = 1000;
+      for (auto i : warning_list) {
+        /* Find smallest time to nearest aispace (cannot always rely
+           on fact that closest airspace should be in the beginning of
+           the list) */
+        if (i.state < AirspaceWarning::WARNING_INSIDE)
+          tt_closest_airspace = std::min(tt_closest_airspace,
+                                         unsigned(i.solution.elapsed_time));
+        else
+          tt_closest_airspace = 0;
+      }
+
+      const unsigned sound_interval =
+        ((tt_closest_airspace * 3 / warning_config.warning_time) + 1) * 2;
+      if (sound_interval_counter >= sound_interval) {
+        PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+        sound_interval_counter = 1;
+      } else
+        ++sound_interval_counter;
+    }
   } else {
     GetList().SetLength(1);
     selected_airspace = NULL;
+    sound_interval_counter = 0;
   }
 
   GetList().Invalidate();

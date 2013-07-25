@@ -24,10 +24,10 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
-#include "Screen/Blank.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Hardware/CPU.hpp"
 
 /**
  * Constructor of the CalculationThread class
@@ -57,6 +57,10 @@ CalculationThread::SetScreenDistanceMeters(fixed new_value)
 void
 CalculationThread::Tick()
 {
+#ifdef HAVE_CPU_FREQUENCY
+  const ScopeLockCPU cpu;
+#endif
+
   const Validity previous_warning =
     glide_computer.Calculated().airspace_warnings.latest;
 

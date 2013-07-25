@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
-#include "Hardware/Display.hpp"
+#include "Hardware/BlankDisplay.hpp"
 #include "UIState.hpp"
 #include "Event/Idle.hpp"
 

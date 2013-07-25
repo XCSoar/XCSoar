@@ -71,6 +71,7 @@ TestAATPoint()
                           task_behaviour,
                           ordered_task_settings.finish_constraints));
   task.SetActiveTaskPoint(1);
+  task.UpdateGeometry();
   ok1(task.CheckTask());
 
   AATPoint &ap = (AATPoint &)task.GetPoint(1);

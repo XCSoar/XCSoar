@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Asset.hpp"
 
 #include <assert.h>
 #include <winuser.h>
@@ -117,7 +118,7 @@ TabDisplay::GetButtonSize(unsigned i) const
 }
 
 void
-TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
+TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
                         const TCHAR *caption, const PixelRect &rc,
                         const Bitmap *bmp, const bool isDown, bool inverse)
 {
@@ -159,6 +160,11 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
                       bitmap_size.cx / 2, 0);
 
   } else {
+#ifndef USE_GDI
+    if (IsDithered())
+      CaptionStyle |= DT_UNDERLINE;
+#endif
+
     canvas.DrawFormattedText(&rcTextFinal, caption, CaptionStyle);
   }
 }
@@ -188,7 +194,7 @@ TabDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(COLOR_BLACK);
   canvas.Select(*look.button.font);
 
-  const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
+  const unsigned CaptionStyle = DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
   const bool is_focused = !HasCursorKeys() || HasFocus();

@@ -29,8 +29,6 @@ Copyright_License {
 
 #include <vector>
 
-#include <tchar.h>
-
 struct TaskBehaviour;
 class OrderedTask;
 
@@ -69,7 +67,7 @@ public:
       return filename.c_str();
     }
 
-    OrderedTask *GetTask(const TaskBehaviour &task_behaviour);
+    const OrderedTask *GetTask(const TaskBehaviour &task_behaviour);
 
     gcc_pure
     bool operator<(const TaskStore::Item &other) const {
@@ -131,7 +129,8 @@ public:
    * @param index TaskStore index of the desired Task
    * @return The task defined by the given index
    */
-  OrderedTask *GetTask(unsigned index, const TaskBehaviour &task_behaviour);
+  const OrderedTask *GetTask(unsigned index,
+                             const TaskBehaviour &task_behaviour);
 };
 
 #endif

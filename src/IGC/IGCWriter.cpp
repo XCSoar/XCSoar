@@ -77,9 +77,9 @@ IGCWriter::WriteLine(const char *line)
   if (dest == nullptr)
     return false;
 
-  char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
+  char *const end = dest + MAX_IGC_BUFF - 1;
 
-  p = CopyIGCString(dest, end, line);
+  char *p = CopyIGCString(dest, end, line);
   *p = '\0';
 
   return CommitLine(dest);

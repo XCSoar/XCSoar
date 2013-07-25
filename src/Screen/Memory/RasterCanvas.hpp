@@ -210,7 +210,7 @@ protected:
       if (code1 & CLIP_LEFT_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(y2 - y1) / float(x2 - x1);
-	  y1 -= x1 * m;
+	  y1 -= int(x1 * m);
 	  code1 = ClipEncodeY(y1);
 	} else {
 	  code1 &= ~CLIP_LEFT_EDGE;
@@ -237,7 +237,7 @@ protected:
       } else if (code1 & CLIP_TOP_EDGE) {
 	if ((y2 != y1) && (x1 != x2)) {
 	  const float m = float(x2 - x1) / float(y2 - y1);
-          x1 -= y1 * m;
+          x1 -= int(y1 * m);
 	  code1 = ClipEncodeX(x1);
 	} else {
 	  code1 &= ~CLIP_TOP_EDGE;
@@ -447,12 +447,13 @@ public:
         else
           DrawLineDirect(p_this.x, p_this.y, p_last.x, p_last.y, color, line_mask);
         last_visible = true;
+        p_last = p_this;
+        code2 = code1;
+        code2_orig = code1_orig;
       } else {
         last_visible = false;
+        p_last = points[i];
       }
-      p_last = p_this;
-      code2 = code1;
-      code2_orig = code1_orig;
     }
 
   }

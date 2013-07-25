@@ -52,12 +52,6 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   Deserialiser des(*root, waypoints);
   des.Deserialise(*task);
 
-  // Check if the task is valid
-  if (!task->CheckTask()) {
-    delete task;
-    return NULL;
-  }
-
   // Return the parsed task
   return task;
 }

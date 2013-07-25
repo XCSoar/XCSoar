@@ -99,9 +99,9 @@ UpdateBatteryInfo()
 #endif
 
 #ifdef KOBO
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+
+#include "OS/FileUtil.hpp"
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -128,19 +128,11 @@ UpdateBatteryInfo()
   Power::External::Status = Power::External::UNKNOWN;
 
   // code shamelessly copied from OS/SystemLoad.cpp
-  int fd = open("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent", 
-		O_RDONLY|O_NOCTTY);
-  if (fd < 0) 
-    return;
-
   char line[256];
-  ssize_t nbytes = read(fd, line, sizeof(line) - 1);
-  close(fd);
-
-  if (nbytes <= 0)
+  if (!File::ReadString("/sys/bus/platform/drivers/pmic_battery/pmic_battery.1/power_supply/mc13892_bat/uevent",
+                        line, sizeof(line)))
     return;
 
-  line[nbytes] = 0;
   char field[80], value[80];
   int n;
   char* ptr = line;

@@ -32,14 +32,18 @@ Copyright_License {
 struct Event;
 
 class EventQueue {
+  /**
+   * The current time after the event thread returned from sleeping.
+   */
+  uint64_t now_us;
+
   HANDLE trigger;
 
   Mutex mutex;
   TimerQueue timers;
 
 public:
-  EventQueue()
-    :trigger(::CreateEvent(nullptr, true, false, nullptr)) {}
+  EventQueue();
 
   ~EventQueue() {
     ::CloseHandle(trigger);

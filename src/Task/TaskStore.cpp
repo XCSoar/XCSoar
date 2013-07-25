@@ -23,14 +23,12 @@ Copyright_License {
 
 #include "Task/TaskStore.hpp"
 #include "Task/TaskFile.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Components.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
 
-#include <cstdio>
 #include <algorithm>
 #include <memory>
 
@@ -103,7 +101,7 @@ TaskStore::Item::~Item()
     delete task;
 }
 
-OrderedTask*
+const OrderedTask *
 TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 {
   if (task != NULL)
@@ -115,6 +113,8 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 
   if (task == NULL)
     valid = false;
+  else
+    task->UpdateGeometry();
 
   return task;
 }
@@ -131,7 +131,7 @@ TaskStore::GetPath(unsigned index) const
   return store[index].GetPath();
 }
 
-OrderedTask* 
+const OrderedTask *
 TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour)
 {
   return store[index].GetTask(task_behaviour);

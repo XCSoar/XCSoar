@@ -24,7 +24,30 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_CONSOLE_KEY_H
 #define XCSOAR_SCREEN_CONSOLE_KEY_H
 
+#ifdef KOBO
+#define USE_LINUX_INPUT
+#endif
+
+#ifdef USE_LINUX_INPUT
+#include <linux/input.h>
+
+/* these macros conflict with Event::Type */
+#undef KEY_UP
+#undef KEY_DOWN
+
+/* wrong meaning */
+#undef KEY_NEXT
+#endif
+
 enum {
+#ifdef USE_LINUX_INPUT
+  KEY_RETURN = KEY_ENTER,
+  KEY_ESCAPE = KEY_ESC,
+  KEY_PRIOR = KEY_PAGEUP,
+  KEY_NEXT = KEY_PAGEDOWN,
+  KEY_UP = 103,
+  KEY_DOWN = 108,
+#else
   KEY_SPACE = ' ',
   KEY_UP = 0403,
   KEY_DOWN = 0402,
@@ -51,6 +74,7 @@ enum {
   KEY_TAB = '\t',
   KEY_BACK = 0407,
   KEY_MENU,
+#endif
   KEY_APP1,
   KEY_APP2,
   KEY_APP3,

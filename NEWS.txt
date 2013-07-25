@@ -64,6 +64,7 @@ Version 6.7 - not yet released
   - default page gesture changed right/left sense according to other xc ui interaction pattern
   - pressing the Escape key in task manager switches to "Close" tab (#2877)
   - separate font for dialogs (#723, #2806)
+  - repetitive airspace warning sound (#2952)
 * map
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)

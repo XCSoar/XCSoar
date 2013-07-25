@@ -27,11 +27,14 @@ Copyright_License {
 EventQueue::EventQueue()
   :SignalListener(io_loop),
    thread(ThreadHandle::GetCurrent()),
+   now_us(MonotonicClockUS()),
 #ifndef NON_INTERACTIVE
-#ifndef KOBO
    keyboard(*this, io_loop),
-#endif
+#ifdef KOBO
+   mouse(*this, io_loop),
+#else
    mouse(io_loop),
+#endif
 #endif
    running(true)
 {
@@ -42,6 +45,9 @@ EventQueue::EventQueue()
 
 #ifndef NON_INTERACTIVE
 #ifdef KOBO
+  /* power button */
+  keyboard.Open("/dev/input/event0");
+
   /* Kobo touch screen */
   mouse.Open("/dev/input/event1");
 #else
@@ -97,7 +103,7 @@ EventQueue::Push(const Event &event)
 int
 EventQueue::GetTimeout() const
 {
-  int64_t timeout = timers.GetTimeoutUS(MonotonicClockUS());
+  int64_t timeout = timers.GetTimeoutUS(now_us);
   return timeout > 0
     ? int((timeout + 999) / 1000)
     : int(timeout);
@@ -107,7 +113,9 @@ void
 EventQueue::Poll()
 {
   io_loop.Lock();
+  now_us = MonotonicClockUS();
   io_loop.Wait(GetTimeout());
+  now_us = MonotonicClockUS();
   io_loop.Dispatch();
   io_loop.Unlock();
 }
@@ -122,7 +130,7 @@ EventQueue::PushKeyPress(unsigned key_code)
 bool
 EventQueue::Generate(Event &event)
 {
-  Timer *timer = timers.Pop(MonotonicClockUS());
+  Timer *timer = timers.Pop(now_us);
   if (timer != nullptr) {
     event.type = Event::TIMER;
     event.ptr = timer;
@@ -254,8 +262,11 @@ EventQueue::AddTimer(Timer &timer, unsigned ms)
 {
   ScopeLock protect(mutex);
 
+  const uint64_t due_us = MonotonicClockUS() + ms * 1000;
   timers.Add(timer, MonotonicClockUS() + ms * 1000);
-  WakeUp();
+
+  if (timers.IsBefore(due_us))
+    WakeUp();
 }
 
 void

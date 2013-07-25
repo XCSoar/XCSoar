@@ -33,7 +33,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    const WindowStyle style)
   :look(_look),
    caption_color(look.text_color),
-   mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
+   mCaptionStyle(DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   text.clear();
 

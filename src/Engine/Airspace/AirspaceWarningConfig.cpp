@@ -28,6 +28,7 @@ void
 AirspaceWarningConfig::SetDefaults()
 {
   warning_time = 30;
+  repetitive_sound = false;
   acknowledgement_time = 30;
   altitude_warning_margin = 100;
 

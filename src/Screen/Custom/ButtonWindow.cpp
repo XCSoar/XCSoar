@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Hardware/Vibrator.hpp"
+#include "Asset.hpp"
 
 void
 ButtonWindow::Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
@@ -172,7 +173,12 @@ ButtonWindow::OnPaint(Canvas &canvas)
 
   canvas.SetTextColor(IsEnabled() ? COLOR_BLACK : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
-  canvas.DrawFormattedText(&rc, text.c_str(), GetTextStyle());
+
+  unsigned style = GetTextStyle();
+  if (IsDithered())
+    style |= DT_UNDERLINE;
+
+  canvas.DrawFormattedText(&rc, text.c_str(), style);
 }
 
 bool
