@@ -79,6 +79,21 @@ public:
     return oz;
   }
 
+  /**
+   * Create a 180 degree sector centered at the inverse of the
+   * outgoing leg.
+   *
+   * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
+   */
+  static SymmetricSectorZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
+    auto *oz =
+      new SymmetricSectorZone(Shape::BGA_START, true, true, reference,
+                              fixed(5000),
+                              Angle::HalfCircle());
+      oz->UpdateSector();
+      return oz;
+  }
+
   /** 
    * Accessor for angle of sector (angle between start/end radials)
    * 
