@@ -72,6 +72,11 @@ fi
 
 /sbin/hwclock -s -u
 
+# disable the flashing led
+echo "ch 3" > /sys/devices/platform/pmic_light.1/lit
+echo "cur 0" > /sys/devices/platform/pmic_light.1/lit
+echo "dc 0" > /sys/devices/platform/pmic_light.1/lit
+
 # launch user script
 if [ -f /mnt/onboard/XCSoarData/kobo/init.sh ]; then
     source /mnt/onboard/XCSoarData/kobo/init.sh
