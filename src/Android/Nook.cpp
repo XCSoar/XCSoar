@@ -22,35 +22,32 @@ Copyright_License {
 */
 
 #include "Android/Nook.hpp"
+#include "OS/FileUtil.hpp"
 #include "OS/Sleep.h"
 
 #include <stdlib.h>
 
 static char cmd_host[] = "su -c 'echo host > /sys/devices/platform/musb_hdrc/mode'";
 static char cmd_usb_rw[] = "su -c 'chmod 666 /dev/ttyUSB0'";
-static char cmd_fast_mode_enter[] = "echo 1 > /sys/class/graphics/fb0/fmode";
-static char cmd_fast_mode_exit[] = "echo 0 > /sys/class/graphics/fb0/fmode";
-static char cmd_epd_refresh_0[] = " echo 0 > /sys/class/graphics/fb0/epd_refresh";
-static char cmd_epd_refresh_1[] = " echo 1 > /sys/class/graphics/fb0/epd_refresh";
 static char cmd_set_charge_500[] = "su -c 'echo 500000 > /sys/class/regulator/regulator.5/device/force_current'";
 static char cmd_set_charge_100[] = "su -c 'echo 100000 > /sys/class/regulator/regulator.5/device/force_current'";
 
 void
 Nook::EnterFastMode()
 {
-  system(cmd_epd_refresh_0);
+  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
   Sleep(1000);
-  system(cmd_epd_refresh_1);
-  system(cmd_fast_mode_enter);
+  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
+  File::WriteExisting("/sys/class/graphics/fb0/fmode", "1");
 }
 
 void
 Nook::ExitFastMode()
 {
-  system(cmd_fast_mode_exit);
-  system(cmd_epd_refresh_0);
+  File::WriteExisting("/sys/class/graphics/fb0/fmode", "0");
+  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
   Sleep(500);
-  system(cmd_epd_refresh_1);
+  File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
 }
 
 void
