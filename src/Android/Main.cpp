@@ -138,7 +138,9 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                sdk_version, product);
+#ifdef __arm__
   is_nook = strcmp(native_view->GetProduct(), "NOOK") == 0;
+#endif
 
   event_queue = new EventQueue();
 
@@ -148,12 +150,14 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   ioio_helper = new IOIOHelper(env);
 
+#ifdef __arm__
   if (IsNookSimpleTouch()) {
     is_dithered = Nook::EnterFastMode();
 
     /* enable USB host mode if this is a Nook */
     Nook::InitUsb();
   }
+#endif
 
   ScreenInitialized();
   AllowLanguage();
