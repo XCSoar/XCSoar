@@ -32,13 +32,13 @@ static char cmd_usb_rw[] = "su -c 'chmod 666 /dev/ttyUSB0'";
 static char cmd_set_charge_500[] = "su -c 'echo 500000 > /sys/class/regulator/regulator.5/device/force_current'";
 static char cmd_set_charge_100[] = "su -c 'echo 100000 > /sys/class/regulator/regulator.5/device/force_current'";
 
-void
+bool
 Nook::EnterFastMode()
 {
   File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "0");
   Sleep(1000);
   File::WriteExisting("/sys/class/graphics/fb0/epd_refresh", "1");
-  File::WriteExisting("/sys/class/graphics/fb0/fmode", "1");
+  return File::WriteExisting("/sys/class/graphics/fb0/fmode", "1");
 }
 
 void

@@ -33,8 +33,11 @@ namespace Nook {
   /**
    * Enter FastMode to eliminate full refresh of screen
    * requires Nook kernel rooted to support FastMode
+   *
+   * @return false if the operation has failed, e.g. because the
+   * kernel does not support the mode
    */
-  void EnterFastMode();
+  bool EnterFastMode();
 
   /**
    * Exit FastMode to restore full (slow) refresh of screen
