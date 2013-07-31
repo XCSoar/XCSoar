@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-bool is_nook;
+bool is_nook, is_dithered;
 
 bool
 IsGalaxyTab22()

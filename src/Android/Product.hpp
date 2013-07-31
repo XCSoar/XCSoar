@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Compiler.h"
 
-extern bool is_nook;
+extern bool is_nook, is_dithered;
 
 /**
  * Returns whether the application is running on Galaxy Tab with Android 2.2

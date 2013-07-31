@@ -149,7 +149,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   ioio_helper = new IOIOHelper(env);
 
   if (IsNookSimpleTouch()) {
-    Nook::EnterFastMode();
+    is_dithered = Nook::EnterFastMode();
 
     /* enable USB host mode if this is a Nook */
     Nook::InitUsb();

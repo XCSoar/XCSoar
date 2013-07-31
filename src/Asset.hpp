@@ -275,12 +275,18 @@ HasColors()
 /**
  * Is dithering black&white used on the display?
  */
+#ifdef ANDROID
+gcc_const
+#else
 constexpr
+#endif
 static inline bool
 IsDithered()
 {
 #ifdef DITHER
   return true;
+#elif defined(ANDROID)
+  return is_dithered;
 #else
   return false;
 #endif
