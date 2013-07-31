@@ -171,7 +171,9 @@ ButtonWindow::OnPaint(Canvas &canvas)
 
   canvas.DrawButton(GetClientRect(), down);
 
-  canvas.SetTextColor(IsEnabled() ? COLOR_BLACK : COLOR_GRAY);
+  canvas.SetTextColor(IsEnabled()
+                      ? (IsDithered() && down ? COLOR_WHITE : COLOR_BLACK)
+                      : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
 
   unsigned style = GetTextStyle();

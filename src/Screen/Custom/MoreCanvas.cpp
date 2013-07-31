@@ -39,7 +39,7 @@ Canvas::DrawButton(PixelRect rc, bool down)
   const Pen old_pen = pen;
 
   Color gray = IsDithered()
-    ? COLOR_WHITE
+    ? (down ? COLOR_BLACK : COLOR_WHITE)
     : COLOR_LIGHT_GRAY;
   DrawFilledRectangle(rc, gray);
 
