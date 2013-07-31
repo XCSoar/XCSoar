@@ -34,6 +34,7 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Android/LogCat.hpp"
 #include "Android/Product.hpp"
+#include "Android/Nook.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -149,7 +150,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   if (IsNookSimpleTouch())
     /* enable USB host mode if this is a Nook */
-    system("su -c 'echo host > /sys/devices/platform/musb_hdrc/mode'");
+    Nook::InitUsb();
 
   ScreenInitialized();
   AllowLanguage();
