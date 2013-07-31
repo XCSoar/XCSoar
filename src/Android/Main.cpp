@@ -148,9 +148,12 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   ioio_helper = new IOIOHelper(env);
 
-  if (IsNookSimpleTouch())
+  if (IsNookSimpleTouch()) {
+    Nook::EnterFastMode();
+
     /* enable USB host mode if this is a Nook */
     Nook::InitUsb();
+  }
 
   ScreenInitialized();
   AllowLanguage();
@@ -181,6 +184,10 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
+  if (IsNookSimpleTouch()) {
+    Nook::ExitFastMode();
+  }
+
   StopLogCat();
 
   InitThreadDebug();
