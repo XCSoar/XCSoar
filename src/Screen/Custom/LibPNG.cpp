@@ -27,6 +27,7 @@ Copyright_License {
 #include <png.h>
 
 #include <assert.h>
+#include <string.h>
 
 struct PNGCallbackContext {
   const uint8_t *data;
