@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2013 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2011-2015 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,92 +27,74 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CHAR_UTIL_HPP
-#define CHAR_UTIL_HPP
+#ifndef XCSOAR_TCHAR_UTIL_HPP
+#define XCSOAR_TCHAR_UTIL_HPP
 
-#ifdef _UNICODE
-#include "TCharUtil.hpp"
+#ifndef _UNICODE
+#error Cannot use this header without _UNICODE
 #endif
 
-constexpr
-static inline bool
-IsASCII(const unsigned char ch)
-{
-  return ch < 0x80;
-}
+#include <tchar.h>
 
 constexpr
 static inline bool
-IsASCII(const char ch)
+IsASCII(const TCHAR ch)
 {
-  return IsASCII((unsigned char)ch);
+  return (ch & ~0x7f) == 0;
 }
 
 static inline bool
-IsWhitespaceOrNull(const char ch)
+IsWhitespaceOrNull(const TCHAR ch)
 {
-  return (unsigned char)ch <= 0x20;
+  return (unsigned)ch <= 0x20;
 }
 
 static inline bool
-IsWhitespaceNotNull(const char ch)
+IsWhitespaceNotNull(const TCHAR ch)
 {
   return ch > 0 && ch <= 0x20;
 }
 
 constexpr
 static inline bool
-IsPrintableASCII(char ch)
+IsPrintableASCII(TCHAR ch)
 {
-  return (signed char)ch >= 0x20;
+  return IsASCII(ch) && ch >= 0x20;
 }
 
 constexpr
 static inline bool
-IsDigitASCII(char ch)
+IsDigitASCII(TCHAR ch)
 {
-  return ch >= '0' && ch <= '9';
+  return ch >= _T('0') && ch <= _T('9');
 }
 
 constexpr
 static inline bool
-IsUpperAlphaASCII(char ch)
+IsUpperAlphaASCII(TCHAR ch)
 {
-  return ch >= 'A' && ch <= 'Z';
+  return ch >= _T('A') && ch <= _T('Z');
 }
 
 constexpr
 static inline bool
-IsLowerAlphaASCII(char ch)
+IsLowerAlphaASCII(TCHAR ch)
 {
-  return ch >= 'a' && ch <= 'z';
+  return ch >= _T('a') && ch <= _T('z');
 }
 
 constexpr
 static inline bool
-IsAlphaASCII(char ch)
+IsAlphaASCII(TCHAR ch)
 {
   return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
 constexpr
 static inline bool
-IsAlphaNumericASCII(char ch)
+IsAlphaNumericASCII(TCHAR ch)
 {
   return IsAlphaASCII(ch) || IsDigitASCII(ch);
-}
-
-/**
- * Convert the specified ASCII character (0x00..0x7f) to upper case.
- * Unlike toupper(), it ignores the system locale.
- */
-constexpr
-static inline char
-ToUpperASCII(char ch)
-{
-  return ch >= 'a' && ch <= 'z'
-    ? (ch - ('a' - 'A'))
-    : ch;
 }
 
 #endif
