@@ -93,8 +93,9 @@ int main(int argc, char **argv)
          memcmp(line + 3, "RMC", 3) == 0) &&
         line[6] == ',' &&
         strncmp(stamp, line + 7, sizeof(stamp)) != 0) {
-      /* the time stamp has changed - sleep for one second */
-      usleep(1e6-sleep_acc);
+
+      if (1e6-sleep_acc > 0)
+        usleep(1e6-sleep_acc);
       strncpy(stamp, line + 7, sizeof(stamp));
       sleep_acc = 0;
       l_count++;
