@@ -34,8 +34,7 @@ umask 022
 # - the XCSoar installation is broken
 if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     -o -f /mnt/onboard/XCSoarData/kobo/start_nickel \
-    -o ! -x /opt/xcsoar/bin/KoboMenu \
-    -o ! -d /mnt/onboard/XCSoarData ]; then
+    -o ! -x /opt/xcsoar/bin/KoboMenu ]; then
     rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
     umount -l /mnt/onboard
     exec /etc/init.d/rcS
