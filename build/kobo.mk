@@ -26,7 +26,7 @@ endif
 ifeq ($(TARGET_IS_KOBO),y)
 
 BITSTREAM_VERA_DIR ?= /usr/share/fonts/truetype/ttf-bitstream-vera
-BITSTREAM_VERA_NAMES = Vera VeraBd VeraMono
+BITSTREAM_VERA_NAMES = Vera VeraBd VeraIt VeraBI VeraMono
 BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA_NAMES))
 
 # /mnt/onboard/.kobo/KoboRoot.tgz is a file that is picked up by
