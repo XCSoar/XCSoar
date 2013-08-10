@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-05-22 21:41+0000\n"
-"Last-Translator: Juha Huvilinna <Unknown>\n"
+"PO-Revision-Date: 2013-07-28 16:54+0000\n"
+"Last-Translator: Joel Päkkilä <joel.pakkila@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-25 17:20+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-08-10 17:36+0000\n"
+"X-Generator: Launchpad (build 16723)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -35,7 +35,7 @@ msgstr "Tehtävä"
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI suoritusmerkit/ennätykset"
 
 #: src/Task/TypeStrings.cpp:35 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
@@ -45,17 +45,17 @@ msgstr "FAI kolmio"
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI edestakainen"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "FAI määrämaali"
 
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Racing"
-msgstr ""
+msgstr "Kilpailu"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
@@ -191,6 +191,8 @@ msgstr ""
 #, no-c-format
 msgid "A 1 mile cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Mailin (1.6km) kokoinen sylinteri. Pisteitä saa kauimmaisesta alueella. "
+"saavutetusta pisteestä."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -289,7 +291,7 @@ msgstr "Käännepistesylinteri"
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Säteeltään yhden mailin (1.6km) sylinteri."
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -304,7 +306,7 @@ msgstr "Käännealuesektori"
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "FAI maaliintulosektori (neljännesympyrä)"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
@@ -329,7 +331,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Symmetrinen neljännesympyrä"
 
 #: src/Task/TypeStrings.cpp:132
 #, no-c-format
@@ -339,12 +341,12 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
 msgid "No valid start"
-msgstr ""
+msgstr "Virheellinen lähtö"
 
 #: src/Task/ValidationErrorStrings.cpp:33
 #, no-c-format
 msgid "No valid finish"
-msgstr ""
+msgstr "Virheellinen maaliintulo"
 
 #: src/Task/ValidationErrorStrings.cpp:34
 #, no-c-format
@@ -354,22 +356,22 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:35
 #, no-c-format
 msgid "All turnpoints not the same type"
-msgstr ""
+msgstr "Käännepisteet erimuotoisia"
 
 #: src/Task/ValidationErrorStrings.cpp:36
 #, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr ""
+msgstr "Virheellinen määrä käännepisteitä"
 
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Liian monta käännepistettä"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Liian vähän käännepisteitä"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
@@ -379,7 +381,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Tyhjä tehtävä"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -870,11 +872,11 @@ msgstr "Päällä"
 
 #: src/Menu/ExpandMacros.cpp:492 src/Menu/ExpandMacros.cpp:518
 msgid "Topography On"
-msgstr ""
+msgstr "Pinnanmuodostus On"
 
 #: src/Menu/ExpandMacros.cpp:496 src/Menu/ExpandMacros.cpp:522
 msgid "Terrain On"
-msgstr ""
+msgstr "Maasto On"
 
 #: src/Menu/ExpandMacros.cpp:500 src/Menu/ExpandMacros.cpp:526
 msgid "Terrain + Topography"
@@ -882,7 +884,7 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:504 src/Menu/ExpandMacros.cpp:530
 msgid "Terrain Off"
-msgstr ""
+msgstr "Maasto Off"
 
 #: src/Menu/ExpandMacros.cpp:556 src/Input/InputEventsSettings.cpp:303
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
@@ -910,7 +912,7 @@ msgstr "Ei mitään"
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Tehtävät ja lentokentät"
 
 #: src/InfoBoxes/Content/Factory.cpp:164
 #, no-c-format
@@ -1036,7 +1038,7 @@ msgstr "Maanopeus"
 #: src/InfoBoxes/Content/Factory.cpp:227
 #, no-c-format
 msgid "V GND"
-msgstr ""
+msgstr "Maanopeus"
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -1054,7 +1056,7 @@ msgstr "Edellinen nosto keskiarvo"
 #: src/InfoBoxes/Content/Factory.cpp:237
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "Edellinen keskinosto"
 
 #: src/InfoBoxes/Content/Factory.cpp:238
 #, no-c-format
@@ -1073,7 +1075,7 @@ msgstr "Edellinen nosto netto"
 #: src/InfoBoxes/Content/Factory.cpp:247
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "Edellinen korkeudenlisäys"
 
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
@@ -1088,7 +1090,7 @@ msgstr "Edellinen nosto aika"
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "Edellisessä nostossa mennyt aika"
 
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
@@ -8850,6 +8852,12 @@ msgid ""
 "TAF"
 msgstr ""
 
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Profiilin \"%s\" lataaminen epäonnistui!"
+
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "Haluatko ladata profiilin \"%s\"?"
+
 #~ msgid "Keyboard"
 #~ msgstr "Näppäimistö"
 
@@ -8867,6 +8875,9 @@ msgstr ""
 
 #~ msgid "InfoBox Modes"
 #~ msgstr "Inforuutu-tilat"
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Inforuutu-sivut"
 
 #~ msgid "Logger Info"
 #~ msgstr "Loggerin tiedot"
