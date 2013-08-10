@@ -56,9 +56,10 @@ public:
   constexpr ThreadHandle(DWORD _handle):handle(_handle) {}
 #endif
 
+  gcc_pure
   static const ThreadHandle GetCurrent() {
 #ifdef HAVE_POSIX
-    return pthread_self();
+    return ::pthread_self();
 #else
     return ::GetCurrentThreadId();
 #endif
@@ -67,7 +68,7 @@ public:
   gcc_pure
   bool operator==(const ThreadHandle &other) const {
 #ifdef HAVE_POSIX
-    return pthread_equal(handle, other.handle);
+    return ::pthread_equal(handle, other.handle);
 #else
     return handle == other.handle;
 #endif
