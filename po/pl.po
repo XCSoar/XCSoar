@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-07-17 08:34+0000\n"
-"Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
+"PO-Revision-Date: 2013-08-08 19:32+0000\n"
+"Last-Translator: Luke Szczepaniak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-28 09:44+0000\n"
-"X-Generator: Launchpad (build 16700)\n"
+"X-Launchpad-Export-Date: 2013-08-10 17:36+0000\n"
+"X-Generator: Launchpad (build 16723)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -423,7 +423,7 @@ msgstr "PZ typu innego niż MAT"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
-msgstr "Ładowanie pliku przestrzeni powietrznej..."
+msgstr "Wczytywanie pliku stref przestrzeni..."
 
 #: src/Airspace/AirspaceParser.cpp:272
 msgid "Parse Error at Line"
@@ -447,7 +447,7 @@ msgstr ""
 
 #: src/Computer/ConditionMonitor/ConditionMonitorStartRules.cpp:63
 msgid "Start rules violated"
-msgstr "Reguły odejścia na trasę naruszone"
+msgstr "Naruszono reguły odejścia na trasę"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
@@ -567,12 +567,12 @@ msgstr "Stop Rejestratora"
 
 #: src/Logger/ExternalLogger.cpp:82
 msgid "Declare task?"
-msgstr "Zadeklarować trasę?"
+msgstr "Zadeklarować Zadanie?"
 
 #: src/Logger/ExternalLogger.cpp:91 src/Logger/ExternalLogger.cpp:130
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:112
 msgid "Declare task"
-msgstr "Zadeklaruj trasę"
+msgstr "Zadeklaruj Zadanie"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid "Task declared!"
@@ -1021,7 +1021,7 @@ msgid ""
 "or vario if available."
 msgstr ""
 "dH 30s: Wznoszenie przez ostatnie 30 sekund na podstawie wysokości GPS lub "
-"wariometr, jeśli jest podłączony."
+"wariometru, jeśli jest podłączony."
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -2926,7 +2926,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1234
 #, no-c-format
 msgid "Next distance (nominal)"
-msgstr ""
+msgstr "Dystans do celu"
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
 #, no-c-format
@@ -3462,7 +3462,7 @@ msgstr "Śr.nosz."
 #: src/Renderer/MapItemListRenderer.cpp:407
 #, c-format
 msgid "left %s ago"
-msgstr ""
+msgstr "opuszczone %s temu"
 
 #: src/Renderer/MapItemListRenderer.cpp:486
 msgid "FLARM Traffic"
@@ -4227,7 +4227,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:69
 msgid "Task altitude difference"
-msgstr ""
+msgstr "Roznica wysokosci do końca trasy"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:70
 msgid ""
@@ -4489,13 +4489,15 @@ msgstr "Ustaw.listy elementów mapy"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
-msgstr ""
+msgstr "Pokaż  rubrykę pozycji"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:41
 msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
+"Jeżeli włączone rubryka wyświetlająca dystans i kierunek do miejsca zostanie "
+"dodana na górze"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
@@ -6045,7 +6047,7 @@ msgstr "Czcionki"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:121
 msgid "Auto. blank"
-msgstr ""
+msgstr "Wymazanie automatyczne"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:122
 msgid ""
@@ -6530,7 +6532,7 @@ msgstr "Wyłącz ustawienia."
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:61
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr ""
+msgstr "Użyj ostatnia przeciętną jako podstawę."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:62
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:172
@@ -6934,9 +6936,7 @@ msgstr "Mapa[xcm]"
 msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
-msgstr ""
-"Nazwa pliku(.xcm) zawierająca teren, topografię i opcjonalnie punkty "
-"zwrotne, ich szczegóły i przestrzenie powietrzne."
+msgstr "Nazwa pliku(.xcm) zawierającego mapęz fizyczną i topograficzną."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:94
 msgid ""
@@ -7068,7 +7068,7 @@ msgstr "Wario - kolory linii z kropkami"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr ""
+msgstr "Kropki i linie skalowane variometrem"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
@@ -7076,6 +7076,8 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
+"Kropki skalowane variometrem i linie. Pomarańcz do czerwieni = wznoszenie.  "
+"Jasno do ciemno niebieskie = duszenie.  Zero jest reprezentowane żółtą linią."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:116
 #, no-c-format
@@ -7095,7 +7097,7 @@ msgstr "Prosty (duży)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Enlarged simple graphics."
-msgstr ""
+msgstr "Powiększone proste grafiki."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -7422,7 +7424,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:100
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
-msgstr ""
+msgstr "Ostatnie zawody z regulaminem sprintowym."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:102
 #, no-c-format
@@ -7475,7 +7477,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
 msgid "Predict Contest"
-msgstr ""
+msgstr "Przepowiedź Zawody."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
 msgid ""
@@ -7650,11 +7652,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr ""
+msgstr "Kontury"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "Gdy włączane, kontury są rysowane nad terenem."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -8188,11 +8190,11 @@ msgstr "Minimalny czas trasy AAT w minutach"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
 msgid "Arm start manually"
-msgstr ""
+msgstr "Uzbrojenie startu ręcznie."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr ""
+msgstr "Ustaw czy start jest uzbrojony automatycznie lub ręcznie."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start open time"
@@ -8445,15 +8447,15 @@ msgstr "DAeC Cyl.+sektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Fixed Course"
-msgstr ""
+msgstr "BGA kurs stały"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Enhanced Option"
-msgstr ""
+msgstr "Opcja BGA wzmocniona"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:230
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "Sektor Startowy BGA"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
 msgid "Enter a task name"
@@ -8578,7 +8580,7 @@ msgstr "Ta funkcja nie jest jeszcze dostępna na Twoim urządzeniu."
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
-msgstr "Jesteś wewnątrz strefy obserwacyjnej, aktywuj PZ jak będziesz gotowy"
+msgstr "Jesteś wewnątrz strefy obserw., zalicz PZ jak będziesz gotowy."
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:47
 msgid "Arm"
@@ -8775,7 +8777,7 @@ msgstr "Szukanie prognozy pogody"
 
 #: Data/Dialogs/dlgTarget_L.xml:31 Data/Dialogs/dlgTarget.xml:13
 msgid "V rem."
-msgstr ""
+msgstr "V pozostala"
 
 #: Data/Dialogs/dlgTeamCode_L.xml:19 Data/Dialogs/dlgTeamCode.xml:19
 msgid "Flarm lock"
