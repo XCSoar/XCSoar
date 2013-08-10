@@ -51,6 +51,8 @@ static Mutex freetype_mutex;
 
 static const char *font_path;
 static const char *bold_font_path;
+static const char *italic_font_path;
+static const char *bold_italic_font_path;
 static const char *monospace_font_path;
 
 gcc_const
@@ -83,6 +85,8 @@ Font::Initialise()
 {
   font_path = FindDefaultFont();
   bold_font_path = FindDefaultBoldFont();
+  italic_font_path = FindDefaultItalicFont();
+  bold_italic_font_path = FindDefaultBoldItalicFont();
   monospace_font_path = FindDefaultMonospaceFont();
 }
 
@@ -154,25 +158,34 @@ Font::Load(const LOGFONT &log_font)
   assert(IsScreenInitialized());
 
   bool bold = log_font.lfWeight >= 700;
+  bool italic = log_font.lfItalic;
+  const char *path = nullptr;
 
-  const char *path;
-  if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
+  /* check for presence of "real" font and clear the bold or italic
+   * flags if found so that freetype does not apply them again to
+   * produce a "synthetic" bold or italic version of the font */
+  if (italic && bold && bold_italic_font_path != nullptr) {
+    path = bold_italic_font_path;
+    bold = false;
+    italic = false;
+  } else if (italic && italic_font_path != nullptr) {
+    path = italic_font_path;
+    italic = false;
+  } else if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
       monospace_font_path != nullptr) {
     path = monospace_font_path;
   } else if (bold && bold_font_path != nullptr) {
-    /* a bold variant of the font exists: clear the "bold" flag, so
-       SDL_TTF does not apply it again */
     path = bold_font_path;
     bold = false;
   } else {
     path = font_path;
   }
 
-  if (path == NULL)
+  if (path == nullptr)
     return false;
 
   return LoadFile(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-                  bold, log_font.lfItalic);
+                  bold, italic);
 }
 
 void
