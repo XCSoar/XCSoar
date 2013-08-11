@@ -45,16 +45,16 @@ public:
     unsigned id;
     TCHAR *string;
     TCHAR *display_string;
-    TCHAR *mHelp;
+    TCHAR *help;
 
   public:
-    Entry():string(NULL), display_string(NULL), mHelp(NULL) {}
+    Entry():string(nullptr), display_string(nullptr), help(nullptr) {}
     ~Entry();
 
     Entry(Entry &&other)
       :id(other.id), string(other.string),
-       display_string(other.display_string), mHelp(other.mHelp) {
-      other.string = other.display_string = other.mHelp = NULL;
+       display_string(other.display_string), help(other.help) {
+      other.string = other.display_string = other.help = nullptr;
     }
 
     Entry &operator=(Entry &&other) {
@@ -63,14 +63,14 @@ public:
         if (display_string != string)
           free(display_string);
 
-        free(mHelp);
+        free(help);
 
         id = other.id;
         string = other.string;
         display_string = other.display_string;
-        mHelp = other.mHelp;
+        help = other.help;
 
-        other.string = other.display_string = other.mHelp = NULL;
+        other.string = other.display_string = other.help = nullptr;
 
         return *this;
     }
@@ -88,7 +88,7 @@ public:
     }
 
     const TCHAR *GetHelp() const {
-      return mHelp;
+      return help;
     }
 
     void SetString(const TCHAR *_string);

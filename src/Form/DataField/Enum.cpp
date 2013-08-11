@@ -36,7 +36,7 @@ DataFieldEnum::Entry::~Entry()
   if (display_string != string)
     free(display_string);
 
-  free(mHelp);
+  free(help);
 }
 
 void
@@ -60,8 +60,8 @@ DataFieldEnum::Entry::Set(unsigned _id, const TCHAR *_string,
   if (_display_string != NULL)
     display_string = _tcsdup(_display_string);
 
-  free(mHelp);
-  mHelp = _help ? _tcsdup(_help) : NULL;
+  free(help);
+  help = _help ? _tcsdup(_help) : nullptr;
 }
 
 unsigned
