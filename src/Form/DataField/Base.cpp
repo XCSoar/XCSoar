@@ -103,13 +103,3 @@ void
 DataField::SetAsString(gcc_unused const TCHAR *value)
 {
 }
-
-void
-DataField::CopyString(TCHAR *buffer, bool formatted)
-{
-  const TCHAR *src = formatted ? GetAsDisplayString() : GetAsString();
-  if (src == NULL)
-    src = _T("");
-
-  ::CopyString(buffer, src, ComboPopupITEMMAX);
-}

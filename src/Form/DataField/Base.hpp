@@ -139,8 +139,6 @@ public:
     return item_help_enabled;
   }
 
-  void CopyString(TCHAR *buffer, bool formatted);
-
 protected:
   /**
    * Notify interested parties that the value of this object has
