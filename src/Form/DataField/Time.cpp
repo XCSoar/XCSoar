@@ -24,6 +24,7 @@ Copyright_License {
 #include "Time.hpp"
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Util/StringUtil.hpp"
 #include "Asset.hpp"
 
 #include <stdlib.h>
@@ -34,7 +35,8 @@ static bool data_field_key_up = false;
 const TCHAR *
 DataFieldTime::GetAsString() const
 {
-  return GetAsDisplayString();
+  StringFormatUnsafe(string_buffer, _T("%d"), value);
+  return string_buffer;
 }
 
 const TCHAR *
