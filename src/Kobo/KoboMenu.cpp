@@ -246,7 +246,7 @@ Main()
   terminal_look.Initialise(monospace_font);
 
   SingleWindow main_window;
-  main_window.Create(_T("Test"), {600, 800});
+  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800});
   main_window.Show();
 
   int action = Main(main_window, dialog_look, terminal_look);
