@@ -119,9 +119,6 @@ bool
 dlgComboPicker(WndProperty *theProperty)
 {
   static bool bInComboPicker = false;
-  // used to exit loop (optionally reruns combo with
-  // lower/higher index of items for int/float
-  bool bOpenCombo = true;
 
   // prevents multiple instances
   if (bInComboPicker)
@@ -132,11 +129,11 @@ dlgComboPicker(WndProperty *theProperty)
   StaticString<256> buffer;
   const TCHAR *reference = nullptr;
 
-  while (bOpenCombo) {
+  while (true) {
     assert(theProperty != NULL);
     wComboPopupWndProperty = theProperty;
 
-    ComboPopupDataField = wComboPopupWndProperty->GetDataField();
+    ComboPopupDataField = theProperty->GetDataField();
     assert(ComboPopupDataField != NULL);
 
     const ComboList combo_list = ComboPopupDataField->CreateComboList(reference);
@@ -144,35 +141,27 @@ dlgComboPicker(WndProperty *theProperty)
 
     int idx = ComboPicker(*theProperty, combo_list,
                           ComboPopupDataField->GetItemHelpEnabled());
-
-    bOpenCombo = false; //tell  combo to exit loop after close
-
-    if (idx >= 0 && (unsigned)idx < combo_list.size()) {
-      const ComboList::Item *item = &combo_list[idx];
-
-      // OK/Select
-      if (item->DataFieldIndex == ComboList::Item::NEXT_PAGE) {
-        // we're last in list and the want more past end of list so select last real list item and reopen
-        // we'll reopen, so don't call xcsoar data changed routine yet
-        item = &combo_list[idx - 1];
-        reference = buffer = item->StringValue;
-        bOpenCombo = true; // reopen combo with new selected index at center
-      } else if (item->DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
-        // same as above but lower items needed
-        item = &combo_list[idx + 1];
-        reference = buffer = item->StringValue;
-        bOpenCombo = true;
-      } else {
-        ComboPopupDataField->SetFromCombo(item->DataFieldIndex,
-                                          item->StringValue);
-        wComboPopupWndProperty->RefreshDisplay();
-      }
-    } else {
+    if (idx < 0) {
       bInComboPicker = false;
       return false;
     }
-  } // loop reopen combo if <<More>>  or <<Less>> picked
 
-  bInComboPicker = false;
-  return true;
+    const ComboList::Item &item = combo_list[idx];
+
+    // OK/Select
+    if (item.DataFieldIndex == ComboList::Item::NEXT_PAGE) {
+      // we're last in list and the want more past end of list so select last real list item and reopen
+      // we'll reopen, so don't call xcsoar data changed routine yet
+      reference = buffer = combo_list[idx - 1].StringValue;
+    } else if (item.DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
+      // same as above but lower items needed
+      reference = buffer = combo_list[idx + 1].StringValue;
+    } else {
+      ComboPopupDataField->SetFromCombo(item.DataFieldIndex,
+                                        item.StringValue);
+      theProperty->RefreshDisplay();
+      bInComboPicker = false;
+      return true;
+    }
+  } // loop reopen combo if <<More>>  or <<Less>> picked
 }
