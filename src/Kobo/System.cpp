@@ -142,3 +142,11 @@ KoboRunXCSoar()
   system(cmd);
 #endif
 }
+
+void
+KoboRunTelnetd()
+{
+#ifdef KOBO
+  system("/usr/sbin/telnetd -l /bin/sh");
+#endif
+}

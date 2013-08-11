@@ -39,6 +39,7 @@ class NetworkWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
     WIFI,
+    TELNET,
   };
 
   WndButton *wifi_button;
@@ -62,6 +63,8 @@ NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   wifi = false;
   wifi_button = AddButton(_T("Wifi ON"), *this, WIFI);
+
+  AddButton(_T("Telnet server"), *this, TELNET);
 }
 
 void
@@ -84,6 +87,10 @@ NetworkWidget::OnAction(int id)
   switch (id) {
   case WIFI:
     ToggleWifi();
+    break;
+
+  case TELNET:
+    KoboRunTelnetd();
     break;
   }
 }

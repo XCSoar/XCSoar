@@ -42,4 +42,7 @@ KoboExecNickel();
 void
 KoboRunXCSoar();
 
+void
+KoboRunTelnetd();
+
 #endif
