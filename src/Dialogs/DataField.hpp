@@ -21,18 +21,20 @@ Copyright_License {
 }
 */
 
-#define ENABLE_DIALOG
-#define ENABLE_MAIN_WINDOW
+#ifndef XCSOAR_DATA_FIELD_DIALOG_HPP
+#define XCSOAR_DATA_FIELD_DIALOG_HPP
 
-#include "Main.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Util/Macros.hpp"
-#include "LocalPath.hpp"
-#include "Time/RoughTime.hpp"
+#include <tchar.h>
 
-static void
-Main()
-{
-  TCHAR text[64] = _T("");
-  TextEntryDialog(text, ARRAY_SIZE(text), _T("The caption"));
-}
+class DataField;
+
+/**
+ * Show a dialog to edit the value of a #DataField.
+ *
+ * @return false if no dialog is available for this value type
+ */
+bool
+EditDataFieldDialog(const TCHAR *caption, DataField &df,
+                    const TCHAR *help_text);
+
+#endif
