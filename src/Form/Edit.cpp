@@ -180,8 +180,6 @@ WndProperty::BeginEditing()
        it exists */
     return OnHelp();
   } else if (mDataField != NULL && mDataField->supports_combolist) {
-    /* if this asserton fails, then there no valid root window could
-       be found - maybe it didn't register its wndproc? */
     dlgComboPicker(this);
     return true;
   } else if (mDataField != NULL &&
