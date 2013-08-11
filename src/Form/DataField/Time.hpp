@@ -38,7 +38,7 @@ private:
   PeriodClock last_step;
   uint8_t speedup;
 
-  mutable TCHAR display_buffer[OUTBUFFERSIZE + 1];
+  mutable TCHAR string_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup);

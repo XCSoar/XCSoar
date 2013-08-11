@@ -40,8 +40,8 @@ DataFieldTime::GetAsString() const
 const TCHAR *
 DataFieldTime::GetAsDisplayString() const
 {
-  FormatTimespanSmart(display_buffer, value, max_tokens);
-  return display_buffer;
+  FormatTimespanSmart(string_buffer, value, max_tokens);
+  return string_buffer;
 }
 
 void
