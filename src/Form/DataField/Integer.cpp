@@ -40,7 +40,6 @@ DataFieldInteger::GetAsInteger() const
 const TCHAR *
 DataFieldInteger::GetAsString() const
 {
-  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
   _stprintf(output_buffer, edit_format, value);
   return output_buffer;
 }
@@ -48,7 +47,6 @@ DataFieldInteger::GetAsString() const
 const TCHAR *
 DataFieldInteger::GetAsDisplayString() const
 {
-  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
   _stprintf(output_buffer, display_format, value);
   return output_buffer;
 }

@@ -36,7 +36,8 @@ private:
   int step;
   PeriodClock last_step;
   int speedup;
-  TCHAR outpuf_buffer[OUTBUFFERSIZE + 1];
+
+  mutable TCHAR output_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup);
