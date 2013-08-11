@@ -27,8 +27,7 @@ Copyright_License {
 #include "Base.hpp"
 #include "Util/StaticString.hpp"
 
-class DataFieldBoolean: public DataField
-{
+class DataFieldBoolean final : public DataField {
 private:
   bool mValue;
 
@@ -42,31 +41,29 @@ public:
      mValue(Default),
      true_text(TextTrue), false_text(TextFalse) {}
 
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
+  void Set(bool Value);
 
   bool GetAsBoolean() const {
     return mValue;
   }
 
-  virtual int GetAsInteger() const;
-  virtual const TCHAR *GetAsString() const;
+  void SetAsBoolean(bool Value);
 
-  virtual void
-  Set(int Value)
-  {
+  void Set(int Value) {
     if (Value > 0)
       Set(true);
     else
       Set(false);
   }
 
-  void Set(bool Value);
-
-  void SetAsBoolean(bool Value);
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
+  /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual void SetAsInteger(int Value) override;
+  virtual void SetAsString(const TCHAR *Value) override;
+  virtual ComboList *CreateComboList() const override;
 };
 
 #endif

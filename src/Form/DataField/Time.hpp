@@ -28,8 +28,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Math/fixed.hpp"
 
-class DataFieldTime : public DataField
-{
+class DataFieldTime final : public DataField {
 private:
   int value;
   int min;
@@ -83,22 +82,23 @@ public:
   }
 
   /* virtual methods from class DataField */
-  virtual void Inc();
-  virtual void Dec();
+  virtual void Inc() override;
+  virtual void Dec() override;
 
-  virtual int GetAsInteger() const {
+  virtual int GetAsInteger() const override {
     return value;
   }
 
-  virtual const TCHAR *GetAsString() const;
-  virtual const TCHAR *GetAsDisplayString() const;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
 
-  virtual void SetAsInteger(int _value) {
+  virtual void SetAsInteger(int _value) override {
     SetValue(_value);
   }
 
-  virtual ComboList *CreateComboList() const;
-  virtual void SetFromCombo(int data_field_index, TCHAR *value_string);
+  virtual ComboList *CreateComboList() const override;
+  virtual void SetFromCombo(int data_field_index,
+                            TCHAR *value_string) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

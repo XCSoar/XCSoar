@@ -28,8 +28,7 @@ Copyright_License {
 
 #include <functional>
 
-class PrefixDataField : public DataFieldString
-{
+class PrefixDataField final : public DataFieldString {
 public:
   typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharactersFunction;
 
@@ -46,9 +45,10 @@ public:
     return allowed_characters;
   }
 
-  virtual const TCHAR *GetAsDisplayString() const override;
+  /* virtual methods from class DataField */
   virtual void Inc() override;
   virtual void Dec() override;
+  virtual const TCHAR *GetAsDisplayString() const override;
 
 protected:
   gcc_pure

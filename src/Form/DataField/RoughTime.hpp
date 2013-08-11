@@ -33,7 +33,7 @@ Copyright_License {
  * precision of one minute.  For displaying, it is converted to the
  * user's time zone.
  */
-class RoughTimeDataField : public DataField {
+class RoughTimeDataField final : public DataField {
   RoughTime value;
 
   /**
@@ -71,12 +71,11 @@ public:
   void ModifyValue(RoughTime _value);
 
   /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
   virtual int GetAsInteger() const override;
   virtual const TCHAR *GetAsString() const override;
   virtual const TCHAR *GetAsDisplayString() const override;
-
-  virtual void Inc() override;
-  virtual void Dec() override;
 };
 
 #endif

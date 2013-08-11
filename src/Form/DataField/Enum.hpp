@@ -39,8 +39,7 @@ struct StaticEnumChoice {
   const TCHAR *help;
 };
 
-class DataFieldEnum: public DataField
-{
+class DataFieldEnum final : public DataField {
 public:
   class Entry : private NonCopyable {
     unsigned id;
@@ -115,10 +114,6 @@ public:
     return Find(text) >= 0;
   }
 
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
-
   void replaceEnumText(unsigned int i, const TCHAR *Text);
 
   bool AddChoice(unsigned id, const TCHAR *text, const TCHAR *display_string=NULL,
@@ -138,13 +133,6 @@ public:
   unsigned addEnumText(const TCHAR *Text, const TCHAR *display_string=NULL,
                        const TCHAR *ItemHelpText=NULL);
   void addEnumTexts(const TCHAR *const*list);
-
-  gcc_pure
-  virtual int GetAsInteger() const;
-
-  gcc_pure
-  virtual const TCHAR *GetAsString() const;
-  virtual const TCHAR *GetAsDisplayString() const;
 
   /**
    * @return help of current enum item or NULL if current item has no help
@@ -176,8 +164,6 @@ public:
    */
   int SetStringAutoAdd(const TCHAR *text);
 
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
   void Sort(unsigned startindex = 0);
 
   gcc_pure
@@ -185,6 +171,16 @@ public:
     return entries.size();
   }
   unsigned getItem(unsigned index) const;
+
+  /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
+  virtual void SetAsInteger(int value) override;
+  virtual void SetAsString(const TCHAR *value) override;
+  virtual ComboList *CreateComboList() const override;
 
 protected:
   /**

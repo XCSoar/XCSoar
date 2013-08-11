@@ -34,8 +34,7 @@ Copyright_License {
  * files matching a suffix.  First entry is always blank for null entry.
  * 
  */
-class DataFieldFileReader: public DataField
-{
+class DataFieldFileReader final : public DataField {
   typedef StaticArray<StaticString<32>, 8> PatternList;
 
 public:
@@ -92,16 +91,6 @@ public:
    */
   DataFieldFileReader(DataAccessCallback OnDataAccess);
 
-  /** Move the selection up (+1) */
-  void Inc();
-  /** Move the selection down (-1) */
-  void Dec();
-  /**
-   * Prepares the ComboList items
-   * @return The number of items in the ComboList
-   */
-  virtual ComboList *CreateComboList() const;
-
   /**
    * Adds a filename/filepath couple to the filelist
    * @param fname The filename
@@ -120,27 +109,6 @@ public:
    */
   gcc_pure
   unsigned GetNumFiles() const;
-
-  /**
-   * Returns the selection index in integer format
-   * @return The selection index in integer format
-   */
-  gcc_pure
-  virtual int GetAsInteger() const;
-
-  /**
-   * Returns the selection title (filename)
-   * @return The selection title (filename)
-   */
-  gcc_pure
-  virtual const TCHAR *GetAsDisplayString() const;
-
-  /**
-   * Returns the PathFile of the currently selected item
-   * @return The PathFile of the currently selected item
-   */
-  gcc_pure
-  virtual const TCHAR *GetAsString() const;
 
   /**
    * Iterates through the file list and tries to find an item where the path
@@ -163,12 +131,6 @@ public:
    */
   void Set(unsigned Value);
 
-  /**
-   * @see Set()
-   * @return The index that was set (min: 0 / max: nFiles)
-   */
-  virtual void SetAsInteger(int Value);
-
   /** Sorts the filelist by filenames */
   void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
@@ -185,6 +147,15 @@ public:
 
   gcc_pure
   const TCHAR *GetItem(unsigned index) const;
+
+  /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
+  virtual void SetAsInteger(int value) override;
+  virtual ComboList *CreateComboList() const override;
 
 protected:
   void EnsureLoaded();

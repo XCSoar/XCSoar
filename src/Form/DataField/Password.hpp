@@ -30,12 +30,13 @@ Copyright_License {
  * A DataField that stores a string.  The displayed string is
  * obfuscated.
  */
-class PasswordDataField : public DataFieldString {
+class PasswordDataField final : public DataFieldString {
 public:
   PasswordDataField(const TCHAR *initial_value)
     :DataFieldString(initial_value, NULL) {}
 
-  virtual const TCHAR *GetAsDisplayString() const;
+  /* virtual methods from class DataField */
+  virtual const TCHAR *GetAsDisplayString() const override;
 };
 
 #endif

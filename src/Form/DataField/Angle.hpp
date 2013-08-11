@@ -32,7 +32,7 @@ Copyright_License {
  * This #DataField implementation stores an angle value from 0 to 359
  * degrees.  Its precision is integer degree values.
  */
-class AngleDataField : public DataField {
+class AngleDataField final : public DataField {
   static constexpr unsigned MAX = 360u;
 
   unsigned value;
