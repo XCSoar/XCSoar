@@ -12,6 +12,9 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/OverlappedWidget.cpp \
 	$(SRC)/Widget/TwoWidgets.cpp \
 	$(SRC)/Widget/RowFormWidget.cpp \
+	$(SRC)/Widget/EditRowFormWidget.cpp \
+	$(SRC)/Widget/ProfileRowFormWidget.cpp \
+	$(SRC)/Widget/UnitRowFormWidget.cpp \
 	$(SRC)/Widget/ManagedWidget.cpp \
 	$(SRC)/Widget/PagerWidget.cpp \
 	$(SRC)/Widget/OffsetButtonsWidget.cpp \
