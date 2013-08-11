@@ -44,8 +44,9 @@ dlgHelpShowModal(SingleWindow &parent,
   } else
     Caption = prefix;
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(parent, Caption, new LargeTextWidget(HelpText));
+  const auto &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  dialog.CreateFull(parent, Caption, new LargeTextWidget(look, HelpText));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
