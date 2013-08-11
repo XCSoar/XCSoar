@@ -58,21 +58,11 @@ public:
     }
 
     Entry &operator=(Entry &&other) {
-        free(string);
-
-        if (display_string != string)
-          free(display_string);
-
-        free(help);
-
-        id = other.id;
-        string = other.string;
-        display_string = other.display_string;
-        help = other.help;
-
-        other.string = other.display_string = other.help = nullptr;
-
-        return *this;
+      id = other.id;
+      std::swap(string, other.string);
+      std::swap(display_string, other.display_string);
+      std::swap(help, other.help);
+      return *this;
     }
 
     unsigned GetId() const {
