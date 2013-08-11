@@ -70,9 +70,6 @@ protected:
 
   bool item_help_enabled;
 
-private:
-  bool detach_gui;
-
 protected:
   DataField(Type type, bool supports_combolist,
             DataFieldListener *listener);
@@ -119,14 +116,6 @@ public:
 
   virtual void EnableItemHelp(bool value) {};
 
-  // allows combolist to iterate all values w/out triggering external events
-  void SetDetachGUI(bool _detach_gui) {
-    detach_gui = _detach_gui;
-  }
-
-  bool GetDetachGUI() {
-    return detach_gui;
-  }
 
   /**
    * Create a #ComboList that allows the user to choose a value.
