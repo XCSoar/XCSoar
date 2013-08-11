@@ -119,7 +119,6 @@ int
 dlgComboPicker(WndProperty *theProperty)
 {
   static bool bInComboPicker = false;
-  bool bInitialPage = true;
   // used to exit loop (optionally reruns combo with
   // lower/higher index of items for int/float
   bool bOpenCombo = true;
@@ -130,8 +129,8 @@ dlgComboPicker(WndProperty *theProperty)
 
   bInComboPicker = true;
 
-  TCHAR sSavedInitialValue[100];
-  int iSavedInitialDataIndex = -1;
+  StaticString<256> buffer;
+  const TCHAR *reference = nullptr;
 
   while (bOpenCombo) {
     assert(theProperty != NULL);
@@ -140,14 +139,7 @@ dlgComboPicker(WndProperty *theProperty)
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     assert(ComboPopupDataField != NULL);
 
-    ComboListPopup = ComboPopupDataField->CreateComboList(nullptr);
-    if (bInitialPage) { // save values for "Cancel" from first page only
-      bInitialPage = false;
-      iSavedInitialDataIndex =
-        (*ComboListPopup)[ComboListPopup->ComboPopupItemSavedIndex]
-        .DataFieldIndex;
-      ComboPopupDataField->CopyString(sSavedInitialValue, false);
-    }
+    ComboListPopup = ComboPopupDataField->CreateComboList(reference);
 
     int idx = ComboPicker(*theProperty, *ComboListPopup, ComboPopupDataField->GetItemHelpEnabled());
 
@@ -159,32 +151,23 @@ dlgComboPicker(WndProperty *theProperty)
       // OK/Select
       if (item->DataFieldIndex == ComboList::Item::NEXT_PAGE) {
         // we're last in list and the want more past end of list so select last real list item and reopen
-        ComboPopupDataField->SetDetachGUI(true);
         // we'll reopen, so don't call xcsoar data changed routine yet
         item = &(*ComboListPopup)[idx - 1];
+        reference = buffer = item->StringValue;
         bOpenCombo = true; // reopen combo with new selected index at center
       } else if (item->DataFieldIndex == ComboList::Item::PREVIOUS_PAGE) {
         // same as above but lower items needed
-        ComboPopupDataField->SetDetachGUI(true);
         item = &(*ComboListPopup)[idx + 1];
+        reference = buffer = item->StringValue;
         bOpenCombo = true;
+      } else {
+        ComboPopupDataField->SetFromCombo(item->DataFieldIndex,
+                                          item->StringValue);
+        wComboPopupWndProperty->RefreshDisplay();
       }
-
-      ComboPopupDataField->SetFromCombo(item->DataFieldIndex,
-                                        item->StringValue);
-    } else {
-      // Cancel
-      // if we've detached the GUI during the load, then there is nothing to do here
-      assert(iSavedInitialDataIndex >= 0);
-      if (iSavedInitialDataIndex >= 0)
-        // use statics here - saved from first page if multiple were used
-        ComboPopupDataField->SetFromCombo(iSavedInitialDataIndex,
-            sSavedInitialValue);
     }
 
     delete ComboListPopup;
-
-    wComboPopupWndProperty->RefreshDisplay();
   } // loop reopen combo if <<More>>  or <<Less>> picked
 
   bInComboPicker = false;
