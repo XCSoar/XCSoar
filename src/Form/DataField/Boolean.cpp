@@ -24,6 +24,12 @@ Copyright_License {
 #include "Boolean.hpp"
 #include "ComboList.hpp"
 
+bool
+DataFieldBoolean::ParseString(const TCHAR *s) const
+{
+  return true_text.equals(s);
+}
+
 ComboList *
 DataFieldBoolean::CreateComboList() const
 {
@@ -76,10 +82,7 @@ DataFieldBoolean::SetAsInteger(int Value)
 void
 DataFieldBoolean::SetAsString(const TCHAR *Value)
 {
-  const TCHAR *res = GetAsString();
-  if (_tcscmp(res, Value) != 0) {
-    SetAsBoolean(true_text.equals(Value));
-  }
+  SetAsBoolean(ParseString(Value));
 }
 
 void

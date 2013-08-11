@@ -31,6 +31,13 @@ Copyright_License {
 
 static bool datafield_key_up = false;
 
+gcc_pure
+static int
+ParseString(const TCHAR *s)
+{
+  return ParseInt(s);
+}
+
 int
 DataFieldInteger::GetAsInteger() const
 {
@@ -67,7 +74,7 @@ DataFieldInteger::SetAsInteger(int _value)
 void
 DataFieldInteger::SetAsString(const TCHAR *_value)
 {
-  SetAsInteger(ParseInt(_value));
+  SetAsInteger(ParseString(_value));
 }
 
 void

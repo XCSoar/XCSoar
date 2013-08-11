@@ -64,6 +64,10 @@ public:
   virtual void SetAsInteger(int Value) override;
   virtual void SetAsString(const TCHAR *Value) override;
   virtual ComboList *CreateComboList() const override;
+
+private:
+  gcc_pure
+  bool ParseString(const TCHAR *s) const;
 };
 
 #endif

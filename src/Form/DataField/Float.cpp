@@ -24,11 +24,19 @@ Copyright_License {
 #include "Float.hpp"
 #include "ComboList.hpp"
 #include "Asset.hpp"
+#include "Util/NumberParser.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
 
 static bool DataFieldKeyUp = false;
+
+gcc_pure
+static fixed
+ParseString(const TCHAR *s)
+{
+  return fixed(ParseDouble(s));
+}
 
 int
 DataFieldFloat::GetAsInteger() const
@@ -72,7 +80,7 @@ DataFieldFloat::SetAsFloat(fixed Value)
 void
 DataFieldFloat::SetAsString(const TCHAR *Value)
 {
-  SetAsFloat(fixed(_tcstod(Value, NULL)));
+  SetAsFloat(ParseString(Value));
 }
 
 void
