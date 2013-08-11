@@ -490,7 +490,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
   Add(Row::Type::MULTI_LINE, ltw);
 }
 
-void
+WndButton *
 RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 {
   assert(IsDefined());
@@ -507,6 +507,7 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
   WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
 
   Add(Row::Type::BUTTON, button);
+  return button;
 }
 
 void
