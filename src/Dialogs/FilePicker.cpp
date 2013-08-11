@@ -33,7 +33,7 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 
   DataFieldFileReader df(NULL);
   df.ScanMultiplePatterns(patterns);
-  ComboList *combo_list = df.CreateComboList();
+  ComboList *combo_list = df.CreateComboList(nullptr);
   if (combo_list == NULL)
     return false;
 

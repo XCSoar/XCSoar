@@ -31,7 +31,7 @@ DataFieldBoolean::ParseString(const TCHAR *s) const
 }
 
 ComboList *
-DataFieldBoolean::CreateComboList() const
+DataFieldBoolean::CreateComboList(const TCHAR *reference) const
 {
   ComboList *combo_list = new ComboList();
   combo_list->Append(false, false_text);

@@ -128,8 +128,15 @@ public:
     return detach_gui;
   }
 
+  /**
+   * Create a #ComboList that allows the user to choose a value.
+   *
+   * @param reference the reference value for a long list, to
+   * determine the range of displayed values; pass nullptr for the
+   * "default" reference
+   */
   gcc_malloc
-  virtual ComboList *CreateComboList() const {
+  virtual ComboList *CreateComboList(const TCHAR *reference) const {
     return nullptr;
   }
 

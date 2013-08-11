@@ -295,7 +295,7 @@ DataFieldFileReader::Sort()
 }
 
 ComboList *
-DataFieldFileReader::CreateComboList() const
+DataFieldFileReader::CreateComboList(const TCHAR *reference) const
 {
   /* sorry for the const_cast .. this method keeps the promise of not
      modifying the object, given that one does not count filling the

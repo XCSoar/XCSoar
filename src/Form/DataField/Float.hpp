@@ -91,7 +91,7 @@ public:
   virtual const TCHAR *GetAsDisplayString() const override;
   virtual void SetAsInteger(int value) override;
   virtual void SetAsString(const TCHAR *value) override;
-  virtual ComboList *CreateComboList() const override;
+  virtual ComboList *CreateComboList(const TCHAR *reference) const override;
   virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
 
 protected:

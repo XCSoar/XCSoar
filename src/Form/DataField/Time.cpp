@@ -25,6 +25,7 @@ Copyright_License {
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
 #include <stdlib.h>
@@ -94,21 +95,26 @@ DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
 void
 DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
 {
-  TCHAR buffer[128];
+  TCHAR buffer[128], buffer2[32];
   FormatTimespanSmart(buffer, value, max_tokens);
-  combo_list.Append(value, buffer);
+  StringFormatUnsafe(buffer2, _T("%d"), value);
+  combo_list.Append(value, buffer2, buffer);
 }
 
 ComboList *
-DataFieldTime::CreateComboList() const
+DataFieldTime::CreateComboList(const TCHAR *reference_string) const
 {
+  const int reference = reference_string != nullptr
+    ? ParseInt(reference_string)
+    : value;
+
   ComboList *combo_list = new ComboList();
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((value - min) / step) * step + min;
+  int corrected_value = ((reference - min) / step) * step + min;
 
   int first = corrected_value - (int)surrounding_items * step;
   if (first > min)
@@ -121,10 +127,10 @@ DataFieldTime::CreateComboList() const
 
   bool found_current = false;
   for (int i = first; i <= last; i += step) {
-    if (!found_current && value <= i) {
-      if (value < i)
+    if (!found_current && reference <= i) {
+      if (reference < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, value);
+        AppendComboValue(*combo_list, reference);
 
       combo_list->ComboPopupItemSavedIndex = combo_list->size();
       found_current = true;
@@ -133,10 +139,10 @@ DataFieldTime::CreateComboList() const
     AppendComboValue(*combo_list, i);
   }
 
-  if (value > last) {
+  if (reference > last) {
     /* the current value out of range - append it here */
-    last = value;
-    AppendComboValue(*combo_list, value);
+    last = reference;
+    AppendComboValue(*combo_list, reference);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
   }
 

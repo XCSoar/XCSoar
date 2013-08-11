@@ -140,7 +140,7 @@ dlgComboPicker(WndProperty *theProperty)
     ComboPopupDataField = wComboPopupWndProperty->GetDataField();
     assert(ComboPopupDataField != NULL);
 
-    ComboListPopup = ComboPopupDataField->CreateComboList();
+    ComboListPopup = ComboPopupDataField->CreateComboList(nullptr);
     if (bInitialPage) { // save values for "Cancel" from first page only
       bInitialPage = false;
       iSavedInitialDataIndex =

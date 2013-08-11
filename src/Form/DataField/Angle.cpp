@@ -136,7 +136,7 @@ AppendComboValue(ComboList &combo_list, unsigned value)
 }
 
 ComboList *
-AngleDataField::CreateComboList() const
+AngleDataField::CreateComboList(const TCHAR *reference) const
 {
   ComboList *combo_list = new ComboList();
 

@@ -106,7 +106,7 @@ public:
   virtual void Inc() override;
   virtual void Dec() override;
 
-  virtual ComboList *CreateComboList() const override;
+  virtual ComboList *CreateComboList(const TCHAR *reference) const override;
   virtual void SetFromCombo(int i, TCHAR *s) override;
 };
 

@@ -148,8 +148,12 @@ DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
 }
 
 ComboList *
-DataFieldFloat::CreateComboList() const
+DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
 {
+  const fixed reference = reference_string != nullptr
+    ? ParseString(reference_string)
+    : mValue;
+
   ComboList *combo_list = new ComboList();
   const fixed epsilon = mStep / 1000;
   const fixed fine_step = mStep / 10;
@@ -160,7 +164,7 @@ DataFieldFloat::CreateComboList() const
     surrounding_items -= 20;
 
   /* the value aligned to mStep */
-  fixed corrected_value = int((mValue - mMin) / mStep) * mStep + mMin;
+  fixed corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
 
   fixed first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
@@ -185,7 +189,7 @@ DataFieldFloat::CreateComboList() const
 
     if (mFine) {
       // show up to 9 items above and below current value with extended precision
-      if (i - epsilon > mValue + mStep - fine_step) {
+      if (i - epsilon > reference + mStep - fine_step) {
         if (inFineSteps) {
           inFineSteps = false;
           step = mStep;
@@ -194,21 +198,21 @@ DataFieldFloat::CreateComboList() const
             i = mMax;
         }
       }
-      else if (i + epsilon >= mValue - mStep + fine_step) {
+      else if (i + epsilon >= reference - mStep + fine_step) {
         if (!inFineSteps) {
           inFineSteps = true;
           step = fine_step;
-          i = std::max(mMin, mValue - mStep + fine_step);
+          i = std::max(mMin, reference - mStep + fine_step);
         }
       }
     }
 
-    if (!found_current && mValue <= i + epsilon) {
+    if (!found_current && reference <= i + epsilon) {
       combo_list->ComboPopupItemSavedIndex = combo_list->size();
 
-      if (mValue < i - epsilon)
+      if (reference < i - epsilon)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, mValue);
+        AppendComboValue(*combo_list, reference);
 
       found_current = true;
     }
@@ -216,11 +220,11 @@ DataFieldFloat::CreateComboList() const
     AppendComboValue(*combo_list, i);
   }
 
-  if (mValue > last + epsilon) {
+  if (reference > last + epsilon) {
     /* the current value out of range - append it here */
-    last = mValue;
+    last = reference;
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
-    AppendComboValue(*combo_list, mValue);
+    AppendComboValue(*combo_list, reference);
   }
 
   if (last < mMax - epsilon)

@@ -96,7 +96,7 @@ public:
     SetValue(_value);
   }
 
-  virtual ComboList *CreateComboList() const override;
+  virtual ComboList *CreateComboList(const TCHAR *reference) const override;
   virtual void SetFromCombo(int data_field_index,
                             TCHAR *value_string) override;
 

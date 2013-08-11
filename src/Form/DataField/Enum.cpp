@@ -262,7 +262,7 @@ DataFieldEnum::Sort(unsigned startindex)
 }
 
 ComboList *
-DataFieldEnum::CreateComboList() const
+DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
 {
   ComboList *combo_list = new ComboList();
 

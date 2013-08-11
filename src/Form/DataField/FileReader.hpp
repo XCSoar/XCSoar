@@ -155,7 +155,7 @@ public:
   virtual const TCHAR *GetAsString() const override;
   virtual const TCHAR *GetAsDisplayString() const override;
   virtual void SetAsInteger(int value) override;
-  virtual ComboList *CreateComboList() const override;
+  virtual ComboList *CreateComboList(const TCHAR *reference) const override;
 
 protected:
   void EnsureLoaded();
