@@ -34,8 +34,6 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndProperty *wComboPopupWndProperty;
-static DataField *ComboPopupDataField;
 static const ComboList *ComboListPopup;
 
 class ComboPickerSupport : public ListItemRenderer {
@@ -94,17 +92,9 @@ ComboPicker(const TCHAR *caption,
                     enable_item_help ? OnItemHelp : NULL);
 }
 
-static int
-ComboPicker(const WndProperty &control,
-            const ComboList &combo_list, bool EnableItemHelp)
-{
-  return ComboPicker(control.GetCaption(), combo_list,
-                     control.GetHelpText(),
-                     EnableItemHelp);
-}
-
 bool
-dlgComboPicker(WndProperty *theProperty)
+ComboPicker(const TCHAR *caption, DataField &df,
+            const TCHAR *help_text)
 {
   static bool bInComboPicker = false;
 
@@ -118,17 +108,11 @@ dlgComboPicker(WndProperty *theProperty)
   const TCHAR *reference = nullptr;
 
   while (true) {
-    assert(theProperty != NULL);
-    wComboPopupWndProperty = theProperty;
-
-    ComboPopupDataField = theProperty->GetDataField();
-    assert(ComboPopupDataField != NULL);
-
-    const ComboList combo_list = ComboPopupDataField->CreateComboList(reference);
+    const ComboList combo_list = df.CreateComboList(reference);
     ComboListPopup = &combo_list;
 
-    int idx = ComboPicker(*theProperty, combo_list,
-                          ComboPopupDataField->GetItemHelpEnabled());
+    int idx = ComboPicker(caption, combo_list, help_text,
+                          df.GetItemHelpEnabled());
     if (idx < 0) {
       bInComboPicker = false;
       return false;
@@ -145,9 +129,7 @@ dlgComboPicker(WndProperty *theProperty)
       // same as above but lower items needed
       reference = buffer = combo_list[idx + 1].StringValue;
     } else {
-      ComboPopupDataField->SetFromCombo(item.DataFieldIndex,
-                                        item.StringValue);
-      theProperty->RefreshDisplay();
+      df.SetFromCombo(item.DataFieldIndex, item.StringValue);
       bInComboPicker = false;
       return true;
     }

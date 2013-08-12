@@ -27,6 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 class ComboList;
+class DataField;
 class WndProperty;
 
 int
@@ -40,6 +41,7 @@ ComboPicker(const TCHAR *caption,
  * equal to the old one)
  */
 bool
-dlgComboPicker(WndProperty *theProperty);
+ComboPicker(const TCHAR *caption, DataField &df,
+            const TCHAR *help_text = nullptr);
 
 #endif

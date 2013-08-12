@@ -180,7 +180,9 @@ WndProperty::BeginEditing()
        it exists */
     return OnHelp();
   } else if (mDataField != NULL && mDataField->supports_combolist) {
-    dlgComboPicker(this);
+    if (ComboPicker(GetCaption(), *GetDataField(), GetHelpText()))
+      RefreshDisplay();
+
     return true;
   } else if (mDataField != NULL &&
              mDataField->GetType() == DataField::Type::ROUGH_TIME) {
