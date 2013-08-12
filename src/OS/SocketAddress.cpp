@@ -50,7 +50,7 @@ SocketAddress::operator==(const SocketAddress &other) const
     memcmp(&address, &other.address, length) == 0;
 }
 
-#ifdef HAVE_POSIX
+#if defined(HAVE_POSIX) && !defined(__BIONIC__)
 
 void
 SocketAddress::SetLocal(const char *path)
@@ -64,6 +64,8 @@ SocketAddress::SetLocal(const char *path)
 
   sun.sun_family = AF_LOCAL;
   memcpy(sun.sun_path, path, path_length + 1);
+
+  /* note: Bionic doesn't provide SUN_LEN() */
   length = SUN_LEN(&sun);
 }
 

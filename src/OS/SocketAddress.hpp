@@ -51,7 +51,7 @@ class SocketAddress {
 public:
   SocketAddress() = default;
 
-#ifdef HAVE_POSIX
+#if defined(HAVE_POSIX) && !defined(__BIONIC__)
   /**
    * Make this a "local" address (UNIX domain socket).
    */
