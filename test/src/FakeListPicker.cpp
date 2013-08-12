@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Dialogs/ComboPicker.hpp"
 
-int
+bool
 dlgComboPicker(WndProperty *theProperty)
 {
-  return -1;
+  return false;
 }

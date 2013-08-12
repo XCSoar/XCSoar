@@ -115,7 +115,7 @@ ComboPicker(const WndProperty &control,
                      EnableItemHelp);
 }
 
-int
+bool
 dlgComboPicker(WndProperty *theProperty)
 {
   static bool bInComboPicker = false;
@@ -125,7 +125,7 @@ dlgComboPicker(WndProperty *theProperty)
 
   // prevents multiple instances
   if (bInComboPicker)
-    return 0;
+    return false;
 
   bInComboPicker = true;
 
@@ -167,9 +167,12 @@ dlgComboPicker(WndProperty *theProperty)
                                           item->StringValue);
         wComboPopupWndProperty->RefreshDisplay();
       }
+    } else {
+      bInComboPicker = false;
+      return false;
     }
   } // loop reopen combo if <<More>>  or <<Less>> picked
 
   bInComboPicker = false;
-  return 1;
+  return true;
 }

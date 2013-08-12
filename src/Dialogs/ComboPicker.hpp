@@ -35,7 +35,11 @@ ComboPicker(const TCHAR *caption,
             ListHelpCallback_t help_callback,
             bool enable_item_help = false);
 
-int
+/**
+ * @return true if the user has selected a new value (though it may be
+ * equal to the old one)
+ */
+bool
 dlgComboPicker(WndProperty *theProperty);
 
 #endif
