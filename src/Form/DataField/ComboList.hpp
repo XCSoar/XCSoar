@@ -65,6 +65,8 @@ public:
   ComboList()
     :ComboPopupItemSavedIndex(0) {}
 
+  ComboList(ComboList &&other);
+
   ~ComboList() {
     Clear();
   }
