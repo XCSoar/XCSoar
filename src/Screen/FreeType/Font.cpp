@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/Files.hpp"
 #include "Init.hpp"
+#include "Asset.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Thread/Mutex.hpp"
@@ -48,6 +49,9 @@ Copyright_License {
  */
 static Mutex freetype_mutex;
 #endif
+
+static FT_Int32 load_flags = FT_LOAD_DEFAULT;
+static FT_Render_Mode render_mode = FT_RENDER_MODE_NORMAL;
 
 static const char *font_path;
 static const char *bold_font_path;
@@ -83,6 +87,12 @@ NextChar(const TCHAR *p)
 void
 Font::Initialise()
 {
+  if (IsDithered()) {
+    /* disable anti-aliasing */
+    load_flags |= FT_LOAD_TARGET_MONO;
+    render_mode = FT_RENDER_MODE_MONO;
+  }
+
   font_path = FindDefaultFont();
   bold_font_path = FindDefaultBoldFont();
   italic_font_path = FindDefaultItalicFont();
@@ -102,7 +112,7 @@ GetCapitalHeight(FT_Face face)
   if (i == 0)
     return 0;
 
-  FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+  FT_Error error = FT_Load_Glyph(face, i, load_flags);
   if (error)
     return 0;
 
@@ -230,7 +240,7 @@ Font::TextSize(const TCHAR *text) const
     if (i == 0)
       continue;
 
-    FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+    FT_Error error = FT_Load_Glyph(face, i, load_flags);
     if (error)
       continue;
 
@@ -306,14 +316,47 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
 }
 
 static void
+ConvertMono(unsigned char *dest, const unsigned char *src, unsigned n)
+{
+  for (; n >= 8; n -= 8, ++src) {
+    for (unsigned i = 0x80; i != 0; i >>= 1)
+      *dest++ = (*src & i) ? 0xff : 0x00;
+  }
+
+  for (unsigned i = 0x80; n > 0; i >>= 1, --n)
+    *dest++ = (*src & i) ? 0xff : 0x00;
+}
+
+static void
+ConvertMono(FT_Bitmap &dest, const FT_Bitmap &src)
+{
+  dest = src;
+  dest.pitch = dest.width;
+  dest.buffer = new unsigned char[dest.pitch * dest.rows];
+
+  unsigned char *d = dest.buffer, *s = src.buffer;
+  for (unsigned y = 0; y < unsigned(dest.rows);
+       ++y, d += dest.pitch, s += src.pitch)
+    ConvertMono(d, s, dest.width);
+}
+
+static void
 RenderGlyph(uint8_t *buffer, size_t width, size_t height,
             FT_GlyphSlot glyph, int x, int y)
 {
-  FT_Error error = FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL);
+  FT_Error error = FT_Render_Glyph(glyph, render_mode);
   if (error)
     return;
 
-  RenderGlyph(buffer, width, height, glyph->bitmap, x, y);
+  if (IsDithered()) {
+    /* with anti-aliasing disabled, FreeType writes each pixel in one
+       bit; hack: convert it to 1 byte per pixel and then render it */
+    FT_Bitmap bitmap;
+    ConvertMono(bitmap, glyph->bitmap);
+    RenderGlyph(buffer, width, height, bitmap, x, y);
+    delete[] bitmap.buffer;
+  } else
+    RenderGlyph(buffer, width, height, glyph->bitmap, x, y);
 }
 
 void
@@ -349,7 +392,7 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
     if (i == 0)
       continue;
 
-    FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+    FT_Error error = FT_Load_Glyph(face, i, load_flags);
     if (error)
       continue;
 
