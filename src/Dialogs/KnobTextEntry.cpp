@@ -204,25 +204,25 @@ FormKeyDown(unsigned key_code)
 static void
 OnLeftClicked()
 {
-  FormKeyDown(IsAltair() ? KEY_UP : KEY_LEFT);
+  MoveCursorLeft();
 }
 
 static void
 OnRightClicked()
 {
-  FormKeyDown(IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  MoveCursorRight();
 }
 
 static void
 OnUpClicked()
 {
-  FormKeyDown(!IsAltair() ? KEY_UP : KEY_LEFT);
+  DecrementLetter();
 }
 
 static void
 OnDownClicked()
 {
-  FormKeyDown(!IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  IncrementLetter();
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
