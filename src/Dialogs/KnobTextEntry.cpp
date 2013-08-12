@@ -134,36 +134,62 @@ MoveCursor()
 }
 
 static bool
+MoveCursorLeft()
+{
+  if (cursor < 1)
+    return false;
+
+  --cursor;
+  MoveCursor();
+  return true;
+}
+
+static bool
+MoveCursorRight()
+{
+  if (cursor + 2 >= max_width)
+    return false; // max width
+
+  ++cursor;
+  MoveCursor();
+  return true;
+}
+
+static void
+IncrementLetter()
+{
+  ++lettercursor;
+  UpdateCursor();
+}
+
+static void
+DecrementLetter()
+{
+  --lettercursor;
+  UpdateCursor();
+}
+
+static bool
 FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_UP:
   case KEY_LEFT:
     if ((key_code == KEY_LEFT) ^ IsAltair()) {
-      if (cursor < 1)
-        return true; // min width
-
-      cursor--;
-      MoveCursor();
+      MoveCursorLeft();
       return true;
     } else {
-      lettercursor--;
-      UpdateCursor();
+      DecrementLetter();
       return true;
     }
 
   case KEY_DOWN:
   case KEY_RIGHT:
     if ((key_code == KEY_RIGHT) ^ IsAltair()) {
-      if (cursor + 2 >= max_width)
-        return true; // max width
-
-      cursor++;
-      MoveCursor();
+      MoveCursorRight();
       return true;
     } else {
-      lettercursor++;
-      UpdateCursor();
+      IncrementLetter();
       return true;
     }
   case KEY_RETURN:
