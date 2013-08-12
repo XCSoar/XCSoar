@@ -24,10 +24,10 @@ Copyright_License {
 #include "System.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "OS/Process.hpp"
 #include "OS/Sleep.h"
 #include "Util/StaticString.hpp"
 
-#include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -36,17 +36,13 @@ Copyright_License {
 static bool
 InsMod(const char *path)
 {
-  NarrowString<256> buffer;
-  buffer.Format("/sbin/insmod '%s'", path);
-  return system(buffer) == 0;
+  return Run("/sbin/insmod", path);
 }
 
 static bool
 RmMod(const char *name)
 {
-  NarrowString<256> buffer;
-  buffer.Format("/sbin/rmmod '%s'", name);
-  return system(buffer) == 0;
+  return Run("/sbin/rmmod", name);
 }
 
 #endif
@@ -55,7 +51,7 @@ bool
 KoboReboot()
 {
 #ifdef KOBO
-  return system("/sbin/reboot") == 0;
+  return Run("/sbin/reboot");
 #else
   return false;
 #endif
@@ -65,7 +61,7 @@ bool
 KoboPowerOff()
 {
 #ifdef KOBO
-  return system("/sbin/poweroff") == 0;
+  return Run("/sbin/poweroff");
 #else
   return false;
 #endif
@@ -90,13 +86,17 @@ KoboWifiOn()
 
   Sleep(2000);
 
-  system("/sbin/ifconfig eth0 up");
-  system("/bin/wlarm_le -i eth0 up");
-  system("/bin/wpa_supplicant -s -i eth0 -c /etc/wpa_supplicant/wpa_supplicant.conf -C /var/run/wpa_supplicant -B");
+  Run("/sbin/ifconfig", "eth0", "up");
+  Run("/bin/wlarm_le", "-i", "eth0", "up");
+  Run("/bin/wpa_supplicant", "-s", "-i", "eth0",
+      "-c", "/etc/wpa_supplicant/wpa_supplicant.conf",
+      "-C", "/var/run/wpa_supplicant", "-B");
 
   Sleep(2000);
 
-  system("/sbin/udhcpc -S -i eth0 -s /etc/udhcpc.d/default.script -t15 -T10 -A3 -f -q &");
+  Start("/sbin/udhcpc", "-S", "-i", "eth0",
+        "-s", "/etc/udhcpc.d/default.script",
+        "-t15", "-T10", "-A3", "-f", "-q");
 
   return true;
 #else
@@ -108,9 +108,9 @@ bool
 KoboWifiOff()
 {
 #ifdef KOBO
-  system("/usr/bin/killall wpa_supplicant udhcpc");
-  system("/bin/wlarm_le -i eth0 down");
-  system("/sbin/ifconfig eth0 down");
+  Run("/usr/bin/killall", "wpa_supplicant", "udhcpc");
+  Run("/bin/wlarm_le", "-i", "eth0", "down");
+  Run("/sbin/ifconfig", "eth0", "down");
 
   RmMod("dhd");
   RmMod("sdio_wifi_pwr");
@@ -149,7 +149,7 @@ KoboRunXCSoar()
   else
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
-  system(cmd);
+  Run(cmd);
 #endif
 }
 
@@ -157,6 +157,6 @@ void
 KoboRunTelnetd()
 {
 #ifdef KOBO
-  system("/usr/sbin/telnetd -l /bin/sh");
+  Run("/usr/sbin/telnetd", "-l", "/bin/sh");
 #endif
 }
