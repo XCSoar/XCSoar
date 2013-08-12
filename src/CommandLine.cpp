@@ -92,6 +92,8 @@ CommandLine::Parse(Args &args)
         args.UsageError();
       s = p;
       height = ParseUnsigned(s + 1, &p);
+      if (*p != '\0')
+        args.UsageError();
     }
     else if (strcmp(s, "-portrait") == 0) {
       width = 480;
@@ -127,6 +129,8 @@ CommandLine::Parse(Args &args)
         y_dpi = ParseUnsigned(s + 1, &p);
       } else
         y_dpi = x_dpi;
+      if (*p != '\0')
+        args.UsageError();
 
       if (x_dpi < 32 || x_dpi > 512 || y_dpi < 32 || y_dpi > 512)
         args.UsageError();
