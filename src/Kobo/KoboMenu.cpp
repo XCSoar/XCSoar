@@ -232,9 +232,6 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());
 
-  // must be down at start
-  KoboWifiOff();
-
   return dialog.ShowModal();
 
   // /proc/kmsg
