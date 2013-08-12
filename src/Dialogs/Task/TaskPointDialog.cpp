@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
-#include "Form/Draw.hpp"
 #include "Form/Button.hpp"
 #include "Form/CheckBox.hpp"
 #include "Widget/DockWindow.hpp"
@@ -223,10 +222,8 @@ ReadValues()
 }
 
 static void
-OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnTaskPaint(Canvas &canvas, const PixelRect &rc)
 {
-  PixelRect rc = Sender->GetClientRect();
-
   const OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
 
 #ifdef ENABLE_OPENGL

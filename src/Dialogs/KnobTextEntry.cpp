@@ -55,10 +55,8 @@ static constexpr TCHAR EntryLetters[] =
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
 static void
-OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnTextPaint(Canvas &canvas, const PixelRect &rc)
 {
-  const PixelRect rc = Sender->GetClientRect();
-
   canvas.Clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text

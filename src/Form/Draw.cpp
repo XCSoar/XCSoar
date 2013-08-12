@@ -37,5 +37,5 @@ WndOwnerDrawFrame::OnPaint(Canvas &canvas)
   if (mOnPaintCallback == NULL)
     return;
 
-  mOnPaintCallback(this, canvas);
+  mOnPaintCallback(canvas, GetClientRect());
 }

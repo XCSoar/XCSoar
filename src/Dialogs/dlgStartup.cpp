@@ -29,7 +29,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Form.hpp"
-#include "Form/Draw.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Gauge/LogoView.hpp"
@@ -50,10 +49,10 @@ static WndForm *wf = NULL;
 static LogoView *logo;
 
 static void
-OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnLogoPaint(Canvas &canvas, const PixelRect &rc)
 {
   canvas.ClearWhite();
-  logo->draw(canvas, Sender->GetClientRect());
+  logo->draw(canvas, rc);
 }
 
 static void
