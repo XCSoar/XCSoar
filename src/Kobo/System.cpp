@@ -96,7 +96,7 @@ KoboWifiOn()
 
   Sleep(2000);
 
-  system("/sbin/udhcpc -S -i eth0 -s /etc/udhcpc.d/default.script -t15 -T10 -A3 -f -q");
+  system("/sbin/udhcpc -S -i eth0 -s /etc/udhcpc.d/default.script -t15 -T10 -A3 -f -q &");
 
   return true;
 #else
