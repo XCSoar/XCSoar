@@ -33,6 +33,7 @@
 #include "Compiler.h"
 
 #include <new>
+#include <utility>
 
 #if !defined(__clang__) && __GNUC__ && GCC_VERSION < 40800
 #include <type_traits>
