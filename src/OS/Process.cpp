@@ -30,12 +30,22 @@ Copyright_License {
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
+
+static bool
+UnblockAllSignals()
+{
+  sigset_t ss;
+  sigemptyset(&ss);
+  return sigprocmask(SIG_SETMASK, &ss, nullptr) == 0;
+}
 
 static pid_t
 ForkExec(const char *const*argv)
 {
   const pid_t pid = fork();
   if (pid == 0) {
+    UnblockAllSignals();
     execve(argv[0], const_cast<char **>(argv), nullptr);
     _exit(1);
   }
