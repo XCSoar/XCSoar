@@ -1864,10 +1864,8 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
-	$(SRC)/Dialogs/XML.cpp \
-	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/UIUtil/KineticManager.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
@@ -1875,8 +1873,6 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/XML/Node.cpp \
-	$(SRC)/XML/Parser.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \

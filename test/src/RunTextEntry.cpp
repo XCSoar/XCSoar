@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#define ENABLE_XML_DIALOG
+#define ENABLE_DIALOG
 #define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"

@@ -22,16 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/CallBackTable.hpp"
+#include "WidgetDialog.hpp"
+#include "Language/Language.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
-#include "Form/Form.hpp"
-#include "Form/Draw.hpp"
 #include "Form/Button.hpp"
-#include "MapSettings.hpp"
 #include "Asset.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -39,33 +36,129 @@ Copyright_License {
 
 #include <algorithm>
 
-static WndForm *wf = NULL;
-static WndOwnerDrawFrame *wGrid = NULL;
+enum Buttons {
+  DOWN,
+  UP,
+  LEFT,
+  RIGHT,
+};
 
 static constexpr size_t MAX_TEXTENTRY = 40;
-static unsigned int cursor = 0;
-static int lettercursor = 0;
-static size_t max_width;
-
-static TCHAR edittext[MAX_TEXTENTRY];
 
 static constexpr TCHAR EntryLetters[] =
   _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
-static void
-OnTextPaint(Canvas &canvas, const PixelRect &rc)
+/**
+ * Find a letter in the list and returns its index.  Returns 0
+ * (i.e. the index of the space character) if the given letter is
+ * unknown.
+ */
+gcc_const
+static unsigned
+FindEntryLetter(TCHAR ch)
 {
+  for (unsigned i = 0; i < (int)MAXENTRYLETTERS; ++i)
+    if (EntryLetters[i] == ch)
+      return i;
+
+  return 0;
+}
+
+class KnobTextEntryWindow final : public PaintWindow, public ActionListener {
+  const size_t max_width;
+
+  unsigned int cursor;
+  int lettercursor;
+
+  TCHAR buffer[MAX_TEXTENTRY];
+
+public:
+  KnobTextEntryWindow(const TCHAR *text, size_t width)
+    :max_width(std::min(MAX_TEXTENTRY, width)),
+     cursor(0), lettercursor(0) {
+    CopyString(buffer, text, max_width);
+    MoveCursor();
+  }
+
+  TCHAR *GetValue() {
+    return buffer;
+  }
+
+private:
+  void UpdateCursor() {
+    if (lettercursor >= (int)MAXENTRYLETTERS)
+      lettercursor = 0;
+
+    if (lettercursor < 0)
+      lettercursor = MAXENTRYLETTERS - 1;
+
+    buffer[cursor] = EntryLetters[lettercursor];
+
+    if (IsDefined())
+      Invalidate();
+  }
+
+  void MoveCursor() {
+    if (cursor >= _tcslen(buffer))
+      buffer[cursor + 1] = 0;
+
+    lettercursor = FindEntryLetter(ToUpperASCII(buffer[cursor]));
+
+    UpdateCursor();
+  }
+
+  bool MoveCursorLeft() {
+    if (cursor < 1)
+      return false;
+
+    --cursor;
+    MoveCursor();
+    return true;
+  }
+
+  bool MoveCursorRight() {
+    if (cursor + 2 >= max_width)
+      return false; // max width
+
+    ++cursor;
+    MoveCursor();
+    return true;
+  }
+
+  void IncrementLetter() {
+    ++lettercursor;
+    UpdateCursor();
+  }
+
+  void DecrementLetter() {
+    --lettercursor;
+    UpdateCursor();
+  }
+
+protected:
+  /* virtual methods from class Window */
+  virtual void OnPaint(Canvas &canvas);
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
+};
+
+void
+KnobTextEntryWindow::OnPaint(Canvas &canvas)
+{
+  const PixelRect rc = GetClientRect();
+
   canvas.Clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
   const DialogLook &look = UIGlobals::GetDialogLook();
   canvas.Select(*look.text_font);
 
-  PixelSize tsize = canvas.CalcTextSize(edittext);
-  PixelSize tsizec = canvas.CalcTextSize(edittext, cursor);
-  PixelSize tsizea = canvas.CalcTextSize(edittext, cursor + 1);
+  PixelSize tsize = canvas.CalcTextSize(buffer);
+  PixelSize tsizec = canvas.CalcTextSize(buffer, cursor);
+  PixelSize tsizea = canvas.CalcTextSize(buffer, cursor + 1);
 
   RasterPoint p[5];
   p[0].x = 10;
@@ -88,183 +181,92 @@ OnTextPaint(Canvas &canvas, const PixelRect &rc)
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_WHITE);
-  canvas.DrawText(p[0].x, p[0].y, edittext);
+  canvas.DrawText(p[0].x, p[0].y, buffer);
 }
 
-static void
-UpdateCursor()
+void
+KnobTextEntryWindow::OnAction(int id)
 {
-  if (lettercursor >= (int)MAXENTRYLETTERS)
-    lettercursor = 0;
+  switch (id) {
+  case DOWN:
+    IncrementLetter();
+    break;
 
-  if (lettercursor < 0)
-    lettercursor = MAXENTRYLETTERS - 1;
+  case UP:
+    DecrementLetter();
+    break;
 
-  edittext[cursor] = EntryLetters[lettercursor];
+  case LEFT:
+    MoveCursorLeft();
+    break;
 
-  if (wGrid != NULL)
-    wGrid->Invalidate();
-}
-
-/**
- * Find a letter in the list and returns its index.  Returns 0
- * (i.e. the index of the space character) if the given letter is
- * unknown.
- */
-gcc_const
-static unsigned
-FindEntryLetter(TCHAR ch)
-{
-  for (unsigned i = 0; i < (int)MAXENTRYLETTERS; ++i)
-    if (EntryLetters[i] == ch)
-      return i;
-
-  return 0;
-}
-
-static void
-MoveCursor()
-{
-  if (cursor >= _tcslen(edittext))
-    edittext[cursor + 1] = 0;
-
-  lettercursor = FindEntryLetter(ToUpperASCII(edittext[cursor]));
-
-  UpdateCursor();
-}
-
-static bool
-MoveCursorLeft()
-{
-  if (cursor < 1)
-    return false;
-
-  --cursor;
-  MoveCursor();
-  return true;
-}
-
-static bool
-MoveCursorRight()
-{
-  if (cursor + 2 >= max_width)
-    return false; // max width
-
-  ++cursor;
-  MoveCursor();
-  return true;
-}
-
-static void
-IncrementLetter()
-{
-  ++lettercursor;
-  UpdateCursor();
-}
-
-static void
-DecrementLetter()
-{
-  --lettercursor;
-  UpdateCursor();
-}
-
-static bool
-FormKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_UP:
-  case KEY_LEFT:
-    if ((key_code == KEY_LEFT) ^ IsAltair()) {
-      MoveCursorLeft();
-      return true;
-    } else {
-      DecrementLetter();
-      return true;
-    }
-
-  case KEY_DOWN:
-  case KEY_RIGHT:
-    if ((key_code == KEY_RIGHT) ^ IsAltair()) {
-      MoveCursorRight();
-      return true;
-    } else {
-      IncrementLetter();
-      return true;
-    }
-  case KEY_RETURN:
-    wf->SetModalResult(mrOK);
-    return true;
-
-  default:
-    return false;
+  case RIGHT:
+    MoveCursorRight();
+    break;
   }
 }
 
-static void
-OnLeftClicked()
-{
-  MoveCursorLeft();
-}
+class KnobTextEntryWidget final : public WindowWidget {
+  KnobTextEntryWindow window;
 
-static void
-OnRightClicked()
-{
-  MoveCursorRight();
-}
+public:
+  KnobTextEntryWidget(const TCHAR *text, size_t width)
+    :window(text, width) {}
 
-static void
-OnUpClicked()
-{
-  DecrementLetter();
-}
+  TCHAR *GetValue() {
+    return window.GetValue();
+  }
 
-static void
-OnDownClicked()
-{
-  IncrementLetter();
-}
+  void CreateButtons(WidgetDialog &dialog);
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTextPaint),
-  DeclareCallBackEntry(OnLeftClicked),
-  DeclareCallBackEntry(OnRightClicked),
-  DeclareCallBackEntry(OnUpClicked),
-  DeclareCallBackEntry(OnDownClicked),
-  DeclareCallBackEntry(NULL)
+  /* virtual methods from class Widget */
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    WindowStyle style;
+    style.Hide();
+    window.Create(parent, rc, style);
+    SetWindow(&window);
+  }
+
+  virtual void Unprepare() override {
+    window.Destroy();
+  }
 };
+
+inline void
+KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
+{
+  dialog.AddButton(_T("A+"), window, DOWN);
+  dialog.AddButtonKey(IsAltair() ? KEY_LEFT : KEY_UP);
+
+  dialog.AddButton(_T("A-"), window, UP);
+  dialog.AddButtonKey(IsAltair() ? KEY_RIGHT : KEY_DOWN);
+
+  dialog.AddSymbolButton(_T("<"), window, LEFT);
+  dialog.AddButtonKey(IsAltair() ? KEY_UP : KEY_LEFT);
+
+  dialog.AddSymbolButton(_T(">"), window, RIGHT);
+  dialog.AddButtonKey(IsAltair() ? KEY_DOWN : KEY_RIGHT);
+}
 
 void
 KnobTextEntry(TCHAR *text, size_t width,
               const TCHAR *caption)
 {
-  wf = NULL;
-  wGrid = NULL;
-
   if (width == 0)
     width = MAX_TEXTENTRY;
 
-  max_width = std::min(MAX_TEXTENTRY, width);
+  KnobTextEntryWidget widget(text, width);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), caption, &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  widget.CreateButtons(dialog);
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_TEXTENTRY"));
-  assert(wf != nullptr);
-
-  if (caption)
-    wf->SetCaption(caption);
-
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
-
-  cursor = 0;
-  CopyString(edittext, text, max_width);
-  MoveCursor();
-
-  wf->SetKeyDownFunction(FormKeyDown);
-
-  if (wf->ShowModal() == mrOK) {
-    TrimRight(edittext);
-    CopyString(text, edittext, max_width);
+  if (dialog.ShowModal() == mrOK) {
+    TrimRight(widget.GetValue());
+    CopyString(text, widget.GetValue(), width);
   }
 
-  delete wf;
+  dialog.StealWidget();
 }
