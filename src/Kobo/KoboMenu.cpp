@@ -170,7 +170,7 @@ public:
       TogglePause();
       break;
     case NETWORK:
-      ShowNetworkDialog(dialog.GetMainWindow(), dialog.GetLook());
+      ShowNetworkDialog();
       break;
     default:
       break;

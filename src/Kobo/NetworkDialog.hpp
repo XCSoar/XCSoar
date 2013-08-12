@@ -24,10 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_NETWORK_DIALOG_HPP
 #define XCSOAR_KOBO_NETWORK_DIALOG_HPP
 
-class SingleWindow;
-struct DialogLook;
-
 void
-ShowNetworkDialog(SingleWindow &main_window, const DialogLook &look);
+ShowNetworkDialog();
 
 #endif

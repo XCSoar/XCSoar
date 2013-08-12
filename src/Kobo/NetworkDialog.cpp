@@ -23,10 +23,8 @@ Copyright_License {
 
 #include "NetworkDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Screen/Init.hpp"
-#include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
 #include "Screen/Key.h"
-#include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Form/ActionListener.hpp"
@@ -109,11 +107,12 @@ NetworkWidget::OnAction(int id)
 }
 
 void
-ShowNetworkDialog(SingleWindow &main_window, const DialogLook &look)
+ShowNetworkDialog()
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
   NetworkWidget widget(look);
   WidgetDialog dialog(look);
-  dialog.CreateFull(main_window, _("Network"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Network"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   dialog.ShowModal();
   dialog.StealWidget();
