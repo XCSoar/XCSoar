@@ -76,6 +76,7 @@ ButtonPanel::AddSymbol(tstring::const_pointer caption,
 {
   WndButton *button = new WndSymbolButton(parent, look, caption,
                                           dummy_rc, style, listener, id);
+  keys[buttons.size()] = 0;
   buttons.append(button);
 
   return button;
