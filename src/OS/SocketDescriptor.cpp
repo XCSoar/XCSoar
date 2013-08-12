@@ -141,11 +141,15 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 }
 
 bool
+SocketDescriptor::Bind(const SocketAddress &address)
+{
+  return bind(Get(), address, address.GetLength()) == 0;
+}
+
+bool
 SocketDescriptor::BindPort(unsigned port)
 {
-  SocketAddress address = SocketAddress::MakePort4(port);
-
-  return bind(Get(), address, address.GetLength()) == 0;
+  return Bind(SocketAddress::MakePort4(port));
 }
 
 #ifndef _WIN32_WCE
