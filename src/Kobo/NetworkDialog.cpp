@@ -36,11 +36,11 @@ Copyright_License {
 class NetworkWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
-    WIFI,
+    TOGGLE_WIFI,
     TELNET,
   };
 
-  WndButton *wifi_button;
+  WndButton *toggle_wifi_button;
 
 public:
   NetworkWidget(const DialogLook &look):RowFormWidget(look) {}
@@ -59,8 +59,8 @@ private:
 void
 NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  wifi_button = AddButton(IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON"),
-                          *this, WIFI);
+  toggle_wifi_button = AddButton(IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON"),
+                                 *this, TOGGLE_WIFI);
 
   AddButton(_T("Telnet server"), *this, TELNET);
 }
@@ -69,10 +69,10 @@ void
 NetworkWidget::ToggleWifi()
 {
   if (!IsKoboWifiOn()) {
-    wifi_button->SetCaption(("Wifi OFF"));
+    toggle_wifi_button->SetCaption(("Wifi OFF"));
     KoboWifiOn();
   } else {
-    wifi_button->SetCaption(("Wifi ON"));
+    toggle_wifi_button->SetCaption(("Wifi ON"));
     KoboWifiOff();
   }
 }
@@ -81,7 +81,7 @@ void
 NetworkWidget::OnAction(int id)
 {
   switch (id) {
-  case WIFI:
+  case TOGGLE_WIFI:
     ToggleWifi();
     break;
 
