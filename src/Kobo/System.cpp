@@ -72,6 +72,16 @@ KoboPowerOff()
 }
 
 bool
+IsKoboWifiOn()
+{
+#ifdef KOBO
+  return Directory::Exists("/sys/class/net/eth0");
+#else
+  return false;
+#endif
+}
+
+bool
 KoboWifiOn()
 {
 #ifdef KOBO

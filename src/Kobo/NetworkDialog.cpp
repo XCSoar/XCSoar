@@ -33,8 +33,6 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
 
-static bool wifi = false;
-
 class NetworkWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
@@ -61,8 +59,8 @@ private:
 void
 NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  wifi = false;
-  wifi_button = AddButton(_T("Wifi ON"), *this, WIFI);
+  wifi_button = AddButton(IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON"),
+                          *this, WIFI);
 
   AddButton(_T("Telnet server"), *this, TELNET);
 }
@@ -70,9 +68,7 @@ NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 NetworkWidget::ToggleWifi()
 {
-  wifi = !wifi;
-
-  if (wifi) {
+  if (!IsKoboWifiOn()) {
     wifi_button->SetCaption(("Wifi OFF"));
     KoboWifiOn();
   } else {
