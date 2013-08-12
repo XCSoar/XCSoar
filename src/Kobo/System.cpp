@@ -108,7 +108,7 @@ bool
 KoboWifiOff()
 {
 #ifdef KOBO
-  system("/usr/bin/killall wpa_supplicant");
+  system("/usr/bin/killall wpa_supplicant udhcpc");
   system("/bin/wlarm_le -i eth0 down");
   system("/sbin/ifconfig eth0 down");
 
