@@ -28,6 +28,8 @@ Copyright_License {
 #include "Hardware/DisplayDPI.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
+#include "Util/CharUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
 #ifdef WIN32
@@ -85,11 +87,11 @@ CommandLine::Parse(Args &args)
 #if !defined(_WIN32_WCE)
     else if (isdigit(s[1])) {
       char *p;
-      width = strtol(s+1, &p, 10);
+      width = ParseUnsigned(s + 1, &p);
       if (*p != 'x' && *p != 'X')
         args.UsageError();
       s = p;
-      height = strtol(s+1, &p, 10);
+      height = ParseUnsigned(s + 1, &p);
     }
     else if (strcmp(s, "-portrait") == 0) {
       width = 480;
@@ -119,10 +121,10 @@ CommandLine::Parse(Args &args)
     else if (strncmp(s, "-dpi=", 5) == 0) {
       unsigned x_dpi, y_dpi;
       char *p;
-      x_dpi = strtol(s+5, &p, 10);
+      x_dpi = ParseUnsigned(s + 5, &p);
       if (*p == 'x' || *p == 'X') {
         s = p;
-        y_dpi = strtol(s+1, &p, 10);
+        y_dpi = ParseUnsigned(s + 1, &p);
       } else
         y_dpi = x_dpi;
 
