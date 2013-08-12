@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_COMBO_PICKER_HPP
 #define XCSOAR_DIALOGS_COMBO_PICKER_HPP
 
-#include "Dialogs/ListPicker.hpp"
+#include <tchar.h>
 
 class ComboList;
 class WndProperty;
@@ -32,7 +32,7 @@ class WndProperty;
 int
 ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
-            ListHelpCallback_t help_callback,
+            const TCHAR *help_text = nullptr,
             bool enable_item_help = false);
 
 /**

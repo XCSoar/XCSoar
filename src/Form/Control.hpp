@@ -104,6 +104,10 @@ public:
    * @param Value The new Helptext of the Control
    */
   void SetHelpText(const TCHAR *Value);
+
+  const TCHAR *GetHelpText() const {
+    return help_text;
+  }
 };
 
 #endif

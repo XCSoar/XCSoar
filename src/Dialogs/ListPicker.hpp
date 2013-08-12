@@ -28,8 +28,6 @@ Copyright_License {
 
 class ListItemRenderer;
 
-typedef void (*ListHelpCallback_t)(unsigned item);
-
 /** returns string of item's help text **/
 typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
 
@@ -41,7 +39,7 @@ typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
  * @param item_height
  * @param item_renderer Paint a single item
  * @param update Update per timer
- * @param help_callback Callback for Helpbutton
+ * @param help_text enable the "Help" button and show this text on click
  * @param itemhelp_callback Callback to return string for current item help
  * @return the list index, or -1 if the user cancelled the dialog
  */
@@ -50,7 +48,7 @@ ListPicker(const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update = false,
-           ListHelpCallback_t help_callback = nullptr,
+           const TCHAR *help_text = nullptr,
            ItemHelpCallback_t itemhelp_callback = nullptr);
 
 #endif

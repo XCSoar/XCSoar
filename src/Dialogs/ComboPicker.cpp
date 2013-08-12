@@ -68,7 +68,7 @@ OnItemHelp(unsigned i)
 int
 ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
-            ListHelpCallback_t help_callback,
+            const TCHAR *help_text,
             bool enable_item_help)
 {
   ComboListPopup = &combo_list;
@@ -90,20 +90,8 @@ ComboPicker(const TCHAR *caption,
                     combo_list.ComboPopupItemSavedIndex,
                     row_height,
                     support, false,
-                    help_callback,
+                    help_text,
                     enable_item_help ? OnItemHelp : NULL);
-}
-
-static void
-OnHelpClicked(unsigned i)
-{
-  if (i < ComboListPopup->size()) {
-    const ComboList::Item &item = (*ComboListPopup)[i];
-    ComboPopupDataField->SetFromCombo(item.DataFieldIndex,
-                                      item.StringValue);
-  }
-
-  wComboPopupWndProperty->OnHelp();
 }
 
 static int
@@ -111,7 +99,7 @@ ComboPicker(const WndProperty &control,
             const ComboList &combo_list, bool EnableItemHelp)
 {
   return ComboPicker(control.GetCaption(), combo_list,
-                     control.HasHelp() ? OnHelpClicked : nullptr,
+                     control.GetHelpText(),
                      EnableItemHelp);
 }
 
