@@ -147,14 +147,14 @@ DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
   combo_list.Append(combo_list.size(), a, b);
 }
 
-ComboList *
+ComboList
 DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
 {
   const fixed reference = reference_string != nullptr
     ? ParseString(reference_string)
     : mValue;
 
-  ComboList *combo_list = new ComboList();
+  ComboList combo_list;
   const fixed epsilon = mStep / 1000;
   const fixed fine_step = mStep / 10;
 
@@ -169,7 +169,7 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
   fixed first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < mMin - epsilon)
     first = int(mMin / mStep) * mStep;
 
@@ -208,28 +208,28 @@ DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
     }
 
     if (!found_current && reference <= i + epsilon) {
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
 
       if (reference < i - epsilon)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, reference);
+        AppendComboValue(combo_list, reference);
 
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
   }
 
   if (reference > last + epsilon) {
     /* the current value out of range - append it here */
     last = reference;
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
-    AppendComboValue(*combo_list, reference);
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    AppendComboValue(combo_list, reference);
   }
 
   if (last < mMax - epsilon)
     /* there are values after "last" - give the user a choice */
-    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
 }

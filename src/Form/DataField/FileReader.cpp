@@ -294,7 +294,7 @@ DataFieldFileReader::Sort()
      function would require the Item class to be copyable */
 }
 
-ComboList *
+ComboList
 DataFieldFileReader::CreateComboList(const TCHAR *reference) const
 {
   /* sorry for the const_cast .. this method keeps the promise of not
@@ -302,7 +302,7 @@ DataFieldFileReader::CreateComboList(const TCHAR *reference) const
      (cached) file list as "modification" */
   EnsureLoadedDeconst();
 
-  ComboList *cl = new ComboList();
+  ComboList combo_list;
 
   TCHAR buffer[MAX_PATH];
 
@@ -331,13 +331,13 @@ DataFieldFileReader::CreateComboList(const TCHAR *reference) const
       path = buffer;
     }
 
-    cl->Append(i, path);
+    combo_list.Append(i, path);
     if (i == mValue) {
-      cl->ComboPopupItemSavedIndex = i;
+      combo_list.ComboPopupItemSavedIndex = i;
     }
   }
 
-  return cl;
+  return combo_list;
 }
 
 unsigned

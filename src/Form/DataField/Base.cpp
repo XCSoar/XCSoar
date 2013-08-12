@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Listener.hpp"
+#include "ComboList.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
@@ -102,4 +103,10 @@ DataField::SetAsInteger(gcc_unused int value)
 void
 DataField::SetAsString(gcc_unused const TCHAR *value)
 {
+}
+
+ComboList
+DataField::CreateComboList(const TCHAR *reference) const
+{
+  return ComboList();
 }

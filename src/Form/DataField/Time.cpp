@@ -101,14 +101,14 @@ DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
   combo_list.Append(value, buffer2, buffer);
 }
 
-ComboList *
+ComboList
 DataFieldTime::CreateComboList(const TCHAR *reference_string) const
 {
   const int reference = reference_string != nullptr
     ? ParseInt(reference_string)
     : value;
 
-  ComboList *combo_list = new ComboList();
+  ComboList combo_list;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
@@ -119,7 +119,7 @@ DataFieldTime::CreateComboList(const TCHAR *reference_string) const
   int first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < min)
     first = min;
 
@@ -130,25 +130,25 @@ DataFieldTime::CreateComboList(const TCHAR *reference_string) const
     if (!found_current && reference <= i) {
       if (reference < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, reference);
+        AppendComboValue(combo_list, reference);
 
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
   }
 
   if (reference > last) {
     /* the current value out of range - append it here */
     last = reference;
-    AppendComboValue(*combo_list, reference);
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    AppendComboValue(combo_list, reference);
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
   }
 
   if (last < max)
     /* there are values after "last" - give the user a choice */
-    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
 }

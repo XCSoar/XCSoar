@@ -124,10 +124,8 @@ public:
    * determine the range of displayed values; pass nullptr for the
    * "default" reference
    */
-  gcc_malloc
-  virtual ComboList *CreateComboList(const TCHAR *reference) const {
-    return nullptr;
-  }
+  gcc_pure
+  virtual ComboList CreateComboList(const TCHAR *reference) const;
 
   virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)

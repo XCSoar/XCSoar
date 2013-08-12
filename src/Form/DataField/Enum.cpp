@@ -261,16 +261,16 @@ DataFieldEnum::Sort(unsigned startindex)
             });
 }
 
-ComboList *
+ComboList
 DataFieldEnum::CreateComboList(const TCHAR *reference_string) const
 {
-  ComboList *combo_list = new ComboList();
+  ComboList combo_list;
 
   for (const auto &i : entries)
-    combo_list->Append(i.GetId(), i.GetString(), i.GetDisplayString(),
+    combo_list.Append(i.GetId(), i.GetString(), i.GetDisplayString(),
                        i.GetHelp());
 
-  combo_list->ComboPopupItemSavedIndex = value;
+  combo_list.ComboPopupItemSavedIndex = value;
   return combo_list;
 }
 

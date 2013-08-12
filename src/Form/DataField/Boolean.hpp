@@ -63,7 +63,7 @@ public:
   virtual const TCHAR *GetAsString() const override;
   virtual void SetAsInteger(int Value) override;
   virtual void SetAsString(const TCHAR *Value) override;
-  virtual ComboList *CreateComboList(const TCHAR *reference) const override;
+  virtual ComboList CreateComboList(const TCHAR *reference) const override;
 
 private:
   gcc_pure

@@ -30,14 +30,14 @@ DataFieldBoolean::ParseString(const TCHAR *s) const
   return true_text.equals(s);
 }
 
-ComboList *
+ComboList
 DataFieldBoolean::CreateComboList(const TCHAR *reference) const
 {
-  ComboList *combo_list = new ComboList();
-  combo_list->Append(false, false_text);
-  combo_list->Append(true, true_text);
+  ComboList combo_list;
+  combo_list.Append(false, false_text);
+  combo_list.Append(true, true_text);
 
-  combo_list->ComboPopupItemSavedIndex = GetAsInteger();
+  combo_list.ComboPopupItemSavedIndex = GetAsInteger();
   return combo_list;
 }
 
