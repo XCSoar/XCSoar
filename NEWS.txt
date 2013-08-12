@@ -9,6 +9,8 @@ Version 6.6.5 - not yet released
   - remove keyhole from the BGA start sector zone
 * devices
   - enable Nook's internal GPS for mock locations (#2999)
+* configuration
+  - fix loading home waypoint on longitudes bigger than 90 degrees
 
 Version 6.6.4 - 2013/07/11
 * map
