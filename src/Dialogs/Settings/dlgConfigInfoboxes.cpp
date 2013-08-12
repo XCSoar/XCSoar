@@ -210,31 +210,6 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   canvas.DrawText(2, 2, caption);
 }
 
-static void
-OnContentHelp(WindowControl *Sender)
-{
-  WndProperty *wp = (WndProperty*)Sender;
-  const DataFieldEnum &df = *(const DataFieldEnum *)wp->GetDataField();
-  InfoBoxFactory::Type type = (InfoBoxFactory::Type)df.GetValue();
-  if (type >= InfoBoxFactory::NUM_TYPES)
-    return;
-
-  const TCHAR *name = InfoBoxFactory::GetName(type);
-  if (name == NULL)
-    return;
-
-  TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(name));
-
-  const TCHAR *text = InfoBoxFactory::GetDescription(type);
-  if (text == NULL)
-    text = _("No help available on this item");
-  else
-    text = gettext(text);
-
-  dlgHelpShowModal(wf->GetMainWindow(), caption, text);
-}
-
 #ifdef _WIN32_WCE
 
 static bool
@@ -383,7 +358,6 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   dfe->Sort(0);
 
   edit_content->SetDataField(dfe);
-  edit_content->SetOnHelpCallback(OnContentHelp);
 
   control_rc.top += height;
   control_rc.bottom += height * 5;
