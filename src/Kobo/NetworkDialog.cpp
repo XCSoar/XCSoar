@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "NetworkDialog.hpp"
+#include "WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Key.h"
@@ -42,10 +43,11 @@ class NetworkWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
     TOGGLE_WIFI,
+    WIFI,
     TELNET,
   };
 
-  WndButton *toggle_wifi_button;
+  WndButton *toggle_wifi_button, *wifi_button;
 
 public:
   NetworkWidget(const DialogLook &look):RowFormWidget(look) {}
@@ -67,6 +69,7 @@ void
 NetworkWidget::UpdateButtons()
 {
   toggle_wifi_button->SetCaption(GetWifiToggleCaption());
+  wifi_button->SetEnabled(IsKoboWifiOn());
 }
 
 void
@@ -74,6 +77,8 @@ NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  *this, TOGGLE_WIFI);
+
+  wifi_button = AddButton(_("Wifi"), *this, WIFI);
 
   AddButton(_T("Telnet server"), *this, TELNET);
 
@@ -98,6 +103,10 @@ NetworkWidget::OnAction(int id)
   switch (id) {
   case TOGGLE_WIFI:
     ToggleWifi();
+    break;
+
+  case WIFI:
+    ShowWifiDialog();
     break;
 
   case TELNET:

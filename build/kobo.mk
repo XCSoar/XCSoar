@@ -12,10 +12,14 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
+	$(SRC)/Dialogs/Message.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(SRC)/Kobo/WPASupplicant.cpp \
 	$(SRC)/Kobo/System.cpp \
 	$(SRC)/Kobo/NetworkDialog.cpp \
+	$(SRC)/Kobo/WPASupplicant.cpp \
+	$(SRC)/Kobo/WifiDialog.cpp \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
 KOBO_MENU_LDADD = $(FAKE_LIBS)
