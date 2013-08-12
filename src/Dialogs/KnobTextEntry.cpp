@@ -52,7 +52,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 static constexpr TCHAR EntryLetters[] =
   _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
-#define MAXENTRYLETTERS (ARRAY_SIZE(EntryLetters) - 1)
+static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
 static void
 OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
