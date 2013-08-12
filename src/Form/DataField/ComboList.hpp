@@ -45,6 +45,9 @@ public:
     Item(int _DataFieldIndex, const TCHAR *_StringValue,
          const TCHAR *_StringValueFormatted, const TCHAR *_StringHelp = NULL);
     ~Item();
+
+    Item(const Item &other) = delete;
+    Item &operator=(const Item &other) = delete;
   };
 
 #ifdef _WIN32_WCE
@@ -65,6 +68,9 @@ public:
   ~ComboList() {
     Clear();
   }
+
+  ComboList(const ComboList &other) = delete;
+  ComboList &operator=(const ComboList &other) = delete;
 
   unsigned size() const {
     return items.size();
