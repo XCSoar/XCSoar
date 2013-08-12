@@ -22,56 +22,31 @@ Copyright_License {
 */
 
 #define ENABLE_XML_DIALOG
+#define ENABLE_MAIN_WINDOW
 #define ENABLE_CMDLINE
-#define USAGE "XMLFILE [-portrait]"
+#define USAGE "XMLFILE"
 
 #include "Main.hpp"
 #include "Form/Form.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "StatusMessage.hpp"
-#include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 
-#ifdef WIN32
-#include <shellapi.h>
-#endif
-
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 static tstring xmlfile;
-static bool portrait;
 
 static void
 ParseCommandLine(Args &args)
 {
   xmlfile = args.ExpectNextT();
-
-  const char *p = args.PeekNext();
-  if (p != NULL) {
-    if (strcmp(p, "-portrait") == 0) {
-      args.Skip();
-      portrait = true;
-    }
-  }
 }
 
 static void
 Main()
 {
-  PixelSize screen_size(320, 240);
-  if (portrait)
-    std::swap(screen_size.cx, screen_size.cy);
-
-  Layout::Initialize(screen_size);
-  SingleWindow main_window;
-  main_window.Create(_T("RunDialog"), screen_size);
-  main_window.Show();
-
   WndForm *form = LoadDialog(NULL, main_window, xmlfile.c_str());
   if (form == NULL) {
     _ftprintf(stderr, _T("Failed to load resource '%s'\n"), xmlfile.c_str());
