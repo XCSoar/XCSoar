@@ -63,8 +63,7 @@ bool
 WindowControl::OnHelp()
 {
   if (help_text) {
-    dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
-                     caption.c_str(), help_text);
+    HelpDialog(caption.c_str(), help_text);
     return true;
   }
 
