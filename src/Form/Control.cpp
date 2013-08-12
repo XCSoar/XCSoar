@@ -28,9 +28,8 @@ Copyright_License {
 
 #include <stdlib.h>
 
-WindowControl::WindowControl() :
-    help_text(NULL),
-    help_callback(NULL)
+WindowControl::WindowControl()
+  :help_text(nullptr)
 {
   // Clear the caption
   caption.clear();
@@ -66,11 +65,6 @@ WindowControl::OnHelp()
   if (help_text) {
     dlgHelpShowModal(*(SingleWindow *)GetRootOwner(),
                      caption.c_str(), help_text);
-    return true;
-  }
-
-  if (help_callback) {
-    (help_callback)(this);
     return true;
   }
 
