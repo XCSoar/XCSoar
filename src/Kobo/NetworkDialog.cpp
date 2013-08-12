@@ -33,6 +33,13 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "System.hpp"
 
+gcc_pure
+static const TCHAR *
+GetWifiToggleCaption()
+{
+  return IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON");
+}
+
 class NetworkWidget final
   : public RowFormWidget, ActionListener {
   enum Buttons {
@@ -44,6 +51,8 @@ class NetworkWidget final
 
 public:
   NetworkWidget(const DialogLook &look):RowFormWidget(look) {}
+
+  void UpdateButtons();
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -57,24 +66,32 @@ private:
 };
 
 void
+NetworkWidget::UpdateButtons()
+{
+  toggle_wifi_button->SetCaption(GetWifiToggleCaption());
+}
+
+void
 NetworkWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  toggle_wifi_button = AddButton(IsKoboWifiOn() ? _T("Wifi OFF") : _T("Wifi ON"),
+  toggle_wifi_button = AddButton(GetWifiToggleCaption(),
                                  *this, TOGGLE_WIFI);
 
   AddButton(_T("Telnet server"), *this, TELNET);
+
+  UpdateButtons();
 }
 
 void
 NetworkWidget::ToggleWifi()
 {
   if (!IsKoboWifiOn()) {
-    toggle_wifi_button->SetCaption(("Wifi OFF"));
     KoboWifiOn();
   } else {
-    toggle_wifi_button->SetCaption(("Wifi ON"));
     KoboWifiOff();
   }
+
+  UpdateButtons();
 }
 
 void
