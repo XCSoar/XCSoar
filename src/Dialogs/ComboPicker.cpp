@@ -32,8 +32,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 
-#include <assert.h>
-
 static const ComboList *ComboListPopup;
 
 class ComboPickerSupport : public ListItemRenderer {
@@ -96,14 +94,6 @@ bool
 ComboPicker(const TCHAR *caption, DataField &df,
             const TCHAR *help_text)
 {
-  static bool bInComboPicker = false;
-
-  // prevents multiple instances
-  if (bInComboPicker)
-    return false;
-
-  bInComboPicker = true;
-
   StaticString<256> buffer;
   const TCHAR *reference = nullptr;
 
@@ -113,10 +103,8 @@ ComboPicker(const TCHAR *caption, DataField &df,
 
     int idx = ComboPicker(caption, combo_list, help_text,
                           df.GetItemHelpEnabled());
-    if (idx < 0) {
-      bInComboPicker = false;
+    if (idx < 0)
       return false;
-    }
 
     const ComboList::Item &item = combo_list[idx];
 
@@ -130,7 +118,6 @@ ComboPicker(const TCHAR *caption, DataField &df,
       reference = buffer = combo_list[idx + 1].StringValue;
     } else {
       df.SetFromCombo(item.DataFieldIndex, item.StringValue);
-      bInComboPicker = false;
       return true;
     }
   } // loop reopen combo if <<More>>  or <<Less>> picked
