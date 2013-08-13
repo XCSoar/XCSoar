@@ -60,9 +60,7 @@ public:
   typedef bool (*OnCharacterCallback_t)(unsigned ch);
 
 protected:
-  enum {
-    MAX_BUTTONS = 40,
-  };
+  static constexpr unsigned MAX_BUTTONS = 40;
 
   const DialogLook &look;
 
