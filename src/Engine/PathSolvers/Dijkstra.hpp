@@ -99,8 +99,7 @@ public:
    */
   void Clear() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     // Clear EdgeMap
     edges.clear();
@@ -207,8 +206,7 @@ public:
    */
   void RestartQueue() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     for (const auto &i : edges)
       q.push(Value(i.second.value, i));
