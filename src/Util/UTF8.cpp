@@ -52,6 +52,12 @@ IsLeading2(unsigned char ch)
   return (ch & 0xf0) == 0xe0;
 }
 
+static constexpr unsigned char
+MakeLeading2(unsigned char value)
+{
+  return 0xe0 | value;
+}
+
 /**
  * Is this a leading byte that is followed by 3 continuation byte?
  */
@@ -59,6 +65,12 @@ static constexpr bool
 IsLeading3(unsigned char ch)
 {
   return (ch & 0xf8) == 0xf0;
+}
+
+static constexpr unsigned char
+MakeLeading3(unsigned char value)
+{
+  return 0xf0 | value;
 }
 
 /**
@@ -70,6 +82,12 @@ IsLeading4(unsigned char ch)
   return (ch & 0xfc) == 0xf8;
 }
 
+static constexpr unsigned char
+MakeLeading4(unsigned char value)
+{
+  return 0xf8 | value;
+}
+
 /**
  * Is this a leading byte that is followed by 5 continuation byte?
  */
@@ -77,6 +95,12 @@ static constexpr bool
 IsLeading5(unsigned char ch)
 {
   return (ch & 0xfe) == 0xfc;
+}
+
+static constexpr unsigned char
+MakeLeading5(unsigned char value)
+{
+  return 0xfc | value;
 }
 
 static constexpr bool
@@ -195,6 +219,43 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 
   *q = 0;
   return buffer;
+}
+
+char *
+UnicodeToUTF8(unsigned ch, char *q)
+{
+  if (gcc_likely(ch < 0x80)) {
+    *q++ = (char)ch;
+  } else if (gcc_likely(ch < 0x800)) {
+    *q++ = MakeLeading1(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x10000) {
+    *q++ = MakeLeading2(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x200000) {
+    *q++ = MakeLeading3(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x4000000) {
+    *q++ = MakeLeading4(ch >> 24);
+    *q++ = MakeContinuation(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x80000000) {
+    *q++ = MakeLeading5(ch >> 30);
+    *q++ = MakeContinuation(ch >> 24);
+    *q++ = MakeContinuation(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else {
+    // error
+  }
+
+  return q;
 }
 
 size_t

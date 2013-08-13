@@ -59,6 +59,16 @@ char *
 Latin1ToUTF8(unsigned char ch, char *buffer);
 
 /**
+ * Convert the specified Unicode character to UTF-8 and write it to
+ * the buffer.  buffer must have a length of at least 6!
+ *
+ * @return a pointer to the buffer plus the added bytes(s)
+ */
+gcc_nonnull_all
+char *
+UnicodeToUTF8(unsigned ch, char *buffer);
+
+/**
  * Returns the number of characters in the string.  This is different
  * from strlen(), which counts the number of bytes.
  */
