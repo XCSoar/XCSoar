@@ -352,7 +352,8 @@ public:
     DrawRectangle(x1, y1, x2, y2, c, GetPixelTraits());
   }
 
-  void DrawLineDirect(const int& x1, const int& y1, const int& x2, const int& y2, color_type c,
+  void DrawLineDirect(const int x1, const int y1, const int x2, const int y2,
+                      color_type c,
                       unsigned line_mask=-1) {
     /* optimised Bresenham algorithm */
 
