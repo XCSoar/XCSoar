@@ -33,7 +33,7 @@ struct DialogLook;
 
 class KeyboardControl : public ContainerWindow {
 public:
-  typedef void (*OnCharacterCallback_t)(TCHAR key);
+  typedef bool (*OnCharacterCallback_t)(unsigned ch);
 
 protected:
   enum {
@@ -49,7 +49,7 @@ protected:
 
   unsigned num_buttons;
   ButtonWindow buttons[MAX_BUTTONS];
-  TCHAR button_values[MAX_BUTTONS];
+  unsigned button_values[MAX_BUTTONS];
 
 public:
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
@@ -73,10 +73,10 @@ protected:
 
 private:
   gcc_pure
-  ButtonWindow *FindButton(TCHAR ch);
+  ButtonWindow *FindButton(unsigned ch);
 
-  void MoveButton(TCHAR ch, PixelScalar left, PixelScalar top);
-  void ResizeButton(TCHAR ch, UPixelScalar width, UPixelScalar height);
+  void MoveButton(unsigned ch, PixelScalar left, PixelScalar top);
+  void ResizeButton(unsigned ch, UPixelScalar width, UPixelScalar height);
   void ResizeButtons();
   void SetButtonsSize();
   void MoveButtonsToRow(const TCHAR *buttons, int row,
@@ -88,7 +88,7 @@ private:
     return GetWidth() >= GetHeight();
   }
 
-  void AddButton(const TCHAR *caption);
+  void AddButton(const TCHAR *caption, unsigned ch);
 };
 
 #endif

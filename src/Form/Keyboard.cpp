@@ -50,13 +50,13 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
   for (const TCHAR *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
 
-    AddButton(caption);
+    AddButton(caption, *i);
   }
 
-  AddButton(_T(" Space "));
-  AddButton(_T("."));
-  AddButton(_T(","));
-  AddButton(_T("-"));
+  AddButton(_T("Space"), ' ');
+  AddButton(_T("."), '.');
+  AddButton(_T(","), ',');
+  AddButton(_T("-"), '-');
 
   MoveButtons();
 }
@@ -70,7 +70,7 @@ KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 }
 
 ButtonWindow *
-KeyboardControl::FindButton(TCHAR ch)
+KeyboardControl::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     if (button_values[i] == ch)
@@ -90,7 +90,7 @@ KeyboardControl::FindButton(TCHAR ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardControl::MoveButton(TCHAR ch, PixelScalar left, PixelScalar top)
+KeyboardControl::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
 {
   ButtonWindow *kb = FindButton(ch);
   if (kb)
@@ -106,7 +106,7 @@ KeyboardControl::MoveButton(TCHAR ch, PixelScalar left, PixelScalar top)
  * @param height  Height measured in display pixels!
  */
 void
-KeyboardControl::ResizeButton(TCHAR ch,
+KeyboardControl::ResizeButton(unsigned ch,
                               UPixelScalar width, UPixelScalar height)
 {
   ButtonWindow *kb = FindButton(ch);
@@ -171,7 +171,7 @@ bool
 KeyboardControl::OnCommand(unsigned id, unsigned code)
 {
   if (id >= 0x20 && on_character != NULL) {
-    on_character((TCHAR)id);
+    on_character(id);
     return true;
   } else
     return ContainerWindow::OnCommand(id, code);
@@ -188,11 +188,11 @@ KeyboardControl::OnResize(PixelSize new_size)
 }
 
 void
-KeyboardControl::AddButton(const TCHAR *caption)
+KeyboardControl::AddButton(const TCHAR *caption, unsigned ch)
 {
   assert(num_buttons < MAX_BUTTONS);
 
-  button_values[num_buttons] = caption[0];
+  button_values[num_buttons] = ch;
 
   PixelRect rc;
   rc.left = 0;
@@ -201,6 +201,6 @@ KeyboardControl::AddButton(const TCHAR *caption)
   rc.bottom = button_height;
 
   ButtonWindow *button = &buttons[num_buttons++];
-  button->Create(*this, caption, (unsigned)caption[0], rc);
+  button->Create(*this, caption, ch, rc);
   button->SetFont(*look.button.font);
 }

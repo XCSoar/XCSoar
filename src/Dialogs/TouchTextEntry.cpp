@@ -90,12 +90,6 @@ DoCharacter(TCHAR character)
   return true;
 }
 
-static void
-OnCharacter(TCHAR character)
-{
-  DoCharacter(character);
-}
-
 static bool
 FormKeyDown(unsigned key_code)
 {
@@ -223,7 +217,7 @@ TouchTextEntry(TCHAR *text, size_t width,
                            { padding, keyboard_top,
                               rc.right - padding,
                               keyboard_bottom },
-                           OnCharacter);
+                           FormCharacter);
   kb = &keyboard;
 
   WndButton backspace_button(client_area, look, _T("<-"),
