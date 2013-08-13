@@ -579,7 +579,14 @@ WndForm::OnPaint(Canvas &canvas)
 
   // Draw the borders
   if (!IsMaximised()) {
-    canvas.DrawRaisedEdge(rcClient);
+#ifndef USE_GDI
+    if (IsDithered())
+      canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
+                                  rcClient.right - 1, rcClient.bottom - 1,
+                                  COLOR_BLACK);
+    else
+#endif
+      canvas.DrawRaisedEdge(rcClient);
   }
 
   if (!caption.empty()) {
