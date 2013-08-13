@@ -128,13 +128,9 @@ KeyboardControl::MoveButtonsToRow(const TCHAR* buttons, int row,
   if (StringIsEmpty(buttons))
     return;
 
-  ButtonWindow *kb;
   for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
-    kb = FindButton(buttons[i]);
-    if (!kb)
-      continue;
-
-    kb->Move(i * button_width + offset, row * button_height);
+    MoveButton(buttons[i],
+               i * button_width + offset, row * button_height);
   }
 }
 
