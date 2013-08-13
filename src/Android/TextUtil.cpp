@@ -26,6 +26,7 @@ Copyright_License {
 #include "Java/String.hpp"
 #include "Java/Exception.hpp"
 #include "Screen/Point.hpp"
+#include "Asset.hpp"
 
 JNIEnv *TextUtil::env(NULL);
 static Java::TrivialClass cls;
@@ -41,7 +42,7 @@ TextUtil::Initialise(JNIEnv *_env)
 
   cls.Find(env, "org/xcsoar/TextUtil");
 
-  midTextUtil = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;II)V");
+  midTextUtil = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;III)V");
   midGetFontMetrics = env->GetMethodID(cls, "getFontMetrics", "([I)V");
   midGetTextBounds = env->GetMethodID(cls, "getTextBounds",
                                       "(Ljava/lang/String;)[I");
@@ -88,10 +89,16 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
     paramStyle |= 2;
   paramTextSize = height;
 
+  int paint_flags = 0;
+  if (!IsDithered())
+    /* 1 = Paint.ANTI_ALIAS_FLAG */
+    paint_flags |= 1;
+
   // construct org.xcsoar.TextUtil object
   localObject = env->NewObject(cls, midTextUtil,
                                paramFamilyName.Get(),
-                               paramStyle, paramTextSize);
+                               paramStyle, paramTextSize,
+                               paint_flags);
   if (!localObject)
     return NULL;
 
