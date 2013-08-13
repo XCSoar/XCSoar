@@ -231,6 +231,13 @@ WindowList::Paint(Canvas &canvas)
 
     SubCanvas sub_canvas(canvas, { child.GetLeft(), child.GetTop() },
                          child.GetSize());
+#ifdef USE_MEMORY_CANVAS
+    if (sub_canvas.GetWidth() == 0 || sub_canvas.GetHeight() == 0)
+      /* this child window is completely outside the physical
+         screen */
+      continue;
+#endif
+
     child.Setup(sub_canvas);
     child.OnPaint(sub_canvas);
   }
