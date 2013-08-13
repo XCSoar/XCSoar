@@ -308,7 +308,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
 
   ifeq ($(CLANG),y)
-    ANDROID_TOOLCHAIN_NAME = llvm-3.2
+    ANDROID_TOOLCHAIN_NAME = llvm-3.3
 
     # workaround: use libstdc++ 4.6, because 4.7 fails to link with
     # clang due to missing __atomic_* symbols
