@@ -47,6 +47,10 @@ public:
   size_type capacity() const {
     return this->c.capacity();
   }
+
+  void clear() {
+    this->c.clear();
+  }
 };
 
 #endif
