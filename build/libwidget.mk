@@ -21,6 +21,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/XMLWidget.cpp \
 	$(SRC)/Widget/ButtonPanelWidget.cpp \
 	$(SRC)/Widget/QuestionWidget.cpp \
+	$(SRC)/Widget/KeyboardWidget.cpp \
 	$(SRC)/Widget/DockWindow.cpp
 
 WIDGET_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)

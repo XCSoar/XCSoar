@@ -24,8 +24,8 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/Keyboard.hpp"
 #include "Form/Edit.hpp"
+#include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 #include <assert.h>
 
 static WndProperty *editor;
-static KeyboardControl *kb = NULL;
+static KeyboardWidget *kb = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
@@ -213,11 +213,17 @@ TouchTextEntry(TCHAR *text, size_t width,
                              clear_right, button_bottom },
                          button_style, ClearText);
 
-  KeyboardControl keyboard(client_area, look,
-                           { padding, keyboard_top,
-                              rc.right - padding,
-                              keyboard_bottom },
-                           FormCharacter);
+  KeyboardWidget keyboard(look, FormCharacter);
+
+  const PixelRect keyboard_rc = {
+    padding, keyboard_top,
+    rc.right - padding, keyboard_bottom
+  };
+
+  keyboard.Initialise(client_area, keyboard_rc);
+  keyboard.Prepare(client_area, keyboard_rc);
+  keyboard.Show(keyboard_rc);
+
   kb = &keyboard;
 
   WndButton backspace_button(client_area, look, _T("<-"),
@@ -237,6 +243,9 @@ TouchTextEntry(TCHAR *text, size_t width,
 
   UpdateTextboxProp();
   bool result = form.ShowModal() == mrOK;
+
+  keyboard.Hide();
+  keyboard.Unprepare();
 
   if (result) {
     CopyString(text, edittext, width);

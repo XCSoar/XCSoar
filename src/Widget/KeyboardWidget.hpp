@@ -24,14 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_KEYBOARD_CONTROL_HPP
 #define XCSOAR_KEYBOARD_CONTROL_HPP
 
-#include "Screen/ContainerWindow.hpp"
-#include "CharacterButton.hpp"
+#include "Widget.hpp"
+#include "Form/CharacterButton.hpp"
 
 #include <tchar.h>
 
 struct DialogLook;
 
-class KeyboardControl : public ContainerWindow {
+class KeyboardWidget : public NullWidget {
 public:
   typedef bool (*OnCharacterCallback_t)(unsigned ch);
 
@@ -49,21 +49,18 @@ protected:
   CharacterButton buttons[MAX_BUTTONS];
 
 public:
-  KeyboardControl(ContainerWindow &parent, const DialogLook &look,
-                  PixelRect rc,
-                  OnCharacterCallback_t on_character,
-                  const WindowStyle _style = WindowStyle());
+  KeyboardWidget(const DialogLook &_look,
+                 OnCharacterCallback_t _on_character)
+    :look(_look), on_character(_on_character), num_buttons(0) {}
 
   /**
    * Show only the buttons representing the specified character list.
    */
   void SetAllowedCharacters(const TCHAR *allowed);
 
-protected:
-  virtual void OnPaint(Canvas &canvas) override;
-  virtual void OnResize(PixelSize new_size) override;
-
 private:
+  void OnResize(const PixelRect &rc);
+
   gcc_pure
   ButtonWindow *FindButton(unsigned ch);
 
@@ -71,16 +68,24 @@ private:
   void ResizeButton(unsigned ch, UPixelScalar width, UPixelScalar height);
   void ResizeButtons();
   void SetButtonsSize();
-  void MoveButtonsToRow(const TCHAR *buttons, int row,
+  void MoveButtonsToRow(const PixelRect &rc,
+                        const TCHAR *buttons, unsigned row,
                         PixelScalar offset_left = 0);
-  void MoveButtons();
+  void MoveButtons(const PixelRect &rc);
 
   gcc_pure
-  bool IsLandscape() const {
-    return GetWidth() >= GetHeight();
+  static bool IsLandscape(const PixelRect &rc) {
+    return rc.right - rc.left >= rc.bottom - rc.top;
   }
 
-  void AddButton(const TCHAR *caption, unsigned ch);
+  void AddButton(ContainerWindow &parent, const TCHAR *caption, unsigned ch);
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+  virtual void Move(const PixelRect &rc) override;
 };
 
 #endif

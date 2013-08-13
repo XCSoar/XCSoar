@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Form/Keyboard.hpp"
+#include "KeyboardWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "Util/StringUtil.hpp"
 #include "Screen/Canvas.hpp"
@@ -34,35 +34,49 @@ Copyright_License {
 static constexpr TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-KeyboardControl::KeyboardControl(ContainerWindow &parent,
-                                 const DialogLook &_look,
-                                 PixelRect rc,
-                                 OnCharacterCallback_t _on_character,
-                                 const WindowStyle _style)
-  :look(_look),
-   on_character(_on_character),
-   num_buttons(0)
+void
+KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  Create(parent, rc, _style);
+  OnResize(rc);
 
   TCHAR caption[] = _T(" ");
 
   for (const TCHAR *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
 
-    AddButton(caption, *i);
+    AddButton(parent, caption, *i);
   }
 
-  AddButton(_T("Space"), ' ');
-  AddButton(_T("."), '.');
-  AddButton(_T(","), ',');
-  AddButton(_T("-"), '-');
-
-  MoveButtons();
+  AddButton(parent, _T("Space"), ' ');
+  AddButton(parent, _T("."), '.');
+  AddButton(parent, _T(","), ',');
+  AddButton(parent, _T("-"), '-');
 }
 
 void
-KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
+KeyboardWidget::Show(const PixelRect &rc)
+{
+  OnResize(rc);
+
+  for (unsigned i = 0; i < num_buttons; ++i)
+    buttons[i].Show();
+}
+
+void
+KeyboardWidget::Hide()
+{
+  for (unsigned i = 0; i < num_buttons; ++i)
+    buttons[i].Hide();
+}
+
+void
+KeyboardWidget::Move(const PixelRect &rc)
+{
+  OnResize(rc);
+}
+
+void
+KeyboardWidget::SetAllowedCharacters(const TCHAR *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].SetVisible(allowed == NULL ||
@@ -70,7 +84,7 @@ KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 }
 
 ButtonWindow *
-KeyboardControl::FindButton(unsigned ch)
+KeyboardWidget::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     if (buttons[i].GetCharacter() == ch)
@@ -90,7 +104,7 @@ KeyboardControl::FindButton(unsigned ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardControl::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
+KeyboardWidget::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
 {
   ButtonWindow *kb = FindButton(ch);
   if (kb)
@@ -106,7 +120,7 @@ KeyboardControl::MoveButton(unsigned ch, PixelScalar left, PixelScalar top)
  * @param height  Height measured in display pixels!
  */
 void
-KeyboardControl::ResizeButton(unsigned ch,
+KeyboardWidget::ResizeButton(unsigned ch,
                               UPixelScalar width, UPixelScalar height)
 {
   ButtonWindow *kb = FindButton(ch);
@@ -115,68 +129,75 @@ KeyboardControl::ResizeButton(unsigned ch,
 }
 
 void
-KeyboardControl::ResizeButtons()
+KeyboardWidget::ResizeButtons()
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].Resize(button_width, button_height);
 }
 
 void
-KeyboardControl::MoveButtonsToRow(const TCHAR* buttons, int row,
-                                  PixelScalar offset)
+KeyboardWidget::MoveButtonsToRow(const PixelRect &rc,
+                                 const TCHAR *buttons, unsigned row,
+                                 PixelScalar offset)
 {
   if (StringIsEmpty(buttons))
     return;
 
   for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
     MoveButton(buttons[i],
-               i * button_width + offset, row * button_height);
+               rc.left + i * button_width + offset,
+               rc.top + row * button_height);
   }
 }
 
 void
-KeyboardControl::MoveButtons()
+KeyboardWidget::MoveButtons(const PixelRect &rc)
 {
-  MoveButtonsToRow(_T("1234567890"), 0);
-  MoveButtonsToRow(_T("QWERTYUIOP"), 1);
-  MoveButtonsToRow(_T("ASDFGHJKL"), 2, button_width / 3);
-  MoveButtonsToRow(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
+  MoveButtonsToRow(rc, _T("1234567890"), 0);
+  MoveButtonsToRow(rc, _T("QWERTYUIOP"), 1);
+  MoveButtonsToRow(rc, _T("ASDFGHJKL"), 2, button_width / 3);
+  MoveButtonsToRow(rc, _T("ZXCVBNM,."), 3, button_width * 2 / 3);
 
-  if (IsLandscape()) {
-    MoveButton(_T('-'), button_width * 9, Layout::Scale(160));
+  if (IsLandscape(rc)) {
+    MoveButton(_T('-'),
+               rc.left + button_width * 9,
+               rc.top + Layout::Scale(160));
 
-    MoveButton(_T(' '), Layout::Scale(80), Layout::Scale(160));
+    MoveButton(_T(' '),
+               rc.left + Layout::Scale(80),
+               rc.top + Layout::Scale(160));
     ResizeButton(_T(' '), Layout::Scale(93), Layout::Scale(40));
   } else {
-    MoveButton(_T('-'), button_width * 8, button_height * 4);
+    MoveButton(_T('-'),
+               rc.left + button_width * 8,
+               rc.top + button_height * 4);
 
-    MoveButton(_T(' '), button_width * 2, button_height * 4);
+    MoveButton(_T(' '),
+               rc.left + button_width * 2,
+               rc.top + button_height * 4);
     ResizeButton(_T(' '), button_width * 11 / 2, button_height);
   }
 }
 
 void
-KeyboardControl::OnPaint(Canvas &canvas)
+KeyboardWidget::OnResize(const PixelRect &rc)
 {
-  canvas.Clear(look.background_color);
-
-  ContainerWindow::OnPaint(canvas);
-}
-
-void
-KeyboardControl::OnResize(PixelSize new_size)
-{
+  const PixelSize new_size = rc.GetSize();
   button_width = new_size.cx / 10;
   button_height = new_size.cy / 5;
 
   ResizeButtons();
-  MoveButtons();
+  MoveButtons(rc);
 }
 
 void
-KeyboardControl::AddButton(const TCHAR *caption, unsigned ch)
+KeyboardWidget::AddButton(ContainerWindow &parent,
+                          const TCHAR *caption, unsigned ch)
 {
   assert(num_buttons < MAX_BUTTONS);
+
+  ButtonWindowStyle style;
+  style.Hide();
 
   PixelRect rc;
   rc.left = 0;
@@ -185,5 +206,5 @@ KeyboardControl::AddButton(const TCHAR *caption, unsigned ch)
   rc.bottom = button_height;
 
   CharacterButton &button = buttons[num_buttons++];
-  button.Create(*this, look, caption, rc, on_character, ch);
+  button.Create(parent, look, caption, rc, on_character, ch, style);
 }
