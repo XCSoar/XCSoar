@@ -26,16 +26,22 @@ Copyright_License {
 
 #include "Widget.hpp"
 #include "Form/CharacterButton.hpp"
+#include "Form/ActionListener.hpp"
 
 #include <tchar.h>
 
 struct DialogLook;
+class WndSymbolButton;
 
-class KeyboardWidget : public NullWidget {
+class KeyboardWidget : public NullWidget, ActionListener {
 public:
   typedef bool (*OnCharacterCallback_t)(unsigned ch);
 
 protected:
+  enum Actions {
+    SHIFT,
+  };
+
   static constexpr unsigned MAX_BUTTONS = 40;
 
   const DialogLook &look;
@@ -48,10 +54,17 @@ protected:
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
 
+  WndSymbolButton *shift_button;
+  bool shift_state;
+
+  const bool show_shift_button;
+
 public:
   KeyboardWidget(const DialogLook &_look,
-                 OnCharacterCallback_t _on_character)
-    :look(_look), on_character(_on_character), num_buttons(0) {}
+                 OnCharacterCallback_t _on_character,
+                 bool _show_shift_button)
+    :look(_look), on_character(_on_character), num_buttons(0),
+     show_shift_button(_show_shift_button) {}
 
   /**
    * Show only the buttons representing the specified character list.
@@ -83,9 +96,16 @@ private:
 public:
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
   virtual void Move(const PixelRect &rc) override;
+
+private:
+  void OnShiftClicked();
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
 };
 
 #endif

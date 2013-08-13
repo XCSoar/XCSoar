@@ -213,7 +213,7 @@ TouchTextEntry(TCHAR *text, size_t width,
                              clear_right, button_bottom },
                          button_style, ClearText);
 
-  KeyboardWidget keyboard(look, FormCharacter);
+  KeyboardWidget keyboard(look, FormCharacter, !accb);
 
   const PixelRect keyboard_rc = {
     padding, keyboard_top,
