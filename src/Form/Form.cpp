@@ -578,7 +578,9 @@ WndForm::OnPaint(Canvas &canvas)
   PixelRect rcClient = GetClientRect();
 
   // Draw the borders
-  canvas.DrawRaisedEdge(rcClient);
+  if (!IsMaximised()) {
+    canvas.DrawRaisedEdge(rcClient);
+  }
 
   if (!caption.empty()) {
     // Set the colors
