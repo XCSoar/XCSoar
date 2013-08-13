@@ -37,6 +37,12 @@ IsLeading1(unsigned char ch)
   return (ch & 0xe0) == 0xc0;
 }
 
+static constexpr unsigned char
+MakeLeading1(unsigned char value)
+{
+  return 0xc0 | value;
+}
+
 /**
  * Is this a leading byte that is followed by 2 continuation byte?
  */
@@ -77,6 +83,15 @@ static constexpr bool
 IsContinuation(unsigned char ch)
 {
   return (ch & 0xc0) == 0x80;
+}
+
+/**
+ * Generate a continuation byte of the low 6 bit.
+ */
+static constexpr unsigned char
+MakeContinuation(unsigned char value)
+{
+  return 0x80 | (value & 0x3f);
 }
 
 bool
@@ -136,8 +151,8 @@ Latin1ToUTF8(unsigned char ch, char *buffer)
   if (IsASCII(ch)) {
     *buffer++ = ch;
   } else {
-    *buffer++ = 0xc0 | (ch >> 6);
-    *buffer++ = 0x80 | (ch & 0x3f);
+    *buffer++ = MakeLeading1(ch >> 6);
+    *buffer++ = MakeContinuation(ch);
   }
 
   return buffer;
@@ -173,8 +188,8 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
         /* buffer too small */
         return nullptr;
 
-      *q++ = 0xc0 | (ch >> 6);
-      *q++ = 0x80 | (ch & 0x3f);
+      *q++ = MakeLeading1(ch >> 6);
+      *q++ = MakeContinuation(ch);
     }
   }
 
