@@ -518,7 +518,7 @@ WndForm::OnPaint(Canvas &canvas)
   gcc_unused const bool is_active = main_window.IsTopDialog(*this);
 
 #ifdef ENABLE_OPENGL
-  if (!IsMaximised() && is_active) {
+  if (!IsDithered() && !IsMaximised() && is_active) {
     /* draw a shade around the current dialog to emphasise it */
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnableClientState(GL_COLOR_ARRAY);
