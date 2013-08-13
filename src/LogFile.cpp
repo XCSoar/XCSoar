@@ -35,6 +35,7 @@ Copyright_License {
 
 #ifdef ANDROID
 #include <android/log.h>
+#include <fcntl.h>
 #endif
 
 static TextWriter
@@ -47,6 +48,18 @@ OpenLog()
   if (!initialised) {
     initialised = true;
     LocalPath(path, _T("xcsoar-startup.log"));
+
+#ifdef ANDROID
+    /* redirect stdout/stderr to xcsoar-startup.log on Android so we
+       get debug logs from libraries and output from child processes
+       there */
+    int fd = open(path, O_APPEND|O_CREAT|O_WRONLY, 0666);
+    if (fd >= 0) {
+      dup2(fd, 1);
+      dup2(fd, 2);
+      close(fd);
+    }
+#endif
   }
 
   return TextWriter(path, append);
