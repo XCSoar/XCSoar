@@ -24,6 +24,10 @@ Copyright_License {
 #include "Form/CharacterButton.hpp"
 #include "Look/DialogLook.hpp"
 
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <assert.h>
 
 void
@@ -39,6 +43,23 @@ CharacterButton::Create(ContainerWindow &parent, const DialogLook &look,
 
   ButtonWindow::Create(parent, text, rc, style);
   SetFont(*look.button.font);
+}
+
+void
+CharacterButton::SetCharacter(unsigned _character)
+{
+  if (_character == character)
+    return;
+
+  character = _character;
+
+#ifdef _UNICODE
+  const TCHAR buffer[2] = { TCHAR(character), _T('\0') };
+#else
+  char buffer[7];
+  *UnicodeToUTF8(character, buffer) = '\0';
+#endif
+  SetText(buffer);
 }
 
 bool

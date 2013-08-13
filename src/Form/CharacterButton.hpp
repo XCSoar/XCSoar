@@ -49,6 +49,8 @@ public:
     return character;
   }
 
+  void SetCharacter(unsigned character);
+
 protected:
   /* virtual methods from class ButtonWindow */
   virtual bool OnClicked();
