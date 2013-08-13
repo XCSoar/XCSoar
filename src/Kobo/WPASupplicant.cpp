@@ -24,6 +24,8 @@ Copyright_License {
 #include "WPASupplicant.hpp"
 #include "OS/SocketAddress.hpp"
 #include "OS/FileUtil.hpp"
+#include "Util/NumberParser.hpp"
+#include "Util/StaticString.hpp"
 
 #include <string.h>
 #include <stdlib.h>
@@ -131,7 +133,7 @@ WPASupplicant::Status(WifiStatus &status)
 bool
 WPASupplicant::Scan()
 {
-  return SendCommand("SCAN") && ExpectResponse("OK\n");
+  return SendCommand("SCAN") && ExpectOK();
 }
 
 static bool
@@ -219,4 +221,58 @@ WPASupplicant::ScanResults(WifiNetworkInfo *dest, unsigned max)
   buffer[nbytes] = 0;
 
   return ParseScanResults(dest, max, buffer);
+}
+
+int
+WPASupplicant::AddNetwork()
+{
+  if (!SendCommand("ADD_NETWORK"))
+    return -1;
+
+  char buffer[4096];
+  ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
+  if (nbytes < 2 || buffer[nbytes - 1] != '\n')
+    return -1;
+
+  buffer[nbytes - 1] = 0;
+
+  char *endptr;
+  unsigned id = ParseUnsigned(buffer, &endptr);
+  if (endptr == buffer || *endptr != 0)
+    return -1;
+
+  return id;
+}
+
+bool
+WPASupplicant::SetNetworkString(unsigned id,
+                                const char *name, const char *value)
+{
+  NarrowString<512> cmd;
+  cmd.Format("SET_NETWORK %u %s \"%s\"", id, name, value);
+  return SendCommand(cmd) && ExpectOK();
+}
+
+bool
+WPASupplicant::SelectNetwork(unsigned id)
+{
+  NarrowString<64> cmd;
+  cmd.Format("SELECT_NETWORK %u", id);
+  return SendCommand(cmd) && ExpectOK();
+}
+
+bool
+WPASupplicant::EnableNetwork(unsigned id)
+{
+  NarrowString<64> cmd;
+  cmd.Format("ENABLE_NETWORK %u", id);
+  return SendCommand(cmd) && ExpectOK();
+}
+
+bool
+WPASupplicant::DisableNetwork(unsigned id)
+{
+  NarrowString<64> cmd;
+  cmd.Format("DISABLE_NETWORK %u", id);
+  return SendCommand(cmd) && ExpectOK();
 }

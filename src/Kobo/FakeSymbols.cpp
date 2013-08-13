@@ -21,15 +21,17 @@ Copyright_License {
 }
 */
 
-#include "Form/Edit.hpp"
-
-UPixelScalar
-WndProperty::GetRecommendedCaptionWidth() const
-{
-  return 0;
-}
+#include "Form/DataField/Base.hpp"
+#include "Dialogs/DataField.hpp"
 
 void
-WndProperty::SetCaptionWidth(PixelScalar _caption_width)
+DataField::Special()
 {
+}
+
+bool
+EditDataFieldDialog(const TCHAR *caption, DataField &df,
+                    const TCHAR *help_text)
+{
+  return false;
 }

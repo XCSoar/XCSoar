@@ -64,6 +64,14 @@ public:
   bool SendCommand(const char *cmd);
   bool ExpectResponse(const char *expected);
 
+  bool ExpectOK() {
+    return ExpectResponse("OK\n");
+  }
+
+  bool SaveConfig() {
+    return SendCommand("SAVE_CONFIG") && ExpectOK();
+  }
+
   bool Status(WifiStatus &status);
 
   bool Scan();
@@ -72,6 +80,25 @@ public:
    * @return the number of networks or -1 on error
    */
   int ScanResults(WifiNetworkInfo *dest, unsigned max);
+
+  /**
+   * @return the network id or -1 on error
+   */
+  int AddNetwork();
+
+  bool SetNetworkString(unsigned id, const char *name, const char *value);
+
+  bool SetNetworkSSID(unsigned id, const char *ssid) {
+    return SetNetworkString(id, "ssid", ssid);
+  }
+
+  bool SetNetworkPSK(unsigned id, const char *psk) {
+    return SetNetworkString(id, "psk", psk);
+  }
+
+  bool SelectNetwork(unsigned id);
+  bool EnableNetwork(unsigned id);
+  bool DisableNetwork(unsigned id);
 };
 
 #endif

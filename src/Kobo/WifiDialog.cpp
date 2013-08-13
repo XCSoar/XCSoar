@@ -24,6 +24,7 @@ Copyright_License {
 #include "WifiDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -91,6 +92,8 @@ private:
   bool EnsureConnected();
   void UpdateList();
 
+  void Connect();
+
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
 };
@@ -111,6 +114,43 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 }
 
+static bool
+WifiConnect(WPASupplicant &wpa_supplicant, const char *ssid, const char *psk)
+{
+  int id = wpa_supplicant.AddNetwork();
+  if (id < 0)
+    return false;
+
+  return wpa_supplicant.SetNetworkSSID(id, ssid) &&
+    wpa_supplicant.SetNetworkPSK(id, psk) &&
+    wpa_supplicant.EnableNetwork(id) &&
+    wpa_supplicant.SaveConfig();
+}
+
+inline void
+WifiListWidget::Connect()
+{
+  if (!EnsureConnected()) {
+    ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
+    return;
+  }
+
+  const unsigned i = GetList().GetCursorIndex();
+  if (i >= networks.size())
+    return;
+
+  const WifiNetworkInfo &info = networks[i];
+  StaticString<256> caption;
+  caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
+
+  StaticString<32> passphrase;
+  if (!TextEntryDialog(passphrase, caption))
+    return;
+
+  if (!WifiConnect(wpa_supplicant, info.ssid, passphrase))
+    ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
+}
+
 void
 WifiListWidget::OnAction(int id)
 {
@@ -121,8 +161,7 @@ WifiListWidget::OnAction(int id)
     break;
 
   case CONNECT:
-    // TODO
-    ShowMessageBox(_T("Not yet implemented"), _("Connect"), MB_OK);
+    Connect();
     break;
   }
 }
