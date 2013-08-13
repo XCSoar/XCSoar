@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProgressBar.hpp"
 #include "Thread/Debug.hpp"
+#include "Asset.hpp"
 
 #ifdef USE_GDI
 #include <commctrl.h>
@@ -144,12 +145,13 @@ ProgressBar::OnPaint(Canvas &canvas)
   canvas.DrawRoundRectangle(0, 0, GetWidth(), GetHeight(),
                             GetHeight(), GetHeight());
 
-  Brush progress_brush(COLOR_XCSOAR_LIGHT);
+  Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
   canvas.Select(progress_brush);
   canvas.DrawRoundRectangle(margin, margin, margin + position,
                             GetHeight() - margin, GetHeight(), GetHeight());
 #else
-  canvas.DrawFilledRectangle(0, 0, position, GetHeight(), COLOR_GREEN);
+  canvas.DrawFilledRectangle(0, 0, position, GetHeight(),
+                             IsDithered() ? COLOR_BLACK : COLOR_GREEN);
   canvas.DrawFilledRectangle(position, 0, GetWidth(), GetHeight(), COLOR_WHITE);
 #endif
 }
