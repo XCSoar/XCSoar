@@ -25,35 +25,11 @@ Copyright_License {
 #define XCSOAR_KEYBOARD_CONTROL_HPP
 
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/ButtonWindow.hpp"
+#include "CharacterButton.hpp"
 
 #include <tchar.h>
 
 struct DialogLook;
-
-/**
- * A button that emits a character on press.
- */
-class CharacterButton : public ButtonWindow {
-  typedef bool (*OnCharacterCallback)(unsigned key);
-
-  OnCharacterCallback on_character;
-  unsigned character;
-
-public:
-  void Create(ContainerWindow &parent, const DialogLook &look,
-              const TCHAR *text, PixelRect rc,
-              OnCharacterCallback on_character, unsigned character,
-              const ButtonWindowStyle _style=ButtonWindowStyle());
-
-  unsigned GetCharacter() const {
-    return character;
-  }
-
-protected:
-  /* virtual methods from class ButtonWindow */
-  virtual bool OnClicked();
-};
 
 class KeyboardControl : public ContainerWindow {
 public:

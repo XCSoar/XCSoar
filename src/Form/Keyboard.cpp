@@ -34,28 +34,6 @@ Copyright_License {
 static constexpr TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
-void
-CharacterButton::Create(ContainerWindow &parent, const DialogLook &look,
-                        const TCHAR *text, PixelRect rc,
-                        OnCharacterCallback _on_character, unsigned _character,
-                        const ButtonWindowStyle style)
-{
-  assert(_on_character);
-
-  on_character = _on_character;
-  character = _character;
-
-  ButtonWindow::Create(parent, text, rc, style);
-  SetFont(*look.button.font);
-}
-
-bool
-CharacterButton::OnClicked()
-{
-  on_character(character);
-  return true;
-}
-
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const DialogLook &_look,
                                  PixelRect rc,
