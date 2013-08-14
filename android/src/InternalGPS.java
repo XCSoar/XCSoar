@@ -81,7 +81,7 @@ public class InternalGPS
     index = _index;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+    if (!locationManager.isProviderEnabled(locationProvider) &&
         !queriedLocationSettings) {
       // Let user turn on GPS, XCSoar is not allowed to.
       Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
