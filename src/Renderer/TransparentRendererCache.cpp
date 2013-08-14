@@ -86,9 +86,16 @@ TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
 
   const unsigned width = projection.GetScreenWidth(),
     height = projection.GetScreenHeight();
+
+#ifdef USE_MEMORY_CANVAS
+  canvas.AlphaBlendNotWhite(0, 0, width, height,
+                            buffer, 0, 0, width, height,
+                            alpha);
+#else
   canvas.AlphaBlend(0, 0, width, height,
                     buffer, 0, 0, width, height,
                     alpha);
+#endif
 }
 
 #endif
