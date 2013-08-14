@@ -626,8 +626,10 @@ WndForm::OnPaint(Canvas &canvas)
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
-#else
+#elif defined(USE_GDI)
     canvas.InvertRectangle(title_rect);
+#else
+    canvas.InvertRectangle(GetClientRect());
 #endif
   }
 }
