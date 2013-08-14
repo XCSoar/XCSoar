@@ -106,6 +106,7 @@ public:
   bool SelectNetwork(unsigned id);
   bool EnableNetwork(unsigned id);
   bool DisableNetwork(unsigned id);
+  bool RemoveNetwork(unsigned id);
 
   /**
    * @return the number of networks or -1 on error

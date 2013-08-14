@@ -63,9 +63,7 @@ public:
     connect_button = dialog.AddButton(_("Connect"), *this, CONNECT);
   }
 
-  void UpdateButtons() {
-    connect_button->SetEnabled(!networks.empty());
-  }
+  void UpdateButtons();
 
   /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
@@ -120,6 +118,26 @@ private:
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) override;
 };
+
+void
+WifiListWidget::UpdateButtons()
+{
+  const unsigned cursor = GetList().GetCursorIndex();
+
+  if (cursor < networks.size()) {
+    const auto &info = networks[cursor];
+
+    if (info.id >= 0) {
+      connect_button->SetText(_("Remove"));
+      connect_button->SetEnabled(true);
+    } else if (info.signal_level >= 0) {
+      connect_button->SetText(_("Connect"));
+      connect_button->SetEnabled(true);
+    }
+  } else {
+    connect_button->SetEnabled(false);
+  }
+}
 
 void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -188,15 +206,22 @@ WifiListWidget::Connect()
     return;
 
   const auto &info = networks[i];
-  StaticString<256> caption;
-  caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
+  if (info.id < 0) {
+    StaticString<256> caption;
+    caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
 
-  StaticString<32> passphrase;
-  if (!TextEntryDialog(passphrase, caption))
-    return;
+    StaticString<32> passphrase;
+    if (!TextEntryDialog(passphrase, caption))
+      return;
 
-  if (!WifiConnect(wpa_supplicant, info.ssid, passphrase))
-    ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
+    if (!WifiConnect(wpa_supplicant, info.ssid, passphrase))
+      ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
+  } else {
+    if (!wpa_supplicant.RemoveNetwork(info.id) || !wpa_supplicant.SaveConfig())
+      ShowMessageBox(_T("Error"), _("Remove"), MB_OK);
+  }
+
+  UpdateList();
 }
 
 void

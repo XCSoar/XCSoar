@@ -282,6 +282,14 @@ WPASupplicant::DisableNetwork(unsigned id)
   return SendCommand(cmd) && ExpectOK();
 }
 
+bool
+WPASupplicant::RemoveNetwork(unsigned id)
+{
+  NarrowString<64> cmd;
+  cmd.Format("REMOVE_NETWORK %u", id);
+  return SendCommand(cmd) && ExpectOK();
+}
+
 static bool
 ParseListResultsLine(WifiConfiguredNetworkInfo &dest, char *src)
 {
