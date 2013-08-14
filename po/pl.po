@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-08-08 19:32+0000\n"
-"Last-Translator: Luke Szczepaniak <Unknown>\n"
+"PO-Revision-Date: 2013-08-13 01:32+0000\n"
+"Last-Translator: Maciej Rydlewicz <maciej.rydlewicz@softdesk.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-10 17:36+0000\n"
+"X-Launchpad-Export-Date: 2013-08-14 09:04+0000\n"
 "X-Generator: Launchpad (build 16723)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -1000,9 +1000,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"H AGL: Wysokość nawigacyjna mnus poziom terenu uzyskany z pliku mapy terenu. "
-"Wartość wyświetlana w kolorze czerwonym, gdy szybowiec znajduje się poniżej "
-"bezpiecznej wysokości nad terenem."
+"H AGL: Wysokość nawigacyjna minus poziom terenu uzyskany z pliku mapy "
+"terenu. Wartość wyświetlana w kolorze czerwonym, gdy szybowiec znajduje się "
+"poniżej bezpiecznej wysokości nad terenem."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -2907,12 +2907,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1224
 #, no-c-format
 msgid "Speed task last hour"
-msgstr "Prędkość średnia w ost.godzinie"
+msgstr "Wprz1g: Średnia prędkość przelotowa w ost.godz."
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
 #, no-c-format
 msgid "V Task H"
-msgstr ""
+msgstr "Wprz1g"
 
 #: src/InfoBoxes/Content/Factory.cpp:1226
 #, no-c-format
@@ -2920,18 +2920,18 @@ msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
 msgstr ""
-"Średnia prędkość przelotowa aktualnego zadania w ciągu ostatniej godziny, "
-"bez kompensacji zmiany wysokości."
+"Wprz1g: Średnia prędkość przelotowa aktualnego zadania w ciągu ostatniej "
+"godziny, bez kompensacji zmiany wysokości."
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
 #, no-c-format
 msgid "Next distance (nominal)"
-msgstr "Dystans do celu"
+msgstr "PT odl-N: Odległość nominalna do wybr.PT"
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
 #, no-c-format
 msgid "WP Dist-N"
-msgstr ""
+msgstr "PT odl-N"
 
 #: src/InfoBoxes/Content/Factory.cpp:1236
 #, no-c-format
@@ -2939,8 +2939,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Odległość do wybranego Punktu Trasy. W zadaniach AAT jest to odległość do "
-"punktu bazowego sektora AAT."
+"PT odl-N: Odległość nominalna do wybranego Punktu Trasy. W zadaniach AAT "
+"jest to odległość do punktu bazowego sektora AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
@@ -4227,7 +4227,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:69
 msgid "Task altitude difference"
-msgstr "Roznica wysokosci do końca trasy"
+msgstr "Różnica wysokości do końca trasy"
 
 #: src/Dialogs/Device/Vega/VoiceSettingsDialog.cpp:70
 msgid ""
@@ -6999,6 +6999,8 @@ msgid ""
 "The file may contain extracts from enroute supplements or other contributed "
 "information about individual waypoints and airfields."
 msgstr ""
+"Plik może zawierać dodatkowe informacje o poszczególnych punktach trasy lub "
+"lotniskach."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:86
 #, no-c-format
@@ -7068,7 +7070,7 @@ msgstr "Wario - kolory linii z kropkami"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
 #, no-c-format
 msgid "Vario-scaled dots and lines"
-msgstr "Kropki i linie skalowane variometrem"
+msgstr "Kropki i linie skalowane wariometrem"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:113
 #, no-c-format
@@ -7076,8 +7078,9 @@ msgid ""
 "Vario-scaled dots with lines. Orange to red = climb. Light blue to dark blue "
 "= sink. Zero lift is presented as a yellow line."
 msgstr ""
-"Kropki skalowane variometrem i linie. Pomarańcz do czerwieni = wznoszenie.  "
-"Jasno do ciemno niebieskie = duszenie.  Zero jest reprezentowane żółtą linią."
+"Kropki skalowane wariometrem i linie. Kolory od pomarańczu do czerwieni = "
+"wznoszenie.  Kolory od jasno- do ciemno-niebieskiego = duszenie. Żółta linia "
+"= zerowe noszenie."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:116
 #, no-c-format
@@ -7097,7 +7100,7 @@ msgstr "Prosty (duży)"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:124
 #, no-c-format
 msgid "Enlarged simple graphics."
-msgstr "Powiększone proste grafiki."
+msgstr "Powiększony, prosty symbol szybowca."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -7107,7 +7110,7 @@ msgstr "Szczegółowy"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:126
 #, no-c-format
 msgid "Detailed rendered aircraft graphics."
-msgstr "Szczegółowa grafika renderowanego samolotu."
+msgstr "Szczegółowy symbol szybowca."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
@@ -7652,11 +7655,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr "Kontury"
+msgstr "Warstwice"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr "Gdy włączane, kontury są rysowane nad terenem."
+msgstr "Rysowanie warstwic na mapie terenu."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -8190,11 +8193,11 @@ msgstr "Minimalny czas trasy AAT w minutach"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
 msgid "Arm start manually"
-msgstr "Uzbrojenie startu ręcznie."
+msgstr "Ręczna aktyw. startu"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
-msgstr "Ustaw czy start jest uzbrojony automatycznie lub ręcznie."
+msgstr "Możesz wybrać, czy start jest aktywowany ręcznie czy automatycznie."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
 msgid "Start open time"
@@ -8447,15 +8450,15 @@ msgstr "DAeC Cyl.+sektor"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:222
 msgid "BGA Fixed Course"
-msgstr "BGA kurs stały"
+msgstr "BGA Fixed Course (21.2)"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:226
 msgid "BGA Enhanced Option"
-msgstr "Opcja BGA wzmocniona"
+msgstr "BGA Enhanced (21.3)"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:230
 msgid "BGA Start Sector"
-msgstr "Sektor Startowy BGA"
+msgstr "BGA Start Zone (19.1)"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
 msgid "Enter a task name"
@@ -8647,6 +8650,12 @@ msgid ""
 "present, since cloud condensation adds buoyancy aloft (i.e. this neglects "
 "\"cloudsuck\").  W* depends upon both the surface heating and the BL depth."
 msgstr ""
+"Średnia wartość noszenia termiki bezchmurnej w pobliżu wysokości mid-BL. "
+"Odejmij prędkość opadania szybowca w celu uzyskania średniego noszenia "
+"termiki bezchmurnej. Noszenia będą silniejsze niż wynika z tej prognozy w "
+"przypadku obecności chmur konweksyjnych, gdyż kondensacja zwieksza sił "
+"wyporu (efekt 'zasysania' przez chmury). W* zależy od stopnia ogrzania "
+"powierzchni ziemi i zasięgu wysokości warstwy BL."
 
 #: src/Terrain/RasterWeather.cpp:60
 #, no-c-format
@@ -8664,7 +8673,7 @@ msgstr ""
 #: src/Terrain/RasterWeather.cpp:65
 #, no-c-format
 msgid "H bl"
-msgstr ""
+msgstr "H bl"
 
 #: src/Terrain/RasterWeather.cpp:66
 #, no-c-format
@@ -8678,6 +8687,13 @@ msgid ""
 "the mixing results from shear turbulence rather than thermal mixing this "
 "parameter is not useful for glider flying. "
 msgstr ""
+"Pionowy zasięg wysokości warstwy mieszania, co odpowiada średniemu zaięgowi "
+"pionowemu kominów termiki bezchmurnej. Ponad terenem płaskim, maksymalny "
+"zasięg pionowy kominów termicznych będzie mniejszy ze względu na opadanie "
+"własne szybowca i inne czynniki. W przypadku wystąpienia chmur maksymalny "
+"zasięg termiki do wykorzystania może być ograniczony ich podstawą. Ponadto, "
+"gdy mieszanie następuje na skutek np. wiatrów gradientowych, a nie termiki, "
+"ten parametr nie jest przydatny w lotach szybowcowych. "
 
 #: src/Terrain/RasterWeather.cpp:70
 #, no-c-format
@@ -8748,6 +8764,14 @@ msgid ""
 "maximum thermalling height may instead be limited by the cloud base.  Being "
 "for \"dry\" thermals, this parameter omits the effect of \"cloudsuck\"."
 msgstr ""
+"Ten parametr określa wysokość na jakiej średnie noszenie termiki bezchmurnej "
+"spada poniżej 1.14m/s (225 fpm) i oczekuje się, że da on lepszą ilościowo "
+"wartość pozwalającą określić maksymalny pułap termiki bezchmurnej, niż BL "
+"Top height, szczególnie gdy przyczyną mieszania w atmosferze jest wiatr "
+"gradientowy, a nie kominy termiczne. (Uwaga: skutkiem przyjętych założeń "
+"może być zbyt mały zasięg pionowy termiki.) W przypadku wystąpienia chmur "
+"maksymalny zasięg termiki może być ograniczony ich podstawą. Dla termiki "
+"bezchmurnej ten parametr nie uwzględnia efektu 'zasysania' przez chmury."
 
 #: src/Terrain/RasterWeather.cpp:90
 #, no-c-format
@@ -8777,7 +8801,7 @@ msgstr "Szukanie prognozy pogody"
 
 #: Data/Dialogs/dlgTarget_L.xml:31 Data/Dialogs/dlgTarget.xml:13
 msgid "V rem."
-msgstr "V pozostala"
+msgstr "V poz."
 
 #: Data/Dialogs/dlgTeamCode_L.xml:19 Data/Dialogs/dlgTeamCode.xml:19
 msgid "Flarm lock"
@@ -8971,7 +8995,7 @@ msgstr "Masa bez balastu"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:25 Data/Dialogs/dlgTaskPoint.xml:21
 msgid "Score exit"
-msgstr ""
+msgstr "Wyjdź z pods."
 
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Enables automatic backlight, responsive to light sensor."
