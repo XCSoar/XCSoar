@@ -181,7 +181,8 @@ GlideComputer::ProcessIdle(bool exhaustive)
                           calculated, calculated.airspace_warnings);
 
   // Calculate summary of flight
-  retrospective.UpdateSample(basic.location);
+  if (basic.location_available)
+    retrospective.UpdateSample(basic.location);
 }
 
 bool
