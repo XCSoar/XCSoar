@@ -46,6 +46,7 @@ static const char *const port_type_strings[] = {
   "ioio_voltage",
   "auto",
   "internal",
+  "tcp_client",
   "tcp_listener",
   "udp_listener",
   "pty",
@@ -132,6 +133,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, "Port", n, "IOIOUartID");
   Get(buffer, config.ioio_uart_id);
+
+  MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
+  if (!Get(buffer, config.ip_address))
+    config.ip_address.clear();
 
   MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
   if (!Get(buffer, config.tcp_port))

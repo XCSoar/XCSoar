@@ -160,6 +160,20 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   case DeviceConfig::PortType::IOIOVOLTAGE:
     break;
 
+  case DeviceConfig::PortType::TCP_CLIENT: {
+#ifdef _WIN32_WCE
+    return nullptr;
+#else
+    auto port = new SocketPort(handler);
+    if (!port->ConnectTCP(config.ip_address, config.tcp_port)) {
+      delete port;
+      return nullptr;
+    }
+
+    return port;
+#endif
+  }
+
   case DeviceConfig::PortType::TCP_LISTENER: {
     TCPPort *port = new TCPPort(handler);
     if (!port->Open(config.tcp_port)) {

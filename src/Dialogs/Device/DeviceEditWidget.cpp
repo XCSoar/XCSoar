@@ -30,6 +30,7 @@
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/String.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -50,7 +51,10 @@
 #endif
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate, TCPPort, I2CBus, I2CAddr, PressureUsage, Driver,
+  Port, BaudRate, BulkBaudRate,
+  IP_ADDRESS,
+  TCPPort,
+  I2CBus, I2CAddr, PressureUsage, Driver,
   SyncFromDevice, SyncToDevice,
   K6Bt,
   IgnoreCheckSum,
@@ -74,6 +78,8 @@ static constexpr struct {
   { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
   { DeviceConfig::PortType::IOIOVOLTAGE, N_("IOIO voltage sensor") },
 #endif
+
+  { DeviceConfig::PortType::TCP_CLIENT, N_("TCP client") },
 
   /* label not translated for now, until we have a TCP/UDP port
      selection UI */
@@ -303,6 +309,7 @@ FillTCPPorts(DataFieldEnum &dfe)
 {
   dfe.addEnumText(_T("4353"), 4353);
   dfe.addEnumText(_T("10110"), 10110);
+  dfe.addEnumText(_T("4352"), 4352);
 }
 
 static void
@@ -345,6 +352,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
+  case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::PTY:
@@ -404,6 +412,12 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
     bulk_baud_control.GetDataField();
   bulk_baud_df.Set(config.bulk_baud_rate);
   bulk_baud_control.RefreshDisplay();
+
+  WndProperty &ip_address_control = GetControl(IP_ADDRESS);
+  DataFieldEnum &ip_address_df = *(DataFieldEnum *)
+    ip_address_control.GetDataField();
+  ip_address_df.Set(config.ip_address);
+  ip_address_control.RefreshDisplay();
 
   WndProperty &tcp_port_control = GetControl(TCPPort);
   DataFieldEnum &tcp_port_df = *(DataFieldEnum *)
@@ -534,6 +548,7 @@ DeviceEditWidget::UpdateVisibilities()
   SetRowVisible(BulkBaudRate, uses_speed &&
                 DeviceConfig::UsesDriver(type) &&
                 SupportsBulkBaudRate(GetDataField(Driver)));
+  SetRowAvailable(IP_ADDRESS, DeviceConfig::UsesIPAddress(type));
   SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
   SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type));
   SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type) &&
@@ -573,6 +588,11 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   Add(_("Bulk baud rate"),
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
+
+  DataFieldString *ip_address_df = new DataFieldString(_T(""), nullptr);
+  ip_address_df->SetListener(this);
+  ip_address_df->Set(config.ip_address);
+  Add(_("IP Address"), NULL, ip_address_df);
 
   DataFieldEnum *tcp_port_df = new DataFieldEnum(NULL);
   tcp_port_df->SetListener(this);
@@ -664,6 +684,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
+  case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
@@ -724,6 +745,10 @@ DeviceEditWidget::Save(bool &_changed)
     changed |= SaveValue(BaudRate, config.baud_rate);
     changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
   }
+
+  if (config.UsesIPAddress())
+    changed |= SaveValue(IP_ADDRESS, config.ip_address.buffer(),
+                         config.ip_address.MAX_SIZE);
 
   if (config.UsesTCPPort())
     changed |= SaveValue(TCPPort, config.tcp_port);
