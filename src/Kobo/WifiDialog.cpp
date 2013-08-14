@@ -40,10 +40,18 @@ class WifiListWidget final
     CONNECT,
   };
 
+  struct NetworkInfo {
+    StaticString<32> bssid;
+    StaticString<256> ssid;
+    int signal_level;
+
+    bool old;
+  };
+
   WndButton *connect_button;
 
   WifiStatus status;
-  TrivialArray<WifiVisibleNetwork, 64> networks;
+  TrivialArray<NetworkInfo, 64> networks;
 
   WPASupplicant wpa_supplicant;
 
@@ -90,6 +98,10 @@ private:
    * Ensure that we're connected to wpa_supplicant.
    */
   bool EnsureConnected();
+
+  NetworkInfo *FindByBSSID(const char *bssid);
+  void MergeList(const WifiVisibleNetwork *p, unsigned n);
+  void SweepList();
   void UpdateList();
 
   void Connect();
@@ -111,7 +123,7 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     const TCHAR *text = _("Connected");
     unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - padding - width, rc.top + padding, text);
-  } else {
+  } else if (info.signal_level >= 0) {
     StaticString<20> text;
     text.UnsafeFormat(_T("%u"), info.signal_level);
     unsigned width = canvas.CalcTextWidth(text);
@@ -178,19 +190,81 @@ WifiListWidget::EnsureConnected()
     wpa_supplicant.Connect("/var/run/wpa_supplicant/eth0");
 }
 
+WifiListWidget::NetworkInfo *
+WifiListWidget::FindByBSSID(const char *bssid)
+{
+  auto f = std::find_if(networks.begin(), networks.end(),
+                        [bssid](const NetworkInfo &info) {
+                          return info.bssid == bssid;
+                        });
+  if (f == networks.end())
+    return nullptr;
+
+  return f;
+}
+
+inline void
+WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
+{
+  for (unsigned i = 0; i < unsigned(n); ++i) {
+    const auto &found = p[i];
+
+    auto info = FindByBSSID(found.bssid);
+    if (info != nullptr) {
+      info->old = false;
+    } else {
+      info = &networks.append();
+      info->bssid = found.bssid;
+    }
+
+    info->ssid = found.ssid;
+    info->signal_level = found.signal_level;
+  }
+}
+
+inline void
+WifiListWidget::SweepList()
+{
+  unsigned cursor = GetList().GetCursorIndex();
+
+  for (int i = networks.size() - 1; i >= 0; --i) {
+    if (networks[i].old) {
+      networks.remove(i);
+      if (cursor > unsigned(i))
+        --cursor;
+    }
+  }
+
+  GetList().SetCursorIndex(cursor);
+}
+
 void
 WifiListWidget::UpdateList()
 {
   status.Clear();
-  networks.clear();
 
   if (EnsureConnected()) {
     wpa_supplicant.Status(status);
 
-    int n = wpa_supplicant.ScanResults(networks.begin(), networks.capacity());
+    for (auto &i : networks) {
+      i.signal_level = -1;
+      i.old = true;
+    }
+
+    /* obtain scan results */
+    WifiVisibleNetwork *buffer = new WifiVisibleNetwork[networks.capacity()];
+    int n = wpa_supplicant.ScanResults(buffer, networks.capacity());
+
+    /* merge into the network list */
     if (n >= 0)
-      networks.resize(n);
-  }
+      MergeList(buffer, n);
+
+    delete[] buffer;
+
+    /* remove items that are still marked as "old" */
+    SweepList();
+  } else
+    networks.clear();
 
   GetList().SetLength(networks.size());
 
