@@ -152,9 +152,8 @@ SmallTrafficWindow::OnPaint(Canvas &canvas)
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
-#elif defined(USE_GDI)
-    const PixelRect rc = GetClientRect();
-    ::InvertRect(canvas, &rc);
+#else
+    canvas.InvertRectangle(GetClientRect());
 #endif
   }
 }

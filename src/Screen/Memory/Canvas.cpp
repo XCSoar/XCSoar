@@ -76,6 +76,16 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                        canvas.Import(color));
 }
 
+void
+Canvas::InvertRectangle(int left, int top, int right, int bottom)
+{
+  if (left >= right || top >= bottom)
+    return;
+
+  CopyNot(left, top, right - left, bottom - top,
+          buffer, left, top);
+}
+
 template<typename Canvas, typename PixelOperations>
 static void
 DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,

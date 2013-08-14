@@ -275,6 +275,14 @@ public:
     DrawFilledRectangle(rc, brush);
   }
 
+  void InvertRectangle(const PixelRect &rc) {
+    ::InvertRect(dc, &rc);
+  }
+
+  void InvertRectangle(int left, int top, int right, int bottom) {
+    InvertRectangle({left, top, right, bottom});
+  }
+
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
   }

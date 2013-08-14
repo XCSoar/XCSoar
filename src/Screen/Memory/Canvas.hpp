@@ -208,6 +208,12 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
+  void InvertRectangle(int left, int top, int right, int bottom);
+
+  void InvertRectangle(const PixelRect &rc) {
+    InvertRectangle(rc.left, rc.top, rc.right, rc.bottom);
+  }
+
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
   }
