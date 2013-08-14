@@ -7,6 +7,8 @@ Version 6.6.5 - not yet released
   - reduce CPU usage of airspace and topography renderer
 * tasks
   - remove keyhole from the BGA start sector zone
+* devices
+  - enable Nook's internal GPS for mock locations (#2999)
 
 Version 6.6.4 - 2013/07/11
 * map
