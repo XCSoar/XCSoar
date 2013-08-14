@@ -129,8 +129,8 @@ using BinaryPerPixelOperations =
 /**
  * Modify a destination pixel only if the check returns true.
  */
-template<typename Check>
-struct ConditionalWritePixel : private Check {
+template<typename Check, typename Operation=typename Check::PixelTraits>
+struct ConditionalWritePixel : private Check, private Operation {
   typedef typename Check::PixelTraits PixelTraits;
   typedef typename PixelTraits::rpointer_type rpointer_type;
   typedef typename PixelTraits::const_rpointer_type const_rpointer_type;
@@ -144,18 +144,22 @@ struct ConditionalWritePixel : private Check {
   explicit constexpr ConditionalWritePixel(Args&&... args)
     :Check(std::forward<Args>(args)...) {}
 
+  template<typename C, typename O>
+  ConditionalWritePixel(C &&c, O &&o)
+    :Check(std::forward<C>(c)), Operation(std::forward<O>(o)) {}
+
   void WritePixel(rpointer_type p, color_type c) const {
     if (Check::operator()(c))
-      PixelTraits::WritePixel(p, c);
+      Operation::WritePixel(p, c);
   }
 };
 
 /**
  * Modify a destination pixel only if the check returns true.
  */
-template<typename Check>
+template<typename Check, typename Operation=typename Check::PixelTraits>
 using ConditionalPixelOperations =
-  PerPixelOperations<ConditionalWritePixel<Check>>;
+  PerPixelOperations<ConditionalWritePixel<Check, Operation>>;
 
 /**
  * Wrap an existing function object that expects to operate on one
