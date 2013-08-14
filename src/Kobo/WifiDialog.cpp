@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
@@ -69,7 +70,12 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
     const DialogLook &look = UIGlobals::GetDialogLook();
-    CreateList(parent, look, rc, Layout::GetMaximumControlHeight());
+    const unsigned row_height =
+      std::max(Layout::GetMaximumControlHeight(),
+               Layout::GetTextPadding() * 3 + look.text_font->GetHeight()
+               + look.small_font->GetHeight());
+
+    CreateList(parent, look, rc, row_height);
     UpdateList();
     Timer::Schedule(1000);
   }
@@ -114,20 +120,31 @@ void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
   const auto &info = networks[idx];
   const unsigned padding = Layout::GetTextPadding();
 
-  canvas.DrawText(rc.left + padding, rc.top + padding, info.ssid);
+  const unsigned x1 = rc.left + padding;
+  const unsigned y1 = rc.top + padding;
+  const unsigned y2 = y1 + look.text_font->GetHeight() + padding;
+
+  canvas.Select(*look.text_font);
+  canvas.DrawText(x1, y1, info.ssid);
+
+  canvas.Select(*look.small_font);
+  canvas.DrawText(x1, y2, info.bssid);
 
   if (StringIsEqual(info.bssid, status.bssid)) {
     const TCHAR *text = _("Connected");
     unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - padding - width, rc.top + padding, text);
-  } else if (info.signal_level >= 0) {
+    canvas.DrawText(rc.right - padding - width, y1, text);
+  }
+
+  if (info.signal_level >= 0) {
     StaticString<20> text;
     text.UnsafeFormat(_T("%u"), info.signal_level);
     unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - padding - width, rc.top + padding, text);
+    canvas.DrawText(rc.right - padding - width, y2, text);
   }
 }
 
