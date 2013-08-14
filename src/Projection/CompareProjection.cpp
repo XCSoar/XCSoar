@@ -45,7 +45,7 @@ CompareProjection::CompareProjection(const WindowProjection &projection)
    latitude_cos(corners.top_left.latitude.fastcosine()),
    max_delta(SimpleDistance(corners.top_left, corners.top_right,
                             latitude_cos) /
-             (projection.GetScreenWidth() * projection.GetScreenWidth()))
+             projection.GetScreenWidth())
 {
 }
 
