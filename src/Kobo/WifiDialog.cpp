@@ -111,6 +111,11 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     const TCHAR *text = _("Connected");
     unsigned width = canvas.CalcTextWidth(text);
     canvas.DrawText(rc.right - padding - width, rc.top + padding, text);
+  } else {
+    StaticString<20> text;
+    text.UnsafeFormat(_T("%u"), info.signal_level);
+    unsigned width = canvas.CalcTextWidth(text);
+    canvas.DrawText(rc.right - padding - width, rc.top + padding, text);
   }
 }
 

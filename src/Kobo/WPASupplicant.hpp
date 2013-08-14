@@ -40,6 +40,7 @@ struct WifiStatus {
 struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
+  unsigned signal_level;
 };
 
 class WPASupplicant {

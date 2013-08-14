@@ -152,11 +152,16 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
   if (src == nullptr)
     return false;
 
-  src = strchr(src + 1, '\t'); // seek "flags"
-  if (src == nullptr)
+  ++src;
+
+  char *endptr;
+  dest.signal_level = ParseUnsigned(src, &endptr);
+  if (endptr == src || *endptr != '\t')
     return false;
 
-  src = strchr(src + 1, '\t'); // seek "ssid"
+  src = endptr + 1;
+
+  src = strchr(src, '\t'); // seek "ssid"
   if (src == nullptr)
     return false;
 
