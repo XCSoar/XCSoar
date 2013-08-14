@@ -341,6 +341,21 @@ using PortableAlphaPixelOperations =
   BinaryPerChannelOperations<PixelTraits,
                              PixelAlphaOperation<typename PixelTraits::channel_type>>;
 
+template<typename PT>
+struct NotWhiteCondition {
+  typedef PT PixelTraits;
+  typedef typename PT::color_type color_type;
+
+  constexpr bool operator()(color_type c) const {
+    return !PixelTraits::IsWhite(c);
+  }
+};
+
+template<typename PixelTraits>
+using NotWhiteAlphaPixelOperations =
+  ConditionalPixelOperations<NotWhiteCondition<PixelTraits>,
+                             PortableAlphaPixelOperations<PixelTraits>>;
+
 template<typename PT, typename SPT>
 struct PixelOpaqueText {
   typedef PT PixelTraits;

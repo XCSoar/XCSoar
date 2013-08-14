@@ -625,3 +625,38 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
              src_x, src_y, src_width, src_height,
              alpha);
 }
+
+void
+Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
+                           unsigned dest_width, unsigned dest_height,
+                           ConstImageBuffer src,
+                           int src_x, int src_y,
+                           unsigned src_width, unsigned src_height,
+                           uint8_t alpha)
+{
+  // TODO: support scaling
+
+  SDLRasterCanvas canvas(buffer);
+
+  NotWhiteCondition<SDLPixelTraits> c;
+  NotWhiteAlphaPixelOperations<SDLPixelTraits> operations(c,
+                                                          PortableAlphaPixelOperations<SDLPixelTraits>(alpha));
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       src.At(src_x, src_y), src.pitch,
+                       operations);
+}
+
+void
+Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
+                           unsigned dest_width, unsigned dest_height,
+                           const Canvas src,
+                           int src_x, int src_y,
+                           unsigned src_width, unsigned src_height,
+                           uint8_t alpha)
+{
+  AlphaBlendNotWhite(dest_x, dest_y, dest_width, dest_height,
+                     src.buffer,
+                     src_x, src_y, src_width, src_height,
+                     alpha);
+}
