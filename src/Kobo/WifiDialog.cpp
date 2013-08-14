@@ -107,6 +107,7 @@ private:
 
   NetworkInfo *FindByBSSID(const char *bssid);
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
+  void UpdateScanResults();
   void SweepList();
   void UpdateList();
 
@@ -240,6 +241,17 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
 }
 
 inline void
+WifiListWidget::UpdateScanResults()
+{
+  WifiVisibleNetwork *buffer = new WifiVisibleNetwork[networks.capacity()];
+  int n = wpa_supplicant.ScanResults(buffer, networks.capacity());
+  if (n >= 0)
+    MergeList(buffer, n);
+
+  delete[] buffer;
+}
+
+inline void
 WifiListWidget::SweepList()
 {
   unsigned cursor = GetList().GetCursorIndex();
@@ -268,15 +280,7 @@ WifiListWidget::UpdateList()
       i.old = true;
     }
 
-    /* obtain scan results */
-    WifiVisibleNetwork *buffer = new WifiVisibleNetwork[networks.capacity()];
-    int n = wpa_supplicant.ScanResults(buffer, networks.capacity());
-
-    /* merge into the network list */
-    if (n >= 0)
-      MergeList(buffer, n);
-
-    delete[] buffer;
+    UpdateScanResults();
 
     /* remove items that are still marked as "old" */
     SweepList();
