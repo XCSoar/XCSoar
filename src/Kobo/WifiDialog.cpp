@@ -43,7 +43,7 @@ class WifiListWidget final
   WndButton *connect_button;
 
   WifiStatus status;
-  TrivialArray<WifiNetworkInfo, 64> networks;
+  TrivialArray<WifiVisibleNetwork, 64> networks;
 
   WPASupplicant wpa_supplicant;
 
@@ -102,7 +102,7 @@ void
 WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                             unsigned idx)
 {
-  const WifiNetworkInfo &info = networks[idx];
+  const auto &info = networks[idx];
   const unsigned padding = Layout::GetTextPadding();
 
   canvas.DrawText(rc.left + padding, rc.top + padding, info.ssid);
@@ -139,7 +139,7 @@ WifiListWidget::Connect()
   if (i >= networks.size())
     return;
 
-  const WifiNetworkInfo &info = networks[i];
+  const auto &info = networks[i];
   StaticString<256> caption;
   caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
 

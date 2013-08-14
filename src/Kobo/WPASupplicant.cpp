@@ -137,7 +137,7 @@ WPASupplicant::Scan()
 }
 
 static bool
-ParseScanResultsLine(WifiNetworkInfo &dest, char *src)
+ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
 {
   char *tab = strchr(src, '\t'); // seek "frequency"
   if (tab == nullptr)
@@ -173,7 +173,7 @@ ParseScanResultsLine(WifiNetworkInfo &dest, char *src)
 }
 
 static int
-ParseScanResults(WifiNetworkInfo *dest, unsigned max, char *src)
+ParseScanResults(WifiVisibleNetwork *dest, unsigned max, char *src)
 {
   if (memcmp(src, "bssid", 5) != 0)
     return -1;
@@ -205,7 +205,7 @@ ParseScanResults(WifiNetworkInfo *dest, unsigned max, char *src)
 }
 
 int
-WPASupplicant::ScanResults(WifiNetworkInfo *dest, unsigned max)
+WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
 {
   assert(dest != nullptr);
   assert(max > 0);

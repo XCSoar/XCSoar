@@ -37,7 +37,7 @@ struct WifiStatus {
   }
 };
 
-struct WifiNetworkInfo {
+struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
 };
@@ -79,7 +79,7 @@ public:
   /**
    * @return the number of networks or -1 on error
    */
-  int ScanResults(WifiNetworkInfo *dest, unsigned max);
+  int ScanResults(WifiVisibleNetwork *dest, unsigned max);
 
   /**
    * @return the network id or -1 on error
