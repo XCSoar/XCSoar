@@ -28,6 +28,7 @@ Copyright_License {
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
+#include "Util/ConvertString.hpp"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
@@ -164,8 +165,12 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 #ifdef _WIN32_WCE
     return nullptr;
 #else
+    const WideToUTF8Converter ip_address(config.ip_address);
+    if (!ip_address.IsValid())
+      return nullptr;
+
     auto port = new SocketPort(handler);
-    if (!port->ConnectTCP(config.ip_address, config.tcp_port)) {
+    if (!port->ConnectTCP(ip_address, config.tcp_port)) {
       delete port;
       return nullptr;
     }
