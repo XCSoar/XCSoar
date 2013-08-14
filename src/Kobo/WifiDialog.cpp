@@ -45,6 +45,7 @@ class WifiListWidget final
     StaticString<32> bssid;
     StaticString<256> ssid;
     int signal_level;
+    int id;
 
     bool old;
   };
@@ -108,6 +109,9 @@ private:
   NetworkInfo *FindByBSSID(const char *bssid);
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
+  void Merge(const WifiConfiguredNetworkInfo &c);
+  void MergeList(const WifiConfiguredNetworkInfo *p, unsigned n);
+  void UpdateConfigured();
   void SweepList();
   void UpdateList();
 
@@ -135,10 +139,19 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.Select(*look.small_font);
   canvas.DrawText(x1, y2, info.bssid);
 
-  if (StringIsEqual(info.bssid, status.bssid)) {
-    const TCHAR *text = _("Connected");
-    unsigned width = canvas.CalcTextWidth(text);
-    canvas.DrawText(rc.right - padding - width, y1, text);
+  const TCHAR *state = nullptr;
+  if (StringIsEqual(info.bssid, status.bssid))
+    state = _("Connected");
+  else if (info.id >= 0)
+    state = info.signal_level >= 0
+      ? _("Saved and visible")
+      : _("Saved, but not visible");
+  else if (info.signal_level >= 0)
+    state = _("Visible");
+
+  if (state != nullptr) {
+    unsigned width = canvas.CalcTextWidth(state);
+    canvas.DrawText(rc.right - padding - width, y1, state);
   }
 
   if (info.signal_level >= 0) {
@@ -233,6 +246,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
     } else {
       info = &networks.append();
       info->bssid = found.bssid;
+      info->id = -1;
     }
 
     info->ssid = found.ssid;
@@ -245,6 +259,60 @@ WifiListWidget::UpdateScanResults()
 {
   WifiVisibleNetwork *buffer = new WifiVisibleNetwork[networks.capacity()];
   int n = wpa_supplicant.ScanResults(buffer, networks.capacity());
+  if (n >= 0)
+    MergeList(buffer, n);
+
+  delete[] buffer;
+}
+
+inline void
+WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
+{
+  if (c.bssid == "any") {
+    bool found = false;
+
+    for (auto &i : networks) {
+      if (i.signal_level >= 0 && i.ssid == c.ssid) {
+        found = true;
+        i.id = c.id;
+      }
+    }
+
+    if (!found) {
+      auto &info = networks.append();
+      info.bssid = c.bssid;
+      info.ssid = c.ssid;
+      info.id = c.id;
+      info.signal_level = -1;
+    }
+  } else {
+    auto info = FindByBSSID(c.bssid);
+    if (info != nullptr) {
+      info->old = false;
+    } else {
+      info = &networks.append();
+      info->bssid = c.bssid;
+      info->ssid = c.ssid;
+      info->signal_level = -1;
+    }
+
+    info->id = c.id;
+  }
+}
+
+inline void
+WifiListWidget::MergeList(const WifiConfiguredNetworkInfo *p, unsigned n)
+{
+  for (unsigned i = 0; i < unsigned(n); ++i)
+    Merge(p[i]);
+}
+
+inline void
+WifiListWidget::UpdateConfigured()
+{
+  WifiConfiguredNetworkInfo *buffer =
+    new WifiConfiguredNetworkInfo[networks.capacity()];
+  int n = wpa_supplicant.ListNetworks(buffer, networks.capacity());
   if (n >= 0)
     MergeList(buffer, n);
 
@@ -277,10 +345,12 @@ WifiListWidget::UpdateList()
 
     for (auto &i : networks) {
       i.signal_level = -1;
+      i.id = -1;
       i.old = true;
     }
 
     UpdateScanResults();
+    UpdateConfigured();
 
     /* remove items that are still marked as "old" */
     SweepList();

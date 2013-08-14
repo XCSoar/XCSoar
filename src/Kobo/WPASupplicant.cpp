@@ -281,3 +281,81 @@ WPASupplicant::DisableNetwork(unsigned id)
   cmd.Format("DISABLE_NETWORK %u", id);
   return SendCommand(cmd) && ExpectOK();
 }
+
+static bool
+ParseListResultsLine(WifiConfiguredNetworkInfo &dest, char *src)
+{
+  char *endptr;
+  dest.id = ParseUnsigned(src, &endptr);
+  if (endptr == src || *endptr != '\t')
+    return false;
+
+  src = endptr + 1;
+
+  char *tab = strchr(src, '\t');
+  if (tab == nullptr)
+    return false;
+
+  *tab = 0;
+  dest.ssid = src;
+
+  src = tab + 1;
+
+  tab = strchr(src, '\t');
+  if (tab != nullptr)
+    *tab = 0;
+
+  dest.bssid = src;
+  return true;
+}
+
+static int
+ParseListResults(WifiConfiguredNetworkInfo *dest, unsigned max, char *src)
+{
+  if (memcmp(src, "network id", 10) != 0)
+    return -1;
+
+  src = strchr(src, '\n');
+  if (src == nullptr)
+    return -1;
+
+  ++src;
+
+  unsigned n = 0;
+  do {
+    char *eol = strchr(src, '\n');
+    if (eol != nullptr)
+      *eol = 0;
+
+    if (!ParseListResultsLine(dest[n], src))
+      break;
+
+    ++n;
+
+    if (eol == nullptr)
+      break;
+
+    src = eol + 1;
+  } while (n < max);
+
+  return n;
+}
+
+int
+WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, unsigned max)
+{
+  assert(dest != nullptr);
+  assert(max > 0);
+
+  if (!SendCommand("LIST_NETWORKS"))
+    return -1;
+
+  char buffer[4096];
+  ssize_t nbytes = fd.Read(buffer, sizeof(buffer) - 1);
+  if (nbytes <= 5)
+    return -1;
+
+  buffer[nbytes] = 0;
+
+  return ParseListResults(dest, max, buffer);
+}

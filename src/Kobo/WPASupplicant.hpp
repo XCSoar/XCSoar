@@ -43,6 +43,12 @@ struct WifiVisibleNetwork {
   unsigned signal_level;
 };
 
+struct WifiConfiguredNetworkInfo {
+  int id;
+  StaticString<256> ssid;
+  StaticString<32> bssid;
+};
+
 class WPASupplicant {
   SocketDescriptor fd;
 
@@ -100,6 +106,11 @@ public:
   bool SelectNetwork(unsigned id);
   bool EnableNetwork(unsigned id);
   bool DisableNetwork(unsigned id);
+
+  /**
+   * @return the number of networks or -1 on error
+   */
+  int ListNetworks(WifiConfiguredNetworkInfo *dest, unsigned max);
 };
 
 #endif
