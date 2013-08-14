@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2012-05-24 13:44+0000\n"
+"PO-Revision-Date: 2013-08-14 12:58+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-31 16:32+0000\n"
-"X-Generator: Launchpad (build 15322)\n"
+"X-Launchpad-Export-Date: 2013-08-14 17:08+0000\n"
+"X-Generator: Launchpad (build 16723)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -37,7 +37,7 @@ msgstr "Úloha"
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI odznaky/rekordy"
 
 #: src/Task/TypeStrings.cpp:35 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
@@ -252,7 +252,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
 msgid "FAI start quadrant"
-msgstr ""
+msgstr "FAI odletový kvadrant"
 
 #: src/Task/TypeStrings.cpp:116
 #, no-c-format
@@ -267,7 +267,7 @@ msgstr "Štartovný cylinder"
 #: src/Task/TypeStrings.cpp:118 src/Dialogs/Task/dlgTaskHelpers.cpp:185
 #, no-c-format
 msgid "FAI quadrant"
-msgstr ""
+msgstr "FAI kvadrant"
 
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
@@ -292,7 +292,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
 msgid "Cylinder with 1 mile radius."
-msgstr ""
+msgstr "Cylinder s rádiusom 1 míľa"
 
 #: src/Task/TypeStrings.cpp:124
 #, no-c-format
@@ -307,7 +307,7 @@ msgstr "Oblasť - sektor"
 #: src/Task/TypeStrings.cpp:126
 #, no-c-format
 msgid "FAI finish quadrant"
-msgstr ""
+msgstr "FAI cielový kvadrant"
 
 #: src/Task/TypeStrings.cpp:127
 #, no-c-format
@@ -335,54 +335,54 @@ msgid "Symmetric quadrant"
 msgstr ""
 
 #: src/Task/TypeStrings.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Area keyhole"
-msgstr "Oblasť - cylinder"
+msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:32
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid start"
-msgstr "Žiadny validný štart.\n"
+msgstr "Žiadny platný štart"
 
 #: src/Task/ValidationErrorStrings.cpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No valid finish"
-msgstr "Žiadny validný cieľ.\n"
+msgstr "Žiadny platný cieľ"
 
 #: src/Task/ValidationErrorStrings.cpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task not closed"
-msgstr "Úloha nie je uzavretá.\n"
+msgstr "Úloha neuzavretá"
 
 #: src/Task/ValidationErrorStrings.cpp:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "All turnpoints not the same type"
-msgstr "Otočné body nie sú všetky rovnakého typu.\n"
+msgstr "Všetky otočné body nemajú rovnaký typ"
 
 #: src/Task/ValidationErrorStrings.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Incorrect number of turnpoints"
-msgstr "Nesprávny počet otočných bodov.\n"
+msgstr "Nesprávny počet otočných bodov"
 
 #: src/Task/ValidationErrorStrings.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Too many turnpoints"
-msgstr "Príliž veľa otočných bodov.\n"
+msgstr "Príliš veľa otočných bodov"
 
 #: src/Task/ValidationErrorStrings.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not enough turnpoints"
-msgstr "Málo otočných bodov.\n"
+msgstr "Moc málo otočných bodov"
 
 #: src/Task/ValidationErrorStrings.cpp:39
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoints not unique"
-msgstr "Otočné body nie sú unikátne.\n"
+msgstr "Viacnásobné otočné body"
 
 #: src/Task/ValidationErrorStrings.cpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Empty task"
-msgstr "Úloha je prázdna.\n"
+msgstr "Prázdna úloha"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -390,9 +390,9 @@ msgid "non-FAI turn points"
 msgstr ""
 
 #: src/Task/ValidationErrorStrings.cpp:42
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "non-MAT turn points"
-msgstr "Príliž veľa otočných bodov.\n"
+msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -431,24 +431,24 @@ msgid "Significant wind change"
 msgstr "Výrazná zmena vetra"
 
 #: src/FLARM/Error.cpp:29
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No error"
-msgstr "Vega-chyba"
+msgstr "Žiadna chyba"
 
 #: src/FLARM/Error.cpp:30
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Information"
-msgstr "Nastavenie"
+msgstr "Informácie"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Redukovaná funkčnosť"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Vážny problém"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -463,34 +463,34 @@ msgid "Unknown"
 msgstr "Neznámy"
 
 #: src/FLARM/Error.cpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Firmware timeout"
-msgstr "Časový limit menu"
+msgstr ""
 
 #: src/FLARM/Error.cpp:49
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Power"
-msgstr "Napätie PDA"
+msgstr "Napájanie"
 
 #: src/FLARM/Error.cpp:50
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GPS communication"
-msgstr "Vega neodpovedá."
+msgstr "GPS komunikácia"
 
 #: src/FLARM/Error.cpp:51
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GPS configuration"
-msgstr "Nastavenie"
+msgstr "GPS nastavenie"
 
 #: src/FLARM/Error.cpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "RF communication"
-msgstr "Vega neodpovedá."
+msgstr "Rádiové spojenie"
 
 #: src/FLARM/Error.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Communication"
-msgstr "Nastavenie"
+msgstr "Komunikácia"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
@@ -498,19 +498,19 @@ msgid "Flash memory"
 msgstr ""
 
 #: src/FLARM/Error.cpp:55
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pressure sensor"
-msgstr "Výška tlaková"
+msgstr "Tlakový senzor"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:78
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Databáza prekážok"
 
 #: src/FLARM/Error.cpp:57
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flight recorder"
-msgstr "Letová hladina"
+msgstr "Logger"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -518,9 +518,9 @@ msgid "Transponder receiver"
 msgstr ""
 
 #: src/FLARM/Error.cpp:60
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Other"
-msgstr "Počasie"
+msgstr "Iné"
 
 #: src/Logger/Logger.cpp:113 src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 msgid "Start Logger"
@@ -927,31 +927,28 @@ msgid "None"
 msgstr "Žiadne"
 
 #: src/Menu/ExpandMacros.cpp:560 src/Input/InputEventsSettings.cpp:307
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task & Airfields"
-msgstr "Úloha prerušená"
+msgstr "Úloha & Letiská"
 
 #: src/InfoBoxes/Content/Factory.cpp:164
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude GPS"
-msgstr "Nadmor. výška"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt GPS"
-msgstr "GPS výška"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:166
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the altitude above mean sea level reported by the GPS. Touch-screen/"
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
-"Udáva výšku nad hladinou mora, stanovenú podľa GPS. Iba pre dotykový "
-"displej / PC: pri simulácii je táto hodnota meniteľná tlačítkom hore/dole. "
-"Tlačítko vľavo/vpravo zatáča vetroň."
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
@@ -965,19 +962,17 @@ msgid "H AGL"
 msgstr "AGL výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:176
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the navigation altitude minus the terrain elevation obtained from "
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
-"Udáva navigačnú výšku mínus výšku terénu podľa súboru s terénom. Hodnota je "
-"červená ak je vetroň pod bezpečnou výškou nad terénom."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Stupák za posledných 30 s."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
@@ -994,9 +989,9 @@ msgstr ""
 "dostupné."
 
 #: src/InfoBoxes/Content/Factory.cpp:195
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next Bearing"
-msgstr "Kurz k tímu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1015,37 +1010,33 @@ msgstr ""
 "sektore."
 
 #: src/InfoBoxes/Content/Factory.cpp:206
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR instantaneous"
-msgstr "Okamžitá kĺzavosť"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:207
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR Inst"
-msgstr "Okamž. kĺz."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:208
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous glide ratio over ground, given by the ground speed divided by "
 "the vertical speed (GPS speed) over the last 20 seconds. Negative values "
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
-"Okamžitá kĺzavosť, daná podielom rýchlosti voči zemi ku vertikálnej "
-"rýchlosti (rýchlosti GPS) za posledných 20 sekúnd. Negatívne hodnoty "
-"znamenajú stúpanie na preskoku. Ak je vertikálna rýchlosť blízko nule "
-"zobrazí sa hodnota '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:216
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR cruise"
-msgstr "Kĺzavosť na preskoku"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:217
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR Cruise"
-msgstr "Preskok"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:218
 #, no-c-format
@@ -1066,9 +1057,9 @@ msgid "Speed ground"
 msgstr "Pozemná rýchlosť"
 
 #: src/InfoBoxes/Content/Factory.cpp:227
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V GND"
-msgstr "GND výška"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:228
 #, no-c-format
@@ -1141,16 +1132,12 @@ msgid "MC"
 msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The current MacCready setting and the current MacCready mode (manual or "
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
-"Aktuálne nastavenie hodnoty MacCready. Toto info-okno zároveň ukazuje či je "
-"MacCready mód manuálny alebo automatický.\r\n"
-"(Iba dotykový displej/PC) Ak je toto okno aktívne dá sa MacCready hodnota "
-"nastaviť klávesami hore/dole."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1182,12 +1169,11 @@ msgid "WP AltD"
 msgstr "Výšk.roz.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height. "
 "For AAT tasks, the target within the AAT sector is used."
 msgstr ""
-"Príletová výška na ďalší otočný bod relatívna k bezpečnej príletovej výške."
 
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
@@ -1200,11 +1186,11 @@ msgid "WP AltR"
 msgstr "Pož.výš.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
-msgstr "Potrebný prírastok výšky na dosiahnutie daľšieho otočného bodu."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
@@ -1212,21 +1198,18 @@ msgid "Next waypoint"
 msgstr "Ďalší otočný bod"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next WP"
-msgstr "Ďalší"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:311
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The name of the currently selected turn point. When this InfoBox is active, "
 "using the up/down cursor keys selects the next/previous waypoint in the "
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
-"Názov momentálne aktívneho otočného bodu. Ak je toto info-okno aktívne, "
-"stlačenie kláves hore/dole mení otočný bod za nasledujúci/predošlí. (Iba "
-"dotykový displej/PC) Stlačením klávesy enter zobrazíme detaily otočného bodu."
 
 #: src/InfoBoxes/Content/Factory.cpp:319
 #, no-c-format
@@ -1268,9 +1251,9 @@ msgid "Speed task average"
 msgstr "Priemerná rýchlosť v úlohe"
 
 #: src/InfoBoxes/Content/Factory.cpp:340
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Avg"
-msgstr "Priem. rýchl. úlohy"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -1300,9 +1283,9 @@ msgid "Terrain elevation"
 msgstr "Výška terénu"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Terr Elev"
-msgstr "Výška terénu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
@@ -1324,12 +1307,11 @@ msgid "TC Avg"
 msgstr "SS priem"
 
 #: src/InfoBoxes/Content/Factory.cpp:381
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermalling."
 msgstr ""
-"Výška získaná/stratená v terajšom stupáku, delená časom stráveným krúžením."
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
@@ -1353,15 +1335,12 @@ msgid "Track"
 msgstr "Trasa"
 
 #: src/InfoBoxes/Content/Factory.cpp:401
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox "
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
-"Rýchlosť voči zemi, meraná podľa GPS. Ak je toto info-okno aktivované v móde "
-"simulácie, stlačenie tlačítka hore/dole upravuje rýchlosť vetroňa, stlačenie "
-"ľavého/pravého tlačítka vetroň zatáča."
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -1384,15 +1363,12 @@ msgstr "Rých. vetra"
 
 #: src/InfoBoxes/Content/Factory.cpp:421
 #: src/InfoBoxes/Content/Factory.cpp:1168
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind speed estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Smer vetra odhadovaný XCSoarom. (Iba dotykový displej/PC) Manuálne "
-"nastavenie smeru je možné stlačením klávesy vľavo/vpravo, ak je okno "
-"aktivované."
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
@@ -1400,20 +1376,17 @@ msgid "Wind bearing"
 msgstr "Smer vetra"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind Brng"
-msgstr "Smer vetra"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:432
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Wind bearing estimated by XCSoar. Manual adjustment is possible with the "
 "connected InfoBox dialogue. Pressing the up/down cursor keys to cycle "
 "through settings, adjust the values with left/right cursor keys."
 msgstr ""
-"Smer vetra odhadovaný XCSoarom. (Iba dotykový displej/PC) Manuálne "
-"nastavenie smeru je možné stlačením klávesy vľavo/vpravo, ak je okno "
-"aktivované."
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1521,9 +1494,9 @@ msgstr "Barometrická výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:502
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt Baro"
-msgstr "V Baro"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
@@ -1573,9 +1546,9 @@ msgstr ""
 "štarte úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:532
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Flight Duration"
-msgstr "Dĺžka letu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:533
 #, no-c-format
@@ -1607,9 +1580,9 @@ msgstr ""
 "hodnota je negatívna pre manévre so sklonom dole."
 
 #: src/InfoBoxes/Content/Factory.cpp:552
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "Ďalší"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:553
 #, no-c-format
@@ -1699,7 +1672,7 @@ msgid "Vopt"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:606
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The instantaneous MacCready speed-to-fly, making use of netto vario "
 "calculations to determine dolphin cruise speed in the glider's current "
@@ -1709,13 +1682,6 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
-"Okamžitá MacCready rýchlosť letu, využívajúca výpočet netto vária na "
-"stanovenie rýchlosti delfínovania momentálnym kurzom. Pri kĺzavom lete je "
-"táto letová rýchlosť optimalizovaná na udržanie výšky, pri doklze na "
-"optimálny zotup. V móde pre krúženie sa táto rýchlosť prepne na minimálne "
-"opadanie pri momentálnom prevádzkovom násobku (ak je pripojený "
-"akceleromenter). Ak je nastavená pevná MacCready rýchlosť tak je táto "
-"zobrazovaná."
 
 #: src/InfoBoxes/Content/Factory.cpp:614
 #, no-c-format
@@ -1855,17 +1821,13 @@ msgid "Max Temp"
 msgstr "Max. teplota"
 
 #: src/InfoBoxes/Content/Factory.cpp:677
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Forecast temperature of the ground at the home airfield, used in estimating "
 "convection height and cloud base in conjunction with outside air temperature "
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
-"Predpovedaná prízemná teplota na domácom letisku, použitá na predpoveď "
-"konvekčnej výšky a základne mrakov. Predpokladom je sonda relatívnej "
-"vlhkosti a vonkajšej teploty. (Dotykový displej/PC) Stláčanie klávesy hore/"
-"dole nastavuje túto predpovedanú teplotu."
 
 #: src/InfoBoxes/Content/Factory.cpp:685
 #, no-c-format
@@ -1908,22 +1870,18 @@ msgid "L/D vario"
 msgstr "Vário kĺzavosti"
 
 #: src/InfoBoxes/Content/Factory.cpp:706
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "L/D Vario"
-msgstr "Vário kĺzavosti"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:707
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous lift/drag ratio, given by the indicated airspeed divided by "
 "the total energy vertical speed, when connected to an intelligent "
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
-"Okamžitá kĺzavosť, daná podielom rýchlosti voči zemi ku vertikálnej "
-"rýchlosti (rýchlosti GPS) za posledných 20 sekúnd. Negatívne hodnoty "
-"znamenajú stúpanie na preskoku. Ak je vertikálna rýchlosť blízko nule "
-"zobrazí sa hodnota '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:715
 #, no-c-format
@@ -1966,9 +1924,9 @@ msgid "Team bearing"
 msgstr "Kurz k tímu"
 
 #: src/InfoBoxes/Content/Factory.cpp:736
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team Brng"
-msgstr "Tím kurz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:737
 #, no-c-format
@@ -1981,9 +1939,9 @@ msgid "Team bearing difference"
 msgstr "Tým - delta kurzu"
 
 #: src/InfoBoxes/Content/Factory.cpp:746
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team BrngD"
-msgstr "Tím kurz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:747
 #, no-c-format
@@ -2000,9 +1958,9 @@ msgid "Team range"
 msgstr "Vzdialenosť k tímu"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Team Dist"
-msgstr "Tím vzdial"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2016,9 +1974,9 @@ msgid "Speed task instantaneous"
 msgstr "Okamžitá rýchlosť úlohy"
 
 #: src/InfoBoxes/Content/Factory.cpp:766
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Inst"
-msgstr "R trať okam."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:767
 #, no-c-format
@@ -2035,9 +1993,9 @@ msgid "Distance home"
 msgstr "Vzdialenosť domov"
 
 #: src/InfoBoxes/Content/Factory.cpp:776
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Home Dist"
-msgstr "Vzd Dom"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:777
 #, no-c-format
@@ -2050,9 +2008,9 @@ msgid "Speed task achieved"
 msgstr "Dosiahnutá rýchlosť úlohy"
 
 #: src/InfoBoxes/Content/Factory.cpp:786
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task Ach"
-msgstr "Priem. rýchl. úlohy"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:787
 #, no-c-format
@@ -2072,16 +2030,12 @@ msgid "AAT dT"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:797
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Difference between estimated task time and AAT minimum time. Coloured red if "
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
-"Rozdiel medzi odhadnutým časom úlohy a minimálnym časom AAT. Zobrazí sa "
-"červenou farbou, ak je hodnota záporná (je predpokladaný prílet príliž "
-"skoro), alebo modrou ak ste v sektore a môžete ihneď otočiť, pretože "
-"odhadovaný čas príletu je väčší ako AAT čas plus 5 minút."
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -2089,9 +2043,9 @@ msgid "Thermal average over all"
 msgstr "Priemer stúpania celkový"
 
 #: src/InfoBoxes/Content/Factory.cpp:806
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Avg"
-msgstr "SP priem"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:807
 #, no-c-format
@@ -2158,9 +2112,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:849
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 1"
-msgstr "Alternatívne"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:850
 #, no-c-format
@@ -2173,9 +2127,9 @@ msgid "Displays name and bearing to the best alternate landing location."
 msgstr "Zobrazí názov a kurz na najlepšiu alternatívnu pristávaciu plochu."
 
 #: src/InfoBoxes/Content/Factory.cpp:859
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alternate 2"
-msgstr "Alternatívne"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:860
 #, no-c-format
@@ -2224,17 +2178,17 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:890
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR average"
-msgstr "Priemerná kĺzavosť"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:891
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "GR Avg"
-msgstr "SP priem"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:892
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance made in the configured period of time , divided by the altitude "
 "lost since then. Negative values are shown as ^^^ and indicate climbing "
@@ -2246,17 +2200,6 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
-"Vzdialenosť preletená počas nastaveného časového obdobia podelená stratou "
-"výšky za toto obdobie. Záporné hodnoty sú zobrazené ako ^^^ a indikujú "
-"stúpanie (získanie výšky).  Kĺzavosť väčšia ako 200 sa zobrazuje ako +++ . "
-"Časové obdobie priemerovania si môžete nastaviť v menu Špeciálneho "
-"nastavenia (Special config). Odporúčané hodnoty času sú 60, 90 alebo 120: "
-"nižšie hodnoty spôsobia výsledok blízky hodnote \"Okamžitá kĺzavosť\" (LD "
-"INST); vyššie spôsobia výsledok blízky hodnote \"Kĺzavosť na preskoku\" (LD "
-"Cruise). Povšimnite si, že vzdialenosť NIE JE priama vzdialenosť medzi "
-"starou a novou pozíciou: je to presne tá vzdialenosť, ktorú ste preleteli "
-"hoci aj cik-cak poletovaním. Táto hodnota nie je vypočítavaná počas "
-"krúženia. "
 
 #: src/InfoBoxes/Content/Factory.cpp:900
 #, no-c-format
@@ -2317,16 +2260,16 @@ msgid "Next altitude arrival"
 msgstr "Výška na daľšom otočnom bode"
 
 #: src/InfoBoxes/Content/Factory.cpp:941
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP AltA"
-msgstr "Výšk.roz.OB"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:942
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
 "tasks, the target within the AAT sector is used."
-msgstr "Absolútna výška príletu na nasledujúci otočný bod pri doklze."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:951 src/InfoBoxes/Content/Factory.cpp:952
 #, no-c-format
@@ -2344,9 +2287,9 @@ msgid "Flight level"
 msgstr "Letová hladina"
 
 #: src/InfoBoxes/Content/Factory.cpp:962
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FL"
-msgstr "F"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
@@ -2373,9 +2316,9 @@ msgid "Vario trace"
 msgstr "Stopa vária"
 
 #: src/InfoBoxes/Content/Factory.cpp:983
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario Trace"
-msgstr "Stopa vária"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:984
 #, no-c-format
@@ -2392,9 +2335,9 @@ msgid "Netto vario trace"
 msgstr "Stopa netto vária"
 
 #: src/InfoBoxes/Content/Factory.cpp:993
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Netto Trace"
-msgstr "Stopa netto vária"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:994
 #, no-c-format
@@ -2406,14 +2349,14 @@ msgstr ""
 "odhadovanému opadania vetroňa."
 
 #: src/InfoBoxes/Content/Factory.cpp:1002
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal climb trace"
-msgstr "Priemerné stúpanie"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1003
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TC Trace"
-msgstr "Teplotná stopa"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
@@ -2428,18 +2371,16 @@ msgid "Climb band"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb Band"
-msgstr "Trend stúpania"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
-"Graf priemerného stúpania v krúžení (horizontálna os) ako funkcie výšky "
-"(vertikálna os)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1022
 #, no-c-format
@@ -2525,13 +2466,11 @@ msgid "Horizon"
 msgstr "Horizont"
 
 #: src/InfoBoxes/Content/Factory.cpp:1065
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Attitude indicator (artificial horizon) display calculated from flight path, "
 "supplemented with acceleration and variometer data if available."
 msgstr ""
-"Ukazovateľ polohy (umelý horizont) vypočítaný z trasy letu doplnený o dáta "
-"akcelerometra a variometra ak sú pripojené."
 
 #: src/InfoBoxes/Content/Factory.cpp:1073
 #, no-c-format
@@ -2544,9 +2483,9 @@ msgid "Near AS H"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The horizontal distance to the nearest airspace."
-msgstr "Názov súboru sekundárneho vzušného priestoru."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1083
 #, no-c-format
@@ -2576,13 +2515,12 @@ msgid "WP MC0 AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1095
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
-"Príletová výška na ďalší otočný bod relatívna k bezpečnej príletovej výške."
 
 #: src/InfoBoxes/Content/Factory.cpp:1104
 #, no-c-format
@@ -2590,9 +2528,9 @@ msgid "Head wind component"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1105
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Head Wind"
-msgstr "Kurz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1106
 #, no-c-format
@@ -2621,24 +2559,22 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1124
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Altitude (Auto)"
-msgstr "Nadmor. výška"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1125
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Alt Auto"
-msgstr "Automat."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1126
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
-"Toto je barometrická výška udávaná GPS zariadením s tlakovým senzorom, alebo "
-"podporovaným inteligentným váriom."
 
 #: src/InfoBoxes/Content/Factory.cpp:1135
 #, no-c-format
@@ -2646,9 +2582,9 @@ msgid "Thermal next leg equivalent"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "T Next Leg"
-msgstr "Požadovaná kĺzavosť k ďalšiemu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1137
 #, no-c-format
@@ -2663,9 +2599,9 @@ msgid "Head wind component (simplified)"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1146
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Head Wind *"
-msgstr "Kurz"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1147
 #, no-c-format
@@ -2676,28 +2612,22 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1155
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Task cruise efficiency"
-msgstr "Efektívita preskoku"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1156
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise Eff"
-msgstr "Preskok"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1157
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance. This "
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
-"Efektivita kĺzania. Hodnota 100 indikuje presne taký výkon, aký sa očakával "
-"podľa MacCready nastavenia, väčšia než 100 indikuje lepší výkon než "
-"zodpovedá danému MacCready nastaveniu. Menej ako 100 je primeraný, ak ste "
-"leteli značne mimo trasu. Táto hodnota odhaduje vašu efektivitu kĺzania na "
-"základe aktuálnej histórie letu s danou MC hodnotou. Výpočet začína po "
-"štarte úlohy."
 
 #: src/InfoBoxes/Content/Factory.cpp:1166
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:186
@@ -2741,9 +2671,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1186
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Bod štartu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1187
 #, no-c-format
@@ -2756,9 +2686,9 @@ msgid "Start open/close countdown at reaching"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1195
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start reach"
-msgstr "Výška štartu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1196
 #, no-c-format
@@ -2768,9 +2698,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1203
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next radial"
-msgstr "Vzdialenosť k ďalšiemu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1204 Data/Dialogs/dlgTarget_L.xml:16
 #: Data/Dialogs/dlgTarget.xml:23
@@ -2785,9 +2715,9 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1213
 #: src/InfoBoxes/Content/Factory.cpp:1214
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ATC radial"
-msgstr "Vzdialenosť k ďalšiemu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1215
 #, no-c-format
@@ -2797,40 +2727,38 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1224
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speed task last hour"
-msgstr "Priemerná rýchlosť v úlohe"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1225
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V Task H"
-msgstr "Priem. rýchl. úlohy"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1226
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Average cross country speed while on current task over the last hour, not "
 "compensated for altitude."
-msgstr "Stredná rýchlosť doterajšej úlohy, bez výškovej kompenzácie."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next distance (nominal)"
-msgstr "Vzdialenosť k ďalšiemu"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1235
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP Dist-N"
-msgstr "Vzdial. od OB"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1236
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the origin of the AAT sector."
 msgstr ""
-"Vzdialenosť k aktívnemu otočnému bodu. Pre AAT úlohy je toto vzdialenosť k "
-"cieľovému bodu v AAT sekotre."
 
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
@@ -2858,9 +2786,9 @@ msgid "Alternates"
 msgstr "Alternatívy"
 
 #: src/InfoBoxes/Content/Alternate.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Altn %d"
-msgstr "Alt. 1"
+msgstr ""
 
 #: src/InfoBoxes/Content/Altitude.cpp:57
 #: src/MapWindow/GlueMapWindowOverlays.cpp:342
@@ -2937,18 +2865,16 @@ msgid "Time Below"
 msgstr "Doba pod"
 
 #: src/InfoBoxes/Content/Task.cpp:869 src/InfoBoxes/Content/Task.cpp:914
-#, fuzzy
 msgid "Closed"
-msgstr "Zavrieť"
+msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:878 src/InfoBoxes/Content/Task.cpp:923
 msgid "Open"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:883 src/InfoBoxes/Content/Task.cpp:928
-#, fuzzy
 msgid "Waiting"
-msgstr "Vário umlčať"
+msgstr ""
 
 #: src/InfoBoxes/Content/Places.cpp:58
 #, no-c-format
@@ -3325,9 +3251,8 @@ msgid "around terrain"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:251
-#, fuzzy
 msgid "Unreachable due to terrain."
-msgstr "Doklz skrz terén"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:256
 msgid "Arrival altitude incl. safety height"
@@ -3361,9 +3286,9 @@ msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:579
 #: src/Dialogs/Traffic/TrafficList.cpp:670
-#, fuzzy, c-format
+#, c-format
 msgid "%u minutes ago"
-msgstr "2 minúty"
+msgstr ""
 
 #: src/Renderer/WaypointListRenderer.cpp:121
 msgid "Arrival Alt"
@@ -3588,9 +3513,9 @@ msgid "GPS Intermediate Driver"
 msgstr "Prídavný ovládač GPS"
 
 #: src/Device/Config.cpp:255 src/Dialogs/Device/DeviceEditWidget.cpp:68
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Built-in GPS & sensors"
-msgstr "Vstavaná GPS"
+msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. create buttons
@@ -3668,9 +3593,8 @@ msgid "Queued"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:443 src/Dialogs/FileManager.cpp:449
-#, fuzzy
 msgid "Downloading"
-msgstr "Stiahnuť let"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:455 src/Dialogs/FileManager.cpp:687
 #: src/Dialogs/Device/DeviceListDialog.cpp:394
@@ -3696,25 +3620,21 @@ msgid "Error"
 msgstr "Chyba"
 
 #: src/Dialogs/FileManager.cpp:547
-#, fuzzy
 msgid "Select a file"
-msgstr "Zvoľte vzor"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:686
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "Sťahovanie zoznamu letov zlyhalo."
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:695 src/Dialogs/FileManager.cpp:722
 #: Data/Input/default.xci:612
-#, fuzzy
 msgid "File Manager"
-msgstr "Správca úlohy"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:716
-#, fuzzy
 msgid "The file manager is not available on this device."
-msgstr "Pre túto položku nie je nápoveda"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:719
 msgid "The file manager requires Android 2.3."
@@ -3726,14 +3646,14 @@ msgid "IOIO switches and Nunchuk"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO i2c pressure sensor"
-msgstr "Výška tlaková"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "IOIO voltage sensor"
-msgstr "Výška tlaková"
+msgstr ""
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3744,9 +3664,9 @@ msgid "TCP Port"
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:81
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "UDP Port"
-msgstr "Port"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:560
 msgid "Port"
@@ -3755,9 +3675,8 @@ msgstr "Port"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:566
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:116
-#, fuzzy
 msgid "Baud rate"
-msgstr "Baudrate"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:573
 msgid "Bulk baud rate"
@@ -3790,9 +3709,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:603
-#, fuzzy
 msgid "Pressure use"
-msgstr "Výška tlaková"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:603
 msgid ""
@@ -3934,9 +3852,8 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:485
 #: src/Dialogs/Device/DeviceListDialog.cpp:547
-#, fuzzy
 msgid "Device is not connected"
-msgstr "GPS nepripojené"
+msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:511
 msgid "Edit device"
@@ -4053,38 +3970,32 @@ msgid "Serial"
 msgstr ""
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:89
-#, fuzzy
 msgid "GPS baud rate"
-msgstr "Baudrate"
+msgstr ""
 
 #: src/Dialogs/Device/LX/V7ConfigWidget.cpp:90
-#, fuzzy
 msgid "PDA baud rate"
-msgstr "Baudrate"
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:99
-#, fuzzy
 msgid "Auto off"
-msgstr "Automatický zoom VYP"
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:102
-#, fuzzy
 msgid "Auto finish flight"
-msgstr "FAI výška cieľa"
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:105
 msgid "Always run"
 msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:108
-#, fuzzy
 msgid "Enable NMEA"
-msgstr "Povol varov."
+msgstr ""
 
 #: src/Dialogs/Device/LX/NanoConfigWidget.cpp:111
-#, fuzzy
 msgid "Recording interval"
-msgstr "Interval logovania"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/VegaConfigurationDialog.cpp:95
 msgid "Set new audio scheme?  Old values will be lost."
@@ -4168,19 +4079,19 @@ msgid "Vega Voice Extensions"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Positive"
-msgstr "Kladné klapky"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:37
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Neutral"
-msgstr "Neutrálne klapky"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Negative"
-msgstr "Negatívne klapky"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:39 Data/Input/default.xci:53
 #, no-c-format
@@ -4208,18 +4119,17 @@ msgid "Locked"
 msgstr "Zamknuté"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not locked"
-msgstr "Dáta poláry"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:72
 msgid "Airbrake locked"
 msgstr "Brzdy zaistené"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:73
-#, fuzzy
 msgid "Flaps"
-msgstr "Klapka"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:74
 msgid "Gear down"
@@ -4238,9 +4148,8 @@ msgid "Speed command"
 msgstr "Speed commander"
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:99
-#, fuzzy
 msgid "Switch"
-msgstr "Prepínače"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/SwitchesDialog.cpp:100
 msgid "Vario circling"
@@ -4296,9 +4205,9 @@ msgid "Drop plane"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:128
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hang glider"
-msgstr "Doklz"
+msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:129
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:144
@@ -4313,9 +4222,9 @@ msgid "Powered aircraft"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Jet aircraft"
-msgstr "Nevyplnený typ lietadla"
+msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:134
 #, no-c-format
@@ -4328,9 +4237,9 @@ msgid "Balloon"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Airship"
-msgstr "Vzdušný priestor"
+msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:138
 #, no-c-format
@@ -4338,9 +4247,9 @@ msgid "Unmanned aerial vehicle"
 msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:140
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Static object"
-msgstr "Statický port"
+msgstr ""
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:144
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:74
@@ -4440,9 +4349,8 @@ msgid "Heading"
 msgstr "Kurz"
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp:35
-#, fuzzy
 msgid "Airspace Renderer Settings"
-msgstr "Vzdušný priestor - Varovania"
+msgstr ""
 
 #. Add controls
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:79
@@ -4478,9 +4386,9 @@ msgid "Only padding"
 msgstr ""
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:104
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Not filled"
-msgstr "Dáta poláry"
+msgstr ""
 
 #: src/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp:108
 msgid "Fill Mode"
@@ -4553,9 +4461,8 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:67
-#, fuzzy
 msgid "Prefer external wind"
-msgstr "Externý vietor"
+msgstr ""
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:68
 msgid ""
@@ -4572,14 +4479,11 @@ msgstr "Unášanie stopy"
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:75
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:160
-#, fuzzy
 msgid ""
 "Determines whether the snail trail is drifted with the wind when displayed "
 "in circling mode. Switched Off, the snail trail stays uncompensated for wind "
 "drift."
 msgstr ""
-"Určuje, či čiara trajektórie lietadla bude počas módu krúženia posúvaná "
-"vplyvom vetra."
 
 #: src/Dialogs/Settings/WindSettingsPanel.cpp:85
 msgid "Source"
@@ -4707,9 +4611,9 @@ msgid "FLARM, Other"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "Netto vário"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:113
 #, no-c-format
@@ -4732,14 +4636,14 @@ msgid "Screen Layout"
 msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:117
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pages"
-msgstr "Strany"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox Sets"
-msgstr "Info okná"
+msgstr ""
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:119
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
@@ -4869,14 +4773,13 @@ msgstr "Štartovný znak"
 #: src/Dialogs/Traffic/TrafficList.cpp:349
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:164
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:314
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Map"
-msgstr "MaxTepl"
+msgstr ""
 
 #: src/Dialogs/Traffic/TrafficList.cpp:772
-#, fuzzy
 msgid "Traffic"
-msgstr "Žiadna prevádzka"
+msgstr ""
 
 #: src/Dialogs/Traffic/FlarmTrafficDetails.cpp:129
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
@@ -4902,9 +4805,8 @@ msgid "Not Found"
 msgstr "Nenájdené"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:148
-#, fuzzy
 msgid "Set new teammate"
-msgstr "Nastav ako nový domov"
+msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:293
 msgid "Barograph"
@@ -5258,9 +5160,8 @@ msgstr "Čas pristánia"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:118
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:153
-#, fuzzy
 msgid "Daylight time"
-msgstr "Dĺžka letu"
+msgstr ""
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
@@ -5391,9 +5292,8 @@ msgid "Waypoints not editable"
 msgstr "Otočný bod sa nedá upraviť"
 
 #: src/Dialogs/Waypoint/Manager.cpp:122
-#, fuzzy
 msgid "Delete waypoint?"
-msgstr "Vymazať otočný bod?"
+msgstr ""
 
 #: src/Dialogs/Waypoint/Manager.cpp:154
 msgid "Save changes to waypoint file?"
@@ -5605,14 +5505,14 @@ msgstr ""
 "použi všeobecný."
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable final glide bar."
-msgstr "Ukazovateľ doklzu"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Always show final glide bar."
-msgstr "Ste pod doklzovou výškou"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:49
 #, no-c-format
@@ -5673,9 +5573,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:118
-#, fuzzy
 msgid "Vario bar"
-msgstr "Vário"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GaugesConfigPanel.cpp:119
 msgid "If set to ON the vario bar will be shown"
@@ -5837,9 +5736,8 @@ msgid "Preferred period for gliders."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:106
-#, fuzzy
 msgid "GR average period"
-msgstr "Doba priemerovania kĺzavosti"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp:107
 msgid ""
@@ -5859,9 +5757,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:86
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "Ste nad doklzovou výškou"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp:87
 msgid ""
@@ -5991,9 +5888,9 @@ msgid "8 Top (Portrait)"
 msgstr "8 Hore (na výšku)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:79
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr "8 Hore + dole (na výšku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
 #, no-c-format
@@ -6046,24 +5943,24 @@ msgid "24 Right (Landscape)"
 msgstr "24 Vpravo (na šírku)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Top (Portrait)"
-msgstr "8 Hore (na výšku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Bottom (Portrait)"
-msgstr "8 Dole (na výšku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Left (Landscape)"
-msgstr "8 Vľavo (na šírku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Right (Landscape)"
-msgstr "24 Vpravo (na šírku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:113
 #, no-c-format
@@ -6136,11 +6033,9 @@ msgid "Topleft"
 msgstr "Vľavo hore"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show status message boxes ina the top left corner."
 msgstr ""
-"Určuje zarovnanie boxu pre zobrazenie stavových správ - buď sa môžu "
-"zobrazovať centrovane, alebo zarovnané k ľavému hornému rohu."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:147
 #, no-c-format
@@ -6163,9 +6058,9 @@ msgid "Draws a tab at the top of the InfoBox across the title."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:151
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Shaded"
-msgstr "Tieňovať"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:153
 #, no-c-format
@@ -6267,9 +6162,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
-#, fuzzy
 msgid "NMEA logger"
-msgstr "Zápis NMEA dát zapnutý"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:87
 msgid ""
@@ -6298,18 +6192,16 @@ msgstr ""
 "hore."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Heading up"
-msgstr "Kurz"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
-"Zobrazenie posuvnej mapy bude rotovať tak aby bolo vždy orientované stopou "
-"hore."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -6335,18 +6227,16 @@ msgstr ""
 "navigačným cieľom hore."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:53
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Wind up"
-msgstr "Rých. vetra"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:54
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The moving map display will be rotated so the wind is always oriented up to "
 "down. (can be useful for wave flying)"
 msgstr ""
-"Zobrazenie posuvnej mapy bude rotovať tak aby bolo vždy orientované stopou "
-"hore."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:59
 #, no-c-format
@@ -6419,9 +6309,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
-#, fuzzy
 msgid "Auto zoom"
-msgstr "Automatický zoom"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6438,9 +6327,8 @@ msgid "The upper limit for auto zoom distance."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
-#, fuzzy
 msgid "Distinct page zoom"
-msgstr "Vzdialenosť domov"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
@@ -6470,14 +6358,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:350
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cross section"
-msgstr "Smer"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
-#, fuzzy
 msgid "Bottom area"
-msgstr "8 Dole (na výšku)"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:195
 msgid "Specifies what should be displayed below the main area."
@@ -6690,9 +6577,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
-#, fuzzy
 msgid "Auto bugs"
-msgstr "Zobraziť znečistenie"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:101
 #, no-c-format
@@ -6885,9 +6771,9 @@ msgid "Detailed rendered aircraft graphics."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "HangGlider"
-msgstr "Doklz"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:128
 #, no-c-format
@@ -6895,9 +6781,9 @@ msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:129
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "ParaGlider"
-msgstr "Doklz"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
 #, no-c-format
@@ -6930,9 +6816,8 @@ msgid "Draws an arrow head with a dashed arrow line."
 msgstr "Vykreslí hlavu šípky spolu s čiarkovanou nožičkou."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:146
-#, fuzzy
 msgid "Ground track"
-msgstr "Stopa vária"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:147
 msgid "Display the ground track as a grey line on the map."
@@ -7166,9 +7051,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:92
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable OLC Calculations"
-msgstr "Zakázať krúženie"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:94
 #, no-c-format
@@ -7236,9 +7121,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:124
-#, fuzzy
 msgid "Predict Contest"
-msgstr "OLC"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:125
 msgid ""
@@ -7247,14 +7131,12 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:132
-#, fuzzy
 msgid "FAI triangle areas"
-msgstr "FAI trojuholník"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:133
-#, fuzzy
 msgid "Show FAI triangle areas on the map."
-msgstr "Neplatný tvar FAI trojuholníku.\n"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
 #, fuzzy
@@ -7337,9 +7219,9 @@ msgid "Sandstone"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:218
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Pastel"
-msgstr "Vložiť"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:219
 #, no-c-format
@@ -7408,9 +7290,8 @@ msgstr ""
 "terénu."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
-#, fuzzy
 msgid "Contours"
-msgstr "Farby"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
@@ -7778,9 +7659,8 @@ msgid "Tracking Interval"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:166
-#, fuzzy
 msgid "Track friends"
-msgstr "Kurz k tímu"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
 msgid "Download the position of your friends live from the SkyLines server."
@@ -7922,23 +7802,20 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Minimálna AAT doba v minútach."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:236
-#, fuzzy
 msgid "Arm start manually"
-msgstr "Pripravený na štart"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:237
 msgid "Configure whether the start must be armed manually or automatically."
 msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:242
-#, fuzzy
 msgid "Start open time"
-msgstr "Čas štartu"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:244
-#, fuzzy
 msgid "Start close time"
-msgstr "Čas štartu"
+msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:278
 msgid "FAI start / finish rules"
@@ -8029,7 +7906,7 @@ msgid "AAT range"
 msgstr "AAT vzdialenosť"
 
 #: src/Dialogs/Task/Manager/TaskCalculatorPanel.cpp:219
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
 "task you will fly relative to the minimum and maximum possible tasks. -100% "
@@ -8101,14 +7978,12 @@ msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:174
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
-#, fuzzy
 msgid "Task point"
-msgstr "Otočný bod úlohy"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:179
-#, fuzzy
 msgid "Assigned area point"
-msgstr "Určený čas úlohy"
+msgstr ""
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:249
 msgid "Remove task point?"
@@ -8169,9 +8044,8 @@ msgid "Cylinder"
 msgstr "Cylinder"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
-#, fuzzy
 msgid "MAT cylinder"
-msgstr "Oblasť - cylinder"
+msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8194,14 +8068,12 @@ msgid "BGA Start Sector"
 msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
-#, fuzzy
 msgid "Enter a task name"
-msgstr "Odhadovaná doba na úlohu"
+msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:75 src/Dialogs/Weather/RASPDialog.cpp:70
-#, fuzzy
 msgid "Now"
-msgstr "Nie"
+msgstr ""
 
 #: src/Dialogs/Weather/RASPDialog.cpp:55
 msgid "Field"
@@ -8212,9 +8084,8 @@ msgid "Weather Forecast"
 msgstr "Predpoveď počasia"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
-#, fuzzy
 msgid "Audio vario"
-msgstr "Netto vário"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:72
 msgid "Emulate the sound of an electronic vario."
@@ -8235,27 +8106,24 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Základná frekvencia"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "Základná frekvencia"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at zero climb rate."
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "Základná frekvencia"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
@@ -8702,9 +8570,8 @@ msgid "Dry Mass"
 msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:25 Data/Dialogs/dlgTaskPoint.xml:21
-#, fuzzy
 msgid "Score exit"
-msgstr "Hodnotenie"
+msgstr ""
 
 #: Data/Dialogs/dlgBrightness.xml:6
 msgid "Enables automatic backlight, responsive to light sensor."
@@ -9002,9 +8869,8 @@ msgid "Zoom"
 msgstr "Zoom"
 
 #: Data/Input/default.xci:847
-#, fuzzy
 msgid "Traffic List"
-msgstr "Žiadna prevádzka"
+msgstr ""
 
 #: Data/Input/default.xci:725
 msgid "Vario ASI zeroed"
@@ -9136,8 +9002,165 @@ msgstr ""
 #~ msgid "Choose the display size of dialogs."
 #~ msgstr "Určuje veľkosť zobrazenia dialógov."
 
+#~ msgid "Height GPS"
+#~ msgstr "Výška GPS"
+
+#~ msgid "Aircraft type"
+#~ msgstr "Typ lietadla"
+
 #~ msgid "Line skipped."
 #~ msgstr "Riadok vynechaný."
+
+#~ msgid "QFE GPS"
+#~ msgstr "QFE GPS"
+
+#~ msgid "Delete Waypoint?"
+#~ msgstr "Vymazať otočný bod?"
+
+#~ msgid "Save task?"
+#~ msgstr "Uložiť úlohu?"
+
+#~ msgid "Task Point"
+#~ msgstr "Otočný bod úlohy"
+
+#~ msgid "Change point type?"
+#~ msgstr "Zmeniť typ bodu?"
+
+#~ msgid "Weather parameters"
+#~ msgstr "Parametre počasia"
+
+#~ msgid "Task Selection"
+#~ msgstr "Výber úlohy"
+
+#~ msgid "Longitude"
+#~ msgstr "Zemepisná dĺžka"
+
+#~ msgid "Latitude"
+#~ msgstr "Zemepisná šírka"
+
+#~ msgid "Sunset"
+#~ msgstr "Západ slnka"
+
+#~ msgid "Lookup"
+#~ msgstr "Vyhľadať"
+
+#~ msgid "Dump time"
+#~ msgstr "Doba vypúštania"
+
+#~ msgid "Short file name"
+#~ msgstr "Skrátený názov súboru"
+
+#~ msgid ""
+#~ "This is the navigation altitude minus the terrain height obtained from "
+#~ "the terrain file. The value is coloured red when the glider is below the "
+#~ "terrain safety clearance height."
+#~ msgstr ""
+#~ "Udáva navigačnú výšku mínus výšku terénu podľa súboru s terénom. Hodnota "
+#~ "je červená ak je vetroň pod bezpečnou výškou nad terénom."
+
+#~ msgid "TC All"
+#~ msgstr "P S všetkých"
+
+#~ msgid "The time in seconds to dump full ballast."
+#~ msgstr "Doba v sekundách potrebná na vypustenie celej príťaže."
+
+#~ msgid ""
+#~ "This determines whether the logger uses the short IGC file name or the "
+#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
+#~ "(2008-01-18-XXX-ABC-01.IGC)."
+#~ msgstr ""
+#~ "Toto určuje dĺžku pomenovania IGC súboru. Vzor krátkeho názvu (81HXABC1."
+#~ "IGC), dlhý názov (2008-01-18-XXX-ABC-01.IGC)."
+
+#~ msgid ""
+#~ "Sample Text\n"
+#~ "123"
+#~ msgstr ""
+#~ "Príklad textu\n"
+#~ "123"
+
+#~ msgid ""
+#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
+#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
+#~ "if on ground. During flight you can change QFE with up and down keys. "
+#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
+#~ msgstr ""
+#~ "Automatické QFE. Táto hodnota výšky je neustále resetovaná na 0 na zemi "
+#~ "PRED vzletom. Po vzlete už žiadny automatický reset nenastane ani ak "
+#~ "znovu pristanete. Počas letu môžete meniť hodnotu QFE pomocou tlačítok "
+#~ "hore a dolu. Spodný riadok ukazuje QNH výšku. Zmena QFE neovplyvňuje QNH "
+#~ "výšku."
+
+#~ msgid "No valid finish.\n"
+#~ msgstr "Žiadny validný cieľ.\n"
+
+#~ msgid "Task not closed.\n"
+#~ msgstr "Úloha nie je uzavretá.\n"
+
+#~ msgid "All turnpoints not the same type.\n"
+#~ msgstr "Otočné body nie sú všetky rovnakého typu.\n"
+
+#~ msgid "No valid start.\n"
+#~ msgstr "Žiadny validný štart.\n"
+
+#~ msgid "Incorrect number of turnpoints.\n"
+#~ msgstr "Nesprávny počet otočných bodov.\n"
+
+#~ msgid "Too many turnpoints.\n"
+#~ msgstr "Príliž veľa otočných bodov.\n"
+
+#~ msgid "Not enough turnpoints.\n"
+#~ msgstr "Málo otočných bodov.\n"
+
+#~ msgid "Empty task.\n"
+#~ msgstr "Úloha je prázdna.\n"
+
+#~ msgid "Invalid FAI triangle shape.\n"
+#~ msgstr "Neplatný tvar FAI trojuholníku.\n"
+
+#~ msgid "Turnpoints not unique.\n"
+#~ msgstr "Otočné body nie sú unikátne.\n"
+
+#~ msgid ""
+#~ "Determines whether the snail trail is drifted with the wind when "
+#~ "displayed in circling mode."
+#~ msgstr ""
+#~ "Určuje, či čiara trajektórie lietadla bude počas módu krúženia posúvaná "
+#~ "vplyvom vetra."
+
+#~ msgid "H GPS"
+#~ msgstr "GPS výška"
+
+#~ msgid "H GND"
+#~ msgstr "GND výška"
+
+#~ msgid "H Baro"
+#~ msgstr "Baro výška"
+
+#~ msgid "V rough air"
+#~ msgstr "Manévrovacia rýchl."
+
+#~ msgid "My Sample"
+#~ msgstr "Moja vzorka"
+
+#~ msgid ""
+#~ "Graph of average circling climb rate (horizontal axis) as a function of "
+#~ "height (vertical axis)."
+#~ msgstr ""
+#~ "Graf priemerného stúpania v krúžení (horizontálna os) ako funkcie výšky "
+#~ "(vertikálna os)."
+
+#~ msgid "Delete Error"
+#~ msgstr "Chyba pri mazaní"
+
+#~ msgid "L/D average period"
+#~ msgstr "Doba priemerovania kĺzavosti"
+
+#~ msgid "Aircraft reg."
+#~ msgstr "Imatrikulačný znak"
+
+#~ msgid "Page"
+#~ msgstr "Strany"
 
 #, fuzzy
 #~ msgid "Next radial ATC"
@@ -9146,48 +9169,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Logger Info"
 #~ msgstr "Identifikačné čislo loggra"
-
-#~ msgid "Aircraft type"
-#~ msgstr "Typ lietadla"
-
-#~ msgid "Aircraft reg."
-#~ msgstr "Imatrikulačný znak"
-
-#~ msgid "V rough air"
-#~ msgstr "Manévrovacia rýchl."
-
-#~ msgid "Dump time"
-#~ msgstr "Doba vypúštania"
-
-#~ msgid "The time in seconds to dump full ballast."
-#~ msgstr "Doba v sekundách potrebná na vypustenie celej príťaže."
-
-#~ msgid "Lookup"
-#~ msgstr "Vyhľadať"
-
-#~ msgid "Change point type?"
-#~ msgstr "Zmeniť typ bodu?"
-
-#~ msgid "Save task?"
-#~ msgstr "Uložiť úlohu?"
-
-#~ msgid "Task Selection"
-#~ msgstr "Výber úlohy"
-
-#~ msgid "Invalid FAI triangle shape.\n"
-#~ msgstr "Neplatný tvar FAI trojuholníku.\n"
-
-#~ msgid "Longitude"
-#~ msgstr "Zemepisná dĺžka"
-
-#~ msgid "Latitude"
-#~ msgstr "Zemepisná šírka"
-
-#~ msgid "Height GPS"
-#~ msgstr "Výška GPS"
-
-#~ msgid "H GND"
-#~ msgstr "GND výška"
 
 #, fuzzy
 #~ msgid ""
@@ -9211,57 +9192,6 @@ msgstr ""
 #~ "Smer vetra odhadovaný XCSoarom. (Iba dotykový displej/PC) Manuálne "
 #~ "nastavenie smeru je možné stlačením klávesy vľavo/vpravo, ak je okno "
 #~ "aktivované."
-
-#~ msgid "TC All"
-#~ msgstr "P S všetkých"
-
-#~ msgid "QFE GPS"
-#~ msgstr "QFE GPS"
-
-#~ msgid ""
-#~ "Automatic QFE. This altitude value is constantly reset to 0 on ground "
-#~ "BEFORE taking off. After takeoff, it is no more reset automatically even "
-#~ "if on ground. During flight you can change QFE with up and down keys. "
-#~ "Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."
-#~ msgstr ""
-#~ "Automatické QFE. Táto hodnota výšky je neustále resetovaná na 0 na zemi "
-#~ "PRED vzletom. Po vzlete už žiadny automatický reset nenastane ani ak "
-#~ "znovu pristanete. Počas letu môžete meniť hodnotu QFE pomocou tlačítok "
-#~ "hore a dolu. Spodný riadok ukazuje QNH výšku. Zmena QFE neovplyvňuje QNH "
-#~ "výšku."
-
-#~ msgid "H Baro"
-#~ msgstr "Baro výška"
-
-#~ msgid "Short file name"
-#~ msgstr "Skrátený názov súboru"
-
-#~ msgid ""
-#~ "This determines whether the logger uses the short IGC file name or the "
-#~ "long IGC file name. Example short name (81HXABC1.IGC), long name "
-#~ "(2008-01-18-XXX-ABC-01.IGC)."
-#~ msgstr ""
-#~ "Toto určuje dĺžku pomenovania IGC súboru. Vzor krátkeho názvu (81HXABC1."
-#~ "IGC), dlhý názov (2008-01-18-XXX-ABC-01.IGC)."
-
-#~ msgid ""
-#~ "Sample Text\n"
-#~ "123"
-#~ msgstr ""
-#~ "Príklad textu\n"
-#~ "123"
-
-#~ msgid "My Sample"
-#~ msgstr "Moja vzorka"
-
-#~ msgid "Sunset"
-#~ msgstr "Západ slnka"
-
-#~ msgid "Delete Error"
-#~ msgstr "Chyba pri mazaní"
-
-#~ msgid "Weather parameters"
-#~ msgstr "Parametre počasia"
 
 #~ msgid "User down"
 #~ msgstr "Spodné tl."
