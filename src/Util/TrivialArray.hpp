@@ -217,7 +217,7 @@ public:
     assert(i < size());
 
     if (i < size() - 1)
-      data[i] = data[size() - 1];
+      data[i] = std::move(data[size() - 1]);
 
     --the_size;
   }
