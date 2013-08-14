@@ -254,6 +254,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, "Port", n, "BulkBaudRate");
   Set(buffer, config.bulk_baud_rate);
 
+  MakeDeviceSettingName(buffer, "Port", n, "IPAddress");
+  Set(buffer, config.ip_address);
+
   MakeDeviceSettingName(buffer, "Port", n, "TCPPort");
   Set(buffer, config.tcp_port);
 
