@@ -63,9 +63,10 @@ DialogLook::Initialise(const Font &caption_font,
 
   list.background_color = COLOR_WHITE;
   list.text_color = COLOR_BLACK;
-  list.selected.background_color = COLOR_XCSOAR_LIGHT;
+  list.selected.background_color = IsDithered()
+    ? COLOR_VERY_LIGHT_GRAY : COLOR_XCSOAR_LIGHT;
   list.selected.text_color = COLOR_BLACK;
-  list.focused.background_color = COLOR_XCSOAR;
+  list.focused.background_color = IsDithered() ? COLOR_BLACK : COLOR_XCSOAR;
   list.focused.text_color = COLOR_WHITE;
   list.pressed.background_color = COLOR_YELLOW;
   list.pressed.text_color = COLOR_BLACK;
