@@ -71,7 +71,8 @@ public:
     const DialogLook &look = UIGlobals::GetDialogLook();
     const unsigned row_height =
       std::max(Layout::GetMaximumControlHeight(),
-               Layout::GetTextPadding() * 3 + look.text_font->GetHeight()
+               unsigned(Layout::GetTextPadding()) * 3
+               + look.text_font->GetHeight()
                + look.small_font->GetHeight());
 
     CreateList(parent, look, rc, row_height);
