@@ -81,7 +81,15 @@ public class InternalGPS
     index = _index;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    if (!locationManager.isProviderEnabled(locationProvider) &&
+    if (locationManager == null ||
+        locationManager.getProvider(locationProvider) == null) {
+      /* on the Nook Simple Touch, LocationManager.isProviderEnabled()
+         can crash, but LocationManager.getProvider() appears to be
+         safe, therefore we're first checking the latter; if the
+         device does have a GPS, it returns non-null even when the
+         user has disabled GPS */
+      locationProvider = null;
+    } else if (!locationManager.isProviderEnabled(locationProvider) &&
         !queriedLocationSettings) {
       // Let user turn on GPS, XCSoar is not allowed to.
       Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
