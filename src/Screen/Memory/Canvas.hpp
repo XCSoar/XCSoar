@@ -378,7 +378,9 @@ public:
             const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
-  void CopyTransparentWhite(const Canvas &src);
+  void CopyTransparentWhite(int dest_x, int dest_y,
+                            unsigned dest_width, unsigned dest_height,
+                            const Canvas &src, int src_x, int src_y);
 
   void StretchNot(const Bitmap &src);
 

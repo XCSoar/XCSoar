@@ -634,7 +634,7 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
 #endif
 #endif
 #ifdef HAVE_HATCHED_BRUSH
-    fill_cache.CopyAndTo(canvas);
+    fill_cache.CopyAndTo(canvas, projection);
 #endif
 }
 

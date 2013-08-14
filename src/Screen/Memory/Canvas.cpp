@@ -364,12 +364,18 @@ Canvas::Copy(const Bitmap &_src)
 }
 
 void
-Canvas::CopyTransparentWhite(const Canvas &src)
+Canvas::CopyTransparentWhite(int dest_x, int dest_y,
+                             unsigned dest_width, unsigned dest_height,
+                             const Canvas &src, int src_x, int src_y)
 {
+  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
+      !Clip(dest_y, dest_height, GetHeight(), src_y))
+    return;
+
   SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_WHITE));
-  canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
-                       src.buffer.data, src.buffer.pitch,
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       src.buffer.At(src_x, src_y), src.buffer.pitch,
                        operations);
 }
 
