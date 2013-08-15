@@ -22,6 +22,9 @@
 export PATH=/sbin:/bin:/usr/sbin:/usr/bin
 umask 022
 
+# workaround for kernel crash "scheduling while atomic"
+echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
+
 # mount the data partition
 /bin/dosfsck -a -w /dev/mmcblk0p3
 /bin/mkdir -p /mnt/onboard
