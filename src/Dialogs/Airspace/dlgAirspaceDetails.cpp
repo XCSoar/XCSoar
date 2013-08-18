@@ -85,7 +85,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     const fixed distance = closest.Distance(basic.location);
 
     FormatUserDistance(distance, buffer);
-    AddReadOnly(_("Range"), nullptr, buffer);
+    AddReadOnly(_("Distance"), nullptr, buffer);
   }
 }
 
