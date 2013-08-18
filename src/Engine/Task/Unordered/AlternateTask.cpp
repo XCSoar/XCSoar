@@ -103,6 +103,14 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
     if (!IsWaypointInAlternates(top.waypoint))
       alternates.push_back(top);
 
+#if !defined(NDEBUG) && defined(__GLIBCXX__) && __GLIBCXX__ <= 20130401
+    /* work around bug in libstdc++ 4.8 (Android NDK r9, g++ arm (Kobo)), fixed
+       libstdc++ 4.8.1: std::pop_heap() can move-assign self (see
+       TRAC #3035) */
+    if (q.size() == 1)
+      q.clear();
+    else
+#endif
     q.pop();
   }
 }

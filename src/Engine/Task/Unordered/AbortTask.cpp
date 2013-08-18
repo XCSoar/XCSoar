@@ -192,6 +192,15 @@ AbortTask::FillReachable(const AircraftState &state,
     if (task_points[i].point.GetWaypoint().id == active_waypoint)
       active_task_point = i;
 
+#if !defined(NDEBUG) && defined(__GLIBCXX__) && __GLIBCXX__ <= 20130401
+    /* work around bug in libstdc++ 4.8 (Android NDK r9, g++ arm (Kobo)), fixed
+       libstdc++ 4.8.1: std::pop_heap() can move-assign self (see
+       TRAC #3035) */
+
+    if (q.size() == 1)
+      q.clear();
+    else
+#endif
     q.pop();
   }
 

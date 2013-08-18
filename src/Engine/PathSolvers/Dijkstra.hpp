@@ -153,9 +153,19 @@ public:
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
-    do
+    do {
+#if !defined(NDEBUG) && defined(__GLIBCXX__) && __GLIBCXX__ <= 20130401
+      /* work around bug in libstdc++ 4.8 (Android NDK r9, g++ arm (Kobo)), fixed
+         libstdc++ 4.8.1: std::pop_heap() can move-assign self (see
+         TRAC #3035) */
+
+      if (q.size() == 1) {
+        q.clear();
+        continue;
+      }
+#endif
       q.pop();
-    while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
+    } while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
 
     return cur->first;
   }
