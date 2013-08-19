@@ -38,13 +38,13 @@ const Vector
 WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
 {
   //relative weight for each factor
-  #define REL_FACTOR_QUALITY 100
-  #define REL_FACTOR_ALTITUDE 100
-  #define REL_FACTOR_TIME 200
-  #define TIME_RANGE 36 // one hour
+  static constexpr unsigned REL_FACTOR_QUALITY = 100;
+  static constexpr unsigned REL_FACTOR_ALTITUDE = 100;
+  static constexpr unsigned REL_FACTOR_TIME = 200;
+  static constexpr unsigned TIME_RANGE = 36; // one hour
 
-  int altRange = 1000; //conf->getWindAltitudeRange();
-  int timeRange = TIME_RANGE * 100; //conf->getWindTimeRange();
+  static constexpr int altRange = 1000;
+  static constexpr int timeRange = TIME_RANGE * 100;
 
   fixed k(0.0025);
 
