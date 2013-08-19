@@ -25,8 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_CUSTOMBUTTON_HPP
 
 #include "Form/Button.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Features.hpp"
 
 /**
  * This class is used for creating buttons that are custom painted.
