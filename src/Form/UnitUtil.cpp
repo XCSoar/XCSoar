@@ -37,8 +37,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
   assert(control_name != NULL);
 
   WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
+  assert(ctl != nullptr);
 
   Unit unit = Units::GetUserUnitByGroup(unit_group);
 

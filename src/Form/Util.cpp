@@ -75,8 +75,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
   assert(control_name != NULL);
 
   WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
+  assert(ctl != nullptr);
 
   DataFieldBoolean &df = *(DataFieldBoolean *)ctl->GetDataField();
   assert(df.GetType() == DataField::Type::BOOLEAN);
@@ -90,8 +89,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value)
   assert(control_name != NULL);
 
   WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
+  assert(ctl != nullptr);
 
   ctl->GetDataField()->SetAsInteger(value);
   ctl->RefreshDisplay();
