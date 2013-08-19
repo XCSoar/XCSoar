@@ -360,6 +360,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex <= ordered_task->TaskSize());
 
+  const unsigned padding = Layout::GetTextPadding();
   const PixelScalar line_height = rc.bottom - rc.top;
 
   TCHAR buffer[120];
@@ -371,7 +372,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (DrawListIndex == ordered_task->TaskSize()) {
     canvas.Select(name_font);
     _stprintf(buffer, _T("  (%s)"), _("Add Turnpoint"));
-    canvas.DrawText(rc.left + line_height + Layout::FastScale(2),
+    canvas.DrawText(rc.left + line_height + padding,
                     rc.top + line_height / 2 - name_font.GetHeight() / 2,
                     buffer);
     return;
@@ -405,24 +406,24 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     // Draw leg distance
     FormatUserDistanceSmart(leg.distance, buffer, true);
     UPixelScalar width = leg_info_width = canvas.CalcTextWidth(buffer);
-    canvas.DrawText(rc.right - Layout::FastScale(2) - width,
-                    rc.top + Layout::FastScale(2) +
+    canvas.DrawText(rc.right - padding - width,
+                    rc.top + padding +
                     (name_font.GetHeight() - small_font.GetHeight()) / 2,
                     buffer);
 
     // Draw leg bearing
     FormatBearing(buffer, ARRAY_SIZE(buffer), leg.bearing);
     width = canvas.CalcTextWidth(buffer);
-    canvas.DrawText(rc.right - Layout::FastScale(2) - width, top2, buffer);
+    canvas.DrawText(rc.right - padding - width, top2, buffer);
 
     if (width > leg_info_width)
       leg_info_width = width;
 
-    leg_info_width += Layout::FastScale(2);
+    leg_info_width += padding;
   }
 
   // Draw details line
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + padding;
   OrderedTaskPointRadiusLabel(tp.GetObservationZone(), buffer);
   if (!StringIsEmpty(buffer))
     canvas.DrawClippedText(left, top2, rc.right - leg_info_width - left,
@@ -432,7 +433,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   OrderedTaskPointLabel(tp.GetType(), tp.GetWaypoint().name.c_str(),
                         DrawListIndex, buffer);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+  canvas.DrawClippedText(left, rc.top + padding,
                          rc.right - leg_info_width - left, buffer);
 }
 
