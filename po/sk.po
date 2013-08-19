@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-08-14 12:58+0000\n"
+"PO-Revision-Date: 2013-08-16 09:07+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-14 17:08+0000\n"
+"X-Launchpad-Export-Date: 2013-08-18 20:52+0000\n"
 "X-Generator: Launchpad (build 16723)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -67,7 +67,7 @@ msgstr "AAT"
 #: src/Task/TypeStrings.cpp:40
 #, no-c-format
 msgid "Modified area task (MAT)"
-msgstr ""
+msgstr "Úloha zmenená oblasť (MAT)"
 
 #: src/Task/TypeStrings.cpp:41
 #, no-c-format
@@ -85,6 +85,8 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI pravidlá, dovoľujú iba FAI štart, cieľ a otočné body, pre odznaky a "
+"rekordy. Umožňuje FAI cieľovú výšku pre výpočet doklzu."
 
 #: src/Task/TypeStrings.cpp:57
 #, no-c-format
@@ -107,6 +109,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Rýchlostná úloha okolo otočných bodov. Môže byť použitá pre FAI odznaky a "
+"rekordné úlohy. Umožňuje všetky typy pozorovacích zón."
 
 #: src/Task/TypeStrings.cpp:62
 #, no-c-format
@@ -114,6 +118,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Rýchlostná úloha okolo priradených zón (AAT), použitý minimálny čas úlohy. "
+"Obmedzené na pozorovacie zóny typu cylinder a sektor."
 
 #: src/Task/TypeStrings.cpp:64
 #, no-c-format
@@ -122,6 +128,9 @@ msgid ""
 "mile cylinder.  Pilot can add additional points as needed.  Minimum task "
 "time applies."
 msgstr ""
+"Úloha s upraveným priestorom. Úloha so štartom, cieľom a aspoň jedným "
+"preddefinovaným 1 míľovým cylindrom.  Pilot môže pridávať OB podľa potreby. "
+"Platí minimálny čas na úlohu."
 
 #: src/Task/TypeStrings.cpp:65
 #, no-c-format
@@ -203,6 +212,7 @@ msgstr ""
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"Cylinder. Hodnotený podľa najvzdialenejšieho bodu dosiahnutého v oblasti."
 
 #: src/Task/TypeStrings.cpp:93
 #, no-c-format
@@ -210,11 +220,13 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Sektor ktorý sa môže líšiť uhlom a rádiusom. Hodnotený podľa "
+"najvzdialenejšieho bodu dosiahnutého v oblasti."
 
 #: src/Task/TypeStrings.cpp:95
 #, no-c-format
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "90 stupňový sektor s rádiusom 1km. Prekroč hranu pre prílet."
 
 #: src/Task/TypeStrings.cpp:96
 #, no-c-format
@@ -230,7 +242,7 @@ msgstr "Vstúp do oblasti k dokončeniu úlohy."
 #, no-c-format
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
-msgstr ""
+msgstr "180 stupňový sektor s rádiusom 5km. Prekroč ľubovolnú hranu pre štart."
 
 #: src/Task/TypeStrings.cpp:99
 #, no-c-format
@@ -238,16 +250,20 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Sektor ktorý sa môže líšiť uhlom, vonkajším alebo vnútrným rádiusom. "
+"Hodnotený podľa najvzdialenejšieho bodu dosiahnutého v oblasti."
 
 #: src/Task/TypeStrings.cpp:101
 #, no-c-format
 msgid "A symmetric quadrant with a custom radius."
-msgstr ""
+msgstr "Symetrický kvadrant s voliteľným rádiusom."
 
 #: src/Task/TypeStrings.cpp:102
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
 msgstr ""
+"Sektor v tvare kľúčovej dierky. Hodnotený podľa najvzdialenejšieho bodu "
+"dosiahnutého v oblasti."
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -272,22 +288,22 @@ msgstr "FAI kvadrant"
 #: src/Task/TypeStrings.cpp:119
 #, no-c-format
 msgid "Keyhole sector (DAeC)"
-msgstr ""
+msgstr "Sektor v tvare kľúčovej dierky (DAeC)"
 
 #: src/Task/TypeStrings.cpp:120
 #, no-c-format
 msgid "BGA Fixed Course sector"
-msgstr ""
+msgstr "BGA stanovený kurzový sektor"
 
 #: src/Task/TypeStrings.cpp:121
 #, no-c-format
 msgid "BGA Enhanced Option Fixed Course sector"
-msgstr ""
+msgstr "BGA rozšírená možnosť,  stanovený kurzový sektor"
 
 #: src/Task/TypeStrings.cpp:122
 #, no-c-format
 msgid "Turn point cylinder"
-msgstr ""
+msgstr "Otočný cylinder"
 
 #: src/Task/TypeStrings.cpp:123
 #, no-c-format
@@ -322,22 +338,22 @@ msgstr "Cieľový cylinder"
 #: src/Task/TypeStrings.cpp:129
 #, no-c-format
 msgid "BGA start sector"
-msgstr ""
+msgstr "BGA štartový sektor"
 
 #: src/Task/TypeStrings.cpp:130
 #, no-c-format
 msgid "Area sector with inner radius"
-msgstr ""
+msgstr "Priestor sektoru s vnútorným rádiusom"
 
 #: src/Task/TypeStrings.cpp:131 src/Dialogs/Task/dlgTaskHelpers.cpp:234
 #, no-c-format
 msgid "Symmetric quadrant"
-msgstr ""
+msgstr "Symetrický kvadrant"
 
 #: src/Task/TypeStrings.cpp:132
 #, no-c-format
 msgid "Area keyhole"
-msgstr ""
+msgstr "Priestor kľúčovej dierky"
 
 #: src/Task/ValidationErrorStrings.cpp:32
 #, no-c-format
@@ -387,12 +403,12 @@ msgstr "Prázdna úloha"
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
 msgid "non-FAI turn points"
-msgstr ""
+msgstr "nie FAI otočné body"
 
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr ""
+msgstr "nie MAT otočné body"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
@@ -465,7 +481,7 @@ msgstr "Neznámy"
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "vypršanie časového limitu softvéru"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
@@ -495,7 +511,7 @@ msgstr "Komunikácia"
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Flash pamäť"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
@@ -515,7 +531,7 @@ msgstr "Logger"
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Transponder prímač"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
@@ -708,7 +724,7 @@ msgstr "Cieľový otočný bod"
 
 #: src/Menu/ExpandMacros.cpp:209 src/Menu/ExpandMacros.cpp:255
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Ďalší štart"
 
 #: src/Menu/ExpandMacros.cpp:215 src/Menu/ExpandMacros.cpp:261
 msgid "Start Turnpoint"
@@ -934,13 +950,13 @@ msgstr "Úloha & Letiská"
 #: src/InfoBoxes/Content/Factory.cpp:164
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "Výška - GPS  výška"
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
 #, no-c-format
 msgid "Alt GPS"
-msgstr ""
+msgstr "Výška GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:166
 #, no-c-format
@@ -972,7 +988,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Stupák, priemer posledných 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
@@ -991,7 +1007,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
 msgid "Next Bearing"
-msgstr ""
+msgstr "Kurs k ďaľšiemu ob"
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:93
@@ -1012,12 +1028,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "GR instantaneous"
-msgstr ""
+msgstr "kĺzavosť momentálna"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
 msgid "GR Inst"
-msgstr ""
+msgstr "klz mom"
 
 #: src/InfoBoxes/Content/Factory.cpp:208
 #, no-c-format
@@ -1027,6 +1043,10 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"Momentálna kĺzavosť nad zemou, daná podielom rýchlosti nad zemou a "
+"vertikálnej rýchlosti (GPS rýchlosť) za posledných 20 sekúnd. Negatívne "
+"hodnoty znamenajú stúpavé kĺzanie. Ak je vertikálna rýchlosť blízka nule "
+"zobrazená hodnota je '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
@@ -2018,6 +2038,8 @@ msgid ""
 "Achieved cross country speed while on current task, compensated for "
 "altitude.  Equivalent to Pirker cross-country speed remaining."
 msgstr ""
+"Dosiahnutá rýchlosť preletu aktuálnej úlohy, kompenzovaná výškou.  "
+"Ekvivalent Pirkerovej rýchlosti preletu."
 
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
@@ -2114,7 +2136,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:849
 #, no-c-format
 msgid "Alternate 1"
-msgstr ""
+msgstr "Alternatíva 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:850
 #, no-c-format
@@ -2129,7 +2151,7 @@ msgstr "Zobrazí názov a kurz na najlepšiu alternatívnu pristávaciu plochu."
 #: src/InfoBoxes/Content/Factory.cpp:859
 #, no-c-format
 msgid "Alternate 2"
-msgstr ""
+msgstr "Alternatíva 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:860
 #, no-c-format
@@ -2318,7 +2340,7 @@ msgstr "Stopa vária"
 #: src/InfoBoxes/Content/Factory.cpp:983
 #, no-c-format
 msgid "Vario Trace"
-msgstr ""
+msgstr "Vário stopa"
 
 #: src/InfoBoxes/Content/Factory.cpp:984
 #, no-c-format
@@ -2337,7 +2359,7 @@ msgstr "Stopa netto vária"
 #: src/InfoBoxes/Content/Factory.cpp:993
 #, no-c-format
 msgid "Netto Trace"
-msgstr ""
+msgstr "Netto stopa"
 
 #: src/InfoBoxes/Content/Factory.cpp:994
 #, no-c-format
@@ -2351,29 +2373,29 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1002
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr ""
+msgstr "Termické stúpanie - stopa"
 
 #: src/InfoBoxes/Content/Factory.cpp:1003
 #, no-c-format
 msgid "TC Trace"
-msgstr ""
+msgstr "Ts stopa"
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
 msgid ""
 "Trace of average climb rate each turn in circling, based of the reported GPS "
 "altitude, or vario if available."
-msgstr ""
+msgstr "Stopa priemerného stúpania"
 
 #: src/InfoBoxes/Content/Factory.cpp:1012
 #, no-c-format
 msgid "Climb band"
-msgstr ""
+msgstr "Profil stúpania"
 
 #: src/InfoBoxes/Content/Factory.cpp:1013
 #, no-c-format
 msgid "Climb Band"
-msgstr ""
+msgstr "Profil stúpania"
 
 #: src/InfoBoxes/Content/Factory.cpp:1014
 #, no-c-format
@@ -2381,6 +2403,8 @@ msgid ""
 "Graph of average circling climb rate (horizontal axis) as a function of "
 "altitude (vertical axis)."
 msgstr ""
+"Graf priemerného stúpania (horizontálna os) v krúžení ako funkcia výšky "
+"(vertikálna os)."
 
 #: src/InfoBoxes/Content/Factory.cpp:1022
 #, no-c-format
