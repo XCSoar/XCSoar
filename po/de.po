@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-07-17 08:48+0000\n"
-"Last-Translator: Christopher Schenk <Christopher_Schenk@web.de>\n"
+"PO-Revision-Date: 2013-08-18 13:08+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-28 09:44+0000\n"
-"X-Generator: Launchpad (build 16700)\n"
+"X-Launchpad-Export-Date: 2013-08-18 20:52+0000\n"
+"X-Generator: Launchpad (build 16723)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4504,7 +4504,7 @@ msgstr "Funk"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:77
 msgid "Top"
-msgstr "Oben"
+msgstr "Obergrenze"
 
 #: src/Dialogs/Airspace/dlgAirspaceDetails.cpp:80
 msgid "Base"
