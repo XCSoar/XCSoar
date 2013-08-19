@@ -100,8 +100,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
                            bool value)
 {
   WndProperty *edit = Add(label, help, true);
-  DataFieldBoolean *df = new DataFieldBoolean(value, _("On"), _("Off"),
-                                              nullptr);
+  DataFieldBoolean *df = new DataFieldBoolean(value, _("On"), _("Off"));
   edit->SetDataField(df);
 }
 
