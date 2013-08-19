@@ -288,6 +288,17 @@ RowFormWidget::LoadValue(unsigned i, fixed value)
 }
 
 void
+RowFormWidget::LoadValue(unsigned i, const TCHAR *value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldString &df = *(DataFieldString *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::STRING ||
+         df.GetType() == DataField::Type::PREFIX);
+  df.Set(value);
+  control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValue(unsigned i, Angle value)
 {
   WndProperty &control = GetControl(i);

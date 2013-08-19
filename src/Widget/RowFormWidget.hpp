@@ -498,6 +498,8 @@ public:
     LoadValueEnum(i, unsigned(value));
   }
 
+  void LoadValue(unsigned i, const TCHAR *value);
+
   void LoadValue(unsigned i, fixed value);
   void LoadValue(unsigned i, Angle value);
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
