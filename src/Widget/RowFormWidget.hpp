@@ -218,15 +218,16 @@ class RowFormWidget : public WindowWidget {
     /**
      * Will this row grow when there is excess screen space?
      */
-    bool IsElastic(bool vertical) const {
-      return GetMaximumHeight(vertical) > GetMinimumHeight(vertical);
+    bool IsElastic(const DialogLook &look, bool vertical) const {
+      return GetMaximumHeight(look, vertical)
+        > GetMinimumHeight(look, vertical);
     }
 
     gcc_pure
-    unsigned GetMinimumHeight(bool vertical) const;
+    unsigned GetMinimumHeight(const DialogLook &look, bool vertical) const;
 
     gcc_pure
-    unsigned GetMaximumHeight(bool vertical) const;
+    unsigned GetMaximumHeight(const DialogLook &look, bool vertical) const;
   };
 
   const DialogLook &look;

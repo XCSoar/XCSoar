@@ -36,7 +36,8 @@ Copyright_License {
 #include <assert.h>
 
 unsigned
-RowFormWidget::Row::GetMinimumHeight(bool vertical) const
+RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
+                                     bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -50,7 +51,7 @@ RowFormWidget::Row::GetMinimumHeight(bool vertical) const
 
   case Type::EDIT:
     if (vertical && GetControl().HasCaption())
-      return 2 * Layout::GetMinimumControlHeight();
+      return look.text_font->GetHeight() + Layout::GetMinimumControlHeight();
 
     /* fall through */
 
@@ -68,7 +69,8 @@ RowFormWidget::Row::GetMinimumHeight(bool vertical) const
 }
 
 unsigned
-RowFormWidget::Row::GetMaximumHeight(bool vertical) const
+RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
+                                     bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -81,8 +83,12 @@ RowFormWidget::Row::GetMaximumHeight(bool vertical) const
     break;
 
   case Type::EDIT:
-    if (vertical && GetControl().HasCaption())
-      return 2 * Layout::GetMinimumControlHeight();
+    if (vertical && GetControl().HasCaption()) {
+      const unsigned min_height = look.text_font->GetHeight()
+        + Layout::GetMinimumControlHeight();
+      return std::max(min_height,
+                      Layout::GetMaximumControlHeight());
+    }
 
     return GetControl().IsReadOnly()
       /* rows that are not clickable don't need to be extra-large */
@@ -274,8 +280,8 @@ RowFormWidget::UpdateLayout()
     if (!i.IsAvailable(expert))
       continue;
 
-    min_height += i.GetMinimumHeight(vertical);
-    if (i.IsElastic(vertical))
+    min_height += i.GetMinimumHeight(look, vertical);
+    if (i.IsElastic(look, vertical))
       ++n_elastic;
 
     if (!vertical && i.type == Row::Type::EDIT) {
@@ -305,15 +311,15 @@ RowFormWidget::UpdateLayout()
     }
 
     /* determine this row's height */
-    UPixelScalar height = i.GetMinimumHeight(vertical);
-    if (excess_height > 0 && i.IsElastic(vertical)) {
+    UPixelScalar height = i.GetMinimumHeight(look, vertical);
+    if (excess_height > 0 && i.IsElastic(look, vertical)) {
       assert(n_elastic > 0);
 
       /* distribute excess height among all elastic rows */
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i.GetMaximumHeight(vertical);
+        const UPixelScalar max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
@@ -385,7 +391,7 @@ RowFormWidget::GetMinimumSize() const
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
     if (i.IsAvailable(expert))
-      size.cy += i.GetMinimumHeight(vertical);
+      size.cy += i.GetMinimumHeight(look, vertical);
 
   return size;
 }
@@ -402,7 +408,7 @@ RowFormWidget::GetMaximumSize() const
 
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
-    size.cy += i.GetMaximumHeight(vertical);
+    size.cy += i.GetMaximumHeight(look, vertical);
 
   return size;
 }
