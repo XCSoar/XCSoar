@@ -83,11 +83,11 @@ private:
   }
 
   bool InBlackout(const unsigned time) const {
-    return (time < time_blackout + BLACKOUT_TIME);
+    return time < time_blackout;
   }
 
   void SetBlackout(const unsigned time) {
-    time_blackout = time;
+    time_blackout = time + BLACKOUT_TIME;
   }
 };
 
