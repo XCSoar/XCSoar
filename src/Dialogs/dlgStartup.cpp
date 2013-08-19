@@ -186,7 +186,7 @@ dlgStartupShowModal()
   LogFormat("Startup dialog");
 
   /* scan all profile files */
-  DataFieldFileReader *dfe = new DataFieldFileReader(nullptr);
+  DataFieldFileReader *dfe = new DataFieldFileReader();
   dfe->ScanDirectoryTop(_T("*.prf"));
 
   /* skip this dialog if there is only one (or none) */

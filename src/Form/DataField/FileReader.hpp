@@ -89,7 +89,7 @@ public:
    * Constructor of the DataFieldFileReader class
    * @param OnDataAccess
    */
-  DataFieldFileReader(DataAccessCallback OnDataAccess);
+  DataFieldFileReader(DataFieldListener *listener=nullptr);
 
   /**
    * Adds a filename/filepath couple to the filelist

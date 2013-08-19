@@ -38,7 +38,7 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
                              bool nullable)
 {
   WndProperty *edit = Add(label, help);
-  DataFieldFileReader *df = new DataFieldFileReader(NULL);
+  DataFieldFileReader *df = new DataFieldFileReader();
   edit->SetDataField(df);
 
   if (nullable)
