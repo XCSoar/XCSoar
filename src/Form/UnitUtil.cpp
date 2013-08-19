@@ -62,7 +62,7 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
   df.SetUnits(Units::GetUnitName(unit));
-  df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
+  df.Set(Units::ToUserUnit(value, unit));
   ctl->RefreshDisplay();
 }
 
