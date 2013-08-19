@@ -31,11 +31,9 @@ Copyright_License {
 #include "XML/Parser.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/FileReader.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Integer.hpp"
 #include "Form/DataField/String.hpp"
-#include "Form/DataField/Time.hpp"
 #include "Form/DataField/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -462,29 +460,12 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   if (StringIsEqualIgnoreCase(data_type, _T("enum")))
     return new DataFieldEnum(callback);
 
-  if (StringIsEqualIgnoreCase(data_type, _T("filereader"))) {
-    DataFieldFileReader *df = new DataFieldFileReader(callback);
-
-    if (StringToIntDflt(node.GetAttribute(_T("Nullable")), true))
-      df->AddNull();
-
-    return df;
-  }
-
   if (StringIsEqualIgnoreCase(data_type, _T("boolean")))
     return new DataFieldBoolean(false, _("On"), _("Off"), callback);
 
   if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
                               fixed(0), fixed(step), fine, callback);
-
-  if (StringIsEqualIgnoreCase(data_type, _T("time"))) {
-    DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,
-                                          (unsigned)step, callback);
-    unsigned max_token = StringToIntDflt(node.GetAttribute(_T("MaxTokens")), 2);
-    df->SetMaxTokenNumber(max_token);
-    return df;
-  }
 
   if (StringIsEqualIgnoreCase(data_type, _T("string")))
     return new DataFieldString(_T(""), callback);
