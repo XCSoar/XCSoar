@@ -27,7 +27,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -42,8 +41,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <windef.h> /* for MAX_PATH */
-
-class WndButton;
 
 static WndForm *wf = NULL;
 static LogoView *logo;
@@ -100,8 +97,7 @@ dlgStartupShowModal()
   logo = new LogoView();
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_STARTUP_L") :
-                                      _T("IDR_XML_STARTUP"));
+                  _T("IDR_XML_STARTUP"));
   assert(wf != NULL);
 
   WndProperty* wp = ((WndProperty *)wf->FindByName(_T("prpProfile")));
