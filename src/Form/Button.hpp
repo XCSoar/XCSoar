@@ -75,6 +75,13 @@ public:
             ButtonWindowStyle style,
             ActionListener &listener, int id);
 
+  WndButton(const ButtonLook &_look);
+
+  void Create(ContainerWindow &parent,
+              tstring::const_pointer caption, const PixelRect &rc,
+              ButtonWindowStyle style,
+              ActionListener &listener, int id);
+
   /**
    * Set the object that will receive click events.
    */

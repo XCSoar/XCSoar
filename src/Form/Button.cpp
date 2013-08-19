@@ -37,27 +37,38 @@ WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
    click_callback(_click_callback)
 {
   style.EnableCustomPainting();
-  Create(parent, Caption, rc, style);
+  ButtonWindow::Create(parent, Caption, rc, style);
 }
 
 WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :renderer(look),
-#ifdef USE_GDI
-   id(_id),
-#endif
-   listener(&_listener),
-   click_callback(NULL)
+  :renderer(look), listener(nullptr), click_callback(nullptr)
 {
+  Create(parent, caption, rc, style, _listener, _id);
+}
+
+WndButton::WndButton(const ButtonLook &_look)
+  :renderer(_look), listener(nullptr), click_callback(nullptr) {}
+
+void
+WndButton::Create(ContainerWindow &parent,
+                  tstring::const_pointer caption, const PixelRect &rc,
+                  ButtonWindowStyle style,
+                  ActionListener &_listener, int _id) {
+  assert(click_callback == nullptr);
+
+  listener = &_listener;
+
   style.EnableCustomPainting();
 #ifdef USE_GDI
   /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
-  Create(parent, caption, rc, style);
+  id = _id;
+  ButtonWindow::Create(parent, caption, rc, style);
 #else
   /* our custom SDL/OpenGL button doesn't need this hack */
-  Create(parent, caption, _id, rc, style);
+  ButtonWindow::Create(parent, caption, _id, rc, style);
 #endif
 }
 
