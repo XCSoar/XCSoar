@@ -33,6 +33,8 @@ Version 6.7 - not yet released
   - support the OLC/DMSt 500km triangle threshold (#2963)
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
+* calculations
+  - add more weight to zig-zag wind compared to circling wind
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added

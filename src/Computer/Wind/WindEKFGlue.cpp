@@ -38,6 +38,18 @@ WindEKFGlue::Reset()
   ResetBlackout();
 }
 
+static constexpr unsigned
+CounterToQuality(unsigned i)
+{
+  return i >= 600u
+    ? 4u
+    : (i >= 120u
+       ? 3u
+       : (i >= 30u
+          ? 2u
+          : 1u));
+}
+
 WindEKFGlue::Result
 WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 {
@@ -113,7 +125,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   const float* x = ekf.get_state();
 
   Result res;
-  res.quality = 1;
+  res.quality = CounterToQuality(i);
   res.wind = SpeedVector(fixed(-x[0]), fixed(-x[1]));
 
   return res;
