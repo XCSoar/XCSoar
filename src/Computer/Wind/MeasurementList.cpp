@@ -43,7 +43,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
   static constexpr unsigned REL_FACTOR_TIME = 200;
   static constexpr unsigned TIME_RANGE = 36; // one hour
 
-  static constexpr int altRange = 1000;
+  static constexpr unsigned altRange = 1000;
   static constexpr unsigned timeRange = TIME_RANGE * 100;
 
   fixed k(0.0025);
@@ -66,9 +66,9 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
       continue;
 
     fixed timediff = fixed(now - m.time) / timeRange;
-    fixed altdiff = (alt - m.altitude) / altRange;
+    fixed altdiff = fabs(alt - m.altitude) / altRange;
 
-    if ((fabs(altdiff) < fixed(1)) && (timediff < fixed(1))) {
+    if (altdiff < fixed(1) && timediff < fixed(1)) {
       // measurement quality
       unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
 
