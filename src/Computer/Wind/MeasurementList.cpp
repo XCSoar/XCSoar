@@ -74,7 +74,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
       continue;
 
     // measurement quality
-    unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
+    unsigned int q_quality = std::min(5u, m.quality) * REL_FACTOR_QUALITY / 5u;
 
     // factor in altitude difference between current altitude and
     // measurement.  Maximum alt difference is 1000 m.
@@ -134,7 +134,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
  */
 void
 WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
-                                    fixed alt, int quality)
+                                    fixed alt, unsigned quality)
 {
   WindMeasurement &wind = measurements.full()
     ? measurements[getLeastImportantItem(time)] :

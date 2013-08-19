@@ -54,7 +54,7 @@ public:
    * end result and stay in the store longer.
    */
   void SlotMeasurement(const MoreData &info,
-                       const SpeedVector &wind, int quality);
+                       const SpeedVector &wind, unsigned quality);
 
   /**
    * Called if the altitude changes.
