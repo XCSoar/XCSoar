@@ -22,14 +22,13 @@ Copyright_License {
 */
 
 #include "Form/SymbolButton.hpp"
-#include "Form/Control.hpp"
 #include "Formatter/HexColor.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Screen/Layout.hpp"
 #include "Renderer/SymbolRenderer.hpp"
 #include "resource.h"
+#include "Asset.hpp"
 
 void
 WndSymbolButton::OnPaint(Canvas &canvas)

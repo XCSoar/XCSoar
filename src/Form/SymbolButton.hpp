@@ -25,10 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_SYMBOLBUTTON_HPP
 
 #include "Form/Button.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Features.hpp"
-
-class ActionListener;
 
 /**
  * This class is used for creating buttons with symbols instead of text.
