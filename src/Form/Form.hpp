@@ -233,7 +233,6 @@ public:
     return default_focus;
   }
 
-#ifdef ANDROID
   /**
    * Reposition window, if possible, or fail with mrChangeLayout in case
    * there is not enough space. Will be called whenever the parent window
@@ -242,7 +241,6 @@ public:
    * @param parent_rc the parent's client rect
    */
   void ReinitialiseLayout(const PixelRect &parent_rc);
-#endif
 
 protected:
   /**

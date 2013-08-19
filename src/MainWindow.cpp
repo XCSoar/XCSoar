@@ -320,11 +320,9 @@ MainWindow::ReinitialiseLayout()
   const PixelRect rc = GetClientRect();
 
   if (map == NULL) {
-#ifdef ANDROID
     if (HasDialog())
       // adapt simulator prompt
       dialogs.top()->ReinitialiseLayout(rc);
-#endif
     /* without the MapWindow, it is safe to assume that the MainWindow
        is just being initialized, and the InfoBoxes aren't initialized
        yet either, so there is nothing to do here */
@@ -379,11 +377,9 @@ MainWindow::ReinitialiseLayout()
   if (widget != NULL)
     widget->Move(GetMainRect(rc));
 
-#ifdef ANDROID
   // move topmost dialog to fit into the current layout, or close it
   if (HasDialog())
     dialogs.top()->ReinitialiseLayout(rc);
-#endif
 
   if (map != NULL)
     map->BringToBottom();

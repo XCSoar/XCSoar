@@ -643,7 +643,6 @@ WndForm::SetCaption(const TCHAR *_caption)
   }
 }
 
-#ifdef ANDROID
 void
 WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
 {
@@ -651,8 +650,10 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
   const unsigned parent_height = parent_rc.bottom - parent_rc.top;
 
   if (parent_width < GetWidth() || parent_height < GetHeight()) {
+#ifdef ANDROID
     // close dialog, it's creator may want to create a new layout
     modal_result = mrChangeLayout;
+#endif
   } else {
     // reposition dialog to fit into TopWindow
     PixelRect rc = GetPosition();
@@ -674,7 +675,6 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
     Move(rc.left, rc.top);
   }
 }
-#endif
 
 void
 WndForm::SetDefaultFocus()
