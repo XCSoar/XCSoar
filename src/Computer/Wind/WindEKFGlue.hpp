@@ -79,7 +79,7 @@ public:
 
 private:
   void ResetBlackout() {
-    time_blackout = (unsigned)-1;
+    time_blackout = 0;
   }
 
   bool InBlackout(const unsigned time) const {
