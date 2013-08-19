@@ -55,6 +55,11 @@ public:
     :WndButton(Parent, look, Caption, rc,
                style, listener, id) {}
 
+  WndSymbolButton(const ButtonLook &look)
+    :WndButton(look) {}
+
+  using WndButton::Create;
+
 protected:
   virtual void OnPaint(Canvas &canvas) override;
 };
