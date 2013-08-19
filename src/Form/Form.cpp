@@ -363,7 +363,6 @@ WndForm::ShowModal()
 {
   AssertNoneLocked();
 
-#define OPENCLOSESUPPRESSTIME 500
 #ifndef USE_GDI
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
