@@ -26,12 +26,16 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 
+struct DialogLook;
+
 /**
  * This class is used for creating buttons that are custom painted.
  * It is based on the WndButton class.
  */
 class WndCustomButton : public WndButton
 {
+  const DialogLook &look;
+
   static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style)
   {
     style.EnableCustomPainting();
@@ -47,12 +51,13 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndCustomButton(ContainerWindow &Parent, const DialogLook &look,
+  WndCustomButton(ContainerWindow &Parent, const DialogLook &_look,
                   tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ActionListener &listener, int id)
-    :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), listener, id) {}
+    :WndButton(Parent, _look, Caption, rc,
+               custom_painting(style), listener, id),
+     look(_look) {}
 
 protected:
   /**

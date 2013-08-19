@@ -28,11 +28,11 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+WndButton::WndButton(ContainerWindow &parent, const DialogLook &look,
                      const TCHAR *Caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ClickNotifyCallback _click_callback)
-  :look(_look), renderer(look.button),
+  :renderer(look.button),
    listener(NULL),
    click_callback(_click_callback)
 {
@@ -40,11 +40,11 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   Create(parent, Caption, rc, style);
 }
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+WndButton::WndButton(ContainerWindow &parent, const DialogLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :look(_look), renderer(look.button),
+  :renderer(look.button),
 #ifdef USE_GDI
    id(_id),
 #endif
@@ -109,6 +109,8 @@ WndButton::OnKillFocus()
 void
 WndButton::OnPaint(Canvas &canvas)
 {
+  const ButtonLook &look = renderer.GetLook();
+
   const bool pressed = IsDown();
   const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
@@ -124,13 +126,13 @@ WndButton::OnPaint(Canvas &canvas)
 
   canvas.SetBackgroundTransparent();
   if (!IsEnabled())
-    canvas.SetTextColor(look.button.disabled.color);
+    canvas.SetTextColor(look.disabled.color);
   else if (focused)
-    canvas.SetTextColor(look.button.focused.foreground_color);
+    canvas.SetTextColor(look.focused.foreground_color);
   else
-    canvas.SetTextColor(look.button.standard.foreground_color);
+    canvas.SetTextColor(look.standard.foreground_color);
 
-  canvas.Select(*(look.button.font));
+  canvas.Select(*look.font);
 
 #ifndef USE_GDI
   unsigned style = GetTextStyle();

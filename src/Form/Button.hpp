@@ -42,7 +42,6 @@ public:
   typedef void (*ClickNotifyCallback)();
 
 protected:
-  const DialogLook &look;
   ButtonRenderer renderer;
 
 private:
