@@ -82,6 +82,11 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   last_airspeed_available = basic.airspeed_available;
 
   // temporary manoeuvering, dont append this point
+  if (derived.circling)
+    /* reset the counter so the first wind estimate after circling
+       ends is delayed for another 10 seconds */
+    i = 0;
+
   unsigned time(basic.clock);
   if (derived.turn_rate.Absolute() > Angle::Degrees(20) ||
       (basic.acceleration.available &&
