@@ -655,25 +655,23 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
     modal_result = mrChangeLayout;
   } else {
     // reposition dialog to fit into TopWindow
-    PixelScalar left = GetLeft();
-    PixelScalar top = GetTop();
+    PixelRect rc = GetPosition();
 
-    if (GetRight() > (PixelScalar)parent_width)
-      left = parent_width - GetWidth();
-    if (GetBottom() > (PixelScalar)parent_height)
-      top = parent_height - GetHeight();
+    if (rc.right > (PixelScalar)parent_width)
+      rc.left = parent_width - (rc.right - rc.left);
+    if (rc.bottom > (PixelScalar)parent_height)
+      rc.top = parent_height - (rc.bottom - rc.top);
 
 #ifdef USE_MEMORY_CANVAS
     /* the RasterCanvas class doesn't clip negative window positions
        properly, therefore we avoid this problem at this stage */
-    if (left < 0)
-      left = 0;
-    if (top < 0)
-      top = 0;
+    if (rc.left < 0)
+      rc.left = 0;
+    if (rc.top < 0)
+      rc.top = 0;
 #endif
 
-    if (left != GetLeft() || top != GetTop())
-      Move(left, top);
+    Move(rc.left, rc.top);
   }
 }
 #endif
