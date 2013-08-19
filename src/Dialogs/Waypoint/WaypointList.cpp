@@ -451,9 +451,9 @@ ShowWaypointListDialog(const GeoPoint &_location,
   name_control = (WndProperty *)dialog->FindByName(_T("name"));
   assert(name_control != nullptr);
   DataField *name_df = new PrefixDataField(_T(""),
-                                           WaypointNameAllowedCharacters);
+                                           WaypointNameAllowedCharacters,
+                                           &listener);
   name_control->SetDataField(name_df);
-  name_df->SetListener(&listener);
 
   distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
   assert(distance_filter != nullptr);

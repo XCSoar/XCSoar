@@ -32,8 +32,9 @@ Copyright_License {
  */
 class PasswordDataField final : public DataFieldString {
 public:
-  PasswordDataField(const TCHAR *initial_value)
-    :DataFieldString(initial_value, NULL) {}
+  PasswordDataField(const TCHAR *initial_value,
+                    DataFieldListener *listener=nullptr)
+    :DataFieldString(initial_value, listener) {}
 
   /* virtual methods from class DataField */
   virtual const TCHAR *GetAsDisplayString() const override;

@@ -586,8 +586,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
 
-  DataFieldString *ip_address_df = new DataFieldString(_T(""), nullptr);
-  ip_address_df->SetListener(this);
+  DataFieldString *ip_address_df = new DataFieldString(_T(""), this);
   ip_address_df->Set(config.ip_address);
   Add(_("IP Address"), NULL, ip_address_df);
 

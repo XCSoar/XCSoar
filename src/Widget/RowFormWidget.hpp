@@ -416,7 +416,8 @@ public:
   }
 
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
-                       const TCHAR *content);
+                       const TCHAR *content,
+                       DataFieldListener *listener=nullptr);
 
   /**
    * Add a password edit control.  The password is obfuscated while

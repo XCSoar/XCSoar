@@ -319,8 +319,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                               style);
   DataFieldString *dfs = new DataFieldString(allow_name_change
                                              ? (const TCHAR *)data.name
-                                             : gettext(data.name),
-                                             NULL);
+                                             : gettext(data.name));
   edit_name->SetDataField(dfs);
   edit_name->SetReadOnly(!allow_name_change);
 
