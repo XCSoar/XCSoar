@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.1 - not yet released
 * replay
   - fix crash replaying an IGC file with no B record extensions (#3107)
+* data files
+  - save the previous log file in "xcsoar-old.log"
 * user interface
   - new translation: Lithuanian
 * Android
@@ -80,7 +82,6 @@ Version 6.7 - 2013/09/30
 * data files
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
-  - save the previous log file in "xcsoar.old"
   - fix name truncation when saving a waypoint file on Windows (#3096)
 
 Version 6.6.5 - 2013/08/21
