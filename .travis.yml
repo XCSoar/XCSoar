@@ -32,7 +32,7 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r22.0.1-linux.tgz -C ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r8e-linux-x86_64.tar.bz2 -C ~/opt; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-17.0.0,android-17; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-18.0.1,android-17; fi
 
   # Windows Mobile
   - if [[ "$TARGET" == "WM"* ]] || [[ "$TARGET" == "PPC"* ]] || [[ "$TARGET" == "ALTAIR" ]]; then wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/; export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"; fi
