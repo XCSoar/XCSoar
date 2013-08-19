@@ -645,12 +645,12 @@ WndForm::SetCaption(const TCHAR *_caption)
 
 #ifdef ANDROID
 void
-WndForm::ReinitialiseLayout()
+WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
 {
-  const SingleWindow &main_window = GetMainWindow();
+  const unsigned parent_width = parent_rc.right - parent_rc.left;
+  const unsigned parent_height = parent_rc.bottom - parent_rc.top;
 
-  if (main_window.GetWidth() < GetWidth() ||
-      main_window.GetHeight() < GetHeight()) {
+  if (parent_width < GetWidth() || parent_height < GetHeight()) {
     // close dialog, it's creator may want to create a new layout
     modal_result = mrChangeLayout;
   } else {
@@ -658,10 +658,10 @@ WndForm::ReinitialiseLayout()
     PixelScalar left = GetLeft();
     PixelScalar top = GetTop();
 
-    if (GetRight() > (PixelScalar) main_window.GetWidth())
-      left = main_window.GetWidth() - GetWidth();
-    if (GetBottom() > (PixelScalar) main_window.GetHeight())
-      top = main_window.GetHeight() - GetHeight();
+    if (GetRight() > (PixelScalar)parent_width)
+      left = parent_width - GetWidth();
+    if (GetBottom() > (PixelScalar)parent_height)
+      top = parent_height - GetHeight();
 
 #ifdef USE_MEMORY_CANVAS
     /* the RasterCanvas class doesn't clip negative window positions

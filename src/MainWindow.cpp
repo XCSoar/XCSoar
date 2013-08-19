@@ -317,10 +317,13 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
 void
 MainWindow::ReinitialiseLayout()
 {
+  const PixelRect rc = GetClientRect();
+
   if (map == NULL) {
 #ifdef ANDROID
     if (HasDialog())
-      dialogs.top()->ReinitialiseLayout();  // adapt simulator prompt
+      // adapt simulator prompt
+      dialogs.top()->ReinitialiseLayout(rc);
 #endif
     /* without the MapWindow, it is safe to assume that the MainWindow
        is just being initialized, and the InfoBoxes aren't initialized
@@ -338,7 +341,6 @@ MainWindow::ReinitialiseLayout()
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  const PixelRect rc = GetClientRect();
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
@@ -380,7 +382,7 @@ MainWindow::ReinitialiseLayout()
 #ifdef ANDROID
   // move topmost dialog to fit into the current layout, or close it
   if (HasDialog())
-    dialogs.top()->ReinitialiseLayout();
+    dialogs.top()->ReinitialiseLayout(rc);
 #endif
 
   if (map != NULL)
