@@ -45,7 +45,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
   static constexpr unsigned altRange = 1000;
   static constexpr unsigned timeRange = 3600; // one hour
 
-  fixed k(0.0025);
+  static constexpr fixed k(0.0025);
 
   unsigned int total_quality = 0;
 
