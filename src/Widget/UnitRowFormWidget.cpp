@@ -51,14 +51,14 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         UnitGroup unit_group, fixed value,
-                        DataField::DataAccessCallback callback)
+                        DataFieldListener *listener)
 {
   WndProperty *edit = Add(label, help);
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   value = Units::ToUserUnit(value, unit);
   DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
                                           min_value, max_value,
-                                          value, step, fine, callback);
+                                          value, step, fine, listener);
   df->SetUnits(Units::GetUnitName(unit));
   edit->SetDataField(df);
   return edit;
