@@ -205,10 +205,10 @@ TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex <= task_store->Size());
 
+  const unsigned padding = Layout::GetTextPadding();
   const TCHAR *name = task_store->GetName(DrawListIndex);
 
-  canvas.DrawText(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), name);
+  canvas.DrawText(rc.left + padding, rc.top + padding, name);
 }
 
 void
