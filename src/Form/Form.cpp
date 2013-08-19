@@ -650,10 +650,6 @@ WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
   const unsigned parent_height = parent_rc.bottom - parent_rc.top;
 
   if (parent_width < GetWidth() || parent_height < GetHeight()) {
-#ifdef ANDROID
-    // close dialog, it's creator may want to create a new layout
-    modal_result = mrChangeLayout;
-#endif
   } else {
     // reposition dialog to fit into TopWindow
     PixelRect rc = GetPosition();
