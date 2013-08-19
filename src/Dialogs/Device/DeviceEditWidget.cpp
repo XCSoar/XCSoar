@@ -569,19 +569,16 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  DataFieldEnum *port_df = new DataFieldEnum(NULL);
-  port_df->SetListener(this);
+  DataFieldEnum *port_df = new DataFieldEnum(this);
   FillPorts(*port_df, config);
   Add(_("Port"), NULL, port_df);
 
-  DataFieldEnum *baud_rate_df = new DataFieldEnum(NULL);
-  baud_rate_df->SetListener(this);
+  DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
   baud_rate_df->Set(config.baud_rate);
   Add(_("Baud rate"), NULL, baud_rate_df);
 
-  DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(NULL);
-  bulk_baud_rate_df->SetListener(this);
+  DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
   bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
   FillBaudRates(*bulk_baud_rate_df);
   bulk_baud_rate_df->Set(config.bulk_baud_rate);
@@ -594,21 +591,18 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   ip_address_df->Set(config.ip_address);
   Add(_("IP Address"), NULL, ip_address_df);
 
-  DataFieldEnum *tcp_port_df = new DataFieldEnum(NULL);
-  tcp_port_df->SetListener(this);
+  DataFieldEnum *tcp_port_df = new DataFieldEnum(this);
   FillTCPPorts(*tcp_port_df);
   tcp_port_df->Set(config.tcp_port);
   Add(_("TCP Port"), NULL, tcp_port_df);
 
-  DataFieldEnum *i2c_bus_df = new DataFieldEnum(NULL);
-  i2c_bus_df->SetListener(this);
+  DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
   i2c_bus_df->Set(config.i2c_bus);
   Add(_("I2C Bus"), _("Select the description or bus number that matches your configuration."),
                       i2c_bus_df);
 
-  DataFieldEnum *i2c_addr_df = new DataFieldEnum(NULL);
-  i2c_addr_df->SetListener(this);
+  DataFieldEnum *i2c_addr_df = new DataFieldEnum(this);
   FillI2CAddr(*i2c_addr_df);
   i2c_addr_df->Set(config.i2c_addr);
   Add(_("I2C Addr"), _("The i2c address that matches your configuration."
@@ -616,8 +610,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                         "In case you do not understand the previous sentence you may assume that this field is not used."),
                         i2c_addr_df);
 
-  DataFieldEnum *press_df = new DataFieldEnum(NULL);
-  press_df->SetListener(this);
+  DataFieldEnum *press_df = new DataFieldEnum(this);
   FillPress(*press_df);
   press_df->Set((unsigned)config.press_use);
   Add(_("Pressure use"), _("Select the purpose of this pressure sensor. "
@@ -625,8 +618,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                            "what pressure this is and what its should be used for."),
                            press_df);
 
-  DataFieldEnum *driver_df = new DataFieldEnum(NULL);
-  driver_df->SetListener(this);
+  DataFieldEnum *driver_df = new DataFieldEnum(this);
 
   const struct DeviceRegister *driver;
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; i++)
