@@ -291,8 +291,8 @@ AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   if (items.empty()) {
     assert(i == 0);
 
-    canvas.DrawText(rc.left + Layout::FastScale(2),
-                    rc.top + Layout::FastScale(2), _("No Match!"));
+    canvas.DrawText(rc.left + Layout::GetTextPadding(),
+                    rc.top + Layout::GetTextPadding(), _("No Match!"));
     return;
   }
 
