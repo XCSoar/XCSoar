@@ -216,16 +216,6 @@ public:
     cur = q.top().iterator;
 
     do { // remove this item
-#if !defined(NDEBUG) && defined(__GLIBCXX__) && __GLIBCXX__ <= 20130401
-      /* work around bug in libstdc++ 4.8 (Android NDK r9, g++ arm (Kobo)), fixed
-         libstdc++ 4.8.1: std::pop_heap() can move-assign self (see
-         TRAC #3035) */
-      if (q.size() == 1) {
-        q.clear();
-        continue;
-      }
-#endif
-
       q.pop();
     } while (!q.empty() && (q.top().priority > q.top().iterator->second));
     // and all lower rank than this
