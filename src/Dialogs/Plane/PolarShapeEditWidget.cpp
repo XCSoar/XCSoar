@@ -149,7 +149,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
                                             fixed(0), fixed(300), fixed(0),
-                                            fixed(1), false, NULL);
+                                            fixed(1), false);
     points[i].v->SetDataField(df);
   }
 
@@ -185,7 +185,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
                                             min, fixed(0), fixed(0),
-                                            step, false, NULL);
+                                            step, false);
 
     points[i].w->SetDataField(df);
   }

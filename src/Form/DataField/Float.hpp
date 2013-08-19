@@ -53,6 +53,15 @@ public:
      mSpeedup(0), mFine(Fine),
      unit(_T("")) {}
 
+  DataFieldFloat(const TCHAR *edit_format, const TCHAR *display_format,
+                 fixed _min, fixed _max, fixed _value,
+                 fixed _step, bool _fine,
+                 DataFieldListener *listener=nullptr)
+    :NumberDataField(Type::REAL, true, edit_format, display_format, listener),
+     mValue(_value), mMin(_min), mMax(_max), mStep(_step),
+     mSpeedup(0), mFine(_fine),
+     unit(_T("")) {}
+
   void SetUnits(const TCHAR *text) {
     unit = text;
   }

@@ -49,6 +49,12 @@ public:
     :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
      value(Default), min(Min), max(Max), step(Step) {}
 
+  DataFieldInteger(const TCHAR *edit_format, const TCHAR *display_format,
+                   int _min, int _max, int _value, int _step,
+                   DataFieldListener *listener=nullptr)
+    :NumberDataField(Type::REAL, true, edit_format, display_format, listener),
+     value(_value), min(_min), max(_max), step(_step) {}
+
   void Set(int _value) {
     value = _value;
   }

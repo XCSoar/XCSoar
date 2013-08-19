@@ -91,7 +91,7 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
   WndProperty *edit = Add(label, help, true);
   DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
                                           fixed(0), fixed(0),
-                                          value, fixed(1), false, NULL);
+                                          value, fixed(1), false);
   edit->SetDataField(df);
 }
 

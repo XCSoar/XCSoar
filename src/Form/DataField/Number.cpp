@@ -32,6 +32,15 @@ NumberDataField::NumberDataField(Type type, bool support_combo,
 {
 }
 
+NumberDataField::NumberDataField(Type type, bool support_combo,
+                                 const TCHAR *_edit_format,
+                                 const TCHAR *_display_format,
+                                 DataFieldListener *listener)
+  :DataField(type, support_combo, listener),
+   edit_format(_edit_format), display_format(_display_format)
+{
+}
+
 void
 NumberDataField::SetFormat(const TCHAR *text)
 {
