@@ -240,7 +240,7 @@ public:
    *
    * @param parent_rc the parent's client rect
    */
-  void ReinitialiseLayout(const PixelRect &parent_rc);
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc);
 
 protected:
   /**
