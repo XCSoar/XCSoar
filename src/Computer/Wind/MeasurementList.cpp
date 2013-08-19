@@ -66,55 +66,58 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
       continue;
 
     fixed timediff = fixed(now - m.time) / timeRange;
+    if (timediff >= fixed(1))
+      continue;
+
     fixed altdiff = fabs(alt - m.altitude) / altRange;
+    if (altdiff >= fixed(1))
+      continue;
 
-    if (altdiff < fixed(1) && timediff < fixed(1)) {
-      // measurement quality
-      unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
+    // measurement quality
+    unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
 
-      // factor in altitude difference between current altitude and
-      // measurement.  Maximum alt difference is 1000 m.
-      unsigned int a_quality =
-        iround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
-          * REL_FACTOR_ALTITUDE);
+    // factor in altitude difference between current altitude and
+    // measurement.  Maximum alt difference is 1000 m.
+    unsigned int a_quality =
+      iround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
+             * REL_FACTOR_ALTITUDE);
 
-      // factor in timedifference. Maximum difference is 1 hours.
-      unsigned int t_quality =
-        iround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
-          * REL_FACTOR_TIME);
+    // factor in timedifference. Maximum difference is 1 hours.
+    unsigned int t_quality =
+      iround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
+             * REL_FACTOR_TIME);
 
-      if (m.quality == 6) {
-        if (timediff < override_time) {
-          // over-ride happened, so re-set accumulator
-          override_time = timediff;
+    if (m.quality == 6) {
+      if (timediff < override_time) {
+        // over-ride happened, so re-set accumulator
+        override_time = timediff;
+        total_quality = 0;
+        result.x = fixed(0);
+        result.y = fixed(0);
+        overridden = true;
+      } else {
+        // this isn't the latest over-ride or obtained fix, so ignore
+        continue;
+      }
+    } else {
+      if (timediff < override_time) {
+        // a more recent fix was obtained than the over-ride, so start using
+        // that one
+        override_time = timediff;
+        if (overridden) {
+          // re-set accumulators
+          overridden = false;
           total_quality = 0;
           result.x = fixed(0);
           result.y = fixed(0);
-          overridden = true;
-        } else {
-          // this isn't the latest over-ride or obtained fix, so ignore
-          continue;
-        }
-      } else {
-        if (timediff < override_time) {
-          // a more recent fix was obtained than the over-ride, so start using
-          // that one
-          override_time = timediff;
-          if (overridden) {
-            // re-set accumulators
-            overridden = false;
-            total_quality = 0;
-            result.x = fixed(0);
-            result.y = fixed(0);
-          }
         }
       }
-
-      unsigned int quality = q_quality * (a_quality * t_quality);
-      result.x += m.vector.x * quality;
-      result.y += m.vector.y * quality;
-      total_quality += quality;
     }
+
+    unsigned int quality = q_quality * (a_quality * t_quality);
+    result.x += m.vector.x * quality;
+    result.y += m.vector.y * quality;
+    total_quality += quality;
   }
 
   if (total_quality > 0) {
