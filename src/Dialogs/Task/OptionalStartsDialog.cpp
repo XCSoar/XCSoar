@@ -143,15 +143,14 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   assert(GetList().GetLength() ==
          task.GetOptionalStartPointCount() + (RealStartExists ? 2 : 1));
 
+  const unsigned padding = Layout::GetTextPadding();
   const unsigned index_optional_starts = DrawListIndex - (RealStartExists ? 1 : 0);
 
   if (DrawListIndex == GetList().GetLength() - 1) {
-    canvas.DrawText(rc.left + Layout::FastScale(2),
-                    rc.top + Layout::FastScale(2),
+    canvas.DrawText(rc.left + padding, rc.top + padding,
                     _("(Add Alternate Start)"));
   } else {
-    RasterPoint pt(rc.left + Layout::FastScale(2),
-                   rc.top + Layout::FastScale(2));
+    RasterPoint pt(rc.left + padding, rc.top + padding);
 
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0 && RealStartExists) {
