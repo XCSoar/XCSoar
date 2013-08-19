@@ -28,6 +28,7 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Util/StaticString.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -47,7 +48,12 @@ OpenLog()
   const bool append = initialised;
   if (!initialised) {
     initialised = true;
+
+    /* delete the obsolete log file */
     LocalPath(path, _T("xcsoar-startup.log"));
+    File::Delete(path);
+
+    LocalPath(path, _T("xcsoar.log"));
 
 #ifdef ANDROID
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we

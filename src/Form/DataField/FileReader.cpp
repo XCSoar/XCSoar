@@ -54,6 +54,7 @@ IsInternalFile(const TCHAR* str)
     _T("xcsoar-marks.txt"),
     _T("xcsoar-persist.log"),
     _T("xcsoar-startup.log"),
+    _T("xcsoar.log"),
     _T("xcsoar-rasp.dat"),
     NULL
   };

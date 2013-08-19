@@ -54,6 +54,7 @@ Version 6.7 - not yet released
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
 * data files
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
+  - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
 
 Version 6.6.5 - not yet released
 * map
