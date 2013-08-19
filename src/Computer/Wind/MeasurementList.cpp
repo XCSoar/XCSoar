@@ -44,7 +44,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
   static constexpr unsigned TIME_RANGE = 36; // one hour
 
   static constexpr int altRange = 1000;
-  static constexpr int timeRange = TIME_RANGE * 100;
+  static constexpr unsigned timeRange = TIME_RANGE * 100;
 
   fixed k(0.0025);
 
@@ -59,8 +59,14 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
 
   for (unsigned i = 0; i < measurements.size(); i++) {
     const WindMeasurement &m = measurements[i];
+
+    if (now < m.time)
+      /* time warp - usually, this shouldn't happen, because time
+         warps "should" be filtered at a higher level already */
+      continue;
+
+    fixed timediff = fixed(now - m.time) / timeRange;
     fixed altdiff = (alt - m.altitude) / altRange;
-    fixed timediff = fabs(fixed(now - m.time) / timeRange);
 
     if ((fabs(altdiff) < fixed(1)) && (timediff < fixed(1))) {
       // measurement quality
