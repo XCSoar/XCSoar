@@ -29,7 +29,6 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
-#include "DataField/FileReader.hpp"
 
 #include <assert.h>
 
@@ -203,21 +202,6 @@ GetFormValueFixed(const SubForm &form, const TCHAR *control_name)
   return df.GetAsFixed();
 }
 
-bool
-GetFormValueBoolean(const SubForm &form, const TCHAR *control_name)
-{
-  assert(control_name != NULL);
-
-  const WndProperty *control =
-    (const WndProperty *)form.FindByName(control_name);
-  assert(control != NULL);
-
-  const DataFieldBoolean &df =
-    *(const DataFieldBoolean *)control->GetDataField();
-  assert(df.GetType() == DataField::Type::BOOLEAN);
-  return df.GetAsBoolean();
-}
-
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name)
 {
@@ -231,33 +215,6 @@ GetFormValueString(const SubForm &form, const TCHAR *control_name)
   assert(df.GetType() == DataField::Type::STRING);
 
   return df.GetAsString();
-}
-
-const TCHAR *
-GetFormValueFile(const SubForm &form, const TCHAR *control_name)
-{
-  assert(control_name != NULL);
-
-  const WndProperty *control =
-    (const WndProperty *)form.FindByName(control_name);
-  assert(control != NULL);
-
-  const DataFieldFileReader &df =
-    *(const DataFieldFileReader *)control->GetDataField();
-  assert(df.GetType() == DataField::Type::FILE);
-
-  return df.GetPathFile();
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, bool &value)
-{
-  bool new_value = GetFormValueBoolean(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
 }
 
 bool
@@ -281,19 +238,6 @@ SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value)
   value = new_value;
   return true;
 }
-
-#ifdef FIXED_MATH
-bool
-SaveFormProperty(SubForm &form, const TCHAR *control_name, double &value)
-{
-  double new_value = (double)GetFormValueFixed(form, control_name);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-#endif
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,

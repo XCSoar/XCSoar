@@ -106,20 +106,12 @@ int
 GetFormValueInteger(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
-bool
-GetFormValueBoolean(const SubForm &form, const TCHAR *control_name);
-
-gcc_pure
 fixed
 GetFormValueFixed(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name);
-
-gcc_pure
-const TCHAR *
-GetFormValueFile(const SubForm &form, const TCHAR *control_name);
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
@@ -129,11 +121,6 @@ SaveFormProperty(const SubForm &form, const TCHAR* field, unsigned int &value);
 
 bool
 SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value);
-
-#ifdef FIXED_MATH
-bool
-SaveFormProperty(SubForm &form, const TCHAR *control_name, double &value);
-#endif
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
