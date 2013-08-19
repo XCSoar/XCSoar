@@ -42,7 +42,7 @@ GetDialogStyle()
 
 WidgetDialog::WidgetDialog(const DialogLook &look)
   :WndForm(look),
-   buttons(GetClientAreaWindow(), look),
+   buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    changed(false)
 {

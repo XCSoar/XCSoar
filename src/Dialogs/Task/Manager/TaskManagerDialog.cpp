@@ -32,6 +32,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
 #include "Look/MapLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -169,7 +170,7 @@ TaskManagerDialog::Create(SingleWindow &parent)
 
   ButtonWindowStyle button_style(hidden);
   button_style.TabStop();
-  target_button = new WndButton(client_area, GetLook(), _("Target"),
+  target_button = new WndButton(client_area, GetLook().button, _("Target"),
                                 layout.target_button, button_style,
                                 *this, TARGET);
 

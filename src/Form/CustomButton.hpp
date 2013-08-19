@@ -36,28 +36,17 @@ class WndCustomButton : public WndButton
 {
   const DialogLook &look;
 
-  static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style)
-  {
-    style.EnableCustomPainting();
-    return style;
-  }
-
 public:
   /**
    * Constructor of the WndCustomButton class
    * @param Parent Parent window/ContainerControl
    * @param Name Name of the button
    * @param Caption Text on the button
-   * @param Function The function that should be called
-   * when the button is clicked
    */
   WndCustomButton(ContainerWindow &Parent, const DialogLook &_look,
                   tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ActionListener &listener, int id)
-    :WndButton(Parent, _look, Caption, rc,
-               custom_painting(style), listener, id),
-     look(_look) {}
+                  ActionListener &listener, int id);
 
 protected:
   /**

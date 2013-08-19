@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
+#include "Look/DialogLook.hpp"
 #include "StatusPanels/FlightStatusPanel.hpp"
 #include "StatusPanels/TaskStatusPanel.hpp"
 #include "StatusPanels/RulesStatusPanel.hpp"
@@ -90,7 +91,7 @@ dlgStatusShowModal(int start_page)
   ButtonWindowStyle button_style;
   button_style.TabStop();
 
-  WndButton close_button(form.GetClientAreaWindow(), look,
+  WndButton close_button(form.GetClientAreaWindow(), look.button,
                          _("Close"), close_rc, button_style,
                          form, mrOK);
 

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
@@ -374,19 +375,19 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   button_rc.top = button_rc.bottom - button_height;
 
   WndButton *close_button =
-    new WndButton(client_area, dialog_look, _("Close"),
+    new WndButton(client_area, dialog_look.button, _("Close"),
                   button_rc, button_style, *wf, mrOK);
 
   button_rc.left += button_width + Layout::Scale(2);
   button_rc.right += button_width + Layout::Scale(2);
   WndButton *copy_button =
-    new WndButton(client_area, dialog_look, _("Copy"),
+    new WndButton(client_area, dialog_look.button, _("Copy"),
                   button_rc, button_style, OnCopy);
 
   button_rc.left += button_width + Layout::Scale(2);
   button_rc.right += button_width + Layout::Scale(2);
   buttonPaste =
-    new WndButton(client_area, dialog_look, _("Paste"),
+    new WndButton(client_area, dialog_look.button, _("Paste"),
                   button_rc, button_style, OnPaste);
 
   RefreshPasteButton();

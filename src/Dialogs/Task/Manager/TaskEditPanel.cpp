@@ -158,7 +158,7 @@ public:
     style.Hide();
     style.TabStop();
 
-    const DialogLook &look = UIGlobals::GetDialogLook();
+    const ButtonLook &look = UIGlobals::GetDialogLook().button;
 
     const Layout layout = CalculateLayout(rc);
     edit_button = new WndButton(parent, look, _("Edit Point"),

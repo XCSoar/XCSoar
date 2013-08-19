@@ -217,7 +217,8 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
+  WndButton *button = new WndButton(panel, look.button, label, button_rc,
+                                    button_style, listener, id);
 
   Add(Row::Type::BUTTON, button);
   return button;

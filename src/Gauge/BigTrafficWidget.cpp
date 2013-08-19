@@ -871,22 +871,23 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   const PixelRect rc = GetContainer().GetClientRect();
 
 #ifndef GNAV
-  zoom_in_button = new WndSymbolButton(GetContainer(), look.dialog,
+  zoom_in_button = new WndSymbolButton(GetContainer(), look.dialog.button,
                                        _T("+"), rc, ButtonWindowStyle(),
                                        *this, ZOOM_IN);
-  zoom_out_button = new WndSymbolButton(GetContainer(), look.dialog,
+  zoom_out_button = new WndSymbolButton(GetContainer(), look.dialog.button,
                                         _T("-"), rc, ButtonWindowStyle(),
                                         *this, ZOOM_OUT);
-  previous_item_button = new WndSymbolButton(GetContainer(), look.dialog,
+  previous_item_button = new WndSymbolButton(GetContainer(),
+                                             look.dialog.button,
                                              _T("<"), rc, ButtonWindowStyle(),
                                              *this, PREVIOUS_ITEM);
-  next_item_button = new WndSymbolButton(GetContainer(), look.dialog,
+  next_item_button = new WndSymbolButton(GetContainer(), look.dialog.button,
                                          _T(">"), rc, ButtonWindowStyle(),
                                          *this, NEXT_ITEM);
-  details_button = new WndButton(GetContainer(), look.dialog,
+  details_button = new WndButton(GetContainer(), look.dialog.button,
                                  _("Details"), rc, ButtonWindowStyle(),
                                  *this, DETAILS);
-  close_button = new WndButton(GetContainer(), look.dialog,
+  close_button = new WndButton(GetContainer(), look.dialog.button,
                                _("Close"), rc, ButtonWindowStyle(),
                                *this, CLOSE);
 #endif

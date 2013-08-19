@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct DialogLook;
+struct ButtonLook;
 class ActionListener;
 class WndButton;
 
@@ -38,13 +38,13 @@ class WndButton;
  * Show four buttons to increment/decrement a value.
  */
 class OffsetButtonsWidget : public NullWidget, private ActionListener {
-  const DialogLook &look;
+  const ButtonLook &look;
   const TCHAR *const format;
   const fixed offsets[4];
   WndButton *buttons[4];
 
 public:
-  OffsetButtonsWidget(const DialogLook &_look, const TCHAR *_format,
+  OffsetButtonsWidget(const ButtonLook &_look, const TCHAR *_format,
                       fixed small_offset, fixed large_offset)
     :look(_look), format(_format),
      offsets{-large_offset, -small_offset, small_offset, large_offset} {}

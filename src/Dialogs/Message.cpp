@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Util/StaticArray.hpp"
@@ -97,40 +98,40 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   if (button_flags == MB_OK ||
       button_flags == MB_OKCANCEL)
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("OK"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("OK"), button_rc,
                     button_style, wf, IDOK);
 
   if (button_flags == MB_YESNO ||
       button_flags == MB_YESNOCANCEL) {
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("Yes"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("Yes"), button_rc,
                     button_style, wf, IDYES);
 
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("No"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("No"), button_rc,
                     button_style, wf, IDNO);
   }
 
   if (button_flags == MB_ABORTRETRYIGNORE ||
       button_flags == MB_RETRYCANCEL)
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("Retry"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("Retry"), button_rc,
                     button_style, wf, IDRETRY);
 
   if (button_flags == MB_OKCANCEL ||
       button_flags == MB_RETRYCANCEL ||
       button_flags == MB_YESNOCANCEL)
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("Cancel"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("Cancel"), button_rc,
                     button_style, wf, IDCANCEL);
 
   if (button_flags == MB_ABORTRETRYIGNORE) {
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("Abort"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("Abort"), button_rc,
                     button_style, wf, IDABORT);
 
     buttons.append() =
-      new WndButton(client_area, dialog_look, _("Ignore"), button_rc,
+      new WndButton(client_area, dialog_look.button, _("Ignore"), button_rc,
                     button_style, wf, IDIGNORE);
   }
 

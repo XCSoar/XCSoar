@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct DialogLook;
+struct ButtonLook;
 class WndSymbolButton;
 
 class KeyboardWidget : public NullWidget, ActionListener {
@@ -44,7 +44,7 @@ protected:
 
   static constexpr unsigned MAX_BUTTONS = 40;
 
-  const DialogLook &look;
+  const ButtonLook &look;
 
   OnCharacterCallback_t on_character;
 
@@ -60,7 +60,7 @@ protected:
   const bool show_shift_button;
 
 public:
-  KeyboardWidget(const DialogLook &_look,
+  KeyboardWidget(const ButtonLook &_look,
                  OnCharacterCallback_t _on_character,
                  bool _show_shift_button)
     :look(_look), on_character(_on_character), num_buttons(0),

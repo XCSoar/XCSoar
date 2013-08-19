@@ -23,16 +23,16 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/ButtonLook.hpp"
 #include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &look,
+WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *Caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ClickNotifyCallback _click_callback)
-  :renderer(look.button),
+  :renderer(look),
    listener(NULL),
    click_callback(_click_callback)
 {
@@ -40,11 +40,11 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &look,
   Create(parent, Caption, rc, style);
 }
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &look,
+WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :renderer(look.button),
+  :renderer(look),
 #ifdef USE_GDI
    id(_id),
 #endif

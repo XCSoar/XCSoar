@@ -26,6 +26,23 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
 
+static inline ButtonWindowStyle
+CustomPainting(ButtonWindowStyle style)
+{
+  style.EnableCustomPainting();
+  return style;
+}
+
+WndCustomButton::WndCustomButton(ContainerWindow &Parent,
+                                 const DialogLook &_look,
+                                 tstring::const_pointer Caption,
+                                 const PixelRect &rc,
+                                 const ButtonWindowStyle style,
+                                 ActionListener &listener, int id)
+  :WndButton(Parent, _look.button, Caption, rc,
+             CustomPainting(style), listener, id),
+   look(_look) {}
+
 void
 WndCustomButton::OnPaint(Canvas &canvas)
 {
