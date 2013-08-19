@@ -202,6 +202,13 @@ WidgetDialog::OnResize(PixelSize new_size)
   widget.Move(buttons.UpdateLayout());
 }
 
+void
+WidgetDialog::SetDefaultFocus()
+{
+  if (!widget.SetFocus())
+    WndForm::SetDefaultFocus();
+}
+
 bool
 WidgetDialog::OnAnyKeyDown(unsigned key_code)
 {

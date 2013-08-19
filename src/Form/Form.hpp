@@ -244,6 +244,11 @@ public:
 
 protected:
   /**
+   * Assign the initial keyboard focus.
+   */
+  virtual void SetDefaultFocus();
+
+  /**
    * This method can intercept a "key down" event before it gets
    * delivered to the focused dialog control.
    *

@@ -384,11 +384,7 @@ WndForm::ShowModal()
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
 #endif /* USE_GDI */
-  SetFocus();
-  if (default_focus)
-    default_focus->SetFocus();
-  else
-    client_area.FocusFirstControl();
+  SetDefaultFocus();
 
   bool hastimed = false;
 
@@ -681,6 +677,16 @@ WndForm::ReinitialiseLayout()
   }
 }
 #endif
+
+void
+WndForm::SetDefaultFocus()
+{
+  SetFocus();
+  if (default_focus)
+    default_focus->SetFocus();
+  else
+    client_area.FocusFirstControl();
+}
 
 bool
 WndForm::OnAnyKeyDown(unsigned key_code)
