@@ -35,6 +35,35 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 
+gcc_pure
+static unsigned
+GetMinimumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical)
+{
+  if (vertical && control.HasCaption())
+    return look.text_font->GetHeight() + Layout::GetMinimumControlHeight();
+
+  return Layout::GetMinimumControlHeight();
+}
+
+gcc_pure
+static unsigned
+GetMaximumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical)
+{
+  if (vertical && control.HasCaption()) {
+    const unsigned min_height = look.text_font->GetHeight()
+      + Layout::GetMinimumControlHeight();
+    return std::max(min_height,
+                    Layout::GetMaximumControlHeight());
+  }
+
+  return control.IsReadOnly()
+    /* rows that are not clickable don't need to be extra-large */
+    ? Layout::GetMinimumControlHeight()
+    : Layout::GetMaximumControlHeight();
+}
+
 unsigned
 RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
                                      bool vertical) const
@@ -50,10 +79,7 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     break;
 
   case Type::EDIT:
-    if (vertical && GetControl().HasCaption())
-      return look.text_font->GetHeight() + Layout::GetMinimumControlHeight();
-
-    /* fall through */
+    return ::GetMinimumHeight(GetControl(), look, vertical);
 
   case Type::BUTTON:
     return Layout::GetMinimumControlHeight();
@@ -83,17 +109,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
     break;
 
   case Type::EDIT:
-    if (vertical && GetControl().HasCaption()) {
-      const unsigned min_height = look.text_font->GetHeight()
-        + Layout::GetMinimumControlHeight();
-      return std::max(min_height,
-                      Layout::GetMaximumControlHeight());
-    }
-
-    return GetControl().IsReadOnly()
-      /* rows that are not clickable don't need to be extra-large */
-      ? Layout::GetMinimumControlHeight()
-      : Layout::GetMaximumControlHeight();
+    return ::GetMaximumHeight(GetControl(), look, vertical);
 
   case Type::BUTTON:
     return Layout::GetMaximumControlHeight();
