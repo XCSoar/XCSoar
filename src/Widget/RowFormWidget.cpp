@@ -40,10 +40,16 @@ static unsigned
 GetMinimumHeight(const WndProperty &control, const DialogLook &look,
                  bool vertical)
 {
+  const unsigned padding = Layout::GetTextPadding();
+  unsigned height = look.text_font->GetHeight();
   if (vertical && control.HasCaption())
-    return look.text_font->GetHeight() + Layout::GetMinimumControlHeight();
+    height *= 2;
+  height += padding * 2;
 
-  return Layout::GetMinimumControlHeight();
+  if (!control.IsReadOnly() && height < Layout::GetMinimumControlHeight())
+    height = Layout::GetMinimumControlHeight();
+
+  return height;
 }
 
 gcc_pure
@@ -51,17 +57,11 @@ static unsigned
 GetMaximumHeight(const WndProperty &control, const DialogLook &look,
                  bool vertical)
 {
-  if (vertical && control.HasCaption()) {
-    const unsigned min_height = look.text_font->GetHeight()
-      + Layout::GetMinimumControlHeight();
-    return std::max(min_height,
-                    Layout::GetMaximumControlHeight());
-  }
+  unsigned height = GetMinimumHeight(control, look, vertical);
+  if (!control.IsReadOnly() && height < Layout::GetMaximumControlHeight())
+    height = Layout::GetMaximumControlHeight();
 
-  return control.IsReadOnly()
-    /* rows that are not clickable don't need to be extra-large */
-    ? Layout::GetMinimumControlHeight()
-    : Layout::GetMaximumControlHeight();
+  return height;
 }
 
 unsigned
