@@ -36,6 +36,8 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   theta = f12.angle();
   const fixed csq = f12.dsq();
   a = (f1.Distance(ap) + f2.Distance(ap));
+
+  assert(sqr(a) >= csq);
   b = Half(sqrt(sqr(a) - csq));
   a = Half(a);
 

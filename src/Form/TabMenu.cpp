@@ -236,6 +236,16 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   return buttons[page]->rc;
 }
 
+const PixelRect &
+TabMenuControl::GetButtonPosition(MenuTabIndex i) const
+{
+  assert(!i.IsNone());
+
+  return i.IsMain()
+    ? GetMainMenuButtonSize(i.main_index)
+    : GetSubMenuButtonSize(GetPageNum(i));
+}
+
 TabMenuControl::MenuTabIndex
 TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 {

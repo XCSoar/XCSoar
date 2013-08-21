@@ -103,6 +103,11 @@ public:
       return main_index == other.main_index &&
         sub_index == other.sub_index;
     }
+
+    constexpr
+    bool operator!=(const MenuTabIndex &other) const {
+      return !(*this == other);
+    }
   };
 
 protected:
@@ -208,6 +213,9 @@ public:
    */
   gcc_pure
   const PixelRect &GetMainMenuButtonSize(unsigned i) const;
+
+  gcc_pure
+  const PixelRect &GetButtonPosition(MenuTabIndex i) const;
 
   /**
    * @param main_menu_index
