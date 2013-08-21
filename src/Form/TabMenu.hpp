@@ -103,6 +103,11 @@ public:
       return main_index == other.main_index &&
         sub_index == other.sub_index;
     }
+
+    constexpr
+    bool operator!=(const MenuTabIndex &other) const {
+      return !(*this == other);
+    }
   };
 
 protected:
