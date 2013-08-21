@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-04 14:14+0200\n"
-"PO-Revision-Date: 2013-05-22 19:46+0000\n"
+"PO-Revision-Date: 2013-08-20 16:45+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-22 21:12+0000\n"
-"X-Generator: Launchpad (build 16626)\n"
+"X-Launchpad-Export-Date: 2013-08-21 11:09+0000\n"
+"X-Generator: Launchpad (build 16734)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -8550,7 +8550,7 @@ msgstr "La fréquence de la note correspondante au vario le plus positif."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr "Montée min. de la bande muette"
+msgstr "Limite min. de la bande muette"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
@@ -8562,7 +8562,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
-msgstr "Montée max. de la bande muette"
+msgstr "Limite max. de la bande muette"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:117
 msgid ""
@@ -9492,6 +9492,12 @@ msgstr ""
 #~ msgid "InfoBox values, small"
 #~ msgstr "Valeurs en InfoBox, petites"
 
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Échec du chargement du profil du planeur \"%s\"!"
+
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
+
 #~ msgid "Keyboard"
 #~ msgstr "Clavier"
 
@@ -9800,6 +9806,9 @@ msgstr ""
 #~ msgstr ""
 #~ "A sélectionner pour enregistrer les échanges de données avec l'appareil "
 #~ "connecté."
+
+#~ msgid "InfoBox Pages"
+#~ msgstr "Pages InfoBoxes"
 
 #~ msgid "Task not closed.\n"
 #~ msgstr "Épreuve non close\n"
