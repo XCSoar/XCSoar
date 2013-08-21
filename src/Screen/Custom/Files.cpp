@@ -96,7 +96,15 @@ static const char *const all_italic_font_paths[] = {
   "/mnt/onboard/XCSoar/fonts/VeraIt.ttf",
   "/opt/xcsoar/share/fonts/VeraIt.ttf",
 #elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed-Oblique.ttf",
   "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraIt.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf",
+  "/usr/share/fonts/corefonts/ariali.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSansOblique.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSansOblique.ttf",
 #endif
   nullptr
 };
@@ -107,7 +115,15 @@ static const char *const all_bold_italic_font_paths[] = {
   "/mnt/onboard/XCSoar/fonts/VeraBI.ttf",
   "/opt/xcsoar/share/fonts/VeraBI.ttf",
 #elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed-BoldOblique.ttf",
   "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraBI.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf",
+  "/usr/share/fonts/corefonts/arialbi.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSansBoldOblique.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSansBoldOblique.ttf",
 #endif
   nullptr
 };
