@@ -209,6 +209,9 @@ public:
   gcc_pure
   const PixelRect &GetMainMenuButtonSize(unsigned i) const;
 
+  gcc_pure
+  const PixelRect &GetButtonPosition(MenuTabIndex i) const;
+
   /**
    * @param main_menu_index
    * @return pointer to button or NULL if index is out of range
