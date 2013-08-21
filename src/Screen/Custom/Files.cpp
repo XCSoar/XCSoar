@@ -44,6 +44,7 @@ static const char *const all_font_paths[] = {
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
   "/usr/share/fonts/TTF/droid/DroidSans.ttf",
   "/usr/share/fonts/droid/DroidSans.ttf",
@@ -75,6 +76,7 @@ static const char *const all_bold_font_paths[] = {
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/TTF/droid/DroidSans-Bold.ttf",
@@ -120,6 +122,7 @@ static const char *const all_monospace_font_paths[] = {
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/DejaVuSansMono.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
   "/usr/share/fonts/TTF/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/DroidSansMono.ttf",
