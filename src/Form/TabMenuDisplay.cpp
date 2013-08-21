@@ -130,7 +130,12 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   if (!down_index.IsNone()) {
     dragging = true;
     SetCapture();
+
+#ifdef USE_GDI
+    Invalidate(GetTabMenuBar().GetButtonPosition(down_index));
+#else
     Invalidate();
+#endif
     return true;
   }
   return PaintWindow::OnMouseDown(x, y);
@@ -155,9 +160,16 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
         GetTabMenuBar().SetCurrentPage(di);
 
       // main menu click
-      else if (di.IsMain())
+      else if (di.IsMain() && selected_index != down_index) {
         selected_index = down_index;
-      Invalidate();
+        Invalidate();
+      } else {
+#ifdef USE_GDI
+        Invalidate(GetTabMenuBar().GetButtonPosition(down_index));
+#else
+        Invalidate();
+#endif
+      }
     }
 
     down_index = TabMenuControl::MenuTabIndex::None();

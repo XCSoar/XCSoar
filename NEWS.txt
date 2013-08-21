@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.6.5 - not yet released
+* user interface
+  - reduce flickering in system configuration
 * map
   - reduce CPU usage of airspace and topography renderer
 * tasks
