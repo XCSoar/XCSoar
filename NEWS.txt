@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.6.6 - not yet released
+
 Version 6.6.5 - 2013/08/21
 * user interface
   - reduce flickering in system configuration
