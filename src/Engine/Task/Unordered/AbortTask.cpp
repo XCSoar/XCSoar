@@ -67,6 +67,7 @@ AbortTask::SetActiveTaskPoint(unsigned index)
     active_task_point = index;
     active_waypoint = task_points[index].point.GetWaypoint().id;
     stats.start.Reset();
+    force_full_update = true;
   }
 }
 
@@ -287,6 +288,7 @@ AbortTask::UpdateSample(const AircraftState &state,
     active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint)) {
       stats.start.Reset();
+      force_full_update = true;
       return true;
     }
   }

@@ -156,6 +156,8 @@ OrderedTask::UpdateGeometry()
       /// so stats are updated
     }
   }
+
+  force_full_update = true;
 }
 
 // TIMES
@@ -797,6 +799,7 @@ OrderedTask::SetActiveTaskPoint(unsigned index)
 
   task_advance.SetArmed(false);
   active_task_point = index;
+  force_full_update = true;
 }
 
 TaskWaypoint*
@@ -1344,6 +1347,7 @@ OrderedTask::RemoveAllPoints()
 
   taskpoint_start = NULL;
   taskpoint_finish = NULL;
+  force_full_update = true;
 }
 
 void
