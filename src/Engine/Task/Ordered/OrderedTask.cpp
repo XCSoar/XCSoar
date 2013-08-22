@@ -185,7 +185,8 @@ OrderedTask::ScanLegStartTime()
 inline fixed
 OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
 {
-  if (full && location.IsValid() && last_min_location.IsValid()) {
+  if (!full && location.IsValid() && last_min_location.IsValid() &&
+      DistanceIsSignificant(location, last_min_location)) {
     const TaskWaypoint *active = GetActiveTaskPoint();
     if (active != nullptr) {
       const GeoPoint &target = active->GetWaypoint().location;
@@ -194,13 +195,13 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
       const unsigned cur_distance =
         (unsigned)location.Distance(target);
 
-      /* skip this call if the distance to the active task point has
-         changed by less than 5%, because we don't expect any relevant
-         changes */
-      if (last_distance >= 2000 && cur_distance >= 2000 &&
-          last_distance * 20 < cur_distance * 21 &&
-          cur_distance * 20 < last_distance * 21)
-        full = false;
+      /* do the full scan only if the distance to the active task
+         point has changed by more than 5%, otherwise we don't expect
+         any relevant changes */
+      if (last_distance < 2000 || cur_distance < 2000 ||
+          last_distance * 20 >= cur_distance * 21 ||
+          cur_distance * 20 >= last_distance * 21)
+        full = true;
     }
   }
 
@@ -267,8 +268,7 @@ OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
   if (force)
     *dmax = ScanDistanceMax();
 
-  bool force_min = force || DistanceIsSignificant(location, last_min_location);
-  *dmin = ScanDistanceMin(location, force_min);
+  *dmin = ScanDistanceMin(location, force);
 }
 
 fixed
