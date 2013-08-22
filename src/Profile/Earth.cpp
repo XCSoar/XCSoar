@@ -41,7 +41,7 @@ Profile::GetGeoPoint(const char *key, GeoPoint &value)
   p = endptr + 1;
   double latitude = ParseDouble(p, &endptr);
   if (endptr == p || *endptr != _T('\0') ||
-      longitude < -90.0 || longitude > 90.0)
+      latitude < -90.0 || latitude > 90.0)
     return false;
 
   value.longitude = Angle::Degrees(longitude);

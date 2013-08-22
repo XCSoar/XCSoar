@@ -130,7 +130,7 @@ MatPoints::ClearMatPoints()
 
   for (auto v = points.begin(); v != points.end(); ) {
     delete *v;
-    points.erase(v);
+    v = points.erase(v);
   }
   assert(points.empty());
 }

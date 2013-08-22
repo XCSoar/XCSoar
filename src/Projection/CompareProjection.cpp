@@ -33,8 +33,8 @@ CompareProjection::FourCorners::FourCorners(const WindowProjection &projection)
 
 gcc_pure
 static fixed
-SimpleSquareDistance(const GeoPoint &a, const GeoPoint &b,
-                     const fixed latitude_cos)
+SimpleDistance(const GeoPoint &a, const GeoPoint &b,
+               const fixed latitude_cos)
 {
   return TinyHypot((a.longitude - b.longitude).AsDelta().Native(),
                    (a.latitude - b.latitude).AsDelta().Native() * latitude_cos);
@@ -43,9 +43,9 @@ SimpleSquareDistance(const GeoPoint &a, const GeoPoint &b,
 CompareProjection::CompareProjection(const WindowProjection &projection)
   :corners(projection),
    latitude_cos(corners.top_left.latitude.fastcosine()),
-   max_delta(SimpleSquareDistance(corners.top_left, corners.top_right,
-                                  latitude_cos) /
-             (projection.GetScreenWidth() * projection.GetScreenWidth()))
+   max_delta(SimpleDistance(corners.top_left, corners.top_right,
+                            latitude_cos) /
+             projection.GetScreenWidth())
 {
 }
 
@@ -53,14 +53,14 @@ bool
 CompareProjection::Compare(const CompareProjection &other) const
 {
   return positive(max_delta) &&
-    SimpleSquareDistance(corners.top_left, other.corners.top_left,
-                         latitude_cos) <= max_delta &&
-    SimpleSquareDistance(corners.top_right, other.corners.top_right,
-                         latitude_cos) <= max_delta &&
-    SimpleSquareDistance(corners.bottom_left, other.corners.bottom_left,
-                         latitude_cos) <= max_delta &&
-    SimpleSquareDistance(corners.bottom_right, other.corners.bottom_right,
-                         latitude_cos) <= max_delta;
+    SimpleDistance(corners.top_left, other.corners.top_left,
+                   latitude_cos) <= max_delta &&
+    SimpleDistance(corners.top_right, other.corners.top_right,
+                   latitude_cos) <= max_delta &&
+    SimpleDistance(corners.bottom_left, other.corners.bottom_left,
+                   latitude_cos) <= max_delta &&
+    SimpleDistance(corners.bottom_right, other.corners.bottom_right,
+                   latitude_cos) <= max_delta;
 }
 
 bool

@@ -61,9 +61,17 @@ XCSoar TE
   - TravisCI support
 
 
-Version 6.6.5 - not yet released
+Version 6.6.5 - 2013/08/21
+* user interface
+  - reduce flickering in system configuration
+* map
+  - reduce CPU usage of airspace and topography renderer
 * tasks
   - remove keyhole from the BGA start sector zone
+* devices
+  - enable Nook's internal GPS for mock locations (#2999)
+* configuration
+  - fix loading home waypoint on longitudes bigger than 90 degrees
 
 Version 6.6.4 - 2013/07/11
 * map
