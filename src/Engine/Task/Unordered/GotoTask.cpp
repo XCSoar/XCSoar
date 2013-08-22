@@ -85,6 +85,7 @@ GotoTask::DoGoto(const Waypoint & wp)
     delete tp;
     tp = new UnorderedTaskPoint(wp, task_behaviour);
     stats.start.Reset();
+    force_full_update = true;
     return true;
   } else {
     return false;

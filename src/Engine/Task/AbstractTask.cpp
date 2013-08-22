@@ -32,9 +32,9 @@ AbstractTask::AbstractTask(TaskType _type,
                            const TaskBehaviour &tb)
   :TaskInterface(_type),
    active_task_point(0),
-   active_task_point_last(0-1),
    task_events(NULL),
    task_behaviour(tb),
+   force_full_update(true),
    mc_lpf(fixed(8)),
    ce_lpf(fixed(60)),
    em_lpf(fixed(60)),
@@ -247,7 +247,8 @@ AbstractTask::Update(const AircraftState &state,
   const bool full_update = 
     (state.location.IsValid() && state_last.location.IsValid() &&
      CheckTransitions(state, state_last)) ||
-    (active_task_point != active_task_point_last);
+    force_full_update;
+  force_full_update = false;
 
   UpdateStatsDistances(state.location, full_update);
   UpdateGlideSolutions(state, glide_polar);
@@ -259,7 +260,7 @@ AbstractTask::Update(const AircraftState &state,
   UpdateStatsSpeeds(state.time);
   UpdateFlightMode();
 
-  active_task_point_last = active_task_point;
+  assert(!force_full_update);
 
   return sample_updated || full_update;
 }
@@ -312,9 +313,9 @@ void
 AbstractTask::Reset()
 {
   ResetAutoMC();
-  active_task_point_last = 0 - 1;
   ce_lpf.Reset(fixed(1));
   stats.reset();
+  force_full_update = true;
 }
 
 fixed

@@ -45,8 +45,6 @@ class AbstractTask:
 protected:
   /** task point sequence index */
   unsigned active_task_point;
-  /** task point sequence index at last update*/
-  unsigned active_task_point_last;
   /** statistics of this task */
   TaskStats stats;
   TaskStatsComputer stats_computer;
@@ -55,6 +53,13 @@ protected:
 
   /** settings */
   TaskBehaviour task_behaviour;
+
+  /**
+   * Setting this flag enforces a full Update() in the next
+   * #CalculationThread iteration.  Set it when the task has been
+   * edited.
+   */
+  bool force_full_update;
 
 private:
   /** low pass filter on best MC calculations */

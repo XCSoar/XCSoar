@@ -56,6 +56,10 @@ Version 6.7 - not yet released
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
 
+Version 6.6.6 - not yet released
+* tasks
+  - fix parsing of .cup task files
+
 Version 6.6.5 - 2013/08/21
 * user interface
   - reduce flickering in system configuration
