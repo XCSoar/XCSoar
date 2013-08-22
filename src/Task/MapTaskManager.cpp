@@ -213,14 +213,6 @@ MapTaskManager::InsertInTask(const Waypoint &waypoint)
   return result;
 }
 
-MapTaskManager::TaskEditResult
-MapTaskManager::InsertInMatProForma(OrderedTask &task,
-                                    const Waypoint &waypoint)
-{
-  assert(task.CheckTask());
-  return InsertInTask(&task, waypoint);
-}
-
 static MapTaskManager::TaskEditResult
 ReplaceInTask(OrderedTask *task, const Waypoint &waypoint)
 {
