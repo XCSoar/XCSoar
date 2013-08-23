@@ -231,7 +231,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
       ? 0
       /* layout.geometry is the effective layout, while
          settings.geometry is the configured layout */
-      : InfoBoxLayout::GetBorder(layout.geometry, i);
+      : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
                                      Border, settings, look, units_look,

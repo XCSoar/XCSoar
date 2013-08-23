@@ -52,7 +52,7 @@ InfoBoxSettings::SetDefaults()
 {
   use_final_glide = false;
 
-  geometry = Geometry::TOP_4_BOTTOM_4;
+  geometry = Geometry::SPLIT_8;
 
   inverse = false;
   use_colors = true;

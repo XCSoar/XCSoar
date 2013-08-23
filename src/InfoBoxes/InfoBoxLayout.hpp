@@ -33,6 +33,8 @@ namespace InfoBoxLayout
   struct Layout {
     InfoBoxSettings::Geometry geometry;
 
+    bool landscape;
+
     UPixelScalar control_width, control_height;
 
     unsigned count;
@@ -57,7 +59,7 @@ namespace InfoBoxLayout
 
   gcc_const
   int
-  GetBorder(InfoBoxSettings::Geometry geometry, unsigned i);
+  GetBorder(InfoBoxSettings::Geometry geometry, bool landscape, unsigned i);
 };
 
 #endif

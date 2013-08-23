@@ -394,15 +394,14 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
   // Automatic mode - follow info boxes
   if (val == TrafficSettings::GaugeLocation::Auto) {
     switch (InfoBoxManager::layout.geometry) {
-    case InfoBoxSettings::Geometry::TOP_8:
-      val = TrafficSettings::GaugeLocation::TopRight;
+    case InfoBoxSettings::Geometry::TOP_LEFT_8:
+    case InfoBoxSettings::Geometry::TOP_LEFT_12:
+      if (InfoBoxManager::layout.landscape)
+        val = TrafficSettings::GaugeLocation::BottomLeft;
+      else
+        val = TrafficSettings::GaugeLocation::TopRight;
       break;
-    case InfoBoxSettings::Geometry::LEFT_8:
-      val = TrafficSettings::GaugeLocation::BottomLeft;
-      break;
-    case InfoBoxSettings::Geometry::TOP_12:
-      val = TrafficSettings::GaugeLocation::TopLeft;
-      break;
+
     default:
       val = TrafficSettings::GaugeLocation::BottomRight;    // Assume bottom right unles...
       break;
