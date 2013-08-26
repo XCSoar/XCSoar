@@ -82,7 +82,7 @@ LoadAltairLogFonts(FontSettings &settings)
   InitialiseLogfont(&settings.infobox_small,
                     _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
-                    10, false, false, false);
+                    12, false, false, false);
 }
 
 static void
