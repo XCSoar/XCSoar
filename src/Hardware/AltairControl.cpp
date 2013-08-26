@@ -49,7 +49,7 @@ AltairControl::ShortBeep()
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_SHORTBEEP,
-                           NULL, 0, NULL, 0, NULL, NULL) != 0;
+                           NULL, 0, NULL, 0, NULL, NULL);
 }
 
 bool
@@ -60,7 +60,7 @@ AltairControl::GetBacklight(int &value_r)
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTGETVALUE,
                            &value_r, sizeof(value_r),
-                           NULL, 0, NULL, NULL) != 0;
+                           NULL, 0, NULL, NULL);
 }
 
 bool
@@ -70,5 +70,5 @@ AltairControl::SetBacklight(int value)
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTSETVALUE,
-                           &value, sizeof(value), NULL, 0, NULL, NULL) != 0;
+                           &value, sizeof(value), NULL, 0, NULL, NULL);
 }
