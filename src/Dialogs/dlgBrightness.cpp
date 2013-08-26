@@ -33,26 +33,59 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "Time/PeriodClock.hpp"
+#include "RateLimiter.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "UIGlobals.hpp"
 
+/**
+ * This class limits the rate at which we forward user input to the
+ * backlight.
+ */
+class AltairBacklightRateLimiter final
+  : private RateLimiter {
+  int current_value, new_value;
+
+public:
+  AltairBacklightRateLimiter()
+    :RateLimiter(200, 50), current_value(-1), new_value(-1) {}
+
+  ~AltairBacklightRateLimiter() {
+    Apply();
+  }
+
+  void SetBacklight(int _value) {
+    if (_value == new_value)
+      return;
+
+    new_value = _value;
+    if (new_value != current_value)
+      RateLimiter::Trigger();
+    else
+      RateLimiter::Cancel();
+  }
+
+private:
+  void Apply() {
+    if (new_value != current_value && altair_control.SetBacklight(new_value))
+      current_value = new_value;
+  }
+
+  virtual void Run() override {
+    Apply();
+  }
+};
+
+static AltairBacklightRateLimiter *rate_limiter;
 static bool EnableAutoBrightness = true;
 static unsigned BrightnessValue = 0;
 
 static void
 UpdateValues()
 {
-  static PeriodClock last_time;
-  if (!last_time.CheckUpdate(200))
-    return;
-
-  if (EnableAutoBrightness) {
-    altair_control.SetBacklight(AltairControl::BACKLIGHT_AUTO);
-  } else {
-    altair_control.SetBacklight(BrightnessValue);
-  }
+  rate_limiter->SetBacklight(EnableAutoBrightness
+                             ? AltairControl::BACKLIGHT_AUTO
+                             : int(BrightnessValue));
 }
 
 static void
@@ -103,9 +136,10 @@ dlgBrightnessShowModal()
   LoadFormProperty(*wf, _T("prpBrightness"), BrightnessValue);
   LoadFormProperty(*wf, _T("prpAuto"), EnableAutoBrightness);
 
-  wf->ShowModal();
+  AltairBacklightRateLimiter _rate_limiter;
+  rate_limiter = &_rate_limiter;
 
-  UpdateValues();
+  wf->ShowModal();
 
   delete wf;
 }
