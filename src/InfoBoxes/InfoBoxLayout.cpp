@@ -44,8 +44,7 @@ namespace InfoBoxLayout
 {
   gcc_const
   static InfoBoxSettings::Geometry
-  ValidateGeometry(InfoBoxSettings::Geometry geometry,
-                   UPixelScalar width, UPixelScalar height);
+  ValidateGeometry(InfoBoxSettings::Geometry geometry, PixelSize screen_size);
 
   static void
   CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
@@ -113,8 +112,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 {
   const PixelSize screen_size = rc.GetSize();
 
-  geometry = ValidateGeometry(geometry, screen_size.cx,
-                              screen_size.cy);
+  geometry = ValidateGeometry(geometry, screen_size);
 
   Layout layout;
 
@@ -273,13 +271,13 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 
 static InfoBoxSettings::Geometry
 InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
-                                UPixelScalar width, UPixelScalar height)
+                                PixelSize screen_size)
 {
   if ((unsigned)geometry >= ARRAY_SIZE(geometry_counts))
     /* out of range */
     geometry = InfoBoxSettings::Geometry::SPLIT_8;
 
-  if (width > height) {
+  if (screen_size.cx > screen_size.cy) {
     /* landscape */
 
     switch (geometry) {
@@ -310,7 +308,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     case InfoBoxSettings::Geometry::TOP_8_VARIO:
       return InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO;
     }
-  } else if (width == height) {
+  } else if (screen_size.cx == screen_size.cy) {
     /* square */
     geometry = InfoBoxSettings::Geometry::RIGHT_5;
   } else {
