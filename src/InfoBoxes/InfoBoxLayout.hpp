@@ -35,7 +35,7 @@ namespace InfoBoxLayout
 
     bool landscape;
 
-    UPixelScalar control_width, control_height;
+    PixelSize control_size;
 
     unsigned count;
     PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];

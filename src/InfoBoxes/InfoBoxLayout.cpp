@@ -57,10 +57,10 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
            PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
 {
   PixelRect *const end = p + n;
-  const PixelScalar bottom = top + layout.control_height;
+  const PixelScalar bottom = top + layout.control_size.cy;
   while (p < end) {
     p->left = left;
-    left += layout.control_width;
+    left += layout.control_size.cx;
     p->right = left;
     p->top = top;
     p->bottom = bottom;
@@ -75,7 +75,7 @@ static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
               PixelRect *p, unsigned n, PixelScalar left, PixelScalar bottom)
 {
-  PixelScalar top = bottom - layout.control_height;
+  PixelScalar top = bottom - layout.control_size.cy;
   MakeTopRow(layout, p, n, left, top);
   return top;
 }
@@ -85,12 +85,12 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
                PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
 {
   PixelRect *const end = p + n;
-  const PixelScalar right = left + layout.control_width;
+  const PixelScalar right = left + layout.control_size.cx;
   while (p < end) {
     p->left = left;
     p->right = right;
     p->top = top;
-    top += layout.control_height;
+    top += layout.control_size.cy;
     p->bottom = top;
 
     ++p;
@@ -103,7 +103,7 @@ static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
                 PixelRect *p, unsigned n, PixelScalar right, PixelScalar top)
 {
-  PixelScalar left = right - layout.control_width;
+  PixelScalar left = right - layout.control_size.cx;
   MakeLeftColumn(layout, p, n, left, top);
   return left;
 }
@@ -143,9 +143,9 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
-    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.left = rc.right - layout.control_size.cx;
     layout.vario.right = rc.right;
-    layout.vario.top = rc.bottom - layout.control_height * 2;
+    layout.vario.top = rc.bottom - layout.control_size.cy * 2;
     layout.vario.bottom = rc.bottom;
 
     /* fall through */
@@ -167,10 +167,10 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
-    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.left = rc.right - layout.control_size.cx;
     layout.vario.right = rc.right;
     layout.vario.top = rc.top;
-    layout.vario.bottom = rc.top + layout.control_height * 2;
+    layout.vario.bottom = rc.top + layout.control_size.cy * 2;
 
     /* fall through */
 
@@ -188,14 +188,14 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
-    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.left = rc.right - layout.control_size.cx;
     layout.vario.right = rc.right;
     layout.vario.top = 0;
-    layout.vario.bottom = layout.vario.top + layout.control_height * 3;
+    layout.vario.bottom = layout.vario.top + layout.control_size.cy * 3;
 
     rc.left = MakeLeftColumn(layout, layout.positions, 6, rc.left, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3, rc.right,
-                               rc.top + 3 * layout.control_height);
+                               rc.top + 3 * layout.control_size.cy);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
@@ -234,13 +234,13 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
-    layout.vario.left = rc.right - layout.control_width;
+    layout.vario.left = rc.right - layout.control_size.cx;
     layout.vario.right = rc.right;
     layout.vario.top = 0;
-    layout.vario.bottom = layout.vario.top + layout.control_height * 3;
+    layout.vario.bottom = layout.vario.top + layout.control_size.cy * 3;
 
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3,
-                               rc.right, rc.top + 3 * layout.control_height);
+                               rc.right, rc.top + 3 * layout.control_size.cy);
     rc.right = MakeRightColumn(layout, layout.positions, 6, rc.right, rc.top);
     break;
 
@@ -384,13 +384,13 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::TOP_LEFT_12:
     if (landscape) {
-      layout.control_height = 2 * screen_size.cy / layout.count;
-      layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
-                                                         layout.control_height);
+      layout.control_size.cy = 2 * screen_size.cy / layout.count;
+      layout.control_size.cx = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                           layout.control_size.cy);
     } else {
-      layout.control_width = 2 * screen_size.cx / layout.count;
-      layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                        layout.control_width);
+      layout.control_size.cx = 2 * screen_size.cx / layout.count;
+      layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                         layout.control_size.cx);
     }
 
     break;
@@ -398,48 +398,48 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   case InfoBoxSettings::Geometry::TOP_LEFT_4:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:
     if (landscape) {
-      layout.control_height = screen_size.cy / layout.count;
-      layout.control_width = CalculateInfoBoxColumnWidth(screen_size.cx,
-                                                         layout.control_height);
+      layout.control_size.cy = screen_size.cy / layout.count;
+      layout.control_size.cx = CalculateInfoBoxColumnWidth(screen_size.cx,
+                                                           layout.control_size.cy);
     } else {
-      layout.control_width = screen_size.cx / layout.count;
-      layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                        layout.control_width);
+      layout.control_size.cx = screen_size.cx / layout.count;
+      layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                         layout.control_size.cx);
     }
 
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     // calculate control dimensions
-    layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                      layout.control_width);
+    layout.control_size.cx = 2 * screen_size.cx / (layout.count + 2);
+    layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                       layout.control_size.cx);
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     // calculate control dimensions
-    layout.control_width = 2 * screen_size.cx / (layout.count + 2);
-    layout.control_height = CalculateInfoBoxRowHeight(screen_size.cy,
-                                                      layout.control_width);
+    layout.control_size.cx = 2 * screen_size.cx / (layout.count + 2);
+    layout.control_size.cy = CalculateInfoBoxRowHeight(screen_size.cy,
+                                                       layout.control_size.cx);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
     // calculate control dimensions
-    layout.control_height = screen_size.cy / 6;
+    layout.control_size.cy = screen_size.cy / 6;
     // preserve relative shape
-    layout.control_width = layout.control_height * 1.44;
+    layout.control_size.cx = layout.control_size.cy * 1.44;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_5:
     // calculate control dimensions
-    layout.control_width = screen_size.cx / 5;
-    layout.control_height = screen_size.cy / 5;
+    layout.control_size.cx = screen_size.cx / 5;
+    layout.control_size.cy = screen_size.cy / 5;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    layout.control_height = screen_size.cy / 8;
-    layout.control_width = layout.control_height * 1.44;
+    layout.control_size.cy = screen_size.cy / 8;
+    layout.control_size.cx = layout.control_size.cy * 1.44;
     break;
 
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
