@@ -25,12 +25,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-enum {
-  IOCTL_TRA_BACKLIGHTSETVALUE = 5000,
-  IOCTL_TRA_BACKLIGHTGETVALUE = 5001,
-  IOCTL_TRA_GETINFO = 5030,
-  IOCTL_TRA_SHORTBEEP = 5060,
-};
+static constexpr DWORD IOCTL_TRA_BACKLIGHTSETVALUE = 5000;
+static constexpr DWORD IOCTL_TRA_BACKLIGHTGETVALUE = 5001;
+static constexpr DWORD IOCTL_TRA_GETINFO = 5030;
+static constexpr DWORD IOCTL_TRA_SHORTBEEP = 5060;
 
 AltairControl::AltairControl()
  :handle(::CreateFile(_T("TRA1:"), GENERIC_READ|GENERIC_WRITE, 0,
