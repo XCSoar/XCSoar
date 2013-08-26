@@ -65,6 +65,7 @@ InitialiseLogfont(LOGFONT *font, const TCHAR *facename, unsigned height,
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
+  InitialiseLogfont(&settings.dialog, _T("RasterGothicTwelveCond"), 13);
   InitialiseLogfont(&settings.infobox,
                     _T("RasterGothicTwentyFourCond"), 24, true);
   InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);
