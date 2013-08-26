@@ -53,7 +53,7 @@ namespace InfoBoxLayout
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
-           PixelRect *p, unsigned n, int left, int top)
+           PixelRect *p, unsigned n, int left, int right, int top)
 {
   PixelRect *const end = p + n;
   const int bottom = top + layout.control_size.cy;
@@ -67,21 +67,24 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
     ++p;
   }
 
+  /* assign remaining pixels to last InfoBox */
+  p[-1].right = right;
+
   return bottom;
 }
 
 static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
-              PixelRect *p, unsigned n, int left, int bottom)
+              PixelRect *p, unsigned n, int left, int right, int bottom)
 {
   int top = bottom - layout.control_size.cy;
-  MakeTopRow(layout, p, n, left, top);
+  MakeTopRow(layout, p, n, left, right, top);
   return top;
 }
 
 static int
 MakeLeftColumn(const InfoBoxLayout::Layout &layout,
-               PixelRect *p, unsigned n, int left, int top)
+               PixelRect *p, unsigned n, int left, int top, int bottom)
 {
   PixelRect *const end = p + n;
   const int right = left + layout.control_size.cx;
@@ -95,15 +98,18 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
     ++p;
   }
 
+  /* assign remaining pixels to last InfoBox */
+  p[-1].bottom = bottom;
+
   return right;
 }
 
 static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
-                PixelRect *p, unsigned n, int right, int top)
+                PixelRect *p, unsigned n, int right, int top, int bottom)
 {
   int left = right - layout.control_size.cx;
-  MakeLeftColumn(layout, p, n, left, top);
+  MakeLeftColumn(layout, p, n, left, top, bottom);
   return left;
 }
 
@@ -129,13 +135,15 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
   case InfoBoxSettings::Geometry::SPLIT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
     if (layout.landscape) {
-      rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
+      rc.left = MakeLeftColumn(layout, layout.positions, 4,
+                               rc.left, rc.top, rc.bottom);
       rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
     } else {
-      rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions, 4,
+                          rc.left, rc.right, rc.top);
       rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
     }
 
     break;
@@ -152,14 +160,14 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
   case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_8:
     if (layout.landscape) {
       rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
       rc.right = MakeRightColumn(layout, layout.positions, 4,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
     } else {
       rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
       rc.bottom = MakeBottomRow(layout, layout.positions, 4,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
     }
 
     break;
@@ -175,12 +183,15 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_8:
     if (layout.landscape) {
-      rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
+      rc.left = MakeLeftColumn(layout, layout.positions, 4,
+                               rc.left, rc.top, rc.bottom);
       rc.left = MakeLeftColumn(layout, layout.positions + 4, 4,
-                               rc.left, rc.top);
+                               rc.left, rc.top, rc.bottom);
     } else {
-      rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
-      rc.top = MakeTopRow(layout, layout.positions + 4, 4, rc.left, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions, 4,
+                          rc.left, rc.right, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions + 4, 4,
+                          rc.left, rc.right, rc.top);
     }
 
     break;
@@ -191,44 +202,49 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     layout.vario.top = 0;
     layout.vario.bottom = layout.vario.top + layout.control_size.cy * 3;
 
-    rc.left = MakeLeftColumn(layout, layout.positions, 6, rc.left, rc.top);
+    rc.left = MakeLeftColumn(layout, layout.positions, 6,
+                             rc.left, rc.top, rc.bottom);
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3, rc.right,
-                               rc.top + 3 * layout.control_size.cy);
+                               rc.top + 3 * layout.control_size.cy, rc.bottom);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
   case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_12:
     if (layout.landscape) {
       rc.right = MakeRightColumn(layout, layout.positions + 6, 6,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
       rc.right = MakeRightColumn(layout, layout.positions, 6,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
     } else {
       rc.bottom = MakeBottomRow(layout, layout.positions + 6, 6,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
       rc.bottom = MakeBottomRow(layout, layout.positions, 6,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
     }
 
     break;
 
   case InfoBoxSettings::Geometry::TOP_LEFT_12:
     if (layout.landscape) {
-      rc.left = MakeLeftColumn(layout, layout.positions, 6, rc.left, rc.top);
+      rc.left = MakeLeftColumn(layout, layout.positions, 6,
+                               rc.left, rc.top, rc.bottom);
       rc.left = MakeLeftColumn(layout, layout.positions + 6, 6,
-                               rc.left, rc.top);
+                               rc.left, rc.top, rc.bottom);
     } else {
-      rc.top = MakeTopRow(layout, layout.positions, 6, rc.left, rc.top);
-      rc.top = MakeTopRow(layout, layout.positions + 6, 6, rc.left, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions, 6,
+                          rc.left, rc.right, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions + 6, 6,
+                          rc.left, rc.right, rc.top);
     }
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
     rc.right = MakeRightColumn(layout, layout.positions + 16, 8,
-                               rc.right, rc.top);
+                               rc.right, rc.top, rc.bottom);
     rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
-                               rc.right, rc.top);
-    rc.right = MakeRightColumn(layout, layout.positions, 8, rc.right, rc.top);
+                               rc.right, rc.top, rc.bottom);
+    rc.right = MakeRightColumn(layout, layout.positions, 8,
+                               rc.right, rc.top, rc.bottom);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
@@ -238,30 +254,35 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     layout.vario.bottom = layout.vario.top + layout.control_size.cy * 3;
 
     rc.right = MakeRightColumn(layout, layout.positions + 6, 3,
-                               rc.right, rc.top + 3 * layout.control_size.cy);
-    rc.right = MakeRightColumn(layout, layout.positions, 6, rc.right, rc.top);
+                               rc.right,
+                               rc.top + 3 * layout.control_size.cy, rc.bottom);
+    rc.right = MakeRightColumn(layout, layout.positions, 6,
+                               rc.right, rc.top, rc.bottom);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_5:
-    rc.right = MakeRightColumn(layout, layout.positions, 5, rc.right, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions, 5,
+                               rc.right, rc.top, rc.bottom);
     break;
 
   case InfoBoxSettings::Geometry::TOP_LEFT_4:
   case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_4:
     if (layout.landscape)
-      rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
+      rc.left = MakeLeftColumn(layout, layout.positions, 4,
+                               rc.left, rc.top, rc.bottom);
     else
-      rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
+      rc.top = MakeTopRow(layout, layout.positions, 4,
+                          rc.left, rc.right, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:
   case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_4:
     if (layout.landscape)
       rc.right = MakeRightColumn(layout, layout.positions, 4,
-                                 rc.right, rc.top);
+                                 rc.right, rc.top, rc.bottom);
     else
       rc.bottom = MakeBottomRow(layout, layout.positions, 4,
-                                rc.left, rc.bottom);
+                                rc.left, rc.right, rc.bottom);
     break;
   };
 
