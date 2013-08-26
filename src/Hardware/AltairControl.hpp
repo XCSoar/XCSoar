@@ -37,10 +37,6 @@ public:
   AltairControl();
   ~AltairControl();
 
-  bool error() const {
-    return handle == INVALID_HANDLE_VALUE;
-  }
-
   bool ShortBeep();
 
   /**
