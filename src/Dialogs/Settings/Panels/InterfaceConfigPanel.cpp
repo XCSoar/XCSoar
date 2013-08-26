@@ -57,11 +57,11 @@ enum ControlIndex {
 };
 
 class InterfaceConfigPanel final : public RowFormWidget {
+  WndButton *buttonFonts;
+
 public:
   InterfaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()), buttonFonts(0) {}
-
-  WndButton *buttonFonts;
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
