@@ -53,10 +53,10 @@ namespace InfoBoxLayout
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
-           PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
+           PixelRect *p, unsigned n, int left, int top)
 {
   PixelRect *const end = p + n;
-  const PixelScalar bottom = top + layout.control_size.cy;
+  const int bottom = top + layout.control_size.cy;
   while (p < end) {
     p->left = left;
     left += layout.control_size.cx;
@@ -72,19 +72,19 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
-              PixelRect *p, unsigned n, PixelScalar left, PixelScalar bottom)
+              PixelRect *p, unsigned n, int left, int bottom)
 {
-  PixelScalar top = bottom - layout.control_size.cy;
+  int top = bottom - layout.control_size.cy;
   MakeTopRow(layout, p, n, left, top);
   return top;
 }
 
 static int
 MakeLeftColumn(const InfoBoxLayout::Layout &layout,
-               PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
+               PixelRect *p, unsigned n, int left, int top)
 {
   PixelRect *const end = p + n;
-  const PixelScalar right = left + layout.control_size.cx;
+  const int right = left + layout.control_size.cx;
   while (p < end) {
     p->left = left;
     p->right = right;
@@ -100,9 +100,9 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
-                PixelRect *p, unsigned n, PixelScalar right, PixelScalar top)
+                PixelRect *p, unsigned n, int right, int top)
 {
-  PixelScalar left = right - layout.control_size.cx;
+  int left = right - layout.control_size.cx;
   MakeLeftColumn(layout, p, n, left, top);
   return left;
 }
