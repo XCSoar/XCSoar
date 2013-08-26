@@ -49,7 +49,7 @@ UpdateValues()
     return;
 
   if (EnableAutoBrightness) {
-    altair_control.SetBacklight(-100);
+    altair_control.SetBacklight(AltairControl::BACKLIGHT_AUTO);
   } else {
     altair_control.SetBacklight(BrightnessValue);
   }
