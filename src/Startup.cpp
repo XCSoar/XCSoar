@@ -203,7 +203,9 @@ Startup()
   TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
-  style.Resizable();
+
+  if (!IsWindowsCE())
+    style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow(CommonInterface::status_messages);
