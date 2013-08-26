@@ -38,8 +38,6 @@ Copyright_License {
 #include "Hardware/AltairControl.hpp"
 #include "UIGlobals.hpp"
 
-static WndForm *wf=NULL;
-
 static bool EnableAutoBrightness = true;
 static unsigned BrightnessValue = 0;
 
@@ -97,8 +95,8 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 void
 dlgBrightnessShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_BRIGHTNESS"));
+  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                           _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)
     return;
 
