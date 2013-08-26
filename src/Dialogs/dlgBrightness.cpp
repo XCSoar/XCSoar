@@ -22,17 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 
 #ifdef GNAV
 
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Button.hpp"
-#include "Units/Units.hpp"
-#include "Form/DataField/Base.hpp"
-#include "Form/DataField/Boolean.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Language/Language.hpp"
 #include "RateLimiter.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"
@@ -76,72 +72,77 @@ private:
   }
 };
 
-static AltairBacklightRateLimiter *rate_limiter;
-static bool EnableAutoBrightness = true;
-static unsigned BrightnessValue = 0;
+class AltairBacklightWidget final
+  : public RowFormWidget, private DataFieldListener {
+  enum Controls {
+    AUTO, BRIGHTNESS,
+  };
 
-static void
-UpdateValues()
-{
-  rate_limiter->SetBacklight(EnableAutoBrightness
-                             ? AltairControl::BACKLIGHT_AUTO
-                             : int(BrightnessValue));
-}
+  AltairBacklightRateLimiter rate_limiter;
 
-static void
-OnAutoData(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  DataFieldBoolean &df = *(DataFieldBoolean *)Sender;
+public:
+  AltairBacklightWidget(const DialogLook &_look)
+    :RowFormWidget(_look) {}
 
-  switch (Mode) {
-  case DataField::daChange:
-    EnableAutoBrightness = df.GetAsBoolean();
-    UpdateValues();
-    break;
+  void Apply();
 
-  case DataField::daSpecial:
-    return;
-  }
-}
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-static void
-OnBrightnessData(DataField *Sender,
-                 DataField::DataAccessMode Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    BrightnessValue = Sender->GetAsInteger();
-    UpdateValues();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnAutoData),
-  DeclareCallBackEntry(OnBrightnessData),
-  DeclareCallBackEntry(NULL)
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
 };
+
+void
+AltairBacklightWidget::Apply()
+{
+  const bool auto_brightness = GetValueBoolean(AUTO);
+  SetRowEnabled(BRIGHTNESS, !auto_brightness);
+
+  rate_limiter.SetBacklight(auto_brightness
+                            ? AltairControl::BACKLIGHT_AUTO
+                            : GetValueInteger(BRIGHTNESS));
+}
+
+void
+AltairBacklightWidget::OnModified(DataField &df)
+{
+  Apply();
+}
+
+void
+AltairBacklightWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  int value;
+  if (!altair_control.GetBacklight(value))
+    value = 100;
+
+  const bool auto_brightness = value == AltairControl::BACKLIGHT_AUTO;
+
+  AddBoolean(_("Auto"),
+             _("Enables automatic backlight, responsive to light sensor."),
+             auto_brightness, this);
+
+  AddInteger(_("Brightness"),
+             _("Adjusts backlight. When automatic backlight is enabled, this biases the backlight algorithm. When the automatic backlight is disabled, this controls the backlight directly."),
+             _T("%u %%"), _T("%u"), 0, 100, 5,
+             value < 0 ? 100 : value, this);
+
+  SetRowEnabled(BRIGHTNESS, !auto_brightness);
+}
 
 void
 dlgBrightnessShowModal()
 {
-  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                           _T("IDR_XML_BRIGHTNESS"));
-  if (wf == NULL)
-    return;
-
-  LoadFormProperty(*wf, _T("prpBrightness"), BrightnessValue);
-  LoadFormProperty(*wf, _T("prpAuto"), EnableAutoBrightness);
-
-  AltairBacklightRateLimiter _rate_limiter;
-  rate_limiter = &_rate_limiter;
-
-  wf->ShowModal();
-
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  AltairBacklightWidget widget(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Screen Brightness"),
+                    &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
 
 #else /* !GNAV */
