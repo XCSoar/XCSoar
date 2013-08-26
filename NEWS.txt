@@ -19,6 +19,7 @@ Version 6.7 - not yet released
   - suppress drawing duplicate topography labels
   - draw projected path when turning
   - additional zoom levels (#3037)
+  - global "don't fill airspace" setting (#3047)
 * infoboxes
   - new content "Speed task last hour"
   - new content "Next distance (nominal)"
