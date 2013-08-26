@@ -43,7 +43,9 @@ static WndForm *wf=NULL;
 static bool EnableAutoBrightness = true;
 static unsigned BrightnessValue = 0;
 
-static void UpdateValues() {
+static void
+UpdateValues()
+{
   static PeriodClock last_time;
   if (!last_time.CheckUpdate(200))
     return;
@@ -55,13 +57,15 @@ static void UpdateValues() {
   }
 }
 
-static void OnAutoData(DataField *Sender, DataField::DataAccessMode Mode){
+static void
+OnAutoData(DataField *Sender, DataField::DataAccessMode Mode)
+{
   DataFieldBoolean &df = *(DataFieldBoolean *)Sender;
 
-  switch(Mode){
-    case DataField::daChange:
-      EnableAutoBrightness = df.GetAsBoolean();
-      UpdateValues();
+  switch (Mode) {
+  case DataField::daChange:
+    EnableAutoBrightness = df.GetAsBoolean();
+    UpdateValues();
     break;
 
   case DataField::daSpecial:
@@ -69,13 +73,14 @@ static void OnAutoData(DataField *Sender, DataField::DataAccessMode Mode){
   }
 }
 
-
-static void OnBrightnessData(DataField *Sender,
-			     DataField::DataAccessMode Mode){
-  switch(Mode){
-    case DataField::daChange:
-      BrightnessValue = Sender->GetAsInteger();
-      UpdateValues();
+static void
+OnBrightnessData(DataField *Sender,
+                 DataField::DataAccessMode Mode)
+{
+  switch (Mode) {
+  case DataField::daChange:
+    BrightnessValue = Sender->GetAsInteger();
+    UpdateValues();
     break;
 
   case DataField::daSpecial:
@@ -83,18 +88,17 @@ static void OnBrightnessData(DataField *Sender,
   }
 }
 
-
-static constexpr CallBackTableEntry CallBackTable[]={
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAutoData),
   DeclareCallBackEntry(OnBrightnessData),
   DeclareCallBackEntry(NULL)
 };
 
-
-
-void dlgBrightnessShowModal(){
+void
+dlgBrightnessShowModal()
+{
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-		      _T("IDR_XML_BRIGHTNESS"));
+                  _T("IDR_XML_BRIGHTNESS"));
   if (wf == NULL)
     return;
 
