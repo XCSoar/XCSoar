@@ -22,122 +22,178 @@ Copyright_License {
 */
 
 #include "PlaneDialogs.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/String.hpp"
-#include "Screen/Layout.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
-#include <cstdio>
+class PlaneEditWidget final
+  : public RowFormWidget, DataFieldListener, ActionListener {
+  enum Controls {
+    REGISTRATION,
+    COMPETITION_ID,
+    TYPE,
+    HANDICAP,
+    POLAR,
+    WING_AREA,
+    MAX_BALLAST,
+    DUMP_TIME,
+    MAX_SPEED,
+  };
 
-static WndForm *dialog = NULL;
-static Plane plane;
+  WndForm *dialog;
 
-static void
-UpdateCaption()
+  Plane plane;
+
+public:
+  PlaneEditWidget(const Plane &_plane, const DialogLook &_look,
+                  WndForm *_dialog)
+    :RowFormWidget(_look), dialog(_dialog), plane(_plane) {}
+
+  const Plane &GetValue() const {
+    return plane;
+  }
+
+  void UpdateCaption();
+  void UpdatePolarButton();
+  void PolarButtonClicked();
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+};
+
+void
+PlaneEditWidget::UpdateCaption()
 {
+  if (dialog == nullptr)
+    return;
+
   StaticString<128> tmp;
-  tmp.Format(_T("%s: %s"), _("Plane Details"),
-             GetFormValueString(*dialog, _T("Registration")));
+  tmp.Format(_T("%s: %s"), _("Plane Details"), GetValueString(REGISTRATION));
   dialog->SetCaption(tmp);
 }
 
-static void
-UpdateButton(const TCHAR *button, const TCHAR *caption)
+void
+PlaneEditWidget::UpdatePolarButton()
 {
-  WndButton* b = (WndButton*)dialog->FindByName(button);
-  assert(b != NULL);
-  b->SetCaption(caption);
+  const TCHAR *caption = _("Polar");
+  StaticString<64> buffer;
+  if (!plane.polar_name.empty()) {
+    buffer.Format(_T("%s: %s"), caption, plane.polar_name.c_str());
+    caption = buffer;
+  }
+
+  WndButton &polar_button = (WndButton &)GetRow(POLAR);
+  polar_button.SetCaption(caption);
 }
 
-static void
-Update()
+void
+PlaneEditWidget::OnModified(DataField &df)
 {
-  LoadFormProperty(*dialog, _T("Registration"), plane.registration);
-  LoadFormProperty(*dialog, _T("CompetitionID"), plane.competition_id);
-  LoadFormProperty(*dialog, _T("Type"), plane.type);
-  UpdateButton(_T("PolarButton"), plane.polar_name);
+  if (IsDataField(REGISTRATION, df))
+    UpdateCaption();
+}
 
-  LoadFormProperty(*dialog, _T("HandicapEdit"), plane.handicap);
-  LoadFormProperty(*dialog, _T("WingAreaEdit"), plane.wing_area);
-  LoadFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
-  LoadFormProperty(*dialog, _T("DumpTimeEdit"), plane.dump_time);
-  LoadFormProperty(*dialog, _T("MaxSpeedEdit"),
-                   UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
+void
+PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  AddText(_("Registration"), nullptr, plane.registration, this);
+  AddText(_("Comp. ID"), nullptr, plane.competition_id);
+  AddText(_("Type"), nullptr, plane.type);
+  AddInteger(_("Handicap"), nullptr,
+             _T("%u %%"), _T("%u"),
+             50, 150, 1,
+             plane.handicap);
+  AddButton(_("Polar"), *this, POLAR);
+  AddFloat(_("Wing Area"), nullptr,
+           _T("%.1f m²"), _T("%.1f"),
+           fixed(0), fixed(20), fixed(0.1),
+           false, plane.wing_area);
+  AddFloat(_("Max. Ballast"), nullptr,
+           _T("%.0f l"), _T("%.0f"),
+           fixed(0), fixed(500), fixed(5),
+           false, plane.max_ballast);
+  AddInteger(_("Dump Time"), nullptr,
+             _T("%u s"), _T("%u"),
+             10, 300, 5,
+             plane.dump_time);
+  AddFloat(_("Max. Cruise Speed"), nullptr,
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5),
+           false, UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
 
   UpdateCaption();
+  UpdatePolarButton();
 }
 
-static void
-UpdatePlane()
+bool
+PlaneEditWidget::Save(bool &_changed)
 {
-  SaveFormProperty(*dialog, _T("Registration"), plane.registration);
-  SaveFormProperty(*dialog, _T("CompetitionID"), plane.competition_id);
-  SaveFormProperty(*dialog, _T("Type"), plane.type);
-  SaveFormProperty(*dialog, _T("HandicapEdit"), plane.handicap);
-  SaveFormProperty(*dialog, _T("WingAreaEdit"), plane.wing_area);
-  SaveFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
-  SaveFormProperty(*dialog, _T("DumpTimeEdit"), plane.dump_time);
-  SaveFormProperty(*dialog, _T("MaxSpeedEdit"),
-                   UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
+  bool changed = false;
+
+  changed |= SaveValue(REGISTRATION, plane.registration.buffer(),
+                       plane.registration.MAX_SIZE);
+  changed |= SaveValue(COMPETITION_ID, plane.competition_id.buffer(),
+                       plane.competition_id.MAX_SIZE);
+  changed |= SaveValue(TYPE, plane.type.buffer(), plane.type.MAX_SIZE);
+  changed |= SaveValue(HANDICAP, plane.handicap);
+  changed |= SaveValue(WING_AREA, plane.wing_area);
+  changed |= SaveValue(MAX_BALLAST, plane.max_ballast);
+  changed |= SaveValue(DUMP_TIME, plane.dump_time);
+  changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
+                       plane.max_speed);
+
+  _changed |= changed;
+  return true;
 }
 
-static void
-OKClicked()
+void
+PlaneEditWidget::OnAction(int id)
 {
-  dialog->SetModalResult(mrOK);
+  switch (id) {
+  case POLAR:
+    PolarButtonClicked();
+    break;
+  }
 }
 
-static void
-CancelClicked()
+inline void
+PlaneEditWidget::PolarButtonClicked()
 {
-  dialog->SetModalResult(mrCancel);
-}
+  bool changed = false;
+  if (!Save(changed))
+    return;
 
-static void
-OnRegistrationData(DataField *sender)
-{
-  UpdateCaption();
-}
-
-static void
-PolarClicked()
-{
-  UpdatePlane();
   dlgPlanePolarShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane);
-  Update();
+  UpdatePolarButton();
 }
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OKClicked),
-  DeclareCallBackEntry(CancelClicked),
-  DeclareCallBackEntry(OnRegistrationData),
-  DeclareCallBackEntry(PolarClicked),
-  DeclareCallBackEntry(NULL)
-};
 
 bool
 dlgPlaneDetailsShowModal(SingleWindow &parent, Plane &_plane)
 {
-  plane = _plane;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  PlaneEditWidget widget(_plane, look, &dialog);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Plane Details"), &widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
 
-  dialog = LoadDialog(CallBackTable, parent, Layout::landscape ?
-                      _T("IDR_XML_PLANE_DETAILS_L") : _T("IDR_XML_PLANE_DETAILS"));
-  assert(dialog != NULL);
+  if (result != mrOK)
+    return false;
 
-  Update();
-  bool result = (dialog->ShowModal() == mrOK);
-  if (result) {
-    UpdatePlane();
-    _plane = plane;
-  }
-
-  delete dialog;
-
-  return result;
+  _plane = widget.GetValue();
+  return true;
 }
-
