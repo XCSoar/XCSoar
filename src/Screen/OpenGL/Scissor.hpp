@@ -33,12 +33,12 @@ class GLCanvasScissor : public GLScissor {
 public:
   GLCanvasScissor(const Canvas &canvas)
     :GLScissor(OpenGL::translate.x,
-               OpenGL::screen_height - OpenGL::translate.y - canvas.GetHeight() - 1,
+               OpenGL::screen_height - OpenGL::translate.y - canvas.GetHeight(),
                canvas.GetWidth(), canvas.GetHeight()) {}
 
   explicit GLCanvasScissor(PixelRect rc)
     :GLScissor(OpenGL::translate.x + rc.left,
-               OpenGL::screen_height - OpenGL::translate.y - rc.bottom - 1,
+               OpenGL::screen_height - OpenGL::translate.y - rc.bottom,
                rc.right - rc.top, rc.bottom - rc.top) {}
 };
 
