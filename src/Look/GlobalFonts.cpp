@@ -27,7 +27,11 @@ Copyright_License {
 
 #include <algorithm>
 
-FontSettings Fonts::default_settings, Fonts::effective_settings;
+FontSettings Fonts::default_settings;
+
+#ifndef GNAV
+FontSettings Fonts::effective_settings;
+#endif
 
 Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 

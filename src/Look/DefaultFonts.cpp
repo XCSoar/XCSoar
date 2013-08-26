@@ -158,7 +158,12 @@ bool
 Fonts::Initialize()
 {
   default_settings = GetDefaults();
+
+#ifdef GNAV
+  const auto &effective_settings = default_settings;
+#else
   effective_settings = default_settings;
+#endif
 
   return Load(effective_settings);
 }
@@ -166,8 +171,14 @@ Fonts::Initialize()
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
+#ifdef GNAV
+  const auto &effective_settings = default_settings;
+#endif
+
   AutoSizeInfoBoxFonts(default_settings, control_width);
+#ifndef GNAV
   AutoSizeInfoBoxFonts(effective_settings, control_width);
+#endif
 
   infobox.Load(effective_settings.infobox);
   infobox_small.Load(effective_settings.infobox_small);

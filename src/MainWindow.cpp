@@ -206,6 +206,7 @@ MainWindow::InitialiseConfigured()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
+#ifndef GNAV
   if (ui_settings.custom_fonts) {
     LogFormat("Load custom fonts");
     if (!Fonts::LoadCustom()) {
@@ -222,6 +223,7 @@ MainWindow::InitialiseConfigured()
     TextCache::Flush();
 #endif
   }
+#endif
 
   Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 

@@ -45,9 +45,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
-	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
-	$(SRC)/Dialogs/Settings/FontEdit.cpp \
 	$(SRC)/Dialogs/Traffic/TrafficList.cpp \
 	$(SRC)/Dialogs/Traffic/FlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
@@ -613,7 +611,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
-	$(SRC)/Look/CustomFonts.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -736,6 +733,11 @@ endif
 
 ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
+else
+XCSOAR_SOURCES += \
+	$(SRC)/Look/CustomFonts.cpp \
+	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
+	$(SRC)/Dialogs/Settings/FontEdit.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)

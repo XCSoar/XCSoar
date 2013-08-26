@@ -13,6 +13,7 @@ Version 6.7 - not yet released
   - separate font for dialogs (#723, #2806)
   - repetitive airspace warning sound (#2952)
   - never close dialogs due to display rotation
+  - disable custom fonts on Altair
 * map
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)
@@ -57,6 +58,7 @@ Version 6.7 - not yet released
 * data files
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
+  - save the previous log file in "xcsoar.old"
 
 Version 6.6.6 - not yet released
 * tasks

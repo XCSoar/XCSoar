@@ -48,7 +48,9 @@ struct UISettings {
   /** timeout in quarter seconds of menu button */
   unsigned menu_timeout;
 
+#ifndef GNAV
   bool custom_fonts;
+#endif
 
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
