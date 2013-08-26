@@ -213,6 +213,7 @@ private:
         // set stencil for filling (bit 0)
         SetFillStencil();
         DrawPrepared();
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
 
       // fill interior without overpainting any previous outlines
@@ -226,6 +227,7 @@ private:
         // clear fill stencil (bit 0)
         ClearFillStencil();
         DrawPrepared();
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
     }
 
@@ -262,7 +264,6 @@ private:
     canvas.SelectHollowBrush();
 
     // set bit 1 in stencil buffer, where an outline is drawn
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glStencilFunc(GL_ALWAYS, 3, 3);
     glStencilMask(2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -280,7 +281,6 @@ private:
     else
       glStencilFunc(GL_EQUAL, 0, 2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(90)));
     canvas.SelectNullPen();
