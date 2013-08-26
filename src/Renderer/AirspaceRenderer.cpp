@@ -163,11 +163,11 @@ private:
 
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
-    GLEnable stencil(GL_STENCIL_TEST);
 
     if (!warning_manager.IsAcked(airspace) &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
+      GLEnable stencil(GL_STENCIL_TEST);
       GLEnable blend(GL_BLEND);
       SetupInterior(airspace);
       if (warning_manager.HasWarning(airspace) ||
@@ -204,11 +204,12 @@ private:
       warning_manager.IsInside(airspace) ||
       class_settings.fill_mode ==
       AirspaceClassRendererSettings::FillMode::ALL;
-    GLEnable stencil(GL_STENCIL_TEST);
 
     if (!warning_manager.IsAcked(airspace) &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
+      GLEnable stencil(GL_STENCIL_TEST);
+
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
         SetFillStencil();
