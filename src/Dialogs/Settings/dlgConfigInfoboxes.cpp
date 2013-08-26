@@ -150,7 +150,7 @@ SetCurrentInfoBox(unsigned _current_preview)
 }
 
 static void
-OnSelectAccess(DataField *Sender, DataField::DataAccessMode Mode)
+OnSelectAccess(DataField *Sender)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
@@ -158,7 +158,7 @@ OnSelectAccess(DataField *Sender, DataField::DataAccessMode Mode)
 }
 
 static void
-OnContentAccess(DataField *Sender, DataField::DataAccessMode Mode)
+OnContentAccess(DataField *Sender)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 

@@ -55,7 +55,7 @@ DataField::Modified()
   if (listener != NULL)
     listener->OnModified(*this);
   else if (data_access_callback != NULL)
-    data_access_callback(this, daChange);
+    data_access_callback(this);
 }
 
 void
@@ -63,8 +63,6 @@ DataField::Special()
 {
   if (listener != NULL)
     listener->OnSpecial(*this);
-  else if (data_access_callback != NULL)
-    data_access_callback(this, daSpecial);
 }
 
 void

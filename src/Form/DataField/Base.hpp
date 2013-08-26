@@ -52,14 +52,9 @@ public:
     GEOPOINT,
   };
 
-  enum DataAccessMode {
-    daChange,
-    daSpecial,
-  };
-
   DataFieldListener *listener;
 
-  typedef void (*DataAccessCallback)(DataField *sender, DataAccessMode mode);
+  typedef void (*DataAccessCallback)(DataField *sender);
   DataAccessCallback data_access_callback;
 
   // all Types dataField support combolist except DataFieldString.

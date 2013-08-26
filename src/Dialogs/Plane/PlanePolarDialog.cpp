@@ -234,21 +234,14 @@ ImportClicked()
 }
 
 static void
-PolarChanged(gcc_unused DataField *Sender, DataField::DataAccessMode Mode)
+PolarChanged(gcc_unused DataField *Sender)
 {
   if (loading)
     return;
 
-  switch (Mode) {
-  case DataField::daChange:
-    plane.polar_name = _T("Custom");
-    UpdatePolarLabel();
-    UpdateInvalidLabel();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  plane.polar_name = _T("Custom");
+  UpdatePolarLabel();
+  UpdateInvalidLabel();
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {

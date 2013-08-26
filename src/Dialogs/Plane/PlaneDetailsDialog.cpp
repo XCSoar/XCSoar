@@ -99,10 +99,9 @@ CancelClicked()
 }
 
 static void
-OnRegistrationData(DataField *sender, DataField::DataAccessMode mode)
+OnRegistrationData(DataField *sender)
 {
-  if (mode == DataField::daChange)
-    UpdateCaption();
+  UpdateCaption();
 }
 
 static void

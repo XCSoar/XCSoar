@@ -374,18 +374,11 @@ OnRangeModified(fixed new_value)
 }
 
 static void
-OnRangeData(DataField *sender, DataField::DataAccessMode mode)
+OnRangeData(DataField *sender)
 {
   DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (mode) {
-  case DataField::daChange:
-    OnRangeModified(df.GetAsFixed());
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  OnRangeModified(df.GetAsFixed());
 }
 
 static void
@@ -435,18 +428,11 @@ OnRadialModified(fixed new_value)
 }
 
 static void
-OnRadialData(DataField *sender, DataField::DataAccessMode mode)
+OnRadialData(DataField *sender)
 {
   DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (mode) {
-  case DataField::daChange:
-    OnRadialModified(df.GetAsFixed());
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  OnRadialModified(df.GetAsFixed());
 }
 
 static void
