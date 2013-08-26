@@ -331,7 +331,7 @@ private:
     RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
 
-    {
+    if (!warning_manager.IsAcked(airspace)) {
       GLEnable blend(GL_BLEND);
       SetupInterior(airspace);
       canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
