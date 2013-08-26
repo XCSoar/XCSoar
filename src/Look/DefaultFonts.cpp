@@ -66,6 +66,9 @@ static void
 LoadAltairLogFonts(FontSettings &settings)
 {
   InitialiseLogfont(&settings.dialog, _T("RasterGothicTwelveCond"), 13);
+#ifdef GNAV
+  InitialiseLogfont(&settings.dialog_small, _T("RasterGothicNineCond"), 10);
+#endif
   InitialiseLogfont(&settings.infobox,
                     _T("RasterGothicTwentyFourCond"), 24, true);
   InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);

@@ -64,9 +64,13 @@ Fonts::Load(const FontSettings &settings)
   lf.lfWeight = FW_BOLD;
   dialog_bold.Load(lf);
 
+#ifdef GNAV
+  dialog_small.Load(settings.dialog_small);
+#else
   lf = settings.dialog;
   lf.lfHeight = std::max(6u, unsigned(lf.lfHeight) * 3u / 4u);
   dialog_small.Load(lf);
+#endif
 
   title.Load(settings.title);
   cdi.Load(settings.cdi);
