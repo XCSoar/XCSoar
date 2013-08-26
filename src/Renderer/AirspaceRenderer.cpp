@@ -123,8 +123,8 @@ public:
 
   bool operator()(const AbstractAirspace& airspace) const {
     return visible_predicate(airspace) ||
-           warnings.IsInside(airspace) ||
-           warnings.HasWarning(airspace);
+      warnings.IsInside(airspace) ||
+      warnings.HasWarning(airspace);
   }
 };
 
@@ -184,7 +184,7 @@ private:
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
         canvas.DrawCircle(screen_center.x, screen_center.y,
-                      screen_radius - look.thick_pen.GetWidth() / 4);
+                          screen_radius - look.thick_pen.GetWidth() / 4);
       }
     }
 
@@ -201,9 +201,9 @@ private:
       settings.classes[airspace.GetType()];
 
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
-                         warning_manager.IsInside(airspace) ||
+      warning_manager.IsInside(airspace) ||
       class_settings.fill_mode ==
-                         AirspaceClassRendererSettings::FillMode::ALL;
+      AirspaceClassRendererSettings::FillMode::ALL;
     GLEnable stencil(GL_STENCIL_TEST);
 
     if (!warning_manager.IsAcked(airspace) &&
@@ -271,7 +271,7 @@ private:
   }
 
   void SetupInterior(const AbstractAirspace &airspace,
-                      bool check_fillstencil = false) {
+                     bool check_fillstencil = false) {
     const AirspaceClassLook &class_look = look.classes[airspace.GetType()];
 
     // restrict drawing area and don't paint over previously drawn outlines
@@ -348,11 +348,9 @@ private:
 
     if (!warning_manager.IsAcked(airspace)) {
       // fill interior without overpainting any previous outlines
-      {
-        SetupInterior(airspace);
-        GLEnable blend(GL_BLEND);
-        DrawPrepared();
-      }
+      SetupInterior(airspace);
+      GLEnable blend(GL_BLEND);
+      DrawPrepared();
     }
 
     // draw outline
@@ -670,14 +668,14 @@ AirspaceRenderer::Draw(Canvas &canvas,
     AirspaceFillRenderer renderer(canvas, projection, look, awc,
                                   settings);
     airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                          projection.GetScreenDistanceMeters(),
-                                          renderer, visible);
+                                projection.GetScreenDistanceMeters(),
+                                renderer, visible);
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc,
                                      settings);
     airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
-                                          projection.GetScreenDistanceMeters(),
-                                          renderer, visible);
+                                projection.GetScreenDistanceMeters(),
+                                renderer, visible);
   }
 #else
   DrawFillCached(canvas, stencil_canvas, projection, settings, awc, visible);
