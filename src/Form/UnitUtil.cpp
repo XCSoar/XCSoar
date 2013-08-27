@@ -65,19 +65,3 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
   df.Set(Units::ToUserUnit(value, unit));
   ctl->RefreshDisplay();
 }
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, fixed &value)
-{
-  assert(control_name != NULL);
-
-  fixed new_value = GetFormValueFixed(form, control_name);
-  Unit unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}

@@ -70,66 +70,6 @@ SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value)
 }
 
 void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != nullptr);
-
-  DataFieldBoolean &df = *(DataFieldBoolean *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::BOOLEAN);
-  df.Set(value);
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != nullptr);
-
-  ctl->GetDataField()->SetAsInteger(value);
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormPropertyEnum(SubForm &form, const TCHAR *control_name, int value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  DataFieldEnum &df = *(DataFieldEnum *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::ENUM);
-  df.Set(value);
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 const StaticEnumChoice *list, unsigned value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  assert(ctl != NULL);
-
-  DataFieldEnum &df = *(DataFieldEnum *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::ENUM);
-  if (list[0].help != NULL)
-    df.EnableItemHelp(true);
-
-  df.AddChoices(list);
-  df.Set(value);
-
-  ctl->RefreshDisplay();
-}
-
-void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value)
 {
   assert(control_name != NULL);
@@ -188,18 +128,6 @@ GetFormValueInteger(const SubForm &form, const TCHAR *control_name)
   return control->GetDataField()->GetAsInteger();
 }
 
-fixed
-GetFormValueFixed(const SubForm &form, const TCHAR *control_name)
-{
-  const WndProperty *control =
-    (const WndProperty *)form.FindByName(control_name);
-  assert(control != NULL);
-
-  const DataFieldFloat &df = *(const DataFieldFloat *)control->GetDataField();
-  assert(df.GetType() == DataField::Type::REAL);
-  return df.GetAsFixed();
-}
-
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name)
 {
@@ -213,48 +141,4 @@ GetFormValueString(const SubForm &form, const TCHAR *control_name)
   assert(df.GetType() == DataField::Type::STRING);
 
   return df.GetAsString();
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, unsigned int &value)
-{
-  unsigned new_value = (unsigned)GetFormValueInteger(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value)
-{
-  fixed new_value = GetFormValueFixed(form, control_name);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 TCHAR *buffer, size_t max_size)
-{
-  assert(max_size > 0);
-
-  const TCHAR *value = GetFormValueString(form, control_name);
-  assert(value != NULL);
-
-  size_t length = _tcslen(value);
-  if (length >= max_size)
-    length = max_size - 1;
-
-  if (_tcsncmp(value, buffer, length) == 0 && buffer[length] == _T('\0'))
-    /* not modified */
-    return false;
-
-  std::copy(value, value + length, buffer);
-  buffer[length] = _T('\0');
-  return true;
 }
