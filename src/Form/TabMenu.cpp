@@ -169,7 +169,8 @@ TabMenuControl::GetTabHeight() const
 unsigned
 TabMenuControl::GetMenuButtonHeight() const
 {
-  return Layout::Scale(31);
+  return std::min(Layout::GetMaximumControlHeight(),
+                  unsigned(GetHeight()) / 7u);
 }
 
 unsigned
