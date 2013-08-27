@@ -251,7 +251,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                                            is_focused,
                                                            isDown));
 
-    const PixelRect rc = tb.GetMainMenuButtonSize(main_menu_index);
+    const PixelRect &rc = tb.GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             NULL, isDown, inverse);
   }
