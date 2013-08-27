@@ -61,8 +61,8 @@ public:
   void SetDataAccessCallback(DataField::DataAccessCallback callback);
 
   /* virtual methods from class Widget */
-  //TODO: virtual PixelSize GetMinimumSize() const override;
-  //TODO: virtual PixelSize GetMaximumSize() const override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;

@@ -112,6 +112,20 @@ PolarShapeEditWidget::SetDataAccessCallback(DataField::DataAccessCallback callba
   }
 }
 
+PixelSize
+PolarShapeEditWidget::GetMinimumSize() const
+{
+  return { Layout::Scale(200),
+      PixelScalar(Layout::GetMinimumControlHeight()) };
+}
+
+PixelSize
+PolarShapeEditWidget::GetMaximumSize() const
+{
+  return { Layout::Scale(400),
+      PixelScalar(Layout::GetMaximumControlHeight()) };
+}
+
 void
 PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
