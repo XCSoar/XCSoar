@@ -279,6 +279,7 @@ public:
   /**
    * overloads from TabBarControl.
    */
+  gcc_pure
   unsigned GetTabHeight() const;
 
   /**

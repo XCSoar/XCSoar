@@ -77,7 +77,8 @@ protected:
   /**
    * @return Rect of button holding down pointer capture
    */
-  const PixelRect& GetDownButtonRC() const;
+  gcc_pure
+  const PixelRect &GetDownButtonRC() const;
 
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;
