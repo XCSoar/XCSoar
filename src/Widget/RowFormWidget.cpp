@@ -173,9 +173,18 @@ RowFormWidget::Row::SetVisible(bool _visible)
 
   visible = _visible;
   if (!visible)
-    GetWindow().Hide();
+    Hide();
   else if (IsAvailable(UIGlobals::GetDialogSettings().expert))
     GetWindow().Show();
+}
+
+void
+RowFormWidget::Row::Hide()
+{
+  if (type == Type::WIDGET)
+    widget->Hide();
+  else if (type != Type::DUMMY)
+    window->Hide();
 }
 
 RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
@@ -364,11 +373,7 @@ RowFormWidget::UpdateLayout()
   /* second row traversal: now move and resize the rows */
   for (auto &i : rows) {
     if (!i.IsAvailable(expert)) {
-      if (i.type == Row::Type::WIDGET)
-        i.GetWidget().Hide();
-      else if (i.type != Row::Type::DUMMY)
-        i.GetWindow().Hide();
-
+      i.Hide();
       continue;
     }
 

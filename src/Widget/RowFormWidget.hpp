@@ -240,6 +240,11 @@ class RowFormWidget : public WindowWidget {
                       int caption_width);
 
     void SetVisible(bool _visible);
+
+    /**
+     * Hide the Window/Widget, but do not update the #visible flag.
+     */
+    void Hide();
   };
 
   const DialogLook &look;
