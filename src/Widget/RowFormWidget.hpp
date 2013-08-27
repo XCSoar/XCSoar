@@ -118,6 +118,13 @@ class RowFormWidget : public WindowWidget {
 
     Window *window;
 
+    /**
+     * The position determined by RowFormWidget::UpdateLayout().  This
+     * attribute is strictly only necessary for widgets, because these
+     * expect a PixelRect parameter in their Show() method.
+     */
+    PixelRect position;
+
     Row() = default;
 
     Row(Type _type)

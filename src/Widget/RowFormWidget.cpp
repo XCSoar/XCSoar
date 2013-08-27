@@ -348,6 +348,9 @@ RowFormWidget::UpdateLayout()
       --n_elastic;
     }
 
+    NextControlRect(current_rect, height);
+    i.position = current_rect;
+
     if (i.type == Row::Type::WIDGET) {
       Widget &widget = i.GetWidget();
 
@@ -355,19 +358,17 @@ RowFormWidget::UpdateLayout()
          the control position, because Widget::Show() wants a
          PixelRect parameter */
 
-      NextControlRect(current_rect, height);
-
       if (!i.initialised) {
         i.initialised = true;
-        widget.Initialise((ContainerWindow &)GetWindow(), current_rect);
+        widget.Initialise((ContainerWindow &)GetWindow(), i.position);
       }
 
       if (!i.prepared) {
         i.prepared = true;
-        widget.Prepare((ContainerWindow &)GetWindow(), current_rect);
+        widget.Prepare((ContainerWindow &)GetWindow(), i.position);
       }
 
-      widget.Show(current_rect);
+      widget.Show(i.position);
       continue;
     }
 
@@ -382,8 +383,7 @@ RowFormWidget::UpdateLayout()
     }
 
     /* finally move and resize */
-    NextControlRect(current_rect, height);
-    window.Move(current_rect);
+    window.Move(i.position);
   }
 
   assert(excess_height == 0 || n_elastic == 0);
