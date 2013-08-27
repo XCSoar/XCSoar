@@ -58,7 +58,10 @@ void
 ManagedWidget::Move(const PixelRect &_position)
 {
   position = _position;
+
+#ifndef NDEBUG
   have_position = true;
+#endif
 
   if (widget != NULL && prepared && visible)
     widget->Move(position);
