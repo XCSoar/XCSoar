@@ -3,8 +3,6 @@
 <Form Caption="Configuration">
   <CheckBox Name="Expert" Caption="Expert" X="5" Y="5" Width="60" Height="20" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdWaypoints" Caption="Waypts." Y="-140" Width="70" Height="35" Visible="0"/>
-
   <Button Name="cmdExtra2" Y="-165" Width="70" Height="30" Visible="0"/>
   <Button Name="cmdExtra1" Y="-135" Width="70" Height="30" Visible="0"/>
 
