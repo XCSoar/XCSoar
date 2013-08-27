@@ -95,7 +95,7 @@ class RowFormWidget : public WindowWidget {
     /**
      * Only used for #type==WIDGET.
      */
-    bool initialised, prepared;
+    bool initialised, prepared, shown;
 
     /**
      * Shall this row be available?  If not, it is hidden and no
@@ -142,7 +142,7 @@ class RowFormWidget : public WindowWidget {
 
     Row(Widget *_widget)
       :type(Type::WIDGET),
-       initialised(false), prepared(false),
+       initialised(false), prepared(false), shown(false),
        available(true), visible(true), expert(false),
        widget(_widget), window(nullptr) {
       assert(_widget != NULL);
@@ -167,6 +167,8 @@ class RowFormWidget : public WindowWidget {
         assert(widget != nullptr);
         assert(window == nullptr);
 
+        if (shown)
+          widget->Hide();
         if (prepared)
           widget->Unprepare();
         delete widget;

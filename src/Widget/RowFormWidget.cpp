@@ -150,7 +150,11 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
       widget.Prepare(parent, position);
     }
 
-    widget.Show(position);
+    if (!shown) {
+      shown = true;
+      widget.Show(position);
+    } else
+      widget.Move(position);
   } else {
     Window &window = GetWindow();
 
@@ -181,9 +185,12 @@ RowFormWidget::Row::SetVisible(bool _visible)
 void
 RowFormWidget::Row::Hide()
 {
-  if (type == Type::WIDGET)
-    widget->Hide();
-  else if (type != Type::DUMMY)
+  if (type == Type::WIDGET) {
+    if (shown) {
+      shown = false;
+      widget->Hide();
+    }
+  } else if (type != Type::DUMMY)
     window->Hide();
 }
 
