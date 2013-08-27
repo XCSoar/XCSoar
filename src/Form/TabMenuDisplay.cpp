@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
-static UPixelScalar
+static unsigned
 GetTabLineHeight()
 {
   return Layout::Scale(1);
@@ -212,10 +212,10 @@ void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 {
   const TabMenuControl &tb = GetTabMenuBar();
-  const UPixelScalar bwidth = GetTabLineHeight();
+  const unsigned bwidth = GetTabLineHeight();
 
   const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
-  const UPixelScalar menuBottom = tb.GetMainMenuButtonSize(
+  const unsigned menuBottom = tb.GetMainMenuButtonSize(
       tb.GetNumMainMenuItems() - 1).bottom;
   const PixelRect rcBlackBorder(rcFirst.left - bwidth, rcFirst.top - bwidth,
                                 rcFirst.right + bwidth, menuBottom + bwidth);
@@ -262,8 +262,8 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
                                    const MainMenuButton &main_button) const
 {
   const TabMenuControl &tb = GetTabMenuBar();
-  const UPixelScalar bwidth =  GetTabLineHeight();
-  const UPixelScalar subTop =
+  const unsigned bwidth = GetTabLineHeight();
+  const unsigned subTop =
     tb.GetSubMenuButtonSize(main_button.first_page_index).top;
   const PixelRect bLast = tb.GetSubMenuButtonSize(main_button.last_page_index);
   const PixelRect rcBlackBorder(bLast.left - bwidth, subTop - bwidth,

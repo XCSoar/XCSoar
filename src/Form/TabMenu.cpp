@@ -153,26 +153,26 @@ TabMenuControl::GetPageNum(MenuTabIndex i) const
   return main_button.first_page_index + i.sub_index;
 }
 
-static UPixelScalar
+static unsigned
 GetTabLineHeight()
 {
   return Layout::Scale(1);
 }
 
-UPixelScalar
+unsigned
 TabMenuControl::GetTabHeight() const
 {
   return GetMenuButtonHeight() * TabMenuControl::MAX_MAIN_MENU_ITEMS
       + GetTabLineHeight() * 2;
 }
 
-UPixelScalar
+unsigned
 TabMenuControl::GetMenuButtonHeight() const
 {
   return Layout::Scale(31);
 }
 
-UPixelScalar
+unsigned
 TabMenuControl::GetMenuButtonWidth() const
 {
   return (tab_display->GetTabWidth() - GetTabLineHeight()) / 2;
@@ -186,9 +186,9 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   if (main_menu_buttons[i]->rc.left < main_menu_buttons[i]->rc.right)
     return main_menu_buttons[i]->rc;
   PixelRect &rc = main_menu_buttons[i]->rc;
-  const UPixelScalar margin = Layout::Scale(1);
-  const UPixelScalar finalmargin = Layout::Scale(1);
-  const UPixelScalar butHeight = GetMenuButtonHeight();
+  const unsigned margin = Layout::Scale(1);
+  const unsigned finalmargin = Layout::Scale(1);
+  const unsigned butHeight = GetMenuButtonHeight();
   rc.top = finalmargin + (margin + butHeight) * i;
   rc.bottom = rc.top + butHeight;
 
@@ -212,18 +212,18 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
 
   PixelRect &rc = buttons[page]->rc;
 
-  const UPixelScalar margin = Layout::Scale(1);
-  const UPixelScalar finalmargin = Layout::Scale(1);
+  const unsigned margin = Layout::Scale(1);
+  const unsigned finalmargin = Layout::Scale(1);
   const unsigned subMenuItemCount = main_button.NumSubMenus();
-  const UPixelScalar tabHeight = GetTabHeight();
-  const UPixelScalar butHeight = GetMenuButtonHeight();
-  const UPixelScalar itemHeight = butHeight + margin;
-  const UPixelScalar SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
-  const UPixelScalar topMainMenuItem = item.main_menu_index * itemHeight +
+  const unsigned tabHeight = GetTabHeight();
+  const unsigned butHeight = GetMenuButtonHeight();
+  const unsigned itemHeight = butHeight + margin;
+  const unsigned SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
+  const unsigned topMainMenuItem = item.main_menu_index * itemHeight +
       finalmargin;
-  const UPixelScalar offset = Layout::Scale(2);
-  const UPixelScalar topMainMenuItemWOffset = topMainMenuItem + offset;
-  const UPixelScalar subMenuTop =
+  const unsigned offset = Layout::Scale(2);
+  const unsigned topMainMenuItemWOffset = topMainMenuItem + offset;
+  const unsigned subMenuTop =
       (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
        topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
 
