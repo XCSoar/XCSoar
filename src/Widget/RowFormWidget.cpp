@@ -136,30 +136,10 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
   if (type == Type::WIDGET) {
     Widget &widget = GetWidget();
 
-    /* TODO: visible check - hard to implement without remembering
-       the control position, because Widget::Show() wants a
-       PixelRect parameter */
-
-    if (!initialised) {
-      initialised = true;
-      widget.Initialise(parent, position);
-    }
-
-    if (!prepared) {
-      prepared = true;
-      widget.Prepare(parent, position);
-    }
-
-    if (!shown) {
-      shown = true;
-      widget.Show(position);
-    } else
+    if (shown)
       widget.Move(position);
   } else {
     Window &window = GetWindow();
-
-    if (visible)
-      window.Show();
 
     if (type == Type::EDIT && GetControl().HasCaption())
       GetControl().SetCaptionWidth(caption_width);
@@ -167,10 +147,13 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
     /* finally move and resize */
     window.Move(position);
   }
+
+  if (visible)
+    Show(parent);
 }
 
 inline void
-RowFormWidget::Row::SetVisible(bool _visible)
+RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible)
 {
   if (_visible == visible)
     return;
@@ -179,7 +162,29 @@ RowFormWidget::Row::SetVisible(bool _visible)
   if (!visible)
     Hide();
   else if (IsAvailable(UIGlobals::GetDialogSettings().expert))
-    GetWindow().Show();
+    Show(parent);
+}
+
+void
+RowFormWidget::Row::Show(ContainerWindow &parent)
+{
+  if (type == Type::WIDGET) {
+    if (!initialised) {
+      initialised = true;
+      widget->Initialise(parent, position);
+    }
+
+    if (!prepared) {
+      prepared = true;
+      widget->Prepare(parent, position);
+    }
+
+    if (!shown) {
+      shown = true;
+      widget->Show(position);
+    }
+  } else if (type != Type::DUMMY)
+    window->Show();
 }
 
 void
@@ -223,7 +228,7 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
 void
 RowFormWidget::SetRowVisible(unsigned i, bool visible)
 {
-  rows[i].SetVisible(visible);
+  rows[i].SetVisible((ContainerWindow &)GetWindow(), visible);
 }
 
 void

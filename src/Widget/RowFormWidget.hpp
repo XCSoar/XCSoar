@@ -241,7 +241,12 @@ class RowFormWidget : public WindowWidget {
     void UpdateLayout(ContainerWindow &parent, const PixelRect &_position,
                       int caption_width);
 
-    void SetVisible(bool _visible);
+    void SetVisible(ContainerWindow &parent, bool _visible);
+
+    /**
+     * Show the Window/Widget, but do not update the #visible flag.
+     */
+    void Show(ContainerWindow &parent);
 
     /**
      * Hide the Window/Widget, but do not update the #visible flag.
