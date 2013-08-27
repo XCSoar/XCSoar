@@ -130,14 +130,6 @@ static constexpr TabMenuControl::PageItem pages[] = {
 #endif
 };
 
-WndForm &
-ConfigPanel::GetForm()
-{
-  assert(dialog != NULL);
-
-  return *dialog;
-}
-
 WndButton *
 ConfigPanel::GetExtraButton(unsigned number)
 {
