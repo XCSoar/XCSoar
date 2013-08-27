@@ -447,21 +447,18 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   step = StringToFloatDflt(node.GetAttribute(_T("Step")), 1);
   const bool fine = false;
 
-  DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
-    GetCallBack(LookUpTable, node, _T("OnDataAccess"));
-
   if (StringIsEqualIgnoreCase(data_type, _T("enum")))
-    return new DataFieldEnum(callback);
+    return new DataFieldEnum();
 
   if (StringIsEqualIgnoreCase(data_type, _T("boolean")))
-    return new DataFieldBoolean(false, _("On"), _("Off"), callback);
+    return new DataFieldBoolean(false, _("On"), _("Off"));
 
   if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
-                              fixed(0), fixed(step), fine, callback);
+                              fixed(0), fixed(step), fine);
 
   if (StringIsEqualIgnoreCase(data_type, _T("string")))
-    return new DataFieldString(_T(""), callback);
+    return new DataFieldString(_T(""));
 
   if (StringIsEqualIgnoreCase(data_type, _T("geopoint")))
     // TODO: use configured CoordinateFormat
