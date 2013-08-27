@@ -349,15 +349,6 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   return window;
 }
 
-Window *
-LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource,
-           WindowStyle style)
-{
-  return LoadWindow(lookup_table, form, parent, parent.GetClientRect(),
-                    resource, style);
-}
-
 WndForm *
 LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
            const TCHAR *resource, const PixelRect *target_rc)

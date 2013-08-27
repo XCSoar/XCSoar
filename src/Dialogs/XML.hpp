@@ -56,11 +56,6 @@ LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
            ContainerWindow &parent, const PixelRect &rc,
            const TCHAR *resource, WindowStyle style=WindowStyle());
 
-Window *
-LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource,
-           WindowStyle style=WindowStyle());
-
 /**
  * This function returns a WndForm created either from the ressources or
  * from the XML file in XCSoarData(if found)

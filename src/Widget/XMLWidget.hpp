@@ -43,16 +43,6 @@ protected:
                   const TCHAR *resource);
 
   /**
-   * Called from Prepare()
-   * Creates the window object
-   * @param callbacks
-   * @param parent
-   * @param resource
-   */
-  void LoadWindow(const CallBackTableEntry *callbacks,
-                  ContainerWindow &parent, const TCHAR *resource);
-
-  /**
    * Clears and deletes the windows created by LoadWindow
    * during Prepare() associated with the WindowWidget
    */

@@ -38,18 +38,6 @@ XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
   SetWindow(window);
 }
 
-void
-XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
-                      ContainerWindow &parent, const TCHAR *resource)
-{
-  WindowStyle style;
-  style.Hide();
-
-  Window *window = ::LoadWindow(callbacks, &form, parent, resource, style);
-  assert(window != NULL);
-  SetWindow(window);
-}
-
 bool
 XMLWidget::SetFocus()
 {
