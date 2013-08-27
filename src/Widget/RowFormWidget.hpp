@@ -238,6 +238,8 @@ class RowFormWidget : public WindowWidget {
 
     void UpdateLayout(ContainerWindow &parent, const PixelRect &_position,
                       int caption_width);
+
+    void SetVisible(bool _visible);
   };
 
   const DialogLook &look;

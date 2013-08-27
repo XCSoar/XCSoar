@@ -129,7 +129,7 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
                                  const PixelRect &_position,
                                  int caption_width)
 {
-  assert(type != Row::Type::DUMMY);
+  assert(type != Type::DUMMY);
 
   position = _position;
 
@@ -165,6 +165,19 @@ RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
   }
 }
 
+inline void
+RowFormWidget::Row::SetVisible(bool _visible)
+{
+  if (_visible == visible)
+    return;
+
+  visible = _visible;
+  if (!visible)
+    GetWindow().Hide();
+  else if (IsAvailable(UIGlobals::GetDialogSettings().expert))
+    GetWindow().Show();
+}
+
 RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
   :look(_look), vertical(_vertical)
 {
@@ -194,15 +207,7 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
 void
 RowFormWidget::SetRowVisible(unsigned i, bool visible)
 {
-  Row &row = rows[i];
-  if (visible == row.visible)
-    return;
-
-  row.visible = visible;
-  if (!visible)
-    row.GetWindow().Hide();
-  else if (row.IsAvailable(UIGlobals::GetDialogSettings().expert))
-    row.GetWindow().Show();
+  rows[i].SetVisible(visible);
 }
 
 void
