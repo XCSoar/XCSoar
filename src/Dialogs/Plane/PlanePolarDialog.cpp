@@ -23,125 +23,155 @@ Copyright_License {
 
 #include "PlaneDialogs.hpp"
 #include "PolarShapeEditWidget.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/ComboPicker.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Frame.hpp"
-#include "Form/Button.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Form/DataField/Base.hpp"
-#include "Widget/DockWindow.hpp"
-#include "Screen/Layout.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Screen/Color.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Plane/Plane.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
-#include "Units/Units.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 
-#include <cstdio>
+class PlanePolarWidget final
+  : public RowFormWidget, DataFieldListener, ActionListener {
+  enum Controls {
+    NAME,
+    INVALID,
+    SHAPE,
+    REFERENCE_MASS,
+    DRY_MASS,
+  };
 
-static WndForm *dialog = NULL;
-static Plane plane;
+  enum Actions {
+    LIST,
+    IMPORT,
+  };
 
-static PolarShapeEditWidget &
-GetShapeEditor(SubForm &form)
+  Plane plane;
+
+public:
+  PlanePolarWidget(const Plane &_plane, const DialogLook &_look)
+    :RowFormWidget(_look), plane(_plane) {}
+
+  const Plane &GetValue() const {
+    return plane;
+  }
+
+  void CreateButtons(WidgetDialog &buttons) {
+    buttons.AddButton(_("List"), *this, LIST);
+    buttons.AddButton(_("Import"), *this, IMPORT);
+  }
+
+private:
+  PolarShapeEditWidget &GetShapeEditor() {
+    return (PolarShapeEditWidget &)GetRowWidget(SHAPE);
+  }
+
+  void LoadPolarShape(const PolarShape &shape) {
+    GetShapeEditor().SetPolarShape(shape);
+  }
+
+  void UpdatePolarLabel() {
+    SetText(NAME, plane.polar_name);
+  }
+
+  void UpdateInvalidLabel();
+  void Update();
+
+  void ListClicked();
+  void ImportClicked();
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+};
+
+void
+PlanePolarWidget::UpdateInvalidLabel()
 {
-  DockWindow &dock = *(DockWindow *)form.FindByName(_T("shape"));
-  return *(PolarShapeEditWidget *)dock.GetWidget();
-}
-
-static void
-UpdateCaption()
-{
-  StaticString<128> tmp;
-  tmp.Format(_T("%s: %s"), _("Plane Polar"), plane.registration.c_str());
-  dialog->SetCaption(tmp);
-}
-
-static void
-UpdatePolarLabel()
-{
-  StaticString<128> tmp;
-  tmp.Format(_T("%s: %s"), _("Polar"), plane.polar_name.c_str());
-
-  WndFrame *label = ((WndFrame *)dialog->FindByName(_T("PolarLabel")));
-  assert(label != NULL);
-  label->SetCaption(tmp);
-}
-
-static void
-UpdateInvalidLabel()
-{
-  PolarShapeEditWidget &widget = GetShapeEditor(*dialog);
+  PolarShapeEditWidget &widget = GetShapeEditor();
   bool changed = false;
   bool valid = widget.Save(changed) &&
     widget.GetPolarShape().IsValid();
   bool visible = !valid;
 
-  WndFrame *label = ((WndFrame *)dialog->FindByName(_T("InvalidLabel")));
-  assert(label != NULL);
-  label->SetVisible(visible);
+  SetRowVisible(INVALID, visible);
+
+  if (visible) {
+    TextWidget &widget = (TextWidget &)GetRowWidget(INVALID);
+    widget.SetText(_("Invalid"));
+    widget.SetColor(COLOR_RED);
+  }
 }
 
-static void
-LoadPolarShape(SubForm &form, const PolarShape &shape)
+void
+PlanePolarWidget::Update()
 {
-  GetShapeEditor(form).SetPolarShape(shape);
+  LoadPolarShape(plane.polar_shape);
+
+  LoadValue(REFERENCE_MASS, plane.reference_mass);
+  LoadValue(DRY_MASS, plane.dry_mass);
 }
 
-static void
-SavePolarShape(SubForm &form, PolarShape &shape)
+void
+PlanePolarWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  PolarShapeEditWidget &widget = GetShapeEditor(form);
-  bool changed = false;
-  widget.Save(changed);
-  shape = widget.GetPolarShape();
+  AddReadOnly(_("Name"), nullptr, plane.polar_name);
+
+  Add(new TextWidget());
+  SetRowVisible(INVALID, false);
+
+  Add(new PolarShapeEditWidget(plane.polar_shape, this));
+
+  AddFloat(_("Reference Mass"), nullptr,
+           _T("%.0f kg"), _T("%.0f"),
+           fixed(0), fixed(1000), fixed(5),
+           false, plane.reference_mass);
+
+  AddFloat(_("Dry Mass"), nullptr,
+           _T("%.0f kg"), _T("%.0f"),
+           fixed(0), fixed(1000), fixed(5),
+           false, plane.dry_mass);
 }
 
-static void
-Update()
+void
+PlanePolarWidget::Show(const PixelRect &rc)
 {
-  UpdateCaption();
-
-  LoadPolarShape(*dialog, plane.polar_shape);
-
-  LoadFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
-  LoadFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
-
-  UpdatePolarLabel();
+  RowFormWidget::Show(rc);
   UpdateInvalidLabel();
 }
 
-static void
-UpdatePlane()
+bool
+PlanePolarWidget::Save(bool &_changed)
 {
-  SavePolarShape(*dialog, plane.polar_shape);
+  bool changed = false;
+  if (!GetShapeEditor().Save(changed))
+    return false;
 
-  SaveFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
-  SaveFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
+  changed |= SaveValue(REFERENCE_MASS, plane.reference_mass);
+  changed |= SaveValue(DRY_MASS, plane.dry_mass);
+
+  _changed |= changed;
+  return true;
 }
 
-static void
-OKClicked()
-{
-  dialog->SetModalResult(mrOK);
-}
-
-static void
-CancelClicked()
-{
-  dialog->SetModalResult(mrCancel);
-}
-
-static void
-ListClicked()
+inline void
+PlanePolarWidget::ListClicked()
 {
   ComboList list;
   unsigned len = PolarStore::Count();
@@ -192,8 +222,8 @@ public:
   }
 };
 
-static void
-ImportClicked()
+inline void
+PlanePolarWidget::ImportClicked()
 {
   ComboList list;
   PolarFileVisitor fv(list);
@@ -231,49 +261,48 @@ ImportClicked()
   Update();
 }
 
-static void
-PolarChanged(gcc_unused DataField *Sender)
+void
+PlanePolarWidget::OnAction(int id)
+{
+  switch (id) {
+  case LIST:
+    ListClicked();
+    break;
+
+  case IMPORT:
+    ImportClicked();
+    break;
+  }
+}
+
+void
+PlanePolarWidget::OnModified(DataField &df)
 {
   plane.polar_name = _T("Custom");
   UpdatePolarLabel();
   UpdateInvalidLabel();
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OKClicked),
-  DeclareCallBackEntry(CancelClicked),
-  DeclareCallBackEntry(ListClicked),
-  DeclareCallBackEntry(ImportClicked),
-  DeclareCallBackEntry(PolarChanged),
-  DeclareCallBackEntry(NULL)
-};
-
 bool
 dlgPlanePolarShowModal(Plane &_plane)
 {
-  plane = _plane;
+  StaticString<128> caption;
+  caption.Format(_T("%s: %s"), _("Plane Polar"), _plane.registration.c_str());
 
-  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                      Layout::landscape
-                      ? _T("IDR_XML_PLANE_POLAR_L")
-                      : _T("IDR_XML_PLANE_POLAR"));
-  assert(dialog != NULL);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  PlanePolarWidget widget(_plane, look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), caption, &widget);
+  widget.CreateButtons(dialog);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
 
-  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("shape"));
-  PolarShapeEditWidget *shape_editor =
-    new PolarShapeEditWidget(plane.polar_shape);
-  dock.SetWidget(shape_editor);
-  shape_editor->SetDataAccessCallback(PolarChanged);
+  if (result != mrOK)
+    return false;
 
-  Update();
-  bool result = (dialog->ShowModal() == mrOK);
-  if (result) {
-    UpdatePlane();
-    _plane = plane;
-  }
-
-  delete dialog;
-
-  return result;
+  _plane = widget.GetValue();
+  return true;
 }
 

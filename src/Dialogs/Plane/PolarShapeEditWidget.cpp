@@ -36,8 +36,9 @@
 
 #include <algorithm>
 
-PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape)
-  :shape(_shape) {}
+PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
+                                           DataFieldListener *_listener)
+  :shape(_shape), listener(_listener) {}
 
 static void
 LoadValue(WndProperty &e, fixed value, UnitGroup unit_group)
@@ -96,22 +97,6 @@ PolarShapeEditWidget::SetPolarShape(const PolarShape &_shape)
     LoadPoint(points[i], shape[i]);
 }
 
-static void
-SetDataAccessCallback(WndProperty &e, DataField::DataAccessCallback callback)
-{
-  DataField &df = *(DataField *)e.GetDataField();
-  df.SetDataAccessCallback(callback);
-}
-
-void
-PolarShapeEditWidget::SetDataAccessCallback(DataField::DataAccessCallback callback)
-{
-  for (unsigned i = 0; i < ARRAY_SIZE(points); ++i) {
-    ::SetDataAccessCallback(*points[i].v, callback);
-    ::SetDataAccessCallback(*points[i].w, callback);
-  }
-}
-
 PixelSize
 PolarShapeEditWidget::GetMinimumSize() const
 {
@@ -163,7 +148,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
                                             fixed(0), fixed(300), fixed(0),
-                                            fixed(1), false);
+                                            fixed(1), false,
+                                            listener);
     points[i].v->SetDataField(df);
   }
 
@@ -199,7 +185,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
                                             min, fixed(0), fixed(0),
-                                            step, false);
+                                            step, false,
+                                            listener);
 
     points[i].w->SetDataField(df);
   }
