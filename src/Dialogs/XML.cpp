@@ -132,23 +132,6 @@ StringToStringDflt(const TCHAR *string, const TCHAR *_default)
   return string;
 }
 
-/**
- * Converts a String into a Color and sets
- * a default value if String = NULL
- * @param String The String to parse
- * @param color The color (output)
- */
-static bool
-StringToColor(const TCHAR *string, Color &color)
-{
-  int value = StringToIntDflt(string, -1);
-  if (value & ~0xffffff)
-    return false;
-
-  color = Color((value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff);
-  return true;
-}
-
 static int 
 ScaleWidth(const int x)
 {
@@ -416,26 +399,21 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 static DataField *
 LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 {
-  TCHAR data_type[32];
-  TCHAR display_format[32];
-  TCHAR edit_format[32];
-  double step;
-
-  _tcscpy(data_type,
-          StringToStringDflt(node.GetAttribute(_T("DataType")), _T("")));
-  _tcscpy(display_format,
-          StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T("")));
-  _tcscpy(edit_format,
-          StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T("")));
+  const TCHAR *data_type =
+    StringToStringDflt(node.GetAttribute(_T("DataType")), _T(""));
+  const TCHAR *display_format =
+    StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T(""));
+  const TCHAR *edit_format =
+    StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T(""));
 
   fixed min = fixed(StringToFloatDflt(node.GetAttribute(_T("Min")), INT_MIN));
   fixed max = fixed(StringToFloatDflt(node.GetAttribute(_T("Max")), INT_MAX));
-  step = StringToFloatDflt(node.GetAttribute(_T("Step")), 1);
+  fixed step = fixed(StringToFloatDflt(node.GetAttribute(_T("Step")), 1));
   const bool fine = false;
 
   if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
-                              fixed(0), fixed(step), fine);
+                              fixed(0), step, fine);
 
   return NULL;
 }
@@ -612,10 +590,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     // Set the caption
     frame->SetCaption(caption);
-    // Set caption color
-    Color color;
-    if (StringToColor(node.GetAttribute(_T("CaptionColor")), color))
-      frame->SetCaptionColor(color);
 
     window = frame;
 
