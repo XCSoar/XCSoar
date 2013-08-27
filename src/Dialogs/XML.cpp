@@ -62,14 +62,6 @@ Copyright_License {
 #include <tchar.h>
 #include <limits.h>
 
-static const DialogLook *xml_dialog_look;
-
-void
-SetXMLDialogLook(const DialogLook &_dialog_look)
-{
-  xml_dialog_look = &_dialog_look;
-}
-
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
 
@@ -423,7 +415,8 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   form_rc.right = form_rc.left + size.cx;
   form_rc.bottom = form_rc.top + size.cy;
 
-  form = new WndForm(parent, *xml_dialog_look, form_rc, caption, style);
+  form = new WndForm(parent, UIGlobals::GetDialogLook(),
+                     form_rc, caption, style);
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
@@ -536,7 +529,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       style.TabStop();
 
     WndProperty *property;
-    window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
+    window = property = new WndProperty(parent, UIGlobals::GetDialogLook(),
+                                        caption, rc,
                                         caption_width, style);
     property->SetReadOnly(read_only);
 
@@ -569,16 +563,16 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     button_style.TabStop();
     button_style.multiline();
 
-    window = new WndButton(parent, xml_dialog_look->button, caption,
-                           rc,
+    window = new WndButton(parent, UIGlobals::GetDialogLook().button,
+                           caption, rc,
                            button_style, click_callback);
 
   } else if (StringIsEqual(node.GetName(), _T("CloseButton"))) {
     ButtonWindowStyle button_style(style);
     button_style.TabStop();
 
-    window = new WndButton(parent, xml_dialog_look->button, _("Close"),
-                           rc,
+    window = new WndButton(parent, UIGlobals::GetDialogLook().button,
+                           _("Close"), rc,
                            button_style, (WndForm &)form, mrOK);
   } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
     // Determine click_callback function
@@ -590,8 +584,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.TabStop();
 
-    window = new CheckBoxControl(parent, *xml_dialog_look, caption,
-                                 rc,
+    window = new CheckBoxControl(parent, UIGlobals::GetDialogLook(),
+                                 caption, rc,
                                  style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
@@ -608,7 +602,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     const TCHAR* original_caption =
         StringToStringDflt(node.GetAttribute(_T("Caption")), _T(""));
 
-    window = new WndSymbolButton(parent, xml_dialog_look->button,
+    window = new WndSymbolButton(parent, UIGlobals::GetDialogLook().button,
                                  original_caption, rc,
                                  style, click_callback);
 
@@ -618,7 +612,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.ControlParent();
 
-    PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
+    PanelControl *frame = new PanelControl(parent, UIGlobals::GetDialogLook(),
                                            rc,
                                            style);
 
@@ -644,7 +638,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   // FrameControl (WndFrame)
   } else if (StringIsEqual(node.GetName(), _T("Label"))){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(parent, *xml_dialog_look, rc, style);
+    WndFrame* frame = new WndFrame(parent, UIGlobals::GetDialogLook(),
+                                   rc, style);
 
     // Set the caption
     frame->SetCaption(caption);
@@ -665,7 +660,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     LargeTextWindow *ltw = new LargeTextWindow();
     ltw->Create(parent, rc, style);
-    ltw->SetFont(*xml_dialog_look->text_font);
+    ltw->SetFont(*UIGlobals::GetDialogLook().text_font);
 
     window = ltw;
 
@@ -688,7 +683,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     const PixelRect rc(pos.x, pos.y, pos.x + size.cx, pos.y + size.cy);
 
-    window = new ListControl(parent, *xml_dialog_look,
+    window = new ListControl(parent, UIGlobals::GetDialogLook(),
                              rc, style, item_height);
 
   // TabControl (Tabbed)
@@ -714,7 +709,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     // Create the TabBarControl
 
     style.ControlParent();
-    TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look, rc,
+    TabBarControl *tabbar = new TabBarControl(parent,
+                                              UIGlobals::GetDialogLook(), rc,
                                               style, Layout::landscape);
     window = tabbar;
 
@@ -728,8 +724,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
                                                     an ugly hack!
                                                     Please rewrite: */
                                                  (WndForm &)form,
-                                                 *xml_dialog_look, caption,
-                                                 rc, style);
+                                                 UIGlobals::GetDialogLook(),
+                                                 caption, rc, style);
     window = tabmenu;
 
   } else if (StringIsEqual(node.GetName(), _T("Custom"))) {

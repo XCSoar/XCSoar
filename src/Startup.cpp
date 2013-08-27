@@ -34,7 +34,6 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
 #include "Geo/Geoid.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Language/LanguageGlue.hpp"
@@ -248,8 +247,6 @@ Startup()
     }
   }
 #endif
-
-  SetXMLDialogLook(main_window->GetLook().dialog);
 
   CommonInterface::SetSystemSettings().SetDefaults();
   CommonInterface::SetComputerSettings().SetDefaults();

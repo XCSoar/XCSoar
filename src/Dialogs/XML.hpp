@@ -28,19 +28,12 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct DialogLook;
 struct CallBackTableEntry;
 class Window;
 class SubForm;
 class WndForm;
 class SingleWindow;
 class ContainerWindow;
-
-/**
- * Sets the global dialog look for loading XML dialogs.
- */
-void
-SetXMLDialogLook(const DialogLook &dialog_look);
 
 /**
  * Loads a stand-alone XML file as a single top-level XML node
