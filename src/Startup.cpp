@@ -233,12 +233,6 @@ Startup()
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
   if (!sim_set_in_cmd_line_flag) {
-    DialogLook white_look;
-    white_look.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
-                          Fonts::map_bold, Fonts::map_bold, Fonts::map_bold);
-    white_look.SetBackgroundColor(COLOR_WHITE);
-    SetXMLDialogLook(white_look);
-
     SimulatorPromptResult result = dlgSimulatorPromptShowModal();
     switch (result) {
     case SPR_QUIT:
