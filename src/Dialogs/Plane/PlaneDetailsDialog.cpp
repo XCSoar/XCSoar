@@ -177,6 +177,11 @@ PlaneEditWidget::PolarButtonClicked()
 
   dlgPlanePolarShowModal(plane);
   UpdatePolarButton();
+
+  /* reload attributes that may have been modified */
+  LoadValue(WING_AREA, plane.wing_area);
+  LoadValue(MAX_BALLAST, plane.max_ballast);
+  LoadValue(MAX_SPEED, plane.max_speed, UnitGroup::HORIZONTAL_SPEED);
 }
 
 bool
