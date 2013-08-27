@@ -5,10 +5,6 @@
 
   <Button Name="cmdWaypoints" Caption="Waypts." Y="-140" Width="70" Height="35" Visible="0"/>
 
-  <Button Name="cmdLoadInternalPolar" Caption="List" Y="-195" Width="70" Height="30" Visible="0"/>
-  <Button Name="cmdLoadPolarFile" Caption="Import" Y="-165" Width="70" Height="30" Visible="0"/>
-  <Button Name="cmdSavePolarFile" Caption="Export" Y="-135" Width="70" Height="30" Visible="0"/>
-
   <Button Name="cmdExtra2" Y="-165" Width="70" Height="30" Visible="0"/>
   <Button Name="cmdExtra1" Y="-135" Width="70" Height="30" Visible="0"/>
 
