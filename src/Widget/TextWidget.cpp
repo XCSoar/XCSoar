@@ -35,6 +35,13 @@ TextWidget::SetText(const TCHAR *text)
   w.SetText(text);
 }
 
+void
+TextWidget::SetColor(Color _color)
+{
+  WndFrame &w = (WndFrame &)GetWindow();
+  w.SetCaptionColor(_color);
+}
+
 PixelSize
 TextWidget::GetMinimumSize() const
 {
