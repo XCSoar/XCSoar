@@ -327,7 +327,7 @@ RowFormWidget::UpdateLayout()
     }
 
     /* determine this row's height */
-    UPixelScalar height = i.GetMinimumHeight(look, vertical);
+    unsigned height = i.GetMinimumHeight(look, vertical);
     if (excess_height > 0 && i.IsElastic(look, vertical)) {
       assert(n_elastic > 0);
 
@@ -335,7 +335,7 @@ RowFormWidget::UpdateLayout()
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i.GetMaximumHeight(look, vertical);
+        const unsigned max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
