@@ -43,6 +43,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 #include <cstdio>
 
@@ -254,12 +255,14 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgPlanePolarShowModal(SingleWindow &parent, Plane &_plane)
+dlgPlanePolarShowModal(Plane &_plane)
 {
   plane = _plane;
 
-  dialog = LoadDialog(CallBackTable, parent, Layout::landscape ?
-                      _T("IDR_XML_PLANE_POLAR_L") : _T("IDR_XML_PLANE_POLAR"));
+  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                      Layout::landscape
+                      ? _T("IDR_XML_PLANE_POLAR_L")
+                      : _T("IDR_XML_PLANE_POLAR"));
   assert(dialog != NULL);
 
   DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("shape"));

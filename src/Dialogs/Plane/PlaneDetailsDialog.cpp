@@ -175,12 +175,12 @@ PlaneEditWidget::PolarButtonClicked()
   if (!Save(changed))
     return;
 
-  dlgPlanePolarShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane);
+  dlgPlanePolarShowModal(plane);
   UpdatePolarButton();
 }
 
 bool
-dlgPlaneDetailsShowModal(SingleWindow &parent, Plane &_plane)
+dlgPlaneDetailsShowModal(Plane &_plane)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   WidgetDialog dialog(look);
