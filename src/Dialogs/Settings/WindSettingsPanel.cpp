@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "WindSettingsPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Form/Button.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Angle.hpp"
@@ -38,7 +39,8 @@ WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
   :RowFormWidget(UIGlobals::GetDialogLook()),
    edit_manual_wind(_edit_manual_wind),
    clear_manual_button(_clear_manual_button),
-   edit_trail_drift(_edit_trail_drift) {}
+   edit_trail_drift(_edit_trail_drift),
+   clear_manual_window(nullptr) {}
 
 void
 WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -226,6 +228,12 @@ WindSettingsPanel::UpdateVector()
     LoadValue(Speed, Units::ToUserWindSpeed(wind.norm));
     LoadValue(Direction, wind.bearing);
   }
+
+  const bool visible = settings.manual_wind_available;
+  if (clear_manual_button)
+    SetRowVisible(CLEAR_MANUAL_BUTTON, visible);
+  else if (clear_manual_window != nullptr)
+    clear_manual_window->SetVisible(visible);
 }
 
 void
