@@ -290,7 +290,7 @@ RowFormWidget::UpdateLayout()
      determine the minimum total height */
   unsigned min_height = 0;
   unsigned n_elastic = 0;
-  unsigned caption_width = 0;
+  int caption_width = -1;
 
   for (const auto &i : rows) {
     if (!i.IsAvailable(expert))
@@ -301,13 +301,13 @@ RowFormWidget::UpdateLayout()
       ++n_elastic;
 
     if (!vertical && i.type == Row::Type::EDIT) {
-      unsigned cw = i.GetControl().GetRecommendedCaptionWidth();
+      int cw = i.GetControl().GetRecommendedCaptionWidth();
       if (cw > caption_width)
         caption_width = cw;
     }
   }
 
-  if (!vertical && caption_width * 3 > total_width * 2)
+  if (caption_width * 3 > int(total_width * 2))
     caption_width = total_width * 2 / 3;
 
   /* how much excess height in addition to the minimum height? */
@@ -378,10 +378,7 @@ RowFormWidget::UpdateLayout()
 
     if (i.type == Row::Type::EDIT &&
         i.GetControl().HasCaption()) {
-      if (vertical)
-        i.GetControl().SetCaptionWidth(-1);
-      else if (caption_width > 0)
-        i.GetControl().SetCaptionWidth(caption_width);
+      i.GetControl().SetCaptionWidth(caption_width);
     }
 
     /* finally move and resize */
