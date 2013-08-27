@@ -155,7 +155,7 @@ WndProperty::~WndProperty()
 UPixelScalar
 WndProperty::GetRecommendedCaptionWidth() const
 {
-  return look.text_font->TextSize(caption).cx + Layout::FastScale(3);
+  return look.text_font->TextSize(caption).cx + Layout::GetTextPadding();
 }
 
 void
