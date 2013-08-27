@@ -49,7 +49,6 @@ Copyright_License {
 
 static WndForm *dialog = NULL;
 static Plane plane;
-static bool loading = false;
 
 static PolarShapeEditWidget &
 GetShapeEditor(SubForm &form)
@@ -111,12 +110,10 @@ Update()
 {
   UpdateCaption();
 
-  loading = true;
   LoadPolarShape(*dialog, plane.polar_shape);
 
   LoadFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
   LoadFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
-  loading = false;
 
   UpdatePolarLabel();
   UpdateInvalidLabel();
@@ -237,9 +234,6 @@ ImportClicked()
 static void
 PolarChanged(gcc_unused DataField *Sender)
 {
-  if (loading)
-    return;
-
   plane.polar_name = _T("Custom");
   UpdatePolarLabel();
   UpdateInvalidLabel();
