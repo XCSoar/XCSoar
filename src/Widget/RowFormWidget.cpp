@@ -124,6 +124,47 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
   return window->GetHeight();
 }
 
+inline void
+RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
+                                 const PixelRect &_position,
+                                 int caption_width)
+{
+  assert(type != Row::Type::DUMMY);
+
+  position = _position;
+
+  if (type == Type::WIDGET) {
+    Widget &widget = GetWidget();
+
+    /* TODO: visible check - hard to implement without remembering
+       the control position, because Widget::Show() wants a
+       PixelRect parameter */
+
+    if (!initialised) {
+      initialised = true;
+      widget.Initialise(parent, position);
+    }
+
+    if (!prepared) {
+      prepared = true;
+      widget.Prepare(parent, position);
+    }
+
+    widget.Show(position);
+  } else {
+    Window &window = GetWindow();
+
+    if (visible)
+      window.Show();
+
+    if (type == Type::EDIT && GetControl().HasCaption())
+      GetControl().SetCaptionWidth(caption_width);
+
+    /* finally move and resize */
+    window.Move(position);
+  }
+}
+
 RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
   :look(_look), vertical(_vertical)
 {
@@ -349,41 +390,8 @@ RowFormWidget::UpdateLayout()
     }
 
     NextControlRect(current_rect, height);
-    i.position = current_rect;
-
-    if (i.type == Row::Type::WIDGET) {
-      Widget &widget = i.GetWidget();
-
-      /* TODO: visible check - hard to implement without remembering
-         the control position, because Widget::Show() wants a
-         PixelRect parameter */
-
-      if (!i.initialised) {
-        i.initialised = true;
-        widget.Initialise((ContainerWindow &)GetWindow(), i.position);
-      }
-
-      if (!i.prepared) {
-        i.prepared = true;
-        widget.Prepare((ContainerWindow &)GetWindow(), i.position);
-      }
-
-      widget.Show(i.position);
-      continue;
-    }
-
-    Window &window = i.GetWindow();
-
-    if (i.visible)
-      window.Show();
-
-    if (i.type == Row::Type::EDIT &&
-        i.GetControl().HasCaption()) {
-      i.GetControl().SetCaptionWidth(caption_width);
-    }
-
-    /* finally move and resize */
-    window.Move(i.position);
+    i.UpdateLayout((ContainerWindow &)GetWindow(), current_rect,
+                   caption_width);
   }
 
   assert(excess_height == 0 || n_elastic == 0);

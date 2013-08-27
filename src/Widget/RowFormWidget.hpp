@@ -235,6 +235,9 @@ class RowFormWidget : public WindowWidget {
 
     gcc_pure
     unsigned GetMaximumHeight(const DialogLook &look, bool vertical) const;
+
+    void UpdateLayout(ContainerWindow &parent, const PixelRect &_position,
+                      int caption_width);
   };
 
   const DialogLook &look;
