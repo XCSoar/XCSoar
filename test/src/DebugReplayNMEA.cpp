@@ -39,6 +39,7 @@ DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
           ? driver->CreateOnPort(config, port)
           : NULL)
 {
+  clock.Reset();
 }
 
 bool
@@ -48,8 +49,10 @@ DebugReplayNMEA::Next()
 
   const char *line;
   while ((line = reader->ReadLine()) != NULL) {
-    if (raw_basic.time_available)
-      raw_basic.clock = raw_basic.time;
+    raw_basic.clock = clock.NextClock(raw_basic.time_available
+                                      ? raw_basic.time
+                                      : fixed(-1));
+
     if (!device || !device->ParseNMEA(line, raw_basic))
       parser.ParseLine(line, raw_basic);
 

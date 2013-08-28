@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "DebugReplay.hpp"
 #include "Device/Parser.hpp"
+#include "Time/ReplayClock.hpp"
 
 #include <memory>
 
@@ -37,6 +38,8 @@ class DebugReplayNMEA : public DebugReplay {
   std::unique_ptr<Device> device;
 
   NMEAParser parser;
+
+  ReplayClock clock;
 
 public:
   DebugReplayNMEA(NLineReader *reader, const DeviceRegister *driver);
