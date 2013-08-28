@@ -239,10 +239,6 @@ DeviceBlackboard::Merge()
   replay_clock.Normalise(replay_data);
 
   if (replay_data.alive) {
-    /* the replay may run at a higher speed; use NMEA_INFO::Time as a
-       "fake wallclock" to prevent them from expiring too quickly */
-    replay_data.clock = replay_data.time;
-
     replay_data.Expire();
     SetBasic() = replay_data;
   } else if (simulator_data.alive) {
