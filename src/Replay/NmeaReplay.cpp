@@ -27,7 +27,6 @@
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Config.hpp"
-#include "OS/Clock.hpp"
 #include "NMEA/Info.hpp"
 
 #include <string.h>
@@ -47,6 +46,8 @@ NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
     config.Clear();
     device = driver->CreateOnPort(config, port);
   }
+
+  clock.Reset();
 }
 
 NmeaReplay::~NmeaReplay()
@@ -59,13 +60,12 @@ NmeaReplay::~NmeaReplay()
 bool
 NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 {
-  if (data.time_available)
-    data.clock = data.time;
+  data.clock = clock.NextClock(data.time_available ? data.time : fixed(-1));
 
   if ((device != NULL && device->ParseNMEA(line, data)) ||
       (parser != NULL && parser->ParseLine(line, data))) {
     data.gps.replay = true;
-    data.alive.Update(fixed(MonotonicClockMS()) / 1000);
+    data.alive.Update(data.clock);
 
     return true;
   } else
