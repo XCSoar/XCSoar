@@ -99,6 +99,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
+	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Init.cpp \
 	$(SCREEN_SRC_DIR)/EGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
@@ -124,6 +125,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \

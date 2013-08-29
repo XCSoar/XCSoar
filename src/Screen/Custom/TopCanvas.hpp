@@ -48,6 +48,12 @@ class Canvas;
 struct PixelSize;
 struct PixelRect;
 
+#if (defined(USE_FB) && !defined(KOBO)) || (defined USE_EGL && (defined(USE_VIDEOCORE) || defined(HAVE_MALI)))
+/* defined if we need to initialise /dev/tty to graphics mode, see
+   TopCanvas::InitialiseTTY() */
+#define USE_TTY
+#endif
+
 class TopCanvas
 #ifndef USE_MEMORY_CANVAS
   : public Canvas
@@ -85,6 +91,15 @@ class TopCanvas
 #endif
 #endif
 
+#ifdef USE_TTY
+  /**
+   * A file descriptor for /dev/tty, or -1 if /dev/tty could not be
+   * opened.  This is used on Linux to switch to graphics mode
+   * (KD_GRAPHICS) or restore text mode (KD_TEXT).
+   */
+  int tty_fd;
+#endif
+
 #ifdef USE_FB
   int fd;
 
@@ -96,7 +111,14 @@ class TopCanvas
 
 public:
 #ifdef USE_FB
-  TopCanvas():fd(-1), map(nullptr) {}
+  TopCanvas()
+    :
+#ifdef USE_TTY
+    tty_fd(-1),
+#endif
+    fd(-1), map(nullptr) {}
+#elif defined(USE_TTY)
+  TopCanvas():tty_fd(-1) {}
 #endif
 
 #ifndef ANDROID
@@ -172,6 +194,10 @@ public:
    */
   void Wait();
 #endif
+
+private:
+  void InitialiseTTY();
+  void DeinitialiseTTY();
 };
 
 #endif
