@@ -99,15 +99,13 @@ public:
   TopCanvas():fd(-1), map(nullptr) {}
 #endif
 
-#if defined(USE_FB) || defined(USE_VFB)
+#ifndef ANDROID
   ~TopCanvas() {
     Destroy();
   }
-#elif defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE))
-  ~TopCanvas();
-#endif
 
   void Destroy();
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {

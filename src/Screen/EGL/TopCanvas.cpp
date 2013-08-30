@@ -156,7 +156,8 @@ TopCanvas::Create(PixelSize new_size,
   Canvas::Create(effective_size);
 }
 
-TopCanvas::~TopCanvas()
+void
+TopCanvas::Destroy()
 {
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   eglDestroySurface(display, surface);

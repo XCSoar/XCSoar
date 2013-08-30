@@ -42,13 +42,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-#if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
-TopCanvas::~TopCanvas()
-{
-  buffer.Free();
-}
-#endif
-
 #ifndef ENABLE_OPENGL
 
 PixelRect
@@ -122,6 +115,14 @@ TopCanvas::Create(PixelSize new_size,
 #ifdef GREYSCALE
   buffer.Allocate(new_size.cx, new_size.cy);
 #endif
+#endif
+}
+
+void
+TopCanvas::Destroy()
+{
+#if !defined(ENABLE_OPENGL) && defined(GREYSCALE)
+  buffer.Free();
 #endif
 }
 
