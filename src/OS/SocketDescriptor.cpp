@@ -180,7 +180,12 @@ SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {
-  return ::recv(Get(), (char *)buffer, length, 0);
+  int flags = 0;
+#ifdef HAVE_POSIX
+  flags |= MSG_DONTWAIT;
+#endif
+
+  return ::recv(Get(), (char *)buffer, length, flags);
 }
 
 ssize_t
