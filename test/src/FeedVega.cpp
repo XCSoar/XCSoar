@@ -57,13 +57,21 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!port->StartRxThread()) {
+  ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
     delete port;
-    fprintf(stderr, "Failed to start the port thread\n");
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
-  ConsoleOperationEnvironment env;
+  if (!port->StartRxThread()) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to start the port thread\n");
+    return EXIT_FAILURE;
+  }
 
   unsigned long last_stamp = -1;
   char line[1024];

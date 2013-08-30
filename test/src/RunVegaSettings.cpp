@@ -46,9 +46,16 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  VegaDevice device(*port);
-
   ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
+  VegaDevice device(*port);
 
   while (!args.IsEmpty()) {
     const char *p = args.GetNext();

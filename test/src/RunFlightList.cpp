@@ -110,6 +110,13 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
 

@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 #include "OS/Clock.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
 #include "IO/DataHandler.hpp"
 #include "HexDump.hpp"
@@ -56,6 +57,15 @@ int main(int argc, char **argv)
   Port *port = OpenPort(config, handler);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
+    return EXIT_FAILURE;
+  }
+
+  ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 

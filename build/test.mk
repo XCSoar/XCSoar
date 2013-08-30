@@ -1143,6 +1143,8 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -1154,6 +1156,8 @@ LOG_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \

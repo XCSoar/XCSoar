@@ -408,6 +408,14 @@ main(int argc, char **argv)
   }
 
   ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   FlarmDevice flarm(*port);
   RunUI(flarm, env);
 
