@@ -82,10 +82,6 @@ class TopCanvas
 #ifdef DITHER
   Dither dither;
 #endif
-#else
-
-  WritableImageBuffer<BGRAPixelTraits> buffer;
-
 #endif
 #endif
 
