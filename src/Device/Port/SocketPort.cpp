@@ -22,15 +22,10 @@ Copyright_License {
 */
 
 #include "SocketPort.hpp"
-#include "Util/StaticString.hpp"
 #include "IO/DataHandler.hpp"
 
 #ifdef HAVE_POSIX
 #include "IO/Async/GlobalIOThread.hpp"
-#endif
-
-#ifndef _WIN32_WCE
-#include "OS/SocketAddress.hpp"
 #endif
 
 #include <assert.h>
@@ -94,28 +89,6 @@ SocketPort::OpenUDPListener(unsigned port)
   Set(std::move(s));
   return true;
 }
-
-#ifndef _WIN32_WCE
-
-bool
-SocketPort::ConnectTCP(const char *host, unsigned port)
-{
-  NarrowString<32> service;
-  service.UnsafeFormat("%u", port);
-
-  SocketAddress address;
-  if (!address.Lookup(host, service, AF_INET))
-    return false;
-
-  SocketDescriptor s;
-  if (!s.CreateTCP() || !s.Connect(address))
-    return false;
-
-  Set(std::move(s));
-  return true;
-}
-
-#endif
 
 PortState
 SocketPort::GetState() const
