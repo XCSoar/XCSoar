@@ -107,10 +107,10 @@ public:
   bool CreateConnectUDP(const char *host, const char *port);
 #endif
 
-#ifndef HAVE_POSIX
   ssize_t Read(void *buffer, size_t length);
   ssize_t Write(const void *buffer, size_t length);
 
+#ifndef HAVE_POSIX
   int WaitReadable(int timeout_ms) const;
   int WaitWritable(int timeout_ms) const;
 #else

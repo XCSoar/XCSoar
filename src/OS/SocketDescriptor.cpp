@@ -177,8 +177,6 @@ SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 
 #endif
 
-#ifndef HAVE_POSIX
-
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {
@@ -190,6 +188,8 @@ SocketDescriptor::Write(const void *buffer, size_t length)
 {
   return ::send(Get(), (const char *)buffer, length, 0);
 }
+
+#ifndef HAVE_POSIX
 
 int
 SocketDescriptor::WaitReadable(int timeout_ms) const
