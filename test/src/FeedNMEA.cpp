@@ -64,9 +64,6 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  /* turn off output buffering */
-  setvbuf(stdout, NULL, _IONBF, 0);
-
   if (!port->StartRxThread()) {
     delete port;
     fprintf(stderr, "Failed to start the port thread\n");
