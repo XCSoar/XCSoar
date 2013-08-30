@@ -32,11 +32,32 @@ Copyright_License {
 class TCPClientPort final
   : public SocketPort
 {
+#ifdef HAVE_POSIX
+  /**
+   * The unconnected socket.  This will be moved to SocketPort::socket
+   * as soon as the connection has been established.
+   */
+  SocketDescriptor connecting;
+#endif
+
 public:
   TCPClientPort(DataHandler &handler)
     :SocketPort(handler) {}
 
+#ifdef HAVE_POSIX
+  virtual ~TCPClientPort();
+#endif
+
   bool Connect(const char *host, unsigned port);
+
+#ifdef HAVE_POSIX
+  /* virtual methods from class Port */
+  virtual PortState GetState() const override;
+
+protected:
+  /* virtual methods from class FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
+#endif
 };
 
 #endif

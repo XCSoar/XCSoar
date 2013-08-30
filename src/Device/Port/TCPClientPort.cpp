@@ -25,6 +25,19 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "OS/SocketAddress.hpp"
 
+#ifdef HAVE_POSIX
+#include "IO/Async/GlobalIOThread.hpp"
+
+#include <errno.h>
+
+TCPClientPort::~TCPClientPort()
+{
+  if (connecting.IsDefined())
+    io_thread->LockRemove(connecting.Get());
+}
+
+#endif
+
 bool
 TCPClientPort::Connect(const char *host, unsigned port)
 {
@@ -36,9 +49,72 @@ TCPClientPort::Connect(const char *host, unsigned port)
     return false;
 
   SocketDescriptor s;
-  if (!s.CreateTCP() || !s.Connect(address))
+  if (!s.CreateTCP())
     return false;
 
-  Set(std::move(s));
-  return true;
+#ifdef HAVE_POSIX
+  s.SetNonBlocking();
+#endif
+
+  if (s.Connect(address)) {
+#ifdef HAVE_POSIX
+    s.SetBlocking();
+#endif
+    Set(std::move(s));
+    return true;
+  }
+
+#ifdef HAVE_POSIX
+  if (errno == EINPROGRESS) {
+    connecting = std::move(s);
+    io_thread->LockAdd(connecting.Get(), Poll::WRITE, *this);
+    return true;
+  }
+#endif
+
+  return false;
 }
+
+#ifdef HAVE_POSIX
+
+PortState
+TCPClientPort::GetState() const
+{
+  return connecting.IsDefined()
+    ? PortState::LIMBO
+    : SocketPort::GetState();
+}
+
+bool
+TCPClientPort::OnFileEvent(int fd, unsigned mask)
+{
+  if (gcc_likely(!connecting.IsDefined()))
+    /* connection already established: let SocketPort handle reading
+       from the connection */
+    return SocketPort::OnFileEvent(fd, mask);
+
+  /* connection ready: check connect error */
+
+  assert(fd == connecting.Get());
+
+  io_thread->LockRemove(connecting.Get());
+
+  int s_err = 0;
+  socklen_t s_err_size = sizeof(s_err);
+  if (getsockopt(connecting.Get(), SOL_SOCKET, SO_ERROR,
+                 &s_err, &s_err_size) < 0)
+    s_err = errno;
+
+  if (s_err == 0) {
+    /* connection has been established successfully */
+    Set(std::move(connecting));
+    assert(!connecting.IsDefined());
+  } else {
+    /* there was a problem */
+    connecting.Close();
+  }
+
+  return false;
+}
+
+#endif
