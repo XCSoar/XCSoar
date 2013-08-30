@@ -109,7 +109,11 @@ SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 SocketDescriptor
 SocketDescriptor::Accept()
 {
+#if defined(__linux__) && !defined(__BIONIC__)
+  int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
+#else
   int fd = ::accept(Get(), NULL, NULL);
+#endif
   return fd >= 0
     ? SocketDescriptor(fd)
     : SocketDescriptor();
@@ -131,6 +135,11 @@ bool
 SocketDescriptor::Create(int domain, int type, int protocol)
 {
   assert(!IsDefined());
+
+#ifdef SOCK_CLOEXEC
+  /* implemented since Linux 2.6.27 */
+  type |= SOCK_CLOEXEC;
+#endif
 
   int fd = socket(domain, type, protocol);
   if (fd < 0)
