@@ -734,8 +734,9 @@ AirspaceRenderer::Draw(Canvas &canvas,
   if (warning_manager != NULL)
     awc.Visit(*warning_manager);
 
+  const AircraftState aircraft = ToAircraftState(basic, calculated);
   const AirspaceMapVisible visible(computer_settings, settings,
-                                   ToAircraftState(basic, calculated), awc);
+                                   aircraft, awc);
   Draw(canvas,
 #ifndef ENABLE_OPENGL
        stencil_canvas,

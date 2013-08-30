@@ -92,9 +92,12 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   short elevations[NUM_SLICES];
   UpdateTerrain(elevations);
 
-  if (airspace_database)
+  if (airspace_database != nullptr) {
+    const AircraftState aircraft = ToAircraftState(Basic(), Calculated());
     airspace_renderer.Draw(canvas, chart, *airspace_database, start, vec,
-                           ToAircraftState(Basic(), Calculated()));
+                           aircraft);
+  }
+
   terrain_renderer.Draw(canvas, chart, elevations);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
