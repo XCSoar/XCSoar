@@ -191,7 +191,12 @@ SocketDescriptor::Read(void *buffer, size_t length)
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length)
 {
-  return ::send(Get(), (const char *)buffer, length, 0);
+  int flags = 0;
+#ifdef __linux__
+  flags |= MSG_NOSIGNAL;
+#endif
+
+  return ::send(Get(), (const char *)buffer, length, flags);
 }
 
 #ifndef HAVE_POSIX
