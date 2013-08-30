@@ -114,6 +114,15 @@ FileDescriptor::SetNonBlocking()
   fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
+void
+FileDescriptor::SetBlocking()
+{
+  assert(IsDefined());
+
+  int flags = fcntl(fd, F_GETFL);
+  fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+}
+
 #endif
 
 #ifdef HAVE_EVENTFD
