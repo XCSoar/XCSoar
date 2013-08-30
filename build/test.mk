@@ -731,12 +731,11 @@ DEBUG_PROGRAM_NAMES = \
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
 	AnalyseFlight \
-	FeedTCP \
 	FeedFlyNetData
 endif
 
 ifeq ($(TARGET),PC)
-DEBUG_PROGRAM_NAMES += FeedTCP \
+DEBUG_PROGRAM_NAMES += \
   FeedFlyNetData
 endif
 
@@ -2517,12 +2516,6 @@ EMULATE_DEVICE_SOURCES = \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
 EMULATE_DEVICE_DEPENDS = PORT ASYNC OS THREAD UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
-
-FEED_TCP_SOURCES = \
-	$(TEST_SRC_DIR)/FeedTCP.cpp
-FEED_TCP_DEPENDS = OS
-
-$(eval $(call link-program,FeedTCP,FEED_TCP))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
