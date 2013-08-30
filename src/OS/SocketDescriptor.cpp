@@ -235,13 +235,13 @@ ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
                        SocketAddress &address)
 {
-  socklen_t addrlen = address.GetCapacity();
-  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length,
+  int flags = 0;
 #ifdef HAVE_POSIX
-                              MSG_DONTWAIT,
-#else
-                              0,
+  flags |= MSG_DONTWAIT;
 #endif
+
+  socklen_t addrlen = address.GetCapacity();
+  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
                               address, &addrlen);
   if (nbytes > 0)
     address.SetLength(addrlen);
@@ -253,15 +253,14 @@ ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
                         const SocketAddress &address)
 {
-  return ::sendto(Get(), (const char *)buffer, length,
+  int flags = 0;
 #ifdef HAVE_POSIX
+  flags |= MSG_DONTWAIT;
+#endif
 #ifdef __linux__
-                  MSG_DONTWAIT|MSG_NOSIGNAL,
-#else
-                  MSG_DONTWAIT,
+  flags |= MSG_NOSIGNAL;
 #endif
-#else
-                  0,
-#endif
+
+  return ::sendto(Get(), (const char *)buffer, length, flags,
                   address, address.GetLength());
 }
