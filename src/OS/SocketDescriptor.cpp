@@ -238,11 +238,7 @@ SocketDescriptor::Read(void *buffer, size_t length,
   socklen_t addrlen = address.GetCapacity();
   ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length,
 #ifdef HAVE_POSIX
-#ifdef __linux__
-                              MSG_DONTWAIT|MSG_NOSIGNAL,
-#else
                               MSG_DONTWAIT,
-#endif
 #else
                               0,
 #endif
