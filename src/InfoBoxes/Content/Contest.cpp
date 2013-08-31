@@ -81,6 +81,5 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
 
   // Set Value
   data.SetValueFromDistance(result_olc.distance);
-
-  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
+  data.SetCommentFromSpeed(result_olc.GetSpeed());
 }
