@@ -908,7 +908,7 @@ static constexpr MetaData meta_data[] = {
   // e_OC_Distance
   {
     N_("On-Line Contest distance"),
-    N_("OLC"),
+    N_("OLC Dist"),
     N_("Instantaneous evaluation of the flown distance according to the configured On-Line Contest rule set."),
     IBFHelper<InfoBoxContentOLC>::Create,
     e_TaskProgress, // Progress
