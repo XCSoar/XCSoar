@@ -406,7 +406,7 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
            7), even though we did our best to make sure that the
            integer arithmetics above can't overflow */
         /* TODO: debug this problem and replace this workaround */
-        const int sval = num / (mag|1);
+        const int sval = num / int(mag|1);
         const int sindex = (sval - sz) * contrast / 128;
         *p++ = oColorBuf[h + 256 * Clamp(sindex, -63, 63)];
 #else
