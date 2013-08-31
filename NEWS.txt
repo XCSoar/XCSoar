@@ -28,7 +28,6 @@ Version 6.7 - not yet released
   - new content "Next distance (nominal)"
   - new content "Takeoff distance" (#3059)
   - new panel for "Team code" provides quick access to team code settings (#2899)
-  - show average speed in OLC InfoBox (#2352)
 * tasks
   - custom "start requires arm" setting (#2782)
   - new option to disable OLC optimisation
