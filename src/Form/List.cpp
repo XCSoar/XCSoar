@@ -249,10 +249,15 @@ ListControl::EnsureVisible(unsigned i)
     SetOrigin(i);
     SetPixelPan(0);
   } else if (origin + items_visible <= i) {
-    SetOrigin(i - items_visible);
+    if (HasEPaper()) {
+      /* no pixel panning on e-paper screens to avoid tearing */
+      SetOrigin(i + 1 - items_visible);
+    } else {
+      SetOrigin(i - items_visible);
 
-    if (origin > 0 || i >= items_visible)
-      SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+      if (origin > 0 || i >= items_visible)
+        SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+    }
   }
 }
 
