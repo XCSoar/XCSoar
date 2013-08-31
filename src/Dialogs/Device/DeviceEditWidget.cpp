@@ -122,7 +122,11 @@ DetectSerialPorts(DataFieldEnum &df)
   bool found = false;
   const char *path;
   while ((path = enumerator.Next()) != nullptr) {
-    AddPort(df, DeviceConfig::PortType::SERIAL, path);
+    const char *display_string = path;
+    if (memcmp(path, "/dev/", 5) == 0)
+      display_string = path + 5;
+
+    AddPort(df, DeviceConfig::PortType::SERIAL, path, display_string);
     found = true;
   }
 
