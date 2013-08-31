@@ -29,6 +29,9 @@ struct InfoBoxData;
 void
 UpdateInfoBoxHomeDistance(InfoBoxData &data);
 
+void
+UpdateInfoBoxTakeoffDistance(InfoBoxData &data);
+
 extern const struct InfoBoxPanel atc_infobox_panels[];
 
 void
