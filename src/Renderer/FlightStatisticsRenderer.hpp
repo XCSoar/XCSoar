@@ -62,7 +62,7 @@ public:
                  const MapSettings &settings_map,
                  const ContestStatistics &contest,
                  const TraceComputer &trace_computer,
-		 const Retrospective &retrospective) const;
+                 const Retrospective &retrospective) const;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
