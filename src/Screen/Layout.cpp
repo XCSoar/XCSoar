@@ -35,7 +35,7 @@ namespace Layout
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
   UPixelScalar text_padding = 2;
-  UPixelScalar minimum_control_height = 22, maximum_control_height = 44;
+  UPixelScalar minimum_control_height = 20, maximum_control_height = 44;
   UPixelScalar hit_radius = 10;
 }
 
@@ -64,7 +64,7 @@ Layout::Initialize(PixelSize new_size)
 
   text_padding = Scale(2);
 
-  minimum_control_height = Scale(22);
+  minimum_control_height = Scale(20);
 
   if (HasTouchScreen()) {
     /* larger rows for touch screens */
