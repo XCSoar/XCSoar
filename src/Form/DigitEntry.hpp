@@ -128,7 +128,7 @@ class DigitEntry : public PaintWindow {
 
   bool valid;
 
-  unsigned top, bottom;
+  unsigned top, bottom, max_width;
 
   /**
    * The current digit.
