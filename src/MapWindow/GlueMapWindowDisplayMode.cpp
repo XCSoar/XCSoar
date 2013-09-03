@@ -202,7 +202,12 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(
       basic.track_available ? basic.track : Angle::Zero());
 
-  compass_visible = orientation != DisplayOrientation::NORTH_UP;
+if (settings.circling_orientation == DisplayOrientation::NORTH_UP
+      && settings.cruise_orientation == DisplayOrientation::NORTH_UP)
+    compass_visible = false;
+  else
+    compass_visible = true;
+
 }
 
 void
