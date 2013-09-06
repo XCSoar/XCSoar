@@ -101,32 +101,34 @@ AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   PixelScalar w2 = canvas.CalcTextWidth(_("Display")) + Layout::FastScale(10);
   PixelScalar x0 = w0 - w1 - w2;
 
+  const unsigned padding = Layout::GetTextPadding();
+
   if (color_mode) {
     if (AirspacePreviewRenderer::PrepareFill(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
-                       rc.right - Layout::FastScale(2),
-                       rc.bottom - Layout::FastScale(2));
+      canvas.Rectangle(rc.left + x0, rc.top + padding,
+                       rc.right - padding,
+                       rc.bottom - padding);
       AirspacePreviewRenderer::UnprepareFill(canvas);
     }
     if (AirspacePreviewRenderer::PrepareOutline(
         canvas, (AirspaceClass)i, look, renderer)) {
-      canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
-                       rc.right - Layout::FastScale(2),
-                       rc.bottom - Layout::FastScale(2));
+      canvas.Rectangle(rc.left + x0, rc.top + padding,
+                       rc.right - padding,
+                       rc.bottom - padding);
     }
   } else {
     if (computer.warnings.class_warnings[i])
-      canvas.DrawText(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
+      canvas.DrawText(rc.left + w0 - w1 - w2, rc.top + padding,
                       _("Warn"));
 
     if (renderer.classes[i].display)
-      canvas.DrawText(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
+      canvas.DrawText(rc.left + w0 - w2, rc.top + padding,
                       _("Display"));
   }
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
-                         rc.top + Layout::FastScale(2),
+  canvas.DrawClippedText(rc.left + padding,
+                         rc.top + padding,
                          x0 - Layout::FastScale(10),
                          AirspaceFormatter::GetClass((AirspaceClass)i));
 }

@@ -38,6 +38,8 @@ class WidgetDialog : public WndForm {
 
   ManagedWidget widget;
 
+  bool full;
+
   bool auto_size;
 
   bool changed;
@@ -118,6 +120,8 @@ protected:
   virtual void OnResize(PixelSize new_size) override;
 
   /* virtual methods from class WndForm */
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
+  virtual void SetDefaultFocus() override;
   virtual bool OnAnyKeyDown(unsigned key_code) override;
 };
 

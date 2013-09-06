@@ -1,9 +1,16 @@
+LLVM_PREFIX ?=
+LLVM_SUFFIX ?=
+
+LLVM_LINK = $(LLVM_PREFIX)llvm-link$(LLVM_SUFFIX)
+LLVM_OPT = $(LLVM_PREFIX)opt$(LLVM_SUFFIX)
+LLVM_LLC = $(LLVM_PREFIX)llc$(LLVM_SUFFIX)
+
 ifeq ($(CLANG),y)
 
 ifneq ($(TARGET),ANDROID)
 ifneq ($(ANALYZER),y)
-CXX = clang++
-CC = clang
+CXX = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
+CC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
 endif
 
 HOSTCC = $(CC)
@@ -27,7 +34,9 @@ ifeq ($(TARGET),ANDROID)
   TARGET_ARCH := $(filter-out -mthumb-interwork,$(TARGET_ARCH))
   TARGET_ARCH += -gcc-toolchain $(ANDROID_GCC_TOOLCHAIN)
   TARGET_ARCH += -target $(LLVM_TRIPLE)
+  TARGET_ARCH += -integrated-as
   TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
+  TARGET_LDLIBS += -latomic
 endif # Android
 
 ifeq ($(TARGET_IS_PI),y)

@@ -38,15 +38,14 @@ const Vector
 WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
 {
   //relative weight for each factor
-  #define REL_FACTOR_QUALITY 100
-  #define REL_FACTOR_ALTITUDE 100
-  #define REL_FACTOR_TIME 200
-  #define TIME_RANGE 36 // one hour
+  static constexpr unsigned REL_FACTOR_QUALITY = 100;
+  static constexpr unsigned REL_FACTOR_ALTITUDE = 100;
+  static constexpr unsigned REL_FACTOR_TIME = 200;
 
-  int altRange = 1000; //conf->getWindAltitudeRange();
-  int timeRange = TIME_RANGE * 100; //conf->getWindTimeRange();
+  static constexpr unsigned altRange = 1000;
+  static constexpr unsigned timeRange = 3600; // one hour
 
-  fixed k(0.0025);
+  static constexpr fixed k(0.0025);
 
   unsigned int total_quality = 0;
 
@@ -59,56 +58,65 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
 
   for (unsigned i = 0; i < measurements.size(); i++) {
     const WindMeasurement &m = measurements[i];
-    fixed altdiff = (alt - m.altitude) / altRange;
-    fixed timediff = fabs(fixed(now - m.time) / timeRange);
 
-    if ((fabs(altdiff) < fixed(1)) && (timediff < fixed(1))) {
-      // measurement quality
-      unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
+    if (now < m.time)
+      /* time warp - usually, this shouldn't happen, because time
+         warps "should" be filtered at a higher level already */
+      continue;
 
-      // factor in altitude difference between current altitude and
-      // measurement.  Maximum alt difference is 1000 m.
-      unsigned int a_quality =
-        iround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
-          * REL_FACTOR_ALTITUDE);
+    fixed timediff = fixed(now - m.time) / timeRange;
+    if (timediff >= fixed(1))
+      continue;
 
-      // factor in timedifference. Maximum difference is 1 hours.
-      unsigned int t_quality =
-        iround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
-          * REL_FACTOR_TIME);
+    fixed altdiff = fabs(alt - m.altitude) / altRange;
+    if (altdiff >= fixed(1))
+      continue;
 
-      if (m.quality == 6) {
-        if (timediff < override_time) {
-          // over-ride happened, so re-set accumulator
-          override_time = timediff;
+    // measurement quality
+    unsigned int q_quality = std::min(5u, m.quality) * REL_FACTOR_QUALITY / 5u;
+
+    // factor in altitude difference between current altitude and
+    // measurement.  Maximum alt difference is 1000 m.
+    unsigned int a_quality =
+      uround(((fixed(2) / (sqr(altdiff) + fixed(1))) - fixed(1))
+             * REL_FACTOR_ALTITUDE);
+
+    // factor in timedifference. Maximum difference is 1 hours.
+    unsigned int t_quality =
+      uround(k * (fixed(1) - timediff) / (sqr(timediff) + k)
+             * REL_FACTOR_TIME);
+
+    if (m.quality == 6) {
+      if (timediff < override_time) {
+        // over-ride happened, so re-set accumulator
+        override_time = timediff;
+        total_quality = 0;
+        result.x = fixed(0);
+        result.y = fixed(0);
+        overridden = true;
+      } else {
+        // this isn't the latest over-ride or obtained fix, so ignore
+        continue;
+      }
+    } else {
+      if (timediff < override_time) {
+        // a more recent fix was obtained than the over-ride, so start using
+        // that one
+        override_time = timediff;
+        if (overridden) {
+          // re-set accumulators
+          overridden = false;
           total_quality = 0;
           result.x = fixed(0);
           result.y = fixed(0);
-          overridden = true;
-        } else {
-          // this isn't the latest over-ride or obtained fix, so ignore
-          continue;
-        }
-      } else {
-        if (timediff < override_time) {
-          // a more recent fix was obtained than the over-ride, so start using
-          // that one
-          override_time = timediff;
-          if (overridden) {
-            // re-set accumulators
-            overridden = false;
-            total_quality = 0;
-            result.x = fixed(0);
-            result.y = fixed(0);
-          }
         }
       }
-
-      unsigned int quality = q_quality * (a_quality * t_quality);
-      result.x += m.vector.x * quality;
-      result.y += m.vector.y * quality;
-      total_quality += quality;
     }
+
+    unsigned int quality = q_quality * (a_quality * t_quality);
+    result.x += m.vector.x * quality;
+    result.y += m.vector.y * quality;
+    total_quality += quality;
   }
 
   if (total_quality > 0) {
@@ -125,7 +133,7 @@ WindMeasurementList::getWind(unsigned now, fixed alt, bool &found) const
  */
 void
 WindMeasurementList::addMeasurement(unsigned time, const SpeedVector &vector,
-                                    fixed alt, int quality)
+                                    fixed alt, unsigned quality)
 {
   WindMeasurement &wind = measurements.full()
     ? measurements[getLeastImportantItem(time)] :

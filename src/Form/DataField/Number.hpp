@@ -39,7 +39,11 @@ public:
 protected:
   NumberDataField(Type type, bool support_combo,
                   const TCHAR *edit_format, const TCHAR *display_format,
-                  DataAccessCallback OnDataAccess = NULL);
+                  DataAccessCallback OnDataAccess);
+
+  NumberDataField(Type type, bool support_combo,
+                  const TCHAR *edit_format, const TCHAR *display_format,
+                  DataFieldListener *listener=nullptr);
 };
 
 #endif

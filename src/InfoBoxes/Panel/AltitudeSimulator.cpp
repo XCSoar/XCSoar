@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AltitudeSimulator.hpp"
+#include "Look/DialogLook.hpp"
 #include "Widget/OffsetButtonsWidget.hpp"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -59,7 +60,7 @@ LoadAltitudeSimulatorPanel(unsigned id)
   if (!basic.gps.simulator)
     return nullptr;
 
-  return new AltitudeSimulatorOffsetButtons(UIGlobals::GetDialogLook(),
+  return new AltitudeSimulatorOffsetButtons(UIGlobals::GetDialogLook().button,
                                             _T("%+.0f"),
                                             fixed(10), fixed(100));
 }

@@ -363,7 +363,6 @@ WndForm::ShowModal()
 {
   AssertNoneLocked();
 
-#define OPENCLOSESUPPRESSTIME 500
 #ifndef USE_GDI
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
@@ -385,11 +384,7 @@ WndForm::ShowModal()
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
 #endif /* USE_GDI */
-  SetFocus();
-  if (default_focus)
-    default_focus->SetFocus();
-  else
-    client_area.FocusFirstControl();
+  SetDefaultFocus();
 
   bool hastimed = false;
 
@@ -608,40 +603,44 @@ WndForm::SetCaption(const TCHAR *_caption)
   }
 }
 
-#ifdef ANDROID
 void
-WndForm::ReinitialiseLayout()
+WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
 {
-  const SingleWindow &main_window = GetMainWindow();
+  const unsigned parent_width = parent_rc.right - parent_rc.left;
+  const unsigned parent_height = parent_rc.bottom - parent_rc.top;
 
-  if (main_window.GetWidth() < GetWidth() ||
-      main_window.GetHeight() < GetHeight()) {
-    // close dialog, it's creator may want to create a new layout
-    modal_result = mrChangeLayout;
+  if (parent_width < GetWidth() || parent_height < GetHeight()) {
   } else {
     // reposition dialog to fit into TopWindow
-    PixelScalar left = GetLeft();
-    PixelScalar top = GetTop();
+    PixelRect rc = GetPosition();
 
-    if (GetRight() > (PixelScalar) main_window.GetWidth())
-      left = main_window.GetWidth() - GetWidth();
-    if (GetBottom() > (PixelScalar) main_window.GetHeight())
-      top = main_window.GetHeight() - GetHeight();
+    if (rc.right > (PixelScalar)parent_width)
+      rc.left = parent_width - (rc.right - rc.left);
+    if (rc.bottom > (PixelScalar)parent_height)
+      rc.top = parent_height - (rc.bottom - rc.top);
 
 #ifdef USE_MEMORY_CANVAS
     /* the RasterCanvas class doesn't clip negative window positions
        properly, therefore we avoid this problem at this stage */
-    if (left < 0)
-      left = 0;
-    if (top < 0)
-      top = 0;
+    if (rc.left < 0)
+      rc.left = 0;
+    if (rc.top < 0)
+      rc.top = 0;
 #endif
 
-    if (left != GetLeft() || top != GetTop())
-      Move(left, top);
+    Move(rc.left, rc.top);
   }
 }
-#endif
+
+void
+WndForm::SetDefaultFocus()
+{
+  SetFocus();
+  if (default_focus)
+    default_focus->SetFocus();
+  else
+    client_area.FocusFirstControl();
+}
 
 bool
 WndForm::OnAnyKeyDown(unsigned key_code)

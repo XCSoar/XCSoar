@@ -37,6 +37,9 @@ class CylinderZone : public ObservationZonePoint
   /** radius (m) of OZ */
   fixed radius;
 
+public:
+  static constexpr double MAT_RADIUS = 1609.344;
+
 protected:
   CylinderZone(Shape _shape, bool _can_start_through_top,
                const GeoPoint &loc,
@@ -67,7 +70,7 @@ public:
   }
 
   static CylinderZone *CreateMatCylinderZone(const GeoPoint &loc) {
-    return new CylinderZone(Shape::MAT_CYLINDER, true, loc, fixed(1609.344));
+    return new CylinderZone(Shape::MAT_CYLINDER, true, loc, fixed(MAT_RADIUS));
   }
 
   /**

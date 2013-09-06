@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "KeyboardWidget.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/ButtonLook.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "Screen/Canvas.hpp"

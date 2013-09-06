@@ -21,33 +21,27 @@ Copyright_License {
 }
 */
 
-#include "Form/Util.hpp"
-#include "Profile/Profile.hpp"
-#include "Units/Units.hpp"
+#ifndef XCSOAR_MAT_TASK_MONITOR_HPP
+#define XCSOAR_MAT_TASK_MONITOR_HPP
 
-#include <assert.h>
+/**
+ * Monitors the MAT task, watches out for nearby potential turn
+ * points, and asks the user whether to add them to the task.
+ */
+class MatTaskMonitor {
+  friend class MatTaskAddWidget;
+  class MatTaskAddWidget *widget;
 
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 bool &value, const char *registry_name)
-{
-  assert(control_name != NULL);
-  assert(registry_name != NULL);
+  unsigned last_id;
 
-  if (!SaveFormProperty(form, control_name, value))
-    return false;
+public:
+  MatTaskMonitor():widget(nullptr), last_id(-1) {}
 
-  Profile::Set(registry_name, value);
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const char *reg,
-                 bool &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
+  void Reset() {
+    last_id = unsigned(-1);
   }
-  return false;
-}
+
+  void Check();
+};
+
+#endif

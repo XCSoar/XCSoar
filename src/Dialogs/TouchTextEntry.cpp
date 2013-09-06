@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/TextEntry.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
@@ -199,21 +200,21 @@ TouchTextEntry(TCHAR *text, size_t width,
   ButtonWindowStyle button_style;
   button_style.TabStop();
 
-  WndButton ok_button(client_area, look, _("OK"),
+  WndButton ok_button(client_area, look.button, _("OK"),
                       { ok_left, button_top, ok_right, button_bottom },
                       button_style, form, mrOK);
 
-  WndButton cancel_button(client_area, look, _("Cancel"),
+  WndButton cancel_button(client_area, look.button, _("Cancel"),
                           { cancel_left, button_top,
                               cancel_right, button_bottom },
                           button_style, form, mrCancel);
 
-  WndButton clear_button(client_area, look, _("Clear"),
+  WndButton clear_button(client_area, look.button, _("Clear"),
                          { clear_left, button_top,
                              clear_right, button_bottom },
                          button_style, ClearText);
 
-  KeyboardWidget keyboard(look, FormCharacter, !accb);
+  KeyboardWidget keyboard(look.button, FormCharacter, !accb);
 
   const PixelRect keyboard_rc = {
     padding, keyboard_top,
@@ -226,7 +227,7 @@ TouchTextEntry(TCHAR *text, size_t width,
 
   kb = &keyboard;
 
-  WndButton backspace_button(client_area, look, _T("<-"),
+  WndButton backspace_button(client_area, look.button, _T("<-"),
                              { backspace_left, padding, rc.right - padding,
                                  editor_bottom },
                              button_style, OnBackspace);

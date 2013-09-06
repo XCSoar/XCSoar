@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct DialogLook;
+struct ButtonLook;
 
 /**
  * A button that emits a character on press.
@@ -40,7 +40,7 @@ class CharacterButton : public ButtonWindow {
   unsigned character;
 
 public:
-  void Create(ContainerWindow &parent, const DialogLook &look,
+  void Create(ContainerWindow &parent, const ButtonLook &look,
               const TCHAR *text, PixelRect rc,
               OnCharacterCallback on_character, unsigned character,
               const ButtonWindowStyle _style=ButtonWindowStyle());

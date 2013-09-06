@@ -71,6 +71,9 @@ fi
 
 /sbin/hwclock -s -u
 
+# workaround for kernel crash "scheduling while atomic"
+echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
+
 # disable the flashing led
 echo "ch 3" > /sys/devices/platform/pmic_light.1/lit
 echo "cur 0" > /sys/devices/platform/pmic_light.1/lit

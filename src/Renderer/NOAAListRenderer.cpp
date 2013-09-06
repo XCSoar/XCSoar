@@ -49,6 +49,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        const NOAAStore::Item &station,
                        const DialogLook &dialog_look)
 {
+  const unsigned padding = Layout::GetTextPadding();
   const Font &code_font = *dialog_look.list.font;
   const Font &details_font = *dialog_look.small_font;
 
@@ -60,8 +61,8 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
       station.parsed_metar.name_available)
     title.AppendFormat(_T(": %s"), station.parsed_metar.name.c_str());
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2) + padding_left,
-                         rc.top + Layout::FastScale(2), rc, title);
+  canvas.DrawClippedText(rc.left + padding + padding_left,
+                         rc.top + padding, rc, title);
 
   canvas.Select(details_font);
 
@@ -71,7 +72,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   else
     tmp = station.metar.content.c_str();
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2) + padding_left,
+  canvas.DrawClippedText(rc.left + padding + padding_left,
                          rc.top + code_font.GetHeight() + Layout::FastScale(4),
                          rc, tmp);
 }

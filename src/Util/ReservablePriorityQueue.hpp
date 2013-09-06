@@ -51,6 +51,20 @@ public:
   void clear() {
     this->c.clear();
   }
+
+#if defined(_GLIBCXX_DEBUG) && defined(__GLIBCXX__) && __GLIBCXX__ == 20130322
+  using std::priority_queue<T, Container, Compare>::size;
+
+  void pop() {
+    /* work around bug in libstdc++ 4.8 (Android NDK r9, g++ arm
+       (Kobo)), fixed libstdc++ 4.8.1: std::pop_heap() can move-assign
+       self (see TRAC #3035) */
+    if (size() == 1)
+      clear();
+    else
+      std::priority_queue<T, Container, Compare>::pop();
+  }
+#endif
 };
 
 #endif

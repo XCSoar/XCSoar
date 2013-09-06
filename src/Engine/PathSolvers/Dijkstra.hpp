@@ -153,9 +153,9 @@ public:
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
-    do
+    do {
       q.pop();
-    while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
+    } while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
 
     return cur->first;
   }

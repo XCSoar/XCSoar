@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <assert.h>
 
-struct DialogLook;
+struct ButtonLook;
 class ContainerWindow;
 class ActionListener;
 
@@ -42,7 +42,6 @@ public:
   typedef void (*ClickNotifyCallback)();
 
 protected:
-  const DialogLook &look;
   ButtonRenderer renderer;
 
 private:
@@ -66,15 +65,22 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndButton(ContainerWindow &parent, const DialogLook &look,
+  WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ClickNotifyCallback click_callback = NULL);
 
-  WndButton(ContainerWindow &parent, const DialogLook &look,
+  WndButton(ContainerWindow &parent, const ButtonLook &look,
             tstring::const_pointer caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ActionListener &listener, int id);
+
+  WndButton(const ButtonLook &_look);
+
+  void Create(ContainerWindow &parent,
+              tstring::const_pointer caption, const PixelRect &rc,
+              ButtonWindowStyle style,
+              ActionListener &listener, int id);
 
   /**
    * Set the object that will receive click events.

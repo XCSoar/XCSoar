@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/CharacterButton.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/ButtonLook.hpp"
 
 #ifndef _UNICODE
 #include "Util/UTF8.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-CharacterButton::Create(ContainerWindow &parent, const DialogLook &look,
+CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
                         const TCHAR *text, PixelRect rc,
                         OnCharacterCallback _on_character, unsigned _character,
                         const ButtonWindowStyle style)
@@ -42,7 +42,7 @@ CharacterButton::Create(ContainerWindow &parent, const DialogLook &look,
   character = _character;
 
   ButtonWindow::Create(parent, text, rc, style);
-  SetFont(*look.button.font);
+  SetFont(*look.font);
 }
 
 void

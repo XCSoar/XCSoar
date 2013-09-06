@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MacCreadyEdit.hpp"
+#include "Look/DialogLook.hpp"
 #include "Widget/OffsetButtonsWidget.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
@@ -48,7 +49,7 @@ Widget *
 LoadMacCreadyEditPanel(unsigned id)
 {
   const fixed step = GetUserVerticalSpeedStep();
-  return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook(),
+  return new MacCreadyOffsetButtons(UIGlobals::GetDialogLook().button,
                                     GetUserVerticalSpeedFormat(false, true),
                                     step, 5 * step);
 }

@@ -137,7 +137,7 @@ public:
     ButtonWindowStyle button_style;
     button_style.Hide();
     button_style.TabStop();
-    button = new WndButton(parent, UIGlobals::GetDialogLook(),
+    button = new WndButton(parent, UIGlobals::GetDialogLook().button,
                            _("Edit"), rc, button_style, *this, 0);
 
     TextWindowStyle preview_style;

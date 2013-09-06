@@ -227,7 +227,7 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
 
   LogMonitorGlue glue(terminal_look, dialog);
 
-  ButtonPanel buttons(client_area, dialog_look);
+  ButtonPanel buttons(client_area, dialog_look.button);
 
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());

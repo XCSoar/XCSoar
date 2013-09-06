@@ -36,10 +36,15 @@ private:
   AllowedCharactersFunction allowed_characters;
 
 public:
-  PrefixDataField(const TCHAR *value=_T(""),
-                  AllowedCharactersFunction _allowed_characters=AllowedCharactersFunction())
-    :DataFieldString(Type::PREFIX, value),
+  PrefixDataField(const TCHAR *value,
+                  AllowedCharactersFunction _allowed_characters,
+                  DataFieldListener *listener=nullptr)
+    :DataFieldString(Type::PREFIX, value, listener),
      allowed_characters(_allowed_characters) {}
+
+  PrefixDataField(const TCHAR *value=_T(""),
+                  DataFieldListener *listener=nullptr)
+    :DataFieldString(Type::PREFIX, value, listener) {}
 
   const AllowedCharactersFunction &GetAllowedCharactersFunction() const {
     return allowed_characters;

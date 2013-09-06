@@ -33,7 +33,9 @@ Copyright_License {
 struct WindMeasurement
 {
   Vector vector;                /**< Wind speed vector */
-  int quality;                  /**< Quality of fit */
+
+  /** Quality of fit */
+  unsigned quality;
 
   /**
    * Time of fix.
@@ -71,7 +73,7 @@ public:
 
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(unsigned time, const SpeedVector &vector,
-                      fixed alt, int quality);
+                      fixed alt, unsigned quality);
 
   void Reset();
 

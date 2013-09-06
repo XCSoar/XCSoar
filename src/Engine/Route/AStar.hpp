@@ -215,9 +215,9 @@ public:
   const Node &Pop() {
     cur = q.top().iterator;
 
-    do // remove this item
+    do { // remove this item
       q.pop();
-    while (!q.empty() && (q.top().priority > q.top().iterator->second));
+    } while (!q.empty() && (q.top().priority > q.top().iterator->second));
     // and all lower rank than this
 
     return cur->first;

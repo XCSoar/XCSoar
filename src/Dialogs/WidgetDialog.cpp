@@ -42,7 +42,7 @@ GetDialogStyle()
 
 WidgetDialog::WidgetDialog(const DialogLook &look)
   :WndForm(look),
-   buttons(GetClientAreaWindow(), look),
+   buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    changed(false)
 {
@@ -53,6 +53,7 @@ WidgetDialog::Create(SingleWindow &parent,
                      const TCHAR *caption, const PixelRect &rc,
                      Widget *_widget)
 {
+  full = false;
   auto_size = false;
   WndForm::Create(parent, rc, caption, GetDialogStyle());
   widget.Set(_widget);
@@ -64,12 +65,14 @@ WidgetDialog::CreateFull(SingleWindow &parent, const TCHAR *caption,
                          Widget *widget)
 {
   Create(parent, caption, parent.GetClientRect(), widget);
+  full = true;
 }
 
 void
 WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
                          Widget *_widget)
 {
+  full = false;
   auto_size = true;
   WndForm::Create(parent, caption, GetDialogStyle());
   widget.Set(_widget);
@@ -79,6 +82,7 @@ WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
 void
 WidgetDialog::CreatePreliminary(SingleWindow &parent, const TCHAR *caption)
 {
+  full = false;
   auto_size = true;
   WndForm::Create(parent, parent.GetClientRect(), caption, GetDialogStyle());
 }
@@ -200,6 +204,23 @@ WidgetDialog::OnResize(PixelSize new_size)
     return;
 
   widget.Move(buttons.UpdateLayout());
+}
+
+void
+WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc)
+{
+  if (full)
+    /* make it full-screen again on the resized main window */
+    Move(parent_rc);
+  else
+    WndForm::ReinitialiseLayout(parent_rc);
+}
+
+void
+WidgetDialog::SetDefaultFocus()
+{
+  if (!widget.SetFocus())
+    WndForm::SetDefaultFocus();
 }
 
 bool

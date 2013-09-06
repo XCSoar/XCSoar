@@ -218,15 +218,16 @@ class RowFormWidget : public WindowWidget {
     /**
      * Will this row grow when there is excess screen space?
      */
-    bool IsElastic(bool vertical) const {
-      return GetMaximumHeight(vertical) > GetMinimumHeight(vertical);
+    bool IsElastic(const DialogLook &look, bool vertical) const {
+      return GetMaximumHeight(look, vertical)
+        > GetMinimumHeight(look, vertical);
     }
 
     gcc_pure
-    unsigned GetMinimumHeight(bool vertical) const;
+    unsigned GetMinimumHeight(const DialogLook &look, bool vertical) const;
 
     gcc_pure
-    unsigned GetMaximumHeight(bool vertical) const;
+    unsigned GetMaximumHeight(const DialogLook &look, bool vertical) const;
   };
 
   const DialogLook &look;
@@ -320,31 +321,13 @@ public:
 
   WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
                           bool value=false,
-                          DataField::DataAccessCallback callback=NULL);
-
-  WndProperty *AddBoolean(const TCHAR *label, const TCHAR *help,
-                          bool value, DataFieldListener *listener) {
-    WndProperty *control = AddBoolean(label, help, value);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
+                          DataFieldListener *listener=nullptr);
 
   WndProperty *AddInteger(const TCHAR *label, const TCHAR *help,
                           const TCHAR *display_format,
                           const TCHAR *edit_format,
                           int min_value, int max_value, int step, int value,
-                          DataField::DataAccessCallback callback=NULL);
-
-  WndProperty *AddInteger(const TCHAR *label, const TCHAR *help,
-                          const TCHAR *display_format,
-                          const TCHAR *edit_format,
-                          int min_value, int max_value, int step, int value,
-                          DataFieldListener *listener) {
-    WndProperty *control = AddInteger(label, help, display_format, edit_format,
-                                      min_value, max_value, step, value);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
+                          DataFieldListener *listener=nullptr);
 
   WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
@@ -352,20 +335,7 @@ public:
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         fixed value,
-                        DataFieldListener *listener) {
-    WndProperty *control = AddFloat(label, help, display_format, edit_format,
-                                    min_value, max_value, step, fine, value);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
-
-  WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
-                        const TCHAR *display_format,
-                        const TCHAR *edit_format,
-                        fixed min_value, fixed max_value,
-                        fixed step, bool fine,
-                        fixed value,
-                        DataField::DataAccessCallback callback=NULL);
+                        DataFieldListener *listener=nullptr);
 
   WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
                         const TCHAR *display_format,
@@ -373,21 +343,7 @@ public:
                         fixed min_value, fixed max_value,
                         fixed step, bool fine,
                         UnitGroup unit_group, fixed value,
-                        DataField::DataAccessCallback callback=NULL);
-
-  WndProperty *AddFloat(const TCHAR *label, const TCHAR *help,
-                        const TCHAR *display_format,
-                        const TCHAR *edit_format,
-                        fixed min_value, fixed max_value,
-                        fixed step, bool fine,
-                        UnitGroup unit_group, fixed value,
-                        DataFieldListener *listener) {
-    WndProperty *control = AddFloat(label, help, display_format, edit_format,
-                                    min_value, max_value, step, fine,
-                                    unit_group, value);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
+                        DataFieldListener *listener=nullptr);
 
   WndProperty *AddAngle(const TCHAR *label, const TCHAR *help,
                         Angle value, unsigned step, bool fine,
@@ -395,28 +351,14 @@ public:
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value=0,
-                       DataField::DataAccessCallback callback=NULL);
+                       DataFieldListener *listener=nullptr);
 
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
-                       const StaticEnumChoice *list, unsigned value,
-                       DataFieldListener *listener) {
-    WndProperty *control = AddEnum(label, help, list, value);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
-
-  WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
-                       DataField::DataAccessCallback callback=NULL);
-
-  WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
-                       DataFieldListener *listener) {
-    WndProperty *control = AddEnum(label, help);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
+                       DataFieldListener *listener=nullptr);
 
   WndProperty *AddText(const TCHAR *label, const TCHAR *help,
-                       const TCHAR *content);
+                       const TCHAR *content,
+                       DataFieldListener *listener=nullptr);
 
   /**
    * Add a password edit control.  The password is obfuscated while
@@ -428,17 +370,7 @@ public:
   WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
                        int min_value, int max_value, unsigned step,
                        int value, unsigned max_tokens = 2,
-                       DataField::DataAccessCallback callback=NULL);
-
-  WndProperty *AddTime(const TCHAR *label, const TCHAR *help,
-                       int min_value, int max_value, unsigned step,
-                       int value, unsigned max_tokens,
-                       DataFieldListener *listener) {
-    WndProperty *control = AddTime(label, help, min_value, max_value, step,
-                                   value, max_tokens);
-    control->GetDataField()->SetListener(listener);
-    return control;
-  }
+                       DataFieldListener *listener=nullptr);
 
   WndProperty *AddRoughTime(const TCHAR *label, const TCHAR *help,
                             RoughTime value, RoughTimeDelta time_zone,
@@ -565,6 +497,8 @@ public:
   void LoadValueEnum(unsigned i, T value) {
     LoadValueEnum(i, unsigned(value));
   }
+
+  void LoadValue(unsigned i, const TCHAR *value);
 
   void LoadValue(unsigned i, fixed value);
   void LoadValue(unsigned i, Angle value);

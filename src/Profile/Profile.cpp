@@ -39,7 +39,8 @@ Copyright_License {
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
 
-#define XCSPROFILE "xcsoar-registry.prf"
+#define XCSPROFILE "default.prf"
+#define OLDXCSPROFILE "xcsoar-registry.prf"
 
 namespace Profile {
   static bool SaveFile(const FileTransaction &transaction);
@@ -142,7 +143,7 @@ Profile::SetFiles(const TCHAR *override_path)
 
   if (IsAltair() && !File::Exists(startProfileFile)) {
     /* backwards compatibility with old Altair firmware */
-    LocalPath(startProfileFile, _T("config/")_T(XCSPROFILE));
+    LocalPath(startProfileFile, _T("config/")_T(OLDXCSPROFILE));
     if (!File::Exists(startProfileFile))
       LocalPath(startProfileFile, _T(XCSPROFILE));
   }

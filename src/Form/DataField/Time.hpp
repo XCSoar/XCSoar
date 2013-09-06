@@ -50,6 +50,12 @@ public:
      value(_value), min(_min), max(_max), step(_step), max_tokens(2),
      speedup(0) {}
 
+  DataFieldTime(int _min, int _max, int _value, unsigned _step,
+                DataFieldListener *listener)
+    :DataField(Type::TIME, true, listener),
+     value(_value), min(_min), max(_max), step(_step), max_tokens(2),
+     speedup(0) {}
+
 protected:
   void SetValue(int _value) {
     if (_value == value)

@@ -48,15 +48,6 @@ namespace MapTaskManager
   TaskEditResult AppendToTask(const Waypoint &wp);
   TaskEditResult InsertInTask(const Waypoint &wp);
 
-  /**
-   * inserts the waypoint into the Ordered Task
-   * It is up to the caller to decide whether to commit the new task or not.
-   * Task manager must be in Ordered Mode when called
-   * @param task.  Pointer to an ordered Mat task
-   * @param waypoint.  The wp to insert into the task before the active tp
-   */
-  TaskEditResult InsertInMatProForma(OrderedTask &task,
-                                     const Waypoint &waypoint);
   TaskEditResult ReplaceInTask(const Waypoint &wp);
   TaskEditResult RemoveFromTask(const Waypoint &wp);
 

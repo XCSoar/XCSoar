@@ -201,9 +201,10 @@ WndProperty::UpdateLayout()
     edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
     edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
   } else {
+    const unsigned caption_height = look.text_font->GetHeight();
+
     edit_rc.left += (DEFAULTBORDERPENWIDTH + 1);
-    edit_rc.top = (edit_rc.top + edit_rc.bottom) / 2
-      - 2 * (DEFAULTBORDERPENWIDTH + 1);
+    edit_rc.top = DEFAULTBORDERPENWIDTH + caption_height;
     edit_rc.right -= (DEFAULTBORDERPENWIDTH + 1);
     edit_rc.bottom -= (DEFAULTBORDERPENWIDTH + 1);
   }

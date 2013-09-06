@@ -23,41 +23,52 @@ Copyright_License {
 
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/ButtonLook.hpp"
 #include "Screen/Key.h"
 #include "Screen/Canvas.hpp"
 #include "Asset.hpp"
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *Caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ClickNotifyCallback _click_callback)
-  :look(_look), renderer(look.button),
+  :renderer(look),
    listener(NULL),
    click_callback(_click_callback)
 {
   style.EnableCustomPainting();
-  Create(parent, Caption, rc, style);
+  ButtonWindow::Create(parent, Caption, rc, style);
 }
 
-WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
                      ActionListener &_listener, int _id)
-  :look(_look), renderer(look.button),
-#ifdef USE_GDI
-   id(_id),
-#endif
-   listener(&_listener),
-   click_callback(NULL)
+  :renderer(look), listener(nullptr), click_callback(nullptr)
 {
+  Create(parent, caption, rc, style, _listener, _id);
+}
+
+WndButton::WndButton(const ButtonLook &_look)
+  :renderer(_look), listener(nullptr), click_callback(nullptr) {}
+
+void
+WndButton::Create(ContainerWindow &parent,
+                  tstring::const_pointer caption, const PixelRect &rc,
+                  ButtonWindowStyle style,
+                  ActionListener &_listener, int _id) {
+  assert(click_callback == nullptr);
+
+  listener = &_listener;
+
   style.EnableCustomPainting();
 #ifdef USE_GDI
   /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
-  Create(parent, caption, rc, style);
+  id = _id;
+  ButtonWindow::Create(parent, caption, rc, style);
 #else
   /* our custom SDL/OpenGL button doesn't need this hack */
-  Create(parent, caption, _id, rc, style);
+  ButtonWindow::Create(parent, caption, _id, rc, style);
 #endif
 }
 
@@ -109,6 +120,8 @@ WndButton::OnKillFocus()
 void
 WndButton::OnPaint(Canvas &canvas)
 {
+  const ButtonLook &look = renderer.GetLook();
+
   const bool pressed = IsDown();
   const bool focused = HasCursorKeys() ? HasFocus() : pressed;
 
@@ -124,13 +137,13 @@ WndButton::OnPaint(Canvas &canvas)
 
   canvas.SetBackgroundTransparent();
   if (!IsEnabled())
-    canvas.SetTextColor(look.button.disabled.color);
+    canvas.SetTextColor(look.disabled.color);
   else if (focused)
-    canvas.SetTextColor(look.button.focused.foreground_color);
+    canvas.SetTextColor(look.focused.foreground_color);
   else
-    canvas.SetTextColor(look.button.standard.foreground_color);
+    canvas.SetTextColor(look.standard.foreground_color);
 
-  canvas.Select(*(look.button.font));
+  canvas.Select(*look.font);
 
 #ifndef USE_GDI
   unsigned style = GetTextStyle();

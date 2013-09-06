@@ -107,6 +107,7 @@ public:
    */
   void UpdateOZ(const TaskProjection &projection, const OZBoundary &boundary);
 
+protected:
   /**
    * Update the interior sample polygon.  The caller checks if the
    * given #AircraftState is inside the observation zone.
@@ -116,6 +117,7 @@ public:
   bool AddInsideSample(const AircraftState &state,
                        const TaskProjection &projection);
 
+public:
   /**
    * Test if the task point has recorded presence of the aircraft
    * in this sector

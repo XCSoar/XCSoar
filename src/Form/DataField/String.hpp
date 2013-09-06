@@ -34,10 +34,14 @@ class DataFieldString: public DataField
   StaticString<EDITSTRINGSIZE> mValue;
 
 protected:
-  DataFieldString(Type _type, const TCHAR *_value)
-    :DataField(_type, false), mValue(_value) {}
+  DataFieldString(Type _type, const TCHAR *_value,
+                  DataFieldListener *listener=nullptr)
+    :DataField(_type, false, listener), mValue(_value) {}
 
 public:
+  DataFieldString(const TCHAR *_value, DataFieldListener *listener=nullptr)
+    :DataField(Type::STRING, false, listener), mValue(_value) {}
+
   DataFieldString(const TCHAR *Default,
                   DataAccessCallback OnDataAccess) :
     DataField(Type::STRING, false, OnDataAccess), mValue(Default) {}

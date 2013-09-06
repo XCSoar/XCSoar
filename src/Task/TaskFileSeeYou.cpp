@@ -192,7 +192,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     const TCHAR *pair = params[i];
     SeeYouTurnpointInformation &tp_info = turnpoint_infos[oz_index];
 
-    if (_tcsncmp(pair, _T("style"), 5) == 0) {
+    if (_tcsncmp(pair, _T("Style"), 5) == 0) {
       if (_tcslen(pair) > 6)
         tp_info.style = ParseStyle(pair + 6);
     } else if (_tcsncmp(pair, _T("R1="), 3) == 0) {
@@ -210,13 +210,13 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     } else if (_tcsncmp(pair, _T("A12="), 4) == 0) {
       if (_tcslen(pair) > 3)
         tp_info.angle12 = ParseAngle(pair + 4);
-    } else if (_tcsncmp(pair, _T("max_altitude="), 7) == 0) {
+    } else if (_tcsncmp(pair, _T("MaxAlt="), 7) == 0) {
       if (_tcslen(pair) > 7)
         tp_info.max_altitude = ParseMaxAlt(pair + 7);
-      } else if (_tcsncmp(pair, _T("is_line"), 4) == 0) {
+      } else if (_tcsncmp(pair, _T("Line"), 4) == 0) {
       if (_tcslen(pair) > 5 && pair[5] == _T('1'))
         tp_info.is_line = true;
-    } else if (_tcsncmp(pair, _T("reduce"), 6) == 0) {
+    } else if (_tcsncmp(pair, _T("Reduce"), 6) == 0) {
       if (_tcslen(pair) > 7 && pair[7] == _T('1'))
         tp_info.reduce = true;
     }

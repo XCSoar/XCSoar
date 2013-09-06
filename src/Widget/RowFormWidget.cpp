@@ -35,8 +35,38 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 #include <assert.h>
 
+gcc_pure
+static unsigned
+GetMinimumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical)
+{
+  const unsigned padding = Layout::GetTextPadding();
+  unsigned height = look.text_font->GetHeight();
+  if (vertical && control.HasCaption())
+    height *= 2;
+  height += padding * 2;
+
+  if (!control.IsReadOnly() && height < Layout::GetMinimumControlHeight())
+    height = Layout::GetMinimumControlHeight();
+
+  return height;
+}
+
+gcc_pure
+static unsigned
+GetMaximumHeight(const WndProperty &control, const DialogLook &look,
+                 bool vertical)
+{
+  unsigned height = GetMinimumHeight(control, look, vertical);
+  if (!control.IsReadOnly() && height < Layout::GetMaximumControlHeight())
+    height = Layout::GetMaximumControlHeight();
+
+  return height;
+}
+
 unsigned
-RowFormWidget::Row::GetMinimumHeight(bool vertical) const
+RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
+                                     bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -49,10 +79,7 @@ RowFormWidget::Row::GetMinimumHeight(bool vertical) const
     break;
 
   case Type::EDIT:
-    if (vertical && GetControl().HasCaption())
-      return 2 * Layout::GetMinimumControlHeight();
-
-    /* fall through */
+    return ::GetMinimumHeight(GetControl(), look, vertical);
 
   case Type::BUTTON:
     return Layout::GetMinimumControlHeight();
@@ -68,7 +95,8 @@ RowFormWidget::Row::GetMinimumHeight(bool vertical) const
 }
 
 unsigned
-RowFormWidget::Row::GetMaximumHeight(bool vertical) const
+RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
+                                     bool vertical) const
 {
   switch (type) {
   case Type::DUMMY:
@@ -81,13 +109,7 @@ RowFormWidget::Row::GetMaximumHeight(bool vertical) const
     break;
 
   case Type::EDIT:
-    if (vertical && GetControl().HasCaption())
-      return 2 * Layout::GetMinimumControlHeight();
-
-    return GetControl().IsReadOnly()
-      /* rows that are not clickable don't need to be extra-large */
-      ? Layout::GetMinimumControlHeight()
-      : Layout::GetMaximumControlHeight();
+    return ::GetMaximumHeight(GetControl(), look, vertical);
 
   case Type::BUTTON:
     return Layout::GetMaximumControlHeight();
@@ -217,7 +239,8 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
 
-  WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
+  WndButton *button = new WndButton(panel, look.button, label, button_rc,
+                                    button_style, listener, id);
 
   Add(Row::Type::BUTTON, button);
   return button;
@@ -273,8 +296,8 @@ RowFormWidget::UpdateLayout()
     if (!i.IsAvailable(expert))
       continue;
 
-    min_height += i.GetMinimumHeight(vertical);
-    if (i.IsElastic(vertical))
+    min_height += i.GetMinimumHeight(look, vertical);
+    if (i.IsElastic(look, vertical))
       ++n_elastic;
 
     if (!vertical && i.type == Row::Type::EDIT) {
@@ -304,15 +327,15 @@ RowFormWidget::UpdateLayout()
     }
 
     /* determine this row's height */
-    UPixelScalar height = i.GetMinimumHeight(vertical);
-    if (excess_height > 0 && i.IsElastic(vertical)) {
+    UPixelScalar height = i.GetMinimumHeight(look, vertical);
+    if (excess_height > 0 && i.IsElastic(look, vertical)) {
       assert(n_elastic > 0);
 
       /* distribute excess height among all elastic rows */
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i.GetMaximumHeight(vertical);
+        const UPixelScalar max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
@@ -384,7 +407,7 @@ RowFormWidget::GetMinimumSize() const
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
     if (i.IsAvailable(expert))
-      size.cy += i.GetMinimumHeight(vertical);
+      size.cy += i.GetMinimumHeight(look, vertical);
 
   return size;
 }
@@ -401,7 +424,7 @@ RowFormWidget::GetMaximumSize() const
 
   PixelSize size(edit_width, 0u);
   for (const auto &i : rows)
-    size.cy += i.GetMaximumHeight(vertical);
+    size.cy += i.GetMaximumHeight(look, vertical);
 
   return size;
 }

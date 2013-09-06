@@ -41,6 +41,13 @@ public:
      mValue(Default),
      true_text(TextTrue), false_text(TextFalse) {}
 
+  DataFieldBoolean(bool _value,
+                   const TCHAR *_true_text, const TCHAR *_false_text,
+                   DataFieldListener *listener=nullptr)
+    :DataField(Type::BOOLEAN, true, listener),
+     mValue(_value),
+     true_text(_true_text), false_text(_false_text) {}
+
   void Set(bool Value);
 
   bool GetAsBoolean() const {
