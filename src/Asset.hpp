@@ -275,12 +275,18 @@ HasColors()
 /**
  * Is dithering black&white used on the display?
  */
+#if defined(ANDROID) && defined(__arm__)
+gcc_const
+#else
 constexpr
+#endif
 static inline bool
 IsDithered()
 {
 #ifdef DITHER
   return true;
+#elif defined(ANDROID) && defined(__arm__)
+  return is_dithered;
 #else
   return false;
 #endif
@@ -292,7 +298,7 @@ IsDithered()
  * and show ghosting.  Animations shall be disabled when this function
  * returns true.
  */
-#ifdef ANDROID
+#if defined(ANDROID) && defined(__arm__)
 gcc_const
 #else
 constexpr
@@ -300,7 +306,7 @@ constexpr
 static inline bool
 HasEPaper()
 {
-#ifdef ANDROID
+#if defined(ANDROID) && defined(__arm__)
   return IsNookSimpleTouch();
 #else
   return IsKobo();

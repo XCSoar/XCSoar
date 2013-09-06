@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2013 The XCSoar Project
+  Copyright (C) 2000-2012 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,25 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Product.hpp"
-#include "Main.hpp"
-#include "NativeView.hpp"
+#ifndef XCSOAR_ANDROID_NOOK_HPP
+#define XCSOAR_ANDROID_NOOK_HPP
 
-#include <assert.h>
-#include <string.h>
+namespace Nook {
+  /**
+   * initialize USB mode in Nook (must be rooted with USB Kernel)
+   */
+  void InitUsb();
 
-#ifdef __arm__
+  /**
+   * Enter FastMode to eliminate full refresh of screen
+   * requires Nook kernel rooted to support FastMode
+   *
+   * @return false if the operation has failed, e.g. because the
+   * kernel does not support the mode
+   */
+  bool EnterFastMode();
 
-bool is_nook, is_dithered;
+  /**
+   * Exit FastMode to restore full (slow) refresh of screen
+   * requires Nook kernel rooted to support FastMode
+   */
+  void ExitFastMode();
 
-bool
-IsGalaxyTab22()
-{
-  assert(native_view);
+  /**
+   * Set Nook regulator's charge rate to 500mA.
+   */
+  void SetCharge500();
 
-  return native_view->GetAPILevel() == 8 &&
-    (strcmp(native_view->GetProduct(), "GT-P1000") == 0 ||
-     strcmp(native_view->GetProduct(), "GT-P1010") == 0);
+  /**
+   * Set Nook regulator's charge rate to 100mA.
+   */
+  void SetCharge100();
 }
 
 #endif

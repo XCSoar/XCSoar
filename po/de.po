@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-14 21:40+0200\n"
-"PO-Revision-Date: 2013-07-05 20:29+0000\n"
+"PO-Revision-Date: 2013-07-17 08:48+0000\n"
 "Last-Translator: Christopher Schenk <Christopher_Schenk@web.de>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-07-11 07:48+0000\n"
-"X-Generator: Launchpad (build 16696)\n"
+"X-Launchpad-Export-Date: 2013-07-28 09:44+0000\n"
+"X-Generator: Launchpad (build 16700)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -101,7 +101,7 @@ msgstr "FAI Regeln, ein Kurs vom Abflug um eine Wende und wieder zurück."
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
 msgid "FAI rules, path from start to a goal destination."
-msgstr "FAI Regeln, Kurs vom Abflug zu einem Ziel."
+msgstr "FAI Regeln, Kurs vom Abflug zu einem Zielpunkt."
 
 #: src/Task/TypeStrings.cpp:60
 #, no-c-format
@@ -120,7 +120,7 @@ msgid ""
 "cylinder and sector observation zones."
 msgstr ""
 "Geschwindigkeitsaufgabe über zugewiesene Gebiete, min. Flugzeit wird "
-"angewendet. Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
+"angewandt. Beschränkt auf Zylinder und Sektor Gebiete (OZ)."
 
 #: src/Task/TypeStrings.cpp:64
 #, no-c-format
@@ -140,14 +140,14 @@ msgid ""
 "applies."
 msgstr ""
 "Geschwindigkeitsaufgabe mit einer Mischung aus zugewiesenen Gebieten und "
-"Wendepunkten, minimale Flugzeit wird angewendet."
+"Wendepunkten, minimale Aufgabenzeit wird angewendet."
 
 #: src/Task/TypeStrings.cpp:66
 #, no-c-format
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
-msgstr "Gelegenheitsaufgabe mit Abflug- und Zielzylinder und FAI Sektorwenden"
+msgstr "Gelegenheitsaufgabe mit Abflug-, Zielzylinder und FAI Sektorwenden."
 
 #: src/Task/TypeStrings.cpp:79
 #, no-c-format
@@ -275,7 +275,7 @@ msgstr "Ein symmetrischer Quadrant/Viertelkreis mit einem beliebigen Radius."
 #, no-c-format
 msgid "A keyhole.  Scored by farthest point reached in area."
 msgstr ""
-"Ein Schlüsselloch. Gewertet wird der entfernteste erreichte Punkt darin."
+"Ein Schlüsselloch. Gewertet wird der entferntest erreichte Punkt darin."
 
 #: src/Task/TypeStrings.cpp:115
 #, no-c-format
@@ -420,15 +420,15 @@ msgstr "Nicht-FAI Wendepunkte"
 #: src/Task/ValidationErrorStrings.cpp:42
 #, no-c-format
 msgid "non-MAT turn points"
-msgstr "nicht MAT Wendepunkte"
+msgstr "nicht-MAT Wendepunkte"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
-msgstr "Luftraumdatei wird geladen..."
+msgstr "Lade Luftraumdatei..."
 
 #: src/Airspace/AirspaceParser.cpp:271
 msgid "Parse Error at Line"
-msgstr "Syntaxfehler bei Zeile"
+msgstr "Syntaxfehler in Zeile"
 
 #: src/Airspace/AirspaceParser.cpp:920
 msgid "Unknown airspace filetype"
@@ -436,7 +436,7 @@ msgstr "Unbekannter Luftraumdateityp"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:51
 msgid "Expect early task arrival"
-msgstr "Erwarte frühe Aufgaben-Ankunft"
+msgstr "Erwarte frühe Aufgaben Ankunft"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid ""
@@ -687,7 +687,7 @@ msgstr "Distanz"
 
 #: src/Gauge/BigTrafficWidget.cpp:425 src/Gauge/BigTrafficWidget.cpp:428
 msgid "Rel. Alt."
-msgstr "Rel Höhe"
+msgstr "rel. Höhe"
 
 #: src/Gauge/BigTrafficWidget.cpp:887 src/InfoBoxes/Content/Task.cpp:66
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -861,7 +861,7 @@ msgstr "Norden oben"
 #: src/Menu/ExpandMacros.cpp:454 src/Dialogs/Settings/dlgBasicSettings.cpp:145
 #: src/Dialogs/ReplayDialog.cpp:56
 msgid "Stop"
-msgstr "Stopp"
+msgstr "Stop"
 
 #: src/Menu/ExpandMacros.cpp:455 src/Dialogs/ReplayDialog.cpp:55
 msgid "Start"
@@ -3636,7 +3636,7 @@ msgstr "Lese Flugliste"
 
 #: src/Device/Descriptor.cpp:983
 msgid "Downloading flight log"
-msgstr "Hole Fluglog"
+msgstr "Lade Fluglog runter"
 
 #: src/Device/Config.cpp:214 src/Dialogs/Device/DeviceEditWidget.cpp:63
 #: src/Dialogs/Device/DeviceListDialog.cpp:373
@@ -9427,7 +9427,7 @@ msgstr ""
 #~ msgstr "InfoBox Werte, klein"
 
 #~ msgid "Loading of plane profile \"%s\" failed!"
-#~ msgstr "Das Laden des Flugzeugprofils \"%s\" ist fehlgeschlagen!"
+#~ msgstr "Laden des Flugzeugprofils \"%s\" ist fehlgeschlagen!"
 
 #~ msgid "Do you want to load plane profile \"%s\"?"
 #~ msgstr "Möchtest Du das Flugzeugprofil \"%s\" laden?"

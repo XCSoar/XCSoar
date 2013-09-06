@@ -700,6 +700,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
 	$(SRC)/Android/Environment.cpp \
 	$(SRC)/Android/Product.cpp \
+	$(SRC)/Android/Nook.cpp \
 	$(SRC)/Android/InternalSensors.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \

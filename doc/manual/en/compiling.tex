@@ -241,6 +241,21 @@ auto-detect the Pi.
 
 \subsection{Compiling for Kobo E-book Readers}
 
+Download the ARM cross-compiler and unpack in your home directory:
+
+\begin{verbatim*}
+wget http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.tar.xz
+tar xJfC x-tools-arm.tar.xz $HOME
+export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
+\end{verbatim*}
+
+Download the Kobo libraries and unpack in \texttt{/opt}:
+
+\begin{verbatim*}
+wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-07-17.tar.xz
+tar xJfC kobo-libs-2013-07-17.tar.xz /opt
+\end{verbatim*}
+
 To compile, run:
 
 \begin{verbatim*}
