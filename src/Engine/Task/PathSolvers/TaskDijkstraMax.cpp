@@ -28,8 +28,8 @@ TaskDijkstraMax::DistanceMax(const OrderedTask &task)
   if (!RefreshTask(task))
     return false;
 
-  dijkstra.Reserve(256);
   dijkstra.Clear();
+  dijkstra.Reserve(256);
   AddZeroStartEdges();
   return Run();
 }

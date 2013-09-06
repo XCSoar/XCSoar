@@ -50,12 +50,12 @@ struct has_trivial_copy_and_destructor
                                   std::is_trivially_copy_assignable<T>::value &&
                                   std::is_trivially_destructible<T>::value>
 #else
-#if GCC_VERSION >= 40600 || defined(__clang__)
+#if !defined(__GLIBCXX__) || __GLIBCXX__ >= 20120106
                                   std::has_trivial_copy_assign<T>::value &&
 #else
                                   std::has_trivial_assign<T>::value &&
 #endif
-#if GCC_VERSION >= 40800 || (defined(__clang__) && CLANG_VERSION >= 30300)
+#if !defined(__GLIBCXX__) || __GLIBCXX__ >= 20130322
                                   std::is_trivially_destructible<T>::value>
 #else
                                   std::has_trivial_destructor<T>::value>

@@ -135,10 +135,10 @@ AppendComboValue(ComboList &combo_list, unsigned value)
   combo_list.Append(value, buffer1, buffer2);
 }
 
-ComboList *
-AngleDataField::CreateComboList() const
+ComboList
+AngleDataField::CreateComboList(const TCHAR *reference) const
 {
-  ComboList *combo_list = new ComboList();
+  ComboList combo_list;
 
   const unsigned fine_step = std::max(1u, step / 10u);
   const unsigned fine_start_value = (value >= step) ? value - step : 0;
@@ -151,16 +151,16 @@ AngleDataField::CreateComboList() const
 
   while (i < MAX) {
     if (!found_current && value <= i) {
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
 
       if (value < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, value);
+        AppendComboValue(combo_list, value);
 
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
 
     if (fine) {
       if (i + current_step > fine_stop_value) {
@@ -185,8 +185,8 @@ AngleDataField::CreateComboList() const
 
   if (!found_current) {
     /* the current value out of range - append it here */
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
-    AppendComboValue(*combo_list, value);
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    AppendComboValue(combo_list, value);
   }
 
   return combo_list;

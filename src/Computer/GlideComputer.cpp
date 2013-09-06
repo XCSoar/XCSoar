@@ -166,19 +166,23 @@ GlideComputer::ProcessGPS(bool force)
 void
 GlideComputer::ProcessIdle(bool exhaustive)
 {
+  const MoreData &basic = Basic();
+  DerivedInfo &calculated = SetCalculated();
+
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  stats_computer.DoLogging(Basic(), Calculated());
-  log_computer.Run(Basic(), Calculated(), GetComputerSettings().logger);
+  stats_computer.DoLogging(basic, calculated);
+  log_computer.Run(basic, calculated, GetComputerSettings().logger);
 
-  task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
+  task_computer.ProcessIdle(basic, calculated, GetComputerSettings(),
                             exhaustive);
 
-  warning_computer.Update(GetComputerSettings(), Basic(),
-                          Calculated(), SetCalculated().airspace_warnings);
+  warning_computer.Update(GetComputerSettings(), basic,
+                          calculated, calculated.airspace_warnings);
 
   // Calculate summary of flight
-  retrospective.UpdateSample(Basic().location);
+  if (basic.location_available)
+    retrospective.UpdateSample(basic.location);
 }
 
 bool

@@ -60,6 +60,9 @@ DeviceConfig::IsAvailable() const
   case PortType::INTERNAL:
     return IsAndroid();
 
+  case PortType::TCP_CLIENT:
+    return !IsWindowsCE();
+
   case PortType::TCP_LISTENER:
   case PortType::UDP_LISTENER:
     return true;
@@ -97,6 +100,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
   case PortType::NUNCHUCK:
   case PortType::I2CPRESSURESENSOR:
   case PortType::IOIOVOLTAGE:
+  case PortType::TCP_CLIENT:
     /* errors on these are detected automatically by the driver */
     return false;
 
@@ -253,6 +257,11 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::INTERNAL:
     return _("Built-in GPS & sensors");
+
+  case PortType::TCP_CLIENT:
+    StringFormat(buffer, max_size, _T("TCP client %s:%u"),
+                 ip_address.c_str(), tcp_port);
+    return buffer;
 
   case PortType::TCP_LISTENER:
     StringFormat(buffer, max_size, _T("TCP port %d"), tcp_port);

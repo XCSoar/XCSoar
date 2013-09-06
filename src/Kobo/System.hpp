@@ -24,11 +24,17 @@ Copyright_License {
 #ifndef XCSOAR_KOBO_SYSTEM_HPP
 #define XCSOAR_KOBO_SYSTEM_HPP
 
+#include "Compiler.h"
+
 bool
 KoboReboot();
 
 bool
 KoboPowerOff();
+
+gcc_pure
+bool
+IsKoboWifiOn();
 
 bool
 KoboWifiOn();
@@ -41,5 +47,8 @@ KoboExecNickel();
 
 void
 KoboRunXCSoar();
+
+void
+KoboRunTelnetd();
 
 #endif

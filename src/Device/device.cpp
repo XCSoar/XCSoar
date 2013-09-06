@@ -81,6 +81,10 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   case DeviceConfig::PortType::IOIOVOLTAGE:
     return true;
 
+  case DeviceConfig::PortType::TCP_CLIENT:
+    return a.tcp_port == b.tcp_port &&
+      a.ip_address == b.ip_address;
+
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
     return a.tcp_port == b.tcp_port;

@@ -179,8 +179,7 @@ public:
   /** Clears the queues */
   void Clear() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     // Clear the node_parent_map
     node_parents.clear();

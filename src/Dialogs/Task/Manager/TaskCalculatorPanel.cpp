@@ -160,7 +160,7 @@ TaskCalculatorPanel::OnSpecial(DataField &df)
 }
 
 static void
-OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnWarningPaint(Canvas &canvas, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 

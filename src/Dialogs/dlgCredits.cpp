@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Tabbed.hpp"
-#include "Form/Draw.hpp"
 #include "Look/StandardFonts.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/LargeTextWindow.hpp"
@@ -121,10 +120,11 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
-OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnLogoPaint(Canvas &canvas, const PixelRect &rc)
 {
-  const UPixelScalar width = canvas.GetWidth();
-  PixelScalar x = Layout::FastScale(10), y = x;
+  const unsigned width = rc.right - rc.left;
+  int x = rc.left + Layout::FastScale(10);
+  int y = rc.top + Layout::FastScale(10);
 
   canvas.ClearWhite();
 

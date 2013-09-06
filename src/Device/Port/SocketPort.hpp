@@ -82,6 +82,10 @@ public:
    */
   bool OpenUDPListener(unsigned port);
 
+#ifndef _WIN32_WCE
+  bool ConnectTCP(const char *host, unsigned port);
+#endif
+
   /* virtual methods from class Port */
   virtual PortState GetState() const override;
   virtual bool Drain() override;

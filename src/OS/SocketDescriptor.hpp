@@ -69,6 +69,8 @@ public:
    */
   bool Create(int domain, int type, int protocol);
 
+  bool Bind(const SocketAddress &address);
+
   /**
    * Binds the socket to the port on INADDR_ANY
    * @param port is the port to bound

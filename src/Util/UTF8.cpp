@@ -37,6 +37,12 @@ IsLeading1(unsigned char ch)
   return (ch & 0xe0) == 0xc0;
 }
 
+static constexpr unsigned char
+MakeLeading1(unsigned char value)
+{
+  return 0xc0 | value;
+}
+
 /**
  * Is this a leading byte that is followed by 2 continuation byte?
  */
@@ -44,6 +50,12 @@ static constexpr bool
 IsLeading2(unsigned char ch)
 {
   return (ch & 0xf0) == 0xe0;
+}
+
+static constexpr unsigned char
+MakeLeading2(unsigned char value)
+{
+  return 0xe0 | value;
 }
 
 /**
@@ -55,6 +67,12 @@ IsLeading3(unsigned char ch)
   return (ch & 0xf8) == 0xf0;
 }
 
+static constexpr unsigned char
+MakeLeading3(unsigned char value)
+{
+  return 0xf0 | value;
+}
+
 /**
  * Is this a leading byte that is followed by 4 continuation byte?
  */
@@ -62,6 +80,12 @@ static constexpr bool
 IsLeading4(unsigned char ch)
 {
   return (ch & 0xfc) == 0xf8;
+}
+
+static constexpr unsigned char
+MakeLeading4(unsigned char value)
+{
+  return 0xf8 | value;
 }
 
 /**
@@ -73,10 +97,25 @@ IsLeading5(unsigned char ch)
   return (ch & 0xfe) == 0xfc;
 }
 
+static constexpr unsigned char
+MakeLeading5(unsigned char value)
+{
+  return 0xfc | value;
+}
+
 static constexpr bool
 IsContinuation(unsigned char ch)
 {
   return (ch & 0xc0) == 0x80;
+}
+
+/**
+ * Generate a continuation byte of the low 6 bit.
+ */
+static constexpr unsigned char
+MakeContinuation(unsigned char value)
+{
+  return 0x80 | (value & 0x3f);
 }
 
 bool
@@ -136,8 +175,8 @@ Latin1ToUTF8(unsigned char ch, char *buffer)
   if (IsASCII(ch)) {
     *buffer++ = ch;
   } else {
-    *buffer++ = 0xc0 | (ch >> 6);
-    *buffer++ = 0x80 | (ch & 0x3f);
+    *buffer++ = MakeLeading1(ch >> 6);
+    *buffer++ = MakeContinuation(ch);
   }
 
   return buffer;
@@ -173,13 +212,50 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
         /* buffer too small */
         return nullptr;
 
-      *q++ = 0xc0 | (ch >> 6);
-      *q++ = 0x80 | (ch & 0x3f);
+      *q++ = MakeLeading1(ch >> 6);
+      *q++ = MakeContinuation(ch);
     }
   }
 
   *q = 0;
   return buffer;
+}
+
+char *
+UnicodeToUTF8(unsigned ch, char *q)
+{
+  if (gcc_likely(ch < 0x80)) {
+    *q++ = (char)ch;
+  } else if (gcc_likely(ch < 0x800)) {
+    *q++ = MakeLeading1(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x10000) {
+    *q++ = MakeLeading2(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x200000) {
+    *q++ = MakeLeading3(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x4000000) {
+    *q++ = MakeLeading4(ch >> 24);
+    *q++ = MakeContinuation(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else if (ch < 0x80000000) {
+    *q++ = MakeLeading5(ch >> 30);
+    *q++ = MakeContinuation(ch >> 24);
+    *q++ = MakeContinuation(ch >> 18);
+    *q++ = MakeContinuation(ch >> 12);
+    *q++ = MakeContinuation(ch >> 6);
+    *q++ = MakeContinuation(ch);
+  } else {
+    // error
+  }
+
+  return q;
 }
 
 size_t

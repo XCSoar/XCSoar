@@ -30,8 +30,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-dlgHelpShowModal(SingleWindow &parent,
-                 const TCHAR* Caption, const TCHAR* HelpText)
+HelpDialog(const TCHAR *Caption, const TCHAR *HelpText)
 {
   assert(HelpText != nullptr);
 
@@ -44,8 +43,10 @@ dlgHelpShowModal(SingleWindow &parent,
   } else
     Caption = prefix;
 
-  WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.CreateFull(parent, Caption, new LargeTextWidget(HelpText));
+  const auto &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), Caption,
+                    new LargeTextWidget(look, HelpText));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

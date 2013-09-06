@@ -28,6 +28,7 @@ Copyright_License {
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
 #include "LogFile.hpp"
+#include "Util/ConvertString.hpp"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
@@ -159,6 +160,24 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
     break;
+
+  case DeviceConfig::PortType::TCP_CLIENT: {
+#ifdef _WIN32_WCE
+    return nullptr;
+#else
+    const WideToUTF8Converter ip_address(config.ip_address);
+    if (!ip_address.IsValid())
+      return nullptr;
+
+    auto port = new SocketPort(handler);
+    if (!port->ConnectTCP(ip_address, config.tcp_port)) {
+      delete port;
+      return nullptr;
+    }
+
+    return port;
+#endif
+  }
 
   case DeviceConfig::PortType::TCP_LISTENER: {
     TCPPort *port = new TCPPort(handler);

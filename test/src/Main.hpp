@@ -4,8 +4,12 @@
  *
  */
 
-#ifdef ENABLE_CMDLINE
+#if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
 #include "OS/Args.hpp"
+#endif
+
+#if defined(ENABLE_MAIN_WINDOW) && !defined(ENABLE_CMDLINE)
+#define USAGE "-WxH"
 #endif
 
 #ifdef ENABLE_XML_DIALOG
@@ -27,6 +31,8 @@
 #ifdef ENABLE_MAIN_WINDOW
 #include "Screen/SingleWindow.hpp"
 #include "UIGlobals.hpp"
+#include "Util/CharUtil.hpp"
+#include "Util/NumberParser.hpp"
 #endif
 
 #ifdef ENABLE_LOOK
@@ -111,13 +117,30 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
-#ifdef ENABLE_CMDLINE
+#if defined(ENABLE_CMDLINE) || defined(ENABLE_MAIN_WINDOW)
 #ifdef WIN32
   Args args(GetCommandLine(), USAGE);
 #else
   Args args(argc, argv, USAGE);
 #endif
+#ifdef ENABLE_MAIN_WINDOW
+  PixelSize window_size{640, 480};
+  const char *a = args.PeekNext();
+  if (a != nullptr && a[0] == '-' && IsDigitASCII(a[1])) {
+    args.GetNext();
+    char *p;
+    window_size.cx = ParseUnsigned(a + 1, &p);
+    if (*p != 'x' && *p != 'X')
+      args.UsageError();
+    a = p;
+    window_size.cy = ParseUnsigned(a + 1, &p);
+    if (*p != '\0')
+      args.UsageError();
+  }
+#endif
+#ifdef ENABLE_CMDLINE
   ParseCommandLine(args);
+#endif
   args.ExpectEnd();
 #endif
 
@@ -126,8 +149,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_SCREEN
+#ifndef ENABLE_MAIN_WINDOW
+  constexpr PixelSize window_size{800, 600};
+#endif
+
   ScreenGlobalInit screen_init;
-  Layout::Initialize({640, 480});
+  Layout::Initialize(window_size);
   InitialiseFonts();
 #endif
 
@@ -175,7 +202,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-  main_window.Create(_T("Test"), {640, 480});
+  main_window.Create(_T("Test"), window_size);
   main_window.Show();
 #endif
 

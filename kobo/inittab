@@ -8,7 +8,6 @@
 # Kobo software)
 
 ::sysinit:/opt/xcsoar/bin/rcS
-::respawn:/sbin/getty -L ttymxc0 115200 vt100
 ::ctrlaltdel:/sbin/reboot
 ::shutdown:/bin/umount -a -r
 ::restart:/sbin/init

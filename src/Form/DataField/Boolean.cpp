@@ -24,14 +24,20 @@ Copyright_License {
 #include "Boolean.hpp"
 #include "ComboList.hpp"
 
-ComboList *
-DataFieldBoolean::CreateComboList() const
+bool
+DataFieldBoolean::ParseString(const TCHAR *s) const
 {
-  ComboList *combo_list = new ComboList();
-  combo_list->Append(false, false_text);
-  combo_list->Append(true, true_text);
+  return true_text.equals(s);
+}
 
-  combo_list->ComboPopupItemSavedIndex = GetAsInteger();
+ComboList
+DataFieldBoolean::CreateComboList(const TCHAR *reference) const
+{
+  ComboList combo_list;
+  combo_list.Append(false, false_text);
+  combo_list.Append(true, true_text);
+
+  combo_list.ComboPopupItemSavedIndex = GetAsInteger();
   return combo_list;
 }
 
@@ -76,10 +82,7 @@ DataFieldBoolean::SetAsInteger(int Value)
 void
 DataFieldBoolean::SetAsString(const TCHAR *Value)
 {
-  const TCHAR *res = GetAsString();
-  if (_tcscmp(res, Value) != 0) {
-    SetAsBoolean(true_text.equals(Value));
-  }
+  SetAsBoolean(ParseString(Value));
 }
 
 void

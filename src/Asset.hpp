@@ -267,6 +267,8 @@ HasColors()
 {
 #ifdef ANDROID
   return !IsNookSimpleTouch();
+#elif defined(GREYSCALE)
+  return false;
 #else
   return !IsKobo();
 #endif

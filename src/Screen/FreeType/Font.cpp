@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/Custom/Files.hpp"
 #include "Init.hpp"
+#include "Asset.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Thread/Mutex.hpp"
@@ -49,8 +50,13 @@ Copyright_License {
 static Mutex freetype_mutex;
 #endif
 
+static FT_Int32 load_flags = FT_LOAD_DEFAULT;
+static FT_Render_Mode render_mode = FT_RENDER_MODE_NORMAL;
+
 static const char *font_path;
 static const char *bold_font_path;
+static const char *italic_font_path;
+static const char *bold_italic_font_path;
 static const char *monospace_font_path;
 
 gcc_const
@@ -81,8 +87,16 @@ NextChar(const TCHAR *p)
 void
 Font::Initialise()
 {
+  if (IsDithered()) {
+    /* disable anti-aliasing */
+    load_flags |= FT_LOAD_TARGET_MONO;
+    render_mode = FT_RENDER_MODE_MONO;
+  }
+
   font_path = FindDefaultFont();
   bold_font_path = FindDefaultBoldFont();
+  italic_font_path = FindDefaultItalicFont();
+  bold_italic_font_path = FindDefaultBoldItalicFont();
   monospace_font_path = FindDefaultMonospaceFont();
 }
 
@@ -98,7 +112,7 @@ GetCapitalHeight(FT_Face face)
   if (i == 0)
     return 0;
 
-  FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+  FT_Error error = FT_Load_Glyph(face, i, load_flags);
   if (error)
     return 0;
 
@@ -154,25 +168,34 @@ Font::Load(const LOGFONT &log_font)
   assert(IsScreenInitialized());
 
   bool bold = log_font.lfWeight >= 700;
+  bool italic = log_font.lfItalic;
+  const char *path = nullptr;
 
-  const char *path;
-  if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
+  /* check for presence of "real" font and clear the bold or italic
+   * flags if found so that freetype does not apply them again to
+   * produce a "synthetic" bold or italic version of the font */
+  if (italic && bold && bold_italic_font_path != nullptr) {
+    path = bold_italic_font_path;
+    bold = false;
+    italic = false;
+  } else if (italic && italic_font_path != nullptr) {
+    path = italic_font_path;
+    italic = false;
+  } else if ((log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH &&
       monospace_font_path != nullptr) {
     path = monospace_font_path;
   } else if (bold && bold_font_path != nullptr) {
-    /* a bold variant of the font exists: clear the "bold" flag, so
-       SDL_TTF does not apply it again */
     path = bold_font_path;
     bold = false;
   } else {
     path = font_path;
   }
 
-  if (path == NULL)
+  if (path == nullptr)
     return false;
 
   return LoadFile(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-                  bold, log_font.lfItalic);
+                  bold, italic);
 }
 
 void
@@ -217,7 +240,7 @@ Font::TextSize(const TCHAR *text) const
     if (i == 0)
       continue;
 
-    FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+    FT_Error error = FT_Load_Glyph(face, i, load_flags);
     if (error)
       continue;
 
@@ -293,14 +316,47 @@ RenderGlyph(uint8_t *buffer, unsigned buffer_width, unsigned buffer_height,
 }
 
 static void
+ConvertMono(unsigned char *dest, const unsigned char *src, unsigned n)
+{
+  for (; n >= 8; n -= 8, ++src) {
+    for (unsigned i = 0x80; i != 0; i >>= 1)
+      *dest++ = (*src & i) ? 0xff : 0x00;
+  }
+
+  for (unsigned i = 0x80; n > 0; i >>= 1, --n)
+    *dest++ = (*src & i) ? 0xff : 0x00;
+}
+
+static void
+ConvertMono(FT_Bitmap &dest, const FT_Bitmap &src)
+{
+  dest = src;
+  dest.pitch = dest.width;
+  dest.buffer = new unsigned char[dest.pitch * dest.rows];
+
+  unsigned char *d = dest.buffer, *s = src.buffer;
+  for (unsigned y = 0; y < unsigned(dest.rows);
+       ++y, d += dest.pitch, s += src.pitch)
+    ConvertMono(d, s, dest.width);
+}
+
+static void
 RenderGlyph(uint8_t *buffer, size_t width, size_t height,
             FT_GlyphSlot glyph, int x, int y)
 {
-  FT_Error error = FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL);
+  FT_Error error = FT_Render_Glyph(glyph, render_mode);
   if (error)
     return;
 
-  RenderGlyph(buffer, width, height, glyph->bitmap, x, y);
+  if (IsDithered()) {
+    /* with anti-aliasing disabled, FreeType writes each pixel in one
+       bit; hack: convert it to 1 byte per pixel and then render it */
+    FT_Bitmap bitmap;
+    ConvertMono(bitmap, glyph->bitmap);
+    RenderGlyph(buffer, width, height, bitmap, x, y);
+    delete[] bitmap.buffer;
+  } else
+    RenderGlyph(buffer, width, height, glyph->bitmap, x, y);
 }
 
 void
@@ -336,7 +392,7 @@ Font::Render(const TCHAR *text, const PixelSize size, void *_buffer) const
     if (i == 0)
       continue;
 
-    FT_Error error = FT_Load_Glyph(face, i, FT_LOAD_DEFAULT);
+    FT_Error error = FT_Load_Glyph(face, i, load_flags);
     if (error)
       continue;
 

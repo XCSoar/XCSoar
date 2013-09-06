@@ -34,11 +34,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Features.hpp"
-#include "Dialogs/ComboPicker.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
-#include "resource.h"
+#include "Dialogs/DataField.hpp"
 
 #include <assert.h>
 
@@ -179,50 +175,14 @@ WndProperty::BeginEditing()
     /* this would display xml file help on a read-only wndproperty if
        it exists */
     return OnHelp();
-  } else if (mDataField != NULL && mDataField->supports_combolist) {
-    /* if this asserton fails, then there no valid root window could
-       be found - maybe it didn't register its wndproc? */
-    dlgComboPicker(this);
-    return true;
-  } else if (mDataField != NULL &&
-             mDataField->GetType() == DataField::Type::ROUGH_TIME) {
-    RoughTimeDataField &df = *(RoughTimeDataField *)mDataField;
-    RoughTime value = df.GetValue();
-    if (!TimeEntryDialog(GetCaption(), value, df.GetTimeZone(), true))
-      return true;
+  } else if (mDataField != NULL) {
+    if (!EditDataFieldDialog(GetCaption(), *mDataField, GetHelpText()))
+      return false;
 
-    df.ModifyValue(value);
-    RefreshDisplay();
-    return true;
-  } else if (mDataField != NULL &&
-             mDataField->GetType() == DataField::Type::GEOPOINT) {
-    GeoPointDataField &df = *(GeoPointDataField *)mDataField;
-    GeoPoint value = df.GetValue();
-    if (!GeoPointEntryDialog(GetCaption(), value, false))
-      return true;
-
-    df.ModifyValue(value);
     RefreshDisplay();
     return true;
   } else if (CanEditInPlace()) {
     // TODO: implement
-    return true;
-  } else if (mDataField != NULL) {
-    const TCHAR *value = mDataField->GetAsString();
-    if (value == NULL)
-      return false;
-
-    StaticString<EDITSTRINGSIZE> buffer(value);
-
-    PrefixDataField::AllowedCharactersFunction acf;
-    if (mDataField->GetType() == DataField::Type::PREFIX)
-      acf = ((PrefixDataField *)mDataField)->GetAllowedCharactersFunction();
-
-    if (!TextEntryDialog(buffer, GetCaption(), acf))
-      return true;
-
-    mDataField->SetAsString(buffer);
-    RefreshDisplay();
     return true;
   } else
     return false;

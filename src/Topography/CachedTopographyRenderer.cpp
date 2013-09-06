@@ -39,7 +39,7 @@ CachedTopographyRenderer::Draw(Canvas &canvas,
     cache.Commit(canvas, projection);
   }
 
-  cache.CopyTransparentWhiteTo(canvas);
+  cache.CopyTransparentWhiteTo(canvas, projection);
 }
 
 #endif

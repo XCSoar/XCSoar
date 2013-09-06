@@ -51,6 +51,13 @@ class SocketAddress {
 public:
   SocketAddress() = default;
 
+#if defined(HAVE_POSIX) && !defined(__BIONIC__)
+  /**
+   * Make this a "local" address (UNIX domain socket).
+   */
+  void SetLocal(const char *path);
+#endif
+
   /**
    * Creates a #SocketAddress with the specified IPv4 address and
    * port.

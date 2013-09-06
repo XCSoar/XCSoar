@@ -208,6 +208,12 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
+  void InvertRectangle(int left, int top, int right, int bottom);
+
+  void InvertRectangle(const PixelRect &rc) {
+    InvertRectangle(rc.left, rc.top, rc.right, rc.bottom);
+  }
+
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
   }
@@ -372,7 +378,9 @@ public:
             const Bitmap &src, int src_x, int src_y);
   void Copy(const Bitmap &src);
 
-  void CopyTransparentWhite(const Canvas &src);
+  void CopyTransparentWhite(int dest_x, int dest_y,
+                            unsigned dest_width, unsigned dest_height,
+                            const Canvas &src, int src_x, int src_y);
 
   void StretchNot(const Bitmap &src);
 
@@ -493,6 +501,23 @@ public:
                   int src_x, int src_y,
                   unsigned src_width, unsigned src_height,
                   uint8_t alpha);
+
+  /**
+   * Like AlphaBlend(), but skip source pixels that are white.
+   */
+  void AlphaBlendNotWhite(int dest_x, int dest_y,
+                          unsigned dest_width, unsigned dest_height,
+                          ConstImageBuffer src,
+                          int src_x, int src_y,
+                          unsigned src_width, unsigned src_height,
+                          uint8_t alpha);
+
+  void AlphaBlendNotWhite(int dest_x, int dest_y,
+                          unsigned dest_width, unsigned dest_height,
+                          const Canvas src,
+                          int src_x, int src_y,
+                          unsigned src_width, unsigned src_height,
+                          uint8_t alpha);
 };
 
 #endif

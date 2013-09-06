@@ -39,9 +39,10 @@ public class TextUtil {
   private int[] extent = new int[2];
   private int[] id = new int[3];
 
-  public TextUtil(String family_name, int style, int textSize) {
+  public TextUtil(String family_name, int style, int textSize,
+                  int paint_flags) {
     Typeface tf = Typeface.create(family_name, style);
-    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    paint = new Paint(paint_flags);
     paint.setTypeface(tf);
     paint.setTextSize(textSize);
     if ((style & Typeface.ITALIC) != 0 && !tf.isItalic())

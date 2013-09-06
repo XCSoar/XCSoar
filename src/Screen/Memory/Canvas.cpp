@@ -76,6 +76,16 @@ Canvas::DrawFilledRectangle(int left, int top, int right, int bottom,
                        canvas.Import(color));
 }
 
+void
+Canvas::InvertRectangle(int left, int top, int right, int bottom)
+{
+  if (left >= right || top >= bottom)
+    return;
+
+  CopyNot(left, top, right - left, bottom - top,
+          buffer, left, top);
+}
+
 template<typename Canvas, typename PixelOperations>
 static void
 DrawPolyline(Canvas &canvas, PixelOperations operations, const Pen &pen,
@@ -354,12 +364,18 @@ Canvas::Copy(const Bitmap &_src)
 }
 
 void
-Canvas::CopyTransparentWhite(const Canvas &src)
+Canvas::CopyTransparentWhite(int dest_x, int dest_y,
+                             unsigned dest_width, unsigned dest_height,
+                             const Canvas &src, int src_x, int src_y)
 {
+  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
+      !Clip(dest_y, dest_height, GetHeight(), src_y))
+    return;
+
   SDLRasterCanvas canvas(buffer);
   TransparentPixelOperations<SDLPixelTraits> operations(canvas.Import(COLOR_WHITE));
-  canvas.CopyRectangle(0, 0, GetWidth(), GetHeight(),
-                       src.buffer.data, src.buffer.pitch,
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       src.buffer.At(src_x, src_y), src.buffer.pitch,
                        operations);
 }
 
@@ -614,4 +630,39 @@ Canvas::AlphaBlend(int dest_x, int dest_y,
              src.buffer,
              src_x, src_y, src_width, src_height,
              alpha);
+}
+
+void
+Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
+                           unsigned dest_width, unsigned dest_height,
+                           ConstImageBuffer src,
+                           int src_x, int src_y,
+                           unsigned src_width, unsigned src_height,
+                           uint8_t alpha)
+{
+  // TODO: support scaling
+
+  SDLRasterCanvas canvas(buffer);
+
+  NotWhiteCondition<SDLPixelTraits> c;
+  NotWhiteAlphaPixelOperations<SDLPixelTraits> operations(c,
+                                                          PortableAlphaPixelOperations<SDLPixelTraits>(alpha));
+
+  canvas.CopyRectangle(dest_x, dest_y, dest_width, dest_height,
+                       src.At(src_x, src_y), src.pitch,
+                       operations);
+}
+
+void
+Canvas::AlphaBlendNotWhite(int dest_x, int dest_y,
+                           unsigned dest_width, unsigned dest_height,
+                           const Canvas src,
+                           int src_x, int src_y,
+                           unsigned src_width, unsigned src_height,
+                           uint8_t alpha)
+{
+  AlphaBlendNotWhite(dest_x, dest_y, dest_width, dest_height,
+                     src.buffer,
+                     src_x, src_y, src_width, src_height,
+                     alpha);
 }

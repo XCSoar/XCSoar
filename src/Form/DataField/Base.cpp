@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Base.hpp"
 #include "Listener.hpp"
+#include "ComboList.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
@@ -36,7 +37,7 @@ DataField::DataField(Type _type, bool _supports_combolist,
                      DataFieldListener *_listener)
   :listener(_listener), data_access_callback(nullptr),
    supports_combolist(_supports_combolist), type(_type),
-   item_help_enabled(false), detach_gui(false)
+   item_help_enabled(false)
 {
 }
 
@@ -44,16 +45,13 @@ DataField::DataField(Type _type, bool _supports_combolist,
                      DataAccessCallback _data_access_callback)
   :listener(NULL), data_access_callback(_data_access_callback),
    supports_combolist(_supports_combolist), type(_type),
-   item_help_enabled(false), detach_gui(false)
+   item_help_enabled(false)
 {
 }
 
 void
 DataField::Modified()
 {
-  if (GetDetachGUI())
-    return;
-
   if (listener != NULL)
     listener->OnModified(*this);
   else if (data_access_callback != NULL)
@@ -107,12 +105,8 @@ DataField::SetAsString(gcc_unused const TCHAR *value)
 {
 }
 
-void
-DataField::CopyString(TCHAR *buffer, bool formatted)
+ComboList
+DataField::CreateComboList(const TCHAR *reference) const
 {
-  const TCHAR *src = formatted ? GetAsDisplayString() : GetAsString();
-  if (src == NULL)
-    src = _T("");
-
-  ::CopyString(buffer, src, ComboPopupITEMMAX);
+  return ComboList();
 }

@@ -98,13 +98,11 @@ public:
    */
   void Commit(Canvas &canvas, const WindowProjection &projection);
 
-  void CopyAndTo(Canvas &canvas) const {
-    canvas.CopyAnd(buffer);
-  }
+  void CopyAndTo(Canvas &canvas,
+                 const WindowProjection &projection) const;
 
-  void CopyTransparentWhiteTo(Canvas &canvas) const {
-    canvas.CopyTransparentWhite(buffer);
-  }
+  void CopyTransparentWhiteTo(Canvas &canvas,
+                              const WindowProjection &projection) const;
 
 #ifdef HAVE_ALPHA_BLEND
   /**

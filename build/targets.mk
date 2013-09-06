@@ -268,7 +268,7 @@ ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8e
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r9
 
   ANDROID_PLATFORM = android-17
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
@@ -281,7 +281,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_ABI3 = armeabi
   ANDROID_ABI4 = $(ANDROID_ABI2)
   ANDROID_ABI_SUBDIR = .
-  ANDROID_GCC_VERSION = 4.7
+  ANDROID_GCC_VERSION = 4.8
   ANDROID_GCC_VERSION2 = $(ANDROID_GCC_VERSION)
 
   ifeq ($(ARMV7),y)
@@ -308,7 +308,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
 
   ifeq ($(CLANG),y)
-    ANDROID_TOOLCHAIN_NAME = llvm-3.2
+    ANDROID_TOOLCHAIN_NAME = llvm-3.3
 
     # workaround: use libstdc++ 4.6, because 4.7 fails to link with
     # clang due to missing __atomic_* symbols

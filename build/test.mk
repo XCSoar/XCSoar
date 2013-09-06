@@ -1864,10 +1864,8 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
-	$(SRC)/Dialogs/XML.cpp \
-	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/UIUtil/KineticManager.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
@@ -1875,16 +1873,14 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/XML/Node.cpp \
-	$(SRC)/XML/Parser.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
 RUN_TEXT_ENTRY_LDADD = $(RESOURCE_BINARY)
 RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB TIME

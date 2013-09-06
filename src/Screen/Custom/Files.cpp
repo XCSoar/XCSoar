@@ -88,6 +88,28 @@ static const char *const all_bold_font_paths[] = {
   nullptr
 };
 
+static const char *const all_italic_font_paths[] = {
+#if defined(KOBO)
+  "/mnt/onboard/fonts/VeraIt.ttf",
+  "/mnt/onboard/XCSoar/fonts/VeraIt.ttf",
+  "/opt/xcsoar/share/fonts/VeraIt.ttf",
+#elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraIt.ttf",
+#endif
+  nullptr
+};
+
+static const char *const all_bold_italic_font_paths[] = {
+#if defined(KOBO)
+  "/mnt/onboard/fonts/VeraBI.ttf",
+  "/mnt/onboard/XCSoar/fonts/VeraBI.ttf",
+  "/opt/xcsoar/share/fonts/VeraBI.ttf",
+#elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraBI.ttf",
+#endif
+  nullptr
+};
+
 static const char *const all_monospace_font_paths[] = {
 #ifdef __APPLE__
   "/Library/Fonts/Courier New.ttf",
@@ -130,6 +152,18 @@ const char *
 FindDefaultBoldFont()
 {
   return FindFile(all_bold_font_paths);
+}
+
+const char *
+FindDefaultItalicFont()
+{
+  return FindFile(all_italic_font_paths);
+}
+
+const char *
+FindDefaultBoldItalicFont()
+{
+  return FindFile(all_bold_italic_font_paths);
 }
 
 const char *

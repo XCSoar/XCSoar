@@ -275,6 +275,14 @@ public:
     DrawFilledRectangle(rc, brush);
   }
 
+  void InvertRectangle(const PixelRect &rc) {
+    ::InvertRect(dc, &rc);
+  }
+
+  void InvertRectangle(int left, int top, int right, int bottom) {
+    InvertRectangle({left, top, right, bottom});
+  }
+
   void Clear() {
     Rectangle(0, 0, GetWidth(), GetHeight());
   }
@@ -446,7 +454,9 @@ public:
 
   void Copy(const Bitmap &src);
 
-  void CopyTransparentWhite(const Canvas &src);
+  void CopyTransparentWhite(int dest_x, int dest_y,
+                            unsigned dest_width, unsigned dest_height,
+                            const Canvas &src, int src_x, int src_y);
 
   void StretchNot(const Bitmap &src);
 

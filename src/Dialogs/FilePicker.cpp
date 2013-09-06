@@ -33,24 +33,16 @@ FilePicker(const TCHAR *caption, const TCHAR *patterns, TCHAR *buffer)
 
   DataFieldFileReader df(NULL);
   df.ScanMultiplePatterns(patterns);
-  ComboList *combo_list = df.CreateComboList();
-  if (combo_list == NULL)
+  const ComboList combo_list = df.CreateComboList(nullptr);
+  if (combo_list.size() == 0)
     return false;
 
-  if (combo_list->size() == 0) {
-    delete combo_list;
+  int i = ComboPicker(caption, combo_list, nullptr);
+  if (i < 0)
     return false;
-  }
 
-  int i = ComboPicker(caption, *combo_list, NULL);
-  if (i < 0) {
-    delete combo_list;
-    return false;
-  }
-
-  const ComboList::Item &item = (*combo_list)[i];
+  const ComboList::Item &item = combo_list[i];
   df.SetFromCombo(item.DataFieldIndex, item.StringValue);
-  delete combo_list;
 
   _tcscpy(buffer, df.GetAsString());
   return true;

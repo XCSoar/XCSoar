@@ -27,7 +27,7 @@ Copyright_License {
 #include "Number.hpp"
 #include "Time/PeriodClock.hpp"
 
-class DataFieldInteger : public NumberDataField
+class DataFieldInteger final : public NumberDataField
 {
 private:
   int value;
@@ -36,7 +36,8 @@ private:
   int step;
   PeriodClock last_step;
   int speedup;
-  TCHAR outpuf_buffer[OUTBUFFERSIZE + 1];
+
+  mutable TCHAR output_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup);
@@ -47,15 +48,6 @@ public:
                    int Default, int Step, DataAccessCallback OnDataAccess)
     :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
      value(Default), min(Min), max(Max), step(Step) {}
-
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
-  virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
-
-  virtual int GetAsInteger() const;
-  virtual const TCHAR *GetAsString() const;
-  virtual const TCHAR *GetAsDisplayString() const;
 
   void Set(int _value) {
     value = _value;
@@ -69,8 +61,16 @@ public:
     max = _max;
   }
 
-  virtual void SetAsInteger(int value);
-  virtual void SetAsString(const TCHAR *value);
+  /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
+  virtual void SetAsInteger(int value) override;
+  virtual void SetAsString(const TCHAR *value) override;
+  virtual ComboList CreateComboList(const TCHAR *reference) const override;
+  virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue) override;
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

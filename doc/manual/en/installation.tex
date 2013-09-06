@@ -21,6 +21,7 @@ XCSoar runs on the following platforms:
 \item mobile phones and tablets with Android 1.6 or newer \\
   Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
   Motorola Xoom
+\item Kobo Mini
 \item PDAs with Pocket PC 2000, 2002, 2003 \\
   Example: iPaq 3800, iPaq 3900
 \item PDAs with Windows Mobile \\
@@ -93,6 +94,37 @@ downloaded, and how to install it.
 Obtain XCSoar from Google's Android market, or install the \verb|apk|
 file manually.  Copy the data files on the SD card in the directory
 \verb|XCSoarData|.
+
+\subsection*{On a Kobo Mini}
+
+The Kobo Mini is a cheap e-book reader.  It has a black and white
+e-paper screen with excellent sunlight readability.
+
+Before you begin: back up the internal SD card.  The XCSoar installer
+may break the Kobo, though unlikely.  You can always recover the Kobo
+from a software failure, but only if you have access to a backup.
+
+To install XCSoar, connect the Kobo to your PC via USB.  The Kobo
+exposes a mass storage device to your PC; open it and create a
+directory called \texttt{.kobo} (note the leading dot).  Download the
+file \texttt{KoboRoot.tgz} from the XCSoar website into that
+directory.  Unplug the Kobo and reboot it (switch it off completely,
+and switch it on again).  You will see the message ``Updating'', and
+after a few minutes, the Kobo shows a menu that allows you to launch
+XCSoar or the Kobo e-book reader software.
+
+To copy data files (maps, waypoints, ...) to the Kobo, launch the
+original Kobo software (``Nickel'') and connect the Kobo to your PC
+again.  Copy the files into a directory called \texttt{XCSoarData} at
+the top level.
+
+\subsubsection{Hacking the Kobo}
+
+After installing XCSoar on the Kobo, the new boot script checks for a
+script called \texttt{XCSoarData/kobo/init.sh} and executes it.  If
+you know what you're doing, you can use this script to do things at
+boot time, for example launch \texttt{inetd} (for \texttt{telnet}
+access).
 
 \subsection*{On a PDA (Windows Mobile, PocketPC)}
 

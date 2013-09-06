@@ -26,10 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class SingleWindow;
-
 void
-dlgHelpShowModal(SingleWindow &parent,
-                 const TCHAR *caption, const TCHAR *text);
+HelpDialog(const TCHAR *caption, const TCHAR *text);
 
 #endif

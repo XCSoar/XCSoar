@@ -518,7 +518,7 @@ WndForm::OnPaint(Canvas &canvas)
   gcc_unused const bool is_active = main_window.IsTopDialog(*this);
 
 #ifdef ENABLE_OPENGL
-  if (!IsMaximised() && is_active) {
+  if (!IsDithered() && !IsMaximised() && is_active) {
     /* draw a shade around the current dialog to emphasise it */
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -538,7 +538,16 @@ WndForm::OnPaint(Canvas &canvas)
   PixelRect rcClient = GetClientRect();
 
   // Draw the borders
-  canvas.DrawRaisedEdge(rcClient);
+  if (!IsMaximised()) {
+#ifndef USE_GDI
+    if (IsDithered())
+      canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
+                                  rcClient.right - 1, rcClient.bottom - 1,
+                                  COLOR_BLACK);
+    else
+#endif
+      canvas.DrawRaisedEdge(rcClient);
+  }
 
   if (!caption.empty()) {
     // Set the colors
@@ -550,21 +559,25 @@ WndForm::OnPaint(Canvas &canvas)
     // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-    canvas.SetBackgroundTransparent();
-    canvas.Stretch(title_rect.left, title_rect.top,
-                   title_rect.right - title_rect.left,
-                   title_rect.bottom - title_rect.top,
-                   look.caption.background_bitmap);
+    if (!IsDithered()) {
+      canvas.SetBackgroundTransparent();
+      canvas.Stretch(title_rect.left, title_rect.top,
+                     title_rect.right - title_rect.left,
+                     title_rect.bottom - title_rect.top,
+                     look.caption.background_bitmap);
 
-    // Draw titlebar text
-    canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
-                    caption.c_str());
-#else
-    canvas.SetBackgroundColor(is_active
-                              ? look.caption.background_color
-                              : look.caption.inactive_background_color);
-    canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
-                          title_rect.top, title_rect, caption.c_str());
+      // Draw titlebar text
+      canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
+                      caption.c_str());
+    } else {
+#endif
+      canvas.SetBackgroundColor(is_active
+                                ? look.caption.background_color
+                                : look.caption.inactive_background_color);
+      canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
+                            title_rect.top, title_rect, caption.c_str());
+#ifdef EYE_CANDY
+    }
 #endif
   }
 
@@ -574,7 +587,9 @@ WndForm::OnPaint(Canvas &canvas)
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
-    ::InvertRect(canvas, &title_rect);
+    canvas.InvertRectangle(title_rect);
+#else
+    canvas.InvertRectangle(GetClientRect());
 #endif
   }
 }

@@ -198,13 +198,17 @@ ScrollBar::Paint(Canvas &canvas) const
   }
 
   // fill the rest with darker gray
+  const Color background_color = IsDithered() ? COLOR_BLACK : COLOR_GRAY;
+
   if (up_arrow_rect.bottom + 1 < rc_slider.top)
     canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
-                               rc.right, rc_slider.top, COLOR_GRAY);
+                               rc.right, rc_slider.top,
+                               background_color);
 
   if (rc_slider.bottom + 1 < down_arrow_rect.top - 1)
     canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom + 1,
-                               rc.right, down_arrow_rect.top - 1, COLOR_GRAY);
+                               rc.right, down_arrow_rect.top - 1,
+                               background_color);
 }
 
 void

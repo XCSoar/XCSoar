@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/ListPicker.hpp"
+#include "HelpDialog.hpp"
 #include "WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
@@ -47,7 +48,7 @@ class ListPickerWidget : public ListWidget, public ActionListener,
   ListItemRenderer &item_renderer;
   ActionListener &action_listener;
 
-  ListHelpCallback_t help_callback;
+  const TCHAR *const caption, *const help_text;
   ItemHelpCallback_t item_help_callback;
   TextWidget *help_widget;
   TwoWidgets *two_widgets;
@@ -57,13 +58,13 @@ public:
                    UPixelScalar _row_height,
                    ListItemRenderer &_item_renderer,
                    ActionListener &_action_listener,
-                   ListHelpCallback_t _help_callback)
+                   const TCHAR *_caption, const TCHAR *_help_text)
     :num_items(_num_items), initial_value(_initial_value),
      row_height(_row_height),
      visible(false),
      item_renderer(_item_renderer),
      action_listener(_action_listener),
-     help_callback(_help_callback),
+     caption(_caption), help_text(_help_text),
      item_help_callback(nullptr) {}
 
   using ListWidget::GetList;
@@ -133,7 +134,7 @@ public:
   /* virtual methods from class ActionListener */
 
   virtual void OnAction(int id) override {
-    help_callback(GetList().GetCursorIndex());
+    HelpDialog(caption, help_text);
   }
 
 private:
@@ -156,7 +157,7 @@ ListPicker(const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            unsigned item_height,
            ListItemRenderer &item_renderer, bool update,
-           ListHelpCallback_t _help_callback,
+           const TCHAR *help_text,
            ItemHelpCallback_t _itemhelp_callback)
 {
   assert(num_items <= 0x7fffffff);
@@ -167,7 +168,7 @@ ListPicker(const TCHAR *caption,
 
   ListPickerWidget *const list_widget =
     new ListPickerWidget(num_items, initial_value, item_height,
-                         item_renderer, dialog, _help_callback);
+                         item_renderer, dialog, caption, help_text);
   TextWidget *text_widget = nullptr;
   TwoWidgets *two_widgets = nullptr;
 
@@ -182,7 +183,7 @@ ListPicker(const TCHAR *caption,
 
   dialog.CreateFull(UIGlobals::GetMainWindow(), caption, widget);
 
-  if (_help_callback != nullptr)
+  if (help_text != nullptr)
     dialog.AddButton(_("Help"), *list_widget, HELP);
 
   if (num_items > 0)

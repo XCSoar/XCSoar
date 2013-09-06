@@ -141,9 +141,8 @@ GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
     canvas.Select(Brush(COLOR_YELLOW.WithAlpha(80)));
 
     DrawCircle(canvas);
-#elif defined(USE_GDI)
-    const PixelRect rc = GetClientRect();
-    ::InvertRect(canvas, &rc);
+#else
+    canvas.InvertRectangle(GetClientRect());
 #endif
   }
 }

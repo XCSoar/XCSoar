@@ -24,18 +24,24 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_COMBO_PICKER_HPP
 #define XCSOAR_DIALOGS_COMBO_PICKER_HPP
 
-#include "Dialogs/ListPicker.hpp"
+#include <tchar.h>
 
 class ComboList;
+class DataField;
 class WndProperty;
 
 int
 ComboPicker(const TCHAR *caption,
             const ComboList &combo_list,
-            ListHelpCallback_t help_callback,
+            const TCHAR *help_text = nullptr,
             bool enable_item_help = false);
 
-int
-dlgComboPicker(WndProperty *theProperty);
+/**
+ * @return true if the user has selected a new value (though it may be
+ * equal to the old one)
+ */
+bool
+ComboPicker(const TCHAR *caption, DataField &df,
+            const TCHAR *help_text = nullptr);
 
 #endif

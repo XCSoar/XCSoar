@@ -264,10 +264,6 @@ DeviceDescriptor::OpenInternalSensors()
   if (is_simulator())
     return true;
 
-  if (IsNookSimpleTouch())
-    /* avoid a crash on startup b/c nook has no internal sensors */
-    return false;
-
   internal_sensors =
       InternalSensors::create(Java::GetEnv(), context, GetIndex());
   if (internal_sensors) {
