@@ -61,6 +61,10 @@ XCSoar TE
   - TravisCI support
 
 
+Version 6.6.6 - not yet released
+* tasks
+  - fix parsing of .cup task files
+
 Version 6.6.5 - 2013/08/21
 * user interface
   - reduce flickering in system configuration
