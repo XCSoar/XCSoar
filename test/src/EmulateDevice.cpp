@@ -72,17 +72,23 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  /* turn off output buffering */
-  setvbuf(stdout, NULL, _IONBF, 0);
-
   emulator->port = port;
 
   ConsoleOperationEnvironment env;
   emulator->env = &env;
 
+  if (!port->WaitConnected(env)) {
+    delete port;
+    delete emulator;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   if (!port->StartRxThread()) {
     delete port;
     delete emulator;
+    DeinitialiseIOThread();
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
   }

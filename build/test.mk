@@ -731,12 +731,11 @@ DEBUG_PROGRAM_NAMES = \
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
 	AnalyseFlight \
-	FeedTCP \
 	FeedFlyNetData
 endif
 
 ifeq ($(TARGET),PC)
-DEBUG_PROGRAM_NAMES += FeedTCP \
+DEBUG_PROGRAM_NAMES += \
   FeedFlyNetData
 endif
 
@@ -1144,6 +1143,8 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -1155,6 +1156,8 @@ LOG_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -2517,12 +2520,6 @@ EMULATE_DEVICE_SOURCES = \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
 EMULATE_DEVICE_DEPENDS = PORT ASYNC OS THREAD UTIL
 $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
-
-FEED_TCP_SOURCES = \
-	$(TEST_SRC_DIR)/FeedTCP.cpp
-FEED_TCP_DEPENDS = OS
-
-$(eval $(call link-program,FeedTCP,FEED_TCP))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Math/fixed.cpp \

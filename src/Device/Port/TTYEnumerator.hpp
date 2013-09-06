@@ -35,8 +35,16 @@ class TTYEnumerator {
   char path[64];
 
 public:
+#ifdef __linux__
+  /* on Linux, enumerate /sys/class/tty/ which is faster than /dev/
+     (searches only the TTY character devices) and shows only the
+     ports that really exist */
+  TTYEnumerator()
+    :dir(opendir("/sys/class/tty")) {}
+#else
   TTYEnumerator()
     :dir(opendir("/dev")) {}
+#endif
 
   ~TTYEnumerator() {
     if (dir != nullptr)

@@ -34,7 +34,6 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
 #include "Geo/Geoid.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Language/LanguageGlue.hpp"
@@ -203,7 +202,9 @@ Startup()
   TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
-  style.Resizable();
+
+  if (!IsWindowsCE())
+    style.Resizable();
 
   MainWindow *const main_window = CommonInterface::main_window =
     new MainWindow(CommonInterface::status_messages);
@@ -231,12 +232,6 @@ Startup()
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
   if (!sim_set_in_cmd_line_flag) {
-    DialogLook white_look;
-    white_look.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
-                          Fonts::map_bold, Fonts::map_bold, Fonts::map_bold);
-    white_look.SetBackgroundColor(COLOR_WHITE);
-    SetXMLDialogLook(white_look);
-
     SimulatorPromptResult result = dlgSimulatorPromptShowModal();
     switch (result) {
     case SPR_QUIT:
@@ -252,8 +247,6 @@ Startup()
     }
   }
 #endif
-
-  SetXMLDialogLook(main_window->GetLook().dialog);
 
   CommonInterface::SetSystemSettings().SetDefaults();
   CommonInterface::SetComputerSettings().SetDefaults();

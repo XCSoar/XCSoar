@@ -25,12 +25,10 @@ Copyright_License {
 
 #include <tchar.h>
 
-enum {
-  IOCTL_TRA_BACKLIGHTSETVALUE = 5000,
-  IOCTL_TRA_BACKLIGHTGETVALUE = 5001,
-  IOCTL_TRA_GETINFO = 5030,
-  IOCTL_TRA_SHORTBEEP = 5060,
-};
+static constexpr DWORD IOCTL_TRA_BACKLIGHTSETVALUE = 5000;
+static constexpr DWORD IOCTL_TRA_BACKLIGHTGETVALUE = 5001;
+static constexpr DWORD IOCTL_TRA_GETINFO = 5030;
+static constexpr DWORD IOCTL_TRA_SHORTBEEP = 5060;
 
 AltairControl::AltairControl()
  :handle(::CreateFile(_T("TRA1:"), GENERIC_READ|GENERIC_WRITE, 0,
@@ -51,7 +49,7 @@ AltairControl::ShortBeep()
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_SHORTBEEP,
-                           NULL, 0, NULL, 0, NULL, NULL) != 0;
+                           NULL, 0, NULL, 0, NULL, NULL);
 }
 
 bool
@@ -62,7 +60,7 @@ AltairControl::GetBacklight(int &value_r)
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTGETVALUE,
                            &value_r, sizeof(value_r),
-                           NULL, 0, NULL, NULL) != 0;
+                           NULL, 0, NULL, NULL);
 }
 
 bool
@@ -72,5 +70,5 @@ AltairControl::SetBacklight(int value)
     return false;
 
   return ::DeviceIoControl(handle, IOCTL_TRA_BACKLIGHTSETVALUE,
-                           &value, sizeof(value), NULL, 0, NULL, NULL) != 0;
+                           &value, sizeof(value), NULL, 0, NULL, NULL);
 }

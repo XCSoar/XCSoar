@@ -95,7 +95,7 @@ class RowFormWidget : public WindowWidget {
     /**
      * Only used for #type==WIDGET.
      */
-    bool initialised, prepared;
+    bool initialised, prepared, shown;
 
     /**
      * Shall this row be available?  If not, it is hidden and no
@@ -118,6 +118,13 @@ class RowFormWidget : public WindowWidget {
 
     Window *window;
 
+    /**
+     * The position determined by RowFormWidget::UpdateLayout().  This
+     * attribute is strictly only necessary for widgets, because these
+     * expect a PixelRect parameter in their Show() method.
+     */
+    PixelRect position;
+
     Row() = default;
 
     Row(Type _type)
@@ -135,7 +142,7 @@ class RowFormWidget : public WindowWidget {
 
     Row(Widget *_widget)
       :type(Type::WIDGET),
-       initialised(false), prepared(false),
+       initialised(false), prepared(false), shown(false),
        available(true), visible(true), expert(false),
        widget(_widget), window(nullptr) {
       assert(_widget != NULL);
@@ -160,6 +167,8 @@ class RowFormWidget : public WindowWidget {
         assert(widget != nullptr);
         assert(window == nullptr);
 
+        if (shown)
+          widget->Hide();
         if (prepared)
           widget->Unprepare();
         delete widget;
@@ -228,6 +237,21 @@ class RowFormWidget : public WindowWidget {
 
     gcc_pure
     unsigned GetMaximumHeight(const DialogLook &look, bool vertical) const;
+
+    void UpdateLayout(ContainerWindow &parent, const PixelRect &_position,
+                      int caption_width);
+
+    void SetVisible(ContainerWindow &parent, bool _visible);
+
+    /**
+     * Show the Window/Widget, but do not update the #visible flag.
+     */
+    void Show(ContainerWindow &parent);
+
+    /**
+     * Hide the Window/Widget, but do not update the #visible flag.
+     */
+    void Hide();
   };
 
   const DialogLook &look;

@@ -124,6 +124,81 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
   return window->GetHeight();
 }
 
+inline void
+RowFormWidget::Row::UpdateLayout(ContainerWindow &parent,
+                                 const PixelRect &_position,
+                                 int caption_width)
+{
+  assert(type != Type::DUMMY);
+
+  position = _position;
+
+  if (type == Type::WIDGET) {
+    Widget &widget = GetWidget();
+
+    if (shown)
+      widget.Move(position);
+  } else {
+    Window &window = GetWindow();
+
+    if (type == Type::EDIT && GetControl().HasCaption())
+      GetControl().SetCaptionWidth(caption_width);
+
+    /* finally move and resize */
+    window.Move(position);
+  }
+
+  if (visible)
+    Show(parent);
+}
+
+inline void
+RowFormWidget::Row::SetVisible(ContainerWindow &parent, bool _visible)
+{
+  if (_visible == visible)
+    return;
+
+  visible = _visible;
+  if (!visible)
+    Hide();
+  else if (IsAvailable(UIGlobals::GetDialogSettings().expert))
+    Show(parent);
+}
+
+void
+RowFormWidget::Row::Show(ContainerWindow &parent)
+{
+  if (type == Type::WIDGET) {
+    if (!initialised) {
+      initialised = true;
+      widget->Initialise(parent, position);
+    }
+
+    if (!prepared) {
+      prepared = true;
+      widget->Prepare(parent, position);
+    }
+
+    if (!shown) {
+      shown = true;
+      widget->Show(position);
+    }
+  } else if (type != Type::DUMMY)
+    window->Show();
+}
+
+void
+RowFormWidget::Row::Hide()
+{
+  if (type == Type::WIDGET) {
+    if (shown) {
+      shown = false;
+      widget->Hide();
+    }
+  } else if (type != Type::DUMMY)
+    window->Hide();
+}
+
 RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
   :look(_look), vertical(_vertical)
 {
@@ -131,12 +206,12 @@ RowFormWidget::RowFormWidget(const DialogLook &_look, bool _vertical)
 
 RowFormWidget::~RowFormWidget()
 {
-  if (IsDefined())
-    DeleteWindow();
-
   /* destroy all rows */
   for (auto &i : rows)
     i.Delete();
+
+  if (IsDefined())
+    DeleteWindow();
 }
 
 void
@@ -153,15 +228,7 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
 void
 RowFormWidget::SetRowVisible(unsigned i, bool visible)
 {
-  Row &row = rows[i];
-  if (visible == row.visible)
-    return;
-
-  row.visible = visible;
-  if (!visible)
-    row.GetWindow().Hide();
-  else if (row.IsAvailable(UIGlobals::GetDialogSettings().expert))
-    row.GetWindow().Show();
+  rows[i].SetVisible((ContainerWindow &)GetWindow(), visible);
 }
 
 void
@@ -290,7 +357,7 @@ RowFormWidget::UpdateLayout()
      determine the minimum total height */
   unsigned min_height = 0;
   unsigned n_elastic = 0;
-  unsigned caption_width = 0;
+  int caption_width = -1;
 
   for (const auto &i : rows) {
     if (!i.IsAvailable(expert))
@@ -301,13 +368,13 @@ RowFormWidget::UpdateLayout()
       ++n_elastic;
 
     if (!vertical && i.type == Row::Type::EDIT) {
-      unsigned cw = i.GetControl().GetRecommendedCaptionWidth();
+      int cw = i.GetControl().GetRecommendedCaptionWidth();
       if (cw > caption_width)
         caption_width = cw;
     }
   }
 
-  if (!vertical && caption_width * 3 > total_width * 2)
+  if (caption_width * 3 > int(total_width * 2))
     caption_width = total_width * 2 / 3;
 
   /* how much excess height in addition to the minimum height? */
@@ -318,16 +385,12 @@ RowFormWidget::UpdateLayout()
   /* second row traversal: now move and resize the rows */
   for (auto &i : rows) {
     if (!i.IsAvailable(expert)) {
-      if (i.type == Row::Type::WIDGET)
-        i.GetWidget().Hide();
-      else if (i.type != Row::Type::DUMMY)
-        i.GetWindow().Hide();
-
+      i.Hide();
       continue;
     }
 
     /* determine this row's height */
-    UPixelScalar height = i.GetMinimumHeight(look, vertical);
+    unsigned height = i.GetMinimumHeight(look, vertical);
     if (excess_height > 0 && i.IsElastic(look, vertical)) {
       assert(n_elastic > 0);
 
@@ -335,7 +398,7 @@ RowFormWidget::UpdateLayout()
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i.GetMaximumHeight(look, vertical);
+        const unsigned max_height = i.GetMaximumHeight(look, vertical);
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
@@ -348,45 +411,9 @@ RowFormWidget::UpdateLayout()
       --n_elastic;
     }
 
-    if (i.type == Row::Type::WIDGET) {
-      Widget &widget = i.GetWidget();
-
-      /* TODO: visible check - hard to implement without remembering
-         the control position, because Widget::Show() wants a
-         PixelRect parameter */
-
-      NextControlRect(current_rect, height);
-
-      if (!i.initialised) {
-        i.initialised = true;
-        widget.Initialise((ContainerWindow &)GetWindow(), current_rect);
-      }
-
-      if (!i.prepared) {
-        i.prepared = true;
-        widget.Prepare((ContainerWindow &)GetWindow(), current_rect);
-      }
-
-      widget.Show(current_rect);
-      continue;
-    }
-
-    Window &window = i.GetWindow();
-
-    if (i.visible)
-      window.Show();
-
-    if (i.type == Row::Type::EDIT &&
-        i.GetControl().HasCaption()) {
-      if (vertical)
-        i.GetControl().SetCaptionWidth(-1);
-      else if (caption_width > 0)
-        i.GetControl().SetCaptionWidth(caption_width);
-    }
-
-    /* finally move and resize */
     NextControlRect(current_rect, height);
-    window.Move(current_rect);
+    i.UpdateLayout((ContainerWindow &)GetWindow(), current_rect,
+                   caption_width);
   }
 
   assert(excess_height == 0 || n_elastic == 0);

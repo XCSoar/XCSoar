@@ -27,7 +27,11 @@ Copyright_License {
 
 #include <algorithm>
 
-FontSettings Fonts::default_settings, Fonts::effective_settings;
+FontSettings Fonts::default_settings;
+
+#ifndef GNAV
+FontSettings Fonts::effective_settings;
+#endif
 
 Font Fonts::dialog, Fonts::dialog_bold, Fonts::dialog_small;
 
@@ -60,9 +64,13 @@ Fonts::Load(const FontSettings &settings)
   lf.lfWeight = FW_BOLD;
   dialog_bold.Load(lf);
 
+#ifdef GNAV
+  dialog_small.Load(settings.dialog_small);
+#else
   lf = settings.dialog;
   lf.lfHeight = std::max(6u, unsigned(lf.lfHeight) * 3u / 4u);
   dialog_small.Load(lf);
+#endif
 
   title.Load(settings.title);
   cdi.Load(settings.cdi);

@@ -74,6 +74,8 @@ static constexpr StaticEnumChoice as_fill_mode_list[] = {
     N_("Transparently fills the airspace colour over the whole area.") },
   { (unsigned)AirspaceRendererSettings::FillMode::PADDING, N_("Fill padding"),
     N_("Draws a solid outline with a half transparent border around the airspace.") },
+  { (unsigned)AirspaceRendererSettings::FillMode::NONE, N_("No fill"),
+    N_("Don't fill the airspace area.") },
   { 0 }
 };
 

@@ -22,90 +22,127 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 
 #ifdef GNAV
 
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Button.hpp"
-#include "Units/Units.hpp"
-#include "Form/DataField/Base.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Time/PeriodClock.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Language/Language.hpp"
+#include "RateLimiter.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "UIGlobals.hpp"
 
-static WndForm *wf=NULL;
+/**
+ * This class limits the rate at which we forward user input to the
+ * backlight.
+ */
+class AltairBacklightRateLimiter final
+  : private RateLimiter {
+  int current_value, new_value;
 
-static bool EnableAutoBrightness = true;
-static unsigned BrightnessValue = 0;
+public:
+  AltairBacklightRateLimiter()
+    :RateLimiter(200, 50), current_value(-1), new_value(-1) {}
 
-static void UpdateValues() {
-  static PeriodClock last_time;
-  if (!last_time.CheckUpdate(200))
-    return;
-
-  if (EnableAutoBrightness) {
-    altair_control.SetBacklight(-100);
-  } else {
-    altair_control.SetBacklight(BrightnessValue);
+  ~AltairBacklightRateLimiter() {
+    Apply();
   }
-}
 
-static void OnAutoData(DataField *Sender, DataField::DataAccessMode Mode){
-  DataFieldBoolean &df = *(DataFieldBoolean *)Sender;
+  void SetBacklight(int _value) {
+    if (_value == new_value)
+      return;
 
-  switch(Mode){
-    case DataField::daChange:
-      EnableAutoBrightness = df.GetAsBoolean();
-      UpdateValues();
-    break;
-
-  case DataField::daSpecial:
-    return;
+    new_value = _value;
+    if (new_value != current_value)
+      RateLimiter::Trigger();
+    else
+      RateLimiter::Cancel();
   }
-}
 
-
-static void OnBrightnessData(DataField *Sender,
-			     DataField::DataAccessMode Mode){
-  switch(Mode){
-    case DataField::daChange:
-      BrightnessValue = Sender->GetAsInteger();
-      UpdateValues();
-    break;
-
-  case DataField::daSpecial:
-    return;
+private:
+  void Apply() {
+    if (new_value != current_value && altair_control.SetBacklight(new_value))
+      current_value = new_value;
   }
-}
 
-
-static constexpr CallBackTableEntry CallBackTable[]={
-  DeclareCallBackEntry(OnAutoData),
-  DeclareCallBackEntry(OnBrightnessData),
-  DeclareCallBackEntry(NULL)
+  virtual void Run() override {
+    Apply();
+  }
 };
 
+class AltairBacklightWidget final
+  : public RowFormWidget, private DataFieldListener {
+  enum Controls {
+    AUTO, BRIGHTNESS,
+  };
 
+  AltairBacklightRateLimiter rate_limiter;
 
-void dlgBrightnessShowModal(){
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-		      _T("IDR_XML_BRIGHTNESS"));
-  if (wf == NULL)
-    return;
+public:
+  AltairBacklightWidget(const DialogLook &_look)
+    :RowFormWidget(_look) {}
 
-  LoadFormProperty(*wf, _T("prpBrightness"), BrightnessValue);
-  LoadFormProperty(*wf, _T("prpAuto"), EnableAutoBrightness);
+  void Apply();
 
-  wf->ShowModal();
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-  UpdateValues();
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+};
 
-  delete wf;
+void
+AltairBacklightWidget::Apply()
+{
+  const bool auto_brightness = GetValueBoolean(AUTO);
+  SetRowEnabled(BRIGHTNESS, !auto_brightness);
+
+  rate_limiter.SetBacklight(auto_brightness
+                            ? AltairControl::BACKLIGHT_AUTO
+                            : GetValueInteger(BRIGHTNESS));
+}
+
+void
+AltairBacklightWidget::OnModified(DataField &df)
+{
+  Apply();
+}
+
+void
+AltairBacklightWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  int value;
+  if (!altair_control.GetBacklight(value))
+    value = 100;
+
+  const bool auto_brightness = value == AltairControl::BACKLIGHT_AUTO;
+
+  AddBoolean(_("Auto"),
+             _("Enables automatic backlight, responsive to light sensor."),
+             auto_brightness, this);
+
+  AddInteger(_("Brightness"),
+             _("Adjusts backlight. When automatic backlight is enabled, this biases the backlight algorithm. When the automatic backlight is disabled, this controls the backlight directly."),
+             _T("%u %%"), _T("%u"), 0, 100, 5,
+             value < 0 ? 100 : value, this);
+
+  SetRowEnabled(BRIGHTNESS, !auto_brightness);
+}
+
+void
+dlgBrightnessShowModal()
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  AltairBacklightWidget widget(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Screen Brightness"),
+                    &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
 
 #else /* !GNAV */

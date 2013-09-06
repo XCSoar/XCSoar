@@ -21,20 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_PLACES_HPP
-#define XCSOAR_INFOBOX_CONTENT_PLACES_HPP
+#ifndef XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
+#define XCSOAR_DEVICE_TCP_CLIENT_PORT_HPP
 
-struct InfoBoxData;
+#include "SocketPort.hpp"
 
-void
-UpdateInfoBoxHomeDistance(InfoBoxData &data);
+/**
+ * A #Port implementation that connects to a TCP port.
+ */
+class TCPClientPort final
+  : public SocketPort
+{
+#ifdef HAVE_POSIX
+  /**
+   * The unconnected socket.  This will be moved to SocketPort::socket
+   * as soon as the connection has been established.
+   */
+  SocketDescriptor connecting;
+#endif
 
-void
-UpdateInfoBoxTakeoffDistance(InfoBoxData &data);
+public:
+  TCPClientPort(DataHandler &handler)
+    :SocketPort(handler) {}
 
-extern const struct InfoBoxPanel atc_infobox_panels[];
+#ifdef HAVE_POSIX
+  virtual ~TCPClientPort();
+#endif
 
-void
-UpdateInfoBoxATCRadial(InfoBoxData &data);
+  bool Connect(const char *host, unsigned port);
+
+#ifdef HAVE_POSIX
+  /* virtual methods from class Port */
+  virtual PortState GetState() const override;
+
+protected:
+  /* virtual methods from class FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask) override;
+#endif
+};
 
 #endif

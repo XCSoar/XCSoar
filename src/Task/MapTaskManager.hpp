@@ -57,14 +57,6 @@ namespace MapTaskManager
    * else returns -1
    */
   int GetIndexInTask(const Waypoint &wp);
-
-  /**
-   * is this wp an unachieved task point?
-   * @param waypoint.  the wp being tested
-   * @return.  -1 or last index in ordered task where the wp is an
-   * unachieved intermediate point.  -1 if mode != MODE_ORDDERED
-   */
-  int GetUnachievedIndexInTask(const Waypoint &waypoint);
 };
 
 #endif

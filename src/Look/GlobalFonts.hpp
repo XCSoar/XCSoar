@@ -38,11 +38,13 @@ namespace Fonts
    */
   extern FontSettings default_settings;
 
+#ifndef GNAV
   /**
    * The font settings that are effectively used.  This is different
    * from #default_settings if the user has configured custom fonts.
    */
   extern FontSettings effective_settings;
+#endif
 
   /**
    * Fonts for user interfaces such as dialogs, pop-up messages etc.

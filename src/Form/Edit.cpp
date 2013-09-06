@@ -155,7 +155,7 @@ WndProperty::~WndProperty()
 UPixelScalar
 WndProperty::GetRecommendedCaptionWidth() const
 {
-  return look.text_font->TextSize(caption).cx + Layout::FastScale(3);
+  return look.text_font->TextSize(caption).cx + Layout::GetTextPadding();
 }
 
 void
@@ -345,7 +345,7 @@ WndProperty::OnPaint(Canvas &canvas)
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.cy;
     } else {
-      org.x = caption_width - tsize.cx - Layout::FastScale(3);
+      org.x = caption_width - tsize.cx;
       org.y = (GetHeight() - tsize.cy) / 2;
     }
 

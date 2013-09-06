@@ -1249,6 +1249,14 @@ static constexpr MetaData meta_data[] = {
     CIRCLE_DIAMETER,
   },
 
+  {
+    N_("Distance takeoff"),
+    N_("Takeoff Dist"),
+    N_("Distance to where take-off was detected."),
+    UpdateInfoBoxTakeoffDistance,
+    TAKEOFF_DISTANCE,
+    TAKEOFF_DISTANCE,
+  },
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

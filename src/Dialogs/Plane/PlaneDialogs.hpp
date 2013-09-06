@@ -24,11 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_PLANES_HPP
 #define XCSOAR_DIALOGS_PLANES_HPP
 
-class SingleWindow;
 struct Plane;
 
 void dlgPlanesShowModal();
-bool dlgPlaneDetailsShowModal(SingleWindow &parent, Plane &plane);
-bool dlgPlanePolarShowModal(SingleWindow &parent, Plane &plane);
+
+bool
+dlgPlaneDetailsShowModal(Plane &plane);
+
+bool
+dlgPlanePolarShowModal(Plane &plane);
 
 #endif

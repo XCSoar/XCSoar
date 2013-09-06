@@ -24,17 +24,9 @@ Copyright_License {
 #ifndef CONFIGPANEL_HPP
 #define CONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-
-class WndProperty;
 class WndButton;
 
 namespace ConfigPanel {
-  /**
-   * Hack - to be removed!
-   */
-  gcc_pure
-  WndForm &GetForm();
   WndButton *GetExtraButton(unsigned);
 };
 

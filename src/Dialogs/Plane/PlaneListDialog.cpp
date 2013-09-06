@@ -269,7 +269,7 @@ PlaneListWidget::NewClicked()
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
-  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
+  while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
@@ -309,7 +309,7 @@ PlaneListWidget::EditClicked()
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
 
-  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
+  while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);

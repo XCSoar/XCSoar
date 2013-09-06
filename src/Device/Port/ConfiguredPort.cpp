@@ -32,6 +32,8 @@ Copyright_License {
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
+#else
+#include "TCPClientPort.hpp"
 #endif
 
 #ifdef ANDROID
@@ -169,8 +171,8 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
     if (!ip_address.IsValid())
       return nullptr;
 
-    auto port = new SocketPort(handler);
-    if (!port->ConnectTCP(ip_address, config.tcp_port)) {
+    auto port = new TCPClientPort(handler);
+    if (!port->Connect(ip_address, config.tcp_port)) {
       delete port;
       return nullptr;
     }

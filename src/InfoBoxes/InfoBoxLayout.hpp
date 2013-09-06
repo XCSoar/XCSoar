@@ -33,7 +33,9 @@ namespace InfoBoxLayout
   struct Layout {
     InfoBoxSettings::Geometry geometry;
 
-    UPixelScalar control_width, control_height;
+    bool landscape;
+
+    PixelSize control_size;
 
     unsigned count;
     PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
@@ -57,7 +59,7 @@ namespace InfoBoxLayout
 
   gcc_const
   int
-  GetBorder(InfoBoxSettings::Geometry geometry, unsigned i);
+  GetBorder(InfoBoxSettings::Geometry geometry, bool landscape, unsigned i);
 };
 
 #endif

@@ -34,24 +34,22 @@ class AltairControl {
   HANDLE handle;
 
 public:
+  static constexpr int BACKLIGHT_AUTO = -100;
+
   AltairControl();
   ~AltairControl();
-
-  bool error() const {
-    return handle == INVALID_HANDLE_VALUE;
-  }
 
   bool ShortBeep();
 
   /**
-   * Reads the backlight value; range is 0..100 or -100 for auto
-   * backlight.
+   * Reads the backlight value; range is 0..100 or #BACKLIGHT_AUTO for
+   * auto backlight.
    */
   bool GetBacklight(int &value_r);
 
   /**
-   * Sets a new backlight value; range is 0..100, or -100 for auto
-   * backlight.
+   * Sets a new backlight value; range is 0..100, or #BACKLIGHT_AUTO
+   * for auto backlight.
    */
   bool SetBacklight(int value);
 };

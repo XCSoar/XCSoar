@@ -57,11 +57,17 @@ enum ControlIndex {
 };
 
 class InterfaceConfigPanel final : public RowFormWidget {
+#ifndef GNAV
+  WndButton *buttonFonts;
+#endif
+
 public:
   InterfaceConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()), buttonFonts(0) {}
-
-  WndButton *buttonFonts;
+    :RowFormWidget(UIGlobals::GetDialogLook())
+#ifndef GNAV
+    , buttonFonts(0)
+#endif
+    {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -73,9 +79,11 @@ public:
 void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
+#ifndef GNAV
   buttonFonts->SetText(_("Fonts"));
   buttonFonts->SetOnClickNotify(dlgConfigFontsShowModal);
   buttonFonts->Show();
+#endif
 
   RowFormWidget::Show(rc);
 }
@@ -83,7 +91,9 @@ InterfaceConfigPanel::Show(const PixelRect &rc)
 void
 InterfaceConfigPanel::Hide()
 {
+#ifndef GNAV
   buttonFonts->Hide();
+#endif
 
   RowFormWidget::Hide();
 }
@@ -115,8 +125,10 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
+#ifndef GNAV
   buttonFonts = ConfigPanel::GetExtraButton(1);
   assert(buttonFonts);
+#endif
 
 #ifdef HAVE_BLANK
   AddBoolean(_("Auto. blank"),

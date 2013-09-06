@@ -24,14 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_FORM_UTIL_HPP
 #define XCSOAR_FORM_UTIL_HPP
 
-#include "Util/StaticString.hpp"
 #include "Units/Group.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
 
-struct StaticEnumChoice;
 class SubForm;
 
 /**
@@ -55,25 +53,6 @@ void SetFormControlEnabled(SubForm &form, const TCHAR *control_name,
  */
 void
 SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value);
-
-/**
- * Loads the specified value into the form.
- *
- * @param form the form
- * @param control_name the name of the control in the form
- * @param value the new value
- */
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value);
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value);
-
-void
-LoadFormPropertyEnum(SubForm &form, const TCHAR *control_name, int value);
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 const StaticEnumChoice *list, unsigned value);
 
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value);
@@ -106,25 +85,11 @@ int
 GetFormValueInteger(const SubForm &form, const TCHAR *control_name);
 
 gcc_pure
-fixed
-GetFormValueFixed(const SubForm &form, const TCHAR *control_name);
-
-gcc_pure
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name);
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, unsigned int &value);
-
-bool
-SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, fixed &value);
 
 /**
  * Saves a form value into a variable and into the registry.
@@ -143,17 +108,5 @@ bool
 SaveFormProperty(const SubForm &form, const TCHAR *field,
                  const char *profile_key,
                  bool &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 TCHAR *buffer, size_t max_size);
-
-template<size_t N>
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 StaticString<N> &value)
-{
-  return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE);
-}
 
 #endif

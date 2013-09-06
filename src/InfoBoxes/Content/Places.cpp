@@ -50,6 +50,27 @@ UpdateInfoBoxHomeDistance(InfoBoxData &data)
     data.SetCommentInvalid();
 }
 
+void
+UpdateInfoBoxTakeoffDistance(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const FlyingState &flight = CommonInterface::Calculated().flight;
+
+  if (!basic.location_available || !flight.flying ||
+      !flight.takeoff_location.IsValid()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const GeoVector vector(basic.location, flight.takeoff_location);
+  data.SetValueFromDistance(vector.distance);
+
+  if (basic.track_available)
+    data.SetCommentFromBearingDifference(vector.bearing - basic.track);
+  else
+    data.SetCommentInvalid();
+}
+
 #ifdef __clang__
 /* gcc gives "redeclaration differs in 'constexpr'" */
 constexpr

@@ -25,13 +25,14 @@ Mise à jour du \today \space(par Adrien Ott)
 \noindent
 \textbf{\textit{Avant-propos}}\\
 \newline
-Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas un mode d'emploi exhaustif du logiciel. L'objectif de ce document est de permettre à un(e) utilisateur(trice) ne connaissant pas le logiciel de l'installer, le configurer et l'utiliser le plus rapidement et facilement possible.\\Le mode d'emploi complet faisant actuellement référence est en anglais et disponible dans chaque répertoire de livraison (voir paragraphe "liens divers").\\Si vous avez des commentaires ou des suggestions d'amélioration de ce guide, n'hésitez pas à les faire sur le forum d'XCSoar, dans la rubrique "French".\\
+Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas un mode d'emploi exhaustif du logiciel. L'objectif de ce document est de permettre à un(e) utilisateur(trice) ne connaissant pas le logiciel de l'installer, le configurer et l'utiliser le plus rapidement et facilement possible.\\Un mode d'emploi en français (traduit de l'anglais) est disponible.\\Le mode d'emploi complet faisant référence est en anglais.\\Si vous avez des commentaires ou des suggestions d'amélioration de ce guide, n'hésitez pas à les faire sur le forum d'XCSoar, dans la rubrique "French".\\
 \newline
-La dernière version de ce guide de prise en main est disponible à l'adresse suivante : \url{http://www.xcsoar.org/discover/manual.html}\\
+La dernière version de ce guide de prise en main, ainsi que les modes d'emploi sont disponibles à l'adresse suivante : \url{http://www.xcsoar.org/discover/manual.html}\\
 \newline
 Si vous souhaitez contribuer au projet, que ce soit
 \begin{itemize}
 \item en complétant la traduction de l'interface du logiciel (de l'anglais au français),
+\item en complétant ce guide de prise en main ou les modes d'emploi (français ou anglais),
 \item en participant au développement du logiciel,
 \item en signalant des bugs ou en indiquant des suggestions d'amélioration,
 \end{itemize}
@@ -50,7 +51,7 @@ XCSoar est disponible sur plusieurs platformes matérielles (PDA, PNA, smartphon
 %
 \newline
 %
-XCSoar est développé par des volontaires bénévoles avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur. La même équipe de volontaires développe la plateforme SkyLines (voir plus bas).\\
+XCSoar est développé par des volontaires bénévoles avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur. La même équipe de volontaires développe la plateforme de partage des vols SkyLines (voir plus bas).\\
 Ce guide de prise en main suppose que vous utilisiez XSoar version 6.3 ou plus récente.\\
 Pour une version 6.x.y :
 \begin{itemize}
@@ -61,12 +62,18 @@ Pour une version 6.x.y :
 Pour être informé des mises à jour, vous pouvez vous abonner au flux RSS du site XCSoar.org (voir paragraphe \ref{LiensUtiles} "Liens utiles").\\
 %
 \newline
-SkyLines est une plateforme internet de partage des vols, disponible à l'adresse http://skylines.xcsoar.org\\
+SkyLines est une plateforme internet de partage des vols, disponible à l'adresse \url{http://skylines.xcsoar.org}.\\
 La plateforme permet, entre autres, de visualiser ses vols, consulter les statistiques associées, superposer des vols, mais aussi une fonction de suivi en direct de votre vol (dite \textit{live tracking} en anglais). Cette dernière nécessite la version 6.4 d'XCSoar (ou plus récente), sous Android, avec un forfait téléphonique comprenant un accès internet mobile.\\
 %
 \section{Installation}
 \noindent
-La première étape nécessaire à l'installation est le téléchagement de la dernière version d'XCSoar au lien suivant : \url{http://www.xcsoar.org/download/}\\
+La première étape nécessaire à l'installation est le téléchagement de la dernière version d'XCSoar.\\
+%
+\newline
+%
+\itshape Sous Android, lancez l'application "Play Store" (celle vous permettant d'installer des applications) et cherchez XCSoar. Téléchargez la version bleue, la version rouge est la version de développement.\upshape\\
+\newline
+Sinon, rendez-vous au lien suivant : \url{http://www.xcsoar.org/download/}\\
 Sur cette page figurent les différents systèmes d'exploitation supportés, sélectionnez le votre et téléchagez le logiciel. Copiez le sur votre appareil, et lancez-le.\\
 %
 \newline
@@ -82,15 +89,16 @@ L'utilisation est détaillée plus bas.
 %
 \subsection{Les fichiers}
 \noindent
-XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire doit être à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows (c'est la configuration par défaut qu'il peut être préférable d'éviter sur les appareils ayant  peu de mémoire interne).\\
+XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire doit être à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows (c'est la configuration par défaut qu'il peut être préférable d'éviter sur les appareils ayant peu de mémoire interne).\\
+
 Les fichiers les plus utiles sont les suivants :
 \begin{itemize}
 \item points de virage ("waypoints"), ils peuvent être de diffèrents formats (*.dat de WinPilot/Cambridge, *.cup de SeeYou, *.wpz de Zander, *.wpt d'OziExplorer, GPSDump/FS, GEO ou UTM),
 \item espaces aériens (au format OpenAir),
-\item fond cartographique (format .xcm).
+\item fond cartographique (format .xcm).\\
 \end{itemize}
 %
-Pour trouver ces fichiers, voir le paragraphe \ref{LiensUtiles} "Liens utiles".
+Pour trouver ces fichiers, voir le paragraphe \ref{LiensUtiles} "Liens utiles". Notez que le fond cartographique contient le relief (altitude du terrain), des éléments topographiques (contours de villes, rivières, etc...), mais aussi un fichier de points de virage. Ce dernier est ignoré si vous séectionnez vous-même un fichier dans la page de configuration. Notez également que le navigateur internet "Internet Explorer" renomme les fichiers .xcm en .zip, il peut donc être nécessaire de renommer manuellement le fichier en .zip (ou utiliser un meilleur navigateur).
 %
 \subsection{L'interface}
 \noindent
@@ -101,15 +109,14 @@ Une fois ces fichiers placés dans le répertoire XCSoarData, la configuration p
 %
 Lancez XCSoar en mode simulation et lancez le menu principal:
 \begin{itemize}
-\item double clic sur la carte,
-ou
+\item double clic sur la carte,\\
+ou bien
 \item raccourci gestuel "bas-haut" (\textbf{B H}).
 \end{itemize}
 Un raccourci gestuel ("gesture" dans le manuel en anglais), est un dessin géométrique que l'utilisateur peut tracer à l'écran pour invoquer un menu en particulier. "\textbf{B H}" consiste à tracer sur l'écran, avec le doigt, un aller-retour commençant par descendre. D'autres exemples sont détaillés plus bas.\\
 %
 \newline
 %
-
 Le \textbf{menu principal} est constitué des boutons
 \begin{itemize}
 \item "Nav." pour gérer les fonctions du logiciel liées à la navigation,
@@ -147,17 +154,17 @@ A l'utilisation, le passage d'une page à l'autre s'effectue au choix par le men
 \item "gauche" (glisser le doigt de la droite vers la gauche sur la carte),
 \item "droite" (l'inverse).
 \end{itemize}
-Ce qui permet respectivement de passer à la page précédente ou suivante (telles que listées dans le menu de configuration "Apparence / Pages de InfoBox").\\
+Ce qui permet de passer à la page précédente ou suivante (telles que listées dans le menu de configuration "Apparence / Pages de InfoBox").\\
 %
-L'affichage portrait ou paysage est également configurable, ainsi que la disposition des InfoBox sur l'écran (quoique identique sur toutes les pages).\\
+L'affichage portrait ou paysage est également configurable, ainsi que la disposition de chaque InfoBox sur l'écran (quoique l'agencement globale des InfoBox reste identique sur toutes les pages).\\
 %
 \newline
 %
 Les \textbf{InfoBox} sont des fenêtres d'information numériques, alphanumériques ou graphiques. Leur configuration peut se faire au choix 
 \begin{itemize}
-\item dans le menu de configuration de la page correspondante (Config. / Config. / Options Système / Apparence / Modes InfoBox)
-ou
-\item en agissant directement sur l'InfoBox, à partir de la carte : en effectuant un appui long sur l'InfoBox correspondante.
+\item dans le menu de configuration de la page correspondante (Config. / Config. / Options Système / Apparence / Modes InfoBox)\\
+ou bien
+\item en agissant directement sur l'InfoBox, à partir de la carte : en effectuant un appui long sur l'InfoBox correspondante.\\
 \end{itemize}
 %
 \textit{Conseils :
@@ -212,6 +219,9 @@ Boîte à bugs (et demandes d'amélioration) :\\ \url{http://www.xcsoar.org/trac
 \newline
 Le forum, dont une rubrique en français pour poser vos questions :\\
 \url{http://www.xcsoar.org/forum/}\\
+\newline
+Pour contribuer à la traduction de l'interface utilisateur d'XCSoar :\\
+\url{https://translations.launchpad.net/xcsoar/}\\
 \newline
 Pour les développeurs, voir le "developer manual" à l'adresse suivante : \url{http://www.xcsoar.org/discover/manual.html} et le site \url{http://www.xcsoar.org/develop/} .
 %

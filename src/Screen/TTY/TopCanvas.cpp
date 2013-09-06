@@ -21,20 +21,45 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_PLACES_HPP
-#define XCSOAR_INFOBOX_CONTENT_PLACES_HPP
+#include "Screen/Custom/TopCanvas.hpp"
 
-struct InfoBoxData;
+#ifdef USE_TTY
+
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <linux/kd.h>
+#include <sys/ioctl.h>
 
 void
-UpdateInfoBoxHomeDistance(InfoBoxData &data);
+TopCanvas::InitialiseTTY()
+{
+  assert(tty_fd < 0);
+
+  const char *path = "/dev/tty";
+  tty_fd = open(path, O_RDWR | O_NOCTTY | O_CLOEXEC);
+  if (tty_fd < 0) {
+    fprintf(stderr, "Warning: failed to open %s: %s\n",
+            path, strerror(errno));
+    return;
+  }
+
+  if (ioctl(tty_fd, KDSETMODE, KD_GRAPHICS) < 0)
+    fprintf(stderr, "Warning: failed to set graphics mode on %s: %s\n",
+            path, strerror(errno));
+}
 
 void
-UpdateInfoBoxTakeoffDistance(InfoBoxData &data);
-
-extern const struct InfoBoxPanel atc_infobox_panels[];
-
-void
-UpdateInfoBoxATCRadial(InfoBoxData &data);
+TopCanvas::DeinitialiseTTY()
+{
+  if (tty_fd >= 0) {
+    ioctl(tty_fd, KDSETMODE, KD_TEXT);
+    close(tty_fd);
+    tty_fd = -1;
+  }
+}
 
 #endif

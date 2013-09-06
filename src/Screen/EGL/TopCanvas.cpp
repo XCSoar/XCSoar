@@ -34,6 +34,10 @@ void
 TopCanvas::Create(PixelSize new_size,
                   bool full_screen, bool resizable)
 {
+#ifdef USE_TTY
+  InitialiseTTY();
+#endif
+
 #ifdef USE_X11
   X11Display *const x_display = XOpenDisplay(nullptr);
   if (x_display == nullptr) {
@@ -156,12 +160,17 @@ TopCanvas::Create(PixelSize new_size,
   Canvas::Create(effective_size);
 }
 
-TopCanvas::~TopCanvas()
+void
+TopCanvas::Destroy()
 {
   eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
   eglDestroySurface(display, surface);
   eglDestroyContext(display, context);
   eglTerminate(display);
+
+#ifdef USE_TTY
+  DeinitialiseTTY();
+#endif
 }
 
 void

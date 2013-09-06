@@ -188,10 +188,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                           bold_font, bold_font, bold_font);
 #endif
 
-#ifdef ENABLE_XML_DIALOG
-  SetXMLDialogLook(*dialog_look);
-#endif
-
 #ifdef ENABLE_DATA_PATH
   InitialiseDataPath();
 #endif

@@ -29,6 +29,8 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
+class WndButton;
+
 class WindSettingsPanel final
   : public RowFormWidget, public ActionListener,
     private DataFieldListener, private NullBlackboardListener {
@@ -49,6 +51,8 @@ class WindSettingsPanel final
    */
   bool manual_modified;
 
+  WndButton *clear_manual_window;
+
 public:
   enum Buttons {
     /**
@@ -63,6 +67,10 @@ public:
    */
   WindSettingsPanel(bool edit_manual_wind, bool clear_manual_button,
                     bool edit_trail_drift);
+
+  void SetClearManualButton(WndButton *_button) {
+    clear_manual_window = _button;
+  }
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;

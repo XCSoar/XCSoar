@@ -39,19 +39,19 @@
 #endif
 
 CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
-                                       const AirspaceLook &_airspace_look,
-                                       const ChartLook &_chart_look)
+                                           const AirspaceLook &_airspace_look,
+                                           const ChartLook &_chart_look)
   :look(_look), chart_look(_chart_look), airspace_renderer(_airspace_look),
-  terrain_renderer(look), terrain(NULL), airspace_database(NULL),
+   terrain_renderer(look), terrain(NULL), airspace_database(NULL),
    start(GeoPoint::Invalid()),
    vec(fixed(50000), Angle::Zero()) {}
 
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
-                                   const DerivedInfo &_calculated_info,
+                                     const DerivedInfo &_calculated_info,
                                      const GlideSettings &_glide_settings,
                                      const GlidePolar &_glide_polar,
-                                   const AirspaceRendererSettings &ar_settings)
+                                     const AirspaceRendererSettings &ar_settings)
 {
   gps_info = _gps_info;
   calculated_info = _calculated_info;
@@ -92,9 +92,12 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   short elevations[NUM_SLICES];
   UpdateTerrain(elevations);
 
-  if (airspace_database)
+  if (airspace_database != nullptr) {
+    const AircraftState aircraft = ToAircraftState(Basic(), Calculated());
     airspace_renderer.Draw(canvas, chart, *airspace_database, start, vec,
-                           ToAircraftState(Basic(), Calculated()));
+                           aircraft);
+  }
+
   terrain_renderer.Draw(canvas, chart, elevations);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
@@ -143,7 +146,7 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
 
 void
 CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
-                                  const PixelRect rc) const
+                                    const PixelRect rc) const
 {
   if (!gps_info.NavAltitudeAvailable())
     return;

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Form/Form.hpp"
+#include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Form/CheckBox.hpp"
@@ -374,18 +375,11 @@ OnRangeModified(fixed new_value)
 }
 
 static void
-OnRangeData(DataField *sender, DataField::DataAccessMode mode)
+OnRangeData(DataField *sender)
 {
   DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (mode) {
-  case DataField::daChange:
-    OnRangeModified(df.GetAsFixed());
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  OnRangeModified(df.GetAsFixed());
 }
 
 static void
@@ -435,18 +429,11 @@ OnRadialModified(fixed new_value)
 }
 
 static void
-OnRadialData(DataField *sender, DataField::DataAccessMode mode)
+OnRadialData(DataField *sender)
 {
   DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (mode) {
-  case DataField::daChange:
-    OnRadialModified(df.GetAsFixed());
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  OnRadialModified(df.GetAsFixed());
 }
 
 static void
@@ -492,8 +479,6 @@ OnNameClicked()
 static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnCreateMap),
   DeclareCallBackEntry(OnNameClicked),
-  DeclareCallBackEntry(OnRangeData),
-  DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOptimized),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
@@ -583,6 +568,18 @@ FormKeyDown(unsigned key_code)
   return false;
 }
 
+static void
+SetDataAccessCallback(SubForm &form, const TCHAR *name,
+                      DataField::DataAccessCallback cb)
+{
+  WndProperty *edit = (WndProperty *)form.FindByName(name);
+  assert(edit != nullptr);
+
+  DataField *df = edit->GetDataField();
+  assert(df != nullptr);
+  df->SetDataAccessCallback(cb);
+}
+
 void
 dlgTargetShowModal(int _target_point)
 {
@@ -593,6 +590,9 @@ dlgTargetShowModal(int _target_point)
                   Layout::landscape ? _T("IDR_XML_TARGET_L") :
                                       _T("IDR_XML_TARGET"));
   assert(wf != NULL);
+
+  SetDataAccessCallback(*wf, _T("prpRange"), OnRangeData);
+  SetDataAccessCallback(*wf, _T("prpRadial"), OnRadialData);
 
   if (_target_point >= 0)
     target_point = _target_point;

@@ -279,7 +279,8 @@ public:
   /**
    * overloads from TabBarControl.
    */
-  UPixelScalar GetTabHeight() const;
+  gcc_pure
+  unsigned GetTabHeight() const;
 
   /**
    * @return last content page shown (0 to (NumPages-1))
@@ -337,12 +338,12 @@ protected:
   /**
    * @return Height of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonHeight() const;
+  unsigned GetMenuButtonHeight() const;
 
   /**
    * @return Width of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonWidth() const;
+  unsigned GetMenuButtonWidth() const;
 
 public:
   void NextPage();

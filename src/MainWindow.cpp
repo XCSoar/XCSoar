@@ -206,6 +206,7 @@ MainWindow::InitialiseConfigured()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
+#ifndef GNAV
   if (ui_settings.custom_fonts) {
     LogFormat("Load custom fonts");
     if (!Fonts::LoadCustom()) {
@@ -222,8 +223,9 @@ MainWindow::InitialiseConfigured()
     TextCache::Flush();
 #endif
   }
+#endif
 
-  Fonts::SizeInfoboxFont(ib_layout.control_width);
+  Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 
   assert(look != NULL);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -307,8 +309,8 @@ void
 MainWindow::ReinitialiseLayoutTA(PixelRect rc,
                                  const InfoBoxLayout::Layout &layout)
 {
-  UPixelScalar sz = std::min(layout.control_height,
-                             layout.control_width) * 2;
+  UPixelScalar sz = std::min(layout.control_size.cy,
+                             layout.control_size.cx) * 2;
   rc.right = rc.left + sz;
   rc.top = rc.bottom - sz;
   thermal_assistant.Move(rc);
@@ -342,7 +344,7 @@ MainWindow::ReinitialiseLayout()
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
-  Fonts::SizeInfoboxFont(ib_layout.control_width);
+  Fonts::SizeInfoboxFont(ib_layout.control_size.cx);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   InfoBoxManager::ProcessTimer();
@@ -394,15 +396,14 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
   // Automatic mode - follow info boxes
   if (val == TrafficSettings::GaugeLocation::Auto) {
     switch (InfoBoxManager::layout.geometry) {
-    case InfoBoxSettings::Geometry::TOP_8:
-      val = TrafficSettings::GaugeLocation::TopRight;
+    case InfoBoxSettings::Geometry::TOP_LEFT_8:
+    case InfoBoxSettings::Geometry::TOP_LEFT_12:
+      if (InfoBoxManager::layout.landscape)
+        val = TrafficSettings::GaugeLocation::BottomLeft;
+      else
+        val = TrafficSettings::GaugeLocation::TopRight;
       break;
-    case InfoBoxSettings::Geometry::LEFT_8:
-      val = TrafficSettings::GaugeLocation::BottomLeft;
-      break;
-    case InfoBoxSettings::Geometry::TOP_12:
-      val = TrafficSettings::GaugeLocation::TopLeft;
-      break;
+
     default:
       val = TrafficSettings::GaugeLocation::BottomRight;    // Assume bottom right unles...
       break;
@@ -411,40 +412,40 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
 
   switch (val) {
   case TrafficSettings::GaugeLocation::TopLeft:
-    rc.right = rc.left + ib_layout.control_width * 2;
+    rc.right = rc.left + ib_layout.control_size.cx * 2;
     ++rc.left;
-    rc.bottom = rc.top + ib_layout.control_height * 2;
+    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::TopRight:
-    rc.left = rc.right - ib_layout.control_width * 2 + 1;
-    rc.bottom = rc.top + ib_layout.control_height * 2;
+    rc.left = rc.right - ib_layout.control_size.cx * 2 + 1;
+    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::BottomLeft:
-    rc.right = rc.left + ib_layout.control_width * 2;
+    rc.right = rc.left + ib_layout.control_size.cx * 2;
     ++rc.left;
-    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
+    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
     break;
 
   case TrafficSettings::GaugeLocation::CentreTop:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
-    rc.right = rc.left + ib_layout.control_width * 2 - 1;
-    rc.bottom = rc.top + ib_layout.control_height * 2;
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.cx;
+    rc.right = rc.left + ib_layout.control_size.cx * 2 - 1;
+    rc.bottom = rc.top + ib_layout.control_size.cy * 2;
     ++rc.top;
     break;
 
   case TrafficSettings::GaugeLocation::CentreBottom:
-    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_width;
-    rc.right = rc.left + ib_layout.control_width * 2 - 1;
-    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
+    rc.left = (rc.left + rc.right) / 2 - ib_layout.control_size.cx;
+    rc.right = rc.left + ib_layout.control_size.cx * 2 - 1;
+    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
     break;
 
   default:    // aka flBottomRight
-    rc.left = rc.right - ib_layout.control_width * 2 + 1;
-    rc.top = rc.bottom - ib_layout.control_height * 2 + 1;
+    rc.left = rc.right - ib_layout.control_size.cx * 2 + 1;
+    rc.top = rc.bottom - ib_layout.control_size.cy * 2 + 1;
     break;
   }
 

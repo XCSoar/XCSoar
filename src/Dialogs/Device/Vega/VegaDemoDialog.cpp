@@ -22,15 +22,16 @@ Copyright_License {
 */
 
 #include "VegaDialogs.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Device/device.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
-#include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Float.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Form/Util.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
@@ -55,77 +56,77 @@ VegaWriteDemo()
   VarioWriteNMEA(dbuf, env);
 }
 
-static void
-OnVegaDemoW(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+class VegaDemoWidget final
+  : public RowFormWidget, private DataFieldListener {
+  enum Controls {
+    VARIO,
+    AIRSPEED,
+    CIRCLING,
+  };
 
-  switch (Mode){
-  case DataField::daChange:
-    VegaDemoW = Units::ToSysVSpeed(df.GetAsFixed());
-    VegaWriteDemo();
-    break;
+public:
+  VegaDemoWidget(const DialogLook &_look)
+    :RowFormWidget(_look) {}
 
-  case DataField::daSpecial:
-    return;
-  }
-}
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
 
-static void
-OnVegaDemoV(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
-
-  switch (Mode){
-  case DataField::daChange:
-    VegaDemoV = Units::ToSysSpeed(df.GetAsFixed());
-    VegaWriteDemo();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  switch (Mode){
-  case DataField::daChange:
-    VegaDemoAudioClimb = ((DataFieldBoolean *)Sender)->GetAsBoolean();
-    VegaWriteDemo();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static constexpr CallBackTableEntry CallBackTable[]={
-  DeclareCallBackEntry(OnVegaDemoW),
-  DeclareCallBackEntry(OnVegaDemoV),
-  DeclareCallBackEntry(OnVegaDemoAudioClimb),
-  DeclareCallBackEntry(NULL)
+private:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
 };
+
+void
+VegaDemoWidget::OnModified(DataField &df)
+{
+  if (IsDataField(VARIO, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    VegaDemoW = Units::ToSysVSpeed(dff.GetAsFixed());
+  } else if (IsDataField(AIRSPEED, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    VegaDemoV = Units::ToSysSpeed(dff.GetAsFixed());
+  } else if (IsDataField(CIRCLING, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    VegaDemoAudioClimb = dfb.GetAsBoolean();
+  }
+
+  VegaWriteDemo();
+}
+
+void
+VegaDemoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  AddFloat(_("TE vario"),
+           _("This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced."),
+           _T("%.1f %s"), _T("%.1f"),
+           Units::ToUserVSpeed(fixed(-20)), Units::ToUserVSpeed(fixed(20)),
+           GetUserVerticalSpeedStep(),
+           false, UnitGroup::VERTICAL_SPEED, VegaDemoW, this);
+
+  AddFloat(_("Airspeed"),
+           _("This produces a fake airspeed.  It can be used when not in circling mode to demonstrate the speed command tones."),
+           _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(200), fixed(2),
+           false, UnitGroup::HORIZONTAL_SPEED, VegaDemoV, this);
+
+  AddBoolean(_("Circling"),
+             _("This forces the variometer into circling or cruise mode"),
+             VegaDemoAudioClimb, this);
+}
 
 void
 dlgVegaDemoShowModal()
 {
-  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                           _T("IDR_XML_VEGADEMO"));
-
-  if (!wf) return;
-
   PopupOperationEnvironment env;
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
-  LoadFormProperty(*wf, _T("prpVegaDemoW"), UnitGroup::VERTICAL_SPEED, VegaDemoW);
-  LoadFormProperty(*wf, _T("prpVegaDemoV"), UnitGroup::VERTICAL_SPEED, VegaDemoV);
-  LoadFormProperty(*wf, _T("prpVegaDemoAudioClimb"), VegaDemoAudioClimb);
-
-  wf->ShowModal();
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  VegaDemoWidget widget(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Vario Demo"), &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 
   // deactivate demo.
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);

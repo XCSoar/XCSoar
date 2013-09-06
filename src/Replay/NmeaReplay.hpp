@@ -25,6 +25,7 @@ Copyright_License {
 #define NMEA_REPLAY_HPP
 
 #include "AbstractReplay.hpp"
+#include "Time/ReplayClock.hpp"
 #include "Device/Port/NullPort.hpp"
 
 class NLineReader;
@@ -40,6 +41,8 @@ class NmeaReplay: public AbstractReplay
   NMEAParser *parser;
   NullPort port;
   Device *device;
+
+  ReplayClock clock;
 
 public:
   NmeaReplay(NLineReader *reader, const DeviceConfig &config);

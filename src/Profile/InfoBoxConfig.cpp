@@ -70,6 +70,55 @@ Profile::Load(InfoBoxSettings &settings)
     settings.use_final_glide = Exists(ProfileKeys::InfoBoxGeometry);
 
   GetEnum(ProfileKeys::InfoBoxGeometry, settings.geometry);
+
+  /* migrate from XCSoar older than 6.7 */
+  switch (settings.geometry) {
+  case InfoBoxSettings::Geometry::SPLIT_8:
+  case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
+  case InfoBoxSettings::Geometry::TOP_LEFT_8:
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
+    settings.geometry = InfoBoxSettings::Geometry::SPLIT_8;
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_8:
+    settings.geometry = InfoBoxSettings::Geometry::TOP_LEFT_8;
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_8:
+    settings.geometry = InfoBoxSettings::Geometry::BOTTOM_RIGHT_8;
+    break;
+
+  case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
+  case InfoBoxSettings::Geometry::RIGHT_5:
+  case InfoBoxSettings::Geometry::BOTTOM_RIGHT_12:
+  case InfoBoxSettings::Geometry::RIGHT_24:
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_12:
+    settings.geometry = InfoBoxSettings::Geometry::BOTTOM_RIGHT_12;
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_LEFT_12:
+  case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
+  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+  case InfoBoxSettings::Geometry::TOP_LEFT_4:
+  case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_TOP_LEFT_4:
+    settings.geometry = InfoBoxSettings::Geometry::TOP_LEFT_4;
+    break;
+
+  case InfoBoxSettings::Geometry::OBSOLETE_BOTTOM_RIGHT_4:
+    settings.geometry = InfoBoxSettings::Geometry::BOTTOM_RIGHT_4;
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    break;
+  }
+
   Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
 

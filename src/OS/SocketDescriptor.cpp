@@ -109,7 +109,11 @@ SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 SocketDescriptor
 SocketDescriptor::Accept()
 {
+#if defined(__linux__) && !defined(__BIONIC__)
+  int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
+#else
   int fd = ::accept(Get(), NULL, NULL);
+#endif
   return fd >= 0
     ? SocketDescriptor(fd)
     : SocketDescriptor();
@@ -131,6 +135,11 @@ bool
 SocketDescriptor::Create(int domain, int type, int protocol)
 {
   assert(!IsDefined());
+
+#ifdef SOCK_CLOEXEC
+  /* implemented since Linux 2.6.27 */
+  type |= SOCK_CLOEXEC;
+#endif
 
   int fd = socket(domain, type, protocol);
   if (fd < 0)
@@ -168,19 +177,29 @@ SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 
 #endif
 
-#ifndef HAVE_POSIX
-
 ssize_t
 SocketDescriptor::Read(void *buffer, size_t length)
 {
-  return ::recv(Get(), (char *)buffer, length, 0);
+  int flags = 0;
+#ifdef HAVE_POSIX
+  flags |= MSG_DONTWAIT;
+#endif
+
+  return ::recv(Get(), (char *)buffer, length, flags);
 }
 
 ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length)
 {
-  return ::send(Get(), (const char *)buffer, length, 0);
+  int flags = 0;
+#ifdef __linux__
+  flags |= MSG_NOSIGNAL;
+#endif
+
+  return ::send(Get(), (const char *)buffer, length, flags);
 }
+
+#ifndef HAVE_POSIX
 
 int
 SocketDescriptor::WaitReadable(int timeout_ms) const
@@ -226,17 +245,13 @@ ssize_t
 SocketDescriptor::Read(void *buffer, size_t length,
                        SocketAddress &address)
 {
-  socklen_t addrlen = address.GetCapacity();
-  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length,
+  int flags = 0;
 #ifdef HAVE_POSIX
-#ifdef __linux__
-                              MSG_DONTWAIT|MSG_NOSIGNAL,
-#else
-                              MSG_DONTWAIT,
+  flags |= MSG_DONTWAIT;
 #endif
-#else
-                              0,
-#endif
+
+  socklen_t addrlen = address.GetCapacity();
+  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length, flags,
                               address, &addrlen);
   if (nbytes > 0)
     address.SetLength(addrlen);
@@ -248,15 +263,14 @@ ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
                         const SocketAddress &address)
 {
-  return ::sendto(Get(), (const char *)buffer, length,
+  int flags = 0;
 #ifdef HAVE_POSIX
+  flags |= MSG_DONTWAIT;
+#endif
 #ifdef __linux__
-                  MSG_DONTWAIT|MSG_NOSIGNAL,
-#else
-                  MSG_DONTWAIT,
+  flags |= MSG_NOSIGNAL;
 #endif
-#else
-                  0,
-#endif
+
+  return ::sendto(Get(), (const char *)buffer, length, flags,
                   address, address.GetLength());
 }
