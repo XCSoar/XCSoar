@@ -132,11 +132,13 @@ UTM::ToGeoPoint() const
   double _e2 = _e * _e;
   double _e3 = _e * _e2;
   double _e4 = _e * _e3;
+  double _e5 = _e * _e4;
 
   Angle phi1rad = Angle::Radians(fixed(mu +
-      (3 * _e / 2 - 27 * _e3 / 32) * sin(2 * mu) +
-      (21 * _e3 / 16 - 55 * _e4 / 32) * sin(4 * mu) +
-      (151 * _e3 / 96) * sin(6 * mu)));
+      (3. / 2 * _e - 27. / 32 * _e3 + 269. / 512 * _e5) * sin(2 * mu) +
+      (21. / 16 * _e2 - 55. / 32 * _e4) * sin(4 * mu) +
+      (151. / 96 * _e3 - 417. / 128 * _e5) * sin(6 * mu) +
+      (1097. / 512 * _e4) * sin(8 * mu)));
 
   double _sin = (double)phi1rad.sin();
   double sin2 = _sin * _sin;

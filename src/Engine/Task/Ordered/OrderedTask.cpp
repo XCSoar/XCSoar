@@ -156,6 +156,8 @@ OrderedTask::UpdateGeometry()
       /// so stats are updated
     }
   }
+
+  force_full_update = true;
 }
 
 // TIMES
@@ -792,14 +794,12 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 void 
 OrderedTask::SetActiveTaskPoint(unsigned index)
 {
-  if (index < task_points.size()) {
-    if (active_task_point != index)
-      task_advance.SetArmed(false);
+  if (index >= task_points.size() || index == active_task_point)
+    return;
 
-    active_task_point = index;
-  } else if (task_points.empty()) {
-    active_task_point = 0;
-  }
+  task_advance.SetArmed(false);
+  active_task_point = index;
+  force_full_update = true;
 }
 
 TaskWaypoint*
@@ -1347,6 +1347,7 @@ OrderedTask::RemoveAllPoints()
 
   taskpoint_start = NULL;
   taskpoint_finish = NULL;
+  force_full_update = true;
 }
 
 void
