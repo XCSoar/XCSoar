@@ -908,7 +908,7 @@ static constexpr MetaData meta_data[] = {
   // e_OC_Distance
   {
     N_("On-Line Contest distance"),
-    N_("OLC"),
+    N_("OLC Dist"),
     N_("Instantaneous evaluation of the flown distance according to the configured On-Line Contest rule set."),
     IBFHelper<InfoBoxContentOLC>::Create,
     e_TaskProgress, // Progress
@@ -1257,6 +1257,17 @@ static constexpr MetaData meta_data[] = {
     TAKEOFF_DISTANCE,
     TAKEOFF_DISTANCE,
   },
+
+  // OLC_SPEED
+  {
+    N_("On-Line Contest speed"),
+    N_("OLC Speed"),
+    N_("Instantaneous evaluation of the flown speed according to the configured On-Line Contest rule set."),
+    IBFHelper<InfoBoxContentOLCSpeed>::Create,
+    OLC_SPEED,
+    OLC_SPEED,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

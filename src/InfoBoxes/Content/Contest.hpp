@@ -33,4 +33,10 @@ public:
   virtual void Update(InfoBoxData &data) override;
 };
 
+class InfoBoxContentOLCSpeed: public InfoBoxContent
+{
+public:
+  virtual const InfoBoxPanel *GetDialogContent() override;
+  virtual void Update(InfoBoxData &data) override;
+};
 #endif

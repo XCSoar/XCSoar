@@ -66,6 +66,8 @@ struct MapLook {
 
   Pen compass_pen;
   Brush compass_brush;
+  Pen compass_triangle_pen;
+  Brush compass_triangle_brush;
 
   Pen reach_pen;
   Pen reach_pen_thick;

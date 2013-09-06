@@ -81,5 +81,35 @@ InfoBoxContentOLC::Update(InfoBoxData &data)
 
   // Set Value
   data.SetValueFromDistance(result_olc.distance);
-  data.SetCommentFromSpeed(result_olc.GetSpeed());
+
+  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
+}
+
+const InfoBoxPanel *
+InfoBoxContentOLCSpeed::GetDialogContent()
+{
+  return analysis8_infobox_panels;
+}
+
+void
+InfoBoxContentOLCSpeed::Update(InfoBoxData &data)
+{
+  if (!CommonInterface::GetComputerSettings().contest.enable ||
+      !protected_task_manager) {
+    data.SetInvalid();
+    return;
+  }
+
+  const ContestResult& result_olc =
+    CommonInterface::Calculated().contest_stats.GetResult();
+
+  if (result_olc.score < fixed(1)) {
+    data.SetInvalid();
+    return;
+  }
+
+  // Set Value
+  data.SetValueFromSpeed(result_olc.GetSpeed());
+
+  data.UnsafeFormatComment(_T("%.1f pts"), (double)result_olc.score);
 }
