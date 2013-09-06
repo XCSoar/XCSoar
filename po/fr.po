@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-02 11:05+0200\n"
-"PO-Revision-Date: 2013-08-20 16:45+0000\n"
+"PO-Revision-Date: 2013-09-04 20:50+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-21 11:09+0000\n"
-"X-Generator: Launchpad (build 16734)\n"
+"X-Launchpad-Export-Date: 2013-09-06 09:12+0000\n"
+"X-Generator: Launchpad (build 16760)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2339,9 +2339,9 @@ msgid "On-Line Contest distance"
 msgstr "Distance On-Line Contest"
 
 #: src/InfoBoxes/Content/Factory.cpp:911
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Dist"
-msgstr "Dist WP"
+msgstr "Dist OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
@@ -2930,12 +2930,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
 msgid "Circle Diameter"
-msgstr ""
+msgstr "Diamètre du cercle"
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circle D"
-msgstr "Thermique"
+msgstr "D Cercle"
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
 #, no-c-format
@@ -2946,38 +2946,38 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance takeoff"
-msgstr "Distance à faire"
+msgstr "Distance au décollage"
 
 #: src/InfoBoxes/Content/Factory.cpp:1254
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Takeoff Dist"
-msgstr "Heure décollage"
+msgstr "Dist Déco"
 
 #: src/InfoBoxes/Content/Factory.cpp:1255
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "Durée depuis la détection du décollage."
+msgstr "Distance au point de décollage détecté."
 
 #: src/InfoBoxes/Content/Factory.cpp:1263
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "On-Line Contest speed"
-msgstr "On-Line Contest"
+msgstr "Vitesse sur circuit \"OLC\""
 
 #: src/InfoBoxes/Content/Factory.cpp:1264
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Speed"
-msgstr "Vitesse"
+msgstr "Vitesse OLC"
 
 #: src/InfoBoxes/Content/Factory.cpp:1265
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
 msgstr ""
-"Estimation instantanée de la distance parcourue en tenant compte des règles "
-"de concours paramétrées."
+"Evaluation en temps-réel de la vitesse moyenne sur l'optimisation OLC "
+"choisie."
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -3853,7 +3853,7 @@ msgstr "Voltmètre par IOIO"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "Client TCP"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3891,9 +3891,8 @@ msgstr ""
 "déclaration de tâche ou téléchargement du fichier de vol."
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
-#, fuzzy
 msgid "IP Address"
-msgstr "Adresse I2C"
+msgstr "Adresse IP"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:605
 msgid "I2C Bus"
@@ -3983,9 +3982,8 @@ msgstr ""
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:260
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
-#, fuzzy
 msgid "Disable"
-msgstr "Désactivée"
+msgstr "Désactiver"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:261
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
@@ -4898,9 +4896,9 @@ msgid "Route"
 msgstr "Route"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Scoring"
-msgstr "Tourisme"
+msgstr "Points"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
@@ -5130,23 +5128,22 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:169
-#, fuzzy
 msgid "Activate"
-msgstr "Actif"
+msgstr "Activer"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 msgid "Active"
 msgstr "Actif"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane profile \"%s\" failed!"
-msgstr "Échec du chargement du profil du planeur \"%s\"!"
+msgstr "L'activation du profil de planeur \"%s\" a échoué !"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:250
 #: src/Dialogs/Plane/PlaneListDialog.cpp:401
 msgid " "
-msgstr ""
+msgstr " "
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:251
 #, c-format
@@ -5175,9 +5172,9 @@ msgid "Do you really want to delete plane profile \"%s\"?"
 msgstr "Voulez-vous vraiment effacer le profil \"%s\" du planeur ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to activate plane profile \"%s\"?"
-msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
+msgstr "Voulez-vous activer le profil de  planeur \"%s\" ?"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:410
 msgid "Planes"
@@ -5614,7 +5611,7 @@ msgid "Waypoints edited"
 msgstr "Waypoints édités"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint"
 msgstr "Point de virage"
 
@@ -5626,9 +5623,9 @@ msgid "Airport"
 msgstr "Aéroport"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landpoint"
-msgstr "Prochain point d'atterrissage"
+msgstr "Point de poser"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:72
 msgid "Comment"
@@ -5734,14 +5731,14 @@ msgstr ""
 "transparente."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No fill"
-msgstr "Transparent"
+msgstr "Aucun remplissage"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Don't fill the airspace area."
-msgstr "Spécifie le mode de remplissage de l'espace aérien."
+msgstr "Ne remplit pas l'espace aérien."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -5808,13 +5805,15 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Repetitive sound"
-msgstr ""
+msgstr "Son répétitif"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
 msgstr ""
+"Active/désactive l'avertissement sonore répétitif lors de l'affichage de la "
+"fenêtre d'avertissement d'espace aérien."
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Acknowledge time"
@@ -6291,12 +6290,12 @@ msgstr "Paysage inversé"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "8 Split"
-msgstr ""
+msgstr "8 séparées"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Bottom or Right"
-msgstr "En bas à droite"
+msgstr "8 en bas ou à droite"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:75
 #, no-c-format
@@ -6304,9 +6303,9 @@ msgid "8 Bottom + Vario (Portrait)"
 msgstr "8 Bas + Vario (Portrait)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top or Left"
-msgstr "En haut à gauche"
+msgstr "8 en haut ou à gauche"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:79
 #, no-c-format
@@ -6329,14 +6328,14 @@ msgid "5 Right (Square)"
 msgstr "5 Droite (Carré)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Bottom or Right"
-msgstr "En bas à droite"
+msgstr "12 en bas ou à droite"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Top or Left"
-msgstr "En haut à gauche"
+msgstr "12 en haut ou à gauche"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:91
 #, no-c-format
@@ -6344,14 +6343,14 @@ msgid "24 Right (Landscape)"
 msgstr "24 Droite (Paysage)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Top or Left"
-msgstr "En haut à gauche"
+msgstr "4 en haut ou à gauche"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Bottom or Right"
-msgstr "En bas à droite"
+msgstr "4 en bas ou à droite"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
 #, no-c-format
@@ -7575,6 +7574,8 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
+"Scoring parapente avec différentes calculs: vol libre - 1 km = 1.0 point; "
+"triangle plat - 1 km = 1.2 p; triangle FAI - 1 km = 1.4 p."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -7631,14 +7632,12 @@ msgid "Show FAI triangle areas on the map."
 msgstr "Montrer les secteur de triangle FAI sur la carte"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-#, fuzzy
 msgid "FAI triangle threshold"
-msgstr "Secteurs de triangle FAI"
+msgstr "Seuil du triangle FAI"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
-#, fuzzy
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr "Définit quelles InfoBoxes doivent être affichées dans cette page."
+msgstr "Définit quel seuil est utilisé pour les \"grands\" triangles FAI."
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
@@ -8736,16 +8735,15 @@ msgstr "Dans le Secteur, Armer Point Suivant quand vous Voulez"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:47
 msgid "Arm"
-msgstr ""
+msgstr "Armer"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48 src/Monitor/MatTaskMonitor.cpp:63
 msgid "Dismiss"
-msgstr ""
+msgstr "Rejeter"
 
 #: src/Monitor/MatTaskMonitor.cpp:54
-#, fuzzy
 msgid "Add this turn point?"
-msgstr "Ajouter point de virage"
+msgstr "Ajouter ce point de virage ?"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:205
 #, no-c-format
@@ -8758,9 +8756,9 @@ msgid "InfoBox titles"
 msgstr "Titres des InfoBoxes"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox values"
-msgstr "Pages InfoBoxes"
+msgstr "Valeurs des Infoboxes"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:213
 #, no-c-format
@@ -8775,7 +8773,7 @@ msgstr "Infos topographie, important"
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:218
 #, no-c-format
 msgid "Overlay text"
-msgstr ""
+msgstr "Texte superposé"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:235
 msgid "Customize fonts"
@@ -9516,93 +9514,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "OLC"
-#~ msgstr "OLC"
-
-#~ msgid "8 Top + Bottom (Portrait)"
-#~ msgstr "8 Haut + Bas (Portrait)"
-
-#~ msgid "8 Bottom (Portrait)"
-#~ msgstr "8 Bas (Portrait)"
-
-#~ msgid "8 Top (Portrait)"
-#~ msgstr "8 Haut (Portrait)"
-
-#~ msgid "8 Left + Right (Landscape)"
-#~ msgstr "8 Gauche + Droite (Paysage)"
-
-#~ msgid "8 Left (Landscape)"
-#~ msgstr "8 Gauche (Paysage)"
-
-#~ msgid "8 Right (Landscape)"
-#~ msgstr "8 Droite (Paysage)"
-
-#~ msgid "12 Right (Landscape)"
-#~ msgstr "12 Droite (Paysage)"
-
-#~ msgid "12 Bottom (Portrait)"
-#~ msgstr "12 Bas (Portrait)"
-
-#~ msgid "12 Top (Portrait)"
-#~ msgstr "12 Haut (Portrait)"
-
-#~ msgid "4 Top (Portrait)"
-#~ msgstr "4 Haut (portrait)"
-
-#~ msgid "4 Bottom (Portrait)"
-#~ msgstr "4 Bas (portrait)"
-
-#~ msgid "4 Left (Landscape)"
-#~ msgstr "4 Gauche (portrait)"
-
-#~ msgid "4 Right (Landscape)"
-#~ msgstr "4 Droite (portrait)"
-
-#~ msgid "Export"
-#~ msgstr "Exporter"
-
-#~ msgid "No help available on this item"
-#~ msgstr "Aucune aide définie à ce sujet"
-
-#~ msgid "Edit text"
-#~ msgstr "Saisie texte"
-
-#~ msgid "A-"
-#~ msgstr "A-"
-
-#~ msgid "Filter..."
-#~ msgstr "Filtre..."
-
-#~ msgid "A+"
-#~ msgstr "A+"
-
-#~ msgid "InfoBox values, normal"
-#~ msgstr "Valeurs InfoBox, normal"
-
-#~ msgid "InfoBox values, small"
-#~ msgstr "Valeurs en InfoBox, petites"
-
-#~ msgid "Loading of plane profile \"%s\" failed!"
-#~ msgstr "Échec du chargement du profil du planeur \"%s\"!"
-
-#~ msgid "Do you want to load plane profile \"%s\"?"
-#~ msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
-
-#~ msgid "Full width"
-#~ msgstr "Toute la largeur"
-
-#~ msgid "Scaled"
-#~ msgstr "A l'échelle"
-
-#~ msgid "Scaled centered"
-#~ msgstr "A l'échelle centré"
-
-#~ msgid "Dialog size"
-#~ msgstr "Taille de la fenêtre"
-
-#~ msgid "Choose the display size of dialogs."
-#~ msgstr "Détermine la taille de l'affichage des dialogues."
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -9621,6 +9532,9 @@ msgstr ""
 #~ msgid "Weather parameters"
 #~ msgstr "Paramètres météo"
 
+#~ msgid "A-"
+#~ msgstr "A-"
+
 #~ msgid "Longitude"
 #~ msgstr "Longitude"
 
@@ -9630,14 +9544,23 @@ msgstr ""
 #~ msgid "Latitude"
 #~ msgstr "Latitude"
 
+#~ msgid "A+"
+#~ msgstr "A+"
+
 #~ msgid "V rough air"
 #~ msgstr "V air Agité"
 
 #~ msgid "Lookup"
 #~ msgstr "Parcourir"
 
+#~ msgid "Filter..."
+#~ msgstr "Filtre..."
+
 #~ msgid "Short file name"
 #~ msgstr "Nom Fichier Court"
+
+#~ msgid "Edit text"
+#~ msgstr "Saisie texte"
 
 #~ msgid "H GPS"
 #~ msgstr "H GPS"
@@ -9660,6 +9583,9 @@ msgstr ""
 #~ msgid "H Baro"
 #~ msgstr "Alt Baro"
 
+#~ msgid "Export"
+#~ msgstr "Exporter"
+
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
 #~ "height (vertical axis)."
@@ -9676,6 +9602,12 @@ msgstr ""
 #~ msgid "Create xcsoar-checklist.txt\n"
 #~ msgstr "Créer xcsoar-checklist.txt\n"
 
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "Voulez vous charger le profil \"%s\" du planeur ?"
+
+#~ msgid "Full width"
+#~ msgstr "Toute la largeur"
+
 #~ msgid "Polar name"
 #~ msgstr "Nom de la polaire"
 
@@ -9687,6 +9619,12 @@ msgstr ""
 #~ "Il s'agit de l'altitude de vol moins l'altitude du relief obtenue à "
 #~ "partir du fichier de relief. La valeur est en rouge lorsque le planeur "
 #~ "est en dessous de l'altitude de sécurité."
+
+#~ msgid "OLC"
+#~ msgstr "OLC"
+
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "Échec du chargement du profil du planeur \"%s\"!"
 
 #~ msgid "No further information"
 #~ msgstr "Pas d'autre information"
@@ -9700,6 +9638,33 @@ msgstr ""
 #~ msgstr ""
 #~ "Détails\n"
 #~ "Pt de virage"
+
+#~ msgid "8 Top + Bottom (Portrait)"
+#~ msgstr "8 Haut + Bas (Portrait)"
+
+#~ msgid "8 Top (Portrait)"
+#~ msgstr "8 Haut (Portrait)"
+
+#~ msgid "8 Bottom (Portrait)"
+#~ msgstr "8 Bas (Portrait)"
+
+#~ msgid "8 Left + Right (Landscape)"
+#~ msgstr "8 Gauche + Droite (Paysage)"
+
+#~ msgid "8 Right (Landscape)"
+#~ msgstr "8 Droite (Paysage)"
+
+#~ msgid "8 Left (Landscape)"
+#~ msgstr "8 Gauche (Paysage)"
+
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12 Droite (Paysage)"
+
+#~ msgid "12 Top (Portrait)"
+#~ msgstr "12 Haut (Portrait)"
+
+#~ msgid "12 Bottom (Portrait)"
+#~ msgstr "12 Bas (Portrait)"
 
 #~ msgid "Task Point"
 #~ msgstr "Point du circuit"
@@ -9799,6 +9764,9 @@ msgstr ""
 #~ msgid "Page"
 #~ msgstr "Page"
 
+#~ msgid "Choose the display size of dialogs."
+#~ msgstr "Détermine la taille de l'affichage des dialogues."
+
 #~ msgid "Return"
 #~ msgstr "Retour"
 
@@ -9836,6 +9804,9 @@ msgstr ""
 #~ "[Base] l'ordre essaie de prendre en compte la direction du terrain défini "
 #~ "comme Base."
 
+#~ msgid "Dialog size"
+#~ msgstr "Taille de la fenêtre"
+
 #~ msgid "Aircraft reg."
 #~ msgstr "Immatriculation appareil"
 
@@ -9866,6 +9837,12 @@ msgstr ""
 #~ msgid "Dry mass of the glider (pilot + empty mass)."
 #~ msgstr "Masse du planeur (pilote + masse à vide)"
 
+#~ msgid "InfoBox values, small"
+#~ msgstr "Valeurs en InfoBox, petites"
+
+#~ msgid "InfoBox values, normal"
+#~ msgstr "Valeurs InfoBox, normal"
+
 #~ msgid "Max. ballast"
 #~ msgstr "Ballast max."
 
@@ -9880,6 +9857,9 @@ msgstr ""
 #~ msgstr ""
 #~ "A sélectionner pour enregistrer les échanges de données avec l'appareil "
 #~ "connecté."
+
+#~ msgid "No help available on this item"
+#~ msgstr "Aucune aide définie à ce sujet"
 
 #~ msgid "InfoBox Pages"
 #~ msgstr "Pages InfoBoxes"
@@ -9971,14 +9951,32 @@ msgstr ""
 #~ "Option ZigZag: Nécessite un variomètre fournissant la vitesse air\r\n"
 #~ "Option Les 2: Utilise ZigZag et Thermique"
 
+#~ msgid "4 Top (Portrait)"
+#~ msgstr "4 Haut (portrait)"
+
 #~ msgid "Logger Info"
 #~ msgstr "Info logger"
+
+#~ msgid "4 Bottom (Portrait)"
+#~ msgstr "4 Bas (portrait)"
+
+#~ msgid "4 Left (Landscape)"
+#~ msgstr "4 Gauche (portrait)"
+
+#~ msgid "4 Right (Landscape)"
+#~ msgstr "4 Droite (portrait)"
 
 #~ msgid "This sets the task point for review."
 #~ msgstr "Définit le point de virage pour vérification."
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "Inateniable à cause du terrain"
+
+#~ msgid "Scaled"
+#~ msgstr "A l'échelle"
+
+#~ msgid "Scaled centered"
+#~ msgstr "A l'échelle centré"
 
 #~ msgid "Next radial ATC"
 #~ msgstr "Prochain relèvement ATC"
