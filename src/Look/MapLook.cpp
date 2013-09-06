@@ -49,9 +49,9 @@ MapLook::Initialise(const MapSettings &settings,
 
   terrain_warning_icon.LoadResource(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
 
-  compass_brush.Set(Color(207, 207, 207));
+  compass_brush.Set(IsDithered() ? COLOR_WHITE : Color(207, 207, 207));
   compass_pen.Set(Layout::ScalePenWidth(1), HasColors()? COLOR_GRAY : COLOR_BLACK);
-  compass_triangle_brush.Set(Color(50, 50, 50));
+  compass_triangle_brush.Set(IsDithered() ? COLOR_BLACK : Color(50, 50, 50));
   compass_triangle_pen.Set(Layout::ScalePenWidth(1), HasColors()? COLOR_GRAY : COLOR_BLACK);
 
   traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
