@@ -17,6 +17,7 @@ ifneq ($(ANALYZER),y)
     CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
   endif
 endif
+LD = $(TCPREFIX)ld$(EXE)
 DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
