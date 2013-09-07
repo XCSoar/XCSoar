@@ -109,7 +109,9 @@ Draw(Canvas &canvas)
 
 int main(int argc, char **argv)
 {
+  FreeType::mono = false;
   FreeType::Initialise();
+
   Font::Initialise();
   Display::Rotate(DisplaySettings::Orientation::PORTRAIT);
 

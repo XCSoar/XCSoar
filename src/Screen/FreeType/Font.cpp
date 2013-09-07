@@ -60,6 +60,17 @@ static const char *bold_italic_font_path;
 static const char *monospace_font_path;
 
 gcc_const
+static inline bool
+IsMono()
+{
+#ifdef KOBO
+  return FreeType::mono;
+#else
+  return IsDithered();
+#endif
+}
+
+gcc_const
 static inline FT_Long
 FT_FLOOR(FT_Long x)
 {
@@ -87,7 +98,7 @@ NextChar(const TCHAR *p)
 void
 Font::Initialise()
 {
-  if (IsDithered()) {
+  if (IsMono()) {
     /* disable anti-aliasing */
     load_flags |= FT_LOAD_TARGET_MONO;
     render_mode = FT_RENDER_MODE_MONO;
@@ -348,7 +359,7 @@ RenderGlyph(uint8_t *buffer, size_t width, size_t height,
   if (error)
     return;
 
-  if (IsDithered()) {
+  if (IsMono()) {
     /* with anti-aliasing disabled, FreeType writes each pixel in one
        bit; hack: convert it to 1 byte per pixel and then render it */
     FT_Bitmap bitmap;
