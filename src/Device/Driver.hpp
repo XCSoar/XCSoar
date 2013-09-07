@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_HPP
 #define XCSOAR_DEVICE_DRIVER_HPP
 
-#include "Time/BrokenDate.hpp"
-#include "Time/BrokenTime.hpp"
 #include "Util/StaticArray.hpp"
 #include "Util/tstring.hpp"
 #include "Math/fixed.hpp"
+#include "FlightInfo.hpp"
 
 #include <tchar.h>
 #include <stdint.h>
@@ -44,11 +43,7 @@ class AtmosphericPressure;
 class RadioFrequency;
 class OperationEnvironment;
 
-struct RecordedFlightInfo {
-  BrokenDate date;
-
-  BrokenTime start_time, end_time;
-
+struct RecordedFlightInfo : FlightInfo {
   /**
    * Optional driver specific data to address a flight.
    */
