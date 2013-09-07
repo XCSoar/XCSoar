@@ -38,6 +38,9 @@ Copyright_License {
 #include <algorithm>
 #include <stdio.h>
 
+/**
+ * Fake symbols to avoid linking the Screen/Layout library.
+ */
 namespace Layout {
   unsigned small_scale = 1500;
   unsigned scale_1024 = 2048;
@@ -51,6 +54,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   const Bitmap logo(IDB_LOGO);
   const unsigned banner_height = logo.GetHeight();
 
+  /* draw the XCSoar logo */
   int x = rc.left + padding;
   canvas.Copy(x, rc.top + padding,
               logo.GetWidth(), logo.GetHeight(),
@@ -62,6 +66,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
 
+  /* draw the XCSoar banner text with a larger font */
   Font large_font;
   large_font.LoadFile("/opt/xcsoar/share/fonts/VeraBd.ttf", 40);
   canvas.Select(large_font);
@@ -78,6 +83,7 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
   canvas.SetTextColor(COLOR_BLACK);
   x += canvas.CalcTextWidth(name2) + 30;
 
+  /* some more text */
   const TCHAR *const website = _T("www.xcsoar.org");
   canvas.Select(normal_font);
   canvas.DrawText(x, rc.top + (banner_height - normal_font.GetHeight()) / 2,
@@ -119,7 +125,10 @@ Draw(Canvas &canvas)
 
 int main(int argc, char **argv)
 {
+  /* enable FreeType anti-aliasing, because we don't use dithering in
+     this program */
   FreeType::mono = false;
+
   FreeType::Initialise();
 
   Font::Initialise();
@@ -133,20 +142,28 @@ int main(int argc, char **argv)
 
     Canvas canvas = screen.Lock();
     if (canvas.IsDefined()) {
+      /* all black first, to eliminate E-ink ghost images */
       canvas.Clear(COLOR_BLACK);
       screen.Flip();
       screen.Wait();
 
+      /* disable dithering, render with 16 shades of gray, to make the
+         (static) display more pretty */
       screen.SetEnableDither(false);
 
+      /* draw the pictuer */
       canvas.ClearWhite();
       Draw(canvas);
+
+      /* finish */
       screen.Unlock();
       screen.Flip();
       screen.Wait();
     }
   }
 
+  /* now we can power off the Kobo; the picture remains on the
+     screen */
   execl("/sbin/poweroff", "poweroff", nullptr);
   return 0;
 }
