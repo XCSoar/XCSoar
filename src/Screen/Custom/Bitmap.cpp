@@ -23,23 +23,8 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "LibPNG.hpp"
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
-#include "ResourceLoader.hpp"
-
-bool
-Bitmap::Load(unsigned id, Type type)
-{
-  assert(IsScreenInitialized());
-
-  ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.first == nullptr)
-    return false;
-
-  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
-  return Load(uncompressed, type);
-}
 
 bool
 Bitmap::LoadFile(const TCHAR *path)

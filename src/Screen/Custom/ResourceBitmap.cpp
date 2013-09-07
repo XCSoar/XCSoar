@@ -23,35 +23,32 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "Screen/Custom/UncompressedImage.hpp"
+#include "LibPNG.hpp"
 #include "UncompressedImage.hpp"
-
-#include <assert.h>
+#include "ResourceLoader.hpp"
 
 bool
-Bitmap::Load(const UncompressedImage &uncompressed, Type type)
+Bitmap::Load(unsigned id, Type type)
 {
   assert(IsScreenInitialized());
-  assert(uncompressed.IsVisible());
 
-  Reset();
+  ResourceLoader::Data data = ResourceLoader::Load(id);
+  if (data.first == nullptr)
+    return false;
 
-  ImportSurface(buffer, uncompressed);
-  return true;
+  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  return Load(uncompressed, type);
 }
 
-void
-Bitmap::Reset()
+#ifdef USE_MEMORY_CANVAS
+
+bool
+Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
-  assert(!IsDefined() || IsScreenInitialized());
+  assert(zoom > 0);
 
-  buffer.Free();
+  // XXX
+  return Load(id);
 }
 
-const PixelSize
-Bitmap::GetSize() const
-{
-  assert(IsDefined());
-
-  return { buffer.width, buffer.height };
-}
+#endif

@@ -1014,7 +1014,6 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
@@ -1623,7 +1622,6 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp

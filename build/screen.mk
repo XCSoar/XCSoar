@@ -82,6 +82,7 @@ SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
@@ -97,6 +98,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
 	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
@@ -112,6 +114,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/Window.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
@@ -125,6 +128,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/LibPNG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LibJPEG.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/TTY/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/FB/TopCanvas.cpp \
@@ -152,6 +156,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Pen.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Brush.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/GDI/ResourceBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
