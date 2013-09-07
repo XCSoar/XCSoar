@@ -139,6 +139,14 @@ public:
   unsigned GetHeight() const {
     return size.cy;
   }
+#elif defined(USE_MEMORY_CANVAS)
+  unsigned GetWidth() const {
+    return buffer.width;
+  }
+
+  unsigned GetHeight() const {
+    return buffer.height;
+  }
 #endif
 
 #ifdef ENABLE_OPENGL
