@@ -56,15 +56,17 @@ DrawBanner(Canvas &canvas, PixelRect &rc)
               logo.GetWidth(), logo.GetHeight(),
               logo, 0, 0);
 
-  x += logo.GetWidth() + padding;
+  x += logo.GetWidth() + 8;
 
   canvas.Select(bold_font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
 
+  Font large_font;
+  large_font.LoadFile("/opt/xcsoar/share/fonts/VeraBd.ttf", 40);
   const TCHAR *const name = _T("XCSoar");
-  canvas.Select(bold_font);
-  canvas.DrawText(x, rc.top + (banner_height - bold_font.GetHeight()) / 2,
+  canvas.Select(large_font);
+  canvas.DrawText(x, rc.top + (banner_height - large_font.GetHeight()) / 2,
                   name);
   x += canvas.CalcTextWidth(name) + 30;
 
