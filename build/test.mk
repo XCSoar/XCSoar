@@ -687,6 +687,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
+	RunFlightParser \
 	EnumeratePorts \
 	ReadPort RunPortHandler LogPort \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
@@ -1106,6 +1107,13 @@ NEAREST_WAYPOINTS_SOURCES = \
 NEAREST_WAYPOINTS_LDADD = $(FAKE_LIBS)
 NEAREST_WAYPOINTS_DEPENDS = WAYPOINT IO OS THREAD ZZIP GEO MATH UTIL
 $(eval $(call link-program,NearestWaypoints,NEAREST_WAYPOINTS))
+
+RUN_FLIGHT_PARSER_SOURCES = \
+	$(SRC)/Logger/FlightParser.cpp \
+	$(TEST_SRC_DIR)/RunFlightParser.cpp
+RUN_FLIGHT_PARSER_LDADD = $(FAKE_LIBS)
+RUN_FLIGHT_PARSER_DEPENDS = IO OS UTIL
+$(eval $(call link-program,RunFlightParser,RUN_FLIGHT_PARSER))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
