@@ -36,6 +36,7 @@
 #include <string.h>
 
 #ifdef HAVE_POSIX
+#include <sys/un.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #else
@@ -48,6 +49,27 @@ SocketAddress::operator==(const SocketAddress &other) const
   return length == other.length &&
     memcmp(&address, &other.address, length) == 0;
 }
+
+#if defined(HAVE_POSIX) && !defined(__BIONIC__)
+
+void
+SocketAddress::SetLocal(const char *path)
+{
+  auto &sun = reinterpret_cast<struct sockaddr_un &>(address);
+
+  const size_t path_length = strlen(path);
+
+  // TODO: make this a runtime check
+  assert(path_length < sizeof(sun.sun_path));
+
+  sun.sun_family = AF_LOCAL;
+  memcpy(sun.sun_path, path, path_length + 1);
+
+  /* note: Bionic doesn't provide SUN_LEN() */
+  length = SUN_LEN(&sun);
+}
+
+#endif
 
 SocketAddress
 SocketAddress::MakeIPv4Port(uint32_t ip, unsigned port)

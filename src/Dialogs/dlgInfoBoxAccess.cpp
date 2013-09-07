@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
-#include "Look/Look.hpp"
+#include "Look/DialogLook.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
@@ -105,7 +105,7 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
         button_style.multiline();
 
         WndButton *button =
-          new WndButton(tab_bar, look, _("Switch InfoBox"),
+          new WndButton(tab_bar, look.button, _("Switch InfoBox"),
                         button_rc, button_style,
                         form, SWITCH_INFO_BOX);
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "PortMonitor.hpp"
 #include "Dialogs/Message.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -194,7 +195,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
 
   PortMonitorGlue glue(device, terminal_look);
 
-  ButtonPanel buttons(client_area, dialog_look);
+  ButtonPanel buttons(client_area, dialog_look.button);
   buttons.Add(_("Close"), dialog, mrOK);
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());

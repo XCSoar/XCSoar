@@ -196,6 +196,9 @@ FlightPhaseDetector::Finish()
 {
   // Push last phases (we still have two latest phases in state)
   if (current_phase.phase_type == Phase::Type::NO_PHASE) {
+    if (previous_phase.phase_type == Phase::Type::NO_PHASE)
+      return;
+
     current_phase.phase_type = previous_phase.phase_type;
   }
   PushPhase();

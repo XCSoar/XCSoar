@@ -30,6 +30,10 @@ Copyright_License {
 struct FontSettings {
   LOGFONT dialog;
 
+#ifdef GNAV
+  LOGFONT dialog_small;
+#endif
+
   LOGFONT infobox;
   LOGFONT infobox_small;
 #ifndef GNAV

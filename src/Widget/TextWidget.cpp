@@ -25,6 +25,8 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Form/Frame.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
+#include "Look/DialogLook.hpp"
 
 void
 TextWidget::SetText(const TCHAR *text)
@@ -33,10 +35,20 @@ TextWidget::SetText(const TCHAR *text)
   w.SetText(text);
 }
 
+void
+TextWidget::SetColor(Color _color)
+{
+  WndFrame &w = (WndFrame &)GetWindow();
+  w.SetCaptionColor(_color);
+}
+
 PixelSize
 TextWidget::GetMinimumSize() const
 {
-  return {0u, Layout::GetMinimumControlHeight()};
+  const Font &font = *UIGlobals::GetDialogLook().text_font;
+  const PixelScalar height = 2 * Layout::GetTextPadding() + font.GetHeight();
+
+  return { PixelScalar(0), height };
 }
 
 PixelSize

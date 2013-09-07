@@ -82,6 +82,11 @@ struct DeviceConfig {
     INTERNAL,
 
     /**
+     * Connect to a TCP port.
+     */
+    TCP_CLIENT,
+
+    /**
      * Listen on a TCP Network port.
      */
     TCP_LISTENER,
@@ -172,7 +177,15 @@ struct DeviceConfig {
   StaticString<32> driver_name;
 
   /**
-   * The TCP server port number.
+   * The IP address of the peer to connect to, including the port
+   * number.  Used for #TCP_CLIENT.
+   */
+  StaticString<64> ip_address;
+
+  /**
+   * The TCP server port number.  Used for #TCP_LISTENER and
+   * #TCP_CLIENT.  Also used for #UDP_LISTENER (which is a kludge
+   * because there's no #udp_port attribute).
    */
   unsigned tcp_port;
 
@@ -263,6 +276,7 @@ struct DeviceConfig {
     return port_type == PortType::SERIAL || port_type == PortType::RFCOMM ||
       port_type == PortType::RFCOMM_SERVER ||
       port_type == PortType::AUTO || port_type == PortType::TCP_LISTENER ||
+      port_type == PortType::TCP_CLIENT ||
       port_type == PortType::IOIOUART || port_type == PortType::PTY ||
       port_type == PortType::UDP_LISTENER;
   }
@@ -272,10 +286,22 @@ struct DeviceConfig {
   }
 
   /**
+   * Does this port type use a tcp host?
+   */
+  static bool UsesIPAddress(PortType port_type) {
+    return port_type == PortType::TCP_CLIENT;
+  }
+
+  bool UsesIPAddress() const {
+    return UsesIPAddress(port_type);
+  }
+
+  /**
    * Does this port type use a tcp port?
    */
   static bool UsesTCPPort(PortType port_type) {
     return port_type == PortType::TCP_LISTENER ||
+      port_type == PortType::TCP_CLIENT ||
       port_type == PortType::UDP_LISTENER;
   }
 

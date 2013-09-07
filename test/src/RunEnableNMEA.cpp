@@ -94,11 +94,19 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   assert(driver->CreateOnPort != NULL);
   Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
 
-  ConsoleOperationEnvironment env;
   device->EnableNMEA(env);
 
   delete device;

@@ -103,6 +103,11 @@ public:
       return main_index == other.main_index &&
         sub_index == other.sub_index;
     }
+
+    constexpr
+    bool operator!=(const MenuTabIndex &other) const {
+      return !(*this == other);
+    }
   };
 
 protected:
@@ -209,6 +214,9 @@ public:
   gcc_pure
   const PixelRect &GetMainMenuButtonSize(unsigned i) const;
 
+  gcc_pure
+  const PixelRect &GetButtonPosition(MenuTabIndex i) const;
+
   /**
    * @param main_menu_index
    * @return pointer to button or NULL if index is out of range
@@ -271,7 +279,8 @@ public:
   /**
    * overloads from TabBarControl.
    */
-  UPixelScalar GetTabHeight() const;
+  gcc_pure
+  unsigned GetTabHeight() const;
 
   /**
    * @return last content page shown (0 to (NumPages-1))
@@ -329,12 +338,12 @@ protected:
   /**
    * @return Height of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonHeight() const;
+  unsigned GetMenuButtonHeight() const;
 
   /**
    * @return Width of any item in Main or Sub menu
    */
-  UPixelScalar GetMenuButtonWidth() const;
+  unsigned GetMenuButtonWidth() const;
 
 public:
   void NextPage();

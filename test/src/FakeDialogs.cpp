@@ -22,10 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
-#include "Time/RoughTime.hpp"
+#include "Dialogs/DataField.hpp"
 
 int
 ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
@@ -34,23 +31,8 @@ ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 }
 
 bool
-TextEntryDialog(TCHAR *text, size_t size,
-                const TCHAR *caption,
-                AllowedCharacters accb)
-{
-  return false;
-}
-
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value,
-                RoughTimeDelta time_zone, bool nullable)
-{
-  return false;
-}
-
-bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
+EditDataFieldDialog(const TCHAR *caption, DataField &df,
+                    const TCHAR *help_text)
 {
   return false;
 }

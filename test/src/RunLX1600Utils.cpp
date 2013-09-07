@@ -349,6 +349,12 @@ main(int argc, char **argv)
   }
 
   ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   RunUI(*port, env);
 
   DeinitialiseIOThread();

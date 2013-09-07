@@ -69,6 +69,8 @@ public:
    */
   bool Create(int domain, int type, int protocol);
 
+  bool Bind(const SocketAddress &address);
+
   /**
    * Binds the socket to the port on INADDR_ANY
    * @param port is the port to bound
@@ -105,10 +107,10 @@ public:
   bool CreateConnectUDP(const char *host, const char *port);
 #endif
 
-#ifndef HAVE_POSIX
   ssize_t Read(void *buffer, size_t length);
   ssize_t Write(const void *buffer, size_t length);
 
+#ifndef HAVE_POSIX
   int WaitReadable(int timeout_ms) const;
   int WaitWritable(int timeout_ms) const;
 #else

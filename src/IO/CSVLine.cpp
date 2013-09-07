@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "NMEA/InputLine.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -72,8 +74,7 @@ CSVLine::Read(char *dest, size_t size)
   size_t length = Skip();
   if (length >= size)
     length = size - 1;
-  strncpy(dest, src, length);
-  dest[length] = '\0';
+  *std::copy_n(src, length, dest) = '\0';
 }
 
 bool

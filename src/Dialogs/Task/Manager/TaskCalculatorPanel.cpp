@@ -24,6 +24,7 @@ Copyright_License {
 #include "TaskCalculatorPanel.hpp"
 #include "Internal.hpp"
 #include "../TaskDialogs.hpp"
+#include "Widget/TextWidget.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Units/Units.hpp"
@@ -159,34 +160,6 @@ TaskCalculatorPanel::OnSpecial(DataField &df)
   }
 }
 
-static void
-OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  const DialogLook &look = UIGlobals::GetDialogLook();
-
-  if (instance->IsTaskModified()) {
-    const UPixelScalar textheight = canvas.GetFontHeight();
-    const TCHAR* message = _("Calculator excludes unsaved task changes!");
-    canvas.Select(*look.small_font);
-
-    const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
-    const MaskedIcon *bmp = &look.intercept_icon;
-    const int offsetx = bmp->GetSize().cx;
-    const int offsety = canvas.GetHeight() - bmp->GetSize().cy;
-    canvas.Clear(COLOR_YELLOW);
-    bmp->Draw(canvas, offsetx, offsety);
-
-    canvas.SetBackgroundColor(COLOR_YELLOW);
-    canvas.SetTextColor(COLOR_BLACK);
-    canvas.DrawText(offsetx * 2 + Layout::GetTextPadding(),
-                    (int)(canvas.GetHeight() - textheight) / 2,
-                    message);
-  }
-  else {
-    canvas.Clear(look.background_color);
-  }
-}
-
 void
 TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -194,9 +167,8 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   instance = this;
 
-  Add(new WndOwnerDrawFrame((ContainerWindow &)GetWindow(),
-                            PixelRect{0, 0, 100, Layout::Scale(17)},
-                            WindowStyle(), OnWarningPaint));
+  Add(new TextWidget());
+  SetRowVisible(WARNING, false);
 
   AddReadOnly(_("Assigned task time"));
   AddReadOnly(_("Estimated task time"));
@@ -251,6 +223,14 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 
   RowFormWidget::Show(rc);
+
+  const bool modified = instance->IsTaskModified();
+  SetRowVisible(WARNING, modified);
+  if (modified) {
+    TextWidget &widget = (TextWidget &)GetRowWidget(WARNING);
+    widget.SetText(_("Calculator excludes unsaved task changes!"));
+    widget.SetColor(COLOR_RED);
+  }
 }
 
 void

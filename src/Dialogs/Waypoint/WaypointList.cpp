@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "WaypointDialogs.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -65,15 +67,18 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-class FAITrianglePointValidator;
+enum Controls {
+  NAME,
+  DISTANCE,
+  DIRECTION,
+  TYPE,
+};
+
+enum Buttons {
+  SELECT,
+};
 
 static GeoPoint location;
-static WndForm *dialog = nullptr;
-static ListControl *waypoint_list_control = nullptr;
-static WndProperty *name_control;
-static WndProperty *distance_filter;
-static WndProperty *direction_filter;
-static WndProperty *type_filter;
 
 static OrderedTask *ordered_task;
 static unsigned ordered_task_index;
@@ -127,9 +132,54 @@ struct WaypointListDialogState
   }
 };
 
-class WaypointListDialog : public ListItemRenderer,
-                           public ListCursorHandler {
+class WaypointFilterWidget;
+class WaypointListButtons;
+
+class WaypointListWidget final
+  : public ListWidget, public DataFieldListener,
+    public ActionListener, NullBlackboardListener {
+  ActionListener &action_listener;
+
+  WaypointFilterWidget &filter_widget;
+
+  WaypointList items;
+
 public:
+  WaypointListWidget(ActionListener &_action_listener,
+                     WaypointFilterWidget &_filter_widget)
+    :action_listener(_action_listener),
+    filter_widget(_filter_widget) {}
+
+  void UpdateList();
+
+  void OnWaypointListEnter();
+
+  const Waypoint *GetCursorObject() const {
+    return items.empty()
+      ? nullptr
+      : items[GetList().GetCursorIndex()].waypoint;
+  }
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+
+  virtual void Unprepare() override {
+    DeleteWindow();
+  }
+
+  virtual void Show(const PixelRect &rc) override {
+    ListWidget::Show(rc);
+    UpdateList();
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+  }
+
+  virtual void Hide() override {
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
+    ListWidget::Hide();
+  }
+
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
@@ -140,10 +190,59 @@ public:
   }
 
   virtual void OnActivateItem(unsigned index) override;
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override;
+
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+
+private:
+  /* virtual methods from BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic) override;
+};
+
+class WaypointFilterWidget : public RowFormWidget {
+  DataFieldListener *listener;
+
+public:
+  WaypointFilterWidget(const DialogLook &look)
+    :RowFormWidget(look, true) {}
+
+  void SetListener(DataFieldListener *_listener) {
+    listener = _listener;
+  }
+
+  void Update();
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+#ifdef GNAV
+  virtual bool KeyPress(unsigned key_code) override;
+#endif
+};
+
+class WaypointListButtons : public RowFormWidget {
+  ActionListener &dialog;
+  ActionListener *list;
+
+public:
+  WaypointListButtons(const DialogLook &look, ActionListener &_dialog)
+    :RowFormWidget(look), dialog(_dialog) {}
+
+  void SetList(ActionListener *_list) {
+    list = _list;
+  }
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    AddButton(_("Select"), *list, SELECT);
+    AddButton(_("Cancel"), dialog, mrCancel);
+  }
 };
 
 static WaypointListDialogState dialog_state;
-static WaypointList waypoint_list;
 
 static TCHAR *
 GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
@@ -160,60 +259,17 @@ GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
   return buffer;
 }
 
-static void
-InitializeDirection(bool only_heading)
+void
+WaypointFilterWidget::Update()
 {
-  // initialize datafieldenum for Direction
+  WndProperty &direction_control = GetControl(DIRECTION);
+  DataFieldEnum &direction_df = *(DataFieldEnum *)
+    direction_control.GetDataField();
+
   TCHAR buffer[12];
-
-  DataFieldEnum* data_field = (DataFieldEnum*)direction_filter->GetDataField();
-  if (!only_heading) {
-    for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
-      data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
-
-    data_field->SetAsInteger(dialog_state.direction_index);
-  } else
-    // update heading value to current heading
-    data_field->replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
-
-  direction_filter->RefreshDisplay();
-}
-
-static void
-PrepareData()
-{
-  dialog_state.name.clear();
-
-  // initialize datafieldenum for Distance
-  DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
-  data_field->addEnumText(_T("*"));
-
-  TCHAR buffer[15];
-  for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    FormatUserDistance(Units::ToSysDistance(fixed(distance_filter_items[i])),
-                       buffer);
-    data_field->addEnumText(buffer);
-  }
-
-  data_field->SetAsInteger(dialog_state.distance_index);
-  distance_filter->RefreshDisplay();
-
-  InitializeDirection(false);
-
-  // initialize datafieldenum for Type
-  data_field = (DataFieldEnum*)type_filter->GetDataField();
-  data_field->addEnumTexts(type_filter_items);
-
-  const TCHAR *p = Profile::GetPathBase(ProfileKeys::WaypointFile);
-  if (p != nullptr)
-    data_field->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
-
-  p = Profile::GetPathBase(ProfileKeys::AdditionalWaypointFile);
-  if (p != nullptr)
-    data_field->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
-
-  data_field->SetAsInteger((int)dialog_state.type_index);
-  type_filter->RefreshDisplay();
+  direction_df.replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer),
+                                                   1));
+  direction_control.RefreshDisplay();
 }
 
 static void
@@ -248,22 +304,31 @@ FillLastUsedList(WaypointList &list,
   }
 }
 
-static void
-UpdateList()
+void
+WaypointListWidget::UpdateList()
 {
-  waypoint_list.clear();
+  items.clear();
 
   if (dialog_state.type_index == TypeFilter::LAST_USED)
-    FillLastUsedList(waypoint_list, LastUsedWaypoints::GetList(),
+    FillLastUsedList(items, LastUsedWaypoints::GetList(),
                      way_points);
   else
-    FillList(waypoint_list, way_points, location, last_heading,
+    FillList(items, way_points, location, last_heading,
              dialog_state);
 
-  waypoint_list_control->SetLength(std::max(1, (int)waypoint_list.size()));
-  waypoint_list_control->SetOrigin(0);
-  waypoint_list_control->SetCursorIndex(0);
-  waypoint_list_control->Invalidate();
+  auto &list = GetList();
+  list.SetLength(std::max(1u, (unsigned)items.size()));
+  list.SetOrigin(0);
+  list.SetCursorIndex(0);
+  list.Invalidate();
+}
+
+void
+WaypointListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc, WaypointListRenderer::GetHeight(look));
+  UpdateList();
 }
 
 static const TCHAR *
@@ -273,17 +338,73 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
   return way_points.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
 }
 
-class FilterDataFieldListener: public DataFieldListener
+static DataField *
+CreateNameDataField(DataFieldListener *listener)
 {
-private:
-  /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
-};
+  return new PrefixDataField(_T(""), WaypointNameAllowedCharacters, listener);
+}
+
+static DataField *
+CreateDistanceDataField(DataFieldListener *listener)
+{
+  DataFieldEnum *df = new DataFieldEnum(listener);
+  df->addEnumText(_T("*"));
+
+  TCHAR buffer[15];
+  for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
+    FormatUserDistance(Units::ToSysDistance(fixed(distance_filter_items[i])),
+                       buffer);
+    df->addEnumText(buffer);
+  }
+
+  df->Set(dialog_state.distance_index);
+  return df;
+}
+
+static DataField *
+CreateDirectionDataField(DataFieldListener *listener)
+{
+  TCHAR buffer[12];
+  DataFieldEnum *df = new DataFieldEnum(listener);
+  for (unsigned i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
+    df->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
+
+  df->Set(dialog_state.direction_index);
+  return df;
+}
+
+static DataField *
+CreateTypeDataField(DataFieldListener *listener)
+{
+  DataFieldEnum *df = new DataFieldEnum(listener);
+  df->addEnumTexts(type_filter_items);
+
+  const TCHAR *p = Profile::GetPathBase(ProfileKeys::WaypointFile);
+  if (p != nullptr)
+    df->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
+
+  p = Profile::GetPathBase(ProfileKeys::AdditionalWaypointFile);
+  if (p != nullptr)
+    df->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
+
+  df->Set((int)dialog_state.type_index);
+  return df;
+}
 
 void
-FilterDataFieldListener::OnModified(DataField &df)
+WaypointFilterWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc)
 {
-  if (&df == name_control->GetDataField()) {
+  Add(_("Name"), nullptr, CreateNameDataField(listener));
+  Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
+  Add(_("Direction"), nullptr, CreateDirectionDataField(listener));
+  Add(_("Type"), nullptr, CreateTypeDataField(listener));
+}
+
+void
+WaypointListWidget::OnModified(DataField &df)
+{
+  if (filter_widget.IsDataField(NAME, df)) {
     dialog_state.name = df.GetAsString();
 
     /* pass the focus to the list so the user can use the up/down keys
@@ -294,14 +415,14 @@ FilterDataFieldListener::OnModified(DataField &df)
        changed, but if the filter has only one letter, it's most
        likely changed by left/right */
     if (dialog_state.name.length() > 1)
-      waypoint_list_control->SetFocus();
-  } else if (&df == distance_filter->GetDataField()) {
+      GetList().SetFocus();
+  } else if (filter_widget.IsDataField(DISTANCE, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     dialog_state.distance_index = dfe.GetValue();
-  } else if (&df == direction_filter->GetDataField()) {
+  } else if (filter_widget.IsDataField(DIRECTION, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     dialog_state.direction_index = dfe.GetValue();
-  } else if (&df == type_filter->GetDataField()) {
+  } else if (filter_widget.IsDataField(TYPE, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     dialog_state.type_index = (TypeFilter)dfe.GetValue();
   }
@@ -310,10 +431,10 @@ FilterDataFieldListener::OnModified(DataField &df)
 }
 
 void
-WaypointListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
+WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                 unsigned i)
 {
-  if (waypoint_list.empty()) {
+  if (items.empty()) {
     assert(i == 0);
 
     const UPixelScalar line_height = rc.bottom - rc.top;
@@ -328,9 +449,9 @@ WaypointListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  assert(i < waypoint_list.size());
+  assert(i < items.size());
 
-  const struct WaypointListItem &info = waypoint_list[i];
+  const struct WaypointListItem &info = items[i];
 
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              info.GetVector(location),
@@ -339,35 +460,33 @@ WaypointListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
                              CommonInterface::GetMapSettings().waypoint);
 }
 
-static void
-OnWaypointListEnter()
+void
+WaypointListWidget::OnWaypointListEnter()
 {
-  if (waypoint_list.size() > 0)
-    dialog->SetModalResult(mrOK);
+  if (!items.empty())
+    action_listener.OnAction(mrOK);
   else
-    name_control->BeginEditing();
+    filter_widget.GetControl(NAME).BeginEditing();
 }
 
 void
-WaypointListDialog::OnActivateItem(unsigned index)
+WaypointListWidget::OnActivateItem(unsigned index)
 {
   OnWaypointListEnter();
 }
 
-static void
-OnSelectClicked()
+void
+WaypointListWidget::OnAction(int id)
 {
-  OnWaypointListEnter();
+  switch (Buttons(id)) {
+  case SELECT:
+    OnWaypointListEnter();
+    break;
+  }
 }
 
-static void
-OnCloseClicked()
-{
-  dialog->SetModalResult(mrCancel);
-}
-
-static void
-OnGPSUpdate(const MoreData &basic)
+void
+WaypointListWidget::OnGPSUpdate(const MoreData &basic)
 {
   if (dialog_state.direction_index == 1 &&
       !CommonInterface::Calculated().circling) {
@@ -375,121 +494,68 @@ OnGPSUpdate(const MoreData &basic)
     Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
       last_heading = heading;
+      filter_widget.Update();
       UpdateList();
-      InitializeDirection(true);
     }
   }
 }
 
 #ifdef GNAV
 
-static bool
-FormKeyDown(unsigned key_code)
+bool
+WaypointFilterWidget::KeyPress(unsigned key_code)
 {
-  TypeFilter new_index = dialog_state.type_index;
-
   switch (key_code) {
   case KEY_APP1:
-    new_index = TypeFilter::ALL;
-    break;
+    LoadValueEnum(TYPE, TypeFilter::ALL);
+    return true;
 
   case KEY_APP2:
-    new_index = TypeFilter::LANDABLE;
-    break;
+    LoadValueEnum(TYPE, TypeFilter::LANDABLE);
+    return true;
 
   case KEY_APP3:
-    new_index = TypeFilter::TURNPOINT;
-    break;
+    LoadValueEnum(TYPE, TypeFilter::TURNPOINT);
+    return true;
 
   default:
     return false;
   }
-
-  if (dialog_state.type_index != new_index) {
-    dialog_state.type_index = new_index;
-    UpdateList();
-    type_filter->GetDataField()->SetAsInteger((int)dialog_state.type_index);
-    type_filter->RefreshDisplay();
-  }
-
-  return true;
 }
 
 #endif /* GNAV */
-
-static constexpr CallBackTableEntry callback_table[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnSelectClicked),
-  DeclareCallBackEntry(nullptr)
-};
 
 const Waypoint*
 ShowWaypointListDialog(const GeoPoint &_location,
                        OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
-  dialog = LoadDialog(callback_table, UIGlobals::GetMainWindow(),
-                      Layout::landscape ?
-      _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
-  assert(dialog != nullptr);
-
-#ifdef GNAV
-  dialog->SetKeyDownFunction(FormKeyDown);
-#endif
-
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
-
-  WaypointListDialog dialog2;
-
-  waypoint_list_control = (ListControl*)dialog->FindByName(_T("frmWaypointList"));
-  assert(waypoint_list_control != nullptr);
-  waypoint_list_control->SetItemRenderer(&dialog2);
-  waypoint_list_control->SetItemHeight(WaypointListRenderer::GetHeight(dialog_look));
-  waypoint_list_control->SetCursorHandler(&dialog2);
-
-  FilterDataFieldListener listener;
-
-  name_control = (WndProperty *)dialog->FindByName(_T("name"));
-  assert(name_control != nullptr);
-  DataField *name_df = new PrefixDataField(_T(""),
-                                           WaypointNameAllowedCharacters);
-  name_control->SetDataField(name_df);
-  name_df->SetListener(&listener);
-
-  distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
-  assert(distance_filter != nullptr);
-  distance_filter->GetDataField()->SetListener(&listener);
-
-  direction_filter = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
-  assert(direction_filter != nullptr);
-  direction_filter->GetDataField()->SetListener(&listener);
-
-  type_filter = (WndProperty *)dialog->FindByName(_T("prpFltType"));
-  assert(type_filter != nullptr);
-  type_filter->GetDataField()->SetListener(&listener);
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
   location = _location;
   ordered_task = _ordered_task;
   ordered_task_index = _ordered_task_index;
   last_heading = CommonInterface::Basic().attitude.heading;
+  dialog_state.name.clear();
 
-  PrepareData();
-  UpdateList();
+  WidgetDialog dialog(look);
 
-  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), OnGPSUpdate);
+  WaypointFilterWidget *filter_widget = new WaypointFilterWidget(look);
 
-  if (dialog->ShowModal() != mrOK) {
-    delete dialog;
-    return nullptr;
-  }
+  WaypointListButtons *buttons_widget = new WaypointListButtons(look, dialog);
 
-  unsigned index = waypoint_list_control->GetCursorIndex();
+  TwoWidgets *left_widget =
+    new TwoWidgets(filter_widget, buttons_widget, true);
 
-  delete dialog;
+  WaypointListWidget *const list_widget =
+    new WaypointListWidget(dialog, *filter_widget);
 
-  const Waypoint* retval = nullptr;
+  filter_widget->SetListener(list_widget);
+  buttons_widget->SetList(list_widget);
 
-  if (index < waypoint_list.size())
-    retval = waypoint_list[index].waypoint;
+  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
 
-  return retval;
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select Waypoint"), widget);
+  return dialog.ShowModal() == mrOK
+    ? list_widget->GetCursorObject()
+    : nullptr;
 }

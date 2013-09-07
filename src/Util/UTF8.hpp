@@ -50,13 +50,23 @@ Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
 
 /**
  * Convert the specified character from ISO-8859-1 to UTF-8 and write
- * it to the buffer. buffer must have a length of at least 2!
+ * it to the buffer.  buffer must have a length of at least 2!
  *
- * @return A pointer to the buffer plus the added character(s)
+ * @return a pointer to the buffer plus the added bytes(s)
  */
 gcc_nonnull_all
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer);
+
+/**
+ * Convert the specified Unicode character to UTF-8 and write it to
+ * the buffer.  buffer must have a length of at least 6!
+ *
+ * @return a pointer to the buffer plus the added bytes(s)
+ */
+gcc_nonnull_all
+char *
+UnicodeToUTF8(unsigned ch, char *buffer);
 
 /**
  * Returns the number of characters in the string.  This is different

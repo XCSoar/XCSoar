@@ -21,32 +21,14 @@ Copyright_License {
 }
 */
 
-#define ENABLE_XML_DIALOG
+#define ENABLE_DIALOG
 #define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Util/Macros.hpp"
 #include "LocalPath.hpp"
-#include "Dialogs/TimeEntry.hpp"
-#include "Dialogs/GeoPointEntry.hpp"
 #include "Time/RoughTime.hpp"
-
-void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
-
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value,
-                RoughTimeDelta time_zone, bool nullable)
-{
-  return false;
-}
-
-bool
-GeoPointEntryDialog(const TCHAR *caption, GeoPoint &value,
-                    bool nullable)
-{
-  return false;
-}
 
 static void
 Main()

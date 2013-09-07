@@ -99,8 +99,7 @@ public:
    */
   void Clear() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     // Clear EdgeMap
     edges.clear();
@@ -154,9 +153,9 @@ public:
     edge_const_iterator cur(q.top().iterator);
     current_value = cur->second.value;
 
-    do
+    do {
       q.pop();
-    while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
+    } while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
 
     return cur->first;
   }
@@ -207,8 +206,7 @@ public:
    */
   void RestartQueue() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     for (const auto &i : edges)
       q.push(Value(i.second.value, i));

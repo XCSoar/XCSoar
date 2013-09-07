@@ -10,12 +10,12 @@
 
   <Edit Name="prpRange" Caption="Distance" X="-120" Y="-167" Height="22" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
-    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="-100" Max="100" Step="5"/>
   </Edit>
 
   <Edit Name="prpRadial" Caption="Radial" X="-120" Y="-145" Height="22" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5" OnDataAccess="OnRadialData"/>
+    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-90" Max="90" Step="5"/>
   </Edit>
 
   <Edit Name="prpAATEst" Caption="ETE" X="-120" Y="-123" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="600" step="10"

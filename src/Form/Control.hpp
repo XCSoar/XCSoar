@@ -47,13 +47,6 @@ private:
   /** Helptext of the Control */
   TCHAR *help_text;
 
-  /**
-   * The callback-function that should be called when the help button is
-   * pressed while the control has focus
-   * @see SetOnHelpCallback()
-   */
-  HelpCallback help_callback;
-
 public:
   WindowControl();
 
@@ -78,7 +71,7 @@ public:
    * Does this control have a help text?
    */
   bool HasHelp() const {
-    return help_text != NULL || help_callback != NULL;
+    return help_text != nullptr;
   }
 
   /**
@@ -87,14 +80,6 @@ public:
    * @return
    */
   bool OnHelp();
-
-  /**
-   * Sets the function that should be called when the help button is pressed
-   * @param Function Pointer to the function to be called
-   */
-  void SetOnHelpCallback(HelpCallback Function) {
-    help_callback = Function;
-  }
 
   bool HasCaption() const {
     return !caption.empty();
@@ -119,6 +104,10 @@ public:
    * @param Value The new Helptext of the Control
    */
   void SetHelpText(const TCHAR *Value);
+
+  const TCHAR *GetHelpText() const {
+    return help_text;
+  }
 };
 
 #endif

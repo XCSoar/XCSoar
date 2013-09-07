@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Form/ButtonPanel.hpp"
 #include "SymbolButton.hpp"
-#include "Look/DialogLook.hpp"
+#include "Look/ButtonLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"
 
-ButtonPanel::ButtonPanel(ContainerWindow &_parent, const DialogLook &_look)
+ButtonPanel::ButtonPanel(ContainerWindow &_parent, const ButtonLook &_look)
   :parent(_parent), look(_look) {
   style.TabStop();
 }
@@ -76,6 +76,7 @@ ButtonPanel::AddSymbol(tstring::const_pointer caption,
 {
   WndButton *button = new WndSymbolButton(parent, look, caption,
                                           dummy_rc, style, listener, id);
+  keys[buttons.size()] = 0;
   buttons.append(button);
 
   return button;
@@ -93,7 +94,7 @@ ButtonPanel::AddKey(unsigned key_code)
 UPixelScalar
 ButtonPanel::Width(unsigned i) const
 {
-  return look.button.font->TextSize(buttons[i]->GetText().c_str()).cx +
+  return look.font->TextSize(buttons[i]->GetText().c_str()).cx +
     Layout::SmallScale(8);
 }
 

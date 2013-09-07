@@ -42,7 +42,7 @@ WindStore::reset()
 
 void
 WindStore::SlotMeasurement(const MoreData &info,
-                           const SpeedVector &windvector, int quality)
+                           const SpeedVector &windvector, unsigned quality)
 {
   updated = true;
   windlist.addMeasurement((unsigned)info.time, windvector,

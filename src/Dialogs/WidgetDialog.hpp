@@ -38,6 +38,8 @@ class WidgetDialog : public WndForm {
 
   ManagedWidget widget;
 
+  bool full;
+
   bool auto_size;
 
   bool changed;
@@ -91,6 +93,11 @@ public:
     return AddButton(caption, *this, modal_result);
   }
 
+  WndButton *AddSymbolButton(const TCHAR *caption,
+                             ActionListener &listener, int id) {
+    return buttons.AddSymbol(caption, listener, id);
+  }
+
   void AddButtonKey(unsigned key_code) {
     return buttons.AddKey(key_code);
   }
@@ -113,6 +120,8 @@ protected:
   virtual void OnResize(PixelSize new_size) override;
 
   /* virtual methods from class WndForm */
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
+  virtual void SetDefaultFocus() override;
   virtual bool OnAnyKeyDown(unsigned key_code) override;
 };
 

@@ -65,25 +65,35 @@ Version 6.7 - not yet released
   - pressing the Escape key in task manager switches to "Close" tab (#2877)
   - separate font for dialogs (#723, #2806)
   - repetitive airspace warning sound (#2952)
+  - never close dialogs due to display rotation
+  - disable custom fonts on Altair
+  - improve small dialog font on Altair
 * map
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)
   - suppress drawing duplicate topography labels
   - draw projected path when turning
+  - additional zoom levels (#3037)
+  - global "don't fill airspace" setting (#3047)
+  - fix rendering errors when some airspaces have no border (#3045)
 * infoboxes
   - new content "Speed task last hour"
   - new content "Next distance (nominal)"
+  - new content "Takeoff distance" (#3059)
   - new panel for "Team code" provides quick access to team code settings (#2899)
+  - new content "OLC speed" (#2352)
 * tasks
   - custom "start requires arm" setting (#2782)
   - new option to disable OLC optimisation
-  - MAT: remove "auto add" turnpoint feature when fly over it
+  - MAT: ask user whether to add turn points while flying over it
   - update the calculator without a GPS fix (#2876)
   - fix task speed and time estimates before task start (#2876)
-  - show "arm advance" button when manual arming is necessary
+  - show "arm advance" button when manual arming is necessary (#1729)
   - support the OLC/DMSt 500km triangle threshold (#2963)
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
+* calculations
+  - add more weight to zig-zag wind compared to circling wind
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added
@@ -92,13 +102,35 @@ Version 6.7 - not yet released
   - "debug" button
   - more robust midnight wraparound handling (#2857)
   - new driver from Cambridge L-Nav
+  - support TCP client connection
 * Android
   - support IOIO via OpenAccessory (Android 4.x)
   - support USB host mode and USB-RS232 adapters on the Nook (#2886)
   - show Bluetooth name instead of MAC address in device list
+  - enable fast refresh mode on Nook Simple Touch
 * Analysis
   - a retrospective task is compiled that summarises waypoints the aircraft has 
     visited (within 15km radius).  These waypoints are drawn on OLC page of analysis dialog.
+* data files
+  - default profile is called "default.prf" instead of "xcsoar-registry.prf"
+  - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
+  - save the previous log file in "xcsoar.old"
+
+Version 6.6.6 - not yet released
+* tasks
+  - fix parsing of .cup task files
+
+Version 6.6.5 - 2013/08/21
+* user interface
+  - reduce flickering in system configuration
+* map
+  - reduce CPU usage of airspace and topography renderer
+* tasks
+  - remove keyhole from the BGA start sector zone
+* devices
+  - enable Nook's internal GPS for mock locations (#2999)
+* configuration
+  - fix loading home waypoint on longitudes bigger than 90 degrees
 
 Version 6.6.4 - 2013/07/11
 * map

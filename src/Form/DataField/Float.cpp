@@ -24,11 +24,19 @@ Copyright_License {
 #include "Float.hpp"
 #include "ComboList.hpp"
 #include "Asset.hpp"
+#include "Util/NumberParser.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
 
 static bool DataFieldKeyUp = false;
+
+gcc_pure
+static fixed
+ParseString(const TCHAR *s)
+{
+  return fixed(ParseDouble(s));
+}
 
 int
 DataFieldFloat::GetAsInteger() const
@@ -72,7 +80,7 @@ DataFieldFloat::SetAsFloat(fixed Value)
 void
 DataFieldFloat::SetAsString(const TCHAR *Value)
 {
-  SetAsFloat(fixed(_tcstod(Value, NULL)));
+  SetAsFloat(ParseString(Value));
 }
 
 void
@@ -139,10 +147,14 @@ DataFieldFloat::AppendComboValue(ComboList &combo_list, fixed value) const
   combo_list.Append(combo_list.size(), a, b);
 }
 
-ComboList *
-DataFieldFloat::CreateComboList() const
+ComboList
+DataFieldFloat::CreateComboList(const TCHAR *reference_string) const
 {
-  ComboList *combo_list = new ComboList();
+  const fixed reference = reference_string != nullptr
+    ? ParseString(reference_string)
+    : mValue;
+
+  ComboList combo_list;
   const fixed epsilon = mStep / 1000;
   const fixed fine_step = mStep / 10;
 
@@ -152,12 +164,12 @@ DataFieldFloat::CreateComboList() const
     surrounding_items -= 20;
 
   /* the value aligned to mStep */
-  fixed corrected_value = int((mValue - mMin) / mStep) * mStep + mMin;
+  fixed corrected_value = int((reference - mMin) / mStep) * mStep + mMin;
 
   fixed first = corrected_value - surrounding_items * mStep;
   if (first > mMin + epsilon)
     /* there are values before "first" - give the user a choice */
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < mMin - epsilon)
     first = int(mMin / mStep) * mStep;
 
@@ -177,7 +189,7 @@ DataFieldFloat::CreateComboList() const
 
     if (mFine) {
       // show up to 9 items above and below current value with extended precision
-      if (i - epsilon > mValue + mStep - fine_step) {
+      if (i - epsilon > reference + mStep - fine_step) {
         if (inFineSteps) {
           inFineSteps = false;
           step = mStep;
@@ -186,38 +198,38 @@ DataFieldFloat::CreateComboList() const
             i = mMax;
         }
       }
-      else if (i + epsilon >= mValue - mStep + fine_step) {
+      else if (i + epsilon >= reference - mStep + fine_step) {
         if (!inFineSteps) {
           inFineSteps = true;
           step = fine_step;
-          i = std::max(mMin, mValue - mStep + fine_step);
+          i = std::max(mMin, reference - mStep + fine_step);
         }
       }
     }
 
-    if (!found_current && mValue <= i + epsilon) {
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    if (!found_current && reference <= i + epsilon) {
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
 
-      if (mValue < i - epsilon)
+      if (reference < i - epsilon)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, mValue);
+        AppendComboValue(combo_list, reference);
 
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
   }
 
-  if (mValue > last + epsilon) {
+  if (reference > last + epsilon) {
     /* the current value out of range - append it here */
-    last = mValue;
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
-    AppendComboValue(*combo_list, mValue);
+    last = reference;
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    AppendComboValue(combo_list, reference);
   }
 
   if (last < mMax - epsilon)
     /* there are values after "last" - give the user a choice */
-    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
 }

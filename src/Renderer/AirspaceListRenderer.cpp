@@ -57,6 +57,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
+  const unsigned padding = Layout::GetTextPadding();
   const PixelScalar line_height = rc.bottom - rc.top;
 
   const Font &name_font = *dialog_look.list.font_bold;
@@ -73,7 +74,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   UPixelScalar altitude_width = canvas.CalcTextWidth(buffer);
   canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
                          rc.top + name_font.GetHeight() -
-                         small_font.GetHeight() + Layout::FastScale(2), rc,
+                         small_font.GetHeight() + padding, rc,
                          buffer);
 
   UPixelScalar max_altitude_width = altitude_width;
@@ -91,13 +92,13 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     max_altitude_width + Layout::FastScale(10);
 
   // Draw comment line
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + padding;
   PixelScalar width = rc.right - max_altitude_width_with_padding - left;
   canvas.DrawClippedText(left, top2, width, comment);
 
   // Draw airspace name
   canvas.Select(name_font);
-  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), width,
+  canvas.DrawClippedText(left, rc.top + padding, width,
                          airspace.GetName());
 
   const RasterPoint pt(rc.left + line_height / 2,

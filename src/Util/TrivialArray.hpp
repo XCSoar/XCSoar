@@ -211,13 +211,24 @@ public:
   }
 
   /**
+   * Remove the item at the given index.
+   */
+  void remove(size_type i) {
+    assert(i < size());
+
+    std::move(data + i + 1, data + size(), data + i);
+
+    --the_size;
+  }
+
+  /**
    * Remove an item by copying the last item over it.
    */
   void quick_remove(size_type i) {
     assert(i < size());
 
     if (i < size() - 1)
-      data[i] = data[size() - 1];
+      data[i] = std::move(data[size() - 1]);
 
     --the_size;
   }

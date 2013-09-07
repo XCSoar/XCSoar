@@ -22,9 +22,12 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Math/FastMath.h"
+#include "Widget/ListWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/List.hpp"
@@ -40,7 +43,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Busy.hpp"
 #include "Screen/Key.h"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
@@ -55,8 +57,49 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-class AirspaceListDialog : public ListItemRenderer, public ListCursorHandler {
+enum Controls {
+  NAME,
+  DISTANCE,
+  DIRECTION,
+  TYPE,
+};
+
+class AirspaceFilterWidget;
+
+class AirspaceListWidget final
+  : public ListWidget, public DataFieldListener,
+    NullBlackboardListener {
+  AirspaceFilterWidget &filter_widget;
+
+  AirspaceSelectInfoVector items;
+
 public:
+  AirspaceListWidget(AirspaceFilterWidget &_filter_widget)
+    :filter_widget(_filter_widget) {}
+
+  void UpdateList();
+  void FilterMode(bool direction);
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+
+  virtual void Unprepare() override {
+    DeleteWindow();
+  }
+
+  virtual void Show(const PixelRect &rc) override {
+    ListWidget::Show(rc);
+    UpdateList();
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+  }
+
+  virtual void Hide() override {
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
+    ListWidget::Hide();
+  }
+
   /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) override;
@@ -67,6 +110,47 @@ public:
   }
 
   virtual void OnActivateItem(unsigned index) override;
+
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df) override;
+
+private:
+  /* virtual methods from BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic) override;
+};
+
+class AirspaceFilterWidget final : public RowFormWidget {
+  DataFieldListener *listener;
+
+public:
+  AirspaceFilterWidget(const DialogLook &look)
+    :RowFormWidget(look, true) {}
+
+  void SetListener(DataFieldListener *_listener) {
+    listener = _listener;
+  }
+
+  void Update();
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+#ifdef GNAV
+  virtual bool KeyPress(unsigned key_code) override;
+#endif
+};
+
+class AirspaceListButtons final : public RowFormWidget {
+  ActionListener &dialog;
+
+public:
+  AirspaceListButtons(const DialogLook &look, ActionListener &_dialog)
+    :RowFormWidget(look), dialog(_dialog) {}
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    AddButton(_("Close"), dialog, mrCancel);
+  }
 };
 
 /**
@@ -78,13 +162,6 @@ static const Airspaces *airspaces;
 static ProtectedAirspaceWarningManager *airspace_warnings;
 
 static GeoPoint location;
-
-static WndForm *dialog;
-static WndProperty *name_control;
-static WndProperty *distance_control;
-static WndProperty *direction_control;
-static WndProperty *type_control;
-static ListControl *airspace_list_control;
 
 static Angle last_heading;
 
@@ -108,35 +185,33 @@ static constexpr StaticEnumChoice type_filter_list[] = {
   { 0 }
 };
 
-static AirspaceSelectInfoVector airspace_list;
-
-struct AirspaceListDialogState
+struct AirspaceListWidgetState
 {
   fixed distance;
   unsigned direction;
   unsigned type;
 
-  AirspaceListDialogState()
+  AirspaceListWidgetState()
     :distance(fixed(-1)), direction(WILDCARD), type(WILDCARD) {}
 };
 
-static AirspaceListDialogState dialog_state;
+static AirspaceListWidgetState dialog_state;
 
 void
-AirspaceListDialog::OnActivateItem(unsigned i)
+AirspaceListWidget::OnActivateItem(unsigned i)
 {
-  if (airspace_list.empty()) {
+  if (items.empty()) {
     assert(i == 0);
     return;
   }
 
-  assert(i < airspace_list.size());
+  assert(i < items.size());
 
-  dlgAirspaceDetails(airspace_list[i].GetAirspace(), airspace_warnings);
+  dlgAirspaceDetails(items[i].GetAirspace(), airspace_warnings);
 }
 
-static void
-UpdateList()
+void
+AirspaceListWidget::UpdateList()
 {
   AirspaceFilterData data;
   data.Clear();
@@ -144,7 +219,7 @@ UpdateList()
   if (dialog_state.type != WILDCARD)
     data.cls = (AirspaceClass)dialog_state.type;
 
-  const TCHAR *name_filter = name_control->GetDataField()->GetAsString();
+  const TCHAR *name_filter = filter_widget.GetValueString(NAME);
   if (!StringIsEmpty(name_filter))
     data.name_prefix = name_filter;
 
@@ -157,83 +232,77 @@ UpdateList()
   if (positive(dialog_state.distance))
     data.distance = dialog_state.distance;
 
-  airspace_list = FilterAirspaces(*airspaces,
-                                  CommonInterface::Basic().location,
-                                  data);
+  items = FilterAirspaces(*airspaces,
+                          CommonInterface::Basic().location,
+                          data);
 
-  airspace_list_control->SetLength(std::max((size_t)1, airspace_list.size()));
-  airspace_list_control->Invalidate();
+  GetList().SetLength(std::max((size_t)1, items.size()));
+  GetList().Invalidate();
 }
 
-static void
-FilterMode(bool direction)
+void
+AirspaceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc, AirspaceListRenderer::GetHeight(look));
+  UpdateList();
+}
+
+inline void
+AirspaceListWidget::FilterMode(bool direction)
 {
   if (direction) {
     dialog_state.distance = fixed(-1);
     dialog_state.direction = WILDCARD;
 
-    DataFieldEnum *df = (DataFieldEnum *)distance_control->GetDataField();
-    df->Set(WILDCARD);
-    distance_control->RefreshDisplay();
-
-    df = (DataFieldEnum *)direction_control->GetDataField();
-    df->Set(WILDCARD);
-    direction_control->RefreshDisplay();
+    filter_widget.LoadValueEnum(DISTANCE, WILDCARD);
+    filter_widget.LoadValueEnum(DIRECTION, WILDCARD);
   } else {
-    DataFieldString *df = (DataFieldString *)name_control->GetDataField();
-    df->Set(_T(""));
-    name_control->RefreshDisplay();
+    filter_widget.LoadValue(NAME, _T(""));
   }
 }
 
-class AirspaceFilterListener: public DataFieldListener
-{
-private:
-  /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df) override;
-};
-
 void
-AirspaceFilterListener::OnModified(DataField &df)
+AirspaceListWidget::OnModified(DataField &df)
 {
-  if (&df == distance_control->GetDataField()) {
+  if (filter_widget.IsDataField(DISTANCE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.distance = dfe.GetValue() != WILDCARD
       ? Units::ToSysDistance(fixed(dfe.GetValue()))
       : fixed(-1);
 
-  } else if (&df == direction_control->GetDataField()) {
+  } else if (filter_widget.IsDataField(DIRECTION, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.direction = dfe.GetValue();
 
-  } else if (&df == type_control->GetDataField()) {
+  } else if (filter_widget.IsDataField(TYPE, df)) {
     DataFieldEnum &dfe = (DataFieldEnum &)df;
     dialog_state.type = dfe.GetValue();
   }
 
-  FilterMode(&df == name_control->GetDataField());
+  FilterMode(filter_widget.IsDataField(NAME, df));
   UpdateList();
 }
 
 void
-AirspaceListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
+AirspaceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                 unsigned i)
 {
-  if (airspace_list.empty()) {
+  if (items.empty()) {
     assert(i == 0);
 
-    canvas.DrawText(rc.left + Layout::FastScale(2),
-                    rc.top + Layout::FastScale(2), _("No Match!"));
+    canvas.DrawText(rc.left + Layout::GetTextPadding(),
+                    rc.top + Layout::GetTextPadding(), _("No Match!"));
     return;
   }
 
-  assert(i < airspace_list.size());
+  assert(i < items.size());
 
-  const AbstractAirspace &airspace = airspace_list[i].GetAirspace();
+  const AbstractAirspace &airspace = items[i].GetAirspace();
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
-      airspace_list[i].GetVector(location, airspaces->GetProjection()),
+      items[i].GetVector(location, airspaces->GetProjection()),
       UIGlobals::GetDialogLook(), UIGlobals::GetMapLook().airspace,
       CommonInterface::GetMapSettings().airspace);
 }
@@ -250,8 +319,8 @@ GetHeadingString(TCHAR *buffer)
   return buffer;
 }
 
-static void
-OnGPSUpdate(const MoreData &basic)
+void
+AirspaceListWidget::OnGPSUpdate(const MoreData &basic)
 {
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
     const Angle heading = basic.attitude.heading;
@@ -260,46 +329,44 @@ OnGPSUpdate(const MoreData &basic)
       last_heading = heading;
 
       UpdateList();
-
-      DataFieldEnum &df = *(DataFieldEnum *)direction_control->GetDataField();
-      TCHAR buffer[64];
-      df.replaceEnumText(0, GetHeadingString(buffer));
-      direction_control->RefreshDisplay();
+      filter_widget.Update();
     }
   }
 }
 
+inline void
+AirspaceFilterWidget::Update()
+{
+  WndProperty &direction_control = GetControl(DIRECTION);
+  DataFieldEnum &direction_df = *(DataFieldEnum *)
+    direction_control.GetDataField();
+
+  TCHAR buffer[64];
+  direction_df.replaceEnumText(0, GetHeadingString(buffer));
+  direction_control.RefreshDisplay();
+}
+
 #ifdef GNAV
 
-static bool
-FormKeyDown(unsigned key_code)
+bool
+AirspaceFilterWidget::KeyPress(unsigned key_code)
 {
-  WndProperty* wp;
-  unsigned new_index = dialog_state.type;
-
-  wp = ((WndProperty *)dialog->FindByName(_T("prpFltType")));
-
-  switch(key_code) {
+  switch (key_code) {
   case KEY_APP1:
-    new_index = WILDCARD;
-    break;
+    LoadValueEnum(TYPE, WILDCARD);
+    return true;
+
   case KEY_APP2:
-    new_index = RESTRICT;
-    break;
+    LoadValueEnum(TYPE, RESTRICT);
+    return true;
+
   case KEY_APP3:
-    new_index = PROHIBITED;
-    break;
+    LoadValueEnum(TYPE, PROHIBITED);
+    return true;
 
   default:
     return false;
   }
-
-  if (dialog_state.type != new_index){
-    wp->GetDataField()->SetAsInteger(new_index);
-    wp->RefreshDisplay();
-  }
-
-  return true;
 }
 
 #endif /* GNAV */
@@ -343,70 +410,65 @@ FillDirectionEnum(DataFieldEnum &df)
   df.Set(WILDCARD);
 }
 
-static void
-PrepareAirspaceSelectDialog()
+static DataField *
+CreateNameDataField(DataFieldListener *listener)
 {
-  gcc_unused ScopeBusyIndicator busy;
+  return new PrefixDataField(_T(""), listener);
+}
 
-  dialog = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
-                                      _T("IDR_XML_AIRSPACESELECT"));
-  assert(dialog != NULL);
+static DataField *
+CreateDistanceDataField(DataFieldListener *listener)
+{
+  DataFieldEnum *df = new DataFieldEnum(listener);
+  FillDistanceEnum(*df);
+  return df;
+}
 
-#ifdef GNAV
-  dialog->SetKeyDownFunction(FormKeyDown);
-#endif
+static DataField *
+CreateDirectionDataField(DataFieldListener *listener)
+{
+  DataFieldEnum *df = new DataFieldEnum(listener);
+  FillDirectionEnum(*df);
+  return df;
+}
 
-  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
-
-  airspace_list_control = (ListControl*)dialog->FindByName(_T("frmAirspaceList"));
-  assert(airspace_list_control != NULL);
-  airspace_list_control->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
-
-  name_control = (WndProperty*)dialog->FindByName(_T("prpFltName"));
-  assert(name_control != NULL);
-  name_control->SetDataField(new PrefixDataField());
-
-  distance_control = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
-  assert(distance_control != NULL);
-  FillDistanceEnum(*(DataFieldEnum *)distance_control->GetDataField());
-  distance_control->RefreshDisplay();
-
-  direction_control = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
-  assert(direction_control != NULL);
-  FillDirectionEnum(*(DataFieldEnum *)direction_control->GetDataField());
-  direction_control->RefreshDisplay();
-
-  type_control = (WndProperty*)dialog->FindByName(_T("prpFltType"));
-  assert(type_control != NULL);
-  LoadFormProperty(*dialog, _T("prpFltType"), type_filter_list, WILDCARD);
+void
+AirspaceFilterWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc)
+{
+  Add(_("Name"), nullptr, CreateNameDataField(listener));
+  Add(_("Distance"), nullptr, CreateDistanceDataField(listener));
+  Add(_("Direction"), nullptr, CreateDirectionDataField(listener));
+  AddEnum(_("Type"), nullptr, type_filter_list, WILDCARD, listener);
 }
 
 void
 ShowAirspaceListDialog(const Airspaces &_airspaces,
                        ProtectedAirspaceWarningManager *_airspace_warnings)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
   airspace_warnings = _airspace_warnings;
   airspaces = &_airspaces;
   location = CommonInterface::Basic().location;
 
-  PrepareAirspaceSelectDialog();
+  WidgetDialog dialog(look);
 
-  AirspaceListDialog dialog2;
-  airspace_list_control->SetItemRenderer(&dialog2);
-  airspace_list_control->SetCursorHandler(&dialog2);
+  AirspaceFilterWidget *filter_widget = new AirspaceFilterWidget(look);
 
-  AirspaceFilterListener listener;
-  name_control->GetDataField()->SetListener(&listener);
-  distance_control->GetDataField()->SetListener(&listener);
-  direction_control->GetDataField()->SetListener(&listener);
-  type_control->GetDataField()->SetListener(&listener);
+  AirspaceListButtons *buttons_widget = new AirspaceListButtons(look, dialog);
 
-  UpdateList();
+  TwoWidgets *left_widget =
+    new TwoWidgets(filter_widget, buttons_widget, true);
 
-  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), OnGPSUpdate);
+  AirspaceListWidget *const list_widget =
+    new AirspaceListWidget(*filter_widget);
 
-  dialog->ShowModal();
-  delete dialog;
+  filter_widget->SetListener(list_widget);
+
+  TwoWidgets *widget = new TwoWidgets(left_widget, list_widget, false);
+
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Select Airspace"), widget);
+  dialog.ShowModal();
 }
 

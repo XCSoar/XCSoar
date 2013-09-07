@@ -117,6 +117,11 @@ public:
   void SetNonBlocking();
 
   /**
+   * Enable blocking mode on this file descriptor.
+   */
+  void SetBlocking();
+
+  /**
    * Duplicate the file descriptor onto the given file descriptor.
    */
   bool Duplicate(int new_fd) const {

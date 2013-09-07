@@ -44,6 +44,7 @@ static const char *const all_font_paths[] = {
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
   "/usr/share/fonts/TTF/droid/DroidSans.ttf",
   "/usr/share/fonts/droid/DroidSans.ttf",
@@ -75,6 +76,7 @@ static const char *const all_bold_font_paths[] = {
   "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/truetype/DejaVuSansCondensed-Bold.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed-Bold.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/droid/DroidSans-Bold.ttf",
   "/usr/share/fonts/TTF/droid/DroidSans-Bold.ttf",
@@ -84,6 +86,44 @@ static const char *const all_bold_font_paths[] = {
   "/usr/share/fonts/corefonts/arialbd.ttf",
   "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
   "/usr/share/fonts/freefont-ttf/FreeSansBold.ttf",
+#endif
+  nullptr
+};
+
+static const char *const all_italic_font_paths[] = {
+#if defined(KOBO)
+  "/mnt/onboard/fonts/VeraIt.ttf",
+  "/mnt/onboard/XCSoar/fonts/VeraIt.ttf",
+  "/opt/xcsoar/share/fonts/VeraIt.ttf",
+#elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed-Oblique.ttf",
+  "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraIt.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf",
+  "/usr/share/fonts/corefonts/ariali.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSansOblique.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSansOblique.ttf",
+#endif
+  nullptr
+};
+
+static const char *const all_bold_italic_font_paths[] = {
+#if defined(KOBO)
+  "/mnt/onboard/fonts/VeraBI.ttf",
+  "/mnt/onboard/XCSoar/fonts/VeraBI.ttf",
+  "/opt/xcsoar/share/fonts/VeraBI.ttf",
+#elif defined(HAVE_POSIX)
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/TTF/dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/truetype/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/dejavu/DejaVuSansCondensed-BoldOblique.ttf",
+  "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraBI.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf",
+  "/usr/share/fonts/corefonts/arialbi.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSansBoldOblique.ttf",
+  "/usr/share/fonts/freefont-ttf/FreeSansBoldOblique.ttf",
 #endif
   nullptr
 };
@@ -98,6 +138,7 @@ static const char *const all_monospace_font_paths[] = {
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
   "/usr/share/fonts/truetype/DejaVuSansMono.ttf",
+  "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
   "/usr/share/fonts/TTF/droid/DroidSansMono.ttf",
   "/usr/share/fonts/truetype/DroidSansMono.ttf",
@@ -130,6 +171,18 @@ const char *
 FindDefaultBoldFont()
 {
   return FindFile(all_bold_font_paths);
+}
+
+const char *
+FindDefaultItalicFont()
+{
+  return FindFile(all_italic_font_paths);
+}
+
+const char *
+FindDefaultBoldItalicFont()
+{
+  return FindFile(all_bold_italic_font_paths);
 }
 
 const char *

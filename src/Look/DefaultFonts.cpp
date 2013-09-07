@@ -65,6 +65,10 @@ InitialiseLogfont(LOGFONT *font, const TCHAR *facename, unsigned height,
 static void
 LoadAltairLogFonts(FontSettings &settings)
 {
+  InitialiseLogfont(&settings.dialog, _T("RasterGothicTwelveCond"), 13);
+#ifdef GNAV
+  InitialiseLogfont(&settings.dialog_small, _T("RasterGothicNineCond"), 10);
+#endif
   InitialiseLogfont(&settings.infobox,
                     _T("RasterGothicTwentyFourCond"), 24, true);
   InitialiseLogfont(&settings.title, _T("RasterGothicNineCond"), 10);
@@ -78,7 +82,7 @@ LoadAltairLogFonts(FontSettings &settings)
   InitialiseLogfont(&settings.infobox_small,
                     _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&settings.monospace, GetStandardMonospaceFontFace(),
-                    10, false, false, false);
+                    12, false, false, false);
 }
 
 static void
@@ -157,7 +161,12 @@ bool
 Fonts::Initialize()
 {
   default_settings = GetDefaults();
+
+#ifdef GNAV
+  const auto &effective_settings = default_settings;
+#else
   effective_settings = default_settings;
+#endif
 
   return Load(effective_settings);
 }
@@ -165,8 +174,14 @@ Fonts::Initialize()
 void
 Fonts::SizeInfoboxFont(unsigned control_width)
 {
+#ifdef GNAV
+  const auto &effective_settings = default_settings;
+#endif
+
   AutoSizeInfoBoxFonts(default_settings, control_width);
+#ifndef GNAV
   AutoSizeInfoBoxFonts(effective_settings, control_width);
+#endif
 
   infobox.Load(effective_settings.infobox);
   infobox_small.Load(effective_settings.infobox_small);

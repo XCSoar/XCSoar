@@ -86,7 +86,7 @@ int main(int argc, char **argv)
              ARRAY_SIZE(length) +
              ARRAY_SIZE(crop) +
              ARRAY_SIZE(latin1_chars) +
-             9);
+             9 + 27);
 
   for (auto i : valid)
     ok1(ValidateUTF8(i));
@@ -131,6 +131,44 @@ int main(int argc, char **argv)
     n = NextUTF8(p + 6);
     ok1(n.first == 0);
   }
+
+  /* test UnicodeToUTF8() */
+
+  buffer[0] = 1;
+  ok1(UnicodeToUTF8(0, buffer) == buffer + 1);
+  ok1(buffer[0] == 0);
+
+  ok1(UnicodeToUTF8(' ', buffer) == buffer + 1);
+  ok1(buffer[0] == ' ');
+
+  ok1(UnicodeToUTF8(0x7f, buffer) == buffer + 1);
+  ok1(buffer[0] == 0x7f);
+
+  ok1(UnicodeToUTF8(0xa2, buffer) == buffer + 2);
+  ok1(buffer[0] == char(0xc2));
+  ok1(buffer[1] == char(0xa2));
+
+  ok1(UnicodeToUTF8(0x6fb3, buffer) == buffer + 3);
+  ok1(buffer[0] == char(0xe6));
+  ok1(buffer[1] == char(0xbe));
+  ok1(buffer[2] == char(0xb3));
+
+  ok1(UnicodeToUTF8(0xffff, buffer) == buffer + 3);
+  ok1(buffer[0] == char(0xef));
+  ok1(buffer[1] == char(0xbf));
+  ok1(buffer[2] == char(0xbf));
+
+  ok1(UnicodeToUTF8(0x10000, buffer) == buffer + 4);
+  ok1(buffer[0] == char(0xf0));
+  ok1(buffer[1] == char(0x90));
+  ok1(buffer[2] == char(0x80));
+  ok1(buffer[3] == char(0x80));
+
+  ok1(UnicodeToUTF8(0x10ffff, buffer) == buffer + 4);
+  ok1(buffer[0] == char(0xf4));
+  ok1(buffer[1] == char(0x8f));
+  ok1(buffer[2] == char(0xbf));
+  ok1(buffer[3] == char(0xbf));
 
   return exit_status();
 }

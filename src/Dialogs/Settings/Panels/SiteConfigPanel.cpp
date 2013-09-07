@@ -63,6 +63,8 @@ public:
 void
 SiteConfigPanel::Show(const PixelRect &rc)
 {
+  buttonWaypoints->SetText(_("Waypts."));
+  buttonWaypoints->SetOnClickNotify(dlgConfigWaypointsShowModal);
   buttonWaypoints->SetVisible(true);
   RowFormWidget::Show(rc);
 }
@@ -77,9 +79,8 @@ SiteConfigPanel::Hide()
 void
 SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdWaypoints")));
+  buttonWaypoints = ConfigPanel::GetExtraButton(1);
   assert (buttonWaypoints);
-  buttonWaypoints->SetOnClickNotify(dlgConfigWaypointsShowModal);
 
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());

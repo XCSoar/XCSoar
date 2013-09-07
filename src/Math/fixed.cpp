@@ -506,23 +506,4 @@ fixed::rsqrt() const
   }
 }
 
-#elif defined(__BIONIC__)
-
-/* Android's Bionic doesn't have sincos(), but with LTO=y, gcc folds
-   sin() and cos() into sincos(); the following kludge works around
-   this problem by providing the symbol */
-
-#pragma GCC optimize ("O0")
-
-extern "C"
-void
-sincos(double x, double *s, double *c);
-
-void
-sincos(double x, double *s, double *c)
-{
-  *s = sin(x);
-  *c = cos(x);
-}
-
 #endif

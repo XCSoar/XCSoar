@@ -125,6 +125,15 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   LoggerSettings logger_settings;
   logger_settings.pilot_name = _T("Foo Bar");
   Plane plane;
@@ -174,8 +183,6 @@ int main(int argc, char **argv)
   assert(driver->CreateOnPort != NULL);
   Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
-
-  ConsoleOperationEnvironment env;
 
   if (through_device != NULL && !through_device->EnablePassThrough(env)) {
     _ftprintf(stderr, _T("Failed to enable pass-through mode: %s\n"),

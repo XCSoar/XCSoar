@@ -61,23 +61,23 @@ struct InfoBoxSettings {
   bool use_final_glide;
 
   enum class Geometry : uint8_t {
-    /** default, infoboxes along top and bottom, map in middle */
-    TOP_4_BOTTOM_4 = 0,
+    /** 8 infoboxes split bottom/top or left/right */
+    SPLIT_8,
 
-    /** both infoboxes along bottom */
-    BOTTOM_8 = 1,
+    /** 8 infoboxes along bottom or right */
+    BOTTOM_RIGHT_8 = 1,
 
-    /** both infoboxes along top */
-    TOP_8 = 2,
+    /** 8 infoboxes along top or left */
+    TOP_LEFT_8 = 2,
 
-    /** infoboxes along both sides */
-    LEFT_4_RIGHT_4 = 3,
+    /** @see #SPLIT_8 */
+    OBSOLETE_SPLIT_8 = 3,
 
-    /** infoboxes along left side */
-    LEFT_8 = 4,
+    /** @see #TOP_LEFT_8 */
+    OBSOLETE_TOP_LEFT_8 = 4,
 
-    /** infoboxes along right side */
-    RIGHT_8 = 5,
+    /** @see #BOTTOM_RIGHT_8 */
+    OBSOLETE_BOTTOM_RIGHT_8 = 5,
 
     /** infoboxes GNAV (9 right + vario) */
     RIGHT_9_VARIO = 6,
@@ -85,27 +85,28 @@ struct InfoBoxSettings {
     /** infoboxes (5) along right side (square screen) */
     RIGHT_5 = 7,
 
-    /** 12 infoboxes along right side (i.e. like GNav without vario) */
-    RIGHT_12 = 8,
+    /** 12 infoboxes along bottom or right side */
+    BOTTOM_RIGHT_12 = 8,
 
     /** 24 infoboxes along right side (3x8) */
     RIGHT_24 = 9,
 
-    /** 12 infoboxes along bottom */
-    BOTTOM_12 = 10,
+    /** @see BOTTOM_RIGHT_12 */
+    OBSOLETE_BOTTOM_RIGHT_12 = 10,
 
-    /** 12 infoboxes along top */
-    TOP_12 = 11,
+    /** 12 infoboxes along top or left */
+    TOP_LEFT_12 = 11,
 
     /** 6 left, 3 right + vario */
     LEFT_6_RIGHT_3_VARIO = 12,
 
     /** 8 bottom + vario */
     BOTTOM_8_VARIO = 13,
-    TOP_4 = 14,
-    BOTTOM_4 = 15,
-    RIGHT_4 = 16,
-    LEFT_4 = 17,
+    TOP_LEFT_4 = 14,
+    BOTTOM_RIGHT_4 = 15,
+
+    OBSOLETE_BOTTOM_RIGHT_4 = 16,
+    OBSOLETE_TOP_LEFT_4 = 17,
 
     /** 8 top + vario */
     TOP_8_VARIO = 18,

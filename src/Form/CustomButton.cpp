@@ -22,12 +22,26 @@ Copyright_License {
 */
 
 #include "Form/CustomButton.hpp"
-#include "Form/Control.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Layout.hpp"
 #include "Asset.hpp"
+
+static inline ButtonWindowStyle
+CustomPainting(ButtonWindowStyle style)
+{
+  style.EnableCustomPainting();
+  return style;
+}
+
+WndCustomButton::WndCustomButton(ContainerWindow &Parent,
+                                 const DialogLook &_look,
+                                 tstring::const_pointer Caption,
+                                 const PixelRect &rc,
+                                 const ButtonWindowStyle style,
+                                 ActionListener &listener, int id)
+  :WndButton(Parent, _look.button, Caption, rc,
+             CustomPainting(style), listener, id),
+   look(_look) {}
 
 void
 WndCustomButton::OnPaint(Canvas &canvas)

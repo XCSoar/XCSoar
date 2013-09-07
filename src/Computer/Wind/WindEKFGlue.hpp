@@ -79,15 +79,15 @@ public:
 
 private:
   void ResetBlackout() {
-    time_blackout = (unsigned)-1;
+    time_blackout = 0;
   }
 
   bool InBlackout(const unsigned time) const {
-    return (time < time_blackout + BLACKOUT_TIME);
+    return time < time_blackout;
   }
 
   void SetBlackout(const unsigned time) {
-    time_blackout = time;
+    time_blackout = time + BLACKOUT_TIME;
   }
 };
 

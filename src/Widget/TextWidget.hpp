@@ -28,12 +28,15 @@ Copyright_License {
 
 #include <tchar.h>
 
+class Color;
+
 /**
  * A #Widget implementation that displays multi-line text.
  */
 class TextWidget : public WindowWidget {
 public:
   void SetText(const TCHAR *text);
+  void SetColor(Color _color);
 
   /* virtual methods from class Widget */
   virtual PixelSize GetMinimumSize() const override;

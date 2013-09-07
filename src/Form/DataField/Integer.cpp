@@ -31,6 +31,13 @@ Copyright_License {
 
 static bool datafield_key_up = false;
 
+gcc_pure
+static int
+ParseString(const TCHAR *s)
+{
+  return ParseInt(s);
+}
+
 int
 DataFieldInteger::GetAsInteger() const
 {
@@ -40,7 +47,6 @@ DataFieldInteger::GetAsInteger() const
 const TCHAR *
 DataFieldInteger::GetAsString() const
 {
-  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
   _stprintf(output_buffer, edit_format, value);
   return output_buffer;
 }
@@ -48,7 +54,6 @@ DataFieldInteger::GetAsString() const
 const TCHAR *
 DataFieldInteger::GetAsDisplayString() const
 {
-  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
   _stprintf(output_buffer, display_format, value);
   return output_buffer;
 }
@@ -69,7 +74,7 @@ DataFieldInteger::SetAsInteger(int _value)
 void
 DataFieldInteger::SetAsString(const TCHAR *_value)
 {
-  SetAsInteger(ParseInt(_value));
+  SetAsInteger(ParseString(_value));
 }
 
 void
@@ -123,21 +128,25 @@ DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
   combo_list.Append(combo_list.size(), a, b);
 }
 
-ComboList *
-DataFieldInteger::CreateComboList() const
+ComboList
+DataFieldInteger::CreateComboList(const TCHAR *reference_string) const
 {
-  ComboList *combo_list = new ComboList();
+  const int reference = reference_string != nullptr
+    ? ParseString(reference_string)
+    : value;
+
+  ComboList combo_list;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((value - min) / step) * step + min;
+  int corrected_value = ((reference - min) / step) * step + min;
 
   int first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < min)
     first = min;
 
@@ -145,29 +154,29 @@ DataFieldInteger::CreateComboList() const
 
   bool found_current = false;
   for (int i = first; i <= last; i += step) {
-    if (!found_current && value <= i) {
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    if (!found_current && reference <= i) {
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
 
-      if (value < i)
+      if (reference < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, value);
+        AppendComboValue(combo_list, reference);
 
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
   }
 
-  if (value > last) {
+  if (reference > last) {
     /* the current value out of range - append it here */
-    last = value;
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
-    AppendComboValue(*combo_list, value);
+    last = reference;
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
+    AppendComboValue(combo_list, reference);
   }
 
   if (last < max)
     /* there are values after "last" - give the user a choice */
-    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
 }

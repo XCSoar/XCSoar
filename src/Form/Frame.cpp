@@ -66,7 +66,8 @@ unsigned
 WndFrame::GetTextHeight() const
 {
   PixelRect rc = GetClientRect();
-  rc.Grow(-2); // todo border width
+  const int padding = Layout::GetTextPadding();
+  rc.Grow(-padding);
 
   AnyCanvas canvas;
   canvas.Select(*look.text_font);

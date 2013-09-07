@@ -60,6 +60,13 @@ ParsePortArgs(Args &args)
     return config;
   }
 
+  if (config.path.equals(_T("tcp_client"))) {
+    config.port_type = DeviceConfig::PortType::TCP_CLIENT;
+    config.ip_address = args.ExpectNextT().c_str();
+    config.tcp_port = atoi(args.ExpectNext());
+    return config;
+  }
+
   if (config.path.equals(_T("udp"))) {
     config.port_type = DeviceConfig::PortType::UDP_LISTENER;
     config.tcp_port = atoi(args.ExpectNext());

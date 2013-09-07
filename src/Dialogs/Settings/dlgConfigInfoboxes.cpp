@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
@@ -149,7 +150,7 @@ SetCurrentInfoBox(unsigned _current_preview)
 }
 
 static void
-OnSelectAccess(DataField *Sender, DataField::DataAccessMode Mode)
+OnSelectAccess(DataField *Sender)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
@@ -157,7 +158,7 @@ OnSelectAccess(DataField *Sender, DataField::DataAccessMode Mode)
 }
 
 static void
-OnContentAccess(DataField *Sender, DataField::DataAccessMode Mode)
+OnContentAccess(DataField *Sender)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
@@ -208,31 +209,6 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(2, 2, caption);
-}
-
-static void
-OnContentHelp(WindowControl *Sender)
-{
-  WndProperty *wp = (WndProperty*)Sender;
-  const DataFieldEnum &df = *(const DataFieldEnum *)wp->GetDataField();
-  InfoBoxFactory::Type type = (InfoBoxFactory::Type)df.GetValue();
-  if (type >= InfoBoxFactory::NUM_TYPES)
-    return;
-
-  const TCHAR *name = InfoBoxFactory::GetName(type);
-  if (name == NULL)
-    return;
-
-  TCHAR caption[100];
-  _stprintf(caption, _T("%s: %s"), _("InfoBox"), gettext(name));
-
-  const TCHAR *text = InfoBoxFactory::GetDescription(type);
-  if (text == NULL)
-    text = _("No help available on this item");
-  else
-    text = gettext(text);
-
-  dlgHelpShowModal(wf->GetMainWindow(), caption, text);
 }
 
 #ifdef _WIN32_WCE
@@ -343,8 +319,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
                               style);
   DataFieldString *dfs = new DataFieldString(allow_name_change
                                              ? (const TCHAR *)data.name
-                                             : gettext(data.name),
-                                             NULL);
+                                             : gettext(data.name));
   edit_name->SetDataField(dfs);
   edit_name->SetReadOnly(!allow_name_change);
 
@@ -383,7 +358,6 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   dfe->Sort(0);
 
   edit_content->SetDataField(dfe);
-  edit_content->SetOnHelpCallback(OnContentHelp);
 
   control_rc.top += height;
   control_rc.bottom += height * 5;
@@ -400,19 +374,19 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   button_rc.top = button_rc.bottom - button_height;
 
   WndButton *close_button =
-    new WndButton(client_area, dialog_look, _("Close"),
+    new WndButton(client_area, dialog_look.button, _("Close"),
                   button_rc, button_style, *wf, mrOK);
 
   button_rc.left += button_width + Layout::Scale(2);
   button_rc.right += button_width + Layout::Scale(2);
   WndButton *copy_button =
-    new WndButton(client_area, dialog_look, _("Copy"),
+    new WndButton(client_area, dialog_look.button, _("Copy"),
                   button_rc, button_style, OnCopy);
 
   button_rc.left += button_width + Layout::Scale(2);
   button_rc.right += button_width + Layout::Scale(2);
   buttonPaste =
-    new WndButton(client_area, dialog_look, _("Paste"),
+    new WndButton(client_area, dialog_look.button, _("Paste"),
                   button_rc, button_style, OnPaste);
 
   RefreshPasteButton();

@@ -48,6 +48,12 @@ class Canvas;
 struct PixelSize;
 struct PixelRect;
 
+#if (defined(USE_FB) && !defined(KOBO)) || (defined USE_EGL && (defined(USE_VIDEOCORE) || defined(HAVE_MALI)))
+/* defined if we need to initialise /dev/tty to graphics mode, see
+   TopCanvas::InitialiseTTY() */
+#define USE_TTY
+#endif
+
 class TopCanvas
 #ifndef USE_MEMORY_CANVAS
   : public Canvas
@@ -82,11 +88,16 @@ class TopCanvas
 #ifdef DITHER
   Dither dither;
 #endif
-#else
-
-  WritableImageBuffer<BGRAPixelTraits> buffer;
-
 #endif
+#endif
+
+#ifdef USE_TTY
+  /**
+   * A file descriptor for /dev/tty, or -1 if /dev/tty could not be
+   * opened.  This is used on Linux to switch to graphics mode
+   * (KD_GRAPHICS) or restore text mode (KD_TEXT).
+   */
+  int tty_fd;
 #endif
 
 #ifdef USE_FB
@@ -100,18 +111,23 @@ class TopCanvas
 
 public:
 #ifdef USE_FB
-  TopCanvas():fd(-1), map(nullptr) {}
+  TopCanvas()
+    :
+#ifdef USE_TTY
+    tty_fd(-1),
+#endif
+    fd(-1), map(nullptr) {}
+#elif defined(USE_TTY)
+  TopCanvas():tty_fd(-1) {}
 #endif
 
-#if defined(USE_FB) || defined(USE_VFB)
+#ifndef ANDROID
   ~TopCanvas() {
     Destroy();
   }
-#elif defined(USE_EGL) || (defined(USE_MEMORY_CANVAS) && defined(GREYSCALE))
-  ~TopCanvas();
-#endif
 
   void Destroy();
+#endif
 
 #ifdef USE_MEMORY_CANVAS
   bool IsDefined() const {
@@ -178,6 +194,10 @@ public:
    */
   void Wait();
 #endif
+
+private:
+  void InitialiseTTY();
+  void DeinitialiseTTY();
 };
 
 #endif

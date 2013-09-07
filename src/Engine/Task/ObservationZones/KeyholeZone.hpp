@@ -76,18 +76,6 @@ public:
   }
 
   /**
-   * Create a 180 degree sector centered at the inverse of the
-   * outgoing leg.
-   *
-   * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
-   */
-  static KeyholeZone *CreateBGAStartSectorZone(const GeoPoint &reference) {
-    return new KeyholeZone(Shape::BGA_START, true, true, reference,
-                           fixed(5000),
-                           Angle::HalfCircle());
-  }
-
-  /**
    * Create a 90 degree 20km sector centered at the bisector of
    * incoming/outgoing legs, with 500m cylinder.
    */

@@ -179,8 +179,7 @@ public:
   /** Clears the queues */
   void Clear() {
     // Clear the search queue
-    while (!q.empty())
-      q.pop();
+    q.clear();
 
     // Clear the node_parent_map
     node_parents.clear();
@@ -216,9 +215,9 @@ public:
   const Node &Pop() {
     cur = q.top().iterator;
 
-    do // remove this item
+    do { // remove this item
       q.pop();
-    while (!q.empty() && (q.top().priority > q.top().iterator->second));
+    } while (!q.empty() && (q.top().priority > q.top().iterator->second));
     // and all lower rank than this
 
     return cur->first;

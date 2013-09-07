@@ -22,12 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/DialogSettings.hpp"
+#include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "../test/src/Fonts.hpp"
-#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/ActionListener.hpp"
@@ -41,6 +42,7 @@ Copyright_License {
 #include "Util/FifoBuffer.hpp"
 #include "IO/DataHandler.hpp"
 #include "System.hpp"
+#include "NetworkDialog.hpp"
 
 #include <algorithm>
 #include <stdio.h>
@@ -48,12 +50,38 @@ Copyright_License {
 enum Buttons {
   LAUNCH_XCSOAR = 100,
   LAUNCH_NICKEL,
-  WIFI,
+  NETWORK,
   PAUSE,
   CLEAR,
   REBOOT,
   POWEROFF
 };
+
+static DialogSettings dialog_settings;
+static SingleWindow *global_main_window;
+static DialogLook *global_dialog_look;
+
+const DialogSettings &
+UIGlobals::GetDialogSettings()
+{
+  return dialog_settings;
+}
+
+SingleWindow &
+UIGlobals::GetMainWindow()
+{
+  assert(global_main_window != nullptr);
+
+  return *global_main_window;
+}
+
+const DialogLook &
+UIGlobals::GetDialogLook()
+{
+  assert(global_dialog_look != nullptr);
+
+  return *global_dialog_look;
+}
 
 /**
  * A bridge between DataHandler and TerminalWindow: copy all data
@@ -110,13 +138,11 @@ class LogMonitorGlue : public ActionListener {
   WndButton *pause_button;
   bool paused;
 
-  WndButton *wifi_button;
-  bool wifi;
   WndForm &dialog;
 
 public:
   LogMonitorGlue(const TerminalLook &look, WndForm &_dialog)
-    :terminal(look), bridge(terminal), paused(false), wifi(false), dialog(_dialog) {}
+    :terminal(look), bridge(terminal), paused(false), dialog(_dialog) {}
 
   ~LogMonitorGlue() {
     // device.SetMonitor(nullptr);
@@ -134,7 +160,6 @@ public:
   }
 
   void TogglePause();
-  void ToggleWifi();
 
   virtual void OnAction(int id) override {
     switch (id) {
@@ -144,8 +169,8 @@ public:
     case PAUSE:
       TogglePause();
       break;
-    case WIFI:
-      ToggleWifi();
+    case NETWORK:
+      ShowNetworkDialog();
       break;
     default:
       break;
@@ -160,7 +185,7 @@ LogMonitorGlue::CreateButtons(ButtonPanel &buttons)
   buttons.Add(("Nickel"), dialog, LAUNCH_NICKEL);
   buttons.Add(("Clear"), *this, CLEAR);
   pause_button = buttons.Add(("Pause"), *this, PAUSE);
-  wifi_button = buttons.Add(("Wifi ON"), *this, WIFI);
+  buttons.Add(_("Network"), *this, NETWORK);
   buttons.Add(("Reboot"), dialog, REBOOT);
   buttons.Add(("Poweroff"), dialog, POWEROFF);
 }
@@ -176,22 +201,6 @@ LogMonitorGlue::TogglePause()
   } else {
     pause_button->SetCaption(("Pause"));
     //    device.SetMonitor(&bridge);
-  }
-}
-
-void
-LogMonitorGlue::ToggleWifi()
-{
-  wifi = !wifi;
-
-  if (wifi) {
-    wifi_button->SetCaption(("Wifi OFF"));
-    KoboWifiOn();
-    //    device.SetMonitor(nullptr);
-  } else {
-    wifi_button->SetCaption(("Wifi ON"));
-    //    device.SetMonitor(&bridge);
-    KoboWifiOff();
   }
 }
 
@@ -218,13 +227,10 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
 
   LogMonitorGlue glue(terminal_look, dialog);
 
-  ButtonPanel buttons(client_area, dialog_look);
+  ButtonPanel buttons(client_area, dialog_look.button);
 
   glue.CreateButtons(buttons);
   glue.CreateTerminal(client_area, buttons.UpdateLayout());
-
-  // must be down at start
-  KoboWifiOff();
 
   return dialog.ShowModal();
 
@@ -234,6 +240,8 @@ Main(SingleWindow &main_window, const DialogLook &dialog_look,
 static int
 Main()
 {
+  dialog_settings.SetDefaults();
+
   ScreenGlobalInit screen_init;
   Layout::Initialize({600, 800});
   InitialiseFonts();
@@ -246,8 +254,11 @@ Main()
   terminal_look.Initialise(monospace_font);
 
   SingleWindow main_window;
-  main_window.Create(_T("Test"), {600, 800});
+  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800});
   main_window.Show();
+
+  global_dialog_look = &dialog_look;
+  global_main_window = &main_window;
 
   int action = Main(main_window, dialog_look, terminal_look);
 

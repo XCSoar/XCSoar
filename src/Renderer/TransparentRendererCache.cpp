@@ -70,6 +70,25 @@ TransparentRendererCache::Commit(Canvas &canvas,
   assert(Check(projection));
 }
 
+void
+TransparentRendererCache::CopyAndTo(Canvas &canvas,
+                                    const WindowProjection &projection) const
+{
+  canvas.CopyAnd(0, 0,
+                 projection.GetScreenWidth(), projection.GetScreenHeight(),
+                 buffer, 0, 0);
+}
+
+void
+TransparentRendererCache::CopyTransparentWhiteTo(Canvas &canvas,
+                                                 const WindowProjection &projection) const
+{
+  canvas.CopyTransparentWhite(0, 0,
+                              projection.GetScreenWidth(),
+                              projection.GetScreenHeight(),
+                              buffer, 0, 0);
+}
+
 #ifdef HAVE_ALPHA_BLEND
 
 void
@@ -86,9 +105,16 @@ TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
 
   const unsigned width = projection.GetScreenWidth(),
     height = projection.GetScreenHeight();
+
+#ifdef USE_MEMORY_CANVAS
+  canvas.AlphaBlendNotWhite(0, 0, width, height,
+                            buffer, 0, 0, width, height,
+                            alpha);
+#else
   canvas.AlphaBlend(0, 0, width, height,
                     buffer, 0, 0, width, height,
                     alpha);
+#endif
 }
 
 #endif

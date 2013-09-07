@@ -28,7 +28,9 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-bool is_nook;
+#ifdef __arm__
+
+bool is_nook, is_dithered;
 
 bool
 IsGalaxyTab22()
@@ -39,3 +41,5 @@ IsGalaxyTab22()
     (strcmp(native_view->GetProduct(), "GT-P1000") == 0 ||
      strcmp(native_view->GetProduct(), "GT-P1010") == 0);
 }
+
+#endif

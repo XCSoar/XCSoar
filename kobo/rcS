@@ -34,8 +34,7 @@ umask 022
 # - the XCSoar installation is broken
 if [ -f /mnt/onboard/.kobo/Kobo.tgz -o -f /mnt/onboard/.kobo/KoboRoot.tgz \
     -o -f /mnt/onboard/XCSoarData/kobo/start_nickel \
-    -o ! -x /opt/xcsoar/bin/KoboMenu \
-    -o ! -d /mnt/onboard/XCSoarData ]; then
+    -o ! -x /opt/xcsoar/bin/KoboMenu ]; then
     rm -f /mnt/onboard/XCSoarData/kobo/start_nickel
     umount -l /mnt/onboard
     exec /etc/init.d/rcS
@@ -63,6 +62,8 @@ fi
 /bin/mknod /dev/input/event1 c 13 65
 /bin/mknod /dev/fb0 c 29 0
 /bin/mknod /dev/ttymxc0 c 207 16
+/bin/mknod /dev/ttymxc1 c 207 17
+/bin/mknod /dev/ttymxc2 c 207 18
 /bin/mknod /dev/rtc0 c 254 0
 
 /bin/mknod /dev/mmcblk0 b 179 0
@@ -71,6 +72,14 @@ fi
 /bin/mknod /dev/mmcblk0p3 b 179 3
 
 /sbin/hwclock -s -u
+
+# workaround for kernel crash "scheduling while atomic"
+echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
+
+# disable the flashing led
+echo "ch 3" > /sys/devices/platform/pmic_light.1/lit
+echo "cur 0" > /sys/devices/platform/pmic_light.1/lit
+echo "dc 0" > /sys/devices/platform/pmic_light.1/lit
 
 # launch user script
 if [ -f /mnt/onboard/XCSoarData/kobo/init.sh ]; then

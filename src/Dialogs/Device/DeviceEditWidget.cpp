@@ -30,6 +30,7 @@
 #include "Language/Language.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/String.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -50,7 +51,10 @@
 #endif
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate, TCPPort, I2CBus, I2CAddr, PressureUsage, Driver,
+  Port, BaudRate, BulkBaudRate,
+  IP_ADDRESS,
+  TCPPort,
+  I2CBus, I2CAddr, PressureUsage, Driver,
   SyncFromDevice, SyncToDevice,
   K6Bt,
   IgnoreCheckSum,
@@ -74,6 +78,8 @@ static constexpr struct {
   { DeviceConfig::PortType::I2CPRESSURESENSOR, N_("IOIO i2c pressure sensor") },
   { DeviceConfig::PortType::IOIOVOLTAGE, N_("IOIO voltage sensor") },
 #endif
+
+  { DeviceConfig::PortType::TCP_CLIENT, N_("TCP client") },
 
   /* label not translated for now, until we have a TCP/UDP port
      selection UI */
@@ -116,7 +122,11 @@ DetectSerialPorts(DataFieldEnum &df)
   bool found = false;
   const char *path;
   while ((path = enumerator.Next()) != nullptr) {
-    AddPort(df, DeviceConfig::PortType::SERIAL, path);
+    const char *display_string = path;
+    if (memcmp(path, "/dev/", 5) == 0)
+      display_string = path + 5;
+
+    AddPort(df, DeviceConfig::PortType::SERIAL, path, display_string);
     found = true;
   }
 
@@ -303,6 +313,7 @@ FillTCPPorts(DataFieldEnum &dfe)
 {
   dfe.addEnumText(_T("4353"), 4353);
   dfe.addEnumText(_T("10110"), 10110);
+  dfe.addEnumText(_T("4352"), 4352);
 }
 
 static void
@@ -345,6 +356,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
+  case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::PTY:
@@ -404,6 +416,12 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
     bulk_baud_control.GetDataField();
   bulk_baud_df.Set(config.bulk_baud_rate);
   bulk_baud_control.RefreshDisplay();
+
+  WndProperty &ip_address_control = GetControl(IP_ADDRESS);
+  DataFieldEnum &ip_address_df = *(DataFieldEnum *)
+    ip_address_control.GetDataField();
+  ip_address_df.Set(config.ip_address);
+  ip_address_control.RefreshDisplay();
 
   WndProperty &tcp_port_control = GetControl(TCPPort);
   DataFieldEnum &tcp_port_df = *(DataFieldEnum *)
@@ -534,6 +552,7 @@ DeviceEditWidget::UpdateVisibilities()
   SetRowVisible(BulkBaudRate, uses_speed &&
                 DeviceConfig::UsesDriver(type) &&
                 SupportsBulkBaudRate(GetDataField(Driver)));
+  SetRowAvailable(IP_ADDRESS, DeviceConfig::UsesIPAddress(type));
   SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
   SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type));
   SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type) &&
@@ -554,19 +573,16 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RowFormWidget::Prepare(parent, rc);
 
-  DataFieldEnum *port_df = new DataFieldEnum(NULL);
-  port_df->SetListener(this);
+  DataFieldEnum *port_df = new DataFieldEnum(this);
   FillPorts(*port_df, config);
   Add(_("Port"), NULL, port_df);
 
-  DataFieldEnum *baud_rate_df = new DataFieldEnum(NULL);
-  baud_rate_df->SetListener(this);
+  DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
   FillBaudRates(*baud_rate_df);
   baud_rate_df->Set(config.baud_rate);
   Add(_("Baud rate"), NULL, baud_rate_df);
 
-  DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(NULL);
-  bulk_baud_rate_df->SetListener(this);
+  DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
   bulk_baud_rate_df->addEnumText(_T("Default"), 0u);
   FillBaudRates(*bulk_baud_rate_df);
   bulk_baud_rate_df->Set(config.bulk_baud_rate);
@@ -574,21 +590,22 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       _("The baud rate used for bulk transfers, such as task declaration or flight download."),
       bulk_baud_rate_df);
 
-  DataFieldEnum *tcp_port_df = new DataFieldEnum(NULL);
-  tcp_port_df->SetListener(this);
+  DataFieldString *ip_address_df = new DataFieldString(_T(""), this);
+  ip_address_df->Set(config.ip_address);
+  Add(_("IP Address"), NULL, ip_address_df);
+
+  DataFieldEnum *tcp_port_df = new DataFieldEnum(this);
   FillTCPPorts(*tcp_port_df);
   tcp_port_df->Set(config.tcp_port);
   Add(_("TCP Port"), NULL, tcp_port_df);
 
-  DataFieldEnum *i2c_bus_df = new DataFieldEnum(NULL);
-  i2c_bus_df->SetListener(this);
+  DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
   FillI2CBus(*i2c_bus_df);
   i2c_bus_df->Set(config.i2c_bus);
   Add(_("I2C Bus"), _("Select the description or bus number that matches your configuration."),
                       i2c_bus_df);
 
-  DataFieldEnum *i2c_addr_df = new DataFieldEnum(NULL);
-  i2c_addr_df->SetListener(this);
+  DataFieldEnum *i2c_addr_df = new DataFieldEnum(this);
   FillI2CAddr(*i2c_addr_df);
   i2c_addr_df->Set(config.i2c_addr);
   Add(_("I2C Addr"), _("The i2c address that matches your configuration."
@@ -596,8 +613,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                         "In case you do not understand the previous sentence you may assume that this field is not used."),
                         i2c_addr_df);
 
-  DataFieldEnum *press_df = new DataFieldEnum(NULL);
-  press_df->SetListener(this);
+  DataFieldEnum *press_df = new DataFieldEnum(this);
   FillPress(*press_df);
   press_df->Set((unsigned)config.press_use);
   Add(_("Pressure use"), _("Select the purpose of this pressure sensor. "
@@ -605,8 +621,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                            "what pressure this is and what its should be used for."),
                            press_df);
 
-  DataFieldEnum *driver_df = new DataFieldEnum(NULL);
-  driver_df->SetListener(this);
+  DataFieldEnum *driver_df = new DataFieldEnum(this);
 
   const struct DeviceRegister *driver;
   for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; i++)
@@ -664,6 +679,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::NUNCHUCK:
   case DeviceConfig::PortType::I2CPRESSURESENSOR:
   case DeviceConfig::PortType::IOIOVOLTAGE:
+  case DeviceConfig::PortType::TCP_CLIENT:
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
@@ -724,6 +740,10 @@ DeviceEditWidget::Save(bool &_changed)
     changed |= SaveValue(BaudRate, config.baud_rate);
     changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
   }
+
+  if (config.UsesIPAddress())
+    changed |= SaveValue(IP_ADDRESS, config.ip_address.buffer(),
+                         config.ip_address.MAX_SIZE);
 
   if (config.UsesTCPPort())
     changed |= SaveValue(TCPPort, config.tcp_port);

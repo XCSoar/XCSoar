@@ -25,13 +25,13 @@
 #define XCSOAR_DEVICE_EDIT_WIDGET_HPP
 
 #include "Widget/PanelWidget.hpp"
-#include "Form/DataField/Base.hpp"
 #include "Polar/Shape.hpp"
 
 #include <assert.h>
 
 class WndFrame;
 class WndProperty;
+class DataFieldListener;
 
 class PolarShapeEditWidget : public PanelWidget {
 public:
@@ -46,8 +46,10 @@ private:
 
   PointEditor points[3];
 
+  DataFieldListener *const listener;
+
 public:
-  PolarShapeEditWidget(const PolarShape &shape);
+  PolarShapeEditWidget(const PolarShape &shape, DataFieldListener *_listener);
 
   const PolarShape &GetPolarShape() const {
     return shape;
@@ -58,11 +60,9 @@ public:
    */
   void SetPolarShape(const PolarShape &shape);
 
-  void SetDataAccessCallback(DataField::DataAccessCallback callback);
-
   /* virtual methods from class Widget */
-  //TODO: virtual PixelSize GetMinimumSize() const override;
-  //TODO: virtual PixelSize GetMaximumSize() const override;
+  virtual PixelSize GetMinimumSize() const override;
+  virtual PixelSize GetMaximumSize() const override;
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;

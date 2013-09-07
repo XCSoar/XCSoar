@@ -64,16 +64,21 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  /* turn off output buffering */
-  setvbuf(stdout, NULL, _IONBF, 0);
+  ConsoleOperationEnvironment env;
 
-  if (!port->StartRxThread()) {
+  if (!port->WaitConnected(env)) {
     delete port;
-    fprintf(stderr, "Failed to start the port thread\n");
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
     return EXIT_FAILURE;
   }
 
-  ConsoleOperationEnvironment env;
+  if (!port->StartRxThread()) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to start the port thread\n");
+    return EXIT_FAILURE;
+  }
 
   char stamp[6] = "";
 

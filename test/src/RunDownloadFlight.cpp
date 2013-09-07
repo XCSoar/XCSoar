@@ -106,7 +106,6 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  ConsoleOperationEnvironment env;
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
@@ -116,6 +115,15 @@ int main(int argc, char **argv)
   if (!driver->IsLogger()) {
     fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
     args.UsageError();
+  }
+
+  ConsoleOperationEnvironment env;
+
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
   }
 
   assert(driver->CreateOnPort != NULL);

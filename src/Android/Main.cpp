@@ -34,6 +34,7 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Android/LogCat.hpp"
 #include "Android/Product.hpp"
+#include "Android/Nook.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -137,7 +138,9 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
                                sdk_version, product);
+#ifdef __arm__
   is_nook = strcmp(native_view->GetProduct(), "NOOK") == 0;
+#endif
 
   event_queue = new EventQueue();
 
@@ -147,9 +150,14 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   ioio_helper = new IOIOHelper(env);
 
-  if (IsNookSimpleTouch())
+#ifdef __arm__
+  if (IsNookSimpleTouch()) {
+    is_dithered = Nook::EnterFastMode();
+
     /* enable USB host mode if this is a Nook */
-    system("su -c 'echo host > /sys/devices/platform/musb_hdrc/mode'");
+    Nook::InitUsb();
+  }
+#endif
 
   ScreenInitialized();
   AllowLanguage();
@@ -180,6 +188,10 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
+  if (IsNookSimpleTouch()) {
+    Nook::ExitFastMode();
+  }
+
   StopLogCat();
 
   InitThreadDebug();

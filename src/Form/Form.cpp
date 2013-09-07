@@ -363,7 +363,6 @@ WndForm::ShowModal()
 {
   AssertNoneLocked();
 
-#define OPENCLOSESUPPRESSTIME 500
 #ifndef USE_GDI
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
@@ -385,11 +384,7 @@ WndForm::ShowModal()
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
 #endif /* USE_GDI */
-  SetFocus();
-  if (default_focus)
-    default_focus->SetFocus();
-  else
-    client_area.FocusFirstControl();
+  SetDefaultFocus();
 
   bool hastimed = false;
 
@@ -518,7 +513,7 @@ WndForm::OnPaint(Canvas &canvas)
   gcc_unused const bool is_active = main_window.IsTopDialog(*this);
 
 #ifdef ENABLE_OPENGL
-  if (!IsMaximised() && is_active) {
+  if (!IsDithered() && !IsMaximised() && is_active) {
     /* draw a shade around the current dialog to emphasise it */
     const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -538,7 +533,16 @@ WndForm::OnPaint(Canvas &canvas)
   PixelRect rcClient = GetClientRect();
 
   // Draw the borders
-  canvas.DrawRaisedEdge(rcClient);
+  if (!IsMaximised()) {
+#ifndef USE_GDI
+    if (IsDithered())
+      canvas.DrawOutlineRectangle(rcClient.left, rcClient.top,
+                                  rcClient.right - 1, rcClient.bottom - 1,
+                                  COLOR_BLACK);
+    else
+#endif
+      canvas.DrawRaisedEdge(rcClient);
+  }
 
   if (!caption.empty()) {
     // Set the colors
@@ -550,21 +554,25 @@ WndForm::OnPaint(Canvas &canvas)
     // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-    canvas.SetBackgroundTransparent();
-    canvas.Stretch(title_rect.left, title_rect.top,
-                   title_rect.right - title_rect.left,
-                   title_rect.bottom - title_rect.top,
-                   look.caption.background_bitmap);
+    if (!IsDithered()) {
+      canvas.SetBackgroundTransparent();
+      canvas.Stretch(title_rect.left, title_rect.top,
+                     title_rect.right - title_rect.left,
+                     title_rect.bottom - title_rect.top,
+                     look.caption.background_bitmap);
 
-    // Draw titlebar text
-    canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
-                    caption.c_str());
-#else
-    canvas.SetBackgroundColor(is_active
-                              ? look.caption.background_color
-                              : look.caption.inactive_background_color);
-    canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
-                          title_rect.top, title_rect, caption.c_str());
+      // Draw titlebar text
+      canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
+                      caption.c_str());
+    } else {
+#endif
+      canvas.SetBackgroundColor(is_active
+                                ? look.caption.background_color
+                                : look.caption.inactive_background_color);
+      canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
+                            title_rect.top, title_rect, caption.c_str());
+#ifdef EYE_CANDY
+    }
 #endif
   }
 
@@ -574,7 +582,9 @@ WndForm::OnPaint(Canvas &canvas)
     canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                                COLOR_YELLOW.WithAlpha(80));
 #elif defined(USE_GDI)
-    ::InvertRect(canvas, &title_rect);
+    canvas.InvertRectangle(title_rect);
+#else
+    canvas.InvertRectangle(GetClientRect());
 #endif
   }
 }
@@ -593,40 +603,44 @@ WndForm::SetCaption(const TCHAR *_caption)
   }
 }
 
-#ifdef ANDROID
 void
-WndForm::ReinitialiseLayout()
+WndForm::ReinitialiseLayout(const PixelRect &parent_rc)
 {
-  const SingleWindow &main_window = GetMainWindow();
+  const unsigned parent_width = parent_rc.right - parent_rc.left;
+  const unsigned parent_height = parent_rc.bottom - parent_rc.top;
 
-  if (main_window.GetWidth() < GetWidth() ||
-      main_window.GetHeight() < GetHeight()) {
-    // close dialog, it's creator may want to create a new layout
-    modal_result = mrChangeLayout;
+  if (parent_width < GetWidth() || parent_height < GetHeight()) {
   } else {
     // reposition dialog to fit into TopWindow
-    PixelScalar left = GetLeft();
-    PixelScalar top = GetTop();
+    PixelRect rc = GetPosition();
 
-    if (GetRight() > (PixelScalar) main_window.GetWidth())
-      left = main_window.GetWidth() - GetWidth();
-    if (GetBottom() > (PixelScalar) main_window.GetHeight())
-      top = main_window.GetHeight() - GetHeight();
+    if (rc.right > (PixelScalar)parent_width)
+      rc.left = parent_width - (rc.right - rc.left);
+    if (rc.bottom > (PixelScalar)parent_height)
+      rc.top = parent_height - (rc.bottom - rc.top);
 
 #ifdef USE_MEMORY_CANVAS
     /* the RasterCanvas class doesn't clip negative window positions
        properly, therefore we avoid this problem at this stage */
-    if (left < 0)
-      left = 0;
-    if (top < 0)
-      top = 0;
+    if (rc.left < 0)
+      rc.left = 0;
+    if (rc.top < 0)
+      rc.top = 0;
 #endif
 
-    if (left != GetLeft() || top != GetTop())
-      Move(left, top);
+    Move(rc.left, rc.top);
   }
 }
-#endif
+
+void
+WndForm::SetDefaultFocus()
+{
+  SetFocus();
+  if (default_focus)
+    default_focus->SetFocus();
+  else
+    client_area.FocusFirstControl();
+}
 
 bool
 WndForm::OnAnyKeyDown(unsigned key_code)

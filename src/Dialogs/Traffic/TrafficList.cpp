@@ -325,8 +325,7 @@ public:
 
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override {
-    PrefixDataField *callsign_df = new PrefixDataField();
-    callsign_df->SetListener(listener);
+    PrefixDataField *callsign_df = new PrefixDataField(_T(""), listener);
     Add(_("Competition ID"), nullptr, callsign_df);
   }
 };

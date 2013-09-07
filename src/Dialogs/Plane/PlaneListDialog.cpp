@@ -197,15 +197,15 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
-    canvas.DrawClippedText(rc.left + Layout::FastScale(2),
-                           rc.top + Layout::FastScale(2), rc, buffer);
+    canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
+                           rc.top + Layout::GetTextPadding(), rc, buffer);
   } else
-    canvas.DrawClippedText(rc.left + Layout::FastScale(2),
-                           rc.top + Layout::FastScale(2), rc, list[i].name);
+    canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
+                           rc.top + Layout::GetTextPadding(), rc, list[i].name);
 
   canvas.Select(details_font);
 
-  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+  canvas.DrawClippedText(rc.left + Layout::GetTextPadding(),
                          rc.top + name_font.GetHeight() + Layout::FastScale(4),
                          rc, list[i].path);
 }
@@ -269,7 +269,7 @@ PlaneListWidget::NewClicked()
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
-  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
+  while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
@@ -309,7 +309,7 @@ PlaneListWidget::EditClicked()
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
 
-  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
+  while (dlgPlaneDetailsShowModal(plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);

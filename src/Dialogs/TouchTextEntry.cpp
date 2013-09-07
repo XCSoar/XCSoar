@@ -22,10 +22,11 @@ Copyright_License {
 */
 
 #include "Dialogs/TextEntry.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/Keyboard.hpp"
 #include "Form/Edit.hpp"
+#include "Widget/KeyboardWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
@@ -36,7 +37,7 @@ Copyright_License {
 #include <assert.h>
 
 static WndProperty *editor;
-static KeyboardControl *kb = NULL;
+static KeyboardWidget *kb = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
@@ -88,12 +89,6 @@ DoCharacter(TCHAR character)
   edittext[cursor] = 0;
   UpdateTextboxProp();
   return true;
-}
-
-static void
-OnCharacter(TCHAR character)
-{
-  DoCharacter(character);
 }
 
 static bool
@@ -205,28 +200,34 @@ TouchTextEntry(TCHAR *text, size_t width,
   ButtonWindowStyle button_style;
   button_style.TabStop();
 
-  WndButton ok_button(client_area, look, _("OK"),
+  WndButton ok_button(client_area, look.button, _("OK"),
                       { ok_left, button_top, ok_right, button_bottom },
                       button_style, form, mrOK);
 
-  WndButton cancel_button(client_area, look, _("Cancel"),
+  WndButton cancel_button(client_area, look.button, _("Cancel"),
                           { cancel_left, button_top,
                               cancel_right, button_bottom },
                           button_style, form, mrCancel);
 
-  WndButton clear_button(client_area, look, _("Clear"),
+  WndButton clear_button(client_area, look.button, _("Clear"),
                          { clear_left, button_top,
                              clear_right, button_bottom },
                          button_style, ClearText);
 
-  KeyboardControl keyboard(client_area, look,
-                           { padding, keyboard_top,
-                              rc.right - padding,
-                              keyboard_bottom },
-                           OnCharacter);
+  KeyboardWidget keyboard(look.button, FormCharacter, !accb);
+
+  const PixelRect keyboard_rc = {
+    padding, keyboard_top,
+    rc.right - padding, keyboard_bottom
+  };
+
+  keyboard.Initialise(client_area, keyboard_rc);
+  keyboard.Prepare(client_area, keyboard_rc);
+  keyboard.Show(keyboard_rc);
+
   kb = &keyboard;
 
-  WndButton backspace_button(client_area, look, _T("<-"),
+  WndButton backspace_button(client_area, look.button, _T("<-"),
                              { backspace_left, padding, rc.right - padding,
                                  editor_bottom },
                              button_style, OnBackspace);
@@ -243,6 +244,9 @@ TouchTextEntry(TCHAR *text, size_t width,
 
   UpdateTextboxProp();
   bool result = form.ShowModal() == mrOK;
+
+  keyboard.Hide();
+  keyboard.Unprepare();
 
   if (result) {
     CopyString(text, edittext, width);

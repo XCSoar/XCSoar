@@ -34,7 +34,7 @@ class ContainerWindow;
  */
 class WndOwnerDrawFrame : public PaintWindow {
 public:
-  typedef void (*OnPaintCallback_t)(WndOwnerDrawFrame *Sender, Canvas &canvas);
+  typedef void (*OnPaintCallback_t)(Canvas &canvas, const PixelRect &rc);
 
 public:
   WndOwnerDrawFrame(ContainerWindow &parent,

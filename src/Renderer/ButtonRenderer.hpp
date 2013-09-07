@@ -35,6 +35,10 @@ class ButtonRenderer
 public:
   ButtonRenderer(const ButtonLook &_look):look(_look) {}
 
+  const ButtonLook &GetLook() const {
+    return look;
+  }
+
   void DrawButton(Canvas &canvas, PixelRect rc, bool focused, bool pressed);
   PixelRect GetDrawingRect(PixelRect rc, bool pressed);
 };

@@ -32,7 +32,7 @@ Copyright_License {
  * This #DataField implementation stores an angle value from 0 to 359
  * degrees.  Its precision is integer degree values.
  */
-class AngleDataField : public DataField {
+class AngleDataField final : public DataField {
   static constexpr unsigned MAX = 360u;
 
   unsigned value;
@@ -106,7 +106,7 @@ public:
   virtual void Inc() override;
   virtual void Dec() override;
 
-  virtual ComboList *CreateComboList() const override;
+  virtual ComboList CreateComboList(const TCHAR *reference) const override;
   virtual void SetFromCombo(int i, TCHAR *s) override;
 };
 

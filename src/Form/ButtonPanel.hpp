@@ -29,7 +29,7 @@ Copyright_License {
 
 class ButtonPanel {
   ContainerWindow &parent;
-  const DialogLook &look;
+  const ButtonLook &look;
   ButtonWindowStyle style;
 
   StaticArray<WndButton *, 8u> buttons;
@@ -40,7 +40,7 @@ class ButtonPanel {
   unsigned keys[8u];
 
 public:
-  ButtonPanel(ContainerWindow &parent, const DialogLook &look);
+  ButtonPanel(ContainerWindow &parent, const ButtonLook &look);
   ~ButtonPanel();
 
   void SetDefaultHidden() {

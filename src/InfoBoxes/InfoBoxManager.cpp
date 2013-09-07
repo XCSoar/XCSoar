@@ -30,20 +30,14 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
-#include "Hardware/Battery.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
-#include "UIGlobals.hpp"
 
 #include <assert.h>
-#include <stdio.h>
-
-#include <algorithm>
 
 namespace InfoBoxManager
 {
@@ -237,7 +231,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
       ? 0
       /* layout.geometry is the effective layout, while
          settings.geometry is the configured layout */
-      : InfoBoxLayout::GetBorder(layout.geometry, i);
+      : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
                                      Border, settings, look, units_look,
@@ -254,25 +248,6 @@ InfoBoxManager::Destroy()
     delete infoboxes[i];
     infoboxes[i] = NULL;
   }
-}
-
-static const ComboList *info_box_combo_list;
-
-static void
-OnInfoBoxHelp(unsigned item)
-{
-  InfoBoxFactory::Type type = (InfoBoxFactory::Type)
-    (*info_box_combo_list)[item].DataFieldIndex;
-
-  StaticString<100> caption;
-  caption.Format(_T("%s: %s"), _("InfoBox"),
-                 gettext(InfoBoxFactory::GetName(type)));
-
-  const TCHAR* text = InfoBoxFactory::GetDescription(type);
-  if (text == nullptr)
-    text = N_("No help available on this item");
-
-  dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, gettext(text));
 }
 
 void
@@ -307,8 +282,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
 
   StaticString<20> caption;
   caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
-  info_box_combo_list = &list;
-  int result = ComboPicker(caption, list, OnInfoBoxHelp, true);
+  int result = ComboPicker(caption, list, nullptr, true);
   if (result < 0)
     return;
 

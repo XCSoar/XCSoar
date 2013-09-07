@@ -24,6 +24,8 @@ Copyright_License {
 #include "Time.hpp"
 #include "ComboList.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
 #include <stdlib.h>
@@ -34,14 +36,15 @@ static bool data_field_key_up = false;
 const TCHAR *
 DataFieldTime::GetAsString() const
 {
-  return GetAsDisplayString();
+  StringFormatUnsafe(string_buffer, _T("%d"), value);
+  return string_buffer;
 }
 
 const TCHAR *
 DataFieldTime::GetAsDisplayString() const
 {
-  FormatTimespanSmart(display_buffer, value, max_tokens);
-  return display_buffer;
+  FormatTimespanSmart(string_buffer, value, max_tokens);
+  return string_buffer;
 }
 
 void
@@ -92,26 +95,31 @@ DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
 void
 DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
 {
-  TCHAR buffer[128];
+  TCHAR buffer[128], buffer2[32];
   FormatTimespanSmart(buffer, value, max_tokens);
-  combo_list.Append(value, buffer);
+  StringFormatUnsafe(buffer2, _T("%d"), value);
+  combo_list.Append(value, buffer2, buffer);
 }
 
-ComboList *
-DataFieldTime::CreateComboList() const
+ComboList
+DataFieldTime::CreateComboList(const TCHAR *reference_string) const
 {
-  ComboList *combo_list = new ComboList();
+  const int reference = reference_string != nullptr
+    ? ParseInt(reference_string)
+    : value;
+
+  ComboList combo_list;
 
   /* how many items before and after the current value? */
   unsigned surrounding_items = ComboList::MAX_SIZE / 2 - 2;
 
   /* the value aligned to mStep */
-  int corrected_value = ((value - min) / step) * step + min;
+  int corrected_value = ((reference - min) / step) * step + min;
 
   int first = corrected_value - (int)surrounding_items * step;
   if (first > min)
     /* there are values before "first" - give the user a choice */
-    combo_list->Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::PREVIOUS_PAGE, _T("<<More Items>>"));
   else if (first < min)
     first = min;
 
@@ -119,28 +127,28 @@ DataFieldTime::CreateComboList() const
 
   bool found_current = false;
   for (int i = first; i <= last; i += step) {
-    if (!found_current && value <= i) {
-      if (value < i)
+    if (!found_current && reference <= i) {
+      if (reference < i)
         /* the current value is not listed - insert it here */
-        AppendComboValue(*combo_list, value);
+        AppendComboValue(combo_list, reference);
 
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list.ComboPopupItemSavedIndex = combo_list.size();
       found_current = true;
     }
 
-    AppendComboValue(*combo_list, i);
+    AppendComboValue(combo_list, i);
   }
 
-  if (value > last) {
+  if (reference > last) {
     /* the current value out of range - append it here */
-    last = value;
-    AppendComboValue(*combo_list, value);
-    combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    last = reference;
+    AppendComboValue(combo_list, reference);
+    combo_list.ComboPopupItemSavedIndex = combo_list.size();
   }
 
   if (last < max)
     /* there are values after "last" - give the user a choice */
-    combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
+    combo_list.Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
 }

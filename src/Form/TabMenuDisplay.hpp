@@ -49,11 +49,11 @@ public:
 
   void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 
-  UPixelScalar GetTabHeight() const {
+  unsigned GetTabHeight() const {
     return this->GetHeight();
   }
 
-  UPixelScalar GetTabWidth() const {
+  unsigned GetTabWidth() const {
     return this->GetWidth();
   }
 
@@ -77,7 +77,8 @@ protected:
   /**
    * @return Rect of button holding down pointer capture
    */
-  const PixelRect& GetDownButtonRC() const;
+  gcc_pure
+  const PixelRect &GetDownButtonRC() const;
 
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;

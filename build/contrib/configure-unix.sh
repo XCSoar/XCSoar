@@ -27,7 +27,12 @@ then
     rm ${DEST}
     exit 0
 fi
-
+if [ "`uname -s`" == "Darwin" ];
+then
+    LOCATOR="mdfind -name"
+else
+    LOCATOR="locate"
+fi
 
 # Current OS X distributions come with GCC 4.2, which is too old.
 
@@ -61,7 +66,7 @@ echo "Using toolchain in ${LOCAL_TCPREFIX} for UNIX targets."
 
 # Building for Android 
 
-ANDROID_SDK=${ANDROID_SDK-`locate android-sdk-macosx | head -n1`}
+ANDROID_SDK=${ANDROID_SDK-`${LOCATOR} android-sdk-macosx | head -n1`}
 if [ -d ${ANDROID_SDK} ]; then
   echo "Using Android SDK: ${ANDROID_SDK}"
   ANDROID_NDK=${ANDROID_NDK-${ANDROID_SDK}/../android-ndk-*}
@@ -81,12 +86,12 @@ if [ -d ${ANDROID_SDK} ]; then
 
   if [ ! -d "${ANDROID_SDK_PLATFORM}" ]; then
       echo "Android SDK platform $ANDROID_PLATFORM not found.
-  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  Install platform with ${ANDROID_SDK}/tools/android 
   or adapt targets.mk in order to build for Android."
   fi
   if [ ! -d "${ANDROID_NDK_PLATFORM}" ]; then
       echo "Android NDK platform ${ANDROID_PLATFORM} not found.  
-  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  Install platform with ${ANDROID_SDK}/tools/android 
   or adapt targets.mk in order to build for Android.
   The NDK platform must match the SDK one.  It is set in targets.mk."
   fi

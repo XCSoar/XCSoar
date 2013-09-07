@@ -27,6 +27,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
@@ -67,7 +68,8 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
   const PixelRect rc = GetContainer().GetClientRect();
 
 #ifndef GNAV
-  close_button = new WndButton(GetContainer(), UIGlobals::GetDialogLook(),
+  close_button = new WndButton(GetContainer(),
+                               UIGlobals::GetDialogLook().button,
                                _("Close"), rc, ButtonWindowStyle(),
                                *this, CLOSE);
 #endif

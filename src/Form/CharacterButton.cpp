@@ -21,33 +21,50 @@ Copyright_License {
 }
 */
 
-#include "Form/Util.hpp"
-#include "Profile/Profile.hpp"
-#include "Units/Units.hpp"
+#include "Form/CharacterButton.hpp"
+#include "Look/ButtonLook.hpp"
+
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
 
 #include <assert.h>
 
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 bool &value, const char *registry_name)
+void
+CharacterButton::Create(ContainerWindow &parent, const ButtonLook &look,
+                        const TCHAR *text, PixelRect rc,
+                        OnCharacterCallback _on_character, unsigned _character,
+                        const ButtonWindowStyle style)
 {
-  assert(control_name != NULL);
-  assert(registry_name != NULL);
+  assert(_on_character);
 
-  if (!SaveFormProperty(form, control_name, value))
-    return false;
+  on_character = _on_character;
+  character = _character;
 
-  Profile::Set(registry_name, value);
-  return true;
+  ButtonWindow::Create(parent, text, rc, style);
+  SetFont(*look.font);
+}
+
+void
+CharacterButton::SetCharacter(unsigned _character)
+{
+  if (_character == character)
+    return;
+
+  character = _character;
+
+#ifdef _UNICODE
+  const TCHAR buffer[2] = { TCHAR(character), _T('\0') };
+#else
+  char buffer[7];
+  *UnicodeToUTF8(character, buffer) = '\0';
+#endif
+  SetText(buffer);
 }
 
 bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const char *reg,
-                 bool &value)
+CharacterButton::OnClicked()
 {
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  }
-  return false;
+  on_character(character);
+  return true;
 }

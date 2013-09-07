@@ -43,10 +43,10 @@ struct DialogLook {
 
 #ifdef EYE_CANDY
     Bitmap background_bitmap;
-#else
+#endif
+
     Color background_color;
     Color inactive_background_color;
-#endif
   } caption;
 
   Color background_color, text_color;

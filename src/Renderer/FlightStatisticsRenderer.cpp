@@ -61,12 +61,12 @@ FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
 
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
-                            const NMEAInfo &nmea_info, 
-                            const ComputerSettings &settings_computer,
-                            const MapSettings &settings_map,
-                            const ContestStatistics &contest,
+                                    const NMEAInfo &nmea_info,
+                                    const ComputerSettings &settings_computer,
+                                    const MapSettings &settings_map,
+                                    const ContestStatistics &contest,
                                     const TraceComputer &trace_computer,
-				    const Retrospective &retrospective) const
+                                    const Retrospective &retrospective) const
 {
   if (!trail_renderer.LoadTrace(trace_computer)) {
     ChartRenderer chart(chart_look, canvas, rc);
@@ -88,7 +88,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   const ChartProjection proj(rc, task_projection);
 
-  { 
+  {
     // draw place names found in the retrospective task
     //    canvas.Select(*dialog_look.small_font);
     canvas.Select(chart_look.label_font);
@@ -98,8 +98,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     for (auto it = retrospective.getNearWaypointList().begin(); it!= end; ++it) {
       RasterPoint wp_pos = proj.GeoToScreen(it->waypoint.location);
       canvas.DrawText(wp_pos.x,
-		      wp_pos.y,
-		      it->waypoint.name.c_str());
+                      wp_pos.y,
+                      it->waypoint.name.c_str());
     }
   }
 
@@ -206,9 +206,9 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 
 void
 FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
-                             const NMEAInfo &nmea_info, 
-                             const ComputerSettings &settings_computer,
-                             const MapSettings &settings_map,
+                                     const NMEAInfo &nmea_info,
+                                     const ComputerSettings &settings_computer,
+                                     const MapSettings &settings_map,
                                      const ProtectedTaskManager &_task_manager,
                                      const TraceComputer *trace_computer) const
 {

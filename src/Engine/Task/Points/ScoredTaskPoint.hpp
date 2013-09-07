@@ -147,15 +147,6 @@ protected:
                                    const AircraftState &ref_last) const = 0;
 
 private:
-  /**
-   * Set OZ entry state
-   *
-   * @param state State at entry
-   */
-  void SetStateEntered(const AircraftState &state) {
-    state_entered = state;
-  }
-
   gcc_pure
   virtual bool EntryPrecondition() const {
     return true;

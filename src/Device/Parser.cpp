@@ -359,6 +359,7 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
   new_value.month = atoi(buffer + 2);
   buffer[2] = '\0';
   new_value.day = atoi(buffer);
+  new_value.day_of_week = -1;
 
   if (!new_value.IsPlausible())
     return false;

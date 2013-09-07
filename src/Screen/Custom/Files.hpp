@@ -36,6 +36,14 @@ FindDefaultBoldFont();
 
 gcc_const
 const char *
+FindDefaultItalicFont();
+
+gcc_const
+const char *
+FindDefaultBoldItalicFont();
+
+gcc_const
+const char *
 FindDefaultMonospaceFont();
 
 #endif

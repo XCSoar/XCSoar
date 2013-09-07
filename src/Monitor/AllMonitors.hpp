@@ -26,12 +26,14 @@ Copyright_License {
 
 #include "Blackboard/BlackboardListener.hpp"
 #include "TaskAdvanceMonitor.hpp"
+#include "MatTaskMonitor.hpp"
 
 /**
  * A container that combines all monitor classes.
  */
 class AllMonitors final : private NullBlackboardListener {
   TaskAdvanceMonitor task_advance;
+  MatTaskMonitor mat_task;
 
 public:
   AllMonitors();
@@ -39,10 +41,12 @@ public:
 
   void Reset() {
     task_advance.Reset();
+    mat_task.Reset();
   }
 
   void Check() {
     task_advance.Check();
+    mat_task.Check();
   }
 
 private:

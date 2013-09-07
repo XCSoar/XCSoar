@@ -28,15 +28,18 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct DialogLook;
+
 /**
  * A #Widget implementation that displays multi-line text.
  */
 class LargeTextWidget : public WindowWidget {
+  const DialogLook &look;
   const TCHAR *text;
 
 public:
-  LargeTextWidget(const TCHAR *_text=nullptr)
-    :text(_text) {}
+  LargeTextWidget(const DialogLook &_look, const TCHAR *_text=nullptr)
+    :look(_look), text(_text) {}
 
   void SetText(const TCHAR *text);
 

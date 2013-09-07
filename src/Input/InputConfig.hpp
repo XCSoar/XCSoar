@@ -35,18 +35,17 @@ Copyright_License {
 
 struct InputConfig {
   // Sensible maximums
-  enum {
-    MAX_MODE = 32,
-    MAX_MODE_STRING = 24,
+
+  static constexpr unsigned MAX_MODE = 32;
+  static constexpr unsigned MAX_MODE_STRING = 24;
 #ifdef ENABLE_SDL
-    MAX_KEY = 400,
+  static constexpr unsigned MAX_KEY = 400;
 #elif defined(USE_CONSOLE) || defined(NON_INTERACTIVE)
-    MAX_KEY = 0600,
+  static constexpr unsigned MAX_KEY = 0600;
 #else
-    MAX_KEY = 255,
+  static constexpr unsigned MAX_KEY = 255;
 #endif
-    MAX_EVENTS = 2048,
-  };
+  static constexpr unsigned MAX_EVENTS = 2048;
 
   typedef void (*pt2Event)(const TCHAR *);
 

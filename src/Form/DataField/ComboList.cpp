@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "ComboList.hpp"
 
+#include <algorithm>
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -42,6 +44,13 @@ ComboList::Item::~Item()
   free(StringValue);
   free(StringValueFormatted);
   free(StringHelp);
+}
+
+ComboList::ComboList(ComboList &&other)
+  :ComboPopupItemSavedIndex(other.ComboPopupItemSavedIndex),
+   items(other.items)
+{
+  std::fill(other.items.begin(), other.items.end(), nullptr);
 }
 
 void

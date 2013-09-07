@@ -217,8 +217,9 @@ MapItemListBuilder::AddVisibleAirspace(
   if (warning_manager != NULL)
     warnings.Fill(*warning_manager);
 
+  const AircraftState aircraft = ToAircraftState(basic, calculated);
   AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
-                                     ToAircraftState(basic, calculated),
+                                     aircraft,
                                      warnings, location);
 
   AirspaceListBuilderVisitor builder(list);

@@ -41,7 +41,6 @@ class PeriodClock;
 enum ModalResult {
   mrOK = 2,
   mrCancel = 3,
-  mrChangeLayout = 4,
 };
 
 /**
@@ -233,16 +232,20 @@ public:
     return default_focus;
   }
 
-#ifdef ANDROID
   /**
-   * Reposition window, if possible, or fail with mrChangeLayout in case
-   * there is not enough space. Will be called whenever the parent window
-   * changes.
+   * Reposition window, if possible.  Will be called whenever the
+   * parent window changes.
+   *
+   * @param parent_rc the parent's client rect
    */
-  void ReinitialiseLayout();
-#endif
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc);
 
 protected:
+  /**
+   * Assign the initial keyboard focus.
+   */
+  virtual void SetDefaultFocus();
+
   /**
    * This method can intercept a "key down" event before it gets
    * delivered to the focused dialog control.

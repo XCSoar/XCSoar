@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/HelpDialog.hpp"
 
 void
-dlgHelpShowModal(SingleWindow &parent,
-                 const TCHAR *caption, const TCHAR *text)
+HelpDialog(const TCHAR *caption, const TCHAR *text)
 {
 }

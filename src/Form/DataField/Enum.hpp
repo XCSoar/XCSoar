@@ -39,41 +39,30 @@ struct StaticEnumChoice {
   const TCHAR *help;
 };
 
-class DataFieldEnum: public DataField
-{
+class DataFieldEnum final : public DataField {
 public:
   class Entry : private NonCopyable {
     unsigned id;
     TCHAR *string;
     TCHAR *display_string;
-    TCHAR *mHelp;
+    TCHAR *help;
 
   public:
-    Entry():string(NULL), display_string(NULL), mHelp(NULL) {}
+    Entry():string(nullptr), display_string(nullptr), help(nullptr) {}
     ~Entry();
 
     Entry(Entry &&other)
       :id(other.id), string(other.string),
-       display_string(other.display_string), mHelp(other.mHelp) {
-      other.string = other.display_string = other.mHelp = NULL;
+       display_string(other.display_string), help(other.help) {
+      other.string = other.display_string = other.help = nullptr;
     }
 
     Entry &operator=(Entry &&other) {
-        free(string);
-
-        if (display_string != string)
-          free(display_string);
-
-        free(mHelp);
-
-        id = other.id;
-        string = other.string;
-        display_string = other.display_string;
-        mHelp = other.mHelp;
-
-        other.string = other.display_string = other.mHelp = NULL;
-
-        return *this;
+      id = other.id;
+      std::swap(string, other.string);
+      std::swap(display_string, other.display_string);
+      std::swap(help, other.help);
+      return *this;
     }
 
     unsigned GetId() const {
@@ -89,7 +78,7 @@ public:
     }
 
     const TCHAR *GetHelp() const {
-      return mHelp;
+      return help;
     }
 
     void SetString(const TCHAR *_string);
@@ -103,6 +92,9 @@ private:
   unsigned int value;
 
 public:
+  DataFieldEnum(DataFieldListener *listener=nullptr)
+    :DataField(Type::ENUM, true, listener), value(0) {}
+
   DataFieldEnum(DataAccessCallback OnDataAccess) :
     DataField(Type::ENUM, true, OnDataAccess),
     value(0) {}
@@ -114,10 +106,6 @@ public:
   bool Exists(const TCHAR *text) const {
     return Find(text) >= 0;
   }
-
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
 
   void replaceEnumText(unsigned int i, const TCHAR *Text);
 
@@ -138,13 +126,6 @@ public:
   unsigned addEnumText(const TCHAR *Text, const TCHAR *display_string=NULL,
                        const TCHAR *ItemHelpText=NULL);
   void addEnumTexts(const TCHAR *const*list);
-
-  gcc_pure
-  virtual int GetAsInteger() const;
-
-  gcc_pure
-  virtual const TCHAR *GetAsString() const;
-  virtual const TCHAR *GetAsDisplayString() const;
 
   /**
    * @return help of current enum item or NULL if current item has no help
@@ -176,8 +157,6 @@ public:
    */
   int SetStringAutoAdd(const TCHAR *text);
 
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
   void Sort(unsigned startindex = 0);
 
   gcc_pure
@@ -185,6 +164,16 @@ public:
     return entries.size();
   }
   unsigned getItem(unsigned index) const;
+
+  /* virtual methods from class DataField */
+  virtual void Inc() override;
+  virtual void Dec() override;
+  virtual int GetAsInteger() const override;
+  virtual const TCHAR *GetAsString() const override;
+  virtual const TCHAR *GetAsDisplayString() const override;
+  virtual void SetAsInteger(int value) override;
+  virtual void SetAsString(const TCHAR *value) override;
+  virtual ComboList CreateComboList(const TCHAR *reference) const override;
 
 protected:
   /**

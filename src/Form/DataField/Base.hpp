@@ -52,14 +52,9 @@ public:
     GEOPOINT,
   };
 
-  enum DataAccessMode {
-    daChange,
-    daSpecial,
-  };
-
   DataFieldListener *listener;
 
-  typedef void (*DataAccessCallback)(DataField *sender, DataAccessMode mode);
+  typedef void (*DataAccessCallback)(DataField *sender);
   DataAccessCallback data_access_callback;
 
   // all Types dataField support combolist except DataFieldString.
@@ -69,9 +64,6 @@ protected:
   const Type type;
 
   bool item_help_enabled;
-
-private:
-  bool detach_gui;
 
 protected:
   DataField(Type type, bool supports_combolist,
@@ -119,19 +111,16 @@ public:
 
   virtual void EnableItemHelp(bool value) {};
 
-  // allows combolist to iterate all values w/out triggering external events
-  void SetDetachGUI(bool _detach_gui) {
-    detach_gui = _detach_gui;
-  }
 
-  bool GetDetachGUI() {
-    return detach_gui;
-  }
-
-  gcc_malloc
-  virtual ComboList *CreateComboList() const {
-    return nullptr;
-  }
+  /**
+   * Create a #ComboList that allows the user to choose a value.
+   *
+   * @param reference the reference value for a long list, to
+   * determine the range of displayed values; pass nullptr for the
+   * "default" reference
+   */
+  gcc_pure
+  virtual ComboList CreateComboList(const TCHAR *reference) const;
 
   virtual void
   SetFromCombo(int iDataFieldIndex, TCHAR *sValue)
@@ -142,8 +131,6 @@ public:
   bool GetItemHelpEnabled() {
     return item_help_enabled;
   }
-
-  void CopyString(TCHAR *buffer, bool formatted);
 
 protected:
   /**

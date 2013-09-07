@@ -24,6 +24,7 @@ Copyright_License {
 #include "MacCreadySetup.hpp"
 #include "Screen/Layout.hpp"
 #include "Widget/WindowWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Interface.hpp"
@@ -82,7 +83,8 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
   style.TabStop();
 
-  SetWindow(new WndButton(parent, UIGlobals::GetDialogLook(), GetCaption(), rc,
+  SetWindow(new WndButton(parent, UIGlobals::GetDialogLook().button,
+                          GetCaption(), rc,
                           style, *this, 1));
 }
 

@@ -45,7 +45,9 @@ class ManagedWidget {
 
   bool prepared, visible;
 
+#ifndef NDEBUG
   DebugFlag have_position;
+#endif
 
 public:
   ManagedWidget(ContainerWindow &_parent)

@@ -49,6 +49,13 @@ int main(int argc, char **argv)
 
   ConsoleOperationEnvironment env;
 
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   char buffer[4096];
   while (true) {
     switch (port->WaitRead(env, 60000)) {

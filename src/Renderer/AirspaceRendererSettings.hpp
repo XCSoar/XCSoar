@@ -116,6 +116,9 @@ struct AirspaceRendererSettings {
 
     /** fill only a thick padding (like on ICAO maps) */
     PADDING,
+
+    /** don't fill anything */
+    NONE,
   } fill_mode;
 
   AirspaceClassRendererSettings classes[AIRSPACECLASSCOUNT];

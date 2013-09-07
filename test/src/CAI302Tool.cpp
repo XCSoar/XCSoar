@@ -175,6 +175,13 @@ int main(int argc, char **argv)
 
   ConsoleOperationEnvironment env;
 
+  if (!port->WaitConnected(env)) {
+    delete port;
+    DeinitialiseIOThread();
+    fprintf(stderr, "Failed to connect the port\n");
+    return EXIT_FAILURE;
+  }
+
   CAI302Device device(config, *port);
   if (!RunCommand(device, command, env)) {
     fprintf(stderr, "error\n");

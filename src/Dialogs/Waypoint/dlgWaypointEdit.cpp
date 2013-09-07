@@ -22,110 +22,97 @@ Copyright_License {
 */
 
 #include "WaypointDialogs.hpp"
-#include "Dialogs/XML.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/Button.hpp"
-#include "Form/Edit.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/GeoPoint.hpp"
 #include "Units/Units.hpp"
-#include "Screen/Layout.hpp"
-#include "Terrain/RasterTerrain.hpp"
 #include "UIGlobals.hpp"
-#include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Util/StringUtil.hpp"
-#include "Compiler.h"
-#include "Sizes.h"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-#include <stdio.h>
+class WaypointEditWidget final : public RowFormWidget {
+  enum Rows {
+    NAME,
+    COMMENT,
+    LOCATION,
+    ELEVATION,
+    TYPE,
+  };
 
-static WndForm *wf = nullptr;
-static Waypoint *global_wpt = nullptr;
+  Waypoint value;
 
-static void
-SetValues()
+public:
+  WaypointEditWidget(const DialogLook &look, Waypoint _value)
+    :RowFormWidget(look), value(_value) {}
+
+  const Waypoint &GetValue() const {
+    return value;
+  }
+
+private:
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
+  virtual bool Save(bool &changed) override;
+};
+
+static constexpr StaticEnumChoice waypoint_types[] = {
+  { 0, N_("Turnpoint"), nullptr },
+  { 1, N_("Airport"), nullptr },
+  { 2, N_("Landpoint"), nullptr },
+  { 0 }
+};
+
+void
+WaypointEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadFormProperty(*wf, _T("Name"), global_wpt->name.c_str());
-  LoadFormProperty(*wf, _T("Comment"), global_wpt->comment.c_str());
-
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
-  assert(wp != nullptr);
-
-  GeoPointDataField &gpdf = *(GeoPointDataField *)wp->GetDataField();
-  gpdf.SetValue(global_wpt->location);
-  wp->RefreshDisplay();
-
-  LoadFormProperty(*wf, _T("prpAltitude"), UnitGroup::ALTITUDE, global_wpt->elevation);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  assert(wp != nullptr);
-  DataFieldEnum *dfe = (DataFieldEnum*)wp->GetDataField();
-
-  dfe->addEnumText(_T("Turnpoint"));
-  dfe->addEnumText(_T("Airport"));
-  dfe->addEnumText(_T("Landpoint"));
-
-  if (global_wpt->IsAirport())
-    dfe->Set(1u);
-  else if (global_wpt->IsLandable())
-    dfe->Set(2u);
-  else
-    dfe->Set(0u);
-
-  wp->RefreshDisplay();
+  AddText(_("Name"), nullptr, value.name.c_str());
+  AddText(_("Comment"), nullptr, value.comment.c_str());
+  Add(_("Location"), nullptr, new GeoPointDataField(value.location,
+                                                    // TODO: use configured CoordinateFormat
+                                                    CoordinateFormat::DDMMSS));
+  AddFloat(_("Altitude"), nullptr,
+           _T("%.0f %s"), _T("%.0f"),
+           fixed(0), fixed(30000), fixed(5), false,
+           UnitGroup::ALTITUDE, value.elevation);
+  AddEnum(_("Type"), nullptr, waypoint_types,
+          value.IsAirport() ? 1u : (value.IsLandable() ? 2u : 0u ));
 }
 
-static void
-GetValues()
+bool
+WaypointEditWidget::Save(bool &_changed)
 {
-  global_wpt->name = GetFormValueString(*wf, _T("Name"));
-  global_wpt->comment = GetFormValueString(*wf, _T("Comment"));
+  bool changed = false;
+  value.name = GetValueString(NAME);
+  value.comment = GetValueString(COMMENT);
+  value.location = ((GeoPointDataField &)GetDataField(LOCATION)).GetValue();
+  changed |= SaveValue(ELEVATION, UnitGroup::ALTITUDE, value.elevation);
+  _changed |= changed;
 
-  WndProperty *wp = (WndProperty *)wf->FindByName(_T("Location"));
-  assert(wp != nullptr);
-
-  const GeoPointDataField &gpdf =
-    *(const GeoPointDataField *)wp->GetDataField();
-  global_wpt->location = gpdf.GetValue();
-
-  int ss = GetFormValueInteger(*wf, _T("prpAltitude"));
-  global_wpt->elevation = (ss == 0 && terrain != nullptr)
-    ? fixed(terrain->GetTerrainHeight(global_wpt->location))
-    : Units::ToSysAltitude(fixed(ss));
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
-  assert(wp != nullptr);
-  switch (((const DataFieldEnum *)wp->GetDataField())->GetValue()) {
+  switch (GetValueInteger(TYPE)) {
   case 1:
-    global_wpt->flags.turn_point = true;
-    global_wpt->type = Waypoint::Type::AIRFIELD;
+    value.flags.turn_point = true;
+    value.type = Waypoint::Type::AIRFIELD;
     break;
+
   case 2:
-    global_wpt->type = Waypoint::Type::OUTLANDING;
+    value.type = Waypoint::Type::OUTLANDING;
     break;
+
   default:
-    global_wpt->type = Waypoint::Type::NORMAL;
-    global_wpt->flags.turn_point = true;
+    value.type = Waypoint::Type::NORMAL;
+    value.flags.turn_point = true;
+    break;
   };
+
+  return true;
 }
 
 bool
 dlgWaypointEditShowModal(Waypoint &way_point)
 {
-  global_wpt = &way_point;
-
-  wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-                  Layout::landscape ?
-                  _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
-  assert(wf != nullptr);
-
-  SetValues();
-
   if (CommonInterface::GetUISettings().coordinate_format ==
       CoordinateFormat::UTM) {
     ShowMessageBox(
@@ -134,14 +121,18 @@ dlgWaypointEditShowModal(Waypoint &way_point)
     return false;
   }
 
-  wf->SetModalResult(mrCancel);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  WaypointEditWidget widget(look, way_point);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Waypoint Editor"), &widget);
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
 
-  bool retval = false;
-  if (wf->ShowModal() == mrOK) {
-    GetValues();
-    retval = true;
-  }
+  if (result != mrOK)
+    return false;
 
-  delete wf;
-  return retval;
+  way_point = widget.GetValue();
+  return true;
 }

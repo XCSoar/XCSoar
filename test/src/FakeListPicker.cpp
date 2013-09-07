@@ -23,8 +23,9 @@ Copyright_License {
 
 #include "Dialogs/ComboPicker.hpp"
 
-int
-dlgComboPicker(WndProperty *theProperty)
+bool
+ComboPicker(const TCHAR *caption, DataField &df,
+            const TCHAR *help_text)
 {
-  return -1;
+  return false;
 }

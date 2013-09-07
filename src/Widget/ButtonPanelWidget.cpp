@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ButtonPanelWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
@@ -76,7 +77,7 @@ ButtonPanelWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   assert(buttons == nullptr);
 
-  buttons = new ButtonPanel(parent, UIGlobals::GetDialogLook());
+  buttons = new ButtonPanel(parent, UIGlobals::GetDialogLook().button);
   buttons->SetDefaultHidden();
 
   /* initialise with full dimensions for now, buttons will be added

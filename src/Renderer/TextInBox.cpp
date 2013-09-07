@@ -109,9 +109,10 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
   else if (mode.vertical_position == TextInBoxMode::VerticalPosition::CENTERED)
     y -= tsize.cy / 2;
 
+  const unsigned padding = Layout::GetTextPadding();
   PixelRect rc;
-  rc.left = x - Layout::FastScale(2) - 1;
-  rc.right = x + tsize.cx + Layout::FastScale(2);
+  rc.left = x - padding - 1;
+  rc.right = x + tsize.cx + padding;
   rc.top = y;
   rc.bottom = y + tsize.cy + 1;
 

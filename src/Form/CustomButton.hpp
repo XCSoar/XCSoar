@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_FORM_CUSTOMBUTTON_HPP
 
 #include "Form/Button.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Features.hpp"
+
+struct DialogLook;
 
 /**
  * This class is used for creating buttons that are custom painted.
@@ -34,11 +34,7 @@ Copyright_License {
  */
 class WndCustomButton : public WndButton
 {
-  static inline ButtonWindowStyle custom_painting(ButtonWindowStyle style)
-  {
-    style.EnableCustomPainting();
-    return style;
-  }
+  const DialogLook &look;
 
 public:
   /**
@@ -46,15 +42,11 @@ public:
    * @param Parent Parent window/ContainerControl
    * @param Name Name of the button
    * @param Caption Text on the button
-   * @param Function The function that should be called
-   * when the button is clicked
    */
-  WndCustomButton(ContainerWindow &Parent, const DialogLook &look,
+  WndCustomButton(ContainerWindow &Parent, const DialogLook &_look,
                   tstring::const_pointer Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ActionListener &listener, int id)
-    :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), listener, id) {}
+                  ActionListener &listener, int id);
 
 protected:
   /**

@@ -29,14 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "XML/Node.hpp"
 #include "XML/Parser.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Form/DataField/FileReader.hpp"
 #include "Form/DataField/Float.hpp"
-#include "Form/DataField/Integer.hpp"
-#include "Form/DataField/String.hpp"
-#include "Form/DataField/Time.hpp"
-#include "Form/DataField/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/LargeTextWindow.hpp"
@@ -63,14 +56,6 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <limits.h>
-
-static const DialogLook *xml_dialog_look;
-
-void
-SetXMLDialogLook(const DialogLook &_dialog_look)
-{
-  xml_dialog_look = &_dialog_look;
-}
 
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
@@ -145,23 +130,6 @@ StringToStringDflt(const TCHAR *string, const TCHAR *_default)
   if (string == NULL || StringIsEmpty(string))
     return _default;
   return string;
-}
-
-/**
- * Converts a String into a Color and sets
- * a default value if String = NULL
- * @param String The String to parse
- * @param color The color (output)
- */
-static bool
-StringToColor(const TCHAR *string, Color &color)
-{
-  int value = StringToIntDflt(string, -1);
-  if (value & ~0xffffff)
-    return false;
-
-  color = Color((value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff);
-  return true;
 }
 
 static int 
@@ -359,15 +327,6 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   return window;
 }
 
-Window *
-LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource,
-           WindowStyle style)
-{
-  return LoadWindow(lookup_table, form, parent, parent.GetClientRect(),
-                    resource, style);
-}
-
 WndForm *
 LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
            const TCHAR *resource, const PixelRect *target_rc)
@@ -425,7 +384,8 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   form_rc.right = form_rc.left + size.cx;
   form_rc.bottom = form_rc.top + size.cy;
 
-  form = new WndForm(parent, *xml_dialog_look, form_rc, caption, style);
+  form = new WndForm(parent, UIGlobals::GetDialogLook(),
+                     form_rc, caption, style);
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
@@ -439,60 +399,21 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 static DataField *
 LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 {
-  TCHAR data_type[32];
-  TCHAR display_format[32];
-  TCHAR edit_format[32];
-  double step;
-
-  _tcscpy(data_type,
-          StringToStringDflt(node.GetAttribute(_T("DataType")), _T("")));
-  _tcscpy(display_format,
-          StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T("")));
-  _tcscpy(edit_format,
-          StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T("")));
+  const TCHAR *data_type =
+    StringToStringDflt(node.GetAttribute(_T("DataType")), _T(""));
+  const TCHAR *display_format =
+    StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T(""));
+  const TCHAR *edit_format =
+    StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T(""));
 
   fixed min = fixed(StringToFloatDflt(node.GetAttribute(_T("Min")), INT_MIN));
   fixed max = fixed(StringToFloatDflt(node.GetAttribute(_T("Max")), INT_MAX));
-  step = StringToFloatDflt(node.GetAttribute(_T("Step")), 1);
+  fixed step = fixed(StringToFloatDflt(node.GetAttribute(_T("Step")), 1));
   const bool fine = false;
-
-  DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
-    GetCallBack(LookUpTable, node, _T("OnDataAccess"));
-
-  if (StringIsEqualIgnoreCase(data_type, _T("enum")))
-    return new DataFieldEnum(callback);
-
-  if (StringIsEqualIgnoreCase(data_type, _T("filereader"))) {
-    DataFieldFileReader *df = new DataFieldFileReader(callback);
-
-    if (StringToIntDflt(node.GetAttribute(_T("Nullable")), true))
-      df->AddNull();
-
-    return df;
-  }
-
-  if (StringIsEqualIgnoreCase(data_type, _T("boolean")))
-    return new DataFieldBoolean(false, _("On"), _("Off"), callback);
 
   if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
-                              fixed(0), fixed(step), fine, callback);
-
-  if (StringIsEqualIgnoreCase(data_type, _T("time"))) {
-    DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,
-                                          (unsigned)step, callback);
-    unsigned max_token = StringToIntDflt(node.GetAttribute(_T("MaxTokens")), 2);
-    df->SetMaxTokenNumber(max_token);
-    return df;
-  }
-
-  if (StringIsEqualIgnoreCase(data_type, _T("string")))
-    return new DataFieldString(_T(""), callback);
-
-  if (StringIsEqualIgnoreCase(data_type, _T("geopoint")))
-    // TODO: use configured CoordinateFormat
-    return new GeoPointDataField(GeoPoint::Invalid(),
-                                 CoordinateFormat::DDMMSS);
+                              fixed(0), step, fine);
 
   return NULL;
 }
@@ -555,7 +476,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       style.TabStop();
 
     WndProperty *property;
-    window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
+    window = property = new WndProperty(parent, UIGlobals::GetDialogLook(),
+                                        caption, rc,
                                         caption_width, style);
     property->SetReadOnly(read_only);
 
@@ -588,16 +510,16 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     button_style.TabStop();
     button_style.multiline();
 
-    window = new WndButton(parent, *xml_dialog_look, caption,
-                           rc,
+    window = new WndButton(parent, UIGlobals::GetDialogLook().button,
+                           caption, rc,
                            button_style, click_callback);
 
   } else if (StringIsEqual(node.GetName(), _T("CloseButton"))) {
     ButtonWindowStyle button_style(style);
     button_style.TabStop();
 
-    window = new WndButton(parent, *xml_dialog_look, _("Close"),
-                           rc,
+    window = new WndButton(parent, UIGlobals::GetDialogLook().button,
+                           _("Close"), rc,
                            button_style, (WndForm &)form, mrOK);
   } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
     // Determine click_callback function
@@ -609,8 +531,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.TabStop();
 
-    window = new CheckBoxControl(parent, *xml_dialog_look, caption,
-                                 rc,
+    window = new CheckBoxControl(parent, UIGlobals::GetDialogLook(),
+                                 caption, rc,
                                  style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
@@ -627,8 +549,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     const TCHAR* original_caption =
         StringToStringDflt(node.GetAttribute(_T("Caption")), _T(""));
 
-    window = new WndSymbolButton(parent, *xml_dialog_look, original_caption,
-                                 rc,
+    window = new WndSymbolButton(parent, UIGlobals::GetDialogLook().button,
+                                 original_caption, rc,
                                  style, click_callback);
 
   // PanelControl (WndPanel)
@@ -637,7 +559,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.ControlParent();
 
-    PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
+    PanelControl *frame = new PanelControl(parent, UIGlobals::GetDialogLook(),
                                            rc,
                                            style);
 
@@ -663,14 +585,11 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   // FrameControl (WndFrame)
   } else if (StringIsEqual(node.GetName(), _T("Label"))){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(parent, *xml_dialog_look, rc, style);
+    WndFrame* frame = new WndFrame(parent, UIGlobals::GetDialogLook(),
+                                   rc, style);
 
     // Set the caption
     frame->SetCaption(caption);
-    // Set caption color
-    Color color;
-    if (StringToColor(node.GetAttribute(_T("CaptionColor")), color))
-      frame->SetCaptionColor(color);
 
     window = frame;
 
@@ -684,7 +603,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     LargeTextWindow *ltw = new LargeTextWindow();
     ltw->Create(parent, rc, style);
-    ltw->SetFont(*xml_dialog_look->text_font);
+    ltw->SetFont(*UIGlobals::GetDialogLook().text_font);
 
     window = ltw;
 
@@ -707,7 +626,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     const PixelRect rc(pos.x, pos.y, pos.x + size.cx, pos.y + size.cy);
 
-    window = new ListControl(parent, *xml_dialog_look,
+    window = new ListControl(parent, UIGlobals::GetDialogLook(),
                              rc, style, item_height);
 
   // TabControl (Tabbed)
@@ -733,7 +652,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     // Create the TabBarControl
 
     style.ControlParent();
-    TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look, rc,
+    TabBarControl *tabbar = new TabBarControl(parent,
+                                              UIGlobals::GetDialogLook(), rc,
                                               style, Layout::landscape);
     window = tabbar;
 
@@ -747,8 +667,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
                                                     an ugly hack!
                                                     Please rewrite: */
                                                  (WndForm &)form,
-                                                 *xml_dialog_look, caption,
-                                                 rc, style);
+                                                 UIGlobals::GetDialogLook(),
+                                                 caption, rc, style);
     window = tabmenu;
 
   } else if (StringIsEqual(node.GetName(), _T("Custom"))) {

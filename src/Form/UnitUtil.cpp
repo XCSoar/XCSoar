@@ -37,8 +37,7 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
   assert(control_name != NULL);
 
   WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
+  assert(ctl != nullptr);
 
   Unit unit = Units::GetUserUnitByGroup(unit_group);
 
@@ -63,22 +62,6 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
   assert(df.GetType() == DataField::Type::REAL);
   df.SetUnits(Units::GetUnitName(unit));
-  df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
+  df.Set(Units::ToUserUnit(value, unit));
   ctl->RefreshDisplay();
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, fixed &value)
-{
-  assert(control_name != NULL);
-
-  fixed new_value = GetFormValueFixed(form, control_name);
-  Unit unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
 }
