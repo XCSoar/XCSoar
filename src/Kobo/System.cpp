@@ -45,6 +45,20 @@ RmMod(const char *name)
   return Run("/sbin/rmmod", name);
 }
 
+/**
+ * Determine the location of the current program, and build a path to
+ * another program in the same directory.
+ */
+static bool
+SiblingPath(const char *name, char *buffer, size_t size)
+{
+  if (readlink("/proc/self/exe", buffer, size) <= 0)
+    return false;
+
+  ReplaceBaseName(buffer, name);
+  return true;
+}
+
 #endif
 
 bool
@@ -144,9 +158,7 @@ KoboRunXCSoar()
   char buffer[256];
   const char *cmd = buffer;
 
-  if (readlink("/proc/self/exe", buffer, sizeof(buffer)) > 0)
-    ReplaceBaseName(buffer, "xcsoar");
-  else
+  if (!SiblingPath("xcsoar", buffer, sizeof(buffer)))
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
   Run(cmd);
