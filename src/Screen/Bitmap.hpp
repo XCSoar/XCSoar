@@ -132,11 +132,11 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     return size.cx;
   }
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return size.cy;
   }
 #endif
