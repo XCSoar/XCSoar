@@ -75,6 +75,11 @@ bool
 KoboPowerOff()
 {
 #ifdef KOBO
+  char buffer[256];
+  if (SiblingPath("PowerOff", buffer, sizeof(buffer)))
+    execl(buffer, buffer, nullptr);
+
+  /* fall back */
   return Run("/sbin/poweroff");
 #else
   return false;
