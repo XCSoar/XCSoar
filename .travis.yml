@@ -28,10 +28,10 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then sudo apt-get install default-jre default-jdk ant vorbis-tools; fi
   - if [[ "$TARGET" == "ANDROID" ]] && [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/android-sdk_r22.0.1-linux.tgz; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/ndk/android-ndk-r8e-linux-x86_64.tar.bz2; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r22.0.1-linux.tgz -C ~/opt; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r8e-linux-x86_64.tar.bz2 -C ~/opt; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r9-linux-x86_64.tar.bz2 -C ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-18.0.1,android-17; fi
 
   # Windows Mobile
