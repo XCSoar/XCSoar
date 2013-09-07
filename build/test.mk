@@ -710,6 +710,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHorizonRenderer \
 	RunFinalGlideBarRenderer \
 	RunFAITriangleSectorRenderer \
+	RunFlightListRenderer \
 	RunProgressWindow \
 	RunJobDialog \
 	RunAnalysis \
@@ -2133,6 +2134,20 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD GEO MATH UTIL
 $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_RENDERER))
+
+RUN_FLIGHT_LIST_RENDERER_SOURCES = \
+	$(SRC)/Hardware/CPU.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/RotateDisplay.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Renderer/FlightListRenderer.cpp \
+	$(SRC)/Logger/FlightParser.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
+RUN_FLIGHT_LIST_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL
+$(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
