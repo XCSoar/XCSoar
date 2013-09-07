@@ -109,6 +109,14 @@ class TopCanvas
   uint32_t epd_update_marker;
 #endif
 
+#ifdef KOBO
+  /**
+   * Runtime flag that can be used to disable dithering at runtime for
+   * some situations.
+   */
+  bool enable_dither;
+#endif
+
 public:
 #ifdef USE_FB
   TopCanvas()
@@ -116,7 +124,11 @@ public:
 #ifdef USE_TTY
     tty_fd(-1),
 #endif
-    fd(-1), map(nullptr) {}
+    fd(-1), map(nullptr)
+#ifdef KOBO
+    , enable_dither(true)
+#endif
+  {}
 #elif defined(USE_TTY)
   TopCanvas():tty_fd(-1) {}
 #endif
@@ -193,6 +205,10 @@ public:
    * Wait until the screen update is complete.
    */
   void Wait();
+
+  void SetEnableDither(bool _enable_dither) {
+    enable_dither = _enable_dither;
+  }
 #endif
 
 private:

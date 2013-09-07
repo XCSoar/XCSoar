@@ -125,6 +125,8 @@ int main(int argc, char **argv)
       screen.Flip();
       screen.Wait();
 
+      screen.SetEnableDither(false);
+
       canvas.ClearWhite();
       Draw(canvas);
       screen.Unlock();
