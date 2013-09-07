@@ -114,7 +114,7 @@ TCPClientPort::OnFileEvent(int fd, unsigned mask)
     connecting.Close();
   }
 
-  return false;
+  return true;
 }
 
 #endif
