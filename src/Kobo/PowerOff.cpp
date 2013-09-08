@@ -33,6 +33,7 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "Logger/FlightParser.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Resources.hpp"
 
 #include <algorithm>
 #include <stdio.h>

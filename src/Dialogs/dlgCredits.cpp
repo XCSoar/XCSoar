@@ -38,7 +38,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "Util/ConvertString.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 #include <assert.h>
 

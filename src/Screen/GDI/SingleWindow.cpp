@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Event/GDI/Event.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 #include <cassert>
 

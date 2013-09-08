@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ProgressWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 #ifdef USE_GDI
 #include "Screen/VirtualCanvas.hpp"

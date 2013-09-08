@@ -23,8 +23,7 @@ Copyright_License {
 
 #include "IconLook.hpp"
 #include "Screen/Layout.hpp"
-
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 IconLook::Initialise()

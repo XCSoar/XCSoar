@@ -30,7 +30,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Compatibility/path.h"
 #include "Asset.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 #include <stdint.h>
 #include <windef.h> // for MAX_PATH
