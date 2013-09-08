@@ -59,7 +59,7 @@ using BitmapPixelTraits = BGRAPixelTraits;
 /**
  * An image loaded from storage.
  */
-class Bitmap
+class Bitmap final
 #ifdef ENABLE_OPENGL
              : private GLSurfaceListener
 #endif
