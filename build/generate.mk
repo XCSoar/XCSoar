@@ -66,6 +66,7 @@ $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc src/resource.h | $(TARGET_OUTPUT_
 	$(Q)$(HOSTCPP) -o $@ $< -I$(SRC) $(TARGET_CPPFLAGS)
 
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
+	$(RESOURCE_FILES) \
 	tools/GenerateResources.pl | $(TARGET_OUTPUT_DIR)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/GenerateResources.pl $< >$@.tmp
