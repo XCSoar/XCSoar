@@ -31,11 +31,8 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #endif
 
-#ifdef ENABLE_OPENGL
-#include "Util/tstring.hpp"
-#endif
-
 #ifdef ANDROID
+#include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 #endif
 
