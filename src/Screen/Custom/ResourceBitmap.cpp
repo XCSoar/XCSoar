@@ -40,7 +40,7 @@ Bitmap::Load(unsigned id, Type type)
   return Load(uncompressed, type);
 }
 
-#ifdef USE_MEMORY_CANVAS
+#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 
 bool
 Bitmap::LoadStretch(unsigned id, unsigned zoom)

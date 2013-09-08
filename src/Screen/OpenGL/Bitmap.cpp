@@ -53,15 +53,6 @@ Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
   return true;
 }
 
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
 #ifndef ANDROID
 
 void
