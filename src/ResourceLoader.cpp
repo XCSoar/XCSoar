@@ -80,6 +80,8 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 #endif
 }
 
+#ifndef ANDROID
+
 ResourceLoader::Data
 ResourceLoader::Load(unsigned id)
 {
@@ -94,6 +96,8 @@ ResourceLoader::Load(unsigned id)
   return Data::Null();
 #endif
 }
+
+#endif
 
 #ifdef WIN32
 HBITMAP

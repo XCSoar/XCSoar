@@ -45,8 +45,10 @@ namespace ResourceLoader {
   Data
   Load(const TCHAR *name, const TCHAR *type);
 
+#ifndef ANDROID
   Data
   Load(unsigned id);
+#endif
 
 #ifdef WIN32
   HBITMAP
