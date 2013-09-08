@@ -72,9 +72,9 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
   return Data(data, size);
 #else
 
-  for (unsigned i = 0; named_resources[i].data != NULL; ++i)
+  for (unsigned i = 0; !named_resources[i].data.IsNull(); ++i)
     if (_tcscmp(named_resources[i].name, name) == 0)
-      return Data(named_resources[i].data, named_resources[i].size);
+      return named_resources[i].data;
 
   return Data::Null();
 #endif
@@ -87,9 +87,9 @@ ResourceLoader::Load(unsigned id)
   return Load(MAKEINTRESOURCE(id), RT_BITMAP);
 #else
 
-  for (unsigned i = 0; numeric_resources[i].data != NULL; ++i)
+  for (unsigned i = 0; !numeric_resources[i].data.IsNull(); ++i)
     if (numeric_resources[i].id == id)
-      return Data(numeric_resources[i].data, numeric_resources[i].size);
+      return numeric_resources[i].data;
 
   return Data::Null();
 #endif

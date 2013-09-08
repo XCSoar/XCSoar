@@ -40,29 +40,27 @@ while (<>) {
     }
 }
 
-print "#include <stddef.h>\n";
+print "#include \"Util/ConstBuffer.hpp\"\n";
 print "#include <tchar.h>\n";
 
 print "static constexpr struct {\n";
 print "  unsigned id;\n";
-print "  const unsigned char *data;\n";
-print "  size_t size;\n";
+print "  ConstBuffer<void> data;\n";
 print "} numeric_resources[] = {";
 foreach my $i (@numeric) {
-    print "  { $i, resource_$i, sizeof(resource_$i) },\n";
+    print "  { $i, { resource_$i, sizeof(resource_$i) } },\n";
 }
-print "  { 0, NULL, 0 }\n";
+print "  { 0, { nullptr, 0 } }\n";
 print "};\n";
 
 print "static constexpr struct {\n";
 print "  const TCHAR *name;\n";
-print "  const void *data;\n";
-print "  size_t size;\n";
+print "  ConstBuffer<void> data;\n";
 print "} named_resources[] = {";
 foreach my $i (@named) {
     my $variable = "resource_$i";
     $variable =~ s,\.,_,g;
-    print "  { _T(\"$i\"), $variable, sizeof($variable) },\n";
+    print "  { _T(\"$i\"), { $variable, sizeof($variable) } },\n";
 }
-print "  { 0, NULL, 0 }\n";
+print "  { 0, { nullptr, 0 } }\n";
 print "};\n";
