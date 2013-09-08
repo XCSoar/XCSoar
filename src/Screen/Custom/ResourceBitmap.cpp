@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "LibPNG.hpp"
 #include "UncompressedImage.hpp"
 #include "ResourceLoader.hpp"
 
@@ -36,8 +35,7 @@ Bitmap::Load(unsigned id, Type type)
   if (data.IsNull())
     return false;
 
-  const UncompressedImage uncompressed = LoadPNG(data.data, data.size);
-  return Load(uncompressed, type);
+  return Load(data, type);
 }
 
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)

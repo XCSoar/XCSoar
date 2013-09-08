@@ -23,8 +23,17 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+#include "LibPNG.hpp"
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
+#include "Util/ConstBuffer.hpp"
+
+bool
+Bitmap::Load(ConstBuffer<void> buffer, Type type)
+{
+  const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
+  return Load(uncompressed, type);
+}
 
 bool
 Bitmap::LoadFile(const TCHAR *path)

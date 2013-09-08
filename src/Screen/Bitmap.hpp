@@ -45,6 +45,7 @@ Copyright_License {
 #include <stdint.h>
 
 class UncompressedImage;
+template<typename T> struct ConstBuffer;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -163,7 +164,10 @@ public:
   void EnableInterpolation() {}
 #endif
 
+#if !defined(USE_GDI) && !defined(ANDROID)
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
+  bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
+#endif
 
   bool Load(unsigned id, Type type=Type::STANDARD);
 
