@@ -97,6 +97,7 @@ include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
+include $(topdir)/build/libresource.mk
 include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk

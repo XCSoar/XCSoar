@@ -606,7 +606,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
@@ -763,13 +762,11 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
-XCSOAR_LDADD = \
-	$(RESOURCE_BINARY)
-
 XCSOAR_DEPENDS = GETTEXT PROFILE \
 	TERRAIN \
 	WIDGET FORM DATA_FIELD \
 	AUDIO SCREEN EVENT \
+	RESOURCE \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB ZZIP \

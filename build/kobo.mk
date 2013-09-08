@@ -4,7 +4,6 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/DialogLook.cpp \
@@ -26,7 +25,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Kobo/FakeSymbols.cpp \
 	$(SRC)/Kobo/KoboMenu.cpp
 KOBO_MENU_LDADD = $(FAKE_LIBS)
-KOBO_MENU_DEPENDS = WIDGET FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+KOBO_MENU_DEPENDS = WIDGET FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 KOBO_MENU_STRIP = y
 
 $(eval $(call link-program,KoboMenu,KOBO_MENU))
@@ -40,12 +39,11 @@ ifeq ($(TARGET_IS_KOBO),y)
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/Kobo/PowerOff.cpp
 KOBO_POWER_OFF_LDADD = $(FAKE_LIBS)
-KOBO_POWER_OFF_DEPENDS = SCREEN IO OS UTIL
+KOBO_POWER_OFF_DEPENDS = SCREEN RESOURCE IO OS UTIL
 KOBO_POWER_OFF_STRIP = y
 $(eval $(call link-program,PowerOff,KOBO_POWER_OFF))
 OPTIONAL_OUTPUTS += $(KOBO_POWER_OFF_BIN)

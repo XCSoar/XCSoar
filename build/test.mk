@@ -1603,12 +1603,11 @@ LOAD_IMAGE_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/LoadImage.cpp
 LOAD_IMAGE_LDADD = $(FAKE_LIBS)
-LOAD_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+LOAD_IMAGE_DEPENDS = SCREEN RESOURCE EVENT ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,LoadImage,LOAD_IMAGE))
 
 VIEW_IMAGE_SOURCES = \
@@ -1617,7 +1616,6 @@ VIEW_IMAGE_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/ViewImage.cpp
@@ -1736,7 +1734,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/NOAALook.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Computer/Settings.cpp \
 	$(SRC)/Computer/Wind/Settings.cpp \
@@ -1818,8 +1815,7 @@ RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 
-RUN_MAP_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_MAP_WINDOW_DEPENDS = PROFILE TERRAIN SCREEN EVENT SHAPELIB IO ASYNC OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
+RUN_MAP_WINDOW_DEPENDS = PROFILE TERRAIN SCREEN EVENT RESOURCE SHAPELIB IO ASYNC OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_DIALOG_SOURCES = \
@@ -1836,7 +1832,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
@@ -1849,9 +1844,8 @@ RUN_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/fmode.c
 RUN_DIALOG_LDADD = \
-	$(RESOURCE_BINARY) \
 	$(FAKE_LIBS)
-RUN_DIALOG_DEPENDS = GEO IO FORM WIDGET DATA_FIELD SCREEN EVENT ASYNC OS THREAD MATH ZZIP UTIL TIME
+RUN_DIALOG_DEPENDS = GEO IO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS THREAD MATH ZZIP UTIL TIME
 $(eval $(call link-program,RunDialog,RUN_DIALOG))
 
 RUN_LIST_CONTROL_SOURCES = \
@@ -1859,7 +1853,6 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/UIUtil/KineticManager.cpp \
@@ -1867,7 +1860,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
-RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TEXT_ENTRY_SOURCES = \
@@ -1880,7 +1873,6 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
@@ -1892,8 +1884,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
-RUN_TEXT_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 
 RUN_NUMBER_ENTRY_SOURCES = \
@@ -1904,7 +1895,6 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/XML/Node.cpp \
@@ -1917,8 +1907,7 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunNumberEntry.cpp
-RUN_NUMBER_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
 
 RUN_TIME_ENTRY_SOURCES = \
@@ -1929,7 +1918,6 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1940,8 +1928,7 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunTimeEntry.cpp
-RUN_TIME_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTimeEntry,RUN_TIME_ENTRY))
 
 RUN_ANGLE_ENTRY_SOURCES = \
@@ -1952,7 +1939,6 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1963,8 +1949,7 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunAngleEntry.cpp
-RUN_ANGLE_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB TIME
+RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunAngleEntry,RUN_ANGLE_ENTRY))
 
 RUN_GEOPOINT_ENTRY_SOURCES = \
@@ -1975,7 +1960,6 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1987,8 +1971,7 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/RunGeoPointEntry.cpp
-RUN_GEOPOINT_ENTRY_LDADD = $(RESOURCE_BINARY)
-RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD MATH UTIL ZLIB GEOPOINT
+RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD MATH UTIL ZLIB GEOPOINT
 $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
@@ -1998,7 +1981,6 @@ RUN_TERMINAL_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
@@ -2016,13 +1998,11 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Projection/Projection.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
-RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
-RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT ASYNC OS THREAD GEO MATH UTIL
+RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT RESOURCE ASYNC OS THREAD GEO MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 
 RUN_CHART_RENDERER_SOURCES = \
@@ -2033,14 +2013,12 @@ RUN_CHART_RENDERER_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunChartRenderer.cpp
-RUN_CHART_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunChartRenderer,RUN_CHART_RENDERER))
 
 RUN_WIND_ARROW_RENDERER_SOURCES = \
@@ -2052,7 +2030,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -2061,8 +2038,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
-RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
@@ -2072,13 +2048,11 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
-RUN_HORIZON_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
@@ -2092,7 +2066,6 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -2112,8 +2085,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
-RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD TASK GLIDE GEO MATH UTIL
+RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD TASK GLIDE GEO MATH UTIL
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
@@ -2125,14 +2097,12 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSettings.cpp \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFAITriangleSectorRenderer.cpp
-RUN_FAI_TRIANGLE_SECTOR_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC OS THREAD GEO MATH UTIL
+RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD GEO MATH UTIL
 $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_RENDERER))
 
 RUN_FLIGHT_LIST_RENDERER_SOURCES = \
@@ -2145,7 +2115,6 @@ RUN_FLIGHT_LIST_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
-RUN_FLIGHT_LIST_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL
 $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 
@@ -2157,12 +2126,10 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
-RUN_PROGRESS_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT ASYNC OS THREAD MATH UTIL
+RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL
 $(eval $(call link-program,RunProgressWindow,RUN_PROGRESS_WINDOW))
 
 RUN_JOB_DIALOG_SOURCES = \
@@ -2178,15 +2145,13 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
-RUN_JOB_DIALOG_LDADD = $(RESOURCE_BINARY)
-RUN_JOB_DIALOG_DEPENDS = THREAD FORM SCREEN EVENT ASYNC OS MATH UTIL
+RUN_JOB_DIALOG_DEPENDS = THREAD FORM SCREEN EVENT RESOURCE ASYNC OS MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
@@ -2237,7 +2202,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
@@ -2360,9 +2324,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
-RUN_ANALYSIS_LDADD = \
-	$(RESOURCE_BINARY)
-RUN_ANALYSIS_DEPENDS = TERRAIN DRIVER PROFILE FORM WIDGET SCREEN EVENT ASYNC IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
+RUN_ANALYSIS_DEPENDS = TERRAIN DRIVER PROFILE FORM WIDGET SCREEN EVENT RESOURCE ASYNC IO DATA_FIELD OS THREAD CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
@@ -2393,7 +2355,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -2409,10 +2370,8 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
-RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
-	$(FAKE_LIBS) \
-	$(RESOURCE_BINARY)
-RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO ASYNC OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME
+RUN_AIRSPACE_WARNING_DIALOG_LDADD = $(FAKE_LIBS)
+RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO ASYNC OS THREAD AIRSPACE ZZIP UTIL GEO MATH TIME
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
 
 PLAY_TONE_SOURCES = \
@@ -2481,10 +2440,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
-RUN_TASK_EDITOR_DIALOG_LDADD = \
-	$(FAKE_LIBS) \
-	$(RESOURCE_BINARY)
-RUN_TASK_EDITOR_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT IO OS THREAD ZZIP UTIL GEO
+RUN_TASK_EDITOR_DIALOG_LDADD = $(FAKE_LIBS)
+RUN_TASK_EDITOR_DIALOG_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO OS THREAD ZZIP UTIL GEO
 $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
