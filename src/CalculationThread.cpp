@@ -26,7 +26,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Hardware/CPU.hpp"
 
 /**

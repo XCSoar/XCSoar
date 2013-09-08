@@ -23,11 +23,8 @@
 #include "AlternateTask.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Geo/Math.hpp"
-#include "Task/TaskEvents.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
 #include "Navigation/Aircraft.hpp"
-
-#include <limits.h>
 
 AlternateTask::AlternateTask(const TaskBehaviour &tb,
                              const Waypoints &wps):

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "GlueMapWindow.hpp"
 #include "Look/MapLook.hpp"
-#include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
@@ -35,10 +34,8 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIState.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
-#include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"

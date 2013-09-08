@@ -23,8 +23,7 @@
 #include "AirspaceRoute.hpp"
 #include "Geo/SearchPointVector.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspacePolygon.hpp"
+#include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/Predicate/AirspacePredicateHeightRange.hpp"
 #include "Geo/Flat/FlatRay.hpp"
 

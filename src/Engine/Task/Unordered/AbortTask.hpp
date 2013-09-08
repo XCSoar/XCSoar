@@ -26,13 +26,12 @@
 #include "UnorderedTask.hpp"
 #include "UnorderedTaskPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "AlternatePoint.hpp"
-#include "AlternateList.hpp"
 
 #include <assert.h>
 
 class Waypoints;
 class AbortIntersectionTest;
+class AlternateList;
 
 /**
  * Abort task provides automatic management of a sorted list of task points

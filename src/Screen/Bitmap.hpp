@@ -42,7 +42,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <tchar.h>
-#include <stdint.h>
 
 class UncompressedImage;
 template<typename T> struct ConstBuffer;

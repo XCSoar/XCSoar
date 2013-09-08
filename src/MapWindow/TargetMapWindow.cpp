@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TargetMapWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -48,8 +47,6 @@ Copyright_License {
 #else
 #include "Screen/WindowCanvas.hpp"
 #endif
-
-#include <tchar.h>
 
 static const ComputerSettings &
 GetComputerSettings()

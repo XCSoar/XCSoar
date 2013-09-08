@@ -28,9 +28,6 @@
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
-struct TaskBehaviour;
-struct AircraftState;
-
 /**
  * Base class for all task points 
  */

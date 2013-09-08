@@ -35,7 +35,6 @@ Copyright_License {
 
 #include <set>
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 class TracePointVector;

@@ -31,6 +31,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
+struct TaskBehaviour;
 struct OrderedTaskSettings;
 
 /**

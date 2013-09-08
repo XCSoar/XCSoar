@@ -33,7 +33,6 @@ class WndForm;
 class TabMenuDisplay;
 class SubMenuButton;
 class MainMenuButton;
-class ContainerWindow;
 
 /** TabMenuControl is a two-level menu structure.
  * The menu items are linked to Tab panels

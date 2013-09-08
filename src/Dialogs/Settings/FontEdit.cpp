@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/LargeTextWindow.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"

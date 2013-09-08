@@ -30,7 +30,6 @@
 
 class GlidePolar;
 struct GlideSettings;
-struct GlideResult;
 class TaskProjection;
 class RasterMap;
 struct SpeedVector;

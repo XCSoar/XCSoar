@@ -26,8 +26,6 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 
-#include <assert.h>
-
 AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
                                  const bool prune)
   :AbstractAirspace(Shape::POLYGON)

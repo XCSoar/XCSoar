@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Trace.hpp"
 #include "Vector.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Util/GlobalSliceAllocator.hpp"
 
 #include <algorithm>

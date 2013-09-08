@@ -25,7 +25,6 @@
 
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/AbstractTask.hpp"
-#include "Task/TaskBehaviour.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
 

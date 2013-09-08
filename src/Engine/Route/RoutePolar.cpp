@@ -24,9 +24,6 @@
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
-#include "Geo/SpeedVector.hpp"
-
-#include <assert.h>
 
 GlideResult
 RoutePolar::SolveTask(const GlideSettings &settings,

@@ -30,7 +30,6 @@
 #include "Math/Filter.hpp"
 
 class TaskPointConstVisitor;
-class AbortTask;
 class TaskEvents;
 class GlidePolar;
 

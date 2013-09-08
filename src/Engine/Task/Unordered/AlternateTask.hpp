@@ -24,6 +24,7 @@
 #define ALTERNATETASK_HPP
 
 #include "AbortTask.hpp"
+#include "AlternateList.hpp"
 
 /**
  * AlternateTask is a specialisation of AbortTask to add functionality

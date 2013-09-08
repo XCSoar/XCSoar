@@ -33,9 +33,7 @@ Copyright_License {
 
 struct DialogLook;
 class Bitmap;
-class ContainerWindow;
 class TabDisplay;
-class TabButton;
 
 /** TabBarControl displays tabs that show/hide the windows
  * associated with each tab.  For example a "Panel" control.
