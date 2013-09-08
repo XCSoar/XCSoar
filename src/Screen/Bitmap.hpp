@@ -33,6 +33,9 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Util/tstring.hpp"
+#endif
+
+#ifdef ANDROID
 #include "Screen/OpenGL/Surface.hpp"
 #endif
 
@@ -60,7 +63,7 @@ using BitmapPixelTraits = BGRAPixelTraits;
  * An image loaded from storage.
  */
 class Bitmap final
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
              : private GLSurfaceListener
 #endif
 {
@@ -79,11 +82,14 @@ public:
   };
 
 protected:
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
   /** resource id */
   unsigned id;
   /** filename for external images (id=0) */
   tstring pathName;
+#endif
+
+#ifdef ENABLE_OPENGL
   GLTexture *texture;
   PixelSize size;
 
@@ -96,7 +102,12 @@ protected:
 
 public:
 #ifdef ENABLE_OPENGL
-  Bitmap():id(0), texture(NULL), interpolation(false) {}
+  Bitmap()
+    :
+#ifdef ANDROID
+    id(0),
+#endif
+    texture(NULL), interpolation(false) {}
   explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
     Load(id);
   }
@@ -186,7 +197,7 @@ public:
   }
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
 private:
   /**
    * Load the texture again after the OpenGL surface has been

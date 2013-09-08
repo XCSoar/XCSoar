@@ -124,3 +124,16 @@ Bitmap::Reset()
   delete texture;
   texture = NULL;
 }
+
+void
+Bitmap::SurfaceCreated()
+{
+  Reload();
+}
+
+void
+Bitmap::SurfaceDestroyed()
+{
+  delete texture;
+  texture = NULL;
+}

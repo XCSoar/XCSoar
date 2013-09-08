@@ -64,17 +64,6 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
 
 #ifndef ANDROID
 
-bool
-Bitmap::Reload()
-{
-  assert(id != 0);
-  assert(texture == NULL);
-
-  /* XXX this is no real implementation; we currently support OpenGL
-     surface reinitialisation only on Android */
-  return Load(id);
-}
-
 void
 Bitmap::Reset()
 {
@@ -86,19 +75,6 @@ Bitmap::Reset()
 }
 
 #endif /* !ANDROID */
-
-void
-Bitmap::SurfaceCreated()
-{
-  Reload();
-}
-
-void
-Bitmap::SurfaceDestroyed()
-{
-  delete texture;
-  texture = NULL;
-}
 
 const PixelSize
 Bitmap::GetSize() const
