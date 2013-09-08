@@ -50,9 +50,9 @@ UnitSymbol::Load(unsigned id)
   assert(buffer.data == nullptr);
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
-  assert(data.first != nullptr);
+  assert(!data.IsNull());
 
-  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  const UncompressedImage uncompressed = LoadPNG(data.data, data.size);
   assert(uncompressed.GetFormat() == UncompressedImage::Format::GRAY);
 
   const size_t size = uncompressed.GetPitch() * uncompressed.GetHeight();

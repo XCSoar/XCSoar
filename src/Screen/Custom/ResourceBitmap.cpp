@@ -33,10 +33,10 @@ Bitmap::Load(unsigned id, Type type)
   assert(IsScreenInitialized());
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.first == nullptr)
+  if (data.IsNull())
     return false;
 
-  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  const UncompressedImage uncompressed = LoadPNG(data.data, data.size);
   return Load(uncompressed, type);
 }
 

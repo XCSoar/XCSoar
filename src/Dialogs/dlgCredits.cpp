@@ -168,9 +168,9 @@ static void
 LoadTextFromResource(const TCHAR* name, const TCHAR* control)
 {
   ResourceLoader::Data data = ResourceLoader::Load(name, _T("TEXT"));
-  assert(data.first != NULL);
+  assert(!data.IsNull());
 
-  char *buffer = InflateToString(data.first, data.second);
+  char *buffer = InflateToString(data.data, data.size);
 
   UTF8ToWideConverter text(buffer);
   if (text.IsValid())

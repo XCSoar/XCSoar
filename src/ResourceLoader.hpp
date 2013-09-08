@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_LOADER_HPP
 #define XCSOAR_RESOURCE_LOADER_HPP
 
+#include "Util/ConstBuffer.hpp"
+
 #ifdef WIN32
 #include <windef.h>
 #endif
@@ -38,7 +40,7 @@ namespace ResourceLoader {
   Init(HINSTANCE hInstance);
 #endif
 
-  typedef std::pair<const void *, size_t> Data;
+  typedef ConstBuffer<void> Data;
 
   Data
   Load(const TCHAR *name, const TCHAR *type);

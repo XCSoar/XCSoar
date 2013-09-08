@@ -271,14 +271,14 @@ ReadResourceLanguageFile(const TCHAR *resource)
 
   // Load resource
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
-  if (data.first == NULL) {
+  if (data.IsNull()) {
     LogFormat(_T("Language: resource '%s' not found"), resource);
     return false;
   }
 
   // Load MO file from resource
   delete mo_loader;
-  mo_loader = new MOLoader(data.first, data.second);
+  mo_loader = new MOLoader(data.data, data.size);
   if (mo_loader->error()) {
     LogFormat(_T("Language: could not load resource '%s'"), resource);
     delete mo_loader;

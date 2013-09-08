@@ -55,28 +55,28 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 
   HRSRC resource = ::FindResource(ResourceLoaderInstance, name, type);
   if (resource == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   DWORD size = ::SizeofResource(ResourceLoaderInstance, resource);
   if (size == 0)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   HGLOBAL handle = ::LoadResource(ResourceLoaderInstance, resource);
   if (handle == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   LPVOID data = LockResource(handle);
   if (data == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
-  return std::pair<const void *, size_t>(data, size);
+  return Data(data, size);
 #else
 
   for (unsigned i = 0; named_resources[i].data != NULL; ++i)
     if (_tcscmp(named_resources[i].name, name) == 0)
       return Data(named_resources[i].data, named_resources[i].size);
 
-  return Data((const void *)NULL, 0);
+  return Data::Null();
 #endif
 }
 
@@ -91,7 +91,7 @@ ResourceLoader::Load(unsigned id)
     if (numeric_resources[i].id == id)
       return Data(numeric_resources[i].data, numeric_resources[i].size);
 
-  return Data((const void *)NULL, 0);
+  return Data::Null();
 #endif
 }
 

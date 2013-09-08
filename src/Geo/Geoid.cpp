@@ -43,10 +43,10 @@ EGM96::Load()
 {
   ResourceLoader::Data data = ResourceLoader::Load(_T("IDR_RASTER_EGM96S"),
                                                    _T("RASTERDATA"));
-  assert(data.first != nullptr);
-  assert(data.second == EGM96SIZE);
+  assert(!data.IsNull());
+  assert(data.size == EGM96SIZE);
 
-  egm96data = (const uint8_t *)data.first;
+  egm96data = (const uint8_t *)data.data;
 }
 
 fixed
