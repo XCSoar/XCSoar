@@ -27,7 +27,6 @@ Copyright_License {
  */
 
 #include "Startup.hpp"
-#include "resource.h"
 #include "LocalPath.hpp"
 #include "Version.hpp"
 #include "Protection.hpp"

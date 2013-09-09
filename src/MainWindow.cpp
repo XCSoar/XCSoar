@@ -24,7 +24,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "resource.h"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"

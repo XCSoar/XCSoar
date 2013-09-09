@@ -27,7 +27,6 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "resource.h"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
