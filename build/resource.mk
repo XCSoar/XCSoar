@@ -192,7 +192,7 @@ endif
 
 endif
 
-output/include/resource.h: src/Resources.hpp output/include/dirstamp
+$(OUT)/include/resource.h: src/Resources.hpp $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
 	$(Q)mv $@.tmp $@
@@ -204,14 +204,14 @@ RESOURCE_TEXT = Data/XCSoar.rc
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 
-$(RESOURCE_BINARY): $(RESOURCE_TEXT) output/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
+$(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
 else
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/resources.a
-$(RESOURCE_BINARY): $(TARGET_OUTPUT_DIR)/XCSoar.rc output/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl | $(TARGET_OUTPUT_DIR)/resources/dirstamp
+$(RESOURCE_BINARY): $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/LinkResources.pl $< $@ "$(LD)" "$(AR) $(ARFLAGS)"
 
