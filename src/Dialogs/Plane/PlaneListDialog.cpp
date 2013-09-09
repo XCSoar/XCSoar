@@ -247,7 +247,7 @@ PlaneListWidget::LoadWithDialog(unsigned i)
     text.Format(_("Activating plane profile \"%s\" failed!"),
                 list[i].name.c_str());
   } else {
-    title = _(" ");
+    title = _T(" ");
     text.Format(_("Plane profile \"%s\" activated."),
                 list[i].name.c_str());
   }
