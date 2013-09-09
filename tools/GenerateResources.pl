@@ -11,17 +11,13 @@ sub generate_blob($$) {
 
 print "#include <stdint.h>\n";
 
-my @numeric;
 my @named;
 
 while (<>) {
     # merge adjacent strings
     while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
 
-    if (/^\s*(\d+)\s+BITMAP\s+DISCARDABLE\s+"(.*?)"\s*$/) {
-        push @numeric, [ $1, -s "Data/$2" ];
-        generate_blob("resource_$1", "Data/$2");
-    } elsif (/^\s*([.\w]+)\s+(?:TEXT|XMLDIALOG|MO|RASTERDATA)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
+    if (/^\s*([.\w]+)\s+(?:XMLDIALOG)\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @named, [ $1, -s "Data/$2" ];
         my $path = $2;
         my $variable = "resource_$1";
@@ -32,17 +28,6 @@ while (<>) {
 
 print "#include \"Util/ConstBuffer.hpp\"\n";
 print "#include <tchar.h>\n";
-
-print "static constexpr struct {\n";
-print "  ResourceId id;\n";
-print "  ConstBuffer<void> data;\n";
-print "} numeric_resources[] = {";
-foreach my $i (@numeric) {
-    my ($id, $size) = @$i;
-    print "  { ResourceId(${id}), { resource_${id}, ${size} } },\n";
-}
-print "  { ResourceId::Null(), { nullptr, 0 } }\n";
-print "};\n";
 
 print "static constexpr struct {\n";
 print "  const TCHAR *name;\n";

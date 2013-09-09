@@ -89,12 +89,7 @@ ResourceLoader::Load(ResourceId id)
 #ifdef WIN32
   return Load(MAKEINTRESOURCE((unsigned)id), RT_BITMAP);
 #else
-
-  for (unsigned i = 0; !numeric_resources[i].data.IsNull(); ++i)
-    if (numeric_resources[i].id == id)
-      return numeric_resources[i].data;
-
-  return Data::Null();
+  return id;
 #endif
 }
 

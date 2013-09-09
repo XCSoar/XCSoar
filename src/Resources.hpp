@@ -1,6 +1,20 @@
 #include "ResourceId.hpp"
+
+#if defined(USE_GDI) || defined(ANDROID)
+
 #define MAKE_RESOURCE(name, id) \
   static constexpr ResourceId name(id);
+
+#else
+
+#include "Util/ConstBuffer.hpp"
+
+#define MAKE_RESOURCE(name, id) \
+  extern const char resource_ ## id[]; \
+  extern const char resource_ ## id ## _size[]; \
+  static constexpr ResourceId name(resource_ ##id, resource_ ##id ## _size);
+
+#endif
 
 MAKE_RESOURCE(IDB_LANDABLE, 139);
 MAKE_RESOURCE(IDB_LANDABLE_HD, 5139);
