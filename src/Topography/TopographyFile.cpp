@@ -35,8 +35,9 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                                fixed _label_threshold,
                                fixed _important_label_threshold,
                                const Color _color,
-                               int _label_field, int _icon,
-                               int _pen_width)
+                               int _label_field,
+                               unsigned _icon,
+                               unsigned _pen_width)
   :dir(_dir), first(NULL),
    label_field(_label_field), icon(_icon),
    pen_width(_pen_width),

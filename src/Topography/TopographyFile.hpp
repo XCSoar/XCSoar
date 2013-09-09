@@ -65,7 +65,11 @@ class TopographyFile : private NonCopyable {
   AllocatedArray<ShapeList> shapes;
   const ShapeList *first;
 
-  int label_field, icon, pen_width;
+  int label_field;
+
+  unsigned icon;
+
+  unsigned pen_width;
 
   Color color;
 
@@ -150,8 +154,8 @@ public:
                  fixed threshold, fixed label_threshold,
                  fixed important_label_threshold,
                  const Color color,
-                 int label_field=-1, int icon=0,
-                 int pen_width=1);
+                 int label_field=-1, unsigned icon=0,
+                 unsigned pen_width=1);
 
   /**
    * The destructor clears the cache and closes the shapefile
@@ -178,7 +182,7 @@ public:
     return map_scale <= important_label_threshold;
   }
 
-  int GetIcon() const {
+  unsigned GetIcon() const {
     return icon;
   }
 
@@ -186,7 +190,7 @@ public:
     return color;
   }
 
-  int GetPenWidth() const {
+  unsigned GetPenWidth() const {
     return pen_width;
   }
 

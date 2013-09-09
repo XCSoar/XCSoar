@@ -46,7 +46,7 @@ IsHugeTopographyFile(const char *name)
 
 typedef struct {
     const char *name;
-    int resource_id;
+    unsigned resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
@@ -226,11 +226,11 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     uint8_t blue = (uint8_t)strtol(p + 1, &p, 10);
 
     // Parse pen width of lines
-    int pen_width=1;
+    unsigned pen_width = 1;
     if (*p == _T(',')) {
-      pen_width = strtol(p + 1, &p, 10);
-      if (pen_width<0)
-        pen_width=1;
+      pen_width = strtoul(p + 1, &p, 10);
+      if (pen_width < 1)
+        pen_width = 1;
       else if (pen_width>31)
         pen_width=31;
     }
