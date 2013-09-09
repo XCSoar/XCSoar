@@ -26,6 +26,7 @@ ARFLAGS = -rcs
 
 ifeq ($(TARGET),WINE)
 AR = ar$(EXE)
+LD = ld$(EXE) -m elf_i386
 STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
 endif
