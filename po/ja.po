@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-02 11:05+0200\n"
-"PO-Revision-Date: 2013-06-24 00:00+0000\n"
-"Last-Translator: Masahiro Mori <Unknown>\n"
+"PO-Revision-Date: 2013-09-08 06:07+0000\n"
+"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-06-24 11:24+0000\n"
-"X-Generator: Launchpad (build 16677)\n"
+"X-Launchpad-Export-Date: 2013-09-09 04:52+0000\n"
+"X-Generator: Launchpad (build 16760)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2310,9 +2310,9 @@ msgid "On-Line Contest distance"
 msgstr "OLC　距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:911
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Dist"
-msgstr "WP　距離"
+msgstr "OLC  距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:912
 #, no-c-format
@@ -2891,12 +2891,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1244
 #, no-c-format
 msgid "Circle Diameter"
-msgstr ""
+msgstr "円の直径"
 
 #: src/InfoBoxes/Content/Factory.cpp:1245
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circle D"
-msgstr "旋回"
+msgstr "円の直径"
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
 #, no-c-format
@@ -2905,38 +2905,40 @@ msgid ""
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
+"旋回円の大きさ　、円の直径と予想される旋回時間\r\n"
+"翼面荷重の大きさによる最適旋回半径の判断に有効"
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance takeoff"
-msgstr "残り距離"
+msgstr "離陸地点　距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1254
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Takeoff Dist"
-msgstr "離陸時刻"
+msgstr "離陸地点距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1255
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Distance to where take-off was detected."
-msgstr "離陸が検出されてからの経過時間"
+msgstr "離陸が検出された地点からの距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:1263
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "On-Line Contest speed"
-msgstr "オンラインコンテスト"
+msgstr "オンラインコンテスト　速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1264
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "OLC Speed"
-msgstr "速度"
+msgstr "OLS　速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:1265
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Instantaneous evaluation of the flown speed according to the configured On-"
 "Line Contest rule set."
-msgstr "OLCルールにより計算した飛行距離"
+msgstr "オンライン　コンテスト規則によって算出された　現時点までの平均飛行速度"
 
 #: src/InfoBoxes/Content/Alternate.cpp:47
 #: src/Dialogs/Task/AlternatesListDialog.cpp:158 Data/Input/default.xci:388
@@ -3812,7 +3814,7 @@ msgstr "IOIO　電圧センサー"
 #: src/Dialogs/Device/DeviceEditWidget.cpp:82
 #, no-c-format
 msgid "TCP client"
-msgstr ""
+msgstr "TCPクライアント"
 
 #. label not translated for now, until we have a TCP/UDP port
 #. selection UI
@@ -3850,9 +3852,8 @@ msgstr ""
 "タスク宣言データーの転送に使用する"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:595
-#, fuzzy
 msgid "IP Address"
-msgstr "I2C アドレス"
+msgstr "IP アドレス"
 
 #: src/Dialogs/Device/DeviceEditWidget.cpp:605
 msgid "I2C Bus"
@@ -3928,9 +3929,8 @@ msgstr "NMEA信号　チェックが不適当であった場合は無視して�
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:260
 #: src/Dialogs/Device/DeviceListDialog.cpp:279
-#, fuzzy
 msgid "Disable"
-msgstr "無効"
+msgstr "無効にする"
 
 #: src/Dialogs/Device/DeviceListDialog.cpp:261
 #: src/Dialogs/Device/DeviceListDialog.cpp:454
@@ -4828,9 +4828,9 @@ msgid "Route"
 msgstr "ルート"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:107
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Scoring"
-msgstr "ツーリング"
+msgstr "採点"
 
 #: src/Dialogs/Settings/dlgConfiguration.cpp:108
 #, no-c-format
@@ -5058,23 +5058,22 @@ msgid "Delete"
 msgstr "削除"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:169
-#, fuzzy
 msgid "Activate"
-msgstr "有効"
+msgstr "有効化"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:199
 msgid "Active"
 msgstr "有効"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid "Activating plane profile \"%s\" failed!"
-msgstr "機体情報%s の読み込み失敗！"
+msgstr "\"%s\"の有効化に失敗しました"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:250
 #: src/Dialogs/Plane/PlaneListDialog.cpp:401
 msgid " "
-msgstr ""
+msgstr " "
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:251
 #, c-format
@@ -5103,9 +5102,9 @@ msgid "Do you really want to delete plane profile \"%s\"?"
 msgstr "機体情報\"%s\"本当に削除してよろしいですか？"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to activate plane profile \"%s\"?"
-msgstr "機体情報\"%s\"読み込みますか？"
+msgstr "\"%s\"の機体を選択しますか"
 
 #: src/Dialogs/Plane/PlaneListDialog.cpp:410
 msgid "Planes"
@@ -5541,7 +5540,7 @@ msgid "Waypoints edited"
 msgstr "ウエイポイント編集しました"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Turnpoint"
 msgstr "旋回点"
 
@@ -5553,9 +5552,9 @@ msgid "Airport"
 msgstr "空港"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Landpoint"
-msgstr "次の着陸地"
+msgstr "着陸地点"
 
 #: src/Dialogs/Waypoint/dlgWaypointEdit.cpp:72
 msgid "Comment"
@@ -5653,14 +5652,14 @@ msgid ""
 msgstr "半透明の太い線で空域の境界を囲む"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No fill"
-msgstr "塗りつぶし無し"
+msgstr "ファイルが有りません"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Don't fill the airspace area."
-msgstr "塗りつぶしタイプを選択してください"
+msgstr "空域の塗りつぶし　無し"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:151
 msgid "Colours"
@@ -5726,13 +5725,13 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:214
 msgid "Repetitive sound"
-msgstr ""
+msgstr "警告音を繰り返す"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:215
 msgid ""
 "Enable/disable repetitive warning sound when airspaces warnings dialog is "
 "displayed."
-msgstr ""
+msgstr "警告ダイアログ表示時の警告音をON/OFF設定する"
 
 #: src/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp:219
 msgid "Acknowledge time"
@@ -6212,12 +6211,12 @@ msgstr "横型表示を選択"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "8 Split"
-msgstr ""
+msgstr "８　スプリット"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Bottom or Right"
-msgstr "右下"
+msgstr "８　下　または　右"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:75
 #, no-c-format
@@ -6225,9 +6224,9 @@ msgid "8 Bottom + Vario (Portrait)"
 msgstr "8下　＋バリオ　（縦型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:77
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "8 Top or Left"
-msgstr "左上"
+msgstr "８　上　または　左"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:79
 #, no-c-format
@@ -6250,14 +6249,14 @@ msgid "5 Right (Square)"
 msgstr "５右　（四角型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:87
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Bottom or Right"
-msgstr "右下"
+msgstr "１２　下　または　右"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:89
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "12 Top or Left"
-msgstr "左上"
+msgstr "１２　上　または　左"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:91
 #, no-c-format
@@ -6265,14 +6264,14 @@ msgid "24 Right (Landscape)"
 msgstr "24右　（横型）"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Top or Left"
-msgstr "左上"
+msgstr "４　上　または　左"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "4 Bottom or Right"
-msgstr "右下"
+msgstr "４　下　または　右"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
 #, no-c-format
@@ -7449,6 +7448,10 @@ msgid ""
 "PG online contest with different track values: Free flight - 1 km = 1.0 "
 "point; flat trianlge - 1 km = 1.2 p; FAI triangle - 1 km = 1.4 p."
 msgstr ""
+"パラグライダー　オンラインコンテスト　採点ルール\r\n"
+"フリーフライト　１km＝1点\r\n"
+"フラット3角コース　１km＝1.2点\r\n"
+"FAI三角コース　１km＝1.4点"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:110
 #, no-c-format
@@ -7457,6 +7460,9 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
+"ヨ－ロッパ　パラグライダーOLC　DHV協会の　XCコンテストの採点方法はルールはほ"
+"ぼ同じですが配点は\r\n"
+"それぞれ１km＝1.5点、1.75 点　2.0点となります"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -7465,6 +7471,8 @@ msgid ""
 "The bounding box part with 1 km = 1.0 point and the additional zick-zack "
 "part with 1 km = 0.5 p."
 msgstr ""
+"オーストリア　グライダーOLCでは、旋回点は最大6ポイント\r\n"
+"ボックス内は１km＝1.0点　追加のジグザグ部は0.5点で採点されます"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:116
 #, no-c-format
@@ -7504,14 +7512,12 @@ msgid "Show FAI triangle areas on the map."
 msgstr "FAI三角コースを地図上に表示する"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:137
-#, fuzzy
 msgid "FAI triangle threshold"
-msgstr "FAI三角コース"
+msgstr "FAI三角コース制限事項"
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:138
-#, fuzzy
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr "表示させるインフォボックスの設定"
+msgstr "FAI三角コースの設定時にどの制限事項を採用するか"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:197
 msgid "Terrain display"
@@ -8584,9 +8590,8 @@ msgid "Dismiss"
 msgstr ""
 
 #: src/Monitor/MatTaskMonitor.cpp:54
-#, fuzzy
 msgid "Add this turn point?"
-msgstr "旋回点の追加"
+msgstr "この旋回転を追加しますか？"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:205
 #, no-c-format
@@ -8599,9 +8604,9 @@ msgid "InfoBox titles"
 msgstr "インフォボックスのタイトル"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:209
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "InfoBox values"
-msgstr "インフォボックスのページ"
+msgstr "インフォボックス　数値"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:213
 #, no-c-format
@@ -8616,7 +8621,7 @@ msgstr "重要地勢ラベル"
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:218
 #, no-c-format
 msgid "Overlay text"
-msgstr ""
+msgstr "テキスト上書き表示"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:235
 msgid "Customize fonts"
@@ -9343,93 +9348,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "OLC"
-#~ msgstr "OLC"
-
-#~ msgid "8 Top + Bottom (Portrait)"
-#~ msgstr "8上　＋　下　（縦型）"
-
-#~ msgid "8 Bottom (Portrait)"
-#~ msgstr "8下　（縦型）"
-
-#~ msgid "8 Top (Portrait)"
-#~ msgstr "8上　（縦型）"
-
-#~ msgid "8 Left + Right (Landscape)"
-#~ msgstr "8左+右　（横型）"
-
-#~ msgid "8 Left (Landscape)"
-#~ msgstr "8左　　（横型）"
-
-#~ msgid "8 Right (Landscape)"
-#~ msgstr "8右　（横型）"
-
-#~ msgid "12 Right (Landscape)"
-#~ msgstr "12右　（横型）"
-
-#~ msgid "12 Bottom (Portrait)"
-#~ msgstr "１２下　（縦型）"
-
-#~ msgid "12 Top (Portrait)"
-#~ msgstr "１２上　（縦型）"
-
-#~ msgid "4 Top (Portrait)"
-#~ msgstr "4上（縦型）"
-
-#~ msgid "4 Bottom (Portrait)"
-#~ msgstr "4下　（縦型）"
-
-#~ msgid "4 Left (Landscape)"
-#~ msgstr "４左　（横型）"
-
-#~ msgid "4 Right (Landscape)"
-#~ msgstr "4右　（横型）"
-
-#~ msgid "Export"
-#~ msgstr "エクスポート"
-
-#~ msgid "No help available on this item"
-#~ msgstr "ヘルプモード無し"
-
-#~ msgid "Edit text"
-#~ msgstr "テキストの編集"
-
-#~ msgid "A-"
-#~ msgstr "テキスト－"
-
-#~ msgid "Filter..."
-#~ msgstr "フィルター"
-
-#~ msgid "A+"
-#~ msgstr "テキスト＋"
-
-#~ msgid "InfoBox values, normal"
-#~ msgstr "インフォボックスの数値　通常"
-
-#~ msgid "InfoBox values, small"
-#~ msgstr "インフォボックス　小さい"
-
-#~ msgid "Loading of plane profile \"%s\" failed!"
-#~ msgstr "機体情報%s の読み込み失敗！"
-
-#~ msgid "Do you want to load plane profile \"%s\"?"
-#~ msgstr "機体情報\"%s\"読み込みますか？"
-
-#~ msgid "Full width"
-#~ msgstr "全幅"
-
-#~ msgid "Scaled"
-#~ msgstr "拡大縮小"
-
-#~ msgid "Scaled centered"
-#~ msgstr "中央揃え"
-
-#~ msgid "Dialog size"
-#~ msgstr "ダイアログの大きさ"
-
-#~ msgid "Choose the display size of dialogs."
-#~ msgstr "ダイアログの表示サイズ選択"
-
 #~ msgid "English"
 #~ msgstr "英語"
 
@@ -9453,6 +9371,9 @@ msgstr ""
 
 #~ msgid "H Baro"
 #~ msgstr "気圧高度"
+
+#~ msgid "OLC"
+#~ msgstr "OLC"
 
 #~ msgid "Not found"
 #~ msgstr "見つかりませんでした"
@@ -9508,6 +9429,9 @@ msgstr ""
 #~ "水平軸　上昇率\r\n"
 #~ "垂直軸　高度"
 
+#~ msgid "No help available on this item"
+#~ msgstr "ヘルプモード無し"
+
 #~ msgid "Unknown competition number"
 #~ msgstr "コンペID該当無し"
 
@@ -9530,11 +9454,50 @@ msgstr ""
 #~ msgid "L/D average period"
 #~ msgstr "平均滑空比演算時間"
 
+#~ msgid "8 Top + Bottom (Portrait)"
+#~ msgstr "8上　＋　下　（縦型）"
+
+#~ msgid "8 Top (Portrait)"
+#~ msgstr "8上　（縦型）"
+
+#~ msgid "8 Bottom (Portrait)"
+#~ msgstr "8下　（縦型）"
+
+#~ msgid "8 Left + Right (Landscape)"
+#~ msgstr "8左+右　（横型）"
+
+#~ msgid "8 Left (Landscape)"
+#~ msgstr "8左　　（横型）"
+
+#~ msgid "8 Right (Landscape)"
+#~ msgstr "8右　（横型）"
+
+#~ msgid "12 Right (Landscape)"
+#~ msgstr "12右　（横型）"
+
+#~ msgid "12 Top (Portrait)"
+#~ msgstr "１２上　（縦型）"
+
+#~ msgid "12 Bottom (Portrait)"
+#~ msgstr "１２下　（縦型）"
+
+#~ msgid "Scaled"
+#~ msgstr "拡大縮小"
+
+#~ msgid "Full width"
+#~ msgstr "全幅"
+
+#~ msgid "Choose the display size of dialogs."
+#~ msgstr "ダイアログの表示サイズ選択"
+
 #~ msgid "Height GPS"
 #~ msgstr "GPS高度"
 
 #~ msgid "H GPS"
 #~ msgstr "GPS高度"
+
+#~ msgid "Dialog size"
+#~ msgstr "ダイアログの大きさ"
 
 #~ msgid ""
 #~ "This determines whether the logger uses the short IGC file name or the "
@@ -9625,6 +9588,21 @@ msgstr ""
 
 #~ msgid "Logger Info"
 #~ msgstr "ロガー情報"
+
+#~ msgid "4 Top (Portrait)"
+#~ msgstr "4上（縦型）"
+
+#~ msgid "4 Left (Landscape)"
+#~ msgstr "４左　（横型）"
+
+#~ msgid "4 Right (Landscape)"
+#~ msgstr "4右　（横型）"
+
+#~ msgid "4 Bottom (Portrait)"
+#~ msgstr "4下　（縦型）"
+
+#~ msgid "Scaled centered"
+#~ msgstr "中央揃え"
 
 #~ msgid "Delete Error"
 #~ msgstr "削除エラー"
@@ -9738,6 +9716,9 @@ msgstr ""
 #~ msgid "Reference weight at which the given polar is valid."
 #~ msgstr "ポーラーカーブ設定重量"
 
+#~ msgid "InfoBox values, normal"
+#~ msgstr "インフォボックスの数値　通常"
+
 #~ msgid "The handicap factor used for the OnLine Contest scoring."
 #~ msgstr "オンラインコンテストで使用する　ハンディキャップ　ファクター"
 
@@ -9747,8 +9728,14 @@ msgstr ""
 #~ msgid "This sets the task point for review."
 #~ msgstr "タスクポイントの見直し"
 
+#~ msgid "Edit text"
+#~ msgstr "テキストの編集"
+
 #~ msgid "Wing area"
 #~ msgstr "翼面積"
+
+#~ msgid "Export"
+#~ msgstr "エクスポート"
 
 #~ msgid "Dry mass"
 #~ msgstr "乾燥重量"
@@ -9758,6 +9745,12 @@ msgstr ""
 
 #~ msgid "The time in seconds to dump full ballast."
 #~ msgstr "すべてのバラストを投棄するのに必要な時間"
+
+#~ msgid "Filter..."
+#~ msgstr "フィルター"
+
+#~ msgid "InfoBox values, small"
+#~ msgstr "インフォボックス　小さい"
 
 #~ msgid ""
 #~ "FLARM\n"
@@ -9771,6 +9764,12 @@ msgstr ""
 
 #~ msgid "Return"
 #~ msgstr "Returnキー"
+
+#~ msgid "Do you want to load plane profile \"%s\"?"
+#~ msgstr "機体情報\"%s\"読み込みますか？"
+
+#~ msgid "Loading of plane profile \"%s\" failed!"
+#~ msgstr "機体情報%s の読み込み失敗！"
 
 #~ msgid "TC All"
 #~ msgstr "All TC平均"
@@ -9794,6 +9793,12 @@ msgstr ""
 #~ msgstr ""
 #~ "ウエイポイント\n"
 #~ "の詳細"
+
+#~ msgid "A-"
+#~ msgstr "テキスト－"
+
+#~ msgid "A+"
+#~ msgstr "テキスト＋"
 
 #~ msgid "AAT Est Remaining Help"
 #~ msgstr "AAT 残り時間"
