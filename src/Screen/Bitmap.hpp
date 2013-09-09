@@ -122,6 +122,10 @@ public:
   }
 #endif
 
+#if !defined(USE_GDI) && !defined(ANDROID)
+  Bitmap(ConstBuffer<void> buffer);
+#endif
+
   ~Bitmap() {
     Reset();
   }

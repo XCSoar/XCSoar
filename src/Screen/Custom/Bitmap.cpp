@@ -28,6 +28,20 @@ Copyright_License {
 #include "UncompressedImage.hpp"
 #include "Util/ConstBuffer.hpp"
 
+Bitmap::Bitmap(ConstBuffer<void> _buffer)
+  :
+#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+  id(0),
+#endif
+  texture(NULL), interpolation(false)
+#else
+  buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
+#endif
+{
+  Load(_buffer);
+}
+
 bool
 Bitmap::Load(ConstBuffer<void> buffer, Type type)
 {
