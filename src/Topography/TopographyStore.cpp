@@ -39,14 +39,14 @@ static bool
 IsHugeTopographyFile(const char *name)
 {
   return StringIsEqual(name, "village_point") ||
-         StringIsEqual(name, "citysmall_point") ||
-         StringIsEqual(name, "roadsmall_point") ||
-         StringIsEqual(name, "roadsmall_line");
+    StringIsEqual(name, "citysmall_point") ||
+    StringIsEqual(name, "roadsmall_point") ||
+    StringIsEqual(name, "roadsmall_line");
 }
 
 typedef struct {
-    const char *name;
-    unsigned resource_id;
+  const char *name;
+  unsigned resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
