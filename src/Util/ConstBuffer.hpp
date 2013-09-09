@@ -65,19 +65,19 @@ struct ConstBuffer {
     return size == 0;
   }
 
-  iterator begin() const {
+  constexpr iterator begin() const {
     return data;
   }
 
-  iterator end() const {
+  constexpr iterator end() const {
     return data + size;
   }
 
-  const_iterator cbegin() const {
+  constexpr const_iterator cbegin() const {
     return data;
   }
 
-  const_iterator cend() const {
+  constexpr const_iterator cend() const {
     return data + size;
   }
 };
