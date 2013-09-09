@@ -32,6 +32,7 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
+#include "ResourceId.hpp"
 
 #include <assert.h>
 
@@ -67,7 +68,7 @@ class TopographyFile : private NonCopyable {
 
   int label_field;
 
-  unsigned icon, big_icon;
+  ResourceId icon, big_icon;
 
   unsigned pen_width;
 
@@ -156,7 +157,8 @@ public:
                  fixed important_label_threshold,
                  const Color color,
                  int label_field=-1,
-                 unsigned icon=0, unsigned big_icon=0,
+                 ResourceId icon=ResourceId::Null(),
+                 ResourceId big_icon=ResourceId::Null(),
                  unsigned pen_width=1);
 
   /**
@@ -184,11 +186,11 @@ public:
     return map_scale <= important_label_threshold;
   }
 
-  unsigned GetIcon() const {
+  ResourceId GetIcon() const {
     return icon;
   }
 
-  unsigned GetBigIcon() const {
+  ResourceId GetBigIcon() const {
     return big_icon;
   }
 

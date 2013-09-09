@@ -28,6 +28,12 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "android_drawable.h"
 
+Bitmap::Bitmap(ResourceId id)
+  :texture(nullptr), interpolation(false)
+{
+  Load(id);
+}
+
 static const char *
 find_resource_name(unsigned id)
 {
@@ -40,9 +46,9 @@ find_resource_name(unsigned id)
 
 gcc_malloc
 static GLTexture *
-LoadResourceTexture(unsigned id)
+LoadResourceTexture(ResourceId id)
 {
-  const char *name = find_resource_name(id);
+  const char *name = find_resource_name((unsigned)id);
   if (name == NULL)
     return NULL;
 
@@ -67,11 +73,12 @@ LoadFileTexture(const TCHAR *path)
 bool
 Bitmap::Reload()
 {
-  assert(id != 0 || !pathName.empty());
+  assert(id.IsDefined() || !pathName.empty());
   assert(texture == NULL);
 
-  texture = (id != 0) ? LoadResourceTexture(id) :
-                        LoadFileTexture(pathName.c_str());
+  texture = id.IsDefined()
+    ? LoadResourceTexture(id)
+    : LoadFileTexture(pathName.c_str());
   if (texture == NULL)
     return false;
 
@@ -81,9 +88,9 @@ Bitmap::Reload()
 }
 
 bool
-Bitmap::Load(unsigned _id, Type type)
+Bitmap::Load(ResourceId _id, Type type)
 {
-  assert(_id != 0);
+  assert(_id.IsDefined());
 
   Reset();
 
@@ -97,7 +104,7 @@ Bitmap::Load(unsigned _id, Type type)
 }
 
 bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 {
   assert(zoom > 0);
 
@@ -124,9 +131,9 @@ Bitmap::LoadFile(const TCHAR *path)
 void
 Bitmap::Reset()
 {
-  if (id != 0 || !pathName.empty()) {
+  if (id.IsDefined() || !pathName.empty()) {
     RemoveSurfaceListener(*this);
-    id = 0;
+    id = ResourceId::Null();
     pathName.clear();
   }
 

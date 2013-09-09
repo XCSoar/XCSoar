@@ -37,7 +37,7 @@ SingleWindow::RegisterClass(HINSTANCE hInstance)
   wc.lpfnWndProc = Window::WndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
-  wc.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
+  wc.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE((unsigned)IDI_XCSOAR));
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = nullptr;
   wc.lpszMenuName = 0;

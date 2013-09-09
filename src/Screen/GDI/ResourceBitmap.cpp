@@ -23,11 +23,18 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "ResourceLoader.hpp"
+#include "ResourceId.hpp"
 
 #include <assert.h>
 
+Bitmap::Bitmap(ResourceId id)
+  :bitmap(nullptr)
+{
+  Load(id);
+}
+
 bool
-Bitmap::Load(unsigned id, Type type)
+Bitmap::Load(ResourceId id, Type type)
 {
   Reset();
 
@@ -36,7 +43,7 @@ Bitmap::Load(unsigned id, Type type)
 }
 
 bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 {
   assert(zoom > 0);
 

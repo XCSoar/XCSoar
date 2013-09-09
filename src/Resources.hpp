@@ -1,5 +1,6 @@
+#include "ResourceId.hpp"
 #define MAKE_RESOURCE(name, id) \
-  static constexpr unsigned name = id;
+  static constexpr ResourceId name(id);
 
 MAKE_RESOURCE(IDB_LANDABLE, 139);
 MAKE_RESOURCE(IDB_LANDABLE_HD, 5139);

@@ -34,6 +34,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "ResourceId.hpp"
 #endif
 
 #ifdef USE_GDI
@@ -43,6 +44,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 
+class ResourceId;
 class UncompressedImage;
 template<typename T> struct ConstBuffer;
 
@@ -81,7 +83,7 @@ public:
 protected:
 #ifdef ANDROID
   /** resource id */
-  unsigned id;
+  ResourceId id;
   /** filename for external images (id=0) */
   tstring pathName;
 #endif
@@ -102,25 +104,16 @@ public:
   Bitmap()
     :
 #ifdef ANDROID
-    id(0),
+    id(ResourceId::Null()),
 #endif
     texture(NULL), interpolation(false) {}
-  explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
-    Load(id);
-  }
 #elif defined(USE_MEMORY_CANVAS)
   constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
-
-  explicit Bitmap(unsigned id)
-    :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {
-    Load(id);
-  }
 #else
   Bitmap():bitmap(NULL) {}
-  explicit Bitmap(unsigned id):bitmap(NULL) {
-    Load(id);
-  }
 #endif
+
+  explicit Bitmap(ResourceId id);
 
 #if !defined(USE_GDI) && !defined(ANDROID)
   Bitmap(ConstBuffer<void> buffer);
@@ -172,12 +165,12 @@ public:
   bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
 #endif
 
-  bool Load(unsigned id, Type type=Type::STANDARD);
+  bool Load(ResourceId id, Type type=Type::STANDARD);
 
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
    */
-  bool LoadStretch(unsigned id, unsigned zoom);
+  bool LoadStretch(ResourceId id, unsigned zoom);
 
   bool LoadFile(const TCHAR *path);
 

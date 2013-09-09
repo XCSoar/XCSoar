@@ -34,9 +34,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
+#include "ResourceId.hpp"
 
 static tstring path;
-static unsigned id;
+static ResourceId id = ResourceId::Null();
 
 static void
 ParseCommandLine(Args &args)
@@ -44,16 +45,16 @@ ParseCommandLine(Args &args)
   path = args.ExpectNextT();
 
   TCHAR *endptr;
-  id = ParseUnsigned(path.c_str(), &endptr);
-  if (!StringIsEmpty(endptr))
-    id = 0;
+  unsigned _id = ParseUnsigned(path.c_str(), &endptr);
+  if (StringIsEmpty(endptr))
+    id = ResourceId(_id);
 }
 
 static void
 Main()
 {
   Bitmap bitmap;
-  bool success = id != 0
+  bool success = id.IsDefined()
     ? bitmap.Load(id)
     : bitmap.LoadFile(path.c_str());
   if (!success)

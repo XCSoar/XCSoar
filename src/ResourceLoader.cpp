@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ResourceLoader.hpp"
+#include "ResourceId.hpp"
 
 #include <assert.h>
 
@@ -83,10 +84,10 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 #ifndef ANDROID
 
 ResourceLoader::Data
-ResourceLoader::Load(unsigned id)
+ResourceLoader::Load(ResourceId id)
 {
 #ifdef WIN32
-  return Load(MAKEINTRESOURCE(id), RT_BITMAP);
+  return Load(MAKEINTRESOURCE((unsigned)id), RT_BITMAP);
 #else
 
   for (unsigned i = 0; !numeric_resources[i].data.IsNull(); ++i)
@@ -101,9 +102,9 @@ ResourceLoader::Load(unsigned id)
 
 #ifdef WIN32
 HBITMAP
-ResourceLoader::LoadBitmap2(unsigned id)
+ResourceLoader::LoadBitmap2(ResourceId id)
 {
-  return ::LoadBitmap(ResourceLoaderInstance, MAKEINTRESOURCE(id));
+  return ::LoadBitmap(ResourceLoaderInstance, MAKEINTRESOURCE((unsigned)id));
 }
 #endif
 
@@ -111,9 +112,10 @@ ResourceLoader::LoadBitmap2(unsigned id)
 #include "OS/AYGShellDLL.hpp"
 
 HBITMAP
-ResourceLoader::SHLoadImageResource(unsigned id)
+ResourceLoader::SHLoadImageResource(ResourceId id)
 {
   const AYGShellDLL ayg_shell_dll;
-  return ayg_shell_dll.SHLoadImageResource(ResourceLoaderInstance, id);
+  return ayg_shell_dll.SHLoadImageResource(ResourceLoaderInstance,
+                                           (unsigned)id);
 }
 #endif

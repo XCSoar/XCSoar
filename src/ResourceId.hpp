@@ -21,49 +21,41 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ICON_HPP
-#define XCSOAR_SCREEN_ICON_HPP
-
-#include "Screen/Bitmap.hpp"
-#include "Screen/Point.hpp"
-#include "ResourceId.hpp"
-
-class Canvas;
+#ifndef XCSOAR_RESOURCE_ID_HPP
+#define XCSOAR_RESOURCE_ID_HPP
 
 /**
- * An icon with a mask which marks transparent pixels.
+ * The identifier for a resource to be passed to
+ * ResourceLoader::Load() or other resource-loading functions.
  */
-class MaskedIcon {
-protected:
-  Bitmap bitmap;
-
-  PixelSize size;
-
-  RasterPoint origin;
+class ResourceId {
+  unsigned id;
 
 public:
-  const PixelSize &GetSize() const {
-    return size;
+  ResourceId() = default;
+
+  constexpr explicit ResourceId(unsigned _id)
+    :id(_id) {}
+
+  static constexpr ResourceId Null() {
+    return ResourceId(0);
   }
 
-  bool IsDefined() const {
-    return bitmap.IsDefined();
+  constexpr bool IsDefined() const {
+    return id != 0;
   }
 
-  void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
-                    bool center=true);
-
-  void Reset() {
-    bitmap.Reset();
+  constexpr explicit operator unsigned() const {
+    return id;
   }
 
-  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
-  void Draw(Canvas &canvas, RasterPoint pt) const {
-    Draw(canvas, pt.x, pt.y);
+  constexpr bool operator==(ResourceId other) const {
+    return id == other.id;
   }
 
-protected:
-  void CalculateLayout(bool center);
+  constexpr bool operator!=(ResourceId other) const {
+    return id != other.id;
+  }
 };
 
 #endif

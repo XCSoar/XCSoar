@@ -24,8 +24,9 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "ResourceId.hpp"
 
-#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
+#ifdef USE_MEMORY_CANVAS
 #include "Debug.hpp"
 #include "Custom/LibPNG.hpp"
 #include "Custom/UncompressedImage.hpp"
@@ -41,11 +42,10 @@ UnitSymbol::GetScreenSize() const
   return { Layout::Scale(s.cx), Layout::Scale(s.cy) };
 }
 
-#if !defined(USE_GDI) && !defined(ENABLE_OPENGL)
-
 void
-UnitSymbol::Load(unsigned id)
+UnitSymbol::Load(ResourceId id)
 {
+#ifdef USE_MEMORY_CANVAS
   assert(IsScreenInitialized());
   assert(buffer.data == nullptr);
 
@@ -62,9 +62,11 @@ UnitSymbol::Load(unsigned id)
   buffer.pitch = uncompressed.GetPitch();
   buffer.width = uncompressed.GetWidth();
   buffer.height = uncompressed.GetHeight();
-}
-
+#else
+  bitmap.Load(id, Bitmap::Type::MONO);
+  size = bitmap.GetSize();
 #endif
+}
 
 void 
 UnitSymbol::Draw(Canvas &canvas, PixelScalar x, PixelScalar y,

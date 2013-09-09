@@ -34,6 +34,8 @@ Copyright_License {
 #include <stddef.h>
 #include <utility>
 
+class ResourceId;
+
 namespace ResourceLoader {
 #ifdef WIN32
   void
@@ -47,12 +49,12 @@ namespace ResourceLoader {
 
 #ifndef ANDROID
   Data
-  Load(unsigned id);
+  Load(ResourceId id);
 #endif
 
 #ifdef WIN32
   HBITMAP
-  LoadBitmap2(unsigned id);
+  LoadBitmap2(ResourceId id);
 #endif
 
 #ifdef HAVE_AYGSHELL_DLL
@@ -60,7 +62,7 @@ namespace ResourceLoader {
    * Load an image resource using aygshell.dll.
    */
   HBITMAP
-  SHLoadImageResource(unsigned id);
+  SHLoadImageResource(ResourceId id);
 #endif
 }
 

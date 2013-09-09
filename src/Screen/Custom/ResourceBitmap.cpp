@@ -25,9 +25,30 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "UncompressedImage.hpp"
 #include "ResourceLoader.hpp"
+#include "ResourceId.hpp"
+
+#ifdef ENABLE_OPENGL
+
+Bitmap::Bitmap(ResourceId id)
+  :texture(nullptr), interpolation(false)
+{
+  Load(id);
+}
+
+#endif
+
+#ifdef USE_MEMORY_CANVAS
+
+Bitmap::Bitmap(ResourceId id)
+  :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
+{
+  Load(id);
+}
+
+#endif
 
 bool
-Bitmap::Load(unsigned id, Type type)
+Bitmap::Load(ResourceId id, Type type)
 {
   assert(IsScreenInitialized());
 
@@ -41,7 +62,7 @@ Bitmap::Load(unsigned id, Type type)
 #if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 
 bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
+Bitmap::LoadStretch(ResourceId id, unsigned zoom)
 {
   assert(zoom > 0);
 

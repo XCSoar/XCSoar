@@ -34,14 +34,14 @@ print "#include \"Util/ConstBuffer.hpp\"\n";
 print "#include <tchar.h>\n";
 
 print "static constexpr struct {\n";
-print "  unsigned id;\n";
+print "  ResourceId id;\n";
 print "  ConstBuffer<void> data;\n";
 print "} numeric_resources[] = {";
 foreach my $i (@numeric) {
     my ($id, $size) = @$i;
-    print "  { ${id}, { resource_${id}, ${size} } },\n";
+    print "  { ResourceId(${id}), { resource_${id}, ${size} } },\n";
 }
-print "  { 0, { nullptr, 0 } }\n";
+print "  { ResourceId::Null(), { nullptr, 0 } }\n";
 print "};\n";
 
 print "static constexpr struct {\n";

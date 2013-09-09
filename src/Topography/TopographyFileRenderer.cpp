@@ -47,8 +47,8 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.GetPenWidth(), file.GetColor()),
    brush(file.GetColor())
 {
-  int icon_ID = file.GetIcon();
-  if (icon_ID != 0)
+  ResourceId icon_ID = file.GetIcon();
+  if (icon_ID.IsDefined())
     icon.LoadResource(icon_ID, file.GetBigIcon());
 }
 

@@ -46,7 +46,7 @@ IsHugeTopographyFile(const char *name)
 
 typedef struct {
   const char *name;
-  unsigned resource_id, big_resource_id;
+  ResourceId resource_id, big_resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
@@ -91,7 +91,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "mountain_pass", IDB_MOUNTAIN_PASS, IDB_MOUNTAIN_PASS_HD },
   { "weather_station", IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD },
   { "thermal_hotspot", IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD },
-  { NULL, 0, 0 }
+  { NULL, ResourceId::Null(), ResourceId::Null() }
 };
 
 unsigned
@@ -198,7 +198,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     // Null-terminate the line string at the next comma for strncpy() call
     *p = 0;
     strncpy(icon_name, start, 22);
-    unsigned icon = 0, big_icon = 0;
+    ResourceId icon = ResourceId::Null(), big_icon = ResourceId::Null();
 
     if (strlen(icon_name) > 0) {
       const LOOKUP_ICON *ip = icon_list;
