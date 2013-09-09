@@ -39,8 +39,6 @@ HI_RES_AWARE CEUX {1}
 
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
 
-#define TEXT(name, file) name TEXT DISCARDABLE "../output/data/" file ".gz"
-
 // --- Icons ---
 
 IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"
@@ -291,10 +289,3 @@ MO(sv)
 MO(tr)
 MO(uk)
 MO(vi)
-
-TEXT(LICENSE, "COPYING")
-TEXT(AUTHORS, "AUTHORS")
-
-// --- EGM96 Raster Data --- 
-
-IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "other/egm96s.dem"

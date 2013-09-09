@@ -328,9 +328,6 @@ Startup()
 
   replay = new Replay(logger, *protected_task_manager);
 
-  // Load the EGM96 geoid data
-  EGM96::Load();
-
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(fixed(0));
   gp.SetMC(computer_settings.task.safety_mc);
@@ -625,9 +622,6 @@ Shutdown()
   // Close the progress dialog
   LogFormat("Close Progress Dialog");
   operation.Hide();
-
-  // Clear the EGM96 database
-  EGM96::Close();
 
   delete glide_computer;
   delete task_events;

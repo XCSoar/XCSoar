@@ -28,33 +28,17 @@ Copyright_License {
  */
 
 #include "Geoid.hpp"
-#include "ResourceLoader.hpp"
 #include "Geo/GeoPoint.hpp"
 
-#include <tchar.h>
 #include <stdint.h>
 
 #define EGM96SIZE 16200
 
-static const uint8_t *egm96data;
-
-void
-EGM96::Load()
-{
-  ResourceLoader::Data data = ResourceLoader::Load(_T("IDR_RASTER_EGM96S"),
-                                                   _T("RASTERDATA"));
-  assert(!data.IsNull());
-  assert(data.size == EGM96SIZE);
-
-  egm96data = (const uint8_t *)data.data;
-}
+extern const uint8_t egm96data[] asm("_binary_egm96s_dem_start");
 
 fixed
 EGM96::LookupSeparation(const GeoPoint &pt)
 {
-  if (!egm96data)
-    return fixed(0);
-
   int ilat, ilon;
   ilat = iround((Angle::QuarterCircle() - pt.latitude).Half().Degrees());
   ilon = iround(pt.longitude.AsBearing().Half().Degrees());

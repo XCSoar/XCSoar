@@ -67,6 +67,7 @@ include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/resource.mk
+include $(topdir)/build/libdata.mk
 include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
