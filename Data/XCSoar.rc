@@ -31,12 +31,6 @@ HI_RES_AWARE CEUX {1}
 
 #define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
 
-#if defined(WIN32) || defined(ANDROID) || defined(KOBO)
-#define MO(name) name.mo MO DISCARDABLE "../output/po/" #name ".mo"
-#else
-#define MO(name)
-#endif
-
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
 
 // --- Icons ---
@@ -261,31 +255,3 @@ XMLDIALOG(IDR_XML_TASKMANAGER_L, "dlgTaskManager_L")
 XMLDIALOG(IDR_XML_TASKMANAGERCLOSE, "pnlTaskManagerClose")
 XMLDIALOG(IDR_XML_TASKPOINT, "dlgTaskPoint")
 XMLDIALOG(IDR_XML_TASKPOINT_L, "dlgTaskPoint_L")
-
-// translations
-MO(cs)
-MO(da)
-MO(de)
-MO(el)
-MO(es)
-MO(fi)
-MO(fr)
-MO(he)
-MO(hr)
-MO(hu)
-MO(it)
-MO(ja)
-MO(ko)
-MO(nb)
-MO(nl)
-MO(pl)
-MO(pt)
-MO(pt_BR)
-MO(ro)
-MO(ru)
-MO(sk)
-MO(sr)
-MO(sv)
-MO(tr)
-MO(uk)
-MO(vi)

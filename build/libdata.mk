@@ -2,6 +2,7 @@
 # authors list and others
 
 DATA_SOURCES = \
+	$(MO_FILES) \
 	output/data/COPYING.gz \
 	output/data/AUTHORS.gz \
 	Data/other/egm96s.dem
