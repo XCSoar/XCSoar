@@ -67,7 +67,7 @@ class TopographyFile : private NonCopyable {
 
   int label_field;
 
-  unsigned icon;
+  unsigned icon, big_icon;
 
   unsigned pen_width;
 
@@ -144,6 +144,7 @@ public:
    * @param color The color to use for drawing, including alpha for OpenGL
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
+   * @param big_icon the resource id of the big icon, 0 for no big icon
    * @param pen_width The pen width used for line drawing
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
@@ -154,7 +155,8 @@ public:
                  fixed threshold, fixed label_threshold,
                  fixed important_label_threshold,
                  const Color color,
-                 int label_field=-1, unsigned icon=0,
+                 int label_field=-1,
+                 unsigned icon=0, unsigned big_icon=0,
                  unsigned pen_width=1);
 
   /**
@@ -184,6 +186,10 @@ public:
 
   unsigned GetIcon() const {
     return icon;
+  }
+
+  unsigned GetBigIcon() const {
+    return big_icon;
   }
 
   Color GetColor() const {

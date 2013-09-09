@@ -46,48 +46,52 @@ IsHugeTopographyFile(const char *name)
 
 typedef struct {
   const char *name;
-  unsigned resource_id;
+  unsigned resource_id, big_resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
-  {"landable", IDB_LANDABLE},
-  {"reachable", IDB_REACHABLE},
-  {"turnpoint", IDB_TURNPOINT},
-  {"small", IDB_SMALL},
-  {"cruise", IDB_CRUISE},
-  {"town", IDB_TOWN},
-  {"mark", IDB_MARK},
-  {"terrainwarning", IDB_TERRAINWARNING},
-  {"logger", IDB_LOGGER},
-  {"loggeroff", IDB_LOGGEROFF},
-  {"airport_reachable", IDB_AIRPORT_REACHABLE},
-  {"airport_unreachable", IDB_AIRPORT_UNREACHABLE},
-  {"outfield_reachable", IDB_OUTFIELD_REACHABLE},
-  {"outfield_reachable", IDB_OUTFIELD_UNREACHABLE},
-  {"target", IDB_TARGET},
-  {"teammate_pos", IDB_TEAMMATE_POS},
-  {"airport_unreachable2", IDB_AIRPORT_UNREACHABLE2},
-  {"outfield_unreachable2", IDB_OUTFIELD_UNREACHABLE2},
-  {"airspacei", IDB_AIRSPACEI},
-  {"mountain_top", IDB_MOUNTAIN_TOP},
-  {"bridge", IDB_BRIDGE},
-  {"tunnel", IDB_TUNNEL},
-  {"tower", IDB_TOWER},
-  {"power_plant", IDB_POWER_PLANT},
-  {"airport_marginal", IDB_AIRPORT_MARGINAL},
-  {"outfield_marginal", IDB_OUTFIELD_MARGINAL},
-  {"airport_marginal2", IDB_AIRPORT_MARGINAL2},
-  {"outfield_marginal2", IDB_OUTFIELD_MARGINAL2},
-  {"marginal", IDB_MARGINAL},
-  {"traffic_safe", IDB_TRAFFIC_SAFE},
-  {"traffic_warning", IDB_TRAFFIC_WARNING},
-  {"traffic_alarm", IDB_TRAFFIC_ALARM},
-  {"taskturnpoint", IDB_TASKTURNPOINT},
-  {"obstacle", IDB_OBSTACLE},
-  {"mountain_pass", IDB_MOUNTAIN_PASS},
-  {"weather_station", IDB_WEATHER_STATION},
-  {"thermal_hotspot", IDB_THERMAL_HOTSPOT},
-  { NULL, 0 }
+  { "landable", IDB_LANDABLE, IDB_LANDABLE_HD },
+  { "reachable", IDB_REACHABLE, IDB_REACHABLE_HD },
+  { "turnpoint", IDB_TURNPOINT, IDB_TURNPOINT_HD },
+  { "small", IDB_SMALL, IDB_SMALL_HD },
+  { "cruise", IDB_CRUISE, IDB_CRUISE_HD },
+  { "town", IDB_TOWN, IDB_TOWN_HD },
+  { "mark", IDB_MARK, IDB_MARK_HD },
+  { "terrainwarning", IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD },
+  { "logger", IDB_LOGGER, IDB_LOGGER_HD },
+  { "loggeroff", IDB_LOGGEROFF, IDB_LOGGEROFF_HD },
+  { "airport_reachable", IDB_AIRPORT_REACHABLE, IDB_AIRPORT_REACHABLE_HD },
+  { "airport_unreachable",
+    IDB_AIRPORT_UNREACHABLE, IDB_AIRPORT_UNREACHABLE_HD },
+  { "outfield_reachable", IDB_OUTFIELD_REACHABLE, IDB_OUTFIELD_REACHABLE_HD },
+  { "outfield_reachable",
+    IDB_OUTFIELD_UNREACHABLE, IDB_OUTFIELD_UNREACHABLE_HD },
+  { "target", IDB_TARGET, IDB_TARGET_HD },
+  { "teammate_pos", IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD },
+  { "airport_unreachable2",
+    IDB_AIRPORT_UNREACHABLE2, IDB_AIRPORT_UNREACHABLE2_HD },
+  { "outfield_unreachable2",
+    IDB_OUTFIELD_UNREACHABLE2, IDB_OUTFIELD_UNREACHABLE2_HD },
+  { "airspacei", IDB_AIRSPACEI, IDB_AIRSPACEI_HD },
+  { "mountain_top", IDB_MOUNTAIN_TOP, IDB_MOUNTAIN_TOP_HD },
+  { "bridge", IDB_BRIDGE, IDB_BRIDGE_HD },
+  { "tunnel", IDB_TUNNEL, IDB_TUNNEL_HD },
+  { "tower", IDB_TOWER, IDB_TOWER_HD },
+  { "power_plant", IDB_POWER_PLANT, IDB_POWER_PLANT_HD },
+  { "airport_marginal", IDB_AIRPORT_MARGINAL, IDB_AIRPORT_MARGINAL_HD },
+  { "outfield_marginal", IDB_OUTFIELD_MARGINAL, IDB_OUTFIELD_MARGINAL_HD },
+  { "airport_marginal2", IDB_AIRPORT_MARGINAL2, IDB_AIRPORT_MARGINAL2_HD },
+  { "outfield_marginal2", IDB_OUTFIELD_MARGINAL2, IDB_OUTFIELD_MARGINAL2_HD },
+  { "marginal", IDB_MARGINAL, IDB_MARGINAL_HD },
+  { "traffic_safe", IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD },
+  { "traffic_warning", IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD },
+  { "traffic_alarm", IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD },
+  { "taskturnpoint", IDB_TASKTURNPOINT, IDB_TASKTURNPOINT_HD },
+  { "obstacle", IDB_OBSTACLE, IDB_OBSTACLE_HD },
+  { "mountain_pass", IDB_MOUNTAIN_PASS, IDB_MOUNTAIN_PASS_HD },
+  { "weather_station", IDB_WEATHER_STATION, IDB_WEATHER_STATION_HD },
+  { "thermal_hotspot", IDB_THERMAL_HOTSPOT, IDB_THERMAL_HOTSPOT_HD },
+  { NULL, 0, 0 }
 };
 
 unsigned
@@ -194,13 +198,14 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
     // Null-terminate the line string at the next comma for strncpy() call
     *p = 0;
     strncpy(icon_name, start, 22);
-    unsigned icon = 0;
+    unsigned icon = 0, big_icon = 0;
 
     if (strlen(icon_name) > 0) {
       const LOOKUP_ICON *ip = icon_list;
       while (ip->name != NULL) {
         if (StringIsEqual(ip->name, icon_name)) {
           icon = ip->resource_id;
+          big_icon = ip->big_resource_id;
           break;
         }
         ip++;
@@ -272,7 +277,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
 #else
                                               Color(red, green, blue),
 #endif
-                                              shape_field, icon,
+                                              shape_field, icon, big_icon,
                                               pen_width);
     if (file->IsEmpty())
       // If the shape file could not be read -> skip this line/file
