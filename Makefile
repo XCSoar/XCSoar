@@ -66,6 +66,7 @@ include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/pkgconfig.mk
+include $(topdir)/build/languages.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/libdata.mk
 include $(topdir)/build/options.mk
