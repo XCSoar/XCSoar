@@ -398,7 +398,7 @@ PlaneListWidget::OnActivateItem(unsigned i)
   tmp.Format(_("Do you want to activate plane profile \"%s\"?"),
              list[i].name.c_str());
 
-  if (ShowMessageBox(tmp, _(" "), MB_YESNO) == IDYES)
+  if (ShowMessageBox(tmp, _T(" "), MB_YESNO) == IDYES)
     LoadWithDialog(i);
 }
 
