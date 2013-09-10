@@ -100,6 +100,10 @@ enum {
 };
 #endif
 
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
 const BuiltinLanguage language_table[] = {
   { LANG_CZECH, _T("cs.mo"), _T("Czech") },
   { LANG_DANISH, _T("da.mo"), _T("Danish") },
