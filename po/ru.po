@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-10 10:51+0200\n"
+"POT-Creation-Date: 2013-09-10 10:53+0200\n"
 "PO-Revision-Date: 2012-12-08 04:02+0000\n"
 "Last-Translator: Глория Хрусталёва <gloriya@hushmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -806,6 +806,7 @@ msgstr "Вручную"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:341
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:34
 #, no-c-format
 msgid "Auto"
 msgstr "Автоматически"
@@ -866,6 +867,7 @@ msgstr "Полный"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:135
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:261
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:32
 #, no-c-format
 msgid "Off"
 msgstr "Откл."
@@ -881,6 +883,7 @@ msgstr "Откл."
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:55
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:262
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:33
 #, no-c-format
 msgid "On"
 msgstr "Вкл."
@@ -920,6 +923,7 @@ msgstr "Задачи и Посадки"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
 msgstr "Нет"
@@ -3541,6 +3545,7 @@ msgstr "Загружаю историю полета"
 
 #: src/Device/Config.cpp:218 src/Dialogs/Device/DeviceEditWidget.cpp:67
 #: src/Dialogs/Device/DeviceListDialog.cpp:373
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
 msgstr "ОТКЛЮЧИТЬ"
@@ -3972,6 +3977,8 @@ msgstr "Вы действительно хотите удалить ВСЕ по�
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:68
+#, no-c-format
 msgid "Temperature"
 msgstr "Температура"
 
@@ -4348,6 +4355,8 @@ msgid "Type"
 msgstr "Тип"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:145
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:40
+#, no-c-format
 msgid "Logger interval"
 msgstr ""
 
@@ -7503,6 +7512,8 @@ msgid "Units used for latitude and longitude."
 msgstr "Единицы измерения широты и долготы."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
+#, no-c-format
 msgid "UTC offset"
 msgstr "Часовой пояс"
 
@@ -8437,6 +8448,527 @@ msgstr ""
 msgid "No TAF available!"
 msgstr ""
 
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:33
+#, no-c-format
+msgid "Gear on delay"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:36
+#, no-c-format
+msgid "Gear off delay"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:39
+#, no-c-format
+msgid "Interval; gear"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:42
+#, no-c-format
+msgid "Radio com. max. delay"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:45
+#, fuzzy, no-c-format
+msgid "Battery low delay"
+msgstr "Низкий заряд батареи"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:48
+#, fuzzy, no-c-format
+msgid "Battery empty delay"
+msgstr "Низкий заряд батареи"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:51
+#, no-c-format
+msgid "Interval; battery"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
+#, no-c-format
+msgid "Step"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
+#, no-c-format
+msgid "Ramp"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
+#, no-c-format
+msgid "Circling deadband type"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
+#, no-c-format
+msgid "Type of dead band used in circling mode."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
+#, fuzzy, no-c-format
+msgid "Circling hi cutoff"
+msgstr "Зум в спирали выкл"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
+#, no-c-format
+msgid "High limit of circling dead band"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
+#, fuzzy, no-c-format
+msgid "Circling low cutoff"
+msgstr "Зум в спирали выкл"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
+#, no-c-format
+msgid "Low limit of circling dead band"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
+#, no-c-format
+msgid "Cruise deadband type"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
+#, no-c-format
+msgid "Type of dead band used in cruise mode."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
+#, fuzzy, no-c-format
+msgid "Cruise hi cutoff"
+msgstr "Эфф полета"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
+#, no-c-format
+msgid "High limit of cruise dead band"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
+#, fuzzy, no-c-format
+msgid "Cruise low cutoff"
+msgstr "Эфф полета"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
+#, no-c-format
+msgid "Low limit of cruise dead band"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
+#, fuzzy, no-c-format
+msgid "Climb fast trigger"
+msgstr "Темп набора высоты"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
+#, no-c-format
+msgid ""
+"Comparison method used to detect climb states (HIGH/LOW).\n"
+"[NONE]: State LOW disabled\n"
+"[MACCREADY]: State High if gross vario is greater than MacCready setting.\n"
+"[AVERAGE]: State HIGH if gross vario value is greater than average gross "
+"vario value."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
+#, no-c-format
+msgid "Cruise lift trigger"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
+#, no-c-format
+msgid ""
+"Comparison method used to detect cruise states for switching to lift tones "
+"during cruise.\n"
+"[NONE]: LIFT tone disabled in cruise\n"
+"[RELATIVE ZERO] LIFT tone when relative vario greater than zero.\n"
+"[GROSS ZERO] LIFT tone when glider is climbing.\n"
+"[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
+"[NET MC/2] LIFT tone when airmass velocity greater than half MC."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
+#, fuzzy, no-c-format
+msgid "Climb averager scale"
+msgstr "Темп набора высоты"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
+#, no-c-format
+msgid "Time scale used for vario averager."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
+#, no-c-format
+msgid "Cruise averager scale"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
+#, no-c-format
+msgid "Time scale used for cruise speed command averager."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
+#, fuzzy, no-c-format
+msgid "Circling volume"
+msgstr "Масштаб в спирали"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
+#, no-c-format
+msgid "Mean volume level in circling modes."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
+#, fuzzy, no-c-format
+msgid "Cruise volume"
+msgstr "Переход"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
+#, no-c-format
+msgid ""
+"Mean volume level in cruise modes.  If set to zero, scales with airspeed."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
+#, no-c-format
+msgid "Base frequency"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
+#, no-c-format
+msgid "Adjustment to base frequency of tones in all modes."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
+#, fuzzy, no-c-format
+msgid "Filter circling"
+msgstr "Шаг времени Вращения"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
+#, no-c-format
+msgid "Variometer low pass filter time constant in circling mode."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
+#, fuzzy, no-c-format
+msgid "Filter cruise"
+msgstr "Шаг времени Полета"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
+#, no-c-format
+msgid "Variometer low pass filter time constant in cruise mode."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
+#, no-c-format
+msgid "Tone pitch scale"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
+#, no-c-format
+msgid "Adjustment to base pitch scale of tones in all modes."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:105
+msgid "Beep type"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:108
+msgid "Pitch scheme"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:111
+msgid "Pitch scale"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:114
+msgid "Period scheme"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:117
+msgid "Period scale"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
+#, no-c-format
+msgid "TE mixing"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:34
+#, no-c-format
+msgid ""
+"Proportion of TE probe value used in total energy mixing with pitot/static "
+"total energy."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
+#, no-c-format
+msgid "ASI cal."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:39
+#, no-c-format
+msgid ""
+"Calibration factor applied to measured airspeed to obtain indicated airspeed."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
+#, no-c-format
+msgid "TE static cal."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
+#, no-c-format
+msgid ""
+"Calibration factor applied to static pressure used in total energy "
+"calculation."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
+#, no-c-format
+msgid "TE dynamic cal."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
+#, no-c-format
+msgid ""
+"Calibration factor applied to dynamic pressure used in total energy "
+"calculation."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
+#, no-c-format
+msgid "Needle gauge type"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
+#, no-c-format
+msgid "LED bright"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
+#, no-c-format
+msgid "Max. objects reported"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
+#, no-c-format
+msgid "Max. reported"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
+#, no-c-format
+msgid "Flarm interface"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
+#, fuzzy, no-c-format
+msgid "Disable circling"
+msgstr "Шаг времени Вращения"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
+#, no-c-format
+msgid "No mode reports"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
+#, fuzzy, no-c-format
+msgid "No aircraft type"
+msgstr "Тип планера"
+
+#: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
+#, no-c-format
+msgid "Privacy"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
+#, no-c-format
+msgid "Aircraft type"
+msgstr "Тип планера"
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
+#, no-c-format
+msgid "Interval; info"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
+#, no-c-format
+msgid "Interval; caution"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
+#, no-c-format
+msgid "Interval; warning"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
+#, fuzzy, no-c-format
+msgid "TE port"
+msgstr "Импортировать"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
+#, no-c-format
+msgid "Whether the Total Energy port is connected."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
+#, no-c-format
+msgid "Pitot port"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
+#, no-c-format
+msgid "Whether the Pitot port is connected."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
+#, no-c-format
+msgid "Static port"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
+#, no-c-format
+msgid "Whether the Static port is connected."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
+#, no-c-format
+msgid "Stall port"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
+#, no-c-format
+msgid "Whether the Stall pressure port is connected."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
+#, fuzzy, no-c-format
+msgid "Accelerometer"
+msgstr ""
+"Ускор\n"
+"ноль"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
+#, no-c-format
+msgid ""
+"Whether the internal accelerometer is used.  Only change this if the "
+"accelerometer has malfunctioned or the instrument cannot be installed with "
+"correct alignment."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
+#, no-c-format
+msgid ""
+"Whether a temperature and humidity sensor is installed.  Set to 0 to "
+"disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
+"specified."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
+#, fuzzy, no-c-format
+msgid "Baud rate Vega"
+msgstr "Скорость передачи данных"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
+#, no-c-format
+msgid ""
+"Baud rate of serial device connected to Vega port X1.  Use this as necessary "
+"when using a third party GPS or data-logger instead of FLARM.  If FLARM is "
+"connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
+"be set to 19200."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
+#, fuzzy, no-c-format
+msgid "FLARM connected"
+msgstr "Отключено"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
+#, no-c-format
+msgid ""
+"Enable detection of FLARM.  Disable only if FLARM is not used or "
+"disconnected."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
+#, fuzzy, no-c-format
+msgid "PDA power"
+msgstr "Питание"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
+#, no-c-format
+msgid ""
+"Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
+"Vega is connected to Altair, this should be set to False."
+msgstr ""
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:32
+#, no-c-format
+msgid "VNE"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:34
+#, fuzzy, no-c-format
+msgid "V terrain"
+msgstr "Ландшафт"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:36
+#, fuzzy, no-c-format
+msgid "Height terrain"
+msgstr "Прямое и \"рельефное\" глайдирование"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:38
+#, no-c-format
+msgid "V manoeuvering"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:40
+#, no-c-format
+msgid "V airbrake"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:42
+#, no-c-format
+msgid "V flap"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
+#, no-c-format
+msgid "IGC logging"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:32
+#, no-c-format
+msgid "Mute vario on voice"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:33
+#, no-c-format
+msgid "Mute vario on radio"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:34
+#, fuzzy, no-c-format
+msgid "Vario muting"
+msgstr "Варио #1"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:36
+#, no-c-format
+msgid "Voice muting"
+msgstr ""
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:38
+#, fuzzy, no-c-format
+msgid "Speaker threshold"
+msgstr "Треугольник FAI"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:40
+#, fuzzy, no-c-format
+msgid "Headset threshold"
+msgstr "Треугольник FAI"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:42
+#, no-c-format
+msgid "Urgent min. volume"
+msgstr ""
+
 #: src/Terrain/RasterWeather.cpp:51
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
@@ -9064,9 +9596,6 @@ msgstr ""
 #~ msgid ""
 #~ "Enable this if you would like to log the communication with the device."
 #~ msgstr "Включите если вы хотите иметь историю общения с устройством"
-
-#~ msgid "Aircraft type"
-#~ msgstr "Тип планера"
 
 #~ msgid "V rough air"
 #~ msgstr "Макс. скорость"

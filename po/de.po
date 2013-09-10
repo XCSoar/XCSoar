@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-10 10:51+0200\n"
+"POT-Creation-Date: 2013-09-10 10:53+0200\n"
 "PO-Revision-Date: 2013-08-18 13:08+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -845,6 +845,7 @@ msgstr "Manuell"
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:176
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:341
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:88
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:34
 #, no-c-format
 msgid "Auto"
 msgstr "Auto"
@@ -905,6 +906,7 @@ msgstr "Voll"
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:135
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:231
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:261
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:32
 #, no-c-format
 msgid "Off"
 msgstr "Aus"
@@ -920,6 +922,7 @@ msgstr "Aus"
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:55
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:87
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:262
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:33
 #, no-c-format
 msgid "On"
 msgstr "Ein"
@@ -959,6 +962,7 @@ msgstr "Aufgaben & Landeplätze"
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:100
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:108
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:153
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:33
 #, no-c-format
 msgid "None"
 msgstr "Keine"
@@ -3674,6 +3678,7 @@ msgstr "Lade Fluglog runter"
 
 #: src/Device/Config.cpp:218 src/Dialogs/Device/DeviceEditWidget.cpp:67
 #: src/Dialogs/Device/DeviceListDialog.cpp:373
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:40
 #, no-c-format
 msgid "Disabled"
 msgstr "Deaktiviert"
@@ -4114,6 +4119,8 @@ msgstr "Bestätige, wirklich alle Flüge vom Gerät löschen?"
 #: src/Dialogs/Device/CAI302/UnitsEditor.cpp:54
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:192
 #: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:68
+#, no-c-format
 msgid "Temperature"
 msgstr "Temperatur"
 
@@ -4504,6 +4511,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/Dialogs/Device/FLARM/ConfigWidget.cpp:145
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:40
+#, no-c-format
 msgid "Logger interval"
 msgstr "Logger interval"
 
@@ -7852,6 +7861,8 @@ msgid "Units used for latitude and longitude."
 msgstr "Einheiten für Breitengrad und Längengrad."
 
 #: src/Dialogs/Settings/Panels/TimeConfigPanel.cpp:91
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:33
+#, no-c-format
 msgid "UTC offset"
 msgstr "Zeitzonenverschiebung"
 
@@ -8816,6 +8827,561 @@ msgstr "Kein METAR verfügbar!"
 msgid "No TAF available!"
 msgstr "Kein TAF verfügbar!"
 
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:33
+#, no-c-format
+msgid "Gear on delay"
+msgstr "Verzögerung beim Einfahren des Fahrwerks"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:36
+#, no-c-format
+msgid "Gear off delay"
+msgstr "Verzögerung beim Ausfahren des Fahrwerks"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:39
+#, no-c-format
+msgid "Interval; gear"
+msgstr "Intervall; Fahrwerk"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:42
+#, no-c-format
+msgid "Radio com. max. delay"
+msgstr "Funkverbindung max. Verzögerung"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:45
+#, no-c-format
+msgid "Battery low delay"
+msgstr "Batterie leer Verzögerung"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:48
+#, no-c-format
+msgid "Battery empty delay"
+msgstr "Batterie leer Verzögerung"
+
+#: src/Dialogs/Device/Vega/AlertParameters.hpp:51
+#, no-c-format
+msgid "Interval; battery"
+msgstr "Interval; Batterie"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
+#, no-c-format
+msgid "Step"
+msgstr "Schrittweite"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
+#, no-c-format
+msgid "Ramp"
+msgstr "Steigung"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
+#, no-c-format
+msgid "Circling deadband type"
+msgstr "Steigflug Totbandtyp"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
+#, no-c-format
+msgid "Type of dead band used in circling mode."
+msgstr "Typ des Totbands im Steigmodus."
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
+#, no-c-format
+msgid "Circling hi cutoff"
+msgstr "Kreisen Abbruch hoch"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
+#, no-c-format
+msgid "High limit of circling dead band"
+msgstr "Obergrenze der Tonausblendung im Steigflug"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
+#, no-c-format
+msgid "Circling low cutoff"
+msgstr "Untere Tonausblendung Steigen"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
+#, no-c-format
+msgid "Low limit of circling dead band"
+msgstr "Untergrenze des Todbands beim Kreisen."
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
+#, no-c-format
+msgid "Cruise deadband type"
+msgstr "Vorflug Totbandtyp"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
+#, no-c-format
+msgid "Type of dead band used in cruise mode."
+msgstr "Type des Tonausblendung für den Vorflugmodus."
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
+#, no-c-format
+msgid "Cruise hi cutoff"
+msgstr "Ausblendung oben im Vorflug"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
+#, no-c-format
+msgid "High limit of cruise dead band"
+msgstr "Obergrenze der Tonausblendung im Vorflug"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
+#, no-c-format
+msgid "Cruise low cutoff"
+msgstr "Untere Tonausblendung Vorflug"
+
+#: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
+#, no-c-format
+msgid "Low limit of cruise dead band"
+msgstr "Untergrenze der Tonausblendung im Vorflug"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
+#, no-c-format
+msgid "Climb fast trigger"
+msgstr "Schnell Steigen Auslösung"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
+#, no-c-format
+msgid ""
+"Comparison method used to detect climb states (HIGH/LOW).\n"
+"[NONE]: State LOW disabled\n"
+"[MACCREADY]: State High if gross vario is greater than MacCready setting.\n"
+"[AVERAGE]: State HIGH if gross vario value is greater than average gross "
+"vario value."
+msgstr ""
+"Methode zum Einstufen des Steigens (Hoch/Gering).\n"
+"[Kein]: Stufe Gering deaktiviert\n"
+"[MacCready]: Stufe Hoch, falls das Bruttosteigen größer als die MacCready "
+"Einstellung ist.\n"
+"[Durchscnitt]: Stufe Hoch, wenn das Bruttosteigen höher als das mittlere "
+"Bruttosteigen ist."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
+#, no-c-format
+msgid "Cruise lift trigger"
+msgstr "Steigen Umschaltauslösung"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
+#, no-c-format
+msgid ""
+"Comparison method used to detect cruise states for switching to lift tones "
+"during cruise.\n"
+"[NONE]: LIFT tone disabled in cruise\n"
+"[RELATIVE ZERO] LIFT tone when relative vario greater than zero.\n"
+"[GROSS ZERO] LIFT tone when glider is climbing.\n"
+"[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
+"[NET MC/2] LIFT tone when airmass velocity greater than half MC."
+msgstr ""
+"Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-Töne "
+"geschaltet wird.\n"
+"[Kein]: Steigen-Töne sind im Vorflug ausgeschaltet.\n"
+"[Relativ Null] Steigen-Töne, sobald das relativ Vario größer Null zeigt.\n"
+"[Brutto Null] Steigen-Töne, wenn der Segler steigt.\n"
+"[Relativ MC/2] Steigen-Töne, sobald das relativ Vario mehr als die Hälfte "
+"der MacCready Einstellung zeigt.\n"
+"[Netto MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als die "
+"Hälfte des MacCready ist."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
+#, no-c-format
+msgid "Climb averager scale"
+msgstr "Steigwert Mittelwertzeitspanne"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
+#, no-c-format
+msgid "Time scale used for vario averager."
+msgstr "Zeitdauer für die Vario Mittelwertbildung."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
+#, no-c-format
+msgid "Cruise averager scale"
+msgstr "Reise Mittelwert Skalierung"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
+#, no-c-format
+msgid "Time scale used for cruise speed command averager."
+msgstr ""
+"Zeitintervall für die Mittelung der empfohlenen Vorfluggeschwindigkeit."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
+#, no-c-format
+msgid "Circling volume"
+msgstr "Kreisen Volumen"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
+#, no-c-format
+msgid "Mean volume level in circling modes."
+msgstr "Mittlere Lautstärke im Steigflug."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
+#, no-c-format
+msgid "Cruise volume"
+msgstr "Reise Lautstärke"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
+#, no-c-format
+msgid ""
+"Mean volume level in cruise modes.  If set to zero, scales with airspeed."
+msgstr ""
+"Mittlere Lautstärke im Vorflugmodus. Auf Null gesetzt wird sie der "
+"Geschwindigkeit angepasst."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
+#, no-c-format
+msgid "Base frequency"
+msgstr "Basis Frequenz"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
+#, no-c-format
+msgid "Adjustment to base frequency of tones in all modes."
+msgstr "Einstellung der Basistonhöhe für alle Modi."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
+#, no-c-format
+msgid "Filter circling"
+msgstr "Filter Kreisen"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
+#, no-c-format
+msgid "Variometer low pass filter time constant in circling mode."
+msgstr "Variometer Tiefpassfilter Zeitkonstante im Steigmodus."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
+#, no-c-format
+msgid "Filter cruise"
+msgstr "Filter Reise/Gleiten"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
+#, no-c-format
+msgid "Variometer low pass filter time constant in cruise mode."
+msgstr "Variometer Tiefpassfilter Zeitkonstante in Vorflugmodus."
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
+#, no-c-format
+msgid "Tone pitch scale"
+msgstr "Tonanstieg"
+
+#: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
+#, no-c-format
+msgid "Adjustment to base pitch scale of tones in all modes."
+msgstr "Einstellung der Grund-Tonlage für alle Modi."
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:105
+msgid "Beep type"
+msgstr "Piepston Typ"
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:108
+msgid "Pitch scheme"
+msgstr "Neigungs Schema"
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:111
+msgid "Pitch scale"
+msgstr "Änderung"
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:114
+msgid "Period scheme"
+msgstr "Periodenschema"
+
+#: src/Dialogs/Device/Vega/AudioParameters.hpp:117
+msgid "Period scale"
+msgstr "Periode"
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
+#, no-c-format
+msgid "TE mixing"
+msgstr "Total Energie Mischung"
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:34
+#, no-c-format
+msgid ""
+"Proportion of TE probe value used in total energy mixing with pitot/static "
+"total energy."
+msgstr ""
+"Verhältnis des TEK-Düsen Wertes für die gemischte Berechnung zusammen mit "
+"der Pitot/statischer total Energie Kompensation."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:38
+#, no-c-format
+msgid "ASI cal."
+msgstr "IAS Kalib."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:39
+#, no-c-format
+msgid ""
+"Calibration factor applied to measured airspeed to obtain indicated airspeed."
+msgstr ""
+"Kalibrierfaktor der gemessenen Geschwindigkeit, um die angezeigte "
+"Geschwindigkeit zu berechnen."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
+#, no-c-format
+msgid "TE static cal."
+msgstr "TE statische Kalib."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:44
+#, no-c-format
+msgid ""
+"Calibration factor applied to static pressure used in total energy "
+"calculation."
+msgstr "Kalibrierfaktor des statischen Druck für die Totalenergieberechnung."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
+#, no-c-format
+msgid "TE dynamic cal."
+msgstr "TE dynamische Kalib."
+
+#: src/Dialogs/Device/Vega/CalibrationParameters.hpp:49
+#, no-c-format
+msgid ""
+"Calibration factor applied to dynamic pressure used in total energy "
+"calculation."
+msgstr "Kalibrierfaktor des Staudruck für die Totalenergieberechnung."
+
+#: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
+#, no-c-format
+msgid "Needle gauge type"
+msgstr "Zeiger Anzeigetyp"
+
+#: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
+#, no-c-format
+msgid "LED bright"
+msgstr "LED Helligkeit"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
+#, no-c-format
+msgid "Max. objects reported"
+msgstr "Max. gemeldete Objekte"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
+#, no-c-format
+msgid "Max. reported"
+msgstr "Max. gemeldet"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
+#, no-c-format
+msgid "Flarm interface"
+msgstr "Flarmverbindung"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
+#, fuzzy, no-c-format
+msgid "Disable circling"
+msgstr "Filter Kreisen"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
+#, no-c-format
+msgid "No mode reports"
+msgstr "Keine Modus Meldungen"
+
+#: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
+#, no-c-format
+msgid "No aircraft type"
+msgstr "Kein Flugzeugtyp"
+
+#: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
+#, no-c-format
+msgid "Privacy"
+msgstr "Privatsphäre"
+
+#: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
+#, no-c-format
+msgid "Aircraft type"
+msgstr "Flugzeugtyp"
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
+#, no-c-format
+msgid "Interval; info"
+msgstr "Interval; info"
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
+#, no-c-format
+msgid "Interval; caution"
+msgstr "Intervall; Vorsicht"
+
+#: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
+#, no-c-format
+msgid "Interval; warning"
+msgstr "Intervall; Warnung"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
+#, no-c-format
+msgid "TE port"
+msgstr "Total Energie Düse"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
+#, no-c-format
+msgid "Whether the Total Energy port is connected."
+msgstr "Ob ein Totalenergie-Sensor verbunden ist."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
+#, no-c-format
+msgid "Pitot port"
+msgstr "Pitot Anschluss"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
+#, no-c-format
+msgid "Whether the Pitot port is connected."
+msgstr "Ob der Pitot-Anschluss verbunden ist."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
+#, no-c-format
+msgid "Static port"
+msgstr "Statischer Port"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
+#, no-c-format
+msgid "Whether the Static port is connected."
+msgstr "Ob der statische Druck angeschlossen ist."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
+#, no-c-format
+msgid "Stall port"
+msgstr "Überziehwarnung Port"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
+#, no-c-format
+msgid "Whether the Stall pressure port is connected."
+msgstr "Ist der Überziehdrucksensor angeschlossen."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
+#, no-c-format
+msgid "Accelerometer"
+msgstr "Beschleunigungsmesser"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
+#, no-c-format
+msgid ""
+"Whether the internal accelerometer is used.  Only change this if the "
+"accelerometer has malfunctioned or the instrument cannot be installed with "
+"correct alignment."
+msgstr ""
+"Ob der interne Beschleunigungssensor verwendet werden soll. Schalte dies nur "
+"aus, wenn der Sensor nicht gut funktioniert, oder das Gerät nicht korrekt "
+"ausgerichtet montiert ist."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:69
+#, no-c-format
+msgid ""
+"Whether a temperature and humidity sensor is installed.  Set to 0 to "
+"disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
+"specified."
+msgstr ""
+"Ob ein Temperatur- und Feuchtigkeitssensor verfügbar ist. Setze auf 0, wenn "
+"nicht verfügbar, 255 für eine automatische Erkennung, oder auf die "
+"Gerätekennung der Eindrahtverbindung."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
+#, no-c-format
+msgid "Baud rate Vega"
+msgstr "Baudrate Vega"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
+#, no-c-format
+msgid ""
+"Baud rate of serial device connected to Vega port X1.  Use this as necessary "
+"when using a third party GPS or data-logger instead of FLARM.  If FLARM is "
+"connected the baud rate will be fixed at 38400.  For OzFLARM, the value can "
+"be set to 19200."
+msgstr ""
+"Baudrate der seriellen Verbindung zum Vega-Anschluss X1. Einstellung nach "
+"den Erfordernissen des angeschlossenen GPS oder Logger. Ist ein FLARM "
+"angschlossen wird die Baudrate fest auf 38400 eingestellt. Für das OzFLARM "
+"kann auch 19200 verwendet werden."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
+#, no-c-format
+msgid "FLARM connected"
+msgstr "FLARM verbunden"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
+#, no-c-format
+msgid ""
+"Enable detection of FLARM.  Disable only if FLARM is not used or "
+"disconnected."
+msgstr ""
+"Aktiviert die FLARM Erkennung. Schalte dies nur ab, wenn das FLARM nicht "
+"genutzt wird, oder nicht angeschlossen ist."
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
+#, no-c-format
+msgid "PDA power"
+msgstr "PDA Strom"
+
+#: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
+#, no-c-format
+msgid ""
+"Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
+"Vega is connected to Altair, this should be set to False."
+msgstr ""
+"Aktiviere den +5V Ausgang für PDA's etc. an der Vega Schnittstelle ~X2. Ist "
+"das Vega mit dem Altair verbunden muss diese Einstellung ausgeschaltet sein."
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:32
+#, no-c-format
+msgid "VNE"
+msgstr "VNE"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:34
+#, no-c-format
+msgid "V terrain"
+msgstr "V Gelände"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:36
+#, no-c-format
+msgid "Height terrain"
+msgstr "Geländehöhe"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:38
+#, no-c-format
+msgid "V manoeuvering"
+msgstr "Manövergeschwindigkeit"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:40
+#, no-c-format
+msgid "V airbrake"
+msgstr "V Bremsklappe"
+
+#: src/Dialogs/Device/Vega/LimitParameters.hpp:42
+#, no-c-format
+msgid "V flap"
+msgstr "V Wölbklappe"
+
+#: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
+#, no-c-format
+msgid "IGC logging"
+msgstr "IGC Logging"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:32
+#, no-c-format
+msgid "Mute vario on voice"
+msgstr "Vario bei Sprache stilllegen"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:33
+#, no-c-format
+msgid "Mute vario on radio"
+msgstr "Vario auf Radio stummschalten"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:34
+#, fuzzy, no-c-format
+msgid "Vario muting"
+msgstr "Stimme stummschalten"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:36
+#, no-c-format
+msgid "Voice muting"
+msgstr "Stimme stummschalten"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:38
+#, no-c-format
+msgid "Speaker threshold"
+msgstr "Lautsprecher Schwellwert"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:40
+#, no-c-format
+msgid "Headset threshold"
+msgstr "Kopfhörer Lautstärke Schwelle"
+
+#: src/Dialogs/Device/Vega/MixerParameters.hpp:42
+#, no-c-format
+msgid "Urgent min. volume"
+msgstr "Min. Dringendlautstärke"
+
 #: src/Terrain/RasterWeather.cpp:51
 #, no-c-format
 msgid "Display terrain on map, no weather data displayed."
@@ -9583,9 +10149,6 @@ msgstr ""
 #~ msgid "QFE GPS"
 #~ msgstr "QFE GPS"
 
-#~ msgid "Aircraft type"
-#~ msgstr "Flugzeugtyp"
-
 #~ msgid "Delete Waypoint?"
 #~ msgstr "Wegpunkt löschen?"
 
@@ -10031,365 +10594,6 @@ msgstr ""
 
 #~ msgid "Flight replay"
 #~ msgstr "Flug wiedergeben"
-
-#~ msgid "Gear on delay"
-#~ msgstr "Verzögerung beim Einfahren des Fahrwerks"
-
-#~ msgid "Gear off delay"
-#~ msgstr "Verzögerung beim Ausfahren des Fahrwerks"
-
-#~ msgid "Interval; gear"
-#~ msgstr "Intervall; Fahrwerk"
-
-#~ msgid "Radio com. max. delay"
-#~ msgstr "Funkverbindung max. Verzögerung"
-
-#~ msgid "Battery low delay"
-#~ msgstr "Batterie leer Verzögerung"
-
-#~ msgid "Battery empty delay"
-#~ msgstr "Batterie leer Verzögerung"
-
-#~ msgid "Interval; battery"
-#~ msgstr "Interval; Batterie"
-
-#~ msgid "Step"
-#~ msgstr "Schrittweite"
-
-#~ msgid "Ramp"
-#~ msgstr "Steigung"
-
-#~ msgid "Circling deadband type"
-#~ msgstr "Steigflug Totbandtyp"
-
-#~ msgid "Type of dead band used in circling mode."
-#~ msgstr "Typ des Totbands im Steigmodus."
-
-#~ msgid "Circling hi cutoff"
-#~ msgstr "Kreisen Abbruch hoch"
-
-#~ msgid "High limit of circling dead band"
-#~ msgstr "Obergrenze der Tonausblendung im Steigflug"
-
-#~ msgid "Circling low cutoff"
-#~ msgstr "Untere Tonausblendung Steigen"
-
-#~ msgid "Low limit of circling dead band"
-#~ msgstr "Untergrenze des Todbands beim Kreisen."
-
-#~ msgid "Cruise deadband type"
-#~ msgstr "Vorflug Totbandtyp"
-
-#~ msgid "Type of dead band used in cruise mode."
-#~ msgstr "Type des Tonausblendung für den Vorflugmodus."
-
-#~ msgid "Cruise hi cutoff"
-#~ msgstr "Ausblendung oben im Vorflug"
-
-#~ msgid "High limit of cruise dead band"
-#~ msgstr "Obergrenze der Tonausblendung im Vorflug"
-
-#~ msgid "Cruise low cutoff"
-#~ msgstr "Untere Tonausblendung Vorflug"
-
-#~ msgid "Low limit of cruise dead band"
-#~ msgstr "Untergrenze der Tonausblendung im Vorflug"
-
-#~ msgid "Climb fast trigger"
-#~ msgstr "Schnell Steigen Auslösung"
-
-#~ msgid ""
-#~ "Comparison method used to detect climb states (HIGH/LOW).\n"
-#~ "[NONE]: State LOW disabled\n"
-#~ "[MACCREADY]: State High if gross vario is greater than MacCready "
-#~ "setting.\n"
-#~ "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
-#~ "vario value."
-#~ msgstr ""
-#~ "Methode zum Einstufen des Steigens (Hoch/Gering).\n"
-#~ "[Kein]: Stufe Gering deaktiviert\n"
-#~ "[MacCready]: Stufe Hoch, falls das Bruttosteigen größer als die MacCready "
-#~ "Einstellung ist.\n"
-#~ "[Durchscnitt]: Stufe Hoch, wenn das Bruttosteigen höher als das mittlere "
-#~ "Bruttosteigen ist."
-
-#~ msgid "Cruise lift trigger"
-#~ msgstr "Steigen Umschaltauslösung"
-
-#~ msgid ""
-#~ "Comparison method used to detect cruise states for switching to lift "
-#~ "tones during cruise.\n"
-#~ "[NONE]: LIFT tone disabled in cruise\n"
-#~ "[RELATIVE ZERO] LIFT tone when relative vario greater than zero.\n"
-#~ "[GROSS ZERO] LIFT tone when glider is climbing.\n"
-#~ "[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.\n"
-#~ "[NET MC/2] LIFT tone when airmass velocity greater than half MC."
-#~ msgstr ""
-#~ "Wahl der Methode zur Entscheidung, ob während des Vorflugs auf Steigen-"
-#~ "Töne geschaltet wird.\n"
-#~ "[Kein]: Steigen-Töne sind im Vorflug ausgeschaltet.\n"
-#~ "[Relativ Null] Steigen-Töne, sobald das relativ Vario größer Null zeigt.\n"
-#~ "[Brutto Null] Steigen-Töne, wenn der Segler steigt.\n"
-#~ "[Relativ MC/2] Steigen-Töne, sobald das relativ Vario mehr als die Hälfte "
-#~ "der MacCready Einstellung zeigt.\n"
-#~ "[Netto MC/2] Steigen-Töne, wenn das Steigen der Luftmasse größer als die "
-#~ "Hälfte des MacCready ist."
-
-#~ msgid "Climb averager scale"
-#~ msgstr "Steigwert Mittelwertzeitspanne"
-
-#~ msgid "Time scale used for vario averager."
-#~ msgstr "Zeitdauer für die Vario Mittelwertbildung."
-
-#~ msgid "Cruise averager scale"
-#~ msgstr "Reise Mittelwert Skalierung"
-
-#~ msgid "Time scale used for cruise speed command averager."
-#~ msgstr ""
-#~ "Zeitintervall für die Mittelung der empfohlenen Vorfluggeschwindigkeit."
-
-#~ msgid "Circling volume"
-#~ msgstr "Kreisen Volumen"
-
-#~ msgid "Mean volume level in circling modes."
-#~ msgstr "Mittlere Lautstärke im Steigflug."
-
-#~ msgid "Cruise volume"
-#~ msgstr "Reise Lautstärke"
-
-#~ msgid ""
-#~ "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
-#~ msgstr ""
-#~ "Mittlere Lautstärke im Vorflugmodus. Auf Null gesetzt wird sie der "
-#~ "Geschwindigkeit angepasst."
-
-#~ msgid "Base frequency"
-#~ msgstr "Basis Frequenz"
-
-#~ msgid "Adjustment to base frequency of tones in all modes."
-#~ msgstr "Einstellung der Basistonhöhe für alle Modi."
-
-#~ msgid "Filter circling"
-#~ msgstr "Filter Kreisen"
-
-#~ msgid "Variometer low pass filter time constant in circling mode."
-#~ msgstr "Variometer Tiefpassfilter Zeitkonstante im Steigmodus."
-
-#~ msgid "Filter cruise"
-#~ msgstr "Filter Reise/Gleiten"
-
-#~ msgid "Variometer low pass filter time constant in cruise mode."
-#~ msgstr "Variometer Tiefpassfilter Zeitkonstante in Vorflugmodus."
-
-#~ msgid "Tone pitch scale"
-#~ msgstr "Tonanstieg"
-
-#~ msgid "Adjustment to base pitch scale of tones in all modes."
-#~ msgstr "Einstellung der Grund-Tonlage für alle Modi."
-
-#~ msgid "Beep type"
-#~ msgstr "Piepston Typ"
-
-#~ msgid "Pitch scheme"
-#~ msgstr "Neigungs Schema"
-
-#~ msgid "Pitch scale"
-#~ msgstr "Änderung"
-
-#~ msgid "Period scheme"
-#~ msgstr "Periodenschema"
-
-#~ msgid "Period scale"
-#~ msgstr "Periode"
-
-#~ msgid "TE mixing"
-#~ msgstr "Total Energie Mischung"
-
-#~ msgid ""
-#~ "Proportion of TE probe value used in total energy mixing with pitot/"
-#~ "static total energy."
-#~ msgstr ""
-#~ "Verhältnis des TEK-Düsen Wertes für die gemischte Berechnung zusammen mit "
-#~ "der Pitot/statischer total Energie Kompensation."
-
-#~ msgid "ASI cal."
-#~ msgstr "IAS Kalib."
-
-#~ msgid ""
-#~ "Calibration factor applied to measured airspeed to obtain indicated "
-#~ "airspeed."
-#~ msgstr ""
-#~ "Kalibrierfaktor der gemessenen Geschwindigkeit, um die angezeigte "
-#~ "Geschwindigkeit zu berechnen."
-
-#~ msgid "TE static cal."
-#~ msgstr "TE statische Kalib."
-
-#~ msgid ""
-#~ "Calibration factor applied to static pressure used in total energy "
-#~ "calculation."
-#~ msgstr ""
-#~ "Kalibrierfaktor des statischen Druck für die Totalenergieberechnung."
-
-#~ msgid "TE dynamic cal."
-#~ msgstr "TE dynamische Kalib."
-
-#~ msgid ""
-#~ "Calibration factor applied to dynamic pressure used in total energy "
-#~ "calculation."
-#~ msgstr "Kalibrierfaktor des Staudruck für die Totalenergieberechnung."
-
-#~ msgid "Needle gauge type"
-#~ msgstr "Zeiger Anzeigetyp"
-
-#~ msgid "LED bright"
-#~ msgstr "LED Helligkeit"
-
-#~ msgid "Max. objects reported"
-#~ msgstr "Max. gemeldete Objekte"
-
-#~ msgid "Max. reported"
-#~ msgstr "Max. gemeldet"
-
-#~ msgid "Flarm interface"
-#~ msgstr "Flarmverbindung"
-
-#~ msgid "No mode reports"
-#~ msgstr "Keine Modus Meldungen"
-
-#~ msgid "No aircraft type"
-#~ msgstr "Kein Flugzeugtyp"
-
-#~ msgid "Privacy"
-#~ msgstr "Privatsphäre"
-
-#~ msgid "Interval; info"
-#~ msgstr "Interval; info"
-
-#~ msgid "Interval; caution"
-#~ msgstr "Intervall; Vorsicht"
-
-#~ msgid "Interval; warning"
-#~ msgstr "Intervall; Warnung"
-
-#~ msgid "TE port"
-#~ msgstr "Total Energie Düse"
-
-#~ msgid "Whether the Total Energy port is connected."
-#~ msgstr "Ob ein Totalenergie-Sensor verbunden ist."
-
-#~ msgid "Pitot port"
-#~ msgstr "Pitot Anschluss"
-
-#~ msgid "Whether the Pitot port is connected."
-#~ msgstr "Ob der Pitot-Anschluss verbunden ist."
-
-#~ msgid "Static port"
-#~ msgstr "Statischer Port"
-
-#~ msgid "Whether the Static port is connected."
-#~ msgstr "Ob der statische Druck angeschlossen ist."
-
-#~ msgid "Stall port"
-#~ msgstr "Überziehwarnung Port"
-
-#~ msgid "Whether the Stall pressure port is connected."
-#~ msgstr "Ist der Überziehdrucksensor angeschlossen."
-
-#~ msgid "Accelerometer"
-#~ msgstr "Beschleunigungsmesser"
-
-#~ msgid ""
-#~ "Whether the internal accelerometer is used.  Only change this if the "
-#~ "accelerometer has malfunctioned or the instrument cannot be installed "
-#~ "with correct alignment."
-#~ msgstr ""
-#~ "Ob der interne Beschleunigungssensor verwendet werden soll. Schalte dies "
-#~ "nur aus, wenn der Sensor nicht gut funktioniert, oder das Gerät nicht "
-#~ "korrekt ausgerichtet montiert ist."
-
-#~ msgid ""
-#~ "Whether a temperature and humidity sensor is installed.  Set to 0 to "
-#~ "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
-#~ "specified."
-#~ msgstr ""
-#~ "Ob ein Temperatur- und Feuchtigkeitssensor verfügbar ist. Setze auf 0, "
-#~ "wenn nicht verfügbar, 255 für eine automatische Erkennung, oder auf die "
-#~ "Gerätekennung der Eindrahtverbindung."
-
-#~ msgid "Baud rate Vega"
-#~ msgstr "Baudrate Vega"
-
-#~ msgid ""
-#~ "Baud rate of serial device connected to Vega port X1.  Use this as "
-#~ "necessary when using a third party GPS or data-logger instead of FLARM.  "
-#~ "If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, "
-#~ "the value can be set to 19200."
-#~ msgstr ""
-#~ "Baudrate der seriellen Verbindung zum Vega-Anschluss X1. Einstellung nach "
-#~ "den Erfordernissen des angeschlossenen GPS oder Logger. Ist ein FLARM "
-#~ "angschlossen wird die Baudrate fest auf 38400 eingestellt. Für das "
-#~ "OzFLARM kann auch 19200 verwendet werden."
-
-#~ msgid "FLARM connected"
-#~ msgstr "FLARM verbunden"
-
-#~ msgid ""
-#~ "Enable detection of FLARM.  Disable only if FLARM is not used or "
-#~ "disconnected."
-#~ msgstr ""
-#~ "Aktiviert die FLARM Erkennung. Schalte dies nur ab, wenn das FLARM nicht "
-#~ "genutzt wird, oder nicht angeschlossen ist."
-
-#~ msgid "PDA power"
-#~ msgstr "PDA Strom"
-
-#~ msgid ""
-#~ "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
-#~ "Vega is connected to Altair, this should be set to False."
-#~ msgstr ""
-#~ "Aktiviere den +5V Ausgang für PDA's etc. an der Vega Schnittstelle ~X2. "
-#~ "Ist das Vega mit dem Altair verbunden muss diese Einstellung "
-#~ "ausgeschaltet sein."
-
-#~ msgid "VNE"
-#~ msgstr "VNE"
-
-#~ msgid "V terrain"
-#~ msgstr "V Gelände"
-
-#~ msgid "Height terrain"
-#~ msgstr "Geländehöhe"
-
-#~ msgid "V manoeuvering"
-#~ msgstr "Manövergeschwindigkeit"
-
-#~ msgid "V airbrake"
-#~ msgstr "V Bremsklappe"
-
-#~ msgid "V flap"
-#~ msgstr "V Wölbklappe"
-
-#~ msgid "IGC logging"
-#~ msgstr "IGC Logging"
-
-#~ msgid "Mute vario on voice"
-#~ msgstr "Vario bei Sprache stilllegen"
-
-#~ msgid "Mute vario on radio"
-#~ msgstr "Vario auf Radio stummschalten"
-
-#~ msgid "Voice muting"
-#~ msgstr "Stimme stummschalten"
-
-#~ msgid "Speaker threshold"
-#~ msgstr "Lautsprecher Schwellwert"
-
-#~ msgid "Headset threshold"
-#~ msgstr "Kopfhörer Lautstärke Schwelle"
-
-#~ msgid "Urgent min. volume"
-#~ msgstr "Min. Dringendlautstärke"
 
 #~ msgid "Task Status"
 #~ msgstr "Aufgabenstatus"
