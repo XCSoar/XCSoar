@@ -27,15 +27,15 @@ Copyright_License {
 void
 SingleWindow::AddDialog(WndForm *dialog)
 {
-  dialogs.push(dialog);
+  dialogs.push_front(dialog);
 }
 
 void
 SingleWindow::RemoveDialog(WndForm *dialog)
 {
-  assert(dialog == dialogs.top());
+  assert(dialog == dialogs.front());
 
-  dialogs.pop();
+  dialogs.pop_front();
 }
 
 void
