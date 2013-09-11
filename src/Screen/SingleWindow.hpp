@@ -111,6 +111,7 @@ public:
 protected:
   virtual bool OnClose() override;
   virtual void OnDestroy() override;
+  virtual void OnResize(PixelSize new_size) override;
 };
 
 #endif

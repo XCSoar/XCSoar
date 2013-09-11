@@ -64,3 +64,12 @@ SingleWindow::OnDestroy()
   TopWindow::OnDestroy();
   PostQuit();
 }
+
+void
+SingleWindow::OnResize(PixelSize new_size)
+{
+  TopWindow::OnResize(new_size);
+
+  if (HasDialog())
+    GetTopDialog().ReinitialiseLayout(GetClientRect());
+}

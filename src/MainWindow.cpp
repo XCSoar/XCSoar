@@ -318,17 +318,13 @@ MainWindow::ReinitialiseLayoutTA(PixelRect rc,
 void
 MainWindow::ReinitialiseLayout()
 {
-  const PixelRect rc = GetClientRect();
-
-  if (map == NULL) {
-    if (HasDialog())
-      // adapt simulator prompt
-      GetTopDialog().ReinitialiseLayout(rc);
+  if (map == nullptr)
     /* without the MapWindow, it is safe to assume that the MainWindow
        is just being initialized, and the InfoBoxes aren't initialized
        yet either, so there is nothing to do here */
     return;
-  }
+
+  const PixelRect rc = GetClientRect();
 
 #ifndef ENABLE_OPENGL
   if (draw_thread == NULL)
@@ -377,10 +373,6 @@ MainWindow::ReinitialiseLayout()
 
   if (widget != NULL)
     widget->Move(GetMainRect(rc));
-
-  // move topmost dialog to fit into the current layout, or close it
-  if (HasDialog())
-    GetTopDialog().ReinitialiseLayout(rc);
 
   if (map != NULL)
     map->BringToBottom();
@@ -517,9 +509,9 @@ MainWindow::FullRedraw()
 void
 MainWindow::OnResize(PixelSize new_size)
 {
-  SingleWindow::OnResize(new_size);
-
   Layout::Initialize(new_size);
+
+  SingleWindow::OnResize(new_size);
 
   ReinitialiseLayout();
 
