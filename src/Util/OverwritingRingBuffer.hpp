@@ -145,6 +145,12 @@ public:
       head = next(head);
   }
 
+  T pop() {
+    assert(!empty());
+    tail = previous(tail);
+    return data[tail];
+  }
+
   /**
    * Returns a pointer to the oldest item.
    */
