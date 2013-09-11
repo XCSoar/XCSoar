@@ -21,18 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLIGHT_INFO_HPP
-#define XCSOAR_FLIGHT_INFO_HPP
+#include "FlightInfo.hpp"
+#include "Time/BrokenDateTime.hpp"
 
-#include "Time/BrokenDate.hpp"
-#include "Time/BrokenTime.hpp"
+BrokenTime FlightInfo::Duration() const {
+  if (!date.IsPlausible() ||
+      !start_time.IsPlausible() || !end_time.IsPlausible())
+    return BrokenTime::Invalid();
 
-struct FlightInfo {
-  BrokenDate date;
+  int secs = BrokenDateTime(date, end_time) - BrokenDateTime(date, start_time);
 
-  BrokenTime start_time, end_time;
+  // adjust for possible date advance between start and end (add one day)
+  if (secs < 0)
+    secs += 24 * 60 * 60;
 
-  BrokenTime Duration() const;
-};
+  // if still not a plausible duration return invalid duration
+  if (secs < 0 || secs > 14 * 60 * 60)
+    return BrokenTime::Invalid();
 
-#endif
+  return BrokenTime::FromSecondOfDay(secs);
+}
