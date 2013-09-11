@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLIGHT_LOGGER_HPP
-#define XCSOAR_FLIGHT_LOGGER_HPP
+#ifndef XCSOAR_FLIGHT_PARSER_HPP
+#define XCSOAR_FLIGHT_PARSER_HPP
 
 struct FlightInfo;
 struct BrokenDateTime;
