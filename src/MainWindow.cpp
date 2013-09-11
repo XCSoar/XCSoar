@@ -323,7 +323,7 @@ MainWindow::ReinitialiseLayout()
   if (map == NULL) {
     if (HasDialog())
       // adapt simulator prompt
-      dialogs.top()->ReinitialiseLayout(rc);
+      GetTopDialog().ReinitialiseLayout(rc);
     /* without the MapWindow, it is safe to assume that the MainWindow
        is just being initialized, and the InfoBoxes aren't initialized
        yet either, so there is nothing to do here */
@@ -380,7 +380,7 @@ MainWindow::ReinitialiseLayout()
 
   // move topmost dialog to fit into the current layout, or close it
   if (HasDialog())
-    dialogs.top()->ReinitialiseLayout(rc);
+    GetTopDialog().ReinitialiseLayout(rc);
 
   if (map != NULL)
     map->BringToBottom();

@@ -41,7 +41,6 @@ class SingleWindow : public TopWindow {
   static constexpr const TCHAR *class_name = _T("XCSoarMain");
 #endif
 
-protected:
   std::stack<WndForm *> dialogs;
 
 public:
