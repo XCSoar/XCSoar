@@ -50,6 +50,8 @@
 #
 #   LIBCXX      The absolute path of the libc++ svn/git working directory.
 #
+#   IWYU        "y" to run "include-what-you-use" on all sources
+#
 
 .DEFAULT_GOAL := all
 

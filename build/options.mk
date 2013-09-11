@@ -1,6 +1,7 @@
 RADIANS ?= y
 LLVM ?= n
 CLANG ?= $(LLVM)
+IWYU ?= n
 
 FIXED ?= $(call bool_not,$(HAVE_FPU))
 ifeq ($(FIXED),y)
