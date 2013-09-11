@@ -82,8 +82,6 @@ FlightParser::ReadLine(BrokenDateTime &dt)
     if (space == nullptr)
       continue;
 
-    *space = 0;
-
     unsigned year, month, day, hour, minute, second;
     int result = sscanf(line, "%04u-%02u-%02uT%02u:%02u:%02u",
                         &year, &month, &day, &hour, &minute, &second);
