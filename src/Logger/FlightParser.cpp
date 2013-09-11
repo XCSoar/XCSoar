@@ -38,7 +38,7 @@ FlightParser::Read(FlightInfo &flight)
     BrokenDateTime dt;
     char *line = ReadLine(dt);
     if (line == nullptr)
-      return false;
+      return flight.start_time.IsPlausible();
 
     if (StringIsEqual(line, "start")) {
       if (flight.start_time.IsPlausible()) {
