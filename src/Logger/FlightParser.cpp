@@ -43,7 +43,7 @@ FlightParser::Read(FlightInfo &flight)
     if (StringIsEqual(line, "start")) {
       if (flight.start_time.IsPlausible()) {
         /* this is the next flight: unread this line, return */
-        last = line;
+        last = current_line;
         return true;
       }
 
@@ -77,6 +77,7 @@ FlightParser::ReadLine(BrokenDateTime &dt)
 {
   char *line;
   while ((line = ReadLine()) != nullptr) {
+    current_line = line;
     char *space = strchr(line, ' ');
     if (space == nullptr)
       continue;

@@ -35,6 +35,7 @@ class FlightParser {
   NLineReader &reader;
 
   char *last;
+  char *current_line;
 
 public:
   FlightParser(NLineReader &_reader):reader(_reader), last(nullptr) {}
