@@ -70,6 +70,7 @@ SingleWindow::OnResize(PixelSize new_size)
 {
   TopWindow::OnResize(new_size);
 
-  if (HasDialog())
-    GetTopDialog().ReinitialiseLayout(GetClientRect());
+  const PixelRect rc = GetClientRect();
+  for (WndForm *dialog : dialogs)
+    dialog->ReinitialiseLayout(rc);
 }
