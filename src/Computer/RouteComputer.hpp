@@ -34,8 +34,6 @@ struct DerivedInfo;
 struct GlideSettings;
 struct RoutePlannerConfig;
 class ProtectedAirspaceWarningManager;
-class ProtectedRoutePlanner;
-class RoutePlannerGlue;
 class RasterTerrain;
 class GlidePolar;
 

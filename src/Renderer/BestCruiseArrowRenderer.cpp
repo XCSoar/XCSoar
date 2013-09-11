@@ -27,7 +27,6 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
-#include "MapSettings.hpp"
 #include "Util/Macros.hpp"
 
 void

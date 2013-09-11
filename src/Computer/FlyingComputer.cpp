@@ -25,7 +25,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-#include "Engine/GlideSolvers/GlidePolar.hpp"
 
 void
 FlyingComputer::Reset()

@@ -28,9 +28,8 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Look/VarioBarLook.hpp"
-#include "Look/TaskLook.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/Macros.hpp"
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #endif

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct BrokenDateTime;
 class RoughTimeDelta;
 
 /**

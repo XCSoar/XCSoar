@@ -27,7 +27,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "Util/StaticString.hpp"
 #include "OS/FileUtil.hpp"
 
 #include <stdio.h>

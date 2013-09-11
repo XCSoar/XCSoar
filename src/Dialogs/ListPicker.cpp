@@ -27,7 +27,6 @@ Copyright_License {
 #include "Widget/ListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Event/LambdaTimer.hpp"

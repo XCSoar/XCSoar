@@ -25,7 +25,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Formatter/Units.hpp"
 #include "TeamActions.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
 #include "Widget/CallbackWidget.hpp"

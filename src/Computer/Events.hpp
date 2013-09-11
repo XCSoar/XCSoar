@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Blackboard/BlackboardListener.hpp"
 #include "NMEA/Validity.hpp"
-#include "Compiler.h"
 
 /**
  * This class listens for #LiveBlackboard changes and emits glide

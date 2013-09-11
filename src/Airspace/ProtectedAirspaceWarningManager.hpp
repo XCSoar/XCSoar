@@ -26,7 +26,6 @@
 #include "Thread/Guard.hpp"
 #include "Compiler.h"
 
-struct AircraftState;
 class AirspaceWarningManager;
 class AbstractAirspace;
 class TaskProjection;

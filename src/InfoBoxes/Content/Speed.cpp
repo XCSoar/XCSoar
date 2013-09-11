@@ -31,9 +31,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 
-#include <tchar.h>
-#include <stdio.h>
-
 void
 InfoBoxContentSpeedGround::Update(InfoBoxData &data)
 {

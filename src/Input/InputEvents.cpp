@@ -53,27 +53,20 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Protection.hpp"
 #include "LogFile.hpp"
 #include "Menu/ButtonLabel.hpp"
-#include "Profile/Profile.hpp"
-#include "LocalPath.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Asset.hpp"
 #include "Menu/MenuData.hpp"
 #include "IO/ConfiguredFile.hpp"
-#include "MapSettings.hpp"
-#include "Projection/MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Language/Language.hpp"
 #include "Pan.hpp"
 
 #ifdef KOBO
 #include "Screen/Key.h"
 #endif
 
-#include <algorithm>
 #include <assert.h>
-#include <ctype.h>
 #include <tchar.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <memory>
 
 namespace InputEvents

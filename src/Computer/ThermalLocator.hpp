@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Geo/SpeedVector.hpp"
 #include "Geo/Flat/FlatPoint.hpp"
 
+struct SpeedVector;
 class TaskProjection;
 struct ThermalLocatorInfo;
 

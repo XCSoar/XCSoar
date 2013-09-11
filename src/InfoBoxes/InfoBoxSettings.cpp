@@ -25,7 +25,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <algorithm>
-#include <stdio.h>
 #include <tchar.h>
 
 using namespace InfoBoxFactory;

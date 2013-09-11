@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
@@ -38,7 +37,6 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 void
 UpdateInfoBoxHumidity(InfoBoxData &data)

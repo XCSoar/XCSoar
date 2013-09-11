@@ -26,13 +26,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "FlarmTrafficWindow.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
-#include "NMEA/MoreData.hpp"
 #include "Computer/Settings.hpp"
 #include "PageActions.hpp"
-
-#ifdef USE_GDI
-#include "Screen/Canvas.hpp"
-#endif
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

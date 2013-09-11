@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "FlightLogger.hpp"
-#include "Blackboard/LiveBlackboard.hpp"
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 #include "IO/TextWriter.hpp"
 
 void

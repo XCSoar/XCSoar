@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "BackgroundRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
-#include "Renderer/LabelBlock.hpp"
 #include "NMEA/Derived.hpp"
 
 static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);

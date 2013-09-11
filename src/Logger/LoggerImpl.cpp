@@ -35,10 +35,6 @@
 #include "IGCFileCleanup.hpp"
 #include "IGC/IGCWriter.hpp"
 
-#ifdef HAVE_POSIX
-#include <unistd.h>
-#endif
-#include <sys/types.h>
 #include <tchar.h>
 #include <algorithm>
 

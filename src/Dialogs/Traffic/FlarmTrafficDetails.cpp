@@ -44,7 +44,6 @@
 #include "FLARM/Glue.hpp"
 #include "Screen/Layout.hpp"
 #include "Geo/Math.hpp"
-#include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -55,7 +54,6 @@
 #include "Interface.hpp"
 #include "Blackboard/ScopeGPSListener.hpp"
 #include "TeamActions.hpp"
-#include "Compiler.h"
 
 #include <math.h>
 #include <stdio.h>

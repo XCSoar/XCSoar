@@ -23,7 +23,6 @@
 #include "Logger/MD5.hpp"
 #include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
-#include "Compiler.h"
 
 #include <algorithm>
 #include <stdio.h>

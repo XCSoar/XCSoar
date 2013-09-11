@@ -26,8 +26,6 @@
 #include "DataNode.hpp"
 #include "XML/Node.hpp"
 
-struct XMLNode;
-
 /**
  * DataNode implementation for XML files
  */

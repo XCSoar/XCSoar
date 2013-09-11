@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Dialogs/Device/DeviceListDialog.hpp"

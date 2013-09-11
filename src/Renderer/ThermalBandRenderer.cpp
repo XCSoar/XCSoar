@@ -28,14 +28,14 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ThermalBandLook.hpp"
-#include <algorithm>
-#include "Engine/Task/TaskBehaviour.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #endif
+
+#include <algorithm>
 
 void
 ThermalBandRenderer::ScaleChart(const DerivedInfo &calculated,

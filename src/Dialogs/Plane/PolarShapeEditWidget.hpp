@@ -27,8 +27,6 @@
 #include "Widget/PanelWidget.hpp"
 #include "Polar/Shape.hpp"
 
-#include <assert.h>
-
 class WndFrame;
 class WndProperty;
 class DataFieldListener;

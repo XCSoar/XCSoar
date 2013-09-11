@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Util/tstring.hpp"
 #include "Math/fixed.hpp"
 #include "FlightInfo.hpp"
 

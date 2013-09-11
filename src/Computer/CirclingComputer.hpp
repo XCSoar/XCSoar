@@ -31,7 +31,6 @@ Copyright_License {
 struct CirclingInfo;
 struct NMEAInfo;
 struct MoreData;
-struct DerivedInfo;
 struct CirclingSettings;
 struct FlyingState;
 

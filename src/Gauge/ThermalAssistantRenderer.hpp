@@ -26,13 +26,14 @@
 
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/VarioInfo.hpp"
-#include "Screen/Canvas.hpp"
+#include "Screen/Point.hpp"
 
 #include <array>
 
 struct ThermalAssistantLook;
 struct AttitudeState;
 struct DerivedInfo;
+class Canvas;
 
 class ThermalAssistantRenderer
 {

@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "Screen/Point.hpp"
-#include "Math/fixed.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 

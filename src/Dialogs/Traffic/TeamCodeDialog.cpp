@@ -29,7 +29,6 @@
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
-#include "Form/Button.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"

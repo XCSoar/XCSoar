@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
-#include "Form/DataField/String.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"

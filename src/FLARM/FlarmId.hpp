@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_ID_HPP
 #define XCSOAR_FLARM_ID_HPP
 
-#include "Compiler.h"
-
 #include <stdint.h>
 
 #ifdef _UNICODE

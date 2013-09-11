@@ -26,7 +26,6 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "NMEA/DeviceInfo.hpp"
 

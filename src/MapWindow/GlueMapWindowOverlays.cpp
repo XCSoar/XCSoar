@@ -30,7 +30,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
-#include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"

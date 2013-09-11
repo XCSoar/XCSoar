@@ -22,19 +22,14 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Math/Screen.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Layout.hpp"
-#include "Util/StringUtil.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Look/TrafficLook.hpp"
 #include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/Friends.hpp"
 #include "Tracking/SkyLines/Data.hpp"
-
-#include <stdio.h>
 
 /**
  * Draws the FLARM traffic icons onto the given canvas

@@ -28,8 +28,8 @@ Copyright_License {
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 
-class HorizonWidget : public WindowWidget,
-                      private NullBlackboardListener {
+class HorizonWidget final : public WindowWidget,
+                            private NullBlackboardListener {
   void Update(const MoreData &basic);
 
 public:

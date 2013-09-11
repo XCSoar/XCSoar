@@ -34,7 +34,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 
 #include <stdio.h>
-#include <math.h>
 
 void
 MapWindow::DrawTask(Canvas &canvas)

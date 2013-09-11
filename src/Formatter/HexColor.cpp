@@ -26,7 +26,6 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
 
 void

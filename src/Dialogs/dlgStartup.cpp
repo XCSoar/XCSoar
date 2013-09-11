@@ -36,7 +36,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Gauge/LogoView.hpp"
 #include "LogFile.hpp"
-#include "Asset.hpp"
 #include "Util/StringUtil.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"

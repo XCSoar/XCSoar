@@ -23,7 +23,6 @@ Copyright_License {
 */
 
 #include "ConditionMonitors.hpp"
-#include "ConditionMonitor.hpp"
 #include "ConditionMonitorAATTime.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
 #include "ConditionMonitorGlideTerrain.hpp"

@@ -27,8 +27,6 @@
 #include "Math/Filter.hpp"
 #include "Geo/GeoPoint.hpp"
 
-#include <vector>
-
 struct AircraftState;
 
 struct AutopilotParameters {
@@ -74,7 +72,6 @@ protected:
   virtual void OnClose() {};
 };
 
-struct ElementStat;
 class TaskAccessor;
 
 class TaskAutoPilot: public AbstractAutoPilot {

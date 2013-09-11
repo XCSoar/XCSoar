@@ -31,10 +31,6 @@ class Canvas;
 struct ChartLook;
 class GlidePolar;
 class FlightStatistics;
-struct NMEAInfo;
-struct DerivedInfo;
-class ProtectedTaskManager;
-class TaskManager;
 
 void
 ClimbChartCaption(TCHAR *buffer,

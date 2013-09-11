@@ -35,8 +35,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
-class WndButton;
-
 class AltitudeSetupPanel : public RowFormWidget,
                            private DataFieldListener {
 public:

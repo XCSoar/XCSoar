@@ -24,12 +24,10 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
 #include "Geo/GeoClip.hpp"
-#include "Screen/Icon.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/Triangulate.hpp"
 #endif
 
 #include <stdio.h>

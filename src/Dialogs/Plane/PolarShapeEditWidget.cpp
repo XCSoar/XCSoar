@@ -36,6 +36,8 @@
 
 #include <algorithm>
 
+#include <assert.h>
+
 PolarShapeEditWidget::PolarShapeEditWidget(const PolarShape &_shape,
                                            DataFieldListener *_listener)
   :shape(_shape), listener(_listener) {}

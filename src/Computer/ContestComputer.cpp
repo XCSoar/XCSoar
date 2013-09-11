@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "ContestComputer.hpp"
 #include "Engine/Contest/Settings.hpp"
-#include "NMEA/Derived.hpp"
 
 ContestComputer::ContestComputer(const Trace &trace_full,
                                  const Trace &trace_triangle,

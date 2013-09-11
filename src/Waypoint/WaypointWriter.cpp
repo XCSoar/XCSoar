@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "Waypoint/WaypointWriter.hpp"
-
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
 #include "Engine/Waypoint/Runway.hpp"
-#include "RadioFrequency.hpp"
 
 void
 WaypointWriter::Save(TextWriter &writer, WaypointFileType type)

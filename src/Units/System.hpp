@@ -28,9 +28,6 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
-class Angle;
-
 namespace Units
 {
   /**

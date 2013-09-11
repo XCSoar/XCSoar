@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "WaypointReader.hpp"
-
 #include "WaypointReaderZander.hpp"
 #include "WaypointReaderSeeYou.hpp"
 #include "WaypointReaderWinPilot.hpp"
@@ -30,12 +29,10 @@ Copyright_License {
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
 #include "WaypointFileType.hpp"
-
-#include "Terrain/RasterTerrain.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/ZipSource.hpp"
 #include "IO/TextFile.hpp"
+#include "Util/StringUtil.hpp"
 
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)

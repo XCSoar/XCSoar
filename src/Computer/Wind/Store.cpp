@@ -25,7 +25,6 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "Store.hpp"
-#include "Math/Constants.h"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 

@@ -23,7 +23,6 @@
 #include "Task/MapTaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "Protection.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Message.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

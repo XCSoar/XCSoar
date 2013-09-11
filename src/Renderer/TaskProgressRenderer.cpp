@@ -26,7 +26,6 @@ Copyright_License {
 #include "Engine/Task/Stats/TaskSummary.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Icon.hpp"
 #include "Math/Angle.hpp"
 
 #include <algorithm>

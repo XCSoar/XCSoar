@@ -26,12 +26,9 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#include <tchar.h>
-
 struct PixelRect;
 struct InfoBoxData;
 struct InfoBoxPanel;
-class Widget;
 class Canvas;
 
 class InfoBoxContent

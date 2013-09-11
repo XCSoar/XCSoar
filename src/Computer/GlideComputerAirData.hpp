@@ -33,14 +33,12 @@ Copyright_License {
 #include "LiftDatabaseComputer.hpp"
 #include "AverageVarioComputer.hpp"
 #include "ThermalLocator.hpp"
-#include "Math/WindowFilter.hpp"
 
 struct VarioInfo;
 struct OneClimbInfo;
 struct TerrainInfo;
 struct ThermalLocatorInfo;
 class Waypoints;
-class Airspaces;
 class RasterTerrain;
 class GlidePolar;
 

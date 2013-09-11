@@ -25,10 +25,8 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Look/InfoBoxLook.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Content/Base.hpp"
-#include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
@@ -36,8 +34,6 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
-
-#include <assert.h>
 
 namespace InfoBoxManager
 {

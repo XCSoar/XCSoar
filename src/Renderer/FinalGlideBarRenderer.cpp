@@ -29,7 +29,6 @@ Copyright_License {
 #include "Look/FinalGlideBarLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Util/Macros.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

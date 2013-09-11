@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "FlightStatisticsRenderer.hpp"
 #include "ChartRenderer.hpp"
-#include "FlightStatistics.hpp"
 #include "Util/Macros.hpp"
 #include "Look/MapLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -36,15 +35,13 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-#include "Computer/Settings.hpp"
+#include "Engine/Contest/Settings.hpp"
 #include "MapSettings.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Projection/ChartProjection.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Computer/TraceComputer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
 
 #include <algorithm>

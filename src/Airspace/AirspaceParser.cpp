@@ -38,12 +38,9 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Util/StaticString.hpp"
 
-#include <math.h>
 #include <tchar.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windef.h> /* for MAX_PATH */
 
 enum AirspaceFileType {
   AFT_UNKNOWN,

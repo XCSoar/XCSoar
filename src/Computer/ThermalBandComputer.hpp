@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_THERMAL_BAND_COMPUTER_HPP
 #define XCSOAR_THERMAL_BAND_COMPUTER_HPP
 
-#include "Math/fixed.hpp"
 #include "NMEA/Validity.hpp"
 
 struct MoreData;

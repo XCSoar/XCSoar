@@ -36,11 +36,7 @@ Copyright_License {
 
 #include <assert.h>
 
-struct GeoPoint;
-class Canvas;
 class WindowProjection;
-class LabelBlock;
-struct MapSettings;
 class XShape;
 struct zzip_dir;
 

@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Pan.hpp"
 #include "UIGlobals.hpp"
-#include "UIActions.hpp"
-#include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Interface.hpp"
 #include "PageActions.hpp"
