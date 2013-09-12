@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
+#include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
 #include "OS/MemInfo.hpp"
 #include "Language/Language.hpp"
