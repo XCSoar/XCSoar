@@ -22,36 +22,104 @@
 */
 
 #include "TrafficDialogs.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Util.hpp"
-#include "Form/DataField/Base.hpp"
-#include "Form/DataField/Float.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"
 #include "Computer/Settings.hpp"
-#include "Screen/Layout.hpp"
-#include "Util/StringUtil.hpp"
-#include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
-#include "Blackboard/ScopeCalculatedListener.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "TeamActions.hpp"
 
-#include <stdio.h>
+class TeamCodeWidget final
+  : public RowFormWidget, NullBlackboardListener, ActionListener {
+  enum Controls {
+    SET_CODE,
+    SET_WAYPOINT,
+    SET_FLARM_LOCK,
+  };
 
-static WndForm *wf = NULL;
+  enum Buttons {
+    OWN_CODE,
+    MATE_CODE,
+    RANGE,
+    BEARING,
+    RELATIVE_BEARING,
+    FLARM_LOCK,
+  };
 
-static void
-Update(const MoreData &basic, const DerivedInfo &calculated)
+public:
+  TeamCodeWidget(const DialogLook &look)
+    :RowFormWidget(look) {}
+
+  void CreateButtons(WidgetDialog &buttons);
+  void Update(const MoreData &basic, const DerivedInfo &calculated);
+
+private:
+  void OnCodeClicked();
+  void OnSetWaypointClicked();
+  void OnFlarmLockClicked();
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
+  virtual void Show(const PixelRect &rc) override;
+  virtual void Hide() override;
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
+
+  /* virtual methods from class BlackboardListener */
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) override;
+};
+
+inline void
+TeamCodeWidget::CreateButtons(WidgetDialog &buttons)
+{
+  buttons.AddButton(_("Set code"), *this, SET_CODE);
+  buttons.AddButton(_("Set WP"), *this, SET_WAYPOINT);
+  buttons.AddButton(_("Flarm Lock"), *this, SET_FLARM_LOCK);
+}
+
+void
+TeamCodeWidget::Prepare(ContainerWindow &parent,
+                        const PixelRect &rc)
+{
+  AddReadOnly(_("Own code"));
+  AddReadOnly(_("Mate code"));
+  AddReadOnly(_("Range"));
+  AddReadOnly(_("Bearing"));
+  AddReadOnly(_("Rel. bearing"));
+  AddReadOnly(_("Flarm lock"));
+}
+
+void
+TeamCodeWidget::Show(const PixelRect &rc)
+{
+  Update(CommonInterface::Basic(), CommonInterface::Calculated());
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
+  RowFormWidget::Show(rc);
+}
+
+void
+TeamCodeWidget::Hide()
+{
+  RowFormWidget::Hide();
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+}
+
+void
+TeamCodeWidget::Update(const MoreData &basic, const DerivedInfo &calculated)
 {
   const TeamInfo &teamcode_info = calculated;
   const TeamCodeSettings &settings =
@@ -65,27 +133,35 @@ Update(const MoreData &basic, const DerivedInfo &calculated)
     buffer = _T("---");
   }
 
-  SetFormValue(*wf, _T("prpRelBearing"), buffer);
+  SetText(RELATIVE_BEARING, buffer);
 
   if (teamcode_info.teammate_available) {
-    LoadFormProperty(*wf, _T("prpBearing"),
-                     teamcode_info.teammate_vector.bearing.Degrees());
-    LoadFormProperty(*wf, _T("prpRange"), UnitGroup::DISTANCE,
-                     teamcode_info.teammate_vector.distance);
+    FormatBearing(buffer.buffer(), buffer.MAX_SIZE,
+                  teamcode_info.teammate_vector.bearing);
+    SetText(BEARING, buffer);
+
+    FormatUserDistanceSmart(teamcode_info.teammate_vector.distance,
+                            buffer.buffer());
+    SetText(RANGE, buffer);
   }
 
-  SetFormValue(*wf, _T("prpOwnCode"),
-               teamcode_info.own_teammate_code.GetCode());
-  SetFormValue(*wf, _T("prpMateCode"), settings.team_code.GetCode());
-
-  SetFormValue(*wf, _T("prpFlarmLock"),
-               settings.team_flarm_id.IsDefined()
-               ? settings.team_flarm_callsign.c_str()
-               : _T(""));
+  SetText(OWN_CODE, teamcode_info.own_teammate_code.GetCode());
+  SetText(MATE_CODE, settings.team_code.GetCode());
+  SetText(FLARM_LOCK,
+          settings.team_flarm_id.IsDefined()
+          ? settings.team_flarm_callsign.c_str()
+          : _T(""));
 }
 
-static void
-OnSetWaypointClicked()
+void
+TeamCodeWidget::OnCalculatedUpdate(const MoreData &basic,
+                                   const DerivedInfo &calculated)
+{
+  Update(basic, calculated);
+}
+
+inline void
+TeamCodeWidget::OnSetWaypointClicked()
 {
   const Waypoint* wp =
     ShowWaypointListDialog(CommonInterface::Basic().location);
@@ -95,8 +171,8 @@ OnSetWaypointClicked()
   }
 }
 
-static void
-OnCodeClicked()
+inline void
+TeamCodeWidget::OnCodeClicked()
 {
   TCHAR newTeammateCode[10];
 
@@ -115,8 +191,8 @@ OnCodeClicked()
     settings.team_flarm_id.Clear();
 }
 
-static void
-OnFlarmLockClicked()
+inline void
+TeamCodeWidget::OnFlarmLockClicked()
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;
@@ -151,29 +227,33 @@ OnFlarmLockClicked()
   TeamActions::TrackFlarm(id, newTeamFlarmCNTarget);
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnFlarmLockClicked),
-  DeclareCallBackEntry(OnCodeClicked),
-  DeclareCallBackEntry(OnSetWaypointClicked),
-  DeclareCallBackEntry(NULL)
-};
+void
+TeamCodeWidget::OnAction(int id)
+{
+  switch (id) {
+  case SET_CODE:
+    OnCodeClicked();
+    break;
+
+  case SET_WAYPOINT:
+    OnSetWaypointClicked();
+    break;
+
+  case SET_FLARM_LOCK:
+    OnFlarmLockClicked();
+    break;
+  }
+}
 
 void
 dlgTeamCodeShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_TEAMCODE_L") :
-                                      _T("IDR_XML_TEAMCODE"));
-
-  if (!wf)
-    return;
-
-  Update(CommonInterface::Basic(), CommonInterface::Calculated());
-
-  const ScopeCalculatedListener l(CommonInterface::GetLiveBlackboard(),
-                                  Update);
-
-  wf->ShowModal();
-
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  TeamCodeWidget widget(look);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Team Code"), &widget);
+  widget.CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
