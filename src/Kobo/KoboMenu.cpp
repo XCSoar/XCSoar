@@ -168,8 +168,11 @@ Main()
   dialog_look.Initialise(bold_font, normal_font, small_font,
                          bold_font, bold_font, bold_font);
 
+  TopWindowStyle main_style;
+  main_style.Resizable();
+
   SingleWindow main_window;
-  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800});
+  main_window.Create(_T("XCSoar/KoboMenu"), {600, 800}, main_style);
   main_window.Show();
 
   global_dialog_look = &dialog_look;
