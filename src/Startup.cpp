@@ -432,7 +432,7 @@ Startup()
 
   all_monitors = new AllMonitors();
 
-  if (computer_settings.logger.enable_flight_logger) {
+  if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
     LocalPath(path, _T("flights.log"));
     flight_logger->SetPath(path);
