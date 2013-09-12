@@ -24,10 +24,10 @@ Copyright_License {
 #include "FlightInfo.hpp"
 #include "Time/BrokenDateTime.hpp"
 
-BrokenTime FlightInfo::Duration() const {
+int FlightInfo::Duration() const {
   if (!date.IsPlausible() ||
       !start_time.IsPlausible() || !end_time.IsPlausible())
-    return BrokenTime::Invalid();
+    return -1;
 
   int secs = BrokenDateTime(date, end_time) - BrokenDateTime(date, start_time);
 
@@ -37,7 +37,7 @@ BrokenTime FlightInfo::Duration() const {
 
   // if still not a plausible duration return invalid duration
   if (secs < 0 || secs > 14 * 60 * 60)
-    return BrokenTime::Invalid();
+    return -1;
 
-  return BrokenTime::FromSecondOfDay(secs);
+  return secs;
 }

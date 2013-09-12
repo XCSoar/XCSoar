@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLIGHT_LIST_RENDERER_HPP
 #define XCSOAR_FLIGHT_LIST_RENDERER_HPP
 
-#include "Util/StaticArray.hpp"
+#include "Util/OverwritingRingBuffer.hpp"
 #include "FlightInfo.hpp"
 
 struct PixelRect;
@@ -32,13 +32,9 @@ class Canvas;
 class Font;
 
 class FlightListRenderer {
-  struct Flight : FlightInfo {
-    unsigned duration;
-  };
-
   const Font &font, &header_font;
 
-  StaticArray<Flight, 128u> flights;
+  OverwritingRingBuffer<FlightInfo, 128u> flights;
 
 public:
   FlightListRenderer(const Font &_font, const Font &_header_font)
@@ -46,7 +42,7 @@ public:
 
   void AddFlight(const FlightInfo &flight);
 
-  void Draw(Canvas &canvas, PixelRect rc) const;
+  void Draw(Canvas &canvas, PixelRect rc);
 };
 
 #endif

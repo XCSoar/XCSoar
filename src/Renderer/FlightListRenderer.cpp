@@ -29,19 +29,11 @@ Copyright_License {
 void
 FlightListRenderer::AddFlight(const FlightInfo &_flight)
 {
-  // TODO: discard the oldest flight if the list is full
-  if (flights.full())
-    return;
-
-  Flight flight;
-  (FlightInfo &)flight = _flight;
-  flight.duration = 3600; // TODO
-
-  flights.push_back(flight);
+  flights.push(_flight);
 }
 
 void
-FlightListRenderer::Draw(Canvas &canvas, PixelRect rc) const
+FlightListRenderer::Draw(Canvas &canvas, PixelRect rc)
 {
   canvas.Select(font);
   canvas.SetTextColor(COLOR_BLACK);
@@ -63,39 +55,66 @@ FlightListRenderer::Draw(Canvas &canvas, PixelRect rc) const
   if (height <= header_height)
     return;
 
-  const unsigned row_height = font_height * 2 + padding;
-  const unsigned list_height = height - header_height;
-  const unsigned n_rows = std::min(list_height / row_height, flights.size());
-
-  const unsigned date_width = canvas.CalcTextWidth(_T("2222-22-22")) + padding;
-  //const unsigned time_width = canvas.CalcTextWidth(_T("22:22")) + padding;
-
-  const unsigned date_x = rc.left + padding;
-  const unsigned time_x = date_x + date_width;
-
-  int y = rc.top;
+  const unsigned row_height = font_height + padding;
+  const unsigned date_width = canvas.CalcTextWidth(_T("2222-22-22")) + padding * 4;
+  const unsigned time_width = canvas.CalcTextWidth(_T("22:22")) + padding * 4;
 
   canvas.Select(header_font);
-  canvas.DrawText(date_x, y, _T("Date"));
-  canvas.DrawText(time_x, y, _T("Time"));
 
-  y += header_height;
-
+  int y = rc.bottom - row_height * 2;
   canvas.Select(font);
-  for (unsigned i = 0; i < n_rows; ++i, y += row_height) {
-    const Flight &flight = flights[i];
+
+  while (!flights.empty() && y > (int) rc.top + (int) header_height + (int) row_height) {
+    const FlightInfo flight = flights.pop();
+    int x = rc.left + padding;
 
     StaticString<64> buffer;
-    buffer.UnsafeFormat(_T("%04u-%02u-%02u"), flight.date.year,
-                        flight.date.month, flight.date.day);
-    canvas.DrawText(date_x, y, buffer);
+    if (flight.date.IsPlausible()) {
+      buffer.UnsafeFormat(_T("%04u-%02u-%02u  "), flight.date.year,
+                          flight.date.month, flight.date.day);
+      canvas.DrawText(x, y, buffer);
+    } else
+      canvas.DrawText(x, y, _T("____-__-__"));
+    x += date_width;
 
-    buffer.UnsafeFormat(_T("%02u:%02u"),
-                        flight.start_time.hour, flight.start_time.minute);
-    canvas.DrawText(time_x, y, buffer);
+    if (flight.start_time.IsPlausible()) {
+      buffer.UnsafeFormat(_T("%02u:%02u  "),
+                          flight.start_time.hour, flight.start_time.minute);
+      canvas.DrawText(x, y, buffer);
+    } else
+      canvas.DrawText(x, y, _T("--:--"));
+    x += time_width;
 
-    buffer.UnsafeFormat(_T("%02u:%02u"),
-                        flight.end_time.hour, flight.end_time.minute);
-    canvas.DrawText(time_x, y + font_height, buffer);
+    if (flight.end_time.IsPlausible()) {
+      buffer.UnsafeFormat(_T("%02u:%02u"),
+                          flight.end_time.hour, flight.end_time.minute);
+      canvas.DrawText(x, y, buffer);
+    } else
+      canvas.DrawText(x, y, _T("--:--"));
+    x += time_width;
+
+    if (flight.Duration() >= 0) {
+      BrokenTime duration = BrokenTime::FromSecondOfDay(flight.Duration());
+      buffer.UnsafeFormat(_T("%02u:%02u"),
+                          duration.hour, duration.minute);
+      canvas.DrawText(x, y, buffer);
+    } else
+      canvas.DrawText(x, y, _T("--:--"));
+    x += time_width;
+
+    y -= row_height;
+  }
+
+
+  {
+    int x = rc.left + padding;
+    canvas.DrawText(x, y, _T("Date"));
+    x += date_width;
+
+    canvas.DrawText(x, y, _T("Time"));
+    x += time_width;
+
+    x += time_width;
+    canvas.DrawText(x, y, _T("Duration"));
   }
 }

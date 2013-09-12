@@ -51,7 +51,16 @@ FlightParser::Read(FlightInfo &flight)
       flight.start_time = dt;
     } else if (StringIsEqual(line, "landing")) {
       if (flight.date.IsPlausible()) {
-        // TODO: does this line match the 'start' line?
+        // we have a start date/time
+        int duration = dt - BrokenDateTime(flight.date, flight.start_time);
+        if (duration >= 0 && duration <= 14 * 60 * 60) {
+          // landing entry is likely belonging to start entry
+          flight.end_time = dt;
+        } else {
+          // landing time only since duration is improbable
+          last = current_line;
+        }
+        return true;
       } else
         flight.date = dt;
 

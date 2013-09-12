@@ -1113,7 +1113,7 @@ RUN_FLIGHT_PARSER_SOURCES = \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(TEST_SRC_DIR)/RunFlightParser.cpp
 RUN_FLIGHT_PARSER_LDADD = $(FAKE_LIBS)
-RUN_FLIGHT_PARSER_DEPENDS = IO OS UTIL
+RUN_FLIGHT_PARSER_DEPENDS = IO OS TIME UTIL
 $(eval $(call link-program,RunFlightParser,RUN_FLIGHT_PARSER))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
@@ -2111,11 +2111,12 @@ RUN_FLIGHT_LIST_RENDERER_SOURCES = \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
+	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
-RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL
+RUN_FLIGHT_LIST_RENDERER_DEPENDS = SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
 $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \

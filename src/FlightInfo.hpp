@@ -32,7 +32,7 @@ struct FlightInfo {
 
   BrokenTime start_time, end_time;
 
-  BrokenTime Duration() const;
+  int Duration() const;
 };
 
 #endif
