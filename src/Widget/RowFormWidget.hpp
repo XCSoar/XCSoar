@@ -434,7 +434,7 @@ public:
   }
 
   void SetRowEnabled(unsigned i, bool enabled) {
-    GetControl(i).SetEnabled(enabled);
+    GetRow(i).SetEnabled(enabled);
   }
 
   /**
