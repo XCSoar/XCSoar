@@ -38,8 +38,6 @@ Copyright_License {
 #include "System.hpp"
 #include "NetworkDialog.hpp"
 
-#include <stdio.h>
-
 enum Buttons {
   LAUNCH_NICKEL = 100,
   NETWORK,
@@ -194,9 +192,6 @@ int main(int argc, char **argv)
 
     switch (action) {
     case LAUNCH_NICKEL:
-      printf("launch nickel\n");
-      fflush(stdout);
-
       KoboExecNickel();
       return EXIT_FAILURE;
 
