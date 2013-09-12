@@ -96,6 +96,7 @@ public:
 void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
+  buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL);
   buttons.AddButton(_("Network"), *this, NETWORK);
   buttons.AddButton(("Reboot"), dialog, REBOOT);
   buttons.AddButton(("Poweroff"), dialog, POWEROFF);
