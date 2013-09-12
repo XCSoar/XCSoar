@@ -31,7 +31,6 @@ Copyright_License {
 namespace Layout
 {
   extern bool landscape;
-  extern bool square;
 
   /**
    * Fixed-point scaling factor, fractional part is 10 bits (factor
