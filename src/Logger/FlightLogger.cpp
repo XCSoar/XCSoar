@@ -100,6 +100,9 @@ FlightLogger::Tick(const MoreData &basic, const DerivedInfo &calculated)
 {
   assert(!path.empty());
 
+  if (basic.gps.replay || basic.gps.simulator)
+    return;
+
   if (!basic.time_available || !basic.date_time_utc.IsDatePlausible())
     /* can't work without these */
     return;
