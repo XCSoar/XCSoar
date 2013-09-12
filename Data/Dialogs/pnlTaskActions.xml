@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel>
-  <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60" OnClick="OnNewTaskClicked"/>
-  <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60" OnClick="OnDeclareClicked"/>
-  <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60" OnClick="OnBrowseClicked"/>
-  <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60" OnClick="OnSaveClicked"/>
-</Panel>
