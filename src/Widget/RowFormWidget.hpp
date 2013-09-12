@@ -159,18 +159,35 @@ class RowFormWidget : public WindowWidget {
         (!expert || expert_mode);
     }
 
-    /**
-     * Delete the #Widget or #Window object.
-     */
-    void Delete() {
+    void Unprepare() {
       if (type == Type::WIDGET) {
         assert(widget != nullptr);
         assert(window == nullptr);
 
-        if (shown)
+        if (shown) {
           widget->Hide();
-        if (prepared)
+          shown = false;
+        }
+
+        if (prepared) {
           widget->Unprepare();
+          prepared = false;
+        }
+      }
+    }
+
+    /**
+     * Delete the #Widget or #Window object.
+     */
+    void Delete() {
+      Unprepare();
+
+      if (type == Type::WIDGET) {
+        assert(widget != nullptr);
+        assert(window == nullptr);
+        assert(!shown);
+        assert(!prepared);
+
         delete widget;
         return;
       }
@@ -643,6 +660,7 @@ public:
   virtual PixelSize GetMaximumSize() const override;
   virtual void Initialise(ContainerWindow &parent,
                           const PixelRect &rc) override;
+  virtual void Unprepare() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Move(const PixelRect &rc) override;
   virtual bool SetFocus() override;
