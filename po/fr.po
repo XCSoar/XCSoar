@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-13 00:01+0200\n"
-"PO-Revision-Date: 2013-09-04 20:50+0000\n"
+"PO-Revision-Date: 2013-09-12 19:28+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-06 09:12+0000\n"
-"X-Generator: Launchpad (build 16760)\n"
+"X-Launchpad-Export-Date: 2013-09-12 22:04+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -8876,9 +8876,9 @@ msgid "No TAF available!"
 msgstr "Pas de TAF disponible !"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Gear on delay"
-msgstr "Train sorti"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
@@ -8896,14 +8896,14 @@ msgid "Radio com. max. delay"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Battery low delay"
-msgstr "Batterie faible"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Battery empty delay"
-msgstr "Batterie faible"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
@@ -8913,77 +8913,77 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Pas"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
 msgid "Ramp"
-msgstr ""
+msgstr "Rampe"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:40
 #, no-c-format
 msgid "Circling deadband type"
-msgstr ""
+msgstr "Type de bande muette en spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:41
 #, no-c-format
 msgid "Type of dead band used in circling mode."
-msgstr ""
+msgstr "Le type de bande muette pour le mode spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:45
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling hi cutoff"
-msgstr "Zoom en spirale OFF"
+msgstr "Coupure haute en spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "Limite supérieure de la bande muette en mode spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:50
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling low cutoff"
-msgstr "Zoom en spirale OFF"
+msgstr "Coupure basse en spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "Limite inférieure de la bande muette en spirale"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:56
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Type de bande muette en transition"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
 msgid "Type of dead band used in cruise mode."
-msgstr ""
+msgstr "Le type de la bande muette en mode transition."
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:61
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise hi cutoff"
-msgstr "Eff Trans"
+msgstr "Coupure haute en transition"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
 msgid "High limit of cruise dead band"
-msgstr ""
+msgstr "Limite supérieure de la bande muette en mode transition"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:66
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise low cutoff"
-msgstr "Eff Trans"
+msgstr "Coupure basse en transtion"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
 msgid "Low limit of cruise dead band"
-msgstr ""
+msgstr "Limite inférieure de la bande muette en mode transition"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:72
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb fast trigger"
-msgstr "Taux de montée"
+msgstr "Déclencheur rapide du mode montée"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -8998,7 +8998,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:77
 #, no-c-format
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Déclencheur du mode montée"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:78
 #, no-c-format
@@ -9013,19 +9013,19 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Climb averager scale"
-msgstr "Taux de montée"
+msgstr "Echelle du moyenneur en montée"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Time scale used for vario averager."
-msgstr ""
+msgstr "Durée pour le vario moyne"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise averager scale"
-msgstr "Tendance montée moyenne"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
@@ -9033,9 +9033,9 @@ msgid "Time scale used for cruise speed command averager."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Circling volume"
-msgstr "Zoom en spirale"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
@@ -9043,9 +9043,9 @@ msgid "Mean volume level in circling modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Cruise volume"
-msgstr "Transition"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:97
 #, no-c-format
@@ -9054,9 +9054,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Base frequency"
-msgstr "Fréquence radio"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
@@ -9064,9 +9064,9 @@ msgid "Adjustment to base frequency of tones in all modes."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter circling"
-msgstr "Int. de temps spirale"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
@@ -9074,9 +9074,9 @@ msgid "Variometer low pass filter time constant in circling mode."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Filter cruise"
-msgstr "Int. de temps en transition"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
@@ -9102,18 +9102,16 @@ msgid "Pitch scheme"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:111
-#, fuzzy
 msgid "Pitch scale"
-msgstr "Epaississement de la trace"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
-#, fuzzy
 msgid "Period scale"
-msgstr "Epaississement de la trace"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:33
 #, no-c-format
@@ -9178,9 +9176,9 @@ msgid "Max. objects reported"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Max. reported"
-msgstr "Vitesse de transition max."
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
@@ -9188,9 +9186,9 @@ msgid "Flarm interface"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable circling"
-msgstr "Int. de temps spirale"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -9198,9 +9196,9 @@ msgid "No mode reports"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "No aircraft type"
-msgstr "Type d'aéronef"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
@@ -9228,9 +9226,9 @@ msgid "Interval; warning"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "TE port"
-msgstr "Exporter"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
@@ -9248,9 +9246,9 @@ msgid "Whether the Pitot port is connected."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Static port"
-msgstr "Object statique"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
@@ -9268,9 +9266,9 @@ msgid "Whether the Stall pressure port is connected."
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Accelerometer"
-msgstr "Accéléromètre lissé"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9289,9 +9287,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Baud rate Vega"
-msgstr "Débit"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -9303,9 +9301,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FLARM connected"
-msgstr "Non connecté"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9315,9 +9313,9 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "PDA power"
-msgstr "Marche"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
 #, no-c-format
@@ -9332,14 +9330,14 @@ msgid "VNE"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "V terrain"
-msgstr "Relief"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Height terrain"
-msgstr "Plané selon relief et direct"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
@@ -9372,9 +9370,9 @@ msgid "Mute vario on radio"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario muting"
-msgstr "Vario en spirale"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
@@ -9382,14 +9380,14 @@ msgid "Voice muting"
 msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Speaker threshold"
-msgstr "Seuil du triangle FAI"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Headset threshold"
-msgstr "Seuil du triangle FAI"
+msgstr ""
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
@@ -10042,9 +10040,6 @@ msgstr ""
 #~ msgid "Fly"
 #~ msgstr "Vol"
 
-#~ msgid " "
-#~ msgstr " "
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -10110,6 +10105,9 @@ msgstr ""
 
 #~ msgid "H Baro"
 #~ msgstr "Alt Baro"
+
+#~ msgid "Export"
+#~ msgstr "Exporter"
 
 #~ msgid ""
 #~ "Graph of average circling climb rate (horizontal axis) as a function of "
@@ -10502,6 +10500,9 @@ msgstr ""
 
 #~ msgid "Scaled centered"
 #~ msgstr "A l'échelle centré"
+
+#~ msgid " "
+#~ msgstr " "
 
 #~ msgid "Next radial ATC"
 #~ msgstr "Prochain relèvement ATC"
