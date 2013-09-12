@@ -157,7 +157,7 @@ KoboExecNickel()
 }
 
 void
-KoboRunXCSoar()
+KoboRunXCSoar(const char *mode)
 {
 #ifdef KOBO
   char buffer[256];
@@ -166,7 +166,7 @@ KoboRunXCSoar()
   if (!SiblingPath("xcsoar", buffer, sizeof(buffer)))
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
-  Run(cmd);
+  Run(cmd, mode);
 #endif
 }
 

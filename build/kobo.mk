@@ -1,4 +1,5 @@
 KOBO_MENU_SOURCES = \
+	$(SRC)/Version.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
@@ -8,6 +9,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
@@ -15,6 +17,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Dialogs/TextEntry.cpp \
 	$(SRC)/Dialogs/KnobTextEntry.cpp \
 	$(SRC)/Dialogs/TouchTextEntry.cpp \
+	$(SRC)/Dialogs/SimulatorPromptWindow.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(SRC)/Kobo/WPASupplicant.cpp \

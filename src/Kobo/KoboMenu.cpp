@@ -22,6 +22,9 @@ Copyright_License {
 */
 
 #include "Dialogs/DialogSettings.hpp"
+#include "Dialogs/SimulatorPromptWindow.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Init.hpp"
@@ -29,30 +32,17 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "../test/src/Fonts.hpp"
 #include "Language/Language.hpp"
-#include "Form/Form.hpp"
-#include "Form/ButtonPanel.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/TerminalWindow.hpp"
-#include "Look/TerminalLook.hpp"
-#include "Event/DelayedNotify.hpp"
-#include "Thread/Mutex.hpp"
-#include "Util/Macros.hpp"
-#include "Util/FifoBuffer.hpp"
-#include "IO/DataHandler.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"
 
-#include <algorithm>
 #include <stdio.h>
 
 enum Buttons {
-  LAUNCH_XCSOAR = 100,
-  LAUNCH_NICKEL,
+  LAUNCH_NICKEL = 100,
   NETWORK,
-  PAUSE,
-  CLEAR,
   REBOOT,
   POWEROFF
 };
@@ -83,158 +73,86 @@ UIGlobals::GetDialogLook()
   return *global_dialog_look;
 }
 
-/**
- * A bridge between DataHandler and TerminalWindow: copy all data
- * received from the Log to the TerminalWindow.
- */
-class LogTerminalBridge
-  : public DataHandler,
-    private DelayedNotify {
-  TerminalWindow &terminal;
-  Mutex mutex;
-  FifoBuffer<char, 1024> buffer;
+class KoboMenuWidget final : public WindowWidget, ActionListener {
+  ActionListener &dialog;
+  SimulatorPromptWindow w;
 
 public:
-  LogTerminalBridge(TerminalWindow &_terminal)
-    :DelayedNotify(100), terminal(_terminal) {}
+  KoboMenuWidget(const DialogLook &_look,
+                 ActionListener &_dialog)
+    :dialog(_dialog),
+     w(_look, _dialog, false) {}
 
-  virtual void DataReceived(const void *data, size_t length) {
-    mutex.Lock();
-    auto range = buffer.Write();
-    if (range.length < length)
-      length = range.length;
-    memcpy(range.data, data, length);
-    buffer.Append(length);
-    mutex.Unlock();
-    SendNotification();
-  }
+  void CreateButtons(WidgetDialog &buttons);
 
-private:
-  virtual void OnNotification() {
-    while (true) {
-      char data[64];
-      size_t length;
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override;
 
-      {
-        ScopeLock protect(mutex);
-        auto range = buffer.Read();
-        if (range.IsEmpty())
-          break;
+  virtual bool KeyPress(unsigned key_code) override;
 
-        length = std::min(ARRAY_SIZE(data), size_t(range.length));
-        memcpy(data, range.data, length);
-        buffer.Consume(length);
-      }
-
-      terminal.Write(data, length);
-    }
-  }
-};
-
-class LogMonitorGlue : public ActionListener {
-  TerminalWindow terminal;
-  LogTerminalBridge bridge;
-
-  WndButton *pause_button;
-  bool paused;
-
-  WndForm &dialog;
-
-public:
-  LogMonitorGlue(const TerminalLook &look, WndForm &_dialog)
-    :terminal(look), bridge(terminal), paused(false), dialog(_dialog) {}
-
-  ~LogMonitorGlue() {
-    // device.SetMonitor(nullptr);
-  }
-
-  void CreateButtons(ButtonPanel &buttons);
-
-  void CreateTerminal(ContainerWindow &parent, const PixelRect &rc) {
-    terminal.Create(parent, rc);
-    // device.SetMonitor(&bridge);
-  }
-
-  void Clear() {
-    terminal.Clear();
-  }
-
-  void TogglePause();
-
-  virtual void OnAction(int id) override {
-    switch (id) {
-    case CLEAR:
-      Clear();
-      break;
-    case PAUSE:
-      TogglePause();
-      break;
-    case NETWORK:
-      ShowNetworkDialog();
-      break;
-    default:
-      break;
-    }
-  }
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
 };
 
 void
-LogMonitorGlue::CreateButtons(ButtonPanel &buttons)
+KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
-  buttons.Add(("XCSoar"), dialog, LAUNCH_XCSOAR);
-  buttons.Add(("Nickel"), dialog, LAUNCH_NICKEL);
-  buttons.Add(("Clear"), *this, CLEAR);
-  pause_button = buttons.Add(("Pause"), *this, PAUSE);
-  buttons.Add(_("Network"), *this, NETWORK);
-  buttons.Add(("Reboot"), dialog, REBOOT);
-  buttons.Add(("Poweroff"), dialog, POWEROFF);
+  buttons.AddButton(_("Network"), *this, NETWORK);
+  buttons.AddButton(("Reboot"), dialog, REBOOT);
+  buttons.AddButton(("Poweroff"), dialog, POWEROFF);
 }
 
 void
-LogMonitorGlue::TogglePause()
+KoboMenuWidget::Prepare(ContainerWindow &parent,
+                        const PixelRect &rc)
 {
-  paused = !paused;
+  WindowStyle style;
+  style.Hide();
+  style.ControlParent();
 
-  if (paused) {
-    pause_button->SetCaption(("Resume"));
-    //    device.SetMonitor(nullptr);
-  } else {
-    pause_button->SetCaption(("Pause"));
-    //    device.SetMonitor(&bridge);
+  w.Create(parent, rc, style);
+  SetWindow(&w);
+}
+
+bool
+KoboMenuWidget::KeyPress(unsigned key_code)
+{
+  switch (key_code) {
+#ifdef USE_LINUX_INPUT
+  case KEY_POWER:
+    dialog.OnAction(POWEROFF);
+    return true;
+#endif
+
+  default:
+    return false;
+  }
+}
+
+void
+KoboMenuWidget::OnAction(int id)
+{
+  switch (id) {
+  case NETWORK:
+    ShowNetworkDialog();
+    break;
   }
 }
 
 static int
-Main(SingleWindow &main_window, const DialogLook &dialog_look,
-     const TerminalLook &terminal_look)
+Main(SingleWindow &main_window, const DialogLook &dialog_look)
 {
-  WndForm dialog(dialog_look);
-#ifdef USE_LINUX_INPUT
-  dialog.SetKeyDownFunction([&dialog](unsigned key_code){
-      switch (key_code) {
-      case KEY_POWER:
-        dialog.SetModalResult(POWEROFF);
-        return true;
+  WidgetDialog dialog(dialog_look);
+  KoboMenuWidget widget(dialog_look, dialog);
+  dialog.CreateFull(main_window, _T(""), &widget);
+  widget.CreateButtons(dialog);
 
-      default:
-        return false;
-      }
-    });
-#endif
-
-  dialog.Create(main_window, _T("Kobo XCSoar Launcher"));
-  ContainerWindow &client_area = dialog.GetClientAreaWindow();
-
-  LogMonitorGlue glue(terminal_look, dialog);
-
-  ButtonPanel buttons(client_area, dialog_look.button);
-
-  glue.CreateButtons(buttons);
-  glue.CreateTerminal(client_area, buttons.UpdateLayout());
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
+  return result;
 
   return dialog.ShowModal();
-
-  // /proc/kmsg
 }
 
 static int
@@ -250,9 +168,6 @@ Main()
   dialog_look.Initialise(bold_font, normal_font, small_font,
                          bold_font, bold_font, bold_font);
 
-  TerminalLook terminal_look;
-  terminal_look.Initialise(monospace_font);
-
   SingleWindow main_window;
   main_window.Create(_T("XCSoar/KoboMenu"), {600, 800});
   main_window.Show();
@@ -260,7 +175,7 @@ Main()
   global_dialog_look = &dialog_look;
   global_main_window = &main_window;
 
-  int action = Main(main_window, dialog_look, terminal_look);
+  int action = Main(main_window, dialog_look);
 
   main_window.Destroy();
 
@@ -282,11 +197,13 @@ int main(int argc, char **argv)
       KoboExecNickel();
       return EXIT_FAILURE;
 
-    case LAUNCH_XCSOAR:
-      printf("launch xcsoar\n");
-      fflush(stdout);
+    case SimulatorPromptWindow::FLY:
+      KoboRunXCSoar("-fly");
+      /* return to menu after XCSoar quits */
+      break;
 
-      KoboRunXCSoar();
+    case SimulatorPromptWindow::SIMULATOR:
+      KoboRunXCSoar("-simulator");
       /* return to menu after XCSoar quits */
       break;
 
