@@ -67,7 +67,6 @@ struct TaskManagerLayout {
 };
 
 /* TODO: eliminate all global variables */
-static TaskManagerDialog *instance;
 static unsigned TurnpointTab = 0;
 static unsigned PropertiesTab = 0;
 
@@ -365,7 +364,6 @@ dlgTaskManagerShowModal()
     return;
 
   TaskManagerDialog dialog(UIGlobals::GetDialogLook());
-  instance = &dialog;
 
   dialog.Create(UIGlobals::GetMainWindow());
 
