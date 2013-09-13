@@ -30,6 +30,17 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #endif
 
+gcc_const
+static PixelRect
+MakePagerRect(PixelRect rc, const PixelRect &tab_rc, bool vertical)
+{
+  if (vertical)
+    rc.left = tab_rc.right;
+  else
+    rc.top = tab_rc.bottom;
+  return rc;
+}
+
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
@@ -39,13 +50,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
 
   tab_display = new TabDisplay(*this, look, *this, tab_rc, vertical);
 
-  PixelRect rc = GetClientRect();
-  if (vertical)
-    rc.left = tab_rc.right;
-  else
-    rc.top = tab_rc.bottom;
-
-  pager.Move(rc);
+  pager.Move(MakePagerRect(GetClientRect(), tab_rc, vertical));
 }
 
 TabBarControl::~TabBarControl()
