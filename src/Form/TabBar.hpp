@@ -65,6 +65,9 @@ public:
 
   ~TabBarControl();
 
+  void UpdateLayout(const PixelRect &rc, const PixelRect &tab_rc,
+                    bool vertical);
+
   void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
     assert(!page_flipped_callback);
     assert(_page_flipped_callback);

@@ -60,6 +60,15 @@ TabBarControl::~TabBarControl()
   Destroy();
 }
 
+void
+TabBarControl::UpdateLayout(const PixelRect &rc, const PixelRect &tab_rc,
+                            bool vertical)
+{
+  tab_display->UpdateLayout(tab_rc, vertical);
+  Move(rc);
+  pager.Move(MakePagerRect(GetClientRect(), tab_rc, vertical));
+}
+
 PixelSize
 TabBarControl::GetMinimumSize() const
 {

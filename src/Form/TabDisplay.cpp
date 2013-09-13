@@ -57,6 +57,13 @@ TabDisplay::~TabDisplay()
     delete i;
 }
 
+void
+TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical)
+{
+  vertical = _vertical;
+  Move(rc);
+}
+
 const PixelRect &
 TabDisplay::GetButtonSize(unsigned i) const
 {
@@ -186,6 +193,15 @@ TabDisplay::GetButtonIndexAt(RasterPoint p) const
   }
 
   return -1;
+}
+
+void
+TabDisplay::OnResize(PixelSize new_size)
+{
+  PaintWindow::OnResize(new_size);
+
+  for (auto button : buttons)
+    button->InvalidateLayout();
 }
 
 void
