@@ -31,7 +31,7 @@ class WndButton;
 class TabBarControl;
 class OrderedTask;
 
-class TaskManagerDialog : public WndForm {
+class TaskManagerDialog final : public WndForm {
   PixelRect task_view_position;
 
   TaskMapWindow *task_view;
