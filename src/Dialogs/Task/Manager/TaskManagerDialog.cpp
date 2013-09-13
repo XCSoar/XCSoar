@@ -74,6 +74,12 @@ TaskManagerDialog::~TaskManagerDialog()
   delete task;
 }
 
+void
+TaskManagerDialog::ReinitialiseLayout(const PixelRect &parent_rc)
+{
+  Move(parent_rc);
+}
+
 bool
 TaskManagerDialog::OnAnyKeyDown(unsigned key_code)
 {
@@ -230,6 +236,27 @@ TaskManagerDialog::Create(SingleWindow &parent)
   }
 
   UpdateCaption();
+}
+
+void
+TaskManagerDialog::OnResize(PixelSize new_size)
+{
+  WndForm::OnResize(new_size);
+
+  ContainerWindow &client_area = GetClientAreaWindow();
+  const PixelRect rc = client_area.GetClientRect();
+  const TaskManagerLayout layout = CalculateTaskManagerLayout(rc);
+
+  task_view_position = layout.task_view;
+
+  if (task_view != nullptr)
+    task_view->Move(layout.task_view);
+
+  if (target_button != nullptr)
+    target_button->Move(layout.target_button);
+
+  if (tab_bar != nullptr)
+    tab_bar->UpdateLayout(rc, layout.tab_bar, layout.vertical);
 }
 
 void

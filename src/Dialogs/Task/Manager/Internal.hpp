@@ -85,7 +85,11 @@ public:
 
   void Revert();
 
+  /* virtual methods from class Window */
+  virtual void OnResize(PixelSize new_size) override;
+
   /* virtual methods from class WndForm */
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
   virtual bool OnAnyKeyDown(unsigned key_code) override;
 
   /* virtual methods from class ActionListener */
