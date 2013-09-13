@@ -1132,9 +1132,10 @@ OrderedTask::Clone(const TaskBehaviour &tb) const
 {
   OrderedTask* new_task = new OrderedTask(tb);
 
+  new_task->SetFactory(factory_mode);
+
   new_task->ordered_settings = ordered_settings;
 
-  new_task->SetFactory(factory_mode);
   for (const OrderedTaskPoint *tp : task_points)
     new_task->Append(*tp);
 
