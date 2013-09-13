@@ -193,7 +193,7 @@ public:
    */
   gcc_pure
   bool HasStart() const {
-    return taskpoint_start != NULL;
+    return taskpoint_start != nullptr;
   }
 
   /**
@@ -203,7 +203,7 @@ public:
    */
   gcc_pure
   bool HasFinish() const {
-    return taskpoint_finish != NULL;
+    return taskpoint_finish != nullptr;
   }
 
   /**
@@ -324,7 +324,7 @@ public:
   *
   * @param TPindex index of taskpoint
   *
-  * @return pointer to tp if valid, else NULL
+  * @return pointer to tp if valid, else nullptr
   */
  AATPoint* GetAATTaskPoint(unsigned index) const;
 
@@ -565,7 +565,7 @@ public:
   gcc_pure
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
-    assert(task_points[i] != NULL);
+    assert(task_points[i] != nullptr);
 
     return *task_points[i];
   }
@@ -573,7 +573,7 @@ public:
   gcc_pure
   const OrderedTaskPoint &GetPoint(const unsigned i) const {
     assert(i < task_points.size());
-    assert(task_points[i] != NULL);
+    assert(task_points[i] != nullptr);
 
     return *task_points[i];
   }
@@ -594,7 +594,7 @@ public:
    * returns optional start point
    *
    * @param pos optional start point index
-   * @return NULL if index out of range, else optional start point
+   * @return nullptr if index out of range, else optional start point
    */
   gcc_pure
   const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {
