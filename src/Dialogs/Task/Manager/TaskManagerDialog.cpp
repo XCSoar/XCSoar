@@ -66,10 +66,6 @@ struct TaskManagerLayout {
   bool vertical;
 };
 
-/* TODO: eliminate all global variables */
-static unsigned TurnpointTab = 0;
-static unsigned PropertiesTab = 0;
-
 TaskManagerDialog::~TaskManagerDialog()
 {
   delete task_view;

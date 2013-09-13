@@ -38,6 +38,9 @@ class TaskManagerDialog final : public WndForm {
   WndButton *target_button;
   TabBarControl *tab_bar;
 
+  unsigned TurnpointTab;
+  unsigned PropertiesTab;
+
   OrderedTask *task;
 
   bool fullscreen;
