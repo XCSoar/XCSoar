@@ -109,7 +109,7 @@ public:
     return buttons.size();
   }
 
-  void Add(const TCHAR *caption, const Bitmap *bmp = NULL);
+  void Add(const TCHAR *caption, const Bitmap *bmp=nullptr);
 
   gcc_pure
   const TCHAR *GetCaption(unsigned i) const {

@@ -73,7 +73,8 @@ public:
   }
 
 public:
-  unsigned AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp = NULL);
+  unsigned AddTab(Widget *widget, const TCHAR *caption,
+                  const Bitmap *bmp=nullptr);
 
 public:
   gcc_pure

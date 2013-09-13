@@ -33,7 +33,7 @@ Copyright_License {
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
-  :tab_display(NULL)
+  :tab_display(nullptr)
 {
   Create(_parent, _parent.GetClientRect(), style);
 
@@ -109,7 +109,7 @@ TabBarControl::ClickPage(unsigned i)
      of the page, which is important for Altair hot keys */
   pager.SetFocus();
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -127,7 +127,7 @@ TabBarControl::SetCurrentPage(unsigned i)
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -141,7 +141,7 @@ TabBarControl::NextPage()
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -155,7 +155,7 @@ TabBarControl::PreviousPage()
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -208,7 +208,7 @@ TabBarControl::OnPaint(Canvas &canvas)
      does not cover the whole height or width; this is necessary only
      on GDI */
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     canvas.Clear(tab_display->GetLook().background_color);
 }
 
