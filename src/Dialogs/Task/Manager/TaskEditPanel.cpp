@@ -460,7 +460,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     }
   } else if (!ordered_task->IsFull()) {
 
-    OrderedTaskPoint* point = NULL;
+    OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
@@ -475,7 +475,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     } else {
       point = (OrderedTaskPoint*)factory.CreateIntermediate(*way_point);
      }
-    if (point == NULL)
+    if (point == nullptr)
       return;
 
     if (factory.Append(*point, true)) {

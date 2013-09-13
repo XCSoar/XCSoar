@@ -66,11 +66,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static WndForm *wf = NULL;
-static WndFrame* wTaskView = NULL;
+static WndForm *wf = nullptr;
+static WndFrame* wTaskView = nullptr;
 static DockWindow *dock;
 static ObservationZoneEditWidget *properties_widget;
-static OrderedTask* ordered_task = NULL;
+static OrderedTask* ordered_task = nullptr;
 static bool task_modified = false;
 static unsigned active_index = 0;
 
@@ -130,7 +130,7 @@ RefreshView()
     dock->SetWidget(properties_widget);
   }
 
-  WndFrame* wfrm = NULL;
+  WndFrame* wfrm = nullptr;
   wfrm = ((WndFrame*)wf->FindByName(_T("lblType")));
   if (wfrm)
     wfrm->SetCaption(OrderedTaskPointName(ordered_task->GetFactory().GetType(tp)));
@@ -270,7 +270,7 @@ OnRelocateClicked()
 
   const Waypoint *wp = ShowWaypointListDialog(gpBearing,
                                          ordered_task, active_index);
-  if (wp == NULL)
+  if (wp == nullptr)
     return;
 
   ordered_task->GetFactory().Relocate(active_index, *wp);
@@ -336,7 +336,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnOptionalStartsClicked),
   DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 bool
@@ -350,10 +350,10 @@ dlgTaskPointShowModal(OrderedTask **task,
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TASKPOINT_L") :
                                       _T("IDR_XML_TASKPOINT"));
-  assert(wf != NULL);
+  assert(wf != nullptr);
 
   wTaskView = (WndFrame*)wf->FindByName(_T("frmTaskView"));
-  assert(wTaskView != NULL);
+  assert(wTaskView != nullptr);
 
   dock = (DockWindow *)wf->FindByName(_T("properties"));
   assert(dock != nullptr);

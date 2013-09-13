@@ -46,11 +46,11 @@ class TaskCalculatorPanel final
 public:
   TaskCalculatorPanel(const DialogLook &look, const bool *_task_modified)
     :RowFormWidget(look),
-     target_button(NULL), task_modified(_task_modified) {}
+     target_button(nullptr), task_modified(_task_modified) {}
 
   void SetTargetButton(WndButton *_target_button) {
-    assert(target_button == NULL);
-    assert(_target_button != NULL);
+    assert(target_button == nullptr);
+    assert(_target_button != nullptr);
 
     target_button = _target_button;
   }

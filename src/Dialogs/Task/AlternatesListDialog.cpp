@@ -146,7 +146,7 @@ AlternatesListWidget::OnAction(int id)
 void
 dlgAlternatesListShowModal()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();

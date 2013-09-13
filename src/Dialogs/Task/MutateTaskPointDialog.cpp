@@ -36,8 +36,8 @@ Copyright_License {
 
 #include <assert.h>
 
-static OrderedTask* ordered_task = NULL;
-static OrderedTaskPoint* point = NULL;
+static OrderedTask* ordered_task = nullptr;
+static OrderedTaskPoint* point = nullptr;
 static unsigned active_index = 0;
 
 static TrivialArray<TaskPointFactoryType, LegalPointSet::N> point_types;
@@ -88,7 +88,7 @@ SetPointType(TaskPointFactoryType type)
   bool task_modified = false;
 
   point = factory.CreateMutatedPoint(*point, type);
-  if (point == NULL)
+  if (point == nullptr)
     return false;
 
   if (factory.Replace(*point, active_index, true))

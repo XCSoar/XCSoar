@@ -242,7 +242,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 bool
 OrderedTaskSave(const OrderedTask &task)
 {
-  assert(protected_task_manager != NULL);
+  assert(protected_task_manager != nullptr);
 
   TCHAR fname[69] = _T("");
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))

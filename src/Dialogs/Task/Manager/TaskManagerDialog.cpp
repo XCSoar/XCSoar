@@ -201,10 +201,10 @@ TaskManagerDialog::Create(SingleWindow &parent)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
   const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : NULL;
-  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : NULL;
-  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
-  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : NULL;
+  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : nullptr;
+  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : nullptr;
+  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : nullptr;
+  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : nullptr;
 
   tab_bar->AddTab(wCalculator, _("Calculator"), CalcIcon);
 
@@ -361,7 +361,7 @@ TaskManagerDialog::Revert()
 void
 dlgTaskManagerShowModal()
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   TaskManagerDialog dialog(UIGlobals::GetDialogLook());
