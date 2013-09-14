@@ -1006,6 +1006,7 @@ OrderedTask::Reset()
   stats.start.task_started = false;
   task_advance.Reset();
   SetActiveTaskPoint(0);
+  UpdateStatsGeometry();
 }
 
 bool
