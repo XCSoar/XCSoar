@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(14);
+  plan_tests(17);
 
   OverwritingRingBuffer<unsigned,4> buffer;
   ok1(buffer.empty());
@@ -54,6 +54,12 @@ int main(int argc, char **argv)
   ok1(buffer.shift() == 3);
   ok1(buffer.shift() == 4);
   ok1(buffer.shift() == 5);
+  ok1(buffer.empty());
+
+  buffer.push(6);
+  buffer.push(7);
+  ok1(buffer.pop() == 7);
+  ok1(buffer.pop() == 6);
   ok1(buffer.empty());
 
   return exit_status();
