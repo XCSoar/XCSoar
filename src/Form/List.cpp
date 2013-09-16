@@ -40,6 +40,18 @@ Copyright_License {
 
 #include <algorithm>
 
+/**
+ * Can the user scroll with pixel precision?  This is used on fast
+ * displays to give more instant feedback, which feels more slick.  On
+ * slow e-paper screens, this is not a good idea.
+ */
+gcc_const
+static bool
+UsePixelPan()
+{
+  return HasEPaper();
+}
+
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
@@ -249,14 +261,14 @@ ListControl::EnsureVisible(unsigned i)
     SetOrigin(i);
     SetPixelPan(0);
   } else if (origin + items_visible <= i) {
-    if (HasEPaper()) {
-      /* no pixel panning on e-paper screens to avoid tearing */
-      SetOrigin(i + 1 - items_visible);
-    } else {
+    if (UsePixelPan()) {
       SetOrigin(i - items_visible);
 
       if (origin > 0 || i >= items_visible)
         SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+    } else {
+      /* no pixel panning on e-paper screens to avoid tearing */
+      SetOrigin(i + 1 - items_visible);
     }
   }
 }
@@ -357,7 +369,7 @@ ListControl::SetPixelOrigin(int pixel_origin)
   SetOrigin(pixel_origin / item_height);
 
   /* no pixel panning on e-paper screens to avoid tearing */
-  SetPixelPan(HasEPaper() ? 0 : pixel_origin % item_height);
+  SetPixelPan(UsePixelPan() ? pixel_origin % item_height : 0);
 }
 
 void
