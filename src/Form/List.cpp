@@ -375,8 +375,12 @@ ListControl::SetPixelOrigin(int pixel_origin)
 void
 ListControl::MoveOrigin(int delta)
 {
-  int pixel_origin = (int)GetPixelOrigin();
-  SetPixelOrigin(pixel_origin + delta * (int)item_height);
+  if (UsePixelPan()) {
+    int pixel_origin = (int)GetPixelOrigin();
+    SetPixelOrigin(pixel_origin + delta * (int)item_height);
+  } else {
+    SetOrigin(origin + delta);
+  }
 }
 
 bool
