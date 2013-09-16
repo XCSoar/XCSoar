@@ -89,6 +89,8 @@ MapDisplayConfigPanel::UpdateVisibilities()
   SetRowVisible(MAP_SHIFT_BIAS,
                 orientation == DisplayOrientation::NORTH_UP ||
                 orientation == DisplayOrientation::WIND_UP);
+
+  SetRowVisible(MaxAutoZoomDistance, GetValueBoolean(AUTO_ZOOM));
 }
 
 void
@@ -96,6 +98,7 @@ MapDisplayConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(OrientationCruise, df) ||
       IsDataField(OrientationCircling, df) ||
+      IsDataField(AUTO_ZOOM, df) ||
       IsDataField(MAP_SHIFT_BIAS, df)) {
     UpdateVisibilities();
   }
@@ -140,7 +143,8 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Auto zoom"),
              _("Automatically zoom in when approaching a waypoint to keep the waypoint at a reasonable screen distance."),
-             settings_map.auto_zoom_enabled);
+             settings_map.auto_zoom_enabled,
+             this);
   SetExpertRow(AUTO_ZOOM);
 
   AddFloat(_("Max. auto zoom distance"),
