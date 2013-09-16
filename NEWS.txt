@@ -23,6 +23,7 @@ Version 6.7 - not yet released
   - additional zoom levels (#3037)
   - global "don't fill airspace" setting (#3047)
   - fix rendering errors when some airspaces have no border (#3045)
+  - fix distinct page zoom in conjunction with circling zoom (#2907)
 * infoboxes
   - new content "Speed task last hour"
   - new content "Next distance (nominal)"
