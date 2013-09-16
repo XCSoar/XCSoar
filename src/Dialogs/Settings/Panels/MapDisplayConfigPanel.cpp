@@ -36,7 +36,6 @@ enum ControlIndex {
   CirclingZoom,
   MAP_SHIFT_BIAS,
   GliderScreenPosition,
-  AUTO_ZOOM,
   MaxAutoZoomDistance,
   PAGES_DISTINCT_ZOOM,
 };
@@ -89,8 +88,6 @@ MapDisplayConfigPanel::UpdateVisibilities()
   SetRowVisible(MAP_SHIFT_BIAS,
                 orientation == DisplayOrientation::NORTH_UP ||
                 orientation == DisplayOrientation::WIND_UP);
-
-  SetRowVisible(MaxAutoZoomDistance, GetValueBoolean(AUTO_ZOOM));
 }
 
 void
@@ -98,7 +95,6 @@ MapDisplayConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(OrientationCruise, df) ||
       IsDataField(OrientationCircling, df) ||
-      IsDataField(AUTO_ZOOM, df) ||
       IsDataField(MAP_SHIFT_BIAS, df)) {
     UpdateVisibilities();
   }
@@ -141,12 +137,6 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.glider_screen_position);
   SetExpertRow(GliderScreenPosition);
 
-  AddBoolean(_("Auto zoom"),
-             _("Automatically zoom in when approaching a waypoint to keep the waypoint at a reasonable screen distance."),
-             settings_map.auto_zoom_enabled,
-             this);
-  SetExpertRow(AUTO_ZOOM);
-
   AddFloat(_("Max. auto zoom distance"),
            _("The upper limit for auto zoom distance."),
            _T("%.0f %s"), _T("%.0f"), fixed(20), fixed(250), fixed(10), false,
@@ -183,9 +173,6 @@ MapDisplayConfigPanel::Save(bool &_changed)
 
   changed |= SaveValue(CirclingZoom, ProfileKeys::CircleZoom,
                        settings_map.circle_zoom_enabled);
-
-  changed |= SaveValue(AUTO_ZOOM, ProfileKeys::AutoZoom,
-                       settings_map.auto_zoom_enabled);
 
   changed |= SaveValue(MaxAutoZoomDistance, UnitGroup::DISTANCE,
                        ProfileKeys::MaxAutoZoomDistance,
