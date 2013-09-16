@@ -208,7 +208,11 @@ ListControl::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.IsDefined())
     return;
 
-  scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+  if (UsePixelPan())
+    scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+  else
+    scroll_bar.SetSlider(length, items_visible, origin);
+
   scroll_bar.Paint(canvas);
 }
 
@@ -549,9 +553,11 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
-    unsigned value =
-      scroll_bar.DragMove(length * item_height, GetHeight(), y);
-    SetPixelOrigin(value);
+    if (UsePixelPan())
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(), y));
+    else
+      SetOrigin(scroll_bar.DragMove(length, items_visible, y));
+
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
     if (abs(y - drag_y_window) > ((int)item_height / 5)) {
