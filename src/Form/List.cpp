@@ -509,11 +509,17 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
+#ifndef _WIN32_WCE
+    const bool enable_kinetic = drag_mode == DragMode::SCROLL;
+#endif
+
     drag_end();
 
 #ifndef _WIN32_WCE
-    kinetic.MouseUp(GetPixelOrigin());
-    kinetic_timer.Schedule(30);
+    if (enable_kinetic) {
+      kinetic.MouseUp(GetPixelOrigin());
+      kinetic_timer.Schedule(30);
+    }
 #endif
 
     return true;
