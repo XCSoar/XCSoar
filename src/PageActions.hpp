@@ -32,6 +32,9 @@ class Widget;
 
 namespace PageActions
 {
+  /**
+   * Returns the #PageLayout that is currently visible.
+   */
   gcc_pure
   const PageLayout &GetCurrentLayout();
 
@@ -51,12 +54,21 @@ namespace PageActions
    */
   void OpenLayout(const PageLayout &layout);
 
+  /**
+   * Determine the index of the next configured page.
+   */
   gcc_pure
   unsigned NextIndex();
 
+  /**
+   * Determine the index of the next configured page.
+   */
   gcc_pure
   unsigned PrevIndex();
 
+  /**
+   * Reload the current layout.
+   */
   void Update();
 
   /**
