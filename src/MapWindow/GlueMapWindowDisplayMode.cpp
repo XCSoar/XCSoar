@@ -127,6 +127,18 @@ GlueMapWindow::SetMapScale(fixed scale)
   SaveDisplayModeScales();
 }
 
+void
+GlueMapWindow::RestoreMapScale()
+{
+  const MapSettings &settings = CommonInterface::GetMapSettings();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
+
+  visible_projection.SetScale(settings.circle_zoom_enabled && circling
+                              ? settings.circling_scale
+                              : settings.cruise_scale);
+}
+
 inline void
 GlueMapWindow::SaveDisplayModeScales()
 {
@@ -137,17 +149,12 @@ GlueMapWindow::SaveDisplayModeScales()
 }
 
 inline void
-GlueMapWindow::SwitchZoomClimb(bool circling)
+GlueMapWindow::SwitchZoomClimb()
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
 
-  if (!settings.circle_zoom_enabled)
-    return;
-
-  if (circling)
-    visible_projection.SetScale(settings.circling_scale);
-  else
-    visible_projection.SetScale(settings.cruise_scale);
+  if (settings.circle_zoom_enabled)
+    RestoreMapScale();
 }
 
 void
@@ -166,7 +173,7 @@ GlueMapWindow::UpdateDisplayMode()
   last_display_mode = new_mode;
 
   if (is_circling != was_circling)
-    SwitchZoomClimb(is_circling);
+    SwitchZoomClimb();
 }
 
 void
