@@ -34,14 +34,14 @@ OffsetHistory::Reset()
   offsets.fill(RasterPoint{0, 0});
 }
 
-void
+inline void
 OffsetHistory::Add(RasterPoint p)
 {
   offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 
-RasterPoint
+inline RasterPoint
 OffsetHistory::GetAverage() const
 {
   int x = 0;
@@ -127,7 +127,7 @@ GlueMapWindow::SetMapScale(fixed scale)
   SaveDisplayModeScales();
 }
 
-void
+inline void
 GlueMapWindow::SaveDisplayModeScales()
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
@@ -136,7 +136,7 @@ GlueMapWindow::SaveDisplayModeScales()
   Profile::Set(ProfileKeys::CruiseMapScale, (int)(settings.cruise_scale * 10000));
 }
 
-void
+inline void
 GlueMapWindow::SwitchZoomClimb(bool circling)
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
