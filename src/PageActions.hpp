@@ -33,6 +33,13 @@ class Widget;
 namespace PageActions
 {
   /**
+   * Returns the configured #PageLayout that was most recently
+   * visible.
+   */
+  gcc_pure
+  const PageLayout &GetConfiguredLayout();
+
+  /**
    * Returns the #PageLayout that is currently visible.
    */
   gcc_pure

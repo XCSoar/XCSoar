@@ -92,8 +92,8 @@ PageActions::RestoreMapZoom()
   }
 }
 
-static const PageLayout &
-GetConfiguredLayout()
+const PageLayout &
+PageActions::GetConfiguredLayout()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const PagesState &state = CommonInterface::GetUIState().pages;
