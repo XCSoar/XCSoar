@@ -505,7 +505,6 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
-  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     if (landscape) {
       if (i != 3 && i != 7)
         border |= BORDERBOTTOM;
@@ -550,7 +549,6 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::TOP_LEFT_4:
-  case InfoBoxSettings::Geometry::TOP_8_VARIO:
     if (landscape) {
       if (i != 3 && i != 7)
         border |= BORDERBOTTOM;
@@ -565,8 +563,16 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
     break;
 
+  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+    border |= BORDERTOP|BORDERRIGHT;
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    border |= BORDERBOTTOM|BORDERRIGHT;
+    break;
+
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
-    if ((i != 0) && (i != 6))
+    if (i != 0)
       border |= BORDERTOP;
     if (i < 6)
       border |= BORDERRIGHT;
