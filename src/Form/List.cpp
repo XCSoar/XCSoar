@@ -510,7 +510,7 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
 #ifndef _WIN32_WCE
-    const bool enable_kinetic = drag_mode == DragMode::SCROLL;
+    const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
 #endif
 
     drag_end();
@@ -561,7 +561,8 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
-    kinetic.MouseMove(GetPixelOrigin());
+    if (UsePixelPan())
+      kinetic.MouseMove(GetPixelOrigin());
 #endif
     return true;
   }
@@ -630,7 +631,8 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
       drag_mode = DragMode::SCROLL;
     }
 #ifndef _WIN32_WCE
-    kinetic.MouseDown(GetPixelOrigin());
+    if (UsePixelPan())
+      kinetic.MouseDown(GetPixelOrigin());
 #endif
     SetCapture();
   }
@@ -678,6 +680,8 @@ bool
 ListControl::OnTimer(WindowTimer &timer)
 {
   if (timer == kinetic_timer) {
+    assert(UsePixelPan());
+
     if (kinetic.IsSteady()) {
       kinetic_timer.Cancel();
     } else
