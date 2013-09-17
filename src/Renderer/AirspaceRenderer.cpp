@@ -589,7 +589,7 @@ AirspaceRenderer::DrawIntersections(Canvas &canvas,
 
 #ifndef ENABLE_OPENGL
 
-inline void
+inline bool
 AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
                            const WindowProjection &projection,
                            const AirspaceRendererSettings &settings,
@@ -608,7 +608,7 @@ AirspaceRenderer::DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
                                         projection.GetScreenDistanceMeters(),
                                         v, visible);
 
-  v.Commit();
+  return v.Commit();
 }
 
 inline void
@@ -623,9 +623,11 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
     last_warning_serial = awc.GetSerial();
 
     Canvas &buffer_canvas = fill_cache.Begin(canvas, projection);
-    DrawFill(buffer_canvas, stencil_canvas,
-             projection, settings, awc, visible);
-    fill_cache.Commit(canvas, projection);
+    if (DrawFill(buffer_canvas, stencil_canvas,
+                                projection, settings, awc, visible))
+      fill_cache.Commit(canvas, projection);
+    else
+      fill_cache.CommitEmpty();
   }
 
 #ifdef HAVE_ALPHA_BLEND

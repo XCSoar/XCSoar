@@ -68,12 +68,17 @@ TransparentRendererCache::Commit(Canvas &canvas,
   assert(compare_projection.IsDefined());
   assert(buffer.IsDefined());
   assert(Check(projection));
+
+  empty = false;
 }
 
 void
 TransparentRendererCache::CopyAndTo(Canvas &canvas,
                                     const WindowProjection &projection) const
 {
+  if (empty)
+    return;
+
   canvas.CopyAnd(0, 0,
                  projection.GetScreenWidth(), projection.GetScreenHeight(),
                  buffer, 0, 0);
@@ -83,6 +88,9 @@ void
 TransparentRendererCache::CopyTransparentWhiteTo(Canvas &canvas,
                                                  const WindowProjection &projection) const
 {
+  if (empty)
+    return;
+
   canvas.CopyTransparentWhite(0, 0,
                               projection.GetScreenWidth(),
                               projection.GetScreenHeight(),
@@ -102,6 +110,9 @@ TransparentRendererCache::AlphaBlendTo(Canvas &canvas,
   assert(projection.IsValid());
   assert(compare_projection.IsDefined());
   assert(Check(projection));
+
+  if (empty)
+    return;
 
   const unsigned width = projection.GetScreenWidth(),
     height = projection.GetScreenHeight();

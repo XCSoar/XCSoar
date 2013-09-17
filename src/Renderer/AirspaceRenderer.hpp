@@ -103,7 +103,7 @@ public:
 
 #ifndef ENABLE_OPENGL
 private:
-  void DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
+  bool DrawFill(Canvas &buffer_canvas, Canvas &stencil_canvas,
                 const WindowProjection &projection,
                 const AirspaceRendererSettings &settings,
                 const AirspaceWarningCopy &awc,
