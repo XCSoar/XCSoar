@@ -70,7 +70,13 @@ public:
   void DrawCircle(const RasterPoint &center, unsigned radius);
 
   void Begin();
-  void Commit();
+
+  /**
+   * Commits the calculated results
+   *
+   * @return true if something has been rendered, false otherwise
+   */
+  bool Commit();
 
 protected:
   void ClearBuffer();
