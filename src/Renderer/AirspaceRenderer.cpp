@@ -666,7 +666,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        const AirspaceWarningCopy &awc,
                        const AirspacePredicate &visible)
 {
-  if (airspaces == NULL)
+  if (airspaces == NULL || airspaces->IsEmpty())
     return;
 
 #ifdef ENABLE_OPENGL
