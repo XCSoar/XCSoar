@@ -30,7 +30,6 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/IntermediatePoint.hpp"
-#include "Language/Language.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 #include <list>

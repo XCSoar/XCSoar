@@ -48,11 +48,9 @@ class RasterTerrain;
 class RasterWeather;
 class ProtectedMarkers;
 class Waypoints;
-struct Waypoint;
 class Airspaces;
 class ProtectedTaskManager;
 class GlideComputer;
-class GlidePolar;
 class ContainerWindow;
 class NOAAStore;
 

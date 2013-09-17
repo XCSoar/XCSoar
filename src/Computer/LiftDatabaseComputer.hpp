@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/Angle.hpp"
 
-struct NMEAInfo;
 struct MoreData;
 struct CirclingInfo;
 class LiftDatabase;

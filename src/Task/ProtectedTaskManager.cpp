@@ -23,13 +23,12 @@ Copyright_License {
 
 #include "ProtectedTaskManager.hpp"
 #include "Serialiser.hpp"
-#include "Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
-#include "Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
 
 #include <windef.h> // for MAX_PATH

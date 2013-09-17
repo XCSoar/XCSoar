@@ -247,7 +247,7 @@ PlaneListWidget::LoadWithDialog(unsigned i)
     text.Format(_("Activating plane profile \"%s\" failed!"),
                 list[i].name.c_str());
   } else {
-    title = _(" ");
+    title = _T(" ");
     text.Format(_("Plane profile \"%s\" activated."),
                 list[i].name.c_str());
   }
@@ -398,7 +398,7 @@ PlaneListWidget::OnActivateItem(unsigned i)
   tmp.Format(_("Do you want to activate plane profile \"%s\"?"),
              list[i].name.c_str());
 
-  if (ShowMessageBox(tmp, _(" "), MB_YESNO) == IDYES)
+  if (ShowMessageBox(tmp, _T(" "), MB_YESNO) == IDYES)
     LoadWithDialog(i);
 }
 

@@ -25,7 +25,6 @@ Copyright_License {
 #include "FileLineReader.hpp"
 #include "ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */

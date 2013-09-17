@@ -21,7 +21,6 @@
 */
 
 #include "AbstractAirspace.hpp"
-#include "Util/StringUtil.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceInterceptSolution.hpp"
@@ -30,6 +29,7 @@
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "AirspaceIntersectionVector.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 

@@ -25,14 +25,11 @@ Copyright_License {
 #define GAUGE_VARIO_H
 
 #include "Screen/AntiFlickerWindow.hpp"
-#include "Screen/Bitmap.hpp"
-#include "Screen/Point.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 
 struct VarioLook;
 struct UnitsLook;
 class ContainerWindow;
-class UnitSymbol;
 
 class GaugeVario : public AntiFlickerWindow
 {

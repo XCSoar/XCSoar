@@ -23,12 +23,10 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Glide.hpp"
 #include "Engine/Util/Gradient.hpp"
-#include "Computer/GlideRatioCalculator.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 void
 UpdateInfoBoxGRInstant(InfoBoxData &data)

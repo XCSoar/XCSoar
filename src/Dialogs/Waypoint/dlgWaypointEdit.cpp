@@ -27,7 +27,6 @@ Copyright_License {
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/GeoPoint.hpp"
-#include "Units/Units.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Interface.hpp"

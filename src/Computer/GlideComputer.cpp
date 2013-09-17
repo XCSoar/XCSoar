@@ -23,11 +23,9 @@ Copyright_License {
 
 #include "GlideComputer.hpp"
 #include "Computer/Settings.hpp"
-#include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "ConditionMonitor/ConditionMonitors.hpp"
 #include "GlideComputerInterface.hpp"
-#include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 static PeriodClock last_team_code_update;

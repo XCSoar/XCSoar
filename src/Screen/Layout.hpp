@@ -25,14 +25,12 @@ Copyright_License {
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
 #include "Screen/Point.hpp"
-#include "Math/fixed.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
 namespace Layout
 {
   extern bool landscape;
-  extern bool square;
 
   /**
    * Fixed-point scaling factor, fractional part is 10 bits (factor

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_HPP
 #define XCSOAR_INFO_BOX_HPP
 
-#include "Util/StaticString.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Timer.hpp"

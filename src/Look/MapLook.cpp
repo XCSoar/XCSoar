@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapLook.hpp"
 #include "MapSettings.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 MapLook::Initialise(const MapSettings &settings,

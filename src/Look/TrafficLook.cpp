@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TrafficLook.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 TrafficLook::Initialise(const Font &_font)

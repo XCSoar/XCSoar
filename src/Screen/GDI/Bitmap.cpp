@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
-#include "ResourceLoader.hpp"
-#include "OS/PathName.hpp"
 
 #ifdef HAVE_AYGSHELL_DLL
 #include "OS/AYGShellDLL.hpp"
@@ -36,59 +34,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-
-bool
-Bitmap::Load(unsigned id, Type type)
-{
-  Reset();
-
-  bitmap = ResourceLoader::LoadBitmap2(id);
-  return bitmap != NULL;
-}
-
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  if (!Load(id))
-    return false;
-
-  if (zoom <= 1)
-    return true;
-
-  const PixelSize src_size = GetSize();
-  PixelSize dest_size;
-  dest_size.cx = src_size.cx * zoom;
-  dest_size.cy = src_size.cy * zoom;
-
-  HDC dc = ::GetDC(NULL), src_dc = ::CreateCompatibleDC(dc),
-    dest_dc = ::CreateCompatibleDC(dc);
-  HBITMAP dest_bitmap = ::CreateCompatibleBitmap(dc,
-                                                 dest_size.cx, dest_size.cy);
-  ::ReleaseDC(NULL, dc);
-
-  if (dest_bitmap == NULL) {
-    ::DeleteDC(src_dc);
-    ::DeleteDC(dest_dc);
-    return false;
-  }
-
-  ::SelectObject(src_dc, bitmap);
-  ::SelectObject(dest_dc, dest_bitmap);
-
-  ::StretchBlt(dest_dc, 0, 0, dest_size.cx, dest_size.cy,
-               src_dc, 0, 0, src_size.cx, src_size.cy,
-               SRCCOPY);
-
-  ::DeleteDC(src_dc);
-  ::DeleteDC(dest_dc);
-
-  ::DeleteObject(bitmap);
-  bitmap = dest_bitmap;
-
-  return true;
-}
 
 #ifdef HAVE_IMGDECMP_DLL
 

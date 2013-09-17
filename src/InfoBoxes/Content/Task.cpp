@@ -31,7 +31,6 @@ Copyright_License {
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
-#include "Formatter/Units.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Widget/CallbackWidget.hpp"

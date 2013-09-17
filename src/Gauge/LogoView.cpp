@@ -24,7 +24,7 @@ Copyright_License {
 #include "LogoView.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 #include "Version.hpp"
 
 #include <algorithm>

@@ -32,7 +32,6 @@ struct RoutePlannerConfig;
 class GlidePolar;
 class RasterTerrain;
 class Airspaces;
-class RoutePlannerGlue;
 
 /**
  * Facade to task/airspace/waypoints as used by threads,

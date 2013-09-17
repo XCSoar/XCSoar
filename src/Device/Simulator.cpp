@@ -26,10 +26,7 @@ Copyright_License {
 #include "Device/Simulator.hpp"
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
-#include "NMEA/InputLine.hpp"
-#include "NMEA/Checksum.hpp"
 #include "../Simulator.hpp"
-#include "OS/Clock.hpp"
 #include "Asset.hpp"
 #include "Geo/Math.hpp"
 

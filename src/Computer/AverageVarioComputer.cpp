@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AverageVarioComputer.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/VarioInfo.hpp"
 
 void
 AverageVarioComputer::Reset()

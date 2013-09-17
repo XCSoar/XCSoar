@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Util/ReusableArray.hpp"
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
 #include "Look/ChartLook.hpp"
 #include "Compiler.h"

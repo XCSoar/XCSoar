@@ -25,7 +25,6 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
 #include "IO/LineReader.hpp"
-#include "IO/TextFile.hpp"
 
 #include <stdlib.h>
 

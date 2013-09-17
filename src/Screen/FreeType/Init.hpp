@@ -27,6 +27,15 @@ Copyright_License {
 typedef struct FT_FaceRec_ *FT_Face;
 
 namespace FreeType {
+#ifdef KOBO
+  /**
+   * Are we using monochrome font rendering mode on the Kobo?  This
+   * can be disabled for some situations; see
+   * TopCanvas::SetEnableDither().
+   */
+  extern bool mono;
+#endif
+
   void Initialise();
   void Deinitialise();
 

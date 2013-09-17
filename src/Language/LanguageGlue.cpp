@@ -34,10 +34,6 @@ Copyright_License {
 #include <locale.h>
 #endif
 
-#ifdef HAVE_BUILTIN_LANGUAGES
-#include "ResourceLoader.hpp"
-#endif
-
 #ifdef _WIN32_WCE
 #include "OS/DynamicLibrary.hpp"
 #endif
@@ -100,51 +96,108 @@ enum {
 };
 #endif
 
+extern const uint8_t cs_start[] asm("_binary_cs_mo_start");
+extern const uint8_t cs_size[] asm("_binary_cs_mo_size");
+extern const uint8_t da_start[] asm("_binary_da_mo_start");
+extern const uint8_t da_size[] asm("_binary_da_mo_size");
+extern const uint8_t de_start[] asm("_binary_de_mo_start");
+extern const uint8_t de_size[] asm("_binary_de_mo_size");
+extern const uint8_t el_start[] asm("_binary_el_mo_start");
+extern const uint8_t el_size[] asm("_binary_el_mo_size");
+extern const uint8_t es_start[] asm("_binary_es_mo_start");
+extern const uint8_t es_size[] asm("_binary_es_mo_size");
+extern const uint8_t fi_start[] asm("_binary_fi_mo_start");
+extern const uint8_t fi_size[] asm("_binary_fi_mo_size");
+extern const uint8_t fr_start[] asm("_binary_fr_mo_start");
+extern const uint8_t fr_size[] asm("_binary_fr_mo_size");
+extern const uint8_t he_start[] asm("_binary_he_mo_start");
+extern const uint8_t he_size[] asm("_binary_he_mo_size");
+extern const uint8_t hr_start[] asm("_binary_hr_mo_start");
+extern const uint8_t hr_size[] asm("_binary_hr_mo_size");
+extern const uint8_t hu_start[] asm("_binary_hu_mo_start");
+extern const uint8_t hu_size[] asm("_binary_hu_mo_size");
+extern const uint8_t it_start[] asm("_binary_it_mo_start");
+extern const uint8_t it_size[] asm("_binary_it_mo_size");
+extern const uint8_t ja_start[] asm("_binary_ja_mo_start");
+extern const uint8_t ja_size[] asm("_binary_ja_mo_size");
+extern const uint8_t ko_start[] asm("_binary_ko_mo_start");
+extern const uint8_t ko_size[] asm("_binary_ko_mo_size");
+extern const uint8_t nb_start[] asm("_binary_nb_mo_start");
+extern const uint8_t nb_size[] asm("_binary_nb_mo_size");
+extern const uint8_t nl_start[] asm("_binary_nl_mo_start");
+extern const uint8_t nl_size[] asm("_binary_nl_mo_size");
+extern const uint8_t pl_start[] asm("_binary_pl_mo_start");
+extern const uint8_t pl_size[] asm("_binary_pl_mo_size");
+extern const uint8_t pt_BR_start[] asm("_binary_pt_BR_mo_start");
+extern const uint8_t pt_BR_size[] asm("_binary_pt_BR_mo_size");
+extern const uint8_t pt_start[] asm("_binary_pt_mo_start");
+extern const uint8_t pt_size[] asm("_binary_pt_mo_size");
+extern const uint8_t ro_start[] asm("_binary_ro_mo_start");
+extern const uint8_t ro_size[] asm("_binary_ro_mo_size");
+extern const uint8_t ru_start[] asm("_binary_ru_mo_start");
+extern const uint8_t ru_size[] asm("_binary_ru_mo_size");
+extern const uint8_t sk_start[] asm("_binary_sk_mo_start");
+extern const uint8_t sk_size[] asm("_binary_sk_mo_size");
+extern const uint8_t sr_start[] asm("_binary_sr_mo_start");
+extern const uint8_t sr_size[] asm("_binary_sr_mo_size");
+extern const uint8_t sv_start[] asm("_binary_sv_mo_start");
+extern const uint8_t sv_size[] asm("_binary_sv_mo_size");
+extern const uint8_t tr_start[] asm("_binary_tr_mo_start");
+extern const uint8_t tr_size[] asm("_binary_tr_mo_size");
+extern const uint8_t uk_start[] asm("_binary_uk_mo_start");
+extern const uint8_t uk_size[] asm("_binary_uk_mo_size");
+extern const uint8_t vi_start[] asm("_binary_vi_mo_start");
+extern const uint8_t vi_size[] asm("_binary_vi_mo_size");
+
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
 const BuiltinLanguage language_table[] = {
-  { LANG_CZECH, _T("cs.mo"), _T("Czech") },
-  { LANG_DANISH, _T("da.mo"), _T("Danish") },
-  { LANG_GERMAN, _T("de.mo"), _T("German") },
-  { LANG_GREEK, _T("el.mo"), _T("Greek") },
-  { LANG_SPANISH, _T("es.mo"), _T("Spanish") },
-  { LANG_FINNISH, _T("fi.mo"), _T("Finnish") },
-  { LANG_FRENCH, _T("fr.mo"), _T("French") },
-  { LANG_HEBREW, _T("he.mo"), _T("Hebrew") },
-  { LANG_CROATIAN, _T("hr.mo"), _T("Croatian") },
-  { LANG_HUNGARIAN, _T("hu.mo"), _T("Hungarian") },
-  { LANG_ITALIAN, _T("it.mo"), _T("Italian") },
-  { LANG_JAPANESE, _T("ja.mo"), _T("Japanese") },
-  { LANG_KOREAN, _T("ko.mo"), _T("Korean") },
-  { LANG_NORWEGIAN, _T("nb.mo"), _T("Norwegian") },
-  { LANG_DUTCH, _T("nl.mo"), _T("Dutch") },
-  { LANG_POLISH, _T("pl.mo"), _T("Polish") },
-  { LANG_PORTUGUESE, _T("pt_BR.mo"), _T("Brazilian Portuguese") },
+  { LANG_CZECH, cs_start, cs_size, _T("cs.mo"), _T("Czech") },
+  { LANG_DANISH, da_start, da_size, _T("da.mo"), _T("Danish") },
+  { LANG_GERMAN, de_start, de_size, _T("de.mo"), _T("German") },
+  { LANG_GREEK, el_start, el_size, _T("el.mo"), _T("Greek") },
+  { LANG_SPANISH, es_start, es_size, _T("es.mo"), _T("Spanish") },
+  { LANG_FINNISH, fi_start, fi_size, _T("fi.mo"), _T("Finnish") },
+  { LANG_FRENCH, fr_start, fr_size, _T("fr.mo"), _T("French") },
+  { LANG_HEBREW, he_start, he_size, _T("he.mo"), _T("Hebrew") },
+  { LANG_CROATIAN, hr_start, hr_size, _T("hr.mo"), _T("Croatian") },
+  { LANG_HUNGARIAN, hu_start, hu_size, _T("hu.mo"), _T("Hungarian") },
+  { LANG_ITALIAN, it_start, it_size, _T("it.mo"), _T("Italian") },
+  { LANG_JAPANESE, ja_start, ja_size, _T("ja.mo"), _T("Japanese") },
+  { LANG_KOREAN, ko_start, ko_size, _T("ko.mo"), _T("Korean") },
+  { LANG_NORWEGIAN, nb_start, nb_size, _T("nb.mo"), _T("Norwegian") },
+  { LANG_DUTCH, nl_start, nl_size, _T("nl.mo"), _T("Dutch") },
+  { LANG_POLISH, pl_start, pl_size, _T("pl.mo"), _T("Polish") },
+  { LANG_PORTUGUESE, pt_BR_start, pt_BR_size, _T("pt_BR.mo"), _T("Brazilian Portuguese") },
 
   /* our Portuguese translation is less advanced than Brazilian
      Portuguese */
-  { LANG_PORTUGUESE, _T("pt.mo"), _T("Portuguese") },
+  { LANG_PORTUGUESE, pt_start, pt_size, _T("pt.mo"), _T("Portuguese") },
 
-  { LANG_ROMANIAN, _T("ro.mo"), _T("Romanian") },
-  { LANG_RUSSIAN, _T("ru.mo"), _T("Russian") },
-  { LANG_SLOVAK, _T("sk.mo"), _T("Slovak") },
-  { LANG_SERBIAN, _T("sr.mo"), _T("Serbian") },
-  { LANG_SWEDISH, _T("sv.mo"), _T("Swedish") },
-  { LANG_TURKISH, _T("tr.mo"), _T("Turkish") },
-  { LANG_UKRAINIAN, _T("uk.mo"), _T("Ukranian") },
-  { LANG_VIETNAMESE, _T("vi.mo"), _T("Vietnamese") },
+  { LANG_ROMANIAN, ro_start, ro_size, _T("ro.mo"), _T("Romanian") },
+  { LANG_RUSSIAN, ru_start, ru_size, _T("ru.mo"), _T("Russian") },
+  { LANG_SLOVAK, sk_start, sk_size, _T("sk.mo"), _T("Slovak") },
+  { LANG_SERBIAN, sr_start, sr_size, _T("sr.mo"), _T("Serbian") },
+  { LANG_SWEDISH, sv_start, sv_size, _T("sv.mo"), _T("Swedish") },
+  { LANG_TURKISH, tr_start, tr_size, _T("tr.mo"), _T("Turkish") },
+  { LANG_UKRAINIAN, uk_start, uk_size, _T("uk.mo"), _T("Ukranian") },
+  { LANG_VIETNAMESE, vi_start, vi_size, _T("vi.mo"), _T("Vietnamese") },
   { 0, NULL }
 };
 
 #ifdef WIN32
 
 gcc_pure
-static const TCHAR *
+static const BuiltinLanguage *
 FindLanguage(WORD language)
 {
   // Search for supported languages matching the language code
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
     if (language_table[i].language == language)
       // .. and return the MO file name if found
-      return language_table[i].resource;
+      return &language_table[i];
 
   return NULL;
 }
@@ -152,7 +205,7 @@ FindLanguage(WORD language)
 #endif
 
 gcc_pure
-static unsigned
+static const BuiltinLanguage *
 FindLanguage(const TCHAR *resource)
 {
   assert(resource != NULL);
@@ -161,12 +214,12 @@ FindLanguage(const TCHAR *resource)
   for (unsigned i = 0; language_table[i].resource != NULL; ++i)
     if (StringIsEqual(language_table[i].resource, resource))
       // .. and return the language code
-      return language_table[i].language;
+      return &language_table[i];
 
-  return 0;
+  return nullptr;
 }
 
-static const TCHAR *
+static const BuiltinLanguage *
 DetectLanguage()
 {
 #ifdef ANDROID
@@ -221,7 +274,7 @@ DetectLanguage()
   env->DeleteLocalRef(language);
 
   // Return e.g. "de.mo"
-  return language_buffer;
+  return FindLanguage(language_buffer);
 
 #elif defined(WIN32)
 
@@ -261,46 +314,48 @@ DetectLanguage()
 }
 
 static bool
-ReadResourceLanguageFile(const TCHAR *resource)
+ReadBuiltinLanguage(const BuiltinLanguage &language)
 {
-  if (!FindLanguage(resource))
-    /* refuse to load resources which are not in the language table */
-    return false;
-
-  LogFormat(_T("Language: loading resource '%s'"), resource);
-
-  // Load resource
-  ResourceLoader::Data data = ResourceLoader::Load(resource, _T("MO"));
-  if (data.first == NULL) {
-    LogFormat(_T("Language: resource '%s' not found"), resource);
-    return false;
-  }
+  LogFormat(_T("Language: loading resource '%s'"), language.resource);
 
   // Load MO file from resource
   delete mo_loader;
-  mo_loader = new MOLoader(data.first, data.second);
+  mo_loader = new MOLoader(language.begin, (size_t)language.size);
   if (mo_loader->error()) {
-    LogFormat(_T("Language: could not load resource '%s'"), resource);
+    LogFormat(_T("Language: could not load resource '%s'"), language.resource);
     delete mo_loader;
     mo_loader = NULL;
     return false;
   }
 
-  LogFormat(_T("Loaded translations from resource '%s'"), resource);
+  LogFormat(_T("Loaded translations from resource '%s'"), language.resource);
 
   mo_file = &mo_loader->get();
   return true;
 }
 
+static bool
+ReadResourceLanguageFile(const TCHAR *resource)
+{
+  auto language = FindLanguage(resource);
+  return language != nullptr && ReadBuiltinLanguage(*language);
+}
+
 #else /* !HAVE_BUILTIN_LANGUAGES */
 
-static inline const TCHAR *
+static inline const char *
 DetectLanguage()
 {
   return NULL;
 }
 
 static inline bool
+ReadBuiltinLanguage(char dummy)
+{
+  return false;
+}
+
+static bool
 ReadResourceLanguageFile(const TCHAR *resource)
 {
   return false;
@@ -323,10 +378,10 @@ AutoDetectLanguage()
 #else /* !HAVE_NATIVE_GETTEXT */
 
   // Try to detect the language by calling the OS's corresponding functions
-  const TCHAR *resource = DetectLanguage();
-  if (resource != NULL)
+  const auto l = DetectLanguage();
+  if (l != nullptr)
     // If a language was detected -> try to load the MO file
-    ReadResourceLanguageFile(resource);
+    ReadBuiltinLanguage(*l);
 
 #endif /* !HAVE_NATIVE_GETTEXT */
 }

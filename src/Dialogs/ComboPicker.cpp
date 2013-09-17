@@ -24,13 +24,13 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Form/List.hpp"
-#include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Util/StaticString.hpp"
 
 static const ComboList *ComboListPopup;
 

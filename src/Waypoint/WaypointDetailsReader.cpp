@@ -25,7 +25,6 @@ Copyright_License {
 #include "WaypointDetailsReader.hpp"
 #include "Language/Language.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Interface.hpp"
 #include "Util/StringUtil.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"

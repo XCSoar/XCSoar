@@ -28,7 +28,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Window;
 class ContainerWindow;
 
 /**

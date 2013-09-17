@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MarkerLook.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 MarkerLook::Initialise()

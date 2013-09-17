@@ -35,7 +35,6 @@ Copyright_License {
 struct NMEAInfo;
 struct LoggerSettings;
 struct Declaration;
-class OrderedTask;
 class IGCWriter;
 
 /**

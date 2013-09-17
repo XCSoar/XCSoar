@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "AirspaceFormatter.hpp"
-
-#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceAltitude.hpp"
-#include "Util/StaticString.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
+
+#include <string.h>
+#include <stdio.h>
 
 void
 AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,

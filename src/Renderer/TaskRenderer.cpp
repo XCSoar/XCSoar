@@ -26,8 +26,7 @@ Copyright_License {
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/StartPoint.hpp"
-#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "TaskPointRenderer.hpp"
 
 TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)

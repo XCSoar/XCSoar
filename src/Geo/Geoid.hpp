@@ -30,16 +30,6 @@ struct GeoPoint;
 namespace EGM96
 {
   /**
-   * Load the EGM96 geoid resource into egm96data.
-   */
-  void Load();
-
-  /**
-   * Clear the EGM96 from the memory
-   */
-  static inline void Close() {}
-
-  /**
    * Returns the geoid separation between the EGS96
    * and the WGS84 at the given latitude and longitude
    * @param lat Latitude

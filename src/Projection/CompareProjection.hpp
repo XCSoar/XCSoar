@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_COMPARE_PROJECTION_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
 
 class WindowProjection;
 

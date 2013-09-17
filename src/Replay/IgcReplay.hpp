@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef IGC_REPLAY_HPP
 #define IGC_REPLAY_HPP
 
-#include "Math/fixed.hpp"
 #include "AbstractReplay.hpp"
 #include "IGC/IGCExtensions.hpp"
+#include "Compiler.h"
 
 class NLineReader;
-struct GeoPoint;
-class Angle;
 struct IGCFix;
 
 class IgcReplay: public AbstractReplay

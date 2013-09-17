@@ -34,6 +34,7 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #endif
 
+class ResourceId;
 class Canvas;
 class Color;
 
@@ -46,12 +47,7 @@ class UnitSymbol {
 #endif
 
 public:
-#if defined(USE_GDI) || defined(ENABLE_OPENGL)
-  void Load(unsigned id) {
-    bitmap.Load(id, Bitmap::Type::MONO);
-    size = bitmap.GetSize();
-  }
-#else
+#ifdef USE_MEMORY_CANVAS
   UnitSymbol() {
     buffer.data = nullptr;
   }
@@ -59,9 +55,9 @@ public:
   ~UnitSymbol() {
     Reset();
   }
-
-  void Load(unsigned id);
 #endif
+
+  void Load(ResourceId id);
 
   void Reset() {
 #if defined(USE_GDI) || defined(ENABLE_OPENGL)

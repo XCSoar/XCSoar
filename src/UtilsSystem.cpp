@@ -25,7 +25,6 @@ Copyright_License {
 #include "CommandLine.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "OS/FileUtil.hpp"
 #include "OS/MemInfo.hpp"
 #include "Screen/Point.hpp"
 

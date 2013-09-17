@@ -30,15 +30,10 @@ Copyright_License {
 #include "ActionInterface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Language/Language.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/Macros.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 static void
 SetVSpeed(InfoBoxData &data, fixed value)

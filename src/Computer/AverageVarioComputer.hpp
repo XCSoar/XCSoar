@@ -28,7 +28,6 @@ Copyright_License {
 #include "Time/DeltaTime.hpp"
 
 struct MoreData;
-struct CirclingInfo;
 struct VarioInfo;
 
 class AverageVarioComputer {

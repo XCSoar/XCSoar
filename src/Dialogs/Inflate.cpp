@@ -25,7 +25,6 @@ Copyright_License {
 
 #include <zlib/zlib.h>
 #include <assert.h>
-#include <tchar.h>
 #include <limits.h>
 #include <stdint.h>
 #include <string.h>

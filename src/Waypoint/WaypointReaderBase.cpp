@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Waypoint/Waypoints.hpp"
 #include "Operation/Operation.hpp"
 #include "IO/LineReader.hpp"
 

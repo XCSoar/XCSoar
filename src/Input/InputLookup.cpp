@@ -25,6 +25,8 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "InputQueue.hpp"
 
+#include <string.h>
+
 // Mapping text names of events to the real thing
 struct Text2EventSTRUCT {
   const TCHAR *text;
@@ -33,29 +35,29 @@ struct Text2EventSTRUCT {
 
 static constexpr Text2EventSTRUCT Text2Event[] = {
 #include "InputEvents_Text2Event.cpp"
-  { NULL, NULL }
+  { nullptr, nullptr }
 };
 
 // Mapping text names of events to the real thing
 static const TCHAR *const Text2GCE[] = {
 #include "InputEvents_Text2GCE.cpp"
-  NULL
+  nullptr
 };
 
 // Mapping text names of events to the real thing
 static const TCHAR *const Text2NE[] = {
 #include "InputEvents_Text2NE.cpp"
-  NULL
+  nullptr
 };
 
 pt2Event
 InputEvents::findEvent(const TCHAR *data)
 {
-  for (unsigned i = 0; Text2Event[i].text != NULL; ++i)
+  for (unsigned i = 0; Text2Event[i].text != nullptr; ++i)
     if (_tcscmp(data, Text2Event[i].text) == 0)
       return Text2Event[i].event;
 
-  return NULL;
+  return nullptr;
 }
 
 int

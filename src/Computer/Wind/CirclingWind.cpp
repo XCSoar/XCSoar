@@ -25,12 +25,9 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "CirclingWind.hpp"
-#include "Math/Constants.h"
-#include "LogFile.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-#include <stdlib.h>
 #include <algorithm>
 
 /*

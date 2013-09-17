@@ -22,7 +22,6 @@
 #ifndef SERIALISER_HPP
 #define SERIALISER_HPP
 
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Factory/TaskFactoryType.hpp"
 #include "Geo/AltitudeReference.hpp"
 

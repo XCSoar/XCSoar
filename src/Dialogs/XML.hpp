@@ -29,7 +29,6 @@ Copyright_License {
 #include <tchar.h>
 
 struct CallBackTableEntry;
-class Window;
 class SubForm;
 class WndForm;
 class SingleWindow;

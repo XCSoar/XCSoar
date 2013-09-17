@@ -28,7 +28,6 @@ Copyright_License {
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Screen/BufferWindow.hpp"
 #include "Renderer/LabelBlock.hpp"
-#include "MapWindowBlackboard.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
 #include "Renderer/WaypointRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"

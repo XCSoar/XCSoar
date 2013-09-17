@@ -63,9 +63,9 @@ protected:
   virtual void OnTaskModified() override;
 };
 
-static WndForm *wf = NULL;
+static WndForm *wf = nullptr;
 static TargetMapWindow *map;
-static CheckBoxControl *optimized_checkbox = NULL;
+static CheckBoxControl *optimized_checkbox = nullptr;
 static unsigned initial_active_task_point = 0;
 static unsigned task_size = 0;
 
@@ -132,7 +132,7 @@ MoveTarget(gcc_unused double adjust_angle)
       double course_bearing, target_bearing;
       DistanceBearing(task.getTargetLocation(target_point-1),
                       CommonInterface::Basic().Location,
-                      NULL, &course_bearing);
+                      nullptr, &course_bearing);
 
       DistanceBearing(CommonInterface::Basic().Location,
                       target_location,
@@ -482,7 +482,7 @@ static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnOptimized),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 static bool
@@ -583,13 +583,13 @@ SetDataAccessCallback(SubForm &form, const TCHAR *name,
 void
 dlgTargetShowModal(int _target_point)
 {
-  if (protected_task_manager == NULL)
+  if (protected_task_manager == nullptr)
     return;
 
   wf = LoadDialog(callback_table, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TARGET_L") :
                                       _T("IDR_XML_TARGET"));
-  assert(wf != NULL);
+  assert(wf != nullptr);
 
   SetDataAccessCallback(*wf, _T("prpRange"), OnRangeData);
   SetDataAccessCallback(*wf, _T("prpRadial"), OnRadialData);
@@ -599,12 +599,12 @@ dlgTargetShowModal(int _target_point)
 
   if (!InitTargetPoints()) {
     delete wf;
-    map = NULL;
+    map = nullptr;
     return;
   }
 
   optimized_checkbox = (CheckBoxControl*)wf->FindByName(_T("chkbOptimized"));
-  assert(optimized_checkbox != NULL);
+  assert(optimized_checkbox != nullptr);
 
   UpdateButtons();
 

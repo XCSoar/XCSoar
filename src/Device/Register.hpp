@@ -36,11 +36,11 @@ Copyright_License {
 struct DeviceRegister;
 
 gcc_const
-const struct DeviceRegister *
+const DeviceRegister *
 GetDriverByIndex(unsigned i);
 
 gcc_pure
-const struct DeviceRegister *
+const DeviceRegister *
 FindDriverByName(const TCHAR *name);
 
 /**

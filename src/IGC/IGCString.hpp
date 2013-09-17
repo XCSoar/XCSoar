@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_IGC_STRING_HPP
 #define XCSOAR_IGC_STRING_HPP
 
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 /**
  * Is this a "reserved" character?

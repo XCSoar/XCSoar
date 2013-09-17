@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Base.hpp"
-#include "InfoBoxes/Data.hpp"
 
 InfoBoxContent::~InfoBoxContent() {}
 
@@ -40,5 +39,5 @@ InfoBoxContent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 const InfoBoxPanel *
 InfoBoxContent::GetDialogContent()
 {
-  return NULL;
+  return nullptr;
 }

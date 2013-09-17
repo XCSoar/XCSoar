@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 #define XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 
-struct MapItem;
 class MapItemList;
-struct GeoVector;
 struct DialogLook;
 struct MapLook;
 struct TrafficLook;

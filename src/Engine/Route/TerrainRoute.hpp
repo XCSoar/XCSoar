@@ -24,8 +24,6 @@
 
 #include "RoutePlanner.hpp"
 
-class RasterMap;
-
 class TerrainRoute: public RoutePlanner
 {
   mutable RoutePoint m_inx_terrain;

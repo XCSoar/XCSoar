@@ -29,7 +29,6 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
-#include "Units/Units.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -37,7 +36,8 @@ Copyright_License {
 
 #include <assert.h>
 
-class AirspaceDetailsWidget : public RowFormWidget, public ActionListener {
+class AirspaceDetailsWidget final
+  : public RowFormWidget, public ActionListener {
   const AbstractAirspace &airspace;
   ProtectedAirspaceWarningManager *warnings;
 

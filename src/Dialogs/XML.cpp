@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Message.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -266,9 +265,9 @@ static XMLNode *
 LoadXMLFromResource(const TCHAR* resource, XML::Results *xml_results)
 {
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("XMLDialog"));
-  assert(data.first != NULL);
+  assert(!data.IsNull());
 
-  char *buffer = InflateToString(data.first, data.second);
+  char *buffer = InflateToString(data.data, data.size);
   assert(buffer != nullptr);
 
   UTF8ToWideConverter buffer2(buffer);

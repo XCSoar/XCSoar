@@ -36,7 +36,6 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
-#include <assert.h>
 
 class XShape : private NonCopyable {
   enum { MAX_LINES = 32 };

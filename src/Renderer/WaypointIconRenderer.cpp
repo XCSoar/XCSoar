@@ -26,7 +26,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "WaypointRenderer.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Util/Macros.hpp"

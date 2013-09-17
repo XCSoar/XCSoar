@@ -26,12 +26,9 @@ Copyright_License {
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
 #include "Components.hpp"
 #include "Logger/ExternalLogger.hpp"
-#include "UIGlobals.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
@@ -41,9 +38,13 @@ Copyright_License {
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskActionsPanel *instance;
+TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
+                                   TaskMiscPanel &_parent,
+                                   OrderedTask **_active_task,
+                                   bool *_task_modified)
+  :RowFormWidget(_dialog.GetLook()),
+   dialog(_dialog), parent(_parent),
+   active_task(_active_task), task_modified(_task_modified) {}
 
 void
 TaskActionsPanel::SaveTask()
@@ -65,20 +66,14 @@ TaskActionsPanel::SaveTask()
   }
 }
 
-void
+inline void
 TaskActionsPanel::OnBrowseClicked()
 {
   dialog.RestoreTaskView();
   parent.SetCurrent(1);
 }
 
-static void
-OnBrowseClicked()
-{
-  instance->OnBrowseClicked();
-}
-
-void
+inline void
 TaskActionsPanel::OnNewTaskClicked()
 {
   if (((*active_task)->TaskSize() < 2) ||
@@ -91,19 +86,7 @@ TaskActionsPanel::OnNewTaskClicked()
   }
 }
 
-static void
-OnNewTaskClicked()
-{
-  instance->OnNewTaskClicked();
-}
-
-static void
-OnSaveClicked()
-{
-  instance->SaveTask();
-}
-
-void
+inline void
 TaskActionsPanel::OnDeclareClicked()
 {
   if (!(*active_task)->CheckTask()) {
@@ -119,38 +102,23 @@ TaskActionsPanel::OnDeclareClicked()
   ExternalLogger::Declare(decl, way_points.GetHome());
 }
 
-static void
-OnDeclareClicked()
-{
-  instance->OnDeclareClicked();
-}
-
 void
 TaskActionsPanel::ReClick()
 {
   dialog.TaskViewClicked();
 }
 
-static constexpr CallBackTableEntry task_list_callbacks[] = {
-  DeclareCallBackEntry(OnBrowseClicked),
-  DeclareCallBackEntry(OnNewTaskClicked),
-  DeclareCallBackEntry(OnSaveClicked),
-  DeclareCallBackEntry(OnDeclareClicked),
-
-  DeclareCallBackEntry(NULL)
-};
-
 void
 TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(task_list_callbacks, parent, rc,
-             _T("IDR_XML_TASKACTIONS"));
-
-  instance = this;
+  AddButton(_("New Task"), *this, NEW_TASK);
+  AddButton(_("Declare"), *this, DECLARE);
+  AddButton(_("Browse"), *this, BROWSE);
+  AddButton(_("Save"), *this, SAVE);
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
-    form.FindByName(_T("cmdDeclare"))->SetEnabled(false);
+    SetRowEnabled(DECLARE, false);
 }
 
 void
@@ -158,7 +126,7 @@ TaskActionsPanel::Show(const PixelRect &rc)
 {
   dialog.ShowTaskView();
 
-  XMLWidget::Show(rc);
+  RowFormWidget::Show(rc);
 }
 
 void
@@ -166,5 +134,27 @@ TaskActionsPanel::Hide()
 {
   dialog.ResetTaskView();
 
-  XMLWidget::Hide();
+  RowFormWidget::Hide();
+}
+
+void
+TaskActionsPanel::OnAction(int id)
+{
+  switch (id) {
+  case NEW_TASK:
+    OnNewTaskClicked();
+    break;
+
+  case DECLARE:
+    OnDeclareClicked();
+    break;
+
+  case BROWSE:
+    OnBrowseClicked();
+    break;
+
+  case SAVE:
+    SaveTask();
+    break;
+  }
 }

@@ -24,12 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_QUEUE_HPP
 #define XCSOAR_INPUT_QUEUE_HPP
 
-#include "Math/fixed.hpp"
-#include "Compiler.h"
-
 #include <tchar.h>
-
-struct InputConfig;
 
 typedef void (*pt2Event)(const TCHAR *);
 

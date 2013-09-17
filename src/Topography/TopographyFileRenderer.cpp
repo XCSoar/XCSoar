@@ -27,7 +27,6 @@ Copyright_License {
 #include "Look/GlobalFonts.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "resource.h"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
@@ -48,9 +47,9 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
   :file(_file), pen(file.GetPenWidth(), file.GetColor()),
    brush(file.GetColor())
 {
-  int icon_ID = file.GetIcon();
-  if (icon_ID != 0)
-    icon.LoadResource(icon_ID, 5000+icon_ID);
+  ResourceId icon_ID = file.GetIcon();
+  if (icon_ID.IsDefined())
+    icon.LoadResource(icon_ID, file.GetBigIcon());
 }
 
 void

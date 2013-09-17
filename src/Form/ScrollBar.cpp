@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Window.hpp"
-#include "resource.h"
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 

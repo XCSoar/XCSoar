@@ -49,11 +49,12 @@ public:
     :bitmap(_bitmap)
   {
     caption = _caption;
-    rc.left = 0;
-    rc.top = 0;
-    rc.right = 0;
-    rc.bottom = 0;
+    InvalidateLayout();
   };
+
+  void InvalidateLayout() {
+    rc.left = rc.right = 0;
+  }
 };
 
 /**
@@ -70,7 +71,7 @@ protected:
 
   StaticArray<TabButton *, 32> buttons;
 
-  const bool vertical;
+  bool vertical;
 
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
@@ -98,6 +99,8 @@ public:
     return vertical;
   }
 
+  void UpdateLayout(const PixelRect &rc, bool _vertical);
+
   /**
    * Paints one button
    */
@@ -109,7 +112,7 @@ public:
     return buttons.size();
   }
 
-  void Add(const TCHAR *caption, const Bitmap *bmp = NULL);
+  void Add(const TCHAR *caption, const Bitmap *bmp=nullptr);
 
   gcc_pure
   const TCHAR *GetCaption(unsigned i) const {
@@ -133,6 +136,8 @@ private:
   const PixelRect &GetButtonSize(unsigned i) const;
 
 protected:
+  virtual void OnResize(PixelSize new_size) override;
+
   virtual void OnPaint(Canvas &canvas) override;
 
   virtual void OnKillFocus() override;

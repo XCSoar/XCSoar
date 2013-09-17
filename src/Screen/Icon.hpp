@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
+#include "ResourceId.hpp"
 
 class Canvas;
 
@@ -49,7 +50,8 @@ public:
     return bitmap.IsDefined();
   }
 
-  void LoadResource(unsigned id, unsigned big_id = 0, bool center=true);
+  void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
+                    bool center=true);
 
   void Reset() {
     bitmap.Reset();

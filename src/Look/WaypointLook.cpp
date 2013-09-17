@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WaypointLook.hpp"
 #include "Renderer/WaypointRendererSettings.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 WaypointLook::Initialise(const WaypointRendererSettings &settings,

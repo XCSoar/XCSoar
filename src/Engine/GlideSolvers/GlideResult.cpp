@@ -22,8 +22,6 @@
 
 #include "GlideResult.hpp"
 #include "GlideState.hpp"
-#include <math.h>
-#include "Navigation/Aircraft.hpp"
 
 GlideResult::GlideResult(const GlideState &task, const fixed V):
   head_wind(task.head_wind),

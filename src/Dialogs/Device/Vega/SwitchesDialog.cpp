@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
-#include "Blackboard/ScopeGPSListener.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Widget/TwoWidgets.hpp"

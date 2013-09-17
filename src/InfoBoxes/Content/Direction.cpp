@@ -29,9 +29,6 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 
-#include <tchar.h>
-#include <stdio.h>
-
 void
 InfoBoxContentTrack::Update(InfoBoxData &data)
 {

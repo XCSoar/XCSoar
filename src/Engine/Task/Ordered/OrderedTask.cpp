@@ -50,12 +50,12 @@
 
 OrderedTask::OrderedTask(const TaskBehaviour &tb)
   :AbstractTask(TaskType::ORDERED, tb),
-   taskpoint_start(NULL),
-   taskpoint_finish(NULL),
+   taskpoint_start(nullptr),
+   taskpoint_finish(nullptr),
    factory_mode(tb.task_type_default),
-   active_factory(NULL),
+   active_factory(nullptr),
    ordered_settings(tb.ordered_defaults),
-   dijkstra_min(NULL), dijkstra_max(NULL)
+   dijkstra_min(nullptr), dijkstra_max(nullptr)
 {
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
@@ -135,7 +135,7 @@ OrderedTask::UpdateGeometry()
   // projection can now be determined
   task_projection.Update();
 
-  // update OZ's for items that depend on next-point geometry 
+  // update OZ's for items that depend on next-point geometry
   UpdateObservationZones(task_points, task_projection);
   UpdateObservationZones(optional_start_points, task_projection);
 
@@ -162,7 +162,7 @@ OrderedTask::UpdateGeometry()
 
 // TIMES
 
-fixed 
+fixed
 OrderedTask::ScanTotalStartTime()
 {
   if (taskpoint_start)
@@ -171,7 +171,7 @@ OrderedTask::ScanTotalStartTime()
   return fixed(-1);
 }
 
-fixed 
+fixed
 OrderedTask::ScanLegStartTime()
 {
   if (active_task_point)
@@ -206,7 +206,7 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
   }
 
   if (full) {
-    if (dijkstra_min == NULL)
+    if (dijkstra_min == nullptr)
       dijkstra_min = new TaskDijkstraMin();
 
     SearchPoint ac(location, task_projection);
@@ -238,7 +238,7 @@ OrderedTask::ScanDistanceMax()
     taskpoint_start->ScanActive(*task_points[active_task_point]);
   }
 
-  if (dijkstra_max == NULL)
+  if (dijkstra_max == nullptr)
     dijkstra_max = new TaskDijkstraMax();
 
   if (dijkstra_max->DistanceMax(*this)) {
@@ -330,7 +330,7 @@ OrderedTask::GetLastIntermediateAchieved() const
 
 // TRANSITIONS
 
-bool 
+bool
 OrderedTask::CheckTransitions(const AircraftState &state,
                               const AircraftState &state_last)
 {
@@ -390,7 +390,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
           SetActiveTaskPoint(i);
           taskpoint_start->ScanActive(*task_points[active_task_point]);
 
-          if (task_events != NULL)
+          if (task_events != nullptr)
             task_events->ActiveAdvanced(*task_points[i], i);
 
           // on sector exit, must update samples since start sector
@@ -398,7 +398,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
           full_update = true;
         }
       } else if (!last_request_armed && task_advance.NeedToArm()) {
-        if (task_events != NULL)
+        if (task_events != nullptr)
           task_events->RequestArm(*task_points[i]);
       }
     }
@@ -419,7 +419,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     taskpoint_finish->set_fai_finish_height(start_state.altitude - fixed(1000));
   }
 
-  if (task_events != NULL) {
+  if (task_events != nullptr) {
     if (stats.start.task_started && !last_started)
       task_events->TaskStart();
 
@@ -478,24 +478,24 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
   if (nearby && point.TransitionEnter(state, state_last)) {
     transition_enter = true;
 
-    if (task_events != NULL)
+    if (task_events != nullptr)
       task_events->EnterTransition(point);
   }
-  
+
   if (nearby && point.TransitionExit(state, state_last, task_projection)) {
     transition_exit = true;
 
-    if (task_events != NULL)
+    if (task_events != nullptr)
       task_events->ExitTransition(point);
-    
+
     // detect restart
     if (is_start && last_started)
       last_started = false;
   }
-  
-  if (is_start) 
+
+  if (is_start)
     UpdateStartTransition(state, point);
-  
+
   return nearby
     ? point.UpdateSampleNear(state, task_projection)
     : point.UpdateSampleFar(state, task_projection);
@@ -503,7 +503,7 @@ OrderedTask::CheckTransitionPoint(OrderedTaskPoint &point,
 
 // ADDITIONAL FUNCTIONS
 
-bool 
+bool
 OrderedTask::UpdateIdle(const AircraftState &state,
                         const GlidePolar &glide_polar)
 {
@@ -526,11 +526,11 @@ OrderedTask::UpdateIdle(const AircraftState &state,
     }
     retval = true;
   }
-  
+
   return retval;
 }
 
-bool 
+bool
 OrderedTask::UpdateSample(const AircraftState &state,
                           const GlidePolar &glide_polar,
                            const bool full_update)
@@ -548,8 +548,8 @@ OrderedTask::UpdateSample(const AircraftState &state,
 void
 OrderedTask::SetNeighbours(unsigned position)
 {
-  OrderedTaskPoint* prev = NULL;
-  OrderedTaskPoint* next = NULL;
+  OrderedTaskPoint* prev = nullptr;
+  OrderedTaskPoint* next = nullptr;
 
   if (!task_points[position])
     // nothing to do if this is deleted
@@ -583,15 +583,15 @@ AATPoint*
 OrderedTask::GetAATTaskPoint(unsigned TPindex) const
 {
  if (TPindex > task_points.size() - 1) {
-   return NULL;
+   return nullptr;
  }
  if (task_points[TPindex]) {
     if (task_points[TPindex]->GetType() == TaskPointType::AAT)
       return (AATPoint*) task_points[TPindex];
     else
-      return (AATPoint*)NULL;
+      return (AATPoint*)nullptr;
  }
- return NULL;
+ return nullptr;
 }
 
 bool
@@ -599,19 +599,19 @@ OrderedTask::ScanStartFinish()
 {
   /// @todo also check there are not more than one start/finish point
   if (task_points.empty()) {
-    taskpoint_start = NULL;
-    taskpoint_finish = NULL;
+    taskpoint_start = nullptr;
+    taskpoint_finish = nullptr;
     return false;
   }
 
   taskpoint_start = task_points[0]->GetType() == TaskPointType::START
     ? (StartPoint *)task_points[0]
-    : NULL;
+    : nullptr;
 
   taskpoint_finish = task_points.size() > 1 &&
     task_points[task_points.size() - 1]->GetType() == TaskPointType::FINISH
     ? (FinishPoint *)task_points[task_points.size() - 1]
-    : NULL;
+    : nullptr;
 
   return HasStart() && HasFinish();
 }
@@ -665,7 +665,7 @@ OrderedTask::RemoveOptionalStart(const unsigned position)
   return true;
 }
 
-bool 
+bool
 OrderedTask::Append(const OrderedTaskPoint &new_tp)
 {
   if (/* is the new_tp allowed in this context? */
@@ -687,7 +687,7 @@ OrderedTask::Append(const OrderedTaskPoint &new_tp)
   return true;
 }
 
-bool 
+bool
 OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
 {
   optional_start_points.push_back(new_tp.Clone(task_behaviour,
@@ -697,7 +697,7 @@ OrderedTask::AppendOptionalStart(const OrderedTaskPoint &new_tp)
   return true;
 }
 
-bool 
+bool
 OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
 {
   if (position >= task_points.size())
@@ -726,7 +726,7 @@ OrderedTask::Insert(const OrderedTaskPoint &new_tp, const unsigned position)
   return true;
 }
 
-bool 
+bool
 OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
 {
   if (position >= task_points.size())
@@ -755,7 +755,7 @@ OrderedTask::Replace(const OrderedTaskPoint &new_tp, const unsigned position)
 }
 
 
-bool 
+bool
 OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
                                   const unsigned position)
 {
@@ -775,7 +775,7 @@ OrderedTask::ReplaceOptionalStart(const OrderedTaskPoint &new_tp,
 }
 
 
-void 
+void
 OrderedTask::SetActiveTaskPoint(unsigned index)
 {
   if (index >= task_points.size() || index == active_task_point)
@@ -792,10 +792,10 @@ OrderedTask::GetActiveTaskPoint() const
   if (active_task_point < task_points.size())
     return task_points[active_task_point];
 
-  return NULL;
+  return nullptr;
 }
 
-bool 
+bool
 OrderedTask::IsValidTaskPoint(const int index_offset) const
 {
   unsigned index = active_task_point + index_offset;
@@ -917,7 +917,7 @@ OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
   }
 }
 
-bool 
+bool
 OrderedTask::CalcEffectiveMC(const AircraftState &aircraft,
                              const GlidePolar &glide_polar,
                              fixed &val) const
@@ -954,8 +954,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
   return fixed(0);
 }
 
-
-fixed 
+fixed
 OrderedTask::CalcGradient(const AircraftState &state) const
 {
   if (task_points.empty())
@@ -982,7 +981,7 @@ Visit(const OrderedTask::OrderedTaskPointVector &points,
     visitor.Visit(*tp);
 }
 
-void 
+void
 OrderedTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {
   Visit(task_points, visitor);
@@ -997,7 +996,7 @@ ResetPoints(OrderedTask::OrderedTaskPointVector &points)
 
 void
 OrderedTask::Reset()
-{  
+{
   /// @todo also reset data in this class e.g. stats?
   ResetPoints(task_points);
   ResetPoints(optional_start_points);
@@ -1007,14 +1006,15 @@ OrderedTask::Reset()
   stats.start.task_started = false;
   task_advance.Reset();
   SetActiveTaskPoint(0);
+  UpdateStatsGeometry();
 }
 
-bool 
+bool
 OrderedTask::TaskStarted(bool soft) const
 {
   if (taskpoint_start) {
     // have we really started?
-    if (taskpoint_start->HasExited()) 
+    if (taskpoint_start->HasExited())
       return true;
 
     // if soft starts allowed, consider started if we progressed to next tp
@@ -1059,20 +1059,20 @@ OrderedTask::GetPointSearchPoints(unsigned tp) const
   return task_points[tp]->GetSearchPoints();
 }
 
-void 
+void
 OrderedTask::SetPointSearchMin(unsigned tp, const SearchPoint &sol)
 {
   task_points[tp]->SetSearchMin(sol);
 }
 
-void 
-OrderedTask::set_tp_search_achieved(unsigned tp, const SearchPoint &sol) 
+void
+OrderedTask::set_tp_search_achieved(unsigned tp, const SearchPoint &sol)
 {
   if (task_points[tp]->HasSampled())
     SetPointSearchMin(tp, sol);
 }
 
-void 
+void
 OrderedTask::SetPointSearchMax(unsigned tp, const SearchPoint &sol)
 {
   task_points[tp]->SetSearchMax(sol);
@@ -1110,7 +1110,7 @@ OrderedTask::HasTargets() const
   return false;
 }
 
-GeoPoint 
+GeoPoint
 OrderedTask::GetTaskCenter() const
 {
   if (!HasStart() || !task_points[0])
@@ -1119,23 +1119,24 @@ OrderedTask::GetTaskCenter() const
   return task_projection.GetCenter();
 }
 
-fixed 
+fixed
 OrderedTask::GetTaskRadius() const
-{ 
+{
   if (!HasStart() || !task_points[0])
     return fixed(0);
 
   return task_projection.ApproxRadius();
 }
 
-OrderedTask* 
+OrderedTask*
 OrderedTask::Clone(const TaskBehaviour &tb) const
 {
   OrderedTask* new_task = new OrderedTask(tb);
 
+  new_task->SetFactory(factory_mode);
+
   new_task->ordered_settings = ordered_settings;
 
-  new_task->SetFactory(factory_mode);
   for (const OrderedTaskPoint *tp : task_points)
     new_task->Append(*tp);
 
@@ -1179,7 +1180,7 @@ OrderedTask::Commit(const OrderedTask& that)
 {
   bool modified = false;
 
-  // change mode to that one 
+  // change mode to that one
   SetFactory(that.factory_mode);
 
   // copy across behaviour
@@ -1300,7 +1301,7 @@ OrderedTask::PropagateOrderedTaskSettings()
     tp->SetOrderedTaskSettings(ordered_settings);
 }
 
-bool 
+bool
 OrderedTask::IsScored() const
 {
   return GetFactoryConstraints().task_scored;
@@ -1331,8 +1332,8 @@ OrderedTask::RemoveAllPoints()
 
   optional_start_points.clear();
 
-  taskpoint_start = NULL;
-  taskpoint_finish = NULL;
+  taskpoint_start = nullptr;
+  taskpoint_finish = nullptr;
   force_full_update = true;
 }
 
@@ -1346,7 +1347,7 @@ OrderedTask::Clear()
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
 
-FlatBoundingBox 
+FlatBoundingBox
 OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
 {
   if (!TaskSize()) {
@@ -1362,18 +1363,18 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
                     std::min(ll.latitude, lr.latitude));
   FlatGeoPoint fmax(std::max(lr.longitude, ur.longitude),
                     std::max(ul.latitude, ur.latitude));
-  // note +/- 1 to ensure rounding keeps bb valid 
+  // note +/- 1 to ensure rounding keeps bb valid
   fmin.longitude -= 1; fmin.latitude -= 1;
   fmax.longitude += 1; fmax.latitude += 1;
   return FlatBoundingBox (fmin, fmax);
 }
 
-void 
+void
 OrderedTask::RotateOptionalStarts()
 {
   if (!TaskSize())
     return;
-  if (!optional_start_points.size()) 
+  if (!optional_start_points.size())
     return;
 
   SelectOptionalStart(0);

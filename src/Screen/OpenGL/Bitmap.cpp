@@ -38,6 +38,8 @@ Bitmap::EnableInterpolation()
   }
 }
 
+#ifndef ANDROID
+
 bool
 Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
@@ -53,28 +55,6 @@ Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
   return true;
 }
 
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
-#ifndef ANDROID
-
-bool
-Bitmap::Reload()
-{
-  assert(id != 0);
-  assert(texture == NULL);
-
-  /* XXX this is no real implementation; we currently support OpenGL
-     surface reinitialisation only on Android */
-  return Load(id);
-}
-
 void
 Bitmap::Reset()
 {
@@ -86,19 +66,6 @@ Bitmap::Reset()
 }
 
 #endif /* !ANDROID */
-
-void
-Bitmap::SurfaceCreated()
-{
-  Reload();
-}
-
-void
-Bitmap::SurfaceDestroyed()
-{
-  delete texture;
-  texture = NULL;
-}
 
 const PixelSize
 Bitmap::GetSize() const

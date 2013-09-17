@@ -27,8 +27,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#include <stdio.h>
-
 void
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
                       TCHAR *buffer, const bool concise) const

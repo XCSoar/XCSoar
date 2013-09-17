@@ -33,7 +33,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
-#include <cstdio>
 
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,

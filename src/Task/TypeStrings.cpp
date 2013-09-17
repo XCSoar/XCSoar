@@ -24,11 +24,8 @@ Copyright_License {
 #include "TypeStrings.hpp"
 #include "Engine/Task/Factory/TaskFactoryType.hpp"
 #include "Engine/Task/Factory/TaskPointFactoryType.hpp"
-#include "Engine/Task/Points/Type.hpp"
 #include "Language/Language.hpp"
 #include "Util/Macros.hpp"
-
-#include <assert.h>
 
 static const TCHAR *const task_factory_names[] = {
   N_("FAI badges/records"),

@@ -470,6 +470,15 @@ RowFormWidget::Initialise(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
+RowFormWidget::Unprepare()
+{
+  for (auto &i : rows)
+    i.Unprepare();
+
+  WindowWidget::Unprepare();
+}
+
+void
 RowFormWidget::Show(const PixelRect &rc)
 {
   Window &panel = GetWindow();

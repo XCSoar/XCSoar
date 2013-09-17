@@ -23,8 +23,6 @@ Copyright_License {
 */
 
 #include "GlideComputerBlackboard.hpp"
-#include "NMEA/Info.hpp"
-#include "NMEA/Derived.hpp"
 
 /**
  * Resets the GlideComputerBlackboard

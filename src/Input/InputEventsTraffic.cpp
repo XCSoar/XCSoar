@@ -28,12 +28,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Gauge/BigTrafficWidget.hpp"
 #include "FLARM/Glue.hpp"
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Traffic/TrafficDialogs.hpp"
-#include "Language/Language.hpp"
-#include "FLARM/FlarmDetails.hpp"
-#include "FLARM/Glue.hpp"
 
 void
 InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)

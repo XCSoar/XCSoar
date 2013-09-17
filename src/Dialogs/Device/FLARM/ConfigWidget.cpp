@@ -26,7 +26,6 @@ Copyright_License {
 #include "FLARM/Traffic.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Util/Macros.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "OS/Sleep.h"
 

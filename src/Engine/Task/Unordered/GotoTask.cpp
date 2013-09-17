@@ -25,7 +25,6 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Navigation/Aircraft.hpp"
 
 GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)

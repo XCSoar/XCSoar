@@ -26,18 +26,26 @@ Copyright_License {
 #include "LibPNG.hpp"
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
-#include "ResourceLoader.hpp"
+#include "Util/ConstBuffer.hpp"
+
+Bitmap::Bitmap(ConstBuffer<void> _buffer)
+  :
+#ifdef ENABLE_OPENGL
+#ifdef ANDROID
+  id(0),
+#endif
+  texture(NULL), interpolation(false)
+#else
+  buffer(WritableImageBuffer<BitmapPixelTraits>::Empty())
+#endif
+{
+  Load(_buffer);
+}
 
 bool
-Bitmap::Load(unsigned id, Type type)
+Bitmap::Load(ConstBuffer<void> buffer, Type type)
 {
-  assert(IsScreenInitialized());
-
-  ResourceLoader::Data data = ResourceLoader::Load(id);
-  if (data.first == nullptr)
-    return false;
-
-  const UncompressedImage uncompressed = LoadPNG(data.first, data.second);
+  const UncompressedImage uncompressed = LoadPNG(buffer.data, buffer.size);
   return Load(uncompressed, type);
 }
 

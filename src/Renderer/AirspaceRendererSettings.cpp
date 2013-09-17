@@ -24,8 +24,6 @@ Copyright_License {
 #include "AirspaceRendererSettings.hpp"
 #include "Asset.hpp"
 
-#include <algorithm>
-
 void
 AirspaceClassRendererSettings::SetDefaults()
 {

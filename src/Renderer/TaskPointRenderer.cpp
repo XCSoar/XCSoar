@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Engine/Task/Unordered/UnorderedTaskPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/AATIsolineSegment.hpp"
 #include "Look/TaskLook.hpp"

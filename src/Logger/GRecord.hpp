@@ -23,10 +23,9 @@
 #ifndef GRECORD_HPP
 #define GRECORD_HPP
 
-#include "Compiler.h"
+#include "Logger/MD5.hpp"
 
 #include <tchar.h>
-#include "Logger/MD5.hpp"
 
 #define XCSOAR_IGC_CODE "XCS"
 

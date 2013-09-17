@@ -22,6 +22,9 @@
 */
 
 #include "BigTrafficWidget.hpp"
+#include "Dialogs/Traffic/TrafficDialogs.hpp"
+#include "Math/Screen.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/SymbolButton.hpp"
 #include "UIState.hpp"

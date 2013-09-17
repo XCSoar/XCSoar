@@ -26,8 +26,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "UIState.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
-#include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"

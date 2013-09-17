@@ -26,8 +26,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
 
-#include <stdio.h>
-
 static constexpr double CONTROLHEIGHTRATIO = 7.4;
 
 /**

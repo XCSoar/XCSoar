@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "NOAALook.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 NOAALook::Initialise()

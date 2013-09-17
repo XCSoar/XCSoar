@@ -65,6 +65,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/ReplayDialog.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
+	$(SRC)/Dialogs/SimulatorPromptWindow.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	\
 	$(SRC)/Dialogs/dlgStatus.cpp \
@@ -507,6 +508,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
+	$(SRC)/FlightInfo.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
 	$(SRC)/Renderer/BarographRenderer.cpp \
 	$(SRC)/Renderer/ClimbChartRenderer.cpp \
@@ -609,7 +611,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
-	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/AutoFont.cpp \
@@ -766,13 +767,11 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
-XCSOAR_LDADD = \
-	$(RESOURCE_BINARY)
-
 XCSOAR_DEPENDS = GETTEXT PROFILE \
 	TERRAIN \
 	WIDGET FORM DATA_FIELD \
 	AUDIO SCREEN EVENT \
+	RESOURCE DATA \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB ZZIP \

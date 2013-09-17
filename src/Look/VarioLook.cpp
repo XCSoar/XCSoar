@@ -24,7 +24,7 @@ Copyright_License {
 #include "VarioLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 VarioLook::Initialise(bool _inverse, bool _colors,

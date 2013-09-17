@@ -22,7 +22,6 @@ Copyright_License {
 */
 #include "TraceHistory.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
 
 void
 TraceHistory::append(const MoreData &basic)

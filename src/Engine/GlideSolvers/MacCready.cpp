@@ -25,7 +25,6 @@
 #include "GlideState.hpp"
 #include "GlidePolar.hpp"
 #include "GlideResult.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Math/ZeroFinder.hpp"
 #include "Util/Tolerances.hpp"
 

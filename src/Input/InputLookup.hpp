@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INPUT_LOOKUP_HPP
 #define XCSOAR_INPUT_LOOKUP_HPP
 
-#include "Math/fixed.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>

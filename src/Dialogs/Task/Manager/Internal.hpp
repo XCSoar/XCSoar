@@ -31,12 +31,15 @@ class WndButton;
 class TabBarControl;
 class OrderedTask;
 
-class TaskManagerDialog : public WndForm {
+class TaskManagerDialog final : public WndForm {
   PixelRect task_view_position;
 
   TaskMapWindow *task_view;
   WndButton *target_button;
   TabBarControl *tab_bar;
+
+  unsigned TurnpointTab;
+  unsigned PropertiesTab;
 
   OrderedTask *task;
 
@@ -82,7 +85,11 @@ public:
 
   void Revert();
 
+  /* virtual methods from class Window */
+  virtual void OnResize(PixelSize new_size) override;
+
   /* virtual methods from class WndForm */
+  virtual void ReinitialiseLayout(const PixelRect &parent_rc) override;
   virtual bool OnAnyKeyDown(unsigned key_code) override;
 
   /* virtual methods from class ActionListener */

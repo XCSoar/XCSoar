@@ -23,13 +23,10 @@ Copyright_License {
 
 #include "WaypointGlue.hpp"
 #include "Profile/Profile.hpp"
-#include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WaypointReader.hpp"
 #include "Language/Language.hpp"
-#include "NMEA/Aircraft.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
 #include "OS/PathName.hpp"
 #include "Waypoint/WaypointWriter.hpp"

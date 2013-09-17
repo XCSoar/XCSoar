@@ -27,8 +27,6 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/Clamp.hpp"
 
-#include <stdlib.h>
-#include <math.h>
 #include <assert.h>
 
 static constexpr unsigned ScaleList[] = {

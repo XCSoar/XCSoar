@@ -23,7 +23,6 @@
 #include "Logger/GRecord.hpp"
 #include "Logger/MD5.hpp"
 #include "IGC/IGCString.hpp"
-#include "IO/FileSource.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "Util/Macros.hpp"

@@ -25,9 +25,7 @@ Copyright_License {
 #include "Form/SubForm.hpp"
 #include "Form/Edit.hpp"
 #include "DataField/Base.hpp"
-#include "DataField/Boolean.hpp"
 #include "DataField/Float.hpp"
-#include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
 
 #include <assert.h>

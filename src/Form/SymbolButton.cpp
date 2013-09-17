@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Renderer/SymbolRenderer.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 #include "Asset.hpp"
 
 void

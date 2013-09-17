@@ -24,16 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_WAY_POINT_GLUE_HPP
 #define XCSOAR_WAY_POINT_GLUE_HPP
 
-#include <tchar.h>
-
 struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
-
-class WaypointReaderBase;
 class DeviceBlackboard;
 
 /**

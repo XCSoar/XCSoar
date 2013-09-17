@@ -30,7 +30,6 @@ Copyright_License {
 #include "Port/State.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
-#include "Util/tstring.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"

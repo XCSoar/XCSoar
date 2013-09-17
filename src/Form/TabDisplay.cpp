@@ -57,6 +57,13 @@ TabDisplay::~TabDisplay()
     delete i;
 }
 
+void
+TabDisplay::UpdateLayout(const PixelRect &rc, bool _vertical)
+{
+  vertical = _vertical;
+  Move(rc);
+}
+
 const PixelRect &
 TabDisplay::GetButtonSize(unsigned i) const
 {
@@ -138,7 +145,7 @@ TabDisplay::PaintButton(Canvas &canvas, unsigned CaptionStyle,
 
   canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
 
-  if (bmp != NULL) {
+  if (bmp != nullptr) {
     const PixelSize bitmap_size = bmp->GetSize();
     const int offsetx = (rc.right - rc.left - bitmap_size.cx / 2) / 2;
     const int offsety = (rc.bottom - rc.top - bitmap_size.cy) / 2;
@@ -186,6 +193,15 @@ TabDisplay::GetButtonIndexAt(RasterPoint p) const
   }
 
   return -1;
+}
+
+void
+TabDisplay::OnResize(PixelSize new_size)
+{
+  PaintWindow::OnResize(new_size);
+
+  for (auto button : buttons)
+    button->InvalidateLayout();
 }
 
 void

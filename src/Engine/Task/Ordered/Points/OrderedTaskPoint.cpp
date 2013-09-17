@@ -32,7 +32,6 @@
 #include "Geo/Math.hpp"
 
 #include <assert.h>
-#include <math.h>
 
 OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
                                    ObservationZonePoint *_oz,

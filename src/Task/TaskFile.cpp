@@ -29,7 +29,6 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 
-#include <assert.h>
 #include <stdlib.h>
 #include <memory>
 

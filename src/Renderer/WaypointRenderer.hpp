@@ -65,7 +65,7 @@ public:
 
   void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
-              const struct WaypointRendererSettings &settings,
+              const WaypointRendererSettings &settings,
               const PolarSettings &polar_settings,
               const TaskBehaviour &task_behaviour,
               const MoreData &basic, const DerivedInfo &calculated,

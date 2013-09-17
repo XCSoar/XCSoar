@@ -31,7 +31,6 @@
 #include <stdint.h>
 
 struct GlideState;
-struct AircraftState;
 
 /**
  * Class used to represent a solution to a glide task

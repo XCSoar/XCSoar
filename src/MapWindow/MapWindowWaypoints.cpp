@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 
 void
 MapWindow::DrawWaypoints(Canvas &canvas)

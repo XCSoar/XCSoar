@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ACCELERATION_HPP
 #define XCSOAR_ACCELERATION_HPP
 
-#include "Math/Angle.hpp"
+#include "Math/fixed.hpp"
 
 /**
  * State of acceleration of aircraft

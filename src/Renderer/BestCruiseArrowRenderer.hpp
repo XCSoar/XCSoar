@@ -28,7 +28,6 @@ struct RasterPoint;
 class Canvas;
 struct TaskLook;
 class Angle;
-struct NMEAInfo;
 struct DerivedInfo;
 
 namespace BestCruiseArrowRenderer

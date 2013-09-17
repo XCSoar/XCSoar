@@ -29,8 +29,6 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_INTERNAL_HPP
 #define XCSOAR_DEVICE_INTERNAL_HPP
 
-#include <tchar.h>
-
 class Port;
 class OperationEnvironment;
 

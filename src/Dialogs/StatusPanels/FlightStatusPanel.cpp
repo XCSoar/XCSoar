@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "FlightStatusPanel.hpp"
-#include "Util/Macros.hpp"
 #include "Util/StaticString.hpp"
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"

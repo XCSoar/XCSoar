@@ -28,7 +28,6 @@ Copyright_License {
 
 class ComboList;
 class DataField;
-class WndProperty;
 
 int
 ComboPicker(const TCHAR *caption,

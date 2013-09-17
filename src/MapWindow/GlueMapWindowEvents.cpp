@@ -22,15 +22,11 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-#include "Message.hpp"
 #include "Input/InputEvents.hpp"
-#include "Screen/Key.h"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "Protection.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
 #include "Interface.hpp"
@@ -41,8 +37,6 @@ Copyright_License {
 #ifdef ENABLE_SDL
 #include <SDL_keyboard.h>
 #endif
-
-#include <algorithm>
 
 void
 GlueMapWindow::OnDestroy()
