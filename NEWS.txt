@@ -7,6 +7,8 @@ XCSoar TE
   - new logo
   - traditional Flarm radar dialog
     (the "new" Flarm radar page is too cluttered)
+  - traditional/opaque Flarm radar gauge
+    (the "new" Flarm radar gauge is barely readable over the infoboxes)
   - menu label improvements
     (e.g. Raw logger -> NMEA logger)
   - removed "Auto bugs" feature
