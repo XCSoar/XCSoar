@@ -108,6 +108,9 @@ private:
   gcc_pure
   NetworkInfo *FindByBSSID(const char *bssid);
 
+  gcc_pure
+  NetworkInfo *FindVisibleBySSID(const char *ssid);
+
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
   void Merge(const WifiConfiguredNetworkInfo &c);
@@ -262,6 +265,19 @@ WifiListWidget::FindByBSSID(const char *bssid)
   return f;
 }
 
+WifiListWidget::NetworkInfo *
+WifiListWidget::FindVisibleBySSID(const char *ssid)
+{
+  auto f = std::find_if(networks.begin(), networks.end(),
+                        [ssid](const NetworkInfo &info) {
+                          return info.signal_level >= 0 && info.ssid == ssid;
+                        });
+  if (f == networks.end())
+    return nullptr;
+
+  return f;
+}
+
 inline void
 WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
 {
@@ -297,16 +313,10 @@ inline void
 WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
 {
   if (c.bssid == "any") {
-    bool found = false;
-
-    for (auto &i : networks) {
-      if (i.signal_level >= 0 && i.ssid == c.ssid) {
-        found = true;
-        i.id = c.id;
-      }
-    }
-
-    if (!found) {
+    auto found = FindVisibleBySSID(c.ssid);
+    if (found != nullptr) {
+      found->id = c.id;
+    } else {
       auto &info = networks.append();
       info.bssid = c.bssid;
       info.ssid = c.ssid;
