@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-09-12 19:28+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2013-09-17 21:00+0000\n"
+"Last-Translator: Fifou06 <fifou06@hotmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-12 22:04+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2013-09-18 19:12+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -5032,9 +5032,8 @@ msgid "New Teammate"
 msgstr "Nouvel équipier"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:89
-#, fuzzy
 msgid "Set code"
-msgstr "Définir code"
+msgstr ""
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:90
 msgid "Set WP"
@@ -9298,7 +9297,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "Accéléromètre"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9357,7 +9356,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:32
 #, no-c-format
 msgid "VNE"
-msgstr ""
+msgstr "VNE (vitesse à ne jamais dépasser)"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
@@ -10039,9 +10038,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Fly"
-#~ msgstr "Vol"
-
 #~ msgid "Height GPS"
 #~ msgstr "Altitude GPS"
 
@@ -10071,6 +10067,9 @@ msgstr ""
 
 #~ msgid "A+"
 #~ msgstr "A+"
+
+#~ msgid "Fly"
+#~ msgstr "Vol"
 
 #~ msgid "V rough air"
 #~ msgstr "V air Agité"
@@ -10370,6 +10369,9 @@ msgstr ""
 
 #~ msgid "Max. ballast"
 #~ msgstr "Ballast max."
+
+#~ msgid "Set Code"
+#~ msgstr "Définir code"
 
 #~ msgid "Dry mass"
 #~ msgstr "Masse  à vide"
