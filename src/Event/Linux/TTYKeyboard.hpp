@@ -38,10 +38,28 @@ class TTYKeyboard final : private FileEventHandler {
   EventQueue &queue;
   IOLoop &io_loop;
 
+  /**
+   * The current state of the multi-byte key code parser.
+   */
   enum class InputState : uint8_t {
-    NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
+    /** Not currently parsing a multi-byte key code. */
+    NONE,
+
+    /** The "ESC" ASCII code was seen. */
+    ESCAPE,
+
+    /** "ESC" plus a square bracket was seen. */
+    ESCAPE_BRACKET,
+
+    /**
+     * "ESC" plus one or more digits was seen.  See #input_number.
+     */
+    ESCAPE_NUMBER,
   } input_state;
 
+  /**
+   * The number currently being parsed by #ESCAPE_NUMBER.
+   */
   unsigned input_number;
 
 public:
