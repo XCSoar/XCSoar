@@ -113,6 +113,7 @@ private:
 
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
+  void Append(const WifiConfiguredNetworkInfo &src);
   void Merge(const WifiConfiguredNetworkInfo &c);
   void MergeList(const WifiConfiguredNetworkInfo *p, unsigned n);
   void UpdateConfigured();
@@ -309,6 +310,16 @@ WifiListWidget::UpdateScanResults()
   delete[] buffer;
 }
 
+void
+WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
+{
+  auto &dest = networks.append();
+  dest.bssid = src.bssid;
+  dest.ssid = src.ssid;
+  dest.id = src.id;
+  dest.signal_level = -1;
+}
+
 inline void
 WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
 {
@@ -318,24 +329,16 @@ WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
       found->id = c.id;
       found->old = false;
     } else {
-      auto &info = networks.append();
-      info.bssid = c.bssid;
-      info.ssid = c.ssid;
-      info.id = c.id;
-      info.signal_level = -1;
+      Append(c);
     }
   } else {
     auto info = FindByBSSID(c.bssid);
     if (info != nullptr) {
+      info->id = c.id;
       info->old = false;
     } else {
-      info = &networks.append();
-      info->bssid = c.bssid;
-      info->ssid = c.ssid;
-      info->signal_level = -1;
+      Append(c);
     }
-
-    info->id = c.id;
   }
 }
 
