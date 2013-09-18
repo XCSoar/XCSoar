@@ -55,6 +55,9 @@ class TTYKeyboard final : private FileEventHandler {
      * "ESC" plus one or more digits was seen.  See #input_number.
      */
     ESCAPE_NUMBER,
+
+    /** "ESC" plus two square brackets were seen. */
+    ESCAPE_BRACKET2,
   } input_state;
 
   /**

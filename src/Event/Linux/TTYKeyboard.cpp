@@ -119,12 +119,44 @@ TTYKeyboard::HandleInputByte(char ch)
       queue.PushKeyPress(KEY_LEFT);
       break;
 
+    case '[':
+      input_state = InputState::ESCAPE_BRACKET2;
+      break;
+
     default:
       if (ch >= '0' && ch <= '9') {
         input_state = InputState::ESCAPE_NUMBER;
         input_number = ch - '0';
       } else
         input_state = InputState::NONE;
+    }
+
+    return;
+
+  case InputState::ESCAPE_BRACKET2:
+    switch (ch) {
+    case 'A':
+      queue.PushKeyPress(KEY_F1);
+      break;
+
+    case 'B':
+      queue.PushKeyPress(KEY_F2);
+      break;
+
+    case 'C':
+      queue.PushKeyPress(KEY_F3);
+      break;
+
+    case 'D':
+      queue.PushKeyPress(KEY_F4);
+      break;
+
+    case 'E':
+      queue.PushKeyPress(KEY_F5);
+      break;
+
+    default:
+      input_state = InputState::NONE;
     }
 
     return;
