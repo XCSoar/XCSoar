@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 bool
 WPASupplicant::Connect(const char *path)
@@ -72,7 +73,7 @@ WPASupplicant::ExpectResponse(const char *expected)
   char buffer[4096];
   assert(length <= sizeof(buffer));
 
-  return fd.Read(buffer, sizeof(buffer)) == ssize_t(length) &&
+  return ReadTimeout(buffer, sizeof(buffer)) == ssize_t(length) &&
     memcmp(buffer, expected, length) == 0;
 }
 
@@ -121,7 +122,7 @@ WPASupplicant::Status(WifiStatus &status)
     return false;
 
   char buffer[4096];
-  ssize_t nbytes = fd.Read(buffer, sizeof(buffer) - 1);
+  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
   if (nbytes <= 0)
     return false;
 
@@ -219,7 +220,7 @@ WPASupplicant::ScanResults(WifiVisibleNetwork *dest, unsigned max)
     return -1;
 
   char buffer[4096];
-  ssize_t nbytes = fd.Read(buffer, sizeof(buffer) - 1);
+  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
   if (nbytes <= 5)
     return -1;
 
@@ -235,7 +236,7 @@ WPASupplicant::AddNetwork()
     return -1;
 
   char buffer[4096];
-  ssize_t nbytes = fd.Read(buffer, sizeof(buffer));
+  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer));
   if (nbytes < 2 || buffer[nbytes - 1] != '\n')
     return -1;
 
@@ -359,11 +360,24 @@ WPASupplicant::ListNetworks(WifiConfiguredNetworkInfo *dest, unsigned max)
     return -1;
 
   char buffer[4096];
-  ssize_t nbytes = fd.Read(buffer, sizeof(buffer) - 1);
+  ssize_t nbytes = ReadTimeout(buffer, sizeof(buffer) - 1);
   if (nbytes <= 5)
     return -1;
 
   buffer[nbytes] = 0;
 
   return ParseListResults(dest, max, buffer);
+}
+
+ssize_t
+WPASupplicant::ReadTimeout(void *buffer, size_t length, int timeout_ms)
+{
+  /* TODO: this is a kludge, because SocketDescriptor::Read()
+     hard-codes MSG_DONTWAIT; we would be better off moving all of
+     this into an IOLoop/IOThread */
+
+  ssize_t nbytes = fd.Read(buffer, length);
+  if (nbytes < 0 && errno == EAGAIN && fd.WaitReadable(timeout_ms) > 0)
+    nbytes = fd.Read(buffer, length);
+  return nbytes;
 }
