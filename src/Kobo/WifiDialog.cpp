@@ -105,7 +105,9 @@ private:
    */
   bool EnsureConnected();
 
+  gcc_pure
   NetworkInfo *FindByBSSID(const char *bssid);
+
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
   void Merge(const WifiConfiguredNetworkInfo &c);
