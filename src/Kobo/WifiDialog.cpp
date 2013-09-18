@@ -106,6 +106,9 @@ private:
   bool EnsureConnected();
 
   gcc_pure
+  NetworkInfo *FindByID(int id);
+
+  gcc_pure
   NetworkInfo *FindByBSSID(const char *bssid);
 
   gcc_pure
@@ -256,6 +259,19 @@ WifiListWidget::EnsureConnected()
     wpa_supplicant.Connect("/var/run/wpa_supplicant/eth0");
 }
 
+inline WifiListWidget::NetworkInfo *
+WifiListWidget::FindByID(int id)
+{
+  auto f = std::find_if(networks.begin(), networks.end(),
+                        [id](const NetworkInfo &info) {
+                          return info.id == id;
+                        });
+  if (f == networks.end())
+    return nullptr;
+
+  return f;
+}
+
 WifiListWidget::NetworkInfo *
 WifiListWidget::FindByBSSID(const char *bssid)
 {
@@ -315,6 +331,10 @@ WifiListWidget::UpdateScanResults()
 inline WifiListWidget::NetworkInfo *
 WifiListWidget::Find(const WifiConfiguredNetworkInfo &c)
 {
+  auto found = FindByID(c.id);
+  if (found != nullptr)
+    return found;
+
   return c.bssid == "any"
     ? FindVisibleBySSID(c.ssid)
     : FindByBSSID(c.bssid);
