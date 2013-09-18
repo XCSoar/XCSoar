@@ -123,7 +123,8 @@ TTYKeyboard::HandleInputByte(char ch)
       if (ch >= '0' && ch <= '9') {
         input_state = InputState::ESCAPE_NUMBER;
         input_number = ch - '0';
-      }
+      } else
+        input_state = InputState::NONE;
     }
 
     return;
