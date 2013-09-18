@@ -47,7 +47,7 @@ class WifiListWidget final
     int signal_level;
     int id;
 
-    bool old;
+    bool old_visible, old_configured;
   };
 
   WndButton *connect_button;
@@ -297,7 +297,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
 
     info->ssid = found.ssid;
     info->signal_level = found.signal_level;
-    info->old = false;
+    info->old_visible = false;
   }
 }
 
@@ -328,7 +328,7 @@ WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
   dest.ssid = src.ssid;
   dest.id = src.id;
   dest.signal_level = -1;
-  dest.old = false;
+  dest.old_configured = false;
 }
 
 inline void
@@ -337,7 +337,7 @@ WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
   auto found = Find(c);
   if (found != nullptr) {
     found->id = c.id;
-    found->old = false;
+    found->old_configured = false;
   } else
     Append(c);
 }
@@ -367,10 +367,18 @@ WifiListWidget::SweepList()
   unsigned cursor = GetList().GetCursorIndex();
 
   for (int i = networks.size() - 1; i >= 0; --i) {
-    if (networks[i].old) {
+    NetworkInfo &info = networks[i];
+
+    if (info.old_visible && info.old_configured) {
       networks.remove(i);
       if (cursor > unsigned(i))
         --cursor;
+    } else {
+      if (info.old_visible)
+        info.signal_level = -1;
+
+      if (info.old_configured)
+        info.id = -1;
     }
   }
 
@@ -385,11 +393,8 @@ WifiListWidget::UpdateList()
   if (EnsureConnected()) {
     wpa_supplicant.Status(status);
 
-    for (auto &i : networks) {
-      i.signal_level = -1;
-      i.id = -1;
-      i.old = true;
-    }
+    for (auto &i : networks)
+      i.old_visible = i.old_configured = true;
 
     UpdateScanResults();
     UpdateConfigured();
