@@ -111,6 +111,9 @@ private:
   gcc_pure
   NetworkInfo *FindVisibleBySSID(const char *ssid);
 
+  gcc_pure
+  NetworkInfo *Find(const WifiConfiguredNetworkInfo &c);
+
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
   void Append(const WifiConfiguredNetworkInfo &src);
@@ -310,7 +313,15 @@ WifiListWidget::UpdateScanResults()
   delete[] buffer;
 }
 
-void
+inline WifiListWidget::NetworkInfo *
+WifiListWidget::Find(const WifiConfiguredNetworkInfo &c)
+{
+  return c.bssid == "any"
+    ? FindVisibleBySSID(c.ssid)
+    : FindByBSSID(c.bssid);
+}
+
+inline void
 WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
 {
   auto &dest = networks.append();
@@ -323,23 +334,12 @@ WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
 inline void
 WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
 {
-  if (c.bssid == "any") {
-    auto found = FindVisibleBySSID(c.ssid);
-    if (found != nullptr) {
-      found->id = c.id;
-      found->old = false;
-    } else {
-      Append(c);
-    }
-  } else {
-    auto info = FindByBSSID(c.bssid);
-    if (info != nullptr) {
-      info->id = c.id;
-      info->old = false;
-    } else {
-      Append(c);
-    }
-  }
+  auto found = Find(c);
+  if (found != nullptr) {
+    found->id = c.id;
+    found->old = false;
+  } else
+    Append(c);
 }
 
 inline void
