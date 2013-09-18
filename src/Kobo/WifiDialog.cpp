@@ -316,6 +316,7 @@ WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
     auto found = FindVisibleBySSID(c.ssid);
     if (found != nullptr) {
       found->id = c.id;
+      found->old = false;
     } else {
       auto &info = networks.append();
       info.bssid = c.bssid;
