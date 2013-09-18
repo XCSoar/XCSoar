@@ -289,9 +289,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
     const auto &found = p[i];
 
     auto info = FindByBSSID(found.bssid);
-    if (info != nullptr) {
-      info->old = false;
-    } else {
+    if (info == nullptr) {
       info = &networks.append();
       info->bssid = found.bssid;
       info->id = -1;
@@ -299,6 +297,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
 
     info->ssid = found.ssid;
     info->signal_level = found.signal_level;
+    info->old = false;
   }
 }
 
@@ -329,6 +328,7 @@ WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
   dest.ssid = src.ssid;
   dest.id = src.id;
   dest.signal_level = -1;
+  dest.old = false;
 }
 
 inline void
