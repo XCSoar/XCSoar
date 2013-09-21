@@ -474,7 +474,7 @@ ifeq ($(HAVE_WIN32),y)
     TARGET_ARCH += -mwin32
   endif
 
-  WINDRESFLAGS := -I$(OUT)/include $(TARGET_CPPFLAGS)
+  WINDRESFLAGS := -I$(OUT)/include -I$(SRC) $(TARGET_CPPFLAGS)
 endif
 
 ifeq ($(TARGET),PC)
