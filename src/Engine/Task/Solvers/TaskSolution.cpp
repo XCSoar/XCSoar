@@ -30,7 +30,7 @@
 
 #include <algorithm>
 
-GlideResult 
+GlideResult
 TaskSolution::GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,
                                      const fixed target_elevation,
@@ -61,7 +61,7 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
   return MacCready::Solve(settings, polar, gs);
 }
 
-GlideResult 
+GlideResult
 TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const AircraftState &ac,
                                    const GlideSettings &settings,
@@ -76,7 +76,7 @@ TaskSolution::GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
   return MacCready::Solve(settings, polar, gs);
 }
 
-GlideResult 
+GlideResult
 TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const AircraftState &ac,
                                      const GlideSettings &settings,
@@ -91,7 +91,7 @@ TaskSolution::GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
   return MacCready::Solve(settings, polar, gs);
 }
 
-GlideResult 
+GlideResult
 TaskSolution::GlideSolutionSink(const TaskPoint &taskpoint,
                                 const AircraftState &ac,
                                 const GlideSettings &settings,
