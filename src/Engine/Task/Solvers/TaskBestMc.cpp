@@ -28,7 +28,7 @@
 
 // @todo only engage this class if above final glide at mc=0
 
-TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
+TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp,
@@ -39,7 +39,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
 {
 }
 
-TaskBestMc::TaskBestMc(TaskPoint* tp,
+TaskBestMc::TaskBestMc(TaskPoint *tp,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &_gp)
   :ZeroFinder(fixed(0.1), fixed(10.0), fixed(TOLERANCE_BEST_MC)),
@@ -80,7 +80,7 @@ TaskBestMc::search(const fixed mc)
 }
 
 bool
-TaskBestMc::search(const fixed mc, fixed& result)
+TaskBestMc::search(const fixed mc, fixed &result)
 {
   // only search if mc zero is valid
   f(fixed(0));

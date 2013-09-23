@@ -29,9 +29,9 @@
 #include <vector>
 
 /**
- *  Class to solve for MacCready value, being the highest MC value to produce a
- *  pure glide solution for the remainder of the task.
- *  
+ * Class to solve for MacCready value, being the highest MC value to produce a
+ * pure glide solution for the remainder of the task.
+ *
  * \todo
  * - f() fails if Mc too low for wind, need to account for failed solution
  */
@@ -51,11 +51,12 @@ public:
    * @param _gp Glide polar to copy for calculations
    * @param _mc_min Minimum legal value of MacCready (m/s) in search
    */
-  TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
+  TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp,
              const fixed _mc_min=fixed(0));
+
   /**
    * Constructor for single task points (non-ordered ones)
    *
@@ -63,7 +64,7 @@ public:
    * @param _aircraft Current aircraft state
    * @param _gp Glide polar to copy for calculations
    */
-  TaskBestMc(TaskPoint* tp,
+  TaskBestMc(TaskPoint *tp,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp);
 
@@ -88,7 +89,7 @@ public:
    */
   virtual fixed search(const fixed mc);
 
-  virtual bool search(const fixed mc, fixed& result);
+  virtual bool search(const fixed mc, fixed &result);
 };
 
 #endif
