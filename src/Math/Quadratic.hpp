@@ -44,7 +44,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _b, const fixed _c)
-    :da(fixed(2)), b(_b), denom(sqr(b) - fixed(4) * _c)
+    :da(2), b(_b), denom(sqr(b) - Quadruple(_c))
   {
   }
 

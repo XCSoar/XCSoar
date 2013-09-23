@@ -180,11 +180,11 @@ TopographyFile::LoadAll()
 unsigned
 TopographyFile::GetSkipSteps(fixed map_scale) const
 {
-  if (map_scale * 4 > scale_threshold * 3)
+  if (Quadruple(map_scale) > scale_threshold * 3)
     return 4;
-  if (map_scale * 2 > scale_threshold)
+  if (Double(map_scale) > scale_threshold)
     return 3;
-  if (map_scale * 4 > scale_threshold)
+  if (Quadruple(map_scale) > scale_threshold)
     return 2;
   return 1;
 }
@@ -194,11 +194,11 @@ TopographyFile::GetSkipSteps(fixed map_scale) const
 unsigned
 TopographyFile::GetThinningLevel(fixed map_scale) const
 {
-  if (map_scale * 2 > scale_threshold)
+  if (Double(map_scale) > scale_threshold)
     return 3;
   if (map_scale * 3 > scale_threshold)
     return 2;
-  if (map_scale * 4 > scale_threshold)
+  if (Quadruple(map_scale) > scale_threshold)
     return 1;
 
   return 0;
@@ -209,11 +209,11 @@ TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return (unsigned)(fixed(4) * scale_threshold / 30);
+      return (unsigned)(Quadruple(scale_threshold) / 30);
     case 2:
-      return (unsigned)(fixed(6) * scale_threshold / 30);
+      return (unsigned)(6 * scale_threshold / 30);
     case 3:
-      return (unsigned)(fixed(9) * scale_threshold / 30);
+      return (unsigned)(9 * scale_threshold / 30);
   }
   return 1;
 }
