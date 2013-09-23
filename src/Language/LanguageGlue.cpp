@@ -343,6 +343,8 @@ ReadResourceLanguageFile(const TCHAR *resource)
 
 #else /* !HAVE_BUILTIN_LANGUAGES */
 
+#ifndef HAVE_NATIVE_GETTEXT
+
 static inline const char *
 DetectLanguage()
 {
@@ -354,6 +356,8 @@ ReadBuiltinLanguage(char dummy)
 {
   return false;
 }
+
+#endif /* HAVE_NATIVE_GETTEXT */
 
 static bool
 ReadResourceLanguageFile(const TCHAR *resource)
