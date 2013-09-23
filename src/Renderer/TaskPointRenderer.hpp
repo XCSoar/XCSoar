@@ -63,7 +63,6 @@ private:
   unsigned active_index;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
-  bool location_available;
   bool task_finished;
   bool mode_optional_start;
 
@@ -75,6 +74,10 @@ public:
     LAYER_SYMBOLS,
   };
 
+  /**
+   * @param aircraft_location the aircraft's location or
+   * GeoPoint::Invalid()
+   */
   TaskPointRenderer(Canvas &_canvas,
                     const WindowProjection &_projection,
                     const TaskLook &task_look,
@@ -82,7 +85,7 @@ public:
                     OZRenderer &_ozv,
                     bool _draw_bearing,
                     TargetVisibility _target_visibility,
-                    bool location_available, const GeoPoint &_location);
+                    const GeoPoint &aircraft_location);
 
   void ResetIndex() {
     index = 0;

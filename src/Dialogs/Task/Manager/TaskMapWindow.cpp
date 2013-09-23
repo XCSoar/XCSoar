@@ -48,7 +48,7 @@ TaskMapWindow::OnPaintBuffer(Canvas &canvas)
 
   const NMEAInfo &basic = CommonInterface::Basic();
   PaintTask(canvas, GetClientRect(), *task,
-            basic.location_available, basic.location,
+            basic.location_available ? basic.location : GeoPoint::Invalid(),
             CommonInterface::GetMapSettings(),
             look.task, look.airspace,
             terrain, &airspace_database,

@@ -234,7 +234,8 @@ OnTaskPaint(Canvas &canvas, const PixelRect &rc)
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
   PaintTaskPoint(canvas, rc, *ordered_task, tp,
-                 basic.location_available, basic.location,
+                 basic.location_available
+                 ? basic.location : GeoPoint::Invalid(),
                  CommonInterface::GetMapSettings(),
                  look.task, look.airspace,
                  terrain, &airspace_database);

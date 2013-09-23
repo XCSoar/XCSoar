@@ -279,7 +279,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     TaskPointRenderer tpv(canvas, proj, map_look.task,
                           task.GetTaskProjection(),
                           ozv, false, TaskPointRenderer::ALL,
-                          nmea_info.location_available, nmea_info.location);
+                          nmea_info.location_available
+                          ? nmea_info.location : GeoPoint::Invalid());
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
     dv.Draw(task);
   }

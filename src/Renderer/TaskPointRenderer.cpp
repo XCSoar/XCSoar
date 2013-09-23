@@ -38,7 +38,6 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
                                      OZRenderer &_ozv,
                                      bool _draw_bearing,
                                      TargetVisibility _target_visibility,
-                                     bool _location_available,
                                      const GeoPoint &_location)
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
@@ -51,7 +50,6 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
    ozv(_ozv),
    active_index(0),
    location(_location),
-   location_available(_location_available),
    task_finished(false),
    mode_optional_start(false)
 {
@@ -116,7 +114,7 @@ TaskPointRenderer::IsTargetVisible(const TaskPoint &tp) const
 void
 TaskPointRenderer::DrawBearing(const TaskPoint &tp)
 {
-  if (!location_available || !draw_bearing || !PointCurrent())
+  if (!location.IsValid() || !draw_bearing || !PointCurrent())
     return;
 
   canvas.Select(task_look.bearing_pen);
@@ -221,7 +219,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
 
   switch (tp.GetType()) {
   case TaskPointType::UNORDERED:
-    if (layer == LAYER_LEG && location_available)
+    if (layer == LAYER_LEG && location.IsValid())
       DrawTaskLine(location, tp.GetLocationRemaining());
 
     if (layer == LAYER_SYMBOLS)
