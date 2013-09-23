@@ -35,7 +35,7 @@
  * \todo
  * - f() fails if Mc too low for wind, need to account for failed solution
  */
-class TaskBestMc final : public ZeroFinder
+class TaskBestMc final : ZeroFinder
 {
   TaskMacCreadyRemaining tm;
   GlideResult res;
@@ -68,8 +68,6 @@ public:
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp);
 
-  virtual fixed f(const fixed mc);
-
   /**
    * Test validity of a solution given search parameter
    *
@@ -90,6 +88,10 @@ public:
   virtual fixed search(const fixed mc);
 
   virtual bool search(const fixed mc, fixed &result);
+
+private:
+  /* virtual methods from class ZeroFinder */
+  virtual fixed f(const fixed mc) override;
 };
 
 #endif
