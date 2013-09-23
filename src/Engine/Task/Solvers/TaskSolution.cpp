@@ -55,9 +55,7 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
                                      const GlidePolar &polar,
                                      const fixed min_h)
 {
-  GlideState gs(taskpoint.GetVectorRemaining(ac.location),
-                std::max(min_h, taskpoint.GetElevation()),
-                ac.altitude, ac.wind);
+  const GlideState gs = GlideState::Remaining(taskpoint, ac, min_h);
   return MacCready::Solve(settings, polar, gs);
 }
 
