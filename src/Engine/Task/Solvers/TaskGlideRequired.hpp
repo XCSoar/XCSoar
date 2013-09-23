@@ -66,8 +66,6 @@ public:
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
 
-  virtual ~TaskGlideRequired() {};
-
   virtual fixed f(const fixed mc);
 
   /**

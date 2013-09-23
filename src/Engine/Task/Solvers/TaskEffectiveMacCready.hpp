@@ -47,7 +47,6 @@ public:
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                          const GlideSettings &settings, const GlidePolar &gp);
-  virtual ~TaskEffectiveMacCready() {};
 
   fixed f(const fixed ce);
 };

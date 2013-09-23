@@ -55,7 +55,6 @@ class TaskSolveTravelled : public ZeroFinder {
                      const GlideSettings &settings, const GlidePolar &gp,
                      const fixed xmin,
                      const fixed xmax);
-  virtual ~TaskSolveTravelled() {};
 
   /**
    * Calls travelled calculator

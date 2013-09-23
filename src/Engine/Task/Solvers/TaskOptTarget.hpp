@@ -73,8 +73,6 @@ public:
                 const TaskProjection &projection,
                 StartPoint *_ts);
 
-  virtual ~TaskOptTarget() {}
-
   virtual fixed f(const fixed p);
 
   /**
