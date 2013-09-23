@@ -56,6 +56,7 @@ public:
                      const fixed xmin,
                      const fixed xmax);
 
+protected:
   /**
    * Calls travelled calculator
    *
@@ -63,6 +64,7 @@ public:
    */
   fixed time_error();
 
+public:
   /**
    * Search for parameter value.
    *
