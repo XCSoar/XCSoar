@@ -35,7 +35,9 @@ TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const TaskProjection &projection,
                              StartPoint *_ts)
   :ZeroFinder(fixed(0.02), fixed(0.98), fixed(TOLERANCE_OPT_TARGET)),
-   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp),
+   tm(tps.cbegin(), tps.cend(), activeTaskPoint, settings, _gp,
+      /* ignore the travel to the start point */
+      false),
    aircraft(_aircraft),
    tp_start(_ts),
    tp_current(_tp_current),

@@ -35,7 +35,7 @@ Version 6.7 - not yet released
   - new option to disable OLC optimisation
   - MAT: ask user whether to add turn points while flying over it
   - update the calculator without a GPS fix (#2876)
-  - fix task speed and time estimates before task start (#2876)
+  - fix task speed and time estimates before task start (#2876, #2906)
   - show "arm advance" button when manual arming is necessary (#1729)
   - support the OLC/DMSt 500km triangle threshold (#2963)
 * route planner
