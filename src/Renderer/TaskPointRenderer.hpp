@@ -47,7 +47,7 @@ public:
     NONE,
   };
 
-protected:
+private:
   Canvas &canvas;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
@@ -101,7 +101,7 @@ public:
 
   void Draw(const TaskPoint &tp, Layer layer);
 
-protected:
+private:
   void DrawOrdered(const OrderedTaskPoint &tp, Layer layer);
 
   bool LegActive() const {

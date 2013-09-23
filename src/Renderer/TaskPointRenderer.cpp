@@ -147,7 +147,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.DrawPolyline(Arrow, 3);
 }
 
-void
+inline void
 TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 {
   if (!tp.valid() || !IsTargetVisible(tp))
@@ -181,14 +181,14 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   canvas.SetBackgroundOpaque();
 }
 
-void
+inline void
 TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
            index - active_index);
 }
 
-void
+inline void
 TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp)
 {
   int offset = index - active_index;
