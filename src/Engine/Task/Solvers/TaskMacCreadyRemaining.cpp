@@ -72,8 +72,7 @@ TaskMacCreadyRemaining::has_targets() const
   return false;
 }
 
-
-void 
+void
 TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
@@ -91,8 +90,7 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
   }
 }
 
-
-void 
+void
 TaskMacCreadyRemaining::target_save()
 {
   auto saved = saved_targets.begin();
@@ -102,7 +100,7 @@ TaskMacCreadyRemaining::target_save()
       : GeoPoint::Invalid();
 }
 
-void 
+void
 TaskMacCreadyRemaining::target_restore()
 {
   auto saved = saved_targets.cbegin();
