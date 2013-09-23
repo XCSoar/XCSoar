@@ -69,15 +69,6 @@ public:
              const GlideSettings &settings, const GlidePolar &_gp);
 
   /**
-   * Test validity of a solution given search parameter
-   *
-   * @param mc Search parameter (MacCready setting (m/s))
-   *
-   * @return True if solution is valid
-   */
-  virtual bool valid(const fixed mc);
-
-  /**
    * Search for best MC.  If fails (MC=0 is below final glide), returns
    * default value.
    *
@@ -85,11 +76,22 @@ public:
    *
    * @return Best MC value found or default value if no solution
    */
-  virtual fixed search(const fixed mc);
+  fixed search(const fixed mc);
 
-  virtual bool search(const fixed mc, fixed &result);
+  bool search(const fixed mc, fixed &result);
 
 private:
+
+  /**
+   * Test validity of a solution given search parameter
+   *
+   * @param mc Search parameter (MacCready setting (m/s))
+   *
+   * @return True if solution is valid
+   */
+  gcc_pure
+  bool valid(const fixed mc) const;
+
   /* virtual methods from class ZeroFinder */
   virtual fixed f(const fixed mc) override;
 };
