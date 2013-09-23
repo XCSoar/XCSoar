@@ -64,6 +64,7 @@ private:
   const GeoPoint location;
   FlatBoundingBox bb_screen;
   bool location_available;
+  bool task_finished;
   bool mode_optional_start;
 
 public:
@@ -93,6 +94,10 @@ public:
 
   void SetBoundingBox(const FlatBoundingBox &bb) {
     bb_screen = bb;
+  }
+
+  void SetTaskFinished(bool _task_finished) {
+    task_finished = _task_finished;
   }
 
   void SetModeOptional(const bool mode) {

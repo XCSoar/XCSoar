@@ -52,6 +52,7 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
    active_index(0),
    location(_location),
    location_available(_location_available),
+   task_finished(false),
    mode_optional_start(false)
 {
 }
@@ -60,6 +61,13 @@ void
 TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
   int offset = index - active_index;
+
+  if (offset == 0 && task_finished && tp.GetType() == TaskPointType::FINISH)
+    /* if the task is finished, pretend the active_index is past the
+       current index; we need this because XCSoar never moves
+       active_index to one after the finish point, because that would
+       point to an invalid task point index */
+    offset = -1;
 
   switch (layer) {
   case LAYER_OZ_SHADE:
