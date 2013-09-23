@@ -79,7 +79,7 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 
   case LAYER_OZ_OUTLINE:
     if (tp.BoundingBoxOverlaps(bb_screen)) {
-      if (mode_optional_start)
+      if (mode_optional_start && offset == 0)
         /* render optional starts as deactivated */
         offset = -1;
 
