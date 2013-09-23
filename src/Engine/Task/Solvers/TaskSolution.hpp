@@ -49,12 +49,14 @@ namespace TaskSolution
    * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
    * @return GlideResult of task leg
    */
+  gcc_pure
   GlideResult GlideSolutionRemaining(const TaskPoint& taskpoint,
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
                                      const fixed min_h = fixed(0));
 
+  gcc_pure
   GlideResult GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,
                                      const fixed target_elevation,
@@ -74,6 +76,7 @@ namespace TaskSolution
    * @param S Sink rate (m/s, positive down)
    * @return GlideResult of task leg
    */
+  gcc_pure
   GlideResult GlideSolutionSink(const TaskPoint &taskpoint,
                                 const AircraftState &state,
                                 const GlideSettings &settings,
@@ -90,6 +93,7 @@ namespace TaskSolution
    * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
    * @return GlideResult of task leg
    */
+  gcc_pure
   GlideResult GlideSolutionTravelled(const OrderedTaskPoint &taskpoint,
                                      const AircraftState &state,
                                      const GlideSettings &settings,
@@ -106,6 +110,7 @@ namespace TaskSolution
    * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
    * @return GlideResult of task leg
    */
+  gcc_pure
   GlideResult GlideSolutionPlanned(const OrderedTaskPoint &taskpoint,
                                    const AircraftState &state,
                                    const GlideSettings &settings,
