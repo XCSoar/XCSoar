@@ -72,7 +72,7 @@ public:
    *
    * @return Value producing same travelled time
    */
-  virtual fixed search(const fixed ce);
+  fixed search(const fixed ce);
 };
 
 #endif
