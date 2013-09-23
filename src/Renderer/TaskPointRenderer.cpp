@@ -59,11 +59,13 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
 void
 TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
+  int offset = index - active_index;
+
   switch (layer) {
   case LAYER_OZ_SHADE:
     if (tp.BoundingBoxOverlaps(bb_screen))
       // draw shaded part of observation zone
-      DrawOZBackground(canvas, tp);
+      DrawOZBackground(canvas, tp, offset);
 
     break;
 
@@ -76,8 +78,13 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
     break;
 
   case LAYER_OZ_OUTLINE:
-    if (tp.BoundingBoxOverlaps(bb_screen))
-      DrawOZForeground(tp);
+    if (tp.BoundingBoxOverlaps(bb_screen)) {
+      if (mode_optional_start)
+        /* render optional starts as deactivated */
+        offset = -1;
+
+      DrawOZForeground(tp, offset);
+    }
 
     break;
 
@@ -182,19 +189,16 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 }
 
 inline void
-TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
+TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
+                                    int offset)
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
-           index - active_index);
+           offset);
 }
 
 inline void
-TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp)
+TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp, int offset)
 {
-  int offset = index - active_index;
-  if (mode_optional_start)
-    offset = -1; // render optional starts as deactivated
-
   ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, tp.GetObservationZone(),
            offset);
   ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, tp.GetObservationZone(),

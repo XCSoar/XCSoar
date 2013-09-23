@@ -123,8 +123,9 @@ private:
   void DrawTarget(const TaskPoint &tp);
   void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
   void DrawIsoline(const AATPoint &tp);
-  void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);
-  void DrawOZForeground(const OrderedTaskPoint &tp);
+  void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
+                        int offset);
+  void DrawOZForeground(const OrderedTaskPoint &tp, int offset);
 };
 
 #endif
