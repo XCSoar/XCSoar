@@ -37,6 +37,7 @@ enum ControlIndex {
   DeviceModelType
 };
 
+#ifdef HAVE_MODEL_TYPE
 
 static constexpr StaticEnumChoice model_type_list[] = {
   { (unsigned)ModelType::GENERIC, N_("Generic") },
@@ -49,6 +50,7 @@ static constexpr StaticEnumChoice model_type_list[] = {
   { 0 }
 };
 
+#endif
 
 class ExperimentalConfigPanel final : public RowFormWidget {
 public:
