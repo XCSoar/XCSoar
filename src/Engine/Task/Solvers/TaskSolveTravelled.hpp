@@ -35,10 +35,10 @@ class TaskSolveTravelled : public ZeroFinder {
   fixed inv_dt;
   fixed dt;
 
- protected:
+protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
 
- public:
+public:
   /**
    * Constructor for ordered task points
    *
@@ -49,7 +49,7 @@ class TaskSolveTravelled : public ZeroFinder {
    * @param xmin Min value of search parameter
    * @param xmax Max value of search parameter
    */
-  TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
+  TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
                      const unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,

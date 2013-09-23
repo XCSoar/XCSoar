@@ -25,24 +25,24 @@
 #include "TaskSolveTravelled.hpp"
 
 /**
- *  Class to solve for cruise efficiency.
- *  This is the ratio of the achieved inter-thermal cruise speed to that
- *  predicted by MacCready theory with the current glide polar.
+ * Class to solve for cruise efficiency.
+ * This is the ratio of the achieved inter-thermal cruise speed to that
+ * predicted by MacCready theory with the current glide polar.
  *
- *  This is calculated for the part of the task that has been travelled
+ * This is calculated for the part of the task that has been travelled
  */
 class TaskCruiseEfficiency final : public TaskSolveTravelled
 {
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param gp Glide polar to copy for calculations
- */
-  TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param gp Glide polar to copy for calculations
+   */
+  TaskCruiseEfficiency(const std::vector<OrderedTaskPoint *> &tps,
                        const unsigned activeTaskPoint,
                        const AircraftState &_aircraft,
                        const GlideSettings &settings, const GlidePolar &gp);
