@@ -30,7 +30,7 @@
 /**
  *  Abstract class to solve for travelled time.
  */
-class TaskSolveTravelled : public ZeroFinder {
+class TaskSolveTravelled : protected ZeroFinder {
   const AircraftState &aircraft;
   fixed inv_dt;
   fixed dt;

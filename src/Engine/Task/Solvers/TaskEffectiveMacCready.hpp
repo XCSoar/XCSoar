@@ -48,6 +48,7 @@ class TaskEffectiveMacCready final : public TaskSolveTravelled
                          const AircraftState &_aircraft,
                          const GlideSettings &settings, const GlidePolar &gp);
 
+protected:
   /* virtual methods from class ZeroFinder */
   virtual fixed f(const fixed x) override;
 };
