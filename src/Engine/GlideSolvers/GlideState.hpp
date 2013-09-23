@@ -29,8 +29,7 @@
 /**
  * Class used to define a glide/navigation task
  */
-struct GlideState 
-{
+struct GlideState {
   /** Distance/bearing of task */
   GeoVector vector;
 
