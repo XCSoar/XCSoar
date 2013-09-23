@@ -73,7 +73,8 @@ public:
    *
    * @return Solution sink rate (m/s, down positive)
    */
-  virtual fixed search(const fixed s);
+  gcc_pure
+  fixed search(const fixed s);
 
 private:
   /* virtual methods from class ZeroFinder */
