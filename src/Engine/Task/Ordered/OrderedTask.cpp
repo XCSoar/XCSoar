@@ -938,7 +938,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
                            const GlidePolar &glide_polar,
                            const fixed t_target)
 {
-  if (stats.distance_max > stats.distance_min) {
+  if (stats.has_targets) {
     // only perform scan if modification is possible
     const fixed t_rem = std::max(fixed(0),
                                  t_target - stats.total.time_elapsed);
