@@ -101,6 +101,11 @@ public:
     return search_min.GetLocation();
   };
 
+  gcc_pure
+  GeoPoint InterpolateLocationMinMax(fixed p) const {
+    return GetLocationMin().Interpolate(GetLocationMax(), p);
+  }
+
   /**
    * Construct boundary polygon from internal representation of observation zone.
    * Also updates projection.

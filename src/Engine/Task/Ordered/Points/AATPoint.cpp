@@ -144,13 +144,13 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
 
   case CURRENT_ACTIVE:
     if (!HasEntered() || force_if_current) {
-      target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
+      target_location = InterpolateLocationMinMax(p);
       return true;
     }
     return false;
 
   case AFTER_ACTIVE:
-    target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
+    target_location = InterpolateLocationMinMax(p);
     return true;
   }
 
