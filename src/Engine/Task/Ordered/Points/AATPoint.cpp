@@ -147,11 +147,8 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
     return false;
 
   case AFTER_ACTIVE:
-    if (GetActiveState() == AFTER_ACTIVE) {
-      target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
-      return true;
-    }
-    return false;
+    target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
+    return true;
 
   default:
     return false;
