@@ -65,6 +65,7 @@ Version 6.7 - not yet released
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
   - save the previous log file in "xcsoar.old"
+  - fix name truncation when saving a waypoint file on Windows (#3096)
 
 Version 6.6.6 - not yet released
 * tasks
