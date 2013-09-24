@@ -408,6 +408,9 @@ InitLanguage()
 
   const char *const domain = "xcsoar";
 
+  /* we want to get UTF-8 strings from gettext() */
+  bind_textdomain_codeset(domain, "utf8");
+
   // Set the current locale to the environment's default
   setlocale(LC_ALL, "");
   // always use a dot as decimal point in printf/scanf()
