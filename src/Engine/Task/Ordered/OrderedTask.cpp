@@ -47,6 +47,43 @@
 #include "Task/Stats/TaskSummary.hpp"
 #include "Task/PathSolvers/TaskDijkstraMin.hpp"
 #include "Task/PathSolvers/TaskDijkstraMax.hpp"
+#include "Task/ObservationZones/ObservationZoneClient.hpp"
+#include "Task/ObservationZones/CylinderZone.hpp"
+
+/**
+ * According to "FAI Sporting Code / Annex A to Section 3 - Gliding",
+ * 6.3.1c and 6.3.2dii, the radius of the "start/finish ring" must be
+ * subtracted from the task distance.  This flag controls whether this
+ * behaviour is enabled.
+ *
+ * Currently, it is always enabled, but at some point, we may want to
+ * make it optional.
+ */
+constexpr bool subtract_start_finish_cylinder_radius = true;
+
+/**
+ * Determine the cylinder radius if this is a CylinderZone.  If not,
+ * return -1.
+ */
+gcc_pure
+static fixed
+GetCylinderRadiusOrMinusOne(const ObservationZone &oz)
+{
+  return oz.GetShape() == ObservationZone::Shape::CYLINDER
+    ? ((const CylinderZone &)oz).GetRadius()
+    : fixed(-1);
+}
+
+/**
+ * Determine the cylinder radius if this is a CylinderZone.  If not,
+ * return -1.
+ */
+gcc_pure
+static fixed
+GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p)
+{
+  return GetCylinderRadiusOrMinusOne(p.GetObservationZone());
+}
 
 OrderedTask::OrderedTask(const TaskBehaviour &tb)
   :AbstractTask(TaskType::ORDERED, tb),
@@ -263,11 +300,50 @@ OrderedTask::RunDijsktraMax()
     dijkstra_max->SetBoundary(i, boundary);
   }
 
+  fixed start_radius(-1), finish_radius(-1);
+  if (subtract_start_finish_cylinder_radius) {
+    /* to subtract the start/finish cylinder radius, we use only the
+       nominal points (i.e. the cylinder's center), and later replace
+       it with a point on the cylinder boundary */
+
+    if (taskpoint_start != nullptr) {
+      start_radius = GetCylinderRadiusOrMinusOne(*taskpoint_start);
+      if (positive(start_radius))
+        dijkstra.SetBoundary(0, task_points[0]->GetNominalPoints());
+    }
+
+    if (taskpoint_finish != nullptr) {
+      finish_radius = GetCylinderRadiusOrMinusOne(*taskpoint_finish);
+      if (positive(finish_radius))
+        dijkstra.SetBoundary(task_size - 1,
+                             task_points[task_size - 1]->GetNominalPoints());
+    }
+  }
+
   if (!dijkstra_max->DistanceMax())
     return false;
 
   for (unsigned i = 0; i != task_size; ++i) {
-    const SearchPoint &solution = dijkstra.GetSolution(i);
+    SearchPoint solution = dijkstra.GetSolution(i);
+
+    if (i == 0 && positive(start_radius)) {
+      /* subtract start cylinder radius by finding the intersection
+         with the cylinder boundary */
+      const GeoPoint &current = taskpoint_start->GetLocation();
+      const GeoPoint &neighbour = dijkstra.GetSolution(i + 1).GetLocation();
+      GeoPoint gp = current.IntermediatePoint(neighbour, start_radius);
+      solution = SearchPoint(gp, task_projection);
+    }
+
+    if (i == task_size - 1 && positive(finish_radius)) {
+      /* subtract finish cylinder radius by finding the intersection
+         with the cylinder boundary */
+      const GeoPoint &current = taskpoint_finish->GetLocation();
+      const GeoPoint &neighbour = dijkstra.GetSolution(i - 1).GetLocation();
+      GeoPoint gp = current.IntermediatePoint(neighbour, finish_radius);
+      solution = SearchPoint(gp, task_projection);
+    }
+
     SetPointSearchMax(i, solution);
     if (i <= active_index)
       set_tp_search_achieved(i, solution);
@@ -305,10 +381,24 @@ OrderedTask::ScanDistanceMinMax(const GeoPoint &location, bool force,
 fixed
 OrderedTask::ScanDistanceNominal()
 {
-  if (taskpoint_start)
-    return taskpoint_start->ScanDistanceNominal();
+  if (taskpoint_start == nullptr)
+    return fixed(0);
 
-  return fixed(0);
+  fixed d = taskpoint_start->ScanDistanceNominal();
+
+  if (subtract_start_finish_cylinder_radius) {
+    fixed radius = GetCylinderRadiusOrMinusOne(*taskpoint_start);
+    if (positive(radius) && radius < d)
+      d -= radius;
+
+    if (taskpoint_finish != nullptr) {
+      radius = GetCylinderRadiusOrMinusOne(*taskpoint_finish);
+      if (positive(radius) && radius < d)
+        d -= radius;
+    }
+  }
+
+  return d;
 }
 
 fixed

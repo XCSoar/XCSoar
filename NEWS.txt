@@ -40,6 +40,7 @@ Version 6.7 - not yet released
   - show "arm advance" button when manual arming is necessary (#1729)
   - support the OLC/DMSt 500km triangle threshold (#2963)
   - render finish point as achieved when task is finished (#2140)
+  - subtract start/finish cylinder radius from task distance (#2308)
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
 * calculations
