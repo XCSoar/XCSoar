@@ -357,49 +357,31 @@ ReadBuiltinLanguage(char dummy)
   return false;
 }
 
-#endif /* HAVE_NATIVE_GETTEXT */
-
 static bool
 ReadResourceLanguageFile(const TCHAR *resource)
 {
   return false;
 }
 
+#endif /* HAVE_NATIVE_GETTEXT */
+
 #endif /* !HAVE_BUILTIN_LANGUAGES */
+
+#ifndef HAVE_NATIVE_GETTEXT
 
 static void
 AutoDetectLanguage()
 {
-#ifdef HAVE_NATIVE_GETTEXT
-
-  // Set the current locale to the environment's default
-  setlocale(LC_ALL, "");
-  // always use a dot as decimal point in printf/scanf()
-  setlocale(LC_NUMERIC, "C");
-  bindtextdomain("xcsoar", "/usr/share/locale");
-  textdomain("xcsoar");
-
-#else /* !HAVE_NATIVE_GETTEXT */
-
   // Try to detect the language by calling the OS's corresponding functions
   const auto l = DetectLanguage();
   if (l != nullptr)
     // If a language was detected -> try to load the MO file
     ReadBuiltinLanguage(*l);
-
-#endif /* !HAVE_NATIVE_GETTEXT */
 }
 
 static bool
 LoadLanguageFile(const TCHAR *path)
 {
-#ifdef HAVE_NATIVE_GETTEXT
-
-  /* not supported on UNIX */
-  return false;
-
-#else /* !HAVE_NATIVE_GETTEXT */
-
   LogFormat(_T("Language: loading file '%s'"), path);
 
   delete mo_loader;
@@ -415,8 +397,23 @@ LoadLanguageFile(const TCHAR *path)
 
   mo_file = &mo_loader->get();
   return true;
+}
 
 #endif /* !HAVE_NATIVE_GETTEXT */
+
+void
+InitLanguage()
+{
+#ifdef HAVE_NATIVE_GETTEXT
+
+  // Set the current locale to the environment's default
+  setlocale(LC_ALL, "");
+  // always use a dot as decimal point in printf/scanf()
+  setlocale(LC_NUMERIC, "C");
+  bindtextdomain("xcsoar", "/usr/share/locale");
+  textdomain("xcsoar");
+
+#endif
 }
 
 /**
@@ -425,6 +422,7 @@ LoadLanguageFile(const TCHAR *path)
 void
 ReadLanguageFile()
 {
+#ifndef HAVE_NATIVE_GETTEXT
   CloseLanguageFile();
 
   LogFormat("Loading language file");
@@ -452,6 +450,7 @@ ReadLanguageFile()
 
   if (!LoadLanguageFile(value) && !ReadResourceLanguageFile(base))
     AutoDetectLanguage();
+#endif
 }
 
 void
