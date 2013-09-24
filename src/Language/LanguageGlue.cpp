@@ -406,12 +406,14 @@ InitLanguage()
 {
 #ifdef HAVE_NATIVE_GETTEXT
 
+  const char *const domain = "xcsoar";
+
   // Set the current locale to the environment's default
   setlocale(LC_ALL, "");
   // always use a dot as decimal point in printf/scanf()
   setlocale(LC_NUMERIC, "C");
-  bindtextdomain("xcsoar", "/usr/share/locale");
-  textdomain("xcsoar");
+  bindtextdomain(domain, "/usr/share/locale");
+  textdomain(domain);
 
 #endif
 }
