@@ -141,8 +141,23 @@ public:
    * @return Vector of sample points representing a closed polygon
    */
   gcc_pure
-  const SearchPointVector &GetSamplePoints() const {
+  const SearchPointVector &GetSampledPoints() const {
     return sampled_points;
+  }
+
+  /**
+   * Retrieve boundary points polygon
+   */
+  const SearchPointVector &GetBoundaryPoints() const {
+    return boundary_points;
+  }
+
+  /**
+   * Return a #SearchPointVector that contains just the reference
+   * point.
+   */
+  const SearchPointVector &GetNominalPoints() const {
+    return nominal_points;
   }
 
   bool IsBoundaryScored() const {
@@ -161,13 +176,6 @@ protected:
    */
   void ClearSampleAllButLast(const AircraftState &state,
                              const TaskProjection &projection);
-
-  /**
-   * Retrieve boundary points polygon
-   */
-  const SearchPointVector &GetBoundaryPoints() const {
-    return boundary_points;
-  }
 
 private:
   /**
