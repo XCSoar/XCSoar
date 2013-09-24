@@ -43,6 +43,7 @@ Version 6.7 - not yet released
   - ignore inactive and acknowledged airspaces (#2866)
 * calculations
   - add more weight to zig-zag wind compared to circling wind
+  - enable circling wind calculation in IGC replay (#2672)
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added
