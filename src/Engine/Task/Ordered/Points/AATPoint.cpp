@@ -139,6 +139,9 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
     return false;
 
   switch (GetActiveState()) {
+  case BEFORE_ACTIVE:
+    return false;
+
   case CURRENT_ACTIVE:
     if (!HasEntered() || force_if_current) {
       target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
@@ -149,10 +152,10 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
   case AFTER_ACTIVE:
     target_location = GetLocationMin().Interpolate(GetLocationMax(), p);
     return true;
-
-  default:
-    return false;
   }
+
+  assert(false);
+  gcc_unreachable();
 }
 
 void
