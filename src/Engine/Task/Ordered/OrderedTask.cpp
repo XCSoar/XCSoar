@@ -255,7 +255,11 @@ OrderedTask::RunDijsktraMax()
   const unsigned active_index = GetActiveIndex();
   dijkstra.SetTaskSize(task_size);
   for (unsigned i = 0; i != task_size; ++i) {
-    const SearchPointVector &boundary = task_points[i]->GetSearchPoints();
+    const SearchPointVector &boundary = i == active_index
+      /* since one can still travel further in the current sector, use
+         the full boundary here */
+      ? task_points[i]->GetBoundaryPoints()
+      : task_points[i]->GetSearchPoints();
     dijkstra_max->SetBoundary(i, boundary);
   }
 
@@ -280,21 +284,8 @@ OrderedTask::ScanDistanceMax()
 
   assert(active_task_point < task_points.size());
 
-  // for max calculations, since one can still travel further in the
-  // sector, we pretend we are on the previous turnpoint so the
-  // search samples will contain the full boundary
-  const unsigned atp = active_task_point;
-  if (atp) {
-    active_task_point--;
-    taskpoint_start->ScanActive(*task_points[active_task_point]);
-  }
-
   RunDijsktraMax();
 
-  if (atp) {
-    active_task_point = atp;
-    taskpoint_start->ScanActive(*task_points[active_task_point]);
-  }
   return taskpoint_start->ScanDistanceMax();
 }
 
