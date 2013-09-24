@@ -23,11 +23,8 @@
 #include "TaskDijkstraMax.hpp"
 
 bool
-TaskDijkstraMax::DistanceMax(const OrderedTask &task)
+TaskDijkstraMax::DistanceMax()
 {
-  if (!RefreshTask(task))
-    return false;
-
   dijkstra.Clear();
   dijkstra.Reserve(256);
   AddZeroStartEdges();

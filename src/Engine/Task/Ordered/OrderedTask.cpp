@@ -185,16 +185,27 @@ OrderedTask::ScanLegStartTime()
 inline bool
 OrderedTask::RunDijsktraMin(const GeoPoint &location)
 {
+  const unsigned task_size = TaskSize();
+  if (task_size < 2)
+    return false;
+
   if (dijkstra_min == nullptr)
     dijkstra_min = new TaskDijkstraMin();
   TaskDijkstraMin &dijkstra = *dijkstra_min;
 
+  const unsigned active_index = GetActiveIndex();
+  dijkstra.SetTaskSize(task_size - active_index);
+  for (unsigned i = active_index; i != task_size; ++i) {
+    const SearchPointVector &boundary = task_points[i]->GetSearchPoints();
+    dijkstra.SetBoundary(i - active_index, boundary);
+  }
+
   SearchPoint ac(location, task_projection);
-  if (!dijkstra.DistanceMin(*this, ac))
+  if (!dijkstra.DistanceMin(ac))
     return false;
 
-  for (unsigned i = GetActiveIndex(), end = TaskSize(); i != end; ++i)
-    SetPointSearchMin(i, dijkstra.GetSolution(i));
+  for (unsigned i = active_index; i != task_size; ++i)
+    SetPointSearchMin(i, dijkstra.GetSolution(i - active_index));
 
   return true;
 }
@@ -233,18 +244,28 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
 inline bool
 OrderedTask::RunDijsktraMax()
 {
+  const unsigned task_size = TaskSize();
+  if (task_size < 2)
+    return false;
+
   if (dijkstra_max == nullptr)
     dijkstra_max = new TaskDijkstraMax();
   TaskDijkstraMax &dijkstra = *dijkstra_max;
 
-  if (!dijkstra.DistanceMax(*this))
+  const unsigned active_index = GetActiveIndex();
+  dijkstra.SetTaskSize(task_size);
+  for (unsigned i = 0; i != task_size; ++i) {
+    const SearchPointVector &boundary = task_points[i]->GetSearchPoints();
+    dijkstra_max->SetBoundary(i, boundary);
+  }
+
+  if (!dijkstra_max->DistanceMax())
     return false;
 
-  for (unsigned i = 0, active = GetActiveIndex(), end = TaskSize();
-       i != end; ++i) {
+  for (unsigned i = 0; i != task_size; ++i) {
     const SearchPoint &solution = dijkstra.GetSolution(i);
     SetPointSearchMax(i, solution);
-    if (i <= active)
+    if (i <= active_index)
       set_tp_search_achieved(i, solution);
   }
 

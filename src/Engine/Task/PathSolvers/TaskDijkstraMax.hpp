@@ -41,7 +41,7 @@ public:
    *
    * @return True if succeeded
    */
-  bool DistanceMax(const OrderedTask &task);
+  bool DistanceMax();
 };
 
 #endif

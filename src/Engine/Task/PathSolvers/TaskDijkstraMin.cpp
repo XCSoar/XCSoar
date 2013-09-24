@@ -21,20 +21,15 @@
 */
 
 #include "TaskDijkstraMin.hpp"
-#include "Task/Ordered/OrderedTask.hpp"
 
 bool
-TaskDijkstraMin::DistanceMin(const OrderedTask &task,
-                             const SearchPoint &currentLocation)
+TaskDijkstraMin::DistanceMin(const SearchPoint &currentLocation)
 {
-  if (!RefreshTask(task))
-    return false;
-
   dijkstra.Clear();
   dijkstra.Reserve(256);
 
   if (currentLocation.IsValid()) {
-    AddStartEdges(task.GetActiveTaskPointIndex(), currentLocation);
+    AddStartEdges(0, currentLocation);
   } else {
     AddZeroStartEdges();
   }
