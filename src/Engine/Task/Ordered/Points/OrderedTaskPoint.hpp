@@ -170,6 +170,27 @@ public:
   }
 
   /**
+   * Are we past this task point?
+   */
+  bool IsPast() const {
+    return active_state == BEFORE_ACTIVE;
+  }
+
+  /**
+   * Is this the current task point?
+   */
+  bool IsCurrent() const {
+    return active_state == CURRENT_ACTIVE;
+  }
+
+  /**
+   * Do we expect to reach this task point in the future?
+   */
+  bool IsFuture() const {
+    return active_state == AFTER_ACTIVE;
+  }
+
+  /**
    * Scan forward through successors to set the activity
    * state of all connected task points.  Should only be
    * called on the known first task point in the list.

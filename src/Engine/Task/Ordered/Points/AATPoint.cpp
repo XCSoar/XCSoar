@@ -28,7 +28,7 @@
 const GeoPoint&
 AATPoint::GetLocationRemaining() const
 {
-  if (GetActiveState() != BEFORE_ACTIVE)
+  if (!IsPast())
     return target_location;
 
   if (HasSampled())
@@ -60,7 +60,7 @@ AATPoint::UpdateSampleFar(const AircraftState& state,
 bool
 AATPoint::CheckTarget(const AircraftState &state, const bool known_outside)
 {
-  if (GetActiveState() == CURRENT_ACTIVE && target_locked)
+  if (IsCurrent() && target_locked)
     return false;
 
   bool moved = false;
