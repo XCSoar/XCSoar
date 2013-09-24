@@ -44,6 +44,7 @@ GroundSpeedComputer::Compute(NMEAInfo &basic)
     if (positive(dt)) {
       fixed distance = basic.location.Distance(last_location);
       basic.ground_speed = distance / dt;
+      basic.ground_speed_available = basic.location_available;
     }
   }
 
