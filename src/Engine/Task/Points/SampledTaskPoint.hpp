@@ -38,13 +38,13 @@ struct AircraftState;
  * paths to border locations.
  *
  * \todo
- * - Currently undefined as to what happens to interior samples if observation 
+ * - Currently undefined as to what happens to interior samples if observation
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
 class SampledTaskPoint {
   /**
-   * Whether boundaries are used in scoring distance,
-   * or just the reference point
+   * Whether boundaries are used in scoring distance, or just the
+   * reference point
    */
   const bool boundary_scored;
 
@@ -63,8 +63,9 @@ class SampledTaskPoint {
 
 public:
   /**
-   * Constructor.  Clears boundary and interior samples on instantiation.
-   * Must be followed by update_oz() after task geometry is modified.
+   * Constructor.  Clears boundary and interior samples on
+   * instantiation.  Must be followed by update_oz() after task
+   * geometry is modified.
    *
    * @param location the reference location of this task point
    * @param is_scored Whether distance within OZ is scored
@@ -81,8 +82,8 @@ public:
   }
 
   /**
-   * Accessor to retrieve location of the sample/boundary polygon
-   * node that produces the maximum task distance.
+   * Accessor to retrieve location of the sample/boundary polygon node
+   * that produces the maximum task distance.
    *
    * @return Location of max distance node
    */
@@ -155,8 +156,8 @@ protected:
 
   /**
    * Clear all sample points and add the current state as a sample.
-   * This is used, for exmaple, for StartPoints to only remember the last sample
-   * prior to crossing the start.
+   * This is used, for exmaple, for StartPoints to only remember the
+   * last sample prior to crossing the start.
    */
   void ClearSampleAllButLast(const AircraftState &state,
                              const TaskProjection &projection);
@@ -164,7 +165,7 @@ protected:
   /**
    * Retrieve boundary points polygon
    */
-  const SearchPointVector& GetBoundaryPoints() const {
+  const SearchPointVector &GetBoundaryPoints() const {
     return boundary_points;
   }
 
@@ -178,10 +179,12 @@ private:
 public:
   /**
    * Retrieve interior sample polygon.
-   * Because sometimes an OZ will be skipped (by accident, true miss, or
-   * failure of electronics), but we still want rest of task to function,
-   * the 'cheat' option allows non-achieved task points to be considered achieved
-   * by assuming the aircraft appeared at the reference location.
+   *
+   * Because sometimes an OZ will be skipped (by accident, true miss,
+   * or failure of electronics), but we still want rest of task to
+   * function, the 'cheat' option allows non-achieved task points to
+   * be considered achieved by assuming the aircraft appeared at the
+   * reference location.
    *
    * @return a list of boundary points
    */
