@@ -91,12 +91,11 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     canvas.Select(chart_look.label_font);
     canvas.SetBackgroundTransparent();
 
-    auto end = retrospective.getNearWaypointList().end();
-    for (auto it = retrospective.getNearWaypointList().begin(); it!= end; ++it) {
-      RasterPoint wp_pos = proj.GeoToScreen(it->waypoint.location);
+    for (const auto &i : retrospective.getNearWaypointList()) {
+      RasterPoint wp_pos = proj.GeoToScreen(i.waypoint.location);
       canvas.DrawText(wp_pos.x,
                       wp_pos.y,
-                      it->waypoint.name.c_str());
+                      i.waypoint.name.c_str());
     }
   }
 
