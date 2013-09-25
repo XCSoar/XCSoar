@@ -141,6 +141,10 @@ public:
     return retrospective;
   }
 
+  void SetContestIncremental(bool incremental) {
+    task_computer.SetContestIncremental(incremental);
+  }
+
 protected:
   void OnTakeoff();
   void OnLanding();

@@ -88,6 +88,10 @@ public:
 
   void SetTerrain(const RasterTerrain* _terrain);
 
+  void SetContestIncremental(bool incremental) {
+    contest.SetIncremental(incremental);
+  }
+
   /**
    * Auto-create a task on takeoff that leads back home.
    */
