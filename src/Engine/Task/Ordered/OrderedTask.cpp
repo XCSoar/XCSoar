@@ -187,13 +187,14 @@ OrderedTask::RunDijsktraMin(const GeoPoint &location)
 {
   if (dijkstra_min == nullptr)
     dijkstra_min = new TaskDijkstraMin();
+  TaskDijkstraMin &dijkstra = *dijkstra_min;
 
   SearchPoint ac(location, task_projection);
-  if (!dijkstra_min->DistanceMin(*this, ac))
+  if (!dijkstra.DistanceMin(*this, ac))
     return false;
 
   for (unsigned i = GetActiveIndex(), end = TaskSize(); i != end; ++i)
-    SetPointSearchMin(i, dijkstra_min->GetSolution(i));
+    SetPointSearchMin(i, dijkstra.GetSolution(i));
 
   return true;
 }
@@ -234,13 +235,14 @@ OrderedTask::RunDijsktraMax()
 {
   if (dijkstra_max == nullptr)
     dijkstra_max = new TaskDijkstraMax();
+  TaskDijkstraMax &dijkstra = *dijkstra_max;
 
-  if (!dijkstra_max->DistanceMax(*this))
+  if (!dijkstra.DistanceMax(*this))
     return false;
 
   for (unsigned i = 0, active = GetActiveIndex(), end = TaskSize();
        i != end; ++i) {
-    const SearchPoint &solution = dijkstra_max->GetSolution(i);
+    const SearchPoint &solution = dijkstra.GetSolution(i);
     SetPointSearchMax(i, solution);
     if (i <= active)
       set_tp_search_achieved(i, solution);
