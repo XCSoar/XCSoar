@@ -122,11 +122,13 @@ $(eval $(call rsvg-convert,$(PNG_LAUNCH_224),$(DATA)/graphics/%_224.png,Data/gra
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
 $(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_224),%_1.bmp,%.png,-background white))
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_SIM_224),%_2.bmp,%.png,-background white))
+$(BMP_LAUNCH_SIM_224): $(BMP_LAUNCH_FLY_224)
+	$(noop)
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
 $(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_224),%_dll_1.bmp,%.png,-background blue))
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_SIM_224),%_dll_2.bmp,%.png,-background blue))
+$(BMP_LAUNCH_DLL_SIM_224): $(BMP_LAUNCH_DLL_FLY_224)
+	$(noop)
 
 # back to PNG
 
