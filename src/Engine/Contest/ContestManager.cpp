@@ -124,7 +124,6 @@ ContestManager::UpdateIdle(bool exhaustive)
 
   switch (contest) {
   case Contest::NONE:
-    retval = true;
     break;
 
   case Contest::OLC_SPRINT:
