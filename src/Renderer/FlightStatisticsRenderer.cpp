@@ -72,6 +72,20 @@ FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
 }
 
 void
+FlightStatisticsRenderer::DrawContestTriangle(Canvas &canvas, const Projection &projection,
+                                              const ContestStatistics &statistics, unsigned i) const
+{
+  if (!statistics.GetResult(i).IsDefined() ||
+      statistics.GetSolution(i).size() != 5)
+    return;
+
+  canvas.Select(map_look.contest_pens[i]);
+  canvas.SelectHollowBrush();
+  trail_renderer.DrawTriangle(canvas, projection,
+                              statistics.GetSolution(i));
+}
+
+void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                                     const NMEAInfo &nmea_info,
                                     const ComputerSettings &settings_computer,
@@ -125,12 +139,15 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     break;
 
   case Contest::OLC_SPRINT:
-  case Contest::OLC_FAI:
   case Contest::OLC_CLASSIC:
   case Contest::SIS_AT:
   case Contest::NET_COUPE:
   case Contest::DMST:
     DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_FAI:
+    DrawContestTriangle(canvas, proj, contest, 0);
     break;
 
   case Contest::OLC_LEAGUE:
@@ -143,7 +160,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   case Contest::XCONTEST:
   case Contest::DHV_XC:
     DrawContestSolution(canvas, proj, contest, 0);
-    DrawContestSolution(canvas, proj, contest, 1);
+    DrawContestTriangle(canvas, proj, contest, 1);
     break;
   }
 }

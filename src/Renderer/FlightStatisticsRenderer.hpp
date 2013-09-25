@@ -75,6 +75,8 @@ public:
 private:
   void DrawContestSolution(Canvas &canvas, const Projection &projection,
                            const ContestStatistics &statistics, unsigned i) const;
+  void DrawContestTriangle(Canvas &canvas, const Projection &projection,
+                           const ContestStatistics &statistics, unsigned i) const;
 };
 
 #endif

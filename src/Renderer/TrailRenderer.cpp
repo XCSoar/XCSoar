@@ -239,6 +239,14 @@ TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
 }
 
 void
+TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
+{
+  assert(points.size() >= n);
+
+  canvas.DrawPolygon(points.begin(), n);
+}
+
+void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const ContestTraceVector &trace)
 {
@@ -249,6 +257,22 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
     *p++ = projection.GeoToScreen(i.GetLocation());
 
   DrawPreparedPolyline(canvas, n);
+}
+
+void
+TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
+                            const ContestTraceVector &trace)
+{
+  assert(trace.size() == 5);
+
+  const unsigned start = 1, n = 3;
+
+  RasterPoint *p = Prepare(n);
+
+  for (unsigned i = start; i < start + n; ++i)
+    *p++ = projection.GeoToScreen(trace[i].GetLocation());
+
+  DrawPreparedPolygon(canvas, n);
 }
 
 void
