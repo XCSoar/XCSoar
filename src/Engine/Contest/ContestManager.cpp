@@ -103,7 +103,7 @@ RunContest(AbstractContest &_contest,
   // by subsequent calls
   SolverResult r = _contest.Solve(exhaustive);
   if (r != SolverResult::VALID)
-    return r != SolverResult::INCOMPLETE;
+    return false;
 
   // if no improved solution was found, must have finished processing
   // with invalid data
