@@ -533,7 +533,7 @@ OrderedTask::UpdateIdle(const AircraftState &state,
 bool
 OrderedTask::UpdateSample(const AircraftState &state,
                           const GlidePolar &glide_polar,
-                           const bool full_update)
+                          const bool full_update)
 {
   assert(state.location.IsValid());
 
@@ -802,12 +802,11 @@ OrderedTask::IsValidTaskPoint(const int index_offset) const
   return (index < task_points.size());
 }
 
-
 void
 OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
-                                      const GlidePolar &polar,
-                                      GlideResult &total,
-                                      GlideResult &leg)
+                                    const GlidePolar &polar,
+                                    GlideResult &total,
+                                    GlideResult &leg)
 {
   TaskMacCreadyRemaining tm(task_points.cbegin(), task_points.cend(),
                             active_task_point,
@@ -819,8 +818,8 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
 void
 OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
                                     const GlidePolar &glide_polar,
-                                      GlideResult &total,
-                                      GlideResult &leg)
+                                    GlideResult &total,
+                                    GlideResult &leg)
 {
   if (!aircraft.location.IsValid()) {
     total.Reset();
@@ -837,12 +836,12 @@ OrderedTask::GlideSolutionTravelled(const AircraftState &aircraft,
 void
 OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
                                   const GlidePolar &glide_polar,
-                                    GlideResult &total,
-                                    GlideResult &leg,
-                                    DistanceStat &total_remaining_effective,
-                                    DistanceStat &leg_remaining_effective,
-                                    const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg)
+                                  GlideResult &total,
+                                  GlideResult &leg,
+                                  DistanceStat &total_remaining_effective,
+                                  DistanceStat &leg_remaining_effective,
+                                  const GlideResult &solution_remaining_total,
+                                  const GlideResult &solution_remaining_leg)
 {
   TaskMacCreadyTotal tm(task_points.cbegin(), task_points.cend(),
                         active_task_point,

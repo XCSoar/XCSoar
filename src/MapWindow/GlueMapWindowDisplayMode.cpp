@@ -34,14 +34,14 @@ OffsetHistory::Reset()
   offsets.fill(RasterPoint{0, 0});
 }
 
-void
+inline void
 OffsetHistory::Add(RasterPoint p)
 {
   offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 
-RasterPoint
+inline RasterPoint
 OffsetHistory::GetAverage() const
 {
   int x = 0;
@@ -128,6 +128,18 @@ GlueMapWindow::SetMapScale(fixed scale)
 }
 
 void
+GlueMapWindow::RestoreMapScale()
+{
+  const MapSettings &settings = CommonInterface::GetMapSettings();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
+
+  visible_projection.SetScale(settings.circle_zoom_enabled && circling
+                              ? settings.circling_scale
+                              : settings.cruise_scale);
+}
+
+inline void
 GlueMapWindow::SaveDisplayModeScales()
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
@@ -136,18 +148,13 @@ GlueMapWindow::SaveDisplayModeScales()
   Profile::Set(ProfileKeys::CruiseMapScale, (int)(settings.cruise_scale * 10000));
 }
 
-void
-GlueMapWindow::SwitchZoomClimb(bool circling)
+inline void
+GlueMapWindow::SwitchZoomClimb()
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
 
-  if (!settings.circle_zoom_enabled)
-    return;
-
-  if (circling)
-    visible_projection.SetScale(settings.circling_scale);
-  else
-    visible_projection.SetScale(settings.cruise_scale);
+  if (settings.circle_zoom_enabled)
+    RestoreMapScale();
 }
 
 void
@@ -166,7 +173,7 @@ GlueMapWindow::UpdateDisplayMode()
   last_display_mode = new_mode;
 
   if (is_circling != was_circling)
-    SwitchZoomClimb(is_circling);
+    SwitchZoomClimb();
 }
 
 void

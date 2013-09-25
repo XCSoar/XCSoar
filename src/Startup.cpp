@@ -518,10 +518,6 @@ Shutdown()
   operation.SetText(_("Shutdown, saving profile..."));
   Profile::Save();
 
-  // Stop sound
-
-  AudioVarioGlue::Deinitialise();
-
   operation.SetText(_("Shutdown, please wait..."));
 
   // Stop threads
@@ -556,6 +552,9 @@ Shutdown()
 
   LogFormat("delete MapWindow");
   main_window->Deinitialise();
+
+  // Stop sound
+  AudioVarioGlue::Deinitialise();
 
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));

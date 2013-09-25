@@ -531,7 +531,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += -L$(KOBO)/lib
-  TARGET_STATIC = y
 endif
 
 ifeq ($(TARGET),ANDROID)

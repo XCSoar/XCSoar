@@ -50,6 +50,7 @@ public:
    *
    * @return Effective distance remaining (m)
    */
+  gcc_pure
   fixed effective_distance(const fixed time_remaining) const;
 
   /**
@@ -61,6 +62,7 @@ public:
    *
    * @return Effective distance remaining (m) for active leg
    */
+  gcc_pure
   fixed effective_leg_distance(const fixed time_remaining) const;
 
 private:

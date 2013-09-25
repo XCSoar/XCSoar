@@ -129,6 +129,8 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 
   layout.ClearVario();
 
+  unsigned right = rc.right;
+
   switch (geometry) {
   case InfoBoxSettings::Geometry::SPLIT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
@@ -152,6 +154,8 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     layout.vario.top = rc.bottom - layout.control_size.cy * 2;
     layout.vario.bottom = rc.bottom;
 
+    right = layout.vario.left;
+
     /* fall through */
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
@@ -163,9 +167,9 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
                                  rc.right, rc.top, rc.bottom);
     } else {
       rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
-                                rc.left, rc.right, rc.bottom);
+                                rc.left, right, rc.bottom);
       rc.bottom = MakeBottomRow(layout, layout.positions, 4,
-                                rc.left, rc.right, rc.bottom);
+                                rc.left, right, rc.bottom);
     }
 
     break;
@@ -175,6 +179,8 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     layout.vario.right = rc.right;
     layout.vario.top = rc.top;
     layout.vario.bottom = rc.top + layout.control_size.cy * 2;
+
+    right = layout.vario.left;
 
     /* fall through */
 
@@ -187,9 +193,9 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
                                rc.left, rc.top, rc.bottom);
     } else {
       rc.top = MakeTopRow(layout, layout.positions, 4,
-                          rc.left, rc.right, rc.top);
+                          rc.left, right, rc.top);
       rc.top = MakeTopRow(layout, layout.positions + 4, 4,
-                          rc.left, rc.right, rc.top);
+                          rc.left, right, rc.top);
     }
 
     break;
@@ -499,7 +505,6 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_4:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
-  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
     if (landscape) {
       if (i != 3 && i != 7)
         border |= BORDERBOTTOM;
@@ -544,7 +549,6 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
   case InfoBoxSettings::Geometry::TOP_LEFT_8:
   case InfoBoxSettings::Geometry::TOP_LEFT_4:
-  case InfoBoxSettings::Geometry::TOP_8_VARIO:
     if (landscape) {
       if (i != 3 && i != 7)
         border |= BORDERBOTTOM;
@@ -559,8 +563,16 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
 
     break;
 
+  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+    border |= BORDERTOP|BORDERRIGHT;
+    break;
+
+  case InfoBoxSettings::Geometry::TOP_8_VARIO:
+    border |= BORDERBOTTOM|BORDERRIGHT;
+    break;
+
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
-    if ((i != 0) && (i != 6))
+    if (i != 0)
       border |= BORDERTOP;
     if (i < 6)
       border |= BORDERRIGHT;

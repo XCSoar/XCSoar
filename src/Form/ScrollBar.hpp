@@ -88,7 +88,7 @@ public:
    * @param size Size of the client area including the ScrollBar
    * @return The x-Coordinate of the ScrollBar
    */
-  UPixelScalar GetLeft(const PixelSize size) const {
+  unsigned GetLeft(const PixelSize size) const {
     return IsDefined() ? rc.left : size.cx;
   }
 
@@ -118,7 +118,7 @@ public:
    * @return True if the given y-Coordinate is on the up arrow,
    * False otherwise
    */
-  bool IsInsideUpArrow(PixelScalar y) const {
+  bool IsInsideUpArrow(int y) const {
     return y < rc.top + GetWidth();
   }
 
@@ -128,7 +128,7 @@ public:
    * @return True if the given y-Coordinate is on the down arrow,
    * False otherwise
    */
-  bool IsInsideDownArrow(PixelScalar y) const {
+  bool IsInsideDownArrow(int y) const {
     return y >= rc.bottom - GetWidth();
   }
 
@@ -138,7 +138,7 @@ public:
    * @return True if the given y-Coordinate is above the slider area,
    * False otherwise
    */
-  bool IsAboveSlider(PixelScalar y) const {
+  bool IsAboveSlider(int y) const {
     return y < rc_slider.top;
   }
 
@@ -148,7 +148,7 @@ public:
    * @return True if the given y-Coordinate is below the slider area,
    * False otherwise
    */
-  bool IsBelowSlider(PixelScalar y) const {
+  bool IsBelowSlider(int y) const {
     return y >= rc_slider.bottom;
   }
 
@@ -166,7 +166,7 @@ public:
   void SetSlider(unsigned size, unsigned view_size, unsigned origin);
 
   /** Calculates the new origin out of the given y-Coordinate of the drag */
-  unsigned ToOrigin(unsigned size, unsigned view_size, PixelScalar y) const;
+  unsigned ToOrigin(unsigned size, unsigned view_size, int y) const;
 
   /** Paints the ScollBar */
   void Paint(Canvas &canvas) const;
@@ -185,7 +185,7 @@ public:
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
-  void DragBegin(Window *w, UPixelScalar y);
+  void DragBegin(Window *w, unsigned y);
 
   /**
    * Should be called when stopping to drag
@@ -201,7 +201,7 @@ public:
    * @param y y-Coordinate
    * @return "Value" of the ScrollBar
    */
-  unsigned DragMove(unsigned  size, unsigned view_size, PixelScalar y) const;
+  unsigned DragMove(unsigned  size, unsigned view_size, int y) const;
 };
 
 #endif

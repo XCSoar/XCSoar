@@ -109,7 +109,7 @@ SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 SocketDescriptor
 SocketDescriptor::Accept()
 {
-#if defined(__linux__) && !defined(__BIONIC__)
+#if defined(__linux__) && !defined(__BIONIC__) && !defined(KOBO)
   int fd = ::accept4(Get(), nullptr, nullptr, SOCK_CLOEXEC);
 #else
   int fd = ::accept(Get(), NULL, NULL);

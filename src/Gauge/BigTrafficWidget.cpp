@@ -124,7 +124,10 @@ TrafficWidget::Update()
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (CommonInterface::GetUISettings().traffic.auto_close_dialog &&
-      basic.flarm.traffic.IsEmpty()) {
+      basic.flarm.traffic.IsEmpty() &&
+      /* auto-close only really closes the FLARM radar if the
+         "restored" page has no FLARM radar */
+      PageActions::GetConfiguredLayout().main != PageLayout::Main::FLARM_RADAR) {
     /* this must be deferred, because this method is called from
        within the BlackboardListener, and we must not unregister the
        listener in this context */

@@ -35,7 +35,7 @@ clean:
 	dh_testroot
 	rm -f debian/stamp-*
 
-	$(MAKE) $(OPTIONS) clean
+	rm -rf output/DEBIAN output/data output/host output/include output/manual output/po output/test
 
 	dh_clean
 

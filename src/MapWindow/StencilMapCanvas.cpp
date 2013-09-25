@@ -93,11 +93,11 @@ StencilMapCanvas::DrawCircle(const RasterPoint &center, unsigned radius)
     stencil.DrawCircle(center.x, center.y, radius);
 }
 
-void
+bool
 StencilMapCanvas::Commit()
 {
   if (!buffer_drawn)
-    return;
+    return false;
 
   buffer_drawn = false;
 
@@ -105,6 +105,8 @@ StencilMapCanvas::Commit()
     buffer.CopyOr(0, 0, proj.GetScreenWidth(), proj.GetScreenHeight(),
                   stencil, 0, 0);
   }
+
+  return true;
 }
 
 void

@@ -69,8 +69,11 @@ PageActions::LeavePage()
   PageState &page = state.pages[state.current_index];
 
   const GlueMapWindow *map = UIGlobals::GetMapIfActive();
-  if (map != nullptr)
-    page.map_scale = map->VisibleProjection().GetMapScale();
+  if (map != nullptr) {
+    const MapSettings &map_settings = CommonInterface::GetMapSettings();
+    page.cruise_scale = map_settings.cruise_scale;
+    page.circling_scale = map_settings.circling_scale;
+  }
 }
 
 void
@@ -83,17 +86,24 @@ PageActions::RestoreMapZoom()
   const PageState &page = state.pages[state.current_index];
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
 
-  if (settings.distinct_zoom && positive(page.map_scale)) {
+  if (settings.distinct_zoom) {
+    MapSettings &map_settings = CommonInterface::SetMapSettings();
+
+    if (positive(page.cruise_scale))
+      map_settings.cruise_scale = page.cruise_scale;
+    if (positive(page.circling_scale))
+      map_settings.circling_scale = page.circling_scale;
+
     GlueMapWindow *map = UIGlobals::GetMapIfActive();
     if (map != nullptr) {
-      map->SetMapScale(page.map_scale);
+      map->RestoreMapScale();
       map->QuickRedraw();
     }
   }
 }
 
-static const PageLayout &
-GetConfiguredLayout()
+const PageLayout &
+PageActions::GetConfiguredLayout()
 {
   const PageSettings &settings = CommonInterface::GetUISettings().pages;
   const PagesState &state = CommonInterface::GetUIState().pages;

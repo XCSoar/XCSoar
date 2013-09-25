@@ -60,7 +60,7 @@ private:
 static constexpr StaticEnumChoice waypoint_types[] = {
   { 0, N_("Turnpoint"), nullptr },
   { 1, N_("Airport"), nullptr },
-  { 2, N_("Landpoint"), nullptr },
+  { 2, N_("Landable"), nullptr },
   { 0 }
 };
 

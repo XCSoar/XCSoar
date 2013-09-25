@@ -39,10 +39,19 @@ struct PageState {
    * This attribute is only used if PageSettings::distinct_zoom is
    * enabled.
    */
-  fixed map_scale;
+  fixed cruise_scale;
+
+  /**
+   * The last map scale on this page while circling.  Negative means
+   * it's undefined.  This attribute is only used if
+   * PageSettings::distinct_zoom and MapSettings::circle_zoom_enabled
+   * are both enabled.
+   */
+  fixed circling_scale;
 
   void Clear() {
-    map_scale = fixed(-1);
+    cruise_scale = fixed(-1);
+    circling_scale = fixed(-1);
   }
 };
 

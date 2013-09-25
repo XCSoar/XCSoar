@@ -4,9 +4,7 @@ ifeq ($(LIBPNG),y)
 
 $(eval $(call pkg-config-library,LIBPNG,libpng))
 
-ifeq ($(TARGET_STATIC),y)
-  LIBPNG_LDADD += $(ZLIB_LDADD)
-  LIBPNG_LDLIBS += $(ZLIB_LDLIBS)
-endif
+LIBPNG_LDADD += $(ZLIB_LDADD)
+LIBPNG_LDLIBS += $(ZLIB_LDLIBS)
 
 endif
