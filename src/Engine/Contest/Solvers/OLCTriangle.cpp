@@ -64,7 +64,9 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
    TraceManager(_trace),
    is_fai(_is_fai), predict(_predict),
    is_closed(false),
-   is_complete(false)
+   is_complete(false),
+   max_iterations(1e6),
+   max_tree_size(5e5)
 {
 }
 
@@ -335,9 +337,10 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }
 
-  const unsigned max_iterations = !exhaustive && predict
-    ? tick_iterations
-    : std::numeric_limits<unsigned>::max();
+  // set max_iterations only if non-exhaustive and predictive solving is enabled.
+  // otherwise use predefined value.
+  if (!exhaustive && predict)
+    max_iterations = tick_iterations;
 
   while (!branch_and_bound.empty()) {
     /* now loop over the tree, branching each found candidate set, adding the branch if it's feasible.
@@ -347,8 +350,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
 
     iterations++;
 
-    // break loop if tick_iterations exceeded
-    if (iterations > max_iterations)
+    // break loop if max_iterations or max_tree_size exceeded
+    if (iterations > max_iterations || branch_and_bound.size() > max_tree_size)
       break;
 
     // first clean up tree, removeing all nodes with d_max < worst_d

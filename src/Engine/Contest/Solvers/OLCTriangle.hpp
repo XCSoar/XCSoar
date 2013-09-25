@@ -84,6 +84,12 @@ private:
    */
   unsigned tick_iterations;
 
+  /**
+   * Hard limits for number of iterations and tree size.
+   */
+  unsigned max_iterations,
+           max_tree_size;
+
   typedef std::pair<unsigned, unsigned> ClosingPair;
 
   struct ClosingPairs {
@@ -386,6 +392,14 @@ public:
   /* virtual methods from AbstractContest */
   virtual void Reset() override;
   virtual SolverResult Solve(bool exhaustive) override;
+
+  void SetMaxIterations(unsigned _max_iterations) {
+    max_iterations = _max_iterations;
+  };
+
+  void SetMaxTreeSize(unsigned _max_tree_size) {
+    max_tree_size = _max_tree_size;
+  };
 
 protected:
   /* virtual methods from AbstractContest */

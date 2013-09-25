@@ -111,6 +111,18 @@ public:
   }
 
   /**
+   * Solve exhaustive with custom computational limits for the triangle solver.
+   */
+  bool SolveExhaustive(unsigned max_iterations, unsigned max_tree_size) {
+    olc_fai.SetMaxIterations(max_iterations);
+    olc_fai.SetMaxTreeSize(max_tree_size);
+    dhv_xc_triangle.SetMaxIterations(max_iterations);
+    dhv_xc_triangle.SetMaxTreeSize(max_tree_size);
+
+    return SolveExhaustive();
+  }
+
+  /**
    * Reset the task (as if never flown)
    */
   void Reset();
