@@ -70,6 +70,7 @@ Version 6.7 - not yet released
   - never close dialogs due to display rotation
   - disable custom fonts on Altair
   - improve small dialog font on Altair
+  - fix loading translations on Linux (#2041)
 * map
   - terrain countour lines (#2451)
   - continue loading terrain/topography without GPS fix (#2723)
@@ -90,13 +91,16 @@ Version 6.7 - not yet released
   - new option to disable OLC optimisation
   - MAT: ask user whether to add turn points while flying over it
   - update the calculator without a GPS fix (#2876)
-  - fix task speed and time estimates before task start (#2876)
+  - fix task speed and time estimates before task start (#2876, #2906)
   - show "arm advance" button when manual arming is necessary (#1729)
   - support the OLC/DMSt 500km triangle threshold (#2963)
+  - render finish point as achieved when task is finished (#2140)
+  - subtract start/finish cylinder radius from task distance (#2308)
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
 * calculations
   - add more weight to zig-zag wind compared to circling wind
+  - enable circling wind calculation in IGC replay (#2672)
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added
@@ -118,6 +122,7 @@ Version 6.7 - not yet released
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
   - save the previous log file in "xcsoar.old"
+  - fix name truncation when saving a waypoint file on Windows (#3096)
 
 Version 6.6.6 - not yet released
 * tasks

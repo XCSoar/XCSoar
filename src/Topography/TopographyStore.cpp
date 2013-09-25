@@ -251,8 +251,6 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
 
     // Handle alpha component
-    // Only used by OpenGL versions... GDI versions ignore anything that has an alpha specified
-#ifdef ENABLE_OPENGL
     // If not present at all (i.e. v6.6 or earlier file), default to 100% opaque
     uint8_t alpha = 255;
     if (*p == _T(',')) {
@@ -261,12 +259,12 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       // Ignore a totally transparent file!
       if (alpha == 0)
         continue;
-    }
-#else
-    // GDI versions ignore anything that has an alpha specified
-    if (*p == _T(','))
-      continue;
+#ifndef ENABLE_OPENGL
+      // Without OpenGL ignore anything but 100% opaque
+      if (alpha != 255)
+        continue;
 #endif
+    }
 
     // Create TopographyFile instance from parsed line
     TopographyFile *file = new TopographyFile(zdir, shape_filename,

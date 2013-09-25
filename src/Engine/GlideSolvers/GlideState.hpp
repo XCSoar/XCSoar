@@ -26,11 +26,13 @@
 #include "Geo/GeoVector.hpp"
 #include "Compiler.h"
 
+struct AircraftState;
+class TaskPoint;
+
 /**
  * Class used to define a glide/navigation task
  */
-struct GlideState 
-{
+struct GlideState {
   /** Distance/bearing of task */
   GeoVector vector;
 
@@ -69,6 +71,11 @@ public:
    */
   GlideState(const GeoVector &vector, const fixed htarget,
              fixed altitude, const SpeedVector wind);
+
+  gcc_pure
+  static GlideState Remaining(const TaskPoint &tp,
+                              const AircraftState &aircraft,
+                              const fixed min_h);
 
   /**
    * Calculate internal quantities to reduce computation time

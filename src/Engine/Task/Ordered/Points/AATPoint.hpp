@@ -52,8 +52,7 @@ struct RangeAndRadial {
  * \todo
  * - Elevation may vary with target shift
  */
-class AATPoint final : public IntermediateTaskPoint
-{
+class AATPoint final : public IntermediateTaskPoint {
   /** Location of target within OZ */
   GeoPoint target_location;
   /** Whether target can float */
@@ -131,12 +130,14 @@ public:
   }
 
   /**
-   * Test whether aircraft has travelled close to isoline of target within threshold
+   * Test whether aircraft has travelled close to isoline of target
+   * within threshold
    *
    * @param state Aircraft state
    * @param threshold Threshold for distance comparision (m)
    *
-   * @return True if double leg distance from state is within threshold of target
+   * @return True if double leg distance from state is within
+   * threshold of target
    */
   gcc_pure
   bool IsCloseToTarget(const AircraftState& state,
@@ -148,7 +149,8 @@ public:
    * force_if_current is true.
    *
    * @param p Parametric range (0:1) to set target
-   * @param force_if_current If current active, force range move (otherwise ignored)
+   * @param force_if_current If current active, force range move
+   * (otherwise ignored)
    *
    * @return True if target was moved
    */

@@ -18,15 +18,24 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "TaskDijkstraMax.hpp"
+#include "GlideState.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "Task/Points/TaskPoint.hpp"
 
-bool
-TaskDijkstraMax::DistanceMax()
+#include <algorithm>
+
+#include <assert.h>
+
+GlideState
+GlideState::Remaining(const TaskPoint &tp,
+                      const AircraftState &aircraft,
+                      const fixed min_h)
 {
-  dijkstra.Clear();
-  dijkstra.Reserve(256);
-  AddZeroStartEdges();
-  return Run();
+  assert(aircraft.location.IsValid());
+
+  return GlideState(tp.GetVectorRemaining(aircraft.location),
+                    std::max(min_h, tp.GetElevation()),
+                    aircraft.altitude, aircraft.wind);
 }

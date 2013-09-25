@@ -21,9 +21,9 @@
  */
 #include "TaskEffectiveMacCready.hpp"
 
-TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
-                                           const unsigned activeTaskPoint,
-                                           const AircraftState &_aircraft,
+TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint *> &tps,
+                                               const unsigned activeTaskPoint,
+                                               const AircraftState &_aircraft,
                                                const GlideSettings &settings,
                                                const GlidePolar &gp):
   TaskSolveTravelled(tps, activeTaskPoint, _aircraft,
@@ -31,8 +31,8 @@ TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoin
 {
 }
 
-fixed 
-TaskEffectiveMacCready::f(const fixed mc) 
+fixed
+TaskEffectiveMacCready::f(const fixed mc)
 {
   tm.set_mc(mc);
   return time_error();

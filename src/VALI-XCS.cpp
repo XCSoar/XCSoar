@@ -47,7 +47,6 @@ enum STATUS_t {
 static const char szPass[] = "Validation check passed, data indicated as correct";
 static const char szFail[] = "Validation check failed.  G Record is invalid";
 static const char szNoFile[] = "Validation check failed.  File not found";
-static const char szInfo[] = "Vali XCS for the XCSoar Flight Computer Version 1.0.2";
 
 static STATUS_t
 ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)

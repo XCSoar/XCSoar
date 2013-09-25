@@ -43,8 +43,8 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const fixed _b, const fixed _c) :
-    da(fixed(2)), b(_b), denom(sqr(b) - fixed(4) * _c)
+  Quadratic(const fixed _b, const fixed _c)
+    :da(2), b(_b), denom(sqr(b) - Quadruple(_c))
   {
   }
 
@@ -55,8 +55,8 @@ public:
    * @param _b Value of b
    * @param _c Value of c
    */
-  Quadratic(const fixed _a, const fixed _b, const fixed _c) :
-    da(Double(_a)), b(_b), denom(sqr(b) - Double(da * _c))
+  Quadratic(const fixed _a, const fixed _b, const fixed _c)
+    :da(Double(_a)), b(_b), denom(sqr(b) - Double(da * _c))
   {
   }
 
@@ -65,9 +65,8 @@ public:
    *
    * @return True if quadratic has at least one real solution
    */
-  gcc_pure bool
-  Check() const
-  {
+  gcc_pure
+  bool Check() const {
     if (negative(denom))
       return false;
 
@@ -82,9 +81,8 @@ public:
    *
    * @return greater x value of solutions
    */
-  gcc_pure fixed
-  SolutionMax() const
-  {
+  gcc_pure
+  fixed SolutionMax() const {
     assert(Check());
     return positive(da) ? Solution(true) : Solution(false);
   }
@@ -94,9 +92,8 @@ public:
    *
    * @return smallest x value of solutions
    */
-  gcc_pure fixed
-  SolutionMin() const
-  {
+  gcc_pure
+  fixed SolutionMin() const {
     assert(Check());
     return positive(da) ? Solution(false) : Solution(true);
   }
@@ -110,9 +107,8 @@ private:
    *
    * @return x value of solution
    */
-  gcc_pure fixed
-  Solution(const bool positive) const
-  {
+  gcc_pure
+  fixed Solution(const bool positive) const {
     assert(Check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }

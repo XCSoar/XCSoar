@@ -65,7 +65,6 @@ public:
                 const GlideSettings &settings, const GlidePolar &_gp,
                 const fixed _t_remaining,
                 StartPoint *_ts);
-  virtual ~TaskMinTarget() {};
 
 private:
   virtual fixed f(const fixed p);

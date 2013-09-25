@@ -21,7 +21,8 @@
  */
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "TaskSolution.hpp"
+#include "GlideSolvers/GlideState.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
 
@@ -30,15 +31,35 @@ TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
                                    const AircraftState &aircraft,
                                    fixed minH) const
 {
-  return TaskSolution::GlideSolutionRemaining(tp, aircraft,
-                                              settings, glide_polar, minH);
+  GlideState gs = GlideState::Remaining(tp, aircraft, minH);
+
+  if (!include_travel_to_start && active_index == 0 &&
+      tp.GetType() == TaskPointType::START &&
+      !((const OrderedTaskPoint &)tp).HasEntered())
+    /* ignore the travel to the start point */
+    gs.vector.distance = fixed(0);
+
+  return MacCready::Solve(settings, glide_polar, gs);
 }
 
 
 AircraftState
 TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
-  return aircraft;
+  const OrderedTaskPoint &tp = *(const OrderedTaskPoint *)points[0];
+  assert(tp.GetType() != TaskPointType::UNORDERED);
+
+  if (!include_travel_to_start && active_index == 0 &&
+      tp.GetType() == TaskPointType::START &&
+      !tp.HasEntered()) {
+    /* if this instance shall only scan what really belongs to the
+       task, assume the aircraft is already at the start location */
+    AircraftState aircraft2 = aircraft;
+    aircraft2.location = tp.GetLocation();
+    aircraft2.altitude = tp.GetElevation();
+    return aircraft2;
+  } else
+    return aircraft;
 }
 
 bool
@@ -51,8 +72,7 @@ TaskMacCreadyRemaining::has_targets() const
   return false;
 }
 
-
-void 
+void
 TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
 {
   // first try to modify targets without regard to current inside (unless forced)
@@ -70,8 +90,7 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
   }
 }
 
-
-void 
+void
 TaskMacCreadyRemaining::target_save()
 {
   auto saved = saved_targets.begin();
@@ -81,7 +100,7 @@ TaskMacCreadyRemaining::target_save()
       : GeoPoint::Invalid();
 }
 
-void 
+void
 TaskMacCreadyRemaining::target_restore()
 {
   auto saved = saved_targets.cbegin();

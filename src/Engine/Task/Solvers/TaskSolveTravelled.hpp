@@ -30,15 +30,15 @@
 /**
  *  Abstract class to solve for travelled time.
  */
-class TaskSolveTravelled : public ZeroFinder {
+class TaskSolveTravelled : protected ZeroFinder {
   const AircraftState &aircraft;
   fixed inv_dt;
   fixed dt;
 
- protected:
+protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
 
- public:
+public:
   /**
    * Constructor for ordered task points
    *
@@ -49,14 +49,14 @@ class TaskSolveTravelled : public ZeroFinder {
    * @param xmin Min value of search parameter
    * @param xmax Max value of search parameter
    */
-  TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
+  TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tps,
                      const unsigned activeTaskPoint,
                      const AircraftState &_aircraft,
                      const GlideSettings &settings, const GlidePolar &gp,
                      const fixed xmin,
                      const fixed xmax);
-  virtual ~TaskSolveTravelled() {};
 
+protected:
   /**
    * Calls travelled calculator
    *
@@ -64,6 +64,7 @@ class TaskSolveTravelled : public ZeroFinder {
    */
   fixed time_error();
 
+public:
   /**
    * Search for parameter value.
    *
@@ -71,7 +72,7 @@ class TaskSolveTravelled : public ZeroFinder {
    *
    * @return Value producing same travelled time
    */
-  virtual fixed search(const fixed ce);
+  fixed search(const fixed ce);
 };
 
 #endif

@@ -431,7 +431,19 @@ public:
 
 private:
 
+  /**
+   * @return true if a solution was found (and applied)
+   */
+  bool RunDijsktraMin(const GeoPoint &location);
+
+
   fixed ScanDistanceMin(const GeoPoint &ref, bool full);
+
+  /**
+   * @return true if a solution was found (and applied)
+   */
+  bool RunDijsktraMax();
+
   fixed ScanDistanceMax();
 
   /**

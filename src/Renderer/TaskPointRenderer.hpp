@@ -47,7 +47,7 @@ public:
     NONE,
   };
 
-protected:
+private:
   Canvas &canvas;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
@@ -64,6 +64,7 @@ protected:
   const GeoPoint location;
   FlatBoundingBox bb_screen;
   bool location_available;
+  bool task_finished;
   bool mode_optional_start;
 
 public:
@@ -95,13 +96,17 @@ public:
     bb_screen = bb;
   }
 
+  void SetTaskFinished(bool _task_finished) {
+    task_finished = _task_finished;
+  }
+
   void SetModeOptional(const bool mode) {
     mode_optional_start = mode;
   }
 
   void Draw(const TaskPoint &tp, Layer layer);
 
-protected:
+private:
   void DrawOrdered(const OrderedTaskPoint &tp, Layer layer);
 
   bool LegActive() const {
@@ -123,8 +128,9 @@ protected:
   void DrawTarget(const TaskPoint &tp);
   void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
   void DrawIsoline(const AATPoint &tp);
-  void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);
-  void DrawOZForeground(const OrderedTaskPoint &tp);
+  void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
+                        int offset);
+  void DrawOZForeground(const OrderedTaskPoint &tp, int offset);
 };
 
 #endif

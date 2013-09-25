@@ -151,6 +151,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                           task_manager->GetOrderedTask().GetTaskProjection(),
                           ozv, false, TaskPointRenderer::ALL,
                           Basic().location_available, Basic().location);
+    tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);
   }

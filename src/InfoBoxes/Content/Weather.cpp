@@ -226,7 +226,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
   PixelScalar length =
-      std::min(size, (UPixelScalar)std::max(10, iround(info.wind.norm * 4)));
+    std::min(size, (UPixelScalar)std::max(10, iround(Quadruple(info.wind.norm))));
 
   PixelScalar offset = -length / 2;
 

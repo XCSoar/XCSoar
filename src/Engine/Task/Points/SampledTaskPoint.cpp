@@ -33,7 +33,7 @@ SampledTaskPoint::SampledTaskPoint(const GeoPoint &location,
 
 // SAMPLES
 
-bool 
+bool
 SampledTaskPoint::AddInsideSample(const AircraftState& state,
                                   const TaskProjection &projection)
 {
@@ -55,11 +55,11 @@ SampledTaskPoint::AddInsideSample(const AircraftState& state,
   // return true; (update required)
   return sampled_points.ThinToSize(64) || retval;
 
-  // thin to size is used here to ensure the sampled points vector
-  // size is bounded to reasonable values for AAT calculations.
+  /* thin to size is used here to ensure the sampled points vector
+     size is bounded to reasonable values for AAT calculations */
 }
 
-void 
+void
 SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
                                             const TaskProjection &projection)
 {
@@ -72,10 +72,10 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 
 // BOUNDARY
 
-void 
+void
 SampledTaskPoint::UpdateOZ(const TaskProjection &projection,
                            const OZBoundary &_boundary)
-{ 
+{
   search_max = search_min = nominal_points.front();
   boundary_points.clear();
 
@@ -87,7 +87,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection,
 
 // SAMPLES + BOUNDARY
 
-void 
+void
 SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
 {
   search_max.Project(projection);
@@ -98,12 +98,12 @@ SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
 }
 
 void
-SampledTaskPoint::Reset() 
+SampledTaskPoint::Reset()
 {
   sampled_points.clear();
 }
 
-const SearchPointVector& 
+const SearchPointVector &
 SampledTaskPoint::GetSearchPoints() const
 {
   if (HasSampled())

@@ -19,9 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskCruiseEfficiency.hpp"
 
-TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
+TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint *> &tps,
                                            const unsigned activeTaskPoint,
                                            const AircraftState &_aircraft,
                                            const GlideSettings &settings,
@@ -31,7 +32,7 @@ TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>&
 {
 }
 
-fixed 
+fixed
 TaskCruiseEfficiency::f(const fixed ce)
 {
   tm.set_cruise_efficiency(ce);

@@ -42,6 +42,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
+#include "Language/LanguageGlue.hpp"
 #include "Simulator.hpp"
 #include "OS/Args.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
@@ -132,6 +133,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   AllowLanguage();
+  InitLanguage();
 
   InitialiseIOThread();
 
