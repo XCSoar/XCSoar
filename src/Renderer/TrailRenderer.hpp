@@ -75,6 +75,11 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time);
 
+  gcc_malloc
+  RasterPoint *Prepare(unsigned n);
+
+  void DrawPreparedPolyline(Canvas &canvas, unsigned n);
+
   /**
    * Draw a ContestTraceVector.  The caller must select a Pen.
    */
