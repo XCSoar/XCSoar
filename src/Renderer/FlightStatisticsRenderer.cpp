@@ -57,6 +57,20 @@ FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
    trail_renderer(map_look.trail) {}
 
 void
+FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
+                                              const Projection &projection,
+                                              const ContestStatistics &statistics,
+                                              unsigned i) const
+{
+  if (!statistics.GetResult(i).IsDefined())
+    return;
+
+  canvas.Select(map_look.contest_pens[i]);
+  trail_renderer.DrawTraceVector(canvas, projection,
+                                 statistics.GetSolution(i));
+}
+
+void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                                     const NMEAInfo &nmea_info,
                                     const ComputerSettings &settings_computer,
@@ -105,12 +119,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   trail_renderer.Draw(canvas, proj);
 
-  for (unsigned i=0; i< 3; ++i) {
-    if (contest.GetResult(i).IsDefined()) {
-      canvas.Select(map_look.contest_pens[i]);
-      trail_renderer.DrawTraceVector(canvas, proj, contest.GetSolution(i));
-    }
-  }
+  for (unsigned i=0; i< 3; ++i)
+    DrawContestSolution(canvas, proj, contest, i);
 }
 
 void
