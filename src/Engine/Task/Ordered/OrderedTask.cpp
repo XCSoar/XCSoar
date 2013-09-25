@@ -182,6 +182,22 @@ OrderedTask::ScanLegStartTime()
 
 // DISTANCES
 
+inline bool
+OrderedTask::RunDijsktraMin(const GeoPoint &location)
+{
+  if (dijkstra_min == nullptr)
+    dijkstra_min = new TaskDijkstraMin();
+
+  SearchPoint ac(location, task_projection);
+  if (!dijkstra_min->DistanceMin(*this, ac))
+    return false;
+
+  for (unsigned i = GetActiveIndex(), end = TaskSize(); i != end; ++i)
+    SetPointSearchMin(i, dijkstra_min->GetSolution(i));
+
+  return true;
+}
+
 inline fixed
 OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
 {
@@ -206,19 +222,31 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
   }
 
   if (full) {
-    if (dijkstra_min == nullptr)
-      dijkstra_min = new TaskDijkstraMin();
-
-    SearchPoint ac(location, task_projection);
-    if (dijkstra_min->DistanceMin(*this, ac)) {
-      for (unsigned i = GetActiveIndex(), end = TaskSize(); i != end; ++i)
-        SetPointSearchMin(i, dijkstra_min->GetSolution(i));
-    }
-
+    RunDijsktraMin(location);
     last_min_location = location;
   }
 
   return taskpoint_start->ScanDistanceMin();
+}
+
+inline bool
+OrderedTask::RunDijsktraMax()
+{
+  if (dijkstra_max == nullptr)
+    dijkstra_max = new TaskDijkstraMax();
+
+  if (!dijkstra_max->DistanceMax(*this))
+    return false;
+
+  for (unsigned i = 0, active = GetActiveIndex(), end = TaskSize();
+       i != end; ++i) {
+    const SearchPoint &solution = dijkstra_max->GetSolution(i);
+    SetPointSearchMax(i, solution);
+    if (i <= active)
+      set_tp_search_achieved(i, solution);
+  }
+
+  return true;
 }
 
 inline fixed
@@ -238,18 +266,7 @@ OrderedTask::ScanDistanceMax()
     taskpoint_start->ScanActive(*task_points[active_task_point]);
   }
 
-  if (dijkstra_max == nullptr)
-    dijkstra_max = new TaskDijkstraMax();
-
-  if (dijkstra_max->DistanceMax(*this)) {
-    for (unsigned i = 0, active = GetActiveIndex(), end = TaskSize();
-         i != end; ++i) {
-      const SearchPoint &solution = dijkstra_max->GetSolution(i);
-      SetPointSearchMax(i, solution);
-      if (i <= active)
-        set_tp_search_achieved(i, solution);
-    }
-  }
+  RunDijsktraMax();
 
   if (atp) {
     active_task_point = atp;
