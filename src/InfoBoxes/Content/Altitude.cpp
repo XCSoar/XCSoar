@@ -28,7 +28,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -38,9 +37,6 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Simulator.hpp"
-#include "Protection.hpp"
-
-#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

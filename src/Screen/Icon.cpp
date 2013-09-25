@@ -32,10 +32,10 @@ Copyright_License {
 #endif
 
 void
-MaskedIcon::LoadResource(unsigned id, unsigned big_id, bool center)
+MaskedIcon::LoadResource(ResourceId id, ResourceId big_id, bool center)
 {
   if (Layout::ScaleEnabled()) {
-    if (big_id > 0)
+    if (big_id.IsDefined())
       bitmap.Load(big_id);
     else
       bitmap.LoadStretch(id, Layout::FastScale(1));

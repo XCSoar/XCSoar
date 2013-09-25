@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "RulesStatusPanel.hpp"
 #include "Util/Macros.hpp"
-#include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Formatter/UserUnits.hpp"

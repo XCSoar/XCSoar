@@ -29,7 +29,6 @@ Copyright_License {
 namespace Layout
 {
   bool landscape = false;
-  bool square = false;
   int scale = 1;
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
@@ -45,7 +44,7 @@ Layout::Initialize(PixelSize new_size)
   const unsigned width = new_size.cx, height = new_size.cy;
 
   landscape = width > height;
-  square = width == height;
+  const bool square = width == height;
 
   if (!ScaleSupported())
     return;

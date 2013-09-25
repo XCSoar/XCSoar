@@ -31,15 +31,7 @@ HI_RES_AWARE CEUX {1}
 
 #define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
 
-#if defined(WIN32) || defined(ANDROID) || defined(KOBO)
-#define MO(name) name.mo MO DISCARDABLE "../output/po/" #name ".mo"
-#else
-#define MO(name)
-#endif
-
 #define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
-
-#define TEXT(name, file) name TEXT DISCARDABLE "../output/data/" file ".gz"
 
 // --- Icons ---
 
@@ -242,56 +234,14 @@ XMLDIALOG(IDR_XML_FLARMTRAFFIC, "dlgFlarmTraffic")
 XMLDIALOG(IDR_XML_FLARMTRAFFIC_L, "dlgFlarmTraffic_L")
 XMLDIALOG(IDR_XML_FLARMTRAFFICDETAILS, "dlgFlarmTrafficDetails")
 XMLDIALOG(IDR_XML_FLARMTRAFFICDETAILS_L, "dlgFlarmTrafficDetails_L")
-XMLDIALOG(IDR_XML_NOAA_DETAILS_L, "dlgNOAADetails_L")
-XMLDIALOG(IDR_XML_NOAA_DETAILS, "dlgNOAADetails")
 XMLDIALOG(IDR_XML_TARGET, "dlgTarget")
 XMLDIALOG(IDR_XML_TARGET_L, "dlgTarget_L")
-XMLDIALOG(IDR_XML_TEAMCODE, "dlgTeamCode")
-XMLDIALOG(IDR_XML_TEAMCODE_L, "dlgTeamCode_L")
 XMLDIALOG(IDR_XML_VARIO, "dlgVario")
 XMLDIALOG(IDR_XML_VARIO_L, "dlgVario_L")
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS, "dlgWaypointDetails")
 XMLDIALOG(IDR_XML_WAYPOINTDETAILS_L, "dlgWaypointDetails_L")
 
 // new task editor
-XMLDIALOG(IDR_XML_TASKACTIONS, "pnlTaskActions")
-XMLDIALOG(IDR_XML_TASKMANAGER, "dlgTaskManager")
-XMLDIALOG(IDR_XML_TASKMANAGER_L, "dlgTaskManager_L")
 XMLDIALOG(IDR_XML_TASKMANAGERCLOSE, "pnlTaskManagerClose")
 XMLDIALOG(IDR_XML_TASKPOINT, "dlgTaskPoint")
 XMLDIALOG(IDR_XML_TASKPOINT_L, "dlgTaskPoint_L")
-
-// translations
-MO(cs)
-MO(da)
-MO(de)
-MO(el)
-MO(es)
-MO(fi)
-MO(fr)
-MO(he)
-MO(hr)
-MO(hu)
-MO(it)
-MO(ja)
-MO(ko)
-MO(nb)
-MO(nl)
-MO(pl)
-MO(pt)
-MO(pt_BR)
-MO(ro)
-MO(ru)
-MO(sk)
-MO(sr)
-MO(sv)
-MO(tr)
-MO(uk)
-MO(vi)
-
-TEXT(LICENSE, "COPYING")
-TEXT(AUTHORS, "AUTHORS")
-
-// --- EGM96 Raster Data --- 
-
-IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "other/egm96s.dem"

@@ -149,16 +149,17 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
       return std::max(fixed(0),
                       GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
                       - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
-    } else {
+    } else if (ref.IsValid())
       return std::max(fixed(0),
                       ref.ProjectedDistance(GetOrigin()->GetLocationScored(),
                                             destination.GetLocationScored())
                       -GetOrigin()->ScoreAdjustment());
-    }
+    else
+      return fixed(0);
 
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
-    if (GetOrigin()->HasEntered()) {
+    if (GetOrigin()->HasEntered() && ref.IsValid()) {
       return std::max(fixed(0),
                       memo_travelled.calc(GetOrigin()->GetLocationScored(),
                                           ref).distance

@@ -160,7 +160,7 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     } else
       tp = &task.GetOptionalStartPoint(index_optional_starts);
 
-    assert(tp != NULL);
+    assert(tp != nullptr);
 
     canvas.DrawText(pt.x, pt.y, tp->GetWaypoint().name.c_str());
   }

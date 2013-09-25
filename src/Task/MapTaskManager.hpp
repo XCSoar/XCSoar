@@ -24,7 +24,6 @@
 #define MAPTASKMANAGER_H
 
 struct Waypoint;
-class OrderedTask;
 
 /**
  * Appends wp to current Ordered task and activates the ordered task if

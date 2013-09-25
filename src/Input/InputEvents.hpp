@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
-#include "Menu/MenuData.hpp"
 
 #include <tchar.h>
 
 struct InputConfig;
+class Menu;
 
 typedef void (*pt2Event)(const TCHAR *);
 

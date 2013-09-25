@@ -26,7 +26,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef EYE_CANDY
-#include "resource.h"
+#include "Resources.hpp"
 #endif
 
 void

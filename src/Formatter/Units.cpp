@@ -24,12 +24,9 @@ Copyright_License {
 #include "Formatter/Units.hpp"
 #include "Units/System.hpp"
 #include "Units/Descriptor.hpp"
-#include "Math/Angle.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
-#include <stdlib.h>
 
 static void
 FormatInteger(TCHAR *buffer,

@@ -31,9 +31,10 @@ Copyright_License {
 #include "Screen/Memory/PixelTraits.hpp"
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
 #include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "ResourceId.hpp"
 #endif
 
 #ifdef USE_GDI
@@ -42,9 +43,10 @@ Copyright_License {
 
 #include <assert.h>
 #include <tchar.h>
-#include <stdint.h>
 
+class ResourceId;
 class UncompressedImage;
+template<typename T> struct ConstBuffer;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -59,8 +61,8 @@ using BitmapPixelTraits = BGRAPixelTraits;
 /**
  * An image loaded from storage.
  */
-class Bitmap
-#ifdef ENABLE_OPENGL
+class Bitmap final
+#ifdef ANDROID
              : private GLSurfaceListener
 #endif
 {
@@ -79,11 +81,14 @@ public:
   };
 
 protected:
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
   /** resource id */
-  unsigned id;
+  ResourceId id;
   /** filename for external images (id=0) */
   tstring pathName;
+#endif
+
+#ifdef ENABLE_OPENGL
   GLTexture *texture;
   PixelSize size;
 
@@ -96,22 +101,22 @@ protected:
 
 public:
 #ifdef ENABLE_OPENGL
-  Bitmap():id(0), texture(NULL), interpolation(false) {}
-  explicit Bitmap(unsigned id):texture(NULL), interpolation(false) {
-    Load(id);
-  }
+  Bitmap()
+    :
+#ifdef ANDROID
+    id(ResourceId::Null()),
+#endif
+    texture(NULL), interpolation(false) {}
 #elif defined(USE_MEMORY_CANVAS)
   constexpr Bitmap():buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {}
-
-  explicit Bitmap(unsigned id)
-    :buffer(WritableImageBuffer<BitmapPixelTraits>::Empty()) {
-    Load(id);
-  }
 #else
   Bitmap():bitmap(NULL) {}
-  explicit Bitmap(unsigned id):bitmap(NULL) {
-    Load(id);
-  }
+#endif
+
+  explicit Bitmap(ResourceId id);
+
+#if !defined(USE_GDI) && !defined(ANDROID)
+  Bitmap(ConstBuffer<void> buffer);
 #endif
 
   ~Bitmap() {
@@ -132,12 +137,20 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  UPixelScalar GetWidth() const {
+  unsigned GetWidth() const {
     return size.cx;
   }
 
-  UPixelScalar GetHeight() const {
+  unsigned GetHeight() const {
     return size.cy;
+  }
+#elif defined(USE_MEMORY_CANVAS)
+  unsigned GetWidth() const {
+    return buffer.width;
+  }
+
+  unsigned GetHeight() const {
+    return buffer.height;
   }
 #endif
 
@@ -147,14 +160,17 @@ public:
   void EnableInterpolation() {}
 #endif
 
+#if !defined(USE_GDI) && !defined(ANDROID)
   bool Load(const UncompressedImage &uncompressed, Type type=Type::STANDARD);
+  bool Load(ConstBuffer<void> buffer, Type type=Type::STANDARD);
+#endif
 
-  bool Load(unsigned id, Type type=Type::STANDARD);
+  bool Load(ResourceId id, Type type=Type::STANDARD);
 
   /**
    * Load a bitmap and stretch it by the specified zoom factor.
    */
-  bool LoadStretch(unsigned id, unsigned zoom);
+  bool LoadStretch(ResourceId id, unsigned zoom);
 
   bool LoadFile(const TCHAR *path);
 
@@ -178,7 +194,7 @@ public:
   }
 #endif
 
-#ifdef ENABLE_OPENGL
+#ifdef ANDROID
 private:
   /**
    * Load the texture again after the OpenGL surface has been

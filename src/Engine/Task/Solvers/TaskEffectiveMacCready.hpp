@@ -25,31 +25,32 @@
 #include "TaskSolveTravelled.hpp"
 
 /**
- *  Class to solve for effective MC.
+ * Class to solve for effective MC.
  *
- *  This is the MC setting that would produce the same travelled speed
- *  at 100% cruise efficiency.
+ * This is the MC setting that would produce the same travelled speed
+ * at 100% cruise efficiency.
  *
- *  This is calculated for the part of the task that has been travelled
+ * This is calculated for the part of the task that has been travelled
  */
 class TaskEffectiveMacCready final : public TaskSolveTravelled
 {
-public:
-/** 
- * Constructor for ordered task points
- * 
- * @param tps Vector of ordered task points comprising the task
- * @param activeTaskPoint Current active task point in sequence
- * @param _aircraft Current aircraft state
- * @param gp Glide polar to copy for calculations
- */
-  TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
-                       const unsigned activeTaskPoint,
-                       const AircraftState &_aircraft,
+ public:
+  /**
+   * Constructor for ordered task points
+   *
+   * @param tps Vector of ordered task points comprising the task
+   * @param activeTaskPoint Current active task point in sequence
+   * @param _aircraft Current aircraft state
+   * @param gp Glide polar to copy for calculations
+   */
+  TaskEffectiveMacCready(const std::vector<OrderedTaskPoint *> &tps,
+                         const unsigned activeTaskPoint,
+                         const AircraftState &_aircraft,
                          const GlideSettings &settings, const GlidePolar &gp);
-  virtual ~TaskEffectiveMacCready() {};
 
-  fixed f(const fixed ce);
+protected:
+  /* virtual methods from class ZeroFinder */
+  virtual fixed f(const fixed x) override;
 };
 
 #endif

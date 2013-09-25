@@ -68,6 +68,13 @@ Double(fixed a)
   return a * 2;
 }
 
+constexpr
+static inline fixed
+Quadruple(fixed a)
+{
+  return a * 4;
+}
+
 gcc_const
 inline fixed rsqrt(fixed a) {
   // not fast
@@ -331,6 +338,11 @@ public:
   constexpr
   fixed Double() const {
     return fixed(internal(), m_nVal << 1);
+  }
+
+  constexpr
+  fixed Quadruple() const {
+    return fixed(internal(), m_nVal << 2);
   }
 
   gcc_pure
@@ -943,6 +955,13 @@ static inline fixed
 Double(fixed a)
 {
   return a.Double();
+}
+
+constexpr
+static inline fixed
+Quadruple(fixed a)
+{
+  return a.Quadruple();
 }
 
 #endif

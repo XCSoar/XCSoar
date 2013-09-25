@@ -28,7 +28,6 @@ Copyright_License {
 #include "Formatter/LocalTimeFormatter.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 void
 UpdateInfoBoxTimeLocal(InfoBoxData &data)

@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 
-#include <stack>
+#include <list>
+
 #include <assert.h>
 
 struct Event;
@@ -41,8 +42,7 @@ class SingleWindow : public TopWindow {
   static constexpr const TCHAR *class_name = _T("XCSoarMain");
 #endif
 
-protected:
-  std::stack<WndForm *> dialogs;
+  std::list<WndForm *> dialogs;
 
 public:
 #ifdef USE_GDI
@@ -85,13 +85,13 @@ public:
   bool IsTopDialog(const WndForm &dialog) const {
     assert(HasDialog());
 
-    return &dialog == dialogs.top();
+    return &dialog == dialogs.front();
   }
 
   WndForm &GetTopDialog() {
     assert(HasDialog());
 
-    return *dialogs.top();
+    return *dialogs.front();
   }
 
 #ifndef USE_GDI
@@ -112,6 +112,7 @@ public:
 protected:
   virtual bool OnClose() override;
   virtual void OnDestroy() override;
+  virtual void OnResize(PixelSize new_size) override;
 };
 
 #endif

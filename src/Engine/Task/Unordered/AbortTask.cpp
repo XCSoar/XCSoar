@@ -22,11 +22,10 @@
 
 #include "AbortTask.hpp"
 #include "AbortIntersectionTest.hpp"
-#include "Task/TaskBehaviour.hpp"
+#include "AlternateList.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Solvers/TaskSolution.hpp"
-#include "Task/TaskEvents.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/ReservablePriorityQueue.hpp"

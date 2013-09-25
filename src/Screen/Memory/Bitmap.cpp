@@ -40,15 +40,6 @@ Bitmap::Load(const UncompressedImage &uncompressed, Type type)
   return true;
 }
 
-bool
-Bitmap::LoadStretch(unsigned id, unsigned zoom)
-{
-  assert(zoom > 0);
-
-  // XXX
-  return Load(id);
-}
-
 void
 Bitmap::Reset()
 {

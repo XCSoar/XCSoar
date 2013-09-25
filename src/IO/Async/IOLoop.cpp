@@ -140,11 +140,13 @@ IOLoop::HandleReady(File *ready)
       continue;
     }
 
+    const auto handler = ready->handler;
+
     mutex.Unlock();
     bool result = ready->handler->OnFileEvent(ready->fd, mask);
     mutex.Lock();
 
-    if (!result && ready->mask != 0) {
+    if (!result && ready->mask != 0 && ready->handler == handler) {
       ready->mask = 0;
       ready->modified = true;
       modified = true;

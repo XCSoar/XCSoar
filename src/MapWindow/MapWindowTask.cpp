@@ -34,7 +34,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 
 #include <stdio.h>
-#include <math.h>
 
 void
 MapWindow::DrawTask(Canvas &canvas)
@@ -70,6 +69,7 @@ MapWindow::DrawTask(Canvas &canvas)
                           task_manager->GetOrderedTask().GetTaskProjection(),
                           ozv, draw_bearing, target_visibility,
                           Basic().location_available, Basic().location);
+    tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);
   }

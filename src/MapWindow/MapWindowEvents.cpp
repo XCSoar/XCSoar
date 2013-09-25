@@ -22,12 +22,8 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Asset.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Protection.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#else
+#ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
 #endif
 

@@ -34,11 +34,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Key.h"
-#include "ResourceLoader.hpp"
 #include "Version.hpp"
 #include "Inflate.hpp"
 #include "Util/ConvertString.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 #include <assert.h>
 
@@ -165,12 +164,9 @@ OnLogoPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 static void
-LoadTextFromResource(const TCHAR* name, const TCHAR* control)
+LoadTextFromResource(const void *data, const void *size, const TCHAR *control)
 {
-  ResourceLoader::Data data = ResourceLoader::Load(name, _T("TEXT"));
-  assert(data.first != NULL);
-
-  char *buffer = InflateToString(data.first, data.second);
+  char *buffer = InflateToString(data, (size_t)size);
 
   UTF8ToWideConverter text(buffer);
   if (text.IsValid())
@@ -186,6 +182,12 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
+extern const uint8_t license_start[] asm("_binary_COPYING_gz_start");
+extern const uint8_t license_size[] asm("_binary_COPYING_gz_size");
+
+extern const uint8_t authors_start[] asm("_binary_AUTHORS_gz_start");
+extern const uint8_t authors_size[] asm("_binary_AUTHORS_gz_size");
+
 void
 dlgCreditsShowModal(SingleWindow &parent)
 {
@@ -198,8 +200,8 @@ dlgCreditsShowModal(SingleWindow &parent)
 
   wf->SetKeyDownFunction(FormKeyDown);
 
-  LoadTextFromResource(_T("LICENSE"), _T("prpLicense"));
-  LoadTextFromResource(_T("AUTHORS"), _T("prpAuthors"));
+  LoadTextFromResource(license_start, license_size, _T("prpLicense"));
+  LoadTextFromResource(authors_start, authors_size, _T("prpAuthors"));
 
   wf->ShowModal();
 

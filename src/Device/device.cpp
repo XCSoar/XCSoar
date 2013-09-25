@@ -31,8 +31,6 @@ Copyright_License {
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Util/Algorithm.hpp"
 
-#include <assert.h>
-
 static void
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config)
 {

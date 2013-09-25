@@ -36,7 +36,6 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
-#include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 

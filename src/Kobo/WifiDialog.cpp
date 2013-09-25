@@ -47,7 +47,7 @@ class WifiListWidget final
     int signal_level;
     int id;
 
-    bool old;
+    bool old_visible, old_configured;
   };
 
   WndButton *connect_button;
@@ -105,9 +105,21 @@ private:
    */
   bool EnsureConnected();
 
+  gcc_pure
+  NetworkInfo *FindByID(int id);
+
+  gcc_pure
   NetworkInfo *FindByBSSID(const char *bssid);
+
+  gcc_pure
+  NetworkInfo *FindVisibleBySSID(const char *ssid);
+
+  gcc_pure
+  NetworkInfo *Find(const WifiConfiguredNetworkInfo &c);
+
   void MergeList(const WifiVisibleNetwork *p, unsigned n);
   void UpdateScanResults();
+  void Append(const WifiConfiguredNetworkInfo &src);
   void Merge(const WifiConfiguredNetworkInfo &c);
   void MergeList(const WifiConfiguredNetworkInfo *p, unsigned n);
   void UpdateConfigured();
@@ -247,12 +259,38 @@ WifiListWidget::EnsureConnected()
     wpa_supplicant.Connect("/var/run/wpa_supplicant/eth0");
 }
 
+inline WifiListWidget::NetworkInfo *
+WifiListWidget::FindByID(int id)
+{
+  auto f = std::find_if(networks.begin(), networks.end(),
+                        [id](const NetworkInfo &info) {
+                          return info.id == id;
+                        });
+  if (f == networks.end())
+    return nullptr;
+
+  return f;
+}
+
 WifiListWidget::NetworkInfo *
 WifiListWidget::FindByBSSID(const char *bssid)
 {
   auto f = std::find_if(networks.begin(), networks.end(),
                         [bssid](const NetworkInfo &info) {
                           return info.bssid == bssid;
+                        });
+  if (f == networks.end())
+    return nullptr;
+
+  return f;
+}
+
+WifiListWidget::NetworkInfo *
+WifiListWidget::FindVisibleBySSID(const char *ssid)
+{
+  auto f = std::find_if(networks.begin(), networks.end(),
+                        [ssid](const NetworkInfo &info) {
+                          return info.signal_level >= 0 && info.ssid == ssid;
                         });
   if (f == networks.end())
     return nullptr;
@@ -267,9 +305,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
     const auto &found = p[i];
 
     auto info = FindByBSSID(found.bssid);
-    if (info != nullptr) {
-      info->old = false;
-    } else {
+    if (info == nullptr) {
       info = &networks.append();
       info->bssid = found.bssid;
       info->id = -1;
@@ -277,6 +313,7 @@ WifiListWidget::MergeList(const WifiVisibleNetwork *p, unsigned n)
 
     info->ssid = found.ssid;
     info->signal_level = found.signal_level;
+    info->old_visible = false;
   }
 }
 
@@ -291,39 +328,38 @@ WifiListWidget::UpdateScanResults()
   delete[] buffer;
 }
 
+inline WifiListWidget::NetworkInfo *
+WifiListWidget::Find(const WifiConfiguredNetworkInfo &c)
+{
+  auto found = FindByID(c.id);
+  if (found != nullptr)
+    return found;
+
+  return c.bssid == "any"
+    ? FindVisibleBySSID(c.ssid)
+    : FindByBSSID(c.bssid);
+}
+
+inline void
+WifiListWidget::Append(const WifiConfiguredNetworkInfo &src)
+{
+  auto &dest = networks.append();
+  dest.bssid = src.bssid;
+  dest.ssid = src.ssid;
+  dest.id = src.id;
+  dest.signal_level = -1;
+  dest.old_configured = false;
+}
+
 inline void
 WifiListWidget::Merge(const WifiConfiguredNetworkInfo &c)
 {
-  if (c.bssid == "any") {
-    bool found = false;
-
-    for (auto &i : networks) {
-      if (i.signal_level >= 0 && i.ssid == c.ssid) {
-        found = true;
-        i.id = c.id;
-      }
-    }
-
-    if (!found) {
-      auto &info = networks.append();
-      info.bssid = c.bssid;
-      info.ssid = c.ssid;
-      info.id = c.id;
-      info.signal_level = -1;
-    }
-  } else {
-    auto info = FindByBSSID(c.bssid);
-    if (info != nullptr) {
-      info->old = false;
-    } else {
-      info = &networks.append();
-      info->bssid = c.bssid;
-      info->ssid = c.ssid;
-      info->signal_level = -1;
-    }
-
-    info->id = c.id;
-  }
+  auto found = Find(c);
+  if (found != nullptr) {
+    found->id = c.id;
+    found->old_configured = false;
+  } else
+    Append(c);
 }
 
 inline void
@@ -351,10 +387,18 @@ WifiListWidget::SweepList()
   unsigned cursor = GetList().GetCursorIndex();
 
   for (int i = networks.size() - 1; i >= 0; --i) {
-    if (networks[i].old) {
+    NetworkInfo &info = networks[i];
+
+    if (info.old_visible && info.old_configured) {
       networks.remove(i);
       if (cursor > unsigned(i))
         --cursor;
+    } else {
+      if (info.old_visible)
+        info.signal_level = -1;
+
+      if (info.old_configured)
+        info.id = -1;
     }
   }
 
@@ -369,11 +413,8 @@ WifiListWidget::UpdateList()
   if (EnsureConnected()) {
     wpa_supplicant.Status(status);
 
-    for (auto &i : networks) {
-      i.signal_level = -1;
-      i.id = -1;
-      i.old = true;
-    }
+    for (auto &i : networks)
+      i.old_visible = i.old_configured = true;
 
     UpdateScanResults();
     UpdateConfigured();

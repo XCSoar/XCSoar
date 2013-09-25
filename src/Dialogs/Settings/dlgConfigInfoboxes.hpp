@@ -25,7 +25,6 @@ Copyright_License {
 #define INFOBOXES_CONFIG_DIALOG_HPP
 
 #include "InfoBoxes/InfoBoxSettings.hpp"
-#include "tchar.h"
 
 struct DialogLook;
 struct InfoBoxLook;

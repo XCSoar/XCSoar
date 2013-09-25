@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "Waypoint/WaypointWriter.hpp"
-
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
 #include "Engine/Waypoint/Runway.hpp"
-#include "RadioFrequency.hpp"
 
 void
 WaypointWriter::Save(TextWriter &writer, WaypointFileType type)
@@ -97,7 +95,7 @@ void
 WaypointWriter::WriteSeeYou(TextWriter &writer, const Waypoint &wp)
 {
   // Write Title
-  writer.Format("\"%s\",", wp.name.c_str());
+  writer.Format(_T("\"%s\","), wp.name.c_str());
 
   // Write Code
   writer.Write(',');
@@ -144,7 +142,7 @@ WaypointWriter::WriteSeeYou(TextWriter &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Description
-  writer.FormatLine("\"%s\"", wp.comment.c_str());
+  writer.FormatLine(_T("\"%s\""), wp.comment.c_str());
 }
 
 void

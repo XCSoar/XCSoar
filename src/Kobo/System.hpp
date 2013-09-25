@@ -46,7 +46,7 @@ void
 KoboExecNickel();
 
 void
-KoboRunXCSoar();
+KoboRunXCSoar(const char *mode);
 
 void
 KoboRunTelnetd();

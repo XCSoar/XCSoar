@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Window.hpp"
-#include "resource.h"
 #include "Asset.hpp"
 #include "Util/Macros.hpp"
 
@@ -43,7 +42,7 @@ ScrollBar::ScrollBar()
 void
 ScrollBar::SetSize(const PixelSize size)
 {
-  UPixelScalar width;
+  unsigned width;
 
   // if the device has a pointer (mouse/touchscreen/etc.)
   if (HasTouchScreen())
@@ -72,12 +71,12 @@ ScrollBar::Reset()
 
 void
 ScrollBar::SetSlider(unsigned size, unsigned view_size,
-                      unsigned origin)
+                     unsigned origin)
 {
-  const PixelScalar netto_height = GetNettoHeight();
+  const int netto_height = GetNettoHeight();
 
   // If (no size) slider fills the whole area (no scrolling)
-  PixelScalar height = size > 0
+  int height = size > 0
     ? (int)(netto_height * view_size / size)
     : netto_height;
   // Prevent the slider from getting to small
@@ -91,7 +90,7 @@ ScrollBar::SetSlider(unsigned size, unsigned view_size,
   unsigned max_origin = size - view_size;
 
   // Move the slider to the appropriate position
-  PixelScalar top = (max_origin > 0) ?
+  int top = (max_origin > 0) ?
       ((netto_height - height) * origin / max_origin) : 0;
 
   // Prevent the slider from getting to big
@@ -107,8 +106,7 @@ ScrollBar::SetSlider(unsigned size, unsigned view_size,
 }
 
 unsigned
-ScrollBar::ToOrigin(unsigned size, unsigned view_size,
-                     PixelScalar y) const
+ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const
 {
   // Calculate highest origin (counted in ListItems)
   unsigned max_origin = size - view_size;
@@ -212,7 +210,7 @@ ScrollBar::Paint(Canvas &canvas) const
 }
 
 void
-ScrollBar::DragBegin(Window *w, UPixelScalar y)
+ScrollBar::DragBegin(Window *w, unsigned y)
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -237,7 +235,7 @@ ScrollBar::DragEnd(Window *w)
 }
 
 unsigned
-ScrollBar::DragMove(unsigned size, unsigned view_size, PixelScalar y) const
+ScrollBar::DragMove(unsigned size, unsigned view_size, int y) const
 {
   assert(dragging);
 

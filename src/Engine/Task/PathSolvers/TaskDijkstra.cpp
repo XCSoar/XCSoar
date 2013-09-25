@@ -21,28 +21,14 @@
 */
 
 #include "TaskDijkstra.hpp"
-#include "Task/Ordered/OrderedTask.hpp"
 #include "Geo/SearchPointVector.hpp"
+
+#include <algorithm>
 
 TaskDijkstra::TaskDijkstra(bool _is_min)
   :NavDijkstra(0),
    is_min(_is_min)
 {
-}
-
-bool
-TaskDijkstra::RefreshTask(const OrderedTask &task)
-{
-  const unsigned task_size = task.TaskSize();
-  if (task_size < 2 || task_size > MAX_STAGES)
-    return false;
-
-  SetStageCount(task_size);
-
-  for (unsigned stage = 0; stage != num_stages; ++stage)
-    boundaries[stage] = &task.GetPointSearchPoints(stage);
-
-  return true;
 }
 
 inline unsigned

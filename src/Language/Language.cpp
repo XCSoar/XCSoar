@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <assert.h>
 
-#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO)
+#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(KOBO) && !defined(__APPLE__)
 
 #include <locale.h>
 

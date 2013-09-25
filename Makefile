@@ -50,6 +50,8 @@
 #
 #   LIBCXX      The absolute path of the libc++ svn/git working directory.
 #
+#   IWYU        "y" to run "include-what-you-use" on all sources
+#
 
 .DEFAULT_GOAL := all
 
@@ -66,7 +68,9 @@ include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/pkgconfig.mk
+include $(topdir)/build/languages.mk
 include $(topdir)/build/resource.mk
+include $(topdir)/build/libdata.mk
 include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
@@ -97,6 +101,7 @@ include $(topdir)/build/doxygen.mk
 include $(topdir)/build/manual.mk
 
 # Create libraries for zzip, jasper and compatibility stuff
+include $(topdir)/build/libresource.mk
 include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk

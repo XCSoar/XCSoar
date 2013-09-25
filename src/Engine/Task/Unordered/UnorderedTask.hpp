@@ -27,15 +27,12 @@
 /**
  *  Common class for all unordered task types
  */
-class UnorderedTask: 
-  public AbstractTask
-{
+class UnorderedTask : public AbstractTask {
 public:
-  /** 
+  /**
    * Base constructor.
-   * 
+   *
    * @param tb Global task behaviour settings
-   * 
    */
   UnorderedTask(TaskType _type,
                 const TaskBehaviour &tb);

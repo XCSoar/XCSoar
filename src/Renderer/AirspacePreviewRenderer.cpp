@@ -33,10 +33,6 @@ Copyright_License {
 
 #include <vector>
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#endif
-
 static void
 GetPolygonPoints(std::vector<RasterPoint> &pts,
                  const AirspacePolygon &airspace,

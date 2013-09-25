@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "dlgConfigInfoboxes.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/HelpDialog.hpp"
-#include "Dialogs/TextEntry.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
@@ -36,18 +34,14 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/String.hpp"
-#include "Compiler.h"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
-#include <cstdio>
-#include <algorithm>
 
 class InfoBoxPreview : public PaintWindow {
 protected:

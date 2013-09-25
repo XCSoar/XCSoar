@@ -21,21 +21,18 @@
 }
 */
 
-#include "CrossSectionRenderer.hpp"
+#include "AirspaceXSRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspacePolygon.hpp"
+#include "Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#endif
+#include "Util/StringUtil.hpp"
+#include "Geo/GeoVector.hpp"
 
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer

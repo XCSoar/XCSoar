@@ -25,10 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DEVICE_HPP
 
 #include <tchar.h>
-#include <stdio.h>
 
-struct Declaration;
-class Mutex;
 class DeviceDescriptor;
 class OperationEnvironment;
 

@@ -31,6 +31,7 @@
 #include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
+struct TaskBehaviour;
 struct OrderedTaskSettings;
 
 /**
@@ -166,6 +167,27 @@ public:
    */
   ActiveState GetActiveState() const {
     return active_state;
+  }
+
+  /**
+   * Are we past this task point?
+   */
+  bool IsPast() const {
+    return active_state == BEFORE_ACTIVE;
+  }
+
+  /**
+   * Is this the current task point?
+   */
+  bool IsCurrent() const {
+    return active_state == CURRENT_ACTIVE;
+  }
+
+  /**
+   * Do we expect to reach this task point in the future?
+   */
+  bool IsFuture() const {
+    return active_state == AFTER_ACTIVE;
   }
 
   /**

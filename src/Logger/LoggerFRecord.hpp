@@ -27,8 +27,6 @@ Copyright_License {
 #include "Time/GPSClock.hpp"
 #include "NMEA/Info.hpp"
 
-struct BrokenTime;
-
 class LoggerFRecord
 {
   /* 4.5 minutes */

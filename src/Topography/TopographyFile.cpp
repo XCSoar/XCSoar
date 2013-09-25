@@ -35,10 +35,11 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                                fixed _label_threshold,
                                fixed _important_label_threshold,
                                const Color _color,
-                               int _label_field, int _icon,
-                               int _pen_width)
+                               int _label_field,
+                               ResourceId _icon, ResourceId _big_icon,
+                               unsigned _pen_width)
   :dir(_dir), first(NULL),
-   label_field(_label_field), icon(_icon),
+   label_field(_label_field), icon(_icon), big_icon(_big_icon),
    pen_width(_pen_width),
    color(_color), scale_threshold(_threshold),
    label_threshold(_label_threshold),
@@ -179,11 +180,11 @@ TopographyFile::LoadAll()
 unsigned
 TopographyFile::GetSkipSteps(fixed map_scale) const
 {
-  if (map_scale * 4 > scale_threshold * 3)
+  if (Quadruple(map_scale) > scale_threshold * 3)
     return 4;
-  if (map_scale * 2 > scale_threshold)
+  if (Double(map_scale) > scale_threshold)
     return 3;
-  if (map_scale * 4 > scale_threshold)
+  if (Quadruple(map_scale) > scale_threshold)
     return 2;
   return 1;
 }
@@ -193,11 +194,11 @@ TopographyFile::GetSkipSteps(fixed map_scale) const
 unsigned
 TopographyFile::GetThinningLevel(fixed map_scale) const
 {
-  if (map_scale * 2 > scale_threshold)
+  if (Double(map_scale) > scale_threshold)
     return 3;
   if (map_scale * 3 > scale_threshold)
     return 2;
-  if (map_scale * 4 > scale_threshold)
+  if (Quadruple(map_scale) > scale_threshold)
     return 1;
 
   return 0;
@@ -208,11 +209,11 @@ TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return (unsigned)(fixed(4) * scale_threshold / 30);
+      return (unsigned)(Quadruple(scale_threshold) / 30);
     case 2:
-      return (unsigned)(fixed(6) * scale_threshold / 30);
+      return (unsigned)(6 * scale_threshold / 30);
     case 3:
-      return (unsigned)(fixed(9) * scale_threshold / 30);
+      return (unsigned)(9 * scale_threshold / 30);
   }
   return 1;
 }

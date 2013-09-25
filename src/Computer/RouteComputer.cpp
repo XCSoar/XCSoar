@@ -24,8 +24,6 @@ Copyright_License {
 
 #include "RouteComputer.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "Task/RoutePlannerGlue.hpp"
-#include "Terrain/RasterTerrain.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "NMEA/Aircraft.hpp"

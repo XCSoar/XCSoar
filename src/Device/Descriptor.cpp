@@ -40,7 +40,6 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "OS/Clock.hpp"
 #include "../Simulator.hpp"
-#include "Asset.hpp"
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
 #include "Job/Job.hpp"

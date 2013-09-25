@@ -23,12 +23,11 @@ Copyright_License {
 
 #include "CirclingComputer.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/CirclingInfo.hpp"
+#include "NMEA/FlyingState.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Util/Clamp.hpp"
-
-#include "LogFile.hpp"
 
 static constexpr Angle MIN_TURN_RATE = Angle::Degrees(4);
 static constexpr fixed CRUISE_CLIMB_SWITCH(15);

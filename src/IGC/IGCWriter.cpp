@@ -27,7 +27,6 @@ Copyright_License {
 #include "Version.hpp"
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
 
 static char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)

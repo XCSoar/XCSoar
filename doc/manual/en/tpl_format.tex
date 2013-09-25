@@ -121,10 +121,10 @@ To add your own images to the list of icons:
 BITMAP\_ICON(IDB\_MAST, "mast")
 BITMAP\_ICON(IDB\_MAST\_HD, "mast\_160")
 \end{verbatim}
-\item Insert two lines into \texttt{xcsoar/src/resource.h} (e.g.)
+\item Insert two lines into \texttt{xcsoar/src/Resources.hpp} (e.g.)
 \begin{verbatim}
-\#define IDB\_MAST                        500
-\#define IDB\_MAST\_HD                    5500
+MAKE_RESOURCE(IDB_MAST, 500);
+MAKE_RESOURCE(IDB_MAST_HD, 5500);
 \end{verbatim}
 \item Add a corresponding line into the \texttt{icon\_list} table in \texttt{xcsoar/src/Topography/TopographyStore.cpp}
 \begin{verbatim}

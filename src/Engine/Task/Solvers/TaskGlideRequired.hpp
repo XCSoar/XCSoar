@@ -36,7 +36,7 @@
  * - f() fails if Mc too low for wind, need to account for failed solution
  *
  */
-class TaskGlideRequired final : public ZeroFinder {
+class TaskGlideRequired final : private ZeroFinder {
   TaskMacCreadyRemaining tm;
   GlideResult res;
   const AircraftState &aircraft;
@@ -66,10 +66,6 @@ public:
                     const AircraftState &_aircraft,
                     const GlideSettings &settings, const GlidePolar &gp);
 
-  virtual ~TaskGlideRequired() {};
-
-  virtual fixed f(const fixed mc);
-
   /**
    * Search for sink rate to produce final glide solution
    *
@@ -77,7 +73,12 @@ public:
    *
    * @return Solution sink rate (m/s, down positive)
    */
-  virtual fixed search(const fixed s);
+  gcc_pure
+  fixed search(const fixed s);
+
+private:
+  /* virtual methods from class ZeroFinder */
+  virtual fixed f(const fixed mc) override;
 };
 
 #endif

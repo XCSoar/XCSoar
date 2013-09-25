@@ -22,22 +22,14 @@ Copyright_License {
 */
 
 #include "TargetMapWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyRenderer.hpp"
-#include "Terrain/RasterTerrain.hpp"
-#include "Terrain/RasterWeather.hpp"
-#include "Look/TaskLook.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Renderer/TrailRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Asset.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
@@ -48,8 +40,6 @@ Copyright_License {
 #else
 #include "Screen/WindowCanvas.hpp"
 #endif
-
-#include <tchar.h>
 
 static const ComputerSettings &
 GetComputerSettings()
@@ -161,6 +151,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                           task_manager->GetOrderedTask().GetTaskProjection(),
                           ozv, false, TaskPointRenderer::ALL,
                           Basic().location_available, Basic().location);
+    tpv.SetTaskFinished(Calculated().task_stats.task_finished);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);
   }

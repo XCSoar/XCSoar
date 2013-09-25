@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaypointReaderCompeGPS.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "IO/LineReader.hpp"
-#include "Util/Macros.hpp"
 #include "Geo/UTM.hpp"
 
 #include <stdlib.h>

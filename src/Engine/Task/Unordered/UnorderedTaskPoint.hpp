@@ -27,6 +27,8 @@
 
 #include "Task/Points/TaskWaypoint.hpp"
 
+struct TaskBehaviour;
+
 /**
  * Class for unordered task points (e.g. goto and abort)
  *

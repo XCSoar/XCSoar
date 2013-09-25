@@ -382,19 +382,6 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   GeoVector leg = tp.GetNominalLegVector();
   bool show_leg_info = leg.distance > fixed(0.01);
 
-  // Draw icon
-  const RasterPoint pt(rc.left + line_height / 2,
-                       rc.top + line_height / 2);
-
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
-                                Layout::FastScale(10));
-
-  OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
-                          pt, radius, task_look,
-                          CommonInterface::GetMapSettings().airspace,
-                          airspace_look);
-
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
 
@@ -435,6 +422,19 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                         DrawListIndex, buffer);
   canvas.DrawClippedText(left, rc.top + padding,
                          rc.right - leg_info_width - left, buffer);
+
+  // Draw icon
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
+
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
+
+  OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
+                          pt, radius, task_look,
+                          CommonInterface::GetMapSettings().airspace,
+                          airspace_look);
 }
 
 void
@@ -460,7 +460,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     }
   } else if (!ordered_task->IsFull()) {
 
-    OrderedTaskPoint* point = NULL;
+    OrderedTaskPoint* point = nullptr;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
       ShowWaypointListDialog(ordered_task->TaskSize() > 0
@@ -475,7 +475,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     } else {
       point = (OrderedTaskPoint*)factory.CreateIntermediate(*way_point);
      }
-    if (point == NULL)
+    if (point == nullptr)
       return;
 
     if (factory.Append(*point, true)) {

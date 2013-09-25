@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Engine/Task/Unordered/UnorderedTaskPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/AATIsolineSegment.hpp"
 #include "Look/TaskLook.hpp"
@@ -53,6 +52,7 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
    active_index(0),
    location(_location),
    location_available(_location_available),
+   task_finished(false),
    mode_optional_start(false)
 {
 }
@@ -60,11 +60,20 @@ TaskPointRenderer::TaskPointRenderer(Canvas &_canvas,
 void
 TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
+  int offset = index - active_index;
+
+  if (offset == 0 && task_finished && tp.GetType() == TaskPointType::FINISH)
+    /* if the task is finished, pretend the active_index is past the
+       current index; we need this because XCSoar never moves
+       active_index to one after the finish point, because that would
+       point to an invalid task point index */
+    offset = -1;
+
   switch (layer) {
   case LAYER_OZ_SHADE:
     if (tp.BoundingBoxOverlaps(bb_screen))
       // draw shaded part of observation zone
-      DrawOZBackground(canvas, tp);
+      DrawOZBackground(canvas, tp, offset);
 
     break;
 
@@ -77,8 +86,13 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
     break;
 
   case LAYER_OZ_OUTLINE:
-    if (tp.BoundingBoxOverlaps(bb_screen))
-      DrawOZForeground(tp);
+    if (tp.BoundingBoxOverlaps(bb_screen)) {
+      if (mode_optional_start && offset == 0)
+        /* render optional starts as deactivated */
+        offset = -1;
+
+      DrawOZForeground(tp, offset);
+    }
 
     break;
 
@@ -148,7 +162,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.DrawPolyline(Arrow, 3);
 }
 
-void
+inline void
 TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 {
   if (!tp.valid() || !IsTargetVisible(tp))
@@ -182,20 +196,17 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
   canvas.SetBackgroundOpaque();
 }
 
-void
-TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
+inline void
+TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp,
+                                    int offset)
 {
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
-           index - active_index);
+           offset);
 }
 
-void
-TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp)
+inline void
+TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp, int offset)
 {
-  int offset = index - active_index;
-  if (mode_optional_start)
-    offset = -1; // render optional starts as deactivated
-
   ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, tp.GetObservationZone(),
            offset);
   ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, tp.GetObservationZone(),

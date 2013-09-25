@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_PROXY_BLACKBOARD_LISTENER_HPP
 
 #include "BlackboardListener.hpp"
-#include "RateLimiter.hpp"
 
 /**
  * A #BlackboardListener that forwards all calls to another listener.

@@ -30,7 +30,6 @@ Copyright_License {
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Util/Macros.hpp"
 
 struct NearestAirspace {
   const AbstractAirspace *airspace;

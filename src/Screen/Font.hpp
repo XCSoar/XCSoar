@@ -62,11 +62,6 @@ protected:
 
   void CalculateHeights();
 
-#ifdef USE_FREETYPE
-  bool LoadFile(const char *file, UPixelScalar ptsize, bool bold = false,
-                bool italic = false);
-#endif
-
 public:
 #ifdef USE_FREETYPE
   Font():face(nullptr) {}
@@ -97,6 +92,11 @@ public:
     return font != NULL;
     #endif
   }
+
+#ifdef USE_FREETYPE
+  bool LoadFile(const char *file, UPixelScalar ptsize, bool bold = false,
+                bool italic = false);
+#endif
 
   bool Load(const TCHAR *facename, UPixelScalar height, bool bold = false,
             bool italic = false);

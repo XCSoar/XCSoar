@@ -22,20 +22,13 @@
 #ifndef ROUTEPOLAR_HPP
 #define ROUTEPOLAR_HPP
 
-#include <limits.h>
-#include "Config.hpp"
+#include "Geo/Flat/FlatGeoPoint.hpp"
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
-#include "Geo/SearchPoint.hpp"
-#include "Rough/RoughAltitude.hpp"
 
-#include <utility>
-
+class Angle;
 class GlidePolar;
 struct GlideSettings;
 struct GlideResult;
-class TaskProjection;
-class RasterMap;
 struct SpeedVector;
 
 typedef AFlatGeoPoint RoutePoint;

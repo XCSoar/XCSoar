@@ -21,15 +21,11 @@
  */
 
 #include "TaskManager.hpp"
-#include "Visitors/TaskPointVisitor.hpp"
-#include "Solvers/TaskSolution.hpp"
 #include "Ordered/OrderedTask.hpp"
 #include "Ordered/Points/OrderedTaskPoint.hpp"
 #include "Ordered/Points/AATPoint.hpp"
 #include "Unordered/GotoTask.hpp"
 #include "Unordered/AlternateTask.hpp"
-#include "Unordered/UnorderedTaskPoint.hpp"
-#include "Util/StringUtil.hpp"
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
                          const Waypoints &wps)

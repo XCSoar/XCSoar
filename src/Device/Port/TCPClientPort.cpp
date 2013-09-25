@@ -97,7 +97,7 @@ TCPClientPort::OnFileEvent(int fd, unsigned mask)
 
   assert(fd == connecting.Get());
 
-  io_thread->LockRemove(connecting.Get());
+  io_thread->Remove(connecting.Get());
 
   int s_err = 0;
   socklen_t s_err_size = sizeof(s_err);
@@ -114,7 +114,7 @@ TCPClientPort::OnFileEvent(int fd, unsigned mask)
     connecting.Close();
   }
 
-  return false;
+  return true;
 }
 
 #endif

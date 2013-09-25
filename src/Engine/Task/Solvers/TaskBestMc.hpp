@@ -29,13 +29,13 @@
 #include <vector>
 
 /**
- *  Class to solve for MacCready value, being the highest MC value to produce a
- *  pure glide solution for the remainder of the task.
- *  
+ * Class to solve for MacCready value, being the highest MC value to produce a
+ * pure glide solution for the remainder of the task.
+ *
  * \todo
  * - f() fails if Mc too low for wind, need to account for failed solution
  */
-class TaskBestMc final : public ZeroFinder
+class TaskBestMc final : ZeroFinder
 {
   TaskMacCreadyRemaining tm;
   GlideResult res;
@@ -51,11 +51,12 @@ public:
    * @param _gp Glide polar to copy for calculations
    * @param _mc_min Minimum legal value of MacCready (m/s) in search
    */
-  TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
+  TaskBestMc(const std::vector<OrderedTaskPoint *> &tps,
              const unsigned activeTaskPoint,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp,
              const fixed _mc_min=fixed(0));
+
   /**
    * Constructor for single task points (non-ordered ones)
    *
@@ -63,22 +64,9 @@ public:
    * @param _aircraft Current aircraft state
    * @param _gp Glide polar to copy for calculations
    */
-  TaskBestMc(TaskPoint* tp,
+  TaskBestMc(TaskPoint *tp,
              const AircraftState &_aircraft,
              const GlideSettings &settings, const GlidePolar &_gp);
-
-  virtual ~TaskBestMc() {};
-
-  virtual fixed f(const fixed mc);
-
-  /**
-   * Test validity of a solution given search parameter
-   *
-   * @param mc Search parameter (MacCready setting (m/s))
-   *
-   * @return True if solution is valid
-   */
-  virtual bool valid(const fixed mc);
 
   /**
    * Search for best MC.  If fails (MC=0 is below final glide), returns
@@ -88,9 +76,24 @@ public:
    *
    * @return Best MC value found or default value if no solution
    */
-  virtual fixed search(const fixed mc);
+  fixed search(const fixed mc);
 
-  virtual bool search(const fixed mc, fixed& result);
+  bool search(const fixed mc, fixed &result);
+
+private:
+
+  /**
+   * Test validity of a solution given search parameter
+   *
+   * @param mc Search parameter (MacCready setting (m/s))
+   *
+   * @return True if solution is valid
+   */
+  gcc_pure
+  bool valid(const fixed mc) const;
+
+  /* virtual methods from class ZeroFinder */
+  virtual fixed f(const fixed mc) override;
 };
 
 #endif

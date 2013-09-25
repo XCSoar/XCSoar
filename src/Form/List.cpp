@@ -40,6 +40,18 @@ Copyright_License {
 
 #include <algorithm>
 
+/**
+ * Can the user scroll with pixel precision?  This is used on fast
+ * displays to give more instant feedback, which feels more slick.  On
+ * slow e-paper screens, this is not a good idea.
+ */
+gcc_const
+static bool
+UsePixelPan()
+{
+  return HasEPaper();
+}
+
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
@@ -196,7 +208,11 @@ ListControl::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.IsDefined())
     return;
 
-  scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+  if (UsePixelPan())
+    scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
+  else
+    scroll_bar.SetSlider(length, items_visible, origin);
+
   scroll_bar.Paint(canvas);
 }
 
@@ -249,14 +265,14 @@ ListControl::EnsureVisible(unsigned i)
     SetOrigin(i);
     SetPixelPan(0);
   } else if (origin + items_visible <= i) {
-    if (HasEPaper()) {
-      /* no pixel panning on e-paper screens to avoid tearing */
-      SetOrigin(i + 1 - items_visible);
-    } else {
+    if (UsePixelPan()) {
       SetOrigin(i - items_visible);
 
       if (origin > 0 || i >= items_visible)
         SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
+    } else {
+      /* no pixel panning on e-paper screens to avoid tearing */
+      SetOrigin(i + 1 - items_visible);
     }
   }
 }
@@ -357,14 +373,18 @@ ListControl::SetPixelOrigin(int pixel_origin)
   SetOrigin(pixel_origin / item_height);
 
   /* no pixel panning on e-paper screens to avoid tearing */
-  SetPixelPan(HasEPaper() ? 0 : pixel_origin % item_height);
+  SetPixelPan(UsePixelPan() ? pixel_origin % item_height : 0);
 }
 
 void
 ListControl::MoveOrigin(int delta)
 {
-  int pixel_origin = (int)GetPixelOrigin();
-  SetPixelOrigin(pixel_origin + delta * (int)item_height);
+  if (UsePixelPan()) {
+    int pixel_origin = (int)GetPixelOrigin();
+    SetPixelOrigin(pixel_origin + delta * (int)item_height);
+  } else {
+    SetOrigin(origin + delta);
+  }
 }
 
 bool
@@ -497,11 +517,17 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
+#ifndef _WIN32_WCE
+    const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
+#endif
+
     drag_end();
 
 #ifndef _WIN32_WCE
-    kinetic.MouseUp(GetPixelOrigin());
-    kinetic_timer.Schedule(30);
+    if (enable_kinetic) {
+      kinetic.MouseUp(GetPixelOrigin());
+      kinetic_timer.Schedule(30);
+    }
 #endif
 
     return true;
@@ -527,9 +553,11 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
-    unsigned value =
-      scroll_bar.DragMove(length * item_height, GetHeight(), y);
-    SetPixelOrigin(value);
+    if (UsePixelPan())
+      SetPixelOrigin(scroll_bar.DragMove(length * item_height, GetHeight(), y));
+    else
+      SetOrigin(scroll_bar.DragMove(length, items_visible, y));
+
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
     if (abs(y - drag_y_window) > ((int)item_height / 5)) {
@@ -543,7 +571,8 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     int new_origin = drag_y - y;
     SetPixelOrigin(new_origin);
 #ifndef _WIN32_WCE
-    kinetic.MouseMove(GetPixelOrigin());
+    if (UsePixelPan())
+      kinetic.MouseMove(GetPixelOrigin());
 #endif
     return true;
   }
@@ -612,7 +641,8 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
       drag_mode = DragMode::SCROLL;
     }
 #ifndef _WIN32_WCE
-    kinetic.MouseDown(GetPixelOrigin());
+    if (UsePixelPan())
+      kinetic.MouseDown(GetPixelOrigin());
 #endif
     SetCapture();
   }
@@ -660,6 +690,8 @@ bool
 ListControl::OnTimer(WindowTimer &timer)
 {
   if (timer == kinetic_timer) {
+    assert(UsePixelPan());
+
     if (kinetic.IsSteady()) {
       kinetic_timer.Cancel();
     } else

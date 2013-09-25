@@ -27,8 +27,6 @@ Copyright_License {
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Blackboard/ComputerSettingsBlackboard.hpp"
 
-class ProtectedTaskManager;
-
 /**
  * Blackboard class used by glide computer (calculation) thread.
  * Can only write DERIVED_INFO

@@ -422,6 +422,9 @@ public:
   }
 
   void Move(const PixelRect rc) {
+    assert(rc.left < rc.right);
+    assert(rc.top < rc.bottom);
+
     Move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   }
 

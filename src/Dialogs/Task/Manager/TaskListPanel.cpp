@@ -148,21 +148,21 @@ private:
 /**
  * used for browsing saved tasks
  * must be valid (2 task points)
- * @return NULL if no valid task at cursor, else pointer to task;
+ * @return nullptr if no valid task at cursor, else pointer to task;
  */
 const OrderedTask *
 TaskListPanel::get_cursor_task()
 {
   const unsigned cursor_index = GetList().GetCursorIndex();
   if (cursor_index >= task_store->Size())
-    return NULL;
+    return nullptr;
 
   const OrderedTask *ordered_task =
     task_store->GetTask(cursor_index,
                         CommonInterface::GetComputerSettings().task);
 
   if (ordered_task == nullptr || !ordered_task->CheckTask())
-    return NULL;
+    return nullptr;
 
   return ordered_task;
 }
@@ -221,7 +221,7 @@ TaskListPanel::RefreshView()
   const OrderedTask *ordered_task = get_cursor_task();
   dialog.ShowTaskView(ordered_task);
 
-  if (ordered_task == NULL) {
+  if (ordered_task == nullptr) {
     summary.SetText(_T(""));
   } else {
     TCHAR text[300];
@@ -237,7 +237,7 @@ void
 TaskListPanel::LoadTask()
 {
   const OrderedTask* orig = get_cursor_task();
-  if (orig == NULL)
+  if (orig == nullptr)
     return;
 
   StaticString<1024> text;

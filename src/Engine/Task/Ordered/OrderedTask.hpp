@@ -25,7 +25,6 @@
 
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/AbstractTask.hpp"
-#include "Task/TaskBehaviour.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
 
@@ -62,7 +61,8 @@ struct TaskFactoryConstraints;
 class OrderedTask final : public AbstractTask
 {
 public:
-  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
+  /** Storage type of task points */
+  typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector;
 
   typedef DereferenceContainerAdapter<const OrderedTaskPointVector,
                                       const OrderedTaskPoint> ConstTaskPointList;
@@ -86,14 +86,14 @@ private:
   TaskDijkstraMax *dijkstra_max;
 
 public:
-  /** 
+  /**
    * Constructor.
    *
    * \todo
    * - default values in constructor
-   * 
+   *
    * @param tb Task behaviour
-   * 
+   *
    * @return Initialised object
    */
   OrderedTask(const TaskBehaviour &tb);
@@ -119,11 +119,11 @@ public:
    */
   void SetFactory(const TaskFactoryType _factory);
 
-  /** 
+  /**
    * Return list of factory types
-   * 
+   *
    * @param all If true, return all types, otherwise only valid transformable ones
-   * 
+   *
    * @return Vector of factory types
    */
   gcc_pure
@@ -136,14 +136,14 @@ public:
    */
   void RemoveAllPoints();
 
-  /** 
+  /**
    * Clear all points and restore default ordered task behaviour
    * for the active factory
    */
   void Clear();
 
   /**
-   * Create a clone of the task. 
+   * Create a clone of the task.
    * Caller is responsible for destruction.
    *
    * @param te Task events
@@ -194,7 +194,7 @@ public:
    */
   gcc_pure
   bool HasStart() const {
-    return taskpoint_start != NULL;
+    return taskpoint_start != nullptr;
   }
 
   /**
@@ -204,7 +204,7 @@ public:
    */
   gcc_pure
   bool HasFinish() const {
-    return taskpoint_finish != NULL;
+    return taskpoint_finish != nullptr;
   }
 
   /**
@@ -325,7 +325,7 @@ public:
   *
   * @param TPindex index of taskpoint
   *
-  * @return pointer to tp if valid, else NULL
+  * @return pointer to tp if valid, else nullptr
   */
  AATPoint* GetAATTaskPoint(unsigned index) const;
 
@@ -431,7 +431,19 @@ public:
 
 private:
 
+  /**
+   * @return true if a solution was found (and applied)
+   */
+  bool RunDijsktraMin(const GeoPoint &location);
+
+
   fixed ScanDistanceMin(const GeoPoint &ref, bool full);
+
+  /**
+   * @return true if a solution was found (and applied)
+   */
+  bool RunDijsktraMax();
+
   fixed ScanDistanceMax();
 
   /**
@@ -517,36 +529,36 @@ public:
     return task_advance;
   }
 
-  /** 
+  /**
    * Retrieve TaskAdvance mechanism
-   * 
+   *
    * @return Reference to TaskAdvance used by this task
    */
   TaskAdvance &SetTaskAdvance() {
     return task_advance;
   }
 
-  /** 
+  /**
    * Retrieve the factory type used by this task
-   * 
+   *
    * @return Factory type
    */
   TaskFactoryType GetFactoryType() const {
     return factory_mode;
   }
 
-  /** 
+  /**
    * Retrieve (const) the #OrderedTaskSettings used by this task
-   * 
+   *
    * @return Read-only #OrderedTaskSettings
    */
   const OrderedTaskSettings &GetOrderedTaskSettings() const {
     return ordered_settings;
   }
 
-  /** 
+  /**
    * Copy #OrderedTaskSettings to this task
-   * 
+   *
    * @param ob Value to set
    */
   void SetOrderedTaskSettings(const OrderedTaskSettings &ob);
@@ -566,7 +578,7 @@ public:
   gcc_pure
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
-    assert(task_points[i] != NULL);
+    assert(task_points[i] != nullptr);
 
     return *task_points[i];
   }
@@ -574,7 +586,7 @@ public:
   gcc_pure
   const OrderedTaskPoint &GetPoint(const unsigned i) const {
     assert(i < task_points.size());
-    assert(task_points[i] != NULL);
+    assert(task_points[i] != nullptr);
 
     return *task_points[i];
   }
@@ -595,7 +607,7 @@ public:
    * returns optional start point
    *
    * @param pos optional start point index
-   * @return NULL if index out of range, else optional start point
+   * @return nullptr if index out of range, else optional start point
    */
   gcc_pure
   const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {

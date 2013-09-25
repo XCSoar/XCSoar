@@ -17,6 +17,7 @@ ifneq ($(ANALYZER),y)
     CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
   endif
 endif
+LD = $(TCPREFIX)ld$(EXE)
 DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
@@ -25,6 +26,7 @@ ARFLAGS = -rcs
 
 ifeq ($(TARGET),WINE)
 AR = ar$(EXE)
+LD = ld$(EXE) -m elf_i386
 STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
 endif
@@ -76,3 +78,6 @@ $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c $(TARGET_OUTPUT_DIR)/%/../dirstamp
 $(TARGET_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
+ifeq ($(IWYU),y)
+	$(Q)iwyu $< $(cxx-flags)
+endif

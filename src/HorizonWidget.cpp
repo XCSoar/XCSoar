@@ -29,15 +29,6 @@
 #include "Screen/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 
-struct CrossSectionLook;
-struct AirspaceLook;
-struct ChartLook;
-struct MoreData;
-struct DerivedInfo;
-struct AirspaceRendererSettings;
-class Airspaces;
-class RasterTerrain;
-
 /**
  * A Window which renders a terrain and airspace cross-section
  */

@@ -474,7 +474,7 @@ ifeq ($(HAVE_WIN32),y)
     TARGET_ARCH += -mwin32
   endif
 
-  WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS)
+  WINDRESFLAGS := -I$(OUT)/include -I$(SRC) $(TARGET_CPPFLAGS)
 endif
 
 ifeq ($(TARGET),PC)
@@ -531,7 +531,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += -L$(KOBO)/lib
-  TARGET_STATIC = y
 endif
 
 ifeq ($(TARGET),ANDROID)

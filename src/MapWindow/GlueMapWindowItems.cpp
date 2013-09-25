@@ -24,7 +24,6 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Items/List.hpp"
 #include "Items/Builder.hpp"
-#include "Look/MapLook.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"

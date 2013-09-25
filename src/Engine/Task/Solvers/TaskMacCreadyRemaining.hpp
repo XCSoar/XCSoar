@@ -30,6 +30,11 @@
  */
 class TaskMacCreadyRemaining final : public TaskMacCready {
   /**
+   * Include the travel necessary to reach the first task point?
+   */
+  const bool include_travel_to_start;
+
+  /**
    * Storage used by target_save() and target_restore().
    */
   std::array<GeoPoint, MAX_SIZE> saved_targets;
@@ -44,10 +49,11 @@ public:
   template<class I>
   TaskMacCreadyRemaining(const I tps_begin, const I tps_end,
                          const unsigned _activeTaskPoint,
-                         const GlideSettings &settings, const GlidePolar &_gp)
+                         const GlideSettings &settings, const GlidePolar &_gp,
+                         const bool _include_travel_to_start=true)
     :TaskMacCready(std::next(tps_begin, _activeTaskPoint), tps_end, 0,
-                   settings, _gp) {
-  }
+                   settings, _gp),
+     include_travel_to_start(_include_travel_to_start) {}
 
   /**
    * Constructor for single task points (non-ordered ones)
@@ -57,7 +63,8 @@ public:
    */
   TaskMacCreadyRemaining(TaskPoint* tp,
                          const GlideSettings &settings, const GlidePolar &gp)
-    :TaskMacCready(tp, settings, gp) {}
+    :TaskMacCready(tp, settings, gp),
+     include_travel_to_start(true) {}
 
   /**
    * Set ranges of all remaining task points

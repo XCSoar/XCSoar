@@ -25,7 +25,6 @@
 #include "Points/TaskWaypoint.hpp"
 #include "Util/Gradient.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 AbstractTask::AbstractTask(TaskType _type,

@@ -25,11 +25,10 @@
 
 /**
  * Quadratic function solver for MacCready theory constraint equation
- * 
+ *
  * - document this equation!
  */
-class AverageSpeedSolver: public Quadratic
-{
+class AverageSpeedSolver : public Quadratic {
 public:
   /**
    * Constructor.
@@ -40,10 +39,8 @@ public:
    * @return Initialised object (not solved)
    */
   AverageSpeedSolver(const fixed dwcostheta, const fixed wind_speed_squared,
-                     const fixed V) :
-    Quadratic(dwcostheta, wind_speed_squared - sqr(V))
-  {
-  }
+                     const fixed V)
+    :Quadratic(dwcostheta, wind_speed_squared - sqr(V)) {}
 
   /**
    * Find ground speed from task and wind
@@ -51,9 +48,7 @@ public:
    * @return Ground speed during cruise (m/s)
    */
   gcc_pure
-  fixed
-  Solve() const
-  {
+  fixed Solve() const {
     if (Check())
       /// @todo check this is correct for all theta
       return SolutionMax();
@@ -75,10 +70,10 @@ GlideState::CalcAverageSpeed(const fixed Veff) const
 
 // dummy task
 GlideState::GlideState(const GeoVector &vector, const fixed htarget,
-                       fixed altitude, const SpeedVector wind) :
-  vector(vector),
-  min_arrival_altitude(htarget),
-  altitude_difference(altitude - min_arrival_altitude)
+                       fixed altitude, const SpeedVector wind)
+  :vector(vector),
+   min_arrival_altitude(htarget),
+   altitude_difference(altitude - min_arrival_altitude)
 {
   CalcSpeedups(wind);
 }

@@ -28,17 +28,10 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/FastPixelRotation.hpp"
-#include "LogFile.hpp"
 #include "Units/Units.hpp"
 #include "Util/Clamp.hpp"
 
-#include <assert.h>
-#include <stdio.h>
-
 #include <algorithm>
-
-using std::min;
-using std::max;
 
 #define DELTA_V_STEP fixed(4)
 #define DELTA_V_LIMIT fixed(16)

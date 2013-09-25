@@ -30,22 +30,27 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #endif
 
+gcc_const
+static PixelRect
+MakePagerRect(PixelRect rc, const PixelRect &tab_rc, bool vertical)
+{
+  if (vertical)
+    rc.left = tab_rc.right;
+  else
+    rc.top = tab_rc.bottom;
+  return rc;
+}
+
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
-  :tab_display(NULL)
+  :tab_display(nullptr)
 {
   Create(_parent, _parent.GetClientRect(), style);
 
   tab_display = new TabDisplay(*this, look, *this, tab_rc, vertical);
 
-  PixelRect rc = GetClientRect();
-  if (vertical)
-    rc.left = tab_rc.right;
-  else
-    rc.top = tab_rc.bottom;
-
-  pager.Move(rc);
+  pager.Move(MakePagerRect(GetClientRect(), tab_rc, vertical));
 }
 
 TabBarControl::~TabBarControl()
@@ -53,6 +58,15 @@ TabBarControl::~TabBarControl()
   delete tab_display;
 
   Destroy();
+}
+
+void
+TabBarControl::UpdateLayout(const PixelRect &rc, const PixelRect &tab_rc,
+                            bool vertical)
+{
+  tab_display->UpdateLayout(tab_rc, vertical);
+  Move(rc);
+  pager.Move(MakePagerRect(GetClientRect(), tab_rc, vertical));
 }
 
 PixelSize
@@ -109,7 +123,7 @@ TabBarControl::ClickPage(unsigned i)
      of the page, which is important for Altair hot keys */
   pager.SetFocus();
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -127,7 +141,7 @@ TabBarControl::SetCurrentPage(unsigned i)
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -141,7 +155,7 @@ TabBarControl::NextPage()
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -155,7 +169,7 @@ TabBarControl::PreviousPage()
     /* failed to switch */
     return;
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     tab_display->Invalidate();
 
   if (page_flipped_callback)
@@ -208,7 +222,7 @@ TabBarControl::OnPaint(Canvas &canvas)
      does not cover the whole height or width; this is necessary only
      on GDI */
 
-  if (tab_display != NULL)
+  if (tab_display != nullptr)
     canvas.Clear(tab_display->GetLook().background_color);
 }
 

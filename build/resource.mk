@@ -122,11 +122,13 @@ $(eval $(call rsvg-convert,$(PNG_LAUNCH_224),$(DATA)/graphics/%_224.png,Data/gra
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
 $(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_224),%_1.bmp,%.png,-background white))
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_SIM_224),%_2.bmp,%.png,-background white))
+$(BMP_LAUNCH_SIM_224): $(BMP_LAUNCH_FLY_224)
+	$(noop)
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
 $(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_224),%_dll_1.bmp,%.png,-background blue))
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_SIM_224),%_dll_2.bmp,%.png,-background blue))
+$(BMP_LAUNCH_DLL_SIM_224): $(BMP_LAUNCH_DLL_FLY_224)
+	$(noop)
 
 # back to PNG
 
@@ -192,19 +194,27 @@ endif
 
 endif
 
+$(OUT)/include/resource.h: src/Resources.hpp $(OUT)/include/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), (\d+)\);/;' $< >$@.tmp
+	$(Q)mv $@.tmp $@
+
 ifeq ($(HAVE_WIN32),y)
 
 RESOURCE_TEXT = Data/XCSoar.rc
+
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 
-$(RESOURCE_BINARY): $(RESOURCE_TEXT) $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
+$(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  WINDRES $@"
 	$(Q)$(WINDRES) $(WINDRESFLAGS) -o $@ $<
 
 else
 
-# no resources on UNIX
-RESOURCE_BINARY =
+RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/resources.a
+$(RESOURCE_BINARY): $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl | $(TARGET_OUTPUT_DIR)/resources/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(PERL) tools/LinkResources.pl $< $@ "$(LD)" "$(AR) $(ARFLAGS)"
 
 endif

@@ -23,8 +23,7 @@
 #include "AirspaceWarningManager.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Airspaces.hpp"
-#include "AirspaceCircle.hpp"
-#include "AirspacePolygon.hpp"
+#include "AbstractAirspace.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
@@ -105,6 +104,14 @@ AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
       return &w;
 
   return NULL;
+}
+
+AirspaceWarning*
+AirspaceWarningManager::GetNewWarningPtr(const AbstractAirspace &airspace)
+{
+  ++serial;
+  warnings.emplace_back(airspace);
+  return &warnings.back();
 }
 
 bool 
@@ -210,8 +217,8 @@ public:
         ExcludeAltitude(airspace))
       return;
 
-    AirspaceWarning& warning = warning_manager.GetWarning(airspace);
-    if (warning.IsStateAccepted(warning_state)) {
+    AirspaceWarning *warning = warning_manager.GetWarningPtr(airspace);
+    if (warning == NULL || warning->IsStateAccepted(warning_state)) {
 
       AirspaceInterceptSolution solution;
 
@@ -225,7 +232,10 @@ public:
       if (solution.elapsed_time > max_time)
         return;
 
-      warning.UpdateSolution(warning_state, solution);
+      if (warning == NULL)
+        warning = warning_manager.GetNewWarningPtr(airspace);
+
+      warning->UpdateSolution(warning_state, solution);
       found = true;
     }
   }
@@ -394,15 +404,18 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
     if (!config.IsClassEnabled(airspace.GetType()))
       continue;
 
-    AirspaceWarning& warning = GetWarning(airspace);
+    AirspaceWarning *warning = GetWarningPtr(airspace);
 
-    if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
+    if (warning == NULL || warning->IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
       GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
       const AirspaceAircraftPerformance perf_glide(glide_polar);
       AirspaceInterceptSolution solution;
       airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
 
-      warning.UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
+      if (warning == NULL)
+        warning = GetNewWarningPtr(airspace);
+
+      warning->UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;
     }
   }

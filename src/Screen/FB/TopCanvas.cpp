@@ -274,10 +274,27 @@ CopyGreyscaleToRGB565(RGB565Color *gcc_restrict dest,
 
 #endif
 
+#ifdef KOBO
+
+static void
+CopyGreyscale(uint8_t *dest_pixels, unsigned dest_pitch,
+              const uint8_t *src_pixels, unsigned src_pitch,
+              unsigned width, unsigned height)
+{
+  for (unsigned y = 0; y < height;
+       ++y, dest_pixels += dest_pitch, src_pixels += src_pitch)
+    std::copy_n(src_pixels, width, dest_pixels);
+}
+
+#endif
+
 static void
 CopyFromGreyscale(
 #ifdef DITHER
                   Dither &dither,
+#endif
+#ifdef KOBO
+                  bool enable_dither,
 #endif
                   void *dest_pixels, unsigned dest_pitch, unsigned dest_bpp,
                   ConstImageBuffer<GreyscalePixelTraits> src)
@@ -285,6 +302,15 @@ CopyFromGreyscale(
   const uint8_t *src_pixels = reinterpret_cast<const uint8_t *>(src.data);
 
   const unsigned width = src.width, height = src.height;
+
+#ifdef KOBO
+  if (!enable_dither) {
+    CopyGreyscale((uint8_t *)dest_pixels, dest_pitch,
+                  src_pixels, src.pitch,
+                  width, height);
+    return;
+  }
+#endif
 
 #ifdef DITHER
 
@@ -384,6 +410,9 @@ TopCanvas::Flip()
 #ifdef DITHER
                     dither,
 #endif
+#ifdef KOBO
+                    enable_dither,
+#endif
                     map, map_pitch, map_bpp,
                     buffer);
 #else
@@ -403,7 +432,7 @@ TopCanvas::Flip()
     UPDATE_MODE_FULL, // PARTIAL
     epd_update_marker,
     TEMP_USE_AMBIENT,
-    EPDC_FLAG_FORCE_MONOCHROME,
+    enable_dither ? EPDC_FLAG_FORCE_MONOCHROME : 0,
   };
 
   ioctl(fd, MXCFB_SEND_UPDATE, &epd_update_data);

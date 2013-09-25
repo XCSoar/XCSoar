@@ -27,7 +27,6 @@ Copyright_License {
 #include "Geo/GeoBounds.hpp"
 
 class TaskPointRenderer;
-class AbstractTask;
 class AbortTask;
 class OrderedTask;
 class GotoTask;

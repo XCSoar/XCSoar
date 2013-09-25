@@ -46,6 +46,9 @@ class SearchPointVector;
  * before the active task point need only be searched for maximum achieved
  * distance rather than border search points. 
  *
+ * Before each calculation, set up this object with SetTaskSize() and
+ * call SetBoundary() for each task point.
+ *
  * This uses a Dijkstra search and so is O(N log(N)).
  */
 class TaskDijkstra : protected NavDijkstra
@@ -62,6 +65,16 @@ public:
    */
   TaskDijkstra(const bool is_min);
 
+  void SetTaskSize(unsigned size) {
+    SetStageCount(size);
+  }
+
+  void SetBoundary(unsigned idx, const SearchPointVector &boundary) {
+    assert(idx < num_stages);
+
+    boundaries[idx] = &boundary;
+  }
+
   /**
    * Returns the solution point for the specified task point.  Call
    * this after run() has returned true.
@@ -77,13 +90,6 @@ protected:
   const SearchPoint &GetPoint(ScanTaskPoint sp) const;
 
   bool Run();
-
-  /**
-   * Update internal details required from the task
-   *
-   * @param _task The task to find max/min distances for
-   */
-  bool RefreshTask(const OrderedTask &task);
 
   bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
             unsigned value) {

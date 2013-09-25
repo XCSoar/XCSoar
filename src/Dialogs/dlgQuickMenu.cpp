@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Util/Macros.hpp"
 #include "Menu/ButtonLabel.hpp"
+#include "Menu/MenuData.hpp"
 #include "UIGlobals.hpp"
 
 #include <stdio.h>

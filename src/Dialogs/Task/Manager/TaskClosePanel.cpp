@@ -72,7 +72,7 @@ static constexpr CallBackTableEntry task_close_callbacks[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRevertClicked),
 
-  DeclareCallBackEntry(NULL)
+  DeclareCallBackEntry(nullptr)
 };
 
 void

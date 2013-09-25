@@ -22,9 +22,7 @@ Copyright_License {
 */
 
 #include "UnitsLook.hpp"
-#include "resource.h"
-
-#include <assert.h>
+#include "Resources.hpp"
 
 void
 UnitsLook::Initialise()

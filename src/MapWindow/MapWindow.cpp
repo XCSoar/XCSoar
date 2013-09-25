@@ -23,20 +23,15 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
-#include "Screen/Layout.hpp"
-#include "Topography/TopographyStore.hpp"
 #include "Topography/CachedTopographyRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "Units/Units.hpp"
 #include "Operation/Operation.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
 #endif
-
-#include <tchar.h>
 
 /**
  * Constructor of the MapWindow class

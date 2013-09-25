@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Menu/ButtonLabel.hpp"
 #include "Language/Language.hpp"
-#include "Gauge/GaugeFLARM.hpp"
 #include "Logger/Logger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
@@ -31,7 +30,6 @@ Copyright_License {
 #include "Computer/Settings.hpp"
 #include "Components.hpp"
 #include "MapSettings.hpp"
-#include "Simulator.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "ResourceLoader.hpp"
+#include "ResourceId.hpp"
 
 #include <assert.h>
 
@@ -55,51 +56,50 @@ ResourceLoader::Load(const TCHAR *name, const TCHAR *type)
 
   HRSRC resource = ::FindResource(ResourceLoaderInstance, name, type);
   if (resource == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   DWORD size = ::SizeofResource(ResourceLoaderInstance, resource);
   if (size == 0)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   HGLOBAL handle = ::LoadResource(ResourceLoaderInstance, resource);
   if (handle == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
   LPVOID data = LockResource(handle);
   if (data == NULL)
-    return Data((const void *)NULL, 0);
+    return Data::Null();
 
-  return std::pair<const void *, size_t>(data, size);
+  return Data(data, size);
 #else
 
-  for (unsigned i = 0; named_resources[i].data != NULL; ++i)
+  for (unsigned i = 0; !named_resources[i].data.IsNull(); ++i)
     if (_tcscmp(named_resources[i].name, name) == 0)
-      return Data(named_resources[i].data, named_resources[i].size);
+      return named_resources[i].data;
 
-  return Data((const void *)NULL, 0);
+  return Data::Null();
 #endif
 }
+
+#ifndef ANDROID
 
 ResourceLoader::Data
-ResourceLoader::Load(unsigned id)
+ResourceLoader::Load(ResourceId id)
 {
 #ifdef WIN32
-  return Load(MAKEINTRESOURCE(id), RT_BITMAP);
+  return Load(MAKEINTRESOURCE((unsigned)id), RT_BITMAP);
 #else
-
-  for (unsigned i = 0; numeric_resources[i].data != NULL; ++i)
-    if (numeric_resources[i].id == id)
-      return Data(numeric_resources[i].data, numeric_resources[i].size);
-
-  return Data((const void *)NULL, 0);
+  return id;
 #endif
 }
+
+#endif
 
 #ifdef WIN32
 HBITMAP
-ResourceLoader::LoadBitmap2(unsigned id)
+ResourceLoader::LoadBitmap2(ResourceId id)
 {
-  return ::LoadBitmap(ResourceLoaderInstance, MAKEINTRESOURCE(id));
+  return ::LoadBitmap(ResourceLoaderInstance, MAKEINTRESOURCE((unsigned)id));
 }
 #endif
 
@@ -107,9 +107,10 @@ ResourceLoader::LoadBitmap2(unsigned id)
 #include "OS/AYGShellDLL.hpp"
 
 HBITMAP
-ResourceLoader::SHLoadImageResource(unsigned id)
+ResourceLoader::SHLoadImageResource(ResourceId id)
 {
   const AYGShellDLL ayg_shell_dll;
-  return ayg_shell_dll.SHLoadImageResource(ResourceLoaderInstance, id);
+  return ayg_shell_dll.SHLoadImageResource(ResourceLoaderInstance,
+                                           (unsigned)id);
 }
 #endif

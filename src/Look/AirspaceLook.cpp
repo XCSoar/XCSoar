@@ -24,7 +24,7 @@ Copyright_License {
 #include "Look/AirspaceLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 #include "Util/Macros.hpp"
 
 #ifdef USE_GDI

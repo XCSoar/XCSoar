@@ -24,7 +24,6 @@ Copyright_License {
 #include "UnitsEditor.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 
 void

@@ -153,6 +153,15 @@ public:
    */
   AirspaceWarning* GetWarningPtr(const AbstractAirspace& airspace);
 
+  /**
+   * Return new corresponding airspace warning item in store by airspace
+   *
+   * @param airspace Airspace for which to create warning for
+   *
+   * @return Pointer to airspace warning item (or NULL if not found)
+   */
+  AirspaceWarning* GetNewWarningPtr(const AbstractAirspace& airspace);
+
   const AirspaceWarning *GetWarningPtr(const AbstractAirspace &airspace) const {
     return const_cast<AirspaceWarningManager *>(this)->GetWarningPtr(airspace);
   }

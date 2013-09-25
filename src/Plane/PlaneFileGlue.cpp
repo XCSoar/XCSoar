@@ -24,14 +24,11 @@ Copyright_License {
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
 #include "Polar/Parser.hpp"
-#include "Units/System.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Util/NumberParser.hpp"
-
-#include <cstdio>
 
 static bool
 ReadPolar(const char *string, Plane &plane)

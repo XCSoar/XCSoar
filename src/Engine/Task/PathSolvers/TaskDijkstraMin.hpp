@@ -46,7 +46,7 @@ public:
    * @param location Location of aircraft
    * @return True if succeeded
    */
-  bool DistanceMin(const OrderedTask &task, const SearchPoint &location);
+  bool DistanceMin(const SearchPoint &location);
 };
 
 #endif

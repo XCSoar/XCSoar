@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_RESOURCE_LOADER_HPP
 #define XCSOAR_RESOURCE_LOADER_HPP
 
+#include "Util/ConstBuffer.hpp"
+
 #ifdef WIN32
 #include <windef.h>
 #endif
@@ -32,23 +34,27 @@ Copyright_License {
 #include <stddef.h>
 #include <utility>
 
+class ResourceId;
+
 namespace ResourceLoader {
 #ifdef WIN32
   void
   Init(HINSTANCE hInstance);
 #endif
 
-  typedef std::pair<const void *, size_t> Data;
+  typedef ConstBuffer<void> Data;
 
   Data
   Load(const TCHAR *name, const TCHAR *type);
 
+#ifndef ANDROID
   Data
-  Load(unsigned id);
+  Load(ResourceId id);
+#endif
 
 #ifdef WIN32
   HBITMAP
-  LoadBitmap2(unsigned id);
+  LoadBitmap2(ResourceId id);
 #endif
 
 #ifdef HAVE_AYGSHELL_DLL
@@ -56,7 +62,7 @@ namespace ResourceLoader {
    * Load an image resource using aygshell.dll.
    */
   HBITMAP
-  SHLoadImageResource(unsigned id);
+  SHLoadImageResource(ResourceId id);
 #endif
 }
 

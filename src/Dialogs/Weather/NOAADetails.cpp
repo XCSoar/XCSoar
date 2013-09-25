@@ -23,16 +23,14 @@ Copyright_License {
 
 #include "WeatherDialogs.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_NOAA
 
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/LargeTextWidget.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
@@ -40,24 +38,51 @@ Copyright_License {
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/TAF.hpp"
 #include "Weather/NOAAFormatter.hpp"
-#include "Formatter/Units.hpp"
-#include "Screen/LargeTextWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 
-#include <stdio.h>
+class NOAADetailsWidget final : public LargeTextWidget, ActionListener {
+  enum Buttons {
+    UPDATE,
+    REMOVE,
+  };
 
-static WndForm *wf = NULL;
-static NOAAStore::iterator station_iterator;
+  WndForm &dialog;
+  NOAAStore::iterator station_iterator;
 
-static void
-Update()
+public:
+  NOAADetailsWidget(WndForm &_dialog, NOAAStore::iterator _station)
+    :LargeTextWidget(_dialog.GetLook()), dialog(_dialog),
+    station_iterator(_station) {}
+
+  void CreateButtons(WidgetDialog &buttons);
+
+private:
+  void Update();
+  void UpdateClicked();
+  void RemoveClicked();
+
+  /* virtual methods from class Widget */
+  virtual void Show(const PixelRect &rc) override;
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
+};
+
+void
+NOAADetailsWidget::CreateButtons(WidgetDialog &buttons)
+{
+  buttons.AddButton(_("Update"), *this, UPDATE);
+  buttons.AddButton(_("Remove"), *this, REMOVE);
+}
+
+void
+NOAADetailsWidget::Update()
 {
   tstring metar_taf = _T("");
 
   NOAAFormatter::Format(*station_iterator, metar_taf);
 
-  ((LargeTextWindow *)wf->FindByName(_T("DetailsText")))->SetText(metar_taf.c_str());
+  SetText(metar_taf.c_str());
 
   StaticString<100> caption;
   caption.Format(_T("%s: "), _("METAR and TAF"));
@@ -70,20 +95,20 @@ Update()
                          station_iterator->parsed_metar.name.c_str(),
                          station_iterator->GetCodeT());
 
-  wf->SetCaption(caption);
+  dialog.SetCaption(caption);
 }
 
-static void
-UpdateClicked()
+inline void
+NOAADetailsWidget::UpdateClicked()
 {
-  DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
+  DialogJobRunner runner(dialog.GetMainWindow(), dialog.GetLook(),
                          _("Download"), true);
   NOAAUpdater::Update(*station_iterator, runner);
   Update();
 }
 
-static void
-RemoveClicked()
+inline void
+NOAADetailsWidget::RemoveClicked()
 {
   StaticString<256> tmp;
   tmp.Format(_("Do you want to remove station %s?"),
@@ -95,30 +120,41 @@ RemoveClicked()
   noaa_store->erase(station_iterator);
   noaa_store->SaveToProfile();
 
-  wf->SetModalResult(mrOK);
+  dialog.SetModalResult(mrOK);
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(UpdateClicked),
-  DeclareCallBackEntry(RemoveClicked),
-  DeclareCallBackEntry(NULL)
-};
+void
+NOAADetailsWidget::Show(const PixelRect &rc)
+{
+  LargeTextWidget::Show(rc);
+  Update();
+}
+
+void
+NOAADetailsWidget::OnAction(int id)
+{
+  switch (id) {
+  case UPDATE:
+    UpdateClicked();
+    break;
+
+  case REMOVE:
+    RemoveClicked();
+    break;
+  }
+}
 
 void
 dlgNOAADetailsShowModal(NOAAStore::iterator iterator)
 {
-  station_iterator = iterator;
-
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ?
-                  _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
-  assert(wf != NULL);
-
-  Update();
-
-  wf->ShowModal();
-
-  delete wf;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(look);
+  NOAADetailsWidget widget(dialog, iterator);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("METAR and TAF"), &widget);
+  widget.CreateButtons(dialog);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
 
 #else

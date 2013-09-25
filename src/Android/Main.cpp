@@ -36,6 +36,7 @@ Copyright_License {
 #include "Android/Product.hpp"
 #include "Android/Nook.hpp"
 #include "Language/Language.hpp"
+#include "Language/LanguageGlue.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Version.hpp"
@@ -161,6 +162,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   ScreenInitialized();
   AllowLanguage();
+  InitLanguage();
   return Startup();
 }
 

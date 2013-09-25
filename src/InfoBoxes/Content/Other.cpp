@@ -28,7 +28,6 @@ Copyright_License {
 #include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
 #include "OS/MemInfo.hpp"
-#include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
@@ -38,7 +37,6 @@ Copyright_License {
 #endif
 
 #include <tchar.h>
-#include <stdio.h>
 
 void
 UpdateInfoBoxGLoad(InfoBoxData &data)

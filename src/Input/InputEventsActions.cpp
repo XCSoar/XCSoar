@@ -46,12 +46,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 #include "InputEvents.hpp"
 #include "Protection.hpp"
-#include "LogFile.hpp"
-#include "Device/Parser.hpp"
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
-#include "MapSettings.hpp"
-#include "Math/FastMath.h"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Device/Vega/VoiceSettingsDialog.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
@@ -61,7 +57,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Weather/WeatherDialogs.hpp"
 #include "Dialogs/Plane/PlaneDialogs.hpp"
-#include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
@@ -70,7 +65,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "MainWindow.hpp"
 #include "Projection/MapWindowProjection.hpp"
-#include "Gauge/GaugeFLARM.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Util/StringUtil.hpp"
@@ -81,22 +75,18 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Logger/Logger.hpp"
-#include "Asset.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
 #include "PageActions.hpp"
 #include "Hardware/AltairControl.hpp"
-#include "NMEA/Aircraft.hpp"
 #include "Compiler.h"
 #include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 
 #include <assert.h>
-#include <ctype.h>
 #include <tchar.h>
 #include <algorithm>
 

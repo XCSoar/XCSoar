@@ -34,28 +34,38 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
+#include "ResourceId.hpp"
 
 static tstring path;
-static unsigned id;
+
+#ifdef USE_GDI
+static ResourceId id = ResourceId::Null();
+#endif
 
 static void
 ParseCommandLine(Args &args)
 {
   path = args.ExpectNextT();
 
+#ifdef USE_GDI
   TCHAR *endptr;
-  id = ParseUnsigned(path.c_str(), &endptr);
-  if (!StringIsEmpty(endptr))
-    id = 0;
+  unsigned _id = ParseUnsigned(path.c_str(), &endptr);
+  if (StringIsEmpty(endptr))
+    id = ResourceId(_id);
+#endif
 }
 
 static void
 Main()
 {
   Bitmap bitmap;
-  bool success = id != 0
+  bool success =
+#ifdef USE_GDI
+    id.IsDefined()
     ? bitmap.Load(id)
-    : bitmap.LoadFile(path.c_str());
+    :
+#endif
+    bitmap.LoadFile(path.c_str());
   if (!success)
     fprintf(stderr, "Failed to load image\n");
 }

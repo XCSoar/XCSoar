@@ -22,7 +22,6 @@
 */
 
 #include "Logger/Logger.hpp"
-#include "Logger/ExternalLogger.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Language/Language.hpp"

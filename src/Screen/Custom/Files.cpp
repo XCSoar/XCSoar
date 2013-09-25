@@ -92,6 +92,7 @@ static const char *const all_bold_font_paths[] = {
 
 static const char *const all_italic_font_paths[] = {
 #if defined(KOBO)
+  "/mnt/onboard/XCSoar/fonts/DejaVuSansCondensed-Oblique.ttf",
   "/mnt/onboard/fonts/VeraIt.ttf",
   "/mnt/onboard/XCSoar/fonts/VeraIt.ttf",
   "/opt/xcsoar/share/fonts/VeraIt.ttf",
@@ -111,6 +112,7 @@ static const char *const all_italic_font_paths[] = {
 
 static const char *const all_bold_italic_font_paths[] = {
 #if defined(KOBO)
+  "/mnt/onboard/XCSoar/fonts/DejaVuSansCondensed-BoldOblique.ttf",
   "/mnt/onboard/fonts/VeraBI.ttf",
   "/mnt/onboard/XCSoar/fonts/VeraBI.ttf",
   "/opt/xcsoar/share/fonts/VeraBI.ttf",

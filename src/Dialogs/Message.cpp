@@ -26,7 +26,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
-#include "Form/Edit.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"

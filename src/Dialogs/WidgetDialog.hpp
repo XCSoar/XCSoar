@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_DIALOG_HPP
 #define XCSOAR_WIDGET_DIALOG_HPP
 
-#include "Screen/Point.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Widget/ManagedWidget.hpp"

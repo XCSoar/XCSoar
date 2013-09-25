@@ -31,9 +31,6 @@ Copyright_License {
 #include <map>
 #include <tchar.h>
 
-class NLineReader;
-class FlarmId;
-
 /**
  * An in-memory representation of the FlarmNet.org database.
  */

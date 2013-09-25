@@ -25,7 +25,6 @@
 #include "Renderer/ChartRenderer.hpp"
 #include "Renderer/GradientRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Units/Units.hpp"
@@ -33,10 +32,6 @@
 #include "Navigation/Aircraft.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#endif
 
 CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                            const AirspaceLook &_airspace_look,

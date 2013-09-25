@@ -22,11 +22,8 @@
 
 #include "AirspaceAircraftPerformance.hpp"
 #include "Math/ZeroFinder.hpp"
-#include "GlideSolvers/GlideResult.hpp"
 
 #include <algorithm>
-
-#include <assert.h>
 
 #define fixed_big fixed(1000000)
 

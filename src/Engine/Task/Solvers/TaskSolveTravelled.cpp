@@ -35,9 +35,9 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint *> &tp
    aircraft(_aircraft),
    tm(tps.cbegin(), activeTaskPoint, settings, gp)
 {
-  dt = aircraft.time-tps[0]->GetEnteredState().time;
+  dt = aircraft.time - tps[0]->GetEnteredState().time;
   if (positive(dt)) {
-    inv_dt = fixed(1)/dt;
+    inv_dt = fixed(1) / dt;
   } else {
     inv_dt = fixed(0); // error!
   }
@@ -56,13 +56,13 @@ TaskSolveTravelled::time_error()
     return fixed(999999);
 
 #ifdef SOLVE_ZERO
-  fixed d = res.time_elapsed-dt;
+  fixed d = res.time_elapsed - dt;
 #else
-  fixed d = fabs(res.time_elapsed-dt);
+  fixed d = fabs(res.time_elapsed - dt);
 #endif
   d += res.time_virtual;
 
-  return d*inv_dt;
+  return d * inv_dt;
 }
 
 fixed

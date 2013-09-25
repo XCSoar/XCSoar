@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "MeasurementList.hpp"
 
-#include <stdlib.h>
 #include <algorithm>
 
 /**

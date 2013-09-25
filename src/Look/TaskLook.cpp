@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "TaskLook.hpp"
 #include "Screen/Layout.hpp"
-#include "resource.h"
+#include "Resources.hpp"
 
 void
 TaskLook::Initialise()
 {
   // Magenta ICAO color is 0x65,0x23,0x1c
-  const Color task_color = Color(0x62,0x4e,0x90);
-  const Color bearing_color = Color(0x3e,0x30,0x5f);
+  const Color task_color = Color(0x62, 0x4e, 0x90);
+  const Color bearing_color = Color(0x3e, 0x30, 0x5f);
   const Color isoline_color = bearing_color;
 
   oz_current_pen.Set(Pen::SOLID, Layout::ScalePenWidth(2), task_color);
@@ -44,10 +44,12 @@ TaskLook::Initialise()
 
   isoline_pen.Set(Pen::DASH, Layout::ScalePenWidth(1), isoline_color);
 
-  bearing_pen.Set(Layout::ScalePenWidth(2), !HasColors()? COLOR_BLACK: bearing_color);
+  bearing_pen.Set(Layout::ScalePenWidth(2),
+                  HasColors() ? bearing_color : COLOR_BLACK);
   best_cruise_track_brush.Set(bearing_color);
-  best_cruise_track_pen.Set(Layout::ScalePenWidth(1), HasColors()?
-			    DarkColor(bearing_color) : COLOR_BLACK);
+  best_cruise_track_pen.Set(Layout::ScalePenWidth(1),
+                            HasColors()
+                            ? DarkColor(bearing_color) : COLOR_BLACK);
 
   highlight_pen.Set(Layout::ScalePenWidth(4), COLOR_BLACK);
 

@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
@@ -38,7 +37,6 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 void
 UpdateInfoBoxHumidity(InfoBoxData &data)
@@ -228,7 +226,7 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
   auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
 
   PixelScalar length =
-      std::min(size, (UPixelScalar)std::max(10, iround(info.wind.norm * 4)));
+    std::min(size, (UPixelScalar)std::max(10, iround(Quadruple(info.wind.norm))));
 
   PixelScalar offset = -length / 2;
 

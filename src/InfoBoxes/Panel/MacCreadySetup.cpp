@@ -32,8 +32,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 
-class WndButton;
-
 class MacCreadySetupPanel : public WindowWidget,
                             private ActionListener {
 public:

@@ -27,8 +27,6 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
 
-#include <tchar.h>
-
 class FlarmId;
 
 constexpr

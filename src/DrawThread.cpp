@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "DrawThread.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
 
 #ifndef ENABLE_OPENGL
 
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Hardware/CPU.hpp"
 
 /**

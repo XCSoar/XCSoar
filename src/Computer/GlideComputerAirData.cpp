@@ -23,14 +23,14 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
-#include "GlideComputer.hpp"
 #include "Settings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "NMEA/Aircraft.hpp"
 #include "Math/SunEphemeris.hpp"
+#include "NMEA/Derived.hpp"
+#include "NMEA/MoreData.hpp"
 
 static constexpr fixed THERMAL_TIME_MIN(45);
 

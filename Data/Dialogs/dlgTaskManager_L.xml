@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Caption="Task Manager">
-  <Canvas Name="TaskView" X="0" Y="0" Width="80" Height="53" Visible="0"/>
-  <Button Name="Target" Caption="Target" X="5" Y="18" Width="73" Height="33" Visible="0"/>
-
-  <TabBar Name="TabBar" X="0" Y="52" Width="80"/>
-</Form>

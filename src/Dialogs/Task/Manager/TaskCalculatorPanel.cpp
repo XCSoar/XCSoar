@@ -77,7 +77,7 @@ TaskCalculatorPanel::Refresh()
 
   TCHAR buffer[32];
 
-  if (target_button != NULL)
+  if (target_button != nullptr)
     target_button->SetVisible(task_stats.has_targets);
 
   SetRowVisible(AAT_TIME, task_stats.has_targets);
@@ -163,7 +163,7 @@ TaskCalculatorPanel::OnSpecial(DataField &df)
 void
 TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(protected_task_manager != NULL);
+  assert(protected_task_manager != nullptr);
 
   instance = this;
 
@@ -172,7 +172,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddReadOnly(_("Assigned task time"));
   AddReadOnly(_("Estimated task time"));
-  AddReadOnly(_("Task distance"), NULL, _T("%.0f %s"),
+  AddReadOnly(_("Task distance"), nullptr, _T("%.0f %s"),
               UnitGroup::DISTANCE, fixed(0));
 
   AddFloat(_("Set MacCready"),
@@ -191,15 +191,15 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
               _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
               _T("%.0f %%"), fixed(0));
 
-  AddReadOnly(_("Speed remaining"), NULL, _T("%.0f %s"),
+  AddReadOnly(_("Speed remaining"), nullptr, _T("%.0f %s"),
               UnitGroup::TASK_SPEED, fixed(0));
 
-  AddReadOnly(_("Achieved MacCready"), NULL, _T("%.1f %s"),
+  AddReadOnly(_("Achieved MacCready"), nullptr, _T("%.1f %s"),
               UnitGroup::VERTICAL_SPEED, fixed(0));
   DataFieldFloat &emc_df = (DataFieldFloat &)GetDataField(EFFECTIVE_MC);
   emc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
-  AddReadOnly(_("Achieved speed"), NULL, _T("%.0f %s"),
+  AddReadOnly(_("Achieved speed"), nullptr, _T("%.0f %s"),
               UnitGroup::TASK_SPEED, fixed(0));
 
   AddFloat(_("Cruise efficiency"),
@@ -236,7 +236,7 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 void
 TaskCalculatorPanel::Hide()
 {
-  if (target_button != NULL)
+  if (target_button != nullptr)
     target_button->Hide();
 
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);

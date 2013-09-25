@@ -22,15 +22,15 @@ Copyright_License {
 */
 
 #include "StatusMessage.hpp"
-#include "Profile/Profile.hpp"
-#include "LocalPath.hpp"
+#include "Profile/ProfileKeys.hpp"
 #include "Util/EscapeBackslash.hpp"
-#include "Util/StringUtil.hpp"
 #include "Util/NumberParser.hpp"
 #include "IO/ConfiguredFile.hpp"
 
-#include <stdio.h>
 #include <memory>
+
+#include <stdio.h>
+#include <string.h>
 
 static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"

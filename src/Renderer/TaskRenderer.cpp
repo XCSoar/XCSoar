@@ -26,8 +26,7 @@ Copyright_License {
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/StartPoint.hpp"
-#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "TaskPointRenderer.hpp"
 
 TaskRenderer::TaskRenderer(TaskPointRenderer &_tpv, GeoBounds _screen_bounds)
@@ -37,10 +36,11 @@ void
 TaskRenderer::Draw(const AbortTask &task)
 {
   tpv.SetActiveIndex(task.GetActiveIndex());
+  tpv.SetModeOptional(false);
+
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
       tpv.Draw(task.GetAlternate(j), (TaskPointRenderer::Layer)i);
   }
@@ -72,10 +72,11 @@ void
 TaskRenderer::Draw(const GotoTask &task)
 {
   tpv.SetActiveIndex(0);
+  tpv.SetModeOptional(false);
+
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
-    tpv.SetModeOptional(false);
     tpv.Draw(*task.GetActiveTaskPoint(), (TaskPointRenderer::Layer)i);
   }
 }

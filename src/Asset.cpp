@@ -34,7 +34,6 @@ Copyright_License {
 #include <winioctl.h>
 #endif
 
-#include <windef.h> /* for MAX_PATH */
 #include <string.h>
 
 // Registration Data

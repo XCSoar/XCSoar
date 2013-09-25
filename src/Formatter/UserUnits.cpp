@@ -24,13 +24,9 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/Units.hpp"
 #include "Units/Units.hpp"
-#include "Units/Descriptor.hpp"
-#include "Math/Angle.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
-#include <stdlib.h>
 
 void
 FormatUserAltitude(fixed value, TCHAR *buffer, bool include_unit)

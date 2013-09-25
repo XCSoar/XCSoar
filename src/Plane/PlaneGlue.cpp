@@ -26,7 +26,6 @@ Copyright_License {
 #include "Plane.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
-#include "Polar/Parser.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
 

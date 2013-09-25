@@ -121,8 +121,10 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
-  if (v.distance >= fixed(1))
+  if (v.distance >= fixed(1)) {
     basic.track = v.bearing;
+    basic.track_available = basic.location_available;
+  }
 }
 
 /**

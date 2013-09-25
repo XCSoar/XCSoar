@@ -24,12 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_SETTINGS_HPP
 #define XCSOAR_UNITS_SETTINGS_HPP
 
-#include "Geo/CoordinateFormat.hpp"
 #include "Unit.hpp"
 #include "Group.hpp"
 #include "Compiler.h"
-
-#include <stdint.h>
 
 struct UnitSetting
 {

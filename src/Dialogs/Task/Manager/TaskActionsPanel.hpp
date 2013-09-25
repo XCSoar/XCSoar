@@ -24,15 +24,21 @@ Copyright_License {
 #ifndef XCSOAR_TASK_ACTIONS_PANEL_HPP
 #define XCSOAR_TASK_ACTIONS_PANEL_HPP
 
-#include "Widget/XMLWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
 
 class TaskManagerDialog;
 class TaskMiscPanel;
-class WndOwnerDrawFrame;
-class TabbedControl;
 class OrderedTask;
 
-class TaskActionsPanel : public XMLWidget {
+class TaskActionsPanel : public RowFormWidget, ActionListener {
+  enum Controls {
+    NEW_TASK,
+    DECLARE,
+    BROWSE,
+    SAVE,
+  };
+
   TaskManagerDialog &dialog;
   TaskMiscPanel &parent;
 
@@ -41,10 +47,9 @@ class TaskActionsPanel : public XMLWidget {
 
 public:
   TaskActionsPanel(TaskManagerDialog &_dialog, TaskMiscPanel &_parent,
-                   OrderedTask **_active_task, bool *_task_modified)
-    :dialog(_dialog), parent(_parent),
-     active_task(_active_task), task_modified(_task_modified) {}
+                   OrderedTask **_active_task, bool *_task_modified);
 
+private:
   void SaveTask();
 
   void OnBrowseClicked();
@@ -57,6 +62,9 @@ public:
   virtual void ReClick() override;
   virtual void Show(const PixelRect &rc) override;
   virtual void Hide() override;
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) override;
 };
 
 #endif

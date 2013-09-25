@@ -32,14 +32,11 @@ Copyright_License {
 #include "Util/Serial.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
+#include "ResourceId.hpp"
 
 #include <assert.h>
 
-struct GeoPoint;
-class Canvas;
 class WindowProjection;
-class LabelBlock;
-struct MapSettings;
 class XShape;
 struct zzip_dir;
 
@@ -65,7 +62,11 @@ class TopographyFile : private NonCopyable {
   AllocatedArray<ShapeList> shapes;
   const ShapeList *first;
 
-  int label_field, icon, pen_width;
+  int label_field;
+
+  ResourceId icon, big_icon;
+
+  unsigned pen_width;
 
   Color color;
 
@@ -140,6 +141,7 @@ public:
    * @param color The color to use for drawing, including alpha for OpenGL
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
+   * @param big_icon the resource id of the big icon, 0 for no big icon
    * @param pen_width The pen width used for line drawing
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
@@ -150,8 +152,10 @@ public:
                  fixed threshold, fixed label_threshold,
                  fixed important_label_threshold,
                  const Color color,
-                 int label_field=-1, int icon=0,
-                 int pen_width=1);
+                 int label_field=-1,
+                 ResourceId icon=ResourceId::Null(),
+                 ResourceId big_icon=ResourceId::Null(),
+                 unsigned pen_width=1);
 
   /**
    * The destructor clears the cache and closes the shapefile
@@ -178,15 +182,19 @@ public:
     return map_scale <= important_label_threshold;
   }
 
-  int GetIcon() const {
+  ResourceId GetIcon() const {
     return icon;
+  }
+
+  ResourceId GetBigIcon() const {
+    return big_icon;
   }
 
   Color GetColor() const {
     return color;
   }
 
-  int GetPenWidth() const {
+  unsigned GetPenWidth() const {
     return pen_width;
   }
 

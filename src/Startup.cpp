@@ -33,17 +33,14 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
-#include "Geo/Geoid.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
-#include "Math/FastMath.h"
 #include "UtilsSystem.hpp"
 #include "FLARM/Glue.hpp"
-#include "MapSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Logger/GlueFlightLogger.hpp"
@@ -57,13 +54,8 @@ Copyright_License {
 #include "Topography/TopographyGlue.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Screen/Busy.hpp"
-#include "Polar/PolarGlue.hpp"
-#include "Polar/Polar.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
-#include "Look/Look.hpp"
-#include "Look/GlobalFonts.hpp"
-#include "resource.h"
 #include "Computer/GlideComputer.hpp"
 #include "Computer/GlideComputerInterface.hpp"
 #include "Computer/Events.hpp"
@@ -91,7 +83,6 @@ Copyright_License {
 #include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "PageActions.hpp"
 #include "Weather/Features.hpp"
@@ -329,9 +320,6 @@ Startup()
 
   replay = new Replay(logger, *protected_task_manager);
 
-  // Load the EGM96 geoid data
-  EGM96::Load();
-
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(fixed(0));
   gp.SetMC(computer_settings.task.safety_mc);
@@ -444,7 +432,7 @@ Startup()
 
   all_monitors = new AllMonitors();
 
-  if (computer_settings.logger.enable_flight_logger) {
+  if (!is_simulator() && computer_settings.logger.enable_flight_logger) {
     flight_logger = new GlueFlightLogger(live_blackboard);
     LocalPath(path, _T("flights.log"));
     flight_logger->SetPath(path);
@@ -530,10 +518,6 @@ Shutdown()
   operation.SetText(_("Shutdown, saving profile..."));
   Profile::Save();
 
-  // Stop sound
-
-  AudioVarioGlue::Deinitialise();
-
   operation.SetText(_("Shutdown, please wait..."));
 
   // Stop threads
@@ -568,6 +552,9 @@ Shutdown()
 
   LogFormat("delete MapWindow");
   main_window->Deinitialise();
+
+  // Stop sound
+  AudioVarioGlue::Deinitialise();
 
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));
@@ -626,9 +613,6 @@ Shutdown()
   // Close the progress dialog
   LogFormat("Close Progress Dialog");
   operation.Hide();
-
-  // Clear the EGM96 database
-  EGM96::Close();
 
   delete glide_computer;
   delete task_events;

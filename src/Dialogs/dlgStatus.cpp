@@ -40,8 +40,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
-#include <assert.h>
-
 static int status_page = 0;
 
 static void

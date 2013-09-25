@@ -27,13 +27,10 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
 #include <tchar.h>
-#include <stdio.h>
 
 static void
 SetVSpeed(InfoBoxData &data, fixed value)

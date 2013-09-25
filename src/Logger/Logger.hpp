@@ -32,8 +32,6 @@ Copyright_License {
 struct NMEAInfo;
 struct ComputerSettings;
 
-class LoggerImpl;
-class OrderedTask;
 class ProtectedTaskManager;
 
 class Logger {

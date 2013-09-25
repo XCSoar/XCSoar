@@ -29,7 +29,6 @@ Copyright_License {
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Util/CharUtil.hpp"
-#include "Util/Macros.hpp"
 
 #include <string.h>
 #include <stdlib.h>

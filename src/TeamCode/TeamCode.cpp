@@ -26,7 +26,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/Macros.hpp"
 
 static constexpr unsigned BASE = 36;
 static constexpr unsigned TEAMCODE_COMBINATIONS = BASE * BASE;

@@ -22,14 +22,12 @@ Copyright_License {
 */
 
 #include "OZRenderer.hpp"
-#include "Task/ObservationZones/LineSectorZone.hpp"
+#include "AirspaceRendererSettings.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Projection/WindowProjection.hpp"
-#include "MapSettings.hpp"
+#include "Projection/Projection.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Layout.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 

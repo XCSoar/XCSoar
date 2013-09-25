@@ -28,6 +28,10 @@ Copyright_License {
 
 #include <stdio.h>
 
+#ifdef KOBO
+bool FreeType::mono = true;
+#endif
+
 static FT_Library ft_library;
 
 void

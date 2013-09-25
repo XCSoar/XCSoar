@@ -25,9 +25,7 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Util/Macros.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
-#include "OS/Sleep.h"
 
 static const char *const v7_setting_names[] = {
   "BRGPS",

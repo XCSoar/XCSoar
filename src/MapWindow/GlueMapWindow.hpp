@@ -39,7 +39,6 @@ Copyright_License {
 struct Look;
 struct GestureLook;
 class Logger;
-class SingleWindow;
 
 class OffsetHistory
 {
@@ -240,7 +239,7 @@ private:
   void DrawVario(Canvas &canvas, const PixelRect &rc) const;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
 
-  void SwitchZoomClimb(bool circling);
+  void SwitchZoomClimb();
 
   void SaveDisplayModeScales();
 
@@ -257,6 +256,13 @@ private:
 
 public:
   void UpdateMapScale();
+
+  /**
+   * Restore the map scale from MapSettings::cruise_scale or
+   * MapSettings::circling_scale.
+   */
+  void RestoreMapScale();
+
   void UpdateDisplayMode();
   void SetMapScale(fixed scale);
 

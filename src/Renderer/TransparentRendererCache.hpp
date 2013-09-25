@@ -72,10 +72,21 @@ public:
 #else
   CompareProjection compare_projection;
   BufferCanvas buffer;
+  bool empty;
 
 public:
+
+  /**
+   * Finish drawing the cache. Indicate that no drawing is necessary
+   * since nothing relevant was rendered.
+   */
+  inline void CommitEmpty() {
+    empty = true;
+  }
+
   void Invalidate() {
     compare_projection.Clear();
+    CommitEmpty();
   }
 
   /**

@@ -27,7 +27,6 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 struct NMEAInfo;
-struct BrokenDateTime;
 class NMEAInputLine;
 struct GeoPoint;
 struct BrokenDate;
