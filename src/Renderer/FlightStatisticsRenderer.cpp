@@ -43,6 +43,7 @@ Copyright_License {
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
+#include "Computer/Settings.hpp"
 
 #include <algorithm>
 
@@ -119,8 +120,32 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   trail_renderer.Draw(canvas, proj);
 
-  for (unsigned i=0; i< 3; ++i)
-    DrawContestSolution(canvas, proj, contest, i);
+  switch (settings_computer.contest.contest) {
+  case Contest::NONE:
+    break;
+
+  case Contest::OLC_SPRINT:
+  case Contest::OLC_FAI:
+  case Contest::OLC_CLASSIC:
+  case Contest::SIS_AT:
+  case Contest::NET_COUPE:
+  case Contest::DMST:
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_LEAGUE:
+    /* draw classic first, and triangle on top of it */
+    DrawContestSolution(canvas, proj, contest, 1);
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_PLUS:
+  case Contest::XCONTEST:
+  case Contest::DHV_XC:
+    DrawContestSolution(canvas, proj, contest, 0);
+    DrawContestSolution(canvas, proj, contest, 1);
+    break;
+  }
 }
 
 void
