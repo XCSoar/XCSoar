@@ -239,8 +239,7 @@ TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
 }
 
 void
-TrailRenderer::DrawTraceVector(Canvas &canvas,
-                               const WindowProjection &projection,
+TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const ContestTraceVector &trace)
 {
   const unsigned n = trace.size();

@@ -83,7 +83,7 @@ public:
   /**
    * Draw a ContestTraceVector.  The caller must select a Pen.
    */
-  void DrawTraceVector(Canvas &canvas, const WindowProjection &projection,
+  void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const ContestTraceVector &trace);
 
 private:
