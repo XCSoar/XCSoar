@@ -79,6 +79,9 @@ Run(DebugReplay &replay, FlightTimeResult &result)
   constexpr Angle max_longitude_change = Angle::Degrees(30);
   constexpr Angle max_latitude_change = Angle::Degrees(1);
 
+  replay.SetCalculated().Reset();
+  replay.SetFlyingComputer().Reset();
+
   while (replay.Next()) {
     const MoreData &basic = replay.Basic();
 

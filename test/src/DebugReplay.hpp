@@ -88,6 +88,11 @@ public:
     return calculated;
   }
 
+  FlyingComputer &SetFlyingComputer() {
+    return flying_computer;
+  }
+
+
 protected:
   void Compute();
 };
