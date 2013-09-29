@@ -8,11 +8,6 @@ LLVM_LLC = $(LLVM_PREFIX)llc$(LLVM_SUFFIX)
 ifeq ($(CLANG),y)
 
 ifneq ($(TARGET),ANDROID)
-ifneq ($(ANALYZER),y)
-CXX = $(LLVM_PREFIX)clang++$(LLVM_SUFFIX)
-CC = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-endif
-
 HOSTCC = $(CC)
 HOSTCXX = $(CXX)
 endif
