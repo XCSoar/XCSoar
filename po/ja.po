@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-09-08 06:07+0000\n"
+"PO-Revision-Date: 2013-09-29 10:13+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-09 04:52+0000\n"
-"X-Generator: Launchpad (build 16760)\n"
+"X-Launchpad-Export-Date: 2013-09-30 10:41+0000\n"
+"X-Generator: Launchpad (build 16774)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2906,14 +2906,14 @@ msgid "Circle D"
 msgstr "円の直径"
 
 #: src/InfoBoxes/Content/Factory.cpp:1246
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Circle diameter. Displays estimated circle diameter and full circle flight "
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
-"旋回円の大きさ　、円の直径と予想される旋回時間\r\n"
-"翼面荷重の大きさによる最適旋回半径の判断に有効"
+"旋回直径、予想される旋回時間\r\n"
+"翼面荷重の違いによる最良滑空モードを判断するために活用できる"
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
 #, no-c-format
@@ -4964,9 +4964,8 @@ msgid "New Teammate"
 msgstr "新しい　チームメート"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:89
-#, fuzzy
 msgid "Set code"
-msgstr "コードの設定"
+msgstr "コードを設定する"
 
 #: src/Dialogs/Traffic/TeamCodeDialog.cpp:90
 msgid "Set WP"
@@ -8639,11 +8638,11 @@ msgstr "セクター内　次に向かえ"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:47
 msgid "Arm"
-msgstr ""
+msgstr "アーム"
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:48 src/Monitor/MatTaskMonitor.cpp:63
 msgid "Dismiss"
-msgstr ""
+msgstr "使用しない"
 
 #: src/Monitor/MatTaskMonitor.cpp:54
 msgid "Add this turn point?"
@@ -9080,9 +9079,9 @@ msgid "Flarm interface"
 msgstr "FLARM　インターフェース"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Disable circling"
-msgstr "旋回　フィルター"
+msgstr "旋回モードOFF"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
@@ -9277,9 +9276,9 @@ msgid "Mute vario on radio"
 msgstr "無線が入ったときバリオ消音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario muting"
-msgstr "音声　消音"
+msgstr "バリオ消音"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
@@ -9902,12 +9901,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Fly"
-#~ msgstr "飛行"
-
-#~ msgid " "
-#~ msgstr " "
-
 #~ msgid "English"
 #~ msgstr "英語"
 
@@ -10288,6 +10281,9 @@ msgstr ""
 #~ msgid "Edit text"
 #~ msgstr "テキストの編集"
 
+#~ msgid "Set Code"
+#~ msgstr "コードの設定"
+
 #~ msgid "Wing area"
 #~ msgstr "翼面積"
 
@@ -10318,6 +10314,9 @@ msgstr ""
 
 #~ msgid "Lookup"
 #~ msgstr "検索"
+
+#~ msgid "Fly"
+#~ msgstr "飛行"
 
 #~ msgid "Return"
 #~ msgstr "Returnキー"
@@ -10362,6 +10361,9 @@ msgstr ""
 
 #~ msgid "Unreachable through terrain."
 #~ msgstr "地形越しに到達不能"
+
+#~ msgid " "
+#~ msgstr " "
 
 #~ msgid "Next radial ATC"
 #~ msgstr "次のATCポイントからの方角"
