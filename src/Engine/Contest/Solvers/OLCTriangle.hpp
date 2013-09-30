@@ -294,7 +294,7 @@ private:
       // shortest leg min 28% (here: 27.5%) for small triangle,
       // min 25% (here: 24.3%) for large triangle
       if ((df_max > large_triangle_check && shortest_max * 37 < df_min * 9) ||
-          (df_max <= large_triangle_check && shortest_max * 29 < df_min * 8)) {
+          (df_max <= large_triangle_check && shortest_max * 40 < df_min * 11)) {
         return false;
       }
 
@@ -328,7 +328,7 @@ private:
         return false;
 
       // small triangle and shortest < 27.5% dist_total
-      if (df_max < large_triangle_check && shortest_max * 29 < df_max * 8)
+      if (df_max < large_triangle_check && shortest_max * 40 < df_max * 11)
         return false;
 
       // detailed checks

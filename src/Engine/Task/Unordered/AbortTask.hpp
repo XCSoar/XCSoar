@@ -27,6 +27,8 @@
 #include "UnorderedTaskPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
+#include <vector>
+
 #include <assert.h>
 
 class Waypoints;
