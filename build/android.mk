@@ -4,12 +4,6 @@
 
 ifeq ($(TARGET),ANDROID)
 
-# When enabled, the package org.xcsoar.testing is created, with a red
-# Activity icon, to allow simultaneous installation of "stable" and
-# "testing".
-# In the stable branch, this should default to "n".
-TESTING = y
-
 ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
