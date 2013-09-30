@@ -38,6 +38,10 @@ public:
                   const Trace &trace_triangle,
                   const Trace &trace_sprint);
 
+  void SetIncremental(bool incremental) {
+    contest_manager.SetIncremental(incremental);
+  }
+
   void Reset() {
     contest_manager.Reset();
   }

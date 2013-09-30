@@ -42,7 +42,7 @@ DeviceBlackboard::DeviceBlackboard()
   gps_info.date_time_utc = BrokenDateTime::NowUTC();
   gps_info.time = fixed(gps_info.date_time_utc.GetSecondOfDay());
 
-  std::fill_n(per_device_data, NUMDEV, gps_info);
+  std::fill_n(per_device_data, unsigned(NUMDEV), gps_info);
 
   real_data = simulator_data = replay_data = gps_info;
 
@@ -67,7 +67,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
   if (Calculated().flight.flying)
     return;
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
+  for (unsigned i = 0; i < unsigned(NUMDEV); ++i)
     if (!per_device_data[i].location_available)
       per_device_data[i].SetFakeLocation(loc, alt);
 
@@ -202,7 +202,7 @@ DeviceBlackboard::ExpireWallClock()
     return;
 
   bool modified = false;
-  for (unsigned i = 0; i < NUMDEV; ++i) {
+  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
     NMEAInfo &basic = per_device_data[i];
     if (!basic.alive)
       continue;
@@ -226,7 +226,7 @@ void
 DeviceBlackboard::Merge()
 {
   real_data.Reset();
-  for (unsigned i = 0; i < NUMDEV; ++i) {
+  for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
     if (!per_device_data[i].alive)
       continue;
 

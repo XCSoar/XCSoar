@@ -329,8 +329,8 @@ OLCTriangle::RunBranchAndBound(unsigned from, unsigned to, unsigned worst_d, boo
     // initiate algorithm. otherwise continue unfinished run
     running = true;
 
-    // initialize bound-and-branch tree with root node
-    CandidateSet root_candidates(this, from, to);
+    // initialize bound-and-branch tree with root node (note: Candidate set interval is [min, max))
+    CandidateSet root_candidates(this, from, to + 1);
     if (root_candidates.isFeasible(is_fai, large_triangle_check) && root_candidates.df_max >= worst_d)
       branch_and_bound.insert(std::pair<unsigned, CandidateSet>(root_candidates.df_max, root_candidates));
   }

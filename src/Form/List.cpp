@@ -49,7 +49,7 @@ gcc_const
 static bool
 UsePixelPan()
 {
-  return HasEPaper();
+  return !HasEPaper();
 }
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,

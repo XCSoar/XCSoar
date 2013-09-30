@@ -34,6 +34,7 @@ class TraceComputer;
 class Projection;
 class WindowProjection;
 class ContestTraceVector;
+struct ContestTracePoint;
 struct TrailLook;
 struct NMEAInfo;
 struct DerivedInfo;
@@ -75,11 +76,24 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection, unsigned min_time);
 
+  gcc_malloc
+  RasterPoint *Prepare(unsigned n);
+
+  void DrawPreparedPolyline(Canvas &canvas, unsigned n);
+  void DrawPreparedPolygon(Canvas &canvas, unsigned n);
+
   /**
    * Draw a ContestTraceVector.  The caller must select a Pen.
    */
-  void DrawTraceVector(Canvas &canvas, const WindowProjection &projection,
+  void DrawTraceVector(Canvas &canvas, const Projection &projection,
                        const ContestTraceVector &trace);
+
+  /**
+   * Draw a triangle described by trace index 1..3; expected trace
+   * size is 5 (0=start, 4=finish).
+   */
+  void DrawTriangle(Canvas &canvas, const Projection &projection,
+                    const ContestTraceVector &trace);
 
 private:
   void DrawTraceVector(Canvas &canvas, const Projection &projection,

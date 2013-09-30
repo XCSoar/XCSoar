@@ -30,11 +30,11 @@ Copyright_License {
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Time/WrapClock.hpp"
+#include "OS/Args.hpp"
 
 class NLineReader;
 class Device;
 struct DeviceRegister;
-class Args;
 
 class DebugReplay {
 protected:
@@ -98,5 +98,11 @@ protected:
 
 DebugReplay *
 CreateDebugReplay(Args &args);
+
+DebugReplay *
+CreateDebugReplayIGC(const char *input_file);
+
+DebugReplay *
+CreateDebugReplayNMEA(const tstring &driver_name, const char *input_file);
 
 #endif

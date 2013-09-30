@@ -57,7 +57,8 @@ XCSoar TE
   - TravisCI support
 
 
-Version 6.7 - not yet released
+Version 6.7 - 2013/09/30
+* new target: Kobo e-book readers
 * user interface
   - resizable main window
   - added AutoZoom gesture (up-down)
@@ -101,6 +102,7 @@ Version 6.7 - not yet released
 * calculations
   - add more weight to zig-zag wind compared to circling wind
   - enable circling wind calculation in IGC replay (#2672)
+  - fix OLC triangle display (#2775)
 * waypoint editor
   - delete waypoint implemented
   - CUP file support added

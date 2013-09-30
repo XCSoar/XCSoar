@@ -71,6 +71,12 @@ public:
   static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived);
   static void CaptionOLC(TCHAR *sTmp, const ContestSettings &settings,
                          const DerivedInfo &derived);
+
+private:
+  void DrawContestSolution(Canvas &canvas, const Projection &projection,
+                           const ContestStatistics &statistics, unsigned i) const;
+  void DrawContestTriangle(Canvas &canvas, const Projection &projection,
+                           const ContestStatistics &statistics, unsigned i) const;
 };
 
 #endif

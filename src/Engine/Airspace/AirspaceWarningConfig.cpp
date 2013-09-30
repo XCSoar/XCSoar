@@ -32,7 +32,7 @@ AirspaceWarningConfig::SetDefaults()
   acknowledgement_time = 30;
   altitude_warning_margin = 100;
 
-  std::fill_n(class_warnings, AIRSPACECLASSCOUNT, true);
+  std::fill_n(class_warnings, unsigned(AIRSPACECLASSCOUNT), true);
   class_warnings[CLASSE] = false;
   class_warnings[CLASSF] = false;
   class_warnings[CLASSG] = false;
