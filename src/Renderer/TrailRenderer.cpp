@@ -223,29 +223,67 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     Draw(canvas, projection);
 }
 
-void
-TrailRenderer::DrawTraceVector(Canvas &canvas,
-                               const WindowProjection &projection,
-                               const ContestTraceVector &trace)
+RasterPoint *
+TrailRenderer::Prepare(unsigned n)
 {
-  points.GrowDiscard(trace.size());
+  points.GrowDiscard(n);
+  return points.begin();
+}
 
-  unsigned n = 0;
-  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->GetLocation());
+void
+TrailRenderer::DrawPreparedPolyline(Canvas &canvas, unsigned n)
+{
+  assert(points.size() >= n);
 
   canvas.DrawPolyline(points.begin(), n);
+}
+
+void
+TrailRenderer::DrawPreparedPolygon(Canvas &canvas, unsigned n)
+{
+  assert(points.size() >= n);
+
+  canvas.DrawPolygon(points.begin(), n);
+}
+
+void
+TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
+                               const ContestTraceVector &trace)
+{
+  const unsigned n = trace.size();
+  RasterPoint *p = Prepare(n);
+
+  for (const auto &i : trace)
+    *p++ = projection.GeoToScreen(i.GetLocation());
+
+  DrawPreparedPolyline(canvas, n);
+}
+
+void
+TrailRenderer::DrawTriangle(Canvas &canvas, const Projection &projection,
+                            const ContestTraceVector &trace)
+{
+  assert(trace.size() == 5);
+
+  const unsigned start = 1, n = 3;
+
+  RasterPoint *p = Prepare(n);
+
+  for (unsigned i = start; i < start + n; ++i)
+    *p++ = projection.GeoToScreen(trace[i].GetLocation());
+
+  DrawPreparedPolygon(canvas, n);
 }
 
 void
 TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
                                const TracePointVector &trace)
 {
-  points.GrowDiscard(trace.size());
+  const unsigned n = trace.size();
+  RasterPoint *p = Prepare(n);
 
-  unsigned n = 0;
-  for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->GetLocation());
+  for (const auto &i : trace)
+    *p++ = projection.GeoToScreen(i.GetLocation());
 
-  canvas.DrawPolyline(points.begin(), n);
+  DrawPreparedPolyline(canvas, n);
 }

@@ -80,27 +80,32 @@ DebugReplay *
 CreateDebugReplay(Args &args)
 {
   if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
-    const char *input_file = args.ExpectNext();
-
-    FileLineReaderA *reader = new FileLineReaderA(input_file);
-    if (reader->error()) {
-      delete reader;
-      fprintf(stderr, "Failed to open %s\n", input_file);
-      return NULL;
-    }
-
-    return new DebugReplayIGC(reader);
+    return CreateDebugReplayIGC(args.ExpectNext());
   }
 
-  const tstring driver_name = args.ExpectNextT();
+  return CreateDebugReplayNMEA(args.ExpectNextT(), args.ExpectNext());
+}
+
+DebugReplay *
+CreateDebugReplayIGC(const char *input_file) {
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return NULL;
+  }
+
+  return new DebugReplayIGC(reader);
+}
+
+DebugReplay *
+CreateDebugReplayNMEA(const tstring &driver_name, const char *input_file) {
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
     _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return NULL;
   }
-
-  const char *input_file = args.ExpectNext();
 
   FileLineReaderA *reader = new FileLineReaderA(input_file);
   if (reader->error()) {

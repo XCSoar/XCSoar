@@ -43,6 +43,7 @@ Copyright_License {
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
+#include "Computer/Settings.hpp"
 
 #include <algorithm>
 
@@ -55,6 +56,34 @@ FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
   :chart_look(_chart_look),
    map_look(_map_look),
    trail_renderer(map_look.trail) {}
+
+void
+FlightStatisticsRenderer::DrawContestSolution(Canvas &canvas,
+                                              const Projection &projection,
+                                              const ContestStatistics &statistics,
+                                              unsigned i) const
+{
+  if (!statistics.GetResult(i).IsDefined())
+    return;
+
+  canvas.Select(map_look.contest_pens[i]);
+  trail_renderer.DrawTraceVector(canvas, projection,
+                                 statistics.GetSolution(i));
+}
+
+void
+FlightStatisticsRenderer::DrawContestTriangle(Canvas &canvas, const Projection &projection,
+                                              const ContestStatistics &statistics, unsigned i) const
+{
+  if (!statistics.GetResult(i).IsDefined() ||
+      statistics.GetSolution(i).size() != 5)
+    return;
+
+  canvas.Select(map_look.contest_pens[i]);
+  canvas.SelectHollowBrush();
+  trail_renderer.DrawTriangle(canvas, projection,
+                              statistics.GetSolution(i));
+}
 
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
@@ -91,12 +120,11 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     canvas.Select(chart_look.label_font);
     canvas.SetBackgroundTransparent();
 
-    auto end = retrospective.getNearWaypointList().end();
-    for (auto it = retrospective.getNearWaypointList().begin(); it!= end; ++it) {
-      RasterPoint wp_pos = proj.GeoToScreen(it->waypoint.location);
+    for (const auto &i : retrospective.getNearWaypointList()) {
+      RasterPoint wp_pos = proj.GeoToScreen(i.waypoint.location);
       canvas.DrawText(wp_pos.x,
                       wp_pos.y,
-                      it->waypoint.name.c_str());
+                      i.waypoint.name.c_str());
     }
   }
 
@@ -106,11 +134,34 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   trail_renderer.Draw(canvas, proj);
 
-  for (unsigned i=0; i< 3; ++i) {
-    if (contest.GetResult(i).IsDefined()) {
-      canvas.Select(map_look.contest_pens[i]);
-      trail_renderer.DrawTraceVector(canvas, proj, contest.GetSolution(i));
-    }
+  switch (settings_computer.contest.contest) {
+  case Contest::NONE:
+    break;
+
+  case Contest::OLC_SPRINT:
+  case Contest::OLC_CLASSIC:
+  case Contest::SIS_AT:
+  case Contest::NET_COUPE:
+  case Contest::DMST:
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_FAI:
+    DrawContestTriangle(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_LEAGUE:
+    /* draw classic first, and triangle on top of it */
+    DrawContestSolution(canvas, proj, contest, 1);
+    DrawContestSolution(canvas, proj, contest, 0);
+    break;
+
+  case Contest::OLC_PLUS:
+  case Contest::XCONTEST:
+  case Contest::DHV_XC:
+    DrawContestSolution(canvas, proj, contest, 0);
+    DrawContestTriangle(canvas, proj, contest, 1);
+    break;
   }
 }
 

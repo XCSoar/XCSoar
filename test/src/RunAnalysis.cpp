@@ -185,6 +185,7 @@ Main()
                                task_events);
   glide_computer.ReadComputerSettings(blackboard.GetComputerSettings());
   glide_computer.SetTerrain(terrain);
+  glide_computer.SetContestIncremental(false);
   glide_computer.Initialise();
 
   LoadReplay(replay, glide_computer, blackboard);
