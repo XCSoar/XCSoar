@@ -38,7 +38,7 @@ XCSoar TE
      than what is behind you already)
   - changed default airspace colors
     (closer to the German ICAO charts)
-  - adjusted default terrain brightness and contrast
+  - adjusted default terrain colors, brightness and contrast
   - changed airport symbol default to "traffic lights"
     (more intuitive and easier to interpret)
   - show full waypoint names by default

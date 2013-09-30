@@ -29,7 +29,7 @@ TerrainRendererSettings::SetDefaults()
   enable = true;
   slope_shading = SlopeShading::WIND;
   contrast = 192;
-  brightness = 205;
-  ramp = 0;
+  brightness = 154;
+  ramp = 14;
   contours = Contours::OFF;
 }
