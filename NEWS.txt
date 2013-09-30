@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.7 - not yet released
+Version 6.7 - 2013/09/30
 * new target: Kobo e-book readers
 * user interface
   - resizable main window
