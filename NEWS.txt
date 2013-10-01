@@ -44,6 +44,7 @@ Version 6.7 - 2013/09/30
   - support the OLC/DMSt 500km triangle threshold (#2963)
   - render finish point as achieved when task is finished (#2140)
   - subtract start/finish cylinder radius from task distance (#2308)
+  - fix parsing of .cup task files
 * route planner
   - ignore inactive and acknowledged airspaces (#2866)
 * calculations
@@ -72,10 +73,6 @@ Version 6.7 - 2013/09/30
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
   - save the previous log file in "xcsoar.old"
   - fix name truncation when saving a waypoint file on Windows (#3096)
-
-Version 6.6.6 - not yet released
-* tasks
-  - fix parsing of .cup task files
 
 Version 6.6.5 - 2013/08/21
 * user interface
