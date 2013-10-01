@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-09-30 14:18+0000\n"
-"Last-Translator: Peter Cutting <peter.cutting@gmail.com>\n"
+"PO-Revision-Date: 2013-10-01 08:39+0000\n"
+"Last-Translator: M Söderman <Unknown>\n"
 "Language-Team: none\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-30 15:52+0000\n"
+"X-Launchpad-Export-Date: 2013-10-01 09:24+0000\n"
 "X-Generator: Launchpad (build 16774)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -75,7 +75,7 @@ msgstr "Blandad"
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
 msgid "Touring"
-msgstr ""
+msgstr "Flyga omkring"
 
 #: src/Task/TypeStrings.cpp:52
 #, no-c-format
@@ -107,6 +107,8 @@ msgid ""
 "Racing task around turn points.  Can also be used for FAI badge and record "
 "tasks.  Allows all shapes of observation zones."
 msgstr ""
+"Hastighetsbana runt brytpunkter. Kan också användas för FAI diplom och "
+"rekord. Tillåter alla former på observationsektorn."
 
 #: src/Task/TypeStrings.cpp:59
 #, no-c-format
@@ -114,6 +116,8 @@ msgid ""
 "Task through assigned areas, minimum task time applies.  Restricted to "
 "cylinder and sector observation zones."
 msgstr ""
+"Bana genom bestämda områden, minsta tiden gäller. Observationszonerna "
+"begränsade till cylindrar och sektorer."
 
 #: src/Task/TypeStrings.cpp:61
 #, no-c-format
@@ -129,6 +133,8 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Hastighetsbana med en blandning av designerade områden och brytpunkter, "
+"minsta tid på banan gäller."
 
 #: src/Task/TypeStrings.cpp:63
 #, no-c-format
@@ -163,6 +169,8 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"En 90 graders sektor med oändligt långa sidor. Korsa en sida, och poängen "
+"räknas från spetsen."
 
 #: src/Task/TypeStrings.cpp:81
 #, no-c-format
@@ -188,7 +196,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:87
 #, no-c-format
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "En cylinder. Korsa kanten, och poängen räknas från centrum."
 
 #: src/Task/TypeStrings.cpp:88
 #, no-c-format
@@ -199,6 +207,7 @@ msgstr ""
 #, no-c-format
 msgid "A cylinder.  Scored by farthest point reached in area."
 msgstr ""
+"En cylinder. Poäng räknas från den mest avlägsna punkten inom cylindern."
 
 #: src/Task/TypeStrings.cpp:90
 #, no-c-format
@@ -206,6 +215,8 @@ msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"En sektor som kan variera i vinkel och radie. Poäng räknas från den mest "
+"avlägsna punkten inom sektorn."
 
 #: src/Task/TypeStrings.cpp:92
 #, no-c-format
@@ -236,6 +247,8 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"En sektor som kan variera i vinkel, inre och yttre radie. Poäng räknas från "
+"den mest avlägsna punkten inom sektorn."
 
 #: src/Task/TypeStrings.cpp:98
 #, no-c-format
@@ -663,7 +676,7 @@ msgstr "Avstånd"
 
 #: src/Gauge/BigTrafficWidget.cpp:424 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
-msgstr ""
+msgstr "Rel. Alt."
 
 #: src/Gauge/BigTrafficWidget.cpp:887 src/InfoBoxes/Content/Task.cpp:65
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -940,13 +953,13 @@ msgstr "Uppgifter & Flygplatser"
 #: src/InfoBoxes/Content/Factory.cpp:164
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "Altitude GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:102
 #, no-c-format
 msgid "Alt GPS"
-msgstr ""
+msgstr "Alt GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:166
 #, no-c-format
@@ -955,6 +968,9 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Detta höjden över medelhavsnivån(MSL) enligt GPS. (Endast Pekskärm/PC: Under "
+"simulering kan detta värdet justeras med up/ner piltangenter, höger/vänster "
+"svänger segelplanet)."
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
@@ -974,6 +990,9 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Detta är navigationshöjden minus höjden på terrängen - från data i "
+"terrängfilen. Värdet färgas rött när segelplanet är under "
+"säkerhetsmarginalen mot terräng."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
@@ -1033,6 +1052,10 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"Direkt glidtal över marken, beräknad med hastighet över marken(GS) dividerat "
+"med vertikal hastighet från GPS, under de senaste 20 sekunderna. Negativa "
+"värden innebär stig. Om den vertikala hastigheten är nära noll, så är visat "
+"värde '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
@@ -1140,6 +1163,9 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Nuvarande MacCready inställning och nuvarande MacCready läge (manuellt eller "
+"auto). (Endast Pekskärm/PC: Används även för att justera MacCready värdet "
+"med upp/ner piltangenter om InfoBoxen är aktiv)."
 
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
@@ -1344,6 +1370,8 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Magnetisk bäring enligt GPS. (Endast Pekskärm/PC: Om InfoBoxen är aktiv, så "
+"kan upp/ner piltangent användas för att justera bäringen)."
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -1418,7 +1446,7 @@ msgstr "AAT max. distans "
 #: src/InfoBoxes/Content/Factory.cpp:452
 #, no-c-format
 msgid "AAT Dmax"
-msgstr ""
+msgstr "AAT Dmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:453
 #, no-c-format
@@ -1433,7 +1461,7 @@ msgstr "AAT min. distans"
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
 msgid "AAT Dmin"
-msgstr ""
+msgstr "AAT Dmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:463
 #, no-c-format
@@ -1456,11 +1484,13 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"AAT medelhastighet som kan uppnås om maximal återstående sträcka flygs på "
+"minsta möjliga AAT tid."
 
 #: src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr ""
+msgstr "AAT hastighet min. distans"
 
 #: src/InfoBoxes/Content/Factory.cpp:482
 #, no-c-format
@@ -1720,6 +1750,8 @@ msgid ""
 "Estimated arrival local time at task completion, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Uppskattat ankomstklockslag i lokal tid, vid avklarad bana, antar ideal "
+"MacCready glid/stid-cykel."
 
 #: src/InfoBoxes/Content/Factory.cpp:634
 #, no-c-format
@@ -1746,7 +1778,7 @@ msgstr "Skillnad i bäring"
 #: src/InfoBoxes/Content/Factory.cpp:646
 #, no-c-format
 msgid "Brng D"
-msgstr ""
+msgstr "Brng D"
 
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
@@ -1796,6 +1828,8 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
+"Relativ luftfuktighet i procent från extern prob, om ansluten extern "
+"variometer stödjer det."
 
 #: src/InfoBoxes/Content/Factory.cpp:675 src/Input/InputEventsSettings.cpp:295
 #, no-c-format
@@ -1819,27 +1853,27 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:685
 #, no-c-format
 msgid "AAT distance around target"
-msgstr ""
+msgstr "AAT distans runt objektet"
 
 #: src/InfoBoxes/Content/Factory.cpp:686
 #, no-c-format
 msgid "AAT Dtgt"
-msgstr ""
+msgstr "AAT Dtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:687
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "AAT distans runt objektpunkter för resten av banan."
 
 #: src/InfoBoxes/Content/Factory.cpp:695
 #, no-c-format
 msgid "AAT speed around target"
-msgstr ""
+msgstr "AAT hastighet runt objektet"
 
 #: src/InfoBoxes/Content/Factory.cpp:696
 #, no-c-format
 msgid "AAT Vtgt"
-msgstr ""
+msgstr "AAT Vtgt"
 
 #: src/InfoBoxes/Content/Factory.cpp:697
 #, no-c-format
@@ -1899,6 +1933,8 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
+"Nuvarande teamkod för denna flygfarkost. Använd för att rapportera till "
+"andra teammedlemmar. Den senast inmatade koden visas undertill."
 
 #: src/InfoBoxes/Content/Factory.cpp:735
 #, no-c-format
@@ -1908,22 +1944,22 @@ msgstr "Team bäring"
 #: src/InfoBoxes/Content/Factory.cpp:736
 #, no-c-format
 msgid "Team Brng"
-msgstr ""
+msgstr "Team Brng"
 
 #: src/InfoBoxes/Content/Factory.cpp:737
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
-msgstr ""
+msgstr "Bäring till platsen för teamflygfarkostens senaste teamkodrapport."
 
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
 msgid "Team bearing difference"
-msgstr ""
+msgstr "Skillnad i teambäring"
 
 #: src/InfoBoxes/Content/Factory.cpp:746
 #, no-c-format
 msgid "Team BrngD"
-msgstr ""
+msgstr "Team BrngD"
 
 #: src/InfoBoxes/Content/Factory.cpp:747
 #, no-c-format
@@ -1931,16 +1967,17 @@ msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
 msgstr ""
+"Relativ bäring till platsen för teamflygfarkostens senaste teamkodrapport."
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Teamräckvidd"
 
 #: src/InfoBoxes/Content/Factory.cpp:756
 #, no-c-format
 msgid "Team Dist"
-msgstr ""
+msgstr "Teamdistans"
 
 #: src/InfoBoxes/Content/Factory.cpp:757
 #, no-c-format
@@ -2078,7 +2115,7 @@ msgstr "Final GR"
 #: src/InfoBoxes/Content/Factory.cpp:840
 #, no-c-format
 msgid "Fin GR"
-msgstr ""
+msgstr "Fin GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:841
 #, no-c-format
@@ -2087,6 +2124,9 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"Glidtal över marken som krävs för att avsluta banan, ges av återstående "
+"distans dividerat med höjden som krävs för att komma i mål på "
+"säkerhetshöjden."
 
 #: src/InfoBoxes/Content/Factory.cpp:849
 #, no-c-format
@@ -2121,12 +2161,12 @@ msgstr "Visar namn och bäring för näst bästa landningsplatsen."
 #: src/InfoBoxes/Content/Factory.cpp:869
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr ""
+msgstr "Alternativ 1 GT"
 
 #: src/InfoBoxes/Content/Factory.cpp:870
 #, no-c-format
 msgid "Altn1 GR"
-msgstr ""
+msgstr "Altn1 GR"
 
 #: src/InfoBoxes/Content/Factory.cpp:871
 #, no-c-format
@@ -2134,6 +2174,8 @@ msgid ""
 "Geometric gradient to the arrival height above the best alternate. This is "
 "not adjusted for total energy."
 msgstr ""
+"Geometrisk gradient för ankomsthöjd över bästa alternativet. Ej kompenserat "
+"för total energi."
 
 #: src/InfoBoxes/Content/Factory.cpp:879
 #, no-c-format
@@ -2143,7 +2185,7 @@ msgstr "Höjd över startplatsen"
 #: src/InfoBoxes/Content/Factory.cpp:880
 #, no-c-format
 msgid "H T/O"
-msgstr ""
+msgstr "H T/O"
 
 #: src/InfoBoxes/Content/Factory.cpp:881
 #, no-c-format
@@ -2157,12 +2199,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:890
 #, no-c-format
 msgid "GR average"
-msgstr ""
+msgstr "GR medel"
 
 #: src/InfoBoxes/Content/Factory.cpp:891
 #, no-c-format
 msgid "GR Avg"
-msgstr ""
+msgstr "GR med"
 
 #: src/InfoBoxes/Content/Factory.cpp:892
 #, no-c-format
@@ -2186,7 +2228,7 @@ msgstr "Experiment 1"
 #: src/InfoBoxes/Content/Factory.cpp:901
 #, no-c-format
 msgid "Exp1"
-msgstr ""
+msgstr "Exp1"
 
 #: src/InfoBoxes/Content/Factory.cpp:910
 #, no-c-format
