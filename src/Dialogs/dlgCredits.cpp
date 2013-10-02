@@ -164,15 +164,22 @@ OnLogoPaint(Canvas &canvas, const PixelRect &rc)
 }
 
 static void
-LoadTextFromResource(const void *data, const void *size, const TCHAR *control)
+LoadTextFromResource(const void *data, size_t size, const TCHAR *control)
 {
-  char *buffer = InflateToString(data, (size_t)size);
+  char *buffer = InflateToString(data, size);
 
   UTF8ToWideConverter text(buffer);
   if (text.IsValid())
     ((LargeTextWindow *)wf->FindByName(control))->SetText(text);
 
   delete[] buffer;
+}
+
+static void
+LoadTextFromResource(const uint8_t *start, const uint8_t *end,
+                     const TCHAR *control)
+{
+  LoadTextFromResource(start, end - start, control);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -182,11 +189,15 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
+/* workaround note: we would prefer to use the "_size" symbol here,
+   but it turns out that Android 4 relocates these symbols for some
+   reason, therefore we use "end-start" instead */
+
 extern const uint8_t license_start[] asm("_binary_COPYING_gz_start");
-extern const uint8_t license_size[] asm("_binary_COPYING_gz_size");
+extern const uint8_t license_end[] asm("_binary_COPYING_gz_end");
 
 extern const uint8_t authors_start[] asm("_binary_AUTHORS_gz_start");
-extern const uint8_t authors_size[] asm("_binary_AUTHORS_gz_size");
+extern const uint8_t authors_end[] asm("_binary_AUTHORS_gz_end");
 
 void
 dlgCreditsShowModal(SingleWindow &parent)
@@ -200,8 +211,8 @@ dlgCreditsShowModal(SingleWindow &parent)
 
   wf->SetKeyDownFunction(FormKeyDown);
 
-  LoadTextFromResource(license_start, license_size, _T("prpLicense"));
-  LoadTextFromResource(authors_start, authors_size, _T("prpAuthors"));
+  LoadTextFromResource(license_start, license_end, _T("prpLicense"));
+  LoadTextFromResource(authors_start, authors_end, _T("prpAuthors"));
 
   wf->ShowModal();
 
