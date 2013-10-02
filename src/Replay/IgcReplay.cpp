@@ -32,6 +32,7 @@ IgcReplay::IgcReplay(NLineReader *_reader)
   :AbstractReplay(),
    reader(_reader)
 {
+  extensions.clear();
 }
 
 IgcReplay::~IgcReplay()
