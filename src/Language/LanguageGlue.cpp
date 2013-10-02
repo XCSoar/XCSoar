@@ -81,6 +81,7 @@ enum {
   LANG_ITALIAN,
   LANG_JAPANESE,
   LANG_KOREAN,
+  LANG_LITHUANIAN,
   LANG_NORWEGIAN,
   LANG_DUTCH,
   LANG_POLISH,
@@ -122,6 +123,8 @@ extern const uint8_t ja_start[] asm("_binary_ja_mo_start");
 extern const uint8_t ja_size[] asm("_binary_ja_mo_size");
 extern const uint8_t ko_start[] asm("_binary_ko_mo_start");
 extern const uint8_t ko_size[] asm("_binary_ko_mo_size");
+extern const uint8_t lt_start[] asm("_binary_lt_mo_start");
+extern const uint8_t lt_size[] asm("_binary_lt_mo_size");
 extern const uint8_t nb_start[] asm("_binary_nb_mo_start");
 extern const uint8_t nb_size[] asm("_binary_nb_mo_size");
 extern const uint8_t nl_start[] asm("_binary_nl_mo_start");
@@ -167,6 +170,7 @@ const BuiltinLanguage language_table[] = {
   { LANG_ITALIAN, it_start, it_size, _T("it.mo"), _T("Italian") },
   { LANG_JAPANESE, ja_start, ja_size, _T("ja.mo"), _T("Japanese") },
   { LANG_KOREAN, ko_start, ko_size, _T("ko.mo"), _T("Korean") },
+  { LANG_LITHUANIAN, lt_start, lt_size, _T("lt.mo"), _T("Lithuanian") },
   { LANG_NORWEGIAN, nb_start, nb_size, _T("nb.mo"), _T("Norwegian") },
   { LANG_DUTCH, nl_start, nl_size, _T("nl.mo"), _T("Dutch") },
   { LANG_POLISH, pl_start, pl_size, _T("pl.mo"), _T("Polish") },
