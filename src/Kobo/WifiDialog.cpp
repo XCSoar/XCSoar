@@ -224,6 +224,7 @@ WifiListWidget::Connect()
     caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
 
     StaticString<32> passphrase;
+    passphrase.clear();
     if (!TextEntryDialog(passphrase, caption))
       return;
 

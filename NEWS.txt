@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.1 - not yet released
 * user interface
   - new translation: Lithuanian
+* Kobo
+  - fix passphrase entry in WiFi setup (#3053)
 
 Version 6.7 - 2013/09/30
 * new target: Kobo e-book readers
