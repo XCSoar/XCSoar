@@ -18,6 +18,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/UnitRowFormWidget.cpp \
 	$(SRC)/Widget/ManagedWidget.cpp \
 	$(SRC)/Widget/PagerWidget.cpp \
+	$(SRC)/Widget/ArrowPagerWidget.cpp \
 	$(SRC)/Widget/OffsetButtonsWidget.cpp \
 	$(SRC)/Widget/XMLWidget.cpp \
 	$(SRC)/Widget/ButtonPanelWidget.cpp \

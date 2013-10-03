@@ -22,14 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
-#include "Form/Tabbed.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Widget/CreateWindowWidget.hpp"
+#include "Widget/ArrowPagerWidget.hpp"
+#include "Widget/LargeTextWidget.hpp"
 #include "Look/StandardFonts.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
@@ -38,89 +37,20 @@ Copyright_License {
 #include "Inflate.hpp"
 #include "Util/ConvertString.hpp"
 #include "Resources.hpp"
+#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 
-#include <assert.h>
+class LogoPageWindow final : public PaintWindow {
+protected:
+  /** from class PaintWindow */
+  virtual void OnPaint(Canvas &canvas) override;
+};
 
-static WndForm *wf = NULL;
-static TabbedControl *tab = NULL;
-
-static void
-OnNext()
+void
+LogoPageWindow::OnPaint(Canvas &canvas)
 {
-  tab->NextPage();
-}
+  const PixelRect rc = GetClientRect();
 
-static void
-OnPrev()
-{
-  tab->PreviousPage();
-}
-
-gcc_pure
-static LargeTextWindow *
-FindLargeTextWindow()
-{
-  const TCHAR *name;
-  switch (tab->GetCurrentPage()) {
-  case 1:
-    name = _T("prpAuthors");
-    break;
-
-  case 2:
-    name = _T("prpLicense");
-    break;
-
-  default:
-    return NULL;
-  }
-
-  return (LargeTextWindow *)wf->FindByName(name);
-}
-
-static bool
-FormKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-    LargeTextWindow *edit;
-
-  case KEY_UP:
-    edit = FindLargeTextWindow();
-    if (edit != NULL) {
-      edit->ScrollVertically(-3);
-      return true;
-    } else
-      return false;
-
-  case KEY_DOWN:
-    edit = FindLargeTextWindow();
-    if (edit != NULL) {
-      edit->ScrollVertically(3);
-      return true;
-    } else
-      return false;
-
-  case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
-    tab->PreviousPage();
-    return true;
-
-  case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
-    tab->NextPage();
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-static void
-OnLogoPaint(Canvas &canvas, const PixelRect &rc)
-{
   const unsigned width = rc.right - rc.left;
   int x = rc.left + Layout::FastScale(10);
   int y = rc.top + Layout::FastScale(10);
@@ -163,31 +93,14 @@ OnLogoPaint(Canvas &canvas, const PixelRect &rc)
   canvas.DrawText(x, y, _T("http://www.xcsoar.org"));
 }
 
-static void
-LoadTextFromResource(const void *data, size_t size, const TCHAR *control)
+static Window *
+CreateLogoPage(ContainerWindow &parent, const PixelRect &rc,
+               WindowStyle style)
 {
-  char *buffer = InflateToString(data, size);
-
-  UTF8ToWideConverter text(buffer);
-  if (text.IsValid())
-    ((LargeTextWindow *)wf->FindByName(control))->SetText(text);
-
-  delete[] buffer;
+  LogoPageWindow *window = new LogoPageWindow();
+  window->Create(parent, rc, style);
+  return window;
 }
-
-static void
-LoadTextFromResource(const uint8_t *start, const uint8_t *end,
-                     const TCHAR *control)
-{
-  LoadTextFromResource(start, end - start, control);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNext),
-  DeclareCallBackEntry(OnPrev),
-  DeclareCallBackEntry(OnLogoPaint),
-  DeclareCallBackEntry(NULL)
-};
 
 /* workaround note: we would prefer to use the "_size" symbol here,
    but it turns out that Android 4 relocates these symbols for some
@@ -202,19 +115,25 @@ extern const uint8_t authors_end[] asm("_binary_AUTHORS_gz_end");
 void
 dlgCreditsShowModal(SingleWindow &parent)
 {
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
-                  _T("IDR_XML_CREDITS_L") : _T("IDR_XML_CREDITS"));
-  assert(wf != NULL);
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  tab = ((TabbedControl *)wf->FindByName(_T("tab")));
-  assert(tab != NULL);
+  char *authors = InflateToString(authors_start, authors_end - authors_start);
+  const UTF8ToWideConverter authors2(authors);
 
-  wf->SetKeyDownFunction(FormKeyDown);
+  char *license = InflateToString(license_start, license_end - license_start);
+  const UTF8ToWideConverter license2(license);
 
-  LoadTextFromResource(license_start, license_end, _T("prpLicense"));
-  LoadTextFromResource(authors_start, authors_end, _T("prpAuthors"));
+  WidgetDialog dialog(look);
 
-  wf->ShowModal();
+  ArrowPagerWidget pager(dialog, look.button);
+  pager.Add(new CreateWindowWidget(CreateLogoPage));
+  pager.Add(new LargeTextWidget(look, authors2));
+  pager.Add(new LargeTextWidget(look, license2));
 
-  delete wf;
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Credits"), &pager);
+  dialog.ShowModal();
+  dialog.StealWidget();
+
+  delete[] authors;
+  delete[] license;
 }
