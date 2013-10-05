@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.8 - not yet released
+
 Version 6.7.1 - not yet released
 * replay
   - fix crash replaying an IGC file with no B record extensions (#3107)
