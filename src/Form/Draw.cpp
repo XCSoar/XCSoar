@@ -23,14 +23,6 @@ Copyright_License {
 
 #include "Form/Draw.hpp"
 
-WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
-                                     PixelRect rc, const WindowStyle style,
-                                     OnPaintCallback_t OnPaintCallback)
-  :mOnPaintCallback(OnPaintCallback)
-{
-  Create(parent, rc, style);
-}
-
 void
 WndOwnerDrawFrame::OnPaint(Canvas &canvas)
 {

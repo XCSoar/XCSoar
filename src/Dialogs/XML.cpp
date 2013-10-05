@@ -576,8 +576,8 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       GetCallBack(lookup_table, node, _T("OnPaint"));
 
     // Create the DrawControl
-    WndOwnerDrawFrame* canvas =
-      new WndOwnerDrawFrame(parent, rc, style, paint_callback);
+    WndOwnerDrawFrame *canvas = new WndOwnerDrawFrame();
+    canvas->Create(parent, rc, style, paint_callback);
 
     window = canvas;
 

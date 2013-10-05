@@ -37,17 +37,11 @@ public:
   typedef void (*OnPaintCallback_t)(Canvas &canvas, const PixelRect &rc);
 
 public:
-  WndOwnerDrawFrame(ContainerWindow &parent,
-                    PixelRect rc, const WindowStyle style,
-                    OnPaintCallback_t OnPaintCallback);
-
-  /**
-   * Sets the callback which actually paints the window.  The
-   * background is cleared before, and all configured fonts and colors
-   * have been set in the #Canvas.
-   */
-  void SetOnPaintNotify(OnPaintCallback_t OnPaintCallback) {
-    mOnPaintCallback = OnPaintCallback;
+  void Create(ContainerWindow &parent,
+              PixelRect rc, const WindowStyle style,
+              OnPaintCallback_t _paint) {
+    mOnPaintCallback = _paint;
+    PaintWindow::Create(parent, rc, style);
   }
 
 protected:
