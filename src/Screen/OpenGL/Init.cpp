@@ -83,6 +83,17 @@ SupportsNonPowerOfTwoTexturesGLES()
   return false;
 }
 
+#ifdef HAVE_OES_DRAW_TEXTURE
+
+gcc_pure
+static bool
+CheckOESDrawTexture()
+{
+  return OpenGL::IsExtensionSupported("GL_OES_draw_texture");
+}
+
+#endif
+
 #ifdef ANDROID
 /**
  * Is it safe to use VBO?
@@ -194,6 +205,10 @@ OpenGL::SetupContext()
 #endif
 
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
+
+#ifdef HAVE_OES_DRAW_TEXTURE
+  oes_draw_texture = CheckOESDrawTexture();
+#endif
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);

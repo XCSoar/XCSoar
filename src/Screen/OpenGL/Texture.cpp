@@ -168,13 +168,14 @@ GLTexture::EnableInterpolation()
   }
 }
 
-void
-GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                PixelScalar src_x, PixelScalar src_y,
-                UPixelScalar src_width, UPixelScalar src_height) const
-{
 #ifdef HAVE_OES_DRAW_TEXTURE
+
+inline void
+GLTexture::DrawOES(PixelScalar dest_x, PixelScalar dest_y,
+                   UPixelScalar dest_width, UPixelScalar dest_height,
+                   PixelScalar src_x, PixelScalar src_y,
+                   UPixelScalar src_width, UPixelScalar src_height) const
+{
   const GLint rect[4] = { src_x, src_y + src_height, src_width,
                           /* negative height to flip the texture */
                           -(int)src_height };
@@ -185,7 +186,24 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
   glDrawTexiOES(OpenGL::translate.x + dest_x,
                 OpenGL::screen_height - OpenGL::translate.y - dest_y - dest_height,
                 0, dest_width, dest_height);
-#else
+}
+
+#endif
+
+void
+GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                PixelScalar src_x, PixelScalar src_y,
+                UPixelScalar src_width, UPixelScalar src_height) const
+{
+#ifdef HAVE_OES_DRAW_TEXTURE
+  if (OpenGL::oes_draw_texture) {
+    DrawOES(dest_x, dest_y, dest_width, dest_height,
+            src_x, src_y, src_width, src_height);
+    return;
+  }
+#endif
+
   const RasterPoint vertices[] = {
     { dest_x, dest_y },
     { dest_x + int(dest_width), dest_y },
@@ -212,13 +230,13 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
 }
 
-void
-GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
-{
 #ifdef HAVE_OES_DRAW_TEXTURE
+
+inline void
+GLTexture::DrawFlippedOES(PixelRect dest, PixelRect src) const
+{
   const GLint rect[4] = { src.left, src.top,
                           src.right - src.left, src.bottom - src.top };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
@@ -228,7 +246,20 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
   glDrawTexiOES(OpenGL::translate.x + dest.left,
                 OpenGL::screen_height - OpenGL::translate.y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
-#else
+}
+
+#endif
+
+void
+GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
+{
+#ifdef HAVE_OES_DRAW_TEXTURE
+  if (OpenGL::oes_draw_texture) {
+    DrawFlippedOES(dest, src);
+    return;
+  }
+#endif
+
   const RasterPoint vertices[] = {
     dest.GetTopLeft(),
     dest.GetTopRight(),
@@ -255,5 +286,4 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#endif
 }

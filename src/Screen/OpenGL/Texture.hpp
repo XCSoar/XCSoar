@@ -133,6 +133,15 @@ protected:
 
   static void Configure();
 
+#ifdef HAVE_OES_DRAW_TEXTURE
+private:
+  void DrawOES(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height) const;
+  void DrawFlippedOES(PixelRect dest, PixelRect src) const;
+#endif
+
 public:
   void Bind() {
     glBindTexture(GL_TEXTURE_2D, id);

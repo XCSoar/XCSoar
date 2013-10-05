@@ -54,6 +54,16 @@ namespace OpenGL {
    */
   extern bool texture_non_power_of_two;
 
+#ifdef HAVE_OES_DRAW_TEXTURE
+  /**
+   * Shall we use the OES_draw_texture extension?
+   *
+   * This will be disabled on Vivante GPUs, because they are known to
+   * be buggy.
+   */
+  extern bool oes_draw_texture;
+#endif
+
   /**
    * Is it safe to use VBO?
    *
