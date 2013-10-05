@@ -27,7 +27,6 @@ Copyright_License {
 
 TabbedControl::TabbedControl(ContainerWindow &parent, PixelRect rc,
                              const WindowStyle style)
-  :page_flipped_callback(NULL)
 {
   Create(parent, rc, style);
 }
@@ -43,34 +42,6 @@ TabbedControl::AddPage(Widget *w)
   assert(IsDefined());
 
   pager.Add(w);
-}
-
-bool
-TabbedControl::SetCurrentPage(unsigned i, bool click)
-{
-  const unsigned old_current = pager.GetCurrentIndex();
-
-  bool success = pager.SetCurrent(i, click);
-
-  if (success && old_current != pager.GetCurrentIndex() &&
-      page_flipped_callback != NULL)
-    page_flipped_callback();
-
-  return success;
-}
-
-void
-TabbedControl::NextPage()
-{
-  if (pager.Next(true) && page_flipped_callback != NULL)
-    page_flipped_callback();
-}
-
-void
-TabbedControl::PreviousPage()
-{
-  if (pager.Previous(true) && page_flipped_callback != NULL)
-    page_flipped_callback();
 }
 
 bool

@@ -30,32 +30,20 @@ Copyright_License {
 class Widget;
 
 class TabbedControl : public ContainerWindow {
-public:
-  typedef void (*PageFlippedCallback)();
-
 protected:
   PagerWidget pager;
-
-  PageFlippedCallback page_flipped_callback;
 
 public:
   /**
    * Create an instance without actually creating the Window.  Call
    * set() to do that.
    */
-  TabbedControl():page_flipped_callback(NULL) {};
+  TabbedControl() {};
 
   TabbedControl(ContainerWindow &parent, PixelRect rc,
                 const WindowStyle style=WindowStyle());
 
   virtual ~TabbedControl();
-
-  void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
-    assert(page_flipped_callback == NULL);
-    assert(_page_flipped_callback != NULL);
-
-    page_flipped_callback = _page_flipped_callback;
-  }
 
   /**
    * Append a page to the end.  The program will abort when the list
@@ -93,10 +81,17 @@ public:
    * @param click true if Widget's Click() or ReClick() is to be called.
    * @return true if specified page is now visible
    */
-  bool SetCurrentPage(unsigned i, bool click = false);
+  bool SetCurrentPage(unsigned i, bool click = false) {
+    return pager.SetCurrent(i, click);
+  }
 
-  void NextPage();
-  void PreviousPage();
+  void NextPage() {
+    pager.Next(true);
+  }
+
+  void PreviousPage() {
+    pager.Previous(true);
+  }
 
   /**
    * Calls SetCurrentPage() with click=true parameter.
