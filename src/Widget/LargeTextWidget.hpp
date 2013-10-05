@@ -47,6 +47,7 @@ public:
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Unprepare() override;
+  virtual bool KeyPress(unsigned key_code) override;
 };
 
 #endif

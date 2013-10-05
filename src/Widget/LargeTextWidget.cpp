@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "LargeTextWidget.hpp"
 #include "Screen/LargeTextWindow.hpp"
+#include "Screen/Key.h"
 #include "Look/DialogLook.hpp"
 
 void
@@ -54,4 +55,19 @@ LargeTextWidget::Unprepare()
   DeleteWindow();
 }
 
+bool
+LargeTextWidget::KeyPress(unsigned key_code)
+{
+  switch (key_code) {
+  case KEY_UP:
+    ((LargeTextWindow &)GetWindow()).ScrollVertically(-3);
+    return true;
 
+  case KEY_DOWN:
+    ((LargeTextWindow &)GetWindow()).ScrollVertically(3);
+    return true;
+
+  default:
+    return false;
+  }
+}
