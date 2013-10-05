@@ -9,6 +9,7 @@ Version 6.7.1 - not yet released
   - new translation: Lithuanian
 * Android
   - fix crash in "credits" dialog on Android 4 (#3106)
+  - work around Vivante GPU texture bugs (#1995, #2228, #2990, #2998, #3105)
 * Kobo
   - fix passphrase entry in WiFi setup (#3053)
 
