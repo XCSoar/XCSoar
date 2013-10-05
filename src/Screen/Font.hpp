@@ -114,7 +114,8 @@ public:
 
   void Render(const TCHAR *text, const PixelSize size, void *buffer) const;
 #elif defined(ANDROID)
-  int TextTextureGL(const TCHAR *text, PixelSize &size) const;
+  int TextTextureGL(const TCHAR *text, PixelSize &size,
+                    PixelSize &allocated_size) const;
 #elif defined(USE_GDI)
   HFONT Native() const {
     return font;

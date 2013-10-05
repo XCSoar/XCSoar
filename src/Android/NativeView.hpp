@@ -135,12 +135,12 @@ public:
 
   bool loadResourceTexture(const char *name, jint *result) {
     Java::String name2(env, name);
-    jintArray result2 = env->NewIntArray(3);
+    jintArray result2 = env->NewIntArray(5);
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
                                           name2.Get(), result2);
     if (success)
-      env->GetIntArrayRegion(result2, 0, 3, result);
+      env->GetIntArrayRegion(result2, 0, 5, result);
 
     env->DeleteLocalRef(result2);
 
@@ -149,12 +149,12 @@ public:
 
   bool loadFileTexture(const char *pathName, jint *result) {
     Java::String pathName2(env, pathName);
-    jintArray result2 = env->NewIntArray(3);
+    jintArray result2 = env->NewIntArray(5);
 
     bool success = env->CallBooleanMethod(obj, load_file_texture_method,
                                           pathName2.Get(), result2);
     if (success)
-      env->GetIntArrayRegion(result2, 0, 3, result);
+      env->GetIntArrayRegion(result2, 0, 5, result);
 
     env->DeleteLocalRef(result2);
 

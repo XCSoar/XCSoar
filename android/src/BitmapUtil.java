@@ -41,7 +41,8 @@ final class BitmapUtil {
    * Initialize the current texture and load the specified Bitmap into
    * it.
    */
-  private static boolean loadTexture(Bitmap bmp) {
+  private static boolean loadTexture(Bitmap bmp, int allocated_width,
+                                     int allocated_height) {
     int internalFormat, format, type;
     int unpackAlignment;
 
@@ -72,8 +73,7 @@ final class BitmapUtil {
     /* create an empty texture, and load the Bitmap into it */
 
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat,
-                 validateTextureSize(bmp.getWidth()),
-                 validateTextureSize(bmp.getHeight()),
+                 allocated_width, allocated_height,
                  0, format, type, null);
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpackAlignment);
     GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bmp, format, type);
@@ -83,8 +83,8 @@ final class BitmapUtil {
   /**
    * Loads an Android Bitmap as OpenGL texture.
    *
-   * @param result an array of 3 integers: texture id, width, height
-   * (all output)
+   * @param result an array of 5 integers: texture id, width, height,
+   * allocated width, allocated height (all output)
    * @return true on success
    */
   public static boolean bitmapToOpenGL(Bitmap bmp, int[] result) {
@@ -93,6 +93,8 @@ final class BitmapUtil {
 
     result[1] = bmp.getWidth();
     result[2] = bmp.getHeight();
+    result[3] = validateTextureSize(result[1]);
+    result[4] = validateTextureSize(result[2]);
 
     if (bmp.getConfig() == null) {
       /* convert to a format compatible with OpenGL */
@@ -119,7 +121,7 @@ final class BitmapUtil {
                     GL_NEAREST);
 
     try {
-      if (!loadTexture(bmp)) {
+      if (!loadTexture(bmp, result[3], result[4])) {
         glDeleteTextures(1, result, 0);
         return false;
       }

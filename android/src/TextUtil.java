@@ -37,7 +37,7 @@ public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
   private int[] extent = new int[2];
-  private int[] id = new int[3];
+  private int[] id = new int[5];
 
   public TextUtil(String family_name, int style, int textSize,
                   int paint_flags) {

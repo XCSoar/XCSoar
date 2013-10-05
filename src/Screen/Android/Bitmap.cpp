@@ -52,22 +52,22 @@ LoadResourceTexture(ResourceId id)
   if (name == NULL)
     return NULL;
 
-  jint result[3];
+  jint result[5];
   if (!native_view->loadResourceTexture(name, result))
     return NULL;
 
-  return new GLTexture(result[0], result[1], result[2]);
+  return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
 }
 
 gcc_malloc
 static GLTexture *
 LoadFileTexture(const TCHAR *path)
 {
-  jint result[3];
+  jint result[5];
   if (!native_view->loadFileTexture(path, result))
     return NULL;
 
-  return new GLTexture(result[0], result[1], result[2]);
+  return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
 }
 
 bool

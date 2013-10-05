@@ -56,9 +56,14 @@ protected:
 
 public:
 #ifdef ANDROID
-  GLTexture(GLuint _id, UPixelScalar _width, UPixelScalar _height)
-    :id(_id), width(_width), height(_height) {
+  GLTexture(GLuint _id, UPixelScalar _width, UPixelScalar _height,
+            UPixelScalar _allocated_width, UPixelScalar _allocated_height)
+    :id(_id), width(_width), height(_height),
+     allocated_width(_allocated_width), allocated_height(_allocated_height) {
 #ifndef NDEBUG
+    assert(allocated_width >= width);
+    assert(allocated_height >= height);
+
     ++num_textures;
 #endif
   }
