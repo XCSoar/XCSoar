@@ -25,7 +25,6 @@ Copyright_License {
 
 #ifdef SIMULATOR_AVAILABLE
 
-#include "Widget/WindowWidget.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Language/Language.hpp"
