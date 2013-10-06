@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Tabbed.hpp"
-#include "Widget/WindowWidget.hpp"
 
 #include <assert.h>
 
@@ -44,15 +43,6 @@ TabbedControl::AddPage(Widget *w)
   assert(IsDefined());
 
   pager.Add(w);
-}
-
-void
-TabbedControl::AddClient(Window *w)
-{
-  /* backwards compatibility: make sure the Window is hidden */
-  w->Hide();
-
-  AddPage(new WindowWidget(w));
 }
 
 bool

@@ -41,7 +41,8 @@ GetTabLineHeight()
 
 TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
                                const DialogLook &_look,
-                               ContainerWindow &parent, PixelRect rc)
+                               ContainerWindow &parent, PixelRect rc,
+                               WindowStyle style)
   :menu(_theTabBar),
    look(_look),
    dragging(false),
@@ -49,9 +50,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    down_index(TabMenuControl::MenuTabIndex::None()),
    selected_index(TabMenuControl::MenuTabIndex::None())
 {
-  WindowStyle mystyle;
-  mystyle.TabStop();
-  Create(parent, rc, mystyle);
+  Create(parent, rc, style);
 }
 
 void

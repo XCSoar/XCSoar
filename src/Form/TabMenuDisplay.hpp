@@ -45,7 +45,7 @@ public:
 
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
-                 ContainerWindow &parent, PixelRect rc);
+                 ContainerWindow &parent, PixelRect rc, WindowStyle style);
 
   void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 

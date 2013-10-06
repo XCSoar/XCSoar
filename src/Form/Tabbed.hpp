@@ -63,8 +63,6 @@ public:
    */
   void AddPage(Widget *w);
 
-  void AddClient(Window *w);
-
   unsigned GetTabCount() const {
     return pager.GetSize();
   }

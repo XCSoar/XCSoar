@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/XML.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>
@@ -46,7 +47,10 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
   pager_style.ControlParent();
   pager.Create(*this, rc, pager_style);
 
-  tab_display = new TabMenuDisplay(*this, look, pager, rc);
+  WindowStyle display_style;
+  display_style.Hide();
+  display_style.TabStop();
+  tab_display = new TabMenuDisplay(*this, look, pager, rc, display_style);
 }
 
 TabMenuControl::~TabMenuControl()
@@ -321,7 +325,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
   for (unsigned i = 0; i < num_menu_captions; i++)
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
-  pager.AddClient(tab_display);
+  pager.AddPage(new WindowWidget(tab_display));
   buttons.append(new SubMenuButton(caption));
 
   assert(GetNumPages() == num_pages);
