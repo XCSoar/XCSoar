@@ -38,8 +38,6 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
-#include "Form/Tabbed.hpp"
-#include "Form/TabBar.hpp"
 #include "Form/TabMenu.hpp"
 #include "Form/Panel.hpp"
 #include "Form/CheckBox.hpp"
@@ -627,34 +625,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     window = new ListControl(parent, UIGlobals::GetDialogLook(),
                              rc, style, item_height);
-
-  // TabControl (Tabbed)
-  } else if (StringIsEqual(node.GetName(), _T("Tabbed"))) {
-    // Create the TabControl
-
-    style.ControlParent();
-
-    TabbedControl *tabbed = new TabbedControl(parent, rc, style);
-
-    window = tabbed;
-
-    for (const auto &i : node) {
-      // Load each child control from the child nodes
-      Window *child = LoadChild(form, *tabbed, tabbed->GetClientRect(),
-                                lookup_table,
-                                i);
-      if (child != NULL)
-        tabbed->AddClient(child);
-    }
-  // TabBarControl (TabBar)
-  } else if (StringIsEqual(node.GetName(), _T("TabBar"))) {
-    // Create the TabBarControl
-
-    style.ControlParent();
-    TabBarControl *tabbar = new TabBarControl(parent,
-                                              UIGlobals::GetDialogLook(), rc,
-                                              style, Layout::landscape);
-    window = tabbar;
 
     // TabMenuControl (TabMenu)
   } else if (StringIsEqual(node.GetName(), _T("TabMenu"))) {
