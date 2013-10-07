@@ -169,14 +169,16 @@ ArrowPagerWidget::KeyPress(unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    Previous(true);
+    if (Previous(true))
+      OnPageFlipped();
     return true;
 
   case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif
-    Next(true);
+    if (Next(true))
+      OnPageFlipped();
     return true;
 
   default:
@@ -189,11 +191,13 @@ ArrowPagerWidget::OnAction(int id)
 {
   switch (id) {
   case PREVIOUS:
-    Previous(false);
+    if (Previous(false))
+      OnPageFlipped();
     break;
 
   case NEXT:
-    Next(false);
+    if (Next(false))
+      OnPageFlipped();
     break;
   }
 }

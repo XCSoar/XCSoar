@@ -28,6 +28,8 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/ActionListener.hpp"
 
+#include <functional>
+
 struct ButtonLook;
 
 /**
@@ -35,6 +37,8 @@ struct ButtonLook;
  * left/bottom for page navigation.
  */
 class ArrowPagerWidget : public PagerWidget, ActionListener {
+  typedef std::function<void()> PageFlippedCallback;
+
   enum Buttons {
     PREVIOUS,
     NEXT,
@@ -53,11 +57,20 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
   WndSymbolButton previous_button, next_button;
   WndButton close_button;
 
+  PageFlippedCallback page_flipped_callback;
+
 public:
   ArrowPagerWidget(ActionListener &_action_listener,
                    const ButtonLook &look)
     :action_listener(_action_listener),
      previous_button(look), next_button(look), close_button(look) {}
+
+  void SetPageFlippedCallback(PageFlippedCallback &&_page_flipped_callback) {
+    assert(!page_flipped_callback);
+    assert(_page_flipped_callback);
+
+    page_flipped_callback = std::move(_page_flipped_callback);
+  }
 
   /* virtual methods from Widget */
   virtual PixelSize GetMinimumSize() const override;
@@ -73,6 +86,11 @@ public:
 private:
   /* virtual methods from ActionListener */
   virtual void OnAction(int id) override;
+
+  void OnPageFlipped() {
+    if (page_flipped_callback)
+      page_flipped_callback();
+  }
 };
 
 #endif
