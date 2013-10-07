@@ -193,7 +193,7 @@ ArrowPagerWidget::OnAction(int id)
     break;
 
   case NEXT:
-    Previous(false);
+    Next(false);
     break;
   }
 }
