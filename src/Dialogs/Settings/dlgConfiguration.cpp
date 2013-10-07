@@ -22,17 +22,18 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
 #include "Widget/DockWindow.hpp"
-#include "Widget/PagerWidget.hpp"
+#include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/CreateWindowWidget.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Form/TabMenuDisplay.hpp"
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
+#include "Form/LambdaActionListener.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Profile/Profile.hpp"
@@ -81,10 +82,9 @@ Copyright_License {
 #include <assert.h>
 
 static unsigned current_page;
-static WndForm *dialog = NULL;
 
-static TabMenuDisplay *menu;
-static PagerWidget *pager;
+// TODO: eliminate global variables
+static ArrowPagerWidget *pager;
 
 static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Site Files"), },
@@ -133,34 +133,124 @@ static constexpr TabMenuPage pages[] = {
 #endif
 };
 
-namespace ConfigPanel {
-  static WndButton *GetExtraButton(unsigned);
-}
+class ConfigurationExtraButtons final
+  : public NullWidget, ActionListener {
+  enum Buttons {
+    EXPERT,
+  };
 
-WndButton *
-ConfigPanel::GetExtraButton(unsigned number)
-{
-  assert(number >= 1 && number <= 2);
+  struct Layout {
+    PixelRect expert, button2, button1;
 
-  WndButton *extra_button = NULL;
+    Layout(const PixelRect &rc):expert(rc), button2(rc), button1(rc) {
+      const unsigned height = rc.bottom - rc.top;
+      const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 
-  switch (number) {
-  case 1:
-    extra_button = (WndButton *)dialog->FindByName(_T("cmdExtra1"));
-    break;
-  case 2:
-    extra_button = (WndButton *)dialog->FindByName(_T("cmdExtra2"));
-    break;
+      if (height >= 3 * max_control_height) {
+        expert.bottom = expert.top + max_control_height;
+
+        button1.top = button2.bottom = rc.bottom - max_control_height;
+        button2.top = button2.bottom - max_control_height;
+      } else {
+        expert.right = button2.left = unsigned(rc.left * 2 + rc.right) / 3;
+        button2.right = button1.left = unsigned(rc.left + rc.right * 2) / 3;
+      }
+    }
+  };
+
+  const DialogLook &look;
+
+  CheckBoxControl expert;
+  WndButton button2, button1;
+  bool borrowed2, borrowed1;
+
+public:
+  ConfigurationExtraButtons(const DialogLook &_look)
+    :look(_look),
+     button2(look.button), button1(look.button),
+     borrowed2(false), borrowed1(false) {}
+
+  WndButton &GetButton(unsigned number) {
+    switch (number) {
+    case 1:
+      return button1;
+
+    case 2:
+      return button2;
+
+    default:
+      assert(false);
+      gcc_unreachable();
+    }
   }
 
-  return extra_button;
-}
+protected:
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    Layout layout(rc);
+
+    WindowStyle style;
+    style.Hide();
+    style.TabStop();
+
+    expert.Create(parent, look, _("Expert"),
+                  layout.expert, style, *this, EXPERT);
+
+    button2.Create(parent, _T(""), layout.button2, style);
+    button1.Create(parent, _T(""), layout.button1, style);
+  }
+
+  virtual void Show(const PixelRect &rc) override {
+    Layout layout(rc);
+
+    expert.SetState(CommonInterface::GetUISettings().dialog.expert);
+    expert.MoveAndShow(layout.expert);
+
+    if (borrowed2)
+      button2.MoveAndShow(layout.button2);
+    else
+      button2.Move(layout.button2);
+
+    if (borrowed1)
+      button1.MoveAndShow(layout.button1);
+    else
+      button1.Move(layout.button1);
+  }
+
+  virtual void Hide() override {
+    expert.FastHide();
+    button2.FastHide();
+    button1.FastHide();
+  }
+
+  virtual void Move(const PixelRect &rc) override {
+    Layout layout(rc);
+    expert.Move(layout.expert);
+    button2.Move(layout.button2);
+    button1.Move(layout.button1);
+  }
+
+private:
+  void OnExpertClicked();
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override {
+    switch (id) {
+    case EXPERT:
+      OnExpertClicked();
+      break;
+    }
+  }
+};
 
 void
 ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
                                void (*callback)())
 {
-  WndButton &button = *GetExtraButton(i);
+  ConfigurationExtraButtons &extra =
+    (ConfigurationExtraButtons &)pager->GetExtra();
+  WndButton &button = extra.GetButton(i);
   button.SetCaption(caption);
   button.SetOnClickNotify(callback);
   button.Show();
@@ -169,7 +259,9 @@ ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
 void
 ConfigPanel::ReturnExtraButton(unsigned i)
 {
-  WndButton &button = *GetExtraButton(i);
+  ConfigurationExtraButtons &extra =
+    (ConfigurationExtraButtons &)pager->GetExtra();
+  WndButton &button = extra.GetButton(i);
   button.Hide();
 }
 
@@ -181,102 +273,56 @@ OnUserLevel(CheckBoxControl &control)
   Profile::Set(ProfileKeys::UserLevel, expert);
 
   /* force layout update */
-  pager->Move(pager->GetPosition());
+  pager->PagerWidget::Move(pager->GetPosition());
 }
 
-static void
-OnNextClicked()
+inline void
+ConfigurationExtraButtons::OnExpertClicked()
 {
-  pager->Next(true);
-}
-
-static void
-OnPrevClicked()
-{
-  pager->Previous(true);
+  OnUserLevel(expert);
 }
 
 /**
  * close dialog from menu page.  from content, goes to menu page
  */
 static void
-OnCloseClicked()
+OnCloseClicked(WidgetDialog &dialog)
 {
   if (pager->GetCurrentIndex() == 0)
-    dialog->SetModalResult(mrOK);
+    dialog.SetModalResult(mrOK);
   else
     pager->ClickPage(0);
 }
 
-static bool
-FormKeyDown(unsigned key_code)
-{
-  if (pager->KeyPress(key_code))
-    return true;
-
-  switch (key_code) {
-  case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
-    pager->Previous(true);
-    return true;
-
-  case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
-    pager->Next(true);
-    return true;
-
-  default:
-    return false;
-  }
-}
-
 static void
-OnPageFlipped()
+OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
 {
-  menu->OnPageFlipped();
+  menu.OnPageFlipped();
 
   TCHAR buffer[128];
-  const TCHAR *caption = menu->GetCaption(buffer, ARRAY_SIZE(buffer));
+  const TCHAR *caption = menu.GetCaption(buffer, ARRAY_SIZE(buffer));
   if (caption == nullptr)
     caption = _("Configuration");
-  dialog->SetCaption(caption);
+  dialog.SetCaption(caption);
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnUserLevel),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
-static void
-PrepareConfigurationDialog()
+void dlgConfigurationShowModal()
 {
-  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
-                                      _T("IDR_XML_CONFIGURATION"));
-  if (dialog == NULL)
-    return;
-
-  dialog->SetKeyDownFunction(FormKeyDown);
-
-  bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
-  CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));
-  cb->SetState(expert_mode);
-
-  pager = new PagerWidget();
-
   const DialogLook &look = UIGlobals::GetDialogLook();
-  menu = new TabMenuDisplay(*pager, look);
 
-  pager->Add(new CreateWindowWidget([](ContainerWindow &parent,
-                                       const PixelRect &rc,
-                                       WindowStyle style) {
+  WidgetDialog dialog(look);
+
+  auto on_close = MakeLambdaActionListener([&dialog](unsigned id) {
+      OnCloseClicked(dialog);
+    });
+
+  pager = new ArrowPagerWidget(on_close, look.button,
+                               new ConfigurationExtraButtons(look));
+
+  TabMenuDisplay *menu = new TabMenuDisplay(*pager, look);
+  pager->Add(new CreateWindowWidget([menu](ContainerWindow &parent,
+                                           const PixelRect &rc,
+                                           WindowStyle style) {
                                       style.TabStop();
                                       menu->Create(parent, rc, style);
                                       return menu;
@@ -285,54 +331,25 @@ PrepareConfigurationDialog()
   menu->InitMenu(pages, ARRAY_SIZE(pages),
                  main_menu_captions, ARRAY_SIZE(main_menu_captions));
 
-  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
-
-  dock.SetWidget(pager);
-
-  pager->SetPageFlippedCallback(OnPageFlipped);
-
   /* restore last selected menu item */
   menu->SetCursor(current_page);
-}
 
-static void
-Save()
-{
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Configuration"), pager);
+
+  pager->SetPageFlippedCallback([&dialog, menu](){
+      OnPageFlipped(dialog, *menu);
+    });
+
+  dialog.ShowModal();
+
   /* save page number for next time this dialog is opened */
   current_page = menu->GetCursor();
 
-  bool changed = false;
-  pager->Save(changed);
-
-  if (changed) {
+  if (dialog.GetChanged()) {
     Profile::Save();
     LogDebug(_T("Configuration: Changes saved"));
     if (require_restart)
       ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                   _T(""), MB_OK);
   }
-}
-
-void dlgConfigurationShowModal()
-{
-  PrepareConfigurationDialog();
-
-  dialog->ShowModal();
-
-  if (dialog->IsDefined()) {
-    /* hide the dialog, to avoid redraws inside Save() on a dialog
-       that has already been deregistered from the SingleWindow */
-    dialog->Hide();
-
-    Save();
-  }
-
-  /* destroy the TabMenuControl first, to have a well-defined
-     destruction order; this is necessary because some config panels
-     refer to buttons belonging to the dialog */
-  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
-  dock.SetWidget(nullptr);
-
-  delete dialog;
-  dialog = NULL;
 }
