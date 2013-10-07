@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/OpenGL/Shapes.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
+#include "Asset.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -130,7 +131,7 @@ gcc_pure
 static bool
 IsBlacklistedOESDrawTexture()
 {
-  return IsVivanteGC800() || IsVivanteGC1000();
+  return IsAndroid() && (IsVivanteGC800() || IsVivanteGC1000());
 }
 
 gcc_pure
