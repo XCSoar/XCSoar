@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.8 - not yet released
+* user interface 
+  - checklist remembers last opened list (#3110)
 
 Version 6.7.1 - not yet released
 * replay
