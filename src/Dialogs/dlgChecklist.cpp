@@ -147,12 +147,13 @@ dlgChecklistShowModal()
   for (int i = 0; i < nLists; ++i)
     widget.Add(new LargeTextWidget(look, ChecklistText[i]));
 
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Checklist"), &widget);
+
   widget.SetPageFlippedCallback([&dialog, &widget](){
       UpdateCaption(dialog, widget.GetCurrentIndex());
     });
   UpdateCaption(dialog, widget.GetCurrentIndex());
 
-  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Checklist"), &widget);
   dialog.ShowModal();
   dialog.StealWidget();
 }
