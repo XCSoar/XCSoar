@@ -52,7 +52,12 @@ KOBO_POWER_OFF_STRIP = y
 $(eval $(call link-program,PowerOff,KOBO_POWER_OFF))
 OPTIONAL_OUTPUTS += $(KOBO_POWER_OFF_BIN)
 
-BITSTREAM_VERA_DIR ?= /usr/share/fonts/truetype/ttf-bitstream-vera
+BITSTREAM_VERA_DIR ?= $(shell \
+if [ -d /usr/share/fonts/truetype/ttf-bitstream-vera ]; then \
+	echo /usr/share/fonts/truetype/ttf-bitstream-vera; \
+elif [ -d /usr/share/fonts/bitstream-vera ]; then \
+	echo /usr/share/fonts/bitstream-vera; \
+fi)
 BITSTREAM_VERA_NAMES = Vera VeraBd VeraIt VeraBI VeraMono
 BITSTREAM_VERA_FILES = $(patsubst %,$(BITSTREAM_VERA_DIR)/%.ttf,$(BITSTREAM_VERA_NAMES))
 
