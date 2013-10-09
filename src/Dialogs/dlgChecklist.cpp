@@ -43,7 +43,7 @@ Copyright_License {
 static int nLists = 0;
 static TCHAR *ChecklistText[MAXTITLE];
 static TCHAR *ChecklistTitle[MAXTITLE];
-unsigned int CurrentPage = 0;
+static unsigned int CurrentPage = 0;
 
 static void
 UpdateCaption(WndForm &form, unsigned page)
