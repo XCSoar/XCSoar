@@ -929,6 +929,12 @@ OrderedTask::GlideSolutionRemaining(const AircraftState &aircraft,
                                     GlideResult &total,
                                     GlideResult &leg)
 {
+  if (!aircraft.location.IsValid()) {
+    total.Reset();
+    leg.Reset();
+    return;
+  }
+
   TaskMacCreadyRemaining tm(task_points.cbegin(), task_points.cend(),
                             active_task_point,
                             task_behaviour.glide, polar);
