@@ -43,7 +43,6 @@ Copyright_License {
 static int nLists = 0;
 static TCHAR *ChecklistText[MAXTITLE];
 static TCHAR *ChecklistTitle[MAXTITLE];
-static unsigned int current_page = 0;
 
 static void
 UpdateCaption(WndForm &form, unsigned page)
@@ -134,6 +133,7 @@ LoadChecklist()
 void
 dlgChecklistShowModal()
 {
+  static unsigned int current_page = 0;
   static bool first = true;
   if (first) {
     LoadChecklist();
@@ -153,10 +153,10 @@ dlgChecklistShowModal()
 
   widget.SetPageFlippedCallback([&dialog, &widget](){
       UpdateCaption(dialog, widget.GetCurrentIndex());
-      current_page = widget.GetCurrentIndex();
     });
   UpdateCaption(dialog, widget.GetCurrentIndex());
 
   dialog.ShowModal();
   dialog.StealWidget();
+  current_page = widget.GetCurrentIndex();
 }
