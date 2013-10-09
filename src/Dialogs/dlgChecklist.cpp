@@ -43,7 +43,7 @@ Copyright_License {
 static int nLists = 0;
 static TCHAR *ChecklistText[MAXTITLE];
 static TCHAR *ChecklistTitle[MAXTITLE];
-static unsigned int CurrentPage = 0;
+static unsigned int current_page = 0;
 
 static void
 UpdateCaption(WndForm &form, unsigned page)
@@ -147,13 +147,13 @@ dlgChecklistShowModal()
   ArrowPagerWidget widget(dialog, look.button);
   for (int i = 0; i < nLists; ++i)
     widget.Add(new LargeTextWidget(look, ChecklistText[i]));
-  widget.SetCurrent(CurrentPage);
+  widget.SetCurrent(current_page);
 
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Checklist"), &widget);
 
   widget.SetPageFlippedCallback([&dialog, &widget](){
       UpdateCaption(dialog, widget.GetCurrentIndex());
-      CurrentPage = widget.GetCurrentIndex();
+      current_page = widget.GetCurrentIndex();
     });
   UpdateCaption(dialog, widget.GetCurrentIndex());
 
