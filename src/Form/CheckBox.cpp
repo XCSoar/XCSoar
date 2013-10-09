@@ -34,27 +34,24 @@ CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
                                  ClickNotifyCallback _click_notify_callback)
   :listener(nullptr), click_notify_callback(_click_notify_callback)
 {
-  Create(parent, caption, rc, style);
+  CheckBox::Create(parent, caption, rc, style);
   SetFont(*look.text_font);
 }
 
-CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
-                                 const DialogLook &look,
-                                 tstring::const_pointer caption,
-                                 const PixelRect &rc,
-                                 const CheckBoxStyle style,
-                                 ActionListener *_listener, int _id)
-  :listener(_listener),
-#ifdef USE_GDI
-   id(_id),
-#endif
-   click_notify_callback(nullptr)
+void
+CheckBoxControl::Create(ContainerWindow &parent, const DialogLook &look,
+                        tstring::const_pointer caption,
+                        const PixelRect &rc,
+                        const CheckBoxStyle style,
+                        ActionListener &_listener, int _id)
 {
+  listener = &_listener;
 #ifdef USE_GDI
-  Create(parent, caption, rc, style);
+  id = _id;
+  CheckBox::Create(parent, caption, rc, style);
 #else
   /* our custom SDL/OpenGL button doesn't need this hack */
-  Create(parent, caption, _id, rc, style);
+  CheckBox::Create(parent, caption, _id, rc, style);
 #endif
   SetFont(*look.text_font);
 }

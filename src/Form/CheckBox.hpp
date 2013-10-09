@@ -50,6 +50,9 @@ private:
   ClickNotifyCallback click_notify_callback;
 
 public:
+  CheckBoxControl()
+    :listener(nullptr), click_notify_callback(nullptr) {}
+
   /**
    * @param parent Parent window/ContainerControl
    * @param caption Text on the button
@@ -62,11 +65,11 @@ public:
                   const CheckBoxStyle style,
                   ClickNotifyCallback click_notify_callback = NULL);
 
-  CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
-                  tstring::const_pointer caption,
-                  const PixelRect &rc,
-                  const CheckBoxStyle style,
-                  ActionListener *listener, int id);
+  void Create(ContainerWindow &parent, const DialogLook &look,
+              tstring::const_pointer caption,
+              const PixelRect &rc,
+              const CheckBoxStyle style,
+              ActionListener &listener, int id);
 
   /**
    * Set the object that will receive click events.
