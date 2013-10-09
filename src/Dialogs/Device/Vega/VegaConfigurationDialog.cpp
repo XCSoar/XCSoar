@@ -36,21 +36,17 @@ Copyright_License {
 #include "AlertParameters.hpp"
 #include "LimitParameters.hpp"
 #include "DisplayParameters.hpp"
-#include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Tabbed.hpp"
-#include "Form/Form.hpp"
+#include "Widget/ArrowPagerWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
 #include "Device/Driver/Vega/Internal.hpp"
-#include "Profile/Profile.hpp"
 #include "UIGlobals.hpp"
+#include "Look/DialogLook.hpp"
 #include "Compiler.h"
 #include "Operation/MessageOperationEnvironment.hpp"
 
 #include <assert.h>
-#include <string.h>
 
 static const TCHAR *const captions[] = {
   _T(" 1 Hardware"),
@@ -86,11 +82,90 @@ static const char *const audio_pages[] = {
 
 static VegaDevice *device;
 static bool changed, dirty;
-static WndForm *wf = NULL;
-static TabbedControl *tabbed;
+
+class VegaConfigurationExtraButtons final
+  : public NullWidget, ActionListener {
+  enum Buttons {
+    DEMO,
+    SAVE,
+  };
+
+  struct Layout {
+    PixelRect demo, save;
+
+    Layout(const PixelRect &rc):demo(rc), save(rc) {
+      const unsigned height = rc.bottom - rc.top;
+      const unsigned max_v_height = 2 * ::Layout::GetMaximumControlHeight();
+
+      if (height >= max_v_height) {
+        demo.top = rc.bottom - max_v_height;
+        demo.bottom = save.top = unsigned(demo.top + rc.bottom) / 2;
+      } else
+        demo.right = save.left = unsigned(rc.left + rc.right) / 2;
+    }
+  };
+
+  WidgetDialog &dialog;
+
+  WndButton demo_button, save_button;
+
+public:
+  VegaConfigurationExtraButtons(WidgetDialog &_dialog)
+    :dialog(_dialog),
+     demo_button(dialog.GetLook().button),
+     save_button(dialog.GetLook().button) {}
+
+protected:
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) override {
+    Layout layout(rc);
+
+    ButtonWindowStyle style;
+    style.Hide();
+    style.TabStop();
+
+    demo_button.Create(parent, _("Demo"), layout.demo, style, *this, DEMO);
+    save_button.Create(parent, _("Save"), layout.save, style, *this, SAVE);
+  }
+
+  virtual void Show(const PixelRect &rc) override {
+    Layout layout(rc);
+    demo_button.MoveAndShow(layout.demo);
+    save_button.MoveAndShow(layout.save);
+  }
+
+  virtual void Hide() override {
+    demo_button.FastHide();
+    save_button.FastHide();
+  }
+
+  virtual void Move(const PixelRect &rc) override {
+    Layout layout(rc);
+    demo_button.Move(layout.demo);
+    save_button.Move(layout.save);
+  }
+
+private:
+  void OnDemo();
+  void OnSave();
+
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) override {
+    switch (id) {
+    case DEMO:
+      OnDemo();
+      break;
+
+    case SAVE:
+      OnSave();
+      break;
+    }
+  }
+};
 
 static void
-SetParametersScheme(int schemetype)
+SetParametersScheme(PagerWidget &pager, int schemetype)
 {
   if(ShowMessageBox(_("Set new audio scheme?  Old values will be lost."),
                  _T("Vega"),
@@ -99,56 +174,26 @@ SetParametersScheme(int schemetype)
 
   const VEGA_SCHEME &scheme = VegaSchemes[schemetype];
 
-  tabbed->PreparePage(2);
-  LoadAudioModeScheme((VegaParametersWidget &)tabbed->GetPage(2), scheme);
+  pager.PrepareWidget(2);
+  LoadAudioModeScheme((VegaParametersWidget &)pager.GetWidget(2), scheme);
 
   for (unsigned i = 0; audio_pages[i] != NULL; ++i) {
-    tabbed->PreparePage(4 + i);
-    ((VegaAudioParametersWidget &)tabbed->GetPage(4 + i)).LoadScheme(scheme.audio[i]);
+    pager.PrepareWidget(4 + i);
+    ((VegaAudioParametersWidget &)pager.GetWidget(4 + i)).LoadScheme(scheme.audio[i]);
   }
 }
 
 static void
-UpdateCaption()
+UpdateCaption(WndForm &form, unsigned page)
 {
-  wf->SetCaption(captions[tabbed->GetCurrentPage()]);
+  form.SetCaption(captions[page]);
 }
 
-static void
-PageSwitched()
-{
-  UpdateCaption();
-}
-
-static void
-OnNextClicked()
-{
-  tabbed->NextPage();
-  PageSwitched();
-}
-
-static void
-OnPrevClicked()
-{
-  tabbed->PreviousPage();
-  PageSwitched();
-}
-
-static void
-OnCloseClicked()
-{
-  if (!tabbed->Save(changed))
-    return;
-
-  // make sure changes are sent to device
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnSaveClicked()
+inline void
+VegaConfigurationExtraButtons::OnSave()
 {
   bool _changed = false;
-  if (!tabbed->Save(_changed))
+  if (!dialog.GetWidget().Save(_changed))
     return;
 
   changed |= _changed;
@@ -160,48 +205,22 @@ OnSaveClicked()
     dirty = false;
 }
 
-static void
-OnDemoClicked()
+inline void
+VegaConfigurationExtraButtons::OnDemo()
 {
   // retrieve changes from form
-  if (!tabbed->Save(changed))
+  if (!dialog.GetWidget().Save(changed))
     return;
 
   dlgVegaDemoShowModal();
 }
 
-static bool
-FormKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
-    wf->FindByName(_T("cmdPrev"))->SetFocus();
-    tabbed->PreviousPage();
-    PageSwitched();
-    //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
-    return true;
-
-  case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
-    wf->FindByName(_T("cmdNext"))->SetFocus();
-    tabbed->NextPage();
-    PageSwitched();
-    return true;
-
-  default:
-    return false;
-  }
-}
-
 class VegaSchemeButtonsPage : public RowFormWidget, ActionListener {
+  PagerWidget &pager;
+
 public:
-  VegaSchemeButtonsPage(const DialogLook &look)
-    :RowFormWidget(look) {}
+  VegaSchemeButtonsPage(PagerWidget &_pager, const DialogLook &look)
+    :RowFormWidget(look), pager(_pager) {}
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) {
@@ -215,68 +234,41 @@ public:
 
   /* methods from ActionListener */
   virtual void OnAction(int id) {
-    SetParametersScheme(id);
+    SetParametersScheme(pager, id);
   }
 };
 
-static Window *
-OnCreatePager(ContainerWindow &parent, PixelRect rc,
-              WindowStyle style)
+static void
+FillPager(PagerWidget &pager)
 {
-  style.ControlParent();
-
-  tabbed = new TabbedControl(parent, rc, style);
-
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  tabbed->AddPage(new VegaParametersWidget(look, *device, hardware_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           calibration_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           audio_mode_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           audio_deadband_parameters));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CruiseFaster"));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CruiseSlower"));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CruiseLift"));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CirclingClimbingHi"));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CirclingClimbingLow"));
-  tabbed->AddPage(new VegaAudioParametersWidget(look, *device,
-                                                "CirclingDescending"));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           logger_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           mixer_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           flarm_alert_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           flarm_id_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device,
-                                           flarm_repeat_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device, alert_parameters));
-  tabbed->AddPage(new VegaParametersWidget(look, *device, limit_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, hardware_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, calibration_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, audio_mode_parameters));
+  pager.Add(new VegaParametersWidget(look, *device,
+                                     audio_deadband_parameters));
+  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseFaster"));
+  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseSlower"));
+  pager.Add(new VegaAudioParametersWidget(look, *device, "CruiseLift"));
+  pager.Add(new VegaAudioParametersWidget(look, *device,
+                                          "CirclingClimbingHi"));
+  pager.Add(new VegaAudioParametersWidget(look, *device,
+                                          "CirclingClimbingLow"));
+  pager.Add(new VegaAudioParametersWidget(look, *device,
+                                          "CirclingDescending"));
+  pager.Add(new VegaParametersWidget(look, *device, logger_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, mixer_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, flarm_alert_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, flarm_id_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, flarm_repeat_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, alert_parameters));
+  pager.Add(new VegaParametersWidget(look, *device, limit_parameters));
 
-  tabbed->AddPage(new VegaSchemeButtonsPage(look));
+  pager.Add(new VegaSchemeButtonsPage(pager, look));
 
-  tabbed->AddPage(new VegaParametersWidget(look, *device, display_parameters));
-
-  return tabbed;
+  pager.Add(new VegaParametersWidget(look, *device, display_parameters));
 }
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnDemoClicked),
-  DeclareCallBackEntry(OnSaveClicked),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnCreatePager),
-  DeclareCallBackEntry(NULL)
-};
 
 bool
 dlgConfigurationVarioShowModal(Device &_device)
@@ -284,20 +276,24 @@ dlgConfigurationVarioShowModal(Device &_device)
   device = (VegaDevice *)&_device;
   changed = dirty = false;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape
-                  ? _T("IDR_XML_VARIO_L") : _T("IDR_XML_VARIO_L"));
-  if (!wf)
-    return false;
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  wf->SetKeyDownFunction(FormKeyDown);
+  WidgetDialog dialog(look);
 
-  UpdateCaption();
+  ArrowPagerWidget widget(dialog, look.button,
+                          new VegaConfigurationExtraButtons(dialog));
+  FillPager(widget);
 
-  wf->ShowModal();
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Vario Configuration"),
+                    &widget);
 
-  delete wf;
-  wf = NULL;
+  widget.SetPageFlippedCallback([&dialog, &widget](){
+      UpdateCaption(dialog, widget.GetCurrentIndex());
+    });
+  UpdateCaption(dialog, widget.GetCurrentIndex());
 
-  return changed;
+  dialog.ShowModal();
+  dialog.StealWidget();
+
+  return changed || dialog.GetChanged();
 }
