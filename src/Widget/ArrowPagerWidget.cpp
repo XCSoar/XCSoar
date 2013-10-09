@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <assert.h>
 
-ArrowPagerWidget::Layout::Layout(PixelRect rc)
+ArrowPagerWidget::Layout::Layout(PixelRect rc, const Widget *extra_widget)
   :main(rc)
 {
   const unsigned width = rc.right - rc.left;
@@ -59,6 +59,13 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc)
     next_button = previous_button;
     next_button.left = next_button.right;
     next_button.right = close_button.right;
+
+    /* the remaining area is "extra" */
+
+    extra.left = close_button.left;
+    extra.right = close_button.right;
+    extra.top = rc.top;
+    extra.bottom = previous_button.top;
   } else {
     /* portrait */
 
@@ -79,7 +86,21 @@ ArrowPagerWidget::Layout::Layout(PixelRect rc)
     previous_button.right = next_button.left =
       (rc.left * 3 + rc.right) / 4;
     previous_button.left = rc.left;
+
+    /* "extra" gets another row */
+
+    if (extra_widget != nullptr) {
+      extra.left = main.left;
+      extra.right = main.right;
+      extra.bottom = main.bottom;
+      extra.top = main.bottom -= ::Layout::GetMaximumControlHeight();
+    }
   }
+}
+
+ArrowPagerWidget::~ArrowPagerWidget()
+{
+  delete extra;
 }
 
 PixelSize
@@ -101,10 +122,23 @@ ArrowPagerWidget::GetMaximumSize() const
 }
 
 void
+ArrowPagerWidget::Initialise(ContainerWindow &parent,
+                             const PixelRect &rc)
+{
+  PagerWidget::Initialise(parent, rc);
+
+  if (extra != nullptr)
+    extra->Initialise(parent, rc);
+}
+
+void
 ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  const Layout layout(rc);
+  const Layout layout(rc, extra);
   PagerWidget::Prepare(parent, layout.main);
+
+  if (extra != nullptr)
+    extra->Prepare(parent, layout.extra);
 
   ButtonWindowStyle style;
   style.Hide();
@@ -120,12 +154,15 @@ ArrowPagerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 ArrowPagerWidget::Show(const PixelRect &rc)
 {
-  const Layout layout(rc);
+  const Layout layout(rc, extra);
   PagerWidget::Show(layout.main);
 
   previous_button.MoveAndShow(layout.previous_button);
   next_button.MoveAndShow(layout.next_button);
   close_button.MoveAndShow(layout.close_button);
+
+  if (extra != nullptr)
+    extra->Show(layout.extra);
 }
 
 void
@@ -136,17 +173,23 @@ ArrowPagerWidget::Hide()
   previous_button.Hide();
   next_button.Hide();
   close_button.Hide();
+
+  if (extra != nullptr)
+    extra->Hide();
 }
 
 void
 ArrowPagerWidget::Move(const PixelRect &rc)
 {
-  const Layout layout(rc);
+  const Layout layout(rc, extra);
   PagerWidget::Move(layout.main);
 
   previous_button.Move(layout.previous_button);
   next_button.Move(layout.next_button);
   close_button.Move(layout.close_button);
+
+  if (extra != nullptr)
+    extra->Move(layout.extra);
 }
 
 bool
@@ -162,6 +205,9 @@ bool
 ArrowPagerWidget::KeyPress(unsigned key_code)
 {
   if (PagerWidget::KeyPress(key_code))
+    return true;
+
+  if (extra != nullptr && extra->KeyPress(key_code))
     return true;
 
   switch (key_code) {

@@ -48,11 +48,18 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
     PixelRect previous_button, next_button;
     PixelRect close_button;
     PixelRect main;
+    PixelRect extra;
 
-    Layout(PixelRect rc);
+    Layout(PixelRect rc, const Widget *extra);
   };
 
   ActionListener &action_listener;
+
+  /**
+   * An optional #Widget that is shown in the remaining area in the
+   * buttons row/column.  This object will be deleted automatically.
+   */
+  Widget *const extra;
 
   WndSymbolButton previous_button, next_button;
   WndButton close_button;
@@ -61,9 +68,13 @@ class ArrowPagerWidget : public PagerWidget, ActionListener {
 
 public:
   ArrowPagerWidget(ActionListener &_action_listener,
-                   const ButtonLook &look)
+                   const ButtonLook &look,
+                   Widget *const _extra=nullptr)
     :action_listener(_action_listener),
+     extra(_extra),
      previous_button(look), next_button(look), close_button(look) {}
+
+  virtual ~ArrowPagerWidget();
 
   void SetPageFlippedCallback(PageFlippedCallback &&_page_flipped_callback) {
     assert(!page_flipped_callback);
@@ -75,6 +86,8 @@ public:
   /* virtual methods from Widget */
   virtual PixelSize GetMinimumSize() const override;
   virtual PixelSize GetMaximumSize() const override;
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) override;
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) override;
   virtual void Show(const PixelRect &rc) override;
