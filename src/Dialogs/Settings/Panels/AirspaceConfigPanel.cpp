@@ -26,7 +26,6 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
-#include "Form/Button.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -81,16 +80,12 @@ static constexpr StaticEnumChoice as_fill_mode_list[] = {
 
 class AirspaceConfigPanel final
   : public RowFormWidget, DataFieldListener {
-private:
-  WndButton *buttonColors, *buttonMode;
-
 public:
   AirspaceConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void ShowDisplayControls(AirspaceDisplayMode mode);
   void ShowWarningControls(bool visible);
-  void SetButtonsVisible(bool active);
 
   /* methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -135,29 +130,12 @@ AirspaceConfigPanel::ShowWarningControls(bool visible)
 }
 
 void
-AirspaceConfigPanel::SetButtonsVisible(bool active)
-{
-  if (buttonColors != NULL)
-    buttonColors->SetVisible(active);
-
-  if (buttonMode != NULL)
-    buttonMode->SetVisible(active);
-}
-
-void
 AirspaceConfigPanel::Show(const PixelRect &rc)
 {
-  if (buttonColors != NULL) {
-    buttonColors->SetText(_("Colours"));
-    buttonColors->SetOnClickNotify(OnAirspaceColoursClicked);
-  }
-
-  if (buttonMode != NULL) {
-    buttonMode->SetText(_("Filter"));
-    buttonMode->SetOnClickNotify(OnAirspaceModeClicked);
-  }
-
-  SetButtonsVisible(true);
+  ConfigPanel::BorrowExtraButton(1, _("Colours"),
+                                 OnAirspaceColoursClicked);
+  ConfigPanel::BorrowExtraButton(2, _("Filter"),
+                                 OnAirspaceModeClicked);
   RowFormWidget::Show(rc);
 }
 
@@ -165,7 +143,8 @@ void
 AirspaceConfigPanel::Hide()
 {
   RowFormWidget::Hide();
-  SetButtonsVisible(false);
+  ConfigPanel::ReturnExtraButton(1);
+  ConfigPanel::ReturnExtraButton(2);
 }
 
 void
@@ -238,12 +217,6 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     SetExpertRow(AirspaceTransparency);
   }
 #endif
-
-  buttonColors = ConfigPanel::GetExtraButton(1);
-  assert(buttonColors != NULL);
-
-  buttonMode = ConfigPanel::GetExtraButton(2);
-  assert(buttonMode != NULL);
 
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);

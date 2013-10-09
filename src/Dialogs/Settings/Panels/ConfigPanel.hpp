@@ -24,10 +24,13 @@ Copyright_License {
 #ifndef CONFIGPANEL_HPP
 #define CONFIGPANEL_HPP
 
+#include <tchar.h>
+
 class WndButton;
 
 namespace ConfigPanel {
-  WndButton *GetExtraButton(unsigned);
+  void BorrowExtraButton(unsigned i, const TCHAR *caption, void (*callback)());
+  void ReturnExtraButton(unsigned i);
 };
 
 #endif

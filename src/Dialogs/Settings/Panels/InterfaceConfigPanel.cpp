@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "InterfaceConfigPanel.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Button.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
@@ -57,17 +56,9 @@ enum ControlIndex {
 };
 
 class InterfaceConfigPanel final : public RowFormWidget {
-#ifndef GNAV
-  WndButton *buttonFonts;
-#endif
-
 public:
   InterfaceConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook())
-#ifndef GNAV
-    , buttonFonts(0)
-#endif
-    {}
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -80,9 +71,8 @@ void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
 #ifndef GNAV
-  buttonFonts->SetText(_("Fonts"));
-  buttonFonts->SetOnClickNotify(dlgConfigFontsShowModal);
-  buttonFonts->Show();
+  ConfigPanel::BorrowExtraButton(1, _("Fonts"),
+                                 dlgConfigFontsShowModal);
 #endif
 
   RowFormWidget::Show(rc);
@@ -92,7 +82,7 @@ void
 InterfaceConfigPanel::Hide()
 {
 #ifndef GNAV
-  buttonFonts->Hide();
+  ConfigPanel::ReturnExtraButton(1);
 #endif
 
   RowFormWidget::Hide();
@@ -124,11 +114,6 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const UISettings &settings = CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
-
-#ifndef GNAV
-  buttonFonts = ConfigPanel::GetExtraButton(1);
-  assert(buttonFonts);
-#endif
 
 #ifdef HAVE_BLANK
   AddBoolean(_("Auto. blank"),

@@ -129,6 +129,10 @@ static constexpr TabMenuControl::PageItem pages[] = {
 #endif
 };
 
+namespace ConfigPanel {
+  static WndButton *GetExtraButton(unsigned);
+}
+
 WndButton *
 ConfigPanel::GetExtraButton(unsigned number)
 {
@@ -146,6 +150,23 @@ ConfigPanel::GetExtraButton(unsigned number)
   }
 
   return extra_button;
+}
+
+void
+ConfigPanel::BorrowExtraButton(unsigned i, const TCHAR *caption,
+                               void (*callback)())
+{
+  WndButton &button = *GetExtraButton(i);
+  button.SetCaption(caption);
+  button.SetOnClickNotify(callback);
+  button.Show();
+}
+
+void
+ConfigPanel::ReturnExtraButton(unsigned i)
+{
+  WndButton &button = *GetExtraButton(i);
+  button.Hide();
 }
 
 static void

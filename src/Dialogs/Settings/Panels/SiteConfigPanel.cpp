@@ -25,7 +25,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
-#include "Form/Button.hpp"
 #include "LocalPath.hpp"
 #include "UtilsSettings.hpp"
 #include "ConfigPanel.hpp"
@@ -48,10 +47,7 @@ enum ControlIndex {
 class SiteConfigPanel final : public RowFormWidget {
 public:
   SiteConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()), buttonWaypoints(0) {}
-
-private:
-  WndButton *buttonWaypoints;
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) override;
@@ -63,25 +59,20 @@ public:
 void
 SiteConfigPanel::Show(const PixelRect &rc)
 {
-  buttonWaypoints->SetText(_("Waypts."));
-  buttonWaypoints->SetOnClickNotify(dlgConfigWaypointsShowModal);
-  buttonWaypoints->SetVisible(true);
+  ConfigPanel::BorrowExtraButton(1, _("Waypts."), dlgConfigWaypointsShowModal);
   RowFormWidget::Show(rc);
 }
 
 void
 SiteConfigPanel::Hide()
 {
-  buttonWaypoints->SetVisible(false);
+  ConfigPanel::ReturnExtraButton(1);
   RowFormWidget::Hide();
 }
 
 void
 SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  buttonWaypoints = ConfigPanel::GetExtraButton(1);
-  assert (buttonWaypoints);
-
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());
   wp->SetEnabled(false);
