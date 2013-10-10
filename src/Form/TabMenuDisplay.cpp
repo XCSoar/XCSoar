@@ -61,9 +61,10 @@ void
 TabMenuDisplay::InitMenu(const TCHAR *caption,
                          const TabMenuPage pages_in[],
                          unsigned num_pages,
-                         const TabMenuGroup groups[], unsigned n_groups)
+                         const TabMenuGroup _groups[], unsigned n_groups)
 {
   pages = pages_in;
+  groups = _groups;
 
   for (unsigned i = 0; i < num_pages; ++i)
     AddMenuItem(pages_in[i].menu_caption);
@@ -365,8 +366,6 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
   for (auto i = main_menu_buttons.begin(),
          end = main_menu_buttons.end(); i != end;
        ++i, ++main_menu_index) {
-    const MainMenuButton &button = **i;
-
     const bool isDown = main_menu_index == down_index.main_index &&
       !down_index.IsSub() && !drag_off_button;
 
@@ -380,7 +379,9 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                                            isDown));
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
-    TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
+    TabDisplay::PaintButton(canvas, CaptionStyle,
+                            gettext(GetGroupCaption(main_menu_index)),
+                            rc,
                             nullptr, isDown, false);
   }
 }

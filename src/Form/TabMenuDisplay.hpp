@@ -126,6 +126,8 @@ class TabMenuDisplay final : public PaintWindow
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   const TabMenuPage *pages;
 
+  const TabMenuGroup *groups;
+
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
 
@@ -184,13 +186,16 @@ public:
     return pages[page].menu_caption;
   }
 
+  const TCHAR *GetGroupCaption(unsigned group) const {
+    assert(group < main_menu_buttons.size());
+
+    return groups[group].caption;
+  }
+
   const TCHAR *GetPageParentCaption(unsigned page) const {
     assert(page < GetNumPages());
 
-    const unsigned main_menu_index = pages[page].main_menu_index;
-    assert(main_menu_index < main_menu_buttons.size());
-
-    return main_menu_buttons[main_menu_index]->caption;
+    return GetGroupCaption(pages[page].main_menu_index);
   }
 
   unsigned GetNumMainMenuItems() const {
