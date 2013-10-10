@@ -113,8 +113,14 @@ TabMenuControl::SetCurrentPage(unsigned page)
 {
   assert(page < buttons.size());
 
-  if (!pager.ClickPage(page))
-    return;
+  if (pager.ClickPage(page))
+    OnPageFlipped();
+}
+
+void
+TabMenuControl::OnPageFlipped()
+{
+  const unsigned page = pager.GetCurrentIndex();
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);

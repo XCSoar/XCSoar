@@ -150,6 +150,9 @@ public:
     return buttons;
   }
 
+private:
+  void OnPageFlipped();
+
 public:
   /**
    * Initializes the menu and buids it from the Menuitem[] array
