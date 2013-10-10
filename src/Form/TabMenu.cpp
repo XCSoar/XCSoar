@@ -277,7 +277,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
   return MenuTabIndex::None();
 }
 
-void
+inline void
 TabMenuControl::CreateSubMenuItem(const PageItem &item)
 {
   assert(item.main_menu_index < MAX_MAIN_MENU_ITEMS);
@@ -292,7 +292,7 @@ TabMenuControl::CreateSubMenuItem(const PageItem &item)
   buttons.append(b);
 }
 
-void
+inline void
 TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
                               const TCHAR *main_menu_caption,
                               const unsigned main_menu_index)
