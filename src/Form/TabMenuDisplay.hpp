@@ -31,45 +31,44 @@ Copyright_License {
 struct DialogLook;
 class ContainerWindow;
 
-/**
- * class that holds the child menu button and info for the menu
- */
-class SubMenuButton : public TabButton {
-public:
-  SubMenuButton(const TCHAR* _Caption)
-    :TabButton(_Caption, NULL)
-  {
-  }
-};
-
-/**
- * class that holds the main menu button and info
- */
-class MainMenuButton : public TabButton {
-public:
-  /* index to Pages array of first page in submenu */
-  const unsigned first_page_index;
-
-  /* index to Pages array of last page in submenu */
-  const unsigned last_page_index;
-
-  MainMenuButton(const TCHAR* _Caption,
-                    unsigned _first_page_index,
-                    unsigned _last_page_index)
-    :TabButton(_Caption, NULL),
-     first_page_index(_first_page_index),
-     last_page_index(_last_page_index)
-  {
-  }
-
-public:
-  unsigned NumSubMenus() const { return last_page_index - first_page_index + 1; };
-};
-
 class TabMenuDisplay final : public PaintWindow
 {
   /* excludes "Main Menu" which is a "super menu" */
   static constexpr unsigned MAX_MAIN_MENU_ITEMS = 7;
+
+  /**
+   * class that holds the child menu button and info for the menu
+   */
+  struct SubMenuButton : TabButton {
+    SubMenuButton(const TCHAR* _Caption)
+      :TabButton(_Caption, NULL)
+    {
+    }
+  };
+
+  /**
+   * class that holds the main menu button and info
+   */
+  struct MainMenuButton : TabButton {
+    /* index to Pages array of first page in submenu */
+    const unsigned first_page_index;
+
+    /* index to Pages array of last page in submenu */
+    const unsigned last_page_index;
+
+    MainMenuButton(const TCHAR* _Caption,
+                   unsigned _first_page_index,
+                   unsigned _last_page_index)
+      :TabButton(_Caption, NULL),
+       first_page_index(_first_page_index),
+       last_page_index(_last_page_index)
+    {
+    }
+
+    unsigned NumSubMenus() const {
+      return last_page_index - first_page_index + 1;
+    };
+  };
 
   /* internally used structure for tracking menu down and selection status */
   struct MenuTabIndex {
