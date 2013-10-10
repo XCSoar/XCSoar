@@ -91,31 +91,30 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 bool
 TabMenuDisplay::OnKeyDown(unsigned key_code)
 {
- const unsigned page = menu.GetPageNum(selected_index);
+  const unsigned page = menu.GetPageNum(selected_index);
 
- if (menu.IsCurrentPageTheMenu()) {
-   switch (key_code) {
+  switch (key_code) {
+  case KEY_RETURN:
+    menu.SetCurrentPage(page);
+    return true;
 
-   case KEY_RETURN:
-     menu.SetCurrentPage(page);
-     return true;
-
-   case KEY_RIGHT:
+  case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif
-     menu.HighlightNextMenuItem();
-     return true;
+    menu.HighlightNextMenuItem();
+    return true;
 
-   case KEY_LEFT:
+  case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
-     menu.HighlightPreviousMenuItem();
-     return true;
-   }
- }
- return PaintWindow::OnKeyDown(key_code);
+    menu.HighlightPreviousMenuItem();
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 bool
