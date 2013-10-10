@@ -304,7 +304,6 @@ TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
   for (unsigned i = 0; i < NumPages; i++) {
     const PageItem& item = pages_in[i];
     if (item.main_menu_index == main_menu_index) {
-      CreateSubMenuItem(item);
       firstPageIndex = std::min(i, firstPageIndex);
       subMenuIndex++;
     }
@@ -325,6 +324,9 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
   assert(main_menu_captions);
 
   pages = pages_in;
+
+  for (unsigned i = 0; i < num_pages; ++i)
+    CreateSubMenuItem(pages_in[i]);
 
   for (unsigned i = 0; i < num_menu_captions; i++)
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
