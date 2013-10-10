@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/TabMenu.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Key.h"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
@@ -204,37 +203,7 @@ OnCloseClicked()
 static bool
 FormKeyDown(unsigned key_code)
 {
-  if (tab_menu->InvokeKeyPress(key_code))
-    return true;
-
-  switch (key_code) {
-  case KEY_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
-    if (tab_menu->IsCurrentPageTheMenu()) {
-      tab_menu->FocusMenuPage();
-      tab_menu->HighlightPreviousMenuItem();
-    } else {
-      tab_menu->PreviousPage();
-    }
-    return true;
-
-  case KEY_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
-    if (tab_menu->IsCurrentPageTheMenu()) {
-      tab_menu->FocusMenuPage();
-      tab_menu->HighlightNextMenuItem();
-    } else {
-      tab_menu->NextPage();
-    }
-    return true;
-
-  default:
-    return false;
-  }
+  return tab_menu->InvokeKeyPress(key_code);
 }
 
 static void

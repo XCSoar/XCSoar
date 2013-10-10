@@ -25,6 +25,7 @@ Copyright_License {
 #include "Form/TabMenuDisplay.hpp"
 #include "Form/Form.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/XML.hpp"
 #include "Widget/WindowWidget.hpp"
@@ -109,6 +110,42 @@ TabMenuControl::SetCurrentPage(unsigned page)
 
   if (pager.ClickPage(page))
     OnPageFlipped();
+}
+
+bool
+TabMenuControl::InvokeKeyPress(unsigned key_code)
+{
+  if (pager.KeyPress(key_code))
+    return true;
+
+  switch (key_code) {
+  case KEY_LEFT:
+#ifdef GNAV
+  case '6':
+#endif
+    if (IsCurrentPageTheMenu()) {
+      FocusMenuPage();
+      HighlightPreviousMenuItem();
+    } else {
+      PreviousPage();
+    }
+    return true;
+
+  case KEY_RIGHT:
+#ifdef GNAV
+  case '7':
+#endif
+    if (IsCurrentPageTheMenu()) {
+      FocusMenuPage();
+      HighlightNextMenuItem();
+    } else {
+      NextPage();
+    }
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 void

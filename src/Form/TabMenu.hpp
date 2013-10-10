@@ -359,9 +359,7 @@ public:
   /**
    * Pass a key press event to the active widget.
    */
-  bool InvokeKeyPress(unsigned key_code) {
-    return pager.KeyPress(key_code);
-  }
+  bool InvokeKeyPress(unsigned key_code);
 
   /**
    * sets page that determines which menu item is displayed as selected
