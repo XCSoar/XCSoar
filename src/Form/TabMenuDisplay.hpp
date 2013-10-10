@@ -41,7 +41,7 @@ class TabMenuDisplay final : public PaintWindow
    */
   struct SubMenuButton : TabButton {
     SubMenuButton(const TCHAR* _Caption)
-      :TabButton(_Caption, NULL)
+      :TabButton(_Caption, nullptr)
     {
     }
   };
@@ -59,7 +59,7 @@ class TabMenuDisplay final : public PaintWindow
     MainMenuButton(const TCHAR* _Caption,
                    unsigned _first_page_index,
                    unsigned _last_page_index)
-      :TabButton(_Caption, NULL),
+      :TabButton(_Caption, nullptr),
        first_page_index(_first_page_index),
        last_page_index(_last_page_index)
     {
@@ -243,12 +243,12 @@ private:
 
   /**
    * @param main_menu_index
-   * @return pointer to button or NULL if index is out of range
+   * @return pointer to button or nullptr if index is out of range
    */
   gcc_pure
   const MainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
     assert(main_menu_index < main_menu_buttons.size());
-    assert(main_menu_buttons[main_menu_index] != NULL);
+    assert(main_menu_buttons[main_menu_index] != nullptr);
 
     return *main_menu_buttons[main_menu_index];
   }
@@ -279,12 +279,12 @@ private:
 
   /**
    * @param page
-   * @return pointer to button or NULL if index is out of range
+   * @return pointer to button or nullptr if index is out of range
    */
   gcc_pure
   const SubMenuButton &GetSubMenuButton(unsigned page) const {
     assert(page < GetNumPages() && page < buttons.size());
-    assert(buttons[page] != NULL);
+    assert(buttons[page] != nullptr);
 
     return *buttons[page];
   }

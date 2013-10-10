@@ -381,7 +381,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
-                            NULL, isDown, false);
+                            nullptr, isDown, false);
   }
 }
 
@@ -431,7 +431,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
 
     const PixelRect &rc = GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
-                            NULL, is_cursor,
+                            nullptr, is_cursor,
                             false);
   }
 }
