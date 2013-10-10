@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/TabMenu.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Busy.hpp"
 #include "Screen/Key.h"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
@@ -264,8 +263,6 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 static void
 PrepareConfigurationDialog()
 {
-  gcc_unused ScopeBusyIndicator busy;
-
   dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
                                       _T("IDR_XML_CONFIGURATION"));
