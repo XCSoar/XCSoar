@@ -356,7 +356,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
         GetTabMenuBar().SetCurrentPage(GetPageNum(di));
 
       // main menu click
-      else if (di.IsMain() && selected_index != down_index) {
+      else if (di.IsMain()) {
         /* move cursor to first item in this menu */
         const MenuTabIndex first(di.main_index, 0);
         cursor = GetPageNum(first);
