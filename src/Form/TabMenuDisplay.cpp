@@ -393,8 +393,8 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
   const bool is_focused = !HasCursorKeys() || HasFocus();
 
   unsigned main_menu_index = 0;
-  for (auto i = GetMainMenuButtons().begin(),
-         end = GetMainMenuButtons().end(); i != end;
+  for (auto i = main_menu_buttons.begin(),
+         end = main_menu_buttons.end(); i != end;
        ++i, ++main_menu_index) {
     const MainMenuButton &button = **i;
 

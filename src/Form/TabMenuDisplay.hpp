@@ -173,9 +173,6 @@ public:
   }
 
 private:
-  const StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS>
-      &GetMainMenuButtons() const { return main_menu_buttons; }
-
   unsigned GetNumPages() const {
     return menu.GetNumPages();
   }
