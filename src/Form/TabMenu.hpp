@@ -57,15 +57,10 @@ class TabMenuControl : public ContainerWindow {
 
 public:
   /**
-   * @param parent
    * @param Caption the page caption shown on the menu page
-   * @param style
-   * @return
    */
-  TabMenuControl(ContainerWindow &parent, WndForm &_form,
-                 const DialogLook &look, const TCHAR * Caption,
-                 PixelRect rc,
-                 const WindowStyle style = WindowStyle());
+  TabMenuControl(WndForm &_form,
+                 const DialogLook &look, const TCHAR *caption);
   ~TabMenuControl();
 
   void UpdateLayout() {

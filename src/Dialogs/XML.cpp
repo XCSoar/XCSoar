@@ -631,13 +631,14 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     // Create the TabMenuControl
 
     style.ControlParent();
-    TabMenuControl *tabmenu = new TabMenuControl(parent,
-                                                 /* XXX this cast is
+    TabMenuControl *tabmenu = new TabMenuControl(/* XXX this cast is
                                                     an ugly hack!
                                                     Please rewrite: */
                                                  (WndForm &)form,
                                                  UIGlobals::GetDialogLook(),
-                                                 caption, rc, style);
+                                                 caption);
+    tabmenu->Create(parent, rc, style);
+
     window = tabmenu;
 
   } else if (StringIsEqual(node.GetName(), _T("Custom"))) {

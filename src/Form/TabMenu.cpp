@@ -29,20 +29,12 @@ Copyright_License {
 
 #include <assert.h>
 
-TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
-                               const DialogLook &look, const TCHAR * _caption,
-                               PixelRect rc,
-                               const WindowStyle style)
+TabMenuControl::TabMenuControl(WndForm &_form,
+                               const DialogLook &look, const TCHAR * _caption)
   :tab_display(new TabMenuDisplay(*this, look)),
    caption(_caption),
    form(_form)
 {
-  Create(_parent, rc, style);
-
-  WindowStyle display_style;
-  display_style.Hide();
-  display_style.TabStop();
-  tab_display->Create(*this, GetClientRect(), display_style);
 }
 
 TabMenuControl::~TabMenuControl()
@@ -159,6 +151,11 @@ TabMenuControl::OnCreate()
   pager.Initialise(*this, rc);
   pager.Prepare(*this, rc);
   pager.Show(rc);
+
+  WindowStyle display_style;
+  display_style.Hide();
+  display_style.TabStop();
+  tab_display->Create(*this, rc, display_style);
 }
 
 void
