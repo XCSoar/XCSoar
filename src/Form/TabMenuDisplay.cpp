@@ -81,7 +81,7 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
  case KEY_RETURN:
  case KEY_LEFT:
  case KEY_RIGHT:
-   return menu.IsCurrentPageTheMenu();
+   return true;
 
  default:
    return false;
