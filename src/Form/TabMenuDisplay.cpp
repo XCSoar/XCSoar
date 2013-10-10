@@ -155,11 +155,7 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
     dragging = true;
     SetCapture();
 
-#ifdef USE_GDI
-    Invalidate(GetTabMenuBar().GetButtonPosition(down_index));
-#else
-    Invalidate();
-#endif
+    InvalidateButton(down_index);
     return true;
   }
   return PaintWindow::OnMouseDown(x, y);
@@ -188,11 +184,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
         selected_index = down_index;
         Invalidate();
       } else {
-#ifdef USE_GDI
-        Invalidate(GetTabMenuBar().GetButtonPosition(down_index));
-#else
-        Invalidate();
-#endif
+        InvalidateButton(down_index);
       }
     }
 

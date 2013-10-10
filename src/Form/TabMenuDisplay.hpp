@@ -95,6 +95,13 @@ protected:
   virtual void OnSetFocus() override;
 
 private:
+  void InvalidateButton(TabMenuControl::MenuTabIndex i) {
+    if (SupportsPartialRedraw())
+      Invalidate(GetTabMenuBar().GetButtonPosition(i));
+    else
+      Invalidate();
+  }
+
   /**
    * draw border around main menu
    */
