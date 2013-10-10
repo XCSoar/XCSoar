@@ -174,7 +174,7 @@ public:
 
 private:
   unsigned GetNumPages() const {
-    return menu.GetNumPages();
+    return buttons.size();
   }
 
   /**
