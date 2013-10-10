@@ -33,7 +33,8 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
                                const DialogLook &look, const TCHAR * _caption,
                                PixelRect rc,
                                const WindowStyle style)
-  :caption(_caption),
+  :tab_display(new TabMenuDisplay(*this, look)),
+   caption(_caption),
    form(_form)
 {
   Create(_parent, rc, style);
@@ -41,7 +42,6 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
   WindowStyle display_style;
   display_style.Hide();
   display_style.TabStop();
-  tab_display = new TabMenuDisplay(*this, look);
   tab_display->Create(*this, GetClientRect(), display_style);
 }
 

@@ -49,7 +49,7 @@ class TabMenuDisplay;
 class TabMenuControl : public ContainerWindow {
   PagerWidget pager;
 
-  TabMenuDisplay *tab_display;
+  TabMenuDisplay *const tab_display;
 
   StaticString<256u> caption;
 
