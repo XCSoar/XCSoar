@@ -65,7 +65,6 @@ public:
  */
 class TabDisplay final : public PaintWindow
 {
-protected:
   TabBarControl& tab_bar;
   const DialogLook &look;
 
