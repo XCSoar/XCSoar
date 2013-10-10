@@ -132,7 +132,7 @@ TabMenuControl::GetLastContentPage() const
 inline void
 TabMenuControl::CreateSubMenuItem(const PageItem &item)
 {
-  assert(item.Load != NULL);
+  assert(item.Load != nullptr);
 
   Widget *widget = item.Load();
   pager.Add(widget);
