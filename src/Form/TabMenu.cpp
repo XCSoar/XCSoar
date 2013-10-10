@@ -63,20 +63,15 @@ TabMenuControl::~TabMenuControl()
 void
 TabMenuControl::NextPage()
 {
-  const unsigned NumAllPages = pager.GetSize();
-  if (NumAllPages < 2)
-    return;
-  SetCurrentPage((GetCurrentPage() + 1) % NumAllPages);
+  if (pager.Next(true))
+    OnPageFlipped();
 }
 
 void
 TabMenuControl::PreviousPage()
 {
-  const unsigned NumAllPages = pager.GetSize();
-
-  if (NumAllPages < 2)
-    return;
-  SetCurrentPage((GetCurrentPage() + NumAllPages - 1) % NumAllPages);
+  if (pager.Previous(true))
+    OnPageFlipped();
 }
 
 void
