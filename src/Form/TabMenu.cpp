@@ -184,7 +184,7 @@ TabMenuControl::GetMenuButtonHeight() const
 unsigned
 TabMenuControl::GetMenuButtonWidth() const
 {
-  return (tab_display->GetTabWidth() - GetTabLineHeight()) / 2;
+  return (tab_display->GetWidth() - GetTabLineHeight()) / 2;
 }
 
 const PixelRect&

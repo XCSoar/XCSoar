@@ -53,14 +53,6 @@ private:
   bool HighlightPrevious();
 
 public:
-  unsigned GetTabHeight() const {
-    return this->GetHeight();
-  }
-
-  unsigned GetTabWidth() const {
-    return this->GetWidth();
-  }
-
   /**
    * Returns index of selected (highlighted) tab
    * @return
