@@ -346,15 +346,11 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 inline void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 {
-  const unsigned bwidth = GetTabLineHeight();
+  PixelRect rc = GetMainMenuButtonSize(0);
+  rc.bottom = GetMainMenuButtonSize(GetNumMainMenuItems() - 1).bottom;
+  rc.Grow(GetTabLineHeight());
 
-  const PixelRect rcFirst = GetMainMenuButtonSize(0);
-  const unsigned menuBottom =
-    GetMainMenuButtonSize(GetNumMainMenuItems() - 1).bottom;
-  const PixelRect rcBlackBorder(rcFirst.left - bwidth, rcFirst.top - bwidth,
-                                rcFirst.right + bwidth, menuBottom + bwidth);
-
-  canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rc, COLOR_BLACK);
 }
 
 inline void
@@ -394,14 +390,11 @@ inline void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
                                    const MainMenuButton &main_button) const
 {
-  const unsigned bwidth = GetTabLineHeight();
-  const unsigned subTop =
-    GetSubMenuButtonSize(main_button.first_page_index).top;
-  const PixelRect bLast = GetSubMenuButtonSize(main_button.last_page_index);
-  const PixelRect rcBlackBorder(bLast.left - bwidth, subTop - bwidth,
-                                bLast.right + bwidth, bLast.bottom + bwidth);
+  PixelRect rc = GetSubMenuButtonSize(main_button.first_page_index);
+  rc.bottom = GetSubMenuButtonSize(main_button.last_page_index).bottom;
+  rc.Grow(GetTabLineHeight());
 
-  canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
+  canvas.DrawFilledRectangle(rc, COLOR_BLACK);
 }
 
 inline void
