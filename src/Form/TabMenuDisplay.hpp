@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_FORM_TABMENU_DISPLAY_HPP
 
 #include "TabMenuData.hpp"
-#include "TabDisplay.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Util/StaticArray.hpp"
 
 struct DialogLook;
 class ContainerWindow;
@@ -40,28 +40,25 @@ class TabMenuDisplay final : public PaintWindow
   /**
    * class that holds the child menu button and info for the menu
    */
-  struct SubMenuButton : TabButton {
-    SubMenuButton(const TCHAR* _Caption)
-      :TabButton(_Caption, nullptr)
-    {
-    }
+  struct SubMenuButton {
+    PixelRect rc;
   };
 
   /**
    * class that holds the main menu button and info
    */
-  struct MainMenuButton : TabButton {
+  struct MainMenuButton {
+    PixelRect rc;
+
     /* index to Pages array of first page in submenu */
     const unsigned first_page_index;
 
     /* index to Pages array of last page in submenu */
     const unsigned last_page_index;
 
-    MainMenuButton(const TCHAR* _Caption,
-                   unsigned _first_page_index,
+    MainMenuButton(unsigned _first_page_index,
                    unsigned _last_page_index)
-      :TabButton(_Caption, nullptr),
-       first_page_index(_first_page_index),
+      :first_page_index(_first_page_index),
        last_page_index(_last_page_index)
     {
     }
@@ -222,16 +219,16 @@ public:
   int GetPageNum(MenuTabIndex i) const;
 
 private:
-  void AddMenu(const TCHAR *caption, unsigned first, unsigned last,
+  void AddMenu(unsigned first, unsigned last,
                unsigned main_menu_index) {
     assert(main_menu_index == main_menu_buttons.size());
     assert(main_menu_index < MAX_MAIN_MENU_ITEMS);
 
-    main_menu_buttons.append(new MainMenuButton(caption, first, last));
+    main_menu_buttons.append(new MainMenuButton(first, last));
   }
 
-  void AddMenuItem(const TCHAR *caption) {
-    buttons.append(new SubMenuButton(caption));
+  void AddMenuItem() {
+    buttons.append(new SubMenuButton());
   }
 
   gcc_pure
