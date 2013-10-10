@@ -101,10 +101,16 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
      return true;
 
    case KEY_RIGHT:
+#ifdef GNAV
+  case '7':
+#endif
      menu.HighlightNextMenuItem();
      return true;
 
    case KEY_LEFT:
+#ifdef GNAV
+  case '6':
+#endif
      menu.HighlightPreviousMenuItem();
      return true;
    }
