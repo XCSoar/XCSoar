@@ -343,13 +343,6 @@ TabMenuControl::FindPage(unsigned page) const
   return MenuTabIndex(main_index, sub_index);
 }
 
-unsigned
-TabMenuControl::GotoMenuPage()
-{
-  SetCurrentPage(GetMenuPage());
-  return GetMenuPage();
-}
-
 void
 TabMenuControl::FocusMenuPage()
 {

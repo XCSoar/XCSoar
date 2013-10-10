@@ -182,7 +182,9 @@ public:
    * Sets the current page to the menu page
    * @return Page index of menu page
    */
-  unsigned GotoMenuPage();
+  void GotoMenuPage() {
+    SetCurrentPage(GetMenuPage());
+  }
 
   /**
    * Set the keyboard focus on the menu page.  Switches to the menu
