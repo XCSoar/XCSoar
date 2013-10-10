@@ -304,8 +304,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
       // main menu click
       else if (di.IsMain()) {
         /* move cursor to first item in this menu */
-        const MenuTabIndex first(di.main_index, 0);
-        cursor = GetPageNum(first);
+        cursor = main_menu_buttons[di.main_index].first_page_index;
         Invalidate();
       } else {
         InvalidateButton(down_index);
