@@ -123,8 +123,6 @@ protected:
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   PageItem const *pages;
 
-  unsigned last_content_page;
-
   StaticString<256u> caption;
 
   WndForm &form;
@@ -292,9 +290,7 @@ public:
    * or MAIN_MENU_PAGE if no content pages have been shown
    */
   gcc_pure
-  unsigned GetLastContentPage() const {
-    return last_content_page;
-  }
+  unsigned GetLastContentPage() const;
 
   const StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS>
       &GetMainMenuButtons() const { return main_menu_buttons; }

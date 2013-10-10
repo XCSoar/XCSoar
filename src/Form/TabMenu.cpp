@@ -36,8 +36,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
                                const DialogLook &look, const TCHAR * _caption,
                                PixelRect rc,
                                const WindowStyle style)
-  :last_content_page(-1),
-   caption(_caption),
+  :caption(_caption),
    form(_form)
 {
   Create(_parent, rc, style);
@@ -119,7 +118,7 @@ TabMenuControl::OnPageFlipped()
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);
-    const MenuTabIndex di = FindPage(last_content_page);
+    const MenuTabIndex di = FindPage(GetLastContentPage());
     this->GetTabMenuDisplay()->SetSelectedIndex(di);
 
   } else {
@@ -137,7 +136,6 @@ TabMenuControl::OnPageFlipped()
 
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
-  last_content_page = page;
   GetTabMenuDisplay()->SetSelectedIndex(FindPage(page));
 }
 
@@ -165,6 +163,12 @@ TabMenuControl::GetTabHeight() const
 {
   return GetMenuButtonHeight() * TabMenuControl::MAX_MAIN_MENU_ITEMS
       + GetTabLineHeight() * 2;
+}
+
+unsigned
+TabMenuControl::GetLastContentPage() const
+{
+  return GetPageNum(tab_display->GetSelectedIndex());
 }
 
 unsigned
