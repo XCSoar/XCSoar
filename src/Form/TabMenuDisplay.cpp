@@ -48,7 +48,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    dragging(false),
    drag_off_button(false),
    down_index(TabMenuControl::MenuTabIndex::None()),
-   selected_index(TabMenuControl::MenuTabIndex::None())
+   selected_index(0, 0)
 {
   Create(parent, rc, style);
 }

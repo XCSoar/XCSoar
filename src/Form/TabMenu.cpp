@@ -81,9 +81,6 @@ TabMenuControl::HighlightNextMenuItem()
 
  if (page + 1 < GetNumPages()) // don't wrap
    SetLastContentPage(page + 1);
- else
-   if (page >= GetNumPages()) // initial state is menu (page == NunPages)
-     SetLastContentPage(0);
 }
 
 void
