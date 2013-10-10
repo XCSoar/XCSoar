@@ -292,8 +292,6 @@ Save()
   /* save page number for next time this dialog is opened */
   current_page = tab_menu->GetLastContentPage();
 
-  // TODO enhancement: implement a cancel button that skips all this
-  // below after exit.
   bool changed = false;
   tab_menu->Save(changed);
 
