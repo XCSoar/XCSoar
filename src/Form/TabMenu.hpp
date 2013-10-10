@@ -172,10 +172,11 @@ public:
   MenuTabIndex FindPage(unsigned page) const;
 
   gcc_pure
-  MenuTabIndex GetNextPage(MenuTabIndex i) const;
+  unsigned GetPageMainIndex(unsigned page) const {
+    assert(page < GetNumPages());
 
-  gcc_pure
-  MenuTabIndex GetPreviousPage(MenuTabIndex i) const;
+    return pages[page].main_menu_index;
+  }
 
   /**
    * @return true if currently displaying the menu page

@@ -39,14 +39,17 @@ class TabMenuDisplay final : public PaintWindow
 
   /* used to track mouse down/up clicks */
   TabMenuControl::MenuTabIndex down_index;
-  /* used to render which submenu is drawn and which item is highlighted */
-  TabMenuControl::MenuTabIndex selected_index;
+
+  /**
+   * Which page is currently selected by the cursor?
+   */
+  unsigned cursor;
 
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
                  ContainerWindow &parent, PixelRect rc, WindowStyle style);
 
-  void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
+  void SetCursor(unsigned i);
 
 private:
   bool HighlightNext();
@@ -57,7 +60,9 @@ public:
    * Returns index of selected (highlighted) tab
    * @return
    */
-  const TabMenuControl::MenuTabIndex GetSelectedIndex() { return selected_index; }
+  unsigned GetCursor() const {
+    return cursor;
+  }
 
 private:
   TabMenuControl &GetTabMenuBar() {

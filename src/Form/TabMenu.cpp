@@ -139,7 +139,7 @@ TabMenuControl::OnPageFlipped()
 
 void TabMenuControl::SetLastContentPage(unsigned page)
 {
-  GetTabMenuDisplay()->SetSelectedIndex(FindPage(page));
+  GetTabMenuDisplay()->SetCursor(page);
 }
 
 int
@@ -171,7 +171,7 @@ TabMenuControl::GetTabHeight() const
 unsigned
 TabMenuControl::GetLastContentPage() const
 {
-  return GetPageNum(tab_display->GetSelectedIndex());
+  return tab_display->GetCursor();
 }
 
 unsigned
@@ -350,26 +350,6 @@ TabMenuControl::FindPage(unsigned page) const
   const unsigned sub_index = page - first_page_index;
 
   return MenuTabIndex(main_index, sub_index);
-}
-
-TabMenuControl::MenuTabIndex
-TabMenuControl::GetNextPage(MenuTabIndex i) const
-{
-  const unsigned j = GetPageNum(i) + 1;
-  if (j >= GetNumPages())
-    return MenuTabIndex::None();
-
-  return FindPage(j);
-}
-
-TabMenuControl::MenuTabIndex
-TabMenuControl::GetPreviousPage(MenuTabIndex i) const
-{
-  const unsigned j = GetPageNum(i);
-  if (j == 0)
-    return MenuTabIndex::None();
-
-  return FindPage(j - 1);
 }
 
 void
