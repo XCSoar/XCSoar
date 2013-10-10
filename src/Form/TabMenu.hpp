@@ -32,6 +32,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct DialogLook;
+struct TabMenuPage;
 class WndForm;
 class TabMenuDisplay;
 
@@ -45,22 +46,6 @@ class TabMenuDisplay;
  * ToDo: lazy loading of panels (XML and Init() routines)
  */
 class TabMenuControl : public ContainerWindow {
-public:
-
-  /**List of all submenu items in array of PageItem[0 to (n-1)]
-   * The menus must be sorrted by main_menu_index and the order to appear
-   */
-  struct PageItem {
-    const TCHAR *menu_caption;
-
-     /* The main menu page Enter menu page into the array
-      * 0 to (GetNumMainMenuCaptions() - 1) */
-    unsigned main_menu_index;
-
-    Widget *(*Load)();
-  };
-
-private:
   PagerWidget pager;
 
   TabMenuDisplay *tab_display;
@@ -93,12 +78,13 @@ public:
   /**
    * Initializes the menu and buids it from the Menuitem[] array
    *
-   * @param menus[] Array of PageItem elements to be displayed in the menu
+   * @param menus[] array of TabMenuPage elements to be
+   * displayed in the menu
    * @param num_menus Size the menus array
    * @param main_menu_captions Array of captions for main menu items
    * @param num_menu_captions Aize of main_menu_captions array
    */
-  void InitMenu(const PageItem menus[],
+  void InitMenu(const TabMenuPage menus[],
                 unsigned num_menus,
                 const TCHAR *main_menu_captions[],
                 unsigned num_menu_captions);
@@ -146,9 +132,9 @@ private:
    * appends a submenu button to the buttons array and
    * loads it's XML file
    *
-   * @param item The PageItem to be created
+   * @param item the TabMenuPage to be created
    */
-  void CreateSubMenuItem(const PageItem &item);
+  void CreateSubMenuItem(const TabMenuPage &item);
 
 public:
   void NextPage();

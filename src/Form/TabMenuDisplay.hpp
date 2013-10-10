@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABMENU_DISPLAY_HPP
 #define XCSOAR_FORM_TABMENU_DISPLAY_HPP
 
-#include "TabMenu.hpp"
+#include "TabMenuData.hpp"
 #include "TabDisplay.hpp"
 #include "Screen/PaintWindow.hpp"
 
 struct DialogLook;
 class ContainerWindow;
+class TabMenuControl;
 
 class TabMenuDisplay final : public PaintWindow
 {
@@ -123,7 +124,7 @@ class TabMenuDisplay final : public PaintWindow
   StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
-  const TabMenuControl::PageItem *pages;
+  const TabMenuPage *pages;
 
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
@@ -146,13 +147,14 @@ public:
   /**
    * Initializes the menu and buids it from the Menuitem[] array
    *
-   * @param pages_in Array of PageItem elements to be displayed in the menu
+   * @param pages_in array of TabMenuPage elements to be
+   * displayed in the menu
    * @param num_pages Size the menus array
    * @param main_menu_captions Array of captions for main menu items
    * @param num_menu_captions Aize of main_menu_captions array
    */
   void InitMenu(const TCHAR *caption,
-                const TabMenuControl::PageItem pages_in[], unsigned num_pages,
+                const TabMenuPage pages_in[], unsigned num_pages,
                 const TCHAR *main_menu_captions[],
                 unsigned num_menu_captions);
 
@@ -176,14 +178,6 @@ public:
 private:
   unsigned GetNumPages() const {
     return buttons.size();
-  }
-
-  /**
-   *  returns menu item from data array of pages
-   */
-  const TabMenuControl::PageItem &GetPageItem(unsigned page) const {
-    assert(page < GetNumPages());
-    return pages[page];
   }
 
 public:

@@ -130,7 +130,7 @@ TabMenuControl::GetLastContentPage() const
 }
 
 inline void
-TabMenuControl::CreateSubMenuItem(const PageItem &item)
+TabMenuControl::CreateSubMenuItem(const TabMenuPage &item)
 {
   assert(item.Load != nullptr);
 
@@ -139,7 +139,7 @@ TabMenuControl::CreateSubMenuItem(const PageItem &item)
 }
 
 void
-TabMenuControl::InitMenu(const PageItem pages_in[],
+TabMenuControl::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
                          const TCHAR *main_menu_captions[],
                          unsigned num_menu_captions)

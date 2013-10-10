@@ -27,6 +27,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Form/TabMenu.hpp"
+#include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
@@ -90,7 +91,7 @@ const TCHAR *main_menu_captions[] = {
   N_("Setup"),
 };
 
-static constexpr TabMenuControl::PageItem pages[] = {
+static constexpr TabMenuPage pages[] = {
   {N_("Site Files"), 0, CreateSiteConfigPanel },
   {N_("Orientation"), 1, CreateMapDisplayConfigPanel },
   {N_("Elements"), 1, CreateSymbolsConfigPanel },

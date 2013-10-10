@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Form/TabMenuDisplay.hpp"
+#include "TabMenuDisplay.hpp"
+#include "TabMenu.hpp"
 #include "Form/TabDisplay.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
@@ -58,7 +59,7 @@ TabMenuDisplay::~TabMenuDisplay()
 
 void
 TabMenuDisplay::InitMenu(const TCHAR *caption,
-                         const TabMenuControl::PageItem pages_in[],
+                         const TabMenuPage pages_in[],
                          unsigned num_pages,
                          const TCHAR *main_menu_captions[],
                          unsigned num_menu_captions)
