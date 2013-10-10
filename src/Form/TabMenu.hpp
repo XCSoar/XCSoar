@@ -99,13 +99,6 @@ public:
   }
 
   /**
-   * @return number of pages excluding the menu page
-   */
-  unsigned GetNumPages() const{
-    return pager.GetSize() - 1;
-  }
-
-  /**
    * @return last content page shown (0 to (NumPages-1))
    * or MAIN_MENU_PAGE if no content pages have been shown
    */
@@ -117,7 +110,7 @@ private:
    * @return virtual menu page -- one greater than size of the menu array
    */
   unsigned GetMenuPage() const {
-    return GetNumPages();
+    return pager.GetSize() - 1;
   }
 
   /**
