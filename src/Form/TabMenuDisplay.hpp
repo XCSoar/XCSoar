@@ -173,14 +173,6 @@ public:
   }
 
 private:
-  TabMenuControl &GetTabMenuBar() {
-    return menu;
-  }
-
-  const TabMenuControl &GetTabMenuBar() const {
-    return menu;
-  }
-
   const StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS>
       &GetMainMenuButtons() const { return main_menu_buttons; }
 

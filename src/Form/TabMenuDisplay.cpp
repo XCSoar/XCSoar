@@ -334,7 +334,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 
       // sub menu click
       if (di.IsSub())
-        GetTabMenuBar().SetCurrentPage(GetPageNum(di));
+        menu.SetCurrentPage(GetPageNum(di));
 
       // main menu click
       else if (di.IsMain()) {
