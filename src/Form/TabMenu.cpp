@@ -124,9 +124,6 @@ TabMenuControl::OnPageFlipped()
 
   if (page == GetMenuPage()) {
     form.SetCaption(caption);
-    const MenuTabIndex di = FindPage(GetLastContentPage());
-    this->GetTabMenuDisplay()->SetSelectedIndex(di);
-
   } else {
     const PageItem& theitem = GetPageItem(page);
     SetLastContentPage(page);
