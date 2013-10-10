@@ -187,12 +187,6 @@ public:
     SetCurrentPage(GetMenuPage());
   }
 
-  /**
-   * Set the keyboard focus on the menu page.  Switches to the menu
-   * page if necessary.
-   */
-  void FocusMenuPage();
-
   unsigned GetNumMainMenuItems() const {
     return main_menu_buttons.size();
   }

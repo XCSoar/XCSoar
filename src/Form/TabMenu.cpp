@@ -123,24 +123,14 @@ TabMenuControl::InvokeKeyPress(unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    if (IsCurrentPageTheMenu()) {
-      FocusMenuPage();
-      HighlightPreviousMenuItem();
-    } else {
-      PreviousPage();
-    }
+    PreviousPage();
     return true;
 
   case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif
-    if (IsCurrentPageTheMenu()) {
-      FocusMenuPage();
-      HighlightNextMenuItem();
-    } else {
-      NextPage();
-    }
+    NextPage();
     return true;
 
   default:
@@ -383,13 +373,6 @@ TabMenuControl::FindPage(unsigned page) const
   const unsigned sub_index = page - first_page_index;
 
   return MenuTabIndex(main_index, sub_index);
-}
-
-void
-TabMenuControl::FocusMenuPage()
-{
-  GotoMenuPage();
-  tab_display->SetFocus();
 }
 
 void
