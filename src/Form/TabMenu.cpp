@@ -298,19 +298,18 @@ TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
                               const unsigned main_menu_index)
 {
   assert(main_menu_index < MAX_MAIN_MENU_ITEMS);
-  unsigned firstPageIndex = LARGE_VALUE;
-  unsigned subMenuIndex = 0;
 
-  for (unsigned i = 0; i < NumPages; i++) {
-    const PageItem& item = pages_in[i];
-    if (item.main_menu_index == main_menu_index) {
-      firstPageIndex = std::min(i, firstPageIndex);
-      subMenuIndex++;
-    }
+  unsigned first = 0;
+  while (pages_in[first].main_menu_index != main_menu_index) {
+    ++first;
+    assert(first < NumPages);
   }
-  MainMenuButton *b =
-      new MainMenuButton(main_menu_caption, firstPageIndex,
-                            firstPageIndex + subMenuIndex - 1);
+
+  unsigned last = first + 1;
+  while (last < NumPages && pages_in[last].main_menu_index == main_menu_index)
+    ++last;
+
+  MainMenuButton *b = new MainMenuButton(main_menu_caption, first, last - 1);
   main_menu_buttons.append(b);
 }
 
