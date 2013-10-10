@@ -217,7 +217,6 @@ FormKeyDown(unsigned key_code)
       tab_menu->HighlightPreviousMenuItem();
     } else {
       tab_menu->PreviousPage();
-      ((WndButton *)dialog->FindByName(_T("cmdPrev")))->SetFocus();
     }
     return true;
 
@@ -230,7 +229,6 @@ FormKeyDown(unsigned key_code)
       tab_menu->HighlightNextMenuItem();
     } else {
       tab_menu->NextPage();
-      ((WndButton *)dialog->FindByName(_T("cmdNext")))->SetFocus();
     }
     return true;
 
