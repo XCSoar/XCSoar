@@ -81,14 +81,14 @@ static WndForm *dialog = NULL;
 
 static TabMenuControl* tab_menu = NULL;
 
-const TCHAR *main_menu_captions[] = {
-  N_("Site Files"),
-  N_("Map Display"),
-  N_("Glide Computer"),
-  N_("Gauges"),
-  N_("Task Defaults"),
-  N_("Look"),
-  N_("Setup"),
+static constexpr TabMenuGroup main_menu_captions[] = {
+  { N_("Site Files"), },
+  { N_("Map Display"), },
+  { N_("Glide Computer"), },
+  { N_("Gauges"), },
+  { N_("Task Defaults"), },
+  { N_("Look"), },
+  { N_("Setup"), },
 };
 
 static constexpr TabMenuPage pages[] = {

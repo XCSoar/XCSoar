@@ -28,6 +28,10 @@ Copyright_License {
 
 class Widget;
 
+struct TabMenuGroup {
+  const TCHAR *caption;
+};
+
 /**
  * List of all submenu items in array of MenuPageDescription[0 to
  * (n-1)].  The menus must be sorted by main_menu_index and the order

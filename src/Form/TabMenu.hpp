@@ -33,6 +33,7 @@ Copyright_License {
 
 struct DialogLook;
 struct TabMenuPage;
+struct TabMenuGroup;
 class WndForm;
 class TabMenuDisplay;
 
@@ -81,13 +82,10 @@ public:
    * @param menus[] array of TabMenuPage elements to be
    * displayed in the menu
    * @param num_menus Size the menus array
-   * @param main_menu_captions Array of captions for main menu items
-   * @param num_menu_captions Aize of main_menu_captions array
    */
   void InitMenu(const TabMenuPage menus[],
                 unsigned num_menus,
-                const TCHAR *main_menu_captions[],
-                unsigned num_menu_captions);
+                const TabMenuGroup groups[], unsigned n_groups);
 
   /**
    * @return true if currently displaying the menu page

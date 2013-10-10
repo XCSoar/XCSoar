@@ -141,11 +141,11 @@ TabMenuControl::CreateSubMenuItem(const TabMenuPage &item)
 void
 TabMenuControl::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
-                         const TCHAR *main_menu_captions[],
-                         unsigned num_menu_captions)
+                         const TabMenuGroup groups[], unsigned n_groups)
 {
   assert(pages_in);
-  assert(main_menu_captions);
+  assert(groups != nullptr);
+  assert(n_groups > 0);
 
   for (unsigned i = 0; i < num_pages; ++i)
     CreateSubMenuItem(pages_in[i]);
@@ -153,7 +153,7 @@ TabMenuControl::InitMenu(const TabMenuPage pages_in[],
   pager.Add(new WindowWidget(tab_display));
 
   tab_display->InitMenu(caption, pages_in, num_pages,
-                        main_menu_captions, num_menu_captions);
+                        groups, n_groups);
 }
 
 void

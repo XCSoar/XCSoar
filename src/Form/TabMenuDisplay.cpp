@@ -61,15 +61,14 @@ void
 TabMenuDisplay::InitMenu(const TCHAR *caption,
                          const TabMenuPage pages_in[],
                          unsigned num_pages,
-                         const TCHAR *main_menu_captions[],
-                         unsigned num_menu_captions)
+                         const TabMenuGroup groups[], unsigned n_groups)
 {
   pages = pages_in;
 
   for (unsigned i = 0; i < num_pages; ++i)
     AddMenuItem(pages_in[i].menu_caption);
 
-  for (unsigned i = 0; i < num_menu_captions; i++) {
+  for (unsigned i = 0; i < n_groups; i++) {
     unsigned first = 0;
     while (pages_in[first].main_menu_index != i) {
       ++first;
@@ -80,7 +79,7 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
     while (last < num_pages && pages_in[last].main_menu_index == i)
       ++last;
 
-    AddMenu(main_menu_captions[i], first, last - 1, i);
+    AddMenu(groups[i].caption, first, last - 1, i);
   }
 
   UpdateLayout();
