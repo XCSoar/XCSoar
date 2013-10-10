@@ -147,7 +147,7 @@ TabMenuDisplay::UpdateLayout()
   }
 }
 
-const PixelRect &
+inline const PixelRect &
 TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
 {
   assert(!i.IsNone());
