@@ -49,6 +49,11 @@ public:
 
   void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 
+private:
+  bool HighlightNext();
+  bool HighlightPrevious();
+
+public:
   unsigned GetTabHeight() const {
     return this->GetHeight();
   }

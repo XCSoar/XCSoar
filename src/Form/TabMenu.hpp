@@ -171,6 +171,12 @@ public:
   gcc_pure
   MenuTabIndex FindPage(unsigned page) const;
 
+  gcc_pure
+  MenuTabIndex GetNextPage(MenuTabIndex i) const;
+
+  gcc_pure
+  MenuTabIndex GetPreviousPage(MenuTabIndex i) const;
+
   /**
    * @return true if currently displaying the menu page
    */
@@ -360,16 +366,6 @@ public:
    * @param page
    */
   void SetLastContentPage(unsigned page);
-
-  /**
-   * if displaying the menu page, will select/highlight the next menu item
-   */
-  void HighlightNextMenuItem();
-
-  /**
-   * if displaying the menu page, will select/highlight the previous menu item
-   */
-  void HighlightPreviousMenuItem();
 
 protected:
   /* virtual methods from Window */

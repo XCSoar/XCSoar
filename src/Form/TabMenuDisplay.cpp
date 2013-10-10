@@ -73,6 +73,28 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
   selected_index = di;
 }
 
+inline bool
+TabMenuDisplay::HighlightNext()
+{
+  auto i = menu.GetNextPage(selected_index);
+  if (i.IsNone())
+    return false;
+
+  SetSelectedIndex(i);
+  return true;
+}
+
+inline bool
+TabMenuDisplay::HighlightPrevious()
+{
+  auto i = menu.GetPreviousPage(selected_index);
+  if (i.IsNone())
+    return false;
+
+  SetSelectedIndex(i);
+  return true;
+}
+
 bool
 TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 {
@@ -102,14 +124,14 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    menu.HighlightNextMenuItem();
+    HighlightNext();
     return true;
 
   case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
-    menu.HighlightPreviousMenuItem();
+    HighlightPrevious();
     return true;
 
   default:
