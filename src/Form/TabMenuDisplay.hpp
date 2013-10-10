@@ -70,12 +70,6 @@ private:
 
   void DragEnd();
 
-  /**
-   * @return Rect of button holding down pointer capture
-   */
-  gcc_pure
-  const PixelRect &GetDownButtonRC() const;
-
 protected:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;

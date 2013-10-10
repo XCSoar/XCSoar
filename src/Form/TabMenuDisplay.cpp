@@ -196,26 +196,13 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 }
 
-const PixelRect&
-TabMenuDisplay::GetDownButtonRC() const
-{
-  const TabMenuControl &tb = GetTabMenuBar();
-
-  if (down_index.IsSub()) {
-    int page = tb.GetPageNum(down_index);
-    return tb.GetSubMenuButtonSize(page);
-  }
-  else
-    return tb.GetMainMenuButtonSize(down_index.main_index);
-}
-
 bool
 TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (down_index.IsNone())
     return false;
 
-  const PixelRect rc = GetDownButtonRC();
+  const PixelRect rc = GetTabMenuBar().GetButtonPosition(down_index);
   const bool tmp = !rc.IsInside({x, y});
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
