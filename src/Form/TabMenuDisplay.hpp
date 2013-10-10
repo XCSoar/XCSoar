@@ -30,14 +30,13 @@ Copyright_License {
 struct DialogLook;
 class ContainerWindow;
 
-class TabMenuDisplay : public PaintWindow
+class TabMenuDisplay final : public PaintWindow
 {
   TabMenuControl &menu;
   const DialogLook &look;
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
 
-public:
   /* used to track mouse down/up clicks */
   TabMenuControl::MenuTabIndex down_index;
   /* used to render which submenu is drawn and which item is highlighted */
@@ -68,7 +67,7 @@ public:
    */
   const TabMenuControl::MenuTabIndex GetSelectedIndex() { return selected_index; }
 
-protected:
+private:
   TabMenuControl &GetTabMenuBar() {
     return menu;
   }
@@ -85,6 +84,7 @@ protected:
   gcc_pure
   const PixelRect &GetDownButtonRC() const;
 
+protected:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;
@@ -102,6 +102,7 @@ protected:
   virtual void OnKillFocus() override;
   virtual void OnSetFocus() override;
 
+private:
   /**
    * draw border around main menu
    */
