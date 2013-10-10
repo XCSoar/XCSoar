@@ -113,11 +113,9 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 bool
 TabMenuDisplay::OnKeyDown(unsigned key_code)
 {
-  const unsigned page = menu.GetPageNum(selected_index);
-
   switch (key_code) {
   case KEY_RETURN:
-    menu.SetCurrentPage(page);
+    menu.SetCurrentPage(selected_index);
     return true;
 
   case KEY_RIGHT:
