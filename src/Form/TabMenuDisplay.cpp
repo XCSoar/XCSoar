@@ -81,8 +81,6 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
 
     AddMenu(main_menu_captions[i], first, last - 1, i);
   }
-
-  buttons.append(new SubMenuButton(caption));
 }
 
 int
