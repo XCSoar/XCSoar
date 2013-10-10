@@ -80,8 +80,7 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
 int
 TabMenuDisplay::GetPageNum(MenuTabIndex i) const
 {
-  if (!i.IsSub())
-    return menu.GetMenuPage();
+  assert(i.IsSub());
 
   assert(i.main_index < main_menu_buttons.size());
   assert(i.sub_index < GetNumPages());

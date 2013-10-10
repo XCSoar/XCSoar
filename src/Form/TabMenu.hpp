@@ -117,7 +117,7 @@ public:
   gcc_pure
   unsigned GetLastContentPage() const;
 
-public:
+private:
   /**
    * @return virtual menu page -- one greater than size of the menu array
    */
@@ -125,7 +125,6 @@ public:
     return GetNumPages();
   }
 
-private:
   /**
    * appends a submenu button to the buttons array and
    * loads it's XML file

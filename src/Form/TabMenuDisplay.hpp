@@ -205,7 +205,6 @@ public:
    * @MainMenuIndex Index from main menu
    * @SubMenuIndex Index within submenu
    * returns page number of selected sub menu item base on menus indexes
-   *  or GetMenuPage() if index is not a valid page
    */
   gcc_pure
   int GetPageNum(MenuTabIndex i) const;
