@@ -334,7 +334,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   if (down_index.IsNone())
     return false;
 
-  const PixelRect rc = GetButtonPosition(down_index);
+  const PixelRect &rc = GetButtonPosition(down_index);
   const bool tmp = !rc.IsInside({x, y});
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
