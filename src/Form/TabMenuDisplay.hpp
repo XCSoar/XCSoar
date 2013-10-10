@@ -51,17 +51,10 @@ class TabMenuDisplay final : public PaintWindow
     PixelRect rc;
 
     /* index to Pages array of first page in submenu */
-    const unsigned first_page_index;
+    unsigned first_page_index;
 
     /* index to Pages array of last page in submenu */
-    const unsigned last_page_index;
-
-    MainMenuButton(unsigned _first_page_index,
-                   unsigned _last_page_index)
-      :first_page_index(_first_page_index),
-       last_page_index(_last_page_index)
-    {
-    }
+    unsigned last_page_index;
 
     unsigned NumSubMenus() const {
       return last_page_index - first_page_index + 1;
@@ -115,10 +108,10 @@ class TabMenuDisplay final : public PaintWindow
   TabMenuControl &menu;
   const DialogLook &look;
 
-  StaticArray<SubMenuButton *, 32> buttons;
+  StaticArray<SubMenuButton, 32> buttons;
 
   /* holds info and buttons for the main menu.  not on child menus */
-  StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
+  StaticArray<MainMenuButton, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
   /* holds pointer to array of menus info (must be sorted by MenuGroup) */
   const TabMenuPage *pages;
@@ -141,7 +134,6 @@ class TabMenuDisplay final : public PaintWindow
 public:
   TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
                  ContainerWindow &parent, PixelRect rc, WindowStyle style);
-  virtual ~TabMenuDisplay();
 
   /**
    * Initializes the menu and buids it from the Menuitem[] array
@@ -224,11 +216,13 @@ private:
     assert(main_menu_index == main_menu_buttons.size());
     assert(main_menu_index < MAX_MAIN_MENU_ITEMS);
 
-    main_menu_buttons.append(new MainMenuButton(first, last));
+    MainMenuButton &b = main_menu_buttons.append();
+    b.first_page_index = first;
+    b.last_page_index = last;
   }
 
   void AddMenuItem() {
-    buttons.append(new SubMenuButton());
+    buttons.append();
   }
 
   gcc_pure
@@ -241,9 +235,8 @@ private:
   gcc_pure
   const MainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
     assert(main_menu_index < main_menu_buttons.size());
-    assert(main_menu_buttons[main_menu_index] != nullptr);
 
-    return *main_menu_buttons[main_menu_index];
+    return main_menu_buttons[main_menu_index];
   }
 
   /**
@@ -255,7 +248,7 @@ private:
    */
   gcc_pure
   const PixelRect &GetSubMenuButtonSize(unsigned i) const {
-    return buttons[i]->rc;
+    return buttons[i].rc;
   }
 
   /**
@@ -267,7 +260,7 @@ private:
    */
   gcc_pure
   const PixelRect &GetMainMenuButtonSize(unsigned i) const {
-    return main_menu_buttons[i]->rc;
+    return main_menu_buttons[i].rc;
   }
 
   /**
@@ -277,9 +270,8 @@ private:
   gcc_pure
   const SubMenuButton &GetSubMenuButton(unsigned page) const {
     assert(page < GetNumPages() && page < buttons.size());
-    assert(buttons[page] != nullptr);
 
-    return *buttons[page];
+    return buttons[page];
   }
 
   /**

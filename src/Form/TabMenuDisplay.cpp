@@ -48,15 +48,6 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
   Create(parent, rc, style);
 }
 
-TabMenuDisplay::~TabMenuDisplay()
-{
-  for (const auto i : buttons)
-    delete i;
-
-  for (const auto i : main_menu_buttons)
-    delete i;
-}
-
 void
 TabMenuDisplay::InitMenu(const TCHAR *caption,
                          const TabMenuPage pages_in[],
@@ -120,7 +111,7 @@ TabMenuDisplay::UpdateLayout()
 
   for (unsigned main_i = 0, main_y = border_width;
        main_i < main_menu_buttons.size(); ++main_i) {
-    MainMenuButton &main = *main_menu_buttons[main_i];
+    MainMenuButton &main = main_menu_buttons[main_i];
     main.rc.left = 0;
     main.rc.right = menu_button_width;
     main.rc.top = main_y;
@@ -136,7 +127,7 @@ TabMenuDisplay::UpdateLayout()
 
     for (unsigned page_i = main.first_page_index;
          page_i <= main.last_page_index; ++page_i) {
-      SubMenuButton &page = *buttons[page_i];
+      SubMenuButton &page = buttons[page_i];
 
       page.rc.left = menu_button_width + border_width;
       page.rc.right = page.rc.left + menu_button_width;
