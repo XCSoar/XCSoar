@@ -367,7 +367,6 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
        ++i, ++main_menu_index) {
     const MainMenuButton &button = **i;
 
-    bool inverse = false;
     const bool isDown = main_menu_index == down_index.main_index &&
       !down_index.IsSub() && !drag_off_button;
 
@@ -382,7 +381,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
 
     const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
-                            NULL, isDown, inverse);
+                            NULL, isDown, false);
   }
 }
 
@@ -418,8 +417,6 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
     const SubMenuButton &button = GetSubMenuButton(page_index);
     const unsigned sub_index = page_index - first_page_index;
 
-    bool inverse = false;
-
     const bool is_pressed = sub_index == down_index.sub_index &&
       !drag_off_button;
 
@@ -435,7 +432,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
     const PixelRect &rc = GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             NULL, is_cursor,
-                            inverse);
+                            false);
   }
 }
 
