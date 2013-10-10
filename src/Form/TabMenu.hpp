@@ -60,11 +60,11 @@ public:
     Widget *(*Load)();
   };
 
-  enum tab_menu_values {  // fix indent
-      MAX_MAIN_MENU_ITEMS = 7, // excludes "Main Menu" which is a "super menu"
-      LARGE_VALUE = 1000,
-      MAIN_MENU_PAGE = 999,
-  };
+  /* excludes "Main Menu" which is a "super menu" */
+  static constexpr unsigned MAX_MAIN_MENU_ITEMS = 7;
+
+  static constexpr unsigned LARGE_VALUE = 1000;
+  static constexpr unsigned MAIN_MENU_PAGE = 999;
 
   /* internally used structure for tracking menu down and selection status */
   struct MenuTabIndex {
