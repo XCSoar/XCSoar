@@ -85,22 +85,6 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
   buttons.append(new SubMenuButton(caption));
 }
 
-TabMenuDisplay::MenuTabIndex
-TabMenuDisplay::FindPage(unsigned page) const
-{
-  if (page >= GetNumPages())
-    return MenuTabIndex::None();
-
-  const unsigned main_index = pages[page].main_menu_index;
-  const unsigned first_page_index =
-    main_menu_buttons[main_index]->first_page_index;
-  assert(page >= first_page_index);
-  assert(page <= main_menu_buttons[main_index]->last_page_index);
-  const unsigned sub_index = page - first_page_index;
-
-  return MenuTabIndex(main_index, sub_index);
-}
-
 int
 TabMenuDisplay::GetPageNum(MenuTabIndex i) const
 {
@@ -322,9 +306,7 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   // If possible -> Give focus to the Control
   SetFocus();
 
-  const MenuTabIndex selected_index = FindPage(cursor);
-
-  down_index = IsPointOverButton(Pos, selected_index.main_index);
+  down_index = IsPointOverButton(Pos, GetPageMainIndex(cursor));
 
   if (!down_index.IsNone()) {
     dragging = true;
@@ -346,8 +328,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
   if (dragging) {
     DragEnd();
 
-    const MenuTabIndex selected_index = FindPage(cursor);
-    const MenuTabIndex di = IsPointOverButton(Pos, selected_index.main_index);
+    const MenuTabIndex di = IsPointOverButton(Pos, GetPageMainIndex(cursor));
 
     if (di == down_index) {
 

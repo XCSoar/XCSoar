@@ -224,12 +224,6 @@ public:
   }
 
   /**
-   * Locate the page index in the menu.
-   */
-  gcc_pure
-  MenuTabIndex FindPage(unsigned page) const;
-
-  /**
    * Looks up the page id from the menu table
    * based on the main menu and sub menu index parameters
    *
