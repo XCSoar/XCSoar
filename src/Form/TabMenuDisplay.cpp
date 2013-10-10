@@ -33,12 +33,6 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
-static unsigned
-GetTabLineHeight()
-{
-  return Layout::Scale(1);
-}
-
 TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
                                const DialogLook &_look,
                                ContainerWindow &parent, PixelRect rc,
@@ -47,10 +41,192 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    look(_look),
    dragging(false),
    drag_off_button(false),
-   down_index(TabMenuControl::MenuTabIndex::None()),
+   down_index(MenuTabIndex::None()),
    cursor(0)
 {
   Create(parent, rc, style);
+}
+
+TabMenuDisplay::~TabMenuDisplay()
+{
+  for (const auto i : buttons)
+    delete i;
+
+  for (const auto i : main_menu_buttons)
+    delete i;
+}
+
+void
+TabMenuDisplay::InitMenu(const TCHAR *caption,
+                         const TabMenuControl::PageItem pages_in[],
+                         unsigned num_pages,
+                         const TCHAR *main_menu_captions[],
+                         unsigned num_menu_captions)
+{
+  pages = pages_in;
+
+  for (unsigned i = 0; i < num_pages; ++i)
+    AddMenuItem(pages_in[i].menu_caption);
+
+  for (unsigned i = 0; i < num_menu_captions; i++) {
+    unsigned first = 0;
+    while (pages_in[first].main_menu_index != i) {
+      ++first;
+      assert(first < num_pages);
+    }
+
+    unsigned last = first + 1;
+    while (last < num_pages && pages_in[last].main_menu_index == i)
+      ++last;
+
+    AddMenu(main_menu_captions[i], first, last - 1, i);
+  }
+
+  buttons.append(new SubMenuButton(caption));
+}
+
+TabMenuDisplay::MenuTabIndex
+TabMenuDisplay::FindPage(unsigned page) const
+{
+  if (page >= GetNumPages())
+    return MenuTabIndex::None();
+
+  const unsigned main_index = pages[page].main_menu_index;
+  const unsigned first_page_index =
+    main_menu_buttons[main_index]->first_page_index;
+  assert(page >= first_page_index);
+  assert(page <= main_menu_buttons[main_index]->last_page_index);
+  const unsigned sub_index = page - first_page_index;
+
+  return MenuTabIndex(main_index, sub_index);
+}
+
+int
+TabMenuDisplay::GetPageNum(MenuTabIndex i) const
+{
+  if (!i.IsSub())
+    return menu.GetMenuPage();
+
+  assert(i.main_index < main_menu_buttons.size());
+  assert(i.sub_index < GetNumPages());
+
+  const MainMenuButton &main_button = GetMainMenuButton(i.main_index);
+  return main_button.first_page_index + i.sub_index;
+}
+
+static unsigned
+GetTabLineHeight()
+{
+  return Layout::Scale(1);
+}
+
+unsigned
+TabMenuDisplay::GetTabHeight() const
+{
+  return GetMenuButtonHeight() * MAX_MAIN_MENU_ITEMS + GetTabLineHeight() * 2;
+}
+
+unsigned
+TabMenuDisplay::GetMenuButtonHeight() const
+{
+  return std::min(Layout::GetMaximumControlHeight(),
+                  unsigned(GetHeight()) / 7u);
+}
+
+unsigned
+TabMenuDisplay::GetMenuButtonWidth() const
+{
+  return (GetWidth() - GetTabLineHeight()) / 2;
+}
+
+const PixelRect&
+TabMenuDisplay::GetMainMenuButtonSize(unsigned i) const
+{
+  assert(i < main_menu_buttons.size());
+
+  if (main_menu_buttons[i]->rc.left < main_menu_buttons[i]->rc.right)
+    return main_menu_buttons[i]->rc;
+  PixelRect &rc = main_menu_buttons[i]->rc;
+  const unsigned margin = Layout::Scale(1);
+  const unsigned finalmargin = Layout::Scale(1);
+  const unsigned butHeight = GetMenuButtonHeight();
+  rc.top = finalmargin + (margin + butHeight) * i;
+  rc.bottom = rc.top + butHeight;
+
+  rc.left = 0;
+  rc.right = GetMenuButtonWidth();
+
+  return main_menu_buttons[i]->rc;
+}
+
+const PixelRect&
+TabMenuDisplay::GetSubMenuButtonSize(unsigned page) const
+{
+  assert(page < buttons.size());
+
+  if (buttons[page]->rc.left < buttons[page]->rc.right)
+    return buttons[page]->rc;
+
+  const TabMenuControl::PageItem &item = GetPageItem(page);
+  const MainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
+  const unsigned sub_index = page - main_button.first_page_index;
+
+  PixelRect &rc = buttons[page]->rc;
+
+  const unsigned margin = Layout::Scale(1);
+  const unsigned finalmargin = Layout::Scale(1);
+  const unsigned subMenuItemCount = main_button.NumSubMenus();
+  const unsigned tabHeight = GetTabHeight();
+  const unsigned butHeight = GetMenuButtonHeight();
+  const unsigned itemHeight = butHeight + margin;
+  const unsigned SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
+  const unsigned topMainMenuItem = item.main_menu_index * itemHeight +
+      finalmargin;
+  const unsigned offset = Layout::Scale(2);
+  const unsigned topMainMenuItemWOffset = topMainMenuItem + offset;
+  const unsigned subMenuTop =
+      (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
+       topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
+
+  rc.top = subMenuTop + sub_index * itemHeight;
+  rc.bottom = rc.top + butHeight;
+
+  rc.left = GetMenuButtonWidth() + GetTabLineHeight();
+  rc.right = rc.left + GetMenuButtonWidth();
+
+  return buttons[page]->rc;
+}
+
+const PixelRect &
+TabMenuDisplay::GetButtonPosition(MenuTabIndex i) const
+{
+  assert(!i.IsNone());
+
+  return i.IsMain()
+    ? GetMainMenuButtonSize(i.main_index)
+    : GetSubMenuButtonSize(GetPageNum(i));
+}
+
+TabMenuDisplay::MenuTabIndex
+TabMenuDisplay::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
+{
+  // scan main menu buttons
+  for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
+    if (GetMainMenuButtonSize(i).IsInside(Pos))
+      return MenuTabIndex(i);
+
+
+  // scan visible submenu
+  if (mainIndex < GetNumMainMenuItems()) {
+    const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
+    for (unsigned i = main_button.first_page_index;
+         i <= main_button.last_page_index; ++i) {
+      if (GetSubMenuButtonSize(i).IsInside(Pos))
+        return MenuTabIndex(mainIndex, i - main_button.first_page_index);
+    }
+  }
+
+  return MenuTabIndex::None();
 }
 
 void
@@ -60,9 +236,9 @@ TabMenuDisplay::SetCursor(unsigned i)
     return;
 
   if (SupportsPartialRedraw() &&
-      menu.GetPageMainIndex(cursor) == menu.GetPageMainIndex(i)) {
-    Invalidate(menu.GetSubMenuButtonSize(cursor));
-    Invalidate(menu.GetSubMenuButtonSize(i));
+      GetPageMainIndex(cursor) == GetPageMainIndex(i)) {
+    Invalidate(GetSubMenuButtonSize(cursor));
+    Invalidate(GetSubMenuButtonSize(i));
   } else
     Invalidate();
 
@@ -73,7 +249,7 @@ inline bool
 TabMenuDisplay::HighlightNext()
 {
   const unsigned i = cursor + 1;
-  if (i >= menu.GetNumPages())
+  if (i >= GetNumPages())
     return false;
 
   SetCursor(i);
@@ -87,7 +263,7 @@ TabMenuDisplay::HighlightPrevious()
     return false;
 
   const unsigned i = cursor - 1;
-  assert(i < menu.GetNumPages());
+  assert(i < GetNumPages());
 
   SetCursor(i);
   return true;
@@ -146,10 +322,9 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   // If possible -> Give focus to the Control
   SetFocus();
 
-  const TabMenuControl::MenuTabIndex selected_index = menu.FindPage(cursor);
+  const MenuTabIndex selected_index = FindPage(cursor);
 
-  down_index = GetTabMenuBar().IsPointOverButton(Pos,
-                                                selected_index.main_index);
+  down_index = IsPointOverButton(Pos, selected_index.main_index);
 
   if (!down_index.IsNone()) {
     dragging = true;
@@ -171,28 +346,27 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
   if (dragging) {
     DragEnd();
 
-    const TabMenuControl::MenuTabIndex selected_index = menu.FindPage(cursor);
-    const TabMenuControl::MenuTabIndex di =
-        GetTabMenuBar().IsPointOverButton(Pos, selected_index.main_index);
+    const MenuTabIndex selected_index = FindPage(cursor);
+    const MenuTabIndex di = IsPointOverButton(Pos, selected_index.main_index);
 
     if (di == down_index) {
 
       // sub menu click
       if (di.IsSub())
-        GetTabMenuBar().SetCurrentPage(di);
+        GetTabMenuBar().SetCurrentPage(GetPageNum(di));
 
       // main menu click
       else if (di.IsMain() && selected_index != down_index) {
         /* move cursor to first item in this menu */
-        const TabMenuControl::MenuTabIndex first(di.main_index, 0);
-        cursor = menu.GetPageNum(first);
+        const MenuTabIndex first(di.main_index, 0);
+        cursor = GetPageNum(first);
         Invalidate();
       } else {
         InvalidateButton(down_index);
       }
     }
 
-    down_index = TabMenuControl::MenuTabIndex::None();
+    down_index = MenuTabIndex::None();
 
     return true;
   } else {
@@ -206,7 +380,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   if (down_index.IsNone())
     return false;
 
-  const PixelRect rc = GetTabMenuBar().GetButtonPosition(down_index);
+  const PixelRect rc = GetButtonPosition(down_index);
   const bool tmp = !rc.IsInside({x, y});
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
@@ -218,12 +392,11 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 {
-  const TabMenuControl &tb = GetTabMenuBar();
   const unsigned bwidth = GetTabLineHeight();
 
-  const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
-  const unsigned menuBottom = tb.GetMainMenuButtonSize(
-      tb.GetNumMainMenuItems() - 1).bottom;
+  const PixelRect rcFirst = GetMainMenuButtonSize(0);
+  const unsigned menuBottom =
+    GetMainMenuButtonSize(GetNumMainMenuItems() - 1).bottom;
   const PixelRect rcBlackBorder(rcFirst.left - bwidth, rcFirst.top - bwidth,
                                 rcFirst.right + bwidth, menuBottom + bwidth);
 
@@ -234,14 +407,13 @@ void
 TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                    const unsigned CaptionStyle) const
 {
-  const TabMenuControl &tb = GetTabMenuBar();
   PaintMainMenuBorder(canvas);
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
 
   unsigned main_menu_index = 0;
-  for (auto i = tb.GetMainMenuButtons().begin(),
-         end = tb.GetMainMenuButtons().end(); i != end;
+  for (auto i = GetMainMenuButtons().begin(),
+         end = GetMainMenuButtons().end(); i != end;
        ++i, ++main_menu_index) {
     const MainMenuButton &button = **i;
 
@@ -250,7 +422,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
       !down_index.IsSub() && !drag_off_button;
 
     const bool is_selected = isDown ||
-      main_menu_index == menu.GetPageMainIndex(cursor);
+      main_menu_index == GetPageMainIndex(cursor);
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
                                                isDown));
@@ -258,7 +430,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                                            is_focused,
                                                            isDown));
 
-    const PixelRect &rc = tb.GetMainMenuButtonSize(main_menu_index);
+    const PixelRect &rc = GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             NULL, isDown, inverse);
   }
@@ -268,11 +440,10 @@ void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
                                    const MainMenuButton &main_button) const
 {
-  const TabMenuControl &tb = GetTabMenuBar();
   const unsigned bwidth = GetTabLineHeight();
   const unsigned subTop =
-    tb.GetSubMenuButtonSize(main_button.first_page_index).top;
-  const PixelRect bLast = tb.GetSubMenuButtonSize(main_button.last_page_index);
+    GetSubMenuButtonSize(main_button.first_page_index).top;
+  const PixelRect bLast = GetSubMenuButtonSize(main_button.last_page_index);
   const PixelRect rcBlackBorder(bLast.left - bwidth, subTop - bwidth,
                                 bLast.right + bwidth, bLast.bottom + bwidth);
 
@@ -283,15 +454,13 @@ void
 TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
                                   const unsigned CaptionStyle) const
 {
-  const TabMenuControl &tb = GetTabMenuBar();
-
   const MainMenuButton &main_button =
-    tb.GetMainMenuButton(menu.GetPageMainIndex(cursor));
+    GetMainMenuButton(GetPageMainIndex(cursor));
 
   PaintSubMenuBorder(canvas, main_button);
 
-  assert(main_button.first_page_index < tb.GetTabButtons().size());
-  assert(main_button.last_page_index < tb.GetTabButtons().size());
+  assert(main_button.first_page_index < buttons.size());
+  assert(main_button.last_page_index < buttons.size());
 
   const bool is_focused = !HasCursorKeys() || HasFocus();
 
@@ -299,7 +468,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
          last_page_index = main_button.last_page_index,
          page_index = first_page_index;
        page_index <= last_page_index; ++page_index) {
-    const SubMenuButton &button = tb.GetSubMenuButton(page_index);
+    const SubMenuButton &button = GetSubMenuButton(page_index);
     const unsigned sub_index = page_index - first_page_index;
 
     bool inverse = false;
@@ -316,7 +485,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
                                                            is_focused,
                                                            is_pressed));
 
-    const PixelRect &rc = tb.GetSubMenuButtonSize(page_index);
+    const PixelRect &rc = GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
                             NULL, is_cursor,
                             inverse);

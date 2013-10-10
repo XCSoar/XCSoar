@@ -25,15 +25,15 @@ Copyright_License {
 #define XCSOAR_FORM_TABMENU_HPP
 
 #include "Util/StaticArray.hpp"
+#include "Util/StaticString.hpp"
 #include "Widget/PagerWidget.hpp"
-#include "Form/TabDisplay.hpp"
 #include "Screen/ContainerWindow.hpp"
+
+#include <tchar.h>
 
 struct DialogLook;
 class WndForm;
 class TabMenuDisplay;
-class SubMenuButton;
-class MainMenuButton;
 
 /** TabMenuControl is a two-level menu structure.
  * The menu items are linked to Tab panels
@@ -60,68 +60,10 @@ public:
     Widget *(*Load)();
   };
 
-  /* excludes "Main Menu" which is a "super menu" */
-  static constexpr unsigned MAX_MAIN_MENU_ITEMS = 7;
-
-  static constexpr unsigned LARGE_VALUE = 1000;
-  static constexpr unsigned MAIN_MENU_PAGE = 999;
-
-  /* internally used structure for tracking menu down and selection status */
-  struct MenuTabIndex {
-    static constexpr unsigned NO_MAIN_MENU = 997;
-    static constexpr unsigned NO_SUB_MENU = 998;
-
-    unsigned main_index;
-    unsigned sub_index;
-
-    constexpr
-    explicit MenuTabIndex(unsigned mainNum, unsigned subNum=NO_SUB_MENU)
-      :main_index(mainNum), sub_index(subNum) {}
-
-    constexpr
-    static MenuTabIndex None() {
-      return MenuTabIndex(NO_MAIN_MENU, NO_SUB_MENU);
-    }
-
-    constexpr
-    bool IsNone() const {
-      return main_index == NO_MAIN_MENU;
-    }
-
-    constexpr
-    bool IsMain() const {
-      return main_index != NO_MAIN_MENU && sub_index == NO_SUB_MENU;
-    }
-
-    constexpr
-    bool IsSub() const {
-      return sub_index != NO_SUB_MENU;
-    }
-
-    constexpr
-    bool operator==(const MenuTabIndex &other) const {
-      return main_index == other.main_index &&
-        sub_index == other.sub_index;
-    }
-
-    constexpr
-    bool operator!=(const MenuTabIndex &other) const {
-      return !(*this == other);
-    }
-  };
-
-protected:
+private:
   PagerWidget pager;
 
-  StaticArray<SubMenuButton *, 32> buttons;
-
-  /* holds info and buttons for the main menu.  not on child menus */
-  StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
-
   TabMenuDisplay *tab_display;
-
-  /* holds pointer to array of menus info (must be sorted by MenuGroup) */
-  PageItem const *pages;
 
   StaticString<256u> caption;
 
@@ -144,10 +86,6 @@ public:
     pager.Move(GetClientRect());
   }
 
-  const StaticArray<SubMenuButton *, 32> &GetTabButtons() const {
-    return buttons;
-  }
-
 private:
   void OnPageFlipped();
 
@@ -166,24 +104,11 @@ public:
                 unsigned num_menu_captions);
 
   /**
-   * Locate the page index in the menu.
-   */
-  gcc_pure
-  MenuTabIndex FindPage(unsigned page) const;
-
-  gcc_pure
-  unsigned GetPageMainIndex(unsigned page) const {
-    assert(page < GetNumPages());
-
-    return pages[page].main_menu_index;
-  }
-
-  /**
    * @return true if currently displaying the menu page
    */
   gcc_pure
   bool IsCurrentPageTheMenu() const {
-    return GetCurrentPage() == GetMenuPage();
+    return pager.GetCurrentIndex() == GetMenuPage();
   }
 
   /**
@@ -194,65 +119,6 @@ public:
     SetCurrentPage(GetMenuPage());
   }
 
-  unsigned GetNumMainMenuItems() const {
-    return main_menu_buttons.size();
-  }
-
-  /**
-   * Calculates and caches the size and position of ith sub menu button
-   * All menus (landscape or portrait) are drawn vertically
-   * @param i Index of button
-   * @return Rectangle of button coordinates,
-   *   or {0,0,0,0} if index out of bounds
-   */
-  gcc_pure
-  const PixelRect &GetSubMenuButtonSize(unsigned i) const;
-
-  /**
-   * Calculates and caches the size and position of ith main menu button
-   * All menus (landscape or portrait) are drawn vertically
-   * @param i Index of button
-   * @return Rectangle of button coordinates,
-   *   or {0,0,0,0} if index out of bounds
-   */
-  gcc_pure
-  const PixelRect &GetMainMenuButtonSize(unsigned i) const;
-
-  gcc_pure
-  const PixelRect &GetButtonPosition(MenuTabIndex i) const;
-
-  /**
-   * @param main_menu_index
-   * @return pointer to button or NULL if index is out of range
-   */
-  gcc_pure
-  const MainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
-    assert(main_menu_index < main_menu_buttons.size());
-    assert(main_menu_buttons[main_menu_index] != NULL);
-
-    return *main_menu_buttons[main_menu_index];
-  }
-
-  /**
-   * @param page
-   * @return pointer to button or NULL if index is out of range
-   */
-  gcc_pure
-  const SubMenuButton &GetSubMenuButton(unsigned page) const {
-    assert(page < GetNumPages() && page < buttons.size());
-    assert(buttons[page] != NULL);
-
-    return *buttons[page];
-  }
-
-  /**
-   * @param Pos position of pointer
-   * @param mainIndex main menu whose submenu buttons are visible
-   * @return MenuTabIndex w/ location of item
-   */
-  gcc_pure
-  MenuTabIndex IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const;
-
   /**
    * @return number of pages excluding the menu page
    */
@@ -261,51 +127,13 @@ public:
   }
 
   /**
-   *  returns menu item from data array of pages
-   */
-  const PageItem &GetPageItem(unsigned page) const {
-    assert(page < GetNumPages());
-    return pages[page];
-  }
-
-  /**
-   * Looks up the page id from the menu table
-   * based on the main menu and sub menu index parameters
-   *
-   * @MainMenuIndex Index from main menu
-   * @SubMenuIndex Index within submenu
-   * returns page number of selected sub menu item base on menus indexes
-   *  or GetMenuPage() if index is not a valid page
-   */
-  gcc_pure
-  int GetPageNum(MenuTabIndex i) const;
-
-  /**
-   * overloads from TabBarControl.
-   */
-  gcc_pure
-  unsigned GetTabHeight() const;
-
-  /**
    * @return last content page shown (0 to (NumPages-1))
    * or MAIN_MENU_PAGE if no content pages have been shown
    */
   gcc_pure
   unsigned GetLastContentPage() const;
 
-  const StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS>
-      &GetMainMenuButtons() const { return main_menu_buttons; }
-
-protected:
-  /**
-   * @returns Page Index being displayed (including NumPages for Menu)
-   */
-  unsigned GetCurrentPage() const {
-    return pager.GetCurrentIndex();
-  }
-
-protected:
-
+public:
   /**
    * @return virtual menu page -- one greater than size of the menu array
    */
@@ -313,10 +141,7 @@ protected:
     return GetNumPages();
   }
 
-  TabMenuDisplay *GetTabMenuDisplay() {
-    return tab_display;
-  }
-
+private:
   /**
    * appends a submenu button to the buttons array and
    * loads it's XML file
@@ -325,33 +150,10 @@ protected:
    */
   void CreateSubMenuItem(const PageItem &item);
 
-  /** for each main menu item:
-   *   adds to the MainMenuButtons array
-   *   loops through all submenu items and loads them
-   *
-   * @param main_menu_caption The caption of the parent menu item
-   * @param MainMenuIndex 0 to (MAX_SUB_MENUS-1)
-   */
-  void
-  CreateSubMenu(const PageItem pages_in[], unsigned num_pages,
-                const TCHAR *main_menu_caption,
-                const unsigned main_menu_index);
-
-  /**
-   * @return Height of any item in Main or Sub menu
-   */
-  unsigned GetMenuButtonHeight() const;
-
-  /**
-   * @return Width of any item in Main or Sub menu
-   */
-  unsigned GetMenuButtonWidth() const;
-
 public:
   void NextPage();
   void PreviousPage();
   void SetCurrentPage(unsigned page);
-  void SetCurrentPage(MenuTabIndex menuIndex);
 
   bool Save(bool &changed) {
     return pager.Save(changed);
@@ -374,38 +176,4 @@ protected:
   virtual void OnDestroy() override;
 };
 
-/**
- * class that holds the child menu button and info for the menu
- */
-class SubMenuButton : public TabButton {
-public:
-  SubMenuButton(const TCHAR* _Caption)
-    :TabButton(_Caption, NULL)
-  {
-  }
-};
-
-/**
- * class that holds the main menu button and info
- */
-class MainMenuButton : public TabButton {
-public:
-  /* index to Pages array of first page in submenu */
-  const unsigned first_page_index;
-
-  /* index to Pages array of last page in submenu */
-  const unsigned last_page_index;
-
-  MainMenuButton(const TCHAR* _Caption,
-                    unsigned _first_page_index,
-                    unsigned _last_page_index)
-    :TabButton(_Caption, NULL),
-     first_page_index(_first_page_index),
-     last_page_index(_last_page_index)
-  {
-  }
-
-public:
-  unsigned NumSubMenus() const { return last_page_index - first_page_index + 1; };
-};
 #endif
