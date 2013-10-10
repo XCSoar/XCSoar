@@ -343,7 +343,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   return true;
 }
 
-void
+inline void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
 {
   const unsigned bwidth = GetTabLineHeight();
@@ -357,7 +357,7 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
   canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
 
-void
+inline void
 TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
                                    const unsigned CaptionStyle) const
 {
@@ -390,7 +390,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
   }
 }
 
-void
+inline void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
                                    const MainMenuButton &main_button) const
 {
@@ -404,7 +404,7 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
   canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
 
-void
+inline void
 TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
                                   const unsigned CaptionStyle) const
 {
