@@ -38,7 +38,6 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/Draw.hpp"
 #include "Form/List.hpp"
-#include "Form/TabMenu.hpp"
 #include "Form/Panel.hpp"
 #include "Form/CheckBox.hpp"
 #include "Widget/DockWindow.hpp"
@@ -625,17 +624,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     window = new ListControl(parent, UIGlobals::GetDialogLook(),
                              rc, style, item_height);
-
-    // TabMenuControl (TabMenu)
-  } else if (StringIsEqual(node.GetName(), _T("TabMenu"))) {
-    // Create the TabMenuControl
-
-    style.ControlParent();
-    TabMenuControl *tabmenu = new TabMenuControl(UIGlobals::GetDialogLook(),
-                                                 caption);
-    tabmenu->Create(parent, rc, style);
-
-    window = tabmenu;
 
   } else if (StringIsEqual(node.GetName(), _T("Custom"))) {
     // Create a custom Window object with a callback

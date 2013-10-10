@@ -214,19 +214,19 @@ OnPageFlipped()
   dialog->SetCaption(tab_menu->GetPageCaption(buffer, ARRAY_SIZE(buffer)));
 }
 
-static void
-PrepareConfigurationMenu()
+static Window *
+OnCreateMenu(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 {
-  assert (dialog != NULL);
-
-  tab_menu = (TabMenuControl*)dialog->FindByName(_T("TabMenu"));
-  assert(tab_menu != NULL);
+  tab_menu = new TabMenuControl(UIGlobals::GetDialogLook(),
+                                _("Configuration Menu"));
+  tab_menu->Create(parent, rc, style);
   tab_menu->InitMenu(pages,
                      ARRAY_SIZE(pages),
                      main_menu_captions,
                      ARRAY_SIZE(main_menu_captions));
 
   tab_menu->SetPageFlippedCallback(OnPageFlipped);
+  return tab_menu;
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -234,6 +234,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnCreateMenu),
   DeclareCallBackEntry(NULL)
 };
 
@@ -251,8 +252,6 @@ PrepareConfigurationDialog()
   bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
   CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));
   cb->SetState(expert_mode);
-
-  PrepareConfigurationMenu();
 
   /* restore last selected menu item */
   static bool Initialized = false;
