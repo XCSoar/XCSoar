@@ -42,15 +42,11 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
 {
   Create(_parent, rc, style);
 
-  rc = GetClientRect();
-  WindowStyle pager_style;
-  pager_style.ControlParent();
-  pager.Create(*this, rc, pager_style);
-
   WindowStyle display_style;
   display_style.Hide();
   display_style.TabStop();
-  tab_display = new TabMenuDisplay(*this, look, pager, rc, display_style);
+  tab_display = new TabMenuDisplay(*this, look, *this,
+                                   GetClientRect(), display_style);
 }
 
 TabMenuControl::~TabMenuControl()
@@ -67,7 +63,7 @@ TabMenuControl::~TabMenuControl()
 void
 TabMenuControl::NextPage()
 {
-  const unsigned NumAllPages = pager.GetTabCount();
+  const unsigned NumAllPages = pager.GetSize();
   if (NumAllPages < 2)
     return;
   SetCurrentPage((GetCurrentPage() + 1) % NumAllPages);
@@ -76,7 +72,7 @@ TabMenuControl::NextPage()
 void
 TabMenuControl::PreviousPage()
 {
-  const unsigned NumAllPages = pager.GetTabCount();
+  const unsigned NumAllPages = pager.GetSize();
 
   if (NumAllPages < 2)
     return;
@@ -281,7 +277,7 @@ TabMenuControl::CreateSubMenuItem(const PageItem &item)
   assert(item.Load != NULL);
 
   Widget *widget = item.Load();
-  pager.AddPage(widget);
+  pager.Add(widget);
 
   SubMenuButton *b =
     new SubMenuButton(item.menu_caption);
@@ -325,7 +321,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
   for (unsigned i = 0; i < num_menu_captions; i++)
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
-  pager.AddPage(new WindowWidget(tab_display));
+  pager.Add(new WindowWidget(tab_display));
   buttons.append(new SubMenuButton(caption));
 
   assert(GetNumPages() == num_pages);
@@ -359,4 +355,25 @@ TabMenuControl::FocusMenuPage()
 {
   GotoMenuPage();
   tab_display->SetFocus();
+}
+
+void
+TabMenuControl::OnCreate()
+{
+  ContainerWindow::OnCreate();
+
+  const PixelRect rc = GetClientRect();
+  pager.Initialise(*this, rc);
+  pager.Prepare(*this, rc);
+  pager.Show(rc);
+}
+
+void
+TabMenuControl::OnDestroy()
+{
+  pager.Hide();
+  pager.Unprepare();
+  pager.Clear();
+
+  ContainerWindow::OnDestroy();
 }

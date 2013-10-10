@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_FORM_TABMENU_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Form/Tabbed.hpp"
+#include "Widget/PagerWidget.hpp"
 #include "Form/TabDisplay.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 struct DialogLook;
 class WndForm;
@@ -110,7 +111,7 @@ public:
   };
 
 protected:
-  TabbedControl pager;
+  PagerWidget pager;
 
   StaticArray<SubMenuButton *, 32> buttons;
 
@@ -142,7 +143,7 @@ public:
   ~TabMenuControl();
 
   void UpdateLayout() {
-    pager.UpdateLayout();
+    pager.Move(GetClientRect());
   }
 
   const StaticArray<SubMenuButton *, 32> &GetTabButtons() const {
@@ -252,7 +253,7 @@ public:
    * @return number of pages excluding the menu page
    */
   unsigned GetNumPages() const{
-    return pager.GetTabCount() - 1;
+    return pager.GetSize() - 1;
   }
 
   /**
@@ -298,7 +299,7 @@ protected:
    * @returns Page Index being displayed (including NumPages for Menu)
    */
   unsigned GetCurrentPage() const {
-    return pager.GetCurrentPage();
+    return pager.GetCurrentIndex();
   }
 
 protected:
@@ -358,7 +359,7 @@ public:
    * Pass a key press event to the active widget.
    */
   bool InvokeKeyPress(unsigned key_code) {
-    return pager.InvokeKeyPress(key_code);
+    return pager.KeyPress(key_code);
   }
 
   /**
@@ -376,6 +377,11 @@ public:
    * if displaying the menu page, will select/highlight the previous menu item
    */
   void HighlightPreviousMenuItem();
+
+protected:
+  /* virtual methods from Window */
+  virtual void OnCreate() override;
+  virtual void OnDestroy() override;
 };
 
 /**
