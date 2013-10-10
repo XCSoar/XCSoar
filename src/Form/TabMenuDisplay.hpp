@@ -159,6 +159,8 @@ public:
   void SetCursor(unsigned i);
 
 private:
+  void UpdateLayout();
+
   bool HighlightNext();
   bool HighlightPrevious();
 
@@ -236,44 +238,6 @@ private:
     buttons.append(new SubMenuButton(caption));
   }
 
-  /**
-   * overloads from TabBarControl.
-   */
-  gcc_pure
-  unsigned GetTabHeight() const;
-
-  /**
-   * @return Height of any item in Main or Sub menu
-   */
-  gcc_pure
-  unsigned GetMenuButtonHeight() const;
-
-  /**
-   * @return Width of any item in Main or Sub menu
-   */
-  gcc_pure
-  unsigned GetMenuButtonWidth() const;
-
-  /**
-   * Calculates and caches the size and position of ith sub menu button
-   * All menus (landscape or portrait) are drawn vertically
-   * @param i Index of button
-   * @return Rectangle of button coordinates,
-   *   or {0,0,0,0} if index out of bounds
-   */
-  gcc_pure
-  const PixelRect &GetSubMenuButtonSize(unsigned i) const;
-
-  /**
-   * Calculates and caches the size and position of ith main menu button
-   * All menus (landscape or portrait) are drawn vertically
-   * @param i Index of button
-   * @return Rectangle of button coordinates,
-   *   or {0,0,0,0} if index out of bounds
-   */
-  gcc_pure
-  const PixelRect &GetMainMenuButtonSize(unsigned i) const;
-
   gcc_pure
   const PixelRect &GetButtonPosition(MenuTabIndex i) const;
 
@@ -287,6 +251,30 @@ private:
     assert(main_menu_buttons[main_menu_index] != NULL);
 
     return *main_menu_buttons[main_menu_index];
+  }
+
+  /**
+   * Calculates and caches the size and position of ith sub menu button
+   * All menus (landscape or portrait) are drawn vertically
+   * @param i Index of button
+   * @return Rectangle of button coordinates,
+   *   or {0,0,0,0} if index out of bounds
+   */
+  gcc_pure
+  const PixelRect &GetSubMenuButtonSize(unsigned i) const {
+    return buttons[i]->rc;
+  }
+
+  /**
+   * Calculates and caches the size and position of ith main menu button
+   * All menus (landscape or portrait) are drawn vertically
+   * @param i Index of button
+   * @return Rectangle of button coordinates,
+   *   or {0,0,0,0} if index out of bounds
+   */
+  gcc_pure
+  const PixelRect &GetMainMenuButtonSize(unsigned i) const {
+    return main_menu_buttons[i]->rc;
   }
 
   /**
@@ -312,6 +300,8 @@ private:
   void DragEnd();
 
 protected:
+  virtual void OnResize(PixelSize new_size) override;
+
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) override;

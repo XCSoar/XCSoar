@@ -81,6 +81,8 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
 
     AddMenu(main_menu_captions[i], first, last - 1, i);
   }
+
+  UpdateLayout();
 }
 
 int
@@ -102,81 +104,47 @@ GetTabLineHeight()
   return Layout::Scale(1);
 }
 
-unsigned
-TabMenuDisplay::GetTabHeight() const
+void
+TabMenuDisplay::UpdateLayout()
 {
-  return GetMenuButtonHeight() * MAX_MAIN_MENU_ITEMS + GetTabLineHeight() * 2;
-}
+  const unsigned window_width = GetWidth();
+  const unsigned window_height = GetHeight();
+  const unsigned border_width = GetTabLineHeight();
+  const unsigned menu_button_height =
+    std::min(Layout::GetMaximumControlHeight(), window_height / 7u);
+  const unsigned menu_button_width = (window_width - 2 * border_width) / 2;
 
-unsigned
-TabMenuDisplay::GetMenuButtonHeight() const
-{
-  return std::min(Layout::GetMaximumControlHeight(),
-                  unsigned(GetHeight()) / 7u);
-}
-
-unsigned
-TabMenuDisplay::GetMenuButtonWidth() const
-{
-  return (GetWidth() - GetTabLineHeight()) / 2;
-}
-
-const PixelRect&
-TabMenuDisplay::GetMainMenuButtonSize(unsigned i) const
-{
-  assert(i < main_menu_buttons.size());
-
-  if (main_menu_buttons[i]->rc.left < main_menu_buttons[i]->rc.right)
-    return main_menu_buttons[i]->rc;
-  PixelRect &rc = main_menu_buttons[i]->rc;
-  const unsigned margin = Layout::Scale(1);
-  const unsigned finalmargin = Layout::Scale(1);
-  const unsigned butHeight = GetMenuButtonHeight();
-  rc.top = finalmargin + (margin + butHeight) * i;
-  rc.bottom = rc.top + butHeight;
-
-  rc.left = 0;
-  rc.right = GetMenuButtonWidth();
-
-  return main_menu_buttons[i]->rc;
-}
-
-const PixelRect&
-TabMenuDisplay::GetSubMenuButtonSize(unsigned page) const
-{
-  assert(page < buttons.size());
-
-  if (buttons[page]->rc.left < buttons[page]->rc.right)
-    return buttons[page]->rc;
-
-  const TabMenuControl::PageItem &item = GetPageItem(page);
-  const MainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
-  const unsigned sub_index = page - main_button.first_page_index;
-
-  PixelRect &rc = buttons[page]->rc;
-
-  const unsigned margin = Layout::Scale(1);
-  const unsigned finalmargin = Layout::Scale(1);
-  const unsigned subMenuItemCount = main_button.NumSubMenus();
-  const unsigned tabHeight = GetTabHeight();
-  const unsigned butHeight = GetMenuButtonHeight();
-  const unsigned itemHeight = butHeight + margin;
-  const unsigned SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
-  const unsigned topMainMenuItem = item.main_menu_index * itemHeight +
-      finalmargin;
   const unsigned offset = Layout::Scale(2);
-  const unsigned topMainMenuItemWOffset = topMainMenuItem + offset;
-  const unsigned subMenuTop =
-      (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
-       topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
+  const unsigned item_height = menu_button_height + border_width;
 
-  rc.top = subMenuTop + sub_index * itemHeight;
-  rc.bottom = rc.top + butHeight;
+  for (unsigned main_i = 0, main_y = border_width;
+       main_i < main_menu_buttons.size(); ++main_i) {
+    MainMenuButton &main = *main_menu_buttons[main_i];
+    main.rc.left = 0;
+    main.rc.right = menu_button_width;
+    main.rc.top = main_y;
+    main.rc.bottom = main.rc.top + menu_button_height;
+    main_y = main.rc.bottom + border_width;
 
-  rc.left = GetMenuButtonWidth() + GetTabLineHeight();
-  rc.right = rc.left + GetMenuButtonWidth();
+    const unsigned group_height =
+      item_height * main.NumSubMenus() + border_width;
 
-  return buttons[page]->rc;
+    unsigned page_y = main.rc.top + offset;
+    if (page_y + group_height > window_height)
+      page_y = window_height - group_height - offset;
+
+    for (unsigned page_i = main.first_page_index;
+         page_i <= main.last_page_index; ++page_i) {
+      SubMenuButton &page = *buttons[page_i];
+
+      page.rc.left = menu_button_width + border_width;
+      page.rc.right = page.rc.left + menu_button_width;
+
+      page.rc.top = page_y;
+      page.rc.bottom = page.rc.top + menu_button_height;
+      page_y = page.rc.bottom + border_width;
+    }
+  }
 }
 
 const PixelRect &
@@ -249,6 +217,13 @@ TabMenuDisplay::HighlightPrevious()
 
   SetCursor(i);
   return true;
+}
+
+void
+TabMenuDisplay::OnResize(PixelSize new_size)
+{
+  PaintWindow::OnResize(new_size);
+  UpdateLayout();
 }
 
 bool
