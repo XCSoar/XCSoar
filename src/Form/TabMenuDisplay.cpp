@@ -77,6 +77,15 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
   UpdateLayout();
 }
 
+void
+TabMenuDisplay::FormatPageCaption(TCHAR *buffer, size_t size,
+                                  unsigned i) const
+{
+  StringFormat(buffer, size, _T("%s > %s"),
+               gettext(GetPageParentCaption(i)),
+               gettext(GetPageCaption(i)));
+}
+
 int
 TabMenuDisplay::GetPageNum(MenuTabIndex i) const
 {

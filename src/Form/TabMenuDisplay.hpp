@@ -146,6 +146,8 @@ public:
                 const TabMenuPage pages_in[], unsigned num_pages,
                 const TabMenuGroup groups[], unsigned n_groups);
 
+  void FormatPageCaption(TCHAR *buffer, size_t size, unsigned i) const;
+
   void SetCursor(unsigned i);
 
 private:
@@ -168,7 +170,6 @@ private:
     return buttons.size();
   }
 
-public:
   const TCHAR *GetPageCaption(unsigned page) const {
     assert(page < GetNumPages());
 
@@ -209,7 +210,6 @@ public:
   gcc_pure
   int GetPageNum(MenuTabIndex i) const;
 
-private:
   void AddMenu(unsigned first, unsigned last,
                unsigned main_menu_index) {
     assert(main_menu_index == main_menu_buttons.size());

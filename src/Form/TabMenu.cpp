@@ -24,12 +24,8 @@ Copyright_License {
 #include "Form/TabMenu.hpp"
 #include "Form/TabMenuDisplay.hpp"
 #include "Form/Form.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Look/DialogLook.hpp"
-#include "Dialogs/XML.hpp"
 #include "Widget/WindowWidget.hpp"
-#include "Language/Language.hpp"
 
 #include <assert.h>
 
@@ -111,9 +107,7 @@ TabMenuControl::OnPageFlipped()
   } else {
     SetLastContentPage(page);
     StaticString<128> caption;
-    caption.Format(_T("%s > %s"),
-                   gettext(tab_display->GetPageParentCaption(page)),
-                   gettext(tab_display->GetPageCaption(page)));
+    tab_display->FormatPageCaption(caption.buffer(), caption.MAX_SIZE, page);
     form.SetCaption(caption);
   }
 }
