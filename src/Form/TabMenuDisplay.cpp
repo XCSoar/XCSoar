@@ -35,9 +35,7 @@ Copyright_License {
 #include <winuser.h>
 
 TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
-                               const DialogLook &_look,
-                               ContainerWindow &parent, PixelRect rc,
-                               WindowStyle style)
+                               const DialogLook &_look)
   :menu(_theTabBar),
    look(_look),
    dragging(false),
@@ -45,7 +43,6 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
    down_index(MenuTabIndex::None()),
    cursor(0)
 {
-  Create(parent, rc, style);
 }
 
 void

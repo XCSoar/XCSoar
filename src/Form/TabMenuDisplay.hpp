@@ -132,8 +132,7 @@ class TabMenuDisplay final : public PaintWindow
   /* used to render which submenu is drawn and which item is highlighted */
 
 public:
-  TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look,
-                 ContainerWindow &parent, PixelRect rc, WindowStyle style);
+  TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look);
 
   /**
    * Initializes the menu and buids it from the Menuitem[] array

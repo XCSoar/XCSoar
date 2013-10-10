@@ -41,8 +41,8 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
   WindowStyle display_style;
   display_style.Hide();
   display_style.TabStop();
-  tab_display = new TabMenuDisplay(*this, look, *this,
-                                   GetClientRect(), display_style);
+  tab_display = new TabMenuDisplay(*this, look);
+  tab_display->Create(*this, GetClientRect(), display_style);
 }
 
 TabMenuControl::~TabMenuControl()
