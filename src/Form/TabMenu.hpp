@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_FORM_TABMENU_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Util/StaticString.hpp"
 #include "Widget/PagerWidget.hpp"
 #include "Screen/ContainerWindow.hpp"
 
@@ -54,7 +53,7 @@ class TabMenuControl : public ContainerWindow {
 
   TabMenuDisplay *const tab_display;
 
-  StaticString<256u> caption;
+  const TCHAR *const caption;
 
   OnPageFlippedCallback page_flipped_callback;
 
