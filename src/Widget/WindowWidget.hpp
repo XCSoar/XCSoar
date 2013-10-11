@@ -36,8 +36,15 @@ class WindowWidget : public NullWidget {
   Window *window;
 
 public:
+  /**
+   * Initialise an empty instance.  Call SetWindow() to finish it.
+   */
   WindowWidget():window(nullptr) {}
 
+  /**
+   * Initialise an instance with an existing #Window pointer.  It must
+   * be hidden.
+   */
   WindowWidget(Window *_window);
 
 protected:
