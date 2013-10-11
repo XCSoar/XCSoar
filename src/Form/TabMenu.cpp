@@ -28,9 +28,8 @@ Copyright_License {
 
 #include <assert.h>
 
-TabMenuControl::TabMenuControl(const DialogLook &look, const TCHAR * _caption)
+TabMenuControl::TabMenuControl(const DialogLook &look)
   :tab_display(new TabMenuDisplay(*this, look)),
-   caption(_caption),
    page_flipped_callback(nullptr)
 {
   pager.Add(new WindowWidget(tab_display));
@@ -104,7 +103,7 @@ TabMenuControl::GetPageCaption(TCHAR buffer[], size_t size) const
 {
   const unsigned page = pager.GetCurrentIndex();
   if (page == GetMenuPage()) {
-    return caption;
+    return nullptr;
   } else {
     tab_display->FormatPageCaption(buffer, size, page - PAGE_OFFSET);
     return buffer;

@@ -211,14 +211,16 @@ static void
 OnPageFlipped()
 {
   TCHAR buffer[128];
-  dialog->SetCaption(tab_menu->GetPageCaption(buffer, ARRAY_SIZE(buffer)));
+  const TCHAR *caption = tab_menu->GetPageCaption(buffer, ARRAY_SIZE(buffer));
+  if (caption == nullptr)
+    caption = _("Configuration");
+  dialog->SetCaption(caption);
 }
 
 static Window *
 OnCreateMenu(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 {
-  tab_menu = new TabMenuControl(UIGlobals::GetDialogLook(),
-                                _("Configuration"));
+  tab_menu = new TabMenuControl(UIGlobals::GetDialogLook());
   tab_menu->SetPageFlippedCallback(OnPageFlipped);
   tab_menu->InitMenu(pages,
                      ARRAY_SIZE(pages),

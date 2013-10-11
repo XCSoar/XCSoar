@@ -52,15 +52,10 @@ class TabMenuControl : public ContainerWindow {
 
   TabMenuDisplay *const tab_display;
 
-  const TCHAR *const caption;
-
   OnPageFlippedCallback page_flipped_callback;
 
 public:
-  /**
-   * @param Caption the page caption shown on the menu page
-   */
-  TabMenuControl(const DialogLook &look, const TCHAR *caption);
+  TabMenuControl(const DialogLook &look);
   ~TabMenuControl();
 
   void SetPageFlippedCallback(OnPageFlippedCallback cb) {
