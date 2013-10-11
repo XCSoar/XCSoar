@@ -28,11 +28,15 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Screen/Point.hpp"
 
+#include <functional>
+
 /**
  * A #Widget that host multiple other widgets, displaying one at a
  * time.
  */
 class PagerWidget : public Widget {
+  typedef std::function<void()> PageFlippedCallback;
+
   struct Child {
     Widget *widget;
 
@@ -55,9 +59,18 @@ class PagerWidget : public Widget {
   unsigned current;
   StaticArray<Child, 32u> children;
 
+  PageFlippedCallback page_flipped_callback;
+
 public:
   PagerWidget():initialised(false) {}
   virtual ~PagerWidget();
+
+  void SetPageFlippedCallback(PageFlippedCallback &&_page_flipped_callback) {
+    assert(!page_flipped_callback);
+    assert(_page_flipped_callback);
+
+    page_flipped_callback = std::move(_page_flipped_callback);
+  }
 
   const PixelRect &GetPosition() const {
     return position;

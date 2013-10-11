@@ -132,6 +132,10 @@ PagerWidget::SetCurrent(unsigned i, bool click)
 
   if (visible)
     new_child.widget->Show(position);
+
+  if (page_flipped_callback)
+    page_flipped_callback();
+
   return true;
 }
 
