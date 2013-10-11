@@ -6,16 +6,21 @@ Version 6.8 - not yet released
 * user interface 
   - checklist remembers last opened list (#3110)
 
-Version 6.7.1 - not yet released
+Version 6.7.1 - 2013/10/11
 * replay
   - fix crash replaying an IGC file with no B record extensions (#3107)
+* data files
+  - save the previous log file in "xcsoar-old.log"
 * user interface
   - new translation: Lithuanian
+* devices
+  - CAI302: work around transmission errors during IGC file download (#3074)
 * Android
   - fix crash in "credits" dialog on Android 4 (#3106)
   - work around Vivante GPU texture bugs (#1995, #2228, #2990, #2998, #3105)
 * Kobo
   - fix passphrase entry in WiFi setup (#3053)
+  - fix compatibility with old Kobo firmware
 
 Version 6.7 - 2013/09/30
 * new target: Kobo e-book readers
@@ -84,7 +89,6 @@ Version 6.7 - 2013/09/30
 * data files
   - default profile is called "default.prf" instead of "xcsoar-registry.prf"
   - log file is called "xcsoar.log" instead of "xcsoar-startup.log"
-  - save the previous log file in "xcsoar.old"
   - fix name truncation when saving a waypoint file on Windows (#3096)
 
 Version 6.6.5 - 2013/08/21
