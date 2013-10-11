@@ -33,6 +33,15 @@ TabMenuControl::TabMenuControl(const DialogLook &look)
    page_flipped_callback(nullptr)
 {
   pager.Add(new WindowWidget(tab_display));
+
+  pager.SetPageFlippedCallback([this](){
+      const unsigned page = pager.GetCurrentIndex();
+      if (page != GetMenuPage())
+        SetLastContentPage(page - PAGE_OFFSET);
+
+      if (page_flipped_callback != nullptr)
+        page_flipped_callback();
+    });
 }
 
 TabMenuControl::~TabMenuControl()
@@ -43,22 +52,19 @@ TabMenuControl::~TabMenuControl()
 void
 TabMenuControl::NextPage()
 {
-  if (pager.Next(true))
-    OnPageFlipped();
+  pager.Next(true);
 }
 
 void
 TabMenuControl::PreviousPage()
 {
-  if (pager.Previous(true))
-    OnPageFlipped();
+  pager.Previous(true);
 }
 
 void
 TabMenuControl::SetCurrentPage(unsigned page)
 {
-  if (pager.ClickPage(PAGE_OFFSET + page))
-    OnPageFlipped();
+  pager.ClickPage(PAGE_OFFSET + page);
 }
 
 bool
@@ -85,17 +91,6 @@ TabMenuControl::InvokeKeyPress(unsigned key_code)
   default:
     return false;
   }
-}
-
-void
-TabMenuControl::OnPageFlipped()
-{
-  const unsigned page = pager.GetCurrentIndex();
-  if (page != GetMenuPage())
-    SetLastContentPage(page - PAGE_OFFSET);
-
-  if (page_flipped_callback != nullptr)
-    page_flipped_callback();
 }
 
 const TCHAR *

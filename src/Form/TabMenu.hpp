@@ -99,8 +99,7 @@ public:
    * @return Page index of menu page
    */
   void GotoMenuPage() {
-    if (pager.ClickPage(GetMenuPage()))
-      OnPageFlipped();
+    pager.ClickPage(GetMenuPage());
   }
 
   /**
