@@ -56,9 +56,14 @@ protected:
 
 public:
 #ifdef ANDROID
-  GLTexture(GLuint _id, UPixelScalar _width, UPixelScalar _height)
-    :id(_id), width(_width), height(_height) {
+  GLTexture(GLuint _id, UPixelScalar _width, UPixelScalar _height,
+            UPixelScalar _allocated_width, UPixelScalar _allocated_height)
+    :id(_id), width(_width), height(_height),
+     allocated_width(_allocated_width), allocated_height(_allocated_height) {
 #ifndef NDEBUG
+    assert(allocated_width >= width);
+    assert(allocated_height >= height);
+
     ++num_textures;
 #endif
   }
@@ -127,6 +132,15 @@ protected:
   void Initialise();
 
   static void Configure();
+
+#ifdef HAVE_OES_DRAW_TEXTURE
+private:
+  void DrawOES(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height) const;
+  void DrawFlippedOES(PixelRect dest, PixelRect src) const;
+#endif
 
 public:
   void Bind() {

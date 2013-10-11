@@ -138,8 +138,10 @@ struct RenderedText {
                             buffer);
   }
 #elif defined(ANDROID)
-  RenderedText(int id, unsigned width, unsigned height)
-    :texture(new GLTexture(id, width, height)) {}
+  RenderedText(int id, unsigned width, unsigned height,
+               unsigned allocated_width, unsigned allocated_height)
+    :texture(new GLTexture(id, width, height,
+                           allocated_width, allocated_height)) {}
 #endif
 #else
   RenderedText(RenderedText &&other)
@@ -292,12 +294,13 @@ TextCache::Get(const Font &font, const char *text)
   delete[] buffer;
 #endif
 #elif defined(ANDROID)
-  PixelSize size;
-  int texture_id = font.TextTextureGL(text, size);
+  PixelSize size, allocated_size;
+  int texture_id = font.TextTextureGL(text, size, allocated_size);
   if (texture_id == 0)
     return NULL;
 
-  RenderedText rt(texture_id, size.cx, size.cy);
+  RenderedText rt(texture_id, size.cx, size.cy,
+                  allocated_size.cx, allocated_size.cy);
 #else
 #error No font renderer
 #endif

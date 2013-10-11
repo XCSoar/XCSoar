@@ -208,9 +208,15 @@ Startup()
 #ifdef HAVE_DYNAMIC_EGL
             "egl=%d "
 #endif
+#ifdef HAVE_OES_DRAW_TEXTURE
+            "oesdt=%d "
+#endif
             "npot=%d vbo=%d fbo=%d stencil=%#x",
 #ifdef HAVE_DYNAMIC_EGL
              OpenGL::egl,
+#endif
+#ifdef HAVE_OES_DRAW_TEXTURE
+            OpenGL::oes_draw_texture,
 #endif
              OpenGL::texture_non_power_of_two,
              OpenGL::vertex_buffer_object,

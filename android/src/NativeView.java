@@ -291,8 +291,8 @@ class NativeView extends SurfaceView
   /**
    * Loads the specified bitmap resource as OpenGL texture.
    *
-   * @param result an array of 3 integers: texture id, width, height
-   * (all output)
+   * @param result an array of 5 integers: texture id, width, height,
+   * allocated width, allocated height (all output)
    * @return true on success
    */
   private boolean loadResourceTexture(String name, int[] result) {
@@ -317,8 +317,8 @@ class NativeView extends SurfaceView
   /**
    * Loads an image from filesystem as OpenGL texture.
    *
-   * @param result an array of 3 integers: texture id, width, height
-   * (all output)
+   * @param result an array of 5 integers: texture id, width, height,
+   * allocated width, allocated height (all output)
    * @return true on success
    */
   private boolean loadFileTexture(String pathName, int[] result) {

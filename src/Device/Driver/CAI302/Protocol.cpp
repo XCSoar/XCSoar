@@ -141,6 +141,20 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
   if (!port.FullRead(header, sizeof(header), env, timeout_ms))
     return -1;
 
+  if (header[0] == 0x09 && header[1] >= 0x10 &&
+      header[3] == 0x0d && header[4] == 0x0a) {
+    /* this is probably a "short" reply with an upload prompt, due to
+       a transmission error - now see if the remaining 4 bytes contain
+       the "up>" prompt */
+
+    char prompt[4];
+    if (port.Read(prompt, 4) == 4 && prompt[0] == 0x0a &&
+        prompt[1] == 'u' && prompt[2] == 'p' && prompt[3] == '>')
+      return -2;
+
+    return -1;
+  }
+
   unsigned size = (header[0] << 8) | header[1];
   if (size < sizeof(header))
     return -1;
@@ -192,6 +206,16 @@ CAI302::UploadLarge(Port &port, const char *command,
     return -1;
 
   int nbytes = ReadLargeReply(port, response, max_size, env, timeout_ms);
+
+  if (nbytes == -2) {
+    /* transmission error - try again */
+
+    if (!WriteString(port, command, env))
+      return -1;
+
+    nbytes = ReadLargeReply(port, response, max_size, env, timeout_ms);
+  }
+
   if (nbytes < 0)
     return nbytes;
 

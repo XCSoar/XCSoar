@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Caption="Configuration">
+<Form Caption="Credits">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNext" />
   <CloseButton X="-120" Y="-35" Height="35"/>
 

@@ -54,6 +54,12 @@ OpenLog()
 
     LocalPath(path, _T("xcsoar.log"));
 
+    {
+      TCHAR old_path[MAX_PATH];
+      LocalPath(old_path, _T("xcsoar-old.log"));
+      File::Replace(path, old_path);
+    }
+
 #ifdef ANDROID
     /* redirect stdout/stderr to xcsoar-startup.log on Android so we
        get debug logs from libraries and output from child processes

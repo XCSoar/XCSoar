@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/OpenGL/Shapes.hpp"
 #include "FBO.hpp"
 #include "Screen/Custom/Cache.hpp"
+#include "Asset.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -82,6 +83,66 @@ SupportsNonPowerOfTwoTexturesGLES()
 
   return false;
 }
+
+#ifdef HAVE_OES_DRAW_TEXTURE
+
+gcc_pure
+static bool
+IsVendor(const char *_vendor)
+{
+  const char *vendor = (const char *)glGetString(GL_VENDOR);
+  return vendor != nullptr && strcmp(vendor, _vendor) == 0;
+}
+
+gcc_pure
+static bool
+IsRenderer(const char *_renderer)
+{
+  const char *renderer = (const char *)glGetString(GL_RENDERER);
+  return renderer != nullptr && strcmp(renderer, _renderer) == 0;
+}
+
+gcc_pure
+static bool
+IsVivanteGC800()
+{
+  /* note: this is a Vivante GPU, but its driver declares Marvell as
+     its vendor (found on Samsung GT-S5690) */
+  return IsVendor("Marvell Technology Group Ltd") &&
+    IsRenderer("GC800 Graphics Engine");
+}
+
+gcc_pure
+static bool
+IsVivanteGC1000()
+{
+  return IsVendor("Vivante Corporation") &&
+    IsRenderer("GC1000 Graphics Engine");
+}
+
+/**
+ * Is this OpenGL driver blacklisted for OES_draw_texture?
+ *
+ * This is a workaround to disable OES_draw_texture on certain Vivante
+ * GPUs because they are known to be buggy: when combined with
+ * GL_COLOR_LOGIC_OP, the left quarter of the texture is not drawn
+ */
+gcc_pure
+static bool
+IsBlacklistedOESDrawTexture()
+{
+  return IsAndroid() && (IsVivanteGC800() || IsVivanteGC1000());
+}
+
+gcc_pure
+static bool
+CheckOESDrawTexture()
+{
+  return OpenGL::IsExtensionSupported("GL_OES_draw_texture") &&
+    !IsBlacklistedOESDrawTexture();
+}
+
+#endif
 
 #ifdef ANDROID
 /**
@@ -194,6 +255,10 @@ OpenGL::SetupContext()
 #endif
 
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
+
+#ifdef HAVE_OES_DRAW_TEXTURE
+  oes_draw_texture = CheckOESDrawTexture();
+#endif
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);

@@ -31,6 +31,10 @@ namespace OpenGL {
 
   bool texture_non_power_of_two;
 
+#ifdef HAVE_OES_DRAW_TEXTURE
+  bool oes_draw_texture;
+#endif
+
 #ifdef ANDROID
   bool vertex_buffer_object;
 #endif

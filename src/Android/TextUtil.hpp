@@ -55,9 +55,13 @@ public:
   struct Texture {
     unsigned id;
     unsigned width, height;
+    unsigned allocated_width, allocated_height;
 
-    Texture(unsigned _id, unsigned _width, unsigned _height)
-      :id(_id), width(_width), height(_height) {}
+    Texture(unsigned _id, unsigned _width, unsigned _height,
+            unsigned _allocated_width, unsigned _allocated_height)
+      :id(_id), width(_width), height(_height),
+       allocated_width(_allocated_width),
+       allocated_height(_allocated_height) {}
   };
 
   Texture getTextTextureGL(const char *text) const;

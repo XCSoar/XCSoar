@@ -137,13 +137,13 @@ TextUtil::getTextTextureGL(const char *text) const
   jintArray jresult = (jintArray)
     env->CallObjectMethod(Get(), midGetTextTextureGL,
                           text2.Get());
-  jint result[3];
+  jint result[5];
   if (!Java::DiscardException(env) && jresult != nullptr) {
-    env->GetIntArrayRegion(jresult, 0, 3, result);
+    env->GetIntArrayRegion(jresult, 0, 5, result);
     env->DeleteLocalRef(jresult);
   } else {
-    result[0] = result[1] = result[2] = 0;
+    result[0] = result[1] = result[2] = result[3] = result[4] = 0;
   }
 
-  return Texture(result[0], result[1], result[2]);
+  return Texture(result[0], result[1], result[2], result[3], result[4]);
 }
