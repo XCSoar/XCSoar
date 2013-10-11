@@ -354,8 +354,9 @@ namespace CAI302 {
   /**
    * Receive a "large" reply from the CAI302.
    *
-   * @return the number of data bytes received (not including the 5 byte
-   * header), -1 on error
+   * @return the number of data bytes received (not including the 5
+   * byte header), -1 on error, -2 if a short reply with just an
+   * upload prompt was seen (probably due to transmission error)
    */
   int
   ReadLargeReply(Port &port, void *buffer, unsigned max_size,

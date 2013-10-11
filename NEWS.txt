@@ -9,6 +9,8 @@ Version 6.7.1 - not yet released
   - save the previous log file in "xcsoar-old.log"
 * user interface
   - new translation: Lithuanian
+* devices
+  - CAI302: work around transmission errors during IGC file download (#3074)
 * Android
   - fix crash in "credits" dialog on Android 4 (#3106)
   - work around Vivante GPU texture bugs (#1995, #2228, #2990, #2998, #3105)
