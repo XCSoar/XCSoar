@@ -34,7 +34,6 @@ Copyright_License {
 struct DialogLook;
 struct TabMenuPage;
 struct TabMenuGroup;
-class WndForm;
 class TabMenuDisplay;
 
 /** TabMenuControl is a two-level menu structure.
@@ -47,21 +46,31 @@ class TabMenuDisplay;
  * ToDo: lazy loading of panels (XML and Init() routines)
  */
 class TabMenuControl : public ContainerWindow {
+  typedef void (*OnPageFlippedCallback)();
+
   PagerWidget pager;
 
   TabMenuDisplay *const tab_display;
 
   StaticString<256u> caption;
 
-  WndForm &form;
+  OnPageFlippedCallback page_flipped_callback;
 
 public:
   /**
    * @param Caption the page caption shown on the menu page
    */
-  TabMenuControl(WndForm &_form,
-                 const DialogLook &look, const TCHAR *caption);
+  TabMenuControl(const DialogLook &look, const TCHAR *caption);
   ~TabMenuControl();
+
+  void SetPageFlippedCallback(OnPageFlippedCallback cb) {
+    assert(page_flipped_callback == nullptr);
+    assert(cb != nullptr);
+
+    page_flipped_callback = cb;
+  }
+
+  const TCHAR *GetPageCaption(TCHAR buffer[], size_t size) const;
 
   void UpdateLayout() {
     pager.Move(GetClientRect());

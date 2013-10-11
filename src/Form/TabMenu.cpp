@@ -23,17 +23,15 @@ Copyright_License {
 
 #include "Form/TabMenu.hpp"
 #include "Form/TabMenuDisplay.hpp"
-#include "Form/Form.hpp"
 #include "Screen/Key.h"
 #include "Widget/WindowWidget.hpp"
 
 #include <assert.h>
 
-TabMenuControl::TabMenuControl(WndForm &_form,
-                               const DialogLook &look, const TCHAR * _caption)
+TabMenuControl::TabMenuControl(const DialogLook &look, const TCHAR * _caption)
   :tab_display(new TabMenuDisplay(*this, look)),
    caption(_caption),
-   form(_form)
+   page_flipped_callback(nullptr)
 {
 }
 
@@ -93,14 +91,22 @@ void
 TabMenuControl::OnPageFlipped()
 {
   const unsigned page = pager.GetCurrentIndex();
-
-  if (page == GetMenuPage()) {
-    form.SetCaption(caption);
-  } else {
+  if (page != GetMenuPage())
     SetLastContentPage(page);
-    StaticString<128> caption;
-    tab_display->FormatPageCaption(caption.buffer(), caption.MAX_SIZE, page);
-    form.SetCaption(caption);
+
+  if (page_flipped_callback != nullptr)
+    page_flipped_callback();
+}
+
+const TCHAR *
+TabMenuControl::GetPageCaption(TCHAR buffer[], size_t size) const
+{
+  const unsigned page = pager.GetCurrentIndex();
+  if (page == GetMenuPage()) {
+    return caption;
+  } else {
+    tab_display->FormatPageCaption(buffer, size, page);
+    return buffer;
   }
 }
 

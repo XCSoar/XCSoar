@@ -208,6 +208,13 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
+OnPageFlipped()
+{
+  TCHAR buffer[128];
+  dialog->SetCaption(tab_menu->GetPageCaption(buffer, ARRAY_SIZE(buffer)));
+}
+
+static void
 PrepareConfigurationMenu()
 {
   assert (dialog != NULL);
@@ -218,6 +225,8 @@ PrepareConfigurationMenu()
                      ARRAY_SIZE(pages),
                      main_menu_captions,
                      ARRAY_SIZE(main_menu_captions));
+
+  tab_menu->SetPageFlippedCallback(OnPageFlipped);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
