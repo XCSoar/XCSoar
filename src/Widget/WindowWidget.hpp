@@ -43,7 +43,8 @@ public:
 
   /**
    * Initialise an instance with an existing #Window pointer.  It must
-   * be hidden.
+   * be hidden or undefined (i.e. not yet created).  However, it must
+   * be created before the #Widget gets shown.
    */
   WindowWidget(Window *_window);
 
