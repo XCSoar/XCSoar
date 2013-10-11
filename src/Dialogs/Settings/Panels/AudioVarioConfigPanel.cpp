@@ -106,7 +106,7 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Deadband min. lift"),
            _("Below this lift threshold the vario will start to play sounds if the 'Deadband' feature is enabled."),
            _T("%.1f %s"), _T("%.1f"),
-           Units::ToUserVSpeed(fixed(-2)), fixed(0),
+           Units::ToUserVSpeed(fixed(-5)), fixed(0),
            GetUserVerticalSpeedStep(), false, UnitGroup::VERTICAL_SPEED,
            settings.min_dead);
   SetExpertRow(DEAD_BAND_MIN);
