@@ -143,7 +143,7 @@ TabMenuControl::InitMenu(const TabMenuPage pages_in[],
   for (unsigned i = 0; i < num_pages; ++i)
     CreateSubMenuItem(pages_in[i]);
 
-  tab_display->InitMenu(caption, pages_in, num_pages,
+  tab_display->InitMenu(pages_in, num_pages,
                         groups, n_groups);
 }
 

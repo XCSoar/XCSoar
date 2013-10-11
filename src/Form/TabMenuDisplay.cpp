@@ -46,8 +46,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
 }
 
 void
-TabMenuDisplay::InitMenu(const TCHAR *caption,
-                         const TabMenuPage pages_in[],
+TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
                          const TabMenuGroup _groups[], unsigned n_groups)
 {

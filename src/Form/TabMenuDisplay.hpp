@@ -141,8 +141,7 @@ public:
    * displayed in the menu
    * @param num_pages Size the menus array
    */
-  void InitMenu(const TCHAR *caption,
-                const TabMenuPage pages_in[], unsigned num_pages,
+  void InitMenu(const TabMenuPage pages_in[], unsigned num_pages,
                 const TabMenuGroup groups[], unsigned n_groups);
 
   void FormatPageCaption(TCHAR *buffer, size_t size, unsigned i) const;
