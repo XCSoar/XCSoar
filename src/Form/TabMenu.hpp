@@ -46,6 +46,8 @@ class TabMenuDisplay;
  * ToDo: lazy loading of panels (XML and Init() routines)
  */
 class TabMenuControl : public ContainerWindow {
+  static constexpr unsigned PAGE_OFFSET = 1;
+
   typedef void (*OnPageFlippedCallback)();
 
   PagerWidget pager;
@@ -104,7 +106,8 @@ public:
    * @return Page index of menu page
    */
   void GotoMenuPage() {
-    SetCurrentPage(GetMenuPage());
+    if (pager.ClickPage(GetMenuPage()))
+      OnPageFlipped();
   }
 
   /**
@@ -119,7 +122,7 @@ private:
    * @return virtual menu page -- one greater than size of the menu array
    */
   unsigned GetMenuPage() const {
-    return pager.GetSize() - 1;
+    return 0;
   }
 
   /**

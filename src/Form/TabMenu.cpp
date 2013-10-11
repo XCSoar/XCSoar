@@ -57,7 +57,7 @@ TabMenuControl::PreviousPage()
 void
 TabMenuControl::SetCurrentPage(unsigned page)
 {
-  if (pager.ClickPage(page))
+  if (pager.ClickPage(PAGE_OFFSET + page))
     OnPageFlipped();
 }
 
@@ -92,7 +92,7 @@ TabMenuControl::OnPageFlipped()
 {
   const unsigned page = pager.GetCurrentIndex();
   if (page != GetMenuPage())
-    SetLastContentPage(page);
+    SetLastContentPage(page - PAGE_OFFSET);
 
   if (page_flipped_callback != nullptr)
     page_flipped_callback();
@@ -105,7 +105,7 @@ TabMenuControl::GetPageCaption(TCHAR buffer[], size_t size) const
   if (page == GetMenuPage()) {
     return caption;
   } else {
-    tab_display->FormatPageCaption(buffer, size, page);
+    tab_display->FormatPageCaption(buffer, size, page - PAGE_OFFSET);
     return buffer;
   }
 }
@@ -142,13 +142,8 @@ TabMenuControl::InitMenu(const TabMenuPage pages_in[],
   for (unsigned i = 0; i < num_pages; ++i)
     CreateSubMenuItem(pages_in[i]);
 
-  pager.Add(new WindowWidget(tab_display));
-
   tab_display->InitMenu(caption, pages_in, num_pages,
                         groups, n_groups);
-
-  /* show the menu page by default */
-  pager.SetCurrent(num_pages);
 }
 
 void
@@ -165,6 +160,8 @@ TabMenuControl::OnCreate()
   display_style.Hide();
   display_style.TabStop();
   tab_display->Create(*this, rc, display_style);
+
+  pager.Add(new WindowWidget(tab_display));
 }
 
 void
