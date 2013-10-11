@@ -219,13 +219,13 @@ OnCreateMenu(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 {
   tab_menu = new TabMenuControl(UIGlobals::GetDialogLook(),
                                 _("Configuration Menu"));
-  tab_menu->Create(parent, rc, style);
+  tab_menu->SetPageFlippedCallback(OnPageFlipped);
   tab_menu->InitMenu(pages,
                      ARRAY_SIZE(pages),
                      main_menu_captions,
                      ARRAY_SIZE(main_menu_captions));
 
-  tab_menu->SetPageFlippedCallback(OnPageFlipped);
+  tab_menu->Create(parent, rc, style);
   return tab_menu;
 }
 

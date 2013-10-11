@@ -70,8 +70,6 @@ TabMenuDisplay::InitMenu(const TCHAR *caption,
 
     AddMenu(first, last - 1, i);
   }
-
-  UpdateLayout();
 }
 
 void
