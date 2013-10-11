@@ -49,24 +49,6 @@ TabMenuControl::~TabMenuControl()
   delete tab_display;
 }
 
-void
-TabMenuControl::NextPage()
-{
-  pager.Next(true);
-}
-
-void
-TabMenuControl::PreviousPage()
-{
-  pager.Previous(true);
-}
-
-void
-TabMenuControl::SetCurrentPage(unsigned page)
-{
-  pager.ClickPage(PAGE_OFFSET + page);
-}
-
 bool
 TabMenuControl::InvokeKeyPress(unsigned key_code)
 {

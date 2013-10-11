@@ -126,9 +126,17 @@ private:
   void CreateSubMenuItem(const TabMenuPage &item);
 
 public:
-  void NextPage();
-  void PreviousPage();
-  void SetCurrentPage(unsigned page);
+  void NextPage() {
+    pager.Next(true);
+  }
+
+  void PreviousPage() {
+    pager.Previous(true);
+  }
+
+  void SetCurrentPage(unsigned page) {
+    pager.ClickPage(PAGE_OFFSET + page);
+  }
 
   bool Save(bool &changed) {
     return pager.Save(changed);
