@@ -42,7 +42,6 @@ class TabMenuDisplay;
  * The menu structure is initialized via an array parameter
  * from the client.
  * Creates a vertical menu in both Portrait and in landscape modes
- * ToDo: lazy loading of panels (XML and Init() routines)
  */
 class TabMenuControl : public ContainerWindow {
   static constexpr unsigned PAGE_OFFSET = 1;
