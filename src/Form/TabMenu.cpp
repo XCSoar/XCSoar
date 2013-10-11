@@ -33,6 +33,7 @@ TabMenuControl::TabMenuControl(const DialogLook &look, const TCHAR * _caption)
    caption(_caption),
    page_flipped_callback(nullptr)
 {
+  pager.Add(new WindowWidget(tab_display));
 }
 
 TabMenuControl::~TabMenuControl()
@@ -152,16 +153,15 @@ TabMenuControl::OnCreate()
   ContainerWindow::OnCreate();
 
   const PixelRect rc = GetClientRect();
-  pager.Initialise(*this, rc);
-  pager.Prepare(*this, rc);
-  pager.Show(rc);
 
   WindowStyle display_style;
   display_style.Hide();
   display_style.TabStop();
   tab_display->Create(*this, rc, display_style);
 
-  pager.Add(new WindowWidget(tab_display));
+  pager.Initialise(*this, rc);
+  pager.Prepare(*this, rc);
+  pager.Show(rc);
 }
 
 void
