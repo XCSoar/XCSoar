@@ -245,7 +245,6 @@ PrepareConfigurationDialog()
 
   PrepareConfigurationMenu();
 
-  tab_menu->GotoMenuPage();
   /* restore last selected menu item */
   static bool Initialized = false;
   if (!Initialized)

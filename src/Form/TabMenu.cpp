@@ -140,6 +140,9 @@ TabMenuControl::InitMenu(const TabMenuPage pages_in[],
 
   tab_display->InitMenu(caption, pages_in, num_pages,
                         groups, n_groups);
+
+  /* show the menu page by default */
+  pager.SetCurrent(num_pages);
 }
 
 void
