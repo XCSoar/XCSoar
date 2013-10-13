@@ -59,6 +59,7 @@ enum Buttons {
   MUTATE,
   DOWN,
   UP,
+  REVERSE,
   CLEAR_ALL,
 };
 
@@ -72,19 +73,19 @@ class TaskEditButtons final : public NullWidget {
 
   WndButton *edit_button, *mutate_button;
   WndSymbolButton *down_button, *up_button;
-  WndButton *clear_all_button;
+  WndButton *reverse_button, *clear_all_button;
   bool visible;
 
-  bool show_edit, show_mutate, show_down, show_up;
+  bool show_edit, show_mutate, show_down, show_up, show_reverse;
 
   struct Layout {
-    PixelRect edit, down, up, clear_all;
+    PixelRect edit, down, up, reverse, clear_all;
   };
 
 public:
   TaskEditButtons()
     :visible(false), show_edit(false), show_mutate(false),
-     show_down(false), show_up(false) {}
+     show_down(false), show_up(false), show_reverse(false) {}
 
   void SetListener(ActionListener &_listener) {
     assert(!visible);
@@ -92,11 +93,12 @@ public:
     listener = &_listener;
   }
 
-  void Update(bool _edit, bool _mutate, bool _down, bool _up) {
+  void Update(bool _edit, bool _mutate, bool _down, bool _up, bool _reverse) {
     show_edit = _edit;
     show_mutate = _mutate;
     show_down = _down;
     show_up = _up;
+    show_reverse = _reverse;
 
     if (visible)
       UpdateVisibility();
@@ -110,19 +112,19 @@ private:
     mutate_button->SetVisible(show_mutate);
     down_button->SetVisible(show_down);
     up_button->SetVisible(show_up);
+    reverse_button->SetVisible(show_reverse);
     clear_all_button->Show();
   }
 
   Layout CalculateLayout(const PixelRect &rc) const {
-    const PixelScalar x2 = (rc.left + rc.right) / 2,
-      x1 = (rc.left + x2) / 2,
-      x3 = (x2 + rc.right) / 2;
+    const PixelScalar dx = (rc.right - rc.left) / 5;
 
     return {
-      { rc.left, rc.top, x1, rc.bottom },
-      { x1, rc.top, x2, rc.bottom },
-      { x2, rc.top, x3, rc.bottom },
-      { x3, rc.top, rc.right, rc.bottom },
+      { rc.left         , rc.top, rc.left +     dx, rc.bottom },
+      { rc.left +     dx, rc.top, rc.left + 2 * dx, rc.bottom },
+      { rc.left + 2 * dx, rc.top, rc.left + 3 * dx, rc.bottom },
+      { rc.left + 3 * dx, rc.top, rc.left + 4 * dx, rc.bottom },
+      { rc.left + 4 * dx, rc.top, rc.right        , rc.bottom },
     };
   }
 
@@ -135,6 +137,7 @@ private:
     mutate_button->Move(layout.down);
     down_button->Move(layout.down);
     up_button->Move(layout.up);
+    reverse_button->Move(layout.reverse);
     clear_all_button->Move(layout.clear_all);
   }
 
@@ -173,6 +176,9 @@ public:
     up_button = new WndSymbolButton(parent, look, _T("^"),
                                     layout.down, style,
                                     *listener, UP);
+    reverse_button = new WndButton(parent, look, _("Reverse"),
+                                   layout.reverse, style,
+                                   *listener, REVERSE);
     clear_all_button = new WndButton(parent, look, _("Clear All"),
                                      layout.clear_all, style,
                                      *listener, CLEAR_ALL);
@@ -182,6 +188,7 @@ public:
     assert(!visible);
 
     delete clear_all_button;
+    delete reverse_button;
     delete down_button;
     delete up_button;
     delete mutate_button;
@@ -204,6 +211,7 @@ public:
     mutate_button->Hide();
     down_button->Hide();
     up_button->Hide();
+    reverse_button->Hide();
     clear_all_button->Hide();
   }
 
@@ -246,6 +254,7 @@ public:
   void MoveUp();
   void MoveDown();
 
+  void ReverseTask();
   void OnClearAllClicked();
   void OnEditTurnpointClicked();
   void EditTaskPoint(unsigned ItemIndex);
@@ -288,7 +297,8 @@ TaskEditPanel::UpdateButtons()
                  (index == ordered_task->TaskSize() - 1) &&
                  !ordered_task->HasFinish(),
                  (int)index < ((int)(ordered_task->TaskSize()) - 1),
-                 index > 0 && index < ordered_task->TaskSize());
+                 index > 0 && index < ordered_task->TaskSize(),
+                 ordered_task->TaskSize() >= 2);
 }
 
 void
@@ -312,6 +322,43 @@ TaskEditPanel::RefreshView()
 
   if (GetList().IsVisible() && two_widgets != nullptr)
     two_widgets->UpdateLayout();
+}
+
+void TaskEditPanel::ReverseTask()
+{
+  if (ordered_task->TaskSize() < 2)
+    return;
+
+  const unsigned start_index = 0;
+  const unsigned finish_index = ordered_task->TaskSize() - 1;
+  const Waypoint start_wp = ordered_task->GetTaskPoint(start_index).GetWaypoint();
+  const Waypoint finish_wp = ordered_task->GetTaskPoint(finish_index).GetWaypoint();
+
+  if (start_wp.location != finish_wp.location) {
+    // swap start/finish TP if at different location but leave OZ type intact
+    ordered_task->Relocate(start_index, finish_wp);
+    ordered_task->Relocate(finish_index, start_wp);
+
+    // remove optional start points
+    while (ordered_task->HasOptionalStarts())
+      ordered_task->RemoveOptionalStart(0);
+  }
+
+  // reverse intermediate TPs order keeping the OZ type with the respective TP
+  unsigned length = ordered_task->TaskSize()-1;
+  for (unsigned i = 1; i < length - 1; ++i) {
+    const OrderedTaskPoint &otp = ordered_task->GetTaskPoint(length - 1);
+    if (!ordered_task->GetFactory().Insert(otp, i, false))
+      return;
+    if (!ordered_task->GetFactory().Remove(length, false))
+      return;
+  }
+
+  *task_modified = true;
+  ordered_task->GetFactory().CheckAddFinish();
+  ordered_task->UpdateStatsGeometry();
+  ordered_task->UpdateGeometry();
+  RefreshView();
 }
 
 void
@@ -346,6 +393,10 @@ TaskEditPanel::OnAction(int id)
 
   case DOWN:
     MoveDown();
+    break;
+
+  case REVERSE:
+    ReverseTask();
     break;
 
   case CLEAR_ALL:
