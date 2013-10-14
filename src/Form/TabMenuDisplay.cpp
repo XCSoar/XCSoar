@@ -52,7 +52,7 @@ TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
 {
   assert(pages_in != nullptr);
   assert(num_pages > 0);
-  assert(groups != nullptr);
+  assert(_groups != nullptr);
   assert(n_groups > 0);
 
   pages = pages_in;

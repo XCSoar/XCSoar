@@ -23,7 +23,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/DigitEntry.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
 	$(FORM_SRC_DIR)/TabDisplay.cpp \
-	$(FORM_SRC_DIR)/TabMenu.cpp \
 	$(FORM_SRC_DIR)/TabMenuDisplay.cpp \
 	$(FORM_SRC_DIR)/CharacterButton.cpp \
 	$(FORM_SRC_DIR)/UnitUtil.cpp \

@@ -10,5 +10,5 @@
   <Button Name="cmdExtra2" X="60" Y="-60" Width="-90" Height="30" Visible="0"/>
   <Button Name="cmdExtra1" X="-90" Y="-60" Height="30" Visible="0"/>
 
-  <Custom Name="TabMenu" X="0" Y="0" Height="-60" OnCreate="OnCreateMenu"/>
+  <Widget Name="menu" X="0" Y="0" Height="-60"/>
 </Form>

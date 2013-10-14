@@ -25,12 +25,16 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
+#include "Widget/DockWindow.hpp"
+#include "Widget/PagerWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "UIGlobals.hpp"
-#include "Form/TabMenu.hpp"
+#include "Form/TabMenuDisplay.hpp"
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
@@ -79,7 +83,8 @@ Copyright_License {
 static unsigned current_page;
 static WndForm *dialog = NULL;
 
-static TabMenuControl* tab_menu = NULL;
+static TabMenuDisplay *menu;
+static PagerWidget *pager;
 
 static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Site Files"), },
@@ -174,19 +179,21 @@ OnUserLevel(CheckBoxControl &control)
   const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(ProfileKeys::UserLevel, expert);
-  tab_menu->UpdateLayout();
+
+  /* force layout update */
+  pager->Move(pager->GetPosition());
 }
 
 static void
 OnNextClicked()
 {
-  tab_menu->NextPage();
+  pager->Next(true);
 }
 
 static void
 OnPrevClicked()
 {
-  tab_menu->PreviousPage();
+  pager->Previous(true);
 }
 
 /**
@@ -195,40 +202,48 @@ OnPrevClicked()
 static void
 OnCloseClicked()
 {
-  if (tab_menu->IsCurrentPageTheMenu())
+  if (pager->GetCurrentIndex() == 0)
     dialog->SetModalResult(mrOK);
   else
-    tab_menu->GotoMenuPage();
+    pager->ClickPage(0);
 }
 
 static bool
 FormKeyDown(unsigned key_code)
 {
-  return tab_menu->InvokeKeyPress(key_code);
+  if (pager->KeyPress(key_code))
+    return true;
+
+  switch (key_code) {
+  case KEY_LEFT:
+#ifdef GNAV
+  case '6':
+#endif
+    pager->Previous(true);
+    return true;
+
+  case KEY_RIGHT:
+#ifdef GNAV
+  case '7':
+#endif
+    pager->Next(true);
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 static void
 OnPageFlipped()
 {
+  menu->OnPageFlipped();
+
   TCHAR buffer[128];
-  const TCHAR *caption = tab_menu->GetPageCaption(buffer, ARRAY_SIZE(buffer));
+  const TCHAR *caption = menu->GetCaption(buffer, ARRAY_SIZE(buffer));
   if (caption == nullptr)
     caption = _("Configuration");
   dialog->SetCaption(caption);
-}
-
-static Window *
-OnCreateMenu(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
-{
-  tab_menu = new TabMenuControl(UIGlobals::GetDialogLook());
-  tab_menu->SetPageFlippedCallback(OnPageFlipped);
-  tab_menu->InitMenu(pages,
-                     ARRAY_SIZE(pages),
-                     main_menu_captions,
-                     ARRAY_SIZE(main_menu_captions));
-
-  tab_menu->Create(parent, rc, style);
-  return tab_menu;
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -236,7 +251,6 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnCreateMenu),
   DeclareCallBackEntry(NULL)
 };
 
@@ -255,18 +269,37 @@ PrepareConfigurationDialog()
   CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));
   cb->SetState(expert_mode);
 
+  pager = new PagerWidget();
+
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  menu = new TabMenuDisplay(*pager, look);
+  pager->Add(new WindowWidget(menu));
+  menu->InitMenu(pages, ARRAY_SIZE(pages),
+                 main_menu_captions, ARRAY_SIZE(main_menu_captions));
+
+  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
+
+  WindowStyle menu_style;
+  menu_style.Hide();
+  menu_style.TabStop();
+  menu->Create(dock, dock.GetClientRect(), menu_style);
+
+  dock.SetWidget(pager);
+
+  pager->SetPageFlippedCallback(OnPageFlipped);
+
   /* restore last selected menu item */
-  tab_menu->SetLastContentPage(current_page);
+  menu->SetCursor(current_page);
 }
 
 static void
 Save()
 {
   /* save page number for next time this dialog is opened */
-  current_page = tab_menu->GetLastContentPage();
+  current_page = menu->GetCursor();
 
   bool changed = false;
-  tab_menu->Save(changed);
+  pager->Save(changed);
 
   if (changed) {
     Profile::Save();
@@ -294,7 +327,10 @@ void dlgConfigurationShowModal()
   /* destroy the TabMenuControl first, to have a well-defined
      destruction order; this is necessary because some config panels
      refer to buttons belonging to the dialog */
-  tab_menu->Destroy();
+  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
+  dock.SetWidget(nullptr);
+
+  delete menu;
 
   delete dialog;
   dialog = NULL;
