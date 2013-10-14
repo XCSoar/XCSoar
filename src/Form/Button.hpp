@@ -80,6 +80,11 @@ public:
   void Create(ContainerWindow &parent,
               tstring::const_pointer caption, const PixelRect &rc,
               ButtonWindowStyle style,
+              ClickNotifyCallback click_callback=nullptr);
+
+  void Create(ContainerWindow &parent,
+              tstring::const_pointer caption, const PixelRect &rc,
+              ButtonWindowStyle style,
               ActionListener &listener, int id);
 
   /**

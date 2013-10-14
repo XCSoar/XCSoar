@@ -34,10 +34,9 @@ WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
                      ClickNotifyCallback _click_callback)
   :renderer(look),
    listener(NULL),
-   click_callback(_click_callback)
+   click_callback(nullptr)
 {
-  style.EnableCustomPainting();
-  ButtonWindow::Create(parent, Caption, rc, style);
+  Create(parent, Caption, rc, style, _click_callback);
 }
 
 WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
@@ -51,6 +50,18 @@ WndButton::WndButton(ContainerWindow &parent, const ButtonLook &look,
 
 WndButton::WndButton(const ButtonLook &_look)
   :renderer(_look), listener(nullptr), click_callback(nullptr) {}
+
+void
+WndButton::Create(ContainerWindow &parent,
+                  tstring::const_pointer caption, const PixelRect &rc,
+                  ButtonWindowStyle style,
+                  ClickNotifyCallback _click_callback)
+{
+  click_callback = _click_callback;
+
+  style.EnableCustomPainting();
+  ButtonWindow::Create(parent, caption, rc, style);
+}
 
 void
 WndButton::Create(ContainerWindow &parent,
