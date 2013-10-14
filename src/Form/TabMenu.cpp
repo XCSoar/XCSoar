@@ -98,27 +98,11 @@ TabMenuControl::GetLastContentPage() const
   return tab_display->GetCursor();
 }
 
-inline void
-TabMenuControl::CreateSubMenuItem(const TabMenuPage &item)
-{
-  assert(item.Load != nullptr);
-
-  Widget *widget = item.Load();
-  pager.Add(widget);
-}
-
 void
 TabMenuControl::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
                          const TabMenuGroup groups[], unsigned n_groups)
 {
-  assert(pages_in);
-  assert(groups != nullptr);
-  assert(n_groups > 0);
-
-  for (unsigned i = 0; i < num_pages; ++i)
-    CreateSubMenuItem(pages_in[i]);
-
   tab_display->InitMenu(pages_in, num_pages,
                         groups, n_groups);
 }

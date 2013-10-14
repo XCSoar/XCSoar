@@ -50,11 +50,23 @@ TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
                          unsigned num_pages,
                          const TabMenuGroup _groups[], unsigned n_groups)
 {
+  assert(pages_in != nullptr);
+  assert(num_pages > 0);
+  assert(groups != nullptr);
+  assert(n_groups > 0);
+
   pages = pages_in;
   groups = _groups;
 
-  for (unsigned i = 0; i < num_pages; ++i)
+  for (unsigned i = 0; i < num_pages; ++i) {
+    assert(pages_in[i].Load != nullptr);
+
     AddMenuItem();
+
+    Widget *w = pages_in[i].Load();
+    assert(w != nullptr);
+    pager.Add(w);
+  }
 
   for (unsigned i = 0; i < n_groups; i++) {
     unsigned first = 0;

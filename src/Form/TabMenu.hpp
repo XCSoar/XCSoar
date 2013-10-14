@@ -117,14 +117,6 @@ private:
     return 0;
   }
 
-  /**
-   * appends a submenu button to the buttons array and
-   * loads it's XML file
-   *
-   * @param item the TabMenuPage to be created
-   */
-  void CreateSubMenuItem(const TabMenuPage &item);
-
 public:
   void NextPage() {
     pager.Next(true);
