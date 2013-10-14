@@ -27,7 +27,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Widget/DockWindow.hpp"
 #include "Widget/PagerWidget.hpp"
-#include "Widget/WindowWidget.hpp"
+#include "Widget/CreateWindowWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Form/TabMenuDisplay.hpp"
 #include "Form/TabMenuData.hpp"
@@ -273,16 +273,19 @@ PrepareConfigurationDialog()
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   menu = new TabMenuDisplay(*pager, look);
-  pager->Add(new WindowWidget(menu));
+
+  pager->Add(new CreateWindowWidget([](ContainerWindow &parent,
+                                       const PixelRect &rc,
+                                       WindowStyle style) {
+                                      style.TabStop();
+                                      menu->Create(parent, rc, style);
+                                      return menu;
+                                    }));
+
   menu->InitMenu(pages, ARRAY_SIZE(pages),
                  main_menu_captions, ARRAY_SIZE(main_menu_captions));
 
   DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
-
-  WindowStyle menu_style;
-  menu_style.Hide();
-  menu_style.TabStop();
-  menu->Create(dock, dock.GetClientRect(), menu_style);
 
   dock.SetWidget(pager);
 
@@ -329,8 +332,6 @@ void dlgConfigurationShowModal()
      refer to buttons belonging to the dialog */
   DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("menu"));
   dock.SetWidget(nullptr);
-
-  delete menu;
 
   delete dialog;
   dialog = NULL;
