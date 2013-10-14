@@ -256,11 +256,7 @@ PrepareConfigurationDialog()
   cb->SetState(expert_mode);
 
   /* restore last selected menu item */
-  static bool Initialized = false;
-  if (!Initialized)
-    Initialized = true;
-  else
-    tab_menu->SetLastContentPage(current_page);
+  tab_menu->SetLastContentPage(current_page);
 }
 
 static void
