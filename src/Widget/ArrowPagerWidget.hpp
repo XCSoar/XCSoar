@@ -28,6 +28,8 @@ Copyright_License {
 #include "Form/SymbolButton.hpp"
 #include "Form/ActionListener.hpp"
 
+#include <assert.h>
+
 struct ButtonLook;
 
 /**
@@ -69,6 +71,12 @@ public:
      previous_button(look), next_button(look), close_button(look) {}
 
   virtual ~ArrowPagerWidget();
+
+  Widget &GetExtra() {
+    assert(extra != nullptr);
+
+    return *extra;
+  }
 
   /* virtual methods from Widget */
   virtual PixelSize GetMinimumSize() const override;
