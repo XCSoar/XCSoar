@@ -173,7 +173,9 @@ WidgetDialog::ShowModal()
     widget.Move(buttons.UpdateLayout());
 
   widget.Show();
-  return WndForm::ShowModal();
+  int result = WndForm::ShowModal();
+  widget.Hide();
+  return result;
 }
 
 void
