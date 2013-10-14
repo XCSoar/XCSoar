@@ -76,13 +76,7 @@ TabMenuControl::InvokeKeyPress(unsigned key_code)
 const TCHAR *
 TabMenuControl::GetPageCaption(TCHAR buffer[], size_t size) const
 {
-  const unsigned page = pager.GetCurrentIndex();
-  if (page == GetMenuPage()) {
-    return nullptr;
-  } else {
-    tab_display->FormatPageCaption(buffer, size, page - PAGE_OFFSET);
-    return buffer;
-  }
+  return tab_display->GetCaption(buffer, size);
 }
 
 void TabMenuControl::SetLastContentPage(unsigned page)

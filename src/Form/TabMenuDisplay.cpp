@@ -83,13 +83,18 @@ TabMenuDisplay::InitMenu(const TabMenuPage pages_in[],
   }
 }
 
-void
-TabMenuDisplay::FormatPageCaption(TCHAR *buffer, size_t size,
-                                  unsigned i) const
+const TCHAR *
+TabMenuDisplay::GetCaption(TCHAR buffer[], size_t size) const
 {
-  StringFormat(buffer, size, _T("%s > %s"),
-               gettext(GetPageParentCaption(i)),
-               gettext(GetPageCaption(i)));
+  const unsigned page = pager.GetCurrentIndex();
+  if (page >= PAGE_OFFSET) {
+    const unsigned i = page - PAGE_OFFSET;
+    StringFormat(buffer, size, _T("%s > %s"),
+                 gettext(GetPageParentCaption(i)),
+                 gettext(GetPageCaption(i)));
+    return buffer;
+  } else
+    return nullptr;
 }
 
 int

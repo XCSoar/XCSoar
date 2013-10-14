@@ -150,7 +150,7 @@ public:
   void InitMenu(const TabMenuPage pages_in[], unsigned num_pages,
                 const TabMenuGroup groups[], unsigned n_groups);
 
-  void FormatPageCaption(TCHAR *buffer, size_t size, unsigned i) const;
+  const TCHAR *GetCaption(TCHAR buffer[], size_t size) const;
 
   /**
    * Call this from PagerWidget's OnPageFlipped callback.  It moves
