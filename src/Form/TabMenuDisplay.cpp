@@ -204,12 +204,14 @@ TabMenuDisplay::SetCursor(unsigned i)
   if (i == cursor)
     return;
 
-  if (SupportsPartialRedraw() &&
-      GetPageMainIndex(cursor) == GetPageMainIndex(i)) {
-    Invalidate(GetSubMenuButtonSize(cursor));
-    Invalidate(GetSubMenuButtonSize(i));
-  } else
-    Invalidate();
+  if (IsDefined()) {
+    if (SupportsPartialRedraw() &&
+        GetPageMainIndex(cursor) == GetPageMainIndex(i)) {
+      Invalidate(GetSubMenuButtonSize(cursor));
+      Invalidate(GetSubMenuButtonSize(i));
+    } else
+      Invalidate();
+  }
 
   cursor = i;
 }
