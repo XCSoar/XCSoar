@@ -152,6 +152,12 @@ public:
 
   void FormatPageCaption(TCHAR *buffer, size_t size, unsigned i) const;
 
+  /**
+   * Call this from PagerWidget's OnPageFlipped callback.  It moves
+   * the cursor to the newly selected page.
+   */
+  void OnPageFlipped();
+
   void SetCursor(unsigned i);
 
 private:

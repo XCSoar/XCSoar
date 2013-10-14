@@ -186,6 +186,14 @@ TabMenuDisplay::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 }
 
 void
+TabMenuDisplay::OnPageFlipped()
+{
+  const unsigned i = pager.GetCurrentIndex();
+  if (i >= PAGE_OFFSET)
+    SetCursor(i - PAGE_OFFSET);
+}
+
+void
 TabMenuDisplay::SetCursor(unsigned i)
 {
   if (i == cursor)

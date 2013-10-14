@@ -35,9 +35,7 @@ TabMenuControl::TabMenuControl(const DialogLook &look)
   pager.Add(new WindowWidget(tab_display));
 
   pager.SetPageFlippedCallback([this](){
-      const unsigned page = pager.GetCurrentIndex();
-      if (page != GetMenuPage())
-        SetLastContentPage(page - PAGE_OFFSET);
+      tab_display->OnPageFlipped();
 
       if (page_flipped_callback != nullptr)
         page_flipped_callback();
