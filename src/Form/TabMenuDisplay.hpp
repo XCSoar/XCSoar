@@ -30,12 +30,18 @@ Copyright_License {
 
 struct DialogLook;
 class ContainerWindow;
-class TabMenuControl;
+class PagerWidget;
 
 class TabMenuDisplay final : public PaintWindow
 {
   /* excludes "Main Menu" which is a "super menu" */
   static constexpr unsigned MAX_MAIN_MENU_ITEMS = 7;
+
+  /**
+   * The offset from a page number in the #TabMenuDisplay to a page
+   * number in the #PagerWidget.
+   */
+  static constexpr unsigned PAGE_OFFSET = 1;
 
   /**
    * class that holds the child menu button and info for the menu
@@ -105,7 +111,7 @@ class TabMenuDisplay final : public PaintWindow
     }
   };
 
-  TabMenuControl &menu;
+  PagerWidget &pager;
   const DialogLook &look;
 
   StaticArray<SubMenuButton, 32> buttons;
@@ -132,7 +138,7 @@ class TabMenuDisplay final : public PaintWindow
   /* used to render which submenu is drawn and which item is highlighted */
 
 public:
-  TabMenuDisplay(TabMenuControl &_menu, const DialogLook &look);
+  TabMenuDisplay(PagerWidget &pager, const DialogLook &look);
 
   /**
    * Initializes the menu and buids it from the Menuitem[] array

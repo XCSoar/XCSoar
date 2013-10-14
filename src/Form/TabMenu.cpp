@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 TabMenuControl::TabMenuControl(const DialogLook &look)
-  :tab_display(new TabMenuDisplay(*this, look)),
+  :tab_display(new TabMenuDisplay(pager, look)),
    page_flipped_callback(nullptr)
 {
   pager.Add(new WindowWidget(tab_display));

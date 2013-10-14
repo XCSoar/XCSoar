@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TabMenuDisplay.hpp"
-#include "TabMenu.hpp"
+#include "Widget/PagerWidget.hpp"
 #include "Form/TabDisplay.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
@@ -34,9 +34,9 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
-TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
+TabMenuDisplay::TabMenuDisplay(PagerWidget &_pager,
                                const DialogLook &_look)
-  :menu(_theTabBar),
+  :pager(_pager),
    look(_look),
    dragging(false),
    drag_off_button(false),
@@ -240,7 +240,7 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_RETURN:
-    menu.SetCurrentPage(cursor);
+    pager.ClickPage(PAGE_OFFSET + cursor);
     return true;
 
   case KEY_RIGHT:
@@ -301,7 +301,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 
       // sub menu click
       if (di.IsSub())
-        menu.SetCurrentPage(GetPageNum(di));
+        pager.ClickPage(PAGE_OFFSET + GetPageNum(di));
 
       // main menu click
       else if (di.IsMain()) {
