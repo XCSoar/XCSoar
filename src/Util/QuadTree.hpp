@@ -31,8 +31,6 @@
 #ifndef XCSOAR_QUAD_TREE_HPP
 #define XCSOAR_QUAD_TREE_HPP
 
-#include "Util/NonCopyable.hpp"
-
 #include <utility>
 #include <limits>
 #include <memory>
@@ -58,7 +56,7 @@
  */
 template<typename T, typename Accessor,
          typename Alloc = std::allocator<T> >
-class QuadTree : private NonCopyable {
+class QuadTree {
   struct AlwaysTrue {
     constexpr
     bool operator()(const T &value) const {
@@ -932,6 +930,8 @@ public:
   QuadTree() {
     bounds.Clear();
   }
+
+  QuadTree(const QuadTree &) = delete;
 
   ~QuadTree() {
     /* this needs to be called manually, because we can't pass the
