@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef COMPILER_H
 #define COMPILER_H
 
+#define GCC_CHECK_VERSION(major, minor) \
+  (defined(__GNUC__) &&                                                 \
+   (__GNUC__ > (major) || (__GNUC__ == (major) && __GNUC_MINOR__ >= (minor))))
+
 #ifdef __GNUC__
 #define GCC_VERSION (__GNUC__ * 10000 \
                      + __GNUC_MINOR__ * 100 \
@@ -40,14 +44,14 @@ Copyright_License {
 #    error Sorry, your clang version is too old.  You need at least version 3.1.
 #  endif
 #elif defined(__GNUC__)
-#  if GCC_VERSION < 40600
+#  if !GCC_CHECK_VERSION(4,6)
 #    error Sorry, your gcc version is too old.  You need at least version 4.6.
 #  endif
 #else
 #  warning Untested compiler.  Use at your own risk!
 #endif
 
-#if GCC_VERSION >= 30000
+#if GCC_CHECK_VERSION(4,0)
 
 /* GCC 4.x */
 
@@ -76,7 +80,7 @@ Copyright_License {
 
 #define gcc_always_inline __attribute__((always_inline))
 
-#else /* ! GCC_VERSION >= 30000 */
+#else
 
 /* generic C compiler */
 
@@ -105,9 +109,9 @@ Copyright_License {
 
 #define gcc_always_inline inline
 
-#endif /* ! GCC_VERSION >= 30000 */
+#endif
 
-#if GCC_VERSION >= 40300
+#if GCC_CHECK_VERSION(4,3)
 
 #define gcc_hot __attribute__((hot))
 #define gcc_cold __attribute__((cold))
@@ -119,7 +123,7 @@ Copyright_License {
 
 #endif /* ! GCC_UNUSED >= 40300 */
 
-#if GCC_VERSION >= 40600 && !defined(__clang__)
+#if GCC_CHECK_VERSION(4,6) && !defined(__clang__)
 #define gcc_flatten __attribute__((flatten))
 #else
 #define gcc_flatten
@@ -128,7 +132,7 @@ Copyright_License {
 #ifndef __cplusplus
 /* plain C99 has "restrict" */
 #define gcc_restrict restrict
-#elif GCC_VERSION >= 30000
+#elif GCC_CHECK_VERSION(4,0)
 /* "__restrict__" is a GCC extension for C++ */
 #define gcc_restrict __restrict__
 #else
@@ -141,12 +145,12 @@ Copyright_License {
 #if defined(__cplusplus)
 
 /* support for C++11 "override" was added in gcc 4.7 */
-#if !defined(__clang__) && GCC_VERSION < 40700
+#if !defined(__clang__) && !GCC_CHECK_VERSION(4,7)
 #define override
 #define final
 #endif
 
-#if defined(__clang__) || GCC_VERSION >= 40800
+#if defined(__clang__) || GCC_CHECK_VERSION(4,8)
 #define gcc_alignas(T, fallback) alignas(T)
 #else
 #define gcc_alignas(T, fallback) gcc_aligned(fallback)
