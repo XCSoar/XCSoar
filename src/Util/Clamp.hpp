@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_CLAMP_HPP
-#define XCSOAR_UTIL_CLAMP_HPP
+#ifndef CLAMP_HPP
+#define CLAMP_HPP
 
 #include "Compiler.h"
 

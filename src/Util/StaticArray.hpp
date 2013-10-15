@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_STATIC_ARRAY_HPP
-#define XCSOAR_STATIC_ARRAY_HPP
+#ifndef STATIC_ARRAY_HPP
+#define STATIC_ARRAY_HPP
 
 #include "TrivialArray.hpp"
 

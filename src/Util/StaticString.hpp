@@ -27,10 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_STATIC_STRING_HPP
-#define XCSOAR_STATIC_STRING_HPP
+#ifndef STATIC_STRING_HPP
+#define STATIC_STRING_HPP
 
-#include "Util/StringUtil.hpp"
+#include "StringUtil.hpp"
 #include "UTF8.hpp"
 
 #include <assert.h>

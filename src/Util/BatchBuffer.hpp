@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_BATCH_BUFFER_HPP
-#define XCSOAR_BATCH_BUFFER_HPP
+#ifndef BATCH_BUFFER_HPP
+#define BATCH_BUFFER_HPP
 
 #include "StaticArray.hpp"
 

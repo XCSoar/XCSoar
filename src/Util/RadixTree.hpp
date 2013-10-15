@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_RADIX_TREE_HPP
-#define XCSOAR_RADIX_TREE_HPP
+#ifndef RADIX_TREE_HPP
+#define RADIX_TREE_HPP
 
 #include "Util/StaticString.hpp"
 #include "StringUtil.hpp"

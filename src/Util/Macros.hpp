@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_MACROS_HPP
-#define XCSOAR_UTIL_MACROS_HPP
+#ifndef MACROS_HPP
+#define MACROS_HPP
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 

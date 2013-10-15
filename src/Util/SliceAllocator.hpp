@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_SLICE_ALLOCATOR_HPP
-#define XCSOAR_SLICE_ALLOCATOR_HPP
+#ifndef SLICE_ALLOCATOR_HPP
+#define SLICE_ALLOCATOR_HPP
 
 #include <utility>
 #include <cstddef>

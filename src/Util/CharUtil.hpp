@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_CHAR_UTIL_HPP
-#define XCSOAR_CHAR_UTIL_HPP
+#ifndef CHAR_UTIL_HPP
+#define CHAR_UTIL_HPP
 
 #ifdef _UNICODE
 #include <tchar.h>

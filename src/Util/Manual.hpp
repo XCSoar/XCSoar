@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_MANUAL_HPP
-#define XCSOAR_MANUAL_HPP
+#ifndef MANUAL_HPP
+#define MANUAL_HPP
 
 #include "Compiler.h"
 

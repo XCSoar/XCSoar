@@ -27,10 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_CACHE_HPP
-#define XCSOAR_CACHE_HPP
+#ifndef CACHE_HPP
+#define CACHE_HPP
 
-#include "Util/ListHead.hpp"
+#include "ListHead.hpp"
 #include "Compiler.h"
 
 #include <unordered_map>

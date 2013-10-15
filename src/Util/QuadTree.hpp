@@ -28,8 +28,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_QUAD_TREE_HPP
-#define XCSOAR_QUAD_TREE_HPP
+#ifndef QUAD_TREE_HPP
+#define QUAD_TREE_HPP
 
 #include <utility>
 #include <limits>

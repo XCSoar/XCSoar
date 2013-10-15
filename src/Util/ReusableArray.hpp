@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_REUSABLE_ARRAY_HPP
-#define XCSOAR_REUSABLE_ARRAY_HPP
+#ifndef REUSABLE_ARRAY_HPP
+#define REUSABLE_ARRAY_HPP
 
 #include "Util/AllocatedArray.hpp"
 

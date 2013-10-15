@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_ALGORITHM_HPP
-#define XCSOAR_UTIL_ALGORITHM_HPP
+#ifndef ALGORITHM_HPP
+#define ALGORITHM_HPP
 
 /**
  * @return true if predicate() returns true for at least one item in

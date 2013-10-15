@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_TYPE_TRAITS_HPP
-#define XCSOAR_UTIL_TYPE_TRAITS_HPP
+#ifndef TYPE_TRAITS_HPP
+#define TYPE_TRAITS_HPP
 
 #include "Compiler.h"
 

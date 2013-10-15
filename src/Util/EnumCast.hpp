@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_ENUM_CAST_HPP
-#define XCSOAR_UTIL_ENUM_CAST_HPP
+#ifndef ENUM_CAST_HPP
+#define ENUM_CAST_HPP
 
 #include <stdint.h>
 

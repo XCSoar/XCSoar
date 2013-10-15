@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_LIST_HEAD_HPP
-#define XCSOAR_UTIL_LIST_HEAD_HPP
+#ifndef LIST_HEAD_HPP
+#define LIST_HEAD_HPP
 
 #include "Compiler.h"
 

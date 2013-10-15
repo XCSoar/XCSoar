@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_UTIL_ENUM_BIT_SET_HPP
-#define XCSOAR_UTIL_ENUM_BIT_SET_HPP
+#ifndef ENUM_BIT_SET_HPP
+#define ENUM_BIT_SET_HPP
 
 #include "Compiler.h"
 

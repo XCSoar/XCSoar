@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_FIFO_BUFFER_HPP
-#define XCSOAR_FIFO_BUFFER_HPP
+#ifndef FIFO_BUFFER_HPP
+#define FIFO_BUFFER_HPP
 
 #include <utility>
 #include <algorithm>

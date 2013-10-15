@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_ALLOCATED_GRID_HPP
-#define XCSOAR_ALLOCATED_GRID_HPP
+#ifndef ALLOCATED_GRID_HPP
+#define ALLOCATED_GRID_HPP
 
 #include "AllocatedArray.hpp"
 

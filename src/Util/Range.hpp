@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_RANGE_HPP
-#define XCSOAR_RANGE_HPP
+#ifndef RANGE_HPP
+#define RANGE_HPP
 
 /**
  * This class describes a range with two iterators: one pointing to

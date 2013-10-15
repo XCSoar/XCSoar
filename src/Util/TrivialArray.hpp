@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_TRIVIAL_ARRAY_HPP
-#define XCSOAR_TRIVIAL_ARRAY_HPP
+#ifndef TRIVIAL_ARRAY_HPP
+#define TRIVIAL_ARRAY_HPP
 
 #include <assert.h>
 #include <algorithm>

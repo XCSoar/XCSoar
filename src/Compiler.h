@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_COMPILER_H
-#define XCSOAR_COMPILER_H
+#ifndef COMPILER_H
+#define COMPILER_H
 
 #ifdef __GNUC__
 #define GCC_VERSION (__GNUC__ * 10000 \
