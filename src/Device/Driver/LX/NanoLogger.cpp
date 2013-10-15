@@ -57,7 +57,7 @@ protected:
     if (wresult != Port::WaitResult::READY)
       return false;
 
-    const int nbytes = port.Read(dest.data, dest.length);
+    const int nbytes = port.Read(dest.data, dest.size);
     if (nbytes <= 0)
       return false;
 
@@ -67,7 +67,7 @@ protected:
 
   char *GetLine() {
     const auto src = buffer.Read();
-    char *const end = src.data + src.length;
+    char *const end = src.data + src.size;
 
     /* a NMEA line starts with a dollar symbol ... */
     char *dollar = std::find(src.data, end, '$');

@@ -43,12 +43,11 @@ public:
   virtual typename Source<T>::Range Read() override {
     auto r = buffer.Write();
     if (!r.IsEmpty()) {
-      unsigned n = Read(r.data, r.length);
+      unsigned n = Read(r.data, r.size);
       buffer.Append(n);
     }
 
-    r = buffer.Read();
-    return typename Source<T>::Range(r.data, r.length);
+    return buffer.Read();
   }
 
   virtual void Consume(unsigned n) override {

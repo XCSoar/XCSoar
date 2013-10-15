@@ -59,8 +59,8 @@ public:
   virtual void DataReceived(const void *data, size_t length) {
     mutex.Lock();
     auto range = buffer.Write();
-    if (range.length < length)
-      length = range.length;
+    if (range.size < length)
+      length = range.size;
     memcpy(range.data, data, length);
     buffer.Append(length);
     mutex.Unlock();
@@ -79,7 +79,7 @@ private:
         if (range.IsEmpty())
           break;
 
-        length = std::min(ARRAY_SIZE(data), size_t(range.length));
+        length = std::min(ARRAY_SIZE(data), size_t(range.size));
         memcpy(data, range.data, length);
         buffer.Consume(length);
       }

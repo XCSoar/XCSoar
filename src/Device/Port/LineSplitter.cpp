@@ -61,7 +61,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
       continue;
     }
 
-    size_t nbytes = std::min(size_t(range.length), size_t(end - data));
+    size_t nbytes = std::min(size_t(range.size), size_t(end - data));
     memcpy(range.data, data, nbytes);
     data += nbytes;
     buffer.Append(nbytes);
@@ -73,7 +73,7 @@ PortLineSplitter::DataReceived(const void *_data, size_t length)
       if (range.IsEmpty())
         break;
 
-      char *newline = (char *)memchr(range.data, '\n', range.length);
+      char *newline = (char *)memchr(range.data, '\n', range.size);
       if (newline == NULL)
         /* no newline here: wait for more data */
         break;

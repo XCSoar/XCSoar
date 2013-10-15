@@ -45,7 +45,7 @@ char *
 LineSplitter::ReadLine()
 {
   /* is there enough data left in the buffer to read another line? */
-  if (memchr(remaining.data, '\n', remaining.length) == NULL) {
+  if (memchr(remaining.data, '\n', remaining.size) == NULL) {
     /* no: read more data from the Source */
     remaining = source.Read();
     if (remaining.IsEmpty())
@@ -55,23 +55,23 @@ LineSplitter::ReadLine()
 
   assert(!remaining.IsEmpty());
 
-  Source<char>::Range range = remaining;
+  auto range = remaining;
   std::pair<unsigned, unsigned> bounds =
-    extract_line(range.data, range.length);
+    extract_line(range.data, range.size);
   source.Consume(bounds.second);
   remaining.data += bounds.second;
-  remaining.length -= bounds.second;
+  remaining.size -= bounds.second;
 
-  if (bounds.first >= range.length) {
+  if (bounds.first >= range.size) {
     /* last line, not terminated by a line feed: copy to local buffer,
        because we want to append the null byte */
-    char *line = last.get(range.length + 1);
+    char *line = last.get(range.size + 1);
     if (line == NULL)
       /* allocation has failed */
       return NULL;
 
-    memcpy(line, range.data, range.length);
-    line[range.length] = 0;
+    memcpy(line, range.data, range.size);
+    line[range.size] = 0;
     return line;
   } else {
     /* there is space left for the null byte */

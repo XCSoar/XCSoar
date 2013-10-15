@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_SOURCE_HPP
 #define XCSOAR_IO_SOURCE_HPP
 
+#include "Util/WritableBuffer.hpp"
 #include "Compiler.h"
 
 #include <utility>
@@ -40,21 +41,7 @@ public:
    * of the buffer, and the second item is the number of available
    * words.
    */
-  struct Range {
-    T *data;
-
-    unsigned length;
-
-    Range() = default;
-
-    constexpr
-    Range(T *_data, unsigned _length):data(_data), length(_length) {}
-
-    constexpr
-    bool IsEmpty() const {
-      return length == 0;
-    }
-  };
+  typedef WritableBuffer<T> Range;
 
 public:
   virtual ~Source() {}

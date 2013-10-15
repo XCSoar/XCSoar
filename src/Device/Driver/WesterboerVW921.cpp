@@ -89,7 +89,7 @@ WesterboerVW921Device::DataReceived(const void *_data, size_t length,
       continue;
     }
 
-    size_t nbytes = std::min(size_t(range.length), size_t(end - data));
+    size_t nbytes = std::min(size_t(range.size), size_t(end - data));
     memcpy(range.data, data, nbytes);
     data += nbytes;
     buffer.Append(nbytes);
@@ -101,14 +101,14 @@ WesterboerVW921Device::DataReceived(const void *_data, size_t length,
         break;
 
       // Search for the dollar sign (sync byte)
-      char *dollar = (char *)memchr(range.data, '$', range.length);
+      char *dollar = (char *)memchr(range.data, '$', range.size);
       if (dollar == NULL)
         // no dollar sign here: wait for more data
         break;
 
       // Make sure there are at least 5 bytes in the buffer to
       // read the sentence header
-      unsigned remaining_length = range.length - (dollar - range.data);
+      unsigned remaining_length = range.size - (dollar - range.data);
       if (remaining_length < 5)
         break;
 

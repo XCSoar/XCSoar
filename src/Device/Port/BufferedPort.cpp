@@ -109,10 +109,10 @@ BufferedPort::Read(void *dest, size_t length)
   ScopeLock protect(mutex);
 
   auto r = buffer.Read();
-  if (r.length == 0)
+  if (r.size == 0)
     return -1;
 
-  size_t nbytes = std::min(length, r.length);
+  size_t nbytes = std::min(length, r.size);
   std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
   buffer.Consume(nbytes);
   return nbytes;
@@ -156,12 +156,12 @@ BufferedPort::DataReceived(const void *data, size_t length)
     ScopeLock protect(mutex);
 
     auto r = buffer.Write();
-    if (r.length == 0)
+    if (r.size == 0)
       /* the buffer is already full, discard excess data */
       return;
 
     /* discard excess data */
-    size_t nbytes = std::min(length, r.length);
+    size_t nbytes = std::min(length, r.size);
 
     std::copy(p, p + nbytes, r.data);
     buffer.Append(nbytes);

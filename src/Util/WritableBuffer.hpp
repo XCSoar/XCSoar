@@ -27,35 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONST_BUFFER_HPP
-#define CONST_BUFFER_HPP
+#ifndef WRITABLE_BUFFER_HPP
+#define WRITABLE_BUFFER_HPP
 
 #include "Compiler.h"
 
 #include <stddef.h>
 
 /**
- * A reference to a memory area that is read-only.
+ * A reference to a memory area that is writable.
  *
- * @see WritableBuffer
+ * @see ConstBuffer
  */
 template<typename T>
-struct ConstBuffer {
+struct WritableBuffer {
   typedef size_t size_type;
-  typedef const T *pointer_type;
-  typedef pointer_type const_pointer_type;
+  typedef T *pointer_type;
+  typedef const T *const_pointer_type;
   typedef pointer_type iterator;
   typedef const_pointer_type const_iterator;
 
   pointer_type data;
   size_type size;
 
-  ConstBuffer() = default;
+  WritableBuffer() = default;
 
-  constexpr ConstBuffer(pointer_type _data, size_type _size)
+  constexpr WritableBuffer(pointer_type _data, size_type _size)
     :data(_data), size(_size) {}
 
-  constexpr static ConstBuffer Null() {
+  constexpr static WritableBuffer Null() {
     return { nullptr, 0 };
   }
 

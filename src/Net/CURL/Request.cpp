@@ -63,8 +63,8 @@ Net::Request::~Request()
 size_t
 Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 {
-  Buffer::Range range = buffer.Write();
-  if ((size_t)range.length < size)
+  auto range = buffer.Write();
+  if ((size_t)range.size < size)
     /* buffer is full, pause CURL */
     return CURL_WRITEFUNC_PAUSE;
 
@@ -141,8 +141,8 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
   }
 
   --buffer_size;
-  if (buffer_size > range.length)
-    buffer_size = range.length;
+  if (buffer_size > range.size)
+    buffer_size = range.size;
 
   uint8_t *p = (uint8_t *)_buffer;
   std::copy(range.data, range.data + buffer_size, p);

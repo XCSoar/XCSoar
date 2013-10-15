@@ -62,7 +62,7 @@ public:
    * the Source object, the LineSplitter must forget the buffer.
    */
   void ResetBuffer() {
-    remaining.length = 0;
+    remaining.size = 0;
   }
 
   /* virtual methods from class NLineReader */

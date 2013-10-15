@@ -30,6 +30,8 @@
 #ifndef FIFO_BUFFER_HPP
 #define FIFO_BUFFER_HPP
 
+#include "WritableBuffer.hpp"
+
 #include <utility>
 #include <algorithm>
 
@@ -47,21 +49,7 @@ public:
   typedef size_t size_type;
 
 public:
-  struct Range {
-    T *data;
-
-    size_type length;
-
-    Range() = default;
-
-    constexpr
-    Range(T *_data, size_type _length):data(_data), length(_length) {}
-
-    constexpr
-    bool IsEmpty() const {
-      return length == 0;
-    }
-  };
+  typedef WritableBuffer<T> Range;
 
 protected:
   size_type head, tail;
