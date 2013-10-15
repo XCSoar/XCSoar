@@ -30,6 +30,7 @@
 #ifndef ALLOCATED_ARRAY_HPP
 #define ALLOCATED_ARRAY_HPP
 
+#include "WritableBuffer.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -40,58 +41,55 @@
  */
 template<class T>
 class AllocatedArray {
+  typedef WritableBuffer<T> Buffer;
+
 public:
-  typedef size_t size_type;
+  typedef typename Buffer::size_type size_type;
+  typedef typename Buffer::iterator iterator;
+  typedef typename Buffer::const_iterator const_iterator;
 
 protected:
-  size_type the_size;
-  T *gcc_restrict data;
+  Buffer buffer;
 
 public:
-  typedef T *iterator;
-  typedef const T *const_iterator;
-
-public:
-  constexpr AllocatedArray():the_size(0), data(nullptr) {}
+  constexpr AllocatedArray():buffer(Buffer::Null()) {}
 
   explicit AllocatedArray(size_type _size)
-    :the_size(_size), data(new T[the_size]) {
-    assert(size() == 0 || data != nullptr);
+    :buffer{new T[_size], _size} {
+    assert(size() == 0 || buffer.data != nullptr);
   }
 
   explicit AllocatedArray(const AllocatedArray &other)
-    :the_size(other.size()), data(new T[the_size]) {
-    assert(size() == 0 || data != nullptr);
-    assert(other.size() == 0 || other.data != nullptr);
+    :buffer{new T[other.buffer.size], other.buffer.size} {
+    assert(size() == 0 || buffer.data != nullptr);
+    assert(other.size() == 0 || other.buffer.data != nullptr);
 
-    std::copy(other.data, other.data + the_size, data);
+    std::copy_n(other.buffer.data, buffer.size, buffer.data);
   }
 
   explicit AllocatedArray(AllocatedArray &&other)
-    :the_size(other.the_size), data(other.data) {
-    other.the_size = 0;
-    other.data = nullptr;
+    :buffer(other.buffer) {
+    other.buffer = Buffer::Null();
   }
 
   ~AllocatedArray() {
-    delete[] data;
+    delete[] buffer.data;
   }
 
   AllocatedArray &operator=(const AllocatedArray &other) {
-    assert(size() == 0 || data != nullptr);
-    assert(other.size() == 0 || other.data != nullptr);
+    assert(size() == 0 || buffer.data != nullptr);
+    assert(other.size() == 0 || other.buffer.data != nullptr);
 
     if (&other == this)
       return *this;
 
     ResizeDiscard(other.size());
-    std::copy(other.begin(), other.end(), data);
+    std::copy_n(other.buffer.data, other.buffer.size, buffer.data);
     return *this;
   }
 
   AllocatedArray &operator=(AllocatedArray &&other) {
-    std::swap(the_size, other.the_size);
-    std::swap(data, other.data);
+    std::swap(buffer, other.buffer);
     return *this;
   }
 
@@ -99,14 +97,14 @@ public:
    * Returns true if no memory was allocated so far.
    */
   constexpr bool empty() const {
-    return the_size == 0;
+    return buffer.IsEmpty();
   }
 
   /**
    * Returns the number of allocated elements.
    */
   constexpr size_type size() const {
-    return the_size;
+    return buffer.size;
   }
 
   /**
@@ -115,7 +113,7 @@ public:
   T &operator[](size_type i) {
     assert(i < size());
 
-    return data[i];
+    return buffer.data[i];
   }
 
   /**
@@ -124,37 +122,37 @@ public:
   const T &operator[](size_type i) const {
     assert(i < size());
 
-    return data[i];
+    return buffer.data[i];
   }
 
   iterator begin() {
-    return data;
+    return buffer.begin();
   }
 
   constexpr const_iterator begin() const {
-    return data;
+    return buffer.cbegin();
   }
 
   iterator end() {
-    return data + the_size;
+    return buffer.end();
   }
 
   constexpr const_iterator end() const {
-    return data + the_size;
+    return buffer.cend();
   }
 
   /**
    * Resizes the array, discarding old data.
    */
   void ResizeDiscard(size_type _size) {
-    if (_size == the_size)
+    if (_size == buffer.size)
       return;
 
-    delete[] data;
-    the_size = _size;
-    data = new T[the_size];
+    delete[] buffer.data;
+    buffer.size = _size;
+    buffer.data = new T[buffer.size];
 
-    assert(size() == 0 || data != nullptr);
+    assert(size() == 0 || buffer.data != nullptr);
   }
 
   /**
@@ -163,7 +161,7 @@ public:
    * avoid expensive heap operations.
    */
   void GrowDiscard(size_type _size) {
-    if (_size > the_size)
+    if (_size > buffer.size)
       ResizeDiscard(_size);
   }
 
@@ -172,17 +170,17 @@ public:
    * range of elements, starting from the beginning.
    */
   void GrowPreserve(size_type _size, size_type preserve) {
-    if (_size <= the_size)
+    if (_size <= buffer.size)
       return;
 
     T *new_data = new T[_size];
     assert(_size == 0 || new_data != nullptr);
 
-    std::move(data, data + preserve, new_data);
+    std::move(buffer.data, buffer.data + preserve, new_data);
 
-    delete[] data;
-    data = new_data;
-    the_size = _size;
+    delete[] buffer.data;
+    buffer.data = new_data;
+    buffer.size = _size;
   }
 };
 
