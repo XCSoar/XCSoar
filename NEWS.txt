@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.8 - not yet released
+* task editor
+  - added one-click task reversal (#1730)
 * user interface 
   - checklist remembers last opened list (#3110)
 
