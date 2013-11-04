@@ -118,7 +118,7 @@ PlaneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddButton(_("Polar"), *this, POLAR);
   AddFloat(_("Wing Area"), nullptr,
            _T("%.1f m²"), _T("%.1f"),
-           fixed(0), fixed(20), fixed(0.1),
+           fixed(0), fixed(40), fixed(0.1),
            false, plane.wing_area);
   AddFloat(_("Max. Ballast"), nullptr,
            _T("%.0f l"), _T("%.0f"),

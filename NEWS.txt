@@ -7,6 +7,8 @@ Version 6.7.2 - not yet released
   - fix crash in alternates list (#3146)
 * infoboxes
   - fix "Fin Dist" infobox for GOTO tasks (#3152)
+* configuration
+  - increase upper limit for plane wing area (#3154)
 
 Version 6.7.1 - 2013/10/11
 * replay
