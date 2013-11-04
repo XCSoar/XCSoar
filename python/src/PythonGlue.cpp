@@ -174,8 +174,9 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     PyObject *py_fix_ias = PyInt_FromLong(fix.ias);
     PyObject *py_fix_satellites = PyInt_FromLong(fix.siu);
     PyObject *py_fix_level = PyInt_FromLong(replay->Level());
+    PyObject *py_fix_elevation = fix.elevation > -999 ? PyInt_FromLong(fix.elevation) : Py_None;
 
-    PyObject *py_fix = PyTuple_Pack(12,
+    PyObject *py_fix = PyTuple_Pack(13,
       py_fix_datetime,
       py_fix_time,
       py_fix_location,
@@ -187,7 +188,8 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
       py_fix_tas,
       py_fix_ias,
       py_fix_satellites,
-      py_fix_level);
+      py_fix_level,
+      py_fix_elevation);
 
     if (PyList_Append(py_fixes, py_fix))
       Py_RETURN_NONE;
@@ -206,6 +208,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     Py_DECREF(py_fix_ias);
     Py_DECREF(py_fix_satellites);
     Py_DECREF(py_fix_level);
+    Py_DECREF(py_fix_elevation);
   }
 
   delete replay;
