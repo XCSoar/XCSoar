@@ -9,6 +9,8 @@ Version 6.7.2 - not yet released
   - fix "Fin Dist" infobox for GOTO tasks (#3152)
 * configuration
   - increase upper limit for plane wing area (#3154)
+* waypoints
+  - correctly handle S latitudes and W longitudes in waypoint editor (#3155)
 
 Version 6.7.1 - 2013/10/11
 * replay
