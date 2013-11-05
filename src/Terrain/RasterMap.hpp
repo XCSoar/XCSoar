@@ -83,8 +83,6 @@ public:
    */
   gcc_pure fixed
   PixelDistance(const GeoPoint &location, unsigned pixels) const {
-    /* factor 256 because the caller should pass a physical pixel
-       number, not interpolated */
     return projection.CoarsePixelDistance(location, pixels);
   }
 

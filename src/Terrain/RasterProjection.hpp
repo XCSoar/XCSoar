@@ -106,6 +106,8 @@ public:
 
   gcc_pure
   fixed CoarsePixelDistance(const GeoPoint &location, unsigned pixels) const {
+    /* factor 256 because the caller should pass a physical pixel
+       number, not interpolated */
     return FinePixelDistance(location, pixels << 8);
   }
 
