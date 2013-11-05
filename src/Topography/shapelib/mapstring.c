@@ -33,6 +33,9 @@
 
 #include "mapserver.h"
 
+#ifdef SHAPELIB_DISABLED
+#include "mapthread.h"
+#endif
 
 
 #include <stdio.h>
@@ -47,7 +50,7 @@
  */
 
 #ifdef USE_FRIBIDI
-#if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(USE_FRIBIDI2)
+#if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(HAVE_FRIBIDI2)
 #include "fribidi.h"
 #else
 #include <fribidi/fribidi.h>
@@ -61,10 +64,9 @@
 #endif
 
 #include "mapentities.h"
-
 #endif /* SHAPELIB_DISABLED */
 
-#ifdef NEED_STRRSTR
+#ifndef HAVE_STRRSTR
 /*
 ** Copyright (c) 2000-2004  University of Illinois Board of Trustees
 ** Copyright (c) 2000-2005  Mark D. Roth
@@ -119,7 +121,7 @@ char *strrstr(char *string, char *find)
 }
 #endif
 
-#ifdef NEED_STRLCAT
+#ifndef HAVE_STRLCAT
 /*
  * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
  *
@@ -171,7 +173,7 @@ size_t strlcat(char *dst, const char *src, size_t siz)
 }
 #endif
 
-#ifdef NEED_STRLCPY
+#ifndef HAVE_STRLCPY
 /*
  * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
  * All rights reserved.
@@ -231,7 +233,7 @@ strlcpy(char *dst, const char *src, size_t siz)
 }
 #endif
 
-#ifdef NEED_STRCASESTR
+#ifndef HAVE_STRCASESTR
 /*-
  * Copyright (c) 1990, 1993
  *  The Regents of the University of California.  All rights reserved.
@@ -283,7 +285,7 @@ char *strcasestr(const char *s, const char *find)
 }
 #endif
 
-#ifdef NEED_STRDUP
+#ifndef HAVE_STRDUP
 char  *strdup(char *s)
 {
   char  *s1;
@@ -299,7 +301,7 @@ char  *strdup(char *s)
 }
 #endif
 
-#ifdef NEED_STRNCASECMP
+#ifndef HAVE_STRNCASECMP
 int strncasecmp(const char *s1, const char *s2, int len)
 {
   register const char *cp1, *cp2;
@@ -337,7 +339,7 @@ int strncasecmp(const char *s1, const char *s2, int len)
 }
 #endif
 
-#ifdef NEED_STRCASECMP
+#ifndef HAVE_STRCASECMP
 int strcasecmp(const char *s1, const char *s2)
 {
   register const char *cp1, *cp2;
@@ -1497,7 +1499,7 @@ int msHexToInt(char *hex)
 char *msGetFriBidiEncodedString(const char *string, const char *encoding)
 {
   FriBidiChar logical[MAX_STR_LEN];
-  FriBidiCharType base = FRIBIDI_TYPE_ON;
+  FriBidiParType base;
   size_t len;
 
 #ifdef FRIBIDI_NO_CHARSETS
@@ -1615,8 +1617,13 @@ char *msGetEncodedString(const char *string, const char *encoding)
   size_t len, bufsize, bufleft, iconv_status;
 
 #ifdef USE_FRIBIDI
-  if(fribidi_parse_charset ((char*)encoding))
-    return msGetFriBidiEncodedString(string, encoding);
+  msAcquireLock(TLOCK_FRIBIDI);
+  if(fribidi_parse_charset ((char*)encoding)) {
+    char *ret = msGetFriBidiEncodedString(string, encoding);
+    msReleaseLock(TLOCK_FRIBIDI);
+    return ret;
+  }
+  msReleaseLock(TLOCK_FRIBIDI);
 #endif
   len = strlen(string);
 

@@ -47,7 +47,10 @@
 #include "mapserver.h"
 #include "maptree.h"
 
-
+#if defined(USE_GDAL) || defined(USE_OGR)
+#include <cpl_conv.h>
+#include <ogr_srs_api.h>
+#endif
 
 /* Only use this macro on 32-bit integers! */
 #define SWAP_FOUR_BYTES(data) \
@@ -267,6 +270,10 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
   sprintf( pszFullname, "%s.shp", pszBasename );
   psSHP->fpSHP = zzip_open_rb(zdir, pszFullname);
   if( psSHP->fpSHP == NULL ) {
+    sprintf( pszFullname, "%s.SHP", pszBasename );
+    psSHP->fpSHP = zzip_open_rb(zdir, pszFullname );
+  }
+  if( psSHP->fpSHP == NULL ) {
     msFree(pszBasename);
     msFree(pszFullname);
     msFree(psSHP);
@@ -275,6 +282,10 @@ SHPHandle msSHPOpen(struct zzip_dir *zdir, const char * pszLayer, const char * p
 
   sprintf( pszFullname, "%s.shx", pszBasename );
   psSHP->fpSHX = zzip_open_rb(zdir, pszFullname);
+  if( psSHP->fpSHX == NULL ) {
+    sprintf( pszFullname, "%s.SHX", pszBasename );
+    psSHP->fpSHX = zzip_open_rb(zdir, pszFullname);
+  }
   if( psSHP->fpSHX == NULL ) {
     msFree(pszBasename);
     msFree(pszFullname);
@@ -1299,7 +1310,7 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
 
         shape->type = MS_SHAPE_NULL;
         msSetError(MS_MEMERR, "Out of memory. Cannot allocate %d bytes. Probably broken shapefile at feature %d",
-                   "msSHPReadShape()", nParts * sizeof(int), hEntity);
+                   "msSHPReadShape()", (int)(nParts * sizeof(int)), hEntity);
         return;
       }
       psSHP->nPartMax = nParts;
@@ -1786,9 +1797,14 @@ int msShapefileWhichShapes(shapefileObj *shpfile, struct zzip_dir *zdir, rectObj
 
     /* deal with case where sourcename is of the form 'file.shp' */
     sourcename = msStrdup(shpfile->source);
-    /* TODO: need to add case-insensitive handling! */
     s = strstr(sourcename, ".shp");
-    if( s ) *s = '\0';
+    if( s )
+      *s = '\0';
+    else {
+      s = strstr(sourcename, ".SHP");
+      if( s )
+        *s = '\0';
+    }
 
     filename = (char *)malloc(strlen(sourcename)+strlen(MS_INDEX_EXTENSION)+1);
     MS_CHECK_ALLOC(filename, strlen(sourcename)+strlen(MS_INDEX_EXTENSION)+1, MS_FAILURE);
@@ -1896,7 +1912,7 @@ int msTiledSHPOpenFile(layerObj *layer)
   tSHP->shpfile = (shapefileObj *) malloc(sizeof(shapefileObj));
   if (tSHP->shpfile == NULL) {
     msSetError(MS_MEMERR, "%s: %d: Out of memory allocating %u bytes.\n", "msTiledSHPOpenFile()",
-               __FILE__, __LINE__, sizeof(shapefileObj));
+               __FILE__, __LINE__, (unsigned int)sizeof(shapefileObj));
     free(tSHP);
     return MS_FAILURE;
   }
@@ -1932,7 +1948,7 @@ int msTiledSHPOpenFile(layerObj *layer)
     tSHP->tileshpfile = (shapefileObj *) malloc(sizeof(shapefileObj));
     if (tSHP->tileshpfile == NULL) {
       msSetError(MS_MEMERR, "%s: %d: Out of memory allocating %u bytes.\n", "msTiledSHPOpenFile()",
-                 __FILE__, __LINE__, sizeof(shapefileObj));
+                 __FILE__, __LINE__, (unsigned int)sizeof(shapefileObj));
       free(tSHP->shpfile);
       free(tSHP);
       layer->layerinfo = NULL;
@@ -1946,6 +1962,13 @@ int msTiledSHPOpenFile(layerObj *layer)
   }
 
   if((layer->tileitemindex = msDBFGetItemIndex(tSHP->tileshpfile->hDBF, layer->tileitem)) == -1) return(MS_FAILURE);
+
+  if( layer->tilesrs != NULL ) {
+    msSetError(MS_OGRERR,
+                "TILESRS not supported in vector layers.",
+                "msTiledSHPOpenFile()");
+    return MS_FAILURE;
+  }
 
   msTileIndexAbsoluteDir(tiFileAbsDir, layer);
 
@@ -2534,6 +2557,55 @@ int msSHPLayerOpen(layerObj *layer)
       free(shpfile);
       return MS_FAILURE;
     }
+  }
+  
+  if (layer->projection.numargs > 0 &&
+      EQUAL(layer->projection.args[0], "auto"))
+  {
+#if defined(USE_GDAL) || defined(USE_OGR)
+    const char* pszPRJFilename = CPLResetExtension(szPath, "prj");
+    int bOK = MS_FALSE;
+    FILE* fp = fopen(pszPRJFilename, "rb");
+    if( fp != NULL )
+    {
+        char szPRJ[2048];
+        OGRSpatialReferenceH hSRS;
+        int nRead;
+
+        nRead = (int)fread(szPRJ, 1, sizeof(szPRJ) - 1, fp);
+        szPRJ[nRead] = '\0';
+        hSRS = OSRNewSpatialReference(szPRJ);
+        if( hSRS != NULL )
+        {
+            if( OSRMorphFromESRI( hSRS ) == OGRERR_NONE )
+            {
+                char* pszWKT = NULL;
+                if( OSRExportToWkt( hSRS, &pszWKT ) == OGRERR_NONE )
+                {
+                    if( msOGCWKT2ProjectionObj(pszWKT, &(layer->projection),
+                                               layer->debug ) == MS_SUCCESS )
+                    {
+                        bOK = MS_TRUE;
+                    }
+                }
+                CPLFree(pszWKT);
+            }
+            OSRDestroySpatialReference(hSRS);
+        }
+    }
+    fclose(fp);
+
+    if( bOK != MS_TRUE )
+    {
+        if( layer->debug || (layer->map && layer->map->debug) ) {
+            msDebug( "Unable to get SRS from shapefile '%s' for layer '%s'.\n", szPath, layer->name );
+        }
+    }
+#else /* !(defined(USE_GDAL) || defined(USE_OGR)) */
+    if( layer->debug || (layer->map && layer->map->debug) ) {
+        msDebug( "Unable to get SRS from shapefile '%s' for layer '%s'. GDAL or OGR support needed\n", szPath, layer->name );
+    }
+#endif /* defined(USE_GDAL) || defined(USE_OGR) */
   }
 
   return MS_SUCCESS;

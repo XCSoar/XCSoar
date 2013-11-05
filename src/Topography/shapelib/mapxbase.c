@@ -159,11 +159,11 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char
   pszDBFFilename = (char *) msSmallMalloc(strlen(pszFilename)+1);
   strcpy( pszDBFFilename, pszFilename );
 
-  if( strcmp(pszFilename+strlen(pszFilename)-4,".shp")
-      || strcmp(pszFilename+strlen(pszFilename)-4,".shx") ) {
+  if( strcmp(pszFilename+strlen(pszFilename)-4,".shp") == 0
+      || strcmp(pszFilename+strlen(pszFilename)-4,".shx") == 0 ) {
     strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".dbf");
-  } else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP")
-             || strcmp(pszFilename+strlen(pszFilename)-4,".SHX") ) {
+  } else if( strcmp(pszFilename+strlen(pszFilename)-4,".SHP") == 0
+             || strcmp(pszFilename+strlen(pszFilename)-4,".SHX") == 0 ) {
     strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
   }
 
@@ -173,6 +173,13 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir,  const char * pszFilename, const char
   psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
   MS_CHECK_ALLOC(psDBF, sizeof(DBFInfo), NULL);
   psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
+  if( psDBF->fp == NULL )
+  {
+    if( strcmp(pszDBFFilename+strlen(pszDBFFilename)-4,".dbf") == 0 ) {
+      strcpy( pszDBFFilename+strlen(pszDBFFilename)-4, ".DBF");
+      psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
+    }
+  }
   free( pszDBFFilename );
   if( psDBF->fp == NULL )
     return( NULL );
@@ -334,7 +341,7 @@ DBFHandle msDBFCreate( const char * pszFilename )
   psDBF = (DBFHandle) malloc(sizeof(DBFInfo));
   if (psDBF == NULL) {
     msSetError(MS_MEMERR, "%s: %d: Out of memory allocating %u bytes.\n", "msDBFCreate()",
-               __FILE__, __LINE__, sizeof(DBFInfo));
+               __FILE__, __LINE__, (unsigned int)sizeof(DBFInfo));
     fclose(fp);
     return NULL;
   }
@@ -794,29 +801,6 @@ int msDBFWriteIntegerAttribute( DBFHandle psDBF, int iRecord, int iField, int nV
 int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const char * pszValue )
 {
   return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) pszValue ) );
-}
-
-static int
-m_strcasecmp(const char *s1, const char*s2)
-{
-  unsigned int i;
-
-  for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
-    unsigned char x1 = tolower(s1[i]);
-    unsigned char x2 = tolower(s2[i]);
-    if (x1 > x2) {
-      return 1;
-    } else if (x1 < x2) {
-      return -1;
-    }
-  }
-  if ((0 == s1[i]) && (0 == s2[i])) {
-    return 0;
-  }
-  if (s1[i] != 0) {
-    return 1;
-  }
-  return -1;
 }
 
 /*
