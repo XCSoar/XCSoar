@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-10-06 07:12+0000\n"
+"PO-Revision-Date: 2013-10-13 06:19+0000\n"
 "Last-Translator: King Julian <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-07 07:48+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2013-10-13 15:08+0000\n"
+"X-Generator: Launchpad (build 16799)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2951,11 +2951,16 @@ msgid ""
 "time. Useful for evaluating best thermalling mode with a glider at different "
 "wing loading."
 msgstr ""
+"Diamètre du cercle. Affiche le diamètre du cercle estimé et le temps pour un "
+"tour complet. Utile pour évaluer le meilleur taux de montée à différentes "
+"charges alaires."
 
 #: src/InfoBoxes/Content/Factory.cpp:1253
 #, no-c-format
 msgid "Distance takeoff"
-msgstr "Distance au décollage"
+msgstr ""
+"Distance de décollage\r\n"
+"(Il faudrait le contexte car cela peut aussi être 'Décollage distant')"
 
 #: src/InfoBoxes/Content/Factory.cpp:1254
 #, no-c-format
@@ -7619,6 +7624,10 @@ msgid ""
 "the XContest rules, but with different track values: 1 km = 1.5 points, 1.75 "
 "p and 2.0 p for FAI triangles respectively."
 msgstr ""
+"Compétition Européenne de parapente en ligne du DHV. Similaire aux règles du "
+"XContest, mais avec différentes évaluations de la trace : 1 km = 1,5 points "
+"(en ligne droite), 1,75 points pour un triangle et 2,0 points pour un "
+"triangle FAI."
 
 #: src/Dialogs/Settings/Panels/ScoringConfigPanel.cpp:113
 #, no-c-format
@@ -8907,37 +8916,37 @@ msgstr "Pas de TAF disponible !"
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:33
 #, no-c-format
 msgid "Gear on delay"
-msgstr ""
+msgstr "Retard train on"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:36
 #, no-c-format
 msgid "Gear off delay"
-msgstr ""
+msgstr "Retard train off"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:39
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Intervale train"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:42
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr ""
+msgstr "Tempo max radio com"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:45
 #, no-c-format
 msgid "Battery low delay"
-msgstr ""
+msgstr "Tempo batterie faible"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
 #, no-c-format
 msgid "Battery empty delay"
-msgstr ""
+msgstr "Tempo batt. vide"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
 msgid "Interval; battery"
-msgstr ""
+msgstr "Intervale Batterie"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
@@ -9054,7 +9063,7 @@ msgstr "Durée pour le vario moyne"
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Ech. trans. moy."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:87
 #, no-c-format
@@ -9064,12 +9073,12 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:91
 #, no-c-format
 msgid "Circling volume"
-msgstr ""
+msgstr "Volume Spirale"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "Niveau de volume moyen en spirale."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:96
 #, no-c-format
@@ -9081,21 +9090,23 @@ msgstr "Volume en croisière"
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
+"Niveau de volume moyen en croisière.  Si réglé à zéro, calé sur la  vitesse "
+"air."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:101
 #, no-c-format
 msgid "Base frequency"
-msgstr ""
+msgstr "Fréquence de base"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:102
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Ajustement de la fréquence de base des tons dans tous les modes."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:106
 #, no-c-format
 msgid "Filter circling"
-msgstr ""
+msgstr "Filtre en spirale"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:107
 #, no-c-format
@@ -9105,7 +9116,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:111
 #, no-c-format
 msgid "Filter cruise"
-msgstr ""
+msgstr "Filtre en croisière"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:112
 #, no-c-format
@@ -9115,16 +9126,16 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:116
 #, no-c-format
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "Echelle de hauteur tonale"
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:117
 #, no-c-format
 msgid "Adjustment to base pitch scale of tones in all modes."
-msgstr ""
+msgstr "Ajustement à l'échelle de hauteur tonale de base dans tous les modes."
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:105
 msgid "Beep type"
-msgstr ""
+msgstr "Type de Bip"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:108
 msgid "Pitch scheme"
@@ -9136,7 +9147,7 @@ msgstr ""
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:114
 msgid "Period scheme"
-msgstr ""
+msgstr "Période son"
 
 #: src/Dialogs/Device/Vega/AudioParameters.hpp:117
 msgid "Period scale"
@@ -9164,6 +9175,8 @@ msgstr ""
 msgid ""
 "Calibration factor applied to measured airspeed to obtain indicated airspeed."
 msgstr ""
+"Facteur de calibration appliqué à la vitesse de l'air mesurée pour obtenir "
+"la vitesse de l'air affichée."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:43
 #, no-c-format
@@ -9176,6 +9189,8 @@ msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation."
 msgstr ""
+"Facteur de calibration appliqué à la pression statique utilisée dans le "
+"calcul de l'énergie totale."
 
 #: src/Dialogs/Device/Vega/CalibrationParameters.hpp:48
 #, no-c-format
@@ -9188,46 +9203,48 @@ msgid ""
 "Calibration factor applied to dynamic pressure used in total energy "
 "calculation."
 msgstr ""
+"Facteur de calibration appliqué à la pression dynamique utilisée dans le "
+"calcul de l'énergie totale."
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:40
 #, no-c-format
 msgid "Needle gauge type"
-msgstr ""
+msgstr "Type d'aiguille de la jauge"
 
 #: src/Dialogs/Device/Vega/DisplayParameters.hpp:42
 #, no-c-format
 msgid "LED bright"
-msgstr ""
+msgstr "Lumin. LED"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:42
 #, no-c-format
 msgid "Max. objects reported"
-msgstr ""
+msgstr "Nbr objets max signalés"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:44
 #, no-c-format
 msgid "Max. reported"
-msgstr ""
+msgstr "Max signalés"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:46
 #, no-c-format
 msgid "Flarm interface"
-msgstr ""
+msgstr "Interface Flarm"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:48
 #, no-c-format
 msgid "Disable circling"
-msgstr ""
+msgstr "Désactiv. Spirale"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:50
 #, no-c-format
 msgid "No mode reports"
-msgstr ""
+msgstr "Pas de signalement"
 
 #: src/Dialogs/Device/Vega/FlarmAlertParameters.hpp:52
 #, no-c-format
 msgid "No aircraft type"
-msgstr ""
+msgstr "Pas de type aéronef"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
@@ -9242,12 +9259,12 @@ msgstr "Type d'aéronef"
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:33
 #, no-c-format
 msgid "Interval; info"
-msgstr ""
+msgstr "Intervale Info"
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:36
 #, no-c-format
 msgid "Interval; caution"
-msgstr ""
+msgstr "Intervale Avert."
 
 #: src/Dialogs/Device/Vega/FlarmRepeatParameters.hpp:39
 #, no-c-format
@@ -9262,37 +9279,37 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:52
 #, no-c-format
 msgid "Whether the Total Energy port is connected."
-msgstr ""
+msgstr "Si la prise à energie totale est connectée."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Pitot port"
-msgstr ""
+msgstr "Prise Pitot"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:55
 #, no-c-format
 msgid "Whether the Pitot port is connected."
-msgstr ""
+msgstr "Si la prise Pitot est connectée."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Static port"
-msgstr ""
+msgstr "Prise statique"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:58
 #, no-c-format
 msgid "Whether the Static port is connected."
-msgstr ""
+msgstr "Si la prise statique est connectée."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Stall port"
-msgstr ""
+msgstr "Prise avertisseur de décrochage"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:61
 #, no-c-format
 msgid "Whether the Stall pressure port is connected."
-msgstr ""
+msgstr "Si la prise d'avertisseur de décrochage est connectée."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
@@ -9314,11 +9331,14 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Si un capteur de température et d'humidité est installé. Mettre à 0 pour "
+"désactiver, 255 pour activer l'auto-detection, sinon l'ID du périphérique "
+"1Wire peut être spécifié."
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:73
 #, no-c-format
 msgid "Baud rate Vega"
-msgstr ""
+msgstr "Tx.trans. Vega"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -9332,7 +9352,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:78
 #, no-c-format
 msgid "FLARM connected"
-msgstr ""
+msgstr "FLARM connecté"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:79
 #, no-c-format
@@ -9344,7 +9364,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:82
 #, no-c-format
 msgid "PDA power"
-msgstr ""
+msgstr "Alim. PDA"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:83
 #, no-c-format
@@ -9361,62 +9381,62 @@ msgstr "VNE (vitesse à ne jamais dépasser)"
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:34
 #, no-c-format
 msgid "V terrain"
-msgstr ""
+msgstr "V sol"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:36
 #, no-c-format
 msgid "Height terrain"
-msgstr ""
+msgstr "Hauteur terrain"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:38
 #, no-c-format
 msgid "V manoeuvering"
-msgstr ""
+msgstr "VNO"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:40
 #, no-c-format
 msgid "V airbrake"
-msgstr ""
+msgstr "Vmax AF"
 
 #: src/Dialogs/Device/Vega/LimitParameters.hpp:42
 #, no-c-format
 msgid "V flap"
-msgstr ""
+msgstr "VFE"
 
 #: src/Dialogs/Device/Vega/LoggerParameters.hpp:37
 #, no-c-format
 msgid "IGC logging"
-msgstr ""
+msgstr "Enregist. IGC"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:32
 #, no-c-format
 msgid "Mute vario on voice"
-msgstr ""
+msgstr "Vario muet sur voix"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:33
 #, no-c-format
 msgid "Mute vario on radio"
-msgstr ""
+msgstr "Vario muet sur radio"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:34
 #, no-c-format
 msgid "Vario muting"
-msgstr ""
+msgstr "Val. vario muet"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:36
 #, no-c-format
 msgid "Voice muting"
-msgstr ""
+msgstr "Val. voix muette"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Seuil HautParleur"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "Seuil Ecouteurs"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
