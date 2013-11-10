@@ -36,6 +36,21 @@ Copyright_License {
 #undef KEY_UP
 #endif
 
+gcc_const
+static unsigned
+TranslateKeyCode(unsigned key_code)
+{
+  if (IsKobo()) {
+    switch (key_code) {
+    case KEY_HOME:
+      /* the Kobo Touch "home" button shall open the menu */
+      return KEY_MENU;
+    }
+  }
+
+  return key_code;
+}
+
 bool
 LinuxInputDevice::Open(const char *path)
 {
@@ -92,7 +107,8 @@ LinuxInputDevice::Read()
             released = true;
         }
       } else
-        queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP, e.code));
+        queue.Push(Event(e.value ? Event::KEY_DOWN : Event::KEY_UP,
+                         TranslateKeyCode(e.code)));
 
       break;
 
