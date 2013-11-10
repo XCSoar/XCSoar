@@ -117,11 +117,11 @@ LinuxInputDevice::Read()
 
       switch (e.code) {
       case ABS_X:
-        x = e.value;
+        position.x = e.value;
         break;
 
       case ABS_Y:
-        y = e.value;
+        position.y = e.value;
         break;
       }
 
@@ -138,17 +138,17 @@ LinuxInputDevice::Generate()
 
   if (moved) {
     moved = false;
-    return Event(Event::MOUSE_MOTION, x, y);
+    return Event(Event::MOUSE_MOTION, position.x, position.y);
   }
 
   if (pressed) {
     pressed = false;
-    return Event(Event::MOUSE_DOWN, x, y);
+    return Event(Event::MOUSE_DOWN, position.x, position.y);
   }
 
   if (released) {
     released = false;
-    return Event(Event::MOUSE_UP, x, y);
+    return Event(Event::MOUSE_UP, position.x, position.y);
   }
 
   return Event(Event::Type::NOP);

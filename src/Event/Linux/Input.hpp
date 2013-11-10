@@ -35,10 +35,18 @@ struct Event;
  * A driver for Linux input devices (/dev/input/event*).
  */
 class LinuxInputDevice final : private FileEventHandler {
+  struct Position {
+    unsigned x, y;
+
+    static constexpr Position Zero() {
+      return { 0, 0 };
+    }
+  };
+
   EventQueue &queue;
   IOLoop &io_loop;
 
-  unsigned x, y;
+  Position position;
   bool down;
 
   bool moved, pressed, released;
@@ -48,7 +56,7 @@ class LinuxInputDevice final : private FileEventHandler {
 public:
   explicit LinuxInputDevice(EventQueue &_queue, IOLoop &_io_loop)
     :queue(_queue), io_loop(_io_loop),
-     x(0), y(0) {}
+     position(Position::Zero()) {}
 
   ~LinuxInputDevice() {
     Close();
