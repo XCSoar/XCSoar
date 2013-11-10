@@ -61,7 +61,7 @@ LinuxInputDevice::Open(const char *path)
   io_loop.Add(fd.Get(), io_loop.READ, *this);
 
   down = false;
-  moved = pressed = released = false;
+  moving = moved = pressed = released = false;
   return true;
 }
 
@@ -87,13 +87,24 @@ LinuxInputDevice::Read()
 
     switch (e.type) {
     case EV_SYN:
-      // TODO
+      if (e.code == SYN_REPORT) {
+        /* commit the finger movement */
 
-      if (IsKobo() && released)
-        /* workaround: on the Kobo Touch N905B, releasing the touch
-           screen reliably produces a finger position that is way off;
-           in that case, ignore finger movement */
-        moved = false;
+        if (IsKobo() && released) {
+          /* workaround: on the Kobo Touch N905B, releasing the touch
+             screen reliably produces a finger position that is way
+             off; in that case, ignore finger movement */
+          moving = false;
+          edit_position = public_position;
+        }
+
+        if (moving) {
+          moving = false;
+          moved = true;
+          public_position = edit_position;
+        }
+      }
+
       break;
 
     case EV_KEY:
@@ -113,15 +124,15 @@ LinuxInputDevice::Read()
       break;
 
     case EV_ABS:
-      moved = true;
+      moving = true;
 
       switch (e.code) {
       case ABS_X:
-        position.x = e.value;
+        edit_position.x = e.value;
         break;
 
       case ABS_Y:
-        position.y = e.value;
+        edit_position.y = e.value;
         break;
       }
 
@@ -138,17 +149,17 @@ LinuxInputDevice::Generate()
 
   if (moved) {
     moved = false;
-    return Event(Event::MOUSE_MOTION, position.x, position.y);
+    return Event(Event::MOUSE_MOTION, public_position.x, public_position.y);
   }
 
   if (pressed) {
     pressed = false;
-    return Event(Event::MOUSE_DOWN, position.x, position.y);
+    return Event(Event::MOUSE_DOWN, public_position.x, public_position.y);
   }
 
   if (released) {
     released = false;
-    return Event(Event::MOUSE_UP, position.x, position.y);
+    return Event(Event::MOUSE_UP, public_position.x, public_position.y);
   }
 
   return Event(Event::Type::NOP);
