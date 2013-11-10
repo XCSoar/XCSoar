@@ -16,6 +16,7 @@ Version 6.7.2 - not yet released
   - work around Kobo Touch N905B kernel crash in display driver (#3145)
   - work around Kobo Touch N905B touch screen bug
   - the "Home" button opens the menu
+  - mount /dev/pts for telnetd (#3135)
 
 Version 6.7.1 - 2013/10/11
 * replay
