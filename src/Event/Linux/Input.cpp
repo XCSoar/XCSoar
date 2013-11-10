@@ -25,6 +25,7 @@ Copyright_License {
 #include "Event/Shared/Event.hpp"
 #include "Event/Queue.hpp"
 #include "IO/Async/IOLoop.hpp"
+#include "Asset.hpp"
 
 #include <linux/input.h>
 
@@ -72,6 +73,12 @@ LinuxInputDevice::Read()
     switch (e.type) {
     case EV_SYN:
       // TODO
+
+      if (IsKobo() && released)
+        /* workaround: on the Kobo Touch N905B, releasing the touch
+           screen reliably produces a finger position that is way off;
+           in that case, ignore finger movement */
+        moved = false;
       break;
 
     case EV_KEY:
