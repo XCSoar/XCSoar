@@ -1,21 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Slovenian translation for xcsoar
+# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
+# This file is distributed under the same license as the xcsoar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-11-16 21:09+0000\n"
+"Last-Translator: Iztok <kodric.iztok@gmail.com>\n"
+"Language-Team: Slovenian <sl@li.org>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-11-21 12:32+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -29,27 +30,27 @@ msgstr ""
 #: Data/Input/default.xci:991 Data/Input/default.xci:1029
 #, no-c-format
 msgid "Task"
-msgstr ""
+msgstr "Naloga"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr ""
+msgstr "FAI značke/rekordi"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
 msgid "FAI triangle"
-msgstr ""
+msgstr "FAI trikotnik"
 
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr ""
+msgstr "FAI cilj-povratek"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr ""
+msgstr "FAI cilj"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
@@ -59,7 +60,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:36
 #, no-c-format
 msgid "AAT"
-msgstr ""
+msgstr "AAT"
 
 #: src/Task/TypeStrings.cpp:37
 #, no-c-format
@@ -69,7 +70,7 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:38
 #, no-c-format
 msgid "Mixed"
-msgstr ""
+msgstr "Mešani"
 
 #: src/Task/TypeStrings.cpp:39
 #, no-c-format
@@ -248,12 +249,12 @@ msgstr ""
 #: src/Task/TypeStrings.cpp:113
 #, no-c-format
 msgid "Start line"
-msgstr ""
+msgstr "Začetna linija"
 
 #: src/Task/TypeStrings.cpp:114
 #, no-c-format
 msgid "Start cylinder"
-msgstr ""
+msgstr "Začetni cilinder"
 
 #: src/Task/TypeStrings.cpp:115 src/Dialogs/Task/dlgTaskHelpers.cpp:185
 #, no-c-format
@@ -358,12 +359,12 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:37
 #, no-c-format
 msgid "Too many turnpoints"
-msgstr ""
+msgstr "Preveč obratnih točk"
 
 #: src/Task/ValidationErrorStrings.cpp:38
 #, no-c-format
 msgid "Not enough turnpoints"
-msgstr ""
+msgstr "Premalo obratnih točk"
 
 #: src/Task/ValidationErrorStrings.cpp:39
 #, no-c-format
@@ -373,7 +374,7 @@ msgstr ""
 #: src/Task/ValidationErrorStrings.cpp:40
 #, no-c-format
 msgid "Empty task"
-msgstr ""
+msgstr "Prazna naloga"
 
 #: src/Task/ValidationErrorStrings.cpp:41
 #, no-c-format
@@ -387,7 +388,7 @@ msgstr ""
 
 #: src/Airspace/AirspaceGlue.cpp:62
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "Nalagam datoteko z zračnimi prostori"
 
 #: src/Airspace/AirspaceParser.cpp:269
 msgid "Parse Error at Line"
@@ -413,21 +414,21 @@ msgstr ""
 
 #: src/Computer/ConditionMonitor/ConditionMonitorSunset.cpp:65
 msgid "Expect arrival past sunset"
-msgstr ""
+msgstr "Pričakuj prihod po sončnem  zahodu"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorWind.cpp:55
 msgid "Significant wind change"
-msgstr ""
+msgstr "Močna sprememba vetra"
 
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Brez napake"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Informacija"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
@@ -449,7 +450,7 @@ msgstr ""
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:64
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Neznano"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
@@ -469,37 +470,37 @@ msgstr ""
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "GSP nastavitve"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "VF komunikacija"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Komunikacija"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Bliskovni pomnilnik"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Tlačni senzor"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:78
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Baza ovir"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Zapisovalec leta"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
@@ -509,7 +510,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Ostalo"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:74
 msgid "Start Logger"
@@ -521,7 +522,7 @@ msgstr ""
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
-msgstr ""
+msgstr "Napaka zapisovalca"
 
 #: src/Logger/Logger.cpp:148 src/Dialogs/Device/ManageCAI302Dialog.cpp:75
 msgid "Stop Logger"
@@ -529,52 +530,52 @@ msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:79
 msgid "Declare task?"
-msgstr ""
+msgstr "Najavi nalogo?"
 
 #: src/Logger/ExternalLogger.cpp:88 src/Logger/ExternalLogger.cpp:127
 #: src/Dialogs/Task/Manager/TaskActionsPanel.cpp:95
 msgid "Declare task"
-msgstr ""
+msgstr "Najavi nalogo"
 
 #: src/Logger/ExternalLogger.cpp:95
 msgid "Task declared!"
-msgstr ""
+msgstr "Naloga najavljena"
 
 #: src/Logger/ExternalLogger.cpp:100
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
-msgstr ""
+msgstr "Prišlo je do napake. Naloga ni najavljena!"
 
 #: src/Logger/ExternalLogger.cpp:126
 msgid "No logger connected"
-msgstr ""
+msgstr "Ni priključenega zapisovalca"
 
 #: src/Logger/ExternalLogger.cpp:260
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Napaka pri prenosu seznama letov"
 
 #: src/Logger/ExternalLogger.cpp:261 src/Logger/ExternalLogger.cpp:272
 #: src/Logger/ExternalLogger.cpp:293 src/Logger/ExternalLogger.cpp:325
 msgid "Download flight"
-msgstr ""
+msgstr "Prenos letov"
 
 #: src/Logger/ExternalLogger.cpp:271
 msgid "Logger is empty."
-msgstr ""
+msgstr "Zapisovalec je prazen"
 
 #: src/Logger/ExternalLogger.cpp:292
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Napaka pri prenosu leta"
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Ali želiš prenesti naslednji let?"
 
 #: src/Waypoint/WaypointGlue.cpp:109
 #: src/Dialogs/Device/CAI302/WaypointUploader.cpp:35
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Nalaganje obratnih točk"
 
 #: src/Gauge/ThermalAssistantRenderer.cpp:193
 msgid "Not Circling"
@@ -614,7 +615,7 @@ msgstr ""
 #: Data/Dialogs/dlgVario_L.xml:6 Data/Dialogs/dlgVario.xml:6
 #: Data/Dialogs/pnlTaskManagerClose.xml:4
 msgid "Close"
-msgstr ""
+msgstr "Zaprto"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:233
 msgid "No Traffic"
@@ -630,7 +631,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Vario"
 
 #: src/Gauge/BigTrafficWidget.cpp:381 src/Renderer/MapItemListRenderer.cpp:124
 #: src/Renderer/MapItemListRenderer.cpp:128
@@ -648,7 +649,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10 Data/Dialogs/dlgTarget_L.xml:11
 #: Data/Dialogs/dlgTarget.xml:18
 msgid "Distance"
-msgstr ""
+msgstr "Razdalja"
 
 #: src/Gauge/BigTrafficWidget.cpp:424 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
@@ -663,21 +664,21 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint.xml:19
 #, no-c-format
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:151
 msgid "Loading Airfield Details File..."
-msgstr ""
+msgstr "Nalagam datoteko s podrobnostmi letališča"
 
 #: src/Menu/ExpandMacros.cpp:126 src/Menu/ExpandMacros.cpp:136
 #: src/Menu/ExpandMacros.cpp:202 src/Menu/ExpandMacros.cpp:232
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Naslednja točka"
 
 #: src/Menu/ExpandMacros.cpp:131 src/Menu/ExpandMacros.cpp:141
 #: src/Menu/ExpandMacros.cpp:214 src/Menu/ExpandMacros.cpp:260
 msgid "Previous Turnpoint"
-msgstr ""
+msgstr "Prejšnja točka"
 
 #: src/Menu/ExpandMacros.cpp:153 src/Menu/ExpandMacros.cpp:173
 msgid "Furthest Landpoint"
@@ -697,15 +698,15 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:201 src/Menu/ExpandMacros.cpp:231
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Ciljna obratna točka"
 
 #: src/Menu/ExpandMacros.cpp:207 src/Menu/ExpandMacros.cpp:253
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Naslednja začetna točka"
 
 #: src/Menu/ExpandMacros.cpp:213 src/Menu/ExpandMacros.cpp:259
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Začetna obratna točka"
 
 #: src/Menu/ExpandMacros.cpp:237
 msgid "Arm start"
@@ -762,12 +763,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:324 src/Menu/ExpandMacros.cpp:328
 #: src/Dialogs/Device/PortMonitor.cpp:167
 msgid "Resume"
-msgstr ""
+msgstr "Nadaljuj"
 
 #: src/Menu/ExpandMacros.cpp:324 src/Menu/ExpandMacros.cpp:328
 #: src/Dialogs/Message.cpp:129
 msgid "Abort"
-msgstr ""
+msgstr "Opusti"
 
 #: src/Menu/ExpandMacros.cpp:344 src/Menu/ExpandMacros.cpp:538
 #: src/Menu/ExpandMacros.cpp:569 src/Menu/ExpandMacros.cpp:629
@@ -790,46 +791,46 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:34
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Avto"
 
 #: src/Menu/ExpandMacros.cpp:347
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:45
 #, no-c-format
 msgid "Track up"
-msgstr ""
+msgstr "Smer letenja gor"
 
 #: src/Menu/ExpandMacros.cpp:347
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:49
 #, no-c-format
 msgid "North up"
-msgstr ""
+msgstr "Sever gor"
 
 #: src/Menu/ExpandMacros.cpp:452 src/Dialogs/Settings/dlgBasicSettings.cpp:143
 #: src/Dialogs/ReplayDialog.cpp:56
 msgid "Stop"
-msgstr ""
+msgstr "Zaustavi"
 
 #: src/Menu/ExpandMacros.cpp:453 src/Dialogs/ReplayDialog.cpp:55
 msgid "Start"
-msgstr ""
+msgstr "Začni"
 
 #: src/Menu/ExpandMacros.cpp:459
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Long"
-msgstr ""
+msgstr "Dolg"
 
 #: src/Menu/ExpandMacros.cpp:463
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Short"
-msgstr ""
+msgstr "Kratek"
 
 #: src/Menu/ExpandMacros.cpp:467
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:96
 #, no-c-format
 msgid "Full"
-msgstr ""
+msgstr "Poln"
 
 #: src/Menu/ExpandMacros.cpp:471 src/Menu/ExpandMacros.cpp:478
 #: src/Menu/ExpandMacros.cpp:535 src/Menu/ExpandMacros.cpp:541
@@ -871,19 +872,19 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:490 src/Menu/ExpandMacros.cpp:516
 msgid "Topography On"
-msgstr ""
+msgstr "Vključi topografijo"
 
 #: src/Menu/ExpandMacros.cpp:494 src/Menu/ExpandMacros.cpp:520
 msgid "Terrain On"
-msgstr ""
+msgstr "Vključi teren"
 
 #: src/Menu/ExpandMacros.cpp:498 src/Menu/ExpandMacros.cpp:524
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Teren in Topografija"
 
 #: src/Menu/ExpandMacros.cpp:502 src/Menu/ExpandMacros.cpp:528
 msgid "Terrain Off"
-msgstr ""
+msgstr "Izključi teren"
 
 #: src/Menu/ExpandMacros.cpp:554 src/Input/InputEventsSettings.cpp:303
 #: src/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp:142
@@ -917,13 +918,13 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:164
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "GPS višina"
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:102
 #, no-c-format
 msgid "Alt GPS"
-msgstr ""
+msgstr "GPS višina"
 
 #: src/InfoBoxes/Content/Factory.cpp:166
 #, no-c-format
@@ -936,7 +937,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Višina nad terenom"
 
 #: src/InfoBoxes/Content/Factory.cpp:175
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
@@ -955,7 +956,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Dviganje v zadnjih 30 s"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
@@ -1099,7 +1100,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:267
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:268
 #, no-c-format
@@ -1163,12 +1164,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Naslednja točka"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Naslednja točka"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
