@@ -122,6 +122,7 @@ void
 PlanePolarWidget::Update()
 {
   LoadPolarShape(plane.polar_shape);
+  UpdatePolarLabel();
 
   LoadValue(REFERENCE_MASS, plane.reference_mass);
   LoadValue(DRY_MASS, plane.dry_mass);
