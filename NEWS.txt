@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.2 - not yet released
 * user interface
   - fix crash in alternates list (#3146)
+  - new translation: Slovenian
 * infoboxes
   - fix "Fin Dist" infobox for GOTO tasks (#3152)
 * configuration

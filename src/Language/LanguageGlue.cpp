@@ -89,6 +89,7 @@ enum {
   LANG_ROMANIAN,
   LANG_RUSSIAN,
   LANG_SLOVAK,
+  LANG_SLOVENIAN,
   LANG_SERBIAN,
   LANG_SWEDISH,
   LANG_TURKISH,
@@ -141,6 +142,8 @@ extern const uint8_t ru_start[] asm("_binary_ru_mo_start");
 extern const uint8_t ru_size[] asm("_binary_ru_mo_size");
 extern const uint8_t sk_start[] asm("_binary_sk_mo_start");
 extern const uint8_t sk_size[] asm("_binary_sk_mo_size");
+extern const uint8_t sl_start[] asm("_binary_sl_mo_start");
+extern const uint8_t sl_size[] asm("_binary_sl_mo_size");
 extern const uint8_t sr_start[] asm("_binary_sr_mo_start");
 extern const uint8_t sr_size[] asm("_binary_sr_mo_size");
 extern const uint8_t sv_start[] asm("_binary_sv_mo_start");
@@ -183,6 +186,7 @@ const BuiltinLanguage language_table[] = {
   { LANG_ROMANIAN, ro_start, ro_size, _T("ro.mo"), _T("Romanian") },
   { LANG_RUSSIAN, ru_start, ru_size, _T("ru.mo"), _T("Russian") },
   { LANG_SLOVAK, sk_start, sk_size, _T("sk.mo"), _T("Slovak") },
+  { LANG_SLOVENIAN, sl_start, sl_size, _T("sl.mo"), _T("Slovenian") },
   { LANG_SERBIAN, sr_start, sr_size, _T("sr.mo"), _T("Serbian") },
   { LANG_SWEDISH, sv_start, sv_size, _T("sv.mo"), _T("Swedish") },
   { LANG_TURKISH, tr_start, tr_size, _T("tr.mo"), _T("Turkish") },
