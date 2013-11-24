@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-11-15 10:23+0000\n"
+"PO-Revision-Date: 2013-11-22 14:25+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-21 12:32+0000\n"
+"X-Launchpad-Export-Date: 2013-11-24 08:16+0000\n"
 "X-Generator: Launchpad (build 16831)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -2526,17 +2526,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1073
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr ""
+msgstr "Najbližsí vzdušný priestor, horizontálne"
 
 #: src/InfoBoxes/Content/Factory.cpp:1074
 #, no-c-format
 msgid "Near AS H"
-msgstr ""
+msgstr "VP najblizsi hz"
 
 #: src/InfoBoxes/Content/Factory.cpp:1075
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace."
-msgstr ""
+msgstr "Horizontálna vzdialenosť k najbližsiemu vzdušnému priestoru."
 
 #: src/InfoBoxes/Content/Factory.cpp:1083
 #, no-c-format
