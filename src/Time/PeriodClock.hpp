@@ -40,8 +40,8 @@ private:
 public:
   /**
    * Initializes the object, setting the last time stamp to "0",
-   * i.e. a check() will always succeed.  If you do not want this
-   * default behaviour, call update() immediately after creating the
+   * i.e. a Check() will always succeed.  If you do not want this
+   * default behaviour, call Update() immediately after creating the
    * object.
    */
   constexpr
