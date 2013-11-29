@@ -13,6 +13,8 @@ Version 6.7.2 - not yet released
   - fix saving of custom polars (#3173)
 * waypoints
   - correctly handle S latitudes and W longitudes in waypoint editor (#3155)
+* Android
+  - enable Vivante workaround for GC600 (#3184)
 * Kobo
   - fix misassigned passphrase in WiFi dialog (#3151)
   - work around Kobo Touch N905B kernel crash in display driver (#3145)
