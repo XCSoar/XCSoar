@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.8 - not yet released
+* infoboxes
+  - add "Fin MC0 AltD" infobox (#2824)
 * task editor
   - added one-click task reversal (#1730)
 * user interface 

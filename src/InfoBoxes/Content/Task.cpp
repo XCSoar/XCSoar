@@ -465,6 +465,15 @@ UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 }
 
 void
+UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data)
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  SetValueFromAltDiff(data, task_stats,
+                      task_stats.total.solution_mc0);
+}
+
+void
 UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;

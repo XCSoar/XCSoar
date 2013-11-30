@@ -152,6 +152,8 @@ namespace InfoBoxFactory
     TAKEOFF_DISTANCE,
     OLC_SPEED,
 
+    FIN_MC0_ALTD,
+
     e_NUM_TYPES /* Last item */
   };
 

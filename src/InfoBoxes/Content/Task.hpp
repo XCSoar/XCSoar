@@ -85,6 +85,9 @@ void
 UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data);
 
 void
+UpdateInfoBoxFinalMC0AltitudeDiff(InfoBoxData &data);
+
+void
 UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data);
 
 void

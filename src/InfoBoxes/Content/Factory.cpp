@@ -1268,6 +1268,14 @@ static constexpr MetaData meta_data[] = {
     OLC_SPEED,
   },
 
+  {
+    N_("Final MC0 altitude difference"),
+    N_("Fin MC0 AltD"),
+    N_("Arrival altitude at the final waypoint with MC 0 setting relative to the safety arrival height."),
+    UpdateInfoBoxFinalMC0AltitudeDiff,
+    FIN_MC0_ALTD,
+    FIN_MC0_ALTD,
+  },
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
