@@ -120,15 +120,17 @@ WaypointWriter::WriteSeeYou(TextWriter &writer, const Waypoint &wp)
   writer.Write(',');
 
   // Write Runway Direction
-  if (wp.type == Waypoint::Type::AIRFIELD ||
-      wp.type == Waypoint::Type::OUTLANDING)
+  if ((wp.type == Waypoint::Type::AIRFIELD ||
+       wp.type == Waypoint::Type::OUTLANDING) &&
+      wp.runway.IsDirectionDefined())
     writer.Format("%03u", wp.runway.GetDirectionDegrees());
 
   writer.Write(',');
 
   // Write Runway Length
-  if (wp.type == Waypoint::Type::AIRFIELD ||
-      wp.type == Waypoint::Type::OUTLANDING)
+  if ((wp.type == Waypoint::Type::AIRFIELD ||
+       wp.type == Waypoint::Type::OUTLANDING) &&
+      wp.runway.IsLengthDefined())
     writer.Format("%03uM", wp.runway.GetLength());
 
   writer.Write(',');
