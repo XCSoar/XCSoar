@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.8 - not yet released
+* calculations
+  - use maximum speed configured in plane setup as limit for calculations
 * infoboxes
   - add "Fin MC0 AltD" infobox (#2824)
 * task editor

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Computer/Settings.hpp"
+#include "Util/Clamp.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -88,7 +89,15 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.SetWingArea(plane.wing_area);
 
+  // assure the polar is not invalid (because of VMin > VMax)
+  gp.SetVMax(fixed(75), false);
+
   gp.Update();
+
+  // set VMax from settings but assure the range [VMin, VMax] is reasonable
+  if (positive(plane.max_speed))
+    gp.SetVMax(Clamp(plane.max_speed, gp.GetVMin() + fixed(10), fixed(75)));
+
   settings.plane.competition_id = plane.competition_id;
   settings.plane.registration = plane.registration;
   settings.plane.type = plane.type;
