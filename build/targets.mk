@@ -393,6 +393,9 @@ ifeq ($(TARGET),ANDROID)
 
   ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
 
+  # clang is the default compiler on Android
+  CLANG ?= y
+
   ifeq ($(CLANG),y)
     ANDROID_TOOLCHAIN_NAME = llvm-3.4
   else
