@@ -3,8 +3,16 @@
 
 ifeq ($(LIBCXX),y)
 
+ifeq ($(TARGET),ANDROID)
+LIBCXX_CXXFLAGS = -nostdinc++ \
+	-isystem $(ANDROID_NDK)/sources/android/support/include \
+	-isystem $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libcxx/include \
+	-DLIBCXX
+LIBCXX_LDADD = $(ANDROID_NDK)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_ABI3)/libc++_static.a
+else
 LIBCXX_CXXFLAGS += -stdlib=libc++
 LIBCXX_LDFLAGS += -stdlib=libc++
+endif
 
 else
 
