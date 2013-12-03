@@ -131,7 +131,7 @@ public:
   };
 
   /**
-   * An rectangle on the plane that is parallel to the X and Y axes.
+   * A rectangle on the plane that is parallel to the X and Y axes.
    */
   struct Rectangle {
     position_type left, top, right, bottom;
