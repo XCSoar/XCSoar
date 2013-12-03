@@ -331,10 +331,12 @@ ifeq ($(TARGET),ANDROID)
   LLVM_PREFIX = $(ANDROID_TOOLCHAIN)/bin/
 
   ifeq ($(X86),y)
+    LLVM_TRIPLE = i686-none-linux-android
     HAVE_FPU := y
   endif
 
   ifeq ($(MIPS),y)
+    LLVM_TRIPLE = mipsel-none-linux-android
     HAVE_FPU := y
   endif
 
