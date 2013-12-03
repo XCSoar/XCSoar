@@ -15,12 +15,23 @@ Version 6.8 - not yet released
 Version 6.7.2 - not yet released
 * user interface
   - fix crash in alternates list (#3146)
+  - new translation: Slovenian
 * infoboxes
   - fix "Fin Dist" infobox for GOTO tasks (#3152)
 * configuration
   - increase upper limit for plane wing area (#3154)
+  - fix saving of custom polars (#3173)
 * waypoints
   - correctly handle S latitudes and W longitudes in waypoint editor (#3155)
+  - fix saving waypoints to cup format files from waypoint editor
+* Android
+  - enable Vivante workaround for GC600 (#3184)
+* Kobo
+  - fix misassigned passphrase in WiFi dialog (#3151)
+  - work around Kobo Touch N905B kernel crash in display driver (#3145)
+  - work around Kobo Touch N905B touch screen bug
+  - the "Home" button opens the menu
+  - mount /dev/pts for telnetd (#3135)
 
 Version 6.7.1 - 2013/10/11
 * replay

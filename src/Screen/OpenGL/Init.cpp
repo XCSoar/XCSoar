@@ -104,6 +104,15 @@ IsRenderer(const char *_renderer)
 
 gcc_pure
 static bool
+IsVivanteGC600()
+{
+  /* found on StreetMate GTA-50-3D */
+  return IsVendor("Vivante Corporation") &&
+    IsRenderer("GC600 Graphics Engine");
+}
+
+gcc_pure
+static bool
 IsVivanteGC800()
 {
   /* note: this is a Vivante GPU, but its driver declares Marvell as
@@ -131,7 +140,8 @@ gcc_pure
 static bool
 IsBlacklistedOESDrawTexture()
 {
-  return IsAndroid() && (IsVivanteGC800() || IsVivanteGC1000());
+  return IsAndroid() && (IsVivanteGC600() || IsVivanteGC800() ||
+                         IsVivanteGC1000());
 }
 
 gcc_pure

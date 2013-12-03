@@ -41,12 +41,12 @@
 template<typename T>
 struct has_trivial_copy_and_destructor
   : public std::integral_constant<bool,
-#ifdef LIBCXX
+#ifdef _LIBCPP_VERSION
                                   std::is_trivially_copy_constructible<T>::value &&
 #else
                                   std::has_trivial_copy_constructor<T>::value &&
 #endif
-#ifdef LIBCXX
+#ifdef _LIBCPP_VERSION
                                   std::is_trivially_copy_assignable<T>::value &&
                                   std::is_trivially_destructible<T>::value>
 #else
