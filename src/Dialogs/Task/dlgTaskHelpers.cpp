@@ -240,7 +240,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 }
 
 bool
-OrderedTaskSave(const OrderedTask &task)
+OrderedTaskSave(OrderedTask &task)
 {
   assert(protected_task_manager != nullptr);
 
@@ -253,6 +253,7 @@ OrderedTaskSave(const OrderedTask &task)
   Directory::Create(path);
 
   _tcscat(fname, _T(".tsk"));
+  task.SetName(StaticString<64>(fname));
   LocalPath(path, _T("tasks"), fname);
   protected_task_manager->TaskSave(path, task);
   return true;

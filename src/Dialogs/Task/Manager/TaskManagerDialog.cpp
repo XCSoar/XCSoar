@@ -274,7 +274,8 @@ void
 TaskManagerDialog::UpdateCaption()
 {
   StaticString<128> title;
-  title.Format(_T("%s - %s"), _("Task Manager"),
+  title.Format(_T("%s: %s - %s"), _("Task Manager"),
+               task->GetName().empty() ? _T("Default.tsk") : task->GetName().c_str(),
                tab_bar->GetButtonCaption(tab_bar->GetCurrentPage()));
   SetCaption(title);
 }
@@ -282,6 +283,7 @@ TaskManagerDialog::UpdateCaption()
 void
 TaskManagerDialog::InvalidateTaskView()
 {
+  UpdateCaption();
   task_view->Invalidate();
 }
 

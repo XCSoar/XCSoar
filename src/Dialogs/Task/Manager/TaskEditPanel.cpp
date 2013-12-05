@@ -355,6 +355,7 @@ void TaskEditPanel::ReverseTask()
   }
 
   *task_modified = true;
+  ordered_task->ClearName();
   ordered_task->GetFactory().CheckAddFinish();
   ordered_task->UpdateStatsGeometry();
   ordered_task->UpdateGeometry();
@@ -369,7 +370,7 @@ TaskEditPanel::OnClearAllClicked()
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
 
     ordered_task->RemoveAllPoints();
-
+    ordered_task->ClearName();
     *task_modified = true;
     RefreshView();
   }
@@ -506,6 +507,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
   if (ItemIndex < ordered_task->TaskSize()) {
     if (dlgTaskPointShowModal(&ordered_task, ItemIndex)) {
       *task_modified = true;
+      ordered_task->ClearName();
       ordered_task->UpdateGeometry();
       RefreshView();
     }
@@ -531,6 +533,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 
     if (factory.Append(*point, true)) {
       *task_modified = true;
+      ordered_task->ClearName();
       ordered_task->UpdateGeometry();
       RefreshView();
     }
@@ -573,6 +576,7 @@ TaskEditPanel::MoveUp()
 
   GetList().SetCursorIndex(index - 1);
   *task_modified = true;
+  ordered_task->ClearName();
 
   ordered_task->UpdateGeometry();
   RefreshView();
@@ -590,6 +594,7 @@ TaskEditPanel::MoveDown()
 
   GetList().SetCursorIndex(index + 1);
   *task_modified = true;
+  ordered_task->ClearName();
 
   ordered_task->UpdateGeometry();
   RefreshView();

@@ -252,6 +252,10 @@ TaskListPanel::LoadTask()
   OrderedTask* temptask = orig->Clone(CommonInterface::GetComputerSettings().task);
   delete *active_task;
   *active_task = temptask;
+
+  const unsigned cursor_index = GetList().GetCursorIndex();
+  (*active_task)->SetName(StaticString<64>(task_store->GetName(cursor_index)));
+
   RefreshView();
   *task_modified = true;
 

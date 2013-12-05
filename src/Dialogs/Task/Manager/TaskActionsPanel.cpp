@@ -58,6 +58,8 @@ TaskActionsPanel::SaveTask()
     if (!OrderedTaskSave(**active_task))
       return;
 
+    *task_modified = true;
+    dialog.UpdateCaption();
     DirtyTaskListPanel();
   } else {
     ShowMessageBox(getTaskValidationErrors(

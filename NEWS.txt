@@ -9,6 +9,7 @@ Version 6.8 - not yet released
   - add "Fin MC0 AltD" infobox (#2824)
 * task editor
   - added one-click task reversal (#1730)
+  - show name of loaded/saved tasks in dialog title (#1924)
 * user interface 
   - checklist remembers last opened list (#3110)
 
