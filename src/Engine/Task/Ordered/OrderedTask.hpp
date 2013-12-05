@@ -27,6 +27,7 @@
 #include "Task/AbstractTask.hpp"
 #include "SmartTaskAdvance.hpp"
 #include "Util/DereferenceIterator.hpp"
+#include "Util/StaticString.hpp"
 
 #include <assert.h>
 #include <vector>
@@ -84,6 +85,8 @@ private:
   SmartTaskAdvance task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
+
+  StaticString<64> name;
 
 public:
   /**
@@ -644,6 +647,19 @@ public:
    * @return index of last intermediate point achieved or 0 if none
    */
   unsigned GetLastIntermediateAchieved() const;
+
+  gcc_pure
+  const StaticString<64> &GetName() const {
+    return name;
+  }
+
+  void SetName(const StaticString<64> &name_) {
+    name = name_;
+  }
+
+  void ClearName() {
+    name.clear();
+  }
 
 public:
   /* virtual methods from class TaskInterface */

@@ -94,6 +94,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
    ordered_settings(tb.ordered_defaults),
    dijkstra_min(nullptr), dijkstra_max(nullptr)
 {
+  ClearName();
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskSettings(ordered_settings);
 }
@@ -1271,6 +1272,9 @@ OrderedTask::Clone(const TaskBehaviour &tb) const
 
   new_task->active_task_point = active_task_point;
   new_task->UpdateGeometry();
+
+  new_task->SetName(GetName());
+
   return new_task;
 }
 
@@ -1305,6 +1309,8 @@ bool
 OrderedTask::Commit(const OrderedTask& that)
 {
   bool modified = false;
+
+  SetName(that.GetName());
 
   // change mode to that one
   SetFactory(that.factory_mode);
@@ -1467,6 +1473,8 @@ void
 OrderedTask::Clear()
 {
   RemoveAllPoints();
+
+  ClearName();
 
   Reset();
   ordered_settings = task_behaviour.ordered_defaults;
