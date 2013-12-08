@@ -27,23 +27,25 @@
 #include "Look/Look.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
+#include "Util/Clamp.hpp"
 
 void
 CrossSectionWidget::Update(const MoreData &basic,
                            const DerivedInfo &calculated,
-                           const AirspaceRendererSettings &settings)
+                           const MapSettings &settings)
 {
   CrossSectionWindow &w = (CrossSectionWindow &)GetWindow();
 
   w.ReadBlackboard(basic, calculated,
                    CommonInterface::GetComputerSettings().task.glide,
                    CommonInterface::GetComputerSettings().polar.glide_polar_task,
-                   CommonInterface::GetMapSettings().airspace);
+                   CommonInterface::GetMapSettings());
 
   if (basic.location_available && basic.track_available) {
     w.SetStart(basic.location);
     w.SetDirection(basic.track);
-    w.SetRange(fixed(50000));
+    w.SetRange(Clamp(fixed(w.GetWidth()) / settings.cruise_scale,
+               fixed(5000), fixed(200000)));
   } else
     w.SetInvalid();
 
@@ -78,7 +80,7 @@ void
 CrossSectionWidget::Show(const PixelRect &rc)
 {
   Update(CommonInterface::Basic(), CommonInterface::Calculated(),
-         CommonInterface::GetMapSettings().airspace);
+         CommonInterface::GetMapSettings());
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 
   WindowWidget::Show(rc);
@@ -96,5 +98,5 @@ void
 CrossSectionWidget::OnCalculatedUpdate(const MoreData &basic,
                                        const DerivedInfo &calculated)
 {
-  Update(basic, calculated, CommonInterface::GetMapSettings().airspace);
+  Update(basic, calculated, CommonInterface::GetMapSettings());
 }

@@ -26,6 +26,7 @@
 
 #include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+#include "MapSettings.hpp"
 #include "Compiler.h"
 
 struct AirspaceRendererSettings;
@@ -33,7 +34,7 @@ struct AirspaceRendererSettings;
 class CrossSectionWidget : public WindowWidget,
                            private NullBlackboardListener {
   void Update(const MoreData &basic, const DerivedInfo &calculated,
-              const AirspaceRendererSettings &settings);
+              const MapSettings &settings);
 
 public:
   /* virtual methods from class Widget */

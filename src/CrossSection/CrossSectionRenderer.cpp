@@ -27,6 +27,7 @@
 #include "Screen/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "MapSettings.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Navigation/Aircraft.hpp"
@@ -46,13 +47,13 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
                                      const DerivedInfo &_calculated_info,
                                      const GlideSettings &_glide_settings,
                                      const GlidePolar &_glide_polar,
-                                     const AirspaceRendererSettings &ar_settings)
+                                     const MapSettings &map_settings)
 {
   gps_info = _gps_info;
   calculated_info = _calculated_info;
   glide_settings = _glide_settings;
   glide_polar = _glide_polar;
-  airspace_renderer.SetSettings(ar_settings);
+  airspace_renderer.SetSettings(map_settings.airspace);
 }
 
 void

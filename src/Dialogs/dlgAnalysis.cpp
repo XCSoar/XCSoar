@@ -264,7 +264,7 @@ UpdateCrossSection()
   csw->ReadBlackboard(basic, calculated,
                       blackboard->GetComputerSettings().task.glide,
                       blackboard->GetComputerSettings().polar.glide_polar_task,
-                      blackboard->GetMapSettings().airspace);
+                      blackboard->GetMapSettings());
 
   if (basic.location_available && basic.track_available) {
     csw->SetDirection(basic.track);

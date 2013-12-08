@@ -32,7 +32,7 @@ struct AirspaceLook;
 struct ChartLook;
 struct MoreData;
 struct DerivedInfo;
-struct AirspaceRendererSettings;
+struct MapSettings;
 class Airspaces;
 class RasterTerrain;
 
@@ -58,10 +58,10 @@ public:
                       const DerivedInfo &calculated,
                       const GlideSettings &glide_settings,
                       const GlidePolar &glide_polar,
-                      const AirspaceRendererSettings &ar_settings) {
+                      const MapSettings &map_settings) {
     renderer.ReadBlackboard(basic, calculated,
                             glide_settings, glide_polar,
-                            ar_settings);
+                            map_settings);
     Invalidate();
   }
 
