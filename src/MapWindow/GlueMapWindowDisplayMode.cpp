@@ -218,7 +218,7 @@ GlueMapWindow::UpdateMapScale()
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const MapSettings &settings = CommonInterface::GetMapSettings();
+  MapSettings &settings = CommonInterface::SetMapSettings();
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
@@ -248,6 +248,7 @@ GlueMapWindow::UpdateMapScale()
                      settings.max_auto_zoom_distance / 10);
 
     visible_projection.SetFreeMapScale(distance);
+    settings.cruise_scale = visible_projection.GetScale();
   }
 }
 
