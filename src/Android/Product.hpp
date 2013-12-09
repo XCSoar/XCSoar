@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef __arm__
+extern bool has_cursor_keys;
 extern bool is_nook, is_dithered;
 #endif
 
