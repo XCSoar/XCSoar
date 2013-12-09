@@ -134,8 +134,10 @@ SocketPort::OnFileEvent(int fd, unsigned mask)
 
   char buffer[1024];
   ssize_t nbytes = socket.Read(buffer, sizeof(buffer));
-  if (nbytes <= 0)
+  if (nbytes <= 0) {
+    socket.Close();
     return false;
+  }
 
   handler.DataReceived(buffer, nbytes);
   return true;
