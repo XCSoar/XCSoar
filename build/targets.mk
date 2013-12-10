@@ -527,7 +527,11 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += -L$(KOBO)/lib
-  TARGET_STATIC = y
+  TARGET_LDFLAGS += -static-libstdc++
+
+  # use our glibc version and its ld.so on the Kobo, not the one from
+  # the stock Kobo firmware, as it may be incompatible
+  TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
 endif
 
 ifeq ($(TARGET),ANDROID)
