@@ -241,13 +241,19 @@ auto-detect the Pi.
 
 \subsection{Compiling for Kobo E-book Readers}
 
-Download the ARM cross-compiler and unpack in your home directory:
+You need an ARM toolchain.  For example, you can use this toolchain
+that was built for Debian Wheezy on AMD64:
 
 \begin{verbatim*}
 wget http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.tar.xz
 tar xJfC x-tools-arm.tar.xz $HOME
 export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
 \end{verbatim*}
+
+You can build your own toolchain with
+\href{http://crosstool-ng.org/}{crosstool-ng}.  The above toolchain
+was built with crosstool-ng and this configuration file:
+\url{http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.config}
 
 Download the Kobo libraries and unpack in \texttt{/opt}:
 
