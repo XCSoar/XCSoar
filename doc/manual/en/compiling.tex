@@ -245,21 +245,28 @@ You need an ARM toolchain.  For example, you can use this toolchain
 that was built for Debian Wheezy on AMD64:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.tar.xz
-tar xJfC x-tools-arm.tar.xz $HOME
+wget http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz
+tar xJfC x-tools-arm-amd64-2013-12-11.tar.xz $HOME
 export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
 \end{verbatim*}
+
+There are precompiled toolchains for
+\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz}{amd64}
+and for
+\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-i386-2013-12-11.tar.xz}{i386}.
 
 You can build your own toolchain with
 \href{http://crosstool-ng.org/}{crosstool-ng}.  The above toolchain
 was built with crosstool-ng and this configuration file:
 \url{http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.config}
 
-Download the Kobo libraries and unpack in \texttt{/opt}:
+Download the
+\href{http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz}{Kobo
+  libraries} and unpack in \texttt{/opt}:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-07-17.tar.xz
-tar xJfC kobo-libs-2013-07-17.tar.xz /opt
+wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz
+tar xJfC kobo-libs-2013-12-11.tar.xz /opt
 \end{verbatim*}
 
 To compile, run:
