@@ -532,6 +532,7 @@ ifeq ($(TARGET_IS_KOBO),y)
   # use our glibc version and its ld.so on the Kobo, not the one from
   # the stock Kobo firmware, as it may be incompatible
   TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
+  TARGET_LDFLAGS += -Wl,--rpath=/opt/xcsoar/lib
 endif
 
 ifeq ($(TARGET),ANDROID)

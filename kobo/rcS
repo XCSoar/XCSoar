@@ -93,9 +93,6 @@ if [ `dd if=/dev/mmcblk0 bs=8 count=1 skip=64` = "SN-N905B" ]; then
     sleep 1
 fi
 
-# use our version of the system libraries
-export LD_LIBRARY_PATH=/opt/xcsoar/lib
-
 # finally, open the menu
 exec /opt/xcsoar/bin/KoboMenu
 
