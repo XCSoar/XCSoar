@@ -98,7 +98,11 @@ final class BitmapUtil {
 
     if (bmp.getConfig() == null) {
       /* convert to a format compatible with OpenGL */
-      Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
+      Bitmap.Config config = bmp.hasAlpha()
+        ? Bitmap.Config.ARGB_8888
+        : Bitmap.Config.RGB_565;
+
+      Bitmap tmp = bmp.copy(config, false);
       bmp.recycle();
 
       if (tmp == null)
