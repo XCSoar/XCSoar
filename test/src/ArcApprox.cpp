@@ -25,6 +25,8 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Math.hpp"
 
+#include <vector>
+
 #include <stdio.h>
 
 static void
