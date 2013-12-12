@@ -37,6 +37,11 @@ public:
     RGB,
 
     /**
+     * 24 bits per pixel RGB with 8 bit alpha.
+     */
+    RGBA,
+
+    /**
      * 8 bits per pixel grayscale.
      */
     GRAY,

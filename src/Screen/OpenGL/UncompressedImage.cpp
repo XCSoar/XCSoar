@@ -44,6 +44,12 @@ ImportTexture(const UncompressedImage &image)
     type = GL_UNSIGNED_BYTE;
     break;
 
+  case UncompressedImage::Format::RGBA:
+    internal_format = GL_RGBA;
+    format = GL_RGBA;
+    type = GL_UNSIGNED_BYTE;
+    break;
+
   case UncompressedImage::Format::INVALID:
     return nullptr;
 
