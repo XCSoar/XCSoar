@@ -36,6 +36,7 @@ FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
+TARGET_IS_ANDROID := n
 TARGET_IS_PI := n
 TARGET_IS_KOBO := n
 HAVE_POSIX := n
@@ -367,6 +368,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_ARCH += -fpic -funwind-tables
 
   TARGET_IS_LINUX := y
+  TARGET_IS_ANDROID := y
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
