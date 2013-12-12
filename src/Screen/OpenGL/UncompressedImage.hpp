@@ -35,4 +35,12 @@ class UncompressedImage;
 GLTexture *
 ImportTexture(const UncompressedImage &image);
 
+/**
+ * Convert an #UncompressedImage to a GL_ALPHA #GLTexture.
+ *
+ * @return the new GLTexture object or nullptr on error
+ */
+GLTexture *
+ImportAlphaTexture(const UncompressedImage &image);
+
 #endif

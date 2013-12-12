@@ -85,7 +85,7 @@ public class TextUtil {
     canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
 
     // create OpenGL texture
-    if (!BitmapUtil.bitmapToOpenGL(bmp, id))
+    if (!BitmapUtil.bitmapToOpenGL(bmp, false, id))
       return null;
 
     return id;

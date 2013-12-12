@@ -747,59 +747,26 @@ Canvas::StretchMono(int dest_x, int dest_y,
      implementation will be faster when erasing the background
      again */
 
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+  /* replace the texture color with the selected text color */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_PREVIOUS);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+
+  /* invert texture alpha (our bitmaps have black text on white
+     background) */
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  const GLEnable scope(GL_TEXTURE_2D);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   GLTexture &texture = *src.GetNative();
-  GLEnable scope(GL_TEXTURE_2D);
   texture.Bind();
-
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-  if (fg_color == COLOR_WHITE) {
-    /* white text requested: use this trivial implementation */
-    GLLogicOp logic_op(GL_OR_INVERTED);
-    texture.Draw(dest_x, dest_y, dest_width, dest_height,
-                 src_x, src_y, src_width, src_height);
-    return;
-  }
-
-  /* apply the mask, pixels will be black then */
-  GLLogicOp logic_op(GL_AND);
-  if (bg_color != COLOR_BLACK)
-    texture.Draw(dest_x, dest_y, dest_width, dest_height,
-                 src_x, src_y, src_width, src_height);
-
-  if (fg_color != COLOR_BLACK) {
-    /* draw */
-
-#ifndef HAVE_GLES
-    if (fg_color != COLOR_WHITE) {
-      /* XXX OpenGL/ES doesn't support GL_OPERAND0_RGB; we can't print
-         colored mono images currently */
-
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB,
-                        GL_ONE_MINUS_SRC_COLOR);
-
-      const GLfloat color[] = {
-        GLfloat(fg_color.Red() / 256.),
-        GLfloat(fg_color.Green() / 256.),
-        GLfloat(fg_color.Blue() / 256.),
-        GLfloat(1.0),
-      };
-
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_CONSTANT);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
-      OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-      glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, color);
-
-      logic_op.set(GL_OR);
-    } else
-#endif
-      logic_op.set(GL_OR_INVERTED);
-
-    texture.Draw(dest_x, dest_y, dest_width, dest_height,
-                 src_x, src_y, src_width, src_height);
-  }
+  texture.Draw(dest_x, dest_y, dest_width, dest_height,
+               src_x, src_y, src_width, src_height);
 }
 
 void

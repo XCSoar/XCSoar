@@ -63,3 +63,16 @@ ImportTexture(const UncompressedImage &image)
   return new GLTexture(internal_format, image.GetWidth(), image.GetHeight(),
                        format, type, image.GetData());
 }
+
+GLTexture *
+ImportAlphaTexture(const UncompressedImage &image)
+{
+  assert(image.GetFormat() == UncompressedImage::Format::GRAY);
+
+  const GLint internal_format = GL_ALPHA;
+  const GLenum format = GL_ALPHA, type = GL_UNSIGNED_BYTE;
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  return new GLTexture(internal_format, image.GetWidth(), image.GetHeight(),
+                       format, type, image.GetData());
+}

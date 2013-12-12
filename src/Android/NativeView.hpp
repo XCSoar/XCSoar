@@ -82,7 +82,7 @@ public:
       env->GetMethodID(cls, "setRequestedOrientation", "(I)Z");
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
-                                                    "(Ljava/lang/String;[I)Z");
+                                                    "(Ljava/lang/String;Z[I)Z");
     load_file_texture_method = env->GetMethodID(cls, "loadFileTexture",
                                                 "(Ljava/lang/String;[I)Z");
     open_file_method = env->GetMethodID(cls, "openFile",
@@ -133,12 +133,12 @@ public:
     env->CallVoidMethod(obj, swap_method);
   }
 
-  bool loadResourceTexture(const char *name, jint *result) {
+  bool loadResourceTexture(const char *name, jboolean alpha, jint *result) {
     Java::String name2(env, name);
     jintArray result2 = env->NewIntArray(5);
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
-                                          name2.Get(), result2);
+                                          name2.Get(), alpha, result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 5, result);
 
