@@ -803,18 +803,6 @@ Canvas::StretchMono(int dest_x, int dest_y,
 }
 
 void
-Canvas::CopyOr(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y)
-{
-  assert(src.IsDefined());
-
-  GLLogicOp logic_op(GL_OR);
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src, src_x, src_y);
-}
-
-void
 Canvas::CopyNotOr(int dest_x, int dest_y,
                   unsigned dest_width, unsigned dest_height,
                   const Bitmap &src, int src_x, int src_y)
@@ -834,18 +822,6 @@ Canvas::CopyAnd(int dest_x, int dest_y,
   assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_AND);
-  Copy(dest_x, dest_y, dest_width, dest_height,
-       src, src_x, src_y);
-}
-
-void
-Canvas::CopyNot(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y)
-{
-  assert(src.IsDefined());
-
-  GLLogicOp logic_op(GL_COPY_INVERTED);
   Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
