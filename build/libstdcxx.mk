@@ -19,6 +19,12 @@ else
   ifeq ($(DEBUG_GLIBCXX),y)
     LIBSTDCXX_CPPFLAGS += -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
   endif
+
+  ifeq ($(CLANG),y)
+    # workaround to disable libstdc++'s use of "__float128" (since
+    # version 4.7) because clang doesn't know that type
+    LIBSTDCXX_CPPFLAGS += -D__STRICT_ANSI__ -D_GNU_SOURCE
+  endif
 endif
 
 # Add the C++ standard library to every library and every program
