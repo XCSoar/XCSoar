@@ -133,7 +133,7 @@ unsigned log2_fast(const unsigned v)
     L16(4), L16(5), L16(5), L16(6), L16(6), L16(6), L16(6),
     L16(7), L16(7), L16(7), L16(7), L16(7), L16(7), L16(7), L16(7)
   };
-  register unsigned int t, tt; // temporaries
+  unsigned int t, tt; // temporaries
 
   if ((tt = v >> 16))
     {
