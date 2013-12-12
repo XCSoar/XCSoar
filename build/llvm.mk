@@ -7,11 +7,6 @@ LLVM_LLC = $(LLVM_PREFIX)llc$(LLVM_SUFFIX)
 
 ifeq ($(CLANG),y)
 
-ifneq ($(TARGET),ANDROID)
-HOSTCC = $(CC)
-HOSTCXX = $(CXX)
-endif
-
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 ifeq ($(DEBUG)$(LLVM)$(LTO),nny)
