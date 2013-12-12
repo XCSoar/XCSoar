@@ -58,8 +58,10 @@ void
 MaskedIcon::CalculateLayout(bool center)
 {
   size = bitmap.GetSize();
+#ifndef ENABLE_OPENGL
   /* left half is mask, right half is icon */
   size.cx /= 2;
+#endif
 
   if (center) {
     origin.x = size.cx / 2;
@@ -80,20 +82,14 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
     /* hack: do the postponed layout calcuation now */
     const_cast<MaskedIcon *>(this)->CalculateLayout((bool)size.cy);
 
-  GLTexture &texture = *bitmap.GetNative();
-
-  GLEnable scope(GL_TEXTURE_2D);
-  texture.Bind();
-
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
-  GLLogicOp logic_op(GL_OR);
-  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
-               0, 0, size.cx, size.cy);
+  const GLEnable scope(GL_TEXTURE_2D);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  logic_op.set(GL_AND);
-  texture.Draw(x - origin.x, y - origin.y, size.cx, size.cy,
-               size.cx, 0, size.cx, size.cy);
+  GLTexture &texture = *bitmap.GetNative();
+  texture.Bind();
+  texture.Draw(x - origin.x, y - origin.y);
 #else
 
 #ifdef USE_GDI
