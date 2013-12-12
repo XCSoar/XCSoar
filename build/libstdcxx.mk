@@ -10,6 +10,7 @@ ifneq ($(LIBCXX),)
   # using libc++
 
   include $(topdir)/build/libcxx.mk
+  LIBSTDCXX_CXXFLAGS = $(LIBCXX_CXXFLAGS)
   LIBSTDCXX_CPPFLAGS = $(LIBCXX_CPPFLAGS)
   LIBSTDCXX_LDADD = $(LIBCXX_LDADD)
   LIBSTDCXX_LDFLAGS = $(LIBCXX_LDFLAGS)
@@ -28,5 +29,6 @@ else
 endif
 
 # Add the C++ standard library to every library and every program
+TARGET_CXXFLAGS += $(LIBSTDCXX_CXXFLAGS)
 TARGET_CPPFLAGS += $(LIBSTDCXX_CPPFLAGS)
 TARGET_LDADD := $(LIBSTDCXX_LDADD) $(TARGET_LDADD)
