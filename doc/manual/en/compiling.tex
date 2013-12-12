@@ -275,6 +275,19 @@ To compile, run:
 make TARGET=KOBO
 \end{verbatim*}
 
+To build the kobo install file \texttt{KoboRoot.tgz}, you need the
+following Debian packages:
+
+\begin{verbatim*}
+apt-get install fakeroot ttf-bitstream-vera
+\end{verbatim*}
+
+Then compile using this command:
+
+\begin{verbatim*}
+make TARGET=KOBO output/KOBO/KoboRoot.tgz
+\end{verbatim*}
+
 \section{Options}
 
 \subsection{Parallel Build}
