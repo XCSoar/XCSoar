@@ -12,6 +12,10 @@ ifeq ($(TARGET_IS_KOBO),y)
   PKG_CONFIG := PKG_CONFIG_LIBDIR=$(KOBO)/lib/pkgconfig $(PKG_CONFIG)
 endif
 
+ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
+endif
+
 # Generates a pkg-config lookup for a library.
 #
 # Example: $(eval $(call CURL,libcurl >= 2.21))
