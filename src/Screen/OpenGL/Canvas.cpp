@@ -526,6 +526,36 @@ Canvas::CalcTextSize(const TCHAR *text) const
   return TextCache::GetSize(*font, text);
 }
 
+/**
+ * Prepare drawing a GL_ALPHA texture with the specified color.
+ */
+static void
+PrepareColoredAlphaTexture(Color color)
+{
+  color.Set();
+
+  if (color == COLOR_BLACK) {
+    /* GL_ALPHA textures have black RGB - this is easy */
+
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+  } else {
+    /* use GL_COMBINE to replace the texture color (black) with the
+       specified one */
+
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+
+    /* replace the texture color with the selected text color */
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_RGB, GL_PREVIOUS);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+
+    /* use the texture alpha */
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_SRC0_ALPHA, GL_TEXTURE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA);
+  }
+}
+
 void
 Canvas::DrawText(int x, int y, const TCHAR *text)
 {
@@ -544,28 +574,17 @@ Canvas::DrawText(int x, int y, const TCHAR *text)
     return;
 
   if (background_mode == OPAQUE)
-    /* draw the opaque background */
     DrawFilledRectangle(x, y,
                         x + texture->GetWidth(), y + texture->GetHeight(),
                         background_color);
 
+  PrepareColoredAlphaTexture(text_color);
+
   GLEnable scope(GL_TEXTURE_2D);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   texture->Bind();
-  GLLogicOp logic_op(GL_AND_INVERTED);
-
-  if (background_mode != OPAQUE || background_color != COLOR_BLACK) {
-    /* cut out the shape in black */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    texture->Draw(x, y);
-  }
-
-  if (text_color != COLOR_BLACK) {
-    /* draw the text color on top */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    logic_op.set(GL_OR);
-    text_color.Set();
-    texture->Draw(x, y);
-  }
+  texture->Draw(x, y);
 }
 
 void
@@ -585,21 +604,13 @@ Canvas::DrawTransparentText(int x, int y, const TCHAR *text)
   if (texture == NULL)
     return;
 
+  PrepareColoredAlphaTexture(text_color);
+
   GLEnable scope(GL_TEXTURE_2D);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   texture->Bind();
-  GLLogicOp logic_op(GL_AND_INVERTED);
-
-  /* cut out the shape in black */
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   texture->Draw(x, y);
-
-  if (text_color != COLOR_BLACK) {
-    /* draw the text color on top */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    logic_op.set(GL_OR);
-    text_color.Set();
-    texture->Draw(x, y);
-  }
 }
 
 void
@@ -621,26 +632,18 @@ Canvas::DrawClippedText(int x, int y,
   if (texture == NULL)
     return;
 
-  GLEnable scope(GL_TEXTURE_2D);
-  texture->Bind();
-  GLLogicOp logic_op(GL_AND_INVERTED);
-
   if (texture->GetHeight() < height)
     height = texture->GetHeight();
   if (texture->GetWidth() < width)
     width = texture->GetWidth();
 
-  /* cut out the shape in black */
-  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-  texture->Draw(x, y, width, height, 0, 0, width, height);
+  PrepareColoredAlphaTexture(text_color);
 
-  if (text_color != COLOR_BLACK) {
-    /* draw the text color on top */
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    logic_op.set(GL_OR);
-    text_color.Set();
-    texture->Draw(x, y, width, height, 0, 0, width, height);
-  }
+  GLEnable scope(GL_TEXTURE_2D);
+  const GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  texture->Bind();
+  texture->Draw(x, y, width, height, 0, 0, width, height);
 }
 
 void
