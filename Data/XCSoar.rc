@@ -17,7 +17,11 @@ HI_RES_AWARE CEUX {1}
 #define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics/" file ".bmp")
 #else
 #define BITMAP_BITMAP(name, file) BITMAP(name, "../output/data/bitmaps/" file ".png")
+#ifdef ENABLE_OPENGL
+#define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons/" file ".png")
+#else
 #define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons2/" file ".png")
+#endif
 #define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics2/" file ".png")
 #endif
 

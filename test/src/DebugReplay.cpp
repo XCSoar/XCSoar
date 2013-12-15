@@ -83,7 +83,9 @@ CreateDebugReplay(Args &args)
     return CreateDebugReplayIGC(args.ExpectNext());
   }
 
-  return CreateDebugReplayNMEA(args.ExpectNextT(), args.ExpectNext());
+  const auto driver_name = args.ExpectNextT();
+  const auto input_file = args.ExpectNext();
+  return CreateDebugReplayNMEA(driver_name, input_file);
 }
 
 DebugReplay *

@@ -48,7 +48,8 @@
 #
 #   LLVM        "y" to compile LLVM bitcode with clang
 #
-#   LIBCXX      The absolute path of the libc++ svn/git working directory.
+#   LIBCXX      "y" to compile with libc++, or the absolute path of the
+#               libc++ svn/git working directory.
 #
 #   IWYU        "y" to run "include-what-you-use" on all sources
 #

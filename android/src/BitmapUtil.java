@@ -24,6 +24,10 @@ package org.xcsoar;
 
 import android.util.Log;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import static android.opengl.GLES11.*;
 import android.opengl.GLUtils;
 
@@ -61,7 +65,7 @@ final class BitmapUtil {
       break;
 
     case ALPHA_8:
-      internalFormat = format = GL_LUMINANCE;
+      internalFormat = format = GL_ALPHA;
       type = GL_UNSIGNED_BYTE;
       unpackAlignment = 1;
       break;
@@ -81,13 +85,53 @@ final class BitmapUtil {
   }
 
   /**
+   * Copy the red channel to a new Bitmap's alpha channel.  The old
+   * one will be recycled.
+   */
+  static Bitmap redToAlpha(Bitmap src) {
+    Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(),
+                                      Bitmap.Config.ARGB_8888);
+
+    float[] matrix = new float[] {
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0
+    };
+
+    Paint paint = new Paint();
+    paint.setColorFilter(new ColorMatrixColorFilter(new ColorMatrix(matrix)));
+
+    Canvas canvas = new Canvas(dest);
+    canvas.setDensity(Bitmap.DENSITY_NONE);
+    canvas.drawBitmap(src, 0, 0, paint);
+
+    src.recycle();
+    return dest;
+  }
+
+  /**
+   * Convert the Bitmap to ALPHA_8.  The old one will be recycled.
+   */
+  static Bitmap toAlpha8(Bitmap src) {
+    if (!src.hasAlpha())
+      src = redToAlpha(src);
+
+    Bitmap dest = src.copy(Bitmap.Config.ALPHA_8, false);
+    src.recycle();
+    return dest;
+  }
+
+  /**
    * Loads an Android Bitmap as OpenGL texture.
    *
+   * @param alpha expect a GL_ALPHA texture?
    * @param result an array of 5 integers: texture id, width, height,
    * allocated width, allocated height (all output)
    * @return true on success
    */
-  public static boolean bitmapToOpenGL(Bitmap bmp, int[] result) {
+  public static boolean bitmapToOpenGL(Bitmap bmp, boolean alpha,
+                                       int[] result) {
     if (bmp == null)
       return false;
 
@@ -96,9 +140,15 @@ final class BitmapUtil {
     result[3] = validateTextureSize(result[1]);
     result[4] = validateTextureSize(result[2]);
 
-    if (bmp.getConfig() == null) {
+    if (alpha && bmp.getConfig() != Bitmap.Config.ALPHA_8)
+      bmp = toAlpha8(bmp);
+    else if (bmp.getConfig() == null) {
       /* convert to a format compatible with OpenGL */
-      Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
+      Bitmap.Config config = bmp.hasAlpha()
+        ? Bitmap.Config.ARGB_8888
+        : Bitmap.Config.RGB_565;
+
+      Bitmap tmp = bmp.copy(config, false);
       bmp.recycle();
 
       if (tmp == null)

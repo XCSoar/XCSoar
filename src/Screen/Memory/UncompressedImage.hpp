@@ -95,6 +95,7 @@ ImportSurface(WritableImageBuffer<PixelTraits> &buffer,
     gcc_unreachable();
 
   case UncompressedImage::Format::RGB:
+  case UncompressedImage::Format::RGBA:
     ConvertFromRGB<PixelTraits>(buffer,
                                 (const uint8_t *)uncompressed.GetData(),
                                 uncompressed.GetPitch());

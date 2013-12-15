@@ -63,7 +63,7 @@ ifeq ($(HAVE_WIN32),n)
 
 $(TARGET_OUTPUT_DIR)/XCSoar.rc: Data/XCSoar.rc $(OUT)/include/resource.h | $(TARGET_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  CPP     $@"
-	$(Q)$(HOSTCPP) -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS)
+	$(Q)$(HOSTCPP) -o $@ $< -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS)
 
 $(TARGET_OUTPUT_DIR)/include/resource_data.h: $(TARGET_OUTPUT_DIR)/XCSoar.rc \
 	$(RESOURCE_FILES) \

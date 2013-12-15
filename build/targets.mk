@@ -36,6 +36,7 @@ FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
+TARGET_IS_ANDROID := n
 TARGET_IS_PI := n
 TARGET_IS_KOBO := n
 HAVE_POSIX := n
@@ -367,6 +368,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_ARCH += -fpic -funwind-tables
 
   TARGET_IS_LINUX := y
+  TARGET_IS_ANDROID := y
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -387,6 +389,7 @@ endif
 ######## target definitions
 
 TARGET_INCLUDES =
+TARGET_CXXFLAGS =
 TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 
 ifneq ($(WINVER),)
@@ -527,7 +530,12 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_LDFLAGS += -L$(KOBO)/lib
-  TARGET_STATIC = y
+  TARGET_LDFLAGS += -static-libstdc++
+
+  # use our glibc version and its ld.so on the Kobo, not the one from
+  # the stock Kobo firmware, as it may be incompatible
+  TARGET_LDFLAGS += -Wl,--dynamic-linker=/opt/xcsoar/lib/ld-linux-armhf.so.3
+  TARGET_LDFLAGS += -Wl,--rpath=/opt/xcsoar/lib
 endif
 
 ifeq ($(TARGET),ANDROID)
