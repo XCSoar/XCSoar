@@ -242,16 +242,20 @@ HasKeyboard()
  * in modal dialogs.  Without cursor keys, focused controls do not
  * need to be highlighted.
  */
+#ifndef ANDROID
 constexpr
+#endif
 static inline bool
 HasCursorKeys()
 {
   /* we assume that all Windows (CE) devices have cursor keys; some do
      not, but that's hard to detect */
 
-  /* TODO: check Configuration.keyboard on Android */
-
-  return !IsKobo() && !IsAndroid();
+#ifdef ANDROID
+  return has_cursor_keys;
+#else
+  return !IsKobo();
+#endif
 }
 
 /**

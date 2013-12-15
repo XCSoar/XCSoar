@@ -35,20 +35,49 @@ struct Event;
  * A driver for Linux input devices (/dev/input/event*).
  */
 class LinuxInputDevice final : private FileEventHandler {
+  struct Position {
+    unsigned x, y;
+
+    static constexpr Position Zero() {
+      return { 0, 0 };
+    }
+  };
+
   EventQueue &queue;
   IOLoop &io_loop;
 
-  unsigned x, y;
+  /**
+   * The position being edited.  Upon EV_SYN, it will be copied to
+   * #moved_position if #moving is true.
+   */
+  Position edit_position;
+
+  /**
+   * The position published by Generate().
+   */
+  Position public_position;
+
   bool down;
 
-  bool moved, pressed, released;
+  /**
+   * Was #edit_position modified?
+   */
+  bool moving;
+
+  /**
+   * Does #public_position contain a new value?  This is copied from
+   * #moving on EV_SYN and will be picked up by Generate().
+   */
+  bool moved;
+
+  bool pressed, released;
 
   FileDescriptor fd;
 
 public:
   explicit LinuxInputDevice(EventQueue &_queue, IOLoop &_io_loop)
     :queue(_queue), io_loop(_io_loop),
-     x(0), y(0) {}
+     edit_position(Position::Zero()), public_position(Position::Zero()) {}
 
   ~LinuxInputDevice() {
     Close();

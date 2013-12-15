@@ -62,9 +62,10 @@ public:
     return GetList().GetCursorIndex();
   }
 
-  void Update() {
+  bool Update() {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
     alternates = lease->GetAlternates();
+    return !alternates.empty();
   }
 
 public:
@@ -132,6 +133,7 @@ AlternatesListWidget::OnAction(int id)
   switch (id) {
   case GOTO:
     unsigned index = GetCursorIndex();
+    assert(index < alternates.size());
 
     auto const &item = alternates[index];
     auto const &waypoint = item.waypoint;
@@ -152,7 +154,9 @@ dlgAlternatesListShowModal()
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   AlternatesListWidget widget(dialog_look);
-  widget.Update();
+  if (!widget.Update())
+    /* no alternates: don't show the dialog */
+    return;
 
   WidgetDialog dialog(dialog_look);
   dialog.CreateFull(UIGlobals::GetMainWindow(), _("Alternates"), &widget);

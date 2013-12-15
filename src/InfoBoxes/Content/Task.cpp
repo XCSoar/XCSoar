@@ -398,7 +398,7 @@ void
 UpdateInfoBoxFinalDistance(InfoBoxData &data)
 {
   const auto &calculated = CommonInterface::Calculated();
-  const TaskStats &task_stats = calculated.ordered_task_stats;
+  const TaskStats &task_stats = calculated.task_stats;
 
   if (!task_stats.task_valid ||
       !task_stats.current_leg.vector_remaining.IsValid() ||

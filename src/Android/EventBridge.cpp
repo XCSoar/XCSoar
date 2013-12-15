@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "org_xcsoar_EventBridge.h"
+#include "Product.hpp"
 #include "Event/Queue.hpp"
 #include "Event/Idle.hpp"
 #include "Event/Globals.hpp"
@@ -38,6 +39,9 @@ enum {
   KEYCODE_Z = 0x36,
 };
 
+static constexpr unsigned KEYCODE_DPAD_UP = 0x13;
+static constexpr unsigned KEYCODE_DPAD_DOWN = 0x14;
+
 static unsigned
 TranslateKeyCode(unsigned key_code)
 {
@@ -52,6 +56,13 @@ TranslateKeyCode(unsigned key_code)
   return key_code;
 }
 
+constexpr
+static bool
+IsCursorKey(unsigned key_code)
+{
+  return key_code == KEYCODE_DPAD_UP || key_code == KEYCODE_DPAD_DOWN;
+}
+
 gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
@@ -59,6 +70,11 @@ Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
   if (event_queue == NULL)
     /* XCSoar not yet initialised */
     return;
+
+  if (!has_cursor_keys && IsCursorKey(key_code))
+    /* enable this flag as soon as we see the first cursor event; used
+       by HasCursorKeys() */
+    has_cursor_keys = true;
 
   event_queue->Push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
   ResetUserIdle();

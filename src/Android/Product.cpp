@@ -30,6 +30,7 @@ Copyright_License {
 
 #ifdef __arm__
 
+bool has_cursor_keys;
 bool is_nook, is_dithered;
 
 bool

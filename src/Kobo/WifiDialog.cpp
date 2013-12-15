@@ -220,15 +220,17 @@ WifiListWidget::Connect()
 
   const auto &info = networks[i];
   if (info.id < 0) {
+    const auto ssid = info.ssid;
+
     StaticString<256> caption;
-    caption.Format(_("Passphrase of network '%s'"), info.ssid.c_str());
+    caption.Format(_("Passphrase of network '%s'"), ssid.c_str());
 
     StaticString<32> passphrase;
     passphrase.clear();
     if (!TextEntryDialog(passphrase, caption))
       return;
 
-    if (!WifiConnect(wpa_supplicant, info.ssid, passphrase))
+    if (!WifiConnect(wpa_supplicant, ssid, passphrase))
       ShowMessageBox(_T("Network failure"), _("Connect"), MB_OK);
   } else {
     if (!wpa_supplicant.RemoveNetwork(info.id) || !wpa_supplicant.SaveConfig())

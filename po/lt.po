@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-10-01 20:10+0000\n"
+"PO-Revision-Date: 2013-10-12 09:26+0000\n"
 "Last-Translator: Donatas <donatas.povilionis@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-02 10:36+0000\n"
-"X-Generator: Launchpad (build 16791)\n"
+"X-Launchpad-Export-Date: 2013-10-13 15:08+0000\n"
+"X-Generator: Launchpad (build 16799)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -923,12 +923,12 @@ msgstr ""
 #: src/Menu/ExpandMacros.cpp:558 src/Input/InputEventsSettings.cpp:307
 #, no-c-format
 msgid "Task & Airfields"
-msgstr ""
+msgstr "Užduotis ir Aerodromai"
 
 #: src/InfoBoxes/Content/Factory.cpp:164
 #, no-c-format
 msgid "Altitude GPS"
-msgstr ""
+msgstr "GPS Altitudė"
 
 #: src/InfoBoxes/Content/Factory.cpp:165
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:102
@@ -943,17 +943,19 @@ msgid ""
 "PC only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Ši altitudė virš jūros lygio gaunama iš GPS. Simuliacijos režime altitudės "
+"reikšmę galime keisti reguliuojant klavišus aukštyn / žemyn"
 
 #: src/InfoBoxes/Content/Factory.cpp:174
 #, no-c-format
 msgid "Height AGL"
-msgstr ""
+msgstr "Aukštis AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:175
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:104
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "H AGL"
 
 #: src/InfoBoxes/Content/Factory.cpp:176
 #, no-c-format
@@ -962,11 +964,14 @@ msgid ""
 "the terrain file. The value is coloured red when the glider is below the "
 "terrain safety clearance height."
 msgstr ""
+"Aukštis gaunamas altitudę atėmus iš vietovės aukštčio, kuri gaunama iš "
+"vietovės failo.Vertė yra raudonos spalvos, kai sklandytuvas yra žemiau "
+"nustatyto atsargos aukščio."
 
 #: src/InfoBoxes/Content/Factory.cpp:185
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Termiko kilmas, paskutinės 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:186
 #, no-c-format
@@ -979,6 +984,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"30 sekundžių vidutinis kilimas paremtas GPS altitudės kitimu, arba "
+"variometru."
 
 #: src/InfoBoxes/Content/Factory.cpp:195
 #, no-c-format
@@ -1085,12 +1092,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:248
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "Visas aukštis uždirbtas/prarastas paskutiniame termike"
 
 #: src/InfoBoxes/Content/Factory.cpp:256
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "Laikas paskutiniame termike"
 
 #: src/InfoBoxes/Content/Factory.cpp:257
 #, no-c-format
@@ -1100,12 +1107,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:258
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "Laikas praleistas sukantis termike paskutiniame termike"
 
 #: src/InfoBoxes/Content/Factory.cpp:266
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "MacCready nustatymas"
 
 #: src/InfoBoxes/Content/Factory.cpp:267
 #, no-c-format
@@ -1123,7 +1130,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:276
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "Sekanti distancija"
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Task.cpp:201
 #, no-c-format
@@ -1140,7 +1147,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "Sekantis altitudės skirtumas"
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
@@ -1157,7 +1164,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:298
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "Sekanti reikalinga altitudė"
 
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
@@ -1174,7 +1181,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:309
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Kitas punktas"
 
 #: src/InfoBoxes/Content/Factory.cpp:310
 #, no-c-format
@@ -1193,7 +1200,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:319
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Finišo altitudės skirtumas"
 
 #: src/InfoBoxes/Content/Factory.cpp:320
 #, no-c-format
@@ -1210,7 +1217,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:329
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Finalinė reikalinga altitudė"
 
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
@@ -1225,7 +1232,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:339
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Užduotiės vidutinis greitis"
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
@@ -1242,7 +1249,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Finalinė distancija"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
@@ -1252,12 +1259,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
 msgid "Distance to finish around remaining turn points."
-msgstr ""
+msgstr "Visa likusi distancija"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Vietovės peraukštėjimas"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
@@ -1274,7 +1281,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Termiko vidurkis"
 
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
@@ -1307,7 +1314,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:60
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Kelio kampas"
 
 #: src/InfoBoxes/Content/Factory.cpp:401
 #, no-c-format
@@ -1327,7 +1334,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:419
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "Vėjo greitis"
 
 #: src/InfoBoxes/Content/Factory.cpp:420
 #, no-c-format
@@ -1444,7 +1451,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Oro greitis IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:492
 #, no-c-format
@@ -1454,12 +1461,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Indikuotas oro greitis gaunamas iš išorinio išmanaus variometro"
 
 #: src/InfoBoxes/Content/Factory.cpp:501
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "Barometrinė altitudė"
 
 #: src/InfoBoxes/Content/Factory.cpp:502
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:103
@@ -1473,6 +1480,7 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"Šis barometrinis aukštis gaunamas iš įrenginio, kuris turi slėgio sensorių."
 
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
