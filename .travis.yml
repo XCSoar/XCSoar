@@ -14,6 +14,13 @@ env:
   - TARGET=ALTAIR
   - TARGET=MANUAL
 
+before_install:
+  - ANDROID_API_LEVEL=17
+  - ANDROID_SDK_VERSION=22.0.1
+  - ANDROID_NDK_VERSION=9
+  - ANDROID_BUILD_TOOLS_VERSION=18.1.0
+  - ANDROID_OS_VERSION=4.3
+
 install:
   # General
   - sudo apt-get clean
@@ -25,15 +32,18 @@ install:
   - if [[ "$TARGET" == "WIN64" ]]; then sudo apt-get install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 gettext; fi
 
   # Android
+  - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then sudo apt-get install default-jre default-jdk ant vorbis-tools; fi
   - if [[ "$TARGET" == "ANDROID" ]] && [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/android-sdk_r22.0.1-linux.tgz; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/ndk/android-ndk-r9-linux-x86_64.tar.bz2; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r22.0.1-linux.tgz -C ~/opt; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r9-linux-x86_64.tar.bz2 -C ~/opt; fi
+  # - Install SDK
+  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/android-sdk_r$ANDROID_SDK_VERSION-linux.tgz; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r$ANDROID_SDK_VERSION-linux.tgz -C ~/opt; fi
+  # - Install SDK components
   - if [[ "$TARGET" == "ANDROID" ]]; then ~/opt/android-sdk-linux/tools/android list sdk -a --extended; fi
-  - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -a -t platform-tools,build-tools-18.1.0,android-17; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -a -t platform-tools,build-tools-$ANDROID_BUILD_TOOLS_VERSION,android-$ANDROID_API_LEVEL; fi
+  # - Install NDK
+  - if [[ "$TARGET" == "ANDROID" ]]; then wget http://dl.google.com/android/ndk/android-ndk-r$ANDROID_NDK_VERSION-linux-x86_64.tar.bz2; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r$ANDROID_NDK_VERSION-linux-x86_64.tar.bz2 -C ~/opt; fi
 
   # Windows Mobile
   - if [[ "$TARGET" == "WM"* ]] || [[ "$TARGET" == "PPC"* ]] || [[ "$TARGET" == "ALTAIR" ]]; then wget http://spekje.snt.utwente.nl/~roel/cegcc/mingw32ce-mk-2013-04-03-amd64.tar.xz; tar -xJf mingw32ce-mk-2013-04-03-amd64.tar.xz -C ~/; export PATH="/home/travis/mingw32ce-mk-2013-04-03-amd64/bin:$PATH"; fi
