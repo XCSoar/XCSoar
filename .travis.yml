@@ -32,6 +32,7 @@ install:
   - if [[ "$TARGET" == "ANDROID" ]]; then mkdir ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xzf android-sdk_r22.0.1-linux.tgz -C ~/opt; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then tar -xjf android-ndk-r9-linux-x86_64.tar.bz2 -C ~/opt; fi
+  - if [[ "$TARGET" == "ANDROID" ]]; then ~/opt/android-sdk-linux/tools/android list sdk -a --extended; fi
   - if [[ "$TARGET" == "ANDROID" ]]; then echo 'y' | ~/opt/android-sdk-linux/tools/android update sdk -u -t platform-tools,build-tools-18.1.0,android-17; fi
 
   # Windows Mobile
