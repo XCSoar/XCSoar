@@ -11,6 +11,12 @@ To run XCSoar, you need to obtain the following:
 \item a map file (optional)
 \end{itemize}
 
+\section{! Before you go out flying the first time with XCSoar !}
+
+After having installed XCSoar successfully, you might use it instantly.  XCSoar will launch with a ready-to-use pre-configuration. But be aware, that up to this point your new toy will give you a moving map display only.  \emph{Don't trust the computations.} You have to tell XCSoar which plane you are flying in advance.  This is done by specifying your plane's data as are polar, weight and some other data.  However it's always a good idea to study the manual and become familiar with XCSoar at home.
+
+
+
 \section{Compatibility}
 
 \subsection*{Devices for running XCSoar}
@@ -18,30 +24,31 @@ To run XCSoar, you need to obtain the following:
 XCSoar runs on the following platforms:
 
 \begin{itemize}
-\item mobile phones and tablets with Android 1.6 or newer \\
-  Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
-  Motorola Xoom
-\item Kobo Mini
 \item PDAs with Pocket PC 2000, 2002, 2003 \\
   Example: iPaq 3800, iPaq 3900
 \item PDAs with Windows Mobile \\
   Example: iPaq hx4700, Dell Axim x51v
 \item PNAs with Windows CE 3.0 or newer \\
   Example: HP314, Mio400
+  \item Android mobile phones and tablets with Android 1.6 or newer \\
+  Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
+  Motorola Xoom
+\item eReader Kobo (experimental, Dec. 2013)
 \item Triadis Altair
 \item LX MiniMap
 \item Windows 2000 or newer
 \item Linux
-\item Mac OS X
+\item Mac OS X (outdated)
 \end{itemize}
 
 \subsection*{GPS, Logger, Vario}
 
 XCSoar is compatible with any GPS emitting NMEA data.  Most modern
-Android devices have a built-in GPS, but sometimes it is favorable to
-connect to an external device:
+Android devices have a built-in GPS, but for several reasons it is favorable to
+connect to one or more external devices:
 
 \begin{itemize}
+\item a specialized GPS receiver gains much better reception providing much better data for measures and calclulations
 \item an airspeed indicator allows quick and exact wind estimates
   without circling
 \item a vario improves the thermal assistant
@@ -49,6 +56,7 @@ connect to an external device:
   flight log can be downloaded
 \item some varios allow synchronising the MacCready setting with
   XCSoar
+\item flarm (and even ADS-B input) provide informations and stati of others around you - and gives you collision detection
 \end{itemize}
 
 \subsection*{Supported external devices and features}
@@ -117,6 +125,8 @@ To copy data files (maps, waypoints, ...) to the Kobo, launch the
 original Kobo software (``Nickel'') and connect the Kobo to your PC
 again.  Copy the files into a directory called \texttt{XCSoarData} at
 the top level.
+
+Alternatively data files may be downloaded via XCSoar's file manager, after having invoked a W-LAN-connection just before launching XCSoar.  
 
 \subsubsection{Hacking the Kobo}
 
@@ -203,12 +213,13 @@ internal storage is used.
 
 
 XCSoar will generate a number of additional files at run time.  These
-will be placed in the  \texttt{XCSoarData} directory (Windows PC and 
-Windows Mobile devices), or the \texttt{.xcsoar} directory (Unix/Linux
-PC).  At first run, XCSoar will create the files 
-\texttt{Default.tsk} (Default Task),  \texttt{default.prf} 
-(configuration settings), \newline
-\texttt{xcsoar.log} (log of the startup progress), 
+will be placed in the  \texttt{XCSoarData} directory (Windows PC, 
+Windows and Android mobile devices), or the \texttt{.xcsoar} directory (Unix/Linux
+PC).  From the first run, XCSoar will create and maintain the files 
+\texttt{Default.tsk} (Default Task),  
+\texttt{default.prf} 
+(configuration settings),
+\texttt{xcsoar.log}, 
 plus three directories: \texttt{cache},
 \texttt{config} and \texttt{logs}.  Additional files may be
 created/modified while XCSoar is running, such as task files
@@ -290,8 +301,8 @@ can be useful for example in the following cases:
 \item Different pilots
 \item Competition versus casual flying
 \item Flying in different locations
+\item Different planes (with different polars)
 \end{itemize}
-
 
 \subsection*{SIM mode}
 The simulator contains a simple interface allowing the user to fly
