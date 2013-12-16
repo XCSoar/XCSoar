@@ -32,14 +32,9 @@ Copyright_License {
 #include "Time/WrapClock.hpp"
 #include "OS/Args.hpp"
 
-class NLineReader;
-class Device;
-struct DeviceRegister;
 
 class DebugReplay {
 protected:
-  NLineReader *reader;
-
   GlidePolar glide_polar;
 
   BasicComputer computer;
@@ -65,15 +60,11 @@ protected:
   WrapClock wrap_clock;
 
 public:
-  DebugReplay(NLineReader *reader);
+  DebugReplay();
   virtual ~DebugReplay();
 
-  gcc_pure
-  long Size() const;
-
-  gcc_pure
-  long Tell() const;
-
+  virtual long Size() const = 0;
+  virtual long Tell() const = 0;
   virtual bool Next() = 0;
 
   const MoreData &Basic() const {
@@ -98,11 +89,5 @@ protected:
 
 DebugReplay *
 CreateDebugReplay(Args &args);
-
-DebugReplay *
-CreateDebugReplayIGC(const char *input_file);
-
-DebugReplay *
-CreateDebugReplayNMEA(const tstring &driver_name, const char *input_file);
 
 #endif

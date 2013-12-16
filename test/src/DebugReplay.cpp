@@ -25,13 +25,11 @@ Copyright_License {
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayNMEA.hpp"
 #include "OS/Args.hpp"
-#include "IO/FileLineReader.hpp"
 #include "OS/PathName.hpp"
-#include "Device/Register.hpp"
 #include "Computer/Settings.hpp"
 
-DebugReplay::DebugReplay(NLineReader *_reader)
-  :reader(_reader), glide_polar(fixed(1))
+DebugReplay::DebugReplay()
+  :glide_polar(fixed(1))
 {
   raw_basic.Reset();
   computed_basic.Reset();
@@ -44,19 +42,6 @@ DebugReplay::DebugReplay(NLineReader *_reader)
 
 DebugReplay::~DebugReplay()
 {
-  delete reader;
-}
-
-long
-DebugReplay::Size() const
-{
-  return reader->GetSize();
-}
-
-long
-DebugReplay::Tell() const
-{
-  return reader->Tell();
 }
 
 void
@@ -79,40 +64,13 @@ DebugReplay::Compute()
 DebugReplay *
 CreateDebugReplay(Args &args)
 {
+  DebugReplay *replay;
+
   if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
-    return CreateDebugReplayIGC(args.ExpectNext());
+    replay = DebugReplayIGC::Create(args.ExpectNext());
+  } else {
+    replay = DebugReplayNMEA::Create(args.ExpectNext(), args.ExpectNextT());
   }
 
-  return CreateDebugReplayNMEA(args.ExpectNextT(), args.ExpectNext());
-}
-
-DebugReplay *
-CreateDebugReplayIGC(const char *input_file) {
-  FileLineReaderA *reader = new FileLineReaderA(input_file);
-  if (reader->error()) {
-    delete reader;
-    fprintf(stderr, "Failed to open %s\n", input_file);
-    return NULL;
-  }
-
-  return new DebugReplayIGC(reader);
-}
-
-DebugReplay *
-CreateDebugReplayNMEA(const tstring &driver_name, const char *input_file) {
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
-  if (driver == NULL) {
-    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
-    return NULL;
-  }
-
-  FileLineReaderA *reader = new FileLineReaderA(input_file);
-  if (reader->error()) {
-    delete reader;
-    fprintf(stderr, "Failed to open %s\n", input_file);
-    return NULL;
-  }
-
-  return new DebugReplayNMEA(reader, driver);
+  return replay;
 }

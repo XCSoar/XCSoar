@@ -27,6 +27,18 @@ Copyright_License {
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
 
+DebugReplay*
+DebugReplayIGC::Create(const char *input_file) {
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return nullptr;
+  }
+
+  return new DebugReplayIGC(reader);
+}
+
 bool
 DebugReplayIGC::Next()
 {

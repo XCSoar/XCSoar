@@ -32,15 +32,34 @@ Copyright_License {
 static DeviceConfig config;
 static NullPort port;
 
-DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
+DebugReplayNMEA::DebugReplayNMEA(FileLineReaderA *_reader,
                                  const DeviceRegister *driver)
-  :DebugReplay(_reader),
+  :DebugReplayFile(_reader),
    device(driver->CreateOnPort != NULL
           ? driver->CreateOnPort(config, port)
           : NULL)
 {
   clock.Reset();
 }
+
+DebugReplay*
+DebugReplayNMEA::Create(const char *input_file, const tstring &driver_name) {
+  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
+  if (driver == NULL) {
+    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
+    return nullptr;
+  }
+
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return nullptr;
+  }
+
+  return new DebugReplayNMEA(reader, driver);
+}
+
 
 bool
 DebugReplayNMEA::Next()
