@@ -82,6 +82,8 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
 
   DebugReplay *replay = self->flight->Replay();
   while (replay->Next()) {
+    if (replay->Level() == -1) continue;
+
     const MoreData &basic = replay->Basic();
     const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
 
@@ -109,8 +111,9 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     PyObject *py_fix_tas = PyInt_FromLong(fix.tas);
     PyObject *py_fix_ias = PyInt_FromLong(fix.ias);
     PyObject *py_fix_satellites = PyInt_FromLong(fix.siu);
+    PyObject *py_fix_level = PyInt_FromLong(replay->Level());
 
-    PyObject *py_fix = PyTuple_Pack(11,
+    PyObject *py_fix = PyTuple_Pack(12,
       py_fix_datetime,
       py_fix_time,
       py_fix_location,
@@ -121,7 +124,8 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
       py_fix_ground_speed,
       py_fix_tas,
       py_fix_ias,
-      py_fix_satellites);
+      py_fix_satellites,
+      py_fix_level);
 
     if (PyList_Append(py_fixes, py_fix))
       Py_RETURN_NONE;
@@ -139,6 +143,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     Py_DECREF(py_fix_tas);
     Py_DECREF(py_fix_ias);
     Py_DECREF(py_fix_satellites);
+    Py_DECREF(py_fix_level);
   }
 
   delete replay;

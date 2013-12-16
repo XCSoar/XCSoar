@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_DEBUG_REPLAY_VECTOR_HPP
 
 #include "DebugReplay.hpp"
+#include "IGCFixEnhanced.hpp"
+#include <assert.h>
 
-struct IGCFixEnhanced;
 
 class DebugReplayVector : public DebugReplay {
   const std::vector<IGCFixEnhanced> fixes;
@@ -49,6 +50,11 @@ public:
 
   long Tell() const {
     return position;
+  }
+
+  int Level() const {
+    assert(position > 0);
+    return fixes[position - 1].level;
   }
 
   static DebugReplay* Create(const std::vector<IGCFixEnhanced> &fixes) {
