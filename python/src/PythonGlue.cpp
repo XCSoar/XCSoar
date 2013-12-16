@@ -26,9 +26,9 @@
 
 #include "PythonGlue.hpp"
 #include "PythonConverters.hpp"
-#include "Flight.hpp"
+#include "Flight/Flight.hpp"
 #include "Time/BrokenDateTime.hpp"
-#include "IGCFixEnhanced.hpp"
+#include "Flight/IGCFixEnhanced.hpp"
 
 #include <cstdio>
 #include <vector>

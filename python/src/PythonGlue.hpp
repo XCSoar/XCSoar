@@ -24,7 +24,7 @@
 #define PYTHON_PYTHONGLUE_HPP
 
 #include <Python.h>
-#include "Flight.hpp"
+#include "Flight/Flight.hpp"
 
 /* xcsoar.Flight methods */
 struct Pyxcsoar_Flight {
