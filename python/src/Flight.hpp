@@ -60,6 +60,10 @@ public:
 
     return results.size();
   };
+
+private:
+  /* Read the flight into memory */
+  void ReadFlight();
 };
 
 #endif /* PYTHON_FLIGHT_HPP */

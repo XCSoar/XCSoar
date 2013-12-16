@@ -29,20 +29,23 @@
 
 Flight::Flight(const char* _flight_file, bool _keep_flight)
   : fixes(nullptr), keep_flight(_keep_flight), flight_file(_flight_file) {
-  if (keep_flight) {
-    fixes = new std::vector<IGCFixEnhanced>;
+  if (keep_flight)
+    ReadFlight();
+}
 
-    DebugReplay *replay = DebugReplayIGC::Create(flight_file);
+void Flight::ReadFlight() {
+  fixes = new std::vector<IGCFixEnhanced>;
 
-    if (replay) {
-      while (replay->Next()) {
-        IGCFixEnhanced fix;
-        if (fix.Apply(replay->Basic()))
-          fixes->push_back(fix);
-      }
+  DebugReplay *replay = DebugReplayIGC::Create(flight_file);
 
-      delete replay;
+  if (replay) {
+    while (replay->Next()) {
+      IGCFixEnhanced fix;
+      if (fix.Apply(replay->Basic()))
+        fixes->push_back(fix);
     }
+
+    delete replay;
   }
 }
 
