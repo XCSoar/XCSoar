@@ -31,9 +31,12 @@ struct IGCFixEnhanced : public IGCFix
 {
   BrokenDate date;
 
+  unsigned clock;
+
   bool Apply(const NMEAInfo &basic) {
     if (IGCFix::Apply(basic)) {
       date = basic.date_time_utc;
+      clock = basic.time;
       return true;
     } else {
       return false;
