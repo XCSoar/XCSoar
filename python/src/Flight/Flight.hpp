@@ -40,8 +40,23 @@ private:
   const char *flight_file;
 
 public:
-  Flight(const char* _flight_file, bool _keep_flight);
+  /**
+   * Create a empty flight object, used to create a flight from in-memory data
+   */
+  Flight()
+    : keep_flight(true), flight_file(nullptr) {
+    fixes = new std::vector<IGCFixEnhanced>;
+  };
+
+  /**
+   * Destructor
+   */
   ~Flight();
+
+  /**
+   * Create a flight object with file source
+   */
+  Flight(const char* _flight_file, bool _keep_flight);
 
   /**
    * Return a DebugReplay, either direct from file or from memory,
@@ -92,6 +107,15 @@ public:
                   full, triangle, sprint,
                   max_iterations, max_tree_size);
     delete replay;
+  };
+
+  /**
+   * Append a fix to this flight (only valid for in-memory flights)
+   */
+  void AppendFix(const IGCFixEnhanced &fix) {
+    if (fixes == nullptr) return;
+
+    fixes->push_back(fix);
   };
 
 private:

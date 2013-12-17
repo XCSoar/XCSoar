@@ -40,6 +40,8 @@ flight = xcsoar.Flight(args.file_name, True)
 
 times = flight.times()
 
+flight_sequence = None
+
 for dtime in times:
   takeoff = dtime['takeoff']
   release = dtime['release']
@@ -61,9 +63,25 @@ for dtime in times:
   for fix in fixes:
     print fix
 
+  flight_sequence = fixes
+
   analysis = flight.analyse(takeoff['time'], release['time'], landing['time'])
   pprint(analysis)
 
 del flight
 
 
+print
+print "Init xcsoar.Flight with a python sequence"
+
+flight = xcsoar.Flight([(flight_sequence[i][1],
+         flight_sequence[i][2]['latitude'],
+         flight_sequence[i][2]['longitude'],
+         flight_sequence[i][3],
+         flight_sequence[i][5],
+         None) for i in range(len(flight_sequence))])
+
+for fix in flight.path():
+  print fix
+
+del flight
