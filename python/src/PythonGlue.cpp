@@ -97,7 +97,7 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
       continue;
 
     IGCFixEnhanced fix;
-    fix.Apply(basic);
+    fix.Apply(basic, replay->Calculated());
 
     PyObject *py_fix_datetime = Python::BrokenDateTimeToPy(basic.date_time_utc);
     PyObject *py_fix_time = PyInt_FromLong(basic.time);

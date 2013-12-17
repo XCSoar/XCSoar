@@ -63,6 +63,7 @@ public:
 
 protected:
   void CopyFromFix(const IGCFixEnhanced &fix);
+  void Compute(const int elevation);
 };
 
 #endif /* XCSOAR_DEBUG_REPLAY_VECTOR_HPP */

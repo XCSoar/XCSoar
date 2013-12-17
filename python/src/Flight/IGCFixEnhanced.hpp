@@ -26,6 +26,7 @@
 #include "IGC/IGCFix.hpp"
 #include "Time/BrokenDate.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 
 struct IGCFixEnhanced : public IGCFix
 {
@@ -36,14 +37,29 @@ struct IGCFixEnhanced : public IGCFix
   /* The detail level of this fix. -1 is not visible at all, 0 is always visible. */
   int level = 0;
 
-  bool Apply(const NMEAInfo &basic) {
+  /* Terrian elevation */
+  int elevation = -1000;
+
+  bool Apply(const NMEAInfo &basic, const DerivedInfo &calculated) {
     if (IGCFix::Apply(basic)) {
       date = basic.date_time_utc;
       clock = basic.time;
+
+      if (calculated.terrain_valid)
+        elevation = calculated.terrain_altitude;
+      else
+        elevation = -1000;
+
       return true;
     } else {
       return false;
     }
+  };
+
+  void Clear() {
+    time = BrokenTime::Invalid();
+    elevation = -1000;
+    ClearExtensions();
   };
 };
 

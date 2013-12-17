@@ -25,6 +25,7 @@ Copyright_License {
 #include "IGCFixEnhanced.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Units/System.hpp"
+#include "Computer/Settings.hpp"
 
 bool
 DebugReplayVector::Next()
@@ -33,7 +34,7 @@ DebugReplayVector::Next()
 
   if (position != fixes.size()) {
     CopyFromFix(fixes[position]);
-    Compute();
+    Compute(fixes[position].elevation);
     ++position;
     return true;
   }
@@ -42,6 +43,34 @@ DebugReplayVector::Next()
     flying_computer.Finish(calculated.flight, computed_basic.time);
 
   return false;
+}
+
+void
+DebugReplayVector::Compute(const int elevation)
+{
+  computed_basic.Reset();
+  (NMEAInfo &)computed_basic = raw_basic;
+  wrap_clock.Normalise(computed_basic);
+
+  FeaturesSettings features;
+  features.nav_baro_altitude_enabled = true;
+  computer.Fill(computed_basic, AtmosphericPressure::Standard(), features);
+  computer.Compute(computed_basic, last_basic, last_basic, calculated);
+
+  if (elevation > -1000) {
+    calculated.terrain_valid = true;
+    calculated.terrain_altitude = fixed(elevation);
+
+    if (computed_basic.NavAltitudeAvailable()) {
+      calculated.altitude_agl = computed_basic.nav_altitude - calculated.terrain_altitude;
+      calculated.altitude_agl_valid = true;
+    } else
+      calculated.altitude_agl_valid = false;
+  }
+
+  flying_computer.Compute(glide_polar.GetVTakeoff(),
+                          computed_basic, calculated,
+                          calculated.flight);
 }
 
 void
