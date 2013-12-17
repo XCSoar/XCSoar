@@ -47,7 +47,6 @@ AircraftState
 TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
   const TaskPoint &tp = *points[0];
-  assert(tp.GetType() != TaskPointType::UNORDERED);
 
   if (!include_travel_to_start && active_index == 0 &&
       tp.GetType() == TaskPointType::START &&
