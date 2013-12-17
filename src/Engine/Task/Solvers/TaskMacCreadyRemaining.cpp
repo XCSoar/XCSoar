@@ -46,12 +46,12 @@ TaskMacCreadyRemaining::SolvePoint(const TaskPoint &tp,
 AircraftState
 TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
-  const OrderedTaskPoint &tp = *(const OrderedTaskPoint *)points[0];
+  const TaskPoint &tp = *points[0];
   assert(tp.GetType() != TaskPointType::UNORDERED);
 
   if (!include_travel_to_start && active_index == 0 &&
       tp.GetType() == TaskPointType::START &&
-      !tp.HasEntered()) {
+      !((const OrderedTaskPoint &)tp).HasEntered()) {
     /* if this instance shall only scan what really belongs to the
        task, assume the aircraft is already at the start location */
     AircraftState aircraft2 = aircraft;
