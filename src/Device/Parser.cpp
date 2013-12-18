@@ -249,10 +249,17 @@ NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
   return TimeHasAdvanced(this_time, last_time, info);
 }
 
+gcc_const
+static bool
+TimeHasAdvanced(fixed this_time, fixed last_time)
+{
+  return this_time >= last_time;
+}
+
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
-  if (this_time < last_time) {
+  if (!::TimeHasAdvanced(this_time, last_time)) {
     last_time = this_time;
     return false;
   } else {
