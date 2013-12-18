@@ -183,11 +183,21 @@ TestCopy()
   in_date = out_date;
   ok1(equals(Normalise(w, out_date, 0, 30), 24 * 3600 + 30 * 60));
   ok1(out_date == expected_date);
+
+  /* fast-forward to just before midnight */
+  ok1(equals(Normalise(w, out_date, 23, 59, 50), 47 * 3600 + 59 * 60 + 50));
+  ok1(out_date == expected_date);
+
+  /* send a new day, but no new time */
+  in_date.IncrementDay();
+  out_date = expected_date = in_date;
+  ok1(equals(Normalise(w, out_date, 23, 59, 50), 48 * 3600));
+  ok1(out_date == expected_date);
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(56);
+  plan_tests(60);
 
   TestBasic();
   TestCopy();
