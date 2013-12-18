@@ -16,6 +16,7 @@ Version 6.7.2 - not yet released
   - fix saving waypoints to cup format files from waypoint editor
 * devices
   - auto-reconnect TCP client (#3127)
+  - handle time warps in NMEA replay
 * Android
   - enable Vivante workaround for GC600 (#3184)
   - faster map renderer (#3124)

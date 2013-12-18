@@ -113,6 +113,8 @@ Replay::Update()
   if (!positive(time_scale))
     return true;
 
+  const fixed old_virtual_time = virtual_time;
+
   if (!negative(virtual_time)) {
     /* update the virtual time */
     assert(clock.IsDefined());
@@ -160,6 +162,13 @@ Replay::Update()
 
         if (next_data.time >= virtual_time)
           break;
+
+        if (next_data.time < old_virtual_time) {
+          /* time warp; that can happen on midnight wraparound during
+             NMEA replay */
+          virtual_time = next_data.time;
+          break;
+        }
       }
     }
   } else {
