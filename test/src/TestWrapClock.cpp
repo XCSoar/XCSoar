@@ -20,6 +20,8 @@
 }
 */
 
+#define ACCURACY 1000000
+
 #include "Time/BrokenDate.hpp"
 #include "Time/BrokenTime.hpp"
 #include "Time/WrapClock.hpp"
