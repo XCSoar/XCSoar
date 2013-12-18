@@ -46,6 +46,10 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
         /* new date from GPS: copy it and update the day serial */
         last_day += days;
         last_output_date = date;
+
+        if (days == 1 && last_stamp >= fixed(SECONDS_PER_DAY - 60) &&
+            stamp >= last_stamp)
+          stamp = fixed(0);
       } else if (days < 0 && !last_input_date.IsPlausible())
         /* time warp after recovering from invalid input date */
         Reset();
