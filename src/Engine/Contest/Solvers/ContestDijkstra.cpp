@@ -289,7 +289,13 @@ ContestDijkstra::AddIncrementalEdges(unsigned first_point)
 
   /* we need a copy of the current edge map, because the following
      loop will modify it, invalidating the iterator */
+#if GCC_VERSION < 40800 || GCC_VERSION > 40802
   const Dijkstra::EdgeMap edges = dijkstra.GetEdgeMap();
+#else
+  // workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=59548
+  Dijkstra::EdgeMap edges;
+  edges = dijkstra.GetEdgeMap();
+#endif
 
   /* establish links between each old node and each new node, to
      initiate the follow-up search, hoping a better solution will be
