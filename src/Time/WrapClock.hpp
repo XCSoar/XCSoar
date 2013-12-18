@@ -41,7 +41,7 @@ struct NMEAInfo;
  */
 class WrapClock {
   /**
-   * A serial number for the day specified by #last_date (at
+   * A serial number for the day specified by #last_output_date (at
    * midnight), beginning at 0 for the first day of flight.
    */
   unsigned last_day;
@@ -53,9 +53,16 @@ class WrapClock {
   fixed last_stamp;
 
   /**
-   * The last known date.  Check IsPlausible() before using this attribute.
+   * The last known input date.  Check IsPlausible() before using this
+   * attribute.
    */
-  BrokenDate last_date;
+  BrokenDate last_input_date;
+
+  /**
+   * The last known output date.  Check IsPlausible() before using
+   * this attribute.
+   */
+  BrokenDate last_output_date;
 
   /**
    * The last known time of day.  Check IsPlausible() before using
@@ -67,7 +74,7 @@ public:
   void Reset() {
     last_day = 0;
     last_stamp = fixed(-1);
-    last_date = BrokenDate::Invalid();
+    last_input_date = last_output_date = BrokenDate::Invalid();
     last_time = BrokenTime::Invalid();
   }
 
