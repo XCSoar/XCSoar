@@ -138,11 +138,59 @@ TestBasic()
   ok1(date == expected_date);
 }
 
+/**
+ * Operate on a #BrokenDate copy.  Instead of persisting the date
+ * modified by WrapClock::Normalise(), the method always receives the
+ * original date as received by the GPS.  The WrapClock must be able
+ * to deal with that.
+ */
+static void
+TestCopy()
+{
+  WrapClock w;
+  w.Reset();
+
+  BrokenDate in_date = BrokenDate(2013, 5, 14), out_date;
+
+  /* start with a valid date to initialise WrapClock */
+  out_date = in_date;
+  BrokenDate expected_date = out_date;
+  ok1(equals(Normalise(w, out_date, 0, 10), 10 * 60));
+  ok1(out_date == expected_date);
+
+  /* same day */
+  out_date = in_date;
+  ok1(equals(Normalise(w, out_date, 20, 20), 20 * 3600 + 20 * 60));
+  ok1(out_date == expected_date);
+
+  /* produce a wraparound and then recover date */
+  out_date = in_date;
+  ok1(equals(Normalise(w, out_date, 23, 50), 23 * 3600 + 50 * 60));
+  ok1(out_date == expected_date);
+
+  out_date = in_date;
+  expected_date = out_date;
+  expected_date.IncrementDay();
+  ok1(equals(Normalise(w, out_date, 0, 10), 24 * 3600 + 10 * 60));
+  ok1(out_date == expected_date);
+
+  /* submit old date again, and WrapClock must return new date */
+  out_date = in_date;
+  ok1(equals(Normalise(w, out_date, 0, 20), 24 * 3600 + 20 * 60));
+  ok1(out_date == expected_date);
+
+  /* submit new date, and WrapClock must return new date */
+  in_date = out_date;
+  ok1(equals(Normalise(w, out_date, 0, 30), 24 * 3600 + 30 * 60));
+  ok1(out_date == expected_date);
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(44);
+  plan_tests(56);
 
   TestBasic();
+  TestCopy();
 
   return exit_status();
 }
