@@ -69,7 +69,9 @@ CreateDebugReplay(Args &args)
   if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
     replay = DebugReplayIGC::Create(args.ExpectNext());
   } else {
-    replay = DebugReplayNMEA::Create(args.ExpectNext(), args.ExpectNextT());
+    const auto driver_name = args.ExpectNextT();
+    const auto input_file = args.ExpectNext();
+    replay = DebugReplayNMEA::Create(input_file, driver_name);
   }
 
   return replay;

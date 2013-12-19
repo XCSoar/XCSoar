@@ -46,14 +46,15 @@ find_resource_name(unsigned id)
 
 gcc_malloc
 static GLTexture *
-LoadResourceTexture(ResourceId id)
+LoadResourceTexture(ResourceId id, Bitmap::Type type)
 {
   const char *name = find_resource_name((unsigned)id);
   if (name == NULL)
     return NULL;
 
   jint result[5];
-  if (!native_view->loadResourceTexture(name, result))
+  if (!native_view->loadResourceTexture(name, type == Bitmap::Type::MONO,
+                                        result))
     return NULL;
 
   return new GLTexture(result[0], result[1], result[2], result[3], result[4]);
@@ -77,7 +78,7 @@ Bitmap::Reload()
   assert(texture == NULL);
 
   texture = id.IsDefined()
-    ? LoadResourceTexture(id)
+    ? LoadResourceTexture(id, type)
     : LoadFileTexture(pathName.c_str());
   if (texture == NULL)
     return false;
@@ -88,13 +89,14 @@ Bitmap::Reload()
 }
 
 bool
-Bitmap::Load(ResourceId _id, Type type)
+Bitmap::Load(ResourceId _id, Type _type)
 {
   assert(_id.IsDefined());
 
   Reset();
 
   id = _id;
+  type = _type;
   AddSurfaceListener(*this);
 
   if (!surface_valid)

@@ -249,10 +249,28 @@ NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
   return TimeHasAdvanced(this_time, last_time, info);
 }
 
+gcc_const
+static bool
+IsMidnightWraparound(fixed this_time, fixed last_time)
+{
+  constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
+  constexpr unsigned SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR;
+
+  return this_time < fixed(SECONDS_PER_HOUR) &&
+                     last_time >= fixed(SECONDS_PER_DAY - SECONDS_PER_HOUR);
+}
+
+gcc_const
+static bool
+TimeHasAdvanced(fixed this_time, fixed last_time)
+{
+  return this_time >= last_time || IsMidnightWraparound(this_time, last_time);
+}
+
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
 {
-  if (this_time < last_time) {
+  if (!::TimeHasAdvanced(this_time, last_time)) {
     last_time = this_time;
     return false;
   } else {

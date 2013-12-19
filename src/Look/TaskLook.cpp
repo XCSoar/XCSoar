@@ -55,7 +55,7 @@ TaskLook::Initialise()
 
   target_icon.LoadResource(IDB_TARGET, IDB_TARGET_HD);
 
-  hbGreen.Set(COLOR_GRAY);
+  hbGray.Set(COLOR_GRAY);
   hbGreen.Set(COLOR_GREEN);
   hbOrange.Set(COLOR_ORANGE);
   hbLightGray.Set(COLOR_LIGHT_GRAY);

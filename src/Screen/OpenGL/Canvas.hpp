@@ -420,21 +420,9 @@ public:
                    unsigned src_width, unsigned src_height,
                    Color fg_color, Color bg_color);
 
-  void CopyOr(int dest_x, int dest_y,
-              unsigned dest_width, unsigned dest_height,
-              const Bitmap &src, int src_x, int src_y);
-
-  void CopyOr(const Bitmap &src) {
-    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
-  }
-
   void CopyNotOr(int dest_x, int dest_y,
                  unsigned dest_width, unsigned dest_height,
                  const Bitmap &src, int src_x, int src_y);
-
-  void CopyNot(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
 
   void CopyAnd(int dest_x, int dest_y,
                unsigned dest_width, unsigned dest_height,

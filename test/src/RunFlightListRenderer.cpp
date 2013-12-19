@@ -36,6 +36,8 @@ Copyright_License {
 #include "Logger/FlightParser.hpp"
 #include "IO/FileLineReader.hpp"
 
+#include <vector>
+
 enum Buttons {
   CLOSE = 1,
 };

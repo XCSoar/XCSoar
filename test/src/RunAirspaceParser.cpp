@@ -51,6 +51,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  airspaces.Optimise();
+
   printf("OK\n");
 
   return 0;

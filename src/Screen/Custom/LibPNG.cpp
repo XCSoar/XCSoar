@@ -52,6 +52,9 @@ ConvertColorType(int color_type)
   case PNG_COLOR_TYPE_RGB:
     return UncompressedImage::Format::RGB;
 
+  case PNG_COLOR_TYPE_RGB_ALPHA:
+    return UncompressedImage::Format::RGBA;
+
   default:
     /* not supported */
     return UncompressedImage::Format::INVALID;

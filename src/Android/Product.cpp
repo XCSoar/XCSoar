@@ -28,6 +28,8 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
+bool has_cursor_keys;
+
 #ifdef __arm__
 
 bool is_nook, is_dithered;

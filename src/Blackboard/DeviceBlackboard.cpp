@@ -225,6 +225,8 @@ DeviceBlackboard::ScheduleMerge()
 void
 DeviceBlackboard::Merge()
 {
+  NMEAInfo &basic = SetBasic();
+
   real_data.Reset();
   for (unsigned i = 0; i < unsigned(NUMDEV); ++i) {
     if (!per_device_data[i].alive)
@@ -236,17 +238,21 @@ DeviceBlackboard::Merge()
   }
 
   real_clock.Normalise(real_data);
-  replay_clock.Normalise(replay_data);
 
   if (replay_data.alive) {
     replay_data.Expire();
-    SetBasic() = replay_data;
+    basic = replay_data;
+
+    /* WrapClock operates on the replay_data copy to avoid feeding
+       back BrokenDate modifications to the NMEA parser, as this would
+       trigger its time warp checks */
+    replay_clock.Normalise(basic);
   } else if (simulator_data.alive) {
     simulator_data.UpdateClock();
     simulator_data.Expire();
-    SetBasic() = simulator_data;
+    basic = simulator_data;
   } else {
-    SetBasic() = real_data;
+    basic = real_data;
   }
 }
 

@@ -241,25 +241,51 @@ auto-detect the Pi.
 
 \subsection{Compiling for Kobo E-book Readers}
 
-Download the ARM cross-compiler and unpack in your home directory:
+You need an ARM toolchain.  For example, you can use this toolchain
+that was built for Debian Wheezy on AMD64:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.tar.xz
-tar xJfC x-tools-arm.tar.xz $HOME
+wget http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz
+tar xJfC x-tools-arm-amd64-2013-12-11.tar.xz $HOME
 export PATH=$HOME/x-tools/arm-unknown-linux-gnueabi/bin:$PATH
 \end{verbatim*}
 
-Download the Kobo libraries and unpack in \texttt{/opt}:
+There are precompiled toolchains for
+\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-amd64-2013-12-11.tar.xz}{amd64}
+and for
+\href{http://max.kellermann.name/download/xcsoar/devel/x-tools/x-tools-arm-i386-2013-12-11.tar.xz}{i386}.
+
+You can build your own toolchain with
+\href{http://crosstool-ng.org/}{crosstool-ng}.  The above toolchain
+was built with crosstool-ng and this configuration file:
+\url{http://max.kellermann.name/download/xcsoar/devel/x-tools-arm.config}
+
+Download the
+\href{http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz}{Kobo
+  libraries} and unpack in \texttt{/opt}:
 
 \begin{verbatim*}
-wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-07-17.tar.xz
-tar xJfC kobo-libs-2013-07-17.tar.xz /opt
+wget http://max.kellermann.name/download/xcsoar/devel/kobo/kobo-libs-2013-12-11.tar.xz
+tar xJfC kobo-libs-2013-12-11.tar.xz /opt
 \end{verbatim*}
 
 To compile, run:
 
 \begin{verbatim*}
 make TARGET=KOBO
+\end{verbatim*}
+
+To build the kobo install file \texttt{KoboRoot.tgz}, you need the
+following Debian packages:
+
+\begin{verbatim*}
+apt-get install fakeroot ttf-bitstream-vera
+\end{verbatim*}
+
+Then compile using this command:
+
+\begin{verbatim*}
+make TARGET=KOBO output/KOBO/KoboRoot.tgz
 \end{verbatim*}
 
 \section{Options}

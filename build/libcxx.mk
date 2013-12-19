@@ -1,7 +1,14 @@
 # libc++, the C++ standard library implementation from the LLVM
 # project.
 
-LIBCXX_CXXFLAGS = -Wno-char-subscripts -Wno-sign-compare
+ifeq ($(LIBCXX),y)
+
+LIBCXX_CXXFLAGS += -stdlib=libc++
+LIBCXX_LDFLAGS += -stdlib=libc++
+
+else
+
+LIBCXX_CXXFLAGS_INTERNAL = -Wno-char-subscripts -Wno-sign-compare
 LIBCXX_CPPFLAGS = -nostdinc++ -isystem $(LIBCXX)/include -DLIBCXX
 LIBCXX_SOURCES = \
 	$(SRC)/LibCXX.cpp \
@@ -15,3 +22,5 @@ LIBCXX_SOURCES += $(LIBCXX)/src/new.cpp
 endif
 
 $(eval $(call link-library,libcxx,LIBCXX))
+
+endif

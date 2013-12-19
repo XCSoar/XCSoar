@@ -44,7 +44,9 @@ bool
 Bitmap::Load(const UncompressedImage &uncompressed, gcc_unused Type type)
 {
   delete texture;
-  texture = ImportTexture(uncompressed);
+  texture = type == Type::MONO
+    ? ImportAlphaTexture(uncompressed)
+    : ImportTexture(uncompressed);
   if (texture == nullptr)
     return false;
 

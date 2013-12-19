@@ -74,25 +74,27 @@ XCSoar running in landscape orientation.
 
 \section{Platforms}
 \begin{description}
+\item[Windows Mobile PDA/PNA]
+Devices powered by Microsoft Pocket PC 2000 up to Windows Mobile 6 are
+supported by XCSoar. Windows Mobile 7 will not be supported as Microsoft decided
+to skip support for native applications from this version on.
+\item[Android Devices]
+XCSoar runs on Android 1.6 or newer.
+\item [eBookreader]
+XCSoar runs on some Kobo eReader devices. A native port has been released with version 6.7.1, but is still considered experimental (Nov. 2013).
+\item[Altair]
+The Altair glide computer by Triadis Engineering is a glide computer
+factory installed with XCSoar.  The Altair PRO version also contains
+an internal GPS.
 \item[Windows PC]
 It is possible to run XCSoar on an ordinary computer with the Windows
 operating system. This setup can be used for training yourself in using XCSoar.
 A simulation mode is included in XCSoar as well as a IGC replay function, that
 can be used when not connected to a valid GPS source.
-\item[Windows Mobile PDA/PNA]
-Devices powered by Microsoft Pocket PC 2000 up to Windows Mobile 6 are
-supported by XCSoar. Windows Mobile 7 will not be supported as Microsoft decided
-to skip support for native applications from this version on.
 \item[Unix/Linux PC]
 XCSoar can be run on Unix using the Wine emulator. A native Unix port
 has been released with the 6.0 version of XCSoar, but is still
 considered experimental.
-\item[Android Devices]
-XCSoar runs on Android 1.6 or newer.
-\item[Altair]
-The Altair glide computer by Triadis Engineering is a glide computer
-factory installed with XCSoar.  The Altair PRO version also contains
-an internal GPS.
 \end{description}
 
 
@@ -103,28 +105,42 @@ an internal GPS.
 A small team of dedicated developers produces XCSoar. Although we are
 happy to help with the use of our software, we cannot teach you about
 basics of modern information technology. If you have a question about XCSoar in
-particular please email us at: 
+particular not found in this manual please get in touch. You will find all of the following links summarized at:
+\begin{quote}
+\xcsoarwebsite{/contact}
+\end{quote}
+To begin with communication, join the XCSoar forum at:
+\begin{quote}
+\url{http://forum.xcsoar.org}
+\end{quote}
+If your concern appears not already addressed, post it or email us: 
 \begin{quote}
 \href{mailto:xcsoar-user@lists.sourceforge.net}{xcsoar-user@lists.sourceforge.net}
 \end{quote}
-
 Any frequent questions will be added to this document and to the Frequently
 Asked Questions (FAQ) section of the XCSoar website.
-
 You may also find it useful to subscribe to the XCSoar users mailing
-list so you will be kept up to date with latest developments. You can find more
-information about the XCSoar mailing lists on our website:
+list so you will be kept up to date with latest developments.
+
+If all of this does not help, you probably discovered a bug.
+
+\subsection*{Feedback}
+Like any complex software program, XCSoar may be subject to software
+bugs, so if you find any, please report them to the XCSoar developers
+by using our bug tracker portal at: 
 \begin{quote}
-\xcsoarwebsite{/discover/mailinglist.html}
+\xcsoarwebsite{/trac}
 \end{quote}
-
-A log file of the startup progress of XCSoar is generated in the file
-\verb|xcsoar.log|. This can be sent to the XCSoar developers
-to help determine the cause of any startup related problems.
-
-For Altair users, the startup file is transferred to the `FromAltair'
-directory by AltairSync if a USB drive is plugged in when Altair is
-first switched on.
+or by sending an email to
+\begin{quote}
+\href{mailto:xcsoar-devel@lists.sourceforge.net}{xcsoar-devel@lists.sourceforge.net}
+\end{quote}
+XCSoar logs many valuable things in a logfile
+\verb|xcsoar.log| in the \texttt{XCSoarData} directory. The logfile can be appended to the bug ticket in order to help XCSoar developers determine the cause of possible problems. For Altair users, the logfile is transferred to the `FromAltair' directory by AltairSync if a USB drive is plugged in when Altair is first switched on.
+If you like the idea of doing some more, get involved:
+\begin{quote}
+\xcsoarwebsite{/develop}
+\end{quote}
 
 \subsection*{Updates}
 You should periodically visit the XCSoar website to check for program
@@ -145,18 +161,6 @@ installation.  Refer to the {\em Altair Owner's Manual} for details.
 
 Other data and program files can be transferred to Altair in a similar
 way.
-
-\subsection*{Feedback}
-Like any complex software program, XCSoar may be subject to software
-bugs, so if you find any, please report them to the XCSoar developers
-by using our bug tracker portal at: 
-\begin{quote}
-\xcsoarwebsite{/trac}
-\end{quote}
-or by sending an email to
-\begin{quote}
-\href{mailto:xcsoar-devel@lists.sourceforge.net}{xcsoar-devel@lists.sourceforge.net}
-\end{quote}
 
 \section{Training}
 For the safety of yourself and others, pilots using XCSoar are advised to
@@ -198,7 +202,7 @@ maintaining situational awareness and eyes outside the cockpit.
 The philosophy guiding the design and development of the software is
 to try to reduce this distraction by minimising the need for user
 interactions as much as possible, and by presenting information in a
-clear fashion able to be interpreted in a glance.
+clear fashion able to be interpreted at a glance.
 
 Pilots using XCSoar must take responsibility for using the system safely.
 Good practice in the use of XCSoar includes:

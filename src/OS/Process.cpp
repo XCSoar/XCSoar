@@ -46,7 +46,7 @@ ForkExec(const char *const*argv)
   const pid_t pid = fork();
   if (pid == 0) {
     UnblockAllSignals();
-    execve(argv[0], const_cast<char **>(argv), nullptr);
+    execv(argv[0], const_cast<char **>(argv));
     _exit(1);
   }
 

@@ -34,27 +34,44 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
   assert(time.IsPlausible());
 
   int days = 0;
-  if (last_date.IsPlausible() && date.IsPlausible()) {
-    days = date.DaysSince(last_date);
-    if (days < 0)
-      /* time warp */
+  if (date.IsPlausible()) {
+    if (last_input_date.IsPlausible() &&
+        date.DaysSince(last_input_date) < 0)
+      /* input date warp */
       Reset();
-    else
-      /* update the day serial for the new date */
-      last_day += days;
+
+    if (last_output_date.IsPlausible()) {
+      days = date.DaysSince(last_output_date);
+      if (days > 0) {
+        /* new date from GPS: copy it and update the day serial */
+        last_day += days;
+        last_output_date = date;
+
+        if (days == 1 && last_stamp >= fixed(SECONDS_PER_DAY - 60) &&
+            stamp >= last_stamp)
+          stamp = fixed(0);
+      } else if (days < 0 && !last_input_date.IsPlausible())
+        /* time warp after recovering from invalid input date */
+        Reset();
+    }
   }
 
-  bool increment_day = false;
+  last_input_date = date;
+
   if (stamp < last_stamp && days <= 0) {
     assert(!negative(last_stamp));
-    assert(days == 0);
 
     if (stamp < fixed(SECONDS_PER_HOUR) &&
         last_stamp >= fixed(SECONDS_PER_DAY - SECONDS_PER_HOUR)) {
       /* wraparound, but no date changed: assume the date was not yet
          updated, and wrap to the next day */
-      increment_day = true;
       ++last_day;
+
+      if (date.IsPlausible())
+        date.IncrementDay();
+
+      if (last_output_date.IsPlausible())
+        last_output_date.IncrementDay();
     } else if (stamp + fixed(2) >= last_stamp) {
       /* Ignore time warps of less than 2 seconds.
 
@@ -68,19 +85,18 @@ WrapClock::Normalise(fixed stamp, BrokenDate &date, const BrokenTime &time)
       /* big time warp */
       Reset();
     }
-  }
+  } else if (days == -1 && last_output_date.IsPlausible())
+    /* midnight wraparound was detected recently, but the GPS still
+       hasn't sent a new date: return the date that was already
+       incremented */
+    date = last_output_date;
 
   last_stamp = stamp;
 
-  if (date.IsPlausible()) {
-    last_date = date;
-
-    if (increment_day)
-      date.IncrementDay();
-  }
-
-  if (increment_day && last_date.IsPlausible())
-    last_date.IncrementDay();
+  if (!last_output_date.IsPlausible())
+    /* initialise last_output_date on the first iteration or after a
+       time warp */
+    last_output_date = date;
 
   last_time = time;
 

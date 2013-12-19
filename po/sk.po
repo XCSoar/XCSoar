@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-11-22 14:25+0000\n"
+"PO-Revision-Date: 2013-11-26 14:07+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-24 08:16+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2013-12-18 23:20+0000\n"
+"X-Generator: Launchpad (build 16872)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2541,12 +2541,12 @@ msgstr "Horizontálna vzdialenosť k najbližsiemu vzdušnému priestoru."
 #: src/InfoBoxes/Content/Factory.cpp:1083
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr ""
+msgstr "Najbližší vzdušný priestor vertikálne"
 
 #: src/InfoBoxes/Content/Factory.cpp:1084
 #, no-c-format
 msgid "Near AS V"
-msgstr ""
+msgstr "Najbližší VP vertikal"
 
 #: src/InfoBoxes/Content/Factory.cpp:1085
 #, no-c-format
@@ -2554,6 +2554,8 @@ msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
 msgstr ""
+"Vertikálna vzdialenosť k najbližšiemu vzdušnému priestoru. Pozitívna hodnota "
+"znamená že je vzdušný priestor nad vami, negatívna pod vami."
 
 #: src/InfoBoxes/Content/Factory.cpp:1093
 #, no-c-format
@@ -2652,12 +2654,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1145
 #, no-c-format
 msgid "Head wind component (simplified)"
-msgstr ""
+msgstr "Protivietor - zlozka (zjednodušená)"
 
 #: src/InfoBoxes/Content/Factory.cpp:1146
 #, no-c-format
 msgid "Head Wind *"
-msgstr ""
+msgstr "Protivietor *"
 
 #: src/InfoBoxes/Content/Factory.cpp:1147
 #, no-c-format
@@ -2666,16 +2668,18 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
+"Aktuálna zložka protivetra. Zjednodušený protivietor je počítaný rozdielom "
+"TAS a GPS rýchlosti, za predpokladu že TAS dodáva externé zariadenie."
 
 #: src/InfoBoxes/Content/Factory.cpp:1155
 #, no-c-format
 msgid "Task cruise efficiency"
-msgstr ""
+msgstr "Efektivita preskoku"
 
 #: src/InfoBoxes/Content/Factory.cpp:1156
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "Efektiv. presk."
 
 #: src/InfoBoxes/Content/Factory.cpp:1157
 #, no-c-format
@@ -2684,6 +2688,9 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
+"Efektivita preskoku. 100 indikuje perfektný preskokový výkon podľa MacReady "
+"teórie. Táto hodnota odhaduje efektivitu počas preskokov podľa doterajšieho "
+"postupu pri nastavenom MC. Výpočet odštartuje s úlohou."
 
 #: src/InfoBoxes/Content/Factory.cpp:1166
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:186
