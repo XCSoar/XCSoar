@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-12-17 11:51+0000\n"
-"Last-Translator: Grigory A. <ryhor.a@gmail.com>\n"
+"PO-Revision-Date: 2013-12-19 22:41+0000\n"
+"Last-Translator: Viktor P <alikhh@rambler.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-18 23:21+0000\n"
+"X-Launchpad-Export-Date: 2013-12-20 11:20+0000\n"
 "X-Generator: Launchpad (build 16872)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -30,12 +30,12 @@ msgstr ""
 #: Data/Input/default.xci:991 Data/Input/default.xci:1029
 #, no-c-format
 msgid "Task"
-msgstr "Задание"
+msgstr "Задача"
 
 #: src/Task/TypeStrings.cpp:31
 #, no-c-format
 msgid "FAI badges/records"
-msgstr "FAI значения/записи"
+msgstr "FAI отметки\\данные"
 
 #: src/Task/TypeStrings.cpp:32 src/Dialogs/Task/dlgTaskHelpers.cpp:86
 #, no-c-format
@@ -45,12 +45,12 @@ msgstr "Треугольник FAI"
 #: src/Task/TypeStrings.cpp:33
 #, no-c-format
 msgid "FAI out and return"
-msgstr "FAI туда и обратно"
+msgstr "FAI полет туда-обратно"
 
 #: src/Task/TypeStrings.cpp:34
 #, no-c-format
 msgid "FAI goal"
-msgstr "цель"
+msgstr "FAI цель"
 
 #: src/Task/TypeStrings.cpp:35
 #, no-c-format
@@ -146,8 +146,8 @@ msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
-"Повседневная туристическое задание, включает стартовый и финишный цилиндр и "
-"поворотные точки FAI сектора."
+"Второстепенное туристическое задание, включает стартовый и финишный цилиндр "
+"и поворотные точки FAI сектора."
 
 #: src/Task/TypeStrings.cpp:76
 #, no-c-format
@@ -688,7 +688,7 @@ msgstr "Дистанция"
 
 #: src/Gauge/BigTrafficWidget.cpp:424 src/Gauge/BigTrafficWidget.cpp:427
 msgid "Rel. Alt."
-msgstr ""
+msgstr "Отн. Выс."
 
 #: src/Gauge/BigTrafficWidget.cpp:887 src/InfoBoxes/Content/Task.cpp:65
 #: src/Dialogs/MapItemListDialog.cpp:178
@@ -788,6 +788,8 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Приготовиться\n"
+"Старт"
 
 #: src/Menu/ExpandMacros.cpp:301
 msgid ""
@@ -1208,7 +1210,7 @@ msgstr "Следующая разность высоты"
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "ПП Выс D"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
@@ -1227,7 +1229,7 @@ msgstr "Требуется следующий показатель высоты"
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "ПП Выс R"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -1268,7 +1270,7 @@ msgstr "Разность высот на Финише"
 #: src/InfoBoxes/Content/Factory.cpp:320
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Фин. Выс."
 
 #: src/InfoBoxes/Content/Factory.cpp:321
 #, no-c-format
@@ -1287,7 +1289,7 @@ msgstr "Потребная Н долета"
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "Фин Выс R"
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
@@ -1474,7 +1476,7 @@ msgstr "Максимальное расстояние ААТ "
 #: src/InfoBoxes/Content/Factory.cpp:452
 #, no-c-format
 msgid "AAT Dmax"
-msgstr ""
+msgstr "AAT дист.макс"
 
 #: src/InfoBoxes/Content/Factory.cpp:453
 #, no-c-format
@@ -1648,7 +1650,7 @@ msgstr "Величина силы тяжести (перегрузки). Из в
 #: src/InfoBoxes/Content/Factory.cpp:552
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "След. глайд"
 
 #: src/InfoBoxes/Content/Factory.cpp:553
 #, no-c-format
@@ -6131,6 +6133,8 @@ msgid ""
 "The Input Events file defines the menu system and how XCSoar responds to "
 "button presses and events from external devices."
 msgstr ""
+"Файл Событий ввода определяет системное меню и как XCSoar будет реагировать "
+"на нажатия кнопок и события с внешних устройств."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:148
 msgid "Language"
@@ -6158,6 +6162,9 @@ msgid ""
 "The status file can be used to define sounds to be played when certain "
 "events occur, and how long various status messages will appear on screen."
 msgstr ""
+"Файл состояния может быть использован для назначения звуков, которые будут "
+"воспроизводится при наступлении определённых событий, и времени, в течение "
+"которого различные сообщения о состоянии будут отображаться на экране."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:192
 msgid "Menu timeout"
@@ -6168,6 +6175,8 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
+"Определяет, как долго будет отображаться меню на экране, если пользователь "
+"не делает никаких нажатий на кнопки или взаимодействует с компьютером."
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:200
 #, no-c-format
@@ -6187,15 +6196,17 @@ msgstr "Стиль текста"
 msgid ""
 "Determines how the user is prompted for text input (filename, teamcode etc.)"
 msgstr ""
+"Определяет, как пользователю будет предложено ввести текст (имя файла, "
+"teamcode т.д.)"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:217
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "настройки операционной системы"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:223
 msgid "Haptic feedback"
-msgstr ""
+msgstr "Виброотклик"
 
 #: src/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp:224
 msgid "Determines if haptic feedback like vibration is used."
@@ -6204,122 +6215,122 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:59
 #, no-c-format
 msgid "Portrait"
-msgstr ""
+msgstr "Книжная"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:61
 #, no-c-format
 msgid "Landscape"
-msgstr ""
+msgstr "Альбомная"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:63
 #, no-c-format
 msgid "Reverse Portrait"
-msgstr ""
+msgstr "Перевёрнутая книжная"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:65
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr ""
+msgstr "Перевёрнутая альбомная"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:71
 #, no-c-format
 msgid "8 Split"
-msgstr ""
+msgstr "8 разделённых (сверху и снизу (портретная), слева и справа (альбомная)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:73
 #, no-c-format
 msgid "8 Bottom or Right"
-msgstr ""
+msgstr "8 внизу или справа"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:75
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
-msgstr ""
+msgstr "8 внизу + Варио (Портретный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:77
 #, no-c-format
 msgid "8 Top or Left"
-msgstr ""
+msgstr "8 вверху или слева"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:79
 #, no-c-format
 msgid "8 Top + Vario (Portrait)"
-msgstr ""
+msgstr "8 вверху + Варио (портретный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:81
 #, no-c-format
 msgid "9 Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 справа + Варио (Книжный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:83
 #, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 слева + справа + Варио (Книжный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:85
 #, no-c-format
 msgid "5 Right (Square)"
-msgstr ""
+msgstr "5 справа (Квадратный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:87
 #, no-c-format
 msgid "12 Bottom or Right"
-msgstr ""
+msgstr "12 снизу или справа"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:89
 #, no-c-format
 msgid "12 Top or Left"
-msgstr ""
+msgstr "12 вверху или слева"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:91
 #, no-c-format
 msgid "24 Right (Landscape)"
-msgstr ""
+msgstr "24 справа (Альбомный)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:93
 #, no-c-format
 msgid "4 Top or Left"
-msgstr ""
+msgstr "4 вверху или слева"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:95
 #, no-c-format
 msgid "4 Bottom or Right"
-msgstr ""
+msgstr "4 внизу или справа"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:101
 #, no-c-format
 msgid "Auto (follow infoboxes)"
-msgstr ""
+msgstr "Авто (согласно инфобоксу)"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:103
 #, no-c-format
 msgid "Top Left"
-msgstr ""
+msgstr "Сверху слева"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:105
 #, no-c-format
 msgid "Top Right"
-msgstr ""
+msgstr "Сверху справа"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:107
 #, no-c-format
 msgid "Bottom Left"
-msgstr ""
+msgstr "Внизу слева"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:109
 #, no-c-format
 msgid "Bottom Right"
-msgstr ""
+msgstr "Внизу справа"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:111
 #, no-c-format
 msgid "Centre Top"
-msgstr ""
+msgstr "вверху по центру"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:113
 #, no-c-format
 msgid "Centre Bottom"
-msgstr ""
+msgstr "внизу по центру"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:118
 #, no-c-format
@@ -6329,7 +6340,7 @@ msgstr "ТЕКСТ"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:119
 #, no-c-format
 msgid "Show text on tabbed dialogs."
-msgstr ""
+msgstr "Показать текст на диалогах со вкладками."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:120
 #, no-c-format
@@ -6339,7 +6350,7 @@ msgstr "Значки"
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:121
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
-msgstr ""
+msgstr "Показать иконки на диалогах со вкладками."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:126
 #, no-c-format
@@ -6384,20 +6395,22 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:139
 #, no-c-format
 msgid "Shaded"
-msgstr ""
+msgstr "Затенённо"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:141
 #, no-c-format
 msgid "Glass"
-msgstr ""
+msgstr "Прозрачность"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:163
 msgid "Display orientation"
-msgstr ""
+msgstr "Ориентация дисплея"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:163
 msgid "Rotate the display on devices that support it."
 msgstr ""
+"Поворачивает изображение дисплея на устройствах, которые поддержывают данную "
+"функцию."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:168
 msgid "InfoBox geometry"
@@ -6408,6 +6421,8 @@ msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
+"Список возможных макетов Инфобокс. Экспериментируйте, чтобы найти лучшее для "
+"вашего размера экрана."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:172
 msgid "FLARM display"
@@ -6415,7 +6430,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:172
 msgid "Choose a location for the FLARM display."
-msgstr ""
+msgstr "Выберите место для дисплея FLARM."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:177
 msgid "Tab dialog style"
@@ -6423,34 +6438,39 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:180
 msgid "Message display"
-msgstr ""
+msgstr "Дисплей сообщений"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:185
 msgid "Inverse InfoBoxes"
-msgstr ""
+msgstr "Инверсный Инфобокс"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:185
 msgid "If true, the InfoBoxes are white on black, otherwise black on white."
 msgstr ""
+"Если включено, то Инфобокс белый на черном, в противном случае черный на "
+"белом."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:190
 msgid "Colored InfoBoxes"
-msgstr ""
+msgstr "Цвет Инфобокса"
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:191
 msgid ""
 "If true, certain InfoBoxes will have coloured text.  For example, the active "
 "waypoint InfoBox will be blue when the glider is above final glide."
 msgstr ""
+"Если включено, некоторые Инфобоксы будут иметь цветной текст. Например, об "
+"активной путевой точке Инфобокс будет синим, когда планер находится выше "
+"финишного глайда."
 
 #: src/Dialogs/Settings/Panels/LayoutConfigPanel.cpp:198
 msgid "InfoBox border"
-msgstr ""
+msgstr "Границы Инфобокса"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:56
 #, no-c-format
 msgid "Start only"
-msgstr ""
+msgstr "Только старт"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:68
 msgid "Pilot name"
@@ -6463,6 +6483,8 @@ msgstr "Шаг времени Полета"
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:71
 msgid "This is the time interval between logged points when not circling."
 msgstr ""
+"Это промежуток времени между сохраняемыми точками, когда Вы не находились в "
+"спирали."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:75
 msgid "Time step circling"
@@ -6470,35 +6492,39 @@ msgstr "Шаг времени Вращения"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:76
 msgid "This is the time interval between logged points when circling."
-msgstr ""
+msgstr "Интервал сохранения точек в спирали."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:80
 msgid "Auto. logger"
-msgstr ""
+msgstr "Автоматический логгер"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:81
 msgid ""
 "Enables the automatic starting and stopping of logger on takeoff and landing "
 "respectively. Disable when flying paragliders."
 msgstr ""
+"Позволяет автоматически запускать и останавливать логгер при взлёте и "
+"посадке соответственно. Отключите при полете на параплане."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:86
 msgid "NMEA logger"
-msgstr ""
+msgstr "NMEA логгер"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:87
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr ""
+"Включить NMEA регистратор при запуске? Если эта опция отключена, NMEA логгер "
+"может быть запущен вручную."
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Log book"
-msgstr ""
+msgstr "Лог журнал"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:92
 msgid "Logs each start and landing."
-msgstr ""
+msgstr "Логи при каждом старте и посадке"
 
 #: src/Dialogs/Settings/Panels/LoggerConfigPanel.cpp:96
 msgid "Logger ID"
@@ -6509,11 +6535,13 @@ msgstr "CIVL ID"
 msgid ""
 "The moving map display will be rotated so the glider's track is oriented up."
 msgstr ""
+"Отображение карты на дисплее будет повёрнуто так, чтобы трек планера был "
+"ориентирован вверх."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:47
 #, no-c-format
 msgid "Heading up"
-msgstr ""
+msgstr "По движению планера"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:48
 #, no-c-format
@@ -6521,6 +6549,7 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
+"Отображение карты на дисплее будет повёрнуто по направлению движения планера"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:50
 #, no-c-format
@@ -6574,7 +6603,7 @@ msgstr "Цель"
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:63
 #, no-c-format
 msgid "Use the current target waypoint as basis."
-msgstr ""
+msgstr "Использовать текущую целевую путевую точку в качестве базовой."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:112
 msgid "Cruise orientation"
@@ -6601,6 +6630,8 @@ msgid ""
 "If enabled, then the map will zoom in automatically when entering circling "
 "mode and zoom out automatically when leaving circling mode."
 msgstr ""
+"Если включено, то масштаб карты будет увеличиваться автоматически при входе "
+"в спираль и автоматически уменьшаться при выходе из спирали."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:128
 msgid "Map shift reference"
@@ -6618,11 +6649,11 @@ msgstr ""
 msgid ""
 "Defines the location of the glider drawn on the screen in percent from the "
 "screen edge."
-msgstr ""
+msgstr "Определяет позицию планера на экране в процентах от края экрана."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:141
 msgid "Auto zoom"
-msgstr ""
+msgstr "Автоматический зум"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:142
 msgid ""
@@ -6632,19 +6663,19 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:146
 msgid "Max. auto zoom distance"
-msgstr ""
+msgstr "Максимальное расстояние автозума"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:147
 msgid "The upper limit for auto zoom distance."
-msgstr ""
+msgstr "Верхний предел для расстояния автозума."
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:152
 msgid "Distinct page zoom"
-msgstr ""
+msgstr "Зум отдельных страниц"
 
 #: src/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp:153
 msgid "Maintain one map zoom level on each page."
-msgstr ""
+msgstr "Поддерживать одинаковый масштаб карты на каждой странице"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:170
 msgid "Main area"
@@ -6657,16 +6688,16 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:181
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:334
 msgid "InfoBoxes"
-msgstr ""
+msgstr "Инфобокс"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:182
 msgid "Specifies which InfoBoxes should be displayed on this page."
-msgstr ""
+msgstr "Определяет, какие Инфобоксы должны быть отображены на этой странице."
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:189
 #, no-c-format
 msgid "Nothing"
-msgstr ""
+msgstr "Ничего"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:191
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:350
@@ -6676,11 +6707,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:194
 msgid "Bottom area"
-msgstr ""
+msgstr "Ниже главной области"
 
 #: src/Dialogs/Settings/Panels/PagesConfigPanel.cpp:195
 msgid "Specifies what should be displayed below the main area."
-msgstr ""
+msgstr "Указывает, что должно отображаться ниже главной области."
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:104
 #, no-c-format
@@ -6695,7 +6726,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr ""
+msgstr "Маршруты будут избегать воздушное простанство"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:110
 #, no-c-format
@@ -6735,7 +6766,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:133
 #, no-c-format
 msgid "Straight"
-msgstr ""
+msgstr "прямая"
 
 #: src/Dialogs/Settings/Panels/RouteConfigPanel.cpp:134
 #, no-c-format
@@ -6828,6 +6859,8 @@ msgstr ""
 msgid ""
 "The height above terrain that the glider should arrive at for a safe landing."
 msgstr ""
+"Высота над местностью, на которой планер должен прийти для безопасной "
+"посадки."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:71
 msgid "Terrain height"
@@ -6836,12 +6869,14 @@ msgstr "Высота над рельефом"
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:72
 msgid "The height above terrain that the glider must clear during final glide."
 msgstr ""
+"Высота над местностью, которую планер должны сбросить в течение финишного "
+"глайда."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:78
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:121
 #, no-c-format
 msgid "Simple"
-msgstr ""
+msgstr "Простой"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:79
 #, no-c-format
@@ -6866,6 +6901,8 @@ msgid ""
 "The sorting will try to find landing options in the current direction to the "
 "configured home waypoint."
 msgstr ""
+"Сортировка постарается найти варианты посадки в текущем направлении к "
+"настроенное путевой точке."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:87
 msgid "Alternates mode"
@@ -6878,7 +6915,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:91
 msgid "Polar degradation"
-msgstr ""
+msgstr "Деградация поляры"
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:92
 #, no-c-format
@@ -6886,6 +6923,8 @@ msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
+"Постоянная деградация поляры. 0% означает отсутствие деградации, 50% "
+"указывает, что скорость снижения планера удваивается."
 
 #: src/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp:100
 msgid "Auto bugs"
@@ -6929,12 +6968,16 @@ msgid ""
 "The name of the file (.xcm) containing terrain, topography, and optionally "
 "waypoints, their details and airspaces."
 msgstr ""
+"Имя файла (. XCM), содержащий местность, рельеф, и (опционально) точки, их "
+"детали и воздушное пространство."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:95
 msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
+"Файл с основными путевыми точками. Поддерживаемые типы файлов Cambridge / "
+"WinPilot файлы (. DAT), Zander файлы (. WPZ) или SeeYou файлы (.cup)."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:99
 msgid "More waypoints"
@@ -6945,6 +6988,8 @@ msgid ""
 "Secondary waypoints file.  This may be used to add waypoints for a "
 "competition."
 msgstr ""
+"Файл с дополнительными путевыми точками. Может быть использован для "
+"добавления точек на соревновании."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:104
 msgid "Watched waypoints"
@@ -6961,19 +7006,19 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:111
 #: Data/Input/default.xci:882
 msgid "Airspaces"
-msgstr ""
+msgstr "Воздушное пространство"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:111
 msgid "The file name of the primary airspace file."
-msgstr ""
+msgstr "Имя основного файла воздушного пространства."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:114
 msgid "More airspaces"
-msgstr ""
+msgstr "Дополнительное воздушное пространство"
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:114
 msgid "The file name of the secondary airspace file."
-msgstr ""
+msgstr "Имя дополнительного файла воздушного пространства."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:118
 msgid "Waypoint details"
@@ -7013,11 +7058,14 @@ msgid ""
 "Within lift areas lines get displayed green and thicker, while sinking lines "
 "are shown brown and thin. Zero lift is presented as a grey line."
 msgstr ""
+"В зонах подъёма линии будут отображаться зелёным и жирным, а зоны слива "
+"будут показаны тонкими коричневыми линиями коричневым. Нулевой подъём будет "
+"отображён в виде серой линии."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
 #, no-c-format
 msgid "Vario #1 (with dots)"
-msgstr ""
+msgstr "Vario № 1 (с точками)"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:104
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
@@ -7025,6 +7073,8 @@ msgstr ""
 msgid ""
 "The same colour scheme as the previous, but with dotted lines while sinking."
 msgstr ""
+"Та же цветовая схема, что и предыдущая, но с пунктирными линиями во время "
+"снижения."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:106
 #, no-c-format
@@ -7037,11 +7087,14 @@ msgid ""
 "The climb colour for this scheme is orange to red, sinking is displayed as "
 "light blue to dark blue. Zero lift is presented as a yellow line."
 msgstr ""
+"Цвет подъёма для этой схемы является от оранжевого до красного, снижение "
+"отображается в виде от светло-голубого до темно-синего цвета. Нулевой подъём "
+"представлен в виде жёлтой линии."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:109
 #, no-c-format
 msgid "Vario #2 (with dots)"
-msgstr ""
+msgstr "Vario № 2 (с точками)"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:112
 #, no-c-format
@@ -7058,12 +7111,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:116
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
-msgstr ""
+msgstr "Цветовая гамма соответствует высоте."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:122
 #, no-c-format
 msgid "Simplified line graphics, black with white contours."
-msgstr ""
+msgstr "Упрощенные графические линии, черные с белыми контурами."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:123
 #, no-c-format
@@ -7088,7 +7141,7 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:127
 #, no-c-format
 msgid "HangGlider"
-msgstr ""
+msgstr "Дельтаплан"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:128
 #, no-c-format
@@ -7098,17 +7151,17 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:129
 #, no-c-format
 msgid "ParaGlider"
-msgstr ""
+msgstr "Параплан"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:130
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
-msgstr ""
+msgstr "Упрощённое изображение параплана, белый с чёрными контурами."
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:135
 #, no-c-format
 msgid "No wind arrow is drawn."
-msgstr ""
+msgstr "Стрелка ветра не отображается"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:136
 #, no-c-format
@@ -7165,7 +7218,7 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:170
 msgid "Trail scaled"
-msgstr ""
+msgstr "Масштабируемый след"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:171
 msgid ""
@@ -9649,7 +9702,7 @@ msgstr ""
 
 #: Data/Input/default.xci:874
 msgid "Credits"
-msgstr ""
+msgstr "Благодарности"
 
 #: Data/Input/default.xci:135 Data/Input/default.xci:451
 #: Data/Input/default.xci:958
@@ -9693,7 +9746,7 @@ msgstr ""
 
 #: Data/Input/default.xci:979
 msgid "AVG/ALT"
-msgstr ""
+msgstr "СРЕДН\\ВЫС"
 
 #: Data/Input/default.xci:350 Data/Input/default.xci:399
 #: Data/Input/default.xci:900
@@ -9715,6 +9768,10 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+"METAR\n"
+"TAF\n"
+"факт погода\n"
+"прогноз"
 
 #~ msgid "Height GPS"
 #~ msgstr "Высота GPS"
