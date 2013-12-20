@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.7.3 - not yet released
+
 Version 6.7.2 - 2013/12/19
 * user interface
   - fix crash in alternates list (#3146)
