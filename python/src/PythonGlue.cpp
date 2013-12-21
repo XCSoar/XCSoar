@@ -146,6 +146,47 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
   return py_fixes;
 }
 
+PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
+  std::vector<FlightTimeResult> results;
+
+  Py_BEGIN_ALLOW_THREADS
+  self->flight->Times(results);
+  Py_END_ALLOW_THREADS
+
+  PyObject *py_times = PyList_New(0);
+
+  for (auto times : results) {
+    PyObject *py_single_flight = PyDict_New();
+
+    PyObject *py_takeoff = Python::WriteEvent(
+      times.takeoff_time,
+      times.takeoff_location);
+
+    PyObject *py_release = Python::WriteEvent(
+      times.release_time,
+      times.release_location);
+
+    PyObject *py_landing = Python::WriteEvent(
+      times.landing_time,
+      times.landing_location);
+
+    PyDict_SetItemString(py_single_flight, "takeoff", py_takeoff);
+    PyDict_SetItemString(py_single_flight, "release", py_release);
+    PyDict_SetItemString(py_single_flight, "landing", py_landing);
+
+    Py_DECREF(py_takeoff);
+    Py_DECREF(py_release);
+    Py_DECREF(py_landing);
+
+    if (PyList_Append(py_times, py_single_flight))
+      Py_RETURN_NONE;
+
+    Py_DECREF(py_single_flight);
+  }
+
+  return py_times;
+}
+
 PyMODINIT_FUNC
 __attribute__ ((visibility("default")))
 initxcsoar() {

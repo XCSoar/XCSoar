@@ -60,3 +60,22 @@ PyObject* Python::WriteLonLat(const GeoPoint &location) {
   return py_location;
 }
 
+PyObject* Python::WriteEvent(const BrokenDateTime &datetime,
+                             const GeoPoint &location) {
+  PyObject *py_event = PyDict_New();
+
+  if (datetime.IsPlausible()) {
+    PyObject *py_datetime = BrokenDateTimeToPy(datetime);
+    PyDict_SetItemString(py_event, "time", py_datetime);
+    Py_DECREF(py_datetime);
+  }
+
+  if (location.IsValid()) {
+    PyObject *py_location = WriteLonLat(location);
+    PyDict_Merge(py_event, py_location, true);
+    Py_DECREF(py_location);
+  }
+
+  return py_event;
+}
+

@@ -44,6 +44,12 @@ namespace Python {
    * Convert a GeoPoint to a python dict {longitude, latitude}
    */
   PyObject* WriteLonLat(const GeoPoint &location);
+
+  /**
+   * Convert a event (datetime + location) to a python dict
+   */
+  PyObject* WriteEvent(const BrokenDateTime &datetime,
+                       const GeoPoint &location);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */

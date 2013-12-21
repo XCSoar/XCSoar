@@ -26,6 +26,7 @@
 #include "IGCFixEnhanced.hpp"
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayVector.hpp"
+#include "FlightTimes.hpp"
 
 #include <vector>
 
@@ -49,6 +50,15 @@ public:
   DebugReplay *Replay() {
     if (keep_flight) return DebugReplayVector::Create(*fixes);
     else return DebugReplayIGC::Create(flight_file);
+  };
+
+  /* Search for flights within the fixes */
+  unsigned Times(std::vector<FlightTimeResult> &results) {
+    DebugReplay *replay = Replay();
+    FlightTimes(*replay, results);
+    delete replay;
+
+    return results.size();
   };
 };
 
