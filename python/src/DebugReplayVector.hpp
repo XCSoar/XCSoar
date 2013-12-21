@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2013 The XCSoar Project
@@ -20,36 +21,42 @@
 }
 */
 
-#ifndef PYTHON_FLIGHT_HPP
-#define PYTHON_FLIGHT_HPP
+#ifndef XCSOAR_DEBUG_REPLAY_VECTOR_HPP
+#define XCSOAR_DEBUG_REPLAY_VECTOR_HPP
 
-#include "IGCFixEnhanced.hpp"
-#include "DebugReplayIGC.hpp"
-#include "DebugReplayVector.hpp"
+#include "DebugReplay.hpp"
 
-#include <vector>
+struct IGCFixEnhanced;
 
-class DebugReplay;
+class DebugReplayVector : public DebugReplay {
+  const std::vector<IGCFixEnhanced> fixes;
+  unsigned long position;
 
-class Flight {
 private:
-  std::vector<IGCFixEnhanced> *fixes;
-  bool keep_flight;
-  const char *flight_file;
+  DebugReplayVector(const std::vector<IGCFixEnhanced> &_fixes)
+    : fixes(_fixes), position(0) {
+  }
+
+  ~DebugReplayVector() {
+  }
 
 public:
-  Flight(const char* _flight_file, bool _keep_flight);
-  ~Flight();
+  virtual bool Next();
 
-  /**
-   * Return a DebugReplay, either direct from file or from memory,
-   * depending on the keep_flight flag. Don't forget to delete
-   * the replay after use.
-   */
-  DebugReplay *Replay() {
-    if (keep_flight) return DebugReplayVector::Create(*fixes);
-    else return DebugReplayIGC::Create(flight_file);
-  };
+  long Size() const {
+    return fixes.size();
+  }
+
+  long Tell() const {
+    return position;
+  }
+
+  static DebugReplay* Create(const std::vector<IGCFixEnhanced> &fixes) {
+    return new DebugReplayVector(fixes);
+  }
+
+protected:
+  void CopyFromFix(const IGCFixEnhanced &fix);
 };
 
-#endif /* PYTHON_FLIGHT_HPP */
+#endif /* XCSOAR_DEBUG_REPLAY_VECTOR_HPP */

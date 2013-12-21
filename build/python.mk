@@ -66,9 +66,11 @@ endef
 python: $(call name-to-so,xcsoar)
 
 PYTHON_SOURCES = \
-        $(DEBUG_REPLAY_SOURCES) \
-        $(SRC)/IGC/IGCFix.cpp \
-        $(PYTHON_SRC)/Flight.cpp \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/IGC/IGCFix.cpp \
+	$(PYTHON_SRC)/Flight.cpp \
+	$(PYTHON_SRC)/DebugReplayVector.cpp \
+	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7

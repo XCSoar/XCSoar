@@ -20,36 +20,30 @@
 }
 */
 
-#ifndef PYTHON_FLIGHT_HPP
-#define PYTHON_FLIGHT_HPP
+#ifndef PYTHON_PYTHONCONVERTERS_HPP
+#define PYTHON_PYTHONCONVERTERS_HPP
 
-#include "IGCFixEnhanced.hpp"
-#include "DebugReplayIGC.hpp"
-#include "DebugReplayVector.hpp"
+#include <Python.h>
 
-#include <vector>
+struct BrokenDateTime;
+struct GeoPoint;
 
-class DebugReplay;
-
-class Flight {
-private:
-  std::vector<IGCFixEnhanced> *fixes;
-  bool keep_flight;
-  const char *flight_file;
-
-public:
-  Flight(const char* _flight_file, bool _keep_flight);
-  ~Flight();
+namespace Python {
 
   /**
-   * Return a DebugReplay, either direct from file or from memory,
-   * depending on the keep_flight flag. Don't forget to delete
-   * the replay after use.
+   * Convert a XCSoar BrokenDateTime to a Python DateTime object
    */
-  DebugReplay *Replay() {
-    if (keep_flight) return DebugReplayVector::Create(*fixes);
-    else return DebugReplayIGC::Create(flight_file);
-  };
+  PyObject* BrokenDateTimeToPy(const BrokenDateTime &datetime);
+
+  /**
+   * Convert a Python DateTime object to XCSoar BrokenDateTime
+   */
+  BrokenDateTime PyToBrokenDateTime(PyObject *py_datetime);
+
+  /**
+   * Convert a GeoPoint to a python dict {longitude, latitude}
+   */
+  PyObject* WriteLonLat(const GeoPoint &location);
 };
 
-#endif /* PYTHON_FLIGHT_HPP */
+#endif /* PYTHON_PYTHONCONVERTERS_HPP */

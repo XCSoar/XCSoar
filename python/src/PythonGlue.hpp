@@ -34,7 +34,10 @@ struct Pyxcsoar_Flight {
 static Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
 static void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 
+static PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
+
 static PyMethodDef xcsoar_Flight_methods[] = {
+  {"path", (PyCFunction)xcsoar_Flight_path, METH_VARARGS, "Get flight as list."},
   {NULL, NULL, 0, NULL}
 };
 

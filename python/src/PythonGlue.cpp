@@ -25,7 +25,10 @@
 #include <datetime.h>
 
 #include "PythonGlue.hpp"
+#include "PythonConverters.hpp"
 #include "Flight.hpp"
+#include "Time/BrokenDateTime.hpp"
+#include "IGCFixEnhanced.hpp"
 
 #include <cstdio>
 #include <vector>
@@ -54,6 +57,93 @@ Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObj
 void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   /* destructor */
   delete self->flight;
+}
+
+PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
+  PyObject *py_begin = NULL,
+           *py_end = NULL;
+
+  if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
+    Py_RETURN_NONE;
+  }
+
+  int64_t begin = 0,
+          end = std::numeric_limits<int64_t>::max();
+
+  if (py_begin != NULL && PyDateTime_Check(py_begin))
+    begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
+
+  if (py_end != NULL && PyDateTime_Check(py_end))
+    end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
+
+  // prepare output
+  PyObject *py_fixes = PyList_New(0);
+
+  DebugReplay *replay = self->flight->Replay();
+  while (replay->Next()) {
+    const MoreData &basic = replay->Basic();
+    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
+
+    if (date_time_utc < begin)
+      continue;
+    else if (date_time_utc > end)
+      break;
+
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    IGCFixEnhanced fix;
+    fix.Apply(basic);
+
+    // FIXME: fix.time has no date!
+    PyObject *py_fix_datetime = Python::BrokenDateTimeToPy(basic.date_time_utc);
+    PyObject *py_fix_time = PyInt_FromLong(basic.time);
+    PyObject *py_fix_location = Python::WriteLonLat(fix.location);
+    PyObject *py_fix_gps_altitude = PyInt_FromLong(fix.gps_altitude);
+    PyObject *py_fix_pressure_altitude = PyInt_FromLong(fix.pressure_altitude);
+    PyObject *py_fix_engine_noise_level = PyInt_FromLong(fix.enl);
+    PyObject *py_fix_track = PyInt_FromLong(fix.trt);
+    PyObject *py_fix_ground_speed = PyInt_FromLong(fix.gsp);
+    PyObject *py_fix_tas = PyInt_FromLong(fix.tas);
+    PyObject *py_fix_ias = PyInt_FromLong(fix.ias);
+    PyObject *py_fix_satellites = PyInt_FromLong(fix.siu);
+
+    PyObject *py_fix = PyTuple_Pack(11,
+      py_fix_datetime,
+      py_fix_time,
+      py_fix_location,
+      py_fix_gps_altitude,
+      py_fix_pressure_altitude,
+      py_fix_engine_noise_level,
+      py_fix_track,
+      py_fix_ground_speed,
+      py_fix_tas,
+      py_fix_ias,
+      py_fix_satellites);
+
+    if (PyList_Append(py_fixes, py_fix))
+      Py_RETURN_NONE;
+
+    Py_DECREF(py_fix);
+
+    Py_DECREF(py_fix_time);
+    Py_DECREF(py_fix_datetime);
+    Py_DECREF(py_fix_location);
+    Py_DECREF(py_fix_gps_altitude);
+    Py_DECREF(py_fix_pressure_altitude);
+    Py_DECREF(py_fix_engine_noise_level);
+    Py_DECREF(py_fix_track);
+    Py_DECREF(py_fix_ground_speed);
+    Py_DECREF(py_fix_tas);
+    Py_DECREF(py_fix_ias);
+    Py_DECREF(py_fix_satellites);
+  }
+
+  delete replay;
+
+  return py_fixes;
 }
 
 PyMODINIT_FUNC
