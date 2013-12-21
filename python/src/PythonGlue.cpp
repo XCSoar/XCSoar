@@ -209,7 +209,9 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     Py_DECREF(py_fix_ias);
     Py_DECREF(py_fix_satellites);
     Py_DECREF(py_fix_level);
-    Py_DECREF(py_fix_elevation);
+
+    if (py_fix_elevation != Py_None)
+      Py_DECREF(py_fix_elevation);
   }
 
   delete replay;
