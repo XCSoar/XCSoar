@@ -99,7 +99,6 @@ PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
     IGCFixEnhanced fix;
     fix.Apply(basic);
 
-    // FIXME: fix.time has no date!
     PyObject *py_fix_datetime = Python::BrokenDateTimeToPy(basic.date_time_utc);
     PyObject *py_fix_time = PyInt_FromLong(basic.time);
     PyObject *py_fix_location = Python::WriteLonLat(fix.location);
@@ -198,19 +197,20 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
            *py_force_endpoints = NULL;
 
   static char *kwlist[] = {"begin", "end", "num_levels", "zoom_factor",
-                           "max_delta_time", "threshold",
+                           "max_delta_time", "threshold", "max_points",
                            "force_endpoints", NULL};
 
   /* default values */
   unsigned num_levels = 4,
            zoom_factor = 4,
-           max_delta_time = 30;
+           max_delta_time = 30,
+           max_points = std::numeric_limits<unsigned>::max();
   double threshold = 0.001;
   bool force_endpoints = true;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOIIIdO", kwlist,
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOIIIdIO", kwlist,
                                    &py_begin, &py_end, &num_levels, &zoom_factor,
-                                   &max_delta_time, &threshold, &py_force_endpoints)) {
+                                   &max_delta_time, &threshold, &max_points, &py_force_endpoints)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     Py_RETURN_NONE;
   }
@@ -235,7 +235,7 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
 
   Py_BEGIN_ALLOW_THREADS
   self->flight->Reduce(begin, end, num_levels,
-    zoom_factor, threshold, force_endpoints, max_delta_time);
+    zoom_factor, threshold, force_endpoints, max_delta_time, max_points);
   Py_END_ALLOW_THREADS
 
   Py_RETURN_NONE;

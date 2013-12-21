@@ -69,7 +69,7 @@ public:
   void Reduce(const BrokenDateTime start, const BrokenDateTime end,
               const unsigned num_levels, const unsigned zoom_factor,
               const double threshold, const bool force_endpoints,
-              const unsigned max_delta_time);
+              const unsigned max_delta_time, const unsigned max_points);
 
 private:
   /* Read the flight into memory */

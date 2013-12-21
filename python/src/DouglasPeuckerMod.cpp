@@ -36,10 +36,11 @@ DouglasPeuckerMod::DouglasPeuckerMod(const unsigned _num_levels,
                                      const unsigned _zoom_factor,
                                      const double _threshold,
                                      const bool _force_endpoints,
-                                     const unsigned _max_delta_time)
+                                     const unsigned _max_delta_time,
+                                     const unsigned _max_points)
   : num_levels(_num_levels), zoom_factor(_zoom_factor),
     threshold(_threshold), force_endpoints(_force_endpoints),
-    max_delta_time(_max_delta_time) {
+    max_delta_time(_max_delta_time), max_points(_max_points) {
   zoom_level_breaks = new double[num_levels];
 
   for (unsigned i = 0; i < num_levels; i++) {
@@ -56,9 +57,7 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
   unsigned max_loc = 0;
   std::stack<std::pair<unsigned, unsigned>> stack;
   const unsigned fixes_size = end - start;
-
-  double *dists = new double[fixes_size];
-  std::fill(&dists[0], &dists[fixes_size], 0.0);
+  DistQueue dists;
 
   double temp,
          max_dist,
@@ -99,7 +98,7 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
       }
 
       if (max_dist > threshold_squared) {
-        dists[max_loc - start] = sqrt(max_dist);
+        dists.push(std::pair<unsigned, double>(max_loc, sqrt(max_dist)));
         stack.push(std::pair<unsigned, unsigned>(current.first, max_loc));
         stack.push(std::pair<unsigned, unsigned>(max_loc, current.second));
       }
@@ -109,8 +108,6 @@ void DouglasPeuckerMod::Encode(std::vector<IGCFixEnhanced> &fixes,
   abs_max_dist = sqrt(abs_max_dist_squared);
 
   Classify(fixes, dists, abs_max_dist, start, end);
-
-  delete[] dists;
 }
 
 /**
@@ -170,36 +167,27 @@ double DouglasPeuckerMod::DistanceTime(const unsigned time0,
 }
 
 void DouglasPeuckerMod::Classify(std::vector<IGCFixEnhanced> &fixes,
-                                 const double dists[],
+                                 DistQueue &dists,
                                  const double abs_max_dist,
                                  const unsigned start,
                                  const unsigned end) {
-  unsigned i = 0;
 
-  for (; i < start; ++i) {
+  /* initialize levels with -1 */
+  for (unsigned i = 0; i < fixes.size(); ++i) {
     fixes[i].level = -1;
   }
 
-  /* Level for startpoint */
-  fixes[++i].level = force_endpoints
-    ? 0
-    : ComputeLevel(abs_max_dist);
-
-  if (i < end) {
-    for (; i < end - 1; ++i) {
-      fixes[i].level = dists[i] != 0.0
-        ? ComputeLevel(dists[i])
-        : -1;
-    }
-
-    /* Level for endpoint */
-    fixes[++i].level = force_endpoints
-      ? 0
-      : ComputeLevel(abs_max_dist);
+  unsigned i = force_endpoints ? 2 : 0;
+  while (!dists.empty() && ++i < max_points) {
+    std::pair<unsigned, double> fix_dist = dists.top();
+    fixes[fix_dist.first].level = ComputeLevel(fix_dist.second);
+    dists.pop();
   }
 
-  for (; i < fixes.size(); ++i) {
-    fixes[i].level = -1;
+  /* Level for start- and endpoint */
+  if (force_endpoints) {
+    fixes[start].level = 0;
+    fixes[end - 1].level = 0;
   }
 }
 

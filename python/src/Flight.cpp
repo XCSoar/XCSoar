@@ -53,14 +53,15 @@ void Flight::ReadFlight() {
 void Flight::Reduce(const BrokenDateTime start, const BrokenDateTime end,
                     const unsigned num_levels, const unsigned zoom_factor,
                     const double threshold, const bool force_endpoints,
-                    const unsigned max_delta_time) {
+                    const unsigned max_delta_time, const unsigned max_points) {
   // we need the whole flight, so read it now...
   if (!keep_flight) {
     ReadFlight();
     keep_flight = true;
   }
 
-  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold, force_endpoints, max_delta_time);
+  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold,
+    force_endpoints, max_delta_time, max_points);
 
   unsigned start_index = 0,
            end_index = 0;
@@ -72,7 +73,7 @@ void Flight::Reduce(const BrokenDateTime start, const BrokenDateTime end,
     if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() < start_time)
       start_index++;
 
-    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() <= end_time)
+    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() < end_time)
       end_index++;
     else
       break;
