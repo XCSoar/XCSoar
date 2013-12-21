@@ -40,7 +40,8 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
 
 ContestStatistics
 SolveContest(Contest contest,
-             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace);
+             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace,
+             const unsigned max_iterations, const unsigned max_tree_size);
 
 void AnalyseFlight(DebugReplay &replay,
              const BrokenDateTime &takeoff_time,
@@ -52,6 +53,8 @@ void AnalyseFlight(DebugReplay &replay,
              PhaseTotals &phase_totals,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
-             const unsigned sprint_points = 96);
+             const unsigned sprint_points = 96,
+             const unsigned max_iterations = 20e6,
+             const unsigned max_tree_size = 5e6);
 
 #endif /* PYTHON_ANALYSEFLIGHT_HPP */

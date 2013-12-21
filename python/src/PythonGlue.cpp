@@ -242,14 +242,20 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
 }
 
 PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
-  static char *kwlist[] = {"takeoff", "release", "landing", "full", "triangle", "sprint", NULL};
+  static char *kwlist[] = {"takeoff", "release", "landing",
+                           "full", "triangle", "sprint",
+                           "max_iterations", "max_tree_size", NULL};
   PyObject *py_takeoff, *py_release, *py_landing;
   unsigned full = 512,
            triangle = 1024,
-           sprint = 96;
+           sprint = 96,
+           max_iterations = 20e6,
+           max_tree_size = 5e6;
 
-  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOO|III", kwlist,
-                                   &py_takeoff, &py_release, &py_landing, &full, &triangle, &sprint)) {
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOO|IIIII", kwlist,
+                                   &py_takeoff, &py_release, &py_landing,
+                                   &full, &triangle, &sprint,
+                                   &max_iterations, &max_tree_size)) {
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     Py_RETURN_NONE;
   }
@@ -273,7 +279,8 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   self->flight->Analyse(takeoff, release, landing,
     olc_plus, dmst,
     phase_list, phase_totals,
-    full, triangle, sprint);
+    full, triangle, sprint,
+    max_iterations, max_tree_size);
   Py_END_ALLOW_THREADS
 
   PyObject *py_result = PyDict_New();

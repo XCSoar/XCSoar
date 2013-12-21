@@ -82,12 +82,15 @@ public:
                PhaseTotals &phase_totals,
                const unsigned full = 512,
                const unsigned triangle = 1024,
-               const unsigned sprint = 96) {
+               const unsigned sprint = 96,
+               const unsigned max_iterations = 20e6,
+               const unsigned max_tree_size = 5e6) {
     DebugReplay *replay = Replay();
     AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
                   olc_plus, dmst,
                   phase_list, phase_totals,
-                  full, triangle, sprint);
+                  full, triangle, sprint,
+                  max_iterations, max_tree_size);
     delete replay;
   };
 

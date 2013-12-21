@@ -97,10 +97,11 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
 
 ContestStatistics
 SolveContest(Contest contest,
-             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace)
+             Trace &full_trace, Trace &triangle_trace, Trace &sprint_trace,
+             const unsigned max_iterations, const unsigned max_tree_size)
 {
   ContestManager manager(contest, full_trace, triangle_trace, sprint_trace);
-  manager.SolveExhaustive();
+  manager.SolveExhaustive(max_iterations, max_tree_size);
   return manager.GetStats();
 }
 
@@ -114,7 +115,9 @@ void AnalyseFlight(DebugReplay &replay,
              PhaseTotals &phase_totals,
              const unsigned full_points,
              const unsigned triangle_points,
-             const unsigned sprint_points)
+             const unsigned sprint_points,
+             const unsigned max_iterations,
+             const unsigned max_tree_size)
 {
   Trace full_trace(0, Trace::null_time, full_points);
   Trace triangle_trace(0, Trace::null_time, triangle_points);
@@ -125,8 +128,12 @@ void AnalyseFlight(DebugReplay &replay,
       takeoff_time, release_time, landing_time,
       full_trace, triangle_trace, sprint_trace);
 
-  olc_plus = SolveContest(Contest::OLC_PLUS, full_trace, triangle_trace, sprint_trace);
-  dmst = SolveContest(Contest::DMST, full_trace, triangle_trace, sprint_trace);
+  olc_plus = SolveContest(Contest::OLC_PLUS,
+    full_trace, triangle_trace, sprint_trace,
+    max_iterations, max_tree_size);
+  dmst = SolveContest(Contest::DMST,
+    full_trace, triangle_trace, sprint_trace,
+    max_iterations, max_tree_size);
 
   phase_list = flight_phase_detector.GetPhases();
   phase_totals = flight_phase_detector.GetTotals();
