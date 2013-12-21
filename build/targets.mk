@@ -19,7 +19,11 @@ else
   endif
 endif
 
-TARGET_FLAVOR := $(TARGET)
+ifeq ($(MAKECMDGOALS),python)
+  TARGET_FLAVOR := $(TARGET)_PYTHON
+else
+  TARGET_FLAVOR := $(TARGET)
+endif
 
 HAVE_CE := n
 HAVE_FPU := y

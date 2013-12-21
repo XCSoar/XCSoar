@@ -15,6 +15,13 @@ else
 C_FEATURES =
 endif
 
+# produce position independent code when compiling the python library
+ifeq ($(MAKECMDGOALS),python)
+CXX_FEATURES += -fPIC
+C_FEATURES += -fPIC
+LDFLAGS += -fPIC -shared
+endif
+
 ifeq ($(HAVE_WIN32),n)
 CXX_FEATURES += -fvisibility=hidden
 C_FEATURES += -fvisibility=hidden
