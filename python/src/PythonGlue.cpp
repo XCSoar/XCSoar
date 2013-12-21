@@ -241,6 +241,98 @@ PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *
   Py_RETURN_NONE;
 }
 
+PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
+  static char *kwlist[] = {"takeoff", "release", "landing", "full", "triangle", "sprint", NULL};
+  PyObject *py_takeoff, *py_release, *py_landing;
+  unsigned full = 512,
+           triangle = 1024,
+           sprint = 96;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OOO|III", kwlist,
+                                   &py_takeoff, &py_release, &py_landing, &full, &triangle, &sprint)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
+    Py_RETURN_NONE;
+  }
+
+  if (!PyDateTime_Check(py_takeoff) || !PyDateTime_Check(py_release) || !PyDateTime_Check(py_landing)) {
+    PyErr_SetString(PyExc_TypeError, "Expected a DateTime object for takeoff, release and landing.");
+    Py_RETURN_NONE;
+  }
+
+  BrokenDateTime takeoff = Python::PyToBrokenDateTime(py_takeoff);
+  BrokenDateTime release = Python::PyToBrokenDateTime(py_release);
+  BrokenDateTime landing = Python::PyToBrokenDateTime(py_landing);
+
+  ContestStatistics olc_plus;
+  ContestStatistics dmst;
+
+  PhaseList phase_list;
+  PhaseTotals phase_totals;
+
+  Py_BEGIN_ALLOW_THREADS
+  self->flight->Analyse(takeoff, release, landing,
+    olc_plus, dmst,
+    phase_list, phase_totals,
+    full, triangle, sprint);
+  Py_END_ALLOW_THREADS
+
+  PyObject *py_result = PyDict_New();
+
+  /* write contests */
+  PyObject *py_contests = PyDict_New();
+
+  /* write olc_plus statistics */
+  PyObject *py_olc_plus = PyDict_New();
+
+  PyObject *py_classic = Python::WriteContest(olc_plus.result[0], olc_plus.solution[0]);
+  PyObject *py_triangle = Python::WriteContest(olc_plus.result[1], olc_plus.solution[1]);
+  PyObject *py_plus = Python::WriteContest(olc_plus.result[2], olc_plus.solution[2]);
+
+  PyDict_SetItemString(py_olc_plus, "classic", py_classic);
+  PyDict_SetItemString(py_olc_plus, "triangle", py_triangle);
+  PyDict_SetItemString(py_olc_plus, "plus", py_plus);
+
+  Py_DECREF(py_classic);
+  Py_DECREF(py_triangle);
+  Py_DECREF(py_plus);
+
+  PyDict_SetItemString(py_contests, "olc_plus", py_olc_plus);
+  Py_DECREF(py_olc_plus);
+
+  /* write dmst statistics */
+  PyObject *py_dmst = PyDict_New();
+
+  PyObject *py_quadrilateral = Python::WriteContest(dmst.result[0], dmst.solution[0]);
+  PyDict_SetItemString(py_dmst, "quadrilateral", py_quadrilateral);
+  Py_DECREF(py_quadrilateral);
+
+  PyDict_SetItemString(py_contests, "dmst", py_dmst);
+  Py_DECREF(py_dmst);
+
+  PyDict_SetItemString(py_result, "contests", py_contests);
+  Py_DECREF(py_contests);
+
+  /* write fligh phases */
+  PyObject *py_phases = PyList_New(0);
+
+  for (Phase phase : phase_list) {
+    PyObject *py_phase = Python::WritePhase(phase);
+    if (PyList_Append(py_phases, py_phase))
+      return NULL;
+
+    Py_DECREF(py_phase);
+  }
+
+  PyDict_SetItemString(py_result, "phases", py_phases);
+  Py_DECREF(py_phases);
+
+  /* write performance stats */
+  PyObject *py_performance = Python::WritePerformanceStats(phase_totals);
+  PyDict_SetItemString(py_result, "performance", py_performance);
+  Py_DECREF(py_performance);
+
+  return py_result;
+}
 
 PyMODINIT_FUNC
 __attribute__ ((visibility("default")))
@@ -257,6 +349,5 @@ initxcsoar() {
 
   PyDateTime_IMPORT;
 
-  Py_INCREF(&xcsoar_Flight_Type);
   PyModule_AddObject(m, "Flight", (PyObject *)&xcsoar_Flight_Type);
 }

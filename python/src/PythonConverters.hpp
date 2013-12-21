@@ -27,6 +27,11 @@
 
 struct BrokenDateTime;
 struct GeoPoint;
+struct ContestResult;
+class ContestTraceVector;
+struct ContestTracePoint;
+struct Phase;
+struct PhaseTotals;
 
 namespace Python {
 
@@ -50,6 +55,20 @@ namespace Python {
    */
   PyObject* WriteEvent(const BrokenDateTime &datetime,
                        const GeoPoint &location);
+
+  /**
+   * Convert two points to a python dict with leg statistics
+   */
+  PyObject* WritePoint(const ContestTracePoint &point,
+                       const ContestTracePoint *previous);
+
+  PyObject* WriteContest(const ContestResult &result,
+                         const ContestTraceVector &trace);
+
+  PyObject* WritePhase(const Phase &phase);
+  PyObject* WriteCirclingStats(const Phase &stats);
+  PyObject* WriteCruiseStats(const Phase &stats);
+  PyObject* WritePerformanceStats(const PhaseTotals &totals);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */

@@ -27,6 +27,7 @@
 #include "DebugReplayIGC.hpp"
 #include "DebugReplayVector.hpp"
 #include "FlightTimes.hpp"
+#include "AnalyseFlight.hpp"
 
 #include <vector>
 
@@ -70,6 +71,25 @@ public:
               const unsigned num_levels, const unsigned zoom_factor,
               const double threshold, const bool force_endpoints,
               const unsigned max_delta_time, const unsigned max_points);
+
+  /* Analyse flight */
+  void Analyse(const BrokenDateTime takeoff_time,
+               const BrokenDateTime release_time,
+               const BrokenDateTime landing_time,
+               ContestStatistics &olc_plus,
+               ContestStatistics &dmst,
+               PhaseList &phase_list,
+               PhaseTotals &phase_totals,
+               const unsigned full = 512,
+               const unsigned triangle = 1024,
+               const unsigned sprint = 96) {
+    DebugReplay *replay = Replay();
+    AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
+                  olc_plus, dmst,
+                  phase_list, phase_totals,
+                  full, triangle, sprint);
+    delete replay;
+  };
 
 private:
   /* Read the flight into memory */

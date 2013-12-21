@@ -37,11 +37,13 @@ static void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 static PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
 static PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self);
 static PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
 
 static PyMethodDef xcsoar_Flight_methods[] = {
   {"path", (PyCFunction)xcsoar_Flight_path, METH_VARARGS, "Get flight as list."},
   {"times", (PyCFunction)xcsoar_Flight_times, METH_VARARGS, "Get takeoff/release/landing times from flight."},
   {"reduce", (PyCFunction)xcsoar_Flight_reduce, METH_VARARGS | METH_KEYWORDS, "Reduce flight."},
+  {"analyse", (PyCFunction)xcsoar_Flight_analyse, METH_VARARGS | METH_KEYWORDS, "Analyse flight."},
   {NULL, NULL, 0, NULL}
 };
 

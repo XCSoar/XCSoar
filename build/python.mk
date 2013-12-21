@@ -68,11 +68,16 @@ python: $(call name-to-so,xcsoar)
 PYTHON_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCFix.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(PYTHON_SRC)/Flight.cpp \
 	$(PYTHON_SRC)/DebugReplayVector.cpp \
 	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/FlightTimes.cpp \
 	$(PYTHON_SRC)/DouglasPeuckerMod.cpp \
+	$(PYTHON_SRC)/AnalyseFlight.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7

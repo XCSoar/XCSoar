@@ -2,6 +2,7 @@
 
 import xcsoar
 import argparse
+from pprint import pprint
 
 # Parse command line parameters
 parser = argparse.ArgumentParser(
@@ -59,6 +60,9 @@ for dtime in times:
   fixes = flight.path(takeoff['time'], landing['time'])
   for fix in fixes:
     print fix
+
+  analysis = flight.analyse(takeoff['time'], release['time'], landing['time'])
+  pprint(analysis)
 
 del flight
 
