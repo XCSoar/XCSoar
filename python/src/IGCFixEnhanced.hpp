@@ -33,6 +33,9 @@ struct IGCFixEnhanced : public IGCFix
 
   unsigned clock;
 
+  /* The detail level of this fix. -1 is not visible at all, 0 is always visible. */
+  int level = 0;
+
   bool Apply(const NMEAInfo &basic) {
     if (IGCFix::Apply(basic)) {
       date = basic.date_time_utc;

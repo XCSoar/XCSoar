@@ -187,6 +187,56 @@ PyObject* xcsoar_Flight_times(Pyxcsoar_Flight *self) {
   return py_times;
 }
 
+PyObject* xcsoar_Flight_reduce(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
+  PyObject *py_begin = NULL,
+           *py_end = NULL,
+           *py_force_endpoints = NULL;
+
+  static char *kwlist[] = {"begin", "end", "num_levels", "zoom_factor",
+                           "max_delta_time", "threshold",
+                           "force_endpoints", NULL};
+
+  /* default values */
+  unsigned num_levels = 4,
+           zoom_factor = 4,
+           max_delta_time = 30;
+  double threshold = 0.001;
+  bool force_endpoints = true;
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|OOIIIdO", kwlist,
+                                   &py_begin, &py_end, &num_levels, &zoom_factor,
+                                   &max_delta_time, &threshold, &py_force_endpoints)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
+    Py_RETURN_NONE;
+  }
+
+  if (py_force_endpoints != NULL && !PyObject_IsTrue(py_force_endpoints))
+    force_endpoints = false;
+
+  BrokenDateTime begin, end;
+
+  if (py_begin != NULL && PyDateTime_Check(py_begin))
+    begin = Python::PyToBrokenDateTime(py_begin);
+  else
+    begin = BrokenDateTime::FromUnixTimeUTC(0);
+
+  if (py_end != NULL && PyDateTime_Check(py_end))
+    end = Python::PyToBrokenDateTime(py_end);
+  else
+    /* numeric_limits<int64_t>::max() doesn't work here, because
+       that's an invalid date in BrokenDate's eyes. 1970 + 2^33 secs
+       is about the year 2242, which is far enough in the future :-) */
+    end = BrokenDateTime::FromUnixTimeUTC(int64_t(2)<<32);
+
+  Py_BEGIN_ALLOW_THREADS
+  self->flight->Reduce(begin, end, num_levels,
+    zoom_factor, threshold, force_endpoints, max_delta_time);
+  Py_END_ALLOW_THREADS
+
+  Py_RETURN_NONE;
+}
+
+
 PyMODINIT_FUNC
 __attribute__ ((visibility("default")))
 initxcsoar() {

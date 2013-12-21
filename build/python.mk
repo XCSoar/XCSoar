@@ -72,6 +72,7 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/DebugReplayVector.cpp \
 	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/FlightTimes.cpp \
+	$(PYTHON_SRC)/DouglasPeuckerMod.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)
 PYTHON_LDLIBS = -lpython2.7

@@ -24,6 +24,7 @@
 #include "IGCFixEnhanced.hpp"
 #include "DebugReplay.hpp"
 #include "DebugReplayIGC.hpp"
+#include "DouglasPeuckerMod.hpp"
 
 #include <vector>
 
@@ -47,6 +48,40 @@ void Flight::ReadFlight() {
 
     delete replay;
   }
+}
+
+void Flight::Reduce(const BrokenDateTime start, const BrokenDateTime end,
+                    const unsigned num_levels, const unsigned zoom_factor,
+                    const double threshold, const bool force_endpoints,
+                    const unsigned max_delta_time) {
+  // we need the whole flight, so read it now...
+  if (!keep_flight) {
+    ReadFlight();
+    keep_flight = true;
+  }
+
+  DouglasPeuckerMod dp(num_levels, zoom_factor, threshold, force_endpoints, max_delta_time);
+
+  unsigned start_index = 0,
+           end_index = 0;
+
+  int64_t start_time = start.ToUnixTimeUTC(),
+          end_time = end.ToUnixTimeUTC();
+
+  for (auto fix : *fixes) {
+    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() < start_time)
+      start_index++;
+
+    if (BrokenDateTime(fix.date, fix.time).ToUnixTimeUTC() <= end_time)
+      end_index++;
+    else
+      break;
+  }
+
+  end_index = std::min(end_index, unsigned(fixes->size()));
+  start_index = std::min(start_index, end_index);
+
+  dp.Encode(*fixes, start_index, end_index);
 }
 
 Flight::~Flight() {

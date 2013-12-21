@@ -61,6 +61,16 @@ public:
     return results.size();
   };
 
+  /**
+   * Calculate the DP reduced flight path
+   * This always sets the keep_flight flag to true and
+   * stores the flight fixes in memory
+   */
+  void Reduce(const BrokenDateTime start, const BrokenDateTime end,
+              const unsigned num_levels, const unsigned zoom_factor,
+              const double threshold, const bool force_endpoints,
+              const unsigned max_delta_time);
+
 private:
   /* Read the flight into memory */
   void ReadFlight();

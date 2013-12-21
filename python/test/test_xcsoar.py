@@ -53,6 +53,13 @@ for dtime in times:
   for fix in fixes:
     print fix
 
+  flight.reduce(takeoff['time'], landing['time'])
+
+  print "Flight path from takeoff to landing, reduced:"
+  fixes = flight.path(takeoff['time'], landing['time'])
+  for fix in fixes:
+    print fix
+
 del flight
 
 
