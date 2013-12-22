@@ -32,6 +32,7 @@ class ContestTraceVector;
 struct ContestTracePoint;
 struct Phase;
 struct PhaseTotals;
+struct WindListItem;
 
 namespace Python {
 
@@ -69,6 +70,8 @@ namespace Python {
   PyObject* WriteCirclingStats(const Phase &stats);
   PyObject* WriteCruiseStats(const Phase &stats);
   PyObject* WritePerformanceStats(const PhaseTotals &totals);
+
+  PyObject* WriteWindItem(const WindListItem &wind_item);
 };
 
 #endif /* PYTHON_PYTHONCONVERTERS_HPP */

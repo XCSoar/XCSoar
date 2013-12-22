@@ -95,6 +95,7 @@ public:
                ContestStatistics &dmst,
                PhaseList &phase_list,
                PhaseTotals &phase_totals,
+               WindList &wind_list,
                const unsigned full = 512,
                const unsigned triangle = 1024,
                const unsigned sprint = 96,
@@ -103,7 +104,7 @@ public:
     DebugReplay *replay = Replay();
     AnalyseFlight(*replay, takeoff_time, release_time, landing_time,
                   olc_plus, dmst,
-                  phase_list, phase_totals,
+                  phase_list, phase_totals, wind_list,
                   full, triangle, sprint,
                   max_iterations, max_tree_size);
     delete replay;

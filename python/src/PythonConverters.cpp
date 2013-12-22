@@ -24,6 +24,7 @@
 #include <datetime.h>
 
 #include "PythonConverters.hpp"
+#include "Flight/AnalyseFlight.hpp"
 
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
@@ -321,5 +322,27 @@ PyObject* Python::WritePerformanceStats(const PhaseTotals &totals) {
   Py_DECREF(py_cruise_total);
 
   return py_totals;
+}
+
+PyObject* Python::WriteWindItem(const WindListItem &wind_item) {
+  PyObject *py_wind = PyDict_New();
+
+  PyObject *py_datetime = BrokenDateTimeToPy(wind_item.datetime);
+  PyDict_SetItemString(py_wind, "datetime", py_datetime);
+  Py_DECREF(py_datetime);
+
+  PyObject *py_altitude = PyInt_FromLong((long)wind_item.altitude);
+  PyDict_SetItemString(py_wind, "altitude", py_altitude);
+  Py_DECREF(py_altitude);
+
+  PyObject *py_speed = PyFloat_FromDouble(wind_item.wind.norm);
+  PyDict_SetItemString(py_wind, "speed", py_speed);
+  Py_DECREF(py_speed);
+
+  PyObject *py_direction = PyFloat_FromDouble(wind_item.wind.bearing.Degrees());
+  PyDict_SetItemString(py_wind, "direction", py_direction);
+  Py_DECREF(py_direction);
+
+  return py_wind;
 }
 

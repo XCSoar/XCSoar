@@ -25,14 +25,34 @@
 
 #include "FlightPhaseDetector.hpp"
 #include "Contest/Settings.hpp"
+#include "Geo/SpeedVector.hpp"
+#include "Time/BrokenDateTime.hpp"
+
+#include <list>
 
 class DebugReplay;
 class Trace;
 struct ContestStatistics;
-struct BrokenDateTime;
+
+struct WindListItem {
+  // Date and time of measurement
+  BrokenDateTime datetime;
+
+  // Altitude of measurement
+  double altitude;
+
+  // Speed vector of measurement
+  SpeedVector wind;
+
+  WindListItem(BrokenDateTime _datetime, double _altitude, SpeedVector _wind)
+    :datetime(_datetime), altitude(_altitude), wind(_wind) {};
+};
+
+typedef std::list<WindListItem> WindList;
 
 void
 Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
+    WindList &wind_list,
     const BrokenDateTime &takeoff_time,
     const BrokenDateTime &release_time,
     const BrokenDateTime &landing_time,
@@ -51,6 +71,7 @@ void AnalyseFlight(DebugReplay &replay,
              ContestStatistics &dmst,
              PhaseList &phase_list,
              PhaseTotals &phase_totals,
+             WindList &wind_list,
              const unsigned full_points = 512,
              const unsigned triangle_points = 1024,
              const unsigned sprint_points = 96,

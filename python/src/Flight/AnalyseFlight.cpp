@@ -27,11 +27,13 @@
 #include "Math/Angle.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Computer/CirclingComputer.hpp"
+#include "Computer/Wind/Computer.hpp"
 #include "Computer/Settings.hpp"
 #include "FlightPhaseDetector.hpp"
 
 void
 Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
+    WindList &wind_list,
     const BrokenDateTime &takeoff_time,
     const BrokenDateTime &release_time,
     const BrokenDateTime &landing_time,
@@ -44,6 +46,17 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
   CirclingSettings circling_settings;
   circling_settings.SetDefaults();
   CirclingComputer circling_computer;
+
+  GlidePolar glide_polar(fixed(0));
+
+  WindSettings wind_settings;
+  wind_settings.SetDefaults();
+
+  WindComputer wind_computer;
+  wind_computer.Reset();
+
+  Validity last_wind;
+  last_wind.Clear();
 
   const int64_t takeoff_unix = takeoff_time.ToUnixTimeUTC();
   const int64_t release_unix = release_time.ToUnixTimeUTC();
@@ -68,6 +81,16 @@ Run(DebugReplay &replay, FlightPhaseDetector &flight_phase_detector,
                               circling_settings);
 
     flight_phase_detector.Update(replay.Basic(), replay.Calculated());
+
+    wind_computer.Compute(wind_settings, glide_polar, basic,
+                          replay.SetCalculated());
+
+    if (replay.Calculated().estimated_wind_available.Modified(last_wind)) {
+      wind_list.push_back(WindListItem(basic.date_time_utc, basic.gps_altitude,
+                                       replay.Calculated().estimated_wind));
+    }
+
+    last_wind = replay.Calculated().estimated_wind_available;
 
     if (!basic.time_available || !basic.location_available ||
         !basic.NavAltitudeAvailable())
@@ -113,6 +136,7 @@ void AnalyseFlight(DebugReplay &replay,
              ContestStatistics &dmst,
              PhaseList &phase_list,
              PhaseTotals &phase_totals,
+             WindList &wind_list,
              const unsigned full_points,
              const unsigned triangle_points,
              const unsigned sprint_points,
@@ -124,7 +148,7 @@ void AnalyseFlight(DebugReplay &replay,
   Trace sprint_trace(0, 9000, sprint_points);
   FlightPhaseDetector flight_phase_detector;
 
-  Run(replay, flight_phase_detector,
+  Run(replay, flight_phase_detector, wind_list,
       takeoff_time, release_time, landing_time,
       full_trace, triangle_trace, sprint_trace);
 

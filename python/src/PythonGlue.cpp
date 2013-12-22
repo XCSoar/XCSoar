@@ -344,10 +344,12 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   PhaseList phase_list;
   PhaseTotals phase_totals;
 
+  WindList wind_list;
+
   Py_BEGIN_ALLOW_THREADS
   self->flight->Analyse(takeoff, release, landing,
     olc_plus, dmst,
-    phase_list, phase_totals,
+    phase_list, phase_totals, wind_list,
     full, triangle, sprint,
     max_iterations, max_tree_size);
   Py_END_ALLOW_THREADS
@@ -406,6 +408,20 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   PyObject *py_performance = Python::WritePerformanceStats(phase_totals);
   PyDict_SetItemString(py_result, "performance", py_performance);
   Py_DECREF(py_performance);
+
+  /* write wind list*/
+  PyObject *py_wind_list = PyList_New(0);
+
+  for (WindListItem wind_item: wind_list) {
+    PyObject *py_wind = Python::WriteWindItem(wind_item);
+    if (PyList_Append(py_wind_list, py_wind))
+      Py_RETURN_NONE;
+
+    Py_DECREF(py_wind);
+  }
+
+  PyDict_SetItemString(py_result, "wind", py_wind_list);
+  Py_DECREF(py_wind_list);
 
   return py_result;
 }
