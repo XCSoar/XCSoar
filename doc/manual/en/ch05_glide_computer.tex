@@ -7,29 +7,74 @@ reading for competition pilots as well as pilots engaging in casual
 cross-country touring.
 
 
-\section{Flight modes} 
+\section{Flight modes} \label{cha:flightmodes}
 
-XCSoar performs different calculations and may dispay different
-InfoBoxes depending on the flight mode, for example Circling
-(thermalling), Cruise, or Final Glide (cruise to the Finish waypoint).
-XCSoar automatically detects the difference between thermal (circling)
-flight and cruising flight. After about 30 seconds of circling flight
-the software will switch from cruise to climb mode. After about 30
-seconds of straight line flight the software will switch from climb to
-cruise mode.
+In order to reduce the pilot's workload, XCSoar is enabled to do 
+different things depending on the actual flight's state. XCSoar can 
+do this without in-flight interaction of the pilot. The differences are 
+reflected by different displays, calculations, and flight information 
+amongst others. The four states used by XCSoar are called 
+\emph{flight modes}, which are
+\begin{itemize}
+\item Cruise mode
+\item Circling mode
+\item Final glide mode
+\item Abort mode
+\end{itemize}
+XCSoar automatically detects the difference between circling flight and 
+cruising flight. Circling is enabled when the glider turns (typically 
+three quarters of a turn). After about 30 seconds of straight line flight 
+the software will switch from circling to cruise mode. Hence, the switch 
+is based on a simple condition.
 
-The cruise modes are further divided into final glide and normal
-cruise.  Final glide becomes active when the glider is above final glide 
-altitude with respect to the last waypoint in the task, or when 
-in abort mode.
-
-Switching between the different flight modes is automatic.  Circling
-is enabled when the glider turns (typically three quarters of a turn).
-It is possible to have circling mode switched based on an external
+It is also possible to have circling mode switched based on an external 
 input (e.g.\ from a pilot-operated switch).
 
-A small symbol is drawn on the lower right corner of the map area to
-indicate which flight mode the computer is in.
+Final glide becomes active when the glider is above final glide 
+altitude with respect to the last waypoint in the task and after the 
+last turnpoint has been passed. The altitude required depends most 
+importantly on the adjusted MC value, but also the ground clearance 
+is considered. On entering a thermal while in final glide mode for 
+gaining some extra safety margin XCSoar will switch to the circling 
+mode and back to the final glide mode, once the thermal is left again 
+and the final glide condition is still met (i.e. the glider is still 
+above the final glide path, considering MC setting and terrain).
+
+As an example, a powerful feature to be driven by flight modes is the 
+switch between different MacReady setting's strategies. If you decided 
+to let XCSoar manage the setting automatically it will maintain a value 
+based on past thermals worked out successfully until final glide. 
+Instantly MacReady is set to achive minimal arrival time or what you 
+set up for final glide (see section \ref{sec:auto-maccready}).
+\config{final-glide} Hence the switch to final glide mode is based on 
+a set of sophistically computed tactical conditions.
+
+You might force XCSoar to enter final glide mode by skipping all 
+remaining turnpoints, if for example conditions get worse and you 
+decided to just go home.
+
+Abort mode is invoked manually to give you full control in case of 
+emergency via menu.  No automatics - you decide.  The abort mode 
+might be understood technically as a special final glide mode with 
+instantsupport for choosing a different final instantly. However, in 
+perception the abort mode simply supports your urgent decision where 
+and how to go finally (see section \ref{sec:taskabort}).  In this case, 
+a safety MacReady value is set. \config{safetyMC} Hence the switch to 
+abort mode is based on the pilot's cognition.
+
+Due to the fact, the different flight modes typically are reflected in 
+differring things being displayed, the frequent XCSoar user might get 
+used to some kind of watching a `display mode'. This is just the 
+default \emph{perceived} after having installed XCSoar without having 
+done some advanced configuration. As holds true for almost everything 
+within XCSoar, the display's behavior might be changed adding value 
+for the advanced user. But altering things in XCSoar does not influence 
+the conditions for entering a flight mode, they do not change.
+
+In order to take full advantage of the flight modes concept, XCSoar 
+will \emph{always} show you, which mode is active. A small symbol is 
+drawn on the lower right corner of the map area to indicate which flight 
+mode the computer is in.
 
 \begin{tabular}{c c c c}%{c c c c}
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/mode_cruise.pdf} &
@@ -40,39 +85,42 @@ indicate which flight mode the computer is in.
 \end{tabular}
 
 \begin{description}
-\item[Cruise (a)]   The glider is not circling and there is either no task
-  active, or the task waypoint is not the finish point.
+\item[Cruise (a)]   The glider is not circling and there is either no 
+task active, or the task waypoint is not the finish point.
 \item[Circling (b)]  The glider is circling (though it may not be climbing).
-\item[Final glide (c)]  The glider is not circling and the active waypoint is the
- final one in the task.
-\item[Abort (d)]  This manually-triggered mode indicates the immediate landing
-options to the user.(see Section~\ref{sec:taskabort})
+\item[Final glide (c)]  The glider is not circling and the active waypoint 
+is the final one in the task.
+\item[Abort (d)]  This manually-triggered mode indicates the immediate 
+landing options to the user.(see section~\ref{sec:taskabort})
 \end{description}
 
-The specific computations performed by XCSoar are of course dependent
-on this flight mode.  The display changes in each mode, principally,
-the InfoBoxes may be set up differently for each mode; secondly there
-is a facility to automatically change zoom between circling and other
-flight modes (this is called `circling zoom').
+The concept of different flight modes enables much more to be automated:
+\begin{itemize}
+\item \config{screenpages} The InfoBoxes may be set up differently for 
+each flight mode. (see section \ref{sec:infoboxandpages})
+\item \config{circlingzoom} Change zoom level between circling and other 
+flight modes (this is called `circling zoom', see section\ref{sec:zooming}).
+\item \config{variogauge} Switch the vario gauge's reading between Vario 
+(gross climb rate) and airmass lift around you (net) whilst cruising 
+(see section \ref{sec:variometer}).
+\item \config{thermalassistant} When in circling mode, invoke the 
+`thermal assistant', a small polar diagram depicting the updraft over 
+circular course (see section \ref{sec:thermal-assistant}).
+\item \config{traildrift} Switch to a so-called drift compensation, 
+drawing a wind-compensated trail of the circles you fly to better depict 
+wind shear (see section \ref{sec:trail}). 
+\end{itemize}
 
-In addition to these display modes, an auxiliary set of InfoBoxes may
-be displayed in any flight mode.  This is useful if the pilot has
-information he wants to be able to view no matter what mode the
-glide computer is in.  This is accessed from the menu,
-\menulabel{\bmenu{Info 2}\blink\bmenut{Info}{\it MySet}}
-which toggles between the normal mode-specific InfoBoxes and
-the auxiliary set of InfoBoxes.
-
-Final glide mode replaces the Cruise mode as soon as the glider is
-above the final glide path. The required altitude depends most
-importantly on the adjusted MC value, but also the ground clearance is
-considered. On entering a thermal while in Final glide mode XCSoar
-will switch to the Circling display and back to the Final glide
-display once the thermal is left again and the final glide condition
-is still met (i.e. the glider is still above the final glide path,
-considering MC setting and terrain). The potential of having the Final
-glide mode is obvious when flying short tasks in which the aircraft
-may well be above final glide turning the penultimate waypoint.
+Take notice, that this list is just an excerpt from an entirety of 
+switchable items. You will find numerous dependencies conducted by the 
+actual flight mode, whilst further reading this manual. Please pay 
+attention to, because the flight mode concept is one of XCSoars 
+fundamental basics. Another very basic scheme deals with how to structure 
+informations to be displayed at once. These informations are grouped in 
+\emph{screen pages}, easily turned by a swipe gesture, pushing a button, 
+or, as you have read recently, by XCSoar's flight mode. Further details 
+are given in section \ref{sec:infoboxandpages} "Infoboxes and screen 
+pages".\config{screenpages}
 
 
 \section{MacCready setting}
@@ -85,10 +133,10 @@ The MacCready setting may be adjusted several ways:
 \item When connected to a supported intelligent variometer, adjusting
   the MacCready setting on the variometer will change the setting
   in XCSoar according to the devices synchronisation configuration (see 
-  section~\ref{conf:comdevices}).
+  section.\config{comdevices}
 \end{itemize}
 In addition, an automatic MacCready mode is available as described in
-Section~\ref{sec:auto-maccready}.
+section~\ref{sec:auto-maccready}.
 
 
 \section{Glide polar}
