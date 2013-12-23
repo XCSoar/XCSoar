@@ -1,42 +1,94 @@
 \chapter{User Interface}\label{cha:interface}
-This chapter describes the fundamental user interface concepts used by
-XCSoar, and is intended as an overview.  More detailed descriptions
-are given in following chapters.
-
-\begin{center}
+\begin{figure}[h]
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/plain.png}
-\end{center}
+\caption{Typical XCSoar main screen layout}
+\end{figure}
 
-The XCSoar display is composed of several parts:
+This chapter describes the fundamental user interface concepts used by 
+XCSoar, and is intended as an overview. The \emph{main screen} covers much of 
+the information needed during normal flight.  Typically, the main screen is 
+composed of the moving map and infoboxes. For several reasons - not being the 
+scope of an introduction - you have a choice of using several main screens 
+in-flight, named \emph{screen pages}.
+
+Screen pages are easily accessed by a horizontal swipe gesture just like 
+turning pages of a book or button push, depending on the hardware you use. 
+With screen pages you are enabled to compose several main screens to be used 
+advantageously in different situations in-flight. Simply speaking, you are 
+enabled to use appropriate information in different \emph{use cases}, to be 
+accessed quite simply and fast. 
+
+Whenever actual situations are worthy of grabbing the pilot's attention, an 
+\emph{overlay} is put in front of the main screen. This happens especially 
+when urgent reaction by the pilot is required as are the situation of a 
+possible collision or an entering of a restricted airspace expected to happen
+soon.
+
+Evidently, menu buttons and menu screens are overlays too, and there are many 
+more. As a result, the elements put on each other form a display stack with 
+the main screen representing the base of it. More detailed descriptions are 
+given in following chapters.
+
+
+
+\section{Display elements}
+\subsection*{Main screen and screen pages}
+Eyery screen page out of XCSoar's screen page's ensemble is composed of several 
+parts:
 \begin{description}
-\item[Map area] The bulk of the screen is dedicated to the GPS moving map
-display. Various symbols relating to glide computer information are overlaid 
-on the map area. Icons and text may appear along the lower edge of the screen
-to indicate status of connected devices, operating modes etc.
+\item[Main area] The bulk of the screen typically is dedicated to the GPS moving 
+map display. Various symbols relating to glide computer information are overlaid 
+the map area. Icons and text may appear along the lower edge of the screen
+to indicate status of connected devices, flight modes etc.
+Following the development process of XCSoar there is an increasing number of 
+items that may be chosen for display in the main area, which are gauges 
+Flarm Radar, Thermal Assistant, and Horizon (as is with Version 6.7.2, 
+Dec. 2013).
 \item[InfoBoxes] A grid of data values is displayed usually either along
 the top and bottom of the screen (portrait display) or to the right of the
 screen (landscape display).  These so-called InfoBoxes display data from the
-GPS and other input devices as well as data calculated by XCSoar.
+GPS and other input devices as well as data calculated by XCSoar. Further, 
+Infoboxes can display even gauges and certain graphs.
+\item[Bottom area] At the screen's bottom, XCSoar is able to draw a cross 
+section of terrain and airspaces in direction of your heading. (There might be 
+more to come after Dec. 2013)
+\end{description}
+
+\subsection*{Overlays}
+\begin{description}
 \item[Gauges]  Gauges provide instrumentation displays. All gauges are optional
 and some may only have meaningful information displayed when XCSoar is
 connected to a supported instrument.
+A gauge overlay is either permanently drawn or is invoked by several 
+conditions.  E.g. the thermal assistant is shown, when XCSoar enters circling 
+mode. The Flarm radar is invoked, whenever a probable collision is detected. 
+Permanently overlayed gauges are the final glide bar as well as the vario bar 
+amongst others.
 \item[Button labels and menus] Hardware buttons on the device running XCSoar
 can be used to bring up and navigate smaller on-screen menus that are
 typically laid out such that menu items can be selected by pressing the
 button adjacent to the item.  If the device has a touch screen, the menu
 items can be selected by touching them.  These buttons are drawn in black
 text on a grey background.
-\item[Status messages] Text is displayed over the map area in status message
+\item[Status messages] Text is displayed over the screen in status message
 boxes.  This text is used to present detailed information to the pilot when
 certain events occur.
 \item[Dialogue windows] Larger dialogue windows, usually containing graphics and
 buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
 \item[Main menu] The main menu is accessible by double tapping the map area or
-InfoBoxes as well as through gesture\gesture{Down - Up}. If the menu buttons are
-not pressed after a specified time, they disappear again so as to not obscure the map area.
+InfoBoxes as well as through gesture. If the menu buttons are not pressed after
+\gesture{Down - Up} a specified time, they disappear again so as to not obscure 
+the map area.
 \end{description}
 
+\subsection*{Classic vario gauge}
+As said above, gauges might be displayed in different ways, either as an 
+infobox, overlay, or even in the main area. The traditional variometer gauge is 
+different. This needle-style gauge is invoked permanently by choosing an infobox 
+layout including the variometer on the right side of the other infoboxes. 
+
+\section{Interaction}
 There are several ways to interact with XCSoar:
 \begin{itemize}
 \item Touching certain map elements
@@ -358,7 +410,7 @@ A selection of key dynamic menu items is presented below:
 \end{description}
 
 
-\section{InfoBoxes and screen pages}
+\section{InfoBoxes and screen pages}\label{sec:infoboxandpages}
 
 The information displayed in the InfoBox fields can be selected from a
 wide variety of options (listed in Chapter~\ref{cha:infobox}). These
@@ -374,24 +426,78 @@ InfoBoxes below the map display.
 
 A typical landscape layout has 9 InfoBoxes and the variometer gauge 
 to the right of the map display. 
- 
-For larger displays are up to 24 InfoBoxes on one screen page possible.
+For larger displays up to 24 InfoBoxes may be displayed simultaneously.  
+
+In order to gain clarity, the less infoboxes you choose to be displayed at once, 
+the faster your reading will be. On the other hand, there are much too many 
+InfoBox options a pilot would hardly reject. The number of possible InfoBox 
+options already exceeded one hundred. That is why XCSoar offers two ways of 
+managing even more options than Info\emph{boxes} count.
+
+Depending on your flight's state, whether you are circling or cruising, you can 
+let XCSoar change the content of each single InfoBox. As an example you might 
+change the display of the actual average climb whilst circling to speed to fly 
+when cruising. The switch is derived automatically by entering different 
+\emph{flight modes} (see section \ref{sec:flightmodes}) executing a switch to 
+another \emph{InfoBox set}.
+
+Further, you can use screen pages to change InfoBox content manually, by 
+assigning different Infobox sets to different pages (see following section).
+
+To gain access to automatic switching InfoBoxes dependent on the flight mode, 
+just let XCSoar run with it's pre-configured setup from installation. To set up 
+your personal version of Infoboxes go through the following procedure.
+\begin{description}
+\item[InfoBox geometry] Choose a basic Infobox geometry or layout.  This basic 
+layout is maintained through any changes in-flight, affecting InfoBox content 
+only.\config{interface-appearance}
+\item[Choose Infobox set "Auto"] Configure at least one screen page with the 
+choice of Infoboxes "Auto". As can be seen on the corresponding configuration 
+screen, there are more screen pages pre-defined. \config{screenpages}  These 
+others are not needed to gain automatic switches by flight mode. They are for \emph{manually} turning through the screens defined by pages. 
+\item[Define InfoBox sets] Put together the Infobox content you want to be 
+displayed in three Infobox sets called "Circling", "Cruise", and "FinalGlide" 
+respectively.\config{infobox_sets}
+\end{description}  
 
 
-\subsection*{Pages with different InfoBox sets}
+\subsection*{Screen pages with different InfoBox sets}
 
 XCSoar allows the pilot to define various sets of InfoBoxes that are 
-appropriate to various stages of flight (e.g. when circling in a thermal, 
-flying between thermals, on final glide, etc.). XCSoar can be configured 
-to automatically switch from one screen page to another based on the mode 
-of flight, or you can manually roll through the various pages, including 
-one with a full-screen map and no InfoBoxes at all. Thus a screen page 
-consists of a InfoBox set and specific map appearance, that includes 
-map orientation and scale.
+appropriate for "normal" states of flight.  Assuming circling, 
+cruising, or final glide as normal, XCSoar can switch corresponding Infobox 
+sets automatically. Perfectly done.
+
+As you might imagine, there are countless cases, you wished you had another 
+ensemble of information displayed at once.  For all of these more or less 
+special situations you can define up to eight screen pages, reflecting the 
+actual \emph{use case}. Just to draw a brief sketch of the possibilities 
+introduced by the concept of screen pages, a few use cases are given. 
+\label{par:use_case}
+\begin{description}
+\item[Familiarisation] Especially if you are a beginner, you might study 
+computed values in-flight in advance of placing them in your "normal" InfoBox 
+ensemble - just to get familiar with the reading. To do so, create a new 
+Infobox named "test" to be placed on a additional screen page brought in. In 
+any case you can go back to the screen you know by "turning a page".
+\item[Competition] If you are a pilot scratching the edge, you might want to 
+gain benefit of XCSoar's numerous task- and competition-related computations. 
+In order to get them related to the competition's phases, you might like the 
+idea of defining two special use cases with pages for the phase before start, 
+another one for whilst racing.  If you are in search for a specific value to 
+be displayed, give it a try in chapter \ref{cha:infobox} "Infobox reference". 
+There is a big chance you will find it.
+\item[On the ground] As a manager on duty you might use a screen page, showing 
+the "Flarm Radar" solely.  This might happen on a PC screen running XCSoar 
+being connected to a Flarm receiver.
+\end{description}
+
+Whatever you would like to display, take into account the use case and screen 
+pages concept.
 
 \gesture{Right or Left} 
-To toggle through the various InfoBox pages, using the left/right cursor 
-keys (Altair), or by gestures (touch-screen).
+To go through the various screen pages, use the left/right cursor 
+keys (Altair), or gesture left/right (touch-screen).
 
 
 \subsection*{Modifying InfoBox content}
