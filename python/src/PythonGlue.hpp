@@ -96,7 +96,11 @@ PyTypeObject xcsoar_Flight_Type = {
    */
 };
 
+/* xcsoar methods */
+static PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs);
+
 static PyMethodDef xcsoar_methods[] = {
+  {"encode", (PyCFunction)xcsoar_encode, METH_VARARGS | METH_KEYWORDS, "Encode a list of numbers."},
   {NULL, NULL, 0, NULL}
 };
 

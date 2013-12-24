@@ -77,6 +77,7 @@ PYTHON_SOURCES = \
 	$(PYTHON_SRC)/Flight/FlightTimes.cpp \
 	$(PYTHON_SRC)/Flight/DouglasPeuckerMod.cpp \
 	$(PYTHON_SRC)/Flight/AnalyseFlight.cpp \
+        $(PYTHON_SRC)/Tools/GoogleEncode.cpp \
 	$(PYTHON_SRC)/PythonConverters.cpp \
 	$(PYTHON_SRC)/PythonGlue.cpp
 PYTHON_LDADD = $(DEBUG_REPLAY_LDADD)

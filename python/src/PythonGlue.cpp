@@ -29,6 +29,7 @@
 #include "Flight/Flight.hpp"
 #include "Time/BrokenDateTime.hpp"
 #include "Flight/IGCFixEnhanced.hpp"
+#include "Tools/GoogleEncode.hpp"
 
 #include <cstdio>
 #include <vector>
@@ -403,6 +404,111 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   PyObject *py_performance = Python::WritePerformanceStats(phase_totals);
   PyDict_SetItemString(py_result, "performance", py_performance);
   Py_DECREF(py_performance);
+
+  return py_result;
+}
+
+PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
+  PyObject *py_list,
+           *py_method = PyString_FromString("unsigned");
+  double floor_to = 1;
+  bool delta = true;
+
+  static char *kwlist[] = {"list", "delta", "floor", "method", NULL};
+
+  if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|idO", kwlist,
+                                   &py_list, &delta, &floor_to, &py_method)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
+    Py_RETURN_NONE;
+  }
+
+  if (!PySequence_Check(py_list)) {
+    PyErr_SetString(PyExc_TypeError, "Expected a list.");
+    Py_RETURN_NONE;
+  }
+
+  Py_ssize_t num_items = PySequence_Fast_GET_SIZE(py_list);
+
+  unsigned dimension;
+  if (PySequence_Check(PySequence_Fast_GET_ITEM(py_list, 0))) {
+    dimension = PySequence_Size(PySequence_Fast_GET_ITEM(py_list, 0));
+  } else {
+    dimension = 1;
+  }
+
+  enum Method { UNSIGNED, SIGNED, DOUBLE } method;
+
+  if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "unsigned") == 0)
+    method = UNSIGNED;
+  else if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "signed") == 0)
+    method = SIGNED;
+  else if (PyString_Check(py_method) && strcmp(PyString_AsString(py_method), "double") == 0)
+    method = DOUBLE;
+  else if (!PyString_Check(py_method))
+    method = UNSIGNED;
+  else {
+    PyErr_SetString(PyExc_TypeError, "Can't parse method.");
+    Py_RETURN_NONE;
+  }
+
+  GoogleEncode encoded(dimension, delta, floor_to);
+
+  for (Py_ssize_t i = 0; i < num_items; ++i) {
+    PyObject *py_item = PySequence_Fast_GET_ITEM(py_list, i);
+
+    if (dimension > 1) {
+      for (unsigned j = 0; j < dimension; ++j) {
+
+        if (method == UNSIGNED) {
+          if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
+            PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+            Py_RETURN_NONE;
+          }
+          encoded.addUnsignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
+        } else if (method == SIGNED) {
+          if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
+            PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+            Py_RETURN_NONE;
+          }
+          encoded.addSignedNumber(PyInt_AsLong(PySequence_Fast_GET_ITEM(py_item, j)));
+        } else if (method == DOUBLE) {
+          if (!PyNumber_Check(PySequence_Fast_GET_ITEM(py_item, j))) {
+            PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+            Py_RETURN_NONE;
+          }
+          encoded.addDouble(PyFloat_AsDouble(PySequence_Fast_GET_ITEM(py_item, j)));
+        }
+
+      }
+    } else {
+
+      if (method == UNSIGNED) {
+        if (!PyNumber_Check(py_item)) {
+          PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+          Py_RETURN_NONE;
+        }
+        encoded.addUnsignedNumber(PyInt_AsLong(py_item));
+      } else if (method == SIGNED) {
+        if (!PyNumber_Check(py_item)) {
+          PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+          Py_RETURN_NONE;
+        }
+        encoded.addSignedNumber(PyInt_AsLong(py_item));
+      } else if (method == DOUBLE) {
+        if (!PyNumber_Check(py_item)) {
+          PyErr_SetString(PyExc_TypeError, "Expected numeric value.");
+          Py_RETURN_NONE;
+        }
+        encoded.addDouble(PyFloat_AsDouble(py_item));
+      }
+
+    }
+  }
+
+  Py_DECREF(py_list);
+
+  // prepare output
+  PyObject *py_result = PyString_FromString(encoded.asString()->c_str());
 
   return py_result;
 }
