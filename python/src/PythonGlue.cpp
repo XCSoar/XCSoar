@@ -408,6 +408,85 @@ PyObject* xcsoar_Flight_analyse(Pyxcsoar_Flight *self, PyObject *args, PyObject 
   return py_result;
 }
 
+PyObject* xcsoar_Flight_encode(Pyxcsoar_Flight *self, PyObject *args) {
+  PyObject *py_begin = NULL,
+           *py_end = NULL;
+
+  if (!PyArg_ParseTuple(args, "|OO", &py_begin, &py_end)) {
+    PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
+    Py_RETURN_NONE;
+  }
+
+  int64_t begin = 0,
+          end = std::numeric_limits<int64_t>::max();
+
+  if (py_begin != NULL && PyDateTime_Check(py_begin))
+    begin = Python::PyToBrokenDateTime(py_begin).ToUnixTimeUTC();
+
+  if (py_end != NULL && PyDateTime_Check(py_end))
+    end = Python::PyToBrokenDateTime(py_end).ToUnixTimeUTC();
+
+  GoogleEncode encoded_locations(2, true, 1e5),
+               encoded_levels,
+               encoded_times,
+               encoded_altitude,
+               encoded_enl;
+
+  DebugReplay *replay = self->flight->Replay();
+  while (replay->Next()) {
+    if (replay->Level() == -1) continue;
+
+    const MoreData &basic = replay->Basic();
+    const int64_t date_time_utc = basic.date_time_utc.ToUnixTimeUTC();
+
+    if (date_time_utc < begin)
+      continue;
+    else if (date_time_utc > end)
+      break;
+
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    IGCFixEnhanced fix;
+    fix.Apply(basic, replay->Calculated());
+
+    encoded_locations.addDouble(fix.location.latitude.Degrees());
+    encoded_locations.addDouble(fix.location.longitude.Degrees());
+
+    encoded_levels.addUnsignedNumber(replay->Level());
+    encoded_times.addSignedNumber(basic.time);
+    encoded_altitude.addSignedNumber(fix.gps_altitude);
+    encoded_enl.addSignedNumber(fix.enl);
+  }
+
+  delete replay;
+
+  // prepare output
+  PyObject *py_locations = PyString_FromString(encoded_locations.asString()->c_str());
+  PyObject *py_levels = PyString_FromString(encoded_levels.asString()->c_str());
+  PyObject *py_times = PyString_FromString(encoded_times.asString()->c_str());
+  PyObject *py_altitude = PyString_FromString(encoded_altitude.asString()->c_str());
+  PyObject *py_enl = PyString_FromString(encoded_enl.asString()->c_str());
+
+  PyObject *py_result = PyDict_New();
+
+  PyDict_SetItemString(py_result, "locations", py_locations);
+  PyDict_SetItemString(py_result, "levels", py_levels);
+  PyDict_SetItemString(py_result, "times", py_times);
+  PyDict_SetItemString(py_result, "altitude", py_altitude);
+  PyDict_SetItemString(py_result, "enl", py_enl);
+
+  Py_DECREF(py_locations);
+  Py_DECREF(py_levels);
+  Py_DECREF(py_times);
+  Py_DECREF(py_altitude);
+  Py_DECREF(py_enl);
+
+  return py_result;
+}
+
+
 PyObject* xcsoar_encode(PyObject *self, PyObject *args, PyObject *kwargs) {
   PyObject *py_list,
            *py_method = PyString_FromString("unsigned");

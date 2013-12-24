@@ -71,6 +71,8 @@ for dtime in times:
   fixes = flight.path(takeoff['time'], landing['time'])
   print xcsoar.encode([(row[2]['longitude'], row[2]['latitude']) for row in fixes], floor=10e5, method="double")
 
+  pprint(flight.encode())
+
 del flight
 
 
