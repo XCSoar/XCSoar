@@ -50,7 +50,7 @@ map ahead of the glider.  This position is adjustable in the configuration
 
 \section{Zoom and map scale}\label{sec:zooming}
 
-To change the scale of the map, for PC, PNA, or Pocket PC:
+To change the scale of the map, depending on the hardware You use:
 \begin{enumerate}
 \item Tap/click on a blank part of the map to highlight the map if it is not
 already selected.
@@ -58,9 +58,8 @@ Then use mouse wheel, or the Pocket PC up/down key to either zoom
 in or out.
 \item A PNA with a button wheel let you also change the zoom. 
 \item Android devices have the +/- rocker that let you change the zoom. 
-\gesture{Up/Down}
 \item You can also gesture to change the zoom level. Gesture 
-`{\it Up}' zooms in, `{\it Down}' zooms out.
+Up (see left) zooms in, Down zooms out.\gesturespec{up}
 \item Or select the function from the menu.
 \begin{quote}
 \bmenu{Display 1}\blink\bmenu{Zoom In} and \bmenu{Zoom Out}
@@ -76,6 +75,7 @@ of the map display.
 Compaq Aero Users. If you enable the Compaq Aero Game Keys (On the
 Q-menu) the centre two front buttons become the up/down keys.
 
+\subsection*{Circling Zoom}
 There is a facility to have two zoom settings; one when the glider is
 in circling mode, and one in the cruise or final mode.  This is the `{\it Circling zoom}' 
 option in the \config{circlingzoom} configuration settings.  
@@ -84,16 +84,23 @@ display size. When the user zooms in or out, it affects the current
 mode's zoom setting only, so when leaving the mode the previous mode's
 zoom setting is used.  If `{\it Circling Zoom}' is not enabled,
 there is only a single zoom level.
+This leads to different zoom levels being preserved to be managed manually, 
+independent of the following Auto Zoom settings.
 
+\subsection*{Auto Zoom}
+Auto Zoom automatically zooms in when approaching a waypoint to keep
+the waypoint at a reasonable screen distance. When \emph{Auto Zoom} is active,
+'AUTO' appears next to the map scale.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
-`{\it Auto Zoom}' automatically zooms in when approaching a waypoint to keep
+
+To invoke Auto Zoom use the gesture \gesturespec{ud}
+or menu path depicted to the left. 
+Switching back to manual zoom is simply done by using the same menu path
+or - just zooming manually, no matter whether done via menu or gesture. 
 \menulabel{\bmenu{Display 1}\blink\bmenut{Zoom}{Auto}}
-the waypoint at a reasonable screen distance. When `{\it Auto Zoom}' is active,
-'AUTO' appears next to the map scale. The user can still zoom
-in and out if desired, zoom will be switch to manual control automatically.
 
 When a waypoint changes (automatically, via the task selector, or by
-manually switching waypoints), `{\it Auto Zoom}' adjusts the zoom level
+manually switching waypoints), \emph{Auto Zoom} adjusts the zoom level
 automatically so that the next waypoint is visible on the map.
 
 During circling, if a thermal has been detected, then the map is centered about
@@ -105,9 +112,8 @@ A pan mode allows the user to explore areas beyond the glider.  This
 is particularly useful when task planning.
 \begin{enumerate}
 \menulabel{\bmenu{Display 1}\blink\bmenu{Pan On}}
-\item Enable pan mode by button menu, by gesture, or, on Android devices, 
-  by a two finger touch and swish over the map.
-\gesture{Up - Right - Down - Left}
+\item Enable pan mode by button menu or by gesture.  The gesture for this is moving your fingertip up, right, down, left, supposed to form a "P".
+\gesturespec{urdl}
 \item The map can then be panned by dragging the screen or using the cursor
   keys.  For Altair, panning is performed with the inner/outer rotary knob.
 \item When done, pan mode has to be disabled manually, by pressing `{\it Pan Off}' 
@@ -187,19 +193,46 @@ encoded in the appearance of it's icon.
   include this information.  
 \end{enumerate}
 
-XCSoar continually calculates which landing points are within gliding
-range using the current wind estimate.  The estimated arrival altitude
-{\em above the arrival safety height} of reachable landable points is
-displayed next to the waypoint.  This arrival altitude is calculated
-with the glider performance and MacCready setting configurable as
-either that of the task\config{reachpolar}, or at a safety MacCready value.
+\subsection*{Landables in Reach}
+Next to landables an estimated arrival altitude
+\emph{above the arrival safety height of reachable landable} points is
+displayed next to the waypoint. This feature is one of the most powerful out 
+of XCSoar's capabilities. The arrival altitude is calculated highly 
+configurable by XCSoar's \emph{glide computer} with parameters taken into 
+account being glider performance (polar), MacCready setting, wind, terrain 
+clearance, and - apparently - safety heights' values.  With all of it being 
+configurable, there is enough room for failure, so please:
+
+Unless you will have fully understood the glide computer's concepts, you 
+\warning
+better stay with XCSoar's pre-configuration (and in no way judge readings as 
+heavenly approved).
+
+It is up to the pilot to always interpret readings and watch values trending 
+over time.  However, having set up the glide computer following chapter 
+\ref{cha:glide} the \emph{display} of estimated reach altitudes, drawn beside 
+landables in reach may take into account terrain or not or display both.
+\config{arrivalheight}
+
+Another option is to display the required glide ratio next to a landable in 
+reach. This calculation is simply derived by the glider's actual distance to 
+landables divided by the height difference between actual height and 
+landable's height.  Again, the safety height is added to the landable's 
+height, but nothing else taken into account: no wind, no polar, no MacCready 
+settings, just geometry. The concept of required glide ratios is a widely 
+discussed concept, said as to be a very robust one.
+
+\tip Keep in mind a strong relationship of displays of \emph{reach} and 
+settings in the glide computer.
 
 \subsection*{Non-Landables}
 As far as your waypoint file contains information on the nature of the 
 non-landable waypoints, the map will then display specific icons accordingly. 
-The table contains a collection of the currently supported map icons:
+The table contains a collection of the currently supported map icons (see 
+figure \ref{fig:nonlandables}).
 
-\begin{center}
+\begin{figure}[h]
+\centering
 \vspace{2.5cm}
 \begin{tabular}{ccccccccc}
 \begin{rotate}{60}Simple waypoint\end{rotate} &
@@ -223,8 +256,9 @@ The table contains a collection of the currently supported map icons:
 \includegraphics[width=0.8cm]{icons/map_bridge.pdf} \\
 
 \end{tabular}
-\end{center}
-
+\caption{non-landables}\label{fig:nonlandables}
+\end{figure}
+\pagebreak
 
 \section{Active task}
 
