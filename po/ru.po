@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-12-19 22:41+0000\n"
-"Last-Translator: Viktor P <alikhh@rambler.ru>\n"
+"PO-Revision-Date: 2013-12-23 14:05+0000\n"
+"Last-Translator: Aleksander Kharchuk <Aleks22006@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-20 11:20+0000\n"
-"X-Generator: Launchpad (build 16872)\n"
+"X-Launchpad-Export-Date: 2013-12-30 09:08+0000\n"
+"X-Generator: Launchpad (build 16877)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -7002,6 +7002,10 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
+"Файл с точками, содержащий специальные путевые точки, для которых "
+"производятся дополнительные вычисления (вычисления высоты прибытия на экране "
+"карты происходит всегда). Полезно для путевых точек, для которых известны "
+"надёжные тепловые источники (например, powerplants) или горные перевалы."
 
 #: src/Dialogs/Settings/Panels/SiteConfigPanel.cpp:111
 #: Data/Input/default.xci:882
@@ -7658,11 +7662,11 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:266
 msgid "Contours"
-msgstr ""
+msgstr "Контуры"
 
 #: src/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp:267
 msgid "If enabled, draws contour lines on the terrain."
-msgstr ""
+msgstr "Если включено, отображает контурные линии на местности."
 
 #: src/Dialogs/Settings/Panels/UnitsConfigPanel.cpp:126
 msgid "Preset"
@@ -8045,12 +8049,12 @@ msgstr ""
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:146
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "Воздушный шар"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:162
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:186
 msgid "Tracking Interval"
-msgstr ""
+msgstr "Интервал трекинга"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:166
 msgid "Track friends"
@@ -8058,23 +8062,23 @@ msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:167
 msgid "Download the position of your friends live from the SkyLines server."
-msgstr ""
+msgstr "Загрузите онлайн позицию Ваших друзей с сервера SkyLines"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 msgid "Vehicle Type"
-msgstr ""
+msgstr "Тип транспортного средства"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:188
 msgid "Type of vehicle used."
-msgstr ""
+msgstr "Тип используемого транспортного средства"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:191
 msgid "Server"
-msgstr ""
+msgstr "Сервер"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:195
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:196
 msgid "Password"
@@ -8082,16 +8086,16 @@ msgstr "Пароль"
 
 #: src/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp:42
 msgid "Radius of the OZ cylinder."
-msgstr ""
+msgstr "Радиус OZ цилиндра"
 
 #: src/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp:42
 msgid "Width of the start/finish gate."
-msgstr ""
+msgstr "Ширина страртовых/финишных ворот"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:47
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:42
 msgid "Radius of the OZ sector."
-msgstr ""
+msgstr "Радиус OZ сектора"
 
 #: src/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp:57
 msgid "Start radial"
@@ -8121,7 +8125,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Widgets/KeyholeZoneEditWidget.cpp:54
 msgid "Angle"
-msgstr ""
+msgstr "Угол"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:155
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:277
@@ -8140,7 +8144,7 @@ msgstr "Точка поворота"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:367
 msgid "Validation Errors"
-msgstr ""
+msgstr "Ошибки валидации"
 
 #: src/Dialogs/Task/Manager/TaskManagerDialog.cpp:369
 msgid ""
@@ -8164,7 +8168,7 @@ msgstr "Редактировать точку"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:167
 msgid "Make Finish"
-msgstr ""
+msgstr "Обозначьте финиш"
 
 #: src/Dialogs/Task/Manager/TaskEditPanel.cpp:176
 msgid "Clear All"
@@ -8192,7 +8196,7 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:232
 msgid "Minimum AAT task time in minutes."
-msgstr ""
+msgstr "Минимальное  время AAT задачи в минутах."
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:235
 msgid "Arm start manually"
@@ -8204,11 +8208,11 @@ msgstr ""
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:241
 msgid "Start open time"
-msgstr ""
+msgstr "Время открытия старта"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:243
 msgid "Start close time"
-msgstr ""
+msgstr "Время закрытия старта"
 
 #: src/Dialogs/Task/Manager/TaskPropertiesPanel.cpp:277
 msgid "FAI start / finish rules"
@@ -8360,7 +8364,7 @@ msgstr "Удалить"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:151
 msgid "(Add Alternate Start)"
-msgstr ""
+msgstr "(Добавить альтернативный старт)"
 
 #: src/Dialogs/Task/OptionalStartsDialog.cpp:244
 msgid "Alternate Start Points"
@@ -8368,7 +8372,7 @@ msgstr "Альтерн. старт. точки"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:147
 msgid "Enable Alternate Starts"
-msgstr ""
+msgstr "Включить альтернативный старт"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:150
 msgid "Edit Alternates"
@@ -8377,7 +8381,7 @@ msgstr ""
 #: src/Dialogs/Task/TaskPointDialog.cpp:173
 #: src/Dialogs/Task/TaskPointDialog.cpp:246
 msgid "Task point"
-msgstr ""
+msgstr "Точка задания"
 
 #: src/Dialogs/Task/TaskPointDialog.cpp:178
 msgid "Assigned area point"
@@ -8389,7 +8393,7 @@ msgstr "Удалить \"задачную\" точку?"
 
 #: src/Dialogs/Task/MutateTaskPointDialog.cpp:129
 msgid "Task Point Type"
-msgstr ""
+msgstr "Тип точки задания"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:68
 msgid "Goal"
@@ -8443,7 +8447,7 @@ msgstr "Цилиндр"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:208
 msgid "MAT cylinder"
-msgstr ""
+msgstr "MAT цилиндр"
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:212
 msgid "Keyhole"
@@ -8467,11 +8471,11 @@ msgstr ""
 
 #: src/Dialogs/Task/dlgTaskHelpers.cpp:248
 msgid "Enter a task name"
-msgstr ""
+msgstr "Введите имя задания"
 
 #: src/Dialogs/TimeEntry.cpp:75 src/Dialogs/Weather/RASPDialog.cpp:70
 msgid "Now"
-msgstr ""
+msgstr "Текущее"
 
 #: src/Dialogs/Weather/RASPDialog.cpp:55
 msgid "Field"
@@ -8483,11 +8487,11 @@ msgstr "Прогноз погоды"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:71
 msgid "Audio vario"
-msgstr ""
+msgstr "Звуковой вариометр"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:72
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Эмуляция электронного звукового вариометра"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:75
 msgid "Volume"
@@ -8502,50 +8506,60 @@ msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
 msgstr ""
+"Отключение аудиовыхода, когда текущий подъём находится в определённом "
+"диапазоне около нуля"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:85
 msgid "Min. Frequency"
-msgstr ""
+msgstr "Мин. частота"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at maximum sink rate."
 msgstr ""
+"Тональная частота, которая воспроизводится при максимальной скорости "
+"снижения."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:91
 msgid "Zero Frequency"
-msgstr ""
+msgstr "Нулевая частота"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at zero climb rate."
 msgstr ""
+"Тональная частота, которая воспроизводится при нулевой скороподъёмности."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:97
 msgid "Max. Frequency"
-msgstr ""
+msgstr "Макс. частота"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:98
 msgid "The tone frequency that is played at maximum climb rate."
 msgstr ""
+"Тональная частота, которая воспроизводится при максимальной скороподъёмности."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:106
 msgid "Deadband min. lift"
-msgstr ""
+msgstr "Мин. скороподъёмность нулевой зоны"
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:107
 msgid ""
 "Below this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Ниже этого уровня скороподъёмности варио будет начинать воспроизводить "
+"звуки, если функция ''Нулевой зоны'' разрешена."
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:116
 msgid "Deadband max. lift"
-msgstr ""
+msgstr "Макс. скороподъёмность \"нулевой зоны\""
 
 #: src/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp:117
 msgid ""
 "Above this lift threshold the vario will start to play sounds if the "
 "'Deadband' feature is enabled."
 msgstr ""
+"Выше этого уровня скороподъёмности варио будет начинать воспроизводить "
+"звуки, если функция ''Нулевой зоны''  разрешена."
 
 #: src/Dialogs/Weather/NOAAList.cpp:110 src/Dialogs/Weather/NOAADetails.cpp:74
 msgid "Update"
@@ -8553,33 +8567,34 @@ msgstr "Обновить"
 
 #: src/Dialogs/Weather/NOAAList.cpp:166
 msgid "Airport ICAO code"
-msgstr ""
+msgstr "ICAO код аэропорта"
 
 #: src/Dialogs/Weather/NOAAList.cpp:170
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
+msgstr "Введите четырёхбуквенный код нужной станции"
 
 #: src/Dialogs/Weather/NOAAList.cpp:176
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr ""
+"Пожалуйста, не используйте специальные символы в четырёхзначном коде станции"
 
 #: src/Dialogs/Weather/NOAAList.cpp:210
 #: src/Dialogs/Weather/NOAADetails.cpp:114
 #, c-format
 msgid "Do you want to remove station %s?"
-msgstr ""
+msgstr "Вы хотите удалить станцию %s?"
 
 #: src/Dialogs/Weather/NOAAList.cpp:270 src/Dialogs/Weather/NOAADetails.cpp:88
 #: src/Dialogs/Weather/NOAADetails.cpp:153
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR и TAF"
 
 #: src/Dialogs/Weather/NOAAList.cpp:282
 #: src/Dialogs/Weather/NOAADetails.cpp:167
 msgid "This function is not available on your platform yet."
-msgstr ""
+msgstr "Эта функция ещэ не доступна на Вашей платформе."
 
 #: src/Monitor/TaskAdvanceMonitor.cpp:45
 msgid "In sector, arm advance when ready"
@@ -8595,32 +8610,32 @@ msgstr ""
 
 #: src/Monitor/MatTaskMonitor.cpp:54
 msgid "Add this turn point?"
-msgstr ""
+msgstr "Добавить эту поворотную точку?"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:205
 #, no-c-format
 msgid "Dialog text"
-msgstr ""
+msgstr "Текст диалога"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:207
 #, no-c-format
 msgid "InfoBox titles"
-msgstr ""
+msgstr "Заголовки Инфобоксов"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:209
 #, no-c-format
 msgid "InfoBox values"
-msgstr ""
+msgstr "Значения Инфобоксов"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:213
 #, no-c-format
 msgid "Topography labels, normal"
-msgstr ""
+msgstr "Топографические метки, нормальные"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:216
 #, no-c-format
 msgid "Topography labels, important"
-msgstr ""
+msgstr "Топографические метки, важные"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:218
 #, no-c-format
@@ -8633,15 +8648,15 @@ msgstr "Настройки шрифтов"
 
 #: src/Dialogs/Settings/dlgConfigFonts.cpp:268
 msgid "Font Configuration"
-msgstr ""
+msgstr "Настройка шрифтов"
 
 #: src/Dialogs/Settings/FontEdit.cpp:132
 msgid "Font not found."
-msgstr ""
+msgstr "Шрифт не найден"
 
 #: src/Dialogs/Settings/FontEdit.cpp:142
 msgid "Font face"
-msgstr ""
+msgstr "Начертание шрифта"
 
 #: src/Dialogs/Settings/FontEdit.cpp:153
 msgid "Height"
@@ -8649,7 +8664,7 @@ msgstr "Размер"
 
 #: src/Dialogs/Settings/FontEdit.cpp:154
 msgid "Bold"
-msgstr ""
+msgstr "Жирный"
 
 #: src/Dialogs/Settings/FontEdit.cpp:155
 msgid "Italic"
@@ -8669,16 +8684,16 @@ msgstr ""
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
-msgstr ""
+msgstr "Точка росы"
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "Видимость"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
 msgid "more than %s"
-msgstr ""
+msgstr "более %s"
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
@@ -8729,17 +8744,17 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:48
 #, no-c-format
 msgid "Battery empty delay"
-msgstr ""
+msgstr "Значение разряженной батареи"
 
 #: src/Dialogs/Device/Vega/AlertParameters.hpp:51
 #, no-c-format
 msgid "Interval; battery"
-msgstr ""
+msgstr "Интервал; батарея"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:32
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Шаг"
 
 #: src/Dialogs/Device/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
@@ -8846,7 +8861,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:82
 #, no-c-format
 msgid "Time scale used for vario averager."
-msgstr ""
+msgstr "Временная шкала, используемая для усреднения варио."
 
 #: src/Dialogs/Device/Vega/AudioModeParameters.hpp:86
 #, no-c-format
@@ -9094,7 +9109,7 @@ msgstr ""
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:64
 #, no-c-format
 msgid "Accelerometer"
-msgstr ""
+msgstr "Акселерометр"
 
 #: src/Dialogs/Device/Vega/HardwareParameters.hpp:65
 #, no-c-format
@@ -9208,17 +9223,17 @@ msgstr ""
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:38
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Уровень динамика"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:40
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "Уровень гарнитуры"
 
 #: src/Dialogs/Device/Vega/MixerParameters.hpp:42
 #, no-c-format
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "Срочная мин. громкость"
 
 #: src/Terrain/RasterWeather.cpp:51
 #, no-c-format
@@ -9375,7 +9390,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:4
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:4
 msgid "Team"
-msgstr ""
+msgstr "Группа"
 
 #: Data/Dialogs/dlgTarget_L.xml:26 Data/Dialogs/dlgTarget.xml:8
 msgid "Delta T"
@@ -9383,7 +9398,7 @@ msgstr "Дельта Т"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:13 Data/Dialogs/dlgConfiguration.xml:13
 msgid "Configuration Menu"
-msgstr ""
+msgstr "Меню конфигурации"
 
 #: Data/Dialogs/dlgTaskPoint_L.xml:17 Data/Dialogs/dlgTaskPoint.xml:13
 msgid "Change Type"
@@ -9399,7 +9414,7 @@ msgstr "Время"
 
 #: Data/Dialogs/dlgVario_L.xml:3 Data/Dialogs/dlgVario.xml:3
 msgid "Vario Configuration"
-msgstr ""
+msgstr "Конфигурация варио"
 
 #: Data/Dialogs/dlgAnalysis_L.xml:9 Data/Dialogs/dlgAnalysis.xml:9
 msgid "Calc"
@@ -9417,7 +9432,7 @@ msgstr "Лететь к"
 
 #: Data/Dialogs/dlgVario_L.xml:7 Data/Dialogs/dlgVario.xml:8
 msgid "Demo"
-msgstr ""
+msgstr "Демонстрация"
 
 #: Data/Dialogs/pnlTaskManagerClose.xml:6
 msgid "Revert Changes"
@@ -9499,7 +9514,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1173
 msgid "Setup Plane"
-msgstr ""
+msgstr "Установки планера"
 
 #: Data/Input/default.xci:514 Data/Input/default.xci:1101
 msgid "Topo."
@@ -9537,7 +9552,7 @@ msgstr ""
 #: Data/Input/default.xci:660 Data/Input/default.xci:671
 #: Data/Input/default.xci:718
 msgid "Vega"
-msgstr ""
+msgstr "Вега"
 
 #: Data/Input/default.xci:733
 msgid ""
@@ -9581,7 +9596,7 @@ msgstr ""
 
 #: Data/Input/default.xci:414 Data/Input/default.xci:1061
 msgid "Dropped marker"
-msgstr ""
+msgstr "Пропущенный маркер"
 
 #: Data/Input/default.xci:645 Data/Input/default.xci:1157
 msgid "Raw Logger"
@@ -9609,7 +9624,7 @@ msgstr ""
 
 #: Data/Input/default.xci:855 Data/Input/default.xci:1228
 msgid "Thermal Assistant"
-msgstr ""
+msgstr "Помощник в термике"
 
 #: Data/Input/default.xci:59
 msgid "Above final glide"
@@ -9645,7 +9660,7 @@ msgstr "Настроить Звук"
 
 #: Data/Input/default.xci:773 Data/Input/default.xci:1180
 msgid "FLARM Radar"
-msgstr ""
+msgstr "FLARM радар"
 
 #: Data/Input/default.xci:459 Data/Input/default.xci:965
 #: Data/Input/default.xci:1054
@@ -9662,7 +9677,7 @@ msgstr ""
 
 #: Data/Input/default.xci:732
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Уровень акселерометра"
 
 #: Data/Input/default.xci:473 Data/Input/default.xci:1071
 msgid ""
