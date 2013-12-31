@@ -80,6 +80,7 @@ LATEX2HTML = latex2html
 LATEX2HTML_RUN = $(TEX_VARS) L2HINIT_NAME=$(DOC)/manual/latex2html.config $(LATEX2HTML) -local_icons -verbosity 0 -split 3
 
 MANUAL_PDF = \
+	$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf \
@@ -98,6 +99,14 @@ Handbuch: \
 # without the full XCSoar development chain to compile the XCSoar
 # manual.  It contains all generated files.
 manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
+
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex $(DOC)/manual/en/XCFlashIIconf.tex \
+	$(TEX_INCLUDES_EN) $(FIGURES_BLITZ_DE) $(TEX_INCLUDES) \
+	$(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	# run TeX twice to make sure that all references are resolved
+	$(TEX_RUN) $<
+	$(TEX_RUN) $<
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
@@ -206,6 +215,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(SVG_FIGURES) $(SVG_LOGOS) $(T)/figures/.
 	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/.
 	# Incl. the English original 
+	cp $(DOC)/manual/en/XCSoar-in-a-flash.tex $(DOC)/manual/en/XCFlashIIconf.tex $(T)/en/.
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
 	cp $(FIGURES_EN) $(T)/en/figures/.
 	# Incl. the French translation
@@ -224,7 +234,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
-	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\$(MKDIR) -p output" > $(T)/generate_manuals.sh
+	echo "#!/bin/bash\n\n# This is an example how the manuals get generated\n\n$(MKDIR) -p output" > $(T)/generate_manuals.sh
 	make manual -ns|grep -v mkdir|grep -v touch|sed s#doc/manual#.#g|sed s#output/manual#output#g >> $(T)/generate_manuals.sh
 	chmod +x $(T)/generate_manuals.sh
 	# Copy an example bat file to generate the manuals with MikTex on Windows
