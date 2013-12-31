@@ -1,0 +1,463 @@
+\input{XCFlashIIconf.tex}%configuration and definition of buttons
+
+\setcounter{secnumdepth}{1}
+\renewcommand*{\thesection}{\textsf{\arabic{section}}}
+\begin{document}
+\pagestyle{empty}
+\vspace*{2em}
+\begin{center}
+{\Huge\textbf{XCSoar in a flash}}
+
+\vspace{0.1em}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/blitzlogo.png}
+
+\vspace{4em}
+{\Huge How To\\}
+\vspace{0.3em}
+{\tiny get your personal\\}
+{\Huge Tactical Soaring\\ Assistant\\}
+{\tiny ready for boarding}
+\end{center}
+
+%\setlength{\parskip}{0.5\baselineskip}
+\newpage
+\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
+\pagestyle{fancy}
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\begin{center}
+{\Huge\textbf{XCSoar Checklist}}
+\end{center}
+\section*{Flash {\color[rgb]{.9,.85,0}On}}\label{ch:flashon}
+%%%%%--------------------------------------------------------------------%%%%%
+
+\subsection{\textcolor{blue}{Bring XCSoar into play}file:///home/hjr/projekte/XCSoar/doc/manual/en/XCFlashIIconf.tex
+}
+\begin{itemize}
+\item get hardware and install XCSoar
+\item get appropriate data files of your flight district
+\item tell XCSoar which data files to use
+\item tell XCSoar about the glider's polar \& weight
+\item possibly connect to instruments
+\item finish setup and familiarize
+\item mount hardware
+\item add items listed underneath to your checklists
+\item make "home"
+\end{itemize}
+
+\subsection{\textcolor{blue}{Conduct preflight check, including}}
+\begin{itemize}
+\item setup polar and weight
+\item setup wind and flight parameters (MC, bugs, QNH)
+\item possibly setup a task
+\end{itemize}
+
+\subsection{\textcolor{blue}{Conduct start check, including}}
+\begin{itemize}
+\item Check wind and flight setup once more
+\end{itemize}
+
+\subsection{\textcolor{blue}{Fly}}
+\vspace{1em}
+
+\section*{{\color[rgb]{.9,.85,0}Flash} Off}
+
+\hspace*{1cm} Flashing time too short?\\
+\hspace*{4cm} Just a second...\\
+\hspace*{6cm} flashing time set up to match,\\
+\hspace*{10cm} now proceed:
+
+\setlength{\parskip}{0.3\baselineskip}
+\newpage
+\fancyhead[R]{\includegraphics[angle=0,width={1cm},keepaspectratio='true']{graphics/logo.png}}
+\pagestyle{fancy}
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\section{XCSoar Installation}\label{ch:XCSinstall}
+%%%%%--------------------------------------------------------------------%%%%%
+Identify the appropriate distribution of XCSoar for your hardware and 
+operating system \textsf{(Android, PC, Windows Mobile, PPC2000, PPC2003, Linux)} 
+on \url{http://www.xcsoar.org}.
+In case you choose an install directory other than standard, make sure access 
+rights are set to full/all. Create subdirectory \verb+XCSoarData+ and put all 
+data files there, which are configuration, airspace, waypoints, and the XCM 
+terrain files.
+
+Using the default from installers for Android, Windows Mobile, PC will do the 
+job smoothly.  In order to keep things easy, stay with the defaults. 
+Installation on SD-card ist possible.
+
+\begin{compactitem}
+\item[1.] Download latest XCSoar version released from homepage 
+{\url{http://www.xcsoar.org}} or via Google Play app for Android.
+\item[2.] Download terrain file \verb+name.xcm+ from 
+{\url{http://www.xcsoar.org/download/maps/}}
+corresponding to your flight district.  If \verb+.xcm+-file appears to be 
+corrupt, use another browser. (This is an issue with several versions of 
+internet explorer, desintegrating \verb+.xcm+-files.)
+\item[3.] Download waypoints with XCSoar supporting several file formats 
+\verb+.dat, .cup, .wpz,+ \verb+.wpt+.  However, follow the roads starting with 
+{\url{http://www.xcsoar.org/download/data.html}}.
+\item[4.] Download an airspace file \verb+.txt and/or .sua+.  Again, follow 
+the link last mentioned.
+\end{compactitem}
+
+\subsection{\textcolor{blue}{Run XCSoar for the first time}}
+Run XCSoar. With startup, XCSoar asks you to enter either a real life (fly) or 
+a simulation (sim) mode. In sim mode, you can input speed, heading, and height 
+manually in order to do some exercising on the ground. In fly mode, instrument 
+input of already connected devices is fed to XCSoar. Remember this when 
+attempting to connect to instruments. In sim mode, all connections are cut 
+off.
+
+Start fly mode. Tell XCSoar which files to use. Invoke system setup via main 
+menu button Config.
+
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Site Files}\blink\bmw{Site files}\\\end{flushleft}
+\index{Map database}\index{Waypoints}\index{Airspaces}
+
+Choose appropriate files in dialog. If no files show up, again make sure files 
+reside in subdirectory \verb+/XCSoarData+.
+
+\subsection{\textcolor{blue}{File Manager}}\index{Filemanager}
+\textbf{please note:} XCSoar's File Manager on Android requires Android 2.2 
+and up!!!
+
+If the platform you choose supports direct access to the internet, you can 
+easily download and maintain datafiles directly. Touch 
+
+\begin{flushleft}\hspace*{1cm}\konf{2}{File}{Manager}\\\end{flushleft}
+A list of already downloaded files appears.  Doing this for the very first 
+time might result in displaying an empty list. Proceed with\blink Add.
+
+A huge list of files shows up. If not, check internet connection. The XCSoar 
+team maintains this list of files and corresponding url, read in after 
+touching \blink Add in order to give you a plain list of possible downloads 
+worldwide. (Take notice, that file names of equal files might differ to names, 
+downloaded via other ways.)
+Selecting files will start downloading immediatelay. To add more files, repeat 
+\blink Add.
+Updating files is done via \blink Download on the same menu screen.  As a 
+quick start, download terrain, airspace and waypoint files apiece only. With 
+some maps, e.g. depicting thermal spots and areas it might take some time to 
+understand setups. For further info please refer to the main manual or 
+\url{http://www.glidinghotspots.eu/} 
+
+\subsection*{\textcolor{blue}{Language ( Fonts, Sounds)}}
+Typically, XCSoar follows the operation system's language setting. If you do 
+prefer another, there are 28 languages available as is with Dec. 2013 (sorry 
+Bavarian, Boston and other people, dialects are not to be included ever):
+
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{Language, Input}\\\end{flushleft}
+
+This menu page also allows for changing fonts, and, after having prepared a 
+special data file do much more by defining events.  However, it is not 
+supposed to be the scope of a quickstart manual, just an outlook.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Finish Configuration Setup}
+%%%%%--------------------------------------------------------------------%%%%%
+\subsection*{\textcolor{blue}{Setup Polar}}
+XCSoar comes with a comprehensive list of predefined polars.  To choose, edit, 
+or store your customized polar, invoke the plane configuration by 
+\begin{flushleft}\hspace*{1cm}\konf{2}{System}{}\blink\bmw{Plane}\\\end{flushleft}
+The planes' indexes in this compilation is taken from the official DAEC list 
+of 2012.
+
+\subsection*{\textcolor{blue}{Connect Logger, Flarm, Vario etc\dots NMEA setup}}
+To run, XCSoar needs live data from a GPS receiver at least. You have to tell 
+XCSoar, which one to use, even built-in hardware. To connect to, use
+\begin{flushleft}\hspace*{1cm}\konf{2}{Devices}{}\blink\bmw{edit}\\\end{flushleft}
+Many portable devices are equipped with such hardware.  However, it is always 
+a good idea to connect to one or more external devices:
+
+\begin{compactitem}
+\item A specialized GPS receiver gains much better reception providing much 
+better data for measures and calclulations.
+\item An airspeed indicator allows quick and exact wind estimates without 
+circling.
+\item A vario improves the thermal assistant.
+\item A task can be declared to an IGC logger, and after landing, the 
+flight log can be downloaded.
+\item Some varios allow synchronising the MacCready setting with XCSoar.
+\item Flarm (and even ADS-B input) provide informations and stati of others 
+around you - and gives you collision detection.
+\end{compactitem}
+
+\subsection*{\textcolor{blue}{NMEA}}
+Wondering?  NMEA stands for `National Marine Electronics Association', having 
+reached a status of a worldwide standard. The standard defines electrical 
+interfaces as well as protocols used for transmitting navigational data and 
+much more. As is with nautical mile, aviators adopted maritime things once 
+more. So do their instruments...
+
+\subsection*{\textcolor{blue}{Internal GPS}}
+The GPS receiver of your particular mobile device might be a really good one. 
+For several reasons carefully check, whether this holds true in-flight:
+
+\begin{compactitem}
+\item The three-dimensional orientation of your device and in-built GPS 
+antenna respectively may cause poor reception.  When loosing GPS-fix, many 
+mobile devices are heavily dependent on aGPS - asissted GPS.  You have to wait 
+minutes for a new fix in the air.
+\item aGPS is based on information transmitted from a cellular network 
+operator. Reception might get worse in the air and so does precision of the 
+GPS fix.
+\item Cheap or badly setup hardware `invents' GPS fixes. So-called 
+`interpolated' and possibly bad values might screw up XCSoar's algorithms.
+\end{compactitem}
+
+If your hardware's GPS reception turns out to be stable: congratulations! You 
+acquired a good piece of hardware. No need for extra hardware, you alraedy own 
+an XCSoar `basic' system. If not, the method of choice is to connect an extra 
+GPS receiver. Better you connect an IGC logger, best, you connect to a Flarm. 
+With an IGC Logger, you can declare tasks and download IGC-certified flight 
+logs needed to participate in the OLC league.
+Connecting Flarm will give you information of stati of your teammates, 
+collision detection and a barometric height reading - and IGC-certified flight 
+logs if hardware is enabled.
+With a Flarm connected you own an XCSoar `classic' system.  Integrating even 
+more hardware is a task of its own and not within scope of a quickstart guide. 
+
+\subsection*{\textcolor{blue}{Glueing things together}}
+Up to date, there are three ways to connect to other instruments.  Use either 
+a serial wired, a wired serial-over-USB or radio connection via bluetooth. The 
+latter being the matter of choice with Android mobiles, still a so-called 
+bluetooth serial port profile (spp) is needed. With version Android 4 up, 
+Google introduced serious problems stemming from the serial bluetooth profile 
+involved. With XCSoar coming for free, it is almost no risk to just test your 
+hardware's capabilities. If everything is fine ;-)
+
+\textbf{please note:} Before connecting instruments via bluetooth you have to 
+pair bluetooth devices. Needed steps differ depending on the hardware you use. 
+Use your operating system's tools.
+
+For using USB-equipped hardware, you need a serial-to-USB converter. Consult 
+XCSoar's website for further details: {\url{http://www.xcsoar.org/hardware/}}
+
+If using a serial connection, with PDAs expected to be equipped with, be 
+aware, there are three physically differring serial types of connection 
+commonly used. It is about using different physical signal levels:
+
+\begin{compactitem}
+\item RS232 uses full-swing plus minus 12 Volt level
+\item TTL uses 5 Volt signal swing
+\item Low level logic uses 3 Volt signal swing
+\end{compactitem}
+Always, logically speaking these connections do all the same, exactly the 
+same.
+
+Make sure, serial ports signal swing match.  Otherwise you need a level 
+converter. Again, consult XCSoar's website for more details.
+
+Things go easy by using approved hardware setups. A widely used Android 
+hardware for running XCSoar is Dell's Streak5. On the hardware page of 
+XCSoar's website you find several bluetooth adapters listed, known of as 
+gaining stable radio connections. 
+
+\subsection*{\textcolor{blue}{Pilot's Name}}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Setup}\blink\bmw{Logger}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Time settings}}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Setup}\blink\bmw{Time}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Moving the (Moving) Map manually}}
+Time to engage the map.  Navigate through by entering the pan mode.
+\begin{flushleft}\hspace*{1cm}\ansi{1}{Pan}{On}\\\end{flushleft}
+Depending on your hardware use buttons, dials, rockers of your hardware to 
+navigate, or even use your fingertip for dragging the map.
+
+\subsection*{\textcolor{blue}{Make "home"}}\index{home waypoint}
+Whenever XCSoar starts up, the map display is centered on your "home" 
+waypoint.
+\begin{compactitem}
+\item Navigate to desired waypoint
+\item Klick on (touch) screen in close proximity of desired waypoint.
+\item Dialog ''Map Elements at this location'' appears.
+\item Select waypoint.
+\item Push `Details'.
+\item Turn one page further by touching: \blink
+\item Push `Set As New Home.'
+\end{compactitem}
+
+With finishing the basic setup, you are almost ready to take one step further 
+by proceeding with the preflight check. Otherwise, all of a sudden you might 
+face a deep interest in getting familiar with all of the knobs and buttons 
+XCSoar provides, or...
+
+Possibly all of XCSoars features starts maxing xou see Xs everywheird? There 
+are two strategies to cope with:
+
+\begin{compactitem}
+\item Change to XCSoar's main manual and take your time.
+\item Do the last steps underneath and replay a flight log, just watching 
+XCSoar's screen to familiarize with readings and things happening - or invoke 
+XCSoar's simulation mode.
+\end{compactitem}
+
+...with the best strategy ever going through both.
+
+\subsection*{\textcolor{blue}{Action - watch XCSoar replay a flight}}
+Pick a flightlog and let XCSoar step back in time.  Place the file in 
+subdirectory\verb+/XCSoarData+ \verb+/logs+ and start replay.
+
+\begin{flushleft}\hspace*{1cm}\konf{2}{Replay}{}\blink\bmw{File\dots Start}\\\end{flushleft}
+
+Now you are able to study XCSoar's behavior on the ground. Whilst examining, 
+you possibly develop a request for changing screen layout and Infobox's 
+content respectively. You are kindly requested to go through following steps 
+only, if you have developed a deep demand to do so.  XCSoar comes with a 
+pre-configuration quite useful.
+
+\subsection*{\textcolor{blue}{Screen Layout (portrait, landscape, etc.\dots)}} 
+\pdfbookmark[0]{Screen Layout}{Infoboxseiten}
+To change basic Screen Layouts:
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{Screen Layout}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Change InfoBox' Content}}\pdfbookmark[0]{Infobox Sets}{Infobox Change}
+To change Infobox sets and boxes' content:
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{InfoBox Sets}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Configuration Files}}
+For using XCSoar in different situations, environments, and gliders, you are 
+invited to use configuration files. If XCSoar finds more than one on startup, 
+it will ask you which one to use. Here we are, recalling setups is just a 
+button to touch.
+Thus, once happy with having configured almost everything, do a backup of your 
+configuration file. Other reasons are briefly depicted as follows.
+\begin{compactitem}
+\item You do not own a glider, flying with all the toys of your club. Not to 
+get tired of changing polar and weight every time you change glider but XCSoar 
+hardware via setup dialogues, set up different configuration files.
+\item You got engaged in a contest. With difference in location and glider and 
+having setup numerous screen pages for content purposes you want go back to 
+your all day configuration quickly.
+\item You are a flight instructor, handing out your glide computer once in a 
+while in order to show your students what it is all about. Therefore you might 
+need a much less complex configuration than using normally.
+\end{compactitem}
+To backup configurations, make two copies of youre configuration file.  One 
+keeping extension \verb+.prf+, another one, changing the extension to
+\verb+.bak+. Relating to the last example you might end up with
+\begin{compactitem}
+\item\verb+educationinASK13.prf+
+\item\verb+educationinASK13.bak+
+\item\verb+humphreyinLS8atwonderland.prf+
+\item\verb+humphreyinLS8atwonderland.bak+
+\end{compactitem}
+Whenever XCSoar loads a specific configuration file \verb+.prf+, that file 
+will include all configuration setups you will perform, with this file active. 
+That is why a backup-file \verb+.bak+ is needed to preserve a standard, you 
+judged being worth it.
+
+\subsection*{\textcolor{blue}{Mount Hardware}}
+Mounting the hardware of your choice might turn out to reach some level of 
+effort.  In any case, mount the hardware to even resist very rough conditions, 
+no matter, whether you use special holders and a suction mount or a 
+screwedtosomewhatever.
+In case, you just want to give it a try, holding your phone in hands is a very 
+bad idea. For this case, you might follow the hook-and-loop fastener way. A 
+quick and dirty approach might be:
+\begin{compactitem}
+\item Get a silicone-type phone case, apply hook tape to the back.
+\item Get a velcro strap for wrapping around your leg, slightly above knee.
+\item Put phone case including phone on your leg just after boarding, in order 
+to achieve a kneeboard like operation.
+\end{compactitem}
+Never hold complex machines in hand whilst flying.
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Pre-flight Check}
+%%%%%--------------------------------------------------------------------%%%%%
+To be included in your Checklist.
+
+If you use a single XCSoar hardware whithin several gliders, first setup your 
+planes polar. Otherwise you might skip the first step or step 1 and 2.
+
+\subsection*{\textcolor{blue}{Setup Polar}}
+Invoke either
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Plane}\\\end{flushleft}
+or
+
+\subsection*{\textcolor{blue}{Recall Setup}}
+Restart XCSoar and choose a different configuration, including correctly set 
+up polar and weight.
+
+\subsection*{\textcolor{blue}{Setup Flight}}
+\begin{flushleft}\hspace*{1cm}\konf{1}{Flight}{}\blink\bmw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Setup Wind}}
+\begin{flushleft}\hspace*{1cm}\konf{1}{Wind}{}\blink\bmw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Setup Task?}}
+After having made your "home", XCSoar will always give you support on how to 
+come home. For creating and using tasks, a brief introduction is given at the 
+end of this manual. However, if you previously created a task you might 
+deactivate it to get XCSoar resume the basic "home" mode.
+
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Start Check}
+%%%%%--------------------------------------------------------------------%%%%%
+To be included in your Checklist.
+
+\subsection*{\textcolor{blue}{Check Flight}}
+\begin{flushleft}\hspace*{1cm}\konf{1}{Flight}{}\blink\bmw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
+
+\subsection*{\textcolor{blue}{Check Wind}}
+\begin{flushleft}\hspace*{1cm}\konf{1}{Wind}{}\blink\bmw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
+
+\section{Fly}%no section at all, formatting reasons
+
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+%%%%%--------------------------------------------------------------------%%%%%
+\newpage\section{Tasks}
+%%%%%--------------------------------------------------------------------%%%%%
+This is just the beginning\dots.
+
+\subsection*{\textcolor{blue}{Task: create, save, load, declare}}\pdfbookmark[0]{create task}{tasks}
+Creating a new task:
+\begin{flushleft}\hspace*{1cm}\nav{1}{Task}{}\blink\bmw{Manage}\blink\bmw{New Task}\\\end{flushleft}
+\begin{compactitem}
+\item On the same menu screen you'll find `Browse', `Save', or `Declare' (to 
+logger). After pushing `New Task' you are asked to acknowledge, then menu 
+screen for `Rules' comes up.  Do your job, with defining the `Task type' 
+first.
+\item By touching `Turnpoint' and `Add Turnpoint' a filtering screen `Select 
+Waypoint' comes up. Edit your wayponts. Touching ``Edit Point' lets you alter 
+things.
+\item Do not close dialogue! Finally, use `Manage' and `Save' successively, 
+then `Close'.
+\end{compactitem}
+
+\subsection*{\textcolor{blue}{Task: Start open time and close time}}
+Right now, the flashing time initially set up is supposed to end.
+Close time hit. Time to change to XCSoar's main manual.
+
+Thank you for your time and
+
+\section{Always happy Landings}%no section at all, formatting reasons
+
+\printindex
+\end{document}

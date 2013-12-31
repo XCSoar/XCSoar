@@ -1,0 +1,164 @@
+\documentclass[english,a4paper,12pt,utf8]{scrreprt}
+\usepackage[utf8]{inputenc}
+%\usepackage[german]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[off]{flippdf}                %mirrored pages (even images ..) -> Default OFF ..
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{wasysym}
+\usepackage{hhline}
+\usepackage{framed}               % colour support
+\usepackage{color}               % colour support
+\usepackage{graphicx}                      % see c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{fancyhdr}
+\usepackage{url}
+% Index needed:
+\usepackage{makeidx}\makeindex
+% gaining active links and document informations
+\usepackage[colorlinks]{hyperref}
+\hypersetup{
+    bookmarks=true,
+    unicode=true,
+    pagebackref=true,
+    pdftoolbar=true,
+    pdfmenubar=true,
+    pdffitwindow=false,
+    pdfstartview={FitH},
+    pdftitle={XCSoar in a Flash},
+    pdfauthor={WZ},
+    pdfsubject={Subject},
+    pdfcreator={HotteTeX},
+    pdfproducer={OH},
+    pdfkeywords={XCSoar}{Quickstart}{Soaring}{Final Glide},
+    pdfnewwindow=true,
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=green,
+    filecolor=magenta,
+    urlcolor=blue
+}
+\usepackage[right]{eurosym}% Eurosymbol, rechts neben Text mit \EUR{427,45}, symbol alleine mit\eur{}
+\parindent0mm%no indent
+\textwidth=170mm
+\rightmargin=0mm\leftmargin=-10mm\oddsidemargin=-10mm\evensidemargin=-10mm
+\setlength{\baselineskip}{1em}
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+%
+%##############  Colour, Background, Border ##############
+%
+\fboxrule0.4mm                                                      % width Fbox-border
+%
+\definecolor{gray}{rgb}{0.8,0.8,0.8}                       %{0.7,0.7,0.7}
+\definecolor{buttongreen}{rgb}{0.625,0.94,0.625}  %
+\definecolor{rahmen1}{gray}{0.5}                            % light grey border - eitehr RGB -values or
+\definecolor{hintergrund1}{rgb}{.7,1,.7}                 % light green background
+\definecolor{rahmen2}{gray}{0.1}                            % plain grey
+\definecolor{hintergrund2}{rgb}{.9,.9,.9}               % very light grey background
+\definecolor{rahmen3}{gray}{0.15}                         % plain grey
+\definecolor{hintergrund3}{rgb}{1.0,1.0,0.9}         % light yellow background
+% \definecolor{hintergrund3}{rgb}{.7,1,1}              % full cyan background
+%
+%##############  Makros and  Menus ..##############
+%
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\blink}[0]{{~\LARGE$\triangleright$~}}
+%
+\newcommand{\bmg}[1]{\fcolorbox {black}{gray}{{\strut\sf{\footnotesize#1}}}}
+%
+\newcommand{\bmw}[1]{\fcolorbox {black}{white}{{\strut\sf{\footnotesize#1}}}}
+%
+\newcommand{\bmt}[2]{%Menubutton, doublespaced
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{#1}}\\
+    {\footnotesize\sf{#2}}
+    \end{tabular}
+    }
+  }
+}
+%
+\newcommand{\bms}[1]{%Menubutton, single line
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+      \begin{tabular}{c}
+        {\footnotesize\sf{#1}}\\
+      \\
+    \end{tabular}
+  }
+}
+}
+%
+\newcommand{\button}[1]{% simple button box
+\fcolorbox {black}{gray}{{\sf #1}}}
+%
+%##############  advanced Makros and Menus ..##############
+\newcommand{\nav}[3]{\bmt{Nav}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%NavMenu
+\newcommand{\ansi}[3]{\bmt{Display}{#1/2}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%DisplayMenu
+\newcommand{\konf}[3]{\bmt{Config}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%ConfigNavMenu
+\newcommand{\info}[3]{\bmt{Info}{#1/3}{\LARGE$\triangleright$}~\bmt{#2}{#3}}%InfoMenu
+
+\newcommand{\sk}[0]{%  commonly used.. conf-conf-system
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{Config}}\\
+    {\footnotesize\sf{2/3}}
+    \end{tabular} } }
+{\LARGE$\triangleright$}\hspace{0.0075em}
+\fcolorbox {black}{gray}{
+    \makebox[1.6cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{System}}\\
+    \end{tabular} } } }
+%abbreviations
+\newcommand{\xc}{{\textsf XCSoar}}
+%
+%##############  Titelpage of flash .##############
+\def\maketitle{%
+  \null
+  \thispagestyle{empty}%
+  \begin{maxipage}
+    \begin{center}
+     \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{figures/logo.png}
+    \vskip 0.5cm
+
+    \end{center}
+    \begin{center}
+      \normalfont\huge\textsf{der \textbf{Blitzeinstieg} zu dem quelloffenen-Segelflugrechner für fast jede Hardware}\par
+    \end{center}
+    \vskip 1cm
+    \begin{center}
+      \normalfont\huge\textsf{\@title}\par
+    \end{center}
+    \vskip 1cm
+  \end{maxipage}
+
+  \vfill
+  %\todo[nolist,size=\Large,inline]{Beta-Stadium, inhaltlich OK, am Outfit gibt es noch zu tun\dots}
+
+  \begin{flushright}
+    \large \strut {
+      \sf
+      \today \\
+      Für \xc Version \version \\
+      \xcsoarwebsite \\
+    }
+    \par
+  \end{flushright}
+  \par
+  \vfil
+  \vfil
+  \null
+  \cleardoublepage
+}
+%
