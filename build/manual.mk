@@ -101,7 +101,7 @@ Handbuch: \
 manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
 
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex $(DOC)/manual/en/XCFlashIIconf.tex \
+$(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex \
 	$(TEX_INCLUDES_EN) $(FIGURES_BLITZ_DE) $(TEX_INCLUDES) \
 	$(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
@@ -215,7 +215,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(SVG_FIGURES) $(SVG_LOGOS) $(T)/figures/.
 	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/.
 	# Incl. the English original 
-	cp $(DOC)/manual/en/XCSoar-in-a-flash.tex $(DOC)/manual/en/XCFlashIIconf.tex $(T)/en/.
+	cp $(DOC)/manual/en/XCSoar-in-a-flash.tex $(T)/en/.
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
 	cp $(FIGURES_EN) $(T)/en/figures/.
 	# Incl. the French translation

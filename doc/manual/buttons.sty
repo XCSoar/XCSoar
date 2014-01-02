@@ -1,9 +1,13 @@
 \definecolor{buttongray}{rgb}{0.831,0.816,0.784}
 \newcommand{\blink}[0]{$\triangleright$}
-\newcommand{\bmenu}[1]{
-	\fcolorbox {black}{buttongray}{{\sf{#1}}}
+\newcommand{\bmenug}[1]{
+	\fcolorbox {black}{buttongray}{{\footnotesize\sf{#1}}}
 }
-\newcommand{\bmenut}[2]{
+\newcommand{\button}{\bmenug}
+\newcommand{\bmenuw}[1]{
+    \fcolorbox {black}{white}{{\footnotesize\sf{#1}}}
+}
+\newcommand{\bmenut}[2]{    % Menubutton, doublespaced (two lined)
 	\fcolorbox {black}{buttongray}{
     \makebox[1.4cm][c]{
     	\begin{tabular}{c}
@@ -24,7 +28,7 @@
     }
   }
 }
-\newcommand{\bmenus}[1]{
+\newcommand{\bmenus}[1]{    % Menubutton, single line
 	\fcolorbox {black}{buttongray}{
     \makebox[1.4cm][c]{
       \begin{tabular}{c}
@@ -33,9 +37,6 @@
       \end{tabular}
 	  }
 	}
-}
-\newcommand{\button}[1]{
-	\fcolorbox {black}{buttongray}{{\sf #1}}
 }
 
 \newcommand{\infobox}[1]{

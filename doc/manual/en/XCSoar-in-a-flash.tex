@@ -1,5 +1,124 @@
-\input{XCFlashIIconf.tex}%configuration and definition of buttons
+\documentclass[english,a4paper,12pt,utf8]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage[off]{flippdf}           % mirrored pages (even images ..) -> Default OFF ..
+\usepackage{supertabular}
+\usepackage{array}
+\usepackage{wasysym}
+\usepackage{hhline}
+\usepackage{framed}                 % colour support
+\usepackage{color}                  % colour support
+\usepackage{graphicx}               % see c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage{booktabs}
+\usepackage{paralist}
+\usepackage{fancyhdr}
+\usepackage{url}
+% Index needed:
+\usepackage{makeidx}\makeindex      % gaining active links and document informations
+\usepackage[colorlinks]{hyperref}
+\hypersetup{
+    bookmarks=true,
+    unicode=true,
+    pagebackref=true,
+    pdftoolbar=true,
+    pdfmenubar=true,
+    pdffitwindow=false,
+    pdfstartview={FitH},
+    pdftitle={XCSoar in a Flash},
+    pdfauthor={WZ},
+    pdfsubject={Subject},
+    pdfcreator={HotteTeX},
+    pdfproducer={OH},
+    pdfkeywords={XCSoar}{Quickstart}{Soaring}{Final Glide},
+    pdfnewwindow=true,
+    colorlinks=true,
+    linkcolor=red,
+    citecolor=green,
+    filecolor=magenta,
+    urlcolor=blue
+}
+\parindent0mm%no indent
+\textwidth=170mm
+\rightmargin=0mm\leftmargin=-10mm\oddsidemargin=-10mm\evensidemargin=-10mm
+\setlength{\baselineskip}{1em}
+% Font selection
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\fontfamily{phv}\selectfont
+%
+%##############  Include the XC commons ##############
+%
+\input{buttons.sty}
+%
+%##############  Colour, Background, Border ##############
+%
+\fboxrule0.4mm                                                      % width Fbox-border
+%
+%##############  advanced Makros and Menus ..##############
+\newcommand{\nav}[3]{\bmenut{Nav}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%NavMenu
+\newcommand{\display}[3]{\bmenut{Display}{#1/2}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%DisplayMenu
+\newcommand{\config}[3]{\bmenut{Config}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%ConfigNavMenu
+\newcommand{\info}[3]{\bmenut{Info}{#1/3}{\LARGE$\triangleright$}~\bmenut{#2}{#3}}%InfoMenu
 
+\newcommand{\sk}[0]{%  commonly used.. conf-conf-system
+\fcolorbox {black}{buttongray}{
+    \makebox[1.4cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{Config}}\\
+    {\footnotesize\sf{2/3}}
+    \end{tabular} } }
+{\LARGE$\triangleright$}\hspace{0.0075em}
+\fcolorbox {black}{buttongray}{
+    \makebox[1.4cm][c]{
+    \begin{tabular}{c}
+    {\footnotesize\sf{System}}\\
+    \end{tabular} } } }
+%abbreviations
+\newcommand{\xc}{{\textsf XCSoar}}
+%
+%##############  Titelpage of flash ##############
+\def\maketitle{%
+  \null
+  \thispagestyle{empty}%
+  \begin{maxipage}
+    \begin{center}
+     \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{figures/logo.png}
+    \vskip 0.5cm
+
+    \end{center}
+    \begin{center}
+      \normalfont\huge\textsf{der \textbf{Blitzeinstieg} zu dem quelloffenen-Segelflugrechner für fast jede Hardware}\par
+    \end{center}
+    \vskip 1cm
+    \begin{center}
+      \normalfont\huge\textsf{\@title}\par
+    \end{center}
+    \vskip 1cm
+  \end{maxipage}
+
+  \vfill
+
+  \begin{flushright}
+    \large \strut {
+      \sf
+      \today \\
+      Für \xc Version \version \\
+      \xcsoarwebsite \\
+    }
+    \par
+  \end{flushright}
+  \par
+  \vfil
+  \vfil
+  \null
+  \cleardoublepage
+}
+%
+
+%##############  Document start of flash ##############
+%
 \setcounter{secnumdepth}{1}
 \renewcommand*{\thesection}{\textsf{\arabic{section}}}
 \begin{document}
@@ -118,7 +237,7 @@ off.
 Start fly mode. Tell XCSoar which files to use. Invoke system setup via main 
 menu button Config.
 
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Site Files}\blink\bmw{Site files}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Site Files}\blink\bmenuw{Site files}\\\end{flushleft}
 \index{Map database}\index{Waypoints}\index{Airspaces}
 
 Choose appropriate files in dialog. If no files show up, again make sure files 
@@ -131,7 +250,7 @@ and up!!!
 If the platform you choose supports direct access to the internet, you can 
 easily download and maintain datafiles directly. Touch 
 
-\begin{flushleft}\hspace*{1cm}\konf{2}{File}{Manager}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{2}{File}{Manager}\\\end{flushleft}
 A list of already downloaded files appears.  Doing this for the very first 
 time might result in displaying an empty list. Proceed with\blink Add.
 
@@ -153,7 +272,7 @@ Typically, XCSoar follows the operation system's language setting. If you do
 prefer another, there are 28 languages available as is with Dec. 2013 (sorry 
 Bavarian, Boston and other people, dialects are not to be included ever):
 
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{Language, Input}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Look}\blink\bmenuw{Language, Input}\\\end{flushleft}
 
 This menu page also allows for changing fonts, and, after having prepared a 
 special data file do much more by defining events.  However, it is not 
@@ -169,14 +288,14 @@ supposed to be the scope of a quickstart manual, just an outlook.
 \subsection*{\textcolor{blue}{Setup Polar}}
 XCSoar comes with a comprehensive list of predefined polars.  To choose, edit, 
 or store your customized polar, invoke the plane configuration by 
-\begin{flushleft}\hspace*{1cm}\konf{2}{System}{}\blink\bmw{Plane}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{2}{System}{}\blink\bmenuw{Plane}\\\end{flushleft}
 The planes' indexes in this compilation is taken from the official DAEC list 
 of 2012.
 
 \subsection*{\textcolor{blue}{Connect Logger, Flarm, Vario etc\dots NMEA setup}}
 To run, XCSoar needs live data from a GPS receiver at least. You have to tell 
 XCSoar, which one to use, even built-in hardware. To connect to, use
-\begin{flushleft}\hspace*{1cm}\konf{2}{Devices}{}\blink\bmw{edit}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{2}{Devices}{}\blink\bmenuw{edit}\\\end{flushleft}
 Many portable devices are equipped with such hardware.  However, it is always 
 a good idea to connect to one or more external devices:
 
@@ -265,14 +384,14 @@ XCSoar's website you find several bluetooth adapters listed, known of as
 gaining stable radio connections. 
 
 \subsection*{\textcolor{blue}{Pilot's Name}}
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Setup}\blink\bmw{Logger}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Setup}\blink\bmenuw{Logger}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Time settings}}
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Setup}\blink\bmw{Time}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Setup}\blink\bmenuw{Time}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Moving the (Moving) Map manually}}
 Time to engage the map.  Navigate through by entering the pan mode.
-\begin{flushleft}\hspace*{1cm}\ansi{1}{Pan}{On}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\display{1}{Pan}{On}\\\end{flushleft}
 Depending on your hardware use buttons, dials, rockers of your hardware to 
 navigate, or even use your fingertip for dragging the map.
 
@@ -310,7 +429,7 @@ XCSoar's simulation mode.
 Pick a flightlog and let XCSoar step back in time.  Place the file in 
 subdirectory\verb+/XCSoarData+ \verb+/logs+ and start replay.
 
-\begin{flushleft}\hspace*{1cm}\konf{2}{Replay}{}\blink\bmw{File\dots Start}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{2}{Replay}{}\blink\bmenuw{File\dots Start}\\\end{flushleft}
 
 Now you are able to study XCSoar's behavior on the ground. Whilst examining, 
 you possibly develop a request for changing screen layout and Infobox's 
@@ -321,11 +440,11 @@ pre-configuration quite useful.
 \subsection*{\textcolor{blue}{Screen Layout (portrait, landscape, etc.\dots)}} 
 \pdfbookmark[0]{Screen Layout}{Infoboxseiten}
 To change basic Screen Layouts:
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{Screen Layout}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Look}\blink\bmenuw{Screen Layout}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Change InfoBox' Content}}\pdfbookmark[0]{Infobox Sets}{Infobox Change}
 To change Infobox sets and boxes' content:
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Look}\blink\bmw{InfoBox Sets}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Look}\blink\bmenuw{InfoBox Sets}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Configuration Files}}
 For using XCSoar in different situations, environments, and gliders, you are 
@@ -389,7 +508,7 @@ planes polar. Otherwise you might skip the first step or step 1 and 2.
 
 \subsection*{\textcolor{blue}{Setup Polar}}
 Invoke either
-\begin{flushleft}\hspace*{1cm}\sk\blink\bmw{Plane}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\sk\blink\bmenuw{Plane}\\\end{flushleft}
 or
 
 \subsection*{\textcolor{blue}{Recall Setup}}
@@ -397,10 +516,10 @@ Restart XCSoar and choose a different configuration, including correctly set
 up polar and weight.
 
 \subsection*{\textcolor{blue}{Setup Flight}}
-\begin{flushleft}\hspace*{1cm}\konf{1}{Flight}{}\blink\bmw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}\blink\bmenuw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Setup Wind}}
-\begin{flushleft}\hspace*{1cm}\konf{1}{Wind}{}\blink\bmw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{1}{Wind}{}\blink\bmenuw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Setup Task?}}
 After having made your "home", XCSoar will always give you support on how to 
@@ -419,10 +538,10 @@ deactivate it to get XCSoar resume the basic "home" mode.
 To be included in your Checklist.
 
 \subsection*{\textcolor{blue}{Check Flight}}
-\begin{flushleft}\hspace*{1cm}\konf{1}{Flight}{}\blink\bmw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{1}{Flight}{}\blink\bmenuw{Wing loading / Bugs / QNH / Max temp}\\\end{flushleft}
 
 \subsection*{\textcolor{blue}{Check Wind}}
-\begin{flushleft}\hspace*{1cm}\konf{1}{Wind}{}\blink\bmw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\config{1}{Wind}{}\blink\bmenuw{Auto wind\dots / Speed / Direction}\\\end{flushleft}
 
 \section{Fly}%no section at all, formatting reasons
 
@@ -437,7 +556,7 @@ This is just the beginning\dots.
 
 \subsection*{\textcolor{blue}{Task: create, save, load, declare}}\pdfbookmark[0]{create task}{tasks}
 Creating a new task:
-\begin{flushleft}\hspace*{1cm}\nav{1}{Task}{}\blink\bmw{Manage}\blink\bmw{New Task}\\\end{flushleft}
+\begin{flushleft}\hspace*{1cm}\nav{1}{Task}{}\blink\bmenuw{Manage}\blink\bmenuw{New Task}\\\end{flushleft}
 \begin{compactitem}
 \item On the same menu screen you'll find `Browse', `Save', or `Declare' (to 
 logger). After pushing `New Task' you are asked to acknowledge, then menu 
