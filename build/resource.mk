@@ -15,7 +15,7 @@ BMP_BITMAPS = $(wildcard Data/bitmaps/*.bmp)
 PNG_BITMAPS = $(patsubst Data/bitmaps/%.bmp,$(DATA)/bitmaps/%.png,$(BMP_BITMAPS))
 
 $(PNG_BITMAPS): $(DATA)/bitmaps/%.png: Data/bitmaps/%.bmp | $(DATA)/bitmaps/dirstamp
-	$(Q)$(IM_PREFIX)convert +dither -define png:color-type=0 $< $@
+	$(Q)$(IM_PREFIX)convert +dither -type GrayScale -define png:color-type=0 $< $@
 
 ####### icons
 
