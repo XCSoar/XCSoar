@@ -45,7 +45,7 @@ Puis utiliser la roulette de la souris ou les flêche haut/bas du Pocket PC pour
 ``Appui + Haut'' zoom, ``Appui + Bas'' dézoom.
 \item Ou sélectionner la fonction à l'aide des menus.:
 \begin{quote}
-\bmenu{Affich.}\blink\bmenu{Zoom} et \bmenu{Affich}\blink\bmenu{Dézoom}
+\bmenug{Affich.}\blink\bmenug{Zoom} et \bmenug{Affich}\blink\bmenug{Dézoom}
 \end{quote}
 \end{enumerate}
 Sur un Altair, le bouton de rotation peut être utilisé pour la mise à l'échelle.
@@ -61,7 +61,7 @@ Zoom Auto. permet de zoomer automatiquement à l'approche d'un point de virage, 
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
 Pour passer d'un mode de zoom à l'autre, utilisez le menu:
 \begin{quote}
-\bmenu{Affich.}\blink\bmenu{Zoom Auto} 
+\bmenug{Affich.}\blink\bmenug{Zoom Auto} 
 \end{quote}
 Quand un point de virage change (automatiquement, à l'aide du gestionnaire de circuit, ou par changement manuel du prochain point de virage), Zoom Auto règle l'affichage afin de faire apparaitre à l'écran le prochain point de virage.
 En spirale si une ascendance est détectée, alors le thermique est centré sur la carte tout en faisant en sorte que le planeur soit toujours visible.
@@ -71,13 +71,13 @@ Le mode déplacement panoramique de la carte permet de se déplacer sur toute la
 \begin{enumerate}
 \item Activation du mode déplacement par pression (ou par geste)  \gesture{Haut - Droite - Bas - Gauche}
 \begin{quote}
-\bmenu{Affich.}\blink\bmenu{Panor. ON}
+\bmenug{Affich.}\blink\bmenug{Panor. ON}
 \end{quote}
 
 \item Le déplacement de la carte se fait en tirant dans n'importe quelle direction à l'aide du doigt, de la souris ou des touches permettant de déplacer le curseur. Pour Altair ceci s'effectue à l'aide des  touches intérieur/extérieur du bouton de rotation.
 \item Le mode panoramique se désactive en utilisant;
 \begin{quote}
-\bmenu{Panor. OFF}
+\bmenug{Panor. OFF}
 \end{quote}
 \end{enumerate} 
 
@@ -157,8 +157,8 @@ Le relief est ombré pour améliorer sa lisibilité. Par défaut l'éclairage vi
 
 L'affichage du relief et de la topographie peuvent être activés/désactivés par les menus:
 \begin{quote}
-\bmenu{Affich. 2}\blink\bmenu{Relief On} \\
-\bmenu{Affich. 2}\blink\bmenu{Topo. On}
+\bmenug{Affich. 2}\blink\bmenug{Relief On} \\
+\bmenug{Affich. 2}\blink\bmenug{Topo. On}
 \end{quote}
 
 \begin{center}
@@ -175,7 +175,7 @@ Si la carte de relief n'est pas chargée(ou si son affichage est sur Off), le fo
 
 L'écran peut contenir trop d'information et être peu lisible. Il est possible de ne plus montrer les textes  topographiques et toutes les infos ne concernant pas le circuit en utilisant:
 \begin{quote}
-\bmenu{Affich. 2}\blink\bmenu{Etiquettes Circuit}
+\bmenug{Affich. 2}\blink\bmenug{Etiquettes Circuit}
 \end{quote}
 
 D'autres options sont disponibles:
@@ -199,11 +199,11 @@ Si un Vega ou un vario "intelligent" est connecté avec un sotie "Netto", la val
 
 La longueur de la trace sol peut être désactivée, courte (environ 10 minutes) ou bien longue (environ 1 heure) ou encore infinie (vol complet). Ce réglage peut être permanent en utilisant le menu de configuration \config{snailtrail} ou temporaire à l'aide du menu:
 \begin{quote}
-\bmenu{Affich. 2}\blink\bmenu{Trace On} \\
-\bmenu{Affich. 2}\blink\bmenu{Trace Court} \\
-\bmenu{Affich. 2}\blink\bmenu{Trace Long} \\
-\bmenu{Affich. 2}\blink\bmenu{Trace Complet} \\
-\bmenu{Affich. 2}\blink\bmenu{Trace Off}
+\bmenug{Affich. 2}\blink\bmenug{Trace On} \\
+\bmenug{Affich. 2}\blink\bmenug{Trace Court} \\
+\bmenug{Affich. 2}\blink\bmenug{Trace Long} \\
+\bmenug{Affich. 2}\blink\bmenug{Trace Complet} \\
+\bmenug{Affich. 2}\blink\bmenug{Trace Off}
 \end{quote}
 
 Pour tout les modes de trace, en spirale la trace est courte afin de laisser la carte lisible.
@@ -219,7 +219,7 @@ La figure suivante en montre l'exemple. Quand la dérive compensée en spirale e
 L'activation de la "dérive compensée en spirale" se fait dans le menu de configuration du vent  \config{traildrift}.  La compensation n'a lieu qu'en spirale. La trace sol en transition n'en tiens pas compte.
 Le paramétrage peut se faire aussi avec le menu Options Vent:
 \begin{quote}
-\bmenu{Config.}\blink\bmenu{Options Vent}
+\bmenug{Config.}\blink\bmenug{Options Vent}
 \end{quote}
 
 L'affichage de la dérive est aussi utile afin de montrer plus clairement l'effet du du cisaillement du vent sur les thermiques.
@@ -234,7 +234,7 @@ Les marques ne sont pas conservées sur la carte quand on éteint XCSoar. Les ma
 
 Pour poser une marque utiliser le menu: 
 \begin{quote}
-\bmenu{Nav. 2}\blink\bmenu{Marquer}
+\bmenug{Nav. 2}\blink\bmenug{Marquer}
 \end{quote}
 
 \section{Marques de thermiques}
@@ -286,7 +286,7 @@ Les calculs de "zone atteignable en plané" sont utilisés pour: la trace au sol
 Le panel des États comporte plusieurs onglets regroupant l'accès à des informations du vol, du circuit, des règles, des temps et durées ainsi qu'à des informations système. Ce sont des informations et ne sont donc pas modifiables par l'utilisateur.
 On y accède en faisant un "S à angles droits" sur l'écran ou par les boutons menus sous:\gesture{Gauche - Bas - Droite - Bas - Gauche}
 \begin{quote}
-\bmenu{Info. 2}\blink\bmenu{Etats}
+\bmenug{Info. 2}\blink\bmenug{Etats}
 \end{quote}
 On sélectionne ensuite l'un des onglets.
 
