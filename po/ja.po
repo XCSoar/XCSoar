@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-12-30 07:26+0000\n"
+"PO-Revision-Date: 2013-12-30 12:29+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-30 09:08+0000\n"
+"X-Launchpad-Export-Date: 2014-01-05 20:28+0000\n"
 "X-Generator: Launchpad (build 16877)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -3001,11 +3001,11 @@ msgstr "編集"
 
 #: src/InfoBoxes/Content/MacCready.cpp:72
 msgid "MC AUTO"
-msgstr "マクレディー　オート"
+msgstr "マクレディ　自動"
 
 #: src/InfoBoxes/Content/MacCready.cpp:72
 msgid "MC MANUAL"
-msgstr "マクレディー　マニュアル"
+msgstr "マクレディ　手動"
 
 #: src/InfoBoxes/Content/Other.cpp:62 src/InfoBoxes/Content/Other.cpp:65
 msgid "AC Off"
@@ -3033,7 +3033,7 @@ msgstr "時間　下"
 
 #: src/InfoBoxes/Content/Task.cpp:868 src/InfoBoxes/Content/Task.cpp:913
 msgid "Closed"
-msgstr "閉まる"
+msgstr "閉じる"
 
 #: src/InfoBoxes/Content/Task.cpp:877 src/InfoBoxes/Content/Task.cpp:922
 msgid "Open"
@@ -3211,7 +3211,7 @@ msgstr "空域表示 オン"
 
 #: src/Input/InputEventsTask.cpp:80
 msgid "Advance manually"
-msgstr "上級マニュアル設定"
+msgstr "上級手動設定"
 
 #: src/Input/InputEventsTask.cpp:83
 msgid "Advance automatically"
@@ -3243,7 +3243,7 @@ msgstr "自動マクレディー オフ"
 
 #: src/Input/InputEventsTask.cpp:168
 msgid "MacCready "
-msgstr "マクレディー "
+msgstr "マクレディ "
 
 #: src/Input/InputEventsTask.cpp:229
 msgid "Task aborted"
@@ -3467,7 +3467,7 @@ msgstr "その場所の地図情報"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:116
 msgid "Elevation: "
-msgstr "標高 "
+msgstr "標高： "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:158
 msgid "GPS not connected"
@@ -3592,7 +3592,7 @@ msgid ""
 "Using LS8 polar instead!"
 msgstr ""
 "ポーラーカーブ情報が不適当です\n"
-"代替えでLS8のポーラーカーブヲ使用します"
+"代替でLS8のポーラーカーブを使用します"
 
 #: src/Polar/PolarGlue.cpp:107
 msgid "Warning"
@@ -3610,7 +3610,7 @@ msgstr "初期化中"
 #. Start the device thread(s)
 #: src/Startup.cpp:377
 msgid "Starting devices"
-msgstr "スタートしています"
+msgstr "デバイスを起動しています"
 
 #.
 #. -- Reset polar in case devices need the data
