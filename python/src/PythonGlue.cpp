@@ -52,6 +52,8 @@ PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs
   self = (Pyxcsoar_Flight *)type->tp_alloc(type, 0);
 
   if (PyString_Check(py_input_data) || PyUnicode_Check(py_input_data)) {
+    Py_INCREF(py_input_data);
+
     Py_BEGIN_ALLOW_THREADS
     self->flight = new Flight(PyString_AsString(py_input_data), keep);
     Py_END_ALLOW_THREADS
