@@ -133,7 +133,7 @@ $(MANUAL_OUTPUT_DIR)/html/developer/index.html: $(DOC)/manual/en/XCSoar-develope
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/developer/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex $(DOC)/manual/de/Blitz/XCBlitzIIKonf.tex \
+$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex \
 	$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
