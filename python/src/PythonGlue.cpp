@@ -36,7 +36,7 @@
 #include <cinttypes>
 #include <limits>
 
-Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs) {
+PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs) {
   /* constructor */
   static char *kwlist[] = {"file", "keep", NULL};
   PyObject *py_input_data = NULL;
@@ -47,6 +47,9 @@ Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObj
     PyErr_SetString(PyExc_AttributeError, "Can't parse argument list.");
     return 0;
   }
+
+  Pyxcsoar_Flight *self;
+  self = (Pyxcsoar_Flight *)type->tp_alloc(type, 0);
 
   if (PyString_Check(py_input_data) || PyUnicode_Check(py_input_data)) {
     Py_BEGIN_ALLOW_THREADS
@@ -115,12 +118,13 @@ Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObj
     }
   }
 
-  return 0;
+  return (PyObject*) self;
 }
 
 void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self) {
   /* destructor */
   delete self->flight;
+  self->ob_type->tp_free((Pyxcsoar_Flight*)self);
 }
 
 PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args) {
@@ -625,5 +629,6 @@ initxcsoar() {
 
   PyDateTime_IMPORT;
 
+  Py_INCREF(&xcsoar_Flight_Type);
   PyModule_AddObject(m, "Flight", (PyObject *)&xcsoar_Flight_Type);
 }

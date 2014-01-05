@@ -31,7 +31,7 @@ struct Pyxcsoar_Flight {
   PyObject_HEAD Flight *flight;
 };
 
-static Pyxcsoar_Flight* xcsoar_Flight_init(Pyxcsoar_Flight *self, PyObject *args, PyObject *kwargs);
+static PyObject* xcsoar_Flight_new(PyTypeObject *type, PyObject *args, PyObject *kwargs);
 static void xcsoar_Flight_dealloc(Pyxcsoar_Flight *self);
 
 static PyObject* xcsoar_Flight_path(Pyxcsoar_Flight *self, PyObject *args);
@@ -90,9 +90,9 @@ PyTypeObject xcsoar_Flight_Type = {
   0,                     /* tp_descr_get */
   0,                     /* tp_descr_set */
   0,                     /* tp_dictoffset */
-  (initproc)xcsoar_Flight_init, /* tp_init */
+  0,                     /* tp_init */
   0,                     /* tp_alloc */
-  PyType_GenericNew,     /* tp_new */
+  xcsoar_Flight_new,     /* tp_new */
 /* this could be extended even further...
    * http://starship.python.net/crew/arcege/extwriting/pyext.html
    */
