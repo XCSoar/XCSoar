@@ -1,57 +1,67 @@
+% Colors
 \definecolor{buttongray}{rgb}{0.831,0.816,0.784}
+
+
+% A set of boxes, buttons etc.
+%
+% Simple gray button
 \newcommand{\blink}[0]{$\triangleright$}
 \newcommand{\bmenug}[1]{
 	\fcolorbox {black}{buttongray}{{\footnotesize\sf{#1}}}
 }
 \newcommand{\button}{\bmenug}
+\newcommand{\bmenu}{\bmenug}
 \newcommand{\bmenuw}[1]{
     \fcolorbox {black}{white}{{\footnotesize\sf{#1}}}
 }
-\newcommand{\bmenut}[2]{    % Menubutton, doublespaced (two lined)
-	\fcolorbox {black}{buttongray}{
-    \makebox[1.4cm][c]{
-    	\begin{tabular}{c}
-    	{\footnotesize\sf{#1}}\\
-    	{\footnotesize\sf{#2}}
-    	\end{tabular}
+\newcounter{mboxwidth}
+\setcounter{mboxwidth}{14}
+\newcommand{\setbuttonwidth}[1]{\setcounter{mboxwidth}{#1}}
+\newcommand{\bmenut}[2]{    % Menu button (two lined)
+    \fcolorbox {black}{buttongray}{
+    \makebox[\value{mboxwidth}mm][c]{
+        \begin{tabular}{c}
+        {\footnotesize\sf{#1}}\\
+        {\footnotesize\sf{#2}}
+        \end{tabular}
     }
   }
 }
-\newcommand{\bmenuth}[3]{
-	\fcolorbox {black}{buttongray}{
-    \makebox[1.4cm][c]{
-    	\begin{tabular}{c}
-    	{\footnotesize\sf{#1}}\\
-    	{\footnotesize\sf{#2}}\\
-    	{\footnotesize\sf{#3}}
-    	\end{tabular}
+\newcommand{\bmenuth}[3]{    % Menu button (three lined)
+    \fcolorbox {black}{buttongray}{
+    \makebox[\value{mboxwidth}mm][c]{
+        \begin{tabular}{c}
+        {\footnotesize\sf{#1}}\\
+        {\footnotesize\sf{#2}}\\
+        {\footnotesize\sf{#3}}
+        \end{tabular}
     }
   }
 }
-\newcommand{\bmenus}[1]{    % Menubutton, single line
-	\fcolorbox {black}{buttongray}{
-    \makebox[1.4cm][c]{
+\newcommand{\bmenus}[1]{    % Menu button (single line)
+    \fcolorbox {black}{buttongray}{
+    \makebox[\value{mboxwidth}mm][c]{
       \begin{tabular}{c}
         {\footnotesize\sf{#1}}\\
-    	  \\
+          \\
       \end{tabular}
-	  }
-	}
+      }
+    }
+}
+\newcommand{\infobox}[1]{    % Normal Info box in text
+    \fcolorbox {black}{white}{\makebox[1.7cm][c]{\sf\strut #1}}
 }
 
-\newcommand{\infobox}[1]{
-	\fcolorbox {black}{white}{\makebox[1.7cm][c]{\sf #1}}
-}
-
-
-\newenvironment{jspecs}{
+% Some more convenience
+%
+\newenvironment{jspecs}{    % Description spacing
 \itemsep=2pt\topsep=3pt\partopsep=3pt\parskip=0pt
 \begin{description}
 \itemsep=2pt\topsep=3pt\partopsep=3pt\parskip=0pt
 }
 {\end{description}}
 
-\newcommand{\jindent}[2]{
+\newcommand{\jindent}[2]{   % Extra list spacing
   \noindent\makebox[0pt][r]{{#1}\hspace*{\marginparsep}}
   \parbox[t]{0.95\linewidth}{#2}\par
 }
