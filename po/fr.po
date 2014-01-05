@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-14 20:49+0200\n"
-"PO-Revision-Date: 2013-12-22 09:42+0000\n"
-"Last-Translator: King Julian <Unknown>\n"
+"PO-Revision-Date: 2014-01-05 20:24+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-22 16:00+0000\n"
-"X-Generator: Launchpad (build 16872)\n"
+"X-Launchpad-Export-Date: 2014-01-05 20:28+0000\n"
+"X-Generator: Launchpad (build 16877)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -6039,7 +6039,7 @@ msgstr "Montrer les moucherons"
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:75
 msgid "Whether to show the bugs percentage."
-msgstr "Affichage de la ropreté (moucherons) en %."
+msgstr "Affichage de la propreté (moucherons) en %."
 
 #: src/Dialogs/Settings/Panels/VarioConfigPanel.cpp:78
 msgid "Show ballast"
@@ -6067,7 +6067,7 @@ msgid ""
 "cruise, this needle displays the average netto value.  During circling, this "
 "needle displays the average gross value."
 msgstr ""
-"Si activé, alors le vario afiche une aiguille creuse fournissant une "
+"Si activé, alors le vario affiche une aiguille creuse fournissant une "
 "indication moyenne en spirale. En transition, l'aiguille indique la valeur "
 "netto moyenne."
 
@@ -9249,7 +9249,7 @@ msgstr "Pas de type aéronef"
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:52
 #, no-c-format
 msgid "Privacy"
-msgstr ""
+msgstr "Confidentialité"
 
 #: src/Dialogs/Device/Vega/FlarmIdentificationParameters.hpp:54
 #, no-c-format
