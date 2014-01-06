@@ -102,8 +102,7 @@ manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
 
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.tex \
-	$(TEX_INCLUDES_EN) $(FIGURES_BLITZ_DE) $(TEX_INCLUDES) \
-	$(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(TEX_INCLUDES) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -133,8 +132,8 @@ $(MANUAL_OUTPUT_DIR)/html/developer/index.html: $(DOC)/manual/en/XCSoar-develope
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/developer/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
-$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/Blitz/XCSoar-Blitzeinstieg.tex \
-	$(TEX_INCLUDES_BLITZ_DE) $(FIGURES_BLITZ_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+$(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/XCSoar-Blitzeinstieg.tex \
+	$(TEX_INCLUDES_DE) $(FIGURES_DE) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -215,7 +214,6 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(SVG_FIGURES) $(SVG_LOGOS) $(T)/figures/.
 	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/.
 	# Incl. the English original 
-	cp $(DOC)/manual/en/XCSoar-in-a-flash.tex $(T)/en/.
 	cp $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/en/.
 	cp $(FIGURES_EN) $(T)/en/figures/.
 	# Incl. the French translation
@@ -227,10 +225,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	cp $(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(T)/pl/.
 	##cp $(FIGURES_PL) $(T)/pl/figures/.
 	# Incl. both German translation
-	$(MKDIR) -p $(T)/de/figures $(T)/de/Blitz/figures
-	cp $(DOC)/manual/de/Blitz/*.tex $(T)/de/Blitz/.
-	##cp $(TEX_INCLUDES_BLITZ_DE) $(T)/de/Blitz/.
-	cp $(FIGURES_BLITZ_DE) $(T)/de/Blitz/figures/.
+	$(MKDIR) -p $(T)/de/figures
 	cp $(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(T)/de/.
 	cp $(FIGURES_DE) $(T)/de/figures/.
 	# Create an example bash to generate the manuals
