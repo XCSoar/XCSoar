@@ -135,7 +135,7 @@ TrackingConfigPanel::OnModified(DataField &df)
 static constexpr StaticEnumChoice server_list[] = {
   { 0, _T("www.livetrack24.com") },
   { 1, _T("test.livetrack24.com") },
-  { 2, _T("livexc.dhv1.de") },
+  { 2, _T("livexc.dhv.de") },
   { 0 },
 };
 

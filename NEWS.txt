@@ -20,6 +20,8 @@ Version 6.7.2 - 2013/12/19
   - auto-reconnect TCP client (#3127)
   - handle time warps in NMEA replay
   - another midnight wraparound bug fix (#2973)
+* tracking
+  - changed host for DHV tracking server (#3208)
 * Android
   - enable Vivante workaround for GC600 (#3184)
   - faster map renderer (#3124)
