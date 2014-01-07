@@ -52,6 +52,10 @@ Profile::Load(LiveTrack24Settings &settings)
 
   if (!Get(ProfileKeys::LiveTrack24Server, settings.server))
     settings.server = _T("www.livetrack24.com");
+  else if (StringIsEqual(settings.server, _T("livexc.dhv1.de"))) {
+    // DHV tracking server moved to new host (#3208)
+    settings.server = _T("livexc.dhv.de");
+  }
 
   Get(ProfileKeys::LiveTrack24Username, settings.username);
   Get(ProfileKeys::LiveTrack24Password, settings.password);
