@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.7.3 - not yet released
 * tracking
   - changed host for DHV tracking server (#3208)
+* user interface
+  - fix missing battery info in status panels
 
 Version 6.7.2 - 2013/12/19
 * user interface
