@@ -66,7 +66,7 @@ public:
   /**
    * Purge all matching events from the event queue.
    */
-  void Purge(Uint32 mask,
+  void Purge(Uint32 event,
              bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
 
   /**
