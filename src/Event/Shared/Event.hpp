@@ -109,11 +109,11 @@ struct Event {
     return param;
   }
 
-  bool IsCharacter() const {
-    return false;
+  size_t GetCharacterCount() const {
+    return 0;
   }
 
-  unsigned GetCharacter() const {
+  unsigned GetCharacter(size_t characterIdx) const {
     assert(false);
     return 0;
   }

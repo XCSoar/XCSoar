@@ -482,9 +482,13 @@ WndForm::ShowModal()
 #endif
     }
 
-    if (event.IsCharacter() && character_function &&
-        character_function(event.GetCharacter()))
-      continue;
+    if (character_function && (event.GetCharacterCount() > 0)) {
+      bool handled = false;
+      for (size_t i = 0; i < event.GetCharacterCount(); ++i)
+        handled = character_function(event.GetCharacter(i)) || handled;
+      if (handled)
+        continue;
+    }
 
     loop.Dispatch(event);
   } // End Modal Loop

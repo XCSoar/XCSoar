@@ -44,12 +44,13 @@ struct Event {
     return msg.wParam;
   }
 
-  bool IsCharacter() const {
-    return msg.message == WM_CHAR;
+  size_t GetCharacterCount() const {
+    return msg.message == WM_CHAR ? 1 : 0;
   }
 
-  unsigned GetCharacter() const {
-    assert(IsCharacter());
+  unsigned GetCharacter(size_t characterIdx) const {
+    assert(GetCharacterCount() == 1);
+    assert(characterIdx == 0);
 
     return msg.wParam;
   }
@@ -64,7 +65,7 @@ struct Event {
   }
 
   bool IsUserInput() const {
-    return IsKey() || IsCharacter() || IsMouse();
+    return IsKey() || (GetCharacterCount() > 0) || IsMouse();
   }
 };
 

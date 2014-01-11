@@ -58,12 +58,13 @@ struct Event {
     return event.key.keysym.sym;
   }
 
-  bool IsCharacter() const {
-    return IsKeyDown() && event.key.keysym.unicode != 0;
+  size_t GetCharacterCount() const {
+    return (IsKeyDown() && event.key.keysym.unicode != 0) ? 1 : 0;
   }
 
-  unsigned GetCharacter() const {
-    assert(IsCharacter());
+  unsigned GetCharacter(size_t characterIdx) const {
+    assert(GetCharacterCount() == 1);
+    assert(characterIdx == 0);
 
     return event.key.keysym.unicode;
   }
