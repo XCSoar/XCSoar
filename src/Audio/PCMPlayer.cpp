@@ -33,7 +33,7 @@ Copyright_License {
 #include <SLES/OpenSLES_Android.h>
 #elif defined(WIN32)
 #else
-#include <SDL/SDL_audio.h>
+#include <SDL_audio.h>
 #endif
 
 #include <assert.h>
