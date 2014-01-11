@@ -26,6 +26,8 @@ AUDIO_SOURCES += \
 	$(AUDIO_SRC_DIR)/SLES/Init.cpp
 endif
 
+AUDIO_CPPFLAGS = $(SDL_CPPFLAGS)
+
 $(eval $(call link-library,libaudio,AUDIO))
 
 endif
