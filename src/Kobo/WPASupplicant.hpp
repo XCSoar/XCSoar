@@ -27,6 +27,11 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "OS/SocketDescriptor.hpp"
 
+enum WifiSecurity {
+  WPA_SECURITY,
+  WEP_SECURITY
+};
+
 struct WifiStatus {
   StaticString<32> bssid;
   StaticString<256> ssid;
@@ -41,6 +46,7 @@ struct WifiVisibleNetwork {
   StaticString<32> bssid;
   StaticString<256> ssid;
   unsigned signal_level;
+  enum WifiSecurity security;
 };
 
 struct WifiConfiguredNetworkInfo {
@@ -94,6 +100,8 @@ public:
   int AddNetwork();
 
   bool SetNetworkString(unsigned id, const char *name, const char *value);
+
+  bool SetNetworkID(unsigned id, const char *name, const char *value);
 
   bool SetNetworkSSID(unsigned id, const char *ssid) {
     return SetNetworkString(id, "ssid", ssid);

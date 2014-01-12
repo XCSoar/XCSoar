@@ -137,6 +137,24 @@ WPASupplicant::Scan()
   return SendCommand("SCAN") && ExpectOK();
 }
 
+/*
+ * Scan Results look like:
+ * bssid                   frequency     signal_level  flags                                                   ssid
+ * bc:14:01:e1:d6:78       2412          178           [WPA-PSK-TKIP+CCMP][WPA2-PSK-TKIP+CCMP][WPS][ESS]       FunnyMaple
+ * 00:22:a4:b8:f3:31       2437          185           [WEP][ESS]                                              BELL778
+ * 98:fc:11:3e:58:ea       2462          169           [WPA-PSK-TKIP+CCMP][WPA2-PSK-TKIP+CCMP][WPS][ESS]       Cisco54414
+ * bc:14:01:e1:d6:79       2412          176           [WPA2-PSK-CCMP][ESS]
+ * 44:94:fc:36:22:48       2412          173           [WPA2-PSK-CCMP][WPS][ESS]                               NETGEAR14
+ *
+ * Fields are delimited by single tabs.
+ *
+ * Items of interest which are:
+ * - bssid  binary ssid
+ * - signal_level a number, bigger is better.
+ * - network type. A wireless router may support one or all of WEP, WPA, and WPA2.
+ *                 WPA and WPA2 are handled the same. WPA/WPA2 are preferred over WEP.
+ * - ssid ascii ssid. ssid could be empty if ssid broadcast is disabled.
+ */
 static bool
 ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
 {
@@ -162,11 +180,22 @@ ParseScanResultsLine(WifiVisibleNetwork &dest, char *src)
 
   src = endptr + 1;
 
-  src = strchr(src, '\t'); // seek "ssid"
-  if (src == nullptr)
+  tab = strchr(src, '\t'); // seek "ssid"
+  if (tab == nullptr)
     return false;
 
-  ++src;
+  *tab = 0;
+
+  // src points to the flags.
+  if (strstr(src, "WPA") != NULL)
+    dest.security = WPA_SECURITY;
+  else if (strstr(src, "WEP") != NULL)
+    dest.security = WEP_SECURITY;
+  else
+    return false;
+
+  src = tab + 1;
+
   tab = strchr(src, '\t');
   if (tab != nullptr)
     *tab = 0;
@@ -256,6 +285,14 @@ WPASupplicant::SetNetworkString(unsigned id,
 {
   NarrowString<512> cmd;
   cmd.Format("SET_NETWORK %u %s \"%s\"", id, name, value);
+  return SendCommand(cmd) && ExpectOK();
+}
+bool
+WPASupplicant::SetNetworkID(unsigned id,
+                                const char *name, const char *value)
+{
+  NarrowString<512> cmd;
+  cmd.Format("SET_NETWORK %u %s %s", id, name, value);
   return SendCommand(cmd) && ExpectOK();
 }
 
