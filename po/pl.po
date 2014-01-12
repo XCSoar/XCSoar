@@ -5101,7 +5101,7 @@ msgid "Thermal Band"
 msgstr "Rozkład noszeń"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "Wiatr na wysokości"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5607,27 +5607,27 @@ msgid "Remove from task"
 msgstr "Usuń z trasy"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "Zamień w zadaniu"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "Wstaw do zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "Dodaj do zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "Usuń z zadania"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "Ustaw jako nowy Dom"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr "Pokaż Punkt Trasy"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
@@ -10818,9 +10818,6 @@ msgstr ""
 
 #~ msgid "Acknowledge for day?"
 #~ msgstr "Potwierdzić na resztę dnia?"
-
-#~ msgid "Wind at Altitude"
-#~ msgstr "Wiatr na wysokości"
 
 #~ msgid "Set wind"
 #~ msgstr "Ustaw wiatr"

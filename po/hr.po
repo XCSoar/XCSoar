@@ -4759,7 +4759,7 @@ msgid "Thermal Band"
 msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "vjetar po visini"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5259,27 +5259,27 @@ msgid "Remove from task"
 msgstr "Ukloni iz zadatka"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "Zamjeni u zadatku"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "Umetni u zadatak"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "Dodaj na zadatk"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "Ukloni iz zadatka"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "Set kao novi Home"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
@@ -9466,9 +9466,6 @@ msgstr ""
 
 #~ msgid "Acknowledge for day?"
 #~ msgstr "Potvrda za dan?"
-
-#~ msgid "Wind at Altitude"
-#~ msgstr "vjetar po visini"
 
 #~ msgid "Set wind"
 #~ msgstr "Set vjetar"

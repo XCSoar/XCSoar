@@ -5050,7 +5050,7 @@ msgid "Thermal Band"
 msgstr "Thermiek Grafiek"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "Wind op Hoogte"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5555,27 +5555,27 @@ msgid "Remove from task"
 msgstr "Verwijder uit opdracht"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "Vervang In Opdracht"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "Invoegen In Opdracht"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "Toevoegen Aan Opdracht"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "Verwijder Uit Opdracht"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "Instellen Als Nieuwe Thuisbasis"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr "Verplaats Naar Keerpunt"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232

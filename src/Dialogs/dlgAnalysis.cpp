@@ -317,7 +317,7 @@ Update()
 
   case AnalysisPage::WIND:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              _("Wind At Altitude"));
+              _("Wind at Altitude"));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Set Wind"));

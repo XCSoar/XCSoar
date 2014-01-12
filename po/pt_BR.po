@@ -4941,7 +4941,7 @@ msgid "Thermal Band"
 msgstr "Faixa da térmica"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "Vento em altitude"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5447,27 +5447,27 @@ msgid "Remove from task"
 msgstr "Remover da prova"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "Substituir na prova"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "Inserir na prova"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "Anexar à prova"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "Remover da prova"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "Selec como nova Casa"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr "Deslocar Para Waypoint"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232

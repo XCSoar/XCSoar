@@ -5020,7 +5020,7 @@ msgid "Thermal Band"
 msgstr "サーマル　バンド"
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "この標高の風向風速"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5523,27 +5523,27 @@ msgid "Remove from task"
 msgstr "タスクから削除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "タスク入れ替え"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "タスクに挿入"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "タスクに追加"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "タスクから削除"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "新しいホームに設定"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr "ウエイポイントに　向かう"
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232

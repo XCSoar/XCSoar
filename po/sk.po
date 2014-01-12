@@ -4920,7 +4920,7 @@ msgid "Thermal Band"
 msgstr ""
 
 #: src/Dialogs/dlgAnalysis.cpp:320
-msgid "Wind At Altitude"
+msgid "Wind at Altitude"
 msgstr "Vietor vo výške"
 
 #: src/Dialogs/dlgAnalysis.cpp:323
@@ -5419,27 +5419,27 @@ msgid "Remove from task"
 msgstr "Odobrať z úlohy"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:243
-msgid "Replace In Task"
+msgid "Replace in Task"
 msgstr "Nahradiť v úlohe"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:244
-msgid "Insert In Task"
+msgid "Insert in Task"
 msgstr "Vložiť do úlohy"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:245
-msgid "Append To Task"
+msgid "Append to Task"
 msgstr "Pridať k úlohe"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:248
-msgid "Remove From Task"
+msgid "Remove from Task"
 msgstr "Odobrať z úlohy"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:251
-msgid "Set As New Home"
+msgid "Set as New Home"
 msgstr "Nastav ako nový domov"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:252
-msgid "Pan To Waypoint"
+msgid "Pan to Waypoint"
 msgstr ""
 
 #: src/Dialogs/Waypoint/dlgWaypointDetails.cpp:232
@@ -10234,9 +10234,6 @@ msgstr ""
 
 #~ msgid "Organiser Battery Low"
 #~ msgstr "Slabá batéria"
-
-#~ msgid "Wind at Altitude"
-#~ msgstr "Vietor vo výške"
 
 #~ msgid "Temp trace"
 #~ msgstr "Teplotná stopa"
