@@ -37,9 +37,11 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "System.hpp"
 #include "NetworkDialog.hpp"
+#include "ToolsDialog.hpp"
 
 enum Buttons {
   LAUNCH_NICKEL = 100,
+  TOOLS,
   NETWORK,
   REBOOT,
   POWEROFF
@@ -97,6 +99,7 @@ void
 KoboMenuWidget::CreateButtons(WidgetDialog &buttons)
 {
   buttons.AddButton(("Nickel"), dialog, LAUNCH_NICKEL);
+  buttons.AddButton(("Tools"), *this, TOOLS);
   buttons.AddButton(_("Network"), *this, NETWORK);
   buttons.AddButton(("Reboot"), dialog, REBOOT);
   buttons.AddButton(("Poweroff"), dialog, POWEROFF);
@@ -133,6 +136,9 @@ void
 KoboMenuWidget::OnAction(int id)
 {
   switch (id) {
+  case TOOLS:
+    ShowToolsDialog();
+    break;
   case NETWORK:
     ShowNetworkDialog();
     break;
