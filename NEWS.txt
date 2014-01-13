@@ -7,6 +7,8 @@ Version 6.7.3 - not yet released
   - changed host for DHV tracking server (#3208)
 * user interface
   - fix missing battery info in status panels
+* map
+  - fix disappearing observation zones at left/top screen border (#3212)
 * devices
   - LX: auto-retry after errors during IGC download
 * Kobo
